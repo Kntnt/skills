@@ -1,0 +1,3 @@
+# The collection repo groups skills by category
+
+A flat `skills/<name>/` list does not scale once the collection has more than a handful of skills. Following Matt Pocock, each Skill lives at `skills/<category>/<name>/`. The Skill's identity is its name, not its path: `/grill-me` stays `/grill-me` if it moves from `text/` to `code/`. Category names (today `agents`, `code`, `text`, `wordpress`) may change. The transport already discovers this layout. Status and interactive Enable group the list by Category so a long menu stays readable. The user still Enables one Skill at a time; `kntnt enable wordpress` is not a thing.

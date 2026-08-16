@@ -1,0 +1,3 @@
+# One desired set per layer; harnesses are a list, not a matrix
+
+Letting each harness enable a different subset doubles the work and guarantees drift (Claude has A, OpenCode does not). The user picks which harnesses receive the set; every skill Enabled in a layer is then applied to all of them. When Setup adds a Harness, it applies every skill Enabled in Global, with no extra question — Project extras are not copied. The user applies the Project layer with Enable `--project` or Update `--project`. The list is offered with detected harnesses pre-checked, not hard-coded to Claude/OpenCode/Codex and not silently written into every detected harness.
