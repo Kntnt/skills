@@ -1,0 +1,3 @@
+# Human docs stay in `docs/`; agent-only files live in `agents.d/`
+
+The `agents-md` skill treats audience as the placement rule, not format. A document written for human contributors lives in `docs/` (coding standards, ADRs, and anything else a person would read). A document written only for an agent lives in `agents.d/`. When audience is unclear, `docs/` wins. The skill never edits `docs/`. `AGENTS.md` points; it does not copy. A reading brief in `agents.d/` — routing only, no restatement — is allowed only when a `docs/` file is at least 10 000 characters (`wc -c`) *and* a typical session needs a slice of it. Otherwise the pointer in `AGENTS.md` goes straight to `docs/` or straight to the agent file.
