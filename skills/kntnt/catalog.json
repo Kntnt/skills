@@ -1,0 +1,42 @@
+{
+  "origin": "Kntnt/skills",
+  "skills": [
+    {
+      "name": "commit",
+      "category": "code",
+      "description": "Commit tracked work on the current branch, without pushing.",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [],
+      "externals": []
+    },
+    {
+      "name": "push",
+      "category": "code",
+      "description": "Commit tracked work and push the current branch.",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [
+        "commit"
+      ],
+      "externals": []
+    },
+    {
+      "name": "release",
+      "category": "code",
+      "description": "Ship a version — changelog, bump, tag, push, and GitHub release.",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [
+        "commit"
+      ],
+      "externals": []
+    }
+  ]
+}
