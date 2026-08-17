@@ -37,6 +37,9 @@ build/
 .venv/
 venv/
 
+# `uv run` writes a lock file even though this repository ships no package.
+uv.lock
+
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
