@@ -39,6 +39,40 @@
       "capabilities": []
     },
     {
+      "name": "execute",
+      "category": "code",
+      "description": "Build the plans under plans/ unattended, landing each approved one on the current branch.",
+      "binaries": [
+        "git",
+        "gh",
+        "uv"
+      ],
+      "skills": [
+        "commit"
+      ],
+      "externals": [
+        "improve"
+      ],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "plan",
+      "category": "code",
+      "description": "Turn tickets, or a design settled in conversation, into plans under plans/.",
+      "binaries": [
+        "git",
+        "gh",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [
+        "improve"
+      ],
+      "capabilities": []
+    },
+    {
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",

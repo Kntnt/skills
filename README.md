@@ -92,7 +92,15 @@ Follow `commit`, then push the current branch. Same `"message"` and `--yes` as `
 
 Ship a version from the default branch: reconcile `CHANGELOG.md`, bump, follow `push`, tag `HEAD`, and open a GitHub release. If the project has a conventional archive script, build it and attach the zip. Pass `minor`, `major`, or `X.Y.Z` to force the bump; otherwise the bump comes from `[Unreleased]`. `--no-build` skips the archive. `gh` is required only for the GitHub release step.
 
-`commit`, `push`, `release`, and `agents-md` need `git`; `delegation` needs a harness that can spawn subagents. If a dependency is unsatisfied, the skill does no work and prints how to fix it.
+### plan
+
+Turn tickets — or a design you have just settled in conversation — into plans under `plans/`: self-contained files carrying their own scope, dependencies, and done criteria, written by the External `improve`. `/plan #12 #17` plans those tickets whatever labels they carry. `/plan "<description>"` plans work that has no ticket behind it. Bare `/plan` shows a picker of the open `ready-for-agent` tickets, with the conversation's settled design as the first row when there is one, so you can pick either or both. It writes no code and closes no ticket. `--yes` plans every `ready-for-agent` ticket without the picker and never the conversation row; where the planner cannot specify the work honestly it sets that ticket aside with the reason instead of asking you, which tells you the label promised more than the ticket delivered.
+
+### execute
+
+Build the plans under `plans/` while you are away. One at a time: `improve` builds each one in an isolated worktree and renders the verdict, and every approved plan is landed on the branch you started on — squash-merged, then committed through `commit`, so `CHANGELOG.md` gets one entry per plan — before the next is dispatched. Drift is checked once before the run starts, since after that every change is the run's own; a commit from anywhere else stops it. A blocked plan is set aside together with whatever depends on it and the run goes on. It never pushes, tags, or releases. `--yes` builds every TODO plan without the picker, skips the confirmation, restores a stash it made, and closes the tickets of the plans that landed.
+
+`commit`, `push`, `release`, `agents-md`, `plan`, and `execute` need `git`; `plan` and `execute` also need `gh` and the External `improve`; `delegation` and `execute` need a harness that can spawn subagents. If a dependency is unsatisfied, the skill does no work and prints how to fix it.
 
 ## License
 

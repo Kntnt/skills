@@ -122,3 +122,11 @@ _Avoid_: issue, story, task, PRD
 **Plan**:
 A file under `plans/` describing one unit of work, self-contained enough that an agent with no other context can carry it out. It states its own dependencies, scope boundaries, and done criteria.
 _Avoid_: spec, brief, ticket, design doc
+
+**Land**:
+Bring one approved Plan's changes onto the branch the run started on, as one commit made by the `commit` skill, leaving no branch or worktree behind. A Plan is Landed or it is not; there is no halfway state.
+_Avoid_: merge, integrate, ship, apply
+
+**Drift**:
+A Plan whose in-scope files changed after it was written, so its excerpts and steps may no longer describe the code. A run's own Landings are not Drift, because the run knows it made them.
+_Avoid_: staleness, rot, conflict

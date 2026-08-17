@@ -4,8 +4,13 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.6.0] – 2026-08-17
+
 ### Added
 
+- `plan` — turn Tickets, or a design settled in conversation, into Plans under `plans/`. `/plan #12 #17` plans those Tickets whatever labels they carry, `/plan "<description>"` plans work with no Ticket behind it, and bare `/plan` shows a picker of the open `ready-for-agent` Tickets with the conversation's settled design as its first row. The External `improve` writes each Plan; the skill then makes the batch a queue by numbering it, resolving `**Depends on**` across old and new Plans, recording each Plan's Ticket, and writing `plans/README.md`.
+- `execute` — build the Plans under `plans/` unattended. One at a time, `improve` builds each in an isolated worktree and renders the verdict, and every approved Plan is Landed on the branch the run started on — squash-merged, then committed through `commit` so the changelog gets one entry per Plan — before the next is dispatched. Drift is checked once against the run's base, after which the invariant that `HEAD` stands where the run left it is what separates the run's own commits from a third party's. A blocked Plan is set aside with everything that depends on it. It commits and stops: no push, no tag, no release.
+- Architecture Decision Records 0031 (Plans are written by one skill and built by another), 0032 (Land each approved Plan before the next one starts), 0033 (Drift is checked once, before the run), and 0034 (an unattended skill asks only yes or no), and the Collection terms *Land* and *Drift*.
 - The Collection terms *Ticket* and *Plan*. A Ticket is a unit of work in the issue tracker, named so that no skill is bound to one tracker's own vocabulary; a Plan is a file under `plans/` describing one unit of work, self-contained enough that an agent with no other context can carry it out.
 - `plans/` — six implementation plans and their index, from an audit of the two Python engines. Nothing is fixed yet; the plans describe the work. They cover a version bump that can rewrite a nested `"version"` field instead of the real one and still report success, `git status` output parsed so that any path with a non-ASCII byte reaches the user C-quoted, the absent continuous integration that would keep the passing tests, linter, and type checker passing, and Catalog generation accepting an entry whose name or description cannot do its job.
 
@@ -78,6 +83,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - `agents-md` skill under `skills/agents/`: create, shrink, or tend `AGENTS.md` and `agents.d/`.
 - Architecture Decision Records 0016–0025 for `agents-md` placement, the `CLAUDE.md` bridge, invocation, when a line may be stripped, and `read when` pointers.
 
-[Unreleased]: https://github.com/Kntnt/skills/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/Kntnt/skills/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/Kntnt/skills/releases/tag/v0.6.0
 [0.5.0]: https://github.com/Kntnt/skills/releases/tag/v0.5.0
 [0.4.0]: https://github.com/Kntnt/skills/releases/tag/v0.4.0
