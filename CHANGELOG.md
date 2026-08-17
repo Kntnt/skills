@@ -4,6 +4,11 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- The Collection terms *Ticket* and *Plan*. A Ticket is a unit of work in the issue tracker, named so that no skill is bound to one tracker's own vocabulary; a Plan is a file under `plans/` describing one unit of work, self-contained enough that an agent with no other context can carry it out.
+- `plans/` — six implementation plans and their index, from an audit of the two Python engines. Nothing is fixed yet; the plans describe the work. They cover a version bump that can rewrite a nested `"version"` field instead of the real one and still report success, `git status` output parsed so that any path with a non-ASCII byte reaches the user C-quoted, the absent continuous integration that would keep the passing tests, linter, and type checker passing, and Catalog generation accepting an entry whose name or description cannot do its job.
+
 ## [0.5.0] – 2026-08-17
 
 ### Added

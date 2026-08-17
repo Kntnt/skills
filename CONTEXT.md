@@ -114,3 +114,11 @@ _Avoid_: installed, resolved, met
 **Unsatisfied**:
 A dependency that is missing. The dependent skill does no work; it only tells the user how to satisfy it.
 _Avoid_: broken, missing (say unsatisfied)
+
+**Ticket**:
+A unit of work in the project's issue tracker. The Collection says Ticket and never the tracker's own word, so no skill is bound to one tracker.
+_Avoid_: issue, story, task, PRD
+
+**Plan**:
+A file under `plans/` describing one unit of work, self-contained enough that an agent with no other context can carry it out. It states its own dependencies, scope boundaries, and done criteria.
+_Avoid_: spec, brief, ticket, design doc
