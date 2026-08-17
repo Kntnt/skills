@@ -1,3 +1,0 @@
-# Plans are written by one skill and built by another
-
-`plan` turns Tickets or a settled design into Plans; `execute` builds Plans into code. Neither does the other's job, and `execute` given a Ticket refuses and names `plan`, the same shape as an Unsatisfied Dependency. Fusing them would put the one interactive step inside the unattended one: writing a Plan means asking what a Ticket left open, and an unattended run cannot host that honestly — it would either block or guess. The Plan is also the last place a mistake costs an edit rather than a string of commits, so it is worth stopping at. The split is cheap to reverse: two skills can grow a flag that chains them, while one skill that has taught the user to expect both in a breath cannot be pulled apart.

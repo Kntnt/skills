@@ -1,3 +1,0 @@
-# An unattended skill asks only yes or no
-
-ADR-0029 gives `--yes` one meaning: every question that can be answered yes or no is answered yes. A skill meant to run unattended must therefore phrase every blocking decision that way, or the flag cannot carry it. Where a genuine question has no yes-or-no form — the External `improve` cannot specify a Plan honestly and needs to ask what the Ticket left open — the skill does not silence it and does not guess. It asks its own question instead: skip this one and continue? With `--yes` that is a yes, the item is set aside with its reason in the report, and the queue goes on. Nothing is assumed, nothing blocks, and the flag keeps the single meaning ADR-0029 gave it.
