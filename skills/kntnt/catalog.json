@@ -13,6 +13,16 @@
       "externals": []
     },
     {
+      "name": "delegation",
+      "category": "agents",
+      "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": []
+    },
+    {
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",

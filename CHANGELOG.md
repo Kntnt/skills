@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.3.0] – 2026-08-17
+
+### Added
+
+- `delegation` skill under `skills/agents/`: turn delegation mode on or off — the agent orchestrates, subagents execute — for the session, the project, or the user account. Adapted from the `kntnt-skills` plugin skill of the same name.
+- Architecture Decision Record 0026: `delegation`'s user scope is per-harness, its project scope is not.
+
 ## [0.2.0] – 2026-08-17
 
 ### Added
