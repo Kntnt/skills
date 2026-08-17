@@ -9,6 +9,10 @@ All notable changes to this project are documented here. The format follows [Kee
 - Tests that pin the release version-bump: a nested JSON `"version"` must not be rewritten instead of the top-level one, a TOML `version_scheme` must not be read as the version, and a failed bump must write nothing.
 - CI on push to `main` and on every pull request: ruff, mypy, and pytest. Tool settings live in `pyproject.toml`.
 
+### Changed
+
+- `Improve` moves from the README's essential collections to the recommended ones. It was essential only while `plan` and `execute` declared it as an External; no skill here depends on it now.
+
 ### Removed
 
 - `plan` and `execute`, added in 0.6.0, are withdrawn. The premise — that work is best carried from Ticket to code through a file under `plans/` written by one skill and built unattended by another — did not hold, and a skill that does not earn its place is better removed than kept. `plans/`, Architecture Decision Records 0031–0034, and the Collection terms *Ticket*, *Plan*, *Land*, and *Drift* go with them. If either is Enabled on your machine, run `/kntnt disable plan execute` **before** `/kntnt update`: the Manager cannot yet withdraw a skill it has already put on disk, and updating first strands the files where no command reaches them (issue #5). The six improvements below came out of that experiment and stand on their own.

@@ -22,12 +22,12 @@ A few skills need something of the harness itself rather than of your machine â€
 Essential skills on which Kntnt Skills depends:
 
 - [Skills for Real Engineers](https://github.com/mattpocock/skills) (select engineering and productivity skills)
-- [Improve](https://github.com/shadcn/improve)
 - [No AI Slop](https://github.com/petergyang/no-ai-slop)
 - [agent-browser](https://github.com/vercel-labs/agent-browser)
 
 Other recommended skills or collections of skills:
 
+- [Improve](https://github.com/shadcn/improve) if you want a codebase surveyed before you change it
 - [Cloudflare Skills](https://github.com/cloudflare/skills) if you work with Cloudflare
 - [Impeccable](https://github.com/pbakaus/impeccable) if you work with web design
 
