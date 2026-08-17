@@ -11,6 +11,7 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Fixed
 
 - Release version bump now reads and writes by one rule per format: the top-level JSON `"version"`, and `[project]` / `[tool.poetry]` in TOML. A file that cannot be rewritten unambiguously aborts the whole bump so nothing is left half-written.
+- `git status` paths in the commit plan are no longer C-quoted: porcelain is read with NUL separators, so a file named `skäl.md` is shown as itself.
 
 ## [0.6.0] – 2026-08-17
 

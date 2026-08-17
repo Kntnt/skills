@@ -147,16 +147,32 @@ class Plan:
 
 
 def status_paths(cwd: Path) -> tuple[list[str], list[str], list[str]]:
-    """Return (staged, tracked unstaged, untracked) paths from porcelain."""
+    """Return (staged, tracked unstaged, untracked) paths from porcelain.
+
+    Reads the NUL-separated form: git C-quotes any path with a byte outside
+    ASCII in its default output, and these paths are shown to the user to
+    confirm before a commit, so they have to arrive as themselves.
+    """
 
     staged: list[str] = []
     tracked: list[str] = []
     untracked: list[str] = []
-    for line in git(cwd, "status", "--porcelain", "-uall").splitlines():
-        code = line[:2]
-        path = line[3:]
-        if " -> " in path:
-            path = path.split(" -> ", 1)[1]
+
+    # A rename or copy spends a second field on the original path. Walk the
+    # fields by index so that one can be consumed rather than parsed as an
+    # entry of its own.
+    fields = git(cwd, "status", "--porcelain", "-z", "-uall").split("\0")
+    index = 0
+    while index < len(fields):
+        entry = fields[index]
+        index += 1
+        if len(entry) < 4:
+            continue
+        code = entry[:2]
+        path = entry[3:]
+        if "R" in code or "C" in code:
+            index += 1
+
         if code == "??":
             untracked.append(path)
         elif code[0] != " " and code[0] != "?":
@@ -165,6 +181,7 @@ def status_paths(cwd: Path) -> tuple[list[str], list[str], list[str]]:
                 tracked.append(path)
         else:
             tracked.append(path)
+
     return staged, tracked, untracked
 
 

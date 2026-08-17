@@ -616,6 +616,35 @@ def test_apply_publish_passes_changelog_notes_with_shifted_headings(
     assert "An older thing" not in recorded
 
 
+def test_plan_commit_reports_a_non_ascii_path_unescaped(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "skäl.md").write_text("reason\n", encoding="utf-8")
+    (repo / "README.md").write_text("hello world\n", encoding="utf-8")
+
+    result = _ship(repo, "plan", "commit")
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["untracked"] == ["skäl.md"]
+    assert plan["tracked"] == ["README.md"]
+
+
+def test_plan_commit_reports_a_renamed_path_once(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "gammal fil.txt").write_text("content\n", encoding="utf-8")
+    _git(repo, "add", "gammal fil.txt")
+    _git(repo, "commit", "-m", "Add a file")
+    _git(repo, "mv", "gammal fil.txt", "ny fil.txt")
+
+    result = _ship(repo, "plan", "commit")
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["staged"] == ["ny fil.txt"]
+    assert plan["tracked"] == []
+    assert plan["untracked"] == []
+
+
 def test_commit_skill_does_not_push() -> None:
     text = (REPO_ROOT / "skills" / "code" / "commit" / "SKILL.md").read_text(
         encoding="utf-8"
