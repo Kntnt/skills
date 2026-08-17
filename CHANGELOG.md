@@ -11,7 +11,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
-- `Improve` moves from the README's essential collections to the recommended ones. It was essential only while `plan` and `execute` declared it as an External; no skill here depends on it now.
+- The README no longer names collections this one depends on. It listed four as essential while every Catalog entry declared `"externals": []`, and nothing in the repository referred to any of them — `plan` and `execute` had been the only skills ever to declare an External. The section is now one list of recommendations, offered as a courtesy. A skill that genuinely needs another collection declares it and says so when it is run, which is where a dependency belongs and where it cannot drift.
 
 ### Removed
 

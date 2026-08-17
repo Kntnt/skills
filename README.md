@@ -17,17 +17,14 @@ New catalog entries stay Disabled after an Update. Enable them when you want the
 
 A few skills need something of the harness itself rather than of your machine — `delegation` is pointless where subagents cannot be spawned. Those requirements are dependencies like any other, not an install-time filter: the skill is enabled on every harness on your list, and in one that cannot meet the requirement it says so and does nothing. No script can test this, since the manager cannot know which harness invoked it; the agent answers, because the agent is the harness.
 
-## Essential and recommended skills and skill sets
+## Recommended skills and collections of skills
 
-Essential skills on which Kntnt Skills depends:
+None of these is required. They are the skills and collections that sit well beside this one, listed as a courtesy rather than as a checklist. A skill here that genuinely needs something else declares that dependency itself, and tells you what to do about it when you run it — so this list never has to be the place you find out.
 
-- [Skills for Real Engineers](https://github.com/mattpocock/skills) (select engineering and productivity skills)
-- [No AI Slop](https://github.com/petergyang/no-ai-slop)
-- [agent-browser](https://github.com/vercel-labs/agent-browser)
-
-Other recommended skills or collections of skills:
-
+- [Skills for Real Engineers](https://github.com/mattpocock/skills) if you want a full engineering and productivity set alongside these
 - [Improve](https://github.com/shadcn/improve) if you want a codebase surveyed before you change it
+- [No AI Slop](https://github.com/petergyang/no-ai-slop) if you want your prose to stop reading as machine-written
+- [agent-browser](https://github.com/vercel-labs/agent-browser) if a task needs a real browser
 - [Cloudflare Skills](https://github.com/cloudflare/skills) if you work with Cloudflare
 - [Impeccable](https://github.com/pbakaus/impeccable) if you work with web design
 
