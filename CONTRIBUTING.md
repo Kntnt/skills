@@ -1,4 +1,4 @@
-# Contributing to kntnt-wp-skills
+# Contributing to Kntnt Skills
 
 Thanks for considering a contribution. kntnt/skills is open source, so anyone is free to fork it and adapt it for their own purposes. This document describes the *project norm* — what kinds of contribution are likely to be welcomed into the upstream repository at [Kntnt/skills](https://github.com/Kntnt/skills). It is editorial guidance on what is likely to be merged, not a legal restriction on what you may do with the code.
 
@@ -23,11 +23,16 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
 1. **Open an issue first** for anything in the *discussed* row above. For *welcomed* items, you can open a PR directly. Use the issue tracker at <https://github.com/Kntnt/skills/issues>.
 2. **One concern per PR.** Smaller PRs land faster.
 3. **Follow the project's coding standard.** It is materialised under [`docs/coding-standard/`](docs/coding-standard/) — read `general.md` plus the module(s) for the language or framework you touch before changing code.
-4. **Run the tests.** The Python helpers under `scripts/` are covered by a pytest suite under `tests/`. One command runs it, provisioning pytest through `uv`:
+4. **Run the tests.** The Python engines under `skills/<category>/<skill>/scripts/` are covered by a pytest suite under `tests/`. Four commands verify a change, each provisioning its tool through `uv`:
 
    ```
+   uvx ruff check .
+   uvx ruff format --check .
+   uvx mypy skills/kntnt/scripts/kntnt.py skills/code/commit/scripts/ship.py
    uv run --with pytest pytest
    ```
+
+   These are the same four checks CI runs on every pull request, so a green run locally means a green run there.
 
 ## Questions
 

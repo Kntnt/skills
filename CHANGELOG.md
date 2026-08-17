@@ -14,6 +14,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Release version bump now reads and writes by one rule per format: the top-level JSON `"version"`, and `[project]` / `[tool.poetry]` in TOML. A file that cannot be rewritten unambiguously aborts the whole bump so nothing is left half-written.
 - `git status` paths in the commit plan are no longer C-quoted: porcelain is read with NUL separators, so a file named `skäl.md` is shown as itself.
 - Catalog generation refuses a skill whose frontmatter `name` is not its directory, or whose description is empty or a YAML block-scalar indicator the parser cannot read.
+- `CONTRIBUTING.md` now names this Collection, points at `skills/<category>/<skill>/scripts/`, and lists the same four checks CI runs.
 
 ## [0.6.0] – 2026-08-17
 

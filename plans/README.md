@@ -13,7 +13,7 @@ Every plan is self-contained. None of them requires reading another plan, this i
 | 003 | Parse `git status` with NUL separators so non-ASCII paths reach the user intact | P2 | S | — | DONE |
 | 004 | Enforce the verification baseline in CI and pin the linter and type checker | P1 | S | 001, 002, 003 | DONE |
 | 005 | Fail Catalog generation on an entry that cannot carry its own name or description | P2 | S | — | DONE |
-| 006 | Correct `CONTRIBUTING.md` — the project's own name, where its code lives, and how to verify it | P3 | S | 004 (soft) | TODO |
+| 006 | Correct `CONTRIBUTING.md` — the project's own name, where its code lives, and how to verify it | P3 | S | 004 (soft) | DONE |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) | REJECTED (with one-line rationale — finding fixed independently or approach abandoned)
 
