@@ -6,7 +6,11 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Added
 
-- Failing tests that pin the release version-bump bugs: a nested JSON `"version"` is rewritten instead of the top-level one, a TOML `version_scheme` is read as the version, and a failed bump can leave a half-written tree.
+- Tests that pin the release version-bump: a nested JSON `"version"` must not be rewritten instead of the top-level one, a TOML `version_scheme` must not be read as the version, and a failed bump must write nothing.
+
+### Fixed
+
+- Release version bump now reads and writes by one rule per format: the top-level JSON `"version"`, and `[project]` / `[tool.poetry]` in TOML. A file that cannot be rewritten unambiguously aborts the whole bump so nothing is left half-written.
 
 ## [0.6.0] – 2026-08-17
 

@@ -17,6 +17,8 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from urllib.parse import urlparse
 
+import tomllib
+
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
 JSON_VERSION_RE = re.compile(r'("version"\s*:\s*")([^"]+)(")')
 TOML_VERSION_RE = re.compile(r'^(version\s*=\s*")([^"]+)(")', re.MULTILINE)
@@ -398,8 +400,14 @@ def detect_versions(cwd: Path) -> list[tuple[str, str]]:
 def json_version(path: Path) -> str | None:
     """Return the top-level version string from a JSON file."""
 
+    return json_reader(path.read_text(encoding="utf-8"))
+
+
+def json_reader(text: str) -> str | None:
+    """Return the top-level version string from JSON *text*."""
+
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(text)
     except json.JSONDecodeError:
         return None
     value = data.get("version")
@@ -407,13 +415,31 @@ def json_version(path: Path) -> str | None:
 
 
 def toml_version(path: Path) -> str | None:
-    """Return a ``version = "…"`` assignment from a TOML file."""
+    """Return the declared version from a TOML file."""
 
-    for line in path.read_text(encoding="utf-8").splitlines():
-        stripped = line.strip()
-        if stripped.startswith("version") and "=" in stripped:
-            _, _, raw = stripped.partition("=")
-            return raw.strip().strip('"').strip("'")
+    return toml_reader(path.read_text(encoding="utf-8"))
+
+
+def toml_reader(text: str) -> str | None:
+    """Return the declared version from TOML *text*, or None.
+
+    Reads `[project]` first, then `[tool.poetry]` — the two places a Python
+    project's own version conventionally lives. A dynamic version is absent
+    from both, which is the correct answer: there is nothing here to bump.
+    """
+
+    try:
+        data = tomllib.loads(text)
+    except tomllib.TOMLDecodeError:
+        return None
+
+    tool = data.get("tool")
+    poetry = tool.get("poetry") if isinstance(tool, dict) else None
+    for table in (data.get("project"), poetry):
+        if isinstance(table, dict):
+            value = table.get("version")
+            if isinstance(value, str):
+                return value
     return None
 
 
@@ -445,26 +471,62 @@ def apply_push(cwd: Path) -> str:
     return "pushed"
 
 
-def bump_version_files(cwd: Path, version: str) -> list[Path]:
-    """Write *version* into every detected conventional location. Return paths."""
+def _confirm_version(path: Path, updated: str, version: str, relative: str) -> None:
+    """Raise unless *updated* reads back as *version* through the reader.
 
-    written: list[Path] = []
-    for relative, _current in detect_versions(cwd):
+    The reader is the authority on where a version lives, so running it over
+    the rewritten text is what proves the write hit that same place. It is the
+    only check that also catches the ambiguous case, where a nested key holds
+    the identical string and no value match can tell the two apart.
+    """
+
+    reader = toml_reader if path.suffix == ".toml" else json_reader
+    if reader(updated) != version:
+        raise GitError(f"could not bump version in {relative}")
+
+
+def _rewrite_version(
+    text: str, pattern: re.Pattern[str], current: str, version: str, relative: str
+) -> str:
+    """Return *text* with the assignment holding *current* set to *version*.
+
+    Matching on the value rather than on the first occurrence is what keeps a
+    nested `"version"` in some unrelated block from being rewritten instead of
+    the real one. When no match carries *current*, or the result no longer
+    reads back as *version*, this refuses: for a command that goes on to tag
+    and publish, a wrong version written quietly is worse than a stopped run.
+    """
+
+    for match in pattern.finditer(text):
+        if match[2] != current:
+            continue
+        return f"{text[: match.start(2)]}{version}{text[match.end(2) :]}"
+    raise GitError(f"could not bump version in {relative}")
+
+
+def bump_version_files(cwd: Path, version: str) -> list[Path]:
+    """Write *version* into every detected conventional location. Return paths.
+
+    Resolves every file before writing any of them, so a file this cannot
+    rewrite unambiguously aborts the whole bump instead of leaving the project
+    half-bumped for the caller to unpick by hand.
+    """
+
+    # Resolve first, write second — every failure mode has to land before the
+    # first byte is written.
+    resolved: list[tuple[Path, str]] = []
+    for relative, current in detect_versions(cwd):
         path = cwd / relative
-        original = path.read_text(encoding="utf-8")
-        if path.suffix == ".toml":
-            updated, count = TOML_VERSION_RE.subn(
-                rf"\g<1>{version}\g<3>", original, count=1
-            )
-        else:
-            updated, count = JSON_VERSION_RE.subn(
-                rf"\g<1>{version}\g<3>", original, count=1
-            )
-        if count != 1:
-            raise GitError(f"could not bump version in {relative}")
+        pattern = TOML_VERSION_RE if path.suffix == ".toml" else JSON_VERSION_RE
+        updated = _rewrite_version(
+            path.read_text(encoding="utf-8"), pattern, current, version, relative
+        )
+        _confirm_version(path, updated, version, relative)
+        resolved.append((path, updated))
+
+    for path, updated in resolved:
         path.write_text(updated, encoding="utf-8")
-        written.append(path)
-    return written
+    return [path for path, _updated in resolved]
 
 
 def promote_changelog(text: str, version: str, date: str) -> str:

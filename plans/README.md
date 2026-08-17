@@ -9,7 +9,7 @@ Every plan is self-contained. None of them requires reading another plan, this i
 | Plan | Title | Priority | Effort | Depends on | Status |
 |------|-------|----------|--------|------------|--------|
 | 001 | Pin the release version machinery with tests that expose the wrong-field bump | P1 | S | — | DONE |
-| 002 | Make version detection and version writing agree, and make a failed bump write nothing | P1 | S | 001 | TODO |
+| 002 | Make version detection and version writing agree, and make a failed bump write nothing | P1 | S | 001 | DONE |
 | 003 | Parse `git status` with NUL separators so non-ASCII paths reach the user intact | P2 | S | — | TODO |
 | 004 | Enforce the verification baseline in CI and pin the linter and type checker | P1 | S | 001, 002, 003 | TODO |
 | 005 | Fail Catalog generation on an entry that cannot carry its own name or description | P2 | S | — | TODO |
