@@ -55,14 +55,14 @@ Bare `/kntnt` is Help. The manager subcommands are:
 | Command | What it does |
 |---|---|
 | `/kntnt help [skill]` | Help for the manager, or one named skill |
-| `/kntnt status [skill...]` | Report Enabled or Disabled in Global and Project |
+| `/kntnt status [--project] [skill...]` | Report what this machine has, or what applies here |
 | `/kntnt enable [--project] [skill...]` | Enable skills (picker if none named) |
 | `/kntnt disable [--project] [skill...]` | Disable skills (picker if none named) |
 | `/kntnt update [--project]` | Refresh this collection and re-check dependencies |
 
-Status with no names lists every skill in the catalog, Disabled ones included — that is how you find what there is to enable. The catalog ships with the manager, so a skill added upstream since your last `/kntnt update` appears only after you run it.
+Status answers one of two questions. Bare, it reports Global: every skill in the catalog, Enabled or Disabled on this machine, Disabled ones included — that is how you find what there is to enable. With `--project` it reports what applies in the directory you are standing in — everything enabled globally plus everything enabled in this project — and says of each whether it comes from Global, the project, or both. The catalog ships with the manager, so a skill added upstream since your last `/kntnt update` appears only after you run it.
 
-Enable, Disable, and Update default to Global. `--project` or `--project=on` targets the Project; `--project=off` targets Global. Update refreshes this collection only. It reports each new catalog skill and leaves it Disabled. It deletes a skill that has been withdrawn from the collection upstream, and does not ask: such a skill can no longer be updated or supported, and no other command here could reach it. It does not refresh a skill that came from another collection. If a dependency is missing, it tells you how to satisfy it and does not install anything.
+Every command here reads `--project` the same way: `--project` or `--project=on` means the Project, and nothing or `--project=off` means Global. Enable, Disable, and Update change that layer; Status only reports. Update refreshes this collection only. It reports each new catalog skill and leaves it Disabled. It deletes a skill that has been withdrawn from the collection upstream, and does not ask: such a skill can no longer be updated or supported, and no other command here could reach it. It does not refresh a skill that came from another collection. If a dependency is missing, it tells you how to satisfy it and does not install anything.
 
 `--yes` works the same on every skill here: whatever could be answered yes or no is answered yes instead of asked.
 

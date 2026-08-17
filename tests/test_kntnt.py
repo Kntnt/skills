@@ -227,8 +227,100 @@ def test_status_lists_catalog_skills_as_disabled(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stderr
     skills = _json(result)["skills"]
     assert [skill["name"] for skill in skills] == ["alpha", "beta", "gamma"]
-    assert {skill["global"] for skill in skills} == {"disabled"}
-    assert {skill["project"] for skill in skills} == {"disabled"}
+    assert {skill["state"] for skill in skills} == {"disabled"}
+
+
+def test_status_reports_global_and_says_nothing_of_the_project(tmp_path: Path) -> None:
+    """Bare Status answers one question: what is Enabled in Global."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "enable", "--project", "gamma")
+
+    payload = _json(_run(world, "status"))
+
+    assert payload["reports"] == "global"
+    by_name = {skill["name"]: skill for skill in payload["skills"]}
+    assert by_name["alpha"]["state"] == "enabled"
+    assert by_name["gamma"]["state"] == "disabled"
+    assert all("source" not in skill for skill in payload["skills"])
+    assert "project" not in payload["directories"]
+
+
+def test_status_project_reports_the_effective_set_and_its_source(
+    tmp_path: Path,
+) -> None:
+    """With the flag the question is what applies here, and where it comes from."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "enable", "alpha", "beta")
+    _run(world, "apply", "enable", "--project", "alpha", "gamma")
+
+    payload = _json(_run(world, "status", "--project"))
+
+    assert payload["reports"] == "effective"
+    by_name = {skill["name"]: skill for skill in payload["skills"]}
+    assert set(by_name) == {"alpha", "beta", "gamma"}
+    assert by_name["alpha"]["source"] == "both"
+    assert by_name["beta"]["source"] == "global"
+    assert by_name["gamma"]["source"] == "project"
+    assert {skill["state"] for skill in payload["skills"]} == {"enabled"}
+
+
+def test_status_project_omits_a_skill_disabled_in_both_layers(tmp_path: Path) -> None:
+    """A skill that applies nowhere here is no answer to *what applies here*."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "enable", "alpha")
+
+    effective = _json(_run(world, "status", "--project"))["skills"]
+    global_form = _json(_run(world, "status"))["skills"]
+
+    assert [skill["name"] for skill in effective] == ["alpha"]
+    gamma = next(skill for skill in global_form if skill["name"] == "gamma")
+    assert gamma["state"] == "disabled"
+
+
+def test_status_project_off_is_the_bare_form(tmp_path: Path) -> None:
+    """The off form of the flag is its absence, as it is for every other verb."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "enable", "--project", "gamma")
+
+    assert _json(_run(world, "status", "--project=off")) == _json(_run(world, "status"))
+
+
+def test_status_named_skills_narrow_either_form(tmp_path: Path) -> None:
+    """Naming skills selects rows; it does not change the shape of one."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "enable", "--project", "gamma")
+
+    global_form = _json(_run(world, "status", "alpha"))
+    effective = _json(_run(world, "status", "--project", "gamma"))
+
+    assert global_form["skills"] == [
+        skill
+        for skill in _json(_run(world, "status"))["skills"]
+        if skill["name"] == "alpha"
+    ]
+    assert effective["skills"] == [
+        skill
+        for skill in _json(_run(world, "status", "--project"))["skills"]
+        if skill["name"] == "gamma"
+    ]
 
 
 def test_status_groups_category_on_each_skill(tmp_path: Path) -> None:
@@ -247,7 +339,7 @@ def test_status_reports_the_directories_it_acted_on(tmp_path: Path) -> None:
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
 
-    payload = _json(_run(world, "status"))
+    payload = _json(_run(world, "status", "--project"))
 
     assert payload["directories"]["global"] == [
         str(world["home"] / ".claude" / "skills")
@@ -302,6 +394,7 @@ def test_no_command_asks_for_setup_when_nothing_is_detected(tmp_path: Path) -> N
         ("plan", "disable", "alpha"),
         ("plan", "update"),
         ("status",),
+        ("status", "--project"),
     ):
         result = _run(world, *args)
         assert result.returncode == 0, f"{args}: {result.stderr}"
@@ -322,7 +415,7 @@ def test_global_enable_places_the_skill_in_every_detected_harness(
         world["home"] / ".config" / "opencode" / "skills" / "alpha" / "SKILL.md"
     ).is_file()
     status = _json(_run(world, "status", "alpha"))
-    assert status["skills"][0]["global"] == "enabled"
+    assert status["skills"][0]["state"] == "enabled"
 
 
 def test_global_enable_with_nothing_detected_writes_only_the_shared_directory(
@@ -435,7 +528,7 @@ def test_status_sees_opencode_skill_in_transport_canonical_dir(
 
     status = _json(_run(world, "status", "alpha"))
 
-    assert status["skills"][0]["global"] == "enabled"
+    assert status["skills"][0]["state"] == "enabled"
 
 
 def test_help_reads_opencode_skill_from_transport_canonical_dir(
@@ -509,9 +602,10 @@ def test_apply_enable_project_writes_only_the_project_layer(tmp_path: Path) -> N
     assert result.returncode == 0, result.stderr
     assert (world["project"] / ".claude" / "skills" / "gamma" / "SKILL.md").is_file()
     assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
-    status = _json(_run(world, "status", "gamma"))
-    assert status["skills"][0]["global"] == "disabled"
-    assert status["skills"][0]["project"] == "enabled"
+    assert _json(_run(world, "status", "gamma"))["skills"][0]["state"] == "disabled"
+    effective = _json(_run(world, "status", "--project", "gamma"))["skills"][0]
+    assert effective["state"] == "enabled"
+    assert effective["source"] == "project"
 
 
 def test_disable_project_is_noop_when_skill_is_only_global(tmp_path: Path) -> None:
@@ -568,7 +662,7 @@ def test_update_reports_new_catalog_entries_and_leaves_them_disabled(
     names = [skill["name"] for skill in status["skills"]]
     assert "delta" in names
     delta = next(skill for skill in status["skills"] if skill["name"] == "delta")
-    assert delta["global"] == "disabled"
+    assert delta["state"] == "disabled"
 
 
 def test_check_reports_an_unsatisfied_binary(tmp_path: Path) -> None:

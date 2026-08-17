@@ -50,18 +50,19 @@ Usage: /kntnt [subcommand] [skill...] [--project[=on|off]] [--yes]
 
 Subcommands:
   help [skill]         this help, or help for one named collection skill
-  status [skill...]    report Enabled/Disabled in Global and Project
+  status [skill...]    report Global, or what applies here with --project
   enable [skill...]    make skills Enabled (picker if none named)
   disable [skill...]   make skills Disabled (picker if none named)
   update               refresh this collection and re-check Dependencies
 
 Options:
-  --project    act on this Project instead of Global (--project=off is Global)
+  --project    this Project rather than Global (--project=off is Global)
   --yes        assume yes; ask nothing that can be answered yes or no
 
-Bare /kntnt is this help. Status lists every Catalog skill, Enabled or not.
-Enable, Disable, and Update default to Global. They act on every Harness
-present on this machine, working out which those are on every run.
+Bare /kntnt is this help. Status lists every Catalog skill, Enabled or not;
+with --project it lists what applies in this directory and where each skill
+comes from. Enable, Disable, and Update default to Global. They act on every
+Harness present on this machine, working out which those are on every run.
 """
 
 
@@ -689,35 +690,87 @@ def validate_names(names: list[str]) -> list[str]:
     return cleaned
 
 
-def status_payload(names: list[str]) -> dict[str, Any]:
-    """Build the Status report for *names*, or every Catalog skill."""
+def effective_row(global_state: str, project_state: str) -> dict[str, str] | None:
+    """Return the state and source a skill has here, or None where it has neither.
 
+    Only a layer that carries the skill can be its source, so a skill Disabled
+    in both is no answer to *what applies here* and gets no row at all. Enabled
+    in a carrying layer is Enabled here, that layer having put the skill in
+    every Harness it detected; only where every carrying layer is partial is
+    the answer partial. The two are never merged Harness by Harness: each layer
+    detects its own set, so their union would answer a question nobody asked.
+    """
+
+    carrying = {
+        layer: state
+        for layer, state in (("global", global_state), ("project", project_state))
+        if state != "disabled"
+    }
+    if not carrying:
+        return None
+
+    return {
+        "state": "enabled" if "enabled" in carrying.values() else "partial",
+        "source": "both" if len(carrying) == 2 else next(iter(carrying)),
+    }
+
+
+def status_payload(names: list[str], *, effective: bool) -> dict[str, Any]:
+    """Build the Status report for *names*, or every Catalog skill.
+
+    Two questions, one shape. Without the project flag Status answers *what
+    does this machine have*: every Catalog skill with its Global `state`,
+    Disabled ones included, because the Catalog still carries them. With the
+    flag it answers *what applies in this working directory*: the Effective
+    set — everything Enabled in Global plus everything Enabled in this Project
+    — each row naming its `source` as global, project, or both. A skill
+    Disabled in both layers is no answer to the second question, so that form
+    leaves it out. `reports` says which of the two was answered, because a
+    reader must never have to guess.
+    """
+
+    # Global is read either way; the Project only where it is part of the answer.
     global_targets = target_harnesses(global_layer=True)
-    project_targets = target_harnesses(global_layer=False)
+    project_targets = target_harnesses(global_layer=False) if effective else []
+
+    # Skill names select rows out of the Catalog; naming none selects them all.
     wanted = (
         validate_names(names)
         if names
         else [str(entry["name"]) for entry in catalog_skills()]
     )
     by_name = {str(entry["name"]): entry for entry in catalog_skills()}
+
+    # Every row carries what the Catalog knows about a skill; the two forms
+    # differ only in what they add to that and in which skills earn a row.
     skills: list[dict[str, Any]] = []
     for name in wanted:
         entry = by_name[name]
-        skills.append(
-            {
-                "name": name,
-                "category": entry.get("category", ""),
-                "description": entry.get("description", ""),
-                "capabilities": entry.get("capabilities", []),
-                "global": skill_state(name, global_targets, global_layer=True),
-                "project": skill_state(name, project_targets, global_layer=False),
-            }
+        row = {
+            "name": name,
+            "category": entry.get("category", ""),
+            "description": entry.get("description", ""),
+            "capabilities": entry.get("capabilities", []),
+        }
+        global_state = skill_state(name, global_targets, global_layer=True)
+        if not effective:
+            skills.append({**row, "state": global_state})
+            continue
+        applies = effective_row(
+            global_state, skill_state(name, project_targets, global_layer=False)
         )
+        if applies is not None:
+            skills.append({**row, **applies})
+
+    # Name only the layers the report covers, so the directories are the places
+    # the states just reported were read from and nowhere else.
+    directories = {"global": target_dirs(global_targets, global_layer=True)}
+    if effective:
+        directories["project"] = target_dirs(project_targets, global_layer=False)
+
     return {
-        "directories": {
-            "global": target_dirs(global_targets, global_layer=True),
-            "project": target_dirs(project_targets, global_layer=False),
-        },
+        "reports": "effective" if effective else "global",
+        "directories": directories,
         "skills": skills,
     }
 
@@ -752,10 +805,14 @@ def picker_payload(
     }
 
 
-def cmd_status(names: list[str]) -> int:
-    """Print Status and return 0."""
+def cmd_status(names: list[str], *, global_layer: bool) -> int:
+    """Print Status and return 0.
 
-    emit(status_payload(names))
+    Status reads two layers and changes neither, so the project flag selects
+    the question rather than a target: Global alone, or what applies here.
+    """
+
+    emit(status_payload(names, effective=not global_layer))
     return 0
 
 
@@ -1206,6 +1263,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     status = sub.add_parser("status", help="Report Enabled and Disabled.")
     status.add_argument("skills", nargs="*")
+    add_project_flag(status)
     add_yes_flag(status)
 
     help_cmd = sub.add_parser("help", help="Print help.")
@@ -1255,7 +1313,7 @@ def dispatch(args: argparse.Namespace) -> int:
     """Run the parsed command."""
 
     if args.command == "status":
-        return cmd_status(args.skills)
+        return cmd_status(args.skills, global_layer=parse_layer(args.project))
     if args.command == "help":
         return cmd_help(args.skill)
     if args.command == "check":

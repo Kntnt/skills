@@ -20,12 +20,14 @@ If the arguments are `help`, `--help`, `-h`, or `help <name>`, follow `$HERE/hel
 ## Arguments
 
 - no args / `help` `[skill]` — Help for the manager, or one named collection skill. Bare `/kntnt` means Help.
-- `status` `[skill...]` — Status. No names reports every Catalog skill, Enabled or not.
+- `status` `[skill...]` `[--project]` — Status. No names reports every skill the form covers.
 - `enable` `[skill...]` `[--project]` `[--yes]` — Enable. No names opens a picker.
 - `disable` `[skill...]` `[--project]` `[--yes]` — Disable. No names opens a picker.
 - `update` `[--project]` `[--yes]` — refresh this collection, then re-check Dependencies.
 
-Enable, Disable, and Update target Global unless `--project` or `--project=on` is given. `--project=off` targets Global. Which Harnesses they reach is never asked and never recorded: every Harness present in that layer is acted on, worked out on each run.
+Every verb reads `--project` the same way: absent or `--project=off` means Global, `--project` or `--project=on` means this Project. Enable, Disable, and Update change that layer. Status changes nothing, so the flag picks the question instead: Global alone without it, and with it the Effective set — what applies in this working directory.
+
+Which Harnesses a verb reaches is never asked and never recorded: every Harness present in that layer is acted on, worked out on each run.
 
 `--yes` means assume yes: ask nothing that can be answered yes or no. Every verb of `scripts/kntnt.py` accepts it, so passing the user's flag straight through is always safe.
 

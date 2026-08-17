@@ -36,7 +36,7 @@ The manager subcommand that makes one or more skills disabled. With no skill nam
 _Avoid_: remove, uninstall
 
 **Status**:
-The manager subcommand that reports whether named skills are Enabled or Disabled in both Project and Global. With no skill names it reports every skill in the Catalog, Disabled ones included.
+The manager subcommand that reports which skills are Enabled and which are Disabled. It reads the same `--project` rule as every other verb, but changes nothing, so the flag picks the question rather than a target: without it Status reports Global, and with it the Effective set for the working directory, each skill naming its source as Global, the Project, or both. With no skill names it reports every skill the form covers — the whole Catalog in the Global form, Disabled ones included; in the Effective form only what applies here.
 _Avoid_: list, info, doctor
 
 **Update**:
