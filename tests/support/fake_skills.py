@@ -180,6 +180,17 @@ def names_of(args: argparse.Namespace) -> list[str]:
     return [name for name in names if name and name != "*"]
 
 
+def skipped() -> set[str]:
+    """Return the skills this run reports as done and leaves untouched.
+
+    A transport that exits zero having changed nothing is the failure the
+    manager is meant to catch, and staging it is the only way to test that.
+    """
+
+    raw = os.environ.get("KNTNT_TRANSPORT_SKIP", "")
+    return {name.strip() for name in raw.split(",") if name.strip()}
+
+
 def main(argv: list[str] | None = None) -> int:
     """Dispatch add, remove, or update against the isolated dirs."""
 
@@ -194,10 +205,13 @@ def main(argv: list[str] | None = None) -> int:
         global_layer = False
     log_call(args.command, agents, names, global_layer=global_layer)
 
+    skip = skipped()
     for agent in agents:
         dest = dest_dir(agent, global_layer)
         dest.mkdir(parents=True, exist_ok=True)
         for name in names:
+            if name in skip:
+                continue
             if args.command == "remove":
                 remove_skill(name, dest)
             elif args.command == "update":

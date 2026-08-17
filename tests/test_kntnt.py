@@ -148,7 +148,11 @@ def _present(world: dict[str, Path], root: str, *harness_dirs: str) -> None:
 
 
 def _run(
-    world: dict[str, Path], *args: str, cwd: Path | None = None, log: Path | None = None
+    world: dict[str, Path],
+    *args: str,
+    cwd: Path | None = None,
+    log: Path | None = None,
+    skip: list[str] | None = None,
 ) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
     env["KNTNT_HOME"] = str(world["home"])
@@ -158,6 +162,8 @@ def _run(
     env["KNTNT_TRANSPORT"] = f"uv run {FAKE_SKILLS}"
     if log is not None:
         env["KNTNT_TRANSPORT_LOG"] = str(log)
+    if skip is not None:
+        env["KNTNT_TRANSPORT_SKIP"] = ",".join(skip)
     script = world["here"] / "scripts" / "kntnt.py"
     return subprocess.run(
         ["uv", "run", str(script), *args],
@@ -446,7 +452,7 @@ def test_apply_enable_is_idempotent(tmp_path: Path) -> None:
 
     assert first.returncode == 0, first.stderr
     assert second.returncode == 0, second.stderr
-    assert _json(second)["changed"] == []
+    assert _json(second)["intended"] == []
 
 
 def test_apply_enable_refuses_the_manager(tmp_path: Path) -> None:
@@ -495,7 +501,7 @@ def test_disable_project_is_noop_when_skill_is_only_global(tmp_path: Path) -> No
     assert result.returncode == 0, result.stderr
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
     payload = _json(result)
-    assert payload["changed"] == []
+    assert payload["intended"] == []
     assert payload["noop"] == ["alpha"]
 
 
@@ -651,7 +657,7 @@ def test_capabilities_do_not_gate_where_a_skill_is_installed(tmp_path: Path) -> 
     result = _run(world, "apply", "enable", "alpha")
 
     assert result.returncode == 0, result.stderr
-    assert _json(result)["changed"] == ["alpha"]
+    assert _json(result)["confirmed"] == ["alpha"]
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
     assert (
         world["home"] / ".config" / "opencode" / "skills" / "alpha" / "SKILL.md"
@@ -746,7 +752,7 @@ def test_update_project_does_not_install_the_manager_in_the_project(
 
     assert result.returncode == 0, result.stderr
     assert not (world["project"] / ".claude" / "skills" / "kntnt").exists()
-    assert _json(result)["refreshed"] == ["alpha"]
+    assert _json(result)["confirmed"] == ["alpha"]
 
 
 def test_update_reports_removed_catalog_entries(tmp_path: Path) -> None:
@@ -972,3 +978,199 @@ def test_catalog_generation_rejects_a_folded_description(tmp_path: Path) -> None
 
     assert result.returncode == 1
     assert "alpha" in result.stderr
+
+
+def test_enable_confirms_each_placement_against_the_disk(tmp_path: Path) -> None:
+    """A clean run says what it did and says the disk was read to know it."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "enable", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["intended"] == ["alpha"]
+    assert payload["confirmed"] == ["alpha"]
+    assert payload["failed"] == []
+
+
+def test_enable_reports_a_placement_the_transport_did_not_make(tmp_path: Path) -> None:
+    """A transport that exits zero and writes nothing is not a success."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "enable", "alpha", skip=["alpha"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["intended"] == ["alpha"]
+    assert payload["confirmed"] == []
+    assert payload["failed"] == [
+        {
+            "name": "alpha",
+            "directories": [str(world["home"] / ".claude" / "skills")],
+        }
+    ]
+
+
+def test_enable_project_reports_a_placement_the_transport_did_not_make(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "project", ".claude")
+
+    result = _run(world, "apply", "enable", "--project", "gamma", skip=["gamma"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["confirmed"] == []
+    assert payload["failed"][0]["directories"] == [
+        str(world["project"] / ".claude" / "skills")
+    ]
+
+
+def test_disable_reports_a_removal_the_transport_did_not_make(tmp_path: Path) -> None:
+    """The reported defect: removal claimed, files still there, exit 0."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+
+    result = _run(world, "apply", "disable", "alpha", "--yes", skip=["alpha"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["intended"] == ["alpha"]
+    assert payload["confirmed"] == []
+    assert payload["failed"] == [
+        {
+            "name": "alpha",
+            "directories": [str(world["home"] / ".claude" / "skills")],
+        }
+    ]
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+
+
+def test_disable_project_reports_a_removal_the_transport_did_not_make(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "project", ".claude")
+    _run(world, "apply", "enable", "--project", "gamma")
+
+    result = _run(
+        world, "apply", "disable", "--project", "gamma", "--yes", skip=["gamma"]
+    )
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["confirmed"] == []
+    assert payload["failed"][0]["directories"] == [
+        str(world["project"] / ".claude" / "skills")
+    ]
+
+
+def test_a_partly_applied_verb_reports_both_sets_and_still_fails(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "enable", "alpha", "beta", skip=["beta"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["intended"] == ["alpha", "beta"]
+    assert payload["confirmed"] == ["alpha"]
+    assert [item["name"] for item in payload["failed"]] == ["beta"]
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+
+
+def test_a_failed_removal_names_only_the_directory_it_survived_in(
+    tmp_path: Path,
+) -> None:
+    """Where to look is the point, so the Harness that agrees is not named."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    _run(world, "apply", "enable", "alpha")
+    shutil.rmtree(world["home"] / ".config" / "crush" / "skills" / "alpha")
+
+    result = _run(world, "apply", "disable", "alpha", "--yes", skip=["alpha"])
+
+    assert result.returncode != 0
+    assert _json(result)["failed"][0]["directories"] == [
+        str(world["home"] / ".claude" / "skills")
+    ]
+
+
+def test_update_reports_a_refresh_that_never_landed(tmp_path: Path) -> None:
+    """Update reaches a Harness installed since the last Enable, or says so."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _present(world, "home", ".config/crush")
+
+    result = _run(world, "apply", "update", skip=["alpha"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert "alpha" in payload["intended"]
+    assert [item["name"] for item in payload["failed"]] == ["alpha"]
+    assert payload["failed"][0]["directories"] == [
+        str(world["home"] / ".config" / "crush" / "skills")
+    ]
+
+
+def test_a_verb_that_changes_nothing_is_clean(tmp_path: Path) -> None:
+    """Nothing intended is nothing to verify; an inert transport cannot fail."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+
+    result = _run(world, "apply", "enable", "alpha", skip=["alpha"])
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["intended"] == []
+    assert payload["confirmed"] == []
+    assert payload["failed"] == []
+    assert payload["noop"] == ["alpha"]
+
+
+def test_the_change_verbs_tell_the_user_when_a_change_did_not_take(
+    tmp_path: Path,
+) -> None:
+    """The payload is half of it; the skill body has to show the failure."""
+
+    for name in ("enable.md", "disable.md", "update.md"):
+        text = (REPO_ROOT / "skills" / "kntnt" / name).read_text(encoding="utf-8")
+        assert "`failed`" in text, name
+        assert "`directories`" in text, name
+
+
+def test_a_failed_removal_names_the_shared_tree_a_universal_harness_reads(
+    tmp_path: Path,
+) -> None:
+    """The installation the defect was found on: shared tree, exit 0.
+
+    The transport clears each Harness's own path and skips the shared one, so
+    the report has to name the directory the files are actually left in.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".config/opencode")
+    _write(
+        world["home"] / ".agents" / "skills" / "alpha" / "SKILL.md", _skill_md("alpha")
+    )
+
+    result = _run(world, "apply", "disable", "alpha", "--yes", skip=["alpha"])
+
+    assert result.returncode != 0
+    assert _json(result)["failed"][0]["directories"] == [
+        str(world["home"] / ".agents" / "skills")
+    ]

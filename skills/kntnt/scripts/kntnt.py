@@ -22,6 +22,10 @@ ORIGIN = "Kntnt/skills"
 MANAGER = "kntnt"
 UNIVERSAL_PROJECT = ".agents/skills"
 CANONICAL_GLOBAL = "~/.agents/skills"
+
+# What a verb exits with when the disk does not show the change it made. The
+# payload is still emitted: the user has to be told which skills and where.
+EXIT_CHANGE_FAILED = 1
 BINARY_HOW = {
     "uv": "install uv from https://docs.astral.sh/uv/",
     "git": "install git",
@@ -434,6 +438,16 @@ def target_dirs(harnesses: list[str], *, global_layer: bool) -> list[str]:
     return sorted(directories)
 
 
+def skill_present_at(directory: Path, name: str) -> bool:
+    """True when *name* is on disk in *directory*.
+
+    The manager's one notion of presence. Status decides Enabled with it and a
+    change is confirmed with it, so no verb can report what Status contradicts.
+    """
+
+    return (directory / name / "SKILL.md").is_file()
+
+
 def skill_state(name: str, harnesses: list[str], *, global_layer: bool) -> str:
     """Return enabled, disabled, or partial for *name* in one layer."""
 
@@ -446,7 +460,7 @@ def skill_state(name: str, harnesses: list[str], *, global_layer: bool) -> str:
         if not directories:
             continue
         checked += 1
-        if any((directory / name / "SKILL.md").is_file() for directory in directories):
+        if any(skill_present_at(directory, name) for directory in directories):
             present += 1
     if checked == 0 or present == 0:
         return "disabled"
@@ -487,36 +501,120 @@ def run_transport(args: list[str], *, internal: bool = False) -> None:
         raise ManagerError(detail or f"transport failed: {' '.join(args)}")
 
 
-def add_skills(names: list[str], harnesses: list[str], *, global_layer: bool) -> None:
-    """Enable *names* on *harnesses* in the targeted layer."""
+def contradicting_dirs(
+    name: str, harnesses: list[str], *, global_layer: bool, expect_present: bool
+) -> list[str]:
+    """Return the directories where *name* contradicts the intended change."""
 
-    if not names or not harnesses:
-        return
-    args = ["add", collection_source()]
-    for name in names:
-        args.extend(["--skill", name])
+    directories: set[str] = set()
+
+    # A Harness that agrees contributes nothing, even where one of its own
+    # directories is empty: that is what the canonical tree does to a universal
+    # Harness on a placement that did take effect.
     for harness in harnesses:
-        args.extend(["--agent", harness])
-    if global_layer:
-        args.append("--global")
-    args.append("--yes")
-    run_transport(args, internal=True)
+        presence = {
+            directory: skill_present_at(directory, name)
+            for directory in skill_dirs(harness, global_layer=global_layer)
+        }
+        if any(presence.values()) == expect_present:
+            continue
+        directories.update(
+            str(directory)
+            for directory, present in presence.items()
+            if present != expect_present
+        )
+
+    return sorted(directories)
+
+
+def verified_outcome(
+    names: list[str], harnesses: list[str], *, global_layer: bool, expect_present: bool
+) -> dict[str, Any]:
+    """Report which of *names* the disk agrees were changed.
+
+    The transport's exit code says only that it did not throw; a run that does
+    nothing looks exactly like one that did the work (issue #7). Success is
+    therefore the presence test Status uses, run again over the same layer and
+    the same directories: a placement is confirmed where the skill is now
+    Enabled, a removal where it is now Disabled. Whatever fails that is named,
+    with the directories that contradict it, so the user knows where to look.
+    """
+
+    wanted = "enabled" if expect_present else "disabled"
+    confirmed: list[str] = []
+    failed: list[dict[str, Any]] = []
+
+    # Ask the disk about each name, and name the directories behind a no.
+    for name in names:
+        if skill_state(name, harnesses, global_layer=global_layer) == wanted:
+            confirmed.append(name)
+            continue
+        failed.append(
+            {
+                "name": name,
+                "directories": contradicting_dirs(
+                    name,
+                    harnesses,
+                    global_layer=global_layer,
+                    expect_present=expect_present,
+                ),
+            }
+        )
+
+    return {"intended": list(names), "confirmed": confirmed, "failed": failed}
+
+
+def outcome_exit_code(outcome: dict[str, Any]) -> int:
+    """Return the exit code a verified outcome earns.
+
+    One rule for every verb: a change the disk does not show fails the run,
+    including a run where other skills succeeded. The payload is emitted
+    either way — an exit code names neither the skill nor the directory.
+    """
+
+    return EXIT_CHANGE_FAILED if outcome["failed"] else 0
+
+
+def add_skills(
+    names: list[str], harnesses: list[str], *, global_layer: bool
+) -> dict[str, Any]:
+    """Enable *names* on *harnesses* in the targeted layer, and verify it."""
+
+    # Nothing to place is not a call: the transport refuses an empty selection.
+    if names and harnesses:
+        args = ["add", collection_source()]
+        for name in names:
+            args.extend(["--skill", name])
+        for harness in harnesses:
+            args.extend(["--agent", harness])
+        if global_layer:
+            args.append("--global")
+        args.append("--yes")
+        run_transport(args, internal=True)
+
+    return verified_outcome(
+        names, harnesses, global_layer=global_layer, expect_present=True
+    )
 
 
 def remove_skills(
     names: list[str], harnesses: list[str], *, global_layer: bool
-) -> None:
-    """Disable *names* on *harnesses* in the targeted layer."""
+) -> dict[str, Any]:
+    """Disable *names* on *harnesses* in the targeted layer, and verify it."""
 
-    if not names or not harnesses:
-        return
-    args = ["remove", *names]
-    for harness in harnesses:
-        args.extend(["--agent", harness])
-    if global_layer:
-        args.append("--global")
-    args.append("--yes")
-    run_transport(args, internal=True)
+    # Nothing to remove is not a call: the transport refuses an empty selection.
+    if names and harnesses:
+        args = ["remove", *names]
+        for harness in harnesses:
+            args.extend(["--agent", harness])
+        if global_layer:
+            args.append("--global")
+        args.append("--yes")
+        run_transport(args, internal=True)
+
+    return verified_outcome(
+        names, harnesses, global_layer=global_layer, expect_present=False
+    )
 
 
 def parse_layer(value: str) -> bool:
@@ -665,16 +763,16 @@ def cmd_apply_enable(names: list[str], *, global_layer: bool) -> int:
         if skill_state(name, harnesses, global_layer=global_layer) == "enabled"
     }
     changing = [name for name in wanted if name not in already]
-    add_skills(changing, harnesses, global_layer=global_layer)
+    outcome = add_skills(changing, harnesses, global_layer=global_layer)
     emit(
         {
-            "changed": changing,
+            **outcome,
             "noop": [name for name in wanted if name in already],
             "layer": "global" if global_layer else "project",
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
-    return 0
+    return outcome_exit_code(outcome)
 
 
 def cmd_apply_disable(names: list[str], *, global_layer: bool, yes: bool) -> int:
@@ -700,16 +798,16 @@ def cmd_apply_disable(names: list[str], *, global_layer: bool, yes: bool) -> int
             noop.append(name)
             continue
         changing.append(name)
-    remove_skills(changing, harnesses, global_layer=global_layer)
+    outcome = remove_skills(changing, harnesses, global_layer=global_layer)
     emit(
         {
-            "changed": changing,
+            **outcome,
             "noop": noop,
             "layer": "global" if global_layer else "project",
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
-    return 0
+    return outcome_exit_code(outcome)
 
 
 def cmd_plan_update(*, global_layer: bool) -> int:
@@ -742,7 +840,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     # SKILL.md is unchanged, leaving sidecars — catalog.json, helper documents,
     # scripts — frozen at the revision that last touched SKILL.md. `add`
     # re-copies the whole directory and is idempotent, so it is the refresh.
-    add_skills(refresh, harnesses, global_layer=global_layer)
+    outcome = add_skills(refresh, harnesses, global_layer=global_layer)
 
     # That reaches only the Harnesses detected here, which need not hold the copy
     # of the Manager running right now. Refresh its Catalog directly, or Status
@@ -764,7 +862,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
         for directory in skill_dirs(harness, global_layer=global_layer):
             for name in desired:
                 skill_dir = directory / name
-                if not (skill_dir / "SKILL.md").is_file():
+                if not skill_present_at(directory, name):
                     continue
                 for item in unsatisfied_at(skill_dir):
                     key = (item["kind"], item["name"], item["how"])
@@ -781,9 +879,9 @@ def cmd_apply_update(*, global_layer: bool) -> int:
 
     emit(
         {
+            **outcome,
             "new": new_names,
             "removed": removed_names,
-            "refreshed": refresh,
             "catalog_refreshed": catalog_refreshed,
             "unsatisfied": unsatisfied,
             "capabilities": capabilities,
@@ -791,7 +889,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
-    return 0
+    return outcome_exit_code(outcome)
 
 
 def declared_deps_at(skill_dir: Path) -> dict[str, list[str]]:
@@ -857,7 +955,7 @@ def skill_is_effective(name: str) -> bool:
     for global_layer in (True, False):
         for harness in target_harnesses(global_layer=global_layer):
             if any(
-                (directory / name / "SKILL.md").is_file()
+                skill_present_at(directory, name)
                 for directory in skill_dirs(harness, global_layer=global_layer)
             ):
                 return True
