@@ -1030,6 +1030,12 @@ def cmd_help(name: str | None) -> int:
     return 0
 
 
+# The frontmatter parser reads a restricted YAML subset with no block scalars,
+# so `description: >` yields this indicator as the value. Generation is where
+# that has to fail: past it the character ships as the skill's whole help text.
+BLOCK_SCALARS = frozenset({">", "|", ">-", "|-", ">+", "|+"})
+
+
 def generate_catalog(source: Path) -> dict[str, Any]:
     """Build a Catalog from SKILL.md files under *source*/skills."""
 
@@ -1042,16 +1048,32 @@ def generate_catalog(source: Path) -> dict[str, Any]:
         if name == MANAGER:
             continue
         deps = skill_deps(frontmatter)
+        description = str(frontmatter.get("description") or "")
 
         # Generation is where a misspelt Capability has to fail. Past this
         # point the name would ride into the Catalog and only surface when a
-        # user ran the skill.
+        # user ran the skill. The same is true of the two fields the Catalog
+        # exists to carry: the transport installs by directory name, and the
+        # description is a skill's entire help until it is Enabled.
         capability_notes(deps["capabilities"])
+        if name != skill_md.parent.name:
+            raise ManagerError(
+                f"{skill_md}: name '{name}' is not the directory "
+                f"'{skill_md.parent.name}'; the transport installs by directory"
+            )
+        if not description:
+            raise ManagerError(f"{skill_md}: description is empty")
+        if description in BLOCK_SCALARS:
+            raise ManagerError(
+                f"{skill_md}: description '{description}' is a YAML block "
+                "scalar, which the frontmatter parser does not support; "
+                "write it on one line"
+            )
         entries.append(
             {
                 "name": name,
                 "category": category,
-                "description": str(frontmatter.get("description") or ""),
+                "description": description,
                 "binaries": deps["binaries"],
                 "skills": deps["skills"],
                 "externals": deps["externals"],

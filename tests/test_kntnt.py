@@ -869,3 +869,50 @@ def test_delegation_requires_subagents_and_says_so() -> None:
     mode = (path.parent / "mode.md").read_text(encoding="utf-8")
     assert "haiku" not in mode
     assert "Claude Code" not in mode
+
+
+def test_catalog_generation_rejects_a_name_that_is_not_the_directory(
+    tmp_path: Path,
+) -> None:
+    """The transport installs by directory, so a Catalog name that differs cannot resolve."""
+
+    world = _world(tmp_path)
+    _write(
+        world["source"] / "skills" / "code" / "delta" / "SKILL.md",
+        _skill_md("epsilon"),
+    )
+
+    result = _run(world, "catalog")
+
+    assert result.returncode == 1
+    assert "epsilon" in result.stderr
+    assert "delta" in result.stderr
+
+
+def test_catalog_generation_rejects_an_empty_description(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _write(
+        world["source"] / "skills" / "code" / "alpha" / "SKILL.md",
+        _skill_md("alpha", description=""),
+    )
+
+    result = _run(world, "catalog")
+
+    assert result.returncode == 1
+    assert "description" in result.stderr
+    assert "alpha" in result.stderr
+
+
+def test_catalog_generation_rejects_a_folded_description(tmp_path: Path) -> None:
+    """parse_simple_yaml has no block scalars, so a folded description ships as '>'."""
+
+    world = _world(tmp_path)
+    _write(
+        world["source"] / "skills" / "code" / "alpha" / "SKILL.md",
+        _skill_md("alpha", description=">"),
+    )
+
+    result = _run(world, "catalog")
+
+    assert result.returncode == 1
+    assert "alpha" in result.stderr
