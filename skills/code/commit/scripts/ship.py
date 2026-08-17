@@ -15,10 +15,39 @@ import subprocess
 import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from urllib.parse import urlparse
 
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
 JSON_VERSION_RE = re.compile(r'("version"\s*:\s*")([^"]+)(")')
 TOML_VERSION_RE = re.compile(r'^(version\s*=\s*")([^"]+)(")', re.MULTILINE)
+MAKE_TARGET_RE = re.compile(r"^([A-Za-z][A-Za-z0-9_-]*):")
+
+BUILD_SCRIPTS = (
+    "scripts/build-zip.sh",
+    "scripts/build-release.sh",
+    "scripts/package.sh",
+)
+MAKE_TARGETS = ("zip", "dist", "archive", "release-zip")
+NPM_SCRIPTS = ("zip", "build:zip", "archive")
+
+GITIGNORE_BASE = """# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*~
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Claude local
+.claude/settings.local.json
+"""
 
 
 class GitError(RuntimeError):
@@ -61,6 +90,35 @@ def git_ok(cwd: Path, *args: str) -> bool:
     return result.returncode == 0
 
 
+def _gh(cwd: Path, *args: str) -> str:
+    """Run gh in *cwd* and return stdout. Raise GitError on failure."""
+
+    result = subprocess.run(
+        ["gh", *args],
+        cwd=cwd,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout).strip()
+        raise GitError(detail or f"gh {' '.join(args)} failed")
+    return result.stdout
+
+
+def _gh_ok(cwd: Path, *args: str) -> bool:
+    """Return True when a gh command exits 0."""
+
+    result = subprocess.run(
+        ["gh", *args],
+        cwd=cwd,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
 @dataclass
 class Plan:
     """Facts the calling skill shows, then feeds to apply."""
@@ -71,7 +129,7 @@ class Plan:
     branch: str | None = None
     default_branch: str | None = None
     dirty: bool = False
-    stage_rule: str = "tracked"
+    stage_rule: str = "all"
     staged: list[str] = field(default_factory=list)
     tracked: list[str] = field(default_factory=list)
     untracked: list[str] = field(default_factory=list)
@@ -82,6 +140,8 @@ class Plan:
     unreleased_empty: bool | None = None
     gh: bool = False
     commits: list[dict[str, str]] = field(default_factory=list)
+    gitignore_proposal: str | None = None
+    build: dict[str, str] | None = None
 
 
 def status_paths(cwd: Path) -> tuple[list[str], list[str], list[str]]:
@@ -167,26 +227,94 @@ def commit_subjects(cwd: Path, since: str | None) -> list[dict[str, str]]:
     return commits
 
 
+def gitignore_proposal(cwd: Path) -> str | None:
+    """Return a proposed .gitignore, or None when one already exists."""
+
+    if (cwd / ".gitignore").is_file():
+        return None
+
+    parts = [GITIGNORE_BASE]
+    if (cwd / "package.json").is_file():
+        parts.append("node_modules/\ndist/\n")
+    if (cwd / "composer.json").is_file():
+        parts.append("/vendor/\n")
+    if (cwd / "pyproject.toml").is_file() or (cwd / "requirements.txt").is_file():
+        parts.append(
+            "__pycache__/\n*.py[cod]\n.venv/\n.mypy_cache/\n.pytest_cache/\n.ruff_cache/\n"
+        )
+    return "\n".join(part.rstrip() for part in parts) + "\n"
+
+
+def make_targets(path: Path) -> set[str]:
+    """Return Makefile target names declared at column 0."""
+
+    names: set[str] = set()
+    for line in path.read_text(encoding="utf-8").splitlines():
+        match = MAKE_TARGET_RE.match(line)
+        if match:
+            names.add(match.group(1))
+    return names
+
+
+def json_scripts(path: Path) -> set[str]:
+    """Return package.json script names."""
+
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return set()
+    scripts = data.get("scripts")
+    if not isinstance(scripts, dict):
+        return set()
+    return {name for name in scripts if isinstance(name, str)}
+
+
+def detect_build(cwd: Path) -> dict[str, str] | None:
+    """Return the first conventional archive build command, or None."""
+
+    for relative in BUILD_SCRIPTS:
+        if (cwd / relative).is_file():
+            return {"command": relative}
+
+    makefile = cwd / "Makefile"
+    if makefile.is_file():
+        targets = make_targets(makefile)
+        for name in MAKE_TARGETS:
+            if name in targets:
+                return {"command": f"make {name}"}
+
+    package = cwd / "package.json"
+    if package.is_file():
+        scripts = json_scripts(package)
+        for name in NPM_SCRIPTS:
+            if name in scripts:
+                return {"command": f"npm run {name}"}
+
+    return None
+
+
 def build_plan(cwd: Path, mode: str) -> Plan:
     """Gather plan facts for *mode* in *cwd*."""
 
     staged, tracked, untracked = status_paths(cwd)
-    dirty = bool(staged or tracked)
-    stage_rule = "staged" if staged else "tracked"
+    dirty = bool(staged or tracked or untracked)
     branch = current_branch(cwd)
+    tag = last_tag(cwd)
     plan = Plan(
         mode=mode,
         ready=True,
         branch=branch,
         default_branch=default_branch(cwd),
         dirty=dirty,
-        stage_rule=stage_rule,
         staged=staged,
         tracked=tracked,
         untracked=untracked,
         unpushed=unpushed_count(cwd),
-        last_tag=last_tag(cwd),
+        last_tag=tag,
         gh=shutil.which("gh") is not None,
+        commits=commit_subjects(cwd, tag),
+        gitignore_proposal=gitignore_proposal(cwd),
+        unreleased_empty=unreleased_is_empty(cwd / "CHANGELOG.md"),
     )
 
     if mode == "commit":
@@ -204,8 +332,7 @@ def build_plan(cwd: Path, mode: str) -> Plan:
             plan.reason = "everything up-to-date"
         return plan
 
-    plan.commits = commit_subjects(cwd, plan.last_tag)
-    plan.unreleased_empty = unreleased_is_empty(cwd / "CHANGELOG.md")
+    plan.build = detect_build(cwd)
     locations = detect_versions(cwd)
     plan.version_files = [f"{path}:{version}" for path, version in locations]
     if locations:
@@ -224,7 +351,7 @@ def unreleased_is_empty(changelog: Path) -> bool | None:
     body = unreleased_body(text)
     if body is None:
         return None
-    return not any(line.startswith("- ") or line.startswith("* ") for line in body.splitlines())
+    return not any(line.startswith(("- ", "* ")) for line in body.splitlines())
 
 
 def unreleased_body(text: str) -> str | None:
@@ -290,21 +417,10 @@ def toml_version(path: Path) -> str | None:
     return None
 
 
-def stage(cwd: Path, include: list[str]) -> None:
-    """Stage tracked changes, or the existing index, plus any --include paths."""
+def apply_commit(cwd: Path, message: str) -> str:
+    """Stage the working tree and commit. Return the new SHA."""
 
-    staged, tracked, _untracked = status_paths(cwd)
-    if not staged:
-        if tracked:
-            git(cwd, "add", "-u")
-    for path in include:
-        git(cwd, "add", "--", path)
-
-
-def apply_commit(cwd: Path, message: str, include: list[str]) -> str:
-    """Stage and commit. Return the new SHA. Raise GitError if nothing to commit."""
-
-    stage(cwd, include)
+    git(cwd, "add", "-A")
     staged, _tracked, _untracked = status_paths(cwd)
     if not staged:
         raise GitError("nothing to commit")
@@ -312,14 +428,11 @@ def apply_commit(cwd: Path, message: str, include: list[str]) -> str:
     return git(cwd, "rev-parse", "--short", "HEAD").strip()
 
 
-def apply_push(cwd: Path, message: str, include: list[str]) -> str:
-    """Commit when dirty, then push the current branch. Return a summary."""
+def apply_push(cwd: Path) -> str:
+    """Push the current branch. Return a summary."""
 
-    staged, tracked, _untracked = status_paths(cwd)
-    parts: list[str] = []
-    if staged or tracked or include:
-        sha = apply_commit(cwd, message, include)
-        parts.append(sha)
+    if not _origin_url(cwd):
+        raise GitError("no origin remote")
     try:
         git(cwd, "rev-parse", "--abbrev-ref", "@{upstream}")
         has_upstream = True
@@ -329,8 +442,7 @@ def apply_push(cwd: Path, message: str, include: list[str]) -> str:
         git(cwd, "push")
     else:
         git(cwd, "push", "-u", "origin", "HEAD")
-    parts.append("pushed")
-    return " ".join(parts)
+    return "pushed"
 
 
 def bump_version_files(cwd: Path, version: str) -> list[Path]:
@@ -375,56 +487,74 @@ def extract_release_notes(text: str, version: str) -> str:
     return body.strip()
 
 
-def apply_release(cwd: Path, message: str, version: str, include: list[str]) -> str:
-    """Bump, promote changelog, commit, tag, push, and publish."""
+def _require_version(version: str) -> str:
+    """Return the v-prefixed tag, or raise when *version* is not SemVer."""
 
     if not VERSION_RE.match(version):
         raise GitError(f"'{version}' is not a major.minor.patch version")
+    return f"v{version}"
 
-    # Release only from the default branch, with a free tag name.
+
+def _require_default_branch(cwd: Path) -> None:
+    """Raise when HEAD is not the default branch."""
+
     branch = current_branch(cwd)
     default = default_branch(cwd)
     if branch != default:
         raise GitError(f"not on the default branch (on {branch}, default is {default})")
-    tag = f"v{version}"
+
+
+def apply_bump(cwd: Path, version: str) -> str:
+    """Bump version files and promote the changelog. Return the version."""
+
+    tag = _require_version(version)
+    _require_default_branch(cwd)
     if git(cwd, "tag", "-l", tag).strip():
         raise GitError(f"tag {tag} already exists")
-
-    # Refuse when there is no user-facing Unreleased body to ship.
     changelog = cwd / "CHANGELOG.md"
     if unreleased_is_empty(changelog) is not False:
         raise GitError("nothing to release")
 
-    # Write the version and promote the changelog before staging.
     bump_version_files(cwd, version)
-    date = datetime.date.today().isoformat()
+    date = datetime.datetime.now(tz=datetime.UTC).date().isoformat()
     new_text = promote_changelog(changelog.read_text(encoding="utf-8"), version, date)
     changelog.write_text(new_text, encoding="utf-8")
+    return version
 
-    git(cwd, "add", "--", "CHANGELOG.md")
-    for relative, _current in detect_versions(cwd):
-        git(cwd, "add", "--", relative)
-    sha = apply_commit(cwd, message, include)
 
-    # Tag the release commit and publish the branch, tag, and notes.
+def apply_tag(cwd: Path, version: str) -> str:
+    """Create an annotated tag on HEAD and push it. Return the tag name."""
+
+    tag = _require_version(version)
+    if git(cwd, "tag", "-l", tag).strip():
+        raise GitError(f"tag {tag} already exists")
     git(cwd, "tag", "-a", tag, "-m", tag)
-    git(cwd, "push", "-u", "origin", "HEAD")
     git(cwd, "push", "origin", tag)
-    parts = [sha, tag, "pushed"]
-    if shutil.which("gh") and "github.com" in _origin_url(cwd):
-        notes = extract_release_notes(new_text, version)
-        created = subprocess.run(
-            ["gh", "release", "create", tag, "--title", tag, "--notes", notes],
-            cwd=cwd,
-            text=True,
-            capture_output=True,
-            check=False,
-        )
-        if created.returncode != 0:
-            detail = (created.stderr or created.stdout).strip()
-            raise GitError(f"tag pushed; gh release failed: {detail}")
-        parts.append("released")
-    return " ".join(parts)
+    return tag
+
+
+def apply_publish(cwd: Path, version: str, asset: str | None) -> str:
+    """Create a GitHub release, or upload *asset* onto an existing one."""
+
+    tag = _require_version(version)
+    if not shutil.which("gh"):
+        raise GitError("gh not available")
+    if "github" not in _remote_host(_origin_url(cwd)):
+        raise GitError("origin is not GitHub")
+
+    if asset and _gh_ok(cwd, "release", "view", tag):
+        _gh(cwd, "release", "upload", tag, asset)
+        return "uploaded"
+
+    notes = ""
+    changelog = cwd / "CHANGELOG.md"
+    if changelog.is_file():
+        notes = extract_release_notes(changelog.read_text(encoding="utf-8"), version)
+    args = ["release", "create", tag, "--title", tag, "--notes", notes]
+    if asset:
+        args.append(asset)
+    _gh(cwd, *args)
+    return "released"
 
 
 def _origin_url(cwd: Path) -> str:
@@ -434,6 +564,16 @@ def _origin_url(cwd: Path) -> str:
         return git(cwd, "remote", "get-url", "origin").strip()
     except GitError:
         return ""
+
+
+def _remote_host(url: str) -> str:
+    """Return the host of a git remote URL."""
+
+    if not url:
+        return ""
+    if url.startswith("git@"):
+        return url[4:].split(":", 1)[0]
+    return urlparse(url).hostname or ""
 
 
 def cmd_plan(cwd: Path, mode: str) -> int:
@@ -452,18 +592,20 @@ def cmd_plan(cwd: Path, mode: str) -> int:
 def cmd_apply(cwd: Path, args: argparse.Namespace) -> int:
     """Apply *args.mode* and print a one-line result."""
 
-    message = args.message.strip()
-    if not message:
-        return fail("message is empty")
     try:
         if args.mode == "commit":
-            result = apply_commit(cwd, message, args.include)
+            message = args.message.strip()
+            if not message:
+                return fail("message is empty")
+            result = apply_commit(cwd, message)
         elif args.mode == "push":
-            result = apply_push(cwd, message, args.include)
+            result = apply_push(cwd)
+        elif args.mode == "bump":
+            result = apply_bump(cwd, args.version)
+        elif args.mode == "tag":
+            result = apply_tag(cwd, args.version)
         else:
-            if not args.version:
-                return fail("--version is required for release")
-            result = apply_release(cwd, message, args.version, args.include)
+            result = apply_publish(cwd, args.version, args.asset)
     except GitError as exc:
         text = str(exc)
         if text == "nothing to commit":
@@ -478,13 +620,28 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
+
     plan = sub.add_parser("plan", help="Print a JSON plan and stop.")
     plan.add_argument("mode", choices=("commit", "push", "release"))
+
     apply = sub.add_parser("apply", help="Apply a plan.")
-    apply.add_argument("mode", choices=("commit", "push", "release"))
-    apply.add_argument("--message", required=True)
-    apply.add_argument("--version")
-    apply.add_argument("--include", action="append", default=[])
+    apply_sub = apply.add_subparsers(dest="mode", required=True)
+
+    commit = apply_sub.add_parser("commit", help="Stage everything and commit.")
+    commit.add_argument("--message", required=True)
+
+    apply_sub.add_parser("push", help="Push the current branch.")
+
+    bump = apply_sub.add_parser("bump", help="Bump versions and promote the changelog.")
+    bump.add_argument("--version", required=True)
+
+    tag = apply_sub.add_parser("tag", help="Tag HEAD and push the tag.")
+    tag.add_argument("--version", required=True)
+
+    publish = apply_sub.add_parser("publish", help="Create or update the GitHub release.")
+    publish.add_argument("--version", required=True)
+    publish.add_argument("--asset")
+
     return parser.parse_args(argv)
 
 

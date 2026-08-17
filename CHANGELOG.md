@@ -4,6 +4,23 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.2.0] – 2026-08-17
+
+### Added
+
+- README documents install, the manager, and the collection skills.
+- `AGENTS.md` at the repo root with ground rules and pointers.
+
+### Changed
+
+- `commit` reconciles `[Unreleased]`, proposes a `.gitignore` when missing, and stages the whole working tree (`git add -A`).
+- `push` follows `commit`, then pushes. It no longer commits on its own.
+- `release` bumps, follows `push`, tags `HEAD`, publishes a GitHub release, and uploads a zip when a conventional build script exists.
+
+### Fixed
+
+- The manager finds OpenCode skills in `~/.agents/skills`, where the transport actually writes them.
+
 ## [0.1.0] – 2026-08-16
 
 ### Added

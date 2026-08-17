@@ -20,6 +20,8 @@ from typing import Any, cast
 
 ORIGIN = "Kntnt/skills"
 MANAGER = "kntnt"
+UNIVERSAL_PROJECT = ".agents/skills"
+CANONICAL_GLOBAL = "~/.agents/skills"
 BINARY_HOW = {
     "uv": "install uv from https://docs.astral.sh/uv/",
     "git": "install git",
@@ -121,6 +123,32 @@ def layer_dir(harness: str, *, global_layer: bool) -> Path | None:
     if not template:
         return None
     return expand_path(template, global_layer=global_layer)
+
+
+def is_universal(harness: str) -> bool:
+    """True when the transport installs *harness* into the shared .agents/skills tree."""
+
+    spec = harness_paths().get(harness)
+    return spec is not None and spec.get("project") == UNIVERSAL_PROJECT
+
+
+def skill_dirs(harness: str, *, global_layer: bool) -> list[Path]:
+    """Return directories where *harness* may hold a skill in this layer.
+
+    The transport treats a harness whose project path is `.agents/skills` as
+    universal and writes Global files to `~/.agents/skills`, ignoring that
+    harness's documented globalSkillsDir.
+    """
+
+    dirs: list[Path] = []
+    primary = layer_dir(harness, global_layer=global_layer)
+    if primary is not None:
+        dirs.append(primary)
+    if global_layer and is_universal(harness):
+        canonical = expand_path(CANONICAL_GLOBAL, global_layer=True)
+        if canonical not in dirs:
+            dirs.append(canonical)
+    return dirs
 
 
 def parse_yaml_scalar(raw: str) -> Any:
@@ -374,11 +402,11 @@ def skill_state(name: str, harnesses: list[str], *, global_layer: bool) -> str:
     present = 0
     checked = 0
     for harness in harnesses:
-        directory = layer_dir(harness, global_layer=global_layer)
-        if directory is None:
+        directories = skill_dirs(harness, global_layer=global_layer)
+        if not directories:
             continue
         checked += 1
-        if (directory / name / "SKILL.md").is_file():
+        if any((directory / name / "SKILL.md").is_file() for directory in directories):
             present += 1
     if checked == 0 or present == 0:
         return "disabled"
@@ -779,19 +807,17 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     unsatisfied: list[dict[str, str]] = []
     seen: set[tuple[str, str, str]] = set()
     for harness in harnesses:
-        directory = layer_dir(harness, global_layer=global_layer)
-        if directory is None:
-            continue
-        for name in desired:
-            skill_dir = directory / name
-            if not (skill_dir / "SKILL.md").is_file():
-                continue
-            for item in unsatisfied_at(skill_dir):
-                key = (item["kind"], item["name"], item["how"])
-                if key in seen:
+        for directory in skill_dirs(harness, global_layer=global_layer):
+            for name in desired:
+                skill_dir = directory / name
+                if not (skill_dir / "SKILL.md").is_file():
                     continue
-                seen.add(key)
-                unsatisfied.append(item)
+                for item in unsatisfied_at(skill_dir):
+                    key = (item["kind"], item["name"], item["how"])
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    unsatisfied.append(item)
 
     emit(
         {
@@ -852,8 +878,10 @@ def skill_is_effective(name: str) -> bool:
 
     for harness in optional_harnesses() or detected_harnesses():
         for global_layer in (True, False):
-            directory = layer_dir(harness, global_layer=global_layer)
-            if directory is not None and (directory / name / "SKILL.md").is_file():
+            if any(
+                (directory / name / "SKILL.md").is_file()
+                for directory in skill_dirs(harness, global_layer=global_layer)
+            ):
                 return True
     return False
 
@@ -874,12 +902,10 @@ def find_skill_md(name: str) -> Path | None:
 
     for harness in optional_harnesses() or detected_harnesses():
         for global_layer in (True, False):
-            directory = layer_dir(harness, global_layer=global_layer)
-            if directory is None:
-                continue
-            candidate = directory / name / "SKILL.md"
-            if candidate.is_file():
-                return candidate
+            for directory in skill_dirs(harness, global_layer=global_layer):
+                candidate = directory / name / "SKILL.md"
+                if candidate.is_file():
+                    return candidate
 
     source = Path(collection_source())
     if source.is_dir():

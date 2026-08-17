@@ -237,6 +237,36 @@ def test_apply_enable_installs_on_every_recorded_harness(tmp_path: Path) -> None
     assert status["skills"][0]["global"] == "enabled"
 
 
+def test_status_sees_opencode_skill_in_transport_canonical_dir(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _setup(world, "opencode")
+    dest = world["home"] / ".agents" / "skills" / "alpha"
+    _write(dest / "SKILL.md", _skill_md("alpha"))
+
+    status = _json(_run(world, "status", "alpha"))
+
+    assert status["skills"][0]["global"] == "enabled"
+
+
+def test_help_reads_opencode_skill_from_transport_canonical_dir(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _setup(world, "opencode")
+    dest = world["home"] / ".agents" / "skills" / "alpha"
+    _write(
+        dest / "SKILL.md",
+        _skill_md("alpha", help_body="Canonical help."),
+    )
+
+    result = _run(world, "help", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert "Canonical help." in result.stdout
+
+
 def test_apply_enable_is_idempotent(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _setup(world, "claude-code")
@@ -578,11 +608,35 @@ def test_update_reports_removed_catalog_entries(tmp_path: Path) -> None:
 
 
 def test_collection_skills_are_hidden_from_the_transport() -> None:
-    for name in ("commit", "push", "release"):
-        path = REPO_ROOT / "skills" / "code" / name / "SKILL.md"
-        if not path.is_file():
+    for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
+        if path.parent.name == "kntnt":
             continue
         text = path.read_text(encoding="utf-8")
-        assert "internal: true" in text
-        assert "check --here" in text
-        assert "npx skills add Kntnt/skills" in text
+        assert "internal: true" in text, path
+        assert "check --here" in text, path
+        assert "npx skills add Kntnt/skills" in text, path
+
+
+def test_agents_md_is_model_invoked() -> None:
+    text = (REPO_ROOT / "skills" / "agents" / "agents-md" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "disable-model-invocation" not in text
+    assert "name: agents-md" in text
+
+
+def test_generated_catalog_includes_agents_md() -> None:
+    result = subprocess.run(
+        ["uv", "run", str(KNTNT_PY), "catalog"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        env={**os.environ, "KNTNT_SOURCE": str(REPO_ROOT)},
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    catalog = json.loads(result.stdout)
+    names = {entry["name"] for entry in catalog["skills"]}
+    assert "agents-md" in names
+    entry = next(item for item in catalog["skills"] if item["name"] == "agents-md")
+    assert entry["category"] == "agents"
