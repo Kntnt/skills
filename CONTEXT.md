@@ -69,7 +69,7 @@ _Avoid_: lockfile, config, preferences
 
 **Detected Harness**:
 A Harness that is present in the layer being acted on: the parent of its skills directory for that layer exists — `~/.claude` for Global, `.claude` in the working directory for Project. Enable, Disable, and Update act on every Detected Harness, and on the shared `.agents/skills` directory alone when none is detected. Nothing is recorded and nothing is asked; the set is resolved at each invocation, so a Harness installed later is reached by the next run. In the Project layer a Harness whose skills directory is not hidden is never detected, its name being indistinguishable from the repository's own content.
-_Avoid_: harness list, agent list, targets, setup file
+_Avoid_: harness list, agent list, setup file
 
 **Global**:
 The desired set that applies on this machine. Enable, Disable, and Update without `--project` change only this layer.

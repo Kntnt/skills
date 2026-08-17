@@ -1,6 +1,6 @@
 ---
 name: kntnt
-description: Manage this collection — which skills are Enabled, on which Harnesses.
+description: Manage this collection — which skills are Enabled, in Global and in each Project.
 disable-model-invocation: true
 argument-hint: "[status|enable|disable|update|help] [skill...] [--project] [--yes]"
 ---

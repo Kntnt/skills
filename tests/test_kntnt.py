@@ -14,8 +14,7 @@ KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 HARNESS_PATHS = REPO_ROOT / "skills" / "kntnt" / "harness-paths.json"
 FAKE_SKILLS = REPO_ROOT / "tests" / "support" / "fake_skills.py"
 
-SHARED_GLOBAL = ".agents/skills"
-SHARED_PROJECT = ".agents/skills"
+SHARED_SKILLS = ".agents/skills"
 
 
 def _write(path: Path, text: str) -> None:
@@ -138,18 +137,14 @@ def _world(
     return {"home": home, "project": project, "source": source, "here": here}
 
 
-def _present(world: dict[str, Path], *harness_dirs: str) -> None:
-    """Make Harnesses present in the Global layer by creating their homes."""
+def _present(world: dict[str, Path], root: str, *harness_dirs: str) -> None:
+    """Make Harnesses present under *root* by creating the homes they are found by.
+
+    `root` is `home` for the Global layer and `project` for the Project layer.
+    """
 
     for relative in harness_dirs:
-        (world["home"] / relative).mkdir(parents=True, exist_ok=True)
-
-
-def _present_here(world: dict[str, Path], *harness_dirs: str) -> None:
-    """Make Harnesses present in the Project layer."""
-
-    for relative in harness_dirs:
-        (world["project"] / relative).mkdir(parents=True, exist_ok=True)
+        (world[root] / relative).mkdir(parents=True, exist_ok=True)
 
 
 def _run(
@@ -183,8 +178,6 @@ def _json(result: subprocess.CompletedProcess[str]) -> dict[str, Any]:
 def _calls(log: Path) -> list[dict[str, Any]]:
     """Read the transport log written by the fake transport."""
 
-    if not log.is_file():
-        return []
     return [json.loads(line) for line in log.read_text(encoding="utf-8").splitlines()]
 
 
@@ -221,8 +214,8 @@ def test_status_reports_the_directories_it_acted_on(tmp_path: Path) -> None:
     """Targeting is no longer a choice, so the report names places, not a list."""
 
     world = _world(tmp_path)
-    _present(world, ".claude")
-    _present_here(world, ".claude")
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
 
     payload = _json(_run(world, "status"))
 
@@ -234,6 +227,28 @@ def test_status_reports_the_directories_it_acted_on(tmp_path: Path) -> None:
     ]
     assert "harness_list" not in payload
     assert "harnesses" not in payload
+
+
+def test_reported_directories_cover_where_a_universal_harness_really_lands(
+    tmp_path: Path,
+) -> None:
+    """The transport writes a universal Harness's Global files to the canonical tree.
+
+    Reporting the documented path alone would name a directory the file never
+    landed in, and the user reads this to learn where the work happened.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".config/opencode")
+
+    payload = _json(_run(world, "status"))
+
+    assert payload["directories"]["global"] == sorted(
+        [
+            str(world["home"] / ".agents" / "skills"),
+            str(world["home"] / ".config" / "opencode" / "skills"),
+        ]
+    )
 
 
 def test_the_manager_has_no_setup_verb(tmp_path: Path) -> None:
@@ -267,7 +282,7 @@ def test_global_enable_places_the_skill_in_every_detected_harness(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude", ".config/opencode")
+    _present(world, "home", ".claude", ".config/opencode")
 
     result = _run(world, "apply", "enable", "alpha")
 
@@ -288,7 +303,7 @@ def test_global_enable_with_nothing_detected_writes_only_the_shared_directory(
     result = _run(world, "apply", "enable", "alpha")
 
     assert result.returncode == 0, result.stderr
-    assert (world["home"] / SHARED_GLOBAL / "alpha" / "SKILL.md").is_file()
+    assert (world["home"] / SHARED_SKILLS / "alpha" / "SKILL.md").is_file()
     assert sorted(child.name for child in world["home"].iterdir()) == [".agents"]
 
 
@@ -296,7 +311,7 @@ def test_project_enable_places_the_skill_in_every_detected_harness(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
-    _present_here(world, ".claude", ".crush")
+    _present(world, "project", ".claude", ".crush")
 
     result = _run(world, "apply", "enable", "--project", "gamma")
 
@@ -313,7 +328,7 @@ def test_project_enable_with_nothing_detected_writes_only_the_shared_directory(
     result = _run(world, "apply", "enable", "--project", "gamma")
 
     assert result.returncode == 0, result.stderr
-    assert (world["project"] / SHARED_PROJECT / "gamma" / "SKILL.md").is_file()
+    assert (world["project"] / SHARED_SKILLS / "gamma" / "SKILL.md").is_file()
     assert sorted(child.name for child in world["project"].iterdir()) == [".agents"]
 
 
@@ -323,14 +338,14 @@ def test_project_detection_ignores_an_ordinary_skills_directory(
     """`skills/` and `data/` are things a repository has for its own reasons."""
 
     world = _world(tmp_path)
-    _present_here(world, "skills", "data")
+    _present(world, "project", "skills", "data")
 
     result = _run(world, "apply", "enable", "--project", "gamma")
 
     assert result.returncode == 0, result.stderr
     assert not (world["project"] / "skills" / "gamma").exists()
     assert not (world["project"] / "data" / "skills").exists()
-    assert (world["project"] / SHARED_PROJECT / "gamma" / "SKILL.md").is_file()
+    assert (world["project"] / SHARED_SKILLS / "gamma" / "SKILL.md").is_file()
 
 
 def test_a_harness_installed_later_is_acted_on_by_the_next_update(
@@ -339,9 +354,9 @@ def test_a_harness_installed_later_is_acted_on_by_the_next_update(
     """A recorded list would go stale here; a resolved one repairs itself."""
 
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     _run(world, "apply", "enable", "alpha")
-    _present(world, ".config/opencode")
+    _present(world, "home", ".config/opencode")
 
     result = _run(world, "apply", "update")
 
@@ -355,7 +370,7 @@ def test_every_transport_call_names_the_full_detected_set(tmp_path: Path) -> Non
     """Naming a subset is what lets the transport strand a shared directory."""
 
     world = _world(tmp_path)
-    _present(world, ".agents")
+    _present(world, "home", ".agents")
     log = tmp_path / "transport.jsonl"
 
     result = _run(world, "apply", "enable", "alpha", log=log)
@@ -370,7 +385,7 @@ def test_disable_removes_the_skill_from_every_detected_directory(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude", ".config/opencode")
+    _present(world, "home", ".claude", ".config/opencode")
     _run(world, "apply", "enable", "alpha")
 
     result = _run(world, "apply", "disable", "alpha", "--yes")
@@ -384,7 +399,7 @@ def test_status_sees_opencode_skill_in_transport_canonical_dir(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
-    _present(world, ".config/opencode")
+    _present(world, "home", ".config/opencode")
     dest = world["home"] / ".agents" / "skills" / "alpha"
     _write(dest / "SKILL.md", _skill_md("alpha"))
 
@@ -397,7 +412,7 @@ def test_help_reads_opencode_skill_from_transport_canonical_dir(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
-    _present(world, ".config/opencode")
+    _present(world, "home", ".config/opencode")
     dest = world["home"] / ".agents" / "skills" / "alpha"
     _write(
         dest / "SKILL.md",
@@ -412,7 +427,7 @@ def test_help_reads_opencode_skill_from_transport_canonical_dir(
 
 def test_plan_enable_without_names_prints_a_picker(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
 
     result = _run(world, "plan", "enable")
 
@@ -425,7 +440,7 @@ def test_plan_enable_without_names_prints_a_picker(tmp_path: Path) -> None:
 
 def test_apply_enable_is_idempotent(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     first = _run(world, "apply", "enable", "alpha")
     second = _run(world, "apply", "enable", "alpha")
 
@@ -436,7 +451,7 @@ def test_apply_enable_is_idempotent(tmp_path: Path) -> None:
 
 def test_apply_enable_refuses_the_manager(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
 
     result = _run(world, "apply", "enable", "kntnt")
 
@@ -446,7 +461,7 @@ def test_apply_enable_refuses_the_manager(tmp_path: Path) -> None:
 
 def test_apply_enable_refuses_an_unknown_skill(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
 
     result = _run(world, "apply", "enable", "nope")
 
@@ -456,8 +471,8 @@ def test_apply_enable_refuses_an_unknown_skill(tmp_path: Path) -> None:
 
 def test_apply_enable_project_writes_only_the_project_layer(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
-    _present_here(world, ".claude")
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
 
     result = _run(world, "apply", "enable", "--project", "gamma")
 
@@ -471,8 +486,8 @@ def test_apply_enable_project_writes_only_the_project_layer(tmp_path: Path) -> N
 
 def test_disable_project_is_noop_when_skill_is_only_global(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
-    _present_here(world, ".claude")
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
     _run(world, "apply", "enable", "alpha")
 
     result = _run(world, "apply", "disable", "--project", "alpha", "--yes")
@@ -486,8 +501,8 @@ def test_disable_project_is_noop_when_skill_is_only_global(tmp_path: Path) -> No
 
 def test_project_off_targets_global(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
-    _present_here(world, ".claude")
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
 
     result = _run(world, "apply", "enable", "--project=off", "alpha")
 
@@ -500,7 +515,7 @@ def test_update_reports_new_catalog_entries_and_leaves_them_disabled(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     _run(world, "apply", "enable", "alpha")
 
     new_entries = [
@@ -545,7 +560,7 @@ def test_check_reports_an_unsatisfied_binary(tmp_path: Path) -> None:
 
 def test_check_reports_an_unsatisfied_collection_skill(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     skill = world["home"] / ".claude" / "skills" / "beta"
     _write(skill / "SKILL.md", _skill_md("beta", skills=["alpha"]))
 
@@ -560,7 +575,7 @@ def test_check_reports_an_unsatisfied_collection_skill(tmp_path: Path) -> None:
 
 def test_check_is_ok_when_dependencies_are_present(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     _run(world, "apply", "enable", "alpha")
     _run(world, "apply", "enable", "beta")
     beta = world["home"] / ".claude" / "skills" / "beta"
@@ -631,7 +646,7 @@ def test_capabilities_do_not_gate_where_a_skill_is_installed(tmp_path: Path) -> 
         tmp_path,
         [_entry("alpha", "agents", capabilities=["subagents"])],
     )
-    _present(world, ".claude", ".config/opencode")
+    _present(world, "home", ".claude", ".config/opencode")
 
     result = _run(world, "apply", "enable", "alpha")
 
@@ -654,7 +669,7 @@ def test_status_names_the_capabilities_a_skill_needs(tmp_path: Path) -> None:
 
 def test_update_reports_capabilities_per_skill(tmp_path: Path) -> None:
     world = _world(tmp_path, [_entry("alpha", "agents", capabilities=["subagents"])])
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     _run(world, "apply", "enable", "alpha")
 
     result = _run(world, "apply", "update")
@@ -708,8 +723,8 @@ def test_check_treats_a_global_skill_as_effective_for_a_project_skill(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
-    _present_here(world, ".claude")
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
     _run(world, "apply", "enable", "alpha")
     _run(world, "apply", "enable", "--project", "beta")
     beta = world["project"] / ".claude" / "skills" / "beta"
@@ -724,7 +739,7 @@ def test_update_project_does_not_install_the_manager_in_the_project(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
-    _present_here(world, ".claude")
+    _present(world, "project", ".claude")
     _run(world, "apply", "enable", "--project", "alpha")
 
     result = _run(world, "apply", "update", "--project")
@@ -736,7 +751,7 @@ def test_update_project_does_not_install_the_manager_in_the_project(
 
 def test_update_reports_removed_catalog_entries(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     _write(
         world["source"] / "skills" / "kntnt" / "catalog.json",
         _catalog([_entry("alpha", "code", binaries=["git"])]),
@@ -776,7 +791,7 @@ def test_update_refreshes_the_catalog_of_the_running_manager(tmp_path: Path) -> 
     """
 
     world = _world(tmp_path)
-    _present(world, ".config/opencode")
+    _present(world, "home", ".config/opencode")
 
     _write(
         world["source"] / "skills" / "kntnt" / "catalog.json",
@@ -802,7 +817,7 @@ def test_update_refreshes_a_sidecar_when_skill_md_is_unchanged(tmp_path: Path) -
     """The transport's own `update` skips these; the manager must not rely on it."""
 
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     _run(world, "apply", "enable", "alpha")
 
     sidecar = world["source"] / "skills" / "code" / "alpha" / "notes.md"
@@ -817,7 +832,7 @@ def test_update_refreshes_a_sidecar_when_skill_md_is_unchanged(tmp_path: Path) -
 
 def test_apply_disable_refuses_without_yes(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
     _run(world, "apply", "enable", "alpha")
 
     result = _run(world, "apply", "disable", "alpha")
@@ -829,7 +844,7 @@ def test_apply_disable_refuses_without_yes(tmp_path: Path) -> None:
 
 def test_every_verb_accepts_yes(tmp_path: Path) -> None:
     world = _world(tmp_path)
-    _present(world, ".claude")
+    _present(world, "home", ".claude")
 
     for args in (
         ("status", "--yes"),

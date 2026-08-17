@@ -372,6 +372,9 @@ def detected_harnesses(*, global_layer: bool) -> list[str]:
 
     key = "global" if global_layer else "project"
     found: list[str] = []
+
+    # A Harness qualifies only where it documents a path for this layer, and in
+    # the Project layer only where that path is its own to claim.
     for harness, spec in harness_paths().items():
         template = spec.get(key)
         if not template:
@@ -380,6 +383,7 @@ def detected_harnesses(*, global_layer: bool) -> list[str]:
             continue
         if expand_path(template, global_layer=global_layer).parent.is_dir():
             found.append(harness)
+
     return found
 
 
@@ -413,12 +417,19 @@ def target_harnesses(*, global_layer: bool) -> list[str]:
 
 
 def target_dirs(harnesses: list[str], *, global_layer: bool) -> list[str]:
-    """Return the skills directories *harnesses* resolve to, for a payload."""
+    """Return the skills directories *harnesses* resolve to, for a payload.
+
+    These are `skill_dirs`, not the documented path alone: a universal Harness
+    has its Global files written to the canonical tree rather than to the
+    directory its own entry names, so naming only the latter would report a
+    place the file never landed in. Reporting both keeps the payload to what
+    Status actually looked in.
+    """
 
     directories = {
         str(directory)
         for harness in harnesses
-        if (directory := layer_dir(harness, global_layer=global_layer)) is not None
+        for directory in skill_dirs(harness, global_layer=global_layer)
     }
     return sorted(directories)
 

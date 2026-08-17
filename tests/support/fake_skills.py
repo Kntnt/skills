@@ -45,7 +45,9 @@ def json_load(path: Path) -> dict[str, dict[str, str]]:
     return cast(dict[str, dict[str, str]], json.loads(path.read_text(encoding="utf-8")))
 
 
-def log_call(command: str, agents: list[str], names: list[str], *, glob: bool) -> None:
+def log_call(
+    command: str, agents: list[str], names: list[str], *, global_layer: bool
+) -> None:
     """Record this invocation so a test can see which agents were named.
 
     Whether the manager names every target or only some of them is invisible
@@ -60,7 +62,7 @@ def log_call(command: str, agents: list[str], names: list[str], *, glob: bool) -
         "command": command,
         "agents": agents,
         "skills": names,
-        "global": glob,
+        "global": global_layer,
     }
     with Path(destination).open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(entry) + "\n")
@@ -190,7 +192,7 @@ def main(argv: list[str] | None = None) -> int:
     global_layer = bool(getattr(args, "global_layer", False))
     if args.command == "update" and getattr(args, "project_layer", False):
         global_layer = False
-    log_call(args.command, agents, names, glob=global_layer)
+    log_call(args.command, agents, names, global_layer=global_layer)
 
     for agent in agents:
         dest = dest_dir(agent, global_layer)
