@@ -1,3 +1,5 @@
-# One desired set per layer; harnesses are a list, not a matrix
+# One desired set per layer; harnesses are not a matrix
 
-Letting each harness enable a different subset doubles the work and guarantees drift (Claude has A, OpenCode does not). The user picks which harnesses receive the set; every skill Enabled in a layer is then applied to all of them. When Setup adds a Harness, it applies every skill Enabled in Global, with no extra question — Project extras are not copied. The user applies the Project layer with Enable `--project` or Update `--project`. The list is offered with detected harnesses pre-checked, not hard-coded to Claude/OpenCode/Codex and not silently written into every detected harness.
+Letting each harness enable a different subset doubles the work and guarantees drift (Claude has A, OpenCode does not). Every skill Enabled in a layer is applied to every Harness that layer targets, and Project extras are not copied into Global; the user applies the Project layer with Enable `--project` or Update `--project`.
+
+Since targets are resolved by detection rather than chosen (ADR-0031), the rule is now trivially true: there is no per-harness dimension left for a set to differ along, and no list to offer with anything pre-checked. What remains of this record is the reason the collection never grew one.

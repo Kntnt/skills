@@ -7,15 +7,15 @@ AI Agent Skills Collection by Kntnt Sweden AB
 
 ## Description
 
-This repository is a collection of [Agent Skills](https://agentskills.io) for coding harnesses: Claude Code, OpenCode, Codex, and others that load skills from a well-known directory. It ships the skills, the shared scripts they call, and a manager named `kntnt`. It does not ship harness `commands/` files. What you type is a skill name (`/commit`, `/push`); the same gesture works in every harness on your list.
+This repository is a collection of [Agent Skills](https://agentskills.io) for coding harnesses: Claude Code, OpenCode, Codex, and others that load skills from a well-known directory. It ships the skills, the shared scripts they call, and a manager named `kntnt`. It does not ship harness `commands/` files. What you type is a skill name (`/commit`, `/push`); the same gesture works in every harness you have.
 
-`npx skills add Kntnt/skills` puts only `kntnt` on disk. The other skills stay off disk until you Enable them. You pick the harnesses once. Every skill Enabled in a layer is then applied to all of them, so the set does not drift between Claude and OpenCode.
+`npx skills add Kntnt/skills` puts only `kntnt` on disk. The other skills stay off disk until you Enable them. You are never asked which harnesses to target: every skill you Enable is applied to every harness present on the machine, worked out on each run, so the set does not drift between Claude and OpenCode — and a harness you install next month is picked up by the next `/kntnt update` with nothing to configure. Where a skill goes is not a choice; which skills you Enable is.
 
 There are two layers. Global is the set on this machine. Project is extras for one working directory. A harness in that directory loads the union of both. A Project cannot hide a Global skill. Project extras live as skill files in that project's harness directories; a teammate who checks those files in receives the extras, not your Global set.
 
 New catalog entries stay Disabled after an Update. Enable them when you want them.
 
-A few skills need something of the harness itself rather than of your machine — `delegation` is pointless where subagents cannot be spawned. Those requirements are dependencies like any other, not an install-time filter: the skill is enabled on every harness on your list, and in one that cannot meet the requirement it says so and does nothing. No script can test this, since the manager cannot know which harness invoked it; the agent answers, because the agent is the harness.
+A few skills need something of the harness itself rather than of your machine — `delegation` is pointless where subagents cannot be spawned. Those requirements are dependencies like any other, not an install-time filter: the skill is enabled on every harness you have, and in one that cannot meet the requirement it says so and does nothing. No script can test this, since the manager cannot know which harness invoked it; the agent answers, because the agent is the harness.
 
 ## Recommended skills and collections of skills
 
@@ -38,15 +38,15 @@ npx skills add Kntnt/skills
 
 That command is the transport. It does not offer the rest of the collection in a picker; Enable is how those skills become Enabled.
 
-In a harness that can see `kntnt`:
+There is nothing to configure after it. In a harness that can see `kntnt`:
 
 ```
-/kntnt setup
+/kntnt enable
 ```
 
-Setup records the harness list. Detected harnesses are pre-checked; you can change the set. Adding a harness copies every skill already Enabled in Global onto it. Removing a harness asks before deleting this collection's files there. The first run then offers Enable so you can pick skills.
+Omit the names and you get a picker grouped by category. Add or drop skills the same way later, with `/kntnt enable` and `/kntnt disable`. Pass `--project` to change only the current working directory.
 
-Later, add or drop skills with `/kntnt enable` and `/kntnt disable`. Omit the names and you get a picker grouped by category. Pass `--project` to change only the current working directory.
+Each of those commands works out where to write on its own: every harness with a home in that layer — `~/.claude`, `~/.config/opencode`, and so on for Global; `.claude`, `.crush` and their like for a Project. If it finds none, it writes to the shared `.agents/skills` directory alone, and never creates a directory for a harness you have not installed.
 
 ## Usage
 
@@ -56,7 +56,6 @@ Bare `/kntnt` is Help. The manager subcommands are:
 |---|---|
 | `/kntnt help [skill]` | Help for the manager, or one named skill |
 | `/kntnt status [skill...]` | Report Enabled or Disabled in Global and Project |
-| `/kntnt setup` | Record the harness list |
 | `/kntnt enable [--project] [skill...]` | Enable skills (picker if none named) |
 | `/kntnt disable [--project] [skill...]` | Disable skills (picker if none named) |
 | `/kntnt update [--project]` | Refresh this collection and re-check dependencies |

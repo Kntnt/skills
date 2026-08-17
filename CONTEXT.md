@@ -27,16 +27,12 @@ A skill the model may load on its own when the task matches the skill's descript
 The always-enabled skill named `kntnt`. It is the collection's only namespaced entry point.
 _Avoid_: installer, CLI, wrapper
 
-**Setup**:
-The manager subcommand that records the Harness list. Adding a Harness applies every skill Enabled in Global to it. Removing a Harness asks before deleting this collection's skills there. The first run may then hand off to Enable.
-_Avoid_: init, configure, target
-
 **Enable**:
-The manager subcommand that makes one or more skills enabled. With no skill names it opens an interactive list. It targets Global unless `--project` or `--project=on` is given. It requires a Harness list.
+The manager subcommand that makes one or more skills enabled. With no skill names it opens an interactive list. It targets Global unless `--project` or `--project=on` is given. It reaches every Detected Harness in that layer.
 _Avoid_: add, activate, install
 
 **Disable**:
-The manager subcommand that makes one or more skills disabled. With no skill names it opens an interactive list. It uses the same `--project` rule as Enable. It requires a Harness list.
+The manager subcommand that makes one or more skills disabled. With no skill names it opens an interactive list. It uses the same `--project` rule as Enable and reaches the same Harnesses.
 _Avoid_: remove, uninstall
 
 **Status**:
@@ -56,7 +52,7 @@ What `--yes` means on any collection skill: every question that can be answered 
 _Avoid_: force, non-interactive, quiet, auto-approve
 
 **Enabled**:
-A skill present on disk in a layer, in each recorded harness's skills directory for that layer.
+A skill present on disk in a layer, in each Detected Harness's skills directory for that layer.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)
 
 **Disabled**:
@@ -68,15 +64,15 @@ The collection's declared list of its skills and their dependencies, authored in
 _Avoid_: manifest, registry, index, lockfile
 
 **State**:
-The user's remembered choices: which skills are Enabled in Global and in each Project. Reconstructable from disk; never the source of truth. The Harness list is not State.
+The user's remembered choices: which skills are Enabled in Global and in each Project. Reconstructable from disk; never the source of truth. Nothing about where skills go is remembered — that is resolved on each run.
 _Avoid_: lockfile, config, preferences
 
-**Harness list**:
-The recorded Harnesses the collection targets. Setup writes it. If it is missing, the Manager rebuilds it from Harnesses that already have a Collection skill other than the Manager. A Harness that has only the Manager stays off the list until Setup. If the rebuild finds no such Harness, the Harness list is Unsatisfied — Enable, Disable, and Update stop. Status and Help still run.
-_Avoid_: agent list, targets, setup file
+**Detected Harness**:
+A Harness that is present in the layer being acted on: the parent of its skills directory for that layer exists — `~/.claude` for Global, `.claude` in the working directory for Project. Enable, Disable, and Update act on every Detected Harness, and on the shared `.agents/skills` directory alone when none is detected. Nothing is recorded and nothing is asked; the set is resolved at each invocation, so a Harness installed later is reached by the next run. In the Project layer a Harness whose skills directory is not hidden is never detected, its name being indistinguishable from the repository's own content.
+_Avoid_: harness list, agent list, targets, setup file
 
 **Global**:
-The desired set and harness list that apply on this machine. Enable, Disable, and Update without `--project` change only this layer.
+The desired set that applies on this machine. Enable, Disable, and Update without `--project` change only this layer.
 _Avoid_: user, machine, default (say global)
 
 **Project**:

@@ -47,7 +47,6 @@ Usage: /kntnt [subcommand] [skill...] [--project[=on|off]] [--yes]
 Subcommands:
   help [skill]         this help, or help for one named collection skill
   status [skill...]    report Enabled/Disabled in Global and Project
-  setup                record the Harness list
   enable [skill...]    make skills Enabled (picker if none named)
   disable [skill...]   make skills Disabled (picker if none named)
   update               refresh this collection and re-check Dependencies
@@ -57,7 +56,8 @@ Options:
   --yes        assume yes; ask nothing that can be answered yes or no
 
 Bare /kntnt is this help. Status lists every Catalog skill, Enabled or not.
-Enable, Disable, and Update default to Global.
+Enable, Disable, and Update default to Global. They act on every Harness
+present on this machine, working out which those are on every run.
 """
 
 
@@ -350,89 +350,77 @@ def catalog_names() -> set[str]:
     return {str(entry["name"]) for entry in catalog_skills() if "name" in entry}
 
 
-def harness_list_path() -> Path:
-    """Return the path Setup writes the Harness list to."""
+def is_project_detectable(template: str) -> bool:
+    """True when a Project template names a hidden directory of the Harness's own.
 
-    return home() / ".config" / "kntnt" / "harnesses.json"
+    `skills`, `data/skills`, and `agent/skills` are things a repository has for
+    its own reasons. Reading one of those as a Harness would write this
+    collection into someone else's source tree, so such a Harness is not
+    detected in the Project layer at all.
+    """
 
-
-def read_harness_list_file() -> list[str] | None:
-    """Return the stored Harness list, or None if it is missing or corrupt."""
-
-    path = harness_list_path()
-    if not path.is_file():
-        return None
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return None
-    harnesses = data.get("harnesses")
-    if not isinstance(harnesses, list) or not all(
-        isinstance(item, str) for item in harnesses
-    ):
-        return None
-    return list(harnesses)
+    return template.startswith(".")
 
 
-def write_harness_list(harnesses: list[str]) -> None:
-    """Persist the Harness list."""
+def detected_harnesses(*, global_layer: bool) -> list[str]:
+    """Return the Harnesses present in this layer.
 
-    path = harness_list_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps({"harnesses": harnesses}, indent=2) + "\n", encoding="utf-8"
-    )
+    Present means the Harness has a home here — the parent of its skills
+    directory is on disk — not that it already holds skills. A Harness
+    installed after the last Enable is therefore detected on the next run.
+    """
 
-
-def collection_skill_present(directory: Path) -> bool:
-    """True when *directory* holds a collection skill other than the Manager."""
-
-    names = catalog_names()
-    if not directory.is_dir():
-        return False
-    for child in directory.iterdir():
-        if child.name == MANAGER:
-            continue
-        if child.name in names and (child / "SKILL.md").is_file():
-            return True
-    return False
-
-
-def rebuild_harness_list() -> list[str]:
-    """Rebuild the Harness list from Global disks that hold a collection skill."""
-
+    key = "global" if global_layer else "project"
     found: list[str] = []
     for harness, spec in harness_paths().items():
-        template = spec.get("global")
+        template = spec.get(key)
         if not template:
             continue
-        directory = expand_path(template, global_layer=True)
-        if collection_skill_present(directory):
+        if not global_layer and not is_project_detectable(template):
+            continue
+        if expand_path(template, global_layer=global_layer).parent.is_dir():
             found.append(harness)
-    if found:
-        write_harness_list(found)
     return found
 
 
-def require_harnesses() -> list[str]:
-    """Return the Harness list, rebuilding if needed. Raise when Unsatisfied."""
+def shared_harness() -> str:
+    """Return the harness id that reads the shared skills directory in both layers.
 
-    stored = read_harness_list_file()
-    if stored:
-        return stored
-    rebuilt = rebuild_harness_list()
-    if rebuilt:
-        return rebuilt
-    raise ManagerError("Harness list is unsatisfied; run /kntnt setup", 2)
+    The transport writes by agent id, so naming the shared directory means
+    naming an agent that reads exactly it and nothing else. Several do, they
+    all write the same files to the same place, and the first in a stable order
+    is as good as any.
+    """
+
+    for harness, spec in sorted(harness_paths().items()):
+        if (
+            spec.get("global") == CANONICAL_GLOBAL
+            and spec.get("project") == UNIVERSAL_PROJECT
+        ):
+            return harness
+    raise ManagerError("no harness reads the shared skills directory")
 
 
-def optional_harnesses() -> list[str]:
-    """Return the Harness list, or an empty list when Unsatisfied."""
+def target_harnesses(*, global_layer: bool) -> list[str]:
+    """Return every Harness this invocation acts on, never a subset of them.
 
-    try:
-        return require_harnesses()
-    except ManagerError:
-        return []
+    With nothing detected the answer is the shared skills directory alone. The
+    transport's own fallback — every agent it knows of — would create skills
+    directories for Harnesses the user has never installed.
+    """
+
+    return detected_harnesses(global_layer=global_layer) or [shared_harness()]
+
+
+def target_dirs(harnesses: list[str], *, global_layer: bool) -> list[str]:
+    """Return the skills directories *harnesses* resolve to, for a payload."""
+
+    directories = {
+        str(directory)
+        for harness in harnesses
+        if (directory := layer_dir(harness, global_layer=global_layer)) is not None
+    }
+    return sorted(directories)
 
 
 def skill_state(name: str, harnesses: list[str], *, global_layer: bool) -> str:
@@ -457,7 +445,7 @@ def skill_state(name: str, harnesses: list[str], *, global_layer: bool) -> str:
 
 
 def enabled_names(harnesses: list[str], *, global_layer: bool) -> list[str]:
-    """Return Catalog skills Enabled in *layer* on any recorded Harness."""
+    """Return Catalog skills Enabled in *layer* on any targeted Harness."""
 
     names: list[str] = []
     for entry in catalog_skills():
@@ -465,20 +453,6 @@ def enabled_names(harnesses: list[str], *, global_layer: bool) -> list[str]:
         if skill_state(name, harnesses, global_layer=global_layer) != "disabled":
             names.append(name)
     return names
-
-
-def detected_harnesses() -> list[str]:
-    """Return harness ids whose Global parent directory exists."""
-
-    found: list[str] = []
-    for harness, spec in harness_paths().items():
-        template = spec.get("global")
-        if not template:
-            continue
-        directory = expand_path(template, global_layer=True)
-        if directory.parent.is_dir():
-            found.append(harness)
-    return found
 
 
 def run_transport(args: list[str], *, internal: bool = False) -> None:
@@ -562,10 +536,8 @@ def validate_names(names: list[str]) -> list[str]:
 def status_payload(names: list[str]) -> dict[str, Any]:
     """Build the Status report for *names*, or every Catalog skill."""
 
-    stored = read_harness_list_file()
-    if stored is None:
-        stored = rebuild_harness_list() or None
-    harnesses = stored or []
+    global_targets = target_harnesses(global_layer=True)
+    project_targets = target_harnesses(global_layer=False)
     wanted = (
         validate_names(names)
         if names
@@ -581,13 +553,15 @@ def status_payload(names: list[str]) -> dict[str, Any]:
                 "category": entry.get("category", ""),
                 "description": entry.get("description", ""),
                 "capabilities": entry.get("capabilities", []),
-                "global": skill_state(name, harnesses, global_layer=True),
-                "project": skill_state(name, harnesses, global_layer=False),
+                "global": skill_state(name, global_targets, global_layer=True),
+                "project": skill_state(name, project_targets, global_layer=False),
             }
         )
     return {
-        "harness_list": "ok" if harnesses else "unsatisfied",
-        "harnesses": harnesses,
+        "directories": {
+            "global": target_dirs(global_targets, global_layer=True),
+            "project": target_dirs(project_targets, global_layer=False),
+        },
         "skills": skills,
     }
 
@@ -597,7 +571,7 @@ def picker_payload(
 ) -> dict[str, Any]:
     """Group Catalog skills by Category for an interactive Enable/Disable."""
 
-    harnesses = require_harnesses()
+    harnesses = target_harnesses(global_layer=global_layer)
     categories: dict[str, list[dict[str, Any]]] = {}
     for entry in catalog_skills():
         name = str(entry["name"])
@@ -632,17 +606,17 @@ def cmd_status(names: list[str]) -> int:
 def cmd_plan_enable(names: list[str], *, global_layer: bool) -> int:
     """Print an Enable picker or a plan for the named skills."""
 
-    harnesses = require_harnesses()
     if not names:
         emit(picker_payload([], global_layer=global_layer, action="enable"))
         return 2
     wanted = validate_names(names)
+    harnesses = target_harnesses(global_layer=global_layer)
     emit(
         {
             "action": "enable",
             "layer": "global" if global_layer else "project",
             "skills": wanted,
-            "harnesses": harnesses,
+            "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
     return 0
@@ -651,17 +625,17 @@ def cmd_plan_enable(names: list[str], *, global_layer: bool) -> int:
 def cmd_plan_disable(names: list[str], *, global_layer: bool) -> int:
     """Print a Disable picker or a plan for the named skills."""
 
-    harnesses = require_harnesses()
     if not names:
         emit(picker_payload([], global_layer=global_layer, action="disable"))
         return 2
     wanted = validate_names(names)
+    harnesses = target_harnesses(global_layer=global_layer)
     emit(
         {
             "action": "disable",
             "layer": "global" if global_layer else "project",
             "skills": wanted,
-            "harnesses": harnesses,
+            "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
     return 0
@@ -673,7 +647,7 @@ def cmd_apply_enable(names: list[str], *, global_layer: bool) -> int:
     wanted = validate_names(names)
     if not wanted:
         raise ManagerError("name at least one skill to enable", 2)
-    harnesses = require_harnesses()
+    harnesses = target_harnesses(global_layer=global_layer)
     already = {
         name
         for name in wanted
@@ -686,7 +660,7 @@ def cmd_apply_enable(names: list[str], *, global_layer: bool) -> int:
             "changed": changing,
             "noop": [name for name in wanted if name in already],
             "layer": "global" if global_layer else "project",
-            "harnesses": harnesses,
+            "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
     return 0
@@ -706,7 +680,7 @@ def cmd_apply_disable(names: list[str], *, global_layer: bool, yes: bool) -> int
             "disabling deletes these skills' files; confirm first, then pass --yes",
             2,
         )
-    harnesses = require_harnesses()
+    harnesses = target_harnesses(global_layer=global_layer)
     changing: list[str] = []
     noop: list[str] = []
     for name in wanted:
@@ -721,93 +695,16 @@ def cmd_apply_disable(names: list[str], *, global_layer: bool, yes: bool) -> int
             "changed": changing,
             "noop": noop,
             "layer": "global" if global_layer else "project",
-            "harnesses": harnesses,
+            "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
-    return 0
-
-
-def cmd_plan_setup() -> int:
-    """Print detected Harnesses, pre-checking those that should stay selected."""
-
-    current = read_harness_list_file() or []
-    detected = detected_harnesses()
-    selected = set(current) if current else set(detected)
-    items = []
-    seen: set[str] = set()
-    for harness in [*detected, *current]:
-        if harness in seen:
-            continue
-        seen.add(harness)
-        items.append(
-            {
-                "id": harness,
-                "present": harness in detected,
-                "selected": harness in selected,
-            }
-        )
-    emit(
-        {
-            "action": "setup",
-            "detected": items,
-            "current": current,
-            "first": not current,
-        }
-    )
-    return 0
-
-
-def unique(items: list[str]) -> list[str]:
-    """Return *items* without duplicates, keeping order."""
-
-    seen: set[str] = set()
-    result: list[str] = []
-    for item in items:
-        if item in seen:
-            continue
-        seen.add(item)
-        result.append(item)
-    return result
-
-
-def cmd_apply_setup(harnesses: list[str], *, yes: bool) -> int:
-    """Record the Harness list and apply Global skills to added Harnesses."""
-
-    wanted = unique(harnesses)
-    if not wanted:
-        raise ManagerError("pass --harness for each Harness to keep", 2)
-    known = harness_paths()
-    for harness in wanted:
-        if harness not in known:
-            raise ManagerError(f"unknown harness '{harness}'")
-
-    current = read_harness_list_file() or []
-    added = [harness for harness in wanted if harness not in current]
-    removed = [harness for harness in current if harness not in wanted]
-    if removed and not yes:
-        raise ManagerError(
-            f"removing {', '.join(removed)} deletes this collection's skills there; pass --yes",
-            2,
-        )
-
-    globally_enabled = enabled_names(current, global_layer=True) if current else []
-    if added:
-        add_skills([MANAGER], added, global_layer=True)
-        add_skills(globally_enabled, added, global_layer=True)
-    if removed:
-        drop = [*sorted(catalog_names()), MANAGER]
-        remove_skills(drop, removed, global_layer=True)
-
-    write_harness_list(wanted)
-    changed = [*added, *removed]
-    emit({"changed": changed, "harnesses": wanted, "removed": removed, "added": added})
     return 0
 
 
 def cmd_plan_update(*, global_layer: bool) -> int:
     """Print which Enabled skills Update will refresh."""
 
-    harnesses = require_harnesses()
+    harnesses = target_harnesses(global_layer=global_layer)
     refresh = enabled_names(harnesses, global_layer=global_layer)
     if global_layer:
         refresh = [MANAGER, *refresh]
@@ -816,7 +713,7 @@ def cmd_plan_update(*, global_layer: bool) -> int:
             "action": "update",
             "layer": "global" if global_layer else "project",
             "refresh": refresh,
-            "harnesses": harnesses,
+            "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
     return 0
@@ -825,7 +722,7 @@ def cmd_plan_update(*, global_layer: bool) -> int:
 def cmd_apply_update(*, global_layer: bool) -> int:
     """Refresh this collection, report new Catalog entries, re-check Dependencies."""
 
-    harnesses = require_harnesses()
+    harnesses = target_harnesses(global_layer=global_layer)
     old_names = catalog_names()
     desired = enabled_names(harnesses, global_layer=global_layer)
     refresh = [MANAGER, *desired] if global_layer else list(desired)
@@ -836,9 +733,9 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     # re-copies the whole directory and is idempotent, so it is the refresh.
     add_skills(refresh, harnesses, global_layer=global_layer)
 
-    # That reaches only the recorded Harnesses, which need not hold the copy of
-    # the Manager running right now. Refresh its Catalog directly, or Status goes
-    # on reporting the snapshot this Manager shipped with.
+    # That reaches only the Harnesses detected here, which need not hold the copy
+    # of the Manager running right now. Refresh its Catalog directly, or Status
+    # goes on reporting the snapshot this Manager shipped with.
     catalog_refreshed = True
     try:
         write_catalog(fetch_catalog())
@@ -880,6 +777,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
             "unsatisfied": unsatisfied,
             "capabilities": capabilities,
             "layer": "global" if global_layer else "project",
+            "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
     return 0
@@ -945,8 +843,8 @@ def unsatisfied_at(skill_dir: Path) -> list[dict[str, str]]:
 def skill_is_effective(name: str) -> bool:
     """True when *name* is present in Global or this Project (the Effective union)."""
 
-    for harness in optional_harnesses() or detected_harnesses():
-        for global_layer in (True, False):
+    for global_layer in (True, False):
+        for harness in target_harnesses(global_layer=global_layer):
             if any(
                 (directory / name / "SKILL.md").is_file()
                 for directory in skill_dirs(harness, global_layer=global_layer)
@@ -976,8 +874,8 @@ def cmd_check(skill_dir: Path) -> int:
 def find_skill_md(name: str) -> Path | None:
     """Locate a SKILL.md for *name* on disk or in a local collection source."""
 
-    for harness in optional_harnesses() or detected_harnesses():
-        for global_layer in (True, False):
+    for global_layer in (True, False):
+        for harness in target_harnesses(global_layer=global_layer):
             for directory in skill_dirs(harness, global_layer=global_layer):
                 candidate = directory / name / "SKILL.md"
                 if candidate.is_file():
@@ -1162,7 +1060,6 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan_disable.add_argument("skills", nargs="*")
     add_project_flag(plan_disable)
     add_yes_flag(plan_disable)
-    add_yes_flag(plan_sub.add_parser("setup"))
     plan_update = plan_sub.add_parser("update")
     add_project_flag(plan_update)
     add_yes_flag(plan_update)
@@ -1177,9 +1074,6 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     apply_disable.add_argument("skills", nargs="*")
     add_project_flag(apply_disable)
     add_yes_flag(apply_disable)
-    apply_setup = apply_sub.add_parser("setup")
-    apply_setup.add_argument("--harness", action="append", default=[])
-    add_yes_flag(apply_setup)
     apply_update = apply_sub.add_parser("update")
     add_project_flag(apply_update)
     add_yes_flag(apply_update)
@@ -1199,16 +1093,12 @@ def dispatch(args: argparse.Namespace) -> int:
     if args.command == "catalog":
         return cmd_catalog(write=args.write)
     if args.command == "plan":
-        if args.verb == "setup":
-            return cmd_plan_setup()
         if args.verb == "update":
             return cmd_plan_update(global_layer=parse_layer(args.project))
         global_layer = parse_layer(args.project)
         if args.verb == "enable":
             return cmd_plan_enable(args.skills, global_layer=global_layer)
         return cmd_plan_disable(args.skills, global_layer=global_layer)
-    if args.verb == "setup":
-        return cmd_apply_setup(args.harness, yes=args.yes)
     if args.verb == "update":
         return cmd_apply_update(global_layer=parse_layer(args.project))
     global_layer = parse_layer(args.project)

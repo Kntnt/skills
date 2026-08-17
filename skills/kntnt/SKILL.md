@@ -2,7 +2,7 @@
 name: kntnt
 description: Manage this collection — which skills are Enabled, on which Harnesses.
 disable-model-invocation: true
-argument-hint: "[status|setup|enable|disable|update|help] [skill...] [--project] [--yes]"
+argument-hint: "[status|enable|disable|update|help] [skill...] [--project] [--yes]"
 ---
 
 # kntnt
@@ -21,12 +21,11 @@ If the arguments are `help`, `--help`, `-h`, or `help <name>`, follow `$HERE/hel
 
 - no args / `help` `[skill]` — Help for the manager, or one named collection skill. Bare `/kntnt` means Help.
 - `status` `[skill...]` — Status. No names reports every Catalog skill, Enabled or not.
-- `setup` `[--yes]` — record the Harness list.
 - `enable` `[skill...]` `[--project]` `[--yes]` — Enable. No names opens a picker.
 - `disable` `[skill...]` `[--project]` `[--yes]` — Disable. No names opens a picker.
 - `update` `[--project]` `[--yes]` — refresh this collection, then re-check Dependencies.
 
-Enable, Disable, and Update target Global unless `--project` or `--project=on` is given. `--project=off` targets Global.
+Enable, Disable, and Update target Global unless `--project` or `--project=on` is given. `--project=off` targets Global. Which Harnesses they reach is never asked and never recorded: every Harness present in that layer is acted on, worked out on each run.
 
 `--yes` means assume yes: ask nothing that can be answered yes or no. Every verb of `scripts/kntnt.py` accepts it, so passing the user's flag straight through is always safe.
 

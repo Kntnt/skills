@@ -7,10 +7,12 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import shutil
 import sys
 from pathlib import Path
+from typing import cast
 
 
 def home() -> Path:
@@ -40,10 +42,28 @@ def harness_paths() -> dict[str, dict[str, str]]:
 def json_load(path: Path) -> dict[str, dict[str, str]]:
     """Read a JSON object from *path*."""
 
-    import json
-    from typing import cast
-
     return cast(dict[str, dict[str, str]], json.loads(path.read_text(encoding="utf-8")))
+
+
+def log_call(command: str, agents: list[str], names: list[str], *, glob: bool) -> None:
+    """Record this invocation so a test can see which agents were named.
+
+    Whether the manager names every target or only some of them is invisible
+    on disk when several agents share one directory, and that is exactly the
+    property worth pinning.
+    """
+
+    destination = os.environ.get("KNTNT_TRANSPORT_LOG")
+    if not destination:
+        return
+    entry = {
+        "command": command,
+        "agents": agents,
+        "skills": names,
+        "global": glob,
+    }
+    with Path(destination).open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(entry) + "\n")
 
 
 def expand(template: str, *, global_layer: bool) -> Path:
@@ -170,6 +190,7 @@ def main(argv: list[str] | None = None) -> int:
     global_layer = bool(getattr(args, "global_layer", False))
     if args.command == "update" and getattr(args, "project_layer", False):
         global_layer = False
+    log_call(args.command, agents, names, glob=global_layer)
 
     for agent in agents:
         dest = dest_dir(agent, global_layer)
