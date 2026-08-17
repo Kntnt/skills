@@ -466,6 +466,156 @@ def test_apply_publish_uploads_asset_when_release_exists(tmp_path: Path) -> None
     assert "release upload v0.2.0" in recorded
 
 
+def test_apply_bump_ignores_a_nested_version_key(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "composer.json").write_text(
+        "{\n"
+        '  "name": "acme/demo",\n'
+        '  "extra": {\n'
+        '    "pinned": { "version": "9.9.9" }\n'
+        "  },\n"
+        '  "version": "0.1.0"\n'
+        "}\n",
+        encoding="utf-8",
+    )
+    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+    _git(repo, "add", "composer.json", "CHANGELOG.md")
+    _git(repo, "commit", "-m", "Add composer manifest")
+
+    result = _ship(repo, "apply", "bump", "--version", "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    composer = json.loads((repo / "composer.json").read_text(encoding="utf-8"))
+    assert composer["version"] == "0.2.0"
+    assert composer["extra"]["pinned"]["version"] == "9.9.9"
+
+
+def test_plan_release_ignores_a_version_scheme_setting(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "pyproject.toml").write_text(
+        "[project]\n"
+        'name = "demo"\n'
+        'dynamic = ["version"]\n'
+        "\n"
+        "[tool.setuptools_scm]\n"
+        'version_scheme = "post-release"\n',
+        encoding="utf-8",
+    )
+    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+
+    result = _ship(repo, "plan", "release")
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["version_files"] == []
+    assert plan["current_version"] != "post-release"
+
+
+def test_apply_bump_writes_the_pyproject_project_version(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "pyproject.toml").write_text(
+        "[build-system]\n"
+        'requires = ["hatchling"]\n'
+        "\n"
+        "[project]\n"
+        'name = "demo"\n'
+        'version = "0.1.0"\n',
+        encoding="utf-8",
+    )
+    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+    _git(repo, "add", "pyproject.toml", "CHANGELOG.md")
+    _git(repo, "commit", "-m", "Add pyproject")
+
+    result = _ship(repo, "apply", "bump", "--version", "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    assert 'version = "0.2.0"' in (repo / "pyproject.toml").read_text(encoding="utf-8")
+    assert 'requires = ["hatchling"]' in (repo / "pyproject.toml").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_apply_bump_writes_nothing_when_one_file_cannot_be_bumped(
+    tmp_path: Path,
+) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "package.json").write_text('{"version": "0.1.0"}\n', encoding="utf-8")
+    ambiguous = (
+        "{\n"
+        '  "name": "acme/demo",\n'
+        '  "extra": {\n'
+        '    "pinned": { "version": "0.1.0" }\n'
+        "  },\n"
+        '  "version": "0.1.0"\n'
+        "}\n"
+    )
+    (repo / "composer.json").write_text(ambiguous, encoding="utf-8")
+    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+    _git(repo, "add", "package.json", "composer.json", "CHANGELOG.md")
+    _git(repo, "commit", "-m", "Add manifests")
+
+    result = _ship(repo, "apply", "bump", "--version", "0.2.0")
+
+    assert result.returncode != 0
+    assert "composer.json" in result.stderr
+    assert (repo / "package.json").read_text(encoding="utf-8") == (
+        '{"version": "0.1.0"}\n'
+    )
+    assert (repo / "composer.json").read_text(encoding="utf-8") == ambiguous
+    assert "## [0.2.0]" not in (repo / "CHANGELOG.md").read_text(encoding="utf-8")
+
+
+def test_apply_publish_passes_changelog_notes_with_shifted_headings(
+    tmp_path: Path,
+) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "CHANGELOG.md").write_text(
+        "# Changelog\n"
+        "\n"
+        "## [Unreleased]\n"
+        "\n"
+        "## [0.2.0] – 2026-02-02\n"
+        "\n"
+        "### Added\n"
+        "\n"
+        "- A shipped thing.\n"
+        "\n"
+        "## [0.1.0] – 2026-01-01\n"
+        "\n"
+        "### Added\n"
+        "\n"
+        "- An older thing.\n",
+        encoding="utf-8",
+    )
+    _git(repo, "add", "CHANGELOG.md")
+    _git(repo, "commit", "-m", "changelog")
+    _git(repo, "remote", "add", "origin", "git@github.com:example/proj.git")
+    log = tmp_path / "gh.log"
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    gh = bin_dir / "gh"
+    gh.write_text('#!/bin/sh\necho "$@" >> "$GH_LOG"\n', encoding="utf-8")
+    gh.chmod(gh.stat().st_mode | stat.S_IEXEC)
+
+    result = _ship(
+        repo,
+        "apply",
+        "publish",
+        "--version",
+        "0.2.0",
+        env={
+            "PATH": f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}",
+            "GH_LOG": str(log),
+        },
+    )
+
+    assert result.returncode == 0, result.stderr
+    recorded = log.read_text(encoding="utf-8")
+    assert "- A shipped thing." in recorded
+    assert "## Added" in recorded
+    assert "An older thing" not in recorded
+
+
 def test_commit_skill_does_not_push() -> None:
     text = (REPO_ROOT / "skills" / "code" / "commit" / "SKILL.md").read_text(
         encoding="utf-8"

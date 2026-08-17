@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- Failing tests that pin the release version-bump bugs: a nested JSON `"version"` is rewritten instead of the top-level one, a TOML `version_scheme` is read as the version, and a failed bump can leave a half-written tree.
+
 ## [0.6.0] – 2026-08-17
 
 ### Added
