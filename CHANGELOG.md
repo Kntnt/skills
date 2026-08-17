@@ -7,6 +7,7 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Added
 
 - Tests that pin the release version-bump: a nested JSON `"version"` must not be rewritten instead of the top-level one, a TOML `version_scheme` must not be read as the version, and a failed bump must write nothing.
+- CI on push to `main` and on every pull request: ruff, mypy, and pytest. Tool settings live in `pyproject.toml`. `plans/` is excluded from ruff so Markdown Plans are not formatted as Python.
 
 ### Fixed
 

@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Lint
+        run: uvx ruff check .
+
+      - name: Check formatting
+        run: uvx ruff format --check .
+
+      - name: Type-check
+        run: uvx mypy skills/kntnt/scripts/kntnt.py skills/code/commit/scripts/ship.py
+
+      - name: Test
+        run: uv run --with pytest pytest -q

@@ -13,11 +13,10 @@ import re
 import shutil
 import subprocess
 import sys
+import tomllib
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from urllib.parse import urlparse
-
-import tomllib
 
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
 JSON_VERSION_RE = re.compile(r'("version"\s*:\s*")([^"]+)(")')
