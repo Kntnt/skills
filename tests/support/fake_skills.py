@@ -95,6 +95,22 @@ def copy_skill(name: str, dest: Path) -> None:
         shutil.copy2(path, out)
 
 
+def update_skill(name: str, dest: Path) -> None:
+    """Refresh *name* the way the real transport does — and no better.
+
+    `npx skills update` compares SKILL.md and skips the skill when it matches,
+    so a revision that changes only a sidecar never lands. The manager must not
+    rely on update; modelling the real behaviour is what keeps it honest.
+    """
+
+    src = find_skill(name)
+    target = dest / name
+    current = target / "SKILL.md"
+    if current.is_file() and current.read_bytes() == (src / "SKILL.md").read_bytes():
+        return
+    copy_skill(name, dest)
+
+
 def remove_skill(name: str, dest: Path) -> None:
     """Delete *name* from *dest* if it is there."""
 
@@ -161,6 +177,8 @@ def main(argv: list[str] | None = None) -> int:
         for name in names:
             if args.command == "remove":
                 remove_skill(name, dest)
+            elif args.command == "update":
+                update_skill(name, dest)
             else:
                 copy_skill(name, dest)
     return 0

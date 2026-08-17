@@ -10,4 +10,4 @@ Refresh this collection's skills, then check every Dependency again. Report each
 2. Exit 2 and stderr mentions setup: tell the user to run `/kntnt setup`, and stop.
 3. Show the plan. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
 4. Run `uv run "$HERE/scripts/kntnt.py" apply update` with the same `--project` flag. Done when stdout is JSON.
-5. Say each name in `new` is in the Catalog and Disabled. Say each name in `removed` is no longer in the Catalog. For each item in `unsatisfied`, give its `how`. Done when the user has the report.
+5. Say each name in `new` is in the Catalog and Disabled. Say each name in `removed` is no longer in the Catalog. For each item in `unsatisfied`, give its `how`. If `catalog_refreshed` is false, say the Catalog could not be fetched, so Status may still be reporting an old list. Done when the user has the report.

@@ -303,7 +303,7 @@ def test_apply_disable_removes_from_every_recorded_harness(tmp_path: Path) -> No
     _setup(world, "claude-code", "opencode")
     _run(world, "apply", "enable", "alpha")
 
-    result = _run(world, "apply", "disable", "alpha")
+    result = _run(world, "apply", "disable", "alpha", "--yes")
 
     assert result.returncode == 0, result.stderr
     assert not (world["home"] / ".claude" / "skills" / "alpha").exists()
@@ -329,7 +329,7 @@ def test_disable_project_is_noop_when_skill_is_only_global(tmp_path: Path) -> No
     _setup(world, "claude-code")
     _run(world, "apply", "enable", "alpha")
 
-    result = _run(world, "apply", "disable", "--project", "alpha")
+    result = _run(world, "apply", "disable", "--project", "alpha", "--yes")
 
     assert result.returncode == 0, result.stderr
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
@@ -605,6 +605,104 @@ def test_update_reports_removed_catalog_entries(tmp_path: Path) -> None:
 
     assert result.returncode == 0, result.stderr
     assert _json(result)["removed"] == ["beta", "gamma"]
+
+
+def test_no_arguments_prints_help(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+
+    result = _run(world)
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.startswith("kntnt — manage this collection")
+    assert result.stdout == _run(world, "help").stdout
+
+
+def test_help_says_status_lists_every_catalog_skill(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+
+    text = _run(world, "help").stdout
+
+    assert "Enabled or not" in text
+    assert "check --here" not in text
+
+
+def test_update_refreshes_the_catalog_of_the_running_manager(tmp_path: Path) -> None:
+    """The transport writes to the recorded Harnesses, not necessarily to $HERE.
+
+    Thomas's shape: the Manager runs from ~/.claude/skills while the Harness
+    list holds only opencode, so nothing the transport does can refresh the
+    Catalog this Manager reads.
+    """
+
+    world = _world(tmp_path)
+    _setup(world, "opencode")
+
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json",
+        _catalog(
+            [
+                _entry("alpha", "code", binaries=["git"]),
+                _entry("delta", "code", description="The delta skill."),
+            ]
+        ),
+    )
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["catalog_refreshed"] is True
+    shipped = json.loads((world["here"] / "catalog.json").read_text(encoding="utf-8"))
+    assert [entry["name"] for entry in shipped["skills"]] == ["alpha", "delta"]
+    names = [skill["name"] for skill in _json(_run(world, "status"))["skills"]]
+    assert names == ["alpha", "delta"]
+
+
+def test_update_refreshes_a_sidecar_when_skill_md_is_unchanged(tmp_path: Path) -> None:
+    """The transport's own `update` skips these; the manager must not rely on it."""
+
+    world = _world(tmp_path)
+    _setup(world, "claude-code")
+    _run(world, "apply", "enable", "alpha")
+
+    sidecar = world["source"] / "skills" / "code" / "alpha" / "notes.md"
+    _write(sidecar, "revised\n")
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "notes.md"
+    assert installed.read_text(encoding="utf-8") == "revised\n"
+
+
+def test_apply_disable_refuses_without_yes(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _setup(world, "claude-code")
+    _run(world, "apply", "enable", "alpha")
+
+    result = _run(world, "apply", "disable", "alpha")
+
+    assert result.returncode == 2
+    assert "--yes" in result.stderr
+    assert (world["home"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_every_verb_accepts_yes(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _setup(world, "claude-code")
+
+    for args in (
+        ("status", "--yes"),
+        ("help", "--yes"),
+        ("plan", "enable", "alpha", "--yes"),
+        ("plan", "disable", "alpha", "--yes"),
+        ("plan", "setup", "--yes"),
+        ("plan", "update", "--yes"),
+        ("apply", "enable", "alpha", "--yes"),
+        ("apply", "update", "--yes"),
+    ):
+        result = _run(world, *args)
+        assert result.returncode == 0, f"{args}: {result.stderr}"
+        assert "unrecognized arguments" not in result.stderr
 
 
 def test_collection_skills_are_hidden_from_the_transport() -> None:

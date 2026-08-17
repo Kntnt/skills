@@ -4,6 +4,26 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.4.0] – 2026-08-17
+
+### Added
+
+- `--yes` is accepted by every verb of every collection script, and means the same thing everywhere: answer yes rather than ask. `agents-md` gained the flag; `kntnt` and `ship.py` previously advertised it and then died with `unrecognized arguments` when it was passed.
+- Architecture Decision Records 0027 (bare `/kntnt` is Help), 0028 (Update re-adds), and 0029 (`--yes` means assume yes).
+
+### Changed
+
+- Bare `/kntnt` is now Help instead of Status. Status is reached as `/kntnt status`.
+- `/kntnt disable` requires `--yes` on its apply step, because it deletes files and a script cannot prompt.
+- Status spells out that it reports every Catalog skill, Disabled ones included, and points at `/kntnt update` when an expected skill is absent.
+- `/kntnt update` says whether it managed to refresh the Catalog, so a failed fetch is visible rather than silent.
+
+### Fixed
+
+- `/kntnt update` refreshes the collection. It called the transport's `update`, which compares `SKILL.md` and skips a skill whose `SKILL.md` is unchanged — so any revision that touched only a sidecar was never delivered, and `delegation` could not reach the Catalog at all. Update now re-adds, and writes the Catalog to the running Manager's own directory, which the transport need not reach.
+- The test double for the transport modelled `update` as an unconditional copy, making it more capable than the real thing and hiding the bug above.
+- `apply setup` builds its removal list in a stable order rather than from an unordered set.
+
 ## [0.3.0] – 2026-08-17
 
 ### Added
@@ -40,3 +60,6 @@ All notable changes to this project are documented here. The format follows [Kee
 - Category folders under `skills/` (`agents`, `code`, `text`, `wordpress`).
 - `agents-md` skill under `skills/agents/`: create, shrink, or tend `AGENTS.md` and `agents.d/`.
 - Architecture Decision Records 0016–0025 for `agents-md` placement, the `CLAUDE.md` bridge, invocation, when a line may be stripped, and `read when` pointers.
+
+[Unreleased]: https://github.com/Kntnt/skills/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/Kntnt/skills/releases/tag/v0.4.0

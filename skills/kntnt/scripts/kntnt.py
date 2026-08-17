@@ -30,16 +30,22 @@ BINARY_HOW = {
 MANAGER_HELP = """\
 kntnt — manage this collection
 
-Subcommands:
-  status [skill...]              report Enabled/Disabled in Global and Project
-  setup                          record the Harness list
-  enable [--project] [skill...]  make skills Enabled (picker if none named)
-  disable [--project] [skill...] make skills Disabled (picker if none named)
-  update [--project]             refresh this collection and re-check Dependencies
-  help [skill]                   help for the manager, or one named skill
-  check --here PATH              refuse when a Dependency is Unsatisfied
+Usage: /kntnt [subcommand] [skill...] [--project[=on|off]] [--yes]
 
-Bare /kntnt is Status. Enable, Disable, and Update default to Global.
+Subcommands:
+  help [skill]         this help, or help for one named collection skill
+  status [skill...]    report Enabled/Disabled in Global and Project
+  setup                record the Harness list
+  enable [skill...]    make skills Enabled (picker if none named)
+  disable [skill...]   make skills Disabled (picker if none named)
+  update               refresh this collection and re-check Dependencies
+
+Options:
+  --project    act on this Project instead of Global (--project=off is Global)
+  --yes        assume yes; ask nothing that can be answered yes or no
+
+Bare /kntnt is this help. Status lists every Catalog skill, Enabled or not.
+Enable, Disable, and Update default to Global.
 """
 
 
@@ -281,6 +287,15 @@ def fetch_catalog() -> dict[str, Any]:
         raise ManagerError(f"Catalog could not be fetched from {url}") from exc
 
 
+def write_catalog(catalog: dict[str, Any]) -> None:
+    """Store *catalog* beside the Manager that is running."""
+
+    path = here() / "catalog.json"
+    path.write_text(
+        json.dumps(catalog, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+
 def load_catalog() -> dict[str, Any]:
     """Return the shipped Catalog, fetching it once if the file is gone."""
 
@@ -288,9 +303,7 @@ def load_catalog() -> dict[str, Any]:
     if path.is_file():
         return cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
     catalog = fetch_catalog()
-    path.write_text(
-        json.dumps(catalog, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    write_catalog(catalog)
     return catalog
 
 
@@ -493,24 +506,6 @@ def remove_skills(
     run_transport(args, internal=True)
 
 
-def update_skills(
-    names: list[str], harnesses: list[str], *, global_layer: bool
-) -> None:
-    """Refresh *names* on *harnesses* in the targeted layer."""
-
-    if not names or not harnesses:
-        return
-    args = ["update", *names]
-    for harness in harnesses:
-        args.extend(["--agent", harness])
-    if global_layer:
-        args.append("--global")
-    else:
-        args.append("--project")
-    args.append("--yes")
-    run_transport(args, internal=True)
-
-
 def parse_layer(value: str) -> bool:
     """True when the command targets Global."""
 
@@ -607,12 +602,11 @@ def cmd_status(names: list[str]) -> int:
 def cmd_plan_enable(names: list[str], *, global_layer: bool) -> int:
     """Print an Enable picker or a plan for the named skills."""
 
-    require_harnesses()
+    harnesses = require_harnesses()
     if not names:
         emit(picker_payload([], global_layer=global_layer, action="enable"))
         return 2
     wanted = validate_names(names)
-    harnesses = require_harnesses()
     emit(
         {
             "action": "enable",
@@ -627,12 +621,11 @@ def cmd_plan_enable(names: list[str], *, global_layer: bool) -> int:
 def cmd_plan_disable(names: list[str], *, global_layer: bool) -> int:
     """Print a Disable picker or a plan for the named skills."""
 
-    require_harnesses()
+    harnesses = require_harnesses()
     if not names:
         emit(picker_payload([], global_layer=global_layer, action="disable"))
         return 2
     wanted = validate_names(names)
-    harnesses = require_harnesses()
     emit(
         {
             "action": "disable",
@@ -669,12 +662,20 @@ def cmd_apply_enable(names: list[str], *, global_layer: bool) -> int:
     return 0
 
 
-def cmd_apply_disable(names: list[str], *, global_layer: bool) -> int:
+def cmd_apply_disable(names: list[str], *, global_layer: bool, yes: bool) -> int:
     """Disable the named skills in the targeted layer."""
 
     wanted = validate_names(names)
     if not wanted:
         raise ManagerError("name at least one skill to disable", 2)
+
+    # Disable deletes skill files. Nothing here can prompt, so the confirmation
+    # has to have happened before the call, and --yes is how that is asserted.
+    if not yes:
+        raise ManagerError(
+            "disabling deletes these skills' files; confirm first, then pass --yes",
+            2,
+        )
     harnesses = require_harnesses()
     changing: list[str] = []
     noop: list[str] = []
@@ -764,7 +765,7 @@ def cmd_apply_setup(harnesses: list[str], *, yes: bool) -> int:
         add_skills([MANAGER], added, global_layer=True)
         add_skills(globally_enabled, added, global_layer=True)
     if removed:
-        drop = [*catalog_names(), MANAGER]
+        drop = [*sorted(catalog_names()), MANAGER]
         remove_skills(drop, removed, global_layer=True)
 
     write_harness_list(wanted)
@@ -798,8 +799,21 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     old_names = catalog_names()
     desired = enabled_names(harnesses, global_layer=global_layer)
     refresh = [MANAGER, *desired] if global_layer else list(desired)
-    update_skills(refresh, harnesses, global_layer=global_layer)
-    add_skills(desired, harnesses, global_layer=global_layer)
+
+    # The transport's own `update` compares SKILL.md and skips a skill whose
+    # SKILL.md is unchanged, leaving sidecars — catalog.json, helper documents,
+    # scripts — frozen at the revision that last touched SKILL.md. `add`
+    # re-copies the whole directory and is idempotent, so it is the refresh.
+    add_skills(refresh, harnesses, global_layer=global_layer)
+
+    # That reaches only the recorded Harnesses, which need not hold the copy of
+    # the Manager running right now. Refresh its Catalog directly, or Status goes
+    # on reporting the snapshot this Manager shipped with.
+    catalog_refreshed = True
+    try:
+        write_catalog(fetch_catalog())
+    except ManagerError:
+        catalog_refreshed = False
 
     current_names = catalog_names()
     new_names = [name for name in sorted(current_names) if name not in old_names]
@@ -824,6 +838,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
             "new": new_names,
             "removed": removed_names,
             "refreshed": refresh,
+            "catalog_refreshed": catalog_refreshed,
             "unsatisfied": unsatisfied,
             "layer": "global" if global_layer else "project",
         }
@@ -1002,6 +1017,16 @@ def add_project_flag(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--project", choices=("on", "off"), default="off")
 
 
+def add_yes_flag(parser: argparse.ArgumentParser) -> None:
+    """Add --yes to a verb.
+
+    Every verb takes it, so passing the user's flag through is never a crash.
+    It only carries meaning where something is asked or deleted.
+    """
+
+    parser.add_argument("--yes", action="store_true")
+
+
 def normalize_argv(argv: list[str]) -> list[str]:
     """Turn bare `--project` into `--project on` so it cannot steal a skill name."""
 
@@ -1024,9 +1049,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     status = sub.add_parser("status", help="Report Enabled and Disabled.")
     status.add_argument("skills", nargs="*")
+    add_yes_flag(status)
 
     help_cmd = sub.add_parser("help", help="Print help.")
     help_cmd.add_argument("skill", nargs="?")
+    add_yes_flag(help_cmd)
 
     check = sub.add_parser("check", help="Refuse when a Dependency is Unsatisfied.")
     check.add_argument("--here", required=True, type=Path)
@@ -1041,26 +1068,32 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan_enable = plan_sub.add_parser("enable")
     plan_enable.add_argument("skills", nargs="*")
     add_project_flag(plan_enable)
+    add_yes_flag(plan_enable)
     plan_disable = plan_sub.add_parser("disable")
     plan_disable.add_argument("skills", nargs="*")
     add_project_flag(plan_disable)
-    plan_sub.add_parser("setup")
+    add_yes_flag(plan_disable)
+    add_yes_flag(plan_sub.add_parser("setup"))
     plan_update = plan_sub.add_parser("update")
     add_project_flag(plan_update)
+    add_yes_flag(plan_update)
 
     apply = sub.add_parser("apply", help="Apply a plan.")
     apply_sub = apply.add_subparsers(dest="verb", required=True)
     apply_enable = apply_sub.add_parser("enable")
     apply_enable.add_argument("skills", nargs="*")
     add_project_flag(apply_enable)
+    add_yes_flag(apply_enable)
     apply_disable = apply_sub.add_parser("disable")
     apply_disable.add_argument("skills", nargs="*")
     add_project_flag(apply_disable)
+    add_yes_flag(apply_disable)
     apply_setup = apply_sub.add_parser("setup")
     apply_setup.add_argument("--harness", action="append", default=[])
-    apply_setup.add_argument("--yes", action="store_true")
+    add_yes_flag(apply_setup)
     apply_update = apply_sub.add_parser("update")
     add_project_flag(apply_update)
+    add_yes_flag(apply_update)
 
     return parser.parse_args(argv)
 
@@ -1092,7 +1125,7 @@ def dispatch(args: argparse.Namespace) -> int:
     global_layer = parse_layer(args.project)
     if args.verb == "enable":
         return cmd_apply_enable(args.skills, global_layer=global_layer)
-    return cmd_apply_disable(args.skills, global_layer=global_layer)
+    return cmd_apply_disable(args.skills, global_layer=global_layer, yes=args.yes)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1100,7 +1133,7 @@ def main(argv: list[str] | None = None) -> int:
 
     raw = normalize_argv(list(sys.argv[1:] if argv is None else argv))
     if not raw:
-        raw = ["status"]
+        raw = ["help"]
     args = parse_args(raw)
     try:
         return dispatch(args)

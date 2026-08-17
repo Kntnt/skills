@@ -9,7 +9,7 @@
 - `CUT` a line with a cited discoverable source.
 - `CUT` a line that a **tracked Project** skill already covers (Enabled in Project, `SKILL.md` in `git ls-files`, same meaning, that skill starts when the line would have mattered).
 
-## Ask (one concrete question after the task)
+## Ask (one concrete question after the task, or the change itself under `--yes`)
 
 - Drop a fact because this session did not use it.
 - Drop a fact with no named source.

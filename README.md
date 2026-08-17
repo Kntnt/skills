@@ -51,18 +51,22 @@ Later, add or drop skills with `/kntnt enable` and `/kntnt disable`. Omit the na
 
 ## Usage
 
-Bare `/kntnt` is Status. The manager subcommands are:
+Bare `/kntnt` is Help. The manager subcommands are:
 
 | Command | What it does |
 |---|---|
+| `/kntnt help [skill]` | Help for the manager, or one named skill |
 | `/kntnt status [skill...]` | Report Enabled or Disabled in Global and Project |
 | `/kntnt setup` | Record the harness list |
 | `/kntnt enable [--project] [skill...]` | Enable skills (picker if none named) |
 | `/kntnt disable [--project] [skill...]` | Disable skills (picker if none named) |
 | `/kntnt update [--project]` | Refresh this collection and re-check dependencies |
-| `/kntnt help [skill]` | Help for the manager, or one named skill |
+
+Status with no names lists every skill in the catalog, Disabled ones included — that is how you find what there is to enable. The catalog ships with the manager, so a skill added upstream since your last `/kntnt update` appears only after you run it.
 
 Enable, Disable, and Update default to Global. `--project` or `--project=on` targets the Project; `--project=off` targets Global. Update refreshes this collection only. It reports each new catalog skill and leaves it Disabled. It does not refresh a skill that came from another collection. If a dependency is missing, it tells you how to satisfy it and does not install anything.
+
+`--yes` works the same on every skill here: whatever could be answered yes or no is answered yes instead of asked.
 
 Enabled skills are invoked by their own names, not as `/kntnt <name>`.
 

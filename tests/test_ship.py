@@ -12,9 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SHIP = REPO_ROOT / "skills" / "code" / "commit" / "scripts" / "ship.py"
 
 _GIT_ENV = {
-    key: value
-    for key, value in os.environ.items()
-    if not key.startswith("GIT_")
+    key: value for key, value in os.environ.items() if not key.startswith("GIT_")
 }
 _GIT_ENV["GIT_AUTHOR_NAME"] = "Test"
 _GIT_ENV["GIT_AUTHOR_EMAIL"] = "test@example.com"
@@ -410,7 +408,7 @@ def test_apply_publish_creates_github_release(tmp_path: Path) -> None:
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
     gh = bin_dir / "gh"
-    gh.write_text("#!/bin/sh\necho \"$@\" >> \"$GH_LOG\"\n", encoding="utf-8")
+    gh.write_text('#!/bin/sh\necho "$@" >> "$GH_LOG"\n', encoding="utf-8")
     gh.chmod(gh.stat().st_mode | stat.S_IEXEC)
 
     result = _ship(
@@ -442,8 +440,8 @@ def test_apply_publish_uploads_asset_when_release_exists(tmp_path: Path) -> None
     gh = bin_dir / "gh"
     gh.write_text(
         "#!/bin/sh\n"
-        "echo \"$@\" >> \"$GH_LOG\"\n"
-        "if [ \"$1\" = release ] && [ \"$2\" = view ]; then exit 0; fi\n",
+        'echo "$@" >> "$GH_LOG"\n'
+        'if [ "$1" = release ] && [ "$2" = view ]; then exit 0; fi\n',
         encoding="utf-8",
     )
     gh.chmod(gh.stat().st_mode | stat.S_IEXEC)

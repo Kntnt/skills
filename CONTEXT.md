@@ -40,7 +40,7 @@ The manager subcommand that makes one or more skills disabled. With no skill nam
 _Avoid_: remove, uninstall
 
 **Status**:
-The manager subcommand that reports whether named skills are Enabled or Disabled in both Project and Global. With no skill names it reports every collection skill. Bare `/kntnt` means Status.
+The manager subcommand that reports whether named skills are Enabled or Disabled in both Project and Global. With no skill names it reports every skill in the Catalog, Disabled ones included.
 _Avoid_: list, info, doctor
 
 **Update**:
@@ -48,8 +48,12 @@ The manager subcommand that refreshes this collection's skills and then checks e
 _Avoid_: upgrade, sync, pull
 
 **Help**:
-The manager subcommand that prints help for the manager, or for one named collection skill.
+The manager subcommand that prints help for the manager, or for one named collection skill. Bare `/kntnt` means Help.
 _Avoid_: usage, man
+
+**Assume yes**:
+What `--yes` means on any collection skill: every question that can be answered yes or no is answered yes instead of asked. Every verb of a collection script accepts the flag, so a skill can pass the user's arguments through unread. Where a subcommand deletes files, the flag is also the gate — the script refuses without it, because a script cannot prompt.
+_Avoid_: force, non-interactive, quiet, auto-approve
 
 **Enabled**:
 A skill present on disk in a layer, in each recorded harness's skills directory for that layer.

@@ -453,9 +453,13 @@ def bump_version_files(cwd: Path, version: str) -> list[Path]:
         path = cwd / relative
         original = path.read_text(encoding="utf-8")
         if path.suffix == ".toml":
-            updated, count = TOML_VERSION_RE.subn(rf"\g<1>{version}\g<3>", original, count=1)
+            updated, count = TOML_VERSION_RE.subn(
+                rf"\g<1>{version}\g<3>", original, count=1
+            )
         else:
-            updated, count = JSON_VERSION_RE.subn(rf"\g<1>{version}\g<3>", original, count=1)
+            updated, count = JSON_VERSION_RE.subn(
+                rf"\g<1>{version}\g<3>", original, count=1
+            )
         if count != 1:
             raise GitError(f"could not bump version in {relative}")
         path.write_text(updated, encoding="utf-8")
@@ -483,7 +487,9 @@ def extract_release_notes(text: str, version: str) -> str:
     match = pattern.search(text)
     if match is None:
         return ""
-    body = re.sub(r"^(#{3,6})(?= )", lambda m: m[1][1:], match["body"], flags=re.MULTILINE)
+    body = re.sub(
+        r"^(#{3,6})(?= )", lambda m: m[1][1:], match["body"], flags=re.MULTILINE
+    )
     return body.strip()
 
 
@@ -615,6 +621,17 @@ def cmd_apply(cwd: Path, args: argparse.Namespace) -> int:
     return 0
 
 
+def add_yes_flag(parser: argparse.ArgumentParser) -> None:
+    """Add --yes to a verb.
+
+    The confirmation lives in the skill, not here — nothing in this script can
+    prompt. Accepting the flag on every verb means the skill can pass the user's
+    own arguments straight through without turning `--yes` into a crash.
+    """
+
+    parser.add_argument("--yes", action="store_true")
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     """Parse the ship CLI."""
 
@@ -623,24 +640,31 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     plan = sub.add_parser("plan", help="Print a JSON plan and stop.")
     plan.add_argument("mode", choices=("commit", "push", "release"))
+    add_yes_flag(plan)
 
     apply = sub.add_parser("apply", help="Apply a plan.")
     apply_sub = apply.add_subparsers(dest="mode", required=True)
 
     commit = apply_sub.add_parser("commit", help="Stage everything and commit.")
     commit.add_argument("--message", required=True)
+    add_yes_flag(commit)
 
-    apply_sub.add_parser("push", help="Push the current branch.")
+    add_yes_flag(apply_sub.add_parser("push", help="Push the current branch."))
 
     bump = apply_sub.add_parser("bump", help="Bump versions and promote the changelog.")
     bump.add_argument("--version", required=True)
+    add_yes_flag(bump)
 
     tag = apply_sub.add_parser("tag", help="Tag HEAD and push the tag.")
     tag.add_argument("--version", required=True)
+    add_yes_flag(tag)
 
-    publish = apply_sub.add_parser("publish", help="Create or update the GitHub release.")
+    publish = apply_sub.add_parser(
+        "publish", help="Create or update the GitHub release."
+    )
     publish.add_argument("--version", required=True)
     publish.add_argument("--asset")
+    add_yes_flag(publish)
 
     return parser.parse_args(argv)
 

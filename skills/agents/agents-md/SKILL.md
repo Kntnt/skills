@@ -1,7 +1,7 @@
 ---
 name: agents-md
 description: "AGENTS.md: create, shrink, or tend the always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`."
-argument-hint: "[path] [--force]"
+argument-hint: "[path] [--force] [--yes]"
 metadata:
   internal: true
   kntnt:
@@ -26,6 +26,7 @@ If the arguments are `help`, `--help`, or `-h`, emit the Arguments and Steps bel
 
 - `path` — directory to tend. Default: current repo root.
 - `--force` — lay the skeleton when no fact earns a file.
+- `--yes` — take yes for an answer on every question in [`writes.md`](writes.md) and make the change, rather than asking. `docs/` stays a proposal even so: a human writes that text.
 
 ## Steps
 
@@ -35,5 +36,5 @@ If the arguments are `help`, `--help`, or `-h`, emit the Arguments and Steps bel
 4. Collect candidate facts from those files and from this session. Read [`gates.md`](gates.md) and apply every gate to every candidate. Read [`placement.md`](placement.md) and give each survivor a home. Done when every candidate is `KEEP`, `CUT`, `ASK`, or placed.
 5. Read [`writes.md`](writes.md). Split the plan into writes and questions. Done when every change is one or the other.
 6. No `KEEP` and no `--force`: write no file. Report why. Stop. Done when the working tree is unchanged.
-7. Ask every question after the work, as a concrete fact, not “run `/agents-md`”. Write the safe set. `--force` with no facts: `CLAUDE.md` is exactly `@AGENTS.md`; `AGENTS.md` is the title plus Ground rules only if `README*` or other narrative exists; `agents.d/.gitkeep` if the directory is empty. Every References line is `read when <situation>` and passes the completeness test in [`placement.md`](placement.md). Done when writes match the plan, `docs/` is untouched, every `agents.d/` file has a References line, and every References line passes the test.
+7. Ask every question after the work, as a concrete fact, not “run `/agents-md`”. With `--yes`, ask nothing: make each change the question would have proposed, and list it in the report instead. Write the safe set. `--force` with no facts: `CLAUDE.md` is exactly `@AGENTS.md`; `AGENTS.md` is the title plus Ground rules only if `README*` or other narrative exists; `agents.d/.gitkeep` if the directory is empty. Every References line is `read when <situation>` and passes the completeness test in [`placement.md`](placement.md). Done when writes match the plan, `docs/` is untouched, every `agents.d/` file has a References line, and every References line passes the test.
 8. Report `wc -c` before and after for the always-loaded pair and for the total including `agents.d/`. List each cut, keep, split, and pointer with its reason. Cite the source for every `CUT`. Done when that report is shown.
