@@ -62,7 +62,7 @@ Bare `/kntnt` is Help. The manager subcommands are:
 
 Status with no names lists every skill in the catalog, Disabled ones included — that is how you find what there is to enable. The catalog ships with the manager, so a skill added upstream since your last `/kntnt update` appears only after you run it.
 
-Enable, Disable, and Update default to Global. `--project` or `--project=on` targets the Project; `--project=off` targets Global. Update refreshes this collection only. It reports each new catalog skill and leaves it Disabled. It does not refresh a skill that came from another collection. If a dependency is missing, it tells you how to satisfy it and does not install anything.
+Enable, Disable, and Update default to Global. `--project` or `--project=on` targets the Project; `--project=off` targets Global. Update refreshes this collection only. It reports each new catalog skill and leaves it Disabled. It deletes a skill that has been withdrawn from the collection upstream, and does not ask: such a skill can no longer be updated or supported, and no other command here could reach it. It does not refresh a skill that came from another collection. If a dependency is missing, it tells you how to satisfy it and does not install anything.
 
 `--yes` works the same on every skill here: whatever could be answered yes or no is answered yes instead of asked.
 

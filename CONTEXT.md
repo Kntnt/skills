@@ -40,7 +40,7 @@ The manager subcommand that reports whether named skills are Enabled or Disabled
 _Avoid_: list, info, doctor
 
 **Update**:
-The manager subcommand that refreshes this collection's skills and then checks every Dependency again. It reports each new Catalog entry; it does not Enable that skill and it does not ask. It does not refresh an External. Without `--project` it applies the Global layer; with `--project` it applies the Project layer.
+The manager subcommand that refreshes this collection's skills and then checks every Dependency again. It reports each new Catalog entry; it does not Enable that skill and it does not ask. It deletes a Withdrawn skill from the layer it is applying, reporting each one and asking nothing. It does not refresh an External. Without `--project` it applies the Global layer; with `--project` it applies the Project layer.
 _Avoid_: upgrade, sync, pull
 
 **Help**:
@@ -48,7 +48,7 @@ The manager subcommand that prints help for the manager, or for one named collec
 _Avoid_: usage, man
 
 **Assume yes**:
-What `--yes` means on any collection skill: every question that can be answered yes or no is answered yes instead of asked. Every verb of a collection script accepts the flag, so a skill can pass the user's arguments through unread. Where a subcommand deletes files, the flag is also the gate — the script refuses without it, because a script cannot prompt.
+What `--yes` means on any collection skill: every question that can be answered yes or no is answered yes instead of asked. Every verb of a collection script accepts the flag, so a skill can pass the user's arguments through unread. Where a subcommand deletes files the user is choosing to delete, the flag is also the gate — the script refuses without it, because a script cannot prompt. Deleting a Withdrawn skill is not such a choice and is not gated: there is no question to answer, so Update removes it with or without the flag.
 _Avoid_: force, non-interactive, quiet, auto-approve
 
 **Enabled**:
@@ -62,6 +62,10 @@ _Avoid_: inactive, off, uninstalled
 **Catalog**:
 The collection's declared list of its skills and their dependencies, authored in the repository and shipped with the Manager.
 _Avoid_: manifest, registry, index, lockfile
+
+**Withdrawn**:
+A skill the collection no longer ships: it has left the repository, and with it the Catalog. Update deletes a Withdrawn skill from the layer it applies and does not ask, because nothing can Enable, Disable, or update it any longer. The mirror of a new Catalog entry, which is reported and left Disabled.
+_Avoid_: deprecated, retired, obsolete, orphaned
 
 **State**:
 The user's remembered choices: which skills are Enabled in Global and in each Project. Reconstructable from disk; never the source of truth. Nothing about where skills go is remembered — that is resolved on each run.

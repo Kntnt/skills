@@ -191,6 +191,19 @@ def skipped() -> set[str]:
     return {name.strip() for name in raw.split(",") if name.strip()}
 
 
+def refused() -> set[str]:
+    """Return the skills this run refuses to touch, failing the whole call.
+
+    The real transport errors rather than working around what it will not do —
+    a skill missing from the source, a directory it declines to delete — and it
+    takes the batch with it. A manager that must survive that has to be tested
+    against it.
+    """
+
+    raw = os.environ.get("KNTNT_TRANSPORT_REFUSE", "")
+    return {name.strip() for name in raw.split(",") if name.strip()}
+
+
 def main(argv: list[str] | None = None) -> int:
     """Dispatch add, remove, or update against the isolated dirs."""
 
@@ -204,6 +217,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "update" and getattr(args, "project_layer", False):
         global_layer = False
     log_call(args.command, agents, names, global_layer=global_layer)
+
+    # A refused name fails the call before anything moves, batch and all.
+    blocked = sorted(refused().intersection(names))
+    if blocked:
+        print(f"error: skills {', '.join(blocked)} refused", file=sys.stderr)
+        return 1
 
     skip = skipped()
     for agent in agents:

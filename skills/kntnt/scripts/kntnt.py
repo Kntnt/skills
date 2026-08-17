@@ -617,6 +617,53 @@ def remove_skills(
     )
 
 
+def withdraw_skills(
+    names: list[str], harnesses: list[str], *, global_layer: bool
+) -> list[dict[str, Any]]:
+    """Take the skills the collection has withdrawn off the disk.
+
+    A skill that has left the Catalog can no longer be updated, supported, or
+    reasoned about, so it is removed without asking (ADR-0037). It goes through
+    Disable's own removal — the collection has one way to delete skill files —
+    and each name is reported with what the disk then showed: `removed` where
+    the files are gone, `absent` where there were none to delete, and `failed`
+    with the directories they survive in. A failure is one skill's, not the
+    run's: whatever else Update had to do still happens.
+    """
+
+    # A withdrawn skill that was never Enabled here has nothing to delete, and
+    # the transport is not asked about one.
+    on_disk = [
+        name
+        for name in names
+        if skill_state(name, harnesses, global_layer=global_layer) != "disabled"
+    ]
+
+    # The transport takes the whole batch down when it refuses one name, so a
+    # failure here is a verdict to be read off the disk rather than raised.
+    try:
+        outcome = remove_skills(on_disk, harnesses, global_layer=global_layer)
+    except ManagerError:
+        outcome = verified_outcome(
+            on_disk, harnesses, global_layer=global_layer, expect_present=False
+        )
+
+    # Give every withdrawn name its verdict, whether or not it was asked of the
+    # transport, so the report covers what left the Catalog and not just what
+    # the removal touched.
+    failed = {str(item["name"]): item["directories"] for item in outcome["failed"]}
+    report: list[dict[str, Any]] = []
+    for name in names:
+        if name not in on_disk:
+            report.append({"name": name, "disk": "absent"})
+        elif name in failed:
+            report.append({"name": name, "disk": "failed", "directories": failed[name]})
+        else:
+            report.append({"name": name, "disk": "removed"})
+
+    return report
+
+
 def parse_layer(value: str) -> bool:
     """True when the command targets Global."""
 
@@ -833,6 +880,25 @@ def cmd_apply_update(*, global_layer: bool) -> int:
 
     harnesses = target_harnesses(global_layer=global_layer)
     old_names = catalog_names()
+
+    # The Catalog is adopted before anything is decided from it. Deciding first
+    # would resolve the work against a list the collection has already moved
+    # on from, and ask the transport for a skill the source no longer carries
+    # (issue #5). The refresh below reaches only the Harnesses detected here,
+    # which need not hold the copy of the Manager running right now, so this
+    # Manager's own Catalog is written directly or Status goes on reporting the
+    # snapshot it shipped with.
+    catalog_refreshed = True
+    try:
+        write_catalog(fetch_catalog())
+    except ManagerError:
+        catalog_refreshed = False
+
+    current_names = catalog_names()
+    new_names = [name for name in sorted(current_names) if name not in old_names]
+    withdrawn = [name for name in sorted(old_names) if name not in current_names]
+    withdrawals = withdraw_skills(withdrawn, harnesses, global_layer=global_layer)
+
     desired = enabled_names(harnesses, global_layer=global_layer)
     refresh = [MANAGER, *desired] if global_layer else list(desired)
 
@@ -842,18 +908,6 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     # re-copies the whole directory and is idempotent, so it is the refresh.
     outcome = add_skills(refresh, harnesses, global_layer=global_layer)
 
-    # That reaches only the Harnesses detected here, which need not hold the copy
-    # of the Manager running right now. Refresh its Catalog directly, or Status
-    # goes on reporting the snapshot this Manager shipped with.
-    catalog_refreshed = True
-    try:
-        write_catalog(fetch_catalog())
-    except ManagerError:
-        catalog_refreshed = False
-
-    current_names = catalog_names()
-    new_names = [name for name in sorted(current_names) if name not in old_names]
-    removed_names = [name for name in sorted(old_names) if name not in current_names]
     unsatisfied: list[dict[str, str]] = []
     capabilities: list[dict[str, str]] = []
     seen: set[tuple[str, str, str]] = set()
@@ -881,7 +935,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
         {
             **outcome,
             "new": new_names,
-            "removed": removed_names,
+            "removed": withdrawals,
             "catalog_refreshed": catalog_refreshed,
             "unsatisfied": unsatisfied,
             "capabilities": capabilities,
@@ -889,6 +943,13 @@ def cmd_apply_update(*, global_layer: bool) -> int:
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
+
+    # ADR-0036's one rule reaches both halves of the run: a withdrawal whose
+    # files are still there is as much a change the disk does not show as a
+    # refresh that never landed.
+    if any(item["disk"] == "failed" for item in withdrawals):
+        return EXIT_CHANGE_FAILED
+
     return outcome_exit_code(outcome)
 
 

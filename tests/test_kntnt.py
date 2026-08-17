@@ -82,6 +82,13 @@ def _entry(
     }
 
 
+# The default Catalog with `gamma` withdrawn from it.
+_SURVIVORS = [
+    _entry("alpha", "code", binaries=["git"], description="The alpha skill."),
+    _entry("beta", "code", skills=["alpha"], description="The beta skill."),
+]
+
+
 def _world(
     tmp_path: Path, entries: list[dict[str, Any]] | None = None
 ) -> dict[str, Path]:
@@ -147,12 +154,27 @@ def _present(world: dict[str, Path], root: str, *harness_dirs: str) -> None:
         (world[root] / relative).mkdir(parents=True, exist_ok=True)
 
 
+def _withdraw(
+    world: dict[str, Path], name: str, category: str, remaining: list[dict[str, Any]]
+) -> None:
+    """Withdraw *name* from the collection: out of the Catalog and off the tree.
+
+    Both halves matter. A source that still carried the skill would let a
+    refresh of it succeed by accident, which is precisely what the collection
+    cannot count on once a skill is gone.
+    """
+
+    _write(world["source"] / "skills" / "kntnt" / "catalog.json", _catalog(remaining))
+    shutil.rmtree(world["source"] / "skills" / category / name)
+
+
 def _run(
     world: dict[str, Path],
     *args: str,
     cwd: Path | None = None,
     log: Path | None = None,
     skip: list[str] | None = None,
+    refuse: list[str] | None = None,
 ) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
     env["KNTNT_HOME"] = str(world["home"])
@@ -164,6 +186,8 @@ def _run(
         env["KNTNT_TRANSPORT_LOG"] = str(log)
     if skip is not None:
         env["KNTNT_TRANSPORT_SKIP"] = ",".join(skip)
+    if refuse is not None:
+        env["KNTNT_TRANSPORT_REFUSE"] = ",".join(refuse)
     script = world["here"] / "scripts" / "kntnt.py"
     return subprocess.run(
         ["uv", "run", str(script), *args],
@@ -755,7 +779,11 @@ def test_update_project_does_not_install_the_manager_in_the_project(
     assert _json(result)["confirmed"] == ["alpha"]
 
 
-def test_update_reports_removed_catalog_entries(tmp_path: Path) -> None:
+def test_update_reports_a_withdrawn_skill_that_was_never_enabled(
+    tmp_path: Path,
+) -> None:
+    """Nothing on disk is nothing to delete, and still worth reporting."""
+
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _write(
@@ -763,10 +791,93 @@ def test_update_reports_removed_catalog_entries(tmp_path: Path) -> None:
         _catalog([_entry("alpha", "code", binaries=["git"])]),
     )
 
+    log = tmp_path / "transport.jsonl"
+
+    result = _run(world, "apply", "update", log=log)
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["removed"] == [
+        {"name": "beta", "disk": "absent"},
+        {"name": "gamma", "disk": "absent"},
+    ]
+    assert not [call for call in _calls(log) if call["command"] == "remove"]
+
+
+def test_update_removes_a_skill_the_collection_has_withdrawn(tmp_path: Path) -> None:
+    """A skill that has left the repository must leave the disk."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
     result = _run(world, "apply", "update")
 
     assert result.returncode == 0, result.stderr
-    assert _json(result)["removed"] == ["beta", "gamma"]
+    assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
+    assert _json(result)["removed"] == [{"name": "gamma", "disk": "removed"}]
+
+
+def test_update_never_asks_the_transport_for_a_withdrawn_skill(
+    tmp_path: Path,
+) -> None:
+    """The source no longer carries it, so asking for it is what killed the run."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+    log = tmp_path / "transport.jsonl"
+
+    result = _run(world, "apply", "update", log=log)
+
+    assert result.returncode == 0, result.stderr
+    placements = [call for call in _calls(log) if call["command"] == "add"]
+    assert placements, "the refresh itself never ran"
+    assert all("gamma" not in call["skills"] for call in placements)
+
+
+def test_update_with_project_withdraws_only_from_the_project(tmp_path: Path) -> None:
+    """The Global copy is another layer's business, and this run is not it."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "enable", "gamma")
+    _run(world, "apply", "enable", "--project", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "apply", "update", "--project")
+
+    assert result.returncode == 0, result.stderr
+    assert not (world["project"] / ".claude" / "skills" / "gamma").exists()
+    assert (world["home"] / ".claude" / "skills" / "gamma" / "SKILL.md").is_file()
+
+
+def test_update_refreshes_the_rest_when_a_withdrawal_fails(tmp_path: Path) -> None:
+    """A transport that refuses one removal does not get to end the run."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "enable", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+    _write(world["source"] / "skills" / "code" / "alpha" / "notes.md", "revised\n")
+
+    result = _run(world, "apply", "update", refuse=["gamma"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["removed"] == [
+        {
+            "name": "gamma",
+            "disk": "failed",
+            "directories": [str(world["home"] / ".claude" / "skills")],
+        }
+    ]
+    assert "alpha" in payload["confirmed"]
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "notes.md"
+    assert installed.read_text(encoding="utf-8") == "revised\n"
 
 
 def test_no_arguments_prints_help(tmp_path: Path) -> None:
