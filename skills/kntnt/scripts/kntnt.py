@@ -27,6 +27,18 @@ BINARY_HOW = {
     "git": "install git",
     "gh": "install GitHub CLI (gh) from https://cli.github.com/",
 }
+
+# A Capability is a Dependency on the Harness itself. No script can test one:
+# this file cannot know which Harness invoked it, let alone what that Harness
+# can do. So the checker reports the Capabilities a skill requires and the
+# agent — which is the Harness — answers. Every name a skill may declare is
+# defined here, so a typo is a refusal rather than a silently skipped check.
+CAPABILITIES = {
+    "subagents": {
+        "confirm": "you can spawn subagents that work in their own context window",
+        "how": "run this skill in a harness that can spawn subagents",
+    },
+}
 MANAGER_HELP = """\
 kntnt — manage this collection
 
@@ -248,20 +260,36 @@ def parse_frontmatter(text: str) -> dict[str, Any]:
     return parse_simple_yaml(text[4:end])
 
 
+DEP_KINDS = ("binaries", "skills", "externals", "capabilities")
+
+
 def skill_deps(frontmatter: dict[str, Any]) -> dict[str, list[str]]:
     """Read Dependency lists from a skill's frontmatter."""
 
+    empty: dict[str, list[str]] = {key: [] for key in DEP_KINDS}
     metadata = frontmatter.get("metadata")
     if not isinstance(metadata, dict):
-        return {"binaries": [], "skills": [], "externals": []}
+        return empty
     block = metadata.get("kntnt")
     if not isinstance(block, dict):
-        return {"binaries": [], "skills": [], "externals": []}
+        return empty
     result: dict[str, list[str]] = {}
-    for key in ("binaries", "skills", "externals"):
+    for key in DEP_KINDS:
         values = block.get(key, [])
         result[key] = [str(item) for item in values] if isinstance(values, list) else []
     return result
+
+
+def capability_notes(names: list[str]) -> list[dict[str, str]]:
+    """Describe each required Capability so the agent can answer for itself."""
+
+    notes: list[dict[str, str]] = []
+    for name in names:
+        note = CAPABILITIES.get(name)
+        if note is None:
+            raise ManagerError(f"unknown capability '{name}'")
+        notes.append({"name": name, **note})
+    return notes
 
 
 def fetch_catalog() -> dict[str, Any]:
@@ -552,6 +580,7 @@ def status_payload(names: list[str]) -> dict[str, Any]:
                 "name": name,
                 "category": entry.get("category", ""),
                 "description": entry.get("description", ""),
+                "capabilities": entry.get("capabilities", []),
                 "global": skill_state(name, harnesses, global_layer=True),
                 "project": skill_state(name, harnesses, global_layer=False),
             }
@@ -582,6 +611,7 @@ def picker_payload(
             {
                 "name": name,
                 "description": entry.get("description", ""),
+                "capabilities": entry.get("capabilities", []),
                 "enabled": state == "enabled",
             }
         )
@@ -819,7 +849,9 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     new_names = [name for name in sorted(current_names) if name not in old_names]
     removed_names = [name for name in sorted(old_names) if name not in current_names]
     unsatisfied: list[dict[str, str]] = []
+    capabilities: list[dict[str, str]] = []
     seen: set[tuple[str, str, str]] = set()
+    seen_capabilities: set[tuple[str, str]] = set()
     for harness in harnesses:
         for directory in skill_dirs(harness, global_layer=global_layer):
             for name in desired:
@@ -832,6 +864,12 @@ def cmd_apply_update(*, global_layer: bool) -> int:
                         continue
                     seen.add(key)
                     unsatisfied.append(item)
+                for note in capabilities_at(skill_dir):
+                    pair = (name, note["name"])
+                    if pair in seen_capabilities:
+                        continue
+                    seen_capabilities.add(pair)
+                    capabilities.append({"skill": name, **note})
 
     emit(
         {
@@ -840,19 +878,35 @@ def cmd_apply_update(*, global_layer: bool) -> int:
             "refreshed": refresh,
             "catalog_refreshed": catalog_refreshed,
             "unsatisfied": unsatisfied,
+            "capabilities": capabilities,
             "layer": "global" if global_layer else "project",
         }
     )
     return 0
 
 
-def unsatisfied_at(skill_dir: Path) -> list[dict[str, str]]:
-    """Return Unsatisfied Dependencies declared in *skill_dir*/SKILL.md."""
+def declared_deps_at(skill_dir: Path) -> dict[str, list[str]]:
+    """Return the Dependency lists declared in *skill_dir*/SKILL.md."""
 
     path = skill_dir / "SKILL.md"
     if not path.is_file():
         raise ManagerError(f"no SKILL.md at {skill_dir}")
-    deps = skill_deps(parse_frontmatter(path.read_text(encoding="utf-8")))
+    return skill_deps(parse_frontmatter(path.read_text(encoding="utf-8")))
+
+
+def capabilities_at(skill_dir: Path) -> list[dict[str, str]]:
+    """Return the Capabilities *skill_dir* requires of the running Harness."""
+
+    return capability_notes(declared_deps_at(skill_dir)["capabilities"])
+
+
+def unsatisfied_at(skill_dir: Path) -> list[dict[str, str]]:
+    """Return Unsatisfied Dependencies declared in *skill_dir*/SKILL.md.
+
+    Capabilities are absent by design: only the agent can answer those.
+    """
+
+    deps = declared_deps_at(skill_dir)
     missing: list[dict[str, str]] = []
 
     for binary in deps["binaries"]:
@@ -902,13 +956,20 @@ def skill_is_effective(name: str) -> bool:
 
 
 def cmd_check(skill_dir: Path) -> int:
-    """Refuse when a Dependency at *skill_dir* is Unsatisfied."""
+    """Refuse when a Dependency at *skill_dir* is Unsatisfied.
 
+    `capabilities` is the unfinished half of the check: each entry is a
+    Dependency this script cannot test, handed to the agent to answer. Exit 0
+    with a non-empty list therefore means "nothing missing that I can see",
+    not "go ahead".
+    """
+
+    capabilities = capabilities_at(skill_dir)
     missing = unsatisfied_at(skill_dir)
     if missing:
-        emit({"ok": False, "unsatisfied": missing})
+        emit({"ok": False, "unsatisfied": missing, "capabilities": capabilities})
         return 2
-    emit({"ok": True, "unsatisfied": []})
+    emit({"ok": True, "unsatisfied": [], "capabilities": capabilities})
     return 0
 
 
@@ -981,6 +1042,11 @@ def generate_catalog(source: Path) -> dict[str, Any]:
         if name == MANAGER:
             continue
         deps = skill_deps(frontmatter)
+
+        # Generation is where a misspelt Capability has to fail. Past this
+        # point the name would ride into the Catalog and only surface when a
+        # user ran the skill.
+        capability_notes(deps["capabilities"])
         entries.append(
             {
                 "name": name,
@@ -989,6 +1055,7 @@ def generate_catalog(source: Path) -> dict[str, Any]:
                 "binaries": deps["binaries"],
                 "skills": deps["skills"],
                 "externals": deps["externals"],
+                "capabilities": deps["capabilities"],
             }
         )
     return {"origin": ORIGIN, "skills": entries}

@@ -15,6 +15,8 @@ There are two layers. Global is the set on this machine. Project is extras for o
 
 New catalog entries stay Disabled after an Update. Enable them when you want them.
 
+A few skills need something of the harness itself rather than of your machine — `delegation` is pointless where subagents cannot be spawned. Those requirements are dependencies like any other, not an install-time filter: the skill is enabled on every harness on your list, and in one that cannot meet the requirement it says so and does nothing. No script can test this, since the manager cannot know which harness invoked it; the agent answers, because the agent is the harness.
+
 ## Essential and recommended skills and skill sets
 
 Essential skills on which Kntnt Skills depends:
@@ -76,7 +78,7 @@ Create, shrink, or tend `AGENTS.md` and `agents.d/`. After a task it writes only
 
 ### delegation
 
-Turn delegation mode on or off: while it is on, the agent orchestrates — thinks, plans, briefs, verifies — and subagents execute on the cheapest model able to do the job. `/delegation` toggles it for this session; add `project` or `user` with `on` or `off` to make it standing, and the skill writes the mode as a managed block into the context file your harness already loads, after showing you the file and the exact insertion. `/delegation status` reports all three scopes. It never changes your model or effort.
+Turn delegation mode on or off: while it is on, the agent orchestrates — thinks, plans, briefs, verifies — and subagents execute on the cheapest model able to do the job. `/delegation` toggles it for this session; add `project` or `user` with `on` or `off` to make it standing, and the skill writes the mode as a managed block into the context file your harness already loads, after showing you the file and the exact insertion. `/delegation status` reports all three scopes. It never changes your model or effort. It needs a harness that can spawn subagents, and refuses in one that cannot.
 
 ### commit
 
@@ -90,7 +92,7 @@ Follow `commit`, then push the current branch. Same `"message"` and `--yes` as `
 
 Ship a version from the default branch: reconcile `CHANGELOG.md`, bump, follow `push`, tag `HEAD`, and open a GitHub release. If the project has a conventional archive script, build it and attach the zip. Pass `minor`, `major`, or `X.Y.Z` to force the bump; otherwise the bump comes from `[Unreleased]`. `--no-build` skips the archive. `gh` is required only for the GitHub release step.
 
-`commit`, `push`, `release`, and `agents-md` need `git`. If a dependency is unsatisfied, the skill does no work and prints how to fix it.
+`commit`, `push`, `release`, and `agents-md` need `git`; `delegation` needs a harness that can spawn subagents. If a dependency is unsatisfied, the skill does no work and prints how to fix it.
 
 ## License
 

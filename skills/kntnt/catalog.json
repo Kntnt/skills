@@ -10,7 +10,8 @@
         "uv"
       ],
       "skills": [],
-      "externals": []
+      "externals": [],
+      "capabilities": []
     },
     {
       "name": "delegation",
@@ -20,7 +21,10 @@
         "uv"
       ],
       "skills": [],
-      "externals": []
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
     },
     {
       "name": "commit",
@@ -31,7 +35,8 @@
         "uv"
       ],
       "skills": [],
-      "externals": []
+      "externals": [],
+      "capabilities": []
     },
     {
       "name": "push",
@@ -44,7 +49,8 @@
       "skills": [
         "commit"
       ],
-      "externals": []
+      "externals": [],
+      "capabilities": []
     },
     {
       "name": "release",
@@ -57,7 +63,8 @@
       "skills": [
         "push"
       ],
-      "externals": []
+      "externals": [],
+      "capabilities": []
     }
   ]
 }

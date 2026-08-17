@@ -4,6 +4,18 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.5.0] – 2026-08-17
+
+### Added
+
+- Capabilities: a fourth kind of Dependency, on what the running Harness can do rather than on what sits on disk. A skill declares `capabilities` in its frontmatter, `check` reports each one with a sentence to confirm and a fix, and the agent answers — no script can, since the Manager cannot know which Harness invoked it. Unknown Capability names fail when the Catalog is generated. Status, the Enable picker, and Update surface them.
+- Architecture Decision Record 0030 (a harness requirement is a Dependency the agent answers, not an install-time gate) and the Collection term *Capability*.
+
+### Changed
+
+- `delegation` no longer assumes Claude Code. The mode text drops the hard-coded `haiku < sonnet < opus < fable` ladder and the Fable pricing note for a rule each harness resolves against its own models, and covers the case where subagents can be spawned but their model cannot be chosen. `~/.claude` and Claude Code's scratchpad directory become the general thing they were examples of.
+- `delegation` declares the `subagents` Capability, so it refuses in a harness that cannot spawn them instead of writing a mode that harness cannot honour. It is still Enabled everywhere, keeping one desired set per layer (ADR-0005).
+
 ## [0.4.0] – 2026-08-17
 
 ### Added
@@ -61,5 +73,6 @@ All notable changes to this project are documented here. The format follows [Kee
 - `agents-md` skill under `skills/agents/`: create, shrink, or tend `AGENTS.md` and `agents.d/`.
 - Architecture Decision Records 0016–0025 for `agents-md` placement, the `CLAUDE.md` bridge, invocation, when a line may be stripped, and `read when` pointers.
 
-[Unreleased]: https://github.com/Kntnt/skills/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/Kntnt/skills/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/Kntnt/skills/releases/tag/v0.5.0
 [0.4.0]: https://github.com/Kntnt/skills/releases/tag/v0.4.0

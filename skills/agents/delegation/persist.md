@@ -6,7 +6,7 @@
 
 The block must land in a file this harness loads automatically in every session at that scope. You are the harness: resolve the target from what you load, rather than detecting which harness you are. A block in a file nothing loads is a confirmed "on" and a mode that does not exist — Claude Code, for one, reads a project `AGENTS.md` only when a `CLAUDE.md` imports it.
 
-`user` — this harness's own global context file, created if absent; for Claude Code, `~/.claude/CLAUDE.md`. No `AGENTS.md`, no `agents.d/`, no include: there is no cross-agent global convention, so this scope covers the harness you are in. Run the skill in another harness to give that one the mode too.
+`user` — this harness's own global context file, created if absent; `~/.claude/CLAUDE.md` in Claude Code, and its counterpart elsewhere. No `AGENTS.md`, no `agents.d/`, no include: there is no cross-agent global convention, so this scope covers the harness you are in. Run the skill in another harness to give that one the mode too.
 
 `project` — first match wins:
 

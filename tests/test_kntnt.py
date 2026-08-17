@@ -27,6 +27,7 @@ def _skill_md(
     binaries: list[str] | None = None,
     skills: list[str] | None = None,
     externals: list[str] | None = None,
+    capabilities: list[str] | None = None,
     help_body: str = "",
 ) -> str:
     lines = [
@@ -42,6 +43,7 @@ def _skill_md(
         ("binaries", binaries or []),
         ("skills", skills or []),
         ("externals", externals or []),
+        ("capabilities", capabilities or []),
     ):
         if values:
             lines.append(f"    {key}:")
@@ -64,6 +66,7 @@ def _entry(
     binaries: list[str] | None = None,
     skills: list[str] | None = None,
     externals: list[str] | None = None,
+    capabilities: list[str] | None = None,
     description: str = "A collection skill.",
 ) -> dict[str, Any]:
     return {
@@ -73,6 +76,7 @@ def _entry(
         "binaries": binaries or [],
         "skills": skills or [],
         "externals": externals or [],
+        "capabilities": capabilities or [],
     }
 
 
@@ -109,6 +113,7 @@ def _world(
                 binaries=entry["binaries"],
                 skills=entry["skills"],
                 externals=entry["externals"],
+                capabilities=entry.get("capabilities", []),
                 help_body=f"Help for {entry['name']}.",
             ),
         )
@@ -511,6 +516,100 @@ def test_check_is_ok_when_dependencies_are_present(tmp_path: Path) -> None:
     assert _json(result)["ok"] is True
 
 
+def test_check_hands_a_required_capability_to_the_agent(tmp_path: Path) -> None:
+    """No script can test a Capability, so `check` reports it instead of judging it."""
+
+    world = _world(tmp_path)
+    skill = world["project"] / "skill"
+    _write(skill / "SKILL.md", _skill_md("alpha", capabilities=["subagents"]))
+
+    result = _run(world, "check", "--here", str(skill))
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["ok"] is True
+    assert payload["unsatisfied"] == []
+    note = payload["capabilities"][0]
+    assert note["name"] == "subagents"
+    assert note["confirm"] and note["how"]
+
+
+def test_check_reports_capabilities_alongside_an_unsatisfied_binary(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    skill = world["project"] / "skill"
+    _write(
+        skill / "SKILL.md",
+        _skill_md(
+            "alpha",
+            binaries=["definitely-not-a-binary-kntnt"],
+            capabilities=["subagents"],
+        ),
+    )
+
+    result = _run(world, "check", "--here", str(skill))
+
+    assert result.returncode == 2
+    payload = _json(result)
+    assert payload["unsatisfied"][0]["kind"] == "binary"
+    assert payload["capabilities"][0]["name"] == "subagents"
+
+
+def test_check_rejects_an_unknown_capability(tmp_path: Path) -> None:
+    """A misspelt Capability must refuse, not pass as a check that never runs."""
+
+    world = _world(tmp_path)
+    skill = world["project"] / "skill"
+    _write(skill / "SKILL.md", _skill_md("alpha", capabilities=["telepathy"]))
+
+    result = _run(world, "check", "--here", str(skill))
+
+    assert result.returncode == 1
+    assert "telepathy" in result.stderr
+
+
+def test_capabilities_do_not_gate_where_a_skill_is_installed(tmp_path: Path) -> None:
+    """ADR-0030: one desired set; the skill is Enabled everywhere and refuses at runtime."""
+
+    world = _world(
+        tmp_path,
+        [_entry("alpha", "agents", capabilities=["subagents"])],
+    )
+    _setup(world, "claude-code", "opencode")
+
+    result = _run(world, "apply", "enable", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["changed"] == ["alpha"]
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+    assert (
+        world["home"] / ".config" / "opencode" / "skills" / "alpha" / "SKILL.md"
+    ).is_file()
+
+
+def test_status_names_the_capabilities_a_skill_needs(tmp_path: Path) -> None:
+    world = _world(tmp_path, [_entry("alpha", "agents", capabilities=["subagents"])])
+
+    result = _run(world, "status", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["skills"][0]["capabilities"] == ["subagents"]
+
+
+def test_update_reports_capabilities_per_skill(tmp_path: Path) -> None:
+    world = _world(tmp_path, [_entry("alpha", "agents", capabilities=["subagents"])])
+    _setup(world, "claude-code")
+    _run(world, "apply", "enable", "alpha")
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    capabilities = _json(result)["capabilities"]
+    assert [item["skill"] for item in capabilities] == ["alpha"]
+    assert capabilities[0]["name"] == "subagents"
+
+
 def test_help_prints_manager_help(tmp_path: Path) -> None:
     world = _world(tmp_path)
 
@@ -738,3 +837,35 @@ def test_generated_catalog_includes_agents_md() -> None:
     assert "agents-md" in names
     entry = next(item for item in catalog["skills"] if item["name"] == "agents-md")
     assert entry["category"] == "agents"
+
+
+def test_shipped_catalog_matches_the_generated_one() -> None:
+    """The Catalog is generated; a hand-edited one would drift from the skills."""
+
+    result = subprocess.run(
+        ["uv", "run", str(KNTNT_PY), "catalog"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        env={**os.environ, "KNTNT_SOURCE": str(REPO_ROOT)},
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    shipped = (REPO_ROOT / "skills" / "kntnt" / "catalog.json").read_text(
+        encoding="utf-8"
+    )
+    assert json.loads(result.stdout) == json.loads(shipped)
+
+
+def test_delegation_requires_subagents_and_says_so() -> None:
+    """The Claude-only model ladder is gone; the harness requirement is declared."""
+
+    path = REPO_ROOT / "skills" / "agents" / "delegation" / "SKILL.md"
+    text = path.read_text(encoding="utf-8")
+    assert "capabilities:" in text
+    assert "- subagents" in text
+    assert "`capabilities`" in text
+
+    mode = (path.parent / "mode.md").read_text(encoding="utf-8")
+    assert "haiku" not in mode
+    assert "Claude Code" not in mode
