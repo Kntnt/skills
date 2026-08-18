@@ -3793,6 +3793,37 @@ def test_dry_run_project_leaves_the_working_directory_alone(tmp_path: Path) -> N
     assert _tree(world["project"]) == before
 
 
+def test_a_project_dry_run_reads_the_global_layer(tmp_path: Path) -> None:
+    """A Dependency Global supplies wants no second copy in the Project (ADR-0013)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    payload = _json(
+        _run(
+            world, "apply", "select", "--project", "--on", "beta", "--yes", "--dry-run"
+        )
+    )
+
+    assert payload["placed"] == ["beta"]
+
+
+def test_a_project_dry_run_leaves_the_global_layer_alone(tmp_path: Path) -> None:
+    """Seeing Global is not touching it: the Sandbox holds a copy of both layers."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "select", "alpha")
+    before = _tree(world["home"])
+
+    _run(world, "apply", "select", "--project", "--on", "beta", "--yes", "--dry-run")
+
+    assert _tree(world["home"]) == before
+
+
 def test_dry_run_takes_the_sandbox_with_it(tmp_path: Path) -> None:
     """A dry run leaves a report behind and nothing else."""
 

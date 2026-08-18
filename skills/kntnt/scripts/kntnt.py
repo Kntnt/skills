@@ -844,6 +844,29 @@ def seed_manager(root: Path, directories: list[Path], *, global_layer: bool) -> 
     return copy
 
 
+def seed_layer(root: Path, *, global_layer: bool) -> list[Path]:
+    """Recreate one layer's directories inside the Sandbox at *root*, and fill them.
+
+    Every directory the layer covers is recreated, whether or not this
+    collection has anything in it. A Harness is Detected by its directory
+    being there (ADR-0035), so a Sandbox missing one would resolve a different
+    set of targets than the run it is standing in for. The answer is the
+    directories as they are outside the Sandbox, which is what the Manager's
+    own seeding is then decided against.
+    """
+
+    directories = layer_dirs(
+        target_harnesses(global_layer=global_layer), global_layer=global_layer
+    )
+    for directory in directories:
+        target = sandbox_path(directory, root, global_layer=global_layer)
+        target.mkdir(parents=True, exist_ok=True)
+        if directory.is_dir():
+            seed_skills(directory, target)
+
+    return directories
+
+
 def seed_sandbox(root: Path, *, global_layer: bool) -> dict[str, str]:
     """Fill the Sandbox at *root* with this collection's files, and say where it is.
 
@@ -857,18 +880,16 @@ def seed_sandbox(root: Path, *, global_layer: bool) -> dict[str, str]:
     sandbox_home.mkdir()
     sandbox_project.mkdir()
 
-    # Every directory the layer covers is recreated, whether or not this
-    # collection has anything in it. A Harness is Detected by its directory
-    # being there (ADR-0035), so a Sandbox missing one would resolve a
-    # different set of targets than the run it is standing in for.
-    directories = layer_dirs(
-        target_harnesses(global_layer=global_layer), global_layer=global_layer
-    )
-    for directory in directories:
-        target = sandbox_path(directory, root, global_layer=global_layer)
-        target.mkdir(parents=True, exist_ok=True)
-        if directory.is_dir():
-            seed_skills(directory, target)
+    # The layer being previewed, and Global with it where that layer is a
+    # Project. What Satisfies a Project's Dependency is Global's copy as much
+    # as its own (ADR-0013), so a Sandbox holding only the working directory
+    # reads a machine with nothing on it and offers a second copy of every
+    # Dependency the user already has. Global runs the other way: it reads no
+    # Project, and one seeded for it would be a directory the real run never
+    # looked in.
+    directories = seed_layer(root, global_layer=global_layer)
+    if not global_layer:
+        seed_layer(root, global_layer=True)
 
     return {
         "HOME": str(sandbox_home),
