@@ -12,6 +12,10 @@ Prints the catalog as a list grouped by category, one row per skill. A row carri
 
 You answer the list in one sentence of plain text, and changing several skills is one reply rather than a walk through a menu. Checked means Enabled. You are asked to confirm once, and nothing reaches the disk before that.
 
+The structure between skills is on the list rather than behind it. A skill that needs another one of this collection is shown locked while that other is unchecked, and the row names what to check instead. Check it anyway and what it needs comes with it: you are asked one yes/no question naming exactly what would be added, once for the whole chain — checking `release` where you have neither `push` nor `commit` is a single yes rather than one question per level — and nothing is written until you have answered it. `--yes` answers it.
+
+Unchecking a skill that another checked skill depends on is reported, not blocked. You are told what it leaves unsatisfied, and the answer stands: it is your machine.
+
 Reading is never a side-effecting act. An answer that changes nothing writes nothing — no refresh, no repair, no touching of files to make the disk agree with a list you only wanted to look at.
 
 ## Options

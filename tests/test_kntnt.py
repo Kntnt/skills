@@ -28,6 +28,9 @@ _ROW_KEYS = {
     "checked",
     "incomplete",
     "freshness",
+    "requires",
+    "unsatisfied",
+    "locked",
 }
 
 
@@ -121,6 +124,13 @@ def _entry(
 _SURVIVORS = [
     _entry("alpha", "code", binaries=["git"], description="The alpha skill."),
     _entry("beta", "code", skills=["alpha"], description="The beta skill."),
+]
+# A three-deep chain: `delta` needs `beta`, which needs `alpha`. The shape a
+# closure has to collapse into one question rather than three (issue #28).
+_CHAIN = [
+    _entry("alpha", "code", description="The alpha skill."),
+    _entry("beta", "code", skills=["alpha"], description="The beta skill."),
+    _entry("delta", "code", skills=["beta"], description="The delta skill."),
 ]
 
 
@@ -728,6 +738,191 @@ def test_one_answer_places_and_removes_in_the_same_run(tmp_path: Path) -> None:
         "beta": True,
         "gamma": True,
     }
+
+
+def test_select_locks_a_row_whose_dependency_is_unchecked(tmp_path: Path) -> None:
+    """The structure between Skills is visible before the user answers."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    row = _row(_json(_run(world, "plan", "select")), "beta")
+
+    assert row["requires"] == ["alpha"]
+    assert row["unsatisfied"] == ["alpha"]
+    assert row["locked"] is True
+
+
+def test_select_unlocks_a_row_whose_dependency_is_checked(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    row = _row(_json(_run(world, "plan", "select")), "beta")
+
+    assert row["requires"] == ["alpha"]
+    assert row["unsatisfied"] == []
+    assert row["locked"] is False
+
+
+def test_select_resolves_a_chain_to_the_whole_closure(tmp_path: Path) -> None:
+    """Three levels resolve to one set, so one question can cover all of it."""
+
+    world = _world(tmp_path, _CHAIN)
+    _present(world, "home", ".claude")
+
+    row = _row(_json(_run(world, "plan", "select")), "delta")
+
+    assert row["requires"] == ["alpha", "beta"]
+    assert row["unsatisfied"] == ["alpha", "beta"]
+    assert row["locked"] is True
+
+
+def test_select_leaves_a_checked_row_unlocked_and_names_what_it_lacks(
+    tmp_path: Path,
+) -> None:
+    """A Dependency missing under a checked skill is a break to report, not a lock."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "beta", "--yes")
+
+    row = _row(_json(_run(world, "plan", "select")), "beta")
+
+    assert row["checked"] is True
+    assert row["unsatisfied"] == ["alpha"]
+    assert row["locked"] is False
+
+
+def test_select_project_counts_a_global_dependency_as_satisfied(
+    tmp_path: Path,
+) -> None:
+    """A Project row is judged against what the Harness will load (ADR-0013)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    row = _row(_json(_run(world, "plan", "select", "--project")), "beta")
+
+    assert row["unsatisfied"] == []
+    assert row["locked"] is False
+
+
+def test_apply_select_reports_a_dependency_the_answer_leaves_out(
+    tmp_path: Path,
+) -> None:
+    """The answer stands; what it leaves Unsatisfied is reported."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "beta")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["beta"]
+    assert payload["unsatisfied"] == {"beta": ["alpha"]}
+
+
+def test_apply_select_reports_nothing_when_the_answer_carries_the_closure(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "alpha", "beta")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["unsatisfied"] == {}
+
+
+def test_unchecking_a_dependency_is_reported_and_not_blocked(tmp_path: Path) -> None:
+    """The user is told what they have broken; they are not overruled."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "beta")
+
+    result = _run(world, "apply", "select", "beta", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["removed"] == ["alpha"]
+    assert payload["unsatisfied"] == {"beta": ["alpha"]}
+    assert not (world["home"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_apply_select_reads_what_a_dependency_lacks_off_the_disk(
+    tmp_path: Path,
+) -> None:
+    """A Dependency the transport never placed is absent, whatever the answer said."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "alpha", "beta", skip=["alpha"])
+
+    payload = _json(result)
+    assert [item["name"] for item in payload["failed"]] == ["alpha"]
+    assert payload["unsatisfied"] == {"beta": ["alpha"]}
+
+
+def test_apply_select_project_counts_a_global_dependency_as_satisfied(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    result = _run(world, "apply", "select", "--project", "beta")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["unsatisfied"] == {}
+
+
+def test_a_dependency_cycle_in_the_catalog_does_not_take_the_run_down(
+    tmp_path: Path,
+) -> None:
+    """The Catalog is fetched at every invocation, so a cycle in it is survivable."""
+
+    world = _world(
+        tmp_path,
+        [
+            _entry("alpha", "code", skills=["beta"], description="The alpha skill."),
+            _entry("beta", "code", skills=["alpha"], description="The beta skill."),
+        ],
+    )
+    _present(world, "home", ".claude")
+
+    result = _run(world, "plan", "select")
+
+    assert result.returncode == 0, result.stderr
+    assert _row(_json(result), "alpha")["requires"] == ["beta"]
+
+
+def test_select_settles_the_closure_before_anything_is_written(
+    tmp_path: Path,
+) -> None:
+    """One question for the whole closure, asked before the run (issue #28)."""
+
+    text = (REPO_ROOT / "skills" / "kntnt" / "steps" / "select.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "`requires`" in text
+    assert "`unsatisfied`" in text
+    assert "`locked`" in text
+    assert "one question" in text
+    assert "--yes" in text
+
+    # The closure is resolved before the write and never against the user: a
+    # step that re-checked what they unchecked would overrule the answer it
+    # was asked to carry out (ADR-0047).
+    assert "the user did not just uncheck" in text
+    assert "reported, not refused" in text
 
 
 def test_the_manager_has_no_status_enable_or_disable_verb(tmp_path: Path) -> None:

@@ -28,7 +28,7 @@ The always-enabled skill named `kntnt`. It is the collection's only namespaced e
 _Avoid_: installer, CLI, wrapper
 
 **Select**:
-The manager subcommand that shows what the collection has and changes it in the same gesture. It prints the Catalog as a list grouped by Category — one row per skill, carrying a checkbox that is checked when the skill is Enabled in the targeted layer, the skill's one-line description, and any Capability it requires — and the user answers it in one sentence. Checked means Enabled. It targets Global unless `--project` or `--project=on` is given, and it reaches every Detected Harness in that layer. `--on <skill>` and `--off <skill>` apply a delta and open no list. An answer that changes nothing writes nothing. It replaces Status, Enable, and Disable, which made the everyday change *read a list under one verb, then retype names from it under another*.
+The manager subcommand that shows what the collection has and changes it in the same gesture. It prints the Catalog as a list grouped by Category — one row per skill, carrying a checkbox that is checked when the skill is Enabled in the targeted layer, the skill's one-line description, and any Capability it requires — and the user answers it in one sentence. Checked means Enabled. It targets Global unless `--project` or `--project=on` is given, and it reaches every Detected Harness in that layer. `--on <skill>` and `--off <skill>` apply a delta and open no list. An answer that changes nothing writes nothing. A row whose Dependency is Unsatisfied in that layer is shown locked and names what to check instead, so the structure between Skills is visible before the answer is given. An answer implying more Skills is resolved to its whole closure before anything is written and costs one yes/no question naming exactly the additions, however deep the chain. Unchecking a Skill that a checked one depends on is reported and allowed: the user is told what they left Unsatisfied, not overruled. It replaces Status, Enable, and Disable, which made the everyday change *read a list under one verb, then retype names from it under another*.
 _Avoid_: status, enable, disable, picker, menu, add, remove, activate, install
 
 **Update**:
@@ -104,7 +104,7 @@ The temporary home a changing verb runs against under `--dry-run`, and discards 
 _Avoid_: preview, simulation, plan, mock, staging
 
 **Dependency**:
-A skill or runtime that another collection skill cannot work without.
+A skill or runtime that another collection skill cannot work without. A Dependency on a collection Skill is one Select can supply, so Select resolves it to its whole closure and asks before it writes; a binary, an External, and a Capability are not Select's to place, and stay the checker's to answer when the Skill is used.
 _Avoid_: requirement, prerequisite
 
 **External**:

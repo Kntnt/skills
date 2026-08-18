@@ -1116,6 +1116,102 @@ def catalog_digest(entry: dict[str, Any]) -> str:
     return str(entry.get("digest") or "")
 
 
+def catalog_entries() -> dict[str, dict[str, Any]]:
+    """Return the Catalog's skills by name, in the order the Catalog lists them."""
+
+    return {str(entry["name"]): entry for entry in catalog_skills()}
+
+
+def dependencies_of(name: str, entries: dict[str, dict[str, Any]]) -> list[str]:
+    """Return the collection Skills *name* declares, as the Catalog carries them.
+
+    Only names the Catalog itself carries. A `skills` entry naming something
+    this collection does not ship has no row to check and no entry to walk; a
+    Dependency outside the Catalog is the checker's to answer when the Skill is
+    used (ADR-0012).
+    """
+
+    entry = entries.get(name)
+    if entry is None:
+        return []
+    declared = entry.get("skills", [])
+    return [str(item) for item in declared if str(item) in entries]
+
+
+def dependency_closure(name: str, entries: dict[str, dict[str, Any]]) -> list[str]:
+    """Return every collection Skill *name* needs, Dependencies before dependents.
+
+    The whole chain rather than the first link, because the user is asked one
+    question for the whole closure: `release` pulling in `push` and `commit` is
+    a single yes rather than three (ADR-0047). The order is the order the
+    Skills would be checked in, so the rendering can read the list out as what
+    it is about to add.
+    """
+
+    resolved: list[str] = []
+
+    def walk(current: str, ancestors: tuple[str, ...]) -> None:
+        for dependency in dependencies_of(current, entries):
+            # The Catalog is fetched from the origin at every invocation, so a
+            # cycle in it is an authoring mistake this run has to survive
+            # rather than a state the caller has already ruled out.
+            if dependency in ancestors:
+                continue
+
+            walk(dependency, (*ancestors, dependency))
+            if dependency not in resolved:
+                resolved.append(dependency)
+
+    walk(name, (name,))
+    return resolved
+
+
+def unsatisfied_among(requires: list[str], satisfied: set[str]) -> list[str]:
+    """Return the members of *requires* that nothing in *satisfied* supplies."""
+
+    return [name for name in requires if name not in satisfied]
+
+
+def satisfying_names(harnesses: list[str], *, global_layer: bool) -> set[str]:
+    """Return the Skills that Satisfy a Dependency for a Skill in this layer.
+
+    What Satisfies one is what the Harness will load, so a Project is judged by
+    its own copies and Global's together: a Dependency already Enabled on the
+    machine wants no second copy in the working directory (ADR-0013).
+    """
+
+    satisfied = set(enabled_names(harnesses, global_layer=global_layer))
+    if not global_layer:
+        satisfied.update(
+            enabled_names(target_harnesses(global_layer=True), global_layer=True)
+        )
+    return satisfied
+
+
+def unsatisfied_on_disk(
+    harnesses: list[str], *, global_layer: bool
+) -> dict[str, list[str]]:
+    """Name, per Skill the layer now holds, the Dependencies it is left without.
+
+    Read off the disk rather than off the answer, because a placement the
+    transport did not make leaves a Skill without that Dependency whatever the
+    answer said, and a report of the answer would call that run clean
+    (ADR-0036). Reported and never blocked: unchecking a Skill that a checked
+    one depends on is the user's to do, and the manager says what it left
+    Unsatisfied rather than putting the Dependency back (ADR-0047).
+    """
+
+    entries = catalog_entries()
+    enabled = enabled_names(harnesses, global_layer=global_layer)
+    satisfied = satisfying_names(harnesses, global_layer=global_layer)
+
+    lacking = {
+        name: unsatisfied_among(dependency_closure(name, entries), satisfied)
+        for name in enabled
+    }
+    return {name: names for name, names in lacking.items() if names}
+
+
 def select_payload(*, global_layer: bool) -> dict[str, Any]:
     """Build the list the user reads and answers in one gesture.
 
@@ -1123,7 +1219,9 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
     together (ADR-0015), and everything a row is judged on carried on the row:
     the checkbox, the one-line description, the Capabilities the skill wants of
     the harness, whether its files reached only some of the layer's Detected
-    Harnesses, and whether they are the files the collection ships.
+    Harnesses, whether they are the files the collection ships, and the whole
+    chain of collection Skills it needs — resolved here so that the rendering
+    names what would be added rather than walking the graph itself (ADR-0047).
 
     One layer, and no Effective form: without the flag the list is Global, and
     with it the Project layer alone (ADR-0038). There is no `partial` state
@@ -1139,9 +1237,12 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
     # a second copy in the working directory (ADR-0013).
     global_targets = [] if global_layer else target_harnesses(global_layer=True)
 
+    entries = catalog_entries()
+    satisfied = satisfying_names(harnesses, global_layer=global_layer)
     categories: dict[str, list[dict[str, Any]]] = {}
-    for entry in catalog_skills():
-        name = str(entry["name"])
+    rows: list[dict[str, Any]] = []
+
+    for name, entry in entries.items():
         state = skill_state(name, harnesses, global_layer=global_layer)
         row: dict[str, Any] = {
             "name": name,
@@ -1155,7 +1256,20 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
             row["in_global"] = (
                 skill_state(name, global_targets, global_layer=True) != "disabled"
             )
+
         categories.setdefault(str(entry.get("category") or "other"), []).append(row)
+        rows.append(row)
+
+    # The closure is resolved here and not by the rendering, so a row names the
+    # whole chain it needs rather than the first link of it (ADR-0047). A row
+    # is locked where the user cannot yet have it; a checked Skill whose
+    # Dependency has gone is a break to report, and locking it would say the
+    # user may not have what they already do.
+    for row in rows:
+        requires = dependency_closure(str(row["name"]), entries)
+        row["requires"] = requires
+        row["unsatisfied"] = unsatisfied_among(requires, satisfied)
+        row["locked"] = bool(row["unsatisfied"]) and not row["checked"]
 
     return {
         "action": "select",
@@ -1254,6 +1368,7 @@ def cmd_apply_select(names: list[str], *, global_layer: bool, yes: bool) -> int:
             "placed": place,
             "removed": remove,
             "noop": noop,
+            "unsatisfied": unsatisfied_on_disk(harnesses, global_layer=global_layer),
             "layer": "global" if global_layer else "project",
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
