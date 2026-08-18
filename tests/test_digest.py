@@ -21,7 +21,13 @@ def _manager() -> ModuleType:
     the lowest layer that constrains the computation at all.
     """
 
+    # The loader API answers with optionals, so both are narrowed before use:
+    # a missing script is a broken checkout and has to say which file.
     spec = importlib.util.spec_from_file_location("kntnt_manager", KNTNT_PY)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot import the manager from {KNTNT_PY}")
+
+    # Execute the script under its own module object and hand that back.
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module

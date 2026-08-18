@@ -35,7 +35,7 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
    ```
    uvx ruff check .
    uvx ruff format --check .
-   uvx mypy skills/kntnt/scripts/kntnt.py skills/code/commit/scripts/ship.py
+   uvx mypy skills/kntnt/scripts/kntnt.py skills/code/commit/scripts/ship.py tests
    uv run --with pytest pytest
    ```
 
