@@ -1,6 +1,6 @@
 # kntnt update
 
-Refresh this collection's skills, then check every Dependency again.
+Refresh the skills of this collection whose files differ from it, then check every Dependency again.
 
 ## Synopsis
 
@@ -8,7 +8,7 @@ Refresh this collection's skills, then check every Dependency again.
 
 ## Description
 
-Re-copies every skill the targeted layer has Enabled that the collection still carries, so what is on disk is what the collection ships. A skill the collection has withdrawn is deleted from that layer without asking: it can no longer be updated or supported, and no other command can reach it. A new Catalog entry is reported and left Disabled — Update never Enables anything on its own.
+Re-copies every skill the targeted layer has Enabled whose files differ from the ones the collection ships, and leaves the rest where they are, so the report says what moved rather than how much was Enabled. Re-copying a skill discards any local edit to it. The manager itself is refreshed every time: it is no catalog entry, so no digest describes it, and the verb that repairs everything else has to be able to reach itself. A skill the collection has withdrawn is deleted from that layer without asking: it can no longer be updated or supported, and no other command can reach it. A new Catalog entry is reported and left Disabled — Update never Enables anything on its own.
 
 Afterwards every Dependency and every Capability is checked again, so a refresh that broke a prerequisite says so.
 
@@ -22,7 +22,7 @@ Afterwards every Dependency and every Capability is checked again, so a refresh 
 
 Update is the only verb that replaces the Catalog copy stored beside the manager, because it is the difference between that copy and the collection that tells a new skill from a withdrawn one.
 
-Where the collection cannot be reached, nothing is deleted and nothing is reported as new: a stale list does not get to decide which files go. Run it again when the collection is reachable.
+Where the collection cannot be reached, nothing is refreshed, nothing is deleted, and nothing is reported as new. The files move through the same origin the list could not be read from, so there is nothing to copy, and a stale list does not get to decide which files go either. Run it again when the collection is reachable.
 
 A Harness installed since the last run is reached with nothing to configure in between, because the targets are worked out on every run.
 

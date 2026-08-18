@@ -1384,6 +1384,61 @@ def select_change(
     return place, remove, noop
 
 
+def refresh_change(
+    names: list[str], harnesses: list[str], *, global_layer: bool
+) -> tuple[list[str], list[str]]:
+    """Split the Enabled Skills into what a refresh copies and what it leaves alone.
+
+    A Skill whose Digest matches the Catalog's is already byte-identical to
+    what the collection ships, so re-copying it would move nothing while the
+    report went on saying *twelve of twelve refreshed* — equally true of a
+    machine where everything had changed and one where nothing had (ADR-0028).
+    Everything else is refreshed: Deviating because the files are not the
+    collection's, incomplete because the layer is missing a copy, and unknown
+    because nothing establishes either. An open question is one Update answers
+    by fetching, which is where this parts company with Select: Select is being
+    told *this is the set*, and re-copying on no evidence would discard a local
+    edit under a command that never named the Skill, while Update was pointed
+    at the collection and fetching is the whole of what it was asked for.
+
+    Nothing at all is refreshed from a Catalog read off the snapshot. The files
+    move through the transport from the same origin that Catalog could not be
+    fetched from, so there is nothing to copy, and gating on digests describing
+    a revision the collection may already have left would be theatre in front
+    of a fetch that cannot happen (ADR-0041).
+
+    The Manager leads whatever is left, whatever any Digest says. It is no
+    Catalog entry, so no Digest describes it, and the verb that repairs
+    everything else has to be able to reach itself. Global only: an Update of a
+    Project places no Manager in the working directory.
+    """
+
+    # The load-bearing half of the fallback rule. Without it the empty Digests
+    # a snapshot Catalog answers with would read as unknown, and unknown is
+    # refreshed — a fallback would fetch everything rather than nothing.
+    if not catalog_from_origin():
+        return [], []
+
+    entries = catalog_entries()
+    directories = layer_dirs(harnesses, global_layer=global_layer)
+    refresh = [MANAGER] if global_layer else []
+    current: list[str] = []
+
+    # *names* is Catalog order, and the split keeps it, so the report reads in
+    # the order the list the user answered was printed in.
+    for name in names:
+        state = skill_state(name, harnesses, global_layer=global_layer)
+        freshness = installed_freshness(
+            name, catalog_digest(entries.get(name, {})), directories
+        )
+        if state == "enabled" and freshness == "current":
+            current.append(name)
+        else:
+            refresh.append(name)
+
+    return refresh, current
+
+
 def cmd_plan_select(*, global_layer: bool) -> int:
     """Print the list the user reads and answers. Nothing is written."""
 
@@ -1540,17 +1595,26 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
 
 
 def cmd_plan_update(*, global_layer: bool) -> int:
-    """Print which Enabled skills Update will refresh."""
+    """Print which Enabled skills Update will refresh, and which it will leave alone.
+
+    The plan is what the user confirms, so it is the same split the run makes
+    rather than a list of everything Enabled: a plan promising to refresh
+    twelve skills ahead of a run that copies two describes a different verb.
+    """
 
     harnesses = target_harnesses(global_layer=global_layer)
-    refresh = enabled_names(harnesses, global_layer=global_layer)
-    if global_layer:
-        refresh = [MANAGER, *refresh]
+    refresh, current = refresh_change(
+        enabled_names(harnesses, global_layer=global_layer),
+        harnesses,
+        global_layer=global_layer,
+    )
     emit(
         {
             "action": "update",
             "layer": "global" if global_layer else "project",
             "refresh": refresh,
+            "current": current,
+            "catalog_refreshed": catalog_from_origin(),
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
@@ -1593,12 +1657,14 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     withdrawals = withdraw_skills(withdrawn, harnesses, global_layer=global_layer)
 
     desired = enabled_names(harnesses, global_layer=global_layer)
-    refresh = [MANAGER, *desired] if global_layer else list(desired)
+    refresh, current = refresh_change(desired, harnesses, global_layer=global_layer)
 
     # The transport's own `update` compares SKILL.md and skips a skill whose
     # SKILL.md is unchanged, leaving sidecars — catalog.json, helper documents,
     # scripts — frozen at the revision that last touched SKILL.md. `add`
-    # re-copies the whole directory and is idempotent, so it is the refresh.
+    # re-copies the whole directory and is idempotent, so it is the refresh —
+    # and it is why the Digest may gate it: what is skipped here is skipped for
+    # being the collection's own files already, not for one file agreeing.
     outcome = add_skills(refresh, harnesses, global_layer=global_layer)
 
     unsatisfied: list[dict[str, str]] = []
@@ -1627,6 +1693,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
         {
             **outcome,
             "new": new_names,
+            "current": current,
             "removed": withdrawals,
             "catalog_refreshed": refreshed,
             "unsatisfied": unsatisfied,

@@ -262,6 +262,22 @@ def _snapshot_forgets(world: dict[str, Path], remaining: list[dict[str, Any]]) -
     _write(world["here"] / "catalog.json", _catalog(remaining))
 
 
+def _store_snapshot(world: dict[str, Path]) -> None:
+    """Store the Catalog the origin now carries as the snapshot beside the Manager.
+
+    The mirror of `_snapshot_forgets`: a Manager whose stored copy is exactly
+    what the last Update fetched, which is the state a fallback is read in —
+    and the only one in which the snapshot carries Digests at all.
+    """
+
+    _write(
+        world["here"] / "catalog.json",
+        (world["source"] / "skills" / "kntnt" / "catalog.json").read_text(
+            encoding="utf-8"
+        ),
+    )
+
+
 def _unreachable_origin(world: dict[str, Path]) -> None:
     """Make the Catalog fetch fail while the collection tree stays usable.
 
@@ -424,6 +440,23 @@ def _digested_catalog(world: dict[str, Path]) -> str:
     result = _run(world, "catalog")
     assert result.returncode == 0, result.stderr
     return result.stdout
+
+
+def _digested_world(
+    tmp_path: Path, entries: list[dict[str, Any]] | None = None
+) -> dict[str, Path]:
+    """Build a world whose origin Catalog carries the Digests the disk is judged by.
+
+    The Digest is what tells a Skill that has moved from one that has not, so a
+    test about which Skills a verb refreshes needs the generated Catalog rather
+    than the hand-authored one every other fixture is built on.
+    """
+
+    world = _world(tmp_path, entries)
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json", _digested_catalog(world)
+    )
+    return world
 
 
 def test_select_lists_every_catalog_skill_unchecked(tmp_path: Path) -> None:
@@ -2291,6 +2324,234 @@ def test_update_refreshes_a_sidecar_when_skill_md_is_unchanged(tmp_path: Path) -
     assert result.returncode == 0, result.stderr
     installed = world["home"] / ".claude" / "skills" / "alpha" / "notes.md"
     assert installed.read_text(encoding="utf-8") == "revised\n"
+
+
+def test_update_leaves_a_skill_whose_digest_matches_alone(tmp_path: Path) -> None:
+    """A Skill already byte-identical to the collection is no work (ADR-0028)."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    log = tmp_path / "transport.jsonl"
+
+    result = _run(world, "apply", "update", log=log)
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["current"] == ["alpha"]
+    assert payload["intended"] == ["kntnt"]
+    assert all("alpha" not in call["skills"] for call in _calls(log))
+
+
+def test_update_refreshes_a_skill_whose_digest_deviates(tmp_path: Path) -> None:
+    """A refresh discards the local edit that made the Skill Deviate (ADR-0041)."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["intended"] == ["kntnt", "alpha"]
+    assert payload["confirmed"] == ["kntnt", "alpha"]
+    assert payload["current"] == []
+    source = world["source"] / "skills" / "code" / "alpha" / "SKILL.md"
+    assert installed.read_bytes() == source.read_bytes()
+
+
+def test_update_refreshes_the_manager_whatever_the_digests_say(tmp_path: Path) -> None:
+    """It is no Catalog entry, and the verb that repairs the rest has to reach itself."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "update")
+    log = tmp_path / "transport.jsonl"
+
+    result = _run(world, "apply", "update", log=log)
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["confirmed"] == ["kntnt"]
+    assert [call["skills"] for call in _calls(log)] == [["kntnt"]]
+
+
+def test_update_reports_what_moved_apart_from_what_did_not(tmp_path: Path) -> None:
+    """*Twelve of twelve refreshed* said the same thing whatever had happened."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "beta")
+    installed = world["home"] / ".claude" / "skills" / "beta" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["intended"] == ["kntnt", "beta"]
+    assert payload["current"] == ["alpha"]
+
+
+def test_a_refreshed_skill_is_the_files_the_collection_ships(tmp_path: Path) -> None:
+    """Withdrawn upstream is gone, changed is replaced, added is present — after one call."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    upstream = world["source"] / "skills" / "code" / "alpha"
+    _write(upstream / "gone.md", "carried once\n")
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json", _digested_catalog(world)
+    )
+    _run(world, "apply", "select", "alpha")
+
+    (upstream / "gone.md").unlink()
+    _write(upstream / "notes.md", "added upstream\n")
+    _write(
+        upstream / "SKILL.md",
+        _skill_md(
+            "alpha",
+            description="The alpha skill.",
+            binaries=["git"],
+            help_body="Revised help for alpha.",
+        ),
+    )
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json", _digested_catalog(world)
+    )
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["confirmed"] == ["kntnt", "alpha"]
+    assert _tree(world["home"] / ".claude" / "skills" / "alpha") == _tree(upstream)
+
+
+def test_update_re_checks_a_skill_it_did_not_refresh(tmp_path: Path) -> None:
+    """A Dependency is the layer's business, and the layer is not only what moved."""
+
+    world = _digested_world(
+        tmp_path,
+        [
+            _entry(
+                "alpha",
+                "agents",
+                binaries=["definitely-not-a-binary-kntnt"],
+                capabilities=["subagents"],
+            )
+        ],
+    )
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["current"] == ["alpha"]
+    assert [item["name"] for item in payload["unsatisfied"]] == [
+        "definitely-not-a-binary-kntnt"
+    ]
+    assert [item["skill"] for item in payload["capabilities"]] == ["alpha"]
+
+
+def test_update_reports_a_gated_refresh_that_never_landed(tmp_path: Path) -> None:
+    """The Digest decides what is copied; the disk still decides what is reported."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+    _present(world, "home", ".config/crush")
+
+    result = _run(world, "apply", "update", skip=["alpha"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert [item["name"] for item in payload["failed"]] == ["alpha"]
+    assert payload["current"] == [], "a Skill that never landed is not current"
+
+
+def test_update_sweeps_a_withdrawal_with_everything_else_current(
+    tmp_path: Path,
+) -> None:
+    """The sweep asks the disk what this collection wrote, and no Digest gates it."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json", _digested_catalog(world)
+    )
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["removed"] == [{"name": "gamma", "disk": "removed"}]
+    assert payload["current"] == ["alpha"]
+    assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
+
+
+def test_update_refreshes_nothing_from_the_snapshot_and_says_so(
+    tmp_path: Path,
+) -> None:
+    """The files move through the origin the Catalog could not be read from (ADR-0041)."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _store_snapshot(world)
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+    _unreachable_origin(world)
+    log = tmp_path / "transport.jsonl"
+
+    result = _run(world, "apply", "update", log=log)
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["catalog_refreshed"] is False
+    assert payload["intended"] == []
+    assert payload["current"] == []
+    assert not log.exists(), "the transport was asked for files it could not fetch"
+    assert installed.read_text(encoding="utf-8") == "hand edited\n"
+
+
+def test_plan_update_names_only_what_it_would_refresh(tmp_path: Path) -> None:
+    """The plan is what the user confirms, so it cannot promise a refresh of everything."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "beta")
+    installed = world["home"] / ".claude" / "skills" / "beta" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+
+    payload = _json(_run(world, "plan", "update"))
+
+    assert payload["refresh"] == ["kntnt", "beta"]
+    assert payload["current"] == ["alpha"]
+    assert payload["catalog_refreshed"] is True
+
+
+def test_plan_update_promises_no_refresh_from_the_snapshot(tmp_path: Path) -> None:
+    """Nothing can be fetched, so there is nothing to plan and nothing to confirm."""
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _store_snapshot(world)
+    _unreachable_origin(world)
+
+    payload = _json(_run(world, "plan", "update"))
+
+    assert payload["catalog_refreshed"] is False
+    assert payload["refresh"] == []
+    assert payload["current"] == []
 
 
 def test_the_transport_empties_a_skill_directory_before_it_copies(
