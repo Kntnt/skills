@@ -9,11 +9,11 @@ The set of skills, shared scripts, and shared documents shipped from the `kntnt/
 _Avoid_: package, plugin, marketplace, bundle
 
 **Category**:
-A folder under `skills/` in the collection repository that groups related skills. Status and interactive Enable list skills by Category. A Category is not part of the skill name and cannot be Enabled as a set.
+A folder under `skills/` in the collection repository that groups related skills. Select lists skills by Category, so related skills are read together. A Category is not part of the skill name and cannot be Enabled as a set.
 _Avoid_: namespace, group, tag, section
 
 **Skill**:
-A standalone Agent Skill with its own name. Collection skills are not namespaced under `kntnt`. The collection ships skills only — never harness `commands/` files.
+A standalone Agent Skill with its own name. Collection skills are not namespaced under `kntnt`. The collection ships skills only — never harness `commands/` files. Every collection skill ships its own help beside it and prints it when invoked with `--help`.
 _Avoid_: module, plugin, recipe, command, slash command
 
 **User-invoked skill**:
@@ -27,20 +27,12 @@ A skill the model may load on its own when the task matches the skill's descript
 The always-enabled skill named `kntnt`. It is the collection's only namespaced entry point.
 _Avoid_: installer, CLI, wrapper
 
-**Enable**:
-The manager subcommand that makes one or more skills enabled. With no skill names it opens an interactive list. It targets Global unless `--project` or `--project=on` is given. It reaches every Detected Harness in that layer.
-_Avoid_: add, activate, install
-
-**Disable**:
-The manager subcommand that makes one or more skills disabled. With no skill names it opens an interactive list. It uses the same `--project` rule as Enable and reaches the same Harnesses.
-_Avoid_: remove, uninstall
-
-**Status**:
-The manager subcommand that reports which skills are Enabled and which are Disabled. It reads the same `--project` rule as every other verb, but changes nothing, so the flag picks the question rather than a target: without it Status reports Global, and with it the Effective set for the working directory, each skill naming its source as Global, the Project, or both. With no skill names it reports every skill the form covers — the whole Catalog in the Global form, Disabled ones included; in the Effective form only what applies here.
-_Avoid_: list, info, doctor
+**Select**:
+The manager subcommand that shows what the collection has and changes it in the same gesture. It prints the Catalog as a list grouped by Category — one row per skill, carrying a checkbox that is checked when the skill is Enabled in the targeted layer, the skill's one-line description, and any Capability it requires — and the user answers it in one sentence. Checked means Enabled. It targets Global unless `--project` or `--project=on` is given, and it reaches every Detected Harness in that layer. `--on <skill>` and `--off <skill>` apply a delta and open no list. An answer that changes nothing writes nothing. It replaces Status, Enable, and Disable, which made the everyday change *read a list under one verb, then retype names from it under another*.
+_Avoid_: status, enable, disable, picker, menu, add, remove, activate, install
 
 **Update**:
-The manager subcommand that refreshes this collection's skills and then checks every Dependency again. It reports each new Catalog entry; it does not Enable that skill and it does not ask. It deletes a Withdrawn skill from the layer it is applying, reporting each one and asking nothing. It does not refresh an External. Without `--project` it applies the Global layer; with `--project` it applies the Project layer.
+The manager subcommand that refreshes this collection's skills and then checks every Dependency again. It refreshes an Enabled skill whose files Deviate from the Digest and leaves the rest alone, so its report says what moved rather than what was Enabled; it refreshes the Manager every time, the Manager being no Catalog entry and having no Digest to compare. It reports each new Catalog entry and asks whether to Enable it; `--yes` answers yes. It deletes a Withdrawn skill from the layer it is applying, reporting each one and asking nothing. It does not refresh an External. Without `--project` it applies the Global layer; with `--project` it applies the Project layer.
 _Avoid_: upgrade, sync, pull
 
 **Uninstall**:
@@ -48,11 +40,11 @@ The manager subcommand that takes this collection off this machine: every Catalo
 _Avoid_: remove, delete, purge, reset
 
 **Help**:
-The manager subcommand that prints help for the manager, or for one named collection skill. Bare `/kntnt` means Help.
+The manager subcommand that prints the manager's own help, or the help for one of its own subcommands. Bare `/kntnt` means Help. It is not how a skill's help is reached: a skill one has answers `/<skill> --help`, and a skill one does not have yet is read about in Select, which fetches that help from the collection.
 _Avoid_: usage, man
 
 **Assume yes**:
-What `--yes` means on any collection skill: every question that can be answered yes or no is answered yes instead of asked. Every verb of a collection script accepts the flag, so a skill can pass the user's arguments through unread. Where a subcommand deletes files the user is choosing to delete, the flag is also the gate — the script refuses without it, because a script cannot prompt. Deleting a Withdrawn skill is not such a choice and is not gated: there is no question to answer, so Update removes it with or without the flag.
+What `--yes` means on any collection skill: no question is asked at all — every question that could be answered yes or no is answered yes instead. Every verb of a collection script accepts the flag, so a skill can pass the user's arguments through unread. Because the flag answers rather than defers, every yes/no question is worded so that *yes* ends it; a question whose yes opens another question has no unattended answer. Where a subcommand deletes files the user is choosing to delete, the flag is also the gate — the script refuses without it, because a script cannot prompt. Deleting a Withdrawn skill is not such a choice and is not gated: there is no question to answer, so Update removes it with or without the flag.
 _Avoid_: force, non-interactive, quiet, auto-approve
 
 **Enabled**:
@@ -63,12 +55,24 @@ _Avoid_: active, installed, on, turned on (installed is what the transport does;
 A skill that is not present on disk in that layer.
 _Avoid_: inactive, off, uninstalled
 
+**Partial**:
+A fact about the disk: a skill's files are present in some of the layer's Detected Harnesses and missing from others. It is not a third state a user chooses — a skill is Enabled or Disabled — so nothing sets it, nothing stores it, and no answer of the user's can select it. Select shows such a skill checked and marks it incomplete, and confirming the list repairs it.
+_Avoid_: partially enabled, half-installed, third state, partial state
+
 **Catalog**:
-The collection's declared list of its skills and their dependencies, authored in the repository and read from it at every invocation, so that it names what the collection provides now. A copy is stored beside the Manager and is what a verb falls back to when the origin cannot be reached; a verb that falls back says so. Only Update replaces that copy — a Catalog fetched by a verb that reports rather than changes is reasoned from and not written, or the difference Update reports new and Withdrawn skills from would be gone before it looked.
+The collection's declared list of its skills, their dependencies, and each skill's Digest, authored in the repository and read from it at every invocation, so that it names what the collection provides now. A copy is stored beside the Manager and is what a verb falls back to when the origin cannot be reached; a verb that falls back says so. Only Update replaces that copy — a Catalog fetched by a verb that reports rather than changes is reasoned from and not written, or the difference Update reports new and Withdrawn skills from would be gone before it looked.
 _Avoid_: manifest, registry, index, lockfile
 
+**Digest**:
+A content digest of a skill's directory as the collection ships it, computed over sorted relative paths and file contents, and carried by that skill's Catalog entry. It is generated when the Catalog is generated, so no release depends on remembering to bump anything and no version number is introduced. The same computation over what is on disk answers the one freshness question the manager can answer honestly — are these the same files. It ignores exactly `__pycache__/` and `*.pyc`, on the producing and the consuming side alike.
+_Avoid_: version, revision, release number, hash of SKILL.md
+
+**Deviating**:
+What a skill is when its files differ from the Digest the Catalog carries: a truncated install, a hand edit, or a Project copy that has fallen behind. Never *out of date* — the comparison sees two states and no history, so the manager cannot establish direction, and outside a lagging copy the commonest cause is the user's own edit. Update refreshes what Deviates; any offer to re-copy says in the same breath that local changes are overwritten. Nothing Deviates on a Catalog that came from the stored copy: those digests describe the collection as of the last Update.
+_Avoid_: out of date, stale, outdated, modified, dirty
+
 **Withdrawn**:
-A skill the collection no longer ships: it has left the repository, and with it the Catalog. Update deletes a Withdrawn skill from the layer it applies and does not ask, because nothing can Enable, Disable, or update it any longer. It finds one by asking the disk rather than any stored list: a skill installed from this collection carries the `metadata.kntnt` block, so one that carries it and the Catalog does not name is Withdrawn, whatever a local file remembers. The Manager is never one, being no Catalog entry. The mirror of a new Catalog entry, which is reported and left Disabled.
+A skill the collection no longer ships: it has left the repository, and with it the Catalog. Update deletes a Withdrawn skill from the layer it applies and does not ask, because nothing can Select or update it any longer. It finds one by asking the disk rather than any stored list: a skill installed from this collection carries the `metadata.kntnt` block, so one that carries it and the Catalog does not name is Withdrawn, whatever a local file remembers. The Manager is never one, being no Catalog entry. The mirror of a new Catalog entry, which is reported and offered.
 _Avoid_: deprecated, retired, obsolete, orphaned
 
 **State**:
@@ -76,20 +80,16 @@ The user's remembered choices: which skills are Enabled in Global and in each Pr
 _Avoid_: lockfile, config, preferences
 
 **Detected Harness**:
-A Harness that is present in the layer being acted on: the parent of its skills directory for that layer exists — `~/.claude` for Global, `.claude` in the working directory for Project. Enable, Disable, Update, and Uninstall act on every Detected Harness, and on the shared `.agents/skills` directory alone when none is detected. Nothing is recorded and nothing is asked; the set is resolved at each invocation, so a Harness installed later is reached by the next run. In the Project layer a Harness whose skills directory is not hidden is never detected, its name being indistinguishable from the repository's own content.
+A Harness that is present in the layer being acted on: the parent of its skills directory for that layer exists — `~/.claude` for Global, `.claude` in the working directory for Project. Select, Update, and Uninstall act on every Detected Harness, and on the shared `.agents/skills` directory alone when none is detected. Nothing is recorded and nothing is asked; the set is resolved at each invocation, so a Harness installed later is reached by the next run. In the Project layer a Harness whose skills directory is not hidden is never detected, its name being indistinguishable from the repository's own content.
 _Avoid_: harness list, agent list, setup file
 
 **Global**:
-The desired set that applies on this machine. Enable, Disable, and Update without `--project` change only this layer, and Uninstall clears it.
+The desired set that applies on this machine. Select and Update without `--project` change only this layer, and Uninstall clears it.
 _Avoid_: user, machine, default (say global)
 
 **Project**:
-A working directory with its own extra desired set. Enable, Disable, and Update with `--project` change only this layer. They do not change Global. They cannot Disable a skill that is Enabled only in Global. Uninstall never reaches this layer at all.
+A working directory with its own extra desired set. Select and Update with `--project` change only this layer. They do not change Global. `select --project` cannot uncheck a skill that is Enabled only in Global — this layer holds no copy of it to remove, and there is no subtractive overlay — so the row says the skill is already Enabled in Global instead, which is also how the user avoids Enabling a second copy. Uninstall never reaches this layer at all.
 _Avoid_: repo, workspace, local
-
-**Effective**:
-The skills a Harness can load in the current directory: every skill Enabled in Global, plus every skill Enabled in this Project.
-_Avoid_: available, active set, override
 
 **Harness**:
 A coding agent that loads Agent Skills from a well-known directory (Claude Code, OpenCode, Codex, and others).
@@ -98,6 +98,10 @@ _Avoid_: agent, IDE, tool, client
 **Transport**:
 The existing `npx skills` CLI, used to add, remove, and refresh skill files in harness directories.
 _Avoid_: installer, package manager
+
+**Sandbox**:
+The temporary home a changing verb runs against under `--dry-run`, and discards afterwards. The verb executes for real — same code, same Transport, same reading of the disk to report from — so what the user gets back is an outcome and not a description of intent. The Sandbox is seeded with this collection's own files as they are now, so a dry run does not report installing what the user already has, and it has its own npm cache, so the first dry run in a session downloads the Transport afresh and takes longer.
+_Avoid_: preview, simulation, plan, mock, staging
 
 **Dependency**:
 A skill or runtime that another collection skill cannot work without.
@@ -108,7 +112,7 @@ A dependency whose source is another collection, not this one.
 _Avoid_: third-party, upstream, peer
 
 **Capability**:
-A Dependency on what the running Harness can do rather than on what is on disk — spawning subagents, for one. No script can test one, because the Manager cannot know which Harness invoked it; the agent answers, being the Harness. The checker therefore reports the Capabilities a skill requires and the skill's own instructions make answering them part of the check. A skill declaring one is still Enabled everywhere; it refuses where the Capability is Unsatisfied.
+A Dependency on what the running Harness can do rather than on what is on disk — spawning subagents, for one. No script can test one, because the Manager cannot know which Harness invoked it; the agent answers, being the Harness. The checker therefore reports the Capabilities a skill requires and the skill's own instructions make answering them part of the check. Select names them on the skill's row, so the user knows before choosing that it may refuse to work where they are. A skill declaring one is still Enabled everywhere; it refuses where the Capability is Unsatisfied.
 _Avoid_: feature, harness flag, platform check, gate
 
 **Satisfied**:
