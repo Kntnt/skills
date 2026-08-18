@@ -11,3 +11,5 @@ Help that the agent generates from a skill's own Steps section is help that drif
 With that route in place `/kntnt help <skill>` is withdrawn rather than kept alongside it. A second way to the same text is a second thing to keep true, and this one asked the user to remember the wrong fact. `/kntnt help <command>` stays, because the Manager's own verbs are the Manager's to document, and bare `/kntnt` still prints Help (ADR-0027).
 
 None of this makes the Manager the owner of a skill's documentation. It never was; it was only the address.
+
+What a skill body keeps once its help has left is ADR-0046: only what the agent executes.
