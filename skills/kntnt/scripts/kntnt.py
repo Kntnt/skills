@@ -54,6 +54,7 @@ Subcommands:
   enable [skill...]    make skills Enabled (picker if none named)
   disable [skill...]   make skills Disabled (picker if none named)
   update               refresh this collection and re-check Dependencies
+  uninstall            remove this collection from this machine, Manager last
 
 Options:
   --project    this Project rather than Global (--project=off is Global)
@@ -63,6 +64,8 @@ Bare /kntnt is this help. Status lists every Catalog skill, Enabled or not;
 with --project it lists what applies in this directory and where each skill
 comes from. Enable, Disable, and Update default to Global. They act on every
 Harness present on this machine, working out which those are on every run.
+Uninstall takes no --project: it clears this machine, and leaves a working
+directory's own copies to that project.
 """
 
 
@@ -117,12 +120,25 @@ def collection_source() -> str:
     return os.environ.get("KNTNT_SOURCE", ORIGIN)
 
 
-def harness_paths() -> dict[str, dict[str, str]]:
-    """Load harness id → path templates."""
+# The path table this run resolves every directory through. Held for the run
+# because Uninstall deletes the Manager, and this file with it, while the same
+# run still has to verify that removal and name the directories it happened in.
+_HARNESS_PATHS: dict[str, dict[str, str]] | None = None
 
-    override = os.environ.get("KNTNT_HARNESS_PATHS")
-    path = Path(override) if override else here() / "harness-paths.json"
-    return cast(dict[str, dict[str, str]], json.loads(path.read_text(encoding="utf-8")))
+
+def harness_paths() -> dict[str, dict[str, str]]:
+    """Load harness id → path templates, once per run."""
+
+    global _HARNESS_PATHS
+
+    if _HARNESS_PATHS is None:
+        override = os.environ.get("KNTNT_HARNESS_PATHS")
+        path = Path(override) if override else here() / "harness-paths.json"
+        _HARNESS_PATHS = cast(
+            dict[str, dict[str, str]], json.loads(path.read_text(encoding="utf-8"))
+        )
+
+    return _HARNESS_PATHS
 
 
 def expand_path(template: str, *, global_layer: bool) -> Path:
@@ -680,6 +696,26 @@ def remove_skills(
     )
 
 
+def removal_outcome(
+    names: list[str], harnesses: list[str], *, global_layer: bool
+) -> dict[str, Any]:
+    """Remove *names* and report the outcome, whatever the transport did.
+
+    The transport takes the whole call down when it declines one name, so a
+    removal that has to carry on regardless — Update's withdrawals, Uninstall
+    deciding whether the Manager may go — reads that failure off the disk
+    rather than raising it. What the run intended is unchanged either way;
+    only the split between confirmed and failed differs.
+    """
+
+    try:
+        return remove_skills(names, harnesses, global_layer=global_layer)
+    except ManagerError:
+        return verified_outcome(
+            names, harnesses, global_layer=global_layer, expect_present=False
+        )
+
+
 def withdraw_skills(
     names: list[str], harnesses: list[str], *, global_layer: bool
 ) -> list[dict[str, Any]]:
@@ -702,14 +738,7 @@ def withdraw_skills(
         if skill_state(name, harnesses, global_layer=global_layer) != "disabled"
     ]
 
-    # The transport takes the whole batch down when it refuses one name, so a
-    # failure here is a verdict to be read off the disk rather than raised.
-    try:
-        outcome = remove_skills(on_disk, harnesses, global_layer=global_layer)
-    except ManagerError:
-        outcome = verified_outcome(
-            on_disk, harnesses, global_layer=global_layer, expect_present=False
-        )
+    outcome = removal_outcome(on_disk, harnesses, global_layer=global_layer)
 
     # Give every withdrawn name its verdict, whether or not it was asked of the
     # transport, so the report covers what left the Catalog and not just what
@@ -725,6 +754,20 @@ def withdraw_skills(
             report.append({"name": name, "disk": "removed"})
 
     return report
+
+
+def require_yes(yes: bool, deletion: str) -> None:
+    """Refuse a deletion the user has not been asked about.
+
+    Where a subcommand deletes files the user is choosing to delete, `--yes` is
+    the gate rather than a convenience (ADR-0029): the confirmation belongs to
+    the skill, because a script run non-interactively cannot prompt, and the
+    flag is how the skill asserts that it happened. One sentence for every such
+    verb, so the two halves cannot drift apart.
+    """
+
+    if not yes:
+        raise ManagerError(f"{deletion}; confirm first, then pass --yes", 2)
 
 
 def parse_layer(value: str) -> bool:
@@ -954,13 +997,8 @@ def cmd_apply_disable(names: list[str], *, global_layer: bool, yes: bool) -> int
     if not wanted:
         raise ManagerError("name at least one skill to disable", 2)
 
-    # Disable deletes skill files. Nothing here can prompt, so the confirmation
-    # has to have happened before the call, and --yes is how that is asserted.
-    if not yes:
-        raise ManagerError(
-            "disabling deletes these skills' files; confirm first, then pass --yes",
-            2,
-        )
+    require_yes(yes, "disabling deletes these skills' files")
+
     harnesses = target_harnesses(global_layer=global_layer)
     changing: list[str] = []
     noop: list[str] = []
@@ -977,6 +1015,72 @@ def cmd_apply_disable(names: list[str], *, global_layer: bool, yes: bool) -> int
             "noop": noop,
             "layer": "global" if global_layer else "project",
             "directories": target_dirs(harnesses, global_layer=global_layer),
+        }
+    )
+    return outcome_exit_code(outcome)
+
+
+def cmd_plan_uninstall() -> int:
+    """Print what Uninstall will take off this machine."""
+
+    harnesses = target_harnesses(global_layer=True)
+    emit(
+        {
+            "action": "uninstall",
+            "layer": "global",
+            "skills": [*enabled_names(harnesses, global_layer=True), MANAGER],
+            "catalog_refreshed": catalog_from_origin(),
+            "directories": target_dirs(harnesses, global_layer=True),
+        }
+    )
+    return 0
+
+
+def cmd_apply_uninstall(*, yes: bool) -> int:
+    """Take this collection off the machine: the Global set, then the Manager.
+
+    Global only, and no `--project` to say otherwise. A Skill in a working
+    directory is checked into that repository and travels with it, so whether
+    it stays is that project's decision rather than this machine's (ADR-0040).
+
+    `catalog_refreshed` matters more here than anywhere else: the set to
+    remove is every Catalog skill Enabled in Global, so a Catalog read off
+    the snapshot rather than the origin may leave a skill the collection has
+    since withdrawn behind — and once the Manager is gone there is no verb
+    left to finish the job.
+    """
+
+    require_yes(yes, "uninstalling deletes this collection's files")
+
+    harnesses = target_harnesses(global_layer=True)
+    directories = target_dirs(harnesses, global_layer=True)
+
+    # Which list the run worked from is part of the report, and the Catalog is
+    # read while the snapshot it may have come from is still on disk.
+    refreshed = catalog_from_origin()
+
+    outcome = removal_outcome(
+        enabled_names(harnesses, global_layer=True), harnesses, global_layer=True
+    )
+
+    # The Manager goes last, and only where the rest of the collection really
+    # left: it is the one skill that can be asked to finish the job, and a
+    # machine holding skills with no verb left to remove them is worse off than
+    # one whose Manager outlives them by a run.
+    if not outcome["failed"]:
+        manager = removal_outcome([MANAGER], harnesses, global_layer=True)
+        outcome = {
+            "intended": [*outcome["intended"], *manager["intended"]],
+            "confirmed": [*outcome["confirmed"], *manager["confirmed"]],
+            "failed": manager["failed"],
+        }
+
+    emit(
+        {
+            **outcome,
+            "catalog_refreshed": refreshed,
+            "layer": "global",
+            "directories": directories,
         }
     )
     return outcome_exit_code(outcome)
@@ -1364,6 +1468,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     add_project_flag(plan_update)
     add_yes_flag(plan_update)
 
+    # Uninstall takes no --project: it acts on this machine, and a working
+    # directory's copies are that repository's to keep or drop (ADR-0040).
+    plan_uninstall = plan_sub.add_parser("uninstall")
+    add_yes_flag(plan_uninstall)
+
     apply = sub.add_parser("apply", help="Apply a plan.")
     apply_sub = apply.add_subparsers(dest="verb", required=True)
     apply_enable = apply_sub.add_parser("enable")
@@ -1377,6 +1486,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     apply_update = apply_sub.add_parser("update")
     add_project_flag(apply_update)
     add_yes_flag(apply_update)
+    apply_uninstall = apply_sub.add_parser("uninstall")
+    add_yes_flag(apply_uninstall)
 
     return parser.parse_args(argv)
 
@@ -1393,12 +1504,16 @@ def dispatch(args: argparse.Namespace) -> int:
     if args.command == "catalog":
         return cmd_catalog(write=args.write)
     if args.command == "plan":
+        if args.verb == "uninstall":
+            return cmd_plan_uninstall()
         if args.verb == "update":
             return cmd_plan_update(global_layer=parse_layer(args.project))
         global_layer = parse_layer(args.project)
         if args.verb == "enable":
             return cmd_plan_enable(args.skills, global_layer=global_layer)
         return cmd_plan_disable(args.skills, global_layer=global_layer)
+    if args.verb == "uninstall":
+        return cmd_apply_uninstall(yes=args.yes)
     if args.verb == "update":
         return cmd_apply_update(global_layer=parse_layer(args.project))
     global_layer = parse_layer(args.project)

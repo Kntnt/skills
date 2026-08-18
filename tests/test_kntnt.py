@@ -120,6 +120,12 @@ def _world(
     _write(source / "skills" / "kntnt" / "catalog.json", _catalog(entries))
     shutil.copy(HARNESS_PATHS, source / "skills" / "kntnt" / "harness-paths.json")
 
+    # The collection ships the Manager's script, so the origin has to carry it:
+    # a refresh that placed a `kntnt` with no `scripts/` would be a Manager
+    # nothing could invoke, and Uninstall runs from the copy it is deleting.
+    (source / "skills" / "kntnt" / "scripts").mkdir(parents=True)
+    shutil.copy(KNTNT_PY, source / "skills" / "kntnt" / "scripts" / "kntnt.py")
+
     for entry in entries:
         _write(
             source / "skills" / entry["category"] / entry["name"] / "SKILL.md",
@@ -204,6 +210,7 @@ def _run(
     log: Path | None = None,
     skip: list[str] | None = None,
     refuse: list[str] | None = None,
+    installed: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
     env["KNTNT_HOME"] = str(world["home"])
@@ -211,13 +218,22 @@ def _run(
     env["KNTNT_PROJECT"] = str(world["project"])
     env["KNTNT_HARNESS_PATHS"] = str(HARNESS_PATHS)
     env["KNTNT_TRANSPORT"] = f"uv run {FAKE_SKILLS}"
+    env["KNTNT_TRANSPORT_PATHS"] = str(HARNESS_PATHS)
+
+    # `installed` runs the copy the transport placed, resolving `$HERE` and the
+    # path table off that directory the way a real invocation does. The fixture
+    # keeps the Manager outside every Harness otherwise, so only a test that
+    # asks for this shape can watch the Manager delete itself.
+    if installed is not None:
+        env["KNTNT_HERE"] = str(installed)
+        del env["KNTNT_HARNESS_PATHS"]
     if log is not None:
         env["KNTNT_TRANSPORT_LOG"] = str(log)
     if skip is not None:
         env["KNTNT_TRANSPORT_SKIP"] = ",".join(skip)
     if refuse is not None:
         env["KNTNT_TRANSPORT_REFUSE"] = ",".join(refuse)
-    script = world["here"] / "scripts" / "kntnt.py"
+    script = (installed or world["here"]) / "scripts" / "kntnt.py"
     return subprocess.run(
         ["uv", "run", str(script), *args],
         cwd=cwd or world["project"],
@@ -1239,6 +1255,7 @@ def test_every_verb_accepts_yes(tmp_path: Path) -> None:
         ("plan", "enable", "alpha", "--yes"),
         ("plan", "disable", "alpha", "--yes"),
         ("plan", "update", "--yes"),
+        ("plan", "uninstall", "--yes"),
         ("apply", "enable", "alpha", "--yes"),
         ("apply", "update", "--yes"),
     ):
@@ -1555,3 +1572,230 @@ def test_a_failed_removal_names_the_shared_tree_a_universal_harness_reads(
     assert _json(result)["failed"][0]["directories"] == [
         str(world["home"] / ".agents" / "skills")
     ]
+
+
+def _install_manager(world: dict[str, Path]) -> None:
+    """Put the Manager on disk the way a Global refresh does.
+
+    `kntnt` reaches a Harness through the transport like any other skill, so a
+    test with something to uninstall has to have run the verb that places it.
+    """
+
+    _run(world, "apply", "update", "--yes")
+
+
+def test_uninstall_removes_every_enabled_skill_and_the_manager(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    _run(world, "apply", "enable", "alpha", "beta")
+    _install_manager(world)
+
+    result = _run(world, "apply", "uninstall", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    for harness in (".claude", ".config/crush"):
+        skills = world["home"] / harness / "skills"
+        assert sorted(path.name for path in skills.iterdir()) == []
+
+
+def test_uninstall_reports_every_name_it_took_off_the_disk(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+
+    payload = _json(_run(world, "apply", "uninstall", "--yes"))
+
+    assert payload["intended"] == ["alpha", "kntnt"]
+    assert payload["confirmed"] == ["alpha", "kntnt"]
+    assert payload["failed"] == []
+    assert payload["directories"] == [str(world["home"] / ".claude" / "skills")]
+
+
+def test_uninstall_removes_the_manager_last(tmp_path: Path) -> None:
+    """The Manager is what re-runs the verb when the first pass leaves work."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+    log = tmp_path / "calls.jsonl"
+
+    _run(world, "apply", "uninstall", "--yes", log=log)
+
+    removals = [call for call in _calls(log) if call["command"] == "remove"]
+    assert [call["skills"] for call in removals] == [["alpha"], ["kntnt"]]
+
+
+def test_uninstall_with_nothing_enabled_still_removes_the_manager(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _install_manager(world)
+
+    payload = _json(_run(world, "apply", "uninstall", "--yes"))
+
+    assert payload["intended"] == ["kntnt"]
+    assert payload["confirmed"] == ["kntnt"]
+    assert not (world["home"] / ".claude" / "skills" / "kntnt").exists()
+
+
+def test_uninstall_refuses_without_yes(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+
+    result = _run(world, "apply", "uninstall")
+
+    assert result.returncode == 2
+    assert "--yes" in result.stderr
+    assert (world["home"] / ".claude" / "skills" / "alpha").exists()
+    assert (world["home"] / ".claude" / "skills" / "kntnt").exists()
+
+
+def test_uninstall_leaves_a_project_copy_where_it_is(tmp_path: Path) -> None:
+    """A Skill in a working directory travels with that repository."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "enable", "--project", "gamma")
+    _install_manager(world)
+
+    result = _run(world, "apply", "uninstall", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    assert (world["project"] / ".claude" / "skills" / "gamma" / "SKILL.md").is_file()
+
+
+def test_uninstall_has_no_project_form(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _install_manager(world)
+
+    for args in (
+        ("plan", "uninstall", "--project"),
+        ("apply", "uninstall", "--project", "--yes"),
+    ):
+        result = _run(world, *args)
+        assert result.returncode != 0, args
+        assert (world["home"] / ".claude" / "skills" / "kntnt").exists()
+
+
+def test_plan_uninstall_names_what_will_go_and_from_where(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+
+    payload = _json(_run(world, "plan", "uninstall"))
+
+    assert payload["action"] == "uninstall"
+    assert payload["layer"] == "global"
+    assert payload["skills"] == ["alpha", "kntnt"]
+    assert payload["directories"] == [str(world["home"] / ".claude" / "skills")]
+    assert (world["home"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_uninstall_says_whether_the_list_it_worked_from_is_current(
+    tmp_path: Path,
+) -> None:
+    """Nothing is left to re-run afterwards, so a stale list is said aloud."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+    _unreachable_origin(world)
+
+    plan = _json(_run(world, "plan", "uninstall"))
+    apply = _json(_run(world, "apply", "uninstall", "--yes"))
+
+    assert plan["catalog_refreshed"] is False
+    assert apply["catalog_refreshed"] is False
+
+
+def test_uninstall_keeps_the_manager_when_a_skill_is_left_behind(
+    tmp_path: Path,
+) -> None:
+    """The Manager is the only verb that can finish what this run could not."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+
+    result = _run(world, "apply", "uninstall", "--yes", skip=["alpha"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["intended"] == ["alpha"]
+    assert payload["confirmed"] == []
+    assert payload["failed"] == [
+        {
+            "name": "alpha",
+            "directories": [str(world["home"] / ".claude" / "skills")],
+        }
+    ]
+    assert (world["home"] / ".claude" / "skills" / "kntnt" / "SKILL.md").is_file()
+
+
+def test_uninstall_keeps_the_manager_when_the_transport_refuses_a_name(
+    tmp_path: Path,
+) -> None:
+    """A refusal takes the batch down, so nothing left — nor may the Manager."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha", "beta")
+    _install_manager(world)
+    log = tmp_path / "calls.jsonl"
+
+    result = _run(world, "apply", "uninstall", "--yes", refuse=["beta"], log=log)
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert [item["name"] for item in payload["failed"]] == ["alpha", "beta"]
+    assert (world["home"] / ".claude" / "skills" / "kntnt").exists()
+    assert ["kntnt"] not in [call["skills"] for call in _calls(log)]
+
+
+def test_uninstall_survives_deleting_the_manager_it_is_running(tmp_path: Path) -> None:
+    """`$HERE` goes with the Manager; the run still has a removal to verify."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+
+    result = _run(world, "apply", "uninstall", "--yes", installed=installed)
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["confirmed"] == ["alpha", "kntnt"]
+    assert not installed.exists()
+
+
+def test_uninstall_tells_the_user_what_it_does_not_touch() -> None:
+    """No payload can carry every working directory; the body has to say it."""
+
+    text = (REPO_ROOT / "skills" / "kntnt" / "uninstall.md").read_text(encoding="utf-8")
+
+    assert "`failed`" in text
+    assert "`directories`" in text
+    assert "Project" in text
+
+
+def test_help_lists_the_uninstall_verb(tmp_path: Path) -> None:
+    """Help is the only place the way out is discovered."""
+
+    world = _world(tmp_path)
+
+    text = _run(world, "help").stdout
+
+    assert "uninstall" in text

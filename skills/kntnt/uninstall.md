@@ -1,0 +1,12 @@
+# uninstall
+
+Remove this collection from this machine: every Catalog skill Enabled in Global, then the Manager itself. There is no `--project` form — a skill in a working directory is checked into that repository and travels with it, so whether it stays is that project's decision rather than this machine's.
+
+`$HERE` is the manager directory (the parent of `scripts/`).
+
+## Steps
+
+1. Run `uv run "$HERE/scripts/kntnt.py" plan uninstall`. Done when stdout is JSON.
+2. Show the plan: the `skills` it will delete, ending with `kntnt` itself, and the `directories` they will go from. Say that this is the last thing the Manager does — afterwards there is no `/kntnt` left to finish anything with — and that copies in a working directory are untouched, so a project that has this collection's skills checked in still has them. The Manager goes only if everything else does: a run that leaves a skill behind keeps `kntnt` so the verb can be run again. If `catalog_refreshed` is false, say the list came from the stored copy because the collection could not be reached, so a skill withdrawn upstream since the last `/kntnt update` may be left behind; running this with the collection reachable is what covers that. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
+3. Run `uv run "$HERE/scripts/kntnt.py" apply uninstall --yes`. Uninstall deletes files, so the script refuses without `--yes`; reaching this step means step 2 settled it. Done when stdout is JSON.
+4. Report the outcome the payload carries, not the plan. `intended` names what the run set out to remove and `confirmed` what the script then found gone from the disk. If `failed` is non-empty the command exits non-zero: say those skills are **still** on the machine, whatever the transport reported, name each one's `directories`, and do not call the machine clean. `kntnt` in `confirmed` is the whole of it: the Manager is gone, and the harness's own uninstall has nothing left to do. `kntnt` anywhere else — in `failed`, or in neither list because the run stopped short of it — means the Manager is still installed, which is deliberate: say so, and that `/kntnt uninstall` can be run again once what failed has been dealt with. Repeat that Project copies were not touched. Done when the user has the outcome.

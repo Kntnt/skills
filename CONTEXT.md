@@ -43,6 +43,10 @@ _Avoid_: list, info, doctor
 The manager subcommand that refreshes this collection's skills and then checks every Dependency again. It reports each new Catalog entry; it does not Enable that skill and it does not ask. It deletes a Withdrawn skill from the layer it is applying, reporting each one and asking nothing. It does not refresh an External. Without `--project` it applies the Global layer; with `--project` it applies the Project layer.
 _Avoid_: upgrade, sync, pull
 
+**Uninstall**:
+The manager subcommand that takes this collection off this machine: every Catalog skill Enabled in Global, from every Detected Harness, and then the Manager itself, last and through the Transport. It is the only verb with no `--project` form — a Skill in a working directory is checked into that Project and travels with it, so it is never touched and the report says so. `--yes` is its gate.
+_Avoid_: remove, delete, purge, reset
+
 **Help**:
 The manager subcommand that prints help for the manager, or for one named collection skill. Bare `/kntnt` means Help.
 _Avoid_: usage, man
@@ -72,15 +76,15 @@ The user's remembered choices: which skills are Enabled in Global and in each Pr
 _Avoid_: lockfile, config, preferences
 
 **Detected Harness**:
-A Harness that is present in the layer being acted on: the parent of its skills directory for that layer exists — `~/.claude` for Global, `.claude` in the working directory for Project. Enable, Disable, and Update act on every Detected Harness, and on the shared `.agents/skills` directory alone when none is detected. Nothing is recorded and nothing is asked; the set is resolved at each invocation, so a Harness installed later is reached by the next run. In the Project layer a Harness whose skills directory is not hidden is never detected, its name being indistinguishable from the repository's own content.
+A Harness that is present in the layer being acted on: the parent of its skills directory for that layer exists — `~/.claude` for Global, `.claude` in the working directory for Project. Enable, Disable, Update, and Uninstall act on every Detected Harness, and on the shared `.agents/skills` directory alone when none is detected. Nothing is recorded and nothing is asked; the set is resolved at each invocation, so a Harness installed later is reached by the next run. In the Project layer a Harness whose skills directory is not hidden is never detected, its name being indistinguishable from the repository's own content.
 _Avoid_: harness list, agent list, setup file
 
 **Global**:
-The desired set that applies on this machine. Enable, Disable, and Update without `--project` change only this layer.
+The desired set that applies on this machine. Enable, Disable, and Update without `--project` change only this layer, and Uninstall clears it.
 _Avoid_: user, machine, default (say global)
 
 **Project**:
-A working directory with its own extra desired set. Enable, Disable, and Update with `--project` change only this layer. They do not change Global. They cannot Disable a skill that is Enabled only in Global.
+A working directory with its own extra desired set. Enable, Disable, and Update with `--project` change only this layer. They do not change Global. They cannot Disable a skill that is Enabled only in Global. Uninstall never reaches this layer at all.
 _Avoid_: repo, workspace, local
 
 **Effective**:

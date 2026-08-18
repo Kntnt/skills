@@ -2,7 +2,7 @@
 name: kntnt
 description: Manage this collection — which skills are Enabled, in Global and in each Project.
 disable-model-invocation: true
-argument-hint: "[status|enable|disable|update|help] [skill...] [--project] [--yes]"
+argument-hint: "[status|enable|disable|update|uninstall|help] [skill...] [--project] [--yes]"
 ---
 
 # kntnt
@@ -24,8 +24,9 @@ If the arguments are `help`, `--help`, `-h`, or `help <name>`, follow `$HERE/hel
 - `enable` `[skill...]` `[--project]` `[--yes]` — Enable. No names opens a picker.
 - `disable` `[skill...]` `[--project]` `[--yes]` — Disable. No names opens a picker.
 - `update` `[--project]` `[--yes]` — refresh this collection, then re-check Dependencies.
+- `uninstall` `[--yes]` — remove this collection from this machine, the Manager last.
 
-Every verb reads `--project` the same way: absent or `--project=off` means Global, `--project` or `--project=on` means this Project. Enable, Disable, and Update change that layer. Status changes nothing, so the flag picks the question instead: Global alone without it, and with it the Effective set — what applies in this working directory.
+Every verb reads `--project` the same way: absent or `--project=off` means Global, `--project` or `--project=on` means this Project. Enable, Disable, and Update change that layer. Status changes nothing, so the flag picks the question instead: Global alone without it, and with it the Effective set — what applies in this working directory. Uninstall is the one verb that takes no `--project`: it clears this machine, and a working directory's own copies belong to that project.
 
 Which Harnesses a verb reaches is never asked and never recorded: every Harness present in that layer is acted on, worked out on each run.
 

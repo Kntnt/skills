@@ -34,9 +34,14 @@ def source() -> Path:
 
 
 def harness_paths() -> dict[str, dict[str, str]]:
-    """Load the same path table the manager uses."""
+    """Load this transport's own path table.
 
-    return json_load(Path(os.environ["KNTNT_HARNESS_PATHS"]))
+    The real `npx skills` carries its table with it and would not lose it by
+    deleting a skill. Reading the manager's variable would tie the two together
+    and leave the stand-in blind exactly where a test removes the manager.
+    """
+
+    return json_load(Path(os.environ["KNTNT_TRANSPORT_PATHS"]))
 
 
 def json_load(path: Path) -> dict[str, dict[str, str]]:
