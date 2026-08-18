@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.7.0] – 2026-08-18
+
 ### Added
 
 - `/kntnt uninstall` — take this collection off this machine in one gesture. It removes every catalog skill enabled globally from every harness present in your home directory, and then the manager itself, last and through the transport, so your harness's own uninstall has nothing left to do. The manager goes only where everything else really left — a run that leaves a skill behind keeps `kntnt`, since it is the one verb that could still remove it — so `kntnt` among the confirmed removals is the whole report. Installing was one command and removing was none: the behaviour existed, but only as a side effect of dropping a harness from a list that has since been retired, and uninstalling by hand meant working out which directories held what. It takes no `--project`, and that is the decision rather than an omission: a skill in a working directory is checked into that repository and travels with it, so whether it stays is that project's decision — those copies are never touched, and the report says so rather than letting anyone believe the machine is clean while a repository still carries them. `--yes` is the gate, as on Disable. What it removes is what the catalog names, so the report says whether that list came from the collection or from the stored copy — the usual remedy of running it again is only available while the manager is still installed. Architecture Decision Record 0040 states the rule and the two things that follow from a manager deleting itself, and the Collection term *Uninstall* names the verb.
