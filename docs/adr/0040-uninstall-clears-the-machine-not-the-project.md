@@ -6,7 +6,7 @@ There is no `--project` form, and this is the decision rather than an omission. 
 
 The set is resolved by detection at the moment the verb runs, for the same reason every other verb resolves it that way, and with one consequence particular to removal: the transport only clears a shared skills directory when the call names every Harness that reads it, and a call that always names all of them cannot get that wrong (ADR-0035).
 
-`--yes` is the gate, as on Disable: the verb deletes files the user is choosing to delete, and a script cannot prompt (ADR-0029).
+`--yes` is the gate, as on `select --off`: the verb deletes files the user is choosing to delete, and a script cannot prompt (ADR-0029).
 
 Two things follow from the Manager deleting itself. The path table is read once per run and held, because it ships beside the Manager and the same run still has to verify the removal and name the directories it happened in. And the Manager goes last, in a transport call of its own, made only where the rest of the collection really left — a machine holding skills with no verb left to remove them is worse off than one whose Manager outlives them by a run, and the retry the split exists for has to be a retry the code actually leaves available. Neither pass raises on the other's behalf; both read their verdict off the disk, which is what ADR-0036 requires and matters most here, where afterwards there is nothing left to contradict a false report of success. `kntnt` among the confirmed is therefore the whole report: the Manager is gone only when everything it was asked to remove went with it.
 

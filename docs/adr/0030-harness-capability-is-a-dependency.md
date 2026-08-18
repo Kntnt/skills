@@ -1,6 +1,6 @@
 # A harness requirement is a Dependency the agent answers, not an install-time gate
 
-Some skills need something of the Harness itself, not of the machine: `delegation` is meaningless where subagents cannot be spawned. The obvious fix — let the Catalog say which Harnesses a skill belongs on and have Enable install it only there — is the matrix ADR-0005 rejects: the desired set would differ per Harness, Status would have to report per Harness, and the drift the collection exists to prevent returns through the back door.
+Some skills need something of the Harness itself, not of the machine: `delegation` is meaningless where subagents cannot be spawned. The obvious fix — let the Catalog say which Harnesses a skill belongs on and have Select place it only there — is the matrix ADR-0005 rejects: the desired set would differ per Harness, Select's list would need a row per Harness, and the drift the collection exists to prevent returns through the back door.
 
 So a Capability is modelled as a fourth kind of Dependency, alongside binaries, skills, and externals. The skill is installed everywhere and refuses where it does not fit, exactly as an Unsatisfied binary makes it refuse — one desired set, one layer model, ADR-0005 and ADR-0013 untouched.
 
