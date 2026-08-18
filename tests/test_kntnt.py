@@ -57,6 +57,27 @@ def _skill_md(
     return "\n".join(lines)
 
 
+def _foreign_skill_md(name: str) -> str:
+    """A SKILL.md from outside this collection: no `metadata.kntnt` anywhere.
+
+    The marker is the whole of what tells the sweep which directories are this
+    collection's. A skill that carries none is another collection's or the
+    user's own, and must survive every Update untouched.
+    """
+
+    return "\n".join(
+        [
+            "---",
+            f"name: {name}",
+            "description: A skill from somewhere else.",
+            "---",
+            "",
+            f"# {name}",
+            "",
+        ]
+    )
+
+
 def _catalog(entries: list[dict[str, Any]]) -> str:
     return json.dumps({"origin": "Kntnt/skills", "skills": entries}, indent=2) + "\n"
 
@@ -189,6 +210,19 @@ def _publish(
         world["source"] / "skills" / entry["category"] / entry["name"] / "SKILL.md",
         _skill_md(entry["name"], description=entry["description"]),
     )
+
+
+def _snapshot_forgets(world: dict[str, Path], remaining: list[dict[str, Any]]) -> None:
+    """Refresh the snapshot beside the Manager behind the Manager's back.
+
+    `catalog.json` is a sidecar of the Manager, so any run of the transport
+    that re-copies `kntnt` replaces it — including one whose Update then died,
+    and including `npx skills update` invoked by hand. This is that state: the
+    file no longer names the withdrawn skill, so a diff against it is empty
+    forever and the files it should have taken are stranded (issue #20).
+    """
+
+    _write(world["here"] / "catalog.json", _catalog(remaining))
 
 
 def _unreachable_origin(world: dict[str, Path]) -> None:
@@ -1065,10 +1099,10 @@ def test_update_project_does_not_install_the_manager_in_the_project(
     assert _json(result)["confirmed"] == ["alpha"]
 
 
-def test_update_reports_a_withdrawn_skill_that_was_never_enabled(
+def test_update_says_nothing_of_a_withdrawn_skill_that_is_not_here(
     tmp_path: Path,
 ) -> None:
-    """Nothing on disk is nothing to delete, and still worth reporting."""
+    """The sweep reports what it found, and a skill never Enabled here is not there."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1082,11 +1116,123 @@ def test_update_reports_a_withdrawn_skill_that_was_never_enabled(
     result = _run(world, "apply", "update", log=log)
 
     assert result.returncode == 0, result.stderr
-    assert _json(result)["removed"] == [
-        {"name": "beta", "disk": "absent"},
-        {"name": "gamma", "disk": "absent"},
-    ]
+    assert _json(result)["removed"] == []
     assert not [call for call in _calls(log) if call["command"] == "remove"]
+
+
+def test_update_removes_a_withdrawal_the_snapshot_has_already_forgotten(
+    tmp_path: Path,
+) -> None:
+    """The stranded state of issue #20, recovered by one Update.
+
+    The Catalog beside the Manager has already been refreshed past `gamma` and
+    the files are still on disk, which is where a diff runs out of memory. The
+    marker in `gamma`'s own frontmatter does not.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+    _snapshot_forgets(world, _SURVIVORS)
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["removed"] == [{"name": "gamma", "disk": "removed"}]
+    assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
+
+
+def test_update_removes_a_withdrawal_with_no_snapshot_to_compare_against(
+    tmp_path: Path,
+) -> None:
+    """No stored Catalog at all is still no obstacle: the marker is on the skill."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+    (world["here"] / "catalog.json").unlink()
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["new"] == []
+    assert payload["removed"] == [{"name": "gamma", "disk": "removed"}]
+    assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
+
+
+def test_update_leaves_a_skill_without_the_marker_alone(tmp_path: Path) -> None:
+    """An External or the user's own skill is not this collection's to remove."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    foreign = world["home"] / ".claude" / "skills" / "zeta"
+    _write(foreign / "SKILL.md", _foreign_skill_md("zeta"))
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["removed"] == []
+    assert (foreign / "SKILL.md").is_file()
+
+
+def test_update_survives_a_skill_file_it_cannot_read(tmp_path: Path) -> None:
+    """The sweep reads files this collection did not write, so one of them may not read.
+
+    A foreign SKILL.md is an untrusted boundary: it can be any bytes at all.
+    Letting one raise would take the whole run down with a traceback and no
+    report — the failure shape of issue #5, reintroduced from the other end.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    foreign = world["home"] / ".claude" / "skills" / "zeta" / "SKILL.md"
+    foreign.parent.mkdir(parents=True, exist_ok=True)
+    foreign.write_bytes(b"---\nname: zeta\ndescription: \xff\xfe not utf-8\n---\n")
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["removed"] == []
+    assert foreign.is_file()
+
+
+def test_update_never_sweeps_the_manager(tmp_path: Path) -> None:
+    """`kntnt` is no Catalog entry, and the verb must not delete what runs it."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "update")
+    manager = world["home"] / ".claude" / "skills" / "kntnt"
+    assert manager.is_dir(), "the refresh never placed the Manager"
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["removed"] == []
+    assert (manager / "SKILL.md").is_file()
+
+
+def test_update_sweeps_nothing_when_the_origin_is_unreachable(tmp_path: Path) -> None:
+    """Which files to delete is not a question a fallback list gets to answer."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "gamma")
+    _snapshot_forgets(world, _SURVIVORS)
+    _unreachable_origin(world)
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["catalog_refreshed"] is False
+    assert payload["removed"] == []
+    assert (world["home"] / ".claude" / "skills" / "gamma" / "SKILL.md").is_file()
 
 
 def test_update_removes_a_skill_the_collection_has_withdrawn(tmp_path: Path) -> None:
@@ -1376,6 +1522,29 @@ def test_catalog_generation_rejects_a_folded_description(tmp_path: Path) -> None
 
     assert result.returncode == 1
     assert "alpha" in result.stderr
+
+
+def test_catalog_generation_rejects_a_skill_without_the_collection_marker(
+    tmp_path: Path,
+) -> None:
+    """The marker is how Update tells a withdrawal from an External on disk.
+
+    A shipped skill that carried none could never be swept, which is the bug
+    of issue #20 reintroduced one skill at a time, so generation is where it
+    has to fail.
+    """
+
+    world = _world(tmp_path)
+    _write(
+        world["source"] / "skills" / "code" / "alpha" / "SKILL.md",
+        _foreign_skill_md("alpha"),
+    )
+
+    result = _run(world, "catalog")
+
+    assert result.returncode == 1
+    assert "alpha" in result.stderr
+    assert "metadata.kntnt" in result.stderr
 
 
 def test_enable_confirms_each_placement_against_the_disk(tmp_path: Path) -> None:

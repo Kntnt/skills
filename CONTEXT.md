@@ -68,7 +68,7 @@ The collection's declared list of its skills and their dependencies, authored in
 _Avoid_: manifest, registry, index, lockfile
 
 **Withdrawn**:
-A skill the collection no longer ships: it has left the repository, and with it the Catalog. Update deletes a Withdrawn skill from the layer it applies and does not ask, because nothing can Enable, Disable, or update it any longer. The mirror of a new Catalog entry, which is reported and left Disabled.
+A skill the collection no longer ships: it has left the repository, and with it the Catalog. Update deletes a Withdrawn skill from the layer it applies and does not ask, because nothing can Enable, Disable, or update it any longer. It finds one by asking the disk rather than any stored list: a skill installed from this collection carries the `metadata.kntnt` block, so one that carries it and the Catalog does not name is Withdrawn, whatever a local file remembers. The Manager is never one, being no Catalog entry. The mirror of a new Catalog entry, which is reported and left Disabled.
 _Avoid_: deprecated, retired, obsolete, orphaned
 
 **State**:

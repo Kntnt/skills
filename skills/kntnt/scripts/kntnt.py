@@ -283,22 +283,56 @@ def parse_frontmatter(text: str) -> dict[str, Any]:
 
 DEP_KINDS = ("binaries", "skills", "externals", "capabilities")
 
+# The frontmatter block a collection skill declares its Dependencies in, under
+# `metadata`. It is also this collection's mark on a skill it installed: no
+# other collection has reason to write the key, and it travels in the skill's
+# own SKILL.md rather than in anything the Manager keeps beside itself.
+METADATA_BLOCK = "kntnt"
+
+
+def collection_block(frontmatter: dict[str, Any]) -> dict[str, Any] | None:
+    """Return this collection's frontmatter block, or None where there is none."""
+
+    metadata = frontmatter.get("metadata")
+    if not isinstance(metadata, dict):
+        return None
+    block = metadata.get(METADATA_BLOCK)
+    return block if isinstance(block, dict) else None
+
 
 def skill_deps(frontmatter: dict[str, Any]) -> dict[str, list[str]]:
     """Read Dependency lists from a skill's frontmatter."""
 
-    empty: dict[str, list[str]] = {key: [] for key in DEP_KINDS}
-    metadata = frontmatter.get("metadata")
-    if not isinstance(metadata, dict):
-        return empty
-    block = metadata.get("kntnt")
-    if not isinstance(block, dict):
-        return empty
+    block = collection_block(frontmatter)
+    if block is None:
+        return {key: [] for key in DEP_KINDS}
     result: dict[str, list[str]] = {}
     for key in DEP_KINDS:
         values = block.get(key, [])
         result[key] = [str(item) for item in values] if isinstance(values, list) else []
     return result
+
+
+def carries_marker(skill_dir: Path) -> bool:
+    """True when the skill installed at *skill_dir* came from this collection.
+
+    Provenance is read off the skill's own frontmatter and off nothing else.
+    Every file the Manager keeps beside itself is a sidecar the transport
+    overwrites whenever it re-copies `kntnt`, so a record held there can forget
+    that a skill was ever ours; the marker in the skill's own SKILL.md cannot
+    (issue #20). Answers rather than raises, whatever it meets on the way.
+    """
+
+    # A layer holds skills this collection did not write, so the file is an
+    # untrusted boundary: any bytes at all, no read permission, or no file
+    # there. None of that can claim to be ours, and none of it may take the
+    # run down — a traceback in place of the report is the failure of #5.
+    try:
+        text = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return False
+
+    return collection_block(parse_frontmatter(text)) is not None
 
 
 def capability_notes(names: list[str]) -> list[dict[str, str]]:
@@ -716,6 +750,40 @@ def removal_outcome(
         )
 
 
+def withdrawn_names(harnesses: list[str], *, global_layer: bool) -> list[str]:
+    """Return this collection's skills in this layer that the Catalog no longer names.
+
+    Withdrawal is resolved from what the disk says wrote each skill, never from
+    what a stored Catalog remembers the collection once shipped. That memory is
+    a sidecar the transport replaces whenever it re-copies the Manager — a
+    failed Update or a hand-run `npx skills update` is enough — and once it has
+    forgotten a name, nothing can establish the skill was ever ours and the
+    files are stranded for good (issue #20).
+
+    Two things are never swept, whatever the Catalog says. The Manager is not a
+    Catalog entry, so judging it by the Catalog alone would delete the verb
+    doing the sweeping; and a skill with no marker belongs to another
+    collection or to the user, which is not this collection's to remove.
+    """
+
+    catalog = catalog_names()
+    withdrawn: set[str] = set()
+
+    # Every directory the layer could hold a skill in, asked what wrote it.
+    for harness in harnesses:
+        for directory in skill_dirs(harness, global_layer=global_layer):
+            if not directory.is_dir():
+                continue
+            for entry in directory.iterdir():
+                name = entry.name
+                if name == MANAGER or name in catalog or name in withdrawn:
+                    continue
+                if carries_marker(entry):
+                    withdrawn.add(name)
+
+    return sorted(withdrawn)
+
+
 def withdraw_skills(
     names: list[str], harnesses: list[str], *, global_layer: bool
 ) -> list[dict[str, Any]]:
@@ -725,30 +793,23 @@ def withdraw_skills(
     reasoned about, so it is removed without asking (ADR-0037). It goes through
     Disable's own removal — the collection has one way to delete skill files —
     and each name is reported with what the disk then showed: `removed` where
-    the files are gone, `absent` where there were none to delete, and `failed`
-    with the directories they survive in. A failure is one skill's, not the
-    run's: whatever else Update had to do still happens.
+    the files are gone, `failed` with the directories they survive in. A
+    failure is one skill's, not the run's: whatever else Update had to do still
+    happens.
+
+    *names* is what `withdrawn_names` swept off this layer, so every one of
+    them was on disk when it looked. There is no verdict for a skill that was
+    never here, because there is no such name to give one to.
     """
 
-    # A withdrawn skill that was never Enabled here has nothing to delete, and
-    # the transport is not asked about one.
-    on_disk = [
-        name
-        for name in names
-        if skill_state(name, harnesses, global_layer=global_layer) != "disabled"
-    ]
+    outcome = removal_outcome(names, harnesses, global_layer=global_layer)
 
-    outcome = removal_outcome(on_disk, harnesses, global_layer=global_layer)
-
-    # Give every withdrawn name its verdict, whether or not it was asked of the
-    # transport, so the report covers what left the Catalog and not just what
-    # the removal touched.
+    # Every name was on disk when the sweep looked, so each one has an outcome
+    # to report rather than a reason it was skipped.
     failed = {str(item["name"]): item["directories"] for item in outcome["failed"]}
     report: list[dict[str, Any]] = []
     for name in names:
-        if name not in on_disk:
-            report.append({"name": name, "disk": "absent"})
-        elif name in failed:
+        if name in failed:
             report.append({"name": name, "disk": "failed", "directories": failed[name]})
         else:
             report.append({"name": name, "disk": "removed"})
@@ -1129,7 +1190,14 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     # one entry that matters under every entry that does not.
     old_names = names_of(stored) if stored is not None else current_names
     new_names = [name for name in sorted(current_names) if name not in old_names]
-    withdrawn = [name for name in sorted(old_names) if name not in current_names]
+
+    # Only the reporting half rests on that comparison. What has been
+    # withdrawn is asked of the disk (ADR-0037), and only where the origin
+    # answered: deleting files on the strength of a fallback list is the one
+    # thing a stale Catalog must never be allowed to do.
+    withdrawn = (
+        withdrawn_names(harnesses, global_layer=global_layer) if refreshed else []
+    )
     withdrawals = withdraw_skills(withdrawn, harnesses, global_layer=global_layer)
 
     desired = enabled_names(harnesses, global_layer=global_layer)
@@ -1354,9 +1422,16 @@ def generate_catalog(source: Path) -> dict[str, Any]:
         # Generation is where a misspelt Capability has to fail. Past this
         # point the name would ride into the Catalog and only surface when a
         # user ran the skill. The same is true of the two fields the Catalog
-        # exists to carry: the transport installs by directory name, and the
-        # description is a skill's entire help until it is Enabled.
+        # exists to carry — the transport installs by directory name, and
+        # the description is a skill's entire help until it is Enabled — and
+        # of the marker, which is how Update tells a withdrawal of ours from
+        # another collection's skill once this one has stopped shipping it.
         capability_notes(deps["capabilities"])
+        if collection_block(frontmatter) is None:
+            raise ManagerError(
+                f"{skill_md}: no metadata.kntnt block; a skill without the "
+                "marker cannot be removed when the collection withdraws it"
+            )
         if name != skill_md.parent.name:
             raise ManagerError(
                 f"{skill_md}: name '{name}' is not the directory "
