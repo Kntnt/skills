@@ -353,9 +353,10 @@ def _run(
     skip: list[str] | None = None,
     refuse: list[str] | None = None,
     installed: Path | None = None,
+    paths: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
     env = _env(world)
-    env["KNTNT_HARNESS_PATHS"] = str(HARNESS_PATHS)
+    env["KNTNT_HARNESS_PATHS"] = str(paths or HARNESS_PATHS)
     env["KNTNT_TRANSPORT"] = f"uv run {FAKE_SKILLS}"
 
     # `installed` runs the copy the transport placed, resolving `$HERE` and the
@@ -3797,3 +3798,55 @@ def test_every_changing_verb_forwards_the_dry_run_flag() -> None:
             encoding="utf-8"
         )
         assert "--dry-run" in text, verb
+
+
+def test_a_damaged_stored_catalog_is_not_a_traceback(tmp_path: Path) -> None:
+    """A snapshot half-written by an interrupted Update must not take a verb down."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    (world["here"] / "catalog.json").write_text('{"skills": [', encoding="utf-8")
+
+    result = _run(world, "plan", "update")
+
+    assert "Traceback" not in result.stderr, result.stderr
+    assert result.returncode == 0, result.stderr
+
+
+def test_a_damaged_stored_catalog_reports_nothing_new(tmp_path: Path) -> None:
+    """No readable snapshot is no *before*, so the run has discovered nothing."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    (world["here"] / "catalog.json").write_text("not json at all", encoding="utf-8")
+
+    payload = _json(_run(world, "plan", "update"))
+
+    assert payload["new"] == []
+    assert payload["catalog_refreshed"] is True
+
+
+def test_a_damaged_path_table_names_the_file(tmp_path: Path) -> None:
+    """The path table has no fallback, so it fails with the manager's own message."""
+
+    world = _world(tmp_path)
+    table = tmp_path / "harness-paths.json"
+    table.write_text("{", encoding="utf-8")
+
+    result = _run(world, "plan", "select", paths=table)
+
+    assert "Traceback" not in result.stderr, result.stderr
+    assert "harness-paths.json" in result.stderr
+    assert result.returncode == 1
+
+
+def test_a_stored_catalog_is_written_in_one_move(tmp_path: Path) -> None:
+    """An interrupted write must not be able to truncate the snapshot."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    _run(world, "apply", "update", "--yes")
+
+    assert not list(world["here"].glob("*.tmp"))
+    assert json.loads((world["here"] / "catalog.json").read_text(encoding="utf-8"))

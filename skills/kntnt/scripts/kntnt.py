@@ -138,9 +138,19 @@ def harness_paths() -> dict[str, dict[str, str]]:
     if _HARNESS_PATHS is None:
         override = os.environ.get("KNTNT_HARNESS_PATHS")
         path = Path(override) if override else here() / "harness-paths.json"
-        _HARNESS_PATHS = cast(
-            dict[str, dict[str, str]], json.loads(path.read_text(encoding="utf-8"))
-        )
+
+        # The path table is required data with no fallback, so a damaged one is
+        # a truncated install: name the file, because that is what the user can
+        # act on.
+        try:
+            _HARNESS_PATHS = cast(
+                dict[str, dict[str, str]], json.loads(path.read_text(encoding="utf-8"))
+            )
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise ManagerError(
+                f"could not read the harness path table '{path}'; "
+                "run the transport again"
+            ) from exc
 
     return _HARNESS_PATHS
 
@@ -459,21 +469,48 @@ def fetch_catalog() -> dict[str, Any]:
 
 
 def write_catalog(catalog: dict[str, Any]) -> None:
-    """Store *catalog* beside the Manager that is running."""
+    """Store *catalog* beside the Manager that is running, in one move.
+
+    Written to a sibling and renamed over the target, because a write in place
+    is what leaves a half-written snapshot behind when a run is interrupted —
+    and the reader treats a damaged one as no snapshot at all, so an in-place
+    write can silently cost the user their fallback. A rename within one
+    directory is atomic: what survives is the old file or the new one.
+    """
 
     path = here() / "catalog.json"
-    path.write_text(
-        json.dumps(catalog, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    text = json.dumps(catalog, indent=2, ensure_ascii=False) + "\n"
+
+    # Sibling rather than a temporary directory: `replace` is only atomic
+    # within one filesystem, and the directory the file lands in is the one
+    # place guaranteed to be on it.
+    temporary = path.with_name(f"{path.name}.tmp")
+    temporary.write_text(text, encoding="utf-8")
+    temporary.replace(path)
 
 
 def stored_catalog() -> dict[str, Any] | None:
-    """Return the snapshot stored beside the Manager, or None if absent."""
+    """Return the snapshot stored beside the Manager, or None where there is none.
+
+    Damaged counts as absent. The file is a sidecar the transport replaces
+    whenever it re-copies the Manager and an interrupted Update can leave half
+    written, so unreadable bytes are a state the run has to survive: raising
+    here would take down every verb, including the Update that rewrites the
+    file. A run with no snapshot has no *before* and reports nothing new, which
+    is what `new_entry_names` already says of a Manager that has never stored
+    one, and where the origin cannot be reached either the fetch's own error
+    stands rather than a Catalog being invented.
+    """
 
     path = here() / "catalog.json"
-    if not path.is_file():
+
+    # The snapshot is not necessarily anything the Manager wrote, so it is read
+    # as an untrusted boundary: any bytes at all, no read permission, or no
+    # file there. None of it may reach the caller as an exception.
+    try:
+        return cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         return None
-    return cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
 
 
 def resolve_catalog() -> tuple[dict[str, Any], bool]:
