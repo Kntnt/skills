@@ -9,11 +9,11 @@ AI Agent Skills Collection by Kntnt Sweden AB
 
 This repository is a collection of [Agent Skills](https://agentskills.io) for coding harnesses: Claude Code, OpenCode, Codex, and others that load skills from a well-known directory. It ships the skills, the shared scripts they call, and a manager named `kntnt`. It does not ship harness `commands/` files. What you type is a skill name (`/commit`, `/push`); the same gesture works in every harness you have.
 
-`npx skills add Kntnt/skills` puts only `kntnt` on disk. The other skills stay off disk until you Enable them. You are never asked which harnesses to target: every skill you Enable is applied to every harness present on the machine, worked out on each run, so the set does not drift between Claude and OpenCode — and a harness you install next month is picked up by the next `/kntnt update` with nothing to configure. Where a skill goes is not a choice; which skills you Enable is.
+`npx skills add Kntnt/skills` puts only `kntnt` on disk. The other skills stay off disk until you check them in `/kntnt select`. You are never asked which harnesses to target: every skill you Enable is applied to every harness present on the machine, worked out on each run, so the set does not drift between Claude and OpenCode — and a harness you install next month is picked up by the next `/kntnt update` with nothing to configure. Where a skill goes is not a choice; which skills you Enable is.
 
 There are two layers. Global is the set on this machine. Project is extras for one working directory. A harness in that directory loads the union of both. A Project cannot hide a Global skill. Project extras live as skill files in that project's harness directories; a teammate who checks those files in receives the extras, not your Global set.
 
-A new catalog entry is never enabled for you. It shows up in `/kntnt status` as soon as the collection carries it, and `/kntnt update` reports it as well; either way, you Enable it when you want it.
+A new catalog entry is never enabled for you. It is on the list `/kntnt select` prints as soon as the collection carries it, and `/kntnt update` reports it as well; either way, it is yours the moment you check it.
 
 A few skills need something of the harness itself rather than of your machine — `delegation` is pointless where subagents cannot be spawned. Those requirements are dependencies like any other, not an install-time filter: the skill is enabled on every harness you have, and in one that cannot meet the requirement it says so and does nothing. No script can test this, since the manager cannot know which harness invoked it; the agent answers, because the agent is the harness.
 
@@ -36,17 +36,17 @@ The manager and the skills run their scripts with [uv](https://docs.astral.sh/uv
 npx skills add Kntnt/skills
 ```
 
-That command is the transport. It does not offer the rest of the collection in a picker; Enable is how those skills become Enabled.
+That command is the transport. It does not offer the rest of the collection in a picker; `/kntnt select` is how the rest of it reaches your disk.
 
 There is nothing to configure after it. In a harness that can see `kntnt`:
 
 ```
-/kntnt enable
+/kntnt select
 ```
 
-Omit the names and you get a picker grouped by category. Add or drop skills the same way later, with `/kntnt enable` and `/kntnt disable`. Pass `--project` to change only the current working directory.
+You get the catalog as a list grouped by category, one row per skill, each with a checkbox that is checked when you already have that skill. You answer it in one sentence of plain text — *check commit and push, uncheck delegation* — so changing several skills is one reply rather than a walk through a menu, and you are asked to confirm once before anything is written. It is the same command later: reading what you have and changing it are the same gesture, not two verbs with a transcription step between them. There is no picker and there will not be one — a skill's script has no terminal to draw in, and a widget belonging to one harness would make this collection behave differently depending on where you ran it. Pass `--project` to list and change the current working directory instead of the machine.
 
-Each of those commands works out where to write on its own: every harness with a home in that layer — `~/.claude`, `~/.config/opencode`, and so on for Global; `.claude`, `.crush` and their like for a Project. If it finds none, it writes to the shared `.agents/skills` directory alone, and never creates a directory for a harness you have not installed.
+That command works out where to write on its own: every harness with a home in that layer — `~/.claude`, `~/.config/opencode`, and so on for Global; `.claude`, `.crush` and their like for a Project. If it finds none, it writes to the shared `.agents/skills` directory alone, and never creates a directory for a harness you have not installed.
 
 ## Usage
 
@@ -54,22 +54,22 @@ Bare `/kntnt` is Help. The manager subcommands are:
 
 | Command | What it does |
 |---|---|
-| `/kntnt help [skill]` | Help for the manager, or one named skill |
-| `/kntnt status [--project] [skill...]` | Report what this machine has, or what applies here |
-| `/kntnt enable [--project] [skill...]` | Enable skills (picker if none named) |
-| `/kntnt disable [--project] [skill...]` | Disable skills (picker if none named) |
+| `/kntnt help [skill]` | Help for the manager, one of its verbs, or one named skill |
+| `/kntnt select [--project]` | List what the collection has and change it in the same answer |
 | `/kntnt update [--project]` | Refresh this collection and re-check dependencies |
 | `/kntnt uninstall` | Remove this collection from this machine, manager last |
 
-Status answers one of two questions. Bare, it reports Global: every skill in the catalog, Enabled or Disabled on this machine, Disabled ones included — that is how you find what there is to enable. With `--project` it reports what applies in the directory you are standing in — everything enabled globally plus everything enabled in this project — and says of each whether it comes from Global, the project, or both. Either form reads the catalog from the collection itself, so a skill published upstream this morning is listed — and enableable — this afternoon, with no `/kntnt update` in between. When the collection cannot be reached, the report falls back to the copy stored beside the manager and says that it did.
+Select shows one layer and changes that one: Global bare, this working directory with `--project`. Reading it is never a side-effecting act, so an answer that changes nothing writes nothing. A skill whose files reached only some of your harnesses is shown checked and marked incomplete, and confirming the list repairs it; one whose files differ from the ones the collection ships is marked deviating, never *out of date* — the comparison sees two states and no history, and outside a project copy that has fallen behind, the likelier cause is an edit of your own, so the offer to re-copy says in the same breath that it overwrites that edit. The list is read from the collection itself, so a skill published upstream this morning is on it — and checkable — this afternoon, with no `/kntnt update` in between. When the collection cannot be reached, the list comes from the copy stored beside the manager and says so.
 
-Every command here reads `--project` the same way: `--project` or `--project=on` means the Project, and nothing or `--project=off` means Global. Enable, Disable, and Update change that layer; Status only reports. Update refreshes this collection only. It reports each new catalog skill and leaves it Disabled. It deletes a skill that has been withdrawn from the collection upstream, and does not ask: such a skill can no longer be updated or supported, and no other command here could reach it. It does not refresh a skill that came from another collection, and never deletes one: it recognises its own by a marker each carries in its own frontmatter. If a dependency is missing, it tells you how to satisfy it and does not install anything.
+The list carries the structure between skills as well as the skills. One that needs another of this collection is shown locked while that other is unchecked, and the row names what to check instead, so you can see why you cannot have it yet. Check it anyway and what it needs comes with it: you are asked one yes/no question naming exactly what would be added, once for the whole chain — checking `release` where you have neither `push` nor `commit` is a single yes rather than one question per level — and nothing is written until you have answered it. Unchecking a skill that another checked skill depends on is reported, not blocked: you are told what it leaves unsatisfied, and your answer stands.
+
+Every command here reads `--project` the same way: `--project` or `--project=on` means the Project, and nothing or `--project=off` means Global. Select and Update change that layer, and Select is also what lists it; Uninstall takes no `--project` at all. Update refreshes this collection only. It reports each new catalog skill and leaves it Disabled. It deletes a skill that has been withdrawn from the collection upstream, and does not ask: such a skill can no longer be updated or supported, and no other command here could reach it. It does not refresh a skill that came from another collection, and never deletes one: it recognises its own by a marker each carries in its own frontmatter. If a dependency is missing, it tells you how to satisfy it and does not install anything.
 
 `--yes` works the same on every skill here: whatever could be answered yes or no is answered yes instead of asked.
 
-`--dry-run` lets you watch a change happen before you let it happen. Enable, Disable, Update, and Uninstall each accept it, and the run is the real one: the same code, the same transport, the same reading of the disk afterwards — only against a temporary home seeded with this collection's files as they are now, which is thrown away when the run ends. What you get back is the outcome rather than a description of it, and nothing on your machine has moved. It has an npm cache of its own, so it downloads the transport afresh and takes noticeably longer than the run it is previewing; the report says so before the wait. The confirmation each of those commands asks for anyway is the cheap way to see what is about to happen, and it is not this.
+`--dry-run` lets you watch a change happen before you let it happen. Select, Update, and Uninstall each accept it, and the run is the real one: the same code, the same transport, the same reading of the disk afterwards — only against a temporary home seeded with this collection's files as they are now, which is thrown away when the run ends. What you get back is the outcome rather than a description of it, and nothing on your machine has moved. It has an npm cache of its own, so it downloads the transport afresh and takes noticeably longer than the run it is previewing; the report says so before the wait. The confirmation each of those commands asks for anyway is the cheap way to see what is about to happen, and it is not this.
 
-`/kntnt uninstall` is the way out, and the mirror of the one command that installed this. It removes every enabled skill from every harness on the machine and then the manager itself, so there is nothing left for your harness's own uninstall to do. The manager goes last and only if everything else went: a run that leaves a skill behind keeps `kntnt`, because it is the only thing that can be asked to finish. It takes no `--project`: skills in a working directory are checked into that repository and travel with it, so they are left alone and the report says so. It deletes files, so it asks first — `--yes` answers.
+`/kntnt uninstall` is the way out, and the mirror of the one command that installed this. It removes every enabled catalog skill from every harness on the machine and then the manager itself, so there is nothing left for your harness's own uninstall to do. The manager goes last and only if everything else went: a run that leaves a skill behind keeps `kntnt`, because it is the only thing that can be asked to finish. It takes no `--project`: skills in a working directory are checked into that repository and travel with it, so they are left alone and the report says so. It deletes files, so it asks first — `--yes` answers.
 
 Enabled skills are invoked by their own names, not as `/kntnt <name>`. Each one answers `--help` — `-h` and `help` too — with the manpage it ships beside itself, so a skill in front of you can be asked what it does without knowing which collection it arrived from.
 
@@ -93,7 +93,7 @@ Follow `commit`, then push the current branch. Same `"message"` and `--yes` as `
 
 Ship a version from the default branch: reconcile `CHANGELOG.md`, bump, follow `push`, tag `HEAD`, and open a GitHub release. If the project has a conventional archive script, build it and attach the zip. Pass `minor`, `major`, or `X.Y.Z` to force the bump; otherwise the bump comes from `[Unreleased]`. `--no-build` skips the archive. `gh` is required only for the GitHub release step.
 
-`commit`, `push`, `release`, and `agents-md` need `git`; `release` also needs `gh` for the GitHub release step; `delegation` needs a harness that can spawn subagents. If a dependency is unsatisfied, the skill does no work and prints how to fix it.
+`commit`, `push`, `release`, and `agents-md` need `git`; `release` also needs `gh` for the GitHub release step; `delegation` needs a harness that can spawn subagents. `push` needs `commit` and `release` needs `push`, and a dependency on another skill of this collection is the one kind `/kntnt select` can supply — it names it on the row and offers to add it. A binary, another collection's skill, and a harness capability are yours to satisfy: the skill that wants one does no work without it and prints how to fix it.
 
 ## License
 
