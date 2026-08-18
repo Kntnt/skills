@@ -1028,6 +1028,42 @@ def remove_skills(
     )
 
 
+def placement_outcome(
+    names: list[str], harnesses: list[str], *, global_layer: bool
+) -> dict[str, Any]:
+    """Place *names* and report the outcome, whatever the transport did.
+
+    The mirror of `removal_outcome`, for the half of a run that puts files
+    there. Update deletes what the collection has Withdrawn before it places
+    anything, so a transport failure that escaped would cost the user the
+    report of a deletion that has already happened — a change the disk shows
+    and nothing says (ADR-0036).
+
+    A refusal is every name failing, and not the presence test the other
+    mirror re-reads the disk for. The transport declines the whole call before
+    anything moves, so nothing in the batch landed; and presence cannot answer
+    a refresh in any case, the files it would have replaced being already
+    there. Absence, which is what a removal is verified by, has no such
+    problem. The directories named are the ones the layer covers, because
+    where to look is the whole use the user has for them.
+    """
+
+    try:
+        return add_skills(names, harnesses, global_layer=global_layer)
+    except ManagerError:
+        return {
+            "intended": list(names),
+            "confirmed": [],
+            "failed": [
+                {
+                    "name": name,
+                    "directories": target_dirs(harnesses, global_layer=global_layer),
+                }
+                for name in names
+            ],
+        }
+
+
 def removal_outcome(
     names: list[str], harnesses: list[str], *, global_layer: bool
 ) -> dict[str, Any]:
@@ -1723,13 +1759,10 @@ def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
     stored = stored_catalog()
     new_names = new_entry_names(stored)
 
-    # Update is the collection's one writer of the snapshot. Every verb reasons
-    # from the origin; storing what it returned is what leaves a usable
-    # fallback for the next run that cannot reach it, and what the comparison
-    # above is made against next time.
+    # Every verb reasons from the origin, and whether it answered is what the
+    # rest of the run is gated on: what may be deleted as Withdrawn, and
+    # whether the snapshot below is worth writing at all.
     refreshed = catalog_from_origin()
-    if refreshed:
-        write_catalog(load_catalog())
 
     # The answer to the offer, and the whole of what a run places beyond a
     # refresh. Every name it adds is in the report, which is what makes an
@@ -1763,7 +1796,23 @@ def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
     # re-copies the whole directory and is idempotent, so it is the refresh —
     # and it is why the Digest may gate it: what is skipped here is skipped for
     # being the collection's own files already, not for one file agreeing.
-    outcome = add_skills(place, harnesses, global_layer=global_layer)
+    # A refusal here is read rather than raised: the withdrawals above have
+    # already been deleted, and the run has to report them.
+    outcome = placement_outcome(place, harnesses, global_layer=global_layer)
+
+    # Update is the collection's one writer of the snapshot, and what holds it
+    # back is exactly what the offer is about. The difference against this file
+    # is the whole of what makes an entry new, so a run that set out to Enable
+    # one and did not place it must leave the file as it was: reported once and
+    # gone before the user could act on it is the failure this guards
+    # (ADR-0007). Nothing else holds it back. A refresh that did not land is
+    # found again by its Digest on the next run, and a withdrawal that did not
+    # land is found again by asking the disk — neither reads this file, so
+    # freezing it for their sake would only leave the fallback describing an
+    # older collection than the one the origin just answered with.
+    unplaced = {item["name"] for item in outcome["failed"]} & set(adopted)
+    if refreshed and not unplaced:
+        write_catalog(load_catalog())
 
     unsatisfied: list[dict[str, str]] = []
     capabilities: list[dict[str, str]] = []

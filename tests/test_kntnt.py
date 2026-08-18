@@ -2515,6 +2515,74 @@ def test_update_refreshes_the_rest_when_a_withdrawal_fails(tmp_path: Path) -> No
     assert installed.read_text(encoding="utf-8") == "revised\n"
 
 
+def test_update_reports_the_withdrawal_it_made_when_a_refresh_is_refused(
+    tmp_path: Path,
+) -> None:
+    """A transport that refuses a placement does not get to hide a deletion."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "apply", "update", refuse=["alpha"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["removed"] == [{"name": "gamma", "disk": "removed"}]
+    assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
+    assert {item["name"] for item in payload["failed"]} == {"kntnt", "alpha"}
+    assert payload["confirmed"] == []
+
+
+def test_an_entry_that_did_not_land_is_still_on_offer(tmp_path: Path) -> None:
+    """The offer is the difference against the snapshot, so a failure must not spend it."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _store_snapshot(world)
+    _publish_delta(world)
+    assert _json(_run(world, "plan", "update"))["new"] == ["delta"]
+
+    failed = _run(world, "apply", "update", "--yes", refuse=["delta"])
+
+    assert failed.returncode != 0
+    assert _json(_run(world, "plan", "update"))["new"] == ["delta"]
+
+
+def test_the_stored_catalog_is_untouched_when_an_entry_did_not_land(
+    tmp_path: Path,
+) -> None:
+    """The mechanism behind the offer standing, asserted on the file itself."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _store_snapshot(world)
+    _publish_delta(world)
+
+    _run(world, "apply", "update", "--yes", refuse=["delta"])
+
+    stored = json.loads((world["here"] / "catalog.json").read_text(encoding="utf-8"))
+    assert "delta" not in [entry["name"] for entry in stored["skills"]]
+
+
+def test_an_offer_the_user_declined_is_not_made_twice(tmp_path: Path) -> None:
+    """Asked and answered: the entry is `select`'s from then on (ADR-0007)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _store_snapshot(world)
+    _publish_delta(world)
+
+    assert _json(_run(world, "apply", "update"))["new"] == ["delta"]
+
+    assert _json(_run(world, "plan", "update"))["new"] == []
+    assert not (world["home"] / ".claude" / "skills" / "delta").exists()
+
+
 def test_no_arguments_prints_help(tmp_path: Path) -> None:
     world = _world(tmp_path)
 
