@@ -45,4 +45,4 @@ A block whose text no longer matches the skill's is reported as stale, and `/del
 
 ## See also
 
-`/kntnt help enable` to Enable this skill elsewhere.
+`/kntnt select` to Enable this skill elsewhere.

@@ -1,28 +1,26 @@
 # kntnt help
 
-Print the manager's manpage, one subcommand's manpage, or one collection skill's help.
+Print the manager's manpage, or the manpage of one of its subcommands.
 
 ## Synopsis
 
-`/kntnt help [name]`
+`/kntnt help [command]`
 
 `/kntnt`
 
 ## Description
 
-With no name, prints the manager's own manpage — the same text bare `/kntnt` prints. With the name of a subcommand, prints that subcommand's manpage. With the name of a collection skill, prints that skill's help.
+With no name, prints the manager's own manpage — the same text bare `/kntnt` prints. With the name of a subcommand, prints that subcommand's manpage.
 
 Help changes nothing, in either layer.
 
 ## Arguments
 
-- `name` — a subcommand of the manager, or a skill of this collection. A name that is neither is an error rather than an empty page.
+- `command` — a subcommand of the manager. A name that is not one is an error rather than an empty page.
 
 ## Notes
 
-Asking the manager about a skill means remembering which collection that skill arrived from, which is why this route is the one on its way out. A skill that is installed answers `--help` itself, and that is the shorter way to the same text: the manpage the manager prints for a skill is the file that skill ships.
-
-A skill that is Disabled has no files on disk, so its help here is the Catalog description alone; Enabling it from `/kntnt select` gives the rest.
+The manager documents its own verbs and no skill. Asking it about a skill meant remembering which collection that skill had arrived from, which is exactly the fact a user should not have to hold, so there are two better routes instead. A skill you have answers `/<skill> --help` with the manpage it ships beside itself, whichever collection it came from. A skill you do not have yet is read about from `/kntnt select`, which fetches that manpage from the collection — the list is where you decide whether to enable it, and deciding never requires installing it first.
 
 ## See also
 

@@ -2,7 +2,7 @@
 name: kntnt
 description: Manage this collection — which skills are Enabled, in Global and in each Project.
 disable-model-invocation: true
-argument-hint: "[select|update|uninstall|help] [name] [--on <skill>] [--off <skill>] [--project] [--yes] [--dry-run]"
+argument-hint: "[select|update|uninstall|help] [command] [--on <skill>] [--off <skill>] [--project] [--yes] [--dry-run]"
 ---
 
 # kntnt
@@ -15,12 +15,12 @@ The Manager. One namespaced entry point. Every other collection skill is invoked
 
 ## Help
 
-If the arguments are `help`, `--help`, `-h`, or `help <name>`, follow `$HERE/steps/help.md` and stop. `$HERE/help.md` is this skill's own manpage, and `$HERE/help/<verb>.md` is the manpage of one verb; both are printed by that file rather than read by you.
+If the arguments are `help`, `--help`, `-h`, or `help <command>`, follow `$HERE/steps/help.md` and stop. `$HERE/help.md` is this skill's own manpage, and `$HERE/help/<verb>.md` is the manpage of one verb; both are printed by that file rather than read by you. The Manager documents its own verbs and no skill: a skill the user has answers `/<skill> --help` itself, and one they do not have is read about from the `select` list.
 
 ## Arguments
 
-- no args / `help` `[name]` — Help for the manager, one of its verbs, or one named collection skill. Bare `/kntnt` means Help.
-- `select` `[--on <skill>]` `[--off <skill>]` `[--project]` `[--yes]` `[--dry-run]` — Select: print the Catalog as a list and take the answer. `--on` and `--off` name skills instead, as often as there are names, and open no list; `--yes` with neither opens none either and only puts what is already Enabled into good order.
+- no args / `help` `[command]` — Help for the manager or one of its verbs. Bare `/kntnt` means Help.
+- `select` `[--on <skill>]` `[--off <skill>]` `[--project]` `[--yes]` `[--dry-run]` — Select: print the Catalog as a list, answer for a row the user asks to read in full, and take the answer. `--on` and `--off` name skills instead, as often as there are names, and open no list; `--yes` with neither opens none either and only puts what is already Enabled into good order.
 - `update` `[--project]` `[--yes]` `[--dry-run]` — refresh this collection, then re-check Dependencies.
 - `uninstall` `[--yes]` `[--dry-run]` — remove this collection from this machine, the Manager last.
 

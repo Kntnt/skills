@@ -414,27 +414,48 @@ def directory_digest(directory: Path) -> str:
 _CATALOG: tuple[dict[str, Any], bool] | None = None
 
 
-def fetch_catalog() -> dict[str, Any]:
-    """Load the Catalog from the collection origin. Never invent it."""
+def origin_text(relative: str, what: str) -> str:
+    """Read one file of the collection from the origin, wherever the origin is.
+
+    A local path is a collection checked out; anything else is `owner/repo` at
+    GitHub. How the origin is addressed lives here alone, so the Catalog and a
+    skill's manpage are fetched by one scheme and fail with one pair of
+    messages: *missing at* a path that is there, *could not be fetched* from a
+    host that is not. *what* names the thing for those messages.
+    """
 
     source = collection_source()
     local = Path(source)
-    if local.is_dir():
-        candidate = local / "skills" / MANAGER / "catalog.json"
-        if candidate.is_file():
-            return cast(
-                dict[str, Any], json.loads(candidate.read_text(encoding="utf-8"))
-            )
-        raise ManagerError(f"Catalog missing at {candidate}")
 
-    url = (
-        f"https://raw.githubusercontent.com/{source}/main/skills/{MANAGER}/catalog.json"
-    )
+    # A checked-out collection: a file that is not there is that origin's way
+    # of being unreachable, and the path is what the user can act on.
+    if local.is_dir():
+        candidate = local / relative
+        if candidate.is_file():
+            return candidate.read_text(encoding="utf-8")
+        raise ManagerError(f"{what} missing at {candidate}")
+
+    url = f"https://raw.githubusercontent.com/{source}/main/{relative}"
     try:
         with urllib.request.urlopen(url, timeout=15) as response:
-            return cast(dict[str, Any], json.loads(response.read().decode("utf-8")))
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-        raise ManagerError(f"Catalog could not be fetched from {url}") from exc
+            return cast(bytes, response.read()).decode("utf-8")
+    except (urllib.error.URLError, TimeoutError) as exc:
+        raise ManagerError(f"{what} could not be fetched from {url}") from exc
+
+
+def fetch_catalog() -> dict[str, Any]:
+    """Load the Catalog from the collection origin. Never invent it.
+
+    Corrupt is its own answer rather than *could not be fetched*: the origin
+    replied, and a reader told the file was unreachable would go looking in
+    the wrong place for it.
+    """
+
+    raw = origin_text(f"skills/{MANAGER}/catalog.json", "Catalog")
+    try:
+        return cast(dict[str, Any], json.loads(raw))
+    except json.JSONDecodeError as exc:
+        raise ManagerError("Catalog at the origin is corrupt") from exc
 
 
 def write_catalog(catalog: dict[str, Any]) -> None:
@@ -1841,41 +1862,61 @@ def cmd_check(skill_dir: Path) -> int:
     return 0
 
 
-def find_skill_md(name: str) -> Path | None:
-    """Locate a SKILL.md for *name* on disk or in a local collection source."""
+def enabled_manpage(name: str) -> Path | None:
+    """Locate the manpage of *name* where a layer holds it, Global or Project.
+
+    Both layers answer, and Global before Project only because something has to
+    come first: the question is what a Skill does, and any copy of it says so.
+    A directory of that name is read as that skill's without asking the marker,
+    which is the manager's one notion of presence — the same one the checkbox
+    on the row is computed from, so the help and the checkbox cannot disagree.
+    """
 
     for global_layer in (True, False):
         for harness in target_harnesses(global_layer=global_layer):
             for directory in skill_dirs(harness, global_layer=global_layer):
-                candidate = directory / name / "SKILL.md"
+                candidate = directory / name / "help.md"
                 if candidate.is_file():
                     return candidate
-
-    source = Path(collection_source())
-    if source.is_dir():
-        if name == MANAGER:
-            candidate = source / "skills" / MANAGER / "SKILL.md"
-            if candidate.is_file():
-                return candidate
-        matches = list((source / "skills").glob(f"*/{name}/SKILL.md"))
-        if matches:
-            return matches[0]
     return None
 
 
-def help_section(text: str) -> str:
-    """Return the Help section of a SKILL.md, or the whole body after frontmatter."""
+def fetch_manpage(category: str, name: str) -> str:
+    """Read *name*'s manpage from the collection origin. Never invent it.
 
-    marker = "## Help"
-    start = text.find(marker)
-    if start < 0:
-        end = text.find("\n---", 3)
-        return text[end + 4 :].strip() if end >= 0 else text.strip()
-    rest = text[start:]
-    next_heading = rest.find("\n## ", 1)
-    if next_heading >= 0:
-        rest = rest[:next_heading]
-    return rest.strip()
+    The path is derivable rather than published: `category` is a Catalog field
+    and the origin serves a skill's files where the repository ships them, so
+    reading about a Skill nobody has Enabled costs the collection nothing.
+    """
+
+    return origin_text(
+        f"skills/{category}/{name}/help.md", f"help for '{name}'"
+    ).rstrip("\n")
+
+
+def skill_manpage(name: str) -> str:
+    """Return one collection skill's manpage, from disk or from the origin.
+
+    This is what Select reads a row about, so it answers for a Skill the user
+    has Enabled and one they are only considering alike (ADR-0044) — and it
+    answers with the file the collection ships either way, or says it could not.
+    """
+
+    # The Catalog settles the name before any of it reaches a path, so a string
+    # typed at the list can never address a file of its own choosing.
+    entry = catalog_entries().get(name)
+    if entry is None:
+        raise ManagerError(f"unknown skill '{name}'")
+
+    path = enabled_manpage(name)
+    if path is not None:
+        return read_manpage(path)
+
+    category = str(entry.get("category") or "")
+    if not category:
+        raise ManagerError(f"the Catalog gives '{name}' no Category to fetch help from")
+
+    return fetch_manpage(category, name)
 
 
 def read_manpage(path: Path) -> str:
@@ -1903,43 +1944,40 @@ def subcommand_manpage(name: str) -> Path | None:
 
 
 def help_text(name: str | None) -> str:
-    """Return the help for *name*: the manager's, a subcommand's, or a skill's."""
+    """Return the manager's own manpage, or the manpage of one of its verbs.
+
+    A skill's help is not reached here (ADR-0044): one the user has answers
+    `--help` itself, and one they do not is read about in Select. So an
+    unknown name is refused with both routes named rather than looked for in
+    the Catalog, which keeps Help answerable with no origin to reach.
+    """
 
     # Bare help, and the manager's own name, both mean the manager's manpage.
     if not name or name == MANAGER:
         return read_manpage(here() / "help.md")
 
-    # The manager documents its own verbs; every skill documents itself. A verb
-    # answers first, so a skill can never take a subcommand's name out of use.
     verb = subcommand_manpage(name)
-    if verb is not None:
-        return read_manpage(verb)
-
-    if name not in catalog_names():
-        raise ManagerError(f"unknown subcommand or skill '{name}'")
-
-    # A Disabled skill has no files here, so its description is all there is.
-    path = find_skill_md(name)
-    if path is None:
-        entry = next(
-            (item for item in catalog_skills() if item.get("name") == name), None
+    if verb is None:
+        raise ManagerError(
+            f"unknown subcommand '{name}'; the manager documents its own verbs — "
+            f"a skill of this collection answers '/{name} --help' itself, and "
+            "'/kntnt select' reads the help of one you do not have"
         )
-        description = entry.get("description", "") if entry else ""
-        return f"{name}\n\n{description}\n\nEnable this skill to read its full help."
 
-    # Every collection skill ships its manpage beside its SKILL.md; one that
-    # does not is older than that contract, and its Help section stands in.
-    manpage = path.parent / "help.md"
-    if manpage.is_file():
-        return read_manpage(manpage)
-
-    return help_section(path.read_text(encoding="utf-8"))
+    return read_manpage(verb)
 
 
 def cmd_help(name: str | None) -> int:
-    """Print help for the manager, one of its subcommands, or one skill."""
+    """Print help for the manager or one of its subcommands."""
 
     print(help_text(name))
+    return 0
+
+
+def cmd_manpage(name: str) -> int:
+    """Print one collection skill's manpage, whether or not it is Enabled."""
+
+    print(skill_manpage(name))
     return 0
 
 
@@ -2083,9 +2121,16 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     sub = parser.add_subparsers(dest="command", required=True)
 
     help_cmd = sub.add_parser("help", help="Print help.")
-    help_cmd.add_argument("skill", nargs="?")
+    help_cmd.add_argument("subcommand", nargs="?")
     add_yes_flag(help_cmd)
     add_dry_run_flag(help_cmd)
+
+    # Not a verb the user types: Select is what runs it, for a row the user
+    # asked to read in full before answering the list (ADR-0044).
+    manpage = sub.add_parser("manpage", help="Print one skill's manpage.")
+    manpage.add_argument("skill")
+    add_yes_flag(manpage)
+    add_dry_run_flag(manpage)
 
     check = sub.add_parser("check", help="Refuse when a Dependency is Unsatisfied.")
     check.add_argument("--here", required=True, type=Path)
@@ -2169,7 +2214,9 @@ def run_command(args: argparse.Namespace) -> int:
     """Run the parsed command against whatever home is in force."""
 
     if args.command == "help":
-        return cmd_help(args.skill)
+        return cmd_help(args.subcommand)
+    if args.command == "manpage":
+        return cmd_manpage(args.skill)
     if args.command == "check":
         return cmd_check(args.here)
     # Catalog's `--write` is the one write this script makes outside a layer,

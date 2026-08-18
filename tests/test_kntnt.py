@@ -47,7 +47,7 @@ def _skill_md(
     skills: list[str] | None = None,
     externals: list[str] | None = None,
     capabilities: list[str] | None = None,
-    help_body: str = "",
+    body: str = "",
 ) -> str:
     lines = [
         "---",
@@ -68,8 +68,8 @@ def _skill_md(
             lines.append(f"    {key}:")
             lines.extend(f"      - {value}" for value in values)
     lines.extend(["---", "", f"# {name}", ""])
-    if help_body:
-        lines.extend(["## Help", "", help_body, ""])
+    if body:
+        lines.extend([body, ""])
     lines.extend(["## Arguments", "", "- none", ""])
     return "\n".join(lines)
 
@@ -93,6 +93,12 @@ def _foreign_skill_md(name: str) -> str:
             "",
         ]
     )
+
+
+def _manpage(name: str) -> str:
+    """The manpage the origin ships for *name*, as ADR-0044 has every skill do."""
+
+    return f"# {name}\n\nThe {name} manpage, from the collection.\n"
 
 
 def _catalog(entries: list[dict[str, Any]]) -> str:
@@ -171,6 +177,9 @@ def _world(
     (source / "skills" / "kntnt" / "scripts").mkdir(parents=True)
     shutil.copy(KNTNT_PY, source / "skills" / "kntnt" / "scripts" / "kntnt.py")
 
+    # Every collection skill ships its manpage beside its SKILL.md (ADR-0044),
+    # so the origin carries one too: it is what Select reads a skill's help
+    # from when nobody has that skill installed.
     for entry in entries:
         _write(
             source / "skills" / entry["category"] / entry["name"] / "SKILL.md",
@@ -181,8 +190,11 @@ def _world(
                 skills=entry["skills"],
                 externals=entry["externals"],
                 capabilities=entry.get("capabilities", []),
-                help_body=f"Help for {entry['name']}.",
             ),
+        )
+        _write(
+            source / "skills" / entry["category"] / entry["name"] / "help.md",
+            _manpage(entry["name"]),
         )
 
     dest_scripts = here / "scripts"
@@ -246,6 +258,10 @@ def _publish(
     _write(
         world["source"] / "skills" / entry["category"] / entry["name"] / "SKILL.md",
         _skill_md(entry["name"], description=entry["description"]),
+    )
+    _write(
+        world["source"] / "skills" / entry["category"] / entry["name"] / "help.md",
+        _manpage(entry["name"]),
     )
 
 
@@ -1519,21 +1535,19 @@ def test_select_sees_opencode_skill_in_transport_canonical_dir(
     assert _row(payload, "alpha")["checked"] is True
 
 
-def test_help_reads_opencode_skill_from_transport_canonical_dir(
+def test_manpage_reads_opencode_skill_from_transport_canonical_dir(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".config/opencode")
     dest = world["home"] / ".agents" / "skills" / "alpha"
-    _write(
-        dest / "SKILL.md",
-        _skill_md("alpha", help_body="Canonical help."),
-    )
+    _write(dest / "SKILL.md", _skill_md("alpha"))
+    _write(dest / "help.md", "# alpha\n\nThe canonical copy's manpage.\n")
 
-    result = _run(world, "help", "alpha")
+    result = _run(world, "manpage", "alpha")
 
     assert result.returncode == 0, result.stderr
-    assert "Canonical help." in result.stdout
+    assert "The canonical copy's manpage." in result.stdout
 
 
 def test_plan_select_prints_the_list_and_writes_nothing(tmp_path: Path) -> None:
@@ -2000,28 +2014,94 @@ def test_help_named_subcommand_prints_that_subcommands_manpage(
     assert result.stdout.strip() == shipped.strip()
 
 
-def test_help_named_skill_prefers_the_manpage_beside_it(tmp_path: Path) -> None:
-    """A skill that ships `help.md` is read from that file, not from its Steps."""
+def test_help_no_longer_answers_for_a_skill(tmp_path: Path) -> None:
+    """`/kntnt help <skill>` is withdrawn: it asked the user the wrong question.
+
+    Knowing which collection a skill arrived from is the fact the route made
+    the user hold, and both replacements are named where the refusal is read.
+    """
+
+    world = _world(tmp_path)
+
+    result = _run(world, "help", "alpha")
+
+    assert result.returncode != 0
+    assert "--help" in result.stderr
+    assert "select" in result.stderr
+
+
+def test_manpage_of_an_enabled_skill_is_read_from_disk(tmp_path: Path) -> None:
+    """A skill the user has answers out of its own files, origin or no origin."""
 
     world = _world(tmp_path)
     dest = world["home"] / ".agents" / "skills" / "alpha"
-    _write(dest / "SKILL.md", _skill_md("alpha", help_body="Generated help."))
-    _write(dest / "help.md", "# alpha\n\nThe alpha manpage.\n")
+    _write(dest / "SKILL.md", _skill_md("alpha"))
+    _write(dest / "help.md", "# alpha\n\nThe Enabled copy's manpage.\n")
 
-    result = _run(world, "help", "alpha")
+    result = _run(world, "manpage", "alpha")
 
     assert result.returncode == 0, result.stderr
-    assert "The alpha manpage." in result.stdout
-    assert "Generated help." not in result.stdout
+    assert "The Enabled copy's manpage." in result.stdout
+    assert "from the collection" not in result.stdout
 
 
-def test_help_named_skill_prints_that_skills_help(tmp_path: Path) -> None:
+def test_manpage_of_a_skill_not_enabled_comes_from_the_origin(
+    tmp_path: Path,
+) -> None:
+    """Deciding whether to Enable something never means installing it first."""
+
     world = _world(tmp_path)
 
-    result = _run(world, "help", "alpha")
+    result = _run(world, "manpage", "alpha")
 
     assert result.returncode == 0, result.stderr
-    assert "Help for alpha." in result.stdout
+    assert "The alpha manpage, from the collection." in result.stdout
+
+
+def test_manpage_writes_nothing_in_either_layer(tmp_path: Path) -> None:
+    """Reading is never a side-effecting act, on this route as on the list."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    before = (_tree(world["home"]), _tree(world["project"]), _tree(world["here"]))
+
+    result = _run(world, "manpage", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert (_tree(world["home"]), _tree(world["project"]), _tree(world["here"])) == (
+        before
+    )
+
+
+def test_manpage_says_the_collection_could_not_be_reached(tmp_path: Path) -> None:
+    """No copy on disk and no origin is a thing to say, not a page to invent.
+
+    A checked-out collection is unreachable by the file not being there, which
+    is how `_unreachable_origin` stages the same failure for the Catalog. The
+    remote half of that branch is one network call and stays untested here.
+    """
+
+    world = _world(tmp_path)
+    (world["source"] / "skills" / "code" / "alpha" / "help.md").unlink()
+
+    result = _run(world, "manpage", "alpha")
+
+    assert result.returncode != 0
+    assert not result.stdout.strip()
+    assert "alpha" in result.stderr
+    assert "help.md" in result.stderr
+
+
+def test_manpage_refuses_a_name_the_catalog_does_not_carry(tmp_path: Path) -> None:
+    """The Catalog settles the name, so nothing typed at the list reaches a path."""
+
+    world = _world(tmp_path)
+
+    result = _run(world, "manpage", "../../etc/passwd")
+
+    assert result.returncode != 0
+    assert not result.stdout.strip()
 
 
 def test_select_lists_without_a_stored_snapshot(tmp_path: Path) -> None:
@@ -2592,7 +2672,7 @@ def test_a_refreshed_skill_is_the_files_the_collection_ships(tmp_path: Path) -> 
             "alpha",
             description="The alpha skill.",
             binaries=["git"],
-            help_body="Revised help for alpha.",
+            body="Revised upstream.",
         ),
     )
     _write(
@@ -2811,6 +2891,7 @@ def test_every_verb_accepts_yes(tmp_path: Path) -> None:
 
     for args in (
         ("help", "--yes"),
+        ("manpage", "alpha", "--yes"),
         ("plan", "select", "--yes"),
         ("plan", "update", "--yes"),
         ("plan", "uninstall", "--yes"),
@@ -2858,6 +2939,42 @@ def test_the_manager_separates_steps_from_manpages() -> None:
 
     text = (manager / "SKILL.md").read_text(encoding="utf-8")
     assert "$HERE/steps/" in text
+
+
+def test_select_is_where_a_skill_is_read_about_before_it_is_enabled() -> None:
+    """The route `/kntnt help <skill>` was withdrawn in favour of (ADR-0044).
+
+    Prose is what carries it, so prose is where it has to be pinned: a list
+    that never offers the help is a list nobody can ask for it from.
+    """
+
+    manager = REPO_ROOT / "skills" / "kntnt"
+    steps = (manager / "steps" / "select.md").read_text(encoding="utf-8")
+    page = (manager / "help" / "select.md").read_text(encoding="utf-8")
+
+    assert 'scripts/kntnt.py" manpage' in steps
+    assert "read in full" in page
+
+
+def test_the_manager_documents_its_own_verbs_and_no_skill() -> None:
+    """A withdrawn route left standing in the prose is one users keep trying."""
+
+    withdrawn = (
+        "help <skill>",
+        "one collection skill",
+        "named collection skill",
+        "collection skill's help",
+    )
+    manager = REPO_ROOT / "skills" / "kntnt"
+    for path in (
+        manager / "SKILL.md",
+        manager / "help.md",
+        manager / "help" / "help.md",
+        manager / "steps" / "help.md",
+    ):
+        text = path.read_text(encoding="utf-8")
+        for phrase in withdrawn:
+            assert phrase not in text, f"{path}: {phrase}"
 
 
 def test_agents_md_is_model_invoked() -> None:
@@ -3648,6 +3765,7 @@ def test_every_subparser_accepts_dry_run(tmp_path: Path) -> None:
 
     for args in (
         ("help", "--dry-run"),
+        ("manpage", "alpha", "--dry-run"),
         ("check", "--here", str(gamma), "--dry-run"),
         ("catalog", "--dry-run"),
         ("plan", "select", "--dry-run"),

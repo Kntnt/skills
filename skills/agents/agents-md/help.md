@@ -39,4 +39,4 @@ Prose under `docs/` is never written for you. What the skill may propose there i
 
 ## See also
 
-`/kntnt help enable` to Enable this skill elsewhere.
+`/kntnt select` to Enable this skill elsewhere.

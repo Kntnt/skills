@@ -54,12 +54,14 @@ Bare `/kntnt` is Help. The manager subcommands are:
 
 | Command | What it does |
 |---|---|
-| `/kntnt help [skill]` | Help for the manager, one of its verbs, or one named skill |
+| `/kntnt help [command]` | Help for the manager or one of its verbs |
 | `/kntnt select [--project]` | List what the collection has and change it in the same answer |
 | `/kntnt update [--project]` | Refresh this collection and re-check dependencies |
 | `/kntnt uninstall` | Remove this collection from this machine, manager last |
 
 Select shows one layer and changes that one: Global bare, this working directory with `--project`. Reading it is never a side-effecting act, so an answer that changes nothing writes nothing. A skill whose files reached only some of your harnesses is shown checked and marked incomplete, and confirming the list repairs it; one whose files differ from the ones the collection ships is marked deviating, never *out of date* — the comparison sees two states and no history, and outside a project copy that has fallen behind, the likelier cause is an edit of your own, so the offer to re-copy says in the same breath that it overwrites that edit. The list is read from the collection itself, so a skill published upstream this morning is on it — and checkable — this afternoon, with no `/kntnt update` in between. When the collection cannot be reached, the list comes from the copy stored beside the manager and says so.
+
+Any row can be read in full before you answer it. Ask for a skill's help and you get the manpage that skill ships — read from your own copy where you have one, and fetched from the collection where you do not — so deciding whether to enable something never means installing it first. Where you have no copy and the collection cannot be reached, you are told that rather than shown an invented page. Asking is not answering: nothing is written, and the list is still open.
 
 The list carries the structure between skills as well as the skills. One that needs another of this collection is shown locked while that other is unchecked, and the row names what to check instead, so you can see why you cannot have it yet. Check it anyway and what it needs comes with it: you are asked one yes/no question naming exactly what would be added, once for the whole chain — checking `release` where you have neither `push` nor `commit` is a single yes rather than one question per level — and nothing is written until you have answered it. Unchecking a skill that another checked skill depends on is reported, not blocked: you are told what it leaves unsatisfied, and your answer stands.
 
@@ -71,7 +73,7 @@ Every command here reads `--project` the same way: `--project` or `--project=on`
 
 `/kntnt uninstall` is the way out, and the mirror of the one command that installed this. It removes every enabled catalog skill from every harness on the machine and then the manager itself, so there is nothing left for your harness's own uninstall to do. The manager goes last and only if everything else went: a run that leaves a skill behind keeps `kntnt`, because it is the only thing that can be asked to finish. It takes no `--project`: skills in a working directory are checked into that repository and travel with it, so they are left alone and the report says so. It deletes files, so it asks first — `--yes` answers.
 
-Enabled skills are invoked by their own names, not as `/kntnt <name>`. Each one answers `--help` — `-h` and `help` too — with the manpage it ships beside itself, so a skill in front of you can be asked what it does without knowing which collection it arrived from.
+Enabled skills are invoked by their own names, not as `/kntnt <name>`. Each one answers `--help` — `-h` and `help` too — with the manpage it ships beside itself, so a skill in front of you can be asked what it does without knowing which collection it arrived from. That, and the `select` list, are the two ways to a skill's help: the manager documents its own verbs and no skill.
 
 ### agents-md
 

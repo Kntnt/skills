@@ -16,6 +16,8 @@ The structure between skills is on the list rather than behind it. A skill that 
 
 Unchecking a skill that another checked skill depends on is reported, not blocked. You are told what it leaves unsatisfied, and the answer stands: it is your machine.
 
+Any row can be read in full before you answer it. Ask for a skill's help and you get the manpage that skill ships: read from your own copy where you have one, and fetched from the collection where you do not, so deciding whether to enable something never means installing it first. Where you have no copy and the collection cannot be reached, you are told that rather than shown an invented page. Asking is not answering — the list is still open, and nothing has been written.
+
 Reading is never a side-effecting act. An answer that changes nothing writes nothing — no refresh, no repair, no touching of files to make the disk agree with a list you only wanted to look at.
 
 A machine can also be set up with nobody at the list. `--on` and `--off` name skills directly and open no list; `--yes` on its own opens none either and enables nothing you did not already have. All three are described under *Options*.
