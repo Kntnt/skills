@@ -529,6 +529,21 @@ def catalog_names() -> set[str]:
     return names_of(load_catalog())
 
 
+def new_entry_names(stored: dict[str, Any] | None) -> list[str]:
+    """Return the Catalog entries the collection has added since *stored*.
+
+    A Manager with no snapshot has no *before*, and a run with no *before* has
+    discovered nothing: calling the whole collection new would bury the one
+    entry that matters under every entry that does not. A Catalog read off the
+    snapshot is that snapshot, so it answers with nothing new — which is the
+    honest answer rather than a claim that the collection published nothing.
+    """
+
+    current = catalog_names()
+    old = names_of(stored) if stored is not None else current
+    return sorted(name for name in current if name not in old)
+
+
 def is_project_detectable(template: str) -> bool:
     """True when a Project template names a hidden directory of the Harness's own.
 
@@ -1065,6 +1080,12 @@ def parse_layer(value: str) -> bool:
     raise ManagerError(f"unknown --project value '{value}'")
 
 
+def joined(base: list[str], extra: list[str]) -> list[str]:
+    """Return *base* followed by each name of *extra* it does not already carry."""
+
+    return [*base, *(name for name in extra if name not in base)]
+
+
 def validate_names(names: list[str]) -> list[str]:
     """Reject the Manager and unknown Catalog names."""
 
@@ -1595,11 +1616,15 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
 
 
 def cmd_plan_update(*, global_layer: bool) -> int:
-    """Print which Enabled skills Update will refresh, and which it will leave alone.
+    """Print what Update will refresh, what it will leave alone, and what is new.
 
     The plan is what the user confirms, so it is the same split the run makes
     rather than a list of everything Enabled: a plan promising to refresh
     twelve skills ahead of a run that copies two describes a different verb.
+
+    The new Catalog entries are here for the same reason. Apply is where they
+    are Enabled, and the offer to Enable them has to be answerable before that
+    — nothing reaches the disk ahead of the question it belongs to (ADR-0047).
     """
 
     harnesses = target_harnesses(global_layer=global_layer)
@@ -1614,6 +1639,7 @@ def cmd_plan_update(*, global_layer: bool) -> int:
             "layer": "global" if global_layer else "project",
             "refresh": refresh,
             "current": current,
+            "new": new_entry_names(stored_catalog()),
             "catalog_refreshed": catalog_from_origin(),
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
@@ -1621,8 +1647,15 @@ def cmd_plan_update(*, global_layer: bool) -> int:
     return 0
 
 
-def cmd_apply_update(*, global_layer: bool) -> int:
-    """Refresh this collection, report new Catalog entries, re-check Dependencies."""
+def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
+    """Refresh this collection, Enable what is new where the offer is answered.
+
+    The offer is the one question Update asks, and `--yes` is how an answer
+    reaches a script that cannot prompt (ADR-0029). Answered, the entries the
+    collection has added since the last run are Enabled in the layer being
+    updated and named in the report; unanswered, nothing new is placed — a run
+    nobody answered has been told nothing (ADR-0007).
+    """
 
     harnesses = target_harnesses(global_layer=global_layer)
 
@@ -1630,6 +1663,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     # and what the origin carries now, so the old half is read off the file
     # itself: the shared loader is already holding the new one.
     stored = stored_catalog()
+    new_names = new_entry_names(stored)
 
     # Update is the collection's one writer of the snapshot. Every verb reasons
     # from the origin; storing what it returned is what leaves a usable
@@ -1639,15 +1673,13 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     if refreshed:
         write_catalog(load_catalog())
 
-    current_names = catalog_names()
+    # The answer to the offer, and the whole of what a run places beyond a
+    # refresh. Every name it adds is in the report, which is what makes an
+    # unattended Update's one power — Enabling what the user pointed it at —
+    # legible after the fact (ADR-0007).
+    adopted = new_names if yes else []
 
-    # A Manager with no snapshot has no *before*, and a run with no *before*
-    # has discovered nothing: calling the whole collection new would bury the
-    # one entry that matters under every entry that does not.
-    old_names = names_of(stored) if stored is not None else current_names
-    new_names = [name for name in sorted(current_names) if name not in old_names]
-
-    # Only the reporting half rests on that comparison. What has been
+    # Only the reporting half rests on the comparison above. What has been
     # withdrawn is asked of the disk (ADR-0037), and only where the origin
     # answered: deleting files on the strength of a fallback list is the one
     # thing a stale Catalog must never be allowed to do.
@@ -1659,20 +1691,28 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     desired = enabled_names(harnesses, global_layer=global_layer)
     refresh, current = refresh_change(desired, harnesses, global_layer=global_layer)
 
+    # An adopted entry is a placement like any other, so it joins the refresh
+    # rather than travelling beside it: one transport call, one reading of the
+    # disk, and one `intended`/`confirmed`/`failed` account of both (ADR-0036).
+    # The re-check covers it for the same reason: what a skill lacks is the
+    # layer's business from the moment the skill is in the layer.
+    place = joined(refresh, adopted)
+    recheck = joined(desired, adopted)
+
     # The transport's own `update` compares SKILL.md and skips a skill whose
     # SKILL.md is unchanged, leaving sidecars — catalog.json, helper documents,
     # scripts — frozen at the revision that last touched SKILL.md. `add`
     # re-copies the whole directory and is idempotent, so it is the refresh —
     # and it is why the Digest may gate it: what is skipped here is skipped for
     # being the collection's own files already, not for one file agreeing.
-    outcome = add_skills(refresh, harnesses, global_layer=global_layer)
+    outcome = add_skills(place, harnesses, global_layer=global_layer)
 
     unsatisfied: list[dict[str, str]] = []
     capabilities: list[dict[str, str]] = []
     seen: set[tuple[str, str, str]] = set()
     seen_capabilities: set[tuple[str, str]] = set()
     for directory in layer_dirs(harnesses, global_layer=global_layer):
-        for name in desired:
+        for name in recheck:
             skill_dir = directory / name
             if not skill_present_at(directory, name):
                 continue
@@ -1693,6 +1733,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
         {
             **outcome,
             "new": new_names,
+            "enabled": adopted,
             "current": current,
             "removed": withdrawals,
             "catalog_refreshed": refreshed,
@@ -2146,7 +2187,7 @@ def run_command(args: argparse.Namespace) -> int:
     if args.verb == "uninstall":
         return cmd_apply_uninstall(yes=args.yes)
     if args.verb == "update":
-        return cmd_apply_update(global_layer=parse_layer(args.project))
+        return cmd_apply_update(global_layer=parse_layer(args.project), yes=args.yes)
     return cmd_apply_select(
         args.skills,
         on=args.on,

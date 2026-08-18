@@ -249,6 +249,20 @@ def _publish(
     )
 
 
+def _publish_delta(world: dict[str, Path]) -> None:
+    """Publish `delta` at the origin, leaving `alpha` the only entry beside it.
+
+    The arrange every test of the offer shares: one entry the stored snapshot
+    has never seen, in a Catalog whose other name that snapshot already carries.
+    """
+
+    _publish(
+        world,
+        _entry("delta", "code", description="The delta skill."),
+        [_entry("alpha", "code", binaries=["git"]), _entry("delta", "code")],
+    )
+
+
 def _snapshot_forgets(world: dict[str, Path], remaining: list[dict[str, Any]]) -> None:
     """Refresh the snapshot beside the Manager behind the Manager's back.
 
@@ -1624,32 +1638,195 @@ def test_project_off_targets_global(tmp_path: Path) -> None:
     assert not (world["project"] / ".claude" / "skills" / "alpha").exists()
 
 
-def test_update_reports_new_catalog_entries_and_leaves_them_disabled(
+def test_update_reports_a_new_catalog_entry_and_leaves_it_disabled_unanswered(
     tmp_path: Path,
 ) -> None:
+    """The offer is reported either way; only an answer puts files anywhere."""
+
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _run(world, "apply", "select", "alpha")
 
-    new_entries = [
-        _entry("alpha", "code", binaries=["git"]),
-        _entry("delta", "code", description="The delta skill."),
-    ]
-    _write(world["source"] / "skills" / "kntnt" / "catalog.json", _catalog(new_entries))
-    _write(
-        world["source"] / "skills" / "code" / "delta" / "SKILL.md",
-        _skill_md("delta", description="The delta skill."),
-    )
+    _publish_delta(world)
 
     result = _run(world, "apply", "update")
 
     assert result.returncode == 0, result.stderr
     payload = _json(result)
     assert payload["new"] == ["delta"]
+    assert payload["enabled"] == [], "an unanswered offer Enables nothing"
     assert not (world["home"] / ".claude" / "skills" / "delta").exists()
     listing = _json(_run(world, "plan", "select"))
     assert "delta" in _checked(listing)
     assert _checked(listing)["delta"] is False
+
+
+def test_update_enables_a_new_catalog_entry_when_yes_answers_the_offer(
+    tmp_path: Path,
+) -> None:
+    """ADR-0007: the offer is a question, and `--yes` answers every question yes."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _publish_delta(world)
+
+    result = _run(world, "apply", "update", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["new"] == ["delta"]
+    assert payload["enabled"] == ["delta"]
+    assert "delta" in payload["intended"]
+    assert "delta" in payload["confirmed"]
+    assert (world["home"] / ".claude" / "skills" / "delta" / "SKILL.md").is_file()
+
+
+def test_update_enables_a_new_catalog_entry_in_the_layer_it_was_aimed_at(
+    tmp_path: Path,
+) -> None:
+    """The offer belongs to the layer being updated, as every other placement does."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "select", "--project", "alpha")
+    _publish_delta(world)
+
+    result = _run(world, "apply", "update", "--project", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["enabled"] == ["delta"]
+    assert (world["project"] / ".claude" / "skills" / "delta" / "SKILL.md").is_file()
+    assert not (world["home"] / ".claude" / "skills" / "delta").exists()
+
+
+def test_update_reports_a_new_entry_that_never_landed(tmp_path: Path) -> None:
+    """A new entry is placed by the path every placement takes, disk and all."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _publish_delta(world)
+
+    result = _run(world, "apply", "update", "--yes", skip=["delta"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert payload["enabled"] == ["delta"]
+    assert [item["name"] for item in payload["failed"]] == ["delta"]
+
+
+def test_update_re_checks_what_a_newly_enabled_skill_needs(tmp_path: Path) -> None:
+    """A skill Enabled by the offer is as much the layer's business as any other."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    entries = [
+        _entry("alpha", "code"),
+        _entry(
+            "delta",
+            "agents",
+            binaries=["definitely-not-a-binary-kntnt"],
+            capabilities=["subagents"],
+            description="The delta skill.",
+        ),
+    ]
+    _write(world["source"] / "skills" / "kntnt" / "catalog.json", _catalog(entries))
+    _write(
+        world["source"] / "skills" / "agents" / "delta" / "SKILL.md",
+        _skill_md(
+            "delta",
+            description="The delta skill.",
+            binaries=["definitely-not-a-binary-kntnt"],
+            capabilities=["subagents"],
+        ),
+    )
+
+    result = _run(world, "apply", "update", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["enabled"] == ["delta"]
+    assert [item["name"] for item in payload["unsatisfied"]] == [
+        "definitely-not-a-binary-kntnt"
+    ]
+    assert [item["skill"] for item in payload["capabilities"]] == ["delta"]
+
+
+def test_update_enables_nothing_new_where_there_was_no_snapshot(
+    tmp_path: Path,
+) -> None:
+    """No *before* is no discovery, so `--yes` has nothing to say yes to."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    (world["here"] / "catalog.json").unlink()
+
+    result = _run(world, "apply", "update", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["new"] == []
+    assert payload["enabled"] == []
+    assert not (world["home"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_update_enables_nothing_new_when_the_origin_is_unreachable(
+    tmp_path: Path,
+) -> None:
+    """A fallback Catalog is the snapshot itself, so it can carry nothing new."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _unreachable_origin(world)
+
+    result = _run(world, "apply", "update", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["catalog_refreshed"] is False
+    assert payload["new"] == []
+    assert payload["enabled"] == []
+
+
+def test_plan_update_reports_the_new_entries_the_question_is_about(
+    tmp_path: Path,
+) -> None:
+    """The question is asked before the write, so the plan carries what it names."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _publish_delta(world)
+
+    result = _run(world, "plan", "update")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["new"] == ["delta"]
+    stored = json.loads((world["here"] / "catalog.json").read_text(encoding="utf-8"))
+    assert "delta" not in [entry["name"] for entry in stored["skills"]], (
+        "a plan writes nothing, the snapshot included"
+    )
+    assert not (world["home"] / ".claude" / "skills" / "delta").exists()
+
+
+def test_the_update_body_asks_the_offer_and_names_what_answers_it() -> None:
+    """The question lives in the body: a script run non-interactively cannot ask."""
+
+    steps = (REPO_ROOT / "skills" / "kntnt" / "steps" / "update.md").read_text(
+        encoding="utf-8"
+    )
+    assert "`new`" in steps, "the body has to name the entries the question is about"
+    assert "`enabled`" in steps, "and what the run then Enabled"
+    assert "--yes" in steps, "and the flag that carries the answer to the script"
+    page = (REPO_ROOT / "skills" / "kntnt" / "help" / "update.md").read_text(
+        encoding="utf-8"
+    )
+    option = next(line for line in page.splitlines() if line.startswith("- `--yes`"))
+    assert "enable" in option.lower(), "the manpage documents what the flag now does"
 
 
 def test_check_reports_an_unsatisfied_binary(tmp_path: Path) -> None:
