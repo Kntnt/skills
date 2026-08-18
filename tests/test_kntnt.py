@@ -1652,7 +1652,25 @@ def test_shipped_catalog_matches_the_generated_one() -> None:
     shipped = (REPO_ROOT / "skills" / "kntnt" / "catalog.json").read_text(
         encoding="utf-8"
     )
-    assert json.loads(result.stdout) == json.loads(shipped)
+    assert json.loads(result.stdout) == json.loads(shipped), (
+        "run `KNTNT_SOURCE=. uv run skills/kntnt/scripts/kntnt.py catalog --write`"
+    )
+
+
+def test_the_generated_catalog_digests_each_skill_directory(tmp_path: Path) -> None:
+    """The Digest is generated with the Catalog, so nothing has to be bumped."""
+
+    world = _world(tmp_path)
+
+    before = _json(_run(world, "catalog"))
+    _write(world["source"] / "skills" / "code" / "alpha" / "extra.md", "more\n")
+    after = _json(_run(world, "catalog"))
+
+    digests_before = {entry["name"]: entry["digest"] for entry in before["skills"]}
+    digests_after = {entry["name"]: entry["digest"] for entry in after["skills"]}
+    assert all(len(digest) == 64 for digest in digests_before.values())
+    assert digests_after["alpha"] != digests_before["alpha"]
+    assert digests_after["beta"] == digests_before["beta"]
 
 
 def test_delegation_requires_subagents_and_says_so() -> None:

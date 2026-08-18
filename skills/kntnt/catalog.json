@@ -5,6 +5,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
+      "digest": "6616f6dc5744d29e5098ba9c73748e9d91d2e3146018ae1ba30f1e7c80a2b030",
       "binaries": [
         "git",
         "uv"
@@ -17,6 +18,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
+      "digest": "bab347212f243e669b9167cce0861f64baa11ddfd90daf8cb4c0f18b7d89d286",
       "binaries": [
         "uv"
       ],
@@ -30,6 +32,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
+      "digest": "a62bf8996f4f247a5b3fa144f0466e8798dce20e1f93f7cd35a77861903c13dc",
       "binaries": [
         "git",
         "uv"
@@ -42,6 +45,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
+      "digest": "dde69d960729104983253510e52f856382c049d3164a804e87b91516f7ce6e86",
       "binaries": [
         "git",
         "uv"
@@ -56,6 +60,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
+      "digest": "e9ec6bbd5c232ee7894e9fa7f71125dd65b2d6f4c90ebc0886be184fcb48c2a4",
       "binaries": [
         "git",
         "uv"

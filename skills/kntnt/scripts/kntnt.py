@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shlex
@@ -15,6 +16,7 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
+from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, cast
 
@@ -321,6 +323,64 @@ def capability_notes(names: list[str]) -> list[dict[str, str]]:
             raise ManagerError(f"unknown capability '{name}'")
         notes.append({"name": name, **note})
     return notes
+
+
+# What no Digest may see, on the producing side and the consuming side alike.
+# The generator walks a working tree carrying the maintainer's own bytecode
+# cache; the consumer walks an installed directory carrying the one running the
+# skill created. Neither has a git to ask which files are the collection's, so
+# the two can agree only through this list (ADR-0041). A pattern ending in `/`
+# is a directory name skipped wherever it occurs; any other matches a filename.
+DIGEST_IGNORE = ("__pycache__/", "*.pyc")
+
+
+def digest_ignores(relative: str) -> bool:
+    """True when a path below a skill directory is an artefact, not a file we ship."""
+
+    # Match each pattern against the part of the path its shape names: a
+    # directory anywhere along the way, or the filename at the end of it.
+    parts = relative.split("/")
+    for pattern in DIGEST_IGNORE:
+        if pattern.endswith("/"):
+            if pattern[:-1] in parts[:-1]:
+                return True
+        elif fnmatch(parts[-1], pattern):
+            return True
+
+    return False
+
+
+def directory_digest(directory: Path) -> str:
+    """Digest a skill directory over its sorted relative paths and file contents.
+
+    The one freshness question the manager can answer honestly is whether two
+    directories hold the same files, so paths and contents both go in: a
+    rename, an edit, an added file and a removed file each change the value.
+    The Catalog carries this for a skill as the collection ships it, and the
+    same call over an installed copy is what any comparison stands on — which
+    is why the ignore list above has to be the only one either side applies.
+    """
+
+    # Sort by the relative path rather than by the absolute one, so that where
+    # the directory sits cannot reach the value the two sides compare.
+    files = sorted(
+        (path.relative_to(directory).as_posix(), path)
+        for path in directory.rglob("*")
+        if path.is_file()
+    )
+
+    # Hash the files the collection ships and pass the artefacts by. A NUL
+    # after each path and a fixed-width digest of its contents keep the stream
+    # unambiguous: no arrangement of names and bytes can imitate another.
+    digest = hashlib.sha256()
+    for relative, path in files:
+        if digest_ignores(relative):
+            continue
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(hashlib.sha256(path.read_bytes()).digest())
+
+    return digest.hexdigest()
 
 
 # The Catalog this run reasons from, and whether the origin supplied it. Held
@@ -1490,6 +1550,7 @@ def generate_catalog(source: Path) -> dict[str, Any]:
                 "name": name,
                 "category": category,
                 "description": description,
+                "digest": directory_digest(skill_md.parent),
                 "binaries": deps["binaries"],
                 "skills": deps["skills"],
                 "externals": deps["externals"],

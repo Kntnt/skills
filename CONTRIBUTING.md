@@ -23,7 +23,14 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
 1. **Open an issue first** for anything in the *discussed* row above. For *welcomed* items, you can open a PR directly. Use the issue tracker at <https://github.com/Kntnt/skills/issues>.
 2. **One concern per PR.** Smaller PRs land faster.
 3. **Follow the project's coding standard.** It is materialised under [`docs/coding-standard/`](docs/coding-standard/) — read `general.md` plus the module(s) for the language or framework you touch before changing code.
-4. **Run the tests.** The Python engines under `skills/<category>/<skill>/scripts/` are covered by a pytest suite under `tests/`. Four commands verify a change, each provisioning its tool through `uv`:
+4. **Regenerate the catalog** when you change any file of a skill the catalog names — anything under `skills/<category>/<skill>/`. Each entry carries a content digest of that skill's directory, so a catalog left as it was no longer describes the skills. The manager under `skills/kntnt/` is no catalog entry and carries no digest, so its own files are not part of one:
+
+   ```
+   KNTNT_SOURCE=. uv run skills/kntnt/scripts/kntnt.py catalog --write
+   ```
+
+   Nothing is authored by hand and no version is bumped — the digest is computed from the files. The fourth check below fails on a catalog that has fallen behind.
+5. **Run the tests.** The Python engines under `skills/<category>/<skill>/scripts/` are covered by a pytest suite under `tests/`. Four commands verify a change, each provisioning its tool through `uv`:
 
    ```
    uvx ruff check .
