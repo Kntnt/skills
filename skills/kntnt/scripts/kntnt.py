@@ -533,6 +533,30 @@ def target_harnesses(*, global_layer: bool) -> list[str]:
     return detected_harnesses(global_layer=global_layer) or [shared_harness()]
 
 
+def layer_dirs(harnesses: list[str], *, global_layer: bool) -> list[Path]:
+    """Return every directory *harnesses* could hold a skill in, each of them once.
+
+    The union of the Harnesses' directories rather than the per-Harness
+    grouping, because several Harness ids share one directory: every universal
+    Harness has its Global files written to the canonical tree. A walk that
+    iterated Harnesses would arrive at that tree once per id and do its work
+    there as many times — which for a walk that reads each SKILL.md it finds
+    is that many reads of every file in it.
+
+    Whoever needs to know which Harness a directory belongs to walks the
+    Harnesses itself: `skill_state` counts how many of them agree a skill is
+    present, and `contradicting_dirs` names the ones that disagree. Everything
+    else wants this.
+    """
+
+    directories = {
+        directory
+        for harness in harnesses
+        for directory in skill_dirs(harness, global_layer=global_layer)
+    }
+    return sorted(directories, key=str)
+
+
 def target_dirs(harnesses: list[str], *, global_layer: bool) -> list[str]:
     """Return the skills directories *harnesses* resolve to, for a payload.
 
@@ -543,12 +567,9 @@ def target_dirs(harnesses: list[str], *, global_layer: bool) -> list[str]:
     Status actually looked in.
     """
 
-    directories = {
-        str(directory)
-        for harness in harnesses
-        for directory in skill_dirs(harness, global_layer=global_layer)
-    }
-    return sorted(directories)
+    return [
+        str(directory) for directory in layer_dirs(harnesses, global_layer=global_layer)
+    ]
 
 
 def skill_present_at(directory: Path, name: str) -> bool:
@@ -770,16 +791,15 @@ def withdrawn_names(harnesses: list[str], *, global_layer: bool) -> list[str]:
     withdrawn: set[str] = set()
 
     # Every directory the layer could hold a skill in, asked what wrote it.
-    for harness in harnesses:
-        for directory in skill_dirs(harness, global_layer=global_layer):
-            if not directory.is_dir():
+    for directory in layer_dirs(harnesses, global_layer=global_layer):
+        if not directory.is_dir():
+            continue
+        for entry in directory.iterdir():
+            name = entry.name
+            if name == MANAGER or name in catalog or name in withdrawn:
                 continue
-            for entry in directory.iterdir():
-                name = entry.name
-                if name == MANAGER or name in catalog or name in withdrawn:
-                    continue
-                if carries_marker(entry):
-                    withdrawn.add(name)
+            if carries_marker(entry):
+                withdrawn.add(name)
 
     return sorted(withdrawn)
 
@@ -1213,24 +1233,23 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     capabilities: list[dict[str, str]] = []
     seen: set[tuple[str, str, str]] = set()
     seen_capabilities: set[tuple[str, str]] = set()
-    for harness in harnesses:
-        for directory in skill_dirs(harness, global_layer=global_layer):
-            for name in desired:
-                skill_dir = directory / name
-                if not skill_present_at(directory, name):
+    for directory in layer_dirs(harnesses, global_layer=global_layer):
+        for name in desired:
+            skill_dir = directory / name
+            if not skill_present_at(directory, name):
+                continue
+            for item in unsatisfied_at(skill_dir):
+                key = (item["kind"], item["name"], item["how"])
+                if key in seen:
                     continue
-                for item in unsatisfied_at(skill_dir):
-                    key = (item["kind"], item["name"], item["how"])
-                    if key in seen:
-                        continue
-                    seen.add(key)
-                    unsatisfied.append(item)
-                for note in capabilities_at(skill_dir):
-                    pair = (name, note["name"])
-                    if pair in seen_capabilities:
-                        continue
-                    seen_capabilities.add(pair)
-                    capabilities.append({"skill": name, **note})
+                seen.add(key)
+                unsatisfied.append(item)
+            for note in capabilities_at(skill_dir):
+                pair = (name, note["name"])
+                if pair in seen_capabilities:
+                    continue
+                seen_capabilities.add(pair)
+                capabilities.append({"skill": name, **note})
 
     emit(
         {

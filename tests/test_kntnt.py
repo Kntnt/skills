@@ -452,6 +452,28 @@ def test_reported_directories_cover_where_a_universal_harness_really_lands(
     )
 
 
+def test_a_directory_two_harnesses_share_is_resolved_once(tmp_path: Path) -> None:
+    """Every universal Harness's Global files land in one canonical tree.
+
+    Two of them present means that tree is reached twice over, and a walk that
+    took it twice would do its work there twice — for Update's sweep, that is
+    every SKILL.md in it read once per Harness id rather than once per run.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".codex", ".cursor")
+
+    payload = _json(_run(world, "status"))
+
+    assert payload["directories"]["global"] == sorted(
+        [
+            str(world["home"] / ".agents" / "skills"),
+            str(world["home"] / ".codex" / "skills"),
+            str(world["home"] / ".cursor" / "skills"),
+        ]
+    )
+
+
 def test_the_manager_has_no_setup_verb(tmp_path: Path) -> None:
     world = _world(tmp_path)
 
