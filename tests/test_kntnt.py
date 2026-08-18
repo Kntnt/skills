@@ -925,6 +925,319 @@ def test_select_settles_the_closure_before_anything_is_written(
     assert "reported, not refused" in text
 
 
+def test_select_on_enables_a_skill_and_opens_no_list(tmp_path: Path) -> None:
+    """A machine is set up without a human at the list (ADR-0043)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "--on", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["alpha"]
+    assert "categories" not in payload
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+
+
+def test_select_off_disables_a_skill_and_opens_no_list(tmp_path: Path) -> None:
+    """The mirror of `--on`, and gated the same way a deletion always is."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    result = _run(world, "apply", "select", "--off", "alpha", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["removed"] == ["alpha"]
+    assert "categories" not in payload
+    assert not (world["home"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_select_on_leaves_the_skills_it_does_not_name_alone(tmp_path: Path) -> None:
+    """Naming one Skill can never silently Disable another (ADR-0043)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    result = _run(world, "apply", "select", "--on", "gamma")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["gamma"]
+    assert payload["removed"] == []
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+
+
+def test_select_off_leaves_the_skills_it_does_not_name_alone(tmp_path: Path) -> None:
+    """Unchecking one Skill is not an answer about any other."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+
+    result = _run(world, "apply", "select", "--off", "gamma", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["removed"] == ["gamma"]
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+
+
+def test_select_on_leaves_a_deviating_skill_it_did_not_name_alone(
+    tmp_path: Path,
+) -> None:
+    """Keeping the state it had includes keeping the edit somebody made to it."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json",
+        _digested_catalog(world),
+    )
+    _run(world, "apply", "select", "alpha")
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+
+    result = _run(world, "apply", "select", "--on", "gamma")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["gamma"]
+    assert "alpha" in payload["noop"]
+    assert installed.read_text(encoding="utf-8") == "hand edited\n"
+
+
+def test_select_on_leaves_an_incomplete_skill_it_did_not_name_alone(
+    tmp_path: Path,
+) -> None:
+    """A delta answers for the names it carries and for no others (ADR-0043)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    _run(world, "apply", "select", "alpha")
+    shutil.rmtree(world["home"] / ".config" / "crush" / "skills" / "alpha")
+
+    result = _run(world, "apply", "select", "--on", "gamma")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["placed"] == ["gamma"]
+    assert not (world["home"] / ".config" / "crush" / "skills" / "alpha").exists()
+
+
+def test_select_takes_more_than_one_on_and_more_than_one_off(tmp_path: Path) -> None:
+    """One invocation carries the whole delta, however many names it names."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+
+    result = _run(
+        world,
+        "apply",
+        "select",
+        "--on",
+        "beta",
+        "--off",
+        "alpha",
+        "--off",
+        "gamma",
+        "--yes",
+    )
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["beta"]
+    assert payload["removed"] == ["alpha", "gamma"]
+
+
+def test_select_refuses_a_delta_and_a_whole_answer_in_one_invocation(
+    tmp_path: Path,
+) -> None:
+    """Names are the whole set; `--on` and `--off` are a change to it."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "alpha", "--on", "beta")
+
+    assert result.returncode != 0
+    assert "--on" in result.stderr
+    assert "whole answer" in result.stderr
+    assert not (world["home"] / ".claude" / "skills" / "beta").exists()
+
+
+def test_select_off_refuses_without_yes(tmp_path: Path) -> None:
+    """A delta that deletes files is gated like any other (ADR-0029)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    result = _run(world, "apply", "select", "--off", "alpha")
+
+    assert result.returncode == 2
+    assert "--yes" in result.stderr
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+
+
+def test_select_on_refuses_an_unknown_skill(tmp_path: Path) -> None:
+    """A delta names Catalog skills; a typo is a refusal, never a silent miss."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "--on", "nosuch")
+
+    assert result.returncode != 0
+    assert "nosuch" in result.stderr
+
+
+def test_select_on_resolves_the_whole_closure_before_it_writes(
+    tmp_path: Path,
+) -> None:
+    """`--on release --yes` Enables `push` and `commit` as well (issue #29)."""
+
+    world = _world(tmp_path, _CHAIN)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "--on", "delta", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["alpha", "beta", "delta"]
+    assert payload["unsatisfied"] == {}
+
+
+def test_select_off_stands_against_a_dependency_the_same_run_would_add(
+    tmp_path: Path,
+) -> None:
+    """What the user unchecked stays unchecked; what it lacks is reported."""
+
+    world = _world(tmp_path, _CHAIN)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "--on", "delta", "--off", "beta", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["alpha", "delta"]
+    assert payload["unsatisfied"] == {"delta": ["beta"]}
+
+
+def test_select_project_on_leaves_a_global_dependency_where_it_is(
+    tmp_path: Path,
+) -> None:
+    """Global's copy Satisfies it, and a second one buys nothing (ADR-0013)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    result = _run(world, "apply", "select", "--project", "--on", "beta")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["beta"]
+    assert payload["unsatisfied"] == {}
+    assert not (world["project"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_select_as_is_enables_nothing_that_was_not_enabled(tmp_path: Path) -> None:
+    """An unattended run can never inject instructions nobody read (ADR-0043)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    result = _run(world, "apply", "select", "--as-is", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == []
+    assert payload["removed"] == []
+    assert "categories" not in payload
+    assert not (world["home"] / ".claude" / "skills" / "beta").exists()
+
+
+def test_select_as_is_repairs_an_incomplete_skill(tmp_path: Path) -> None:
+    """Putting what the user has into good order needs no list to read."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    _run(world, "apply", "select", "alpha")
+    shutil.rmtree(world["home"] / ".config" / "crush" / "skills" / "alpha")
+
+    result = _run(world, "apply", "select", "--as-is", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["placed"] == ["alpha"]
+    assert (
+        world["home"] / ".config" / "crush" / "skills" / "alpha" / "SKILL.md"
+    ).is_file()
+
+
+def test_select_as_is_refreshes_a_deviating_skill(tmp_path: Path) -> None:
+    """Putting what the user has into good order is what the flag is for."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json",
+        _digested_catalog(world),
+    )
+    _run(world, "apply", "select", "alpha")
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+
+    result = _run(world, "apply", "select", "--as-is", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["placed"] == ["alpha"]
+    source = world["source"] / "skills" / "code" / "alpha" / "SKILL.md"
+    assert installed.read_bytes() == source.read_bytes()
+
+
+def test_select_as_is_refreshes_nothing_from_the_snapshot_and_says_why(
+    tmp_path: Path,
+) -> None:
+    """Those digests describe the collection as of the last Update (ADR-0041)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    catalog = _digested_catalog(world)
+    _write(world["source"] / "skills" / "kntnt" / "catalog.json", catalog)
+    _run(world, "apply", "select", "alpha")
+    _write(world["here"] / "catalog.json", catalog)
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+    _unreachable_origin(world)
+
+    result = _run(world, "apply", "select", "--as-is", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == []
+    assert payload["catalog_refreshed"] is False
+    assert installed.read_text(encoding="utf-8") == "hand edited\n"
+
+
+def test_select_names_the_delta_forms_in_its_steps(tmp_path: Path) -> None:
+    """The list is suppressed where there is nobody to read it (issue #29)."""
+
+    text = (REPO_ROOT / "skills" / "kntnt" / "steps" / "select.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "`--on`" in text
+    assert "`--off`" in text
+    assert "--as-is" in text
+    assert "open no list" in text
+
+
 def test_the_manager_has_no_status_enable_or_disable_verb(tmp_path: Path) -> None:
     """Three verbs and a transcription step became one gesture (ADR-0043)."""
 

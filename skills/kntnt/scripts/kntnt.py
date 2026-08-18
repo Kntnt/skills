@@ -1281,11 +1281,60 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
     }
 
 
+def delta_answer(
+    on: list[str],
+    off: list[str],
+    harnesses: list[str],
+    *,
+    as_is: bool,
+    global_layer: bool,
+) -> tuple[list[str], frozenset[str]]:
+    """Resolve a delta into the whole checked set, and what it only carried.
+
+    `--on` and `--off` never mean *make this the whole set*. The base is what
+    the layer already holds, so a Skill nobody named keeps the state it had and
+    a script that mentions one name cannot silently Disable another (ADR-0043).
+
+    What a named Skill needs comes with it, resolved to the whole closure
+    before anything is written (ADR-0047) and minus whatever already Satisfies
+    it, so a Project gains no second copy of a Dependency Global supplies
+    (ADR-0013). `--off` is applied last and stands: a name the user took off is
+    off however the same run arrived at it, and what that leaves Unsatisfied is
+    reported rather than repaired behind them.
+
+    The second answer is the Skills the base carried and the delta never named.
+    Keeping the state they had is a fact about their files and not only about
+    their checkbox: re-copying a Deviating one would overwrite an edit under a
+    command that named something else, and the offer that says so is the list's
+    (ADR-0041), which this form does not open. `--as-is` carries nothing,
+    because there the set already on disk is itself the answer given.
+    """
+
+    # What the delta is resolved against: the Catalog it may name Skills from,
+    # the Dependencies this layer already Satisfies, and the set on disk.
+    entries = catalog_entries()
+    satisfied = satisfying_names(harnesses, global_layer=global_layer)
+    answer = enabled_names(harnesses, global_layer=global_layer)
+    carried = frozenset() if as_is else frozenset(answer) - frozenset(on)
+
+    # Each named Skill brings the chain it cannot work without, ahead of
+    # itself, so the order is the order the Skills would be checked in.
+    for name in on:
+        for required in dependency_closure(name, entries):
+            if required not in answer and required not in satisfied:
+                answer.append(required)
+        if name not in answer:
+            answer.append(name)
+
+    return [name for name in answer if name not in off], carried
+
+
 def select_change(
     answer: list[str],
     harnesses: list[str],
     directories: list[Path],
     *,
+    carried: frozenset[str] = frozenset(),
     global_layer: bool,
 ) -> tuple[list[str], list[str], list[str]]:
     """Split the Catalog into what the answer places, removes, and leaves alone.
@@ -1298,6 +1347,11 @@ def select_change(
     Checked and already those files is no work, and an unchecked skill this
     layer does not carry is no work either. An answer that is all no work
     leaves both lists empty, and reading is never a side-effecting act.
+
+    *carried* names the skills the answer holds without answering for them —
+    what a delta found on disk and never mentioned. Nothing is written for one
+    of those, whatever the disk shows, so the repair and the re-copy stay where
+    the offer to make them was given.
     """
 
     place: list[str] = []
@@ -1313,6 +1367,12 @@ def select_change(
         if name not in answer:
             if state != "disabled":
                 remove.append(name)
+            continue
+
+        # Carried and never named: the run has no answer about this skill, so
+        # it writes none — the state it had includes the files it had.
+        if name in carried:
+            noop.append(name)
             continue
 
         freshness = installed_freshness(name, catalog_digest(entry), directories)
@@ -1331,19 +1391,55 @@ def cmd_plan_select(*, global_layer: bool) -> int:
     return 0
 
 
-def cmd_apply_select(names: list[str], *, global_layer: bool, yes: bool) -> int:
+def cmd_apply_select(
+    names: list[str],
+    *,
+    on: list[str],
+    off: list[str],
+    as_is: bool,
+    global_layer: bool,
+    yes: bool,
+) -> int:
     """Make the targeted layer hold exactly the skills the answer checked.
 
     Both halves of the answer are one verb's work, so both are reported
     together: `intended`, `confirmed`, and `failed` cover the run, and
     `placed` and `removed` say which way each intended name went (ADR-0036).
+
+    The answer arrives in one of two forms and never both. Skill names are the
+    whole checked set, which is how the list is answered; `--as-is`, `--on`,
+    and `--off` change the set the layer already holds, which is how a machine
+    with nobody at the list is set up. `--as-is` names nothing and is the whole
+    of `select --yes`: it Enables nothing that was not already Enabled and
+    refreshes what Deviates and repairs what is incomplete, so an unattended
+    run can never place instructions the user has not read (ADR-0043).
     """
 
-    answer = validate_names(names)
+    # Read together, the two forms would leave the Skills nobody named in a
+    # state neither of them chose: the whole-set form removes them and the
+    # delta keeps them.
+    is_delta = as_is or bool(on) or bool(off)
+    if is_delta and names:
+        raise ManagerError(
+            "skill names are the whole answer, and --as-is, --on, and --off "
+            "change the set on disk; give one form or the other"
+        )
+
     harnesses = target_harnesses(global_layer=global_layer)
     directories = layer_dirs(harnesses, global_layer=global_layer)
+    answer, carried = (
+        delta_answer(
+            validate_names(on),
+            validate_names(off),
+            harnesses,
+            as_is=as_is,
+            global_layer=global_layer,
+        )
+        if is_delta
+        else (validate_names(names), frozenset())
+    )
     place, remove, noop = select_change(
-        answer, harnesses, directories, global_layer=global_layer
+        answer, harnesses, directories, carried=carried, global_layer=global_layer
     )
 
     # Unchecking deletes files the user chose to delete, and a script cannot
@@ -1370,6 +1466,7 @@ def cmd_apply_select(names: list[str], *, global_layer: bool, yes: bool) -> int:
             "noop": noop,
             "unsatisfied": unsatisfied_on_disk(harnesses, global_layer=global_layer),
             "layer": "global" if global_layer else "project",
+            "catalog_refreshed": catalog_from_origin(),
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
@@ -1822,6 +1919,20 @@ def add_project_flag(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--project", choices=("on", "off"), default="off")
 
 
+def add_delta_flags(parser: argparse.ArgumentParser) -> None:
+    """Add the answer form that names Skills instead of listing them.
+
+    `--on` and `--off` each take one Skill and may be given as often as the
+    answer has names, so a whole delta is one invocation. `--as-is` is the
+    delta that names nothing — the answer is the set the layer already holds —
+    and it is what `select --yes` comes down to once there is no list to open.
+    """
+
+    parser.add_argument("--on", action="append", default=[], metavar="SKILL")
+    parser.add_argument("--off", action="append", default=[], metavar="SKILL")
+    parser.add_argument("--as-is", action="store_true")
+
+
 def add_yes_flag(parser: argparse.ArgumentParser) -> None:
     """Add --yes to a verb.
 
@@ -1903,9 +2014,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     # The names are the whole answer, so no names is the answer that checked
     # nothing — which Apply can read as such, having no list form to confuse
-    # it with.
+    # it with. The delta flags are the other answer form, for the run with
+    # nobody at the list, and the two are refused together.
     apply_select = apply_sub.add_parser("select")
     apply_select.add_argument("skills", nargs="*")
+    add_delta_flags(apply_select)
     add_project_flag(apply_select)
     add_yes_flag(apply_select)
     add_dry_run_flag(apply_select)
@@ -1968,7 +2081,12 @@ def run_command(args: argparse.Namespace) -> int:
     if args.verb == "update":
         return cmd_apply_update(global_layer=parse_layer(args.project))
     return cmd_apply_select(
-        args.skills, global_layer=parse_layer(args.project), yes=args.yes
+        args.skills,
+        on=args.on,
+        off=args.off,
+        as_is=args.as_is,
+        global_layer=parse_layer(args.project),
+        yes=args.yes,
     )
 
 

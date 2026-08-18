@@ -4,7 +4,7 @@ Show what this collection has and change it in the same gesture.
 
 ## Synopsis
 
-`/kntnt select [--project[=on|off]] [--yes] [--dry-run]`
+`/kntnt select [--on <skill>]… [--off <skill>]… [--project[=on|off]] [--yes] [--dry-run]`
 
 ## Description
 
@@ -18,10 +18,14 @@ Unchecking a skill that another checked skill depends on is reported, not blocke
 
 Reading is never a side-effecting act. An answer that changes nothing writes nothing — no refresh, no repair, no touching of files to make the disk agree with a list you only wanted to look at.
 
+A machine can also be set up with nobody at the list. `--on` and `--off` name skills directly and open no list; `--yes` on its own opens none either and enables nothing you did not already have. All three are described under *Options*.
+
 ## Options
 
+- `--on <skill>` — enable that skill in the targeted layer, and open no list. Give it as often as you have names. It applies a change rather than a whole set: a skill you do not name keeps the state it had, files included — it is not disabled, and a deviating one is not re-copied either, because the offer to overwrite your edit belongs to the list this form does not open. What the named skill needs comes with it, and you are asked once before it does — `--yes` answers that.
+- `--off <skill>` — disable that skill in the targeted layer, and open no list. Give it as often as you have names, and combine it with `--on` in the same invocation. It applies a change in the same way, and it deletes files, so the script refuses it without `--yes`.
 - `--project`, `--project=on` — list and change this project rather than global. `--project=off` is the bare form.
-- `--yes` — assume yes: apply the answer without waiting for a confirmation. Unchecking deletes files, so the script itself refuses without it.
+- `--yes` — assume yes: apply the answer without waiting for a confirmation. Unchecking deletes files, so the script itself refuses without it. Given with neither `--on` nor `--off`, it is an instruction of its own: open no list, enable nothing that is not already enabled, and put what you have into good order — refresh what deviates, repair what is incomplete. An unattended run can never place instructions you have not read.
 - `--dry-run` — run it against a temporary home seeded with this collection's files, and throw that home away. Nothing in the layer changes, and the report is the run's own outcome read off the sandbox's disk. It downloads the transport afresh, so it takes longer than the run it previews.
 
 ## Notes
@@ -31,6 +35,8 @@ A skill whose files reached only some of the directories the layer covers is sho
 A skill whose files differ from the ones the collection ships is marked **deviating**, never *out of date*. The comparison sees two states and no history, so it cannot say which way the difference runs, and outside a project copy that has fallen behind the commoner cause is an edit of your own. Re-copying it overwrites that edit, and the offer says so.
 
 Where the collection cannot be reached, the list comes from the copy stored beside the manager and says so. Nothing is marked deviating or current on such a list, and no re-copy is offered from it: those digests describe the collection as of the last `/kntnt update`.
+
+That reaches `--yes` too: run against a catalog read from the snapshot, it refreshes nothing at all, and says why rather than reporting a clean run.
 
 `--project` shows the project layer alone. A skill already Enabled globally is marked as such rather than shown unchecked: this layer holds no copy of it to uncheck, and checking the row would give you a second one.
 

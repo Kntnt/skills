@@ -2,7 +2,7 @@
 name: kntnt
 description: Manage this collection — which skills are Enabled, in Global and in each Project.
 disable-model-invocation: true
-argument-hint: "[select|update|uninstall|help] [name] [--project] [--yes] [--dry-run]"
+argument-hint: "[select|update|uninstall|help] [name] [--on <skill>] [--off <skill>] [--project] [--yes] [--dry-run]"
 ---
 
 # kntnt
@@ -20,7 +20,7 @@ If the arguments are `help`, `--help`, `-h`, or `help <name>`, follow `$HERE/ste
 ## Arguments
 
 - no args / `help` `[name]` — Help for the manager, one of its verbs, or one named collection skill. Bare `/kntnt` means Help.
-- `select` `[--project]` `[--yes]` `[--dry-run]` — Select: print the Catalog as a list and take the answer.
+- `select` `[--on <skill>]` `[--off <skill>]` `[--project]` `[--yes]` `[--dry-run]` — Select: print the Catalog as a list and take the answer. `--on` and `--off` name skills instead, as often as there are names, and open no list; `--yes` with neither opens none either and only puts what is already Enabled into good order.
 - `update` `[--project]` `[--yes]` `[--dry-run]` — refresh this collection, then re-check Dependencies.
 - `uninstall` `[--yes]` `[--dry-run]` — remove this collection from this machine, the Manager last.
 
