@@ -60,7 +60,7 @@ A skill that is not present on disk in that layer.
 _Avoid_: inactive, off, uninstalled
 
 **Catalog**:
-The collection's declared list of its skills and their dependencies, authored in the repository and shipped with the Manager.
+The collection's declared list of its skills and their dependencies, authored in the repository and read from it at every invocation, so that it names what the collection provides now. A copy is stored beside the Manager and is what a verb falls back to when the origin cannot be reached; a verb that falls back says so. Only Update replaces that copy — a Catalog fetched by a verb that reports rather than changes is reasoned from and not written, or the difference Update reports new and Withdrawn skills from would be gone before it looked.
 _Avoid_: manifest, registry, index, lockfile
 
 **Withdrawn**:

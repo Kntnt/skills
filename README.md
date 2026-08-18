@@ -13,7 +13,7 @@ This repository is a collection of [Agent Skills](https://agentskills.io) for co
 
 There are two layers. Global is the set on this machine. Project is extras for one working directory. A harness in that directory loads the union of both. A Project cannot hide a Global skill. Project extras live as skill files in that project's harness directories; a teammate who checks those files in receives the extras, not your Global set.
 
-New catalog entries stay Disabled after an Update. Enable them when you want them.
+A new catalog entry is never enabled for you. It shows up in `/kntnt status` as soon as the collection carries it, and `/kntnt update` reports it as well; either way, you Enable it when you want it.
 
 A few skills need something of the harness itself rather than of your machine — `delegation` is pointless where subagents cannot be spawned. Those requirements are dependencies like any other, not an install-time filter: the skill is enabled on every harness you have, and in one that cannot meet the requirement it says so and does nothing. No script can test this, since the manager cannot know which harness invoked it; the agent answers, because the agent is the harness.
 
@@ -60,7 +60,7 @@ Bare `/kntnt` is Help. The manager subcommands are:
 | `/kntnt disable [--project] [skill...]` | Disable skills (picker if none named) |
 | `/kntnt update [--project]` | Refresh this collection and re-check dependencies |
 
-Status answers one of two questions. Bare, it reports Global: every skill in the catalog, Enabled or Disabled on this machine, Disabled ones included — that is how you find what there is to enable. With `--project` it reports what applies in the directory you are standing in — everything enabled globally plus everything enabled in this project — and says of each whether it comes from Global, the project, or both. The catalog ships with the manager, so a skill added upstream since your last `/kntnt update` appears only after you run it.
+Status answers one of two questions. Bare, it reports Global: every skill in the catalog, Enabled or Disabled on this machine, Disabled ones included — that is how you find what there is to enable. With `--project` it reports what applies in the directory you are standing in — everything enabled globally plus everything enabled in this project — and says of each whether it comes from Global, the project, or both. Either form reads the catalog from the collection itself, so a skill published upstream this morning is listed — and enableable — this afternoon, with no `/kntnt update` in between. When the collection cannot be reached, the report falls back to the copy stored beside the manager and says that it did.
 
 Every command here reads `--project` the same way: `--project` or `--project=on` means the Project, and nothing or `--project=off` means Global. Enable, Disable, and Update change that layer; Status only reports. Update refreshes this collection only. It reports each new catalog skill and leaves it Disabled. It deletes a skill that has been withdrawn from the collection upstream, and does not ask: such a skill can no longer be updated or supported, and no other command here could reach it. It does not refresh a skill that came from another collection. If a dependency is missing, it tells you how to satisfy it and does not install anything.
 

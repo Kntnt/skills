@@ -297,6 +297,11 @@ def capability_notes(names: list[str]) -> list[dict[str, str]]:
     return notes
 
 
+# The Catalog this run reasons from, and whether the origin supplied it. Held
+# for the run because a single invocation reads the Catalog many times over.
+_CATALOG: tuple[dict[str, Any], bool] | None = None
+
+
 def fetch_catalog() -> dict[str, Any]:
     """Load the Catalog from the collection origin. Never invent it."""
 
@@ -329,30 +334,87 @@ def write_catalog(catalog: dict[str, Any]) -> None:
     )
 
 
-def load_catalog() -> dict[str, Any]:
-    """Return the shipped Catalog, fetching it once if the file is gone."""
+def stored_catalog() -> dict[str, Any] | None:
+    """Return the snapshot stored beside the Manager, or None if absent."""
 
     path = here() / "catalog.json"
-    if path.is_file():
-        return cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
-    catalog = fetch_catalog()
-    write_catalog(catalog)
-    return catalog
+    if not path.is_file():
+        return None
+    return cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
 
 
-def catalog_skills() -> list[dict[str, Any]]:
-    """Return the Catalog's skill entries."""
+def resolve_catalog() -> tuple[dict[str, Any], bool]:
+    """Return the Catalog to reason from and whether the origin supplied it.
 
-    skills = load_catalog().get("skills", [])
+    The collection is what the repository ships, not what a snapshot recorded
+    the last time someone ran Update, so the origin is asked first and every
+    verb reasons from the answer. A fetch that fails must not take a read verb
+    with it: the snapshot is the fallback, and the boolean is how the caller
+    tells the user which of the two they are looking at. With neither — no
+    origin and no snapshot — there is no Catalog to invent, and the fetch's own
+    error stands.
+
+    The answer is cached because a single invocation reads the Catalog many
+    times over and the origin is to be asked once per run, not once per reader.
+    """
+
+    global _CATALOG
+
+    if _CATALOG is None:
+        try:
+            _CATALOG = (fetch_catalog(), True)
+        except ManagerError:
+            stored = stored_catalog()
+            if stored is None:
+                raise
+            _CATALOG = (stored, False)
+
+    return _CATALOG
+
+
+def load_catalog() -> dict[str, Any]:
+    """Return the Catalog every verb reasons from."""
+
+    return resolve_catalog()[0]
+
+
+def catalog_from_origin() -> bool:
+    """True when the Catalog in hand was fetched rather than read off disk.
+
+    Named for what it reports rather than for the payload field it feeds. The
+    field kept Update's name, `catalog_refreshed`, so that a reader meets one
+    shape everywhere; a *refresh* is what Update then does with the answer, and
+    is not what a verb that only reports has established.
+    """
+
+    return resolve_catalog()[1]
+
+
+def skills_of(catalog: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return the skill entries of *catalog*."""
+
+    skills = catalog.get("skills", [])
     if not isinstance(skills, list):
         raise ManagerError("Catalog is corrupt")
     return [entry for entry in skills if isinstance(entry, dict)]
 
 
+def names_of(catalog: dict[str, Any]) -> set[str]:
+    """Return every skill name in *catalog*."""
+
+    return {str(entry["name"]) for entry in skills_of(catalog) if "name" in entry}
+
+
+def catalog_skills() -> list[dict[str, Any]]:
+    """Return the Catalog's skill entries."""
+
+    return skills_of(load_catalog())
+
+
 def catalog_names() -> set[str]:
     """Return every Catalog skill name."""
 
-    return {str(entry["name"]) for entry in catalog_skills() if "name" in entry}
+    return names_of(load_catalog())
 
 
 def is_project_detectable(template: str) -> bool:
@@ -727,6 +789,11 @@ def status_payload(names: list[str], *, effective: bool) -> dict[str, Any]:
     Disabled in both layers is no answer to the second question, so that form
     leaves it out. `reports` says which of the two was answered, because a
     reader must never have to guess.
+
+    Either form is only as current as the list it was built from, so
+    `catalog_refreshed` says whether that list came from the origin or from the
+    snapshot the origin could not be reached to replace. Same field, same
+    meaning, as the one Update reports.
     """
 
     # Global is read either way; the Project only where it is part of the answer.
@@ -770,6 +837,7 @@ def status_payload(names: list[str], *, effective: bool) -> dict[str, Any]:
 
     return {
         "reports": "effective" if effective else "global",
+        "catalog_refreshed": catalog_from_origin(),
         "directories": directories,
         "skills": skills,
     }
@@ -936,22 +1004,26 @@ def cmd_apply_update(*, global_layer: bool) -> int:
     """Refresh this collection, report new Catalog entries, re-check Dependencies."""
 
     harnesses = target_harnesses(global_layer=global_layer)
-    old_names = catalog_names()
 
-    # The Catalog is adopted before anything is decided from it. Deciding first
-    # would resolve the work against a list the collection has already moved
-    # on from, and ask the transport for a skill the source no longer carries
-    # (issue #5). The refresh below reaches only the Harnesses detected here,
-    # which need not hold the copy of the Manager running right now, so this
-    # Manager's own Catalog is written directly or Status goes on reporting the
-    # snapshot it shipped with.
-    catalog_refreshed = True
-    try:
-        write_catalog(fetch_catalog())
-    except ManagerError:
-        catalog_refreshed = False
+    # What changed is the difference between the snapshot this Manager stored
+    # and what the origin carries now, so the old half is read off the file
+    # itself: the shared loader is already holding the new one.
+    stored = stored_catalog()
+
+    # Update is the collection's one writer of the snapshot. Every verb reasons
+    # from the origin; storing what it returned is what leaves a usable
+    # fallback for the next run that cannot reach it, and what the comparison
+    # above is made against next time.
+    refreshed = catalog_from_origin()
+    if refreshed:
+        write_catalog(load_catalog())
 
     current_names = catalog_names()
+
+    # A Manager with no snapshot has no *before*, and a run with no *before*
+    # has discovered nothing: calling the whole collection new would bury the
+    # one entry that matters under every entry that does not.
+    old_names = names_of(stored) if stored is not None else current_names
     new_names = [name for name in sorted(current_names) if name not in old_names]
     withdrawn = [name for name in sorted(old_names) if name not in current_names]
     withdrawals = withdraw_skills(withdrawn, harnesses, global_layer=global_layer)
@@ -993,7 +1065,7 @@ def cmd_apply_update(*, global_layer: bool) -> int:
             **outcome,
             "new": new_names,
             "removed": withdrawals,
-            "catalog_refreshed": catalog_refreshed,
+            "catalog_refreshed": refreshed,
             "unsatisfied": unsatisfied,
             "capabilities": capabilities,
             "layer": "global" if global_layer else "project",

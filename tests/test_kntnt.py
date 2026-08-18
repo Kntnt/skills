@@ -168,6 +168,35 @@ def _withdraw(
     shutil.rmtree(world["source"] / "skills" / category / name)
 
 
+def _publish(
+    world: dict[str, Path], entry: dict[str, Any], catalog: list[dict[str, Any]]
+) -> None:
+    """Publish *entry* at the origin: into its Catalog and onto its tree.
+
+    The mirror of `_withdraw`. The stored snapshot beside the Manager is left
+    alone, which is the whole point — a skill the origin carries and the
+    snapshot does not is what every fetch-first test is about.
+    """
+
+    _write(world["source"] / "skills" / "kntnt" / "catalog.json", _catalog(catalog))
+    _write(
+        world["source"] / "skills" / entry["category"] / entry["name"] / "SKILL.md",
+        _skill_md(entry["name"], description=entry["description"]),
+    )
+
+
+def _unreachable_origin(world: dict[str, Path]) -> None:
+    """Make the Catalog fetch fail while the collection tree stays usable.
+
+    Standing in for an offline machine without going near the network: the
+    origin is there and its skills are still copyable, but its Catalog cannot
+    be read. That is the failure the fallback exists for, and it is the one
+    shape of it a test can stage deterministically.
+    """
+
+    (world["source"] / "skills" / "kntnt" / "catalog.json").unlink()
+
+
 def _run(
     world: dict[str, Path],
     *args: str,
@@ -823,7 +852,16 @@ def test_help_named_skill_prints_that_skills_help(tmp_path: Path) -> None:
     assert "Help for alpha." in result.stdout
 
 
-def test_missing_catalog_is_fetched_from_the_source(tmp_path: Path) -> None:
+def test_status_reports_without_a_stored_snapshot(tmp_path: Path) -> None:
+    """A Manager with no snapshot beside it still reports, and stays without one.
+
+    Status reads the origin, so a missing snapshot costs it nothing. Writing
+    one would give a read verb a write side effect and, worse, hand the next
+    Update a baseline it never chose: Update tells new entries from withdrawn
+    ones by diffing the snapshot it stored against what the origin now carries,
+    and a snapshot laid down by Status flattens that diff.
+    """
+
     world = _world(tmp_path)
     (world["here"] / "catalog.json").unlink()
 
@@ -832,7 +870,145 @@ def test_missing_catalog_is_fetched_from_the_source(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stderr
     names = [skill["name"] for skill in _json(result)["skills"]]
     assert names == ["alpha", "beta", "gamma"]
-    assert (world["here"] / "catalog.json").is_file()
+    assert not (world["here"] / "catalog.json").exists()
+
+
+def test_status_lists_a_skill_the_origin_added_after_the_snapshot(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    delta = _entry("delta", "code", description="The delta skill.")
+    _publish(world, delta, [*_SURVIVORS, delta])
+
+    result = _run(world, "status")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["catalog_refreshed"] is True
+    row = next(skill for skill in payload["skills"] if skill["name"] == "delta")
+    assert row["state"] == "disabled"
+
+
+def test_status_leaves_out_a_skill_the_origin_no_longer_carries(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "status")
+
+    assert result.returncode == 0, result.stderr
+    names = [skill["name"] for skill in _json(result)["skills"]]
+    assert names == ["alpha", "beta"]
+
+
+def test_status_does_not_place_a_newly_published_skill_on_disk(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    delta = _entry("delta", "code", description="The delta skill.")
+    _publish(world, delta, [*_SURVIVORS, delta])
+
+    result = _run(world, "status")
+
+    assert result.returncode == 0, result.stderr
+    assert not (world["home"] / ".claude" / "skills" / "delta").exists()
+
+
+def test_enable_accepts_a_name_only_the_origin_carries(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    delta = _entry("delta", "code", description="The delta skill.")
+    _publish(world, delta, [*_SURVIVORS, delta])
+
+    result = _run(world, "apply", "enable", "delta")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["confirmed"] == ["delta"]
+    assert (world["home"] / ".claude" / "skills" / "delta" / "SKILL.md").is_file()
+
+
+def test_status_falls_back_to_the_snapshot_when_the_origin_is_unreachable(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _unreachable_origin(world)
+
+    result = _run(world, "status")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["catalog_refreshed"] is False
+    assert [skill["name"] for skill in payload["skills"]] == ["alpha", "beta", "gamma"]
+
+
+def test_enable_works_from_the_snapshot_when_the_origin_is_unreachable(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _unreachable_origin(world)
+
+    result = _run(world, "apply", "enable", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+
+
+def test_update_reports_nothing_changed_when_the_origin_is_unreachable(
+    tmp_path: Path,
+) -> None:
+    """An unreachable origin leaves the snapshot alone and claims no discoveries.
+
+    `new` and `removed` are the difference between the stored copy and the
+    collection. With no collection to reach there is no difference to state,
+    and an empty pair must not be read as *nothing changed upstream*.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _unreachable_origin(world)
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["catalog_refreshed"] is False
+    assert payload["new"] == []
+    assert payload["removed"] == []
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+
+
+def test_update_calls_nothing_new_when_there_was_no_snapshot(tmp_path: Path) -> None:
+    """With no snapshot there is no *before*, so the collection is not all new.
+
+    Status no longer writes the snapshot it fetched, so a Manager can reach
+    Update without one. Reporting every skill as a new entry would bury the
+    one that matters under every one that does not.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    (world["here"] / "catalog.json").unlink()
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["new"] == []
+    stored = json.loads((world["here"] / "catalog.json").read_text(encoding="utf-8"))
+    assert [entry["name"] for entry in stored["skills"]] == ["alpha", "beta", "gamma"]
+
+
+def test_status_guidance_no_longer_sends_the_user_to_update(tmp_path: Path) -> None:
+    """Discovery no longer depends on Update, so the skill body must not say it does."""
+
+    text = (REPO_ROOT / "skills" / "kntnt" / "status.md").read_text(encoding="utf-8")
+
+    assert "/kntnt update" not in text
+    assert "catalog_refreshed" in text
 
 
 def test_manager_skill_is_user_invoked_and_not_internal() -> None:
