@@ -1653,6 +1653,17 @@ def test_project_off_targets_global(tmp_path: Path) -> None:
     assert not (world["project"] / ".claude" / "skills" / "alpha").exists()
 
 
+def test_an_unknown_project_value_is_refused_by_the_parser(tmp_path: Path) -> None:
+    """`on` and `off` are the whole of the flag, and argparse is what says so."""
+
+    world = _world(tmp_path)
+
+    result = _run(world, "plan", "select", "--project=sometimes")
+
+    assert result.returncode == 2
+    assert "invalid choice" in result.stderr
+
+
 def test_update_reports_a_new_catalog_entry_and_leaves_it_disabled_unanswered(
     tmp_path: Path,
 ) -> None:

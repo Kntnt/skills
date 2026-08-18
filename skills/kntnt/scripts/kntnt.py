@@ -1186,13 +1186,15 @@ def require_yes(yes: bool, deletion: str) -> None:
 
 
 def parse_layer(value: str) -> bool:
-    """True when the command targets Global."""
+    """True when the command targets Global.
 
-    if value in {"on", "true", "1"}:
-        return False
-    if value in {"off", "false", "0"}:
-        return True
-    raise ManagerError(f"unknown --project value '{value}'")
+    `off` is Global and `on` is the Project, and those two are the whole of the
+    flag (ADR-0038). Nothing else can arrive: `add_project_flag` declares the
+    choices, and `normalize_argv` has already turned the bare flag and the
+    `--project=` form into one of them before argparse reads it.
+    """
+
+    return value == "off"
 
 
 def joined(base: list[str], extra: list[str]) -> list[str]:
