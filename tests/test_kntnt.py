@@ -12,6 +12,7 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 HARNESS_PATHS = REPO_ROOT / "skills" / "kntnt" / "harness-paths.json"
+MANAGER_DIR = REPO_ROOT / "skills" / "kntnt"
 FAKE_SKILLS = REPO_ROOT / "tests" / "support" / "fake_skills.py"
 
 SHARED_SKILLS = ".agents/skills"
@@ -167,8 +168,21 @@ def _world(
     shutil.copy(HARNESS_PATHS, here / "harness-paths.json")
     _write(here / "catalog.json", _catalog(entries))
     _write(here / "SKILL.md", _skill_md("kntnt", description="Manager."))
+    _ship_manpages(here)
+    _ship_manpages(source / "skills" / "kntnt")
 
     return {"home": home, "project": project, "source": source, "here": here}
+
+
+def _ship_manpages(manager: Path) -> None:
+    """Give *manager* the help files the collection ships beside its script.
+
+    Help is a file the manager prints rather than a string it holds, so a
+    fixture without these files is a manager that cannot answer at all.
+    """
+
+    shutil.copy(MANAGER_DIR / "help.md", manager / "help.md")
+    shutil.copytree(MANAGER_DIR / "help", manager / "help", dirs_exist_ok=True)
 
 
 def _present(world: dict[str, Path], root: str, *harness_dirs: str) -> None:
@@ -948,14 +962,47 @@ def test_update_reports_capabilities_per_skill(tmp_path: Path) -> None:
     assert capabilities[0]["name"] == "subagents"
 
 
-def test_help_prints_manager_help(tmp_path: Path) -> None:
+def test_help_prints_the_manpage_the_manager_ships(tmp_path: Path) -> None:
+    """The manager's help is a file beside it, not a string inside its script."""
+
     world = _world(tmp_path)
 
     result = _run(world, "help")
 
     assert result.returncode == 0, result.stderr
-    assert "enable" in result.stdout
-    assert "disable" in result.stdout
+    shipped = (REPO_ROOT / "skills" / "kntnt" / "help.md").read_text(encoding="utf-8")
+    assert result.stdout.strip() == shipped.strip()
+
+
+def test_help_named_subcommand_prints_that_subcommands_manpage(
+    tmp_path: Path,
+) -> None:
+    """`/kntnt help <command>` is how a verb of the manager is read about."""
+
+    world = _world(tmp_path)
+
+    result = _run(world, "help", "uninstall")
+
+    assert result.returncode == 0, result.stderr
+    shipped = (REPO_ROOT / "skills" / "kntnt" / "help" / "uninstall.md").read_text(
+        encoding="utf-8"
+    )
+    assert result.stdout.strip() == shipped.strip()
+
+
+def test_help_named_skill_prefers_the_manpage_beside_it(tmp_path: Path) -> None:
+    """A skill that ships `help.md` is read from that file, not from its Steps."""
+
+    world = _world(tmp_path)
+    dest = world["home"] / ".agents" / "skills" / "alpha"
+    _write(dest / "SKILL.md", _skill_md("alpha", help_body="Generated help."))
+    _write(dest / "help.md", "# alpha\n\nThe alpha manpage.\n")
+
+    result = _run(world, "help", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert "The alpha manpage." in result.stdout
+    assert "Generated help." not in result.stdout
 
 
 def test_help_named_skill_prints_that_skills_help(tmp_path: Path) -> None:
@@ -1120,7 +1167,9 @@ def test_update_calls_nothing_new_when_there_was_no_snapshot(tmp_path: Path) -> 
 def test_status_guidance_no_longer_sends_the_user_to_update(tmp_path: Path) -> None:
     """Discovery no longer depends on Update, so the skill body must not say it does."""
 
-    text = (REPO_ROOT / "skills" / "kntnt" / "status.md").read_text(encoding="utf-8")
+    text = (REPO_ROOT / "skills" / "kntnt" / "steps" / "status.md").read_text(
+        encoding="utf-8"
+    )
 
     assert "/kntnt update" not in text
     assert "catalog_refreshed" in text
@@ -1130,7 +1179,9 @@ def test_manager_skill_is_user_invoked_and_not_internal() -> None:
     text = (REPO_ROOT / "skills" / "kntnt" / "SKILL.md").read_text(encoding="utf-8")
     assert "disable-model-invocation: true" in text
     assert "internal: true" not in text
-    enable = (REPO_ROOT / "skills" / "kntnt" / "enable.md").read_text(encoding="utf-8")
+    enable = (REPO_ROOT / "skills" / "kntnt" / "steps" / "enable.md").read_text(
+        encoding="utf-8"
+    )
     assert "scripts/kntnt.py" in enable
 
 
@@ -1383,7 +1434,7 @@ def test_no_arguments_prints_help(tmp_path: Path) -> None:
     result = _run(world)
 
     assert result.returncode == 0, result.stderr
-    assert result.stdout.startswith("kntnt — manage this collection")
+    assert result.stdout.startswith("# kntnt")
     assert result.stdout == _run(world, "help").stdout
 
 
@@ -1531,6 +1582,34 @@ def test_collection_skills_are_hidden_from_the_transport() -> None:
         assert "internal: true" in text, path
         assert "check --here" in text, path
         assert "npx skills add Kntnt/skills" in text, path
+
+
+def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
+    """Help lives with the skill: a file it prints, not prose it regenerates."""
+
+    for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
+        text = path.read_text(encoding="utf-8")
+        assert (path.parent / "help.md").is_file(), path
+        assert "`$HERE/help.md`" in text, path
+        assert "--help" in text, path
+        assert "Arguments and Steps" not in text, path
+
+
+def test_the_manager_separates_steps_from_manpages() -> None:
+    """One rule everywhere: `help.md` is the manpage, `steps/` is the instructions."""
+
+    manager = REPO_ROOT / "skills" / "kntnt"
+    verbs = ("help", "status", "enable", "disable", "update", "uninstall")
+
+    assert (manager / "help.md").is_file()
+    for verb in verbs:
+        assert (manager / "steps" / f"{verb}.md").is_file(), verb
+        assert (manager / "help" / f"{verb}.md").is_file(), verb
+        if verb != "help":
+            assert not (manager / f"{verb}.md").exists(), verb
+
+    text = (manager / "SKILL.md").read_text(encoding="utf-8")
+    assert "$HERE/steps/" in text
 
 
 def test_agents_md_is_model_invoked() -> None:
@@ -1828,7 +1907,9 @@ def test_the_change_verbs_tell_the_user_when_a_change_did_not_take(
     """The payload is half of it; the skill body has to show the failure."""
 
     for name in ("enable.md", "disable.md", "update.md"):
-        text = (REPO_ROOT / "skills" / "kntnt" / name).read_text(encoding="utf-8")
+        text = (REPO_ROOT / "skills" / "kntnt" / "steps" / name).read_text(
+            encoding="utf-8"
+        )
         assert "`failed`" in text, name
         assert "`directories`" in text, name
 
@@ -2066,7 +2147,9 @@ def test_uninstall_survives_deleting_the_manager_it_is_running(tmp_path: Path) -
 def test_uninstall_tells_the_user_what_it_does_not_touch() -> None:
     """No payload can carry every working directory; the body has to say it."""
 
-    text = (REPO_ROOT / "skills" / "kntnt" / "uninstall.md").read_text(encoding="utf-8")
+    text = (REPO_ROOT / "skills" / "kntnt" / "steps" / "uninstall.md").read_text(
+        encoding="utf-8"
+    )
 
     assert "`failed`" in text
     assert "`directories`" in text

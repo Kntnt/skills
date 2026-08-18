@@ -20,7 +20,7 @@ Write the fewest always-loaded tokens that still keep the next session safe. Def
 
 ## Help
 
-If the arguments are `help`, `--help`, or `-h`, emit the Arguments and Steps below and stop.
+If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` as it stands and stop. It is this skill's manpage: print it, do not summarise or extend it.
 
 ## Arguments
 

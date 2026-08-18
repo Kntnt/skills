@@ -43,30 +43,6 @@ CAPABILITIES = {
         "how": "run this skill in a harness that can spawn subagents",
     },
 }
-MANAGER_HELP = """\
-kntnt — manage this collection
-
-Usage: /kntnt [subcommand] [skill...] [--project[=on|off]] [--yes]
-
-Subcommands:
-  help [skill]         this help, or help for one named collection skill
-  status [skill...]    report Global, or what applies here with --project
-  enable [skill...]    make skills Enabled (picker if none named)
-  disable [skill...]   make skills Disabled (picker if none named)
-  update               refresh this collection and re-check Dependencies
-  uninstall            remove this collection from this machine, Manager last
-
-Options:
-  --project    this Project rather than Global (--project=off is Global)
-  --yes        assume yes; ask nothing that can be answered yes or no
-
-Bare /kntnt is this help. Status lists every Catalog skill, Enabled or not;
-with --project it lists what applies in this directory and where each skill
-comes from. Enable, Disable, and Update default to Global. They act on every
-Harness present on this machine, working out which those are on every run.
-Uninstall takes no --project: it clears this machine, and leaves a working
-directory's own copies to that project.
-"""
 
 
 class ManagerError(RuntimeError):
@@ -1398,23 +1374,68 @@ def help_section(text: str) -> str:
     return rest.strip()
 
 
-def cmd_help(name: str | None) -> int:
-    """Print help for the manager or one named collection skill."""
+def read_manpage(path: Path) -> str:
+    """Read a shipped manpage, or name the file a truncated install is missing."""
 
+    # A half-copied install is the one way a manpage can be absent, and the
+    # user can act on that only if the file that should be there is named.
+    if not path.is_file():
+        raise ManagerError(f"missing help file '{path}'; run the transport again")
+
+    return path.read_text(encoding="utf-8").rstrip("\n")
+
+
+def subcommand_manpage(name: str) -> Path | None:
+    """Return the manpage the manager ships for *name*, if *name* is a verb of it.
+
+    Matched against what is on disk rather than a list held here, so the set of
+    documented verbs is the set of files under `help/` and cannot drift from it.
+    Globbing also settles the name: a user-supplied string never reaches a path.
+    """
+
+    return next(
+        (path for path in (here() / "help").glob("*.md") if path.stem == name), None
+    )
+
+
+def help_text(name: str | None) -> str:
+    """Return the help for *name*: the manager's, a subcommand's, or a skill's."""
+
+    # Bare help, and the manager's own name, both mean the manager's manpage.
     if not name or name == MANAGER:
-        print(MANAGER_HELP, end="")
-        return 0
-    if name not in catalog_names() and name != MANAGER:
-        raise ManagerError(f"unknown skill '{name}'")
+        return read_manpage(here() / "help.md")
+
+    # The manager documents its own verbs; every skill documents itself. A verb
+    # answers first, so a skill can never take a subcommand's name out of use.
+    verb = subcommand_manpage(name)
+    if verb is not None:
+        return read_manpage(verb)
+
+    if name not in catalog_names():
+        raise ManagerError(f"unknown subcommand or skill '{name}'")
+
+    # A Disabled skill has no files here, so its description is all there is.
     path = find_skill_md(name)
     if path is None:
         entry = next(
             (item for item in catalog_skills() if item.get("name") == name), None
         )
         description = entry.get("description", "") if entry else ""
-        print(f"{name}\n\n{description}\n\nEnable this skill to read its full help.")
-        return 0
-    print(help_section(path.read_text(encoding="utf-8")))
+        return f"{name}\n\n{description}\n\nEnable this skill to read its full help."
+
+    # Every collection skill ships its manpage beside its SKILL.md; one that
+    # does not is older than that contract, and its Help section stands in.
+    manpage = path.parent / "help.md"
+    if manpage.is_file():
+        return read_manpage(manpage)
+
+    return help_section(path.read_text(encoding="utf-8"))
+
+
+def cmd_help(name: str | None) -> int:
+    """Print help for the manager, one of its subcommands, or one skill."""
+
+    print(help_text(name))
     return 0
 
 

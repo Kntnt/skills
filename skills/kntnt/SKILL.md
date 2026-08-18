@@ -15,7 +15,7 @@ The Manager. One namespaced entry point. Every other collection skill is invoked
 
 ## Help
 
-If the arguments are `help`, `--help`, `-h`, or `help <name>`, follow `$HERE/help.md` and stop.
+If the arguments are `help`, `--help`, `-h`, or `help <name>`, follow `$HERE/steps/help.md` and stop. `$HERE/help.md` is this skill's own manpage, and `$HERE/help/<verb>.md` is the manpage of one verb; both are printed by that file rather than read by you.
 
 ## Arguments
 
@@ -35,5 +35,5 @@ Which Harnesses a verb reaches is never asked and never recorded: every Harness 
 ## Steps
 
 1. Take the first argument as the subcommand. No arguments → `help`. `help`, `--help`, or `-h` → `help`.
-2. Read `$HERE/<subcommand>.md`. Unknown subcommand → follow `$HERE/help.md` and stop.
+2. Read `$HERE/steps/<subcommand>.md`. Unknown subcommand → follow `$HERE/steps/help.md` and stop.
 3. Follow that file. Done when it says to stop.

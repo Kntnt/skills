@@ -69,7 +69,7 @@ Every command here reads `--project` the same way: `--project` or `--project=on`
 
 `/kntnt uninstall` is the way out, and the mirror of the one command that installed this. It removes every enabled skill from every harness on the machine and then the manager itself, so there is nothing left for your harness's own uninstall to do. The manager goes last and only if everything else went: a run that leaves a skill behind keeps `kntnt`, because it is the only thing that can be asked to finish. It takes no `--project`: skills in a working directory are checked into that repository and travel with it, so they are left alone and the report says so. It deletes files, so it asks first — `--yes` answers.
 
-Enabled skills are invoked by their own names, not as `/kntnt <name>`.
+Enabled skills are invoked by their own names, not as `/kntnt <name>`. Each one answers `--help` — `-h` and `help` too — with the manpage it ships beside itself, so a skill in front of you can be asked what it does without knowing which collection it arrived from.
 
 ### agents-md
 
