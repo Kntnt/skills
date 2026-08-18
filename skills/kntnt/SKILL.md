@@ -2,7 +2,7 @@
 name: kntnt
 description: Manage this collection — which skills are Enabled, in Global and in each Project.
 disable-model-invocation: true
-argument-hint: "[status|enable|disable|update|uninstall|help] [skill...] [--project] [--yes]"
+argument-hint: "[status|enable|disable|update|uninstall|help] [skill...] [--project] [--yes] [--dry-run]"
 ---
 
 # kntnt
@@ -21,16 +21,18 @@ If the arguments are `help`, `--help`, `-h`, or `help <name>`, follow `$HERE/ste
 
 - no args / `help` `[skill]` — Help for the manager, or one named collection skill. Bare `/kntnt` means Help.
 - `status` `[skill...]` `[--project]` — Status. No names reports every skill the form covers.
-- `enable` `[skill...]` `[--project]` `[--yes]` — Enable. No names opens a picker.
-- `disable` `[skill...]` `[--project]` `[--yes]` — Disable. No names opens a picker.
-- `update` `[--project]` `[--yes]` — refresh this collection, then re-check Dependencies.
-- `uninstall` `[--yes]` — remove this collection from this machine, the Manager last.
+- `enable` `[skill...]` `[--project]` `[--yes]` `[--dry-run]` — Enable. No names opens a picker.
+- `disable` `[skill...]` `[--project]` `[--yes]` `[--dry-run]` — Disable. No names opens a picker.
+- `update` `[--project]` `[--yes]` `[--dry-run]` — refresh this collection, then re-check Dependencies.
+- `uninstall` `[--yes]` `[--dry-run]` — remove this collection from this machine, the Manager last.
 
 Every verb reads `--project` the same way: absent or `--project=off` means Global, `--project` or `--project=on` means this Project. Enable, Disable, and Update change that layer. Status changes nothing, so the flag picks the question instead: Global alone without it, and with it the Effective set — what applies in this working directory. Uninstall is the one verb that takes no `--project`: it clears this machine, and a working directory's own copies belong to that project.
 
 Which Harnesses a verb reaches is never asked and never recorded: every Harness present in that layer is acted on, worked out on each run.
 
 `--yes` means assume yes: ask nothing that can be answered yes or no. Every verb of `scripts/kntnt.py` accepts it, so passing the user's flag straight through is always safe.
+
+`--dry-run` runs a changing verb for real against a temporary home seeded with this collection's own files, and throws that home away when the run ends. Nothing on the machine changes, and what comes back is the verb's own outcome rather than a description of what it would have done. It has an npm cache of its own, so the transport is downloaded afresh and the run takes noticeably longer than the one it previews — say so before starting it. Every verb of `scripts/kntnt.py` accepts the flag, as with `--yes`, and a verb that changes nothing ignores it. A payload carrying `dry_run` is such a run's outcome: report it as the outcome it is, say in the same breath that nothing on the machine changed, and read its `directories` as the Sandbox's copies of the real ones — they sit under the temporary home `dry_run.sandbox` names, and that home is gone by the time you read the payload.
 
 ## Steps
 

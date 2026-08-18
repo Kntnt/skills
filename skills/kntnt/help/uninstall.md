@@ -4,7 +4,7 @@ Remove this collection from this machine.
 
 ## Synopsis
 
-`/kntnt uninstall [--yes]`
+`/kntnt uninstall [--yes] [--dry-run]`
 
 ## Description
 
@@ -15,6 +15,7 @@ The manager goes only where everything else really went. A run that leaves a ski
 ## Options
 
 - `--yes` — assume yes: remove without waiting for a confirmation. Uninstall deletes, so the script itself refuses without it.
+- `--dry-run` — run it against a temporary home seeded with this collection's files, and throw that home away. Nothing in the layer changes, and the report is the run's own outcome read off the Sandbox's disk. It downloads the transport afresh, so it takes longer than the run it previews.
 
 ## Notes
 

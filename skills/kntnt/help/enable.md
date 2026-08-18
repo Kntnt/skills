@@ -4,7 +4,7 @@ Make one or more skills of this collection Enabled.
 
 ## Synopsis
 
-`/kntnt enable [skill...] [--project[=on|off]] [--yes]`
+`/kntnt enable [skill...] [--project[=on|off]] [--yes] [--dry-run]`
 
 ## Description
 
@@ -20,6 +20,7 @@ With no skill names, the Catalog is shown as a list grouped by Category, naming 
 
 - `--project`, `--project=on` — Enable in this Project rather than Global. `--project=off` is the bare form.
 - `--yes` — assume yes: place the skills without waiting for a confirmation.
+- `--dry-run` — run it against a temporary home seeded with this collection's files, and throw that home away. Nothing in the layer changes, and the report is the run's own outcome read off the Sandbox's disk. It downloads the transport afresh, so it takes longer than the run it previews.
 
 ## Notes
 

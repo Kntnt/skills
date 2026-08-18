@@ -4,7 +4,7 @@ Make one or more skills of this collection Disabled.
 
 ## Synopsis
 
-`/kntnt disable [skill...] [--project[=on|off]] [--yes]`
+`/kntnt disable [skill...] [--project[=on|off]] [--yes] [--dry-run]`
 
 ## Description
 
@@ -20,6 +20,7 @@ With no skill names, the Enabled skills are shown as a list grouped by Category,
 
 - `--project`, `--project=on` — Disable in this Project rather than Global. `--project=off` is the bare form.
 - `--yes` — assume yes: delete the files without waiting for a confirmation. Disable deletes, so the script itself refuses without it.
+- `--dry-run` — run it against a temporary home seeded with this collection's files, and throw that home away. Nothing in the layer changes, and the report is the run's own outcome read off the Sandbox's disk. It downloads the transport afresh, so it takes longer than the run it previews.
 
 ## Notes
 

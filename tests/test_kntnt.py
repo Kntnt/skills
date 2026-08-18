@@ -14,6 +14,7 @@ KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 HARNESS_PATHS = REPO_ROOT / "skills" / "kntnt" / "harness-paths.json"
 MANAGER_DIR = REPO_ROOT / "skills" / "kntnt"
 FAKE_SKILLS = REPO_ROOT / "tests" / "support" / "fake_skills.py"
+UV_CACHE = Path(os.environ.get("UV_CACHE_DIR") or Path.home() / ".cache" / "uv")
 
 SHARED_SKILLS = ".agents/skills"
 
@@ -256,9 +257,19 @@ def _env(world: dict[str, Path]) -> dict[str, str]:
 
     The isolated home, project, and collection are what makes a run a test run,
     and the transport reads its own path table from a variable of its own.
+
+    `HOME` is redirected as well as the manager's own variable, because the
+    transport resolves the Global layer through it exactly as the real one
+    does. A Sandbox redirects that same variable and nothing else would carry
+    the redirection to the stand-in (ADR-0042). `uv` keeps its cache where it
+    was: it is what runs the stand-in rather than anything the collection
+    installs, and a cache under the isolated home would be a change to that
+    home that no verb made.
     """
 
     env = os.environ.copy()
+    env["HOME"] = str(world["home"])
+    env["UV_CACHE_DIR"] = str(UV_CACHE)
     env["KNTNT_HOME"] = str(world["home"])
     env["KNTNT_SOURCE"] = str(world["source"])
     env["KNTNT_PROJECT"] = str(world["project"])
@@ -304,14 +315,20 @@ def _run(
 
 
 def _transport_add(
-    world: dict[str, Path], name: str
+    world: dict[str, Path], name: str, *, home: Path | None = None
 ) -> subprocess.CompletedProcess[str]:
     """Add *name* globally through the stand-in transport, as the manager does.
 
     A test about what `add` does to a directory calls the transport itself
     rather than a verb: which skills a verb hands it is a separate question
-    with tests of its own, and one that is going to keep changing.
+    with tests of its own, and one that is going to keep changing. *home*
+    redirects the home the transport writes the Global layer into, which is
+    what a Sandbox does to it.
     """
+
+    env = _env(world)
+    if home is not None:
+        env["HOME"] = str(home)
 
     return subprocess.run(
         [
@@ -328,7 +345,7 @@ def _transport_add(
             "--yes",
         ],
         cwd=world["project"],
-        env=_env(world),
+        env=env,
         text=True,
         capture_output=True,
         check=False,
@@ -2182,3 +2199,252 @@ def test_help_lists_the_uninstall_verb(tmp_path: Path) -> None:
     text = _run(world, "help").stdout
 
     assert "uninstall" in text
+
+
+def _tree(root: Path) -> dict[str, bytes]:
+    """Snapshot every file under *root*, so a run can be shown to have left it alone."""
+
+    return {
+        str(path.relative_to(root)): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+
+
+def test_the_transport_writes_where_home_points(tmp_path: Path) -> None:
+    """The real transport honours an overridden HOME, and the double has to too.
+
+    That property is the whole of what makes a Sandbox possible (ADR-0042), so
+    a double that resolved its home some other way would let a dry run pass
+    the suite while writing into the user's real home.
+    """
+
+    world = _world(tmp_path)
+    elsewhere = tmp_path / "elsewhere"
+
+    result = _transport_add(world, "alpha", home=elsewhere)
+
+    assert result.returncode == 0, result.stderr
+    assert (elsewhere / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+    assert not (world["home"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_dry_run_leaves_every_directory_of_the_layer_alone(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    before = _tree(world["home"])
+
+    result = _run(world, "apply", "enable", "alpha", "--dry-run")
+
+    assert result.returncode == 0, result.stderr
+    assert _tree(world["home"]) == before
+
+
+def test_dry_run_reports_an_outcome_read_from_the_sandbox(tmp_path: Path) -> None:
+    """What comes back is the verb's own outcome, not a description of intent."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+
+    assert payload["intended"] == ["alpha"]
+    assert payload["confirmed"] == ["alpha"]
+    assert payload["failed"] == []
+    assert payload["noop"] == []
+
+
+def test_dry_run_makes_the_transport_calls_the_real_run_makes(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    dry = tmp_path / "dry.jsonl"
+    real = tmp_path / "real.jsonl"
+
+    _run(world, "apply", "enable", "alpha", "--dry-run", log=dry)
+    _run(world, "apply", "enable", "alpha", log=real)
+
+    assert _calls(dry) == _calls(real)
+
+
+def test_dry_run_says_it_downloads_the_transport_afresh(tmp_path: Path) -> None:
+    """An unexplained pause is when a user reaches for the interrupt."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+
+    note = payload["dry_run"]["note"]
+    assert "download" in note
+    assert "longer" in note
+
+
+def test_dry_run_starts_from_the_collection_files_the_layer_holds(
+    tmp_path: Path,
+) -> None:
+    """Seeded with what is here, so a preview reports the run and not the world."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    before = _tree(world["home"])
+
+    payload = _json(_run(world, "apply", "disable", "alpha", "--yes", "--dry-run"))
+
+    assert payload["confirmed"] == ["alpha"]
+    assert _tree(world["home"]) == before
+
+
+def test_dry_run_reports_a_skill_already_enabled_as_no_work(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+
+    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+
+    assert payload["noop"] == ["alpha"]
+    assert payload["intended"] == []
+
+
+def test_dry_run_leaves_a_skill_that_is_not_ours_out_of_the_sandbox(
+    tmp_path: Path,
+) -> None:
+    """Only this collection's files are seeded; another's is nothing to copy."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _write(
+        world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md",
+        _foreign_skill_md("alpha"),
+    )
+
+    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+
+    assert payload["intended"] == ["alpha"]
+    assert payload["noop"] == []
+
+
+def test_dry_run_update_writes_neither_the_skills_nor_the_stored_catalog(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+    delta = _entry("delta", "code", description="The delta skill.")
+    _publish(
+        world,
+        delta,
+        [*_SURVIVORS, _entry("gamma", "text", description="The gamma skill."), delta],
+    )
+    before = _tree(world["home"])
+    stored = (world["here"] / "catalog.json").read_bytes()
+
+    payload = _json(_run(world, "apply", "update", "--dry-run"))
+
+    assert payload["new"] == ["delta"]
+    assert "alpha" in payload["confirmed"]
+    assert _tree(world["home"]) == before
+    assert (world["here"] / "catalog.json").read_bytes() == stored
+
+
+def test_dry_run_uninstall_keeps_the_collection_on_the_machine(
+    tmp_path: Path,
+) -> None:
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    _install_manager(world)
+    before = _tree(world["home"])
+
+    payload = _json(_run(world, "apply", "uninstall", "--yes", "--dry-run"))
+
+    assert payload["confirmed"] == ["alpha", "kntnt"]
+    assert _tree(world["home"]) == before
+
+
+def test_dry_run_project_leaves_the_working_directory_alone(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+    _present(world, "project", ".claude")
+    before = _tree(world["project"])
+
+    payload = _json(_run(world, "apply", "enable", "--project", "alpha", "--dry-run"))
+
+    assert payload["confirmed"] == ["alpha"]
+    assert _tree(world["project"]) == before
+
+
+def test_dry_run_takes_the_sandbox_with_it(tmp_path: Path) -> None:
+    """A dry run leaves a report behind and nothing else."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+
+    assert not Path(payload["dry_run"]["sandbox"]).exists()
+
+
+def test_dry_run_catalog_prints_the_catalog_and_writes_nothing(
+    tmp_path: Path,
+) -> None:
+    """The one write outside a layer honours the flag rather than ignoring it."""
+
+    world = _world(tmp_path)
+    _publish(
+        world,
+        _entry("delta", "code", description="The delta skill."),
+        [*_SURVIVORS, _entry("gamma", "text", description="The gamma skill.")],
+    )
+    stored = (world["here"] / "catalog.json").read_bytes()
+
+    result = _run(world, "catalog", "--write", "--dry-run")
+
+    assert result.returncode == 0, result.stderr
+    assert "delta" in json.dumps(json.loads(result.stdout))
+    assert (world["here"] / "catalog.json").read_bytes() == stored
+
+
+def test_every_subparser_accepts_dry_run(tmp_path: Path) -> None:
+    """A forwarded flag must never be the thing that breaks a run (ADR-0029)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+
+    for args in (
+        ("status", "--dry-run"),
+        ("help", "--dry-run"),
+        ("check", "--here", str(gamma), "--dry-run"),
+        ("catalog", "--dry-run"),
+        ("plan", "enable", "alpha", "--dry-run"),
+        ("plan", "disable", "alpha", "--dry-run"),
+        ("plan", "update", "--dry-run"),
+        ("plan", "uninstall", "--dry-run"),
+        ("apply", "enable", "alpha", "--dry-run"),
+        ("apply", "disable", "alpha", "--yes", "--dry-run"),
+        ("apply", "update", "--dry-run"),
+        ("apply", "uninstall", "--yes", "--dry-run"),
+    ):
+        result = _run(world, *args)
+        assert result.returncode == 0, f"{args}: {result.stderr}"
+        assert "unrecognized arguments" not in result.stderr
+
+
+def test_help_documents_the_dry_run_flag(tmp_path: Path) -> None:
+    world = _world(tmp_path)
+
+    text = _run(world, "help").stdout
+
+    assert "--dry-run" in text
+
+
+def test_every_changing_verb_forwards_the_dry_run_flag() -> None:
+    """The agent's forwarding is prose, so the prose has to say it."""
+
+    for verb in ("enable", "disable", "update", "uninstall"):
+        text = (REPO_ROOT / "skills" / "kntnt" / "steps" / f"{verb}.md").read_text(
+            encoding="utf-8"
+        )
+        assert "--dry-run" in text, verb

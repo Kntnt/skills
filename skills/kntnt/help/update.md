@@ -4,7 +4,7 @@ Refresh this collection's skills, then check every Dependency again.
 
 ## Synopsis
 
-`/kntnt update [--project[=on|off]] [--yes]`
+`/kntnt update [--project[=on|off]] [--yes] [--dry-run]`
 
 ## Description
 
@@ -16,6 +16,7 @@ Afterwards every Dependency and every Capability is checked again, so a refresh 
 
 - `--project`, `--project=on` — refresh this Project rather than Global. `--project=off` is the bare form.
 - `--yes` — assume yes: refresh without waiting for a confirmation.
+- `--dry-run` — run it against a temporary home seeded with this collection's files, and throw that home away. Nothing in the layer changes, and the report is the run's own outcome read off the Sandbox's disk. It downloads the transport afresh, so it takes longer than the run it previews.
 
 ## Notes
 

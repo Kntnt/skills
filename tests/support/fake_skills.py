@@ -16,9 +16,16 @@ from typing import cast
 
 
 def home() -> Path:
-    """Return the isolated home directory tests give us."""
+    """Return the home the Global layer is written under.
 
-    return Path(os.environ["KNTNT_HOME"])
+    `HOME` and nothing else, because that is what the real transport resolves
+    its global directory through — the property a Sandbox stands on (ADR-0042).
+    A double that read a variable of its own would write inside the Sandbox
+    whether or not the manager had redirected the one that matters, and a dry
+    run that escaped into the real home would pass the suite anyway.
+    """
+
+    return Path(os.environ["HOME"])
 
 
 def project() -> Path:

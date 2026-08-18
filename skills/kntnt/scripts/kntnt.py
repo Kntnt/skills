@@ -14,8 +14,11 @@ import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 import urllib.error
 import urllib.request
+from collections.abc import Iterator
+from contextlib import contextmanager
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, cast
@@ -62,8 +65,31 @@ def fail(message: str, code: int = 1) -> int:
     return code
 
 
-def emit(payload: Any) -> None:
-    """Print *payload* as JSON."""
+# What a dry run costs, carried in the payload rather than left to be guessed
+# at: the Sandbox has an npm cache of its own, so the first dry run in a
+# session downloads the transport afresh. An unexplained pause in a command
+# whose whole promise is that nothing happens is the moment somebody reaches
+# for the interrupt (ADR-0042).
+DRY_RUN_NOTE = (
+    "a dry run has an npm cache of its own, so the transport is downloaded "
+    "afresh and this takes longer than the run it previews"
+)
+
+# The Sandbox this run is executing against, or None when the run is real.
+# Held for the run because every payload a dry run emits has to say so, and
+# which verb composed it is beside the point: the Sandbox is a fact about the
+# run rather than about the verb.
+_SANDBOX: Path | None = None
+
+
+def emit(payload: dict[str, Any]) -> None:
+    """Print *payload* as JSON, saying where a dry run read its outcome from."""
+
+    if _SANDBOX is not None:
+        payload = {
+            **payload,
+            "dry_run": {"sandbox": str(_SANDBOX), "note": DRY_RUN_NOTE},
+        }
 
     print(json.dumps(payload, indent=2))
 
@@ -669,6 +695,148 @@ def run_transport(args: list[str], *, internal: bool = False) -> None:
     if result.returncode != 0:
         detail = (result.stderr or result.stdout).strip()
         raise ManagerError(detail or f"transport failed: {' '.join(args)}")
+
+
+# The variables a Sandbox redirects. `HOME` is what the transport resolves the
+# Global layer and its own npm cache through — measured rather than assumed,
+# and the property the whole of `--dry-run` stands on (ADR-0042) — and the
+# three of ours are how this script resolves that same layer, the Project, and
+# the Manager a verb writes beside.
+SANDBOX_ENV = ("HOME", "KNTNT_HOME", "KNTNT_PROJECT", "KNTNT_HERE")
+
+# The two homes a Sandbox holds, under the root it is made at. Both stand
+# whichever layer is being run: the transport resolves a Project against the
+# directory it is invoked in and its own cache against the home, so a Sandbox
+# with only the layer's own base would leave the other reaching out of it.
+SANDBOX_HOME = "home"
+SANDBOX_PROJECT = "project"
+
+
+def sandbox_path(path: Path, root: Path, *, global_layer: bool) -> Path:
+    """Return where *path* lands inside the Sandbox at *root*.
+
+    The layer decides both ends of the move — Global is rooted at the home and
+    a Project at the working directory, and the Sandbox holds a counterpart of
+    each — so both are worked out here rather than passed in. Where a layer
+    lives is then one expression in one place instead of a pair of values
+    every caller has to carry and keep matched.
+    """
+
+    base = home() if global_layer else project_root()
+    replacement = root / (SANDBOX_HOME if global_layer else SANDBOX_PROJECT)
+
+    try:
+        return replacement / path.relative_to(base)
+    except ValueError:
+        raise ManagerError(
+            f"{path} is outside {base} and cannot be sandboxed"
+        ) from None
+
+
+def seed_skills(source: Path, destination: Path) -> None:
+    """Copy this collection's own skills out of *source* and into *destination*.
+
+    The Manager and every skill carrying the marker, and nothing else. Without
+    the seed a dry run would report installing what the user already has, which
+    is the failure mode of a preview that starts from an empty world; with more
+    than the seed it would absorb a defect worth seeing, since no verb of this
+    collection touches another collection's files (ADR-0042).
+    """
+
+    for entry in sorted(source.iterdir()):
+        if not (entry / "SKILL.md").is_file():
+            continue
+        if entry.name != MANAGER and not carries_marker(entry):
+            continue
+        shutil.copytree(entry, destination / entry.name)
+
+
+def seed_manager(root: Path, directories: list[Path], *, global_layer: bool) -> Path:
+    """Return the Manager a sandboxed run resolves its own directory to.
+
+    A Manager installed in the layer being run is already in the Sandbox, put
+    there with the directory it sits in, and pointing at that copy is what lets
+    a dry run of Uninstall delete the Manager the way the real run would. One
+    installed anywhere else — a Global Manager applying a Project, a checkout
+    under test — is copied in, because a verb that writes beside the Manager,
+    as Update does when it stores the Catalog, has to write inside the Sandbox.
+    """
+
+    installed = here()
+    if installed.parent in directories:
+        return sandbox_path(installed, root, global_layer=global_layer)
+
+    copy = root / MANAGER
+    shutil.copytree(installed, copy)
+    return copy
+
+
+def seed_sandbox(root: Path, *, global_layer: bool) -> dict[str, str]:
+    """Fill the Sandbox at *root* with this collection's files, and say where it is.
+
+    Returns the environment the verb is then run under: both of the Sandbox's
+    homes, whichever layer is being applied, and the Manager it resolves its
+    own directory to.
+    """
+
+    sandbox_home = root / SANDBOX_HOME
+    sandbox_project = root / SANDBOX_PROJECT
+    sandbox_home.mkdir()
+    sandbox_project.mkdir()
+
+    # Every directory the layer covers is recreated, whether or not this
+    # collection has anything in it. A Harness is Detected by its directory
+    # being there (ADR-0035), so a Sandbox missing one would resolve a
+    # different set of targets than the run it is standing in for.
+    directories = layer_dirs(
+        target_harnesses(global_layer=global_layer), global_layer=global_layer
+    )
+    for directory in directories:
+        target = sandbox_path(directory, root, global_layer=global_layer)
+        target.mkdir(parents=True, exist_ok=True)
+        if directory.is_dir():
+            seed_skills(directory, target)
+
+    return {
+        "HOME": str(sandbox_home),
+        "KNTNT_HOME": str(sandbox_home),
+        "KNTNT_PROJECT": str(sandbox_project),
+        "KNTNT_HERE": str(seed_manager(root, directories, global_layer=global_layer)),
+    }
+
+
+@contextmanager
+def sandbox(*, global_layer: bool) -> Iterator[None]:
+    """Run a verb against a temporary home seeded with this collection, then discard it.
+
+    The verb inside is the verb itself: the same code, the same transport
+    calls, and the same reading of the disk afterwards, so what it reports is
+    an outcome rather than a description of intent (ADR-0042). The redirection
+    is the environment, because that is what this script resolves every
+    directory through and what the transport inherits from it.
+    """
+
+    global _SANDBOX
+
+    # Seeded before anything is redirected, since the seed is read from the
+    # world as it is now, and the Sandbox is announced only once it stands.
+    root = Path(tempfile.mkdtemp(prefix="kntnt-dry-run-"))
+    restore = {name: os.environ.get(name) for name in SANDBOX_ENV}
+    try:
+        os.environ.update(seed_sandbox(root, global_layer=global_layer))
+        _SANDBOX = root
+        yield
+    finally:
+        # Put the environment back as it was, whether the verb returned or
+        # raised, and take the Sandbox with it: what a dry run leaves behind
+        # is a report and nothing else.
+        _SANDBOX = None
+        for name, value in restore.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+        shutil.rmtree(root, ignore_errors=True)
 
 
 def contradicting_dirs(
@@ -1593,6 +1761,17 @@ def add_yes_flag(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--yes", action="store_true")
 
 
+def add_dry_run_flag(parser: argparse.ArgumentParser) -> None:
+    """Add --dry-run to a verb.
+
+    Every subparser takes it, including the ones with nothing to do with it:
+    the agent's forwarding is prose and therefore unreliable, and a forwarded
+    flag must never be the thing that breaks a run (ADR-0029).
+    """
+
+    parser.add_argument("--dry-run", action="store_true")
+
+
 def normalize_argv(argv: list[str]) -> list[str]:
     """Turn bare `--project` into `--project on` so it cannot steal a skill name."""
 
@@ -1617,18 +1796,22 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     status.add_argument("skills", nargs="*")
     add_project_flag(status)
     add_yes_flag(status)
+    add_dry_run_flag(status)
 
     help_cmd = sub.add_parser("help", help="Print help.")
     help_cmd.add_argument("skill", nargs="?")
     add_yes_flag(help_cmd)
+    add_dry_run_flag(help_cmd)
 
     check = sub.add_parser("check", help="Refuse when a Dependency is Unsatisfied.")
     check.add_argument("--here", required=True, type=Path)
+    add_dry_run_flag(check)
 
     catalog = sub.add_parser(
         "catalog", help="Generate the Catalog from a local source."
     )
     catalog.add_argument("--write", action="store_true")
+    add_dry_run_flag(catalog)
 
     plan = sub.add_parser("plan", help="Print a JSON plan and stop.")
     plan_sub = plan.add_subparsers(dest="verb", required=True)
@@ -1636,18 +1819,22 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan_enable.add_argument("skills", nargs="*")
     add_project_flag(plan_enable)
     add_yes_flag(plan_enable)
+    add_dry_run_flag(plan_enable)
     plan_disable = plan_sub.add_parser("disable")
     plan_disable.add_argument("skills", nargs="*")
     add_project_flag(plan_disable)
     add_yes_flag(plan_disable)
+    add_dry_run_flag(plan_disable)
     plan_update = plan_sub.add_parser("update")
     add_project_flag(plan_update)
     add_yes_flag(plan_update)
+    add_dry_run_flag(plan_update)
 
     # Uninstall takes no --project: it acts on this machine, and a working
     # directory's copies are that repository's to keep or drop (ADR-0040).
     plan_uninstall = plan_sub.add_parser("uninstall")
     add_yes_flag(plan_uninstall)
+    add_dry_run_flag(plan_uninstall)
 
     apply = sub.add_parser("apply", help="Apply a plan.")
     apply_sub = apply.add_subparsers(dest="verb", required=True)
@@ -1655,21 +1842,49 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     apply_enable.add_argument("skills", nargs="*")
     add_project_flag(apply_enable)
     add_yes_flag(apply_enable)
+    add_dry_run_flag(apply_enable)
     apply_disable = apply_sub.add_parser("disable")
     apply_disable.add_argument("skills", nargs="*")
     add_project_flag(apply_disable)
     add_yes_flag(apply_disable)
+    add_dry_run_flag(apply_disable)
     apply_update = apply_sub.add_parser("update")
     add_project_flag(apply_update)
     add_yes_flag(apply_update)
+    add_dry_run_flag(apply_update)
     apply_uninstall = apply_sub.add_parser("uninstall")
     add_yes_flag(apply_uninstall)
+    add_dry_run_flag(apply_uninstall)
 
     return parser.parse_args(argv)
 
 
+def dry_run_layer(args: argparse.Namespace) -> bool:
+    """Return the layer a changing verb's Sandbox has to stand in for.
+
+    Uninstall takes no `--project` and clears this machine (ADR-0040), so its
+    Sandbox is a home; every other verb previews the layer it was aimed at.
+    """
+
+    verb: str = args.verb
+    return True if verb == "uninstall" else parse_layer(args.project)
+
+
 def dispatch(args: argparse.Namespace) -> int:
-    """Run the parsed command."""
+    """Run the parsed command, in a Sandbox where the run is a dry run."""
+
+    # Apply is where skill files move, and a Sandbox is what those moves
+    # happen in instead. Every other command takes the flag and has nothing to
+    # do with it, bar Catalog, which honours it where it writes.
+    if args.dry_run and args.command == "apply":
+        with sandbox(global_layer=dry_run_layer(args)):
+            return run_command(args)
+
+    return run_command(args)
+
+
+def run_command(args: argparse.Namespace) -> int:
+    """Run the parsed command against whatever home is in force."""
 
     if args.command == "status":
         return cmd_status(args.skills, global_layer=parse_layer(args.project))
@@ -1677,8 +1892,12 @@ def dispatch(args: argparse.Namespace) -> int:
         return cmd_help(args.skill)
     if args.command == "check":
         return cmd_check(args.here)
+    # Catalog's `--write` is the one write this script makes outside a layer,
+    # so it is the one place besides Apply where the flag has anything to
+    # honour. A flag that was accepted while the file was rewritten anyway
+    # would state something false about what happened (ADR-0029).
     if args.command == "catalog":
-        return cmd_catalog(write=args.write)
+        return cmd_catalog(write=args.write and not args.dry_run)
     if args.command == "plan":
         if args.verb == "uninstall":
             return cmd_plan_uninstall()
