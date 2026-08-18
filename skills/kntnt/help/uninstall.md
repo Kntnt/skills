@@ -25,4 +25,4 @@ What is removed is what the Catalog names, so the report says whether that list 
 
 ## See also
 
-`/kntnt help disable`, `/kntnt help update`.
+`/kntnt help select`, `/kntnt help update`.

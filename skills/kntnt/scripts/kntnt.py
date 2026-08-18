@@ -1080,223 +1080,179 @@ def validate_names(names: list[str]) -> list[str]:
     return cleaned
 
 
-def effective_row(global_state: str, project_state: str) -> dict[str, str] | None:
-    """Return the state and source a skill has here, or None where it has neither.
+def installed_freshness(name: str, digest: str, directories: list[Path]) -> str:
+    """Say whether the copies of *name* on disk are the files *digest* names.
 
-    Only a layer that carries the skill can be its source, so a skill Disabled
-    in both is no answer to *what applies here* and gets no row at all. Enabled
-    in a carrying layer is Enabled here, that layer having put the skill in
-    every Harness it detected; only where every carrying layer is partial is
-    the answer partial. The two are never merged Harness by Harness: each layer
-    detects its own set, so their union would answer a question nobody asked.
+    `deviating` where any copy differs, `current` where every copy agrees, and
+    `unknown` where there is nothing to establish it from — no copy on disk, or
+    no Digest to compare against. Never *out of date*: the comparison sees two
+    states and no history, so it cannot name a direction (ADR-0041).
     """
 
-    carrying = {
-        layer: state
-        for layer, state in (("global", global_state), ("project", project_state))
-        if state != "disabled"
-    }
-    if not carrying:
-        return None
-
-    return {
-        "state": "enabled" if "enabled" in carrying.values() else "partial",
-        "source": "both" if len(carrying) == 2 else next(iter(carrying)),
-    }
+    copies = [
+        directory / name
+        for directory in directories
+        if skill_present_at(directory, name)
+    ]
+    if not digest or not copies:
+        return "unknown"
+    if any(directory_digest(copy) != digest for copy in copies):
+        return "deviating"
+    return "current"
 
 
-def status_payload(names: list[str], *, effective: bool) -> dict[str, Any]:
-    """Build the Status report for *names*, or every Catalog skill.
+def catalog_digest(entry: dict[str, Any]) -> str:
+    """Return the Digest *entry* carries, or nothing where none may be trusted.
 
-    Two questions, one shape. Without the project flag Status answers *what
-    does this machine have*: every Catalog skill with its Global `state`,
-    Disabled ones included, because the Catalog still carries them. With the
-    flag it answers *what applies in this working directory*: the Effective
-    set — everything Enabled in Global plus everything Enabled in this Project
-    — each row naming its `source` as global, project, or both. A skill
-    Disabled in both layers is no answer to the second question, so that form
-    leaves it out. `reports` says which of the two was answered, because a
-    reader must never have to guess.
-
-    Either form is only as current as the list it was built from, so
-    `catalog_refreshed` says whether that list came from the origin or from the
-    snapshot the origin could not be reached to replace. Same field, same
-    meaning, as the one Update reports.
+    A Catalog read off the stored snapshot carries digests that describe the
+    collection as of the last Update, so a verdict made from them would be a
+    claim about a revision the collection may already have left. Nothing
+    Deviates and nothing is current on such a list, and no refresh is offered
+    on the strength of it (ADR-0041), which is what the empty answer buys.
     """
 
-    # Global is read either way; the Project only where it is part of the answer.
-    global_targets = target_harnesses(global_layer=True)
-    project_targets = target_harnesses(global_layer=False) if effective else []
-
-    # Skill names select rows out of the Catalog; naming none selects them all.
-    wanted = (
-        validate_names(names)
-        if names
-        else [str(entry["name"]) for entry in catalog_skills()]
-    )
-    by_name = {str(entry["name"]): entry for entry in catalog_skills()}
-
-    # Every row carries what the Catalog knows about a skill; the two forms
-    # differ only in what they add to that and in which skills earn a row.
-    skills: list[dict[str, Any]] = []
-    for name in wanted:
-        entry = by_name[name]
-        row = {
-            "name": name,
-            "category": entry.get("category", ""),
-            "description": entry.get("description", ""),
-            "capabilities": entry.get("capabilities", []),
-        }
-        global_state = skill_state(name, global_targets, global_layer=True)
-        if not effective:
-            skills.append({**row, "state": global_state})
-            continue
-        applies = effective_row(
-            global_state, skill_state(name, project_targets, global_layer=False)
-        )
-        if applies is not None:
-            skills.append({**row, **applies})
-
-    # Name only the layers the report covers, so the directories are the places
-    # the states just reported were read from and nowhere else.
-    directories = {"global": target_dirs(global_targets, global_layer=True)}
-    if effective:
-        directories["project"] = target_dirs(project_targets, global_layer=False)
-
-    return {
-        "reports": "effective" if effective else "global",
-        "catalog_refreshed": catalog_from_origin(),
-        "directories": directories,
-        "skills": skills,
-    }
+    if not catalog_from_origin():
+        return ""
+    return str(entry.get("digest") or "")
 
 
-def picker_payload(
-    names: list[str], *, global_layer: bool, action: str
-) -> dict[str, Any]:
-    """Group Catalog skills by Category for an interactive Enable/Disable."""
+def select_payload(*, global_layer: bool) -> dict[str, Any]:
+    """Build the list the user reads and answers in one gesture.
+
+    One row per Catalog skill, grouped by Category so related skills are read
+    together (ADR-0015), and everything a row is judged on carried on the row:
+    the checkbox, the one-line description, the Capabilities the skill wants of
+    the harness, whether its files reached only some of the layer's Detected
+    Harnesses, and whether they are the files the collection ships.
+
+    One layer, and no Effective form: without the flag the list is Global, and
+    with it the Project layer alone (ADR-0038). There is no `partial` state
+    either — incompleteness is a fact about the disk that confirming the list
+    repairs, never a third thing an answer could select (ADR-0043).
+    """
 
     harnesses = target_harnesses(global_layer=global_layer)
+    directories = layer_dirs(harnesses, global_layer=global_layer)
+
+    # A Project row says where else the skill is already Enabled: this layer
+    # holds no copy of a Global one to uncheck, and checking the row would put
+    # a second copy in the working directory (ADR-0013).
+    global_targets = [] if global_layer else target_harnesses(global_layer=True)
+
     categories: dict[str, list[dict[str, Any]]] = {}
     for entry in catalog_skills():
         name = str(entry["name"])
-        if names and name not in names:
-            continue
         state = skill_state(name, harnesses, global_layer=global_layer)
-        if action == "disable" and state == "disabled":
-            continue
-        category = str(entry.get("category") or "other")
-        categories.setdefault(category, []).append(
-            {
-                "name": name,
-                "description": entry.get("description", ""),
-                "capabilities": entry.get("capabilities", []),
-                "enabled": state == "enabled",
-            }
-        )
+        row: dict[str, Any] = {
+            "name": name,
+            "description": entry.get("description", ""),
+            "capabilities": entry.get("capabilities", []),
+            "checked": state != "disabled",
+            "incomplete": state == "partial",
+            "freshness": installed_freshness(name, catalog_digest(entry), directories),
+        }
+        if not global_layer:
+            row["in_global"] = (
+                skill_state(name, global_targets, global_layer=True) != "disabled"
+            )
+        categories.setdefault(str(entry.get("category") or "other"), []).append(row)
+
     return {
-        "action": "pick",
+        "action": "select",
         "layer": "global" if global_layer else "project",
+        "catalog_refreshed": catalog_from_origin(),
+        "directories": target_dirs(harnesses, global_layer=global_layer),
         "categories": categories,
+        "withdrawn": withdrawn_names(harnesses, global_layer=global_layer),
     }
 
 
-def cmd_status(names: list[str], *, global_layer: bool) -> int:
-    """Print Status and return 0.
+def select_change(
+    answer: list[str],
+    harnesses: list[str],
+    directories: list[Path],
+    *,
+    global_layer: bool,
+) -> tuple[list[str], list[str], list[str]]:
+    """Split the Catalog into what the answer places, removes, and leaves alone.
 
-    Status reads two layers and changes neither, so the project flag selects
-    the question rather than a target: Global alone, or what applies here.
+    A checked skill is placed wherever the layer does not already hold exactly
+    the files the collection ships: a Disabled one is Enabled, an incomplete
+    one repaired, a Deviating one re-copied — which is why the confirmation has
+    to say in the same breath that a local edit goes with it (ADR-0041).
+
+    Checked and already those files is no work, and an unchecked skill this
+    layer does not carry is no work either. An answer that is all no work
+    leaves both lists empty, and reading is never a side-effecting act.
     """
 
-    emit(status_payload(names, effective=not global_layer))
-    return 0
-
-
-def cmd_plan_enable(names: list[str], *, global_layer: bool) -> int:
-    """Print an Enable picker or a plan for the named skills."""
-
-    if not names:
-        emit(picker_payload([], global_layer=global_layer, action="enable"))
-        return 2
-    wanted = validate_names(names)
-    harnesses = target_harnesses(global_layer=global_layer)
-    emit(
-        {
-            "action": "enable",
-            "layer": "global" if global_layer else "project",
-            "skills": wanted,
-            "directories": target_dirs(harnesses, global_layer=global_layer),
-        }
-    )
-    return 0
-
-
-def cmd_plan_disable(names: list[str], *, global_layer: bool) -> int:
-    """Print a Disable picker or a plan for the named skills."""
-
-    if not names:
-        emit(picker_payload([], global_layer=global_layer, action="disable"))
-        return 2
-    wanted = validate_names(names)
-    harnesses = target_harnesses(global_layer=global_layer)
-    emit(
-        {
-            "action": "disable",
-            "layer": "global" if global_layer else "project",
-            "skills": wanted,
-            "directories": target_dirs(harnesses, global_layer=global_layer),
-        }
-    )
-    return 0
-
-
-def cmd_apply_enable(names: list[str], *, global_layer: bool) -> int:
-    """Enable the named skills in the targeted layer."""
-
-    wanted = validate_names(names)
-    if not wanted:
-        raise ManagerError("name at least one skill to enable", 2)
-    harnesses = target_harnesses(global_layer=global_layer)
-    already = {
-        name
-        for name in wanted
-        if skill_state(name, harnesses, global_layer=global_layer) == "enabled"
-    }
-    changing = [name for name in wanted if name not in already]
-    outcome = add_skills(changing, harnesses, global_layer=global_layer)
-    emit(
-        {
-            **outcome,
-            "noop": [name for name in wanted if name in already],
-            "layer": "global" if global_layer else "project",
-            "directories": target_dirs(harnesses, global_layer=global_layer),
-        }
-    )
-    return outcome_exit_code(outcome)
-
-
-def cmd_apply_disable(names: list[str], *, global_layer: bool, yes: bool) -> int:
-    """Disable the named skills in the targeted layer."""
-
-    wanted = validate_names(names)
-    if not wanted:
-        raise ManagerError("name at least one skill to disable", 2)
-
-    require_yes(yes, "disabling deletes these skills' files")
-
-    harnesses = target_harnesses(global_layer=global_layer)
-    changing: list[str] = []
+    place: list[str] = []
+    remove: list[str] = []
     noop: list[str] = []
-    for name in wanted:
+
+    for entry in catalog_skills():
+        name = str(entry["name"])
         state = skill_state(name, harnesses, global_layer=global_layer)
-        if state == "disabled":
-            noop.append(name)
+
+        # Unchecked is Disabled here, and only here: a Project holds no copy of
+        # a skill Enabled in Global, so there is nothing of it to remove.
+        if name not in answer:
+            if state != "disabled":
+                remove.append(name)
             continue
-        changing.append(name)
-    outcome = remove_skills(changing, harnesses, global_layer=global_layer)
+
+        freshness = installed_freshness(name, catalog_digest(entry), directories)
+        if state == "enabled" and freshness != "deviating":
+            noop.append(name)
+        else:
+            place.append(name)
+
+    return place, remove, noop
+
+
+def cmd_plan_select(*, global_layer: bool) -> int:
+    """Print the list the user reads and answers. Nothing is written."""
+
+    emit(select_payload(global_layer=global_layer))
+    return 0
+
+
+def cmd_apply_select(names: list[str], *, global_layer: bool, yes: bool) -> int:
+    """Make the targeted layer hold exactly the skills the answer checked.
+
+    Both halves of the answer are one verb's work, so both are reported
+    together: `intended`, `confirmed`, and `failed` cover the run, and
+    `placed` and `removed` say which way each intended name went (ADR-0036).
+    """
+
+    answer = validate_names(names)
+    harnesses = target_harnesses(global_layer=global_layer)
+    directories = layer_dirs(harnesses, global_layer=global_layer)
+    place, remove, noop = select_change(
+        answer, harnesses, directories, global_layer=global_layer
+    )
+
+    # Unchecking deletes files the user chose to delete, and a script cannot
+    # prompt, so the flag is that half of the answer's gate (ADR-0029).
+    if remove:
+        require_yes(yes, "unchecking these skills deletes their files")
+
+    # The removals are read off the disk rather than raised, because the
+    # placements have already landed by then: a transport that refuses one name
+    # must not cost the user the report of what the same run did place.
+    placed = add_skills(place, harnesses, global_layer=global_layer)
+    removed = removal_outcome(remove, harnesses, global_layer=global_layer)
+    outcome = {
+        "intended": [*placed["intended"], *removed["intended"]],
+        "confirmed": [*placed["confirmed"], *removed["confirmed"]],
+        "failed": [*placed["failed"], *removed["failed"]],
+    }
+
     emit(
         {
             **outcome,
+            "placed": place,
+            "removed": remove,
             "noop": noop,
             "layer": "global" if global_layer else "project",
             "directories": target_dirs(harnesses, global_layer=global_layer),
@@ -1517,7 +1473,7 @@ def unsatisfied_at(skill_dir: Path) -> list[dict[str, str]]:
                 {
                     "name": name,
                     "kind": "skill",
-                    "how": f"/kntnt enable {name}",
+                    "how": f"check '{name}' in /kntnt select",
                 }
             )
 
@@ -1792,12 +1748,6 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    status = sub.add_parser("status", help="Report Enabled and Disabled.")
-    status.add_argument("skills", nargs="*")
-    add_project_flag(status)
-    add_yes_flag(status)
-    add_dry_run_flag(status)
-
     help_cmd = sub.add_parser("help", help="Print help.")
     help_cmd.add_argument("skill", nargs="?")
     add_yes_flag(help_cmd)
@@ -1815,16 +1765,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     plan = sub.add_parser("plan", help="Print a JSON plan and stop.")
     plan_sub = plan.add_subparsers(dest="verb", required=True)
-    plan_enable = plan_sub.add_parser("enable")
-    plan_enable.add_argument("skills", nargs="*")
-    add_project_flag(plan_enable)
-    add_yes_flag(plan_enable)
-    add_dry_run_flag(plan_enable)
-    plan_disable = plan_sub.add_parser("disable")
-    plan_disable.add_argument("skills", nargs="*")
-    add_project_flag(plan_disable)
-    add_yes_flag(plan_disable)
-    add_dry_run_flag(plan_disable)
+
+    # Select's plan half takes no skill names: it is the list the user reads
+    # before there is an answer to plan, and the answer arrives at Apply.
+    plan_select = plan_sub.add_parser("select")
+    add_project_flag(plan_select)
+    add_yes_flag(plan_select)
+    add_dry_run_flag(plan_select)
     plan_update = plan_sub.add_parser("update")
     add_project_flag(plan_update)
     add_yes_flag(plan_update)
@@ -1838,16 +1785,15 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     apply = sub.add_parser("apply", help="Apply a plan.")
     apply_sub = apply.add_subparsers(dest="verb", required=True)
-    apply_enable = apply_sub.add_parser("enable")
-    apply_enable.add_argument("skills", nargs="*")
-    add_project_flag(apply_enable)
-    add_yes_flag(apply_enable)
-    add_dry_run_flag(apply_enable)
-    apply_disable = apply_sub.add_parser("disable")
-    apply_disable.add_argument("skills", nargs="*")
-    add_project_flag(apply_disable)
-    add_yes_flag(apply_disable)
-    add_dry_run_flag(apply_disable)
+
+    # The names are the whole answer, so no names is the answer that checked
+    # nothing — which Apply can read as such, having no list form to confuse
+    # it with.
+    apply_select = apply_sub.add_parser("select")
+    apply_select.add_argument("skills", nargs="*")
+    add_project_flag(apply_select)
+    add_yes_flag(apply_select)
+    add_dry_run_flag(apply_select)
     apply_update = apply_sub.add_parser("update")
     add_project_flag(apply_update)
     add_yes_flag(apply_update)
@@ -1886,8 +1832,6 @@ def dispatch(args: argparse.Namespace) -> int:
 def run_command(args: argparse.Namespace) -> int:
     """Run the parsed command against whatever home is in force."""
 
-    if args.command == "status":
-        return cmd_status(args.skills, global_layer=parse_layer(args.project))
     if args.command == "help":
         return cmd_help(args.skill)
     if args.command == "check":
@@ -1903,18 +1847,14 @@ def run_command(args: argparse.Namespace) -> int:
             return cmd_plan_uninstall()
         if args.verb == "update":
             return cmd_plan_update(global_layer=parse_layer(args.project))
-        global_layer = parse_layer(args.project)
-        if args.verb == "enable":
-            return cmd_plan_enable(args.skills, global_layer=global_layer)
-        return cmd_plan_disable(args.skills, global_layer=global_layer)
+        return cmd_plan_select(global_layer=parse_layer(args.project))
     if args.verb == "uninstall":
         return cmd_apply_uninstall(yes=args.yes)
     if args.verb == "update":
         return cmd_apply_update(global_layer=parse_layer(args.project))
-    global_layer = parse_layer(args.project)
-    if args.verb == "enable":
-        return cmd_apply_enable(args.skills, global_layer=global_layer)
-    return cmd_apply_disable(args.skills, global_layer=global_layer, yes=args.yes)
+    return cmd_apply_select(
+        args.skills, global_layer=parse_layer(args.project), yes=args.yes
+    )
 
 
 def main(argv: list[str] | None = None) -> int:

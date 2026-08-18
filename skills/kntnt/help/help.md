@@ -22,8 +22,8 @@ Help changes nothing, in either layer.
 
 Asking the manager about a skill means remembering which collection that skill arrived from, which is why this route is the one on its way out. A skill that is installed answers `--help` itself, and that is the shorter way to the same text: the manpage the manager prints for a skill is the file that skill ships.
 
-A skill that is Disabled has no files on disk, so its help here is the Catalog description alone; `/kntnt enable <name>` gives the rest.
+A skill that is Disabled has no files on disk, so its help here is the Catalog description alone; Enabling it from `/kntnt select` gives the rest.
 
 ## See also
 
-`/kntnt help status`, `/kntnt help enable`, `/kntnt help disable`, `/kntnt help update`, `/kntnt help uninstall`.
+`/kntnt help select`, `/kntnt help update`, `/kntnt help uninstall`.

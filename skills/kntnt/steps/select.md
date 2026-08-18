@@ -1,0 +1,21 @@
+# select
+
+Show what the collection has and change it in the same gesture. The list is the Catalog, one row per skill with a checkbox that is checked when the skill is Enabled in the targeted layer; the user answers it in one sentence of plain text. Targets Global unless `--project` or `--project=on` is given, and reaches every Harness present in that layer. Reading is never a side-effecting act: an answer that changes nothing writes nothing.
+
+`$HERE` is the manager directory (the parent of `scripts/`).
+
+## Steps
+
+1. Run `uv run "$HERE/scripts/kntnt.py" plan select` with the same `--project` flag the user passed. Done when stdout is JSON.
+2. Print the list. Group the rows by their key in `categories` and give every skill a row of its own, in this shape: a checkbox — checked where `checked` is true — the skill's `name`, its `description`, and, where `capabilities` is non-empty, the Capabilities it requires of the harness, said as a warning that it may refuse to work where the user is. Name the `directories` the list covers. Done when every row the payload carries is on screen.
+3. Mark the rows the payload marks. `incomplete` true: the skill's files reached only some of the directories, so it is shown checked and marked incomplete, and confirming the list repairs it. `freshness` is `deviating`: say the files differ from the ones the collection ships — **deviating**, never *out of date*, because the comparison sees two states and no history, and a local edit is as likely a cause as a lagging copy. `current` needs no remark and `unknown` means there was nothing to compare. Done when the marks are made.
+4. Say which Catalog the list came from, taking it from `catalog_refreshed`. `true` needs no remark. `false` means the collection could not be reached and the list is the copy stored beside the manager: say so, say it may be missing skills published since, and report no skill as deviating or as current — those digests describe the collection as of the last update, so offer no re-copy on the strength of them. Done when that is said, or the list was fetched.
+5. Close with `withdrawn` where it is non-empty: say how many skills on disk carry this collection's marker and are no longer in the Catalog, and that `/kntnt update` is what takes them off. Done when that is said, or the list is empty.
+6. Take the user's answer as the whole checked set for this layer, not a list of changes. Work out what confirming it would do: a skill they checked that is unchecked, incomplete, or deviating is placed; a checked skill they unchecked is deleted from this layer. Show both, name the `directories`, and where a deviating skill is among the placements say in the same breath that re-copying overwrites the local changes. Ask once. Done when the user confirms.
+7. An answer that leaves nothing to place and nothing to delete is not applied at all: say nothing changed and stop. Done when it is said.
+8. Run `uv run "$HERE/scripts/kntnt.py" apply select` with the same `--project` flag, every checked skill's name, and `--yes`. Forward `--dry-run` if the user passed it, and say before starting that the run happens against a temporary home that is thrown away, and that it downloads the transport afresh and so takes longer than the real run would. Unchecking deletes files, so the script refuses without `--yes`; reaching this step means step 6 settled it. Done when stdout is JSON.
+9. Report the outcome the payload carries, not the answer. `intended` names the skills the run set out to change, `placed` and `removed` say which way each of them went, `confirmed` names those the script then found the disk agreeing about, and `noop` those already exactly as answered. If `failed` is non-empty the command exits non-zero: say those skills did **not** change, whatever the transport reported, name each one's `directories` as where to look, and do not call the run clean. Done when the user has the outcome.
+
+## Notes
+
+`--project` shows the Project layer alone. A row whose `in_global` is true is a skill this working directory does not carry and the machine does: say so on the row, because checking it makes a second copy and unchecking it does nothing — this layer holds none of that skill to remove.

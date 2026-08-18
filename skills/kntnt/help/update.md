@@ -28,4 +28,4 @@ A Harness installed since the last run is reached with nothing to configure in b
 
 ## See also
 
-`/kntnt help status`, `/kntnt help enable`, `/kntnt help uninstall`.
+`/kntnt help select`, `/kntnt help uninstall`.

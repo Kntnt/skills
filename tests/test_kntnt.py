@@ -18,6 +18,18 @@ UV_CACHE = Path(os.environ.get("UV_CACHE_DIR") or Path.home() / ".cache" / "uv")
 
 SHARED_SKILLS = ".agents/skills"
 
+# Every key a Select row carries, and no other. Pinned as a set because the two
+# the design withdrew — a `state` and a `source` — are absences rather than
+# values, and an absence is only testable against the whole shape.
+_ROW_KEYS = {
+    "name",
+    "description",
+    "capabilities",
+    "checked",
+    "incomplete",
+    "freshness",
+}
+
 
 def _write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -372,136 +384,385 @@ def _harnesses_reading(template: str, *, global_layer: bool) -> set[str]:
     return {harness for harness, spec in table.items() if spec.get(key) == template}
 
 
-def test_status_lists_catalog_skills_as_disabled(tmp_path: Path) -> None:
+def _rows(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return every row of a Select list, the grouping flattened away."""
+
+    return [row for rows in payload["categories"].values() for row in rows]
+
+
+def _checked(payload: dict[str, Any]) -> dict[str, bool]:
+    """Return each row's checkbox by skill name."""
+
+    return {row["name"]: row["checked"] for row in _rows(payload)}
+
+
+def _row(payload: dict[str, Any], name: str) -> dict[str, Any]:
+    """Return the row *name* has in a Select list."""
+
+    return next(row for row in _rows(payload) if row["name"] == name)
+
+
+def _digested_catalog(world: dict[str, Path]) -> str:
+    """Generate a Catalog from the origin's own tree, Digests and all.
+
+    `_entry` writes the shape a hand-authored Catalog has and carries no
+    Digest, which is what most of the suite wants: freshness that cannot be
+    established is reported as unknown. A test about Deviating needs the real
+    generator instead, because only the digest it computes matches the files.
+    """
+
+    result = _run(world, "catalog")
+    assert result.returncode == 0, result.stderr
+    return result.stdout
+
+
+def test_select_lists_every_catalog_skill_unchecked(tmp_path: Path) -> None:
     world = _world(tmp_path)
 
-    result = _run(world, "status")
+    result = _run(world, "plan", "select")
 
     assert result.returncode == 0, result.stderr
-    skills = _json(result)["skills"]
-    assert [skill["name"] for skill in skills] == ["alpha", "beta", "gamma"]
-    assert {skill["state"] for skill in skills} == {"disabled"}
+    payload = _json(result)
+    assert payload["action"] == "select"
+    assert _checked(payload) == {"alpha": False, "beta": False, "gamma": False}
 
 
-def test_status_reports_global_and_says_nothing_of_the_project(tmp_path: Path) -> None:
-    """Bare Status answers one question: what is Enabled in Global."""
+def test_select_lists_global_and_says_nothing_of_the_project(tmp_path: Path) -> None:
+    """Bare Select lists one layer: what is Enabled on this machine."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "alpha")
-    _run(world, "apply", "enable", "--project", "gamma")
+    _run(world, "apply", "select", "alpha")
+    _run(world, "apply", "select", "--project", "gamma")
 
-    payload = _json(_run(world, "status"))
+    payload = _json(_run(world, "plan", "select"))
 
-    assert payload["reports"] == "global"
-    by_name = {skill["name"]: skill for skill in payload["skills"]}
-    assert by_name["alpha"]["state"] == "enabled"
-    assert by_name["gamma"]["state"] == "disabled"
-    assert all("source" not in skill for skill in payload["skills"])
-    assert "project" not in payload["directories"]
+    assert payload["layer"] == "global"
+    assert _checked(payload) == {"alpha": True, "beta": False, "gamma": False}
+    assert payload["directories"] == [str(world["home"] / ".claude" / "skills")]
 
 
-def test_status_project_reports_the_effective_set_and_its_source(
+def test_select_project_lists_the_project_layer_alone(tmp_path: Path) -> None:
+    """There is no Effective form: with the flag the list is this Project's."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _present(world, "project", ".claude")
+    _run(world, "apply", "select", "alpha", "beta")
+    _run(world, "apply", "select", "--project", "gamma")
+
+    payload = _json(_run(world, "plan", "select", "--project"))
+
+    assert payload["layer"] == "project"
+    assert _checked(payload) == {"alpha": False, "beta": False, "gamma": True}
+    assert payload["directories"] == [str(world["project"] / ".claude" / "skills")]
+
+
+def test_select_project_marks_a_skill_already_enabled_in_global(
     tmp_path: Path,
 ) -> None:
-    """With the flag the question is what applies here, and where it comes from."""
+    """This layer holds no copy to uncheck, so the row says where the copy is."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "alpha", "beta")
-    _run(world, "apply", "enable", "--project", "alpha", "gamma")
+    _run(world, "apply", "select", "alpha")
 
-    payload = _json(_run(world, "status", "--project"))
+    payload = _json(_run(world, "plan", "select", "--project"))
 
-    assert payload["reports"] == "effective"
-    by_name = {skill["name"]: skill for skill in payload["skills"]}
-    assert set(by_name) == {"alpha", "beta", "gamma"}
-    assert by_name["alpha"]["source"] == "both"
-    assert by_name["beta"]["source"] == "global"
-    assert by_name["gamma"]["source"] == "project"
-    assert {skill["state"] for skill in payload["skills"]} == {"enabled"}
+    assert _row(payload, "alpha")["checked"] is False
+    assert _row(payload, "alpha")["in_global"] is True
+    assert _row(payload, "beta")["in_global"] is False
 
 
-def test_status_project_omits_a_skill_disabled_in_both_layers(tmp_path: Path) -> None:
-    """A skill that applies nowhere here is no answer to *what applies here*."""
+def test_select_carries_no_effective_form_and_no_partial_state(
+    tmp_path: Path,
+) -> None:
+    """A skill is Enabled or Disabled; incompleteness is a fact about the disk."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "alpha")
 
-    effective = _json(_run(world, "status", "--project"))["skills"]
-    global_form = _json(_run(world, "status"))["skills"]
+    payload = _json(_run(world, "plan", "select"))
 
-    assert [skill["name"] for skill in effective] == ["alpha"]
-    gamma = next(skill for skill in global_form if skill["name"] == "gamma")
-    assert gamma["state"] == "disabled"
+    assert "reports" not in payload
+    assert "effective" not in json.dumps(payload)
+    assert "partial" not in json.dumps(payload)
+    assert all(set(row) == _ROW_KEYS for row in _rows(payload))
 
 
-def test_status_project_off_is_the_bare_form(tmp_path: Path) -> None:
+def test_select_project_off_is_the_bare_form(tmp_path: Path) -> None:
     """The off form of the flag is its absence, as it is for every other verb."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "alpha")
-    _run(world, "apply", "enable", "--project", "gamma")
+    _run(world, "apply", "select", "alpha")
+    _run(world, "apply", "select", "--project", "gamma")
 
-    assert _json(_run(world, "status", "--project=off")) == _json(_run(world, "status"))
+    assert _json(_run(world, "plan", "select", "--project=off")) == _json(
+        _run(world, "plan", "select")
+    )
 
 
-def test_status_named_skills_narrow_either_form(tmp_path: Path) -> None:
-    """Naming skills selects rows; it does not change the shape of one."""
+def test_plan_select_takes_no_skill_names(tmp_path: Path) -> None:
+    """The list is the whole of the plan half; the answer arrives at Apply."""
+
+    world = _world(tmp_path)
+
+    result = _run(world, "plan", "select", "alpha")
+
+    assert result.returncode != 0
+    assert "unrecognized arguments" in result.stderr
+
+
+def test_select_groups_the_rows_by_category(tmp_path: Path) -> None:
+    """Related skills are read together, so the grouping is the payload's (ADR-0015)."""
+
+    world = _world(tmp_path)
+
+    payload = _json(_run(world, "plan", "select"))
+
+    assert {
+        category: [row["name"] for row in rows]
+        for category, rows in payload["categories"].items()
+    } == {"code": ["alpha", "beta"], "text": ["gamma"]}
+
+
+def test_select_carries_the_description_of_every_row(tmp_path: Path) -> None:
+    """A row is judged on the row: nothing about it is looked up elsewhere."""
+
+    world = _world(tmp_path)
+
+    payload = _json(_run(world, "plan", "select"))
+
+    assert _row(payload, "alpha")["description"] == "The alpha skill."
+    assert _row(payload, "gamma")["description"] == "The gamma skill."
+
+
+def test_select_reports_the_directories_the_layer_covers(tmp_path: Path) -> None:
+    """Targeting is no longer a choice, so the list names places, not a list."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "alpha")
-    _run(world, "apply", "enable", "--project", "gamma")
 
-    global_form = _json(_run(world, "status", "alpha"))
-    effective = _json(_run(world, "status", "--project", "gamma"))
+    payload = _json(_run(world, "plan", "select", "--project"))
 
-    assert global_form["skills"] == [
-        skill
-        for skill in _json(_run(world, "status"))["skills"]
-        if skill["name"] == "alpha"
-    ]
-    assert effective["skills"] == [
-        skill
-        for skill in _json(_run(world, "status", "--project"))["skills"]
-        if skill["name"] == "gamma"
-    ]
-
-
-def test_status_groups_category_on_each_skill(tmp_path: Path) -> None:
-    world = _world(tmp_path)
-
-    payload = _json(_run(world, "status"))
-
-    by_name = {skill["name"]: skill["category"] for skill in payload["skills"]}
-    assert by_name == {"alpha": "code", "beta": "code", "gamma": "text"}
-
-
-def test_status_reports_the_directories_it_acted_on(tmp_path: Path) -> None:
-    """Targeting is no longer a choice, so the report names places, not a list."""
-
-    world = _world(tmp_path)
-    _present(world, "home", ".claude")
-    _present(world, "project", ".claude")
-
-    payload = _json(_run(world, "status", "--project"))
-
-    assert payload["directories"]["global"] == [
-        str(world["home"] / ".claude" / "skills")
-    ]
-    assert payload["directories"]["project"] == [
-        str(world["project"] / ".claude" / "skills")
-    ]
+    assert payload["directories"] == [str(world["project"] / ".claude" / "skills")]
     assert "harness_list" not in payload
     assert "harnesses" not in payload
+
+
+def test_select_shows_an_incomplete_skill_checked_and_marks_it(
+    tmp_path: Path,
+) -> None:
+    """Partial is a fact about the disk, never a third thing anyone chose."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    _run(world, "apply", "select", "alpha")
+    shutil.rmtree(world["home"] / ".config" / "crush" / "skills" / "alpha")
+
+    payload = _json(_run(world, "plan", "select"))
+
+    assert _row(payload, "alpha")["checked"] is True
+    assert _row(payload, "alpha")["incomplete"] is True
+    assert _row(payload, "beta")["incomplete"] is False
+
+
+def test_confirming_the_list_repairs_an_incomplete_skill(tmp_path: Path) -> None:
+    """The answer did not change, and the disk it describes is made true."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude", ".config/crush")
+    _run(world, "apply", "select", "alpha")
+    shutil.rmtree(world["home"] / ".config" / "crush" / "skills" / "alpha")
+
+    result = _run(world, "apply", "select", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["alpha"]
+    assert payload["confirmed"] == ["alpha"]
+    assert (
+        world["home"] / ".config" / "crush" / "skills" / "alpha" / "SKILL.md"
+    ).is_file()
+    assert _row(_json(_run(world, "plan", "select")), "alpha")["incomplete"] is False
+
+
+def test_select_reports_a_hand_edited_skill_as_deviating(tmp_path: Path) -> None:
+    """The Digest answers the one freshness question honestly (ADR-0041)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json",
+        _digested_catalog(world),
+    )
+    _run(world, "apply", "select", "alpha")
+
+    assert _row(_json(_run(world, "plan", "select")), "alpha")["freshness"] == "current"
+
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+
+    payload = _json(_run(world, "plan", "select"))
+
+    assert _row(payload, "alpha")["freshness"] == "deviating"
+    assert _row(payload, "beta")["freshness"] == "unknown"
+
+
+def test_confirming_the_list_re_copies_a_deviating_skill(tmp_path: Path) -> None:
+    """Which is why the offer says the local changes go with it."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json",
+        _digested_catalog(world),
+    )
+    _run(world, "apply", "select", "alpha")
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+
+    result = _run(world, "apply", "select", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["placed"] == ["alpha"]
+    source = world["source"] / "skills" / "code" / "alpha" / "SKILL.md"
+    assert installed.read_bytes() == source.read_bytes()
+
+
+def test_a_snapshot_list_reports_no_skill_deviating_or_current(
+    tmp_path: Path,
+) -> None:
+    """Those digests describe the collection as of the last Update (ADR-0041)."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    catalog = _digested_catalog(world)
+    _write(world["source"] / "skills" / "kntnt" / "catalog.json", catalog)
+    _run(world, "apply", "select", "alpha")
+    _write(world["here"] / "catalog.json", catalog)
+    _unreachable_origin(world)
+
+    payload = _json(_run(world, "plan", "select"))
+
+    assert payload["catalog_refreshed"] is False
+    assert {row["freshness"] for row in _rows(payload)} == {"unknown"}
+
+
+def test_a_snapshot_list_re_copies_nothing_on_the_strength_of_it(
+    tmp_path: Path,
+) -> None:
+    """No refresh is offered from a list the collection did not answer with."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    catalog = _digested_catalog(world)
+    _write(world["source"] / "skills" / "kntnt" / "catalog.json", catalog)
+    _run(world, "apply", "select", "alpha")
+    _write(world["here"] / "catalog.json", catalog)
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+    _unreachable_origin(world)
+
+    result = _run(world, "apply", "select", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["placed"] == []
+    assert installed.read_text(encoding="utf-8") == "hand edited\n"
+
+
+def test_select_closes_by_counting_what_the_catalog_no_longer_names(
+    tmp_path: Path,
+) -> None:
+    """A skill of ours the collection has withdrawn is Update's to take off."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    payload = _json(_run(world, "plan", "select"))
+
+    assert payload["withdrawn"] == ["gamma"]
+    assert "gamma" not in _checked(payload)
+
+
+def test_select_counts_no_skill_that_is_not_this_collection_s(
+    tmp_path: Path,
+) -> None:
+    """The marker is the whole of what says a directory was written by us."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _write(
+        world["home"] / ".claude" / "skills" / "stranger" / "SKILL.md",
+        _foreign_skill_md("stranger"),
+    )
+
+    assert _json(_run(world, "plan", "select"))["withdrawn"] == []
+
+
+def test_one_answer_places_and_removes_in_the_same_run(tmp_path: Path) -> None:
+    """Changing several skills is one reply, and one report covers both ways."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+
+    result = _run(world, "apply", "select", "beta", "gamma", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["placed"] == ["beta", "gamma"]
+    assert payload["removed"] == ["alpha"]
+    assert payload["intended"] == ["beta", "gamma", "alpha"]
+    assert payload["confirmed"] == ["beta", "gamma", "alpha"]
+    assert payload["failed"] == []
+    assert _checked(_json(_run(world, "plan", "select"))) == {
+        "alpha": False,
+        "beta": True,
+        "gamma": True,
+    }
+
+
+def test_the_manager_has_no_status_enable_or_disable_verb(tmp_path: Path) -> None:
+    """Three verbs and a transcription step became one gesture (ADR-0043)."""
+
+    world = _world(tmp_path)
+    manager = REPO_ROOT / "skills" / "kntnt"
+
+    for args in (
+        ("status",),
+        ("status", "--project"),
+        ("plan", "enable", "alpha"),
+        ("plan", "disable", "alpha"),
+        ("apply", "enable", "alpha"),
+        ("apply", "disable", "alpha", "--yes"),
+    ):
+        assert _run(world, *args).returncode != 0, args
+
+    body = (manager / "SKILL.md").read_text(encoding="utf-8")
+    for verb in ("status", "enable", "disable"):
+        assert f"`{verb}`" not in body, verb
+        assert f"{verb}|" not in body, verb
+        assert not (manager / "steps" / f"{verb}.md").exists(), verb
+        assert not (manager / "help" / f"{verb}.md").exists(), verb
+
+
+def test_select_points_at_update_for_what_it_cannot_take_off(tmp_path: Path) -> None:
+    """The closing line is the only place a withdrawn skill can be acted on."""
+
+    text = (REPO_ROOT / "skills" / "kntnt" / "steps" / "select.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "`withdrawn`" in text
+    assert "/kntnt update" in text
 
 
 def test_reported_directories_cover_where_a_universal_harness_really_lands(
@@ -516,9 +777,9 @@ def test_reported_directories_cover_where_a_universal_harness_really_lands(
     world = _world(tmp_path)
     _present(world, "home", ".config/opencode")
 
-    payload = _json(_run(world, "status"))
+    payload = _json(_run(world, "plan", "select"))
 
-    assert payload["directories"]["global"] == sorted(
+    assert payload["directories"] == sorted(
         [
             str(world["home"] / ".agents" / "skills"),
             str(world["home"] / ".config" / "opencode" / "skills"),
@@ -537,9 +798,9 @@ def test_a_directory_two_harnesses_share_is_resolved_once(tmp_path: Path) -> Non
     world = _world(tmp_path)
     _present(world, "home", ".codex", ".cursor")
 
-    payload = _json(_run(world, "status"))
+    payload = _json(_run(world, "plan", "select"))
 
-    assert payload["directories"]["global"] == sorted(
+    assert payload["directories"] == sorted(
         [
             str(world["home"] / ".agents" / "skills"),
             str(world["home"] / ".codex" / "skills"),
@@ -565,65 +826,62 @@ def test_no_command_asks_for_setup_when_nothing_is_detected(tmp_path: Path) -> N
     world = _world(tmp_path)
 
     for args in (
-        ("plan", "enable", "alpha"),
-        ("plan", "disable", "alpha"),
+        ("plan", "select"),
+        ("plan", "select", "--project"),
         ("plan", "update"),
-        ("status",),
-        ("status", "--project"),
     ):
         result = _run(world, *args)
         assert result.returncode == 0, f"{args}: {result.stderr}"
         assert "setup" not in result.stderr.lower()
 
 
-def test_global_enable_places_the_skill_in_every_detected_harness(
+def test_a_checked_skill_is_placed_in_every_detected_harness(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude", ".config/opencode")
 
-    result = _run(world, "apply", "enable", "alpha")
+    result = _run(world, "apply", "select", "alpha")
 
     assert result.returncode == 0, result.stderr
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
     assert (
         world["home"] / ".config" / "opencode" / "skills" / "alpha" / "SKILL.md"
     ).is_file()
-    status = _json(_run(world, "status", "alpha"))
-    assert status["skills"][0]["state"] == "enabled"
+    assert _row(_json(_run(world, "plan", "select")), "alpha")["checked"] is True
 
 
-def test_global_enable_with_nothing_detected_writes_only_the_shared_directory(
+def test_a_checked_skill_with_nothing_detected_writes_the_shared_directory(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
 
-    result = _run(world, "apply", "enable", "alpha")
+    result = _run(world, "apply", "select", "alpha")
 
     assert result.returncode == 0, result.stderr
     assert (world["home"] / SHARED_SKILLS / "alpha" / "SKILL.md").is_file()
     assert sorted(child.name for child in world["home"].iterdir()) == [".agents"]
 
 
-def test_project_enable_places_the_skill_in_every_detected_harness(
+def test_a_project_answer_places_the_skill_in_every_detected_harness(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _present(world, "project", ".claude", ".crush")
 
-    result = _run(world, "apply", "enable", "--project", "gamma")
+    result = _run(world, "apply", "select", "--project", "gamma")
 
     assert result.returncode == 0, result.stderr
     assert (world["project"] / ".claude" / "skills" / "gamma" / "SKILL.md").is_file()
     assert (world["project"] / ".crush" / "skills" / "gamma" / "SKILL.md").is_file()
 
 
-def test_project_enable_with_nothing_detected_writes_only_the_shared_directory(
+def test_a_project_answer_with_nothing_detected_writes_the_shared_directory(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
 
-    result = _run(world, "apply", "enable", "--project", "gamma")
+    result = _run(world, "apply", "select", "--project", "gamma")
 
     assert result.returncode == 0, result.stderr
     assert (world["project"] / SHARED_SKILLS / "gamma" / "SKILL.md").is_file()
@@ -638,7 +896,7 @@ def test_project_detection_ignores_an_ordinary_skills_directory(
     world = _world(tmp_path)
     _present(world, "project", "skills", "data")
 
-    result = _run(world, "apply", "enable", "--project", "gamma")
+    result = _run(world, "apply", "select", "--project", "gamma")
 
     assert result.returncode == 0, result.stderr
     assert not (world["project"] / "skills" / "gamma").exists()
@@ -653,7 +911,7 @@ def test_a_harness_installed_later_is_acted_on_by_the_next_update(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _present(world, "home", ".config/opencode")
 
     result = _run(world, "apply", "update")
@@ -671,7 +929,7 @@ def test_every_transport_call_names_the_full_detected_set(tmp_path: Path) -> Non
     _present(world, "home", ".agents")
     log = tmp_path / "transport.jsonl"
 
-    result = _run(world, "apply", "enable", "alpha", log=log)
+    result = _run(world, "apply", "select", "alpha", log=log)
 
     assert result.returncode == 0, result.stderr
     expected = _harnesses_reading("~/.agents/skills", global_layer=True)
@@ -679,21 +937,21 @@ def test_every_transport_call_names_the_full_detected_set(tmp_path: Path) -> Non
     assert set(_calls(log)[0]["agents"]) == expected
 
 
-def test_disable_removes_the_skill_from_every_detected_directory(
+def test_an_unchecked_skill_leaves_every_detected_directory(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude", ".config/opencode")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
-    result = _run(world, "apply", "disable", "alpha", "--yes")
+    result = _run(world, "apply", "select", "--yes")
 
     assert result.returncode == 0, result.stderr
     assert not (world["home"] / ".claude" / "skills" / "alpha").exists()
     assert not (world["home"] / ".config" / "opencode" / "skills" / "alpha").exists()
 
 
-def test_status_sees_opencode_skill_in_transport_canonical_dir(
+def test_select_sees_opencode_skill_in_transport_canonical_dir(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
@@ -701,9 +959,9 @@ def test_status_sees_opencode_skill_in_transport_canonical_dir(
     dest = world["home"] / ".agents" / "skills" / "alpha"
     _write(dest / "SKILL.md", _skill_md("alpha"))
 
-    status = _json(_run(world, "status", "alpha"))
+    payload = _json(_run(world, "plan", "select"))
 
-    assert status["skills"][0]["state"] == "enabled"
+    assert _row(payload, "alpha")["checked"] is True
 
 
 def test_help_reads_opencode_skill_from_transport_canonical_dir(
@@ -723,79 +981,94 @@ def test_help_reads_opencode_skill_from_transport_canonical_dir(
     assert "Canonical help." in result.stdout
 
 
-def test_plan_enable_without_names_prints_a_picker(tmp_path: Path) -> None:
+def test_plan_select_prints_the_list_and_writes_nothing(tmp_path: Path) -> None:
+    """Reading is never a side-effecting act: the list half touches no file."""
+
     world = _world(tmp_path)
     _present(world, "home", ".claude")
+    before = _tree(world["home"])
 
-    result = _run(world, "plan", "enable")
+    result = _run(world, "plan", "select")
 
-    assert result.returncode == 2
+    assert result.returncode == 0, result.stderr
     payload = _json(result)
-    assert payload["action"] == "pick"
+    assert payload["action"] == "select"
     assert payload["layer"] == "global"
-    assert "alpha" in [skill["name"] for skill in payload["categories"]["code"]]
+    assert "alpha" in [row["name"] for row in payload["categories"]["code"]]
+    assert _tree(world["home"]) == before
 
 
-def test_apply_enable_is_idempotent(tmp_path: Path) -> None:
+def test_an_answer_that_changes_nothing_writes_nothing(tmp_path: Path) -> None:
+    """Someone who opened the list to read it must be able to leave unchanged."""
+
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    first = _run(world, "apply", "enable", "alpha")
-    second = _run(world, "apply", "enable", "alpha")
+    first = _run(world, "apply", "select", "alpha")
+    log = tmp_path / "transport.jsonl"
+    second = _run(world, "apply", "select", "alpha", log=log)
 
     assert first.returncode == 0, first.stderr
     assert second.returncode == 0, second.stderr
-    assert _json(second)["intended"] == []
+    payload = _json(second)
+    assert payload["intended"] == []
+    assert payload["placed"] == []
+    assert payload["removed"] == []
+    assert payload["noop"] == ["alpha"]
+    assert not log.exists()
 
 
-def test_apply_enable_refuses_the_manager(tmp_path: Path) -> None:
+def test_apply_select_refuses_the_manager(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
 
-    result = _run(world, "apply", "enable", "kntnt")
+    result = _run(world, "apply", "select", "kntnt")
 
     assert result.returncode == 1
     assert "manager" in result.stderr.lower()
 
 
-def test_apply_enable_refuses_an_unknown_skill(tmp_path: Path) -> None:
+def test_apply_select_refuses_an_unknown_skill(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
 
-    result = _run(world, "apply", "enable", "nope")
+    result = _run(world, "apply", "select", "nope")
 
     assert result.returncode == 1
     assert "nope" in result.stderr
 
 
-def test_apply_enable_project_writes_only_the_project_layer(tmp_path: Path) -> None:
+def test_apply_select_project_writes_only_the_project_layer(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
 
-    result = _run(world, "apply", "enable", "--project", "gamma")
+    result = _run(world, "apply", "select", "--project", "gamma")
 
     assert result.returncode == 0, result.stderr
     assert (world["project"] / ".claude" / "skills" / "gamma" / "SKILL.md").is_file()
     assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
-    assert _json(_run(world, "status", "gamma"))["skills"][0]["state"] == "disabled"
-    effective = _json(_run(world, "status", "--project", "gamma"))["skills"][0]
-    assert effective["state"] == "enabled"
-    assert effective["source"] == "project"
+    assert _row(_json(_run(world, "plan", "select")), "gamma")["checked"] is False
+    project = _json(_run(world, "plan", "select", "--project"))
+    assert _row(project, "gamma")["checked"] is True
 
 
-def test_disable_project_is_noop_when_skill_is_only_global(tmp_path: Path) -> None:
+def test_select_project_cannot_uncheck_a_skill_only_global_carries(
+    tmp_path: Path,
+) -> None:
+    """This layer holds no copy of it, and there is no subtractive overlay."""
+
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
-    result = _run(world, "apply", "disable", "--project", "alpha", "--yes")
+    result = _run(world, "apply", "select", "--project", "--yes")
 
     assert result.returncode == 0, result.stderr
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
     payload = _json(result)
     assert payload["intended"] == []
-    assert payload["noop"] == ["alpha"]
+    assert payload["removed"] == []
 
 
 def test_project_off_targets_global(tmp_path: Path) -> None:
@@ -803,7 +1076,7 @@ def test_project_off_targets_global(tmp_path: Path) -> None:
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
 
-    result = _run(world, "apply", "enable", "--project=off", "alpha")
+    result = _run(world, "apply", "select", "--project=off", "alpha")
 
     assert result.returncode == 0, result.stderr
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
@@ -815,7 +1088,7 @@ def test_update_reports_new_catalog_entries_and_leaves_them_disabled(
 ) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
     new_entries = [
         _entry("alpha", "code", binaries=["git"]),
@@ -833,11 +1106,9 @@ def test_update_reports_new_catalog_entries_and_leaves_them_disabled(
     payload = _json(result)
     assert payload["new"] == ["delta"]
     assert not (world["home"] / ".claude" / "skills" / "delta").exists()
-    status = _json(_run(world, "status"))
-    names = [skill["name"] for skill in status["skills"]]
-    assert "delta" in names
-    delta = next(skill for skill in status["skills"] if skill["name"] == "delta")
-    assert delta["state"] == "disabled"
+    listing = _json(_run(world, "plan", "select"))
+    assert "delta" in _checked(listing)
+    assert _checked(listing)["delta"] is False
 
 
 def test_check_reports_an_unsatisfied_binary(tmp_path: Path) -> None:
@@ -869,14 +1140,14 @@ def test_check_reports_an_unsatisfied_collection_skill(tmp_path: Path) -> None:
     payload = _json(result)
     assert payload["unsatisfied"][0]["name"] == "alpha"
     assert payload["unsatisfied"][0]["kind"] == "skill"
-    assert "/kntnt enable alpha" in payload["unsatisfied"][0]["how"]
+    assert "/kntnt select" in payload["unsatisfied"][0]["how"]
+    assert "alpha" in payload["unsatisfied"][0]["how"]
 
 
 def test_check_is_ok_when_dependencies_are_present(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
-    _run(world, "apply", "enable", "beta")
+    _run(world, "apply", "select", "alpha", "beta")
     beta = world["home"] / ".claude" / "skills" / "beta"
 
     result = _run(world, "check", "--here", str(beta))
@@ -947,7 +1218,7 @@ def test_capabilities_do_not_gate_where_a_skill_is_installed(tmp_path: Path) -> 
     )
     _present(world, "home", ".claude", ".config/opencode")
 
-    result = _run(world, "apply", "enable", "alpha")
+    result = _run(world, "apply", "select", "alpha")
 
     assert result.returncode == 0, result.stderr
     assert _json(result)["confirmed"] == ["alpha"]
@@ -957,19 +1228,23 @@ def test_capabilities_do_not_gate_where_a_skill_is_installed(tmp_path: Path) -> 
     ).is_file()
 
 
-def test_status_names_the_capabilities_a_skill_needs(tmp_path: Path) -> None:
+def test_select_names_the_capabilities_a_row_needs_of_the_harness(
+    tmp_path: Path,
+) -> None:
+    """The user learns before choosing that a skill may refuse to work here."""
+
     world = _world(tmp_path, [_entry("alpha", "agents", capabilities=["subagents"])])
 
-    result = _run(world, "status", "alpha")
+    result = _run(world, "plan", "select")
 
     assert result.returncode == 0, result.stderr
-    assert _json(result)["skills"][0]["capabilities"] == ["subagents"]
+    assert _row(_json(result), "alpha")["capabilities"] == ["subagents"]
 
 
 def test_update_reports_capabilities_per_skill(tmp_path: Path) -> None:
     world = _world(tmp_path, [_entry("alpha", "agents", capabilities=["subagents"])])
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
     result = _run(world, "apply", "update")
 
@@ -1031,28 +1306,27 @@ def test_help_named_skill_prints_that_skills_help(tmp_path: Path) -> None:
     assert "Help for alpha." in result.stdout
 
 
-def test_status_reports_without_a_stored_snapshot(tmp_path: Path) -> None:
-    """A Manager with no snapshot beside it still reports, and stays without one.
+def test_select_lists_without_a_stored_snapshot(tmp_path: Path) -> None:
+    """A Manager with no snapshot beside it still lists, and stays without one.
 
-    Status reads the origin, so a missing snapshot costs it nothing. Writing
-    one would give a read verb a write side effect and, worse, hand the next
-    Update a baseline it never chose: Update tells new entries from withdrawn
-    ones by diffing the snapshot it stored against what the origin now carries,
-    and a snapshot laid down by Status flattens that diff.
+    Select reads the origin, so a missing snapshot costs it nothing. Writing
+    one would give a reading gesture a write side effect and, worse, hand the
+    next Update a baseline it never chose: Update tells new entries from
+    withdrawn ones by diffing the snapshot it stored against what the origin
+    now carries, and a snapshot laid down by Select flattens that diff.
     """
 
     world = _world(tmp_path)
     (world["here"] / "catalog.json").unlink()
 
-    result = _run(world, "status")
+    result = _run(world, "plan", "select")
 
     assert result.returncode == 0, result.stderr
-    names = [skill["name"] for skill in _json(result)["skills"]]
-    assert names == ["alpha", "beta", "gamma"]
+    assert sorted(_checked(_json(result))) == ["alpha", "beta", "gamma"]
     assert not (world["here"] / "catalog.json").exists()
 
 
-def test_status_lists_a_skill_the_origin_added_after_the_snapshot(
+def test_select_lists_a_skill_the_origin_added_after_the_snapshot(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
@@ -1060,29 +1334,27 @@ def test_status_lists_a_skill_the_origin_added_after_the_snapshot(
     delta = _entry("delta", "code", description="The delta skill.")
     _publish(world, delta, [*_SURVIVORS, delta])
 
-    result = _run(world, "status")
+    result = _run(world, "plan", "select")
 
     assert result.returncode == 0, result.stderr
     payload = _json(result)
     assert payload["catalog_refreshed"] is True
-    row = next(skill for skill in payload["skills"] if skill["name"] == "delta")
-    assert row["state"] == "disabled"
+    assert _row(payload, "delta")["checked"] is False
 
 
-def test_status_leaves_out_a_skill_the_origin_no_longer_carries(
+def test_select_leaves_out_a_skill_the_origin_no_longer_carries(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _withdraw(world, "gamma", "text", _SURVIVORS)
 
-    result = _run(world, "status")
+    result = _run(world, "plan", "select")
 
     assert result.returncode == 0, result.stderr
-    names = [skill["name"] for skill in _json(result)["skills"]]
-    assert names == ["alpha", "beta"]
+    assert sorted(_checked(_json(result))) == ["alpha", "beta"]
 
 
-def test_status_does_not_place_a_newly_published_skill_on_disk(
+def test_select_does_not_place_a_newly_published_skill_on_disk(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
@@ -1090,47 +1362,47 @@ def test_status_does_not_place_a_newly_published_skill_on_disk(
     delta = _entry("delta", "code", description="The delta skill.")
     _publish(world, delta, [*_SURVIVORS, delta])
 
-    result = _run(world, "status")
+    result = _run(world, "plan", "select")
 
     assert result.returncode == 0, result.stderr
     assert not (world["home"] / ".claude" / "skills" / "delta").exists()
 
 
-def test_enable_accepts_a_name_only_the_origin_carries(tmp_path: Path) -> None:
+def test_select_accepts_a_name_only_the_origin_carries(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     delta = _entry("delta", "code", description="The delta skill.")
     _publish(world, delta, [*_SURVIVORS, delta])
 
-    result = _run(world, "apply", "enable", "delta")
+    result = _run(world, "apply", "select", "delta")
 
     assert result.returncode == 0, result.stderr
     assert _json(result)["confirmed"] == ["delta"]
     assert (world["home"] / ".claude" / "skills" / "delta" / "SKILL.md").is_file()
 
 
-def test_status_falls_back_to_the_snapshot_when_the_origin_is_unreachable(
+def test_select_falls_back_to_the_snapshot_when_the_origin_is_unreachable(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _unreachable_origin(world)
 
-    result = _run(world, "status")
+    result = _run(world, "plan", "select")
 
     assert result.returncode == 0, result.stderr
     payload = _json(result)
     assert payload["catalog_refreshed"] is False
-    assert [skill["name"] for skill in payload["skills"]] == ["alpha", "beta", "gamma"]
+    assert sorted(_checked(payload)) == ["alpha", "beta", "gamma"]
 
 
-def test_enable_works_from_the_snapshot_when_the_origin_is_unreachable(
+def test_select_works_from_the_snapshot_when_the_origin_is_unreachable(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _unreachable_origin(world)
 
-    result = _run(world, "apply", "enable", "alpha")
+    result = _run(world, "apply", "select", "alpha")
 
     assert result.returncode == 0, result.stderr
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
@@ -1148,7 +1420,7 @@ def test_update_reports_nothing_changed_when_the_origin_is_unreachable(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _unreachable_origin(world)
 
     result = _run(world, "apply", "update")
@@ -1181,25 +1453,25 @@ def test_update_calls_nothing_new_when_there_was_no_snapshot(tmp_path: Path) -> 
     assert [entry["name"] for entry in stored["skills"]] == ["alpha", "beta", "gamma"]
 
 
-def test_status_guidance_no_longer_sends_the_user_to_update(tmp_path: Path) -> None:
-    """Discovery no longer depends on Update, so the skill body must not say it does."""
+def test_select_says_which_catalog_the_list_came_from(tmp_path: Path) -> None:
+    """Discovery is the list itself, so the body has to declare the list's source."""
 
-    text = (REPO_ROOT / "skills" / "kntnt" / "steps" / "status.md").read_text(
+    text = (REPO_ROOT / "skills" / "kntnt" / "steps" / "select.md").read_text(
         encoding="utf-8"
     )
 
-    assert "/kntnt update" not in text
     assert "catalog_refreshed" in text
+    assert "deviating" in text
 
 
 def test_manager_skill_is_user_invoked_and_not_internal() -> None:
     text = (REPO_ROOT / "skills" / "kntnt" / "SKILL.md").read_text(encoding="utf-8")
     assert "disable-model-invocation: true" in text
     assert "internal: true" not in text
-    enable = (REPO_ROOT / "skills" / "kntnt" / "steps" / "enable.md").read_text(
+    select = (REPO_ROOT / "skills" / "kntnt" / "steps" / "select.md").read_text(
         encoding="utf-8"
     )
-    assert "scripts/kntnt.py" in enable
+    assert "scripts/kntnt.py" in select
 
 
 def test_check_treats_a_global_skill_as_effective_for_a_project_skill(
@@ -1208,8 +1480,8 @@ def test_check_treats_a_global_skill_as_effective_for_a_project_skill(
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "alpha")
-    _run(world, "apply", "enable", "--project", "beta")
+    _run(world, "apply", "select", "alpha")
+    _run(world, "apply", "select", "--project", "beta")
     beta = world["project"] / ".claude" / "skills" / "beta"
 
     result = _run(world, "check", "--here", str(beta))
@@ -1223,7 +1495,7 @@ def test_update_project_does_not_install_the_manager_in_the_project(
 ) -> None:
     world = _world(tmp_path)
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "--project", "alpha")
+    _run(world, "apply", "select", "--project", "alpha")
 
     result = _run(world, "apply", "update", "--project")
 
@@ -1265,7 +1537,7 @@ def test_update_removes_a_withdrawal_the_snapshot_has_already_forgotten(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "gamma")
+    _run(world, "apply", "select", "gamma")
     _withdraw(world, "gamma", "text", _SURVIVORS)
     _snapshot_forgets(world, _SURVIVORS)
 
@@ -1283,7 +1555,7 @@ def test_update_removes_a_withdrawal_with_no_snapshot_to_compare_against(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "gamma")
+    _run(world, "apply", "select", "gamma")
     _withdraw(world, "gamma", "text", _SURVIVORS)
     (world["here"] / "catalog.json").unlink()
 
@@ -1301,7 +1573,7 @@ def test_update_leaves_a_skill_without_the_marker_alone(tmp_path: Path) -> None:
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     foreign = world["home"] / ".claude" / "skills" / "zeta"
     _write(foreign / "SKILL.md", _foreign_skill_md("zeta"))
 
@@ -1322,7 +1594,7 @@ def test_update_survives_a_skill_file_it_cannot_read(tmp_path: Path) -> None:
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     foreign = world["home"] / ".claude" / "skills" / "zeta" / "SKILL.md"
     foreign.parent.mkdir(parents=True, exist_ok=True)
     foreign.write_bytes(b"---\nname: zeta\ndescription: \xff\xfe not utf-8\n---\n")
@@ -1355,7 +1627,7 @@ def test_update_sweeps_nothing_when_the_origin_is_unreachable(tmp_path: Path) ->
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "gamma")
+    _run(world, "apply", "select", "gamma")
     _snapshot_forgets(world, _SURVIVORS)
     _unreachable_origin(world)
 
@@ -1373,7 +1645,7 @@ def test_update_removes_a_skill_the_collection_has_withdrawn(tmp_path: Path) -> 
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "gamma")
+    _run(world, "apply", "select", "gamma")
     _withdraw(world, "gamma", "text", _SURVIVORS)
 
     result = _run(world, "apply", "update")
@@ -1390,7 +1662,7 @@ def test_update_never_asks_the_transport_for_a_withdrawn_skill(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "gamma")
+    _run(world, "apply", "select", "gamma")
     _withdraw(world, "gamma", "text", _SURVIVORS)
     log = tmp_path / "transport.jsonl"
 
@@ -1408,8 +1680,8 @@ def test_update_with_project_withdraws_only_from_the_project(tmp_path: Path) -> 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "gamma")
-    _run(world, "apply", "enable", "--project", "gamma")
+    _run(world, "apply", "select", "gamma")
+    _run(world, "apply", "select", "--project", "gamma")
     _withdraw(world, "gamma", "text", _SURVIVORS)
 
     result = _run(world, "apply", "update", "--project")
@@ -1424,8 +1696,7 @@ def test_update_refreshes_the_rest_when_a_withdrawal_fails(tmp_path: Path) -> No
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
-    _run(world, "apply", "enable", "gamma")
+    _run(world, "apply", "select", "alpha", "gamma")
     _withdraw(world, "gamma", "text", _SURVIVORS)
     _write(world["source"] / "skills" / "code" / "alpha" / "notes.md", "revised\n")
 
@@ -1455,7 +1726,7 @@ def test_no_arguments_prints_help(tmp_path: Path) -> None:
     assert result.stdout == _run(world, "help").stdout
 
 
-def test_help_says_status_lists_every_catalog_skill(tmp_path: Path) -> None:
+def test_help_says_select_lists_every_catalog_skill(tmp_path: Path) -> None:
     world = _world(tmp_path)
 
     text = _run(world, "help").stdout
@@ -1491,8 +1762,10 @@ def test_update_refreshes_the_catalog_of_the_running_manager(tmp_path: Path) -> 
     assert _json(result)["catalog_refreshed"] is True
     shipped = json.loads((world["here"] / "catalog.json").read_text(encoding="utf-8"))
     assert [entry["name"] for entry in shipped["skills"]] == ["alpha", "delta"]
-    names = [skill["name"] for skill in _json(_run(world, "status"))["skills"]]
-    assert names == ["alpha", "delta"]
+    assert sorted(_checked(_json(_run(world, "plan", "select")))) == [
+        "alpha",
+        "delta",
+    ]
 
 
 def test_update_refreshes_a_sidecar_when_skill_md_is_unchanged(tmp_path: Path) -> None:
@@ -1500,7 +1773,7 @@ def test_update_refreshes_a_sidecar_when_skill_md_is_unchanged(tmp_path: Path) -
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
     sidecar = world["source"] / "skills" / "code" / "alpha" / "notes.md"
     _write(sidecar, "revised\n")
@@ -1524,7 +1797,7 @@ def test_the_transport_empties_a_skill_directory_before_it_copies(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     installed = world["home"] / ".claude" / "skills" / "alpha"
     stray = installed / "notes" / "stray.md"
     _write(stray, "left behind\n")
@@ -1549,7 +1822,7 @@ def test_the_transport_discards_a_hand_edit_to_a_file_of_the_skill(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
     installed.write_text("hand edited\n", encoding="utf-8")
 
@@ -1560,16 +1833,30 @@ def test_the_transport_discards_a_hand_edit_to_a_file_of_the_skill(
     assert installed.read_bytes() == source.read_bytes()
 
 
-def test_apply_disable_refuses_without_yes(tmp_path: Path) -> None:
+def test_unchecking_refuses_without_yes(tmp_path: Path) -> None:
+    """The flag is the gate where the answer deletes files (ADR-0029)."""
+
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
-    result = _run(world, "apply", "disable", "alpha")
+    result = _run(world, "apply", "select")
 
     assert result.returncode == 2
     assert "--yes" in result.stderr
     assert (world["home"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_an_answer_that_only_places_needs_no_gate(tmp_path: Path) -> None:
+    """Nothing is deleted, so there is nothing for the flag to stand in for."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+
+    result = _run(world, "apply", "select", "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
 
 
 def test_every_verb_accepts_yes(tmp_path: Path) -> None:
@@ -1577,13 +1864,11 @@ def test_every_verb_accepts_yes(tmp_path: Path) -> None:
     _present(world, "home", ".claude")
 
     for args in (
-        ("status", "--yes"),
         ("help", "--yes"),
-        ("plan", "enable", "alpha", "--yes"),
-        ("plan", "disable", "alpha", "--yes"),
+        ("plan", "select", "--yes"),
         ("plan", "update", "--yes"),
         ("plan", "uninstall", "--yes"),
-        ("apply", "enable", "alpha", "--yes"),
+        ("apply", "select", "alpha", "--yes"),
         ("apply", "update", "--yes"),
     ):
         result = _run(world, *args)
@@ -1616,7 +1901,7 @@ def test_the_manager_separates_steps_from_manpages() -> None:
     """One rule everywhere: `help.md` is the manpage, `steps/` is the instructions."""
 
     manager = REPO_ROOT / "skills" / "kntnt"
-    verbs = ("help", "status", "enable", "disable", "update", "uninstall")
+    verbs = ("help", "select", "update", "uninstall")
 
     assert (manager / "help.md").is_file()
     for verb in verbs:
@@ -1774,13 +2059,13 @@ def test_catalog_generation_rejects_a_skill_without_the_collection_marker(
     assert "metadata.kntnt" in result.stderr
 
 
-def test_enable_confirms_each_placement_against_the_disk(tmp_path: Path) -> None:
+def test_select_confirms_each_placement_against_the_disk(tmp_path: Path) -> None:
     """A clean run says what it did and says the disk was read to know it."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
 
-    result = _run(world, "apply", "enable", "alpha")
+    result = _run(world, "apply", "select", "alpha")
 
     assert result.returncode == 0, result.stderr
     payload = _json(result)
@@ -1789,13 +2074,15 @@ def test_enable_confirms_each_placement_against_the_disk(tmp_path: Path) -> None
     assert payload["failed"] == []
 
 
-def test_enable_reports_a_placement_the_transport_did_not_make(tmp_path: Path) -> None:
+def test_select_reports_a_placement_the_transport_did_not_make(
+    tmp_path: Path,
+) -> None:
     """A transport that exits zero and writes nothing is not a success."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
 
-    result = _run(world, "apply", "enable", "alpha", skip=["alpha"])
+    result = _run(world, "apply", "select", "alpha", skip=["alpha"])
 
     assert result.returncode != 0
     payload = _json(result)
@@ -1809,13 +2096,13 @@ def test_enable_reports_a_placement_the_transport_did_not_make(tmp_path: Path) -
     ]
 
 
-def test_enable_project_reports_a_placement_the_transport_did_not_make(
+def test_select_project_reports_a_placement_the_transport_did_not_make(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _present(world, "project", ".claude")
 
-    result = _run(world, "apply", "enable", "--project", "gamma", skip=["gamma"])
+    result = _run(world, "apply", "select", "--project", "gamma", skip=["gamma"])
 
     assert result.returncode != 0
     payload = _json(result)
@@ -1825,14 +2112,14 @@ def test_enable_project_reports_a_placement_the_transport_did_not_make(
     ]
 
 
-def test_disable_reports_a_removal_the_transport_did_not_make(tmp_path: Path) -> None:
+def test_select_reports_a_removal_the_transport_did_not_make(tmp_path: Path) -> None:
     """The reported defect: removal claimed, files still there, exit 0."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
-    result = _run(world, "apply", "disable", "alpha", "--yes", skip=["alpha"])
+    result = _run(world, "apply", "select", "--yes", skip=["alpha"])
 
     assert result.returncode != 0
     payload = _json(result)
@@ -1847,16 +2134,14 @@ def test_disable_reports_a_removal_the_transport_did_not_make(tmp_path: Path) ->
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
 
 
-def test_disable_project_reports_a_removal_the_transport_did_not_make(
+def test_select_project_reports_a_removal_the_transport_did_not_make(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "--project", "gamma")
+    _run(world, "apply", "select", "--project", "gamma")
 
-    result = _run(
-        world, "apply", "disable", "--project", "gamma", "--yes", skip=["gamma"]
-    )
+    result = _run(world, "apply", "select", "--project", "--yes", skip=["gamma"])
 
     assert result.returncode != 0
     payload = _json(result)
@@ -1872,7 +2157,7 @@ def test_a_partly_applied_verb_reports_both_sets_and_still_fails(
     world = _world(tmp_path)
     _present(world, "home", ".claude")
 
-    result = _run(world, "apply", "enable", "alpha", "beta", skip=["beta"])
+    result = _run(world, "apply", "select", "alpha", "beta", skip=["beta"])
 
     assert result.returncode != 0
     payload = _json(result)
@@ -1889,10 +2174,10 @@ def test_a_failed_removal_names_only_the_directory_it_survived_in(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude", ".config/crush")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     shutil.rmtree(world["home"] / ".config" / "crush" / "skills" / "alpha")
 
-    result = _run(world, "apply", "disable", "alpha", "--yes", skip=["alpha"])
+    result = _run(world, "apply", "select", "--yes", skip=["alpha"])
 
     assert result.returncode != 0
     assert _json(result)["failed"][0]["directories"] == [
@@ -1905,7 +2190,7 @@ def test_update_reports_a_refresh_that_never_landed(tmp_path: Path) -> None:
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _present(world, "home", ".config/crush")
 
     result = _run(world, "apply", "update", skip=["alpha"])
@@ -1924,9 +2209,9 @@ def test_a_verb_that_changes_nothing_is_clean(tmp_path: Path) -> None:
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
-    result = _run(world, "apply", "enable", "alpha", skip=["alpha"])
+    result = _run(world, "apply", "select", "alpha", skip=["alpha"])
 
     assert result.returncode == 0, result.stderr
     payload = _json(result)
@@ -1934,6 +2219,8 @@ def test_a_verb_that_changes_nothing_is_clean(tmp_path: Path) -> None:
     assert payload["confirmed"] == []
     assert payload["failed"] == []
     assert payload["noop"] == ["alpha"]
+    assert payload["placed"] == []
+    assert payload["removed"] == []
 
 
 def test_the_change_verbs_tell_the_user_when_a_change_did_not_take(
@@ -1941,7 +2228,7 @@ def test_the_change_verbs_tell_the_user_when_a_change_did_not_take(
 ) -> None:
     """The payload is half of it; the skill body has to show the failure."""
 
-    for name in ("enable.md", "disable.md", "update.md"):
+    for name in ("select.md", "update.md"):
         text = (REPO_ROOT / "skills" / "kntnt" / "steps" / name).read_text(
             encoding="utf-8"
         )
@@ -1964,7 +2251,7 @@ def test_a_failed_removal_names_the_shared_tree_a_universal_harness_reads(
         world["home"] / ".agents" / "skills" / "alpha" / "SKILL.md", _skill_md("alpha")
     )
 
-    result = _run(world, "apply", "disable", "alpha", "--yes", skip=["alpha"])
+    result = _run(world, "apply", "select", "--yes", skip=["alpha"])
 
     assert result.returncode != 0
     assert _json(result)["failed"][0]["directories"] == [
@@ -1987,7 +2274,7 @@ def test_uninstall_removes_every_enabled_skill_and_the_manager(
 ) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude", ".config/crush")
-    _run(world, "apply", "enable", "alpha", "beta")
+    _run(world, "apply", "select", "alpha", "beta")
     _install_manager(world)
 
     result = _run(world, "apply", "uninstall", "--yes")
@@ -2001,7 +2288,7 @@ def test_uninstall_removes_every_enabled_skill_and_the_manager(
 def test_uninstall_reports_every_name_it_took_off_the_disk(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
 
     payload = _json(_run(world, "apply", "uninstall", "--yes"))
@@ -2017,7 +2304,7 @@ def test_uninstall_removes_the_manager_last(tmp_path: Path) -> None:
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
     log = tmp_path / "calls.jsonl"
 
@@ -2044,7 +2331,7 @@ def test_uninstall_with_nothing_enabled_still_removes_the_manager(
 def test_uninstall_refuses_without_yes(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
 
     result = _run(world, "apply", "uninstall")
@@ -2061,8 +2348,8 @@ def test_uninstall_leaves_a_project_copy_where_it_is(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _present(world, "project", ".claude")
-    _run(world, "apply", "enable", "alpha")
-    _run(world, "apply", "enable", "--project", "gamma")
+    _run(world, "apply", "select", "alpha")
+    _run(world, "apply", "select", "--project", "gamma")
     _install_manager(world)
 
     result = _run(world, "apply", "uninstall", "--yes")
@@ -2088,7 +2375,7 @@ def test_uninstall_has_no_project_form(tmp_path: Path) -> None:
 def test_plan_uninstall_names_what_will_go_and_from_where(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
 
     payload = _json(_run(world, "plan", "uninstall"))
@@ -2107,7 +2394,7 @@ def test_uninstall_says_whether_the_list_it_worked_from_is_current(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
     _unreachable_origin(world)
 
@@ -2125,7 +2412,7 @@ def test_uninstall_keeps_the_manager_when_a_skill_is_left_behind(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
 
     result = _run(world, "apply", "uninstall", "--yes", skip=["alpha"])
@@ -2150,7 +2437,7 @@ def test_uninstall_keeps_the_manager_when_the_transport_refuses_a_name(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha", "beta")
+    _run(world, "apply", "select", "alpha", "beta")
     _install_manager(world)
     log = tmp_path / "calls.jsonl"
 
@@ -2168,7 +2455,7 @@ def test_uninstall_survives_deleting_the_manager_it_is_running(tmp_path: Path) -
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
     installed = world["home"] / ".claude" / "skills" / "kntnt"
 
@@ -2234,7 +2521,7 @@ def test_dry_run_leaves_every_directory_of_the_layer_alone(tmp_path: Path) -> No
     _present(world, "home", ".claude", ".config/crush")
     before = _tree(world["home"])
 
-    result = _run(world, "apply", "enable", "alpha", "--dry-run")
+    result = _run(world, "apply", "select", "alpha", "--dry-run")
 
     assert result.returncode == 0, result.stderr
     assert _tree(world["home"]) == before
@@ -2246,7 +2533,7 @@ def test_dry_run_reports_an_outcome_read_from_the_sandbox(tmp_path: Path) -> Non
     world = _world(tmp_path)
     _present(world, "home", ".claude")
 
-    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+    payload = _json(_run(world, "apply", "select", "alpha", "--dry-run"))
 
     assert payload["intended"] == ["alpha"]
     assert payload["confirmed"] == ["alpha"]
@@ -2260,8 +2547,8 @@ def test_dry_run_makes_the_transport_calls_the_real_run_makes(tmp_path: Path) ->
     dry = tmp_path / "dry.jsonl"
     real = tmp_path / "real.jsonl"
 
-    _run(world, "apply", "enable", "alpha", "--dry-run", log=dry)
-    _run(world, "apply", "enable", "alpha", log=real)
+    _run(world, "apply", "select", "alpha", "--dry-run", log=dry)
+    _run(world, "apply", "select", "alpha", log=real)
 
     assert _calls(dry) == _calls(real)
 
@@ -2272,7 +2559,7 @@ def test_dry_run_says_it_downloads_the_transport_afresh(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
 
-    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+    payload = _json(_run(world, "apply", "select", "alpha", "--dry-run"))
 
     note = payload["dry_run"]["note"]
     assert "download" in note
@@ -2286,10 +2573,10 @@ def test_dry_run_starts_from_the_collection_files_the_layer_holds(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     before = _tree(world["home"])
 
-    payload = _json(_run(world, "apply", "disable", "alpha", "--yes", "--dry-run"))
+    payload = _json(_run(world, "apply", "select", "--yes", "--dry-run"))
 
     assert payload["confirmed"] == ["alpha"]
     assert _tree(world["home"]) == before
@@ -2298,9 +2585,9 @@ def test_dry_run_starts_from_the_collection_files_the_layer_holds(
 def test_dry_run_reports_a_skill_already_enabled_as_no_work(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
 
-    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+    payload = _json(_run(world, "apply", "select", "alpha", "--dry-run"))
 
     assert payload["noop"] == ["alpha"]
     assert payload["intended"] == []
@@ -2318,7 +2605,7 @@ def test_dry_run_leaves_a_skill_that_is_not_ours_out_of_the_sandbox(
         _foreign_skill_md("alpha"),
     )
 
-    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+    payload = _json(_run(world, "apply", "select", "alpha", "--dry-run"))
 
     assert payload["intended"] == ["alpha"]
     assert payload["noop"] == []
@@ -2329,7 +2616,7 @@ def test_dry_run_update_writes_neither_the_skills_nor_the_stored_catalog(
 ) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude", ".config/crush")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
     delta = _entry("delta", "code", description="The delta skill.")
     _publish(
@@ -2353,7 +2640,7 @@ def test_dry_run_uninstall_keeps_the_collection_on_the_machine(
 ) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     _install_manager(world)
     before = _tree(world["home"])
 
@@ -2368,7 +2655,7 @@ def test_dry_run_project_leaves_the_working_directory_alone(tmp_path: Path) -> N
     _present(world, "project", ".claude")
     before = _tree(world["project"])
 
-    payload = _json(_run(world, "apply", "enable", "--project", "alpha", "--dry-run"))
+    payload = _json(_run(world, "apply", "select", "--project", "alpha", "--dry-run"))
 
     assert payload["confirmed"] == ["alpha"]
     assert _tree(world["project"]) == before
@@ -2380,7 +2667,7 @@ def test_dry_run_takes_the_sandbox_with_it(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
 
-    payload = _json(_run(world, "apply", "enable", "alpha", "--dry-run"))
+    payload = _json(_run(world, "apply", "select", "alpha", "--dry-run"))
 
     assert not Path(payload["dry_run"]["sandbox"]).exists()
 
@@ -2410,20 +2697,18 @@ def test_every_subparser_accepts_dry_run(tmp_path: Path) -> None:
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "enable", "alpha")
+    _run(world, "apply", "select", "alpha")
     gamma = world["source"] / "skills" / "text" / "gamma"
 
     for args in (
-        ("status", "--dry-run"),
         ("help", "--dry-run"),
         ("check", "--here", str(gamma), "--dry-run"),
         ("catalog", "--dry-run"),
-        ("plan", "enable", "alpha", "--dry-run"),
-        ("plan", "disable", "alpha", "--dry-run"),
+        ("plan", "select", "--dry-run"),
         ("plan", "update", "--dry-run"),
         ("plan", "uninstall", "--dry-run"),
-        ("apply", "enable", "alpha", "--dry-run"),
-        ("apply", "disable", "alpha", "--yes", "--dry-run"),
+        ("apply", "select", "alpha", "--dry-run"),
+        ("apply", "select", "--yes", "--dry-run"),
         ("apply", "update", "--dry-run"),
         ("apply", "uninstall", "--yes", "--dry-run"),
     ):
@@ -2443,7 +2728,7 @@ def test_help_documents_the_dry_run_flag(tmp_path: Path) -> None:
 def test_every_changing_verb_forwards_the_dry_run_flag() -> None:
     """The agent's forwarding is prose, so the prose has to say it."""
 
-    for verb in ("enable", "disable", "update", "uninstall"):
+    for verb in ("select", "update", "uninstall"):
         text = (REPO_ROOT / "skills" / "kntnt" / "steps" / f"{verb}.md").read_text(
             encoding="utf-8"
         )

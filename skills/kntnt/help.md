@@ -4,7 +4,7 @@ Manage this collection — which skills are Enabled, in Global and in each Proje
 
 ## Synopsis
 
-`/kntnt [subcommand] [skill...] [--project[=on|off]] [--yes] [--dry-run]`
+`/kntnt [subcommand] [name] [--project[=on|off]] [--yes] [--dry-run]`
 
 ## Description
 
@@ -15,21 +15,19 @@ Bare `/kntnt` prints this text. Someone who types the manager's name with nothin
 ## Subcommands
 
 - `help [name]` — this text, the manpage of one subcommand, or the help of one collection skill.
-- `status [skill...]` — report Global, or what applies in this directory with `--project`.
-- `enable [skill...]` — make skills Enabled. No names opens a list.
-- `disable [skill...]` — make skills Disabled. No names opens a list.
+- `select` — print the catalog as a list, and change what is Enabled by answering it.
 - `update` — refresh this collection, then re-check every Dependency.
 - `uninstall` — remove this collection from this machine, the manager last.
 
 ## Options
 
-- `--project`, `--project=on` — act on this Project rather than Global. `--project=off` is the bare form. Uninstall takes no `--project`.
+- `--project`, `--project=on` — act on this project rather than global. `--project=off` is the bare form. Uninstall takes no `--project`.
 - `--yes` — assume yes: ask nothing that can be answered yes or no.
 - `--dry-run` — run the verb against a temporary home seeded with this collection's files, and throw that home away. Nothing on this machine changes. Accepted everywhere; the verbs that change nothing ignore it.
 
 ## Notes
 
-Status lists every Catalog skill, Enabled or not; with `--project` it lists what applies in this directory and where each skill comes from. Enable, Disable, and Update default to Global. They act on every Harness present in the layer they target, worked out on every run rather than recorded. Uninstall clears this machine and leaves a working directory's own copies to that project.
+Select lists every catalog skill, Enabled or not, and is where you change which of them are. Reading the list and acting on it are the same gesture, so there is no second verb to retype a name into. Select and Update default to global; with `--project` they act on this working directory alone. They act on every harness present in the layer they target, worked out on every run rather than recorded. Uninstall clears this machine and leaves a working directory's own copies to that project.
 
 A dry run is the expensive way to see a change before it happens: the verb really runs, against files copied into a temporary home, and the report is its own outcome read off that home's disk rather than a second account of what it meant to do. It downloads the transport afresh into a cache of its own, so it takes noticeably longer than the run it previews. The confirmation a changing verb asks for before it writes is the cheap way, and it is not a dry run.
 
