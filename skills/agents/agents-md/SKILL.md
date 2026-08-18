@@ -20,13 +20,7 @@ Write the fewest always-loaded tokens that still keep the next session safe. Def
 
 ## Help
 
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` as it stands and stop. It is this skill's manpage: print it, do not summarise or extend it.
-
-## Arguments
-
-- `path` — directory to tend. Default: current repo root.
-- `--force` — lay the skeleton when no fact earns a file.
-- `--yes` — take yes for an answer on every question in [`writes.md`](writes.md) and make the change, rather than asking. `docs/` stays a proposal even so: a human writes that text.
+If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
 
 ## Steps
 

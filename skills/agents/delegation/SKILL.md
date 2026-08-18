@@ -24,7 +24,7 @@ The payload's `capabilities` are the half of the check no script can do — you 
 
 ## Help
 
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` as it stands and stop. It is this skill's manpage: print it, do not summarise or extend it.
+If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
 
 ## Arguments
 

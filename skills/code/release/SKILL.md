@@ -23,13 +23,7 @@ Ship a version from the default branch: changelog, bump, push, tag, GitHub relea
 
 ## Help
 
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` as it stands and stop. It is this skill's manpage: print it, do not summarise or extend it.
-
-## Arguments
-
-- `minor` / `major` / `X.Y.Z` — force the bump; otherwise derive it from `[Unreleased]`.
-- `--no-build` — skip the archive even when the plan has a `build` command.
-- `--yes` — skip the confirmation.
+If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
 
 ## Steps
 

@@ -21,12 +21,7 @@ Commit the working tree on the current branch and stop.
 
 ## Help
 
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` as it stands and stop. It is this skill's manpage: print it, do not summarise or extend it.
-
-## Arguments
-
-- `"message"` — use this commit message.
-- `--yes` — skip the confirmation.
+If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
 
 ## Steps
 
