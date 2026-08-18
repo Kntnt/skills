@@ -108,11 +108,22 @@ def dest_dir(agent: str, global_layer: bool) -> Path:
 
 
 def copy_skill(name: str, dest: Path) -> None:
-    """Copy *name* into *dest*, leaving extra files already there."""
+    """Replace *name* in *dest* with the collection's copy of it.
+
+    `npx skills add` empties the skill's directory before copying rather than
+    merging into it, so nothing that was there survives. ADR-0028 records why
+    this double has to model that rather than copy over what it finds.
+    """
 
     src = find_skill(name)
+
+    # Empty the directory first, so what the collection ships is all that is left.
     target = dest / name
-    target.mkdir(parents=True, exist_ok=True)
+    if target.is_dir():
+        shutil.rmtree(target)
+    target.mkdir(parents=True)
+
+    # Copy the skill in, every file of it and none of its directory entries.
     for path in src.rglob("*"):
         if path.is_dir():
             continue

@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- The test double standing in for the transport models `npx skills add`'s wipe: it empties a skill's directory before it copies, so a file left under an installed skill and an edit to one of the skill's own files are both gone after a re-add — the behaviour the real transport was verified to have. Nothing on any machine changes; the double is used only by this repository's own suite. What it buys is the postcondition a refresh is about to state — the skill on disk is the skill the collection ships and nothing more — which could not be tested at all against a double less capable than the thing it stands in for. Architecture Decision Record 0028 carries the rule, and its own history is the mirror image: the double was once *more* capable than the real transport, and the suite stayed green while the collection could not be updated.
+
 ## [0.7.0] – 2026-08-18
 
 ### Added

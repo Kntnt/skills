@@ -237,6 +237,21 @@ def _unreachable_origin(world: dict[str, Path]) -> None:
     (world["source"] / "skills" / "kntnt" / "catalog.json").unlink()
 
 
+def _env(world: dict[str, Path]) -> dict[str, str]:
+    """Build the environment the manager and the transport are both run with.
+
+    The isolated home, project, and collection are what makes a run a test run,
+    and the transport reads its own path table from a variable of its own.
+    """
+
+    env = os.environ.copy()
+    env["KNTNT_HOME"] = str(world["home"])
+    env["KNTNT_SOURCE"] = str(world["source"])
+    env["KNTNT_PROJECT"] = str(world["project"])
+    env["KNTNT_TRANSPORT_PATHS"] = str(HARNESS_PATHS)
+    return env
+
+
 def _run(
     world: dict[str, Path],
     *args: str,
@@ -246,13 +261,9 @@ def _run(
     refuse: list[str] | None = None,
     installed: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
-    env = os.environ.copy()
-    env["KNTNT_HOME"] = str(world["home"])
-    env["KNTNT_SOURCE"] = str(world["source"])
-    env["KNTNT_PROJECT"] = str(world["project"])
+    env = _env(world)
     env["KNTNT_HARNESS_PATHS"] = str(HARNESS_PATHS)
     env["KNTNT_TRANSPORT"] = f"uv run {FAKE_SKILLS}"
-    env["KNTNT_TRANSPORT_PATHS"] = str(HARNESS_PATHS)
 
     # `installed` runs the copy the transport placed, resolving `$HERE` and the
     # path table off that directory the way a real invocation does. The fixture
@@ -272,6 +283,38 @@ def _run(
         ["uv", "run", str(script), *args],
         cwd=cwd or world["project"],
         env=env,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def _transport_add(
+    world: dict[str, Path], name: str
+) -> subprocess.CompletedProcess[str]:
+    """Add *name* globally through the stand-in transport, as the manager does.
+
+    A test about what `add` does to a directory calls the transport itself
+    rather than a verb: which skills a verb hands it is a separate question
+    with tests of its own, and one that is going to keep changing.
+    """
+
+    return subprocess.run(
+        [
+            "uv",
+            "run",
+            str(FAKE_SKILLS),
+            "add",
+            str(world["source"]),
+            "--skill",
+            name,
+            "--agent",
+            "claude-code",
+            "--global",
+            "--yes",
+        ],
+        cwd=world["project"],
+        env=_env(world),
         text=True,
         capture_output=True,
         check=False,
@@ -1399,6 +1442,54 @@ def test_update_refreshes_a_sidecar_when_skill_md_is_unchanged(tmp_path: Path) -
     assert result.returncode == 0, result.stderr
     installed = world["home"] / ".claude" / "skills" / "alpha" / "notes.md"
     assert installed.read_text(encoding="utf-8") == "revised\n"
+
+
+def test_the_transport_empties_a_skill_directory_before_it_copies(
+    tmp_path: Path,
+) -> None:
+    """`add` replaces a skill's directory rather than merging into it.
+
+    A file the collection does not carry is gone after a re-`add` — verified
+    against the real transport, and ADR-0028 is where the double's obligation
+    to model it is written down.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    installed = world["home"] / ".claude" / "skills" / "alpha"
+    stray = installed / "notes" / "stray.md"
+    _write(stray, "left behind\n")
+
+    result = _transport_add(world, "alpha")
+
+    assert result.returncode == 0, result.stderr
+    assert not stray.exists()
+    assert (installed / "SKILL.md").is_file()
+
+
+def test_the_transport_discards_a_hand_edit_to_a_file_of_the_skill(
+    tmp_path: Path,
+) -> None:
+    """The other half of the postcondition: the collection's bytes, not the edit.
+
+    This half holds through the copy rather than through the wipe — the source
+    is written over whatever is there — so it would survive the wipe being
+    lost. Both halves together are what lets a refresh promise the skill on
+    disk is the skill the collection ships, so both are pinned.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "enable", "alpha")
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+
+    result = _transport_add(world, "alpha")
+
+    assert result.returncode == 0, result.stderr
+    source = world["source"] / "skills" / "code" / "alpha" / "SKILL.md"
+    assert installed.read_bytes() == source.read_bytes()
 
 
 def test_apply_disable_refuses_without_yes(tmp_path: Path) -> None:
