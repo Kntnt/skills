@@ -96,6 +96,12 @@ def test_the_shipped_skills_declare_the_lists_the_checker_refuses_on() -> None:
         "externals": [],
         "capabilities": [],
     }
+    assert kntnt.skill_deps(_frontmatter("code/orchestrate/SKILL.md")) == {
+        "binaries": ["git", "gh", "uv"],
+        "skills": [],
+        "externals": [],
+        "capabilities": ["subagents"],
+    }
     assert kntnt.skill_deps(_frontmatter("agents/delegation/SKILL.md")) == {
         "binaries": ["uv"],
         "skills": [],

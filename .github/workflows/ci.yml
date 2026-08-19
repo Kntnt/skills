@@ -30,7 +30,7 @@ jobs:
         run: uvx ruff format --check .
 
       - name: Type-check
-        run: uvx mypy skills/kntnt/scripts/kntnt.py skills/code/commit/scripts/ship.py tests
+        run: uvx mypy skills/kntnt/scripts/kntnt.py skills/code/commit/scripts/ship.py skills/code/orchestrate/scripts/run.py tests
 
       - name: Test
         run: uv run --with pytest pytest -q

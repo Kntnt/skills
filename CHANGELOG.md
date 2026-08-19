@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- `/orchestrate` — read the issue tracker and report the run it would make of it. Every open ticket carrying `ready-for-agent` is in the report, together with which of them are workable now and the branch a run would use, so the scope of a night's work can be checked before a night is committed to it; a ticket without that label never appears, because a ticket without it is unfinished thinking and unfinished thinking is never built. A run works the branch you are on and refuses on the repository's default branch — and on a repository where nothing can say which branch that is, rather than guess at it — and nothing is pushed, tagged, or released. It plans; it does not build yet — briefing a session per ticket and verifying the result independently is what working a ticket means, and the skill grows into that. Everything deterministic about a run lives behind one seam, the engine's command line, so the skill behaves identically in every harness rather than being sharp where one vendor's orchestration primitive exists and vague everywhere else; ADR-0050 records that decision and what it replaces.
+
 ### Changed
 
 - The test suites stand in for a binary through one shared helper. A test that has to fake something an engine shells out to — `gh`, so far — writes the stand-in and gets back the environment that makes it the one that runs, instead of spelling out for itself the executable-in-a-directory-placed-first-on-`PATH` dance. The commit engine's suite carried three copies of that dance; the orchestrate engine being built next talks to the tracker through `gh` for its whole working life and would have added more. Nothing a user can observe changes, and no test's meaning changes — the same tests assert the same things, from one helper instead of three copies.

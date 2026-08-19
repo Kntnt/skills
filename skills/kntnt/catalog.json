@@ -52,6 +52,22 @@
       "capabilities": []
     },
     {
+      "name": "orchestrate",
+      "category": "code",
+      "description": "Plan an unattended run over the tracker's ready-for-agent tickets, and name what it would work.",
+      "digest": "db23c2110f10cbf6aefbd16f7e0041ac3784e383416fae2558129235b40d6d1a",
+      "binaries": [
+        "git",
+        "gh",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
