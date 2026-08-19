@@ -261,24 +261,42 @@ def worktree_home(cwd: Path) -> Path:
     return (cwd / common).resolve() / WORKTREE_HOME
 
 
-def open_worktrees(cwd: Path) -> dict[int, str]:
-    """Return the working tree a run has open per ticket, read off git itself.
+def worktree_branch(run_branch: str, number: int) -> str:
+    """Return the branch ticket *number* is built on in *run_branch*'s run."""
+
+    return f"{WORKTREE_HOME}/{run_branch}/{number}"
+
+
+def open_worktrees(cwd: Path, run_branch: str) -> dict[int, str]:
+    """Return the working tree *run_branch*'s run has open per ticket.
 
     Git's own account of its working trees is the source: a run that made one
     and was interrupted, and one whose ticket failed and whose tree was left
     to be inspected, are the same fact on disk and are read the same way.
+
+    A tree is named for its ticket and a branch for the run that made it, so
+    it is the branch that says whose it is. A tree standing at this ticket's
+    path on another run's branch is another branch's work, and adopting it
+    would build this run's ticket on top of it.
     """
 
-    # A working tree of this run's is one git lists under the run's own
-    # directory, named for the ticket it holds.
+    # Find the trees this run made: those under its own directory, named for a
+    # ticket, on the branch this run cuts for it. Git writes one block per
+    # tree; a block with no branch line is a detached head this never makes.
     home = worktree_home(cwd)
     found: dict[int, str] = {}
+    standing: Path | None = None
     for line in git(cwd, "worktree", "list", "--porcelain").splitlines():
-        if not line.startswith("worktree "):
-            continue
-        path = Path(line.removeprefix("worktree ").strip()).resolve()
-        if path.parent == home and path.name.isdigit():
-            found[int(path.name)] = str(path)
+        if line.startswith("worktree "):
+            standing = Path(line.removeprefix("worktree ").strip()).resolve()
+        elif line.startswith("branch ") and standing is not None:
+            branch = line.removeprefix("branch ").strip().removeprefix("refs/heads/")
+            if (
+                standing.parent == home
+                and standing.name.isdigit()
+                and branch == worktree_branch(run_branch, int(standing.name))
+            ):
+                found[int(standing.name)] = str(standing)
 
     return found
 
@@ -1121,7 +1139,7 @@ def tickets_recorded_done(
     return sorted(tickets, key=lambda ticket: ticket.number)
 
 
-def say_where_work_stands(cwd: Path, tickets: list[Ticket]) -> None:
+def say_where_work_stands(cwd: Path, tickets: list[Ticket], run_branch: str) -> None:
     """Tell each of *tickets* which working tree still holds its work, if any.
 
     Asked of the repository once and answered for the whole set, rather than
@@ -1129,7 +1147,7 @@ def say_where_work_stands(cwd: Path, tickets: list[Ticket]) -> None:
     is the repository's answer and the tracker has no opinion about it.
     """
 
-    open_now = open_worktrees(cwd)
+    open_now = open_worktrees(cwd, run_branch)
     for ticket in tickets:
         ticket.worktree = open_now.get(ticket.number)
 
@@ -1268,7 +1286,7 @@ def build_plan(
     listed = open_listing(cwd)
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
     tickets = tickets_in_scope(cwd, listed, scope)
-    say_where_work_stands(cwd, tickets)
+    say_where_work_stands(cwd, tickets, branch)
     recorded = [ticket.number for ticket in tickets if ticket.outcome]
     stranded = stranded_behind(tickets)
 
@@ -1503,7 +1521,7 @@ def isolate(cwd: Path, number: int) -> int:
     """
 
     run_branch = current_branch(cwd)
-    open_now = open_worktrees(cwd)
+    open_now = open_worktrees(cwd, run_branch)
 
     # The invocation is the resume here as everywhere else (ADR-0052): a ticket
     # picked up again goes on in the working tree it was left in.
@@ -1521,14 +1539,24 @@ def isolate(cwd: Path, number: int) -> int:
 
     # A branch with nothing checked out on it is work an earlier run left
     # behind and this one would silently build over, so it is named instead.
-    branch = f"{WORKTREE_HOME}/{run_branch}/{number}"
+    branch = worktree_branch(run_branch, number)
     if git_ok(cwd, "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"):
         return fail(
             f"#{number} already has the branch '{branch}' and no working tree "
             "holding it: look at what is on it, then delete it"
         )
 
+    # A working tree standing at this ticket's path that is not this run's is
+    # another branch's run, interrupted or failed and left to be looked at.
+    # Building over it would take that branch's work for this ticket's.
     path = worktree_home(cwd) / str(number)
+    if path.exists():
+        return fail(
+            f"#{number} already has a working tree at {path} that belongs to "
+            "another run: look at what is in it, then remove it with `git "
+            "worktree remove`"
+        )
+
     try:
         git(cwd, "worktree", "add", str(path), "-b", branch)
     except RunError as exc:
@@ -1562,7 +1590,7 @@ def integrate(cwd: Path, number: int) -> int:
 
     branch = current_branch(cwd)
     default = default_branch(cwd)
-    open_now = open_worktrees(cwd)
+    open_now = open_worktrees(cwd, branch)
 
     # A merge is the one gesture here that writes to the branch it is on, so
     # the branch an unattended night must never land on is refused again.
@@ -1755,9 +1783,12 @@ def rebuild(cwd: Path, number: int) -> int:
     undone where it collided.
     """
 
+    # Which trees are this run's is a question about the branch it is on, the
+    # branch being what says which run made a tree.
+    open_now = open_worktrees(cwd, current_branch(cwd))
+
     # A ceiling of one merges nothing, so nothing of this kind can have gone
     # wrong there and there is no second place to build.
-    open_now = open_worktrees(cwd)
     if number not in open_now:
         return fail(
             f"#{number} has no working tree to discard: a ceiling of one "
@@ -1950,7 +1981,7 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
             open_scope + tickets_recorded_done(finished, scope),
             key=lambda ticket: ticket.number,
         )
-        say_where_work_stands(cwd, tickets)
+        say_where_work_stands(cwd, tickets, branch)
         base = run_base(cwd, tickets)
     except RunError as exc:
         return fail(str(exc))

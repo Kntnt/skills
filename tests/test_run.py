@@ -2786,3 +2786,66 @@ def test_record_writes_a_failure_from_a_working_tree_that_still_holds_work(
 
     assert result.returncode == 0, result.stderr
     assert "issue comment 9" in _gh_calls(env)
+
+
+def test_isolate_does_not_adopt_a_working_tree_another_branch_left(
+    tmp_path: Path,
+) -> None:
+    """A tree is named for its ticket and a branch for its run, and it is the
+    branch that says whose it is: adopting one an interrupted run left on
+    another branch would build this run's ticket on top of that branch's
+    work."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("another branch's work\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "build #9 elsewhere")
+    _git(repo, "checkout", "-b", "other")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert str(worktree) in result.stderr
+    assert worktree.is_dir()
+    assert (worktree / "graph.py").is_file()
+
+
+def test_integrate_leaves_a_working_tree_another_branch_holds_alone(
+    tmp_path: Path,
+) -> None:
+    """What a run merges is what it built, and a tree cut from another branch
+    is neither."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("another branch's work\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "build #9 elsewhere")
+    _git(repo, "checkout", "-b", "other")
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert not (repo / "graph.py").exists()
+    assert worktree.is_dir()
+
+
+def test_isolate_still_resumes_the_working_tree_this_branchs_run_made(
+    tmp_path: Path,
+) -> None:
+    """The invocation is the resume, and narrowing what counts as this run's
+    tree must not cost the run the tree it made itself."""
+
+    repo = _init_repo(tmp_path / "proj")
+
+    first = _engine(repo, "isolate", "--ticket", "9")
+    second = _engine(repo, "isolate", "--ticket", "9")
+
+    assert first.returncode == 0, first.stderr
+    assert second.returncode == 0, second.stderr
+    assert json.loads(first.stdout) == json.loads(second.stdout)
