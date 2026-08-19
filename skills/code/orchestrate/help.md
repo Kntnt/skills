@@ -84,6 +84,8 @@ A repository whose tracker holds no ready-for-agent ticket is said so, and nothi
 
 `git`, `gh`, and `uv` on PATH, the manager installed, and a harness that can spawn subagents. The last one is a Capability no script can test: the skill asks you to confirm it, and does no work where it is not true.
 
+The tracker has to answer for more than the binary being there. Every plan asks it for each ticket's blocked-by relation and its parent, and a run aimed at a reference asks what is filed under that reference — so the repository needs issue dependencies and sub-issues, and `gh` needs to be new enough to know those fields. Where either is missing the first plan stops with what `gh` said, which names the field it could not answer for; `gh` upgraded, or the tracker's relations turned on, is what fixes it. The `Blocked by` and `Parent` lines a ticket body can carry are a fallback for a ticket that has no relation, not for a tracker that has none. `gh` also has to be authenticated for this repository, since the run claims tickets, comments on them, and closes them.
+
 ## See also
 
 `/commit` records what a run leaves on the branch. `/kntnt select` to Enable this skill elsewhere.
