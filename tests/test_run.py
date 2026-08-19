@@ -13,6 +13,11 @@ from support.fake_binary import fake_binary_on_path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUN = REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py"
 
+# How long any one invocation is given. Generous enough that a cold `uv` never
+# trips it, and short enough that a graph the engine walks in circles is a
+# failure rather than a suite that never ends.
+ENGINE_TIMEOUT = 120
+
 _GIT_ENV = {
     key: value for key, value in os.environ.items() if not key.startswith("GIT_")
 }
@@ -25,9 +30,16 @@ _GIT_ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
 # asked for, and knows no other way to reach a ticket. A ticket the engine
 # comes back with is therefore one it asked for by label, and a query carrying
 # no label finds no file and fails the call — which is what makes "a ticket
-# without that label never appears" an assertion rather than a hope.
+# without that label never appears" an assertion rather than a hope. One
+# ticket is reachable by number as well, because a blocking edge read out of a
+# body names a ticket the scope need not contain; a number the tracker was
+# never given fails the call, as a deleted ticket does.
 _GH_SCRIPT = """#!/bin/sh
 echo "$@" >> "$GH_LOG"
+if [ "$2" = "view" ]; then
+  cat "$GH_ISSUES/$3.json"
+  exit $?
+fi
 label=""
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -65,26 +77,63 @@ def _init_repo(path: Path, branch: str = "work", initial: str = "main") -> Path:
     return path
 
 
-def _ticket(number: int, title: str) -> dict[str, Any]:
+def _ticket(
+    number: int,
+    title: str,
+    *,
+    blocked_by: list[tuple[int, str]] | None = None,
+    body: str = "",
+) -> dict[str, Any]:
+    """Build a ticket as the tracker answers it, with *blocked_by* as edges.
+
+    Each edge is a ticket number and the state the tracker reports it in, which
+    is how the native relation arrives: the blocker's own state travels with
+    the edge, so a closed blocker needs no second question.
+    """
+
+    edges = blocked_by or []
     return {
         "number": number,
         "title": title,
         "url": f"https://example.test/issues/{number}",
+        "body": body,
+        "blockedBy": {
+            "nodes": [{"number": blocker, "state": state} for blocker, state in edges],
+            "totalCount": len(edges),
+        },
     }
 
 
 def _tracker(
-    tmp_path: Path, tickets: dict[str, list[dict[str, Any]]]
+    tmp_path: Path,
+    tickets: dict[str, list[dict[str, Any]]],
+    states: dict[int, str] | None = None,
 ) -> dict[str, str]:
-    """Stand `gh` up over a tracker holding *tickets*, filed by label."""
+    """Stand `gh` up over a tracker holding *tickets*, filed by label.
+
+    *states* names the tickets reachable by number rather than by label, each
+    with the state the tracker reports it in — the tickets a blocking edge read
+    out of a body can point at from outside the scope.
+    """
 
     directory = tmp_path / "tracker"
     directory.mkdir()
     for label, filed in tickets.items():
         (directory / f"{label}.json").write_text(json.dumps(filed), encoding="utf-8")
 
+    issues = tmp_path / "issues"
+    issues.mkdir()
+    for number, state in (states or {}).items():
+        (issues / f"{number}.json").write_text(
+            json.dumps({"number": number, "state": state}), encoding="utf-8"
+        )
+
     env = fake_binary_on_path(tmp_path, "gh", _GH_SCRIPT)
-    return env | {"GH_TICKETS": str(directory), "GH_LOG": str(tmp_path / "gh.log")}
+    return env | {
+        "GH_TICKETS": str(directory),
+        "GH_ISSUES": str(issues),
+        "GH_LOG": str(tmp_path / "gh.log"),
+    }
 
 
 def _engine(
@@ -100,13 +149,15 @@ def _engine(
         text=True,
         capture_output=True,
         check=False,
+        timeout=ENGINE_TIMEOUT,
     )
 
 
 def test_plan_returns_every_ready_for_agent_ticket_and_all_of_them_workable(
     tmp_path: Path,
 ) -> None:
-    """No edges are read yet, so a set with no edges is workable in full."""
+    """A set with no edge has no ticket waiting on another, so all of it is
+    workable at once."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -288,3 +339,260 @@ def test_plan_refuses_a_ticket_list_that_may_have_been_truncated(
 
     assert result.returncode == 1
     assert "200" in result.stderr
+
+
+def test_plan_separates_the_workable_ticket_from_the_one_that_waits_on_it(
+    tmp_path: Path,
+) -> None:
+    """The edge is what the run must never get wrong: 10 waits for 9."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [9]
+    assert plan["blocked"] == [10]
+    assert plan["waves"] == [[9], [10]]
+    assert plan["never_workable"] == []
+
+
+def test_plan_offers_every_ticket_whose_blockers_are_met_in_the_same_wave(
+    tmp_path: Path,
+) -> None:
+    """A run is not slower than the graph requires: two roots start together."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph"),
+                _ticket(11, "the build", blocked_by=[(9, "OPEN"), (10, "OPEN")]),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [9, 10]
+    assert plan["waves"] == [[9, 10], [11]]
+
+
+def test_plan_does_not_let_a_closed_blocker_block(tmp_path: Path) -> None:
+    """The work the edge names already exists, so nothing is waited for."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph", blocked_by=[(9, "CLOSED")])]},
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [10]
+    assert plan["blocked"] == []
+    assert plan["tickets"][0]["blocked_by"] == []
+
+
+def test_plan_reads_a_blocked_by_line_where_the_relation_carries_nothing(
+    tmp_path: Path,
+) -> None:
+    """The breakdown writes the edge in the body where the tracker has no
+    relation to write it in, and it means the same thing."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph", body="## Blocked by\n\n- #9\n"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [9]
+    assert plan["blocked"] == [10]
+    assert plan["tickets"][1]["blocked_by"] == [9]
+
+
+def test_plan_does_not_let_a_closed_ticket_named_in_the_body_block(
+    tmp_path: Path,
+) -> None:
+    """A body edge names a ticket the scope need not hold, so its state is
+    asked for rather than assumed from its absence."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph", body="Blocked by: #9")]},
+        states={9: "CLOSED"},
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [10]
+
+
+def test_plan_keeps_a_ticket_blocked_by_open_work_outside_the_scope_blocked(
+    tmp_path: Path,
+) -> None:
+    """The blocker is open and carries no label, so the run will never build
+    it — calling the ticket workable would build it before its work exists."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph", body="Blocked by: #9")]},
+        states={9: "OPEN"},
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == []
+    assert plan["blocked"] == [10]
+    assert plan["never_workable"] == [10]
+
+
+def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
+    tmp_path: Path,
+) -> None:
+    """The relation is the tracker's own answer; a body line is the fallback,
+    never a second source added to it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(
+                    10,
+                    "the graph",
+                    blocked_by=[(8, "CLOSED")],
+                    body="Blocked by: #9",
+                ),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [9, 10]
+
+
+def test_plan_refuses_a_body_edge_naming_a_ticket_the_tracker_cannot_answer_for(
+    tmp_path: Path,
+) -> None:
+    """An edge whose state nothing can settle makes the whole graph a guess."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph", body="Blocked by: #404")]},
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 1
+    assert "404" in result.stderr
+
+
+def test_plan_refuses_a_body_edge_written_in_another_trackers_terms(
+    tmp_path: Path,
+) -> None:
+    """A run reads one tracker, so `owner/repo#9` is a number it cannot place.
+    Passing over it would promote a blocked ticket to the frontier in silence,
+    which is the one way this reasoning must never be wrong."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(10, "the graph", body="Blocked by: Kntnt/skills#9")
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 1
+    assert "Kntnt/skills#9" in result.stderr
+
+
+def test_plan_with_no_workable_ticket_terminates_rather_than_looping(
+    tmp_path: Path,
+) -> None:
+    """Two tickets waiting on each other resolve no wave at all. The run says
+    so and stops; a frontier walked until it empties would never end."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", blocked_by=[(10, "OPEN")]),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert plan["workable"] == []
+    assert plan["waves"] == []
+    assert plan["blocked"] == [9, 10]
+    assert plan["never_workable"] == [9, 10]
+    assert "no ticket is workable" in plan["reason"]
+
+
+def test_plan_under_a_dry_run_shows_the_wave_plan(tmp_path: Path) -> None:
+    """The shape of the night is what the dry run is read for."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", "--dry-run", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["dry_run"] is True
+    assert plan["waves"] == [[9], [10]]

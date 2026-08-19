@@ -54,8 +54,8 @@
     {
       "name": "orchestrate",
       "category": "code",
-      "description": "Plan an unattended run over the tracker's ready-for-agent tickets, and name what it would work.",
-      "digest": "db23c2110f10cbf6aefbd16f7e0041ac3784e383416fae2558129235b40d6d1a",
+      "description": "Plan an unattended run over the tracker's ready-for-agent tickets as a wave plan, and name what it would work.",
+      "digest": "a094c754212d811cfb464bc8f133341f4a9bf8cb27abac269472381bc129c866",
       "binaries": [
         "git",
         "gh",
