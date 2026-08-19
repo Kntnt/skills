@@ -2096,6 +2096,67 @@ def subcommand_manpage(name: str) -> Path | None:
     )
 
 
+def synopsis_of(page: Path) -> str:
+    """Return the `## Synopsis` section of *page*, verbatim and whole.
+
+    A syntax error prints a synopsis the collection ships rather than one
+    composed here, and takes the section entire rather than the line it wants
+    (ADR-0059). Anything rebuilt from the parser would be a second grammar,
+    free to drift from the page the pointer at the end of the error leads to.
+    """
+
+    text = read_manpage(page)
+    heading = "\n## Synopsis\n"
+    if heading not in text:
+        raise ManagerError(f"'{page}' ships no Synopsis; run the transport again")
+
+    return text.partition(heading)[2].partition("\n## ")[0].strip("\n")
+
+
+def addressed_verb(argv: list[str]) -> str:
+    """Return the word an invocation addressed.
+
+    `plan` and `apply` are the two halves of one verb, so what the user
+    addressed is the verb under them; everything else addresses itself.
+    """
+
+    if argv[0] in ("plan", "apply") and len(argv) > 1 and not argv[1].startswith("-"):
+        return argv[1]
+
+    return argv[0]
+
+
+def addressed_page(argv: list[str]) -> tuple[Path, str]:
+    """Return the manpage an invocation addressed and where to read it in full.
+
+    A verb the manager documents answers with its own page. Anything else —
+    an internal subcommand, or a word that is no subcommand at all — answers
+    with the manager's own, and nothing is published to make the first case
+    fit: `manpage`, `check`, and `catalog` are nobody's verbs (ADR-0046).
+    """
+
+    verb = addressed_verb(argv)
+    page = subcommand_manpage(verb)
+    if page is None:
+        return here() / "help.md", "/kntnt --help"
+
+    return page, f"/kntnt help {verb}"
+
+
+def syntax_error(problem: str, argv: list[str]) -> ManagerError:
+    """Answer a syntax error with the error, the synopsis, and the pointer.
+
+    And with nothing else (ADR-0059): no guess at which verb was meant, no
+    half of a run, and nothing done with the rest of a line whose first word
+    was wrong. One shape for both halves of the grammar, so the difference
+    between two refusals is never something only the source explains.
+    """
+
+    page, pointer = addressed_page(argv)
+
+    return ManagerError(f"{problem}\n\n{synopsis_of(page)}\n\nsee '{pointer}'", 2)
+
+
 def help_text(name: str | None) -> str:
     """Return the manager's own manpage, or the manpage of one of its verbs.
 
@@ -2233,21 +2294,22 @@ def add_delta_flags(parser: argparse.ArgumentParser) -> None:
 
 
 def add_yes_flag(parser: argparse.ArgumentParser) -> None:
-    """Add --yes to a verb.
+    """Add --yes to a verb that asks something answerable yes or no.
 
-    Every verb takes it, so passing the user's flag through is never a crash.
-    It only carries meaning where something is asked or deleted.
+    To those verbs and no others. A flag with no function on this verb is not
+    a flag of this verb (ADR-0059), so the ones that ask nothing refuse it
+    rather than accepting it and doing nothing with it.
     """
 
     parser.add_argument("--yes", action="store_true")
 
 
 def add_dry_run_flag(parser: argparse.ArgumentParser) -> None:
-    """Add --dry-run to a verb.
+    """Add --dry-run to a subcommand that acts on it.
 
-    Every subparser takes it, including the ones with nothing to do with it:
-    the agent's forwarding is prose and therefore unreliable, and a forwarded
-    flag must never be the thing that breaks a run (ADR-0029).
+    The changing verbs preview themselves in a Sandbox, and Catalog honours
+    the flag where it writes. Nothing else has a use for it, and a use is the
+    only way anything holds a flag under ADR-0059.
     """
 
     parser.add_argument("--dry-run", action="store_true")
@@ -2267,53 +2329,33 @@ def normalize_argv(argv: list[str]) -> list[str]:
     return normalized
 
 
-def refuse_project_on_uninstall(argv: list[str]) -> None:
-    """Refuse `uninstall --project` in the verb's own terms, ahead of the parser.
-
-    *argv* is what `normalize_argv` has already been over, so `--project=on`
-    has become two arguments and the flag is always a word of its own.
-
-    Uninstall declares no `--project`, so argparse would refuse this anyway —
-    with `unrecognized arguments`, which says the flag is unknown where what
-    the user has to learn is that the verb clears the machine. A meaningless
-    flag is tolerated and a misleading one is refused (ADR-0029), and this is
-    the misleading one: forwarded silently it would let a user believe they had
-    scoped the run to a Project while it emptied their home. The check sits
-    ahead of the parser so that the parser stays permissive for everything it
-    does accept.
-    """
-
-    uninstalling = argv[0] in ("plan", "apply") and argv[1:2] == ["uninstall"]
-    if uninstalling and "--project" in argv[2:]:
-        raise ManagerError(
-            "uninstall takes no --project: it clears this collection off this "
-            "machine and never reaches a Project, whose own copies are checked "
-            "into that repository and stay",
-            2,
-        )
-
-
 def parse_args(argv: list[str]) -> argparse.Namespace:
-    """Parse the manager CLI."""
+    """Parse the manager CLI, strictly.
+
+    An unknown subcommand and a disallowed flag are both errors, and both are
+    answered in the manager's own terms rather than with argparse's usage dump
+    (ADR-0059). The parser still does the deciding — what a subcommand is, and
+    which flags it declared — so there is no second table here to disagree
+    with it.
+    """
 
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
 
+    # Help takes no flags at all. It changes nothing, asks nothing, and writes
+    # nothing, so every flag the manager carries would mean nothing here.
     help_cmd = sub.add_parser("help", help="Print help.")
     help_cmd.add_argument("subcommand", nargs="?")
-    add_yes_flag(help_cmd)
-    add_dry_run_flag(help_cmd)
 
     # Not a verb the user types: Select is what runs it, for a row the user
-    # asked to read in full before answering the list (ADR-0044).
+    # asked to read in full before answering the list (ADR-0044). The rule
+    # binds it and the two below all the same — a surface strict where
+    # somebody is looking and lax where nobody is, is the seam again.
     manpage = sub.add_parser("manpage", help="Print one skill's manpage.")
     manpage.add_argument("skill")
-    add_yes_flag(manpage)
-    add_dry_run_flag(manpage)
 
     check = sub.add_parser("check", help="Refuse when a Dependency is Unsatisfied.")
     check.add_argument("--here", required=True, type=Path)
-    add_dry_run_flag(check)
 
     catalog = sub.add_parser(
         "catalog", help="Generate the Catalog from a local source."
@@ -2362,7 +2404,27 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     add_yes_flag(apply_uninstall)
     add_dry_run_flag(apply_uninstall)
 
-    return parser.parse_args(argv)
+    # A word that is no subcommand is where parsing stops. Nothing after it is
+    # read: a mistyped verb used to run Help with the rest of the line as its
+    # arguments, and a line meant for Update carries flags that would mean
+    # something to whatever the typo landed on.
+    if argv:
+        verbs = {"plan": plan_sub.choices, "apply": apply_sub.choices}
+        if argv[0] not in sub.choices:
+            raise syntax_error(f"unknown subcommand '{argv[0]}'", argv)
+        verb = addressed_verb(argv)
+        if argv[0] in verbs and verb != argv[0] and verb not in verbs[argv[0]]:
+            raise syntax_error(f"unknown subcommand '{verb}'", argv)
+
+    # Whatever the subparser did not declare, it does not take. Argparse would
+    # answer this with `unrecognized arguments` and its own usage, which names
+    # neither the verb the user addressed nor where to read what it does take.
+    args, extras = parser.parse_known_args(argv)
+    if extras:
+        stray = next((item for item in extras if item.startswith("-")), extras[0])
+        raise syntax_error(f"{addressed_verb(argv)} takes no '{stray}'", argv)
+
+    return args
 
 
 def dry_run_layer(args: argparse.Namespace) -> bool:
@@ -2380,9 +2442,9 @@ def dispatch(args: argparse.Namespace) -> int:
     """Run the parsed command, in a Sandbox where the run is a dry run."""
 
     # Apply is where skill files move, and a Sandbox is what those moves
-    # happen in instead. Every other command takes the flag and has nothing to
-    # do with it, bar Catalog, which honours it where it writes.
-    if args.dry_run and args.command == "apply":
+    # happen in instead. The only other subcommand that declares the flag is
+    # Catalog, which honours it itself, where it writes.
+    if args.command == "apply" and args.dry_run:
         with sandbox(global_layer=dry_run_layer(args)):
             return run_command(args)
 
@@ -2400,8 +2462,8 @@ def run_command(args: argparse.Namespace) -> int:
         return cmd_check(args.here)
     # Catalog's `--write` is the one write this script makes outside a layer,
     # so it is the one place besides Apply where the flag has anything to
-    # honour. A flag that was accepted while the file was rewritten anyway
-    # would state something false about what happened (ADR-0029).
+    # honour — and honouring it is the only reason Catalog keeps a flag no
+    # other internal subcommand does (ADR-0059).
     if args.command == "catalog":
         return cmd_catalog(write=args.write and not args.dry_run)
     if args.command == "plan":
@@ -2428,10 +2490,14 @@ def main(argv: list[str] | None = None) -> int:
     """Dispatch a manager command. Return an exit code."""
 
     raw = normalize_argv(list(sys.argv[1:] if argv is None else argv))
-    if not raw:
-        raw = ["help"]
+
+    # Bare `/kntnt` is Help (ADR-0027), and `--help` and `-h` are the route
+    # into Help rather than flags on a verb (ADR-0059) — so they name the verb
+    # instead of being handed to it, which under strict syntax it would refuse.
+    if not raw or raw[0] in ("--help", "-h"):
+        raw = ["help", *raw[1:]]
+
     try:
-        refuse_project_on_uninstall(raw)
         return dispatch(parse_args(raw))
     except ManagerError as exc:
         return fail(str(exc), exc.code)

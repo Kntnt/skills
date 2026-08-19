@@ -20,7 +20,7 @@ Help changes nothing, in either layer.
 
 ## Options
 
-None. Help takes no flags, and passing one is answered by saying so rather than by dropping it quietly. The verb changes nothing, asks nothing, and writes nothing, so every flag the manager carries would have to mean nothing here — and a flag accepted and ignored is what teaches a user that flags sometimes do nothing.
+None. Help takes no flags, and passing one is an error rather than a page with a note above it: the flag is named, the synopsis above is printed, and you are told where to read this page in full. The verb changes nothing, asks nothing, and writes nothing, so every flag the manager carries would have to mean nothing here — and a flag accepted and ignored is what teaches a user that flags sometimes do nothing.
 
 ## Notes
 

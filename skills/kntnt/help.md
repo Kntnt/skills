@@ -25,7 +25,7 @@ Bare `/kntnt` prints this text. Someone who types the manager's name with nothin
 - `--yes` — assume yes: ask nothing that can be answered yes or no. Select, Update, and Uninstall take it.
 - `--dry-run` — run the verb against a temporary home seeded with this collection's files, and throw that home away. Nothing on this machine changes. Select, Update, and Uninstall take it.
 
-Help takes none of the three. Where a flag is accepted it always means the same thing — which is not the rule that every verb accepts every flag, and is the better of the two: a flag accepted and ignored teaches that flags sometimes do nothing, so a verb with no meaning for one says so rather than dropping it quietly. No verb of the manager takes `--force`: the digest answers whether a thing needs doing and `--yes` answers whether to ask, so no third flag was left with anything to mean.
+Help takes none of the three. Where a flag is accepted it always means the same thing — which is not the rule that every verb accepts every flag, and is the better of the two: a flag accepted and ignored teaches that flags sometimes do nothing, so a verb with no meaning for one refuses it. A flag a verb does not take is an error naming the flag, followed by that verb's synopsis and where to read its page in full, and a subcommand the manager does not have is the same error against this page — nothing after the unknown word is read, so a typo never runs a different verb with the rest of the line as its arguments. No verb of the manager takes `--force`: the digest answers whether a thing needs doing and `--yes` answers whether to ask, so no third flag was left with anything to mean.
 
 ## Notes
 

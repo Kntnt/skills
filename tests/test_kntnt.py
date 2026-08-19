@@ -584,14 +584,20 @@ def test_select_project_off_is_the_bare_form(tmp_path: Path) -> None:
 
 
 def test_plan_select_takes_no_skill_names(tmp_path: Path) -> None:
-    """The list is the whole of the plan half; the answer arrives at Apply."""
+    """The list is the whole of the plan half; the answer arrives at Apply.
+
+    Refused in the manager's own terms, as every syntax error is: what the
+    parser did not declare is named, with the verb's synopsis under it and the
+    pointer to its page, rather than argparse's usage dump (ADR-0059).
+    """
 
     world = _world(tmp_path)
 
     result = _run(world, "plan", "select", "alpha")
 
-    assert result.returncode != 0
-    assert "unrecognized arguments" in result.stderr
+    assert result.returncode == 2
+    assert "unrecognized arguments" not in result.stderr
+    assert "select takes no 'alpha'" in result.stderr
 
 
 def test_select_groups_the_rows_by_category(tmp_path: Path) -> None:
@@ -3080,21 +3086,36 @@ def test_an_answer_that_only_places_needs_no_gate(tmp_path: Path) -> None:
     assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
 
 
-def test_every_verb_accepts_yes(tmp_path: Path) -> None:
+def test_a_verb_takes_yes_only_where_it_can_ask_something(tmp_path: Path) -> None:
+    """The inversion of `test_every_verb_accepts_yes`, for the same reason.
+
+    The flag answers a question, so a subcommand that asks none has nothing
+    for it to answer and refuses it rather than swallowing it (ADR-0059).
+    """
+
     world = _world(tmp_path)
     _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
 
     for args in (
-        ("help", "--yes"),
-        ("manpage", "alpha", "--yes"),
+        ("help",),
+        ("manpage", "alpha"),
+        ("check", "--here", str(gamma)),
+        ("catalog",),
+    ):
+        result = _run(world, *args, "--yes")
+        assert result.returncode == 2, f"{args}: {result.stderr}"
+        assert "takes no '--yes'" in result.stderr, args
+
+    for invocation in (
         ("plan", "select", "--yes"),
         ("plan", "update", "--yes"),
         ("plan", "uninstall", "--yes"),
         ("apply", "select", "alpha", "--yes"),
         ("apply", "update", "--yes"),
     ):
-        result = _run(world, *args)
-        assert result.returncode == 0, f"{args}: {result.stderr}"
+        result = _run(world, *invocation)
+        assert result.returncode == 0, f"{invocation}: {result.stderr}"
         assert "unrecognized arguments" not in result.stderr
 
 
@@ -3660,12 +3681,15 @@ def test_uninstall_has_no_project_form(tmp_path: Path) -> None:
         assert (world["home"] / ".claude" / "skills" / "kntnt").exists()
 
 
-def test_uninstall_refuses_project_in_its_own_terms(tmp_path: Path) -> None:
-    """A misleading flag is refused with the reason, not with the parser's.
+def test_uninstall_refuses_project_by_the_path_every_flag_is_refused_by(
+    tmp_path: Path,
+) -> None:
+    """One error path, not two: the bespoke message for this flag is gone.
 
-    Argparse declares no `--project` on Uninstall and would refuse it anyway,
-    but `unrecognized arguments` says only that the flag is unknown, where what
-    the user has to learn is that the verb clears the machine (ADR-0040).
+    A special case in the code for one flag is the seam ADR-0059 exists to
+    remove — a difference between two refusals only somebody reading the
+    source can account for. The reason the verb has no project form stays in
+    `help/uninstall.md`, which the pointer at the end of the error leads to.
     """
 
     world = _world(tmp_path)
@@ -3678,11 +3702,12 @@ def test_uninstall_refuses_project_in_its_own_terms(tmp_path: Path) -> None:
         ("apply", "uninstall", "--project=on", "--yes"),
     ):
         result = _run(world, *args)
-        assert result.returncode != 0, args
+        assert result.returncode == 2, args
         assert "unrecognized arguments" not in result.stderr, args
-        assert "--project" in result.stderr, args
-        assert "machine" in result.stderr, args
-        assert "Project" in result.stderr, args
+        assert "uninstall takes no '--project'" in result.stderr, args
+        assert _synopsis(MANAGER_DIR / "help" / "uninstall.md") in result.stderr, args
+        assert "/kntnt help uninstall" in result.stderr, args
+        assert "never reaches a Project" not in result.stderr, args
         assert (world["home"] / ".claude" / "skills" / "kntnt").exists(), args
 
 
@@ -4037,8 +4062,16 @@ def test_dry_run_catalog_prints_the_catalog_and_writes_nothing(
     assert (world["here"] / "catalog.json").read_bytes() == stored
 
 
-def test_every_subparser_accepts_dry_run(tmp_path: Path) -> None:
-    """A forwarded flag must never be the thing that breaks a run (ADR-0029)."""
+def test_a_subparser_takes_dry_run_only_where_it_acts_on_it(tmp_path: Path) -> None:
+    """The inversion of `test_every_subparser_accepts_dry_run` (ADR-0059).
+
+    That test pinned the tolerance this record withdrew: every subparser took
+    the flag, including the three with nothing to do with it, so that a flag
+    the agent forwarded on its own could never break a run. It is inverted
+    rather than deleted, so the reversal is visible where the old promise was
+    — the same invocations, now split by whether the subcommand has a use for
+    the flag. `catalog` keeps it by honouring it where it writes.
+    """
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -4046,9 +4079,15 @@ def test_every_subparser_accepts_dry_run(tmp_path: Path) -> None:
     gamma = world["source"] / "skills" / "text" / "gamma"
 
     for args in (
-        ("help", "--dry-run"),
-        ("manpage", "alpha", "--dry-run"),
-        ("check", "--here", str(gamma), "--dry-run"),
+        ("help",),
+        ("manpage", "alpha"),
+        ("check", "--here", str(gamma)),
+    ):
+        result = _run(world, *args, "--dry-run")
+        assert result.returncode == 2, f"{args}: {result.stderr}"
+        assert "takes no '--dry-run'" in result.stderr, args
+
+    for invocation in (
         ("catalog", "--dry-run"),
         ("plan", "select", "--dry-run"),
         ("plan", "update", "--dry-run"),
@@ -4058,8 +4097,8 @@ def test_every_subparser_accepts_dry_run(tmp_path: Path) -> None:
         ("apply", "update", "--dry-run"),
         ("apply", "uninstall", "--yes", "--dry-run"),
     ):
-        result = _run(world, *args)
-        assert result.returncode == 0, f"{args}: {result.stderr}"
+        result = _run(world, *invocation)
+        assert result.returncode == 0, f"{invocation}: {result.stderr}"
         assert "unrecognized arguments" not in result.stderr
 
 
@@ -4122,18 +4161,56 @@ def test_a_damaged_path_table_names_the_file(tmp_path: Path) -> None:
 
 
 # The flag table settled once every verb existed: where a flag is accepted it
-# always means the same thing, which is a different rule from every verb
-# accepting every flag, and a better one (ADR-0029). It is written out rather
-# than read off `parse_args`, which cannot be its source: argparse takes every
-# flag on every verb on purpose, so that a flag the agent forwards on its own
-# never breaks a run. This is the surface the user meets, and only the pages
-# state it.
+# always means the same thing, and a verb with no use for one does not take it
+# (ADR-0059). Every subcommand the script has is a row, because the rule has no
+# exceptions — the three nobody types are as strict as the four that are typed.
+# The two classes are checked differently and are one table on purpose: a verb
+# a user meets is held to its manpage as well as to the parser, so the
+# documented grammar and the parser cannot drift apart, and an internal
+# subcommand is held to the parser alone rather than being published as user
+# documentation to satisfy the check (ADR-0046).
 _FLAG_TABLE = {
     "help": frozenset[str](),
     "select": frozenset({"--project", "--yes", "--dry-run"}),
     "update": frozenset({"--project", "--yes", "--dry-run"}),
     "uninstall": frozenset({"--yes", "--dry-run"}),
+    "manpage": frozenset[str](),
+    "check": frozenset[str](),
+    "catalog": frozenset({"--dry-run"}),
 }
+
+# The rows a user types, which are the rows that ship a manpage.
+_USER_FACING = ("help", "select", "update", "uninstall")
+
+_FLAGS = ("--project", "--yes", "--dry-run")
+
+
+def _invocations(world: dict[str, Path]) -> dict[str, tuple[tuple[str, ...], ...]]:
+    """Return, per table row, every invocation of the parser that reaches it.
+
+    A user-facing verb has two: the plan half and the apply half are separate
+    subparsers, and a flag the verb takes has to survive both.
+    """
+
+    return {
+        "help": (("help",),),
+        "select": (("plan", "select"), ("apply", "select")),
+        "update": (("plan", "update"), ("apply", "update")),
+        "uninstall": (("plan", "uninstall"), ("apply", "uninstall")),
+        "manpage": (("manpage", "alpha"),),
+        "check": (
+            ("check", "--here", str(world["source"] / "skills" / "text" / "gamma")),
+        ),
+        "catalog": (("catalog",),),
+    }
+
+
+def _synopsis(page: Path) -> str:
+    """Return the `## Synopsis` section of a shipped manpage, verbatim and whole."""
+
+    text = page.read_text(encoding="utf-8")
+    assert "\n## Synopsis\n" in text, page
+    return text.partition("\n## Synopsis\n")[2].partition("\n## ")[0].strip("\n")
 
 
 def _options(verb: str) -> str:
@@ -4149,17 +4226,55 @@ def _options(verb: str) -> str:
 def test_each_manpage_documents_exactly_the_flags_its_verb_takes() -> None:
     """A flag accepted and ignored teaches the user that flags sometimes lie."""
 
-    for verb, allowed in _FLAG_TABLE.items():
+    for verb in _USER_FACING:
         options = _options(verb)
-        for flag in ("--project", "--yes", "--dry-run"):
-            assert (f"`{flag}`" in options) == (flag in allowed), (verb, flag)
+        for flag in _FLAGS:
+            assert (f"`{flag}`" in options) == (flag in _FLAG_TABLE[verb]), (verb, flag)
 
 
-def test_help_takes_no_flags_and_says_so() -> None:
-    """`/kntnt help --yes` is told, rather than having the flag quietly ignored.
+def test_the_parser_takes_exactly_the_flags_the_table_allows(tmp_path: Path) -> None:
+    """The other half of the one table: the parser, held to the same row.
 
-    The refusal lives in the surface the user meets rather than in argparse,
-    which stays permissive so a forwarded flag never breaks a run (ADR-0029).
+    A verb documented to take a flag it would reject is the failure ADR-0029
+    was written against, and strictness re-opens it wherever the two disagree.
+    So the same table drives both, and the internal subcommands are in it: the
+    rule binds every subcommand the script has.
+    """
+
+    world = _world(tmp_path)
+    invocations = _invocations(world)
+
+    for name, allowed in _FLAG_TABLE.items():
+        for invocation in invocations[name]:
+            for flag in _FLAGS:
+                result = _run(world, *invocation, flag)
+                refused = f"takes no '{flag}'" in result.stderr
+                assert refused == (flag not in allowed), (
+                    invocation,
+                    flag,
+                    result.stderr,
+                )
+                assert "unrecognized arguments" not in result.stderr, (invocation, flag)
+
+
+def test_an_internal_subcommand_is_not_published_as_a_manpage() -> None:
+    """Strictness is satisfied by the parser, never by documenting a non-verb.
+
+    `manpage`, `check`, and `catalog` are in the flag table because the rule
+    has no exceptions, and a page under `help/` would make them read as verbs
+    a user is invited to type (ADR-0046).
+    """
+
+    for name in _FLAG_TABLE:
+        published = (MANAGER_DIR / "help" / f"{name}.md").is_file()
+        assert published == (name in _USER_FACING), name
+
+
+def test_help_takes_no_flags_and_says_so(tmp_path: Path) -> None:
+    """`/kntnt help --yes` is an error, not a page with a note above it.
+
+    The refusal is the script's, so the prose that routes the invocation hands
+    the flag on rather than answering for it (ADR-0059).
     """
 
     steps = (REPO_ROOT / "skills" / "kntnt" / "steps" / "help.md").read_text(
@@ -4173,6 +4288,119 @@ def test_help_takes_no_flags_and_says_so() -> None:
     # steps have to exempt it or `/kntnt --help` is met with a complaint about
     # the very argument that asked for the page.
     assert "--help" in steps
+
+    world = _world(tmp_path)
+    result = _run(world, "help", "--yes")
+
+    assert result.returncode == 2
+    assert result.stdout == ""
+
+
+def test_an_unknown_subcommand_is_refused_with_the_managers_own_synopsis(
+    tmp_path: Path,
+) -> None:
+    """`/kntnt sel` is an error, and never a guess at which verb was meant.
+
+    The synopsis is the manager's own, taken whole off the page it ships, so
+    nothing here is a second grammar free to drift from the first (ADR-0059).
+    """
+
+    world = _world(tmp_path)
+
+    result = _run(world, "sel")
+
+    assert result.returncode == 2
+    assert "sel" in result.stderr
+    assert _synopsis(MANAGER_DIR / "help.md") in result.stderr
+    assert "--help" in result.stderr
+    assert "unrecognized arguments" not in result.stderr
+    assert "invalid choice" not in result.stderr
+    assert result.stdout == ""
+
+
+def test_nothing_after_an_unknown_subcommand_is_read(tmp_path: Path) -> None:
+    """A line whose first word was wrong carries flags meant for another verb.
+
+    So the rest of it is neither run as arguments to something else nor
+    reported back: the unknown word is the whole of what the error names.
+    """
+
+    world = _world(tmp_path)
+
+    result = _run(world, "updat", "--yes")
+
+    assert result.returncode == 2
+    named = result.stderr.splitlines()[0]
+    assert "updat" in named
+    assert "--yes" not in named
+    assert result.stdout == ""
+
+
+def test_a_flag_a_verb_does_not_take_is_refused_with_that_verbs_synopsis(
+    tmp_path: Path,
+) -> None:
+    """The same shape as an unknown subcommand: error, synopsis, pointer."""
+
+    world = _world(tmp_path)
+
+    result = _run(world, "help", "--yes")
+
+    assert result.returncode == 2
+    assert "--yes" in result.stderr
+    assert _synopsis(MANAGER_DIR / "help" / "help.md") in result.stderr
+    assert "/kntnt help help" in result.stderr
+    assert "unrecognized arguments" not in result.stderr
+    assert result.stdout == ""
+
+
+def test_the_route_into_help_is_not_a_flag_on_a_verb(tmp_path: Path) -> None:
+    """`--help` and `-h` reach Help, and bare `/kntnt` still does (ADR-0027)."""
+
+    world = _world(tmp_path)
+    shipped = (MANAGER_DIR / "help.md").read_text(encoding="utf-8").strip()
+
+    for args in ((), ("--help",), ("-h",)):
+        result = _run(world, *args)
+
+        assert result.returncode == 0, (args, result.stderr)
+        assert result.stdout.strip() == shipped, args
+
+
+def test_the_dependency_gate_is_invoked_with_no_flag_in_every_skill() -> None:
+    """`check --here` runs first in every skill that has anything to check.
+
+    Under strict syntax a stray flag on that call would kill the skill before
+    it did anything, so the call sites are pinned here and the drift is caught
+    in the suite rather than in a broken `/commit`.
+    """
+
+    gates: dict[str, str] = {}
+    for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
+        text = path.read_text(encoding="utf-8")
+        if "check --here" in text:
+            gates[path.parent.name] = text
+
+    assert {"agents-md", "delegation", "commit", "push", "release"} <= set(gates)
+    for name, text in gates.items():
+        assert 'check --here "$HERE"`' in text, name
+
+
+def test_the_manager_hands_an_unknown_subcommand_to_the_script() -> None:
+    """The fallback to the help step was the tolerance in the other half.
+
+    A typo answered by silently running Help is how everything after it became
+    Help's arguments, so the step is gone and the script answers instead — and
+    the agent prints what comes back rather than authoring a refusal.
+    """
+
+    steps = (
+        (MANAGER_DIR / "SKILL.md")
+        .read_text(encoding="utf-8")
+        .partition("\n## Steps\n")[2]
+    )
+
+    assert 'scripts/kntnt.py" <subcommand>' in steps
+    assert "steps/help.md" not in steps
 
 
 def test_no_verb_accepts_force(tmp_path: Path) -> None:

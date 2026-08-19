@@ -12,6 +12,6 @@ Three reasons, in the order they bind.
 
 **What the primitive actually adds is concurrency, and concurrency has a flag.** The ceiling on how many tickets run at once is a number the developer passes; it is not a reason to fork the architecture.
 
-So the skill body calls the engine and does what only an agent can. The engine emits JSON and never prompts — a script has no terminal to ask a question in — which is also why `--yes` reaches every one of its verbs (ADR-0029) and why the agent, not the engine, is what renders the plan to the user (ADR-0045).
+So the skill body calls the engine and does what only an agent can. The engine emits JSON and never prompts — a script has no terminal to ask a question in — and the agent, not the engine, is what renders the plan to the user (ADR-0045). **This record originally added that the same fact is why `--yes` reaches every one of its verbs (ADR-0029); that clause is withdrawn by ADR-0059.** A flag with no function on a verb is not a flag of that verb, so `--yes` reaches the verbs that can ask something answerable yes or no and is refused by the rest. Nothing else in the sentence moves: the engine still emits JSON, still never prompts, and still leaves the rendering to the agent.
 
 **What this costs.** A decision the engine gets wrong is wrong identically everywhere, with no agent judgement standing between it and the repository. That is the trade taken deliberately: a mistake in one testable place beats the same mistake distributed across prose nobody can diff.
