@@ -136,3 +136,74 @@ def test_unterminated_frontmatter_is_no_frontmatter() -> None:
     """A truncated file must answer empty rather than half a skill's declaration."""
 
     assert kntnt.parse_frontmatter("---\nname: alpha\n") == {}
+
+
+def test_every_shipped_skill_declares_metadata_the_specification_allows() -> None:
+    """`metadata` is a map from string keys to string values, and nothing else.
+
+    A reader outside this collection holds the specification to that and
+    coerces whatever else it is given rather than refusing it: a nested map
+    arrives as a Python repr and a boolean as its `str()`, so a declaration in
+    any other shape is lost without a word being said (issue #52).
+    """
+
+    skill_mds = sorted(SKILLS.glob("*/*/SKILL.md"))
+
+    # A glob that matched nothing would pass every assertion below it.
+    assert skill_mds
+
+    for skill_md in skill_mds:
+        frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
+        metadata = frontmatter.get("metadata")
+        assert isinstance(metadata, dict), skill_md
+        for key, value in metadata.items():
+            assert isinstance(key, str), (skill_md, key)
+            assert isinstance(value, str), (skill_md, key)
+
+
+def test_every_shipped_skill_keeps_its_metadata_keys_under_the_collection() -> None:
+    """One flat namespace, prefixed, so no key of ours is anybody else's.
+
+    The specification asks for reasonably unique key names, and `internal`
+    bare is the opposite of that: every collection that hides a skill from
+    discovery has reason to write it, and the last one to write it wins.
+    """
+
+    for skill_md in sorted(SKILLS.glob("*/*/SKILL.md")):
+        frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
+        for key in frontmatter["metadata"]:
+            assert key.startswith("kntnt."), (skill_md, key)
+
+
+def test_a_skill_with_nothing_to_declare_carries_the_marker_anyway() -> None:
+    """Four empty keys are what a skill with no Dependencies writes.
+
+    The marker used to be the block's presence, so a skill with nothing under
+    it needed an empty map spelled out for the key to survive parsing. It is
+    now any `kntnt.` key at all, and the four lists written empty carry it.
+    """
+
+    frontmatter = _frontmatter("agents/tldr/SKILL.md")
+
+    assert kntnt.collection_block(frontmatter) is not None
+    assert kntnt.skill_deps(frontmatter) == {
+        "binaries": [],
+        "skills": [],
+        "externals": [],
+        "capabilities": [],
+    }
+
+
+def test_a_dependency_list_is_read_off_a_space_separated_string() -> None:
+    """The spec's own `allowed-tools` is one string for the same reason."""
+
+    frontmatter = {"metadata": {"kntnt.binaries": "git gh uv"}}
+
+    assert kntnt.skill_deps(frontmatter)["binaries"] == ["git", "gh", "uv"]
+
+
+def test_metadata_holding_no_key_of_ours_is_no_marker() -> None:
+    """Another collection's `metadata` must never read as this one's mark."""
+
+    assert kntnt.collection_block({"metadata": {"internal": "true"}}) is None
+    assert kntnt.collection_block({"metadata": {}}) is None

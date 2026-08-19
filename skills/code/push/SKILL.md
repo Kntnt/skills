@@ -4,13 +4,11 @@ description: Follow commit, then push the current branch.
 disable-model-invocation: true
 argument-hint: '["message"] [--yes]'
 metadata:
-  internal: true
-  kntnt:
-    binaries:
-      - git
-      - uv
-    skills:
-      - commit
+  kntnt.internal: "true"
+  kntnt.binaries: "git uv"
+  kntnt.skills: "commit"
+  kntnt.externals: ""
+  kntnt.capabilities: ""
 ---
 
 # push

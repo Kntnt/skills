@@ -260,34 +260,48 @@ def parse_frontmatter(text: str) -> dict[str, Any]:
 
 DEP_KINDS = ("binaries", "skills", "externals", "capabilities")
 
-# The frontmatter block a collection skill declares its Dependencies in, under
-# `metadata`. It is also this collection's mark on a skill it installed: no
-# other collection has reason to write the key, and it travels in the skill's
-# own SKILL.md rather than in anything the Manager keeps beside itself.
-METADATA_BLOCK = "kntnt"
+# The prefix every key a collection skill writes under `metadata` carries. It
+# is how a skill declares its Dependencies, and it is also this collection's
+# mark on a skill it installed: no other collection has reason to write a key
+# under this name, and it travels in the skill's own SKILL.md rather than in
+# anything the Manager keeps beside itself. The specification allows `metadata`
+# one level of string values and nothing else, so the namespace is spelled into
+# the key rather than built out of a map underneath it (issue #52).
+METADATA_PREFIX = "kntnt."
 
 
-def collection_block(frontmatter: dict[str, Any]) -> dict[str, Any] | None:
-    """Return this collection's frontmatter block, or None where there is none."""
+def collection_block(frontmatter: dict[str, Any]) -> dict[str, str] | None:
+    """Return this collection's `metadata` keys unprefixed, or None where there are none.
+
+    Any key at all under the prefix carries the marker, so a skill with no
+    Dependencies is marked by writing its four lists empty rather than by an
+    empty map that only means something to a parser reading the block whole.
+    """
 
     metadata = frontmatter.get("metadata")
     if not isinstance(metadata, dict):
         return None
-    block = metadata.get(METADATA_BLOCK)
-    return block if isinstance(block, dict) else None
+
+    # The spec's values are strings, but the file is an untrusted boundary:
+    # a foreign skill may put anything at all under a key that looks like
+    # ours, and every reader below wants a string.
+    block = {
+        str(key)[len(METADATA_PREFIX) :]: str(value)
+        for key, value in metadata.items()
+        if str(key).startswith(METADATA_PREFIX)
+    }
+    return block or None
 
 
 def skill_deps(frontmatter: dict[str, Any]) -> dict[str, list[str]]:
-    """Read Dependency lists from a skill's frontmatter."""
+    """Read Dependency lists from a skill's frontmatter.
 
-    block = collection_block(frontmatter)
-    if block is None:
-        return {key: [] for key in DEP_KINDS}
-    result: dict[str, list[str]] = {}
-    for key in DEP_KINDS:
-        values = block.get(key, [])
-        result[key] = [str(item) for item in values] if isinstance(values, list) else []
-    return result
+    Each list is one space-separated string, as the specification's own
+    `allowed-tools` is and for the same reason: a value `metadata` can hold.
+    """
+
+    block = collection_block(frontmatter) or {}
+    return {key: block.get(key, "").split() for key in DEP_KINDS}
 
 
 def carries_marker(skill_dir: Path) -> bool:
@@ -2154,7 +2168,7 @@ def generate_catalog(source: Path) -> dict[str, Any]:
         capability_notes(deps["capabilities"])
         if collection_block(frontmatter) is None:
             raise ManagerError(
-                f"{skill_md}: no metadata.kntnt block; a skill without the "
+                f"{skill_md}: no metadata.kntnt.* key; a skill without the "
                 "marker cannot be removed when the collection withdraws it"
             )
         if name != skill_md.parent.name:

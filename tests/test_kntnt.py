@@ -56,25 +56,18 @@ def _skill_md(
         f"description: {description}",
         "disable-model-invocation: true",
         "metadata:",
-        "  internal: true",
+        '  kntnt.internal: "true"',
     ]
 
-    # A block with nothing under it is spelled `{}`: a bare key is `null` in
-    # YAML, and the skill would read as carrying no marker at all.
-    declared = [
-        (key, values)
-        for key, values in (
-            ("binaries", binaries or []),
-            ("skills", skills or []),
-            ("externals", externals or []),
-            ("capabilities", capabilities or []),
-        )
-        if values
-    ]
-    lines.append("  kntnt:" if declared else "  kntnt: {}")
-    for key, values in declared:
-        lines.append(f"    {key}:")
-        lines.extend(f"      - {value}" for value in values)
+    # Every list is written, empty or not: the four keys are what carries the
+    # marker, and a skill declaring nothing still has to be recognisably ours.
+    for key, values in (
+        ("binaries", binaries or []),
+        ("skills", skills or []),
+        ("externals", externals or []),
+        ("capabilities", capabilities or []),
+    ):
+        lines.append(f'  kntnt.{key}: "{" ".join(values)}"')
     lines.extend(["---", "", f"# {name}", ""])
     if body:
         lines.extend([body, ""])
@@ -3132,11 +3125,18 @@ def test_a_verb_takes_yes_only_where_it_can_ask_something(tmp_path: Path) -> Non
 
 
 def test_collection_skills_are_hidden_from_the_transport() -> None:
+    """Under the collection's own key, which is where the spec puts it.
+
+    `metadata` holds one flat namespace shared with every other collection, so
+    the flag says whose it is rather than trusting `internal` to be nobody
+    else's (issue #52).
+    """
+
     for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
         if path.parent.name == "kntnt":
             continue
         text = path.read_text(encoding="utf-8")
-        assert "internal: true" in text, path
+        assert 'kntnt.internal: "true"' in text, path
 
 
 def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> None:
@@ -3301,8 +3301,7 @@ def test_delegation_requires_subagents_and_says_so() -> None:
 
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "SKILL.md"
     text = path.read_text(encoding="utf-8")
-    assert "capabilities:" in text
-    assert "- subagents" in text
+    assert 'kntnt.capabilities: "subagents"' in text
     assert "`capabilities`" in text
 
     mode = (path.parent / "mode.md").read_text(encoding="utf-8")
@@ -3360,8 +3359,8 @@ def test_catalog_generation_accepts_a_folded_description(tmp_path: Path) -> None
         "  runs over two lines.\n"
         "disable-model-invocation: true\n"
         "metadata:\n"
-        "  internal: true\n"
-        "  kntnt: {}\n"
+        '  kntnt.internal: "true"\n'
+        '  kntnt.binaries: ""\n'
         "---\n"
         "\n"
         "# alpha\n",

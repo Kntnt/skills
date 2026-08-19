@@ -72,7 +72,7 @@ What a skill is when its files differ from the Digest the Catalog carries: a tru
 _Avoid_: out of date, stale, outdated, modified, dirty
 
 **Withdrawn**:
-A skill the collection no longer ships: it has left the repository, and with it the Catalog. Update deletes a Withdrawn skill from the layer it applies and does not ask, because nothing can Select or update it any longer. It finds one by asking the disk rather than any stored list: a skill installed from this collection carries the `metadata.kntnt` block, so one that carries it and the Catalog does not name is Withdrawn, whatever a local file remembers. The Manager is never one, being no Catalog entry. The mirror of a new Catalog entry, which is reported and offered.
+A skill the collection no longer ships: it has left the repository, and with it the Catalog. Update deletes a Withdrawn skill from the layer it applies and does not ask, because nothing can Select or update it any longer. It finds one by asking the disk rather than any stored list: a skill installed from this collection carries `metadata` keys prefixed `kntnt.`, so one that carries any of them and the Catalog does not name is Withdrawn, whatever a local file remembers. The Manager is never one, being no Catalog entry. The mirror of a new Catalog entry, which is reported and offered.
 _Avoid_: deprecated, retired, obsolete, orphaned
 
 **State**:

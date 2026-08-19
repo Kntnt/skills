@@ -4,14 +4,11 @@ description: Work the tracker's ready-for-agent tickets unattended — claim, bu
 disable-model-invocation: true
 argument-hint: '[#<ticket-or-spec>] [--dry-run] [--at-once <n>] [--model <name>] [--yes]'
 metadata:
-  internal: true
-  kntnt:
-    binaries:
-      - git
-      - gh
-      - uv
-    capabilities:
-      - subagents
+  kntnt.internal: "true"
+  kntnt.binaries: "git gh uv"
+  kntnt.skills: ""
+  kntnt.externals: ""
+  kntnt.capabilities: "subagents"
 ---
 
 # orchestrate

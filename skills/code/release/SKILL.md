@@ -4,13 +4,11 @@ description: Ship a version — changelog, bump, push, tag, and GitHub release.
 disable-model-invocation: true
 argument-hint: "[minor|major|X.Y.Z] [--no-build] [--yes]"
 metadata:
-  internal: true
-  kntnt:
-    binaries:
-      - git
-      - uv
-    skills:
-      - push
+  kntnt.internal: "true"
+  kntnt.binaries: "git uv"
+  kntnt.skills: "push"
+  kntnt.externals: ""
+  kntnt.capabilities: ""
 ---
 
 # release

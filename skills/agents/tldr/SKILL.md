@@ -4,8 +4,11 @@ description: Summarise what was just said as a TL;DR, and turn TL;DR mode on or 
 disable-model-invocation: true
 argument-hint: "[instruction] | [--on|--off|--status] [--user] [--yes]"
 metadata:
-  internal: true
-  kntnt: {}
+  kntnt.internal: "true"
+  kntnt.binaries: ""
+  kntnt.skills: ""
+  kntnt.externals: ""
+  kntnt.capabilities: ""
 ---
 
 # tldr

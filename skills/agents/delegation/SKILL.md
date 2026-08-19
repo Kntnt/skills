@@ -4,12 +4,11 @@ description: Turn delegation mode on or off — you orchestrate, subagents execu
 disable-model-invocation: true
 argument-hint: "[session|project|user] [on|off] [--yes] | [session|project|user] status"
 metadata:
-  internal: true
-  kntnt:
-    binaries:
-      - uv
-    capabilities:
-      - subagents
+  kntnt.internal: "true"
+  kntnt.binaries: "uv"
+  kntnt.skills: ""
+  kntnt.externals: ""
+  kntnt.capabilities: "subagents"
 ---
 
 # delegation

@@ -4,11 +4,11 @@ description: Commit the working tree on the current branch, without pushing.
 disable-model-invocation: true
 argument-hint: '["message"] [--yes]'
 metadata:
-  internal: true
-  kntnt:
-    binaries:
-      - git
-      - uv
+  kntnt.internal: "true"
+  kntnt.binaries: "git uv"
+  kntnt.skills: ""
+  kntnt.externals: ""
+  kntnt.capabilities: ""
 ---
 
 # commit
