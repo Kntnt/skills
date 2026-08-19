@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- A change the transport refuses now tells the user why. `apply update` and `apply select` read a refusal off the disk rather than raising it, so that the run still reports the withdrawals it had already made — and that reading cost the transport's own account of what it declined and why, which is the one thing nothing else on the machine knows. It is written to stderr, verbatim and whole, under a line naming whose words they are; the payload on stdout gains no field and loses none, and the exit codes are what they were. Both mirrors do it, placement and removal alike, but a removal only where the disk check still leaves a failure: a transport that grumbled while removing the files anyway is exactly what that check exists to absorb, and that run stays clean and silent. The `update` and `select` steps tell the agent to hand the message on, and no longer say to report the failure *whatever the transport reported* — true of its exit code, and misread as *never mind what it said* the moment there is something to pass along.
+
 ### Added
 
 - The snapshot the manager stores beside itself is now under a test that notices if the write stops going through a rename. The write is atomic — written to a sibling and renamed over the target, so an interrupted run leaves the old snapshot or the new one and never half of either — but the test that came with it asserted only that the file parses and that no debris is left, both of which a plain write in place satisfies too. The rename now fails on purpose, and what has to hold is that the old snapshot is still there afterwards.

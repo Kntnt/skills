@@ -75,6 +75,24 @@ def fail(message: str, code: int = 1) -> int:
     return code
 
 
+def relay_transport(message: str) -> None:
+    """Write the transport's own account of a failure to stderr, verbatim.
+
+    The mirrors below read a transport failure off the disk rather than
+    raising it, which costs the user the one thing only the transport knows:
+    why it declined. That belongs on stderr — the channel the manager's own
+    errors already use — and never in the payload, which ADR-0036 fixes as a
+    statement about the disk in one shape every verb carries.
+
+    Whole and unedited, under a line naming whose words these are. The same
+    text reaches the user in full wherever the failure is not swallowed, so a
+    cap here would make one path quieter than the other for no reason, and
+    the manager has no standing to summarise prose it cannot interpret.
+    """
+
+    print(f"the transport said:\n{message}", file=sys.stderr)
+
+
 # What a dry run costs, carried in the payload rather than left to be guessed
 # at: the Sandbox has an npm cache of its own, so the first dry run in a
 # session downloads the transport afresh. An unexplained pause in a command
@@ -1077,11 +1095,16 @@ def placement_outcome(
     there. Absence, which is what a removal is verified by, has no such
     problem. The directories named are the ones the layer covers, because
     where to look is the whole use the user has for them.
+
+    The reason goes to the user even so, on stderr rather than in the payload.
+    Every name failing is the condition the other mirror guards on, so here it
+    always holds.
     """
 
     try:
         return add_skills(names, harnesses, global_layer=global_layer)
-    except ManagerError:
+    except ManagerError as exc:
+        relay_transport(str(exc))
         return {
             "intended": list(names),
             "confirmed": [],
@@ -1105,14 +1128,25 @@ def removal_outcome(
     deciding whether the Manager may go — reads that failure off the disk
     rather than raising it. What the run intended is unchanged either way;
     only the split between confirmed and failed differs.
+
+    Where that split leaves a failure, the transport's own account of it goes
+    to the user on stderr, which is the only place it is told.
     """
 
     try:
         return remove_skills(names, harnesses, global_layer=global_layer)
-    except ManagerError:
-        return verified_outcome(
+    except ManagerError as exc:
+        outcome = verified_outcome(
             names, harnesses, global_layer=global_layer, expect_present=False
         )
+
+        # Only a failure has a why to explain. A transport that exited
+        # non-zero having removed the files anyway is exactly what reading the
+        # disk exists to absorb, and that run is clean: printing somebody
+        # else's error over it would be telling the user about nothing.
+        if outcome["failed"]:
+            relay_transport(str(exc))
+        return outcome
 
 
 def withdrawn_names(harnesses: list[str], *, global_layer: bool) -> list[str]:

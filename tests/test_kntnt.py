@@ -352,6 +352,7 @@ def _run(
     log: Path | None = None,
     skip: list[str] | None = None,
     refuse: list[str] | None = None,
+    grumble: list[str] | None = None,
     installed: Path | None = None,
     paths: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
@@ -372,6 +373,8 @@ def _run(
         env["KNTNT_TRANSPORT_SKIP"] = ",".join(skip)
     if refuse is not None:
         env["KNTNT_TRANSPORT_REFUSE"] = ",".join(refuse)
+    if grumble is not None:
+        env["KNTNT_TRANSPORT_GRUMBLE"] = ",".join(grumble)
     script = (installed or world["here"]) / "scripts" / "kntnt.py"
     return subprocess.run(
         ["uv", "run", str(script), *args],
@@ -987,6 +990,23 @@ def test_select_settles_the_closure_before_anything_is_written(
     # was asked to carry out (ADR-0047).
     assert "the user did not just uncheck" in text
     assert "reported, not refused" in text
+
+
+def test_the_steps_relay_the_reason_and_still_distrust_the_transport() -> None:
+    """The two readings of one sentence, told apart (issue #46).
+
+    *Whatever the transport reported* meant do not take its word for success.
+    Once there is a message to hand on it also reads as never mind what it
+    said, which is the opposite of what the step now has to do with it.
+    """
+
+    steps = REPO_ROOT / "skills" / "kntnt" / "steps"
+    for name in ("update.md", "select.md"):
+        text = (steps / name).read_text(encoding="utf-8")
+
+        assert "the transport said:" in text
+        assert "whether or not the transport claimed otherwise" in text
+        assert "whatever the transport reported" not in text
 
 
 def test_select_on_enables_a_skill_and_opens_no_list(tmp_path: Path) -> None:
@@ -2544,6 +2564,101 @@ def test_update_reports_the_withdrawal_it_made_when_a_refresh_is_refused(
     assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
     assert {item["name"] for item in payload["failed"]} == {"kntnt", "alpha"}
     assert payload["confirmed"] == []
+
+
+def test_a_refused_placement_relays_what_the_transport_said(tmp_path: Path) -> None:
+    """The reason a placement was declined is the transport's alone (issue #46).
+
+    Reading the refusal instead of raising it is what keeps the payload — and
+    with it the report of the withdrawal the same run already made — but it
+    leaves the user told which skills did not land and never why. The words go
+    to stderr, where the manager's own errors go, so the payload on stdout
+    stays a statement about the disk (ADR-0036).
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "apply", "update", refuse=["alpha"])
+
+    assert result.returncode != 0
+    assert "the transport said:" in result.stderr
+    assert "error: skills alpha refused" in result.stderr
+
+
+def test_the_relayed_reason_never_reaches_the_payload(tmp_path: Path) -> None:
+    """Two channels, and nothing crossing between them (issue #46).
+
+    The message is somebody else's prose and the payload is the run's own
+    account of the disk. A field carrying the one into the other would grow a
+    case in every verb's steps, so what has to hold is that the payload gains
+    no key and loses none on the run that prints it.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "apply", "update", refuse=["alpha"])
+
+    assert "error: skills alpha refused" in result.stderr
+    assert set(_json(result)) == {
+        "intended",
+        "confirmed",
+        "failed",
+        "new",
+        "enabled",
+        "current",
+        "removed",
+        "catalog_refreshed",
+        "unsatisfied",
+        "capabilities",
+        "layer",
+        "directories",
+    }
+    assert "refused" not in result.stdout
+
+
+def test_a_refused_removal_relays_what_the_transport_said(tmp_path: Path) -> None:
+    """The other mirror, which has swallowed the reason since long before #36."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "apply", "update", refuse=["gamma"])
+
+    assert result.returncode != 0
+    assert "the transport said:" in result.stderr
+    assert "error: skills gamma refused" in result.stderr
+
+
+def test_a_removal_the_disk_confirms_says_nothing_the_transport_said(
+    tmp_path: Path,
+) -> None:
+    """A transport that grumbled while doing the job is what the disk absorbs.
+
+    Only a failure has a why to explain. Where the removal is confirmed off
+    the disk the run is clean, and a clean run that printed somebody's error
+    would be telling the user about nothing at all.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "apply", "update", grumble=["gamma"])
+
+    assert result.returncode == 0, result.stderr
+    assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
+    assert _json(result)["removed"] == [{"name": "gamma", "disk": "removed"}]
+    assert "the transport said:" not in result.stderr
+    assert "ledger" not in result.stderr
 
 
 def test_an_entry_that_did_not_land_is_still_on_offer(tmp_path: Path) -> None:

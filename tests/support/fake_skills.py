@@ -227,6 +227,18 @@ def refused() -> set[str]:
     return {name.strip() for name in raw.split(",") if name.strip()}
 
 
+def grumbled() -> set[str]:
+    """Return the skills this run does the work for and then fails over anyway.
+
+    A transport can exit non-zero with the files already moved — bookkeeping of
+    its own after the copy is enough — and a manager that judges by the disk
+    rather than by the exit code is only tested by staging exactly that.
+    """
+
+    raw = os.environ.get("KNTNT_TRANSPORT_GRUMBLE", "")
+    return {name.strip() for name in raw.split(",") if name.strip()}
+
+
 def main(argv: list[str] | None = None) -> int:
     """Dispatch add, remove, or update against the isolated dirs."""
 
@@ -260,6 +272,17 @@ def main(argv: list[str] | None = None) -> int:
                 update_skill(name, dest)
             else:
                 copy_skill(name, dest)
+
+    # The work is done and the call fails regardless: the disk is right and
+    # the exit code is not.
+    grumbling = sorted(grumbled().intersection(names))
+    if grumbling:
+        print(
+            f"error: skills {', '.join(grumbling)} moved but the ledger did not",
+            file=sys.stderr,
+        )
+        return 1
+
     return 0
 
 
