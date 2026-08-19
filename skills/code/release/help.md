@@ -25,6 +25,8 @@ Nothing is written before you have seen it. The plan, the changelog diff, the ve
 
 ## Notes
 
+A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/release --dry-run` is an error, while `/release minor --no-build --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+
 A branch that is not the default branch stops the run: integrate first. An empty `[Unreleased]` stops it too — there is nothing to ship.
 
 A version that cannot be rewritten unambiguously aborts the whole bump rather than leaving some files written and others not.

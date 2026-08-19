@@ -23,6 +23,15 @@ Commit the working tree on the current branch and stop.
 
 If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
 
+## Arguments
+
+`/commit ["message"] [--yes]`, and nothing else.
+
+- `"message"` — the commit message, in place of one derived from the changes.
+- `--yes` — commit without waiting for a confirmation.
+
+Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/commit --help` for the page in full. Then commit nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
+
 ## Steps
 
 1. Run `uv run "$HERE/scripts/ship.py" plan commit`. Done when stdout is a JSON plan, or the command exits 2.

@@ -25,6 +25,16 @@ Ship a version from the default branch: changelog, bump, push, tag, GitHub relea
 
 If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
 
+## Arguments
+
+`/release [minor|major|X.Y.Z] [--no-build] [--yes]`, and nothing else.
+
+- `minor`, `major`, or `X.Y.Z` — the bump, in place of one derived from `[Unreleased]`.
+- `--no-build` — skip the archive even where the project has a build command.
+- `--yes` — release without waiting for a confirmation.
+
+Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/release --help` for the page in full. Then ship nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
+
 ## Steps
 
 1. Run `uv run "$HERE/../commit/scripts/ship.py" plan release`. Done when stdout is a JSON plan.

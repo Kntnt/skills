@@ -4,7 +4,11 @@ Turn delegation mode on or off — you orchestrate, subagents execute.
 
 ## Synopsis
 
-`/delegation [session|project|user] [on|off|status] [--yes]`
+```
+/delegation [session|project|user] on|off [--yes]
+/delegation [session|project|user] status
+/delegation [session]
+```
 
 ## Description
 
@@ -29,11 +33,13 @@ One scope and one state, bare or flagged, in any order: `/delegation project on`
 
 ## Options
 
-- `--yes` — assume yes: write the persistent scope without waiting for a confirmation.
+- `--yes` — assume yes: write the persistent scope without waiting for a confirmation. Valid only alongside `on` or `off`.
 
 ## Notes
 
-Session is the only scope that can be toggled without saying which way. Flipping a file in your home configuration, or a committed file in a shared repository, off an inferred state is the wrong default, so `project` or `user` with no state changes nothing and asks.
+Session is the only scope that can be toggled without saying which way. Flipping a file in your home configuration, or a committed file in a shared repository, off an inferred state is the wrong default, so `/delegation user` with no state changes nothing and prints the synopsis rather than asking which of `on`, `off`, or `status` you meant.
+
+A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/delegation status --yes` is an error, while `/delegation user on --yes` is not. An invalid form is refused the same way as a disallowed flag, and there is one refusal rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing changed.
 
 Session `off` suspends this skill's own instruction. It does not remove a standing block: that text stays in the context window and its tokens are still paid. A compaction can drop the session instruction while the block survives, so run `/delegation off` again if delegating resumes.
 

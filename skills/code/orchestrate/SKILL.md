@@ -28,6 +28,12 @@ The payload's `capabilities` are the half of the check no script can do — you 
 
 If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
 
+## Arguments
+
+`/orchestrate [#<ticket-or-spec>] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`, and nothing else. `--state-dir` is yours to pass rather than the developer's to type, and step 1 says where it comes from.
+
+Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/orchestrate --help` for the page in full. Then start nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
+
 ## Steps
 
 Every command below takes `--state-dir <directory>`. Pass whatever per-session scratchpad or temporary directory your harness gives you, the same one on every call, so what this run has claimed survives a compaction. Where your harness gives you none, leave the flag off: its absence is not an error, and the engine rebuilds what it needs from the tracker and the branch. There is no resume flag and none is wanted — re-invoked with the same arguments, this Skill continues an interrupted run rather than restarting it.

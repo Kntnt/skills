@@ -64,6 +64,8 @@ There is no sixth pile and no ticket in two of them. A ticket the run dropped in
 
 ## Notes
 
+A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/orchestrate --force` is an error, while `/orchestrate #21 --at-once 3 --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+
 At a ceiling of one, work is committed straight to the branch you were on, one commit per ticket, and nothing is merged because there is nothing to integrate. Above one, each ticket is committed on a branch of its own in a working tree under `.git/kntnt-orchestrate/<number>`, and merged into your branch as its wave completes; the working tree and branch of a merged ticket are removed, and those of a failed or conflicted one are kept where they are. The one exception is a ticket being rebuilt after a repair that did not verify: that working tree and branch are discarded, uncommitted work and all, because what they hold is a resolution a verifier has just refused. Either way the run ends with everything on the one branch you started it on.
 
 A working tree is named for its ticket and its branch for the run that made it, and it is the branch that says whose it is. So a tree left standing by a run on another branch — interrupted, or kept because its ticket failed — is named rather than picked up: this run would otherwise build its ticket on top of that branch's work and merge the result onto yours. Look at what is in it, then remove it with `git worktree remove`, and the ticket can be worked again.

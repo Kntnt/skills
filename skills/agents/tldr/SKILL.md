@@ -42,7 +42,7 @@ A flag is refused rather than ignored where it has no work to do here, because a
 
 ## Steps
 
-1. Parse the arguments by the rules above. An invalid form: print the `## Synopsis` section of `$HERE/help.md` verbatim, name in one line what was wrong, change nothing, stop. Done when the form is settled, or you have stopped.
+1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/tldr --help` for the page in full. Change nothing and stop. Done when the form is settled, or you have stopped.
 2. Summarise form: settle the range. Everything you have written since the user's last input, plus whatever earlier context that range refers to and would be unintelligible without. A free-form instruction moves it as it says. Done when the range is settled.
 3. Summarise form, range empty or already short: say that in a sentence or two, say whether anything in it needs the user, and stop. A summary longer than what it summarises is theatre. Done when that is said.
 4. Summarise form: read [`shape.md`](shape.md) and render the range by it. Stop; nothing below applies to this form. Done when the summary is shown.

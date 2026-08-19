@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -4422,3 +4423,131 @@ def test_no_verb_accepts_force(tmp_path: Path) -> None:
         result = _run(world, *args)
         assert result.returncode != 0, args
         assert "--force" in result.stderr, args
+
+
+# The skills' half of strict syntax. A skill has no parser for the grammar its
+# user types — `agents-md` and `delegation` have no script at all, and the
+# others hand a settled command line to an engine rather than the user's own —
+# so the agent is the only thing that can refuse, and the rule has to be stated
+# where that agent reads it (ADR-0059). What follows is prose held to the
+# behaviour, which is the only seam a script-less skill has (ADR-0046).
+
+
+def _shipped_skills() -> list[Path]:
+    """Every collection skill's directory. The Manager is no entry of its own."""
+
+    directories = sorted(p.parent for p in (REPO_ROOT / "skills").glob("*/*/SKILL.md"))
+    assert directories
+    return directories
+
+
+def _section(text: str, heading: str) -> str:
+    """Return one `## ` section of a Markdown file, and nothing after it."""
+
+    marker = f"\n{heading}\n"
+    assert marker in text, heading
+    return text.partition(marker)[2].partition("\n## ")[0]
+
+
+def _hint(directory: Path) -> str:
+    """Return one skill's `argument-hint`, which is the grammar the harness shows."""
+
+    for line in (directory / "SKILL.md").read_text(encoding="utf-8").splitlines():
+        if line.startswith("argument-hint:"):
+            return line.partition(":")[2].strip().strip("\"'")
+    raise AssertionError(f"{directory} declares no argument-hint")
+
+
+def _flags(text: str) -> set[str]:
+    """Every long flag named in a piece of prose, `--help` excepted.
+
+    `--help` is the route into the manpage rather than a flag on a form, so it
+    is documented nowhere and belongs to no row of the grammar.
+    """
+
+    return {word for word in re.findall(r"--[a-z][a-z-]*", text)} - {"--help"}
+
+
+def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() -> None:
+    """One failure behaviour per skill, and no error text authored by an agent.
+
+    An undeclared flag, an invalid combination, and an incomplete form are the
+    same refusal, in the shape every refusal in this collection has: what was
+    wrong, the synopsis of what was addressed, and where to read the page in
+    full. The synopsis is the one shipped in `help.md`, never a second grammar
+    composed on the spot to answer with.
+    """
+
+    for directory in _shipped_skills():
+        skill = (directory / "SKILL.md").read_text(encoding="utf-8")
+        page = (directory / "help.md").read_text(encoding="utf-8")
+
+        assert "`## Synopsis` section of `$HERE/help.md`" in skill, directory
+        assert f"`/{directory.name} --help` for the page in full" in skill, directory
+        assert "refused rather than ignored" in page, directory
+
+
+def test_a_skills_hint_and_manpage_agree_on_the_flags_it_takes() -> None:
+    """The defence ADR-0059 names: one grammar, read by both halves.
+
+    Strictness re-opens ADR-0029's failure wherever the documented grammar and
+    the thing that enforces it disagree, and for a skill the enforcer reads the
+    same files the user does. So a flag advertised in the hint and missing from
+    the page, or the other way round, is a failure here rather than a refusal
+    in somebody's session.
+    """
+
+    for directory in _shipped_skills():
+        page = (directory / "help.md").read_text(encoding="utf-8")
+        documented = _flags(_section(page, "## Options"))
+
+        assert _flags(_hint(directory)) == documented, directory
+        assert _flags(_section(page, "## Synopsis")) == documented, directory
+
+
+def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None:
+    """`--yes` answers a confirmation, and `status` never asks for one.
+
+    The grammar is flat today — `[session|project|user] [on|off|status]
+    [--yes]` — while the flag is only ever acted on where a persistent scope is
+    written, so `/delegation status --yes` reads as a flag that does nothing.
+    """
+
+    directory = REPO_ROOT / "skills" / "agents" / "delegation"
+    page = (directory / "help.md").read_text(encoding="utf-8")
+    forms = [
+        *_hint(directory).split(" | "),
+        *_section(page, "## Synopsis").splitlines(),
+    ]
+
+    assert any("--yes" in form for form in forms)
+    assert any("status" in form for form in forms)
+    for form in forms:
+        assert not ("--yes" in form and "status" in form), form
+
+
+def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
+    """`/delegation --user` with no state prints the synopsis and stops.
+
+    Its two halves disagreed: the arguments asked for `on`, `off`, or `status`
+    while step 1 stopped. The half the agent executes is the true one (ADR-0046),
+    and `--yes` settles it beyond consistency — a question with three outcomes
+    has no answer under the flag (ADR-0029), so *ask* needs a special case
+    there and *error* needs none.
+    """
+
+    directory = REPO_ROOT / "skills" / "agents" / "delegation"
+    skill = (directory / "SKILL.md").read_text(encoding="utf-8")
+    page = (directory / "help.md").read_text(encoding="utf-8")
+
+    incomplete = [
+        line
+        for line in _section(skill, "## Arguments").splitlines()
+        if "no state" in line
+    ]
+    assert incomplete, "the parse rules no longer name the incomplete form"
+    for line in incomplete:
+        assert "ask" not in line.lower(), line
+
+    assert "changes nothing and asks" not in page
+    assert "prints the synopsis" in _section(page, "## Notes")

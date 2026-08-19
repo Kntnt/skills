@@ -26,6 +26,8 @@ Nothing is written before you have seen it. The changelog diff, the message, and
 
 ## Notes
 
+A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/commit --force` is an error, while `/commit "a subject line" --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+
 A working tree with nothing to commit is said so and nothing happens.
 
 Where untracked files look like they belong in `.gitignore` rather than in the repository, that addition is proposed with the rest and stands or falls with the same confirmation.

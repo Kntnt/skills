@@ -2,7 +2,7 @@
 name: delegation
 description: Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.
 disable-model-invocation: true
-argument-hint: "[session|project|user] [on|off|status] [--yes]"
+argument-hint: "[session|project|user] [on|off] [--yes] | [session|project|user] status"
 metadata:
   internal: true
   kntnt:
@@ -32,14 +32,22 @@ One scope and one state, bare or flagged, in any order: `/delegation project on`
 
 - scope — `session` (the default), `project`, `user`.
 - state — `on`, `off`, `status`.
-- `--yes` — write the persistent scope without waiting for a yes.
+- `--yes` — write the persistent scope without waiting for a yes. Valid only alongside `on` or `off`; `status` asks nothing, so there is nothing for the flag to answer.
 
 Parse rules:
 
-- Session is the only togglable scope. `session` with no state flips the verdict. `project` or `user` with no state is incomplete: change nothing, name what is missing, ask for `on`, `off`, or `status`. Flipping a file in the user's home configuration, or a committed file in a shared repo, off an inferred state is the wrong default.
+- Session is the only togglable scope. `session` with no state flips the verdict.
 - `status` with no scope reports all three scopes.
-- Two scopes, two states, or a state alongside `status`: name the ambiguity, ask which was meant, change nothing.
-- Natural language reaches `status` alone, from "is it on?". Ask rather than guess — "turn it on everywhere" versus "for this project" is exactly the guess that writes the wrong file.
+- Natural language reaches `status` alone, from "is it on?". Prose is not a form, so anything wider than that is asked about rather than refused: "turn it on everywhere" versus "for this project" is exactly the guess that writes the wrong file, and only the user can settle which they meant.
+
+Invalid forms, each refused the same way:
+
+- A `--`-prefixed token that is not `--session`, `--project`, `--user`, `--on`, `--off`, `--status`, or `--yes`.
+- `--yes` without `on` or `off`.
+- `project` or `user` with no state. Flipping a file in the user's home configuration, or a committed file in a shared repo, off an inferred state is the wrong default, and an error infers nothing either.
+- Two scopes, two states, or a state alongside `status`.
+
+A flag is refused rather than ignored where it has no work to do here, and an incomplete form is refused rather than asked about, because a flag accepted and ignored teaches that flags sometimes do nothing and a question asked in place of the grammar leaves the user guessing at what the grammar is (ADR-0059).
 
 ## The mode
 
@@ -60,7 +68,7 @@ The verdict is the effective state here and now:
 
 ## Steps
 
-1. Parse the arguments. Incomplete or ambiguous: say what is missing, change nothing, stop. Done when scope and state are settled, or you have stopped.
+1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/delegation --help` for the page in full. Change nothing and stop. Done when scope and state are settled, or you have stopped.
 2. Scope `project` or `user`, any state: read [`persist.md`](persist.md) and follow it, then go to the report. Done when the block is written, removed, or read.
 3. Session `on`, `off`, or a toggle of the current verdict. Going on: read `$HERE/mode.md` and adopt it as a standing instruction for the rest of this session. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
 4. Write `{"active": true}` or `{"active": false}`, and nothing else, to `kntnt-delegation.json` in whatever per-session scratchpad or temporary directory your harness gives you, so a compaction cannot lose the state. No such directory: the conversation alone carries it. `status` writes nothing. Done when that file matches the session state, or there is nowhere to write it.

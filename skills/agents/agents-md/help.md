@@ -29,6 +29,8 @@ The skill runs after a task, not during one — unless you invoked it yourself, 
 
 ## Notes
 
+A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/agents-md --dry-run` is an error, while `/agents-md --force --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+
 The always-loaded pair is measured before and after, in characters, and so is the total including `agents.d/`. Growth is a cost, and the report shows it as one.
 
 Prose under `docs/` is never written for you. What the skill may propose there is a place and a purpose; the words are yours.
