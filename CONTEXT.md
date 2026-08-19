@@ -44,7 +44,7 @@ The manager subcommand that prints the manager's own help, or the help for one o
 _Avoid_: usage, man
 
 **Assume yes**:
-What `--yes` means on any collection skill: no question is asked at all — every question that could be answered yes or no is answered yes instead. Every verb of a collection script accepts the flag, so a skill can pass the user's arguments through unread. Because the flag answers rather than defers, every yes/no question is worded so that *yes* ends it; a question whose yes opens another question has no unattended answer. Where a subcommand deletes files the user is choosing to delete, the flag is also the gate — the script refuses without it, because a script cannot prompt. Deleting a Withdrawn skill is not such a choice and is not gated: there is no question to answer, so Update removes it with or without the flag.
+What `--yes` means on any collection skill: no question is asked at all — every question that could be answered yes or no is answered yes instead. Because the flag answers rather than defers, every yes/no question is worded so that *yes* ends it; a question whose yes opens another question has no unattended answer. Where a subcommand deletes files the user is choosing to delete, the flag is also the gate — the script refuses without it, because a script cannot prompt. Deleting a Withdrawn skill is not such a choice and is not gated: there is no question to answer, so Update removes it with or without the flag.
 _Avoid_: force, non-interactive, quiet, auto-approve
 
 **Enabled**:
