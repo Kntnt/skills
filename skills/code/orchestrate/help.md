@@ -1,35 +1,40 @@
 # orchestrate
 
-Plan an unattended run over the tracker's ready-for-agent tickets, as a wave plan.
+Work the tracker's ready-for-agent tickets unattended, on the branch you are already on.
 
 ## Synopsis
 
-`/orchestrate [--dry-run] [--yes]`
+`/orchestrate [--dry-run] [--model <name>] [--yes]`
 
 ## Description
 
-Reads the issue tracker for this repository and reports the tickets an unattended run would work: every open ticket carrying `ready-for-agent`, and which of them are workable now. A ticket without that label never appears, because a ticket without it is unfinished thinking and is never built.
+Reads the issue tracker for this repository, works out which tickets an unattended run can start, and then works them: every open ticket carrying `ready-for-agent`, one at a time. A ticket without that label never appears, because a ticket without it is unfinished thinking and is never built.
 
-The blocking edges between those tickets make the report a wave plan rather than a list. Wave one is what may start now; each later wave is what the wave before it unblocks. An edge comes from the tracker's own blocked-by relation, and where a ticket carries none, from a `Blocked by` line in its body naming other tickets — which is how the ticket breakdown writes an edge the tracker has no relation for. The body is that fallback and not a second source: where the relation carries any edge at all, it is the whole of that ticket's edges. A body edge is a bare `#number`; one written as `owner/repo#number` is refused rather than read, because a run reads one repository's tracker and cannot tell such a reference in it from one somewhere else. A blocker that is already closed names work that exists and blocks nothing.
+The blocking edges between those tickets make the plan a wave plan rather than a list. Wave one is what may start now; each later wave is what the wave before it unblocks. An edge comes from the tracker's own blocked-by relation, and where a ticket carries none, from a `Blocked by` line in its body naming other tickets — which is how the ticket breakdown writes an edge the tracker has no relation for. The body is that fallback and not a second source: where the relation carries any edge at all, it is the whole of that ticket's edges. A body edge is a bare `#number`; one written as `owner/repo#number` is refused rather than read, because a run reads one repository's tracker and cannot tell such a reference in it from one somewhere else. A blocker that is already closed names work that exists and blocks nothing.
 
-The report is what you check before committing a night to a run. It names the branch the run would use, the shape of the night in waves, and the reason where no run may start at all.
+Each ticket goes the same way. It is **claimed** on the tracker before any work on it starts, by assigning it, so a second session you start in parallel sees it taken and skips it — and so a ticket a person has taken is left alone too. It is then **built** by a subagent with its own context window, so a long run does not degrade as one context fills. The brief that subagent gets carries the ticket's body as it was filed rather than a summary of it, the ticket's parent spec with the instruction to read its testing decisions before writing any test, the instruction to build test-first, and the fact that nobody is watching — which makes a genuine decision something to stop and report rather than guess at.
 
-It plans; it does not build. Working a ticket means briefing a session for it and verifying the result independently, and this skill grows into that. What it gives you today is the scope.
+It is then **verified** by a second subagent that never saw the building session and is told nothing the builder claimed. That subagent runs the project's full verification itself and checks each acceptance criterion against the repository as it now is. Its verdict is what decides. There is no flag, argument, or circumstance that skips it, because a run that can report success it cannot support is worse than no run at all.
+
+Only then is the ticket **closed**, together with the commit that carries the work. A ticket that fails verification is written down as failed and left open and claimed, and the run stops there. It is not retried: the conditions of a rerun would be identical and so would the outcome.
 
 ## Options
 
 - `--dry-run` — plan the run, print what would be worked, and start nothing.
+- `--model <name>` — the model the building subagents run on, so mechanical work can run cheaper than judgement work. Verification is not affected.
 - `--yes` — assume yes: answer any question the run would otherwise ask.
 
 ## Notes
 
-A run works the branch you are on, so it refuses on the repository's default branch and says so — an unattended night must never land there. The plan is still printed, so you can read the scope from the branch you happen to be on.
+Work is committed straight to the branch you were on, one commit per ticket. Nothing is merged, because there is nothing to integrate: this run works one ticket at a time and no worktree is created.
 
-Where nothing can say which branch is the default — no remote to ask, and neither `main` nor `master` in the repository — it refuses rather than guess, and tells you to name it. A guess would either work the branch it must not touch, or refuse the branch you are on under a reason that is not true.
+A run refuses on the repository's default branch and says so — an unattended night must never land there. The plan is still printed, so you can read the scope from the branch you happen to be on. Where nothing can say which branch is the default — no remote to ask, and neither `main` nor `master` in the repository — it refuses rather than guess, and tells you to name it. A guess would either work the branch it must not touch, or refuse the branch you are on under a reason that is not true.
+
+A failed ticket's work is left on the branch rather than reverted, so you can look at it. That is also why the run stops at the first failure: the next ticket would otherwise be built on top of unverified code.
 
 Nothing is pushed, tagged, or released, and no ticket is created or triaged. `/release` ships a version; this skill consumes tickets somebody else has decided are ready.
 
-A repository whose tracker holds no ready-for-agent ticket is said so, and nothing starts. So is a scope where no ticket is workable at all — tickets waiting on each other in a circle, or on open work the run will never build because it carries no label. Those are named as reached by no wave, and nothing starts rather than a frontier being turned over that never grows.
+A repository whose tracker holds no ready-for-agent ticket is said so, and nothing starts. So is a scope where no ticket is workable at all — tickets waiting on each other in a circle, or on open work the run will never build because it carries no label — and one where every workable ticket is already claimed.
 
 ## Dependencies
 

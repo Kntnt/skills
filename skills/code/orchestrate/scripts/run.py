@@ -2,7 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Plan, record, and report an unattended run over the tracker's tickets."""
+"""Plan, claim, record, and report an unattended run over the tracker's tickets."""
 
 from __future__ import annotations
 
@@ -27,7 +27,35 @@ TICKET_PAGE = 200
 
 # The outcomes a run records against a ticket. Stranded and never-on-the-
 # frontier are read off the graph rather than recorded, so neither is one.
-OUTCOMES = ("done", "failed", "conflicted")
+DONE = "done"
+OUTCOMES = (DONE, "failed", "conflicted")
+
+# What each recorded outcome says on the ticket it is recorded against. The
+# machine-readable half is the marker; this is the half a developer reads.
+NOTES = {
+    DONE: (
+        "Recorded by an unattended run: built and then verified independently "
+        "against this ticket's acceptance criteria."
+    ),
+    "failed": (
+        "Recorded by an unattended run: verification did not pass. The ticket "
+        "is not retried — a rerun would have identical conditions."
+    ),
+    "conflicted": (
+        "Recorded by an unattended run: this ticket's work collided with "
+        "another ticket's and the collision was not repaired."
+    ),
+}
+
+# The marker every recorded outcome carries, so what a run wrote on a ticket
+# is machine-readable and not only prose somebody has to interpret.
+MARKER = "kntnt-orchestrate"
+
+# Who a claim assigns the ticket to. The tracker's own relation for "somebody
+# is on this" is the claim: it needs no label created and no convention
+# agreed, and a ticket a human has taken is one an unattended run must leave
+# alone for exactly the same reason.
+CLAIM_ASSIGNEE = "@me"
 
 # What the tracker calls a ticket that is finished. A blocker in this state
 # names work that already exists, so it blocks nothing.
@@ -40,12 +68,21 @@ BLOCKED_BY_LINE = re.compile(
     r"^\s*(?:#{1,6}\s+)?\**blocked[ -]by\**\s*:?", re.IGNORECASE
 )
 
-# A line that continues the edge list under such a heading. Anything else ends
-# it, so a `#12` further down the body is prose and not an edge.
+# The line the breakdown names a ticket's parent spec on, written the same two
+# ways: a heading with the reference under it, or a sentence carrying it.
+PARENT_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**parent\b\**\s*:?", re.IGNORECASE)
+
+# A line that continues the list under such a heading: an item, or a reference
+# standing on its own line. Anything else ends it, so a `#12` further down the
+# body is prose and not an edge.
 EDGE_LIST_ITEM = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s")
 
 # A ticket reference in a body: a bare number in this repository's tracker.
 TICKET_REFERENCE = re.compile(r"(?<![0-9A-Za-z_/-])#(\d+)")
+
+# A line holding references and nothing else, which is how the breakdown
+# writes a single reference under a heading.
+BARE_REFERENCE = re.compile(r"^(?:\s*#\d+\s*,?)+$")
 
 # The same reference written in a tracker's own terms, `owner/repo#12`. A run
 # reads one repository's tracker and cannot tell such a reference in it from
@@ -148,11 +185,20 @@ class Ticket:
     tracker reports closed names work that already exists and is left out, so
     the list is what remains to be waited for rather than the whole history of
     the edge.
+
+    `body` is the ticket as it was filed, carried whole because the brief a
+    building subagent gets carries the body and never a summary of it, and
+    `parent` is the spec whose testing decisions are read before any test.
+    `claimed_by` is who the tracker has it assigned to: non-empty means another
+    session, or a person, already has it.
     """
 
     number: int
     title: str
     url: str
+    body: str
+    parent: int | None
+    claimed_by: list[str]
     blocked_by: list[int]
 
 
@@ -165,21 +211,28 @@ class Plan:
     the tickets off a plan that refuses exactly as it reads them off one that
     does not.
 
-    The scope is reported four ways over the same tickets. `waves` is the shape
-    of the night, wave one being `workable`; `blocked` is everything else, and
-    `never_workable` the part of it no wave holds because it waits on a cycle
-    or on work outside the run.
+    The scope is reported over the same tickets several ways. `waves` is the
+    shape of the night as the graph dictates it; `blocked` is everything
+    outside wave one, and `never_workable` the part of it no wave holds because
+    it waits on a cycle or on work outside the run. `claimed` cuts across all
+    of that: a ticket somebody already has is not this run's to start, so
+    `workable` is wave one less whatever is claimed.
+
+    `model` is the model the building subagents run on, carried here because
+    the plan is where the run says what it is about to do.
     """
 
     verb: str
     ready: bool
     reason: str | None
     dry_run: bool
+    model: str | None
     branch: str
     default_branch: str | None
     label: str
     tickets: list[dict[str, Any]]
     workable: list[int]
+    claimed: list[int]
     blocked: list[int]
     waves: list[list[int]]
     never_workable: list[int]
@@ -191,43 +244,91 @@ def still_blocks(state: str) -> bool:
     return state.upper() != CLOSED
 
 
-def body_edges(body: str) -> list[int]:
-    """Return the tickets a `Blocked by` line in *body* names.
+def references_under(body: str, opening: re.Pattern[str], heading: str) -> list[int]:
+    """Return the tickets named under each *opening* line in *body*.
 
-    The breakdown writes edges here where the tracker offers no relation to
-    write them in.
+    The breakdown writes both a ticket's blocking edges and its parent this
+    way, where the tracker offers no relation to write them in.
     """
 
-    # Take the text an edge can be written in: the rest of each `Blocked by`
-    # line, and the list under it. The first line that is neither blank nor a
-    # list item ends that list, or a ticket mentioned anywhere further down the
-    # body would become an edge nobody wrote.
+    # Take the text a reference can be written in: the rest of each opening
+    # line, and the list under it. The first line that is neither blank, a list
+    # item, nor a reference standing alone ends that list, or a ticket
+    # mentioned anywhere further down the body would become one nobody wrote.
     lines = body.splitlines()
     written: list[str] = []
     for index, line in enumerate(lines):
-        opening = BLOCKED_BY_LINE.match(line)
-        if not opening:
+        found = opening.match(line)
+        if not found:
             continue
-        written.append(line[opening.end() :])
+        written.append(line[found.end() :])
         for following in lines[index + 1 :]:
             if not following.strip():
                 continue
-            if not EDGE_LIST_ITEM.match(following):
+            if not EDGE_LIST_ITEM.match(following) and not BARE_REFERENCE.match(
+                following
+            ):
                 break
             written.append(following)
 
-    # An edge nothing can read is never passed over in silence.
+    # A reference nothing can read is never passed over in silence.
     for line in written:
         qualified = QUALIFIED_REFERENCE.search(line)
         if qualified:
             raise RunError(
-                f"a `Blocked by` line names {qualified.group()}, and a run reads "
-                "one repository's tracker: write the edge as #number"
+                f"a `{heading}` line names {qualified.group()}, and a run reads "
+                "one repository's tracker: write it as #number"
             )
 
     return [
         int(number) for line in written for number in TICKET_REFERENCE.findall(line)
     ]
+
+
+def body_edges(body: str) -> list[int]:
+    """Return the tickets a `Blocked by` line in *body* names."""
+
+    return references_under(body, BLOCKED_BY_LINE, "Blocked by")
+
+
+def body_parent(body: str) -> int | None:
+    """Return the spec a `Parent` line in *body* names, if it names one.
+
+    A ticket has one parent. Two named under that heading is a ticket nobody
+    can read, and picking whichever came first would send a builder off to
+    read the wrong spec without saying so.
+    """
+
+    named = references_under(body, PARENT_LINE, "Parent")
+    if len(named) > 1:
+        raise RunError(
+            "a `Parent` line names more than one ticket "
+            f"({', '.join(f'#{number}' for number in named)}): a ticket has one parent"
+        )
+
+    return named[0] if named else None
+
+
+def holders_of(item: dict[str, Any]) -> list[str]:
+    """Return who the tracker has *item* assigned to, which is who claims it."""
+
+    return [str(holder["login"]) for holder in item["assignees"]]
+
+
+def ticket_view(cwd: Path, number: int, fields: str) -> dict[str, Any]:
+    """Return what the tracker says about ticket *number*.
+
+    Raises a RunError carrying what the tracker said, for the caller to put in
+    the terms of whatever it was about to do with the answer.
+    """
+
+    output = gh(cwd, "issue", "view", str(number), "--json", fields)
+    try:
+        answer: dict[str, Any] = json.loads(output)
+    except json.JSONDecodeError as exc:
+        raise RunError(str(exc)) from exc
+
+    return answer
 
 
 def ticket_state(cwd: Path, number: int, states: dict[int, str]) -> str:
@@ -243,9 +344,8 @@ def ticket_state(cwd: Path, number: int, states: dict[int, str]) -> str:
         return states[number]
 
     try:
-        output = gh(cwd, "issue", "view", str(number), "--json", "number,state")
-        state = str(json.loads(output)["state"]).upper()
-    except (RunError, json.JSONDecodeError, KeyError) as exc:
+        state = str(ticket_view(cwd, number, "number,state")["state"]).upper()
+    except (RunError, KeyError) as exc:
         raise RunError(
             f"#{number} is named as a blocker, but the tracker cannot say "
             f"whether it is open or closed: {exc}"
@@ -278,6 +378,21 @@ def unmet_blockers(
         for number in set(body_edges(str(item["body"])))
         if still_blocks(ticket_state(cwd, number, states))
     )
+
+
+def parent_of(item: dict[str, Any]) -> int | None:
+    """Return the spec *item* belongs to, as the tracker describes it.
+
+    The tracker's own relation is the source wherever it carries one, and the
+    body is read only where it carries none — the same fallback, and the same
+    order, as a blocking edge.
+    """
+
+    native = item["parent"]
+    if native:
+        return int(native["number"])
+
+    return body_parent(str(item["body"]))
 
 
 def waves_of(tickets: list[Ticket]) -> tuple[list[list[int]], list[int]]:
@@ -326,7 +441,7 @@ def tickets_in_scope(cwd: Path) -> list[Ticket]:
         "--state",
         "open",
         "--json",
-        "number,title,url,body,blockedBy",
+        "number,title,url,body,parent,assignees,blockedBy",
         "--limit",
         str(TICKET_PAGE),
     )
@@ -347,19 +462,32 @@ def tickets_in_scope(cwd: Path) -> list[Ticket]:
     # Every ticket in scope is open, the query having asked for open ones, so
     # an edge that points into the scope costs the tracker no second question.
     states = {int(item["number"]): "OPEN" for item in listed}
-    tickets = [
-        Ticket(
-            number=int(item["number"]),
-            title=str(item["title"]),
-            url=str(item["url"]),
-            blocked_by=unmet_blockers(cwd, item, states),
-        )
-        for item in listed
-    ]
+
+    # A body that cannot be read stops the plan, and says which ticket to go
+    # and fix — the reference alone would leave the scope to be searched by
+    # hand for whichever ticket carries it.
+    tickets = []
+    for item in listed:
+        number = int(item["number"])
+        try:
+            tickets.append(
+                Ticket(
+                    number=number,
+                    title=str(item["title"]),
+                    url=str(item["url"]),
+                    body=str(item["body"]),
+                    parent=parent_of(item),
+                    claimed_by=holders_of(item),
+                    blocked_by=unmet_blockers(cwd, item, states),
+                )
+            )
+        except RunError as exc:
+            raise RunError(f"#{number}: {exc}") from exc
+
     return sorted(tickets, key=lambda ticket: ticket.number)
 
 
-def build_plan(cwd: Path, *, dry_run: bool) -> Plan:
+def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
     """Gather what a run in *cwd* would work, and whether it may start."""
 
     # The graph is the shape of the night: wave one is what may start now, and
@@ -368,18 +496,26 @@ def build_plan(cwd: Path, *, dry_run: bool) -> Plan:
     default = default_branch(cwd)
     tickets = tickets_in_scope(cwd)
     waves, never_workable = waves_of(tickets)
-    workable = waves[0] if waves else []
-    frontier = set(workable)
+    frontier = set(waves[0]) if waves else set()
+
+    # A claim is somebody else's session or a person, and either way the ticket
+    # is not this run's to start. It leaves the frontier without leaving the
+    # account, so nothing disappears by being taken.
+    claimed = [ticket.number for ticket in tickets if ticket.claimed_by]
+    workable = sorted(frontier.difference(claimed))
+
     plan = Plan(
         verb="plan",
         ready=True,
         reason=None,
         dry_run=dry_run,
+        model=model,
         branch=branch,
         default_branch=default,
         label=READY_LABEL,
         tickets=[asdict(ticket) for ticket in tickets],
         workable=workable,
+        claimed=claimed,
         blocked=[ticket.number for ticket in tickets if ticket.number not in frontier],
         waves=waves,
         never_workable=never_workable,
@@ -403,21 +539,27 @@ def build_plan(cwd: Path, *, dry_run: bool) -> Plan:
     elif not tickets:
         plan.ready = False
         plan.reason = f"no open ticket carries '{READY_LABEL}'"
-    elif not workable:
+    elif not frontier:
         plan.ready = False
         plan.reason = (
             "no ticket is workable: every ticket in scope waits on work "
             "this run cannot reach"
         )
+    elif not workable:
+        plan.ready = False
+        plan.reason = (
+            "every workable ticket is already claimed, so another run or a "
+            "person has all the work this one could start"
+        )
 
     return plan
 
 
-def cmd_plan(cwd: Path, *, dry_run: bool) -> int:
+def cmd_plan(cwd: Path, *, dry_run: bool, model: str | None) -> int:
     """Print the plan, and answer whether work may start."""
 
     try:
-        plan = build_plan(cwd, dry_run=dry_run)
+        plan = build_plan(cwd, dry_run=dry_run, model=model)
     except RunError as exc:
         return fail(str(exc))
 
@@ -425,19 +567,108 @@ def cmd_plan(cwd: Path, *, dry_run: bool) -> int:
     return 0 if plan.ready else 2
 
 
-def cmd_record(args: argparse.Namespace) -> int:
-    """Print the outcome recorded against one ticket.
+def claim_refusal(number: int, ticket: dict[str, Any]) -> str | None:
+    """Return why *ticket* may not be claimed, or None where it may.
 
-    Nothing outlives the call yet: run state is what remembers an outcome, and
-    it arrives with the verb that has outcomes to remember.
+    This is the last gate before a subagent is briefed, so it asks the tracker
+    itself rather than trusting a plan that may be minutes old — the whole
+    point of a claim is the session that started while this one was reading.
     """
+
+    if str(ticket["state"]).upper() == CLOSED:
+        return f"#{number} is closed"
+
+    if READY_LABEL not in [str(label["name"]) for label in ticket["labels"]]:
+        return f"#{number} does not carry '{READY_LABEL}'"
+
+    holders = holders_of(ticket)
+    if holders:
+        return f"#{number} is already claimed by {', '.join(holders)}"
+
+    return None
+
+
+def cmd_claim(cwd: Path, number: int) -> int:
+    """Take one ticket on the tracker, before any work on it starts."""
+
+    try:
+        ticket = ticket_view(cwd, number, "number,state,labels,assignees")
+    except RunError as exc:
+        return fail(f"the tracker cannot answer for #{number}: {exc}")
+
+    # A refusal is an answer and not a breakage: the second session started in
+    # parallel reads it, skips the ticket, and works the next one.
+    refusal = claim_refusal(number, ticket)
+    if refusal:
+        emit({"verb": "claim", "ticket": number, "claimed": False, "reason": refusal})
+        return 2
+
+    try:
+        gh(cwd, "issue", "edit", str(number), "--add-assignee", CLAIM_ASSIGNEE)
+    except RunError as exc:
+        return fail(f"#{number} could not be claimed: {exc}")
+
+    emit({"verb": "claim", "ticket": number, "claimed": True, "reason": None})
+    return 0
+
+
+def outcome_note(outcome: str, commit: str | None) -> str:
+    """Render what is written on a ticket when its outcome is recorded.
+
+    One line, carrying a marker a later run can read the outcome back out of
+    and prose the developer reading the ticket can read instead.
+    """
+
+    named = f" commit={commit}" if commit else ""
+    return f"<!-- {MARKER} outcome={outcome}{named} --> {NOTES[outcome]}"
+
+
+def cmd_record(cwd: Path, number: int, outcome: str, named: str | None) -> int:
+    """Store ticket *number*'s *outcome* and the commit that carries it.
+
+    The tracker is the store, because it is the one place an outcome outlives
+    the session that produced it and the one place the developer will look.
+    """
+
+    # Both halves of a done outcome are settled before the tracker is touched:
+    # a ticket closed on a commit nothing can resolve is a report nobody can
+    # check, which is the one thing an unattended run may not produce.
+    if outcome == DONE and not named:
+        return fail(f"recording #{number} done needs the commit that carries it")
+
+    commit = None
+    if named:
+        try:
+            commit = git(cwd, "rev-parse", "--verify", f"{named}^{{commit}}").strip()
+        except RunError:
+            return fail(f"this repository has no commit {named}")
+
+    # The tracker is asked for the ticket before anything is written to it, so
+    # a number it cannot answer for is refused rather than half-recorded.
+    try:
+        ticket_view(cwd, number, "number,state")
+    except RunError as exc:
+        return fail(f"the tracker cannot answer for #{number}: {exc}")
+
+    # Done is the only outcome that closes a ticket, and the Skill records it
+    # only where a separate subagent has verified the work — so there is no
+    # path from a builder's own report to a closed ticket.
+    note = outcome_note(outcome, commit)
+    try:
+        if outcome == DONE:
+            gh(cwd, "issue", "close", str(number), "--comment", note)
+        else:
+            gh(cwd, "issue", "comment", str(number), "--body", note)
+    except RunError as exc:
+        return fail(f"#{number} could not be recorded: {exc}")
 
     emit(
         {
             "verb": "record",
-            "ticket": args.ticket,
-            "outcome": args.outcome,
-            "commit": args.commit,
+            "ticket": number,
+            "outcome": outcome,
+            "commit": commit,
+            "closed": outcome == DONE,
         }
     )
     return 0
@@ -481,7 +712,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     plan = sub.add_parser("plan", help="Print what a run would work.")
     plan.add_argument("--dry-run", action="store_true")
+    plan.add_argument("--model")
     add_yes_flag(plan)
+
+    claim = sub.add_parser("claim", help="Take one ticket before working it.")
+    claim.add_argument("--ticket", required=True, type=int)
+    add_yes_flag(claim)
 
     record = sub.add_parser("record", help="Record one ticket's outcome.")
     record.add_argument("--ticket", required=True, type=int)
@@ -500,9 +736,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
     cwd = Path.cwd()
     if args.verb == "plan":
-        return cmd_plan(cwd, dry_run=args.dry_run)
+        return cmd_plan(cwd, dry_run=args.dry_run, model=args.model)
+    if args.verb == "claim":
+        return cmd_claim(cwd, args.ticket)
     if args.verb == "record":
-        return cmd_record(args)
+        return cmd_record(cwd, args.ticket, args.outcome, args.commit)
     return cmd_report(cwd)
 
 

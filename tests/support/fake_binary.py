@@ -22,8 +22,10 @@ def fake_binary_on_path(directory: Path, name: str, script: str) -> dict[str, st
     """
 
     # Write the stand-in into a directory of its own, and make it runnable.
+    # A test standing in for two binaries at once puts both in that one
+    # directory, so a second call finds it already there.
     bin_dir = directory / "bin"
-    bin_dir.mkdir()
+    bin_dir.mkdir(exist_ok=True)
     executable = bin_dir / name
     executable.write_text(script, encoding="utf-8")
     executable.chmod(executable.stat().st_mode | stat.S_IEXEC)
