@@ -17,13 +17,13 @@ Write exactly this, last in the file, one blank line after whatever precedes it.
 ```markdown
 <!-- kntnt:tldr -->
 <!-- Managed block. Do not edit by hand — run /tldr to change or remove it. -->
-{the entire content of $HERE/mode.md, verbatim}
+{the entire content of $HERE/references/mode.md, verbatim}
 <!-- /kntnt:tldr -->
 ```
 
 - `--on` over an existing block rewrites it from the current `mode.md`, so `--on` is idempotent and doubles as the refresh.
 - `--off` removes the whole block, both markers included, and nothing else.
-- **Stale** — the lines between the second comment and the closing marker differ from `$HERE/mode.md`. `--status` reports it and names `/tldr --on --user` as the fix.
+- **Stale** — the lines between the second comment and the closing marker differ from `$HERE/references/mode.md`. `--status` reports it and names `/tldr --on --user` as the fix.
 - Two blocks in one file, or a marker without its pair: change nothing, report, ask.
 
 ## Confirmation

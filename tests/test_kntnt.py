@@ -3219,6 +3219,86 @@ def test_the_manager_separates_steps_from_manpages() -> None:
     assert "$HERE/steps/" in text
 
 
+# What each skill's body opens only when the situation arises, by the skill it
+# belongs to. Pinned here rather than discovered, because the point of ADR-0063
+# is that a reader can tell these files from the manpage without knowing them.
+_ON_DEMAND = {
+    ("agents", "agents-md"): ("gates.md", "placement.md", "writes.md"),
+    ("agents", "delegation"): ("mode.md", "persist.md"),
+    ("agents", "tldr"): ("mode.md", "persist.md", "shape.md"),
+    ("code", "commit"): ("changelog.md",),
+    ("code", "orchestrate"): (
+        "brief.md",
+        "repair.md",
+        "repaired.md",
+        "verify.md",
+        "wave.md",
+    ),
+}
+
+
+def test_what_a_skill_opens_on_demand_lives_under_references() -> None:
+    """ADR-0063: the spec's directory says what a flat root cannot."""
+
+    for (category, name), files in _ON_DEMAND.items():
+        directory = REPO_ROOT / "skills" / category / name
+        for file in files:
+            assert (directory / "references" / file).is_file(), (name, file)
+            assert not (directory / file).exists(), (name, file)
+
+
+def test_the_paths_the_collection_publishes_are_left_where_they_are() -> None:
+    """ADR-0063's three deviations, each a published address rather than layout.
+
+    A manpage is fetched at `skills/<category>/<name>/help.md` and the Catalog
+    at `skills/kntnt/catalog.json` (ADR-0044); the Manager's `steps/` is what
+    the agent carries out rather than what it consults (ADR-0046).
+    """
+
+    for directory in _shipped_skills():
+        assert (directory / "help.md").is_file(), directory
+
+    manager = REPO_ROOT / "skills" / "kntnt"
+    assert (manager / "help.md").is_file()
+    assert (manager / "catalog.json").is_file()
+    assert (manager / "harness-paths.json").is_file()
+    assert (manager / "steps").is_dir()
+    assert (manager / "help").is_dir()
+
+
+def test_every_file_a_skill_body_points_at_is_where_it_says_it_is() -> None:
+    """A move is only finished when every body that opens the file agrees.
+
+    Two pointer shapes carry the collection: `$HERE/<path>`, resolved from the
+    directory holding `SKILL.md`, and a Markdown link, resolved from the file
+    the link sits in. Both are followed here so a rename cannot leave one of
+    them dangling in somebody's session.
+
+    `$HERE/../kntnt/scripts/kntnt.py` is the one pointer not followed. It is
+    the checker as an installed skill sees it, every skill a sibling of the
+    Manager; the source tree groups by category instead, and the body already
+    reads that path as one that may be absent.
+    """
+
+    here = re.compile(r"\$HERE/([A-Za-z0-9_./-]+\.(?:md|py))")
+    link = re.compile(r"\]\(([A-Za-z0-9_./-]+\.md)\)")
+
+    pointers = 0
+    for path in sorted((REPO_ROOT / "skills").rglob("*.md")):
+        root = next(p for p in path.parents if (p / "SKILL.md").is_file())
+        text = path.read_text(encoding="utf-8")
+        for target in here.findall(text):
+            if target.startswith("../kntnt/"):
+                continue
+            assert (root / target).is_file(), (path, target)
+            pointers += 1
+        for target in link.findall(text):
+            assert (path.parent / target).is_file(), (path, target)
+            pointers += 1
+
+    assert pointers
+
+
 def test_select_is_where_a_skill_is_read_about_before_it_is_enabled() -> None:
     """The route `/kntnt help <skill>` was withdrawn in favour of (ADR-0044).
 
@@ -3324,7 +3404,7 @@ def test_delegation_requires_subagents_and_says_so() -> None:
     assert 'kntnt.capabilities: "subagents"' in text
     assert "`capabilities`" in text
 
-    mode = (path.parent / "mode.md").read_text(encoding="utf-8")
+    mode = (path.parent / "references" / "mode.md").read_text(encoding="utf-8")
     assert "haiku" not in mode
     assert "Claude Code" not in mode
 

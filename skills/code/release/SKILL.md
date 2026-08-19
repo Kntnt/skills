@@ -38,7 +38,7 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 
 1. Run `uv run "$HERE/../commit/scripts/ship.py" plan release`. Done when stdout is a JSON plan.
 2. If the plan's `branch` is not `default_branch`, stop and say to integrate onto the default branch first.
-3. Follow `$HERE/../commit/changelog.md`. Empty `[Unreleased]` → stop; there is nothing to ship.
+3. Follow `$HERE/../commit/references/changelog.md`. Empty `[Unreleased]` → stop; there is nothing to ship.
 4. Version: the `X.Y.Z` argument if given; else bump `current_version` by `major`/`minor` if given; else `Removed` or breaking → major (below 1.0.0 → minor), else `Added` → minor, else patch. Done when the version string is known.
 5. Show the plan, the changelog diff, the version, and the build command if any. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
 6. Run `uv run "$HERE/../commit/scripts/ship.py" apply bump --version X.Y.Z`. Done when stdout is the version.

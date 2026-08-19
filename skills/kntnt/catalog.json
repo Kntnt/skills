@@ -5,7 +5,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "05de4031b0ba8dff865a0b47e13ec9e315b1a989b4cbc25384eee7716b0ef478",
+      "digest": "0730104b386f836e4ceab7065156010a2f175ca5bf743ec08a6f1b7d9459b8ef",
       "binaries": [
         "git",
         "uv"
@@ -18,7 +18,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "10b9e13645724b5f7f04eda67c3270e3c7a312ea81b17aa139faa55540d087fd",
+      "digest": "f6e1c1da660c0c85b5fb5eb792d9f9f69e06423531d4fc592bf884896ce27250",
       "binaries": [
         "uv"
       ],
@@ -32,7 +32,7 @@
       "name": "tldr",
       "category": "agents",
       "description": "Summarise what was just said as a TL;DR, and turn TL;DR mode on or off so replies stay short and say what needs you.",
-      "digest": "f6e0fb5409490ff4f53cd613d74b0df4802c06b341e561ca4f7d0c8f90d729a8",
+      "digest": "53f354a26ea2eb37f497cde0a6512371ebe75e5eec84285eb576ab73b7a1b11a",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -42,7 +42,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "79a7b9c2168ce42d8ac09644f8bd8d0f43963be720218b104f6dc80a6c6455dd",
+      "digest": "c0ca1d034bd188d0442e8ce834a73164e657f0f47628b8a20b07d51a2822ab5b",
       "binaries": [
         "git",
         "uv"
@@ -55,7 +55,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "969f5b33f2226273d9711b46e1af237d2e4090ea05d37e15f0c30521e6b7bae9",
+      "digest": "ba32dc4e3fcf477efccc7029e40e656b0f358c278fe8617e03cff812044c60cf",
       "binaries": [
         "git",
         "gh",
@@ -86,7 +86,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "d7c0c111915f570b407092f22e7d85d2ce088f24897a45a7acfcec45e82bf549",
+      "digest": "1905e628e1830fcac927afb465c26a736b5d978f36dfca33d3855ecdc64f7bbc",
       "binaries": [
         "git",
         "uv"

@@ -37,7 +37,7 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 
 1. Run `uv run "$HERE/scripts/ship.py" plan commit`. Done when stdout is a JSON plan, or the command exits 2.
 2. Exit 2: say there is nothing to commit, and stop.
-3. Follow `$HERE/changelog.md`. Done when every real change is recorded in `CHANGELOG.md` — in `[Unreleased]` or already in a dated version section.
+3. Follow `$HERE/references/changelog.md`. Done when every real change is recorded in `CHANGELOG.md` — in `[Unreleased]` or already in a dated version section.
 4. If the plan has `gitignore_proposal`, keep it for the gate. Done when the proposal is ready or none is needed.
 5. Message: the `"message"` argument if given, otherwise one concrete subject line from the changelog entries just written, or from `git diff` when there is no user-facing entry. Done when the message is a single subject line.
 6. Show the changelog diff, the message, and the proposed `.gitignore` if any. Wait unless `--yes`. Done when the user confirms or `--yes` is set.

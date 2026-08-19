@@ -6,7 +6,7 @@ So audience decides placement inside a skill, exactly as it decides placement in
 
 - **What the agent executes** stays in the body — the Steps, the dependency check, the parse rules it carries out.
 - **What a user reads** is `help.md`, and `--help` is its route (ADR-0044). Nothing in the body restates it.
-- **What the agent needs only sometimes** is a sibling file the body names, opened when the situation arises: `gates.md`, `placement.md`, `writes.md`, `mode.md`, `persist.md`, `changelog.md`, and the Manager's `steps/<verb>.md`.
+- **What the agent needs only sometimes** is a file the body names, opened when the situation arises: `references/gates.md`, `references/placement.md`, `references/writes.md`, `references/mode.md`, `references/persist.md`, `references/changelog.md`, and the Manager's `steps/<verb>.md`.
 
 The test is whether removing a passage changes what the agent does. An `## Arguments` section that describes flags the Steps already act on fails it: the Steps say *wait unless `--yes`*, and the description above them says the same thing to nobody who will act on it. `delegation` keeps its `## Arguments`, and the distinction is the whole rule — its entries are not descriptions of flags but the parse rules themselves, and step 1 has nothing to carry out without them. Four skills lost the section; one kept it; neither outcome was about length.
 

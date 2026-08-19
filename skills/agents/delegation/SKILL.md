@@ -51,7 +51,7 @@ A flag is refused rather than ignored where it has no work to do here, and an in
 
 ## The mode
 
-`$HERE/mode.md` is the single source of truth for what the mode says. Read it, and copy it verbatim wherever it is needed; state it in no other words.
+`$HERE/references/mode.md` is the single source of truth for what the mode says. Read it, and copy it verbatim wherever it is needed; state it in no other words.
 
 Two states, no third:
 
@@ -69,7 +69,7 @@ The verdict is the effective state here and now:
 ## Steps
 
 1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/delegation --help` for the page in full. Change nothing and stop. Done when scope and state are settled, or you have stopped.
-2. Scope `project` or `user`, any state: read [`persist.md`](persist.md) and follow it, then go to the report. Done when the block is written, removed, or read.
-3. Session `on`, `off`, or a toggle of the current verdict. Going on: read `$HERE/mode.md` and adopt it as a standing instruction for the rest of this session. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
+2. Scope `project` or `user`, any state: read [`persist.md`](references/persist.md) and follow it, then go to the report. Done when the block is written, removed, or read.
+3. Session `on`, `off`, or a toggle of the current verdict. Going on: read `$HERE/references/mode.md` and adopt it as a standing instruction for the rest of this session. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
 4. Write `{"active": true}` or `{"active": false}`, and nothing else, to `kntnt-delegation.json` in whatever per-session scratchpad or temporary directory your harness gives you, so a compaction cannot lose the state. No such directory: the conversation alone carries it. `status` writes nothing. Done when that file matches the session state, or there is nowhere to write it.
 5. Report one line per scope touched — its state, then the verdict — and name any disagreement between the two, and any staleness found. Done when that report is shown.
