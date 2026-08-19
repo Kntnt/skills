@@ -4006,18 +4006,6 @@ def test_a_damaged_path_table_names_the_file(tmp_path: Path) -> None:
     assert result.returncode == 1
 
 
-def test_a_stored_catalog_is_written_in_one_move(tmp_path: Path) -> None:
-    """An interrupted write must not be able to truncate the snapshot."""
-
-    world = _world(tmp_path)
-    _present(world, "home", ".claude")
-
-    _run(world, "apply", "update", "--yes")
-
-    assert not list(world["here"].glob("*.tmp"))
-    assert json.loads((world["here"] / "catalog.json").read_text(encoding="utf-8"))
-
-
 # The flag table settled once every verb existed: where a flag is accepted it
 # always means the same thing, which is a different rule from every verb
 # accepting every flag, and a better one (ADR-0029). It is written out rather

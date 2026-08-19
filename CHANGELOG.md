@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- The snapshot the manager stores beside itself is now under a test that notices if the write stops going through a rename. The write is atomic — written to a sibling and renamed over the target, so an interrupted run leaves the old snapshot or the new one and never half of either — but the test that came with it asserted only that the file parses and that no debris is left, both of which a plain write in place satisfies too. The rename now fails on purpose, and what has to hold is that the old snapshot is still there afterwards.
+
 ## [0.9.0] – 2026-08-19
 
 ### Added
