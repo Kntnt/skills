@@ -4,11 +4,11 @@ Work the tracker's ready-for-agent tickets unattended, on the branch you are alr
 
 ## Synopsis
 
-`/orchestrate [--dry-run] [--model <name>] [--yes]`
+`/orchestrate [#<ticket-or-spec>] [--dry-run] [--model <name>] [--yes]`
 
 ## Description
 
-Reads the issue tracker for this repository, works out which tickets an unattended run can start, and then works them: every open ticket carrying `ready-for-agent`, one at a time. A ticket without that label never appears, because a ticket without it is unfinished thinking and is never built.
+Reads the issue tracker for this repository, works out which tickets an unattended run can start, and then works them: every open ticket carrying `ready-for-agent`, one at a time, or the part of them you aimed the run at. A ticket without that label never appears, because a ticket without it is unfinished thinking and is never built.
 
 The blocking edges between those tickets make the plan a wave plan rather than a list. Wave one is what may start now; each later wave is what the wave before it unblocks. An edge comes from the tracker's own blocked-by relation, and where a ticket carries none, from a `Blocked by` line in its body naming other tickets — which is how the ticket breakdown writes an edge the tracker has no relation for. The body is that fallback and not a second source: where the relation carries any edge at all, it is the whole of that ticket's edges. A body edge is a bare `#number`; one written as `owner/repo#number` is refused rather than read, because a run reads one repository's tracker and cannot tell such a reference in it from one somewhere else. A blocker that is already closed names work that exists and blocks nothing.
 
@@ -20,6 +20,17 @@ Only then is the ticket **closed**, together with the commit that carries the wo
 
 Every outcome is written on the ticket it belongs to, which is where the next run reads it back from. So what has been recorded changes what comes next: a ticket already recorded is never offered again, and a ticket whose blocker failed comes back **stranded** — not workable, because the work it builds on does not exist, and not missing from the account either, which is what a loop that only tracks what it can start drops without saying so.
 
+## Aiming the run
+
+Typed bare, the run works every open ticket carrying the label. Name a ticket or a spec and it works that instead:
+
+- **A ticket** — `/orchestrate #14` — works that ticket and no other. This is how one ticket is picked up on its own, without replaying the rest of the graph.
+- **A spec** — `/orchestrate #6` — works that spec's children, so tickets from an unrelated effort in the same tracker are left alone. The spec itself is never built, even where it carries the label: what has children is the shape of other work rather than work.
+
+Which of the two you named is the tracker's answer and not a guess. A reference the tracker files children under is a spec; where it files none, a ticket in scope naming it as its parent says the same thing, that being the other way the ticket breakdown writes the relation. Anything else the tracker can answer for is a ticket. A reference nothing can resolve — a number the tracker does not know, something that is not a number, one written as `owner/repo#number`, or two references where a run has one scope — is named as such and nothing is started.
+
+Aiming a run narrows what it works and changes nothing else about it. A named ticket still waits for the work it is blocked by, and is reported as waiting rather than built on top of code that does not exist. A ticket whose outcome a run has already recorded is still settled, and naming it does not offer it again — clear that outcome from the ticket if you mean to build it afresh.
+
 ## Continuing an interrupted run
 
 A run that was interrupted — the machine slept, the session was killed, you closed the laptop — is continued by starting it again exactly as you started it the first time. There is no resume flag, and none to forget: a ticket already recorded is never offered again, so an interruption costs you the tickets that were left rather than the ones that were built, and the ticket the run was on when it stopped is picked up again rather than treated as taken.
@@ -28,7 +39,7 @@ What makes that work is the tracker: outcomes are written on the tickets themsel
 
 ## The report
 
-The run ends with one report rather than a running commentary, so you read the whole night in one sitting. Every ticket in scope is in it exactly once, under one of five outcomes:
+The run ends with one report rather than a running commentary, so you read the whole night in one sitting. Every ticket in scope is in it exactly once — the whole label where you named nothing, and what you aimed the run at where you did — under one of five outcomes:
 
 - **done** — built, independently verified, and closed on the commit that carries the work.
 - **failed** — verification did not pass. The work is still on the branch and was not reverted, so you can look at it.
@@ -40,7 +51,7 @@ There is no sixth pile and no ticket in two of them. A ticket the run dropped in
 
 ## Options
 
-- `--dry-run` — plan the run, print what would be worked, and start nothing.
+- `--dry-run` — plan the run, print what would be worked, and start nothing. It reads the run you aimed, so a scope is honoured here exactly as it is when work starts.
 - `--model <name>` — the model the building subagents run on, so mechanical work can run cheaper than judgement work. Verification is not affected.
 - `--yes` — assume yes: answer any question the run would otherwise ask.
 

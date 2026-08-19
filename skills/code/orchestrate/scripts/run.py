@@ -107,6 +107,15 @@ BARE_REFERENCE = re.compile(r"^(?:\s*#\d+\s*,?)+$")
 # ticket workable without saying so.
 QUALIFIED_REFERENCE = re.compile(r"[\w.-]+/[\w.-]+#\d+")
 
+# What a run was aimed at, written the way a developer writes a reference: a
+# bare number, marked up as one or not.
+SCOPE_REFERENCE = re.compile(r"^#?(\d+)$")
+
+# The two things a reference can name. A spec scopes the run to its children
+# and is never itself built; a ticket scopes it to itself.
+SPEC = "spec"
+TICKET = "ticket"
+
 
 class RunError(RuntimeError):
     """A git or tracker command the engine depends on failed."""
@@ -416,9 +425,10 @@ class Plan:
     was interrupted before recording, which are in `workable` like any other,
     the claim on them being already its own.
 
-    `model` is the model the building subagents run on, and `state` is where
-    the run left what it remembers of itself, both carried here because the
-    plan is where the run says what it is about to do.
+    `model` is the model the building subagents run on, `scope` what the run
+    was aimed at where it was aimed at anything, and `state` is where the run
+    left what it remembers of itself — all three carried here because the plan
+    is where the run says what it is about to do.
     """
 
     verb: str
@@ -430,6 +440,7 @@ class Plan:
     branch: str
     default_branch: str | None
     label: str
+    scope: dict[str, Any] | None
     tickets: list[dict[str, Any]]
     workable: list[int]
     claimed: list[int]
@@ -618,6 +629,127 @@ def parent_of(item: dict[str, Any]) -> int | None:
     return body_parent(str(item["body"]))
 
 
+def named_parent(item: dict[str, Any]) -> int | None:
+    """Return the spec *item* belongs to, saying which ticket carries a bad line.
+
+    The reference alone would leave the whole label to be searched by hand for
+    whichever ticket nobody can read.
+    """
+
+    try:
+        return parent_of(item)
+    except RunError as exc:
+        raise RunError(f"#{int(item['number'])}: {exc}") from exc
+
+
+@dataclass
+class Scope:
+    """What one run was aimed at, and which of two things the reference named.
+
+    A run given no reference has no scope at all: every ticket the label holds
+    is in, which is what a bare invocation has always meant. A reference
+    narrows the set the same questions are asked of and changes no rule about
+    any ticket in it — an outcome already recorded still settles a ticket
+    somebody names, and a blocking edge still holds one back (ADR-0053).
+
+    `kind` is what the reference resolved to, `number` the ticket it named, and
+    `reference` what the developer wrote, kept so the plan answers in the terms
+    it was asked in.
+    """
+
+    reference: str
+    kind: str
+    number: int
+
+
+def scope_number(reference: str) -> int:
+    """Return the ticket *reference* names, or refuse rather than guess at it.
+
+    Every way of guessing is worse than stopping: dropping a reference nobody
+    can read works the whole tracker under an argument that asked for part of
+    it, and picking one of two readings works tickets the developer never
+    named.
+    """
+
+    # A reference in another tracker's terms is refused for the reason a body
+    # edge written that way is: one repository's tracker is all a run reads.
+    named = reference.strip()
+    qualified = QUALIFIED_REFERENCE.search(named)
+    if qualified:
+        raise RunError(
+            f"'{qualified.group()}' names another repository's tracker, and a "
+            "run reads one: write it as #number"
+        )
+
+    # One reference, and one that reads as a number: a run has one scope, and a
+    # reference nothing can read is not one to guess the rest of the tracker at.
+    written = [part for part in re.split(r"[\s,]+", named) if part]
+    numbers = [
+        found.group(1)
+        for part in written
+        if (found := SCOPE_REFERENCE.match(part)) is not None
+    ]
+    if not numbers or len(numbers) != len(written):
+        raise RunError(f"'{named}' names no ticket or spec: write it as #number")
+    if len(numbers) > 1:
+        raise RunError(f"'{named}' names more than one ticket, and a run has one scope")
+
+    return int(numbers[0])
+
+
+def native_children(cwd: Path, number: int) -> list[int]:
+    """Return the tickets the tracker itself files under *number*.
+
+    This is the relation a `Parent` line in a body stands in for, and asking
+    for it is also how a reference the tracker can answer for is told from one
+    it cannot.
+    """
+
+    try:
+        view = ticket_view(cwd, number, "number,subIssues")
+        return [int(node["number"]) for node in view["subIssues"]["nodes"]]
+    except (RunError, KeyError) as exc:
+        raise RunError(
+            f"#{number} is what this run was aimed at, and the tracker cannot "
+            f"say what it is: {exc}"
+        ) from exc
+
+
+def resolve_scope(cwd: Path, reference: str, listed: list[dict[str, Any]]) -> Scope:
+    """Work out what *reference* aims the run at: a spec's children, or a ticket.
+
+    A reference the tracker files children under is a spec, and the body is the
+    same fallback here as it is for a blocking edge: where the relation carries
+    nothing, a ticket naming this one as its parent settles it. Everything else
+    the tracker can answer for is a ticket, and is worked alone. Children win
+    that reading wherever both are available, because a spec is the shape of
+    other work rather than work itself, and building one is what nobody meant.
+    """
+
+    # What the tracker files children under is a spec, and asking settles both
+    # halves of the question: what the reference is, and whether it is anything.
+    number = scope_number(reference)
+    if native_children(cwd, number):
+        return Scope(reference=reference, kind=SPEC, number=number)
+
+    # Nothing filed under it there: a ticket naming it as its parent is the
+    # other way the breakdown writes the relation, and says the same thing.
+    written = any(named_parent(item) == number for item in listed)
+    return Scope(reference=reference, kind=SPEC if written else TICKET, number=number)
+
+
+def in_scope(item: dict[str, Any], scope: Scope | None) -> bool:
+    """Whether *item* is one of the tickets the run was aimed at."""
+
+    if scope is None:
+        return True
+
+    if scope.kind == TICKET:
+        return int(item["number"]) == scope.number
+
+    return named_parent(item) == scope.number
+
+
 def waves_of(tickets: list[Ticket]) -> tuple[list[list[int]], list[int]]:
     """Lay *tickets* out in waves, and name the ones no wave can hold.
 
@@ -744,16 +876,16 @@ def ticket_from(
     )
 
 
-def tickets_in_scope(cwd: Path) -> list[Ticket]:
-    """Return the open tickets carrying the ready label, oldest first.
+def open_listing(cwd: Path) -> list[dict[str, Any]]:
+    """Return the open tickets the label holds, as the tracker answers for them.
 
-    Ordered by number rather than by whatever order the tracker answers in, so
-    that a plan is the same plan on two invocations with nothing changed.
+    Asked for by label, a ticket without that label being unfinished thinking
+    that is never worked. What a run was aimed at narrows this afterwards: the
+    whole label is read either way, because an edge out of the aim points at a
+    ticket in here and its state settles whether it still blocks.
     """
 
-    # Ask the tracker for the whole scope, and for it by label: a ticket
-    # without that label is unfinished thinking and is never worked.
-    listed = listed_tickets(
+    return listed_tickets(
         cwd,
         "--state",
         "open",
@@ -761,8 +893,38 @@ def tickets_in_scope(cwd: Path) -> list[Ticket]:
         "number,title,url,body,parent,assignees,blockedBy,comments",
     )
 
-    # Every ticket in scope is open, the query having asked for open ones, so
-    # an edge that points into the scope costs the tracker no second question.
+
+def closed_listing(cwd: Path) -> list[dict[str, Any]]:
+    """Return the finished tickets this machine's runs took.
+
+    Narrowed to those, because without it the query is every ticket the label
+    has ever closed, which grows past a page and can only refuse.
+    """
+
+    return listed_tickets(
+        cwd,
+        "--state",
+        "closed",
+        "--assignee",
+        CLAIM_ASSIGNEE,
+        "--json",
+        "number,title,url,body,parent,assignees,comments",
+    )
+
+
+def tickets_in_scope(
+    cwd: Path, listed: list[dict[str, Any]], scope: Scope | None
+) -> list[Ticket]:
+    """Return the open tickets the run was aimed at, oldest first.
+
+    Ordered by number rather than by whatever order the tracker answers in, so
+    that a plan is the same plan on two invocations with nothing changed.
+    """
+
+    # Every ticket the label holds is open, the query having asked for open
+    # ones, so an edge pointing at one costs the tracker no second question —
+    # including an edge pointing out of what the run was aimed at, which is
+    # work this run will not do and still has to wait for.
     states = {int(item["number"]): "OPEN" for item in listed}
 
     # A body that cannot be read stops the plan, and says which ticket to go
@@ -770,6 +932,8 @@ def tickets_in_scope(cwd: Path) -> list[Ticket]:
     # hand for whichever ticket carries it.
     tickets = []
     for item in listed:
+        if not in_scope(item, scope):
+            continue
         number = int(item["number"])
         try:
             outcome, commit = recorded_against(item)
@@ -787,7 +951,9 @@ def tickets_in_scope(cwd: Path) -> list[Ticket]:
     return sorted(tickets, key=lambda ticket: ticket.number)
 
 
-def tickets_recorded_done(cwd: Path) -> list[Ticket]:
+def tickets_recorded_done(
+    listed: list[dict[str, Any]], scope: Scope | None
+) -> list[Ticket]:
     """Return the tickets a run closed as done, oldest first.
 
     Done is the one outcome that takes a ticket out of the open scope, so the
@@ -798,24 +964,13 @@ def tickets_recorded_done(cwd: Path) -> list[Ticket]:
     check.
     """
 
-    # Ask for the closed half of the scope, narrowed to the tickets this
-    # machine's runs took: without that the query is every ticket the label has
-    # ever closed, which grows past a page and can only refuse.
-    listed = listed_tickets(
-        cwd,
-        "--state",
-        "closed",
-        "--assignee",
-        CLAIM_ASSIGNEE,
-        "--json",
-        "number,title,url,body,parent,assignees,comments",
-    )
-
     # No edge is read off a finished ticket. There is nothing left for it to
     # wait for, and asking the tracker about a blocker named in its body is a
     # question whose answer could only ever fail the report.
     tickets = []
     for item in listed:
+        if not in_scope(item, scope):
+            continue
         number = int(item["number"])
         outcome, commit = recorded_against(item)
         if outcome != DONE:
@@ -866,8 +1021,53 @@ def run_base(cwd: Path, tickets: list[Ticket]) -> str:
         return oldest
 
 
+def claimed_elsewhere(
+    remembered: RunState | None,
+    scope: Scope | None,
+    listed: list[dict[str, Any]],
+    tickets: list[Ticket],
+) -> set[int]:
+    """Return the live claims of this run's that the plan was not aimed at.
+
+    A run aimed at part of the graph revises only the claims it read about. A
+    claim an earlier, wider plan of the same run took stands where it is, or
+    the next invocation would find this run's own claim unaccounted for and
+    read it as a stranger's — which is the one thing the state exists to
+    prevent.
+
+    Only a claim the label still holds open survives that. A ticket the tracker
+    has finished with is one this run no longer holds, and preserving it would
+    leave an aimed run's note growing with numbers a bare run prunes.
+    """
+
+    if scope is None or remembered is None:
+        return set()
+
+    open_now = {int(item["number"]) for item in listed}
+    return open_now.intersection(remembered.claimed).difference(
+        ticket.number for ticket in tickets
+    )
+
+
+def no_ticket_reason(scope: Scope | None) -> str:
+    """Say why there is nothing to work, in the terms the run was asked in."""
+
+    if scope is None:
+        return f"no open ticket carries '{READY_LABEL}'"
+
+    if scope.kind == TICKET:
+        return f"#{scope.number} is not an open ticket carrying '{READY_LABEL}'"
+
+    return f"no child of #{scope.number} is an open ticket carrying '{READY_LABEL}'"
+
+
 def build_plan(
-    cwd: Path, *, dry_run: bool, model: str | None, state_path: Path | None
+    cwd: Path,
+    *,
+    dry_run: bool,
+    model: str | None,
+    state_path: Path | None,
+    reference: str | None,
 ) -> Plan:
     """Gather what a run in *cwd* would work, and whether it may start."""
 
@@ -878,7 +1078,9 @@ def build_plan(
     branch = current_branch(cwd)
     default = default_branch(cwd)
     remembered = read_state(state_path, branch)
-    tickets = tickets_in_scope(cwd)
+    listed = open_listing(cwd)
+    scope = resolve_scope(cwd, reference, listed) if reference is not None else None
+    tickets = tickets_in_scope(cwd, listed, scope)
     recorded = [ticket.number for ticket in tickets if ticket.outcome]
     stranded = stranded_behind(tickets)
 
@@ -916,6 +1118,7 @@ def build_plan(
         branch=branch,
         default_branch=default,
         label=READY_LABEL,
+        scope=None if scope is None else asdict(scope),
         tickets=[asdict(ticket) for ticket in tickets],
         workable=workable,
         claimed=claimed,
@@ -944,7 +1147,7 @@ def build_plan(
         plan.reason = f"on the default branch '{branch}'"
     elif not tickets:
         plan.ready = False
-        plan.reason = f"no open ticket carries '{READY_LABEL}'"
+        plan.reason = no_ticket_reason(scope)
     elif not frontier:
         plan.ready = False
         plan.reason = (
@@ -970,7 +1173,10 @@ def build_plan(
                 branch=branch,
                 label=READY_LABEL,
                 login=login or (remembered.login if remembered else None),
-                claimed=resuming,
+                claimed=sorted(
+                    set(resuming)
+                    | claimed_elsewhere(remembered, scope, listed, tickets)
+                ),
                 base=run_base(cwd, tickets),
             ),
         )
@@ -979,12 +1185,23 @@ def build_plan(
 
 
 def cmd_plan(
-    cwd: Path, *, dry_run: bool, model: str | None, state_path: Path | None
+    cwd: Path,
+    *,
+    dry_run: bool,
+    model: str | None,
+    state_path: Path | None,
+    reference: str | None,
 ) -> int:
     """Print the plan, and answer whether work may start."""
 
     try:
-        plan = build_plan(cwd, dry_run=dry_run, model=model, state_path=state_path)
+        plan = build_plan(
+            cwd,
+            dry_run=dry_run,
+            model=model,
+            state_path=state_path,
+            reference=reference,
+        )
     except RunError as exc:
         return fail(str(exc))
 
@@ -1133,7 +1350,7 @@ def cmd_record(
     return 0
 
 
-def cmd_report(cwd: Path) -> int:
+def cmd_report(cwd: Path, reference: str | None) -> int:
     """Print the consolidated report: every ticket in scope, and its outcome.
 
     One report rather than a running commentary, and every ticket in scope in
@@ -1145,13 +1362,23 @@ def cmd_report(cwd: Path) -> int:
     claim, or by the run stopping before its wave came round.
     """
 
-    # The scope is asked for twice, because done is the one outcome that takes
-    # a ticket out of the open one by closing it.
+    # The label is asked for twice, because done is the one outcome that takes
+    # a ticket out of the open half by closing it. What the run was aimed at is
+    # resolved against both halves, so a spec whose children are all finished
+    # is still the spec it was named as.
     try:
         branch = current_branch(cwd)
-        open_scope = tickets_in_scope(cwd)
+        listed = open_listing(cwd)
+        finished = closed_listing(cwd)
+        scope = (
+            resolve_scope(cwd, reference, listed + finished)
+            if reference is not None
+            else None
+        )
+        open_scope = tickets_in_scope(cwd, listed, scope)
         tickets = sorted(
-            open_scope + tickets_recorded_done(cwd), key=lambda ticket: ticket.number
+            open_scope + tickets_recorded_done(finished, scope),
+            key=lambda ticket: ticket.number,
         )
         base = run_base(cwd, tickets)
     except RunError as exc:
@@ -1170,6 +1397,7 @@ def cmd_report(cwd: Path) -> int:
         {
             "verb": "report",
             "label": READY_LABEL,
+            "scope": None if scope is None else asdict(scope),
             "branch": branch,
             "base": base,
             "tickets": [asdict(ticket) for ticket in tickets],
@@ -1202,6 +1430,18 @@ def add_shared_flags(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--state-dir")
 
 
+def add_scope_flag(parser: argparse.ArgumentParser) -> None:
+    """Let a verb that reads the whole label be aimed at part of it.
+
+    Only the two verbs that read a set take it. A verb already given one ticket
+    by number is aimed, and taking a second way of saying which ticket would
+    state something untrue about what happened — which is where ADR-0029 draws
+    the line between a flag that is merely meaningless and one that misleads.
+    """
+
+    parser.add_argument("--scope")
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     """Parse the run CLI."""
 
@@ -1211,6 +1451,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan = sub.add_parser("plan", help="Print what a run would work.")
     plan.add_argument("--dry-run", action="store_true")
     plan.add_argument("--model")
+    add_scope_flag(plan)
     add_shared_flags(plan)
 
     claim = sub.add_parser("claim", help="Take one ticket before working it.")
@@ -1223,7 +1464,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     record.add_argument("--commit")
     add_shared_flags(record)
 
-    add_shared_flags(sub.add_parser("report", help="Print the consolidated report."))
+    report = sub.add_parser("report", help="Print the consolidated report.")
+    add_scope_flag(report)
+    add_shared_flags(report)
 
     return parser.parse_args(argv)
 
@@ -1236,13 +1479,17 @@ def main(argv: list[str] | None = None) -> int:
     state_path = state_file(args.state_dir)
     if args.verb == "plan":
         return cmd_plan(
-            cwd, dry_run=args.dry_run, model=args.model, state_path=state_path
+            cwd,
+            dry_run=args.dry_run,
+            model=args.model,
+            state_path=state_path,
+            reference=args.scope,
         )
     if args.verb == "claim":
         return cmd_claim(cwd, args.ticket, state_path)
     if args.verb == "record":
         return cmd_record(cwd, args.ticket, args.outcome, args.commit, state_path)
-    return cmd_report(cwd)
+    return cmd_report(cwd, args.scope)
 
 
 if __name__ == "__main__":

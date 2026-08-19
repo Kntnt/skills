@@ -171,9 +171,10 @@ def _tracker(
 
     *issues* names the tickets reachable by number rather than by label — the
     ones a blocking edge read out of a body can point at from outside the
-    scope, and the ones a verb that works a single ticket asks about by name.
-    Each is a partial ticket laid over an open, unlabelled, unclaimed one, so
-    a test states only the part it is about. A number that is not there is a
+    scope, the ones a verb that works a single ticket asks about by name, and
+    the ones a run is aimed at. Each is a partial ticket laid over an open,
+    unlabelled, unclaimed one that the tracker files no children under, so a
+    test states only the part it is about. A number that is not there is a
     ticket the tracker cannot answer for.
 
     *closed* holds the tickets the tracker answers for the ready label in its
@@ -198,7 +199,13 @@ def _tracker(
     folder = tmp_path / "issues"
     folder.mkdir()
     for number, issue in (issues or {}).items():
-        default = {"number": number, "state": "OPEN", "labels": [], "assignees": []}
+        default = {
+            "number": number,
+            "state": "OPEN",
+            "labels": [],
+            "assignees": [],
+            "subIssues": {"nodes": [], "totalCount": 0},
+        }
         (folder / f"{number}.json").write_text(
             json.dumps(default | issue), encoding="utf-8"
         )
@@ -233,6 +240,17 @@ def _ready(number: int, **fields: Any) -> dict[str, Any]:
     """Build the answer `gh issue view` gives for a workable ticket."""
 
     return {"labels": [{"name": "ready-for-agent"}]} | fields
+
+
+def _children(*numbers: int) -> dict[str, Any]:
+    """Build the sub-issue relation the tracker files a spec's children under.
+
+    This is the relation a `Parent` line in a body stands in for, and it is
+    what tells a reference naming a spec from one naming a ticket.
+    """
+
+    nodes = [{"number": number, "state": "OPEN"} for number in numbers]
+    return {"subIssues": {"nodes": nodes, "totalCount": len(nodes)}}
 
 
 def _gh_calls(env: dict[str, str]) -> str:
@@ -633,6 +651,7 @@ def test_plan_refuses_a_body_edge_naming_a_ticket_the_tracker_cannot_answer_for(
 
     assert result.returncode == 1
     assert "404" in result.stderr
+    assert result.stderr.startswith("error:")
 
 
 def test_plan_refuses_a_body_edge_written_in_another_trackers_terms(
@@ -969,6 +988,7 @@ def test_record_refuses_a_ticket_the_tracker_does_not_know(tmp_path: Path) -> No
 
     assert result.returncode == 1
     assert "404" in result.stderr
+    assert result.stderr.startswith("error:")
 
 
 def test_no_verb_pushes_or_makes_a_worktree(tmp_path: Path) -> None:
@@ -1630,3 +1650,349 @@ def test_the_run_state_names_the_commit_the_work_sits_on(tmp_path: Path) -> None
 
     state = json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))
     assert state["base"] == before
+
+
+def test_plan_given_a_ticket_reference_works_that_ticket_alone(
+    tmp_path: Path,
+) -> None:
+    """The developer aims the run at one ticket, and the rest of the tracker is
+    neither planned nor named."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+        issues={9: _ready(9)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#9", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["scope"] == {"reference": "#9", "kind": "ticket", "number": 9}
+    assert [entry["number"] for entry in plan["tickets"]] == [9]
+    assert plan["workable"] == [9]
+    assert "the graph" not in result.stdout
+
+
+def test_a_ticket_reference_does_not_lift_the_tickets_blocking_edges(
+    tmp_path: Path,
+) -> None:
+    """Naming a ticket says which ticket to work, never that the work it waits
+    on already exists. A blocker outside the scope is work the run cannot
+    reach, and the ticket is reported rather than built on top of nothing."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+            ]
+        },
+        issues={10: _ready(10)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "10", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert plan["workable"] == []
+    assert plan["never_workable"] == [10]
+
+
+def test_plan_given_a_spec_reference_works_that_specs_children(
+    tmp_path: Path,
+) -> None:
+    """A spec scopes the run to its children, so tickets of an unrelated effort
+    in the same tracker are left alone."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", parent=6),
+                _ticket(10, "the graph", parent=6),
+                _ticket(41, "another effort", parent=7),
+            ]
+        },
+        issues={6: _children(9, 10)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#6", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["scope"] == {"reference": "#6", "kind": "spec", "number": 6}
+    assert [entry["number"] for entry in plan["tickets"]] == [9, 10]
+    assert plan["workable"] == [9, 10]
+    assert "another effort" not in result.stdout
+
+
+def test_plan_given_a_spec_reference_reads_a_parent_named_only_in_a_body(
+    tmp_path: Path,
+) -> None:
+    """The tracker's own relation is the source where it carries one, and the
+    body is the same fallback for a parent as it is for a blocking edge."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", body="## Parent\n\n#6\n"),
+                _ticket(41, "another effort"),
+            ]
+        },
+        issues={6: _ready(6)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "6", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["scope"]["kind"] == "spec"
+    assert [entry["number"] for entry in plan["tickets"]] == [9]
+
+
+def test_plan_reads_a_reference_the_tracker_files_children_under_as_a_spec(
+    tmp_path: Path,
+) -> None:
+    """A spec carrying the label is still a spec: what has children is scoped
+    to them, and is never itself built."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(6, "the spec"),
+                _ticket(9, "the skeleton", parent=6),
+            ]
+        },
+        issues={6: _ready(6, **_children(9))},
+    )
+
+    result = _engine(repo, "plan", "--scope", "6", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["scope"]["kind"] == "spec"
+    assert [entry["number"] for entry in plan["tickets"]] == [9]
+
+
+def test_plan_refuses_a_reference_the_tracker_cannot_answer_for(
+    tmp_path: Path,
+) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", "--scope", "#404", env=env)
+
+    assert result.returncode != 0
+    assert not result.stdout
+    assert "404" in result.stderr
+    assert result.stderr.startswith("error:")
+
+
+def test_plan_refuses_a_reference_that_names_no_ticket(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", "--scope", "the graph", env=env)
+
+    assert result.returncode != 0
+    assert not result.stdout
+    assert "the graph" in result.stderr
+    assert result.stderr.startswith("error:")
+
+
+def test_plan_refuses_a_reference_written_in_another_trackers_terms(
+    tmp_path: Path,
+) -> None:
+    """A run reads one repository's tracker and cannot tell a reference in it
+    from one somewhere else, which is why a body edge written this way is
+    refused too."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", "--scope", "kntnt/skills#9", env=env)
+
+    assert result.returncode != 0
+    assert not result.stdout
+    assert "kntnt/skills#9" in result.stderr
+    assert result.stderr.startswith("error:")
+
+
+def test_plan_refuses_a_reference_naming_more_than_one_ticket(
+    tmp_path: Path,
+) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#9 #10", env=env)
+
+    assert result.returncode != 0
+    assert not result.stdout
+    assert "one scope" in result.stderr
+    assert result.stderr.startswith("error:")
+
+
+def test_a_dry_run_honours_the_scope_it_was_given(tmp_path: Path) -> None:
+    """The plan a dry run is read off is the plan a run would work, so the two
+    have to be aimed at the same tickets."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+        issues={9: _ready(9)},
+    )
+
+    result = _engine(repo, "plan", "--dry-run", "--scope", "#9", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert "dry run" in plan["reason"]
+    assert [entry["number"] for entry in plan["tickets"]] == [9]
+    assert plan["waves"] == [[9]]
+
+
+def test_report_accounts_for_the_scope_the_run_was_aimed_at(tmp_path: Path) -> None:
+    """A run aimed at one spec reports that spec's children and nothing else,
+    or the report would account for work the run never had."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", parent=6),
+                _ticket(41, "another effort", parent=7),
+            ]
+        },
+        issues={6: _children(9)},
+    )
+
+    result = _engine(repo, "report", "--scope", "#6", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["scope"] == {"reference": "#6", "kind": "spec", "number": 6}
+    assert [entry["number"] for entry in report["tickets"]] == [9]
+    assert report["never_on_frontier"] == [9]
+
+
+def test_a_scoped_plan_leaves_a_claim_outside_its_scope_where_it_is(
+    tmp_path: Path,
+) -> None:
+    """A run aimed at part of the graph revises only what it read about. A
+    claim an earlier, wider plan of this run took is still this run's own
+    afterwards, or the next bare invocation would read it as a stranger's."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", claimed_by=["me"]),
+                _ticket(10, "the graph"),
+            ]
+        },
+        issues={10: _ready(10)},
+    )
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+
+    result = _engine(
+        repo, "plan", "--scope", "10", "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode == 0, result.stderr
+    state = json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["claimed"] == [9]
+
+
+def test_plan_refuses_a_reference_that_says_nothing(tmp_path: Path) -> None:
+    """An empty reference is a reference nobody can read, and reading it as a
+    bare invocation would work the whole tracker under an argument that asked
+    for part of it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", "--scope", "", env=env)
+
+    assert result.returncode != 0
+    assert not result.stdout
+    assert result.stderr.startswith("error:")
+
+
+def test_a_ticket_reference_does_not_re_offer_a_ticket_already_recorded(
+    tmp_path: Path,
+) -> None:
+    """Naming a ticket says which ticket to work. It does not say that what a
+    run has already written on that ticket has stopped being true, so a
+    recorded outcome settles a named ticket exactly as it settles any other
+    (ADR-0053)."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", comments=[_recorded("failed")])
+            ]
+        },
+        issues={9: _ready(9)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#9", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert plan["recorded"] == [9]
+    assert plan["workable"] == []
+
+
+def test_a_scoped_plan_forgets_a_claim_the_label_no_longer_holds_open(
+    tmp_path: Path,
+) -> None:
+    """The note is the claims a run holds now. A claim the tracker has finished
+    with is pruned by an aimed plan exactly as a bare one prunes it, or the
+    note would only ever grow."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", claimed_by=["me"]),
+                _ticket(10, "the graph"),
+            ]
+        },
+        issues={10: _ready(10)},
+    )
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+
+    # The tracker as it stands once 9 has been closed by hand.
+    _refile(env, "open", [_ticket(10, "the graph")])
+
+    result = _engine(
+        repo, "plan", "--scope", "10", "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode == 0, result.stderr
+    state = json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["claimed"] == []
