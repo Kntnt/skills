@@ -73,6 +73,19 @@ CLAIM_ASSIGNEE = "@me"
 # same session finds what the last one left (ADR-0052).
 STATE_FILE = "kntnt-orchestrate.json"
 
+# What a run calls the working trees it builds tickets in, and the branches it
+# builds them on. They live under the repository's own git directory: a
+# developer who comes back mid-run finds their working tree exactly as they
+# left it, and `git status` says nothing about a run in progress (ADR-0054).
+WORKTREE_HOME = "kntnt-orchestrate"
+
+# The ceiling at which a run works one ticket at a time: the default, the
+# floor below which a ceiling would start nothing, and the point isolation
+# begins above. It is the run that needs no integration at all — the work
+# lands straight on the branch, with nothing to merge and no working tree to
+# make (ADR-0054).
+ONE_AT_A_TIME = 1
+
 # What the tracker calls a ticket that is finished. A blocker in this state
 # names work that already exists, so it blocks nothing.
 CLOSED = "CLOSED"
@@ -156,10 +169,21 @@ def git(cwd: Path, *args: str) -> str:
     return _output(cwd, "git", *args)
 
 
+def git_result(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    """Run git in *cwd* and return the whole result, exit code and all.
+
+    For the callers that act on a git command's failure rather than stopping
+    at it: a merge that collides is an answer, and so is a working tree that
+    will not go.
+    """
+
+    return _capture(cwd, "git", *args)
+
+
 def git_ok(cwd: Path, *args: str) -> bool:
     """Return True when a git command exits 0."""
 
-    return _capture(cwd, "git", *args).returncode == 0
+    return git_result(cwd, *args).returncode == 0
 
 
 def gh(cwd: Path, *args: str) -> str:
@@ -202,6 +226,40 @@ def default_branch(cwd: Path) -> str | None:
     return None
 
 
+def worktree_home(cwd: Path) -> Path:
+    """Return the directory a run keeps its ticket working trees in.
+
+    The git directory rather than the repository beside it, because a working
+    tree there would show up as untracked files in the developer's own — and
+    in whatever a builder is about to commit (ADR-0054).
+    """
+
+    common = Path(git(cwd, "rev-parse", "--git-common-dir").strip())
+    return (cwd / common).resolve() / WORKTREE_HOME
+
+
+def open_worktrees(cwd: Path) -> dict[int, str]:
+    """Return the working tree a run has open per ticket, read off git itself.
+
+    Git's own account of its working trees is the source: a run that made one
+    and was interrupted, and one whose ticket failed and whose tree was left
+    to be inspected, are the same fact on disk and are read the same way.
+    """
+
+    # A working tree of this run's is one git lists under the run's own
+    # directory, named for the ticket it holds.
+    home = worktree_home(cwd)
+    found: dict[int, str] = {}
+    for line in git(cwd, "worktree", "list", "--porcelain").splitlines():
+        if not line.startswith("worktree "):
+            continue
+        path = Path(line.removeprefix("worktree ").strip()).resolve()
+        if path.parent == home and path.name.isdigit():
+            found[int(path.name)] = str(path)
+
+    return found
+
+
 @dataclass
 class Ticket:
     """One ticket in scope, as the tracker describes it.
@@ -223,6 +281,12 @@ class Ticket:
     where nothing has been recorded. A ticket carrying an outcome is settled:
     it is never offered again, and what waits on it is stranded rather than
     workable.
+
+    `worktree` is the one thing here the tracker cannot say and the repository
+    can: where this ticket's work stands, for as long as a working tree of its
+    own holds it. It is None for a ticket built straight on the branch, and for
+    one whose tree was taken away when its work was merged — which leaves it
+    naming exactly the failures the machine kept for the developer to look at.
     """
 
     number: int
@@ -234,6 +298,7 @@ class Ticket:
     blocked_by: list[int]
     outcome: str | None
     commit: str | None
+    worktree: str | None = None
 
 
 @dataclass
@@ -425,6 +490,13 @@ class Plan:
     was interrupted before recording, which are in `workable` like any other,
     the claim on them being already its own.
 
+    `at_once` is the ceiling the developer set on how many tickets are built at
+    the same time, and `starting` is what that makes of the frontier: the
+    tickets this wave works, which is `workable` cut to the ceiling. `worktrees`
+    is the isolation decision the ceiling carries with it — above one, each
+    ticket is built in a working tree of its own, and at exactly one the work
+    lands straight on the branch with nothing to integrate (ADR-0054).
+
     `model` is the model the building subagents run on, `scope` what the run
     was aimed at where it was aimed at anything, and `state` is where the run
     left what it remembers of itself — all three carried here because the plan
@@ -435,6 +507,8 @@ class Plan:
     ready: bool
     reason: str | None
     dry_run: bool
+    at_once: int
+    worktrees: bool
     model: str | None
     state: str | None
     branch: str
@@ -443,6 +517,7 @@ class Plan:
     scope: dict[str, Any] | None
     tickets: list[dict[str, Any]]
     workable: list[int]
+    starting: list[int]
     claimed: list[int]
     resuming: list[int]
     recorded: list[int]
@@ -985,6 +1060,19 @@ def tickets_recorded_done(
     return sorted(tickets, key=lambda ticket: ticket.number)
 
 
+def say_where_work_stands(cwd: Path, tickets: list[Ticket]) -> None:
+    """Tell each of *tickets* which working tree still holds its work, if any.
+
+    Asked of the repository once and answered for the whole set, rather than
+    threaded through the reading of the tracker: where a ticket's work stands
+    is the repository's answer and the tracker has no opinion about it.
+    """
+
+    open_now = open_worktrees(cwd)
+    for ticket in tickets:
+        ticket.worktree = open_now.get(ticket.number)
+
+
 def run_base(cwd: Path, tickets: list[Ticket]) -> str:
     """Return the commit this run's work sits on top of.
 
@@ -1049,6 +1137,23 @@ def claimed_elsewhere(
     )
 
 
+def branch_refusal(branch: str, default: str | None) -> str | None:
+    """Return why a run may not work *branch*, or None where it may.
+
+    Asked wherever a run would write to the branch it is on — when it plans,
+    and again when it merges a ticket into it — so the one place an unattended
+    night must never land is refused in the same terms both times.
+    """
+
+    if default is None:
+        return (
+            "cannot tell which branch is the default; "
+            "name it with `git remote set-head origin --auto`"
+        )
+
+    return f"on the default branch '{branch}'" if branch == default else None
+
+
 def no_ticket_reason(scope: Scope | None) -> str:
     """Say why there is nothing to work, in the terms the run was asked in."""
 
@@ -1065,6 +1170,7 @@ def build_plan(
     cwd: Path,
     *,
     dry_run: bool,
+    at_once: int,
     model: str | None,
     state_path: Path | None,
     reference: str | None,
@@ -1081,6 +1187,7 @@ def build_plan(
     listed = open_listing(cwd)
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
     tickets = tickets_in_scope(cwd, listed, scope)
+    say_where_work_stands(cwd, tickets)
     recorded = [ticket.number for ticket in tickets if ticket.outcome]
     stranded = stranded_behind(tickets)
 
@@ -1113,6 +1220,8 @@ def build_plan(
         ready=True,
         reason=None,
         dry_run=dry_run,
+        at_once=at_once,
+        worktrees=at_once > ONE_AT_A_TIME,
         model=model,
         state=None,
         branch=branch,
@@ -1121,6 +1230,7 @@ def build_plan(
         scope=None if scope is None else asdict(scope),
         tickets=[asdict(ticket) for ticket in tickets],
         workable=workable,
+        starting=workable[:at_once],
         claimed=claimed,
         resuming=resuming,
         recorded=recorded,
@@ -1136,15 +1246,9 @@ def build_plan(
     if dry_run:
         plan.ready = False
         plan.reason = "dry run: nothing is started"
-    elif default is None:
+    elif (refused := branch_refusal(branch, default)) is not None:
         plan.ready = False
-        plan.reason = (
-            "cannot tell which branch is the default; "
-            "name it with `git remote set-head origin --auto`"
-        )
-    elif branch == default:
-        plan.ready = False
-        plan.reason = f"on the default branch '{branch}'"
+        plan.reason = refused
     elif not tickets:
         plan.ready = False
         plan.reason = no_ticket_reason(scope)
@@ -1188,16 +1292,26 @@ def cmd_plan(
     cwd: Path,
     *,
     dry_run: bool,
+    at_once: int,
     model: str | None,
     state_path: Path | None,
     reference: str | None,
 ) -> int:
     """Print the plan, and answer whether work may start."""
 
+    # A ceiling below one is a run that works no ticket at all, which is a run
+    # nobody meant — and it is settled before the tracker is read, an argument
+    # nothing can act on being no reason to go and ask about tickets.
+    if at_once < ONE_AT_A_TIME:
+        return fail(
+            "--at-once caps how many tickets are worked at once, so it is at least 1"
+        )
+
     try:
         plan = build_plan(
             cwd,
             dry_run=dry_run,
+            at_once=at_once,
             model=model,
             state_path=state_path,
             reference=reference,
@@ -1282,6 +1396,174 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     remember_claim(state_path, cwd, number)
     emit({"verb": "claim", "ticket": number, "claimed": True, "reason": None})
     return 0
+
+
+def cmd_isolate(cwd: Path, number: int) -> int:
+    """Give ticket *number* a working tree of its own, and say where it is."""
+
+    try:
+        return isolate(cwd, number)
+    except RunError as exc:
+        return fail(str(exc))
+
+
+def isolate(cwd: Path, number: int) -> int:
+    """Open the working tree ticket *number* is built in, or find the one open.
+
+    Tickets built at once cannot share one working tree, and the developer's is
+    not a place to build in: it is where they left it and it stays there. So
+    each ticket gets one, on a branch of its own cut from where the run branch
+    now stands — which is the code the earlier waves were integrated into.
+    """
+
+    run_branch = current_branch(cwd)
+    open_now = open_worktrees(cwd)
+
+    # The invocation is the resume here as everywhere else (ADR-0052): a ticket
+    # picked up again goes on in the working tree it was left in.
+    if number in open_now:
+        standing = Path(open_now[number])
+        emit(
+            {
+                "verb": "isolate",
+                "ticket": number,
+                "worktree": str(standing),
+                "branch": current_branch(standing),
+            }
+        )
+        return 0
+
+    # A branch with nothing checked out on it is work an earlier run left
+    # behind and this one would silently build over, so it is named instead.
+    branch = f"{WORKTREE_HOME}/{run_branch}/{number}"
+    if git_ok(cwd, "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"):
+        return fail(
+            f"#{number} already has the branch '{branch}' and no working tree "
+            "holding it: look at what is on it, then delete it"
+        )
+
+    path = worktree_home(cwd) / str(number)
+    try:
+        git(cwd, "worktree", "add", str(path), "-b", branch)
+    except RunError as exc:
+        raise RunError(f"#{number} could not be given a working tree: {exc}") from exc
+
+    emit({"verb": "isolate", "ticket": number, "worktree": str(path), "branch": branch})
+    return 0
+
+
+def cmd_integrate(cwd: Path, number: int) -> int:
+    """Merge ticket *number*'s work into the run branch and tidy up after it."""
+
+    try:
+        return integrate(cwd, number)
+    except RunError as exc:
+        return fail(str(exc))
+
+
+def integrate(cwd: Path, number: int) -> int:
+    """Bring ticket *number*'s work onto the branch the developer comes back to.
+
+    Called per verified ticket as its wave completes rather than at the end of
+    the run, because a ticket in a later wave is blocked by one in an earlier
+    wave: it builds on that code, and a working tree cut before the merge would
+    not have it.
+
+    A collision is an answer and not a breakage — the run branch is left as it
+    was and the losing ticket's working tree stands, so the collision can be
+    repaired from it.
+    """
+
+    branch = current_branch(cwd)
+    default = default_branch(cwd)
+    open_now = open_worktrees(cwd)
+
+    # A merge is the one gesture here that writes to the branch it is on, so
+    # the branch an unattended night must never land on is refused again.
+    refused = branch_refusal(branch, default)
+    if refused is not None:
+        return fail(refused)
+
+    # Nothing to merge is not a merge that failed: at a ceiling of one the
+    # work is on the branch already, and asking here is asking for a run that
+    # was never started this way.
+    if number not in open_now:
+        return fail(
+            f"#{number} has no working tree to integrate: a ceiling of one "
+            "commits straight to the branch and leaves nothing to merge"
+        )
+
+    # Work only the working tree holds would be swept away with it, so a
+    # builder that stopped mid-ticket is named rather than quietly discarded.
+    # Untracked files count: a file written and never added is the half of that
+    # work the merge cannot carry and the removal would destroy outright. What
+    # the repository ignores is not work and does not count.
+    path = Path(open_now[number])
+    if git_result(path, "status", "--porcelain").stdout:
+        return fail(
+            f"#{number} has work its working tree never committed, and merging "
+            f"the branch would leave it behind: look at {path}"
+        )
+
+    # The merge itself, kept as its own commit so what a ticket delivered
+    # stays legible on the branch afterwards.
+    built_on = current_branch(path)
+    merged = git_result(cwd, "merge", "--no-ff", "--no-edit", built_on)
+    if merged.returncode != 0:
+        return refuse_merge(cwd, number, path, merged)
+
+    # The machine ends tidy: what is merged is on the branch the developer
+    # comes back to, so the working tree it was built in and the branch it was
+    # built on are both spent. A tree that will not go is left standing and
+    # said so rather than reported gone.
+    commit = git(cwd, "rev-parse", "HEAD").strip()
+    removed = git_result(cwd, "worktree", "remove", "--force", str(path))
+    if removed.returncode == 0:
+        git_result(cwd, "branch", "--delete", built_on)
+
+    emit(
+        {
+            "verb": "integrate",
+            "ticket": number,
+            "merged": True,
+            "commit": commit,
+            "worktree": None if removed.returncode == 0 else str(path),
+            "collisions": [],
+            "reason": None,
+        }
+    )
+    return 0
+
+
+def refuse_merge(
+    cwd: Path, number: int, path: Path, merged: subprocess.CompletedProcess[str]
+) -> int:
+    """Undo a merge that did not go through, and say what stopped it."""
+
+    # What is left half-merged is read before the merge is undone, that being
+    # the only moment the repository can say which files the two tickets both
+    # touched.
+    collisions = git_result(cwd, "diff", "--name-only", "--diff-filter=U")
+    files = collisions.stdout.split()
+    git_result(cwd, "merge", "--abort")
+
+    emit(
+        {
+            "verb": "integrate",
+            "ticket": number,
+            "merged": False,
+            "commit": None,
+            "worktree": str(path),
+            "collisions": files,
+            "reason": (
+                f"#{number} collided with work already on the branch in "
+                + ", ".join(files)
+                if files
+                else (merged.stderr or merged.stdout).strip()
+            ),
+        }
+    )
+    return 2
 
 
 def outcome_note(outcome: str, commit: str | None) -> str:
@@ -1380,6 +1662,7 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
             open_scope + tickets_recorded_done(finished, scope),
             key=lambda ticket: ticket.number,
         )
+        say_where_work_stands(cwd, tickets)
         base = run_base(cwd, tickets)
     except RunError as exc:
         return fail(str(exc))
@@ -1450,6 +1733,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     plan = sub.add_parser("plan", help="Print what a run would work.")
     plan.add_argument("--dry-run", action="store_true")
+    plan.add_argument("--at-once", type=int, default=ONE_AT_A_TIME)
     plan.add_argument("--model")
     add_scope_flag(plan)
     add_shared_flags(plan)
@@ -1457,6 +1741,14 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     claim = sub.add_parser("claim", help="Take one ticket before working it.")
     claim.add_argument("--ticket", required=True, type=int)
     add_shared_flags(claim)
+
+    isolate = sub.add_parser("isolate", help="Give one ticket a working tree.")
+    isolate.add_argument("--ticket", required=True, type=int)
+    add_shared_flags(isolate)
+
+    integrate = sub.add_parser("integrate", help="Merge one ticket into the branch.")
+    integrate.add_argument("--ticket", required=True, type=int)
+    add_shared_flags(integrate)
 
     record = sub.add_parser("record", help="Record one ticket's outcome.")
     record.add_argument("--ticket", required=True, type=int)
@@ -1481,12 +1773,17 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_plan(
             cwd,
             dry_run=args.dry_run,
+            at_once=args.at_once,
             model=args.model,
             state_path=state_path,
             reference=args.scope,
         )
     if args.verb == "claim":
         return cmd_claim(cwd, args.ticket, state_path)
+    if args.verb == "isolate":
+        return cmd_isolate(cwd, args.ticket)
+    if args.verb == "integrate":
+        return cmd_integrate(cwd, args.ticket)
     if args.verb == "record":
         return cmd_record(cwd, args.ticket, args.outcome, args.commit, state_path)
     return cmd_report(cwd, args.scope)

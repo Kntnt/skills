@@ -991,9 +991,12 @@ def test_record_refuses_a_ticket_the_tracker_does_not_know(tmp_path: Path) -> No
     assert result.stderr.startswith("error:")
 
 
-def test_no_verb_pushes_or_makes_a_worktree(tmp_path: Path) -> None:
+def test_a_run_at_a_ceiling_of_one_pushes_nothing_and_makes_no_worktree(
+    tmp_path: Path,
+) -> None:
     """Nothing leaves the machine while the developer is asleep, and a ceiling
-    of one works the branch they were on rather than a worktree beside it."""
+    of one works the branch they were on rather than a working tree beside it:
+    the run reads what git has open, and opens none of its own."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -1011,9 +1014,13 @@ def test_no_verb_pushes_or_makes_a_worktree(tmp_path: Path) -> None:
     ):
         assert _engine(repo, *args, env=env).returncode == 0, args
 
-    ran = Path(env["SPY_LOG"]).read_text(encoding="utf-8")
-    assert "push" not in ran
-    assert "worktree" not in ran
+    ran = [
+        line.split()
+        for line in Path(env["SPY_LOG"]).read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    assert "push" not in [called[0] for called in ran]
+    assert ["worktree", "add"] not in [called[:2] for called in ran]
 
 
 def test_plan_refuses_a_body_naming_more_than_one_parent(tmp_path: Path) -> None:
@@ -1996,3 +2003,335 @@ def test_a_scoped_plan_forgets_a_claim_the_label_no_longer_holds_open(
     assert result.returncode == 0, result.stderr
     state = json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))
     assert state["claimed"] == []
+
+
+def test_plan_caps_how_many_tickets_are_started_at_once(tmp_path: Path) -> None:
+    """The ceiling is what keeps concurrent test suites from overloading the
+    machine and failing for the wrong reason. It caps what starts, and nothing
+    else: the whole frontier stays workable and is worked a ceiling at a
+    time."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph"),
+                _ticket(11, "the report"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", "--at-once", "2", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["at_once"] == 2
+    assert plan["workable"] == [9, 10, 11]
+    assert plan["starting"] == [9, 10]
+
+
+def test_a_ceiling_above_one_gives_each_ticket_its_own_working_tree(
+    tmp_path: Path,
+) -> None:
+    """Isolation is not an independent choice the developer makes separately:
+    more than one ticket at a time is more than one working tree, and exactly
+    one needs none."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+    )
+
+    alone = _engine(repo, "plan", env=env)
+    together = _engine(repo, "plan", "--at-once", "2", env=env)
+
+    assert alone.returncode == 0, alone.stderr
+    assert together.returncode == 0, together.stderr
+    assert json.loads(alone.stdout)["at_once"] == 1
+    assert json.loads(alone.stdout)["worktrees"] is False
+    assert json.loads(alone.stdout)["starting"] == [9]
+    assert json.loads(together.stdout)["worktrees"] is True
+
+
+def test_plan_refuses_a_ceiling_that_would_start_nothing(tmp_path: Path) -> None:
+    """A ceiling below one is a run that works no ticket at all, which is not a
+    run the developer can have meant."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", "--at-once", "0", env=env)
+
+    assert result.returncode == 1
+    assert not result.stdout
+    assert "at once" in result.stderr
+
+
+def test_isolate_gives_a_ticket_a_working_tree_of_its_own(tmp_path: Path) -> None:
+    """Two tickets built at once cannot share one working tree, and the
+    developer's own is not a place to build in either: it is where they left
+    it and stays there."""
+
+    repo = _init_repo(tmp_path / "proj")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    worktree = Path(answer["worktree"])
+    assert worktree.is_dir()
+    assert answer["branch"] != "work"
+    assert _git(worktree, "branch", "--show-current").stdout.strip() == answer["branch"]
+    assert _git(repo, "status", "--porcelain").stdout == ""
+
+
+def test_isolate_returns_the_working_tree_an_interrupted_run_already_made(
+    tmp_path: Path,
+) -> None:
+    """The invocation is the resume here as everywhere else: a ticket picked up
+    again goes on in the working tree it was left in rather than in a second
+    one beside it."""
+
+    repo = _init_repo(tmp_path / "proj")
+
+    first = _engine(repo, "isolate", "--ticket", "9")
+    second = _engine(repo, "isolate", "--ticket", "9")
+
+    assert first.returncode == 0, first.stderr
+    assert second.returncode == 0, second.stderr
+    assert json.loads(first.stdout) == json.loads(second.stdout)
+
+
+def test_integrate_merges_a_ticket_and_takes_its_working_tree_away(
+    tmp_path: Path,
+) -> None:
+    """The developer comes back to one branch and a tidy machine: the work is
+    on the branch they were on, and what it was built in is gone."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "read the blocking edges")
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["merged"] is True
+    assert answer["commit"] == _git(repo, "rev-parse", "HEAD").stdout.strip()
+    assert (repo / "graph.py").read_text(encoding="utf-8") == "edges\n"
+    assert not worktree.exists()
+    assert "kntnt-orchestrate" not in _git(repo, "branch", "--list").stdout
+
+
+def test_integrate_keeps_the_working_tree_of_a_ticket_it_could_not_merge(
+    tmp_path: Path,
+) -> None:
+    """Two tickets that touched the same code collide at the merge. The run
+    branch is left as it was rather than half-merged, and the losing ticket's
+    working tree stands so the collision can be repaired from it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    trees = {}
+    for number, written in ((9, "nine\n"), (10, "ten\n")):
+        tree = Path(
+            json.loads(_engine(repo, "isolate", "--ticket", str(number)).stdout)[
+                "worktree"
+            ]
+        )
+        (tree / "graph.py").write_text(written, encoding="utf-8")
+        _git(tree, "add", "graph.py")
+        _git(tree, "commit", "-m", f"build #{number}")
+        trees[number] = tree
+    assert _engine(repo, "integrate", "--ticket", "9").returncode == 0
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["merged"] is False
+    assert answer["collisions"] == ["graph.py"]
+    assert answer["worktree"] == str(trees[10])
+    assert trees[10].is_dir()
+    assert (repo / "graph.py").read_text(encoding="utf-8") == "nine\n"
+    assert _git(repo, "status", "--porcelain").stdout == ""
+
+
+def test_integrate_refuses_work_a_working_tree_never_committed(
+    tmp_path: Path,
+) -> None:
+    """A builder that stopped mid-ticket leaves work only its working tree
+    holds. Merging the branch and sweeping the tree away would take that work
+    with it without saying so."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "README.md").write_text("half a ticket\n", encoding="utf-8")
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert "never committed" in result.stderr
+    assert worktree.is_dir()
+
+
+def test_integrate_refuses_a_file_a_working_tree_never_added(tmp_path: Path) -> None:
+    """A file written and never added is the half of a stopped ticket's work
+    the merge cannot carry, and taking the working tree away would destroy it
+    outright rather than leave it somewhere to be found."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("never added\n", encoding="utf-8")
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert "never committed" in result.stderr
+    assert (worktree / "graph.py").is_file()
+
+
+def test_integrate_refuses_to_merge_into_the_default_branch(tmp_path: Path) -> None:
+    """An unattended night never lands on the branch it must not touch, whether
+    it got there by plan or by a verb called on its own."""
+
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "read the blocking edges")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert "default branch" in result.stderr
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == head
+    assert worktree.is_dir()
+
+
+def test_integrate_refuses_where_nothing_can_say_which_branch_is_the_default(
+    tmp_path: Path,
+) -> None:
+    """A merge writes to the branch it is on, so a repository that cannot name
+    the branch it must not touch is told so rather than merged into on the
+    chance that this one is not it."""
+
+    repo = _init_repo(tmp_path / "proj", initial="trunk", branch="work")
+    _git(repo, "branch", "-D", "trunk")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "read the blocking edges")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert "cannot tell which branch is the default" in result.stderr
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == head
+
+
+def test_a_failed_tickets_working_tree_stays_where_the_run_left_it(
+    tmp_path: Path,
+) -> None:
+    """The machine ends tidy except for the failures, which stay inspectable —
+    so the report says where the work of one stands."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    assert (
+        _engine(
+            repo, "record", "--ticket", "9", "--outcome", "failed", env=env
+        ).returncode
+        == 0
+    )
+    _refile(env, "open", [_ticket(9, "the skeleton", comments=[_recorded("failed")])])
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["failed"] == [9]
+    assert report["tickets"][0]["worktree"] == str(worktree)
+    assert worktree.is_dir()
+
+
+def test_report_names_the_tickets_a_stopped_run_never_attempted(
+    tmp_path: Path,
+) -> None:
+    """A suite that fails on the integrated branch stops the run rather than
+    spending the remaining hours building on broken code. What the run never
+    got to is named rather than dropped: a ticket dropped in silence is one the
+    developer would not know to pick up."""
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(10, "the graph", blocked_by=[(9, "CLOSED")]),
+                _ticket(11, "the report"),
+            ]
+        },
+        closed=[_ticket(9, "the skeleton", comments=[_recorded("done", head)])],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["done"] == [9]
+    assert report["never_on_frontier"] == [10, 11]
+    accounted = (
+        report["done"]
+        + report["failed"]
+        + report["conflicted"]
+        + report["stranded"]
+        + report["never_on_frontier"]
+    )
+    assert sorted(accounted) == [9, 10, 11]
+    assert len(accounted) == len(set(accounted))
+
+
+def test_no_verb_pushes_while_the_developer_is_asleep(tmp_path: Path) -> None:
+    """Isolating and integrating are git of a kind the earlier verbs never ran,
+    and nothing leaves the machine in either."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _git_spy(tmp_path)
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9", env=env).stdout)[
+            "worktree"
+        ]
+    )
+    (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "read the blocking edges")
+
+    assert _engine(repo, "integrate", "--ticket", "9", env=env).returncode == 0
+
+    ran = Path(env["SPY_LOG"]).read_text(encoding="utf-8").splitlines()
+    assert "push" not in [line.split()[0] for line in ran if line.strip()]

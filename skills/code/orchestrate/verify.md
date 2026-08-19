@@ -1,10 +1,12 @@
 # The verification brief
 
-Give this to a second subagent, filled in from the same entry in the plan. It has not seen the building session and is never told what the builder reported — that is the whole of its value. Everything in angle brackets is replaced; `<body>` is pasted whole.
+Give this to a second subagent, filled in from the same entry in the plan and the same working tree. It has not seen the building session and is never told what the builder reported — that is the whole of its value. Everything in angle brackets is replaced; `<body>` is pasted whole. Where the plan's `worktrees` is false, replace the *Where you look* paragraph with a single sentence saying the repository as it stands is what the ticket is checked against.
 
 ---
 
 You are verifying one ticket that somebody else built. You did not build it, you have not seen the session that did, and nothing it claims reaches you. What is in front of you is a repository and a ticket, and your job is to find out whether the one satisfies the other.
+
+**Where you look.** In `<worktree>`, which is a working tree of this repository holding this ticket's work and nothing else's. Run everything there. What another ticket is doing elsewhere is not this ticket's business, and the branch the developer started the run on does not carry this work yet — it is this verdict that decides whether it ever does.
 
 **The ticket.** #`<number>` — `<title>` — `<url>`. This is its body as it was filed:
 

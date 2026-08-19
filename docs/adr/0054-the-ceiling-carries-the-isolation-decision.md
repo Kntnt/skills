@@ -1,0 +1,15 @@
+# The ceiling carries the isolation decision
+
+An unattended run that works one ticket at a time is slower than the ticket graph requires: the tickets on the frontier wait on each other for no reason but the loop that offers them. Working them at once needs a ceiling, because concurrent test suites on one machine fail for the wrong reason. That much is the developer's call.
+
+Where each concurrent ticket is built is not. Two builders in one working tree is not a slower run, it is a broken one — two sets of edits interleaved in the same files and two commits nobody can separate. **So the ceiling carries the isolation decision with it: above one, each ticket gets a working tree of its own, and at exactly one there is none.** There is no flag for isolation, and no run that can ask for concurrency without it.
+
+**A second flag would only ever be answered one way.** The combinations are a ceiling above one without isolation, which corrupts the run, and a ceiling of one with isolation, which pays for a working tree, a branch, and a merge to build one ticket that could have been committed where the developer already stands. Neither is a run somebody would choose. A flag whose wrong answers are the only thing it adds is a flag that should not exist.
+
+**A ceiling of one stays what it was.** The work lands on the branch the developer is on, one commit per ticket, with nothing to merge and no working tree to clean up. That is the small run — a ticket picked up on its own, a retry, a graph one wave deep — and it costs the developer no integration at all.
+
+**The working trees live under the repository's own git directory,** at `.git/kntnt-orchestrate/<number>`. Beside the repository they would be somewhere on the developer's filesystem nobody asked the run to write to; inside the working tree they would be untracked files in the developer's `git status` and in whatever a builder is about to commit. Under the git directory they are neither: the developer's working tree is exactly as they left it, and git's own account of its working trees is what the run reads back to find them — which makes finding a working tree an interrupted run left and finding one a failed ticket kept the same question, asked the same way.
+
+**Integration happens at the wave boundary, not at the end.** A ticket in a later wave is blocked by one in an earlier wave, which is to say it builds on that code; a working tree cut before the earlier wave was merged would not have it. So each verified ticket is merged as its wave completes, the full verification runs once on the branch as it then stands — which is the only place two tickets that pass alone and fail together are caught — and a failure there stops the run rather than spending the remaining hours building on top of it.
+
+**What this costs.** A developer who wants concurrency without worktrees, or worktrees without concurrency, cannot have either. The first is not a thing that works, and the second is a cost with no benefit, so what is lost is a choice nobody had a reason to make.

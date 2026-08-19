@@ -4,19 +4,23 @@ Work the tracker's ready-for-agent tickets unattended, on the branch you are alr
 
 ## Synopsis
 
-`/orchestrate [#<ticket-or-spec>] [--dry-run] [--model <name>] [--yes]`
+`/orchestrate [#<ticket-or-spec>] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`
 
 ## Description
 
-Reads the issue tracker for this repository, works out which tickets an unattended run can start, and then works them: every open ticket carrying `ready-for-agent`, one at a time, or the part of them you aimed the run at. A ticket without that label never appears, because a ticket without it is unfinished thinking and is never built.
+Reads the issue tracker for this repository, works out which tickets an unattended run can start, and then works them: every open ticket carrying `ready-for-agent`, a wave at a time, or the part of them you aimed the run at. A ticket without that label never appears, because a ticket without it is unfinished thinking and is never built.
 
 The blocking edges between those tickets make the plan a wave plan rather than a list. Wave one is what may start now; each later wave is what the wave before it unblocks. An edge comes from the tracker's own blocked-by relation, and where a ticket carries none, from a `Blocked by` line in its body naming other tickets — which is how the ticket breakdown writes an edge the tracker has no relation for. The body is that fallback and not a second source: where the relation carries any edge at all, it is the whole of that ticket's edges. A body edge is a bare `#number`; one written as `owner/repo#number` is refused rather than read, because a run reads one repository's tracker and cannot tell such a reference in it from one somewhere else. A blocker that is already closed names work that exists and blocks nothing.
 
 Each ticket goes the same way. It is **claimed** on the tracker before any work on it starts, by assigning it, so a second session you start in parallel sees it taken and skips it — and so a ticket a person has taken is left alone too. It is then **built** by a subagent with its own context window, so a long run does not degrade as one context fills. The brief that subagent gets carries the ticket's body as it was filed rather than a summary of it, the ticket's parent spec with the instruction to read its testing decisions before writing any test, the instruction to build test-first, and the fact that nobody is watching — which makes a genuine decision something to stop and report rather than guess at.
 
+The tickets that are workable now are built at the same time rather than one after another, up to the ceiling `--at-once` sets, so no ticket waits on an unrelated one. Above a ceiling of one, each ticket is built in a working tree of its own, cut from where your branch stands and kept under the repository's own git directory — your working tree is where you left it, and `git status` says nothing about a run in progress. A ceiling of exactly one needs none of that: the ticket is built where you are, on the branch you are on, and there is nothing to integrate.
+
 It is then **verified** by a second subagent that never saw the building session and is told nothing the builder claimed. That subagent runs the project's full verification itself and checks each acceptance criterion against the repository as it now is. Its verdict is what decides. There is no flag, argument, or circumstance that skips it, because a run that can report success it cannot support is worse than no run at all.
 
-Only then is the ticket **closed**, together with the commit that carries the work. A ticket that fails verification is written down as failed and left open and claimed, and the run stops there. It is not retried: the conditions of a rerun would be identical and so would the outcome.
+Only then is the ticket **integrated** — merged into the branch you started the run on — and **closed**, together with the commit that carries the work. That happens as each wave completes rather than at the end of the run, because a ticket in a later wave is blocked by one in an earlier wave: it builds on that code and must have it. Once a wave is merged, the project's full verification runs once more on the branch as it now stands, which is what catches two tickets that pass alone and fail together; a failure there stops the run rather than spending the remaining hours building on broken code, and the tickets it never attempted are named in the report. The working tree of a merged ticket is taken away and its branch with it, so you come back to one branch and a tidy machine.
+
+A ticket that fails verification is written down as failed and left open and claimed, and it is not retried: the conditions of a rerun would be identical and so would the outcome. Nothing merges it, so its working tree stays exactly where it stood, which is where you look at what it did. Above a ceiling of one the run carries on — the failure is contained in a working tree of its own, and what waited on that ticket comes back stranded rather than built on code that does not exist. At a ceiling of one the run stops there instead, the unverified work being on your branch already.
 
 Every outcome is written on the ticket it belongs to, which is where the next run reads it back from. So what has been recorded changes what comes next: a ticket already recorded is never offered again, and a ticket whose blocker failed comes back **stranded** — not workable, because the work it builds on does not exist, and not missing from the account either, which is what a loop that only tracks what it can start drops without saying so.
 
@@ -42,28 +46,29 @@ What makes that work is the tracker: outcomes are written on the tickets themsel
 The run ends with one report rather than a running commentary, so you read the whole night in one sitting. Every ticket in scope is in it exactly once — the whole label where you named nothing, and what you aimed the run at where you did — under one of five outcomes:
 
 - **done** — built, independently verified, and closed on the commit that carries the work.
-- **failed** — verification did not pass. The work is still on the branch and was not reverted, so you can look at it.
-- **conflicted** — this ticket's work collided with another's and the collision was not repaired. Nothing produces this outcome yet; collisions arrive with integration, and the account has a place for them from the start.
+- **failed** — verification did not pass. The work was not reverted: it stands in the ticket's own working tree, or on your branch where the run made none, so you can look at it either way.
+- **conflicted** — this ticket's work collided with work already on the branch and the collision was not repaired. Its working tree stands, and the report names the files the two tickets both touched.
 - **stranded** — waiting, directly or through others, on a ticket that did not pass.
-- **never on the frontier** — everything this run never had a chance at: tickets waiting on each other in a circle, tickets waiting on open work outside the run, tickets another session has claimed, and tickets whose wave never came round because the run stopped first.
+- **never on the frontier** — everything this run never had a chance at: tickets waiting on each other in a circle, tickets waiting on open work outside the run, tickets another session has claimed, and tickets whose wave never came round because the run stopped first — which is where the tickets a failed integration cost you are named.
 
 There is no sixth pile and no ticket in two of them. A ticket the run dropped in silence is one you would not know to pick up. The report also names the commit the run's work sits on top of, so a night reads as one diff from there to the head of your branch.
 
 ## Options
 
 - `--dry-run` — plan the run, print what would be worked, and start nothing. It reads the run you aimed, so a scope is honoured here exactly as it is when work starts.
+- `--at-once <n>` — how many tickets are built at the same time, so concurrent test suites do not overload the machine and fail for the wrong reason. One by default. Above one, each ticket gets a working tree of its own and the work is merged into your branch wave by wave; exactly one keeps everything on your branch with nothing to integrate. The ceiling carries that isolation decision with it, because isolation is not a separate choice to make.
 - `--model <name>` — the model the building subagents run on, so mechanical work can run cheaper than judgement work. Verification is not affected.
 - `--yes` — assume yes: answer any question the run would otherwise ask.
 
 ## Notes
 
-Work is committed straight to the branch you were on, one commit per ticket. Nothing is merged, because there is nothing to integrate: this run works one ticket at a time and no worktree is created.
+At a ceiling of one, work is committed straight to the branch you were on, one commit per ticket, and nothing is merged because there is nothing to integrate. Above one, each ticket is committed on a branch of its own in a working tree under `.git/kntnt-orchestrate/<number>`, and merged into your branch as its wave completes; the working tree and branch of a merged ticket are removed, and those of a failed or conflicted one are kept where they are. Either way the run ends with everything on the one branch you started it on.
 
 A run refuses on the repository's default branch and says so — an unattended night must never land there. The plan is still printed, so you can read the scope from the branch you happen to be on. Where nothing can say which branch is the default — no remote to ask, and neither `main` nor `master` in the repository — it refuses rather than guess, and tells you to name it. A guess would either work the branch it must not touch, or refuse the branch you are on under a reason that is not true.
 
 Where a ticket in scope is claimed, the run asks the tracker who you are, so it can tell a claim of your own from somebody else's — and where the tracker will not say, it stops and tells you rather than guess. Either guess is one an unattended night should not make: reading your own interrupted claim as a stranger's leaves the work undone, and reading a stranger's as your own builds the same ticket twice. Nothing is asked and nothing refuses where no ticket in scope is claimed.
 
-A failed ticket's work is left on the branch rather than reverted, so you can look at it. That is also why the run stops at the first failure: the next ticket would otherwise be built on top of unverified code.
+A failed ticket's work is never reverted, so you can look at it. At a ceiling of one that work is on your branch, which is also why the run stops at the first failure: the next ticket would otherwise be built on top of unverified code. Above one it is in the ticket's own working tree and reaches your branch only by being merged, so the run carries on and what waited on that ticket comes back stranded.
 
 Nothing is pushed, tagged, or released, and no ticket is created or triaged. `/release` ships a version; this skill consumes tickets somebody else has decided are ready.
 
