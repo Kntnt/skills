@@ -16,6 +16,7 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Fixed
 
 - A ticket's working tree is this run's only where the branch checked out in it is the one this run would have cut for that ticket. A tree is named for its ticket and its branch for the run that made it, and only the branch says whose it is — so a tree an interrupted run left standing on another branch used to be adopted by the next run and its work merged onto a branch that never asked for it. It is now named rather than picked up: look at what is in it, then remove it with `git worktree remove`.
+- The report's closed question is now bounded by the day this branch left the default one. Every ticket a run finishes stays closed, stays labelled `ready-for-agent`, and stays assigned to the login that claimed it, so the question grew for the life of the project until it came back a full page — and a page that may be hiding the rest of the scope is refused rather than trusted, which took the whole report down with it. The fork point is an ancestor of everything the run built, so nothing the run did falls outside the bound; where there is nothing to fork from, the question is asked whole and the full-page guard answers for it as before.
 
 ## [0.8.0] – 2026-08-19
 

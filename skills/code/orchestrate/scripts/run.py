@@ -1041,12 +1041,51 @@ def open_listing(cwd: Path) -> list[dict[str, Any]]:
     )
 
 
-def closed_listing(cwd: Path) -> list[dict[str, Any]]:
-    """Return the finished tickets this machine's runs took.
+def closed_since(cwd: Path) -> str | None:
+    """Return the day this branch left the default one, or None where none can.
 
-    Narrowed to those, because without it the query is every ticket the label
-    has ever closed, which grows past a page and can only refuse.
+    The closed half of a scope is every ticket a run has ever finished, which
+    grows for the life of the project and can only end in a refusal. The fork
+    point bounds it honestly: it is an ancestor of everything this run built,
+    so nothing this run recorded is earlier than it, and everything the
+    project finished before this branch existed is.
+
+    A day rather than an instant, because a whole day of slack in the safe
+    direction costs a handful of tickets nobody reads and saves the question
+    of whose clock settles a boundary. None where there is nothing to bound
+    by — no default branch to fork from, the default branch itself in hand,
+    or no common ancestor to find — and the full-page guard is what answers
+    for the question then, as it always did.
     """
+
+    # Nothing to fork from is nothing to bound by: no default to name it, or
+    # the default itself in hand, and the question is left whole.
+    branch = current_branch(cwd)
+    default = default_branch(cwd)
+    if default is None or default == branch:
+        return None
+
+    # The fork commit's own day, in the shape the tracker reads as a whole day.
+    try:
+        fork = git(cwd, "merge-base", "HEAD", default).strip()
+        return git(cwd, "show", "--no-patch", "--format=%cs", fork).strip()
+    except RunError:
+        return None
+
+
+def closed_listing(cwd: Path) -> list[dict[str, Any]]:
+    """Return the finished tickets this machine's runs took on this branch.
+
+    Narrowed twice over, because the label's closed half is every ticket any
+    run ever finished: to the claims this machine made, and to what was closed
+    since this branch left the default one. Both are true of everything a run
+    on this branch recorded and false of most of what came before it.
+    """
+
+    # A branch with nothing to fork from bounds nothing, and the question is
+    # asked whole — where the guard against a full page is what answers.
+    since = closed_since(cwd)
+    bound = ["--search", f"closed:>={since}"] if since else []
 
     return listed_tickets(
         cwd,
@@ -1054,6 +1093,7 @@ def closed_listing(cwd: Path) -> list[dict[str, Any]]:
         "closed",
         "--assignee",
         CLAIM_ASSIGNEE,
+        *bound,
         "--json",
         "number,title,url,body,parent,assignees,comments",
     )

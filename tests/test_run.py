@@ -2849,3 +2849,66 @@ def test_isolate_still_resumes_the_working_tree_this_branchs_run_made(
     assert first.returncode == 0, first.stderr
     assert second.returncode == 0, second.stderr
     assert json.loads(first.stdout) == json.loads(second.stdout)
+
+
+def test_report_asks_only_for_what_was_closed_since_the_branch_left_the_default(
+    tmp_path: Path,
+) -> None:
+    """Every ticket a run ever finished stays closed, labelled, and assigned,
+    so the question grows for the life of the project. The fork point is
+    earlier than anything this run recorded and later than everything the
+    project finished before the branch existed."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": []})
+    fork = _git(repo, "merge-base", "HEAD", "main").stdout.strip()
+    day = _git(repo, "show", "--no-patch", "--format=%cs", fork).stdout.strip()
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    asked = [line for line in _gh_calls(env).splitlines() if "--state closed" in line]
+    assert len(asked) == 1
+    assert f"closed:>={day}" in asked[0]
+
+
+def test_report_asks_the_whole_closed_question_where_no_default_can_be_told(
+    tmp_path: Path,
+) -> None:
+    """A repository naming its default neither main nor master, and no remote
+    to ask, has no fork point to bound anything by — so the question is asked
+    whole and the full-page guard is what still answers for it."""
+
+    repo = _init_repo(tmp_path / "proj", initial="trunk", branch="work")
+    env = _tracker(tmp_path, {"ready-for-agent": []})
+    _git(repo, "branch", "-D", "trunk")
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    asked = [line for line in _gh_calls(env).splitlines() if "--state closed" in line]
+    assert len(asked) == 1
+    assert "closed:>=" not in asked[0]
+
+
+def test_report_refuses_a_closed_list_that_may_have_been_truncated(
+    tmp_path: Path,
+) -> None:
+    """The bound narrows the question; it does not answer it. A closed half
+    that still comes back a full page is a report nobody can check, and says
+    so rather than accounting for part of a run."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        closed=[
+            _ticket(number, "one of many", comments=[_recorded("done", "abc123")])
+            for number in range(200)
+        ],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 1
+    assert "200" in result.stderr
