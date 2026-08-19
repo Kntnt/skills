@@ -52,3 +52,7 @@ htmlcov/
 *.log
 tmp/
 temp/
+
+# Advisory improvement plans: working material for whoever picks one up, kept
+# beside the repository rather than in it.
+advisor-plans/

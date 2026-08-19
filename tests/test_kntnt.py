@@ -3515,6 +3515,32 @@ def test_uninstall_has_no_project_form(tmp_path: Path) -> None:
         assert (world["home"] / ".claude" / "skills" / "kntnt").exists()
 
 
+def test_uninstall_refuses_project_in_its_own_terms(tmp_path: Path) -> None:
+    """A misleading flag is refused with the reason, not with the parser's.
+
+    Argparse declares no `--project` on Uninstall and would refuse it anyway,
+    but `unrecognized arguments` says only that the flag is unknown, where what
+    the user has to learn is that the verb clears the machine (ADR-0040).
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _install_manager(world)
+
+    for args in (
+        ("plan", "uninstall", "--project"),
+        ("apply", "uninstall", "--project", "--yes"),
+        ("apply", "uninstall", "--project=on", "--yes"),
+    ):
+        result = _run(world, *args)
+        assert result.returncode != 0, args
+        assert "unrecognized arguments" not in result.stderr, args
+        assert "--project" in result.stderr, args
+        assert "machine" in result.stderr, args
+        assert "Project" in result.stderr, args
+        assert (world["home"] / ".claude" / "skills" / "kntnt").exists(), args
+
+
 def test_plan_uninstall_names_what_will_go_and_from_where(tmp_path: Path) -> None:
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -3960,3 +3986,78 @@ def test_a_stored_catalog_is_written_in_one_move(tmp_path: Path) -> None:
 
     assert not list(world["here"].glob("*.tmp"))
     assert json.loads((world["here"] / "catalog.json").read_text(encoding="utf-8"))
+
+
+# The flag table settled once every verb existed: where a flag is accepted it
+# always means the same thing, which is a different rule from every verb
+# accepting every flag, and a better one (ADR-0029). It is written out rather
+# than read off `parse_args`, which cannot be its source: argparse takes every
+# flag on every verb on purpose, so that a flag the agent forwards on its own
+# never breaks a run. This is the surface the user meets, and only the pages
+# state it.
+_FLAG_TABLE = {
+    "help": frozenset[str](),
+    "select": frozenset({"--project", "--yes", "--dry-run"}),
+    "update": frozenset({"--project", "--yes", "--dry-run"}),
+    "uninstall": frozenset({"--yes", "--dry-run"}),
+}
+
+
+def _options(verb: str) -> str:
+    """Return the Options section of one verb's manpage, and nothing after it."""
+
+    text = (REPO_ROOT / "skills" / "kntnt" / "help" / f"{verb}.md").read_text(
+        encoding="utf-8"
+    )
+    assert "\n## Options\n" in text, verb
+    return text.partition("\n## Options\n")[2].partition("\n## ")[0]
+
+
+def test_each_manpage_documents_exactly_the_flags_its_verb_takes() -> None:
+    """A flag accepted and ignored teaches the user that flags sometimes lie."""
+
+    for verb, allowed in _FLAG_TABLE.items():
+        options = _options(verb)
+        for flag in ("--project", "--yes", "--dry-run"):
+            assert (f"`{flag}`" in options) == (flag in allowed), (verb, flag)
+
+
+def test_help_takes_no_flags_and_says_so() -> None:
+    """`/kntnt help --yes` is told, rather than having the flag quietly ignored.
+
+    The refusal lives in the surface the user meets rather than in argparse,
+    which stays permissive so a forwarded flag never breaks a run (ADR-0029).
+    """
+
+    steps = (REPO_ROOT / "skills" / "kntnt" / "steps" / "help.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "no flags" in steps
+    assert "no flags" in _options("help")
+
+    # `--help` is how the verb is reached (`SKILL.md` routes it here), so the
+    # steps have to exempt it or `/kntnt --help` is met with a complaint about
+    # the very argument that asked for the page.
+    assert "--help" in steps
+
+
+def test_no_verb_accepts_force(tmp_path: Path) -> None:
+    """`--force` was proposed for both changing verbs and dropped in design.
+
+    The Digest answers *does this need doing* and `--yes` answers *ask me
+    nothing*, so nothing was left for a third flag to mean.
+    """
+
+    world = _world(tmp_path)
+
+    for args in (
+        ("plan", "select", "--force"),
+        ("apply", "select", "alpha", "--force"),
+        ("plan", "update", "--force"),
+        ("apply", "update", "--force", "--yes"),
+        ("apply", "uninstall", "--force", "--yes"),
+    ):
+        result = _run(world, *args)
+        assert result.returncode != 0, args
+        assert "--force" in result.stderr, args

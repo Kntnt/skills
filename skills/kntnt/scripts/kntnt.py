@@ -2233,6 +2233,32 @@ def normalize_argv(argv: list[str]) -> list[str]:
     return normalized
 
 
+def refuse_project_on_uninstall(argv: list[str]) -> None:
+    """Refuse `uninstall --project` in the verb's own terms, ahead of the parser.
+
+    *argv* is what `normalize_argv` has already been over, so `--project=on`
+    has become two arguments and the flag is always a word of its own.
+
+    Uninstall declares no `--project`, so argparse would refuse this anyway —
+    with `unrecognized arguments`, which says the flag is unknown where what
+    the user has to learn is that the verb clears the machine. A meaningless
+    flag is tolerated and a misleading one is refused (ADR-0029), and this is
+    the misleading one: forwarded silently it would let a user believe they had
+    scoped the run to a Project while it emptied their home. The check sits
+    ahead of the parser so that the parser stays permissive for everything it
+    does accept.
+    """
+
+    uninstalling = argv[0] in ("plan", "apply") and argv[1:2] == ["uninstall"]
+    if uninstalling and "--project" in argv[2:]:
+        raise ManagerError(
+            "uninstall takes no --project: it clears this collection off this "
+            "machine and never reaches a Project, whose own copies are checked "
+            "into that repository and stay",
+            2,
+        )
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     """Parse the manager CLI."""
 
@@ -2370,9 +2396,9 @@ def main(argv: list[str] | None = None) -> int:
     raw = normalize_argv(list(sys.argv[1:] if argv is None else argv))
     if not raw:
         raw = ["help"]
-    args = parse_args(raw)
     try:
-        return dispatch(args)
+        refuse_project_on_uninstall(raw)
+        return dispatch(parse_args(raw))
     except ManagerError as exc:
         return fail(str(exc), exc.code)
 

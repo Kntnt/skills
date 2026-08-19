@@ -21,9 +21,11 @@ Bare `/kntnt` prints this text. Someone who types the manager's name with nothin
 
 ## Options
 
-- `--project`, `--project=on` — act on this project rather than global. `--project=off` is the bare form. Uninstall takes no `--project`.
-- `--yes` — assume yes: ask nothing that can be answered yes or no.
-- `--dry-run` — run the verb against a temporary home seeded with this collection's files, and throw that home away. Nothing on this machine changes. Accepted everywhere; the verbs that change nothing ignore it.
+- `--project`, `--project=on` — act on this project rather than global. `--project=off` is the bare form. Select and Update take it. Uninstall does not: it clears this machine, and a run that looked scoped to a project would be a lie about what happened.
+- `--yes` — assume yes: ask nothing that can be answered yes or no. Select, Update, and Uninstall take it.
+- `--dry-run` — run the verb against a temporary home seeded with this collection's files, and throw that home away. Nothing on this machine changes. Select, Update, and Uninstall take it.
+
+Help takes none of the three. Where a flag is accepted it always means the same thing — which is not the rule that every verb accepts every flag, and is the better of the two: a flag accepted and ignored teaches that flags sometimes do nothing, so a verb with no meaning for one says so rather than dropping it quietly. No verb of the manager takes `--force`: the digest answers whether a thing needs doing and `--yes` answers whether to ask, so no third flag was left with anything to mean.
 
 ## Notes
 
