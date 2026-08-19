@@ -108,11 +108,43 @@ def _init_repo(path: Path, branch: str = "work", initial: str = "main") -> Path:
     return path
 
 
-def _recorded(outcome: str, commit: str | None = None) -> dict[str, Any]:
-    """Build the comment a run leaves on a ticket when it records *outcome*."""
+def _recorded(
+    outcome: str, commit: str | None = None, collided_with: list[int] | None = None
+) -> dict[str, Any]:
+    """Build the comment a run leaves on a ticket when it records *outcome*.
+
+    *collided_with* is the other half of a conflicted outcome: the tickets whose
+    work this one collided with, which is the pair that names the blocking edge
+    the ticket breakdown was missing.
+    """
 
     named = f" commit={commit}" if commit else ""
-    return {"body": f"<!-- {MARKER} outcome={outcome}{named} --> what happened"}
+    against = (
+        f" collided-with={','.join(str(number) for number in collided_with)}"
+        if collided_with
+        else ""
+    )
+    return {
+        "body": f"<!-- {MARKER} outcome={outcome}{named}{against} --> what happened"
+    }
+
+
+def _wrote(env: dict[str, str], number: int) -> str:
+    """Return the last note the run left on ticket *number*, as the tracker got
+    it.
+
+    Read back off the call rather than built here, so a test that feeds a note
+    to the verb that reads it is feeding it the note the verb that writes it
+    actually wrote.
+    """
+
+    prefix = f"issue comment {number} --body "
+    written = [
+        line.removeprefix(prefix)
+        for line in _gh_calls(env).splitlines()
+        if line.startswith(prefix)
+    ]
+    return written[-1]
 
 
 def _ticket(
@@ -204,6 +236,7 @@ def _tracker(
             "state": "OPEN",
             "labels": [],
             "assignees": [],
+            "comments": [],
             "subIssues": {"nodes": [], "totalCount": 0},
         }
         (folder / f"{number}.json").write_text(
@@ -233,6 +266,21 @@ def _refile(
     (directory / f"ready-for-agent.{state}.json").write_text(
         json.dumps(tickets), encoding="utf-8"
     )
+    return env
+
+
+def _refile_issue(
+    env: dict[str, str], number: int, issue: dict[str, Any]
+) -> dict[str, str]:
+    """Lay *issue* over the ticket the tracker answers for by number.
+
+    The stand-in `gh` accepts a write and changes nothing, so a test that goes
+    on to read a ticket back says here what that write left on it.
+    """
+
+    path = Path(env["GH_ISSUES"]) / f"{number}.json"
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    path.write_text(json.dumps(stored | issue), encoding="utf-8")
     return env
 
 
@@ -2130,14 +2178,14 @@ def test_integrate_merges_a_ticket_and_takes_its_working_tree_away(
     assert "kntnt-orchestrate" not in _git(repo, "branch", "--list").stdout
 
 
-def test_integrate_keeps_the_working_tree_of_a_ticket_it_could_not_merge(
-    tmp_path: Path,
-) -> None:
-    """Two tickets that touched the same code collide at the merge. The run
-    branch is left as it was rather than half-merged, and the losing ticket's
-    working tree stands so the collision can be repaired from it."""
+def _collided(repo: Path) -> dict[int, Path]:
+    """Build two tickets over the same file and put the first on the branch.
 
-    repo = _init_repo(tmp_path / "proj")
+    What is left is the collision every repair starts from: #9 merged into the
+    run branch, and #10 standing in a working tree of its own with work that
+    will not merge on top of it.
+    """
+
     trees = {}
     for number, written in ((9, "nine\n"), (10, "ten\n")):
         tree = Path(
@@ -2150,6 +2198,19 @@ def test_integrate_keeps_the_working_tree_of_a_ticket_it_could_not_merge(
         _git(tree, "commit", "-m", f"build #{number}")
         trees[number] = tree
     assert _engine(repo, "integrate", "--ticket", "9").returncode == 0
+
+    return trees
+
+
+def test_integrate_keeps_the_working_tree_of_a_ticket_it_could_not_merge(
+    tmp_path: Path,
+) -> None:
+    """Two tickets that touched the same code collide at the merge. The run
+    branch is left as it was rather than half-merged, and the losing ticket's
+    working tree stands so the collision can be repaired from it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    trees = _collided(repo)
 
     result = _engine(repo, "integrate", "--ticket", "10")
 
@@ -2314,6 +2375,274 @@ def test_report_names_the_tickets_a_stopped_run_never_attempted(
     )
     assert sorted(accounted) == [9, 10, 11]
     assert len(accounted) == len(set(accounted))
+
+
+def test_integrate_names_the_ticket_a_collision_was_with(tmp_path: Path) -> None:
+    """A collision that is not repaired names a blocking edge the ticket
+    breakdown was missing, and it takes both tickets to name it. The files
+    alone would leave the developer to work out whose work is on the other
+    side of them."""
+
+    repo = _init_repo(tmp_path / "proj")
+    _collided(repo)
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["collisions"] == ["graph.py"]
+    assert answer["collided_with"] == [9]
+
+
+def test_integrate_leaves_out_a_merge_the_losing_branch_already_carries(
+    tmp_path: Path,
+) -> None:
+    """An earlier wave's ticket that touched the same file is not what this one
+    collided with: the losing branch was cut after that merge, so the two share
+    it as common ground. Naming it would report a blocking edge that is not
+    missing, and the pair is read for exactly the ones that are."""
+
+    repo = _init_repo(tmp_path / "proj")
+
+    # An earlier wave puts #8 on the branch, over the file all three touch.
+    early = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "8").stdout)["worktree"]
+    )
+    (early / "graph.py").write_text("eight\n", encoding="utf-8")
+    _git(early, "add", "graph.py")
+    _git(early, "commit", "-m", "build #8")
+    assert _engine(repo, "integrate", "--ticket", "8").returncode == 0
+
+    # #9 and #10 are cut from the branch as it then stands, and collide.
+    trees = {}
+    for number, written in ((9, "eight\nnine\n"), (10, "eight\nten\n")):
+        tree = Path(
+            json.loads(_engine(repo, "isolate", "--ticket", str(number)).stdout)[
+                "worktree"
+            ]
+        )
+        (tree / "graph.py").write_text(written, encoding="utf-8")
+        _git(tree, "add", "graph.py")
+        _git(tree, "commit", "-m", f"build #{number}")
+        trees[number] = tree
+    assert _engine(repo, "integrate", "--ticket", "9").returncode == 0
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["collisions"] == ["graph.py"]
+    assert answer["collided_with"] == [9]
+
+
+def test_integrate_merges_a_ticket_repaired_on_its_own_branch(
+    tmp_path: Path,
+) -> None:
+    """The cheap repair is settled on the losing ticket's own branch, so the
+    branch the developer comes back to is never half-merged and never carries
+    an unverified resolution. Once the run branch is in that ticket's branch,
+    the second integration cannot collide."""
+
+    repo = _init_repo(tmp_path / "proj")
+    trees = _collided(repo)
+    assert _engine(repo, "integrate", "--ticket", "10").returncode == 2
+
+    # The repair, as the subagent makes it: the run branch merged into the
+    # ticket's branch, settled there, and committed.
+    subprocess.run(
+        ["git", "merge", "work"],
+        cwd=trees[10],
+        env=_GIT_ENV,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    (trees[10] / "graph.py").write_text("nine\nten\n", encoding="utf-8")
+    _git(trees[10], "add", "graph.py")
+    _git(trees[10], "commit", "--no-edit")
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["merged"] is True
+    assert (repo / "graph.py").read_text(encoding="utf-8") == "nine\nten\n"
+    assert not trees[10].exists()
+
+
+def test_rebuild_discards_the_losing_tickets_working_tree_and_branch(
+    tmp_path: Path,
+) -> None:
+    """Where the repair does not verify, the ticket is built again from
+    scratch on top of the integrated branch — so what it was built in the
+    first time goes, and the branch it collided with is left exactly as it
+    was."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+    trees = _collided(repo)
+    assert _engine(repo, "integrate", "--ticket", "10").returncode == 2
+
+    result = _engine(repo, "rebuild", "--ticket", "10", env=env)
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["rebuilt"] is True
+    assert not trees[10].exists()
+    assert "kntnt-orchestrate" not in _git(repo, "branch", "--list").stdout
+    assert (repo / "graph.py").read_text(encoding="utf-8") == "nine\n"
+    assert _git(repo, "status", "--porcelain").stdout == ""
+    assert "rebuild" in _gh_calls(env)
+
+
+def test_a_ticket_is_rebuilt_at_most_once(tmp_path: Path) -> None:
+    """A rebuild is the only rerun the run performs, and the tracker is what
+    bounds it: the note the first rebuild left on the ticket is what refuses
+    the second, so a collision that keeps coming back is recorded rather than
+    built over and over."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+    _collided(repo)
+    assert _engine(repo, "rebuild", "--ticket", "10", env=env).returncode == 0
+    note = _wrote(env, 10)
+    assert f"<!-- {MARKER} rebuild -->" in note
+    _refile_issue(env, 10, _ready(10, comments=[{"body": note}]))
+
+    # The ticket, built afresh on the integrated branch, collides again.
+    rebuilt = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "10").stdout)["worktree"]
+    )
+    (rebuilt / "graph.py").write_text("ten again\n", encoding="utf-8")
+    _git(rebuilt, "add", "graph.py")
+    _git(rebuilt, "commit", "-m", "build #10 again")
+
+    result = _engine(repo, "rebuild", "--ticket", "10", env=env)
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["rebuilt"] is False
+    assert "already" in answer["reason"]
+    assert rebuilt.is_dir()
+
+
+def test_rebuild_refuses_a_ticket_that_has_no_working_tree_to_discard(
+    tmp_path: Path,
+) -> None:
+    """A ceiling of one merges nothing, so nothing can collide and there is
+    nothing to rebuild on top of."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+
+    result = _engine(repo, "rebuild", "--ticket", "10", env=env)
+
+    assert result.returncode == 1
+    assert "no working tree" in result.stderr
+    assert _gh_calls(env) == ""
+
+
+def test_record_stores_the_ticket_a_conflicted_outcome_collided_with(
+    tmp_path: Path,
+) -> None:
+    """The pair is what the developer fixes the ticket breakdown from, so it is
+    written where they will look for it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "10",
+        "--outcome",
+        "conflicted",
+        "--collided-with",
+        "9",
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["collided_with"] == [9]
+    assert "collided-with=9" in _gh_calls(env)
+    assert "#9" in _gh_calls(env)
+
+
+def test_record_refuses_a_collision_named_against_another_outcome(
+    tmp_path: Path,
+) -> None:
+    """Only a collision has a ticket on the other side of it. A failure or a
+    pass recorded against one would state something that did not happen."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "10",
+        "--outcome",
+        "failed",
+        "--collided-with",
+        "9",
+        env=env,
+    )
+
+    assert result.returncode == 1
+    assert "conflicted" in result.stderr
+    assert _gh_calls(env) == ""
+
+
+def test_report_accounts_for_a_conflicted_ticket_with_the_one_it_hit(
+    tmp_path: Path,
+) -> None:
+    """A collision that was not repaired is reported together with the ticket
+    it collided with — that pair is the blocking edge the breakdown missed, and
+    it is how this run improves the next one."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(
+                    10,
+                    "the graph",
+                    comments=[_recorded("conflicted", collided_with=[9])],
+                ),
+            ]
+        },
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["conflicted"] == [10]
+    entry = next(entry for entry in report["tickets"] if entry["number"] == 10)
+    assert entry["collided_with"] == [9]
 
 
 def test_no_verb_pushes_while_the_developer_is_asleep(tmp_path: Path) -> None:

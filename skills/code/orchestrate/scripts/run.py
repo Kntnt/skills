@@ -50,6 +50,16 @@ NOTES = {
     ),
 }
 
+# What a run writes on a ticket it is about to build a second time. A rebuild
+# is the only rerun this engine performs, and this note is what bounds it: the
+# ticket carries it from the moment the first rebuild starts, so a second
+# collision on the same ticket is recorded rather than built over again.
+REBUILD_NOTE = (
+    "Recorded by an unattended run: this ticket's work collided with work "
+    "already on the branch, the repair did not verify, and the ticket is "
+    "being built once more on top of the integrated branch."
+)
+
 # The marker every recorded outcome carries, so what a run wrote on a ticket
 # is machine-readable and not only prose somebody has to interpret.
 MARKER = "kntnt-orchestrate"
@@ -59,8 +69,21 @@ MARKER = "kntnt-orchestrate"
 # is what lets one run's record change the next run's plan without either of
 # them sharing any memory (ADR-0051).
 RECORDED_OUTCOME = re.compile(
-    rf"<!--\s*{MARKER}\s+outcome=(\S+?)(?:\s+commit=(\S+?))?\s*-->"
+    rf"<!--\s*{MARKER}\s+outcome=(\S+?)(?:\s+commit=(\S+?))?"
+    rf"(?:\s+collided-with=([\d,]+))?\s*-->"
 )
+
+# The same marker read back for the one thing that is not an outcome: whether
+# this ticket has already had its one rebuild. It is read off the tracker for
+# exactly the reason an outcome is — a run that was interrupted mid-rebuild
+# must find the bound where it left it (ADR-0055).
+RECORDED_REBUILD = re.compile(rf"<!--\s*{MARKER}\s+rebuild\s*-->")
+
+# The same marker again, on the merge a run makes when it brings a ticket onto
+# the branch. It is what lets the branch say whose work a file carries, which
+# is how a collision names the ticket on the other side of it rather than only
+# the files the two tickets both touched.
+MERGED_TICKET = re.compile(rf"<!--\s*{MARKER}\s+merged=(\d+)\s*-->")
 
 # Who a claim assigns the ticket to. The tracker's own relation for "somebody
 # is on this" is the claim: it needs no label created and no convention
@@ -280,7 +303,9 @@ class Ticket:
     off the tracker, with `commit` the commit that outcome named. Both are None
     where nothing has been recorded. A ticket carrying an outcome is settled:
     it is never offered again, and what waits on it is stranded rather than
-    workable.
+    workable. `collided_with` is the other half of a conflicted outcome — the
+    tickets whose work this one collided with, which is the pair that names the
+    blocking edge the ticket breakdown was missing.
 
     `worktree` is the one thing here the tracker cannot say and the repository
     can: where this ticket's work stands, for as long as a working tree of its
@@ -298,6 +323,7 @@ class Ticket:
     blocked_by: list[int]
     outcome: str | None
     commit: str | None
+    collided_with: list[int]
     worktree: str | None = None
 
 
@@ -604,8 +630,8 @@ def holders_of(item: dict[str, Any]) -> list[str]:
     return [str(holder["login"]) for holder in item["assignees"]]
 
 
-def recorded_against(item: dict[str, Any]) -> tuple[str | None, str | None]:
-    """Return the outcome a run recorded on *item*, and the commit it named.
+def recorded_against(item: dict[str, Any]) -> tuple[str | None, str | None, list[int]]:
+    """Return what a run recorded on *item*: outcome, commit, and collision.
 
     The tracker is a boundary and a comment is prose anybody can write, so only
     an outcome this engine knows how to record is read back — a marker naming
@@ -616,12 +642,38 @@ def recorded_against(item: dict[str, Any]) -> tuple[str | None, str | None]:
     # Read every marker and keep the last, that being the outcome as it stands.
     outcome: str | None = None
     commit: str | None = None
+    against: list[int] = []
     for comment in item["comments"]:
         found = RECORDED_OUTCOME.search(str(comment["body"]))
         if found and found.group(1) in OUTCOMES:
             outcome, commit = found.group(1), found.group(2)
+            against = numbers_in(found.group(3))
 
-    return outcome, commit
+    return outcome, commit, against
+
+
+def as_references(numbers: list[int]) -> str:
+    """Render ticket *numbers* the way a developer writes them."""
+
+    return ", ".join(f"#{number}" for number in numbers)
+
+
+def numbers_in(listed: str | None) -> list[int]:
+    """Read back a marker's comma-separated ticket numbers, in the order given.
+
+    Empty where the marker carried none, an outcome other than a collision
+    having nothing on the other side of it to name.
+    """
+
+    return [int(number) for number in listed.split(",")] if listed else []
+
+
+def rebuilt_already(item: dict[str, Any]) -> bool:
+    """Say whether a run has already spent *item*'s one rebuild on it."""
+
+    return any(
+        RECORDED_REBUILD.search(str(comment["body"])) for comment in item["comments"]
+    )
 
 
 def ticket_view(cwd: Path, number: int, fields: str) -> dict[str, Any]:
@@ -930,6 +982,7 @@ def ticket_from(
     blocked_by: list[int],
     outcome: str | None,
     commit: str | None,
+    collided_with: list[int],
 ) -> Ticket:
     """Build one ticket out of what the tracker answered about it.
 
@@ -948,6 +1001,7 @@ def ticket_from(
         blocked_by=blocked_by,
         outcome=outcome,
         commit=commit,
+        collided_with=collided_with,
     )
 
 
@@ -1011,13 +1065,14 @@ def tickets_in_scope(
             continue
         number = int(item["number"])
         try:
-            outcome, commit = recorded_against(item)
+            outcome, commit, against = recorded_against(item)
             tickets.append(
                 ticket_from(
                     item,
                     blocked_by=unmet_blockers(cwd, item, states),
                     outcome=outcome,
                     commit=commit,
+                    collided_with=against,
                 )
             )
         except RunError as exc:
@@ -1047,12 +1102,18 @@ def tickets_recorded_done(
         if not in_scope(item, scope):
             continue
         number = int(item["number"])
-        outcome, commit = recorded_against(item)
+        outcome, commit, against = recorded_against(item)
         if outcome != DONE:
             continue
         try:
             tickets.append(
-                ticket_from(item, blocked_by=[], outcome=outcome, commit=commit)
+                ticket_from(
+                    item,
+                    blocked_by=[],
+                    outcome=outcome,
+                    commit=commit,
+                    collided_with=against,
+                )
             )
         except RunError as exc:
             raise RunError(f"#{number}: {exc}") from exc
@@ -1506,11 +1567,12 @@ def integrate(cwd: Path, number: int) -> int:
         )
 
     # The merge itself, kept as its own commit so what a ticket delivered
-    # stays legible on the branch afterwards.
+    # stays legible on the branch afterwards, and marked so the branch can say
+    # afterwards which ticket brought which file.
     built_on = current_branch(path)
-    merged = git_result(cwd, "merge", "--no-ff", "--no-edit", built_on)
+    merged = git_result(cwd, "merge", "--no-ff", "-m", merge_message(number), built_on)
     if merged.returncode != 0:
-        return refuse_merge(cwd, number, path, merged)
+        return refuse_merge(cwd, number, path, built_on, merged)
 
     # The machine ends tidy: what is merged is on the branch the developer
     # comes back to, so the working tree it was built in and the branch it was
@@ -1536,16 +1598,39 @@ def integrate(cwd: Path, number: int) -> int:
 
 
 def refuse_merge(
-    cwd: Path, number: int, path: Path, merged: subprocess.CompletedProcess[str]
+    cwd: Path,
+    number: int,
+    path: Path,
+    built_on: str,
+    merged: subprocess.CompletedProcess[str],
 ) -> int:
-    """Undo a merge that did not go through, and say what stopped it."""
+    """Undo a merge that did not go through, and say what stopped it.
+
+    A collision is answered with both halves of it: the files the two tickets
+    both touched, and the ticket on the other side of them. That pair names a
+    blocking edge the ticket breakdown was missing, which is how one run
+    improves the next one — and the files alone would leave the developer to
+    work out whose work they had run into.
+    """
 
     # What is left half-merged is read before the merge is undone, that being
     # the only moment the repository can say which files the two tickets both
     # touched.
     collisions = git_result(cwd, "diff", "--name-only", "--diff-filter=U")
     files = collisions.stdout.split()
+    against = tickets_touching(cwd, files, built_on)
     git_result(cwd, "merge", "--abort")
+
+    # Whose work it ran into, where the branch can say, and what stopped the
+    # merge where it cannot — a merge that failed for some other reason than a
+    # conflict leaves no unmerged file to name and has to speak for itself.
+    whose = as_references(against)
+    reason = (
+        f"#{number} collided with {whose or 'work already on the branch'} in "
+        + ", ".join(files)
+        if files
+        else (merged.stderr or merged.stdout).strip()
+    )
 
     emit(
         {
@@ -1555,30 +1640,187 @@ def refuse_merge(
             "commit": None,
             "worktree": str(path),
             "collisions": files,
-            "reason": (
-                f"#{number} collided with work already on the branch in "
-                + ", ".join(files)
-                if files
-                else (merged.stderr or merged.stdout).strip()
-            ),
+            "collided_with": against,
+            "reason": reason,
         }
     )
     return 2
 
 
-def outcome_note(outcome: str, commit: str | None) -> str:
+def merge_message(number: int) -> str:
+    """Render the message of the merge that brings ticket *number* over.
+
+    One line a developer reading the branch can read, and a marker the engine
+    reads back: which ticket a commit carried is the branch's own answer, and a
+    branch that cannot give it can name no ticket on the other side of a
+    collision.
+    """
+
+    return f"Merge #{number} into the run branch\n\n<!-- {MARKER} merged={number} -->"
+
+
+def merges_on_branch(cwd: Path) -> list[tuple[int, str]]:
+    """Return the ticket each of this branch's own merges carried, newest first.
+
+    Only the merges a run made are here — the marker is what says so — and only
+    along the first parent, that being the run branch's own history rather than
+    everything the tickets brought with them.
+    """
+
+    record = git(cwd, "log", "--first-parent", "--format=%H%x1f%B%x1e")
+    found = []
+    for entry in record.split("\x1e"):
+        commit, _, message = entry.strip().partition("\x1f")
+        carried = MERGED_TICKET.search(message)
+        if carried:
+            found.append((int(carried.group(1)), commit))
+
+    return found
+
+
+def tickets_touching(cwd: Path, files: list[str], built_on: str) -> list[int]:
+    """Return the tickets whose merged work *built_on* collided with in *files*.
+
+    A merge is asked what it brought rather than what the branch looked like
+    around it: the diff against its first parent is the ticket's own
+    contribution, and everything else on the branch is somebody else's. No
+    file is no question, and asking it would walk the branch to answer nothing.
+
+    A merge the losing branch already contains is not one it can have collided
+    with — the branch was cut after it, so that work is on both sides and the
+    merge has it as common ground. Naming it anyway would report a blocking
+    edge that is not missing, which is the one thing this pair is read for.
+    """
+
+    if not files:
+        return []
+
+    touched = set(files)
+    return sorted(
+        number
+        for number, commit in merges_on_branch(cwd)
+        if not git_ok(cwd, "merge-base", "--is-ancestor", commit, built_on)
+        and touched.intersection(
+            git(cwd, "diff", "--name-only", f"{commit}^1", commit).split()
+        )
+    )
+
+
+def cmd_rebuild(cwd: Path, number: int) -> int:
+    """Discard what ticket *number* was built in, so it can be built again."""
+
+    try:
+        return rebuild(cwd, number)
+    except RunError as exc:
+        return fail(str(exc))
+
+
+def rebuild(cwd: Path, number: int) -> int:
+    """Spend ticket *number*'s one rebuild, and leave nothing of the first try.
+
+    A collision whose repair does not verify is not repaired, and a resolution
+    nobody can verify is not a resolution — so the losing ticket is built again
+    from nothing, on top of the very code it collided with, which is where it
+    cannot collide again. What it was built in the first time goes with it: a
+    working tree holding a resolution that failed is a place a second builder
+    would read as work already done (ADR-0055).
+
+    The run branch is not touched. Nothing of this ticket ever reached it — the
+    repair is settled on the ticket's own branch, and a merge that collided was
+    undone where it collided.
+    """
+
+    # A ceiling of one merges nothing, so nothing of this kind can have gone
+    # wrong there and there is no second place to build.
+    open_now = open_worktrees(cwd)
+    if number not in open_now:
+        return fail(
+            f"#{number} has no working tree to discard: a ceiling of one "
+            "merges nothing and so collides with nothing"
+        )
+
+    # The tracker is asked before anything is destroyed, so a ticket that has
+    # already spent its rebuild keeps the working tree it stands in.
+    try:
+        ticket = ticket_view(cwd, number, "number,comments")
+    except RunError as exc:
+        return fail(f"the tracker cannot answer for #{number}: {exc}")
+    if rebuilt_already(ticket):
+        emit(
+            {
+                "verb": "rebuild",
+                "ticket": number,
+                "rebuilt": False,
+                "worktree": open_now[number],
+                "reason": (
+                    f"#{number} has already been rebuilt once in this run, and "
+                    "a rebuild is the only rerun there is"
+                ),
+            }
+        )
+        return 2
+
+    # The note goes on the ticket before the working tree goes, because the
+    # note is the bound: a run interrupted between the two would otherwise come
+    # back with its one rebuild unspent and spend it again.
+    try:
+        gh(cwd, "issue", "comment", str(number), "--body", rebuild_note())
+    except RunError as exc:
+        return fail(f"#{number} could not be recorded as rebuilt: {exc}")
+
+    # What the first try left is discarded outright, uncommitted work and all.
+    # This is the one gesture in the run that destroys work on purpose, and
+    # what it destroys is a resolution a verifier has just refused.
+    path = Path(open_now[number])
+    built_on = current_branch(path)
+    git(cwd, "worktree", "remove", "--force", str(path))
+    git(cwd, "branch", "--delete", "--force", built_on)
+
+    emit(
+        {
+            "verb": "rebuild",
+            "ticket": number,
+            "rebuilt": True,
+            "worktree": None,
+            "reason": None,
+        }
+    )
+    return 0
+
+
+def rebuild_note() -> str:
+    """Render what is written on a ticket that is being built a second time."""
+
+    return f"<!-- {MARKER} rebuild --> {REBUILD_NOTE}"
+
+
+def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
     """Render what is written on a ticket when its outcome is recorded.
 
     One line, carrying a marker a later run can read the outcome back out of
-    and prose the developer reading the ticket can read instead.
+    and prose the developer reading the ticket can read instead. Both halves
+    name the ticket a collision was with, that being the pair the developer
+    fixes the ticket breakdown from.
     """
 
     named = f" commit={commit}" if commit else ""
-    return f"<!-- {MARKER} outcome={outcome}{named} --> {NOTES[outcome]}"
+    marked = (
+        " collided-with=" + ",".join(str(ticket) for ticket in against)
+        if against
+        else ""
+    )
+    said = f" It collided with {as_references(against)}." if against else ""
+
+    return f"<!-- {MARKER} outcome={outcome}{named}{marked} --> {NOTES[outcome]}{said}"
 
 
 def cmd_record(
-    cwd: Path, number: int, outcome: str, named: str | None, state_path: Path | None
+    cwd: Path,
+    number: int,
+    outcome: str,
+    named: str | None,
+    against: list[int] | None,
+    state_path: Path | None,
 ) -> int:
     """Store ticket *number*'s *outcome* and the commit that carries it.
 
@@ -1591,6 +1833,15 @@ def cmd_record(
     # check, which is the one thing an unattended run may not produce.
     if outcome == DONE and not named:
         return fail(f"recording #{number} done needs the commit that carries it")
+
+    # Only a collision has a ticket on the other side of it, so naming one
+    # against any other outcome would write down something that did not happen.
+    collided = against or []
+    if collided and outcome != CONFLICTED:
+        return fail(
+            f"#{number} is being recorded {outcome}, and only a conflicted "
+            "outcome names the ticket it collided with"
+        )
 
     commit = None
     if named:
@@ -1609,7 +1860,7 @@ def cmd_record(
     # Done is the only outcome that closes a ticket, and the Skill records it
     # only where a separate subagent has verified the work — so there is no
     # path from a builder's own report to a closed ticket.
-    note = outcome_note(outcome, commit)
+    note = outcome_note(outcome, commit, collided)
     try:
         if outcome == DONE:
             gh(cwd, "issue", "close", str(number), "--comment", note)
@@ -1626,6 +1877,7 @@ def cmd_record(
             "ticket": number,
             "outcome": outcome,
             "commit": commit,
+            "collided_with": collided,
             "closed": outcome == DONE,
         }
     )
@@ -1750,10 +2002,15 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     integrate.add_argument("--ticket", required=True, type=int)
     add_shared_flags(integrate)
 
+    rebuild = sub.add_parser("rebuild", help="Discard one ticket's first try.")
+    rebuild.add_argument("--ticket", required=True, type=int)
+    add_shared_flags(rebuild)
+
     record = sub.add_parser("record", help="Record one ticket's outcome.")
     record.add_argument("--ticket", required=True, type=int)
     record.add_argument("--outcome", required=True, choices=OUTCOMES)
     record.add_argument("--commit")
+    record.add_argument("--collided-with", action="append", type=int)
     add_shared_flags(record)
 
     report = sub.add_parser("report", help="Print the consolidated report.")
@@ -1784,8 +2041,17 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_isolate(cwd, args.ticket)
     if args.verb == "integrate":
         return cmd_integrate(cwd, args.ticket)
+    if args.verb == "rebuild":
+        return cmd_rebuild(cwd, args.ticket)
     if args.verb == "record":
-        return cmd_record(cwd, args.ticket, args.outcome, args.commit, state_path)
+        return cmd_record(
+            cwd,
+            args.ticket,
+            args.outcome,
+            args.commit,
+            args.collided_with,
+            state_path,
+        )
     return cmd_report(cwd, args.scope)
 
 
