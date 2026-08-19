@@ -31,6 +31,16 @@ CANONICAL_GLOBAL = "~/.agents/skills"
 # What a verb exits with when the disk does not show the change it made. The
 # payload is still emitted: the user has to be told which skills and where.
 EXIT_CHANGE_FAILED = 1
+
+# How long a verb waits for the origin, in seconds. The files are a small JSON
+# list and a Markdown page, so a link that works answers well inside this; a
+# link that is dropped rather than refused is the case the number is for. For
+# the Catalog the wait buys nothing the fallback — reported in
+# `catalog_refreshed` — does not already give, and for a manpage, which has no
+# stored copy behind it, a short wait is the difference between being told and
+# being kept waiting to be told.
+ORIGIN_TIMEOUT = 5
+
 BINARY_HOW = {
     "uv": "install uv from https://docs.astral.sh/uv/",
     "git": "install git",
@@ -447,7 +457,7 @@ def origin_text(relative: str, what: str) -> str:
 
     url = f"https://raw.githubusercontent.com/{source}/main/{relative}"
     try:
-        with urllib.request.urlopen(url, timeout=15) as response:
+        with urllib.request.urlopen(url, timeout=ORIGIN_TIMEOUT) as response:
             return cast(bytes, response.read()).decode("utf-8")
     except (urllib.error.URLError, TimeoutError) as exc:
         raise ManagerError(f"{what} could not be fetched from {url}") from exc
