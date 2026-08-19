@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- The test suites stand in for a binary through one shared helper. A test that has to fake something an engine shells out to — `gh`, so far — writes the stand-in and gets back the environment that makes it the one that runs, instead of spelling out for itself the executable-in-a-directory-placed-first-on-`PATH` dance. The commit engine's suite carried three copies of that dance; the orchestrate engine being built next talks to the tracker through `gh` for its whole working life and would have added more. Nothing a user can observe changes, and no test's meaning changes — the same tests assert the same things, from one helper instead of three copies.
+
 ## [0.8.0] – 2026-08-19
 
 ### Added

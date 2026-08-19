@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import json
 import os
-import stat
 import subprocess
 from pathlib import Path
+
+from support.fake_binary import fake_binary_on_path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SHIP = REPO_ROOT / "skills" / "code" / "commit" / "scripts" / "ship.py"
@@ -405,11 +406,7 @@ def test_apply_publish_creates_github_release(tmp_path: Path) -> None:
     _git(repo, "commit", "-m", "changelog")
     _git(repo, "remote", "add", "origin", "git@github.com:example/proj.git")
     log = tmp_path / "gh.log"
-    bin_dir = tmp_path / "bin"
-    bin_dir.mkdir()
-    gh = bin_dir / "gh"
-    gh.write_text('#!/bin/sh\necho "$@" >> "$GH_LOG"\n', encoding="utf-8")
-    gh.chmod(gh.stat().st_mode | stat.S_IEXEC)
+    env = fake_binary_on_path(tmp_path, "gh", '#!/bin/sh\necho "$@" >> "$GH_LOG"\n')
 
     result = _ship(
         repo,
@@ -417,10 +414,7 @@ def test_apply_publish_creates_github_release(tmp_path: Path) -> None:
         "publish",
         "--version",
         "0.2.0",
-        env={
-            "PATH": f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}",
-            "GH_LOG": str(log),
-        },
+        env=env | {"GH_LOG": str(log)},
     )
 
     assert result.returncode == 0, result.stderr
@@ -435,16 +429,13 @@ def test_apply_publish_uploads_asset_when_release_exists(tmp_path: Path) -> None
     asset.write_text("zip", encoding="utf-8")
     _git(repo, "remote", "add", "origin", "https://github.com/example/proj.git")
     log = tmp_path / "gh.log"
-    bin_dir = tmp_path / "bin"
-    bin_dir.mkdir()
-    gh = bin_dir / "gh"
-    gh.write_text(
+    env = fake_binary_on_path(
+        tmp_path,
+        "gh",
         "#!/bin/sh\n"
         'echo "$@" >> "$GH_LOG"\n'
         'if [ "$1" = release ] && [ "$2" = view ]; then exit 0; fi\n',
-        encoding="utf-8",
     )
-    gh.chmod(gh.stat().st_mode | stat.S_IEXEC)
 
     result = _ship(
         repo,
@@ -454,10 +445,7 @@ def test_apply_publish_uploads_asset_when_release_exists(tmp_path: Path) -> None
         "0.2.0",
         "--asset",
         str(asset),
-        env={
-            "PATH": f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}",
-            "GH_LOG": str(log),
-        },
+        env=env | {"GH_LOG": str(log)},
     )
 
     assert result.returncode == 0, result.stderr
@@ -591,11 +579,7 @@ def test_apply_publish_passes_changelog_notes_with_shifted_headings(
     _git(repo, "commit", "-m", "changelog")
     _git(repo, "remote", "add", "origin", "git@github.com:example/proj.git")
     log = tmp_path / "gh.log"
-    bin_dir = tmp_path / "bin"
-    bin_dir.mkdir()
-    gh = bin_dir / "gh"
-    gh.write_text('#!/bin/sh\necho "$@" >> "$GH_LOG"\n', encoding="utf-8")
-    gh.chmod(gh.stat().st_mode | stat.S_IEXEC)
+    env = fake_binary_on_path(tmp_path, "gh", '#!/bin/sh\necho "$@" >> "$GH_LOG"\n')
 
     result = _ship(
         repo,
@@ -603,10 +587,7 @@ def test_apply_publish_passes_changelog_notes_with_shifted_headings(
         "publish",
         "--version",
         "0.2.0",
-        env={
-            "PATH": f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}",
-            "GH_LOG": str(log),
-        },
+        env=env | {"GH_LOG": str(log)},
     )
 
     assert result.returncode == 0, result.stderr
