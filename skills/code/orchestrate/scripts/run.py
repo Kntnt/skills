@@ -1215,6 +1215,26 @@ def branch_refusal(branch: str, default: str | None) -> str | None:
     return f"on the default branch '{branch}'" if branch == default else None
 
 
+def uncommitted_refusal(cwd: Path) -> str | None:
+    """Return why a run may not work this repository, or None where it may.
+
+    Asked wherever the run puts work on the branch the developer is standing
+    on — when it plans, and again before a ticket is recorded done. A change
+    nothing has committed is one the run cannot tell from a builder's: at a
+    ceiling of one it lands inside the ticket's own commit, and above one it
+    stops a merge that had nothing to collide with. What the repository
+    ignores is not work and does not count.
+    """
+
+    if not git(cwd, "status", "--porcelain").strip():
+        return None
+
+    return (
+        "the working tree holds work nothing has committed: a run would "
+        "commit it under a ticket that did not make it"
+    )
+
+
 def no_ticket_reason(scope: Scope | None) -> str:
     """Say why there is nothing to work, in the terms the run was asked in."""
 
@@ -1303,13 +1323,18 @@ def build_plan(
 
     # A run works the branch the developer left it on, so the default branch
     # is the one place an unattended night must never land — and a default
-    # nothing can name is a refusal too, not a branch to guess at.
+    # nothing can name is a refusal too, not a branch to guess at. The tree it
+    # would commit in is the other half of that: a run cannot tell work the
+    # developer left uncommitted from the work it is about to do.
     if dry_run:
         plan.ready = False
         plan.reason = "dry run: nothing is started"
     elif (refused := branch_refusal(branch, default)) is not None:
         plan.ready = False
         plan.reason = refused
+    elif (standing := uncommitted_refusal(cwd)) is not None:
+        plan.ready = False
+        plan.reason = standing
     elif not tickets:
         plan.ready = False
         plan.reason = no_ticket_reason(scope)
@@ -1842,6 +1867,17 @@ def cmd_record(
             f"#{number} is being recorded {outcome}, and only a conflicted "
             "outcome names the ticket it collided with"
         )
+
+    # A done outcome names the commit that carries the work, so a tree still
+    # holding work nothing committed is a tree where that cannot be true.
+    # Above a ceiling of one `integrate` asks this of the ticket's own working
+    # tree; at exactly one there is no such tree and this is the only gate.
+    try:
+        standing = uncommitted_refusal(cwd) if outcome == DONE else None
+    except RunError as exc:
+        return fail(str(exc))
+    if standing is not None:
+        return fail(f"#{number} cannot be recorded done: {standing}")
 
     commit = None
     if named:

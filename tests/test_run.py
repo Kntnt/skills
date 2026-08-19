@@ -2664,3 +2664,125 @@ def test_no_verb_pushes_while_the_developer_is_asleep(tmp_path: Path) -> None:
 
     ran = Path(env["SPY_LOG"]).read_text(encoding="utf-8").splitlines()
     assert "push" not in [line.split()[0] for line in ran if line.strip()]
+
+
+def test_plan_refuses_a_working_tree_that_holds_uncommitted_work(
+    tmp_path: Path,
+) -> None:
+    """A run commits where the developer left off, so work they had not
+    committed would land inside a ticket's own commit."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    (repo / "README.md").write_text("half a thought\n", encoding="utf-8")
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert "committed" in plan["reason"]
+    assert [entry["number"] for entry in plan["tickets"]] == [9]
+
+
+def test_plan_refuses_a_working_tree_holding_a_file_nothing_tracks(
+    tmp_path: Path,
+) -> None:
+    """A file written and never added is the half of that work a merge cannot
+    carry, and above a ceiling of one it stops one with nothing to collide
+    over."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    (repo / "notes.txt").write_text("mine, not a ticket's\n", encoding="utf-8")
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert "committed" in plan["reason"]
+
+
+def test_plan_works_a_tree_whose_only_changes_the_repository_ignores(
+    tmp_path: Path,
+) -> None:
+    """What the repository ignores is not work, and a run that refused over a
+    cache directory would refuse every repository that has one."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    (repo / ".gitignore").write_text("build/\n", encoding="utf-8")
+    _git(repo, "add", ".gitignore")
+    _git(repo, "commit", "-m", "ignore what is built")
+    (repo / "build").mkdir()
+    (repo / "build" / "out.txt").write_text("generated\n", encoding="utf-8")
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["ready"] is True
+
+
+def test_a_dry_run_reads_the_scope_from_a_working_tree_that_holds_work(
+    tmp_path: Path,
+) -> None:
+    """A dry run starts nothing whatever the tree holds, so it answers with
+    the scope rather than with a refusal about a run nobody asked to start."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    (repo / "README.md").write_text("half a thought\n", encoding="utf-8")
+
+    result = _engine(repo, "plan", "--dry-run", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert plan["reason"] == "dry run: nothing is started"
+    assert [entry["number"] for entry in plan["tickets"]] == [9]
+
+
+def test_record_refuses_a_done_outcome_while_the_working_tree_holds_work(
+    tmp_path: Path,
+) -> None:
+    """A ticket closed on a commit that does not carry its work is a report
+    nobody can check, and at a ceiling of one nothing else asks the
+    question — the ticket has no working tree of its own to be refused
+    over."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+    (repo / "graph.py").write_text("never committed\n", encoding="utf-8")
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "done",
+        "--commit",
+        "HEAD",
+        env=env,
+    )
+
+    assert result.returncode == 1
+    assert "committed" in result.stderr
+    assert "issue close" not in _gh_calls(env)
+
+
+def test_record_writes_a_failure_from_a_working_tree_that_still_holds_work(
+    tmp_path: Path,
+) -> None:
+    """A failed ticket's work is left where it stands on purpose, so the tree
+    holding it is the state that outcome is recorded from."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+    (repo / "graph.py").write_text("half a ticket\n", encoding="utf-8")
+
+    result = _engine(repo, "record", "--ticket", "9", "--outcome", "failed", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert "issue comment 9" in _gh_calls(env)
