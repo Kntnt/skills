@@ -27,14 +27,16 @@ _GIT_ENV["GIT_AUTHOR_EMAIL"] = "test@example.com"
 _GIT_ENV["GIT_COMMITTER_NAME"] = "Test"
 _GIT_ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
 
-# The stand-in tracker answers with the tickets filed under the label it was
-# asked for, and knows no other way to reach a ticket. A ticket the engine
-# comes back with is therefore one it asked for by label, and a query carrying
-# no label finds no file and fails the call — which is what makes "a ticket
-# without that label never appears" an assertion rather than a hope. One
-# ticket is reachable by number as well, because a blocking edge read out of a
-# body names a ticket the scope need not contain; a number the tracker was
-# never given fails the call, as a deleted ticket does.
+# The stand-in tracker answers with the tickets filed under the label and the
+# state it was asked for, and knows no other way to reach a ticket. A ticket
+# the engine comes back with is therefore one it asked for by label, and a
+# query carrying no label finds no file and fails the call — which is what
+# makes "a ticket without that label never appears" an assertion rather than a
+# hope. State is part of that key because the open scope and the tickets a run
+# closed are two different questions asked of the same label. One ticket is
+# reachable by number as well, because a blocking edge read out of a body
+# names a ticket the scope need not contain; a number the tracker was never
+# given fails the call, as a deleted ticket does.
 _GH_SCRIPT = """#!/bin/sh
 echo "$@" >> "$GH_LOG"
 case "$2" in
@@ -42,14 +44,22 @@ case "$2" in
   edit|close|comment) exit 0 ;;
 esac
 label=""
+state="open"
 while [ $# -gt 0 ]; do
   case "$1" in
     --label) label="$2"; shift 2 ;;
+    --state) state="$2"; shift 2 ;;
     *) shift ;;
   esac
 done
-cat "$GH_TICKETS/$label.json"
+cat "$GH_TICKETS/$label.$state.json"
 """
+
+# The marker `record` writes an outcome in, stated here as the contract rather
+# than imported: what one verb writes on a ticket is what the next run reads
+# back off it, and a test that built the marker from the engine's own constant
+# would pass on both halves being wrong together.
+MARKER = "kntnt-orchestrate"
 
 # A stand-in that logs what git was asked to do and then lets the real git do
 # it. Everything the engine reads from the repository has to stay true, so
@@ -86,6 +96,13 @@ def _init_repo(path: Path, branch: str = "work", initial: str = "main") -> Path:
     return path
 
 
+def _recorded(outcome: str, commit: str | None = None) -> dict[str, Any]:
+    """Build the comment a run leaves on a ticket when it records *outcome*."""
+
+    named = f" commit={commit}" if commit else ""
+    return {"body": f"<!-- {MARKER} outcome={outcome}{named} --> what happened"}
+
+
 def _ticket(
     number: int,
     title: str,
@@ -94,6 +111,7 @@ def _ticket(
     body: str = "",
     parent: int | None = None,
     claimed_by: list[str] | None = None,
+    comments: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Build a ticket as the tracker answers it, with *blocked_by* as edges.
 
@@ -101,11 +119,13 @@ def _ticket(
     is how the native relation arrives: the blocker's own state travels with
     the edge, so a closed blocker needs no second question. *claimed_by* is the
     logins the tracker has the ticket assigned to, which is how a ticket
-    another session is already working announces itself.
+    another session is already working announces itself, and *comments* is
+    where an outcome a run recorded is read back from.
     """
 
     edges = blocked_by or []
     return {
+        "comments": comments or [],
         "number": number,
         "title": title,
         "url": f"https://example.test/issues/{number}",
@@ -132,6 +152,7 @@ def _tracker(
     tmp_path: Path,
     tickets: dict[str, list[dict[str, Any]]],
     issues: dict[int, dict[str, Any]] | None = None,
+    closed: list[dict[str, Any]] | None = None,
 ) -> dict[str, str]:
     """Stand `gh` up over a tracker holding *tickets*, filed by label.
 
@@ -141,12 +162,21 @@ def _tracker(
     Each is a partial ticket laid over an open, unlabelled, unclaimed one, so
     a test states only the part it is about. A number that is not there is a
     ticket the tracker cannot answer for.
+
+    *closed* holds the tickets the tracker answers for the ready label in its
+    closed state, which is where a ticket a run closed as done has gone.
     """
 
     directory = tmp_path / "tracker"
     directory.mkdir()
     for label, filed in tickets.items():
-        (directory / f"{label}.json").write_text(json.dumps(filed), encoding="utf-8")
+        (directory / f"{label}.open.json").write_text(
+            json.dumps(filed), encoding="utf-8"
+        )
+        (directory / f"{label}.closed.json").write_text(
+            json.dumps(closed if label == "ready-for-agent" and closed else []),
+            encoding="utf-8",
+        )
 
     folder = tmp_path / "issues"
     folder.mkdir()
@@ -305,7 +335,7 @@ def test_report_accounts_for_the_tickets_in_scope(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stderr
     report = json.loads(result.stdout)
     assert [entry["number"] for entry in report["tickets"]] == [9, 10]
-    assert report["recorded"] == []
+    assert report["never_on_frontier"] == [9, 10]
 
 
 def test_every_verb_accepts_yes(tmp_path: Path) -> None:
@@ -945,3 +975,256 @@ def test_plan_refuses_a_body_naming_more_than_one_parent(tmp_path: Path) -> None
 
     assert result.returncode == 1
     assert "#6" in result.stderr and "#7" in result.stderr
+
+
+def test_plan_does_not_offer_a_ticket_whose_outcome_is_already_recorded(
+    tmp_path: Path,
+) -> None:
+    """A failure is written down and never retried, so the next plan must not
+    hand the same ticket back — the conditions of a rerun would be identical
+    and so would the outcome. It stays in the account rather than vanishing."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", comments=[_recorded("failed")]),
+                _ticket(10, "the graph"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [10]
+    assert plan["recorded"] == [9]
+    assert plan["tickets"][0]["outcome"] == "failed"
+    assert plan["tickets"][1]["outcome"] is None
+
+
+def test_plan_carries_the_commit_a_recorded_outcome_named(tmp_path: Path) -> None:
+    """An outcome without the commit it was recorded on says nothing about
+    where the work is."""
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", comments=[_recorded("conflicted", head)]),
+                _ticket(10, "the graph"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["tickets"][0]["outcome"] == "conflicted"
+    assert plan["tickets"][0]["commit"] == head
+
+
+def test_plan_strands_the_tickets_waiting_on_a_failure_rather_than_dropping_them(
+    tmp_path: Path,
+) -> None:
+    """This is the outcome a naive loop drops without saying so: 10 waits on a
+    ticket that failed and 11 waits on 10, so neither is workable and neither
+    may go missing from the account."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", comments=[_recorded("failed")]),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+                _ticket(11, "the build", blocked_by=[(10, "OPEN")]),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert plan["workable"] == []
+    assert plan["recorded"] == [9]
+    assert plan["stranded"] == [10, 11]
+    assert plan["never_workable"] == []
+    assert [entry["number"] for entry in plan["tickets"]] == [9, 10, 11]
+
+
+def test_plan_leaves_a_ticket_the_failure_does_not_reach_workable(
+    tmp_path: Path,
+) -> None:
+    """Stranding follows the edges and stops there: an unrelated ticket is
+    still the run's to start."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", comments=[_recorded("failed")]),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+                _ticket(11, "the unrelated one"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [11]
+    assert plan["stranded"] == [10]
+
+
+def test_plan_reads_back_the_outcome_that_record_wrote(tmp_path: Path) -> None:
+    """The two halves meet here: what `record` writes on a ticket is what the
+    next `plan` reads off it. A test that built the marker for itself would
+    pass on both halves being wrong together."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+    assert (
+        _engine(repo, "record", "--ticket", "9", "--outcome", "failed", env=env)
+    ).returncode == 0
+
+    # Take the note the tracker was asked to write, and put it back on the
+    # ticket as the comment the tracker would now be answering with.
+    written = [
+        line for line in _gh_calls(env).splitlines() if line.startswith("issue comment")
+    ]
+    note = written[0].split("--body ", 1)[1]
+    second = tmp_path / "second"
+    second.mkdir()
+    env = _tracker(
+        second,
+        {"ready-for-agent": [_ticket(9, "the skeleton", comments=[{"body": note}])]},
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["tickets"][0]["outcome"] == "failed"
+    assert plan["workable"] == []
+
+
+def test_report_accounts_for_every_ticket_in_scope_exactly_once(
+    tmp_path: Path,
+) -> None:
+    """The five outcomes are the whole account: a ticket the run silently drops
+    is one the developer will not know to pick up."""
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(10, "the failure", comments=[_recorded("failed")]),
+                _ticket(11, "behind it", blocked_by=[(10, "OPEN")]),
+                _ticket(12, "the collision", comments=[_recorded("conflicted", head)]),
+                _ticket(13, "never reached", claimed_by=["someone"]),
+            ]
+        },
+        closed=[_ticket(9, "the skeleton", comments=[_recorded("done", head)])],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["done"] == [9]
+    assert report["failed"] == [10]
+    assert report["conflicted"] == [12]
+    assert report["stranded"] == [11]
+    assert report["never_on_frontier"] == [13]
+
+    # Every ticket in scope, once and once only, across the five.
+    accounted = [
+        number
+        for outcome in ("done", "failed", "conflicted", "stranded", "never_on_frontier")
+        for number in report[outcome]
+    ]
+    in_scope = [entry["number"] for entry in report["tickets"]]
+    assert sorted(accounted) == in_scope == [9, 10, 11, 12, 13]
+    assert len(set(accounted)) == len(accounted)
+
+
+def test_report_names_the_commit_a_closed_ticket_was_recorded_on(
+    tmp_path: Path,
+) -> None:
+    """A done ticket has left the open scope, so the report finds it among the
+    tickets this machine's runs closed and reports the commit with it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        closed=[_ticket(9, "the skeleton", comments=[_recorded("done", head)])],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["done"] == [9]
+    assert report["tickets"][0]["commit"] == head
+    assert "--assignee @me" in _gh_calls(env)
+
+
+def test_report_leaves_out_a_closed_ticket_no_run_recorded(tmp_path: Path) -> None:
+    """A ticket somebody closed by hand was never this run's to account for,
+    and counting it as done would be a report nobody can check."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        closed=[_ticket(9, "closed by a person")],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["done"] == []
+    assert report["tickets"] == []
+
+
+def test_plan_strands_nothing_behind_a_ticket_that_passed(tmp_path: Path) -> None:
+    """Done is work that exists, so nothing strands behind it. A ticket reopened
+    after a run closed it still carries that outcome and is never offered
+    again, which leaves what waits on it waiting on work no wave will build —
+    not stranded behind a failure, which is a different thing to go and fix."""
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", comments=[_recorded("done", head)]),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["recorded"] == [9]
+    assert plan["stranded"] == []
+    assert plan["blocked"] == [9, 10]
+    assert plan["never_workable"] == [10]

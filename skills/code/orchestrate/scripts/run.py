@@ -28,7 +28,9 @@ TICKET_PAGE = 200
 # The outcomes a run records against a ticket. Stranded and never-on-the-
 # frontier are read off the graph rather than recorded, so neither is one.
 DONE = "done"
-OUTCOMES = (DONE, "failed", "conflicted")
+FAILED = "failed"
+CONFLICTED = "conflicted"
+OUTCOMES = (DONE, FAILED, CONFLICTED)
 
 # What each recorded outcome says on the ticket it is recorded against. The
 # machine-readable half is the marker; this is the half a developer reads.
@@ -37,11 +39,11 @@ NOTES = {
         "Recorded by an unattended run: built and then verified independently "
         "against this ticket's acceptance criteria."
     ),
-    "failed": (
+    FAILED: (
         "Recorded by an unattended run: verification did not pass. The ticket "
         "is not retried — a rerun would have identical conditions."
     ),
-    "conflicted": (
+    CONFLICTED: (
         "Recorded by an unattended run: this ticket's work collided with "
         "another ticket's and the collision was not repaired."
     ),
@@ -50,6 +52,14 @@ NOTES = {
 # The marker every recorded outcome carries, so what a run wrote on a ticket
 # is machine-readable and not only prose somebody has to interpret.
 MARKER = "kntnt-orchestrate"
+
+# The same marker read back off a ticket. A recorded outcome outlives the
+# session that produced it because the tracker is where it was written, which
+# is what lets one run's record change the next run's plan without either of
+# them sharing any memory (ADR-0051).
+RECORDED_OUTCOME = re.compile(
+    rf"<!--\s*{MARKER}\s+outcome=(\S+?)(?:\s+commit=(\S+?))?\s*-->"
+)
 
 # Who a claim assigns the ticket to. The tracker's own relation for "somebody
 # is on this" is the claim: it needs no label created and no convention
@@ -191,6 +201,12 @@ class Ticket:
     `parent` is the spec whose testing decisions are read before any test.
     `claimed_by` is who the tracker has it assigned to: non-empty means another
     session, or a person, already has it.
+
+    `outcome` is what a run has already recorded against this ticket, read back
+    off the tracker, with `commit` the commit that outcome named. Both are None
+    where nothing has been recorded. A ticket carrying an outcome is settled:
+    it is never offered again, and what waits on it is stranded rather than
+    workable.
     """
 
     number: int
@@ -200,6 +216,8 @@ class Ticket:
     parent: int | None
     claimed_by: list[str]
     blocked_by: list[int]
+    outcome: str | None
+    commit: str | None
 
 
 @dataclass
@@ -211,12 +229,14 @@ class Plan:
     the tickets off a plan that refuses exactly as it reads them off one that
     does not.
 
-    The scope is reported over the same tickets several ways. `waves` is the
-    shape of the night as the graph dictates it; `blocked` is everything
-    outside wave one, and `never_workable` the part of it no wave holds because
-    it waits on a cycle or on work outside the run. `claimed` cuts across all
-    of that: a ticket somebody already has is not this run's to start, so
-    `workable` is wave one less whatever is claimed.
+    The scope is reported over the same tickets several ways. `recorded` is
+    what a run has already settled and `stranded` what waits on a settled
+    failure; neither is laid out in a wave, because neither can be worked.
+    `waves` is the shape of what remains as the graph dictates it; `blocked` is
+    everything outside wave one, and `never_workable` the part of it no wave
+    holds because it waits on a cycle or on work outside the run. `claimed`
+    cuts across all of that: a ticket somebody already has is not this run's to
+    start, so `workable` is wave one less whatever is claimed.
 
     `model` is the model the building subagents run on, carried here because
     the plan is where the run says what it is about to do.
@@ -233,6 +253,8 @@ class Plan:
     tickets: list[dict[str, Any]]
     workable: list[int]
     claimed: list[int]
+    recorded: list[int]
+    stranded: list[int]
     blocked: list[int]
     waves: list[list[int]]
     never_workable: list[int]
@@ -313,6 +335,26 @@ def holders_of(item: dict[str, Any]) -> list[str]:
     """Return who the tracker has *item* assigned to, which is who claims it."""
 
     return [str(holder["login"]) for holder in item["assignees"]]
+
+
+def recorded_against(item: dict[str, Any]) -> tuple[str | None, str | None]:
+    """Return the outcome a run recorded on *item*, and the commit it named.
+
+    The tracker is a boundary and a comment is prose anybody can write, so only
+    an outcome this engine knows how to record is read back — a marker naming
+    anything else is somebody else's writing and settles nothing. The last one
+    wins, that being the outcome as it now stands.
+    """
+
+    # Read every marker and keep the last, that being the outcome as it stands.
+    outcome: str | None = None
+    commit: str | None = None
+    for comment in item["comments"]:
+        found = RECORDED_OUTCOME.search(str(comment["body"]))
+        if found and found.group(1) in OUTCOMES:
+            outcome, commit = found.group(1), found.group(2)
+
+    return outcome, commit
 
 
 def ticket_view(cwd: Path, number: int, fields: str) -> dict[str, Any]:
@@ -423,6 +465,104 @@ def waves_of(tickets: list[Ticket]) -> tuple[list[list[int]], list[int]]:
     return waves, sorted(waiting)
 
 
+def stranded_behind(tickets: list[Ticket]) -> list[int]:
+    """Return the tickets waiting, however far back, on one that did not pass.
+
+    This is the outcome a naive loop drops without saying so. A ticket whose
+    blocker failed cannot be worked — the work it builds on does not exist —
+    and it is not blocked in the ordinary sense either, because nothing left in
+    the run will ever unblock it. It comes back stranded instead: out of the
+    frontier, and still in the account.
+    """
+
+    # Walk the edges the other way round, so a settled ticket names what waited
+    # on it rather than the other way about.
+    dependents: dict[int, list[int]] = {}
+    for ticket in tickets:
+        for blocker in ticket.blocked_by:
+            dependents.setdefault(blocker, []).append(ticket.number)
+
+    # Stranding spreads from the tickets that did not pass, transitively: done
+    # is work that exists and holds nothing back behind it. A ticket carrying
+    # an outcome of its own is settled by that outcome and is never restated as
+    # stranded.
+    recorded = {ticket.number for ticket in tickets if ticket.outcome}
+    stranded: set[int] = set()
+    spreading = [
+        ticket.number for ticket in tickets if ticket.outcome not in (None, DONE)
+    ]
+    while spreading:
+        for dependent in dependents.get(spreading.pop(), []):
+            if dependent not in recorded and dependent not in stranded:
+                stranded.add(dependent)
+                spreading.append(dependent)
+
+    return sorted(stranded)
+
+
+def listed_tickets(cwd: Path, *query: str) -> list[dict[str, Any]]:
+    """Return what the tracker answers a ticket query with.
+
+    The page size is asked for here rather than by the caller, because it is
+    what the guard below is written against: a caller free to choose its own
+    limit is a caller that can switch that guard off without meaning to.
+    """
+
+    # Every query is by label, a ticket without one being unfinished thinking.
+    output = gh(
+        cwd,
+        "issue",
+        "list",
+        "--label",
+        READY_LABEL,
+        "--limit",
+        str(TICKET_PAGE),
+        *query,
+    )
+
+    # The tracker is a boundary: an unreadable answer, or a full page that may
+    # be hiding the rest of the scope, has to name itself rather than pass as a
+    # plan somebody would act on.
+    try:
+        listed: list[dict[str, Any]] = json.loads(output)
+    except json.JSONDecodeError as exc:
+        raise RunError(f"the tracker returned no readable ticket list: {exc}") from exc
+    if len(listed) >= TICKET_PAGE:
+        raise RunError(
+            f"the tracker returned a full page of {TICKET_PAGE} tickets, "
+            "so the scope cannot be read completely"
+        )
+
+    return listed
+
+
+def ticket_from(
+    item: dict[str, Any],
+    *,
+    blocked_by: list[int],
+    outcome: str | None,
+    commit: str | None,
+) -> Ticket:
+    """Build one ticket out of what the tracker answered about it.
+
+    Everything readable straight off that answer is read here. What costs the
+    tracker a second question, or a judgement about the graph, is settled by
+    the caller and passed in.
+    """
+
+    return Ticket(
+        number=int(item["number"]),
+        title=str(item["title"]),
+        url=str(item["url"]),
+        body=str(item["body"]),
+        parent=parent_of(item),
+        claimed_by=holders_of(item),
+        blocked_by=blocked_by,
+        outcome=outcome,
+        commit=commit,
+    )
+
+
 def tickets_in_scope(cwd: Path) -> list[Ticket]:
     """Return the open tickets carrying the ready label, oldest first.
 
@@ -432,32 +572,13 @@ def tickets_in_scope(cwd: Path) -> list[Ticket]:
 
     # Ask the tracker for the whole scope, and for it by label: a ticket
     # without that label is unfinished thinking and is never worked.
-    output = gh(
+    listed = listed_tickets(
         cwd,
-        "issue",
-        "list",
-        "--label",
-        READY_LABEL,
         "--state",
         "open",
         "--json",
-        "number,title,url,body,parent,assignees,blockedBy",
-        "--limit",
-        str(TICKET_PAGE),
+        "number,title,url,body,parent,assignees,blockedBy,comments",
     )
-
-    # The tracker is a boundary: an unreadable answer, or a full page that may
-    # be hiding the rest of the scope, has to name itself rather than pass as
-    # a plan somebody would act on.
-    try:
-        listed = json.loads(output)
-    except json.JSONDecodeError as exc:
-        raise RunError(f"the tracker returned no readable ticket list: {exc}") from exc
-    if len(listed) >= TICKET_PAGE:
-        raise RunError(
-            f"the tracker returned a full page of {TICKET_PAGE} tickets, "
-            "so the scope cannot be read completely"
-        )
 
     # Every ticket in scope is open, the query having asked for open ones, so
     # an edge that points into the scope costs the tracker no second question.
@@ -470,16 +591,57 @@ def tickets_in_scope(cwd: Path) -> list[Ticket]:
     for item in listed:
         number = int(item["number"])
         try:
+            outcome, commit = recorded_against(item)
             tickets.append(
-                Ticket(
-                    number=number,
-                    title=str(item["title"]),
-                    url=str(item["url"]),
-                    body=str(item["body"]),
-                    parent=parent_of(item),
-                    claimed_by=holders_of(item),
+                ticket_from(
+                    item,
                     blocked_by=unmet_blockers(cwd, item, states),
+                    outcome=outcome,
+                    commit=commit,
                 )
+            )
+        except RunError as exc:
+            raise RunError(f"#{number}: {exc}") from exc
+
+    return sorted(tickets, key=lambda ticket: ticket.number)
+
+
+def tickets_recorded_done(cwd: Path) -> list[Ticket]:
+    """Return the tickets a run closed as done, oldest first.
+
+    Done is the one outcome that takes a ticket out of the open scope, so the
+    report would lose exactly the tickets it most needs to name if it read that
+    scope alone. They are found by the claim that started them and the marker
+    that ended them: a ticket closed by hand carries neither and was never this
+    run's to account for, and counting it done would be a report nobody can
+    check.
+    """
+
+    # Ask for the closed half of the scope, narrowed to the tickets this
+    # machine's runs took: without that the query is every ticket the label has
+    # ever closed, which grows past a page and can only refuse.
+    listed = listed_tickets(
+        cwd,
+        "--state",
+        "closed",
+        "--assignee",
+        CLAIM_ASSIGNEE,
+        "--json",
+        "number,title,url,body,parent,assignees,comments",
+    )
+
+    # No edge is read off a finished ticket. There is nothing left for it to
+    # wait for, and asking the tracker about a blocker named in its body is a
+    # question whose answer could only ever fail the report.
+    tickets = []
+    for item in listed:
+        number = int(item["number"])
+        outcome, commit = recorded_against(item)
+        if outcome != DONE:
+            continue
+        try:
+            tickets.append(
+                ticket_from(item, blocked_by=[], outcome=outcome, commit=commit)
             )
         except RunError as exc:
             raise RunError(f"#{number}: {exc}") from exc
@@ -490,18 +652,30 @@ def tickets_in_scope(cwd: Path) -> list[Ticket]:
 def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
     """Gather what a run in *cwd* would work, and whether it may start."""
 
-    # The graph is the shape of the night: wave one is what may start now, and
-    # everything else is waiting on work inside it or on work outside the run.
+    # What earlier waves of this run wrote down is where the plan starts, not
+    # where it ends: a ticket already settled is never offered again, and what
+    # waits on a settled failure is stranded rather than worked on top of code
+    # that was never built.
     branch = current_branch(cwd)
     default = default_branch(cwd)
     tickets = tickets_in_scope(cwd)
-    waves, never_workable = waves_of(tickets)
+    recorded = [ticket.number for ticket in tickets if ticket.outcome]
+    stranded = stranded_behind(tickets)
+
+    # The graph is the shape of what is left: wave one is what may start now,
+    # and everything else waits on work inside it or on work outside the run.
+    settled = set(recorded).union(stranded)
+    waves, never_workable = waves_of(
+        [ticket for ticket in tickets if ticket.number not in settled]
+    )
     frontier = set(waves[0]) if waves else set()
 
     # A claim is somebody else's session or a person, and either way the ticket
     # is not this run's to start. It leaves the frontier without leaving the
     # account, so nothing disappears by being taken.
-    claimed = [ticket.number for ticket in tickets if ticket.claimed_by]
+    claimed = [
+        ticket.number for ticket in tickets if ticket.claimed_by and not ticket.outcome
+    ]
     workable = sorted(frontier.difference(claimed))
 
     plan = Plan(
@@ -516,6 +690,8 @@ def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
         tickets=[asdict(ticket) for ticket in tickets],
         workable=workable,
         claimed=claimed,
+        recorded=recorded,
+        stranded=stranded,
         blocked=[ticket.number for ticket in tickets if ticket.number not in frontier],
         waves=waves,
         never_workable=never_workable,
@@ -542,8 +718,8 @@ def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
     elif not frontier:
         plan.ready = False
         plan.reason = (
-            "no ticket is workable: every ticket in scope waits on work "
-            "this run cannot reach"
+            "no ticket is workable: every ticket in scope is already recorded, "
+            "stranded behind a failure, or waiting on work this run cannot reach"
         )
     elif not workable:
         plan.ready = False
@@ -675,19 +851,50 @@ def cmd_record(cwd: Path, number: int, outcome: str, named: str | None) -> int:
 
 
 def cmd_report(cwd: Path) -> int:
-    """Print the run report: the tickets in scope, and what was recorded."""
+    """Print the consolidated report: every ticket in scope, and its outcome.
 
+    One report rather than a running commentary, and every ticket in scope in
+    it exactly once — a ticket the run drops in silence is one the developer
+    will not know to pick up. The five outcomes partition the scope by
+    construction: what a run recorded, then what a recorded failure stranded,
+    then everything left, which is everything this run never had on its
+    frontier — held by a cycle, by work outside the run, by another session's
+    claim, or by the run stopping before its wave came round.
+    """
+
+    # The scope is asked for twice, because done is the one outcome that takes
+    # a ticket out of the open one by closing it.
     try:
-        tickets = tickets_in_scope(cwd)
+        branch = current_branch(cwd)
+        open_scope = tickets_in_scope(cwd)
+        tickets = sorted(
+            open_scope + tickets_recorded_done(cwd), key=lambda ticket: ticket.number
+        )
     except RunError as exc:
         return fail(str(exc))
+
+    # Stranding is read off the open scope alone: a ticket that is finished has
+    # no unmet blocker left to strand anything behind.
+    recorded = {
+        outcome: [ticket.number for ticket in tickets if ticket.outcome == outcome]
+        for outcome in OUTCOMES
+    }
+    stranded = stranded_behind(open_scope)
+    accounted = set(stranded).union(*recorded.values())
 
     emit(
         {
             "verb": "report",
             "label": READY_LABEL,
+            "branch": branch,
             "tickets": [asdict(ticket) for ticket in tickets],
-            "recorded": [],
+            "done": recorded[DONE],
+            "failed": recorded[FAILED],
+            "conflicted": recorded[CONFLICTED],
+            "stranded": stranded,
+            "never_on_frontier": [
+                ticket.number for ticket in tickets if ticket.number not in accounted
+            ],
         }
     )
     return 0

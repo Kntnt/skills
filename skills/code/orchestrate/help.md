@@ -18,6 +18,20 @@ It is then **verified** by a second subagent that never saw the building session
 
 Only then is the ticket **closed**, together with the commit that carries the work. A ticket that fails verification is written down as failed and left open and claimed, and the run stops there. It is not retried: the conditions of a rerun would be identical and so would the outcome.
 
+Every outcome is written on the ticket it belongs to, which is where the next run reads it back from. So what has been recorded changes what comes next: a ticket already recorded is never offered again, and a ticket whose blocker failed comes back **stranded** — not workable, because the work it builds on does not exist, and not missing from the account either, which is what a loop that only tracks what it can start drops without saying so.
+
+## The report
+
+The run ends with one report rather than a running commentary, so you read the whole night in one sitting. Every ticket in scope is in it exactly once, under one of five outcomes:
+
+- **done** — built, independently verified, and closed on the commit that carries the work.
+- **failed** — verification did not pass. The work is still on the branch and was not reverted, so you can look at it.
+- **conflicted** — this ticket's work collided with another's and the collision was not repaired. Nothing produces this outcome yet; collisions arrive with integration, and the account has a place for them from the start.
+- **stranded** — waiting, directly or through others, on a ticket that did not pass.
+- **never on the frontier** — everything this run never had a chance at: tickets waiting on each other in a circle, tickets waiting on open work outside the run, tickets another session has claimed, and tickets whose wave never came round because the run stopped first.
+
+There is no sixth pile and no ticket in two of them. A ticket the run dropped in silence is one you would not know to pick up.
+
 ## Options
 
 - `--dry-run` — plan the run, print what would be worked, and start nothing.
