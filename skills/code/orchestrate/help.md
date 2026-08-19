@@ -20,6 +20,12 @@ Only then is the ticket **closed**, together with the commit that carries the wo
 
 Every outcome is written on the ticket it belongs to, which is where the next run reads it back from. So what has been recorded changes what comes next: a ticket already recorded is never offered again, and a ticket whose blocker failed comes back **stranded** — not workable, because the work it builds on does not exist, and not missing from the account either, which is what a loop that only tracks what it can start drops without saying so.
 
+## Continuing an interrupted run
+
+A run that was interrupted — the machine slept, the session was killed, you closed the laptop — is continued by starting it again exactly as you started it the first time. There is no resume flag, and none to forget: a ticket already recorded is never offered again, so an interruption costs you the tickets that were left rather than the ones that were built, and the ticket the run was on when it stopped is picked up again rather than treated as taken.
+
+What makes that work is the tracker: outcomes are written on the tickets themselves, so a fresh session reads them exactly as the session that wrote them did. Alongside that, the run keeps a note of what it has claimed in whatever per-session scratch directory your harness provides. That note is remembered, never relied on — where it is gone, and after a machine restart it will be, the run rebuilds what it needs from the tracker and the branch and reaches the same account. What it buys is the one thing the tracker cannot say: whether a ticket standing in your name is a run of yours that stopped or a second one you started in parallel and is working right now.
+
 ## The report
 
 The run ends with one report rather than a running commentary, so you read the whole night in one sitting. Every ticket in scope is in it exactly once, under one of five outcomes:
@@ -30,7 +36,7 @@ The run ends with one report rather than a running commentary, so you read the w
 - **stranded** — waiting, directly or through others, on a ticket that did not pass.
 - **never on the frontier** — everything this run never had a chance at: tickets waiting on each other in a circle, tickets waiting on open work outside the run, tickets another session has claimed, and tickets whose wave never came round because the run stopped first.
 
-There is no sixth pile and no ticket in two of them. A ticket the run dropped in silence is one you would not know to pick up.
+There is no sixth pile and no ticket in two of them. A ticket the run dropped in silence is one you would not know to pick up. The report also names the commit the run's work sits on top of, so a night reads as one diff from there to the head of your branch.
 
 ## Options
 
@@ -43,6 +49,8 @@ There is no sixth pile and no ticket in two of them. A ticket the run dropped in
 Work is committed straight to the branch you were on, one commit per ticket. Nothing is merged, because there is nothing to integrate: this run works one ticket at a time and no worktree is created.
 
 A run refuses on the repository's default branch and says so — an unattended night must never land there. The plan is still printed, so you can read the scope from the branch you happen to be on. Where nothing can say which branch is the default — no remote to ask, and neither `main` nor `master` in the repository — it refuses rather than guess, and tells you to name it. A guess would either work the branch it must not touch, or refuse the branch you are on under a reason that is not true.
+
+Where a ticket in scope is claimed, the run asks the tracker who you are, so it can tell a claim of your own from somebody else's — and where the tracker will not say, it stops and tells you rather than guess. Either guess is one an unattended night should not make: reading your own interrupted claim as a stranger's leaves the work undone, and reading a stranger's as your own builds the same ticket twice. Nothing is asked and nothing refuses where no ticket in scope is claimed.
 
 A failed ticket's work is left on the branch rather than reverted, so you can look at it. That is also why the run stops at the first failure: the next ticket would otherwise be built on top of unverified code.
 

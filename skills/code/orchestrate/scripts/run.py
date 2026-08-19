@@ -11,6 +11,7 @@ import json
 import re
 import subprocess
 import sys
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -66,6 +67,11 @@ RECORDED_OUTCOME = re.compile(
 # agreed, and a ticket a human has taken is one an unattended run must leave
 # alone for exactly the same reason.
 CLAIM_ASSIGNEE = "@me"
+
+# What a run calls the state it keeps in the session's scratch directory. One
+# file per session, named rather than generated, so a re-invocation in that
+# same session finds what the last one left (ADR-0052).
+STATE_FILE = "kntnt-orchestrate.json"
 
 # What the tracker calls a ticket that is finished. A blocker in this state
 # names work that already exists, so it blocks nothing.
@@ -199,8 +205,9 @@ class Ticket:
     `body` is the ticket as it was filed, carried whole because the brief a
     building subagent gets carries the body and never a summary of it, and
     `parent` is the spec whose testing decisions are read before any test.
-    `claimed_by` is who the tracker has it assigned to: non-empty means another
-    session, or a person, already has it.
+    `claimed_by` is who the tracker has it assigned to: non-empty means a
+    session or a person already has it, and the logins are what tells a claim
+    this run left behind from one somebody else took.
 
     `outcome` is what a run has already recorded against this ticket, read back
     off the tracker, with `commit` the commit that outcome named. Both are None
@@ -221,6 +228,174 @@ class Ticket:
 
 
 @dataclass
+class RunState:
+    """What one run remembers of itself between invocations.
+
+    It is remembered, never relied on: every answer this engine gives is read
+    off the tracker and the branch, and the same answer comes back where this
+    is absent (ADR-0051). What it buys is the one thing the tracker cannot
+    say — which of the claims standing in this developer's name are this run's
+    own, an interrupted run and a session running in parallel being the same
+    login on the same ticket.
+
+    `branch` and `label` are what the state is of: a scratch directory outlives
+    a checkout, and a document describing another branch describes another run.
+    `login` is who the tracker last said this run claims as, kept so a verb
+    that needs it does not ask again. `claimed` is the tickets this run has
+    taken and not yet recorded an outcome against. `base` is the commit its
+    work sits on top of, which is the branch's half of the same account and is
+    worked out afresh every time rather than read back, so a state that is gone
+    cannot make it disagree with the branch it describes.
+    """
+
+    branch: str
+    label: str
+    login: str | None
+    claimed: list[int]
+    base: str
+
+
+def state_file(directory: str | None) -> Path | None:
+    """Return the file the run's state lives in, or None where there is none.
+
+    The harness knows where this session's scratch directory is and the engine
+    does not, so the directory is passed in. None is not an error: the state is
+    an optimisation, and a harness that offers no such directory costs a run
+    nothing but the tracker call the state would have saved.
+    """
+
+    return Path(directory).expanduser() / STATE_FILE if directory else None
+
+
+def read_state(path: Path | None, branch: str) -> RunState | None:
+    """Return what the run remembered of itself, or None where nothing does.
+
+    The file is a boundary like any other: a session killed mid-write, a hand
+    edit, or a scratch directory carried over to another branch all produce
+    something this cannot read, and each is answered the same way — as no state
+    at all, which is a state the engine already knows how to work from.
+    """
+
+    if path is None:
+        return None
+
+    try:
+        stored = json.loads(path.read_text(encoding="utf-8"))
+        if stored["branch"] != branch or stored["label"] != READY_LABEL:
+            return None
+        return RunState(
+            branch=str(stored["branch"]),
+            label=str(stored["label"]),
+            login=None if stored["login"] is None else str(stored["login"]),
+            claimed=[int(number) for number in stored["claimed"]],
+            base=str(stored["base"]),
+        )
+    except (OSError, TypeError, ValueError, KeyError):
+        return None
+
+
+def write_state(path: Path | None, state: RunState) -> str | None:
+    """Store *state* and return where, or None where it was not stored.
+
+    A scratch directory that cannot be written to is not a reason to stop: the
+    run goes on reading the tracker, and the next invocation rebuilds what this
+    one could not leave behind.
+    """
+
+    if path is None:
+        return None
+
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(asdict(state), indent=2) + "\n", encoding="utf-8")
+    except OSError:
+        return None
+
+    return str(path)
+
+
+def remembered_state(path: Path | None, cwd: Path) -> RunState | None:
+    """Return what the run remembered, for a verb that has not read the branch.
+
+    The branch is what says whether a document describes this run, and a verb
+    working one ticket has no other reason to ask for it — so a repository that
+    cannot answer is read as no state, which is a state the engine works from.
+    """
+
+    if path is None:
+        return None
+
+    try:
+        return read_state(path, current_branch(cwd))
+    except RunError:
+        return None
+
+
+def _amend_claims(
+    path: Path | None, cwd: Path, change: Callable[[set[int]], set[int]]
+) -> None:
+    """Put the run's remembered claims through *change*, where it remembers any.
+
+    Only a verb that has read the whole scope writes the document; this one
+    amends the document that is already there, and does nothing where there is
+    none. A file written from a verb that knows about one ticket would say the
+    run's other claims are somebody else's, which is the one thing the state is
+    kept to prevent.
+    """
+
+    state = remembered_state(path, cwd)
+    if state is None:
+        return
+
+    state.claimed = sorted(change(set(state.claimed)))
+    write_state(path, state)
+
+
+def remember_claim(path: Path | None, cwd: Path, number: int) -> None:
+    """Add ticket *number* to what the run remembers claiming."""
+
+    _amend_claims(path, cwd, lambda claims: claims | {number})
+
+
+def forget_claim(path: Path | None, cwd: Path, number: int) -> None:
+    """Drop ticket *number* from what the run remembers claiming.
+
+    A recorded ticket is settled, and a settled ticket is not one that a
+    re-invocation picks up where this run left off.
+    """
+
+    _amend_claims(path, cwd, lambda claims: claims - {number})
+
+
+def my_login(cwd: Path, remembered: RunState | None) -> str:
+    """Return who the tracker has this run authenticated as.
+
+    Asked only where a claim in scope makes it matter, and remembered across
+    the verbs of one run. A run told nothing about who it is cannot tell its
+    own interrupted claim from another session's, and neither guess is one an
+    unattended night may make: it stops instead.
+    """
+
+    if remembered and remembered.login:
+        return remembered.login
+
+    try:
+        login = gh(cwd, "api", "user", "--jq", ".login").strip()
+    except RunError as exc:
+        raise RunError(
+            "a ticket in scope is claimed, and the tracker cannot say who this "
+            f"run would be claiming as: {exc}"
+        ) from exc
+    if not login:
+        raise RunError(
+            "a ticket in scope is claimed, and the tracker named nobody when "
+            "asked who this run would be claiming as"
+        )
+
+    return login
+
+
+@dataclass
 class Plan:
     """What a run would work, and whether it may start.
 
@@ -236,10 +411,14 @@ class Plan:
     everything outside wave one, and `never_workable` the part of it no wave
     holds because it waits on a cycle or on work outside the run. `claimed`
     cuts across all of that: a ticket somebody already has is not this run's to
-    start, so `workable` is wave one less whatever is claimed.
+    start, so `workable` is wave one less whatever is claimed. `resuming` is
+    the other half of that reading — the tickets this run itself claimed and
+    was interrupted before recording, which are in `workable` like any other,
+    the claim on them being already its own.
 
-    `model` is the model the building subagents run on, carried here because
-    the plan is where the run says what it is about to do.
+    `model` is the model the building subagents run on, and `state` is where
+    the run left what it remembers of itself, both carried here because the
+    plan is where the run says what it is about to do.
     """
 
     verb: str
@@ -247,12 +426,14 @@ class Plan:
     reason: str | None
     dry_run: bool
     model: str | None
+    state: str | None
     branch: str
     default_branch: str | None
     label: str
     tickets: list[dict[str, Any]]
     workable: list[int]
     claimed: list[int]
+    resuming: list[int]
     recorded: list[int]
     stranded: list[int]
     blocked: list[int]
@@ -649,7 +830,45 @@ def tickets_recorded_done(cwd: Path) -> list[Ticket]:
     return sorted(tickets, key=lambda ticket: ticket.number)
 
 
-def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
+def run_base(cwd: Path, tickets: list[Ticket]) -> str:
+    """Return the commit this run's work sits on top of.
+
+    This is the branch's half of a run's account: what the night added is the
+    diff from here to the head. It is worked out from the branch every time
+    rather than read back from what a run remembered, so a session whose
+    scratch directory is gone answers exactly as the session that did the work
+    did — the commit all of this run's recorded work descends from. Where the
+    run has recorded nothing yet there is no work to sit on, and the head is
+    where its first ticket will land.
+    """
+
+    # A commit a run recorded on another branch is not this branch's history,
+    # and a branch that does not hold it can say nothing about where work began.
+    recorded = [ticket.commit for ticket in tickets if ticket.commit]
+    on_branch = [
+        commit
+        for commit in recorded
+        if git_ok(cwd, "merge-base", "--is-ancestor", commit, "HEAD")
+    ]
+    if not on_branch:
+        return git(cwd, "rev-parse", "HEAD").strip()
+
+    # What they all descend from is the oldest of them where the run committed
+    # one ticket after another, and an earlier commit where the branch forked
+    # and came back — either way a base the whole run is contained by.
+    oldest = git(cwd, "merge-base", "--octopus", *on_branch).strip()
+
+    # A run whose first recorded commit is the repository's root sits on that
+    # commit itself: there is nothing before it to name.
+    try:
+        return git(cwd, "rev-parse", "--verify", f"{oldest}^").strip()
+    except RunError:
+        return oldest
+
+
+def build_plan(
+    cwd: Path, *, dry_run: bool, model: str | None, state_path: Path | None
+) -> Plan:
     """Gather what a run in *cwd* would work, and whether it may start."""
 
     # What earlier waves of this run wrote down is where the plan starts, not
@@ -658,6 +877,7 @@ def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
     # that was never built.
     branch = current_branch(cwd)
     default = default_branch(cwd)
+    remembered = read_state(state_path, branch)
     tickets = tickets_in_scope(cwd)
     recorded = [ticket.number for ticket in tickets if ticket.outcome]
     stranded = stranded_behind(tickets)
@@ -670,12 +890,20 @@ def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
     )
     frontier = set(waves[0]) if waves else set()
 
-    # A claim is somebody else's session or a person, and either way the ticket
-    # is not this run's to start. It leaves the frontier without leaving the
-    # account, so nothing disappears by being taken.
-    claimed = [
-        ticket.number for ticket in tickets if ticket.claimed_by and not ticket.outcome
+    # A claim standing in this run's own name, over a ticket it took and never
+    # recorded, is where an interruption left off: the run picks it up rather
+    # than treating it as taken. Every other claim is somebody else's session
+    # or a person, and leaves the frontier without leaving the account, so
+    # nothing disappears by being taken.
+    held = [ticket for ticket in tickets if ticket.claimed_by and not ticket.outcome]
+    login = my_login(cwd, remembered) if held else None
+    resuming = [
+        ticket.number
+        for ticket in held
+        if ticket.claimed_by == [login]
+        and (remembered is None or ticket.number in remembered.claimed)
     ]
+    claimed = [ticket.number for ticket in held if ticket.number not in resuming]
     workable = sorted(frontier.difference(claimed))
 
     plan = Plan(
@@ -684,12 +912,14 @@ def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
         reason=None,
         dry_run=dry_run,
         model=model,
+        state=None,
         branch=branch,
         default_branch=default,
         label=READY_LABEL,
         tickets=[asdict(ticket) for ticket in tickets],
         workable=workable,
         claimed=claimed,
+        resuming=resuming,
         recorded=recorded,
         stranded=stranded,
         blocked=[ticket.number for ticket in tickets if ticket.number not in frontier],
@@ -728,14 +958,33 @@ def build_plan(cwd: Path, *, dry_run: bool, model: str | None) -> Plan:
             "person has all the work this one could start"
         )
 
+    # A run that may start leaves what it remembers of itself where this
+    # session's scratch is, written from here because this is the verb that has
+    # read the whole scope. A run that may not starts nothing, and a dry run
+    # that left a file behind would have started something after all. A login
+    # nothing asked for this time is the one already remembered.
+    if plan.ready:
+        plan.state = write_state(
+            state_path,
+            RunState(
+                branch=branch,
+                label=READY_LABEL,
+                login=login or (remembered.login if remembered else None),
+                claimed=resuming,
+                base=run_base(cwd, tickets),
+            ),
+        )
+
     return plan
 
 
-def cmd_plan(cwd: Path, *, dry_run: bool, model: str | None) -> int:
+def cmd_plan(
+    cwd: Path, *, dry_run: bool, model: str | None, state_path: Path | None
+) -> int:
     """Print the plan, and answer whether work may start."""
 
     try:
-        plan = build_plan(cwd, dry_run=dry_run, model=model)
+        plan = build_plan(cwd, dry_run=dry_run, model=model, state_path=state_path)
     except RunError as exc:
         return fail(str(exc))
 
@@ -743,12 +992,22 @@ def cmd_plan(cwd: Path, *, dry_run: bool, model: str | None) -> int:
     return 0 if plan.ready else 2
 
 
-def claim_refusal(number: int, ticket: dict[str, Any]) -> str | None:
+def claim_refusal(
+    number: int,
+    ticket: dict[str, Any],
+    mine: str | None,
+    remembered: RunState | None,
+) -> str | None:
     """Return why *ticket* may not be claimed, or None where it may.
 
     This is the last gate before a subagent is briefed, so it asks the tracker
     itself rather than trusting a plan that may be minutes old — the whole
     point of a claim is the session that started while this one was reading.
+    That is also why a claim in this run's own name is not enough on its own:
+    an interrupted run of this developer's and one they started in parallel
+    leave the same login behind, and only a claim the run remembers taking is
+    its own to pick up. Where it remembers nothing there is nothing to tell
+    them apart by, and the claim is read as the interrupted one it usually is.
     """
 
     if str(ticket["state"]).upper() == CLOSED:
@@ -758,13 +1017,19 @@ def claim_refusal(number: int, ticket: dict[str, Any]) -> str | None:
         return f"#{number} does not carry '{READY_LABEL}'"
 
     holders = holders_of(ticket)
-    if holders:
+    if not holders:
+        return None
+
+    if holders != [mine]:
         return f"#{number} is already claimed by {', '.join(holders)}"
+
+    if remembered and number not in remembered.claimed:
+        return f"#{number} is claimed by a run this one did not start"
 
     return None
 
 
-def cmd_claim(cwd: Path, number: int) -> int:
+def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     """Take one ticket on the tracker, before any work on it starts."""
 
     try:
@@ -772,18 +1037,32 @@ def cmd_claim(cwd: Path, number: int) -> int:
     except RunError as exc:
         return fail(f"the tracker cannot answer for #{number}: {exc}")
 
+    # Who this run is only matters where somebody already holds the ticket,
+    # that being the one question a login answers, so an unclaimed ticket costs
+    # the tracker nothing to take.
+    holders = holders_of(ticket)
+    remembered = remembered_state(state_path, cwd)
+    try:
+        mine = my_login(cwd, remembered) if holders else None
+    except RunError as exc:
+        return fail(str(exc))
+
     # A refusal is an answer and not a breakage: the second session started in
     # parallel reads it, skips the ticket, and works the next one.
-    refusal = claim_refusal(number, ticket)
+    refusal = claim_refusal(number, ticket, mine, remembered)
     if refusal:
         emit({"verb": "claim", "ticket": number, "claimed": False, "reason": refusal})
         return 2
 
-    try:
-        gh(cwd, "issue", "edit", str(number), "--add-assignee", CLAIM_ASSIGNEE)
-    except RunError as exc:
-        return fail(f"#{number} could not be claimed: {exc}")
+    # A ticket this run already holds is already claimed, and asking the
+    # tracker to assign it again would write nothing it does not already say.
+    if not holders:
+        try:
+            gh(cwd, "issue", "edit", str(number), "--add-assignee", CLAIM_ASSIGNEE)
+        except RunError as exc:
+            return fail(f"#{number} could not be claimed: {exc}")
 
+    remember_claim(state_path, cwd, number)
     emit({"verb": "claim", "ticket": number, "claimed": True, "reason": None})
     return 0
 
@@ -799,7 +1078,9 @@ def outcome_note(outcome: str, commit: str | None) -> str:
     return f"<!-- {MARKER} outcome={outcome}{named} --> {NOTES[outcome]}"
 
 
-def cmd_record(cwd: Path, number: int, outcome: str, named: str | None) -> int:
+def cmd_record(
+    cwd: Path, number: int, outcome: str, named: str | None, state_path: Path | None
+) -> int:
     """Store ticket *number*'s *outcome* and the commit that carries it.
 
     The tracker is the store, because it is the one place an outcome outlives
@@ -838,6 +1119,8 @@ def cmd_record(cwd: Path, number: int, outcome: str, named: str | None) -> int:
     except RunError as exc:
         return fail(f"#{number} could not be recorded: {exc}")
 
+    forget_claim(state_path, cwd, number)
+
     emit(
         {
             "verb": "record",
@@ -870,6 +1153,7 @@ def cmd_report(cwd: Path) -> int:
         tickets = sorted(
             open_scope + tickets_recorded_done(cwd), key=lambda ticket: ticket.number
         )
+        base = run_base(cwd, tickets)
     except RunError as exc:
         return fail(str(exc))
 
@@ -887,6 +1171,7 @@ def cmd_report(cwd: Path) -> int:
             "verb": "report",
             "label": READY_LABEL,
             "branch": branch,
+            "base": base,
             "tickets": [asdict(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],
@@ -900,15 +1185,21 @@ def cmd_report(cwd: Path) -> int:
     return 0
 
 
-def add_yes_flag(parser: argparse.ArgumentParser) -> None:
-    """Add --yes to a verb.
+def add_shared_flags(parser: argparse.ArgumentParser) -> None:
+    """Add the flags every verb takes to one of them.
 
     No question is asked here — a script has no terminal to ask one in — but
-    every verb takes the flag, so the skill can pass the user's own arguments
-    straight through without turning `--yes` into a crash (ADR-0029).
+    every verb takes `--yes`, so the skill can pass the user's own arguments
+    straight through without turning it into a crash (ADR-0029). `--state-dir`
+    is on every verb for the other half of the same reason: the harness knows
+    where this session's scratch directory is and the engine does not, and a
+    verb that could not be told would be a verb whose part of the run is
+    forgotten. There is no flag for resuming, because the ordinary invocation
+    is the resume (ADR-0052).
     """
 
     parser.add_argument("--yes", action="store_true")
+    parser.add_argument("--state-dir")
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -920,19 +1211,19 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan = sub.add_parser("plan", help="Print what a run would work.")
     plan.add_argument("--dry-run", action="store_true")
     plan.add_argument("--model")
-    add_yes_flag(plan)
+    add_shared_flags(plan)
 
     claim = sub.add_parser("claim", help="Take one ticket before working it.")
     claim.add_argument("--ticket", required=True, type=int)
-    add_yes_flag(claim)
+    add_shared_flags(claim)
 
     record = sub.add_parser("record", help="Record one ticket's outcome.")
     record.add_argument("--ticket", required=True, type=int)
     record.add_argument("--outcome", required=True, choices=OUTCOMES)
     record.add_argument("--commit")
-    add_yes_flag(record)
+    add_shared_flags(record)
 
-    add_yes_flag(sub.add_parser("report", help="Print the consolidated report."))
+    add_shared_flags(sub.add_parser("report", help="Print the consolidated report."))
 
     return parser.parse_args(argv)
 
@@ -942,12 +1233,15 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parse_args(argv if argv is not None else sys.argv[1:])
     cwd = Path.cwd()
+    state_path = state_file(args.state_dir)
     if args.verb == "plan":
-        return cmd_plan(cwd, dry_run=args.dry_run, model=args.model)
+        return cmd_plan(
+            cwd, dry_run=args.dry_run, model=args.model, state_path=state_path
+        )
     if args.verb == "claim":
-        return cmd_claim(cwd, args.ticket)
+        return cmd_claim(cwd, args.ticket, state_path)
     if args.verb == "record":
-        return cmd_record(cwd, args.ticket, args.outcome, args.commit)
+        return cmd_record(cwd, args.ticket, args.outcome, args.commit, state_path)
     return cmd_report(cwd)
 
 

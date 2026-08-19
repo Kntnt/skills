@@ -1,0 +1,17 @@
+# The invocation is the resume
+
+An unattended run gets interrupted: the machine sleeps, the session is killed, the developer closes the laptop. What that costs has to be the tickets left over and not the ones already built — and the developer has to be able to collect on that without remembering anything special about how the run was started.
+
+There are two ways to offer this. One is a flag: a resume the developer types when they mean to continue and leaves off when they mean to start over. The other is to make the ordinary invocation idempotent. **The same invocation continues the run, and there is no resume flag.**
+
+**A flag is a question the developer has to answer about a session they did not watch.** Answering it wrongly either rebuilds finished work or, worse, starts a fresh run that treats the interrupted one's claims as somebody else's and quietly works nothing. The information needed to answer it is on the tracker either way, so the flag adds a way to get it wrong and nothing else.
+
+**What is done is already visible.** ADR-0051 put every recorded outcome on the ticket it belongs to, so a re-invocation reads finished tickets as settled without being told a run happened before. That is most of the resume, and it comes free.
+
+**The rest is the claim, and it needs one thing the tracker cannot say.** A ticket a run claimed and was interrupted before recording stands assigned to the developer with no outcome on it — and so does a ticket a session they started in parallel is working right now. Both are the same login on the same ticket. The difference is liveness, and the only thing that knows it is the session itself.
+
+So a run keeps state in whatever per-session scratch directory the harness gives it — the branch and label it is a run of, the login it claims as, the tickets it has claimed and not yet recorded, and the commit its work sits on top of. A claim the state accounts for is this run's to pick up. A claim it does not is another session's, and is left alone — by the plan, which never offers it, and by the claim verb, which refuses it even when asked, that being the gate whose whole purpose is the session that started while this one was reading.
+
+**The state is remembered, never relied on.** It is absent by design as often as not: a new session, a cleared scratch directory, a machine restart, or a harness with no such directory to offer. Where it is absent the run rebuilds it from the tracker and the branch — the claims standing in the developer's name with no outcome recorded against them, and the commit all of the run's recorded work descends from — and reaches the same account as the session that did the work. The base is worked out from the branch every time rather than read back, so the half of the state that could disagree with the repository never gets the chance to. Nothing the engine answers is a function of the state alone, which is what keeps ADR-0051's property intact: the plan is a function of the tracker.
+
+**What this costs.** A run rebuilding its state cannot tell an interrupted claim of the developer's from one a session they started in parallel is holding, because a login is all either leaves on the tracker. The narrow case that costs — two runs started in parallel, on the same branch, where the second one's first plan is the one with no state to read — is one where both runs are already committing to the same branch a ticket at a time. Within a session, and across the re-invocations this decision exists for, the state answers it exactly.

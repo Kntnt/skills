@@ -36,9 +36,16 @@ _GIT_ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
 # closed are two different questions asked of the same label. One ticket is
 # reachable by number as well, because a blocking edge read out of a body
 # names a ticket the scope need not contain; a number the tracker was never
-# given fails the call, as a deleted ticket does.
+# given fails the call, as a deleted ticket does. It also answers who the run
+# is authenticated as, which is how a claim of this developer's own is told
+# from another session's; a tracker given no login cannot say.
 _GH_SCRIPT = """#!/bin/sh
 echo "$@" >> "$GH_LOG"
+if [ "$1" = "api" ]; then
+  [ -n "$GH_LOGIN" ] || exit 1
+  printf '%s\\n' "$GH_LOGIN"
+  exit 0
+fi
 case "$2" in
   view) cat "$GH_ISSUES/$3.json"; exit $? ;;
   edit|close|comment) exit 0 ;;
@@ -60,6 +67,11 @@ cat "$GH_TICKETS/$label.$state.json"
 # back off it, and a test that built the marker from the engine's own constant
 # would pass on both halves being wrong together.
 MARKER = "kntnt-orchestrate"
+
+# What the run calls the state it keeps in the session's scratch directory,
+# stated here for the same reason: a test that asked the engine where it wrote
+# would be asking the thing under test to grade itself.
+STATE_FILE = "kntnt-orchestrate.json"
 
 # A stand-in that logs what git was asked to do and then lets the real git do
 # it. Everything the engine reads from the repository has to stay true, so
@@ -153,6 +165,7 @@ def _tracker(
     tickets: dict[str, list[dict[str, Any]]],
     issues: dict[int, dict[str, Any]] | None = None,
     closed: list[dict[str, Any]] | None = None,
+    login: str = "me",
 ) -> dict[str, str]:
     """Stand `gh` up over a tracker holding *tickets*, filed by label.
 
@@ -165,6 +178,10 @@ def _tracker(
 
     *closed* holds the tickets the tracker answers for the ready label in its
     closed state, which is where a ticket a run closed as done has gone.
+
+    *login* is who the tracker says the run is authenticated as, so a claim
+    holding that login is this developer's own and one holding another is
+    somebody else's. Empty is a tracker that cannot say.
     """
 
     directory = tmp_path / "tracker"
@@ -191,7 +208,25 @@ def _tracker(
         "GH_TICKETS": str(directory),
         "GH_ISSUES": str(folder),
         "GH_LOG": str(tmp_path / "gh.log"),
+        "GH_LOGIN": login,
     }
+
+
+def _refile(
+    env: dict[str, str], state: str, tickets: list[dict[str, Any]]
+) -> dict[str, str]:
+    """Refile the ready label's *state* half with *tickets*, and return *env*.
+
+    The tracker as it stands after a run has written to it. The stand-in `gh`
+    accepts a write and changes nothing, so a test that goes on to read the
+    tracker back says here what that write left behind.
+    """
+
+    directory = Path(env["GH_TICKETS"])
+    (directory / f"ready-for-agent.{state}.json").write_text(
+        json.dumps(tickets), encoding="utf-8"
+    )
+    return env
 
 
 def _ready(number: int, **fields: Any) -> dict[str, Any]:
@@ -1228,3 +1263,370 @@ def test_plan_strands_nothing_behind_a_ticket_that_passed(tmp_path: Path) -> Non
     assert plan["stranded"] == []
     assert plan["blocked"] == [9, 10]
     assert plan["never_workable"] == [10]
+
+
+def test_plan_offers_back_the_ticket_an_interrupted_run_left_claimed(
+    tmp_path: Path,
+) -> None:
+    """An interrupted run costs the remaining tickets, not the finished ones.
+    The ticket it was on is still claimed by this developer and carries no
+    outcome, which is what an interruption looks like from the tracker."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", claimed_by=["me"]),
+                _ticket(10, "the graph"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["resuming"] == [9]
+    assert plan["claimed"] == []
+    assert plan["workable"] == [9, 10]
+
+
+def test_plan_leaves_a_claim_this_run_never_took_where_it_is(tmp_path: Path) -> None:
+    """Two sessions of one developer's authenticate as the same person, so a
+    claim carrying that login is not by itself an interrupted run. A run
+    holding state of its own that never took the claim leaves it alone."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+    )
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+
+    # A second session of this developer's claims 9 while the first is reading.
+    _refile(
+        env,
+        "open",
+        [_ticket(9, "the skeleton", claimed_by=["me"]), _ticket(10, "the graph")],
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["resuming"] == []
+    assert plan["claimed"] == [9]
+    assert plan["workable"] == [10]
+
+
+def test_plan_writes_the_run_state_to_the_directory_the_harness_provides(
+    tmp_path: Path,
+) -> None:
+    """The state is written where the harness keeps this session's scratch, and
+    the plan names the file so the developer can go and look at it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton", claimed_by=["me"])]},
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    written = scratch / STATE_FILE
+    assert json.loads(result.stdout)["state"] == str(written)
+    state = json.loads(written.read_text(encoding="utf-8"))
+    assert state["branch"] == "work"
+    assert state["label"] == "ready-for-agent"
+    assert state["login"] == "me"
+    assert state["claimed"] == [9]
+
+
+def test_a_run_given_no_state_directory_plans_the_same_and_writes_nothing(
+    tmp_path: Path,
+) -> None:
+    """A harness with no per-session directory to offer is not an error: the
+    state is an optimisation, and the tracker is what the plan is read off."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["state"] is None
+    assert plan["workable"] == [9]
+    assert not list(tmp_path.rglob(STATE_FILE))
+
+
+def test_a_state_file_nothing_can_read_is_rebuilt_rather_than_stopping_the_run(
+    tmp_path: Path,
+) -> None:
+    """A half-written file from a run somebody killed says nothing, and a run
+    that stopped over it would have made the state a source of truth."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    scratch.mkdir()
+    (scratch / STATE_FILE).write_text('{"branch": "wo', encoding="utf-8")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton", claimed_by=["me"])]},
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["resuming"] == [9]
+    assert json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))[
+        "claimed"
+    ] == [9]
+
+
+def test_claim_takes_a_ticket_this_developer_already_holds(tmp_path: Path) -> None:
+    """The claim an interrupted run left is this run's own, so claiming it again
+    is the same claim rather than a collision with somebody else."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9, assignees=[{"login": "me"}])},
+    )
+
+    result = _engine(repo, "claim", "--ticket", "9", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["claimed"] is True
+
+
+def test_plan_refuses_where_a_claim_exists_and_nothing_can_say_whose_it_is(
+    tmp_path: Path,
+) -> None:
+    """Told nothing about who it is, a run cannot tell its own interrupted claim
+    from another session's, and either guess builds the wrong thing."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton", claimed_by=["someone"])]},
+        login="",
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 1
+    assert "who" in result.stderr
+
+
+def test_no_verb_takes_a_resume_flag(tmp_path: Path) -> None:
+    """The ordinary invocation is the resume, so there is no flag to remember
+    or forget."""
+
+    repo = _init_repo(tmp_path / "proj")
+
+    result = _engine(repo, "plan", "--resume")
+
+    assert result.returncode == 2
+    assert "unrecognized arguments" in result.stderr
+
+
+def test_every_verb_accepts_a_state_directory(tmp_path: Path) -> None:
+    """The flag reaches every verb, as `--yes` does, so the skill passes the
+    session's scratch directory to whatever it calls."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    for args in (
+        ("plan",),
+        ("claim", "--ticket", "9"),
+        ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
+        ("report",),
+    ):
+        result = _engine(repo, *args, "--state-dir", str(scratch), env=env)
+        assert result.returncode == 0, f"{args}: {result.stderr}"
+        assert "unrecognized arguments" not in result.stderr
+
+
+def test_report_names_the_commit_the_runs_work_sits_on(tmp_path: Path) -> None:
+    """The account of a night is read as a diff, and the commit the run's first
+    recorded work sits on top of is where that diff starts."""
+
+    repo = _init_repo(tmp_path / "proj")
+    before = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    (repo / "one.txt").write_text("one\n", encoding="utf-8")
+    _git(repo, "add", "one.txt")
+    _git(repo, "commit", "-m", "the skeleton")
+    first = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        closed=[_ticket(9, "the skeleton", comments=[_recorded("done", first)])],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["base"] == before
+
+
+def _interrupted_run(tmp_path: Path, scratch: Path) -> tuple[Path, dict[str, str]]:
+    """Play a run that recorded #9 done and was interrupted while holding #10.
+
+    The stand-in tracker accepts a write and changes nothing, so what the run
+    wrote is refiled here: #9 closed and recorded, #10 claimed and carrying no
+    outcome, #11 never started.
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph"),
+                _ticket(11, "the build"),
+            ]
+        },
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+
+    for args in (
+        ("plan",),
+        ("claim", "--ticket", "9"),
+        ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
+        ("claim", "--ticket", "10"),
+    ):
+        result = _engine(repo, *args, "--state-dir", str(scratch), env=env)
+        assert result.returncode == 0, f"{args}: {result.stderr}"
+
+    _refile(
+        env,
+        "open",
+        [_ticket(10, "the graph", claimed_by=["me"]), _ticket(11, "the build")],
+    )
+    _refile(env, "closed", [_ticket(9, "the skeleton", comments=[_recorded("done")])])
+    return repo, env
+
+
+def test_re_invoking_continues_the_run_rather_than_restarting_it(
+    tmp_path: Path,
+) -> None:
+    """The developer re-invokes exactly as before: what is done stays done, and
+    what the interruption left claimed is picked up rather than skipped."""
+
+    scratch = tmp_path / "scratch"
+    repo, env = _interrupted_run(tmp_path, scratch)
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert [entry["number"] for entry in plan["tickets"]] == [10, 11]
+    assert plan["resuming"] == [10]
+    assert plan["workable"] == [10, 11]
+
+
+def test_a_run_whose_state_was_deleted_reaches_the_same_account(
+    tmp_path: Path,
+) -> None:
+    """A new session, a cleared scratch directory, or a machine restart leaves
+    no state to read, and the run rebuilds it from the tracker and the branch
+    rather than starting over. That is what makes the invocation idempotent."""
+
+    scratch = tmp_path / "scratch"
+    repo, env = _interrupted_run(tmp_path, scratch)
+    remembered = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    accounted = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    shutil.rmtree(scratch)
+    rebuilt = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    again = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert rebuilt.returncode == remembered.returncode, rebuilt.stderr
+    assert rebuilt.stdout == remembered.stdout
+    assert again.stdout == accounted.stdout
+    assert (scratch / STATE_FILE).exists()
+
+
+def test_a_dry_run_leaves_no_state_behind(tmp_path: Path) -> None:
+    """A dry run starts nothing, and a run that had left its memory behind
+    would have started something after all."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 2, result.stderr
+    assert json.loads(result.stdout)["state"] is None
+    assert not (scratch / STATE_FILE).exists()
+
+
+def test_claim_refuses_a_claim_in_this_developers_name_the_run_never_took(
+    tmp_path: Path,
+) -> None:
+    """The last gate answers as the plan does: a run holding state of its own
+    that never took this claim is looking at another session's work, whatever
+    login the tracker has against it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={9: _ready(9, assignees=[{"login": "me"}])},
+    )
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+
+    result = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode == 2
+    claim = json.loads(result.stdout)
+    assert claim["claimed"] is False
+    assert "did not start" in claim["reason"]
+    assert "--add-assignee" not in _gh_calls(env)
+
+
+def test_the_run_state_names_the_commit_the_work_sits_on(tmp_path: Path) -> None:
+    """The branch is the other half of what a run remembers, and it is read off
+    the branch rather than off the file, so a rebuilt state cannot disagree
+    with the history it describes."""
+
+    repo = _init_repo(tmp_path / "proj")
+    before = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    (repo / "one.txt").write_text("one\n", encoding="utf-8")
+    _git(repo, "add", "one.txt")
+    _git(repo, "commit", "-m", "the skeleton")
+    first = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", comments=[_recorded("failed", first)]),
+                _ticket(10, "the graph"),
+            ]
+        },
+    )
+
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+
+    state = json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["base"] == before
