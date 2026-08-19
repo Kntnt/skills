@@ -1,0 +1,3 @@
+# The Catalog's Digest is computed over file bytes, so a checkout that
+# normalises line endings would regenerate every Digest in the Collection.
+* text=auto eol=lf

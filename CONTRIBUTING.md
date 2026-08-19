@@ -30,6 +30,8 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
    ```
 
    Nothing is authored by hand and no version is bumped — the digest is computed from the files. The fourth check below fails on a catalog that has fallen behind.
+
+   Because that digest is computed over the files' bytes, the repository pins line endings to LF in `.gitattributes` — a checkout that normalises them would regenerate every digest and fail that same check.
 5. **Run the tests.** The Python engines under `skills/<category>/<skill>/scripts/` are covered by a pytest suite under `tests/`. Four commands verify a change, each provisioning its tool through `uv`:
 
    ```
