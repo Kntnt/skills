@@ -3,6 +3,7 @@ name: commit
 description: Commit the working tree on the current branch, without pushing.
 disable-model-invocation: true
 argument-hint: '["message"] [--yes]'
+compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: "git uv"

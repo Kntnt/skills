@@ -3,6 +3,7 @@ name: delegation
 description: Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.
 disable-model-invocation: true
 argument-hint: "[session|project|user] [on|off] [--yes] | [session|project|user] status"
+compatibility: Requires uv, and a harness that can run subagents
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: "uv"

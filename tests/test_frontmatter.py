@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import re
 from pathlib import Path
 from types import ModuleType
 from typing import Any, cast
@@ -207,3 +208,54 @@ def test_metadata_holding_no_key_of_ours_is_no_marker() -> None:
 
     assert kntnt.collection_block({"metadata": {"internal": "true"}}) is None
     assert kntnt.collection_block({"metadata": {}}) is None
+
+
+def _names(compatibility: str, candidates: object) -> set[str]:
+    """Return the *candidates* named as words in *compatibility*."""
+
+    return {
+        str(candidate)
+        for candidate in cast(dict[str, Any], candidates)
+        if re.search(rf"\b{re.escape(str(candidate))}\b", compatibility)
+    }
+
+
+def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
+    """`compatibility` and the dependency block name the same requirements.
+
+    `compatibility` is the one field a consumer outside this collection knows
+    to read, and the same fact stated twice drifts. So every binary the
+    checker refuses on is named there, nothing the checker does not refuse on
+    is named there without being a soft requirement listed below, and a skill
+    with nothing to declare carries no field at all (issue #53).
+    """
+
+    # `gh` is the case the dependency block deliberately cannot hold: release
+    # step 9 degrades to a report when it is missing, so refusing on it would
+    # be wrong and leaving it unsaid would be a lie about the requirement.
+    soft: dict[str, set[str]] = {"release": {"gh"}}
+
+    skill_mds = sorted(SKILLS.glob("*/*/SKILL.md"))
+
+    # A glob that matched nothing would pass every assertion below it.
+    assert skill_mds
+
+    for skill_md in skill_mds:
+        frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
+        deps = kntnt.skill_deps(frontmatter)
+        compatibility = frontmatter.get("compatibility", "")
+        assert isinstance(compatibility, str), skill_md
+
+        # The specification bounds the field at 500 characters, and a skill
+        # with no requirement to state omits it rather than writing it empty.
+        assert 0 < len(compatibility) <= 500 or not compatibility, skill_md
+
+        # Every hard dependency is stated, and every binary the checker knows
+        # that is stated is one this skill hard-requires or softly needs.
+        named = _names(compatibility, kntnt.BINARY_HOW)
+        allowed = set(deps["binaries"]) | soft.get(skill_md.parent.name, set())
+        assert set(deps["binaries"]) <= named, skill_md
+        assert named <= allowed, skill_md
+        assert _names(compatibility, kntnt.CAPABILITIES) == set(deps["capabilities"]), (
+            skill_md
+        )

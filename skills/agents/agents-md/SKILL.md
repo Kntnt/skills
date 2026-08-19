@@ -2,6 +2,7 @@
 name: agents-md
 description: "AGENTS.md: create, shrink, or tend the always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`."
 argument-hint: "[path] [--force] [--yes]"
+compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: "git uv"

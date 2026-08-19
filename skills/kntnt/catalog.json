@@ -5,7 +5,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "58f001f263fc1ef9ff5e3d783e619be881985de2aa528f360d550859e66483a8",
+      "digest": "05de4031b0ba8dff865a0b47e13ec9e315b1a989b4cbc25384eee7716b0ef478",
       "binaries": [
         "git",
         "uv"
@@ -18,7 +18,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "3ead2c2cc08e971136edb0a248188531236c01b1a70fce00ac0a528952788854",
+      "digest": "10b9e13645724b5f7f04eda67c3270e3c7a312ea81b17aa139faa55540d087fd",
       "binaries": [
         "uv"
       ],
@@ -42,7 +42,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "a79b62f3006b86d4711ca8681ee402f50ccbb5b794ed5a2fd928d95b9c73b5fe",
+      "digest": "79a7b9c2168ce42d8ac09644f8bd8d0f43963be720218b104f6dc80a6c6455dd",
       "binaries": [
         "git",
         "uv"
@@ -55,7 +55,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "af07486620893adc377c872e66b2b9d8d5b565f711bf1a47762d41c8a3376505",
+      "digest": "969f5b33f2226273d9711b46e1af237d2e4090ea05d37e15f0c30521e6b7bae9",
       "binaries": [
         "git",
         "gh",
@@ -71,7 +71,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "218f22e788b737ffb5dc2af822f6c68dca59bb5876b2131a734ceb5efc673415",
+      "digest": "86f3b3ee25959d471fa8f246873483f3bb18e746edc41d2c7fcdfa4e8ee75d04",
       "binaries": [
         "git",
         "uv"
@@ -86,7 +86,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "d3eb62bc2a323632051e7a6ffec7924a72cfef56287ddc468b245e84035b952f",
+      "digest": "d7c0c111915f570b407092f22e7d85d2ce088f24897a45a7acfcec45e82bf549",
       "binaries": [
         "git",
         "uv"

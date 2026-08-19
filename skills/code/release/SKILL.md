@@ -3,6 +3,7 @@ name: release
 description: Ship a version — changelog, bump, push, tag, and GitHub release.
 disable-model-invocation: true
 argument-hint: "[minor|major|X.Y.Z] [--no-build] [--yes]"
+compatibility: Requires git and uv; gh only for the GitHub release step
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: "git uv"
