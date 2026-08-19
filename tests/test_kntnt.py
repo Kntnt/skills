@@ -2989,8 +2989,38 @@ def test_collection_skills_are_hidden_from_the_transport() -> None:
             continue
         text = path.read_text(encoding="utf-8")
         assert "internal: true" in text, path
-        assert "check --here" in text, path
-        assert "npx skills add Kntnt/skills" in text, path
+
+
+def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> None:
+    """ADR-0012: a Skill with nothing to declare calls no checker.
+
+    The check reads the Skill's own Dependency lists, so on a Skill whose four
+    lists are empty it can only ever report an empty one — and running it would
+    mean declaring `uv` for the sole purpose of letting the check that proves
+    there are no Dependencies execute. The Catalog carries those lists, so it
+    is what decides which Skill owes the preamble, and the absence is asserted
+    as firmly as the presence: a preamble added back by habit is a Dependency
+    nobody declared.
+    """
+
+    catalog = json.loads((MANAGER_DIR / "catalog.json").read_text(encoding="utf-8"))
+    declares = {
+        entry["name"]: any(
+            entry[kind] for kind in ("binaries", "skills", "externals", "capabilities")
+        )
+        for entry in catalog["skills"]
+    }
+
+    for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
+        if path.parent.name == "kntnt":
+            continue
+        text = path.read_text(encoding="utf-8")
+        assert path.parent.name in declares, path
+        if declares[path.parent.name]:
+            assert "check --here" in text, path
+            assert "npx skills add Kntnt/skills" in text, path
+        else:
+            assert "check --here" not in text, path
 
 
 def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:

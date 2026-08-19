@@ -85,6 +85,10 @@ Create, shrink, or tend `AGENTS.md` and `agents.d/`. After a task it writes only
 
 Turn delegation mode on or off: while it is on, the agent orchestrates — thinks, plans, briefs, verifies — and subagents execute on the cheapest model able to do the job. `/delegation` toggles it for this session; add `project` or `user` with `on` or `off` to make it standing, and the skill writes the mode as a managed block into the context file your harness already loads, after showing you the file and the exact insertion. `/delegation status` reports all three scopes. It never changes your model or effort. It needs a harness that can spawn subagents, and refuses in one that cannot.
 
+### tldr
+
+Summarise what was just said, and keep replies short by default. Typed bare, `/tldr` gives you back everything the agent has written since you last spoke, in three parts — what happened, what it decided on your behalf, and what needs you — with the last part present even when the answer is *nothing needs you*. Anything you type after it is a free-form instruction in any language, so `all` widens the range, `engelska` picks a language, and `bara säkerhetsdelen` narrows the focus. `/tldr --on` switches on TL;DR mode, so replies are short from the outset and the closing verdict arrives without your asking; `--user` makes that standing, `--status` reports it, and `--off` takes it back. The mode is a managed block in the context file your harness already loads rather than a Claude Code output style, so it works everywhere and takes effect on the turn that switches it on. It has no project scope, and it governs what the agent says to you and never what it writes into files.
+
 ### commit
 
 Reconcile `CHANGELOG.md` `[Unreleased]`, propose a `.gitignore` when the project has none, then stage the whole working tree (`git add -A`) and commit. The agent proposes a subject line from the changelog (or the diff) unless you pass `"message"`. It shows the plan and waits unless you pass `--yes`.
@@ -97,7 +101,7 @@ Follow `commit`, then push the current branch. Same `"message"` and `--yes` as `
 
 Ship a version from the default branch: reconcile `CHANGELOG.md`, bump, follow `push`, tag `HEAD`, and open a GitHub release. If the project has a conventional archive script, build it and attach the zip. Pass `minor`, `major`, or `X.Y.Z` to force the bump; otherwise the bump comes from `[Unreleased]`. `--no-build` skips the archive. `gh` is required only for the GitHub release step.
 
-`commit`, `push`, `release`, and `agents-md` need `git`; `release` also needs `gh` for the GitHub release step; `delegation` needs a harness that can spawn subagents. `push` needs `commit` and `release` needs `push`, and a dependency on another skill of this collection is the one kind `/kntnt select` can supply — it names it on the row and offers to add it. A binary, another collection's skill, and a harness capability are yours to satisfy: the skill that wants one does no work without it and prints how to fix it.
+`tldr` needs nothing at all — no binary, no capability, no other skill — and is the only skill here that runs on a machine without `uv`. `commit`, `push`, `release`, and `agents-md` need `git`; `release` also needs `gh` for the GitHub release step; `delegation` needs a harness that can spawn subagents. `push` needs `commit` and `release` needs `push`, and a dependency on another skill of this collection is the one kind `/kntnt select` can supply — it names it on the row and offers to add it. A binary, another collection's skill, and a harness capability are yours to satisfy: the skill that wants one does no work without it and prints how to fix it.
 
 ## License
 

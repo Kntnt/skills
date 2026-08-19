@@ -29,6 +29,16 @@
       ]
     },
     {
+      "name": "tldr",
+      "category": "agents",
+      "description": "Summarise what was just said as a TL;DR, and turn TL;DR mode on or off so replies stay short and say what needs you.",
+      "digest": "f9941e62c6a6e8f83bd14348726a996ea76b299ada2ee6b96202d2a86a5de8d5",
+      "binaries": [],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
