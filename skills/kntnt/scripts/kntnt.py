@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.12"
-# dependencies = []
+# dependencies = ["pyyaml==6.0.3"]
 # ///
 """Manage which collection skills are Enabled on which Harnesses."""
 
@@ -22,6 +22,8 @@ from contextlib import contextmanager
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, cast
+
+import yaml
 
 ORIGIN = "Kntnt/skills"
 MANAGER = "kntnt"
@@ -232,95 +234,28 @@ def skill_dirs(harness: str, *, global_layer: bool) -> list[Path]:
     return dirs
 
 
-def parse_yaml_scalar(raw: str) -> Any:
-    """Parse a YAML scalar used in skill frontmatter."""
-
-    if raw in {"true", "True"}:
-        return True
-    if raw in {"false", "False"}:
-        return False
-    if len(raw) >= 2 and raw[0] == raw[-1] and raw[0] in {"'", '"'}:
-        return raw[1:-1]
-    return raw
-
-
-def _next_significant(lines: list[str], start: int) -> tuple[int, str] | None:
-    """Return (indent, stripped) of the next non-empty, non-comment line."""
-
-    for raw in lines[start:]:
-        if not raw.strip() or raw.strip().startswith("#"):
-            continue
-        indent = len(raw) - len(raw.lstrip(" "))
-        return indent, raw.strip()
-    return None
-
-
-def parse_simple_yaml(text: str) -> dict[str, Any]:
-    """Parse a restricted YAML subset: maps, lists of scalars, scalars."""
-
-    lines = text.splitlines()
-    root: dict[str, Any] = {}
-    stack: list[tuple[int, Any]] = [(-1, root)]
-    index = 0
-
-    while index < len(lines):
-        raw = lines[index]
-        if not raw.strip() or raw.strip().startswith("#"):
-            index += 1
-            continue
-
-        indent = len(raw) - len(raw.lstrip(" "))
-        stripped = raw.strip()
-
-        while stack and indent <= stack[-1][0]:
-            stack.pop()
-        container = stack[-1][1]
-
-        if stripped.startswith("- "):
-            if isinstance(container, list):
-                container.append(parse_yaml_scalar(stripped[2:].strip()))
-            index += 1
-            continue
-
-        if ":" not in stripped:
-            index += 1
-            continue
-
-        key, _, rest = stripped.partition(":")
-        key = key.strip()
-        rest = rest.strip()
-        if not isinstance(container, dict):
-            index += 1
-            continue
-
-        if rest:
-            container[key] = parse_yaml_scalar(rest)
-            index += 1
-            continue
-
-        nxt = _next_significant(lines, index + 1)
-        if nxt is not None and nxt[1].startswith("- ") and nxt[0] > indent:
-            nested_list: list[Any] = []
-            container[key] = nested_list
-            stack.append((indent, nested_list))
-        else:
-            nested_map: dict[str, Any] = {}
-            container[key] = nested_map
-            stack.append((indent, nested_map))
-        index += 1
-
-    return root
-
-
 def parse_frontmatter(text: str) -> dict[str, Any]:
-    """Return the YAML frontmatter of a SKILL.md, or an empty dict."""
+    """Return the YAML frontmatter of a SKILL.md, or an empty dict.
+
+    A file with no frontmatter and one whose fence is never closed both answer
+    empty: neither states anything about the skill. Malformed YAML inside a
+    closed fence is a different thing — it states something unreadable — and
+    raises `yaml.YAMLError` for the caller to decide about (ADR-0060).
+    """
 
     if not text.startswith("---"):
         return {}
     end = text.find("\n---", 3)
     if end < 0:
         return {}
-    return parse_simple_yaml(text[4:end])
+
+    # The fence may hold any YAML document at all, since `carries_marker`
+    # reads files the collection did not write: a list, a bare scalar, or
+    # nothing between the fences is not a declaration and answers as none.
+    frontmatter = yaml.safe_load(text[4:end])
+    if isinstance(frontmatter, dict):
+        return cast(dict[str, Any], frontmatter)
+    return {}
 
 
 DEP_KINDS = ("binaries", "skills", "externals", "capabilities")
@@ -366,15 +301,15 @@ def carries_marker(skill_dir: Path) -> bool:
     """
 
     # A layer holds skills this collection did not write, so the file is an
-    # untrusted boundary: any bytes at all, no read permission, or no file
-    # there. None of that can claim to be ours, and none of it may take the
-    # run down — a traceback in place of the report is the failure of #5.
+    # untrusted boundary: any bytes at all, no read permission, no file there,
+    # or a fence around something that is not YAML. None of that can claim to
+    # be ours, and none of it may take the run down — a traceback in place of
+    # the report is the failure of #5.
     try:
         text = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError):
+        return collection_block(parse_frontmatter(text)) is not None
+    except (OSError, UnicodeDecodeError, yaml.YAMLError):
         return False
-
-    return collection_block(parse_frontmatter(text)) is not None
 
 
 def capability_notes(names: list[str]) -> list[dict[str, str]]:
@@ -2195,12 +2130,6 @@ def cmd_manpage(name: str) -> int:
     return 0
 
 
-# The frontmatter parser reads a restricted YAML subset with no block scalars,
-# so `description: >` yields this indicator as the value. Generation is where
-# that has to fail: past it the character ships as the skill's whole help text.
-BLOCK_SCALARS = frozenset({">", "|", ">-", "|-", ">+", "|+"})
-
-
 def generate_catalog(source: Path) -> dict[str, Any]:
     """Build a Catalog from SKILL.md files under *source*/skills."""
 
@@ -2235,12 +2164,6 @@ def generate_catalog(source: Path) -> dict[str, Any]:
             )
         if not description:
             raise ManagerError(f"{skill_md}: description is empty")
-        if description in BLOCK_SCALARS:
-            raise ManagerError(
-                f"{skill_md}: description '{description}' is a YAML block "
-                "scalar, which the frontmatter parser does not support; "
-                "write it on one line"
-            )
         entries.append(
             {
                 "name": name,

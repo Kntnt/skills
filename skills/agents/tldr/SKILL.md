@@ -5,11 +5,7 @@ disable-model-invocation: true
 argument-hint: "[instruction] | [--on|--off|--status] [--user] [--yes]"
 metadata:
   internal: true
-  # Empty on purpose: this skill has no dependencies, so it runs no checker
-  # (ADR-0012). Leave the key bare. `kntnt: {}` parses to the string "{}" and
-  # catalog generation then reports a block that is visibly present as missing
-  # (issue #48).
-  kntnt:
+  kntnt: {}
 ---
 
 # tldr

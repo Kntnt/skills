@@ -37,9 +37,11 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
    ```
    uvx ruff check .
    uvx ruff format --check .
-   uvx mypy skills/kntnt/scripts/kntnt.py skills/code/commit/scripts/ship.py skills/code/orchestrate/scripts/run.py tests
-   uv run --with pytest pytest
+   uvx --with types-PyYAML mypy skills/kntnt/scripts/kntnt.py skills/code/commit/scripts/ship.py skills/code/orchestrate/scripts/run.py tests
+   uv run --with pytest --with pyyaml pytest
    ```
+
+   The manager's script declares PyYAML in its PEP 723 block, so `uv run` gives it that package on its own; the last two commands name it because they do not go through the script — mypy needs the stubs, and the tests import the script into their own interpreter.
 
    These are the same four checks CI runs on every pull request, so a green run locally means a green run there.
 

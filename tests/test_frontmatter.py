@@ -1,4 +1,4 @@
-"""The restricted YAML the Manager reads a skill's frontmatter with."""
+"""The frontmatter the Manager reads a skill's declaration out of."""
 
 from __future__ import annotations
 
@@ -15,8 +15,9 @@ SKILLS = REPO_ROOT / "skills"
 def _manager() -> ModuleType:
     """Import the manager's script as a module.
 
-    The parser is a function and no verb of its own, so the CLI cannot reach
-    it directly, and this is the lowest layer that constrains it at all.
+    Reading frontmatter is a function and no verb of its own, so the CLI
+    cannot reach it directly, and this is the lowest layer that constrains it
+    at all.
     """
 
     # The loader API answers with optionals, so both are narrowed before use:
@@ -110,40 +111,21 @@ def test_the_shipped_skills_declare_the_lists_the_checker_refuses_on() -> None:
     }
 
 
-def test_a_nested_map_and_a_list_parse_to_their_shapes() -> None:
-    text = "metadata:\n  internal: true\n  kntnt:\n    binaries:\n      - git\n      - uv\n"
+def test_a_skill_whose_frontmatter_is_broken_is_not_ours(tmp_path: Path) -> None:
+    """A layer holds files the collection did not write, so bad YAML answers.
 
-    assert kntnt.parse_simple_yaml(text) == {
-        "metadata": {"internal": True, "kntnt": {"binaries": ["git", "uv"]}}
-    }
+    The parser raises where the subset used to skip the line it could not
+    read, and a traceback in place of the report is the failure of issue #5.
+    """
 
+    skill_dir = tmp_path / "stranger"
+    skill_dir.mkdir()
+    (skill_dir / "SKILL.md").write_text(
+        '---\nname: alpha\ndescription: "unterminated\nmetadata: [oops\n---\n',
+        encoding="utf-8",
+    )
 
-def test_a_key_after_a_nested_block_returns_to_the_root() -> None:
-    """The indent stack has to unwind, or a later key lands inside the block."""
-
-    text = "metadata:\n  kntnt:\n    binaries:\n      - git\nname: alpha\n"
-
-    parsed = kntnt.parse_simple_yaml(text)
-
-    assert parsed["name"] == "alpha"
-    assert parsed["metadata"]["kntnt"]["binaries"] == ["git"]
-
-
-def test_quotes_come_off_and_booleans_come_through() -> None:
-    text = "name: 'alpha'\ndescription: \"a skill\"\ninternal: true\nother: false\n"
-
-    assert kntnt.parse_simple_yaml(text) == {
-        "name": "alpha",
-        "description": "a skill",
-        "internal": True,
-        "other": False,
-    }
-
-
-def test_comments_and_blank_lines_are_passed_over() -> None:
-    text = "# a comment\n\nname: alpha\n\n  # another\ndescription: a skill\n"
-
-    assert kntnt.parse_simple_yaml(text) == {"name": "alpha", "description": "a skill"}
+    assert kntnt.carries_marker(skill_dir) is False
 
 
 def test_text_with_no_frontmatter_is_no_frontmatter() -> None:

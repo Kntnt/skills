@@ -57,17 +57,24 @@ def _skill_md(
         "disable-model-invocation: true",
         "metadata:",
         "  internal: true",
-        "  kntnt:",
     ]
-    for key, values in (
-        ("binaries", binaries or []),
-        ("skills", skills or []),
-        ("externals", externals or []),
-        ("capabilities", capabilities or []),
-    ):
-        if values:
-            lines.append(f"    {key}:")
-            lines.extend(f"      - {value}" for value in values)
+
+    # A block with nothing under it is spelled `{}`: a bare key is `null` in
+    # YAML, and the skill would read as carrying no marker at all.
+    declared = [
+        (key, values)
+        for key, values in (
+            ("binaries", binaries or []),
+            ("skills", skills or []),
+            ("externals", externals or []),
+            ("capabilities", capabilities or []),
+        )
+        if values
+    ]
+    lines.append("  kntnt:" if declared else "  kntnt: {}")
+    for key, values in declared:
+        lines.append(f"    {key}:")
+        lines.extend(f"      - {value}" for value in values)
     lines.extend(["---", "", f"# {name}", ""])
     if body:
         lines.extend([body, ""])
@@ -377,8 +384,12 @@ def _run(
     if grumble is not None:
         env["KNTNT_TRANSPORT_GRUMBLE"] = ",".join(grumble)
     script = (installed or world["here"]) / "scripts" / "kntnt.py"
+
+    # Every fixture is a fresh copy of the script at a path `uv` has not seen,
+    # so it provisions the environment the PEP 723 block declares and says so
+    # on stderr. `--quiet` leaves the fixture reading the script's own output.
     return subprocess.run(
-        ["uv", "run", str(script), *args],
+        ["uv", "run", "--quiet", str(script), *args],
         cwd=cwd or world["project"],
         env=env,
         text=True,
@@ -3331,19 +3342,39 @@ def test_catalog_generation_rejects_an_empty_description(tmp_path: Path) -> None
     assert "alpha" in result.stderr
 
 
-def test_catalog_generation_rejects_a_folded_description(tmp_path: Path) -> None:
-    """parse_simple_yaml has no block scalars, so a folded description ships as '>'."""
+def test_catalog_generation_accepts_a_folded_description(tmp_path: Path) -> None:
+    """A real YAML parser folds the block, so a description may run over lines.
+
+    The subset had no block scalars and yielded the indicator itself, so
+    generation refused `description: >` to keep a lone `>` out of the Catalog
+    (issue #51). There is nothing left to refuse: the value arrives folded.
+    """
 
     world = _world(tmp_path)
     _write(
         world["source"] / "skills" / "code" / "alpha" / "SKILL.md",
-        _skill_md("alpha", description=">"),
+        "---\n"
+        "name: alpha\n"
+        "description: >\n"
+        "  A collection skill whose description\n"
+        "  runs over two lines.\n"
+        "disable-model-invocation: true\n"
+        "metadata:\n"
+        "  internal: true\n"
+        "  kntnt: {}\n"
+        "---\n"
+        "\n"
+        "# alpha\n",
     )
 
     result = _run(world, "catalog")
 
-    assert result.returncode == 1
-    assert "alpha" in result.stderr
+    assert result.returncode == 0, result.stderr
+    entry = next(item for item in _json(result)["skills"] if item["name"] == "alpha")
+    assert (
+        entry["description"]
+        == "A collection skill whose description runs over two lines.\n"
+    )
 
 
 def test_catalog_generation_rejects_a_skill_without_the_collection_marker(
