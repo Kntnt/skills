@@ -2912,3 +2912,81 @@ def test_report_refuses_a_closed_list_that_may_have_been_truncated(
 
     assert result.returncode == 1
     assert "200" in result.stderr
+
+
+def test_isolate_refuses_a_ticket_whose_branch_an_earlier_run_left_behind(
+    tmp_path: Path,
+) -> None:
+    """A branch with no working tree holding it is work an earlier run left,
+    and a run that cut a second one over it would build this ticket on top of
+    that work without saying so. The branch name is stated here as the
+    contract rather than imported.
+
+    The refusal is pinned by what only the engine says. Cutting the tree would
+    fail on its own — git will not open a second branch of that name — with an
+    error naming the same branch and exiting the same way, so a test reading
+    only the name and the code cannot tell the guard from its absence."""
+
+    repo = _init_repo(tmp_path / "proj")
+    _git(repo, "branch", "kntnt-orchestrate/work/9")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert "kntnt-orchestrate/work/9" in result.stderr
+    assert "look at what is on it, then delete it" in result.stderr
+    assert _git(repo, "worktree", "list").stdout.count("\n") == 1
+
+
+def test_integrate_names_a_working_tree_it_could_not_take_away(
+    tmp_path: Path,
+) -> None:
+    """The machine ends tidy, and where it cannot the run says so: a tree
+    reported gone that is still there is one nobody goes back to look at."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "read the blocking edges")
+    _git(repo, "worktree", "lock", str(worktree))
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["merged"] is True
+    assert answer["worktree"] == str(worktree)
+    assert worktree.is_dir()
+    assert "kntnt-orchestrate/work/9" in _git(repo, "branch", "--list").stdout
+
+
+def test_integrate_says_what_stopped_a_merge_that_left_no_conflicted_file(
+    tmp_path: Path,
+) -> None:
+    """A merge can fail without a collision — a file standing in the run
+    branch's own working tree that the merge would have written over. There is
+    no conflicted file to name and no ticket on the other side of it, so what
+    stopped it has to speak for itself rather than pass as a collision with
+    nothing in it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "read the blocking edges")
+    (repo / "graph.py").write_text("somebody else's, never added\n", encoding="utf-8")
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["merged"] is False
+    assert answer["collisions"] == []
+    assert answer["collided_with"] == []
+    assert "graph.py" in answer["reason"]
+    assert answer["worktree"] == str(worktree)
