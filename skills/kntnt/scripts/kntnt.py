@@ -269,28 +269,105 @@ DEP_KINDS = ("binaries", "skills", "externals", "capabilities")
 # the key rather than built out of a map underneath it (issue #52).
 METADATA_PREFIX = "kntnt."
 
+# What a YAML value is, said the way the author of the file spelled it. A
+# refusal that named Python's type for it would answer in a language nobody
+# wrote the frontmatter in, and `NoneType` for a key left empty is the worst
+# of them.
+YAML_TYPES = {
+    type(None): "null",
+    bool: "a boolean",
+    int: "a number",
+    float: "a number",
+    str: "a string",
+    list: "a list",
+    dict: "a mapping",
+}
 
-def collection_block(frontmatter: dict[str, Any]) -> dict[str, str] | None:
+
+def yaml_type(value: Any) -> str:
+    """Name *value*'s YAML type for a message an author has to act on."""
+
+    return YAML_TYPES.get(type(value), "a value")
+
+
+def collection_block(frontmatter: dict[str, Any]) -> dict[str, Any] | None:
     """Return this collection's `metadata` keys unprefixed, or None where there are none.
 
     Any key at all under the prefix carries the marker, so a skill with no
     Dependencies is marked by writing its four lists empty rather than by an
     empty map that only means something to a parser reading the block whole.
+
+    Values come back as the file spelled them. Coercing them here would answer
+    a question this function is not asked: it says whether a skill is ours, on
+    behalf of `carries_marker`, which reads files the collection did not write
+    and may not raise about any of them. What a value is has to be refused
+    somewhere that can refuse (issue #48).
     """
 
     metadata = frontmatter.get("metadata")
     if not isinstance(metadata, dict):
         return None
 
-    # The spec's values are strings, but the file is an untrusted boundary:
-    # a foreign skill may put anything at all under a key that looks like
-    # ours, and every reader below wants a string.
+    # The keys come from a file the collection did not write, where a key is
+    # whatever YAML made of it, so each is read as text to compare at all.
     block = {
-        str(key)[len(METADATA_PREFIX) :]: str(value)
+        str(key)[len(METADATA_PREFIX) :]: value
         for key, value in metadata.items()
         if str(key).startswith(METADATA_PREFIX)
     }
+
     return block or None
+
+
+def value_fault(block: dict[str, Any]) -> str | None:
+    """Say what is wrong with the first non-string value in *block*, or None.
+
+    The specification allows `metadata` string values and nothing else, so a
+    value of any other shape is a file to send back rather than one to read
+    through `str()`: coercion is what put a Python repr where a Dependency
+    list belonged, and it warns nobody because a string is a legal value
+    (ADR-0061).
+    """
+
+    for key, value in block.items():
+        if not isinstance(value, str):
+            return (
+                f"metadata.{METADATA_PREFIX}{key} is {yaml_type(value)}, not a "
+                "string; metadata holds strings, and a list of names is one "
+                "string with spaces between them"
+            )
+
+    return None
+
+
+def marker_fault(frontmatter: dict[str, Any]) -> str | None:
+    """Say why this skill's marker cannot be read, or None when it can.
+
+    Three conditions rather than one, because the single message the first
+    two shared described only the first of them and said something false
+    about a file whose block was visibly there (issue #48).
+    """
+
+    # A `metadata` that is not a mapping has nowhere to hang a key, so it
+    # reaches the same empty block as a skill that declares nothing at all.
+    metadata = frontmatter.get("metadata")
+    if metadata is not None and not isinstance(metadata, dict):
+        return (
+            f"metadata is {yaml_type(metadata)}, not a mapping; the "
+            f"'{METADATA_PREFIX}' keys that mark a skill as this "
+            "collection's have nowhere to be"
+        )
+
+    # No key under the prefix is the one condition the single message was
+    # about: a skill carrying no mark of this collection at all.
+    block = collection_block(frontmatter)
+    if block is None:
+        return (
+            f"no metadata.{METADATA_PREFIX}* key; a skill without the marker "
+            "cannot be removed when the collection withdraws it"
+        )
+
+    return value_fault(block)
 
 
 def skill_deps(frontmatter: dict[str, Any]) -> dict[str, list[str]]:
@@ -298,9 +375,18 @@ def skill_deps(frontmatter: dict[str, Any]) -> dict[str, list[str]]:
 
     Each list is one space-separated string, as the specification's own
     `allowed-tools` is and for the same reason: a value `metadata` can hold.
+
+    Raises:
+        ManagerError: a `kntnt.` key holds something other than a string.
+            Reading it anyway would answer with a Dependency list nobody
+            declared, which is worse than not answering (issue #48).
     """
 
     block = collection_block(frontmatter) or {}
+    fault = value_fault(block)
+    if fault is not None:
+        raise ManagerError(fault)
+
     return {key: block.get(key, "").split() for key in DEP_KINDS}
 
 
@@ -2155,7 +2241,6 @@ def generate_catalog(source: Path) -> dict[str, Any]:
         name = str(frontmatter.get("name") or skill_md.parent.name)
         if name == MANAGER:
             continue
-        deps = skill_deps(frontmatter)
         description = str(frontmatter.get("description") or "")
 
         # Generation is where a misspelt Capability has to fail. Past this
@@ -2165,12 +2250,15 @@ def generate_catalog(source: Path) -> dict[str, Any]:
         # the description is a skill's entire help until it is Enabled — and
         # of the marker, which is how Update tells a withdrawal of ours from
         # another collection's skill once this one has stopped shipping it.
+        # The marker is asked first because everything below reads through
+        # it, and because it is the one refusal `carries_marker` cannot make
+        # on its own: this gate is the whole of what keeps a skill the sweep
+        # could never withdraw off a user's disk (issue #48).
+        fault = marker_fault(frontmatter)
+        if fault is not None:
+            raise ManagerError(f"{skill_md}: {fault}")
+        deps = skill_deps(frontmatter)
         capability_notes(deps["capabilities"])
-        if collection_block(frontmatter) is None:
-            raise ManagerError(
-                f"{skill_md}: no metadata.kntnt.* key; a skill without the "
-                "marker cannot be removed when the collection withdraws it"
-            )
         if name != skill_md.parent.name:
             raise ManagerError(
                 f"{skill_md}: name '{name}' is not the directory "

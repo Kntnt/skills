@@ -96,6 +96,26 @@ def _foreign_skill_md(name: str) -> str:
     )
 
 
+def _skill_md_with_metadata(name: str, metadata: str) -> str:
+    """A SKILL.md whose `metadata` block is written out verbatim.
+
+    `_skill_md` writes the shape the collection ships, which is the one shape
+    none of the marker's refusals is about. *metadata* is the whole block,
+    newline-terminated, and may be empty.
+    """
+
+    return (
+        "---\n"
+        f"name: {name}\n"
+        "description: A collection skill.\n"
+        "disable-model-invocation: true\n"
+        f"{metadata}"
+        "---\n"
+        "\n"
+        f"# {name}\n"
+    )
+
+
 def _manpage(name: str) -> str:
     """The manpage the origin ships for *name*, as ADR-0044 has every skill do."""
 
@@ -3397,6 +3417,94 @@ def test_catalog_generation_rejects_a_skill_without_the_collection_marker(
     assert result.returncode == 1
     assert "alpha" in result.stderr
     assert "metadata.kntnt" in result.stderr
+
+
+def test_catalog_generation_rejects_metadata_that_is_not_a_mapping(
+    tmp_path: Path,
+) -> None:
+    """`metadata: hello` is a file that says something, not one that says nothing.
+
+    It reaches the same empty block as a skill carrying no `metadata` at all,
+    and the message the two shared told this author the marker was missing
+    when what is wrong is the line the keys would have hung under (issue #48).
+    """
+
+    world = _world(tmp_path)
+    _write(
+        world["source"] / "skills" / "code" / "alpha" / "SKILL.md",
+        _skill_md_with_metadata("alpha", "metadata: hello\n"),
+    )
+
+    result = _run(world, "catalog")
+
+    assert result.returncode == 1
+    assert "alpha" in result.stderr
+    assert "not a mapping" in result.stderr
+
+
+def test_catalog_generation_rejects_a_marker_value_that_is_not_a_string(
+    tmp_path: Path,
+) -> None:
+    """A YAML list under `kntnt.binaries` is what habit writes after ADR-0061.
+
+    The marker is there, so the skill passes the test for one, and the value
+    is then read by a reader that wants a string. Coercing it lands a Python
+    repr in the Catalog's `binaries`, which is the silent wrong answer
+    ADR-0061 refused to let any other reader give (issue #48).
+    """
+
+    world = _world(tmp_path)
+    _write(
+        world["source"] / "skills" / "code" / "alpha" / "SKILL.md",
+        _skill_md_with_metadata(
+            "alpha", "metadata:\n  kntnt.binaries:\n    - git\n    - uv\n"
+        ),
+    )
+
+    result = _run(world, "catalog")
+
+    assert result.returncode == 1
+    assert "alpha" in result.stderr
+    assert "kntnt.binaries" in result.stderr
+    assert "not a string" in result.stderr
+
+
+def test_catalog_generation_is_the_gate_on_every_unreadable_marker(
+    tmp_path: Path,
+) -> None:
+    """Nothing else keeps one off a user's disk.
+
+    Generation refuses and `CONTRIBUTING.md` step 4 regenerates the Catalog
+    before anything ships: that pair is the whole of the guarantee, and it has
+    to hold for every form. The predicate underneath also feeds
+    `carries_marker`, which may not raise and so can never report — a skill
+    that reached a machine with an unreadable marker is one the sweep could
+    not withdraw (issue #48).
+    """
+
+    forms = (
+        ("no metadata at all", ""),
+        ("a metadata that is not a mapping", "metadata: hello\n"),
+        ("a metadata holding no kntnt. key", 'metadata:\n  internal: "true"\n'),
+        ("a list value", "metadata:\n  kntnt.binaries:\n    - git\n"),
+        ("an empty value, read as null", "metadata:\n  kntnt.binaries:\n"),
+        ("a bare boolean", "metadata:\n  kntnt.internal: true\n"),
+        ("a mapping value", 'metadata:\n  kntnt.binaries:\n    git: ""\n'),
+    )
+
+    for index, (label, metadata) in enumerate(forms):
+        root = tmp_path / f"form{index}"
+        root.mkdir()
+        world = _world(root)
+        _write(
+            world["source"] / "skills" / "code" / "alpha" / "SKILL.md",
+            _skill_md_with_metadata("alpha", metadata),
+        )
+
+        result = _run(world, "catalog")
+
+        assert result.returncode == 1, f"{label}: {result.stdout}"
+        assert "alpha" in result.stderr, label
 
 
 def test_select_confirms_each_placement_against_the_disk(tmp_path: Path) -> None:
