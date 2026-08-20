@@ -5,6 +5,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from support.contract import STANDARD
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ADR = REPO_ROOT / "docs" / "adr"
 SKILLS = REPO_ROOT / "skills"
@@ -13,6 +15,14 @@ SKILLS = REPO_ROOT / "skills"
 # cites another one, so a number that has gone stale is caught wherever it is
 # written rather than only where records supersede each other.
 CITING_DOCS = ("CONTEXT.md", "README.md", "AGENTS.md", "CONTRIBUTING.md")
+
+# The two other places a record is cited from: the coding standard, which names
+# a rule in a phrase and cites the record carrying its reasoning, and the suite
+# itself, whose assertion messages do the same for the reader whose check has
+# just gone red (issue #69). A pointer is the one part of that arrangement free
+# to drift, so both are held to the same check as the prose above.
+STANDARD_DIR = REPO_ROOT / "docs" / "coding-standard"
+TESTS = REPO_ROOT / "tests"
 
 # A record's file is `NNNN-slug.md` and its number is that four-digit prefix;
 # a citation is the same number written as `ADR-NNNN`.
@@ -42,7 +52,12 @@ def _records() -> dict[str, list[str]]:
 def _sources() -> list[Path]:
     """Every file the collection cites a record from."""
 
-    return sorted(ADR.glob("*.md")) + [REPO_ROOT / name for name in CITING_DOCS]
+    return (
+        sorted(ADR.glob("*.md"))
+        + [REPO_ROOT / name for name in CITING_DOCS]
+        + sorted(STANDARD_DIR.glob("*.md"))
+        + sorted(TESTS.glob("*.py"))
+    )
 
 
 def _citations() -> dict[str, list[str]]:
@@ -128,5 +143,16 @@ def test_the_flag_refusal_rule_cites_the_record_that_carries_it() -> None:
             if cited[-1:] != [REFUSAL_RECORD]:
                 misattributed[where] = cited
 
-    assert carrying
-    assert misattributed == {}
+    assert carrying, (
+        f"no skill body carries the clause {REFUSAL_CLAUSE!r}, so this check"
+        f" judged nothing. Every skill states the flag-refusal rule in that"
+        f" wording, and a rewording that drops it takes the check with it."
+        f" See {STANDARD}."
+    )
+    assert misattributed == {}, (
+        f"{misattributed}: the paragraph stating the flag-refusal rule closes"
+        f" on ADR-{REFUSAL_RECORD}, the record that carries it. ADR-0029 is the"
+        f" record whose tolerance clause 0059 withdrew, so citing it there"
+        f" offers, as authority for refusing a stray flag, the record that used"
+        f" to say a stray flag is tolerated. See {STANDARD}."
+    )

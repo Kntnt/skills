@@ -10,6 +10,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from support.contract import STANDARD
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 HARNESS_PATHS = REPO_ROOT / "skills" / "kntnt" / "harness-paths.json"
@@ -3265,7 +3267,13 @@ def test_collection_skills_are_hidden_from_the_transport() -> None:
         if path.parent.name == "kntnt":
             continue
         text = path.read_text(encoding="utf-8")
-        assert 'kntnt.internal: "true"' in text, path
+        assert 'kntnt.internal: "true"' in text, (
+            f'{path}: every skill declares `kntnt.internal: "true"`, which is'
+            f" how it is kept out of ordinary discovery by a reader elsewhere."
+            f" The flag is prefixed like every other key of ours because"
+            f" `metadata` is one flat namespace and a bare `internal` is a key"
+            f" any collection may claim (ADR-0061). See {STANDARD}."
+        )
 
 
 def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> None:
@@ -3292,12 +3300,31 @@ def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> No
         if path.parent.name == "kntnt":
             continue
         text = path.read_text(encoding="utf-8")
-        assert path.parent.name in declares, path
+        assert path.parent.name in declares, (
+            f"{path}: the Catalog carries no entry for this skill, so nothing"
+            f" says which dependencies it declares. Regenerate the Catalog"
+            f" (CONTRIBUTING.md) and run this again. See {STANDARD}."
+        )
         if declares[path.parent.name]:
-            assert "check --here" in text, path
-            assert "npx skills add Kntnt/skills" in text, path
+            assert "check --here" in text, (
+                f"{path}: this skill declares dependencies, so its body opens"
+                f" with the preamble that runs the checker before it does any"
+                f" work — a skill owns its dependencies and refuses without"
+                f" them rather than installing them (ADR-0012). See {STANDARD}."
+            )
+            assert "npx skills add Kntnt/skills" in text, (
+                f"{path}: the preamble names `npx skills add Kntnt/skills` as"
+                f" the fix where no checker is found, so a user meeting the"
+                f" refusal is told what to do about it (ADR-0012). See"
+                f" {STANDARD}."
+            )
         else:
-            assert "check --here" not in text, path
+            assert "check --here" not in text, (
+                f"{path}: this skill declares no dependency at all, so it calls"
+                f" no checker: the call could only ever report an empty list,"
+                f" and making it would itself require `uv` — a dependency"
+                f" nobody declared (ADR-0012). See {STANDARD}."
+            )
 
 
 def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
@@ -3305,10 +3332,28 @@ def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
 
     for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
         text = path.read_text(encoding="utf-8")
-        assert (path.parent / "help.md").is_file(), path
-        assert "`$HERE/help.md`" in text, path
-        assert "--help" in text, path
-        assert "Arguments and Steps" not in text, path
+        assert (path.parent / "help.md").is_file(), (
+            f"{path}: every skill ships a `help.md` beside its `SKILL.md`."
+            f" Help lives with the skill, so a skill in front of a user can be"
+            f" asked what it does without knowing which collection it came"
+            f" from (ADR-0044). See {STANDARD}."
+        )
+        assert "`$HERE/help.md`" in text, (
+            f"{path}: the body prints `$HERE/help.md` verbatim rather than"
+            f" summarising it. The manpage is a file a reviewer can diff, not"
+            f" prose an agent regenerates each time (ADR-0044, ADR-0045). See"
+            f" {STANDARD}."
+        )
+        assert "--help" in text, (
+            f"{path}: the body routes `--help` to the manpage, which is how"
+            f" every skill of this collection is asked what it does"
+            f" (ADR-0044). See {STANDARD}."
+        )
+        assert "Arguments and Steps" not in text, (
+            f"{path}: the body carries only what the agent executes, so its"
+            f" sections are the ones it acts on rather than a heading pairing"
+            f" two of them (ADR-0046). See {STANDARD}."
+        )
 
 
 def test_the_manager_separates_steps_from_manpages() -> None:
@@ -3352,8 +3397,18 @@ def test_what_a_skill_opens_on_demand_lives_under_references() -> None:
     for (category, name), files in _ON_DEMAND.items():
         directory = REPO_ROOT / "skills" / category / name
         for file in files:
-            assert (directory / "references" / file).is_file(), (name, file)
-            assert not (directory / file).exists(), (name, file)
+            assert (directory / "references" / file).is_file(), (
+                f"{directory}: `{file}` is opened only when the situation"
+                f" arises, so it belongs under `references/` — the"
+                f" specification's own directory for it, which is what tells a"
+                f" reader it is not the manpage (ADR-0063). See {STANDARD}."
+            )
+            assert not (directory / file).exists(), (
+                f"{directory}: `{file}` is under `references/` and must not"
+                f" also sit in the skill's root, where a reader meets it beside"
+                f" `help.md` with nothing to tell the two apart (ADR-0063). See"
+                f" {STANDARD}."
+            )
 
 
 def test_the_paths_the_collection_publishes_are_left_where_they_are() -> None:
@@ -3365,7 +3420,12 @@ def test_the_paths_the_collection_publishes_are_left_where_they_are() -> None:
     """
 
     for directory in _shipped_skills():
-        assert (directory / "help.md").is_file(), directory
+        assert (directory / "help.md").is_file(), (
+            f"{directory}: a manpage is fetched at"
+            f" `skills/<category>/<name>/help.md`, so it stays in the skill's"
+            f" root rather than moving under `references/` with the files a"
+            f" body opens on demand (ADR-0044, ADR-0063). See {STANDARD}."
+        )
 
     manager = REPO_ROOT / "skills" / "kntnt"
     assert (manager / "help.md").is_file()
@@ -3399,10 +3459,20 @@ def test_every_file_a_skill_body_points_at_is_where_it_says_it_is() -> None:
         for target in here.findall(text):
             if target.startswith("../kntnt/"):
                 continue
-            assert (root / target).is_file(), (path, target)
+            assert (root / target).is_file(), (
+                f"{path}: `$HERE/{target}` resolves to nothing. `$HERE` is the"
+                f" directory holding `SKILL.md`, and a pointer that dangles is"
+                f" a file an agent is told to open mid-run and cannot. See"
+                f" {STANDARD}."
+            )
             pointers += 1
         for target in link.findall(text):
-            assert (path.parent / target).is_file(), (path, target)
+            assert (path.parent / target).is_file(), (
+                f"{path}: the link `{target}` resolves to nothing. A Markdown"
+                f" link is resolved from the file it sits in, so a move is"
+                f" finished only when every file pointing at it agrees. See"
+                f" {STANDARD}."
+            )
             pointers += 1
 
     assert pointers
@@ -3448,8 +3518,16 @@ def test_agents_md_is_model_invoked() -> None:
     text = (REPO_ROOT / "skills" / "agents" / "agents-md" / "SKILL.md").read_text(
         encoding="utf-8"
     )
-    assert "disable-model-invocation" not in text
-    assert "name: agents-md" in text
+    assert "disable-model-invocation" not in text, (
+        f"{REPO_ROOT / 'skills' / 'agents' / 'agents-md' / 'SKILL.md'}: this"
+        f" skill is the one the model invokes on its own, so it carries no"
+        f" `disable-model-invocation` (ADR-0018). See {STANDARD}."
+    )
+    assert "name: agents-md" in text, (
+        f"{REPO_ROOT / 'skills' / 'agents' / 'agents-md' / 'SKILL.md'}: `name`"
+        f" is the skill's directory name exactly, and the description is the"
+        f" only hook a harness has for reaching it (ADR-0019). See {STANDARD}."
+    )
 
 
 def test_generated_catalog_includes_agents_md() -> None:
@@ -4712,7 +4790,12 @@ def test_the_dependency_gate_is_invoked_with_no_flag_in_every_skill() -> None:
 
     assert {"agents-md", "delegation", "commit", "push", "release"} <= set(gates)
     for name, text in gates.items():
-        assert 'check --here "$HERE"`' in text, name
+        assert 'check --here "$HERE"`' in text, (
+            f'{name}: the checker is invoked as `check --here "$HERE"` and'
+            f" with no flag on it. Under strict syntax a stray flag there is"
+            f" refused rather than ignored, which would kill the skill before"
+            f" it did anything (ADR-0059). See {STANDARD}."
+        )
 
 
 def test_the_manager_hands_an_unknown_subcommand_to_the_script() -> None:
@@ -4770,11 +4853,19 @@ def _shipped_skills() -> list[Path]:
     return directories
 
 
-def _section(text: str, heading: str) -> str:
+def _section(text: str, heading: str, where: Path) -> str:
     """Return one `## ` section of a Markdown file, and nothing after it."""
 
     marker = f"\n{heading}\n"
-    assert marker in text, heading
+    assert marker in text, (
+        f"{where} carries no `{heading}` section, so the rule read out of it"
+        f" cannot be checked at all. A manpage carries `## Synopsis`,"
+        f" `## Description`, `## Options`, `## Notes`, `## Dependencies`, and"
+        f" `## See also`, and `## Arguments` where the skill takes any —"
+        f" `## Options` even where it has no flags at all, written *none, and"
+        f" none is missing*, so a reader learns the emptiness is deliberate"
+        f" rather than a section nobody wrote. See {STANDARD}."
+    )
     return text.partition(marker)[2].partition("\n## ")[0]
 
 
@@ -4784,7 +4875,13 @@ def _hint(directory: Path) -> str:
     for line in (directory / "SKILL.md").read_text(encoding="utf-8").splitlines():
         if line.startswith("argument-hint:"):
             return line.partition(":")[2].strip().strip("\"'")
-    raise AssertionError(f"{directory} declares no argument-hint")
+    raise AssertionError(
+        f"{directory}: every skill declares an `argument-hint`. It is the"
+        f" grammar the harness shows a user before anything is typed, and one"
+        f" of the three places the flags a skill takes are named — the manpage's"
+        f" `## Synopsis` and `## Options` being the others (ADR-0059). See"
+        f" {STANDARD}."
+    )
 
 
 def _flags(text: str) -> set[str]:
@@ -4811,9 +4908,26 @@ def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() 
         skill = (directory / "SKILL.md").read_text(encoding="utf-8")
         page = (directory / "help.md").read_text(encoding="utf-8")
 
-        assert "`## Synopsis` section of `$HERE/help.md`" in skill, directory
-        assert f"`/{directory.name} --help` for the page in full" in skill, directory
-        assert "refused rather than ignored" in page, directory
+        assert "`## Synopsis` section of `$HERE/help.md`" in skill, (
+            f"{directory}: an invalid form is answered with the `## Synopsis`"
+            f" section of `$HERE/help.md`, printed verbatim. A skill has no"
+            f" parser — the agent reading these files is the whole of the"
+            f" enforcement — so a refusal composed on the spot is a second"
+            f" grammar, free to drift from the one the page documents"
+            f" (ADR-0059). See {STANDARD}."
+        )
+        assert f"`/{directory.name} --help` for the page in full" in skill, (
+            f"{directory}: the refusal closes by pointing at"
+            f" `/{directory.name} --help`, so a user given one line of synopsis"
+            f" is told where the rest of the page is (ADR-0059). See"
+            f" {STANDARD}."
+        )
+        assert "refused rather than ignored" in page, (
+            f"{directory}: the manpage says a flag with no work to do is"
+            f" refused rather than ignored. The strictness is documented as"
+            f" well as performed, or a reader meets it first as an error"
+            f" (ADR-0059). See {STANDARD}."
+        )
 
 
 def test_a_skills_hint_and_manpage_agree_on_the_flags_it_takes() -> None:
@@ -4827,11 +4941,27 @@ def test_a_skills_hint_and_manpage_agree_on_the_flags_it_takes() -> None:
     """
 
     for directory in _shipped_skills():
-        page = (directory / "help.md").read_text(encoding="utf-8")
-        documented = _flags(_section(page, "## Options"))
+        manpage = directory / "help.md"
+        page = manpage.read_text(encoding="utf-8")
+        documented = _flags(_section(page, "## Options", manpage))
 
-        assert _flags(_hint(directory)) == documented, directory
-        assert _flags(_section(page, "## Synopsis")) == documented, directory
+        assert _flags(_hint(directory)) == documented, (
+            f"{directory}: `argument-hint` names"
+            f" {sorted(_flags(_hint(directory)))} and the manpage's"
+            f" `## Options` names {sorted(documented)}. The two are one set:"
+            f" the skill has no parser, so a flag advertised in one and missing"
+            f" from the other is a grammar disagreeing with itself, and the"
+            f" refusal lands in a user's session instead of here (ADR-0059)."
+            f" See {STANDARD}."
+        )
+        assert _flags(_section(page, "## Synopsis", manpage)) == documented, (
+            f"{manpage}: `## Synopsis` names"
+            f" {sorted(_flags(_section(page, '## Synopsis', manpage)))} and"
+            f" `## Options` names {sorted(documented)}. The synopsis is what a"
+            f" refusal quotes verbatim, so a flag missing from it is a flag the"
+            f" user is refused for without being shown (ADR-0059). See"
+            f" {STANDARD}."
+        )
 
 
 def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None:
@@ -4846,13 +4976,25 @@ def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None
     page = (directory / "help.md").read_text(encoding="utf-8")
     forms = [
         *_hint(directory).split(" | "),
-        *_section(page, "## Synopsis").splitlines(),
+        *_section(page, "## Synopsis", directory / "help.md").splitlines(),
     ]
 
-    assert any("--yes" in form for form in forms)
-    assert any("status" in form for form in forms)
+    assert any("--yes" in form for form in forms), (
+        f"{directory}: no form of the grammar names `--yes`, so this check"
+        f" judged nothing. See {STANDARD}."
+    )
+    assert any("status" in form for form in forms), (
+        f"{directory}: no form of the grammar names `status`, so this check"
+        f" judged nothing. See {STANDARD}."
+    )
     for form in forms:
-        assert not ("--yes" in form and "status" in form), form
+        assert not ("--yes" in form and "status" in form), (
+            f"{directory}: the form `{form}` offers `--yes` on `status`, which"
+            f" writes nothing and so asks nothing. A flag with no work to do is"
+            f" refused rather than ignored, and a grammar that advertises one"
+            f" teaches that flags sometimes do nothing (ADR-0059). See"
+            f" {STANDARD}."
+        )
 
 
 def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
@@ -4871,12 +5013,26 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
 
     incomplete = [
         line
-        for line in _section(skill, "## Arguments").splitlines()
+        for line in _section(skill, "## Arguments", directory / "SKILL.md").splitlines()
         if "no state" in line
     ]
-    assert incomplete, "the parse rules no longer name the incomplete form"
+    assert incomplete, (
+        f"{directory}: the parse rules no longer name the incomplete form, so"
+        f" this check judged nothing. See {STANDARD}."
+    )
     for line in incomplete:
-        assert "ask" not in line.lower(), line
+        assert "ask" not in line.lower(), (
+            f"{directory}: `{line.strip()}` answers an incomplete form by"
+            f" asking. A question with three outcomes has no answer under"
+            f" `--yes` (ADR-0029), so the incomplete form is refused with the"
+            f" synopsis like every other invalid one (ADR-0059). See"
+            f" {STANDARD}."
+        )
 
-    assert "changes nothing and asks" not in page
-    assert "prints the synopsis" in _section(page, "## Notes")
+    assert "changes nothing and asks" not in page, (
+        f"{directory / 'help.md'}: the manpage still documents the incomplete"
+        f" form as asking, which is the half the agent does not execute. Where"
+        f" the two halves disagree the body is the true one (ADR-0046). See"
+        f" {STANDARD}."
+    )
+    assert "prints the synopsis" in _section(page, "## Notes", directory / "help.md")

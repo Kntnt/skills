@@ -22,7 +22,7 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
 
 1. **Open an issue first** for anything in the *discussed* row above. For *welcomed* items, you can open a PR directly. Use the issue tracker at <https://github.com/Kntnt/skills/issues>.
 2. **One concern per PR.** Smaller PRs land faster.
-3. **Follow the project's coding standard.** It is materialised under [`docs/coding-standard/`](docs/coding-standard/) — read `general.md` plus the module(s) for the language or framework you touch before changing code.
+3. **Follow the project's coding standard.** It is materialised under [`docs/coding-standard/`](docs/coding-standard/) — read `general.md` plus the module(s) for what you touch before changing anything: `python.md` for the language, and [`skills.md`](docs/coding-standard/skills.md) for the files a skill itself ships. Read that last one before adding a skill. Its `SKILL.md` and its `help.md` each have to carry things the suite enforces and nothing else states, and the fourth check below is where you find out otherwise.
 4. **Regenerate the catalog** when you change any file of a skill the catalog names — anything under `skills/<category>/<skill>/`. Each entry carries a content digest of that skill's directory, so a catalog left as it was no longer describes the skills. The manager under `skills/kntnt/` is no catalog entry and carries no digest, so its own files are not part of one:
 
    ```

@@ -8,6 +8,8 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, cast
 
+from support.contract import STANDARD
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 SKILLS = REPO_ROOT / "skills"
@@ -80,9 +82,22 @@ def test_every_shipped_skill_carries_the_fields_the_catalog_reads() -> None:
 
     for skill_md in skill_mds:
         frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
-        assert frontmatter.get("name") == skill_md.parent.name, skill_md
-        assert frontmatter.get("description"), skill_md
-        assert kntnt.collection_block(frontmatter) is not None, skill_md
+        assert frontmatter.get("name") == skill_md.parent.name, (
+            f"{skill_md}: `name` is the skill's directory name exactly, because"
+            f" that is the name the Catalog identifies it by and the name a"
+            f" user types to invoke it. See {STANDARD}."
+        )
+        assert frontmatter.get("description"), (
+            f"{skill_md}: every skill declares a `description`. It is the only"
+            f" hook a harness has for deciding when the skill applies"
+            f" (ADR-0019), and it is what a Catalog row shows. See {STANDARD}."
+        )
+        assert kntnt.collection_block(frontmatter) is not None, (
+            f"{skill_md}: every skill carries at least one `kntnt.`-prefixed"
+            f" `metadata` key. The prefix is the marker the Manager recognises"
+            f" its own by, and a skill without one is never refreshed or"
+            f" removed by it (ADR-0061). See {STANDARD}."
+        )
 
 
 def test_the_manager_carries_no_collection_block() -> None:
@@ -179,10 +194,24 @@ def test_every_shipped_skill_declares_metadata_the_specification_allows() -> Non
     for skill_md in skill_mds:
         frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
         metadata = frontmatter.get("metadata")
-        assert isinstance(metadata, dict), skill_md
+        assert isinstance(metadata, dict), (
+            f"{skill_md}: `metadata` is a map from string keys to string"
+            f" values, and every skill declares one (ADR-0061). See {STANDARD}."
+        )
         for key, value in metadata.items():
-            assert isinstance(key, str), (skill_md, key)
-            assert isinstance(value, str), (skill_md, key)
+            assert isinstance(key, str), (
+                f"{skill_md}: the `metadata` key {key!r} is not a string. The"
+                f" specification allows no other kind of key, and YAML reads an"
+                f" unquoted `true` or `1` as neither (ADR-0060). See {STANDARD}."
+            )
+            assert isinstance(value, str), (
+                f"{skill_md}: `metadata.{key}` holds {value!r}, which is not a"
+                f" string. A reader outside this collection coerces any other"
+                f" shape rather than refusing it, so a nested map arrives as a"
+                f" Python repr and a boolean as its `str()` — the declaration is"
+                f" lost without a word being said (ADR-0061). Write a list as"
+                f" one space-separated string. See {STANDARD}."
+            )
 
 
 def test_every_shipped_skill_keeps_its_metadata_keys_under_the_collection() -> None:
@@ -196,7 +225,13 @@ def test_every_shipped_skill_keeps_its_metadata_keys_under_the_collection() -> N
     for skill_md in sorted(SKILLS.glob("*/*/SKILL.md")):
         frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
         for key in frontmatter["metadata"]:
-            assert key.startswith("kntnt."), (skill_md, key)
+            assert key.startswith("kntnt."), (
+                f"{skill_md}: the `metadata` key `{key}` carries no `kntnt.`"
+                f" prefix, and has to be written `kntnt.{key}`. `metadata` is"
+                f" one flat namespace shared with every other collection, so an"
+                f" unprefixed key is one anybody may claim and the last writer"
+                f" of it wins (ADR-0061). See {STANDARD}."
+            )
 
 
 def test_a_skill_with_nothing_to_declare_carries_the_marker_anyway() -> None:
@@ -267,20 +302,49 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
         frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
         deps = kntnt.skill_deps(frontmatter)
         compatibility = frontmatter.get("compatibility", "")
-        assert isinstance(compatibility, str), skill_md
+        assert isinstance(compatibility, str), (
+            f"{skill_md}: `compatibility` is a string, being the field a"
+            f" foreign reader reads a skill's environment requirements out of"
+            f" (ADR-0062). See {STANDARD}."
+        )
 
         # The specification bounds the field at 500 characters, and a skill
         # with no requirement to state omits it rather than writing it empty.
-        assert 0 < len(compatibility) <= 500 or not compatibility, skill_md
+        assert 0 < len(compatibility) <= 500 or not compatibility, (
+            f"{skill_md}: `compatibility` runs to {len(compatibility)}"
+            f" characters, and the specification bounds it at 500. A skill with"
+            f" no requirement to state carries no field at all rather than an"
+            f" empty one (ADR-0062). See {STANDARD}."
+        )
 
         # Every hard dependency is stated, and every binary the checker knows
         # that is stated is one this skill hard-requires or softly needs.
         named = _names(compatibility, kntnt.BINARY_HOW)
         allowed = set(deps["binaries"]) | soft.get(skill_md.parent.name, set())
-        assert set(deps["binaries"]) <= named, skill_md
-        assert named <= allowed, skill_md
+        assert set(deps["binaries"]) <= named, (
+            f"{skill_md}: `compatibility` names none of"
+            f" {sorted(set(deps['binaries']) - named)}, which the dependency"
+            f" declaration refuses the skill on. `compatibility` is the one"
+            f" field a reader outside this collection knows to look at, so a"
+            f" requirement left out of it reads as a requirement that is not"
+            f" there (ADR-0062). See {STANDARD}."
+        )
+        assert named <= allowed, (
+            f"{skill_md}: `compatibility` names {sorted(named - allowed)}, which"
+            f" the dependency declaration does not hold. The two state one set"
+            f" of binaries between them; the exception is a requirement the"
+            f" skill degrades gracefully without, which is named in"
+            f" `compatibility` in prose, deliberately kept out of the"
+            f" declaration the checker refuses on, and listed in this test"
+            f" (ADR-0062). See {STANDARD}."
+        )
         assert _names(compatibility, kntnt.CAPABILITIES) == set(deps["capabilities"]), (
-            skill_md
+            f"{skill_md}: `compatibility` and the dependency declaration name"
+            f" different Capabilities —"
+            f" {sorted(_names(compatibility, kntnt.CAPABILITIES))} against"
+            f" {sorted(deps['capabilities'])}. A Capability is stated as the"
+            f" Capability and never as the harness product that has one"
+            f" (ADR-0062, ADR-0030). See {STANDARD}."
         )
 
 
@@ -314,8 +378,12 @@ def test_shipped_frontmatter_stays_within_the_recorded_deviation() -> None:
     for skill_md in skill_mds:
         frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
         assert set(frontmatter) <= allowed, (
-            skill_md,
-            sorted(set(frontmatter) - allowed),
+            f"{skill_md}: the frontmatter carries"
+            f" {sorted(set(frontmatter) - allowed)}, outside the six fields the"
+            f" specification defines and the two ADR-0066 accepts on top of"
+            f" them. The reference validator refuses every field it does not"
+            f" know, so a third deviation is one the record has to accept"
+            f" before it is shipped. See {STANDARD}."
         )
 
 

@@ -16,6 +16,11 @@ TICKET_RECORD = (
     "docs/adr/0067-a-ticket-asserts-only-what-stays-true-until-it-is-built.md"
 )
 
+# The coding-standard module carrying what a Skill's own shipped files must
+# hold. Named here for the same reason the record above is: what has to hold is
+# that this particular module is pointed at, before anything has been written.
+STANDARD = "docs/coding-standard/skills.md"
+
 # Every entry under `## References` is a backticked path, an em dash, and the
 # clause saying when to read it.
 REFERENCE = re.compile(r"^- `([^`]+)` — (read when [^\n]+)$", re.MULTILINE)
@@ -61,3 +66,20 @@ def test_every_file_agents_md_references_exists() -> None:
     missing = [path for path in references if not (REPO_ROOT / path).exists()]
 
     assert missing == []
+
+
+def test_agents_md_points_at_the_standard_a_new_skill_is_held_to() -> None:
+    """A Skill's own files carry requirements the suite enforces and nothing states.
+
+    An author who reads this file, writes a Skill, and runs the suite meets
+    those requirements as a red check on a rule nobody told them about (issue
+    #69). The module is the answer, and this file is what an agent always has
+    loaded, so the module is reachable before anything is written only if this
+    file names it — and the clause has to say *Skill*, because a reader skims
+    the list for the occasion rather than the path.
+    """
+
+    references = _references()
+
+    assert STANDARD in references
+    assert "skill" in references[STANDARD].lower()
