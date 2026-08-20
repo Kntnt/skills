@@ -302,6 +302,22 @@ def open_worktrees(cwd: Path, run_branch: str) -> dict[int, str]:
 
 
 @dataclass
+class Remark:
+    """One thing a person wrote on a ticket after filing it.
+
+    Attributed and dated because the brief renders the thread in filing order
+    and a builder has to be able to tell what came after what — a comment
+    answering a question the body leaves open is only the answer once you can
+    see it was written later. `author` is empty where the tracker has forgotten
+    who wrote it, an account since deleted still having filed requirement.
+    """
+
+    author: str
+    created_at: str
+    body: str
+
+
+@dataclass
 class Ticket:
     """One ticket in scope, as the tracker describes it.
 
@@ -310,9 +326,13 @@ class Ticket:
     the list is what remains to be waited for rather than the whole history of
     the edge.
 
-    `body` is the ticket as it was filed, carried whole because the brief a
-    building subagent gets carries the body and never a summary of it, and
-    `parent` is the spec whose testing decisions are read before any test.
+    `body` is the ticket as it was filed and `thread` is what has been said on
+    it since, oldest first. Both are carried whole, because the brief a
+    building subagent gets carries the ticket as the tracker now holds it and
+    never a summary of it — a requirement a maintainer answered in a comment is
+    requirement, and a builder given only the body would be answering questions
+    that were settled hours ago. `parent` is the spec whose testing decisions
+    are read before any test.
     `claimed_by` is who the tracker has it assigned to: non-empty means a
     session or a person already has it, and the logins are what tells a claim
     this run left behind from one somebody else took.
@@ -336,6 +356,7 @@ class Ticket:
     title: str
     url: str
     body: str
+    thread: list[Remark]
     parent: int | None
     claimed_by: list[str]
     blocked_by: list[int]
@@ -686,6 +707,43 @@ def numbers_in(listed: str | None) -> list[int]:
     return [int(number) for number in listed.split(",")] if listed else []
 
 
+def engine_wrote(body: str) -> bool:
+    """Say whether *body* is this engine talking to its next self.
+
+    A recorded outcome and a rebuild note are written by a run, for a run: what
+    they say is that this ticket has been here before, which is the one thing a
+    builder briefed on the ticket has no use for. Read by exactly the two
+    patterns that write them, so nothing else a comment carries counts as the
+    engine's — a marker naming an outcome this engine never records is prose
+    somebody else wrote, and prose is relayed rather than interpreted.
+    """
+
+    outcome = RECORDED_OUTCOME.search(body)
+    return (outcome is not None and outcome.group(1) in OUTCOMES) or (
+        RECORDED_REBUILD.search(body) is not None
+    )
+
+
+def thread_of(item: dict[str, Any]) -> list[Remark]:
+    """Return what people have written on *item*, in the order they wrote it.
+
+    The tracker's unit of record is the thread, so this is the rest of the
+    ticket: everything said on it after it was filed, minus what a run wrote
+    there itself. Nothing here reads what any of it says — the thread is
+    relayed to a subagent whole, and the subagent is what reads it (ADR-0065).
+    """
+
+    return [
+        Remark(
+            author=str((comment.get("author") or {}).get("login", "")),
+            created_at=str(comment.get("createdAt", "")),
+            body=str(comment["body"]),
+        )
+        for comment in item["comments"]
+        if not engine_wrote(str(comment["body"]))
+    ]
+
+
 def rebuilt_already(item: dict[str, Any]) -> bool:
     """Say whether a run has already spent *item*'s one rebuild on it."""
 
@@ -1014,6 +1072,7 @@ def ticket_from(
         title=str(item["title"]),
         url=str(item["url"]),
         body=str(item["body"]),
+        thread=thread_of(item),
         parent=parent_of(item),
         claimed_by=holders_of(item),
         blocked_by=blocked_by,

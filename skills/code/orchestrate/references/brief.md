@@ -1,6 +1,6 @@
 # The building brief
 
-Give this to the building subagent, filled in from the ticket's entry in the plan and from what `isolate` answered for it. Everything in angle brackets is replaced; nothing else is rewritten. `<body>` is pasted whole — a summary is your reading of the ticket, and your reading is not what was filed. Where `parent` is null, replace the *Read the spec first* paragraph with a single sentence saying the ticket names no parent spec, so its own body is the whole of the requirement. Where the plan's `worktrees` is false, replace the *Where you work* paragraph with a single sentence saying the work happens in the repository as it stands, on the branch already checked out.
+Give this to the building subagent, filled in from the ticket's entry in the plan and from what `isolate` answered for it. Everything in angle brackets is replaced; nothing else is rewritten. `<body>` is pasted whole — a summary is your reading of the ticket, and your reading is not what was filed. `<thread>` is that entry's `thread` rendered in the order it holds, one block per entry, each opening with its `author` and `created_at` and then its `body` pasted whole under the same rule. Where `thread` is empty, drop the *What has been said since* paragraph and the `<thread>` under it, so a ticket nobody has written on is briefed exactly as it was before there was a thread to brief from. Where `parent` is null, replace the *Read the spec first* paragraph with a single sentence saying the ticket names no parent spec, so its own body is the whole of the requirement. Where the plan's `worktrees` is false, replace the *Where you work* paragraph with a single sentence saying the work happens in the repository as it stands, on the branch already checked out.
 
 ---
 
@@ -9,6 +9,12 @@ You are building one ticket, alone, in a session nobody is watching. Other ticke
 **The ticket.** #`<number>` — `<title>` — `<url>`. This is its body as it was filed:
 
 `<body>`
+
+**What has been said since.** A ticket is a thread, and the body above is only its first post. This is everything written on it since it was filed, oldest first:
+
+`<thread>`
+
+Where any of that contradicts the body, the later text stands: a question the body leaves open and a comment answers is answered, and the answer is the requirement. Acceptance criteria stated in a comment are acceptance criteria, and they are what this work is verified against.
 
 **Where you work.** In `<worktree>`, which is a working tree of this repository made for this ticket, with the branch `<branch>` checked out in it. Everything you do happens there — read, build, test, and commit in that directory and nowhere else. The developer's own working tree is elsewhere and is not yours to touch; work landing on their branch is somebody else's job once your work has been verified.
 

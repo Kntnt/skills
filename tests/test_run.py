@@ -147,6 +147,16 @@ def _wrote(env: dict[str, str], number: int) -> str:
     return written[-1]
 
 
+def _remark(author: str, written: str, body: str) -> dict[str, Any]:
+    """Build a comment on a ticket as the tracker answers for it.
+
+    The half of a thread a person wrote: attributed and dated, which is what
+    tells a builder what came after what.
+    """
+
+    return {"author": {"login": author}, "createdAt": written, "body": body}
+
+
 def _ticket(
     number: int,
     title: str,
@@ -848,6 +858,105 @@ def test_plan_carries_each_tickets_body_and_parent_for_the_brief(
     plan = json.loads(result.stdout)
     assert plan["tickets"][0]["body"] == written
     assert plan["tickets"][0]["parent"] == 6
+
+
+def test_plan_carries_what_has_been_said_on_a_ticket_since_it_was_filed(
+    tmp_path: Path,
+) -> None:
+    """A ticket is a thread and the body is only its first post. Triage answers
+    the body's open questions in a comment, and the brief is filled in from the
+    plan — so the plan is where the rest of the thread has to arrive, in filing
+    order, each entry attributed and dated."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(
+                    10,
+                    "the graph",
+                    body="## What triage must decide\n\nWhich seam it goes behind.\n",
+                    comments=[
+                        _remark("maintainer", "2026-01-02T09:00:00Z", "The engine's."),
+                        _remark(
+                            "reviewer", "2026-01-03T11:30:00Z", "Agreed, and\ntested."
+                        ),
+                    ],
+                )
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["tickets"][0]["thread"] == [
+        {
+            "author": "maintainer",
+            "created_at": "2026-01-02T09:00:00Z",
+            "body": "The engine's.",
+        },
+        {
+            "author": "reviewer",
+            "created_at": "2026-01-03T11:30:00Z",
+            "body": "Agreed, and\ntested.",
+        },
+    ]
+
+
+def test_plan_leaves_the_runs_own_notes_out_of_a_tickets_thread(
+    tmp_path: Path,
+) -> None:
+    """An outcome marker and a rebuild note are the engine talking to its next
+    self, and a builder that reads them learns only that this ticket failed
+    once. They are left out, what a person wrote stays, and both readings the
+    engine already makes of a comment answer exactly as they did."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(
+                    10,
+                    "the graph",
+                    comments=[
+                        _remark(
+                            "maintainer", "2026-01-02T09:00:00Z", "Behind the seam."
+                        ),
+                        {"body": f"<!-- {MARKER} rebuild --> built once more"},
+                        _recorded("failed"),
+                    ],
+                )
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert [entry["body"] for entry in plan["tickets"][0]["thread"]] == [
+        "Behind the seam."
+    ]
+    assert plan["tickets"][0]["outcome"] == "failed"
+
+
+def test_plan_carries_an_empty_thread_for_a_ticket_nobody_has_written_on(
+    tmp_path: Path,
+) -> None:
+    """A ticket whose thread is empty is briefed exactly as it was briefed
+    before there was a thread to brief from."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(10, "the graph")]})
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["tickets"][0]["thread"] == []
 
 
 def test_plan_reads_the_parent_from_the_body_where_the_relation_carries_none(

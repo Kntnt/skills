@@ -1,6 +1,6 @@
 # The verification brief
 
-Give this to a second subagent, filled in from the same entry in the plan and the same working tree. It has not seen the building session and is never told what the builder reported — that is the whole of its value. Everything in angle brackets is replaced; `<body>` is pasted whole. Where the plan's `worktrees` is false, replace the *Where you look* paragraph with a single sentence saying the repository as it stands is what the ticket is checked against.
+Give this to a second subagent, filled in from the same entry in the plan and the same working tree. It has not seen the building session and is never told what the builder reported — that is the whole of its value. Everything in angle brackets is replaced; `<body>` is pasted whole, and so is every entry of `<thread>` — a summary is your reading of the ticket rather than what was filed or written on it. `<thread>` is that entry's `thread` rendered in the order it holds, one block per entry, each opening with its `author` and `created_at` and then its `body`. Where `thread` is empty, drop the *What has been said since* paragraph and the `<thread>` under it, so a ticket nobody has written on is verified against exactly what it was verified against before there was a thread to carry. Where the plan's `worktrees` is false, replace the *Where you look* paragraph with a single sentence saying the repository as it stands is what the ticket is checked against.
 
 ---
 
@@ -11,6 +11,12 @@ You are verifying one ticket that somebody else built. You did not build it, you
 **The ticket.** #`<number>` — `<title>` — `<url>`. This is its body as it was filed:
 
 `<body>`
+
+**What has been said since.** A ticket is a thread, and the body above is only its first post. This is everything written on it since it was filed, oldest first:
+
+`<thread>`
+
+Where any of that contradicts the body, the later text stands: a question the body leaves open and a comment answers is answered, and the answer is the requirement. An acceptance criterion stated in a comment is one of this ticket's acceptance criteria and is checked exactly like the rest.
 
 Do all of this, in this order:
 
