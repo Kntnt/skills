@@ -83,6 +83,21 @@
       "capabilities": []
     },
     {
+      "name": "ready-for-agent-check",
+      "category": "code",
+      "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
+      "digest": "50c8bff3ce392fb6f8f91f22ee2e18942d0124f324b315abddbf980efc5533ed",
+      "binaries": [
+        "gh",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
