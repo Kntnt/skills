@@ -1925,6 +1925,24 @@ def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
             skill_dir = directory / name
             if not skill_present_at(directory, name):
                 continue
+
+            # A declaration this Manager cannot read is one of the layer's
+            # Unsatisfied Dependencies rather than a refusal, because the run
+            # is past the point where it may stop talking: the withdrawals
+            # above are already deleted and the placements already made
+            # (ADR-0036). Update reaches Skills a refresh could not repair —
+            # one the origin was unreachable for, one a hand edit left with no
+            # frontmatter at all — and each of those is exactly what has to be
+            # reported (ADR-0068).
+            fault = declaration_fault_at(skill_dir)
+            if fault is not None:
+                item = unreadable_declaration(skill_dir, fault)
+                key = (item["kind"], item["name"], item["how"])
+                if key not in seen:
+                    seen.add(key)
+                    unsatisfied.append(item)
+                continue
+
             for item in unsatisfied_at(skill_dir):
                 key = (item["kind"], item["name"], item["how"])
                 if key in seen:
@@ -1962,12 +1980,67 @@ def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
     return outcome_exit_code(outcome)
 
 
-def declared_deps_at(skill_dir: Path) -> dict[str, list[str]]:
-    """Return the Dependency lists declared in *skill_dir*/SKILL.md."""
+def declaration_fault_at(skill_dir: Path) -> str | None:
+    """Say why the Dependency declaration at *skill_dir* cannot be read, or None.
+
+    `carries_marker` asks the same predicate a different question. It reads
+    directories the collection did not write, so no readable block there means
+    *not ours*, and a stranger's skill legitimately declares nothing this
+    Manager checks. Here the caller is a Skill of this collection asking about
+    itself — nothing else invokes the checker — so the two states come apart
+    and no readable declaration means *ours, and unreadable* (ADR-0068).
+    """
 
     path = skill_dir / "SKILL.md"
     if not path.is_file():
-        raise ManagerError(f"no SKILL.md at {skill_dir}")
+        return f"no SKILL.md at {skill_dir}"
+    return marker_fault(parse_frontmatter(path.read_text(encoding="utf-8")))
+
+
+def unreadable_declaration(skill_dir: Path, fault: str) -> dict[str, str]:
+    """Describe an unreadable declaration as the Unsatisfied Dependency it is.
+
+    The one shape every Unsatisfied Dependency is reported in, because the
+    instruction each Skill carries is to emit what the checker said: an entry
+    of another shape would reach the user through no documented channel, and
+    the fault has to reach them to be acted on. Nothing here is a Dependency
+    by name, so what is Unsatisfied is the declaration itself.
+
+    The fault travels whole and framed rather than alone. `marker_fault` is
+    written for the sweep, which asks the same question to decide whether a
+    Skill can be withdrawn, so its sentence names a consequence that is not
+    this reader's — true, and beside the point in front of somebody whose
+    Skill just refused to run.
+    """
+
+    return {
+        "name": skill_dir.name,
+        "kind": "declaration",
+        "how": (
+            f"this Manager cannot read what the skill declares ({fault}); "
+            "refresh this machine with '/kntnt update', which brings the "
+            "Manager and every Enabled Skill to one revision of the collection"
+        ),
+    }
+
+
+def declared_deps_at(skill_dir: Path) -> dict[str, list[str]]:
+    """Return the Dependency lists declared in *skill_dir*/SKILL.md.
+
+    Raises:
+        ManagerError: the declaration cannot be read. Answering four empty
+            lists is the answer a Skill genuinely requiring nothing gets, so a
+            Manager meeting a shape it does not know reported nothing missing
+            and handed the agent no Capability to confirm — both halves of the
+            gate gone, without a word, for every Skill of a collection that had
+            moved on (issue #68). A declaration that cannot be read is not a
+            declaration of nothing (ADR-0068).
+    """
+
+    fault = declaration_fault_at(skill_dir)
+    if fault is not None:
+        raise ManagerError(fault)
+    path = skill_dir / "SKILL.md"
     return skill_deps(parse_frontmatter(path.read_text(encoding="utf-8")))
 
 
@@ -2039,7 +2112,26 @@ def cmd_check(skill_dir: Path) -> int:
     Dependency this script cannot test, handed to the agent to answer. Exit 0
     with a non-empty list therefore means "nothing missing that I can see",
     not "go ahead".
+
+    Exit 0 with both lists empty is the strongest thing this gate says, so it
+    is never what an unreadable declaration earns: nothing missing that I can
+    see is a claim about a declaration that was read (ADR-0068).
     """
+
+    # A declaration this Manager cannot read is refused the way an Unsatisfied
+    # Dependency is refused, and not raised: exit 2 with the reason on stdout
+    # is the one non-zero answer every Skill's body documents a response to,
+    # so the fault reaches the user rather than an empty stop (ADR-0068).
+    fault = declaration_fault_at(skill_dir)
+    if fault is not None:
+        emit(
+            {
+                "ok": False,
+                "unsatisfied": [unreadable_declaration(skill_dir, fault)],
+                "capabilities": [],
+            }
+        )
+        return 2
 
     capabilities = capabilities_at(skill_dir)
     missing = unsatisfied_at(skill_dir)

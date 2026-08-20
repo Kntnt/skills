@@ -2010,6 +2010,80 @@ def test_check_rejects_an_unknown_capability(tmp_path: Path) -> None:
     assert "telepathy" in result.stderr
 
 
+def test_check_refuses_a_declaration_it_cannot_read(tmp_path: Path) -> None:
+    """The shape a previous release wrote must not read as *requires nothing*.
+
+    ADR-0061 moved the four Dependency lists into one flat prefixed namespace,
+    and a Manager that predates it finds no `kntnt.` key in the shape that
+    replaced it. `check` answered that with exit 0 and two empty lists, which
+    is what a skill genuinely requiring nothing answers with — so the binary
+    half of the gate reported nothing missing and the Capability half handed
+    the agent nothing to confirm, and the skill ran (issue #68).
+    """
+
+    world = _world(tmp_path)
+    skill = world["project"] / "skill"
+    _write(
+        skill / "SKILL.md",
+        _skill_md_with_metadata(
+            "alpha",
+            "metadata:\n"
+            "  internal: true\n"
+            "  kntnt:\n"
+            "    binaries:\n"
+            "      - definitely-not-a-binary-kntnt\n"
+            "    capabilities:\n"
+            "      - subagents\n",
+        ),
+    )
+
+    result = _run(world, "check", "--here", str(skill))
+
+    assert result.returncode == 2, result.stdout
+    payload = _json(result)
+    assert payload["ok"] is False
+    assert payload["capabilities"] == []
+    entry = payload["unsatisfied"][0]
+    assert entry["kind"] == "declaration"
+    assert "metadata" in entry["how"], "the fault reaches the user, not just a stop"
+    assert "/kntnt update" in entry["how"], "and so does the remedy for it"
+
+
+def test_check_refuses_every_declaration_it_cannot_read(tmp_path: Path) -> None:
+    """The gate refuses each form generation refuses, and for the same reason.
+
+    Generation is the gate on an unreadable marker in the repository; nothing
+    was the gate on one already installed. The two lists are deliberately the
+    same, minus the values `skill_deps` could already refuse: whatever shape
+    leaves this Manager without a readable declaration, the answer is a refusal
+    rather than four empty lists (issue #68).
+    """
+
+    forms = (
+        ("no metadata at all", ""),
+        ("a metadata that is not a mapping", "metadata: hello\n"),
+        ("a metadata holding no kntnt. key", 'metadata:\n  internal: "true"\n'),
+        (
+            "the nested block ADR-0061 replaced",
+            "metadata:\n  kntnt:\n    binaries: git\n",
+        ),
+    )
+
+    for index, (label, metadata) in enumerate(forms):
+        root = tmp_path / f"form{index}"
+        root.mkdir()
+        world = _world(root)
+        skill = world["project"] / "skill"
+        _write(skill / "SKILL.md", _skill_md_with_metadata("alpha", metadata))
+
+        result = _run(world, "check", "--here", str(skill))
+
+        assert result.returncode == 2, f"{label}: {result.stdout}"
+        payload = _json(result)
+        assert payload["ok"] is False, label
+        assert payload["unsatisfied"][0]["kind"] == "declaration", label
+
+
 def test_capabilities_do_not_gate_where_a_skill_is_installed(tmp_path: Path) -> None:
     """ADR-0030: one desired set; the skill is Enabled everywhere and refuses at runtime."""
 
@@ -2946,6 +3020,35 @@ def test_update_re_checks_a_skill_it_did_not_refresh(tmp_path: Path) -> None:
     assert [item["skill"] for item in payload["capabilities"]] == ["alpha"]
 
 
+def test_update_reports_a_declaration_it_cannot_read(tmp_path: Path) -> None:
+    """The re-check names an unreadable declaration; it neither hides it nor eats the report.
+
+    ADR-0068 makes an unreadable declaration a refusal rather than four empty
+    lists, and Update re-checks every Skill the layer holds — including one the
+    origin could not be reached to repair. A refusal raised there would cost
+    the user the account of what the same run already deleted and placed, which
+    is the one thing ADR-0036 does not allow a verb to lose, so it is reported
+    in the payload like any other Unsatisfied Dependency (issue #68).
+    """
+
+    world = _digested_world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    installed = world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md"
+    installed.write_text("hand edited\n", encoding="utf-8")
+    _unreachable_origin(world)
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    entry = next(
+        item for item in payload["unsatisfied"] if item["kind"] == "declaration"
+    )
+    assert entry["name"] == "alpha"
+    assert "/kntnt update" in entry["how"]
+
+
 def test_update_reports_a_gated_refresh_that_never_landed(tmp_path: Path) -> None:
     """The Digest decides what is copied; the disk still decides what is reported."""
 
@@ -3561,11 +3664,13 @@ def test_catalog_generation_is_the_gate_on_every_unreadable_marker(
     """Nothing else keeps one off a user's disk.
 
     Generation refuses and `CONTRIBUTING.md` step 4 regenerates the Catalog
-    before anything ships: that pair is the whole of the guarantee, and it has
-    to hold for every form. The predicate underneath also feeds
-    `carries_marker`, which may not raise and so can never report — a skill
-    that reached a machine with an unreadable marker is one the sweep could
-    not withdraw (issue #48).
+    before anything ships: that pair is the whole of the guarantee about this
+    repository, and it has to hold for every form. It was never a guarantee
+    about a machine holding two revisions of the collection at once, which is
+    what the gate now answers for itself (ADR-0068). The predicate underneath
+    also feeds `carries_marker`, which may not raise and so can never report —
+    a skill that reached a machine with an unreadable marker is one the sweep
+    could not withdraw (issue #48).
     """
 
     forms = (
