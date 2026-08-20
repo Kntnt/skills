@@ -3328,9 +3328,17 @@ def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> No
 
 
 def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
-    """Help lives with the skill: a file it prints, not prose it regenerates."""
+    """Help lives with the skill: a file it prints, not prose it regenerates.
 
-    for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
+    The route is read out of the `## Help` section rather than out of the body
+    at large. Both tokens it names are named again by the refusal clause every
+    body has to carry, so a body read whole answers yes for a skill whose
+    `## Help` section was deleted outright — and a skill that can no longer be
+    asked what it does is the failure this exists to catch. Asserting the route
+    inside the section requires the heading and pins the route to it at once.
+    """
+
+    for path in _skill_bodies():
         text = path.read_text(encoding="utf-8")
         assert (path.parent / "help.md").is_file(), (
             f"{path}: every skill ships a `help.md` beside its `SKILL.md`."
@@ -3338,16 +3346,26 @@ def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
             f" asked what it does without knowing which collection it came"
             f" from (ADR-0044). See {STANDARD}."
         )
-        assert "`$HERE/help.md`" in text, (
-            f"{path}: the body prints `$HERE/help.md` verbatim rather than"
-            f" summarising it. The manpage is a file a reviewer can diff, not"
-            f" prose an agent regenerates each time (ADR-0044, ADR-0045). See"
-            f" {STANDARD}."
+
+        marker = "\n## Help\n"
+        assert marker in text, (
+            f"{path}: every body carries a `## Help` section, which is where"
+            f" the route into the manpage lives. A skill is asked what it does"
+            f" by name, so the answer is a section of the body rather than one"
+            f" skill's habit (ADR-0044). See {STANDARD}."
         )
-        assert "--help" in text, (
-            f"{path}: the body routes `--help` to the manpage, which is how"
-            f" every skill of this collection is asked what it does"
-            f" (ADR-0044). See {STANDARD}."
+        section = text.partition(marker)[2].partition("\n## ")[0]
+
+        assert "`$HERE/help.md`" in section, (
+            f"{path}: the `## Help` section prints `$HERE/help.md` verbatim"
+            f" rather than summarising it. The manpage is a file a reviewer can"
+            f" diff, not prose an agent regenerates each time (ADR-0044,"
+            f" ADR-0045). See {STANDARD}."
+        )
+        assert "--help" in section, (
+            f"{path}: the `## Help` section routes `--help` to the manpage,"
+            f" which is how every skill of this collection is asked what it"
+            f" does (ADR-0044). See {STANDARD}."
         )
         assert "Arguments and Steps" not in text, (
             f"{path}: the body carries only what the agent executes, so its"
@@ -3371,6 +3389,29 @@ def test_the_manager_separates_steps_from_manpages() -> None:
 
     text = (manager / "SKILL.md").read_text(encoding="utf-8")
     assert "$HERE/steps/" in text
+
+
+def test_every_manpage_carries_the_sections_the_standard_requires() -> None:
+    """The set is a floor, and a floor is the kind of thing a check holds well.
+
+    A manpage is written for a reader deciding whether to enable the skill,
+    which is a reader who does not have it yet, and what that reader can rely
+    on is meeting the same sections on every page of the collection. Presence
+    is the whole of what is bought here: nothing judges whether a section was
+    written for anybody, and a `## Description` of one word passes. The
+    standard says so rather than implying a check that reads prose.
+    """
+
+    for page in _manpages():
+        text = page.read_text(encoding="utf-8")
+        for heading in _MANPAGE_SECTIONS:
+            assert f"\n{heading}\n" in text, (
+                f"{page}: this manpage carries no `{heading}`. Every manpage of"
+                f" the collection carries {_the_sections()} — the set is the"
+                f" floor a reader who does not have the skill yet can count on"
+                f" finding, and further sections are the skill's own to add"
+                f" (ADR-0044). See {STANDARD}."
+            )
 
 
 # The two Markdown files a skill ships that are not opened on demand: the body
@@ -4868,18 +4909,70 @@ def _shipped_skills() -> list[Path]:
     return directories
 
 
+def _skill_bodies() -> list[Path]:
+    """Every `SKILL.md` the collection ships, the Manager's own included.
+
+    The Manager sits a level above the categories, so the glob that finds a
+    Catalog skill cannot see it — and it is a Skill by the collection's own
+    definition, so a rule about what a body carries is a rule about its body
+    too.
+    """
+
+    return [*(d / "SKILL.md" for d in _shipped_skills()), MANAGER_DIR / "SKILL.md"]
+
+
+def _manpages() -> list[Path]:
+    """Every manpage the collection ships, found rather than listed.
+
+    A skill's manpage is the `help.md` beside its `SKILL.md`; the Manager ships
+    its own and one page per verb under `help/`. Its `steps/` holds a file of
+    the same name that is the agent's instructions for the `help` verb and no
+    manpage at all, which is the line `test_the_manager_separates_steps_from_
+    manpages` draws — and the reason this is not a glob for every `help.md`.
+    """
+
+    pages = [
+        *(d / "help.md" for d in _shipped_skills()),
+        MANAGER_DIR / "help.md",
+        *sorted((MANAGER_DIR / "help").glob("*.md")),
+    ]
+    assert pages
+    return pages
+
+
+# The sections every manpage of the collection carries. A floor rather than a
+# shape: further sections are the skill's own to add where it has something the
+# set has no room for.
+_MANPAGE_SECTIONS = (
+    "## Synopsis",
+    "## Description",
+    "## Options",
+    "## Notes",
+    "## Dependencies",
+    "## See also",
+)
+
+
+def _the_sections() -> str:
+    """The required set as prose, so a message and the standard cannot drift."""
+
+    quoted = [f"`{heading}`" for heading in _MANPAGE_SECTIONS]
+    return f"{', '.join(quoted[:-1])}, and {quoted[-1]}"
+
+
 def _section(text: str, heading: str, where: Path) -> str:
     """Return one `## ` section of a Markdown file, and nothing after it."""
 
     marker = f"\n{heading}\n"
     assert marker in text, (
         f"{where} carries no `{heading}` section, so the rule read out of it"
-        f" cannot be checked at all. A manpage carries `## Synopsis`,"
-        f" `## Description`, `## Options`, `## Notes`, `## Dependencies`, and"
-        f" `## See also`, and `## Arguments` where the skill takes any —"
-        f" `## Options` even where it has no flags at all, written *none, and"
-        f" none is missing*, so a reader learns the emptiness is deliberate"
-        f" rather than a section nobody wrote. See {STANDARD}."
+        f" cannot be checked at all. Every manpage carries {_the_sections()} —"
+        f" `## Options` even where the skill has no flags at all, written"
+        f" *none, and none is missing*, so a reader learns the emptiness is"
+        f" deliberate rather than a section nobody wrote. A page documents the"
+        f" arguments its skill takes as well, conventionally under"
+        f" `## Arguments` and otherwise under a heading that names them better."
+        f" See {STANDARD}."
     )
     return text.partition(marker)[2].partition("\n## ")[0]
 

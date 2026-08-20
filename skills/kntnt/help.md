@@ -33,6 +33,10 @@ Select lists every catalog skill, Enabled or not, and is where you change which 
 
 A dry run is the expensive way to see a change before it happens: the verb really runs, against files copied into a temporary home, and the report is its own outcome read off that home's disk rather than a second account of what it meant to do. It downloads the transport afresh into a cache of its own, so it takes noticeably longer than the run it previews. The confirmation a changing verb asks for before it writes is the cheap way, and it is not a dry run.
 
+## Dependencies
+
+`uv` on PATH, which is what runs the manager's script; without it nothing here runs at all. On top of that, `npx` and network access for the verbs that read the collection or move files: skill files travel only through the transport, which is `npx skills`, and the catalog is fetched from the collection over the network. A fetch that fails falls back to the catalog stored beside the manager, and the verb says which of the two it worked from.
+
 ## See also
 
 `/kntnt help <subcommand>` for one verb in full. `/<skill> --help` for a skill of this collection you already have, and `/kntnt select` to read about one you do not.
