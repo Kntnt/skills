@@ -26,6 +26,10 @@ None. Help takes no flags, and passing one is an error rather than a page with a
 
 The manager documents its own verbs and no skill. Asking it about a skill meant remembering which collection that skill had arrived from, which is exactly the fact a user should not have to hold, so there are two better routes instead. A skill you have answers `/<skill> --help` with the manpage it ships beside itself, whichever collection it came from. A skill you do not have yet is read about from `/kntnt select`, which fetches that manpage from the collection — the list is where you decide whether to enable it, and deciding never requires installing it first.
 
+## Dependencies
+
+`uv` on PATH, and nothing else. Help prints pages shipped beside the manager, so it runs no transport and reaches no network — it is the one verb that still answers on a machine that is offline.
+
 ## See also
 
 `/kntnt help select`, `/kntnt help update`, `/kntnt help uninstall`.

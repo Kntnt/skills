@@ -30,6 +30,10 @@ A new entry is enabled on its own, without whatever it depends on: something it 
 
 `/kntnt select --yes` is the deliberate opposite: it opens no list and enables nothing that was not already enabled. The unattended run that can add a skill is the one you pointed at the collection's own new entries.
 
+## Dependencies
+
+`uv` on PATH, and `npx` plus network access for the whole of what update does: the catalog it compares against is fetched from the collection, and the files it re-copies travel through the transport, which is `npx skills`. Where the collection cannot be reached nothing is refreshed, nothing is deleted, and nothing is reported as new.
+
 ## See also
 
 `/kntnt help select`, `/kntnt help uninstall`.

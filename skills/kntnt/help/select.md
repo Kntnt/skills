@@ -46,6 +46,10 @@ Which harnesses are reached is never asked and never recorded: every harness pre
 
 The list closes by counting the skills on disk that carry this collection's marker and no longer appear in the catalog. `/kntnt update` is what takes those off.
 
+## Dependencies
+
+`uv` on PATH, and `npx` plus network access for everything the list does beyond printing itself. The catalog is fetched from the collection, and so is the manpage of a skill you do not have yet; where the collection cannot be reached the list comes from the copy stored beside the manager and says so. Enabling or disabling a skill moves files, and files move only through the transport, which is `npx skills`.
+
 ## See also
 
 `/kntnt help update`, `/kntnt help uninstall`.

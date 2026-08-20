@@ -23,6 +23,10 @@ There is no `--project` form, and that is the decision rather than an omission. 
 
 What is removed is what the Catalog names, so the report says whether that list came from the collection or from the stored copy. The usual remedy of running it again is only available while the manager is still installed.
 
+## Dependencies
+
+`uv` on PATH, and `npx` for the transport, which is the route the files leave by — the same one they arrived by, the manager's own removal included. The catalog is fetched from the collection over the network to settle what to remove, and falls back to the copy stored beside the manager. Which of the two the run worked from is in the report, and it matters more here than anywhere else: once the manager is gone there is no verb left to finish the job.
+
 ## See also
 
 `/kntnt help select`, `/kntnt help update`.
