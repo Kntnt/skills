@@ -228,9 +228,9 @@ def current_branch(cwd: Path) -> str:
 def default_branch(cwd: Path) -> str | None:
     """Return the repository's default branch, or None where it cannot be told.
 
-    None is not a licence to work anywhere: it is the answer that stops a run
-    from calling the branch in hand the default and refusing under a reason
-    that is not true.
+    None means there is nothing to bound the closed half of a report by
+    (ADR-0058), which is all the answer is asked for. It gates nothing: a run
+    works the branch the developer left it on either way (ADR-0064).
     """
 
     # What the remote calls its default settles it wherever there is one.
@@ -1256,23 +1256,6 @@ def claimed_elsewhere(
     )
 
 
-def branch_refusal(branch: str, default: str | None) -> str | None:
-    """Return why a run may not work *branch*, or None where it may.
-
-    Asked wherever a run would write to the branch it is on — when it plans,
-    and again when it merges a ticket into it — so the one place an unattended
-    night must never land is refused in the same terms both times.
-    """
-
-    if default is None:
-        return (
-            "cannot tell which branch is the default; "
-            "name it with `git remote set-head origin --auto`"
-        )
-
-    return f"on the default branch '{branch}'" if branch == default else None
-
-
 def uncommitted_refusal(cwd: Path) -> str | None:
     """Return why a run may not work this repository, or None where it may.
 
@@ -1379,17 +1362,13 @@ def build_plan(
         never_workable=never_workable,
     )
 
-    # A run works the branch the developer left it on, so the default branch
-    # is the one place an unattended night must never land — and a default
-    # nothing can name is a refusal too, not a branch to guess at. The tree it
-    # would commit in is the other half of that: a run cannot tell work the
-    # developer left uncommitted from the work it is about to do.
+    # A run works the branch the developer left it on, whichever branch that
+    # is (ADR-0064), so the tree it would commit in is the only thing left to
+    # refuse about the state it starts in: a run cannot tell work the developer
+    # left uncommitted from the work it is about to do.
     if dry_run:
         plan.ready = False
         plan.reason = "dry run: nothing is started"
-    elif (refused := branch_refusal(branch, default)) is not None:
-        plan.ready = False
-        plan.reason = refused
     elif (standing := uncommitted_refusal(cwd)) is not None:
         plan.ready = False
         plan.reason = standing
@@ -1629,14 +1608,7 @@ def integrate(cwd: Path, number: int) -> int:
     """
 
     branch = current_branch(cwd)
-    default = default_branch(cwd)
     open_now = open_worktrees(cwd, branch)
-
-    # A merge is the one gesture here that writes to the branch it is on, so
-    # the branch an unattended night must never land on is refused again.
-    refused = branch_refusal(branch, default)
-    if refused is not None:
-        return fail(refused)
 
     # Nothing to merge is not a merge that failed: at a ceiling of one the
     # work is on the branch already, and asking here is asking for a run that

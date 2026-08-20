@@ -55,7 +55,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "ba32dc4e3fcf477efccc7029e40e656b0f358c278fe8617e03cff812044c60cf",
+      "digest": "cba5ead21aef2b30bc66807bf740466db8d2ec2548132d95d72cfe25ce927a41",
       "binaries": [
         "git",
         "gh",

@@ -380,23 +380,25 @@ def test_plan_never_returns_a_ticket_that_does_not_carry_the_label(
     assert "unfinished thinking" not in result.stdout
 
 
-def test_plan_refuses_on_the_default_branch_and_still_shows_the_scope(
+def test_plan_works_the_default_branch_like_any_other_branch(
     tmp_path: Path,
 ) -> None:
-    """A dry run is read off a refused plan, so the scope has to survive it."""
+    """A run works the branch the developer left it on, and which branch that
+    is is not the Skill's to second-guess (ADR-0064)."""
 
     repo = _init_repo(tmp_path / "proj", branch="main")
     env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
 
     result = _engine(repo, "plan", env=env)
 
-    assert result.returncode == 2, result.stderr
+    assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["ready"] is False
-    assert "main" in plan["reason"]
+    assert plan["ready"] is True
+    assert plan["reason"] is None
     assert plan["branch"] == "main"
     assert plan["default_branch"] == "main"
     assert [entry["number"] for entry in plan["tickets"]] == [9]
+    assert plan["workable"] == [9]
 
 
 def test_plan_with_no_labelled_ticket_stops_rather_than_returning_work(
@@ -479,12 +481,13 @@ def test_plan_under_a_dry_run_shows_the_scope_and_starts_nothing(
     assert [entry["number"] for entry in plan["tickets"]] == [9]
 
 
-def test_plan_refuses_when_it_cannot_tell_which_branch_is_the_default(
+def test_plan_works_a_repository_that_cannot_name_its_default_branch(
     tmp_path: Path,
 ) -> None:
-    """A repository naming its default neither main nor master, and no remote
-    to ask, must be told so rather than have the branch in hand called the
-    default and refused under a reason that is not true."""
+    """Nothing is gated on which branch is the default any more, so a
+    repository naming its default neither main nor master, and with no remote
+    to ask, is worked rather than refused — and the plan still says that
+    nothing could tell."""
 
     repo = _init_repo(tmp_path / "proj", initial="trunk", branch="work")
     env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
@@ -492,11 +495,12 @@ def test_plan_refuses_when_it_cannot_tell_which_branch_is_the_default(
 
     result = _engine(repo, "plan", env=env)
 
-    assert result.returncode == 2, result.stderr
+    assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["ready"] is False
+    assert plan["ready"] is True
+    assert plan["reason"] is None
     assert plan["default_branch"] is None
-    assert "cannot tell which branch is the default" in plan["reason"]
+    assert [entry["number"] for entry in plan["tickets"]] == [9]
 
 
 def test_plan_refuses_a_ticket_list_that_may_have_been_truncated(
@@ -2262,9 +2266,9 @@ def test_integrate_refuses_a_file_a_working_tree_never_added(tmp_path: Path) -> 
     assert (worktree / "graph.py").is_file()
 
 
-def test_integrate_refuses_to_merge_into_the_default_branch(tmp_path: Path) -> None:
-    """An unattended night never lands on the branch it must not touch, whether
-    it got there by plan or by a verb called on its own."""
+def test_integrate_merges_into_the_default_branch(tmp_path: Path) -> None:
+    """A run ends on the branch it started on, so a run started on the default
+    branch integrates there like anywhere else (ADR-0064)."""
 
     repo = _init_repo(tmp_path / "proj", branch="main")
     worktree = Path(
@@ -2273,22 +2277,20 @@ def test_integrate_refuses_to_merge_into_the_default_branch(tmp_path: Path) -> N
     (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
     _git(worktree, "add", "graph.py")
     _git(worktree, "commit", "-m", "read the blocking edges")
-    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
 
     result = _engine(repo, "integrate", "--ticket", "9")
 
-    assert result.returncode == 1
-    assert "default branch" in result.stderr
-    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == head
-    assert worktree.is_dir()
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["merged"] is True
+    assert (repo / "graph.py").read_text(encoding="utf-8") == "edges\n"
+    assert not worktree.exists()
 
 
-def test_integrate_refuses_where_nothing_can_say_which_branch_is_the_default(
+def test_integrate_merges_where_nothing_can_say_which_branch_is_the_default(
     tmp_path: Path,
 ) -> None:
-    """A merge writes to the branch it is on, so a repository that cannot name
-    the branch it must not touch is told so rather than merged into on the
-    chance that this one is not it."""
+    """No answer about the default branch gates a merge any more, so a
+    repository that can name no default is merged into rather than refused."""
 
     repo = _init_repo(tmp_path / "proj", initial="trunk", branch="work")
     _git(repo, "branch", "-D", "trunk")
@@ -2298,13 +2300,13 @@ def test_integrate_refuses_where_nothing_can_say_which_branch_is_the_default(
     (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
     _git(worktree, "add", "graph.py")
     _git(worktree, "commit", "-m", "read the blocking edges")
-    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
 
     result = _engine(repo, "integrate", "--ticket", "9")
 
-    assert result.returncode == 1
-    assert "cannot tell which branch is the default" in result.stderr
-    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == head
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["merged"] is True
+    assert (repo / "graph.py").read_text(encoding="utf-8") == "edges\n"
+    assert not worktree.exists()
 
 
 def test_a_failed_tickets_working_tree_stays_where_the_run_left_it(
@@ -2670,9 +2672,11 @@ def test_plan_refuses_a_working_tree_that_holds_uncommitted_work(
     tmp_path: Path,
 ) -> None:
     """A run commits where the developer left off, so work they had not
-    committed would land inside a ticket's own commit."""
+    committed would land inside a ticket's own commit. Asked on the default
+    branch, which is now worked like any other, so the tree is the only thing
+    left that a plan refuses about the state it starts in."""
 
-    repo = _init_repo(tmp_path / "proj")
+    repo = _init_repo(tmp_path / "proj", branch="main")
     env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
     (repo / "README.md").write_text("half a thought\n", encoding="utf-8")
 
@@ -2682,6 +2686,7 @@ def test_plan_refuses_a_working_tree_that_holds_uncommitted_work(
     plan = json.loads(result.stdout)
     assert plan["ready"] is False
     assert "committed" in plan["reason"]
+    assert "branch" not in plan["reason"]
     assert [entry["number"] for entry in plan["tickets"]] == [9]
 
 

@@ -23,7 +23,7 @@ Do all of this, in this order:
 3. **Run the project's full verification yourself**, every command its contributing guide names for a change. A repair you did not run is a guess.
 4. **Commit the merge.** Stage what you settled and commit it, leaving nothing uncommitted and nothing unmerged: work only a working tree holds is work the run cannot integrate.
 
-**Do not go further than the repair.** Do not fix an unrelated failure, refactor around the conflict, or build anything either ticket left undone. Do not push, do not merge anything into `<run-branch>`, and do not touch the default branch.
+**Do not go further than the repair.** Do not fix an unrelated failure, refactor around the conflict, or build anything either ticket left undone. Do not push, do not merge anything into `<run-branch>`, and touch no branch other than `<branch>`, the one you were given.
 
 **Nobody is watching.** There is no human in this session to ask, and no answer is coming. Where the two tickets genuinely disagree — they made incompatible decisions the bodies do not settle, or holding both means designing something neither one specified — that is not a cheap repair and not yours to guess at. Stop, leave the merge unfinished, and report what the disagreement is. The run's answer to that is to build this ticket again from nothing on top of the other one's work, which costs one ticket's build and produces code somebody meant.
 
