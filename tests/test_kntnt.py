@@ -1024,20 +1024,26 @@ def test_select_settles_the_closure_before_anything_is_written(
 
 
 def test_the_steps_relay_the_reason_and_still_distrust_the_transport() -> None:
-    """The two readings of one sentence, told apart (issue #46).
+    """The two readings of one sentence, told apart (issues #46, #65).
 
     *Whatever the transport reported* meant do not take its word for success.
     Once there is a message to hand on it also reads as never mind what it
-    said, which is the opposite of what the step now has to do with it.
+    said, which is the opposite of what the step now has to do with it. All
+    three verbs that can print the message are pinned here, so they cannot
+    drift apart again.
     """
 
     steps = REPO_ROOT / "skills" / "kntnt" / "steps"
-    for name in ("update.md", "select.md"):
+    for name in ("update.md", "select.md", "uninstall.md"):
         text = (steps / name).read_text(encoding="utf-8")
 
         assert "the transport said:" in text
         assert "whether or not the transport claimed otherwise" in text
         assert "whatever the transport reported" not in text
+        assert (
+            "pass on as it stands whatever the script printed to stderr under "
+            "`the transport said:`" in text
+        )
 
 
 def test_select_on_enables_a_skill_and_opens_no_list(tmp_path: Path) -> None:
