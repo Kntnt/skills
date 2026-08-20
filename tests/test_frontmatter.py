@@ -12,6 +12,29 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 SKILLS = REPO_ROOT / "skills"
 
+# The six frontmatter fields the Agent Skills specification defines, which is
+# also the closed allowlist its reference validator refuses everything else on.
+SPECIFIED_FIELDS = frozenset(
+    {
+        "allowed-tools",
+        "compatibility",
+        "description",
+        "license",
+        "metadata",
+        "name",
+    }
+)
+
+# The two Claude Code fields ADR-0066 accepts on top of them, and the record
+# that accepts them.
+HARNESS_FIELDS = frozenset({"argument-hint", "disable-model-invocation"})
+DEVIATION_RECORD = (
+    REPO_ROOT
+    / "docs"
+    / "adr"
+    / "0066-the-reference-validator-is-a-baseline-not-a-gate.md"
+)
+
 
 def _manager() -> ModuleType:
     """Import the manager's script as a module.
@@ -259,3 +282,48 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
         assert _names(compatibility, kntnt.CAPABILITIES) == set(deps["capabilities"]), (
             skill_md
         )
+
+
+def _shipped_skill_mds() -> list[Path]:
+    """Every SKILL.md the collection ships, the Manager's among them."""
+
+    return sorted(SKILLS.glob("*/*/SKILL.md")) + sorted(SKILLS.glob("*/SKILL.md"))
+
+
+def test_shipped_frontmatter_stays_within_the_recorded_deviation() -> None:
+    """The specification's six fields, plus the two ADR-0066 names, and no third.
+
+    The reference validator rejects every skill here on `argument-hint` and
+    `disable-model-invocation`, which the collection ships knowingly because
+    the harness reads them nowhere else. That deviation is bounded by the
+    record rather than open: a skill added later that carries a third field
+    outside the specification fails here until the record accepts it too
+    (issue #63).
+    """
+
+    record = DEVIATION_RECORD.read_text(encoding="utf-8")
+    for field in sorted(HARNESS_FIELDS):
+        assert f"`{field}`" in record, field
+
+    skill_mds = _shipped_skill_mds()
+
+    # A glob that matched nothing would pass every assertion below it.
+    assert skill_mds
+
+    allowed = SPECIFIED_FIELDS | HARNESS_FIELDS
+    for skill_md in skill_mds:
+        frontmatter = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))
+        assert set(frontmatter) <= allowed, (
+            skill_md,
+            sorted(set(frontmatter) - allowed),
+        )
+
+
+def test_both_deviating_fields_are_still_in_use() -> None:
+    """A record accepting a field nothing writes any more is a record to withdraw."""
+
+    written: set[str] = set()
+    for skill_md in _shipped_skill_mds():
+        written |= set(kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8")))
+
+    assert HARNESS_FIELDS <= written
