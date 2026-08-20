@@ -6,6 +6,8 @@ import json
 import re
 from pathlib import Path
 
+from support.contract import STANDARD
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 README = REPO_ROOT / "README.md"
 CATALOG = REPO_ROOT / "skills" / "kntnt" / "catalog.json"
@@ -59,5 +61,8 @@ def test_the_readme_documents_exactly_the_skills_the_catalog_names() -> None:
     assert documented == catalogued, (
         "the README's Usage sections and the Catalog's entries name one set of "
         "Skills between them: undocumented "
-        f"{sorted(catalogued - documented)}, unshipped {sorted(documented - catalogued)}"
+        f"{sorted(catalogued - documented)}, unshipped "
+        f"{sorted(documented - catalogued)}. A Skill with no section is a Skill "
+        "the README hides, and a section with no Skill advertises something "
+        f"`/kntnt select` no longer offers. See {STANDARD}."
     )

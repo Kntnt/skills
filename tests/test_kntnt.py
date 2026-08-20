@@ -3588,12 +3588,34 @@ def test_delegation_requires_subagents_and_says_so() -> None:
 
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "SKILL.md"
     text = path.read_text(encoding="utf-8")
-    assert 'kntnt.capabilities: "subagents"' in text
-    assert "`capabilities`" in text
+    assert 'kntnt.capabilities: "subagents"' in text, (
+        f"{path}: this skill is meaningless where subagents cannot be spawned,"
+        f" so it declares `subagents` as a Capability. A harness requirement is"
+        f" a fourth kind of dependency the skill refuses on, never a row in a"
+        f" per-harness matrix (ADR-0030). See {STANDARD}."
+    )
+    assert "`capabilities`" in text, (
+        f"{path}: the body answers the checker's `capabilities` list itself."
+        f" No script can: the agent is the harness, so exit 0 with a non-empty"
+        f" list means nothing a script could see is missing rather than"
+        f" go-ahead (ADR-0030). See {STANDARD}."
+    )
 
     mode = (path.parent / "references" / "mode.md").read_text(encoding="utf-8")
-    assert "haiku" not in mode
-    assert "Claude Code" not in mode
+    assert "haiku" not in mode, (
+        f"{path.parent / 'references' / 'mode.md'}: the mode text names no"
+        f" model from one vendor's ladder. It is written into a committed"
+        f" `AGENTS.md` that agents of any harness read (ADR-0026), and the"
+        f" collection is one set across harnesses (ADR-0005) — so it tells the"
+        f" reader to pick from its own ladder. See {STANDARD}."
+    )
+    assert "Claude Code" not in mode, (
+        f"{path.parent / 'references' / 'mode.md'}: the mode text names no"
+        f" single harness. It is written into a committed `AGENTS.md` that"
+        f" agents of any harness read (ADR-0026), and an instruction addressed"
+        f" to one of them is an instruction the rest cannot act on (ADR-0005)."
+        f" See {STANDARD}."
+    )
 
 
 def test_catalog_generation_rejects_a_name_that_is_not_the_directory(
@@ -5035,4 +5057,10 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
         f" the two halves disagree the body is the true one (ADR-0046). See"
         f" {STANDARD}."
     )
-    assert "prints the synopsis" in _section(page, "## Notes", directory / "help.md")
+    assert "prints the synopsis" in _section(page, "## Notes", directory / "help.md"), (
+        f"{directory / 'help.md'}: the notes say the incomplete form prints the"
+        f" synopsis. A reader who has not run the skill cannot tell a refusal"
+        f" from a no-op unless the page names what the refusal does, and the"
+        f" refusal with the synopsis is what the body performs (ADR-0059). See"
+        f" {STANDARD}."
+    )

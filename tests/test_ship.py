@@ -7,6 +7,7 @@ import os
 import subprocess
 from pathlib import Path
 
+from support.contract import STANDARD
 from support.fake_binary import fake_binary_on_path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -627,31 +628,89 @@ def test_plan_commit_reports_a_renamed_path_once(tmp_path: Path) -> None:
 
 
 def test_commit_skill_does_not_push() -> None:
-    text = (REPO_ROOT / "skills" / "code" / "commit" / "SKILL.md").read_text(
-        encoding="utf-8"
+    body = REPO_ROOT / "skills" / "code" / "commit" / "SKILL.md"
+    text = body.read_text(encoding="utf-8")
+
+    assert "disable-model-invocation: true" in text, (
+        f"{body}: this skill writes to the repository, so it carries"
+        f" `disable-model-invocation: true` and is reached only when the user"
+        f" types it. The field is what keeps a verb the user asks for from"
+        f" becoming a verb a session may decide to run (ADR-0066). See"
+        f" {STANDARD}."
     )
-    assert "disable-model-invocation: true" in text
-    assert "git push" not in text
-    assert "scripts/ship.py" in text
-    assert "changelog.md" in text
+    assert "git push" not in text, (
+        f"{body}: this skill commits and stops. Pushing is `/push`, a skill of"
+        f" its own that declares this one — a body that pushed as well would"
+        f" publish work on a step the user confirmed as a commit, and the body"
+        f" is the whole of what the agent executes (ADR-0046). See {STANDARD}."
+    )
+    assert "scripts/ship.py" in text, (
+        f"{body}: the body calls `scripts/ship.py` rather than running git"
+        f" itself. Every deterministic step lives behind the engine's command"
+        f" line, which is the skill's only seam and the only part of it a test"
+        f" can hold (ADR-0050). See {STANDARD}."
+    )
+    assert "changelog.md" in text, (
+        f"{body}: the body follows `references/changelog.md`, so a change is"
+        f" recorded while the author still knows what it was rather than"
+        f" reconstructed from the diff at release time. It is a file the body"
+        f" opens only when it gets there, which is why it lives under"
+        f" `references/` (ADR-0063). See {STANDARD}."
+    )
 
 
 def test_push_follows_commit_then_pushes() -> None:
-    text = (REPO_ROOT / "skills" / "code" / "push" / "SKILL.md").read_text(
-        encoding="utf-8"
+    body = REPO_ROOT / "skills" / "code" / "push" / "SKILL.md"
+    text = body.read_text(encoding="utf-8")
+
+    assert "disable-model-invocation: true" in text, (
+        f"{body}: this skill writes to a remote, so it carries"
+        f" `disable-model-invocation: true` and is reached only when the user"
+        f" types it. The field is what keeps a verb the user asks for from"
+        f" becoming a verb a session may decide to run (ADR-0066). See"
+        f" {STANDARD}."
     )
-    assert "disable-model-invocation: true" in text
-    assert "../commit/SKILL.md" in text
-    assert "apply push" in text
+    assert "../commit/SKILL.md" in text, (
+        f"{body}: the body follows the commit skill rather than restating its"
+        f" steps. That skill is what this one declares in `kntnt.skills`, and a"
+        f" second copy of the commit sequence is a copy that drifts from the"
+        f" one the suite checks (ADR-0012). See {STANDARD}."
+    )
+    assert "apply push" in text, (
+        f"{body}: the push itself is `ship.py apply push`, not a git command in"
+        f" the prose. Every deterministic step lives behind the engine's"
+        f" command line, which is the skill's only seam (ADR-0050). See"
+        f" {STANDARD}."
+    )
 
 
 def test_release_follows_push_after_bump() -> None:
-    text = (REPO_ROOT / "skills" / "code" / "release" / "SKILL.md").read_text(
-        encoding="utf-8"
+    body = REPO_ROOT / "skills" / "code" / "release" / "SKILL.md"
+    text = body.read_text(encoding="utf-8")
+
+    assert "disable-model-invocation: true" in text, (
+        f"{body}: this skill tags and publishes, so it carries"
+        f" `disable-model-invocation: true` and is reached only when the user"
+        f" types it. A release starting itself is not a trade any argument pays"
+        f" for (ADR-0066). See {STANDARD}."
     )
-    assert "disable-model-invocation: true" in text
-    assert "../push/SKILL.md" in text
-    assert "apply bump" in text
-    assert "apply tag" in text
-    assert "apply publish" in text
-    assert "--no-build" in text
+    assert "../push/SKILL.md" in text, (
+        f"{body}: the body follows the push skill rather than restating it."
+        f" That skill is what this one declares in `kntnt.skills`, and it is"
+        f" what carries the commit before the tag is cut (ADR-0012). See"
+        f" {STANDARD}."
+    )
+    for verb in ("apply bump", "apply tag", "apply publish"):
+        assert verb in text, (
+            f"{body}: the body reaches `ship.py {verb}` rather than doing that"
+            f" step in prose. Every deterministic step lives behind the"
+            f" engine's command line, which is the skill's only seam and the"
+            f" only part of it a test can hold (ADR-0050). See {STANDARD}."
+        )
+    assert "--no-build" in text, (
+        f"{body}: `--no-build` is in this skill's `argument-hint`, so the body"
+        f" says what it does. A flag advertised in one place and absent from"
+        f" another is a grammar that disagrees with itself, and the body is the"
+        f" half the agent executes — it would refuse the flag its own hint"
+        f" offered (ADR-0059). See {STANDARD}."
+    )
