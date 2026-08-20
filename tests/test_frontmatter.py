@@ -115,39 +115,36 @@ def test_a_description_holding_a_colon_survives_the_parser() -> None:
     assert '"' not in description
 
 
-def test_the_shipped_skills_declare_the_lists_the_checker_refuses_on() -> None:
-    """Every dependency list, read off the files the collection ships."""
+def test_every_shipped_skill_declares_the_lists_the_checker_refuses_on() -> None:
+    """All four lists written out, on every skill the collection ships.
 
-    assert kntnt.skill_deps(_frontmatter("code/commit/SKILL.md")) == {
-        "binaries": ["git", "uv"],
-        "skills": [],
-        "externals": [],
-        "capabilities": [],
-    }
-    assert kntnt.skill_deps(_frontmatter("code/push/SKILL.md")) == {
-        "binaries": ["git", "uv"],
-        "skills": ["commit"],
-        "externals": [],
-        "capabilities": [],
-    }
-    assert kntnt.skill_deps(_frontmatter("code/release/SKILL.md")) == {
-        "binaries": ["git", "uv"],
-        "skills": ["push"],
-        "externals": [],
-        "capabilities": [],
-    }
-    assert kntnt.skill_deps(_frontmatter("code/orchestrate/SKILL.md")) == {
-        "binaries": ["git", "gh", "uv"],
-        "skills": [],
-        "externals": [],
-        "capabilities": ["subagents"],
-    }
-    assert kntnt.skill_deps(_frontmatter("agents/delegation/SKILL.md")) == {
-        "binaries": ["uv"],
-        "skills": [],
-        "externals": [],
-        "capabilities": ["subagents"],
-    }
+    Held by the keys' presence rather than by what `skill_deps` makes of
+    them, because that reading cannot tell the two cases apart: a key nobody
+    wrote and a list written empty both come back empty, and only one of them
+    is a declaration. So the frontmatter is read for the keys themselves, and
+    the skills are discovered rather than named — a guard that listed them
+    would hold nothing against the next skill added.
+    """
+
+    skill_mds = sorted(SKILLS.glob("*/*/SKILL.md"))
+
+    # A glob that matched nothing would pass every assertion below it.
+    assert skill_mds
+
+    for skill_md in skill_mds:
+        metadata = kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8"))[
+            "metadata"
+        ]
+        for kind in kntnt.DEP_KINDS:
+            key = f"{kntnt.METADATA_PREFIX}{kind}"
+            assert key in metadata, (
+                f"{skill_md}: `metadata.{key}` is not written. All four"
+                f" dependency lists are declared even where they are empty,"
+                f" because a key nobody wrote is read as an empty list — the"
+                f" same answer a skill that genuinely requires nothing gives,"
+                f" so the omission cannot be seen (ADR-0012). Write it as an"
+                f" empty string. See {STANDARD}."
+            )
 
 
 def test_a_skill_whose_frontmatter_is_broken_is_not_ours(tmp_path: Path) -> None:

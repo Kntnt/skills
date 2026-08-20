@@ -3373,41 +3373,34 @@ def test_the_manager_separates_steps_from_manpages() -> None:
     assert "$HERE/steps/" in text
 
 
-# What each skill's body opens only when the situation arises, by the skill it
-# belongs to. Pinned here rather than discovered, because the point of ADR-0063
-# is that a reader can tell these files from the manpage without knowing them.
-_ON_DEMAND = {
-    ("agents", "agents-md"): ("gates.md", "placement.md", "writes.md"),
-    ("agents", "delegation"): ("mode.md", "persist.md"),
-    ("agents", "tldr"): ("mode.md", "persist.md", "shape.md"),
-    ("code", "commit"): ("changelog.md",),
-    ("code", "orchestrate"): (
-        "brief.md",
-        "repair.md",
-        "repaired.md",
-        "verify.md",
-        "wave.md",
-    ),
-}
+# The two Markdown files a skill ships that are not opened on demand: the body
+# the harness loads and the manpage a user asks for. Everything else in Markdown
+# that a skill ships is a file its body opens only when the situation arises.
+_ALWAYS_IN_THE_ROOT = frozenset({"SKILL.md", "help.md"})
 
 
 def test_what_a_skill_opens_on_demand_lives_under_references() -> None:
-    """ADR-0063: the spec's directory says what a flat root cannot."""
+    """ADR-0063: the spec's directory says what a flat root cannot.
 
-    for (category, name), files in _ON_DEMAND.items():
-        directory = REPO_ROOT / "skills" / category / name
-        for file in files:
-            assert (directory / "references" / file).is_file(), (
-                f"{directory}: `{file}` is opened only when the situation"
-                f" arises, so it belongs under `references/` — the"
-                f" specification's own directory for it, which is what tells a"
-                f" reader it is not the manpage (ADR-0063). See {STANDARD}."
-            )
-            assert not (directory / file).exists(), (
-                f"{directory}: `{file}` is under `references/` and must not"
-                f" also sit in the skill's root, where a reader meets it beside"
-                f" `help.md` with nothing to tell the two apart (ADR-0063). See"
-                f" {STANDARD}."
+    The on-demand files are discovered rather than listed, because a list
+    maintained by hand goes stale without saying so: a skill it never gained
+    an entry for has its placement held to nothing at all. A skill ships its
+    body, its manpage, its engine where it has one, and the files its body
+    opens when the situation arises — so every Markdown file that is neither
+    `SKILL.md` nor `help.md` is one of the last kind, whether or not anybody
+    remembered to write it down.
+    """
+
+    for directory in _shipped_skills():
+        for path in sorted(directory.rglob("*.md")):
+            if path.parent == directory and path.name in _ALWAYS_IN_THE_ROOT:
+                continue
+            assert directory / "references" in path.parents, (
+                f"{path}: this is neither the body nor the manpage, so it is a"
+                f" file the body opens only when the situation arises, and it"
+                f" belongs under `references/` — the specification's own"
+                f" directory for it, which is what tells a reader it is not the"
+                f" manpage a user is meant to read (ADR-0063). See {STANDARD}."
             )
 
 
