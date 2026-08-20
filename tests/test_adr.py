@@ -11,7 +11,7 @@ ADR = REPO_ROOT / "docs" / "adr"
 # The prose outside the collection that cites records the same way a record
 # cites another one, so a number that has gone stale is caught wherever it is
 # written rather than only where records supersede each other.
-CITING_DOCS = ("CONTEXT.md", "README.md", "AGENTS.md")
+CITING_DOCS = ("CONTEXT.md", "README.md", "AGENTS.md", "CONTRIBUTING.md")
 
 # A record's file is `NNNN-slug.md` and its number is that four-digit prefix;
 # a citation is the same number written as `ADR-NNNN`.

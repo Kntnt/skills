@@ -45,6 +45,17 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
 
    These are the same four checks CI runs on every pull request, so a green run locally means a green run there.
 
+6. **Compare a skill against the reference validator** when you add one or change the frontmatter of one. `skills-ref` is the reference implementation shipped with the Agent Skills specification itself. It is not on `PATH`, nothing above installs it, and it is not obtainable under the name `agentskills` that some of this repository's older tickets gave it — no command exists under that name. `uvx` fetches it from a subdirectory of the specification's repository, and a skill directory is `skills/<category>/<skill>/`:
+
+   ```
+   uvx --from git+https://github.com/agentskills/agentskills#subdirectory=skills-ref skills-ref validate <skill-directory>
+   uvx --from git+https://github.com/agentskills/agentskills#subdirectory=skills-ref skills-ref read-properties <skill-directory>
+   ```
+
+   `validate` holds a skill to the specification. `read-properties` prints the skill's declaration as a reader outside this collection resolves it, which is the answer to *what does anybody else actually get from this skill* — it is what issue #52 was verified with, and the one command that shows a `metadata` value coerced into something nothing can read back out. The tool is also published to PyPI as `skills-ref`, if you would rather install it than fetch it on each run.
+
+   **A red run is expected, and is not something you caused.** `validate` rejects every skill this collection ships, and always has, over frontmatter fields the collection carries knowingly. [ADR-0066](docs/adr/0066-the-reference-validator-is-a-baseline-not-a-gate.md) is the record that settles which fields those are, why they stay, and how the tool may be cited: as a baseline that must not regress, never as a gate that must pass. So this step is a comparison rather than a check — what has to hold is that your change draws no complaint the record does not already account for. It is deliberately absent from the four checks above and from CI, a check red on every run being no gate at all.
+
 ## Questions
 
 Open an issue or start a discussion. Conversation happens in the open.
