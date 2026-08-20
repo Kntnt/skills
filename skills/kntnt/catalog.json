@@ -5,7 +5,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "0730104b386f836e4ceab7065156010a2f175ca5bf743ec08a6f1b7d9459b8ef",
+      "digest": "4c238c82461c810d24aedab79d7c5181c773c7c144ca23a69ed65d17ef0363cd",
       "binaries": [
         "git",
         "uv"
@@ -32,7 +32,7 @@
       "name": "tldr",
       "category": "agents",
       "description": "Summarise what was just said as a TL;DR, and turn TL;DR mode on or off so replies stay short and say what needs you.",
-      "digest": "53f354a26ea2eb37f497cde0a6512371ebe75e5eec84285eb576ab73b7a1b11a",
+      "digest": "59565bb5e7b191f3d4d64abf449b0314a886dbc806dd7d30a8f0347cf679b619",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -42,7 +42,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "c0ca1d034bd188d0442e8ce834a73164e657f0f47628b8a20b07d51a2822ab5b",
+      "digest": "95367e69aaee0198b02e5caf05977c127869d56e977fdbd492282cf9623759b3",
       "binaries": [
         "git",
         "uv"
@@ -71,7 +71,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "86f3b3ee25959d471fa8f246873483f3bb18e746edc41d2c7fcdfa4e8ee75d04",
+      "digest": "66d79d98be73a81657859509a566a1fc9bcccecaef1c00e40d653752a1d9aae8",
       "binaries": [
         "git",
         "uv"
@@ -101,7 +101,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "1905e628e1830fcac927afb465c26a736b5d978f36dfca33d3855ecdc64f7bbc",
+      "digest": "c7b939d020d6605be4aa38b324763c74789e49516c45fc7be419ff288e0e6db6",
       "binaries": [
         "git",
         "uv"

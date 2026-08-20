@@ -27,10 +27,6 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `/agents-md [path] [--force] [--yes]`, and nothing else.
 
-- `path` — the directory to tend. The repository root where none is given.
-- `--force` — lay the skeleton even where no fact has earned a file.
-- `--yes` — make each change the run would have asked about, and list it in the report.
-
 Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/agents-md --help` for the page in full. Then write no file and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
 
 ## Steps

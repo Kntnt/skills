@@ -28,9 +28,6 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `/push ["message"] [--yes]`, and nothing else. It is the commit skill's grammar, which is what lets step 1 hand the arguments straight on — they are checked here first, so nothing reaches that skill it would have to refuse.
 
-- `"message"` — the commit message, in place of one derived from the changes.
-- `--yes` — commit and push without waiting for a confirmation.
-
 Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/push --help` for the page in full. Then commit nothing, push nothing, and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
 
 ## Steps
