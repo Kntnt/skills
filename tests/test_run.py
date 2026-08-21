@@ -1837,7 +1837,7 @@ def test_plan_given_a_ticket_reference_works_that_ticket_alone(
 
     assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["scope"] == {"reference": "#9", "kind": "ticket", "number": 9}
+    assert plan["scope"] == [{"reference": "#9", "kind": "ticket", "number": 9}]
     assert [entry["number"] for entry in plan["tickets"]] == [9]
     assert plan["workable"] == [9]
     assert "the graph" not in result.stdout
@@ -1894,7 +1894,7 @@ def test_plan_given_a_spec_reference_works_that_specs_children(
 
     assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["scope"] == {"reference": "#6", "kind": "spec", "number": 6}
+    assert plan["scope"] == [{"reference": "#6", "kind": "spec", "number": 6}]
     assert [entry["number"] for entry in plan["tickets"]] == [9, 10]
     assert plan["workable"] == [9, 10]
     assert "another effort" not in result.stdout
@@ -1922,7 +1922,7 @@ def test_plan_given_a_spec_reference_reads_a_parent_named_only_in_a_body(
 
     assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["scope"]["kind"] == "spec"
+    assert [aim["kind"] for aim in plan["scope"]] == ["spec"]
     assert [entry["number"] for entry in plan["tickets"]] == [9]
 
 
@@ -1948,7 +1948,7 @@ def test_plan_reads_a_reference_the_tracker_files_children_under_as_a_spec(
 
     assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["scope"]["kind"] == "spec"
+    assert [aim["kind"] for aim in plan["scope"]] == ["spec"]
     assert [entry["number"] for entry in plan["tickets"]] == [9]
 
 
@@ -1996,9 +1996,129 @@ def test_plan_refuses_a_reference_written_in_another_trackers_terms(
     assert result.stderr.startswith("error:")
 
 
-def test_plan_refuses_a_reference_naming_more_than_one_ticket(
+def test_plan_given_several_ticket_references_works_exactly_those_tickets(
     tmp_path: Path,
 ) -> None:
+    """A run is aimed at as many references as the developer named, and its
+    scope is the union of what they resolve to."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph"),
+                _ticket(41, "another effort"),
+            ]
+        },
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#9 #10", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["scope"] == [
+        {"reference": "#9", "kind": "ticket", "number": 9},
+        {"reference": "#10", "kind": "ticket", "number": 10},
+    ]
+    assert [entry["number"] for entry in plan["tickets"]] == [9, 10]
+    assert plan["workable"] == [9, 10]
+    assert "another effort" not in result.stdout
+
+
+def test_plan_given_a_spec_and_a_ticket_works_the_union_of_the_two(
+    tmp_path: Path,
+) -> None:
+    """Each reference is resolved on its own: a spec brings its children and a
+    ticket brings itself, and the run works both sets rather than one of
+    them."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", parent=6),
+                _ticket(10, "the graph", parent=6),
+                _ticket(41, "another effort"),
+                _ticket(42, "a third effort"),
+            ]
+        },
+        issues={6: _children(9, 10), 41: _ready(41)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#6 #41", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert [aim["kind"] for aim in plan["scope"]] == ["spec", "ticket"]
+    assert [entry["number"] for entry in plan["tickets"]] == [9, 10, 41]
+    assert "a third effort" not in result.stdout
+
+
+def test_a_ticket_named_twice_or_beside_its_own_spec_is_the_same_scope(
+    tmp_path: Path,
+) -> None:
+    """The scope is a set, so naming a ticket twice — or naming it beside the
+    spec that holds it — names what one of them named, and is not an error."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", parent=6),
+                _ticket(10, "the graph", parent=6),
+            ]
+        },
+        issues={6: _children(9, 10), 9: _ready(9)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#6 #9 #9", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert [aim["number"] for aim in plan["scope"]] == [6, 9]
+    assert [entry["number"] for entry in plan["tickets"]] == [9, 10]
+    assert plan["workable"] == [9, 10]
+
+
+def test_a_scope_of_several_references_still_waits_on_the_edges_between_them(
+    tmp_path: Path,
+) -> None:
+    """A scope narrows the set and never the rules (ADR-0053): a named ticket
+    blocked by another named ticket waits for it, and the two are laid out in
+    the waves the graph puts them in rather than started together."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+            ]
+        },
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#9 #10", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["waves"] == [[9], [10]]
+    assert plan["workable"] == [9]
+
+
+def test_plan_refuses_the_whole_scope_where_one_reference_reads_as_nothing(
+    tmp_path: Path,
+) -> None:
+    """Dropping the reference nobody can read would work a scope the developer
+    did not name, so the invocation is refused rather than narrowed to the rest
+    of it."""
+
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
         tmp_path,
@@ -2006,12 +2126,76 @@ def test_plan_refuses_a_reference_naming_more_than_one_ticket(
         issues={9: _ready(9), 10: _ready(10)},
     )
 
-    result = _engine(repo, "plan", "--scope", "#9 #10", env=env)
+    result = _engine(repo, "plan", "--scope", "#9 banana #10", env=env)
 
     assert result.returncode != 0
     assert not result.stdout
-    assert "one scope" in result.stderr
+    assert "banana" in result.stderr
     assert result.stderr.startswith("error:")
+
+
+def test_plan_refuses_a_whole_scope_the_tracker_answers_for_only_in_part(
+    tmp_path: Path,
+) -> None:
+    """A reference the tracker does not know is refused wherever it stands, and
+    the references beside it settle nothing about it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#9 #404", env=env)
+
+    assert result.returncode != 0
+    assert not result.stdout
+    assert "404" in result.stderr
+    assert result.stderr.startswith("error:")
+
+
+def test_plan_refuses_a_qualified_reference_named_beside_readable_ones(
+    tmp_path: Path,
+) -> None:
+    """A run reads one repository's tracker whatever else was named beside the
+    reference written in another's terms."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#9 kntnt/skills#10", env=env)
+
+    assert result.returncode != 0
+    assert not result.stdout
+    assert "kntnt/skills#10" in result.stderr
+    assert result.stderr.startswith("error:")
+
+
+def test_a_scope_of_several_references_holding_no_ticket_names_them_all(
+    tmp_path: Path,
+) -> None:
+    """A run says why it has nothing to work in the terms it was asked in, and
+    a run aimed at several references was asked in all of them."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(41, "another effort")]},
+        issues={9: {}, 10: {}},
+    )
+
+    result = _engine(repo, "plan", "--scope", "#9 #10", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert "#9, #10" in plan["reason"]
+    assert plan["tickets"] == []
 
 
 def test_a_dry_run_honours_the_scope_it_was_given(tmp_path: Path) -> None:
@@ -2055,9 +2239,37 @@ def test_report_accounts_for_the_scope_the_run_was_aimed_at(tmp_path: Path) -> N
 
     assert result.returncode == 0, result.stderr
     report = json.loads(result.stdout)
-    assert report["scope"] == {"reference": "#6", "kind": "spec", "number": 6}
+    assert report["scope"] == [{"reference": "#6", "kind": "spec", "number": 6}]
     assert [entry["number"] for entry in report["tickets"]] == [9]
     assert report["never_on_frontier"] == [9]
+
+
+def test_report_accounts_for_a_scope_of_several_references(tmp_path: Path) -> None:
+    """The report reads the run that was aimed, so a scope of several
+    references accounts for the union of what they named and for nothing
+    else."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", parent=6),
+                _ticket(41, "another effort", parent=7),
+                _ticket(42, "a third effort"),
+            ]
+        },
+        issues={6: _children(9), 42: _ready(42)},
+    )
+
+    result = _engine(repo, "report", "--scope", "#6 #42", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert [aim["number"] for aim in report["scope"]] == [6, 42]
+    assert [entry["number"] for entry in report["tickets"]] == [9, 42]
+    assert report["never_on_frontier"] == [9, 42]
+    assert "another effort" not in result.stdout
 
 
 def test_a_scoped_plan_leaves_a_claim_outside_its_scope_where_it_is(

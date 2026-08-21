@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- `/orchestrate` can be aimed at as many tickets and specs as you care to name — `/orchestrate #72 #75 #76 #77 #81` is one run over those five — where a second reference used to be refused outright, on the rule that a run has one scope. It still has one: the scope is the union of what the references resolve to, each of them read on its own exactly as a lone one is, so a ticket named twice, or named beside the spec that holds it, aims the run at the same set as either alone and is not an error. The refusals that are about a reference nobody can read all stay, and one of them now stops the whole invocation however many readable references stand beside it — dropping the unreadable one would work a scope the developer did not name, which is the reasoning that refused a single unreadable reference in the first place. Nothing else about a run moves: the blocking edges between named tickets still hold, so several tickets come back laid out in the waves the graph puts them in rather than started together, a ticket blocked by unnamed open work still waits and is reported as waiting, and a recorded outcome still settles a ticket somebody names (ADR-0053). The dry run and the report honour the whole of what was aimed exactly as the plan does. The engine's `scope` field changes shape with the behaviour: it is now a list carrying one entry per reference — what the developer wrote, what it resolved to, and the ticket it named — rather than the single entry it was, so the plan and the report say what each half of an aim came back as rather than which of them the run kept. The one-scope rule was never a recorded decision; it lived in the parser, in the manpage, and in a test, and all three now say what is actually refused.
+
 ## [0.10.0] – 2026-08-20
 
 ### Added

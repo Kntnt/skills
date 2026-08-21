@@ -563,9 +563,10 @@ class Plan:
     lands straight on the branch with nothing to integrate (ADR-0054).
 
     `model` is the model the building subagents run on, `scope` what the run
-    was aimed at where it was aimed at anything, and `state` is where the run
-    left what it remembers of itself — all three carried here because the plan
-    is where the run says what it is about to do.
+    was aimed at where it was aimed at anything — one entry per reference the
+    developer named, and the tickets are the union of what they resolved to —
+    and `state` is where the run left what it remembers of itself, all three
+    carried here because the plan is where the run says what it is about to do.
     """
 
     verb: str
@@ -579,7 +580,7 @@ class Plan:
     branch: str
     default_branch: str | None
     label: str
-    scope: dict[str, Any] | None
+    scope: list[dict[str, Any]] | None
     tickets: list[dict[str, Any]]
     workable: list[int]
     starting: list[int]
@@ -846,14 +847,18 @@ def named_parent(item: dict[str, Any]) -> int | None:
 
 
 @dataclass
-class Scope:
-    """What one run was aimed at, and which of two things the reference named.
+class Aim:
+    """One thing a run was aimed at, and which of two things it named.
 
     A run given no reference has no scope at all: every ticket the label holds
-    is in, which is what a bare invocation has always meant. A reference
-    narrows the set the same questions are asked of and changes no rule about
-    any ticket in it — an outcome already recorded still settles a ticket
-    somebody names, and a blocking edge still holds one back (ADR-0053).
+    is in, which is what a bare invocation has always meant. A run given
+    several references is aimed at each of them, and its scope is the union of
+    what they resolve to — every reference is read on its own exactly as a lone
+    one is, so a ticket named twice, or named beside the spec that holds it,
+    names the same set as either alone. A reference narrows the set the same
+    questions are asked of and changes no rule about any ticket in it — an
+    outcome already recorded still settles a ticket somebody names, and a
+    blocking edge still holds one back (ADR-0053).
 
     `kind` is what the reference resolved to, `number` the ticket it named, and
     `reference` what the developer wrote, kept so the plan answers in the terms
@@ -865,13 +870,17 @@ class Scope:
     number: int
 
 
-def scope_number(reference: str) -> int:
-    """Return the ticket *reference* names, or refuse rather than guess at it.
+def scope_numbers(reference: str) -> dict[int, str]:
+    """Return the tickets *reference* names, each mapped to how it was written.
 
-    Every way of guessing is worse than stopping: dropping a reference nobody
-    can read works the whole tracker under an argument that asked for part of
-    it, and picking one of two readings works tickets the developer never
-    named.
+    A run may be aimed at one reference or at several, so the value is read as
+    the set of them: the same ticket named twice is the same ticket, and the
+    first way the developer wrote it is how the plan answers for it.
+
+    One reference nobody can read refuses the whole invocation, because every
+    way of going on is worse than stopping: dropping it works a scope the
+    developer did not name, and picking one of two readings works tickets they
+    never named at all.
     """
 
     # A reference in another tracker's terms is refused for the reason a body
@@ -884,20 +893,28 @@ def scope_number(reference: str) -> int:
             "run reads one: write it as #number"
         )
 
-    # One reference, and one that reads as a number: a run has one scope, and a
-    # reference nothing can read is not one to guess the rest of the tracker at.
-    written = [part for part in re.split(r"[\s,]+", named) if part]
-    numbers = [
-        found.group(1)
-        for part in written
-        if (found := SCOPE_REFERENCE.match(part)) is not None
-    ]
-    if not numbers or len(numbers) != len(written):
-        raise RunError(f"'{named}' names no ticket or spec: write it as #number")
-    if len(numbers) > 1:
-        raise RunError(f"'{named}' names more than one ticket, and a run has one scope")
+    # Every part of the value has to read as a number, and the parts that do
+    # not are kept as they were written.
+    numbered: dict[int, str] = {}
+    unreadable: list[str] = []
+    for part in re.split(r"[\s,]+", named):
+        if not part:
+            continue
+        if (found := SCOPE_REFERENCE.match(part)) is None:
+            unreadable.append(part)
+        else:
+            numbered.setdefault(int(found.group(1)), part)
 
-    return int(numbers[0])
+    # The refusal names those parts rather than the whole value, or a developer
+    # who wrote a list would be left to find which of it nobody could read. A
+    # value naming nothing at all is quoted whole, having no part to name.
+    if unreadable or not numbered:
+        raise RunError(
+            f"'{' '.join(unreadable) or named}' names no ticket or spec: "
+            "write it as #number"
+        )
+
+    return numbered
 
 
 def native_children(cwd: Path, number: int) -> list[int]:
@@ -918,8 +935,8 @@ def native_children(cwd: Path, number: int) -> list[int]:
         ) from exc
 
 
-def resolve_scope(cwd: Path, reference: str, listed: list[dict[str, Any]]) -> Scope:
-    """Work out what *reference* aims the run at: a spec's children, or a ticket.
+def resolve_scope(cwd: Path, reference: str, listed: list[dict[str, Any]]) -> list[Aim]:
+    """Work out what *reference* aims the run at, reference by reference.
 
     A reference the tracker files children under is a spec, and the body is the
     same fallback here as it is for a blocking edge: where the relation carries
@@ -927,30 +944,49 @@ def resolve_scope(cwd: Path, reference: str, listed: list[dict[str, Any]]) -> Sc
     the tracker can answer for is a ticket, and is worked alone. Children win
     that reading wherever both are available, because a spec is the shape of
     other work rather than work itself, and building one is what nobody meant.
+
+    Several references are resolved independently and mean the union of what
+    they come back with, so what a reference names is never a function of what
+    was named beside it.
     """
 
-    # What the tracker files children under is a spec, and asking settles both
-    # halves of the question: what the reference is, and whether it is anything.
-    number = scope_number(reference)
-    if native_children(cwd, number):
-        return Scope(reference=reference, kind=SPEC, number=number)
+    # Asking the tracker settles both halves of the question for each
+    # reference: what it is, and whether it is anything at all. What it files
+    # children under is a spec, and where it files none, a ticket naming this
+    # one as its parent is the other way the breakdown writes the relation.
+    aims = []
+    for number, written in scope_numbers(reference).items():
+        filed = bool(native_children(cwd, number)) or any(
+            named_parent(item) == number for item in listed
+        )
+        aims.append(
+            Aim(reference=written, kind=SPEC if filed else TICKET, number=number)
+        )
 
-    # Nothing filed under it there: a ticket naming it as its parent is the
-    # other way the breakdown writes the relation, and says the same thing.
-    written = any(named_parent(item) == number for item in listed)
-    return Scope(reference=reference, kind=SPEC if written else TICKET, number=number)
+    return aims
 
 
-def in_scope(item: dict[str, Any], scope: Scope | None) -> bool:
-    """Whether *item* is one of the tickets the run was aimed at."""
+def in_scope(item: dict[str, Any], scope: list[Aim] | None) -> bool:
+    """Whether *item* is one of the tickets the run was aimed at.
+
+    The scope is the union of what the references resolved to, so a ticket any
+    one of them reaches is in.
+    """
 
     if scope is None:
         return True
 
-    if scope.kind == TICKET:
-        return int(item["number"]) == scope.number
+    # A ticket named by number is in on its own account.
+    number = int(item["number"])
+    if any(aim.number == number for aim in scope if aim.kind == TICKET):
+        return True
 
-    return named_parent(item) == scope.number
+    # A spec in the aim is what makes a parent a question at all: where none
+    # was named no body is read for one, so a ticket carrying a `Parent` line
+    # nobody can read stops a run aimed at ticket numbers no more than it ever
+    # did.
+    specs = [aim.number for aim in scope if aim.kind == SPEC]
+    return bool(specs) and named_parent(item) in specs
 
 
 def waves_of(tickets: list[Ticket]) -> tuple[list[list[int]], list[int]]:
@@ -1159,7 +1195,7 @@ def closed_listing(cwd: Path) -> list[dict[str, Any]]:
 
 
 def tickets_in_scope(
-    cwd: Path, listed: list[dict[str, Any]], scope: Scope | None
+    cwd: Path, listed: list[dict[str, Any]], scope: list[Aim] | None
 ) -> list[Ticket]:
     """Return the open tickets the run was aimed at, oldest first.
 
@@ -1199,7 +1235,7 @@ def tickets_in_scope(
 
 
 def tickets_recorded_done(
-    listed: list[dict[str, Any]], scope: Scope | None
+    listed: list[dict[str, Any]], scope: list[Aim] | None
 ) -> list[Ticket]:
     """Return the tickets a run closed as done, oldest first.
 
@@ -1289,7 +1325,7 @@ def run_base(cwd: Path, tickets: list[Ticket]) -> str:
 
 def claimed_elsewhere(
     remembered: RunState | None,
-    scope: Scope | None,
+    scope: list[Aim] | None,
     listed: list[dict[str, Any]],
     tickets: list[Ticket],
 ) -> set[int]:
@@ -1335,16 +1371,23 @@ def uncommitted_refusal(cwd: Path) -> str | None:
     )
 
 
-def no_ticket_reason(scope: Scope | None) -> str:
+def no_ticket_reason(scope: list[Aim] | None) -> str:
     """Say why there is nothing to work, in the terms the run was asked in."""
 
     if scope is None:
         return f"no open ticket carries '{READY_LABEL}'"
 
-    if scope.kind == TICKET:
-        return f"#{scope.number} is not an open ticket carrying '{READY_LABEL}'"
+    # One reference says which of the two things it named came back empty.
+    if len(scope) == 1:
+        aim = scope[0]
+        if aim.kind == TICKET:
+            return f"#{aim.number} is not an open ticket carrying '{READY_LABEL}'"
+        return f"no child of #{aim.number} is an open ticket carrying '{READY_LABEL}'"
 
-    return f"no child of #{scope.number} is an open ticket carrying '{READY_LABEL}'"
+    # Several are named together: the scope is their union, so no one of them
+    # is what came back empty.
+    named = as_references([aim.number for aim in scope])
+    return f"nothing {named} names is an open ticket carrying '{READY_LABEL}'"
 
 
 def build_plan(
@@ -1408,7 +1451,7 @@ def build_plan(
         branch=branch,
         default_branch=default,
         label=READY_LABEL,
-        scope=None if scope is None else asdict(scope),
+        scope=None if scope is None else [asdict(aim) for aim in scope],
         tickets=[asdict(ticket) for ticket in tickets],
         workable=workable,
         starting=workable[:at_once],
@@ -2070,7 +2113,7 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
         {
             "verb": "report",
             "label": READY_LABEL,
-            "scope": None if scope is None else asdict(scope),
+            "scope": None if scope is None else [asdict(aim) for aim in scope],
             "branch": branch,
             "base": base,
             "tickets": [asdict(ticket) for ticket in tickets],

@@ -2,7 +2,7 @@
 name: orchestrate
 description: Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.
 disable-model-invocation: true
-argument-hint: '[#<ticket-or-spec>] [--dry-run] [--at-once <n>] [--model <name>] [--yes]'
+argument-hint: '[#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes]'
 compatibility: Requires git, gh, and uv, plus a harness that can run subagents
 metadata:
   kntnt.internal: "true"
@@ -28,7 +28,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 ## Arguments
 
-`/orchestrate [#<ticket-or-spec>] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`, and nothing else. `--state-dir` is yours to pass rather than the developer's to type, and step 1 says where it comes from.
+`/orchestrate [#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`, and nothing else. A run may be aimed at as many tickets and specs as the user cares to name. `--state-dir` is yours to pass rather than the developer's to type, and step 1 says where it comes from.
 
 Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/orchestrate --help` for the page in full. Then start nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
 
@@ -36,7 +36,7 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 
 Every command below takes `--state-dir <directory>`. Pass whatever per-session scratchpad or temporary directory your harness gives you, the same one on every call, so what this run has claimed survives a compaction. Where your harness gives you none, leave the flag off: its absence is not an error, and the engine rebuilds what it needs from the tracker and the branch. There is no resume flag and none is wanted — re-invoked with the same arguments, this Skill continues an interrupted run rather than restarting it.
 
-1. Run `uv run "$HERE/scripts/run.py" plan`, passing the user's `--dry-run`, `--at-once`, `--model`, and `--yes` through. Where the user named a ticket or a spec, pass it too, verbatim and as one value: `--scope "<what they wrote>"`. Never resolve that reference yourself, and never widen or narrow it — the engine reads the tracker and decides which of the two it is. Done when stdout is the JSON plan; anything else on stdout means the engine refused the arguments, so show stderr and stop.
+1. Run `uv run "$HERE/scripts/run.py" plan`, passing the user's `--dry-run`, `--at-once`, `--model`, and `--yes` through. Where the user named any tickets or specs, pass what they named too, verbatim and as one value: `--scope "<what they wrote>"` — all of it, however many references it holds and in the order they wrote them. Never resolve a reference yourself, and never widen or narrow what they named, or drop one you cannot make sense of — the engine reads the tracker and decides, reference by reference, which of the two each one is. Done when stdout is the JSON plan; anything else on stdout means the engine refused the arguments, so show stderr and stop.
 2. Where `ready` is false: go to step 10, having started nothing. `reason` is why no run may start, and a dry run is one of those reasons. Done when you have stopped or `ready` is true.
 3. Claim every ticket in `starting`, which is the frontier cut to the ceiling the developer set: `uv run "$HERE/scripts/run.py" claim --ticket <number>` for each. Exit 2 means another session or a person already has it — leave it untouched, record nothing, drop it from this wave, and claim the next ticket in `workable` that the wave does not already hold, so the ceiling stays filled. A ticket `resuming` names is one an earlier invocation of this run claimed and was interrupted before recording: it is in `workable` like any other and claiming it succeeds, the claim being already this run's own. Done when the wave is the tickets you claimed, or nothing could be claimed and you go to step 10.
 4. Where `worktrees` is true, give each ticket in the wave a working tree of its own: `uv run "$HERE/scripts/run.py" isolate --ticket <number>`. It answers with the `worktree` that ticket is built and verified in and the `branch` it is built on, and a ticket picked up again gets back the working tree it was left in rather than a second one. Where `worktrees` is false the wave is one ticket and there is nothing to isolate: it is built in the repository as it stands, on the branch already checked out. An engine refusal here — exit 1, with the reason on stderr — is a ticket this run has nowhere to build: drop it from the wave, build nothing for it, record nothing against it, and leave its claim where it is; step 10's report accounts for it as a ticket that was never on the frontier. Done when every ticket in the wave has somewhere to be built.

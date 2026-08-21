@@ -4,7 +4,7 @@ Work the tracker's ready-for-agent tickets unattended, on the branch you are alr
 
 ## Synopsis
 
-`/orchestrate [#<ticket-or-spec>] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`
+`/orchestrate [#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`
 
 ## Description
 
@@ -28,14 +28,15 @@ Every outcome is written on the ticket it belongs to, which is where the next ru
 
 ## Aiming the run
 
-Typed bare, the run works every open ticket carrying the label. Name a ticket or a spec and it works that instead:
+Typed bare, the run works every open ticket carrying the label. Name tickets or specs and it works those instead:
 
 - **A ticket** — `/orchestrate #14` — works that ticket and no other. This is how one ticket is picked up on its own, without replaying the rest of the graph.
 - **A spec** — `/orchestrate #6` — works that spec's children, so tickets from an unrelated effort in the same tracker are left alone. The spec itself is never built, even where it carries the label: what has children is the shape of other work rather than work.
+- **Several of either** — `/orchestrate #14 #6 #21` — works the union of what they resolve to, in one run and one report. Every reference is read on its own exactly as a lone one is, so a ticket named twice, or named beside the spec that holds it, aims the run at the same set as either alone; the set is the set, and naming a ticket again is not an error.
 
-Which of the two you named is the tracker's answer and not a guess. A reference the tracker files children under is a spec; where it files none, a ticket in scope naming it as its parent says the same thing, that being the other way the ticket breakdown writes the relation. Anything else the tracker can answer for is a ticket. A reference nothing can resolve — a number the tracker does not know, something that is not a number, one written as `owner/repo#number`, or two references where a run has one scope — is named as such and nothing is started.
+Which of the two a reference named is the tracker's answer and not a guess, and it is asked once per reference. A reference the tracker files children under is a spec; where it files none, a ticket in scope naming it as its parent says the same thing, that being the other way the ticket breakdown writes the relation. Anything else the tracker can answer for is a ticket. A reference nothing can resolve — a number the tracker does not know, something that is not a number, or one written as `owner/repo#number` — is named as such and nothing is started, and one such reference stops the whole invocation however many readable ones stand beside it: working the rest of them would work a scope you did not name.
 
-Aiming a run narrows what it works and changes nothing else about it. A named ticket still waits for the work it is blocked by, and is reported as waiting rather than built on top of code that does not exist. A ticket whose outcome a run has already recorded is still settled, and naming it does not offer it again — clear that outcome from the ticket if you mean to build it afresh.
+Aiming a run narrows what it works and changes nothing else about it. A named ticket still waits for the work it is blocked by — including work another ticket you named delivers, which is why several tickets come back laid out in waves rather than started together — and is reported as waiting rather than built on top of code that does not exist. A ticket whose outcome a run has already recorded is still settled, and naming it does not offer it again — clear that outcome from the ticket if you mean to build it afresh.
 
 ## Continuing an interrupted run
 
