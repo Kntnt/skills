@@ -7,12 +7,13 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import json
 import re
 import shutil
 import subprocess
 import sys
-from collections.abc import Callable, Iterable
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any
@@ -165,6 +166,14 @@ SCRATCH_SUFFIX = ".scratch"
 # tree. They are the run's account rather than the ticket's, so they sit
 # outside the scratch directory a subagent is told it may write in.
 RESERVED_SUFFIX = ".reserved.json"
+
+# The lock every reservation is produced under, beside the reservations it
+# guards. One file per repository rather than per run, because two sessions
+# working the same repository reach the same allocation window from different
+# processes, and the tracker's claim keeps them off the same ticket but not
+# off the same number. The kernel releases it with the process that holds it,
+# so a run killed mid-allocation strands nothing.
+ALLOCATION_LOCK = "allocation.lock"
 
 # What a record in a numbered registry is named: four digits and a hyphen,
 # which is the pattern this collection's own registries share. It is how a
@@ -416,19 +425,33 @@ def reserved_numbers(home: Path, number: int) -> list[dict[str, str]]:
         return []
 
 
-def numbers_in_flight(home: Path, tickets: Iterable[int]) -> dict[str, int]:
-    """Return the highest number *tickets* already hold, registry by registry."""
+def numbers_in_flight(home: Path) -> dict[str, int]:
+    """Return the highest number any reservation holds, registry by registry.
 
+    Read off the reservation files under *home* rather than off any list of
+    open working trees, because such a list is read before the reservations
+    it stands for: two isolations started together each list the trees before
+    the other opened its own, and a list read in one session never carries
+    another session's trees at all. The files are whoever has reserved,
+    however they came to.
+    """
+
+    # Every reservation on disk counts, a stale one included: it merely
+    # raises the floor, and an unused number expires as a gap the numbering
+    # already allows. The digit check keeps a hand-copied file from stopping
+    # the run, in the same spirit as reading an unreadable one as nothing.
     taken: dict[str, int] = {}
-    for ticket in tickets:
-        for held in reserved_numbers(home, ticket):
-            directory = held["directory"]
-            taken[directory] = max(taken.get(directory, 0), int(held["number"]))
+    for reservation in home.glob(f"*{RESERVED_SUFFIX}"):
+        ticket = reservation.name.removesuffix(RESERVED_SUFFIX)
+        if ticket.isdigit():
+            for held in reserved_numbers(home, int(ticket)):
+                directory = held["directory"]
+                taken[directory] = max(taken.get(directory, 0), int(held["number"]))
 
     return taken
 
 
-def allocate(cwd: Path, number: int, in_flight: Iterable[int]) -> dict[str, Any]:
+def allocate(cwd: Path, number: int) -> dict[str, Any]:
     """Give ticket *number* the scratch and the record numbers it may take.
 
     Both are the ticket's for as long as its working tree is: made beside it,
@@ -437,7 +460,10 @@ def allocate(cwd: Path, number: int, in_flight: Iterable[int]) -> dict[str, Any]
     brief was filled in from has to be the answer still when the next ticket
     asks — two tickets that each read a registry for its next free number read
     the same one, and git merges the two records they write without a word
-    (ADR-0071).
+    (ADR-0071). And it is produced under an advisory file lock, together with
+    the reads it is derived from, because the allocation is itself that same
+    read-then-write one level up: four isolate calls overlapping in one wave
+    read the same state and reserved the same number.
     """
 
     home = worktree_home(cwd)
@@ -447,24 +473,33 @@ def allocate(cwd: Path, number: int, in_flight: Iterable[int]) -> dict[str, Any]
     scratch = home / f"{number}{SCRATCH_SUFFIX}"
     scratch.mkdir(parents=True, exist_ok=True)
 
-    # A ticket already holding numbers keeps them. One arriving new takes the
-    # next past both the registry's highest and whatever its siblings hold, so
-    # a wave's reservations are disjoint whatever order it is isolated in. A
-    # reservation nobody uses expires as a gap, which the numbering allows:
-    # next free is one above the highest, never the lowest hole (ADR-0067).
-    held = reserved_numbers(home, number)
-    if not held:
-        taken = numbers_in_flight(home, in_flight)
-        held = [
-            {
-                "directory": directory,
-                "number": f"{max(highest, taken.get(directory, 0)) + 1:04d}",
-            }
-            for directory, highest in sorted(numbered_registries(cwd).items())
-        ]
-        (home / f"{number}{RESERVED_SUFFIX}").write_text(
-            json.dumps(held, indent=2) + "\n", encoding="utf-8"
-        )
+    # The whole read-modify-write happens with the lock held. A caller that
+    # finds it taken waits: the work behind it is bounded and short, and a
+    # refusal would turn solved contention into a ticket with nowhere to
+    # build. Closing the file releases it, as does the death of the process.
+    with (home / ALLOCATION_LOCK).open("a") as guard:
+        fcntl.flock(guard, fcntl.LOCK_EX)
+
+        # A ticket already holding numbers keeps them, under contention
+        # exactly as without it. One arriving new takes the next past both
+        # the registry's highest and whatever any reservation holds, so a
+        # wave's reservations are disjoint however its isolations overlap. A
+        # reservation nobody uses expires as a gap, which the numbering
+        # allows: next free is one above the highest, never the lowest hole
+        # (ADR-0067).
+        held = reserved_numbers(home, number)
+        if not held:
+            taken = numbers_in_flight(home)
+            held = [
+                {
+                    "directory": directory,
+                    "number": f"{max(highest, taken.get(directory, 0)) + 1:04d}",
+                }
+                for directory, highest in sorted(numbered_registries(cwd).items())
+            ]
+            (home / f"{number}{RESERVED_SUFFIX}").write_text(
+                json.dumps(held, indent=2) + "\n", encoding="utf-8"
+            )
 
     return {"scratch": str(scratch), "reservations": held}
 
@@ -1950,7 +1985,7 @@ def isolate(cwd: Path, number: int) -> int:
                 "ticket": number,
                 "worktree": str(standing),
                 "branch": current_branch(standing),
-                **allocate(cwd, number, open_now),
+                **allocate(cwd, number),
             }
         )
         return 0
@@ -1986,7 +2021,7 @@ def isolate(cwd: Path, number: int) -> int:
             "ticket": number,
             "worktree": str(path),
             "branch": branch,
-            **allocate(cwd, number, open_now),
+            **allocate(cwd, number),
         }
     )
     return 0

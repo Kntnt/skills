@@ -3563,6 +3563,122 @@ def test_isolate_reserves_nothing_in_a_repository_that_numbers_nothing(
     assert json.loads(result.stdout)["reservations"] == []
 
 
+def _dawdling_git(directory: Path) -> dict[str, str]:
+    """Put a git on PATH whose `ls-files` dawdles before answering.
+
+    The window in which two allocations overlap is naturally a few
+    milliseconds wide, so a test of what happens inside it would pass or fail
+    on scheduling luck. The engine reads every registry through `ls-files`,
+    and a stand-in that sleeps there holds every concurrent isolation in the
+    read window at once — the overlap is certain rather than lucky.
+    """
+
+    # The stand-in must reach the real git however this machine names it,
+    # because PATH names the stand-in itself once it is installed.
+    real = shutil.which("git")
+    assert real is not None
+
+    return fake_binary_on_path(
+        directory,
+        "git",
+        "#!/bin/sh\n"
+        'for word in "$@"; do\n'
+        '  if [ "$word" = ls-files ]; then sleep 2; fi\n'
+        "done\n"
+        f'exec "{real}" "$@"\n',
+    )
+
+
+def _isolated_at_once(
+    repo: Path, tickets: list[int], env: dict[str, str] | None = None
+) -> list[dict[str, Any]]:
+    """Run one isolate per ticket concurrently and return their answers.
+
+    Started before any is waited for, the way an orchestrator batching its
+    independent tool calls starts them, which is the overlap the sequential
+    reading of the isolation step never forbade.
+    """
+
+    # Start every isolation before collecting any, so all of them run at once.
+    merged = dict(_GIT_ENV)
+    if env:
+        merged.update(env)
+    started = [
+        subprocess.Popen(
+            ["uv", "run", str(RUN), "isolate", "--ticket", str(number)],
+            cwd=repo,
+            env=merged,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        for number in tickets
+    ]
+
+    # Every call must have succeeded: a refusal under contention would turn
+    # solved contention into a ticket with nowhere to build.
+    answers = []
+    for process in started:
+        stdout, stderr = process.communicate(timeout=ENGINE_TIMEOUT)
+        assert process.returncode == 0, stderr
+        answers.append(json.loads(stdout))
+
+    return answers
+
+
+def test_isolates_overlapping_in_time_reserve_numbers_no_sibling_holds(
+    tmp_path: Path,
+) -> None:
+    """Four isolate calls started concurrently in one wave all reserved the
+    same number — the defect the verb exists to prevent, one level up from
+    where it was fixed. The allocation is read-then-write, so the engine takes
+    the whole of it under a lock rather than the Skill vowing the calls come
+    one at a time."""
+
+    repo = _init_repo(tmp_path / "proj")
+    _registry(repo, "docs/adr", "0001-the-first.md", "0002-the-second.md")
+
+    answers = _isolated_at_once(repo, [9, 10], env=_dawdling_git(tmp_path))
+
+    reserved = sorted(answer["reservations"][0]["number"] for answer in answers)
+    assert reserved == ["0003", "0004"]
+
+
+def test_a_ticket_gets_its_reservation_back_unchanged_under_contention(
+    tmp_path: Path,
+) -> None:
+    """Nothing else about isolate's answer moves: the same ticket isolated
+    again gets back the same reservation under contention exactly as without
+    it, and the sibling contending with it reserves past what it holds."""
+
+    repo = _init_repo(tmp_path / "proj")
+    _registry(repo, "docs/adr", "0001-the-first.md", "0002-the-second.md")
+    first = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+
+    answers = _isolated_at_once(repo, [10, 9], env=_dawdling_git(tmp_path))
+
+    resumed = next(answer for answer in answers if answer["ticket"] == 9)
+    fresh = next(answer for answer in answers if answer["ticket"] == 10)
+    assert first["reservations"] == [{"directory": "docs/adr", "number": "0003"}]
+    assert resumed["reservations"] == first["reservations"]
+    assert resumed["scratch"] == first["scratch"]
+    assert fresh["reservations"] == [{"directory": "docs/adr", "number": "0004"}]
+
+
+def test_a_repository_that_numbers_nothing_is_unmoved_by_overlapping_isolates(
+    tmp_path: Path,
+) -> None:
+    """A repository keeping no records named by number has nothing to hand
+    out and nothing to contend for, which stays an answer and never becomes
+    a refusal when the isolations overlap."""
+
+    repo = _init_repo(tmp_path / "proj")
+
+    answers = _isolated_at_once(repo, [9, 10])
+
+    assert [answer["reservations"] for answer in answers] == [[], []]
+
+
 def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
     """The detection is deterministic and unconfigured, so what it answers for
     this repository is what this repository actually keeps: the decision
