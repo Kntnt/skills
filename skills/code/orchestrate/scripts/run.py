@@ -1426,16 +1426,20 @@ def tickets_in_scope(
     return sorted(tickets, key=lambda ticket: ticket.number)
 
 
-def tickets_recorded_done(
+def tickets_recorded(
     listed: list[dict[str, Any]], scope: list[Aim] | None
 ) -> list[Ticket]:
-    """Return the tickets a run closed as done, oldest first.
+    """Return the closed tickets a run recorded an outcome on, oldest first.
 
-    Done is the one outcome that takes a ticket out of the open scope, so the
-    report would lose exactly the tickets it most needs to name if it read that
-    scope alone. They are found by the claim that started them and the marker
-    that ended them: a ticket closed by hand carries neither and was never this
-    run's to account for, and counting it done would be a report nobody can
+    Closing is what takes a ticket out of the open scope, so the report would
+    lose exactly the tickets it most needs to name if it read that scope alone
+    — and done is not the only outcome a closed ticket carries. A ticket this
+    run recorded failed is closed too once a person finishes it, or once the
+    tracker reads a commit trailer off the default branch, and it was this
+    run's all the same: the run claimed it, built it, and wrote an outcome on
+    it. So every outcome is read back here, under the marker that stands last,
+    and a ticket closed carrying no marker of this engine's was never this
+    run's to account for — accounting for it would be a report nobody can
     check.
     """
 
@@ -1448,7 +1452,7 @@ def tickets_recorded_done(
             continue
         number = int(item["number"])
         outcome, commit, against = recorded_against(item)
-        if outcome != DONE:
+        if outcome is None:
             continue
         try:
             tickets.append(
@@ -2334,10 +2338,11 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
     claim, or by the run stopping before its wave came round.
     """
 
-    # The label is asked for twice, because done is the one outcome that takes
-    # a ticket out of the open half by closing it. What the run was aimed at is
-    # resolved against both halves, so a spec whose children are all finished
-    # is still the spec it was named as.
+    # The label is asked for twice, because a ticket the run recorded is closed
+    # by the run itself where it passed, and can be closed by anybody after it
+    # where it did not. What the run was aimed at is resolved against both
+    # halves, so a spec whose children are all finished is still the spec it
+    # was named as.
     try:
         branch = current_branch(cwd)
         listed = open_listing(cwd)
@@ -2349,7 +2354,7 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
         )
         open_scope = tickets_in_scope(cwd, listed, scope)
         tickets = sorted(
-            open_scope + tickets_recorded_done(finished, scope),
+            open_scope + tickets_recorded(finished, scope),
             key=lambda ticket: ticket.number,
         )
         say_where_work_stands(cwd, tickets, branch)

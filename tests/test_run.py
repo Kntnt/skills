@@ -47,6 +47,11 @@ def _run() -> ModuleType:
 # failure rather than a suite that never ends.
 ENGINE_TIMEOUT = 120
 
+# The five lists a report accounts for its scope with. Named once, because
+# what a test about the account asserts is a ticket's place across all five —
+# and a sixth list nobody read would be exactly the silence they guard against.
+_ACCOUNT = ("done", "failed", "conflicted", "stranded", "never_on_frontier")
+
 _GIT_ENV = {
     key: value for key, value in os.environ.items() if not key.startswith("GIT_")
 }
@@ -1405,11 +1410,7 @@ def test_report_accounts_for_every_ticket_in_scope_exactly_once(
     assert report["never_on_frontier"] == [13]
 
     # Every ticket in scope, once and once only, across the five.
-    accounted = [
-        number
-        for outcome in ("done", "failed", "conflicted", "stranded", "never_on_frontier")
-        for number in report[outcome]
-    ]
+    accounted = [number for outcome in _ACCOUNT for number in report[outcome]]
     in_scope = [entry["number"] for entry in report["tickets"]]
     assert sorted(accounted) == in_scope == [9, 10, 11, 12, 13]
     assert len(set(accounted)) == len(accounted)
@@ -1439,8 +1440,9 @@ def test_report_names_the_commit_a_closed_ticket_was_recorded_on(
 
 
 def test_report_leaves_out_a_closed_ticket_no_run_recorded(tmp_path: Path) -> None:
-    """A ticket somebody closed by hand was never this run's to account for,
-    and counting it as done would be a report nobody can check."""
+    """A ticket somebody closed by hand carries no marker of this engine's and
+    was never this run's to account for, so it is in none of the five lists —
+    accounting for it under any of them would be a report nobody can check."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -1453,8 +1455,61 @@ def test_report_leaves_out_a_closed_ticket_no_run_recorded(tmp_path: Path) -> No
 
     assert result.returncode == 0, result.stderr
     report = json.loads(result.stdout)
-    assert report["done"] == []
     assert report["tickets"] == []
+    assert all(report[outcome] == [] for outcome in _ACCOUNT)
+
+
+def test_report_accounts_for_a_ticket_recorded_failed_and_later_closed(
+    tmp_path: Path,
+) -> None:
+    """A ticket this run recorded failed, and a person or a commit trailer then
+    closed, is still this run's: the run claimed it, built it, and wrote an
+    outcome on it. It is reported under the outcome that stands on it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        closed=[_ticket(9, "the failure", comments=[_recorded("failed")])],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["failed"] == [9]
+    assert [entry["number"] for entry in report["tickets"]] == [9]
+    assert [number for outcome in _ACCOUNT for number in report[outcome]] == [9]
+
+
+def test_report_reads_a_closed_tickets_outcome_as_it_now_stands(
+    tmp_path: Path,
+) -> None:
+    """A ticket recorded failed and then recorded done is a done ticket, the
+    last marker being the outcome as it stands — and it is in one of the five
+    lists rather than in two of them."""
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        closed=[
+            _ticket(
+                9,
+                "the skeleton",
+                comments=[_recorded("failed"), _recorded("done", head)],
+            )
+        ],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["done"] == [9]
+    assert [entry["number"] for entry in report["tickets"]] == [9]
+    assert [number for outcome in _ACCOUNT for number in report[outcome]] == [9]
 
 
 def test_plan_strands_nothing_behind_a_ticket_that_passed(tmp_path: Path) -> None:
