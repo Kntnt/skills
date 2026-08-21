@@ -1,6 +1,6 @@
 # The wave brief
 
-Give this to a subagent once a wave's verified tickets have been merged into the run branch, in the repository the developer started the run in — and again after every round of fixes, on the branch as the fixer left it. It is filled in from the wave: `<tickets>` is the list of the tickets that were merged, each as `#number — title`, and `<scratch>` is a scratch directory of this check's own — one you make for it under this session's own scratch, since it runs in the repository the developer started the run in rather than in a working tree of its own. It is not given any ticket's acceptance criteria and is not asked to judge one — those were settled ticket by ticket before anything was merged, and what is asked here could not be asked then.
+Give this to a subagent once a wave's verified tickets have been merged into the run branch, in the repository the developer started the run in — and again after every round of fixes, on the branch as the fixer left it. It is filled in from the wave: `<tickets>` is the list of the tickets that were merged, each as `#number — title`, and `<scratch>` is a scratch directory of this check's own — one you make for it under this session's own scratch, since it runs in the repository the developer started the run in rather than in a working tree of its own. `<gate>` is the gate you resolved at run start, pasted as the list of commands it was written down as — never re-derived here, and never widened. It is not given any ticket's acceptance criteria and is not asked to judge one — those were settled ticket by ticket before anything was merged, and what is asked here could not be asked then.
 
 ---
 
@@ -8,7 +8,7 @@ You are checking a branch, not a ticket. Several tickets were built separately, 
 
 **What was merged.** `<tickets>`
 
-**Run the project's full verification, on this branch, as it now stands.** Every command its contributing guide names for a change — all of them, not a subset, and not only the ones that look related to what was merged. If there is no such guide, run the whole test suite and whatever lint, format, and type checks the project is configured for.
+**Run the project's verification gate, on this branch, as it now stands.** These commands, resolved once at run start from the project's contributing guide, are the gate: `<gate>`. Run all of them, not a subset, and not only the ones that look related to what was merged — and run nothing further: a check this list does not name is not run in its place, and there is nothing beyond the list to go looking for.
 
 **A long command is waited on, not yielded to.** Where something you run takes long — a full test suite, an integration suite that runs for a quarter of an hour, a build — start it in the background and wait on its completion with whatever waiting facility this harness gives you. Never end your turn while it runs. Waiting is part of the work rather than idleness to yield in: a turn ended with the gate still running is a build that did not finish or a verdict that was not reached, and in a run nobody is watching, nothing comes back to wake the session that ended it.
 

@@ -1016,3 +1016,170 @@ def test_the_manpage_accounts_for_the_blocked_outcome() -> None:
         f" ticket is simply a ticket waiting on open work once its edge is"
         f" written (ADR-0073)."
     )
+
+
+# Every brief that tells its subagent to run the project's verification gate.
+# Before issue #80 each of them resolved *every command its contributing guide
+# names for a change* alone, from scratch — nine resolutions over one
+# interviewed tree — and the open-ended phrasing invited discovery beyond the
+# list: one wave check found and ran a twenty-five-minute rendering rig no
+# guide had named as a gate. The orchestrator now resolves the list once, at
+# run start, and these briefs carry it.
+GATE_CARRYING_BRIEFS = (
+    "verify.md",
+    "repair.md",
+    "repaired.md",
+    "wave.md",
+    "amend.md",
+)
+
+
+def _instructions(name: str) -> str:
+    """One brief's fill-in instructions — everything above the brief itself."""
+
+    return _brief(name).split("\n---\n", 1)[0]
+
+
+def test_every_gate_brief_carries_the_gate_rather_than_rediscovering_it() -> None:
+    """The gate travels into the brief; the phrase every subagent resolved alone is gone.
+
+    Each of these briefs told its subagent to run every command the project's
+    contributing guide names for a change, and each subagent resolved that
+    phrase from scratch — nine times over the same tree in one interviewed
+    wave (issue #80).
+    """
+
+    for name in GATE_CARRYING_BRIEFS:
+        text = _brief(name)
+        where = SKILL / "references" / name
+
+        assert "`<gate>`" in text, (
+            f"{where}: the brief carries the gate the orchestrator resolved"
+            f" at run start. A subagent handed no list derives one, and each"
+            f" derivation is a fresh reading of the same guide (issue #80)."
+        )
+        assert (
+            "resolved once at run start from the project's contributing guide" in text
+        ), (
+            f"{where}: the brief says where the list came from — resolved"
+            f" once at run start from the project's contributing guide — so"
+            f" the subagent reads it as settled rather than as a starting"
+            f" point for its own reading (issue #80)."
+        )
+        assert "every command its contributing guide names" not in text, (
+            f"{where}: the brief no longer tells its subagent to resolve the"
+            f" guide's commands itself — that phrase is the one every"
+            f" subagent resolved alone, from scratch (issue #80)."
+        )
+        assert "If there is no such guide" not in text, (
+            f"{where}: the no-guide fallback is the orchestrator's to resolve"
+            f" at run start, not the subagent's — a brief that carries it"
+            f" invites the rediscovery the carried gate exists to end"
+            f" (issue #80)."
+        )
+
+
+def test_every_gate_brief_keeps_the_all_of_them_force_and_refuses_discovery() -> None:
+    """All of them, not a subset — and nothing the list does not name.
+
+    The strictness the carried list must not trade away is that the whole
+    gate runs; what it adds is that a subagent no longer goes looking for
+    more — the open-ended phrasing is how one wave check spent twenty-five
+    minutes on a rig no guide named as a gate (issue #80).
+    """
+
+    for name in GATE_CARRYING_BRIEFS:
+        text = _brief(name)
+        where = SKILL / "references" / name
+
+        assert "all of them, not a subset" in text, (
+            f"{where}: the brief keeps the all-of-them force — run all of"
+            f" them, not a subset. The carried list changes where the gate"
+            f" comes from, never how much of it runs (issue #80)."
+        )
+        assert "a check this list does not name is not run in its place" in text, (
+            f"{where}: the brief refuses discovery in those words — a check"
+            f" the list does not name is not run in its place. Without the"
+            f" refusal the list is a starting point, and a subagent that"
+            f" goes looking finds a rig nothing asked for (issue #80)."
+        )
+
+
+def test_every_gate_briefs_fill_in_instructions_take_the_list() -> None:
+    """A placeholder nothing explains is handed out unfilled."""
+
+    for name in GATE_CARRYING_BRIEFS:
+        instructions = _instructions(name)
+        where = SKILL / "references" / name
+
+        assert "`<gate>`" in instructions, (
+            f"{where}: the fill-in instructions say what `<gate>` is replaced"
+            f" with — the gate as the orchestrator resolved it at run start"
+            f" (issue #80)."
+        )
+        assert "never re-derived" in instructions, (
+            f"{where}: the fill-in instructions forbid re-deriving the list"
+            f" at fill time — the resolution happened once, at run start,"
+            f" and filling a brief is not a second reading of the guide"
+            f" (issue #80)."
+        )
+
+
+def test_the_build_step_resolves_the_gate_once_at_run_start() -> None:
+    """The orchestrator reads the contributing guide once and every brief carries the answer.
+
+    Which commands gate a change is a reading of prose, like which files are
+    the run's own — so it is made once, at run start, and held for the whole
+    run rather than re-made by every subagent (issue #80).
+    """
+
+    step = _step(6)
+
+    assert "esolve the gate" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 has the orchestrator resolve the gate"
+        f" before the first wave is briefed. Left to the briefs, the same"
+        f" phrase is resolved by every subagent over the same tree"
+        f" (issue #80)."
+    )
+    assert "verbatim" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 takes the guide's commands verbatim —"
+        f" the gate is what the guide names, not the orchestrator's reading"
+        f" of what it meant (issue #80)."
+    )
+    assert "lint, format, and type checks the project is configured for" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 carries the no-guide fallback the"
+        f" briefs used to state — the whole test suite and the checks the"
+        f" project is configured for — because the fallback moved here"
+        f" rather than being dropped (issue #80)."
+    )
+    assert "every brief that asks for verification" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 fills the resolved gate into every"
+        f" brief that asks for verification, which is what makes one"
+        f" resolution the run's rather than one subagent's (issue #80)."
+    )
+    assert "all of it and nothing in its place" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 keeps the strictness beside the new"
+        f" source — the list is the gate wherever it is carried, all of it"
+        f" and nothing in its place (issue #80)."
+    )
+
+
+def test_the_manpage_says_the_gate_is_resolved_once() -> None:
+    """A developer reading the page has to know what a verifier runs and who decided it."""
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+
+    assert (
+        "resolved once, at the run's start, from the project's contributing guide"
+        in text
+    ), (
+        f"{where}: the manpage says the gate is resolved once, at the run's"
+        f" start, from the project's contributing guide — not rediscovered"
+        f" by each verifying subagent (issue #80)."
+    )
+    assert "a check the list does not name is not run in its place" in text, (
+        f"{where}: the manpage says a check the list does not name is not"
+        f" run in its place, so a reader knows the run cannot wander into"
+        f" a twenty-five-minute rig nothing asked for (issue #80)."
+    )

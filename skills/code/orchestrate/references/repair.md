@@ -1,6 +1,6 @@
 # The repair brief
 
-Give this to a subagent when `integrate` answers with a collision. It is filled in from the losing ticket's entry in the plan, from what `isolate` answered for it, and from what `integrate` answered: `<files>` is the collision's `collisions`, and `<others>` is one block per ticket in its `collided_with`, each carrying that ticket's number, title, url, and whole body from the plan's `tickets`. `<scratch>` is the scratch directory `isolate` answered with for that ticket. Where `collided_with` is empty, say instead that the work on the other side of the collision is the branch's own and no ticket in this run claims it. Everything in angle brackets is replaced; each `<body>` is pasted whole.
+Give this to a subagent when `integrate` answers with a collision. It is filled in from the losing ticket's entry in the plan, from what `isolate` answered for it, and from what `integrate` answered: `<files>` is the collision's `collisions`, and `<others>` is one block per ticket in its `collided_with`, each carrying that ticket's number, title, url, and whole body from the plan's `tickets`. `<scratch>` is the scratch directory `isolate` answered with for that ticket. `<gate>` is the gate you resolved at run start, pasted as the list of commands it was written down as — never re-derived here, and never widened. Where `collided_with` is empty, say instead that the work on the other side of the collision is the branch's own and no ticket in this run claims it. Everything in angle brackets is replaced; each `<body>` is pasted whole.
 
 ---
 
@@ -22,7 +22,7 @@ Do all of this, in this order:
 
 1. **Bring the other work here.** `git merge <run-branch>` in your working tree. It will stop on the conflicts above; that is the point of running it.
 2. **Settle each conflict so both tickets still hold.** Read what each side was doing and why, in the two bodies above, and produce the code somebody would have written had they built both. Not one side picked over the other, and not both pasted together — a resolution that keeps one ticket's criteria by dropping the other's is a repair that failed.
-3. **Run the project's full verification yourself**, every command its contributing guide names for a change. A repair you did not run is a guess.
+3. **Run the project's verification gate yourself.** These commands, resolved once at run start from the project's contributing guide, are the gate: `<gate>`. Run all of them, not a subset — a check this list does not name is not run in its place, and a repair you did not run is a guess.
 4. **Commit the merge.** Stage what you settled and commit it, leaving nothing uncommitted and nothing unmerged: work only a working tree holds is work the run cannot integrate.
 
 **A long command is waited on, not yielded to.** Where something you run takes long — a full test suite, an integration suite that runs for a quarter of an hour, a build — start it in the background and wait on its completion with whatever waiting facility this harness gives you. Never end your turn while it runs. Waiting is part of the work rather than idleness to yield in: a turn ended with the gate still running is a build that did not finish or a verdict that was not reached, and in a run nobody is watching, nothing comes back to wake the session that ended it.

@@ -1,6 +1,6 @@
 # The repaired-collision brief
 
-Give this to a second subagent once a repair subagent says it settled a collision, in the same working tree and filled in the same way as `repair.md`: `<worktree>` is where the repair was made, `<scratch>` is the same scratch directory that repair was given, and the ticket blocks are the losing ticket and every ticket in the collision's `collided_with`, each with its number, title, url, and whole body. It has not seen the repair session and is never told what it reported. Its verdict is what decides whether the repair stands or the ticket is built again from nothing.
+Give this to a second subagent once a repair subagent says it settled a collision, in the same working tree and filled in the same way as `repair.md`: `<worktree>` is where the repair was made, `<scratch>` is the same scratch directory that repair was given, and the ticket blocks are the losing ticket and every ticket in the collision's `collided_with`, each with its number, title, url, and whole body. `<gate>` is the gate you resolved at run start, pasted as the list of commands it was written down as — never re-derived here, and never widened. It has not seen the repair session and is never told what it reported. Its verdict is what decides whether the repair stands or the ticket is built again from nothing.
 
 ---
 
@@ -20,7 +20,7 @@ A resolution is not judged on whether it looks reasonable. It is judged on wheth
 
 Do all of this, in this order:
 
-1. **Run the project's full verification yourself.** Every command its contributing guide names for a change — all of them, not a subset, and not only the ones that look related to the conflict. If there is no such guide, run the whole test suite and whatever lint, format, and type checks the project is configured for.
+1. **Run the project's verification gate yourself.** These commands, resolved once at run start from the project's contributing guide, are the gate: `<gate>`. Run all of them, not a subset, and not only the ones that look related to the conflict — and run nothing further: a check this list does not name is not run in its place, and there is nothing beyond the list to go looking for.
 2. **Check every acceptance criterion of both tickets, one at a time**, against the repository as it is now. Say for each one whether it is met and what you looked at to decide. A criterion about behaviour is checked by exercising the behaviour, not by reading the diff and finding code that looks like it would do that.
 3. **Check what the repair did beyond repairing.** Work neither ticket asked for, a test weakened or deleted to make the merge pass, one side of a conflict dropped rather than settled.
 
