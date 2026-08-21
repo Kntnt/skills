@@ -1,10 +1,10 @@
 # The wave brief
 
-Give this to a subagent once a wave's verified tickets have been merged into the run branch, in the repository the developer started the run in. It is filled in from the wave: `<tickets>` is the list of the tickets that were merged, each as `#number — title`, and `<scratch>` is a scratch directory of this check's own — one you make for it under this session's own scratch, since it runs in the repository the developer started the run in rather than in a working tree of its own. It is not given any ticket's acceptance criteria and is not asked to judge one — those were settled ticket by ticket before anything was merged, and this is the one question that could not be asked then.
+Give this to a subagent once a wave's verified tickets have been merged into the run branch, in the repository the developer started the run in — and again after every round of fixes, on the branch as the fixer left it. It is filled in from the wave: `<tickets>` is the list of the tickets that were merged, each as `#number — title`, and `<scratch>` is a scratch directory of this check's own — one you make for it under this session's own scratch, since it runs in the repository the developer started the run in rather than in a working tree of its own. It is not given any ticket's acceptance criteria and is not asked to judge one — those were settled ticket by ticket before anything was merged, and what is asked here could not be asked then.
 
 ---
 
-You are checking a branch, not a ticket. Several tickets were built separately, each verified on its own, and their work has just been merged together onto this branch. Two of them can pass alone and fail together, and that is the only thing you are here to find out.
+You are checking a branch, not a ticket. Several tickets were built separately, each verified on its own, and their work has just been merged together onto this branch. Every one of them can hold alone and the branch still be wrong, in two ways only this branch shows: two tickets can pass alone and fail together, and the branch can disagree with itself. Those are the only things you are here to find out.
 
 **What was merged.** `<tickets>`
 
@@ -14,6 +14,12 @@ You are checking a branch, not a ticket. Several tickets were built separately, 
 
 **Where you write.** Everything you write goes in one of two places: the working tree you were given, and `<scratch>`, a scratch directory of your own. Nothing outside those two is yours to write in or to delete from — other work is going on beside yours at this moment, and a path two sessions both chose is a log one of them reads as the other's, or a file one of them clears away from under the other.
 
-**Change nothing.** Do not fix a failure, do not commit, and do not revert. What you are doing is reading the branch, and a repair made here is a repair nobody verified.
+**Read the branch for coherence, which no gate sees.** Coherence means the branch agreeing with itself, and its defects arrive by construction: a ticket forked before a sibling's work landed cannot see that work at all, so the contradiction between them exists only here, on the integrated branch, which nothing else reads whole. Look for registries where one number answers twice; for release-notes structure, such as one release section holding two of the same heading; for file-and-line citations the branch's own edits invalidated; and for prose asserting what the branch's own changes have made false. A reading is a reading, not a grep: a correction convention can preserve the false sentence verbatim and append the correction after it, so a pattern search cannot tell a corrected assertion from an uncorrected one — read the surrounding text.
 
-**Report a verdict, and nothing softer.** A pass means every command passed. Anything else is a fail, naming the command that failed and quoting enough of its output to see why — and, where you can tell, which of the merged tickets it points at. The run stops on a fail rather than spending the remaining hours building on broken code, so a verdict you are not sure of is a fail.
+**Change nothing.** Do not fix a failure or a finding, do not commit, and do not revert. What you are doing is reading the branch, and a repair made here is a repair nobody verified. What you find mechanical a separate session fixes, and this check then reads the result — the finder is never the fixer.
+
+**Report a verdict, and nothing softer.** It has three shapes:
+
+- **A clean pass.** Every command passed and the reading found nothing. Only this continues the run.
+- **Mechanical findings.** Every command passed, and the reading found defects whose fix restates what the branch has already decided — renumber the later record, fold the duplicate heading, repoint the citation, bring the sentence up to what the code now does. Name each finding with where it stands and what the branch already decided that it contradicts, precisely enough that a session that has not read what you read can make the fix without deciding anything.
+- **A stop.** A command failed, or a finding requires choosing between two tickets' intents — that is a disagreement merged onto the branch, not something a restatement settles. Name the command that failed and quote enough of its output to see why — and, where you can tell, which of the merged tickets it points at — or name the choice the branch leaves open. The run stops on either rather than spending the remaining hours building on it, so a verdict you are not sure of is a stop.

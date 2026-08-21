@@ -21,6 +21,12 @@ VERIFYING_BRIEFS = (
     "amend.md",
 )
 
+# Every brief the skill hands out, the wave check's fixer included. The fixer
+# runs no gate — the wave check reruns it on the branch the fixer leaves — so
+# the waiting rule is not its to carry, while the confinement rule is every
+# subagent's (ADR-0072).
+ALL_BRIEFS = (*VERIFYING_BRIEFS, "fix.md")
+
 
 def _brief(name: str) -> str:
     """Read one of the skill's briefs."""
@@ -177,7 +183,7 @@ def test_every_brief_confines_its_subagent_to_its_tree_and_its_own_scratch() -> 
     mid-run. Neither is something a merge, a test, or a gate would ever catch.
     """
 
-    for name in VERIFYING_BRIEFS:
+    for name in ALL_BRIEFS:
         text = _brief(name)
         where = SKILL / "references" / name
 
@@ -194,13 +200,13 @@ def test_every_brief_confines_its_subagent_to_its_tree_and_its_own_scratch() -> 
 
 
 def test_the_briefs_state_the_confinement_rule_in_one_wording() -> None:
-    """One rule stated six ways is six rules, and a subagent obeys the one it was given.
+    """One rule stated seven ways is seven rules, and a subagent obeys the one it was given.
 
     The briefs are handed out one per subagent, so nothing but identical
     wording keeps a builder and a verifier held to the same rule.
     """
 
-    stated = {name: _writing_paragraph(_brief(name)) for name in VERIFYING_BRIEFS}
+    stated = {name: _writing_paragraph(_brief(name)) for name in ALL_BRIEFS}
     wordings = set(stated.values())
 
     assert "" not in wordings, (
@@ -622,4 +628,306 @@ def test_the_manpage_documents_the_open_decision_exception_to_yes() -> None:
         f"{where}: the manpage names the label a parked ticket is returned"
         f" under, so a developer reading the morning tracker knows what the"
         f" swap was and how to bring the ticket back (ADR-0070)."
+    )
+
+
+def test_the_wave_brief_reads_the_branch_for_coherence_beside_its_gate() -> None:
+    """Five of six branch-level readings found defects the green gate never saw.
+
+    A decision record asserting a default the branch had just changed, one
+    release section holding two of the same heading, a register still listing
+    findings the branch had closed, citations the branch's own edits
+    invalidated — nothing a test suite sees, and a ticket forked before a
+    sibling's record landed could not have seen it either, so the integrated
+    branch is the one place it can be read (ADR-0072, issue #78).
+    """
+
+    text = _brief("wave.md")
+    where = SKILL / "references" / "wave.md"
+
+    assert "the branch agreeing with itself" in text, (
+        f"{where}: the brief says what coherence means — the branch agreeing"
+        f" with itself — beside its instruction to run the gate. A checker"
+        f" told only to run commands reads nothing (ADR-0072)."
+    )
+    assert "one number answers twice" in text, (
+        f"{where}: the brief names registries where one number answers twice."
+        f" Two tickets forked apart mint the same record number, and git"
+        f" merges the pair without a word (ADR-0072)."
+    )
+    assert "two of the same heading" in text, (
+        f"{where}: the brief names release-notes structure — one release"
+        f" section holding two of the same heading, the collision a clean"
+        f" merge leaves and nobody reads twice (ADR-0072)."
+    )
+    assert "citations the branch's own edits invalidated" in text, (
+        f"{where}: the brief names the citations the branch's own edits"
+        f" invalidated. The field case broke the pointer inside the release"
+        f" procedure's own pre-tag checklist (ADR-0072, issue #78)."
+    )
+    assert "made false" in text, (
+        f"{where}: the brief names prose asserting what the branch's own"
+        f" changes have made false — the decision record still stating the"
+        f" default the branch just changed (ADR-0072)."
+    )
+
+
+def test_the_wave_briefs_verdict_has_three_shapes() -> None:
+    """A clean pass, mechanical findings, or a stop — and nothing softer.
+
+    Mechanical means the fix restates what the branch already decided; a
+    finding that requires choosing between two tickets' intents is a
+    disagreement merged onto the branch, and building the rest of the night
+    on it is the outcome the check exists to prevent (ADR-0072).
+    """
+
+    text = _brief("wave.md")
+    where = SKILL / "references" / "wave.md"
+
+    assert "A clean pass" in text, (
+        f"{where}: the verdict's first shape is a clean pass — gate and"
+        f" reading both found nothing — and only that continues the run"
+        f" (ADR-0072)."
+    )
+    assert "Mechanical findings" in text, (
+        f"{where}: the verdict's second shape is mechanical findings, the"
+        f" kind a separate session fixes by restating what the branch"
+        f" already decided (ADR-0072)."
+    )
+    assert "restates what the branch has already decided" in text, (
+        f"{where}: the brief defines mechanical — the fix restates what the"
+        f" branch has already decided. Without the definition every finding"
+        f" is whatever the checker calls it (ADR-0072)."
+    )
+    assert "where it stands" in text, (
+        f"{where}: each finding is named with where it stands, so a fixer"
+        f" that has not read the branch can find it (ADR-0072)."
+    )
+    assert "what the branch already decided that it contradicts" in text, (
+        f"{where}: each finding names what the branch already decided that"
+        f" it contradicts, which is the whole of what a mechanical fix may"
+        f" restate (ADR-0072)."
+    )
+    assert "choosing between two tickets' intents" in text, (
+        f"{where}: the brief says a finding that requires choosing between"
+        f" two tickets' intents is a stop, exactly as a failed gate is —"
+        f" that is a disagreement merged onto the branch (ADR-0072)."
+    )
+    assert "a verdict you are not sure of is a stop" in text, (
+        f"{where}: the brief keeps the old rule's spine in the new verdict —"
+        f" a verdict the checker is not sure of is a stop, never something"
+        f" softer (ADR-0072)."
+    )
+
+
+def test_the_wave_brief_still_changes_nothing_and_never_fixes() -> None:
+    """The checker reads; a separate session fixes; the finder is never the fixer.
+
+    What licenses the fixer's commit ahead of a verdict is that the check
+    that demanded it reads the result, so the change-nothing rule stays true
+    of the checker itself (ADR-0072).
+    """
+
+    text = _brief("wave.md")
+    where = SKILL / "references" / "wave.md"
+
+    assert "Change nothing" in text, (
+        f"{where}: the brief still forbids the checker to change anything."
+        f" The coherence reading widens what it reads, never what it may"
+        f" touch (ADR-0072)."
+    )
+    assert "a repair made here is a repair nobody verified" in text, (
+        f"{where}: the brief keeps the reasoning that forbids the checker to"
+        f" fix — a repair made here is a repair nobody verified — which the"
+        f" loop answers rather than drops (ADR-0072)."
+    )
+    assert "the finder is never the fixer" in text, (
+        f"{where}: the brief says the finder is never the fixer, in those"
+        f" words. A checker that fixes is a repair nobody reads (ADR-0072)."
+    )
+
+
+def test_the_wave_brief_carries_the_reading_warning() -> None:
+    """A correction convention preserves the false sentence verbatim, so a grep reports noise.
+
+    The cheap implementation fails silently in exactly the direction the
+    check exists to catch — confident wrongness on the branch (ADR-0072).
+    """
+
+    text = _brief("wave.md")
+    where = SKILL / "references" / "wave.md"
+
+    assert "preserve the false sentence verbatim" in text, (
+        f"{where}: the brief warns that a correction convention can preserve"
+        f" the false sentence verbatim and append the correction after it"
+        f" (ADR-0072)."
+    )
+    assert "cannot tell a corrected assertion from an uncorrected one" in text, (
+        f"{where}: the brief says what the convention does to a pattern"
+        f" search — it cannot tell a corrected assertion from an uncorrected"
+        f" one (ADR-0072)."
+    )
+    assert "read the surrounding text" in text, (
+        f"{where}: the brief tells the checker to read the surrounding text"
+        f" rather than grep, or it reports noise (ADR-0072)."
+    )
+
+
+def test_the_fix_brief_hands_the_fixer_the_findings_whole() -> None:
+    """A finding trimmed in the retelling is a fix aimed at half of it."""
+
+    text = _brief("fix.md")
+    where = SKILL / "references" / "fix.md"
+    instructions = text.split("\n---\n", 1)[0]
+
+    assert "`<findings>`" in text, (
+        f"{where}: the brief carries the wave check's findings. A fixer told"
+        f" nothing of them rereads the branch, and the reader that finds is"
+        f" never the writer that fixes (ADR-0072)."
+    )
+    assert "pasted whole" in instructions, (
+        f"{where}: the fill-in instructions say the findings are pasted"
+        f" whole rather than summarised — a summary is the orchestrator's"
+        f" reading, not what the checker found (ADR-0072)."
+    )
+
+
+def test_the_fix_brief_states_the_mandate_as_the_record_states_it() -> None:
+    """Restate what the branch decided, choose nothing.
+
+    The mandate is a boundary that must hold in prose, and a fixer that
+    drifts past it is caught only by the next check round (ADR-0072).
+    """
+
+    text = _brief("fix.md")
+    where = SKILL / "references" / "fix.md"
+
+    assert "estate what the branch decided, choose nothing" in text, (
+        f"{where}: the brief states the mandate as the record states it —"
+        f" restate what the branch decided, choose nothing (ADR-0072)."
+    )
+    assert "choosing between two tickets' intents" in text, (
+        f"{where}: the brief names the finding that is not the fixer's — one"
+        f" whose fix requires choosing between two tickets' intents"
+        f" (ADR-0072)."
+    )
+    assert "name the choice" in text, (
+        f"{where}: the brief says such a finding is left as it stands and"
+        f" the choice named in the report, the run stopping on it as on a"
+        f" failed gate (ADR-0072)."
+    )
+
+
+def test_the_fix_brief_commits_for_the_next_round_to_read() -> None:
+    """The wave check reads the branch, so a fix only a working tree holds goes unread."""
+
+    text = _brief("fix.md")
+    where = SKILL / "references" / "fix.md"
+
+    assert "leaving nothing uncommitted" in text, (
+        f"{where}: the brief has the fixer commit on the branch, leaving"
+        f" nothing uncommitted — the next check round reads the branch, not"
+        f" a working tree (ADR-0072)."
+    )
+    assert "touch no branch other than" in text, (
+        f"{where}: the brief confines the fixer to the branch the findings"
+        f" stand on, as every other brief confines its subagent to what it"
+        f" was given (ADR-0072)."
+    )
+    assert "gate and coherence both" in text, (
+        f"{where}: the brief says the wave check runs again on the result —"
+        f" gate and coherence both — which is what licenses a commit ahead"
+        f" of a verdict: no fix escapes unread (ADR-0072)."
+    )
+
+
+def test_the_wave_step_loops_check_fix_check_to_a_fixed_point() -> None:
+    """This class of defect never comes alone, so one fix-and-recheck round is not enough.
+
+    Every field round that fixed one instance found another the first
+    reading had not reached — the framing paragraph behind the annotated
+    one, the second stale citation behind the first (ADR-0072).
+    """
+
+    step = _step(11)
+
+    assert "fix.md" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 dispatches the fixer from"
+        f" `$HERE/references/fix.md` on mechanical findings — the finding"
+        f" session never fixes (ADR-0072)."
+    )
+    assert "findings pasted whole" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 fills the fixer's brief with the"
+        f" findings pasted whole, so the fixer works from what the checker"
+        f" found rather than a retelling (ADR-0072)."
+    )
+    assert "the finder is never the fixer" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 says the finder is never the fixer,"
+        f" in those words — the fixer is a fresh subagent, never the"
+        f" checking one (ADR-0072)."
+    )
+    assert "gate and coherence both" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 reruns the whole check after a fix —"
+        f" gate and coherence both — so no fix escapes unread and the branch"
+        f" the run continues from has passed a full check whole (ADR-0072)."
+    )
+    assert "a round finds nothing" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 ends the loop when a round finds"
+        f" nothing. A single fix-and-recheck round ships whatever the first"
+        f" reading missed with a green stamp on it (ADR-0072)."
+    )
+    assert "a round changes nothing" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 stops the run when a round changes"
+        f" nothing — findings repeating with no fix the fixer can make is"
+        f" the non-mechanical case wearing the mechanical one's clothes"
+        f" (ADR-0072)."
+    )
+
+
+def test_the_wave_step_stops_on_a_choice_as_on_a_failed_gate() -> None:
+    """Only a clean pass continues the run; a choice stops it exactly as a failure does."""
+
+    step = _step(11)
+
+    assert "A clean pass:" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 continues to the next wave only on a"
+        f" clean pass — gate green and the reading finding nothing"
+        f" (ADR-0072)."
+    )
+    assert "choice between two tickets' intents" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 stops the run on a finding that is a"
+        f" choice between two tickets' intents — a disagreement merged onto"
+        f" the branch, not something a restatement settles (ADR-0072)."
+    )
+
+
+def test_the_manpage_describes_the_wave_loop_and_what_stops_it() -> None:
+    """A developer reading the page has to know the branch check fixes as well as reads.
+
+    The loop commits to the developer's branch between waves, which the old
+    page's account — verification runs once, a failure stops the run — did
+    not say could happen (ADR-0072).
+    """
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+
+    assert "coherence" in text, (
+        f"{where}: the manpage says the post-merge check reads the branch"
+        f" for coherence as well as running the verification (ADR-0072)."
+    )
+    assert "the finder is never the fixer" in text, (
+        f"{where}: the manpage says a separate subagent fixes what the"
+        f" check finds mechanical — the finder is never the fixer"
+        f" (ADR-0072)."
+    )
+    assert "a round finds nothing" in text, (
+        f"{where}: the manpage says the loop ends when a round finds"
+        f" nothing, so the reader knows what a clean pass now means"
+        f" (ADR-0072)."
+    )
+    assert "a round changes nothing" in text, (
+        f"{where}: the manpage says the run stops when a round changes"
+        f" nothing, beside the failed gate and the choice — the three"
+        f" things that stop the loop (ADR-0072)."
     )
