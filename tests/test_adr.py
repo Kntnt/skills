@@ -29,6 +29,30 @@ TESTS = REPO_ROOT / "tests"
 RECORD = re.compile(r"^(\d{4})-.+\.md$")
 CITATION = re.compile(r"ADR-(\d{4})")
 
+# The one edit the convention sanctions in a record that is otherwise never
+# rewritten (ADR-0075): a later record that takes over an earlier one's ground
+# leaves a sentence in it, the relation participle beside the later record's
+# citation. The active form is the declaration a later record makes in its own
+# text where it names what it takes, as ADR-0059's withdrawal paragraph does.
+POINTER = re.compile(
+    r"\b(?:superseded|amended|narrowed|withdrawn|replaced) by ADR-(\d{4})\b"
+)
+CLAIM = re.compile(
+    r"\b(?:supersedes|amends|narrows|replaces|withdraws(?: from)?) ADR-(\d{4})\b"
+)
+
+# The relations the collection carries today, as (earlier, later) pairs. The
+# scans below must find at least these: a record is never rewritten, so the
+# floor only grows, and a pattern that drifted from the prose would otherwise
+# match nothing and judge nothing.
+RELATIONS = {
+    ("0017", "0019"),
+    ("0029", "0059"),
+    ("0050", "0059"),
+    ("0055", "0069"),
+    ("0060", "0061"),
+}
+
 # The clause every skill body opens its flag-refusal rule with, and the record
 # that carries that rule. `delegation` states the rule in a longer sentence
 # than its siblings, so what is pinned is the opening clause and the record
@@ -98,6 +122,91 @@ def test_every_cited_number_has_a_record() -> None:
     }
 
     assert dangling == {}
+
+
+def _relations() -> tuple[set[tuple[str, str]], set[tuple[str, str]]]:
+    """Collect the supersession relations the records write, from both ends.
+
+    Returns the pointers — each an (earlier, later) pair read off a sentence
+    in the earlier record — and the claims, the same pairs read off a later
+    record declaring in its own text what it takes over.
+    """
+
+    pointers: set[tuple[str, str]] = set()
+    claims: set[tuple[str, str]] = set()
+    for path in sorted(ADR.glob("*.md")):
+        match = RECORD.match(path.name)
+        if match is None:
+            continue
+        number = match.group(1)
+        text = path.read_text(encoding="utf-8")
+        pointers |= {(number, later) for later in POINTER.findall(text)}
+        claims |= {(earlier, number) for earlier in CLAIM.findall(text)}
+    return pointers, claims
+
+
+def test_a_record_named_as_taken_over_carries_a_pointer_back() -> None:
+    """A later record's declaration is answered by a pointer in the earlier one.
+
+    A record whose premise a later record narrowed goes on asserting it, and a
+    reader looking for how something works finds a confident wrong answer in
+    the one place the collection points at for architecture (issue #86). So
+    where a record names another as superseded, amended, narrowed, withdrawn
+    from, or replaced, the record it names must carry the pointer sentence
+    back to it. The relation is written in one direction and checked in both.
+
+    What this cannot see is a later record that never states the relation in
+    the declared vocabulary at all — whether prose claims a takeover is a
+    reading, not a comparison, which is the same boundary the citation-aptness
+    check below states. ADR-0075 makes writing the pointer the later author's
+    duty precisely because the scan alone cannot conjure it.
+    """
+
+    pointers, claims = _relations()
+
+    # A declaration vocabulary that matched no record would leave the loop
+    # with nothing to judge and pass regardless.
+    assert claims
+
+    missing = claims - pointers
+    assert missing == set(), (
+        f"{missing}: each pair is an (earlier, later) relation a later record"
+        f" declares in its own text, and the earlier record carries no"
+        f" pointer sentence naming the later one back. See ADR-0075."
+    )
+
+
+def test_a_pointer_names_a_later_record() -> None:
+    """A pointer cites the record that outran the one carrying it.
+
+    The backward half of the check above: every pointer sentence must name a
+    record that exists and comes later than the record it stands in — a
+    pointer at a number nothing answers to, or at an earlier record, is the
+    stale citation this suite already refuses, wearing the convention's
+    clothes. The floor of known relations keeps the scan honest: records are
+    never rewritten, so these pairs can only grow, and a pattern that cannot
+    find them has drifted from the prose and judges nothing.
+    """
+
+    records = _records()
+    pointers, _ = _relations()
+
+    assert RELATIONS <= pointers, (
+        f"the pointer scan missed {RELATIONS - pointers}: these relations are"
+        f" in the collection's own prose, so a scan that cannot find them"
+        f" judges nothing. See ADR-0075."
+    )
+
+    invalid = {
+        (earlier, later)
+        for earlier, later in pointers
+        if later not in records or int(later) <= int(earlier)
+    }
+    assert invalid == set(), (
+        f"{invalid}: a pointer names the record that outran the one carrying"
+        f" it, so it must cite a record that exists and comes later."
+        f" See ADR-0075."
+    )
 
 
 def _skill_bodies() -> list[Path]:
