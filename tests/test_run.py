@@ -2824,7 +2824,7 @@ def test_rebuild_discards_the_losing_tickets_working_tree_and_branch(
 
 
 def test_a_ticket_is_rebuilt_at_most_once(tmp_path: Path) -> None:
-    """A rebuild is the only rerun the run performs, and the tracker is what
+    """A rebuild is the one rerun a collision buys, and the tracker is what
     bounds it: the note the first rebuild left on the ticket is what refuses
     the second, so a collision that keeps coming back is recorded rather than
     built over and over."""
@@ -2855,6 +2855,7 @@ def test_a_ticket_is_rebuilt_at_most_once(tmp_path: Path) -> None:
     answer = json.loads(result.stdout)
     assert answer["rebuilt"] is False
     assert "already" in answer["reason"]
+    assert "a collision buys" in answer["reason"]
     assert rebuilt.is_dir()
 
 

@@ -51,7 +51,7 @@ NOTES = {
 }
 
 # What a run writes on a ticket it is about to build a second time. A rebuild
-# is the only rerun this engine performs, and this note is what bounds it: the
+# is the one rerun a collision buys, and this note is what bounds it: the
 # ticket carries it from the moment the first rebuild starts, so a second
 # collision on the same ticket is recorded rather than built over again.
 REBUILD_NOTE = (
@@ -1951,7 +1951,7 @@ def rebuild(cwd: Path, number: int) -> int:
                 "worktree": open_now[number],
                 "reason": (
                     f"#{number} has already been rebuilt once in this run, and "
-                    "a rebuild is the only rerun there is"
+                    "a rebuild is the one rerun a collision buys"
                 ),
             }
         )
