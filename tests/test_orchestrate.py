@@ -258,3 +258,125 @@ def test_the_isolation_step_says_what_isolate_answers() -> None:
         f" numbers reserved for the ticket, which is what keeps two tickets in"
         f" one wave from minting the same one (ADR-0071)."
     )
+
+
+def _fill_in_instructions() -> str:
+    """The building brief's fill-in instructions — everything above the brief itself."""
+
+    return _brief("brief.md").split("\n---\n", 1)[0]
+
+
+def test_the_building_brief_makes_the_runs_own_files_the_runs_to_write() -> None:
+    """Every parallel ticket appends to the same few files, so every one collides with every other.
+
+    Three of eight tickets in an interviewed run collided at integration and
+    every collision was in prose the repository's ground rules make each ticket
+    append to. The repair machinery, built for disagreements, spent nineteen
+    percent of that run settling appends that agreed (ADR-0071).
+    """
+
+    text = _brief("brief.md")
+    where = SKILL / "references" / "brief.md"
+
+    assert "`<run-owned>`" in text, (
+        f"{where}: the brief carries the list of files the run writes itself."
+        f" A builder told nothing of them appends to them, and so does every"
+        f" ticket beside it (ADR-0071)."
+    )
+    assert "Never edit one of those files" in text, (
+        f"{where}: the brief forbids editing a run-owned file, in those words."
+        f" Naming the files without forbidding the edit leaves the collision"
+        f" exactly where it was (ADR-0071)."
+    )
+    assert "`<note>`" in text, (
+        f"{where}: the brief names the note path the builder writes its entry"
+        f" to instead. An entry with nowhere to go is an entry written into"
+        f" the file anyway, or lost (ADR-0071)."
+    )
+    assert "one ticket at a time" in text, (
+        f"{where}: the brief says the run applies the notes one ticket at a"
+        f" time, which is what makes withholding the file from the builder a"
+        f" deferral rather than a loss (ADR-0071)."
+    )
+
+
+def test_the_building_brief_says_how_it_is_filled_in_where_the_run_owns_nothing() -> (
+    None
+):
+    """A repository with no changelog and no append convention briefs as it always did."""
+
+    instructions = _fill_in_instructions()
+    where = SKILL / "references" / "brief.md"
+
+    assert "`<run-owned>`" in instructions, (
+        f"{where}: the fill-in instructions say what `<run-owned>` is replaced"
+        f" with. A placeholder nothing explains is handed out unfilled."
+    )
+    assert "named none" in instructions, (
+        f"{where}: the fill-in instructions say what becomes of the paragraph"
+        f" where the orchestrator named no run-owned file, as they do for the"
+        f" reservations a repository with no numbered registry has none of."
+    )
+
+
+def test_the_build_step_names_the_runs_own_files_and_briefs_them() -> None:
+    """Which files every ticket appends to is a reading of prose, so it is the orchestrator's."""
+
+    step = _step(5)
+
+    assert "the run's own files" in step, (
+        f"{SKILL / 'SKILL.md'}: step 5 has the orchestrator name the run's own"
+        f" files before the first wave is briefed. An engine cannot read a"
+        f" repository's ground rules for what every ticket must touch"
+        f" (ADR-0071)."
+    )
+    assert "the changelog" in step, (
+        f"{SKILL / 'SKILL.md'}: step 5 names the changelog as one of them."
+        f" It is the file every repository has and every ticket appends to"
+        f" (ADR-0071)."
+    )
+    assert "A builder never edits one of them" in step, (
+        f"{SKILL / 'SKILL.md'}: step 5 says the briefs carry the list because"
+        f" a builder never edits one of these files. A list passed without"
+        f" that rule is a list a builder reads as advice (ADR-0071)."
+    )
+
+
+def test_the_integration_step_applies_the_waves_notes_before_the_wave_check() -> None:
+    """Sequential appends cannot collide, and the run's own appends are verified like any other."""
+
+    step = _step(7)
+
+    assert "in the order this step integrated them" in step, (
+        f"{SKILL / 'SKILL.md'}: step 7 applies the wave's notes in integration"
+        f" order, one ticket's worth at a time. Appends made one after another"
+        f" are the whole of why they are the run's to make (ADR-0071)."
+    )
+    assert "remove the notes from the branch" in step, (
+        f"{SKILL / 'SKILL.md'}: step 7 takes the notes off the branch once"
+        f" they are applied. A note left behind is a scaffolding file shipped"
+        f" as part of the work (ADR-0071)."
+    )
+    assert "before step 10 reads the branch" in step, (
+        f"{SKILL / 'SKILL.md'}: step 7 applies the notes before the wave check"
+        f" runs, which is what makes the arrangement honest — the run's own"
+        f" appends pass the same verification as everything else (ADR-0071)."
+    )
+
+
+def test_the_manpage_accounts_for_the_files_the_run_writes() -> None:
+    """A developer reading the page has to know why no builder's commit carries its changelog line."""
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+
+    assert "the run's own to write" in text, (
+        f"{where}: the manpage says some files are the run's to write rather"
+        f" than any builder's, beside its account of worktrees and"
+        f" integration (ADR-0071)."
+    )
+    assert "leaves it as a note" in text, (
+        f"{where}: the manpage says a builder with an entry for such a file"
+        f" leaves it as a note the run applies later, which is what a reader"
+        f" of the diff would otherwise have to work out (ADR-0071)."
+    )
