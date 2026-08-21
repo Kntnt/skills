@@ -1313,6 +1313,162 @@ def test_the_manpage_says_delivery_lines_are_not_criteria() -> None:
     )
 
 
+def test_the_build_step_judges_each_builders_model_where_no_flag_names_one() -> None:
+    """Absent `--model`, inheritance is what the absence of a choice does.
+
+    Three interviewed runs ran every subagent on the orchestrator's own model
+    because the flag was never passed, paying the strongest model's price for
+    mechanical builds the collection's delegation rule says to send down the
+    ladder (ADR-0074, issue #83).
+    """
+
+    step = _step(6)
+
+    assert "no judgment is made" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 keeps `--model` as the override — where"
+        f" the plan names a model, every builder runs on it and no judgment is"
+        f" made. The flag was always the override; what changes is only the"
+        f" default underneath it (ADR-0074)."
+    )
+    assert "cheapest model" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 sends building to the cheapest model"
+        f" the orchestrator judges able, which is the delegation rule applied"
+        f" inside a run rather than a new one (ADR-0074)."
+    )
+    assert "from the ticket's own text" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 makes the judgment per ticket, from the"
+        f" ticket's own text — the one thing the orchestrator was already"
+        f" reading (ADR-0074)."
+    )
+    assert "a mechanical rename is not a redesign" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 grounds the judgment in the example the"
+        f" record settles it with — a mechanical rename is not a redesign"
+        f" (ADR-0074)."
+    )
+    assert "never above your own" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 caps the judged choice at the"
+        f" orchestrator's own model — the orchestrator is the run's most"
+        f" capable seat, so above it there is nothing to give (ADR-0074)."
+    )
+
+
+def test_every_verdict_step_names_the_orchestrators_own_model() -> None:
+    """Ticket verification, the amend's third verdict, repair verification, and the wave check.
+
+    The verifiers on the inherited arrangement were the strongest part of
+    every interviewed run, and the verdict is the only thing standing between
+    an unattended night and a report the developer cannot trust (ADR-0074).
+    """
+
+    for number in (7, 9, 10, 11):
+        step = _step(number)
+
+        assert "your own model" in step, (
+            f"{SKILL / 'SKILL.md'}: step {number} runs its verdict on the"
+            f" orchestrator's own model. A verdict sent down the ladder takes"
+            f" the saving at the last thing that would catch a mistake"
+            f" (ADR-0074)."
+        )
+
+
+def test_the_verify_step_states_why_the_saving_is_never_taken_at_the_verdict() -> None:
+    """The rule travels with its reason, or the next edit trades the verdict away."""
+
+    step = _step(7)
+
+    assert (
+        "the saving is never taken at the last thing that would catch a mistake" in step
+    ), (
+        f"{SKILL / 'SKILL.md'}: step 7 states the rule that every verdict runs"
+        f" on the orchestrator's own model as the record states it — the"
+        f" saving is never taken at the last thing that would catch a mistake"
+        f" (ADR-0074)."
+    )
+
+
+def test_the_amend_and_repair_dispatches_delegate_as_builds_do() -> None:
+    """Repairing a collision and amending a failed build are building.
+
+    Left unnamed, the two dispatches keep the silent inheritance the build
+    step just lost — and the amend carries a signal of its own: a ticket back
+    for its amend has just demonstrated it was harder than it looked
+    (ADR-0074, issue #83).
+    """
+
+    for number in (9, 10):
+        step = _step(number)
+
+        assert "as step 6 chooses a builder's" in step, (
+            f"{SKILL / 'SKILL.md'}: step {number} chooses its dispatch's model"
+            f" as step 6 chooses a builder's, in those words — one judgment"
+            f" stated once, not three drifting apart (ADR-0074)."
+        )
+
+    assert "harder than it looked" in _step(9), (
+        f"{SKILL / 'SKILL.md'}: step 9 weighs the amend's own signal — a"
+        f" ticket back for its amend has just demonstrated it was harder than"
+        f" it looked, which is the orchestrator's cue to re-judge (ADR-0074)."
+    )
+
+
+def test_the_manpage_model_entry_carries_the_judged_default() -> None:
+    """The flag keeps exactly its meaning; what changes is the default underneath it."""
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+    model_entry = next(
+        (line for line in text.splitlines() if line.startswith("- `--model")), ""
+    )
+
+    assert "pins every builder" in model_entry, (
+        f"{where}: the `--model` entry says what naming a model does — it pins"
+        f" every builder and switches the judgment off — so the flag keeps"
+        f" exactly its meaning (ADR-0074)."
+    )
+    assert "cheapest model" in model_entry, (
+        f"{where}: the `--model` entry states the default underneath the flag"
+        f" — absent it, the run judges per ticket the cheapest model it judges"
+        f" able, never silent inheritance (ADR-0074)."
+    )
+    assert "never above its own" in model_entry, (
+        f"{where}: the `--model` entry caps the judged default at the"
+        f" orchestrator's own model, as the delegation rule always has"
+        f" (ADR-0074)."
+    )
+    assert (
+        "the saving is never taken at the last thing that would catch a mistake"
+        in model_entry
+    ), (
+        f"{where}: the `--model` entry says every verdict runs on the"
+        f" orchestrator's own model, with the record's reason — the saving is"
+        f" never taken at the last thing that would catch a mistake"
+        f" (ADR-0074)."
+    )
+
+
+def test_the_manpage_advises_running_from_the_strongest_model() -> None:
+    """The Skill cannot choose the orchestrator's own seat, so the page says it instead.
+
+    The session's model is the developer's move, and the run's judgment calls
+    are only as good as the model asked to make them (ADR-0074, issue #83).
+    """
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+    description = text.split("## Description", 1)[1].split("\n## ", 1)[0]
+
+    assert "most capable model" in description, (
+        f"{where}: the description advises running the skill from the most"
+        f" capable model available — the seat is the developer's move, so the"
+        f" page is where it is said (ADR-0074)."
+    )
+    assert "only as good as the model asked to make them" in description, (
+        f"{where}: the description says why the seat matters — the run's"
+        f" judgment calls are only as good as the model asked to make them"
+        f" (ADR-0074)."
+    )
+
+
 def test_the_manpage_says_the_gate_is_resolved_once() -> None:
     """A developer reading the page has to know what a verifier runs and who decided it."""
 
