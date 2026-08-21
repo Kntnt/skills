@@ -1164,6 +1164,155 @@ def test_the_build_step_resolves_the_gate_once_at_run_start() -> None:
     )
 
 
+# The two verifying briefs that read acceptance criteria. A ticket whose body
+# ends *deliver as a PR against the default branch* is unsatisfiable by
+# construction: the building brief forbids the push, and a verifier told to
+# check every criterion must fail the ticket for the builder's obedience. In
+# one interviewed run that sentence ended a twelve-ticket night at ticket one,
+# and two sibling tickets carried the same line (issue #82).
+CRITERIA_READING_BRIEFS = (
+    "verify.md",
+    "repaired.md",
+)
+
+
+def _delivery_paragraph(text: str) -> str:
+    """The paragraph of a brief that excludes delivery lines from the criteria, or the empty string."""
+
+    for paragraph in text.split("\n\n"):
+        if "not an acceptance criterion" in paragraph:
+            return paragraph.strip()
+    return ""
+
+
+def test_every_criteria_reading_brief_excludes_the_delivery_channel() -> None:
+    """A delivery clause the builder obeyed must not be a criterion the verifier fails.
+
+    The building brief forbids the push, and the verifier had no licence to
+    skip the line asking for it, so a correctly built ticket failed for the
+    builder's obedience — and at a ceiling of one, that one sentence about
+    delivery stopped the whole run (issue #82).
+    """
+
+    for name in CRITERIA_READING_BRIEFS:
+        text = _brief(name)
+        where = SKILL / "references" / name
+
+        assert "prescribing the delivery channel" in text, (
+            f"{where}: the brief names what is excluded — a line prescribing"
+            f" the delivery channel. Without the exclusion the ticket is"
+            f" unsatisfiable by construction: the builder may not do the one"
+            f" thing the line asks (issue #82)."
+        )
+        assert "a pull request, a push, a release" in text, (
+            f"{where}: the brief names the shapes a delivery line takes — a"
+            f" pull request, a push, a release — so the exclusion is read as"
+            f" the channel rather than as whatever the verifier decides it"
+            f" covers (issue #82)."
+        )
+        assert "not an acceptance criterion" in text, (
+            f"{where}: the brief says such a line is not an acceptance"
+            f" criterion, in those words — the rule that every criterion is"
+            f" checked stands, and this line is simply not one (issue #82)."
+        )
+        assert "delivery is the run's boundary" in text, (
+            f"{where}: the brief says why — delivery is the run's boundary:"
+            f" the run integrates into the branch, and publishing is the"
+            f" developer's move after it (issue #82)."
+        )
+        assert "Note the clause in your report" in text, (
+            f"{where}: the brief has the verifier note the clause in its"
+            f" report, so the developer learns the ticket carried one rather"
+            f" than the line vanishing without a word (issue #82)."
+        )
+        assert "take your verdict from the rest" in text, (
+            f"{where}: the brief says the verdict is taken from the rest of"
+            f" the ticket — excluded means excluded from the verdict, not"
+            f" softened into a reservation (issue #82)."
+        )
+
+
+def test_the_briefs_state_the_delivery_exclusion_in_one_wording() -> None:
+    """One rule stated two ways is two rules, and a verifier obeys the one it was given.
+
+    The briefs are handed out one per subagent, so nothing but identical
+    wording keeps a ticket's verifier and a repair's verifier held to the
+    same exclusion.
+    """
+
+    stated = {
+        name: _delivery_paragraph(_brief(name)) for name in CRITERIA_READING_BRIEFS
+    }
+    wordings = set(stated.values())
+
+    assert "" not in wordings, (
+        f"{SKILL / 'references'}: every criteria-reading brief states the"
+        f" delivery exclusion in a paragraph of its own. These state none: "
+        f"{sorted(name for name, rule in stated.items() if not rule)}."
+    )
+    assert len(wordings) == 1, (
+        f"{SKILL / 'references'}: every criteria-reading brief states the"
+        f" delivery exclusion in the same wording, so the briefs state one"
+        f" rule rather than one each. These differ: {sorted(stated)}."
+    )
+
+
+def test_the_building_brief_mirrors_the_delivery_exclusion() -> None:
+    """The builder is told from its own side what the verifier is told from its.
+
+    A builder that reads *deliver as a PR* beside *do not push* holds a
+    contradiction, and its brief's stop-rather-than-guess rule makes that a
+    stop over a line that was never the work (issue #82).
+    """
+
+    text = _brief("brief.md")
+    where = SKILL / "references" / "brief.md"
+
+    assert "prescribing the delivery channel" in text, (
+        f"{where}: the brief names the delivery line so the builder knows"
+        f" which instruction the mirror sentence is about (issue #82)."
+    )
+    assert "not a requirement to build toward" in text, (
+        f"{where}: the brief says a delivery instruction is not a requirement"
+        f" to build toward — the builder may not push, so building toward it"
+        f" is building toward a forbidden act (issue #82)."
+    )
+    assert "not a decision to stop over" in text, (
+        f"{where}: the brief says the line is not a decision to stop over —"
+        f" without that, the stop-rather-than-guess rule reads the"
+        f" contradiction as a genuine decision and parks the ticket"
+        f" (issue #82)."
+    )
+    assert "delivered by being integrated" in text, (
+        f"{where}: the brief says how the work actually leaves the session —"
+        f" it is delivered by being integrated — so the builder reads the"
+        f" exclusion as settled rather than as a gap (issue #82)."
+    )
+
+
+def test_the_manpage_says_delivery_lines_are_not_criteria() -> None:
+    """A developer reading the page has to know a delivery line cannot fail a ticket.
+
+    The interviewed developer's fix was to edit the clause out of three
+    issue bodies by hand; a reader of the page should know no such edit is
+    needed (issue #82).
+    """
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+
+    assert "prescribing the delivery channel" in text, (
+        f"{where}: the manpage says a line prescribing the delivery channel"
+        f" is read out of the criteria, beside its account of verification"
+        f" (issue #82)."
+    )
+    assert "not an acceptance criterion" in text, (
+        f"{where}: the manpage says such a line is not an acceptance"
+        f" criterion, so a developer whose tickets end *deliver as a PR*"
+        f" knows they need not edit them before a run (issue #82)."
+    )
+
+
 def test_the_manpage_says_the_gate_is_resolved_once() -> None:
     """A developer reading the page has to know what a verifier runs and who decided it."""
 
