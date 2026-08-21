@@ -9,11 +9,12 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 import subprocess
 import sys
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from dataclasses import asdict, dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 # The label that says the thinking behind a ticket is finished. A ticket
@@ -112,11 +113,32 @@ CLAIM_ASSIGNEE = "@me"
 # same session finds what the last one left (ADR-0052).
 STATE_FILE = "kntnt-orchestrate.json"
 
+# The directory it keeps that file in, under the one the harness gives. A
+# subagent's cleanup glob at the root of a shared scratch directory deleted the
+# state of the very run that dispatched it, so the run's own things live one
+# level down, where no subagent is ever sent (ADR-0071).
+STATE_HOME = "kntnt-orchestrate"
+
 # What a run calls the working trees it builds tickets in, and the branches it
 # builds them on. They live under the repository's own git directory: a
 # developer who comes back mid-run finds their working tree exactly as they
 # left it, and `git status` says nothing about a run in progress (ADR-0054).
 WORKTREE_HOME = "kntnt-orchestrate"
+
+# What a ticket's own scratch directory is called, beside the working tree it
+# belongs to. Two subagents that cannot name the same path cannot read each
+# other's logs or clear away each other's files (ADR-0071).
+SCRATCH_SUFFIX = ".scratch"
+
+# Where the numbers a ticket was reserved are kept, beside the same working
+# tree. They are the run's account rather than the ticket's, so they sit
+# outside the scratch directory a subagent is told it may write in.
+RESERVED_SUFFIX = ".reserved.json"
+
+# What a record in a numbered registry is named: four digits and a hyphen,
+# which is the pattern this collection's own registries share. It is how a
+# directory of records is recognised without anybody configuring one.
+RECORD_NAME = re.compile(r"^(\d{4})-")
 
 # The ceiling at which a run works one ticket at a time: the default, the
 # floor below which a ceiling would start nothing, and the point isolation
@@ -317,6 +339,119 @@ def open_worktrees(cwd: Path, run_branch: str) -> dict[int, str]:
     return found
 
 
+def numbered_registries(cwd: Path) -> dict[str, int]:
+    """Return each directory of numbered records, with the highest number in it.
+
+    A registry is found rather than configured: a directory holding files named
+    by a four-digit prefix is one, wherever in the tree it sits. It is read off
+    the repository's index of tracked files, which keeps the answer the same
+    however the tree is walked and leaves out everything git ignores.
+    """
+
+    # The whole repository rather than the directory the verb was run from: a
+    # registry the run cannot see is one two tickets go on colliding in.
+    top = Path(git(cwd, "rev-parse", "--show-toplevel").strip())
+
+    # Every tracked file named by a number puts its directory on the list, and
+    # the highest number in that directory is what the next one is read from.
+    highest: dict[str, int] = {}
+    for tracked in git(top, "ls-files").splitlines():
+        record = PurePosixPath(tracked)
+        numbered = RECORD_NAME.match(record.name)
+        if numbered is not None:
+            directory = str(record.parent)
+            highest[directory] = max(highest.get(directory, 0), int(numbered.group(1)))
+
+    return highest
+
+
+def reserved_numbers(home: Path, number: int) -> list[dict[str, str]]:
+    """Return what isolate reserved ticket *number*, or nothing where it has none.
+
+    The file is a boundary like any other, and a file that cannot be read is
+    read as no reservation: the ticket is given fresh numbers rather than the
+    run stopping over a directory somebody emptied.
+    """
+
+    try:
+        stored = json.loads(
+            (home / f"{number}{RESERVED_SUFFIX}").read_text(encoding="utf-8")
+        )
+        return [
+            {"directory": str(held["directory"]), "number": str(held["number"])}
+            for held in stored
+        ]
+    except (OSError, TypeError, ValueError, KeyError):
+        return []
+
+
+def numbers_in_flight(home: Path, tickets: Iterable[int]) -> dict[str, int]:
+    """Return the highest number *tickets* already hold, registry by registry."""
+
+    taken: dict[str, int] = {}
+    for ticket in tickets:
+        for held in reserved_numbers(home, ticket):
+            directory = held["directory"]
+            taken[directory] = max(taken.get(directory, 0), int(held["number"]))
+
+    return taken
+
+
+def allocate(cwd: Path, number: int, in_flight: Iterable[int]) -> dict[str, Any]:
+    """Give ticket *number* the scratch and the record numbers it may take.
+
+    Both are the ticket's for as long as its working tree is: made beside it,
+    read back where the ticket is picked up again, and taken away with it. The
+    reservation is stored rather than worked out afresh because the answer a
+    brief was filled in from has to be the answer still when the next ticket
+    asks — two tickets that each read a registry for its next free number read
+    the same one, and git merges the two records they write without a word
+    (ADR-0071).
+    """
+
+    home = worktree_home(cwd)
+
+    # The scratch is made rather than merely named: a subagent told to write in
+    # a directory nothing created writes somewhere else instead.
+    scratch = home / f"{number}{SCRATCH_SUFFIX}"
+    scratch.mkdir(parents=True, exist_ok=True)
+
+    # A ticket already holding numbers keeps them. One arriving new takes the
+    # next past both the registry's highest and whatever its siblings hold, so
+    # a wave's reservations are disjoint whatever order it is isolated in. A
+    # reservation nobody uses expires as a gap, which the numbering allows:
+    # next free is one above the highest, never the lowest hole (ADR-0067).
+    held = reserved_numbers(home, number)
+    if not held:
+        taken = numbers_in_flight(home, in_flight)
+        held = [
+            {
+                "directory": directory,
+                "number": f"{max(highest, taken.get(directory, 0)) + 1:04d}",
+            }
+            for directory, highest in sorted(numbered_registries(cwd).items())
+        ]
+        (home / f"{number}{RESERVED_SUFFIX}").write_text(
+            json.dumps(held, indent=2) + "\n", encoding="utf-8"
+        )
+
+    return {"scratch": str(scratch), "reservations": held}
+
+
+def discard_allocation(cwd: Path, number: int) -> None:
+    """Take back what isolate gave ticket *number* beside its working tree.
+
+    The scratch and the reservation live exactly as long as that tree does: a
+    ticket whose work is on the branch is finished with both, and one being
+    built again from nothing has to read the registry as it now stands rather
+    than hold a number the work it collided with has since taken.
+    """
+
+    home = worktree_home(cwd)
+    shutil.rmtree(home / f"{number}{SCRATCH_SUFFIX}", ignore_errors=True)
+    (home / f"{number}{RESERVED_SUFFIX}").unlink(missing_ok=True)
+
+
 @dataclass
 class Remark:
     """One thing a person wrote on a ticket after filing it.
@@ -417,9 +552,39 @@ def state_file(directory: str | None) -> Path | None:
     does not, so the directory is passed in. None is not an error: the state is
     an optimisation, and a harness that offers no such directory costs a run
     nothing but the tracker call the state would have saved.
+
+    It resolves into a subdirectory of that directory rather than its root,
+    which the run shares with every subagent it dispatches (ADR-0071).
     """
 
-    return Path(directory).expanduser() / STATE_FILE if directory else None
+    return Path(directory).expanduser() / STATE_HOME / STATE_FILE if directory else None
+
+
+def carry_state_forward(path: Path | None) -> None:
+    """Move a state file left at the old place into the one it lives in now.
+
+    The state used to sit at the root of the scratch directory the harness
+    gives, where a subagent's own cleanup could reach it. It is read from there
+    once, so a run interrupted before the move goes on where it left off rather
+    than handing its own claims back as somebody else's, and it is never
+    written back there. It is remembered rather than relied on either way: a
+    move that fails costs the run only the tracker call the state would have
+    saved.
+    """
+
+    if path is None or path.exists():
+        return
+
+    # Both ends of the move can fail — a directory that will not be made, an
+    # old file that is not there, which is every run started since — and each
+    # is answered the same way: as no state, which the run rebuilds.
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        left = path.parent.parent / STATE_FILE
+        path.write_text(left.read_text(encoding="utf-8"), encoding="utf-8")
+        left.unlink()
+    except OSError:
+        pass
 
 
 def read_state(path: Path | None, branch: str) -> RunState | None:
@@ -1666,6 +1831,11 @@ def isolate(cwd: Path, number: int) -> int:
     not a place to build in: it is where they left it and it stays there. So
     each ticket gets one, on a branch of its own cut from where the run branch
     now stands — which is the code the earlier waves were integrated into.
+
+    A working tree isolates the files a ticket edits and nothing else, so the
+    same call hands out the rest of what the wave would otherwise share: a
+    scratch directory of the ticket's own, and one record number in each of the
+    repository's numbered registries (ADR-0071).
     """
 
     run_branch = current_branch(cwd)
@@ -1681,6 +1851,7 @@ def isolate(cwd: Path, number: int) -> int:
                 "ticket": number,
                 "worktree": str(standing),
                 "branch": current_branch(standing),
+                **allocate(cwd, number, open_now),
             }
         )
         return 0
@@ -1710,7 +1881,15 @@ def isolate(cwd: Path, number: int) -> int:
     except RunError as exc:
         raise RunError(f"#{number} could not be given a working tree: {exc}") from exc
 
-    emit({"verb": "isolate", "ticket": number, "worktree": str(path), "branch": branch})
+    emit(
+        {
+            "verb": "isolate",
+            "ticket": number,
+            "worktree": str(path),
+            "branch": branch,
+            **allocate(cwd, number, open_now),
+        }
+    )
     return 0
 
 
@@ -1776,6 +1955,7 @@ def integrate(cwd: Path, number: int) -> int:
     removed = git_result(cwd, "worktree", "remove", "--force", str(path))
     if removed.returncode == 0:
         git_result(cwd, "branch", "--delete", built_on)
+        discard_allocation(cwd, number)
 
     emit(
         {
@@ -1972,6 +2152,7 @@ def rebuild(cwd: Path, number: int) -> int:
     built_on = current_branch(path)
     git(cwd, "worktree", "remove", "--force", str(path))
     git(cwd, "branch", "--delete", "--force", built_on)
+    discard_allocation(cwd, number)
 
     emit(
         {
@@ -2287,6 +2468,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
     cwd = Path.cwd()
     state_path = state_file(args.state_dir)
+    carry_state_forward(state_path)
     if args.verb == "plan":
         return cmd_plan(
             cwd,

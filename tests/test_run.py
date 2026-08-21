@@ -2,17 +2,45 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
+from types import ModuleType
 from typing import Any
 
 from support.fake_binary import fake_binary_on_path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUN = REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py"
+
+
+def _run() -> ModuleType:
+    """Import the run engine as a module.
+
+    Almost everything here drives the engine as the skill does, through its
+    command line. Registry detection is the exception: what it has to answer
+    is a fact about this repository, and no invocation in a repository built
+    for a test can ask that question of the one the suite runs in.
+    """
+
+    # The loader API answers with optionals, so both are narrowed before use:
+    # a missing script is a broken checkout and has to say which file.
+    spec = importlib.util.spec_from_file_location("kntnt_run", RUN)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot import the run engine from {RUN}")
+
+    # Execute the script under its own module object and hand that back. It is
+    # registered first because the engine's dataclasses resolve their own
+    # annotations through the module they were declared in.
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
 
 # How long any one invocation is given. Generous enough that a cold `uv` never
 # trips it, and short enough that a graph the engine walks in circles is a
@@ -69,9 +97,11 @@ cat "$GH_TICKETS/$label.$state.json"
 MARKER = "kntnt-orchestrate"
 
 # What the run calls the state it keeps in the session's scratch directory,
-# stated here for the same reason: a test that asked the engine where it wrote
-# would be asking the thing under test to grade itself.
+# and the directory of its own it keeps it in, stated here for the same
+# reason: a test that asked the engine where it wrote would be asking the
+# thing under test to grade itself.
 STATE_FILE = "kntnt-orchestrate.json"
+STATE_HOME = "kntnt-orchestrate"
 
 # A stand-in that logs what git was asked to do and then lets the real git do
 # it. Everything the engine reads from the repository has to stay true, so
@@ -1514,8 +1544,11 @@ def test_plan_leaves_a_claim_this_run_never_took_where_it_is(tmp_path: Path) -> 
 def test_plan_writes_the_run_state_to_the_directory_the_harness_provides(
     tmp_path: Path,
 ) -> None:
-    """The state is written where the harness keeps this session's scratch, and
-    the plan names the file so the developer can go and look at it."""
+    """The state is written under the directory the harness keeps this
+    session's scratch in, and the plan names the file so the developer can go
+    and look at it. Under rather than in: a subagent's cleanup glob at the root
+    of that directory deleted the engine's own state file mid-run, and the
+    run's own things live where no subagent is sent (ADR-0071)."""
 
     repo = _init_repo(tmp_path / "proj")
     scratch = tmp_path / "scratch"
@@ -1527,8 +1560,9 @@ def test_plan_writes_the_run_state_to_the_directory_the_harness_provides(
     result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
 
     assert result.returncode == 0, result.stderr
-    written = scratch / STATE_FILE
+    written = scratch / STATE_HOME / STATE_FILE
     assert json.loads(result.stdout)["state"] == str(written)
+    assert not (scratch / STATE_FILE).exists()
     state = json.loads(written.read_text(encoding="utf-8"))
     assert state["branch"] == "work"
     assert state["label"] == "ready-for-agent"
@@ -1562,8 +1596,8 @@ def test_a_state_file_nothing_can_read_is_rebuilt_rather_than_stopping_the_run(
 
     repo = _init_repo(tmp_path / "proj")
     scratch = tmp_path / "scratch"
-    scratch.mkdir()
-    (scratch / STATE_FILE).write_text('{"branch": "wo', encoding="utf-8")
+    (scratch / STATE_HOME).mkdir(parents=True)
+    (scratch / STATE_HOME / STATE_FILE).write_text('{"branch": "wo', encoding="utf-8")
     env = _tracker(
         tmp_path,
         {"ready-for-agent": [_ticket(9, "the skeleton", claimed_by=["me"])]},
@@ -1573,7 +1607,7 @@ def test_a_state_file_nothing_can_read_is_rebuilt_rather_than_stopping_the_run(
 
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["resuming"] == [9]
-    assert json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))[
+    assert json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))[
         "claimed"
     ] == [9]
 
@@ -1749,7 +1783,7 @@ def test_a_run_whose_state_was_deleted_reaches_the_same_account(
     assert rebuilt.returncode == remembered.returncode, rebuilt.stderr
     assert rebuilt.stdout == remembered.stdout
     assert again.stdout == accounted.stdout
-    assert (scratch / STATE_FILE).exists()
+    assert (scratch / STATE_HOME / STATE_FILE).exists()
 
 
 def test_a_dry_run_leaves_no_state_behind(tmp_path: Path) -> None:
@@ -1764,7 +1798,7 @@ def test_a_dry_run_leaves_no_state_behind(tmp_path: Path) -> None:
 
     assert result.returncode == 2, result.stderr
     assert json.loads(result.stdout)["state"] is None
-    assert not (scratch / STATE_FILE).exists()
+    assert not (scratch / STATE_HOME / STATE_FILE).exists()
 
 
 def test_claim_refuses_a_claim_in_this_developers_name_the_run_never_took(
@@ -1818,7 +1852,7 @@ def test_the_run_state_names_the_commit_the_work_sits_on(tmp_path: Path) -> None
 
     assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
 
-    state = json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
     assert state["base"] == before
 
 
@@ -2300,7 +2334,7 @@ def test_a_scoped_plan_leaves_a_claim_outside_its_scope_where_it_is(
     )
 
     assert result.returncode == 0, result.stderr
-    state = json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
     assert state["claimed"] == [9]
 
 
@@ -2376,7 +2410,7 @@ def test_a_scoped_plan_forgets_a_claim_the_label_no_longer_holds_open(
     )
 
     assert result.returncode == 0, result.stderr
-    state = json.loads((scratch / STATE_FILE).read_text(encoding="utf-8"))
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
     assert state["claimed"] == []
 
 
@@ -3399,3 +3433,181 @@ def test_integrate_says_what_stopped_a_merge_that_left_no_conflicted_file(
     assert answer["collided_with"] == []
     assert "graph.py" in answer["reason"]
     assert answer["worktree"] == str(worktree)
+
+
+def _registry(repo: Path, directory: str, *records: str) -> None:
+    """File a directory of records named by number, as this collection keeps them."""
+
+    (repo / directory).mkdir(parents=True, exist_ok=True)
+    for record in records:
+        (repo / directory / record).write_text("a record\n", encoding="utf-8")
+    _git(repo, "add", directory)
+    _git(repo, "commit", "-m", f"file {directory}")
+
+
+def test_isolate_reserves_a_number_no_other_ticket_in_the_wave_holds(
+    tmp_path: Path,
+) -> None:
+    """Two tickets built at once each read the registry for its next free
+    number, read the same answer, and create two records under one number.
+    Git merges both sides without a conflict and no gate ever says so, so the
+    run hands the numbers out before the wave builds (ADR-0071)."""
+
+    repo = _init_repo(tmp_path / "proj")
+    _registry(repo, "docs/adr", "0001-the-first.md", "0002-the-second.md")
+
+    first = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+    second = json.loads(_engine(repo, "isolate", "--ticket", "10").stdout)
+
+    assert first["reservations"] == [{"directory": "docs/adr", "number": "0003"}]
+    assert second["reservations"] == [{"directory": "docs/adr", "number": "0004"}]
+
+
+def test_isolate_gives_a_ticket_back_the_number_it_already_holds(
+    tmp_path: Path,
+) -> None:
+    """The invocation is the resume here as everywhere else: a ticket picked up
+    again holds the number its brief was filled in from, and a ticket isolated
+    beside it never holds that one."""
+
+    repo = _init_repo(tmp_path / "proj")
+    _registry(repo, "docs/adr", "0001-the-first.md")
+
+    first = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+    beside = json.loads(_engine(repo, "isolate", "--ticket", "10").stdout)
+    again = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+
+    assert first["reservations"] == [{"directory": "docs/adr", "number": "0002"}]
+    assert again["reservations"] == first["reservations"]
+    assert beside["reservations"] == [{"directory": "docs/adr", "number": "0003"}]
+
+
+def test_isolate_reserves_nothing_in_a_repository_that_numbers_nothing(
+    tmp_path: Path,
+) -> None:
+    """A repository keeping no records named by number has nothing to hand out,
+    which is an answer and not a refusal."""
+
+    repo = _init_repo(tmp_path / "proj")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["reservations"] == []
+
+
+def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
+    """The detection is deterministic and unconfigured, so what it answers for
+    this repository is what this repository actually keeps: the decision
+    records under `docs/adr`, and nothing else in the tree."""
+
+    found = _run().numbered_registries(REPO_ROOT)
+    records = sorted((REPO_ROOT / "docs" / "adr").glob("[0-9][0-9][0-9][0-9]-*.md"))
+
+    assert set(found) == {"docs/adr"}
+    assert found["docs/adr"] == int(records[-1].name[:4])
+
+
+def test_isolate_gives_a_ticket_a_scratch_directory_of_its_own(
+    tmp_path: Path,
+) -> None:
+    """Two subagents in sibling working trees chose the same log path for the
+    same gate, and one nearly read the other's exit status as its own. A path
+    they cannot both name is what stops that (ADR-0071)."""
+
+    repo = _init_repo(tmp_path / "proj")
+
+    first = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+    second = json.loads(_engine(repo, "isolate", "--ticket", "10").stdout)
+
+    assert Path(first["scratch"]).is_dir()
+    assert Path(second["scratch"]).is_dir()
+    assert first["scratch"] != second["scratch"]
+    assert Path(first["scratch"]) != Path(first["worktree"])
+    assert Path(first["scratch"]).parent == Path(first["worktree"]).parent
+
+
+def test_integrate_takes_away_what_isolate_gave_a_merged_ticket(
+    tmp_path: Path,
+) -> None:
+    """The machine ends tidy: a ticket whose work is on the branch is finished
+    with the scratch it was given as it is finished with the tree."""
+
+    repo = _init_repo(tmp_path / "proj")
+    answer = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+    worktree = Path(answer["worktree"])
+    (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "read the blocking edges")
+
+    result = _engine(repo, "integrate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    assert not Path(answer["scratch"]).exists()
+
+
+def test_a_rebuilt_ticket_reserves_afresh_rather_than_keeping_a_spent_number(
+    tmp_path: Path,
+) -> None:
+    """A rebuild throws the first try away and builds on top of the work it
+    collided with — which may have taken the number the first try was holding,
+    so the second try reads the registry as it now stands."""
+
+    repo = _init_repo(tmp_path / "proj")
+    _registry(repo, "docs/adr", "0001-the-first.md")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+    _collided(repo)
+    held = json.loads(_engine(repo, "isolate", "--ticket", "10").stdout)
+    assert _engine(repo, "integrate", "--ticket", "10").returncode == 2
+    assert _engine(repo, "rebuild", "--ticket", "10", env=env).returncode == 0
+
+    again = json.loads(_engine(repo, "isolate", "--ticket", "10").stdout)
+
+    assert held["reservations"] == [{"directory": "docs/adr", "number": "0003"}]
+    assert again["reservations"] == [{"directory": "docs/adr", "number": "0002"}]
+
+
+def test_a_state_file_left_at_the_old_place_is_carried_into_the_new_one(
+    tmp_path: Path,
+) -> None:
+    """A run interrupted before the state moved goes on where it left off: the
+    old file is read once and rewritten where the new one lives, rather than
+    read as no state at all and its claims handed back as somebody else's."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    scratch.mkdir()
+    (scratch / STATE_FILE).write_text(
+        json.dumps(
+            {
+                "branch": "work",
+                "label": "ready-for-agent",
+                "login": "me",
+                "claimed": [],
+                "base": _git(repo, "rev-parse", "HEAD").stdout.strip(),
+            }
+        ),
+        encoding="utf-8",
+    )
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton", claimed_by=["me"]),
+                _ticket(10, "the graph"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["resuming"] == []
+    assert plan["claimed"] == [9]
+    assert not (scratch / STATE_FILE).exists()
+    assert (scratch / STATE_HOME / STATE_FILE).exists()

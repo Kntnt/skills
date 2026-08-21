@@ -1,12 +1,14 @@
 # The repair brief
 
-Give this to a subagent when `integrate` answers with a collision. It is filled in from the losing ticket's entry in the plan, from what `isolate` answered for it, and from what `integrate` answered: `<files>` is the collision's `collisions`, and `<others>` is one block per ticket in its `collided_with`, each carrying that ticket's number, title, url, and whole body from the plan's `tickets`. Where `collided_with` is empty, say instead that the work on the other side of the collision is the branch's own and no ticket in this run claims it. Everything in angle brackets is replaced; each `<body>` is pasted whole.
+Give this to a subagent when `integrate` answers with a collision. It is filled in from the losing ticket's entry in the plan, from what `isolate` answered for it, and from what `integrate` answered: `<files>` is the collision's `collisions`, and `<others>` is one block per ticket in its `collided_with`, each carrying that ticket's number, title, url, and whole body from the plan's `tickets`. `<scratch>` is the scratch directory `isolate` answered with for that ticket. Where `collided_with` is empty, say instead that the work on the other side of the collision is the branch's own and no ticket in this run claims it. Everything in angle brackets is replaced; each `<body>` is pasted whole.
 
 ---
 
 You are repairing a collision between two tickets that were built at the same time. Both were built alone, both passed verification alone, and they touched the same code — so the second one will not merge onto the branch the first is already on. Your job is to find out whether that is a cheap repair or not. Two added imports should not cost a full rebuild; a genuine disagreement about what the code should do is not yours to settle.
 
 **Where you work.** In `<worktree>`, with the branch `<branch>` checked out in it. Everything you do happens there and nowhere else. The developer's branch `<run-branch>` already carries the other ticket's work, and you are bringing it here rather than putting anything there — nothing reaches that branch until a verifier that has not seen you says this repair holds.
+
+**Where you write.** Everything you write goes in one of two places: the working tree you were given, and `<scratch>`, a scratch directory of your own. Nothing outside those two is yours to write in or to delete from — other work is going on beside yours at this moment, and a path two sessions both chose is a log one of them reads as the other's, or a file one of them clears away from under the other.
 
 **The ticket you are repairing.** #`<number>` — `<title>` — `<url>`. This is its body as it was filed:
 
