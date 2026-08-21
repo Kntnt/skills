@@ -500,6 +500,7 @@ def test_every_verb_accepts_yes(tmp_path: Path) -> None:
     for args in (
         ("plan", "--yes"),
         ("claim", "--ticket", "9", "--yes"),
+        ("park", "--ticket", "9", "--yes"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head, "--yes"),
         ("report", "--yes"),
     ):
@@ -1207,6 +1208,7 @@ def test_a_run_at_a_ceiling_of_one_pushes_nothing_and_makes_no_worktree(
     for args in (
         ("plan",),
         ("claim", "--ticket", "9"),
+        ("park", "--ticket", "9"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
         ("report",),
     ):
@@ -1731,6 +1733,7 @@ def test_every_verb_accepts_a_state_directory(tmp_path: Path) -> None:
     for args in (
         ("plan",),
         ("claim", "--ticket", "9"),
+        ("park", "--ticket", "9"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
         ("report",),
     ):
@@ -3666,3 +3669,110 @@ def test_a_state_file_left_at_the_old_place_is_carried_into_the_new_one(
     assert plan["claimed"] == [9]
     assert not (scratch / STATE_FILE).exists()
     assert (scratch / STATE_HOME / STATE_FILE).exists()
+
+
+def test_park_returns_a_ticket_to_the_human_loop(tmp_path: Path) -> None:
+    """ADR-0070: the ready label is a claim triage can get wrong, and the swap
+    is the tracker saying truthfully that the thinking is not finished."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+
+    result = _engine(repo, "park", "--ticket", "9", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["parked"] is True
+    calls = _gh_calls(env)
+    assert "issue edit 9 --remove-label ready-for-agent --add-label needs-info" in calls
+
+
+def test_park_releases_the_claim_this_run_holds(tmp_path: Path) -> None:
+    """A parked ticket has left the scope, so a claim of this run's own goes
+    with the label rather than standing over work nobody will do."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9, assignees=[{"login": "me"}])},
+        login="me",
+    )
+
+    result = _engine(repo, "park", "--ticket", "9", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["parked"] is True
+    assert "--remove-assignee @me" in _gh_calls(env)
+
+
+def test_park_leaves_a_claim_that_is_not_this_runs(tmp_path: Path) -> None:
+    """The open question is the ticket's whoever holds it, so the label still
+    moves — but another session's claim is not this run's to release."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9, assignees=[{"login": "someone"}])},
+        login="me",
+    )
+
+    result = _engine(repo, "park", "--ticket", "9", env=env)
+
+    assert result.returncode == 0, result.stderr
+    calls = _gh_calls(env)
+    assert "--remove-label ready-for-agent --add-label needs-info" in calls
+    assert "--remove-assignee" not in calls
+
+
+def test_park_refuses_a_ticket_that_carries_a_recorded_outcome(
+    tmp_path: Path,
+) -> None:
+    """A settled ticket is nobody's to park: what a run recorded on it is the
+    account the report reads, and the swap would take the ticket out of it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9, comments=[_recorded("done", head)])},
+    )
+
+    result = _engine(repo, "park", "--ticket", "9", env=env)
+
+    assert result.returncode == 2
+    parked = json.loads(result.stdout)
+    assert parked["parked"] is False
+    assert "settled" in parked["reason"]
+    assert "issue edit" not in _gh_calls(env)
+
+
+def test_park_takes_the_ticket_out_of_what_the_run_remembers_claiming(
+    tmp_path: Path,
+) -> None:
+    """A parked ticket is no longer this run's claim, so a later invocation
+    does not go looking for it as work an interruption left behind."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+
+    result = _engine(
+        repo, "park", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode == 0, result.stderr
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["claimed"] == []

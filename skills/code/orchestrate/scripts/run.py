@@ -21,6 +21,12 @@ from typing import Any
 # without it is never planned, never claimed, and never built.
 READY_LABEL = "ready-for-agent"
 
+# The label a parked ticket goes back under: the triage vocabulary's own word
+# for thinking that is not finished. The ready label is a claim, and a ticket
+# whose text still defers a decision to a human is one triage got wrong — the
+# swap is the tracker made truthful again (ADR-0070).
+INFO_LABEL = "needs-info"
+
 # How many tickets one tracker query asks for. The tracker pages at thirty by
 # default, which is no scope at all; a page that comes back full is not
 # trusted to be the whole set, since a scope silently missing tickets is a run
@@ -1819,6 +1825,69 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     return 0
 
 
+def cmd_park(cwd: Path, number: int, state_path: Path | None) -> int:
+    """Return one ticket to the human loop, and release this run's claim on it.
+
+    A ticket whose text leaves a decision open — a deferred value, a choice
+    named as the maintainer's — carries a label triage got wrong, and under
+    `--yes` there is nobody left to ask (ADR-0070). Only the deterministic
+    half lives here: the label swap and the claim's release. The question
+    itself is prose and judgment, written on the ticket by the orchestrator
+    with the tracker's ordinary comment command.
+    """
+
+    try:
+        ticket = ticket_view(cwd, number, "number,labels,assignees,comments")
+    except RunError as exc:
+        return fail(f"the tracker cannot answer for #{number}: {exc}")
+
+    # A settled ticket is nobody's to park: what a run recorded on it is the
+    # account the report reads, and the swap would take the ticket out of it.
+    outcome, _, _ = recorded_against(ticket)
+    if outcome is not None:
+        emit(
+            {
+                "verb": "park",
+                "ticket": number,
+                "parked": False,
+                "reason": (
+                    f"#{number} already carries a recorded outcome ({outcome}), "
+                    "and a settled ticket is nobody's to park"
+                ),
+            }
+        )
+        return 2
+
+    # Whose a claim is only matters where somebody holds one, and only a claim
+    # this run took is its own to release — a person's, or another session's,
+    # stays with the ticket. The reading is the claim verb's in reverse: where
+    # the run remembers nothing, a claim in its own name is the interrupted
+    # run's it usually is.
+    holders = holders_of(ticket)
+    remembered = remembered_state(state_path, cwd)
+    try:
+        mine = my_login(cwd, remembered) if holders else None
+    except RunError as exc:
+        return fail(str(exc))
+    releasing = holders == [mine] and (
+        remembered is None or number in remembered.claimed
+    )
+
+    # One write carries the whole swap, so an interruption cannot leave the
+    # ready label gone and the claim standing in two separate halves.
+    swap = ["--remove-label", READY_LABEL, "--add-label", INFO_LABEL]
+    if releasing:
+        swap += ["--remove-assignee", CLAIM_ASSIGNEE]
+    try:
+        gh(cwd, "issue", "edit", str(number), *swap)
+    except RunError as exc:
+        return fail(f"#{number} could not be parked: {exc}")
+
+    forget_claim(state_path, cwd, number)
+    emit({"verb": "park", "ticket": number, "parked": True, "reason": None})
+    return 0
+
+
 def cmd_isolate(cwd: Path, number: int) -> int:
     """Give ticket *number* a working tree of its own, and say where it is."""
 
@@ -2437,6 +2506,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     claim.add_argument("--ticket", required=True, type=int)
     add_shared_flags(claim)
 
+    park = sub.add_parser("park", help="Return one ticket to the human loop.")
+    park.add_argument("--ticket", required=True, type=int)
+    add_shared_flags(park)
+
     isolate = sub.add_parser("isolate", help="Give one ticket a working tree.")
     isolate.add_argument("--ticket", required=True, type=int)
     add_shared_flags(isolate)
@@ -2485,6 +2558,8 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.verb == "claim":
         return cmd_claim(cwd, args.ticket, state_path)
+    if args.verb == "park":
+        return cmd_park(cwd, args.ticket, state_path)
     if args.verb == "isolate":
         return cmd_isolate(cwd, args.ticket)
     if args.verb == "integrate":

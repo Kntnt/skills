@@ -118,20 +118,20 @@ def test_the_build_step_resumes_a_subagent_left_waiting() -> None:
     a build that was never finished. The repair is a resumption.
     """
 
-    step = _step(5)
+    step = _step(6)
 
     assert "ends its turn waiting on a command it started" in step, (
-        f"{SKILL / 'SKILL.md'}: step 5 names the builder that ended its turn"
+        f"{SKILL / 'SKILL.md'}: step 6 names the builder that ended its turn"
         f" waiting on a command it started. It is the run's commonest stop and"
         f" the one that is not a failure (issue #75)."
     )
     assert "resumed with that command's result" in step, (
-        f"{SKILL / 'SKILL.md'}: step 5 says such a builder is resumed with the"
+        f"{SKILL / 'SKILL.md'}: step 6 says such a builder is resumed with the"
         f" command's result. Its stop is the mechanical kind, and the repair is"
         f" a resumption (issue #75)."
     )
     assert "rather than recorded" in step, (
-        f"{SKILL / 'SKILL.md'}: step 5 says the waiting builder is resumed"
+        f"{SKILL / 'SKILL.md'}: step 6 says the waiting builder is resumed"
         f" rather than recorded. Recorded, an unfinished build becomes a failed"
         f" ticket nothing was wrong with (issue #75)."
     )
@@ -140,20 +140,20 @@ def test_the_build_step_resumes_a_subagent_left_waiting() -> None:
 def test_the_verify_step_resumes_a_subagent_left_waiting() -> None:
     """A verifier that ended its turn mid-suite has reached no verdict to record."""
 
-    step = _step(6)
+    step = _step(7)
 
     assert "ends its turn waiting on a command it started" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 names the verifier that ended its turn"
+        f"{SKILL / 'SKILL.md'}: step 7 names the verifier that ended its turn"
         f" waiting on a command it started — the same mechanical stop the"
         f" builder makes, and the interviewed run made it twice (issue #75)."
     )
     assert "resumed with that command's result" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 says such a verifier is resumed with the"
+        f"{SKILL / 'SKILL.md'}: step 7 says such a verifier is resumed with the"
         f" command's result rather than leaving the ticket with a verdict"
         f" nobody reached (issue #75)."
     )
     assert "rather than recorded" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 says the waiting verifier is resumed"
+        f"{SKILL / 'SKILL.md'}: step 7 says the waiting verifier is resumed"
         f" rather than recorded. A verdict that was not reached is not a fail"
         f" (issue #75)."
     )
@@ -246,15 +246,15 @@ def test_the_building_brief_hands_the_builder_the_numbers_it_may_take() -> None:
 def test_the_isolation_step_says_what_isolate_answers() -> None:
     """What every ticket in a wave may reach for, the run hands out before the wave builds."""
 
-    step = _step(4)
+    step = _step(5)
 
     assert "scratch" in step, (
-        f"{SKILL / 'SKILL.md'}: step 4 says `isolate` answers with a scratch"
+        f"{SKILL / 'SKILL.md'}: step 5 says `isolate` answers with a scratch"
         f" directory of the ticket's own, which is what the briefs confine"
         f" their subagents to (ADR-0071)."
     )
     assert "reservations" in step, (
-        f"{SKILL / 'SKILL.md'}: step 4 says `isolate` answers with the record"
+        f"{SKILL / 'SKILL.md'}: step 5 says `isolate` answers with the record"
         f" numbers reserved for the ticket, which is what keeps two tickets in"
         f" one wave from minting the same one (ADR-0071)."
     )
@@ -322,21 +322,21 @@ def test_the_building_brief_says_how_it_is_filled_in_where_the_run_owns_nothing(
 def test_the_build_step_names_the_runs_own_files_and_briefs_them() -> None:
     """Which files every ticket appends to is a reading of prose, so it is the orchestrator's."""
 
-    step = _step(5)
+    step = _step(6)
 
     assert "the run's own files" in step, (
-        f"{SKILL / 'SKILL.md'}: step 5 has the orchestrator name the run's own"
+        f"{SKILL / 'SKILL.md'}: step 6 has the orchestrator name the run's own"
         f" files before the first wave is briefed. An engine cannot read a"
         f" repository's ground rules for what every ticket must touch"
         f" (ADR-0071)."
     )
     assert "the changelog" in step, (
-        f"{SKILL / 'SKILL.md'}: step 5 names the changelog as one of them."
+        f"{SKILL / 'SKILL.md'}: step 6 names the changelog as one of them."
         f" It is the file every repository has and every ticket appends to"
         f" (ADR-0071)."
     )
     assert "A builder never edits one of them" in step, (
-        f"{SKILL / 'SKILL.md'}: step 5 says the briefs carry the list because"
+        f"{SKILL / 'SKILL.md'}: step 6 says the briefs carry the list because"
         f" a builder never edits one of these files. A list passed without"
         f" that rule is a list a builder reads as advice (ADR-0071)."
     )
@@ -345,20 +345,20 @@ def test_the_build_step_names_the_runs_own_files_and_briefs_them() -> None:
 def test_the_integration_step_applies_the_waves_notes_before_the_wave_check() -> None:
     """Sequential appends cannot collide, and the run's own appends are verified like any other."""
 
-    step = _step(7)
+    step = _step(8)
 
     assert "in the order this step integrated them" in step, (
-        f"{SKILL / 'SKILL.md'}: step 7 applies the wave's notes in integration"
+        f"{SKILL / 'SKILL.md'}: step 8 applies the wave's notes in integration"
         f" order, one ticket's worth at a time. Appends made one after another"
         f" are the whole of why they are the run's to make (ADR-0071)."
     )
     assert "remove the notes from the branch" in step, (
-        f"{SKILL / 'SKILL.md'}: step 7 takes the notes off the branch once"
+        f"{SKILL / 'SKILL.md'}: step 8 takes the notes off the branch once"
         f" they are applied. A note left behind is a scaffolding file shipped"
         f" as part of the work (ADR-0071)."
     )
-    assert "before step 10 reads the branch" in step, (
-        f"{SKILL / 'SKILL.md'}: step 7 applies the notes before the wave check"
+    assert "before step 11 reads the branch" in step, (
+        f"{SKILL / 'SKILL.md'}: step 8 applies the notes before the wave check"
         f" runs, which is what makes the arrangement honest — the run's own"
         f" appends pass the same verification as everything else (ADR-0071)."
     )
@@ -379,4 +379,85 @@ def test_the_manpage_accounts_for_the_files_the_run_writes() -> None:
         f"{where}: the manpage says a builder with an entry for such a file"
         f" leaves it as a note the run applies later, which is what a reader"
         f" of the diff would otherwise have to work out (ADR-0071)."
+    )
+
+
+def test_the_question_step_asks_in_one_batch_between_plan_and_claim() -> None:
+    """ADR-0070: every question a run needs a human for is asked before the
+    first ticket is claimed, while the developer who typed the command is
+    still there — and the answers reach the builders through the tickets."""
+
+    step = _step(3)
+
+    assert "leaves open" in step, (
+        f"{SKILL / 'SKILL.md'}: step 3 has the orchestrator read every ticket"
+        f" in scope for a decision its text leaves open. The label promises"
+        f" there is nothing to ask, and the label is a claim triage can get"
+        f" wrong (ADR-0070)."
+    )
+    assert "one batch" in step, (
+        f"{SKILL / 'SKILL.md'}: step 3 asks everything it found in one batch,"
+        f" while the developer who typed the command is still there — after"
+        f" it, the developer is not addressed again until the report"
+        f" (ADR-0070)."
+    )
+    assert "comment" in step, (
+        f"{SKILL / 'SKILL.md'}: step 3 writes each answer as a comment on its"
+        f" ticket, which is how it reaches the builder: the brief carries the"
+        f" whole thread, so an answer on the ticket is an answer in the brief"
+        f" (ADR-0065)."
+    )
+    assert "claim" in _step(4).splitlines()[0].lower(), (
+        f"{SKILL / 'SKILL.md'}: the claim step follows the question step, so"
+        f" every question is asked before the first ticket is claimed"
+        f" (ADR-0070)."
+    )
+
+
+def test_the_question_step_parks_rather_than_guesses_under_yes() -> None:
+    """`--yes` answers yes/no, and *which default?* is not one of those.
+
+    Under the flag there is nobody to ask, so a ticket whose text leaves a
+    decision open is returned to the human loop rather than guessed at.
+    """
+
+    step = _step(3)
+
+    assert "park --ticket" in step, (
+        f"{SKILL / 'SKILL.md'}: step 3 parks a ticket with an open decision"
+        f" under `--yes`, through the engine's park verb — the label swap is"
+        f" deterministic and belongs behind the engine's seam (ADR-0070)."
+    )
+    assert "needs-info" in step, (
+        f"{SKILL / 'SKILL.md'}: step 3 says what parking does to the label —"
+        f" `ready-for-agent` replaced with `needs-info`, the tracker saying"
+        f" truthfully that the thinking is not finished (ADR-0070)."
+    )
+    assert "question on the ticket" in step, (
+        f"{SKILL / 'SKILL.md'}: step 3 writes the question on the ticket"
+        f" before the label moves, so the parked ticket carries what a human"
+        f" must answer to bring it back (ADR-0070)."
+    )
+
+
+def test_the_manpage_documents_the_open_decision_exception_to_yes() -> None:
+    """The `--yes` entry promised every question an answer of yes; an open
+    decision is now the documented exception, parked rather than guessed."""
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+    yes_entry = next(
+        (line for line in text.splitlines() if line.startswith("- `--yes`")), ""
+    )
+
+    assert "parked" in yes_entry, (
+        f"{where}: the `--yes` entry documents the exception — a ticket whose"
+        f" text leaves a decision open is parked rather than answered, the"
+        f" flag answering yes/no and *which default?* not being one"
+        f" (ADR-0070)."
+    )
+    assert "needs-info" in text, (
+        f"{where}: the manpage names the label a parked ticket is returned"
+        f" under, so a developer reading the morning tracker knows what the"
+        f" swap was and how to bring the ticket back (ADR-0070)."
     )
