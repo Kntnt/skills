@@ -931,3 +931,88 @@ def test_the_manpage_describes_the_wave_loop_and_what_stops_it() -> None:
         f" nothing, beside the failed gate and the choice — the three"
         f" things that stop the loop (ADR-0072)."
     )
+
+
+def test_the_build_step_routes_a_discovered_edge_to_the_blocked_outcome() -> None:
+    """A builder that finds its ticket depends on open work the graph does not
+    name found a missing edge, not a failure — the run corrects the graph and
+    steps back rather than burning the ticket (ADR-0073, issue #79).
+    """
+
+    step = _step(6)
+
+    assert "whether the missing thing has a number" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 states the boundary against parking —"
+        f" an open ticket is an edge, and an answer no ticket carries is a"
+        f" question parked under ADR-0070 (ADR-0073)."
+    )
+    assert "--outcome blocked" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 routes a discovered dependency to the"
+        f" engine's blocked outcome, which writes the corrected edge rather"
+        f" than a failure (ADR-0073)."
+    )
+    assert "without spending the ticket's one rebuild" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 says the half-built tree is discarded"
+        f" as a refused repair is while the rebuild stays unspent — the two"
+        f" bounds answer different failures (ADR-0073, ADR-0069)."
+    )
+    assert "the moment its blocker closes" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 says a blocked ticket is offered again"
+        f" the moment its blocker closes, the corrected edge being the whole"
+        f" of the memory the mechanism needs (ADR-0073)."
+    )
+
+
+def test_the_building_brief_stops_on_open_work_the_ticket_does_not_name() -> None:
+    """The builder's vocabulary was build or stop-and-fail, and the third move
+    it invented — the scope quietly narrowed inside the commit — is exactly
+    what verification exists to catch (ADR-0073, issue #79).
+    """
+
+    brief = _brief("brief.md")
+    where = SKILL / "references" / "brief.md"
+
+    assert "stop and name the ticket it waits on" in brief, (
+        f"{where}: the brief tells the builder the move exists — a dependency"
+        f" on open work the ticket does not name is stopped on and named"
+        f" (ADR-0073)."
+    )
+    assert "Never build around it" in brief, (
+        f"{where}: the brief forbids building around the missing work — a"
+        f" torso completed around a hole is what the discarded tree replaces"
+        f" (ADR-0073)."
+    )
+    assert "never narrow the scope" in brief, (
+        f"{where}: the brief forbids narrowing the scope inside the commit,"
+        f" which is exactly the case the verification verdict exists to catch"
+        f" (ADR-0073)."
+    )
+
+
+def test_the_manpage_accounts_for_the_blocked_outcome() -> None:
+    """A developer reading the morning's graph has to know a run can write an
+    edge, and where to look for it (ADR-0073, issue #79).
+    """
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+
+    assert "whether the missing thing has a number" in text, (
+        f"{where}: the manpage states the boundary between the blocked"
+        f" outcome and a parked ticket — an open ticket is an edge, an answer"
+        f" no ticket carries is a question (ADR-0073)."
+    )
+    assert "corrected edge" in text, (
+        f"{where}: the manpage names the corrected edge as what the run"
+        f" writes and where the developer looks — on the ticket, in the"
+        f" breakdown's own vocabulary (ADR-0073)."
+    )
+    assert "the moment its blocker closes" in text, (
+        f"{where}: the manpage says a blocked ticket reappears the moment its"
+        f" blocker closes, nothing about it being settled (ADR-0073)."
+    )
+    assert "waiting on open work" in text, (
+        f"{where}: the manpage keeps the report at five lists — a blocked"
+        f" ticket is simply a ticket waiting on open work once its edge is"
+        f" written (ADR-0073)."
+    )

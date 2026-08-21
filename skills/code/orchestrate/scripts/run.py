@@ -33,12 +33,25 @@ INFO_LABEL = "needs-info"
 # that leaves work behind without saying so.
 TICKET_PAGE = 200
 
-# The outcomes a run records against a ticket. Stranded and never-on-the-
-# frontier are read off the graph rather than recorded, so neither is one.
+# The outcomes a run records against a ticket and that settle it: a settled
+# ticket is never offered again. Stranded and never-on-the-frontier are read
+# off the graph rather than recorded, so neither is one.
 DONE = "done"
 FAILED = "failed"
 CONFLICTED = "conflicted"
 OUTCOMES = (DONE, FAILED, CONFLICTED)
+
+# The one recordable outcome that settles nothing. A builder that finds its
+# ticket depends on open work the graph does not name stops, and the run
+# writes the missing edge rather than a failure (ADR-0073). The edge on the
+# tracker is the whole of the memory the mechanism needs — the ticket is
+# offered again the moment its blocker closes — which is why the outcomes
+# read back off a ticket never include this one.
+BLOCKED = "blocked"
+
+# Everything the record verb accepts: the outcomes that settle a ticket, and
+# the one that corrects the graph instead.
+RECORDABLE = (*OUTCOMES, BLOCKED)
 
 # What each recorded outcome says on the ticket it is recorded against. The
 # machine-readable half is the marker; this is the half a developer reads.
@@ -54,6 +67,12 @@ NOTES = {
     CONFLICTED: (
         "Recorded by an unattended run: this ticket's work collided with "
         "another ticket's and the collision was not repaired."
+    ),
+    BLOCKED: (
+        "Recorded by an unattended run: the builder found this ticket depends "
+        "on open work the graph did not name. The corrected edge is now on "
+        "the tracker, the claim is released, and the ticket is offered again "
+        "the moment its blocker closes."
     ),
 }
 
@@ -101,6 +120,12 @@ RECORDED_REBUILD = re.compile(rf"<!--\s*{MARKER}\s+rebuild\s*-->")
 # and not the rebuild's, the two answering different failures at different
 # moments, so a ticket may spend each once (ADR-0069).
 RECORDED_AMEND = re.compile(rf"<!--\s*{MARKER}\s+amend\s*-->")
+
+# The same marker on the note a blocked outcome leaves. Owned by the engine so
+# it never reaches a brief as thread, and never read back as an outcome: a
+# blocked ticket is not settled, the corrected edge on the tracker being the
+# whole of the memory the mechanism needs (ADR-0073).
+RECORDED_BLOCKED = re.compile(rf"<!--\s*{MARKER}\s+blocked-by=[\d,]+\s*-->")
 
 # The same marker again, on the merge a run makes when it brings a ticket onto
 # the branch. It is what lets the branch say whose work a file carries, which
@@ -898,13 +923,13 @@ def numbers_in(listed: str | None) -> list[int]:
 def engine_wrote(body: str) -> bool:
     """Say whether *body* is this engine talking to its next self.
 
-    A recorded outcome, a rebuild note, and an amend note are written by a run,
-    for a run: what they say is that this ticket has been here before, which is
-    the one thing a builder briefed on the ticket has no use for. Read by
-    exactly the patterns that write them, so nothing else a comment carries
-    counts as the engine's — a marker naming an outcome this engine never
-    records is prose somebody else wrote, and prose is relayed rather than
-    interpreted.
+    A recorded outcome, a rebuild note, an amend note, and a blocked note are
+    written by a run, for a run: what they say is that this ticket has been
+    here before, which is the one thing a builder briefed on the ticket has no
+    use for. Read by exactly the patterns that write them, so nothing else a
+    comment carries counts as the engine's — a marker naming an outcome this
+    engine never records is prose somebody else wrote, and prose is relayed
+    rather than interpreted.
     """
 
     outcome = RECORDED_OUTCOME.search(body)
@@ -912,6 +937,7 @@ def engine_wrote(body: str) -> bool:
         (outcome is not None and outcome.group(1) in OUTCOMES)
         or RECORDED_REBUILD.search(body) is not None
         or RECORDED_AMEND.search(body) is not None
+        or RECORDED_BLOCKED.search(body) is not None
     )
 
 
@@ -2153,6 +2179,22 @@ def tickets_touching(cwd: Path, files: list[str], built_on: str) -> list[int]:
     )
 
 
+def discard_tree(cwd: Path, number: int, path: Path) -> None:
+    """Discard ticket *number*'s working tree at *path*, its branch, and what
+    isolate gave it, uncommitted work and all.
+
+    The one gesture in the run that destroys work on purpose, and what it
+    destroys is always a first try nothing will ever integrate: a resolution a
+    verifier has just refused, or a build toward a requirement that, by the
+    builder's own finding, could not yet be met (ADR-0073).
+    """
+
+    built_on = current_branch(path)
+    git(cwd, "worktree", "remove", "--force", str(path))
+    git(cwd, "branch", "--delete", "--force", built_on)
+    discard_allocation(cwd, number)
+
+
 def cmd_rebuild(cwd: Path, number: int) -> int:
     """Discard what ticket *number* was built in, so it can be built again."""
 
@@ -2218,14 +2260,9 @@ def rebuild(cwd: Path, number: int) -> int:
     except RunError as exc:
         return fail(f"#{number} could not be recorded as rebuilt: {exc}")
 
-    # What the first try left is discarded outright, uncommitted work and all.
-    # This is the one gesture in the run that destroys work on purpose, and
-    # what it destroys is a resolution a verifier has just refused.
-    path = Path(open_now[number])
-    built_on = current_branch(path)
-    git(cwd, "worktree", "remove", "--force", str(path))
-    git(cwd, "branch", "--delete", "--force", built_on)
-    discard_allocation(cwd, number)
+    # What the first try left is discarded outright, uncommitted work and all:
+    # what it holds is a resolution a verifier has just refused.
+    discard_tree(cwd, number, Path(open_now[number]))
 
     emit(
         {
@@ -2314,18 +2351,105 @@ def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
     return f"<!-- {MARKER} outcome={outcome}{named}{marked} --> {NOTES[outcome]}{said}"
 
 
+def blocked_note(waiting_on: list[int]) -> str:
+    """Render what is written on a ticket recorded blocked on open work.
+
+    The note is the engine talking to the developer and its next self, so its
+    marker keeps it out of every brief's thread — and nothing reads it back,
+    the corrected edge on the tracker being the whole of the memory the
+    mechanism needs (ADR-0073).
+    """
+
+    marked = ",".join(str(ticket) for ticket in waiting_on)
+    return (
+        f"<!-- {MARKER} blocked-by={marked} --> {NOTES[BLOCKED]} "
+        f"It waits on {as_references(waiting_on)}."
+    )
+
+
+def write_edges(cwd: Path, number: int, waiting_on: list[int]) -> None:
+    """Write the blocking edges ticket *number* waits on to the tracker.
+
+    Written the way the ticket breakdown would have written them: the
+    tracker's native blocked-by relation wherever it takes the write — the
+    same relation every plan reads edges back off — and the `Blocked by` body
+    line where it does not, which is the same fallback the plan reads, in the
+    same order (ADR-0073).
+    """
+
+    # The native relation is keyed by the blocker's database id rather than
+    # its number, so each edge costs the tracker one question and one write.
+    unwritten = []
+    for blocker in waiting_on:
+        try:
+            identity = gh(
+                cwd,
+                "api",
+                f"repos/{{owner}}/{{repo}}/issues/{blocker}",
+                "--jq",
+                ".id",
+            ).strip()
+            if not identity.isdigit():
+                raise RunError(f"the tracker answered no id for #{blocker}")
+            gh(
+                cwd,
+                "api",
+                "--method",
+                "POST",
+                f"repos/{{owner}}/{{repo}}/issues/{number}/dependencies/blocked_by",
+                "-F",
+                f"issue_id={identity}",
+            )
+        except RunError:
+            unwritten.append(blocker)
+
+    # A tracker that would not take the relation still gets the edge, as the
+    # body line the breakdown writes where the relation is missing — appended
+    # under the body as filed, and read back by exactly the pattern the
+    # breakdown's own line is read by.
+    if unwritten:
+        body = str(ticket_view(cwd, number, "number,body")["body"])
+        line = f"Blocked by: {as_references(unwritten)}"
+        amended = f"{body.rstrip()}\n\n{line}\n" if body.strip() else f"{line}\n"
+        gh(cwd, "issue", "edit", str(number), "--body", amended)
+
+
+def release_claim(
+    cwd: Path, number: int, ticket: dict[str, Any], state_path: Path | None
+) -> None:
+    """Release this run's claim on ticket *number*, where the claim is its own.
+
+    The reading is the park verb's in reverse: only a claim this run took is
+    its own to release, and a person's, or another session's, stays with the
+    ticket. An unclaimed ticket costs the tracker nothing.
+    """
+
+    holders = holders_of(ticket)
+    if not holders:
+        return
+
+    remembered = remembered_state(state_path, cwd)
+    mine = my_login(cwd, remembered)
+    if holders == [mine] and (remembered is None or number in remembered.claimed):
+        gh(cwd, "issue", "edit", str(number), "--remove-assignee", CLAIM_ASSIGNEE)
+
+
 def cmd_record(
     cwd: Path,
     number: int,
     outcome: str,
     named: str | None,
     against: list[int] | None,
+    waiting_on: list[int] | None,
     state_path: Path | None,
 ) -> int:
     """Store ticket *number*'s *outcome* and the commit that carries it.
 
     The tracker is the store, because it is the one place an outcome outlives
-    the session that produced it and the one place the developer will look.
+    the session that produced it and the one place the developer will look. A
+    blocked outcome settles nothing there: it writes the blocking edge the
+    graph was missing and steps back, the ticket staying open to be offered
+    again when the work it waits on exists (ADR-0073).
     """
 
     # Both halves of a done outcome are settled before the tracker is touched:
@@ -2342,6 +2466,26 @@ def cmd_record(
             f"#{number} is being recorded {outcome}, and only a conflicted "
             "outcome names the ticket it collided with"
         )
+
+    # A blocked outcome is an edge and nothing else: it names the open work it
+    # waits on and never a commit, its half-built tree being discarded rather
+    # than carried by one — and a ticket waiting on itself is a graph nobody
+    # could ever work.
+    waiting = sorted(set(waiting_on or []))
+    if waiting and outcome != BLOCKED:
+        return fail(
+            f"#{number} is being recorded {outcome}, and only a blocked "
+            "outcome names the ticket it waits on"
+        )
+    if outcome == BLOCKED and not waiting:
+        return fail(f"recording #{number} blocked needs the ticket it waits on")
+    if outcome == BLOCKED and named:
+        return fail(
+            f"#{number} is being recorded blocked, and a blocked ticket has "
+            "no commit to name: its half-built work is discarded"
+        )
+    if number in waiting:
+        return fail(f"#{number} cannot be blocked by itself")
 
     # A done outcome names the commit that carries the work, so a tree still
     # holding work nothing committed is a tree where that cannot be true.
@@ -2362,16 +2506,46 @@ def cmd_record(
             return fail(f"this repository has no commit {named}")
 
     # The tracker is asked for the ticket before anything is written to it, so
-    # a number it cannot answer for is refused rather than half-recorded.
+    # a number it cannot answer for is refused rather than half-recorded. The
+    # assignees come along because a blocked outcome releases this run's claim.
     try:
-        ticket_view(cwd, number, "number,state")
+        ticket = ticket_view(cwd, number, "number,state,assignees")
     except RunError as exc:
         return fail(f"the tracker cannot answer for #{number}: {exc}")
+
+    # A blocked outcome names work still to exist, and the tracker is asked
+    # before the edge is written: a closed blocker blocks nothing, so an edge
+    # on it would record a wait that is already over.
+    for blocker in waiting:
+        try:
+            state = str(ticket_view(cwd, blocker, "number,state")["state"])
+        except (RunError, KeyError) as exc:
+            return fail(f"the tracker cannot answer for blocker #{blocker}: {exc}")
+        if not still_blocks(state):
+            return fail(
+                f"#{number} cannot be blocked by #{blocker}: it is closed, "
+                "and a closed ticket names work that already exists"
+            )
+
+    # A blocked outcome is the corrected edge before it is anything else: the
+    # dependency goes on the tracker the way the breakdown would have written
+    # it, and the claim is released, a ticket waiting on open work being
+    # nobody's to hold (ADR-0073).
+    if outcome == BLOCKED:
+        try:
+            write_edges(cwd, number, waiting)
+            release_claim(cwd, number, ticket, state_path)
+        except RunError as exc:
+            return fail(f"#{number} could not be recorded blocked: {exc}")
 
     # Done is the only outcome that closes a ticket, and the Skill records it
     # only where a separate subagent has verified the work — so there is no
     # path from a builder's own report to a closed ticket.
-    note = outcome_note(outcome, commit, collided)
+    note = (
+        blocked_note(waiting)
+        if outcome == BLOCKED
+        else outcome_note(outcome, commit, collided)
+    )
     try:
         if outcome == DONE:
             gh(cwd, "issue", "close", str(number), "--comment", note)
@@ -2379,6 +2553,18 @@ def cmd_record(
             gh(cwd, "issue", "comment", str(number), "--body", note)
     except RunError as exc:
         return fail(f"#{number} could not be recorded: {exc}")
+
+    # What a blocked build made goes with the outcome, discarded exactly as a
+    # refused repair is and without spending the ticket's one rebuild: when
+    # the blocker closes, the ticket is isolated afresh from the branch that
+    # by then carries the blocker's work, and built whole on top of it.
+    if outcome == BLOCKED:
+        try:
+            open_now = open_worktrees(cwd, current_branch(cwd))
+            if number in open_now:
+                discard_tree(cwd, number, Path(open_now[number]))
+        except RunError as exc:
+            return fail(f"#{number}'s working tree could not be discarded: {exc}")
 
     forget_claim(state_path, cwd, number)
 
@@ -2389,6 +2575,7 @@ def cmd_record(
             "outcome": outcome,
             "commit": commit,
             "collided_with": collided,
+            "blocked_by": waiting,
             "closed": outcome == DONE,
         }
     )
@@ -2528,9 +2715,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     record = sub.add_parser("record", help="Record one ticket's outcome.")
     record.add_argument("--ticket", required=True, type=int)
-    record.add_argument("--outcome", required=True, choices=OUTCOMES)
+    record.add_argument("--outcome", required=True, choices=RECORDABLE)
     record.add_argument("--commit")
     record.add_argument("--collided-with", action="append", type=int)
+    record.add_argument("--blocked-by", action="append", type=int)
     add_shared_flags(record)
 
     report = sub.add_parser("report", help="Print the consolidated report.")
@@ -2575,6 +2763,7 @@ def main(argv: list[str] | None = None) -> int:
             args.outcome,
             args.commit,
             args.collided_with,
+            args.blocked_by,
             state_path,
         )
     return cmd_report(cwd, args.scope)

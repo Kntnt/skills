@@ -71,10 +71,18 @@ _GIT_ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
 # names a ticket the scope need not contain; a number the tracker was never
 # given fails the call, as a deleted ticket does. It also answers who the run
 # is authenticated as, which is how a claim of this developer's own is told
-# from another session's; a tracker given no login cannot say.
+# from another session's; a tracker given no login cannot say. The dependency
+# endpoints answer too: an issue asked for over the API has the database id
+# the native blocked-by write is keyed by — its number under a fixed prefix —
+# and the write itself is accepted, except where GH_NO_DEPENDENCIES stands
+# for a tracker without the relation and refuses it.
 _GH_SCRIPT = """#!/bin/sh
 echo "$@" >> "$GH_LOG"
 if [ "$1" = "api" ]; then
+  case "$2" in
+    --method) [ -z "$GH_NO_DEPENDENCIES" ] || exit 1; exit 0 ;;
+    repos/*/issues/*) printf '10%s\\n' "${2##*/}"; exit 0 ;;
+  esac
   [ -n "$GH_LOGIN" ] || exit 1
   printf '%s\\n' "$GH_LOGIN"
   exit 0
@@ -282,6 +290,7 @@ def _tracker(
             "labels": [],
             "assignees": [],
             "comments": [],
+            "body": "",
             "subIssues": {"nodes": [], "totalCount": 0},
         }
         (folder / f"{number}.json").write_text(
@@ -3776,3 +3785,361 @@ def test_park_takes_the_ticket_out_of_what_the_run_remembers_claiming(
     assert result.returncode == 0, result.stderr
     state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
     assert state["claimed"] == []
+
+
+def test_record_blocked_writes_the_edge_the_breakdown_would_have(
+    tmp_path: Path,
+) -> None:
+    """ADR-0073: a builder that finds its ticket depends on open work the
+    graph does not name stops, and the run corrects the graph rather than
+    burning the ticket — the dependency written in the tracker's native
+    blocked-by relation, keyed by the blocker's database id, and the ticket
+    left open and unsettled."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9), 12: {}},
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "blocked",
+        "--blocked-by",
+        "12",
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    recorded = json.loads(result.stdout)
+    assert recorded["outcome"] == "blocked"
+    assert recorded["blocked_by"] == [12]
+    assert recorded["closed"] is False
+    assert recorded["commit"] is None
+    calls = _gh_calls(env)
+    assert (
+        "api --method POST repos/{owner}/{repo}/issues/9/dependencies/blocked_by"
+        " -F issue_id=1012" in calls
+    )
+    assert "issue close" not in calls
+    assert f"<!-- {MARKER} blocked-by=12 -->" in _wrote(env, 9)
+
+
+def test_record_blocked_writes_the_body_line_where_the_tracker_has_no_relation(
+    tmp_path: Path,
+) -> None:
+    """The body line is the breakdown's own fallback for a tracker without the
+    relation, written under the body as filed — which is exactly the line the
+    next plan reads an edge back off."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9, body="Build the graph."), 12: {}},
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "blocked",
+        "--blocked-by",
+        "12",
+        env=env | {"GH_NO_DEPENDENCIES": "1"},
+    )
+
+    assert result.returncode == 0, result.stderr
+    calls = _gh_calls(env)
+    assert "issue edit 9 --body" in calls
+    assert "Build the graph." in calls
+    assert "Blocked by: #12" in calls
+
+
+def test_record_blocked_releases_the_claim_this_run_holds(tmp_path: Path) -> None:
+    """A ticket waiting on open work is nobody's to hold: the claim goes back
+    with the outcome, so the run that builds the ticket when its blocker
+    closes can take it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9, assignees=[{"login": "me"}]), 12: {}},
+        login="me",
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "blocked",
+        "--blocked-by",
+        "12",
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert "issue edit 9 --remove-assignee @me" in _gh_calls(env)
+
+
+def test_record_blocked_leaves_a_claim_that_is_not_this_runs(tmp_path: Path) -> None:
+    """The edge is the ticket's whoever holds it, so it is still written — but
+    another session's claim is not this run's to release."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9, assignees=[{"login": "someone"}]), 12: {}},
+        login="me",
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "blocked",
+        "--blocked-by",
+        "12",
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    calls = _gh_calls(env)
+    assert "dependencies/blocked_by" in calls
+    assert "--remove-assignee" not in calls
+
+
+def test_record_blocked_discards_the_half_built_tree_without_spending_the_rebuild(
+    tmp_path: Path,
+) -> None:
+    """The half-built work goes exactly as a refused repair does, so when the
+    blocker closes the ticket is isolated afresh from the branch that by then
+    carries the blocker's work — and the one rebuild stays unspent, that bound
+    answering a different failure (ADR-0073)."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9), 12: {}},
+    )
+    tree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (tree / "graph.py").write_text("half of it\n", encoding="utf-8")
+    _git(tree, "add", "graph.py")
+    _git(tree, "commit", "-m", "half of #9")
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "blocked",
+        "--blocked-by",
+        "12",
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert not tree.exists()
+    assert "kntnt-orchestrate" not in _git(repo, "branch", "--list").stdout
+    assert _git(repo, "status", "--porcelain").stdout == ""
+    calls = _gh_calls(env)
+    assert f"<!-- {MARKER} rebuild -->" not in calls
+    assert "issue close" not in calls
+
+
+def test_record_refuses_a_blocked_outcome_that_names_no_blocker(
+    tmp_path: Path,
+) -> None:
+    """Blocked without the ticket it waits on is an outcome with no edge to
+    write, and the edge is the whole of the point."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+
+    result = _engine(repo, "record", "--ticket", "9", "--outcome", "blocked", env=env)
+
+    assert result.returncode == 1
+    assert not result.stdout
+    assert "waits on" in result.stderr
+    assert _gh_calls(env) == ""
+
+
+def test_record_refuses_a_blocker_named_against_another_outcome(
+    tmp_path: Path,
+) -> None:
+    """Only a blocked outcome has open work on the other side of it. A failure
+    recorded against one would state something that did not happen."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "failed",
+        "--blocked-by",
+        "12",
+        env=env,
+    )
+
+    assert result.returncode == 1
+    assert "blocked" in result.stderr
+    assert _gh_calls(env) == ""
+
+
+def test_record_blocked_refuses_a_blocker_that_is_already_closed(
+    tmp_path: Path,
+) -> None:
+    """A closed ticket names work that already exists, so the edge would
+    record a wait that is already over — the tracker is asked before anything
+    is written, and the refusal leaves nothing behind."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9), 12: {"state": "CLOSED"}},
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "blocked",
+        "--blocked-by",
+        "12",
+        env=env,
+    )
+
+    assert result.returncode == 1
+    assert "closed" in result.stderr
+    calls = _gh_calls(env)
+    assert "dependencies/blocked_by" not in calls
+    assert "issue comment" not in calls
+    assert "issue edit" not in calls
+
+
+def test_the_note_a_blocked_outcome_leaves_stays_out_of_the_thread(
+    tmp_path: Path,
+) -> None:
+    """The note is the engine talking to the developer and its next self, so
+    it never reaches a brief as thread — and it settles nothing: the outcome a
+    plan reads back off a blocked ticket is none at all."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9), 12: {}},
+    )
+    assert (
+        _engine(
+            repo,
+            "record",
+            "--ticket",
+            "9",
+            "--outcome",
+            "blocked",
+            "--blocked-by",
+            "12",
+            env=env,
+        ).returncode
+        == 0
+    )
+    note = _wrote(env, 9)
+    _refile(
+        env,
+        "open",
+        [
+            _ticket(
+                9,
+                "the graph",
+                blocked_by=[(12, "OPEN")],
+                comments=[
+                    _remark("maintainer", "2026-01-02T09:00:00Z", "Behind the seam."),
+                    {"body": note},
+                ],
+            )
+        ],
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 2, result.stderr
+    plan = json.loads(result.stdout)
+    entry = plan["tickets"][0]
+    assert [remark["body"] for remark in entry["thread"]] == ["Behind the seam."]
+    assert entry["outcome"] is None
+    assert plan["blocked"] == [9]
+
+
+def test_a_blocked_ticket_is_offered_again_the_moment_its_blocker_closes(
+    tmp_path: Path,
+) -> None:
+    """The corrected edge on the tracker is the whole of the memory the
+    mechanism needs: nothing about a blocked ticket is settled, so a plan read
+    after its blocker closes has it workable again, to be isolated afresh and
+    built whole on top of the work it waited for."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: _ready(9), 12: {}},
+    )
+    assert (
+        _engine(
+            repo,
+            "record",
+            "--ticket",
+            "9",
+            "--outcome",
+            "blocked",
+            "--blocked-by",
+            "12",
+            env=env,
+        ).returncode
+        == 0
+    )
+    _refile(
+        env,
+        "open",
+        [
+            _ticket(
+                9,
+                "the graph",
+                blocked_by=[(12, "CLOSED")],
+                comments=[{"body": _wrote(env, 9)}],
+            )
+        ],
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [9]
+    assert plan["recorded"] == []
+    assert plan["tickets"][0]["outcome"] is None
