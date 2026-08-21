@@ -440,6 +440,168 @@ def test_the_question_step_parks_rather_than_guesses_under_yes() -> None:
     )
 
 
+def test_the_build_step_triages_a_stop_before_recording_anything() -> None:
+    """A stop is not an outcome until the orchestrator has read what it stopped on.
+
+    The interviewed runs recorded stops over missing directories and taken
+    numbers as failures, because the step gave the orchestrator no licence to
+    do anything with a stop but write it down (ADR-0070, issue #74).
+    """
+
+    step = _step(6)
+
+    assert "triaged before anything is recorded" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 triages a stopped subagent before"
+        f" recording anything. One clause that disposes of every stop alike"
+        f" records a missing directory as a ticket that could not be built"
+        f" (ADR-0070)."
+    )
+    assert "decides anything about the work" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 states the question that sorts a stop —"
+        f" whether fixing it decides anything about the work. Without it the"
+        f" hinder and the decision are one pile again (ADR-0070)."
+    )
+    assert "mechanical hinder" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 names the mechanical hinder — a"
+        f" condition of the environment, not a question of the requirement —"
+        f" as the stop the orchestrator repairs itself (ADR-0070)."
+    )
+    assert "the same brief once more" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 dispatches the same brief once more"
+        f" after repairing a hinder. A repaired condition with no redispatch"
+        f" is a fixed machine and a lost ticket (ADR-0070)."
+    )
+    assert "survives its repair" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 bounds the repair to one — a hinder"
+        f" that survives its repair is recorded as the failure it now is, for"
+        f" the same reason the amend and the rebuild are bounded (ADR-0069)."
+    )
+
+
+def test_a_genuine_decision_mid_run_parks_the_ticket() -> None:
+    """Nothing about the work was tried and found wanting, so no failure is recorded.
+
+    The builder's brief says to stop rather than guess, which is right; what
+    changes is what the orchestrator does with that stop (ADR-0070).
+    """
+
+    step = _step(6)
+
+    assert "parks the ticket exactly as step 3 parks one" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 parks a mid-run decision with the"
+        f" mechanism the plan-time batching uses — one park, not two"
+        f" (ADR-0070, issue #74)."
+    )
+    assert "record no outcome" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 records no outcome for a parked"
+        f" ticket. Recorded, the tracker would hold it settled and no answer"
+        f" could bring it back to a run (ADR-0070)."
+    )
+    assert "the wave carries on without it" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 lets the wave carry on without the"
+        f" parked ticket — a decision parks one ticket, never the night"
+        f" (ADR-0070)."
+    )
+
+
+def test_the_verify_amend_and_repair_steps_share_the_triage() -> None:
+    """One triage stated once, or four triages drifting apart.
+
+    The desired behaviour covers a building, verifying, repairing, or amending
+    subagent alike, so the later steps hand their stops to step 6's rule
+    rather than restating it (issue #74).
+    """
+
+    for number in (7, 9, 10):
+        step = _step(number)
+
+        assert "triaged as step 6 triages a stop" in step, (
+            f"{SKILL / 'SKILL.md'}: step {number} routes a stopped subagent"
+            f" through the triage step 6 states, in those words — a stop"
+            f" recorded untriaged is the failure-by-default issue #74 removed"
+            f" (ADR-0070)."
+        )
+
+
+def test_the_integration_step_narrows_its_catch_all_to_work_found_wanting() -> None:
+    """The clause that disposed of every stop alike now catches only real failures."""
+
+    step = _step(8)
+
+    assert "including a builder that stopped and reported" not in step, (
+        f"{SKILL / 'SKILL.md'}: step 8 no longer folds a stopped builder into"
+        f" its catch-all — a stop is triaged where it happened, and only its"
+        f" found-wanting kind reaches integration as a fail (issue #74)."
+    )
+    assert "tried and found wanting" in step, (
+        f"{SKILL / 'SKILL.md'}: step 8's catch-all names what it now catches"
+        f" — work tried and found wanting, which is what the amend cycle"
+        f" fronts (ADR-0070, issue #74)."
+    )
+
+
+def test_the_report_step_states_the_runs_conduct() -> None:
+    """Act between waves, report once, lead with what is done and what is left.
+
+    One interviewed developer got masses of information when what they wanted
+    was for the work to be done (ADR-0070, issue #74).
+    """
+
+    step = _step(12)
+
+    assert "between waves" in step, (
+        f"{SKILL / 'SKILL.md'}: step 12 says what the run had standing to do"
+        f" it has already done, between waves — a question at the far end is"
+        f" the plan-time rule broken twice (ADR-0070)."
+    )
+    assert "what is done" in step, (
+        f"{SKILL / 'SKILL.md'}: step 12 leads with what is done and what is"
+        f" left for the developer, which is the report the interviewed"
+        f" developer asked for (ADR-0070)."
+    )
+    assert "never as questions awaiting answers" in step, (
+        f"{SKILL / 'SKILL.md'}: step 12 states findings as a list of"
+        f" statements, never as questions awaiting answers — nobody is there"
+        f" to answer, and the report is not a conversation (ADR-0070)."
+    )
+    assert "or mid-run" in step, (
+        f"{SKILL / 'SKILL.md'}: step 12 names the tickets parked mid-run"
+        f" beside the ones step 3 parked — a mid-run park the report cannot"
+        f" name is a ticket the developer would not know to answer"
+        f" (issue #74)."
+    )
+
+
+def test_the_manpage_describes_the_triage_of_a_stop() -> None:
+    """The page said only that nothing integrates a stopped builder's ticket.
+
+    A reader deciding whether to run the night unattended needs to know a
+    wrong path costs a retry, not a ticket (ADR-0070, issue #74).
+    """
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    where = SKILL / "help.md"
+
+    assert "mechanical hinder" in text, (
+        f"{where}: the manpage names the mechanical hinder the run repairs"
+        f" itself before dispatching the same brief once more (ADR-0070)."
+    )
+    assert "decide anything about the work" in text, (
+        f"{where}: the manpage states what separates a hinder from a decision"
+        f" — whether fixing it decides anything about the work (ADR-0070)."
+    )
+    assert "the wave carries on without it" in text, (
+        f"{where}: the manpage says a mid-run decision parks the ticket and"
+        f" the wave carries on without it — a decision costs one ticket,"
+        f" never the night (ADR-0070)."
+    )
+    assert "tried and found wanting" in text, (
+        f"{where}: the manpage says the stop that stays a failure is the one"
+        f" whose work was tried and found wanting, which the amend fronts"
+        f" (issue #74)."
+    )
+
+
 def test_the_manpage_documents_the_open_decision_exception_to_yes() -> None:
     """The `--yes` entry promised every question an answer of yes; an open
     decision is now the documented exception, parked rather than guessed."""
