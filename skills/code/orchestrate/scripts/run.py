@@ -60,6 +60,16 @@ REBUILD_NOTE = (
     "being built once more on top of the integrated branch."
 )
 
+# What a run writes on a ticket whose failed verification it is about to
+# amend. It bounds the amend as the note above bounds the rebuild, and for the
+# same reason: a run interrupted between the note and the amend must come back
+# and find the bound spent (ADR-0069).
+AMEND_NOTE = (
+    "Recorded by an unattended run: verification did not pass, and a fresh "
+    "builder is amending this ticket's work from the verdict that failed it. "
+    "A third session verifies what that builder does."
+)
+
 # The marker every recorded outcome carries, so what a run wrote on a ticket
 # is machine-readable and not only prose somebody has to interpret.
 MARKER = "kntnt-orchestrate"
@@ -78,6 +88,12 @@ RECORDED_OUTCOME = re.compile(
 # exactly the reason an outcome is — a run that was interrupted mid-rebuild
 # must find the bound where it left it (ADR-0055).
 RECORDED_REBUILD = re.compile(rf"<!--\s*{MARKER}\s+rebuild\s*-->")
+
+# The same marker read back for the other thing that is not an outcome:
+# whether this ticket has already had its one amend. It is a bound of its own
+# and not the rebuild's, the two answering different failures at different
+# moments, so a ticket may spend each once (ADR-0069).
+RECORDED_AMEND = re.compile(rf"<!--\s*{MARKER}\s+amend\s*-->")
 
 # The same marker again, on the merge a run makes when it brings a ticket onto
 # the branch. It is what lets the branch say whose work a file carries, which
@@ -711,17 +727,20 @@ def numbers_in(listed: str | None) -> list[int]:
 def engine_wrote(body: str) -> bool:
     """Say whether *body* is this engine talking to its next self.
 
-    A recorded outcome and a rebuild note are written by a run, for a run: what
-    they say is that this ticket has been here before, which is the one thing a
-    builder briefed on the ticket has no use for. Read by exactly the two
-    patterns that write them, so nothing else a comment carries counts as the
-    engine's — a marker naming an outcome this engine never records is prose
-    somebody else wrote, and prose is relayed rather than interpreted.
+    A recorded outcome, a rebuild note, and an amend note are written by a run,
+    for a run: what they say is that this ticket has been here before, which is
+    the one thing a builder briefed on the ticket has no use for. Read by
+    exactly the patterns that write them, so nothing else a comment carries
+    counts as the engine's — a marker naming an outcome this engine never
+    records is prose somebody else wrote, and prose is relayed rather than
+    interpreted.
     """
 
     outcome = RECORDED_OUTCOME.search(body)
-    return (outcome is not None and outcome.group(1) in OUTCOMES) or (
-        RECORDED_REBUILD.search(body) is not None
+    return (
+        (outcome is not None and outcome.group(1) in OUTCOMES)
+        or RECORDED_REBUILD.search(body) is not None
+        or RECORDED_AMEND.search(body) is not None
     )
 
 
@@ -750,6 +769,14 @@ def rebuilt_already(item: dict[str, Any]) -> bool:
 
     return any(
         RECORDED_REBUILD.search(str(comment["body"])) for comment in item["comments"]
+    )
+
+
+def amended_already(item: dict[str, Any]) -> bool:
+    """Say whether a run has already spent *item*'s one amend on it."""
+
+    return any(
+        RECORDED_AMEND.search(str(comment["body"])) for comment in item["comments"]
     )
 
 
@@ -1964,6 +1991,55 @@ def rebuild_note() -> str:
     return f"<!-- {MARKER} rebuild --> {REBUILD_NOTE}"
 
 
+def cmd_amend(cwd: Path, number: int) -> int:
+    """Say whether ticket *number* may be amended, and spend the amend if so.
+
+    A failed verification buys one amend, as a collision buys one rebuild: the
+    verdict names the command that failed or the criterion that is not met,
+    which is information the first builder never had, so the rerun ADR-0055
+    refuses is not what this is (ADR-0069). Nothing here touches the work — the
+    amender builds in the tree the first builder built in, which at a ceiling
+    of one is the repository itself — so the whole of the verb is the bound.
+    """
+
+    # The tracker is where the bound lives, for the reason every outcome lives
+    # there: a run interrupted mid-amend must find it where it left it.
+    try:
+        ticket = ticket_view(cwd, number, "number,comments")
+    except RunError as exc:
+        return fail(f"the tracker cannot answer for #{number}: {exc}")
+    if amended_already(ticket):
+        emit(
+            {
+                "verb": "amend",
+                "ticket": number,
+                "amended": False,
+                "reason": (
+                    f"#{number} has already been amended once in this run, and "
+                    "a failed verification buys one amend"
+                ),
+            }
+        )
+        return 2
+
+    # The note goes on before the amend starts, never after it: a run that
+    # stopped between the two would otherwise come back with its one amend
+    # unspent and spend it on a verdict it has already answered.
+    try:
+        gh(cwd, "issue", "comment", str(number), "--body", amend_note())
+    except RunError as exc:
+        return fail(f"#{number} could not be recorded as amended: {exc}")
+
+    emit({"verb": "amend", "ticket": number, "amended": True, "reason": None})
+    return 0
+
+
+def amend_note() -> str:
+    """Render what is written on a ticket whose one amend is being spent."""
+
+    return f"<!-- {MARKER} amend --> {AMEND_NOTE}"
+
+
 def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
     """Render what is written on a ticket when its outcome is recorded.
 
@@ -2187,6 +2263,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     rebuild.add_argument("--ticket", required=True, type=int)
     add_shared_flags(rebuild)
 
+    amend = sub.add_parser("amend", help="Spend one ticket's one amend.")
+    amend.add_argument("--ticket", required=True, type=int)
+    add_shared_flags(amend)
+
     record = sub.add_parser("record", help="Record one ticket's outcome.")
     record.add_argument("--ticket", required=True, type=int)
     record.add_argument("--outcome", required=True, choices=OUTCOMES)
@@ -2224,6 +2304,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_integrate(cwd, args.ticket)
     if args.verb == "rebuild":
         return cmd_rebuild(cwd, args.ticket)
+    if args.verb == "amend":
+        return cmd_amend(cwd, args.ticket)
     if args.verb == "record":
         return cmd_record(
             cwd,

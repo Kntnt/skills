@@ -909,10 +909,11 @@ def test_plan_carries_what_has_been_said_on_a_ticket_since_it_was_filed(
 def test_plan_leaves_the_runs_own_notes_out_of_a_tickets_thread(
     tmp_path: Path,
 ) -> None:
-    """An outcome marker and a rebuild note are the engine talking to its next
-    self, and a builder that reads them learns only that this ticket failed
-    once. They are left out, what a person wrote stays, and both readings the
-    engine already makes of a comment answer exactly as they did."""
+    """An outcome marker, a rebuild note, and an amend note are the engine
+    talking to its next self, and a builder that reads them learns only that
+    this ticket has been here before. They are left out, what a person wrote
+    stays, and every reading the engine makes of a comment answers exactly as
+    it did."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -927,6 +928,7 @@ def test_plan_leaves_the_runs_own_notes_out_of_a_tickets_thread(
                             "maintainer", "2026-01-02T09:00:00Z", "Behind the seam."
                         ),
                         {"body": f"<!-- {MARKER} rebuild --> built once more"},
+                        {"body": f"<!-- {MARKER} amend --> amended once"},
                         _recorded("failed"),
                     ],
                 )
@@ -2874,6 +2876,86 @@ def test_rebuild_refuses_a_ticket_that_has_no_working_tree_to_discard(
     assert result.returncode == 1
     assert "no working tree" in result.stderr
     assert _gh_calls(env) == ""
+
+
+def test_amend_writes_the_bound_on_the_ticket_the_moment_it_is_spent(
+    tmp_path: Path,
+) -> None:
+    """A failed verification buys one amend, and the note is the bound: the
+    ticket carries it from the moment the amend starts, so a run interrupted
+    mid-amend comes back and finds the bound where it left it (ADR-0069).
+    Nothing is discarded and nothing is made — the amender works the tree the
+    first builder worked, which is why a ceiling of one, with no working tree
+    at all, is amended exactly like any other ticket."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+
+    result = _engine(repo, "amend", "--ticket", "10", env=env)
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["amended"] is True
+    assert answer["reason"] is None
+    assert f"<!-- {MARKER} amend -->" in _wrote(env, 10)
+
+
+def test_a_ticket_is_amended_at_most_once(tmp_path: Path) -> None:
+    """The amend is bounded exactly as the rebuild is, and by the same thing:
+    the note the first amend left on the ticket is what refuses the second, so
+    a ticket whose verdict keeps failing is recorded rather than built over and
+    over through the night."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+    assert _engine(repo, "amend", "--ticket", "10", env=env).returncode == 0
+    _refile_issue(env, 10, _ready(10, comments=[{"body": _wrote(env, 10)}]))
+
+    result = _engine(repo, "amend", "--ticket", "10", env=env)
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["amended"] is False
+    assert "already" in answer["reason"]
+
+
+def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
+    tmp_path: Path,
+) -> None:
+    """The two answer different failures at different moments — the rebuild a
+    collision at integration, the amend a verdict before it — so spending one
+    leaves the other where it was, and a collided ticket's repair story does
+    not depend on whether its verifier had earlier found a typo (ADR-0069)."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+    trees = _collided(repo)
+    assert _engine(repo, "amend", "--ticket", "10", env=env).returncode == 0
+    amended = _wrote(env, 10)
+    _refile_issue(env, 10, _ready(10, comments=[{"body": amended}]))
+
+    result = _engine(repo, "rebuild", "--ticket", "10", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["rebuilt"] is True
+    assert not trees[10].exists()
+
+    # With both notes standing, neither bound is left for this ticket to spend.
+    rebuilt = _wrote(env, 10)
+    _refile_issue(env, 10, _ready(10, comments=[{"body": amended}, {"body": rebuilt}]))
+    assert _engine(repo, "amend", "--ticket", "10", env=env).returncode == 2
 
 
 def test_record_stores_the_ticket_a_conflicted_outcome_collided_with(
