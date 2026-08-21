@@ -27,11 +27,50 @@ VERIFYING_BRIEFS = (
 # subagent's (ADR-0072).
 ALL_BRIEFS = (*VERIFYING_BRIEFS, "fix.md")
 
+# Which briefs the run hands a subagent that writes a ticket's code — the
+# first build and the amend. Declared once: the invariant test quantifies
+# over the reference directory itself, so a brief added later is classified
+# from the moment it exists — here, or in EXEMPT_BRIEFS with its reason
+# stated (issue #85).
+CODE_WRITING_BRIEFS = (
+    "brief.md",
+    "amend.md",
+)
+
+# Every rule that applies to a subagent holding a code-writing brief, named
+# by the opening of the paragraph that states it. A rule is carried whole —
+# its opening paragraph and every paragraph under it up to the next rule —
+# and in one wording wherever it belongs, the mechanism proven on the
+# waiting rule (issue #85).
+CODE_WRITING_RULES = {
+    "the reservation rule (ADR-0071)": "**Numbers are reserved for you.**",
+    "the run-owned files rule (ADR-0071)": "**Some files are the run's to write, not yours.**",
+    "the waiting rule (issue #75)": "**A long command is waited on, not yielded to.**",
+    "the confinement rule (ADR-0071)": "**Where you write.**",
+}
+
+# The reference directory's remaining briefs, each with the reason the
+# code-writing rules are not its to carry — a stated exemption a reader
+# checks, rather than an absence somebody has to notice (issue #85).
+EXEMPT_BRIEFS = {
+    "verify.md": "verdict only: its subagent runs the gate and reads the tree, and writes no work of its own",
+    "repaired.md": "verdict only: the repair's verifier reads the merged tree, and writes no work of its own",
+    "wave.md": "verdict only: the wave check is told to change nothing — the finder is never the fixer",
+    "repair.md": "merges work two builders already made and may build nothing either ticket left undone, so it creates no record and no entry of its own",
+    "fix.md": "runs alone on the integrated branch after the notes are applied — nothing builds beside it, and its findings may send it into the very files the run owns",
+}
+
 
 def _brief(name: str) -> str:
     """Read one of the skill's briefs."""
 
     return (SKILL / "references" / name).read_text(encoding="utf-8")
+
+
+def _instructions(name: str) -> str:
+    """One brief's fill-in instructions — everything above the brief itself."""
+
+    return _brief(name).split("\n---\n", 1)[0]
 
 
 def _waiting_paragraph(text: str) -> str:
@@ -115,6 +154,100 @@ def test_the_briefs_state_the_waiting_rule_in_one_wording() -> None:
         f" same wording, so the briefs state one rule rather than one each."
         f" These differ: {sorted(stated)}."
     )
+
+
+def _rule_statement(text: str, opening: str) -> str:
+    """One rule as a brief states it, or the empty string.
+
+    A rule is the paragraph opening with the rule's own bold sentence plus
+    every paragraph under it up to the next bold-opening paragraph, so a rule
+    that carries a placeholder and its follow-through is compared whole.
+    """
+
+    paragraphs = [paragraph.strip() for paragraph in text.split("\n\n")]
+    for index, paragraph in enumerate(paragraphs):
+        if paragraph.startswith(opening):
+            statement = [paragraph]
+            for following in paragraphs[index + 1 :]:
+                if following.startswith("**"):
+                    break
+                statement.append(following)
+            return "\n\n".join(statement)
+    return ""
+
+
+def test_every_brief_the_reference_directory_holds_is_classified() -> None:
+    """Every rule has to find every brief by hand, and nothing fails when one does not.
+
+    Two rules reached some briefs and not the amending builder's, which took
+    over a first builder's work in the same working tree knowing less than
+    that builder did. So the classification quantifies over the briefs the
+    directory actually holds rather than over a list of names: a brief added
+    later fails here from the moment it exists, until it is declared
+    code-writing or visibly exempt (issue #85).
+    """
+
+    on_disk = {path.name for path in (SKILL / "references").glob("*.md")}
+    classified = set(CODE_WRITING_BRIEFS) | set(EXEMPT_BRIEFS)
+
+    assert set(CODE_WRITING_BRIEFS).isdisjoint(EXEMPT_BRIEFS), (
+        f"{SKILL / 'references'}: a brief is code-writing or exempt, never"
+        f" both — an exemption on a code-writing brief is a contradiction a"
+        f" reader cannot check. Both: "
+        f"{sorted(set(CODE_WRITING_BRIEFS) & set(EXEMPT_BRIEFS))} (issue #85)."
+    )
+    assert on_disk == classified, (
+        f"{SKILL / 'references'}: every brief the directory holds is declared"
+        f" code-writing or exempt, and nothing is declared that the directory"
+        f" does not hold — an unclassified brief is one no rule finds, and a"
+        f" stale entry is a claim about nothing. Unclassified: "
+        f"{sorted(on_disk - classified)}; stale: {sorted(classified - on_disk)}"
+        f" (issue #85)."
+    )
+
+
+def test_every_code_writing_brief_carries_every_code_writing_rule() -> None:
+    """A subagent obeys the brief it was given, and the amending builder's said less.
+
+    The amending builder was briefed without the reservation rule and the
+    run-owned files rule, so it could mint a duplicate record number or append
+    straight to a run-owned file — the two collisions those rules exist to
+    remove. So every code-writing brief carries every rule that applies to a
+    code-writing subagent, in one wording, with every placeholder the rule
+    carries explained by that brief's fill-in instructions (issue #85).
+    """
+
+    for rule, opening in CODE_WRITING_RULES.items():
+        stated = {
+            name: _rule_statement(_brief(name), opening) for name in CODE_WRITING_BRIEFS
+        }
+        wordings = set(stated.values())
+
+        # Every code-writing brief states the rule at all.
+        assert "" not in wordings, (
+            f"{SKILL / 'references'}: every code-writing brief states {rule}"
+            f" in a paragraph opening `{opening}`. These state it nowhere:"
+            f" {sorted(name for name, statement in stated.items() if not statement)}"
+            f" (issue #85)."
+        )
+
+        # One rule in one wording, whichever brief a subagent is holding.
+        assert len(wordings) == 1, (
+            f"{SKILL / 'references'}: every code-writing brief states {rule}"
+            f" in the same wording, so a rule reads identically whichever"
+            f" brief a subagent is holding. These differ: {sorted(stated)}"
+            f" (issue #85)."
+        )
+
+        # A placeholder nothing explains is handed out unfilled.
+        for name, statement in stated.items():
+            instructions = _instructions(name)
+            for placeholder in re.findall(r"`<[a-z-]+>`", statement):
+                assert placeholder in instructions, (
+                    f"{SKILL / 'references' / name}: the fill-in instructions"
+                    f" say what {placeholder} in {rule} is replaced with"
+                    f" (issue #85)."
+                )
 
 
 def test_the_build_step_resumes_a_subagent_left_waiting() -> None:
@@ -1032,12 +1165,6 @@ GATE_CARRYING_BRIEFS = (
     "wave.md",
     "amend.md",
 )
-
-
-def _instructions(name: str) -> str:
-    """One brief's fill-in instructions — everything above the brief itself."""
-
-    return _brief(name).split("\n---\n", 1)[0]
 
 
 def test_every_gate_brief_carries_the_gate_rather_than_rediscovering_it() -> None:
