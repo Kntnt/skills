@@ -1,0 +1,5 @@
+interface:
+  display_name: "Push"
+  short_description: "Commit, then push the branch"
+policy:
+  allow_implicit_invocation: false

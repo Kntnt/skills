@@ -1,0 +1,5 @@
+interface:
+  display_name: "Kntnt Skills"
+  short_description: "Manage this collection's enabled skills"
+policy:
+  allow_implicit_invocation: false

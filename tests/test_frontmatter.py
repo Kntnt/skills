@@ -8,6 +8,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, cast
 
+import yaml
 from support.contract import STANDARD
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -392,3 +393,81 @@ def test_both_deviating_fields_are_still_in_use() -> None:
         written |= set(kntnt.parse_frontmatter(skill_md.read_text(encoding="utf-8")))
 
     assert HARNESS_FIELDS <= written
+
+
+# Where a harness that does not read the frontmatter above finds the same two
+# facts. Codex reads a skill's user-facing name and its invocation policy out
+# of `agents/openai.yaml` and out of nothing else, so a skill declaring them
+# only in its frontmatter arrives there unnamed and implicitly invocable.
+SIDECAR = "agents/openai.yaml"
+
+
+def _sidecar(directory: Path) -> dict[str, Any]:
+    """Parse the Codex sidecar one shipped skill carries beside its SKILL.md."""
+
+    path = directory / SIDECAR
+    assert path.is_file(), (
+        f"{path}: every skill the collection ships carries this sidecar. It is"
+        f" where Codex reads the skill's user-facing name and its invocation"
+        f" policy, neither of which it takes from the frontmatter, so a skill"
+        f" without one is nameless in its picker and implicitly invocable"
+        f" whatever the frontmatter says. See {STANDARD}."
+    )
+
+    return cast(dict[str, Any], yaml.safe_load(path.read_text(encoding="utf-8")))
+
+
+def test_every_shipped_skill_names_itself_to_codex() -> None:
+    """The sidecar's `interface` block is the skill's name in a picker.
+
+    A `description` is written for a harness deciding when a skill applies and
+    reads as an instruction rather than a label; the two fields here are
+    written for a human reading a list, which is why the sidecar carries its
+    own rather than pointing at the frontmatter's.
+    """
+
+    for skill_md in _shipped_skill_mds():
+        interface = _sidecar(skill_md.parent).get("interface") or {}
+        for field in ("display_name", "short_description"):
+            value = interface.get(field)
+            assert isinstance(value, str) and value.strip(), (
+                f"{skill_md.parent / SIDECAR}: `interface.{field}` is missing"
+                f" or empty. Both are what Codex shows a user choosing between"
+                f" skills, and neither has a fallback it could take from the"
+                f" frontmatter. See {STANDARD}."
+            )
+
+
+def test_the_sidecar_says_what_the_frontmatter_says_about_invocation() -> None:
+    """One fact, written once per harness, and the two copies have to agree.
+
+    `disable-model-invocation` and `allow_implicit_invocation` are the same
+    decision under two spellings, and the failure they guard against is silent:
+    a skill meant to run only when a user asks for it, arriving in Codex free
+    to be invoked on a prompt that merely resembles its description. Both
+    harnesses default to allowing it, and neither default is leaned on — a
+    skill that says nothing has not decided, it has only failed to write the
+    decision down, and the two spellings can then disagree without either
+    file changing.
+    """
+
+    for skill_md in _shipped_skill_mds():
+        declared = _frontmatter(str(skill_md.relative_to(SKILLS))).get(
+            "disable-model-invocation"
+        )
+        assert isinstance(declared, bool), (
+            f"{skill_md}: `disable-model-invocation` is {declared!r}. Every"
+            f" skill writes it, `false` included, because the field is how the"
+            f" collection says whose the invocation is and an unwritten field"
+            f" says only that nobody decided. See {STANDARD}."
+        )
+
+        policy = _sidecar(skill_md.parent).get("policy") or {}
+        expected = {"allow_implicit_invocation": not declared}
+        assert policy == expected, (
+            f"{skill_md.parent / SIDECAR}: the `policy` block is"
+            f" {policy or 'absent'} where the frontmatter's"
+            f" `disable-model-invocation: {str(declared).lower()}` makes it"
+            f" {expected}. The two are one decision spelled twice, and Codex"
+            f" reads only this copy. See {STANDARD}."
+        )

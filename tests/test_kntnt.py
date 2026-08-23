@@ -3552,10 +3552,12 @@ def test_agents_md_is_model_invoked() -> None:
     text = (REPO_ROOT / "skills" / "agents" / "agents-md" / "SKILL.md").read_text(
         encoding="utf-8"
     )
-    assert "disable-model-invocation" not in text, (
+    assert "disable-model-invocation: false" in text, (
         f"{REPO_ROOT / 'skills' / 'agents' / 'agents-md' / 'SKILL.md'}: this"
-        f" skill is the one the model invokes on its own, so it carries no"
-        f" `disable-model-invocation` (ADR-0018). See {STANDARD}."
+        f" skill is the one the model invokes on its own, and it says so in"
+        f" the field rather than by leaving the field out — an absent field is"
+        f" a decision nobody wrote, and the Codex sidecar beside it has to"
+        f" agree with something (ADR-0018). See {STANDARD}."
     )
     assert "name: agents-md" in text, (
         f"{REPO_ROOT / 'skills' / 'agents' / 'agents-md' / 'SKILL.md'}: `name`"

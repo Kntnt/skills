@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.12.0] – 2026-08-23
+
+### Added
+
+- Every Skill of the collection, the Manager included, now ships an `agents/openai.yaml` beside its `SKILL.md`. Codex reads a Skill's user-facing name and its invocation policy out of that sidecar and out of nothing else — not out of the frontmatter every other harness here reads — so a collection that declared both only in frontmatter arrived in Codex nameless in the skill picker and, worse, implicitly invocable: eight of the nine Skills say the invocation is the user's, and `/commit`, `/push`, `/release`, and `/orchestrate` are exactly the kind that must never start because a prompt resembled a description. The sidecar carries an `interface` block naming the Skill for a person reading a list, written for that reader rather than reusing the `description`, which is a harness's hook for deciding when a Skill applies and reads as an instruction rather than a label. Nothing else Codex accepts there is written — no icon, no brand colour, no default prompt, and no dependency declaration, that last one being a second copy of the four lists the frontmatter already carries and would have to be kept true by hand. The rule is stated in the Skills coding standard and enforced by the suite.
+
+### Changed
+
+- The invocation policy is now written out on every Skill in both spellings rather than left to either harness's default. Both default to allowing a model to start a Skill on its own, so `/agents-md` — the one Skill here that a model may start (ADR-0018) — used to say so by carrying no `disable-model-invocation` at all and, in the new sidecar, no `policy` block. That is a decision nobody wrote: an absent field cannot be told from an author who never considered the question, and two files that each say nothing can come to disagree without either of them being edited, which is precisely the drift a second copy of one fact invites. So `agents-md` now carries `disable-model-invocation: false` and `allow_implicit_invocation: true`, the other eight carry `true` and `false`, and the suite reads the pair on every Skill and fails where they disagree or where either is unwritten. The test that held `agents-md` to carrying no such field now holds it to carrying the field with `false` in it, which is the same decision said out loud. It moves the baseline ADR-0066 records the collection's distance from the specification's reference validator by: `skills-ref validate` now rejects all nine Skills on both `argument-hint` and `disable-model-invocation`, where it rejected eight on the second, and that record carries a pointer saying so under ADR-0075's convention for a premise outrun by a change with no record of its own.
+
 ## [0.11.0] – 2026-08-21
 
 ### Added

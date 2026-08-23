@@ -1,0 +1,5 @@
+interface:
+  display_name: "Ready for Agent Check"
+  short_description: "Read tickets as the builder will"
+policy:
+  allow_implicit_invocation: false

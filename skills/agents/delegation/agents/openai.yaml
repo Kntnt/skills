@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delegation"
+  short_description: "Turn delegation mode on or off"
+policy:
+  allow_implicit_invocation: false

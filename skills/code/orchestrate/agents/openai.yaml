@@ -1,0 +1,5 @@
+interface:
+  display_name: "Orchestrate"
+  short_description: "Build ready tickets unattended, in waves"
+policy:
+  allow_implicit_invocation: false

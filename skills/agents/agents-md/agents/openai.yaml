@@ -1,0 +1,5 @@
+interface:
+  display_name: "AGENTS.md"
+  short_description: "Tend AGENTS.md and agents.d/"
+policy:
+  allow_implicit_invocation: true

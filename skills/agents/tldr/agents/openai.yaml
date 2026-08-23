@@ -1,0 +1,5 @@
+interface:
+  display_name: "TL;DR"
+  short_description: "Summarise, and keep replies short"
+policy:
+  allow_implicit_invocation: false
