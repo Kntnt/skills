@@ -63,7 +63,7 @@ Leave planning and verification with the main agent while subagents execute the 
 
 ### tldr
 
-Summarise the previous answer or keep later replies short by default. A bare `/tldr` reports what happened, what the agent decided and what still needs you. Run `/tldr [instruction]`, `/tldr --on|--off [--user] [--yes]` or `/tldr --status`.
+Reframe the previous answer at the level and focus useful to the person who owns the outcome, or keep later replies concise and decision-relevant by default. A bare `/tldr` answers the substance again without handing over every implementation detail; `--on` applies the same perspective only to subsequent replies. Run `/tldr [instruction]`, `/tldr --on|--off [--user] [--yes]` or `/tldr --status`.
 
 ### commit
 

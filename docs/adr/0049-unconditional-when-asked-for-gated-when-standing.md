@@ -1,6 +1,6 @@
 # The template is unconditional when asked for, and gated when standing
 
-`/tldr` renders three sections — what happened, what I decided, what needs you — every time it is invoked. TL;DR mode renders them only above a gate. The asymmetry is deliberate, and it rests on a fact about how instructions to a model decay.
+`/tldr` renders three sections — what happened, what I decided, what needs you — every time it is invoked. TL;DR mode renders them only above a gate. The asymmetry is deliberate, and it rests on a fact about how instructions to a model decay. This output contract is superseded by ADR-0080, which replaces both the fixed template and its gated standing counterpart with one content-selection policy and a natural form.
 
 **"Use your judgment" is the one instruction that will not hold.** To a person it is reasonable guidance. To a model it is the first thing to erode: twenty turns into a session, with a full context and a hard problem, *be concise where appropriate* has no force, because this reply is always the appropriate exception. Instructions that survive are the ones that can be checked against the draft already written.
 

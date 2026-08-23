@@ -2,7 +2,7 @@
 
 ## NAME
 
-tldr - summarise the previous response or keep later responses concise
+tldr - reframe the previous response or keep later responses concise
 
 ## SYNOPSIS
 
@@ -14,17 +14,19 @@ tldr - summarise the previous response or keep later responses concise
 
 ## DESCRIPTION
 
-`tldr` has two modes of operation. Without a mode option it summarises what the agent has written since the user last spoke, together with any earlier context needed to understand that range. With `--on` or `--off` it controls a standing instruction that keeps later replies concise.
+`tldr` has two modes of operation. Without a mode option it treats the invocation as feedback that the preceding answer missed the useful level, focus, or density, then answers that substance again together with any earlier context needed to understand it. It reframes even an answer that was already short instead of merely compressing the same structure.
 
-A summary contains what happened, what the agent decided on the user's behalf, and what still needs the user. All three parts appear even when nothing needs the user. It uses the conversation's language unless *INSTRUCTION* requests another language, range, focus, length, or format.
+The replacement answer speaks to a technically capable person who owns the outcome without expecting them to hold every implementation detail. It leads with the conclusion, keeps practical implications and material decisions, omits internal mechanics by default, and uses whatever structure fits the content. Any action or decision genuinely requiring the user is explicit; no heading, list, or empty verdict is mandatory.
 
-TL;DR mode applies to replies in the conversation, not to source files, documentation, comments, commit messages, or other artifacts. Short ordinary replies need no template; longer work reports retain a closing verdict that states what needs the user.
+With `--on` or `--off`, the Skill controls the same perspective as a standing instruction for subsequent replies. Turning it on does not revisit or summarise the preceding answer. An explicit request for more detail overrides its default level for that reply.
+
+TL;DR mode applies to replies in the conversation, not to source files, documentation, comments, commit messages, other artifacts, or general-purpose text and file compression.
 
 ## POSITIONAL ARGUMENTS
 
 *INSTRUCTION*...
 
-Free-form instructions for the summary, in any language. They may widen the range, select a language, narrow the subject, or constrain the output.
+Free-form instructions for the replacement answer, in any language. They may widen the range, select a language, narrow the subject, or constrain the output.
 
 ## OPTIONS
 
@@ -52,27 +54,27 @@ Write or remove the user block without waiting for confirmation. It is valid onl
 
 **session**
 
-The default. It applies only to the current conversation and is stored nowhere else. Context compaction may drop it.
+The default. It applies only to subsequent replies in the current conversation and is stored nowhere else. Context compaction may drop it.
 
 **user**
 
-A managed block in this Harness's global context file. There is no Project scope because reply length is a reader preference rather than a shared Project convention.
+A managed block in this Harness's global context file. There is no Project scope because conversational perspective and density are reader preferences rather than a shared Project convention.
 
 ## DIAGNOSTICS
 
 An incomplete or invalid form is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/tldr --help`. In particular, `/tldr --user` and `/tldr --yes` are invalid, while `/tldr --on --user --yes` is valid.
 
-A summary that cannot cover the requested range because the preceding response is already short or context compaction removed part of it says so instead of presenting an incomplete result as complete.
+A replacement answer whose requested range is partly unavailable after context compaction states that limit instead of presenting an incomplete result as complete.
 
 ## EXAMPLES
 
 **/tldr bara säkerhetsdelen**
 
-Summarise only the security-related part of the previous response.
+Re-answer only the security-related part of the previous response.
 
 **/tldr --on --user**
 
-Show and confirm a user-level block that keeps later replies concise in the current Harness.
+Show and confirm a user-level block that keeps later replies concise and decision-relevant in the current Harness without revisiting the preceding answer.
 
 ## INVOCATION ENVELOPE
 

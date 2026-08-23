@@ -31,8 +31,8 @@
     {
       "name": "tldr",
       "category": "agents",
-      "description": "Summarise what was just said as a TL;DR, and turn TL;DR mode on or off so replies stay short and say what needs you.",
-      "digest": "973afbd4413467dd77b779ae005b08bc598bad17d9bd7f0f8491119d47279004",
+      "description": "Reframe what was just said for the person who owns the outcome, and turn TL;DR mode on or off so later replies stay concise and decision-relevant.",
+      "digest": "b108c2324711847538a5660cb28d5c442ef4e59ecf0235abb44584c93859ebb8",
       "binaries": [],
       "skills": [],
       "externals": [],
