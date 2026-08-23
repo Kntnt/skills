@@ -67,6 +67,18 @@ _Avoid_: usage, man
 What `--yes` means on any collection skill: no question is asked at all — every question that could be answered yes or no is answered yes instead. Because the flag answers rather than defers, every yes/no question is worded so that *yes* ends it; a question whose yes opens another question has no unattended answer. Where a subcommand deletes files the user is choosing to delete, the flag is also the gate — the script refuses without it, because a script cannot prompt. Deleting a Withdrawn skill is not such a choice and is not gated: there is no question to answer, so Update removes it with or without the flag.
 _Avoid_: force, non-interactive, quiet, auto-approve
 
+**Run Outcome**:
+The immutable historical result of an unattended Orchestrate attempt against a ticket. A later repair does not change what that attempt did.
+_Avoid_: current outcome, ticket status
+
+**Ticket Resolution**:
+The current account of whether the work requested by a ticket is complete. Report groups tickets by Ticket Resolution while retaining any earlier Run Outcome as provenance.
+_Avoid_: run outcome, tracker state
+
+**Reconciliation**:
+An explicit maintainer acknowledgement that a ticket with an unsuccessful Run Outcome was completed outside Orchestrate and now has a done Ticket Resolution. It preserves the unsuccessful Run Outcome as provenance.
+_Avoid_: retry, overwrite, superseding outcome
+
 **Enabled**:
 A skill present on disk in a layer, in each Detected Harness's skills directory for that layer.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)
