@@ -1,0 +1,5 @@
+interface:
+  display_name: "Model Selector"
+  short_description: "Compare AI model price and performance"
+policy:
+  allow_implicit_invocation: false

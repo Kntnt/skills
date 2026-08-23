@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.13.0] – 2026-08-23
+
+### Added
+
+- `/model-selector` configures exact AI model versions, effort and serving modes, and subscription or API access channels, then recommends or charts complete configurations from workload-specific Pareto frontiers. Its profile-neutral machine-readable seed carries dated public model, API-price, and benchmark priors without shipping a user's entitlements, and its incremental ledger separates immutable releases from mutable prices, aliases, quotas, benchmarks, and local observations so known details are not researched again.
+
 ## [0.12.1] – 2026-08-23
 
 ### Changed
