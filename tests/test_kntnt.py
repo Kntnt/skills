@@ -3485,6 +3485,7 @@ def test_every_manpage_documents_the_invocation_envelope() -> None:
         "Contextual Instruction",
         "Conversation Context",
         "Redundant but applicable guidance is valid",
+        "Before the first side effect, the Skill uses available read-only checks",
         "exact partial outcome",
         "reserved separator",
         "syntax refusal",
