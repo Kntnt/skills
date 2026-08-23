@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.12.1] – 2026-08-23
+
+### Changed
+
+- `/agents-md` is explicitly confined to the current repository. Its optional path must resolve inside that project, and the Skill refuses to create or change user-level, home-directory, Harness-global, or system-level agent instructions.
+
 ## [0.12.0] – 2026-08-23
 
 ### Added

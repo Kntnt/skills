@@ -1,6 +1,6 @@
 # agents-md
 
-Tend `AGENTS.md` and `agents.d/` — the files every session loads before it starts.
+Tend the current project's `AGENTS.md` and `agents.d/` — the files every session in that project loads before it starts.
 
 ## Synopsis
 
@@ -20,7 +20,7 @@ The skill runs after a task, not during one — unless you invoked it yourself, 
 
 ## Arguments
 
-- `path` — the directory to tend. Defaults to the current repository root.
+- `path` — a directory inside the current repository to tend. Defaults to the repository root. Paths outside it are refused; the skill never changes user-level, Harness-global, or system-level agent instructions.
 
 ## Options
 

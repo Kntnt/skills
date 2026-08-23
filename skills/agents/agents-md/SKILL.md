@@ -1,6 +1,6 @@
 ---
 name: agents-md
-description: "AGENTS.md: create, shrink, or tend the always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`."
+description: "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`."
 disable-model-invocation: false
 argument-hint: "[path] [--force] [--yes]"
 compatibility: Requires git and uv
@@ -28,13 +28,15 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `/agents-md [path] [--force] [--yes]`, and nothing else.
 
-Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/agents-md --help` for the page in full. Then write no file and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
+`path`, when present, must resolve inside the current repository root. The Skill never creates or changes user-level, home-directory, Harness-global, or system-level agent instructions.
+
+Anything else is an invalid form. A `path` outside the current repository is invalid too. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/agents-md --help` for the page in full. Then write no file and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
 
 ## Steps
 
 1. Run only after the current task is complete, or when the user passed `/agents-md` or `--force`. Mid-task with no user invoke: stop. Done when this run is after the task or the user invoked it.
 2. Run the dependency checker. Done when it exits 0, or you told the user to install the Manager.
-3. Target `path` or the repo root. Inventory `CLAUDE.md`, `AGENTS.md`, `agents.d/`, `docs/`, `README*`, and every tracked Project `SKILL.md` (`git ls-files` under `.claude/skills/`, `.agents/skills/`, and `skills/`). Done when that inventory exists.
+3. Resolve the current repository root. Refuse a `path` outside it; otherwise target `path` or that root. Never target agent instructions above or outside the repository. Inventory `CLAUDE.md`, `AGENTS.md`, `agents.d/`, `docs/`, `README*`, and every tracked Project `SKILL.md` (`git ls-files` under `.claude/skills/`, `.agents/skills/`, and `skills/`). Done when the target is project-local and that inventory exists.
 4. Collect candidate facts from those files and from this session. Read [`gates.md`](references/gates.md) and apply every gate to every candidate. Read [`placement.md`](references/placement.md) and give each survivor a home. Done when every candidate is `KEEP`, `CUT`, `ASK`, or placed.
 5. Read [`writes.md`](references/writes.md). Split the plan into writes and questions. Done when every change is one or the other.
 6. No `KEEP` and no `--force`: write no file. Report why. Stop. Done when the working tree is unchanged.

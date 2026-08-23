@@ -4,8 +4,8 @@
     {
       "name": "agents-md",
       "category": "agents",
-      "description": "AGENTS.md: create, shrink, or tend the always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "8c22da7ac3042c6728b02e4cee0433e05fa6eb97d4e4ef7fff89ca71de98f396",
+      "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
+      "digest": "3ee215ba251fac38d90f2dede1d620ba6698803fdfc51de20d6d9619bec1748a",
       "binaries": [
         "git",
         "uv"
