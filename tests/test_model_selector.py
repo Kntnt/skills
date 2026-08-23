@@ -297,3 +297,67 @@ def test_commands_keep_capability_priors_offline_and_append_only() -> None:
     assert manifest["record_type"] == "seed_manifest"
     assert "capability_prior" in manifest["scope"]
     _assert_contains_all(skill, command_rules)
+
+
+def test_route_exposes_the_public_model_routing_contract() -> None:
+    """Delegated callers receive ordered, exact, reproducible decisions."""
+
+    skill = _read("SKILL.md")
+    route_help = _read("help/route.md")
+    route_contract = _read("references/model-routing.md")
+    public_contract = f"{skill}\n{route_help}\n{route_contract}"
+    required_fragments = {
+        "`selected`, `inherit`, or `refused`",
+        "same order",
+        "low`, `medium`, `high`, `xhigh`, and `max",
+        "profile revision",
+        "evidence vintage and identity",
+        "Harness inventory",
+        "main-seat identity",
+        "control mappings",
+        "commercial facts",
+        "override policy",
+        "configuration fingerprint",
+        "Harness-native launch arguments",
+        "exact configured model version or resolved alias",
+        "native deliberation control",
+        "serving mode",
+        "evidence class",
+        "provenance",
+        "exclusions",
+        "bounded next escalation",
+        "never starts setup",
+        "performs no network access",
+        "writes no configuration or evidence",
+    }
+
+    _assert_contains_all(public_contract, required_fragments)
+    assert "| `route` | `$HERE/help/route.md` |" in skill
+    assert "/model-selector route <path>" in skill
+
+
+def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
+    """Routing cannot approximate an unsafe or unreachable exact point."""
+
+    contract = _read("references/model-routing.md")
+    required_fragments = {
+        "invalid_profile",
+        "ambiguous_override",
+        "unavailable_override",
+        "unknown_main_seat_ceiling",
+        "above_main_seat_ceiling",
+        "unrepresentable_verdict_inheritance",
+        "empty_safe_candidate_set",
+        "locks only that dimension",
+        "actual spawn capabilities",
+        "concrete current-Harness adapter",
+        "never interpolates, rounds, or guesses",
+        "adjacency does not imply quality ordering",
+        "matched evidence may prefer a lower portable level",
+        "Missing evidence remains unknown",
+        "external checker or declared failure signal",
+        "one adjacent portable level on the same model",
+        "Cash, rolling quota, weekly quota, allocated subscription cost, and latency",
+    }
+
+    _assert_contains_all(contract, required_fragments)

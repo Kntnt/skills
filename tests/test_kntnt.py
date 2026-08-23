@@ -5293,6 +5293,7 @@ _MODEL_SELECTOR_MANPAGES = frozenset(
         "config/show.md",
         "recommend.md",
         "record.md",
+        "route.md",
         "setup.md",
         "status.md",
         "update.md",

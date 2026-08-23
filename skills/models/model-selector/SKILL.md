@@ -2,7 +2,7 @@
 name: model-selector
 description: Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.
 disable-model-invocation: true
-argument-hint: "[setup|config|recommend|chart|compare|update|record|status] [args] [--decision=route|renew] [--budget=<amount>] [--quality=<score>] [--force] [--data=<path>] [-- <instruction>]"
+argument-hint: "[setup|config|recommend|route|chart|compare|update|record|status] [args] [--decision=route|renew] [--budget=<amount>] [--quality=<score>] [--force] [--data=<path>] [-- <instruction>]"
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: ""
@@ -28,6 +28,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | Command path | Manpage |
 | --- | --- |
 | `recommend` | `$HERE/help/recommend.md` |
+| `route` | `$HERE/help/route.md` |
 | `chart` | `$HERE/help/chart.md` |
 | `compare` | `$HERE/help/compare.md` |
 | `setup` | `$HERE/help/setup.md` |
@@ -53,6 +54,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `/model-selector config remove model\|channel <id>` | Remove one model selection or access channel after confirmation. |
 | `/model-selector config history\|reset` | Show configuration history, or reset the active configuration after confirmation. |
 | `/model-selector [recommend] [<workload>]` | Recommend from stored evidence. Infer the current task only when the workload is omitted and unambiguous. |
+| `/model-selector route <path>` | Resolve a structured request artifact into ordered exact launch decisions. |
 | `/model-selector chart\|compare <workload>` | Show comparable frontier tables and plotting data. |
 | `/model-selector update [--force]` | Revalidate due discovery, pricing, and benchmark indexes once. |
 | `/model-selector record <path>` | Validate and append unseen local run observations. |
@@ -96,6 +98,10 @@ Start every recommendation with exactly one prominent, text-bearing status banne
 Immediately after a blue or orange banner, emit a section titled `Snabbaste vägen till mätdata` using the frozen experiment-brief contract in `$HERE/references/pareto-selection.md`. `recommend` remains offline and read-only: it plans the experiment but performs no network request, evaluation, or write. Normal work executes the brief, and `record` imports its observation artifact; do not add or imply an experiment command.
 
 Complete when the recommendation names an exact configuration and decision rule, every named alternative is comparable, and the user can see why dominated candidates lost.
+
+## Route
+
+Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Consume the artifact at the supplied path, use its frozen snapshot or derive and return one from current local state, and emit only the compact structured response. Route never enters setup and performs no network access, evaluation, research, or persistent write.
 
 ## Chart
 

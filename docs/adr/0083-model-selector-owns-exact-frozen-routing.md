@@ -1,0 +1,15 @@
+# Model-selector owns exact frozen routing
+
+Delegated execution needs a compact decision that another Skill can launch, while model-selector's recommendation is deliberately a detailed human report and may begin first-use setup. Letting each caller translate that report would duplicate selection policy, conceal unsupported native controls, and allow unattended work to drift when profiles, aliases, prices, evidence, or Harness capabilities change.
+
+**Model-selector owns one public route Interface beside human recommend.** Route consumes one versioned structured request or an ordered batch and returns ordered discriminated selection, inheritance, or refusal decisions. Only selection contains an exact Harness-native launch instruction; inheritance audits why no override is safe, and refusal has a stable reason. Both forms share complete-point filtering, evidence classes, multidimensional costs, uncertainty, and escalation semantics, while recommend retains its frontier neighbors, banners, and experiment brief.
+
+**The unattended context is frozen and returned.** A routing snapshot binds the profile revision, evidence identity and vintage, active Harness inventory, main-seat identity, verified native-control mappings, commercial facts, and override policy. Reusing it excludes later environmental changes. Route derives this context locally when none is supplied and performs no setup, network access, evaluation, research, or persistent write.
+
+**The main seat is the authority ceiling and verdict owner.** Execution points, including explicit overrides, cannot exceed its complete capability. Verdict work inherits the exact main seat and is never price-optimized. Unknown ceilings and unrepresentable inheritance are refusals rather than optimistic fallbacks.
+
+**Portable deliberation is narrow and exact.** The public values are `low`, `medium`, `high`, `xhigh`, and `max`; native names and numeric budgets remain inside verified mappings for an exact model, channel, surface, and Harness. Missing mappings are unavailable, never approximated. `max` resolves within the frozen snapshot and its native value participates in the fingerprint. The scale establishes adjacency but makes no monotonic quality claim.
+
+**Overrides have field-level precedence and evidence stays honest.** A supplied model locks only model, and supplied deliberation locks only deliberation. Hard filters and the main-seat ceiling still apply. Representative matched evidence is required for measurement-based selection; missing evidence remains unknown. Cheap-first escalation requires reversible objectively checked work and an external signal, consumes only an existing retry, and ordinarily advances one supported adjacent deliberation level on the same model.
+
+**What this costs.** Callers must provide structured workload and Harness facts and retain a potentially detailed snapshot. Exact mappings make some configured points unavailable until the Harness can prove how to launch them. In return, unattended decisions are reproducible, auditable, and executable without giving dependent Skills ownership of model-selection policy.
