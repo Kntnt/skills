@@ -2,7 +2,7 @@
 name: delegation
 description: Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.
 disable-model-invocation: true
-argument-hint: "[session|project|user] [on|off] [--yes] | [session|project|user] status"
+argument-hint: "[session|--session] | [session|project|user|--session|--project|--user] on|off|--on|--off [--yes] | [session|project|user|--session|--project|--user] status|--status"
 compatibility: Requires uv, and a harness that can run subagents
 metadata:
   kntnt.internal: "true"
@@ -68,7 +68,7 @@ The verdict is the effective state here and now:
 
 ## Steps
 
-1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/delegation --help` for the page in full. Change nothing and stop. Done when scope and state are settled, or you have stopped.
+1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/delegation --help` for the page in full. Change nothing and stop. Done when scope and state are settled, or you have stopped.
 2. Scope `project` or `user`, any state: read [`persist.md`](references/persist.md) and follow it, then go to the report. Done when the block is written, removed, or read.
 3. Session `on`, `off`, or a toggle of the current verdict. Going on: read `$HERE/references/mode.md` and adopt it as a standing instruction for the rest of this session. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
 4. Write `{"active": true}` or `{"active": false}`, and nothing else, to `kntnt-delegation.json` in whatever per-session scratchpad or temporary directory your harness gives you, so a compaction cannot lose the state. No such directory: the conversation alone carries it. `status` writes nothing. Done when that file matches the session state, or there is nowhere to write it.

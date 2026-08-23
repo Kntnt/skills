@@ -1,98 +1,171 @@
 # orchestrate
 
-Work the tracker's ready-for-agent tickets unattended, on the branch you are already on.
+## NAME
 
-## Synopsis
+orchestrate - work ready-for-agent tickets in dependency waves
 
-`/orchestrate [#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`
+## SYNOPSIS
 
-## Description
+**/orchestrate** [*TICKET-OR-SPEC*...] [**--dry-run**] [**--at-once** *COUNT*] [**--model** *NAME*] [**--yes**]
 
-Reads the issue tracker for this repository, works out which tickets an unattended run can start, and then works them: every open ticket carrying `ready-for-agent`, a wave at a time, or the part of them you aimed the run at. A ticket without that label never appears, because a ticket without it is unfinished thinking and is never built. Run it from the most capable model you have — the model the orchestrating session runs on is your move rather than the skill's, and the run's judgment calls, from reading a ticket for an open decision to every verdict below, are only as good as the model asked to make them.
+## DESCRIPTION
 
-The blocking edges between those tickets make the plan a wave plan rather than a list. Wave one is what may start now; each later wave is what the wave before it unblocks. An edge comes from the tracker's own blocked-by relation, and where a ticket carries none, from a `Blocked by` line in its body naming other tickets — which is how the ticket breakdown writes an edge the tracker has no relation for. The body is that fallback and not a second source: where the relation carries any edge at all, it is the whole of that ticket's edges. A body edge is a bare `#number`; one written as `owner/repo#number` is refused rather than read, because a run reads one repository's tracker and cannot tell such a reference in it from one somewhere else. A blocker that is already closed names work that exists and blocks nothing.
+`orchestrate` plans and works the current repository's open `ready-for-agent` tickets on the branch where it starts. It claims each ticket, delegates the build to a fresh subagent, delegates verification to a different subagent, integrates verified work, records the outcome on the tracker, and closes successful tickets. It does not push, tag, or release.
 
-Before the first ticket is claimed, every ticket in scope is read once for a decision its own text leaves open — a value deferred to the maintainer, a choice named as theirs, two designs left standing. The label promises there is nothing left to ask, but the label is a claim, and triage sometimes gets it wrong. Whatever that reading finds is asked in one batch, while the developer who just typed the command is still there, and each answer is written on its ticket as a comment — which is how it reaches the builder, the brief carrying the whole thread. After that batch the run does not address you again until the report. Under `--yes` there is nobody to ask, so such a ticket is **parked** instead: the question is written on the ticket, `ready-for-agent` is replaced with `needs-info` — the tracker saying truthfully that the thinking is not finished — and any claim the run held on it is released. A parked ticket leaves the scope the way an unlabelled ticket was never in it, and the run works everything else.
+Blocking relations produce dependency waves. Wave one contains tickets that can start immediately; each later wave contains work unblocked by earlier verified work. Native tracker dependency relations are authoritative when present. A ticket with no native relation may declare bare `#number` references on a `Blocked by` line. Closed blockers do not block.
 
-Each ticket goes the same way. It is **claimed** on the tracker before any work on it starts, by assigning it, so a second session you start in parallel sees it taken and skips it — and so a ticket a person has taken is left alone too. It is then **built** by a subagent with its own context window, so a long run does not degrade as one context fills. The brief that subagent gets carries the ticket as the tracker now holds it rather than a summary of it — the body it was filed with, followed by everything written on it since, oldest first and each comment attributed and dated. That matters because a ticket is a thread: triage answers the body's open questions in a comment, and a builder given only the body would be answering them again. Where a comment contradicts the body the later text stands, and an acceptance criterion stated in a comment is one of the ticket's criteria. What a run wrote on the ticket itself — the outcome it recorded, the note it leaves before a rebuild or an amend — is left out, that being the engine talking to its next self. The brief also carries the ticket's parent spec with the instruction to read its testing decisions before writing any test, the instruction to build test-first, and the fact that nobody is watching — which makes a genuine decision something to stop and report rather than guess at.
+The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Builders may use cheaper models through `--model` or automatic selection, but every verdict remains on the orchestrator's model.
 
-A subagent that stops and reports rather than finishing is triaged, not written straight down as a failure, and one question sorts the stop: does fixing it decide anything about the work? A **mechanical hinder** — a condition of the environment anybody would repair the same way: a path slightly wrong, a directory missing, a number it wanted already taken — decides nothing, so the run repairs the condition itself and hands the same brief out once more. Once: a hinder that survives its repair is recorded as the failure it now is, for the same reason the amend and the rebuild below are bounded to one. A **genuine decision** — an ambiguity the ticket does not settle, a requirement it does not state, a design the spec leaves open — parks the ticket exactly as a plan-time question does under `--yes`: the question is written on the ticket, `ready-for-agent` gives way to `needs-info`, the claim is released, and the wave carries on without it — no outcome is recorded, because nothing about the work was tried and found wanting, and the morning report names the ticket with its question. A **discovered dependency** — the builder found the ticket depends on open work the graph does not name — is sorted by whether the missing thing has a number: an answer no ticket carries is a genuine decision and parks as above, while an open ticket is an edge the ticket breakdown missed, and the run records the ticket **blocked** on it rather than failed. That writes the corrected edge to the tracker itself, the way the breakdown would have — the native blocked-by relation, or a `Blocked by` body line on a tracker without one — releases the claim, leaves the ticket open with a note saying what happened and on what, and discards the half-built working tree and its branch exactly as a refused repair is discarded, without spending the ticket's one rebuild. Nothing about the ticket is settled: it comes back workable the moment its blocker closes — the same night, where a later wave reaches it — and is then isolated afresh from the branch that carries its blocker's work and built whole on top of it. The corrected edge is where you look in the morning: it is on the ticket, in the breakdown's own vocabulary, and if the builder named a wrong edge, removing it there is one gesture. A stop that is none of these is exactly that — work tried and found wanting — and goes down the failure path like any failed verdict, into the amend below. None of this addresses you: what the run has standing to act on it acts on, between waves, and it turns to you once, in the report, which leads with what is done and what is yours to do and states what it found as findings rather than as questions waiting for you to wake up.
+Before claiming anything, the Skill reads every ticket in scope for a decision the text leaves open and asks all such questions in one batch. Answers are posted to the corresponding ticket before building. With `--yes`, an open decision cannot be answered, so the ticket is parked under `needs-info` with its question and the rest of the scope continues.
 
-The tickets that are workable now are built at the same time rather than one after another, up to the ceiling `--at-once` sets, so no ticket waits on an unrelated one. Above a ceiling of one, each ticket is built in a working tree of its own, cut from where your branch stands and kept under the repository's own git directory — your working tree is where you left it, and `git status` says nothing about a run in progress. A ceiling of exactly one needs none of that: the ticket is built where you are, on the branch you are on, and there is nothing to integrate.
+## POSITIONAL ARGUMENTS
 
-It is then **verified** by a second subagent that never saw the building session and is told nothing the builder claimed. It is given the same account of the ticket the builder was given, body and thread alike, so a criterion stated in a comment is a criterion the verdict is taken against. That subagent runs the project's verification gate itself and checks each acceptance criterion against the repository as it now is. A line in the ticket prescribing the delivery channel — a pull request, a push, a release — is not an acceptance criterion, because delivery is the run's boundary: the verifier notes the clause in its report and takes its verdict from the rest. The gate is resolved once, at the run's start, from the project's contributing guide — the commands it names for verifying a change, or the whole test suite and whatever lint, format, and type checks the project is configured for where no guide names any — and every brief that asks for verification carries that list whole: all of it is run, and a check the list does not name is not run in its place, so no subagent rediscovers the commands or goes looking for checks beyond them. Its verdict is what decides. There is no flag, argument, or circumstance that skips it, because a run that can report success it cannot support is worse than no run at all.
+*TICKET-OR-SPEC*...
 
-Only then is the ticket **integrated** — merged into the branch you started the run on — and **closed**, together with the commit that carries the work. That happens as each wave completes rather than at the end of the run, because a ticket in a later wave is blocked by one in an earlier wave: it builds on that code and must have it. Once a wave is merged, a check reads the branch as it now stands, twice over: it runs the project's full verification, which is what catches two tickets that pass alone and fail together, and it reads the branch for **coherence** — registries where one number answers twice, a release section holding two of the same heading, citations the branch's own edits invalidated, prose asserting what those edits have made false — the defects no gate sees, because a ticket forked before a sibling's work landed could never have seen the contradiction. What that reading finds mechanical — a fix that restates what the branch already decided — a separate subagent fixes on the branch, and the check runs again on the result, gate and coherence both, around a loop that ends only when a round finds nothing; the finder is never the fixer, so no fix goes unread. The loop stops the run instead where the gate fails, where a finding is a choice between two tickets' intents rather than a restatement, or where a round changes nothing — and the tickets the run never attempted because of it are named in the report. The working tree of a merged ticket is taken away and its branch with it, so you come back to one branch and a tidy machine.
+Bare references such as `#14`. With no references, the scope is every open ticket carrying `ready-for-agent`. With references, the scope is the union of each named ticket and each named spec's children.
 
-Some files are the run's own to write rather than any builder's — the changelog above all, and whatever else your repository's ground rules make every ticket touch, such as a guide's list of references or a worklog. Every ticket appends to those files by construction, so every ticket collides with every other one there, over prose the two of them agree about. A builder that has an entry for such a file therefore leaves it as a note in its own working tree instead, committed with its work, and once the wave is merged the run adds the wave's entries to the real files itself, one ticket at a time in the order it merged them, and takes the notes away. Appends made one after another cannot collide, so three tickets that each write a changelog line come back as three lines rather than as three repairs — or as the quieter failure, a clean merge leaving one release section with two of the same heading, which git cannot see and nobody reads twice. Those entries land before the branch check runs, so what the run writes is verified exactly like the work it describes. A repository with no such file has none named, and nothing about the night changes.
+A reference filed as the parent of other tickets is a spec and is never built itself. Where the tracker exposes no parent relation, a `Parent` line in a ticket body is the fallback. A reference that does not resolve, is not a number, or uses `owner/repo#number` makes the complete invocation invalid.
 
-A collision at the merge is repaired rather than reported straight away, because two tickets that both added an import should not cost a full rebuild. The run branch is merged into the losing ticket's own branch and the conflict is settled there, by a subagent that is given both tickets as they were filed — nothing is settled on your branch, which never carries a resolution nobody has checked. A second subagent that did not make that resolution then verifies it against **both** tickets' acceptance criteria and runs the project's full verification itself, because the way a repair fails quietly is by keeping one ticket's criteria and dropping the other's. On a pass the ticket merges and closes as any other does. Where it does not verify — the resolver hit a genuine disagreement the two bodies do not settle, or the verdict is a fail — the repair is thrown away with the working tree that holds it and the ticket is built again from nothing on top of the work it collided with, where it cannot collide again. That rebuild happens at most once per ticket and is the one rerun a collision buys; a ticket that collides a second time is recorded conflicted instead. You are never asked to resolve anything mid-run.
+Naming a ticket narrows the scope but does not bypass blockers, claims, readiness checks, or an outcome already recorded on the ticket.
 
-A ticket that fails verification buys one amend. A fresh builder takes over where the first one left off — the ticket's own working tree, or your branch at a ceiling of one — briefed with the ticket and with the verdict that failed it — which names the command that failed or the criterion that is not met, and is the one thing the first builder did not have — and a third subagent that has seen neither of them, briefed exactly as the first verifier was, decides whether what came back holds. On a pass the ticket merges and closes as any other does. Anything else — the amend tried and found wanting, or the third verdict a fail — writes the ticket down as failed and leaves it open and claimed, and nothing touches it again. That amend happens at most once per ticket and is a bound of its own rather than a share of the rebuild's, and it is written on the ticket the moment it starts, so a run interrupted mid-amend comes back and finds it spent rather than with its one amend to spend again (ADR-0069). Beyond it the ticket is not retried: a rerun from the same brief would have identical conditions and so would its outcome, which is exactly what the verdict changes and nothing else does. Nothing merges a failed ticket, so its working tree stays exactly where it stood, which is where you look at what it did. Above a ceiling of one the run carries on — the failure is contained in a working tree of its own, and what waited on that ticket comes back stranded rather than built on code that does not exist. At a ceiling of one the run stops there instead, the unverified work being on your branch already.
+## TICKET EXECUTION
 
-Every outcome is written on the ticket it belongs to, which is where the next run reads it back from. So what has been recorded changes what comes next: a ticket already recorded is never offered again, and a ticket whose blocker failed comes back **stranded** — not workable, because the work it builds on does not exist, and not missing from the account either, which is what a loop that only tracks what it can start drops without saying so.
+**Claim**
 
-## Aiming the run
+The ticket is assigned before work starts. A ticket claimed by another user or another active run is skipped. An interrupted claim belonging to this run can be resumed when the tracker and branch support it.
 
-Typed bare, the run works every open ticket carrying the label. Name tickets or specs and it works those instead:
+**Build**
 
-- **A ticket** — `/orchestrate #14` — works that ticket and no other. This is how one ticket is picked up on its own, without replaying the rest of the graph.
-- **A spec** — `/orchestrate #6` — works that spec's children, so tickets from an unrelated effort in the same tracker are left alone. The spec itself is never built, even where it carries the label: what has children is the shape of other work rather than work.
-- **Several of either** — `/orchestrate #14 #6 #21` — works the union of what they resolve to, in one run and one report. Every reference is read on its own exactly as a lone one is, so a ticket named twice, or named beside the spec that holds it, aims the run at the same set as either alone; the set is the set, and naming a ticket again is not an error.
+A fresh subagent receives the ticket body, its complete comment thread, the parent spec and its testing decisions, the Project's verification commands, the requirement to build test-first, and isolated scratch and reservation data. It receives no private summary of the ticket. The verification gate is resolved once at the run's start from the Project's contributing guide or configured checks; every verifier receives that exact list and neither substitutes nor expands it.
 
-Which of the two a reference named is the tracker's answer and not a guess, and it is asked once per reference. A reference the tracker files children under is a spec; where it files none, a ticket in scope naming it as its parent says the same thing, that being the other way the ticket breakdown writes the relation. Anything else the tracker can answer for is a ticket. A reference nothing can resolve — a number the tracker does not know, something that is not a number, or one written as `owner/repo#number` — is named as such and nothing is started, and one such reference stops the whole invocation however many readable ones stand beside it: working the rest of them would work a scope you did not name.
+**Verify**
 
-Aiming a run narrows what it works and changes nothing else about it. A named ticket still waits for the work it is blocked by — including work another ticket you named delivers, which is why several tickets come back laid out in waves rather than started together — and is reported as waiting rather than built on top of code that does not exist. A ticket whose outcome a run has already recorded is still settled, and naming it does not offer it again — clear that outcome from the ticket if you mean to build it afresh.
+A different subagent receives the same ticket record but none of the builder's claims. It runs the Project's complete verification gate and checks every acceptance criterion. Delivery requests such as push, pull request, or release are reported but do not change the verdict because delivery is outside this Skill.
 
-## Continuing an interrupted run
+**Integrate**
 
-A run that was interrupted — the machine slept, the session was killed, you closed the laptop — is continued by starting it again exactly as you started it the first time. There is no resume flag, and none to forget: a ticket already recorded is never offered again, so an interruption costs you the tickets that were left rather than the ones that were built, and the ticket the run was on when it stopped is picked up again rather than treated as taken.
+Verified work is committed and integrated into the run branch. After each wave, the full Project gate runs on the combined branch and an independent coherence review checks cross-ticket facts that tests may not cover. Mechanical coherence findings are fixed by another subagent and checked again until a round is clean; a failed gate, an unresolved choice, or a fix that makes no progress stops the run.
 
-What makes that work is the tracker: outcomes are written on the tickets themselves, so a fresh session reads them exactly as the session that wrote them did. Alongside that, the run keeps a note of what it has claimed in whatever per-session scratch directory your harness provides. That note is remembered, never relied on — where it is gone, and after a machine restart it will be, the run rebuilds what it needs from the tracker and the branch and reaches the same account. What it buys is the one thing the tracker cannot say: whether a ticket standing in your name is a run of yours that stopped or a second one you started in parallel and is working right now.
+**Close**
 
-## The report
+The ticket is closed only after its work is integrated and the combined branch passes. Its recorded outcome names the commit that carries the work.
 
-The run ends with one report rather than a running commentary, so you read the whole night in one sitting. Every ticket in scope is in it exactly once — the whole label where you named nothing, and what you aimed the run at where you did — under one of five outcomes:
+## BUILDER STOPS
 
-- **done** — built, independently verified, and closed on the commit that carries the work.
-- **failed** — verification did not pass. The work was not reverted: it stands in the ticket's own working tree, or on your branch where the run made none, so you can look at it either way.
-- **conflicted** — this ticket's work collided with work already on the branch, and neither the repair nor the rebuild that followed it settled the collision. Its working tree stands, and the report names the files the two tickets both touched together with the ticket on the other side of them — that pair is a blocking edge your ticket breakdown was missing, and fixing it there is how this run improves the next one.
-- **stranded** — waiting, directly or through others, on a ticket that did not pass.
-- **never on the frontier** — everything this run never had a chance at: tickets waiting on each other in a circle, tickets waiting on open work outside the run, tickets another session has claimed, and tickets whose wave never came round because the run stopped first — which is where the tickets a failed integration cost you are named. A ticket parked over an open decision is named here too, with the question written on it — answer that question on the ticket and swap `needs-info` back to `ready-for-agent`, and the next run picks it up.
+**Mechanical hinder**
 
-There is no sixth pile and no ticket in two of them. A ticket recorded **blocked** mid-run is not one either: once its corrected edge is written it is simply a ticket waiting on open work, and the account already holds it — under **stranded** where its discovered blocker is a failure of the run's own, under **never on the frontier** where it is open work outside the run — with the edge on the tracker saying on what, and it is offered again the moment its blocker closes. A ticket the run dropped in silence is one you would not know to pick up. The report also names the commit the run's work sits on top of, so a night reads as one diff from there to the head of your branch.
+A deterministic environment problem is repaired by the orchestrator and the same brief is attempted once more. If the hinder remains, it follows the failure path.
 
-## Options
+**Genuine decision**
 
-- `--dry-run` — plan the run, print what would be worked, and start nothing. It reads the run you aimed, so a scope is honoured here exactly as it is when work starts.
-- `--at-once <n>` — how many tickets are built at the same time, so concurrent test suites do not overload the machine and fail for the wrong reason. One by default. Above one, each ticket gets a working tree of its own and the work is merged into your branch wave by wave; exactly one keeps everything on your branch with nothing to integrate. The ceiling carries that isolation decision with it, because isolation is not a separate choice to make.
-- `--model <name>` — the model the building subagents run on, so mechanical work can run cheaper than judgement work. Verification is not affected. Named, it pins every builder and switches the run's own judgment off. Absent, the run judges per ticket, from the ticket's own text, the cheapest model it judges able for that builder — a mechanical rename is not a redesign — never above its own; repairing a collision and amending a failed build delegate the same way, with the note that a ticket back for its amend has just demonstrated it was harder than it looked. Either way, every verdict — ticket verification, repair verification, the wave check — runs on the orchestrator's own model, because the saving is never taken at the last thing that would catch a mistake.
-- `--yes` — assume yes: answer any question the run would otherwise ask. The one documented exception is a decision a ticket's own text leaves open — the flag answers yes/no, and *which default?* is not one — so such a ticket is parked under `needs-info` rather than guessed at, and the report names it with its question.
+An ambiguity, missing requirement, or design choice not settled by the ticket parks the ticket under `needs-info`, posts the question, releases the claim, and records no build outcome.
 
-## Notes
+**Discovered dependency**
 
-A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/orchestrate --force` is an error, while `/orchestrate #21 --at-once 3 --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+When the missing requirement is carried by another open ticket, the run writes the missing blocking edge to the tracker, releases the claim, discards the partial isolated build, and offers the ticket again after its blocker closes. This does not consume the ticket's rebuild.
 
-At a ceiling of one, work is committed straight to the branch you were on, one commit per ticket, and nothing is merged because there is nothing to integrate. Above one, each ticket is committed on a branch of its own in a working tree under `.git/kntnt-orchestrate/<number>`, and merged into your branch as its wave completes; the working tree and branch of a merged ticket are removed, and those of a failed or conflicted one are kept where they are. The two exceptions are a ticket being rebuilt after a repair that did not verify and a ticket recorded blocked on open work the graph did not name: those working trees and branches are discarded, uncommitted work and all, because what they hold is a first try nothing will ever integrate — a resolution a verifier has just refused, or a build toward a requirement that could not yet be met. Either way the run ends with everything on the one branch you started it on.
+**Failed work**
 
-A working tree is named for its ticket and its branch for the run that made it, and it is the branch that says whose it is. So a tree left standing by a run on another branch — interrupted, or kept because its ticket failed — is named rather than picked up: this run would otherwise build its ticket on top of that branch's work and merge the result onto yours. Look at what is in it, then remove it with `git worktree remove`, and the ticket can be worked again.
+A stop that is neither mechanical, a genuine decision, nor a discovered dependency enters the same verification-failure path as a failed build.
 
-A run refuses a working tree that holds work nothing has committed. It commits where you left off, and it cannot tell a change you had not committed from the work it is about to do: at a ceiling of one that change lands inside a ticket's own commit, and above one it stops a merge that had nothing to collide with. Commit it or stash it, and start the run again. What the repository ignores is not work and never refuses anything. The same question is asked once more before a ticket is closed, because that is the last moment work that was never committed can be told from work that was.
+## FAILURES AND COLLISIONS
 
-Where a ticket in scope is claimed, the run asks the tracker who you are, so it can tell a claim of your own from somebody else's — and where the tracker will not say, it stops and tells you rather than guess. Either guess is one an unattended night should not make: reading your own interrupted claim as a stranger's leaves the work undone, and reading a stranger's as your own builds the same ticket twice. Nothing is asked and nothing refuses where no ticket in scope is claimed.
+A verification failure receives one amend. A fresh builder receives the ticket and failed verdict in the same working tree, and a third independent subagent verifies the result. A second failure records the ticket as failed and leaves its work available for inspection.
 
-A failed ticket's work is never reverted, so you can look at it. At a ceiling of one that work is on your branch, which is also why the run stops at the first failure the amend did not turn round: the next ticket would otherwise be built on top of unverified code. Above one it is in the ticket's own working tree and reaches your branch only by being merged, so the run carries on and what waited on that ticket comes back stranded.
+A merge collision is repaired on the ticket's own branch and verified against both tickets. If that repair fails, the ticket is rebuilt once from a clean base containing the work it collided with. A second collision records the ticket as conflicted.
 
-Nothing is pushed, tagged, or released, and no ticket is created or triaged. `/release` ships a version; this skill consumes tickets somebody else has decided are ready.
+With `--at-once 1`, unverified work is on the run branch, so an unrepaired failure stops later tickets. Above one, failures remain isolated and unrelated tickets continue; anything depending on failed work is stranded.
 
-A repository whose tracker holds no ready-for-agent ticket is said so, and nothing starts. So is a scope where no ticket is workable at all — tickets waiting on each other in a circle, or on open work the run will never build because it carries no label — and one where every workable ticket is already claimed.
+## CONTINUING A RUN
 
-## Dependencies
+Restart an interrupted run with the same invocation. There is no resume option. Recorded outcomes remain settled, and state is reconstructed from the tracker and branch when per-session scratch data is unavailable.
 
-`git`, `gh`, and `uv` on PATH, the manager installed, and a harness that can spawn subagents. The last one is a Capability no script can test: the skill asks you to confirm it, and does no work where it is not true.
+A ticket still claimed by the current user is resumed only when the Skill can distinguish an interrupted claim from another active run. If the tracker cannot identify the current user, the Skill stops rather than guessing.
 
-The tracker has to answer for more than the binary being there. Every plan asks it for each ticket's blocked-by relation and its parent, and a run aimed at a reference asks what is filed under that reference — so the repository needs issue dependencies and sub-issues, and `gh` needs to be new enough to know those fields. Where either is missing the first plan stops with what `gh` said, which names the field it could not answer for; `gh` upgraded, or the tracker's relations turned on, is what fixes it. The `Blocked by` and `Parent` lines a ticket body can carry are a fallback for a ticket that has no relation, not for a tracker that has none. `gh` also has to be authenticated for this repository, since the run claims tickets, comments on them, and closes them.
+## OUTCOMES
 
-## See also
+Every ticket in scope appears once in the final report.
 
-`/commit` records what a run leaves on the branch. `/kntnt select` to Enable this skill elsewhere.
+**done**
+
+Built, independently verified, integrated, recorded, and closed.
+
+**failed**
+
+Verification and the single amend did not pass. Work remains in the ticket's isolated working tree or, at a ceiling of one, on the run branch.
+
+**conflicted**
+
+Neither the collision repair nor the single rebuild produced an integrable result. The report names the colliding ticket and files.
+
+**stranded**
+
+Waiting directly or indirectly on a ticket that failed.
+
+**never on the frontier**
+
+Never became workable because of a cycle, an open blocker outside the run, another claim, a stopped integration, or a parked open decision.
+
+The report also names the commit on which the run's work is based. A ticket recorded blocked on newly discovered work appears under the outcome implied by that open blocker rather than in a sixth category.
+
+## OPTIONS
+
+**--dry-run**
+
+Read the tracker, resolve the requested scope, and print the dependency-wave plan without claiming or building a ticket.
+
+**--at-once** *COUNT*
+
+Build at most *COUNT* frontier tickets concurrently. The default is `1`. Values above one isolate each ticket in its own branch and working tree; `1` works directly on the current branch.
+
+**--model** *NAME*
+
+Use *NAME* for every building subagent. Verification, collision repair verdicts, amend verdicts, and wave checks remain on the orchestrator's model. Without this option, the Skill selects per ticket the cheapest builder model it judges able, never above its own model.
+
+**--yes**
+
+Assume yes for every yes-or-no question. A ticket containing an open choice is parked rather than guessed because the option cannot choose among alternatives.
+
+## FILES
+
+**.git/kntnt-orchestrate/**
+
+Working trees, branches, reservations, and ticket scratch space used when concurrency requires isolation. Successful ticket resources are removed after integration. Failed and conflicted resources remain for inspection; abandoned repair and blocked partial builds are discarded.
+
+**Run-owned append files**
+
+Builders leave proposed entries for files every ticket must append to, such as a changelog, in ticket-specific notes. The orchestrator applies those notes serially after each wave, and the combined branch verifies the entries with the rest of the work.
+
+## DIAGNOSTICS
+
+An invalid reference, option, option value, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`.
+
+The working tree must contain no uncommitted non-ignored work when the run plans and immediately before a ticket closes. Commit or stash such work and restart. A repository with no ready ticket, no workable frontier, or only externally claimed work is reported without starting a build.
+
+## EXAMPLES
+
+**/orchestrate --dry-run**
+
+Print the dependency-wave plan for every open `ready-for-agent` ticket without claiming one.
+
+**/orchestrate #14 #21 --at-once 2**
+
+Work the union of two ticket or spec references with at most two concurrent builders.
+
+## DEPENDENCIES
+
+**Binaries**
+
+`git`, `gh`, and `uv` on `PATH`. `gh` must be authenticated with write access to the current repository and support issue dependencies and sub-issues.
+
+**Skills**
+
+The Manager must be Enabled so the dependency check can run.
+
+**Capabilities**
+
+The current Harness must be able to spawn subagents. The Skill asks the Harness to confirm this capability and starts nothing when it is Unsatisfied.
+
+## SEE ALSO
+
+**/ready-for-agent-check --help**, **/commit --help**, **/release --help**

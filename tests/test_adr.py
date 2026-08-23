@@ -52,6 +52,8 @@ RELATIONS = {
     ("0055", "0069"),
     ("0060", "0061"),
     ("0063", "0076"),
+    ("0044", "0077"),
+    ("0063", "0077"),
 }
 
 # The clause every skill body opens its flag-refusal rule with, and the record

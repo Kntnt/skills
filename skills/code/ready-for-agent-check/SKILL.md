@@ -30,7 +30,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `/ready-for-agent-check [#<ticket> ...]`, and nothing else. Every argument is a ticket reference; there are no flags, and none is missing. Nothing here is written, asked, or changed, so there is no question for `--yes` to answer and no gate for it to open.
 
-Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/ready-for-agent-check --help` for the page in full. Then check nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
+Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/ready-for-agent-check --help` for the page in full. Then check nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
 
 ## Steps
 

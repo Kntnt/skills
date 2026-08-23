@@ -30,7 +30,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `/orchestrate [#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`, and nothing else. A run may be aimed at as many tickets and specs as the user cares to name. `--state-dir` is yours to pass rather than the developer's to type, and step 1 says where it comes from.
 
-Anything else is an invalid form. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/orchestrate --help` for the page in full. Then start nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
+Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/orchestrate --help` for the page in full. Then start nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
 
 ## Steps
 

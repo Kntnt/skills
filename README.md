@@ -3,118 +3,96 @@
 [![License](https://img.shields.io/github/license/Kntnt/skills)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/Kntnt/skills)](https://github.com/Kntnt/skills/releases/latest)
 
-AI Agent Skills Collection by Kntnt Sweden AB
+[Agent Skills](https://agentskills.io) are portable. Their paths are not: Claude Code, Codex, OpenCode and other Harnesses look for Skills in different directories. Kntnt Skills resolves that mismatch with one Manager. Choose the Skills for a layer once, and the Manager writes them to every Detected Harness.
 
-## Description
+The initial installation puts only the `kntnt` Manager on disk. Its Catalog lets you read every other Skill before you Enable it, keeps Global choices separate from Project extras and detects Harness paths for you.
 
-This repository is a collection of [Agent Skills](https://agentskills.io) for coding harnesses: Claude Code, OpenCode, Codex, and others that load skills from a well-known directory. It ships the skills, the shared scripts they call, and a manager named `kntnt`. It does not ship harness `commands/` files. What you type is a skill name (`/commit`, `/push`); the same gesture works in every harness you have.
+## Quick start
 
-`npx skills add Kntnt/skills` puts only `kntnt` on disk. The other skills stay off disk until you check them in `/kntnt select`. You are never asked which harnesses to target: every skill you Enable is applied to every harness present on the machine, worked out on each run, so the set does not drift between Claude and OpenCode — and a harness you install next month is picked up by the next `/kntnt update` with nothing to configure. Where a skill goes is not a choice; which skills you Enable is.
+You need [uv](https://docs.astral.sh/uv/), `npx` and network access. Install the Manager:
 
-There are two layers. Global is the set on this machine. Project is extras for one working directory. A harness in that directory loads the union of both. A Project cannot hide a Global skill. Project extras live as skill files in that project's harness directories; a teammate who checks those files in receives the extras, not your Global set.
-
-A new catalog entry is never enabled without your say-so. It is on the list `/kntnt select` prints as soon as the collection carries it, and `/kntnt update` reports it and asks whether to enable it — at the moment you are already thinking about the collection, rather than leaving you to reach for a second command. `--yes` answers that question yes, as it answers every question here, so an unattended `/kntnt update --yes` does enable what the collection has added since your last one; every name it enabled is in its report.
-
-A few skills need something of the harness itself rather than of your machine — `delegation` is pointless where subagents cannot be spawned. Those requirements are dependencies like any other, not an install-time filter: the skill is enabled on every harness you have, and in one that cannot meet the requirement it says so and does nothing. No script can test this, since the manager cannot know which harness invoked it; the agent answers, because the agent is the harness.
-
-## Recommended skills and collections of skills
-
-None of these is required. They are the skills and collections that sit well beside this one, listed as a courtesy rather than as a checklist. A skill here that genuinely needs something else declares that dependency itself, and tells you what to do about it when you run it — so this list never has to be the place you find out.
-
-- [Skills for Real Engineers](https://github.com/mattpocock/skills) if you want a full engineering and productivity set alongside these
-- [Improve](https://github.com/shadcn/improve) if you want a codebase surveyed before you change it
-- [No AI Slop](https://github.com/petergyang/no-ai-slop) if you want your prose to stop reading as machine-written
-- [agent-browser](https://github.com/vercel-labs/agent-browser) if a task needs a real browser
-- [Cloudflare Skills](https://github.com/cloudflare/skills) if you work with Cloudflare
-- [Impeccable](https://github.com/pbakaus/impeccable) if you work with web design
-
-## Installation
-
-The manager and the skills run their scripts with [uv](https://docs.astral.sh/uv/). If `uv` is missing, they stop and tell you to install it.
-
-```
+```sh
 npx skills add Kntnt/skills
 ```
 
-That command is the transport. It does not offer the rest of the collection in a picker; `/kntnt select` is how the rest of it reaches your disk.
-
-There is nothing to configure after it. In a harness that can see `kntnt`:
+Then open its Catalog from any Harness that can see `kntnt`:
 
 ```
 /kntnt select
 ```
 
-You get the catalog as a list grouped by category, one row per skill, each with a checkbox that is checked when you already have that skill. You answer it in one sentence of plain text — *check commit and push, uncheck delegation* — so changing several skills is one reply rather than a walk through a menu, and you are asked to confirm once before anything is written. It is the same command later: reading what you have and changing it are the same gesture, not two verbs with a transcription step between them. There is no picker and there will not be one — a skill's script has no terminal to draw in, and a widget belonging to one harness would make this collection behave differently depending on where you ran it. Pass `--project` to list and change the current working directory instead of the machine.
+The Manager groups Skills by Category and marks those already Enabled. Each row explains the Skill and names any Harness Capability it needs; a locked row also names the Skill you need to check first. You can ask to read any Skill's full help before replying to the list in plain text, for example `check commit, push and tldr`. Nothing is written until you confirm.
 
-That command works out where to write on its own: every harness with a home in that layer — `~/.claude`, `~/.config/opencode`, and so on for Global; `.claude`, `.crush` and their like for a Project. If it finds none, it writes to the shared `.agents/skills` directory alone, and never creates a directory for a harness you have not installed.
+## Choose where Skills apply
+
+Kntnt Skills keeps two layers. A Project adds to Global; it cannot hide a Global Skill.
+
+| Layer | What it is for | Select it with |
+|---|---|---|
+| Global | Skills available on this machine | `/kntnt select` |
+| Project | Extra Skills for the current working directory, suitable for committing with the Project | `/kntnt select --project` |
+
+The Manager detects Harnesses afresh on every run. When it changes a layer, it writes to every Harness present in that layer. If you install another supported Harness later, confirm the next Select list or run Update to copy your Enabled Skills into it. If no Harness is detected, the Manager uses only the shared `.agents/skills` directory.
+
+## Manage the collection
+
+| Command | Result |
+|---|---|
+| `/kntnt` | Show Manager help |
+| `/kntnt select [--project]` | Inspect the Catalog and change what is Enabled |
+| `/kntnt select --on <skill> --yes` | Enable a named Skill without opening the list |
+| `/kntnt update [--project]` | Refresh the Manager and Enabled Skills whose files differ, remove Withdrawn Skills, report new Skills and re-check Dependencies |
+| `/kntnt uninstall` | Remove Global Skills and then the Manager; leave Project copies alone |
+
+See `/kntnt help <command>` for all options. Select, Update and Uninstall accept `--dry-run`, which runs the operation against a temporary home and discards that home afterwards.
+
+> [!IMPORTANT]
+> `--yes` answers every yes-or-no question with yes. On `/kntnt update --yes`, that includes Enabling every new Skill reported by the update.
+
+Enabled Skills are invoked by their own names, not through the Manager. Run `/<skill> --help` for a Skill you have. To inspect one you have not Enabled, ask for its help while the Select list is open.
 
 ## Usage
 
-Bare `/kntnt` is Help. The manager subcommands are:
-
-| Command | What it does |
-|---|---|
-| `/kntnt help [command]` | Help for the manager or one of its verbs |
-| `/kntnt select [--on <skill>]… [--off <skill>]… [--project]` | List what the collection has and change it in the same answer |
-| `/kntnt update [--project]` | Refresh this collection and re-check dependencies |
-| `/kntnt uninstall` | Remove this collection from this machine, manager last |
-
-Select shows one layer and changes that one: Global bare, this working directory with `--project`. Reading it is never a side-effecting act, so an answer that changes nothing writes nothing. A skill whose files reached only some of your harnesses is shown checked and marked incomplete, and confirming the list repairs it; one whose files differ from the ones the collection ships is marked deviating, never *out of date*. What it is compared against is a digest: every catalog entry carries a content digest of the skill's directory as the collection ships it, and the same computation over what is on your disk answers the one freshness question this manager can answer honestly — are these the same files. A digest sees two states and no history, so it cannot say which way a difference runs, and outside a project copy that has fallen behind the likelier cause is an edit of your own, so the offer to re-copy says in the same breath that it overwrites that edit. The list is read from the collection itself, so a skill published upstream this morning is on it — and checkable — this afternoon, with no `/kntnt update` in between. When the collection cannot be reached, the list comes from the copy stored beside the manager and says so.
-
-Any row can be read in full before you answer it. Ask for a skill's help and you get the manpage that skill ships — read from your own copy where you have one, and fetched from the collection where you do not — so deciding whether to enable something never means installing it first. Where you have no copy and the collection cannot be reached, you are told that rather than shown an invented page. Asking is not answering: nothing is written, and the list is still open.
-
-The list carries the structure between skills as well as the skills. One that needs another of this collection is shown locked while that other is unchecked, and the row names what to check instead, so you can see why you cannot have it yet. Check it anyway and what it needs comes with it: you are asked one yes/no question naming exactly what would be added, once for the whole chain — checking `release` where you have neither `push` nor `commit` is a single yes rather than one question per level — and nothing is written until you have answered it. Unchecking a skill that another checked skill depends on is reported, not blocked: you are told what it leaves unsatisfied, and your answer stands.
-
-A machine can also be set up with nobody at the list. `--on <skill>` and `--off <skill>` name skills directly and open none, as often as you have names and in either combination in one invocation. They apply a change rather than a whole set: a skill you do not name keeps the state it had, files included, so nothing is re-copied over an edit of yours under a command that named something else. What a named skill needs comes with it, and you are asked once before it does. `--off` deletes files, so the script refuses it without `--yes`. `--yes` given with neither of them is an instruction of its own: open no list, enable nothing you had not already enabled, and put what you have into good order — refresh what deviates, repair what is incomplete. That is the deliberate opposite of `/kntnt update --yes`, which does enable the collection's new entries: there you pointed the verb at the collection, and here nobody was asked whether they wanted the skill.
-
-Every command here reads `--project` the same way: `--project` or `--project=on` means the Project, and nothing or `--project=off` means Global. Select and Update change that layer, and Select is also what lists it; Uninstall takes no `--project` at all. Update refreshes this collection only, and only what has moved: it compares each enabled skill against the digest its catalog entry carries and leaves alone the ones that already hold the collection's own files, so the report says what changed rather than how much you had enabled — and a skill it does re-copy loses any local edit you made to it. The manager is refreshed every time, since no catalog entry describes it and it is the verb that repairs the rest. It reports each new catalog skill and asks whether to enable it; a no leaves it Disabled, and `--yes` is a yes. It deletes a skill that has been withdrawn from the collection upstream, and does not ask: such a skill can no longer be updated or supported, and no other command here could reach it. It does not refresh a skill that came from another collection, and never deletes one: it recognises its own by a marker each carries in its own frontmatter. If a dependency is missing, it tells you how to satisfy it and does not install anything.
-
-`--yes` works the same on every skill here: whatever could be answered yes or no is answered yes instead of asked.
-
-`--dry-run` lets you watch a change happen before you let it happen. Select, Update, and Uninstall each accept it, and the run is the real one: the same code, the same transport, the same reading of the disk afterwards — only against a temporary home seeded with this collection's files as they are now, which is thrown away when the run ends. What you get back is the outcome rather than a description of it, and nothing on your machine has moved. It has an npm cache of its own, so it downloads the transport afresh and takes noticeably longer than the run it is previewing; the report says so before the wait. The confirmation each of those commands asks for anyway is the cheap way to see what is about to happen, and it is not this.
-
-`/kntnt uninstall` is the way out, and the mirror of the one command that installed this. It removes every enabled catalog skill from every harness on the machine and then the manager itself, so there is nothing left for your harness's own uninstall to do. The manager goes last and only if everything else went: a run that leaves a skill behind keeps `kntnt`, because it is the only thing that can be asked to finish. It takes no `--project`: skills in a working directory are checked into that repository and travel with it, so they are left alone and the report says so. It deletes files, so it asks first — `--yes` answers.
-
-Enabled skills are invoked by their own names, not as `/kntnt <name>`. Each one answers `--help` — `-h` and `help` too — with the manpage it ships beside itself, so a skill in front of you can be asked what it does without knowing which collection it arrived from. That, and the `select` list, are the two ways to a skill's help: the manager documents its own verbs and no skill.
-
 ### agents-md
 
-Create, shrink, or tend `AGENTS.md` and `agents.d/`. After a task it writes only facts the next session cannot discover from the repo. Default is to write nothing. Run it on demand with `/agents-md` or `--force`.
+Review `AGENTS.md` and `agents.d/` after a task and write only facts that the next session needs and cannot discover elsewhere. Use `--force` to create the initial structure. Run `/agents-md [path] [--force] [--yes]`.
 
 ### delegation
 
-Turn delegation mode on or off: while it is on, the agent orchestrates — thinks, plans, briefs, verifies — and subagents execute on the cheapest model able to do the job. `/delegation` toggles it for this session; add `project` or `user` with `on` or `off` to make it standing, and the skill writes the mode as a managed block into the context file your harness already loads, after showing you the file and the exact insertion. `/delegation status` reports all three scopes. It never changes your model or effort. It needs a harness that can spawn subagents, and refuses in one that cannot.
+Leave planning and verification with the main agent while subagents execute the work. The mode can last for the current session or be saved in Project or user context without changing the main agent's model or reasoning effort. Run `/delegation` to toggle the session, `/delegation [project|user] on|off [--yes]` to set a standing mode or `/delegation status` to inspect every scope.
 
 ### tldr
 
-Summarise what was just said, and keep replies short by default. Typed bare, `/tldr` gives you back everything the agent has written since you last spoke, in three parts — what happened, what it decided on your behalf, and what needs you — with the last part present even when the answer is *nothing needs you*. Anything you type after it is a free-form instruction in any language, so `all` widens the range, `engelska` picks a language, and `bara säkerhetsdelen` narrows the focus. `/tldr --on` switches on TL;DR mode, so replies are short from the outset and the closing verdict arrives without your asking; `--user` makes that standing, `--status` reports it, and `--off` takes it back. The mode is a managed block in the context file your harness already loads rather than a Claude Code output style, so it works everywhere and takes effect on the turn that switches it on. It has no project scope, and it governs what the agent says to you and never what it writes into files.
-
-### model-selector
-
-Configure the exact AI model versions, effort or thinking settings, serving modes, and subscription or API channels you can use, then compare complete agent configurations on workload-specific Pareto frontiers. First use saves a reusable profile under `~/.model-selector/`; `config` revises it, `recommend` chooses from stored evidence, `chart` and `compare` emit plotting data, and `update` refreshes only due mutable sources without refetching known immutable releases. Cash, subscription quota, allocated renewal cost, and latency remain separate unless you supply explicit shadow prices. The bundled profile-neutral seed provides dated public model, API-price, and benchmark priors but no account entitlement or personal access combination.
+Summarise the previous answer or keep later replies short by default. A bare `/tldr` reports what happened, what the agent decided and what still needs you. Run `/tldr [instruction]`, `/tldr --on|--off [--user] [--yes]` or `/tldr --status`.
 
 ### commit
 
-Reconcile `CHANGELOG.md` `[Unreleased]`, propose a `.gitignore` when the project has none, then stage the whole working tree (`git add -A`) and commit. The agent proposes a subject line from the changelog (or the diff) unless you pass `"message"`. It shows the plan and waits unless you pass `--yes`.
+Commit the entire working tree without pushing. The Skill reconciles `CHANGELOG.md`, proposes `.gitignore` additions where needed, derives a subject unless you provide one and shows the proposed changes before confirmation. Run `/commit ["message"] [--yes]`.
 
 ### push
 
-Follow `commit`, then push the current branch. Same `"message"` and `--yes` as `commit`. If the tree is clean it only pushes.
+Run the `commit` workflow, then push the current branch to its upstream. A clean working tree still allows existing unpushed commits to be sent. Run `/push ["message"] [--yes]`.
 
 ### release
 
-Ship a version from the default branch: reconcile `CHANGELOG.md`, bump, follow `push`, tag `HEAD`, and open a GitHub release. If the project has a conventional archive script, build it and attach the zip. Pass `minor`, `major`, or `X.Y.Z` to force the bump; otherwise the bump comes from `[Unreleased]`. `--no-build` skips the archive. `gh` is required only for the GitHub release step.
-
-### orchestrate
-
-Work the tracker's `ready-for-agent` tickets unattended, on the branch you are already on. It reads the tracker, lays the tickets out in the waves their blocking edges put them in — wave one is what may start now, each later wave is what the one before it unblocks — and then works them a wave at a time. A ticket without that label never appears: a ticket without it is unfinished thinking, and unfinished thinking is never built. An edge comes from the tracker's own blocked-by relation, or, where a ticket carries none, from a `Blocked by` line in its body naming a bare `#number`; a blocker that is already closed names work that exists and blocks nothing. Each ticket is claimed on the tracker before any work on it starts, so a second session you start in parallel skips it; built by a subagent with its own context window, briefed with the ticket as it stands — its body as it was filed and everything said on it since, so a requirement settled in a comment reaches the builder rather than being lost — together with its parent spec's testing decisions and the fact that nobody is watching — so a genuine decision is stopped and reported rather than guessed at; and then verified by a second subagent that never saw the building session, which runs the full verification itself and checks each acceptance criterion. Only then is the ticket merged into the branch you started on and closed, with the commit that carries the work. No flag skips verification, because a run that can report success it cannot support is worse than no run at all. The tickets on the frontier are built at the same time rather than one after another, up to the ceiling `--at-once` sets, so no ticket waits on an unrelated one; above a ceiling of one each is built in a working tree of its own under the repository's git directory, which is the isolation decision the ceiling carries with it rather than a second flag to answer. Each wave is merged into your branch as it completes, because a ticket in a later wave builds on the code an earlier one delivered, and the full verification then runs once on the branch as it stands — the only place two tickets that pass alone and fail together are caught. A failure there stops the run rather than spending the remaining hours building on broken code, and the tickets it never attempted are named. The working tree of a merged ticket is taken away and its branch with it; a failed or conflicted one keeps its own, so the machine ends tidy except for what you would want to look at. A collision at the merge is repaired before it is reported: the run branch is merged into the losing ticket's own branch and settled there, so your branch never carries a resolution nobody has checked, and a subagent that did not make that resolution verifies it against both tickets' acceptance criteria — a repair fails quietly by keeping one ticket's criteria and dropping the other's. Where it does not verify, the repair is thrown away and the ticket is built once more from nothing on top of the work it collided with, where it cannot collide again; that rebuild is the one rerun a collision buys and happens at most once per ticket, and nobody is asked to resolve anything mid-run. A collision neither settled is recorded conflicted and reported with the ticket it collided with, that pair naming a blocking edge the ticket breakdown was missing. A ticket that fails verification buys one amend, that being the other rerun and a bound of its own: a fresh builder takes over the same working tree with the ticket and the verdict that failed it — which names what the first builder never knew — and a third subagent that saw neither of them decides whether what came back holds, briefed exactly as the first verifier was. Where that does not pass, the ticket is written down and left open, and nothing touches it again; at a ceiling of one the run stops there, its unverified work being on your branch, and above one it carries on with the failure contained and whatever waited on it stranded. Every outcome is written on the ticket it belongs to, which is where the next plan reads it back from: a ticket already recorded is never offered again, and a ticket whose blocker failed comes back stranded — not workable, and not missing from the account either. The run ends with one report rather than a running commentary, and every ticket in scope is in it exactly once under one of five outcomes: done, failed, conflicted, stranded behind a failure, and never on the frontier, together with the commit the night's work sits on top of. An interrupted run is continued by starting it again exactly as before, with no resume flag to remember: the finished tickets stay finished, and the ticket the run was on when it stopped is picked up rather than left as taken. What the run keeps in the harness's per-session scratch directory is remembered but never relied on — where it is gone, as after a machine restart it is, the run rebuilds what it needs from the tracker and the branch and reaches the same account. Typed bare it works every ticket the label holds; name a ticket and it works that one alone, name a spec and it works that spec's children, name several of either and it works the union of what they resolve to, so an unrelated effort in the same tracker is left alone and a handful of tickets can be picked up without replaying the graph. Which of the two you named is the tracker's answer rather than a guess — a reference it files children under is a spec and is never itself built, a parent named in a body says the same where the relation carries nothing, and a reference nothing can resolve is named as such with nothing started, however many readable ones stand beside it. Aiming a run narrows what it works and changes nothing else about it: a named ticket still waits for what blocks it, and an outcome already recorded still settles it. `--model` names the model the building subagents run on; `--at-once` caps how many tickets are built at the same time, so concurrent test suites do not overload the machine and fail for the wrong reason; `--dry-run` prints the wave plan for the run you aimed and starts nothing. Either way the run ends with everything on the one branch you started it on. A run refuses a working tree holding work nothing has committed, when it plans and again before a ticket is closed, because a run commits where you left off and cannot tell your uncommitted change from a builder's; nothing is pushed, tagged, or released. It needs a harness that can spawn subagents, and refuses in one that cannot.
+Create a version from the default branch: reconcile the changelog, derive or accept the version, update version files, push and tag. When `gh` and a GitHub remote are available, the Skill also publishes a GitHub release; it attaches an archive when the Project provides a conventional archive build. Run `/release [minor|major|X.Y.Z] [--no-build] [--yes]`.
 
 ### ready-for-agent-check
 
-Read a ticket the way the agent that has to build it will read it, and report what would stop that agent. A ticket is written by somebody who knows what they meant and built hours later by somebody who does not, in a session with no human in it — so every ticket in scope is read by a subagent of its own, in a context window that had no part in writing it, and asked the one question that matters there: could you carry this out from start to finish without stopping to ask? That isolation is the mechanism rather than a detail of performance. A session that helped write a ticket reads its own intent back out of it and calls it clear, and it is the builder's reading the maintainer needs to see. The reviewer is given the ticket as the tracker now holds it — the body it was filed with and everything said on it since, oldest first and each comment attributed — because `/triage` files its brief as a comment, so the settled decisions and the acceptance criteria of a triaged ticket are usually not in the body at all. Half the check is done by looking rather than reading: a ticket makes claims about code, records, and files, and those go stale between filing and building, so each claim is checked against the repository as it now stands and reported beside what is there. What comes back, per ticket, is one line saying whether a builder could carry it through, then the **stops** — what it cannot get past without asking, each naming the question it would ask and what the ticket would have to say instead — and the **costs**, what it gets past but pays for. There is no partial verdict: a reviewer that is unsure answers no, the failure being a run that stops in the middle of the night. Typed bare it checks every open ticket carrying `ready-for-agent`, the set `/orchestrate` would work; name tickets and it checks exactly those whatever label they carry, so a ticket is checked before it is labelled rather than after. Nothing is written — no label moves, no comment is posted — because a check that relabelled what it disagreed with would be a second triage made by a reader deliberately given less context than the first. It needs a harness that can spawn subagents, and refuses in one that cannot.
+Check whether tickets can be built unattended before a run begins. Each ticket is read in an isolated subagent context and checked against the current Project; the Skill reports anything that would stop or slow the builder and never changes the tracker. Run `/ready-for-agent-check [#ticket ...]`.
 
-`tldr` and `model-selector` need no binary, capability, or other skill and both run on a machine without `uv`; only `model-selector update` benefits from network access, and it reports unreachable sources rather than making the rest of the skill unavailable. `commit`, `push`, `release`, `orchestrate`, and `agents-md` need `git`; `release` also needs `gh` for the GitHub release step, `orchestrate` needs it for the tracker, in a version new enough to know the issue dependencies and sub-issues the tracker itself has to carry, and `ready-for-agent-check` needs it to read that tracker, though only to read — it writes nothing there; `delegation`, `orchestrate`, and `ready-for-agent-check` need a harness that can spawn subagents. `push` needs `commit` and `release` needs `push`, and a dependency on another skill of this collection is the one kind `/kntnt select` can supply — it names it on the row and offers to add it. A binary, another collection's skill, and a harness capability are yours to satisfy: the skill that wants one does no work without it and prints how to fix it.
+### orchestrate
 
-## License
+Work the tracker's `ready-for-agent` tickets in Dependency waves on the current branch. Each ticket is claimed, built by a subagent and independently verified, and every outcome is recorded on its ticket. The run neither pushes nor releases. Run it for all ready tickets, named tickets or the children of a spec with `/orchestrate [#ticket-or-spec ...] [--dry-run] [--at-once N] [--model NAME] [--yes]`.
 
-Apache License 2.0. See [LICENSE](LICENSE). How to contribute is in [CONTRIBUTING.md](CONTRIBUTING.md).
+### model-selector
+
+Compare complete model configurations rather than model names in isolation. The Skill records exact versions, effort settings, serving modes and access channels, then recommends from price-performance evidence without reducing cash, quota, latency and quality to one ratio. Start with `/model-selector setup`, then use `/model-selector recommend <workload>` or `/model-selector --help`.
+
+**Dependencies.** `tldr` and `model-selector` have no Dependencies and work without `uv`; every other Skill needs `uv` and the Manager. `agents-md`, `commit`, `push`, `release` and `orchestrate` also need `git`. `orchestrate` and `ready-for-agent-check` need `gh`; `release` uses it only for the GitHub release step. `delegation`, `orchestrate` and `ready-for-agent-check` need a Harness that can spawn subagents. `push` needs `commit`, and `release` needs `push`. Select shows Dependencies on other Skills and Harness Capabilities and can offer required Skills from this Collection. Any Unsatisfied binary Dependency is reported when the Skill is invoked.
+
+## Contributing and licence
+
+Bug fixes, corrections and clarifications are welcome. Discuss new features or changes to existing behaviour in an issue before opening a pull request; the full workflow and verification commands are in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Kntnt Skills is licensed under the [Apache License 2.0](LICENSE).

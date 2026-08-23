@@ -16,7 +16,7 @@ The Manager. One namespaced entry point. Every other collection skill is invoked
 
 ## Help
 
-If the arguments are `help`, `--help`, `-h`, or `help <command>`, follow `$HERE/steps/help.md` and stop. `$HERE/help.md` is this skill's own manpage, and `$HERE/help/<verb>.md` is the manpage of one verb; both are printed by that file rather than read by you. The Manager documents its own verbs and no skill: a skill the user has answers `/<skill> --help` itself, and one they do not have is read about from the `select` list.
+If the arguments are `help`, `--help`, `-h`, `help <command>`, `<subcommand> --help`, or `<subcommand> -h`, follow `$HERE/steps/help.md` and stop. `$HERE/help.md` is this Skill's own manpage, and `$HERE/help/<verb>.md` is the manpage of one verb; both are printed by that file rather than read by you. The Manager documents its own verbs and no Skill: a Skill the user has answers `/<skill> --help` itself, and one they do not have is read about from the `select` list.
 
 ## Arguments
 
@@ -35,6 +35,6 @@ Which Harnesses a verb reaches is never asked and never recorded: every Harness 
 
 ## Steps
 
-1. Take the first argument as the subcommand. No arguments → `help`. `help`, `--help`, or `-h` → `help`.
+1. Take the first argument as the subcommand. No arguments → `help`; the `## Help` section has already stopped every help form.
 2. Read `$HERE/steps/<subcommand>.md`. Where there is no such file the word is not one of the Manager's: run `uv run "$HERE/scripts/kntnt.py" <subcommand>`, emit what it answers with as it stands, and stop. It refuses with the unknown word, the Manager's own synopsis, and where to read the page in full — nothing after that word is passed on, guessed at, or acted on, and none of that text is yours to write.
 3. Follow that file. Done when it says to stop.

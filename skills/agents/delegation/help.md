@@ -1,54 +1,111 @@
 # delegation
 
-Turn delegation mode on or off — you orchestrate, subagents execute.
+## NAME
 
-## Synopsis
+delegation - control delegation mode for a session, Project, or user
 
-```
-/delegation [session|project|user] on|off [--yes]
-/delegation [session|project|user] status
-/delegation [session]
-```
+## SYNOPSIS
 
-## Description
+**/delegation** [**session**|**--session**]
 
-While delegation mode is on, the agent you are talking to thinks, plans, briefs, and verifies, and hands the execution to subagents on the cheapest model able to do the job. This skill is how that mode is turned on, turned off, and read.
+**/delegation** [**session**|**project**|**user**|**--session**|**--project**|**--user**] (**on**|**off**|**--on**|**--off**) [**--yes**]
 
-Three scopes, in widening order of reach:
+**/delegation** [**session**|**project**|**user**|**--session**|**--project**|**--user**] (**status**|**--status**)
 
-- `session` — this conversation only. Nothing is written to a context file, so nothing outlives the session but a note in whatever scratch directory the harness provides, kept so a compaction cannot lose the state.
-- `project` — a managed block in the context file this repository already loads, normally a committed one. Everyone who clones the repository gets the mode.
-- `user` — the same managed block in this harness's own global context file. It covers the harness you are in; run the skill in another harness to give that one the mode too.
+## DESCRIPTION
 
-The verdict is the effective state here and now: a session instruction wins, and otherwise the mode is on exactly when a managed block sits in a context file this harness loads here. `project` and `user` write an identical block, so they cannot disagree.
+`delegation` controls a mode in which the main agent plans, briefs, orchestrates, and verifies while subagents execute on the cheapest model the main agent judges able. It does not change the main agent's model or reasoning effort.
 
-Your own model and reasoning effort stay yours. Whatever your harness offers for changing them is yours to run, never the skill's.
+With no arguments, it toggles the session scope. An explicit `on` or `off` changes the selected scope. `status` reports the selected scope, or all scopes when no scope is given. Scope and state may be written as bare words or equivalent long options, in either order.
 
-## Arguments
+The effective verdict is resolved in this order: an explicit session instruction wins; otherwise the mode is on when a managed block exists in a Project or user context file loaded by the current Harness. Project and user blocks contain identical instructions and therefore cannot create different mode definitions.
 
-One scope and one state, bare or flagged, in any order: `/delegation project on`, `/delegation --project --on`, and `/delegation --on --project` all mean the same.
+## SCOPES
 
-- scope — `session` (the default), `project`, or `user`.
-- state — `on`, `off`, or `status`. `status` with no scope reports all three.
+**session**
 
-## Options
+Apply only to the current conversation. The state is also recorded in the Harness's per-session scratch directory when one exists, so context compaction does not silently lose it.
 
-- `--yes` — assume yes: write the persistent scope without waiting for a confirmation. Valid only alongside `on` or `off`.
+**project**
 
-## Notes
+Write or remove a managed block in the context file this Project already loads. A committed block applies to everyone using the Project.
 
-Session is the only scope that can be toggled without saying which way. Flipping a file in your home configuration, or a committed file in a shared repository, off an inferred state is the wrong default, so `/delegation user` with no state changes nothing and prints the synopsis rather than asking which of `on`, `off`, or `status` you meant.
+**user**
 
-A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/delegation status --yes` is an error, while `/delegation user on --yes` is not. An invalid form is refused the same way as a disallowed flag, and there is one refusal rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing changed.
+Write or remove the same managed block in this Harness's global context file. Run the Skill separately in another Harness to configure that Harness.
 
-Session `off` suspends this skill's own instruction. It does not remove a standing block: that text stays in the context window and its tokens are still paid. A compaction can drop the session instruction while the block survives, so run `/delegation off` again if delegating resumes.
+## STATES
 
-A block whose text no longer matches the skill's is reported as stale, and `/delegation <scope> on` is the fix — it rewrites the block rather than adding a second one.
+**on**
 
-## Dependencies
+Enable delegation mode in the selected scope.
 
-`uv` on PATH, the manager installed, and a harness that can spawn subagents. The last one is a Capability no script can test: the skill asks you to confirm it, and does no work where it is not true.
+**off**
 
-## See also
+Disable the selected scope. Session `off` suspends a standing Project or user block for the current conversation without removing its text; a later compaction may expose that block again.
 
-`/kntnt select` to Enable this skill elsewhere.
+**status**
+
+Report scope state, the effective verdict, and any stale managed block without changing persistent state.
+
+## OPTIONS
+
+**--session**, **--project**, **--user**
+
+Long-option aliases for the corresponding scope operands.
+
+**--on**, **--off**, **--status**
+
+Long-option aliases for the corresponding state operands.
+
+**--yes**
+
+Write or remove a persistent Project or user block without waiting for confirmation. It is valid only with `on` or `off`.
+
+## FILES
+
+**kntnt-delegation.json**
+
+Optional state in the Harness's per-session scratch directory. It preserves session state across context compaction and does not outlive the session.
+
+**Project and user context files**
+
+The Skill shows the selected file and exact managed block before writing unless `--yes` is present. A block whose text differs from the current Skill is reported as stale; applying `on` rewrites it in place.
+
+## DIAGNOSTICS
+
+A persistent scope without a state, more than one scope or state, `status` combined with another state, and `--yes` without `on` or `off` are invalid. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/delegation --help`.
+
+An option with no work to do is refused rather than ignored. In particular, `/delegation status --yes` is invalid.
+
+## EXAMPLES
+
+**/delegation**
+
+Toggle delegation mode for the current session.
+
+**/delegation project on**
+
+Show and confirm a managed Project block that enables the mode for later sessions.
+
+**/delegation status**
+
+Report all scopes and the effective verdict.
+
+## DEPENDENCIES
+
+**Binaries**
+
+`uv` on `PATH`.
+
+**Skills**
+
+The Manager must be Enabled so the dependency check can run.
+
+**Capabilities**
+
+The current Harness must be able to spawn subagents. The Skill asks the Harness to confirm this capability and does no work when it is unsatisfied.
+
+## SEE ALSO
+
+**/tldr --help**, **/kntnt select**

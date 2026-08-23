@@ -1,32 +1,49 @@
 # kntnt uninstall
 
-Remove this collection from this machine.
+## NAME
 
-## Synopsis
+kntnt uninstall - remove the Collection from the machine
 
-`/kntnt uninstall [--yes] [--dry-run]`
+## SYNOPSIS
 
-## Description
+**/kntnt** **uninstall** [**--yes**] [**--dry-run**]
 
-Deletes every Catalog skill Enabled in Global from every Harness present in your home directory, and then the manager itself, last and through the transport, so the harness's own uninstall has nothing left to do.
+## DESCRIPTION
 
-The manager goes only where everything else really went. A run that leaves a skill behind keeps `kntnt`, since it is the one verb that could still remove it — so `kntnt` among the confirmed removals is the whole report.
+`kntnt uninstall` removes every Catalog Skill Enabled in Global from every Harness detected in the user's home directory, then removes the Manager through the transport. The Manager is removed only after every other confirmed removal succeeds, so a partial run retains the command needed to finish.
 
-## Options
+Project copies are never removed. They are part of their repositories and travel with those Projects.
 
-- `--yes` — assume yes: remove without waiting for a confirmation. Uninstall deletes, so the script itself refuses without it.
-- `--dry-run` — run it against a temporary home seeded with this collection's files, and throw that home away. Nothing in the layer changes, and the report is the run's own outcome read off the Sandbox's disk. It downloads the transport afresh, so it takes longer than the run it previews.
+## OPTIONS
 
-## Notes
+**--yes**
 
-There is no `--project` form, and that is the decision rather than an omission. A skill in a working directory is checked into that repository and travels with it, so whether it stays is that project's decision. Those copies are never touched, and the report says so rather than letting anyone believe the machine is clean while a repository still carries them.
+Remove the Collection without waiting for confirmation. The script requires this option because Uninstall deletes files.
 
-What is removed is what the Catalog names, so the report says whether that list came from the collection or from the stored copy. The usual remedy of running it again is only available while the manager is still installed.
+**--dry-run**
 
-## Dependencies
+Execute against a temporary home seeded with this Collection's files, report the Sandbox outcome, and discard it. Nothing on the machine changes. The isolated transport cache makes this slower than an ordinary run.
 
-`uv` on PATH, and `npx` for the transport, which is the route the files leave by — the same one they arrived by, the manager's own removal included. The catalog is fetched from the collection over the network to settle what to remove, and falls back to the copy stored beside the manager. Which of the two the run worked from is in the report, and it matters more here than anywhere else: once the manager is gone there is no verb left to finish the job.
+## OFFLINE OPERATION
 
-## See also
+Uninstall fetches the current Catalog when possible and otherwise uses the stored Catalog. The report identifies which source determined the removal set.
 
-`/kntnt help select`, `/kntnt help update`.
+## DIAGNOSTICS
+
+`--project` and every other unsupported option are refused rather than ignored. The Manager names the error, prints the SYNOPSIS, removes nothing, and points to the full page.
+
+If any Skill cannot be removed, the Manager remains Enabled and the report names what is left.
+
+## DEPENDENCIES
+
+**Binaries**
+
+`uv` and `npx` on `PATH`. Files are removed through `npx skills`.
+
+**Network**
+
+Used to fetch the current Catalog. The stored Catalog is the fallback when the Collection is unreachable.
+
+## SEE ALSO
+
+**/kntnt select --help**, **/kntnt update --help**

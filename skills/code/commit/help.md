@@ -1,41 +1,49 @@
 # commit
 
-Commit the working tree on the current branch, without pushing.
+## NAME
 
-## Synopsis
+commit - commit the current working tree without pushing
 
-`/commit ["message"] [--yes]`
+## SYNOPSIS
 
-## Description
+**/commit** [*MESSAGE*] [**--yes**]
 
-Records everything the working tree holds as one commit on the branch you are on, and stops there. Nothing is pushed, tagged, or released.
+## DESCRIPTION
 
-Before the commit is made, `CHANGELOG.md` is brought in line with what actually changed: an `[Unreleased]` section is written or extended, and a change already recorded anywhere in the file is not written twice. Only that section is edited — no version is promoted, bumped, or dated.
+`commit` records the complete working tree as one commit on the current branch and stops without pushing, tagging, or releasing.
 
-The commit message is the `"message"` argument when you give one. Otherwise it is a single concrete subject line drawn from the changelog entries just written, or from the diff where a change has no user-facing entry.
+Before committing, it reconciles `CHANGELOG.md` with the actual changes. It creates or extends `[Unreleased]`, avoids duplicating a change already recorded anywhere in the file, and edits no released section. When untracked files appear unsuitable for the repository, it includes a proposed `.gitignore` change in the same review.
 
-Nothing is written before you have seen it. The changelog diff, the message, and any proposed `.gitignore` are shown and waited on.
+The Skill uses *MESSAGE* when supplied. Otherwise it derives one concrete subject line from the new changelog entries or, for changes without a user-facing entry, from the diff. It shows the changelog diff, commit message, and any `.gitignore` proposal before writing unless `--yes` is present.
 
-## Arguments
+## POSITIONAL ARGUMENTS
 
-- `"message"` — use this as the commit message instead of one derived from the changes.
+*MESSAGE*
 
-## Options
+Use this text as the commit message instead of deriving one.
 
-- `--yes` — assume yes: commit without waiting for a confirmation.
+## OPTIONS
 
-## Notes
+**--yes**
 
-A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/commit --force` is an error, while `/commit "a subject line" --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+Commit without waiting for confirmation.
 
-A working tree with nothing to commit is said so and nothing happens.
+## DIAGNOSTICS
 
-Where untracked files look like they belong in `.gitignore` rather than in the repository, that addition is proposed with the rest and stands or falls with the same confirmation.
+An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, commits nothing, and points to `/commit --help`.
 
-## Dependencies
+A working tree with nothing to commit is a successful no-op and is reported as such.
 
-`git` and `uv` on PATH, and the manager installed — the skill checks for it and says how to install it if it is missing.
+## DEPENDENCIES
 
-## See also
+**Binaries**
 
-`/push` commits and then pushes the branch. `/release` ships a version.
+`git` and `uv` on `PATH`.
+
+**Skills**
+
+The Manager must be Enabled so the dependency check can run.
+
+## SEE ALSO
+
+**/push --help**, **/release --help**

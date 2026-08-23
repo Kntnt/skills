@@ -19,7 +19,24 @@ Configure the exact model versions and subscription/API channels available to on
 
 ## Help
 
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
+If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop. If `--help` or `-h` immediately follows a recognized command path, print that path's page from the table below verbatim and stop before setup, reads, research, or writes.
+
+| Command path | Manpage |
+| --- | --- |
+| `recommend` | `$HERE/help/recommend.md` |
+| `chart` | `$HERE/help/chart.md` |
+| `compare` | `$HERE/help/compare.md` |
+| `setup` | `$HERE/help/setup.md` |
+| `config` | `$HERE/help/config.md` |
+| `config show` | `$HERE/help/config/show.md` |
+| `config add` | `$HERE/help/config/add.md` |
+| `config edit` | `$HERE/help/config/edit.md` |
+| `config remove` | `$HERE/help/config/remove.md` |
+| `config history` | `$HERE/help/config/history.md` |
+| `config reset` | `$HERE/help/config/reset.md` |
+| `update` | `$HERE/help/update.md` |
+| `record` | `$HERE/help/record.md` |
+| `status` | `$HERE/help/status.md` |
 
 ## Arguments
 
@@ -39,7 +56,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `--data=<path>` is valid on every form and overrides the default data directory. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`.
 
-Anything outside these forms is invalid. Name in one line what was wrong, print the `## Synopsis` section of `$HERE/help.md` verbatim, and point at `/model-selector --help` for the page in full. Change nothing and stop. A flag is refused rather than ignored where it has no work to do here (ADR-0059).
+Anything outside these forms is invalid. Where the invocation starts with a recognized command path, name in one line what was wrong, print the `## SYNOPSIS` from that path's manpage in the Help table verbatim, point at `/model-selector <command-path> --help`, change nothing, and stop. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/model-selector --help` for the page in full instead. A flag is refused rather than ignored where it has no work to do here (ADR-0059).
 
 ## Evidence first
 

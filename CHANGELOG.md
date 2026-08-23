@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
+- Every Skill and Manager help page now follows a researched manpage-shaped Markdown profile: a conventional `NAME` line, uppercase sections, exact typographic `SYNOPSIS` forms, tagged argument and option descriptions, and content-specific sections in place of mandatory empty `OPTIONS` and `NOTES`. Commands with subcommands list every immediate child with a short description, and each child has a directly addressable page through `<command-path> --help`; `model-selector` now ships focused pages for all fourteen command paths, while `kntnt` accepts the same direct help form for each Manager verb. The Skills coding standard records the profile and its deliberate difference from both installed roff pages and brief terminal `--help`, with the primary-source research retained under `docs/research/`.
+- The README now leads with a concise quick start, separates Global and Project usage, summarizes Manager commands, and gives each shipped Skill a compact invocation-oriented description.
 - Shared Skill references and scripts now live in the Manager's Collection Library under `library/references/` and `library/scripts/`. `/commit`, `/push`, and `/release` use the same changelog procedure and ship engine there instead of reaching through `/commit`'s private files, while their genuine behavioural dependencies remain declared.
 
 ## [0.13.0] – 2026-08-23

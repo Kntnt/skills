@@ -1,39 +1,49 @@
 # push
 
-Follow commit, then push the current branch.
+## NAME
 
-## Synopsis
+push - commit the working tree and push the current branch
 
-`/push ["message"] [--yes]`
+## SYNOPSIS
 
-## Description
+**/push** [*MESSAGE*] [**--yes**]
 
-Runs the commit skill with the arguments you gave — changelog, message, confirmation, commit — and then pushes the branch you are on. A working tree with nothing to commit does not stop the push: commits already made and not yet sent still go, which is what makes this the one gesture for *get my work to the remote*.
+## DESCRIPTION
 
-The branch is pushed to its upstream, and one is set on `origin` where the branch has none.
+`push` runs the `commit` Skill with the supplied arguments and then pushes the current branch. A clean working tree does not stop the push; commits already made but not yet sent are still pushed.
 
-Nothing is pushed before you have seen what will go. Where commit already waited for a confirmation, you are not asked a second time for the same run.
+The branch is pushed to its configured upstream. When it has none, the Skill sets one on `origin`. The plan is shown before pushing, and a confirmation already obtained by `commit` is reused instead of asking twice.
 
-## Arguments
+## POSITIONAL ARGUMENTS
 
-- `"message"` — use this as the commit message instead of one derived from the changes.
+*MESSAGE*
 
-## Options
+Pass this text to `commit` as the commit message.
 
-- `--yes` — assume yes: commit and push without waiting for a confirmation.
+## OPTIONS
 
-## Notes
+**--yes**
 
-A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/push --force` is an error, while `/push --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+Commit and push without waiting for confirmation.
 
-Nothing to send at all — a clean tree and a branch already level with its upstream — is said plainly and the run stops there.
+## DIAGNOSTICS
 
-Where the push cannot be made — no `origin` remote, a rejected non-fast-forward, a branch the remote will not take — the reason is given and the commit that was just made stays where it is, ready for another attempt.
+An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, commits and pushes nothing, and points to `/push --help`.
 
-## Dependencies
+A clean tree on a branch already level with its upstream is a successful no-op and is reported as such.
 
-`git` and `uv` on PATH, the commit skill Enabled, and the manager installed — the skill checks for both and says how to install them if they are missing.
+If no `origin` exists, the remote rejects a non-fast-forward update, or the branch cannot be pushed, the error is reported and any new local commit remains available for another attempt.
 
-## See also
+## DEPENDENCIES
 
-`/commit` stops before pushing. `/release` ships a version.
+**Binaries**
+
+`git` and `uv` on `PATH`.
+
+**Skills**
+
+`commit` and the Manager must be Enabled.
+
+## SEE ALSO
+
+**/commit --help**, **/release --help**

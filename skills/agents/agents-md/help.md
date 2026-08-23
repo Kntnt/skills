@@ -1,44 +1,57 @@
 # agents-md
 
-Tend the current project's `AGENTS.md` and `agents.d/` — the files every session in that project loads before it starts.
+## NAME
 
-## Synopsis
+agents-md - tend a project's always-loaded agent instructions
 
-`/agents-md [path] [--force] [--yes]`
+## SYNOPSIS
 
-## Description
+**/agents-md** [*PATH*] [**--force**] [**--yes**]
 
-Everything in `AGENTS.md` is paid for on every single session, whether or not it is needed, so the default is to write nothing. This skill decides what has earned that price and writes only that.
+## DESCRIPTION
 
-It inventories what the repository already tells an agent — `CLAUDE.md`, `AGENTS.md`, `agents.d/`, `docs/`, `README*`, and every tracked project skill — collects the candidate facts from those files and from the session that just ended, and puts each one through the same gates: is it true, is it non-discoverable, does the next session actually need it, is it already written down somewhere else. What survives is given a home; what does not is cut, with the source that settles it named in the report.
+`agents-md` reviews the current Project's `AGENTS.md`, `CLAUDE.md`, `agents.d/`, documentation, and tracked Project Skills after a task. It writes only facts that are true, needed by a later session, not discoverable from the Project, and not already recorded elsewhere. With no *PATH*, it tends the repository root.
 
-`AGENTS.md` itself stays a table of contents and a set of ground rules. A fact that belongs to one concern goes to its own file under `agents.d/`, and is reached from a References line saying *read when* the situation arises, so a session pays for the pointer rather than the page.
+`AGENTS.md` remains a compact table of contents and set of ground rules. Concern-specific material belongs under `agents.d/` and is reached through a pointer that states when to read it. If no fact justifies always-loaded text or a referenced file, nothing is written.
 
-Where no fact earns a file, no file is written and the report says why.
+The Skill may create or update the one-line `CLAUDE.md` bridge, `AGENTS.md`, and files under `agents.d/`. It never changes instructions outside the current repository and never writes proposed documentation prose under `docs/`; it may report a proposed location and purpose for a human to write.
 
-The skill runs after a task, not during one — unless you invoked it yourself, which is always allowed.
+## POSITIONAL ARGUMENTS
 
-## Arguments
+*PATH*
 
-- `path` — a directory inside the current repository to tend. Defaults to the repository root. Paths outside it are refused; the skill never changes user-level, Harness-global, or system-level agent instructions.
+A directory inside the current repository. The repository root is the default. A path outside the repository is invalid.
 
-## Options
+## OPTIONS
 
-- `--force` — lay the skeleton even where no fact has earned a file: `CLAUDE.md` as the one-line bridge to `AGENTS.md`, `AGENTS.md` as title and ground rules, and an empty `agents.d/`.
-- `--yes` — assume yes: make each change the skill would have asked about instead of asking, and list it in the report. `docs/` stays a proposal even so — a human writes that text.
+**--force**
 
-## Notes
+Create the minimum structure even when no fact qualifies: the `CLAUDE.md` bridge, an `AGENTS.md` title and ground-rules section, and an empty `agents.d/` directory.
 
-A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/agents-md --dry-run` is an error, while `/agents-md --force --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+**--yes**
 
-The always-loaded pair is measured before and after, in characters, and so is the total including `agents.d/`. Growth is a cost, and the report shows it as one.
+Assume yes for every proposed change instead of waiting for confirmation. Documentation prose under `docs/` remains a proposal.
 
-Prose under `docs/` is never written for you. What the skill may propose there is a place and a purpose; the words are yours.
+## OUTPUT
 
-## Dependencies
+The report names every retained, moved, replaced, or rejected fact and the source that settles it. It also reports the character count of the always-loaded files and the total including `agents.d/`, before and after.
 
-`git` and `uv` on PATH, and the manager installed — the skill checks for it and says how to install it if it is missing.
+## DIAGNOSTICS
 
-## See also
+An invalid path, unknown option, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/agents-md --help`.
 
-`/kntnt select` to Enable this skill elsewhere.
+A Project with no qualifying fact is a successful no-op and is reported as such.
+
+## DEPENDENCIES
+
+**Binaries**
+
+`git` and `uv` on `PATH`.
+
+**Skills**
+
+The Manager must be Enabled so the dependency check can run.
+
+## SEE ALSO
+
+**/kntnt select**

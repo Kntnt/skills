@@ -1,55 +1,95 @@
 # kntnt select
 
-Show what this collection has and change it in the same gesture.
+## NAME
 
-## Synopsis
+kntnt select - list Collection Skills and change which are Enabled
 
-`/kntnt select [--on <skill>]… [--off <skill>]… [--project[=on|off]] [--yes] [--dry-run]`
+## SYNOPSIS
 
-## Description
+**/kntnt** **select** [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**]
 
-Prints the catalog as a list grouped by category, one row per skill. A row carries a checkbox — checked when the skill is Enabled in the layer being targeted — the skill's one-line description, and any capability it requires of the harness, so nothing about a row has to be looked up somewhere else.
+**/kntnt** **select** [**--on** *SKILL*]... [**--off** *SKILL*]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**]
 
-You answer the list in one sentence of plain text, and changing several skills is one reply rather than a walk through a menu. Checked means Enabled. You are asked to confirm once, and nothing reaches the disk before that.
+## DESCRIPTION
 
-The structure between skills is on the list rather than behind it. A skill that needs another one of this collection is shown locked while that other is unchecked, and the row names what to check instead. Check it anyway and what it needs comes with it: you are asked one yes/no question naming exactly what would be added, once for the whole chain — checking `release` where you have neither `push` nor `commit` is a single yes rather than one question per level — and nothing is written until you have answered it. `--yes` answers it.
+`kntnt select` displays the Catalog grouped by Category, with one row per Skill. Each row shows whether the Skill is Enabled in the targeted layer, its one-line description, any required Harness Capability, and incomplete or Deviating disk state. Global is the default layer.
 
-Unchecking a skill that another checked skill depends on is reported, not blocked. You are told what it leaves unsatisfied, and the answer stands: it is your machine.
+In list mode, reply in plain text with the desired checked set. The Manager resolves required Collection Skills, reports anything the answer would leave Unsatisfied, asks for confirmation, and then applies the complete answer to every Harness detected in the layer. Every row can be read in full before the list is answered; requesting its help displays that Skill's own page without closing or answering the list.
 
-Any row can be read in full before you answer it. Ask for a skill's help and you get the manpage that skill ships: read from your own copy where you have one, and fetched from the collection where you do not, so deciding whether to enable something never means installing it first. Where you have no copy and the collection cannot be reached, you are told that rather than shown an invented page. Asking is not answering — the list is still open, and nothing has been written.
+An answer that changes nothing writes nothing. A Skill whose files are present in only some target Harnesses is shown checked and incomplete; confirming repairs it. A Skill whose files differ from the Collection is shown Deviating, and re-copying it overwrites local changes.
 
-Reading is never a side-effecting act. An answer that changes nothing writes nothing — no refresh, no repair, no touching of files to make the disk agree with a list you only wanted to look at.
+The explicit `--on` and `--off` form applies only the named deltas and opens no list. Existing unmentioned Skills retain their state and files.
 
-A machine can also be set up with nobody at the list. `--on` and `--off` name skills directly and open no list; `--yes` on its own opens none either and enables nothing you did not already have. All three are described under *Options*.
+## OPTIONS
 
-## Options
+**--on** *SKILL*
 
-- `--on <skill>` — enable that skill in the targeted layer, and open no list. Give it as often as you have names. It applies a change rather than a whole set: a skill you do not name keeps the state it had, files included — it is not disabled, and a deviating one is not re-copied either, because the offer to overwrite your edit belongs to the list this form does not open. What the named skill needs comes with it, and you are asked once before it does — `--yes` answers that.
-- `--off <skill>` — disable that skill in the targeted layer, and open no list. Give it as often as you have names, and combine it with `--on` in the same invocation. It applies a change in the same way, and it deletes files, so the script refuses it without `--yes`.
-- `--project`, `--project=on` — list and change this project rather than global. `--project=off` is the bare form.
-- `--yes` — assume yes: apply the answer without waiting for a confirmation. Unchecking deletes files, so the script itself refuses without it. Given with neither `--on` nor `--off`, it is an instruction of its own: open no list, enable nothing that is not already enabled, and put what you have into good order — refresh what deviates, repair what is incomplete. An unattended run can never place instructions you have not read.
-- `--dry-run` — run it against a temporary home seeded with this collection's files, and throw that home away. Nothing in the layer changes, and the report is the run's own outcome read off the sandbox's disk. It downloads the transport afresh, so it takes longer than the run it previews.
+Enable *SKILL* in the targeted layer without opening the list. Repeatable. Required Collection Skills are added after one confirmation for the complete dependency closure.
 
-## Notes
+**--off** *SKILL*
 
-A skill whose files reached only some of the directories the layer covers is shown checked and marked incomplete. That is a fact about the disk rather than a third state anyone chooses — a skill is Enabled or Disabled — and confirming the list repairs it.
+Disable *SKILL* in the targeted layer without opening the list. Repeatable and combinable with `--on`. Because it deletes files, the script requires `--yes`.
 
-A skill whose files differ from the ones the collection ships is marked **deviating**, never *out of date*. The comparison sees two states and no history, so it cannot say which way the difference runs, and outside a project copy that has fallen behind the commoner cause is an edit of your own. Re-copying it overwrites that edit, and the offer says so.
+**--project**, **--project=on**
 
-Where the collection cannot be reached, the list comes from the copy stored beside the manager and says so. Nothing is marked deviating or current on such a list, and no re-copy is offered from it: those digests describe the collection as of the last `/kntnt update`.
+Target the current Project instead of Global. `--project=off` has the same effect as omitting the option.
 
-That reaches `--yes` too: run against a catalog read from the snapshot, it refreshes nothing at all, and says why rather than reporting a clean run.
+**--yes**
 
-`--project` shows the project layer alone. A skill already Enabled globally is marked as such rather than shown unchecked: this layer holds no copy of it to uncheck, and checking the row would give you a second one.
+Assume yes for confirmations. With neither `--on` nor `--off`, it opens no list, Enables no new Skill, refreshes Enabled Skills that Deviate, and repairs incomplete copies.
 
-Which harnesses are reached is never asked and never recorded: every harness present in the targeted layer is written to, worked out on every run. With no harness detected, the shared `.agents/skills` directory is written to alone.
+**--dry-run**
 
-The list closes by counting the skills on disk that carry this collection's marker and no longer appear in the catalog. `/kntnt update` is what takes those off.
+Execute against a temporary home seeded with this Collection's files, report the Sandbox outcome, and discard it. Nothing in the selected layer changes. The isolated transport cache makes this slower than an ordinary run.
 
-## Dependencies
+## SKILL STATES
 
-`uv` on PATH, and `npx` plus network access for everything the list does beyond printing itself. The catalog is fetched from the collection, and so is the manpage of a skill you do not have yet; where the collection cannot be reached the list comes from the copy stored beside the manager and says so. Enabling or disabling a skill moves files, and files move only through the transport, which is `npx skills`.
+**Enabled**
 
-## See also
+The Skill is present in the targeted layer. In the Project view, a Skill Enabled only in Global is identified separately because the Project has no copy to disable.
 
-`/kntnt help update`, `/kntnt help uninstall`.
+**Incomplete**
+
+The Skill is present in only some detected Harnesses. This is a disk condition, not a third selectable state.
+
+**Deviating**
+
+The Skill's files differ from the Digest in the fetched Catalog. The comparison establishes difference, not which state is newer. Re-copying overwrites the layer's current files.
+
+**Locked**
+
+The Skill depends on an unchecked Collection Skill. The row names what must also be checked. Unchecking a Skill still needed by another checked Skill is allowed but reported as leaving the dependent Unsatisfied.
+
+## OFFLINE OPERATION
+
+If the Collection cannot be reached, Select uses the stored Catalog and identifies it as the source. A page for a Skill absent from disk cannot be fetched. No Skill is marked current or Deviating, and no refresh is offered, because stored Digests describe the Collection as of the last Update.
+
+## DIAGNOSTICS
+
+An unknown Skill, invalid combination, or option with no work to do is refused rather than ignored. The Manager names the error, prints the SYNOPSIS, changes nothing, and points to the full page.
+
+The end of the list counts Withdrawn Skills found on disk. Update removes them.
+
+## EXAMPLES
+
+**/kntnt select --on release --yes**
+
+Enable `release` and its required Collection Skills without opening the list.
+
+**/kntnt select --yes**
+
+Open no list and Enable nothing new; refresh Deviating Enabled Skills and repair incomplete copies.
+
+## DEPENDENCIES
+
+**Binaries**
+
+`uv` and `npx` on `PATH`. Skill files move through `npx skills`.
+
+**Network**
+
+Required to fetch the current Catalog, fetch pages for Skills absent from disk, and change Skill files. Read-only fallback uses the stored Catalog as described above.
+
+## SEE ALSO
+
+**/kntnt update --help**, **/kntnt uninstall --help**, **/<skill> --help**

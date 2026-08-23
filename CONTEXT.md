@@ -17,7 +17,7 @@ A folder under `skills/` in the collection repository that groups related skills
 _Avoid_: namespace, group, tag, section
 
 **Skill**:
-A standalone Agent Skill with its own name. Collection skills are not namespaced under `kntnt`. The collection ships skills only — never harness `commands/` files. Every collection skill ships its own help beside it and prints it when invoked with `--help`.
+A standalone Agent Skill with its own name. Collection skills are not namespaced under `kntnt`. The collection ships skills only — never harness `commands/` files. Every collection Skill ships its root help beside it and prints it when invoked with `--help`; a Skill with subcommands also ships and prints the addressed subcommand page for `/<skill> <command-path> --help`.
 _Avoid_: module, plugin, recipe, command, slash command
 
 **User-invoked skill**:
@@ -44,7 +44,7 @@ The manager subcommand that takes this collection off this machine: every Catalo
 _Avoid_: remove, delete, purge, reset
 
 **Help**:
-The manager subcommand that prints the manager's own help, or the help for one of its own subcommands. Bare `/kntnt` means Help. It is not how a skill's help is reached: a skill one has answers `/<skill> --help`, and a skill one does not have yet is read about in Select, which fetches that help from the collection.
+The Manager subcommand that prints the Manager's own help, or the help for one of its own subcommands. Bare `/kntnt` means Help, and `/kntnt <command> --help` reaches the same command page directly. It is not how another Skill's help is reached: a Skill one has answers its own `--help` forms, and a Skill one does not have yet is read about in Select, which fetches that help from the collection.
 _Avoid_: usage, man
 
 **Assume yes**:

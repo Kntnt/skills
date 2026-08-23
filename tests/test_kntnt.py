@@ -16,6 +16,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 HARNESS_PATHS = REPO_ROOT / "skills" / "kntnt" / "harness-paths.json"
 MANAGER_DIR = REPO_ROOT / "skills" / "kntnt"
+MODEL_SELECTOR_DIR = REPO_ROOT / "skills" / "models" / "model-selector"
 FAKE_SKILLS = REPO_ROOT / "tests" / "support" / "fake_skills.py"
 UV_CACHE = Path(os.environ.get("UV_CACHE_DIR") or Path.home() / ".cache" / "uv")
 
@@ -1913,10 +1914,8 @@ def test_the_update_body_asks_the_offer_and_names_what_answers_it() -> None:
     assert "`new`" in steps, "the body has to name the entries the question is about"
     assert "`enabled`" in steps, "and what the run then Enabled"
     assert "--yes" in steps, "and the flag that carries the answer to the script"
-    page = (REPO_ROOT / "skills" / "kntnt" / "help" / "update.md").read_text(
-        encoding="utf-8"
-    )
-    option = next(line for line in page.splitlines() if line.startswith("- `--yes`"))
+    options = _options("update")
+    option = options.partition("**--yes**")[2].partition("\n\n**")[0]
     assert "enable" in option.lower(), "the manpage documents what the flag now does"
 
 
@@ -3398,31 +3397,88 @@ def test_the_manager_separates_steps_from_manpages() -> None:
 
 
 def test_every_manpage_carries_the_sections_the_standard_requires() -> None:
-    """The set is a floor, and a floor is the kind of thing a check holds well.
+    """Every page has the conventional core in its conventional order.
 
     A manpage is written for a reader deciding whether to enable the skill,
-    which is a reader who does not have it yet, and what that reader can rely
-    on is meeting the same sections on every page of the collection. Presence
-    is the whole of what is bought here: nothing judges whether a section was
-    written for anybody, and a `## Description` of one word passes. The
-    standard says so rather than implying a check that reads prose.
+    which is a reader who may not have it yet. Presence and order are what this
+    check can hold; usefulness remains review judgement.
     """
 
     for page in _manpages():
         text = page.read_text(encoding="utf-8")
+        positions: list[int] = []
         for heading in _MANPAGE_SECTIONS:
-            assert f"\n{heading}\n" in text, (
+            marker = f"\n{heading}\n"
+            assert marker in text, (
                 f"{page}: this manpage carries no `{heading}`. Every manpage of"
-                f" the collection carries {_the_sections()} — the set is the"
-                f" floor a reader who does not have the skill yet can count on"
-                f" finding, and further sections are the skill's own to add"
+                f" the collection carries {_the_sections()}, while optional"
+                f" conventional sections appear only where they have content"
                 f" (ADR-0044). See {STANDARD}."
+            )
+            positions.append(text.index(marker))
+
+        assert positions == sorted(positions), (
+            f"{page}: the required sections are not in manpage order. The page"
+            f" starts with {_the_sections()}, with relevant optional sections"
+            f" between `## DESCRIPTION` and `## DEPENDENCIES`. See {STANDARD}."
+        )
+
+
+def test_every_manpage_uses_a_conventional_title_name_and_heading_case() -> None:
+    """Markdown title metadata and `NAME` make each page identifiable."""
+
+    for page in _manpages():
+        text = page.read_text(encoding="utf-8")
+        name = _manpage_name(page)
+        name_lines = _section(text, "## NAME", page).strip().splitlines()
+
+        assert text.startswith(f"# {name}\n"), (
+            f"{page}: the top-level title is not `# {name}`, the Markdown"
+            f" equivalent of the title metadata a roff manpage carries. See"
+            f" {STANDARD}."
+        )
+        assert len(name_lines) == 1 and name_lines[0].startswith(f"{name} - "), (
+            f"{page}: `NAME` is one line in the form `{name} - concise"
+            f" summary`, which is the conventional indexed identity of a"
+            f" manpage. See {STANDARD}."
+        )
+        assert not name_lines[0].endswith("."), (
+            f"{page}: the `NAME` summary is a phrase and carries no final"
+            f" period. See {STANDARD}."
+        )
+
+        for heading in (line for line in text.splitlines() if line.startswith("## ")):
+            assert heading == heading.upper(), (
+                f"{page}: `{heading}` is not an uppercase manpage section"
+                f" heading. Sentence case is reserved for subsections. See"
+                f" {STANDARD}."
             )
 
 
-# The two Markdown files a skill ships that are not opened on demand: the body
-# the harness loads and the manpage a user asks for. Everything else in Markdown
-# that a skill ships is a file its body opens only when the situation arises.
+def test_every_manpage_synopsis_and_options_describe_the_same_flags() -> None:
+    """An absent `OPTIONS` section means the page accepts no option."""
+
+    for manpage in _manpages():
+        page = manpage.read_text(encoding="utf-8")
+        synopsis = _flags(_section(page, "## SYNOPSIS", manpage))
+        options = _optional_section(page, "## OPTIONS")
+        documented = _flags(options)
+
+        assert synopsis == documented, (
+            f"{manpage}: `SYNOPSIS` names {sorted(synopsis)} while `OPTIONS`"
+            f" names {sorted(documented)}. They are one grammar. See"
+            f" {STANDARD}."
+        )
+        assert bool(options) == bool(documented), (
+            f"{manpage}: an `OPTIONS` section exists without an option. Omit"
+            f" an empty conventional section instead of explaining its"
+            f" absence. See {STANDARD}."
+        )
+
+
+# The two Markdown files every skill ships at its root: the body the harness
+# loads and the skill-level manpage. A skill with subcommands may additionally
+# carry their manpages under `help/`; other Markdown is agent reference material.
 _ALWAYS_IN_THE_ROOT = frozenset({"SKILL.md", "help.md"})
 
 
@@ -3432,18 +3488,20 @@ def test_what_a_skill_opens_on_demand_lives_under_references() -> None:
     The on-demand files are discovered rather than listed, because a list
     maintained by hand goes stale without saying so: a skill it never gained
     an entry for has its placement held to nothing at all. A skill ships its
-    body, its manpage, its engine where it has one, and the files its body
-    opens when the situation arises — so every Markdown file that is neither
-    `SKILL.md` nor `help.md` is one of the last kind, whether or not anybody
-    remembered to write it down.
+    body, its manpages, its engine where it has one, and the files its body
+    opens when the situation arises. Subcommand manpages are a user-facing
+    tree under `help/`; every other Markdown file beyond the two root files is
+    one of the last kind, whether or not anybody remembered to write it down.
     """
 
     for directory in _shipped_skills():
         for path in sorted(directory.rglob("*.md")):
             if path.parent == directory and path.name in _ALWAYS_IN_THE_ROOT:
                 continue
+            if directory / "help" in path.parents:
+                continue
             assert directory / "references" in path.parents, (
-                f"{path}: this is neither the body nor the manpage, so it is a"
+                f"{path}: this is neither the body nor a manpage, so it is a"
                 f" file the body opens only when the situation arises, and it"
                 f" belongs under `references/` — the specification's own"
                 f" directory for it, which is what tells a reader it is not the"
@@ -4733,21 +4791,23 @@ def _invocations(world: dict[str, Path]) -> dict[str, tuple[tuple[str, ...], ...
 
 
 def _synopsis(page: Path) -> str:
-    """Return the `## Synopsis` section of a shipped manpage, verbatim and whole."""
+    """Return the `## SYNOPSIS` section of a shipped manpage, verbatim and whole."""
 
     text = page.read_text(encoding="utf-8")
-    assert "\n## Synopsis\n" in text, page
-    return text.partition("\n## Synopsis\n")[2].partition("\n## ")[0].strip("\n")
+    assert "\n## SYNOPSIS\n" in text, page
+    return text.partition("\n## SYNOPSIS\n")[2].partition("\n## ")[0].strip("\n")
 
 
 def _options(verb: str) -> str:
-    """Return the Options section of one verb's manpage, and nothing after it."""
+    """Return one verb's optional `OPTIONS` section, and nothing after it."""
 
     text = (REPO_ROOT / "skills" / "kntnt" / "help" / f"{verb}.md").read_text(
         encoding="utf-8"
     )
-    assert "\n## Options\n" in text, verb
-    return text.partition("\n## Options\n")[2].partition("\n## ")[0]
+    if "\n## OPTIONS\n" not in text:
+        return ""
+
+    return text.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
 
 
 def test_each_manpage_documents_exactly_the_flags_its_verb_takes() -> None:
@@ -4756,7 +4816,10 @@ def test_each_manpage_documents_exactly_the_flags_its_verb_takes() -> None:
     for verb in _USER_FACING:
         options = _options(verb)
         for flag in _FLAGS:
-            assert (f"`{flag}`" in options) == (flag in _FLAG_TABLE[verb]), (verb, flag)
+            assert (flag in _flags(options)) == (flag in _FLAG_TABLE[verb]), (
+                verb,
+                flag,
+            )
 
 
 def test_the_parser_takes_exactly_the_flags_the_table_allows(tmp_path: Path) -> None:
@@ -4809,7 +4872,7 @@ def test_help_takes_no_flags_and_says_so(tmp_path: Path) -> None:
     )
 
     assert "no flags" in steps
-    assert "no flags" in _options("help")
+    assert _options("help") == ""
 
     # `--help` is how the verb is reached (`SKILL.md` routes it here), so the
     # steps have to exempt it or `/kntnt --help` is met with a complaint about
@@ -4891,6 +4954,32 @@ def test_the_route_into_help_is_not_a_flag_on_a_verb(tmp_path: Path) -> None:
 
         assert result.returncode == 0, (args, result.stderr)
         assert result.stdout.strip() == shipped, args
+
+
+def test_each_manager_subcommand_routes_help_flags_to_its_manpage(
+    tmp_path: Path,
+) -> None:
+    """A help flag after a public verb addresses that verb, not the Manager."""
+
+    world = _world(tmp_path)
+
+    for verb in _USER_FACING:
+        shipped = (MANAGER_DIR / "help" / f"{verb}.md").read_text(encoding="utf-8")
+        for flag in ("--help", "-h"):
+            result = _run(world, verb, flag)
+
+            assert result.returncode == 0, (
+                f"/kntnt {verb} {flag} failed instead of printing that verb's"
+                f" manpage: {result.stderr} (ADR-0077). See {STANDARD}."
+            )
+            assert result.stdout.strip() == shipped.strip(), (
+                f"/kntnt {verb} {flag} did not print help/{verb}.md verbatim"
+                f" (ADR-0077). See {STANDARD}."
+            )
+            assert result.stderr == "", (
+                f"/kntnt {verb} {flag} printed the page but also diagnosed a"
+                f" help route as an error (ADR-0077). See {STANDARD}."
+            )
 
 
 def test_the_dependency_gate_is_invoked_with_no_flag_in_every_skill() -> None:
@@ -4987,32 +5076,33 @@ def _skill_bodies() -> list[Path]:
 def _manpages() -> list[Path]:
     """Every manpage the collection ships, found rather than listed.
 
-    A skill's manpage is the `help.md` beside its `SKILL.md`; the Manager ships
-    its own and one page per verb under `help/`. Its `steps/` holds a file of
-    the same name that is the agent's instructions for the `help` verb and no
-    manpage at all, which is the line `test_the_manager_separates_steps_from_
-    manpages` draws — and the reason this is not a glob for every `help.md`.
+    Every Skill ships its root page and a Skill with subcommands ships their
+    page tree under `help/`. The Manager follows the same user-facing shape;
+    its separate `steps/` tree is agent procedure and therefore excluded.
     """
 
     pages = [
         *(d / "help.md" for d in _shipped_skills()),
+        *(
+            page
+            for d in _shipped_skills()
+            for page in sorted((d / "help").rglob("*.md"))
+        ),
         MANAGER_DIR / "help.md",
-        *sorted((MANAGER_DIR / "help").glob("*.md")),
+        *sorted((MANAGER_DIR / "help").rglob("*.md")),
     ]
     assert pages
     return pages
 
 
-# The sections every manpage of the collection carries. A floor rather than a
-# shape: further sections are the skill's own to add where it has something the
-# set has no room for.
+# The fixed core every manpage carries. Further conventional sections are
+# selected by content, with Dependencies retained as a local product rule.
 _MANPAGE_SECTIONS = (
-    "## Synopsis",
-    "## Description",
-    "## Options",
-    "## Notes",
-    "## Dependencies",
-    "## See also",
+    "## NAME",
+    "## SYNOPSIS",
+    "## DESCRIPTION",
+    "## DEPENDENCIES",
+    "## SEE ALSO",
 )
 
 
@@ -5029,15 +5119,168 @@ def _section(text: str, heading: str, where: Path) -> str:
     marker = f"\n{heading}\n"
     assert marker in text, (
         f"{where} carries no `{heading}` section, so the rule read out of it"
-        f" cannot be checked at all. Every manpage carries {_the_sections()} —"
-        f" `## Options` even where the skill has no flags at all, written"
-        f" *none, and none is missing*, so a reader learns the emptiness is"
-        f" deliberate rather than a section nobody wrote. A page documents the"
-        f" arguments its skill takes as well, conventionally under"
-        f" `## Arguments` and otherwise under a heading that names them better."
-        f" See {STANDARD}."
+        f" cannot be checked at all. Every manpage carries {_the_sections()},"
+        f" while `## POSITIONAL ARGUMENTS`, `## OPTIONS`, `## DIAGNOSTICS`, and"
+        f" other conventional sections appear only where they have useful"
+        f" content. See {STANDARD}."
     )
     return text.partition(marker)[2].partition("\n## ")[0]
+
+
+def _optional_section(text: str, heading: str) -> str:
+    """Return an optional `## ` section, or an empty string when omitted."""
+
+    marker = f"\n{heading}\n"
+    if marker not in text:
+        return ""
+
+    return text.partition(marker)[2].partition("\n## ")[0]
+
+
+def _command_entries(page: Path) -> dict[str, str]:
+    """Return immediate command names and descriptions from one manpage."""
+
+    # Split the Commands section into the tagged terms and prose that follow.
+    text = page.read_text(encoding="utf-8")
+    commands = _section(text, "## COMMANDS", page)
+    paragraphs = [part.strip() for part in commands.strip().split("\n\n")]
+    entries: dict[str, str] = {}
+
+    # A command is a tagged term followed by its short description paragraph.
+    for index, paragraph in enumerate(paragraphs):
+        match = re.match(r"^\*\*([a-z][a-z-]*)\*\*(?:\s|$)", paragraph)
+        if match is None:
+            continue
+        assert index + 1 < len(paragraphs), (
+            f"{page}: `{match.group(1)}` has no short description after its"
+            f" tagged term. Every immediate subcommand carries one"
+            f" (ADR-0077). See {STANDARD}."
+        )
+        description = paragraphs[index + 1]
+        assert not description.startswith("**"), (
+            f"{page}: `{match.group(1)}` is followed by another tagged term"
+            f" instead of its short description (ADR-0077). See {STANDARD}."
+        )
+        entries[match.group(1)] = description
+
+    return entries
+
+
+def _command_groups() -> list[tuple[Path, Path]]:
+    """Return each command-list page and the directory it must describe."""
+
+    # Inspect every user-facing help tree, including nested command paths.
+    groups: list[tuple[Path, Path]] = []
+    owners = [*_shipped_skills(), MANAGER_DIR]
+
+    # The root page lists immediate children; a command with children lists its own.
+    for owner in owners:
+        help_directory = owner / "help"
+        if not help_directory.is_dir():
+            continue
+        groups.append((owner / "help.md", help_directory))
+        for directory in sorted(
+            path for path in help_directory.rglob("*") if path.is_dir()
+        ):
+            if not any(directory.glob("*.md")):
+                continue
+            relative = directory.relative_to(help_directory)
+            parent = help_directory / relative.with_suffix(".md")
+            groups.append((parent, directory))
+
+    return groups
+
+
+_MODEL_SELECTOR_MANPAGES = frozenset(
+    {
+        "chart.md",
+        "compare.md",
+        "config.md",
+        "config/add.md",
+        "config/edit.md",
+        "config/history.md",
+        "config/remove.md",
+        "config/reset.md",
+        "config/show.md",
+        "recommend.md",
+        "record.md",
+        "setup.md",
+        "status.md",
+        "update.md",
+    }
+)
+
+
+def test_model_selector_ships_and_routes_one_manpage_per_subcommand() -> None:
+    """Every accepted command path has a deterministic `--help` target."""
+
+    # Compare the complete accepted command set with the shipped page tree.
+    help_directory = MODEL_SELECTOR_DIR / "help"
+    actual = {
+        str(path.relative_to(help_directory)) for path in help_directory.rglob("*.md")
+    }
+    skill = (MODEL_SELECTOR_DIR / "SKILL.md").read_text(encoding="utf-8")
+    help_section = _section(skill, "## Help", MODEL_SELECTOR_DIR / "SKILL.md")
+
+    assert actual == _MODEL_SELECTOR_MANPAGES, (
+        f"{MODEL_SELECTOR_DIR}: the subcommand page tree is {sorted(actual)},"
+        f" but the accepted command paths are"
+        f" {sorted(_MODEL_SELECTOR_MANPAGES)} (ADR-0077). See {STANDARD}."
+    )
+    assert "--help" in help_section, (
+        f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: subcommand pages exist but the"
+        f" Help section has no direct `--help` route to them (ADR-0077). See"
+        f" {STANDARD}."
+    )
+
+    # Hold every file to an explicit deterministic route in the Skill body.
+    for relative in _MODEL_SELECTOR_MANPAGES:
+        assert f"`$HERE/help/{relative}`" in help_section, (
+            f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: the Help section does not"
+            f" route the `{relative}` manpage (ADR-0077). See {STANDARD}."
+        )
+
+
+def test_every_command_page_lists_all_immediate_subcommands_with_descriptions() -> None:
+    """A command tree is discoverable without guessing names from prose."""
+
+    groups = _command_groups()
+    assert groups, "no command page tree was found, so this check judged nothing"
+
+    # Each parent page names exactly the pages immediately below it.
+    for page, directory in groups:
+        expected = {path.stem for path in directory.glob("*.md")}
+        entries = _command_entries(page)
+
+        assert set(entries) == expected, (
+            f"{page}: `COMMANDS` lists {sorted(entries)}, while the immediate"
+            f" command pages are {sorted(expected)}. A parent lists every"
+            f" immediate child and no nested grandchild (ADR-0077). See"
+            f" {STANDARD}."
+        )
+        assert all(entries.values()), (
+            f"{page}: every immediate subcommand carries a short description"
+            f" after its tagged term (ADR-0077). See {STANDARD}."
+        )
+
+
+def _manpage_name(page: Path) -> str:
+    """Return the invocation name a shipped page documents."""
+
+    if page == MANAGER_DIR / "help.md":
+        return "kntnt"
+
+    if page.parent == MANAGER_DIR / "help":
+        return f"kntnt {page.stem}"
+
+    for directory in _shipped_skills():
+        help_directory = directory / "help"
+        if help_directory in page.parents:
+            relative = page.relative_to(help_directory).with_suffix("")
+            command = " ".join(relative.parts)
+            return f"{directory.name} {command}"
+
+    return page.parent.name
 
 
 def _hint(directory: Path) -> str:
@@ -5050,7 +5293,7 @@ def _hint(directory: Path) -> str:
         f"{directory}: every skill declares an `argument-hint`. It is the"
         f" grammar the harness shows a user before anything is typed, and one"
         f" of the three places the flags a skill takes are named — the manpage's"
-        f" `## Synopsis` and `## Options` being the others (ADR-0059). See"
+        f" `## SYNOPSIS` and `## OPTIONS` being the others (ADR-0059). See"
         f" {STANDARD}."
     )
 
@@ -5079,8 +5322,8 @@ def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() 
         skill = (directory / "SKILL.md").read_text(encoding="utf-8")
         page = (directory / "help.md").read_text(encoding="utf-8")
 
-        assert "`## Synopsis` section of `$HERE/help.md`" in skill, (
-            f"{directory}: an invalid form is answered with the `## Synopsis`"
+        assert "`## SYNOPSIS` section of `$HERE/help.md`" in skill, (
+            f"{directory}: an invalid form is answered with the `## SYNOPSIS`"
             f" section of `$HERE/help.md`, printed verbatim. A skill has no"
             f" parser — the agent reading these files is the whole of the"
             f" enforcement — so a refusal composed on the spot is a second"
@@ -5114,21 +5357,21 @@ def test_a_skills_hint_and_manpage_agree_on_the_flags_it_takes() -> None:
     for directory in _shipped_skills():
         manpage = directory / "help.md"
         page = manpage.read_text(encoding="utf-8")
-        documented = _flags(_section(page, "## Options", manpage))
+        documented = _flags(_optional_section(page, "## OPTIONS"))
 
         assert _flags(_hint(directory)) == documented, (
             f"{directory}: `argument-hint` names"
             f" {sorted(_flags(_hint(directory)))} and the manpage's"
-            f" `## Options` names {sorted(documented)}. The two are one set:"
+            f" `## OPTIONS` names {sorted(documented)}. The two are one set:"
             f" the skill has no parser, so a flag advertised in one and missing"
             f" from the other is a grammar disagreeing with itself, and the"
             f" refusal lands in a user's session instead of here (ADR-0059)."
             f" See {STANDARD}."
         )
-        assert _flags(_section(page, "## Synopsis", manpage)) == documented, (
-            f"{manpage}: `## Synopsis` names"
-            f" {sorted(_flags(_section(page, '## Synopsis', manpage)))} and"
-            f" `## Options` names {sorted(documented)}. The synopsis is what a"
+        assert _flags(_section(page, "## SYNOPSIS", manpage)) == documented, (
+            f"{manpage}: `## SYNOPSIS` names"
+            f" {sorted(_flags(_section(page, '## SYNOPSIS', manpage)))} and"
+            f" `## OPTIONS` names {sorted(documented)}. The synopsis is what a"
             f" refusal quotes verbatim, so a flag missing from it is a flag the"
             f" user is refused for without being shown (ADR-0059). See"
             f" {STANDARD}."
@@ -5147,7 +5390,7 @@ def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None
     page = (directory / "help.md").read_text(encoding="utf-8")
     forms = [
         *_hint(directory).split(" | "),
-        *_section(page, "## Synopsis", directory / "help.md").splitlines(),
+        *_section(page, "## SYNOPSIS", directory / "help.md").splitlines(),
     ]
 
     assert any("--yes" in form for form in forms), (
@@ -5206,8 +5449,9 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
         f" the two halves disagree the body is the true one (ADR-0046). See"
         f" {STANDARD}."
     )
-    assert "prints the synopsis" in _section(page, "## Notes", directory / "help.md"), (
-        f"{directory / 'help.md'}: the notes say the incomplete form prints the"
+    diagnostics = _section(page, "## DIAGNOSTICS", directory / "help.md").lower()
+    assert "prints the synopsis" in diagnostics, (
+        f"{directory / 'help.md'}: `DIAGNOSTICS` says the incomplete form prints the"
         f" synopsis. A reader who has not run the skill cannot tell a refusal"
         f" from a no-op unless the page names what the refusal does, and the"
         f" refusal with the synopsis is what the body performs (ADR-0059). See"

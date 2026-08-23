@@ -13,3 +13,5 @@ With that route in place `/kntnt help <skill>` is withdrawn rather than kept alo
 None of this makes the Manager the owner of a skill's documentation. It never was; it was only the address.
 
 What a skill body keeps once its help has left is ADR-0046: only what the agent executes.
+
+The single-page layout for Skills with subcommands is amended by ADR-0077, which adds directly addressable pages under `help/` while retaining the root `help.md`.

@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -3682,11 +3683,17 @@ def test_a_repository_that_numbers_nothing_is_unmoved_by_overlapping_isolates(
 def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
     """The detection is deterministic and unconfigured, so what it answers for
     this repository is what this repository actually keeps: the decision
-    records under `docs/adr`, and nothing else in the tree."""
+    records tracked under `docs/adr`, and nothing else in the index."""
 
+    # Compare the engine with the same tracked-file boundary its contract names.
     found = _run().numbered_registries(REPO_ROOT)
-    records = sorted((REPO_ROOT / "docs" / "adr").glob("[0-9][0-9][0-9][0-9]-*.md"))
+    records = sorted(
+        Path(path)
+        for path in _git(REPO_ROOT, "ls-files", "docs/adr").stdout.splitlines()
+        if re.match(r"^docs/adr/[0-9]{4}-.+\.md$", path)
+    )
 
+    assert records, "this repository tracks no numbered decision records"
     assert set(found) == {"docs/adr"}
     assert found["docs/adr"] == int(records[-1].name[:4])
 

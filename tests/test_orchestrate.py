@@ -95,6 +95,28 @@ def _step(number: int) -> str:
     return match.group(0)
 
 
+def _manpage_section(heading: str) -> str:
+    """Return one uppercase section from the orchestrate manpage."""
+
+    text = (SKILL / "help.md").read_text(encoding="utf-8")
+    marker = f"\n## {heading}\n"
+    assert marker in text, f"{SKILL / 'help.md'}: no {heading} section to read."
+    return text.partition(marker)[2].partition("\n## ")[0]
+
+
+def _manpage_entry(heading: str, term: str) -> str:
+    """Return the description following one tagged manpage term."""
+
+    paragraphs = _manpage_section(heading).strip().split("\n\n")
+    for index, paragraph in enumerate(paragraphs[:-1]):
+        if paragraph.startswith(term):
+            return paragraphs[index + 1]
+
+    raise AssertionError(
+        f"{SKILL / 'help.md'}: the {heading} section has no entry starting {term}."
+    )
+
+
 def test_every_verifying_brief_tells_its_subagent_to_wait_out_a_long_command() -> None:
     """A gate that outlives a subagent's patience ends the turn, and unattended that is a dead run.
 
@@ -506,18 +528,16 @@ def test_the_integration_step_applies_the_waves_notes_before_the_wave_check() ->
 def test_the_manpage_accounts_for_the_files_the_run_writes() -> None:
     """A developer reading the page has to know why no builder's commit carries its changelog line."""
 
-    text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
+    entry = _manpage_entry("FILES", "**Run-owned append files**")
 
-    assert "the run's own to write" in text, (
-        f"{where}: the manpage says some files are the run's to write rather"
-        f" than any builder's, beside its account of worktrees and"
-        f" integration (ADR-0071)."
+    assert "ticket-specific notes" in entry, (
+        f"{where}: the run-owned files entry says builders leave their"
+        f" proposed entries in ticket-specific notes (ADR-0071)."
     )
-    assert "leaves it as a note" in text, (
-        f"{where}: the manpage says a builder with an entry for such a file"
-        f" leaves it as a note the run applies later, which is what a reader"
-        f" of the diff would otherwise have to work out (ADR-0071)."
+    assert "applies those notes serially" in entry, (
+        f"{where}: the entry says the orchestrator applies the notes serially,"
+        f" which prevents append-only files from colliding (ADR-0071)."
     )
 
 
@@ -718,26 +738,25 @@ def test_the_manpage_describes_the_triage_of_a_stop() -> None:
     wrong path costs a retry, not a ticket (ADR-0070, issue #74).
     """
 
-    text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
+    section = _manpage_section("BUILDER STOPS")
 
-    assert "mechanical hinder" in text, (
+    assert "Mechanical hinder" in section, (
         f"{where}: the manpage names the mechanical hinder the run repairs"
         f" itself before dispatching the same brief once more (ADR-0070)."
     )
-    assert "decide anything about the work" in text, (
-        f"{where}: the manpage states what separates a hinder from a decision"
-        f" — whether fixing it decides anything about the work (ADR-0070)."
+    assert "deterministic environment problem" in section, (
+        f"{where}: the manpage confines a hinder to a deterministic"
+        f" environment problem rather than a decision about the work"
+        f" (ADR-0070)."
     )
-    assert "the wave carries on without it" in text, (
-        f"{where}: the manpage says a mid-run decision parks the ticket and"
-        f" the wave carries on without it — a decision costs one ticket,"
-        f" never the night (ADR-0070)."
+    assert "parks the ticket" in section, (
+        f"{where}: the manpage says a genuine decision parks the ticket"
+        f" instead of guessing or failing it (ADR-0070)."
     )
-    assert "tried and found wanting" in text, (
-        f"{where}: the manpage says the stop that stays a failure is the one"
-        f" whose work was tried and found wanting, which the amend fronts"
-        f" (issue #74)."
+    assert "failure path" in section, (
+        f"{where}: the manpage routes every remaining stop through the"
+        f" verification-failure path and its amend (issue #74)."
     )
 
 
@@ -747,9 +766,7 @@ def test_the_manpage_documents_the_open_decision_exception_to_yes() -> None:
 
     text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
-    yes_entry = next(
-        (line for line in text.splitlines() if line.startswith("- `--yes`")), ""
-    )
+    yes_entry = _manpage_entry("OPTIONS", "**--yes**")
 
     assert "parked" in yes_entry, (
         f"{where}: the `--yes` entry documents the exception — a ticket whose"
@@ -1042,27 +1059,26 @@ def test_the_manpage_describes_the_wave_loop_and_what_stops_it() -> None:
     not say could happen (ADR-0072).
     """
 
-    text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
+    entry = _manpage_entry("TICKET EXECUTION", "**Integrate**")
 
-    assert "coherence" in text, (
+    assert "coherence" in entry, (
         f"{where}: the manpage says the post-merge check reads the branch"
         f" for coherence as well as running the verification (ADR-0072)."
     )
-    assert "the finder is never the fixer" in text, (
-        f"{where}: the manpage says a separate subagent fixes what the"
-        f" check finds mechanical — the finder is never the fixer"
+    assert "another subagent" in entry, (
+        f"{where}: the manpage says another subagent fixes mechanical"
+        f" coherence findings, keeping the finder separate from the fixer"
         f" (ADR-0072)."
     )
-    assert "a round finds nothing" in text, (
-        f"{where}: the manpage says the loop ends when a round finds"
-        f" nothing, so the reader knows what a clean pass now means"
+    assert "until a round is clean" in entry, (
+        f"{where}: the manpage says the loop ends only when a round is clean,"
+        f" so the reader knows what a clean pass means"
         f" (ADR-0072)."
     )
-    assert "a round changes nothing" in text, (
-        f"{where}: the manpage says the run stops when a round changes"
-        f" nothing, beside the failed gate and the choice — the three"
-        f" things that stop the loop (ADR-0072)."
+    assert "makes no progress stops the run" in entry, (
+        f"{where}: the manpage says a non-progressing fix stops the run beside"
+        f" a failed gate and an unresolved choice (ADR-0072)."
     )
 
 
@@ -1127,27 +1143,25 @@ def test_the_manpage_accounts_for_the_blocked_outcome() -> None:
     edge, and where to look for it (ADR-0073, issue #79).
     """
 
-    text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
+    edge = _manpage_entry("BUILDER STOPS", "**Discovered dependency**")
+    outcomes = _manpage_section("OUTCOMES")
 
-    assert "whether the missing thing has a number" in text, (
-        f"{where}: the manpage states the boundary between the blocked"
-        f" outcome and a parked ticket — an open ticket is an edge, an answer"
-        f" no ticket carries is a question (ADR-0073)."
+    assert "another open ticket" in edge, (
+        f"{where}: the discovered-dependency entry limits the blocked outcome"
+        f" to missing work carried by another open ticket (ADR-0073)."
     )
-    assert "corrected edge" in text, (
-        f"{where}: the manpage names the corrected edge as what the run"
-        f" writes and where the developer looks — on the ticket, in the"
-        f" breakdown's own vocabulary (ADR-0073)."
+    assert "writes the missing blocking edge" in edge, (
+        f"{where}: the manpage says the run corrects the tracker graph with"
+        f" the missing blocking edge (ADR-0073)."
     )
-    assert "the moment its blocker closes" in text, (
-        f"{where}: the manpage says a blocked ticket reappears the moment its"
-        f" blocker closes, nothing about it being settled (ADR-0073)."
+    assert "after its blocker closes" in edge, (
+        f"{where}: the manpage says the blocked ticket is offered again after"
+        f" its blocker closes, rather than being settled (ADR-0073)."
     )
-    assert "waiting on open work" in text, (
+    assert "rather than in a sixth category" in outcomes, (
         f"{where}: the manpage keeps the report at five lists — a blocked"
-        f" ticket is simply a ticket waiting on open work once its edge is"
-        f" written (ADR-0073)."
+        f" ticket follows the outcome implied by its blocker (ADR-0073)."
     )
 
 
@@ -1425,18 +1439,16 @@ def test_the_manpage_says_delivery_lines_are_not_criteria() -> None:
     needed (issue #82).
     """
 
-    text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
+    entry = _manpage_entry("TICKET EXECUTION", "**Verify**")
 
-    assert "prescribing the delivery channel" in text, (
-        f"{where}: the manpage says a line prescribing the delivery channel"
-        f" is read out of the criteria, beside its account of verification"
-        f" (issue #82)."
+    assert "Delivery requests" in entry, (
+        f"{where}: the verification entry identifies delivery requests"
+        f" separately from acceptance criteria (issue #82)."
     )
-    assert "not an acceptance criterion" in text, (
-        f"{where}: the manpage says such a line is not an acceptance"
-        f" criterion, so a developer whose tickets end *deliver as a PR*"
-        f" knows they need not edit them before a run (issue #82)."
+    assert "do not change the verdict" in entry, (
+        f"{where}: the manpage says delivery requests do not change the"
+        f" verdict because delivery is outside the Skill (issue #82)."
     )
 
 
@@ -1541,18 +1553,15 @@ def test_the_amend_and_repair_dispatches_delegate_as_builds_do() -> None:
 def test_the_manpage_model_entry_carries_the_judged_default() -> None:
     """The flag keeps exactly its meaning; what changes is the default underneath it."""
 
-    text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
-    model_entry = next(
-        (line for line in text.splitlines() if line.startswith("- `--model")), ""
-    )
+    model_entry = _manpage_entry("OPTIONS", "**--model**")
 
-    assert "pins every builder" in model_entry, (
-        f"{where}: the `--model` entry says what naming a model does — it pins"
-        f" every builder and switches the judgment off — so the flag keeps"
+    assert "every building subagent" in model_entry, (
+        f"{where}: the `--model` entry says what naming a model does — it sets"
+        f" every builder explicitly — so the flag keeps"
         f" exactly its meaning (ADR-0074)."
     )
-    assert "cheapest model" in model_entry, (
+    assert "cheapest builder model" in model_entry, (
         f"{where}: the `--model` entry states the default underneath the flag"
         f" — absent it, the run judges per ticket the cheapest model it judges"
         f" able, never silent inheritance (ADR-0074)."
@@ -1562,14 +1571,9 @@ def test_the_manpage_model_entry_carries_the_judged_default() -> None:
         f" orchestrator's own model, as the delegation rule always has"
         f" (ADR-0074)."
     )
-    assert (
-        "the saving is never taken at the last thing that would catch a mistake"
-        in model_entry
-    ), (
-        f"{where}: the `--model` entry says every verdict runs on the"
-        f" orchestrator's own model, with the record's reason — the saving is"
-        f" never taken at the last thing that would catch a mistake"
-        f" (ADR-0074)."
+    assert "remain on the orchestrator's model" in model_entry, (
+        f"{where}: the `--model` entry says every verdict remains on the"
+        f" orchestrator's own model (ADR-0074)."
     )
 
 
@@ -1580,18 +1584,17 @@ def test_the_manpage_advises_running_from_the_strongest_model() -> None:
     are only as good as the model asked to make them (ADR-0074, issue #83).
     """
 
-    text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
-    description = text.split("## Description", 1)[1].split("\n## ", 1)[0]
+    description = _manpage_section("DESCRIPTION")
 
     assert "most capable model" in description, (
         f"{where}: the description advises running the skill from the most"
         f" capable model available — the seat is the developer's move, so the"
         f" page is where it is said (ADR-0074)."
     )
-    assert "only as good as the model asked to make them" in description, (
+    assert "only as reliable as that model" in description, (
         f"{where}: the description says why the seat matters — the run's"
-        f" judgment calls are only as good as the model asked to make them"
+        f" judgment calls are only as reliable as the selected model"
         f" (ADR-0074)."
     )
 
@@ -1599,19 +1602,15 @@ def test_the_manpage_advises_running_from_the_strongest_model() -> None:
 def test_the_manpage_says_the_gate_is_resolved_once() -> None:
     """A developer reading the page has to know what a verifier runs and who decided it."""
 
-    text = (SKILL / "help.md").read_text(encoding="utf-8")
     where = SKILL / "help.md"
+    entry = _manpage_entry("TICKET EXECUTION", "**Build**")
 
-    assert (
-        "resolved once, at the run's start, from the project's contributing guide"
-        in text
-    ), (
+    assert "resolved once at the run's start" in entry, (
         f"{where}: the manpage says the gate is resolved once, at the run's"
         f" start, from the project's contributing guide — not rediscovered"
         f" by each verifying subagent (issue #80)."
     )
-    assert "a check the list does not name is not run in its place" in text, (
-        f"{where}: the manpage says a check the list does not name is not"
-        f" run in its place, so a reader knows the run cannot wander into"
-        f" a twenty-five-minute rig nothing asked for (issue #80)."
+    assert "neither substitutes nor expands it" in entry, (
+        f"{where}: the manpage says every verifier receives the exact gate and"
+        f" neither substitutes nor expands it (issue #80)."
     )

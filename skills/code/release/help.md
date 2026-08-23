@@ -1,42 +1,63 @@
 # release
 
-Ship a version — changelog, bump, push, tag, and GitHub release.
+## NAME
 
-## Synopsis
+release - publish a version from the default branch
 
-`/release [minor|major|X.Y.Z] [--no-build] [--yes]`
+## SYNOPSIS
 
-## Description
+**/release** [**minor**|**major**|*X.Y.Z*] [**--no-build**] [**--yes**]
 
-Takes what is in `[Unreleased]` and turns it into a released version, from the default branch and nowhere else. In order: the changelog is reconciled and its `[Unreleased]` section promoted to the new version under today's date, the version is written into the files that carry it, the branch is committed and pushed, an annotated tag is created and pushed, and a GitHub release is published from the changelog section. Where the project has a build that produces an archive, that archive is attached to the release.
+## DESCRIPTION
 
-The version is derived from the changelog unless you name one: a `Removed` section or a breaking change makes it a major bump — a minor one below 1.0.0 — an `Added` section makes it minor, and anything else a patch.
+`release` turns `[Unreleased]` into a published version from the default branch. It reconciles and promotes the changelog under the current date, updates the files that carry the version, commits and pushes through the `push` Skill, creates and pushes an annotated tag, and publishes a GitHub release from the promoted changelog section.
 
-Nothing is written before you have seen it. The plan, the changelog diff, the version, and the build command are shown and waited on.
+If the Project provides a conventional archive build, the resulting archive is attached to the release. The plan, changelog diff, selected version, and build command are shown before anything is written unless `--yes` is present.
 
-## Arguments
+Without a version operand, the Skill derives the next version from `[Unreleased]`: a `Removed` section or breaking change selects a major bump, except below 1.0.0 where it selects a minor bump; `Added` selects minor; every other change selects patch.
 
-- `minor`, `major`, or `X.Y.Z` — force the bump rather than deriving it from `[Unreleased]`.
+## POSITIONAL ARGUMENTS
 
-## Options
+**minor**
 
-- `--no-build` — skip the archive even where the project has a build command.
-- `--yes` — assume yes: release without waiting for a confirmation.
+Force a minor version bump.
 
-## Notes
+**major**
 
-A flag with no work to do on the invocation you typed is refused rather than ignored, because a flag accepted and ignored teaches that flags sometimes do nothing. So `/release --dry-run` is an error, while `/release minor --no-build --yes` is not. An invalid form is refused the same way, so this skill has one failure behaviour rather than one per kind of mistake: the synopsis above, a line saying what was wrong, and nothing done.
+Force a major version bump.
 
-A branch that is not the default branch stops the run: integrate first. An empty `[Unreleased]` stops it too — there is nothing to ship.
+*X.Y.Z*
 
-A version that cannot be rewritten unambiguously aborts the whole bump rather than leaving some files written and others not.
+Publish this exact semantic version.
 
-Where `gh` is missing or the remote is not GitHub, the tag is pushed and that is reported as the end of it: the release is the only step that needs GitHub.
+## OPTIONS
 
-## Dependencies
+**--no-build**
 
-`git` and `uv` on PATH, the push skill Enabled, and the manager installed — the skill checks for both and says how to install them if they are missing. `gh` is required only for the GitHub release step.
+Skip the archive even when the Project has a build command.
 
-## See also
+**--yes**
 
-`/commit` records the working tree. `/push` commits and pushes.
+Release without waiting for confirmation.
+
+## DIAGNOSTICS
+
+An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, publishes nothing, and points to `/release --help`.
+
+A branch other than the default branch, an empty `[Unreleased]`, or a version that cannot be rewritten unambiguously stops the release before a partial bump is left behind.
+
+If `gh` is unavailable or the remote is not GitHub, the tag is pushed and the Skill reports that the GitHub release step was skipped. The rest of the release remains complete.
+
+## DEPENDENCIES
+
+**Binaries**
+
+`git` and `uv` on `PATH`. `gh` is required only to publish the GitHub release and attach an archive.
+
+**Skills**
+
+`push` and the Manager must be Enabled.
+
+## SEE ALSO
+
+**/commit --help**, **/push --help**

@@ -1,57 +1,129 @@
 # model-selector
 
-Configure the exact AI model versions and access channels you use, then compare their price-performance evidence for a workload.
+## NAME
 
-## Synopsis
+model-selector - compare configured AI model systems by price and performance
 
-```
-/model-selector [recommend] [<workload>] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>]
-/model-selector chart|compare <workload> [--decision=route|renew] [--data=<path>]
-/model-selector setup [--data=<path>]
-/model-selector config [show|add model|add channel|edit model <id>|edit channel <id>|remove model <id>|remove channel <id>|history|reset] [--data=<path>]
-/model-selector update [--force] [--data=<path>]
-/model-selector record <path> [--data=<path>]
-/model-selector status [--data=<path>]
-```
+## SYNOPSIS
 
-## Description
+**/model-selector** [**recommend**] [*WORKLOAD*] [**--decision=route**|**--decision=renew**] [**--budget=**_AMOUNT_|**--quality=**_SCORE_] [**--data=**_PATH_]
 
-`model-selector` treats a comparison point as a complete system: exact model release or resolved alias, effort or thinking budget, serving mode, harness, tools, policies, access channel, and effective commercial schedule. It recommends from Pareto frontiers instead of reducing quality and cost to one misleading ratio.
+**/model-selector** (**chart**|**compare**) *WORKLOAD* [**--decision=route**|**--decision=renew**] [**--data=**_PATH_]
 
-First use asks which exact model versions to include and how each is obtained. An access channel may be a subscription with its exact plan and tier, a direct metered API, a gateway API such as OpenRouter, or another arrangement. The confirmed profile is stored under `~/.model-selector/` by default and reused on later invocations. No credentials are stored.
+**/model-selector** **setup** [**--data=**_PATH_]
 
-The bundled seed contains dated public model identities, direct and gateway API prices, and independent benchmark priors. It contains no access profile, subscription entitlement, account quota, or local evaluation. Recommendations remain conditional on evidence vintage and become production-grade only when representative local observations support them.
+**/model-selector** **config** [**show**|**add** (**model**|**channel**)|**edit** (**model**|**channel**) *ID*|**remove** (**model**|**channel**) *ID*|**history**|**reset**] [**--data=**_PATH_]
 
-## Commands
+**/model-selector** **update** [**--force**] [**--data=**_PATH_]
 
-- `recommend` chooses one exact configuration and reports its nearest cheaper and stronger Pareto neighbours. Bare `/model-selector` is the same form when the current workload is unambiguous.
-- `chart` and `compare` emit separate comparable frontier tables and plotting-ready CSV instead of choosing one winner.
-- `setup` creates the first profile or reopens a complete guided review.
-- `config` shows or revises model selections, access channels, history, and the active profile.
-- `update` performs one bounded refresh of due mutable model indexes, commercial terms, and benchmark releases without refetching known immutable model details.
-- `record` imports unseen local evaluation observations without overwriting conflicting history.
-- `status` reports configuration, evidence age, gaps, and provisional facts without network access or writes.
+**/model-selector** **record** *PATH* [**--data=**_PATH_]
 
-## Options
+**/model-selector** **status** [**--data=**_PATH_]
 
-- `--data=<path>` — use another configuration and evidence directory. Valid on every form.
-- `--decision=route|renew` — compare marginal routing economics now or whether a fixed subscription fee earns renewal. Valid for `recommend`, `chart`, and `compare`; `route` is the default.
-- `--budget=<amount>` — choose the highest conservative quality within a comparable budget. Valid only for `recommend` and mutually exclusive with `--quality`.
-- `--quality=<score>` — choose the lowest conservative comparable cost that clears the quality floor. Valid only for `recommend` and mutually exclusive with `--budget`.
-- `--force` — check every relevant mutable index once regardless of cadence. Valid only for `update`; it still does not refetch known immutable details or rerun existing observations.
+## DESCRIPTION
 
-## Notes
+`model-selector` compares complete model systems rather than bare model families. A comparison point includes an exact model release or resolved alias, effort or thinking budget, serving mode, Harness, tools, policies, access channel, and effective commercial schedule.
 
-Cash, rolling-window quota, weekly quota, subscription credits, allocated plan cost, and latency stay separate unless you provide explicit shadow prices. Included subscription work may have zero marginal cash while still consuming scarce quota.
+First use creates a profile of the exact models and access channels available to the user. Channels may include subscriptions, direct metered APIs, gateway APIs, or other arrangements. The profile contains no credentials and is reused on later runs.
 
-Configuration changes use revision history and do not delete evidence. Newly discovered model versions are reported but never replace an enabled version automatically. A supplied mutable alias remains provisional until its concrete target is resolved.
+Recommendations are selected from comparable Pareto frontiers. Cash, rolling-window quota, weekly quota, subscription credits, allocated plan cost, latency, and quality remain separate unless the user supplies an explicit shadow price. Included subscription usage may have zero marginal cash cost while consuming scarce quota.
 
-A flag with no work to do on the selected form is refused rather than ignored. An incomplete form changes nothing and prints the synopsis instead of guessing what you intended.
+The bundled seed contains dated public model identities, direct and gateway prices, and benchmark priors. It contains no access profile, entitlement, account quota, or local evaluation. Every result reports evidence source, date, uncertainty, exclusions, and missing evidence.
 
-## Dependencies
+## COMMANDS
 
-None. Network access is useful only for `update`; the other forms operate on bundled or locally stored evidence and report when the evidence is insufficient.
+**recommend** [*WORKLOAD*]
 
-## See also
+Choose one exact configuration and report its nearest cheaper and stronger comparable frontier neighbours. Bare `/model-selector` uses this command when the current workload is unambiguous.
 
-`/kntnt select` to enable this skill in another layer or harness. Use `config history` to inspect prior profile revisions and `status` to see whether an update is due.
+**chart** *WORKLOAD*
+
+Build the applicable frontiers without choosing one winner, then emit compact tables and plotting-ready CSV.
+
+**compare** *WORKLOAD*
+
+An alias of `chart`.
+
+**setup**
+
+Create the initial profile or perform a complete guided review of the existing profile.
+
+**config**
+
+Display or revise the model and access-channel profile. Its page lists every configuration subcommand.
+
+**update**
+
+Perform one bounded refresh of due model indexes, commercial terms, and benchmark releases. Known immutable model detail pages and existing local run keys are not fetched or executed again.
+
+**record** *PATH*
+
+Validate and append unseen local evaluation observations. Conflicting historical observations are preserved rather than overwritten.
+
+**status**
+
+Report the profile, evidence vintage, due sources, gaps, and provisional facts without network access or writes.
+
+## OPTIONS
+
+**--data=**_PATH_
+
+Use *PATH* as the profile and evidence directory. Valid with every command. The default is `~/.model-selector/`.
+
+**--decision=route**, **--decision=renew**
+
+For `recommend`, `chart`, and `compare`, compare marginal routing economics now or whether a fixed subscription fee earns renewal. `route` is the default.
+
+**--budget=**_AMOUNT_
+
+For `recommend`, select the highest conservative quality within a budget when every eligible point uses a comparable cost unit. Mutually exclusive with `--quality`.
+
+**--quality=**_SCORE_
+
+For `recommend`, select the lowest conservative comparable cost that clears the quality floor. Mutually exclusive with `--budget`.
+
+**--force**
+
+For `update`, check every relevant mutable index once regardless of cadence. Known immutable details and existing observations remain untouched.
+
+## OUTPUT
+
+`recommend` names an exact configuration, its decision rule, comparable neighbours, exclusions, uncertainty, and staleness. If the evidence cannot support the comparison, it identifies the missing evidence and proposes the smallest discriminating evaluation instead of inventing a rank.
+
+`chart` and `compare` report separate cash, quota, and renewal views unless explicit shadow prices make a common numeric axis valid. Missing metrics are represented as `null`, never zero.
+
+`update` records an outcome for every due source and reports each appended change. Discovering a newer model does not replace an Enabled version automatically; use `config add` or `config edit` to change membership.
+
+## FILES
+
+**~/.model-selector/config.json**
+
+The default active profile and its revision history. A user-supplied `--data` directory relocates it.
+
+**Evidence ledger**
+
+An append-only, effective-dated record under the selected data directory. Configuration changes never delete it.
+
+## DIAGNOSTICS
+
+An incomplete form, unsupported combination, or option with no work to do is refused rather than ignored. The Skill names the error, prints the addressed command's SYNOPSIS, changes nothing, and points to that command's `--help` page.
+
+No changed source is a successful `update`. Unreachable or insufficient evidence is reported without turning unavailable data into a zero or an invented comparison.
+
+## EXAMPLES
+
+**/model-selector recommend repository refactor --decision=route**
+
+Select an exact configured system for a repository-refactoring workload using marginal routing economics.
+
+**/model-selector update --force**
+
+Check every relevant mutable source once while retaining known immutable details and recorded observations.
+
+## DEPENDENCIES
+
+None. Network access is used only by `update`; every other command operates on bundled or locally stored evidence and reports insufficiency.
+
+## SEE ALSO
+
+**/model-selector recommend --help**, **/model-selector config --help**, **/model-selector status --help**, **/kntnt select**

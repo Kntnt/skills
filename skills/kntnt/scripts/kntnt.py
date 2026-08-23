@@ -2224,7 +2224,7 @@ def subcommand_manpage(name: str) -> Path | None:
 
 
 def synopsis_of(page: Path) -> str:
-    """Return the `## Synopsis` section of *page*, verbatim and whole.
+    """Return the `## SYNOPSIS` section of *page*, verbatim and whole.
 
     A syntax error prints a synopsis the collection ships rather than one
     composed here, and takes the section entire rather than the line it wants
@@ -2233,7 +2233,7 @@ def synopsis_of(page: Path) -> str:
     """
 
     text = read_manpage(page)
-    heading = "\n## Synopsis\n"
+    heading = "\n## SYNOPSIS\n"
     if heading not in text:
         raise ManagerError(f"'{page}' ships no Synopsis; run the transport again")
 
@@ -2608,10 +2608,16 @@ def main(argv: list[str] | None = None) -> int:
 
     raw = normalize_argv(list(sys.argv[1:] if argv is None else argv))
 
-    # Bare `/kntnt` is Help (ADR-0027), and `--help` and `-h` are the route
-    # into Help rather than flags on a verb (ADR-0059) — so they name the verb
-    # instead of being handed to it, which under strict syntax it would refuse.
-    if not raw or raw[0] in ("--help", "-h"):
+    # A help flag after a public verb addresses that verb's shipped manpage.
+    if (
+        len(raw) == 2
+        and raw[1] in ("--help", "-h")
+        and subcommand_manpage(raw[0]) is not None
+    ):
+        raw = ["help", raw[0]]
+
+    # Bare `/kntnt` and a top-level help flag address the Manager's own page.
+    elif not raw or raw[0] in ("--help", "-h"):
         raw = ["help", *raw[1:]]
 
     try:
