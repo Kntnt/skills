@@ -5,7 +5,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "173f9aad7ac57dd2daa944a1949de1bd63df58e84774d9980f1e74200f531de7",
+      "digest": "3363cf485efcaa552e74a9c1f3f9525628fe4708b2fee2fab620a2fc5b0ed9a2",
       "binaries": [
         "git",
         "uv"
@@ -18,7 +18,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "7443d2a53181a29baf2312a3603d54fef8e268710e42ef6f00d916c048707b57",
+      "digest": "5b7481568c7164379cd357bc4406a991f11048cb2ce7d3f72db8d369270fb831",
       "binaries": [
         "uv"
       ],
@@ -32,7 +32,7 @@
       "name": "tldr",
       "category": "agents",
       "description": "Reframe what was just said for the person who owns the outcome, and turn TL;DR mode on or off so later replies stay concise and decision-relevant.",
-      "digest": "b108c2324711847538a5660cb28d5c442ef4e59ecf0235abb44584c93859ebb8",
+      "digest": "cf6545cbc11a003fb0cc14a11d529e49c4bb78ac349fe1a9477afe05ee6da460",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -42,7 +42,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "823c7d596f46305141a9a87780d8d7bb34b805b97ed0217381a58ec2a982d096",
+      "digest": "0b2d9ffb0ca89f4a84720ee0b640e5704917dbefad5c40c38cbefce2a171800b",
       "binaries": [
         "git",
         "uv"
@@ -55,7 +55,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "150891f0d564344b1a7009e129aef0df68ebce956f1a66ba27aa998de4b827fc",
+      "digest": "b0ce24ef207eddf9bd2fc83f55e04389771ffa9f415d15df7bf9c229e6f09c31",
       "binaries": [
         "git",
         "gh",
@@ -71,7 +71,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "08ce645a5e27d234dae96fe789fbb76582bd5a453b6a05778b62c9386ac0bee3",
+      "digest": "5fb282e2de95af57481f21de936c392001139c67646b7ade9ece6bc06e006b2a",
       "binaries": [
         "git",
         "uv"
@@ -86,7 +86,7 @@
       "name": "ready-for-agent-check",
       "category": "code",
       "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
-      "digest": "16c3ec319ced340c3c639f878ea2d92c66963b92564b8be7c7fe7b7715e54884",
+      "digest": "8b287120ed6dc6bc9e647fa51feaa5b88fdee8bc45af5c686498b7ee319edd28",
       "binaries": [
         "gh",
         "uv"
@@ -101,7 +101,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "3b36cbf28664d8528e1bf1ee301fc42993ddda21d25ab7d8a109b6ecbcfd886c",
+      "digest": "a64456083d6e64f14cdc878f79f35578f5c8fb95824c57a6901e78ede7363897",
       "binaries": [
         "git",
         "uv"
@@ -116,7 +116,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "be8ec6623fb97b7e5203665517bcd23a0a64fe1a0195a04567e0b6ff3a408a6b",
+      "digest": "cb6e6f145e3eb3e7361cb50e972e7e145651d75c4f4f7743fdef7bd8eb164b98",
       "binaries": [],
       "skills": [],
       "externals": [],

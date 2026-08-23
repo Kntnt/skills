@@ -40,17 +40,15 @@ def test_the_body_briefs_the_reviewer_from_the_whole_thread() -> None:
     """Triage files its criteria as a comment, so the body alone is not the ticket.
 
     A reviewer given only the body reports the open questions that triage
-    answered before this skill ever ran, which is the shape of ADR-0065's
-    failure with the reader changed.
+    answered before this skill ever ran.
     """
 
     text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
 
-    assert "ADR-0065" in text, (
-        f"{SKILL / 'SKILL.md'}: the body cites ADR-0065 where it says the"
-        f" requirement is the whole thread. Triage files its criteria as a"
-        f" comment, so a reviewer given the body alone is measuring the"
-        f" untriaged ticket. See {STANDARD}."
+    assert "The requirement is the thread and not the body" in text, (
+        f"{SKILL / 'SKILL.md'}: the body says the requirement is the whole"
+        f" thread. Triage files its criteria as a comment, so a reviewer given"
+        f" the body alone is measuring the untriaged ticket. See {STANDARD}."
     )
     assert "oldest first" in text, (
         f"{SKILL / 'SKILL.md'}: the body says the comments reach the reviewer"
@@ -88,7 +86,7 @@ def test_the_skill_declares_no_flag_it_would_have_to_refuse() -> None:
 
     The Manager's own grammar rule is that a flag with no work is an error
     rather than a no-op, and a skill that quietly accepted one would teach the
-    opposite of what every other skill in the collection teaches (ADR-0059).
+    opposite of what every other skill in the collection teaches.
     """
 
     text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
@@ -97,9 +95,12 @@ def test_the_skill_declares_no_flag_it_would_have_to_refuse() -> None:
         f"{SKILL / 'SKILL.md'}: this skill writes nothing and asks nothing, so"
         f" the body says plainly that `--yes` has no question to answer. A flag"
         f" quietly accepted here teaches the opposite of what every other skill"
-        f" in the collection teaches (ADR-0059). See {STANDARD}."
+        f" in the collection teaches. See {STANDARD}."
     )
-    assert "ADR-0059" in text, (
-        f"{SKILL / 'SKILL.md'}: the paragraph refusing a flag with no work to"
-        f" do cites ADR-0059, the record that carries the rule. See {STANDARD}."
+    assert (
+        "a flag accepted and ignored teaches that flags sometimes do nothing" in text
+    ), (
+        f"{SKILL / 'SKILL.md'}: the paragraph refusing a flag with no work"
+        f" carries the reason an installed reader needs to apply the rule. See"
+        f" {STANDARD}."
     )

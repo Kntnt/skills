@@ -8,7 +8,7 @@ This harness's own global context file, created if it is absent: `~/.claude/CLAU
 
 No `AGENTS.md`, no `agents.d/`, no include: there is no cross-agent global convention, so this scope covers the harness you are in. Run the skill in another harness to give that one the mode too.
 
-There is no project scope, and its absence is deliberate (ADR-0048). Conversational perspective and density are personal reading preferences, and a committed block would impose them on everyone who clones the repository.
+There is no project scope. Conversational perspective and density are personal reading preferences, and a committed block would impose them on everyone who clones the repository.
 
 ## The managed block
 
