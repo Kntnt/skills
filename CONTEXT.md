@@ -8,6 +8,10 @@ The domain of distributing, enabling, and updating a collection of Agent Skills 
 The set of skills, shared scripts, and shared documents shipped from the `kntnt/skills` repository.
 _Avoid_: package, plugin, marketplace, bundle
 
+**Collection Library**:
+The shared references and scripts shipped inside the Manager and available to every Collection Skill. It is not a Skill, a Catalog entry, or something the user Enables separately.
+_Avoid_: shared skill, utility skill, support skill
+
 **Category**:
 A folder under `skills/` in the collection repository that groups related skills. Select lists skills by Category, so related skills are read together. A Category is not part of the skill name and cannot be Enabled as a set.
 _Avoid_: namespace, group, tag, section

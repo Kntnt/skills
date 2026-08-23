@@ -200,6 +200,9 @@ def _world(
     (source / "skills" / "kntnt" / "scripts").mkdir(parents=True)
     shutil.copy(KNTNT_PY, source / "skills" / "kntnt" / "scripts" / "kntnt.py")
 
+    # Shared resources travel inside the Manager rather than as Catalog Skills.
+    shutil.copytree(MANAGER_DIR / "library", source / "skills" / "kntnt" / "library")
+
     # Every collection skill ships its manpage beside its SKILL.md (ADR-0044),
     # so the origin carries one too: it is what Select reads a skill's help
     # from when nobody has that skill installed.
@@ -228,6 +231,9 @@ def _world(
     _write(here / "SKILL.md", _skill_md("kntnt", description="Manager."))
     _ship_manpages(here)
     _ship_manpages(source / "skills" / "kntnt")
+
+    # The running Manager has the same Library its refreshed copy will carry.
+    shutil.copytree(MANAGER_DIR / "library", here / "library")
 
     return {"home": home, "project": project, "source": source, "here": here}
 
@@ -3445,6 +3451,18 @@ def test_what_a_skill_opens_on_demand_lives_under_references() -> None:
             )
 
 
+def test_a_skills_python_helpers_live_under_scripts() -> None:
+    """The local resource shape separates helpers from instructions."""
+
+    for directory in _shipped_skills():
+        for path in sorted(directory.rglob("*.py")):
+            assert directory / "scripts" in path.parents, (
+                f"{path}: an executable helper used only by this Skill belongs"
+                f" under its `scripts/`, mirroring the Collection Library's"
+                f" resource structure (ADR-0063, ADR-0076). See {STANDARD}."
+            )
+
+
 def test_the_paths_the_collection_publishes_are_left_where_they_are() -> None:
     """ADR-0063's three deviations, each a published address rather than layout.
 
@@ -3469,13 +3487,47 @@ def test_the_paths_the_collection_publishes_are_left_where_they_are() -> None:
     assert (manager / "help").is_dir()
 
 
+def test_the_collection_library_separates_references_from_scripts() -> None:
+    """Shared implementation has one owner and mirrors a Skill's resources."""
+
+    library = REPO_ROOT / "skills" / "kntnt" / "library"
+
+    # Hold the shared destinations and the absence of their old local copies.
+    assert (library / "references" / "changelog.md").is_file()
+    assert (library / "scripts" / "ship.py").is_file()
+    assert not (
+        REPO_ROOT / "skills" / "code" / "commit" / "references" / "changelog.md"
+    ).exists()
+    assert not (
+        REPO_ROOT / "skills" / "code" / "commit" / "scripts" / "ship.py"
+    ).exists()
+
+
+def test_a_skill_reads_shared_implementation_only_from_the_collection_library() -> None:
+    """A peer Skill is a Dependency, never an implementation owner."""
+
+    # Match an installed-layout pointer into any peer except the Manager.
+    peer_implementation = re.compile(
+        r"\$HERE/\.\./(?!kntnt/)[A-Za-z0-9_-]+/(?:references|scripts)/"
+    )
+
+    # Hold every body to the same ownership direction.
+    for body in _skill_bodies():
+        assert peer_implementation.search(body.read_text(encoding="utf-8")) is None, (
+            f"{body}: shared references and scripts belong to the Collection"
+            f" Library, so a Skill never reads another Skill's implementation"
+            f" (ADR-0076). See {STANDARD}."
+        )
+
+
 def test_every_file_a_skill_body_points_at_is_where_it_says_it_is() -> None:
     """A move is only finished when every body that opens the file agrees.
 
-    Two pointer shapes carry the collection: `$HERE/<path>`, resolved from the
-    directory holding `SKILL.md`, and a Markdown link, resolved from the file
-    the link sits in. Both are followed here so a rename cannot leave one of
-    them dangling in somebody's session.
+    Three pointer shapes carry the collection: `$HERE/<path>`, resolved from
+    the directory holding `SKILL.md`; `$LIBRARY/<path>`, resolved from the
+    Manager's Collection Library; and a Markdown link, resolved from the file
+    it sits in. All are followed here so a rename cannot leave one dangling in
+    somebody's session.
 
     `$HERE/../kntnt/scripts/kntnt.py` is the one pointer not followed. It is
     the checker as an installed skill sees it, every skill a sibling of the
@@ -3484,6 +3536,7 @@ def test_every_file_a_skill_body_points_at_is_where_it_says_it_is() -> None:
     """
 
     here = re.compile(r"\$HERE/([A-Za-z0-9_./-]+\.(?:md|py))")
+    library = re.compile(r"\$LIBRARY/([A-Za-z0-9_./-]+\.(?:md|py))")
     link = re.compile(r"\]\(([A-Za-z0-9_./-]+\.md)\)")
 
     pointers = 0
@@ -3498,6 +3551,14 @@ def test_every_file_a_skill_body_points_at_is_where_it_says_it_is() -> None:
                 f" directory holding `SKILL.md`, and a pointer that dangles is"
                 f" a file an agent is told to open mid-run and cannot. See"
                 f" {STANDARD}."
+            )
+            pointers += 1
+        for target in library.findall(text):
+            assert (MANAGER_DIR / "library" / target).is_file(), (
+                f"{path}: `$LIBRARY/{target}` resolves to nothing. `$LIBRARY`"
+                f" is the Collection Library shipped inside the Manager, and"
+                f" a pointer that dangles is a file an agent is told to open"
+                f" mid-run and cannot. See {STANDARD}."
             )
             pointers += 1
         for target in link.findall(text):

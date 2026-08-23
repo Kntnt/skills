@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- Shared Skill references and scripts now live in the Manager's Collection Library under `library/references/` and `library/scripts/`. `/commit`, `/push`, and `/release` use the same changelog procedure and ship engine there instead of reaching through `/commit`'s private files, while their genuine behavioural dependencies remain declared.
+
 ## [0.13.0] – 2026-08-23
 
 ### Added

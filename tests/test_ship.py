@@ -1,4 +1,4 @@
-"""CLI behaviour of the commit skill's ship engine."""
+"""CLI behaviour of the Collection Library's ship engine."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from support.contract import STANDARD
 from support.fake_binary import fake_binary_on_path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SHIP = REPO_ROOT / "skills" / "code" / "commit" / "scripts" / "ship.py"
+SHIP = REPO_ROOT / "skills" / "kntnt" / "library" / "scripts" / "ship.py"
 
 _GIT_ENV = {
     key: value for key, value in os.environ.items() if not key.startswith("GIT_")
@@ -644,18 +644,17 @@ def test_commit_skill_does_not_push() -> None:
         f" publish work on a step the user confirmed as a commit, and the body"
         f" is the whole of what the agent executes (ADR-0046). See {STANDARD}."
     )
-    assert "scripts/ship.py" in text, (
-        f"{body}: the body calls `scripts/ship.py` rather than running git"
-        f" itself. Every deterministic step lives behind the engine's command"
-        f" line, which is the skill's only seam and the only part of it a test"
-        f" can hold (ADR-0050). See {STANDARD}."
+    assert "$LIBRARY/scripts/ship.py" in text, (
+        f"{body}: the body calls the Collection Library's `scripts/ship.py`"
+        f" rather than running git itself. Every deterministic step lives"
+        f" behind the engine's command line, which is the skill's only seam"
+        f" and the only part of it a test can hold (ADR-0050). See {STANDARD}."
     )
-    assert "changelog.md" in text, (
-        f"{body}: the body follows `references/changelog.md`, so a change is"
-        f" recorded while the author still knows what it was rather than"
-        f" reconstructed from the diff at release time. It is a file the body"
-        f" opens only when it gets there, which is why it lives under"
-        f" `references/` (ADR-0063). See {STANDARD}."
+    assert "$LIBRARY/references/changelog.md" in text, (
+        f"{body}: the body follows the Collection Library's changelog"
+        f" reference, so the same procedure serves every Skill that reconciles"
+        f" `[Unreleased]` rather than belonging to one consumer (ADR-0076)."
+        f" See {STANDARD}."
     )
 
 

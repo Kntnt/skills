@@ -20,6 +20,8 @@ Follow the commit skill, then push the current branch.
 
 `$HERE` is the directory that contains this SKILL.md.
 
+`$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
+
 ## Help
 
 If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
@@ -33,7 +35,7 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 ## Steps
 
 1. Follow `$HERE/../commit/SKILL.md` with the same arguments. If it stops because there is nothing to commit, continue. Done when the working tree is clean, or commit stopped as clean.
-2. Run `uv run "$HERE/../commit/scripts/ship.py" plan push`. Done when stdout is a JSON plan, or the command exits 2.
+2. Run `uv run "$LIBRARY/scripts/ship.py" plan push`. Done when stdout is a JSON plan, or the command exits 2.
 3. Exit 2: emit the plan's `reason` and stop.
 4. If commit did not already wait, show the plan and wait unless `--yes`. Done when the user confirms, `--yes` is set, or commit already confirmed.
-5. Run `uv run "$HERE/../commit/scripts/ship.py" apply push`. Done when stdout contains `pushed`.
+5. Run `uv run "$LIBRARY/scripts/ship.py" apply push`. Done when stdout contains `pushed`.

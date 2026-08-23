@@ -20,6 +20,8 @@ Ship a version from the default branch: changelog, bump, push, tag, GitHub relea
 
 `$HERE` is the directory that contains this SKILL.md.
 
+`$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
+
 ## Help
 
 If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
@@ -32,13 +34,13 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 
 ## Steps
 
-1. Run `uv run "$HERE/../commit/scripts/ship.py" plan release`. Done when stdout is a JSON plan.
+1. Run `uv run "$LIBRARY/scripts/ship.py" plan release`. Done when stdout is a JSON plan.
 2. If the plan's `branch` is not `default_branch`, stop and say to integrate onto the default branch first.
-3. Follow `$HERE/../commit/references/changelog.md`. Empty `[Unreleased]` → stop; there is nothing to ship.
+3. Follow `$LIBRARY/references/changelog.md`. Empty `[Unreleased]` → stop; there is nothing to ship.
 4. Version: the `X.Y.Z` argument if given; else bump `current_version` by `major`/`minor` if given; else `Removed` or breaking → major (below 1.0.0 → minor), else `Added` → minor, else patch. Done when the version string is known.
 5. Show the plan, the changelog diff, the version, and the build command if any. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
-6. Run `uv run "$HERE/../commit/scripts/ship.py" apply bump --version X.Y.Z`. Done when stdout is the version.
+6. Run `uv run "$LIBRARY/scripts/ship.py" apply bump --version X.Y.Z`. Done when stdout is the version.
 7. Follow `$HERE/../push/SKILL.md` with `--yes` and message `Release X.Y.Z: <summary>`. Summary is a short comma-separated reading of the changelog highlights. Done when stdout contains `pushed`.
-8. Run `uv run "$HERE/../commit/scripts/ship.py" apply tag --version X.Y.Z`. Done when stdout contains the tag.
-9. Run `uv run "$HERE/../commit/scripts/ship.py" apply publish --version X.Y.Z`. If it fails because `gh` is missing or origin is not GitHub, say the tag is pushed and stop after reporting that. Done when stdout contains `released`, or that report is given.
-10. If the plan has `build` and `--no-build` was not given: run the build command, then `uv run "$HERE/../commit/scripts/ship.py" apply publish --version X.Y.Z --asset <zip>`. Done when stdout contains `uploaded` or `released`, or there was no archive to attach.
+8. Run `uv run "$LIBRARY/scripts/ship.py" apply tag --version X.Y.Z`. Done when stdout contains the tag.
+9. Run `uv run "$LIBRARY/scripts/ship.py" apply publish --version X.Y.Z`. If it fails because `gh` is missing or origin is not GitHub, say the tag is pushed and stop after reporting that. Done when stdout contains `released`, or that report is given.
+10. If the plan has `build` and `--no-build` was not given: run the build command, then `uv run "$LIBRARY/scripts/ship.py" apply publish --version X.Y.Z --asset <zip>`. Done when stdout contains `uploaded` or `released`, or there was no archive to attach.
