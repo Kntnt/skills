@@ -129,6 +129,20 @@ def test_every_cited_number_has_a_record() -> None:
     assert dangling == {}
 
 
+def test_routing_authority_record_keeps_verdicts_on_the_main_seat() -> None:
+    """The routing decision records its authority boundary beside the contract."""
+
+    record = (
+        ADR / "0084-routing-selects-execution-but-verdicts-inherit-the-main-seat.md"
+    )
+
+    assert record.is_file()
+    text = record.read_text(encoding="utf-8")
+    assert "Model-selector owns one public Model Routing Module" in text
+    assert "Verdict authority always resolves to inheritance of the main seat" in text
+    assert "no automatic evidence import" in text
+
+
 def _relations() -> tuple[set[tuple[str, str]], set[tuple[str, str]]]:
     """Collect the supersession relations the records write, from both ends.
 
