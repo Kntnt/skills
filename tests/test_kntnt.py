@@ -3618,8 +3618,10 @@ def test_a_skill_reads_shared_implementation_only_from_the_collection_library() 
         )
 
 
-def test_every_file_a_skill_body_points_at_is_where_it_says_it_is() -> None:
-    """A move is only finished when every body that opens the file agrees.
+def test_every_distributed_markdown_dependency_is_available_to_an_installed_reader() -> (
+    None
+):
+    """A distributed document needs no repository-only context.
 
     Three pointer shapes carry the collection: `$HERE/<path>`, resolved from
     the directory holding `SKILL.md`; `$LIBRARY/<path>`, resolved from the
@@ -3636,11 +3638,15 @@ def test_every_file_a_skill_body_points_at_is_where_it_says_it_is() -> None:
     here = re.compile(r"\$HERE/([A-Za-z0-9_./-]+\.(?:md|py))")
     library = re.compile(r"\$LIBRARY/([A-Za-z0-9_./-]+\.(?:md|py))")
     link = re.compile(r"\]\(([A-Za-z0-9_./-]+\.md)\)")
+    citation = re.compile(r"ADR-\d{4}")
 
     pointers = 0
+    citations: dict[str, list[str]] = {}
     for path in sorted((REPO_ROOT / "skills").rglob("*.md")):
         root = next(p for p in path.parents if (p / "SKILL.md").is_file())
         text = path.read_text(encoding="utf-8")
+        for match in citation.findall(text):
+            citations.setdefault(match, []).append(str(path.relative_to(REPO_ROOT)))
         for target in here.findall(text):
             if target.startswith("../kntnt/"):
                 continue
@@ -3669,6 +3675,12 @@ def test_every_file_a_skill_body_points_at_is_where_it_says_it_is() -> None:
             pointers += 1
 
     assert pointers
+    assert citations == {}, (
+        f"{citations}: an installed reader receives the Skill and the"
+        f" Collection Library, not this repository's ADR directory. Carry the"
+        f" operational rule and necessary rationale in distributed resources"
+        f" instead. See {STANDARD}."
+    )
 
 
 def test_select_is_where_a_skill_is_read_about_before_it_is_enabled() -> None:

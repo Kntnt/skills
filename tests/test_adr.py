@@ -57,12 +57,13 @@ RELATIONS = {
     ("0059", "0078"),
 }
 
-# The clause every skill body opens its flag-refusal rule with, and the record
-# that carries that rule. `delegation` states the rule in a longer sentence
-# than its siblings, so what is pinned is the opening clause and the record
-# closing the same paragraph rather than the sentence in full.
+# The flag-refusal rule and the reasoning an installed reader needs. `delegation`
+# states the rule in a longer sentence than its siblings, so what is pinned is
+# the shared clause and rationale rather than the sentence in full.
 REFUSAL_CLAUSE = "A flag is refused rather than ignored where it has no work to do here"
-REFUSAL_RECORD = "0059"
+REFUSAL_RATIONALE = (
+    "a flag accepted and ignored teaches that flags sometimes do nothing"
+)
 
 
 def _records() -> dict[str, list[str]]:
@@ -219,24 +220,8 @@ def _skill_bodies() -> list[Path]:
     return sorted(SKILLS.glob("*/*/SKILL.md")) + sorted(SKILLS.glob("*/SKILL.md"))
 
 
-def test_the_flag_refusal_rule_cites_the_record_that_carries_it() -> None:
-    """A citation can resolve and still name the wrong record.
-
-    `tldr` attributed the flag-refusal rule to ADR-0029 while its siblings
-    attributed the same rule to ADR-0059 — the record that withdrew ADR-0029's
-    tolerance clause — so the skill cited, as authority for refusing a stray
-    flag, the record that used to say a stray flag is tolerated. Nothing caught
-    it: the check above reads no skill body at all, and 0029 has a file, so it
-    would have resolved even where it did.
-
-    The general form of this check is not writable. Whether a citation is apt
-    requires knowing what each record carries, which is a reading and not a
-    comparison. What is checkable is one rule written in one wording across
-    every body that carries it, which is this one: the clause is fixed prose,
-    so the record closing its paragraph is fixed too, and a body that names
-    another one is wrong by that alone. A second rule stated as uniformly could
-    be pinned the same way; nothing here generalises further than that.
-    """
+def test_the_flag_refusal_rule_carries_its_rationale_in_every_body() -> None:
+    """The installed instruction carries its refusal rationale itself."""
 
     bodies = _skill_bodies()
 
@@ -245,16 +230,15 @@ def test_the_flag_refusal_rule_cites_the_record_that_carries_it() -> None:
     assert bodies
 
     carrying: list[str] = []
-    misattributed: dict[str, list[str]] = {}
+    unsupported: list[str] = []
     for path in bodies:
         where = str(path.relative_to(REPO_ROOT))
         for paragraph in path.read_text(encoding="utf-8").split("\n\n"):
             if REFUSAL_CLAUSE not in paragraph:
                 continue
             carrying.append(where)
-            cited = CITATION.findall(paragraph)
-            if cited[-1:] != [REFUSAL_RECORD]:
-                misattributed[where] = cited
+            if REFUSAL_RATIONALE not in paragraph:
+                unsupported.append(where)
 
     assert carrying, (
         f"no skill body carries the clause {REFUSAL_CLAUSE!r}, so this check"
@@ -262,10 +246,8 @@ def test_the_flag_refusal_rule_cites_the_record_that_carries_it() -> None:
         f" wording, and a rewording that drops it takes the check with it."
         f" See {STANDARD}."
     )
-    assert misattributed == {}, (
-        f"{misattributed}: the paragraph stating the flag-refusal rule closes"
-        f" on ADR-{REFUSAL_RECORD}, the record that carries it. ADR-0029 is the"
-        f" record whose tolerance clause 0059 withdrew, so citing it there"
-        f" offers, as authority for refusing a stray flag, the record that used"
-        f" to say a stray flag is tolerated. See {STANDARD}."
+    assert unsupported == [], (
+        f"{unsupported}: the flag-refusal rule needs the reason an installed"
+        f" reader uses to apply it, not repository-only provenance. See"
+        f" {STANDARD}."
     )
