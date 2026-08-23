@@ -16,6 +16,8 @@ delegation - control delegation mode for a session, Project, or user
 
 `delegation` controls a mode in which the main agent plans, briefs, orchestrates, and verifies while subagents execute on the cheapest model the main agent judges able. It does not change the main agent's model or reasoning effort.
 
+Predictably noisy tool work can stay in a subagent's context and return as a distilled result.
+
 With no arguments, it toggles the session scope. An explicit `on` or `off` changes the selected scope. `status` reports the selected scope, or all scopes when no scope is given. Scope and state may be written as bare words or equivalent long options, in either order.
 
 The effective verdict is resolved in this order: an explicit session instruction wins; otherwise the mode is on when a managed block exists in a Project or user context file loaded by the current Harness. Project and user blocks contain identical instructions and therefore cannot create different mode definitions.
