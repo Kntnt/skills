@@ -2,7 +2,7 @@
 name: orchestrate
 description: Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.
 disable-model-invocation: true
-argument-hint: '[#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes] [-- <instruction>]'
+argument-hint: '[reconcile #<ticket> [--commit <commit>] [--yes] | #<ticket-or-spec> ... [--dry-run] [--at-once <n>] [--model <name>] [--yes]] [-- <instruction>]'
 compatibility: Requires git, gh, and uv, plus a harness that can run subagents
 metadata:
   kntnt.internal: "true"
@@ -28,15 +28,17 @@ Before help routing or formal validation, read the `## INVOCATION ENVELOPE` sect
 
 ## Help
 
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
+If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop. If they are `reconcile --help` or `reconcile -h`, print `$HERE/help/reconcile.md` verbatim and stop.
 
 ## Arguments
 
-`/orchestrate [#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes]`, and nothing else. A run may be aimed at as many tickets and specs as the user cares to name. `--state-dir` is yours to pass rather than the developer's to type, and step 1 says where it comes from.
+`/orchestrate [#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes]` or `/orchestrate reconcile #<ticket> [--commit <commit>] [--yes]`, and nothing else. A run may be aimed at as many tickets and specs as the user cares to name. Reconciliation names exactly one ticket. `--state-dir` is yours to pass rather than the developer's to type, and step 1 says where it comes from.
 
 Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/orchestrate --help` for the page in full. Then start nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
 
 ## Steps
+
+Where the Formal Invocation starts with `reconcile`, follow this paragraph and stop before the numbered run steps. Run `uv run "$HERE/scripts/run.py" reconcile --ticket <number>`, adding `--commit <commit>` when the maintainer supplied one. Exit 0 is the complete Reconciliation; report whether it was newly recorded or already agreed, the unsuccessful Run Outcome, the done Ticket Resolution, and the completion commit from stdout. When no commit was supplied and stderr says no unique completion commit can be established, ask the maintainer for the commit and rerun with their answer; under `--yes`, ask nothing and report the refusal. Any other nonzero exit is a refusal: show stderr and stop. Never close or reopen the ticket, edit an earlier outcome, or describe the rescued work as built or independently verified by Orchestrate.
 
 Every command below takes `--state-dir <directory>`. Pass whatever per-session scratchpad or temporary directory your harness gives you, the same one on every call, so what this run has claimed survives a compaction. The engine keeps what it remembers in a subdirectory of that directory rather than at its root, so a subagent writing or clearing scratch of its own has nothing of the run's to catch (ADR-0071). Where your harness gives you none, leave the flag off: its absence is not an error, and the engine rebuilds what it needs from the tracker and the branch. There is no resume flag and none is wanted — re-invoked with the same arguments, this Skill continues an interrupted run rather than restarting it.
 

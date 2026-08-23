@@ -8,6 +8,8 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 **/orchestrate** [*TICKET-OR-SPEC*...] [**--dry-run**] [**--at-once** *COUNT*] [**--model** *NAME*] [**--yes**] [**--** *INSTRUCTION*]
 
+**/orchestrate reconcile** *TICKET* [**--commit** *COMMIT*] [**--yes**] [**--** *INSTRUCTION*]
+
 ## DESCRIPTION
 
 `orchestrate` plans and works the current repository's open `ready-for-agent` tickets on the branch where it starts. It claims each ticket, delegates the build to a fresh subagent, delegates verification to a different subagent, integrates verified work, records the outcome on the tracker, and closes successful tickets. It does not push, tag, or release.
@@ -17,6 +19,14 @@ Blocking relations produce dependency waves. Wave one contains tickets that can 
 The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Builders may use cheaper models through `--model` or automatic selection, but every verdict remains on the orchestrator's model.
 
 Before claiming anything, the Skill reads every ticket in scope for a decision the text leaves open and asks all such questions in one batch. Answers are posted to the corresponding ticket before building. With `--yes`, an open decision cannot be answered, so the ticket is parked under `needs-info` with its question and the rest of the scope continues.
+
+`reconcile` is the explicit maintainer action for a ticket whose failed or conflicted unattended attempt was later completed outside Orchestrate. It preserves that Run Outcome, records a done Ticket Resolution naming the landed completion commit, and cleans stale workflow state without closing the already-closed ticket. See **/orchestrate reconcile --help**.
+
+## COMMANDS
+
+**reconcile**
+
+Record that a closed, unsuccessfully attempted ticket was completed outside Orchestrate.
 
 ## POSITIONAL ARGUMENTS
 
@@ -121,6 +131,10 @@ Build at most *COUNT* frontier tickets concurrently. The default is `1`. Values 
 **--model** *NAME*
 
 Use *NAME* for every building subagent. Verification, collision repair verdicts, amend verdicts, and wave checks remain on the orchestrator's model. Without this option, the Skill selects per ticket the cheapest builder model it judges able, never above its own model.
+
+**--commit** *COMMIT*
+
+Name the default-branch commit that completed a reconciled ticket. It applies only to `reconcile`; the action discovers the commit when one exact closing-reference candidate exists.
 
 **--yes**
 
