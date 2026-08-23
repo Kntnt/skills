@@ -4,9 +4,9 @@ Use this reference only for `update` or `record`.
 
 ## Bundled seed
 
-`$HERE/data/seed-evidence.jsonl` is a profile-neutral bootstrap snapshot. Its first row is `seed_manifest`; the remaining rows are `model_version_seed`, `model_reference_seed`, `price_schedule_seed`, `benchmark_definition_seed` or `evaluation_prior_seed`. Every row has a stable `seed_id`, source, retrieval time and dated or provisional status. The file contains no access profile, subscription entitlement, account quota or local evaluation.
+`$HERE/data/seed-evidence.jsonl` is a profile-neutral bootstrap snapshot. Its first row is `seed_manifest`; the remaining rows are `model_version_seed`, `model_reference_seed`, `capability_prior_seed`, `price_schedule_seed`, `benchmark_definition_seed` or `evaluation_prior_seed`. Every row has a stable `seed_id`, source, retrieval time and dated or provisional status. The file contains no access profile, subscription entitlement, account quota or local evaluation.
 
-Read only rows whose model identities match enabled selections. `recommend` may consume applicable rows in place as dated priors without writing. During `update`, import unseen immutable model and benchmark records, materialize price schedules only for matching direct or gateway API channels, and map evaluation priors to their exact model configuration and benchmark. A `model_reference_seed` for a mutable alias remains provisional until resolution creates an `AliasBinding` and validated `ModelVersion`; its dependent prices and observations do not become decisive merely because they shipped in the seed.
+Read only rows whose model identities match enabled selections. `recommend` may consume applicable rows in place as dated priors without writing, including a `capability_prior_seed` when no newer applicable row exists in `capability-priors.jsonl`. During `update`, import unseen immutable model, benchmark and capability-prior records, materialize price schedules only for matching direct or gateway API channels, and map evaluation priors to their exact model configuration and benchmark. A `model_reference_seed` for a mutable alias remains provisional until resolution creates an `AliasBinding` and validated `ModelVersion`; its dependent prices and observations do not become decisive merely because they shipped in the seed.
 
 Use `seed_id` for import idempotency and retain the original retrieval timestamp, status and sources. Newer ledger evidence supersedes an older seed row without deleting it. Revalidate mutable prices and benchmark indexes according to cadence; treat a bundled immutable `model_version_seed` as an already retrieved detail record and fetch its detail page again only if validation detects a conflicting identity.
 
@@ -22,6 +22,7 @@ The active profile and its revision history are defined in `profile-management.m
 | `access-channel-snapshots.jsonl` | Immutable commercial-channel identity used by observations. |
 | `model-versions.jsonl` | Immutable validated model releases. |
 | `alias-bindings.jsonl` | Effective-dated alias-to-version bindings. |
+| `capability-priors.jsonl` | Append-only dated first-party qualitative capability claims. |
 | `price-schedules.jsonl` | Effective-dated rates, thresholds, tool fees and serving premiums. |
 | `subscription-schedules.jsonl` | Effective-dated monthly fees, included surfaces, quota rules and credit fallback. |
 | `access-mode-availability.jsonl` | Effective-dated effort/thinking and serving-mode support per model and access surface. |
@@ -42,6 +43,7 @@ Normalize ordered objects before hashing. Preserve exact protected identifiers.
 ```text
 model_version_key = sha256(provider | canonical_model_id | provider_release_id)
 model_reference_key = sha256(provider | canonical_model_id | version_kind | provider_release_id_or_alias)
+capability_prior_key = sha256(provider | model_version_or_reference_key | source_uri | effective_at_or_retrieved_at | normalized_tags | claim_hash)
 access_channel_key = sha256(config_profile_id | channel_id | canonical_channel_content_hash)
 price_schedule_key = sha256(provider | model_version_key | channel | region | effective_from | rate_card_hash)
 subscription_schedule_key = sha256(access_channel_key | effective_from | terms_hash)
@@ -62,6 +64,10 @@ OpenAI release slugs without an exposed dated snapshot use version kind `provide
 
 `AliasBinding`: provider, alias, target model-version key, valid interval and resolver evidence.
 
+`CapabilityPrior`: stable prior key, exact model-version key or provisional model-reference key, first-party source URL, provider, retrieval time, source effective time when stated, normalized workload and capability tags, the qualitative claim with its verbatim-excerpt or faithful-paraphrase form and language, status, predecessor when superseding, and explicitly `low` confidence. A changed claim appends a new row that names its predecessor; it never rewrites history.
+
+A `CapabilityPrior` is categorical evidence for choosing a cold-start experiment. Relevant matched measurements override it. It never enters numeric quality, uncertainty, success probability, cost or Pareto calculations; it cannot clear a quality floor, establish dominance, or make a recommendation measurement-based.
+
 `PriceSchedule`: key, model-version key, channel, region, currency, input/cache-read/cache-write/output rates, threshold rules, tool fees, serving/batch premiums, effective interval and source. Price is mutable commercial data, never model metadata.
 
 `SubscriptionSchedule`: key, access-channel key, list and actual recurring fee, included model/surface rules, rolling-window and weekly reset semantics, model-specific quota multipliers and caps, shared pools, purchasable-credit fallback, effective interval and source. Preserve user-supplied account rules with their provenance and vague provider limits as ranges or prose facts; do not manufacture a numeric quota.
@@ -80,7 +86,7 @@ OpenAI release slugs without an exposed dated snapshot use version kind `provide
 
 Default cadence: model/release indexes and commercial terms weekly; benchmark release indexes monthly. The current configuration may override these values. Check only sources required by enabled selections and families marked `watch_for_newer_versions`. Record `unchanged`, `changed`, `unreachable` or `invalid` for every due source.
 
-1. Conditionally retrieve model indexes, release notes and deprecation feeds using ETag or Last-Modified; otherwise hash the index content.
+1. Conditionally retrieve model indexes, release notes, deprecation feeds and mutable first-party capability sources using ETag or Last-Modified; otherwise hash the index content. Refresh capability sources on the existing model/release-source cadence, and append a new low-confidence `CapabilityPrior` only when the sourced claim or its normalized tags change.
 2. Compute discovered version keys for configured selections and watched families. Fetch first-party detail pages only for relevant keys absent from `model-versions.jsonl`; a known immutable detail is never fetched again. Report a watched newer version without enabling or substituting it.
 3. Resolve mutable aliases. Close a prior binding and append the new target when it changes.
 4. Revalidate direct and gateway API rate cards and subscription/usage-limit pages independently of model discovery. Append scheduled future rates or terms immediately; close prior intervals only from the documented effective time.
@@ -98,4 +104,4 @@ Recompute only derived frontiers whose eligible run set changed. Derived files m
 
 ## Change report
 
-Report relevant new model versions, alias changes, price or subscription schedules, quota-rule changes, deprecations, benchmark versions, imported or missing configured points, frontier membership changes, stale/provisional sources and failures. Name zero changes explicitly; never manufacture work by refreshing immutable details.
+Report relevant new model versions, alias changes, capability-prior changes, price or subscription schedules, quota-rule changes, deprecations, benchmark versions, imported or missing configured points, frontier membership changes, stale/provisional sources and failures. Name zero changes explicitly; never manufacture work by refreshing immutable details.

@@ -12,7 +12,13 @@ model-selector recommend - select an exact configured model system for a workloa
 
 `model-selector recommend` builds comparable Pareto frontiers from configured model systems and stored evidence, then selects one exact model, effort or thinking setting, Harness, tool policy, access channel, and commercial schedule. When *WORKLOAD* is omitted, the current task is used only when it is unambiguous.
 
+When representative matched measurements do not determine the exact point, cold start first chooses the weakest plausibly capable enabled model and then its lowest plausibly sufficient supported reasoning control. Reversible, objectively checked work begins there and escalates one adjacent reasoning rung only after verified failure. High-consequence or irreversible work without a trustworthy checker uses the strongest plausible enabled configuration and refuses unsafe exploration.
+
+The result starts with exactly one text-bearing evidence banner: `🔵 HEURISTISK STARTPUNKT` for an exploratory point chosen from heuristics and capability priors, `🟠 BLANDAD EVIDENS` when measurements exist but a decision-relevant heuristic assumption remains, or `🟢 MÄTDATABASERAD REKOMMENDATION` when representative matched measurements determine the exact point and its conservative quality clears the floor. Every banner states the classification reason, confidence, missing evidence, and whether the point is an exploration start or a production recommendation; the words communicate the status without relying on emoji color.
+
 The result names the decision rule, nearest cheaper and stronger comparable neighbours, exclusions, uncertainty, and evidence staleness. If the evidence cannot support a choice, the command identifies the gap and proposes the smallest discriminating evaluation instead of inventing a rank.
+
+After a blue or orange banner, a section titled `Snabbaste vägen till mätdata` supplies frozen inputs, exact adjacent configurations, the checker and measurements, a bounded confidence-based stop, and both a quota-efficient sequential mode and a time-efficient parallel mode. The resulting observation artifact is accepted by `model-selector record`. `recommend` plans the experiment but performs no network request, evaluation, or write; normal work executes the brief, and there is no experiment command.
 
 ## POSITIONAL ARGUMENTS
 

@@ -2,7 +2,7 @@
 
 ## NAME
 
-model-selector update - refresh due model, price, and benchmark evidence
+model-selector update - refresh due public model evidence
 
 ## SYNOPSIS
 
@@ -10,7 +10,9 @@ model-selector update - refresh due model, price, and benchmark evidence
 
 ## DESCRIPTION
 
-`model-selector update` performs one bounded refresh of mutable model indexes, commercial terms, and benchmark release indexes required by enabled selections and watched families. It initializes or appends applicable evidence and then rebuilds affected configured frontiers.
+`model-selector update` performs one bounded refresh of mutable model indexes, first-party qualitative capability sources, commercial terms, and benchmark release indexes required by enabled selections and watched families. It initializes or appends applicable evidence and then rebuilds affected configured frontiers.
+
+Capability sources follow the existing model/release cadence. A changed claim or normalized tag set appends an explicitly low-confidence categorical prior without rewriting history; provider prose never becomes a numeric score, clears a quality floor, or enters a Pareto frontier.
 
 Known immutable model detail pages and recorded local run keys are not fetched or executed again. A discovered newer model version is reported but never enabled or substituted automatically.
 

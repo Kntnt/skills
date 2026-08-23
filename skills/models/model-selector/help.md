@@ -28,7 +28,9 @@ First use creates a profile of the exact models and access channels available to
 
 Recommendations are selected from comparable Pareto frontiers. Cash, rolling-window quota, weekly quota, subscription credits, allocated plan cost, latency, and quality remain separate unless the user supplies an explicit shadow price. Included subscription usage may have zero marginal cash cost while consuming scarce quota.
 
-The bundled seed contains dated public model identities, direct and gateway prices, and benchmark priors. It contains no access profile, entitlement, account quota, or local evaluation. Every result reports evidence source, date, uncertainty, exclusions, and missing evidence.
+When representative matched measurements do not determine the exact point, cold start first chooses the weakest plausibly capable enabled model and then its lowest plausibly sufficient supported reasoning control. Reversible, objectively checked work begins there and escalates one adjacent reasoning rung only after verified failure. High-consequence or irreversible work without a trustworthy checker uses the strongest plausible enabled configuration and refuses unsafe exploration.
+
+The bundled seed contains dated public model identities, categorical low-confidence first-party capability priors, direct and gateway prices, and benchmark priors. Capability prose can choose a cold-start experiment but never becomes a numeric score or a measurement-based recommendation. The seed contains no access profile, entitlement, account quota, or local evaluation. Every result reports evidence source, date, uncertainty, exclusions, and missing evidence.
 
 ## COMMANDS
 
@@ -54,7 +56,7 @@ Display or revise the model and access-channel profile. Its page lists every con
 
 **update**
 
-Perform one bounded refresh of due model indexes, commercial terms, and benchmark releases. Known immutable model detail pages and existing local run keys are not fetched or executed again.
+Perform one bounded refresh of due model indexes, first-party capability sources, commercial terms, and benchmark releases. Changed capability claims append low-confidence prior records without rewriting history. Known immutable model detail pages and existing local run keys are not fetched or executed again.
 
 **record** *PATH*
 
@@ -88,7 +90,11 @@ For `update`, check every relevant mutable index once regardless of cadence. Kno
 
 ## OUTPUT
 
-`recommend` names an exact configuration, its decision rule, comparable neighbours, exclusions, uncertainty, and staleness. If the evidence cannot support the comparison, it identifies the missing evidence and proposes the smallest discriminating evaluation instead of inventing a rank.
+`recommend` opens with exactly one text-bearing evidence banner: `🔵 HEURISTISK STARTPUNKT` for an exploratory point chosen from workload heuristics and capability priors, `🟠 BLANDAD EVIDENS` when measurements exist but a decision-relevant heuristic assumption remains, or `🟢 MÄTDATABASERAD REKOMMENDATION` when representative matched measurements determine the exact point and its conservative quality clears the floor. The words carry the status; emoji color only reinforces it. Every banner states the classification reason, confidence, missing evidence, and whether the point is an exploration start or a production recommendation.
+
+The recommendation names the exact configuration, its decision rule, comparable neighbours, exclusions, uncertainty, and staleness. If the evidence cannot support the comparison, it identifies the missing evidence and proposes the smallest discriminating evaluation instead of inventing a rank.
+
+After a blue or orange banner, `Snabbaste vägen till mätdata` gives an agent-ready sequential and parallel experiment brief with frozen task inputs, exact adjacent configurations, checker, measurements, run bound, stopping rule, and a `record`-compatible observation artifact. `recommend` plans the experiment but performs no network request, evaluation, or write; normal work executes the brief, and no separate experiment command exists.
 
 `chart` and `compare` report separate cash, quota, and renewal views unless explicit shadow prices make a common numeric axis valid. Missing metrics are represented as `null`, never zero.
 

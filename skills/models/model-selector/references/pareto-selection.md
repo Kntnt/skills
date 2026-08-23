@@ -10,6 +10,38 @@ Compare performance only inside one workload stratum and benchmark definition. B
 
 Apply hard filters first: model availability, context, modalities, data residency, safety, latency ceiling and surface support. A high general score cannot compensate for a failed constraint.
 
+## Cold-start selection
+
+When representative matched measurements do not determine the exact point, make the cold-start choice in two stages: choose the weakest plausibly capable enabled model, then choose the lowest plausibly sufficient supported reasoning control for that model. Judge plausibility categorically from task complexity, ambiguity, context demand, autonomy, tool use, reversibility, consequence of failure and objective checkability. This heuristic chooses an experiment; it does not manufacture a benchmark score, confidence interval, cost observation or Pareto point.
+
+For objectively checkable, reversible work, begin at the lowest plausible complete configuration and escalate exactly one adjacent reasoning rung only after failure is verified by an external checker or declared failure signal. Stop at the first rung whose conservative quality clears the declared floor. Compare the whole policy with always starting stronger by charging every failed attempt, checker run, retry, quota charge, cost and added latency.
+
+For high-consequence or irreversible work without a trustworthy external checker, select the strongest plausible enabled configuration and refuse unsafe exploration. Keep that point classified as heuristic unless representative matched evidence supports the exact configuration.
+
+## Evidence class and output
+
+Start every recommendation with exactly one prominent, text-bearing status banner. Its words are the primary accessible signal; emoji color only reinforces it. State the classification reason, confidence, the evidence still missing, and whether the exact selected point is an exploration start or a production recommendation.
+
+- `🔵 HEURISTISK STARTPUNKT`: Representative matched measurements are insufficient to choose the exact point; capability priors and workload traits determine it. Label the selected point as an exploration start.
+- `🟠 BLANDAD EVIDENS`: Relevant measurements exist, but heuristic assumptions still determine a decision-relevant part of the exact choice or its neighboring frontier. Name those assumptions and label the point as an exploration start unless matched evidence separately supports it for production.
+- `🟢 MÄTDATABASERAD REKOMMENDATION`: Representative matched measurements have enough confidence and decision-relevant coverage to determine the exact point, and its conservative quality bound clears the declared floor. Label it as a production recommendation. Capability prose never qualifies a point for this class.
+
+Classification follows confidence, representativeness and decision-relevant coverage, never a fixed observation count. Relevant measured evidence overrides a capability prior, but only evidence matched to the exact configuration, harness, access channel and comparable workload cohort can take over its decision.
+
+## Fastest path to measurements
+
+Immediately after a blue or orange banner, emit a section titled `Snabbaste vägen till mätdata`. It is a frozen, agent-executable experiment brief, not a suggestion to be redesigned during the run. Include:
+
+- the workload artifact, cohort, rubric, quality floor, and external checker or declared failure signal;
+- the exact configuration fingerprints to compare, changing only the intended model or reasoning control while every other identity field stays frozen;
+- required quality, cost, quota, latency, failure, retry and provenance measurements, charging every failed attempt, checker run, retry and added latency;
+- a bounded run budget and a confidence-based stopping rule rather than a fixed observation count;
+- the observation artifact and import form accepted by `model-selector record`;
+- a quota-efficient sequential plan that starts at the lowest plausible point and escalates one adjacent reasoning rung only after externally verified failure; and
+- a time-efficient parallel plan in which isolated agents run adjacent configurations against the same frozen task and checker.
+
+`recommend` emits the brief but executes no work. The ordinary work path runs it, and `record` validates and imports the resulting observations.
+
 ## Metrics
 
 Prefer objective local outcomes: hidden tests, repository tests, exact data checks or frozen blinded rubrics. For binary tasks report pass rate with Wilson or bootstrap 95% interval. For graded work retain rubric dimensions; use a composite only when its versioned weights express the workload's value.
@@ -74,6 +106,12 @@ Show p90 latency as a third metric. Report hardest-decile quality and cost besid
 For objectively checkable work, compare always-strong against cheap-first-then-strong. Charge the failed first attempt, retry, checker and added latency. Use an observed policy run when available; do not synthesize success probability by combining unrelated benchmark rows. Escalate on an external checker or declared failure signal, never the model's unsupported self-confidence.
 
 Sweep one model's effort curve before proposing multi-model orchestration. Higher effort is not assumed to dominate: sampling and harness effects can make a lower setting tie or win.
+
+## Downward probes
+
+After a measured incumbent succeeds, propose an isolated probe of the adjacent lower point only when its matched evidence is missing or too uncertain, the result could change the relevant frontier or selected policy, and the task is representative, reversible and objectively checkable. The probe does not replace the production recommendation until its conservative quality bound clears the floor.
+
+There is no fixed probe cadence; opportunity and expected decision value trigger the proposal. Otherwise keep routing production work to the measured incumbent.
 
 ## Recommendation shape
 

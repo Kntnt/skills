@@ -10,7 +10,7 @@ model-selector status - report profile and evidence readiness
 
 ## DESCRIPTION
 
-`model-selector status` reports the active profile, evidence vintage, due sources, coverage gaps, provisional facts, and configuration selections without network access or writes.
+`model-selector status` reports the active profile, evidence vintage, due sources, coverage gaps, provisional facts, low-confidence capability priors, and configuration selections without network access or writes.
 
 The report distinguishes evidence that is absent, stale by configured cadence, provisional, or inapplicable rather than collapsing those states into one readiness value.
 
