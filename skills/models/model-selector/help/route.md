@@ -20,7 +20,7 @@ The portable deliberation values are `low`, `medium`, `high`, `xhigh`, and `max`
 
 *PATH*
 
-A UTF-8 JSON artifact conforming to `model-selector-route-request-v1`. It contains one request object or an ordered array and may carry a previously returned snapshot. The Model Routing Module in `references/model-routing.md` is the complete public contract.
+A UTF-8 JSON artifact conforming to `references/route-request.schema.json`. It is one envelope with integer `schema_version: 1`, an ordered `requests` array, and either a previously returned `snapshot` or current read-only `context`. The Model Routing Module in `references/model-routing.md` is the complete behavioral contract.
 
 ## OPTIONS
 
@@ -30,7 +30,7 @@ Read the current profile and evidence from *PATH* only when the request does not
 
 ## OUTPUT
 
-One JSON object with `schema_version`, `snapshot`, and ordered `decisions`. Reusing `snapshot` reproduces routing from its frozen profile revision, evidence, Harness inventory, main seat, native mappings, commercial facts, and override policy instead of adopting later state.
+One JSON object conforming to `references/route-response.schema.json`, with `schema_version`, `snapshot`, and ordered `decisions`. Reusing `snapshot` reproduces routing from its frozen profile revision, evidence, Harness inventory, main seat, native mappings, commercial facts, and override policy instead of adopting later state.
 
 ## DIAGNOSTICS
 

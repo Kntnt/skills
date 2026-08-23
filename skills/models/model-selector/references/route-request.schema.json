@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kntnt.dev/schemas/model-selector/route-request-v1.json",
+  "title": "Model-selector route request",
+  "type": "object",
+  "required": ["schema_version", "requests"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "requests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/request"}
+    },
+    "snapshot": {"$ref": "#/$defs/snapshot"},
+    "context": {"$ref": "#/$defs/snapshot"}
+  },
+  "oneOf": [
+    {"required": ["snapshot"], "not": {"required": ["context"]}},
+    {"required": ["context"], "not": {"required": ["snapshot"]}}
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "request": {
+      "type": "object",
+      "required": ["request_id", "authority", "stage", "workload", "workload_tags", "reversible", "checker", "overrides"],
+      "properties": {
+        "request_id": {"type": "string", "minLength": 1},
+        "authority": {"enum": ["execution", "verdict"]},
+        "stage": {"type": "string", "minLength": 1},
+        "workload": {"type": "string", "minLength": 1},
+        "workload_tags": {"type": "array", "items": {"type": "string"}},
+        "reversible": {"type": "boolean"},
+        "checker": {"type": "object"},
+        "overrides": {
+          "type": "object",
+          "properties": {
+            "model": {"type": "string", "minLength": 1},
+            "deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]}
+          },
+          "additionalProperties": false
+        },
+        "prior": {"type": "object"},
+        "verified_failure": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "snapshot": {
+      "type": "object",
+      "required": ["snapshot_version", "profile", "evidence", "harness", "main_seat", "mappings", "override_policy"],
+      "properties": {
+        "snapshot_version": {"const": 1},
+        "snapshot_identity": {"type": "string"},
+        "profile": {"type": ["object", "null"]},
+        "evidence": {"type": "object"},
+        "harness": {"type": "object"},
+        "main_seat": {"type": "object"},
+        "mappings": {"type": "array", "items": {"type": "object"}},
+        "override_policy": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  }
+}

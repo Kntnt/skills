@@ -68,7 +68,7 @@ Anything outside these forms is invalid. Where the invocation starts with a reco
 
 Default data directory: `~/.model-selector/`. A user-supplied `--data=<path>` wins. Read `config.json` and existing evidence before any research or recommendation.
 
-When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections. Never install a bundled access combination as the user's configuration.
+When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections except `route`. Route follows its own inheritance and refusal rules and never starts setup. Never install a bundled access combination as the user's configuration.
 
 When no evidence ledger exists, use only the configured models covered by `$HERE/data/seed-evidence.jsonl` as dated seed priors. `recommend` reads applicable seed evidence without writing and may read applicable `capability_prior_seed` rows in place when no newer ledger record exists. Relevant matched measurements override capability priors, which choose only cold-start experiments and never supply numeric evidence or clear a quality floor. `update` initializes applicable ledger records, preserving retrieval dates and sources. Never present the seed as current after its stated date.
 
@@ -101,7 +101,7 @@ Complete when the recommendation names an exact configuration and decision rule,
 
 ## Route
 
-Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Consume the artifact at the supplied path, use its frozen snapshot or derive and return one from current local state, and emit only the compact structured response. Route never enters setup and performs no network access, evaluation, research, or persistent write.
+Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the artifact against `$HERE/references/route-request.schema.json`, add the current read-only routing context when it has no frozen snapshot, and run `$HERE/scripts/route.py <path>` with that canonical artifact. Emit the helper's JSON response without commentary. Route never enters setup and performs no network access, evaluation, research, or persistent write.
 
 ## Chart
 

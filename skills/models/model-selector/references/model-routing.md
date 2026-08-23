@@ -1,10 +1,10 @@
 # Model Routing Module
 
-This is the public routing Interface owned by model-selector. A caller invokes `/model-selector route <path>` with a UTF-8 JSON artifact containing one versioned request object or an ordered array. The response is one JSON object containing `schema_version`, `snapshot`, and `decisions`; `decisions` contains exactly one decision per input in the same order. Route is offline, non-interactive, and read-only: it never starts setup, performs no network access, research, evaluation, or evidence refresh, and writes no configuration or evidence.
+This is the public routing Interface owned by model-selector. A caller invokes `/model-selector route <path>` with the single canonical UTF-8 JSON envelope defined by `route-request.schema.json`. The response conforms to `route-response.schema.json` and contains `schema_version`, `snapshot`, and `decisions`; `decisions` contains exactly one decision per request in the same order. Route is offline, non-interactive, and read-only: it never starts setup, performs no network access, research, evaluation, or evidence refresh, and writes no configuration or evidence.
 
 ## Request contract
 
-The accepted `schema_version` is `model-selector-route-request-v1`. Every request supplies a unique `request_id`, `authority` (`execution` or `verdict`), `stage`, `workload` containing the verbatim workload material, `reversible`, and `verification`. `verification` identifies an independent checker, a declared failure signal, or explicitly says neither exists. Optional `overrides` has only `model` and `deliberation`; optional `prior` carries an earlier decision and independently verified failure relevant to the caller's existing retry bound. Optional top-level `snapshot` is a snapshot returned by an earlier response.
+The accepted `schema_version` is the integer `1`. The envelope always contains an ordered `requests` array, including for one request. Every request supplies a unique `request_id`, `authority` (`execution` or `verdict`), `stage`, `workload` containing the verbatim workload material, `workload_tags`, `reversible`, and `checker`. `checker` identifies an external checker, a declared failure signal, or explicitly says neither exists. Optional `overrides` has only `model` and `deliberation`; optional `prior` carries an earlier decision and optional `verified_failure` binds an independently verified failure to that decision's configuration fingerprint. The envelope contains exactly one of `snapshot`, copied unchanged from an earlier response, or `context`, assembled from current read-only local facts before routing.
 
 The public deliberation scale is exactly `low`, `medium`, `high`, `xhigh`, and `max`. Omission means automatic selection. Numeric values, provider control names, `auto`, `none`, `off`, and default aliases are invalid public values. A model override is an exact configured model version or an alias resolving unambiguously inside the snapshot; a family name is not exact.
 
@@ -12,7 +12,7 @@ Reject a malformed artifact as a whole before routing. Request-level failures in
 
 ## Frozen routing snapshot
 
-When no snapshot is supplied, freeze the current profile revision; evidence vintage and identity; active Harness inventory and actual spawn capabilities; main-seat identity including its complete model, channel, native control, and serving mode; verified portable-to-native control mappings; separate commercial facts; and override policy. Give the canonical snapshot a deterministic `snapshot_id` and return the complete snapshot.
+When `context` is supplied, freeze its profile revision; evidence vintage and identity; active Harness inventory and actual spawn capabilities; main-seat identity including its complete model, channel, native control, serving mode, and capability ceiling; verified portable-to-native control mappings; separate commercial facts on each point; and override policy. Give the canonical snapshot a deterministic `snapshot_identity` and return the complete snapshot.
 
 When a snapshot is supplied, validate it and use only its frozen profile, aliases, evidence, prices, quotas, Harness facts, main-seat identity, mappings, and policies. Never silently adopt a later profile revision, alias target, evidence record, price, quota, or Harness capability. An invalid or incomplete supplied snapshot refuses affected requests.
 

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kntnt.dev/schemas/model-selector/route-response-v1.json",
+  "title": "Model-selector route response",
+  "type": "object",
+  "required": ["schema_version", "snapshot", "decisions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "snapshot": {"type": "object"},
+    "decisions": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/selected"},
+          {"$ref": "#/$defs/inherit"},
+          {"$ref": "#/$defs/refused"}
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "base": {
+      "type": "object",
+      "required": ["request_id", "status", "audit"],
+      "properties": {
+        "request_id": {"type": "string"},
+        "status": {"enum": ["selected", "inherit", "refused"]},
+        "audit": {"type": "object"}
+      }
+    },
+    "selected": {
+      "allOf": [
+        {"$ref": "#/$defs/base"},
+        {
+          "required": ["launch", "evidence_class", "provenance", "exclusions", "next_escalation"],
+          "properties": {"status": {"const": "selected"}, "launch": {"type": "object"}},
+          "not": {"anyOf": [{"required": ["inheritance"]}, {"required": ["reason"]}]}
+        }
+      ]
+    },
+    "inherit": {
+      "allOf": [
+        {"$ref": "#/$defs/base"},
+        {
+          "required": ["inheritance"],
+          "properties": {"status": {"const": "inherit"}, "inheritance": {"type": "object"}},
+          "not": {"anyOf": [{"required": ["launch"]}, {"required": ["reason"]}]}
+        }
+      ]
+    },
+    "refused": {
+      "allOf": [
+        {"$ref": "#/$defs/base"},
+        {
+          "required": ["reason"],
+          "properties": {"status": {"const": "refused"}, "reason": {"type": "object"}},
+          "not": {"anyOf": [{"required": ["launch"]}, {"required": ["inheritance"]}]}
+        }
+      ]
+    }
+  }
+}
