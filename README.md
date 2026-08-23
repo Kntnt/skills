@@ -59,7 +59,7 @@ Review `AGENTS.md` and `agents.d/` after a task and write only facts that the ne
 
 ### delegation
 
-Leave planning and verification with the main agent while subagents execute the work. The mode can last for the current session or be saved in Project or user context without changing the main agent's model or reasoning effort. Run `/delegation` to toggle the session, `/delegation [project|user] on|off [--yes]` to set a standing mode or `/delegation status` to inspect every scope.
+Leave planning and verification with the main agent while subagents execute the work. Predictably noisy tool work can stay in a subagent's context and return as a distilled result. The mode can last for the current session or be saved in Project or user context without changing the main agent's model or reasoning effort. Run `/delegation` to toggle the session, `/delegation [project|user] on|off [--yes]` to set a standing mode or `/delegation status` to inspect every scope.
 
 ### tldr
 
