@@ -2,7 +2,7 @@
 name: commit
 description: Commit the working tree on the current branch, without pushing.
 disable-model-invocation: true
-argument-hint: '["message"] [--yes]'
+argument-hint: '["message"] [--yes] [-- <instruction>]'
 compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
@@ -21,6 +21,10 @@ Commit the working tree on the current branch and stop.
 `$HERE` is the directory that contains this SKILL.md.
 
 `$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
+
+## Invocation Envelope
+
+Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
 
 ## Help
 

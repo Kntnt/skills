@@ -5,7 +5,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "f3888444c5fc6fe2cd3180569d5220a23fb3a666b46fedb205a5715c7a881b97",
+      "digest": "9c3d6829194adad6cace21bba75d647e363cc5368de28d5d51344aeaf99da708",
       "binaries": [
         "git",
         "uv"
@@ -18,7 +18,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "9ea940cb8a6490f32d104226fcca27a6e63e4632dc4b8d027b9f92372bc74f79",
+      "digest": "411cee384c5a48afbe60d50b9bad8e8cfe788e6af43295807e516e14651a3254",
       "binaries": [
         "uv"
       ],
@@ -32,7 +32,7 @@
       "name": "tldr",
       "category": "agents",
       "description": "Summarise what was just said as a TL;DR, and turn TL;DR mode on or off so replies stay short and say what needs you.",
-      "digest": "d3a7a1414913791ff36fb149e3b1a73b855cb1ee0a5fdf30c10d9f27d0ab754d",
+      "digest": "a4a15c1ddd1792baa93b27317f16d5cd7ffa3b31352b4cb389167c4d7e40fd42",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -42,7 +42,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "ae56aa9acbe8983e36192f1e90e79af5e5a07c59c99c7f98b69119c23241f32d",
+      "digest": "947cdbb794887303065c79de76e8501108d32277212fbf7073c221ded5d0ad59",
       "binaries": [
         "git",
         "uv"
@@ -55,7 +55,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "b45b700d8dc73e42b2559aa3aa8aaaf1ce7cbb9a1c06e4cf3f0e72179ac198b9",
+      "digest": "18a65a13ec8b1787be0225a5e796dc11cdeb2a158bd6651a5b5377849d9511da",
       "binaries": [
         "git",
         "gh",
@@ -71,7 +71,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "24c29eb66d66d672a2acd8c6d1b72a300c12dedd8a233b1443e44f4bafd21de7",
+      "digest": "a3991a138aa8dcd5952e136b0506132d7fe9d5672679963f85468c95b1530307",
       "binaries": [
         "git",
         "uv"
@@ -86,7 +86,7 @@
       "name": "ready-for-agent-check",
       "category": "code",
       "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
-      "digest": "327a9e82c9852d19474d85f39fea7207aa93601f7c118fc7e5b80775aa2c6d11",
+      "digest": "0c4e480a8769539720f34b4a5016b7d52ac1dd78d9faf8787cac4dadde4e0234",
       "binaries": [
         "gh",
         "uv"
@@ -101,7 +101,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "285a44f0b3276f1989a9443227a0194f4fdffcb664fa12ee4a0a4b9f26722ed2",
+      "digest": "e6d07e057ec80b6220c98816a35b14ddd89c42b32cfdb32a85fff64c7f8ab2e6",
       "binaries": [
         "git",
         "uv"
@@ -116,7 +116,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "d2db2b0bfb9e28fc599c443f90c723aadec79eca75ae1f0dd9ea494cc3822607",
+      "digest": "004d8d161dd019aede023a02fa211a7bc46a7584f9e921b9b853ce8c42eed108",
       "binaries": [],
       "skills": [],
       "externals": [],

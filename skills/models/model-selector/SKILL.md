@@ -2,7 +2,7 @@
 name: model-selector
 description: Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.
 disable-model-invocation: true
-argument-hint: "[setup|config|recommend|chart|compare|update|record|status] [args] [--decision=route|renew] [--budget=<amount>] [--quality=<score>] [--force] [--data=<path>]"
+argument-hint: "[setup|config|recommend|chart|compare|update|record|status] [args] [--decision=route|renew] [--budget=<amount>] [--quality=<score>] [--force] [--data=<path>] [-- <instruction>]"
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: ""
@@ -16,6 +16,10 @@ metadata:
 Configure the exact model versions and subscription/API channels available to one user, then select a Pareto-efficient model, effort and agent configuration for a workload, budget or quality floor without re-researching known releases.
 
 `$HERE` is the directory that contains this SKILL.md.
+
+## Invocation Envelope
+
+Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
 
 ## Help
 

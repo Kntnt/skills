@@ -2,7 +2,7 @@
 name: kntnt
 description: Manage this collection — which skills are Enabled, in Global and in each Project.
 disable-model-invocation: true
-argument-hint: "[select|update|uninstall|help] [command] [--on <skill>] [--off <skill>] [--project] [--yes] [--dry-run]"
+argument-hint: "[select|update|uninstall|help] [command] [--on <skill>] [--off <skill>] [--project] [--yes] [--dry-run] [-- <instruction>]"
 compatibility: Requires uv, and npx plus network access for the transport and the Catalog fetch
 ---
 
@@ -13,6 +13,10 @@ The Manager. One namespaced entry point. Every other collection skill is invoked
 `$HERE` is the directory that contains this SKILL.md.
 
 **Dependencies.** `uv` on PATH. If it is missing, stop and tell the user to install uv from https://docs.astral.sh/uv/.
+
+## Invocation Envelope
+
+Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
 
 ## Help
 

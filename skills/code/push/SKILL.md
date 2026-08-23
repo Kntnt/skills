@@ -2,7 +2,7 @@
 name: push
 description: Follow commit, then push the current branch.
 disable-model-invocation: true
-argument-hint: '["message"] [--yes]'
+argument-hint: '["message"] [--yes] [-- <instruction>]'
 compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
@@ -22,6 +22,10 @@ Follow the commit skill, then push the current branch.
 
 `$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
 
+## Invocation Envelope
+
+Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
+
 ## Help
 
 If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
@@ -34,7 +38,7 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 
 ## Steps
 
-1. Follow `$HERE/../commit/SKILL.md` with the same arguments. If it stops because there is nothing to commit, continue. Done when the working tree is clean, or commit stopped as clean.
+1. Follow `$HERE/../commit/SKILL.md` with the same Formal Invocation. If the outer Contextual Instruction contains guidance relevant to commit, append only that guidance after an explicit `--`; otherwise pass no Contextual Instruction. If commit stops because there is nothing to commit, continue. Done when the working tree is clean, or commit stopped as clean.
 2. Run `uv run "$LIBRARY/scripts/ship.py" plan push`. Done when stdout is a JSON plan, or the command exits 2.
 3. Exit 2: emit the plan's `reason` and stop.
 4. If commit did not already wait, show the plan and wait unless `--yes`. Done when the user confirms, `--yes` is set, or commit already confirmed.

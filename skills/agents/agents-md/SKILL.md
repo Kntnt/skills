@@ -2,7 +2,7 @@
 name: agents-md
 description: "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`."
 disable-model-invocation: false
-argument-hint: "[path] [--force] [--yes]"
+argument-hint: "[path] [--force] [--yes] [-- <instruction>]"
 compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
@@ -19,6 +19,10 @@ Write the fewest always-loaded tokens that still keep the next session safe. Def
 **Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run "<checker>" check --here "$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
 
 `$HERE` is the directory that contains this SKILL.md.
+
+## Invocation Envelope
+
+Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
 
 ## Help
 

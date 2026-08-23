@@ -2,7 +2,7 @@
 name: orchestrate
 description: Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.
 disable-model-invocation: true
-argument-hint: '[#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes]'
+argument-hint: '[#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--yes] [-- <instruction>]'
 compatibility: Requires git, gh, and uv, plus a harness that can run subagents
 metadata:
   kntnt.internal: "true"
@@ -21,6 +21,10 @@ Read the tracker, and work the `ready-for-agent` tickets it holds on the branch 
 The payload's `capabilities` are the half of the check no script can do — you are the harness, so you answer. For each one, say whether its `confirm` sentence is true of you. Any that is not: give its `how`, do no work, install nothing, stop. Exit 0 is not a go-ahead until every one is answered.
 
 `$HERE` is the directory that contains this SKILL.md.
+
+## Invocation Envelope
+
+Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
 
 ## Help
 

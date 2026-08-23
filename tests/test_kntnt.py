@@ -3476,6 +3476,45 @@ def test_every_manpage_synopsis_and_options_describe_the_same_flags() -> None:
         )
 
 
+def test_every_manpage_documents_the_invocation_envelope() -> None:
+    """Every addressed help page exposes context without making it an option."""
+
+    # Hold the context surface and the minimum explanation every page carries.
+    suffix = "[**--** *INSTRUCTION*]"
+    required = (
+        "Contextual Instruction",
+        "Conversation Context",
+        "Redundant but applicable guidance is valid",
+        "exact partial outcome",
+        "reserved separator",
+        "syntax refusal",
+        "context refusal",
+    )
+
+    # Discover every page so future command paths inherit the same contract.
+    for manpage in _manpages():
+        # Read the two public sections that expose the Envelope.
+        text = manpage.read_text(encoding="utf-8")
+        synopsis = _section(text, "## SYNOPSIS", manpage)
+        envelope = _section(text, "## INVOCATION ENVELOPE", manpage)
+
+        # Keep the separator visible as a suffix and absent from the option set.
+        forms = [line for line in synopsis.splitlines() if line]
+        assert forms and all(line.endswith(suffix) for line in forms), (
+            f"{manpage}: every formal form exposes the optional context suffix"
+            f" so callers can distinguish guidance from strict grammar"
+            f" (ADR-0078). See {STANDARD}."
+        )
+        assert all(phrase in envelope for phrase in required), (
+            f"{manpage}: the envelope section does not explain the complete"
+            f" caller-visible contract required by ADR-0078. See {STANDARD}."
+        )
+        assert "**--**" not in _optional_section(text, "## OPTIONS"), (
+            f"{manpage}: the reserved separator is not an option and therefore"
+            f" never belongs in `## OPTIONS` (ADR-0078). See {STANDARD}."
+        )
+
+
 # The two Markdown files every skill ships at its root: the body the harness
 # loads and the skill-level manpage. A skill with subcommands may additionally
 # carry their manpages under `help/`; other Markdown is agent reference material.
@@ -5073,6 +5112,12 @@ def _skill_bodies() -> list[Path]:
     return [*(d / "SKILL.md" for d in _shipped_skills()), MANAGER_DIR / "SKILL.md"]
 
 
+def _root_manpages() -> list[Path]:
+    """Every root page whose Envelope contract its own Skill executes."""
+
+    return [*(d / "help.md" for d in _shipped_skills()), MANAGER_DIR / "help.md"]
+
+
 def _manpages() -> list[Path]:
     """Every manpage the collection ships, found rather than listed.
 
@@ -5082,13 +5127,12 @@ def _manpages() -> list[Path]:
     """
 
     pages = [
-        *(d / "help.md" for d in _shipped_skills()),
+        *_root_manpages(),
         *(
             page
             for d in _shipped_skills()
             for page in sorted((d / "help").rglob("*.md"))
         ),
-        MANAGER_DIR / "help.md",
         *sorted((MANAGER_DIR / "help").rglob("*.md")),
     ]
     assert pages
@@ -5306,6 +5350,180 @@ def _flags(text: str) -> set[str]:
     """
 
     return {word for word in re.findall(r"--[a-z][a-z-]*", text)} - {"--help"}
+
+
+def test_every_skill_exposes_the_invocation_envelope_before_its_grammar() -> None:
+    """Every caller meets the same envelope before Skill-specific parsing.
+
+    The suffix is caller-neutral and reserved across the Collection, so a
+    future Skill discovered by the body glob must expose it in the harness
+    hint and separate it before either help routing or formal validation.
+    """
+
+    # Discover every body so a future Skill cannot omit the shared first step.
+    for body in _skill_bodies():
+        # Read only the body surface the harness executes.
+        text = body.read_text(encoding="utf-8")
+        envelope = _section(text, "## Invocation Envelope", body)
+
+        # Hold exposure, ordering, and the boundary into deterministic parsers.
+        assert _hint(body.parent).endswith("[-- <instruction>]"), (
+            f"{body}: the harness hint omits the optional Contextual"
+            f" Instruction suffix required by ADR-0078. See {STANDARD}."
+        )
+        assert text.index("\n## Invocation Envelope\n") < text.index("\n## Help\n"), (
+            f"{body}: Envelope splitting must precede help routing and formal"
+            f" validation (ADR-0078). See {STANDARD}."
+        )
+        assert "before help routing or formal validation" in envelope.lower(), (
+            f"{body}: the executable Envelope section does not state its"
+            f" required ordering (ADR-0078). See {STANDARD}."
+        )
+        assert "`## INVOCATION ENVELOPE` section of `$HERE/help.md`" in envelope, (
+            f"{body}: a directly installed Skill must read its executable"
+            f" Envelope contract from its own root manpage (ADR-0078). See"
+            f" {STANDARD}."
+        )
+        assert "Pass only the Formal Invocation to scripts" in envelope, (
+            f"{body}: scripts and nested parsers receive only Formal Invocation"
+            f" input (ADR-0078). See {STANDARD}."
+        )
+
+
+def test_invocation_envelope_defines_the_reserved_separator_without_inference() -> None:
+    """The shared executable contract distinguishes context from formal data.
+
+    These are worked inputs from issue #87 rather than a parser reimplemented
+    in the test: prose is the public seam for a Skill whose agent performs the
+    split, and every body above follows this one discovered reference.
+    """
+
+    # Discover every executable root contract, including the Manager's.
+    for root in _root_manpages():
+        text = _section(
+            root.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", root
+        )
+
+        # Pin every separator distinction to literal issue examples.
+        for phrase in (
+            "same line",
+            "after blank lines",
+            "must contain non-whitespace text",
+            "including later `--` tokens",
+            "Without the separator",
+            "`--force`",
+            "`foo--bar`",
+            "`` `--` ``",
+            '`"--"`',
+            "Redundant but applicable guidance is valid",
+        ):
+            # Refuse the loss of an accepted or rejected separator distinction.
+            assert phrase in text, (
+                f"{root}: the executable Envelope omits {phrase!r}, so it no"
+                f" longer distinguishes an issue #87 syntax case (ADR-0078)."
+                f" See {STANDARD}."
+            )
+
+
+def test_invocation_envelope_carries_worked_split_outcomes() -> None:
+    """Concrete payloads pin the agent-executed split at the prose seam."""
+
+    # Keep independent, worked outcomes for every syntax case in issue #87.
+    cases = (
+        "| Same line | `/skill --force -- Preserve deployment facts` | `/skill --force` | `Preserve deployment facts` | Envelope valid; formal grammar next |",
+        r"| Blank lines | `/skill --force --\n\nPreserve deployment facts` | `/skill --force` | `Preserve deployment facts` | Envelope valid; formal grammar next |",
+        "| Empty suffix | `/skill --force --   ` | `/skill --force` | — | Syntax refusal |",
+        "| Later separator | `/skill -- Preserve -- deployment facts` | `/skill` | `Preserve -- deployment facts` | Envelope valid; formal grammar next |",
+        "| No separator | `/skill Preserve deployment facts` | `/skill Preserve deployment facts` | — | No split; formal grammar decides |",
+        '| Attached and quoted | ``/skill --force foo--bar `--` "--"`` | ``/skill --force foo--bar `--` "--"`` | — | No split; formal grammar decides |',
+        "| Exact help | `/skill --help -- Explain this page` | `/skill --help` | `Explain this page` | Context refusal; render nothing |",
+    )
+
+    # Hold each Skill's locally executable examples to the independent outcomes.
+    for root in _root_manpages():
+        text = _section(
+            root.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", root
+        )
+
+        # A missing row removes the expected result, not a descriptive word.
+        for case in cases:
+            # Refuse a scenario whose independently worked outcome disappeared.
+            assert case in text, (
+                f"{root}: worked Envelope outcomes omit `{case}`, leaving that"
+                f" issue #87 split unpinned at the executable prose seam"
+                f" (ADR-0078). See {STANDARD}."
+            )
+
+
+def test_skill_standard_requires_every_invocation_envelope_surface() -> None:
+    """Contributors meet the contract before discovered checks enforce it."""
+
+    # Read the contributor-facing source of the rules asserted by this suite.
+    standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
+
+    # Hold all five authored surfaces and the separator's non-option status.
+    for phrase in (
+        "`[-- <instruction>]`",
+        "`## Invocation Envelope`",
+        "`## INVOCATION ENVELOPE` section of the Skill's own `$HERE/help.md`",
+        "`[**--** *INSTRUCTION*]`",
+        "`## INVOCATION ENVELOPE`",
+        "separator, not an option",
+    ):
+        # Keep each asserted rule discoverable before this test reports it.
+        assert phrase in standard, (
+            f"{STANDARD}: the contributor standard omits {phrase!r}, so an"
+            f" author meets the Envelope rule only after this suite fails"
+            f" (ADR-0078)."
+        )
+
+
+def test_nested_skill_calls_propagate_only_relevant_context_explicitly() -> None:
+    """A nested Envelope is constructed at the call, never blindly forwarded."""
+
+    # Name current Skill-to-Skill calls without duplicating their prose.
+    calls = (
+        (REPO_ROOT / "skills" / "code" / "push" / "SKILL.md", "../commit/SKILL.md"),
+        (REPO_ROOT / "skills" / "code" / "release" / "SKILL.md", "../push/SKILL.md"),
+    )
+
+    # Hold selective propagation at each concrete nested call.
+    for body, target in calls:
+        # Isolate the executable paragraph that constructs the nested Envelope.
+        paragraphs = body.read_text(encoding="utf-8").split("\n\n")
+        call = next(paragraph for paragraph in paragraphs if target in paragraph)
+
+        # Require both Envelope parts and the relevance filter at the call site.
+        assert "Formal Invocation" in call, (
+            f"{body}: the nested call does not construct an explicit Formal"
+            f" Invocation (ADR-0078). See {STANDARD}."
+        )
+        assert "Contextual Instruction" in call, (
+            f"{body}: context propagation into the nested Skill is implicit"
+            f" rather than an explicit inner Envelope (ADR-0078). See {STANDARD}."
+        )
+        assert "relevant" in call, (
+            f"{body}: the nested Skill could receive the outer instruction"
+            f" blindly instead of only relevant guidance (ADR-0078). See"
+            f" {STANDARD}."
+        )
+
+
+def test_manager_help_passes_only_formal_arguments_to_its_script() -> None:
+    """The help adapter never hands the Contextual Instruction to argparse."""
+
+    # Read the adapter that turns the Manager's help route into script input.
+    steps = (MANAGER_DIR / "steps" / "help.md").read_text(encoding="utf-8")
+
+    # Refuse the old whole-payload wording and require the new parser boundary.
+    assert "Formal Invocation arguments" in steps, (
+        f"{MANAGER_DIR / 'steps' / 'help.md'}: the Manager must pass only Formal"
+        f" Invocation input to its parser (ADR-0078). See {STANDARD}."
+    )
+    assert "Every other argument the user gave" not in steps, (
+        f"{MANAGER_DIR / 'steps' / 'help.md'}: whole-payload forwarding would"
+        f" leak Contextual Instruction into argparse (ADR-0078). See {STANDARD}."
+    )
 
 
 def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() -> None:

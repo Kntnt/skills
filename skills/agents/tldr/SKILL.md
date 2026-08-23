@@ -2,7 +2,7 @@
 name: tldr
 description: Summarise what was just said as a TL;DR, and turn TL;DR mode on or off so replies stay short and say what needs you.
 disable-model-invocation: true
-argument-hint: "[instruction] | [--on|--off|--status] [--user] [--yes]"
+argument-hint: "[instruction] | [--on|--off|--status] [--user] [--yes] [-- <instruction>]"
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: ""
@@ -16,6 +16,10 @@ metadata:
 Summarise the reply above so the user can see what happened and whether anything needs them, and turn TL;DR mode on or off.
 
 `$HERE` is the directory that contains this SKILL.md.
+
+## Invocation Envelope
+
+Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
 
 ## Help
 

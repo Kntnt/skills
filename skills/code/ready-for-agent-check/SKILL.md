@@ -2,7 +2,7 @@
 name: ready-for-agent-check
 description: Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.
 disable-model-invocation: true
-argument-hint: '[#<ticket> ...]'
+argument-hint: '[#<ticket> ...] [-- <instruction>]'
 compatibility: Requires gh and uv, plus a harness that can run subagents
 metadata:
   kntnt.internal: "true"
@@ -21,6 +21,10 @@ Find out whether a ticket can be built by somebody who has only the ticket. Each
 The payload's `capabilities` are the half of the check no script can do — you are the harness, so you answer. For each one, say whether its `confirm` sentence is true of you. Any that is not: give its `how`, do no work, install nothing, stop. Exit 0 is not a go-ahead until every one is answered.
 
 `$HERE` is the directory that contains this SKILL.md.
+
+## Invocation Envelope
+
+Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
 
 ## Help
 

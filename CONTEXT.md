@@ -27,6 +27,22 @@ _Avoid_: command, slash command
 **Model-invoked skill**:
 A skill the model may load on its own when the task matches the skill's description.
 
+**Invocation Envelope**:
+The complete input through which any caller starts exactly one Skill: one Formal Invocation and an optional Contextual Instruction.
+_Avoid_: command line, arguments
+
+**Formal Invocation**:
+The structured part of an Invocation Envelope that names the Skill and supplies only the command path, positional arguments, and flags its declared grammar accepts.
+_Avoid_: prompt, context
+
+**Contextual Instruction**:
+Optional natural-language guidance that accompanies a Formal Invocation without becoming part of its grammar. It may clarify or narrow choices within the Skill's contract and overrides older conversational preferences within those choices, but cannot contradict or widen the contract and may be omitted when the conversation already carries the needed context.
+_Avoid_: brief, prose argument, extra arguments
+
+**Conversation Context**:
+The surrounding session material available to the agent independently of the current Invocation Envelope. Applicable guidance may inform Skill execution under the same contract boundaries as a Contextual Instruction without becoming part of either the Formal Invocation or the Contextual Instruction.
+_Avoid_: trailing arguments, implicit instruction
+
 **Manager**:
 The always-enabled skill named `kntnt`. It is the collection's only namespaced entry point.
 _Avoid_: installer, CLI, wrapper
