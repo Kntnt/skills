@@ -5482,31 +5482,32 @@ def test_skill_standard_requires_every_invocation_envelope_surface() -> None:
 def test_nested_skill_calls_propagate_only_relevant_context_explicitly() -> None:
     """A nested Envelope is constructed at the call, never blindly forwarded."""
 
-    # Name current Skill-to-Skill calls without duplicating their prose.
-    calls = (
-        (REPO_ROOT / "skills" / "code" / "push" / "SKILL.md", "../commit/SKILL.md"),
-        (REPO_ROOT / "skills" / "code" / "release" / "SKILL.md", "../push/SKILL.md"),
-    )
+    # Discover peer body references in every shipped Skill's executable prose.
+    nested_skill = re.compile(r"\$HERE/\.\./([A-Za-z0-9_-]+)/SKILL\.md")
+    calls = [
+        (body, target, paragraph)
+        for body in _skill_bodies()
+        for paragraph in body.read_text(encoding="utf-8").split("\n\n")
+        for target in nested_skill.findall(paragraph)
+    ]
+    assert calls, "No nested Skill calls were discovered at the documented seam"
 
     # Hold selective propagation at each concrete nested call.
-    for body, target in calls:
-        # Isolate the executable paragraph that constructs the nested Envelope.
-        paragraphs = body.read_text(encoding="utf-8").split("\n\n")
-        call = next(paragraph for paragraph in paragraphs if target in paragraph)
-
+    for body, target, call in calls:
         # Require both Envelope parts and the relevance filter at the call site.
         assert "Formal Invocation" in call, (
-            f"{body}: the nested call does not construct an explicit Formal"
-            f" Invocation (ADR-0078). See {STANDARD}."
+            f"{body}: the nested call to {target} does not construct an"
+            f" explicit Formal Invocation (ADR-0078). See {STANDARD}."
         )
         assert "Contextual Instruction" in call, (
-            f"{body}: context propagation into the nested Skill is implicit"
-            f" rather than an explicit inner Envelope (ADR-0078). See {STANDARD}."
+            f"{body}: context propagation into nested Skill {target} is"
+            f" implicit rather than an explicit inner Envelope (ADR-0078)."
+            f" See {STANDARD}."
         )
         assert "relevant" in call, (
-            f"{body}: the nested Skill could receive the outer instruction"
-            f" blindly instead of only relevant guidance (ADR-0078). See"
-            f" {STANDARD}."
+            f"{body}: nested Skill {target} could receive the outer"
+            f" instruction blindly instead of only relevant guidance"
+            f" (ADR-0078). See {STANDARD}."
         )
 
 
