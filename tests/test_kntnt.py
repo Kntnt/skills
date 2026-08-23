@@ -3825,6 +3825,38 @@ def test_delegation_requires_subagents_and_says_so() -> None:
     )
 
 
+def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() -> None:
+    """The mode delegates noisy tool work before its raw result reaches the main agent."""
+
+    path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
+    mode = path.read_text(encoding="utf-8")
+
+    required_fragments = {
+        "Narrow at the source first.",
+        "predictably large and mostly irrelevant",
+        "the main agent does not need the raw material",
+        "expected main-context saving exceeds the cost",
+        "complete tool call",
+        "bounded extraction",
+        "direct answer",
+        "minimal supporting evidence",
+        "material anomalies or uncertainty",
+        "truncation or incomplete coverage",
+        "bounded semantic extraction",
+        "understanding, diagnosis, decisions, briefing, verification and the final answer",
+        "same-model context isolation",
+        "Post-hoc summarisation in the main context cannot recover context already spent",
+    }
+    missing = sorted(
+        fragment for fragment in required_fragments if fragment not in mode
+    )
+    assert not missing, (
+        f"{path}: delegation mode must keep predictably noisy tool output out of the"
+        f" main context before the call, with a bounded task-shaped report; missing"
+        f" contract fragments: {missing}."
+    )
+
+
 def test_catalog_generation_rejects_a_name_that_is_not_the_directory(
     tmp_path: Path,
 ) -> None:
