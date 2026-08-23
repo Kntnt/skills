@@ -1105,9 +1105,9 @@ def test_the_build_step_routes_a_discovered_edge_to_the_blocked_outcome() -> Non
         f" as a refused repair is while the rebuild stays unspent — the two"
         f" bounds answer different failures (ADR-0073, ADR-0069)."
     )
-    assert "the moment its blocker closes" in step, (
+    assert "when its blocker has a done Ticket Resolution" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 says a blocked ticket is offered again"
-        f" the moment its blocker closes, the corrected edge being the whole"
+        f" when its blocker has a done Ticket Resolution, the corrected edge being the whole"
         f" of the memory the mechanism needs (ADR-0073)."
     )
 
@@ -1155,14 +1155,25 @@ def test_the_manpage_accounts_for_the_blocked_outcome() -> None:
         f"{where}: the manpage says the run corrects the tracker graph with"
         f" the missing blocking edge (ADR-0073)."
     )
-    assert "after its blocker closes" in edge, (
+    assert "after its blocker has a done Ticket Resolution" in edge, (
         f"{where}: the manpage says the blocked ticket is offered again after"
-        f" its blocker closes, rather than being settled (ADR-0073)."
+        f" its blocker resolves done, rather than being settled (ADR-0073)."
     )
     assert "rather than in a sixth category" in outcomes, (
         f"{where}: the manpage keeps the report at five lists — a blocked"
         f" ticket follows the outcome implied by its blocker (ADR-0073)."
     )
+
+
+def test_invalid_reconcile_form_routes_to_reconcile_synopsis() -> None:
+    """Once the subcommand is recognized, its own grammar and help route make
+    a malformed invocation actionable without showing unrelated run forms."""
+
+    instructions = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+
+    assert "invalid recognized `reconcile` form" in instructions
+    assert "`$HERE/help/reconcile.md`" in instructions
+    assert "`/orchestrate reconcile --help`" in instructions
 
 
 # Every brief that tells its subagent to run the project's verification gate.

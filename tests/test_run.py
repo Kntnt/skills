@@ -92,6 +92,12 @@ case "$2" in
   view) cat "$GH_ISSUES/$3.json"; exit $? ;;
   edit|close|comment) exit 0 ;;
 esac
+if [ "$1" = "label" ]; then
+  case "$2" in
+    list) printf '%s\n' "${GH_LABELS:-[]}"; exit 0 ;;
+    create) [ -z "$GH_LABEL_CREATE_FAIL" ]; exit $? ;;
+  esac
+fi
 label=""
 state="open"
 while [ $# -gt 0 ]; do
@@ -223,7 +229,7 @@ def _ticket(
 
     Each edge is a ticket number and the state the tracker reports it in, which
     is how the native relation arrives: the blocker's own state travels with
-    the edge, so a closed blocker needs no second question. *claimed_by* is the
+    the edge, so a closed blocker needs its Ticket Resolution read. *claimed_by* is the
     logins the tracker has the ticket assigned to, which is how a ticket
     another session is already working announces itself, and *comments* is
     where an outcome a run recorded is read back from.
@@ -1168,8 +1174,9 @@ def test_reconcile_records_external_completion_without_closing_again(
     env = _tracker(
         tmp_path,
         {"ready-for-agent": []},
-        issues={9: ticket | {"state": "CLOSED"}},
+        issues={9: ticket | {"state": "CLOSED", "labels": [{"name": "orchestrated"}]}},
     )
+    env["GH_LABELS"] = '[{"name":"orchestrated"}]'
 
     result = _engine(repo, "reconcile", "--ticket", "9", "--commit", head, env=env)
 
@@ -1229,6 +1236,39 @@ def test_reconcile_refuses_ineligible_ticket_or_unlanded_commit_without_writes(
     assert "issue comment" not in _gh_calls(env)
 
 
+def test_reconcile_repairs_incomplete_lifecycle_before_reporting_agreement(
+    tmp_path: Path,
+) -> None:
+    """A prior interruption may have appended the fact before cleanup; retry
+    restores report discovery without duplicating the append-only event."""
+
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    ticket = _ticket(
+        9,
+        "rescued",
+        claimed_by=["me"],
+        comments=[_recorded("failed"), _reconciled(head)],
+    )
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={
+            9: ticket | {"state": "CLOSED", "labels": [{"name": "ready-for-agent"}]}
+        },
+    )
+
+    result = _engine(repo, "reconcile", "--ticket", "9", "--commit", head, env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["already_agreed"] is True
+    calls = _gh_calls(env)
+    assert "--remove-label ready-for-agent" in calls
+    assert "--add-label orchestrated" in calls
+    assert "--remove-assignee @me" in calls
+    assert "issue comment" not in calls
+
+
 def test_reconcile_is_idempotent_and_refuses_a_contradictory_commit(
     tmp_path: Path,
 ) -> None:
@@ -1249,8 +1289,9 @@ def test_reconcile_is_idempotent_and_refuses_a_contradictory_commit(
     env = _tracker(
         tmp_path,
         {"ready-for-agent": []},
-        issues={9: ticket | {"state": "CLOSED"}},
+        issues={9: ticket | {"state": "CLOSED", "labels": [{"name": "orchestrated"}]}},
     )
+    env["GH_LABELS"] = '[{"name":"orchestrated"}]'
 
     repeated = _engine(repo, "reconcile", "--ticket", "9", "--commit", first, env=env)
     contradicted = _engine(
@@ -1261,7 +1302,10 @@ def test_reconcile_is_idempotent_and_refuses_a_contradictory_commit(
     assert json.loads(repeated.stdout)["already_agreed"] is True
     assert contradicted.returncode == 1
     assert "already reconciled" in contradicted.stderr
-    assert "issue comment" not in _gh_calls(env)
+    calls = _gh_calls(env)
+    assert "issue comment" not in calls
+    assert "issue edit" not in calls
+    assert "label create" not in calls
 
 
 def test_reconcile_discovers_one_closing_commit_and_cleans_lifecycle_state(
@@ -1295,9 +1339,32 @@ def test_reconcile_discovers_one_closing_commit_and_cleans_lifecycle_state(
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["commit"] == head
     calls = _gh_calls(env)
+    assert "label create orchestrated" in calls
     assert "--remove-label ready-for-agent" in calls
     assert "--add-label orchestrated" in calls
     assert "--remove-assignee @me" in calls
+    assert calls.index("label create orchestrated") < calls.index("issue edit 9")
+    assert calls.index("issue edit 9") < calls.index("issue comment 9")
+
+
+def test_successful_record_prepares_completed_lifecycle_before_closing(
+    tmp_path: Path,
+) -> None:
+    """The historical label and cleanup are established before the outcome
+    closes the ticket, so a label failure cannot hide a recorded success."""
+
+    repo = _init_repo(tmp_path / "proj")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+
+    result = _engine(
+        repo, "record", "--ticket", "9", "--outcome", "done", "--commit", head, env=env
+    )
+
+    assert result.returncode == 0, result.stderr
+    calls = _gh_calls(env)
+    assert calls.index("label create orchestrated") < calls.index("issue edit 9")
+    assert calls.index("issue edit 9") < calls.index("issue close 9")
 
 
 def test_reconcile_without_one_safe_commit_refuses_and_requests_commit(
@@ -1356,6 +1423,28 @@ def test_report_projects_reconciliation_as_done_with_failure_provenance(
     assert report["tickets"][0]["run_outcome"] == "failed"
     assert report["tickets"][0]["reconciliation"] is True
     assert report["tickets"][0]["commit"] == head
+
+
+def test_report_does_not_treat_external_completion_as_run_output(
+    tmp_path: Path,
+) -> None:
+    """A Reconciliation commit is resolution provenance, not a commit made by
+    the unattended run and therefore cannot move that run's base backward."""
+
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        closed=[
+            _ticket(9, "rescued", comments=[_recorded("failed"), _reconciled(head)])
+        ],
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["base"] == head
 
 
 def test_plan_unblocks_a_dependent_only_after_its_closed_blocker_is_reconciled(
@@ -4303,7 +4392,7 @@ def test_record_blocked_discards_the_half_built_tree_without_spending_the_rebuil
     tmp_path: Path,
 ) -> None:
     """The half-built work goes exactly as a refused repair does, so when the
-    blocker closes the ticket is isolated afresh from the branch that by then
+    blocker resolves done the ticket is isolated afresh from the branch that by then
     carries the blocker's work — and the one rebuild stays unspent, that bound
     answering a different failure (ADR-0073)."""
 
@@ -4384,18 +4473,52 @@ def test_record_refuses_a_blocker_named_against_another_outcome(
     assert _gh_calls(env) == ""
 
 
-def test_record_blocked_refuses_a_blocker_that_is_already_closed(
+def test_record_blocked_accepts_a_closed_unsuccessful_blocker(
     tmp_path: Path,
 ) -> None:
-    """A closed ticket names work that already exists, so the edge would
-    record a wait that is already over — the tracker is asked before anything
-    is written, and the refusal leaves nothing behind."""
+    """Closure alone does not establish the work a newly discovered dependency
+    needs, so an unsuccessful unresolved blocker still receives the edge."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
         tmp_path,
         {"ready-for-agent": []},
-        issues={9: _ready(9), 12: {"state": "CLOSED"}},
+        issues={
+            9: _ready(9),
+            12: {"state": "CLOSED", "comments": [_recorded("failed")]},
+        },
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "blocked",
+        "--blocked-by",
+        "12",
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    calls = _gh_calls(env)
+    assert "dependencies/blocked_by" in calls
+    assert "issue comment" in calls
+
+
+def test_record_blocked_refuses_a_closed_done_blocker(tmp_path: Path) -> None:
+    """A done Ticket Resolution establishes the prerequisite work, so writing
+    a new blocking edge would record a wait that is already over."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={
+            9: _ready(9),
+            12: {"state": "CLOSED", "comments": [_recorded("done", "HEAD")]},
+        },
     )
 
     result = _engine(
@@ -4411,11 +4534,10 @@ def test_record_blocked_refuses_a_blocker_that_is_already_closed(
     )
 
     assert result.returncode == 1
-    assert "closed" in result.stderr
+    assert "done Ticket Resolution" in result.stderr
     calls = _gh_calls(env)
     assert "dependencies/blocked_by" not in calls
     assert "issue comment" not in calls
-    assert "issue edit" not in calls
 
 
 def test_the_note_a_blocked_outcome_leaves_stays_out_of_the_thread(
@@ -4472,12 +4594,12 @@ def test_the_note_a_blocked_outcome_leaves_stays_out_of_the_thread(
     assert plan["blocked"] == [9]
 
 
-def test_a_blocked_ticket_is_offered_again_the_moment_its_blocker_closes(
+def test_a_blocked_ticket_is_offered_again_when_its_blocker_resolves_done(
     tmp_path: Path,
 ) -> None:
     """The corrected edge on the tracker is the whole of the memory the
     mechanism needs: nothing about a blocked ticket is settled, so a plan read
-    after its blocker closes has it workable again, to be isolated afresh and
+    after its blocker resolves done has it workable again, to be isolated afresh and
     built whole on top of the work it waited for."""
 
     repo = _init_repo(tmp_path / "proj")

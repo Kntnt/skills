@@ -14,7 +14,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 `orchestrate` plans and works the current repository's open `ready-for-agent` tickets on the branch where it starts. It claims each ticket, delegates the build to a fresh subagent, delegates verification to a different subagent, integrates verified work, records the outcome on the tracker, and closes successful tickets. It does not push, tag, or release.
 
-Blocking relations produce dependency waves. Wave one contains tickets that can start immediately; each later wave contains work unblocked by earlier verified work. Native tracker dependency relations are authoritative when present. A ticket with no native relation may declare bare `#number` references on a `Blocked by` line. Closed blockers do not block.
+Blocking relations produce dependency waves. Wave one contains tickets that can start immediately; each later wave contains work unblocked by earlier verified work. Native tracker dependency relations are authoritative when present. A ticket with no native relation may declare bare `#number` references on a `Blocked by` line. A closed blocker continues to block until it has a done Ticket Resolution.
 
 The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Builders may use cheaper models through `--model` or automatic selection, but every verdict remains on the orchestrator's model.
 
@@ -72,7 +72,7 @@ An ambiguity, missing requirement, or design choice not settled by the ticket pa
 
 **Discovered dependency**
 
-When the missing requirement is carried by another open ticket, the run writes the missing blocking edge to the tracker, releases the claim, discards the partial isolated build, and offers the ticket again after its blocker closes. This does not consume the ticket's rebuild.
+When the missing requirement is carried by another open ticket, the run writes the missing blocking edge to the tracker, releases the claim, discards the partial isolated build, and offers the ticket again after its blocker has a done Ticket Resolution. This does not consume the ticket's rebuild.
 
 **Failed work**
 

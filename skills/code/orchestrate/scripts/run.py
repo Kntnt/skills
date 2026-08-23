@@ -50,7 +50,7 @@ OUTCOMES = (DONE, FAILED, CONFLICTED)
 # ticket depends on open work the graph does not name stops, and the run
 # writes the missing edge rather than a failure (ADR-0073). The edge on the
 # tracker is the whole of the memory the mechanism needs — the ticket is
-# offered again the moment its blocker closes — which is why the outcomes
+# offered again when its blocker has a done Ticket Resolution — which is why
 # read back off a ticket never include this one.
 BLOCKED = "blocked"
 
@@ -77,7 +77,7 @@ NOTES = {
         "Recorded by an unattended run: the builder found this ticket depends "
         "on open work the graph did not name. The corrected edge is now on "
         "the tracker, the claim is released, and the ticket is offered again "
-        "the moment its blocker closes."
+        "when its blocker has a done Ticket Resolution."
     ),
 }
 
@@ -1624,7 +1624,11 @@ def run_base(cwd: Path, tickets: list[Ticket]) -> str:
 
     # A commit a run recorded on another branch is not this branch's history,
     # and a branch that does not hold it can say nothing about where work began.
-    recorded = [ticket.commit for ticket in tickets if ticket.commit]
+    recorded = [
+        ticket.commit
+        for ticket in tickets
+        if ticket.commit and not ticket.reconciliation
+    ]
     on_branch = [
         commit
         for commit in recorded
@@ -2532,6 +2536,27 @@ def release_claim(
 def complete_lifecycle(cwd: Path, number: int, ticket: dict[str, Any]) -> None:
     """Replace active workflow state with completed historical state."""
 
+    # Ensure the discovery label exists before any ticket carries completed
+    # state that Report would otherwise be unable to find.
+    labels_output = gh(cwd, "label", "list", "--json", "name", "--limit", "100")
+    try:
+        repository_labels = {str(label["name"]) for label in json.loads(labels_output)}
+    except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        raise RunError(f"the tracker returned no readable label list: {exc}") from exc
+    if HISTORICAL_LABEL not in repository_labels:
+        gh(
+            cwd,
+            "label",
+            "create",
+            HISTORICAL_LABEL,
+            "--color",
+            "6f42c1",
+            "--description",
+            "Completed ticket retained for Orchestrate history",
+        )
+
+    # Replace readiness and ownership with the neutral discovery marker in one
+    # ticket edit, before an append-only completion fact makes the state final.
     labels = [str(label["name"]) for label in ticket.get("labels", [])]
     edit = ["issue", "edit", str(number)]
     if READY_LABEL in labels:
@@ -2640,18 +2665,21 @@ def cmd_record(
     except RunError as exc:
         return fail(f"the tracker cannot answer for #{number}: {exc}")
 
-    # A blocked outcome names work still to exist, and the tracker is asked
-    # before the edge is written: a closed blocker blocks nothing, so an edge
-    # on it would record a wait that is already over.
+    # A blocked outcome names work still to exist. Closure alone does not
+    # establish that work: only a done Ticket Resolution makes the edge over.
     for blocker in waiting:
         try:
             state = str(ticket_view(cwd, blocker, "number,state")["state"])
         except (RunError, KeyError) as exc:
             return fail(f"the tracker cannot answer for blocker #{blocker}: {exc}")
-        if not still_blocks(state):
+        try:
+            blocks = blocker_still_blocks(cwd, blocker, state)
+        except RunError as exc:
+            return fail(str(exc))
+        if not blocks:
             return fail(
-                f"#{number} cannot be blocked by #{blocker}: it is closed, "
-                "and a closed ticket names work that already exists"
+                f"#{number} cannot be blocked by #{blocker}: its done Ticket "
+                "Resolution establishes that the required work exists"
             )
 
     # A blocked outcome is the corrected edge before it is anything else: the
@@ -2675,8 +2703,8 @@ def cmd_record(
     )
     try:
         if outcome == DONE:
-            gh(cwd, "issue", "close", str(number), "--comment", note)
             complete_lifecycle(cwd, number, ticket)
+            gh(cwd, "issue", "close", str(number), "--comment", note)
         else:
             gh(cwd, "issue", "comment", str(number), "--body", note)
     except RunError as exc:
@@ -2684,8 +2712,8 @@ def cmd_record(
 
     # What a blocked build made goes with the outcome, discarded exactly as a
     # refused repair is and without spending the ticket's one rebuild: when
-    # the blocker closes, the ticket is isolated afresh from the branch that
-    # by then carries the blocker's work, and built whole on top of it.
+    # the blocker resolves done, the ticket is isolated afresh from the branch
+    # that by then carries the blocker's work, and built whole on top of it.
     if outcome == BLOCKED:
         try:
             open_now = open_worktrees(cwd, current_branch(cwd))
@@ -2747,6 +2775,16 @@ def cmd_reconcile(cwd: Path, number: int, named: str | None) -> int:
                     f"#{number} is already reconciled at {existing}, not {requested}"
                 )
 
+        # Agreement includes the lifecycle projection that makes the event
+        # discoverable. Repair an interrupted older attempt without appending
+        # another Reconciliation; an already-clean ticket incurs no edit.
+        try:
+            complete_lifecycle(cwd, number, ticket)
+        except RunError as exc:
+            return fail(
+                f"#{number}'s reconciled lifecycle could not be repaired: {exc}"
+            )
+
         emit(
             {
                 "verb": "reconcile",
@@ -2787,8 +2825,8 @@ def cmd_reconcile(cwd: Path, number: int, named: str | None) -> int:
         "outside Orchestrate and is carried by this commit."
     )
     try:
-        gh(cwd, "issue", "comment", str(number), "--body", note)
         complete_lifecycle(cwd, number, ticket)
+        gh(cwd, "issue", "comment", str(number), "--body", note)
     except RunError as exc:
         return fail(f"#{number} could not be reconciled: {exc}")
 
