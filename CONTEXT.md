@@ -20,6 +20,34 @@ _Avoid_: namespace, group, tag, section
 A standalone Agent Skill with its own name. Collection skills are not namespaced under `kntnt`. The collection ships skills only — never harness `commands/` files. Every collection Skill ships its root help beside it and prints it when invoked with `--help`; a Skill with subcommands also ships and prints the addressed subcommand page for `/<skill> <command-path> --help`.
 _Avoid_: module, plugin, recipe, command, slash command
 
+**Language Resource**:
+The single installed source for one language or locale's editorial guidance. It carries the canonical language code, a bounded set of selector aliases, and separate scopes for composing, reviewing, catching machine-sounding prose, and correcting mechanics; a scope is named for the guidance it holds rather than for the Skill that reads it, and a locale variant may inherit the scopes of its base language. Generic editorial rules never move into a Language Resource merely because their examples are written in English.
+_Avoid_: language pack, translation, alias registry
+
+**Source Fidelity**:
+The Write Skill's truthful representation of the material supplied for a new text: facts, attribution, uncertainty, scope, chronology, causality, and the meaning of edited interview quotations remain supported by that material. It is not external fact-checking. Redline does not compare a written text with its source material, and Proofread changes no substantive content.
+_Avoid_: fact-checking, source validation, Redline verification
+
+**Text Artifact**:
+One coherent text that Write creates or that Redline or Proofread processes. Write may use several source materials to create one Text Artifact; Redline and Proofread each process exactly one Text Artifact per invocation.
+_Avoid_: document batch, input collection, text payload
+
+**Handoff Metadata**:
+Optional metadata carried with a Text Artifact that records the resolved genre, technique, and language. Write may add it and Redline may consume it, but every editorial Skill remains usable when it is absent.
+_Avoid_: required frontmatter, source brief, invocation cache
+
+**Correction Budget**:
+The maximum number of subagent corrections Redline may apply after its initial review. A review that verifies a correction and the final Proofread pass spend none of the budget, and Redline stops early when no findings remain.
+_Avoid_: iteration count, review count, retry limit
+
+**Output Target**:
+The response or filesystem destination to which a Skill delivers its resulting Text Artifact. It is independent of where the source material came from.
+_Avoid_: stdout, output mode, source location
+
+**In-place Editing**:
+The user's explicit choice to replace the single writable local file that supplied a Text Artifact instead of delivering the result to another Output Target. Inline text, URLs, and read-only files cannot be edited in place.
+_Avoid_: inline editing, automatic overwrite, mutable mode
+
 **User-invoked skill**:
 A skill the user starts by typing `/name`. Same gesture in every harness; the body is static instructions, not a preprocessed prompt template.
 _Avoid_: command, slash command
