@@ -1326,6 +1326,31 @@ def test_the_manpages_describe_reconciled_done_without_run_provenance() -> None:
     assert "rather than agreement" in reconcile
 
 
+def test_the_manpage_states_which_fact_answers_a_tickets_state_now() -> None:
+    """A recorded outcome and a Reconciliation are two markers a reader has to
+    know about and rank, and the rule that ranks them lived only in ADR-0079
+    before this — unreachable to a reader of a ticket rather than the decision
+    record. The manpage now states it in the section that already describes
+    recorded outcomes and Reconciliation, so reading the shipped Skill is
+    enough to read a ticket correctly (ADR-0079, issue #112)."""
+
+    outcomes = _manpage_section("OUTCOMES")
+
+    assert "different facts" in outcomes, (
+        f"{SKILL / 'help.md'}: the OUTCOMES section names the Run Outcome and"
+        f" the current Ticket Resolution as different facts (ADR-0079)."
+    )
+    assert "immutable record of one unattended attempt" in outcomes, (
+        f"{SKILL / 'help.md'}: the OUTCOMES section says a Run Outcome is"
+        f" history that a later Reconciliation cannot reach back into"
+        f" (ADR-0051, ADR-0079)."
+    )
+    assert "what the ticket's state is now" in outcomes, (
+        f"{SKILL / 'help.md'}: the OUTCOMES section says which fact answers a"
+        f" ticket's current state — its current Ticket Resolution (ADR-0079)."
+    )
+
+
 def test_the_final_report_renders_reconciliation_provenance() -> None:
     """The Skill renders the engine's historical provenance instead of
     silently dropping it from the maintainer-facing Report."""
