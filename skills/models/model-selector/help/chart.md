@@ -46,7 +46,7 @@ When this Skill invokes another Skill, it passes only relevant guidance through 
 
 ## DEPENDENCIES
 
-None. The command reads bundled or locally stored evidence.
+`uv` runs the Skill's dependency check. The command reads bundled or locally stored evidence.
 
 ## SEE ALSO
 

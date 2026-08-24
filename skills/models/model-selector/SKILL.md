@@ -2,10 +2,11 @@
 name: model-selector
 description: Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.
 disable-model-invocation: true
-argument-hint: "[setup|config|recommend|chart|compare|update|record|status] [args] [--decision=route|renew] [--budget=<amount>] [--quality=<score>] [--force] [--data=<path>] [-- <instruction>]"
+argument-hint: "[setup|config|recommend|route|chart|compare|update|record|status] [args] [--decision=route|renew] [--budget=<amount>] [--quality=<score>] [--force] [--data=<path>] [-- <instruction>]"
+compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
-  kntnt.binaries: ""
+  kntnt.binaries: "uv"
   kntnt.skills: ""
   kntnt.externals: ""
   kntnt.capabilities: ""
@@ -14,6 +15,8 @@ metadata:
 # model-selector
 
 Configure the exact model versions and subscription/API channels available to one user, then select a Pareto-efficient model, effort and agent configuration for a workload, budget or quality floor without re-researching known releases.
+
+**Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run "<checker>" check --here "$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
 
 `$HERE` is the directory that contains this SKILL.md.
 
@@ -28,6 +31,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | Command path | Manpage |
 | --- | --- |
 | `recommend` | `$HERE/help/recommend.md` |
+| `route` | `$HERE/help/route.md` |
 | `chart` | `$HERE/help/chart.md` |
 | `compare` | `$HERE/help/compare.md` |
 | `setup` | `$HERE/help/setup.md` |
@@ -53,6 +57,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `/model-selector config remove model\|channel <id>` | Remove one model selection or access channel after confirmation. |
 | `/model-selector config history\|reset` | Show configuration history, or reset the active configuration after confirmation. |
 | `/model-selector [recommend] [<workload>]` | Recommend from stored evidence. Infer the current task only when the workload is omitted and unambiguous. |
+| `/model-selector route <path>` | Resolve a structured request artifact into ordered exact launch decisions. |
 | `/model-selector chart\|compare <workload>` | Show comparable frontier tables and plotting data. |
 | `/model-selector update [--force]` | Revalidate due discovery, pricing, and benchmark indexes once. |
 | `/model-selector record <path>` | Validate and append unseen local run observations. |
@@ -66,7 +71,7 @@ Anything outside these forms is invalid. Where the invocation starts with a reco
 
 Default data directory: `~/.model-selector/`. A user-supplied `--data=<path>` wins. Read `config.json` and existing evidence before any research or recommendation.
 
-When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections. Never install a bundled access combination as the user's configuration.
+When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections except `route`. Route follows its own inheritance and refusal rules and never starts setup. Never install a bundled access combination as the user's configuration.
 
 When no evidence ledger exists, use only the configured models covered by `$HERE/data/seed-evidence.jsonl` as dated seed priors. `recommend` reads applicable seed evidence without writing and may read applicable `capability_prior_seed` rows in place when no newer ledger record exists. Relevant matched measurements override capability priors, which choose only cold-start experiments and never supply numeric evidence or clear a quality floor. `update` initializes applicable ledger records, preserving retrieval dates and sources. Never present the seed as current after its stated date.
 
@@ -82,7 +87,7 @@ Complete when every enabled pinned release or explicitly accepted mutable alias 
 
 ## Recommend
 
-Read `$HERE/references/pareto-selection.md`, then:
+Read `$HERE/references/pareto-selection.md`. Normalize the resolved profile, evidence, active Harness, exact main seat, workload, categorical workload requirements, overrides, adapter mappings, route/renew economics, and policy into the artifact contract in `$HERE/references/route-request.schema.json`, then obtain the decision through the `recommend()` Interface in `$HERE/scripts/route.py`. This is the same selection core as Route; never repeat hard filters, evidence classification, cost selection, or escalation as prose-only judgement. Render the returned detailed recommendation as follows:
 
 1. Resolve workload stratum, surface/harness, quality metric, budget or quality floor, latency/safety/availability filters and evidence date. State any inferred value.
 2. Select only enabled configured model versions, effort/serving modes and access channels. Prefer local production-shaped observations, then matched independent evaluations, then configuration-bearing first-party results; use prose tier claims only to choose experiments.
@@ -96,6 +101,10 @@ Start every recommendation with exactly one prominent, text-bearing status banne
 Immediately after a blue or orange banner, emit a section titled `Snabbaste vägen till mätdata` using the frozen experiment-brief contract in `$HERE/references/pareto-selection.md`. `recommend` remains offline and read-only: it plans the experiment but performs no network request, evaluation, or write. Normal work executes the brief, and `record` imports its observation artifact; do not add or imply an experiment command.
 
 Complete when the recommendation names an exact configuration and decision rule, every named alternative is comparable, and the user can see why dominated candidates lost.
+
+## Route
+
+Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the artifact against `$HERE/references/route-request.schema.json`; when it has no frozen snapshot, derive `context` from the selected data directory plus the active Harness, exact main seat, mappings, commercial policy, and normalized categorical workload requirements, then let the module freeze it through `freeze_context()`. Run `uv run "$HERE/scripts/route.py" <path>` with that canonical artifact and emit the helper's JSON response without commentary. The formal `--data` flag is consumed by this Skill adapter before the internal script invocation. Route never enters setup and performs no network access, evaluation, research, or persistent write.
 
 ## Chart
 

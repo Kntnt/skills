@@ -1,14 +1,1770 @@
 """Public contracts shipped by the model-selector Skill."""
 
 import hashlib
+import importlib.util
 import json
 import re
+import subprocess
+from copy import deepcopy
 from pathlib import Path
 from typing import Any, cast
 from urllib.parse import urlparse
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 MODEL_SELECTOR: Path = REPO_ROOT / "skills" / "models" / "model-selector"
+
+
+def _load_router() -> Any:
+    """Load the shipped public routing module from its installed path."""
+
+    path = MODEL_SELECTOR / "scripts" / "route.py"
+    spec = importlib.util.spec_from_file_location("model_selector_route", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _routing_snapshot() -> dict[str, Any]:
+    """Provide one frozen exact-point routing context."""
+
+    return {
+        "snapshot_version": 1,
+        "profile": {"revision": "profile-7", "valid": True},
+        "evidence": {
+            "identity": "ledger-9",
+            "vintage": "2026-08-01T00:00:00Z",
+            "records": [
+                {
+                    "model": "worker-v2",
+                    "portable_deliberation": "low",
+                    "workload_tags": ["python"],
+                    "quality": 0.93,
+                },
+                {
+                    "model": "worker-v2",
+                    "portable_deliberation": "high",
+                    "workload_tags": ["python"],
+                    "quality": 0.88,
+                },
+            ],
+        },
+        "harness": {
+            "name": "codex",
+            "surface": "subagent",
+            "inventory_revision": "inventory-3",
+            "inheritance": True,
+            "adapters": ["native"],
+        },
+        "main_seat": {
+            "model": "main-v3",
+            "channel": "native",
+            "serving_mode": "standard",
+            "native_deliberation": {"effort": "xhigh"},
+            "portable_deliberation": "xhigh",
+            "capability": 100,
+        },
+        "mappings": [
+            {
+                "model": "worker-v2",
+                "channel": "native",
+                "serving_mode": "standard",
+                "capability": 70,
+                "controls": {
+                    "low": {"effort": "low"},
+                    "medium": {"effort": "medium"},
+                    "high": {"effort": "high"},
+                    "xhigh": {"effort": "xhigh"},
+                    "max": {"effort": "xhigh"},
+                },
+                "launch": {
+                    "model_flag": "model",
+                    "deliberation_flag": "reasoning_effort",
+                },
+                "commercial": {
+                    "cash": 1.0,
+                    "rolling_quota": 2.0,
+                    "weekly_quota": 3.0,
+                    "allocated_subscription_cost": None,
+                    "latency": 4.0,
+                },
+            }
+        ],
+        "override_policy": {
+            "portable_levels": ["low", "medium", "high", "xhigh", "max"]
+        },
+    }
+
+
+def _complete_routing_snapshot() -> dict[str, Any]:
+    """Provide a complete point and a concrete data-driven Harness adapter."""
+
+    # Complete the configured point with exact identity and safety facts.
+    snapshot = _routing_snapshot()
+    point = snapshot["mappings"][0]
+    point.update(
+        {
+            "aliases": [],
+            "surface": "subagent",
+            "tools": ["shell", "apply_patch"],
+            "policy": {"sandbox": "workspace-write", "network": "disabled"},
+            "capabilities": ["routine-python"],
+            "model_capability": 70,
+            "enabled": True,
+            "control_capabilities": {
+                "low": 1,
+                "medium": 2,
+                "high": 3,
+                "xhigh": 4,
+                "max": 4,
+            },
+        }
+    )
+
+    # Freeze every mapped native control in its verified order.
+    point["controls"]["low"] = {"effort": "low", "summary": "auto"}
+    point["native_control_order"] = [
+        point["controls"]["low"],
+        point["controls"]["medium"],
+        point["controls"]["high"],
+        point["controls"]["xhigh"],
+    ]
+
+    # Complete the immutable main-seat identity and authority ceiling.
+    snapshot["main_seat"].update(
+        {
+            "surface": "subagent",
+            "adapter_id": "codex-main-seat",
+            "model_capability": 100,
+            "deliberation_capability": 4,
+            "tools": ["shell", "apply_patch"],
+            "policy": {"sandbox": "workspace-write", "network": "disabled"},
+        }
+    )
+
+    # Freeze selection policy and remove nominal evidence from cold-start tests.
+    snapshot["override_policy"].update(
+        {"cold_start": "select", "quality_floor": 0.9, "shadow_prices": None}
+    )
+    snapshot["evidence"]["records"] = []
+
+    # Declare one concrete adapter and its complete native translation.
+    snapshot["harness"]["adapter_specs"] = [
+        {
+            "adapter_id": "codex-native-subagent",
+            "channel": "native",
+            "harness": "codex",
+            "surface": "subagent",
+            "models": ["worker-v2"],
+            "serving_modes": ["standard"],
+            "native_controls": list(point["controls"].values()),
+            "tool_sets": [["shell", "apply_patch"]],
+            "policies": [
+                {"sandbox": "workspace-write", "network": "disabled"},
+                {"sandbox": "read-only", "network": "disabled"},
+            ],
+            "launch": {
+                "model_flag": "model",
+                "surface_flag": "surface",
+                "serving_mode_flag": "service_tier",
+                "native_control_flags": {
+                    "effort": "reasoning_effort",
+                    "summary": "reasoning_summary",
+                },
+                "tools_flag": "tools",
+                "policy_flags": {"sandbox": "sandbox", "network": "network"},
+            },
+        }
+    ]
+
+    # Remove the deliberately shallow legacy fixture fields.
+    snapshot["harness"].pop("adapters")
+    snapshot["main_seat"].pop("capability")
+    point.pop("capability")
+    point.pop("launch")
+    return snapshot
+
+
+def test_route_selects_an_exact_launchable_point() -> None:
+    """The public seam returns a complete Harness-native launch decision."""
+
+    # Route one controlled workload through the public deep-module seam.
+    result = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": _complete_routing_snapshot(),
+            "requests": [
+                {
+                    "request_id": "build-1",
+                    "authority": "execution",
+                    "stage": "build",
+                    "workload": "Change the Python parser",
+                    "workload_cohort": "python-refactor",
+                    "workload_tags": ["python"],
+                    "reversible": True,
+                    "checker": {"kind": "external", "signal": "pytest"},
+                    "overrides": {},
+                }
+            ],
+        }
+    )
+
+    # Assert the complete exact point, translation, and frozen provenance.
+    assert result["decisions"][0]["status"] == "selected"
+    assert result["decisions"][0]["launch"]["arguments"] == {
+        "model": "worker-v2",
+        "surface": "subagent",
+        "service_tier": "standard",
+        "reasoning_effort": "low",
+        "reasoning_summary": "auto",
+        "tools": ["shell", "apply_patch"],
+        "sandbox": "workspace-write",
+        "network": "disabled",
+    }
+    assert result["decisions"][0]["launch"]["native_deliberation"] == {
+        "effort": "low",
+        "summary": "auto",
+    }
+    assert result["snapshot"]["profile"]["revision"] == "profile-7"
+
+
+def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
+    """Reachability, translation, and identity cover every launch-relevant fact."""
+
+    # Resolve a nominal complete point through its concrete adapter.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    decision = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert every translated launch field and audit identity.
+    assert decision["launch"]["arguments"] == {
+        "model": "worker-v2",
+        "surface": "subagent",
+        "service_tier": "standard",
+        "reasoning_effort": "low",
+        "reasoning_summary": "auto",
+        "tools": ["shell", "apply_patch"],
+        "sandbox": "workspace-write",
+        "network": "disabled",
+    }
+    assert decision["launch"]["adapter_id"] == "codex-native-subagent"
+    assert decision["audit"]["provenance"] == {
+        "profile_revision": "profile-7",
+        "evidence_identity": "ledger-9",
+        "evidence_vintage": "2026-08-01T00:00:00Z",
+        "harness_inventory_revision": "inventory-3",
+        "main_seat_model": "main-v3",
+    }
+
+    # Add a model whose mismatched tool set makes its adapter unreachable.
+    filtered = _complete_routing_snapshot()
+    unreachable_point = deepcopy(filtered["mappings"][0])
+    unreachable_point.update({"model": "worker-v3", "tools": ["browser"]})
+    filtered["mappings"].append(unreachable_point)
+    filtered["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+    filtered_decision = router.route(
+        {
+            "schema_version": 1,
+            "context": filtered,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert selection and audit share the hard-filter authority.
+    assert filtered_decision["status"] == "selected"
+    assert filtered_decision["exclusions"] == [
+        {
+            "code": "adapter_unreachable",
+            "detail": "No active adapter can launch every field of this point.",
+            "model": "worker-v3",
+            "portable_deliberation": "low",
+        }
+    ]
+    assert filtered_decision["audit"]["exclusions"] == filtered_decision["exclusions"]
+
+    # Mutate the only point to prove incomplete adapter matches are refused.
+    changed_tools = _complete_routing_snapshot()
+    changed_tools["mappings"][0]["tools"] = ["shell"]
+    unreachable = router.route(
+        {
+            "schema_version": 1,
+            "context": changed_tools,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert no partial launch instruction escapes the adapter filter.
+    assert unreachable["status"] == "refused"
+    assert unreachable["reason"]["code"] == "empty_safe_candidate_set"
+    assert unreachable["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
+
+    # Collide model and native destinations in an otherwise complete adapter.
+    colliding = _complete_routing_snapshot()
+    colliding["harness"]["adapter_specs"][0]["launch"]["model_flag"] = (
+        "reasoning_effort"
+    )
+    collision = router.route(
+        {
+            "schema_version": 1,
+            "context": colliding,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert one argument destination can never overwrite another field.
+    assert collision["status"] == "refused"
+    assert collision["reason"]["code"] == "empty_safe_candidate_set"
+    assert collision["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
+
+    # Resolve launch-policy and non-launch commercial mutations separately.
+    changed_policy = _complete_routing_snapshot()
+    changed_policy["mappings"][0]["policy"]["sandbox"] = "read-only"
+    changed_commercial = _complete_routing_snapshot()
+    changed_commercial["mappings"][0]["commercial"]["cash"] = 99.0
+    policy_decision = router.route(
+        {
+            "schema_version": 1,
+            "context": changed_policy,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+    commercial_decision = router.route(
+        {
+            "schema_version": 1,
+            "context": changed_commercial,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert only launch-relevant changes alter the point fingerprint.
+    assert (
+        decision["launch"]["configuration_fingerprint"]
+        != policy_decision["launch"]["configuration_fingerprint"]
+    )
+    assert (
+        decision["launch"]["configuration_fingerprint"]
+        == commercial_decision["launch"]["configuration_fingerprint"]
+    )
+
+
+def test_route_requires_verified_mappings_below_the_complete_main_seat() -> None:
+    """Automatic, explicit, and max controls respect exact mapping ceilings."""
+
+    # Remove the lowest mapping and resolve automatic selection again.
+    router = _load_router()
+    missing_automatic = _complete_routing_snapshot()
+    missing_automatic["mappings"][0]["controls"].pop("low")
+    missing_automatic["mappings"][0]["control_capabilities"].pop("low")
+    missing_automatic["mappings"][0]["native_control_order"].pop(0)
+    missing_automatic["harness"]["adapter_specs"][0]["native_controls"] = list(
+        missing_automatic["mappings"][0]["controls"].values()
+    )
+    automatic = router.route(
+        {
+            "schema_version": 1,
+            "context": missing_automatic,
+            "requests": [_request()],
+        }
+    )["decisions"][0]
+
+    # Assert automatic routing excludes rather than guesses the missing value.
+    assert automatic["status"] == "selected"
+    assert automatic["launch"]["portable_deliberation"] == "medium"
+
+    # Supply an unverified max value outside the frozen native order.
+    unverified_max = _complete_routing_snapshot()
+    unverified_max["mappings"][0]["controls"]["max"] = {
+        "effort": "maximum",
+        "summary": "detailed",
+    }
+    max_decision = router.route(
+        {
+            "schema_version": 1,
+            "context": unverified_max,
+            "requests": [_request(overrides={"deliberation": "max"})],
+        }
+    )["decisions"][0]
+
+    # Assert invalid native ordering is refused before selection.
+    assert max_decision["status"] == "refused"
+    assert max_decision["reason"]["code"] == "invalid_snapshot"
+
+    # Lower only the main seat's deliberation ceiling and lock above it.
+    deliberation_ceiling = _complete_routing_snapshot()
+    deliberation_ceiling["main_seat"]["deliberation_capability"] = 2
+    above_deliberation = router.route(
+        {
+            "schema_version": 1,
+            "context": deliberation_ceiling,
+            "requests": [_request(overrides={"deliberation": "high"})],
+        }
+    )["decisions"][0]
+
+    # Assert the deliberation dimension independently enforces authority.
+    assert above_deliberation["status"] == "refused"
+    assert above_deliberation["reason"]["code"] == "above_main_seat_ceiling"
+
+    # Raise the worker model above the independent main-seat model ceiling.
+    model_ceiling = _complete_routing_snapshot()
+    model_ceiling["mappings"][0]["model_capability"] = 101
+    above_model = router.route(
+        {
+            "schema_version": 1,
+            "context": model_ceiling,
+            "requests": [_request(overrides={"model": "worker-v2"})],
+        }
+    )["decisions"][0]
+
+    # Assert the model dimension independently enforces authority.
+    assert above_model["status"] == "refused"
+    assert above_model["reason"]["code"] == "above_main_seat_ceiling"
+
+
+def _request(**changes: Any) -> dict[str, Any]:
+    """Build one valid execution request with explicit variations."""
+
+    request = {
+        "request_id": "route-1",
+        "authority": "execution",
+        "stage": "build",
+        "workload": "Change the Python parser",
+        "workload_cohort": "python-refactor",
+        "workload_tags": ["python"],
+        "reversible": True,
+        "checker": {"kind": "external", "signal": "pytest"},
+        "overrides": {},
+    }
+    request.update(changes)
+    return request
+
+
+def _measurement_record(decision: dict[str, Any], **changes: Any) -> dict[str, Any]:
+    """Build exact representative evidence from a public selected decision."""
+
+    launch = decision["launch"]
+    record = {
+        "configuration_fingerprint": launch["configuration_fingerprint"],
+        "model": launch["model"],
+        "portable_deliberation": launch["portable_deliberation"],
+        "native_deliberation": launch["native_deliberation"],
+        "channel": launch["channel"],
+        "harness": "codex",
+        "surface": launch["surface"],
+        "serving_mode": launch["serving_mode"],
+        "stage": "build",
+        "workload_cohort": "python-refactor",
+        "workload_tags": ["python"],
+        "representative": True,
+        "coverage": {"decision_relevant": True},
+        "uncertainty": {"lower_bound": 0.92, "upper_bound": 0.96},
+        "quality": 0.94,
+        "stale": False,
+    }
+    record.update(changes)
+    return record
+
+
+def test_route_preserves_batch_order_and_inherits_the_verdict_seat() -> None:
+    """Every request produces one same-position discriminated decision."""
+
+    # Route verdict and execution authority in one deliberately ordered batch.
+    verdict = _request(request_id="verdict", authority="verdict", stage="verify")
+    execution = _request(request_id="execution")
+    decisions = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": _complete_routing_snapshot(),
+            "requests": [verdict, execution],
+        }
+    )["decisions"]
+
+    # Assert order, exact inheritance, and launch-shape discrimination.
+    assert [decision["request_id"] for decision in decisions] == [
+        "verdict",
+        "execution",
+    ]
+    assert decisions[0]["status"] == "inherit"
+    assert decisions[0]["inheritance"]["main_seat"]["model"] == "main-v3"
+    assert "launch" not in decisions[0]
+    assert decisions[1]["status"] == "selected"
+
+
+def test_route_honors_independent_overrides_and_matched_lower_evidence() -> None:
+    """A model lock leaves effort selectable and evidence need not rank adjacency."""
+
+    # Resolve exact low and high controls before attaching matched evidence.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    snapshot["mappings"][0]["commercial"]["allocated_subscription_cost"] = 1.0
+    snapshot["mappings"][0]["controls"] = {
+        portable: snapshot["mappings"][0]["controls"][portable]
+        for portable in ("low", "high")
+    }
+    snapshot["mappings"][0]["control_capabilities"] = {"low": 1, "high": 3}
+    snapshot["mappings"][0]["native_control_order"] = list(
+        snapshot["mappings"][0]["controls"].values()
+    )
+    snapshot["harness"]["adapter_specs"][0]["native_controls"] = list(
+        snapshot["mappings"][0]["controls"].values()
+    )
+    low = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(overrides={"model": "worker-v2", "deliberation": "low"})
+            ],
+        }
+    )["decisions"][0]
+    high = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(overrides={"model": "worker-v2", "deliberation": "high"})
+            ],
+        }
+    )["decisions"][0]
+    snapshot["evidence"]["records"] = [
+        _measurement_record(low),
+        _measurement_record(
+            high,
+            quality=0.9,
+            uncertainty={"lower_bound": 0.9, "upper_bound": 0.92},
+        ),
+    ]
+
+    # Lock only the model and let measured quality choose deliberation.
+    result = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"model": "worker-v2"})],
+        }
+    )["decisions"][0]
+
+    # Assert lower deliberation wins without a monotonic quality assumption.
+    assert result["launch"]["model"] == "worker-v2"
+    assert result["launch"]["portable_deliberation"] == "low"
+    assert result["evidence_class"] == "measurement_based"
+
+
+def test_route_freezes_max_native_value_in_the_fingerprint() -> None:
+    """Max resolves from the snapshot and changes exact-point identity."""
+
+    # Resolve max once, then construct a later valid native maximum.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    first = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "max"})],
+        }
+    )
+    changed = _complete_routing_snapshot()
+    changed_native = {"effort": "maximum", "summary": "detailed"}
+    changed["mappings"][0]["controls"]["xhigh"] = changed_native
+    changed["mappings"][0]["controls"]["max"] = changed_native
+    changed["mappings"][0]["native_control_order"][-1] = changed_native
+    changed["harness"]["adapter_specs"][0]["native_controls"] = list(
+        changed["mappings"][0]["controls"].values()
+    )
+
+    # Reuse the first snapshot and independently route the later context.
+    reused = router.route(
+        {
+            "schema_version": 1,
+            "snapshot": first["snapshot"],
+            "requests": [_request(overrides={"deliberation": "max"})],
+        }
+    )
+    later = router.route(
+        {
+            "schema_version": 1,
+            "context": changed,
+            "requests": [_request(overrides={"deliberation": "max"})],
+        }
+    )
+
+    # Assert reuse is stable while a new native maximum changes identity.
+    assert first["decisions"] == reused["decisions"]
+    assert first["decisions"][0]["launch"]["native_deliberation"] == {"effort": "xhigh"}
+    assert (
+        first["decisions"][0]["launch"]["configuration_fingerprint"]
+        != later["decisions"][0]["launch"]["configuration_fingerprint"]
+    )
+
+
+def test_route_emits_only_a_bounded_adjacent_escalation() -> None:
+    """Only one fully bound, launchable, below-seat retry may escalate."""
+
+    # Resolve the exact prior attempt and bind an externally verified failure.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    selected = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+    launch = selected["launch"]
+    prior = {
+        field: launch[field]
+        for field in (
+            "configuration_fingerprint",
+            "model",
+            "channel",
+            "surface",
+            "serving_mode",
+            "adapter_id",
+            "portable_deliberation",
+            "native_deliberation",
+        )
+    }
+    verified_failure = {
+        **prior,
+        "outcome": "failed",
+        "checker": {"kind": "external", "signal": "pytest"},
+    }
+    request = _request(
+        overrides={"deliberation": "low"},
+        retry_available=True,
+        prior=prior,
+        verified_failure=verified_failure,
+    )
+    escalation = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [request]}
+    )["decisions"][0]["next_escalation"]
+
+    # Assert the one adjacent step is complete and consumes an existing retry.
+    assert escalation["model"] == "worker-v2"
+    assert escalation["portable_deliberation"] == "medium"
+    assert escalation["native_deliberation"] == {"effort": "medium"}
+    assert escalation["configuration_fingerprint"].startswith("sha256:")
+    assert escalation["arguments"]["reasoning_effort"] == "medium"
+    assert escalation["consumes_existing_retry"] is True
+
+    # Enumerate retry, point, native-control, and checker binding failures.
+    mismatches: list[dict[str, Any]] = [
+        {"retry_available": False},
+        {"prior": {**prior, "model": "other"}},
+        {
+            "verified_failure": {
+                **verified_failure,
+                "native_deliberation": {"effort": "medium"},
+            }
+        },
+        {
+            "verified_failure": {
+                **verified_failure,
+                "checker": {"kind": "external", "signal": "mypy"},
+            }
+        },
+    ]
+
+    # Assert every mismatched predecessor suppresses escalation.
+    for mismatch in mismatches:
+        changed_request = deepcopy(request)
+        changed_request.update(mismatch)
+        decision = router.route(
+            {
+                "schema_version": 1,
+                "context": snapshot,
+                "requests": [changed_request],
+            }
+        )["decisions"][0]
+        assert decision["next_escalation"] is None, mismatch
+
+    # Lower the main-seat ceiling beneath the otherwise valid adjacent step.
+    bounded = deepcopy(snapshot)
+    bounded["main_seat"]["deliberation_capability"] = 1
+    bounded_decision = router.route(
+        {"schema_version": 1, "context": bounded, "requests": [request]}
+    )["decisions"][0]
+
+    # Assert escalation applies the same complete authority ceiling.
+    assert bounded_decision["next_escalation"] is None
+
+
+def test_route_inherits_without_a_profile_or_discriminating_evidence() -> None:
+    """Absence and honest uncertainty never trigger setup or invented facts."""
+
+    # Route independently with absent profile and inheritance-only cold start.
+    snapshot = _complete_routing_snapshot()
+    snapshot["profile"] = None
+    absent = _load_router().route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+    snapshot = _complete_routing_snapshot()
+    snapshot["evidence"]["records"] = []
+    snapshot["override_policy"]["cold_start"] = "inherit"
+    uncertain = _load_router().route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Assert both safe inheritance reasons remain explicit and distinct.
+    assert absent["status"] == "inherit"
+    assert absent["inheritance"]["reason"] == "missing_profile"
+    assert uncertain["status"] == "inherit"
+    assert uncertain["inheritance"]["reason"] == "insufficient_evidence"
+
+
+def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
+    """Invalid, unavailable, unsafe, and empty states fail before launch."""
+
+    # Build one controlled case for every stable unsafe-state family.
+    cases: list[tuple[dict[str, Any], dict[str, Any], str]] = []
+    invalid = _complete_routing_snapshot()
+    invalid["profile"]["valid"] = False
+    cases.append((invalid, _request(), "invalid_profile"))
+    cases.append(
+        (
+            _complete_routing_snapshot(),
+            _request(overrides={"deliberation": "auto"}),
+            "invalid_request",
+        )
+    )
+    cases.append(
+        (
+            _complete_routing_snapshot(),
+            _request(overrides={"model": "missing"}),
+            "unavailable_override",
+        )
+    )
+    unavailable = _complete_routing_snapshot()
+    unavailable["mappings"][0]["controls"].pop("xhigh")
+    unavailable["mappings"][0]["control_capabilities"].pop("xhigh")
+    unavailable["harness"]["adapter_specs"][0]["native_controls"] = list(
+        unavailable["mappings"][0]["controls"].values()
+    )
+    cases.append(
+        (
+            unavailable,
+            _request(overrides={"deliberation": "xhigh"}),
+            "unavailable_override",
+        )
+    )
+    unknown = _complete_routing_snapshot()
+    unknown["main_seat"]["model_capability"] = None
+    cases.append((unknown, _request(), "unknown_main_seat_ceiling"))
+    above = _complete_routing_snapshot()
+    above["mappings"][0]["model_capability"] = 101
+    cases.append(
+        (above, _request(overrides={"model": "worker-v2"}), "above_main_seat_ceiling")
+    )
+    unreachable = _complete_routing_snapshot()
+    unreachable["harness"]["adapter_specs"] = []
+    cases.append((unreachable, _request(), "empty_safe_candidate_set"))
+    verdict = _complete_routing_snapshot()
+    verdict["harness"]["inheritance"] = False
+    cases.append(
+        (verdict, _request(authority="verdict"), "unrepresentable_verdict_inheritance")
+    )
+
+    # Assert every family refuses through the public seam without a launch.
+    for snapshot, request, expected in cases:
+        decision = _load_router().route(
+            {"schema_version": 1, "context": snapshot, "requests": [request]}
+        )["decisions"][0]
+        assert decision["status"] == "refused"
+        assert decision["reason"]["code"] == expected
+        assert "launch" not in decision
+
+
+def test_recommend_renders_a_refusal_without_claiming_an_exploration_start() -> None:
+    """A refused route remains an honest non-selection in human output."""
+
+    # Adapt an unavailable exact model through the human recommendation seam.
+    recommendation = _load_router().recommend(
+        {
+            "schema_version": 1,
+            "context": _complete_routing_snapshot(),
+            "requests": [_request(overrides={"model": "missing"})],
+        }
+    )["recommendations"][0]
+
+    # Assert the banner explains the shared refusal without proposing a launch.
+    assert recommendation["decision"]["status"] == "refused"
+    assert recommendation["evidence_banner"]["text"] == "🔵 INGEN REKOMMENDATION"
+    assert recommendation["evidence_banner"]["classification_reason"] == (
+        "unavailable_override"
+    )
+    assert recommendation["evidence_banner"]["recommendation_kind"] == "no_selection"
+    assert recommendation["experiment_brief"] is None
+
+
+def test_route_derives_a_snapshot_once_and_resolves_exact_aliases() -> None:
+    """Current inputs become a reusable snapshot before alias resolution."""
+
+    # Route caller-derived current context through the public freezing seam.
+    router = _load_router()
+    context = _complete_routing_snapshot()
+    context["mappings"][0]["aliases"] = ["worker-latest"]
+    original = deepcopy(context)
+    frozen = router.freeze_context(context)
+    result = router.route(
+        {
+            "schema_version": 1,
+            "context": context,
+            "requests": [_request(overrides={"model": "worker-latest"})],
+        }
+    )
+
+    # Assert the snapshot is frozen before its exact alias resolves.
+    assert context == original
+    assert result["snapshot"] == frozen
+    assert result["snapshot"]["snapshot_identity"].startswith("sha256:")
+    assert result["decisions"][0]["launch"]["model"] == "worker-v2"
+    assert result["decisions"][0]["launch"]["resolved_alias"] == "worker-latest"
+
+
+def test_route_refuses_invalid_snapshots_and_ambiguous_aliases() -> None:
+    """Unreproducible context and non-exact aliases are never guessed."""
+
+    # Route a structurally incomplete snapshot and one ambiguous alias set.
+    invalid = _complete_routing_snapshot()
+    invalid.pop("commercial_facts", None)
+    invalid.pop("mappings")
+    invalid_response = _load_router().route(
+        {"schema_version": 1, "context": invalid, "requests": [_request()]}
+    )
+    ambiguous = _complete_routing_snapshot()
+    ambiguous["mappings"][0]["aliases"] = ["worker-latest"]
+    duplicate = deepcopy(ambiguous["mappings"][0])
+    duplicate["model"] = "worker-v3"
+    ambiguous["mappings"].append(duplicate)
+    ambiguous_decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": ambiguous,
+            "requests": [_request(overrides={"model": "worker-latest"})],
+        }
+    )["decisions"][0]
+
+    # Assert both shared-state failures refuse at their correct boundary.
+    assert invalid_response["artifact_refusal"]["code"] == "invalid_snapshot"
+    assert invalid_response["decisions"] == []
+    assert ambiguous_decision["reason"]["code"] == "ambiguous_override"
+
+
+def test_route_cli_is_machine_readable_and_does_not_modify_its_input(
+    tmp_path: Path,
+) -> None:
+    """The shipped process seam emits JSON while leaving local state untouched."""
+
+    # Persist one valid canonical artifact and retain its original bytes.
+    artifact = tmp_path / "route.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "context": _complete_routing_snapshot(),
+                "requests": [_request()],
+            }
+        ),
+        encoding="utf-8",
+    )
+    before = artifact.read_bytes()
+
+    # Execute the packaged script through its declared uv runtime.
+    completed = subprocess.run(
+        ["uv", "run", str(MODEL_SELECTOR / "scripts" / "route.py"), str(artifact)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    # Assert machine output and the route's read-only boundary.
+    assert json.loads(completed.stdout)["decisions"][0]["status"] == "selected"
+    assert completed.stderr == ""
+    assert artifact.read_bytes() == before
+
+
+def test_route_cli_returns_stable_artifact_refusals_without_tracebacks(
+    tmp_path: Path,
+) -> None:
+    """Arguments, paths, JSON, and envelope errors remain machine-readable."""
+
+    # Build one process-boundary artifact for every CLI failure family.
+    script = str(MODEL_SELECTOR / "scripts" / "route.py")
+    malformed_json = tmp_path / "malformed.json"
+    malformed_json.write_text("{not-json", encoding="utf-8")
+    invalid_envelope = tmp_path / "invalid.json"
+    invalid_envelope.write_text(
+        json.dumps({"schema_version": 1, "requests": []}), encoding="utf-8"
+    )
+    cases = [
+        ([], "invalid_arguments"),
+        ([str(tmp_path / "absent.json")], "unreadable_artifact"),
+        ([str(malformed_json)], "malformed_json"),
+        ([str(invalid_envelope)], "invalid_request"),
+    ]
+
+    # Assert each failure has the same stable no-traceback process shape.
+    for arguments, expected in cases:
+        completed = subprocess.run(
+            ["uv", "run", script, *arguments],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        response = json.loads(completed.stdout)
+        assert completed.returncode == 2, expected
+        assert completed.stderr == "", expected
+        assert response["artifact_refusal"]["code"] == expected
+        assert response["artifact_refusal"]["detail"], expected
+        assert response["decisions"] == [], expected
+
+
+def test_route_rejects_non_finite_numbers_at_direct_and_cli_seams(
+    tmp_path: Path,
+) -> None:
+    """Python-only NaN and infinity values never enter the JSON contract."""
+
+    # Submit every non-finite float through the direct public seam.
+    router = _load_router()
+    for value in (float("nan"), float("inf"), float("-inf")):
+        context = _complete_routing_snapshot()
+        context["mappings"][0]["commercial"]["cash"] = value
+        response = router.route(
+            {"schema_version": 1, "context": context, "requests": [_request()]}
+        )
+        assert response["artifact_refusal"]["code"] == "invalid_snapshot"
+
+    # Persist Python's permissive NaN token and invoke the machine seam.
+    context = _complete_routing_snapshot()
+    context["mappings"][0]["commercial"]["cash"] = float("nan")
+    artifact = tmp_path / "non-finite.json"
+    artifact.write_text(
+        json.dumps({"schema_version": 1, "context": context, "requests": [_request()]}),
+        encoding="utf-8",
+    )
+    completed = subprocess.run(
+        ["uv", "run", str(MODEL_SELECTOR / "scripts" / "route.py"), str(artifact)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    # Assert a stable refusal containing only strict JSON numeric syntax.
+    assert completed.returncode == 2
+    assert json.loads(completed.stdout)["artifact_refusal"]["code"] == (
+        "invalid_snapshot"
+    )
+    assert "NaN" not in completed.stdout
+    assert "Infinity" not in completed.stdout
+
+
+def test_route_and_recommend_refuse_malformed_envelopes_without_exceptions() -> None:
+    """Both public seams preserve stable artifact refusals for invalid envelopes."""
+
+    # Prepare malformed shared context and a malformed top-level batch.
+    router = _load_router()
+    artifacts = [
+        {"schema_version": 1, "snapshot": [], "requests": [_request()]},
+        {"schema_version": 1, "requests": []},
+    ]
+
+    # Resolve both public forms through each invalid envelope.
+    for artifact in artifacts:
+        routed = router.route(artifact)
+        recommended = router.recommend(artifact)
+
+        # Assert the human adapter preserves the compact refusal exactly.
+        assert routed["artifact_refusal"]["code"] == "invalid_request"
+        assert recommended["artifact_refusal"] == routed["artifact_refusal"]
+        assert recommended["recommendations"] == []
+
+
+def test_route_outputs_conform_to_the_shipped_response_schema() -> None:
+    """Every public result family satisfies the versioned response contract."""
+
+    # Produce selected, inherited, refused, and artifact-level responses.
+    router = _load_router()
+    context = _complete_routing_snapshot()
+    missing_profile = deepcopy(context)
+    missing_profile["profile"] = None
+    responses = [
+        router.route(
+            {"schema_version": 1, "context": context, "requests": [_request()]}
+        ),
+        router.route(
+            {
+                "schema_version": 1,
+                "context": missing_profile,
+                "requests": [_request()],
+            }
+        ),
+        router.route(
+            {
+                "schema_version": 1,
+                "context": context,
+                "requests": [_request(overrides={"model": "missing"})],
+            }
+        ),
+        router.route({"schema_version": 1, "requests": []}),
+    ]
+
+    # Resolve the response schema's external request-snapshot reference.
+    for response in responses:
+        errors = router._schema_errors(
+            response,
+            router.RESPONSE_SCHEMA,
+            router.RESPONSE_SCHEMA,
+            "response",
+        )
+        assert errors == []
+
+    # Prove the validator enforces the refusal branch's empty decision bound.
+    invalid_refusal = deepcopy(responses[-1])
+    invalid_refusal["decisions"].append(responses[0]["decisions"][0])
+    errors = router._schema_errors(
+        invalid_refusal,
+        router.RESPONSE_SCHEMA,
+        router.RESPONSE_SCHEMA,
+        "response",
+    )
+    assert errors
+
+
+def test_route_labels_stale_measurements_mixed_and_keeps_costs_separate() -> None:
+    """Staleness remains visible and commercial dimensions are not collapsed."""
+
+    # Bind stale evidence to one otherwise exact selected configuration.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    selected = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+    snapshot["evidence"]["records"] = [_measurement_record(selected, stale=True)]
+    decision = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert staleness and each independent commercial fact remain visible.
+    assert decision["evidence_class"] == "mixed"
+    assert decision["launch"]["commercial"] == {
+        "cash": 1.0,
+        "rolling_quota": 2.0,
+        "weekly_quota": 3.0,
+        "allocated_subscription_cost": None,
+        "latency": 4.0,
+    }
+
+    # Adapt the same stale record through the human recommendation seam.
+    recommendation = router.recommend(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["recommendations"][0]
+
+    # Assert presentation cannot revive inapplicable evidence.
+    assert recommendation["uncertainty"]["status"] == "unknown"
+
+
+def test_route_requires_exact_representative_evidence_for_measurement_class() -> None:
+    """Partial, stale, uncertain, or weak evidence never becomes green."""
+
+    # Derive one exact representative record from a selected launch point.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    snapshot["evidence"]["records"] = []
+    explicit = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+    exact = _measurement_record(explicit)
+    snapshot["evidence"]["records"] = [exact]
+
+    # Route the exact record as the positive measurement-based control.
+    measured = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert exact applicability alone earns the production evidence class.
+    assert measured["status"] == "selected"
+    assert measured["evidence_class"] == "measurement_based"
+
+    # Mutate every decision-relevant applicability and quality-floor dimension.
+    partial_records = [
+        {**exact, "stale": True},
+        {**exact, "stage": "verify"},
+        {**exact, "channel": "gateway"},
+        {**exact, "native_deliberation": {"effort": "medium"}},
+        {**exact, "representative": False},
+        {**exact, "coverage": {"decision_relevant": False}},
+        {**exact, "uncertainty": None},
+    ]
+
+    # Assert every partial record remains visibly mixed rather than green.
+    for partial in partial_records:
+        changed = deepcopy(snapshot)
+        changed["evidence"]["records"] = [partial]
+        decision = router.route(
+            {
+                "schema_version": 1,
+                "context": changed,
+                "requests": [_request(overrides={"deliberation": "low"})],
+            }
+        )["decisions"][0]
+        assert decision["status"] == "selected"
+        assert decision["evidence_class"] == "mixed", partial
+
+    # Keep an exact conservative failure out of heuristic selection.
+    below_floor = deepcopy(snapshot)
+    below_floor["evidence"]["records"] = [
+        {
+            **exact,
+            "uncertainty": {"lower_bound": 0.82, "upper_bound": 0.96},
+        }
+    ]
+    failing = router.route(
+        {
+            "schema_version": 1,
+            "context": below_floor,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+    assert failing["status"] == "inherit"
+    assert failing["inheritance"]["reason"] == "quality_floor_not_cleared"
+
+    # Move the record to an unrelated workload cohort.
+    unrelated = deepcopy(snapshot)
+    unrelated["evidence"]["records"] = [
+        {**exact, "workload_cohort": "typescript-frontend"}
+    ]
+    heuristic = router.route(
+        {
+            "schema_version": 1,
+            "context": unrelated,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert unrelated evidence remains unknown and heuristic.
+    assert heuristic["status"] == "selected"
+    assert heuristic["evidence_class"] == "heuristic"
+
+
+def test_route_keeps_unmeasured_candidates_unknown_beside_measurements() -> None:
+    """A measured point cannot dominate a candidate with unknown evidence."""
+
+    # Configure two launchable models at one locked deliberation value.
+    router = _load_router()
+    context = _complete_routing_snapshot()
+    second = deepcopy(context["mappings"][0])
+    second.update({"model": "worker-v3", "model_capability": 80})
+    context["mappings"].append(second)
+    context["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+
+    # Bind representative evidence to only the first candidate.
+    first = router.route(
+        {
+            "schema_version": 1,
+            "context": context,
+            "requests": [
+                _request(overrides={"model": "worker-v2", "deliberation": "low"})
+            ],
+        }
+    )["decisions"][0]
+    context["evidence"]["records"] = [_measurement_record(first)]
+
+    # Route both models without pretending the unknown candidate is dominated.
+    decision = router.route(
+        {
+            "schema_version": 1,
+            "context": context,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert honest inheritance and an explicit missing-evidence audit fact.
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "insufficient_evidence"
+    assert decision["audit"]["exclusions"][-1]["code"] == "missing_exact_evidence"
+
+    # Adapt the same incomplete coverage without hiding the unknown candidate.
+    recommendation = router.recommend(
+        {
+            "schema_version": 1,
+            "context": context,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["recommendations"][0]
+    assert recommendation["uncertainty"]["status"] == "mixed"
+    assert {
+        candidate["status"] for candidate in recommendation["uncertainty"]["candidates"]
+    } == {"measured", "unknown"}
+
+
+def test_route_excludes_exact_evidence_known_below_the_quality_floor() -> None:
+    """A known failing point cannot re-enter selection as a heuristic."""
+
+    # Resolve one exact candidate before attaching failing evidence.
+    router = _load_router()
+    context = _complete_routing_snapshot()
+    request = _request(overrides={"model": "worker-v2", "deliberation": "low"})
+    selected = router.route(
+        {"schema_version": 1, "context": context, "requests": [request]}
+    )["decisions"][0]
+    context["evidence"]["records"] = [
+        _measurement_record(
+            selected,
+            quality=0.82,
+            uncertainty={"lower_bound": 0.8, "upper_bound": 0.84},
+        )
+    ]
+
+    # Route again through the same exact point and quality policy.
+    decision = router.route(
+        {"schema_version": 1, "context": context, "requests": [request]}
+    )["decisions"][0]
+
+    # Assert the known failing evidence yields inheritance rather than launch.
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "quality_floor_not_cleared"
+    assert decision["audit"]["exclusions"][-1]["code"] == "quality_floor_not_cleared"
+
+    # Adapt the inherited point without discarding its measured interval.
+    recommendation = router.recommend(
+        {"schema_version": 1, "context": context, "requests": [request]}
+    )["recommendations"][0]
+    assert recommendation["uncertainty"]["status"] == "measured"
+    assert recommendation["uncertainty"]["candidates"][0]["lower_bound"] == 0.8
+    assert recommendation["uncertainty"]["candidates"][0]["upper_bound"] == 0.84
+
+
+def test_route_requires_snapshot_identity_but_freezes_current_context() -> None:
+    """Only returned snapshots may bypass current-context derivation."""
+
+    # Submit identical unsigned facts through frozen and current-context fields.
+    router = _load_router()
+    unsigned = _complete_routing_snapshot()
+    refused = router.route(
+        {"schema_version": 1, "snapshot": unsigned, "requests": [_request()]}
+    )
+    derived = router.route(
+        {"schema_version": 1, "context": unsigned, "requests": [_request()]}
+    )
+
+    # Mutate one returned snapshot without changing its frozen identity.
+    tampered = deepcopy(derived["snapshot"])
+    tampered["profile"]["revision"] = "profile-8"
+    mismatch = router.route(
+        {"schema_version": 1, "snapshot": tampered, "requests": [_request()]}
+    )
+
+    # Assert only current context is signed and stale signatures are refused.
+    assert refused["artifact_refusal"]["code"] == "invalid_snapshot"
+    assert refused["decisions"] == []
+    assert derived["decisions"][0]["status"] == "selected"
+    assert derived["snapshot"]["snapshot_identity"].startswith("sha256:")
+    assert mismatch["decisions"][0]["reason"]["code"] == "invalid_snapshot"
+
+
+def test_route_cold_start_uses_workload_safety_before_economics() -> None:
+    """Safe exploration starts weak; unchecked irreversible work starts strong."""
+
+    # Configure weak and strong launchable points without matched measurements.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    stronger = deepcopy(snapshot["mappings"][0])
+    stronger.update({"model": "worker-v3", "model_capability": 90})
+    snapshot["mappings"].append(stronger)
+    snapshot["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+
+    # Route checked reversible and unchecked irreversible work independently.
+    safe = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+    consequential = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(
+                    reversible=False,
+                    checker={"kind": "none"},
+                )
+            ],
+        }
+    )["decisions"][0]
+
+    # Assert workload safety chooses opposite cold-start endpoints.
+    assert safe["launch"]["model"] == "worker-v2"
+    assert safe["launch"]["portable_deliberation"] == "low"
+    assert consequential["launch"]["model"] == "worker-v3"
+    assert consequential["launch"]["portable_deliberation"] == "max"
+    assert consequential["evidence_class"] == "heuristic"
+
+
+def test_route_cold_start_filters_by_explicit_workload_requirements() -> None:
+    """Cold-start strength follows frozen workload capability facts."""
+
+    # Freeze distinct categorical workload support on weak and strong points.
+    snapshot = _complete_routing_snapshot()
+    stronger = deepcopy(snapshot["mappings"][0])
+    stronger.update(
+        {
+            "model": "worker-v3",
+            "model_capability": 90,
+            "capabilities": ["routine-python", "architecture"],
+        }
+    )
+    snapshot["mappings"].append(stronger)
+    snapshot["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+    artifact = {
+        "schema_version": 1,
+        "context": snapshot,
+        "requests": [
+            _request(request_id="routine", required_capabilities=["routine-python"]),
+            _request(request_id="architecture", required_capabilities=["architecture"]),
+        ],
+    }
+
+    # Route routine and architectural requirements through one ordered batch.
+    decisions = _load_router().route(artifact)["decisions"]
+
+    # Assert the requirement filter precedes weakest-capable selection.
+    assert [decision["launch"]["model"] for decision in decisions] == [
+        "worker-v2",
+        "worker-v3",
+    ]
+    assert decisions[1]["audit"]["exclusions"][0]["code"] == (
+        "workload_capability_mismatch"
+    )
+
+
+def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
+    """Separate commercial dimensions prevent an invented universal winner."""
+
+    # Configure two exact points with opposing commercial dimensions.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    first = snapshot["mappings"][0]
+    first["commercial"] = {
+        "cash": 1.0,
+        "rolling_quota": 4.0,
+        "weekly_quota": 2.0,
+        "allocated_subscription_cost": 1.0,
+        "latency": 4.0,
+    }
+    second = deepcopy(first)
+    second.update(
+        {
+            "model": "worker-v3",
+            "model_capability": 80,
+            "commercial": {
+                "cash": 2.0,
+                "rolling_quota": 1.0,
+                "weekly_quota": 1.0,
+                "allocated_subscription_cost": 2.0,
+                "latency": 2.0,
+            },
+        }
+    )
+    snapshot["mappings"].append(second)
+    snapshot["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+
+    # Resolve each exact point before binding representative measurements.
+    first_decision = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(overrides={"model": "worker-v2", "deliberation": "low"})
+            ],
+        }
+    )["decisions"][0]
+    second_decision = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(overrides={"model": "worker-v3", "deliberation": "low"})
+            ],
+        }
+    )["decisions"][0]
+    snapshot["evidence"]["records"] = [
+        _measurement_record(
+            first_decision,
+            quality=0.94,
+            uncertainty={"lower_bound": 0.92, "upper_bound": 0.96},
+        ),
+        _measurement_record(
+            second_decision,
+            quality=0.96,
+            uncertainty={"lower_bound": 0.94, "upper_bound": 0.98},
+        ),
+    ]
+
+    # Route without a conversion policy across the two-point frontier.
+    ambiguous = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert incomparable dimensions produce audited inheritance.
+    assert ambiguous["status"] == "inherit"
+    assert ambiguous["inheritance"]["reason"] == "underdetermined_frontier"
+    assert len(ambiguous["audit"]["frontier"]) == 2
+
+    # Adapt the unresolved measured frontier with its explicit quality rubric.
+    unresolved = router.recommend(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(
+                    overrides={"deliberation": "low"},
+                    rubric={"kind": "binary", "pass_condition": "pytest passes"},
+                )
+            ],
+        }
+    )["recommendations"][0]
+
+    # Assert unresolved evidence retains an executable measurement path.
+    assert unresolved["decision"]["status"] == "inherit"
+    assert unresolved["evidence_banner"]["class"] == "mixed"
+    assert "STARTPUNKT" not in unresolved["evidence_banner"]["text"]
+    assert unresolved["evidence_banner"]["classification_reason"] == (
+        "underdetermined_frontier"
+    )
+    assert unresolved["evidence_banner"]["missing_evidence"]
+    assert unresolved["evidence_banner"]["recommendation_kind"] == "no_selection"
+    assert unresolved["uncertainty"]["status"] == "measured"
+    assert len(unresolved["uncertainty"]["candidates"]) == 2
+    assert {
+        candidate["lower_bound"]
+        for candidate in unresolved["uncertainty"]["candidates"]
+    } == {0.92, 0.94}
+    assert unresolved["experiment_brief"]["rubric"] == {
+        "kind": "binary",
+        "pass_condition": "pytest passes",
+    }
+    assert unresolved["experiment_brief"]["record_import"]["command"] == (
+        "/model-selector record <path>"
+    )
+
+    # Make the second point demonstrably worse on quality and every cost axis.
+    dominated = deepcopy(snapshot)
+    dominated["mappings"][1]["commercial"] = {
+        "cash": 3.0,
+        "rolling_quota": 5.0,
+        "weekly_quota": 3.0,
+        "allocated_subscription_cost": 2.0,
+        "latency": 5.0,
+    }
+    dominated["evidence"]["records"][1].update(
+        {
+            "quality": 0.91,
+            "uncertainty": {"lower_bound": 0.9, "upper_bound": 0.92},
+        }
+    )
+    dominant = router.route(
+        {
+            "schema_version": 1,
+            "context": dominated,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert exact Pareto dominance selects the sole frontier point.
+    assert dominant["status"] == "selected"
+    assert dominant["launch"]["model"] == "worker-v2"
+
+    # Supply a complete explicit shadow-price policy for every non-cash axis.
+    priced = deepcopy(snapshot)
+    priced["override_policy"]["shadow_prices"] = {
+        "rolling_quota": 1.0,
+        "weekly_quota": 0.1,
+        "allocated_subscription_cost": 0.1,
+        "latency": 0.1,
+    }
+    selected = router.route(
+        {
+            "schema_version": 1,
+            "context": priced,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert only the explicit conversion policy resolves the tradeoff.
+    assert selected["status"] == "selected"
+    assert selected["launch"]["model"] == "worker-v3"
+    assert selected["launch"]["commercial"] == snapshot["mappings"][1]["commercial"]
+    assert selected["audit"]["decision_policy"] == "explicit_shadow_prices"
+
+    # Adapt the same measured decision into the detailed human form.
+    recommendation = router.recommend(
+        {
+            "schema_version": 1,
+            "context": priced,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["recommendations"][0]
+
+    # Assert presentation retains the shared point, frontier, and uncertainty.
+    assert recommendation["decision"] == selected
+    assert recommendation["evidence_banner"]["class"] == "measurement_based"
+    assert recommendation["frontier_neighbors"][0]["model"] == "worker-v2"
+    assert recommendation["uncertainty"] == {
+        "status": "measured",
+        "lower_bound": 0.94,
+        "upper_bound": 0.98,
+    }
+    assert recommendation["experiment_brief"] is None
+
+
+def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> None:
+    """Human economic constraints select through the same exact routing core."""
+
+    # Configure points whose route and renewal cost order is reversed.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    first = snapshot["mappings"][0]
+    first["commercial"].update({"cash": 1.0, "allocated_subscription_cost": 5.0})
+    second = deepcopy(first)
+    second.update(
+        {
+            "model": "worker-v3",
+            "model_capability": 80,
+            "commercial": {
+                **first["commercial"],
+                "cash": 2.0,
+                "allocated_subscription_cost": 2.0,
+            },
+        }
+    )
+    snapshot["mappings"].append(second)
+    snapshot["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+
+    # Resolve exact fingerprints before adding representative evidence.
+    first_decision = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(overrides={"model": "worker-v2", "deliberation": "low"})
+            ],
+        }
+    )["decisions"][0]
+    second_decision = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(overrides={"model": "worker-v3", "deliberation": "low"})
+            ],
+        }
+    )["decisions"][0]
+    snapshot["evidence"]["records"] = [
+        _measurement_record(first_decision),
+        _measurement_record(second_decision),
+    ]
+
+    # Express route and renewal floors through the shared structured request.
+    route_request = _request(
+        overrides={"deliberation": "low"},
+        economics={"decision": "route", "quality_floor": 0.9},
+    )
+    renew_request = _request(
+        request_id="renew",
+        overrides={"deliberation": "low"},
+        economics={"decision": "renew", "quality_floor": 0.9},
+    )
+    budget_request = _request(
+        request_id="budget",
+        overrides={"deliberation": "low"},
+        economics={"decision": "route", "budget": 1.5},
+    )
+    decision_only_request = _request(
+        request_id="decision-only",
+        overrides={"deliberation": "low"},
+        economics={"decision": "route"},
+    )
+
+    # Resolve the same economic batch through compact and human forms.
+    routed = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                route_request,
+                renew_request,
+                budget_request,
+                decision_only_request,
+            ],
+        }
+    )["decisions"]
+    recommended = router.recommend(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                route_request,
+                renew_request,
+                budget_request,
+                decision_only_request,
+            ],
+        }
+    )["recommendations"]
+
+    # Assert each dimension chooses correctly without presentation drift.
+    assert [decision["launch"]["model"] for decision in routed[:3]] == [
+        "worker-v2",
+        "worker-v3",
+        "worker-v2",
+    ]
+    assert [item["decision"] for item in recommended] == routed
+    assert [decision["audit"]["decision_policy"] for decision in routed[:3]] == [
+        "quality_floor_cash",
+        "quality_floor_allocated_subscription_cost",
+        "budget_cash",
+    ]
+    assert routed[3]["status"] == "inherit"
+    assert routed[3]["inheritance"]["reason"] == "underdetermined_frontier"
+
+
+def test_route_and_recommend_share_selection_but_not_presentation() -> None:
+    """Both public forms adapt one exact selection result without semantic drift."""
+
+    # Prepare one heuristic exact-point artifact for both public adapters.
+    router = _load_router()
+    artifact = {
+        "schema_version": 1,
+        "context": _complete_routing_snapshot(),
+        "requests": [_request(overrides={"deliberation": "low"})],
+    }
+
+    # Resolve compact and detailed forms from independent artifact copies.
+    route_result = router.route(deepcopy(artifact))
+    recommend_result = router.recommend(deepcopy(artifact))
+    recommendation = recommend_result["recommendations"][0]
+
+    # Assert shared semantics and the human-only evidence presentation.
+    assert recommendation["decision"] == route_result["decisions"][0]
+    assert recommendation["evidence_banner"] == {
+        "class": "heuristic",
+        "text": "🔵 HEURISTISK STARTPUNKT",
+        "confidence": "low",
+        "classification_reason": "Representative exact-point measurements did not determine the selected point.",
+        "missing_evidence": [
+            "representative exact-point evidence clearing the quality floor"
+        ],
+        "recommendation_kind": "exploration_start",
+        "production_recommendation": False,
+    }
+    assert recommendation["frontier_neighbors"] == []
+    assert recommendation["uncertainty"]["status"] == "unknown"
+    fingerprints = recommendation["experiment_brief"]["configuration_fingerprints"]
+    assert (
+        fingerprints[0]
+        == route_result["decisions"][0]["launch"]["configuration_fingerprint"]
+    )
+    assert len(fingerprints) == 2
+    assert fingerprints[0] != fingerprints[1]
+    assert recommendation["experiment_brief"]["checker"] == {
+        "kind": "external",
+        "signal": "pytest",
+    }
+    assert recommendation["experiment_brief"]["sequential_plan"]
+    assert recommendation["experiment_brief"]["parallel_plan"]
+
+
+def test_route_totally_validates_nested_snapshot_and_request_families() -> None:
+    """Malformed nested state becomes detailed refusals rather than exceptions."""
+
+    # Enumerate malformed values across every shared snapshot family.
+    snapshot_changes: list[tuple[str, Any]] = [
+        ("profile", {"revision": 7, "valid": True}),
+        (
+            "evidence",
+            {"identity": "ledger-9", "vintage": "2026-08-01T00:00:00Z", "records": {}},
+        ),
+        ("harness", {"name": "codex", "adapters": "native", "inheritance": True}),
+        ("main_seat", {"model": "main-v3", "capability": "highest"}),
+        ("mappings", [{"model": "worker-v2", "controls": []}]),
+        (
+            "mappings",
+            [
+                {
+                    **_complete_routing_snapshot()["mappings"][0],
+                    "commercial": {"cash": "cheap"},
+                }
+            ],
+        ),
+        ("override_policy", {"portable_levels": ["low", "high"]}),
+    ]
+
+    # Assert malformed shared state receives one schema-valid artifact refusal.
+    for family, malformed in snapshot_changes:
+        snapshot = _complete_routing_snapshot()
+        snapshot[family] = malformed
+        response = _load_router().route(
+            {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+        )
+        assert response["artifact_refusal"]["code"] == "invalid_snapshot", family
+        assert response["artifact_refusal"]["detail"], family
+        assert response["snapshot"] is None, family
+        assert response["decisions"] == [], family
+
+    # Enumerate malformed values across every nested request family.
+    request_changes: list[tuple[str, Any]] = [
+        ("request_id", 7),
+        ("checker", []),
+        ("overrides", []),
+        ("prior", []),
+        ("verified_failure", []),
+    ]
+
+    # Assert one bad request cannot erase or corrupt its valid batch peer.
+    for family, malformed in request_changes:
+        invalid_request = _request(request_id="invalid")
+        invalid_request[family] = malformed
+        decisions = _load_router().route(
+            {
+                "schema_version": 1,
+                "context": _complete_routing_snapshot(),
+                "requests": [invalid_request, _request(request_id="valid")],
+            }
+        )["decisions"]
+        assert [decision["request_id"] for decision in decisions] == [
+            "invalid" if family != "request_id" else None,
+            "valid",
+        ]
+        assert decisions[0]["status"] == "refused", family
+        assert decisions[0]["reason"]["code"] == "invalid_request", family
+        assert decisions[0]["reason"]["detail"], family
+        assert decisions[1]["status"] == "selected", family
 
 
 def _read(relative: str) -> str:
@@ -297,3 +2053,67 @@ def test_commands_keep_capability_priors_offline_and_append_only() -> None:
     assert manifest["record_type"] == "seed_manifest"
     assert "capability_prior" in manifest["scope"]
     _assert_contains_all(skill, command_rules)
+
+
+def test_route_exposes_the_public_model_routing_contract() -> None:
+    """Delegated callers receive ordered, exact, reproducible decisions."""
+
+    skill = _read("SKILL.md")
+    route_help = _read("help/route.md")
+    route_contract = _read("references/model-routing.md")
+    public_contract = f"{skill}\n{route_help}\n{route_contract}"
+    required_fragments = {
+        "`selected`, `inherit`, or `refused`",
+        "same order",
+        "low`, `medium`, `high`, `xhigh`, and `max",
+        "profile revision",
+        "evidence vintage and identity",
+        "Harness inventory",
+        "main-seat identity",
+        "control mappings",
+        "commercial facts",
+        "override policy",
+        "configuration fingerprint",
+        "Harness-native launch arguments",
+        "exact configured model version or resolved alias",
+        "native deliberation control",
+        "serving mode",
+        "evidence class",
+        "provenance",
+        "exclusions",
+        "bounded next escalation",
+        "never starts setup",
+        "performs no network access",
+        "writes no configuration or evidence",
+    }
+
+    _assert_contains_all(public_contract, required_fragments)
+    assert "| `route` | `$HERE/help/route.md` |" in skill
+    assert "/model-selector route <path>" in skill
+
+
+def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
+    """Routing cannot approximate an unsafe or unreachable exact point."""
+
+    contract = _read("references/model-routing.md")
+    required_fragments = {
+        "invalid_profile",
+        "ambiguous_override",
+        "unavailable_override",
+        "unknown_main_seat_ceiling",
+        "above_main_seat_ceiling",
+        "unrepresentable_verdict_inheritance",
+        "empty_safe_candidate_set",
+        "locks only that dimension",
+        "actual spawn capabilities",
+        "concrete current-Harness adapter",
+        "never interpolates, rounds, or guesses",
+        "adjacency does not imply quality ordering",
+        "matched evidence may prefer a lower portable level",
+        "Missing evidence remains unknown",
+        "external checker or declared failure signal",
+        "one adjacent portable level on the same model",
+        "Cash, rolling quota, weekly quota, allocated subscription cost, and latency",
+    }
+
+    _assert_contains_all(contract, required_fragments)

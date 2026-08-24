@@ -8,6 +8,8 @@ model-selector - compare configured AI model systems by price and performance
 
 **/model-selector** [**recommend**] [*WORKLOAD*] [**--decision=route**|**--decision=renew**] [**--budget=**_AMOUNT_|**--quality=**_SCORE_] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
+**/model-selector** **route** *PATH* [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
 **/model-selector** (**chart**|**compare**) *WORKLOAD* [**--decision=route**|**--decision=renew**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 **/model-selector** **setup** [**--data=**_PATH_] [**--** *INSTRUCTION*]
@@ -37,6 +39,10 @@ The bundled seed contains dated public model identities, categorical low-confide
 **recommend** [*WORKLOAD*]
 
 Choose one exact configuration and report its nearest cheaper and stronger comparable frontier neighbours. Bare `/model-selector` uses this command when the current workload is unambiguous.
+
+**route** *PATH*
+
+Resolve one versioned structured request or ordered batch into exact, Harness-native launch decisions and a reusable frozen snapshot without setup, network access, evaluation, or persistent writes.
 
 **chart** *WORKLOAD*
 
@@ -92,6 +98,8 @@ For `update`, check every relevant mutable index once regardless of cadence. Kno
 
 `recommend` opens with exactly one text-bearing evidence banner: `🔵 HEURISTISK STARTPUNKT` for an exploratory point chosen from workload heuristics and capability priors, `🟠 BLANDAD EVIDENS` when measurements exist but a decision-relevant heuristic assumption remains, or `🟢 MÄTDATABASERAD REKOMMENDATION` when representative matched measurements determine the exact point and its conservative quality clears the floor. The words carry the status; emoji color only reinforces it. Every banner states the classification reason, confidence, missing evidence, and whether the point is an exploration start or a production recommendation.
 
+`route` emits structured `selected`, `inherit`, or `refused` decisions in request order. Only selection carries Harness-native launch arguments; every refusal carries a stable reason. Its returned snapshot freezes all routing inputs needed to reproduce later decisions.
+
 The recommendation names the exact configuration, its decision rule, comparable neighbours, exclusions, uncertainty, and staleness. If the evidence cannot support the comparison, it identifies the missing evidence and proposes the smallest discriminating evaluation instead of inventing a rank.
 
 After a blue or orange banner, `Snabbaste vägen till mätdata` gives an agent-ready sequential and parallel experiment brief with frozen task inputs, exact adjacent configurations, checker, measurements, run bound, stopping rule, and a `record`-compatible observation artifact. `recommend` plans the experiment but performs no network request, evaluation, or write; normal work executes the brief, and no separate experiment command exists.
@@ -122,6 +130,10 @@ No changed source is a successful `update`. Unreachable or insufficient evidence
 
 Select an exact configured system for a repository-refactoring workload using marginal routing economics.
 
+**/model-selector route ./routing-request.json**
+
+Resolve a caller-owned request artifact without changing profile or evidence state.
+
 **/model-selector update --force**
 
 Check every relevant mutable source once while retaining known immutable details and recorded observations.
@@ -150,7 +162,7 @@ The following schematic cases pin the split independently of any one Skill's For
 
 ## DEPENDENCIES
 
-None. Network access is used only by `update`; every other command operates on bundled or locally stored evidence and reports insufficiency.
+`uv` runs the shipped offline routing module. Network access is used only by `update`; every other command operates on bundled or locally stored evidence and reports insufficiency.
 
 ## SEE ALSO
 

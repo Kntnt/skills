@@ -10,7 +10,7 @@ model-selector recommend - select an exact configured model system for a workloa
 
 ## DESCRIPTION
 
-`model-selector recommend` builds comparable Pareto frontiers from configured model systems and stored evidence, then selects one exact model, effort or thinking setting, Harness, tool policy, access channel, and commercial schedule. When *WORKLOAD* is omitted, the current task is used only when it is unambiguous.
+`model-selector recommend` builds comparable Pareto frontiers from configured model systems and stored evidence, then selects one exact model, effort or thinking setting, Harness, tool policy, access channel, and commercial schedule. It resolves complete points, categorical workload requirements, hard filters, evidence classes, uncertainty, multidimensional costs, route/renew decisions, budgets, quality floors, and escalation through the same executable selection core as `route`, then adds the detailed human presentation. When *WORKLOAD* is omitted, the current task is used only when it is unambiguous.
 
 When representative matched measurements do not determine the exact point, cold start first chooses the weakest plausibly capable enabled model and then its lowest plausibly sufficient supported reasoning control. Reversible, objectively checked work begins there and escalates one adjacent reasoning rung only after verified failure. High-consequence or irreversible work without a trustworthy checker uses the strongest plausible enabled configuration and refuses unsafe exploration.
 
@@ -66,7 +66,7 @@ When this Skill invokes another Skill, it passes only relevant guidance through 
 
 ## DEPENDENCIES
 
-None. The command reads bundled or locally stored evidence and reports when it is insufficient.
+`uv` runs the shared offline selection module. The command reads bundled or locally stored evidence and reports when it is insufficient.
 
 ## SEE ALSO
 
