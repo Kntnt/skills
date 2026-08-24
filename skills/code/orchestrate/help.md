@@ -16,7 +16,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 Blocking relations produce dependency waves. Wave one contains tickets that can start immediately; each later wave contains work unblocked by earlier verified work. Native tracker dependency relations are authoritative when present. A ticket with no native relation may declare bare `#number` references on a `Blocked by` line. A closed blocker continues to block until it has a done Ticket Resolution.
 
-The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Before its first claim, it sends the current frontier as one ordered batch through model-selector's read-only public route Interface and freezes the returned snapshot in resumable run state. Builders, amenders, collision repairers, rebuilders, and mechanical wave fixers launch only with their selected exact Harness-native controls. Every ticket, amend, repair, and wave verdict inherits the orchestrator's complete model and deliberation configuration exactly; no builder override or route can affect it.
+The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Before any claim, it sends the starting frontier as one ordered batch through model-selector's public route Interface and freezes the returned snapshot for the whole run. Every later frontier, replacement claim, amend, collision repair, rebuild, and mechanical wave fix is decided from that same frozen snapshot, in a request of its own, before it runs; nothing is claimed or dispatched that it has no acceptable decision for. Builders, amenders, collision repairers, rebuilders, and mechanical wave fixers launch with their selected exact Harness-native controls, or on the exact main seat where the decision reported inheritance. Every ticket, amend, repair, and wave verdict inherits the orchestrator's complete model and deliberation configuration exactly and is never routed at all; no builder override or route decision can affect it.
 
 Before claiming anything, the Skill reads every ticket in scope for a decision the text leaves open and asks all such questions in one batch. Answers are posted to the corresponding ticket before building. With `--yes`, an open decision cannot be answered, so the ticket is parked under `needs-info` with its question and the rest of the scope continues.
 
@@ -88,7 +88,7 @@ With `--at-once 1`, unverified work is on the run branch, so an unrepaired failu
 
 ## CONTINUING A RUN
 
-Restart an interrupted run with the same invocation and durable per-session state directory. There is no resume option. Recorded outcomes remain settled, and numbered amend markers preserve the exact builder, verifier, passed-verdict, or failed-verdict phase together with the latest complete verdict needed by a resumed builder. The frozen routing snapshot is not reconstructed from current profile, evidence, price, alias, or Harness state: if the route account is absent or unreadable while a claim remains, the run stops before it can select or claim more work. Repeating the same named attempt and phase resumes it without appending another event or spending the next attempt. A legacy unnumbered amend marker counts as attempt one.
+Restart an interrupted run with the same invocation and durable per-session state directory. There is no resume option. Recorded outcomes remain settled, and numbered amend markers preserve the exact builder, verifier, passed-verdict, or failed-verdict phase together with the latest complete verdict needed by a resumed builder. The frozen routing account is not reconstructed from current profile, evidence, price, alias, or Harness state: where it is absent while a claim of this run's remains, or where it cannot be read at all, the run stops rather than routing its remaining work from a context it never ran under. `--model` and `--deliberation` are part of that account, so a re-invocation that changes or drops either is refused rather than treated as a continuation. Repeating the same named attempt and phase resumes it without appending another event or spending the next attempt. A legacy unnumbered amend marker counts as attempt one.
 
 A ticket still claimed by the current user is resumed only when the Skill can distinguish an interrupted claim from another active run. If the tracker cannot identify the current user, the Skill stops rather than guessing.
 
@@ -150,6 +150,10 @@ Assume yes for every yes-or-no question. A ticket containing an open choice is p
 
 Working trees, branches, reservations, and ticket scratch space used when concurrency requires isolation. Successful ticket resources are removed after integration. Failed and conflicted resources remain for inspection; abandoned repair and blocked partial builds are discarded.
 
+**Per-session state directory**
+
+Two records of one run. The claim account — claimed tickets, tracker login, planned frontier, and base commit — is remembered rather than relied on: the tracker and the branch reconstruct it, so losing it costs a tracker call. The frozen routing account — the snapshot every decision was made under, the invocation's model and deliberation locks, and every exact decision — has no second source, so the run refuses to plan, route, or claim without it rather than deciding remaining work from current profile, evidence, price, alias, or Harness state.
+
 **Run-owned append files**
 
 Builders leave proposed entries for files every ticket must append to, such as a changelog, in ticket-specific notes. The orchestrator applies those notes serially after each wave, and the combined branch verifies the entries with the rest of the work.
@@ -157,6 +161,8 @@ Builders leave proposed entries for files every ticket must append to, such as a
 ## DIAGNOSTICS
 
 An invalid reference, option, option value, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`.
+
+Routing is refused rather than adjusted. A response that is not this run's frozen snapshot, that changes that snapshot under its own identity, that is not the plan's starting frontier in plan order, that carries `--model` or `--deliberation` other than the ones the first frontier was routed under, or that decides a verdict role is rejected and nothing is frozen. A claim, amend, repair, rebuild, or wave fix whose exact role has no acceptable decision in that frozen account is refused before it runs. A route refusal is reported with its stable reason code and starts no work.
 
 The working tree must contain no uncommitted non-ignored work when the run plans and immediately before a ticket closes. Commit or stash such work and restart. A repository with no ready ticket, no workable frontier, or only externally claimed work is reported without starting a build.
 

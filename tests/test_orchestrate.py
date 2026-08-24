@@ -1640,76 +1640,215 @@ def test_the_manpage_says_delivery_lines_are_not_criteria() -> None:
     )
 
 
-def test_the_build_step_uses_the_frozen_execution_decision() -> None:
-    """Model-selector, not prose judgment, owns the exact builder configuration."""
+def test_the_build_step_launches_on_the_decision_route_made_for_that_ticket() -> None:
+    """Selection is model-selector's, and the builder launches on exactly what it said.
+
+    ADR-0074 sent building down the ladder on the orchestrator's own judgment
+    of a ticket's text. A model name turned out not to be the whole of an
+    execution configuration — the same model exposes materially different
+    deliberation controls — and a judgment made from prose cannot be
+    reproduced when a resumed run reads different profiles, prices, and
+    mappings. ADR-0085 supersedes it: the decision comes back from the public
+    Interface, named for the ticket it was made for, and the builder launches
+    on it exactly.
+    """
 
     step = _step(6)
 
-    assert "selected exact Harness-native model and deliberation controls" in step
-    assert "locks only model" in step
-    assert "`--deliberation` only deliberation" in step
+    assert "selected exact Harness-native model and deliberation controls" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 launches each builder on the exact"
+        f" Harness-native model and deliberation controls its decision"
+        f" returned, rather than on a model name it chose itself (ADR-0085)."
+    )
+    assert "`build-<number>` decision" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 names the decision each builder launches"
+        f" on — the one made for that ticket — because a decision nothing can"
+        f" be matched to is one no dispatch can be held to (ADR-0085)."
+    )
+    assert "exact main seat where that decision reported inheritance" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 says what a reported inheritance means"
+        f" for a builder — it launches on the exact main seat, the run"
+        f" continuing safely with optimisation unavailable (ADR-0085)."
+    )
+    assert (
+        "locks only model" in step and "`--deliberation` only deliberation" in step
+    ), (
+        f"{SKILL / 'SKILL.md'}: step 6 keeps the two overrides field-level — a"
+        f" named model locks the model dimension and nothing else, a named"
+        f" deliberation the deliberation dimension and nothing else"
+        f" (ADR-0085)."
+    )
 
 
-def test_every_verdict_step_names_the_orchestrators_own_model() -> None:
+def test_every_verdict_step_inherits_the_orchestrators_own_seat() -> None:
     """Ticket verification, amended verdicts, repair verification, and the wave check.
 
     The verifiers on the inherited arrangement were the strongest part of
     every interviewed run, and the verdict is the only thing standing between
     an unattended night and a report the developer cannot trust (ADR-0074).
+    What ADR-0085 changes is only how much of the seat is inherited: the
+    complete model and deliberation configuration, not a model name.
     """
 
     for number in (7, 9, 10, 11):
         step = _step(number)
 
         assert "exact inherited main-seat" in step or "exact inheritance" in step, (
-            f"{SKILL / 'SKILL.md'}: step {number} runs its verdict on the"
-            f" orchestrator's own model. A verdict sent down the ladder takes"
-            f" the saving at the last thing that would catch a mistake"
-            f" (ADR-0074)."
+            f"{SKILL / 'SKILL.md'}: step {number} runs its verdict by exact"
+            f" inheritance of the orchestrating session's own seat. A verdict"
+            f" sent down the ladder takes the saving at the last thing that"
+            f" would catch a mistake (ADR-0074, ADR-0085)."
+        )
+        assert (
+            "no route decision of its own" in step or "Never route a verdict" in step
+        ), (
+            f"{SKILL / 'SKILL.md'}: step {number} says its verdict is not"
+            f" routed at all. Inheritance is authority here rather than a"
+            f" decision that happened to come back inheriting, so there is no"
+            f" request to make for it (ADR-0085)."
         )
 
 
-def test_the_verify_step_states_exact_main_seat_inheritance() -> None:
-    """Verdict authority carries the complete configuration rather than a model name."""
+def test_the_verify_step_states_exact_main_seat_inheritance_and_its_reason() -> None:
+    """The rule travels with its reason, or the next edit trades the verdict away."""
 
     step = _step(7)
 
     assert (
-        "exact inheritance of the orchestrating session's complete main-seat model and deliberation configuration"
-        in step
+        "exact inheritance of the orchestrating session's complete main-seat "
+        "model and deliberation configuration" in step
+    ), (
+        f"{SKILL / 'SKILL.md'}: step 7 states what a verdict inherits in full —"
+        f" the complete main-seat model and deliberation configuration, not a"
+        f" model name (ADR-0085)."
     )
-    assert "no route, flag, circumstance, or failure may downgrade it" in step
+    assert "no route, flag, circumstance, or failure may downgrade it" in step, (
+        f"{SKILL / 'SKILL.md'}: step 7 names everything that may not downgrade"
+        f" the verdict's seat, a route decision among them (ADR-0085)."
+    )
+    assert (
+        "the saving is never taken at the last thing that would catch a mistake" in step
+    ), (
+        f"{SKILL / 'SKILL.md'}: step 7 states the rule as the record states it"
+        f" — the saving is never taken at the last thing that would catch a"
+        f" mistake (ADR-0074)."
+    )
 
 
-def test_the_amend_and_repair_dispatches_delegate_as_builds_do() -> None:
-    """Repairing a collision and amending a failed build are building.
+def test_every_building_role_is_routed_and_named_for_what_it_builds() -> None:
+    """Amending, repairing, rebuilding, and fixing a wave are all building.
 
-    Left unnamed, the two dispatches keep the silent inheritance the build
-    step just lost — and the amend carries a signal of its own: a ticket back
-    for its amend has just demonstrated it was harder than it looked
-    (ADR-0074, issue #83).
+    Left unnamed, each of those dispatches keeps the silent inheritance the
+    build step just lost. Each is named here rather than described, because
+    the name is what the engine matches a decision to when the dispatch it
+    covers is about to run (ADR-0085).
     """
 
-    for number in (9, 10):
+    named = {
+        6: "`build-<number>`",
+        9: "`amend-<number>-<attempt>`",
+        10: "`repair-<number>`",
+        11: "`wave-fix-<n>`",
+    }
+
+    for number, request in named.items():
         step = _step(number)
 
+        assert request in step, (
+            f"{SKILL / 'SKILL.md'}: step {number} names the request its"
+            f" building role is routed as, {request}, so the decision it"
+            f" launches on can be found again (ADR-0085)."
+        )
         assert "frozen snapshot" in step, (
-            f"{SKILL / 'SKILL.md'}: step {number} chooses its dispatch's model"
-            f" as step 6 chooses a builder's, in those words — one judgment"
-            f" stated once, not three drifting apart (ADR-0074)."
+            f"{SKILL / 'SKILL.md'}: step {number} routes from the run's one"
+            f" frozen snapshot rather than from whatever the environment says"
+            f" by then (ADR-0085)."
         )
 
-    assert "bounded adjacent escalation" in _step(9)
+    assert "`rebuild-<number>`" in _step(10), (
+        f"{SKILL / 'SKILL.md'}: step 10's rebuild is a building role of its"
+        f" own and is routed as one (ADR-0085)."
+    )
+    assert "bounded adjacent escalation" in _step(9), (
+        f"{SKILL / 'SKILL.md'}: step 9 says what an amend's decision may do"
+        f" with the verified failure it carries — only the bounded adjacent"
+        f" escalation the Interface returns (ADR-0083)."
+    )
 
 
-def test_the_manpage_model_entry_carries_the_judged_default() -> None:
-    """The flag keeps exactly its meaning; what changes is the default underneath it."""
+def test_the_amend_routes_each_attempt_as_its_own_request() -> None:
+    """Attempt two's escalation is no part of what attempt one was decided on.
 
+    A continuation that reused attempt one's decision would carry the point
+    that had already been tried and found wanting, and the bounded escalation
+    the failed verdict buys would have nowhere to appear (ADR-0083).
+    """
+
+    step = _step(9)
+
+    assert "Each attempt is its own request" in step, (
+        f"{SKILL / 'SKILL.md'}: step 9 routes each amend attempt separately —"
+        f" what attempt 1 was decided on says nothing about attempt 2"
+        f" (ADR-0085)."
+    )
+    assert "consumes the amend the ticket was already spending" in step, (
+        f"{SKILL / 'SKILL.md'}: step 9 says an escalation spends no new"
+        f" attempt: it consumes the amend the ticket was already spending, or"
+        f" the two-attempt bound would not be a bound (ADR-0083)."
+    )
+
+
+def test_the_manpage_model_entry_locks_one_dimension_and_no_verdict() -> None:
+    """The flag narrows to its own dimension; the other stays automatic."""
+
+    where = SKILL / "help.md"
     model_entry = _manpage_entry("OPTIONS", "**--model**")
 
-    assert "Lock only the building model dimension" in model_entry
-    assert "still selects deliberation" in model_entry
-    assert "exact main-seat inheritance" in model_entry
+    assert "Lock only the building model dimension" in model_entry, (
+        f"{where}: the `--model` entry says what naming a model does now — it"
+        f" locks the model dimension for every building role and leaves"
+        f" deliberation to route (ADR-0085)."
+    )
+    assert "still selects deliberation" in model_entry, (
+        f"{where}: the `--model` entry states what is left automatic"
+        f" underneath the flag (ADR-0085)."
+    )
+    assert "never falls through" in model_entry, (
+        f"{where}: the `--model` entry says an exact model that cannot be"
+        f" launched is refused rather than replaced by a neighbour"
+        f" (ADR-0083)."
+    )
+    assert "exact main-seat inheritance" in model_entry, (
+        f"{where}: the `--model` entry says every verdict keeps exact"
+        f" main-seat inheritance, whatever the builders were locked to"
+        f" (ADR-0085)."
+    )
+
+
+def test_the_manpage_deliberation_entry_takes_the_five_portable_levels() -> None:
+    """The portable scale is exactly five values, and a sixth is refused."""
+
+    where = SKILL / "help.md"
+    entry = _manpage_entry("OPTIONS", "**--deliberation**")
+
+    assert "Lock only the building deliberation dimension" in entry, (
+        f"{where}: the `--deliberation` entry locks the deliberation dimension"
+        f" for every building role and nothing else (ADR-0085)."
+    )
+    for level in ("low", "medium", "high", "xhigh", "max"):
+        assert f"`{level}`" in entry, (
+            f"{where}: the `--deliberation` entry names {level}, one of the"
+            f" five public portable values (ADR-0083)."
+        )
+    assert "refused rather than normalized" in entry, (
+        f"{where}: the `--deliberation` entry says another value is refused"
+        f" rather than read as a neighbour — a level the Interface cannot map"
+        f" is a level nothing can launch (ADR-0083)."
+    )
+    assert "exact main-seat inheritance" in entry, (
+        f"{where}: the `--deliberation` entry says a verdict is never affected"
+        f" by it (ADR-0085)."
+    )
 
 
 def test_the_manpage_advises_running_from_the_strongest_model() -> None:
@@ -1751,53 +1890,186 @@ def test_the_manpage_says_the_gate_is_resolved_once() -> None:
     )
 
 
-def test_routing_is_a_preclaim_batch_and_verdicts_inherit_the_main_seat() -> None:
-    """Route owns execution selection while the orchestrator retains verdict authority."""
+def test_the_dependency_on_model_selector_is_declared_everywhere_it_is_read() -> None:
+    """The route Interface is the only seam, so the Skill it belongs to is a hard one."""
 
     skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
-    model_entry = _manpage_entry("OPTIONS", "**--model**")
-    deliberation_entry = _manpage_entry("OPTIONS", "**--deliberation**")
+    dependencies = _manpage_section("DEPENDENCIES")
 
-    assert 'kntnt.skills: "model-selector"' in skill
-    assert skill.index("Before step 4") > skill.index("3. Before anything is claimed")
-    assert "one versioned model-selector route request" in skill
-    assert "complete main-seat model and deliberation configuration" in skill
-    assert "selected exact Harness-native model and deliberation controls" in skill
-    assert "Lock only the building model dimension" in model_entry
-    assert "Lock only the building deliberation dimension" in deliberation_entry
+    assert 'kntnt.skills: "model-selector"' in skill, (
+        f"{SKILL / 'SKILL.md'}: the frontmatter declares model-selector as a"
+        f" hard Skill Dependency, which is what the checker reads and what"
+        f" Select resolves before this Skill is Enabled (issue #94)."
+    )
+    assert (
+        "model-selector" in skill.partition("\n---\n")[0].partition("compatibility:")[2]
+    ), (
+        f"{SKILL / 'SKILL.md'}: the compatibility line names model-selector"
+        f" too, that being the sentence a reader outside the collection gets"
+        f" (issue #94)."
+    )
+    assert "Model Selector" in dependencies or "model-selector" in dependencies, (
+        f"{SKILL / 'help.md'}: the dependencies section names model-selector,"
+        f" so the dependency is visible where a developer reads about the"
+        f" Skill rather than only where a script checks it (issue #94)."
+    )
+    assert "public Interface" in skill or "public Model Routing Module" in skill, (
+        f"{SKILL / 'SKILL.md'}: the body reaches model-selector through its"
+        f" public Interface alone — never its private references, private"
+        f" scripts, or a second copy of its selection rules (ADR-0083)."
+    )
 
 
-def test_a_dry_run_preflights_routing_without_settling_ticket_decisions() -> None:
-    """A dry run is an observable routing preview, never a tracker mutation."""
+def test_routing_is_reached_before_every_claim_and_not_only_the_first() -> None:
+    """Route before claim is an invariant of the run, not a paragraph on its first path.
+
+    The preflight sits inside step 3, and step 11's clean pass is what a
+    second wave arrives through. A pass that jumped straight to step 4 would
+    claim a newly unblocked ticket that nothing had decided — which is the
+    same defect as never routing at all, arriving one wave later.
+    """
+
+    preflight = _step(3)
+    wave = _step(11)
+    claim = _step(4)
+
+    assert "before step 4 and every time this step is reached" in preflight, (
+        f"{SKILL / 'SKILL.md'}: step 3's preflight states that it routes every"
+        f" frontier it is reached with, not only the run's first (issue #94)."
+    )
+    assert "back through step 2 and step 3" in wave, (
+        f"{SKILL / 'SKILL.md'}: step 11's clean pass returns through step 3,"
+        f" where the open-decision check and the routing preflight are. A pass"
+        f" that returned to step 4 would claim an unrouted wave (issue #94)."
+    )
+    assert "route that replacement from the same frozen snapshot" in claim, (
+        f"{SKILL / 'SKILL.md'}: step 4 routes a replacement ticket before its"
+        f" own claim, from the same frozen snapshot — a claim collision is not"
+        f" a licence to claim something nothing decided (issue #94)."
+    )
+    assert "the engine refuses a claim it has no decision for" in claim, (
+        f"{SKILL / 'SKILL.md'}: step 4 says the rule is enforced rather than"
+        f" asked for: the claim verb itself refuses a ticket its frozen"
+        f" routing never decided (issue #94)."
+    )
+
+
+def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
+    """A dry run is read for what a run would do, and a run it started is not that."""
 
     step = _step(2)
 
-    assert "read-only routing preflight" in step
-    assert "proposed decisions and routing readiness" in step
-    assert "without claiming, starting setup, or writing" in step
-    assert "does not enter step 3" in step
+    assert "read-only routing preflight" in step, (
+        f"{SKILL / 'SKILL.md'}: step 2's dry run performs the routing"
+        f" preflight, so what it reports is the decisions a real run would"
+        f" launch on rather than a graph alone (issue #94)."
+    )
+    assert "proposed decisions and routing readiness" in step, (
+        f"{SKILL / 'SKILL.md'}: step 2 says what the dry preflight renders (issue #94)."
+    )
+    assert "does not enter step 3" in step, (
+        f"{SKILL / 'SKILL.md'}: step 2's dry run never reaches the step that"
+        f" comments on and parks tickets — it changes no ticket at all"
+        f" (issue #94)."
+    )
+    assert "The dry route response is not persisted" in step, (
+        f"{SKILL / 'SKILL.md'}: step 2 says the dry preflight freezes nothing,"
+        f" a frozen snapshot being state a dry run may not leave behind"
+        f" (issue #94)."
+    )
+    assert "without claiming, starting setup, or writing" in step, (
+        f"{SKILL / 'SKILL.md'}: step 2 names what a dry run does not write —"
+        f" model-selector configuration, evidence, ledger, and run state among"
+        f" them (issue #94)."
+    )
 
 
-def test_routing_covers_every_execution_and_verdict_dispatch_role() -> None:
-    """Every builder is routed while every independent verdict retains the main seat."""
+def test_the_run_says_which_half_of_its_state_is_rebuilt_and_which_is_not() -> None:
+    """The two halves of the state directory are read very differently.
 
-    execution_steps = {
-        6: "initial builder",
-        9: "amend",
-        10: "collision repair",
-        11: "mechanical wave fix",
-    }
-    verdict_steps = {
-        7: "ticket verification",
-        9: "amend verification",
-        10: "repair verification",
-        11: "wave checking",
-    }
+    ADR-0051 and ADR-0052 make the run's account a reading of the tracker and
+    the branch, recoverable wherever the session's own memory is gone. The
+    frozen routing has no such second source, so the Skill says plainly which
+    rule applies to which half rather than leaving a reader to assume the
+    older one covers both (ADR-0085).
+    """
 
-    for number, role in execution_steps.items():
-        assert "selected exact" in _step(number), role
+    body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    continuing = _manpage_section("CONTINUING A RUN")
 
-    assert "route the rebuild" in _step(10)
+    assert "remembered rather than relied on" in body, (
+        f"{SKILL / 'SKILL.md'}: the state paragraph keeps ADR-0052's rule for"
+        f" the run's ordinary account — the tracker and the branch say all of"
+        f" it again (ADR-0052)."
+    )
+    assert "refuses to plan, route, or claim" in body, (
+        f"{SKILL / 'SKILL.md'}: the state paragraph says what a lost or"
+        f" damaged frozen routing costs — the run stops rather than deciding"
+        f" the rest of itself from what is current (ADR-0085)."
+    )
+    assert (
+        "it refuses, those being the locks its first frontier was routed under" in body
+    ), (
+        f"{SKILL / 'SKILL.md'}: the state paragraph says a re-invocation"
+        f" cannot change `--model` or `--deliberation` mid-run: a resume that"
+        f" relocked would be a second run reporting as the first (ADR-0085)."
+    )
+    assert "not reconstructed from current profile" in continuing, (
+        f"{SKILL / 'help.md'}: the continuing-a-run section says the frozen"
+        f" snapshot is never rebuilt from current profile, evidence, price,"
+        f" alias, or Harness state (ADR-0085)."
+    )
 
-    for number, role in verdict_steps.items():
-        assert "exact inherited main-seat" in _step(number), role
+
+def test_the_report_renders_the_route_facts_or_says_why_it_cannot() -> None:
+    """An audited decision is one the account carries, and a gap is stated as one."""
+
+    step = _step(12)
+
+    assert "`snapshot_identity`" in step and "`main_seat`" in step, (
+        f"{SKILL / 'SKILL.md'}: step 12 renders the identity every decision"
+        f" was made under and the seat every verdict inherited, which is what"
+        f" makes the night's routing auditable (issue #94)."
+    )
+    assert "evidence class" in step and "exclusions" in step, (
+        f"{SKILL / 'SKILL.md'}: step 12 renders each decision's evidence class"
+        f" and exclusions, so a reported inheritance can be told from a"
+        f" measured selection (ADR-0083)."
+    )
+    assert "`routing_reason` says why" in step, (
+        f"{SKILL / 'SKILL.md'}: step 12 says why there is no route account"
+        f" where there is none, rather than leaving the gap unexplained"
+        f" (issue #94)."
+    )
+    assert (
+        "never what the current profile, evidence, or Harness would say now" in step
+    ), (
+        f"{SKILL / 'SKILL.md'}: step 12 forbids filling that gap in from what"
+        f" is current — a fabricated confidence being worse than a stated"
+        f" absence (issue #94)."
+    )
+
+
+def test_a_launch_lost_after_the_claim_is_a_mechanical_hinder() -> None:
+    """Infrastructure that goes away is not a model that was not up to the work.
+
+    The distinction decides what the ticket is charged: the workflow's
+    existing single repair, or a verdict-informed amend it never earned
+    (ADR-0085).
+    """
+
+    step = _step(6)
+
+    assert "mechanical hinder like any other" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 triages a launch lost after the claim"
+        f" as the mechanical hinder it is, taking the same single repair every"
+        f" other hinder takes (ADR-0085)."
+    )
+    assert "never recorded as a model-quality failure" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 says infrastructure unavailability is"
+        f" never counted as a model failure (issue #94)."
+    )
+    assert "never replaced by a neighbouring point" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 says an exact override is not swapped"
+        f" for something launchable when its own point goes away (ADR-0083)."
+    )

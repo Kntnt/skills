@@ -197,8 +197,13 @@ CLAIM_ASSIGNEE = "@me"
 # same session finds what the last one left (ADR-0052).
 STATE_FILE = "kntnt-orchestrate.json"
 
-# Routing facts cannot be rebuilt from the tracker and branch, so they retain
-# their own copy beside ordinary resumable state.
+# What it calls the other half of that state, and the half ADR-0052's account
+# does not cover: the frozen routing context, the invocation's own field locks,
+# and every exact decision made under them. The tracker and the branch can
+# rebuild what a run claimed and recorded; neither can reproduce the profile
+# revision, evidence vintage, prices, aliases, and Harness mappings a decision
+# was made from, so those live in a file of their own and are never inferred
+# (ADR-0085).
 ROUTING_FILE = "kntnt-orchestrate-routing.json"
 
 # The directory it keeps that file in, under the one the harness gives. A
@@ -206,6 +211,41 @@ ROUTING_FILE = "kntnt-orchestrate-routing.json"
 # state of the very run that dispatched it, so the run's own things live one
 # level down, where no subagent is ever sent (ADR-0071).
 STATE_HOME = "kntnt-orchestrate"
+
+# The version of model-selector's public route response this engine reads. The
+# Interface is the only cross-Skill seam, and a response from another version
+# of it is refused rather than guessed at (ADR-0083).
+ROUTE_SCHEMA_VERSION = 1
+
+# What one public decision can be: an exact launch, a safe inheritance, or a
+# role that may not launch at all. The first two may start work; the third
+# never does.
+ROUTE_SELECTED = "selected"
+ROUTE_INHERIT = "inherit"
+ROUTE_REFUSED = "refused"
+ROUTE_ACCEPTABLE = (ROUTE_SELECTED, ROUTE_INHERIT)
+
+# The whole of the portable deliberation scale, which is what `--deliberation`
+# locks and the only vocabulary either side of the seam shares. Native names
+# and numeric budgets stay inside model-selector's verified mappings.
+DELIBERATION_LEVELS = ("low", "medium", "high", "xhigh", "max")
+
+# How Orchestrate names the requests it sends, and therefore how a decision
+# finds its way back to the role and the ticket it was made for. The names are
+# this Skill's own — it writes the requests — and the engine reads them so a
+# claim, an amend, and the account can each ask whether the thing about to run
+# was routed at all.
+ROUTE_REQUEST = re.compile(
+    r"^(?:(?P<role>build|repair|rebuild)-(?P<ticket>\d+)"
+    r"|amend-(?P<amended>\d+)-(?P<attempt>\d+)"
+    r"|wave-fix-(?P<wave>\d+))$"
+)
+
+# The roles that are never routed. A verdict inherits the complete main seat
+# exactly, so a decision made for one is refused at this seam rather than left
+# for a paragraph to forbid: what cannot be persisted cannot reach a verifier
+# (ADR-0085).
+VERDICT_ROLES = ("verify", "amend-verify", "repair-verify", "wave-check")
 
 # What a run calls the working trees it builds tickets in, and the branches it
 # builds them on. They live under the repository's own git directory: a
@@ -732,9 +772,13 @@ class RunState:
     taken and not yet recorded an outcome against. `base` is the commit its
     work sits on top of, which is the branch's half of the same account and is
     worked out afresh every time rather than read back, so a state that is gone
-    cannot make it disagree with the branch it describes. `routing` is the
-    opaque public model-selector response frozen before claims; unlike tracker
-    facts, its exact snapshot and decisions must survive a later wave or resume.
+    cannot make it disagree with the branch it describes. `starting` is the
+    frontier the last plan cut to the ceiling, kept so the preflight that
+    follows can be held to routing that frontier and not some other set.
+
+    Everything here is a note of what the tracker and the branch already say.
+    The frozen routing account is the one thing that is not, and it lives in a
+    file of its own rather than in this one (ADR-0085).
     """
 
     branch: str
@@ -742,7 +786,7 @@ class RunState:
     login: str | None
     claimed: list[int]
     base: str
-    routing: dict[str, Any] | None
+    starting: list[int]
 
 
 def state_file(directory: str | None) -> Path | None:
@@ -758,6 +802,182 @@ def state_file(directory: str | None) -> Path | None:
     """
 
     return Path(directory).expanduser() / STATE_HOME / STATE_FILE if directory else None
+
+
+@dataclass
+class RouteRecord:
+    """One public route decision, and the role of this run's it was made for.
+
+    `decision` is model-selector's own answer, kept whole and never
+    interpreted: this Skill consumes the Interface and owns none of the
+    selection rules behind it (ADR-0083). What the engine adds is the reading
+    of the request name it chose itself — which `role` the decision governs and,
+    where the role belongs to one ticket, which ticket — so a claim, an amend,
+    and the account can each find the decision that covers what is about to run.
+    """
+
+    request_id: str
+    role: str
+    ticket: int | None
+    decision: dict[str, Any]
+
+    @property
+    def acceptable(self) -> bool:
+        """Say whether this decision may launch work at all."""
+
+        return str(self.decision["status"]) in ROUTE_ACCEPTABLE
+
+
+@dataclass
+class Routing:
+    """The frozen routing account: the half of a run nothing can rebuild.
+
+    Every other answer this engine gives is a reading of the tracker and the
+    branch, and comes back the same where a run's own memory is gone
+    (ADR-0051). This one does not. `snapshot` is the context model-selector
+    froze before the first claim — profile revision, evidence identity and
+    vintage, Harness inventory, main seat, native mappings, commercial facts,
+    and override policy — and the current versions of all of that are a
+    different context, not a recovered one. `model` and `deliberation` are the
+    invocation's own field locks, frozen beside it because a resume that
+    changed them would be a second run reporting as the first. `decisions` is
+    every exact decision made under that context, in the order they were made,
+    which is what the outcome account is audited from.
+    """
+
+    snapshot: dict[str, Any]
+    model: str | None
+    deliberation: str | None
+    decisions: list[RouteRecord]
+
+    @property
+    def identity(self) -> str:
+        """Return the identity the snapshot is named by."""
+
+        return str(self.snapshot["snapshot_identity"])
+
+    @property
+    def main_seat(self) -> dict[str, Any]:
+        """Return the seat every verdict inherits, exactly as it was frozen."""
+
+        return cast(dict[str, Any], self.snapshot["main_seat"])
+
+    def decided(self, request_id: str) -> RouteRecord | None:
+        """Return the latest decision made for *request_id*, or None."""
+
+        made = [record for record in self.decisions if record.request_id == request_id]
+        return made[-1] if made else None
+
+
+def routing_details(routing: Routing | None) -> dict[str, Any] | None:
+    """Return the public shape of a frozen routing account, or None.
+
+    The identity and the main seat are hoisted out of the snapshot they are
+    part of, because those two are what a report renders and what a verdict
+    inherits, and neither reader should have to know the snapshot's own shape
+    to reach them.
+    """
+
+    if routing is None:
+        return None
+
+    return {
+        "snapshot_identity": routing.identity,
+        "main_seat": routing.main_seat,
+        "model": routing.model,
+        "deliberation": routing.deliberation,
+        "snapshot": routing.snapshot,
+        "decisions": [asdict(record) for record in routing.decisions],
+    }
+
+
+def frozen_routing(
+    state_path: Path | None,
+) -> tuple[Routing | None, str | None, str | None]:
+    """Return this run's frozen routing, why there is none, and any damage.
+
+    Three answers rather than two, because absence and damage are not the same
+    fact. A run that has not reached its preflight yet has frozen nothing; a
+    run whose frozen context is unreadable has lost something no tracker and no
+    branch can give back, and the difference decides whether the next claim may
+    be made at all (ADR-0085).
+    """
+
+    try:
+        routing = read_routing(state_path)
+    except RunError as exc:
+        return None, str(exc), str(exc)
+
+    if routing is None:
+        return None, "this run has frozen no routing yet", None
+
+    return routing, None, None
+
+
+def dispatch_refusal(
+    routing: Routing | None, request_id: str, described: str
+) -> str | None:
+    """Return why *described* may not launch from the frozen routing, or None.
+
+    Route before dispatch is an invariant of the run rather than a paragraph on
+    its opening path, so every verb that puts an execution role to work asks
+    the same question of the same account: was this exact thing decided, and
+    did the decision allow it (ADR-0085).
+    """
+
+    if routing is None:
+        return (
+            f"{described} before this run has any frozen routing: the preflight "
+            "batches the frontier through model-selector's public route "
+            "Interface before anything is claimed"
+        )
+
+    decided = routing.decided(request_id)
+    if decided is None:
+        return (
+            f"{described}, and this run's frozen routing holds no {request_id} "
+            "decision: route it from the frozen snapshot first"
+        )
+
+    if not decided.acceptable:
+        reason = cast(dict[str, Any], decided.decision["reason"])
+        return f"route refused {request_id}: {reason['code']}: {reason['detail']}"
+
+    return None
+
+
+def routing_refusal(
+    routing: Routing | None,
+    damaged: str | None,
+    resuming: list[int],
+    model: str | None,
+    deliberation: str | None,
+) -> str | None:
+    """Return why a plan may not start on this run's routing, or None where it may.
+
+    A run that has not routed yet is where every run begins, and the plan is
+    what invites the preflight, so nothing is refused there. What is refused is
+    a run carrying on past one: work already claimed under a frozen context
+    that is now gone, a context damaged where it was written, and an invocation
+    asking for locks the first frontier was not routed under.
+    """
+
+    if damaged is not None:
+        return (
+            f"{damaged}, and a frozen context is never rebuilt from current "
+            "profiles, aliases, prices, evidence, or Harness defaults"
+        )
+
+    if routing is None:
+        if not resuming:
+            return None
+        return (
+            f"{as_references(resuming)} stand claimed by this run and its frozen "
+            "routing is gone: restore the state directory it was written in, or "
+            "record or release those claims before a fresh run freezes its own"
+        )
+
+    return locks_refusal(routing, model, deliberation, "this invocation")
 
 
 def routing_file(path: Path | None) -> Path | None:
@@ -815,11 +1035,7 @@ def read_state(path: Path | None, branch: str) -> RunState | None:
             login=None if stored["login"] is None else str(stored["login"]),
             claimed=[int(number) for number in stored["claimed"]],
             base=str(stored["base"]),
-            routing=(
-                None
-                if stored.get("routing") is None
-                else cast(dict[str, Any], stored["routing"])
-            ),
+            starting=[int(number) for number in stored["starting"]],
         )
     except (OSError, TypeError, ValueError, KeyError):
         return None
@@ -845,34 +1061,84 @@ def write_state(path: Path | None, state: RunState) -> str | None:
     return str(path)
 
 
-def read_routing(path: Path | None) -> dict[str, Any] | None:
-    """Return frozen routing facts where their durable copy remains readable."""
+def read_routing(path: Path | None) -> Routing | None:
+    """Return the run's frozen routing, or None where it never froze any.
+
+    Absence and damage are different answers here, and that is the whole point
+    of the file. An ordinary state file nothing can read is answered as no
+    state, because the tracker and the branch say the same thing again. A
+    routing file nothing can read is answered as an error, because nothing else
+    holds what it held and reconstructing it would mean routing this run's
+    remaining work from a context it never ran under (ADR-0085).
+    """
 
     stored = routing_file(path)
-    if stored is None:
+    if stored is None or not stored.exists():
         return None
 
     try:
-        routing = cast(dict[str, Any], json.loads(stored.read_text(encoding="utf-8")))
-        cast(dict[str, Any], routing["snapshot"])
-        cast(list[dict[str, Any]], routing["decisions"])
-        return routing
-    except (OSError, TypeError, ValueError, KeyError):
-        return None
+        held = json.loads(stored.read_text(encoding="utf-8"))
+        snapshot = cast(dict[str, Any], held["snapshot"])
+        snapshot["snapshot_identity"], snapshot["main_seat"]
+        return Routing(
+            snapshot=snapshot,
+            model=None if held["model"] is None else str(held["model"]),
+            deliberation=(
+                None if held["deliberation"] is None else str(held["deliberation"])
+            ),
+            decisions=[
+                RouteRecord(
+                    request_id=str(record["request_id"]),
+                    role=str(record["role"]),
+                    ticket=(
+                        None if record["ticket"] is None else int(record["ticket"])
+                    ),
+                    decision=cast(dict[str, Any], record["decision"]),
+                )
+                for record in cast(list[dict[str, Any]], held["decisions"])
+            ],
+        )
+    except (OSError, TypeError, ValueError, KeyError) as exc:
+        raise RunError(
+            f"this run's frozen routing at {stored} cannot be read ({exc})"
+        ) from exc
 
 
-def write_routing(path: Path | None, routing: dict[str, Any]) -> str | None:
-    """Store frozen routing facts independently of ordinary resumable state."""
+def write_routing(path: Path | None, routing: Routing) -> str:
+    """Store the frozen routing account, or say that it could not be stored.
+
+    Unlike the ordinary state, this is not an optimisation a run can go on
+    without: a frozen context nothing wrote down is one the next invocation
+    cannot reuse, so a directory that will not take it stops the run here
+    rather than at a claim it would then have to refuse.
+    """
 
     stored = routing_file(path)
     if stored is None:
-        return None
+        raise RunError(
+            "routing is frozen for the whole run, so it needs a state directory "
+            "to be frozen in: pass --state-dir"
+        )
 
     try:
         stored.parent.mkdir(parents=True, exist_ok=True)
-        stored.write_text(json.dumps(routing, indent=2) + "\n", encoding="utf-8")
-    except OSError:
-        return None
+        stored.write_text(
+            json.dumps(
+                {
+                    "snapshot": routing.snapshot,
+                    "model": routing.model,
+                    "deliberation": routing.deliberation,
+                    "decisions": [asdict(record) for record in routing.decisions],
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        raise RunError(
+            f"this run's frozen routing could not be written: {exc}"
+        ) from exc
 
     return str(stored)
 
@@ -986,12 +1252,17 @@ class Plan:
     ticket is built in a working tree of its own, and at exactly one the work
     lands straight on the branch with nothing to integrate (ADR-0054).
 
-    `model` and `deliberation` are field-level execution overrides, `routing`
-    is the frozen opaque route account where one exists, and `scope` what the run
-    was aimed at where it was aimed at anything — one entry per reference the
-    developer named, and the tickets are the union of what they resolved to —
-    and `state` is where the run left what it remembers of itself, all three
-    carried here because the plan is where the run says what it is about to do.
+    `model` and `deliberation` are the field-level locks this invocation puts
+    on every building role, and `routing` is the frozen route account they were
+    frozen into — its identity, the main seat every verdict inherits, the
+    snapshot a later request carries back unchanged, and every exact decision
+    made under it. `routing_reason` is the other half of that answer: where
+    there is no account to render, it says why, so a report never fills the gap
+    in from what is current. `scope` is what the run was aimed at where it was
+    aimed at anything — one entry per reference the developer named, and the
+    tickets are the union of what they resolved to — and `state` is where the
+    run left what it remembers of itself, all of it carried here because the
+    plan is where the run says what it is about to do.
     """
 
     verb: str
@@ -1004,6 +1275,7 @@ class Plan:
     deliberation: str | None
     state: str | None
     routing: dict[str, Any] | None
+    routing_reason: str | None
     branch: str
     default_branch: str | None
     label: str
@@ -1945,9 +2217,7 @@ def build_plan(
     branch = current_branch(cwd)
     default = default_branch(cwd)
     remembered = read_state(state_path, branch)
-    routing = remembered.routing if remembered is not None else read_routing(state_path)
-    if routing is None:
-        routing = read_routing(state_path)
+    routing, routing_reason, damaged = frozen_routing(state_path)
     listed = open_listing(cwd)
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
     tickets = tickets_in_scope(cwd, listed, scope)
@@ -1994,7 +2264,8 @@ def build_plan(
         model=model,
         deliberation=deliberation,
         state=None,
-        routing=routing,
+        routing=routing_details(routing),
+        routing_reason=routing_reason,
         branch=branch,
         default_branch=default,
         label=READY_LABEL,
@@ -2036,6 +2307,11 @@ def build_plan(
             "every workable ticket is already claimed, so another run or a "
             "person has all the work this one could start"
         )
+    elif (
+        adrift := routing_refusal(routing, damaged, resuming, model, deliberation)
+    ) is not None:
+        plan.ready = False
+        plan.reason = adrift
 
     # A run that may start leaves what it remembers of itself where this
     # session's scratch is, written from here because this is the verb that has
@@ -2054,7 +2330,7 @@ def build_plan(
                     | claimed_elsewhere(remembered, scope, listed, tickets)
                 ),
                 base=run_base(cwd, tickets),
-                routing=routing,
+                starting=plan.starting,
             ),
         )
 
@@ -2098,48 +2374,253 @@ def cmd_plan(
     return 0 if plan.ready else 2
 
 
-def cmd_route(cwd: Path, response: Path, state_path: Path | None, dry_run: bool) -> int:
-    """Persist one public model-selector response without interpreting selection.
+def route_record(request_id: str, decision: dict[str, Any]) -> RouteRecord:
+    """Read one decision's request name back into the role it was made for.
 
-    Model-selector owns route validity and selection. The engine only retains
-    the opaque frozen snapshot and decisions beside the existing resumable run
-    state, rejecting a later response that would replace frozen facts.
+    The names are Orchestrate's own, so an unreadable one is this Skill's own
+    mistake and is refused rather than kept: a decision nothing can attach to a
+    role is a decision no gate can find when the work it covers is dispatched.
+    """
+
+    # A verdict is refused by name, before anything else is read of it. The
+    # seat a verdict runs on is the orchestrator's own and is inherited whole,
+    # so there is no decision about it for anybody to make (ADR-0085).
+    if any(
+        request_id == role or request_id.startswith(f"{role}-")
+        for role in VERDICT_ROLES
+    ):
+        raise RunError(
+            f"{request_id} routes a verdict, and a verdict is never routed: it "
+            "inherits the orchestrating session's complete main seat exactly"
+        )
+
+    named = ROUTE_REQUEST.match(request_id)
+    if named is None:
+        raise RunError(
+            f"{request_id} is not a request this run makes: an execution "
+            "request is build-<ticket>, amend-<ticket>-<attempt>, "
+            "repair-<ticket>, rebuild-<ticket>, or wave-fix-<wave>"
+        )
+
+    # One of the three alternatives matched, and each names its own role.
+    if named["role"]:
+        return RouteRecord(request_id, named["role"], int(named["ticket"]), decision)
+    if named["amended"]:
+        return RouteRecord(request_id, "amend", int(named["amended"]), decision)
+    return RouteRecord(request_id, "wave-fix", None, decision)
+
+
+def read_response(response: Path) -> dict[str, Any]:
+    """Return what model-selector answered at *response*, or say it did not."""
+
+    try:
+        return cast(dict[str, Any], json.loads(response.read_text(encoding="utf-8")))
+    except (OSError, TypeError, ValueError) as exc:
+        raise RunError(
+            f"{response} is not a model-selector route response: {exc}"
+        ) from exc
+
+
+def routed_response(
+    answered: dict[str, Any],
+) -> tuple[dict[str, Any], list[RouteRecord]]:
+    """Read one public route response into its snapshot and its decisions.
+
+    Only the structure this engine acts on is checked here — the version of the
+    Interface, the frozen context's identity and main seat, and each decision's
+    request name and status. Everything inside a decision is model-selector's
+    to say and is kept exactly as it said it (ADR-0083).
     """
 
     try:
-        routed = json.loads(response.read_text(encoding="utf-8"))
-        snapshot = cast(dict[str, Any], routed["snapshot"])
-        decisions = cast(list[dict[str, Any]], routed["decisions"])
-        identity = str(snapshot["snapshot_identity"])
-    except (OSError, TypeError, ValueError, KeyError):
-        return fail("route response is not a readable model-selector response")
+        if answered["schema_version"] != ROUTE_SCHEMA_VERSION:
+            raise RunError(
+                f"this response answers version {answered['schema_version']} of "
+                f"the model-selector route response, and this run reads version "
+                f"{ROUTE_SCHEMA_VERSION}"
+            )
+        decisions = cast(list[dict[str, Any]], answered["decisions"])
+        for decision in decisions:
+            if decision["status"] not in (*ROUTE_ACCEPTABLE, ROUTE_REFUSED):
+                raise RunError(
+                    f"{decision['request_id']} came back {decision['status']}, "
+                    "which is no decision this Interface makes"
+                )
+        snapshot = cast(dict[str, Any], answered["snapshot"])
+        if snapshot["snapshot_identity"] is None or snapshot["main_seat"] is None:
+            raise RunError("this response's snapshot names no identity or main seat")
+    except RunError:
+        raise
+    except (OSError, TypeError, ValueError, KeyError) as exc:
+        raise RunError(f"this is not a model-selector route response: {exc}") from exc
 
-    # Return a dry-run route response without creating resumable run state.
+    return snapshot, [
+        route_record(str(decision["request_id"]), decision) for decision in decisions
+    ]
+
+
+def emit_route(
+    identity: str | None, records: list[RouteRecord], refusals: list[dict[str, Any]]
+) -> None:
+    """Print what one route call decided, and what it refused."""
+
+    emit(
+        {
+            "verb": "route",
+            "snapshot_identity": identity,
+            "decisions": [asdict(record) for record in records],
+            "refused": refusals,
+        }
+    )
+
+
+def frozen_refusal(routing: Routing, snapshot: dict[str, Any]) -> str | None:
+    """Return why *snapshot* is not the one this run froze, or None where it is."""
+
+    identity = str(snapshot["snapshot_identity"])
+    if identity != routing.identity:
+        return (
+            f"this response carries snapshot {identity} where the run froze "
+            f"{routing.identity}: every later wave and every resumed invocation "
+            "reuses the snapshot the first frontier was routed from"
+        )
+
+    if snapshot != routing.snapshot:
+        return (
+            f"this response changes the frozen snapshot {identity} under its own "
+            "identity, so the context it names is not the context it carries"
+        )
+
+    return None
+
+
+def locks_refusal(
+    routing: Routing, model: str | None, deliberation: str | None, invocation: str
+) -> str | None:
+    """Return why *model* and *deliberation* are not this run's locks, or None."""
+
+    if (model, deliberation) == (routing.model, routing.deliberation):
+        return None
+
+    return (
+        f"{invocation} locks {described_locks(model, deliberation)} where this "
+        f"run's routing was frozen for {described_locks(routing.model, routing.deliberation)}: "
+        "the fields the first frontier was routed under cannot change mid-run"
+    )
+
+
+def described_locks(model: str | None, deliberation: str | None) -> str:
+    """Say in words which building fields an invocation locked."""
+
+    named = [
+        f"--model {model}" if model else "no model",
+        f"--deliberation {deliberation}" if deliberation else "no deliberation",
+    ]
+    return " and ".join(named)
+
+
+def batch_refusal(state: RunState, records: list[RouteRecord]) -> str | None:
+    """Return why an opening batch is not the plan's frontier, or None where it is.
+
+    Only the opening batch is held to this. A frontier routed a ticket at a
+    time is a frontier whose tickets were each decided against a different set
+    of peers, so the run's first request is the whole of what the plan said it
+    starts, in that order. Every request after it is a smaller thing by nature
+    — one replacement, one amend attempt, one repair, one reroute after a
+    mechanical repair — and what keeps those honest is the claim and dispatch
+    gates asking for the exact role rather than a shape asked of the batch.
+    """
+
+    batched = [record.ticket for record in records if record.role == "build"]
+    if batched == state.starting:
+        return None
+
+    return (
+        f"this batch routes {batched or 'no ticket'} where the plan's starting "
+        f"frontier is {state.starting}: the preflight batches that frontier, in "
+        "that order, before anything is claimed"
+    )
+
+
+def cmd_route(
+    cwd: Path,
+    response: Path,
+    state_path: Path | None,
+    *,
+    dry_run: bool,
+    model: str | None,
+    deliberation: str | None,
+) -> int:
+    """Freeze one public model-selector route response for the rest of the run.
+
+    Model-selector owns every selection rule behind the Interface and this verb
+    reproduces none of them. What it owns is the run's side of the seam: that
+    one context is frozen and reused, that the invocation's own locks travel
+    with it, that a decision can be found again by the role it was made for,
+    and that nothing a verdict runs on is ever decided here (ADR-0085).
+    """
+
+    try:
+        answered = read_response(response)
+    except RunError as exc:
+        return fail(str(exc))
+
+    # A whole-artifact refusal is not a decision about any one role, so it is
+    # read before the decisions are and freezes nothing at all (ADR-0083).
+    refusal = answered.get("artifact_refusal")
+    if refusal is not None:
+        emit_route(None, [], [{"request_id": None, **cast(dict[str, Any], refusal)}])
+        return 2
+
+    try:
+        snapshot, records = routed_response(answered)
+    except RunError as exc:
+        return fail(str(exc))
+
+    # A dry run is read for what a run would do, so it reports the decisions
+    # and freezes none of them — there is no run for them to be frozen for.
+    refusals = [
+        {"request_id": record.request_id, **record.decision["reason"]}
+        for record in records
+        if not record.acceptable
+    ]
     if dry_run:
-        emit({"snapshot_identity": identity, "decisions": decisions})
-        return 0
+        emit_route(str(snapshot["snapshot_identity"]), records, refusals)
+        return 2 if refusals else 0
 
     state = remembered_state(state_path, cwd)
     if state is None:
-        return fail("routing needs this run's state; plan before routing")
+        return fail(
+            "routing is frozen against the run the plan wrote down, so there is "
+            "nothing to freeze it against yet: plan before routing"
+        )
 
-    # Preserve the one snapshot that makes resumed decisions reproducible.
-    current = state.routing
-    if current is not None and current["snapshot"] != snapshot:
-        return fail("route response replaces this run's frozen routing snapshot")
+    try:
+        routing = read_routing(state_path)
+    except RunError as exc:
+        return fail(str(exc))
 
-    # Keep every exact decision for the outcome account without owning its rules.
-    previous = (
-        [] if current is None else cast(list[dict[str, Any]], current["decisions"])
-    )
-    state.routing = {"snapshot": snapshot, "decisions": previous + decisions}
-    if write_state(state_path, state) is None:
-        return fail("routing state could not be written")
-    if write_routing(state_path, state.routing) is None:
-        return fail("frozen routing snapshot could not be written")
+    # The first response of a run freezes its context and its locks; every one
+    # after it is held to both, and to the frontier the plan named.
+    if routing is None:
+        if (opening := batch_refusal(state, records)) is not None:
+            return fail(opening)
+        routing = Routing(snapshot, model, deliberation, [])
+    elif (stale := frozen_refusal(routing, snapshot)) is not None:
+        return fail(stale)
+    elif (
+        relocked := locks_refusal(routing, model, deliberation, "this response")
+    ) is not None:
+        return fail(relocked)
 
-    emit({"snapshot_identity": identity, "decisions": decisions})
-    return 0
+    routing.decisions.extend(records)
+    try:
+        write_routing(state_path, routing)
+    except RunError as exc:
+        return fail(str(exc))
+
+    emit_route(routing.identity, records, refusals)
+    return 2 if refusals else 0
 
 
 def claim_refusal(
@@ -2203,6 +2684,20 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     if refusal:
         emit({"verb": "claim", "ticket": number, "claimed": False, "reason": refusal})
         return 2
+
+    # Nothing this run takes was not routed first — the opening frontier's
+    # tickets, a replacement considered after a collision, and a wave the last
+    # one unblocked alike. It is asked after the tracker's own answer so that a
+    # ticket somebody else already holds stays the ordinary refusal the wave
+    # drops and replaces, and before the claim is written so that a ticket
+    # nothing decided is never taken (ADR-0085).
+    try:
+        routing = read_routing(state_path)
+    except RunError as exc:
+        return fail(str(exc))
+    unrouted = dispatch_refusal(routing, f"build-{number}", f"#{number} is claimed")
+    if unrouted is not None:
+        return fail(unrouted)
 
     # A ticket this run already holds is already claimed, and asking the
     # tracker to assign it again would write nothing it does not already say.
@@ -2654,6 +3149,7 @@ def cmd_amend(
     attempt: int,
     phase: str,
     verdict_file: str | None,
+    state_path: Path | None,
 ) -> int:
     """Record one append-only *phase* of amend *attempt* on ticket *number*.
 
@@ -2689,6 +3185,22 @@ def cmd_amend(
             }
         )
         return 2
+
+    # Amending is building, so the amender is routed like every other execution
+    # role — and for its own attempt, the escalation the second one may carry
+    # being no part of what the first was decided on.
+    if phase == AMEND_BUILDING:
+        try:
+            routing = read_routing(state_path)
+        except RunError as exc:
+            return fail(str(exc))
+        refused = dispatch_refusal(
+            routing,
+            f"amend-{number}-{attempt}",
+            f"#{number} amend {attempt} is about to build",
+        )
+        if refused is not None:
+            return fail(refused)
 
     # Read verdicts only for phases whose recovery depends on their exact text.
     needs_verdict = phase in (AMEND_BUILDING, AMEND_FAILED)
@@ -3338,10 +3850,12 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     }
     stranded = stranded_behind(open_scope)
     accounted = set(stranded).union(*recorded.values())
-    remembered = remembered_state(state_path, cwd)
-    routing = None if remembered is None else remembered.routing
-    if routing is None:
-        routing = read_routing(state_path)
+
+    # The route account is rendered from what was frozen or not at all: the
+    # decisions a night was worked under are auditable exactly, and where they
+    # are gone the account says so rather than reading what is current back as
+    # though it had been (ADR-0085).
+    routing, routing_reason, _ = frozen_routing(state_path)
 
     emit(
         {
@@ -3350,7 +3864,8 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
             "scope": None if scope is None else [asdict(aim) for aim in scope],
             "branch": branch,
             "base": base,
-            "routing": routing,
+            "routing": routing_details(routing),
+            "routing_reason": routing_reason,
             "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],
@@ -3381,6 +3896,18 @@ def add_shared_flags(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--state-dir")
 
 
+def add_deliberation_flag(parser: argparse.ArgumentParser) -> None:
+    """Let a verb take the portable deliberation lock, and only its exact values.
+
+    The five public levels are the whole of the portable scale, and a value
+    outside them is refused rather than normalised: a level the Interface
+    cannot map is a level nothing can launch, and quietly reading it as a
+    neighbour would be the fall-through overrides never make (ADR-0083).
+    """
+
+    parser.add_argument("--deliberation", choices=DELIBERATION_LEVELS)
+
+
 def add_scope_flag(parser: argparse.ArgumentParser) -> None:
     """Let a verb that reads the whole label be aimed at part of it.
 
@@ -3403,15 +3930,15 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan.add_argument("--dry-run", action="store_true")
     plan.add_argument("--at-once", type=int, default=ONE_AT_A_TIME)
     plan.add_argument("--model")
-    plan.add_argument(
-        "--deliberation", choices=("low", "medium", "high", "xhigh", "max")
-    )
+    add_deliberation_flag(plan)
     add_scope_flag(plan)
     add_shared_flags(plan)
 
-    route = sub.add_parser("route", help="Persist one model-selector route response.")
+    route = sub.add_parser("route", help="Freeze one model-selector route response.")
     route.add_argument("--response", required=True, type=Path)
     route.add_argument("--dry-run", action="store_true")
+    route.add_argument("--model")
+    add_deliberation_flag(route)
     add_shared_flags(route)
 
     claim = sub.add_parser("claim", help="Take one ticket before working it.")
@@ -3481,7 +4008,14 @@ def main(argv: list[str] | None = None) -> int:
             reference=args.scope,
         )
     if args.verb == "route":
-        return cmd_route(cwd, args.response, state_path, args.dry_run)
+        return cmd_route(
+            cwd,
+            args.response,
+            state_path,
+            dry_run=args.dry_run,
+            model=args.model,
+            deliberation=args.deliberation,
+        )
     if args.verb == "claim":
         return cmd_claim(cwd, args.ticket, state_path)
     if args.verb == "park":
@@ -3499,6 +4033,7 @@ def main(argv: list[str] | None = None) -> int:
             args.attempt,
             args.phase,
             args.verdict_file,
+            state_path,
         )
     if args.verb == "record":
         return cmd_record(
