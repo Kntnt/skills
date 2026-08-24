@@ -1,0 +1,5 @@
+interface:
+  display_name: "Proofread"
+  short_description: "Correct mechanical language errors only"
+policy:
+  allow_implicit_invocation: true

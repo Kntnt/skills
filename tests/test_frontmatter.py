@@ -471,3 +471,91 @@ def test_the_sidecar_says_what_the_frontmatter_says_about_invocation() -> None:
             f" {expected}. The two are one decision spelled twice, and Codex"
             f" reads only this copy. See {STANDARD}."
         )
+
+
+def test_proofread_bounds_the_trigger_its_description_advertises() -> None:
+    """A Skill a model may start is reached by its description and nothing else.
+
+    Proofread corrects mechanics and preserves everything else, so a
+    description reading as general editing invites exactly the invocation the
+    contract exists to refuse — and the user never typed anything for the
+    refusal to answer. The trigger is therefore written narrow, a specific text
+    plus an explicit proofreading request, and the generic verbs are named as
+    exclusions rather than left to be inferred from what the Skill offers
+    (ADR-0019, ADR-0094).
+    """
+
+    skill_md = SKILLS / "editorial" / "proofread" / "SKILL.md"
+    frontmatter = _frontmatter("editorial/proofread/SKILL.md")
+
+    assert frontmatter.get("disable-model-invocation") is False, (
+        f"{skill_md}: a model may start this Skill, so the field says so"
+        f" rather than being left out — an absent field is a decision nobody"
+        f" wrote, and the Codex sidecar beside it has to agree with something"
+        f" (ADR-0094). See {STANDARD}."
+    )
+
+    description = str(frontmatter.get("description", "")).lower()
+    for term in ("proofread", "mechanical"):
+        assert term in description, (
+            f"{skill_md}: the description does not name {term!r}. It is the"
+            f" only hook a harness has for deciding when the Skill applies"
+            f" (ADR-0019), so the narrow trigger has to be in it and nowhere"
+            f" else. See {STANDARD}."
+        )
+
+    assert "not for" in description, (
+        f"{skill_md}: the description states no exclusion. A model reads what"
+        f" the Skill offers and matches on it, so the requests this Skill must"
+        f" not be started for are named as exclusions rather than left to be"
+        f" inferred (ADR-0094). See {STANDARD}."
+    )
+    for excluded in ("edit", "rewrite", "polish", "improve", "review"):
+        assert excluded in description, (
+            f"{skill_md}: the description does not name {excluded!r} among the"
+            f" requests a model must not start this Skill for. Each of them is"
+            f" a request for changes the Skill refuses to make (ADR-0094). See"
+            f" {STANDARD}."
+        )
+
+
+def test_the_standard_names_every_skill_a_model_may_start() -> None:
+    """Model invocation is the exception here, so the exceptions are listed.
+
+    The standard's sidecar section closes by naming the Skills a model may
+    start on its own, which is the only place a reader learns that the
+    collection treats it as an exception at all. A Skill added with
+    `disable-model-invocation: false` and left out of that sentence turns it
+    into a confident wrong answer, and nothing else in the suite reads it
+    (ADR-0018, ADR-0094).
+    """
+
+    invocable = sorted(
+        skill_md.parent.name
+        for skill_md in _shipped_skill_mds()
+        if _frontmatter(str(skill_md.relative_to(SKILLS))).get(
+            "disable-model-invocation"
+        )
+        is False
+    )
+
+    # A collection where nothing is model-invocable would leave the loop below
+    # with nothing to judge and pass whatever the sentence says.
+    assert invocable
+
+    standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
+    section = standard.partition("\n## `agents/openai.yaml`\n")[2].partition("\n## ")[0]
+    assert section, (
+        f"{STANDARD}: the sidecar section could not be found, so this check"
+        f" judged nothing. See {STANDARD}."
+    )
+
+    for name in invocable:
+        assert f"`/{name}`" in section, (
+            f"{STANDARD}: `/{name}` carries"
+            f" `disable-model-invocation: false` and the sidecar section does"
+            f" not name it among the Skills a model may start on its own."
+            f" That sentence is where a reader learns model invocation is the"
+            f" exception here, and a Skill missing from it makes the sentence"
+            f" wrong (ADR-0094)."
+        )
