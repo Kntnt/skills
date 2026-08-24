@@ -9,7 +9,7 @@ Keep one fixture section per fixture run, including the ones that were skipped. 
 - **record** — `<skill>-<provider-family>-<YYYY-MM-DD>`
 - **date** — `YYYY-MM-DD`
 - **ticket** — `#NNN`
-- **skill** — `write` | `redline` | `proofread` | `unslop`
+- **skill** — `write` | `redline` | `proofread`
 - **provider family** — `claude` | `gpt`
 - **model** — as the Harness names it
 - **harness** — name, and version where it exposes one
