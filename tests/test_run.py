@@ -229,8 +229,9 @@ def _ticket(
 
     Each edge is a ticket number and the state the tracker reports it in, which
     is how the native relation arrives: the blocker's own state travels with
-    the edge, so a closed blocker needs its Ticket Resolution read. *claimed_by* is the
-    logins the tracker has the ticket assigned to, which is how a ticket
+    the edge, so a closed blocker needs its Ticket Resolution read.
+    *claimed_by* is the logins the tracker has the ticket assigned to, which is
+    how a ticket
     another session is already working announces itself, and *comments* is
     where an outcome a run recorded is read back from.
     """
@@ -4577,9 +4578,9 @@ def test_record_blocked_discards_the_half_built_tree_without_spending_the_rebuil
     tmp_path: Path,
 ) -> None:
     """The half-built work goes exactly as a refused repair does, so when the
-    blocker resolves done the ticket is isolated afresh from the branch that by then
-    carries the blocker's work — and the one rebuild stays unspent, that bound
-    answering a different failure (ADR-0073)."""
+    blocker resolves done the ticket is isolated afresh from the branch that by
+    then carries the blocker's work — and the one rebuild stays unspent, that
+    bound answering a different failure (ADR-0073)."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -4784,8 +4785,8 @@ def test_a_blocked_ticket_is_offered_again_when_its_blocker_resolves_done(
 ) -> None:
     """The corrected edge on the tracker is the whole of the memory the
     mechanism needs: nothing about a blocked ticket is settled, so a plan read
-    after its blocker resolves done has it workable again, to be isolated afresh and
-    built whole on top of the work it waited for."""
+    after its blocker resolves done has it workable again, to be isolated
+    afresh and built whole on top of the work it waited for."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(

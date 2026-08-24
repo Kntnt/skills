@@ -2669,7 +2669,7 @@ def complete_lifecycle(cwd: Path, number: int, ticket: dict[str, Any]) -> None:
 
 
 def has_completed_lifecycle(ticket: dict[str, Any]) -> bool:
-    """Say whether *ticket* already carries the completed lifecycle projection."""
+    """Say whether *ticket* carries the completed lifecycle projection."""
 
     labels = {str(label["name"]) for label in ticket.get("labels", [])}
     return (
