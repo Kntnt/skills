@@ -1168,6 +1168,7 @@ def test_reconcile_records_external_completion_without_closing_again(
     later completed it without rewriting the run's failure or pretending this
     invocation built, verified, or closed the ticket."""
 
+    # Present an eligible failed ticket and landed completion commit.
     repo = _init_repo(tmp_path / "proj", branch="main")
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
     ticket = _ticket(9, "the rescued work", comments=[_recorded("failed")])
@@ -1178,8 +1179,10 @@ def test_reconcile_records_external_completion_without_closing_again(
     )
     env["GH_LABELS"] = '[{"name":"orchestrated"}]'
 
+    # Reconcile through the public maintainer invocation.
     result = _engine(repo, "reconcile", "--ticket", "9", "--commit", head, env=env)
 
+    # Preserve the Run Outcome while recording truthful external provenance.
     assert result.returncode == 0, result.stderr
     reconciled = json.loads(result.stdout)
     assert reconciled == {
@@ -1189,6 +1192,7 @@ def test_reconcile_records_external_completion_without_closing_again(
         "resolution": "done",
         "commit": head,
         "already_agreed": False,
+        "lifecycle_repaired": False,
     }
     calls = _gh_calls(env)
     assert f"reconciliation=done commit={head}" in calls
@@ -1203,6 +1207,7 @@ def test_reconcile_refuses_ineligible_ticket_or_unlanded_commit_without_writes(
     """Closure, an unsuccessful Run Outcome, and default-branch reachability
     are all preconditions rather than facts Reconciliation manufactures."""
 
+    # Present one ticket for each refusal and an off-default repair commit.
     repo = _init_repo(tmp_path / "proj", branch="work")
     work = repo / "repair.txt"
     work.write_text("repair\n", encoding="utf-8")
@@ -1221,6 +1226,7 @@ def test_reconcile_refuses_ineligible_ticket_or_unlanded_commit_without_writes(
         },
     )
 
+    # Exercise every eligibility gate through the public maintainer invocation.
     opened = _engine(repo, "reconcile", "--ticket", "9", "--commit", "main", env=env)
     successful = _engine(
         repo, "reconcile", "--ticket", "10", "--commit", "main", env=env
@@ -1229,6 +1235,7 @@ def test_reconcile_refuses_ineligible_ticket_or_unlanded_commit_without_writes(
         repo, "reconcile", "--ticket", "11", "--commit", work_head, env=env
     )
 
+    # Refuse every invalid assertion before writing tracker history.
     assert opened.returncode == successful.returncode == unlanded.returncode == 1
     assert "open" in opened.stderr
     assert "failed or conflicted" in successful.stderr
@@ -1236,12 +1243,54 @@ def test_reconcile_refuses_ineligible_ticket_or_unlanded_commit_without_writes(
     assert "issue comment" not in _gh_calls(env)
 
 
-def test_reconcile_repairs_incomplete_lifecycle_before_reporting_agreement(
+def test_reconcile_refuses_existing_off_default_commit_without_writes(
+    tmp_path: Path,
+) -> None:
+    """An earlier marker cannot bypass the default-branch provenance gate
+    merely because its commit object still exists in the local repository."""
+
+    # Create a repair commit that exists only on the checked-out work branch.
+    repo = _init_repo(tmp_path / "proj", branch="work")
+    (repo / "repair.txt").write_text("repair\n", encoding="utf-8")
+    _git(repo, "add", "repair.txt")
+    _git(repo, "commit", "-m", "repair")
+    work_head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    # Present a premature event whose incomplete lifecycle would expose writes.
+    ticket = _ticket(
+        9,
+        "rescued",
+        claimed_by=["former-maintainer"],
+        comments=[_recorded("failed"), _reconciled(work_head)],
+    )
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={
+            9: ticket | {"state": "CLOSED", "labels": [{"name": "ready-for-agent"}]}
+        },
+    )
+    env["GH_LABELS"] = '[{"name":"orchestrated"}]'
+
+    # Repeat the assertion through the public maintainer invocation.
+    result = _engine(repo, "reconcile", "--ticket", "9", "--commit", work_head, env=env)
+
+    # Refuse before lifecycle repair or append-only history can be written.
+    assert result.returncode == 1
+    assert "default branch" in result.stderr
+    calls = _gh_calls(env)
+    assert "issue edit" not in calls
+    assert "issue comment" not in calls
+    assert "label create" not in calls
+
+
+def test_reconcile_reports_incomplete_lifecycle_recovery_instead_of_agreement(
     tmp_path: Path,
 ) -> None:
     """A prior interruption may have appended the fact before cleanup; retry
-    restores report discovery without duplicating the append-only event."""
+    restores report discovery without claiming the tracker already agreed."""
 
+    # Present an event interrupted before lifecycle cleanup.
     repo = _init_repo(tmp_path / "proj", branch="main")
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
     ticket = _ticket(
@@ -1258,23 +1307,67 @@ def test_reconcile_repairs_incomplete_lifecycle_before_reporting_agreement(
         },
     )
 
+    # Repeat the same reconciliation through the public maintainer invocation.
     result = _engine(repo, "reconcile", "--ticket", "9", "--commit", head, env=env)
 
+    # Report recovery while repairing state without duplicating history.
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)["already_agreed"] is True
+    recovered = json.loads(result.stdout)
+    assert recovered["already_agreed"] is False
+    assert recovered["lifecycle_repaired"] is True
     calls = _gh_calls(env)
     assert "--remove-label ready-for-agent" in calls
     assert "--add-label orchestrated" in calls
-    assert "--remove-assignee @me" in calls
+    assert "--remove-assignee me" in calls
     assert "issue comment" not in calls
 
 
-def test_reconcile_is_idempotent_and_refuses_a_contradictory_commit(
+def test_reconcile_complete_repeat_is_idempotent_without_tracker_writes(
     tmp_path: Path,
 ) -> None:
-    """One append-only assertion can be repeated safely but cannot be replaced
-    by a different account of which commit completed the ticket."""
+    """A fully projected Reconciliation repeats as agreement without changing
+    the append-only event, labels, or assignments."""
 
+    # Present a reconciliation whose event and lifecycle projection agree.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    ticket = _ticket(
+        9,
+        "rescued",
+        comments=[_recorded("conflicted"), _reconciled(head)],
+    )
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: ticket | {"state": "CLOSED", "labels": [{"name": "orchestrated"}]}},
+    )
+    env["GH_LABELS"] = '[{"name":"orchestrated"}]'
+
+    # Repeat the exact assertion through the public maintainer invocation.
+    result = _engine(repo, "reconcile", "--ticket", "9", "--commit", head, env=env)
+
+    # Report agreement and perform no tracker write.
+    assert result.returncode == 0, result.stderr
+    repeated = json.loads(result.stdout)
+    assert repeated["already_agreed"] is True
+    assert repeated["lifecycle_repaired"] is False
+    writes = [
+        call
+        for call in _gh_calls(env).splitlines()
+        if call.startswith(
+            ("issue edit", "issue comment", "issue close", "label create")
+        )
+    ]
+    assert writes == []
+
+
+def test_reconcile_refuses_a_contradictory_completion_commit(
+    tmp_path: Path,
+) -> None:
+    """An append-only Reconciliation cannot be replaced by a later account of
+    which default-branch commit completed the ticket."""
+
+    # Record the earlier of two landed commits as completion provenance.
     repo = _init_repo(tmp_path / "proj", branch="main")
     first = _git(repo, "rev-parse", "HEAD").stdout.strip()
     (repo / "later.txt").write_text("later\n", encoding="utf-8")
@@ -1293,15 +1386,12 @@ def test_reconcile_is_idempotent_and_refuses_a_contradictory_commit(
     )
     env["GH_LABELS"] = '[{"name":"orchestrated"}]'
 
-    repeated = _engine(repo, "reconcile", "--ticket", "9", "--commit", first, env=env)
-    contradicted = _engine(
-        repo, "reconcile", "--ticket", "9", "--commit", later, env=env
-    )
+    # Attempt to replace the recorded provenance through the public action.
+    result = _engine(repo, "reconcile", "--ticket", "9", "--commit", later, env=env)
 
-    assert repeated.returncode == 0, repeated.stderr
-    assert json.loads(repeated.stdout)["already_agreed"] is True
-    assert contradicted.returncode == 1
-    assert "already reconciled" in contradicted.stderr
+    # Refuse the contradiction before any lifecycle or history write.
+    assert result.returncode == 1
+    assert "already reconciled" in result.stderr
     calls = _gh_calls(env)
     assert "issue comment" not in calls
     assert "issue edit" not in calls
@@ -1315,6 +1405,7 @@ def test_reconcile_discovers_one_closing_commit_and_cleans_lifecycle_state(
     exact closing reference; the completed ticket becomes historical rather
     than remaining ready and actively claimed."""
 
+    # Present a unique closing commit and a stale claim owned by another login.
     repo = _init_repo(tmp_path / "proj", branch="main")
     (repo / "repair.txt").write_text("repair\n", encoding="utf-8")
     _git(repo, "add", "repair.txt")
@@ -1323,7 +1414,7 @@ def test_reconcile_discovers_one_closing_commit_and_cleans_lifecycle_state(
     ticket = _ticket(
         9,
         "rescued",
-        claimed_by=["me"],
+        claimed_by=["former-maintainer"],
         comments=[_recorded("failed")],
     )
     env = _tracker(
@@ -1332,17 +1423,21 @@ def test_reconcile_discovers_one_closing_commit_and_cleans_lifecycle_state(
         issues={
             9: ticket | {"state": "CLOSED", "labels": [{"name": "ready-for-agent"}]}
         },
+        login="reconciling-maintainer",
     )
 
+    # Discover and reconcile the completion through the public invocation.
     result = _engine(repo, "reconcile", "--ticket", "9", env=env)
 
+    # Remove the recorded stale owner before appending completion history.
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["commit"] == head
     calls = _gh_calls(env)
     assert "label create orchestrated" in calls
     assert "--remove-label ready-for-agent" in calls
     assert "--add-label orchestrated" in calls
-    assert "--remove-assignee @me" in calls
+    assert "--remove-assignee former-maintainer" in calls
+    assert "--remove-assignee @me" not in calls
     assert calls.index("label create orchestrated") < calls.index("issue edit 9")
     assert calls.index("issue edit 9") < calls.index("issue comment 9")
 
@@ -1353,14 +1448,17 @@ def test_successful_record_prepares_completed_lifecycle_before_closing(
     """The historical label and cleanup are established before the outcome
     closes the ticket, so a label failure cannot hide a recorded success."""
 
+    # Present ordinary successful work with active workflow state.
     repo = _init_repo(tmp_path / "proj")
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
     env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
 
+    # Record the verified run outcome through its public invocation.
     result = _engine(
         repo, "record", "--ticket", "9", "--outcome", "done", "--commit", head, env=env
     )
 
+    # Complete lifecycle before closure can hide the ticket from Report.
     assert result.returncode == 0, result.stderr
     calls = _gh_calls(env)
     assert calls.index("label create orchestrated") < calls.index("issue edit 9")
@@ -1373,6 +1471,7 @@ def test_reconcile_without_one_safe_commit_refuses_and_requests_commit(
     """The engine exposes ambiguity for the interactive Skill to ask about and
     refuses when no answer is available instead of choosing a nearby commit."""
 
+    # Present two default-branch commits with equally exact closing evidence.
     repo = _init_repo(tmp_path / "proj", branch="main")
     for name in ("first", "second"):
         (repo / f"{name}.txt").write_text(f"{name}\n", encoding="utf-8")
@@ -1385,8 +1484,10 @@ def test_reconcile_without_one_safe_commit_refuses_and_requests_commit(
         issues={9: ticket | {"state": "CLOSED"}},
     )
 
+    # Invoke discovery without supplying the maintainer's choice.
     result = _engine(repo, "reconcile", "--ticket", "9", env=env)
 
+    # Refuse ambiguity without appending guessed completion provenance.
     assert result.returncode == 1
     assert "more than one completion commit" in result.stderr
     assert "pass --commit" in result.stderr
@@ -1399,6 +1500,7 @@ def test_report_projects_reconciliation_as_done_with_failure_provenance(
     """Report groups by Ticket Resolution and keeps the immutable Run Outcome
     and completion commit in the ticket detail."""
 
+    # Present a reconciled closed ticket under the neutral history label.
     repo = _init_repo(tmp_path / "proj", branch="main")
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
     env = _tracker(
@@ -1413,15 +1515,17 @@ def test_report_projects_reconciliation_as_done_with_failure_provenance(
         ],
     )
 
+    # Read the public Report projection.
     result = _engine(repo, "report", env=env)
 
+    # Group by current resolution while retaining historical provenance.
     assert result.returncode == 0, result.stderr
     report = json.loads(result.stdout)
     assert report["done"] == [9]
     assert report["failed"] == []
     assert report["tickets"][0]["outcome"] == "done"
     assert report["tickets"][0]["run_outcome"] == "failed"
-    assert report["tickets"][0]["reconciliation"] is True
+    assert report["tickets"][0]["is_reconciled"] is True
     assert report["tickets"][0]["commit"] == head
 
 
@@ -1431,6 +1535,7 @@ def test_report_does_not_treat_external_completion_as_run_output(
     """A Reconciliation commit is resolution provenance, not a commit made by
     the unattended run and therefore cannot move that run's base backward."""
 
+    # Present external completion at the current branch head.
     repo = _init_repo(tmp_path / "proj", branch="main")
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
     env = _tracker(
@@ -1441,8 +1546,10 @@ def test_report_does_not_treat_external_completion_as_run_output(
         ],
     )
 
+    # Read the public Report projection.
     result = _engine(repo, "report", env=env)
 
+    # Keep the run base independent of the external completion commit.
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["base"] == head
 
@@ -1453,6 +1560,7 @@ def test_plan_unblocks_a_dependent_only_after_its_closed_blocker_is_reconciled(
     """Tracker closure can mean rejection or duplication; only a done Ticket
     Resolution establishes the work a dependent needs."""
 
+    # Present the same closed failure before and after Reconciliation.
     repo = _init_repo(tmp_path / "proj", branch="main")
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
     dependent = _ticket(10, "dependent", blocked_by=[(9, "CLOSED")])
@@ -1473,9 +1581,11 @@ def test_plan_unblocks_a_dependent_only_after_its_closed_blocker_is_reconciled(
         },
     )
 
+    # Compare the public Plan projections around the current-resolution event.
     before = _engine(repo, "plan", env=before_env)
     after = _engine(repo, "plan", env=after_env)
 
+    # Unblock the dependent only after the blocker resolves done.
     assert before.returncode == 2, before.stderr
     assert json.loads(before.stdout)["workable"] == []
     assert after.returncode == 0, after.stderr

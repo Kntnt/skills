@@ -1165,12 +1165,35 @@ def test_the_manpage_accounts_for_the_blocked_outcome() -> None:
     )
 
 
+def test_the_manpages_describe_reconciled_done_without_run_provenance() -> None:
+    """Report groups on current Ticket Resolution while an external repair
+    remains visibly outside Orchestrate's build and verification history."""
+
+    # Read the root outcome contract and the addressed Reconciliation page.
+    outcomes = _manpage_section("OUTCOMES")
+    done = _manpage_entry("OUTCOMES", "**done**")
+    reconcile = (SKILL / "help" / "reconcile.md").read_text(encoding="utf-8")
+
+    # Define the grouping before describing either provenance path under done.
+    assert "Report groups tickets by their current Ticket Resolution" in outcomes
+    assert "completed outside Orchestrate" in done
+    assert "unsuccessful Run Outcome" in done
+    assert "does not claim Orchestrate built or independently verified" in done
+
+    # Distinguish lifecycle recovery from a complete idempotent repeat.
+    assert "interrupted" in reconcile
+    assert "lifecycle repair" in reconcile
+    assert "rather than agreement" in reconcile
+
+
 def test_invalid_reconcile_form_routes_to_reconcile_synopsis() -> None:
     """Once the subcommand is recognized, its own grammar and help route make
     a malformed invocation actionable without showing unrelated run forms."""
 
+    # Read the shipped parser instructions as the installed agent receives them.
     instructions = (SKILL / "SKILL.md").read_text(encoding="utf-8")
 
+    # Route recognized malformed forms to the addressed subcommand contract.
     assert "invalid recognized `reconcile` form" in instructions
     assert "`$HERE/help/reconcile.md`" in instructions
     assert "`/orchestrate reconcile --help`" in instructions

@@ -14,7 +14,9 @@ orchestrate reconcile - record work completed outside Orchestrate
 
 The ticket must already be closed and carry a failed or conflicted Run Outcome. The completion commit must be reachable from the repository's default branch. When exactly one default-branch commit carries an exact closing reference for the ticket, Orchestrate uses it. Otherwise an interactive invocation asks the maintainer to identify the commit and an unattended invocation refuses rather than guessing.
 
-An identical repeated Reconciliation changes nothing and reports that the tracker already agrees. An existing Reconciliation naming another commit is contradictory and is refused. A successful Reconciliation removes `ready-for-agent` and the active assignment, then adds the neutral `orchestrated` label used to discover completed tickets for later reports.
+An identical repeated Reconciliation whose lifecycle projection is complete changes nothing and reports that the tracker already agrees. If an earlier attempt appended the event but was interrupted before cleanup, repeating it performs lifecycle repair without appending another event and reports recovery rather than agreement. An existing Reconciliation naming another commit is contradictory and is refused.
+
+A successful Reconciliation removes `ready-for-agent`, removes every remaining assignment by its recorded login because completed lifecycle state has no active owner, then adds the neutral `orchestrated` label used to discover completed tickets for later reports.
 
 ## POSITIONAL ARGUMENTS
 

@@ -94,11 +94,11 @@ A ticket still claimed by the current user is resumed only when the Skill can di
 
 ## OUTCOMES
 
-Every ticket in scope appears once in the final report.
+Every ticket in scope appears once in the final report. Report groups tickets by their current Ticket Resolution while ticket detail retains the immutable Run Outcome and completion provenance that produced or later corrected it.
 
 **done**
 
-Built, independently verified, integrated, recorded, and closed.
+The requested work is complete. An ordinary successful run was built, independently verified, integrated, recorded, and closed by Orchestrate. A reconciled ticket was completed outside Orchestrate; its detail preserves the unsuccessful Run Outcome, Reconciliation provenance, and completion commit, and does not claim Orchestrate built or independently verified that repair.
 
 **failed**
 
