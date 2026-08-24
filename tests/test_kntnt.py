@@ -3889,7 +3889,26 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
     assert "config.json" not in mode
-    assert "{the entire content of $HERE/references/mode.md, verbatim}" in persistence
+
+    # Keep project and user persistence as one refreshable mode contract.
+    required_persistence_fragments = {
+        "`project` and `user` keep the mode as a managed block",
+        "{the entire content of $HERE/references/mode.md, verbatim}",
+        "`on` over an existing block rewrites it from the current `mode.md`",
+        "`off` removes the whole block, both markers included, and nothing else",
+        "lines between the second comment and the closing marker differ",
+        "`status` reports it and names `/delegation <scope> on` as the fix",
+    }
+    missing_persistence = sorted(
+        fragment
+        for fragment in required_persistence_fragments
+        if fragment not in persistence
+    )
+    assert not missing_persistence, (
+        f"{directory / 'references' / 'persist.md'}: persistent delegation must"
+        f" copy one authoritative mode verbatim, refresh it, remove it exactly, and"
+        f" diagnose stale copies; missing {missing_persistence}."
+    )
 
 
 def test_delegation_leaves_tool_output_policy_to_ticket_44() -> None:

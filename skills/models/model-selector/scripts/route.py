@@ -1491,8 +1491,22 @@ def _decision(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, An
     ):
         return _refused(request, snapshot, "above_main_seat_ceiling")
 
-    # Refuse an empty safe set with the authoritative hard-filter audit.
+    # Preserve automatic fresh-context delegation when controls are unavailable.
     if not pool.candidates:
+        if (
+            not overrides
+            and snapshot["harness"].get("inheritance")
+            and pool.variant_exclusion_codes
+            and set(pool.variant_exclusion_codes) == {"adapter_unreachable"}
+        ):
+            return _inherit(
+                request,
+                snapshot,
+                "unavailable_selection_controls",
+                {"exclusions": list(pool.exclusions)},
+            )
+
+        # Refuse every other empty safe set with the hard-filter audit.
         return _refused(
             request,
             snapshot,

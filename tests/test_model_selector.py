@@ -717,6 +717,31 @@ def test_route_inherits_without_a_profile_or_discriminating_evidence() -> None:
     assert uncertain["inheritance"]["reason"] == "insufficient_evidence"
 
 
+def test_route_inherits_when_automatic_execution_lacks_selection_controls() -> None:
+    """An inherited Harness still provides fresh-context delegation safely."""
+
+    # Remove every explicit launch adapter while retaining inherited subagents.
+    snapshot = _complete_routing_snapshot()
+    snapshot["harness"]["adapter_specs"] = []
+    decision = _load_router().route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Preserve delegation without falsely claiming exact launch controls exist.
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
+    assert "launch" not in decision
+    assert decision["audit"]["exclusions"] == [
+        {
+            "code": "adapter_unreachable",
+            "detail": "No active adapter can launch every field of this point.",
+            "model": "worker-v2",
+            "portable_deliberation": portable,
+        }
+        for portable in ("low", "medium", "high", "xhigh", "max")
+    ]
+
+
 def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
     """Invalid, unavailable, unsafe, and empty states fail before launch."""
 
@@ -760,9 +785,6 @@ def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
     cases.append(
         (above, _request(overrides={"model": "worker-v2"}), "above_main_seat_ceiling")
     )
-    unreachable = _complete_routing_snapshot()
-    unreachable["harness"]["adapter_specs"] = []
-    cases.append((unreachable, _request(), "empty_safe_candidate_set"))
     verdict = _complete_routing_snapshot()
     verdict["harness"]["inheritance"] = False
     cases.append(
@@ -2104,6 +2126,7 @@ def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
         "above_main_seat_ceiling",
         "unrepresentable_verdict_inheritance",
         "empty_safe_candidate_set",
+        "unavailable_selection_controls",
         "locks only that dimension",
         "actual spawn capabilities",
         "concrete current-Harness adapter",
