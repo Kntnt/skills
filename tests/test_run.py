@@ -1498,6 +1498,47 @@ def test_route_refuses_to_freeze_a_decision_made_for_a_verdict(tmp_path: Path) -
     assert "inherits" in result.stderr
 
 
+def test_route_refuses_to_freeze_a_first_snapshot_over_standing_claims(
+    tmp_path: Path,
+) -> None:
+    """A run with claims out has already routed; a first freeze would be a second run.
+
+    The plan refuses such a resume, but a preflight reached without one would
+    freeze a context today's environment produced and then decide the rest of
+    the night from it — work already claimed under facts nothing can produce
+    again. The invariant is the engine's rather than the workflow's, so this
+    seam asks the same question the plan does (ADR-0085).
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+    _refile(env, "open", [_ticket(9, "the skeleton", claimed_by=["me"])])
+    (scratch / STATE_HOME / ROUTING_FILE).unlink()
+
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("build-9")],
+        snapshot=_snapshot("today"),
+        name="refrozen.json",
+    )
+    claimed = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode == 1
+    assert "#9" in result.stderr
+    assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
+    assert claimed.returncode == 1
+
+
 def test_route_refuses_a_request_name_it_cannot_read(tmp_path: Path) -> None:
     """A decision nothing can attach to a role and a ticket is a decision nobody can act on."""
 

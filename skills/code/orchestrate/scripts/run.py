@@ -238,7 +238,7 @@ DELIBERATION_LEVELS = ("low", "medium", "high", "xhigh", "max")
 ROUTE_REQUEST = re.compile(
     r"^(?:(?P<role>build|repair|rebuild)-(?P<ticket>\d+)"
     r"|amend-(?P<amended>\d+)-(?P<attempt>\d+)"
-    r"|wave-fix-(?P<wave>\d+))$"
+    r"|wave-fix-(?P<wave>\d+))\Z"
 )
 
 # The roles that are never routed. A verdict inherits the complete main seat
@@ -2519,6 +2519,26 @@ def described_locks(model: str | None, deliberation: str | None) -> str:
     return " and ".join(named)
 
 
+def claims_refusal(state: RunState) -> str | None:
+    """Return why a run may not freeze a first snapshot now, or None where it may.
+
+    A run holding claims has routed already, whatever is left of the file that
+    said so. Freezing a context today's environment produced would decide the
+    rest of the night from facts the claimed work was never done under, so this
+    seam asks what the plan asks rather than trusting that the plan was reached
+    (ADR-0085).
+    """
+
+    if not state.claimed:
+        return None
+
+    return (
+        f"{as_references(state.claimed)} stand claimed by this run and its "
+        "frozen routing is gone: a first snapshot frozen now would not be the "
+        "one that work was claimed under"
+    )
+
+
 def batch_refusal(state: RunState, records: list[RouteRecord]) -> str | None:
     """Return why an opening batch is not the plan's frontier, or None where it is.
 
@@ -2603,6 +2623,8 @@ def cmd_route(
     # The first response of a run freezes its context and its locks; every one
     # after it is held to both, and to the frontier the plan named.
     if routing is None:
+        if (standing := claims_refusal(state)) is not None:
+            return fail(standing)
         if (opening := batch_refusal(state, records)) is not None:
             return fail(opening)
         routing = Routing(snapshot, model, deliberation, [])
