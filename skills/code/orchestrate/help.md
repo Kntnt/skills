@@ -96,6 +96,8 @@ A ticket still claimed by the current user is resumed only when the Skill can di
 
 Every ticket in scope appears once in the final report. Report groups tickets by their current Ticket Resolution while ticket detail retains the immutable Run Outcome and completion provenance that produced or later corrected it.
 
+A recorded outcome and a current Ticket Resolution are different facts, wherever a ticket is read. The recorded outcome is the immutable record of one unattended attempt and never changes once written. The current Ticket Resolution is what the ticket's state is now: where no Reconciliation has been recorded, that state is the recorded outcome itself; where one has, the most recent Reconciliation states it instead, and the earlier outcome remains as unchanged history.
+
 **done**
 
 The requested work is complete. An ordinary successful run was built, independently verified, integrated, recorded, and closed by Orchestrate. A reconciled ticket was completed outside Orchestrate; its detail preserves the unsuccessful Run Outcome, Reconciliation provenance, and completion commit, and does not claim Orchestrate built or independently verified that repair.
