@@ -8,15 +8,25 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 **/orchestrate** [*TICKET-OR-SPEC*...] [**--dry-run**] [**--at-once** *COUNT*] [**--model** *NAME*] [**--yes**] [**--** *INSTRUCTION*]
 
+**/orchestrate reconcile** *TICKET* [**--commit** *COMMIT*] [**--yes**] [**--** *INSTRUCTION*]
+
 ## DESCRIPTION
 
 `orchestrate` plans and works the current repository's open `ready-for-agent` tickets on the branch where it starts. It claims each ticket, delegates the build to a fresh subagent, delegates verification to a different subagent, integrates verified work, records the outcome on the tracker, and closes successful tickets. It does not push, tag, or release.
 
-Blocking relations produce dependency waves. Wave one contains tickets that can start immediately; each later wave contains work unblocked by earlier verified work. Native tracker dependency relations are authoritative when present. A ticket with no native relation may declare bare `#number` references on a `Blocked by` line. Closed blockers do not block.
+Blocking relations produce dependency waves. Wave one contains tickets that can start immediately; each later wave contains work unblocked by earlier verified work. Native tracker dependency relations are authoritative when present. A ticket with no native relation may declare bare `#number` references on a `Blocked by` line. A closed blocker continues to block until it has a done Ticket Resolution.
 
 The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Builders may use cheaper models through `--model` or automatic selection, but every verdict remains on the orchestrator's model.
 
 Before claiming anything, the Skill reads every ticket in scope for a decision the text leaves open and asks all such questions in one batch. Answers are posted to the corresponding ticket before building. With `--yes`, an open decision cannot be answered, so the ticket is parked under `needs-info` with its question and the rest of the scope continues.
+
+`reconcile` is the explicit maintainer action for a ticket whose failed or conflicted unattended attempt was later completed outside Orchestrate. It preserves that Run Outcome, records a done Ticket Resolution naming the landed completion commit, and cleans stale workflow state without closing the already-closed ticket. See **/orchestrate reconcile --help**.
+
+## COMMANDS
+
+**reconcile**
+
+Record that a closed, unsuccessfully attempted ticket was completed outside Orchestrate.
 
 ## POSITIONAL ARGUMENTS
 
@@ -62,7 +72,7 @@ An ambiguity, missing requirement, or design choice not settled by the ticket pa
 
 **Discovered dependency**
 
-When the missing requirement is carried by another open ticket, the run writes the missing blocking edge to the tracker, releases the claim, discards the partial isolated build, and offers the ticket again after its blocker closes. This does not consume the ticket's rebuild.
+When the missing requirement is carried by another ticket without a done Ticket Resolution, the run writes the missing blocking edge to the tracker, releases the claim, discards the partial isolated build, and offers the ticket again after its blocker has a done Ticket Resolution. This does not consume the ticket's rebuild.
 
 **Failed work**
 
@@ -84,11 +94,11 @@ A ticket still claimed by the current user is resumed only when the Skill can di
 
 ## OUTCOMES
 
-Every ticket in scope appears once in the final report.
+Every ticket in scope appears once in the final report. Report groups tickets by their current Ticket Resolution while ticket detail retains the immutable Run Outcome and completion provenance that produced or later corrected it.
 
 **done**
 
-Built, independently verified, integrated, recorded, and closed.
+The requested work is complete. An ordinary successful run was built, independently verified, integrated, recorded, and closed by Orchestrate. A reconciled ticket was completed outside Orchestrate; its detail preserves the unsuccessful Run Outcome, Reconciliation provenance, and completion commit, and does not claim Orchestrate built or independently verified that repair.
 
 **failed**
 
@@ -121,6 +131,10 @@ Build at most *COUNT* frontier tickets concurrently. The default is `1`. Values 
 **--model** *NAME*
 
 Use *NAME* for every building subagent. Verification, collision repair verdicts, amend verdicts, and wave checks remain on the orchestrator's model. Without this option, the Skill selects per ticket the cheapest builder model it judges able, never above its own model.
+
+**--commit** *COMMIT*
+
+Name the default-branch commit that completed a reconciled ticket. It applies only to `reconcile`; the action discovers the commit when one exact closing-reference candidate exists.
 
 **--yes**
 

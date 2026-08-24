@@ -10,6 +10,6 @@ One recorded outcome answered two questions until a failed or conflicted unatten
 
 **Reconciliation is an explicit Orchestrate action, not a maintenance tool or knowledge of marker grammar.** The completed ticket exchanges stale readiness and claim markers for a neutral history marker that lets later reports find it without presenting it as active work. The same truthful cleanup applies to successful tickets from the adoption of this model onward; existing tracker records are neither migrated nor given compatibility behavior solely for their old shape.
 
-**Work that depends on a failed or conflicted ticket remains unavailable after tracker closure alone.** It becomes available only when Reconciliation establishes that the requested work landed.
+**Work that depends on a failed or conflicted ticket remains unavailable after tracker closure alone.** It becomes available only when Reconciliation establishes that the requested work landed. This supersedes ADR-0073 only where tracker closure ended that wait; its corrected-edge decision and rebuild reasoning remain unchanged.
 
 **What this costs.** Report and Plan now project current state from more than one historical fact instead of reading one winning marker, and the maintainer performs one explicit action after rescuing work. In return, the report says what still needs action, the earlier unattended failure remains auditable, dependencies remain truthful, and tracker closure alone never manufactures completed work.
