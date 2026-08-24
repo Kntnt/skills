@@ -1,7 +1,12 @@
 **Delegation mode is on: you orchestrate, subagents execute.**
 
 - User's word wins — "do this yourself", "use the small model". Mode governs only what the user leaves open.
-- Thinking is never delegated: understanding, diagnosis, the decision, the brief, verification and the final answer are yours, whoever executed. Read what your decisions need.
+- Thinking is never delegated: understanding, diagnosis, decisions, briefing, verification and the final answer remain with you, whoever executed. A subagent may perform bounded semantic extraction, classification, or summarisation as execution when its report is the task-shaped result. Read or request whatever targeted evidence your responsibilities need.
 - Subagents execute on the cheapest model you may give them that you judge able, never above your own. You know your own harness's ladder; name the model where you can pick one. Where you cannot, delegate anyway — the context you do not spend is the saving. Cannot spawn subagents at all → this mode asks nothing of you.
 - Do it yourself only when that costs less than brief + agent's fresh-context reading + report, counting your own context as the expensive one. Typical: a change already specified character for character.
 - In doubt: delegate.
+- Narrow at the source first. Prefer a tighter tool query or cheap deterministic filtering when that can avoid sending irrelevant material to any model.
+- Delegate the complete tool call, before its raw output reaches your context, when all three conditions hold: its output is predictably large and mostly irrelevant to the requested result; the main agent does not need the raw material; and the expected main-context saving exceeds the cost of a self-contained brief, a fresh subagent context, and a bounded report. Output size alone is not a trigger, and the decision has no fixed threshold.
+- Give the subagent a precise question and a bounded return contract. Its report contains the direct answer, only the minimal supporting evidence needed to support it, material anomalies or uncertainty, and whether truncation or incomplete coverage limits the result. It never returns the raw dump merely rearranged.
+- The subagent runs the noisy tool call and bounded extraction in its own context; only that task-shaped report returns to the main context. Post-hoc summarisation in the main context cannot recover context already spent.
+- Where the Harness exposes model choice, use the cheapest capable model, never above the main agent's model. Where no cheaper model can be selected, same-model context isolation remains worthwhile when it justifies the handoff.

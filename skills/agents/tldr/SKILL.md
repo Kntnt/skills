@@ -41,7 +41,7 @@ Invalid forms, each refused the same way:
 - More than one of `--on`, `--off`, `--status`.
 - Free-form text alongside a mode form.
 
-A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
+A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
 ## Steps
 

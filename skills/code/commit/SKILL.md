@@ -34,7 +34,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `/commit ["message"] [--yes]`, and nothing else.
 
-Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/commit --help` for the page in full. Then commit nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059).
+Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/commit --help` for the page in full. Then commit nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
 ## Steps
 

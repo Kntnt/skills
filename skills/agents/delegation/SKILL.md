@@ -51,7 +51,7 @@ Invalid forms, each refused the same way:
 - `project` or `user` with no state. Flipping a file in the user's home configuration, or a committed file in a shared repo, off an inferred state is the wrong default, and an error infers nothing either.
 - Two scopes, two states, or a state alongside `status`.
 
-A flag is refused rather than ignored where it has no work to do here, and an incomplete form is refused rather than asked about, because a flag accepted and ignored teaches that flags sometimes do nothing and a question asked in place of the grammar leaves the user guessing at what the grammar is (ADR-0059).
+A flag is refused rather than ignored where it has no work to do here, and an incomplete form is refused rather than asked about, because a flag accepted and ignored teaches that flags sometimes do nothing and a question asked in place of the grammar leaves the user guessing at what the grammar is.
 
 ## The mode
 

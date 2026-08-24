@@ -60,7 +60,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `--data=<path>` is valid on every form and overrides the default data directory. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`.
 
-Anything outside these forms is invalid. Where the invocation starts with a recognized command path, name in one line what was wrong, print the `## SYNOPSIS` from that path's manpage in the Help table verbatim, point at `/model-selector <command-path> --help`, change nothing, and stop. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/model-selector --help` for the page in full instead. A flag is refused rather than ignored where it has no work to do here (ADR-0059).
+Anything outside these forms is invalid. Where the invocation starts with a recognized command path, name in one line what was wrong, print the `## SYNOPSIS` from that path's manpage in the Help table verbatim, point at `/model-selector <command-path> --help`, change nothing, and stop. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/model-selector --help` for the page in full instead. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
 ## Evidence first
 
