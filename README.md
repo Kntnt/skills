@@ -67,11 +67,11 @@ Reframe the previous answer at the level and focus useful to the person who owns
 
 ### commit
 
-Commit the entire working tree without pushing. The Skill reconciles `CHANGELOG.md`, proposes `.gitignore` additions where needed, derives a subject unless you provide one and shows the proposed changes before confirmation. Run `/commit ["message"] [--yes]`.
+Commit the entire working tree without pushing. The Skill reconciles `CHANGELOG.md`, proposes `.gitignore` additions where needed, derives a subject unless you provide one and shows the proposed changes before confirmation. Run `/commit [<message>] [--yes]`.
 
 ### push
 
-Run the `commit` workflow, then push the current branch to its upstream. A clean working tree still allows existing unpushed commits to be sent. Run `/push ["message"] [--yes]`.
+Run the `commit` workflow, then push the current branch to its upstream. A clean working tree still allows existing unpushed commits to be sent. Run `/push [<message>] [--yes]`.
 
 ### release
 
@@ -83,7 +83,7 @@ Check whether tickets can be built unattended before a run begins. Each ticket i
 
 ### orchestrate
 
-Work the tracker's `ready-for-agent` tickets in Dependency waves on the current branch. Orchestrate preflights each execution role through model-selector's frozen public route Interface, while independent verdicts inherit the complete main seat. Each ticket is claimed, built by a subagent and independently verified, and every outcome is recorded on its ticket. The run neither pushes nor releases. Run it for all ready tickets, named tickets or the children of a spec with `/orchestrate [#ticket-or-spec ...] [--dry-run] [--at-once N] [--model NAME] [--deliberation low|medium|high|xhigh|max] [--yes]`.
+Work the tracker's `ready-for-agent` tickets in Dependency waves on the current branch. Orchestrate preflights each execution role through model-selector's frozen public route Interface, while independent verdicts inherit the complete main seat. Each ticket is claimed, built by a subagent and independently verified, and every outcome is recorded on its ticket. The run neither pushes nor releases. Run it for all ready tickets, named tickets or the children of a spec with `/orchestrate [#ticket-or-spec ...] [--dry-run] [--at-once N] [--model NAME] [--deliberation low|medium|high|xhigh|max] [--yes]`. Where a failed or conflicted ticket was finished by hand afterwards, `/orchestrate reconcile #<ticket> [--commit <commit>] [--yes]` records that without rewriting the attempt.
 
 ### model-selector
 

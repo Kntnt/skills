@@ -2,7 +2,7 @@
 name: tldr
 description: Reframe what was just said for the person who owns the outcome, and turn TL;DR mode on or off so later replies stay concise and decision-relevant.
 disable-model-invocation: true
-argument-hint: "[instruction] | [--on|--off|--status] [--user] [--yes] [-- <instruction>]"
+argument-hint: "[instruction ...] | [--on|--off] [--user] [--yes] | --status [-- <instruction>]"
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: ""
@@ -37,7 +37,7 @@ Invalid forms, each refused the same way:
 
 - A `--`-prefixed token that is not `--on`, `--off`, `--status`, `--user`, or `--yes`.
 - `--yes` without `--on` or `--off`.
-- `--user` without `--on`, `--off`, or `--status`.
+- `--user` without `--on` or `--off`.
 - More than one of `--on`, `--off`, `--status`.
 - Free-form text alongside a mode form.
 

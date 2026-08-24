@@ -2,7 +2,7 @@
 name: model-selector
 description: Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.
 disable-model-invocation: true
-argument-hint: "[setup|config|recommend|route|chart|compare|update|record|status] [args] [--decision=route|renew] [--budget=<amount>] [--quality=<score>] [--force] [--data=<path>] [-- <instruction>]"
+argument-hint: "[recommend] [<workload>] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] | chart|compare <workload> [--decision=route|renew] [--data=<path>] | route|record <path> [--data=<path>] | config [<subcommand> ...] [--data=<path>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
