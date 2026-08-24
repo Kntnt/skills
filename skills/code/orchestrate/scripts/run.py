@@ -374,6 +374,11 @@ def default_branch_reference(cwd: Path) -> str | None:
     except RunError:
         pass
 
+    # A configured origin establishes a publication boundary even when its
+    # default ref is unavailable locally; uncertainty refuses reconciliation.
+    if git_ok(cwd, "remote", "get-url", "origin"):
+        return None
+
     # Repositories without a remote retain the local fallback used by tests
     # and by work that has no publication boundary.
     return default_branch(cwd)

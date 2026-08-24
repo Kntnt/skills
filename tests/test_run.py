@@ -1329,6 +1329,45 @@ def test_reconcile_refuses_existing_commit_ahead_of_remote_default(
     assert "default branch" in result.stderr
 
 
+def test_reconcile_refuses_local_fallback_when_origin_has_no_default_ref(
+    tmp_path: Path,
+) -> None:
+    """A configured remote with unavailable default history cannot delegate
+    publication authority to a same-named local branch."""
+
+    # Configure an origin without creating any remote-tracking default ref.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    _git(repo, "remote", "add", "origin", str(tmp_path / "missing.git"))
+    local_head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    # Present a premature event naming the local-only commit.
+    ticket = _ticket(
+        9,
+        "rescued",
+        comments=[_recorded("failed"), _reconciled(local_head)],
+    )
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: ticket | {"state": "CLOSED", "labels": [{"name": "orchestrated"}]}},
+    )
+
+    # Refuse without repairing lifecycle state from unauthoritative history.
+    result = _engine(
+        repo,
+        "reconcile",
+        "--ticket",
+        "9",
+        "--commit",
+        local_head,
+        env=env,
+    )
+
+    assert result.returncode == 1
+    assert "default branch" in result.stderr
+    assert "issue edit" not in _gh_calls(env)
+
+
 def test_reconcile_reports_incomplete_lifecycle_recovery_instead_of_agreement(
     tmp_path: Path,
 ) -> None:

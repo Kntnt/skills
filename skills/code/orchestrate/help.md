@@ -72,7 +72,7 @@ An ambiguity, missing requirement, or design choice not settled by the ticket pa
 
 **Discovered dependency**
 
-When the missing requirement is carried by another open ticket, the run writes the missing blocking edge to the tracker, releases the claim, discards the partial isolated build, and offers the ticket again after its blocker has a done Ticket Resolution. This does not consume the ticket's rebuild.
+When the missing requirement is carried by another ticket without a done Ticket Resolution, the run writes the missing blocking edge to the tracker, releases the claim, discards the partial isolated build, and offers the ticket again after its blocker has a done Ticket Resolution. This does not consume the ticket's rebuild.
 
 **Failed work**
 

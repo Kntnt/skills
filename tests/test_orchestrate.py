@@ -1083,18 +1083,19 @@ def test_the_manpage_describes_the_wave_loop_and_what_stops_it() -> None:
 
 
 def test_the_build_step_routes_a_discovered_edge_to_the_blocked_outcome() -> None:
-    """A builder that finds its ticket depends on open work the graph does not
-    name found a missing edge, not a failure — the run corrects the graph and
-    steps back rather than burning the ticket (ADR-0073, issue #79).
+    """A builder that finds its ticket depends on unresolved work the graph
+    does not name found a missing edge, not a failure — the run corrects the
+    graph and steps back rather than burning the ticket (ADR-0073, issue #79).
     """
 
     step = _step(6)
 
     assert "whether the missing thing has a number" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 states the boundary against parking —"
-        f" an open ticket is an edge, and an answer no ticket carries is a"
-        f" question parked under ADR-0070 (ADR-0073)."
+        f" a ticket without a done resolution is an edge, and an answer no"
+        f" ticket carries is a question parked under ADR-0070 (ADR-0073)."
     )
+    assert "a ticket without a done Ticket Resolution is an edge" in step
     assert "--outcome blocked" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 routes a discovered dependency to the"
         f" engine's blocked outcome, which writes the corrected edge rather"
@@ -1110,9 +1111,10 @@ def test_the_build_step_routes_a_discovered_edge_to_the_blocked_outcome() -> Non
         f" when its blocker has a done Ticket Resolution, the corrected edge being the whole"
         f" of the memory the mechanism needs (ADR-0073)."
     )
+    assert "a done Ticket Resolution unblocking whatever waited on it" in _step(11)
 
 
-def test_the_building_brief_stops_on_open_work_the_ticket_does_not_name() -> None:
+def test_the_building_brief_stops_on_unresolved_work_the_ticket_does_not_name() -> None:
     """The builder's vocabulary was build or stop-and-fail, and the third move
     it invented — the scope quietly narrowed inside the commit — is exactly
     what verification exists to catch (ADR-0073, issue #79).
@@ -1121,9 +1123,13 @@ def test_the_building_brief_stops_on_open_work_the_ticket_does_not_name() -> Non
     brief = _brief("brief.md")
     where = SKILL / "references" / "brief.md"
 
+    assert "another ticket without a done Ticket Resolution" in brief, (
+        f"{where}: the brief follows current resolution rather than tracker"
+        f" closure when it identifies missing dependency work (ADR-0079)."
+    )
     assert "stop and name the ticket it waits on" in brief, (
         f"{where}: the brief tells the builder the move exists — a dependency"
-        f" on open work the ticket does not name is stopped on and named"
+        f" on unresolved work the ticket does not name is stopped on and named"
         f" (ADR-0073)."
     )
     assert "Never build around it" in brief, (
@@ -1147,9 +1153,9 @@ def test_the_manpage_accounts_for_the_blocked_outcome() -> None:
     edge = _manpage_entry("BUILDER STOPS", "**Discovered dependency**")
     outcomes = _manpage_section("OUTCOMES")
 
-    assert "another open ticket" in edge, (
+    assert "another ticket without a done Ticket Resolution" in edge, (
         f"{where}: the discovered-dependency entry limits the blocked outcome"
-        f" to missing work carried by another open ticket (ADR-0073)."
+        f" to missing work carried by an unresolved ticket (ADR-0073)."
     )
     assert "writes the missing blocking edge" in edge, (
         f"{where}: the manpage says the run corrects the tracker graph with"
