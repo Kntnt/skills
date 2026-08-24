@@ -304,6 +304,24 @@ def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
     assert unreachable["reason"]["code"] == "empty_safe_candidate_set"
     assert unreachable["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
 
+    # Collide model and native destinations in an otherwise complete adapter.
+    colliding = _complete_routing_snapshot()
+    colliding["harness"]["adapter_specs"][0]["launch"]["model_flag"] = (
+        "reasoning_effort"
+    )
+    collision = router.route(
+        {
+            "schema_version": 1,
+            "context": colliding,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert one argument destination can never overwrite another field.
+    assert collision["status"] == "refused"
+    assert collision["reason"]["code"] == "empty_safe_candidate_set"
+    assert collision["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
+
     # Resolve launch-policy and non-launch commercial mutations separately.
     changed_policy = _complete_routing_snapshot()
     changed_policy["mappings"][0]["policy"]["sandbox"] = "read-only"
@@ -761,6 +779,28 @@ def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
         assert "launch" not in decision
 
 
+def test_recommend_renders_a_refusal_without_claiming_an_exploration_start() -> None:
+    """A refused route remains an honest non-selection in human output."""
+
+    # Adapt an unavailable exact model through the human recommendation seam.
+    recommendation = _load_router().recommend(
+        {
+            "schema_version": 1,
+            "context": _complete_routing_snapshot(),
+            "requests": [_request(overrides={"model": "missing"})],
+        }
+    )["recommendations"][0]
+
+    # Assert the banner explains the shared refusal without proposing a launch.
+    assert recommendation["decision"]["status"] == "refused"
+    assert recommendation["evidence_banner"]["text"] == "🔵 INGEN REKOMMENDATION"
+    assert recommendation["evidence_banner"]["classification_reason"] == (
+        "unavailable_override"
+    )
+    assert recommendation["evidence_banner"]["recommendation_kind"] == "no_selection"
+    assert recommendation["experiment_brief"] is None
+
+
 def test_route_derives_a_snapshot_once_and_resolves_exact_aliases() -> None:
     """Current inputs become a reusable snapshot before alias resolution."""
 
@@ -905,6 +945,57 @@ def test_route_and_recommend_refuse_malformed_envelopes_without_exceptions() -> 
         assert recommended["recommendations"] == []
 
 
+def test_route_outputs_conform_to_the_shipped_response_schema() -> None:
+    """Every public result family satisfies the versioned response contract."""
+
+    # Produce selected, inherited, refused, and artifact-level responses.
+    router = _load_router()
+    context = _complete_routing_snapshot()
+    missing_profile = deepcopy(context)
+    missing_profile["profile"] = None
+    responses = [
+        router.route(
+            {"schema_version": 1, "context": context, "requests": [_request()]}
+        ),
+        router.route(
+            {
+                "schema_version": 1,
+                "context": missing_profile,
+                "requests": [_request()],
+            }
+        ),
+        router.route(
+            {
+                "schema_version": 1,
+                "context": context,
+                "requests": [_request(overrides={"model": "missing"})],
+            }
+        ),
+        router.route({"schema_version": 1, "requests": []}),
+    ]
+
+    # Resolve the response schema's external request-snapshot reference.
+    for response in responses:
+        errors = router._schema_errors(
+            response,
+            router.RESPONSE_SCHEMA,
+            router.RESPONSE_SCHEMA,
+            "response",
+        )
+        assert errors == []
+
+    # Prove the validator enforces the refusal branch's empty decision bound.
+    invalid_refusal = deepcopy(responses[-1])
+    invalid_refusal["decisions"].append(responses[0]["decisions"][0])
+    errors = router._schema_errors(
+        invalid_refusal,
+        router.RESPONSE_SCHEMA,
+        router.RESPONSE_SCHEMA,
+        "response",
+    )
+    assert errors
+
+
 def test_route_labels_stale_measurements_mixed_and_keeps_costs_separate() -> None:
     """Staleness remains visible and commercial dimensions are not collapsed."""
 
@@ -936,6 +1027,18 @@ def test_route_labels_stale_measurements_mixed_and_keeps_costs_separate() -> Non
         "allocated_subscription_cost": None,
         "latency": 4.0,
     }
+
+    # Adapt the same stale record through the human recommendation seam.
+    recommendation = router.recommend(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["recommendations"][0]
+
+    # Assert presentation cannot revive inapplicable evidence.
+    assert recommendation["uncertainty"]["status"] == "unknown"
 
 
 def test_route_requires_exact_representative_evidence_for_measurement_class() -> None:
@@ -1274,6 +1377,37 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
     assert ambiguous["inheritance"]["reason"] == "underdetermined_frontier"
     assert len(ambiguous["audit"]["frontier"]) == 2
 
+    # Adapt the unresolved measured frontier with its explicit quality rubric.
+    unresolved = router.recommend(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [
+                _request(
+                    overrides={"deliberation": "low"},
+                    rubric={"kind": "binary", "pass_condition": "pytest passes"},
+                )
+            ],
+        }
+    )["recommendations"][0]
+
+    # Assert unresolved evidence retains an executable measurement path.
+    assert unresolved["decision"]["status"] == "inherit"
+    assert unresolved["evidence_banner"]["class"] == "mixed"
+    assert "STARTPUNKT" not in unresolved["evidence_banner"]["text"]
+    assert unresolved["evidence_banner"]["classification_reason"] == (
+        "underdetermined_frontier"
+    )
+    assert unresolved["evidence_banner"]["missing_evidence"]
+    assert unresolved["evidence_banner"]["recommendation_kind"] == "no_selection"
+    assert unresolved["experiment_brief"]["rubric"] == {
+        "kind": "binary",
+        "pass_condition": "pytest passes",
+    }
+    assert unresolved["experiment_brief"]["record_import"]["command"] == (
+        "/model-selector record <path>"
+    )
+
     # Make the second point demonstrably worse on quality and every cost axis.
     dominated = deepcopy(snapshot)
     dominated["mappings"][1]["commercial"] = {
@@ -1476,6 +1610,11 @@ def test_route_and_recommend_share_selection_but_not_presentation() -> None:
         "class": "heuristic",
         "text": "🔵 HEURISTISK STARTPUNKT",
         "confidence": "low",
+        "classification_reason": "Representative exact-point measurements did not determine the selected point.",
+        "missing_evidence": [
+            "representative exact-point evidence clearing the quality floor"
+        ],
+        "recommendation_kind": "exploration_start",
         "production_recommendation": False,
     }
     assert recommendation["frontier_neighbors"] == []

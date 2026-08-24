@@ -89,6 +89,7 @@
         "workload": {"$ref": "#/$defs/non_empty_string"},
         "workload_cohort": {"$ref": "#/$defs/non_empty_string"},
         "workload_tags": {"$ref": "#/$defs/string_array"},
+        "rubric": {"oneOf": [{"$ref": "#/$defs/non_empty_string"}, {"type": "object", "minProperties": 1}]},
         "required_capabilities": {"$ref": "#/$defs/string_array"},
         "reversible": {"type": "boolean"},
         "checker": {"$ref": "#/$defs/checker"},

@@ -23,9 +23,19 @@ COMMERCIAL_DIMENSIONS: tuple[str, ...] = (
 REQUEST_SCHEMA_PATH: Path = (
     Path(__file__).resolve().parent.parent / "references" / "route-request.schema.json"
 )
+RESPONSE_SCHEMA_PATH: Path = (
+    Path(__file__).resolve().parent.parent / "references" / "route-response.schema.json"
+)
 REQUEST_SCHEMA: dict[str, Any] = json.loads(
     REQUEST_SCHEMA_PATH.read_text(encoding="utf-8")
 )
+RESPONSE_SCHEMA: dict[str, Any] = json.loads(
+    RESPONSE_SCHEMA_PATH.read_text(encoding="utf-8")
+)
+SCHEMAS_BY_ID: dict[str, dict[str, Any]] = {
+    REQUEST_SCHEMA["$id"]: REQUEST_SCHEMA,
+    RESPONSE_SCHEMA["$id"]: RESPONSE_SCHEMA,
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -57,6 +67,16 @@ class EvidencePool:
     below_floor: tuple[Candidate, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class SelectionOutcome:
+    """Carry one resolved candidate and the policy facts that selected it."""
+
+    candidate: Candidate
+    decision_policy: str
+    frontier: tuple[dict[str, Any], ...]
+    exclusions: tuple[dict[str, Any], ...]
+
+
 def _schema_type_matches(value: Any, expected: str) -> bool:
     """Match the JSON type vocabulary without Python's boolean-number overlap."""
 
@@ -79,13 +99,26 @@ def _schema_type_matches(value: Any, expected: str) -> bool:
             return False
 
 
-def _resolve_schema_reference(reference: str, root: dict[str, Any]) -> dict[str, Any]:
-    """Resolve a local JSON Pointer used by the shipped request schema."""
+def _resolve_schema_reference(
+    reference: str,
+    root: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Resolve a JSON Pointer across the shipped request and response schemas."""
 
-    value: Any = root
-    for token in reference.removeprefix("#/").split("/"):
+    # Select the current root for local pointers or the named shipped schema.
+    if reference.startswith("#"):
+        resolved_root = root
+        pointer = reference
+    else:
+        identifier, _, fragment = reference.partition("#")
+        resolved_root = SCHEMAS_BY_ID[identifier]
+        pointer = f"#{fragment}"
+
+    # Walk the escaped JSON Pointer tokens against the resolved schema root.
+    value: Any = resolved_root
+    for token in pointer.removeprefix("#/").split("/"):
         value = value[token.replace("~1", "/").replace("~0", "~")]
-    return cast(dict[str, Any], value)
+    return cast(dict[str, Any], value), resolved_root
 
 
 def _schema_errors(
@@ -98,10 +131,11 @@ def _schema_errors(
 
     # Resolve references and composition before inspecting concrete keywords.
     if "$ref" in schema:
+        resolved, resolved_root = _resolve_schema_reference(schema["$ref"], root)
         return _schema_errors(
             value,
-            _resolve_schema_reference(schema["$ref"], root),
-            root,
+            resolved,
+            resolved_root,
             path,
         )
     if "oneOf" in schema:
@@ -119,15 +153,6 @@ def _schema_errors(
             for branch in schema["allOf"]
             for error in _schema_errors(value, branch, root, path)
         ]
-    if "anyOf" in schema:
-        return (
-            []
-            if any(
-                not _schema_errors(value, branch, root, path)
-                for branch in schema["anyOf"]
-            )
-            else [f"{path} does not match an allowed shape"]
-        )
     if "not" in schema and not _schema_errors(value, schema["not"], root, path):
         return [f"{path} matches a forbidden shape"]
 
@@ -176,6 +201,8 @@ def _schema_errors(
     if isinstance(value, list):
         if len(value) < schema.get("minItems", 0):
             errors.append(f"{path} has too few items")
+        if "maxItems" in schema and len(value) > schema["maxItems"]:
+            errors.append(f"{path} has too many items")
         if "items" in schema:
             errors.extend(
                 error
@@ -302,6 +329,26 @@ def _fingerprint(
     return _canonical_digest(value)
 
 
+def _launch_destinations_are_unique(adapter: dict[str, Any]) -> bool:
+    """Prevent complete-point fields from overwriting one launch argument."""
+
+    # Gather every scalar and mapped destination the adapter can emit.
+    launch = adapter.get("launch", {})
+    native_flags = launch.get("native_control_flags", {})
+    policy_flags = launch.get("policy_flags", {})
+    destinations = [
+        launch.get("model_flag"),
+        launch.get("surface_flag"),
+        launch.get("serving_mode_flag"),
+        launch.get("tools_flag"),
+        *(native_flags.values() if isinstance(native_flags, dict) else []),
+        *(policy_flags.values() if isinstance(policy_flags, dict) else []),
+    ]
+    return all(isinstance(value, str) and value for value in destinations) and len(
+        destinations
+    ) == len(set(destinations))
+
+
 def _adapter_can_launch(
     adapter: dict[str, Any],
     point: dict[str, Any],
@@ -337,6 +384,7 @@ def _adapter_can_launch(
         and set(native) <= set(native_flags)
         and isinstance(policy_flags, dict)
         and set(point.get("policy", {})) <= set(policy_flags)
+        and _launch_destinations_are_unique(adapter)
     )
 
 
@@ -938,25 +986,90 @@ def _economic_candidate(
     )
 
 
-def _selection_decision(
+def _resolve_measured_policy(
     request: dict[str, Any],
     snapshot: dict[str, Any],
-    pool: CandidatePool,
-) -> dict[str, Any]:
-    """Resolve one selected or underdetermined decision from an eligible pool."""
+    measured: list[tuple[Candidate, dict[str, Any]]],
+    exclusions: list[dict[str, Any]],
+) -> SelectionOutcome | dict[str, Any]:
+    """Resolve exact measurements through human economics or Pareto policy."""
 
-    # Partition exact evidence once for every candidate and human output form.
-    records = snapshot["evidence"]["records"]
-    evidence_pool = _candidate_evidence(pool.candidates, records, request, snapshot)
-    measured = list(evidence_pool.measured)
-    exclusions = deepcopy(list(pool.exclusions)) + _evidence_exclusions(
-        evidence_pool,
-        include_unknown=bool(measured),
+    # Build the honest multidimensional frontier once for every measured policy.
+    frontier = _pareto_frontier(measured)
+    frontier_audit = _frontier_audit(frontier, snapshot)
+    audit = {
+        "frontier": frontier_audit,
+        "exclusions": deepcopy(exclusions),
+    }
+    economics = request.get("economics")
+
+    # Give an explicit human budget or quality floor first precedence.
+    if isinstance(economics, dict) and (
+        "budget" in economics or "quality_floor" in economics
+    ):
+        winner, decision_policy = _economic_candidate(frontier, economics)
+        if winner is None:
+            return _inherit(
+                request,
+                snapshot,
+                "underdetermined_frontier",
+                audit,
+            )
+        candidate = winner
+
+    # Accept a frontier containing exactly one non-dominated point.
+    elif len(frontier) == 1:
+        candidate = frontier[0][0]
+        decision_policy = "pareto_dominance"
+
+    # Resolve a tradeoff only through complete frozen shadow prices.
+    else:
+        shadow_prices = snapshot["override_policy"].get("shadow_prices")
+        priced = (
+            [(_shadow_cost(item[0], shadow_prices), item) for item in frontier]
+            if isinstance(shadow_prices, dict)
+            else []
+        )
+        if not priced or any(cost is None for cost, _ in priced):
+            return _inherit(
+                request,
+                snapshot,
+                "underdetermined_frontier",
+                audit,
+            )
+        minimum = min(float(cost) for cost, _ in priced if cost is not None)
+        winners = [
+            item for cost, item in priced if cost is not None and float(cost) == minimum
+        ]
+        if len(winners) != 1:
+            return _inherit(
+                request,
+                snapshot,
+                "underdetermined_frontier",
+                audit,
+            )
+        candidate = winners[0][0]
+        decision_policy = "explicit_shadow_prices"
+
+    # Preserve the measured frontier and filtering facts with the chosen point.
+    return SelectionOutcome(
+        candidate,
+        decision_policy,
+        tuple(frontier_audit),
+        tuple(deepcopy(exclusions)),
     )
-    decision_policy = "cold_start"
-    frontier_audit: list[dict[str, Any]] = []
+
+
+def _resolve_selection_policy(
+    request: dict[str, Any],
+    snapshot: dict[str, Any],
+    evidence_pool: EvidencePool,
+    exclusions: list[dict[str, Any]],
+) -> SelectionOutcome | dict[str, Any]:
+    """Resolve evidence state into one candidate or honest inheritance."""
 
     # Never let measured points dominate candidates whose evidence is unknown.
+    measured = list(evidence_pool.measured)
     if measured and evidence_pool.unknown:
         frontier = _pareto_frontier(measured)
         return _inherit(
@@ -971,63 +1084,10 @@ def _selection_decision(
 
     # Resolve measured alternatives through explicit economics or Pareto policy.
     if measured:
-        # Build the honest multidimensional frontier once for all output forms.
-        frontier = _pareto_frontier(measured)
-        frontier_audit = _frontier_audit(frontier, snapshot)
-        economics = request.get("economics")
-
-        # Give an explicit human budget or quality floor first precedence.
-        if isinstance(economics, dict) and (
-            "budget" in economics or "quality_floor" in economics
-        ):
-            winner, decision_policy = _economic_candidate(frontier, economics)
-            if winner is None:
-                return _inherit(
-                    request,
-                    snapshot,
-                    "underdetermined_frontier",
-                    {"frontier": frontier_audit},
-                )
-            eligible = [winner]
-
-        # Accept a frontier containing exactly one non-dominated point.
-        elif len(frontier) == 1:
-            eligible = [frontier[0][0]]
-            decision_policy = "pareto_dominance"
-
-        # Resolve a tradeoff only through complete frozen shadow prices.
-        else:
-            shadow_prices = snapshot["override_policy"].get("shadow_prices")
-            priced = (
-                [(_shadow_cost(item[0], shadow_prices), item) for item in frontier]
-                if isinstance(shadow_prices, dict)
-                else []
-            )
-            if not priced or any(cost is None for cost, _ in priced):
-                return _inherit(
-                    request,
-                    snapshot,
-                    "underdetermined_frontier",
-                    {"frontier": frontier_audit},
-                )
-            minimum = min(float(cost) for cost, _ in priced if cost is not None)
-            winners = [
-                item
-                for cost, item in priced
-                if cost is not None and float(cost) == minimum
-            ]
-            if len(winners) != 1:
-                return _inherit(
-                    request,
-                    snapshot,
-                    "underdetermined_frontier",
-                    {"frontier": frontier_audit},
-                )
-            eligible = [winners[0][0]]
-            decision_policy = "explicit_shadow_prices"
+        return _resolve_measured_policy(request, snapshot, measured, exclusions)
 
     # Refuse to treat a heuristic point as measured economic evidence.
-    elif "economics" in request:
+    if "economics" in request:
         return _inherit(
             request,
             snapshot,
@@ -1036,7 +1096,7 @@ def _selection_decision(
         )
 
     # Inherit when every candidate has exact evidence below the quality floor.
-    elif not evidence_pool.unknown:
+    if not evidence_pool.unknown:
         return _inherit(
             request,
             snapshot,
@@ -1045,24 +1105,40 @@ def _selection_decision(
         )
 
     # Choose the workload-safe cold-start endpoint when measurements are absent.
-    else:
-        eligible = list(evidence_pool.unknown)
-        decision_policy = (
-            "cold_start_strongest"
-            if not request["reversible"] and request["checker"]["kind"] == "none"
-            else "cold_start_weakest"
-        )
+    decision_policy = (
+        "cold_start_strongest"
+        if not request["reversible"] and request["checker"]["kind"] == "none"
+        else "cold_start_weakest"
+    )
 
     # Choose the weakest or strongest complete candidate required by the policy.
     choose = max if decision_policy == "cold_start_strongest" else min
     candidate = choose(
-        eligible,
+        evidence_pool.unknown,
         key=lambda item: (
             _model_capability(item.point),
             _control_capability(item.point, item.portable),
             PORTABLE_LEVELS.index(item.portable),
         ),
     )
+    return SelectionOutcome(
+        candidate,
+        decision_policy,
+        (),
+        tuple(deepcopy(exclusions)),
+    )
+
+
+def _selected_decision(
+    request: dict[str, Any],
+    snapshot: dict[str, Any],
+    records: list[dict[str, Any]],
+    selection: SelectionOutcome,
+) -> dict[str, Any]:
+    """Serialize one resolved candidate as the complete selected result."""
+
+    # Translate and fingerprint the candidate selected by shared policy.
+    candidate = selection.candidate
     point = candidate.point
     portable = candidate.portable
     native = candidate.native
@@ -1070,7 +1146,7 @@ def _selection_decision(
     arguments = _launch_arguments(adapter, point, native, snapshot)
     fingerprint = _candidate_fingerprint(candidate, snapshot)
 
-    # Classify and expose the exact winner from the same frozen evidence facts.
+    # Classify the exact winner from the same frozen evidence facts.
     overrides = request["overrides"]
     evidence = snapshot["evidence"]
     evidence_class = _evidence_class(
@@ -1082,6 +1158,9 @@ def _selection_decision(
         fingerprint,
         snapshot,
     )
+
+    # Expose the complete launch, provenance, escalation, and audit contract.
+    exclusions = deepcopy(list(selection.exclusions))
     return {
         "request_id": request["request_id"],
         "status": "selected",
@@ -1118,12 +1197,42 @@ def _selection_decision(
         "audit": _audit(
             snapshot,
             {
-                "decision_policy": decision_policy,
-                "frontier": frontier_audit,
+                "decision_policy": selection.decision_policy,
+                "frontier": deepcopy(list(selection.frontier)),
                 "exclusions": deepcopy(exclusions),
             },
         ),
     }
+
+
+def _selection_decision(
+    request: dict[str, Any],
+    snapshot: dict[str, Any],
+    pool: CandidatePool,
+) -> dict[str, Any]:
+    """Resolve one selected or underdetermined decision from an eligible pool."""
+
+    # Partition exact evidence once for every candidate and human output form.
+    records = snapshot["evidence"]["records"]
+    evidence_pool = _candidate_evidence(pool.candidates, records, request, snapshot)
+    measured = bool(evidence_pool.measured)
+    exclusions = deepcopy(list(pool.exclusions)) + _evidence_exclusions(
+        evidence_pool,
+        include_unknown=measured,
+    )
+
+    # Resolve shared policy before the selected response is serialized.
+    outcome = _resolve_selection_policy(
+        request,
+        snapshot,
+        evidence_pool,
+        exclusions,
+    )
+    if isinstance(outcome, dict):
+        return outcome
+
+    # Serialize a launch only after policy resolved one complete candidate.
+    return _selected_decision(request, snapshot, records, outcome)
 
 
 def _audit(
@@ -1424,55 +1533,182 @@ def route(artifact: Any) -> dict[str, Any]:
     return {"schema_version": 1, "snapshot": snapshot, "decisions": decisions}
 
 
-def _recommendation_banner(decision: dict[str, Any]) -> dict[str, Any]:
-    """Translate the shared evidence class into the human status banner."""
+def _recommendation_evidence_state(
+    decision: dict[str, Any],
+) -> tuple[str, str, list[str]]:
+    """Derive the human evidence class, reason, and missing decision input."""
 
-    evidence_class = decision.get("evidence_class", "heuristic")
-    banners = {
-        "heuristic": ("🔵 HEURISTISK STARTPUNKT", "low", False),
-        "mixed": ("🟠 BLANDAD EVIDENS", "medium", False),
-        "measurement_based": (
-            "🟢 MÄTDATABASERAD REKOMMENDATION",
-            "high",
-            True,
-        ),
+    # Preserve selected classes and classify unresolved measured states.
+    status = decision["status"]
+    reason = (
+        decision.get("inheritance", {}).get("reason")
+        if status == "inherit"
+        else decision.get("reason", {}).get("code")
+    ) or status
+    if status == "selected":
+        evidence_class = decision["evidence_class"]
+    elif status == "inherit" and (
+        decision["audit"].get("frontier")
+        or any(
+            exclusion["code"] == "quality_floor_not_cleared"
+            for exclusion in decision["audit"].get("exclusions", [])
+        )
+    ):
+        evidence_class = "mixed"
+    else:
+        evidence_class = "heuristic"
+
+    # State why the class applies and what still blocks production selection.
+    selected_reasons = {
+        "heuristic": "Representative exact-point measurements did not determine the selected point.",
+        "mixed": "Relevant evidence exists, but an exact decision-relevant match remains incomplete.",
+        "measurement_based": "Representative exact-point evidence determined the selected point and cleared the quality floor.",
     }
-    text, confidence, is_production = banners[evidence_class]
+    missing_by_reason = {
+        "underdetermined_frontier": [
+            "an explicit policy that resolves the measured frontier"
+        ],
+        "insufficient_evidence": [
+            "representative exact-point evidence for every launchable candidate"
+        ],
+        "quality_floor_not_cleared": [
+            "exact evidence whose conservative bound clears the quality floor"
+        ],
+    }
+    default_missing = (
+        []
+        if evidence_class == "measurement_based"
+        else ["representative exact-point evidence clearing the quality floor"]
+    )
+    classification_reason = (
+        selected_reasons[evidence_class] if status == "selected" else reason
+    )
+    missing_evidence = missing_by_reason.get(reason, default_missing)
+    return evidence_class, classification_reason, missing_evidence
+
+
+def _recommendation_presentation(
+    status: str,
+    evidence_class: str,
+) -> tuple[str, str, bool, str]:
+    """Resolve accessible banner text and recommendation disposition."""
+
+    # Avoid claiming an exploration start when no point was selected.
+    selected_banners = {
+        "heuristic": ("🔵 HEURISTISK STARTPUNKT", "low"),
+        "mixed": ("🟠 BLANDAD EVIDENS", "medium"),
+        "measurement_based": ("🟢 MÄTDATABASERAD REKOMMENDATION", "high"),
+    }
+    if status == "selected":
+        text, confidence = selected_banners[evidence_class]
+    elif evidence_class == "mixed":
+        text, confidence = "🟠 BLANDAD EVIDENS — INGET EXAKT VAL", "medium"
+    else:
+        text, confidence = "🔵 INGEN REKOMMENDATION", "low"
+    is_production = status == "selected" and evidence_class == "measurement_based"
+    recommendation_kind = (
+        "production_recommendation"
+        if is_production
+        else "exploration_start"
+        if status == "selected"
+        else "no_selection"
+    )
+    return text, confidence, is_production, recommendation_kind
+
+
+def _recommendation_banner(decision: dict[str, Any]) -> dict[str, Any]:
+    """Translate shared status and evidence facts into an honest human banner."""
+
+    # Resolve evidence meaning independently from accessible presentation.
+    status = decision["status"]
+    evidence_class, classification_reason, missing_evidence = (
+        _recommendation_evidence_state(decision)
+    )
+    text, confidence, is_production, recommendation_kind = _recommendation_presentation(
+        status, evidence_class
+    )
+
+    # Emit every accessibility and evidence field promised by human recommend.
     return {
         "class": evidence_class,
         "text": text,
         "confidence": confidence,
+        "classification_reason": classification_reason,
+        "missing_evidence": missing_evidence,
+        "recommendation_kind": recommendation_kind,
         "production_recommendation": is_production,
     }
 
 
 def _recommendation_uncertainty(
-    decision: dict[str, Any], snapshot: dict[str, Any]
+    request: dict[str, Any],
+    decision: dict[str, Any],
+    snapshot: dict[str, Any],
 ) -> dict[str, Any]:
-    """Expose recorded uncertainty for the selected fingerprint or honest unknowns."""
+    """Expose uncertainty only through the core's exact applicability rule."""
 
     if decision["status"] != "selected":
         return {"status": "unknown", "reason": decision["status"]}
+
+    # Recover the selected candidate from the same hard-filtered request pool.
     fingerprint = decision["launch"]["configuration_fingerprint"]
+    candidates = _candidate_pool(request, snapshot).candidates
+    candidate = next(
+        (
+            item
+            for item in candidates
+            if _candidate_fingerprint(item, snapshot) == fingerprint
+        ),
+        None,
+    )
+    if candidate is None:
+        return {"status": "unknown", "reason": "selected candidate is unavailable"}
+
+    # Retain only representative, current, bounded, exact-point evidence.
     records = [
         record
         for record in snapshot["evidence"]["records"]
-        if record.get("configuration_fingerprint") == fingerprint
-        and isinstance(record.get("uncertainty"), dict)
+        if _evidence_is_applicable(
+            record,
+            request,
+            candidate.point,
+            candidate.portable,
+            candidate.native,
+            fingerprint,
+            snapshot,
+        )
     ]
     if not records:
         return {
             "status": "unknown",
             "reason": "representative exact-point uncertainty is missing",
         }
-    return {"status": "measured", **deepcopy(records[0]["uncertainty"])}
+
+    # Report the strongest conservative applicable record deterministically.
+    record = max(records, key=_quality_lower_bound)
+    return {"status": "measured", **deepcopy(record["uncertainty"])}
 
 
 def _experiment_fingerprints(
-    decision: dict[str, Any], snapshot: dict[str, Any]
+    request: dict[str, Any],
+    decision: dict[str, Any],
+    snapshot: dict[str, Any],
 ) -> list[str]:
-    """Freeze the selected point and its nearest launchable control neighbor."""
+    """Freeze exact comparable points for selected and inherited evidence paths."""
 
+    # Start inherited experiments with their measured frontier and safe pool.
+    if decision["status"] != "selected":
+        fingerprints = [
+            entry["configuration_fingerprint"]
+            for entry in decision["audit"].get("frontier", [])
+        ]
+        for candidate in _candidate_pool(request, snapshot).candidates:
+            fingerprint = _candidate_fingerprint(candidate, snapshot)
+            if fingerprint not in fingerprints:
+                fingerprints.append(fingerprint)
+        return fingerprints[:2]
+
+    # Begin a selected experiment with its exact launch point.
     launch = decision["launch"]
     fingerprints = [launch["configuration_fingerprint"]]
     adjacent_index = PORTABLE_LEVELS.index(launch["portable_deliberation"]) + 1
@@ -1506,20 +1742,43 @@ def _experiment_brief(
 ) -> dict[str, Any] | None:
     """Build the detailed human evidence path without executing an experiment."""
 
+    # Emit plans only for exploratory selections or evidence-driven inheritance.
+    evidence_inheritance = {
+        "insufficient_evidence",
+        "underdetermined_frontier",
+        "quality_floor_not_cleared",
+    }
+    inheritance_reason = decision.get("inheritance", {}).get("reason")
     if (
-        decision["status"] != "selected"
-        or decision.get("evidence_class") == "measurement_based"
+        decision["status"] == "refused"
+        or (
+            decision["status"] == "selected"
+            and decision.get("evidence_class") == "measurement_based"
+        )
+        or (
+            decision["status"] == "inherit"
+            and inheritance_reason not in evidence_inheritance
+        )
     ):
         return None
 
-    # Freeze inputs, controls, measurements, and bounds for both plans.
-    fingerprint = decision["launch"]["configuration_fingerprint"]
+    # Freeze comparable points and derive an explicit checker-backed rubric.
+    fingerprints = _experiment_fingerprints(request, decision, snapshot)
+    if not fingerprints:
+        return None
+    rubric = request.get("rubric") or {
+        "kind": "checker_outcome",
+        "pass_condition": deepcopy(request["checker"]),
+    }
+
+    # Freeze inputs, controls, measurements, bounds, and record import form.
     return {
         "workload": request["workload"],
         "workload_cohort": request.get("workload_cohort"),
+        "rubric": deepcopy(rubric),
         "quality_floor": snapshot["override_policy"].get("quality_floor"),
         "checker": deepcopy(request["checker"]),
-        "configuration_fingerprints": _experiment_fingerprints(decision, snapshot),
+        "configuration_fingerprints": fingerprints,
         "measurements": [
             "quality",
             "cash",
@@ -1531,13 +1790,18 @@ def _experiment_brief(
             "retry",
             "provenance",
         ],
-        "run_bound": 2 if request.get("retry_available") else 1,
-        "stopping_rule": "Stop when the conservative quality bound clears the floor or the run bound is spent.",
-        "sequential_plan": "Run the selected point, then only its permitted adjacent escalation after checker-confirmed failure.",
+        "run_bound": len(fingerprints) * (2 if request.get("retry_available") else 1),
+        "stopping_rule": "Stop when confidence makes the conservative quality bound clear the floor or the finite run bound is spent.",
+        "sequential_plan": "Run the weakest listed point, then only its permitted adjacent escalation after checker-confirmed failure.",
         "parallel_plan": "Run isolated adjacent points against the same frozen workload and checker when the caller grants parallel capacity.",
         "observation_artifact": {
-            "configuration_fingerprint": fingerprint,
+            "schema_version": 1,
+            "configuration_fingerprints": deepcopy(fingerprints),
             "unavailable_values": None,
+        },
+        "record_import": {
+            "command": "/model-selector record <path>",
+            "artifact": "observation_artifact",
         },
     }
 
@@ -1576,7 +1840,9 @@ def recommend(artifact: Any) -> dict[str, Any]:
                 "evidence_banner": _recommendation_banner(decision),
                 "frontier_neighbors": deepcopy(neighbors),
                 "uncertainty": _recommendation_uncertainty(
-                    decision, resolved["snapshot"]
+                    request,
+                    decision,
+                    resolved["snapshot"],
                 ),
                 "experiment_brief": _experiment_brief(
                     request, decision, resolved["snapshot"]
