@@ -3831,6 +3831,70 @@ def test_write_loads_only_what_a_first_draft_is_written_against() -> None:
         )
 
 
+# The Skill this wave's mechanical pass ships as, read at the one seam a test
+# has: the body is the whole of what the agent executes (ADR-0046).
+PROOFREAD = REPO_ROOT / "skills" / "editorial" / "proofread" / "SKILL.md"
+
+
+def test_proofread_reads_only_the_mechanics_scope_of_a_language_resource() -> None:
+    """Scoping buys frugality, and the body is where it is spent or wasted.
+
+    A Language Resource carries four scopes and the resolver returns only the
+    ones a caller asks for (ADR-0087). Proofread may act on mechanics alone, so
+    a body asking for composition, review, or anti-slop guidance would be
+    paying context for rules it is contracted not to apply — and holding rules
+    it may not act on is how a mechanical pass drifts into a rewrite.
+    """
+
+    text = PROOFREAD.read_text(encoding="utf-8")
+
+    assert "$LIBRARY/scripts/languages.py" in text, (
+        f"{PROOFREAD}: the body resolves its language through the Collection"
+        f" Library's resolver rather than reading the resources itself. The"
+        f" selection is deterministic and shared by every editorial Skill,"
+        f" which is why it is a script and not prose (ADR-0087, ADR-0076). See"
+        f" {STANDARD}."
+    )
+    assert "--scope=mechanics" in text, (
+        f"{PROOFREAD}: the body asks the resolver for no scope, so it either"
+        f" loads nothing language-specific or loads the resource whole. It"
+        f" asks for `mechanics`, which is the one scope it may act on"
+        f" (ADR-0087). See {STANDARD}."
+    )
+    for scope in ("composition", "review", "anti-slop"):
+        assert f"--scope={scope}" not in text, (
+            f"{PROOFREAD}: the body asks the resolver for the `{scope}` scope,"
+            f" which this Skill is contracted not to apply. A caller asks for"
+            f" the scopes it can act on and is given those and no others"
+            f" (ADR-0087). See {STANDARD}."
+        )
+
+
+def test_proofread_delivers_through_the_shared_output_contract() -> None:
+    """The rule has one owner, and a consumer follows it rather than repeating it.
+
+    Where a result goes, when a source file may be replaced by it, and what
+    happens when nothing changed are stated once in the Collection Library
+    (ADR-0091). A Skill restating them in its own body is a second copy free to
+    drift from the one every other Skill delivers by.
+    """
+
+    text = PROOFREAD.read_text(encoding="utf-8")
+
+    assert "$LIBRARY/references/delivery.md" in text, (
+        f"{PROOFREAD}: the body delivers its Text Artifact without following"
+        f" the Collection Library's delivery contract, so the Output Target,"
+        f" In-place Editing, its refusals, and the no-change status are this"
+        f" Skill's own account of rules it shares with its peers (ADR-0091,"
+        f" ADR-0076). See {STANDARD}."
+    )
+    assert "`my-file-2.md`" not in text, (
+        f"{PROOFREAD}: the body spells out the shared collision sequence"
+        f" instead of following the contract that owns it, which is one rule"
+        f" made into two things to keep true (ADR-0091). See {STANDARD}."
+    )
+
+
 def test_a_skill_reads_shared_implementation_only_from_the_collection_library() -> None:
     """A peer Skill is a Dependency, never an implementation owner."""
 
@@ -3954,11 +4018,11 @@ def test_agents_md_is_model_invoked() -> None:
         encoding="utf-8"
     )
     assert "disable-model-invocation: false" in text, (
-        f"{REPO_ROOT / 'skills' / 'agents' / 'agents-md' / 'SKILL.md'}: this"
-        f" skill is the one the model invokes on its own, and it says so in"
-        f" the field rather than by leaving the field out — an absent field is"
-        f" a decision nobody wrote, and the Codex sidecar beside it has to"
-        f" agree with something (ADR-0018). See {STANDARD}."
+        f"{REPO_ROOT / 'skills' / 'agents' / 'agents-md' / 'SKILL.md'}: a model"
+        f" invokes this skill on its own, and it says so in the field rather"
+        f" than by leaving the field out — an absent field is a decision nobody"
+        f" wrote, and the Codex sidecar beside it has to agree with something"
+        f" (ADR-0018). See {STANDARD}."
     )
     assert "name: agents-md" in text, (
         f"{REPO_ROOT / 'skills' / 'agents' / 'agents-md' / 'SKILL.md'}: `name`"
