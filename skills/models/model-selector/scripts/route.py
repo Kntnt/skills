@@ -21,6 +21,15 @@ COMMERCIAL_DIMENSIONS: tuple[str, ...] = (
     "allocated_subscription_cost",
     "latency",
 )
+
+# Share the inheritance states that require further evidence work.
+EVIDENCE_INHERITANCE_REASONS: frozenset[str] = frozenset(
+    {
+        "insufficient_evidence",
+        "underdetermined_frontier",
+        "quality_floor_not_cleared",
+    }
+)
 REQUEST_SCHEMA_PATH: Path = (
     Path(__file__).resolve().parent.parent / "references" / "route-request.schema.json"
 )
@@ -1693,15 +1702,10 @@ def _recommendation_uncertainty(
     """Retain selected or inherited uncertainty without reviving weak evidence."""
 
     # Bypass candidate lookup for refusals and non-evidence inheritance.
-    evidence_inheritance = {
-        "insufficient_evidence",
-        "underdetermined_frontier",
-        "quality_floor_not_cleared",
-    }
     inheritance_reason = decision.get("inheritance", {}).get("reason")
     if decision["status"] == "refused" or (
         decision["status"] == "inherit"
-        and inheritance_reason not in evidence_inheritance
+        and inheritance_reason not in EVIDENCE_INHERITANCE_REASONS
     ):
         return {"status": "unknown", "reason": decision["status"]}
 
@@ -1734,10 +1738,14 @@ def _recommendation_uncertainty(
         entry["configuration_fingerprint"]
         for entry in decision["audit"].get("frontier", [])
     }
+    filter_to_frontier = inheritance_reason == "underdetermined_frontier" and bool(
+        frontier
+    )
     relevant = [
         candidate
         for candidate in candidates
-        if not frontier or _candidate_fingerprint(candidate, snapshot) in frontier
+        if not filter_to_frontier
+        or _candidate_fingerprint(candidate, snapshot) in frontier
     ]
     uncertainties = [
         _candidate_uncertainty(request, candidate, snapshot) for candidate in relevant
@@ -1813,11 +1821,6 @@ def _experiment_brief(
     """Build the detailed human evidence path without executing an experiment."""
 
     # Emit plans only for exploratory selections or evidence-driven inheritance.
-    evidence_inheritance = {
-        "insufficient_evidence",
-        "underdetermined_frontier",
-        "quality_floor_not_cleared",
-    }
     inheritance_reason = decision.get("inheritance", {}).get("reason")
     if (
         decision["status"] == "refused"
@@ -1827,7 +1830,7 @@ def _experiment_brief(
         )
         or (
             decision["status"] == "inherit"
-            and inheritance_reason not in evidence_inheritance
+            and inheritance_reason not in EVIDENCE_INHERITANCE_REASONS
         )
     ):
         return None

@@ -1208,6 +1208,19 @@ def test_route_keeps_unmeasured_candidates_unknown_beside_measurements() -> None
     assert decision["inheritance"]["reason"] == "insufficient_evidence"
     assert decision["audit"]["exclusions"][-1]["code"] == "missing_exact_evidence"
 
+    # Adapt the same incomplete coverage without hiding the unknown candidate.
+    recommendation = router.recommend(
+        {
+            "schema_version": 1,
+            "context": context,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["recommendations"][0]
+    assert recommendation["uncertainty"]["status"] == "mixed"
+    assert {
+        candidate["status"] for candidate in recommendation["uncertainty"]["candidates"]
+    } == {"measured", "unknown"}
+
 
 def test_route_excludes_exact_evidence_known_below_the_quality_floor() -> None:
     """A known failing point cannot re-enter selection as a heuristic."""
