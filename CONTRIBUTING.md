@@ -37,7 +37,7 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
    ```
    uvx ruff check .
    uvx ruff format --check .
-   uvx --with types-PyYAML mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/ship.py skills/code/orchestrate/scripts/run.py tests
+   uvx --with types-PyYAML mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/code/orchestrate/scripts/run.py tests
    uv run --with pytest --with pyyaml pytest
    ```
 

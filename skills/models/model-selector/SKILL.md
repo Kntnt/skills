@@ -2,7 +2,7 @@
 name: model-selector
 description: Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.
 disable-model-invocation: true
-argument-hint: "[recommend] [<workload>] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] | chart|compare <workload> [--decision=route|renew] [--data=<path>] | route|record <path> [--data=<path>] | observe <path> --artifact=<path> | config [<subcommand> ...] [--data=<path>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
+argument-hint: "[recommend] [<workload>] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] | chart|compare <workload> [--decision=route|renew] [--data=<path>] | route|record <path> [--data=<path>] | observe <path> --artifact=<path> | capture --on [--harness=<name>] [--data=<path>] | capture --off|--status [--data=<path>] | capture --review=<identity> --action=save|failed|ignore [--data=<path>] | config [<subcommand> ...] [--data=<path>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -10,6 +10,7 @@ metadata:
   kntnt.skills: ""
   kntnt.externals: ""
   kntnt.capabilities: ""
+  kntnt.integrations: "scripts/capture.py"
 ---
 
 # model-selector
@@ -44,6 +45,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `config reset` | `$HERE/help/config/reset.md` |
 | `update` | `$HERE/help/update.md` |
 | `observe` | `$HERE/help/observe.md` |
+| `capture` | `$HERE/help/capture.md` |
 | `record` | `$HERE/help/record.md` |
 | `status` | `$HERE/help/status.md` |
 
@@ -62,10 +64,12 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `/model-selector chart\|compare <workload>` | Show comparable frontier tables and plotting data. |
 | `/model-selector update [--force]` | Revalidate due discovery, pricing, and benchmark indexes once. |
 | `/model-selector observe <path> --artifact=<path>` | Turn completed routed attempts into a sanitized importable artifact in caller-owned scratch. |
+| `/model-selector capture --on\|--off\|--status` | Opt in to automatic local capture during ordinary work, stop it, or report its health. |
+| `/model-selector capture --review=<identity> --action=save\|failed\|ignore` | Settle one pending capture a human has to judge. |
 | `/model-selector record <path>` | Validate and append unseen local run observations. |
 | `/model-selector status` | Report the profile, evidence vintage, due sources, and gaps. |
 
-`--data=<path>` is valid on every form except `observe`, which reads no profile or evidence at all, and overrides the default data directory. `--artifact=<path>` is valid only for `observe`, where it is required, and names the caller-owned file the observations are written into. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`.
+`--data=<path>` is valid on every form except `observe`, which reads no profile or evidence at all, and overrides the default data directory. `--artifact=<path>` is valid only for `observe`, where it is required, and names the caller-owned file the observations are written into. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`. `--on`, `--off`, `--status`, `--review=<identity>`, `--action=save|failed|ignore` and `--harness=<name>` are valid only for `capture`: `--harness` only with `--on`, `--action` only with `--review`, and `--on` and `--off` never together.
 
 Anything outside these forms is invalid. Where the invocation starts with a recognized command path, name in one line what was wrong, print the `## SYNOPSIS` from that path's manpage in the Help table verbatim, point at `/model-selector <command-path> --help`, change nothing, and stop. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/model-selector --help` for the page in full instead. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
@@ -129,6 +133,16 @@ No source changed is a successful update. Complete when every due source has a r
 ## Observe
 
 Read `$HERE/references/run-observations.md` and follow it exactly. Run `uv run "$HERE/scripts/observations.py" observe <path> --artifact <path>` and emit the helper's JSON response without commentary. The attempts come from the caller that routed the work; this Skill re-resolves no model, no deliberation control and no evidence, and adds nothing the attempt did not establish. Observe is offline and starts no setup, research, evaluation, profile write, ledger write or derived-frontier write; the artifact it writes is the caller's own file and is imported only where the user invokes `record` on it. Report the artifact path, what became importable, what was skipped as identical, what conflicted and every refused attempt with its stable code. Never present an unjudged, self-graded or interrupted attempt as importable evidence.
+
+## Capture
+
+Read `$HERE/references/run-capture.md` and follow it exactly. Capture is an explicit opt-in of an Enabled Skill: enabling the Skill alone never starts it, and the first `--on` states what lifecycle integration is installed, what metadata categories are retained, how temporary data is cleaned up, and how to turn it off — before anything is written.
+
+Run `uv run "$HERE/scripts/capture.py" <action> --data <directory>`, with `enable --harness <name> --seat <json> --command <argv>` for `--on`, `disable` for `--off`, `status` for `--status`, and `review --id <identity> --action <choice>` for `--review`. Render the helper's JSON response: for `--on`, the consent obtained and each Harness's installation result; for `--off`, each Harness's removal result; for `--status`, whether capture is enabled, adapter health per Harness, pending-review count, oldest pending age, storage use, and the retention bounds; for `--review`, what was imported or discarded. Name the Harness this session is running in when installing, because a script cannot know which Harness invoked it and must not guess, and pass `--seat` as the exact main seat this session runs on — its model, portable and native deliberation, channel, surface, adapter and serving mode — because no lifecycle payload carries it and captured work with no configuration behind it is not evidence about anything. Report an Unsatisfied integration capability rather than claiming capture is active where an adapter cannot uphold the contract.
+
+Capture is offline and performs no research or evaluation. It writes the capture store and, at an eligible completion boundary, the existing evidence ledger and only the affected derived frontiers; it changes no profile and no configuration. Nothing establishes an outcome from inside the work: an objective checker, a frozen rubric, a declared failure signal, or explicit user confirmation may, and model self-confidence never does. Present pending work as work awaiting a human's judgement rather than as a result, and never present an unjudged, self-graded, or interrupted session as evidence.
+
+Making the Skill Disabled removes every integration this feature owns without a second shutdown step, because the Manager asks the Skill to remove them while its files are still there. Accepted evidence survives both that and `--off`; a purge of captured data is a separate act the user has to ask for by name.
 
 ## Record
 

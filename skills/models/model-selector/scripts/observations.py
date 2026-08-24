@@ -26,10 +26,12 @@ from typing import Any, cast
 
 SCHEMA_VERSION = 1
 
-# The workload strata a routed caller may charge an attempt to. Orchestrate's
-# five building roles are distinct strata because a mechanical wave fix and an
-# initial build are different work, and an amend is a different attempt at the
-# same work; delegation's execution subagent is the sixth.
+# The workload strata an attempt may be charged to. Orchestrate's five building
+# roles are distinct strata because a mechanical wave fix and an initial build
+# are different work, and an amend is a different attempt at the same work;
+# delegation's execution subagent is the sixth. The seventh is the work nobody
+# routed at all — an ordinary interactive session, which automatic capture
+# observes on the main seat it ran on rather than on a point somebody chose.
 STRATA: tuple[str, ...] = (
     "initial_build",
     "amend",
@@ -37,6 +39,7 @@ STRATA: tuple[str, ...] = (
     "rebuild",
     "mechanical_wave_fix",
     "delegated_execution",
+    "interactive_session",
 )
 
 # What an attempt can have come to. The first two are judgements of the model's

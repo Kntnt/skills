@@ -5377,6 +5377,7 @@ _MODEL_SELECTOR_MANPAGES = frozenset(
         "config/remove.md",
         "config/reset.md",
         "config/show.md",
+        "capture.md",
         "observe.md",
         "recommend.md",
         "record.md",

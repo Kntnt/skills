@@ -1092,10 +1092,110 @@ def add_skills(
     )
 
 
+def teardown_integrations(
+    names: list[str], directories: list[Path]
+) -> list[dict[str, Any]]:
+    """Ask every skill in *names* that owns Harness integrations to remove them.
+
+    A skill's files are what removes a skill's integrations, so this runs while
+    those files are still on disk — after them, nothing is left that knows what
+    was installed or where. The declaration is the skill's own
+    `metadata.kntnt.integrations`, naming a script inside its directory, and the
+    contract is one word: `remove-integrations`, answered with JSON. The Manager
+    learns no Harness's hook format that way, and a second skill needing the
+    same thing declares it the same way (ADR-0012).
+
+    A teardown that fails is reported and never raised. External state this
+    collection does not own cannot be allowed to hold up the removal of files
+    it does own, and a partial removal reported is a partial removal the user
+    can finish by hand.
+    """
+
+    reported: list[dict[str, Any]] = []
+    for name in names:
+        for directory in directories:
+            skill = directory / name
+            body = skill / "SKILL.md"
+            if not body.exists():
+                continue
+            try:
+                declared = (
+                    collection_block(
+                        parse_frontmatter(body.read_text(encoding="utf-8"))
+                    )
+                    or {}
+                ).get("integrations")
+            except OSError:
+                continue
+            if not isinstance(declared, str) or not declared.strip():
+                continue
+
+            # A declaration is a path inside the skill, and only inside it: a
+            # skill cannot name somebody else's script for the Manager to run.
+            script = (skill / declared).resolve()
+            if not script.is_relative_to(skill.resolve()):
+                reported.append(
+                    {
+                        "name": name,
+                        "status": "failed",
+                        "detail": f"{declared} points outside the skill's own directory",
+                        "removed": [],
+                    }
+                )
+                continue
+
+            reported.append(_teardown(name, script))
+    return reported
+
+
+def _teardown(name: str, script: Path) -> dict[str, Any]:
+    """Run one skill's declared teardown and read what it says it removed."""
+
+    if not script.exists():
+        return {
+            "name": name,
+            "status": "failed",
+            "detail": f"{script.name} is declared but not installed",
+            "removed": [],
+        }
+    try:
+        completed = subprocess.run(
+            ["uv", "run", "--quiet", str(script), "remove-integrations"],
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=120,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        return {"name": name, "status": "failed", "detail": str(exc), "removed": []}
+
+    if completed.returncode != 0:
+        return {
+            "name": name,
+            "status": "failed",
+            "detail": (completed.stderr or completed.stdout).strip()[:200],
+            "removed": [],
+        }
+    try:
+        answered = json.loads(completed.stdout)
+        removed = answered.get("removed", []) if isinstance(answered, dict) else []
+    except ValueError:
+        removed = []
+    return {"name": name, "status": "removed", "detail": None, "removed": removed}
+
+
 def remove_skills(
     names: list[str], harnesses: list[str], *, global_layer: bool
 ) -> dict[str, Any]:
-    """Disable *names* on *harnesses* in the targeted layer, and verify it."""
+    """Disable *names* on *harnesses* in the targeted layer, and verify it.
+
+    What a skill installed outside its own directory goes first, because the
+    files that know how to remove it are the files this is about to delete.
+    """
+
+    integrations = teardown_integrations(
+        names, layer_dirs(harnesses, global_layer=global_layer)
+    )
 
     # Nothing to remove is not a call: the transport refuses an empty selection.
     if names and harnesses:
@@ -1107,9 +1207,16 @@ def remove_skills(
         args.append("--yes")
         run_transport(args, internal=True)
 
-    return verified_outcome(
-        names, harnesses, global_layer=global_layer, expect_present=False
-    )
+    # What a skill installed outside its own directory is reported beside what
+    # the disk says of the files: a Harness this run could not clear is state
+    # the user is left with, and silence about it is the one thing that would
+    # make it theirs without their knowing (ADR-0036).
+    return {
+        **verified_outcome(
+            names, harnesses, global_layer=global_layer, expect_present=False
+        ),
+        "integrations": integrations,
+    }
 
 
 def placement_outcome(

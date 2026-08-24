@@ -22,6 +22,12 @@ model-selector - compare configured AI model systems by price and performance
 
 **/model-selector** **record** *PATH* [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
+**/model-selector** **capture** **--on** [**--harness=**_NAME_] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
+**/model-selector** **capture** (**--off**|**--status**) [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
+**/model-selector** **capture** **--review=**_IDENTITY_ (**--action=save**|**--action=failed**|**--action=ignore**) [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
 **/model-selector** **status** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
@@ -70,6 +76,10 @@ Perform one bounded refresh of due model indexes, first-party capability sources
 
 Turn completed routed attempts into sanitized run observations in a caller-owned artifact. Only an external judgement establishes an outcome, unavailable measurements stay `null`, and nothing is imported until `record` is invoked explicitly.
 
+**capture**
+
+Opt in to automatic local run-evidence capture during ordinary Harness work, report its health, settle one deferred review, or turn it off again. Its page states what is installed, what is retained, and how long.
+
 **record** *PATH*
 
 Validate and append unseen local evaluation observations. Conflicting historical observations are preserved rather than overwritten.
@@ -100,6 +110,26 @@ For `recommend`, select the highest conservative quality within a budget when ev
 
 For `recommend`, select the lowest conservative comparable cost that clears the quality floor. Mutually exclusive with `--budget`.
 
+**--on**, **--off**
+
+Consent to automatic capture and install its owned lifecycle integration, or stop it and remove every hook this feature owns. Valid only for `capture`. Accepted evidence survives `--off`, and making the Skill Disabled removes the same integrations without a second step.
+
+**--status**
+
+Report capture's own state: whether it is enabled, adapter health per Harness, pending-review count, oldest pending age, storage in use, and the retention bounds. Valid only for `capture`, and distinct from the `status` command, which reports the profile and the evidence.
+
+**--review=**_IDENTITY_
+
+Settle the pending capture named by *IDENTITY*. Valid only for `capture`, and requires `--action`.
+
+**--action=save**, **--action=failed**, **--action=ignore**
+
+Record a reviewed capture as a success, record it as a failure, or discard it. Valid only with `--review`, where explicit user confirmation is what makes the outcome evidence.
+
+**--harness=**_NAME_
+
+Install into the named Harness, repeatable; `claude-code`, `codex`, or `opencode`. Valid only with `--on`, and defaults to every supported Harness.
+
 **--force**
 
 For `update`, check every relevant mutable index once regardless of cadence. Known immutable details and existing observations remain untouched.
@@ -123,6 +153,10 @@ After a blue or orange banner, `Snabbaste vägen till mätdata` gives an agent-r
 **~/.model-selector/config.json**
 
 The default active profile and its revision history. A user-supplied `--data` directory relocates it.
+
+**~/.model-selector/capture/**
+
+The capture store while capture is enabled: its configuration, per-session drafts, and bounded pending-review records. An imported capture is deleted immediately; nothing here is permanent evidence.
 
 **Evidence ledger**
 
