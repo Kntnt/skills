@@ -4222,6 +4222,77 @@ def test_a_ticket_receives_one_continuation_amend_before_exhaustion(
     assert "bounded to 2" in exhausted_answer["reason"]
 
 
+def test_continuation_preserves_several_actionable_findings_verbatim(
+    tmp_path: Path,
+) -> None:
+    """A continuation carries every independently reported finding.
+
+    A fresh verifier may report several specification and standards defects
+    after amend one. Attempt two must retain that complete verdict through the
+    public tracker-backed state rather than narrowing it to one complaint.
+    """
+
+    # Present amend one's fresh verifier verdict with several distinct findings.
+    repo = _init_repo(tmp_path / "proj")
+    findings = (
+        "Gate passed.\n"
+        "Spec: existing-marker recovery is unreachable.\n"
+        "Spec: interrupted-state idempotence is incomplete.\n"
+        "Standards: an exported helper has no caller.\n"
+    )
+    failed_first = (
+        f"<!-- {MARKER} amend=1 phase=failed --> attempt one failed\n\n"
+        f"Verifier verdict:\n\n{findings}"
+    )
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={
+            10: _ready(10, comments=[{"body": failed_first}]),
+        },
+    )
+    verdict = tmp_path / "latest-verdict.md"
+    verdict.write_text(findings, encoding="utf-8")
+
+    # Spend attempt two from the complete verifier verdict.
+    continuation = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "2",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(verdict),
+        env=env,
+    )
+
+    assert continuation.returncode == 0, continuation.stderr
+    assert findings in _gh_calls(env)
+    recorded = (
+        f"<!-- {MARKER} amend=2 phase=building -->\n\nVerifier verdict:\n\n{findings}"
+    )
+    current = _ticket(
+        10,
+        "the graph",
+        comments=[{"body": failed_first}, {"body": recorded}],
+    )
+    _refile_issue(env, 10, _ready(10, comments=current["comments"]))
+    _refile(env, "open", [current])
+
+    # Reconstruct every finding from tracker state in a fresh Plan invocation.
+    plan = _engine(repo, "plan", env=env)
+
+    assert plan.returncode == 0, plan.stderr
+    assert json.loads(plan.stdout)["tickets"][0]["amend_state"] == {
+        "attempt": 2,
+        "phase": "building",
+        "verdict": findings,
+    }
+
+
 def test_a_legacy_amend_marker_counts_as_the_first_attempt(tmp_path: Path) -> None:
     """An interrupted older run retains one continuation opportunity.
 

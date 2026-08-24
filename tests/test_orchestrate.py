@@ -795,6 +795,28 @@ def test_a_ceiling_of_one_waits_for_the_continuation_verdict() -> None:
     assert "a failed verdict having gone through step 9 first" in integrate
 
 
+def test_an_isolated_continuation_does_not_block_a_passing_siblings_accounting() -> (
+    None
+):
+    """A ticket awaiting amend two does not serialize an already-passing sibling.
+
+    Isolated worktrees let the run account for an independent ticket whose
+    verdict already passed while another ticket receives its continuation.
+    The flow must make that possible rather than merely promise it after
+    imposing starting-order serialization (issue #97).
+    """
+
+    # Read the accounting flow and the continuation's worktree exception.
+    integrate = _step(8)
+    amend = _step(9)
+
+    # Account a known passing sibling without waiting for the failed ticket.
+    assert "without waiting for its step 9 result" in integrate
+    assert "whose verdict already passed" in integrate
+    assert "With worktrees" in integrate
+    assert "unrelated completed tickets may still be accounted for" in amend
+
+
 def test_the_manpage_describes_the_two_amend_bound_and_report_states() -> None:
     """Help distinguishes a spent continuation from unrelated failure paths."""
 
