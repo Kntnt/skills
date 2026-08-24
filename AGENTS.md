@@ -14,5 +14,6 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/coding-standard/python.md` — read when writing Python
 - `docs/coding-standard/skills.md` — read when adding a Skill or changing the files one ships
 - `docs/adr/0067-a-ticket-asserts-only-what-stays-true-until-it-is-built.md` — read when writing a ticket
+- `docs/evaluation/protocol.md` — read when evaluating an editorial Skill against the fixture corpus
 - `skills/kntnt/library/references/languages/README.md` — read when adding or changing a Language Resource
 - `CONTRIBUTING.md` — read when running tests or opening a PR
