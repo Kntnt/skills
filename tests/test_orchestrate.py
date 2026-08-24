@@ -1743,3 +1743,39 @@ def test_routing_is_a_preclaim_batch_and_verdicts_inherit_the_main_seat() -> Non
     assert "selected exact Harness-native model and deliberation controls" in skill
     assert "Lock only the building model dimension" in model_entry
     assert "Lock only the building deliberation dimension" in deliberation_entry
+
+
+def test_a_dry_run_preflights_routing_without_settling_ticket_decisions() -> None:
+    """A dry run is an observable routing preview, never a tracker mutation."""
+
+    step = _step(2)
+
+    assert "read-only routing preflight" in step
+    assert "proposed decisions and routing readiness" in step
+    assert "without claiming, starting setup, or writing" in step
+    assert "does not enter step 3" in step
+
+
+def test_routing_covers_every_execution_and_verdict_dispatch_role() -> None:
+    """Every builder is routed while every independent verdict retains the main seat."""
+
+    execution_steps = {
+        6: "initial builder",
+        9: "amend",
+        10: "collision repair",
+        11: "mechanical wave fix",
+    }
+    verdict_steps = {
+        7: "ticket verification",
+        9: "amend verification",
+        10: "repair verification",
+        11: "wave checking",
+    }
+
+    for number, role in execution_steps.items():
+        assert "selected exact" in _step(number), role
+
+    assert "route the rebuild" in _step(10)
+
+    for number, role in verdict_steps.items():
+        assert "exact inherited main-seat" in _step(number), role

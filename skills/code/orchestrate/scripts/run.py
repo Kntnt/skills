@@ -197,6 +197,10 @@ CLAIM_ASSIGNEE = "@me"
 # same session finds what the last one left (ADR-0052).
 STATE_FILE = "kntnt-orchestrate.json"
 
+# Routing facts cannot be rebuilt from the tracker and branch, so they retain
+# their own copy beside ordinary resumable state.
+ROUTING_FILE = "kntnt-orchestrate-routing.json"
+
 # The directory it keeps that file in, under the one the harness gives. A
 # subagent's cleanup glob at the root of a shared scratch directory deleted the
 # state of the very run that dispatched it, so the run's own things live one
@@ -756,6 +760,12 @@ def state_file(directory: str | None) -> Path | None:
     return Path(directory).expanduser() / STATE_HOME / STATE_FILE if directory else None
 
 
+def routing_file(path: Path | None) -> Path | None:
+    """Return the durable copy of a run's frozen routing account."""
+
+    return None if path is None else path.parent / ROUTING_FILE
+
+
 def carry_state_forward(path: Path | None) -> None:
     """Move a state file left at the old place into the one it lives in now.
 
@@ -833,6 +843,38 @@ def write_state(path: Path | None, state: RunState) -> str | None:
         return None
 
     return str(path)
+
+
+def read_routing(path: Path | None) -> dict[str, Any] | None:
+    """Return frozen routing facts where their durable copy remains readable."""
+
+    stored = routing_file(path)
+    if stored is None:
+        return None
+
+    try:
+        routing = cast(dict[str, Any], json.loads(stored.read_text(encoding="utf-8")))
+        cast(dict[str, Any], routing["snapshot"])
+        cast(list[dict[str, Any]], routing["decisions"])
+        return routing
+    except (OSError, TypeError, ValueError, KeyError):
+        return None
+
+
+def write_routing(path: Path | None, routing: dict[str, Any]) -> str | None:
+    """Store frozen routing facts independently of ordinary resumable state."""
+
+    stored = routing_file(path)
+    if stored is None:
+        return None
+
+    try:
+        stored.parent.mkdir(parents=True, exist_ok=True)
+        stored.write_text(json.dumps(routing, indent=2) + "\n", encoding="utf-8")
+    except OSError:
+        return None
+
+    return str(stored)
 
 
 def remembered_state(path: Path | None, cwd: Path) -> RunState | None:
@@ -1910,6 +1952,9 @@ def build_plan(
     branch = current_branch(cwd)
     default = default_branch(cwd)
     remembered = read_state(state_path, branch)
+    routing = remembered.routing if remembered is not None else read_routing(state_path)
+    if routing is None:
+        routing = read_routing(state_path)
     listed = open_listing(cwd)
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
     tickets = tickets_in_scope(cwd, listed, scope)
@@ -1935,6 +1980,7 @@ def build_plan(
         for ticket in tickets
         if ticket.claimed_by and not ticket.resolution.outcome
     ]
+
     login = my_login(cwd, remembered) if held else None
     resuming = [
         ticket.number
@@ -1955,7 +2001,7 @@ def build_plan(
         model=model,
         deliberation=deliberation,
         state=None,
-        routing=None if remembered is None else remembered.routing,
+        routing=routing,
         branch=branch,
         default_branch=default,
         label=READY_LABEL,
@@ -2015,7 +2061,7 @@ def build_plan(
                     | claimed_elsewhere(remembered, scope, listed, tickets)
                 ),
                 base=run_base(cwd, tickets),
-                routing=None if remembered is None else remembered.routing,
+                routing=routing,
             ),
         )
 
@@ -2059,17 +2105,13 @@ def cmd_plan(
     return 0 if plan.ready else 2
 
 
-def cmd_route(cwd: Path, response: Path, state_path: Path | None) -> int:
+def cmd_route(cwd: Path, response: Path, state_path: Path | None, dry_run: bool) -> int:
     """Persist one public model-selector response without interpreting selection.
 
     Model-selector owns route validity and selection. The engine only retains
     the opaque frozen snapshot and decisions beside the existing resumable run
     state, rejecting a later response that would replace frozen facts.
     """
-
-    state = remembered_state(state_path, cwd)
-    if state is None:
-        return fail("routing needs this run's state; plan before routing")
 
     try:
         routed = json.loads(response.read_text(encoding="utf-8"))
@@ -2078,6 +2120,15 @@ def cmd_route(cwd: Path, response: Path, state_path: Path | None) -> int:
         identity = str(snapshot["snapshot_identity"])
     except (OSError, TypeError, ValueError, KeyError):
         return fail("route response is not a readable model-selector response")
+
+    # Return a dry-run route response without creating resumable run state.
+    if dry_run:
+        emit({"snapshot_identity": identity, "decisions": decisions})
+        return 0
+
+    state = remembered_state(state_path, cwd)
+    if state is None:
+        return fail("routing needs this run's state; plan before routing")
 
     # Preserve the one snapshot that makes resumed decisions reproducible.
     current = state.routing
@@ -2091,6 +2142,8 @@ def cmd_route(cwd: Path, response: Path, state_path: Path | None) -> int:
     state.routing = {"snapshot": snapshot, "decisions": previous + decisions}
     if write_state(state_path, state) is None:
         return fail("routing state could not be written")
+    if write_routing(state_path, state.routing) is None:
+        return fail("frozen routing snapshot could not be written")
 
     emit({"snapshot_identity": identity, "decisions": decisions})
     return 0
@@ -3292,7 +3345,10 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     }
     stranded = stranded_behind(open_scope)
     accounted = set(stranded).union(*recorded.values())
-    routing = remembered_state(state_path, cwd)
+    remembered = remembered_state(state_path, cwd)
+    routing = None if remembered is None else remembered.routing
+    if routing is None:
+        routing = read_routing(state_path)
 
     emit(
         {
@@ -3301,7 +3357,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
             "scope": None if scope is None else [asdict(aim) for aim in scope],
             "branch": branch,
             "base": base,
-            "routing": None if routing is None else routing.routing,
+            "routing": routing,
             "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],
@@ -3362,6 +3418,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     route = sub.add_parser("route", help="Persist one model-selector route response.")
     route.add_argument("--response", required=True, type=Path)
+    route.add_argument("--dry-run", action="store_true")
     add_shared_flags(route)
 
     claim = sub.add_parser("claim", help="Take one ticket before working it.")
@@ -3431,7 +3488,7 @@ def main(argv: list[str] | None = None) -> int:
             reference=args.scope,
         )
     if args.verb == "route":
-        return cmd_route(cwd, args.response, state_path)
+        return cmd_route(cwd, args.response, state_path, args.dry_run)
     if args.verb == "claim":
         return cmd_claim(cwd, args.ticket, state_path)
     if args.verb == "park":

@@ -88,7 +88,7 @@ With `--at-once 1`, unverified work is on the run branch, so an unrepaired failu
 
 ## CONTINUING A RUN
 
-Restart an interrupted run with the same invocation. There is no resume option. Recorded outcomes remain settled, and numbered amend markers preserve the exact builder, verifier, passed-verdict, or failed-verdict phase together with the latest complete verdict needed by a resumed builder. State is reconstructed from the tracker and branch when per-session scratch data is unavailable. Repeating the same named attempt and phase resumes it without appending another event or spending the next attempt. A legacy unnumbered amend marker counts as attempt one.
+Restart an interrupted run with the same invocation and durable per-session state directory. There is no resume option. Recorded outcomes remain settled, and numbered amend markers preserve the exact builder, verifier, passed-verdict, or failed-verdict phase together with the latest complete verdict needed by a resumed builder. The frozen routing snapshot is not reconstructed from current profile, evidence, price, alias, or Harness state: if the route account is absent or unreadable while a claim remains, the run stops before it can select or claim more work. Repeating the same named attempt and phase resumes it without appending another event or spending the next attempt. A legacy unnumbered amend marker counts as attempt one.
 
 A ticket still claimed by the current user is resumed only when the Skill can distinguish an interrupted claim from another active run. If the tracker cannot identify the current user, the Skill stops rather than guessing.
 
@@ -122,7 +122,7 @@ The report also names the commit on which the run's work is based. A ticket reco
 
 **--dry-run**
 
-Read the tracker, resolve the requested scope, and report the dependency-wave graph and read-only routing readiness/proposed decisions without claiming, starting setup, or writing model-selector configuration or ledger data.
+Read the tracker, resolve the requested scope, and report the dependency-wave graph and read-only routing readiness/proposed decisions without commenting on, parking, claiming, starting setup, or writing model-selector configuration, ledger, or run-state data.
 
 **--at-once** *COUNT*
 

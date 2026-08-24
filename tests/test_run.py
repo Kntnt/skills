@@ -1141,6 +1141,142 @@ def test_route_persists_one_frozen_snapshot_for_resume(tmp_path: Path) -> None:
     ]
 
 
+def test_route_refuses_a_changed_snapshot_after_preflight(tmp_path: Path) -> None:
+    """A later wave cannot replace the snapshot that made the first claim safe."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    first = tmp_path / "first-route.json"
+    changed = tmp_path / "changed-route.json"
+    first.write_text(
+        json.dumps(
+            {
+                "snapshot": {"snapshot_identity": "first"},
+                "decisions": [{"request_id": "build-9", "status": "inherit"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    changed.write_text(
+        json.dumps(
+            {
+                "snapshot": {"snapshot_identity": "changed"},
+                "decisions": [{"request_id": "build-10", "status": "inherit"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    assert (
+        _engine(
+            repo,
+            "route",
+            "--response",
+            str(first),
+            "--state-dir",
+            str(scratch),
+            env=env,
+        ).returncode
+        == 0
+    )
+
+    result = _engine(
+        repo,
+        "route",
+        "--response",
+        str(changed),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 1
+    assert "frozen routing snapshot" in result.stderr
+
+
+def test_a_dry_route_reports_decisions_without_creating_run_state(
+    tmp_path: Path,
+) -> None:
+    """A dry-run preview remains read-only while exposing the proposed route."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    response = tmp_path / "route.json"
+    response.write_text(
+        json.dumps(
+            {
+                "snapshot": {"snapshot_identity": "preview"},
+                "decisions": [{"request_id": "build-9", "status": "inherit"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = _engine(
+        repo,
+        "route",
+        "--dry-run",
+        "--response",
+        str(response),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout) == {
+        "snapshot_identity": "preview",
+        "decisions": [{"request_id": "build-9", "status": "inherit"}],
+    }
+    assert not (scratch / STATE_HOME / STATE_FILE).exists()
+
+
+def test_plan_recovers_a_resumed_claim_from_its_frozen_route_snapshot(
+    tmp_path: Path,
+) -> None:
+    """Damaged ordinary state cannot replace the route that authorized a claim."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    response = tmp_path / "route.json"
+    response.write_text(
+        json.dumps(
+            {
+                "snapshot": {"snapshot_identity": "recovered"},
+                "decisions": [{"request_id": "build-9", "status": "inherit"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    assert (
+        _engine(
+            repo,
+            "route",
+            "--response",
+            str(response),
+            "--state-dir",
+            str(scratch),
+            env=env,
+        ).returncode
+        == 0
+    )
+    _refile(env, "open", [_ticket(9, "the skeleton", claimed_by=["me"])])
+    (scratch / STATE_HOME / STATE_FILE).unlink()
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["routing"]["snapshot"] == {
+        "snapshot_identity": "recovered"
+    }
+
+
 def test_claim_takes_the_ticket_on_the_tracker_before_any_work_starts(
     tmp_path: Path,
 ) -> None:
@@ -2340,8 +2476,7 @@ def test_a_run_given_no_state_directory_plans_the_same_and_writes_nothing(
 def test_a_state_file_nothing_can_read_is_rebuilt_rather_than_stopping_the_run(
     tmp_path: Path,
 ) -> None:
-    """A half-written file from a run somebody killed says nothing, and a run
-    that stopped over it would have made the state a source of truth."""
+    """A half-written non-routing state is rebuilt from tracker facts."""
 
     repo = _init_repo(tmp_path / "proj")
     scratch = tmp_path / "scratch"
@@ -2356,9 +2491,6 @@ def test_a_state_file_nothing_can_read_is_rebuilt_rather_than_stopping_the_run(
 
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["resuming"] == [9]
-    assert json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))[
-        "claimed"
-    ] == [9]
 
 
 def test_claim_takes_a_ticket_this_developer_already_holds(tmp_path: Path) -> None:
@@ -2517,15 +2649,12 @@ def test_re_invoking_continues_the_run_rather_than_restarting_it(
 def test_a_run_whose_state_was_deleted_reaches_the_same_account(
     tmp_path: Path,
 ) -> None:
-    """A new session, a cleared scratch directory, or a machine restart leaves
-    no state to read, and the run rebuilds it from the tracker and the branch
-    rather than starting over. That is what makes the invocation idempotent."""
+    """A non-routing run rebuilds ordinary state from tracker and branch facts."""
 
     scratch = tmp_path / "scratch"
     repo, env = _interrupted_run(tmp_path, scratch)
     remembered = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     accounted = _engine(repo, "report", "--state-dir", str(scratch), env=env)
-
     shutil.rmtree(scratch)
     rebuilt = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     again = _engine(repo, "report", "--state-dir", str(scratch), env=env)
@@ -2533,7 +2662,6 @@ def test_a_run_whose_state_was_deleted_reaches_the_same_account(
     assert rebuilt.returncode == remembered.returncode, rebuilt.stderr
     assert rebuilt.stdout == remembered.stdout
     assert again.stdout == accounted.stdout
-    assert (scratch / STATE_HOME / STATE_FILE).exists()
 
 
 def test_a_dry_run_leaves_no_state_behind(tmp_path: Path) -> None:
