@@ -327,7 +327,10 @@
       "additionalProperties": false
     },
     "snapshot": {
-      "$ref": "#/$defs/context"
+      "allOf": [
+        {"$ref": "#/$defs/context"},
+        {"required": ["snapshot_identity"]}
+      ]
     }
   }
 }

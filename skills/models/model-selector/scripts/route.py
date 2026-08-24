@@ -48,6 +48,15 @@ class CandidatePool:
     variant_exclusion_codes: tuple[str, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class EvidencePool:
+    """Partition candidates by exact representative evidence coverage."""
+
+    measured: tuple[tuple[Candidate, dict[str, Any]], ...]
+    unknown: tuple[Candidate, ...]
+    below_floor: tuple[Candidate, ...]
+
+
 def _schema_type_matches(value: Any, expected: str) -> bool:
     """Match the JSON type vocabulary without Python's boolean-number overlap."""
 
@@ -189,13 +198,19 @@ def _is_number(value: Any) -> bool:
     return isinstance(value, int | float) and not isinstance(value, bool)
 
 
+def _canonical_digest(value: Any) -> str:
+    """Hash one JSON value through the module's canonical encoding."""
+
+    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
+    return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+
+
 def _snapshot_identity(snapshot: dict[str, Any]) -> str:
     """Hash canonical frozen routing facts without recursively hashing the digest."""
 
     canonical = deepcopy(snapshot)
     canonical.pop("snapshot_identity", None)
-    encoded = json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode()
-    return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+    return _canonical_digest(canonical)
 
 
 def freeze_context(context: dict[str, Any]) -> dict[str, Any]:
@@ -284,8 +299,7 @@ def _fingerprint(
         "tools": point.get("tools", []),
         "policy": point.get("policy", {}),
     }
-    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
-    return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+    return _canonical_digest(value)
 
 
 def _adapter_can_launch(
@@ -576,7 +590,7 @@ def _evidence_is_relevant(
     )
 
 
-def _evidence_is_measurement(
+def _evidence_is_applicable(
     record: dict[str, Any],
     request: dict[str, Any],
     point: dict[str, Any],
@@ -585,7 +599,7 @@ def _evidence_is_measurement(
     fingerprint: str,
     snapshot: dict[str, Any],
 ) -> bool:
-    """Require exact applicability, coverage, uncertainty, and quality floor."""
+    """Require exact representative applicability and bounded uncertainty."""
 
     # Match every decision-relevant identity field and workload stratum.
     harness = snapshot["harness"]
@@ -606,10 +620,9 @@ def _evidence_is_measurement(
     if not identity_matches or record.get("stale", False):
         return False
 
-    # Keep unknown or weak decision support out of the green evidence class.
+    # Keep unknown or weak decision support out of exact evidence coverage.
     coverage = record.get("coverage")
     uncertainty = record.get("uncertainty")
-    quality_floor = snapshot["override_policy"].get("quality_floor")
     return (
         record.get("representative") is True
         and isinstance(coverage, dict)
@@ -617,6 +630,44 @@ def _evidence_is_measurement(
         and isinstance(uncertainty, dict)
         and _is_number(uncertainty.get("lower_bound"))
         and _is_number(uncertainty.get("upper_bound"))
+    )
+
+
+def _evidence_is_measurement(
+    record: dict[str, Any],
+    request: dict[str, Any],
+    point: dict[str, Any],
+    portable: str,
+    native: dict[str, Any],
+    fingerprint: str,
+    snapshot: dict[str, Any],
+) -> bool:
+    """Require applicable exact evidence that clears the frozen quality floor."""
+
+    # Combine exact applicability with the independent conservative floor.
+    return _evidence_is_applicable(
+        record,
+        request,
+        point,
+        portable,
+        native,
+        fingerprint,
+        snapshot,
+    ) and _evidence_clears_quality_floor(record, snapshot)
+
+
+def _evidence_clears_quality_floor(
+    record: dict[str, Any],
+    snapshot: dict[str, Any],
+) -> bool:
+    """Compare one bounded record with the frozen conservative quality floor."""
+
+    # Preserve unknown bounds rather than coercing them into passing values.
+    uncertainty = record.get("uncertainty")
+    quality_floor = snapshot["override_policy"].get("quality_floor")
+    return (
+        isinstance(uncertainty, dict)
+        and _is_number(uncertainty.get("lower_bound"))
         and _is_number(quality_floor)
         and float(uncertainty["lower_bound"]) >= float(quality_floor)
     )
@@ -752,34 +803,76 @@ def _frontier_audit(
     ]
 
 
-def _measured_candidates(
+def _candidate_evidence(
     candidates: tuple[Candidate, ...],
     records: list[dict[str, Any]],
     request: dict[str, Any],
     snapshot: dict[str, Any],
-) -> list[tuple[Candidate, dict[str, Any]]]:
-    """Choose one conservative exact measurement per launchable candidate."""
+) -> EvidencePool:
+    """Partition candidates without treating missing evidence as dominance."""
 
+    # Collect one strongest conservative exact record per candidate.
     measured: list[tuple[Candidate, dict[str, Any]]] = []
+    unknown: list[Candidate] = []
+    below_floor: list[Candidate] = []
     for candidate in candidates:
-        # Retain only records that prove complete decision applicability.
+        # Distinguish exact failing evidence from an entirely unknown point.
+        fingerprint = _candidate_fingerprint(candidate, snapshot)
         applicable = [
             record
             for record in records
-            if _evidence_is_measurement(
+            if _evidence_is_applicable(
                 record,
                 request,
                 candidate.point,
                 candidate.portable,
                 candidate.native,
-                _candidate_fingerprint(candidate, snapshot),
+                fingerprint,
                 snapshot,
             )
         ]
-        if applicable:
-            measured.append((candidate, max(applicable, key=_quality_lower_bound)))
+        qualifying = [
+            record
+            for record in applicable
+            if _evidence_clears_quality_floor(record, snapshot)
+        ]
+        if qualifying:
+            measured.append((candidate, max(qualifying, key=_quality_lower_bound)))
+        elif applicable:
+            below_floor.append(candidate)
+        else:
+            unknown.append(candidate)
 
-    return measured
+    # Freeze the evidence partition for deterministic selection and audit.
+    return EvidencePool(tuple(measured), tuple(unknown), tuple(below_floor))
+
+
+def _evidence_exclusions(
+    evidence: EvidencePool,
+    include_unknown: bool,
+) -> list[dict[str, Any]]:
+    """Expose unknown and known-failing exact points as stable audit facts."""
+
+    # Preserve candidate identity without disclosing repeated launch arguments.
+    below_floor = [
+        _exclusion(
+            "quality_floor_not_cleared",
+            "Exact representative evidence does not clear the quality floor.",
+            candidate.point,
+            candidate.portable,
+        )
+        for candidate in evidence.below_floor
+    ]
+    unknown = [
+        _exclusion(
+            "missing_exact_evidence",
+            "No exact representative evidence covers this candidate.",
+            candidate.point,
+            candidate.portable,
+        )
+        for candidate in evidence.unknown
+    ]
+    return below_floor + (unknown if include_unknown else [])
 
 
 def _economic_candidate(
@@ -852,11 +945,29 @@ def _selection_decision(
 ) -> dict[str, Any]:
     """Resolve one selected or underdetermined decision from an eligible pool."""
 
-    # Match exact measurements once for every candidate and human output form.
+    # Partition exact evidence once for every candidate and human output form.
     records = snapshot["evidence"]["records"]
-    measured = _measured_candidates(pool.candidates, records, request, snapshot)
+    evidence_pool = _candidate_evidence(pool.candidates, records, request, snapshot)
+    measured = list(evidence_pool.measured)
+    exclusions = deepcopy(list(pool.exclusions)) + _evidence_exclusions(
+        evidence_pool,
+        include_unknown=bool(measured),
+    )
     decision_policy = "cold_start"
     frontier_audit: list[dict[str, Any]] = []
+
+    # Never let measured points dominate candidates whose evidence is unknown.
+    if measured and evidence_pool.unknown:
+        frontier = _pareto_frontier(measured)
+        return _inherit(
+            request,
+            snapshot,
+            "insufficient_evidence",
+            {
+                "frontier": _frontier_audit(frontier, snapshot),
+                "exclusions": deepcopy(exclusions),
+            },
+        )
 
     # Resolve measured alternatives through explicit economics or Pareto policy.
     if measured:
@@ -917,11 +1028,25 @@ def _selection_decision(
 
     # Refuse to treat a heuristic point as measured economic evidence.
     elif "economics" in request:
-        return _inherit(request, snapshot, "insufficient_evidence")
+        return _inherit(
+            request,
+            snapshot,
+            "insufficient_evidence",
+            {"exclusions": deepcopy(exclusions)},
+        )
+
+    # Inherit when every candidate has exact evidence below the quality floor.
+    elif not evidence_pool.unknown:
+        return _inherit(
+            request,
+            snapshot,
+            "quality_floor_not_cleared",
+            {"exclusions": deepcopy(exclusions)},
+        )
 
     # Choose the workload-safe cold-start endpoint when measurements are absent.
     else:
-        eligible = list(pool.candidates)
+        eligible = list(evidence_pool.unknown)
         decision_policy = (
             "cold_start_strongest"
             if not request["reversible"] and request["checker"]["kind"] == "none"
@@ -957,8 +1082,6 @@ def _selection_decision(
         fingerprint,
         snapshot,
     )
-    exclusions = deepcopy(list(pool.exclusions))
-
     return {
         "request_id": request["request_id"],
         "status": "selected",
@@ -988,10 +1111,7 @@ def _selection_decision(
         "exclusions": exclusions,
         "next_escalation": _escalation(
             request,
-            point,
-            portable,
-            native,
-            adapter,
+            candidate,
             snapshot,
             fingerprint,
         ),
@@ -1041,16 +1161,17 @@ def _audit(
 
 def _escalation(
     request: dict[str, Any],
-    point: dict[str, Any],
-    portable: str,
-    native: dict[str, Any],
-    adapter: dict[str, Any],
+    candidate: Candidate,
     snapshot: dict[str, Any],
     fingerprint: str,
 ) -> dict[str, Any] | None:
     """Describe one existing-retry step only after externally bound failure."""
 
     # Bind the prior attempt and external failure to the selected exact point.
+    point = candidate.point
+    portable = candidate.portable
+    native = candidate.native
+    adapter = candidate.adapter
     prior = request.get("prior", {})
     failure = request.get("verified_failure", {})
     checker = request.get("checker", {})
@@ -1286,7 +1407,6 @@ def route(artifact: Any) -> dict[str, Any]:
 
     # Freeze live caller-derived context once or preserve a supplied snapshot.
     snapshot = freeze_context(supplied) if source == "context" else supplied
-    snapshot.setdefault("snapshot_identity", _snapshot_identity(snapshot))
     if error := _snapshot_error(snapshot):
         decisions = [
             _refused(request, snapshot, "invalid_snapshot", error)
@@ -1435,6 +1555,7 @@ def recommend(artifact: Any) -> dict[str, Any]:
             "artifact_refusal": resolved["artifact_refusal"],
         }
 
+    # Pair each request with its shared-core decision and human-only evidence.
     requests = artifact.get("requests", [])
     recommendations = []
     for request, decision in zip(requests, resolved["decisions"], strict=True):
@@ -1462,6 +1583,8 @@ def recommend(artifact: Any) -> dict[str, Any]:
                 ),
             }
         )
+
+    # Return detailed output over the same frozen snapshot and decision order.
     return {
         "schema_version": resolved["schema_version"],
         "snapshot": resolved["snapshot"],

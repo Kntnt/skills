@@ -192,7 +192,7 @@ def test_route_selects_an_exact_launchable_point() -> None:
     result = _load_router().route(
         {
             "schema_version": 1,
-            "snapshot": _complete_routing_snapshot(),
+            "context": _complete_routing_snapshot(),
             "requests": [
                 {
                     "request_id": "build-1",
@@ -237,7 +237,7 @@ def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
     decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
@@ -271,7 +271,7 @@ def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
     filtered_decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": filtered,
+            "context": filtered,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
@@ -294,7 +294,7 @@ def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
     unreachable = router.route(
         {
             "schema_version": 1,
-            "snapshot": changed_tools,
+            "context": changed_tools,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
@@ -312,14 +312,14 @@ def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
     policy_decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": changed_policy,
+            "context": changed_policy,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
     commercial_decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": changed_commercial,
+            "context": changed_commercial,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
@@ -350,7 +350,7 @@ def test_route_requires_verified_mappings_below_the_complete_main_seat() -> None
     automatic = router.route(
         {
             "schema_version": 1,
-            "snapshot": missing_automatic,
+            "context": missing_automatic,
             "requests": [_request()],
         }
     )["decisions"][0]
@@ -368,7 +368,7 @@ def test_route_requires_verified_mappings_below_the_complete_main_seat() -> None
     max_decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": unverified_max,
+            "context": unverified_max,
             "requests": [_request(overrides={"deliberation": "max"})],
         }
     )["decisions"][0]
@@ -383,7 +383,7 @@ def test_route_requires_verified_mappings_below_the_complete_main_seat() -> None
     above_deliberation = router.route(
         {
             "schema_version": 1,
-            "snapshot": deliberation_ceiling,
+            "context": deliberation_ceiling,
             "requests": [_request(overrides={"deliberation": "high"})],
         }
     )["decisions"][0]
@@ -398,7 +398,7 @@ def test_route_requires_verified_mappings_below_the_complete_main_seat() -> None
     above_model = router.route(
         {
             "schema_version": 1,
-            "snapshot": model_ceiling,
+            "context": model_ceiling,
             "requests": [_request(overrides={"model": "worker-v2"})],
         }
     )["decisions"][0]
@@ -461,7 +461,7 @@ def test_route_preserves_batch_order_and_inherits_the_verdict_seat() -> None:
     decisions = _load_router().route(
         {
             "schema_version": 1,
-            "snapshot": _complete_routing_snapshot(),
+            "context": _complete_routing_snapshot(),
             "requests": [verdict, execution],
         }
     )["decisions"]
@@ -484,10 +484,21 @@ def test_route_honors_independent_overrides_and_matched_lower_evidence() -> None
     router = _load_router()
     snapshot = _complete_routing_snapshot()
     snapshot["mappings"][0]["commercial"]["allocated_subscription_cost"] = 1.0
+    snapshot["mappings"][0]["controls"] = {
+        portable: snapshot["mappings"][0]["controls"][portable]
+        for portable in ("low", "high")
+    }
+    snapshot["mappings"][0]["control_capabilities"] = {"low": 1, "high": 3}
+    snapshot["mappings"][0]["native_control_order"] = list(
+        snapshot["mappings"][0]["controls"].values()
+    )
+    snapshot["harness"]["adapter_specs"][0]["native_controls"] = list(
+        snapshot["mappings"][0]["controls"].values()
+    )
     low = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 _request(overrides={"model": "worker-v2", "deliberation": "low"})
             ],
@@ -496,7 +507,7 @@ def test_route_honors_independent_overrides_and_matched_lower_evidence() -> None
     high = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 _request(overrides={"model": "worker-v2", "deliberation": "high"})
             ],
@@ -515,7 +526,7 @@ def test_route_honors_independent_overrides_and_matched_lower_evidence() -> None
     result = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [_request(overrides={"model": "worker-v2"})],
         }
     )["decisions"][0]
@@ -535,7 +546,7 @@ def test_route_freezes_max_native_value_in_the_fingerprint() -> None:
     first = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [_request(overrides={"deliberation": "max"})],
         }
     )
@@ -559,7 +570,7 @@ def test_route_freezes_max_native_value_in_the_fingerprint() -> None:
     later = router.route(
         {
             "schema_version": 1,
-            "snapshot": changed,
+            "context": changed,
             "requests": [_request(overrides={"deliberation": "max"})],
         }
     )
@@ -582,7 +593,7 @@ def test_route_emits_only_a_bounded_adjacent_escalation() -> None:
     selected = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
@@ -612,7 +623,7 @@ def test_route_emits_only_a_bounded_adjacent_escalation() -> None:
         verified_failure=verified_failure,
     )
     escalation = router.route(
-        {"schema_version": 1, "snapshot": snapshot, "requests": [request]}
+        {"schema_version": 1, "context": snapshot, "requests": [request]}
     )["decisions"][0]["next_escalation"]
 
     # Assert the one adjacent step is complete and consumes an existing retry.
@@ -648,7 +659,7 @@ def test_route_emits_only_a_bounded_adjacent_escalation() -> None:
         decision = router.route(
             {
                 "schema_version": 1,
-                "snapshot": snapshot,
+                "context": snapshot,
                 "requests": [changed_request],
             }
         )["decisions"][0]
@@ -658,7 +669,7 @@ def test_route_emits_only_a_bounded_adjacent_escalation() -> None:
     bounded = deepcopy(snapshot)
     bounded["main_seat"]["deliberation_capability"] = 1
     bounded_decision = router.route(
-        {"schema_version": 1, "snapshot": bounded, "requests": [request]}
+        {"schema_version": 1, "context": bounded, "requests": [request]}
     )["decisions"][0]
 
     # Assert escalation applies the same complete authority ceiling.
@@ -672,13 +683,13 @@ def test_route_inherits_without_a_profile_or_discriminating_evidence() -> None:
     snapshot = _complete_routing_snapshot()
     snapshot["profile"] = None
     absent = _load_router().route(
-        {"schema_version": 1, "snapshot": snapshot, "requests": [_request()]}
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
     )["decisions"][0]
     snapshot = _complete_routing_snapshot()
     snapshot["evidence"]["records"] = []
     snapshot["override_policy"]["cold_start"] = "inherit"
     uncertain = _load_router().route(
-        {"schema_version": 1, "snapshot": snapshot, "requests": [_request()]}
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
     )["decisions"][0]
 
     # Assert both safe inheritance reasons remain explicit and distinct.
@@ -743,7 +754,7 @@ def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
     # Assert every family refuses through the public seam without a launch.
     for snapshot, request, expected in cases:
         decision = _load_router().route(
-            {"schema_version": 1, "snapshot": snapshot, "requests": [request]}
+            {"schema_version": 1, "context": snapshot, "requests": [request]}
         )["decisions"][0]
         assert decision["status"] == "refused"
         assert decision["reason"]["code"] == expected
@@ -783,7 +794,7 @@ def test_route_refuses_invalid_snapshots_and_ambiguous_aliases() -> None:
     invalid.pop("commercial_facts", None)
     invalid.pop("mappings")
     invalid_response = _load_router().route(
-        {"schema_version": 1, "snapshot": invalid, "requests": [_request()]}
+        {"schema_version": 1, "context": invalid, "requests": [_request()]}
     )
     ambiguous = _complete_routing_snapshot()
     ambiguous["mappings"][0]["aliases"] = ["worker-latest"]
@@ -793,7 +804,7 @@ def test_route_refuses_invalid_snapshots_and_ambiguous_aliases() -> None:
     ambiguous_decision = _load_router().route(
         {
             "schema_version": 1,
-            "snapshot": ambiguous,
+            "context": ambiguous,
             "requests": [_request(overrides={"model": "worker-latest"})],
         }
     )["decisions"][0]
@@ -815,7 +826,7 @@ def test_route_cli_is_machine_readable_and_does_not_modify_its_input(
         json.dumps(
             {
                 "schema_version": 1,
-                "snapshot": _complete_routing_snapshot(),
+                "context": _complete_routing_snapshot(),
                 "requests": [_request()],
             }
         ),
@@ -903,7 +914,7 @@ def test_route_labels_stale_measurements_mixed_and_keeps_costs_separate() -> Non
     selected = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
@@ -911,7 +922,7 @@ def test_route_labels_stale_measurements_mixed_and_keeps_costs_separate() -> Non
     decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
@@ -937,7 +948,7 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
     explicit = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [_request(overrides={"deliberation": "low"})],
         }
     )["decisions"][0]
@@ -946,7 +957,11 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
 
     # Route the exact record as the positive measurement-based control.
     measured = router.route(
-        {"schema_version": 1, "snapshot": snapshot, "requests": [_request()]}
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
     )["decisions"][0]
 
     # Assert exact applicability alone earns the production evidence class.
@@ -962,10 +977,6 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
         {**exact, "representative": False},
         {**exact, "coverage": {"decision_relevant": False}},
         {**exact, "uncertainty": None},
-        {
-            **exact,
-            "uncertainty": {"lower_bound": 0.82, "upper_bound": 0.96},
-        },
     ]
 
     # Assert every partial record remains visibly mixed rather than green.
@@ -973,10 +984,32 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
         changed = deepcopy(snapshot)
         changed["evidence"]["records"] = [partial]
         decision = router.route(
-            {"schema_version": 1, "snapshot": changed, "requests": [_request()]}
+            {
+                "schema_version": 1,
+                "context": changed,
+                "requests": [_request(overrides={"deliberation": "low"})],
+            }
         )["decisions"][0]
         assert decision["status"] == "selected"
         assert decision["evidence_class"] == "mixed", partial
+
+    # Keep an exact conservative failure out of heuristic selection.
+    below_floor = deepcopy(snapshot)
+    below_floor["evidence"]["records"] = [
+        {
+            **exact,
+            "uncertainty": {"lower_bound": 0.82, "upper_bound": 0.96},
+        }
+    ]
+    failing = router.route(
+        {
+            "schema_version": 1,
+            "context": below_floor,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+    assert failing["status"] == "inherit"
+    assert failing["inheritance"]["reason"] == "quality_floor_not_cleared"
 
     # Move the record to an unrelated workload cohort.
     unrelated = deepcopy(snapshot)
@@ -984,12 +1017,111 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
         {**exact, "workload_cohort": "typescript-frontend"}
     ]
     heuristic = router.route(
-        {"schema_version": 1, "snapshot": unrelated, "requests": [_request()]}
+        {
+            "schema_version": 1,
+            "context": unrelated,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
     )["decisions"][0]
 
     # Assert unrelated evidence remains unknown and heuristic.
     assert heuristic["status"] == "selected"
     assert heuristic["evidence_class"] == "heuristic"
+
+
+def test_route_keeps_unmeasured_candidates_unknown_beside_measurements() -> None:
+    """A measured point cannot dominate a candidate with unknown evidence."""
+
+    # Configure two launchable models at one locked deliberation value.
+    router = _load_router()
+    context = _complete_routing_snapshot()
+    second = deepcopy(context["mappings"][0])
+    second.update({"model": "worker-v3", "model_capability": 80})
+    context["mappings"].append(second)
+    context["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+
+    # Bind representative evidence to only the first candidate.
+    first = router.route(
+        {
+            "schema_version": 1,
+            "context": context,
+            "requests": [
+                _request(overrides={"model": "worker-v2", "deliberation": "low"})
+            ],
+        }
+    )["decisions"][0]
+    context["evidence"]["records"] = [_measurement_record(first)]
+
+    # Route both models without pretending the unknown candidate is dominated.
+    decision = router.route(
+        {
+            "schema_version": 1,
+            "context": context,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    # Assert honest inheritance and an explicit missing-evidence audit fact.
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "insufficient_evidence"
+    assert decision["audit"]["exclusions"][-1]["code"] == "missing_exact_evidence"
+
+
+def test_route_excludes_exact_evidence_known_below_the_quality_floor() -> None:
+    """A known failing point cannot re-enter selection as a heuristic."""
+
+    # Resolve one exact candidate before attaching failing evidence.
+    router = _load_router()
+    context = _complete_routing_snapshot()
+    request = _request(overrides={"model": "worker-v2", "deliberation": "low"})
+    selected = router.route(
+        {"schema_version": 1, "context": context, "requests": [request]}
+    )["decisions"][0]
+    context["evidence"]["records"] = [
+        _measurement_record(
+            selected,
+            quality=0.82,
+            uncertainty={"lower_bound": 0.8, "upper_bound": 0.84},
+        )
+    ]
+
+    # Route again through the same exact point and quality policy.
+    decision = router.route(
+        {"schema_version": 1, "context": context, "requests": [request]}
+    )["decisions"][0]
+
+    # Assert the known failing evidence yields inheritance rather than launch.
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "quality_floor_not_cleared"
+    assert decision["audit"]["exclusions"][-1]["code"] == "quality_floor_not_cleared"
+
+
+def test_route_requires_snapshot_identity_but_freezes_current_context() -> None:
+    """Only returned snapshots may bypass current-context derivation."""
+
+    # Submit identical unsigned facts through frozen and current-context fields.
+    router = _load_router()
+    unsigned = _complete_routing_snapshot()
+    refused = router.route(
+        {"schema_version": 1, "snapshot": unsigned, "requests": [_request()]}
+    )
+    derived = router.route(
+        {"schema_version": 1, "context": unsigned, "requests": [_request()]}
+    )
+
+    # Mutate one returned snapshot without changing its frozen identity.
+    tampered = deepcopy(derived["snapshot"])
+    tampered["profile"]["revision"] = "profile-8"
+    mismatch = router.route(
+        {"schema_version": 1, "snapshot": tampered, "requests": [_request()]}
+    )
+
+    # Assert only current context is signed and stale signatures are refused.
+    assert refused["artifact_refusal"]["code"] == "invalid_snapshot"
+    assert refused["decisions"] == []
+    assert derived["decisions"][0]["status"] == "selected"
+    assert derived["snapshot"]["snapshot_identity"].startswith("sha256:")
+    assert mismatch["decisions"][0]["reason"]["code"] == "invalid_snapshot"
 
 
 def test_route_cold_start_uses_workload_safety_before_economics() -> None:
@@ -1005,12 +1137,12 @@ def test_route_cold_start_uses_workload_safety_before_economics() -> None:
 
     # Route checked reversible and unchecked irreversible work independently.
     safe = router.route(
-        {"schema_version": 1, "snapshot": snapshot, "requests": [_request()]}
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
     )["decisions"][0]
     consequential = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 _request(
                     reversible=False,
@@ -1045,7 +1177,7 @@ def test_route_cold_start_filters_by_explicit_workload_requirements() -> None:
     snapshot["harness"]["adapter_specs"][0]["models"].append("worker-v3")
     artifact = {
         "schema_version": 1,
-        "snapshot": snapshot,
+        "context": snapshot,
         "requests": [
             _request(request_id="routine", required_capabilities=["routine-python"]),
             _request(request_id="architecture", required_capabilities=["architecture"]),
@@ -1100,7 +1232,7 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
     first_decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 _request(overrides={"model": "worker-v2", "deliberation": "low"})
             ],
@@ -1109,7 +1241,7 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
     second_decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 _request(overrides={"model": "worker-v3", "deliberation": "low"})
             ],
@@ -1130,7 +1262,11 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
 
     # Route without a conversion policy across the two-point frontier.
     ambiguous = router.route(
-        {"schema_version": 1, "snapshot": snapshot, "requests": [_request()]}
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
     )["decisions"][0]
 
     # Assert incomparable dimensions produce audited inheritance.
@@ -1154,7 +1290,11 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         }
     )
     dominant = router.route(
-        {"schema_version": 1, "snapshot": dominated, "requests": [_request()]}
+        {
+            "schema_version": 1,
+            "context": dominated,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
     )["decisions"][0]
 
     # Assert exact Pareto dominance selects the sole frontier point.
@@ -1170,7 +1310,11 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         "latency": 0.1,
     }
     selected = router.route(
-        {"schema_version": 1, "snapshot": priced, "requests": [_request()]}
+        {
+            "schema_version": 1,
+            "context": priced,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
     )["decisions"][0]
 
     # Assert only the explicit conversion policy resolves the tradeoff.
@@ -1181,7 +1325,11 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
 
     # Adapt the same measured decision into the detailed human form.
     recommendation = router.recommend(
-        {"schema_version": 1, "snapshot": priced, "requests": [_request()]}
+        {
+            "schema_version": 1,
+            "context": priced,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
     )["recommendations"][0]
 
     # Assert presentation retains the shared point, frontier, and uncertainty.
@@ -1223,7 +1371,7 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
     first_decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 _request(overrides={"model": "worker-v2", "deliberation": "low"})
             ],
@@ -1232,7 +1380,7 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
     second_decision = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 _request(overrides={"model": "worker-v3", "deliberation": "low"})
             ],
@@ -1244,17 +1392,23 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
     ]
 
     # Express route and renewal floors through the shared structured request.
-    route_request = _request(economics={"decision": "route", "quality_floor": 0.9})
+    route_request = _request(
+        overrides={"deliberation": "low"},
+        economics={"decision": "route", "quality_floor": 0.9},
+    )
     renew_request = _request(
         request_id="renew",
+        overrides={"deliberation": "low"},
         economics={"decision": "renew", "quality_floor": 0.9},
     )
     budget_request = _request(
         request_id="budget",
+        overrides={"deliberation": "low"},
         economics={"decision": "route", "budget": 1.5},
     )
     decision_only_request = _request(
         request_id="decision-only",
+        overrides={"deliberation": "low"},
         economics={"decision": "route"},
     )
 
@@ -1262,7 +1416,7 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
     routed = router.route(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 route_request,
                 renew_request,
@@ -1274,7 +1428,7 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
     recommended = router.recommend(
         {
             "schema_version": 1,
-            "snapshot": snapshot,
+            "context": snapshot,
             "requests": [
                 route_request,
                 renew_request,
@@ -1307,7 +1461,7 @@ def test_route_and_recommend_share_selection_but_not_presentation() -> None:
     router = _load_router()
     artifact = {
         "schema_version": 1,
-        "snapshot": _complete_routing_snapshot(),
+        "context": _complete_routing_snapshot(),
         "requests": [_request(overrides={"deliberation": "low"})],
     }
 
@@ -1371,7 +1525,7 @@ def test_route_totally_validates_nested_snapshot_and_request_families() -> None:
         snapshot = _complete_routing_snapshot()
         snapshot[family] = malformed
         response = _load_router().route(
-            {"schema_version": 1, "snapshot": snapshot, "requests": [_request()]}
+            {"schema_version": 1, "context": snapshot, "requests": [_request()]}
         )
         assert response["artifact_refusal"]["code"] == "invalid_snapshot", family
         assert response["artifact_refusal"]["detail"], family
@@ -1394,7 +1548,7 @@ def test_route_totally_validates_nested_snapshot_and_request_families() -> None:
         decisions = _load_router().route(
             {
                 "schema_version": 1,
-                "snapshot": _complete_routing_snapshot(),
+                "context": _complete_routing_snapshot(),
                 "requests": [invalid_request, _request(request_id="valid")],
             }
         )["decisions"]
