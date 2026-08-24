@@ -1228,7 +1228,7 @@ def test_select_on_refuses_an_unknown_skill(tmp_path: Path) -> None:
 def test_select_on_resolves_the_whole_closure_before_it_writes(
     tmp_path: Path,
 ) -> None:
-    """`--on release --yes` Enables `push` and `commit` as well (issue #29)."""
+    """`--on=release --yes` Enables `push` and `commit` as well (issue #29)."""
 
     world = _world(tmp_path, _CHAIN)
     _present(world, "home", ".claude")

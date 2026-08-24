@@ -889,6 +889,16 @@ def _rebuild_frontiers(directory: Path, accepted: list[dict[str, Any]]) -> list[
     return affected
 
 
+def _option(rest: list[str], name: str) -> str | None:
+    """Return the sole option's value in either spelling, or None where it is not one."""
+
+    if len(rest) == 1 and rest[0].startswith(f"{name}="):
+        return rest[0].split("=", 1)[1]
+    if len(rest) == 2 and rest[0] == name:
+        return rest[1]
+    return None
+
+
 def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     """Emit one artifact from completed attempts into caller-owned scratch."""
 
@@ -897,9 +907,10 @@ def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     destination: Path | None = None
     rest = arguments[1:]
     if rest:
-        if rest[0] != "--artifact" or len(rest) != 2:
+        artifact = _option(rest, "--artifact")
+        if artifact is None:
             return _artifact_refusal("invalid_arguments", "Unsupported options."), 2
-        destination = Path(rest[1])
+        destination = Path(artifact)
     read, failure = _read(arguments[0])
     if failure is not None:
         return failure, 2
@@ -948,9 +959,10 @@ def _record_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     rest = arguments[1:]
     directory = Path.home() / ".model-selector"
     if rest:
-        if rest[0] != "--data" or len(rest) != 2:
+        data = _option(rest, "--data")
+        if data is None:
             return _artifact_refusal("invalid_arguments", "Unsupported options."), 2
-        directory = Path(rest[1]).expanduser()
+        directory = Path(data).expanduser()
     read, failure = _read(arguments[0])
     if failure is not None:
         return failure, 2
