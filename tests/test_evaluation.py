@@ -1,0 +1,325 @@
+"""The shared fixture corpus and the protocol an evaluation is run under."""
+
+from __future__ import annotations
+
+import re
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+EVALUATION = REPO_ROOT / "docs" / "evaluation"
+PROTOCOL = EVALUATION / "protocol.md"
+TEMPLATE = EVALUATION / "record-template.md"
+CORPUS = EVALUATION / "corpus"
+INDEX = CORPUS / "README.md"
+
+# The material the wave has to survive, one tag per kind. A fixture entry
+# declares what it covers from this vocabulary, and the corpus is complete when
+# every one of these is claimed by at least one entry (issue #101).
+REQUIRED_COVERAGE = frozenset(
+    {
+        "short brief",
+        "interview transcript",
+        "long factual source",
+        "clean prose",
+        "mechanically flawed prose",
+        "ai slop",
+        "genre",
+        "technique",
+        "handoff metadata present",
+        "handoff metadata conflicting",
+        "unrelated frontmatter",
+        "no frontmatter",
+        "inline material",
+        "local file material",
+        "immutable url",
+        "response default",
+        "new file",
+        "existing file",
+        "existing directory",
+        "derived-name collision",
+        "read-only source",
+        "in-place request",
+    }
+)
+
+# Tags a fixture may also carry. They cover material the corpus is better for
+# holding without the acceptance criteria naming it, and they are listed here
+# so that a mistyped required tag cannot pass as an optional one.
+OPTIONAL_COVERAGE = frozenset(
+    {
+        "ambiguous language",
+        "locale mechanics",
+        "no-change status",
+        "refusal",
+        "unusable metadata",
+    }
+)
+
+# Every fixture entry is a level-three heading naming the fixture, followed by
+# the five bullets a reader needs before the fixture means anything: which
+# files it is, what it covers, what the material is, how it is supplied, and
+# what a correct run must never do with it.
+ENTRY = re.compile(r"^### `([A-Za-z0-9_-]+)`$", re.MULTILINE)
+FIELDS = ("Files", "Covers", "Material", "Use", "Reject")
+
+# A field bullet is the field name in bold, an em dash, and its value.
+FIELD = re.compile(r"^- \*\*([A-Za-z ]+)\*\* — (.+)$", re.MULTILINE)
+
+# A path a field names, written the way every other path in this repository's
+# prose is written.
+PATH = re.compile(r"`([A-Za-z0-9_./-]+\.(?:md|txt))`")
+
+# The record fields an evaluation writes. A later cross-family comparison is
+# made by reading records rather than by re-running anything, so a field
+# absent from one family's records is a comparison that cannot be made.
+RECORD_FIELDS = (
+    "record",
+    "date",
+    "ticket",
+    "skill",
+    "provider family",
+    "model",
+    "harness",
+    "corpus commit",
+    "fixture",
+    "invocation",
+    "contextual instruction",
+    "output target",
+    "observed delivery",
+    "side effects",
+    "criteria",
+    "unresolved findings",
+    "defects filed",
+    "notes",
+)
+
+# What blinded judging rejects however well the text reads. These are the
+# specification's five, and they are what keeps a semantic criterion from
+# degrading into approval of anything fluent.
+REJECTIONS = (
+    "unsupported fact",
+    "wrong locale behaviour",
+    "substantive edit",
+    "unresolved mandatory finding",
+    "incorrect side effect",
+)
+
+# Wording that would turn fixture material into an exact-prose assertion. The
+# corpus supplies material and states what must not happen to it; it never
+# supplies the sentence a model is supposed to write back.
+FORBIDDEN = (
+    "expected output",
+    "exact output",
+    "must produce exactly",
+    "must output exactly",
+    "verbatim output",
+    "guaranteed to",
+    "guarantees perfect",
+)
+
+
+def _index() -> str:
+    return INDEX.read_text(encoding="utf-8")
+
+
+def _protocol() -> str:
+    return PROTOCOL.read_text(encoding="utf-8")
+
+
+def _entries() -> dict[str, str]:
+    """Map each fixture's name to the body of its entry in the index."""
+
+    text = _index()
+    starts = [(match.group(1), match.start()) for match in ENTRY.finditer(text)]
+    bodies: dict[str, str] = {}
+    for position, (name, start) in enumerate(starts):
+        end = starts[position + 1][1] if position + 1 < len(starts) else len(text)
+        bodies[name] = text[start:end]
+    return bodies
+
+
+def _fields(body: str) -> dict[str, str]:
+    """Map each field name in one entry to the value written beside it."""
+
+    return {match.group(1): match.group(2) for match in FIELD.finditer(body)}
+
+
+def _fixture_files() -> set[str]:
+    """Every fixture file the corpus carries, corpus-relative.
+
+    The index and the staging notes beside it are prose about the corpus
+    rather than material fed to a Skill, so they are not fixtures and are not
+    expected to be listed as any entry's file.
+    """
+
+    return {
+        str(path.relative_to(CORPUS))
+        for path in CORPUS.rglob("*")
+        if path.is_file() and path.name != "README.md"
+    }
+
+
+def test_the_corpus_lives_at_one_discoverable_location() -> None:
+    """A fixture is reachable from the guide an agent always has loaded."""
+
+    agents = (REPO_ROOT / "AGENTS.md").read_text(encoding="utf-8")
+
+    assert INDEX.exists()
+    assert PROTOCOL.exists()
+    assert TEMPLATE.exists()
+    assert "docs/evaluation/protocol.md" in agents
+
+
+def test_every_fixture_entry_documents_the_fixture_on_its_own() -> None:
+    """An evaluator uses a fixture without reading the Skill that consumes it.
+
+    The five fields are what makes that possible: which files the fixture is,
+    what it covers, what the material actually is, how it reaches the Skill,
+    and what a correct run must never do with it. An entry missing one of them
+    sends the evaluator to the Skill for the answer, which is exactly the
+    dependency the corpus exists to remove.
+    """
+
+    entries = _entries()
+
+    # An index reworded out of the heading shape would leave nothing to judge
+    # and pass regardless.
+    assert entries
+
+    incomplete = {
+        name: sorted(set(FIELDS) - set(_fields(body)))
+        for name, body in entries.items()
+        if set(FIELDS) - set(_fields(body))
+    }
+
+    assert incomplete == {}
+
+
+def test_the_corpus_covers_the_material_the_wave_has_to_survive() -> None:
+    """Every kind the specification names is claimed by some fixture."""
+
+    claimed: set[str] = set()
+    for body in _entries().values():
+        covers = _fields(body).get("Covers", "")
+        claimed |= {tag.strip() for tag in covers.split(";") if tag.strip()}
+
+    unknown = claimed - REQUIRED_COVERAGE - OPTIONAL_COVERAGE
+    assert unknown == set(), (
+        f"{unknown}: a fixture claims coverage this suite does not know, which"
+        f" is either a mistyped required tag passing as an optional one or a"
+        f" kind of material the vocabulary here has not caught up with."
+    )
+
+    assert REQUIRED_COVERAGE <= claimed, f"uncovered: {REQUIRED_COVERAGE - claimed}"
+
+
+def test_the_index_and_the_corpus_directory_describe_the_same_fixtures() -> None:
+    """A file nothing documents, and an entry pointing at nothing, both fail."""
+
+    listed: set[str] = set()
+    for body in _entries().values():
+        listed |= set(PATH.findall(_fields(body).get("Files", "")))
+
+    missing = {name for name in listed if not (CORPUS / name).exists()}
+    assert missing == set(), f"{missing}: named by an entry, absent from disk"
+
+    undocumented = _fixture_files() - listed
+    assert undocumented == set(), (
+        f"{undocumented}: present in the corpus and named by no entry, so an"
+        f" evaluator meets material with no account of what it is for."
+    )
+
+
+def test_the_protocol_states_what_blinded_judging_rejects() -> None:
+    """A semantic criterion tolerates several texts and still says no.
+
+    Blinded judging without a stated floor becomes approval of whatever reads
+    well, so the five rejections are written down and are what a criterion is
+    checked against however the output is worded.
+    """
+
+    protocol = _protocol().lower()
+
+    assert "blinded" in protocol
+
+    unstated = [rejection for rejection in REJECTIONS if rejection not in protocol]
+    assert unstated == [], f"{unstated}: rejected regardless of wording, unstated"
+
+
+def test_the_protocol_defines_a_recording_format_the_template_carries() -> None:
+    """Two families compare their runs by reading records, not by re-running.
+
+    So the format is defined once and materialised as a skeleton an evaluation
+    fills in. A field the protocol names and the template omits is a field the
+    second family's run will not have recorded when the comparison is made.
+    """
+
+    protocol = _protocol().lower()
+    template = TEMPLATE.read_text(encoding="utf-8").lower()
+
+    undefined = [field for field in RECORD_FIELDS if field not in protocol]
+    assert undefined == [], f"{undefined}: recording fields the protocol omits"
+
+    unrecorded = [field for field in RECORD_FIELDS if field not in template]
+    assert unrecorded == [], f"{unrecorded}: recording fields the template omits"
+
+
+def test_the_protocol_isolates_the_provider_families_in_both_directions() -> None:
+    """The isolation rule binds whoever runs an evaluation, both ways round.
+
+    Stated in one direction only, it reads as a rule about Codex that a Claude
+    session may ignore. Both sentences are therefore present, and so is the
+    consequence: the shared corpus is run in provider-native sessions and
+    compared from the records afterwards.
+    """
+
+    protocol = _protocol().lower()
+
+    assert "a codex session runs only gpt-family evaluations" in protocol
+    assert "a claude session runs only claude-family evaluations" in protocol
+    assert "cross-provider orchestration" in protocol
+
+
+def test_nothing_in_the_corpus_or_the_protocol_asserts_exact_prose() -> None:
+    """Fixture material, not a snapshot of sentences a model has to write.
+
+    The corpus states what the material is and what must not happen to it. A
+    fixture that also carried the answer would turn a semantic criterion into
+    a string comparison and would fail every model that wrote something else
+    that was true.
+    """
+
+    sources = sorted(EVALUATION.rglob("*.md"))
+
+    # A corpus moved out from under this glob would leave nothing to judge.
+    assert sources
+
+    offending: dict[str, list[str]] = {}
+    for path in sources:
+        text = path.read_text(encoding="utf-8").lower()
+        found = [phrase for phrase in FORBIDDEN if phrase in text]
+        if found:
+            offending[str(path.relative_to(REPO_ROOT))] = found
+
+    assert offending == {}
+
+
+def test_the_url_fixture_names_a_source_that_cannot_change_under_a_run() -> None:
+    """Two families run the corpus at different times against one text.
+
+    A live page would let the material move between the runs, and the records
+    would then disagree about a difference neither model made.
+    """
+
+    entries = _entries()
+    urls = [
+        name
+        for name, body in entries.items()
+        if "immutable url" in _fields(body).get("Covers", "")
+    ]
+
+    assert urls
+
+    for name in urls:
+        body = entries[name]
+        assert "https://" in body, f"{name}: claims a URL source and names none"
