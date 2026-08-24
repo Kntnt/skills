@@ -48,7 +48,7 @@ When this Skill invokes another Skill, it passes only relevant guidance through 
 
 ## DEPENDENCIES
 
-Network access is required to refresh external evidence. The command reports an unreachable source without inventing current data.
+`uv` runs the Skill's dependency check. Network access is required to refresh external evidence. The command reports an unreachable source without inventing current data.
 
 ## SEE ALSO
 

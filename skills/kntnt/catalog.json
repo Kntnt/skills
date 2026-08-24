@@ -116,8 +116,10 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "9813988349b406ee058f23c6840d05923967e5bc54836437fdc2e34530d8d4f2",
-      "binaries": [],
+      "digest": "f3f8cbf2e8625e03050551f5bb65e8f5d2ce5636ce4c3446e946b0f957dc6537",
+      "binaries": [
+        "uv"
+      ],
       "skills": [],
       "externals": [],
       "capabilities": []

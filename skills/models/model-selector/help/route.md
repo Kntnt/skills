@@ -10,7 +10,7 @@ model-selector route - resolve delegated work into exact launch decisions
 
 ## DESCRIPTION
 
-Read one versioned structured request or an ordered batch from *PATH* and print a structured response containing a frozen routing snapshot and exactly one `selected`, `inherit`, or `refused` decision per input in the same order. A selected decision identifies its exact point, native deliberation control, serving mode, configuration fingerprint, Harness-native launch arguments, evidence class, provenance, exclusions, and bounded next escalation. Only a selected decision carries launch overrides; every refusal carries a stable reason.
+Read one versioned structured request or an ordered batch from *PATH* and print a structured response containing a frozen routing snapshot and exactly one `selected`, `inherit`, or `refused` decision per input in the same order. A selected decision identifies its exact model, adapter, channel, surface, native deliberation control, serving mode, tools, policy, configuration fingerprint, complete Harness-native launch arguments, evidence class, provenance, exclusions, and bounded next escalation. Only a selected decision carries launch overrides; every refusal carries a stable reason.
 
 Route is offline, non-interactive, and read-only. It never starts setup, performs research or evaluation, refreshes evidence, writes configuration, or writes the evidence ledger. A missing profile or evidence that cannot discriminate safely can yield audited inheritance; invalid or unsafe state yields refusal.
 
@@ -34,7 +34,7 @@ One JSON object conforming to `references/route-response.schema.json`, with `sch
 
 ## DIAGNOSTICS
 
-A malformed artifact is refused before routing. Request-level invalid profile state, ambiguous or unavailable overrides, unknown safety ceiling, above-main override, unrepresentable verdict inheritance, and an empty safe candidate set produce stable refused decisions with no launch instruction.
+A malformed artifact is refused before routing. Invalid CLI arguments, unreadable paths, and malformed JSON produce a machine-readable top-level `artifact_refusal`, an empty decision list, exit status 2, and no traceback. Request-level invalid profile state, ambiguous or unavailable overrides, unknown safety ceiling, above-main override, unrepresentable verdict inheritance, and an empty safe candidate set produce stable refused decisions with no launch instruction.
 
 ## INVOCATION ENVELOPE
 
@@ -48,7 +48,7 @@ When this Skill invokes another Skill, it passes only relevant guidance through 
 
 ## DEPENDENCIES
 
-None.
+`uv` runs the shipped offline routing module.
 
 ## SEE ALSO
 

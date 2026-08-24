@@ -2,62 +2,206 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://kntnt.dev/schemas/model-selector/route-response-v1.json",
   "title": "Model-selector route response",
-  "type": "object",
-  "required": ["schema_version", "snapshot", "decisions"],
-  "properties": {
-    "schema_version": {"const": 1},
-    "snapshot": {"type": "object"},
-    "decisions": {
-      "type": "array",
-      "items": {
-        "oneOf": [
-          {"$ref": "#/$defs/selected"},
-          {"$ref": "#/$defs/inherit"},
-          {"$ref": "#/$defs/refused"}
-        ]
-      }
-    }
-  },
-  "additionalProperties": false,
+  "oneOf": [
+    {"$ref": "#/$defs/routed_response"},
+    {"$ref": "#/$defs/artifact_refusal_response"}
+  ],
   "$defs": {
-    "base": {
+    "non_empty_string": {"type": "string", "minLength": 1},
+    "native_control": {
       "type": "object",
-      "required": ["request_id", "status", "audit"],
+      "minProperties": 1,
+      "additionalProperties": {"type": ["string", "number", "boolean"]}
+    },
+    "commercial": {
+      "type": "object",
+      "required": ["cash", "rolling_quota", "weekly_quota", "allocated_subscription_cost", "latency"],
       "properties": {
-        "request_id": {"type": "string"},
-        "status": {"enum": ["selected", "inherit", "refused"]},
-        "audit": {"type": "object"}
-      }
+        "cash": {"type": ["number", "null"]},
+        "rolling_quota": {"type": ["number", "null"]},
+        "weekly_quota": {"type": ["number", "null"]},
+        "allocated_subscription_cost": {"type": ["number", "null"]},
+        "latency": {"type": ["number", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "exclusion": {
+      "type": "object",
+      "required": ["code", "detail", "model"],
+      "properties": {
+        "code": {"$ref": "#/$defs/non_empty_string"},
+        "detail": {"$ref": "#/$defs/non_empty_string"},
+        "model": {"$ref": "#/$defs/non_empty_string"},
+        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]}
+      },
+      "additionalProperties": false
+    },
+    "frontier_entry": {
+      "type": "object",
+      "required": ["configuration_fingerprint", "model", "portable_deliberation", "quality_lower_bound", "commercial"],
+      "properties": {
+        "configuration_fingerprint": {"$ref": "#/$defs/non_empty_string"},
+        "model": {"$ref": "#/$defs/non_empty_string"},
+        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "quality_lower_bound": {"type": "number"},
+        "commercial": {"$ref": "#/$defs/commercial"}
+      },
+      "additionalProperties": false
+    },
+    "audit": {
+      "type": "object",
+      "required": ["snapshot_identity", "provenance"],
+      "properties": {
+        "snapshot_identity": {"$ref": "#/$defs/non_empty_string"},
+        "provenance": {
+          "type": "object",
+          "required": ["profile_revision", "evidence_identity", "evidence_vintage", "harness_inventory_revision", "main_seat_model"],
+          "properties": {
+            "profile_revision": {"type": ["string", "null"]},
+            "evidence_identity": {"type": ["string", "null"]},
+            "evidence_vintage": {"type": ["string", "null"]},
+            "harness_inventory_revision": {"type": ["string", "null"]},
+            "main_seat_model": {"type": ["string", "null"]}
+          },
+          "additionalProperties": false
+        },
+        "decision_policy": {"$ref": "#/$defs/non_empty_string"},
+        "exclusions": {"type": "array", "items": {"$ref": "#/$defs/exclusion"}},
+        "frontier": {"type": "array", "items": {"$ref": "#/$defs/frontier_entry"}}
+      },
+      "additionalProperties": false
+    },
+    "launch": {
+      "type": "object",
+      "required": ["model", "resolved_alias", "adapter_id", "surface", "channel", "serving_mode", "tools", "policy", "portable_deliberation", "native_deliberation", "configuration_fingerprint", "arguments", "commercial"],
+      "properties": {
+        "model": {"$ref": "#/$defs/non_empty_string"},
+        "resolved_alias": {"type": ["string", "null"]},
+        "adapter_id": {"$ref": "#/$defs/non_empty_string"},
+        "surface": {"$ref": "#/$defs/non_empty_string"},
+        "channel": {"$ref": "#/$defs/non_empty_string"},
+        "serving_mode": {"$ref": "#/$defs/non_empty_string"},
+        "tools": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}},
+        "policy": {"type": "object"},
+        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "native_deliberation": {"$ref": "#/$defs/native_control"},
+        "configuration_fingerprint": {"$ref": "#/$defs/non_empty_string"},
+        "arguments": {"type": "object"},
+        "commercial": {"$ref": "#/$defs/commercial"}
+      },
+      "additionalProperties": false
+    },
+    "escalation": {
+      "type": "object",
+      "required": ["model", "adapter_id", "portable_deliberation", "native_deliberation", "configuration_fingerprint", "arguments", "consumes_existing_retry"],
+      "properties": {
+        "model": {"$ref": "#/$defs/non_empty_string"},
+        "adapter_id": {"$ref": "#/$defs/non_empty_string"},
+        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "native_deliberation": {"$ref": "#/$defs/native_control"},
+        "configuration_fingerprint": {"$ref": "#/$defs/non_empty_string"},
+        "arguments": {"type": "object"},
+        "consumes_existing_retry": {"const": true}
+      },
+      "additionalProperties": false
     },
     "selected": {
-      "allOf": [
-        {"$ref": "#/$defs/base"},
-        {
-          "required": ["launch", "evidence_class", "provenance", "exclusions", "next_escalation"],
-          "properties": {"status": {"const": "selected"}, "launch": {"type": "object"}},
-          "not": {"anyOf": [{"required": ["inheritance"]}, {"required": ["reason"]}]}
-        }
-      ]
+      "type": "object",
+      "required": ["request_id", "status", "launch", "evidence_class", "provenance", "exclusions", "next_escalation", "audit"],
+      "properties": {
+        "request_id": {"$ref": "#/$defs/non_empty_string"},
+        "status": {"const": "selected"},
+        "launch": {"$ref": "#/$defs/launch"},
+        "evidence_class": {"enum": ["heuristic", "mixed", "measurement_based"]},
+        "provenance": {
+          "type": "object",
+          "required": ["profile_revision", "evidence_identity", "evidence_vintage"],
+          "properties": {
+            "profile_revision": {"$ref": "#/$defs/non_empty_string"},
+            "evidence_identity": {"$ref": "#/$defs/non_empty_string"},
+            "evidence_vintage": {"$ref": "#/$defs/non_empty_string"}
+          },
+          "additionalProperties": false
+        },
+        "exclusions": {"type": "array", "items": {"$ref": "#/$defs/exclusion"}},
+        "next_escalation": {"oneOf": [{"$ref": "#/$defs/escalation"}, {"type": "null"}]},
+        "audit": {"$ref": "#/$defs/audit"}
+      },
+      "additionalProperties": false
     },
     "inherit": {
-      "allOf": [
-        {"$ref": "#/$defs/base"},
-        {
-          "required": ["inheritance"],
-          "properties": {"status": {"const": "inherit"}, "inheritance": {"type": "object"}},
-          "not": {"anyOf": [{"required": ["launch"]}, {"required": ["reason"]}]}
-        }
-      ]
+      "type": "object",
+      "required": ["request_id", "status", "inheritance", "audit"],
+      "properties": {
+        "request_id": {"$ref": "#/$defs/non_empty_string"},
+        "status": {"const": "inherit"},
+        "inheritance": {
+          "type": "object",
+          "required": ["reason", "main_seat"],
+          "properties": {
+            "reason": {"$ref": "#/$defs/non_empty_string"},
+            "main_seat": {"type": "object"}
+          },
+          "additionalProperties": false
+        },
+        "audit": {"$ref": "#/$defs/audit"}
+      },
+      "additionalProperties": false
     },
     "refused": {
-      "allOf": [
-        {"$ref": "#/$defs/base"},
-        {
-          "required": ["reason"],
-          "properties": {"status": {"const": "refused"}, "reason": {"type": "object"}},
-          "not": {"anyOf": [{"required": ["launch"]}, {"required": ["inheritance"]}]}
-        }
+      "type": "object",
+      "required": ["request_id", "status", "reason", "audit"],
+      "properties": {
+        "request_id": {"type": ["string", "null"]},
+        "status": {"const": "refused"},
+        "reason": {
+          "type": "object",
+          "required": ["code", "detail"],
+          "properties": {
+            "code": {"$ref": "#/$defs/non_empty_string"},
+            "detail": {"$ref": "#/$defs/non_empty_string"}
+          },
+          "additionalProperties": false
+        },
+        "audit": {"$ref": "#/$defs/audit"}
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "oneOf": [
+        {"$ref": "#/$defs/selected"},
+        {"$ref": "#/$defs/inherit"},
+        {"$ref": "#/$defs/refused"}
       ]
+    },
+    "routed_response": {
+      "type": "object",
+      "required": ["schema_version", "snapshot", "decisions"],
+      "properties": {
+        "schema_version": {"const": 1},
+        "snapshot": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/snapshot"},
+        "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}}
+      },
+      "additionalProperties": false
+    },
+    "artifact_refusal_response": {
+      "type": "object",
+      "required": ["schema_version", "snapshot", "decisions", "artifact_refusal"],
+      "properties": {
+        "schema_version": {"const": 1},
+        "snapshot": {"type": "null"},
+        "decisions": {"type": "array", "maxItems": 0},
+        "artifact_refusal": {
+          "type": "object",
+          "required": ["code", "detail"],
+          "properties": {
+            "code": {"$ref": "#/$defs/non_empty_string"},
+            "detail": {"$ref": "#/$defs/non_empty_string"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

@@ -3,9 +3,10 @@ name: model-selector
 description: Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.
 disable-model-invocation: true
 argument-hint: "[setup|config|recommend|route|chart|compare|update|record|status] [args] [--decision=route|renew] [--budget=<amount>] [--quality=<score>] [--force] [--data=<path>] [-- <instruction>]"
+compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
-  kntnt.binaries: ""
+  kntnt.binaries: "uv"
   kntnt.skills: ""
   kntnt.externals: ""
   kntnt.capabilities: ""
@@ -14,6 +15,8 @@ metadata:
 # model-selector
 
 Configure the exact model versions and subscription/API channels available to one user, then select a Pareto-efficient model, effort and agent configuration for a workload, budget or quality floor without re-researching known releases.
+
+**Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run "<checker>" check --here "$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
 
 `$HERE` is the directory that contains this SKILL.md.
 
@@ -84,7 +87,7 @@ Complete when every enabled pinned release or explicitly accepted mutable alias 
 
 ## Recommend
 
-Read `$HERE/references/pareto-selection.md`, then:
+Read `$HERE/references/pareto-selection.md`. Normalize the resolved profile, evidence, active Harness, exact main seat, workload, overrides, adapter mappings, and policy into the artifact contract in `$HERE/references/route-request.schema.json`, then obtain the decision through the `recommend()` Interface in `$HERE/scripts/route.py`. This is the same selection core as Route; never repeat hard filters, evidence classification, cost selection, or escalation as prose-only judgement. Render the returned detailed recommendation as follows:
 
 1. Resolve workload stratum, surface/harness, quality metric, budget or quality floor, latency/safety/availability filters and evidence date. State any inferred value.
 2. Select only enabled configured model versions, effort/serving modes and access channels. Prefer local production-shaped observations, then matched independent evaluations, then configuration-bearing first-party results; use prose tier claims only to choose experiments.
@@ -101,7 +104,7 @@ Complete when the recommendation names an exact configuration and decision rule,
 
 ## Route
 
-Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the artifact against `$HERE/references/route-request.schema.json`, add the current read-only routing context when it has no frozen snapshot, and run `$HERE/scripts/route.py <path>` with that canonical artifact. Emit the helper's JSON response without commentary. Route never enters setup and performs no network access, evaluation, research, or persistent write.
+Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the artifact against `$HERE/references/route-request.schema.json`, add the current read-only routing context when it has no frozen snapshot, and run `uv run "$HERE/scripts/route.py" <path>` with that canonical artifact. Emit the helper's JSON response without commentary. Route never enters setup and performs no network access, evaluation, research, or persistent write.
 
 ## Chart
 

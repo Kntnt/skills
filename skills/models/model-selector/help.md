@@ -162,7 +162,7 @@ The following schematic cases pin the split independently of any one Skill's For
 
 ## DEPENDENCIES
 
-None. Network access is used only by `update`; every other command operates on bundled or locally stored evidence and reports insufficiency.
+`uv` runs the shipped offline routing module. Network access is used only by `update`; every other command operates on bundled or locally stored evidence and reports insufficiency.
 
 ## SEE ALSO
 
