@@ -185,6 +185,24 @@ def _complete_routing_snapshot() -> dict[str, Any]:
     return snapshot
 
 
+def _automatic_low_snapshot() -> dict[str, Any]:
+    """Provide a complete snapshot whose point maps only the low control.
+
+    Automatic requests reach every evidence branch here without an explicit
+    deliberation lock, which route must never resolve into inheritance.
+    """
+
+    # Reduce the mapped, ordered, and launchable controls to the single value.
+    snapshot = _complete_routing_snapshot()
+    point = snapshot["mappings"][0]
+    native = point["controls"]["low"]
+    point["controls"] = {"low": native}
+    point["control_capabilities"] = {"low": point["control_capabilities"]["low"]}
+    point["native_control_order"] = [native]
+    snapshot["harness"]["adapter_specs"][0]["native_controls"] = [native]
+    return snapshot
+
+
 def test_route_selects_an_exact_launchable_point() -> None:
     """The public seam returns a complete Harness-native launch decision."""
 
@@ -742,6 +760,119 @@ def test_route_inherits_when_automatic_execution_lacks_selection_controls() -> N
     ]
 
 
+def test_route_refuses_a_locked_request_that_could_only_inherit() -> None:
+    """An inherited launch carries no controls, so a lock must refuse instead.
+
+    Every graceful inheritance branch delegates without explicit model or
+    deliberation arguments. Returning one for a request that locks a dimension
+    would silently execute the user's exact instruction on the main seat.
+    """
+
+    # Build one controlled snapshot for every inheritance branch a lock reaches.
+    router = _load_router()
+    absent = _complete_routing_snapshot()
+    absent["profile"] = None
+    unreachable = _complete_routing_snapshot()
+    unreachable["harness"]["adapter_specs"] = []
+    cases: list[tuple[str, dict[str, Any], dict[str, Any]]] = [
+        ("missing profile with a locked model", absent, {"model": "worker-v2"}),
+        ("missing profile with a locked level", absent, {"deliberation": "low"}),
+        ("unavailable controls with a lock", unreachable, {"deliberation": "low"}),
+    ]
+
+    # Exclude the only candidate's exact evidence beneath the quality floor.
+    below_floor = _complete_routing_snapshot()
+    locked = _request(overrides={"model": "worker-v2", "deliberation": "low"})
+    selected = router.route(
+        {"schema_version": 1, "context": below_floor, "requests": [locked]}
+    )["decisions"][0]
+    below_floor["evidence"]["records"] = [
+        _measurement_record(
+            selected,
+            quality=0.82,
+            uncertainty={"lower_bound": 0.8, "upper_bound": 0.84},
+        )
+    ]
+    cases.append(
+        (
+            "known failing evidence with a lock",
+            below_floor,
+            {"model": "worker-v2", "deliberation": "low"},
+        )
+    )
+
+    # Measure one of two locked-level candidates and leave the other unknown.
+    mixed = _complete_routing_snapshot()
+    second = deepcopy(mixed["mappings"][0])
+    second.update({"model": "worker-v3", "model_capability": 80})
+    mixed["mappings"].append(second)
+    mixed["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+    mixed["evidence"]["records"] = [
+        _measurement_record(
+            router.route({"schema_version": 1, "context": mixed, "requests": [locked]})[
+                "decisions"
+            ][0]
+        )
+    ]
+    cases.append(("mixed evidence with a locked level", mixed, {"deliberation": "low"}))
+
+    # Assert every locked branch refuses without launching or inheriting.
+    for label, snapshot, overrides in cases:
+        decision = router.route(
+            {
+                "schema_version": 1,
+                "context": snapshot,
+                "requests": [_request(overrides=overrides)],
+            }
+        )["decisions"][0]
+        assert decision["status"] == "refused", label
+        assert "launch" not in decision, label
+        assert "inheritance" not in decision, label
+
+
+def test_route_names_the_blocked_lock_in_its_refusal_detail() -> None:
+    """A refused lock stays auditable instead of becoming an unexplained stop."""
+
+    # Refuse an explicit model that no configured profile can resolve.
+    snapshot = _complete_routing_snapshot()
+    snapshot["profile"] = None
+    decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"model": "worker-v2"})],
+        }
+    )["decisions"][0]
+
+    # Assert the stable override code and the branch that blocked the lock.
+    assert decision["reason"]["code"] == "unavailable_override"
+    assert "missing_profile" in decision["reason"]["detail"]
+
+
+def test_route_still_inherits_when_execution_locks_nothing() -> None:
+    """Automatic dimensions keep every documented graceful inheritance branch."""
+
+    # Route the same branches without any explicit field lock.
+    router = _load_router()
+    absent = _complete_routing_snapshot()
+    absent["profile"] = None
+    unreachable = _complete_routing_snapshot()
+    unreachable["harness"]["adapter_specs"] = []
+    expected = {
+        "missing_profile": absent,
+        "unavailable_selection_controls": unreachable,
+    }
+
+    # Assert absence and unavailable controls still delegate with fresh context.
+    for reason, snapshot in expected.items():
+        decision = router.route(
+            {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+        )["decisions"][0]
+        assert decision["status"] == "inherit", reason
+        assert decision["inheritance"]["reason"] == reason
+        assert "launch" not in decision
+
+
 def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
     """Invalid, unavailable, unsafe, and empty states fail before launch."""
 
@@ -1107,13 +1238,13 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
 
     # Derive one exact representative record from a selected launch point.
     router = _load_router()
-    snapshot = _complete_routing_snapshot()
+    snapshot = _automatic_low_snapshot()
     snapshot["evidence"]["records"] = []
     explicit = router.route(
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
     exact = _measurement_record(explicit)
@@ -1124,7 +1255,7 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
 
@@ -1151,7 +1282,7 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
             {
                 "schema_version": 1,
                 "context": changed,
-                "requests": [_request(overrides={"deliberation": "low"})],
+                "requests": [_request()],
             }
         )["decisions"][0]
         assert decision["status"] == "selected"
@@ -1169,7 +1300,7 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
         {
             "schema_version": 1,
             "context": below_floor,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
     assert failing["status"] == "inherit"
@@ -1184,7 +1315,7 @@ def test_route_requires_exact_representative_evidence_for_measurement_class() ->
         {
             "schema_version": 1,
             "context": unrelated,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
 
@@ -1198,7 +1329,7 @@ def test_route_keeps_unmeasured_candidates_unknown_beside_measurements() -> None
 
     # Configure two launchable models at one locked deliberation value.
     router = _load_router()
-    context = _complete_routing_snapshot()
+    context = _automatic_low_snapshot()
     second = deepcopy(context["mappings"][0])
     second.update({"model": "worker-v3", "model_capability": 80})
     context["mappings"].append(second)
@@ -1209,9 +1340,7 @@ def test_route_keeps_unmeasured_candidates_unknown_beside_measurements() -> None
         {
             "schema_version": 1,
             "context": context,
-            "requests": [
-                _request(overrides={"model": "worker-v2", "deliberation": "low"})
-            ],
+            "requests": [_request(overrides={"model": "worker-v2"})],
         }
     )["decisions"][0]
     context["evidence"]["records"] = [_measurement_record(first)]
@@ -1221,7 +1350,7 @@ def test_route_keeps_unmeasured_candidates_unknown_beside_measurements() -> None
         {
             "schema_version": 1,
             "context": context,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
 
@@ -1235,7 +1364,7 @@ def test_route_keeps_unmeasured_candidates_unknown_beside_measurements() -> None
         {
             "schema_version": 1,
             "context": context,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["recommendations"][0]
     assert recommendation["uncertainty"]["status"] == "mixed"
@@ -1249,8 +1378,8 @@ def test_route_excludes_exact_evidence_known_below_the_quality_floor() -> None:
 
     # Resolve one exact candidate before attaching failing evidence.
     router = _load_router()
-    context = _complete_routing_snapshot()
-    request = _request(overrides={"model": "worker-v2", "deliberation": "low"})
+    context = _automatic_low_snapshot()
+    request = _request()
     selected = router.route(
         {"schema_version": 1, "context": context, "requests": [request]}
     )["decisions"][0]
@@ -1387,7 +1516,7 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
 
     # Configure two exact points with opposing commercial dimensions.
     router = _load_router()
-    snapshot = _complete_routing_snapshot()
+    snapshot = _automatic_low_snapshot()
     first = snapshot["mappings"][0]
     first["commercial"] = {
         "cash": 1.0,
@@ -1418,18 +1547,14 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [
-                _request(overrides={"model": "worker-v2", "deliberation": "low"})
-            ],
+            "requests": [_request(overrides={"model": "worker-v2"})],
         }
     )["decisions"][0]
     second_decision = router.route(
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [
-                _request(overrides={"model": "worker-v3", "deliberation": "low"})
-            ],
+            "requests": [_request(overrides={"model": "worker-v3"})],
         }
     )["decisions"][0]
     snapshot["evidence"]["records"] = [
@@ -1450,7 +1575,7 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
 
@@ -1466,7 +1591,6 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
             "context": snapshot,
             "requests": [
                 _request(
-                    overrides={"deliberation": "low"},
                     rubric={"kind": "binary", "pass_condition": "pytest passes"},
                 )
             ],
@@ -1515,7 +1639,7 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         {
             "schema_version": 1,
             "context": dominated,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
 
@@ -1535,7 +1659,7 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         {
             "schema_version": 1,
             "context": priced,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
 
@@ -1550,7 +1674,7 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         {
             "schema_version": 1,
             "context": priced,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["recommendations"][0]
 
@@ -1571,7 +1695,7 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
 
     # Configure points whose route and renewal cost order is reversed.
     router = _load_router()
-    snapshot = _complete_routing_snapshot()
+    snapshot = _automatic_low_snapshot()
     first = snapshot["mappings"][0]
     first["commercial"].update({"cash": 1.0, "allocated_subscription_cost": 5.0})
     second = deepcopy(first)
@@ -1594,18 +1718,14 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [
-                _request(overrides={"model": "worker-v2", "deliberation": "low"})
-            ],
+            "requests": [_request(overrides={"model": "worker-v2"})],
         }
     )["decisions"][0]
     second_decision = router.route(
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [
-                _request(overrides={"model": "worker-v3", "deliberation": "low"})
-            ],
+            "requests": [_request(overrides={"model": "worker-v3"})],
         }
     )["decisions"][0]
     snapshot["evidence"]["records"] = [
@@ -1615,22 +1735,18 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
 
     # Express route and renewal floors through the shared structured request.
     route_request = _request(
-        overrides={"deliberation": "low"},
         economics={"decision": "route", "quality_floor": 0.9},
     )
     renew_request = _request(
         request_id="renew",
-        overrides={"deliberation": "low"},
         economics={"decision": "renew", "quality_floor": 0.9},
     )
     budget_request = _request(
         request_id="budget",
-        overrides={"deliberation": "low"},
         economics={"decision": "route", "budget": 1.5},
     )
     decision_only_request = _request(
         request_id="decision-only",
-        overrides={"deliberation": "low"},
         economics={"decision": "route"},
     )
 
@@ -2128,6 +2244,8 @@ def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
         "empty_safe_candidate_set",
         "unavailable_selection_controls",
         "locks only that dimension",
+        "selected exactly or refused, never inherited",
+        "reserved for automatic dimensions",
         "actual spawn capabilities",
         "concrete current-Harness adapter",
         "never interpolates, rounds, or guesses",
