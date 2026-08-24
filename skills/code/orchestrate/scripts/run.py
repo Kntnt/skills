@@ -8,13 +8,15 @@ from __future__ import annotations
 
 import argparse
 import fcntl
+import hashlib
 import json
 import re
 import shutil
 import subprocess
 import sys
 from collections.abc import Callable
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
+from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any, cast
 
@@ -252,6 +254,59 @@ ROUTE_REQUEST = re.compile(
     r"|amend-(?P<amended>\d+)-(?P<attempt>\d+)"
     r"|wave-fix-(?P<wave>\d+))\Z"
 )
+
+# Where a run keeps the routed attempts an external verdict has judged, and
+# where the sanitized artifact model-selector makes of them is written. Both
+# sit in the run's own scratch, are named by the engine so a report and an
+# import mean the same two files, and neither is ever a repository file
+# (ADR-0089).
+ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
+OBSERVATION_FILE = "kntnt-orchestrate-observations.json"
+
+# The version of model-selector's public observation contract this engine
+# writes. It is versioned separately from the route response because the two
+# are different documents and neither is a reading of the other.
+OBSERVATION_SCHEMA_VERSION = 1
+
+# What each building role is as workload. An initial build and a mechanical
+# wave fix are different work rather than the same work twice, and an amend is
+# a second attempt at the first one's, so evidence keeps them apart.
+OBSERVED_STRATA: dict[str, str] = {
+    "build": "initial_build",
+    "amend": "amend",
+    "repair": "collision_repair",
+    "rebuild": "rebuild",
+    "wave-fix": "mechanical_wave_fix",
+}
+
+# Which independent verdict establishes each role's outcome. A builder's own
+# report establishes nothing, so the checker an observation names is always the
+# brief of the session that judged it and never the one that did the work.
+OBSERVED_CHECKERS: dict[str, str] = {
+    "build": "verify.md",
+    "amend": "verify.md",
+    "rebuild": "verify.md",
+    "repair": "repaired.md",
+    "wave-fix": "wave.md",
+}
+
+# How this run's own vocabulary reaches the evidence contract's. The first two
+# are verdicts on the work; the rest are conditions of the environment and of
+# the workflow, which the ledger keeps apart from quality because none of them
+# says the configuration did the work badly.
+OBSERVED_OUTCOMES: dict[str, tuple[str, str | None, str]] = {
+    "pass": ("pass", None, "independent_verifier"),
+    "fail": ("fail", None, "independent_verifier"),
+    "hinder": ("infra_error", "mechanical_hinder", "harness"),
+    "tracker-failure": ("infra_error", "tracker_failure", "tracker"),
+    "parked": ("abstain", "open_decision", "tracker"),
+    "blocked": ("abstain", "discovered_dependency", "tracker"),
+    "collision": ("abstain", "merge_collision", "harness"),
+}
+
+# What a commit is as a sanitized artifact identity: the digest itself, under
+# the algorithm that produced it, and never a path into anybody's checkout.
+COMMIT_DIGEST = re.compile(r"^[0-9a-f]{40}$")
 
 # The roles that are never routed. A verdict inherits the complete main seat
 # exactly, so a decision made for one is refused at this seam rather than left
@@ -854,13 +909,17 @@ class Routing:
     invocation's own field locks, frozen beside it because a resume that
     changed them would be a second run reporting as the first. `decisions` is
     every exact decision made under that context, in the order they were made,
-    which is what the outcome account is audited from.
+    which is what the outcome account is audited from. `attempts` is what an
+    external verdict later established about those decisions, kept beside them
+    because an outcome and the decision it judges are one fact, and because
+    nothing else holds either once the session that reached them is gone.
     """
 
     snapshot: dict[str, Any]
     model: str | None
     deliberation: str | None
     decisions: list[RouteRecord]
+    attempts: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def identity(self) -> str:
@@ -998,6 +1057,25 @@ def routing_file(path: Path | None) -> Path | None:
     return None if path is None else path.parent / ROUTING_FILE
 
 
+def attempts_file(path: Path | None) -> Path | None:
+    """Return where the run writes the routed attempts a verdict has judged."""
+
+    return None if path is None else path.parent / ATTEMPTS_FILE
+
+
+def observation_file(path: Path | None) -> Path | None:
+    """Return where model-selector is asked to write the run's own artifact.
+
+    The engine names it rather than the session, so the path a report gives the
+    developer and the path an explicit import is handed are the same one. The
+    file is model-selector's to write and this run's to own: it sits in the
+    session's scratch beside the state, never in the repository, and nothing
+    here imports it.
+    """
+
+    return None if path is None else path.parent / OBSERVATION_FILE
+
+
 def carry_state_forward(path: Path | None) -> None:
     """Move a state file left at the old place into the one it lives in now.
 
@@ -1109,6 +1187,7 @@ def read_routing(path: Path | None) -> Routing | None:
                 )
                 for record in cast(list[dict[str, Any]], held["decisions"])
             ],
+            attempts=cast(list[dict[str, Any]], held["attempts"]),
         )
     except (OSError, TypeError, ValueError, KeyError) as exc:
         raise RunError(
@@ -1141,6 +1220,7 @@ def write_routing(path: Path | None, routing: Routing) -> str:
                     "model": routing.model,
                     "deliberation": routing.deliberation,
                     "decisions": [asdict(record) for record in routing.decisions],
+                    "attempts": routing.attempts,
                 },
                 indent=2,
             )
@@ -3837,6 +3917,254 @@ def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
     return 0
 
 
+def observed_task(record: RouteRecord, request_id: str) -> str:
+    """Return the opaque identity of the work one routed attempt was an attempt at.
+
+    A number and a wave count, and nothing of what either is about: an
+    observation is statistical metadata, so the title, the body, and the branch
+    of a ticket have no reason to be in one.
+    """
+
+    if record.ticket is not None:
+        return f"ticket-{record.ticket}"
+    named = ROUTE_REQUEST.match(request_id)
+    return f"wave-{cast(re.Match[str], named)['wave']}"
+
+
+def observed_attempt(
+    routing: Routing,
+    record: RouteRecord,
+    request_id: str,
+    outcome: str,
+    started_at: str | None,
+    measurements: dict[str, Any],
+    commit: str | None,
+    resolved_model: str | None,
+) -> dict[str, Any]:
+    """Build the completed routed attempt one external verdict established.
+
+    Everything here is either the frozen decision itself, an identity of the
+    thing the attempt was at, or a fact the verdict and the environment gave.
+    The exact point, the mappings, the evidence class, and the provenance ride
+    along inside the decision, because model-selector owns what they mean.
+    """
+
+    # Name the workload, the attempt at it, and who established its outcome.
+    task = observed_task(record, request_id)
+    stratum = OBSERVED_STRATA[record.role]
+    result, condition, authority = OBSERVED_OUTCOMES[outcome]
+    kin = [
+        held.request_id
+        for held in routing.decisions
+        if observed_task(held, held.request_id) == task
+    ]
+
+    # Say which point actually served, where the environment named another.
+    decision = record.decision
+    launch = cast(dict[str, Any], decision.get("launch") or {})
+    inherited = cast(dict[str, Any], decision.get("inheritance") or {})
+    routed_model = launch.get("model") or cast(
+        dict[str, Any], inherited.get("main_seat") or {}
+    ).get("model")
+    served = resolved_model or routed_model
+
+    return {
+        "attempt_id": request_id,
+        "session_identity": "session-"
+        + hashlib.sha256(f"{routing.identity}|{ROUTING_FILE}".encode()).hexdigest()[
+            :16
+        ],
+        "task_identity": task,
+        "workload_stratum": stratum,
+        "attempt_index": kin.index(request_id) + 1,
+        "harness": routing.snapshot["harness"],
+        "benchmark": {
+            "key": f"orchestrate-{stratum.replace('_', '-')}",
+            "name": "orchestrate",
+            "version": None,
+            "cohort": None,
+            "tags": [],
+        },
+        "decision": decision,
+        "outcome": {
+            "result": result,
+            "authority": authority,
+            "checker": (
+                None
+                if condition is not None
+                else {"identity": OBSERVED_CHECKERS[record.role], "independent": True}
+            ),
+            "condition": condition,
+            "scores": None,
+        },
+        "resolution": {
+            "model": served,
+            "fallback_from": routed_model if served != routed_model else None,
+        },
+        "started_at": started_at,
+        "completed_at": datetime.now(UTC)
+        .isoformat(timespec="seconds")
+        .replace("+00:00", "Z"),
+        "measurements": measurements,
+        "artifact_hashes": [] if commit is None else [f"sha1:{commit}"],
+    }
+
+
+def read_measurements(path: str | None) -> dict[str, Any]:
+    """Return the usage, cost, quota, and latency facts the environment exposed.
+
+    What is not there stays absent rather than becoming a zero: an unmeasured
+    attempt is a cheaper-looking one only if absence is read as nothing spent.
+    """
+
+    if path is None:
+        return {}
+
+    try:
+        exposed = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise RunError(f"{path} does not hold exposed measurements: {exc}") from exc
+    if not isinstance(exposed, dict):
+        raise RunError(f"{path} must hold one object of exposed measurements")
+    return cast(dict[str, Any], exposed)
+
+
+def cmd_observe(
+    request_id: str,
+    outcome: str,
+    started_at: str | None,
+    metrics: str | None,
+    commit: str | None,
+    resolved_model: str | None,
+    state_path: Path | None,
+) -> int:
+    """Record what an independent verdict established about one routed attempt.
+
+    The attempt becomes an importable observation and nothing else: no ledger,
+    no profile, no frontier, no tracker state, and no repository file is
+    touched here, and the artifact model-selector makes of it is imported only
+    where the developer asks for it explicitly. A decision nothing judged stays
+    audit data, a verdict role is refused by name, and a second outcome for the
+    same attempt overwrites neither itself nor the first (ADR-0089).
+    """
+
+    # Refuse a verdict by name before the account is read at all: the seat a
+    # verdict runs on is inherited, so there is no attempt of one to observe.
+    try:
+        route_record(request_id, {})
+        routing = read_routing(state_path)
+    except RunError as exc:
+        return fail(str(exc))
+
+    unrouted = dispatch_refusal(routing, request_id, f"{request_id} has completed")
+    if unrouted is not None:
+        return fail(unrouted)
+    held = cast(Routing, routing)
+    decided = cast(RouteRecord, held.decided(request_id))
+    if commit is not None and not COMMIT_DIGEST.match(commit):
+        return fail(f"{commit} is not a commit this run can name as an artifact")
+    if not isinstance(held.snapshot.get("harness"), dict):
+        return fail(
+            "this run's frozen snapshot names no Harness, and an observation is "
+            "of the exact Harness its attempt ran on"
+        )
+
+    try:
+        attempt = observed_attempt(
+            held,
+            decided,
+            request_id,
+            outcome,
+            started_at,
+            read_measurements(metrics),
+            commit,
+            resolved_model,
+        )
+    except RunError as exc:
+        return fail(str(exc))
+
+    # An outcome established twice is one fact; a different one is a conflict.
+    standing = next(
+        (kept for kept in held.attempts if kept["attempt_id"] == request_id), None
+    )
+    recorded = standing is None
+    if standing is not None and _differs(standing, attempt):
+        return fail(
+            f"{request_id} already carries an observed outcome, and a second "
+            "one changes neither: settle which verdict stands before observing"
+        )
+    if recorded:
+        held.attempts.append(attempt)
+
+    try:
+        write_routing(state_path, held)
+        written = cast(Path, attempts_file(state_path))
+        written.write_text(
+            json.dumps(
+                {
+                    "schema_version": OBSERVATION_SCHEMA_VERSION,
+                    "attempts": held.attempts,
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+    except (RunError, OSError) as exc:
+        return fail(f"this run's observed attempts could not be written: {exc}")
+
+    emit(
+        {
+            "verb": "observe",
+            "request_id": request_id,
+            "role": decided.role,
+            "ticket": decided.ticket,
+            "stratum": attempt["workload_stratum"],
+            "attempt_index": attempt["attempt_index"],
+            "outcome": attempt["outcome"]["result"],
+            "condition": attempt["outcome"]["condition"],
+            "recorded": recorded,
+            "observed": len(held.attempts),
+            "attempts": str(written),
+            "artifact": str(cast(Path, observation_file(state_path))),
+        }
+    )
+    return 0
+
+
+def _differs(standing: dict[str, Any], offered: dict[str, Any]) -> bool:
+    """Say whether two observations of one attempt establish different facts.
+
+    The instant the outcome was recorded at is not one of those facts: the same
+    verdict entered twice is the same verdict, and only what it says about the
+    attempt decides whether the second entry conflicts with the first.
+    """
+
+    ignored = {"completed_at"}
+    return {key: value for key, value in standing.items() if key not in ignored} != {
+        key: value for key, value in offered.items() if key not in ignored
+    }
+
+
+def observed_details(
+    routing: Routing | None, state_path: Path | None
+) -> dict[str, Any]:
+    """Return where a run's importable observations stand, for its report.
+
+    Both paths are named only where there is something to import. The artifact
+    is model-selector's to write from the attempts beside it, and this run
+    reports it rather than importing it: the ledger write stays the developer's
+    explicit move.
+    """
+
+    observed = 0 if routing is None else len(routing.attempts)
+    return {
+        "attempts": str(attempts_file(state_path)) if observed else None,
+        "artifact": str(observation_file(state_path)) if observed else None,
+        "observed": observed,
+    }
+
+
 def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int:
     """Print every ticket in scope grouped by current Ticket Resolution.
 
@@ -3900,6 +4228,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
             "base": base,
             "routing": routing_details(routing),
             "routing_reason": routing_reason,
+            "observations": observed_details(routing, state_path),
             "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],
@@ -4017,6 +4346,17 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     reconcile.add_argument("--commit")
     add_shared_flags(reconcile)
 
+    observe = sub.add_parser(
+        "observe", help="Record one routed attempt's established outcome."
+    )
+    observe.add_argument("--request", required=True)
+    observe.add_argument("--outcome", required=True, choices=tuple(OBSERVED_OUTCOMES))
+    observe.add_argument("--started-at")
+    observe.add_argument("--metrics")
+    observe.add_argument("--commit")
+    observe.add_argument("--resolved-model")
+    add_shared_flags(observe)
+
     report = sub.add_parser("report", help="Print the consolidated report.")
     add_scope_flag(report)
     add_shared_flags(report)
@@ -4077,6 +4417,16 @@ def main(argv: list[str] | None = None) -> int:
             args.commit,
             args.collided_with,
             args.blocked_by,
+            state_path,
+        )
+    if args.verb == "observe":
+        return cmd_observe(
+            args.request,
+            args.outcome,
+            args.started_at,
+            args.metrics,
+            args.commit,
+            args.resolved_model,
             state_path,
         )
     if args.verb == "reconcile":
