@@ -998,6 +998,8 @@ def test_plan_leaves_the_runs_own_notes_out_of_a_tickets_thread(
                         ),
                         {"body": f"<!-- {MARKER} rebuild --> built once more"},
                         {"body": f"<!-- {MARKER} amend --> amended once"},
+                        {"body": f"<!-- {MARKER} amend=1 --> amended first"},
+                        {"body": f"<!-- {MARKER} amend=2 --> amended again"},
                         _recorded("failed"),
                     ],
                 )
@@ -1162,6 +1164,8 @@ def test_record_leaves_a_failed_ticket_open_and_does_not_retry_it(
     calls = _gh_calls(env)
     assert "issue close" not in calls
     assert "outcome=failed" in calls
+    assert "bounded two-amend repair path" in calls
+    assert "no further automatic attempt" in calls
 
 
 def test_reconcile_records_external_completion_without_closing_again(
@@ -1638,6 +1642,46 @@ def test_report_keeps_closed_unreconciled_failure_under_failed(
     assert report["done"] == []
     assert report["tickets"][0]["run_outcome"] == "failed"
     assert report["tickets"][0]["is_reconciled"] is False
+
+
+def test_report_distinguishes_an_exhausted_amend_path_from_an_early_failure(
+    tmp_path: Path,
+) -> None:
+    """Report exposes the append-only repair state behind a failed outcome.
+
+    Two spent markers identify an exhausted verification-repair path. A failed
+    ticket with no marker remains visibly different because not every failure
+    follows an available verifier-informed amend.
+    """
+
+    # Present one terminal amended failure and one failure outside that path.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    exhausted = _ticket(
+        9,
+        "amended twice",
+        comments=[
+            {"body": f"<!-- {MARKER} amend=1 --> first"},
+            {"body": f"<!-- {MARKER} amend=2 --> continuation"},
+            _recorded("failed"),
+        ],
+    )
+    early = _ticket(10, "failed before amend", comments=[_recorded("failed")])
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        ready_closed=[exhausted, early],
+    )
+
+    # Read the public Report projection.
+    result = _engine(repo, "report", env=env)
+
+    # Preserve the exact spent count independently of the common outcome.
+    assert result.returncode == 0, result.stderr
+    tickets = {
+        ticket["number"]: ticket for ticket in json.loads(result.stdout)["tickets"]
+    }
+    assert tickets[9]["amends_spent"] == 2
+    assert tickets[10]["amends_spent"] == 0
 
 
 def test_report_does_not_treat_external_completion_as_run_output(
@@ -3548,12 +3592,13 @@ def test_rebuild_refuses_a_ticket_that_has_no_working_tree_to_discard(
 def test_amend_writes_the_bound_on_the_ticket_the_moment_it_is_spent(
     tmp_path: Path,
 ) -> None:
-    """A failed verification buys one amend, and the note is the bound: the
-    ticket carries it from the moment the amend starts, so a run interrupted
-    mid-amend comes back and finds the bound where it left it (ADR-0069).
-    Nothing is discarded and nothing is made — the amender works the tree the
-    first builder worked, which is why a ceiling of one, with no working tree
-    at all, is amended exactly like any other ticket."""
+    """A failed verification buys a first amend, and its note is the bound.
+
+    The ticket carries the numbered attempt from the moment the amend starts,
+    so a run interrupted mid-amend comes back to the exact phase it left. No
+    work is discarded or made: the amender works the first builder's tree,
+    which is why a ceiling of one is amended exactly like any other ticket.
+    """
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -3562,20 +3607,65 @@ def test_amend_writes_the_bound_on_the_ticket_the_moment_it_is_spent(
         issues={10: _ready(10)},
     )
 
-    result = _engine(repo, "amend", "--ticket", "10", env=env)
+    result = _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env)
 
     assert result.returncode == 0, result.stderr
     answer = json.loads(result.stdout)
     assert answer["amended"] is True
+    assert answer["attempt"] == 1
+    assert answer["amends_spent"] == 1
     assert answer["reason"] is None
-    assert f"<!-- {MARKER} amend -->" in _wrote(env, 10)
+    note = _wrote(env, 10)
+    assert f"<!-- {MARKER} amend=1 -->" in note
+    assert "amend 1 of 2" in note
 
 
-def test_a_ticket_is_amended_at_most_once(tmp_path: Path) -> None:
-    """The amend is bounded exactly as the rebuild is, and by the same thing:
-    the note the first amend left on the ticket is what refuses the second, so
-    a ticket whose verdict keeps failing is recorded rather than built over and
-    over through the night."""
+def test_replaying_a_recorded_amend_resumes_without_spending_the_next(
+    tmp_path: Path,
+) -> None:
+    """A lost command response cannot mint a continuation opportunity.
+
+    The caller names the attempt its verdict is spending. Replaying that same
+    attempt after the tracker append is idempotent, leaving attempt two for a
+    genuinely new verdict instead of dispatching it for attempt one's failure.
+    """
+
+    # Record attempt one as the run does before its builder starts.
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+    first = _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env)
+    assert first.returncode == 0, first.stderr
+    marker = _wrote(env, 10)
+    _refile_issue(env, 10, _ready(10, comments=[{"body": marker}]))
+    calls_before_replay = _gh_calls(env)
+
+    # Replay the exact transition after its response was lost.
+    replay = _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env)
+
+    # Resume attempt one without appending attempt two or another first marker.
+    assert replay.returncode == 0, replay.stderr
+    answer = json.loads(replay.stdout)
+    assert answer["attempt"] == 1
+    assert answer["amends_spent"] == 1
+    assert answer["newly_recorded"] is False
+    assert _gh_calls(env).count("issue comment 10") == calls_before_replay.count(
+        "issue comment 10"
+    )
+
+
+def test_a_ticket_receives_one_continuation_amend_before_exhaustion(
+    tmp_path: Path,
+) -> None:
+    """A fresh amended verdict changes the conditions once more, and only once.
+
+    The first marker permits a distinct continuation attempt. The second
+    marker exhausts the bounded path, so a further request is refused rather
+    than turning a concrete verdict into an open-ended repair loop.
+    """
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -3583,15 +3673,63 @@ def test_a_ticket_is_amended_at_most_once(tmp_path: Path) -> None:
         {"ready-for-agent": [_ticket(10, "the graph")]},
         issues={10: _ready(10)},
     )
-    assert _engine(repo, "amend", "--ticket", "10", env=env).returncode == 0
-    _refile_issue(env, 10, _ready(10, comments=[{"body": _wrote(env, 10)}]))
+    first = _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env)
+    assert first.returncode == 0, first.stderr
+    first_note = _wrote(env, 10)
+    _refile_issue(env, 10, _ready(10, comments=[{"body": first_note}]))
 
-    result = _engine(repo, "amend", "--ticket", "10", env=env)
+    second = _engine(repo, "amend", "--ticket", "10", "--attempt", "2", env=env)
 
-    assert result.returncode == 2, result.stderr
+    assert second.returncode == 0, second.stderr
+    second_answer = json.loads(second.stdout)
+    assert second_answer["amended"] is True
+    assert second_answer["attempt"] == 2
+    assert second_answer["amends_spent"] == 2
+    second_note = _wrote(env, 10)
+    assert f"<!-- {MARKER} amend=2 -->" in second_note
+    assert "amend 2 of 2" in second_note
+    _refile_issue(
+        env,
+        10,
+        _ready(10, comments=[{"body": first_note}, {"body": second_note}]),
+    )
+
+    exhausted = _engine(repo, "amend", "--ticket", "10", "--attempt", "3", env=env)
+
+    assert exhausted.returncode == 2, exhausted.stderr
+    exhausted_answer = json.loads(exhausted.stdout)
+    assert exhausted_answer["amended"] is False
+    assert exhausted_answer["attempt"] == 3
+    assert exhausted_answer["amends_spent"] == 2
+    assert "bounded to 2" in exhausted_answer["reason"]
+
+
+def test_a_legacy_amend_marker_counts_as_the_first_attempt(tmp_path: Path) -> None:
+    """An interrupted older run retains one continuation opportunity.
+
+    The historical unnumbered marker is attempt one rather than an unknown
+    comment or an exhausted path, and the next append uses the current numbered
+    continuation marker without rewriting history.
+    """
+
+    # Present the marker written by Orchestrate before numbered attempts.
+    repo = _init_repo(tmp_path / "proj")
+    legacy = f"<!-- {MARKER} amend --> amended once"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10, comments=[{"body": legacy}])},
+    )
+
+    # Spend the one continuation now available.
+    result = _engine(repo, "amend", "--ticket", "10", "--attempt", "2", env=env)
+
+    # Append attempt two and leave the historical marker untouched.
+    assert result.returncode == 0, result.stderr
     answer = json.loads(result.stdout)
-    assert answer["amended"] is False
-    assert "already" in answer["reason"]
+    assert answer["attempt"] == 2
+    assert answer["amends_spent"] == 2
+    assert f"<!-- {MARKER} amend=2 -->" in _wrote(env, 10)
 
 
 def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
@@ -3609,7 +3747,10 @@ def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
         issues={10: _ready(10)},
     )
     trees = _collided(repo)
-    assert _engine(repo, "amend", "--ticket", "10", env=env).returncode == 0
+    assert (
+        _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env).returncode
+        == 0
+    )
     amended = _wrote(env, 10)
     _refile_issue(env, 10, _ready(10, comments=[{"body": amended}]))
 
@@ -3619,10 +3760,24 @@ def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
     assert json.loads(result.stdout)["rebuilt"] is True
     assert not trees[10].exists()
 
-    # With both notes standing, neither bound is left for this ticket to spend.
+    # The rebuild does not consume the continuation amend.
     rebuilt = _wrote(env, 10)
     _refile_issue(env, 10, _ready(10, comments=[{"body": amended}, {"body": rebuilt}]))
-    assert _engine(repo, "amend", "--ticket", "10", env=env).returncode == 2
+    continuation = _engine(repo, "amend", "--ticket", "10", "--attempt", "2", env=env)
+    assert continuation.returncode == 0, continuation.stderr
+    assert json.loads(continuation.stdout)["attempt"] == 2
+
+    # Spending the continuation does not replenish the rebuild or a third amend.
+    continued = _wrote(env, 10)
+    comments = [{"body": amended}, {"body": rebuilt}, {"body": continued}]
+    _refile_issue(env, 10, _ready(10, comments=comments))
+    isolated = _engine(repo, "isolate", "--ticket", "10")
+    assert isolated.returncode == 0, isolated.stderr
+    assert (
+        _engine(repo, "amend", "--ticket", "10", "--attempt", "3", env=env).returncode
+        == 2
+    )
+    assert _engine(repo, "rebuild", "--ticket", "10", env=env).returncode == 2
 
 
 def test_record_stores_the_ticket_a_conflicted_outcome_collided_with(

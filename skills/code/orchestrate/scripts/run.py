@@ -64,6 +64,10 @@ BLOCKED = "blocked"
 # the one that corrects the graph instead.
 RECORDABLE = (*OUTCOMES, BLOCKED)
 
+# A fresh verdict after the first amend may reveal new bounded information,
+# but a second continuation is terminal rather than an open-ended repair loop.
+AMEND_LIMIT: int = 2
+
 # What each recorded outcome says on the ticket it is recorded against. The
 # machine-readable half is the marker; this is the half a developer reads.
 NOTES = {
@@ -72,8 +76,9 @@ NOTES = {
         "against this ticket's acceptance criteria."
     ),
     FAILED: (
-        "Recorded by an unattended run: verification did not pass. The ticket "
-        "is not retried — a rerun would have identical conditions."
+        "Recorded by an unattended run: verification did not pass. Numbered "
+        "amend markers show how far the bounded two-amend repair path ran; no "
+        "further automatic attempt is made."
     ),
     CONFLICTED: (
         "Recorded by an unattended run: this ticket's work collided with "
@@ -97,14 +102,14 @@ REBUILD_NOTE = (
     "being built once more on top of the integrated branch."
 )
 
-# What a run writes on a ticket whose failed verification it is about to
-# amend. It bounds the amend as the note above bounds the rebuild, and for the
-# same reason: a run interrupted between the note and the amend must come back
-# and find the bound spent (ADR-0069).
-AMEND_NOTE = (
-    "Recorded by an unattended run: verification did not pass, and a fresh "
-    "builder is amending this ticket's work from the verdict that failed it. "
-    "A third session verifies what that builder does."
+# What a run writes on a ticket whose failed verification it is about to amend.
+# The filled attempt distinguishes the original and continuation repairs while
+# keeping both notes readable to the developer (ADR-0084).
+AMEND_NOTE: str = (
+    "Recorded by an unattended run: verification did not pass, and amend "
+    "{attempt} of {limit} is being spent. A fresh builder is amending this "
+    "ticket's work from the verdict that failed it, and another fresh session "
+    "verifies what that builder does."
 )
 
 # The marker every recorded outcome carries, so what a run wrote on a ticket
@@ -140,11 +145,12 @@ CLOSING_REFERENCE: re.Pattern[str] = re.compile(
 # must find the bound where it left it (ADR-0055).
 RECORDED_REBUILD = re.compile(rf"<!--\s*{MARKER}\s+rebuild\s*-->")
 
-# The same marker read back for the other thing that is not an outcome:
-# whether this ticket has already had its one amend. It is a bound of its own
-# and not the rebuild's, the two answering different failures at different
-# moments, so a ticket may spend each once (ADR-0069).
-RECORDED_AMEND = re.compile(rf"<!--\s*{MARKER}\s+amend\s*-->")
+# The same marker read back for verifier-informed amendments. Numbered markers
+# distinguish both attempts; the optional number retains the legacy marker as
+# attempt one. This bound remains independent of the collision rebuild.
+RECORDED_AMEND: re.Pattern[str] = re.compile(
+    rf"<!--\s*{MARKER}\s+amend(?:=([1-{AMEND_LIMIT}]))?\s*-->"
+)
 
 # The same marker on the note a blocked outcome leaves. Owned by the engine so
 # it never reaches a brief as thread, and never read back as an outcome: a
@@ -631,6 +637,8 @@ class Ticket:
     done resolution unblocks them. `collided_with` is the other half of a
     conflicted Run Outcome — the tickets whose work this one collided with,
     which is the pair that names the blocking edge the ticket breakdown missed.
+    `amends_spent` is the append-only verification-repair phase: zero before an
+    amend, one after the first marker, and two after the continuation marker.
 
     `worktree` is the one thing here the tracker cannot say and the repository
     can: where this ticket's work stands, for as long as a working tree of its
@@ -649,6 +657,7 @@ class Ticket:
     blocked_by: list[int]
     resolution: TicketResolution
     collided_with: list[int]
+    amends_spent: int
     worktree: str | None = None
 
 
@@ -1098,12 +1107,21 @@ def rebuilt_already(item: dict[str, Any]) -> bool:
     )
 
 
-def amended_already(item: dict[str, Any]) -> bool:
-    """Say whether a run has already spent *item*'s one amend on it."""
+def amends_spent(item: dict[str, Any]) -> int:
+    """Return how many verifier-informed amends *item* has spent.
 
-    return any(
-        RECORDED_AMEND.search(str(comment["body"])) for comment in item["comments"]
-    )
+    The maximum recorded attempt is the append-only state. A legacy unnumbered
+    marker is attempt one, and duplicate comments do not mint opportunities.
+    """
+
+    # Read every marker so interruption recovery follows the latest phase.
+    attempts: list[int] = []
+    for comment in item["comments"]:
+        found = RECORDED_AMEND.search(str(comment["body"]))
+        if found:
+            attempts.append(int(found.group(1) or "1"))
+
+    return max(attempts, default=0)
 
 
 def ticket_view(cwd: Path, number: int, fields: str) -> dict[str, Any]:
@@ -1505,6 +1523,7 @@ def ticket_from(
             is_reconciled=reconciliation_commit is not None,
         ),
         collided_with=collided_with,
+        amends_spent=amends_spent(item),
     )
 
 
@@ -2472,15 +2491,13 @@ def rebuild_note() -> str:
     return f"<!-- {MARKER} rebuild --> {REBUILD_NOTE}"
 
 
-def cmd_amend(cwd: Path, number: int) -> int:
-    """Say whether ticket *number* may be amended, and spend the amend if so.
+def cmd_amend(cwd: Path, number: int, attempt: int) -> int:
+    """Record verifier-informed amend *attempt* for ticket *number*.
 
-    A failed verification buys one amend, as a collision buys one rebuild: the
-    verdict names the command that failed or the criterion that is not met,
-    which is information the first builder never had, so the rerun ADR-0055
-    refuses is not what this is (ADR-0069). Nothing here touches the work — the
-    amender builds in the tree the first builder built in, which at a ceiling
-    of one is the repository itself — so the whole of the verb is the bound.
+    A failed verification buys a first amend, and its fresh verdict may buy one
+    continuation amend because it carries new information. Naming the attempt
+    makes replay after an uncertain tracker write idempotent. Nothing here
+    touches the work: the whole of the verb is the append-only phase change.
     """
 
     # The tracker is where the bound lives, for the reason every outcome lives
@@ -2489,36 +2506,73 @@ def cmd_amend(cwd: Path, number: int) -> int:
         ticket = ticket_view(cwd, number, "number,comments")
     except RunError as exc:
         return fail(f"the tracker cannot answer for #{number}: {exc}")
-    if amended_already(ticket):
+    spent = amends_spent(ticket)
+    if attempt > AMEND_LIMIT:
         emit(
             {
                 "verb": "amend",
                 "ticket": number,
                 "amended": False,
+                "attempt": attempt,
+                "amends_spent": spent,
+                "newly_recorded": False,
                 "reason": (
-                    f"#{number} has already been amended once in this run, and "
-                    "a failed verification buys one amend"
+                    f"#{number} has no amend {attempt}: the verification-repair "
+                    f"path is bounded to {AMEND_LIMIT} verifier-informed amends"
                 ),
             }
         )
         return 2
 
+    # A repeated phase transition resumes the work its existing marker fronts.
+    if attempt == spent and spent > 0:
+        emit(
+            {
+                "verb": "amend",
+                "ticket": number,
+                "amended": True,
+                "attempt": attempt,
+                "amends_spent": spent,
+                "newly_recorded": False,
+                "reason": None,
+            }
+        )
+        return 0
+
+    # A skipped or stale attempt would pair the wrong verdict with a marker.
+    if attempt != spent + 1:
+        return fail(
+            f"#{number} has spent {spent} verifier-informed amends, so attempt "
+            f"{attempt} is not its next phase"
+        )
+
     # The note goes on before the amend starts, never after it: a run that
-    # stopped between the two would otherwise come back with its one amend
-    # unspent and spend it on a verdict it has already answered.
+    # stopped between the two otherwise comes back in the wrong phase and may
+    # spend the same opportunity twice.
     try:
-        gh(cwd, "issue", "comment", str(number), "--body", amend_note())
+        gh(cwd, "issue", "comment", str(number), "--body", amend_note(attempt))
     except RunError as exc:
         return fail(f"#{number} could not be recorded as amended: {exc}")
 
-    emit({"verb": "amend", "ticket": number, "amended": True, "reason": None})
+    emit(
+        {
+            "verb": "amend",
+            "ticket": number,
+            "amended": True,
+            "attempt": attempt,
+            "amends_spent": attempt,
+            "newly_recorded": True,
+            "reason": None,
+        }
+    )
     return 0
 
 
-def amend_note() -> str:
-    """Render what is written on a ticket whose one amend is being spent."""
+def amend_note(attempt: int) -> str:
+    """Render what is written when numbered amend *attempt* is spent."""
 
-    return f"<!-- {MARKER} amend --> {AMEND_NOTE}"
+    note = AMEND_NOTE.format(attempt=attempt, limit=AMEND_LIMIT)
+    return f"<!-- {MARKER} amend={attempt} --> {note}"
 
 
 def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
@@ -3130,8 +3184,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     rebuild.add_argument("--ticket", required=True, type=int)
     add_shared_flags(rebuild)
 
-    amend = sub.add_parser("amend", help="Spend one ticket's one amend.")
+    amend = sub.add_parser("amend", help="Record one numbered bounded amend.")
     amend.add_argument("--ticket", required=True, type=int)
+    amend.add_argument("--attempt", required=True, type=int)
     add_shared_flags(amend)
 
     record = sub.add_parser("record", help="Record one ticket's outcome.")
@@ -3183,7 +3238,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.verb == "rebuild":
         return cmd_rebuild(cwd, args.ticket)
     if args.verb == "amend":
-        return cmd_amend(cwd, args.ticket)
+        return cmd_amend(cwd, args.ticket, args.attempt)
     if args.verb == "record":
         return cmd_record(
             cwd,

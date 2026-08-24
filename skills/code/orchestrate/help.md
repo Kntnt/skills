@@ -80,7 +80,7 @@ A stop that is neither mechanical, a genuine decision, nor a discovered dependen
 
 ## FAILURES AND COLLISIONS
 
-A verification failure receives one amend. A fresh builder receives the ticket and failed verdict in the same working tree, and a third independent subagent verifies the result. A second failure records the ticket as failed and leaves its work available for inspection.
+A verification failure receives amend 1. If its independent verifier also fails, that fresh complete verdict receives a second amend. Each attempt uses a fresh builder in the same ticket allocation and another fresh verifier with the ordinary full ticket brief; that verifier sees no earlier verdict or builder report. The path is bounded to at most two verifier-informed amends, and a failed final verdict after the second amend records the ticket failed with no third amend.
 
 A merge collision is repaired on the ticket's own branch and verified against both tickets. If that repair fails, the ticket is rebuilt once from a clean base containing the work it collided with. A second collision records the ticket as conflicted.
 
@@ -88,7 +88,7 @@ With `--at-once 1`, unverified work is on the run branch, so an unrepaired failu
 
 ## CONTINUING A RUN
 
-Restart an interrupted run with the same invocation. There is no resume option. Recorded outcomes remain settled, and state is reconstructed from the tracker and branch when per-session scratch data is unavailable.
+Restart an interrupted run with the same invocation. There is no resume option. Recorded outcomes remain settled, numbered amend markers preserve whether zero, one, or two attempts were spent, and state is reconstructed from the tracker and branch when per-session scratch data is unavailable. Repeating the same named attempt resumes its recorded phase without appending the next marker. A legacy unnumbered amend marker counts as attempt one.
 
 A ticket still claimed by the current user is resumed only when the Skill can distinguish an interrupted claim from another active run. If the tracker cannot identify the current user, the Skill stops rather than guessing.
 
@@ -102,7 +102,7 @@ The requested work is complete. An ordinary successful run was built, independen
 
 **failed**
 
-Verification and the single amend did not pass. Work remains in the ticket's isolated working tree or, at a ceiling of one, on the run branch.
+Verification did not pass. The ticket detail's `amends_spent` distinguishes an exhausted two-amend verification-repair path from work that failed before an available continuation amend completed. Work remains in the ticket's isolated working tree or, at a ceiling of one, on the run branch.
 
 **conflicted**
 

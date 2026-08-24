@@ -699,6 +699,111 @@ def test_the_integration_step_narrows_its_catch_all_to_work_found_wanting() -> N
     )
 
 
+def test_an_amended_verdict_can_drive_one_continuation_amend() -> None:
+    """An #87-shaped distinct contract defect is new bounded information.
+
+    Amend one may satisfy the first verdict while its fresh verifier finds a
+    different concrete discrepancy. The state machine spends attempt two from
+    that latest verdict and permits either amended verification to integrate,
+    but a failed final verdict after attempt two is terminal (issue #97).
+    """
+
+    # Read the complete verifier-informed repair state machine.
+    step = _step(9)
+
+    # Spend two named attempts from successive complete verdicts, then stop.
+    assert "at most two verifier-informed amends" in step
+    assert "immediately preceding verifier's verdict pasted whole" in step
+    assert "attempt 1's fresh verdict is a fail" in step
+    assert "spend attempt 2" in step
+    assert "A pass after either attempt" in step
+    assert "failed final verification after attempt 2" in step
+    assert "no attempt 3" in step
+
+
+def test_the_continuation_keeps_the_full_verdict_rule_and_fresh_sessions() -> None:
+    """An #89-shaped list of actionable findings remains one strict verdict.
+
+    The continuation builder receives every finding verbatim, while its fresh
+    verifier receives the ordinary full brief without earlier verdicts or
+    builder reports. Several fixable findings never soften a fail or let the
+    amender approve its own work (issue #97).
+    """
+
+    # Read the amend loop and its one shared building template.
+    step = _step(9)
+    amend = _brief("amend.md")
+
+    # Keep the latest verdict whole for the builder and absent from verification.
+    assert "never a summary or an accumulation" in step
+    assert "fresh building subagent" in step
+    assert "fresh verdict subagent" in step
+    assert "`verify.md` unchanged" in step
+    assert "no builder report, earlier verdict, or amend history" in step
+    assert "Every command it says failed and every criterion" in amend
+    assert "pass only when every gate command and acceptance criterion passes" in step
+
+
+def test_amend_recovery_uses_the_recorded_phase_without_minting_an_attempt() -> None:
+    """A marker written before dispatch survives every interruption boundary.
+
+    Plan exposes the exact spent count and amend returns the attempt it wrote,
+    so resumption continues the recorded builder or verifier phase instead of
+    spending the next opportunity on the same verdict (issue #97).
+    """
+
+    # Read the state transition and final Report contract together.
+    step = _step(9)
+    report = _step(12)
+
+    # Resume the numbered phase and render its terminal meaning from disk.
+    assert "`amends_spent`" in step
+    assert "`attempt`" in step
+    assert "--attempt <1-or-2>" in step
+    assert "`newly_recorded` false" in step
+    assert "resume that recorded attempt" in step
+    assert "Never call `amend` with a different attempt for the same verdict" in step
+    assert "`amends_spent`" in report
+    assert "exhausted verification-repair path" in report
+    assert "failed before an available continuation amend completed" in report
+
+
+def test_a_ceiling_of_one_waits_for_the_continuation_verdict() -> None:
+    """No later ticket may build on work still inside either amend attempt.
+
+    Direct-branch work remains in the current wave until a passing final
+    verdict or terminal outcome; isolated continuation work remains confined
+    to its ticket's existing allocation and cannot leak into siblings.
+    """
+
+    # Read the wave accounting boundary around amendment.
+    amend = _step(9)
+    integrate = _step(8)
+
+    # Keep direct work pending and isolated work ticket-local until a verdict.
+    assert "At a concurrency ceiling of one" in amend
+    assert "no later ticket starts" in amend
+    assert "same working tree, scratch directory, reservations" in amend
+    assert "Nothing from one ticket's amend enters a sibling's" in amend
+    assert "a failed verdict having gone through step 9 first" in integrate
+
+
+def test_the_manpage_describes_the_two_amend_bound_and_report_states() -> None:
+    """Help distinguishes a spent continuation from unrelated failure paths."""
+
+    # Read the public failure and outcome descriptions.
+    failures = _manpage_section("FAILURES AND COLLISIONS")
+    failed = _manpage_entry("OUTCOMES", "**failed**")
+
+    # State the finite bound and the Report distinction a maintainer sees.
+    assert "at most two verifier-informed amends" in failures
+    assert "second amend" in failures
+    assert "no third amend" in failures
+    assert "`amends_spent`" in failed
+    assert "exhausted" in failed
+    assert "failed before an available continuation" in failed
+
+
 def test_the_report_step_states_the_runs_conduct() -> None:
     """Act between waves, report once, lead with what is done and what is left.
 
@@ -1546,7 +1651,7 @@ def test_the_build_step_judges_each_builders_model_where_no_flag_names_one() -> 
 
 
 def test_every_verdict_step_names_the_orchestrators_own_model() -> None:
-    """Ticket verification, the amend's third verdict, repair verification, and the wave check.
+    """Ticket verification, amended verdicts, repair verification, and the wave check.
 
     The verifiers on the inherited arrangement were the strongest part of
     every interviewed run, and the verdict is the only thing standing between
