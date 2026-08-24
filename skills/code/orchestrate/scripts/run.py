@@ -1172,13 +1172,6 @@ def recorded_amend_state(item: dict[str, Any]) -> AmendState | None:
     return state
 
 
-def amends_spent(item: dict[str, Any]) -> int:
-    """Return how many verifier-informed amends *item* has spent."""
-
-    state = recorded_amend_state(item)
-    return state.attempt if state else 0
-
-
 def ticket_view(cwd: Path, number: int, fields: str) -> dict[str, Any]:
     """Return what the tracker says about ticket *number*.
 
