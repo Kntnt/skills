@@ -123,6 +123,13 @@ MARKER = "kntnt-orchestrate"
 STATE_FILE = "kntnt-orchestrate.json"
 STATE_HOME = "kntnt-orchestrate"
 
+# Where the run keeps the half of its state no tracker and no branch can
+# rebuild: the frozen routing snapshot, the invocation's own field locks, and
+# every exact decision made under them. Named here for the reason the state
+# file is — a test that asked the engine where it wrote would be asking the
+# thing under test to grade itself.
+ROUTING_FILE = "kntnt-orchestrate-routing.json"
+
 # A stand-in that logs what git was asked to do and then lets the real git do
 # it. Everything the engine reads from the repository has to stay true, so
 # this observes rather than substitutes.
@@ -366,6 +373,227 @@ def _ready(number: int, **fields: Any) -> dict[str, Any]:
     return {"labels": [{"name": "ready-for-agent"}]} | fields
 
 
+def _snapshot(identity: str = "frozen", **fields: Any) -> dict[str, Any]:
+    """Build the frozen routing context a public route response comes back with.
+
+    Two of its fields are the engine's to read — the identity every later
+    request must carry unchanged, and the main seat every verdict inherits.
+    The rest stands here as what it is to the engine: an opaque payload it
+    keeps whole and never interprets, model-selector owning selection.
+    """
+
+    return {
+        "snapshot_version": 1,
+        "snapshot_identity": identity,
+        "main_seat": {
+            "model": "the-strongest",
+            "adapter_id": "harness-1",
+            "portable_deliberation": "high",
+            "native_deliberation": {"thinking_budget": 32000},
+        },
+        "override_policy": {
+            "portable_levels": ["low", "medium", "high", "xhigh", "max"],
+            "cold_start": "inherit",
+        },
+    } | fields
+
+
+def _selected(
+    request_id: str, model: str = "the-cheapest", **fields: Any
+) -> dict[str, Any]:
+    """Build one selected decision, carrying the exact controls a role launches on."""
+
+    return {
+        "request_id": request_id,
+        "status": "selected",
+        "launch": {
+            "model": model,
+            "adapter_id": "harness-1",
+            "portable_deliberation": "medium",
+            "native_deliberation": {"thinking_budget": 8000},
+            "configuration_fingerprint": f"{model}@medium",
+        },
+        "evidence_class": "measurement_based",
+        "exclusions": [],
+    } | fields
+
+
+def _inherited(
+    request_id: str, reason: str = "no profile is configured"
+) -> dict[str, Any]:
+    """Build one inheritance decision: safe to run, with nothing to optimise."""
+
+    return {
+        "request_id": request_id,
+        "status": "inherit",
+        "inheritance": {"reason": reason, "main_seat": {"model": "the-strongest"}},
+    }
+
+
+def _refused(request_id: str, code: str = "unverifiable_ceiling") -> dict[str, Any]:
+    """Build one refusal decision, which is a role that may not launch at all."""
+
+    return {
+        "request_id": request_id,
+        "status": "refused",
+        "reason": {
+            "code": code,
+            "detail": "the main seat's ceiling cannot be verified",
+        },
+    }
+
+
+def _response(
+    decisions: list[dict[str, Any]], snapshot: dict[str, Any] | None = None
+) -> dict[str, Any]:
+    """Build the whole public route response the preflight hands the engine."""
+
+    return {
+        "schema_version": 1,
+        "snapshot": _snapshot() if snapshot is None else snapshot,
+        "decisions": decisions,
+    }
+
+
+def _route(
+    repo: Path,
+    tmp_path: Path,
+    scratch: Path | None,
+    env: dict[str, str],
+    decisions: list[dict[str, Any]],
+    *,
+    snapshot: dict[str, Any] | None = None,
+    response: dict[str, Any] | None = None,
+    dry_run: bool = False,
+    model: str | None = None,
+    deliberation: str | None = None,
+    name: str = "route.json",
+) -> subprocess.CompletedProcess[str]:
+    """Put one route response through the engine, as the preflight does.
+
+    *response* is the whole document, for the malformed and artifact-refusal
+    answers a well-formed batch cannot express; otherwise *decisions* and
+    *snapshot* are assembled into one.
+    """
+
+    path = tmp_path / name
+    path.write_text(
+        json.dumps(_response(decisions, snapshot) if response is None else response),
+        encoding="utf-8",
+    )
+    args = ["route", "--response", str(path)]
+    if dry_run:
+        args.append("--dry-run")
+    if model is not None:
+        args += ["--model", model]
+    if deliberation is not None:
+        args += ["--deliberation", deliberation]
+    if scratch is not None:
+        args += ["--state-dir", str(scratch)]
+    return _engine(repo, *args, env=env)
+
+
+def _amendable(
+    tmp_path: Path,
+    number: int = 10,
+    *,
+    issue: dict[str, Any] | None = None,
+) -> tuple[Path, Path, dict[str, str]]:
+    """Play a run to where ticket *number*'s amends are routed and dispatchable.
+
+    Amending is building, so both attempts are execution roles decided from the
+    same frozen snapshot the initial build was — which is what a run has
+    already done by the time a verdict sends a ticket back (ADR-0085).
+    """
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(number, "the graph")],
+        issues={number: _ready(number, **(issue or {}))},
+        decisions=[_selected(f"build-{number}")],
+    )
+    routed = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected(f"amend-{number}-1"), _selected(f"amend-{number}-2")],
+        name="amends.json",
+    )
+    assert routed.returncode == 0, routed.stderr
+    return repo, scratch, env
+
+
+def _preflight(
+    repo: Path,
+    tmp_path: Path,
+    scratch: Path,
+    env: dict[str, str],
+    *roles: str,
+    plan_args: tuple[str, ...] = (),
+    name: str = "preflight.json",
+) -> list[int]:
+    """Take a run through its plan and its routing preflight, and say what it routed.
+
+    Every claim and every amending builder is routed from the run's frozen
+    snapshot, so a test about anything downstream of one starts here: the
+    frontier the plan named goes through route as one ordered batch, and
+    *roles* adds the later execution roles that test goes on to dispatch.
+    """
+
+    planned = _engine(repo, "plan", *plan_args, "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+    starting = [int(number) for number in json.loads(planned.stdout)["starting"]]
+    routed = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected(f"build-{number}") for number in starting]
+        + [_selected(role) for role in roles],
+        name=name,
+    )
+    assert routed.returncode == 0, routed.stderr
+    return starting
+
+
+def _routed(
+    tmp_path: Path,
+    *,
+    tickets: list[dict[str, Any]] | None = None,
+    issues: dict[int, dict[str, Any]] | None = None,
+    decisions: list[dict[str, Any]] | None = None,
+) -> tuple[Path, Path, dict[str, str]]:
+    """Play a run through plan and its routing preflight, before any claim.
+
+    What every step after step 3 starts from: a plan that may start, and one
+    frozen snapshot whose decisions cover the frontier that plan named.
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    filed = tickets if tickets is not None else [_ticket(9, "the skeleton")]
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": filed},
+        issues=issues if issues is not None else {9: _ready(9)},
+    )
+
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+    routed = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        decisions
+        if decisions is not None
+        else [_selected(f"build-{filed[0]['number']}")],
+    )
+    assert routed.returncode == 0, routed.stderr
+    return repo, scratch, env
+
+
 def _children(*numbers: int) -> dict[str, Any]:
     """Build the sub-issue relation the tracker files a spec's children under.
 
@@ -521,21 +749,25 @@ def test_every_verb_accepts_yes(tmp_path: Path) -> None:
     """ADR-0029: the flag reaches every verb, including those that ask nothing."""
 
     repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
     env = _tracker(
         tmp_path,
         {"ready-for-agent": [_ticket(9, "the skeleton")]},
         issues={9: _ready(9)},
     )
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    response = tmp_path / "route.json"
+    response.write_text(json.dumps(_response([_selected("build-9")])), encoding="utf-8")
 
     for args in (
         ("plan", "--yes"),
+        ("route", "--response", str(response), "--yes"),
         ("claim", "--ticket", "9", "--yes"),
         ("park", "--ticket", "9", "--yes"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head, "--yes"),
         ("report", "--yes"),
     ):
-        result = _engine(repo, *args, env=env)
+        result = _engine(repo, *args, "--state-dir", str(scratch), env=env)
         assert result.returncode == 0, f"{args}: {result.stderr}"
         assert "unrecognized arguments" not in result.stderr
 
@@ -1070,13 +1302,866 @@ def test_plan_names_the_model_the_building_subagents_run_on(tmp_path: Path) -> N
     assert json.loads(bare.stdout)["model"] is None
 
 
+def test_plan_keeps_builder_model_and_deliberation_overrides_separate(
+    tmp_path: Path,
+) -> None:
+    """A named field locks only that builder dimension, never the verdict seat."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    model = _engine(repo, "plan", "--model", "builder", env=env)
+    deliberation = _engine(repo, "plan", "--deliberation", "high", env=env)
+
+    assert model.returncode == 0, model.stderr
+    assert deliberation.returncode == 0, deliberation.stderr
+    assert json.loads(model.stdout)["deliberation"] is None
+    assert json.loads(deliberation.stdout)["model"] is None
+    assert json.loads(deliberation.stdout)["deliberation"] == "high"
+
+
+def test_a_deliberation_outside_the_portable_scale_is_refused_not_read(
+    tmp_path: Path,
+) -> None:
+    """The five public levels are the whole scale, and a sixth is nobody's neighbour.
+
+    Reading an unmappable level as the nearest one it resembles would be the
+    fall-through an exact override never makes: a level the Interface cannot
+    map is a level nothing can launch (ADR-0083).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    response = tmp_path / "route.json"
+    response.write_text(json.dumps(_response([_selected("build-9")])), encoding="utf-8")
+
+    for args in (
+        ("plan", "--deliberation", "highest"),
+        ("route", "--response", str(response), "--deliberation", "highest"),
+    ):
+        result = _engine(repo, *args, env=env)
+
+        assert result.returncode == 2, f"{args}: {result.stdout}"
+        assert "invalid choice" in result.stderr
+        assert not result.stdout
+
+
+def test_route_freezes_the_first_frontier_as_one_ordered_batch(tmp_path: Path) -> None:
+    """The preflight is one batch of the plan's own frontier, in the plan's order.
+
+    One request per initial builder, named for the ticket it is made for, so
+    what comes back can be read as the decision that ticket launches on.
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+
+    planned = _engine(
+        repo, "plan", "--at-once", "2", "--state-dir", str(scratch), env=env
+    )
+    routed = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("build-9"), _inherited("build-10")],
+    )
+
+    assert planned.returncode == 0, planned.stderr
+    assert json.loads(planned.stdout)["starting"] == [9, 10]
+    assert routed.returncode == 0, routed.stderr
+    decided = json.loads(routed.stdout)["decisions"]
+    assert [record["ticket"] for record in decided] == [9, 10]
+    assert [record["role"] for record in decided] == ["build", "build"]
+    assert (scratch / STATE_HOME / ROUTING_FILE).exists()
+
+
+def test_route_refuses_a_batch_that_is_not_the_plans_starting_frontier(
+    tmp_path: Path,
+) -> None:
+    """A preflight that skips a ticket leaves one the claim gate has no decision for."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+
+    assert (
+        _engine(
+            repo, "plan", "--at-once", "2", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+    result = _route(
+        repo, tmp_path, scratch, env, [_selected("build-10"), _selected("build-9")]
+    )
+
+    assert result.returncode == 1
+    assert "starting frontier" in result.stderr
+    assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
+
+
+def test_a_dry_route_reports_its_decisions_and_freezes_nothing(tmp_path: Path) -> None:
+    """A dry run is read for what a run would do, and a run it started is not that."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    planned = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    result = _route(repo, tmp_path, scratch, env, [_selected("build-9")], dry_run=True)
+
+    assert planned.returncode == 2
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["snapshot_identity"] == "frozen"
+    assert json.loads(result.stdout)["decisions"][0]["ticket"] == 9
+    assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
+    assert not (scratch / STATE_HOME / STATE_FILE).exists()
+
+
+def test_route_refuses_a_response_that_is_not_a_public_route_response(
+    tmp_path: Path,
+) -> None:
+    """Model-selector owns the response, so anything else is refused rather than kept."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [],
+        response={"decisions": [{"request_id": "build-9"}]},
+        name="malformed.json",
+    )
+
+    assert result.returncode == 1
+    assert "model-selector route response" in result.stderr
+
+
+def test_route_reports_an_artifact_refusal_and_freezes_nothing(tmp_path: Path) -> None:
+    """Malformed process input refuses as itself rather than as a routing decision."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [],
+        response={
+            "schema_version": 1,
+            "snapshot": None,
+            "decisions": [],
+            "artifact_refusal": {
+                "code": "unreadable_request",
+                "detail": "the request artifact could not be parsed",
+            },
+        },
+    )
+
+    assert result.returncode == 2
+    refused = json.loads(result.stdout)["refused"]
+    assert refused[0]["code"] == "unreadable_request"
+    assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
+
+
+def test_route_refuses_to_freeze_a_decision_made_for_a_verdict(tmp_path: Path) -> None:
+    """A verdict is never routed: it inherits the main seat, whatever route says.
+
+    Refusing the decision at the seam is what keeps a route result from ever
+    reaching a verifier, rather than a paragraph asking nobody to send one
+    (ADR-0085).
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _route(
+        repo, tmp_path, scratch, env, [_selected("verify-9")], name="verdict.json"
+    )
+
+    assert result.returncode == 1
+    assert "verdict" in result.stderr
+    assert "inherits" in result.stderr
+
+
+def test_route_refuses_to_freeze_a_first_snapshot_over_standing_claims(
+    tmp_path: Path,
+) -> None:
+    """A run with claims out has already routed; a first freeze would be a second run.
+
+    The plan refuses such a resume, but a preflight reached without one would
+    freeze a context today's environment produced and then decide the rest of
+    the night from it — work already claimed under facts nothing can produce
+    again. The invariant is the engine's rather than the workflow's, so this
+    seam asks the same question the plan does (ADR-0085).
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+    _refile(env, "open", [_ticket(9, "the skeleton", claimed_by=["me"])])
+    (scratch / STATE_HOME / ROUTING_FILE).unlink()
+
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("build-9")],
+        snapshot=_snapshot("today"),
+        name="refrozen.json",
+    )
+    claimed = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode == 1
+    assert "#9" in result.stderr
+    assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
+    assert claimed.returncode == 1
+
+
+def test_route_refuses_a_request_name_it_cannot_read(tmp_path: Path) -> None:
+    """A decision nothing can attach to a role and a ticket is a decision nobody can act on."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _route(
+        repo, tmp_path, scratch, env, [_selected("whatever")], name="unnamed.json"
+    )
+
+    assert result.returncode == 1
+    assert "whatever" in result.stderr
+
+
+def test_route_refuses_a_response_carrying_another_snapshot(tmp_path: Path) -> None:
+    """A later wave that re-froze its context would report on two different runs."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("amend-9-1")],
+        snapshot=_snapshot("thawed"),
+        name="second.json",
+    )
+
+    assert result.returncode == 1
+    assert "thawed" in result.stderr
+    assert "frozen" in result.stderr
+
+
+def test_route_refuses_a_snapshot_edited_under_its_own_identity(tmp_path: Path) -> None:
+    """The identity names the context; a body changed under it names it falsely."""
+
+    repo, scratch, env = _routed(tmp_path)
+    edited = _snapshot()
+    edited["main_seat"] = {"model": "something-else"}
+
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("amend-9-1")],
+        snapshot=edited,
+        name="edited.json",
+    )
+
+    assert result.returncode == 1
+    assert "changes the frozen" in result.stderr
+
+
+def test_route_refuses_a_lock_the_first_frontier_was_not_routed_under(
+    tmp_path: Path,
+) -> None:
+    """The locks are the invocation's, and an invocation that changed them is another run."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+
+    assert (
+        _engine(
+            repo,
+            "plan",
+            "--model",
+            "the-named-one",
+            "--state-dir",
+            str(scratch),
+            env=env,
+        ).returncode
+        == 0
+    )
+    first = _route(
+        repo, tmp_path, scratch, env, [_selected("build-9")], model="the-named-one"
+    )
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("amend-9-1")],
+        model="another-one",
+        name="relocked.json",
+    )
+
+    assert first.returncode == 0, first.stderr
+    assert result.returncode == 1
+    assert "another-one" in result.stderr
+    assert "the-named-one" in result.stderr
+
+
+def test_route_reports_a_refused_decision_and_starts_no_work(tmp_path: Path) -> None:
+    """A refusal is not a weaker selection: it is a role that may not launch."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    routed = _route(repo, tmp_path, scratch, env, [_refused("build-9")])
+    claimed = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+    assert routed.returncode == 2
+    assert json.loads(routed.stdout)["refused"][0]["request_id"] == "build-9"
+    assert claimed.returncode == 1
+    assert "unverifiable_ceiling" in claimed.stderr
+    assert "--add-assignee" not in _gh_calls(env)
+
+
+def test_route_freezes_every_execution_role_the_workflow_dispatches(
+    tmp_path: Path,
+) -> None:
+    """Initial build, amend, collision repair, rebuild, and the mechanical wave fix."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [
+            _selected("amend-9-1"),
+            _selected("amend-9-2"),
+            _selected("repair-9"),
+            _selected("rebuild-9"),
+            _selected("wave-fix-2"),
+        ],
+        name="roles.json",
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert [record["role"] for record in json.loads(result.stdout)["decisions"]] == [
+        "amend",
+        "amend",
+        "repair",
+        "rebuild",
+        "wave-fix",
+    ]
+
+
+def test_a_launch_lost_after_a_claim_is_rerouted_from_the_same_snapshot(
+    tmp_path: Path,
+) -> None:
+    """A repaired environment is rerouted, not re-frozen: the context did not change.
+
+    An adapter that goes away between the decision and the dispatch is a
+    condition of the machine, so the run repairs it and asks the same frozen
+    context again. The later decision is what the dispatch is held to, and the
+    earlier one stays in the account as the thing that was tried.
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+
+    rerouted = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("build-9", model="the-other-one")],
+        name="repaired.json",
+    )
+    claimed = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert rerouted.returncode == 0, rerouted.stderr
+    assert claimed.returncode == 0, claimed.stderr
+    decisions = json.loads(reported.stdout)["routing"]["decisions"]
+    assert [record["decision"]["launch"]["model"] for record in decisions] == [
+        "the-cheapest",
+        "the-other-one",
+    ]
+
+
+def test_a_later_wave_routes_its_own_frontier_from_the_frozen_snapshot(
+    tmp_path: Path,
+) -> None:
+    """The wave the last one unblocked is routed before it is claimed, like the first.
+
+    The opening batch is what the plan said the run starts. A wave after it is
+    a batch of its own, decided from the same frozen context rather than from
+    whatever the environment says by the time it comes round.
+    """
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[
+            _ticket(9, "the skeleton"),
+            _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+        ],
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    for args in (
+        ("claim", "--ticket", "9"),
+        ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
+    ):
+        assert (
+            _engine(repo, *args, "--state-dir", str(scratch), env=env).returncode == 0
+        ), args
+    _refile(env, "open", [_ticket(10, "the graph", blocked_by=[(9, "CLOSED")])])
+    _refile_issue(env, 9, {"state": "CLOSED", "comments": [_recorded("done", head)]})
+
+    replanned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    before = _engine(
+        repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
+    )
+    routed = _route(
+        repo, tmp_path, scratch, env, [_selected("build-10")], name="wave-two.json"
+    )
+    after = _engine(
+        repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
+    )
+
+    assert replanned.returncode == 0, replanned.stderr
+    assert json.loads(replanned.stdout)["starting"] == [10]
+    assert before.returncode == 1
+    assert "#10" in before.stderr
+    assert routed.returncode == 0, routed.stderr
+    assert json.loads(routed.stdout)["snapshot_identity"] == "frozen"
+    assert after.returncode == 0, after.stderr
+
+
+def test_claim_refuses_a_ticket_the_frozen_routing_never_decided(
+    tmp_path: Path,
+) -> None:
+    """Route before claim is what the claim gate enforces, not what a paragraph asks."""
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton"), _ticket(10, "the graph")],
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+
+    result = _engine(
+        repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode == 1
+    assert "#10" in result.stderr
+    assert "--add-assignee" not in _gh_calls(env)
+
+
+def test_claim_refuses_where_this_run_froze_no_routing_at_all(tmp_path: Path) -> None:
+    """Nothing may be claimed before the preflight, first frontier or later."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    result = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode == 1
+    assert "frozen routing" in result.stderr
+    assert "--add-assignee" not in _gh_calls(env)
+
+
+def test_a_replacement_after_a_collision_is_routed_before_its_own_claim(
+    tmp_path: Path,
+) -> None:
+    """The ticket that takes a lost one's place is a claim, so it is routed like one."""
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton"), _ticket(10, "the graph")],
+        issues={9: _ready(9, assignees=[{"login": "someone"}]), 10: _ready(10)},
+    )
+
+    collided = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+    before = _engine(
+        repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
+    )
+    routed = _route(
+        repo, tmp_path, scratch, env, [_selected("build-10")], name="replacement.json"
+    )
+    after = _engine(
+        repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
+    )
+
+    assert collided.returncode == 2
+    assert before.returncode == 1
+    assert routed.returncode == 0, routed.stderr
+    assert after.returncode == 0, after.stderr
+
+
+def test_a_resumed_run_reuses_the_snapshot_it_froze(tmp_path: Path) -> None:
+    """The same invocation continues the run, on the context the run was frozen at."""
+
+    repo, scratch, env = _routed(tmp_path)
+    _engine(repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env)
+    _refile(env, "open", [_ticket(9, "the skeleton", claimed_by=["me"])])
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["resuming"] == [9]
+    assert plan["routing"]["snapshot"]["snapshot_identity"] == "frozen"
+    assert plan["routing"]["decisions"][0]["ticket"] == 9
+
+
+def test_a_resumed_run_stops_where_its_frozen_routing_is_gone(tmp_path: Path) -> None:
+    """Routing is the half of the state no tracker and no branch can rebuild.
+
+    A resumed claim whose frozen context is gone is work already begun under
+    facts nothing can produce again, so the run says so rather than adopting
+    current profiles, aliases, prices, evidence, or Harness defaults.
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+    _engine(repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env)
+    _refile(env, "open", [_ticket(9, "the skeleton", claimed_by=["me"])])
+    (scratch / STATE_HOME / ROUTING_FILE).unlink()
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 2
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert plan["routing"] is None
+    assert "#9" in plan["reason"]
+    assert "frozen routing" in plan["reason"]
+
+
+def test_a_resumed_run_stops_where_its_frozen_routing_cannot_be_read(
+    tmp_path: Path,
+) -> None:
+    """A half-written frozen context is not a context, and is never reconstructed."""
+
+    repo, scratch, env = _routed(tmp_path)
+    _engine(repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env)
+    _refile(env, "open", [_ticket(9, "the skeleton", claimed_by=["me"])])
+    (scratch / STATE_HOME / ROUTING_FILE).write_text("{", encoding="utf-8")
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 2
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is False
+    assert plan["routing"] is None
+    assert "cannot be read" in plan["reason"]
+    assert plan["routing_reason"] is not None
+
+
+def test_a_resumed_run_stops_where_the_invocation_changes_its_locks(
+    tmp_path: Path,
+) -> None:
+    """A resume that renamed the builder's model would leave the account untrue."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    assert (
+        _engine(
+            repo, "plan", "--deliberation", "high", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+    assert (
+        _route(
+            repo, tmp_path, scratch, env, [_selected("build-9")], deliberation="high"
+        ).returncode
+        == 0
+    )
+
+    changed = _engine(
+        repo, "plan", "--deliberation", "low", "--state-dir", str(scratch), env=env
+    )
+    omitted = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert changed.returncode == 2
+    assert json.loads(changed.stdout)["ready"] is False
+    assert "deliberation" in json.loads(changed.stdout)["reason"]
+    assert omitted.returncode == 2
+    assert json.loads(omitted.stdout)["ready"] is False
+
+
+def test_a_fresh_run_plans_before_it_has_routed_anything(tmp_path: Path) -> None:
+    """The preflight comes after the plan, so a plan cannot require one to exist."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is True
+    assert plan["routing"] is None
+    assert plan["routing_reason"] is not None
+
+
+def test_an_amend_builder_is_not_dispatched_before_its_own_decision(
+    tmp_path: Path,
+) -> None:
+    """Amending is building, so the amend is routed like every other execution role."""
+
+    repo, scratch, env = _routed(tmp_path)
+    verdict = tmp_path / "verdict.md"
+    verdict.write_text("the gate failed\n", encoding="utf-8")
+
+    before = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "9",
+        "--attempt",
+        "1",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(verdict),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    routed = _route(
+        repo, tmp_path, scratch, env, [_selected("amend-9-1")], name="amend.json"
+    )
+    after = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "9",
+        "--attempt",
+        "1",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(verdict),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert before.returncode == 1
+    assert "amend-9-1" in before.stderr
+    assert routed.returncode == 0, routed.stderr
+    assert after.returncode == 0, after.stderr
+
+
+def test_an_amend_continuation_is_routed_for_the_attempt_it_spends(
+    tmp_path: Path,
+) -> None:
+    """Attempt two's bounded escalation is its own decision, not attempt one's."""
+
+    repo, scratch, env = _routed(tmp_path)
+    verdict = tmp_path / "verdict.md"
+    verdict.write_text("the gate failed\n", encoding="utf-8")
+    failed = tmp_path / "failed.md"
+    failed.write_text("still failing\n", encoding="utf-8")
+    assert (
+        _route(
+            repo, tmp_path, scratch, env, [_selected("amend-9-1")], name="amend.json"
+        ).returncode
+        == 0
+    )
+
+    for args in (
+        ("--attempt", "1", "--phase", "building", "--verdict-file", str(verdict)),
+        ("--attempt", "1", "--phase", "verifying"),
+        ("--attempt", "1", "--phase", "failed", "--verdict-file", str(failed)),
+    ):
+        step = _engine(
+            repo, "amend", "--ticket", "9", *args, "--state-dir", str(scratch), env=env
+        )
+        assert step.returncode == 0, step.stderr
+        _refile_issue(env, 9, {"comments": [{"body": _wrote(env, 9)}]})
+
+    result = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "9",
+        "--attempt",
+        "2",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(failed),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 1
+    assert "amend-9-2" in result.stderr
+
+
+def test_report_renders_the_frozen_route_facts_with_the_run_data(
+    tmp_path: Path,
+) -> None:
+    """The account carries what was decided and on what, or it cannot be audited."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    reported = json.loads(result.stdout)
+    routing = reported["routing"]
+    assert routing["snapshot_identity"] == "frozen"
+    assert routing["main_seat"]["model"] == "the-strongest"
+    assert routing["model"] is None and routing["deliberation"] is None
+    decided = routing["decisions"][0]
+    assert decided["ticket"] == 9
+    assert decided["decision"]["evidence_class"] == "measurement_based"
+    assert decided["decision"]["launch"]["native_deliberation"] == {
+        "thinking_budget": 8000
+    }
+    assert [group for group in _ACCOUNT if group not in reported] == []
+
+
+def test_report_says_why_a_run_has_no_frozen_route_facts(tmp_path: Path) -> None:
+    """Missing evidence is reported rather than filled in from what is current."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    reported = json.loads(result.stdout)
+    assert reported["routing"] is None
+    assert reported["routing_reason"] is not None
+
+
+def test_the_frozen_routing_keeps_the_main_seat_apart_from_the_builder_locks(
+    tmp_path: Path,
+) -> None:
+    """The seat a verdict inherits is snapshot data; a lock is the builder's alone."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    assert (
+        _engine(
+            repo,
+            "plan",
+            "--model",
+            "the-cheapest",
+            "--deliberation",
+            "low",
+            "--state-dir",
+            str(scratch),
+            env=env,
+        ).returncode
+        == 0
+    )
+    assert (
+        _route(
+            repo,
+            tmp_path,
+            scratch,
+            env,
+            [_selected("build-9")],
+            model="the-cheapest",
+            deliberation="low",
+        ).returncode
+        == 0
+    )
+
+    result = _engine(
+        repo,
+        "plan",
+        "--model",
+        "the-cheapest",
+        "--deliberation",
+        "low",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    routing = json.loads(result.stdout)["routing"]
+    assert routing["model"] == "the-cheapest"
+    assert routing["deliberation"] == "low"
+    assert routing["main_seat"]["model"] == "the-strongest"
+    assert routing["main_seat"]["portable_deliberation"] == "high"
+
+
 def test_claim_takes_the_ticket_on_the_tracker_before_any_work_starts(
     tmp_path: Path,
 ) -> None:
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+    repo, scratch, env = _routed(tmp_path)
 
-    result = _engine(repo, "claim", "--ticket", "9", env=env)
+    result = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
 
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["claimed"] is True
@@ -1823,7 +2908,9 @@ def test_a_run_at_a_ceiling_of_one_pushes_nothing_and_makes_no_worktree(
         {"ready-for-agent": [_ticket(9, "the skeleton")]},
         issues={9: _ready(9)},
     ) | _git_spy(tmp_path)
+    scratch = tmp_path / "scratch"
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _preflight(repo, tmp_path, scratch, env)
 
     for args in (
         ("plan",),
@@ -1832,7 +2919,9 @@ def test_a_run_at_a_ceiling_of_one_pushes_nothing_and_makes_no_worktree(
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
         ("report",),
     ):
-        assert _engine(repo, *args, env=env).returncode == 0, args
+        assert (
+            _engine(repo, *args, "--state-dir", str(scratch), env=env).returncode == 0
+        ), args
 
     ran = [
         line.split()
@@ -2170,18 +3259,24 @@ def test_plan_offers_back_the_ticket_an_interrupted_run_left_claimed(
     The ticket it was on is still claimed by this developer and carries no
     outcome, which is what an interruption looks like from the tracker."""
 
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
+    repo, scratch, env = _routed(
         tmp_path,
-        {
-            "ready-for-agent": [
-                _ticket(9, "the skeleton", claimed_by=["me"]),
-                _ticket(10, "the graph"),
-            ]
-        },
+        tickets=[_ticket(9, "the skeleton"), _ticket(10, "the graph")],
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+    _refile(
+        env,
+        "open",
+        [_ticket(9, "the skeleton", claimed_by=["me"]), _ticket(10, "the graph")],
     )
 
-    result = _engine(repo, "plan", env=env)
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
 
     assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
@@ -2228,12 +3323,14 @@ def test_plan_writes_the_run_state_to_the_directory_the_harness_provides(
     of that directory deleted the engine's own state file mid-run, and the
     run's own things live where no subagent is sent (ADR-0071)."""
 
-    repo = _init_repo(tmp_path / "proj")
-    scratch = tmp_path / "scratch"
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(9, "the skeleton", claimed_by=["me"])]},
+    repo, scratch, env = _routed(tmp_path)
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
     )
+    _refile(env, "open", [_ticket(9, "the skeleton", claimed_by=["me"])])
 
     result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
 
@@ -2246,6 +3343,7 @@ def test_plan_writes_the_run_state_to_the_directory_the_harness_provides(
     assert state["label"] == "ready-for-agent"
     assert state["login"] == "me"
     assert state["claimed"] == [9]
+    assert state["starting"] == [9]
 
 
 def test_a_run_given_no_state_directory_plans_the_same_and_writes_nothing(
@@ -2270,16 +3368,22 @@ def test_a_state_file_nothing_can_read_is_rebuilt_rather_than_stopping_the_run(
     tmp_path: Path,
 ) -> None:
     """A half-written file from a run somebody killed says nothing, and a run
-    that stopped over it would have made the state a source of truth."""
+    that stopped over it would have made the state a source of truth.
 
-    repo = _init_repo(tmp_path / "proj")
-    scratch = tmp_path / "scratch"
-    (scratch / STATE_HOME).mkdir(parents=True)
-    (scratch / STATE_HOME / STATE_FILE).write_text('{"branch": "wo', encoding="utf-8")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(9, "the skeleton", claimed_by=["me"])]},
+    The frozen routing beside it is the opposite case and stays where it was:
+    what the tracker and the branch can say again is rebuilt, and what only
+    that file holds is not (ADR-0085).
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
     )
+    _refile(env, "open", [_ticket(9, "the skeleton", claimed_by=["me"])])
+    (scratch / STATE_HOME / STATE_FILE).write_text('{"branch": "wo', encoding="utf-8")
 
     result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
 
@@ -2294,14 +3398,18 @@ def test_claim_takes_a_ticket_this_developer_already_holds(tmp_path: Path) -> No
     """The claim an interrupted run left is this run's own, so claiming it again
     is the same claim rather than a collision with somebody else."""
 
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": []},
-        issues={9: _ready(9, assignees=[{"login": "me"}])},
+    repo, scratch, env = _routed(tmp_path)
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
     )
+    _refile_issue(env, 9, {"assignees": [{"login": "me"}]})
 
-    result = _engine(repo, "claim", "--ticket", "9", env=env)
+    result = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
 
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["claimed"] is True
@@ -2350,9 +3458,12 @@ def test_every_verb_accepts_a_state_directory(tmp_path: Path) -> None:
         issues={9: _ready(9)},
     )
     head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    response = tmp_path / "route.json"
+    response.write_text(json.dumps(_response([_selected("build-9")])), encoding="utf-8")
 
     for args in (
         ("plan",),
+        ("route", "--response", str(response)),
         ("claim", "--ticket", "9"),
         ("park", "--ticket", "9"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
@@ -2407,14 +3518,30 @@ def _interrupted_run(tmp_path: Path, scratch: Path) -> tuple[Path, dict[str, str
         issues={9: _ready(9), 10: _ready(10)},
     )
 
+    _preflight(repo, tmp_path, scratch, env)
     for args in (
-        ("plan",),
         ("claim", "--ticket", "9"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
-        ("claim", "--ticket", "10"),
     ):
         result = _engine(repo, *args, "--state-dir", str(scratch), env=env)
         assert result.returncode == 0, f"{args}: {result.stderr}"
+
+    # The next wave is routed from the same frozen snapshot before its claim.
+    assert (
+        _route(
+            repo,
+            tmp_path,
+            scratch,
+            env,
+            [_selected("build-10")],
+            name="second-wave.json",
+        ).returncode
+        == 0
+    )
+    result = _engine(
+        repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
+    )
+    assert result.returncode == 0, result.stderr
 
     _refile(
         env,
@@ -2448,14 +3575,19 @@ def test_a_run_whose_state_was_deleted_reaches_the_same_account(
 ) -> None:
     """A new session, a cleared scratch directory, or a machine restart leaves
     no state to read, and the run rebuilds it from the tracker and the branch
-    rather than starting over. That is what makes the invocation idempotent."""
+    rather than starting over. That is what makes the invocation idempotent.
+
+    What it rebuilds is the account: the claims, the outcomes, and the commit
+    the work sits on. The frozen routing beside it is not part of that account
+    and is left where it was, having nowhere else to be read from (ADR-0085).
+    """
 
     scratch = tmp_path / "scratch"
     repo, env = _interrupted_run(tmp_path, scratch)
     remembered = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     accounted = _engine(repo, "report", "--state-dir", str(scratch), env=env)
 
-    shutil.rmtree(scratch)
+    (scratch / STATE_HOME / STATE_FILE).unlink()
     rebuilt = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     again = _engine(repo, "report", "--state-dir", str(scratch), env=env)
 
@@ -2994,17 +4126,21 @@ def test_a_scoped_plan_leaves_a_claim_outside_its_scope_where_it_is(
     claim an earlier, wider plan of this run took is still this run's own
     afterwards, or the next bare invocation would read it as a stranger's."""
 
-    repo = _init_repo(tmp_path / "proj")
-    scratch = tmp_path / "scratch"
-    env = _tracker(
+    repo, scratch, env = _routed(
         tmp_path,
-        {
-            "ready-for-agent": [
-                _ticket(9, "the skeleton", claimed_by=["me"]),
-                _ticket(10, "the graph"),
-            ]
-        },
-        issues={10: _ready(10)},
+        tickets=[_ticket(9, "the skeleton"), _ticket(10, "the graph")],
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+    _refile(
+        env,
+        "open",
+        [_ticket(9, "the skeleton", claimed_by=["me"]), _ticket(10, "the graph")],
     )
     assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
 
@@ -3067,17 +4203,21 @@ def test_a_scoped_plan_forgets_a_claim_the_label_no_longer_holds_open(
     with is pruned by an aimed plan exactly as a bare one prunes it, or the
     note would only ever grow."""
 
-    repo = _init_repo(tmp_path / "proj")
-    scratch = tmp_path / "scratch"
-    env = _tracker(
+    repo, scratch, env = _routed(
         tmp_path,
-        {
-            "ready-for-agent": [
-                _ticket(9, "the skeleton", claimed_by=["me"]),
-                _ticket(10, "the graph"),
-            ]
-        },
-        issues={10: _ready(10)},
+        tickets=[_ticket(9, "the skeleton"), _ticket(10, "the graph")],
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+    _refile(
+        env,
+        "open",
+        [_ticket(9, "the skeleton", claimed_by=["me"]), _ticket(10, "the graph")],
     )
     assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
 
@@ -3604,12 +4744,7 @@ def test_amend_writes_the_bound_on_the_ticket_the_moment_it_is_spent(
     which is why a ceiling of one is amended exactly like any other ticket.
     """
 
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(10, "the graph")]},
-        issues={10: _ready(10)},
-    )
+    repo, scratch, env = _amendable(tmp_path)
     verdict = tmp_path / "verdict.md"
     verdict.write_text("Verification failed.\n", encoding="utf-8")
 
@@ -3624,6 +4759,8 @@ def test_amend_writes_the_bound_on_the_ticket_the_moment_it_is_spent(
         "building",
         "--verdict-file",
         str(verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -3650,12 +4787,7 @@ def test_replaying_a_recorded_amend_resumes_without_spending_the_next(
     """
 
     # Record attempt one as the run does before its builder starts.
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(10, "the graph")]},
-        issues={10: _ready(10)},
-    )
+    repo, scratch, env = _amendable(tmp_path)
     verdict = tmp_path / "verdict.md"
     verdict.write_text("Verification failed.\n", encoding="utf-8")
     first = _engine(
@@ -3669,6 +4801,8 @@ def test_replaying_a_recorded_amend_resumes_without_spending_the_next(
         "building",
         "--verdict-file",
         str(verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
     assert first.returncode == 0, first.stderr
@@ -3691,6 +4825,8 @@ def test_replaying_a_recorded_amend_resumes_without_spending_the_next(
         "building",
         "--verdict-file",
         str(verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -3718,13 +4854,7 @@ def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
     """
 
     # Present a ticket and the initial verifier's complete verdict.
-    repo = _init_repo(tmp_path / "proj")
-    ticket = _ticket(10, "the graph")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [ticket]},
-        issues={10: _ready(10)},
-    )
+    repo, scratch, env = _amendable(tmp_path)
     initial_verdict = tmp_path / "initial-verdict.md"
     initial_verdict.write_text("Gate failed: contract A\n", encoding="utf-8")
 
@@ -3740,6 +4870,8 @@ def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
         "building",
         "--verdict-file",
         str(initial_verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -3768,6 +4900,8 @@ def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
         "1",
         "--phase",
         "verifying",
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -3795,6 +4929,8 @@ def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
         "failed",
         "--verdict-file",
         str(latest_verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -3838,6 +4974,8 @@ def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
         "building",
         "--verdict-file",
         str(altered_verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -3856,6 +4994,8 @@ def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
         "building",
         "--verdict-file",
         str(latest_verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -3884,6 +5024,8 @@ def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
         "2",
         "--phase",
         "verifying",
+        "--state-dir",
+        str(scratch),
         env=env,
     )
     assert verifying_second.returncode == 0, verifying_second.stderr
@@ -3900,6 +5042,8 @@ def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
         "2",
         "--phase",
         "passed",
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -3934,12 +5078,7 @@ def test_a_ticket_receives_one_continuation_amend_before_exhaustion(
     than turning a concrete verdict into an open-ended repair loop.
     """
 
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(10, "the graph")]},
-        issues={10: _ready(10)},
-    )
+    repo, scratch, env = _amendable(tmp_path)
     initial_verdict = tmp_path / "initial-verdict.md"
     initial_verdict.write_text("Initial verification failed.\n", encoding="utf-8")
     latest_verdict = tmp_path / "latest-verdict.md"
@@ -3957,6 +5096,8 @@ def test_a_ticket_receives_one_continuation_amend_before_exhaustion(
         "building",
         "--verdict-file",
         str(initial_verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
     assert first.returncode == 0, first.stderr
@@ -3978,6 +5119,8 @@ def test_a_ticket_receives_one_continuation_amend_before_exhaustion(
         "building",
         "--verdict-file",
         str(latest_verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -4012,6 +5155,8 @@ def test_a_ticket_receives_one_continuation_amend_before_exhaustion(
         "3",
         "--phase",
         "building",
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -4034,7 +5179,6 @@ def test_continuation_preserves_several_actionable_findings_verbatim(
     """
 
     # Present amend one's fresh verifier verdict with several distinct findings.
-    repo = _init_repo(tmp_path / "proj")
     findings = (
         "Gate passed.\n"
         "Spec: existing-marker recovery is unreachable.\n"
@@ -4045,12 +5189,8 @@ def test_continuation_preserves_several_actionable_findings_verbatim(
         f"<!-- {MARKER} amend=1 phase=failed --> attempt one failed\n\n"
         f"Verifier verdict:\n\n{findings}"
     )
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(10, "the graph")]},
-        issues={
-            10: _ready(10, comments=[{"body": failed_first}]),
-        },
+    repo, scratch, env = _amendable(
+        tmp_path, issue={"comments": [{"body": failed_first}]}
     )
     verdict = tmp_path / "latest-verdict.md"
     verdict.write_text(findings, encoding="utf-8")
@@ -4067,6 +5207,8 @@ def test_continuation_preserves_several_actionable_findings_verbatim(
         "building",
         "--verdict-file",
         str(verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -4103,13 +5245,8 @@ def test_a_legacy_amend_marker_counts_as_the_first_attempt(tmp_path: Path) -> No
     """
 
     # Present the marker written by Orchestrate before numbered attempts.
-    repo = _init_repo(tmp_path / "proj")
     legacy = f"<!-- {MARKER} amend --> amended once"
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(10, "the graph")]},
-        issues={10: _ready(10, comments=[{"body": legacy}])},
-    )
+    repo, scratch, env = _amendable(tmp_path, issue={"comments": [{"body": legacy}]})
     verdict = tmp_path / "verdict.md"
     verdict.write_text("Legacy amend verification failed.\n", encoding="utf-8")
 
@@ -4125,6 +5262,8 @@ def test_a_legacy_amend_marker_counts_as_the_first_attempt(tmp_path: Path) -> No
         "building",
         "--verdict-file",
         str(verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
 
@@ -4144,12 +5283,7 @@ def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
     leaves the other where it was, and a collided ticket's repair story does
     not depend on whether its verifier had earlier found a typo (ADR-0069)."""
 
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(10, "the graph")]},
-        issues={10: _ready(10)},
-    )
+    repo, scratch, env = _amendable(tmp_path)
     initial_verdict = tmp_path / "initial-verdict.md"
     initial_verdict.write_text("Initial verification failed.\n", encoding="utf-8")
     latest_verdict = tmp_path / "latest-verdict.md"
@@ -4167,6 +5301,8 @@ def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
             "building",
             "--verdict-file",
             str(initial_verdict),
+            "--state-dir",
+            str(scratch),
             env=env,
         ).returncode
         == 0
@@ -4201,6 +5337,8 @@ def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
         "building",
         "--verdict-file",
         str(latest_verdict),
+        "--state-dir",
+        str(scratch),
         env=env,
     )
     assert continuation.returncode == 0, continuation.stderr
@@ -4229,6 +5367,8 @@ def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
             "3",
             "--phase",
             "building",
+            "--state-dir",
+            str(scratch),
             env=env,
         ).returncode
         == 2
@@ -4958,6 +6098,7 @@ def test_a_state_file_left_at_the_old_place_is_carried_into_the_new_one(
                 "login": "me",
                 "claimed": [],
                 "base": _git(repo, "rev-parse", "HEAD").stdout.strip(),
+                "starting": [],
             }
         ),
         encoding="utf-8",
@@ -5065,14 +6206,7 @@ def test_park_takes_the_ticket_out_of_what_the_run_remembers_claiming(
     """A parked ticket is no longer this run's claim, so a later invocation
     does not go looking for it as work an interruption left behind."""
 
-    repo = _init_repo(tmp_path / "proj")
-    scratch = tmp_path / "scratch"
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(9, "the skeleton")]},
-        issues={9: _ready(9)},
-    )
-    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    repo, scratch, env = _routed(tmp_path)
     assert (
         _engine(
             repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
