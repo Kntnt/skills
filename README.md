@@ -59,7 +59,7 @@ Review `AGENTS.md` and `agents.d/` after a task and write only facts that the ne
 
 ### delegation
 
-Leave the decision to delegate, planning, briefing, verification, and the final answer with the unchanged main agent while subagents execute the chosen work. Delegated execution uses model-selector's public routing Interface for an exact supported launch point, explicit inheritance, or a refusal; it never changes the main agent's model or deliberation configuration. The mode can last for the current session or be saved in Project or user context. Run `/delegation` to toggle the session, `/delegation [project|user] on|off [--yes]` to set a standing mode or `/delegation status` to inspect every scope.
+Leave the decision to delegate, planning, briefing, verification, and the final answer with the unchanged main agent while subagents execute the chosen work. Predictably noisy tool work can stay in a subagent's context and return as a distilled result. Delegated execution uses model-selector's public routing Interface for an exact supported launch point, explicit inheritance, or a refusal; it never changes the main agent's model or deliberation configuration. The mode can last for the current session or be saved in Project or user context. Run `/delegation` to toggle the session, `/delegation [project|user] on|off [--yes]` to set a standing mode or `/delegation status` to inspect every scope.
 
 ### tldr
 

@@ -3871,12 +3871,12 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "without explicit model or deliberation overrides",
         "Route optimization was unavailable",
         "no subagent is launched",
-        "does not start setup, research, evaluation, profile writes, or ledger writes",
+        "starts no setup, research, evaluation, profile writes, or ledger writes",
         "objective main-agent verification or the declared failure signal",
         "never the execution subagent's self-confidence",
         "strongest safe permitted point",
         "brief + fresh-context reading + report",
-        "#44",
+        "After you have decided to delegate",
     }
     missing = sorted(
         fragment for fragment in required_mode_fragments if fragment not in mode
@@ -3911,29 +3911,34 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     )
 
 
-def test_delegation_leaves_tool_output_policy_to_ticket_44() -> None:
-    """Routing begins after the main agent has decided to delegate execution."""
+def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() -> None:
+    """The mode delegates noisy tool work before its raw result reaches the main agent."""
 
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
     mode = path.read_text(encoding="utf-8")
 
     required_fragments = {
-        "The decision whether voluminous tool output itself warrants delegation belongs to #44",
-        "outside this mode's routing policy",
-        "Once you have chosen to delegate",
-        "precise question",
-        "bounded return contract",
+        "Narrow at the source first.",
+        "predictably large and mostly irrelevant",
+        "the main agent does not need the raw material",
+        "expected main-context saving exceeds the cost",
+        "complete tool call",
+        "bounded extraction",
         "direct answer",
         "minimal supporting evidence",
         "material anomalies or uncertainty",
         "truncation or incomplete coverage",
+        "bounded semantic extraction",
+        "understanding, diagnosis, decisions, briefing, verification and the final answer",
+        "same-model context isolation",
+        "Post-hoc summarisation in the main context cannot recover context already spent",
     }
     missing = sorted(
         fragment for fragment in required_fragments if fragment not in mode
     )
     assert not missing, (
-        f"{path}: delegation mode must leave the tool-output delegation decision to"
-        f" #44 while requiring a bounded task-shaped report after delegation; missing"
+        f"{path}: delegation mode must keep predictably noisy tool output out of the"
+        f" main context before the call, with a bounded task-shaped report; missing"
         f" contract fragments: {missing}."
     )
 
