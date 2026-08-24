@@ -20,13 +20,13 @@ The portable deliberation values are `low`, `medium`, `high`, `xhigh`, and `max`
 
 *PATH*
 
-A UTF-8 JSON artifact conforming to `references/route-request.schema.json`. It is one envelope with integer `schema_version: 1`, an ordered `requests` array, and either a previously returned `snapshot` or current read-only `context`. The Model Routing Module in `references/model-routing.md` is the complete behavioral contract.
+A UTF-8 JSON artifact conforming to `references/route-request.schema.json`. It is one envelope with integer `schema_version: 1`, an ordered `requests` array, and either a previously returned `snapshot` or current read-only `context` that the public Skill adapter derives from local profile/evidence and active Harness facts before invoking the internal script. The Model Routing Module in `references/model-routing.md` is the complete behavioral contract.
 
 ## OPTIONS
 
 **--data=**_PATH_
 
-Read the current profile and evidence from *PATH* only when the request does not carry a snapshot. The default is `~/.model-selector/`. Route never writes there.
+Read the current profile and evidence from *PATH* only when the request does not carry a snapshot. The public Skill adapter consumes this flag while it derives the canonical `context`; the internal script receives only the resulting artifact path. The default is `~/.model-selector/`. Route never writes there.
 
 ## OUTPUT
 

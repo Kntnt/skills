@@ -87,7 +87,7 @@ Complete when every enabled pinned release or explicitly accepted mutable alias 
 
 ## Recommend
 
-Read `$HERE/references/pareto-selection.md`. Normalize the resolved profile, evidence, active Harness, exact main seat, workload, overrides, adapter mappings, and policy into the artifact contract in `$HERE/references/route-request.schema.json`, then obtain the decision through the `recommend()` Interface in `$HERE/scripts/route.py`. This is the same selection core as Route; never repeat hard filters, evidence classification, cost selection, or escalation as prose-only judgement. Render the returned detailed recommendation as follows:
+Read `$HERE/references/pareto-selection.md`. Normalize the resolved profile, evidence, active Harness, exact main seat, workload, categorical workload requirements, overrides, adapter mappings, route/renew economics, and policy into the artifact contract in `$HERE/references/route-request.schema.json`, then obtain the decision through the `recommend()` Interface in `$HERE/scripts/route.py`. This is the same selection core as Route; never repeat hard filters, evidence classification, cost selection, or escalation as prose-only judgement. Render the returned detailed recommendation as follows:
 
 1. Resolve workload stratum, surface/harness, quality metric, budget or quality floor, latency/safety/availability filters and evidence date. State any inferred value.
 2. Select only enabled configured model versions, effort/serving modes and access channels. Prefer local production-shaped observations, then matched independent evaluations, then configuration-bearing first-party results; use prose tier claims only to choose experiments.
@@ -104,7 +104,7 @@ Complete when the recommendation names an exact configuration and decision rule,
 
 ## Route
 
-Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the artifact against `$HERE/references/route-request.schema.json`, add the current read-only routing context when it has no frozen snapshot, and run `uv run "$HERE/scripts/route.py" <path>` with that canonical artifact. Emit the helper's JSON response without commentary. Route never enters setup and performs no network access, evaluation, research, or persistent write.
+Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the artifact against `$HERE/references/route-request.schema.json`; when it has no frozen snapshot, derive `context` from the selected data directory plus the active Harness, exact main seat, mappings, commercial policy, and normalized categorical workload requirements, then let the module freeze it through `freeze_context()`. Run `uv run "$HERE/scripts/route.py" <path>` with that canonical artifact and emit the helper's JSON response without commentary. The formal `--data` flag is consumed by this Skill adapter before the internal script invocation. Route never enters setup and performs no network access, evaluation, research, or persistent write.
 
 ## Chart
 

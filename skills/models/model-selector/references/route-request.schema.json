@@ -8,7 +8,7 @@
     "schema_version": {"const": 1},
     "requests": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/request"}},
     "snapshot": {"$ref": "#/$defs/snapshot"},
-    "context": {"$ref": "#/$defs/snapshot"}
+    "context": {"$ref": "#/$defs/context"}
   },
   "oneOf": [
     {"required": ["snapshot"], "not": {"required": ["context"]}},
@@ -89,6 +89,7 @@
         "workload": {"$ref": "#/$defs/non_empty_string"},
         "workload_cohort": {"$ref": "#/$defs/non_empty_string"},
         "workload_tags": {"$ref": "#/$defs/string_array"},
+        "required_capabilities": {"$ref": "#/$defs/string_array"},
         "reversible": {"type": "boolean"},
         "checker": {"$ref": "#/$defs/checker"},
         "overrides": {
@@ -101,8 +102,20 @@
         },
         "retry_available": {"type": "boolean"},
         "prior": {"$ref": "#/$defs/exact_attempt"},
-        "verified_failure": {"$ref": "#/$defs/verified_failure"}
+        "verified_failure": {"$ref": "#/$defs/verified_failure"},
+        "economics": {"$ref": "#/$defs/economics"}
       },
+      "additionalProperties": false
+    },
+    "economics": {
+      "type": "object",
+      "required": ["decision"],
+      "properties": {
+        "decision": {"enum": ["route", "renew"]},
+        "budget": {"type": "number"},
+        "quality_floor": {"type": "number"}
+      },
+      "not": {"required": ["budget", "quality_floor"]},
       "additionalProperties": false
     },
     "profile": {
@@ -235,7 +248,7 @@
     },
     "mapping": {
       "type": "object",
-      "required": ["model", "aliases", "channel", "surface", "serving_mode", "model_capability", "controls", "control_capabilities", "native_control_order", "tools", "policy", "commercial", "enabled"],
+      "required": ["model", "aliases", "channel", "surface", "serving_mode", "model_capability", "controls", "control_capabilities", "native_control_order", "tools", "policy", "capabilities", "commercial", "enabled"],
       "properties": {
         "model": {"$ref": "#/$defs/non_empty_string"},
         "aliases": {"$ref": "#/$defs/string_array"},
@@ -270,6 +283,7 @@
         "native_control_order": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/native_control"}},
         "tools": {"$ref": "#/$defs/string_array"},
         "policy": {"$ref": "#/$defs/policy"},
+        "capabilities": {"$ref": "#/$defs/string_array"},
         "commercial": {"$ref": "#/$defs/commercial"},
         "enabled": {"type": "boolean"}
       },
@@ -297,7 +311,7 @@
       },
       "additionalProperties": false
     },
-    "snapshot": {
+    "context": {
       "type": "object",
       "required": ["snapshot_version", "profile", "evidence", "harness", "main_seat", "mappings", "override_policy"],
       "properties": {
@@ -311,6 +325,9 @@
         "override_policy": {"$ref": "#/$defs/override_policy"}
       },
       "additionalProperties": false
+    },
+    "snapshot": {
+      "$ref": "#/$defs/context"
     }
   }
 }

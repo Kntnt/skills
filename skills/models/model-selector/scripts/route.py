@@ -4,12 +4,11 @@
 # ///
 """Resolve versioned model routing artifacts without external side effects."""
 
-from __future__ import annotations
-
 import hashlib
 import json
 import sys
 from copy import deepcopy
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, cast
 
@@ -27,6 +26,26 @@ REQUEST_SCHEMA_PATH: Path = (
 REQUEST_SCHEMA: dict[str, Any] = json.loads(
     REQUEST_SCHEMA_PATH.read_text(encoding="utf-8")
 )
+
+
+@dataclass(frozen=True, slots=True)
+class Candidate:
+    """Bind the named parts of one complete launchable exact point."""
+
+    point: dict[str, Any]
+    portable: str
+    native: dict[str, Any]
+    adapter: dict[str, Any]
+
+
+@dataclass(frozen=True, slots=True)
+class CandidatePool:
+    """Keep candidate eligibility and its audit trail as one authority."""
+
+    model_matches: tuple[dict[str, Any], ...]
+    candidates: tuple[Candidate, ...]
+    exclusions: tuple[dict[str, Any], ...]
+    variant_exclusion_codes: tuple[str, ...]
 
 
 def _schema_type_matches(value: Any, expected: str) -> bool:
@@ -68,7 +87,7 @@ def _schema_errors(
 ) -> list[str]:
     """Validate the JSON Schema keywords used by the public routing contract."""
 
-    # Resolve local references and composition before inspecting concrete keywords.
+    # Resolve references and composition before inspecting concrete keywords.
     if "$ref" in schema:
         return _schema_errors(
             value,
@@ -179,23 +198,32 @@ def _snapshot_identity(snapshot: dict[str, Any]) -> str:
     return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
 
 
-def _snapshot_error(snapshot: Any) -> str | None:
-    """Return the first nested snapshot contract violation, if one exists."""
+def freeze_context(context: dict[str, Any]) -> dict[str, Any]:
+    """Freeze caller-derived current facts into one reusable routing snapshot."""
+
+    snapshot = deepcopy(context)
+    snapshot.pop("snapshot_identity", None)
+    snapshot["snapshot_identity"] = _snapshot_identity(snapshot)
+    return snapshot
+
+
+def _snapshot_structure_error(snapshot: Any, definition: str) -> str | None:
+    """Return the first structural context or snapshot violation, if one exists."""
 
     # Treat the shipped JSON Schema as the structural runtime authority.
     errors = _schema_errors(
         snapshot,
-        REQUEST_SCHEMA["$defs"]["snapshot"],
+        REQUEST_SCHEMA["$defs"][definition],
         REQUEST_SCHEMA,
         "snapshot",
     )
-    if errors:
-        return errors[0]
+    return errors[0] if errors else None
 
-    # JSON Schema establishes the nested types used by the semantic checks below.
-    assert isinstance(snapshot, dict)
 
-    # Validate cross-field mapping invariants JSON Schema cannot express.
+def _snapshot_error(snapshot: dict[str, Any]) -> str | None:
+    """Return the first cross-field snapshot invariant violation, if one exists."""
+
+    # Validate cross-field mapping invariants the schema cannot express.
     for point in snapshot["mappings"]:
         native_order = point["native_control_order"]
         control_capabilities = point["control_capabilities"]
@@ -207,7 +235,10 @@ def _snapshot_error(snapshot: Any) -> str | None:
             )
             or set(control_capabilities) != set(point["controls"])
         ):
-            return "snapshot.mappings must freeze max as the highest verified native control"
+            return (
+                "snapshot.mappings must freeze max as the highest verified "
+                "native control"
+            )
 
     # Detect a mutated supplied snapshot rather than blessing its old identity.
     if snapshot.get("snapshot_identity") != _snapshot_identity(snapshot):
@@ -368,67 +399,91 @@ def _within_main_seat(
     ) <= float(deliberation_ceiling)
 
 
-def _launchable_variants(
+def _exclusion(
+    code: str,
+    detail: str,
     point: dict[str, Any],
-    snapshot: dict[str, Any],
-    portable_lock: str | None = None,
-) -> list[tuple[str, dict[str, Any], dict[str, Any]]]:
-    """Expand one configured mapping into complete launchable point variants."""
+    portable: str | None = None,
+) -> dict[str, Any]:
+    """Build one stable hard-filter fact for compact and human audit output."""
 
-    variants: list[tuple[str, dict[str, Any], dict[str, Any]]] = []
-    for portable, native in point["controls"].items():
-        if portable_lock is not None and portable != portable_lock:
-            continue
-        if not _within_main_seat(point, portable, snapshot):
-            continue
-        adapter = _launch_adapter(point, native, snapshot)
-        if adapter is not None:
-            variants.append((portable, native, adapter))
-    return variants
+    exclusion = {"code": code, "detail": detail, "model": point["model"]}
+    if portable is not None:
+        exclusion["portable_deliberation"] = portable
+    return exclusion
 
 
-def _selection_exclusions(
-    request: dict[str, Any], snapshot: dict[str, Any]
-) -> list[dict[str, Any]]:
-    """Explain each configured exact point removed by a routing hard filter."""
+def _candidate_pool(request: dict[str, Any], snapshot: dict[str, Any]) -> CandidatePool:
+    """Evaluate every hard filter once and retain both results and reasons."""
 
+    # Resolve the request dimensions used by every configured-point filter.
     overrides = request["overrides"]
+    model_lock = overrides.get("model")
     portable_lock = overrides.get("deliberation")
+    required_capabilities = set(request.get("required_capabilities", []))
+    exact_model_exists = model_lock is not None and any(
+        point["enabled"] and point["model"] == model_lock
+        for point in snapshot["mappings"]
+    )
+    model_matches: list[dict[str, Any]] = []
+    candidates: list[Candidate] = []
     exclusions: list[dict[str, Any]] = []
+    variant_exclusion_codes: list[str] = []
+
+    # Classify each point and exact portable variant through one authority.
     for point in snapshot["mappings"]:
+        # Exclude disabled configuration before interpreting any dimensions.
         if not point["enabled"]:
             exclusions.append(
-                {
-                    "code": "disabled_point",
-                    "detail": "The configured point is not enabled.",
-                    "model": point["model"],
-                }
-            )
-            continue
-        if "model" in overrides and not (
-            point["model"] == overrides["model"]
-            or overrides["model"] in point["aliases"]
-        ):
-            exclusions.append(
-                {
-                    "code": "model_override_mismatch",
-                    "detail": "The point does not match the locked model dimension.",
-                    "model": point["model"],
-                }
-            )
-            continue
-        if portable_lock is not None and portable_lock not in point["controls"]:
-            exclusions.append(
-                {
-                    "code": "mapping_unavailable",
-                    "detail": "The exact portable control has no verified native mapping.",
-                    "model": point["model"],
-                    "portable_deliberation": portable_lock,
-                }
+                _exclusion(
+                    "disabled_point",
+                    "The configured point is not enabled.",
+                    point,
+                )
             )
             continue
 
-        # Audit only the locked variant or every automatic variant in scale order.
+        # Preserve the independent model lock for availability and ambiguity.
+        if model_lock is not None and not (
+            point["model"] == model_lock
+            or (not exact_model_exists and model_lock in point["aliases"])
+        ):
+            exclusions.append(
+                _exclusion(
+                    "model_override_mismatch",
+                    "The point does not match the locked model dimension.",
+                    point,
+                )
+            )
+            continue
+        model_matches.append(point)
+
+        # Require frozen capability facts for the normalized workload needs.
+        if not required_capabilities <= set(point["capabilities"]):
+            exclusions.append(
+                _exclusion(
+                    "workload_capability_mismatch",
+                    "The point does not cover every required workload capability.",
+                    point,
+                )
+            )
+            variant_exclusion_codes.append("workload_capability_mismatch")
+            continue
+
+        # Refuse approximation when the locked portable value has no mapping.
+        if portable_lock is not None and portable_lock not in point["controls"]:
+            exclusions.append(
+                _exclusion(
+                    "mapping_unavailable",
+                    "The exact portable control has no verified native mapping.",
+                    point,
+                    portable_lock,
+                )
+            )
+            variant_exclusion_codes.append("mapping_unavailable")
+            continue
+
+        # Evaluate only the locked value or each mapped value in scale order.
         portable_values = (
             [portable_lock]
             if portable_lock is not None
@@ -440,25 +495,42 @@ def _selection_exclusions(
         )
         for portable in portable_values:
             native = point["controls"][portable]
+
+            # Enforce both main-seat dimensions before resolving launch syntax.
             if not _within_main_seat(point, portable, snapshot):
                 exclusions.append(
-                    {
-                        "code": "above_main_seat_ceiling",
-                        "detail": "The complete point exceeds the frozen main seat.",
-                        "model": point["model"],
-                        "portable_deliberation": portable,
-                    }
+                    _exclusion(
+                        "above_main_seat_ceiling",
+                        "The complete point exceeds the frozen main seat.",
+                        point,
+                        portable,
+                    )
                 )
-            elif _launch_adapter(point, native, snapshot) is None:
+                variant_exclusion_codes.append("above_main_seat_ceiling")
+                continue
+
+            # Admit only variants with one complete active Harness adapter.
+            adapter = _launch_adapter(point, native, snapshot)
+            if adapter is None:
                 exclusions.append(
-                    {
-                        "code": "adapter_unreachable",
-                        "detail": "No active adapter can launch every field of this point.",
-                        "model": point["model"],
-                        "portable_deliberation": portable,
-                    }
+                    _exclusion(
+                        "adapter_unreachable",
+                        "No active adapter can launch every field of this point.",
+                        point,
+                        portable,
+                    )
                 )
-    return exclusions
+                variant_exclusion_codes.append("adapter_unreachable")
+                continue
+            candidates.append(Candidate(point, portable, native, adapter))
+
+    # Freeze the evaluation so later selection cannot drift from its audit.
+    return CandidatePool(
+        tuple(model_matches),
+        tuple(candidates),
+        tuple(exclusions),
+        tuple(variant_exclusion_codes),
+    )
 
 
 def _variant_fingerprint(
@@ -476,6 +548,18 @@ def _variant_fingerprint(
         native,
         snapshot,
         adapter["adapter_id"],
+    )
+
+
+def _candidate_fingerprint(candidate: Candidate, snapshot: dict[str, Any]) -> str:
+    """Fingerprint a named candidate without leaking its internal representation."""
+
+    return _variant_fingerprint(
+        candidate.point,
+        candidate.portable,
+        candidate.native,
+        candidate.adapter,
+        snapshot,
     )
 
 
@@ -577,22 +661,23 @@ def _quality_lower_bound(record: dict[str, Any]) -> float:
 
 
 def _measurement_dominates(
-    candidate: tuple[dict[str, Any], str, dict[str, Any], dict[str, Any]],
+    candidate: Candidate,
     record: dict[str, Any],
-    other_candidate: tuple[dict[str, Any], str, dict[str, Any], dict[str, Any]],
+    other_candidate: Candidate,
     other_record: dict[str, Any],
 ) -> bool:
     """Apply multidimensional dominance only when every compared fact is known."""
 
-    costs = candidate[0]["commercial"]
-    other_costs = other_candidate[0]["commercial"]
+    # Read every cost axis without inventing unavailable values.
+    costs = candidate.point["commercial"]
+    other_costs = other_candidate.point["commercial"]
     if any(
         not _is_number(costs[dimension]) or not _is_number(other_costs[dimension])
         for dimension in COMMERCIAL_DIMENSIONS
     ):
         return False
 
-    # Require no worse conservative quality and no worse value on every cost axis.
+    # Require no worse quality and no worse value on every cost axis.
     quality = _quality_lower_bound(record)
     other_quality = _quality_lower_bound(other_record)
     no_worse = quality >= other_quality and all(
@@ -607,18 +692,8 @@ def _measurement_dominates(
 
 
 def _pareto_frontier(
-    measured: list[
-        tuple[
-            tuple[dict[str, Any], str, dict[str, Any], dict[str, Any]],
-            dict[str, Any],
-        ]
-    ],
-) -> list[
-    tuple[
-        tuple[dict[str, Any], str, dict[str, Any], dict[str, Any]],
-        dict[str, Any],
-    ]
-]:
+    measured: list[tuple[Candidate, dict[str, Any]]],
+) -> list[tuple[Candidate, dict[str, Any]]]:
     """Remove only candidates demonstrably dominated on quality and every cost."""
 
     return [
@@ -633,12 +708,13 @@ def _pareto_frontier(
 
 
 def _shadow_cost(
-    candidate: tuple[dict[str, Any], str, dict[str, Any], dict[str, Any]],
+    candidate: Candidate,
     shadow_prices: dict[str, Any],
 ) -> float | None:
     """Calculate a scenario cost only from a complete explicit conversion policy."""
 
-    commercial = candidate[0]["commercial"]
+    # Require known commercial values and prices for every non-cash dimension.
+    commercial = candidate.point["commercial"]
     priced_dimensions = tuple(
         dimension for dimension in COMMERCIAL_DIMENSIONS if dimension != "cash"
     )
@@ -650,6 +726,8 @@ def _shadow_cost(
         or not all(_is_number(value) for value in shadow_prices.values())
     ):
         return None
+
+    # Convert only through the complete policy the frozen profile supplied.
     return float(commercial["cash"]) + sum(
         float(commercial[dimension]) * float(shadow_prices[dimension])
         for dimension in priced_dimensions
@@ -657,74 +735,156 @@ def _shadow_cost(
 
 
 def _frontier_audit(
-    frontier: list[
-        tuple[
-            tuple[dict[str, Any], str, dict[str, Any], dict[str, Any]],
-            dict[str, Any],
-        ]
-    ],
+    frontier: list[tuple[Candidate, dict[str, Any]]],
     snapshot: dict[str, Any],
 ) -> list[dict[str, Any]]:
     """Expose the exact non-dominated alternatives without collapsing their costs."""
 
     return [
         {
-            "configuration_fingerprint": _variant_fingerprint(*candidate, snapshot),
-            "model": candidate[0]["model"],
-            "portable_deliberation": candidate[1],
+            "configuration_fingerprint": _candidate_fingerprint(candidate, snapshot),
+            "model": candidate.point["model"],
+            "portable_deliberation": candidate.portable,
             "quality_lower_bound": _quality_lower_bound(record),
-            "commercial": deepcopy(candidate[0]["commercial"]),
+            "commercial": deepcopy(candidate.point["commercial"]),
         }
         for candidate, record in frontier
     ]
 
 
-def _selected(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, Any]:
-    """Select the weakest launchable point allowed by explicit dimensions."""
+def _measured_candidates(
+    candidates: tuple[Candidate, ...],
+    records: list[dict[str, Any]],
+    request: dict[str, Any],
+    snapshot: dict[str, Any],
+) -> list[tuple[Candidate, dict[str, Any]]]:
+    """Choose one conservative exact measurement per launchable candidate."""
 
-    overrides = request.get("overrides", {})
-    deliberation = overrides.get("deliberation")
-    points = [
-        point
-        for point in snapshot["mappings"]
-        if point["enabled"]
-        and (
-            "model" not in overrides
-            or point["model"] == overrides["model"]
-            or overrides["model"] in point.get("aliases", [])
-        )
-        and (deliberation is None or deliberation in point["controls"])
+    measured: list[tuple[Candidate, dict[str, Any]]] = []
+    for candidate in candidates:
+        # Retain only records that prove complete decision applicability.
+        applicable = [
+            record
+            for record in records
+            if _evidence_is_measurement(
+                record,
+                request,
+                candidate.point,
+                candidate.portable,
+                candidate.native,
+                _candidate_fingerprint(candidate, snapshot),
+                snapshot,
+            )
+        ]
+        if applicable:
+            measured.append((candidate, max(applicable, key=_quality_lower_bound)))
+
+    return measured
+
+
+def _economic_candidate(
+    frontier: list[tuple[Candidate, dict[str, Any]]],
+    economics: dict[str, Any],
+) -> tuple[Candidate | None, str]:
+    """Apply an explicit human budget or quality-floor decision dimension."""
+
+    # Map the named decision to its honest comparable commercial dimension.
+    dimension = (
+        "cash" if economics["decision"] == "route" else "allocated_subscription_cost"
+    )
+    known = [
+        item for item in frontier if _is_number(item[0].point["commercial"][dimension])
     ]
-    candidates = [
-        (point, portable, native, adapter)
-        for point in points
-        for portable, native, adapter in _launchable_variants(
-            point, snapshot, deliberation
+
+    # Maximize conservative quality inside an explicit comparable budget.
+    if "budget" in economics:
+        affordable = [
+            item
+            for item in known
+            if float(item[0].point["commercial"][dimension])
+            <= float(economics["budget"])
+        ]
+        if not affordable:
+            return None, f"budget_{dimension}"
+        best_quality = max(_quality_lower_bound(item[1]) for item in affordable)
+        quality_winners = [
+            item for item in affordable if _quality_lower_bound(item[1]) == best_quality
+        ]
+        minimum_cost = min(
+            float(item[0].point["commercial"][dimension]) for item in quality_winners
         )
+        winners = [
+            item
+            for item in quality_winners
+            if float(item[0].point["commercial"][dimension]) == minimum_cost
+        ]
+        return (
+            winners[0][0] if len(winners) == 1 else None,
+            f"budget_{dimension}",
+        )
+
+    # Minimize the named cost among points clearing the explicit quality floor.
+    qualified = [
+        item
+        for item in known
+        if _quality_lower_bound(item[1]) >= float(economics["quality_floor"])
     ]
+    if not qualified:
+        return None, f"quality_floor_{dimension}"
+    minimum_cost = min(
+        float(item[0].point["commercial"][dimension]) for item in qualified
+    )
+    winners = [
+        item
+        for item in qualified
+        if float(item[0].point["commercial"][dimension]) == minimum_cost
+    ]
+    return (
+        winners[0][0] if len(winners) == 1 else None,
+        f"quality_floor_{dimension}",
+    )
+
+
+def _selection_decision(
+    request: dict[str, Any],
+    snapshot: dict[str, Any],
+    pool: CandidatePool,
+) -> dict[str, Any]:
+    """Resolve one selected or underdetermined decision from an eligible pool."""
+
+    # Match exact measurements once for every candidate and human output form.
     records = snapshot["evidence"]["records"]
-    measured = [
-        (candidate, record)
-        for candidate in candidates
-        for record in records
-        if _evidence_is_measurement(
-            record,
-            request,
-            candidate[0],
-            candidate[1],
-            candidate[2],
-            _variant_fingerprint(*candidate, snapshot),
-            snapshot,
-        )
-    ]
+    measured = _measured_candidates(pool.candidates, records, request, snapshot)
     decision_policy = "cold_start"
     frontier_audit: list[dict[str, Any]] = []
+
+    # Resolve measured alternatives through explicit economics or Pareto policy.
     if measured:
+        # Build the honest multidimensional frontier once for all output forms.
         frontier = _pareto_frontier(measured)
         frontier_audit = _frontier_audit(frontier, snapshot)
-        if len(frontier) == 1:
+        economics = request.get("economics")
+
+        # Give an explicit human budget or quality floor first precedence.
+        if isinstance(economics, dict) and (
+            "budget" in economics or "quality_floor" in economics
+        ):
+            winner, decision_policy = _economic_candidate(frontier, economics)
+            if winner is None:
+                return _inherit(
+                    request,
+                    snapshot,
+                    "underdetermined_frontier",
+                    {"frontier": frontier_audit},
+                )
+            eligible = [winner]
+
+        # Accept a frontier containing exactly one non-dominated point.
+        elif len(frontier) == 1:
             eligible = [frontier[0][0]]
             decision_policy = "pareto_dominance"
+
+        # Resolve a tradeoff only through complete frozen shadow prices.
         else:
             shadow_prices = snapshot["override_policy"].get("shadow_prices")
             priced = (
@@ -754,31 +914,39 @@ def _selected(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, An
                 )
             eligible = [winners[0][0]]
             decision_policy = "explicit_shadow_prices"
+
+    # Refuse to treat a heuristic point as measured economic evidence.
+    elif "economics" in request:
+        return _inherit(request, snapshot, "insufficient_evidence")
+
+    # Choose the workload-safe cold-start endpoint when measurements are absent.
     else:
-        eligible = candidates
+        eligible = list(pool.candidates)
         decision_policy = (
             "cold_start_strongest"
             if not request["reversible"] and request["checker"]["kind"] == "none"
             else "cold_start_weakest"
         )
+
+    # Choose the weakest or strongest complete candidate required by the policy.
     choose = max if decision_policy == "cold_start_strongest" else min
-    point, portable, native, adapter = choose(
+    candidate = choose(
         eligible,
-        key=lambda candidate: (
-            _model_capability(candidate[0]),
-            _control_capability(candidate[0], candidate[1]),
-            PORTABLE_LEVELS.index(candidate[1]),
+        key=lambda item: (
+            _model_capability(item.point),
+            _control_capability(item.point, item.portable),
+            PORTABLE_LEVELS.index(item.portable),
         ),
     )
+    point = candidate.point
+    portable = candidate.portable
+    native = candidate.native
+    adapter = candidate.adapter
     arguments = _launch_arguments(adapter, point, native, snapshot)
-    fingerprint = _variant_fingerprint(
-        point,
-        portable,
-        native,
-        adapter,
-        snapshot,
-    )
+    fingerprint = _candidate_fingerprint(candidate, snapshot)
 
+    # Classify and expose the exact winner from the same frozen evidence facts.
+    overrides = request["overrides"]
     evidence = snapshot["evidence"]
     evidence_class = _evidence_class(
         records,
@@ -789,7 +957,7 @@ def _selected(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, An
         fingerprint,
         snapshot,
     )
-    exclusions = _selection_exclusions(request, snapshot)
+    exclusions = deepcopy(list(pool.exclusions))
 
     return {
         "request_id": request["request_id"],
@@ -817,7 +985,7 @@ def _selected(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, An
             "evidence_identity": evidence["identity"],
             "evidence_vintage": evidence["vintage"],
         },
-        "exclusions": deepcopy(exclusions),
+        "exclusions": exclusions,
         "next_escalation": _escalation(
             request,
             point,
@@ -843,6 +1011,7 @@ def _audit(
 ) -> dict[str, Any]:
     """Attach frozen provenance to every request-level routing outcome."""
 
+    # Read shared facts defensively because invalid snapshots are still audited.
     profile = snapshot.get("profile")
     evidence = snapshot.get("evidence")
     harness = snapshot.get("harness")
@@ -881,6 +1050,7 @@ def _escalation(
 ) -> dict[str, Any] | None:
     """Describe one existing-retry step only after externally bound failure."""
 
+    # Bind the prior attempt and external failure to the selected exact point.
     prior = request.get("prior", {})
     failure = request.get("verified_failure", {})
     checker = request.get("checker", {})
@@ -895,6 +1065,7 @@ def _escalation(
         "native_deliberation": native,
     }
 
+    # Suppress any retry not granted, checked, failed, and exactly matched.
     if (
         not request.get("reversible")
         or request.get("retry_available") is not True
@@ -907,6 +1078,7 @@ def _escalation(
     ):
         return None
 
+    # Resolve one adjacent supported point beneath the main-seat ceiling.
     adjacent_index = PORTABLE_LEVELS.index(portable) + 1
     if adjacent_index >= len(PORTABLE_LEVELS):
         return None
@@ -926,6 +1098,8 @@ def _escalation(
         adjacent_adapter,
         snapshot,
     )
+
+    # Return the complete next launch while consuming no new attempt.
     return {
         "model": point["model"],
         "adapter_id": adjacent_adapter["adapter_id"],
@@ -1027,91 +1201,73 @@ def _artifact_error(artifact: Any) -> str | None:
 def _decision(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, Any]:
     """Apply hard refusals and inheritance before exact-point selection."""
 
-    if request.get("authority") not in {"execution", "verdict"}:
-        return _refused(request, snapshot, "invalid_request")
+    # Keep every verdict on the exact immutable main seat.
     if request["authority"] == "verdict":
         if not snapshot["harness"].get("inheritance"):
             return _refused(request, snapshot, "unrepresentable_verdict_inheritance")
         return _inherit(request, snapshot, "verdict_authority")
+
+    # Distinguish absent profile state from invalid persisted state.
     if snapshot.get("profile") is None:
         return _inherit(request, snapshot, "missing_profile")
     if not snapshot["profile"].get("valid"):
         return _refused(request, snapshot, "invalid_profile")
+
+    # Refuse selection when either frozen authority dimension is unknown.
     if (
         snapshot["main_seat"].get("model_capability") is None
         or snapshot["main_seat"].get("deliberation_capability") is None
     ):
         return _refused(request, snapshot, "unknown_main_seat_ceiling")
 
-    overrides = request.get("overrides", {})
-    if set(overrides) - {"model", "deliberation"}:
-        return _refused(request, snapshot, "invalid_request")
+    # Reuse one hard-filter result for selection, refusals, and audit output.
+    overrides = request["overrides"]
     deliberation = overrides.get("deliberation")
-    if deliberation is not None and deliberation not in PORTABLE_LEVELS:
-        return _refused(request, snapshot, "invalid_request")
+    pool = _candidate_pool(request, snapshot)
 
-    model_matches = [
-        point
-        for point in snapshot["mappings"]
-        if point["enabled"]
-        and (
-            "model" not in overrides
-            or point["model"] == overrides["model"]
-            or overrides["model"] in point["aliases"]
-        )
-    ]
-    if overrides.get("model") and not model_matches:
+    # Refuse model locks that resolve to no enabled exact point.
+    if overrides.get("model") and not pool.model_matches:
         return _refused(request, snapshot, "unavailable_override")
-    exact_models = {
-        point["model"]
-        for point in model_matches
-        if point["model"] == overrides.get("model")
-    }
-    resolved_models = {point["model"] for point in model_matches}
-    if overrides.get("model") and not exact_models and len(resolved_models) > 1:
+
+    # Refuse aliases that do not identify exactly one configured release.
+    resolved_models = {point["model"] for point in pool.model_matches}
+    if overrides.get("model") and len(resolved_models) > 1:
         return _refused(request, snapshot, "ambiguous_override")
+
+    # Refuse portable locks unsupported by every model-matched point.
     if deliberation and not any(
-        deliberation in point["controls"] for point in model_matches
+        deliberation in point["controls"] for point in pool.model_matches
     ):
         return _refused(request, snapshot, "unavailable_override")
-    if overrides.get("model") and all(
-        not any(
-            _within_main_seat(point, portable, snapshot)
-            for portable in point["controls"]
-            if deliberation is None or portable == deliberation
-        )
-        for point in model_matches
-    ):
-        return _refused(request, snapshot, "above_main_seat_ceiling")
-    if deliberation and all(
-        not _within_main_seat(point, deliberation, snapshot)
-        for point in model_matches
-        if deliberation in point["controls"]
+
+    # Give an explicit all-above-ceiling point its precise stable refusal.
+    if (
+        overrides
+        and not pool.candidates
+        and pool.variant_exclusion_codes
+        and set(pool.variant_exclusion_codes) == {"above_main_seat_ceiling"}
     ):
         return _refused(request, snapshot, "above_main_seat_ceiling")
 
-    safe = [
-        point
-        for point in model_matches
-        if (deliberation is None or deliberation in point["controls"])
-        and _launchable_variants(point, snapshot, deliberation)
-    ]
-    if not safe:
-        exclusions = _selection_exclusions(request, snapshot)
+    # Refuse an empty safe set with the authoritative hard-filter audit.
+    if not pool.candidates:
         return _refused(
             request,
             snapshot,
             "empty_safe_candidate_set",
             "No configured point remains after complete Harness filtering.",
-            exclusions,
+            list(pool.exclusions),
         )
+
+    # Honor a frozen policy that declines unmeasured automatic cold starts.
     if (
         not snapshot["evidence"].get("records")
         and not overrides
         and snapshot["override_policy"].get("cold_start") != "select"
     ):
         return _inherit(request, snapshot, "insufficient_evidence")
-    return _selected(request, snapshot)
+
+    return _selection_decision(request, snapshot, pool)
 
 
 def route(artifact: Any) -> dict[str, Any]:
@@ -1121,8 +1277,15 @@ def route(artifact: Any) -> dict[str, Any]:
     if error := _artifact_error(artifact):
         return _artifact_refusal("invalid_request", error)
 
-    requests = artifact.get("requests", [])
-    snapshot = deepcopy(artifact.get("snapshot", artifact.get("context", {})))
+    # Validate current facts or a reusable snapshot before identity is trusted.
+    requests = artifact["requests"]
+    source = "snapshot" if "snapshot" in artifact else "context"
+    supplied = deepcopy(artifact[source])
+    if error := _snapshot_structure_error(supplied, source):
+        return _artifact_refusal("invalid_snapshot", error)
+
+    # Freeze live caller-derived context once or preserve a supplied snapshot.
+    snapshot = freeze_context(supplied) if source == "context" else supplied
     snapshot.setdefault("snapshot_identity", _snapshot_identity(snapshot))
     if error := _snapshot_error(snapshot):
         decisions = [
@@ -1130,12 +1293,14 @@ def route(artifact: Any) -> dict[str, Any]:
             for request in requests
         ]
     else:
+        # Preserve request order while isolating each request-level refusal.
         decisions = [
             _refused(request, snapshot, "invalid_request", error)
             if (error := _request_error(request))
             else _decision(request, snapshot)
             for request in requests
         ]
+
     return {"schema_version": 1, "snapshot": snapshot, "decisions": decisions}
 
 
@@ -1227,7 +1392,7 @@ def _experiment_brief(
     ):
         return None
 
-    # Freeze inputs, controls, measurements, and bounds for either execution plan.
+    # Freeze inputs, controls, measurements, and bounds for both plans.
     fingerprint = decision["launch"]["configuration_fingerprint"]
     return {
         "workload": request["workload"],
