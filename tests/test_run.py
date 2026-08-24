@@ -998,8 +998,12 @@ def test_plan_leaves_the_runs_own_notes_out_of_a_tickets_thread(
                         ),
                         {"body": f"<!-- {MARKER} rebuild --> built once more"},
                         {"body": f"<!-- {MARKER} amend --> amended once"},
-                        {"body": f"<!-- {MARKER} amend=1 --> amended first"},
-                        {"body": f"<!-- {MARKER} amend=2 --> amended again"},
+                        {
+                            "body": f"<!-- {MARKER} amend=1 phase=building --> amended first"
+                        },
+                        {
+                            "body": f"<!-- {MARKER} amend=2 phase=failed --> amended again"
+                        },
                         _recorded("failed"),
                     ],
                 )
@@ -1660,8 +1664,8 @@ def test_report_distinguishes_an_exhausted_amend_path_from_an_early_failure(
         9,
         "amended twice",
         comments=[
-            {"body": f"<!-- {MARKER} amend=1 --> first"},
-            {"body": f"<!-- {MARKER} amend=2 --> continuation"},
+            {"body": f"<!-- {MARKER} amend=1 phase=failed --> first"},
+            {"body": f"<!-- {MARKER} amend=2 phase=failed --> continuation"},
             _recorded("failed"),
         ],
     )
@@ -3606,17 +3610,32 @@ def test_amend_writes_the_bound_on_the_ticket_the_moment_it_is_spent(
         {"ready-for-agent": [_ticket(10, "the graph")]},
         issues={10: _ready(10)},
     )
+    verdict = tmp_path / "verdict.md"
+    verdict.write_text("Verification failed.\n", encoding="utf-8")
 
-    result = _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env)
+    result = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "1",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(verdict),
+        env=env,
+    )
 
     assert result.returncode == 0, result.stderr
     answer = json.loads(result.stdout)
     assert answer["amended"] is True
     assert answer["attempt"] == 1
+    assert answer["phase"] == "building"
     assert answer["amends_spent"] == 1
     assert answer["reason"] is None
     note = _wrote(env, 10)
-    assert f"<!-- {MARKER} amend=1 -->" in note
+    assert f"<!-- {MARKER} amend=1 phase=building -->" in note
     assert "amend 1 of 2" in note
 
 
@@ -3637,24 +3656,272 @@ def test_replaying_a_recorded_amend_resumes_without_spending_the_next(
         {"ready-for-agent": [_ticket(10, "the graph")]},
         issues={10: _ready(10)},
     )
-    first = _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env)
+    verdict = tmp_path / "verdict.md"
+    verdict.write_text("Verification failed.\n", encoding="utf-8")
+    first = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "1",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(verdict),
+        env=env,
+    )
     assert first.returncode == 0, first.stderr
-    marker = _wrote(env, 10)
+    marker = (
+        f"<!-- {MARKER} amend=1 phase=building --> attempt one\n\n"
+        "Verifier verdict:\n\nVerification failed.\n"
+    )
     _refile_issue(env, 10, _ready(10, comments=[{"body": marker}]))
     calls_before_replay = _gh_calls(env)
 
     # Replay the exact transition after its response was lost.
-    replay = _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env)
+    replay = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "1",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(verdict),
+        env=env,
+    )
 
     # Resume attempt one without appending attempt two or another first marker.
     assert replay.returncode == 0, replay.stderr
     answer = json.loads(replay.stdout)
     assert answer["attempt"] == 1
+    assert answer["phase"] == "building"
     assert answer["amends_spent"] == 1
     assert answer["newly_recorded"] is False
     assert _gh_calls(env).count("issue comment 10") == calls_before_replay.count(
         "issue comment 10"
     )
+
+
+def test_amend_phase_and_latest_verdict_survive_every_dispatch_boundary(
+    tmp_path: Path,
+) -> None:
+    """A fresh run can reconstruct the exact verifier-informed repair phase.
+
+    The tracker records the builder dispatch, verifier dispatch, and failed
+    verdict separately. Plan projects the latest phase and verdict verbatim, so
+    a resumed run can continue attempt one or start attempt two without relying
+    on a vanished subagent report or session scratch.
+    """
+
+    # Present a ticket and the initial verifier's complete verdict.
+    repo = _init_repo(tmp_path / "proj")
+    ticket = _ticket(10, "the graph")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [ticket]},
+        issues={10: _ready(10)},
+    )
+    initial_verdict = tmp_path / "initial-verdict.md"
+    initial_verdict.write_text("Gate failed: contract A\n", encoding="utf-8")
+
+    # Record attempt one's builder phase before dispatch.
+    building = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "1",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(initial_verdict),
+        env=env,
+    )
+
+    # Persist both the exact phase and complete verdict on the tracker.
+    assert building.returncode == 0, building.stderr
+    assert json.loads(building.stdout)["phase"] == "building"
+    assert f"<!-- {MARKER} amend=1 phase=building -->" in _gh_calls(env)
+    assert "Gate failed: contract A" in _gh_calls(env)
+    comments = [
+        {
+            "body": (
+                f"<!-- {MARKER} amend=1 phase=building --> attempt one\n\n"
+                "Verifier verdict:\n\nGate failed: contract A\n"
+            )
+        }
+    ]
+    _refile_issue(env, 10, _ready(10, comments=comments))
+
+    # Record the fresh verifier phase after its builder completes.
+    verifying = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "1",
+        "--phase",
+        "verifying",
+        env=env,
+    )
+
+    assert verifying.returncode == 0, verifying.stderr
+    assert json.loads(verifying.stdout)["phase"] == "verifying"
+    comments.append(
+        {"body": f"<!-- {MARKER} amend=1 phase=verifying --> verifying attempt one"}
+    )
+    _refile_issue(env, 10, _ready(10, comments=comments))
+    latest_verdict = tmp_path / "latest-verdict.md"
+    latest_verdict.write_text(
+        "Gate passed.\nCriterion failed: distinct contract B.\n",
+        encoding="utf-8",
+    )
+
+    # Record the fresh verifier's failed verdict before deciding what follows.
+    failed = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "1",
+        "--phase",
+        "failed",
+        "--verdict-file",
+        str(latest_verdict),
+        env=env,
+    )
+
+    assert failed.returncode == 0, failed.stderr
+    assert json.loads(failed.stdout)["phase"] == "failed"
+    comments.append(
+        {
+            "body": (
+                f"<!-- {MARKER} amend=1 phase=failed --> failed attempt one\n\n"
+                "Verifier verdict:\n\nGate passed.\n"
+                "Criterion failed: distinct contract B.\n"
+            )
+        }
+    )
+    current = _ticket(10, "the graph", comments=comments)
+    _refile_issue(env, 10, _ready(10, comments=comments))
+    _refile(env, "open", [current])
+
+    # Reconstruct the exact phase from tracker state alone.
+    plan_result = _engine(repo, "plan", env=env)
+
+    assert plan_result.returncode == 0, plan_result.stderr
+    plan = json.loads(plan_result.stdout)
+    assert plan["tickets"][0]["amend_state"] == {
+        "attempt": 1,
+        "phase": "failed",
+        "verdict": "Gate passed.\nCriterion failed: distinct contract B.\n",
+    }
+
+    # Reject any continuation that changes the persisted verdict.
+    altered_verdict = tmp_path / "altered-verdict.md"
+    altered_verdict.write_text("Only criterion B failed.\n", encoding="utf-8")
+    mismatched = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "2",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(altered_verdict),
+        env=env,
+    )
+
+    assert mismatched.returncode == 1
+    assert "verbatim" in mismatched.stderr
+
+    # Spend attempt two only from the persisted immediately preceding verdict.
+    continuation = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "2",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(latest_verdict),
+        env=env,
+    )
+
+    assert continuation.returncode == 0, continuation.stderr
+    answer = json.loads(continuation.stdout)
+    assert answer["attempt"] == 2
+    assert answer["phase"] == "building"
+
+    # Advance attempt two through its verifier and persist a passing verdict.
+    comments.append(
+        {
+            "body": (
+                f"<!-- {MARKER} amend=2 phase=building --> attempt two\n\n"
+                "Verifier verdict:\n\nGate passed.\n"
+                "Criterion failed: distinct contract B.\n"
+            )
+        }
+    )
+    _refile_issue(env, 10, _ready(10, comments=comments))
+    verifying_second = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "2",
+        "--phase",
+        "verifying",
+        env=env,
+    )
+    assert verifying_second.returncode == 0, verifying_second.stderr
+    comments.append(
+        {"body": f"<!-- {MARKER} amend=2 phase=verifying --> verifying attempt two"}
+    )
+    _refile_issue(env, 10, _ready(10, comments=comments))
+    passed = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "2",
+        "--phase",
+        "passed",
+        env=env,
+    )
+
+    assert passed.returncode == 0, passed.stderr
+    assert json.loads(passed.stdout)["phase"] == "passed"
+    comments.append(
+        {"body": f"<!-- {MARKER} amend=2 phase=passed --> passed attempt two"}
+    )
+    current = _ticket(10, "the graph", comments=comments)
+    _refile(env, "open", [current])
+
+    # Leave a resumed run at integration with both opportunities spent.
+    passed_plan = _engine(repo, "plan", env=env)
+
+    assert passed_plan.returncode == 0, passed_plan.stderr
+    passed_ticket = json.loads(passed_plan.stdout)["tickets"][0]
+    assert passed_ticket["amends_spent"] == 2
+    assert passed_ticket["amend_state"] == {
+        "attempt": 2,
+        "phase": "passed",
+        "verdict": None,
+    }
 
 
 def test_a_ticket_receives_one_continuation_amend_before_exhaustion(
@@ -3673,28 +3940,80 @@ def test_a_ticket_receives_one_continuation_amend_before_exhaustion(
         {"ready-for-agent": [_ticket(10, "the graph")]},
         issues={10: _ready(10)},
     )
-    first = _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env)
-    assert first.returncode == 0, first.stderr
-    first_note = _wrote(env, 10)
-    _refile_issue(env, 10, _ready(10, comments=[{"body": first_note}]))
+    initial_verdict = tmp_path / "initial-verdict.md"
+    initial_verdict.write_text("Initial verification failed.\n", encoding="utf-8")
+    latest_verdict = tmp_path / "latest-verdict.md"
+    latest_verdict.write_text("Amend one verification failed.\n", encoding="utf-8")
 
-    second = _engine(repo, "amend", "--ticket", "10", "--attempt", "2", env=env)
+    # Spend attempt one from the initial verdict.
+    first = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "1",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(initial_verdict),
+        env=env,
+    )
+    assert first.returncode == 0, first.stderr
+    failed_first = (
+        f"<!-- {MARKER} amend=1 phase=failed --> attempt one failed\n\n"
+        "Verifier verdict:\n\nAmend one verification failed.\n"
+    )
+    _refile_issue(env, 10, _ready(10, comments=[{"body": failed_first}]))
+
+    # Spend the one continuation from attempt one's fresh failed verdict.
+    second = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "2",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(latest_verdict),
+        env=env,
+    )
 
     assert second.returncode == 0, second.stderr
     second_answer = json.loads(second.stdout)
     assert second_answer["amended"] is True
     assert second_answer["attempt"] == 2
+    assert second_answer["phase"] == "building"
     assert second_answer["amends_spent"] == 2
-    second_note = _wrote(env, 10)
-    assert f"<!-- {MARKER} amend=2 -->" in second_note
-    assert "amend 2 of 2" in second_note
+    assert f"<!-- {MARKER} amend=2 phase=building -->" in _gh_calls(env)
+    assert "amend 2 of 2" in _gh_calls(env)
+    failed_second = (
+        f"<!-- {MARKER} amend=2 phase=failed --> attempt two failed\n\n"
+        "Verifier verdict:\n\nFinal verification failed.\n"
+    )
     _refile_issue(
         env,
         10,
-        _ready(10, comments=[{"body": first_note}, {"body": second_note}]),
+        _ready(
+            10,
+            comments=[{"body": failed_first}, {"body": failed_second}],
+        ),
     )
 
-    exhausted = _engine(repo, "amend", "--ticket", "10", "--attempt", "3", env=env)
+    # Refuse a third attempt after both independent verdicts failed.
+    exhausted = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "3",
+        "--phase",
+        "building",
+        env=env,
+    )
 
     assert exhausted.returncode == 2, exhausted.stderr
     exhausted_answer = json.loads(exhausted.stdout)
@@ -3720,16 +4039,30 @@ def test_a_legacy_amend_marker_counts_as_the_first_attempt(tmp_path: Path) -> No
         {"ready-for-agent": [_ticket(10, "the graph")]},
         issues={10: _ready(10, comments=[{"body": legacy}])},
     )
+    verdict = tmp_path / "verdict.md"
+    verdict.write_text("Legacy amend verification failed.\n", encoding="utf-8")
 
     # Spend the one continuation now available.
-    result = _engine(repo, "amend", "--ticket", "10", "--attempt", "2", env=env)
+    result = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "2",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(verdict),
+        env=env,
+    )
 
     # Append attempt two and leave the historical marker untouched.
     assert result.returncode == 0, result.stderr
     answer = json.loads(result.stdout)
     assert answer["attempt"] == 2
     assert answer["amends_spent"] == 2
-    assert f"<!-- {MARKER} amend=2 -->" in _wrote(env, 10)
+    assert f"<!-- {MARKER} amend=2 phase=building -->" in _gh_calls(env)
 
 
 def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
@@ -3746,13 +4079,32 @@ def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
         {"ready-for-agent": [_ticket(10, "the graph")]},
         issues={10: _ready(10)},
     )
+    initial_verdict = tmp_path / "initial-verdict.md"
+    initial_verdict.write_text("Initial verification failed.\n", encoding="utf-8")
+    latest_verdict = tmp_path / "latest-verdict.md"
+    latest_verdict.write_text("Amend one verification failed.\n", encoding="utf-8")
     trees = _collided(repo)
     assert (
-        _engine(repo, "amend", "--ticket", "10", "--attempt", "1", env=env).returncode
+        _engine(
+            repo,
+            "amend",
+            "--ticket",
+            "10",
+            "--attempt",
+            "1",
+            "--phase",
+            "building",
+            "--verdict-file",
+            str(initial_verdict),
+            env=env,
+        ).returncode
         == 0
     )
-    amended = _wrote(env, 10)
-    _refile_issue(env, 10, _ready(10, comments=[{"body": amended}]))
+    failed_first = (
+        f"<!-- {MARKER} amend=1 phase=failed --> attempt one failed\n\n"
+        "Verifier verdict:\n\nAmend one verification failed.\n"
+    )
+    _refile_issue(env, 10, _ready(10, comments=[{"body": failed_first}]))
 
     result = _engine(repo, "rebuild", "--ticket", "10", env=env)
 
@@ -3762,19 +4114,52 @@ def test_the_amend_and_the_rebuild_are_bounds_a_ticket_spends_separately(
 
     # The rebuild does not consume the continuation amend.
     rebuilt = _wrote(env, 10)
-    _refile_issue(env, 10, _ready(10, comments=[{"body": amended}, {"body": rebuilt}]))
-    continuation = _engine(repo, "amend", "--ticket", "10", "--attempt", "2", env=env)
+    _refile_issue(
+        env,
+        10,
+        _ready(10, comments=[{"body": failed_first}, {"body": rebuilt}]),
+    )
+    continuation = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "10",
+        "--attempt",
+        "2",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(latest_verdict),
+        env=env,
+    )
     assert continuation.returncode == 0, continuation.stderr
     assert json.loads(continuation.stdout)["attempt"] == 2
 
     # Spending the continuation does not replenish the rebuild or a third amend.
-    continued = _wrote(env, 10)
-    comments = [{"body": amended}, {"body": rebuilt}, {"body": continued}]
+    failed_second = (
+        f"<!-- {MARKER} amend=2 phase=failed --> attempt two failed\n\n"
+        "Verifier verdict:\n\nFinal verification failed.\n"
+    )
+    comments = [
+        {"body": failed_first},
+        {"body": rebuilt},
+        {"body": failed_second},
+    ]
     _refile_issue(env, 10, _ready(10, comments=comments))
     isolated = _engine(repo, "isolate", "--ticket", "10")
     assert isolated.returncode == 0, isolated.stderr
     assert (
-        _engine(repo, "amend", "--ticket", "10", "--attempt", "3", env=env).returncode
+        _engine(
+            repo,
+            "amend",
+            "--ticket",
+            "10",
+            "--attempt",
+            "3",
+            "--phase",
+            "building",
+            env=env,
+        ).returncode
         == 2
     )
     assert _engine(repo, "rebuild", "--ticket", "10", env=env).returncode == 2

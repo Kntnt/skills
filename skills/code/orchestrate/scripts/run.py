@@ -68,6 +68,33 @@ RECORDABLE = (*OUTCOMES, BLOCKED)
 # but a second continuation is terminal rather than an open-ended repair loop.
 AMEND_LIMIT: int = 2
 
+# Each amend's append-only lifecycle. The builder and verifier dispatches are
+# recorded before they start; their terminal verdict is recorded before the
+# run integrates or spends the continuation.
+AMEND_BUILDING: str = "building"
+AMEND_VERIFYING: str = "verifying"
+AMEND_PASSED: str = "passed"
+AMEND_FAILED: str = "failed"
+AMEND_LEGACY: str = "legacy"
+AMEND_PHASES: tuple[str, ...] = (
+    AMEND_BUILDING,
+    AMEND_VERIFYING,
+    AMEND_PASSED,
+    AMEND_FAILED,
+)
+
+# The only legal moves through the two-attempt repair path. Repeating the
+# current move is handled separately as an idempotent replay.
+AMEND_TRANSITIONS: dict[tuple[int, str] | None, tuple[tuple[int, str], ...]] = {
+    None: ((1, AMEND_BUILDING),),
+    (1, AMEND_BUILDING): ((1, AMEND_VERIFYING),),
+    (1, AMEND_VERIFYING): ((1, AMEND_PASSED), (1, AMEND_FAILED)),
+    (1, AMEND_FAILED): ((2, AMEND_BUILDING),),
+    (1, AMEND_LEGACY): ((2, AMEND_BUILDING),),
+    (2, AMEND_BUILDING): ((2, AMEND_VERIFYING),),
+    (2, AMEND_VERIFYING): ((2, AMEND_PASSED), (2, AMEND_FAILED)),
+}
+
 # What each recorded outcome says on the ticket it is recorded against. The
 # machine-readable half is the marker; this is the half a developer reads.
 NOTES = {
@@ -102,15 +129,9 @@ REBUILD_NOTE = (
     "being built once more on top of the integrated branch."
 )
 
-# What a run writes on a ticket whose failed verification it is about to amend.
-# The filled attempt distinguishes the original and continuation repairs while
-# keeping both notes readable to the developer (ADR-0084).
-AMEND_NOTE: str = (
-    "Recorded by an unattended run: verification did not pass, and amend "
-    "{attempt} of {limit} is being spent. A fresh builder is amending this "
-    "ticket's work from the verdict that failed it, and another fresh session "
-    "verifies what that builder does."
-)
+# A phase that dispatches a builder or records a failed verifier retains the
+# complete verdict that determines what the run may do when it resumes.
+AMEND_VERDICT_HEADING: str = "\n\nVerifier verdict:\n\n"
 
 # The marker every recorded outcome carries, so what a run wrote on a ticket
 # is machine-readable and not only prose somebody has to interpret.
@@ -145,11 +166,12 @@ CLOSING_REFERENCE: re.Pattern[str] = re.compile(
 # must find the bound where it left it (ADR-0055).
 RECORDED_REBUILD = re.compile(rf"<!--\s*{MARKER}\s+rebuild\s*-->")
 
-# The same marker read back for verifier-informed amendments. Numbered markers
-# distinguish both attempts; the optional number retains the legacy marker as
-# attempt one. This bound remains independent of the collision rebuild.
+# The same marker read back for verifier-informed amendments. Number and phase
+# reconstruct the exact lifecycle; the optional pair retains the legacy marker
+# as attempt one with an unknown historical phase.
 RECORDED_AMEND: re.Pattern[str] = re.compile(
-    rf"<!--\s*{MARKER}\s+amend(?:=([1-{AMEND_LIMIT}]))?\s*-->"
+    rf"<!--\s*{MARKER}\s+amend"
+    rf"(?:=([1-{AMEND_LIMIT}])\s+phase=({'|'.join(AMEND_PHASES)}))?\s*-->"
 )
 
 # The same marker on the note a blocked outcome leaves. Owned by the engine so
@@ -598,6 +620,20 @@ class Remark:
 
 
 @dataclass(frozen=True)
+class AmendState:
+    """The latest append-only verifier-informed amend phase on a ticket.
+
+    `attempt` is one or two. `phase` identifies the next safe action, and
+    `verdict` retains the complete verifier output needed by a resumed builder.
+    Legacy markers expose an unknown historical phase and no persisted verdict.
+    """
+
+    attempt: int
+    phase: str
+    verdict: str | None
+
+
+@dataclass(frozen=True)
 class TicketResolution:
     """A ticket's current resolution and the provenance that established it.
 
@@ -637,8 +673,10 @@ class Ticket:
     done resolution unblocks them. `collided_with` is the other half of a
     conflicted Run Outcome — the tickets whose work this one collided with,
     which is the pair that names the blocking edge the ticket breakdown missed.
-    `amends_spent` is the append-only verification-repair phase: zero before an
+    `amends_spent` is the append-only verification-repair bound: zero before an
     amend, one after the first marker, and two after the continuation marker.
+    `amend_state` identifies the exact current builder, verifier, or verdict
+    phase and retains the verdict a resumed amend builder needs.
 
     `worktree` is the one thing here the tracker cannot say and the repository
     can: where this ticket's work stands, for as long as a working tree of its
@@ -658,6 +696,7 @@ class Ticket:
     resolution: TicketResolution
     collided_with: list[int]
     amends_spent: int
+    amend_state: AmendState | None
     worktree: str | None = None
 
 
@@ -1107,21 +1146,37 @@ def rebuilt_already(item: dict[str, Any]) -> bool:
     )
 
 
-def amends_spent(item: dict[str, Any]) -> int:
-    """Return how many verifier-informed amends *item* has spent.
+def recorded_amend_state(item: dict[str, Any]) -> AmendState | None:
+    """Return *item*'s latest append-only amend state, if it carries one.
 
-    The maximum recorded attempt is the append-only state. A legacy unnumbered
-    marker is attempt one, and duplicate comments do not mint opportunities.
+    A numbered event carries the exact lifecycle phase and, where needed, the
+    complete verdict after the fixed heading. The historical unnumbered event
+    counts as attempt one but cannot reconstruct a phase it never recorded.
     """
 
-    # Read every marker so interruption recovery follows the latest phase.
-    attempts: list[int] = []
+    # Read every marker and retain the last event as the current phase.
+    state: AmendState | None = None
     for comment in item["comments"]:
-        found = RECORDED_AMEND.search(str(comment["body"]))
+        body = str(comment["body"])
+        found = RECORDED_AMEND.search(body)
         if found:
-            attempts.append(int(found.group(1) or "1"))
+            attempt = int(found.group(1) or "1")
+            phase = found.group(2) or AMEND_LEGACY
+            _, heading, verdict = body.partition(AMEND_VERDICT_HEADING)
+            state = AmendState(
+                attempt=attempt,
+                phase=phase,
+                verdict=verdict if heading else None,
+            )
 
-    return max(attempts, default=0)
+    return state
+
+
+def amends_spent(item: dict[str, Any]) -> int:
+    """Return how many verifier-informed amends *item* has spent."""
+
+    state = recorded_amend_state(item)
+    return state.attempt if state else 0
 
 
 def ticket_view(cwd: Path, number: int, fields: str) -> dict[str, Any]:
@@ -1502,10 +1557,11 @@ def ticket_from(
     the caller and passed in.
     """
 
-    # Project current resolution without overwriting the historical attempt.
+    # Project current resolution and amend phase without rewriting history.
     run_outcome = outcome
     reconciliation_commit = reconciled_at(item)
     current_outcome = DONE if reconciliation_commit else outcome
+    amend_state = recorded_amend_state(item)
 
     return Ticket(
         number=int(item["number"]),
@@ -1523,7 +1579,8 @@ def ticket_from(
             is_reconciled=reconciliation_commit is not None,
         ),
         collided_with=collided_with,
-        amends_spent=amends_spent(item),
+        amends_spent=amend_state.attempt if amend_state else 0,
+        amend_state=amend_state,
     )
 
 
@@ -2491,13 +2548,20 @@ def rebuild_note() -> str:
     return f"<!-- {MARKER} rebuild --> {REBUILD_NOTE}"
 
 
-def cmd_amend(cwd: Path, number: int, attempt: int) -> int:
-    """Record verifier-informed amend *attempt* for ticket *number*.
+def cmd_amend(
+    cwd: Path,
+    number: int,
+    attempt: int,
+    phase: str,
+    verdict_file: str | None,
+) -> int:
+    """Record one append-only *phase* of amend *attempt* on ticket *number*.
 
     A failed verification buys a first amend, and its fresh verdict may buy one
     continuation amend because it carries new information. Naming the attempt
-    makes replay after an uncertain tracker write idempotent. Nothing here
-    touches the work: the whole of the verb is the append-only phase change.
+    and phase makes replay after an uncertain tracker write idempotent. Verdicts
+    persisted at builder and failed-verifier boundaries make the tracker alone
+    sufficient to resume. Nothing here touches the work.
     """
 
     # The tracker is where the bound lives, for the reason every outcome lives
@@ -2506,7 +2570,8 @@ def cmd_amend(cwd: Path, number: int, attempt: int) -> int:
         ticket = ticket_view(cwd, number, "number,comments")
     except RunError as exc:
         return fail(f"the tracker cannot answer for #{number}: {exc}")
-    spent = amends_spent(ticket)
+    current = recorded_amend_state(ticket)
+    spent = current.attempt if current else 0
     if attempt > AMEND_LIMIT:
         emit(
             {
@@ -2514,6 +2579,7 @@ def cmd_amend(cwd: Path, number: int, attempt: int) -> int:
                 "ticket": number,
                 "amended": False,
                 "attempt": attempt,
+                "phase": phase,
                 "amends_spent": spent,
                 "newly_recorded": False,
                 "reason": (
@@ -2524,14 +2590,37 @@ def cmd_amend(cwd: Path, number: int, attempt: int) -> int:
         )
         return 2
 
+    # Read verdicts only for phases whose recovery depends on their exact text.
+    needs_verdict = phase in (AMEND_BUILDING, AMEND_FAILED)
+    if needs_verdict and verdict_file is None:
+        return fail(f"amend {attempt} phase {phase} requires --verdict-file")
+    if not needs_verdict and verdict_file is not None:
+        return fail(f"amend {attempt} phase {phase} does not accept --verdict-file")
+    verdict: str | None = None
+    if verdict_file is not None:
+        try:
+            verdict = Path(verdict_file).read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            return fail(
+                f"the verifier verdict cannot be read from {verdict_file}: {exc}"
+            )
+        if not verdict.strip():
+            return fail(f"the verifier verdict in {verdict_file} is empty")
+
     # A repeated phase transition resumes the work its existing marker fronts.
-    if attempt == spent and spent > 0:
+    if current and (attempt, phase) == (current.attempt, current.phase):
+        if verdict != current.verdict:
+            return fail(
+                f"amend {attempt} phase {phase} is already recorded with a "
+                "different verifier verdict"
+            )
         emit(
             {
                 "verb": "amend",
                 "ticket": number,
                 "amended": True,
                 "attempt": attempt,
+                "phase": phase,
                 "amends_spent": spent,
                 "newly_recorded": False,
                 "reason": None,
@@ -2539,20 +2628,46 @@ def cmd_amend(cwd: Path, number: int, attempt: int) -> int:
         )
         return 0
 
-    # A skipped or stale attempt would pair the wrong verdict with a marker.
-    if attempt != spent + 1:
+    # Only the next state-machine edge may be appended to the tracker.
+    current_key = None if current is None else (current.attempt, current.phase)
+    if (attempt, phase) not in AMEND_TRANSITIONS.get(current_key, ()):
+        described = (
+            "no amend"
+            if current is None
+            else f"amend {current.attempt} phase {current.phase}"
+        )
         return fail(
-            f"#{number} has spent {spent} verifier-informed amends, so attempt "
-            f"{attempt} is not its next phase"
+            f"#{number} is at {described}, so amend {attempt} phase {phase} "
+            "is not its next phase"
         )
 
-    # The note goes on before the amend starts, never after it: a run that
-    # stopped between the two otherwise comes back in the wrong phase and may
-    # spend the same opportunity twice.
+    # Attempt two must carry the immediately preceding failed verdict verbatim.
+    if (
+        attempt == 2
+        and phase == AMEND_BUILDING
+        and current is not None
+        and current.phase == AMEND_FAILED
+        and verdict != current.verdict
+    ):
+        return fail(
+            "amend 2 must carry amend 1's immediately preceding verifier "
+            "verdict verbatim"
+        )
+
+    # Append the transition before dispatch or terminal action consumes it.
     try:
-        gh(cwd, "issue", "comment", str(number), "--body", amend_note(attempt))
+        gh(
+            cwd,
+            "issue",
+            "comment",
+            str(number),
+            "--body",
+            amend_note(attempt, phase, verdict),
+        )
     except RunError as exc:
-        return fail(f"#{number} could not be recorded as amended: {exc}")
+        return fail(
+            f"#{number} amend {attempt} phase {phase} could not be recorded: {exc}"
+        )
 
     emit(
         {
@@ -2560,7 +2675,8 @@ def cmd_amend(cwd: Path, number: int, attempt: int) -> int:
             "ticket": number,
             "amended": True,
             "attempt": attempt,
-            "amends_spent": attempt,
+            "phase": phase,
+            "amends_spent": max(spent, attempt),
             "newly_recorded": True,
             "reason": None,
         }
@@ -2568,11 +2684,32 @@ def cmd_amend(cwd: Path, number: int, attempt: int) -> int:
     return 0
 
 
-def amend_note(attempt: int) -> str:
-    """Render what is written when numbered amend *attempt* is spent."""
+def amend_note(attempt: int, phase: str, verdict: str | None) -> str:
+    """Render one tracker event for amend *attempt* at *phase*."""
 
-    note = AMEND_NOTE.format(attempt=attempt, limit=AMEND_LIMIT)
-    return f"<!-- {MARKER} amend={attempt} --> {note}"
+    # Render the human half from the same phase carried by the marker.
+    notes = {
+        AMEND_BUILDING: (
+            "Recorded by an unattended run: verification did not pass, and "
+            f"amend {attempt} of {AMEND_LIMIT} is being spent before its fresh "
+            "builder starts."
+        ),
+        AMEND_VERIFYING: (
+            f"Recorded by an unattended run: amend {attempt} of {AMEND_LIMIT} "
+            "finished building, and its fresh independent verifier is starting."
+        ),
+        AMEND_PASSED: (
+            f"Recorded by an unattended run: amend {attempt} of {AMEND_LIMIT} "
+            "passed its fresh independent verification."
+        ),
+        AMEND_FAILED: (
+            f"Recorded by an unattended run: amend {attempt} of {AMEND_LIMIT} "
+            "failed its fresh independent verification."
+        ),
+    }
+    note = notes[phase]
+    retained = f"{AMEND_VERDICT_HEADING}{verdict}" if verdict is not None else ""
+    return f"<!-- {MARKER} amend={attempt} phase={phase} --> {note}{retained}"
 
 
 def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
@@ -3187,6 +3324,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     amend = sub.add_parser("amend", help="Record one numbered bounded amend.")
     amend.add_argument("--ticket", required=True, type=int)
     amend.add_argument("--attempt", required=True, type=int)
+    amend.add_argument("--phase", required=True, choices=AMEND_PHASES)
+    amend.add_argument("--verdict-file")
     add_shared_flags(amend)
 
     record = sub.add_parser("record", help="Record one ticket's outcome.")
@@ -3238,7 +3377,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.verb == "rebuild":
         return cmd_rebuild(cwd, args.ticket)
     if args.verb == "amend":
-        return cmd_amend(cwd, args.ticket, args.attempt)
+        return cmd_amend(
+            cwd,
+            args.ticket,
+            args.attempt,
+            args.phase,
+            args.verdict_file,
+        )
     if args.verb == "record":
         return cmd_record(
             cwd,

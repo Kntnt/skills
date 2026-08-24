@@ -716,6 +716,7 @@ def test_an_amended_verdict_can_drive_one_continuation_amend() -> None:
     assert "immediately preceding verifier's verdict pasted whole" in step
     assert "attempt 1's fresh verdict is a fail" in step
     assert "spend attempt 2" in step
+    assert "Attempt 1 never exhausts" in step
     assert "A pass after either attempt" in step
     assert "failed final verification after attempt 2" in step
     assert "no attempt 3" in step
@@ -734,7 +735,7 @@ def test_the_continuation_keeps_the_full_verdict_rule_and_fresh_sessions() -> No
     step = _step(9)
     amend = _brief("amend.md")
 
-    # Keep the latest verdict whole for the builder and absent from verification.
+    # Keep the latest verdict whole for the builder and out of verification.
     assert "never a summary or an accumulation" in step
     assert "fresh building subagent" in step
     assert "fresh verdict subagent" in step
@@ -758,8 +759,14 @@ def test_amend_recovery_uses_the_recorded_phase_without_minting_an_attempt() -> 
 
     # Resume the numbered phase and render its terminal meaning from disk.
     assert "`amends_spent`" in step
+    assert "`amend_state`" in step
     assert "`attempt`" in step
     assert "--attempt <1-or-2>" in step
+    assert "--phase building" in step
+    assert "--phase verifying" in step
+    assert "--phase passed" in step
+    assert "--phase failed" in step
+    assert "--verdict-file <path>" in step
     assert "`newly_recorded` false" in step
     assert "resume that recorded attempt" in step
     assert "Never call `amend` with a different attempt for the same verdict" in step

@@ -88,7 +88,7 @@ With `--at-once 1`, unverified work is on the run branch, so an unrepaired failu
 
 ## CONTINUING A RUN
 
-Restart an interrupted run with the same invocation. There is no resume option. Recorded outcomes remain settled, numbered amend markers preserve whether zero, one, or two attempts were spent, and state is reconstructed from the tracker and branch when per-session scratch data is unavailable. Repeating the same named attempt resumes its recorded phase without appending the next marker. A legacy unnumbered amend marker counts as attempt one.
+Restart an interrupted run with the same invocation. There is no resume option. Recorded outcomes remain settled, and numbered amend markers preserve the exact builder, verifier, passed-verdict, or failed-verdict phase together with the latest complete verdict needed by a resumed builder. State is reconstructed from the tracker and branch when per-session scratch data is unavailable. Repeating the same named attempt and phase resumes it without appending another event or spending the next attempt. A legacy unnumbered amend marker counts as attempt one.
 
 A ticket still claimed by the current user is resumed only when the Skill can distinguish an interrupted claim from another active run. If the tracker cannot identify the current user, the Skill stops rather than guessing.
 
