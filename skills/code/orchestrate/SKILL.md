@@ -2,7 +2,7 @@
 name: orchestrate
 description: Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.
 disable-model-invocation: true
-argument-hint: '[reconcile #<ticket> [--commit <commit>] [--yes] | #<ticket-or-spec> ... [--dry-run] [--at-once <n>] [--model <name>] [--deliberation <low|medium|high|xhigh|max>] [--yes]] [-- <instruction>]'
+argument-hint: '[#<ticket-or-spec> ...] [--dry-run] [--at-once <n>] [--model <name>] [--deliberation <low|medium|high|xhigh|max>] [--yes] | reconcile #<ticket> [--commit <commit>] [--yes] [-- <instruction>]'
 compatibility: Requires git, gh, uv, model-selector, and a harness that can run subagents
 metadata:
   kntnt.internal: "true"

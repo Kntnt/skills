@@ -97,6 +97,17 @@ AMEND_TRANSITIONS: dict[tuple[int, str] | None, tuple[tuple[int, str], ...]] = {
     (2, AMEND_VERIFYING): ((2, AMEND_PASSED), (2, AMEND_FAILED)),
 }
 
+# Appended to an unsuccessful outcome's note. The note is append-only and can
+# never be corrected in place (ADR-0051), and a later Reconciliation cannot
+# reach back into it, so what limits its claim to the attempt it records has
+# to be true from the moment it is written and stay true of a ticket that is
+# never reconciled. It therefore points a reader at the rest of the thread
+# rather than promising a Reconciliation is there (ADR-0079, issue #112).
+RESOLUTION_ELSEWHERE = (
+    "This records that attempt only; if the ticket's current resolution "
+    "differs, that is established elsewhere in this thread."
+)
+
 # What each recorded outcome says on the ticket it is recorded against. The
 # machine-readable half is the marker; this is the half a developer reads.
 NOTES = {
@@ -107,11 +118,12 @@ NOTES = {
     FAILED: (
         "Recorded by an unattended run: verification did not pass. Numbered "
         "amend markers show how far the bounded two-amend repair path ran; no "
-        "further automatic attempt is made."
+        f"further automatic attempt is made. {RESOLUTION_ELSEWHERE}"
     ),
     CONFLICTED: (
         "Recorded by an unattended run: this ticket's work collided with "
-        "another ticket's and the collision was not repaired."
+        "another ticket's and the collision was not repaired. "
+        f"{RESOLUTION_ELSEWHERE}"
     ),
     BLOCKED: (
         "Recorded by an unattended run: the builder found this ticket depends "

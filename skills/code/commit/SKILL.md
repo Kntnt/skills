@@ -2,7 +2,7 @@
 name: commit
 description: Commit the working tree on the current branch, without pushing.
 disable-model-invocation: true
-argument-hint: '["message"] [--yes] [-- <instruction>]'
+argument-hint: '[<message>] [--yes] [-- <instruction>]'
 compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
@@ -32,7 +32,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 ## Arguments
 
-`/commit ["message"] [--yes]`, and nothing else.
+`/commit [<message>] [--yes]`, and nothing else.
 
 Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/commit --help` for the page in full. Then commit nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
@@ -42,6 +42,6 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 2. Exit 2: say there is nothing to commit, and stop.
 3. Follow `$LIBRARY/references/changelog.md`. Done when every real change is recorded in `CHANGELOG.md` — in `[Unreleased]` or already in a dated version section.
 4. If the plan has `gitignore_proposal`, keep it for the gate. Done when the proposal is ready or none is needed.
-5. Message: the `"message"` argument if given, otherwise one concrete subject line from the changelog entries just written, or from `git diff` when there is no user-facing entry. Done when the message is a single subject line.
+5. Message: the `<message>` argument if given, otherwise one concrete subject line from the changelog entries just written, or from `git diff` when there is no user-facing entry. Done when the message is a single subject line.
 6. Show the changelog diff, the message, and the proposed `.gitignore` if any. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
 7. Write the proposed `.gitignore` if one was confirmed. Run `uv run "$LIBRARY/scripts/ship.py" apply commit --message "<message>"`. Done when stdout is a commit SHA.

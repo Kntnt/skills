@@ -2,7 +2,7 @@
 name: kntnt
 description: Manage this collection — which skills are Enabled, in Global and in each Project.
 disable-model-invocation: true
-argument-hint: "[select|update|uninstall|help] [command] [--on <skill>] [--off <skill>] [--project] [--yes] [--dry-run] [-- <instruction>]"
+argument-hint: "[help [command]] | select [--on <skill>] [--off <skill>] [--project[=on|off]] [--yes] [--dry-run] | update [--project[=on|off]] [--yes] [--dry-run] | uninstall [--yes] [--dry-run] [-- <instruction>]"
 compatibility: Requires uv, and npx plus network access for the transport and the Catalog fetch
 ---
 

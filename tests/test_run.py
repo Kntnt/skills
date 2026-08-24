@@ -2268,6 +2268,29 @@ def test_record_leaves_a_failed_ticket_open_and_does_not_retry_it(
     assert "no further automatic attempt" in calls
 
 
+def test_record_limits_a_failed_notes_claim_to_the_attempt_it_records(
+    tmp_path: Path,
+) -> None:
+    """The note is append-only and can never be corrected in place (ADR-0051),
+    so it has to stop claiming the ticket's present state the moment it is
+    written rather than only once Reconciliation later moves past it. It
+    points a reader at the rest of the thread instead of promising a
+    Reconciliation is there, so the clause stays true of a ticket that is
+    never reconciled (ADR-0079, issue #112)."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
+
+    result = _engine(repo, "record", "--ticket", "9", "--outcome", "failed", env=env)
+
+    assert result.returncode == 0, result.stderr
+    calls = _gh_calls(env)
+    assert "records that attempt only" in calls
+    assert "current resolution" in calls
+    assert "elsewhere in this thread" in calls
+    assert "Reconciliation" not in calls
+
+
 def test_reconcile_records_external_completion_without_closing_again(
     tmp_path: Path,
 ) -> None:
@@ -5416,6 +5439,41 @@ def test_record_stores_the_ticket_a_conflicted_outcome_collided_with(
     assert json.loads(result.stdout)["collided_with"] == [9]
     assert "collided-with=9" in _gh_calls(env)
     assert "#9" in _gh_calls(env)
+
+
+def test_record_limits_a_conflicted_notes_claim_to_the_attempt_it_records(
+    tmp_path: Path,
+) -> None:
+    """Same limiting clause, same reason: the note is append-only (ADR-0051)
+    and cannot be corrected once a later Reconciliation moves past it, so
+    what limits its claim has to be true from the moment it is written and
+    stay true of a ticket that is never reconciled (ADR-0079, issue #112)."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "10",
+        "--outcome",
+        "conflicted",
+        "--collided-with",
+        "9",
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    calls = _gh_calls(env)
+    assert "records that attempt only" in calls
+    assert "current resolution" in calls
+    assert "elsewhere in this thread" in calls
+    assert "Reconciliation" not in calls
 
 
 def test_record_refuses_a_collision_named_against_another_outcome(

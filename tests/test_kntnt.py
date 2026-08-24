@@ -5730,6 +5730,43 @@ def test_a_skills_hint_and_manpage_agree_on_the_flags_it_takes() -> None:
         )
 
 
+def test_no_hint_form_offers_a_combination_its_synopsis_forbids() -> None:
+    """The aggregate flag set is blind to which flags may appear together.
+
+    `argument-hint` is one line and may collapse forms the manpage spells out
+    separately, so the two are not held to the same count of forms. What is
+    held is that a combination the harness advertises is one the page allows:
+    the hint's alternatives are separated by ` | `, and each one's flags have
+    to fit inside a single `## SYNOPSIS` form. Comparing the three surfaces as
+    one set of names cannot see this — a hint offering a scope flag and a
+    confirmation flag alongside a status form that writes nothing passes that
+    check, and did — and the user meets the disagreement as a refusal for a
+    form the harness itself told them to type.
+    """
+
+    for directory in _shipped_skills():
+        manpage = directory / "help.md"
+        synopsis = _section(manpage.read_text(encoding="utf-8"), "## SYNOPSIS", manpage)
+        allowed = [_flags(line) for line in synopsis.splitlines() if line.strip()]
+
+        assert allowed, (
+            f"{manpage}: `## SYNOPSIS` names no form, so this check judged"
+            f" nothing. See {STANDARD}."
+        )
+
+        for form in _hint(directory).split(" | "):
+            offered = _flags(form)
+            assert any(offered <= permitted for permitted in allowed), (
+                f"{directory}: the `argument-hint` form `{form.strip()}` offers"
+                f" {sorted(offered)}, and no `## SYNOPSIS` form allows that"
+                f" combination — the page permits"
+                f" {[sorted(permitted) for permitted in allowed]}. The hint may"
+                f" collapse forms the page separates, but never widen one: a"
+                f" flag is refused where it has no work to do on the form it"
+                f" was given with (ADR-0059). See {STANDARD}."
+            )
+
+
 def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None:
     """`--yes` answers a confirmation, and `status` never asks for one.
 

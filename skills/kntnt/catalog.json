@@ -34,7 +34,7 @@
       "name": "tldr",
       "category": "agents",
       "description": "Reframe what was just said for the person who owns the outcome, and turn TL;DR mode on or off so later replies stay concise and decision-relevant.",
-      "digest": "cf6545cbc11a003fb0cc14a11d529e49c4bb78ac349fe1a9477afe05ee6da460",
+      "digest": "0ff31dc137514612e672b978681a31d43de8a63ab701bb49fc26e65ab0cb8306",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -44,7 +44,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "0b2d9ffb0ca89f4a84720ee0b640e5704917dbefad5c40c38cbefce2a171800b",
+      "digest": "56057ee3ed698c69a71a7ad9a3a785a1b690ee7858eacdc26b76e03e2b92a5df",
       "binaries": [
         "git",
         "uv"
@@ -57,7 +57,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "656c65e8d54705590ec20b0cfd65d6fea0e3f004c04e989cad9e2cab97394324",
+      "digest": "19391a5bc9b28c67d3e1c2311a9579e33d55f620f2c3c5a445d5f73910505260",
       "binaries": [
         "git",
         "gh",
@@ -75,7 +75,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "5fb282e2de95af57481f21de936c392001139c67646b7ade9ece6bc06e006b2a",
+      "digest": "80846efbbb7bfef6fbf98c9d39c8b8d8301d43122de6a45c57d8e45090351580",
       "binaries": [
         "git",
         "uv"
@@ -120,7 +120,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "f3cca26151d3a8d2d6f1ce4aad172d960d6d805c26b8855cbd4570925809fdbc",
+      "digest": "2dc52a1ca6fc1ae9b8f9d0bf8681c1a6e030a1d8c879359adb3a58ef67e7aa6a",
       "binaries": [
         "uv"
       ],

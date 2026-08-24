@@ -2,7 +2,7 @@
 name: push
 description: Follow commit, then push the current branch.
 disable-model-invocation: true
-argument-hint: '["message"] [--yes] [-- <instruction>]'
+argument-hint: '[<message>] [--yes] [-- <instruction>]'
 compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
@@ -32,7 +32,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 ## Arguments
 
-`/push ["message"] [--yes]`, and nothing else. It is the commit skill's grammar, which is what lets step 1 hand the arguments straight on — they are checked here first, so nothing reaches that skill it would have to refuse.
+`/push [<message>] [--yes]`, and nothing else. It is the commit skill's grammar, which is what lets step 1 hand the arguments straight on — they are checked here first, so nothing reaches that skill it would have to refuse.
 
 Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/push --help` for the page in full. Then commit nothing, push nothing, and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
