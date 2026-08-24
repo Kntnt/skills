@@ -1,0 +1,5 @@
+interface:
+  display_name: "Write"
+  short_description: "Draft one truthful first draft from a brief"
+policy:
+  allow_implicit_invocation: false
