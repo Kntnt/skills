@@ -18,7 +18,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "51cac8904579a0051d7f83ac2ffc146ca6438f6c62877a6e3ecb73a2a0c5e9d5",
+      "digest": "81ae2a16e777ac28dc400c7e75f1de83362cb623cca5e1e454b092346abd96eb",
       "binaries": [
         "uv"
       ],
@@ -57,7 +57,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "9219303afe43a99f92dc04cea97296cbf229bd893438fec4c7c724aad39b0f73",
+      "digest": "656c65e8d54705590ec20b0cfd65d6fea0e3f004c04e989cad9e2cab97394324",
       "binaries": [
         "git",
         "gh",
@@ -120,7 +120,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "11caa8087b307662ecc5513255ad4d0885e0275e245dea935da928efbe31c8bc",
+      "digest": "f3cca26151d3a8d2d6f1ce4aad172d960d6d805c26b8855cbd4570925809fdbc",
       "binaries": [
         "uv"
       ],

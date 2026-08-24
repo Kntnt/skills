@@ -5377,6 +5377,7 @@ _MODEL_SELECTOR_MANPAGES = frozenset(
         "config/remove.md",
         "config/reset.md",
         "config/show.md",
+        "observe.md",
         "recommend.md",
         "record.md",
         "route.md",
@@ -5807,4 +5808,36 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
         f" from a no-op unless the page names what the refusal does, and the"
         f" refusal with the synopsis is what the body performs (ADR-0059). See"
         f" {STANDARD}."
+    )
+
+
+def test_delegation_reports_checked_observations_and_imports_none() -> None:
+    """Routed delegation may leave evidence, and only a checked outcome may.
+
+    The mode is copied verbatim into session, Project, and user contexts, so
+    what it says about evidence is the whole of delegation's observation
+    contract: an unchecked subjective success is not a measurement, and nothing
+    reaches the ledger until the user asks for it (issue #96).
+    """
+
+    path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
+    mode = path.read_text(encoding="utf-8")
+
+    required_fragments = {
+        "/model-selector observe",
+        "/model-selector record",
+        "caller-owned scratch",
+        "objective checker, frozen rubric, declared failure signal, or explicit user confirmation",
+        "unchecked subjective success",
+        "never a checker",
+        "unavailable measurement stays `null`",
+        "no prompt, response, reasoning, source content, diff, terminal output, secret, or absolute path",
+    }
+    missing = sorted(
+        fragment for fragment in required_fragments if fragment not in mode
+    )
+    assert not missing, (
+        f"{path}: routed delegation reports a sanitized observation artifact"
+        f" whose decisive outcomes are externally established, and imports"
+        f" nothing on the user's behalf (issue #96); missing {missing}."
     )

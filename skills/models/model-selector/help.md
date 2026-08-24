@@ -18,6 +18,8 @@ model-selector - compare configured AI model systems by price and performance
 
 **/model-selector** **update** [**--force**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
+**/model-selector** **observe** *PATH* **--artifact=**_PATH_ [**--** *INSTRUCTION*]
+
 **/model-selector** **record** *PATH* [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 **/model-selector** **status** [**--data=**_PATH_] [**--** *INSTRUCTION*]
@@ -64,6 +66,10 @@ Display or revise the model and access-channel profile. Its page lists every con
 
 Perform one bounded refresh of due model indexes, first-party capability sources, commercial terms, and benchmark releases. Changed capability claims append low-confidence prior records without rewriting history. Known immutable model detail pages and existing local run keys are not fetched or executed again.
 
+**observe** *PATH*
+
+Turn completed routed attempts into sanitized run observations in a caller-owned artifact. Only an external judgement establishes an outcome, unavailable measurements stay `null`, and nothing is imported until `record` is invoked explicitly.
+
 **record** *PATH*
 
 Validate and append unseen local evaluation observations. Conflicting historical observations are preserved rather than overwritten.
@@ -74,9 +80,13 @@ Report the profile, evidence vintage, due sources, gaps, and provisional facts w
 
 ## OPTIONS
 
+**--artifact=**_PATH_
+
+Write the observations into the caller-owned artifact at *PATH*, creating it when absent and merging into it when present. Required by `observe` and valid with no other command.
+
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory. Valid with every command. The default is `~/.model-selector/`.
+Use *PATH* as the profile and evidence directory. Valid with every command except `observe`, which reads neither. The default is `~/.model-selector/`.
 
 **--decision=route**, **--decision=renew**
 

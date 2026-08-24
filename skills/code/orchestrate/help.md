@@ -154,6 +154,10 @@ Working trees, branches, reservations, and ticket scratch space used when concur
 
 Two records of one run. The claim account — claimed tickets, tracker login, planned frontier, and base commit — is remembered rather than relied on: the tracker and the branch reconstruct it, so losing it costs a tracker call. The frozen routing account — the snapshot every decision was made under, the invocation's model and deliberation locks, and every exact decision — has no second source, so the run refuses to plan, route, or claim without it rather than deciding remaining work from current profile, evidence, price, alias, or Harness state.
 
+**Routed observation artifact**
+
+Each routed attempt an independent verdict judged is recorded in the same session state directory, and the run's final report names both that account and the sanitized artifact `/model-selector observe` writes from it. The artifact holds statistical metadata about the configurations the run launched — exact point, outcome, available cost, quota, and latency facts, and provenance — and no prompt, response, reasoning, source content, diff, terminal output, secret, or unnecessary absolute path. Nothing is imported by the run: `/model-selector record` is the explicit invocation that accepts it into the evidence ledger.
+
 **Run-owned append files**
 
 Builders leave proposed entries for files every ticket must append to, such as a changelog, in ticket-specific notes. The orchestrator applies those notes serially after each wave, and the combined branch verifies the entries with the rest of the work.

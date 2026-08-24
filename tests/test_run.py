@@ -11,7 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 from types import ModuleType
-from typing import Any
+from typing import Any, cast
 
 from support.fake_binary import fake_binary_on_path
 
@@ -385,6 +385,7 @@ def _snapshot(identity: str = "frozen", **fields: Any) -> dict[str, Any]:
     return {
         "snapshot_version": 1,
         "snapshot_identity": identity,
+        "harness": {"name": "codex", "inventory_revision": "inventory-3"},
         "main_seat": {
             "model": "the-strongest",
             "adapter_id": "harness-1",
@@ -415,6 +416,16 @@ def _selected(
         },
         "evidence_class": "measurement_based",
         "exclusions": [],
+        "audit": {
+            "snapshot_identity": "frozen",
+            "provenance": {
+                "profile_revision": "profile-7",
+                "evidence_identity": "ledger-9",
+                "evidence_vintage": "2026-08-01T00:00:00Z",
+                "harness_inventory_revision": "inventory-3",
+                "main_seat_model": "the-strongest",
+            },
+        },
     } | fields
 
 
@@ -6612,3 +6623,257 @@ def test_a_blocked_ticket_is_offered_again_when_its_blocker_resolves_done(
     assert plan["workable"] == [9]
     assert plan["recorded"] == []
     assert plan["tickets"][0]["outcome"] is None
+
+
+def _observed(
+    repo: Path,
+    scratch: Path,
+    env: dict[str, str],
+    request_id: str,
+    outcome: str,
+    *extra: str,
+) -> subprocess.CompletedProcess[str]:
+    """Record one externally established outcome against a routed attempt."""
+
+    return _engine(
+        repo,
+        "observe",
+        "--request",
+        request_id,
+        "--outcome",
+        outcome,
+        *extra,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+
+def _attempts_file(result: subprocess.CompletedProcess[str]) -> dict[str, Any]:
+    """Return the attempt account one observe call answered with."""
+
+    written = Path(json.loads(result.stdout)["attempts"])
+    return cast(dict[str, Any], json.loads(written.read_text(encoding="utf-8")))
+
+
+def test_observe_records_only_a_routed_attempt_an_external_verdict_judged(
+    tmp_path: Path,
+) -> None:
+    """A decision alone is audit data, and a verdict is never observed at all."""
+
+    repo, scratch, env = _routed(tmp_path)
+    before = _gh_calls(env)
+
+    unknown = _observed(repo, scratch, env, "build-404", "pass")
+    verdict = _observed(repo, scratch, env, "verify-9", "pass")
+    nowhere = _engine(
+        repo, "observe", "--request", "build-9", "--outcome", "pass", env=env
+    )
+    recorded = _observed(repo, scratch, env, "build-9", "pass")
+
+    assert unknown.returncode == 1
+    assert "holds no build-404 decision" in unknown.stderr
+    assert verdict.returncode == 1
+    assert "verdict is never routed" in verdict.stderr
+    assert nowhere.returncode == 1
+    assert recorded.returncode == 0, recorded.stderr
+    attempt = _attempts_file(recorded)["attempts"][0]
+    assert attempt["outcome"] == {
+        "result": "pass",
+        "authority": "independent_verifier",
+        "checker": {"identity": "verify.md", "independent": True},
+        "condition": None,
+        "scores": None,
+    }
+    assert attempt["decision"] == _selected("build-9")
+    assert _gh_calls(env) == before
+
+
+def test_observe_names_each_building_role_its_own_stratum_and_attempt(
+    tmp_path: Path,
+) -> None:
+    """Build, amend, repair, rebuild and wave fix are distinct routed work."""
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton")],
+        decisions=[
+            _selected("build-9"),
+            _selected("amend-9-1"),
+            _selected("amend-9-2"),
+            _selected("repair-9"),
+            _selected("rebuild-9"),
+            _selected("wave-fix-1"),
+        ],
+    )
+
+    for request_id in ("build-9", "amend-9-1", "amend-9-2", "repair-9", "rebuild-9"):
+        result = _observed(repo, scratch, env, request_id, "pass")
+        assert result.returncode == 0, result.stderr
+    last = _observed(repo, scratch, env, "wave-fix-1", "pass")
+    attempts = _attempts_file(last)["attempts"]
+
+    assert [attempt["workload_stratum"] for attempt in attempts] == [
+        "initial_build",
+        "amend",
+        "amend",
+        "collision_repair",
+        "rebuild",
+        "mechanical_wave_fix",
+    ]
+    assert [attempt["attempt_index"] for attempt in attempts] == [1, 2, 3, 4, 5, 1]
+    assert [attempt["task_identity"] for attempt in attempts] == ["ticket-9"] * 5 + [
+        "wave-1"
+    ]
+    assert [attempt["outcome"]["checker"]["identity"] for attempt in attempts] == [
+        "verify.md",
+        "verify.md",
+        "verify.md",
+        "repaired.md",
+        "verify.md",
+        "wave.md",
+    ]
+    assert "the skeleton" not in json.dumps(attempts)
+
+
+def test_observe_keeps_workflow_conditions_out_of_model_failure(
+    tmp_path: Path,
+) -> None:
+    """A hinder, a parked decision, a blocker and a collision are not failures."""
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        decisions=[
+            _selected("build-9"),
+            _selected("amend-9-1"),
+            _selected("amend-9-2"),
+            _selected("repair-9"),
+            _selected("rebuild-9"),
+        ],
+    )
+    conditions = {
+        "build-9": "hinder",
+        "amend-9-1": "parked",
+        "amend-9-2": "blocked",
+        "repair-9": "collision",
+        "rebuild-9": "tracker-failure",
+    }
+
+    for request_id, outcome in conditions.items():
+        result = _observed(repo, scratch, env, request_id, outcome)
+        assert result.returncode == 0, result.stderr
+    attempts = _attempts_file(result)["attempts"]
+
+    assert [attempt["outcome"]["result"] for attempt in attempts] == [
+        "infra_error",
+        "abstain",
+        "abstain",
+        "abstain",
+        "infra_error",
+    ]
+    assert [attempt["outcome"]["condition"] for attempt in attempts] == [
+        "mechanical_hinder",
+        "open_decision",
+        "discovered_dependency",
+        "merge_collision",
+        "tracker_failure",
+    ]
+    assert all(attempt["outcome"]["checker"] is None for attempt in attempts)
+
+
+def test_observe_repeats_without_multiplying_and_refuses_a_conflict(
+    tmp_path: Path,
+) -> None:
+    """An identical outcome changes nothing and a different one overwrites nothing."""
+
+    repo, scratch, env = _routed(tmp_path)
+    first = _observed(repo, scratch, env, "build-9", "pass")
+    written = Path(json.loads(first.stdout)["attempts"]).read_bytes()
+
+    again = _observed(repo, scratch, env, "build-9", "pass")
+    conflicting = _observed(repo, scratch, env, "build-9", "fail")
+
+    assert json.loads(first.stdout)["recorded"] is True
+    assert again.returncode == 0, again.stderr
+    assert json.loads(again.stdout)["recorded"] is False
+    assert conflicting.returncode == 1
+    assert "already" in conflicting.stderr
+    assert Path(json.loads(first.stdout)["attempts"]).read_bytes() == written
+
+
+def test_report_names_the_artifact_a_run_may_import_and_never_imports(
+    tmp_path: Path,
+) -> None:
+    """The account carries the paths, and observing writes only under the state."""
+
+    repo, scratch, env = _routed(tmp_path)
+    empty = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    observed = _observed(repo, scratch, env, "build-9", "pass")
+    filled = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert json.loads(empty.stdout)["observations"] == {
+        "attempts": None,
+        "artifact": None,
+        "observed": 0,
+    }
+    account = json.loads(filled.stdout)["observations"]
+    assert account["observed"] == 1
+    assert account["attempts"] == json.loads(observed.stdout)["attempts"]
+    assert account["artifact"] == json.loads(observed.stdout)["artifact"]
+    assert Path(account["attempts"]).is_relative_to(scratch)
+    assert not Path(account["artifact"]).exists()
+    assert _engine(repo, "plan", env=env).returncode == 0
+
+
+def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
+    tmp_path: Path,
+) -> None:
+    """What the engine writes is what the ledger's own import validation takes."""
+
+    observations = _observations()
+    repo, scratch, env = _routed(
+        tmp_path, decisions=[_selected("build-9"), _selected("amend-9-1")]
+    )
+    metrics = tmp_path / "metrics.json"
+    metrics.write_text(json.dumps({"rolling_quota": 4.0}), encoding="utf-8")
+
+    _observed(repo, scratch, env, "build-9", "fail")
+    last = _observed(
+        repo,
+        scratch,
+        env,
+        "amend-9-1",
+        "pass",
+        "--metrics",
+        str(metrics),
+        "--commit",
+        "b" * 40,
+    )
+    emitted = observations.observe(_attempts_file(last))
+    artifact = observations.merge(None, emitted["observations"])["artifact"]
+    imported = observations.record(artifact, tmp_path / "evidence")
+
+    assert emitted["refusals"] == []
+    assert len(emitted["observations"]) == 2
+    assert emitted["observations"][1]["quota"]["rolling"] == 4.0
+    assert emitted["observations"][1]["artifact_hashes"] == ["sha1:" + "b" * 40]
+    assert len(imported["accepted"]) == 2
+    assert imported["rejected"] == []
+
+
+def _observations() -> ModuleType:
+    """Import the model-selector observation module the artifacts are for."""
+
+    path = (
+        REPO_ROOT
+        / "skills"
+        / "models"
+        / "model-selector"
+        / "scripts"
+        / "observations.py"
+    )
+    spec = importlib.util.spec_from_file_location("kntnt_observations", path)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module

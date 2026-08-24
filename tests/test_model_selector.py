@@ -2258,3 +2258,649 @@ def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
     }
 
     _assert_contains_all(contract, required_fragments)
+
+
+def _load_observations() -> Any:
+    """Load the shipped public observation module from its installed path."""
+
+    path = MODEL_SELECTOR / "scripts" / "observations.py"
+    spec = importlib.util.spec_from_file_location("model_selector_observations", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _routed_decision(**changes: Any) -> dict[str, Any]:
+    """Return one exact selected decision from the shared routing fixtures."""
+
+    decisions = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": _complete_routing_snapshot(),
+            "requests": [_request(**changes)],
+        }
+    )["decisions"]
+    return cast(dict[str, Any], decisions[0])
+
+
+def _attempt(**changes: Any) -> dict[str, Any]:
+    """Build one completed routed attempt with an externally judged outcome."""
+
+    attempt = {
+        "attempt_id": "build-96",
+        "session_identity": "run-4f21",
+        "task_identity": "ticket-96",
+        "workload_stratum": "initial_build",
+        "attempt_index": 1,
+        "harness": {"name": "codex", "inventory_revision": "inventory-3"},
+        "benchmark": {
+            "key": "orchestrate-ticket-v1",
+            "name": "orchestrate-ticket",
+            "version": "1",
+            "cohort": "python-refactor",
+            "tags": ["python"],
+        },
+        "decision": _routed_decision(),
+        "outcome": {
+            "result": "pass",
+            "authority": "independent_verifier",
+            "checker": {"identity": "verify.md", "independent": True},
+            "condition": None,
+            "scores": {"quality": 1.0},
+        },
+        "resolution": {"model": "worker-v2", "fallback_from": None},
+        "started_at": "2026-08-24T10:00:00Z",
+        "completed_at": "2026-08-24T10:04:00Z",
+        "measurements": {"tokens": {"input": 1200, "output": 800}, "retries": 0},
+        "artifact_hashes": ["sha256:" + "a" * 64],
+    }
+    attempt.update(changes)
+    return attempt
+
+
+def _attempts(*attempts: dict[str, Any]) -> dict[str, Any]:
+    """Wrap completed attempts in the versioned observation request envelope."""
+
+    return {"schema_version": 1, "attempts": list(attempts or (_attempt(),))}
+
+
+def test_observe_emits_one_importable_observation_from_a_routed_attempt() -> None:
+    """A judged attempt keeps its exact point, fallback, identities and metrics."""
+
+    # Observe one completed attempt whose provider resolved a fallback model.
+    observations = _load_observations()
+    attempt = _attempt(
+        resolution={"model": "worker-v2-fallback", "fallback_from": "worker-v2"}
+    )
+    response = observations.observe(_attempts(attempt))
+    observation = response["observations"][0]
+    launch = attempt["decision"]["launch"]
+
+    # Assert the exact routed point, the resolved point and the identities.
+    assert response["refusals"] == []
+    assert (
+        observation["configuration_fingerprint"] == launch["configuration_fingerprint"]
+    )
+    assert observation["routed"]["model"] == launch["model"]
+    assert observation["routed"]["native_deliberation"] == launch["native_deliberation"]
+    assert observation["routed"]["channel"] == launch["channel"]
+    assert observation["routed"]["adapter_id"] == launch["adapter_id"]
+    assert observation["resolved"] == {
+        "model": "worker-v2-fallback",
+        "fallback_from": "worker-v2",
+    }
+    assert observation["benchmark_key"] == "orchestrate-ticket-v1"
+    assert observation["task_id"] == "ticket-96"
+    assert observation["session_identity"] == "run-4f21"
+    assert observation["workload_stratum"] == "initial_build"
+    assert observation["outcome"] == "pass"
+    assert observation["outcome_authority"] == "independent_verifier"
+    assert (
+        observation["provenance"]["snapshot_identity"]
+        == (attempt["decision"]["audit"]["snapshot_identity"])
+    )
+    assert (
+        observation["provenance"]["evidence_class"]
+        == attempt["decision"]["evidence_class"]
+    )
+    assert observation["provenance"]["harness"] == "codex"
+    assert observation["latency"]["wall_seconds"] == 240.0
+    assert observation["tokens"]["input"] == 1200
+    assert observation["artifact_hashes"] == attempt["artifact_hashes"]
+    assert observations.validate(observation) is None
+
+
+def test_observe_refuses_every_attempt_no_external_outcome_completed() -> None:
+    """A route choice, a refusal and an interrupted run are audit data only."""
+
+    # Observe one undecided, one unlaunched and one interrupted attempt.
+    observations = _load_observations()
+    undecided = _attempt(attempt_id="build-1", outcome=None)
+    unlaunched = _attempt(
+        attempt_id="build-2",
+        decision={
+            "request_id": "build-2",
+            "status": "refused",
+            "reason": {"code": "empty_safe_candidate_set", "detail": "no point"},
+            "audit": _attempt()["decision"]["audit"],
+        },
+    )
+    interrupted = _attempt(attempt_id="build-3", completed_at=None)
+    response = observations.observe(_attempts(undecided, unlaunched, interrupted))
+
+    # Assert each refusal names its own stable reason and emits no observation.
+    assert response["observations"] == []
+    assert [refusal["code"] for refusal in response["refusals"]] == [
+        "no_outcome",
+        "unlaunched_decision",
+        "incomplete_attempt",
+    ]
+
+
+def test_observe_never_lets_a_self_report_establish_an_outcome() -> None:
+    """Builder and subagent confidence cannot become measured quality."""
+
+    # Observe one builder self-report and one dependent checker.
+    observations = _load_observations()
+    self_reported = _attempt(
+        attempt_id="build-1",
+        outcome={
+            "result": "pass",
+            "authority": "self_report",
+            "checker": {"identity": "builder", "independent": False},
+            "condition": None,
+            "scores": None,
+        },
+    )
+    dependent = _attempt(
+        attempt_id="build-2",
+        outcome={
+            "result": "pass",
+            "authority": "objective_checker",
+            "checker": {"identity": "the builder itself", "independent": False},
+            "condition": None,
+            "scores": None,
+        },
+    )
+    unchecked = _attempt(
+        attempt_id="build-3",
+        workload_stratum="delegated_execution",
+        outcome={
+            "result": "pass",
+            "authority": "objective_checker",
+            "checker": None,
+            "condition": None,
+            "scores": None,
+        },
+    )
+    response = observations.observe(_attempts(self_reported, dependent, unchecked))
+
+    # Assert no self-graded work reaches the artifact at all.
+    assert response["observations"] == []
+    assert [refusal["code"] for refusal in response["refusals"]] == [
+        "self_reported_outcome",
+        "self_reported_outcome",
+        "unchecked_outcome",
+    ]
+
+
+def test_observe_accepts_only_declared_signals_and_human_confirmation() -> None:
+    """Delegation's decisive outcomes come from a checker, rubric or person."""
+
+    # Observe a frozen rubric, a declared failure signal and a confirmed pass.
+    observations = _load_observations()
+    rubric = _attempt(
+        attempt_id="delegate-1",
+        workload_stratum="delegated_execution",
+        outcome={
+            "result": "pass",
+            "authority": "frozen_rubric",
+            "checker": {"identity": "rubric-7", "independent": True},
+            "condition": None,
+            "scores": {"quality": 0.9},
+        },
+    )
+    declared = _attempt(
+        attempt_id="delegate-2",
+        workload_stratum="delegated_execution",
+        outcome={
+            "result": "fail",
+            "authority": "declared_failure_signal",
+            "checker": {"identity": "pytest", "independent": True},
+            "condition": None,
+            "scores": None,
+        },
+    )
+    confirmed = _attempt(
+        attempt_id="delegate-3",
+        workload_stratum="delegated_execution",
+        outcome={
+            "result": "pass",
+            "authority": "user_confirmation",
+            "checker": {"identity": "user", "independent": True},
+            "condition": None,
+            "scores": None,
+        },
+    )
+    response = observations.observe(_attempts(rubric, declared, confirmed))
+
+    # Assert all three decisive authorities produce importable observations.
+    assert response["refusals"] == []
+    assert [observation["outcome"] for observation in response["observations"]] == [
+        "pass",
+        "fail",
+        "pass",
+    ]
+
+
+def test_observe_keeps_workflow_conditions_out_of_model_quality() -> None:
+    """Hinders, decisions, dependencies, tracker faults and collisions differ."""
+
+    # Observe every non-model condition the routed workflows can reach.
+    observations = _load_observations()
+    conditions = {
+        "mechanical_hinder": "infra_error",
+        "tracker_failure": "infra_error",
+        "open_decision": "abstain",
+        "discovered_dependency": "abstain",
+        "merge_collision": "abstain",
+    }
+    attempts = [
+        _attempt(
+            attempt_id=f"build-{index}",
+            attempt_index=index + 1,
+            outcome={
+                "result": result,
+                "authority": "harness",
+                "checker": None,
+                "condition": condition,
+                "scores": None,
+            },
+        )
+        for index, (condition, result) in enumerate(conditions.items())
+    ]
+    miscounted = _attempt(
+        attempt_id="build-99",
+        outcome={
+            "result": "fail",
+            "authority": "independent_verifier",
+            "checker": {"identity": "verify.md", "independent": True},
+            "condition": "merge_collision",
+            "scores": None,
+        },
+    )
+    response = observations.observe(_attempts(*attempts, miscounted))
+
+    # Assert conditions are retained apart from quality and never as failures.
+    assert [observation["outcome"] for observation in response["observations"]] == list(
+        conditions.values()
+    )
+    assert [
+        observation["non_model_condition"] for observation in response["observations"]
+    ] == list(conditions)
+    assert [refusal["code"] for refusal in response["refusals"]] == [
+        "non_model_condition_outcome"
+    ]
+
+
+def test_observe_leaves_unavailable_metrics_null_and_totals_cheap_first() -> None:
+    """A cheap-first policy carries its failed attempt, checker and retry."""
+
+    # Observe a failed cheap attempt and the escalated retry that followed it.
+    observations = _load_observations()
+    cheap = _attempt(
+        attempt_id="build-96",
+        outcome={
+            "result": "fail",
+            "authority": "independent_verifier",
+            "checker": {"identity": "verify.md", "independent": True},
+            "condition": None,
+            "scores": None,
+        },
+        measurements={
+            "rolling_quota": 3.0,
+            "wall_seconds": 120.0,
+            "cash": None,
+            "retries": 0,
+        },
+    )
+    escalated = _attempt(
+        attempt_id="amend-96-1",
+        workload_stratum="amend",
+        attempt_index=2,
+        prior_attempt_id="build-96",
+        checker_charge={"rolling_quota": 1.0, "wall_seconds": 30.0, "cash": None},
+        measurements={"rolling_quota": 5.0, "wall_seconds": 200.0, "retries": 1},
+    )
+    response = observations.observe(_attempts(cheap, escalated))
+    first, second = response["observations"]
+
+    # Assert unavailable metrics stay null and the policy accounts for all three.
+    assert first["cost"]["cash"] is None
+    assert first["tokens"]["input"] is None
+    assert first["quota"]["rolling"] == 3.0
+    assert second["policy"]["identity"] == "cheap_first"
+    assert second["policy"]["attempts"] == [first["run_key"], second["run_key"]]
+    assert second["policy"]["retries"] == 1
+    assert second["policy"]["charged"]["rolling_quota"] == 9.0
+    assert second["policy"]["charged"]["wall_seconds"] == 350.0
+    assert second["policy"]["charged"]["cash"] is None
+    assert first["policy"] is None
+
+
+def test_observe_emits_statistics_rather_than_any_transcript() -> None:
+    """Prompts, bodies, diffs, output, secrets and paths cannot enter."""
+
+    # Observe an attempt padded with every forbidden field a caller might hold.
+    observations = _load_observations()
+    padded = _attempt(
+        prompt="the whole brief",
+        response="the whole answer",
+        reasoning="the whole thinking",
+        ticket_body="the whole ticket",
+        diff="--- a/x\n+++ b/x",
+        terminal_output="pytest ...",
+        transcript=["turn one"],
+        secret="sk-live-1234567890",
+        worktree="/Users/thomas/Projects/skills",
+    )
+    response = observations.observe(_attempts(padded))
+    serialized = json.dumps(response["observations"][0])
+
+    # Assert nothing but the allow-listed statistical fields survives.
+    for forbidden in (
+        "the whole brief",
+        "the whole answer",
+        "the whole thinking",
+        "the whole ticket",
+        "+++ b/x",
+        "pytest ...",
+        "turn one",
+        "sk-live-1234567890",
+        "/Users/thomas",
+    ):
+        assert forbidden not in serialized
+    assert set(json.loads(serialized)).isdisjoint(
+        {"prompt", "response", "reasoning", "ticket_body", "diff", "transcript"}
+    )
+
+    # Assert an absolute path offered as an identity is refused, not trimmed.
+    refused = observations.observe(
+        _attempts(_attempt(task_identity="/Users/thomas/Projects/skills/tests"))
+    )
+    assert refused["observations"] == []
+    assert refused["refusals"][0]["code"] == "unsanitized_value"
+    assert "/Users/thomas" not in json.dumps(refused)
+
+
+def test_observe_merges_identically_and_never_overwrites_a_conflict() -> None:
+    """Repeating an attempt adds nothing; a changed one overwrites nothing."""
+
+    # Merge one produced observation into an empty artifact twice.
+    observations = _load_observations()
+    produced = observations.observe(_attempts())["observations"]
+    first = observations.merge(None, produced)
+    again = observations.merge(first["artifact"], produced)
+
+    # Assert the identical repeat is skipped rather than duplicated.
+    assert len(first["artifact"]["observations"]) == 1
+    assert first["added"] == [produced[0]["run_key"]]
+    assert again["added"] == []
+    assert again["skipped"] == [produced[0]["run_key"]]
+    assert again["artifact"]["observations"] == first["artifact"]["observations"]
+
+    # Merge a different outcome under the same identity.
+    conflicting = observations.observe(
+        _attempts(
+            _attempt(
+                outcome={
+                    "result": "fail",
+                    "authority": "independent_verifier",
+                    "checker": {"identity": "verify.md", "independent": True},
+                    "condition": None,
+                    "scores": None,
+                }
+            )
+        )
+    )["observations"]
+    clash = observations.merge(first["artifact"], conflicting)
+
+    # Assert the conflict is surfaced while both sources stay as they were.
+    assert clash["added"] == []
+    assert clash["conflicts"][0]["run_key"] == produced[0]["run_key"]
+    assert clash["artifact"]["observations"] == first["artifact"]["observations"]
+
+
+def test_record_appends_unseen_observations_and_only_affected_frontiers(
+    tmp_path: Path,
+) -> None:
+    """Explicit import accepts, skips, refuses and rebuilds by eligible set."""
+
+    # Import one artifact into an empty evidence directory.
+    observations = _load_observations()
+    produced = observations.observe(
+        _attempts(
+            _attempt(),
+            _attempt(
+                attempt_id="build-97",
+                attempt_index=2,
+                task_identity="ticket-97",
+                benchmark={
+                    "key": "delegation-extract-v1",
+                    "name": "delegation-extract",
+                    "version": "1",
+                    "cohort": None,
+                    "tags": [],
+                },
+            ),
+        )
+    )["observations"]
+    artifact = observations.merge(None, produced)["artifact"]
+    first = observations.record(artifact, tmp_path)
+    ledger = tmp_path / "run-observations.jsonl"
+    frontiers = json.loads((tmp_path / "derived-frontiers.json").read_text("utf-8"))
+
+    # Assert both observations landed and both cohorts were rebuilt once.
+    assert sorted(first["accepted"]) == sorted(
+        observation["run_key"] for observation in produced
+    )
+    assert first["rejected"] == []
+    assert len(ledger.read_text("utf-8").strip().splitlines()) == 2
+    assert sorted(first["frontiers_rebuilt"]) == [
+        "delegation-extract-v1",
+        "orchestrate-ticket-v1",
+    ]
+    assert not (tmp_path / "config.json").exists()
+
+    # Import the same artifact again, then one changed observation.
+    repeated = observations.record(artifact, tmp_path)
+    conflicting = deepcopy(artifact)
+    conflicting["observations"][0]["outcome"] = "fail"
+    clash = observations.record(conflicting, tmp_path)
+    kept = json.loads((tmp_path / "derived-frontiers.json").read_text("utf-8"))
+
+    # Assert the repeat changes nothing and the conflict overwrites nothing.
+    assert repeated["accepted"] == []
+    assert sorted(repeated["skipped"]) == sorted(first["accepted"])
+    assert repeated["frontiers_rebuilt"] == []
+    assert clash["accepted"] == []
+    assert clash["rejected"][0]["code"] == "conflicting_identity"
+    assert len(ledger.read_text("utf-8").strip().splitlines()) == 2
+    assert kept == frontiers
+
+
+def test_record_rebuilds_quality_from_judged_model_outcomes_alone(
+    tmp_path: Path,
+) -> None:
+    """Infrastructure and abstained attempts cannot lower a point's quality."""
+
+    # Import one passing attempt, then a hinder and a collision beside it.
+    observations = _load_observations()
+    judged = observations.observe(_attempts())["observations"]
+    observations.record(observations.merge(None, judged)["artifact"], tmp_path)
+    measured = json.loads((tmp_path / "derived-frontiers.json").read_text("utf-8"))
+    conditioned = observations.observe(
+        _attempts(
+            *[
+                _attempt(
+                    attempt_id=f"build-{index}",
+                    attempt_index=index + 2,
+                    outcome={
+                        "result": result,
+                        "authority": "harness",
+                        "checker": None,
+                        "condition": condition,
+                        "scores": None,
+                    },
+                )
+                for index, (condition, result) in enumerate(
+                    [
+                        ("mechanical_hinder", "infra_error"),
+                        ("merge_collision", "abstain"),
+                    ]
+                )
+            ]
+        )
+    )["observations"]
+    observations.record(observations.merge(None, conditioned)["artifact"], tmp_path)
+    after = json.loads((tmp_path / "derived-frontiers.json").read_text("utf-8"))
+    point = after["frontiers"]["orchestrate-ticket-v1"]["points"][0]
+
+    # Assert quality counts only judged model outcomes and keeps the rest apart.
+    assert point["runs"] == 1
+    assert point["successes"] == 1
+    assert point["excluded"] == {"infra_error": 1, "abstain": 1}
+    assert (
+        after["frontiers"]["orchestrate-ticket-v1"]["points"][0]["quality_lower_bound"]
+        == measured["frontiers"]["orchestrate-ticket-v1"]["points"][0][
+            "quality_lower_bound"
+        ]
+    )
+
+
+def test_record_applies_the_same_validation_as_emission(tmp_path: Path) -> None:
+    """A hand-written artifact meets exactly the rules emission enforces."""
+
+    # Import an artifact whose observation was never produced by observe.
+    observations = _load_observations()
+    artifact = observations.merge(
+        None, observations.observe(_attempts())["observations"]
+    )["artifact"]
+    forged = deepcopy(artifact)
+    forged["observations"][0]["outcome_authority"] = "self_report"
+    forged["observations"][0]["run_key"] = "forged-run-key"
+    report = observations.record(forged, tmp_path)
+
+    # Assert import refuses it with emission's own reason and writes nothing.
+    assert report["accepted"] == []
+    assert report["rejected"][0]["code"] == "self_reported_outcome"
+    assert not (tmp_path / "run-observations.jsonl").exists()
+
+
+def test_observation_cli_writes_only_the_artifact_the_caller_named(
+    tmp_path: Path,
+) -> None:
+    """The process seam is machine-readable and touches no evidence store."""
+
+    # Emit one artifact through the packaged script's declared uv runtime.
+    script = str(MODEL_SELECTOR / "scripts" / "observations.py")
+    attempts = tmp_path / "attempts.json"
+    attempts.write_text(json.dumps(_attempts()), encoding="utf-8")
+    artifact = tmp_path / "scratch" / "observations.json"
+    completed = subprocess.run(
+        ["uv", "run", script, "observe", str(attempts), "--artifact", str(artifact)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    emitted = json.loads(completed.stdout)
+
+    # Assert the artifact is the only thing written and is reported as such.
+    assert emitted["artifact"] == str(artifact)
+    assert emitted["importable"] == [
+        json.loads(artifact.read_text("utf-8"))["observations"][0]["run_key"]
+    ]
+    assert completed.stderr == ""
+    assert sorted(path.name for path in tmp_path.iterdir()) == [
+        "attempts.json",
+        "scratch",
+    ]
+
+    # Run every process-boundary failure family.
+    for arguments, code in (
+        ([], "invalid_arguments"),
+        (["observe", str(tmp_path / "absent.json")], "unreadable_artifact"),
+        (["record", str(attempts), "--data", str(tmp_path)], "invalid_artifact"),
+    ):
+        refused = subprocess.run(
+            ["uv", "run", script, *arguments],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert refused.returncode == 2
+        assert json.loads(refused.stdout)["artifact_refusal"]["code"] == code
+        assert "Traceback" not in refused.stderr
+
+
+def test_observation_contract_is_public_sanitized_and_never_auto_imported() -> None:
+    """A routed caller can emit evidence, and only the user imports it."""
+
+    skill = _read("SKILL.md")
+    observe_page = _read("help/observe.md")
+    record_page = _read("help/record.md")
+    contract = _read("references/run-observations.md")
+    public_contract = f"{skill}\n{observe_page}\n{record_page}\n{contract}"
+    required_fragments = {
+        "caller-owned scratch",
+        "never imported automatically",
+        "objective checker",
+        "frozen rubric",
+        "declared failure signal",
+        "explicit user confirmation",
+        "self-report",
+        "workload stratum",
+        "`null`",
+        "idempotent",
+        "conflicting identity",
+        "prompts",
+        "transcripts",
+        "absolute paths",
+        "artifact hashes",
+        "#91",
+    }
+
+    _assert_contains_all(public_contract, required_fragments)
+    assert "| `observe` | `$HERE/help/observe.md` |" in skill
+    assert "/model-selector observe <path>" in skill
+
+
+def test_observation_contract_pins_its_outcome_and_refusal_vocabulary() -> None:
+    """An unjudged, self-graded, or unsanitized attempt has a stable answer."""
+
+    contract = _read("references/run-observations.md")
+    required_fragments = {
+        "no_outcome",
+        "unlaunched_decision",
+        "incomplete_attempt",
+        "self_reported_outcome",
+        "unchecked_outcome",
+        "non_model_condition_outcome",
+        "unsanitized_value",
+        "conflicting_identity",
+        "initial_build",
+        "mechanical_wave_fix",
+        "delegated_execution",
+        "mechanical_hinder",
+        "open_decision",
+        "discovered_dependency",
+        "tracker_failure",
+        "merge_collision",
+        "infra_error",
+        "abstain",
+        "cheap-first",
+        "never inferred as zero",
+    }
+
+    _assert_contains_all(contract, required_fragments)
