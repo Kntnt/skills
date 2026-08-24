@@ -18,11 +18,13 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "5b7481568c7164379cd357bc4406a991f11048cb2ce7d3f72db8d369270fb831",
+      "digest": "51cac8904579a0051d7f83ac2ffc146ca6438f6c62877a6e3ecb73a2a0c5e9d5",
       "binaries": [
         "uv"
       ],
-      "skills": [],
+      "skills": [
+        "model-selector"
+      ],
       "externals": [],
       "capabilities": [
         "subagents"
@@ -118,7 +120,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "020ab87d0ab2093c7b92fc0b0141633a5c307b78c851c8127225bd5f3dd38693",
+      "digest": "11caa8087b307662ecc5513255ad4d0885e0275e245dea935da928efbe31c8bc",
       "binaries": [
         "uv"
       ],

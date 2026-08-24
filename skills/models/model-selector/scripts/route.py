@@ -1441,13 +1441,37 @@ def _artifact_error(artifact: Any) -> str | None:
 
 
 def _decision(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, Any]:
-    """Apply hard refusals and inheritance before exact-point selection."""
+    """Resolve one request while keeping explicit locks above inheritance."""
 
     # Keep every verdict on the exact immutable main seat.
     if request["authority"] == "verdict":
         if not snapshot["harness"].get("inheritance"):
             return _refused(request, snapshot, "unrepresentable_verdict_inheritance")
         return _inherit(request, snapshot, "verdict_authority")
+
+    # Refuse rather than drop a lock that an unparameterized launch cannot carry.
+    decision = _execution_decision(request, snapshot)
+    if decision["status"] == "inherit" and request["overrides"]:
+        reason = decision["inheritance"]["reason"]
+        return _refused(
+            request,
+            snapshot,
+            "unavailable_override",
+            f"No exact point can carry the explicit override: {reason}.",
+            decision["audit"].get("exclusions", []),
+        )
+    return decision
+
+
+def _execution_decision(
+    request: dict[str, Any], snapshot: dict[str, Any]
+) -> dict[str, Any]:
+    """Apply hard refusals and inheritance before exact-point selection.
+
+    Every inheritance here answers an automatic dimension. `_decision()` owns
+    the field-lock authority and converts one into a refusal whenever the
+    request locks a dimension that an inherited launch could not carry.
+    """
 
     # Distinguish absent profile state from invalid persisted state.
     if snapshot.get("profile") is None:
@@ -1491,8 +1515,22 @@ def _decision(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, An
     ):
         return _refused(request, snapshot, "above_main_seat_ceiling")
 
-    # Refuse an empty safe set with the authoritative hard-filter audit.
+    # Preserve automatic fresh-context delegation when controls are unavailable.
     if not pool.candidates:
+        if (
+            not overrides
+            and snapshot["harness"].get("inheritance")
+            and pool.variant_exclusion_codes
+            and set(pool.variant_exclusion_codes) == {"adapter_unreachable"}
+        ):
+            return _inherit(
+                request,
+                snapshot,
+                "unavailable_selection_controls",
+                {"exclusions": list(pool.exclusions)},
+            )
+
+        # Refuse every other empty safe set with the hard-filter audit.
         return _refused(
             request,
             snapshot,
