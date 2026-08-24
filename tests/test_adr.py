@@ -55,6 +55,7 @@ RELATIONS = {
     ("0044", "0077"),
     ("0063", "0077"),
     ("0059", "0078"),
+    ("0073", "0079"),
 }
 
 # The flag-refusal rule and the reasoning an installed reader needs. `delegation`
@@ -179,6 +180,30 @@ def test_a_record_named_as_taken_over_carries_a_pointer_back() -> None:
         f" declares in its own text, and the earlier record carries no"
         f" pointer sentence naming the later one back. See ADR-0075."
     )
+
+
+def test_ticket_resolution_supersession_preserves_blocker_record_history() -> None:
+    """The Ticket Resolution model points past ADR-0073 without rewriting
+    the closure-based world that earlier record originally decided in."""
+
+    # Read both ends of the supersession relation as repository documentation.
+    earlier = (
+        ADR
+        / "0073-a-discovered-edge-corrects-the-graph-rather-than-burning-the-ticket.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR / "0079-a-run-outcome-is-history-and-a-ticket-resolution-is-current.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "comes back workable when its blocker closes" in earlier
+    assert "When the blocker closes" in earlier
+    assert "waiting on open work" in earlier
+    assert "superseded by ADR-0079" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "supersedes ADR-0073" in later
 
 
 def test_a_pointer_names_a_later_record() -> None:

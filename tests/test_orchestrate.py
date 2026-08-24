@@ -1083,18 +1083,19 @@ def test_the_manpage_describes_the_wave_loop_and_what_stops_it() -> None:
 
 
 def test_the_build_step_routes_a_discovered_edge_to_the_blocked_outcome() -> None:
-    """A builder that finds its ticket depends on open work the graph does not
-    name found a missing edge, not a failure — the run corrects the graph and
-    steps back rather than burning the ticket (ADR-0073, issue #79).
+    """A builder that finds its ticket depends on unresolved work the graph
+    does not name found a missing edge, not a failure — the run corrects the
+    graph and steps back rather than burning the ticket (ADR-0073, issue #79).
     """
 
     step = _step(6)
 
     assert "whether the missing thing has a number" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 states the boundary against parking —"
-        f" an open ticket is an edge, and an answer no ticket carries is a"
-        f" question parked under ADR-0070 (ADR-0073)."
+        f" a ticket without a done resolution is an edge, and an answer no"
+        f" ticket carries is a question parked under ADR-0070 (ADR-0073)."
     )
+    assert "a ticket without a done Ticket Resolution is an edge" in step
     assert "--outcome blocked" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 routes a discovered dependency to the"
         f" engine's blocked outcome, which writes the corrected edge rather"
@@ -1105,14 +1106,15 @@ def test_the_build_step_routes_a_discovered_edge_to_the_blocked_outcome() -> Non
         f" as a refused repair is while the rebuild stays unspent — the two"
         f" bounds answer different failures (ADR-0073, ADR-0069)."
     )
-    assert "the moment its blocker closes" in step, (
+    assert "when its blocker has a done Ticket Resolution" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 says a blocked ticket is offered again"
-        f" the moment its blocker closes, the corrected edge being the whole"
+        f" when its blocker has a done Ticket Resolution, the corrected edge being the whole"
         f" of the memory the mechanism needs (ADR-0073)."
     )
+    assert "a done Ticket Resolution unblocking whatever waited on it" in _step(11)
 
 
-def test_the_building_brief_stops_on_open_work_the_ticket_does_not_name() -> None:
+def test_the_building_brief_stops_on_unresolved_work_the_ticket_does_not_name() -> None:
     """The builder's vocabulary was build or stop-and-fail, and the third move
     it invented — the scope quietly narrowed inside the commit — is exactly
     what verification exists to catch (ADR-0073, issue #79).
@@ -1121,9 +1123,13 @@ def test_the_building_brief_stops_on_open_work_the_ticket_does_not_name() -> Non
     brief = _brief("brief.md")
     where = SKILL / "references" / "brief.md"
 
+    assert "another ticket without a done Ticket Resolution" in brief, (
+        f"{where}: the brief follows current resolution rather than tracker"
+        f" closure when it identifies missing dependency work (ADR-0079)."
+    )
     assert "stop and name the ticket it waits on" in brief, (
         f"{where}: the brief tells the builder the move exists — a dependency"
-        f" on open work the ticket does not name is stopped on and named"
+        f" on unresolved work the ticket does not name is stopped on and named"
         f" (ADR-0073)."
     )
     assert "Never build around it" in brief, (
@@ -1147,22 +1153,70 @@ def test_the_manpage_accounts_for_the_blocked_outcome() -> None:
     edge = _manpage_entry("BUILDER STOPS", "**Discovered dependency**")
     outcomes = _manpage_section("OUTCOMES")
 
-    assert "another open ticket" in edge, (
+    assert "another ticket without a done Ticket Resolution" in edge, (
         f"{where}: the discovered-dependency entry limits the blocked outcome"
-        f" to missing work carried by another open ticket (ADR-0073)."
+        f" to missing work carried by an unresolved ticket (ADR-0073)."
     )
     assert "writes the missing blocking edge" in edge, (
         f"{where}: the manpage says the run corrects the tracker graph with"
         f" the missing blocking edge (ADR-0073)."
     )
-    assert "after its blocker closes" in edge, (
+    assert "after its blocker has a done Ticket Resolution" in edge, (
         f"{where}: the manpage says the blocked ticket is offered again after"
-        f" its blocker closes, rather than being settled (ADR-0073)."
+        f" its blocker resolves done, rather than being settled (ADR-0073)."
     )
     assert "rather than in a sixth category" in outcomes, (
         f"{where}: the manpage keeps the report at five lists — a blocked"
         f" ticket follows the outcome implied by its blocker (ADR-0073)."
     )
+
+
+def test_the_manpages_describe_reconciled_done_without_run_provenance() -> None:
+    """Report groups on current Ticket Resolution while an external repair
+    remains visibly outside Orchestrate's build and verification history."""
+
+    # Read the root outcome contract and the addressed Reconciliation page.
+    outcomes = _manpage_section("OUTCOMES")
+    done = _manpage_entry("OUTCOMES", "**done**")
+    reconcile = (SKILL / "help" / "reconcile.md").read_text(encoding="utf-8")
+
+    # Define the grouping before describing either provenance path under done.
+    assert "Report groups tickets by their current Ticket Resolution" in outcomes
+    assert "completed outside Orchestrate" in done
+    assert "unsuccessful Run Outcome" in done
+    assert "does not claim Orchestrate built or independently verified" in done
+
+    # Distinguish lifecycle recovery from a complete idempotent repeat.
+    assert "interrupted" in reconcile
+    assert "lifecycle repair" in reconcile
+    assert "rather than agreement" in reconcile
+
+
+def test_the_final_report_renders_reconciliation_provenance() -> None:
+    """The Skill renders the engine's historical provenance instead of
+    silently dropping it from the maintainer-facing Report."""
+
+    # Read the execution contract for the final public report.
+    report_step = _step(12)
+
+    # Render both provenance fields and their external-completion meaning.
+    assert "`run_outcome`" in report_step
+    assert "`is_reconciled`" in report_step
+    assert "completed outside Orchestrate" in report_step
+    assert "not built or independently verified by Orchestrate" in report_step
+
+
+def test_invalid_reconcile_form_routes_to_reconcile_synopsis() -> None:
+    """Once the subcommand is recognized, its own grammar and help route make
+    a malformed invocation actionable without showing unrelated run forms."""
+
+    # Read the shipped parser instructions as the installed agent receives them.
+    instructions = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+
+    # Route recognized malformed forms to the addressed subcommand contract.
+    assert "invalid recognized `reconcile` form" in instructions
+    assert "`$HERE/help/reconcile.md`" in instructions
+    assert "`/orchestrate reconcile --help`" in instructions
 
 
 # Every brief that tells its subagent to run the project's verification gate.

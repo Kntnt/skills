@@ -16,11 +16,21 @@ import sys
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
-from typing import Any
+from typing import Any, cast
 
 # The label that says the thinking behind a ticket is finished. A ticket
 # without it is never planned, never claimed, and never built.
 READY_LABEL = "ready-for-agent"
+
+# Completed tickets keep a neutral discovery label after readiness and an
+# active claim stop being truthful descriptions of their lifecycle.
+HISTORICAL_LABEL: str = "orchestrated"
+
+# GitHub renders the neutral discovery state with its conventional purple.
+HISTORICAL_LABEL_COLOR: str = "6f42c1"
+
+# Repository label discovery is bounded independently of ticket pagination.
+REPOSITORY_LABEL_PAGE: int = 100
 
 # The label a parked ticket goes back under: the triage vocabulary's own word
 # for thinking that is not finished. The ready label is a claim, and a ticket
@@ -46,7 +56,7 @@ OUTCOMES = (DONE, FAILED, CONFLICTED)
 # ticket depends on open work the graph does not name stops, and the run
 # writes the missing edge rather than a failure (ADR-0073). The edge on the
 # tracker is the whole of the memory the mechanism needs — the ticket is
-# offered again the moment its blocker closes — which is why the outcomes
+# offered again when its blocker has a done Ticket Resolution — which is why
 # read back off a ticket never include this one.
 BLOCKED = "blocked"
 
@@ -73,7 +83,7 @@ NOTES = {
         "Recorded by an unattended run: the builder found this ticket depends "
         "on open work the graph did not name. The corrected edge is now on "
         "the tracker, the claim is released, and the ticket is offered again "
-        "the moment its blocker closes."
+        "when its blocker has a done Ticket Resolution."
     ),
 }
 
@@ -108,6 +118,20 @@ MARKER = "kntnt-orchestrate"
 RECORDED_OUTCOME = re.compile(
     rf"<!--\s*{MARKER}\s+outcome=(\S+?)(?:\s+commit=(\S+?))?"
     rf"(?:\s+collided-with=([\d,]+))?\s*-->"
+)
+
+# Reconciliation is a distinct fact from the run outcome it follows. Keeping
+# its own marker preserves the unsuccessful attempt while letting projections
+# answer where the ticket's requested work stands now (ADR-0079).
+RECORDED_RECONCILIATION: re.Pattern[str] = re.compile(
+    rf"<!--\s*{MARKER}\s+reconciliation=done\s+commit=(\S+?)\s*-->"
+)
+
+# GitHub's closing-keyword grammar is the strongest repository-local evidence
+# that a commit completed one ticket. The repository half is deliberately
+# absent: Orchestrate reads one repository and only accepts bare references.
+CLOSING_REFERENCE: re.Pattern[str] = re.compile(
+    r"(?im)^\s*(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)\b"
 )
 
 # The same marker read back for the one thing that is not an outcome: whether
@@ -187,8 +211,8 @@ RECORD_NAME = re.compile(r"^(\d{4})-")
 # make (ADR-0054).
 ONE_AT_A_TIME = 1
 
-# What the tracker calls a ticket that is finished. A blocker in this state
-# names work that already exists, so it blocks nothing.
+# What the tracker calls a ticket that is closed. Closure changes which facts
+# must be projected, but does not itself establish that requested work exists.
 CLOSED = "CLOSED"
 
 # The line the ticket breakdown writes an edge on where the tracker has no
@@ -325,6 +349,39 @@ def default_branch(cwd: Path) -> str | None:
             return candidate
 
     return None
+
+
+def default_branch_reference(cwd: Path) -> str | None:
+    """Return the authoritative default-branch ref used for landed work."""
+
+    # Prefer the remote-tracking ref itself, because a local branch may carry
+    # work that has not reached the repository other maintainers can observe.
+    try:
+        reference = git(
+            cwd,
+            "symbolic-ref",
+            "--quiet",
+            "refs/remotes/origin/HEAD",
+        ).strip()
+        if reference.startswith("refs/remotes/origin/") and git_ok(
+            cwd,
+            "show-ref",
+            "--verify",
+            "--quiet",
+            reference,
+        ):
+            return reference
+    except RunError:
+        pass
+
+    # A configured origin establishes a publication boundary even when its
+    # default ref is unavailable locally; uncertainty refuses reconciliation.
+    if git_ok(cwd, "remote", "get-url", "origin"):
+        return None
+
+    # Repositories without a remote retain the local fallback used by tests
+    # and by work that has no publication boundary.
+    return default_branch(cwd)
 
 
 def worktree_home(cwd: Path) -> Path:
@@ -534,14 +591,29 @@ class Remark:
     body: str
 
 
+@dataclass(frozen=True)
+class TicketResolution:
+    """A ticket's current resolution and the provenance that established it.
+
+    `outcome` is the current projection used for scheduling and reporting.
+    `commit` carries that projection's implementation. `run_outcome` preserves
+    the unattended attempt even when Reconciliation later projects done, and
+    `is_reconciled` identifies that external-completion path.
+    """
+
+    outcome: str | None
+    commit: str | None
+    run_outcome: str | None
+    is_reconciled: bool
+
+
 @dataclass
 class Ticket:
     """One ticket in scope, as the tracker describes it.
 
-    `blocked_by` holds the tickets that still block this one — a blocker the
-    tracker reports closed names work that already exists and is left out, so
-    the list is what remains to be waited for rather than the whole history of
-    the edge.
+    `blocked_by` holds the tickets whose current Ticket Resolution does not
+    establish the work this one needs. A closed failed or conflicted blocker
+    therefore remains in the list until Reconciliation resolves it done.
 
     `body` is the ticket as it was filed and `thread` is what has been said on
     it since, oldest first. Both are carried whole, because the brief a
@@ -554,13 +626,11 @@ class Ticket:
     session or a person already has it, and the logins are what tells a claim
     this run left behind from one somebody else took.
 
-    `outcome` is what a run has already recorded against this ticket, read back
-    off the tracker, with `commit` the commit that outcome named. Both are None
-    where nothing has been recorded. A ticket carrying an outcome is settled:
-    it is never offered again, and what waits on it is stranded rather than
-    workable. `collided_with` is the other half of a conflicted outcome — the
-    tickets whose work this one collided with, which is the pair that names the
-    blocking edge the ticket breakdown was missing.
+    `resolution` keeps the current scheduling projection and its provenance in
+    one domain value. A failed or conflicted resolution strands dependents; a
+    done resolution unblocks them. `collided_with` is the other half of a
+    conflicted Run Outcome — the tickets whose work this one collided with,
+    which is the pair that names the blocking edge the ticket breakdown missed.
 
     `worktree` is the one thing here the tracker cannot say and the repository
     can: where this ticket's work stands, for as long as a working tree of its
@@ -577,10 +647,19 @@ class Ticket:
     parent: int | None
     claimed_by: list[str]
     blocked_by: list[int]
-    outcome: str | None
-    commit: str | None
+    resolution: TicketResolution
     collided_with: list[int]
     worktree: str | None = None
+
+
+def ticket_details(ticket: Ticket) -> dict[str, Any]:
+    """Return the established flat public representation of *ticket*."""
+
+    # The domain groups resolution provenance, while the public engine contract
+    # retains its established top-level fields for callers and renderers.
+    details = asdict(ticket)
+    resolution = cast(dict[str, Any], details.pop("resolution"))
+    return details | resolution
 
 
 @dataclass
@@ -840,8 +919,8 @@ class Plan:
     never_workable: list[int]
 
 
-def still_blocks(state: str) -> bool:
-    """Whether a blocker the tracker reports in *state* is work yet to exist."""
+def is_open_state(state: str) -> bool:
+    """Say whether *state* requires no Ticket Resolution projection yet."""
 
     return state.upper() != CLOSED
 
@@ -918,15 +997,16 @@ def holders_of(item: dict[str, Any]) -> list[str]:
 
 
 def recorded_against(item: dict[str, Any]) -> tuple[str | None, str | None, list[int]]:
-    """Return what a run recorded on *item*: outcome, commit, and collision.
+    """Return *item*'s historical Run Outcome, commit, and collision.
 
     The tracker is a boundary and a comment is prose anybody can write, so only
     an outcome this engine knows how to record is read back — a marker naming
-    anything else is somebody else's writing and settles nothing. The last one
-    wins, that being the outcome as it now stands.
+    anything else is somebody else's writing and settles nothing. The last
+    valid Run Outcome marker is retained as the unattended attempt's history;
+    Reconciliation is read separately and never overwrites it.
     """
 
-    # Read every marker and keep the last, that being the outcome as it stands.
+    # Read every valid marker and keep the latest historical Run Outcome.
     outcome: str | None = None
     commit: str | None = None
     against: list[int] = []
@@ -937,6 +1017,19 @@ def recorded_against(item: dict[str, Any]) -> tuple[str | None, str | None, list
             against = numbers_in(found.group(3))
 
     return outcome, commit, against
+
+
+def reconciled_at(item: dict[str, Any]) -> str | None:
+    """Return the completion commit named by *item*'s Reconciliation."""
+
+    # Keep the last readable event as the current Ticket Resolution provenance.
+    completion_commit: str | None = None
+    for comment in item["comments"]:
+        found = RECORDED_RECONCILIATION.search(str(comment["body"]))
+        if found:
+            completion_commit = found.group(1)
+
+    return completion_commit
 
 
 def as_references(numbers: list[int]) -> str:
@@ -973,6 +1066,7 @@ def engine_wrote(body: str) -> bool:
         or RECORDED_REBUILD.search(body) is not None
         or RECORDED_AMEND.search(body) is not None
         or RECORDED_BLOCKED.search(body) is not None
+        or RECORDED_RECONCILIATION.search(body) is not None
     )
 
 
@@ -1032,9 +1126,9 @@ def ticket_state(cwd: Path, number: int, states: dict[int, str]) -> str:
     """Return the state the tracker reports ticket *number* in, remembering it.
 
     A body edge can name a ticket the scope does not hold, and its absence
-    settles nothing: an open ticket outside the scope blocks, a closed one does
-    not. So the tracker is asked, once per number, and *states* is what makes
-    it once.
+    settles nothing. The tracker state is fetched once per number; the caller
+    combines closure with Run Outcome and Reconciliation to decide whether the
+    blocker's requested work is complete.
     """
 
     if number in states:
@@ -1052,6 +1146,26 @@ def ticket_state(cwd: Path, number: int, states: dict[int, str]) -> str:
     return state
 
 
+def blocker_still_blocks(cwd: Path, number: int, state: str) -> bool:
+    """Say whether blocker *number* lacks a done Ticket Resolution."""
+
+    # Open work has no completed resolution to project.
+    if is_open_state(state):
+        return True
+
+    # Read the facts needed to distinguish completion from mere closure.
+    try:
+        ticket = ticket_view(cwd, number, "number,comments")
+    except RunError as exc:
+        raise RunError(
+            f"#{number} is closed, but the tracker cannot say how its work resolved: {exc}"
+        ) from exc
+
+    # Accept either an ordinary done Run Outcome or an external Reconciliation.
+    outcome, _, _ = recorded_against(ticket)
+    return outcome != DONE and reconciled_at(ticket) is None
+
+
 def unmet_blockers(
     cwd: Path, item: dict[str, Any], states: dict[int, str]
 ) -> list[int]:
@@ -1066,14 +1180,18 @@ def unmet_blockers(
     nodes = item["blockedBy"]["nodes"]
     if nodes:
         return sorted(
-            {int(node["number"]) for node in nodes if still_blocks(str(node["state"]))}
+            {
+                int(node["number"])
+                for node in nodes
+                if blocker_still_blocks(cwd, int(node["number"]), str(node["state"]))
+            }
         )
 
     # A body edge is a bare number, so the state behind it is asked for.
     return sorted(
         number
         for number in set(body_edges(str(item["body"])))
-        if still_blocks(ticket_state(cwd, number, states))
+        if blocker_still_blocks(cwd, number, ticket_state(cwd, number, states))
     )
 
 
@@ -1297,10 +1415,12 @@ def stranded_behind(tickets: list[Ticket]) -> list[int]:
     # is work that exists and holds nothing back behind it. A ticket carrying
     # an outcome of its own is settled by that outcome and is never restated as
     # stranded.
-    recorded = {ticket.number for ticket in tickets if ticket.outcome}
+    recorded = {ticket.number for ticket in tickets if ticket.resolution.outcome}
     stranded: set[int] = set()
     spreading = [
-        ticket.number for ticket in tickets if ticket.outcome not in (None, DONE)
+        ticket.number
+        for ticket in tickets
+        if ticket.resolution.outcome not in (None, DONE)
     ]
     while spreading:
         for dependent in dependents.get(spreading.pop(), []):
@@ -1311,7 +1431,9 @@ def stranded_behind(tickets: list[Ticket]) -> list[int]:
     return sorted(stranded)
 
 
-def listed_tickets(cwd: Path, *query: str) -> list[dict[str, Any]]:
+def listed_tickets(
+    cwd: Path, *query: str, label: str = READY_LABEL
+) -> list[dict[str, Any]]:
     """Return what the tracker answers a ticket query with.
 
     The page size is asked for here rather than by the caller, because it is
@@ -1325,7 +1447,7 @@ def listed_tickets(cwd: Path, *query: str) -> list[dict[str, Any]]:
         "issue",
         "list",
         "--label",
-        READY_LABEL,
+        label,
         "--limit",
         str(TICKET_PAGE),
         *query,
@@ -1362,6 +1484,11 @@ def ticket_from(
     the caller and passed in.
     """
 
+    # Project current resolution without overwriting the historical attempt.
+    run_outcome = outcome
+    reconciliation_commit = reconciled_at(item)
+    current_outcome = DONE if reconciliation_commit else outcome
+
     return Ticket(
         number=int(item["number"]),
         title=str(item["title"]),
@@ -1371,8 +1498,12 @@ def ticket_from(
         parent=parent_of(item),
         claimed_by=holders_of(item),
         blocked_by=blocked_by,
-        outcome=outcome,
-        commit=commit,
+        resolution=TicketResolution(
+            outcome=current_outcome,
+            commit=reconciliation_commit or commit,
+            run_outcome=run_outcome,
+            is_reconciled=reconciliation_commit is not None,
+        ),
         collided_with=collided_with,
     )
 
@@ -1430,10 +1561,10 @@ def closed_since(cwd: Path) -> str | None:
 def closed_listing(cwd: Path) -> list[dict[str, Any]]:
     """Return the finished tickets this machine's runs took on this branch.
 
-    Narrowed twice over, because the label's closed half is every ticket any
-    run ever finished: to the claims this machine made, and to what was closed
-    since this branch left the default one. Both are true of everything a run
-    on this branch recorded and false of most of what came before it.
+    The ready label discovers unsuccessful work closed before Reconciliation;
+    the neutral historical label discovers tickets whose active workflow state
+    was cleaned on completion. The fork date bounds that growing history to
+    what this branch could have recorded.
     """
 
     # A branch with nothing to fork from bounds nothing, and the question is
@@ -1441,16 +1572,32 @@ def closed_listing(cwd: Path) -> list[dict[str, Any]]:
     since = closed_since(cwd)
     bound = ["--search", f"closed:>={since}"] if since else []
 
-    return listed_tickets(
+    # An unsuccessful ticket closed outside Orchestrate still carries the
+    # ready label until Reconciliation replaces its active lifecycle state.
+    active = listed_tickets(
         cwd,
         "--state",
         "closed",
-        "--assignee",
-        CLAIM_ASSIGNEE,
         *bound,
         "--json",
         "number,title,url,body,parent,assignees,comments",
+        label=READY_LABEL,
     )
+    historical = listed_tickets(
+        cwd,
+        "--state",
+        "closed",
+        *bound,
+        "--json",
+        "number,title,url,body,parent,assignees,comments",
+        label=HISTORICAL_LABEL,
+    )
+
+    # Merge both discovery paths by identity so an interrupted transition that
+    # temporarily carries both labels remains one ticket in the final account.
+    found = {int(item["number"]): item for item in active}
+    found.update({int(item["number"]): item for item in historical})
+    return list(found.values())
 
 
 def tickets_in_scope(
@@ -1564,7 +1711,11 @@ def run_base(cwd: Path, tickets: list[Ticket]) -> str:
 
     # A commit a run recorded on another branch is not this branch's history,
     # and a branch that does not hold it can say nothing about where work began.
-    recorded = [ticket.commit for ticket in tickets if ticket.commit]
+    recorded = [
+        ticket.resolution.commit
+        for ticket in tickets
+        if ticket.resolution.commit and not ticket.resolution.is_reconciled
+    ]
     on_branch = [
         commit
         for commit in recorded
@@ -1675,7 +1826,7 @@ def build_plan(
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
     tickets = tickets_in_scope(cwd, listed, scope)
     say_where_work_stands(cwd, tickets, branch)
-    recorded = [ticket.number for ticket in tickets if ticket.outcome]
+    recorded = [ticket.number for ticket in tickets if ticket.resolution.outcome]
     stranded = stranded_behind(tickets)
 
     # The graph is the shape of what is left: wave one is what may start now,
@@ -1691,7 +1842,11 @@ def build_plan(
     # than treating it as taken. Every other claim is somebody else's session
     # or a person, and leaves the frontier without leaving the account, so
     # nothing disappears by being taken.
-    held = [ticket for ticket in tickets if ticket.claimed_by and not ticket.outcome]
+    held = [
+        ticket
+        for ticket in tickets
+        if ticket.claimed_by and not ticket.resolution.outcome
+    ]
     login = my_login(cwd, remembered) if held else None
     resuming = [
         ticket.number
@@ -1715,7 +1870,7 @@ def build_plan(
         default_branch=default,
         label=READY_LABEL,
         scope=None if scope is None else [asdict(aim) for aim in scope],
-        tickets=[asdict(ticket) for ticket in tickets],
+        tickets=[ticket_details(ticket) for ticket in tickets],
         workable=workable,
         starting=workable[:at_once],
         claimed=claimed,
@@ -2469,6 +2624,106 @@ def release_claim(
         gh(cwd, "issue", "edit", str(number), "--remove-assignee", CLAIM_ASSIGNEE)
 
 
+def complete_lifecycle(cwd: Path, number: int, ticket: dict[str, Any]) -> None:
+    """Replace active workflow state with completed historical state.
+
+    Completion has no active lifecycle owner, so every remaining assignee is
+    a stale claim and is removed by its recorded login rather than by whoever
+    happens to perform the cleanup.
+    """
+
+    # Ensure the discovery label exists before any ticket carries completed
+    # state that Report would otherwise be unable to find.
+    labels_output = gh(
+        cwd,
+        "label",
+        "list",
+        "--json",
+        "name",
+        "--limit",
+        str(REPOSITORY_LABEL_PAGE),
+    )
+    try:
+        repository_labels = {str(label["name"]) for label in json.loads(labels_output)}
+    except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        raise RunError(f"the tracker returned no readable label list: {exc}") from exc
+    if HISTORICAL_LABEL not in repository_labels:
+        gh(
+            cwd,
+            "label",
+            "create",
+            HISTORICAL_LABEL,
+            "--color",
+            HISTORICAL_LABEL_COLOR,
+            "--description",
+            "Completed ticket retained for Orchestrate history",
+        )
+
+    # Replace readiness and ownership with the neutral discovery marker in one
+    # ticket edit, before an append-only completion fact makes the state final.
+    labels = [str(label["name"]) for label in ticket.get("labels", [])]
+    changes: list[str] = []
+    if READY_LABEL in labels:
+        changes.extend(("--remove-label", READY_LABEL))
+    if HISTORICAL_LABEL not in labels:
+        changes.extend(("--add-label", HISTORICAL_LABEL))
+    for holder in holders_of(ticket):
+        changes.extend(("--remove-assignee", holder))
+    if changes:
+        gh(cwd, "issue", "edit", str(number), *changes)
+
+
+def has_completed_lifecycle(ticket: dict[str, Any]) -> bool:
+    """Say whether *ticket* carries the completed lifecycle projection."""
+
+    labels = {str(label["name"]) for label in ticket.get("labels", [])}
+    return (
+        HISTORICAL_LABEL in labels
+        and READY_LABEL not in labels
+        and not holders_of(ticket)
+    )
+
+
+def completion_candidates(cwd: Path, number: int) -> list[str]:
+    """Return default-branch commits carrying an exact closing reference."""
+
+    # Decline discovery without identifiable authoritative history.
+    default = default_branch_reference(cwd)
+    if default is None:
+        return []
+
+    # Read commit messages once and retain every exact closing-reference match.
+    history = git(cwd, "log", default, "--format=%H%x1f%B%x1e")
+    candidates: list[str] = []
+    for entry in history.strip("\x1e\n").split("\x1e"):
+        commit, _, message = entry.lstrip("\n").partition("\x1f")
+        if number in [int(found) for found in CLOSING_REFERENCE.findall(message)]:
+            candidates.append(commit)
+
+    return candidates
+
+
+def landed_completion_commit(cwd: Path, reference: str) -> str:
+    """Resolve *reference* to a commit reachable from the default branch."""
+
+    # Reject a reference that cannot name completion work in this repository.
+    try:
+        commit = git(cwd, "rev-parse", "--verify", f"{reference}^{{commit}}").strip()
+    except RunError as exc:
+        raise RunError(f"this repository has no commit {reference}") from exc
+
+    # Require the repository's authoritative history to carry the completion.
+    default = default_branch_reference(cwd)
+    if default is None or not git_ok(
+        cwd, "merge-base", "--is-ancestor", commit, default
+    ):
+        raise RunError(
+            f"commit {reference} is not reachable from the repository's default branch"
+        )
+
+    return commit
+
+
 def cmd_record(
     cwd: Path,
     number: int,
@@ -2544,22 +2799,30 @@ def cmd_record(
     # a number it cannot answer for is refused rather than half-recorded. The
     # assignees come along because a blocked outcome releases this run's claim.
     try:
-        ticket = ticket_view(cwd, number, "number,state,assignees")
+        ticket = ticket_view(cwd, number, "number,state,labels,assignees")
     except RunError as exc:
         return fail(f"the tracker cannot answer for #{number}: {exc}")
 
-    # A blocked outcome names work still to exist, and the tracker is asked
-    # before the edge is written: a closed blocker blocks nothing, so an edge
-    # on it would record a wait that is already over.
+    # A blocked outcome names work still to exist. Closure alone does not
+    # establish that work: only a done Ticket Resolution makes the edge over.
     for blocker in waiting:
+        # Read the blocker's tracker state before projecting its resolution.
         try:
             state = str(ticket_view(cwd, blocker, "number,state")["state"])
         except (RunError, KeyError) as exc:
             return fail(f"the tracker cannot answer for blocker #{blocker}: {exc}")
-        if not still_blocks(state):
+
+        # Combine tracker closure with its recorded completion facts.
+        try:
+            blocks = blocker_still_blocks(cwd, blocker, state)
+        except RunError as exc:
+            return fail(str(exc))
+
+        # Reject an edge whose prerequisite work is already established.
+        if not blocks:
             return fail(
-                f"#{number} cannot be blocked by #{blocker}: it is closed, "
-                "and a closed ticket names work that already exists"
+                f"#{number} cannot be blocked by #{blocker}: its done Ticket "
+                "Resolution establishes that the required work exists"
             )
 
     # A blocked outcome is the corrected edge before it is anything else: the
@@ -2583,6 +2846,7 @@ def cmd_record(
     )
     try:
         if outcome == DONE:
+            complete_lifecycle(cwd, number, ticket)
             gh(cwd, "issue", "close", str(number), "--comment", note)
         else:
             gh(cwd, "issue", "comment", str(number), "--body", note)
@@ -2591,8 +2855,8 @@ def cmd_record(
 
     # What a blocked build made goes with the outcome, discarded exactly as a
     # refused repair is and without spending the ticket's one rebuild: when
-    # the blocker closes, the ticket is isolated afresh from the branch that
-    # by then carries the blocker's work, and built whole on top of it.
+    # the blocker resolves done, the ticket is isolated afresh from the branch
+    # that by then carries the blocker's work, and built whole on top of it.
     if outcome == BLOCKED:
         try:
             open_now = open_worktrees(cwd, current_branch(cwd))
@@ -2617,16 +2881,136 @@ def cmd_record(
     return 0
 
 
+def emit_reconciliation_result(
+    number: int,
+    run_outcome: str,
+    commit: str,
+    *,
+    is_agreed: bool,
+    is_lifecycle_repaired: bool,
+) -> None:
+    """Emit the stable public result of a Reconciliation request."""
+
+    emit(
+        {
+            "verb": "reconcile",
+            "ticket": number,
+            "run_outcome": run_outcome,
+            "resolution": DONE,
+            "commit": commit,
+            "already_agreed": is_agreed,
+            "lifecycle_repaired": is_lifecycle_repaired,
+        }
+    )
+
+
+def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
+    """Resolve a closed unsuccessful ticket completed outside Orchestrate."""
+
+    # Read every eligibility and lifecycle fact before allowing a tracker write.
+    try:
+        ticket = ticket_view(cwd, number, "number,state,labels,assignees,comments")
+    except RunError as exc:
+        return fail(f"the tracker cannot answer for #{number}: {exc}")
+
+    # Require closure and an unsuccessful unattended attempt as historical fact.
+    if str(ticket["state"]).upper() != CLOSED:
+        return fail(f"#{number} is open; Reconciliation never closes a ticket")
+    outcome, _, _ = recorded_against(ticket)
+    if outcome not in (FAILED, CONFLICTED):
+        return fail(f"#{number} has no failed or conflicted Run Outcome to reconcile")
+
+    # Validate an existing event before deciding between agreement and recovery.
+    existing_commit = reconciled_at(ticket)
+    if existing_commit:
+        # Hold historical provenance to the new event's default-branch gate.
+        try:
+            existing_commit = landed_completion_commit(cwd, existing_commit)
+        except RunError as exc:
+            return fail(f"#{number}'s existing Reconciliation is invalid: {exc}")
+
+        # Refuse a caller's contradictory completion provenance.
+        if reference:
+            try:
+                requested = landed_completion_commit(cwd, reference)
+            except RunError as exc:
+                return fail(str(exc))
+            if requested != existing_commit:
+                return fail(
+                    f"#{number} is already reconciled at {existing_commit}, not {requested}"
+                )
+
+        # Recover an interrupted projection without calling mutation agreement.
+        lifecycle_repaired = not has_completed_lifecycle(ticket)
+        if lifecycle_repaired:
+            try:
+                complete_lifecycle(cwd, number, ticket)
+            except RunError as exc:
+                return fail(
+                    f"#{number}'s reconciled lifecycle could not be repaired: {exc}"
+                )
+
+        # Distinguish a complete no-op from lifecycle recovery in the result.
+        emit_reconciliation_result(
+            number,
+            outcome,
+            existing_commit,
+            is_agreed=not lifecycle_repaired,
+            is_lifecycle_repaired=lifecycle_repaired,
+        )
+        return 0
+
+    # Discover provenance only from one safe closing commit.
+    if not reference:
+        candidates = completion_candidates(cwd, number)
+        if len(candidates) != 1:
+            quantity = "no" if not candidates else "more than one"
+            return fail(
+                f"#{number} has {quantity} completion commit on the default branch; "
+                "pass --commit after the maintainer identifies the one that completed it"
+            )
+        reference = candidates[0]
+
+    # Resolve explicit and discovered provenance through one reachability gate.
+    try:
+        commit = landed_completion_commit(cwd, reference)
+    except RunError as exc:
+        return fail(str(exc))
+
+    # Project completed lifecycle before appending the immutable Reconciliation.
+    note = (
+        f"<!-- {MARKER} reconciliation=done commit={commit} --> "
+        "Reconciled by a maintainer: the ticket's requested work was completed "
+        "outside Orchestrate and is carried by this commit."
+    )
+    try:
+        complete_lifecycle(cwd, number, ticket)
+        gh(cwd, "issue", "comment", str(number), "--body", note)
+    except RunError as exc:
+        return fail(f"#{number} could not be reconciled: {exc}")
+
+    # Report the newly recorded current resolution and its preserved provenance.
+    emit_reconciliation_result(
+        number,
+        outcome,
+        commit,
+        is_agreed=False,
+        is_lifecycle_repaired=False,
+    )
+    return 0
+
+
 def cmd_report(cwd: Path, reference: str | None) -> int:
-    """Print the consolidated report: every ticket in scope, and its outcome.
+    """Print every ticket in scope grouped by current Ticket Resolution.
 
     One report rather than a running commentary, and every ticket in scope in
     it exactly once — a ticket the run drops in silence is one the developer
-    will not know to pick up. The five outcomes partition the scope by
-    construction: what a run recorded, then what a recorded failure stranded,
-    then everything left, which is everything this run never had on its
-    frontier — held by a cycle, by work outside the run, by another session's
-    claim, or by the run stopping before its wave came round.
+    will not know to pick up. The five groups partition the scope by
+    construction: current resolutions, what an unsuccessful resolution
+    stranded, then everything this run never had on its frontier — held by a
+    cycle, by work outside the run, by another session's claim, or by the run
+    stopping before its wave came round. Ticket detail retains Run Outcome and
+    Reconciliation provenance independently of that grouping.
     """
 
     # The label is asked for twice, because a ticket the run recorded is closed
@@ -2656,7 +3040,9 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
     # Stranding is read off the open scope alone: a ticket that is finished has
     # no unmet blocker left to strand anything behind.
     recorded = {
-        outcome: [ticket.number for ticket in tickets if ticket.outcome == outcome]
+        outcome: [
+            ticket.number for ticket in tickets if ticket.resolution.outcome == outcome
+        ]
         for outcome in OUTCOMES
     }
     stranded = stranded_behind(open_scope)
@@ -2669,7 +3055,7 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
             "scope": None if scope is None else [asdict(aim) for aim in scope],
             "branch": branch,
             "base": base,
-            "tickets": [asdict(ticket) for ticket in tickets],
+            "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],
             "conflicted": recorded[CONFLICTED],
@@ -2756,6 +3142,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     record.add_argument("--blocked-by", action="append", type=int)
     add_shared_flags(record)
 
+    reconcile = sub.add_parser(
+        "reconcile", help="Resolve work completed outside Orchestrate."
+    )
+    reconcile.add_argument("--ticket", required=True, type=int)
+    reconcile.add_argument("--commit")
+    add_shared_flags(reconcile)
+
     report = sub.add_parser("report", help="Print the consolidated report.")
     add_scope_flag(report)
     add_shared_flags(report)
@@ -2801,6 +3194,8 @@ def main(argv: list[str] | None = None) -> int:
             args.blocked_by,
             state_path,
         )
+    if args.verb == "reconcile":
+        return cmd_reconcile(cwd, args.ticket, args.commit)
     return cmd_report(cwd, args.scope)
 
 
