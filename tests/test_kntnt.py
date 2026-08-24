@@ -3601,6 +3601,62 @@ def test_the_collection_library_separates_references_from_scripts() -> None:
     ).exists()
 
 
+def test_the_collection_library_carries_one_delivery_contract() -> None:
+    """Several Skills deliver a Text Artifact, so the rule has one owner.
+
+    Delivery is stated once, in the Library, rather than in whichever Skill
+    happened to need it first: a copy under one consumer would make that Skill
+    the implementation owner of its peers, and a copy under each would make one
+    rule several things to keep true (ADR-0076, ADR-0091).
+    """
+
+    library = REPO_ROOT / "skills" / "kntnt" / "library"
+
+    # Hold the shared destination and the absence of any private copy of it.
+    assert (library / "references" / "delivery.md").is_file(), (
+        f"{library / 'references' / 'delivery.md'}: the Output Target and"
+        f" In-place Editing contract is read by every Skill that delivers a"
+        f" Text Artifact, so it belongs to the Collection Library"
+        f" (ADR-0076). See {STANDARD}."
+    )
+    private = [
+        directory
+        for directory in _shipped_skills()
+        if (directory / "references" / "delivery.md").exists()
+    ]
+    assert private == [], (
+        f"{private}: the delivery contract has several consumers, so a local"
+        f" copy makes one Skill the implementation owner of its peers"
+        f" (ADR-0076). See {STANDARD}."
+    )
+
+
+def test_the_shared_delivery_contract_binds_no_consumers_grammar() -> None:
+    """A shared contract states behaviour, never a consumer's flag spelling.
+
+    Each editorial Skill declares its own Formal Invocation, and a flag written
+    into the shared document would either be a second copy of that grammar or a
+    name a later Skill is not free to choose (ADR-0091).
+    """
+
+    contract = (
+        REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "delivery.md"
+    ).read_text(encoding="utf-8")
+
+    # Match a long-option spelling, never the reserved standalone separator.
+    flags = sorted(set(re.findall(r"(?<![\w-])--[A-Za-z][\w-]*", contract)))
+    assert flags == [], (
+        f"{flags}: the shared delivery contract names a consumer's flag"
+        f" spelling, which binds a grammar the consuming Skill owns"
+        f" (ADR-0091). See {STANDARD}."
+    )
+
+    # Hold the domain vocabulary and the collision sequence it is read for.
+    assert "Output Target" in contract
+    assert "In-place Editing" in contract
+    assert "`my-file.md`, `my-file-2.md`, `my-file-3.md`" in contract
+
+
 def test_a_skill_reads_shared_implementation_only_from_the_collection_library() -> None:
     """A peer Skill is a Dependency, never an implementation owner."""
 
