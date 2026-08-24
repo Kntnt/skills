@@ -14,9 +14,9 @@ delegation - control delegation mode for a session, Project, or user
 
 ## DESCRIPTION
 
-`delegation` controls a mode in which the main agent plans, briefs, orchestrates, and verifies while subagents execute on the cheapest model the main agent judges able. It does not change the main agent's model or reasoning effort.
+`delegation` controls a mode in which the main agent decides whether delegation is worthwhile, plans, briefs, orchestrates, and verifies while subagents execute. Once the main agent has chosen to delegate, it sends only that execution through model-selector's public `route` Interface. Routing never changes the main agent's model or deliberation configuration.
 
-Predictably noisy tool work can stay in a subagent's context and return as a distilled result.
+The separate decision whether predictably noisy tool work warrants delegation remains outside this routing mode.
 
 With no arguments, it toggles the session scope. An explicit `on` or `off` changes the selected scope. `status` reports the selected scope, or all scopes when no scope is given. Scope and state may be written as bare words or equivalent long options, in either order.
 
@@ -124,7 +124,7 @@ The following schematic cases pin the split independently of any one Skill's For
 
 **Skills**
 
-The Manager must be Enabled so the dependency check can run.
+The Manager and model-selector must be Enabled so the dependency check can run and delegated execution can be routed.
 
 **Capabilities**
 

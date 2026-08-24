@@ -3825,34 +3825,96 @@ def test_delegation_requires_subagents_and_says_so() -> None:
     )
 
 
-def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() -> None:
-    """The mode delegates noisy tool work before its raw result reaches the main agent."""
+def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
+    """The standing mode delegates only execution through model-selector route.
+
+    Delegation's public contract is the instruction copied unchanged to session,
+    Project, and user contexts. Hold the authority boundary at that seam rather
+    than duplicating model-selector's routing tests here.
+    """
+
+    directory = REPO_ROOT / "skills" / "agents" / "delegation"
+    skill = (directory / "SKILL.md").read_text(encoding="utf-8")
+    help_page = (directory / "help.md").read_text(encoding="utf-8")
+    mode = (directory / "references" / "mode.md").read_text(encoding="utf-8")
+    persistence = (directory / "references" / "persist.md").read_text(encoding="utf-8")
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    catalog = json.loads(
+        (REPO_ROOT / "skills" / "kntnt" / "catalog.json").read_text(encoding="utf-8")
+    )
+
+    assert 'kntnt.skills: "model-selector"' in skill
+    assert "model-selector" in skill.partition("compatibility:")[2].partition("\n")[0]
+    assert "model-selector" in help_page
+    assert (
+        "model-selector"
+        in readme.partition("### delegation")[2].partition("### tldr")[0]
+    )
+    entry = next(item for item in catalog["skills"] if item["name"] == "delegation")
+    assert entry["skills"] == ["model-selector"]
+
+    required_mode_fragments = {
+        "do this yourself",
+        "before Route is consulted",
+        "understanding, diagnosis, decisions, briefing, verification and the final answer",
+        "main seat",
+        "only the execution subagent",
+        "public `/model-selector route` Interface",
+        "real execution brief",
+        "reversibility, consequence, context and tool demand",
+        "independent checker or declared failure signal",
+        "Keep the user's access profile and model inventory out of persistent mode context",
+        "explicit execution-model instruction locks only the model dimension",
+        "explicit `low`, `medium`, `high`, `xhigh`, or `max` deliberation instruction locks only the deliberation dimension",
+        "refuse it rather than replacing it",
+        "exact Harness-native launch controls",
+        "without explicit model or deliberation overrides",
+        "Route optimization was unavailable",
+        "no subagent is launched",
+        "does not start setup, research, evaluation, profile writes, or ledger writes",
+        "objective main-agent verification or the declared failure signal",
+        "never the execution subagent's self-confidence",
+        "strongest safe permitted point",
+        "brief + fresh-context reading + report",
+        "#44",
+    }
+    missing = sorted(
+        fragment for fragment in required_mode_fragments if fragment not in mode
+    )
+    assert not missing, (
+        f"{directory / 'references' / 'mode.md'}: delegation must route only chosen"
+        f" execution through the public contract while preserving main-seat ownership;"
+        f" missing {missing}."
+    )
+
+    assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
+    assert "config.json" not in mode
+    assert "{the entire content of $HERE/references/mode.md, verbatim}" in persistence
+
+
+def test_delegation_leaves_tool_output_policy_to_ticket_44() -> None:
+    """Routing begins after the main agent has decided to delegate execution."""
 
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
     mode = path.read_text(encoding="utf-8")
 
     required_fragments = {
-        "Narrow at the source first.",
-        "predictably large and mostly irrelevant",
-        "the main agent does not need the raw material",
-        "expected main-context saving exceeds the cost",
-        "complete tool call",
-        "bounded extraction",
+        "The decision whether voluminous tool output itself warrants delegation belongs to #44",
+        "outside this mode's routing policy",
+        "Once you have chosen to delegate",
+        "precise question",
+        "bounded return contract",
         "direct answer",
         "minimal supporting evidence",
         "material anomalies or uncertainty",
         "truncation or incomplete coverage",
-        "bounded semantic extraction",
-        "understanding, diagnosis, decisions, briefing, verification and the final answer",
-        "same-model context isolation",
-        "Post-hoc summarisation in the main context cannot recover context already spent",
     }
     missing = sorted(
         fragment for fragment in required_fragments if fragment not in mode
     )
     assert not missing, (
-        f"{path}: delegation mode must keep predictably noisy tool output out of the"
-        f" main context before the call, with a bounded task-shaped report; missing"
+        f"{path}: delegation mode must leave the tool-output delegation decision to"
+        f" #44 while requiring a bounded task-shaped report after delegation; missing"
         f" contract fragments: {missing}."
     )
 

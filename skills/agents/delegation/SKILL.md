@@ -3,18 +3,18 @@ name: delegation
 description: Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.
 disable-model-invocation: true
 argument-hint: "[session|--session] | [session|project|user|--session|--project|--user] on|off|--on|--off [--yes] | [session|project|user|--session|--project|--user] status|--status [-- <instruction>]"
-compatibility: Requires uv, and a harness that can run subagents
+compatibility: Requires uv, model-selector, and a harness that can run subagents
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: "uv"
-  kntnt.skills: ""
+  kntnt.skills: "model-selector"
   kntnt.externals: ""
   kntnt.capabilities: "subagents"
 ---
 
 # delegation
 
-While delegation mode is on, you orchestrate — think, plan, brief, verify — and subagents execute on the cheapest model able to do the job. This skill turns the mode on or off. Your own model and reasoning effort stay the user's move — whatever your harness offers for changing them is theirs to run, never yours.
+While delegation mode is on, you orchestrate — think, plan, brief, verify — and subagents execute only after model-selector has routed that execution. This skill turns the mode on or off. Your own model and reasoning effort stay the user's move — whatever your harness offers for changing them is theirs to run, never yours.
 
 **Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run "<checker>" check --here "$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
 
