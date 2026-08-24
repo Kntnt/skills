@@ -1618,43 +1618,14 @@ def test_the_manpage_says_delivery_lines_are_not_criteria() -> None:
     )
 
 
-def test_the_build_step_judges_each_builders_model_where_no_flag_names_one() -> None:
-    """Absent `--model`, inheritance is what the absence of a choice does.
-
-    Three interviewed runs ran every subagent on the orchestrator's own model
-    because the flag was never passed, paying the strongest model's price for
-    mechanical builds the collection's delegation rule says to send down the
-    ladder (ADR-0074, issue #83).
-    """
+def test_the_build_step_uses_the_frozen_execution_decision() -> None:
+    """Model-selector, not prose judgment, owns the exact builder configuration."""
 
     step = _step(6)
 
-    assert "no judgment is made" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 keeps `--model` as the override — where"
-        f" the plan names a model, every builder runs on it and no judgment is"
-        f" made. The flag was always the override; what changes is only the"
-        f" default underneath it (ADR-0074)."
-    )
-    assert "cheapest model" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 sends building to the cheapest model"
-        f" the orchestrator judges able, which is the delegation rule applied"
-        f" inside a run rather than a new one (ADR-0074)."
-    )
-    assert "from the ticket's own text" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 makes the judgment per ticket, from the"
-        f" ticket's own text — the one thing the orchestrator was already"
-        f" reading (ADR-0074)."
-    )
-    assert "a mechanical rename is not a redesign" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 grounds the judgment in the example the"
-        f" record settles it with — a mechanical rename is not a redesign"
-        f" (ADR-0074)."
-    )
-    assert "never above your own" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 caps the judged choice at the"
-        f" orchestrator's own model — the orchestrator is the run's most"
-        f" capable seat, so above it there is nothing to give (ADR-0074)."
-    )
+    assert "selected exact Harness-native model and deliberation controls" in step
+    assert "locks only model" in step
+    assert "`--deliberation` only deliberation" in step
 
 
 def test_every_verdict_step_names_the_orchestrators_own_model() -> None:
@@ -1668,7 +1639,7 @@ def test_every_verdict_step_names_the_orchestrators_own_model() -> None:
     for number in (7, 9, 10, 11):
         step = _step(number)
 
-        assert "your own model" in step, (
+        assert "exact inherited main-seat" in step or "exact inheritance" in step, (
             f"{SKILL / 'SKILL.md'}: step {number} runs its verdict on the"
             f" orchestrator's own model. A verdict sent down the ladder takes"
             f" the saving at the last thing that would catch a mistake"
@@ -1676,19 +1647,16 @@ def test_every_verdict_step_names_the_orchestrators_own_model() -> None:
         )
 
 
-def test_the_verify_step_states_why_the_saving_is_never_taken_at_the_verdict() -> None:
-    """The rule travels with its reason, or the next edit trades the verdict away."""
+def test_the_verify_step_states_exact_main_seat_inheritance() -> None:
+    """Verdict authority carries the complete configuration rather than a model name."""
 
     step = _step(7)
 
     assert (
-        "the saving is never taken at the last thing that would catch a mistake" in step
-    ), (
-        f"{SKILL / 'SKILL.md'}: step 7 states the rule that every verdict runs"
-        f" on the orchestrator's own model as the record states it — the"
-        f" saving is never taken at the last thing that would catch a mistake"
-        f" (ADR-0074)."
+        "exact inheritance of the orchestrating session's complete main-seat model and deliberation configuration"
+        in step
     )
+    assert "no route, flag, circumstance, or failure may downgrade it" in step
 
 
 def test_the_amend_and_repair_dispatches_delegate_as_builds_do() -> None:
@@ -1703,44 +1671,23 @@ def test_the_amend_and_repair_dispatches_delegate_as_builds_do() -> None:
     for number in (9, 10):
         step = _step(number)
 
-        assert "as step 6 chooses a builder's" in step, (
+        assert "frozen snapshot" in step, (
             f"{SKILL / 'SKILL.md'}: step {number} chooses its dispatch's model"
             f" as step 6 chooses a builder's, in those words — one judgment"
             f" stated once, not three drifting apart (ADR-0074)."
         )
 
-    assert "harder than it looked" in _step(9), (
-        f"{SKILL / 'SKILL.md'}: step 9 weighs the amend's own signal — a"
-        f" ticket back for its amend has just demonstrated it was harder than"
-        f" it looked, which is the orchestrator's cue to re-judge (ADR-0074)."
-    )
+    assert "bounded adjacent escalation" in _step(9)
 
 
 def test_the_manpage_model_entry_carries_the_judged_default() -> None:
     """The flag keeps exactly its meaning; what changes is the default underneath it."""
 
-    where = SKILL / "help.md"
     model_entry = _manpage_entry("OPTIONS", "**--model**")
 
-    assert "every building subagent" in model_entry, (
-        f"{where}: the `--model` entry says what naming a model does — it sets"
-        f" every builder explicitly — so the flag keeps"
-        f" exactly its meaning (ADR-0074)."
-    )
-    assert "cheapest builder model" in model_entry, (
-        f"{where}: the `--model` entry states the default underneath the flag"
-        f" — absent it, the run judges per ticket the cheapest model it judges"
-        f" able, never silent inheritance (ADR-0074)."
-    )
-    assert "never above its own" in model_entry, (
-        f"{where}: the `--model` entry caps the judged default at the"
-        f" orchestrator's own model, as the delegation rule always has"
-        f" (ADR-0074)."
-    )
-    assert "remain on the orchestrator's model" in model_entry, (
-        f"{where}: the `--model` entry says every verdict remains on the"
-        f" orchestrator's own model (ADR-0074)."
-    )
+    assert "Lock only the building model dimension" in model_entry
+    assert "still selects deliberation" in model_entry
+    assert "exact main-seat inheritance" in model_entry
 
 
 def test_the_manpage_advises_running_from_the_strongest_model() -> None:
@@ -1780,3 +1727,19 @@ def test_the_manpage_says_the_gate_is_resolved_once() -> None:
         f"{where}: the manpage says every verifier receives the exact gate and"
         f" neither substitutes nor expands it (issue #80)."
     )
+
+
+def test_routing_is_a_preclaim_batch_and_verdicts_inherit_the_main_seat() -> None:
+    """Route owns execution selection while the orchestrator retains verdict authority."""
+
+    skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    model_entry = _manpage_entry("OPTIONS", "**--model**")
+    deliberation_entry = _manpage_entry("OPTIONS", "**--deliberation**")
+
+    assert 'kntnt.skills: "model-selector"' in skill
+    assert skill.index("Before step 4") > skill.index("3. Before anything is claimed")
+    assert "one versioned model-selector route request" in skill
+    assert "complete main-seat model and deliberation configuration" in skill
+    assert "selected exact Harness-native model and deliberation controls" in skill
+    assert "Lock only the building model dimension" in model_entry
+    assert "Lock only the building deliberation dimension" in deliberation_entry

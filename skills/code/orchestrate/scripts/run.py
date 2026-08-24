@@ -728,7 +728,9 @@ class RunState:
     taken and not yet recorded an outcome against. `base` is the commit its
     work sits on top of, which is the branch's half of the same account and is
     worked out afresh every time rather than read back, so a state that is gone
-    cannot make it disagree with the branch it describes.
+    cannot make it disagree with the branch it describes. `routing` is the
+    opaque public model-selector response frozen before claims; unlike tracker
+    facts, its exact snapshot and decisions must survive a later wave or resume.
     """
 
     branch: str
@@ -736,6 +738,7 @@ class RunState:
     login: str | None
     claimed: list[int]
     base: str
+    routing: dict[str, Any] | None
 
 
 def state_file(directory: str | None) -> Path | None:
@@ -802,6 +805,11 @@ def read_state(path: Path | None, branch: str) -> RunState | None:
             login=None if stored["login"] is None else str(stored["login"]),
             claimed=[int(number) for number in stored["claimed"]],
             base=str(stored["base"]),
+            routing=(
+                None
+                if stored.get("routing") is None
+                else cast(dict[str, Any], stored["routing"])
+            ),
         )
     except (OSError, TypeError, ValueError, KeyError):
         return None
@@ -936,7 +944,8 @@ class Plan:
     ticket is built in a working tree of its own, and at exactly one the work
     lands straight on the branch with nothing to integrate (ADR-0054).
 
-    `model` is the model the building subagents run on, `scope` what the run
+    `model` and `deliberation` are field-level execution overrides, `routing`
+    is the frozen opaque route account where one exists, and `scope` what the run
     was aimed at where it was aimed at anything — one entry per reference the
     developer named, and the tickets are the union of what they resolved to —
     and `state` is where the run left what it remembers of itself, all three
@@ -950,7 +959,9 @@ class Plan:
     at_once: int
     worktrees: bool
     model: str | None
+    deliberation: str | None
     state: str | None
+    routing: dict[str, Any] | None
     branch: str
     default_branch: str | None
     label: str
@@ -1886,6 +1897,7 @@ def build_plan(
     dry_run: bool,
     at_once: int,
     model: str | None,
+    deliberation: str | None,
     state_path: Path | None,
     reference: str | None,
 ) -> Plan:
@@ -1941,7 +1953,9 @@ def build_plan(
         at_once=at_once,
         worktrees=at_once > ONE_AT_A_TIME,
         model=model,
+        deliberation=deliberation,
         state=None,
+        routing=None if remembered is None else remembered.routing,
         branch=branch,
         default_branch=default,
         label=READY_LABEL,
@@ -2001,6 +2015,7 @@ def build_plan(
                     | claimed_elsewhere(remembered, scope, listed, tickets)
                 ),
                 base=run_base(cwd, tickets),
+                routing=None if remembered is None else remembered.routing,
             ),
         )
 
@@ -2013,6 +2028,7 @@ def cmd_plan(
     dry_run: bool,
     at_once: int,
     model: str | None,
+    deliberation: str | None,
     state_path: Path | None,
     reference: str | None,
 ) -> int:
@@ -2032,6 +2048,7 @@ def cmd_plan(
             dry_run=dry_run,
             at_once=at_once,
             model=model,
+            deliberation=deliberation,
             state_path=state_path,
             reference=reference,
         )
@@ -2040,6 +2057,43 @@ def cmd_plan(
 
     emit(asdict(plan))
     return 0 if plan.ready else 2
+
+
+def cmd_route(cwd: Path, response: Path, state_path: Path | None) -> int:
+    """Persist one public model-selector response without interpreting selection.
+
+    Model-selector owns route validity and selection. The engine only retains
+    the opaque frozen snapshot and decisions beside the existing resumable run
+    state, rejecting a later response that would replace frozen facts.
+    """
+
+    state = remembered_state(state_path, cwd)
+    if state is None:
+        return fail("routing needs this run's state; plan before routing")
+
+    try:
+        routed = json.loads(response.read_text(encoding="utf-8"))
+        snapshot = cast(dict[str, Any], routed["snapshot"])
+        decisions = cast(list[dict[str, Any]], routed["decisions"])
+        identity = str(snapshot["snapshot_identity"])
+    except (OSError, TypeError, ValueError, KeyError):
+        return fail("route response is not a readable model-selector response")
+
+    # Preserve the one snapshot that makes resumed decisions reproducible.
+    current = state.routing
+    if current is not None and current["snapshot"] != snapshot:
+        return fail("route response replaces this run's frozen routing snapshot")
+
+    # Keep every exact decision for the outcome account without owning its rules.
+    previous = (
+        [] if current is None else cast(list[dict[str, Any]], current["decisions"])
+    )
+    state.routing = {"snapshot": snapshot, "decisions": previous + decisions}
+    if write_state(state_path, state) is None:
+        return fail("routing state could not be written")
+
+    emit({"snapshot_identity": identity, "decisions": decisions})
+    return 0
 
 
 def claim_refusal(
@@ -3191,7 +3245,7 @@ def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
     return 0
 
 
-def cmd_report(cwd: Path, reference: str | None) -> int:
+def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int:
     """Print every ticket in scope grouped by current Ticket Resolution.
 
     One report rather than a running commentary, and every ticket in scope in
@@ -3238,6 +3292,7 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
     }
     stranded = stranded_behind(open_scope)
     accounted = set(stranded).union(*recorded.values())
+    routing = remembered_state(state_path, cwd)
 
     emit(
         {
@@ -3246,6 +3301,7 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
             "scope": None if scope is None else [asdict(aim) for aim in scope],
             "branch": branch,
             "base": base,
+            "routing": None if routing is None else routing.routing,
             "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],
@@ -3298,8 +3354,15 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan.add_argument("--dry-run", action="store_true")
     plan.add_argument("--at-once", type=int, default=ONE_AT_A_TIME)
     plan.add_argument("--model")
+    plan.add_argument(
+        "--deliberation", choices=("low", "medium", "high", "xhigh", "max")
+    )
     add_scope_flag(plan)
     add_shared_flags(plan)
+
+    route = sub.add_parser("route", help="Persist one model-selector route response.")
+    route.add_argument("--response", required=True, type=Path)
+    add_shared_flags(route)
 
     claim = sub.add_parser("claim", help="Take one ticket before working it.")
     claim.add_argument("--ticket", required=True, type=int)
@@ -3363,9 +3426,12 @@ def main(argv: list[str] | None = None) -> int:
             dry_run=args.dry_run,
             at_once=args.at_once,
             model=args.model,
+            deliberation=args.deliberation,
             state_path=state_path,
             reference=args.scope,
         )
+    if args.verb == "route":
+        return cmd_route(cwd, args.response, state_path)
     if args.verb == "claim":
         return cmd_claim(cwd, args.ticket, state_path)
     if args.verb == "park":
@@ -3396,7 +3462,7 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.verb == "reconcile":
         return cmd_reconcile(cwd, args.ticket, args.commit)
-    return cmd_report(cwd, args.scope)
+    return cmd_report(cwd, args.scope, state_path)
 
 
 if __name__ == "__main__":

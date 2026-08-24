@@ -6,7 +6,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 ## SYNOPSIS
 
-**/orchestrate** [*TICKET-OR-SPEC*...] [**--dry-run**] [**--at-once** *COUNT*] [**--model** *NAME*] [**--yes**] [**--** *INSTRUCTION*]
+**/orchestrate** [*TICKET-OR-SPEC*...] [**--dry-run**] [**--at-once** *COUNT*] [**--model** *NAME*] [**--deliberation** *LEVEL*] [**--yes**] [**--** *INSTRUCTION*]
 
 **/orchestrate reconcile** *TICKET* [**--commit** *COMMIT*] [**--yes**] [**--** *INSTRUCTION*]
 
@@ -16,7 +16,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 Blocking relations produce dependency waves. Wave one contains tickets that can start immediately; each later wave contains work unblocked by earlier verified work. Native tracker dependency relations are authoritative when present. A ticket with no native relation may declare bare `#number` references on a `Blocked by` line. A closed blocker continues to block until it has a done Ticket Resolution.
 
-The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Builders may use cheaper models through `--model` or automatic selection, but every verdict remains on the orchestrator's model.
+The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Before its first claim, it sends the current frontier as one ordered batch through model-selector's read-only public route Interface and freezes the returned snapshot in resumable run state. Builders, amenders, collision repairers, rebuilders, and mechanical wave fixers launch only with their selected exact Harness-native controls. Every ticket, amend, repair, and wave verdict inherits the orchestrator's complete model and deliberation configuration exactly; no builder override or route can affect it.
 
 Before claiming anything, the Skill reads every ticket in scope for a decision the text leaves open and asks all such questions in one batch. Answers are posted to the corresponding ticket before building. With `--yes`, an open decision cannot be answered, so the ticket is parked under `needs-info` with its question and the rest of the scope continues.
 
@@ -122,7 +122,7 @@ The report also names the commit on which the run's work is based. A ticket reco
 
 **--dry-run**
 
-Read the tracker, resolve the requested scope, and print the dependency-wave plan without claiming or building a ticket.
+Read the tracker, resolve the requested scope, and report the dependency-wave graph and read-only routing readiness/proposed decisions without claiming, starting setup, or writing model-selector configuration or ledger data.
 
 **--at-once** *COUNT*
 
@@ -130,7 +130,11 @@ Build at most *COUNT* frontier tickets concurrently. The default is `1`. Values 
 
 **--model** *NAME*
 
-Use *NAME* for every building subagent. Verification, collision repair verdicts, amend verdicts, and wave checks remain on the orchestrator's model. Without this option, the Skill selects per ticket the cheapest builder model it judges able, never above its own model.
+Lock only the building model dimension for every execution role. Model-selector still selects deliberation from the frozen snapshot. An unavailable, ambiguous, unmappable, or above-main exact model is refused before claims; it never falls through to another model. Verdicts retain exact main-seat inheritance.
+
+**--deliberation** *LEVEL*
+
+Lock only the building deliberation dimension for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`; another value is refused rather than normalized. Model-selector still selects model when it is omitted. Verdicts retain exact main-seat inheritance.
 
 **--commit** *COMMIT*
 
@@ -160,9 +164,9 @@ The working tree must contain no uncommitted non-ignored work when the run plans
 
 **/orchestrate --dry-run**
 
-Print the dependency-wave plan for every open `ready-for-agent` ticket without claiming one.
+Print the dependency-wave plan and proposed read-only routing decisions for every open `ready-for-agent` ticket without claiming one.
 
-**/orchestrate #14 #21 --at-once 2**
+**/orchestrate #14 #21 --at-once 2 --deliberation high**
 
 Work the union of two ticket or spec references with at most two concurrent builders.
 
@@ -196,7 +200,7 @@ The following schematic cases pin the split independently of any one Skill's For
 
 **Skills**
 
-The Manager must be Enabled so the dependency check can run.
+The Manager and Model Selector Skills must be Enabled so the dependency check can run and Orchestrate can use model-selector's public route Interface.
 
 **Capabilities**
 

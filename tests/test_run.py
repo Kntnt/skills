@@ -1070,6 +1070,77 @@ def test_plan_names_the_model_the_building_subagents_run_on(tmp_path: Path) -> N
     assert json.loads(bare.stdout)["model"] is None
 
 
+def test_plan_keeps_builder_model_and_deliberation_overrides_separate(
+    tmp_path: Path,
+) -> None:
+    """A named field locks only that builder dimension, never the verdict seat."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    model = _engine(repo, "plan", "--model", "builder", env=env)
+    deliberation = _engine(repo, "plan", "--deliberation", "high", env=env)
+
+    assert model.returncode == 0, model.stderr
+    assert deliberation.returncode == 0, deliberation.stderr
+    assert json.loads(model.stdout)["deliberation"] is None
+    assert json.loads(deliberation.stdout)["model"] is None
+    assert json.loads(deliberation.stdout)["deliberation"] == "high"
+
+
+def test_plan_refuses_an_unknown_builder_deliberation_value(tmp_path: Path) -> None:
+    """Portable deliberation is exact public input rather than a normalizable hint."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    result = _engine(repo, "plan", "--deliberation", "highest", env=env)
+
+    assert result.returncode != 0
+    assert "invalid choice" in result.stderr
+
+
+def test_route_persists_one_frozen_snapshot_for_resume(tmp_path: Path) -> None:
+    """Later waves cannot silently replace the route facts preflight selected."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    response = tmp_path / "route.json"
+    response.write_text(
+        json.dumps(
+            {
+                "snapshot": {"snapshot_identity": "frozen"},
+                "decisions": [{"request_id": "build-9", "status": "inherit"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    routed = _engine(
+        repo,
+        "route",
+        "--response",
+        str(response),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    resumed = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert planned.returncode == 0, planned.stderr
+    assert routed.returncode == 0, routed.stderr
+    assert json.loads(routed.stdout)["snapshot_identity"] == "frozen"
+    assert json.loads(resumed.stdout)["routing"]["snapshot"] == {
+        "snapshot_identity": "frozen"
+    }
+    assert json.loads(reported.stdout)["routing"]["decisions"] == [
+        {"request_id": "build-9", "status": "inherit"}
+    ]
+
+
 def test_claim_takes_the_ticket_on_the_tracker_before_any_work_starts(
     tmp_path: Path,
 ) -> None:
