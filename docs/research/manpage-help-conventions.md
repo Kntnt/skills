@@ -46,12 +46,12 @@ The current blanket requirements that every page contain `NOTES` and `OPTIONS`, 
 
 In a command synopsis, literal command text and options are conventionally bold, while replaceable arguments are italic. Square brackets mean optional, a vertical bar separates alternatives, and an ellipsis marks repetition. POSIX uses multiple synopsis lines when mutually exclusive arguments create distinct valid invocation forms; `man(1)` likewise says the synopsis pattern should match every possible invocation and may use several exclusive forms.
 
-In Markdown, map those semantics rather than copying roff escapes: render a literal invocation or flag in bold, render a metavar in italics, and leave the punctuation literal. Use stable, descriptive metavariables such as *SKILL*, *PATH*, and *COUNT*. Use one spelling for repetition throughout, preferably the portable ASCII `...`, and attach it to the syntactic unit that repeats.
+In Markdown, map those semantics rather than copying roff escapes: render a literal invocation or flag in bold, render a metavar in italics, and leave the punctuation literal. A flag that takes a value attaches it with `=`, which is this Collection's own rule rather than a convention of the sources above (ADR-0096), and closes the bold run after the `=` so the metavariable stays legible markup. Use stable, descriptive metavariables such as *SKILL*, *PATH*, and *COUNT*. Use one spelling for repetition throughout, preferably the portable ASCII `...`, and attach it to the syntactic unit that repeats.
 
 For example:
 
 ```markdown
-**/example** [**--project**] [**--output** *PATH*] *INPUT*...
+**/example** [**--project**] [**--output=**_PATH_] *INPUT*...
 **/example** **--status**
 ```
 

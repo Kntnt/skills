@@ -2540,7 +2540,12 @@ def add_dry_run_flag(parser: argparse.ArgumentParser) -> None:
 
 
 def normalize_argv(argv: list[str]) -> list[str]:
-    """Turn bare `--project` into `--project on` so it cannot steal a skill name."""
+    """Turn bare `--project` into the argv pair argparse reads it as.
+
+    Written attached or bare, the flag is one token; argparse wants the value as
+    an argument of its own, and without this a bare `--project` would swallow the
+    skill name that follows it.
+    """
 
     normalized: list[str] = []
     for arg in argv:

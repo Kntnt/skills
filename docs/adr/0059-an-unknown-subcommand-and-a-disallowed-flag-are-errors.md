@@ -15,7 +15,7 @@ The user-facing verbs, settled by the flag table this record makes binding:
 | `update` | yes | yes | yes |
 | `uninstall` | yes | yes | – |
 
-`select` additionally takes `--on <skill>` and `--off <skill>`, documented in its manpage. `--force` is accepted by no verb, as it never has been (ADR-0023's `--force` on `agents-md` is a different flag on a different skill and is untouched).
+`select` additionally takes `--on=<skill>` and `--off=<skill>`, documented in its manpage. `--force` is accepted by no verb, as it never has been (ADR-0023's `--force` on `agents-md` is a different flag on a different skill and is untouched).
 
 **The rule has no exceptions.** It binds every subcommand the script has, including `manpage`, `check`, and `catalog`, which no user types. Exempting them would rebuild the same invisible seam one layer down — a surface strict where somebody is looking and lax where nobody is — and it buys nothing measurable, since no call site in the collection passes a meaningless flag to any of the three. `catalog` keeps `--dry-run` by genuinely acting on it where it writes, which is the only way anything keeps a flag under this record: by having a use for it.
 

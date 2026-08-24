@@ -5224,8 +5224,8 @@ def test_the_dependency_gate_is_invoked_with_no_flag_in_every_skill() -> None:
 
     assert {"agents-md", "delegation", "commit", "push", "release"} <= set(gates)
     for name, text in gates.items():
-        assert 'check --here "$HERE"`' in text, (
-            f'{name}: the checker is invoked as `check --here "$HERE"` and'
+        assert 'check --here="$HERE"`' in text, (
+            f'{name}: the checker is invoked as `check --here="$HERE"` and'
             f" with no flag on it. Under strict syntax a stray flag there is"
             f" refused rather than ignored, which would kill the skill before"
             f" it did anything (ADR-0059). See {STANDARD}."

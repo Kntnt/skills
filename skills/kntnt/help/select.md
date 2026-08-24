@@ -8,7 +8,7 @@ kntnt select - list Collection Skills and change which are Enabled
 
 **/kntnt** **select** [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
-**/kntnt** **select** [**--on** *SKILL*]... [**--off** *SKILL*]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
+**/kntnt** **select** [**--on=**_SKILL_]... [**--off=**_SKILL_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -22,11 +22,11 @@ The explicit `--on` and `--off` form applies only the named deltas and opens no 
 
 ## OPTIONS
 
-**--on** *SKILL*
+**--on=**_SKILL_
 
 Enable *SKILL* in the targeted layer without opening the list. Repeatable. Required Collection Skills are added after one confirmation for the complete dependency closure.
 
-**--off** *SKILL*
+**--off=**_SKILL_
 
 Disable *SKILL* in the targeted layer without opening the list. Repeatable and combinable with `--on`. Because it deletes files, the script requires `--yes`.
 
@@ -72,7 +72,7 @@ The end of the list counts Withdrawn Skills found on disk. Update removes them.
 
 ## EXAMPLES
 
-**/kntnt select --on release --yes**
+**/kntnt select --on=release --yes**
 
 Enable `release` and its required Collection Skills without opening the list.
 

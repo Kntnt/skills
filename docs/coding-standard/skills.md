@@ -16,6 +16,14 @@ A contributor who has not yet written anything cannot be helped by an assertion 
 
 The copies stay together because only one of them states the rule in full. The message names the rule and cites where it is stated; it does not restate the reasoning, and this document does not reproduce the tests. What can drift is the pointer, and a citation to a record number that resolves to nothing fails the suite.
 
+## The collection's flag grammar
+
+**A flag of this collection's own grammar that takes a value attaches it with `=`, written `--flag=value`, and the space-separated form is written nowhere** (ADR-0096). One spelling, on every surface: the `argument-hint`, the `## SYNOPSIS` and `## OPTIONS` of every root and subcommand manpage, the argument prose and steps of every Skill body, and every invocation of the collection's own Python engines a body constructs. The Skills have no parser of their own — the agent reading these files is the whole of the enforcement — so a grammar that varies by Skill is a grammar that is guessed.
+
+A flag taking no value is untouched, and so is the bare spelling of a flag whose value is optional: `--project`, `--project=on`, and `--project=off` are all compliant, and the same value written after a space is not. In a manpage the attached form closes the bold run after the `=` and renders the metavariable with underscores, as `**--data=**_PATH_`, because `**--data=***PATH*` is not the markup it looks like.
+
+**A third-party command line keeps its own tool's spelling.** A body constructing a `git`, `gh`, `uv`, or `npx` invocation writes whatever that tool documents; their grammar is not this collection's to normalise. The collection's engines stay permissive for the same reason they always were — `argparse` accepts both forms and nothing is gained by refusing one there — so the rule is held by the suite, which reads every file a Skill ships and the documents governed here, and fails on a valued flag written with a space.
+
 ## `SKILL.md`
 
 ### Frontmatter
@@ -36,7 +44,7 @@ The frontmatter is YAML and is read by a real YAML parser, so anything YAML acce
 
 The body carries only what the agent executes, which is why prose is the seam a Skill is held at (ADR-0046).
 
-- **The dependency preamble is present exactly when the dependency lists are not empty.** A Skill with nothing to declare calls no checker, because the call could only ever report an empty list and would itself declare `uv` (ADR-0012). Where the preamble is present it invokes the checker as `check --here "$HERE"` and names `npx skills add Kntnt/skills` as the fix for a missing Manager.
+- **The dependency preamble is present exactly when the dependency lists are not empty.** A Skill with nothing to declare calls no checker, because the call could only ever report an empty list and would itself declare `uv` (ADR-0012). Where the preamble is present it invokes the checker as `check --here="$HERE"` and names `npx skills add Kntnt/skills` as the fix for a missing Manager.
 - **An `## Invocation Envelope` section precedes `## Help` and Formal Invocation parsing.** It reads and follows the `## INVOCATION ENVELOPE` section of the Skill's own `$HERE/help.md`, applies Help and Arguments only to the separated Formal Invocation, and passes only that formal part to scripts or nested formal parsers. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance; only a conflict that cannot be discovered until after a legitimate effect may stop later effects and report the exact partial outcome. The local page keeps a directly installed Skill self-contained while carrying the same caller-neutral split, validation order, semantic boundaries, refusal categories, Conversation Context rule, and selective propagation to nested Skills as every other page (ADR-0078).
 - **A `## Help` section** routes `--help`, `-h`, and `help` to `$HERE/help.md`, printed verbatim (ADR-0044). A Skill with subcommands also routes `/<name> <command-path> --help` and its `-h` form to that path's page under `$HERE/help/`, stopping before normal work (ADR-0077). The heading is required and the routes sit under it: looked for anywhere in the body, their tokens prove nothing because the refusal clause names them again.
 - **An invalid form is refused, never repaired or ignored.** The refusal names what was wrong, prints the `## SYNOPSIS` section of the most specific recognized command page verbatim, and points at that command's `--help` form; without a recognized command it uses `$HERE/help.md` and `/<name> --help`. The body states the rule with the clause *A flag is refused rather than ignored where it has no work to do here* and explains why accepting an ignored flag is misleading; the suite pins both.

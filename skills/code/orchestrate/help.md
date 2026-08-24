@@ -6,9 +6,9 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 ## SYNOPSIS
 
-**/orchestrate** [*TICKET-OR-SPEC*...] [**--dry-run**] [**--at-once** *COUNT*] [**--model** *NAME*] [**--deliberation** *LEVEL*] [**--yes**] [**--** *INSTRUCTION*]
+**/orchestrate** [*TICKET-OR-SPEC*...] [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--yes**] [**--** *INSTRUCTION*]
 
-**/orchestrate reconcile** *TICKET* [**--commit** *COMMIT*] [**--yes**] [**--** *INSTRUCTION*]
+**/orchestrate reconcile** *TICKET* [**--commit=**_COMMIT_] [**--yes**] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -84,7 +84,7 @@ A verification failure receives amend 1. If its independent verifier also fails,
 
 A merge collision is repaired on the ticket's own branch and verified against both tickets. If that repair fails, the ticket is rebuilt once from a clean base containing the work it collided with. A second collision records the ticket as conflicted.
 
-With `--at-once 1`, unverified work is on the run branch, so an unrepaired failure stops later tickets. Above one, failures remain isolated and unrelated tickets continue; anything depending on failed work is stranded.
+With `--at-once=1`, unverified work is on the run branch, so an unrepaired failure stops later tickets. Above one, failures remain isolated and unrelated tickets continue; anything depending on failed work is stranded.
 
 ## CONTINUING A RUN
 
@@ -126,19 +126,19 @@ The report also names the commit on which the run's work is based. A ticket reco
 
 Read the tracker, resolve the requested scope, and report the dependency-wave graph and read-only routing readiness/proposed decisions without commenting on, parking, claiming, starting setup, or writing model-selector configuration, ledger, or run-state data.
 
-**--at-once** *COUNT*
+**--at-once=**_COUNT_
 
 Build at most *COUNT* frontier tickets concurrently. The default is `1`. Values above one isolate each ticket in its own branch and working tree; `1` works directly on the current branch.
 
-**--model** *NAME*
+**--model=**_NAME_
 
 Lock only the building model dimension for every execution role. Model-selector still selects deliberation from the frozen snapshot. An unavailable, ambiguous, unmappable, or above-main exact model is refused before claims; it never falls through to another model. Verdicts retain exact main-seat inheritance.
 
-**--deliberation** *LEVEL*
+**--deliberation=**_LEVEL_
 
 Lock only the building deliberation dimension for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`; another value is refused rather than normalized. Model-selector still selects model when it is omitted. Verdicts retain exact main-seat inheritance.
 
-**--commit** *COMMIT*
+**--commit=**_COMMIT_
 
 Name the default-branch commit that completed a reconciled ticket. It applies only to `reconcile`; the action discovers the commit when one exact closing-reference candidate exists.
 
@@ -178,7 +178,7 @@ The working tree must contain no uncommitted non-ignored work when the run plans
 
 Print the dependency-wave plan and proposed read-only routing decisions for every open `ready-for-agent` ticket without claiming one.
 
-**/orchestrate #14 #21 --at-once 2 --deliberation high**
+**/orchestrate #14 #21 --at-once=2 --deliberation=high**
 
 Work the union of two ticket or spec references with at most two concurrent builders.
 

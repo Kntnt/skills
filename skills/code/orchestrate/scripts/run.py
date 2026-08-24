@@ -2605,8 +2605,8 @@ def described_locks(model: str | None, deliberation: str | None) -> str:
     """Say in words which building fields an invocation locked."""
 
     named = [
-        f"--model {model}" if model else "no model",
-        f"--deliberation {deliberation}" if deliberation else "no deliberation",
+        f"--model={model}" if model else "no model",
+        f"--deliberation={deliberation}" if deliberation else "no deliberation",
     ]
     return " and ".join(named)
 
