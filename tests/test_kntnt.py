@@ -3825,6 +3825,92 @@ def test_delegation_requires_subagents_and_says_so() -> None:
     )
 
 
+def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
+    """The standing mode delegates only execution through model-selector route.
+
+    Delegation's public contract is the instruction copied unchanged to session,
+    Project, and user contexts. Hold the authority boundary at that seam rather
+    than duplicating model-selector's routing tests here.
+    """
+
+    directory = REPO_ROOT / "skills" / "agents" / "delegation"
+    skill = (directory / "SKILL.md").read_text(encoding="utf-8")
+    help_page = (directory / "help.md").read_text(encoding="utf-8")
+    mode = (directory / "references" / "mode.md").read_text(encoding="utf-8")
+    persistence = (directory / "references" / "persist.md").read_text(encoding="utf-8")
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    catalog = json.loads(
+        (REPO_ROOT / "skills" / "kntnt" / "catalog.json").read_text(encoding="utf-8")
+    )
+
+    assert 'kntnt.skills: "model-selector"' in skill
+    assert "model-selector" in skill.partition("compatibility:")[2].partition("\n")[0]
+    assert "model-selector" in help_page
+    assert (
+        "model-selector"
+        in readme.partition("### delegation")[2].partition("### tldr")[0]
+    )
+    entry = next(item for item in catalog["skills"] if item["name"] == "delegation")
+    assert entry["skills"] == ["model-selector"]
+
+    required_mode_fragments = {
+        "do this yourself",
+        "before Route is consulted",
+        "understanding, diagnosis, decisions, briefing, verification and the final answer",
+        "main seat",
+        "only the execution subagent",
+        "public `/model-selector route` Interface",
+        "real execution brief",
+        "reversibility, consequence, context and tool demand",
+        "independent checker or declared failure signal",
+        "Keep the user's access profile and model inventory out of persistent mode context",
+        "explicit execution-model instruction locks only the model dimension",
+        "explicit `low`, `medium`, `high`, `xhigh`, or `max` deliberation instruction locks only the deliberation dimension",
+        "refuse it rather than replacing it",
+        "exact Harness-native launch controls",
+        "without explicit model or deliberation overrides",
+        "Route optimization was unavailable",
+        "no subagent is launched",
+        "starts no setup, research, evaluation, profile writes, or ledger writes",
+        "objective main-agent verification or the declared failure signal",
+        "never the execution subagent's self-confidence",
+        "strongest safe permitted point",
+        "brief + fresh-context reading + report",
+        "After you have decided to delegate",
+    }
+    missing = sorted(
+        fragment for fragment in required_mode_fragments if fragment not in mode
+    )
+    assert not missing, (
+        f"{directory / 'references' / 'mode.md'}: delegation must route only chosen"
+        f" execution through the public contract while preserving main-seat ownership;"
+        f" missing {missing}."
+    )
+
+    assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
+    assert "config.json" not in mode
+
+    # Keep project and user persistence as one refreshable mode contract.
+    required_persistence_fragments = {
+        "`project` and `user` keep the mode as a managed block",
+        "{the entire content of $HERE/references/mode.md, verbatim}",
+        "`on` over an existing block rewrites it from the current `mode.md`",
+        "`off` removes the whole block, both markers included, and nothing else",
+        "lines between the second comment and the closing marker differ",
+        "`status` reports it and names `/delegation <scope> on` as the fix",
+    }
+    missing_persistence = sorted(
+        fragment
+        for fragment in required_persistence_fragments
+        if fragment not in persistence
+    )
+    assert not missing_persistence, (
+        f"{directory / 'references' / 'persist.md'}: persistent delegation must"
+        f" copy one authoritative mode verbatim, refresh it, remove it exactly, and"
+        f" diagnose stale copies; missing {missing_persistence}."
+    )
+
+
 def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() -> None:
     """The mode delegates noisy tool work before its raw result reaches the main agent."""
 
