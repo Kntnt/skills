@@ -117,6 +117,18 @@
       "capabilities": []
     },
     {
+      "name": "write",
+      "category": "editorial",
+      "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",
+      "digest": "b5430046e2819e398fe35f893eb96c30f13fe2bcb63e99c11d471de4150d34db",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",

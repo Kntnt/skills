@@ -3657,6 +3657,180 @@ def test_the_shared_delivery_contract_binds_no_consumers_grammar() -> None:
     assert "`my-file.md`, `my-file-2.md`, `my-file-3.md`" in contract
 
 
+def test_the_collection_library_carries_the_editorial_base_contract() -> None:
+    """One statement of what a first draft has to be, read from both sides.
+
+    Write drafts against the base contract and Redline reviews against the same
+    document, so it belongs to neither of them. A copy under one would make that
+    Skill the owner of its peer's rules, and a copy under each would let a
+    requirement and its review disagree about what was required (ADR-0076,
+    ADR-0095).
+    """
+
+    editorial = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
+
+    assert (editorial / "base.md").is_file(), (
+        f"{editorial / 'base.md'}: the normative outcomes a first draft has to"
+        f" meet are stated once, in the Collection Library, because the Skill"
+        f" that writes and the Skill that reviews read the same statement"
+        f" (ADR-0076, ADR-0095). See {STANDARD}."
+    )
+
+    private = [
+        directory
+        for directory in _shipped_skills()
+        if (directory / "references" / "editorial").exists()
+    ]
+    assert private == [], (
+        f"{private}: the editorial contract has several consumers, so a local"
+        f" copy makes one Skill the implementation owner of its peers"
+        f" (ADR-0076, ADR-0095). See {STANDARD}."
+    )
+
+    contract = (editorial / "base.md").read_text(encoding="utf-8")
+
+    # Match a long-option spelling, never the reserved standalone separator.
+    flags = sorted(set(re.findall(r"(?<![\w-])--[A-Za-z][\w-]*", contract)))
+    assert flags == [], (
+        f"{flags}: the shared base contract names a consumer's flag spelling,"
+        f" which binds a grammar the consuming Skill owns (ADR-0095). See"
+        f" {STANDARD}."
+    )
+
+    # Hold the register baseline and the thing that overrides it, which is the
+    # pair a genre resource is written against.
+    assert "newspaper" in contract and "magazine" in contract, (
+        f"{editorial / 'base.md'}: the base contract states the register"
+        f" baseline a draft starts from (ADR-0095). See {STANDARD}."
+    )
+    assert "genre, audience, and purpose" in contract.lower(), (
+        f"{editorial / 'base.md'}: the base contract states that genre,"
+        f" audience, and purpose override the register baseline, or a letter"
+        f" comes out as a news article (ADR-0095). See {STANDARD}."
+    )
+
+
+def test_the_general_genre_ships_beside_the_contract_it_extends() -> None:
+    """An unspecified content type still gets a complete genre contract.
+
+    `general` is the default, so it is the genre a Skill loads when nobody
+    selected one. The set of installed genres is the directory itself, which is
+    what makes adding one a single-resource addition (ADR-0095).
+    """
+
+    genres = (
+        REPO_ROOT
+        / "skills"
+        / "kntnt"
+        / "library"
+        / "references"
+        / "editorial"
+        / "genres"
+    )
+
+    assert (genres / "general.md").is_file(), (
+        f"{genres / 'general.md'}: `general` is the default genre, so it ships"
+        f" as a resource with a complete contract rather than as the absence of"
+        f" one (ADR-0095). See {STANDARD}."
+    )
+
+
+def test_a_review_extension_is_addressable_apart_from_the_base_half() -> None:
+    """A Skill that only writes must not pay for the guidance it cannot use.
+
+    The review half of a genre or technique is a file of its own beside the
+    base half, `<name>.review.md`, rather than a section inside it: a Skill
+    resolving a genre by name loads the base half and stops, and a reviewing
+    Skill asks for the extension by its own name (ADR-0095).
+    """
+
+    editorial = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
+    resources = [
+        path for path in sorted(editorial.rglob("*.md")) if path.name != "README.md"
+    ]
+
+    # A glob that matched nothing would pass every assertion below it.
+    assert resources
+
+    for path in resources:
+        if path.name.endswith(".review.md"):
+            base = path.with_name(path.name[: -len(".review.md")] + ".md")
+            assert base.is_file(), (
+                f"{path}: a review extension extends a base half, and"
+                f" {base.name} is not there to extend (ADR-0095). See"
+                f" {STANDARD}."
+            )
+            continue
+        assert "\n## Review\n" not in path.read_text(encoding="utf-8"), (
+            f"{path}: the review half sits inside the base half, so a Skill"
+            f" that only writes loads it too. Write it as"
+            f" `{path.stem}.review.md` beside this file (ADR-0095). See"
+            f" {STANDARD}."
+        )
+
+
+def test_write_ships_in_the_editorial_category_and_invokes_no_peer() -> None:
+    """Running an editorial pipeline stays the user's separate choice.
+
+    Write produces one first draft and stops. Invoking Redline or Proofread
+    from inside it would make the pipeline the default and the single draft the
+    exception, and would spend a reviewing Skill's context on every draft
+    whether or not anybody wanted one reviewed (ADR-0088).
+    """
+
+    body = REPO_ROOT / "skills" / "editorial" / "write" / "SKILL.md"
+
+    assert body.is_file(), (
+        f"{body}: Write ships in the Collection's editorial category. See {STANDARD}."
+    )
+
+    # The pointer shape a Skill follows a declared peer Dependency through.
+    nested = re.compile(r"\$HERE/\.\./([A-Za-z0-9_-]+)/SKILL\.md")
+    called = sorted(set(nested.findall(body.read_text(encoding="utf-8"))))
+    assert called == [], (
+        f"{called}: Write invokes a peer Skill, which turns one first draft"
+        f" into an editorial pipeline nobody asked for (ADR-0088). See"
+        f" {STANDARD}."
+    )
+
+    assert '\n  kntnt.skills: ""\n' in body.read_text(encoding="utf-8"), (
+        f"{body}: Write declares a Skill Dependency, and it invokes no peer"
+        f" (ADR-0088). See {STANDARD}."
+    )
+
+
+def test_write_loads_only_what_a_first_draft_is_written_against() -> None:
+    """Concision is the point of the wave, and it is a loading rule.
+
+    Write loads the base contract, the selected genre, the composition scope of
+    the resolved Language Resource, and the optional technique. Review,
+    anti-slop, and mechanics guidance belong to the Skills contracted to act on
+    them, and a Skill that loads guidance it may not act on has spent the
+    context the split was made to save (ADR-0095).
+    """
+
+    directory = REPO_ROOT / "skills" / "editorial" / "write"
+    text = "\n".join(
+        path.read_text(encoding="utf-8") for path in sorted(directory.rglob("*.md"))
+    )
+
+    assert "$LIBRARY/references/editorial/base.md" in text, (
+        f"{directory}: Write never reaches the base contract, so nothing says"
+        f" what its draft is written against (ADR-0095). See {STANDARD}."
+    )
+    assert "--scope=composition" in text, (
+        f"{directory}: Write never asks the resolver for the composition"
+        f" scope, which is the language-specific guidance a draft is written"
+        f" with (ADR-0087, ADR-0095). See {STANDARD}."
+    )
+    for scope in ("review", "anti-slop", "mechanics"):
+        assert f"--scope={scope}" not in text, (
+            f"{directory}: Write asks for the {scope} scope, which belongs to"
+            f" the Skills contracted to act on it (ADR-0087, ADR-0095). See"
+            f" {STANDARD}."
+        )
+
+
 def test_a_skill_reads_shared_implementation_only_from_the_collection_library() -> None:
     """A peer Skill is a Dependency, never an implementation owner."""
 
