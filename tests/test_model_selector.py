@@ -924,6 +924,45 @@ def test_route_cli_returns_stable_artifact_refusals_without_tracebacks(
         assert response["decisions"] == [], expected
 
 
+def test_route_rejects_non_finite_numbers_at_direct_and_cli_seams(
+    tmp_path: Path,
+) -> None:
+    """Python-only NaN and infinity values never enter the JSON contract."""
+
+    # Submit every non-finite float through the direct public seam.
+    router = _load_router()
+    for value in (float("nan"), float("inf"), float("-inf")):
+        context = _complete_routing_snapshot()
+        context["mappings"][0]["commercial"]["cash"] = value
+        response = router.route(
+            {"schema_version": 1, "context": context, "requests": [_request()]}
+        )
+        assert response["artifact_refusal"]["code"] == "invalid_snapshot"
+
+    # Persist Python's permissive NaN token and invoke the machine seam.
+    context = _complete_routing_snapshot()
+    context["mappings"][0]["commercial"]["cash"] = float("nan")
+    artifact = tmp_path / "non-finite.json"
+    artifact.write_text(
+        json.dumps({"schema_version": 1, "context": context, "requests": [_request()]}),
+        encoding="utf-8",
+    )
+    completed = subprocess.run(
+        ["uv", "run", str(MODEL_SELECTOR / "scripts" / "route.py"), str(artifact)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    # Assert a stable refusal containing only strict JSON numeric syntax.
+    assert completed.returncode == 2
+    assert json.loads(completed.stdout)["artifact_refusal"]["code"] == (
+        "invalid_snapshot"
+    )
+    assert "NaN" not in completed.stdout
+    assert "Infinity" not in completed.stdout
+
+
 def test_route_and_recommend_refuse_malformed_envelopes_without_exceptions() -> None:
     """Both public seams preserve stable artifact refusals for invalid envelopes."""
 
@@ -1198,6 +1237,14 @@ def test_route_excludes_exact_evidence_known_below_the_quality_floor() -> None:
     assert decision["inheritance"]["reason"] == "quality_floor_not_cleared"
     assert decision["audit"]["exclusions"][-1]["code"] == "quality_floor_not_cleared"
 
+    # Adapt the inherited point without discarding its measured interval.
+    recommendation = router.recommend(
+        {"schema_version": 1, "context": context, "requests": [request]}
+    )["recommendations"][0]
+    assert recommendation["uncertainty"]["status"] == "measured"
+    assert recommendation["uncertainty"]["candidates"][0]["lower_bound"] == 0.8
+    assert recommendation["uncertainty"]["candidates"][0]["upper_bound"] == 0.84
+
 
 def test_route_requires_snapshot_identity_but_freezes_current_context() -> None:
     """Only returned snapshots may bypass current-context derivation."""
@@ -1400,6 +1447,12 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
     )
     assert unresolved["evidence_banner"]["missing_evidence"]
     assert unresolved["evidence_banner"]["recommendation_kind"] == "no_selection"
+    assert unresolved["uncertainty"]["status"] == "measured"
+    assert len(unresolved["uncertainty"]["candidates"]) == 2
+    assert {
+        candidate["lower_bound"]
+        for candidate in unresolved["uncertainty"]["candidates"]
+    } == {0.92, 0.94}
     assert unresolved["experiment_brief"]["rubric"] == {
         "kind": "binary",
         "pass_condition": "pytest passes",

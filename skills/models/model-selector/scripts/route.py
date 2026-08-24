@@ -6,6 +6,7 @@
 
 import hashlib
 import json
+import math
 import sys
 from copy import deepcopy
 from dataclasses import dataclass
@@ -222,7 +223,9 @@ def _schema_errors(
 def _is_number(value: Any) -> bool:
     """Accept JSON numbers without treating booleans as capabilities or costs."""
 
-    return isinstance(value, int | float) and not isinstance(value, bool)
+    return (isinstance(value, int) and not isinstance(value, bool)) or (
+        isinstance(value, float) and math.isfinite(value)
+    )
 
 
 def _canonical_digest(value: Any) -> str:
@@ -1640,31 +1643,15 @@ def _recommendation_banner(decision: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _recommendation_uncertainty(
+def _candidate_uncertainty(
     request: dict[str, Any],
-    decision: dict[str, Any],
+    candidate: Candidate,
     snapshot: dict[str, Any],
 ) -> dict[str, Any]:
-    """Expose uncertainty only through the core's exact applicability rule."""
-
-    if decision["status"] != "selected":
-        return {"status": "unknown", "reason": decision["status"]}
-
-    # Recover the selected candidate from the same hard-filtered request pool.
-    fingerprint = decision["launch"]["configuration_fingerprint"]
-    candidates = _candidate_pool(request, snapshot).candidates
-    candidate = next(
-        (
-            item
-            for item in candidates
-            if _candidate_fingerprint(item, snapshot) == fingerprint
-        ),
-        None,
-    )
-    if candidate is None:
-        return {"status": "unknown", "reason": "selected candidate is unavailable"}
+    """Resolve one candidate's uncertainty through exact applicability."""
 
     # Retain only representative, current, bounded, exact-point evidence.
+    fingerprint = _candidate_fingerprint(candidate, snapshot)
     records = [
         record
         for record in snapshot["evidence"]["records"]
@@ -1680,13 +1667,96 @@ def _recommendation_uncertainty(
     ]
     if not records:
         return {
+            "configuration_fingerprint": fingerprint,
+            "model": candidate.point["model"],
+            "portable_deliberation": candidate.portable,
             "status": "unknown",
             "reason": "representative exact-point uncertainty is missing",
         }
 
     # Report the strongest conservative applicable record deterministically.
     record = max(records, key=_quality_lower_bound)
-    return {"status": "measured", **deepcopy(record["uncertainty"])}
+    return {
+        "configuration_fingerprint": fingerprint,
+        "model": candidate.point["model"],
+        "portable_deliberation": candidate.portable,
+        "status": "measured",
+        **deepcopy(record["uncertainty"]),
+    }
+
+
+def _recommendation_uncertainty(
+    request: dict[str, Any],
+    decision: dict[str, Any],
+    snapshot: dict[str, Any],
+) -> dict[str, Any]:
+    """Retain selected or inherited uncertainty without reviving weak evidence."""
+
+    # Bypass candidate lookup for refusals and non-evidence inheritance.
+    evidence_inheritance = {
+        "insufficient_evidence",
+        "underdetermined_frontier",
+        "quality_floor_not_cleared",
+    }
+    inheritance_reason = decision.get("inheritance", {}).get("reason")
+    if decision["status"] == "refused" or (
+        decision["status"] == "inherit"
+        and inheritance_reason not in evidence_inheritance
+    ):
+        return {"status": "unknown", "reason": decision["status"]}
+
+    # Reuse the shared hard-filtered request candidates for uncertainty.
+    candidates = _candidate_pool(request, snapshot).candidates
+    if decision["status"] == "selected":
+        fingerprint = decision["launch"]["configuration_fingerprint"]
+        candidate = next(
+            (
+                item
+                for item in candidates
+                if _candidate_fingerprint(item, snapshot) == fingerprint
+            ),
+            None,
+        )
+        if candidate is None:
+            return {
+                "status": "unknown",
+                "reason": "selected candidate is unavailable",
+            }
+        uncertainty = _candidate_uncertainty(request, candidate, snapshot)
+        return {
+            key: value
+            for key, value in uncertainty.items()
+            if key in {"status", "reason", "lower_bound", "upper_bound"}
+        }
+
+    # Preserve per-frontier intervals for evidence-driven inheritance only.
+    frontier = {
+        entry["configuration_fingerprint"]
+        for entry in decision["audit"].get("frontier", [])
+    }
+    relevant = [
+        candidate
+        for candidate in candidates
+        if not frontier or _candidate_fingerprint(candidate, snapshot) in frontier
+    ]
+    uncertainties = [
+        _candidate_uncertainty(request, candidate, snapshot) for candidate in relevant
+    ]
+
+    # Summarize complete, partial, or absent applicable intervals honestly.
+    measured = sum(item["status"] == "measured" for item in uncertainties)
+    status = (
+        "measured"
+        if uncertainties and measured == len(uncertainties)
+        else "mixed"
+        if measured
+        else "unknown"
+    )
+    return {
+        "status": status,
+        "reason": inheritance_reason,
+        "candidates": uncertainties,
+    }
 
 
 def _experiment_fingerprints(
