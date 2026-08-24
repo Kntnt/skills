@@ -1186,6 +1186,20 @@ def test_the_manpages_describe_reconciled_done_without_run_provenance() -> None:
     assert "rather than agreement" in reconcile
 
 
+def test_the_final_report_renders_reconciliation_provenance() -> None:
+    """The Skill renders the engine's historical provenance instead of
+    silently dropping it from the maintainer-facing Report."""
+
+    # Read the execution contract for the final public report.
+    report_step = _step(12)
+
+    # Render both provenance fields and their external-completion meaning.
+    assert "`run_outcome`" in report_step
+    assert "`is_reconciled`" in report_step
+    assert "completed outside Orchestrate" in report_step
+    assert "not built or independently verified by Orchestrate" in report_step
+
+
 def test_invalid_reconcile_form_routes_to_reconcile_synopsis() -> None:
     """Once the subcommand is recognized, its own grammar and help route make
     a malformed invocation actionable without showing unrelated run forms."""

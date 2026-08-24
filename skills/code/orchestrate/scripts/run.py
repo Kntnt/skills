@@ -16,7 +16,7 @@ import sys
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
-from typing import Any
+from typing import Any, cast
 
 # The label that says the thinking behind a ticket is finished. A ticket
 # without it is never planned, never claimed, and never built.
@@ -25,6 +25,12 @@ READY_LABEL = "ready-for-agent"
 # Completed tickets keep a neutral discovery label after readiness and an
 # active claim stop being truthful descriptions of their lifecycle.
 HISTORICAL_LABEL: str = "orchestrated"
+
+# GitHub renders the neutral discovery state with its conventional purple.
+HISTORICAL_LABEL_COLOR: str = "6f42c1"
+
+# Repository label discovery is bounded independently of ticket pagination.
+REPOSITORY_LABEL_PAGE: int = 100
 
 # The label a parked ticket goes back under: the triage vocabulary's own word
 # for thinking that is not finished. The ready label is a claim, and a ticket
@@ -345,6 +351,34 @@ def default_branch(cwd: Path) -> str | None:
     return None
 
 
+def default_branch_reference(cwd: Path) -> str | None:
+    """Return the authoritative default-branch ref used for landed work."""
+
+    # Prefer the remote-tracking ref itself, because a local branch may carry
+    # work that has not reached the repository other maintainers can observe.
+    try:
+        reference = git(
+            cwd,
+            "symbolic-ref",
+            "--quiet",
+            "refs/remotes/origin/HEAD",
+        ).strip()
+        if reference.startswith("refs/remotes/origin/") and git_ok(
+            cwd,
+            "show-ref",
+            "--verify",
+            "--quiet",
+            reference,
+        ):
+            return reference
+    except RunError:
+        pass
+
+    # Repositories without a remote retain the local fallback used by tests
+    # and by work that has no publication boundary.
+    return default_branch(cwd)
+
+
 def worktree_home(cwd: Path) -> Path:
     """Return the directory a run keeps its ticket working trees in.
 
@@ -552,6 +586,22 @@ class Remark:
     body: str
 
 
+@dataclass(frozen=True)
+class TicketResolution:
+    """A ticket's current resolution and the provenance that established it.
+
+    `outcome` is the current projection used for scheduling and reporting.
+    `commit` carries that projection's implementation. `run_outcome` preserves
+    the unattended attempt even when Reconciliation later projects done, and
+    `is_reconciled` identifies that external-completion path.
+    """
+
+    outcome: str | None
+    commit: str | None
+    run_outcome: str | None
+    is_reconciled: bool
+
+
 @dataclass
 class Ticket:
     """One ticket in scope, as the tracker describes it.
@@ -571,14 +621,9 @@ class Ticket:
     session or a person already has it, and the logins are what tells a claim
     this run left behind from one somebody else took.
 
-    `outcome` is the current Ticket Resolution retained under the established
-    Report field name. `commit` is that resolution's completion provenance: an
-    unattended run commit for ordinary done work or an external completion
-    commit for Reconciliation. Both are None before the ticket is settled. A
-    failed or conflicted resolution strands dependents; a done resolution
-    unblocks them. `run_outcome` preserves the unattended attempt independently
-    of that current projection, and `is_reconciled` says whether Reconciliation
-    supplied the done resolution. `collided_with` is the other half of a
+    `resolution` keeps the current scheduling projection and its provenance in
+    one domain value. A failed or conflicted resolution strands dependents; a
+    done resolution unblocks them. `collided_with` is the other half of a
     conflicted Run Outcome — the tickets whose work this one collided with,
     which is the pair that names the blocking edge the ticket breakdown missed.
 
@@ -597,12 +642,19 @@ class Ticket:
     parent: int | None
     claimed_by: list[str]
     blocked_by: list[int]
-    outcome: str | None
-    commit: str | None
+    resolution: TicketResolution
     collided_with: list[int]
-    run_outcome: str | None = None
-    is_reconciled: bool = False
     worktree: str | None = None
+
+
+def ticket_details(ticket: Ticket) -> dict[str, Any]:
+    """Return the established flat public representation of *ticket*."""
+
+    # The domain groups resolution provenance, while the public engine contract
+    # retains its established top-level fields for callers and renderers.
+    details = asdict(ticket)
+    resolution = cast(dict[str, Any], details.pop("resolution"))
+    return details | resolution
 
 
 @dataclass
@@ -1358,10 +1410,12 @@ def stranded_behind(tickets: list[Ticket]) -> list[int]:
     # is work that exists and holds nothing back behind it. A ticket carrying
     # an outcome of its own is settled by that outcome and is never restated as
     # stranded.
-    recorded = {ticket.number for ticket in tickets if ticket.outcome}
+    recorded = {ticket.number for ticket in tickets if ticket.resolution.outcome}
     stranded: set[int] = set()
     spreading = [
-        ticket.number for ticket in tickets if ticket.outcome not in (None, DONE)
+        ticket.number
+        for ticket in tickets
+        if ticket.resolution.outcome not in (None, DONE)
     ]
     while spreading:
         for dependent in dependents.get(spreading.pop(), []):
@@ -1428,7 +1482,7 @@ def ticket_from(
     # Project current resolution without overwriting the historical attempt.
     run_outcome = outcome
     reconciliation_commit = reconciled_at(item)
-    resolution = DONE if reconciliation_commit else outcome
+    current_outcome = DONE if reconciliation_commit else outcome
 
     return Ticket(
         number=int(item["number"]),
@@ -1439,11 +1493,13 @@ def ticket_from(
         parent=parent_of(item),
         claimed_by=holders_of(item),
         blocked_by=blocked_by,
-        outcome=resolution,
-        commit=reconciliation_commit or commit,
+        resolution=TicketResolution(
+            outcome=current_outcome,
+            commit=reconciliation_commit or commit,
+            run_outcome=run_outcome,
+            is_reconciled=reconciliation_commit is not None,
+        ),
         collided_with=collided_with,
-        run_outcome=run_outcome,
-        is_reconciled=reconciliation_commit is not None,
     )
 
 
@@ -1500,7 +1556,8 @@ def closed_since(cwd: Path) -> str | None:
 def closed_listing(cwd: Path) -> list[dict[str, Any]]:
     """Return the finished tickets this machine's runs took on this branch.
 
-    The neutral historical label discovers tickets whose active workflow state
+    The ready label discovers unsuccessful work closed before Reconciliation;
+    the neutral historical label discovers tickets whose active workflow state
     was cleaned on completion. The fork date bounds that growing history to
     what this branch could have recorded.
     """
@@ -1510,7 +1567,18 @@ def closed_listing(cwd: Path) -> list[dict[str, Any]]:
     since = closed_since(cwd)
     bound = ["--search", f"closed:>={since}"] if since else []
 
-    return listed_tickets(
+    # An unsuccessful ticket closed outside Orchestrate still carries the
+    # ready label until Reconciliation replaces its active lifecycle state.
+    active = listed_tickets(
+        cwd,
+        "--state",
+        "closed",
+        *bound,
+        "--json",
+        "number,title,url,body,parent,assignees,comments",
+        label=READY_LABEL,
+    )
+    historical = listed_tickets(
         cwd,
         "--state",
         "closed",
@@ -1519,6 +1587,12 @@ def closed_listing(cwd: Path) -> list[dict[str, Any]]:
         "number,title,url,body,parent,assignees,comments",
         label=HISTORICAL_LABEL,
     )
+
+    # Merge both discovery paths by identity so an interrupted transition that
+    # temporarily carries both labels remains one ticket in the final account.
+    found = {int(item["number"]): item for item in active}
+    found.update({int(item["number"]): item for item in historical})
+    return list(found.values())
 
 
 def tickets_in_scope(
@@ -1633,9 +1707,9 @@ def run_base(cwd: Path, tickets: list[Ticket]) -> str:
     # A commit a run recorded on another branch is not this branch's history,
     # and a branch that does not hold it can say nothing about where work began.
     recorded = [
-        ticket.commit
+        ticket.resolution.commit
         for ticket in tickets
-        if ticket.commit and not ticket.is_reconciled
+        if ticket.resolution.commit and not ticket.resolution.is_reconciled
     ]
     on_branch = [
         commit
@@ -1747,7 +1821,7 @@ def build_plan(
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
     tickets = tickets_in_scope(cwd, listed, scope)
     say_where_work_stands(cwd, tickets, branch)
-    recorded = [ticket.number for ticket in tickets if ticket.outcome]
+    recorded = [ticket.number for ticket in tickets if ticket.resolution.outcome]
     stranded = stranded_behind(tickets)
 
     # The graph is the shape of what is left: wave one is what may start now,
@@ -1763,7 +1837,11 @@ def build_plan(
     # than treating it as taken. Every other claim is somebody else's session
     # or a person, and leaves the frontier without leaving the account, so
     # nothing disappears by being taken.
-    held = [ticket for ticket in tickets if ticket.claimed_by and not ticket.outcome]
+    held = [
+        ticket
+        for ticket in tickets
+        if ticket.claimed_by and not ticket.resolution.outcome
+    ]
     login = my_login(cwd, remembered) if held else None
     resuming = [
         ticket.number
@@ -1787,7 +1865,7 @@ def build_plan(
         default_branch=default,
         label=READY_LABEL,
         scope=None if scope is None else [asdict(aim) for aim in scope],
-        tickets=[asdict(ticket) for ticket in tickets],
+        tickets=[ticket_details(ticket) for ticket in tickets],
         workable=workable,
         starting=workable[:at_once],
         claimed=claimed,
@@ -2551,7 +2629,15 @@ def complete_lifecycle(cwd: Path, number: int, ticket: dict[str, Any]) -> None:
 
     # Ensure the discovery label exists before any ticket carries completed
     # state that Report would otherwise be unable to find.
-    labels_output = gh(cwd, "label", "list", "--json", "name", "--limit", "100")
+    labels_output = gh(
+        cwd,
+        "label",
+        "list",
+        "--json",
+        "name",
+        "--limit",
+        str(REPOSITORY_LABEL_PAGE),
+    )
     try:
         repository_labels = {str(label["name"]) for label in json.loads(labels_output)}
     except (json.JSONDecodeError, KeyError, TypeError) as exc:
@@ -2563,7 +2649,7 @@ def complete_lifecycle(cwd: Path, number: int, ticket: dict[str, Any]) -> None:
             "create",
             HISTORICAL_LABEL,
             "--color",
-            "6f42c1",
+            HISTORICAL_LABEL_COLOR,
             "--description",
             "Completed ticket retained for Orchestrate history",
         )
@@ -2571,15 +2657,15 @@ def complete_lifecycle(cwd: Path, number: int, ticket: dict[str, Any]) -> None:
     # Replace readiness and ownership with the neutral discovery marker in one
     # ticket edit, before an append-only completion fact makes the state final.
     labels = [str(label["name"]) for label in ticket.get("labels", [])]
-    edit = ["issue", "edit", str(number)]
+    changes: list[str] = []
     if READY_LABEL in labels:
-        edit.extend(("--remove-label", READY_LABEL))
+        changes.extend(("--remove-label", READY_LABEL))
     if HISTORICAL_LABEL not in labels:
-        edit.extend(("--add-label", HISTORICAL_LABEL))
+        changes.extend(("--add-label", HISTORICAL_LABEL))
     for holder in holders_of(ticket):
-        edit.extend(("--remove-assignee", holder))
-    if len(edit) > 3:
-        gh(cwd, *edit)
+        changes.extend(("--remove-assignee", holder))
+    if changes:
+        gh(cwd, "issue", "edit", str(number), *changes)
 
 
 def has_completed_lifecycle(ticket: dict[str, Any]) -> bool:
@@ -2597,7 +2683,7 @@ def completion_candidates(cwd: Path, number: int) -> list[str]:
     """Return default-branch commits carrying an exact closing reference."""
 
     # Decline discovery without identifiable authoritative history.
-    default = default_branch(cwd)
+    default = default_branch_reference(cwd)
     if default is None:
         return []
 
@@ -2622,7 +2708,7 @@ def landed_completion_commit(cwd: Path, reference: str) -> str:
         raise RunError(f"this repository has no commit {reference}") from exc
 
     # Require the repository's authoritative history to carry the completion.
-    default = default_branch(cwd)
+    default = default_branch_reference(cwd)
     if default is None or not git_ok(
         cwd, "merge-base", "--is-ancestor", commit, default
     ):
@@ -2790,6 +2876,29 @@ def cmd_record(
     return 0
 
 
+def emit_reconciliation_result(
+    number: int,
+    run_outcome: str,
+    commit: str,
+    *,
+    is_agreed: bool,
+    is_lifecycle_repaired: bool,
+) -> None:
+    """Emit the stable public result of a Reconciliation request."""
+
+    emit(
+        {
+            "verb": "reconcile",
+            "ticket": number,
+            "run_outcome": run_outcome,
+            "resolution": DONE,
+            "commit": commit,
+            "already_agreed": is_agreed,
+            "lifecycle_repaired": is_lifecycle_repaired,
+        }
+    )
+
+
 def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
     """Resolve a closed unsuccessful ticket completed outside Orchestrate."""
 
@@ -2837,16 +2946,12 @@ def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
                 )
 
         # Distinguish a complete no-op from lifecycle recovery in the result.
-        emit(
-            {
-                "verb": "reconcile",
-                "ticket": number,
-                "run_outcome": outcome,
-                "resolution": DONE,
-                "commit": existing_commit,
-                "already_agreed": not lifecycle_repaired,
-                "lifecycle_repaired": lifecycle_repaired,
-            }
+        emit_reconciliation_result(
+            number,
+            outcome,
+            existing_commit,
+            is_agreed=not lifecycle_repaired,
+            is_lifecycle_repaired=lifecycle_repaired,
         )
         return 0
 
@@ -2880,16 +2985,12 @@ def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
         return fail(f"#{number} could not be reconciled: {exc}")
 
     # Report the newly recorded current resolution and its preserved provenance.
-    emit(
-        {
-            "verb": "reconcile",
-            "ticket": number,
-            "run_outcome": outcome,
-            "resolution": DONE,
-            "commit": commit,
-            "already_agreed": False,
-            "lifecycle_repaired": False,
-        }
+    emit_reconciliation_result(
+        number,
+        outcome,
+        commit,
+        is_agreed=False,
+        is_lifecycle_repaired=False,
     )
     return 0
 
@@ -2934,7 +3035,9 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
     # Stranding is read off the open scope alone: a ticket that is finished has
     # no unmet blocker left to strand anything behind.
     recorded = {
-        outcome: [ticket.number for ticket in tickets if ticket.outcome == outcome]
+        outcome: [
+            ticket.number for ticket in tickets if ticket.resolution.outcome == outcome
+        ]
         for outcome in OUTCOMES
     }
     stranded = stranded_behind(open_scope)
@@ -2947,7 +3050,7 @@ def cmd_report(cwd: Path, reference: str | None) -> int:
             "scope": None if scope is None else [asdict(aim) for aim in scope],
             "branch": branch,
             "base": base,
-            "tickets": [asdict(ticket) for ticket in tickets],
+            "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],
             "conflicted": recorded[CONFLICTED],

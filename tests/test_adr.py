@@ -201,7 +201,8 @@ def test_ticket_resolution_supersession_preserves_blocker_record_history() -> No
     assert "waiting on open work" in earlier
     assert "superseded by ADR-0079" in earlier
 
-    # Declare the same relation from the later record for the bidirectional scan.
+    # Declare the same relation from the later record for the scan in both
+    # directions.
     assert "supersedes ADR-0073" in later
 
 

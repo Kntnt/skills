@@ -265,6 +265,7 @@ def _tracker(
     tickets: dict[str, list[dict[str, Any]]],
     issues: dict[int, dict[str, Any]] | None = None,
     closed: list[dict[str, Any]] | None = None,
+    ready_closed: list[dict[str, Any]] | None = None,
     login: str = "me",
 ) -> dict[str, str]:
     """Stand `gh` up over a tracker holding *tickets*, filed by label.
@@ -277,8 +278,9 @@ def _tracker(
     test states only the part it is about. A number that is not there is a
     ticket the tracker cannot answer for.
 
-    *closed* holds the tickets the tracker answers for the ready label in its
-    closed state, which is where a ticket a run closed as done has gone.
+    *closed* holds completed tickets under the neutral history label.
+    *ready_closed* holds externally closed unsuccessful tickets whose active
+    workflow state remains until Reconciliation.
 
     *login* is who the tracker says the run is authenticated as, so a claim
     holding that login is this developer's own and one holding another is
@@ -292,7 +294,7 @@ def _tracker(
             json.dumps(filed), encoding="utf-8"
         )
         (directory / f"{label}.closed.json").write_text(
-            "[]",
+            json.dumps(ready_closed or []) if label == "ready-for-agent" else "[]",
             encoding="utf-8",
         )
     (directory / "orchestrated.open.json").write_text("[]", encoding="utf-8")
@@ -1284,6 +1286,48 @@ def test_reconcile_refuses_existing_off_default_commit_without_writes(
     assert "label create" not in calls
 
 
+def test_reconcile_refuses_existing_commit_ahead_of_remote_default(
+    tmp_path: Path,
+) -> None:
+    """A local default branch cannot establish that completion has landed on
+    the remote repository's authoritative default branch."""
+
+    # Pin the remote default before adding a local-only main commit.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    remote_head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _git(repo, "update-ref", "refs/remotes/origin/main", remote_head)
+    _git(
+        repo,
+        "symbolic-ref",
+        "refs/remotes/origin/HEAD",
+        "refs/remotes/origin/main",
+    )
+    (repo / "local.txt").write_text("local\n", encoding="utf-8")
+    _git(repo, "add", "local.txt")
+    _git(repo, "commit", "-m", "local completion")
+    local_head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    # Present a premature event naming the local-only commit.
+    ticket = _ticket(
+        9,
+        "rescued",
+        comments=[_recorded("failed"), _reconciled(local_head)],
+    )
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: ticket | {"state": "CLOSED", "labels": [{"name": "orchestrated"}]}},
+    )
+
+    # Refuse the repeat before accepting local history as landed provenance.
+    result = _engine(
+        repo, "reconcile", "--ticket", "9", "--commit", local_head, env=env
+    )
+
+    assert result.returncode == 1
+    assert "default branch" in result.stderr
+
+
 def test_reconcile_reports_incomplete_lifecycle_recovery_instead_of_agreement(
     tmp_path: Path,
 ) -> None:
@@ -1527,6 +1571,33 @@ def test_report_projects_reconciliation_as_done_with_failure_provenance(
     assert report["tickets"][0]["run_outcome"] == "failed"
     assert report["tickets"][0]["is_reconciled"] is True
     assert report["tickets"][0]["commit"] == head
+
+
+def test_report_keeps_closed_unreconciled_failure_under_failed(
+    tmp_path: Path,
+) -> None:
+    """External closure alone leaves the unsuccessful Ticket Resolution
+    visible until a maintainer records Reconciliation."""
+
+    # File the externally closed failure under its unchanged workflow label.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    ticket = _ticket(9, "rescued", comments=[_recorded("failed")])
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        ready_closed=[ticket],
+    )
+
+    # Read the public Report before Reconciliation exists.
+    result = _engine(repo, "report", env=env)
+
+    # Keep the current failure visible rather than dropping the closed ticket.
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["failed"] == [9]
+    assert report["done"] == []
+    assert report["tickets"][0]["run_outcome"] == "failed"
+    assert report["tickets"][0]["is_reconciled"] is False
 
 
 def test_report_does_not_treat_external_completion_as_run_output(
@@ -3832,8 +3903,10 @@ def test_report_asks_only_for_what_was_closed_since_the_branch_left_the_default(
 
     assert result.returncode == 0, result.stderr
     asked = [line for line in _gh_calls(env).splitlines() if "--state closed" in line]
-    assert len(asked) == 1
-    assert f"closed:>={day}" in asked[0]
+    assert len(asked) == 2
+    assert all(f"closed:>={day}" in question for question in asked)
+    assert any("--label ready-for-agent" in question for question in asked)
+    assert any("--label orchestrated" in question for question in asked)
 
 
 def test_report_asks_the_whole_closed_question_where_no_default_can_be_told(
@@ -3851,8 +3924,10 @@ def test_report_asks_the_whole_closed_question_where_no_default_can_be_told(
 
     assert result.returncode == 0, result.stderr
     asked = [line for line in _gh_calls(env).splitlines() if "--state closed" in line]
-    assert len(asked) == 1
-    assert "closed:>=" not in asked[0]
+    assert len(asked) == 2
+    assert all("closed:>=" not in question for question in asked)
+    assert any("--label ready-for-agent" in question for question in asked)
+    assert any("--label orchestrated" in question for question in asked)
 
 
 def test_report_refuses_a_closed_list_that_may_have_been_truncated(

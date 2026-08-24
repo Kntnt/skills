@@ -15,6 +15,10 @@ All notable changes to this project are documented here. The format follows [Kee
 - The README now leads with a concise quick start, separates Global and Project usage, summarizes Manager commands, and gives each shipped Skill a compact invocation-oriented description.
 - Shared Skill references and scripts now live in the Manager's Collection Library under `library/references/` and `library/scripts/`. `/commit`, `/push`, and `/release` use the same changelog procedure and ship engine there instead of reaching through `/commit`'s private files, while their genuine behavioural dependencies remain declared.
 
+### Fixed
+
+- `/orchestrate reconcile` now records that a closed ticket with a failed or conflicted unattended Run Outcome was completed outside Orchestrate, preserving the unsuccessful attempt while giving Report a done Ticket Resolution with the published completion commit. Reconciliation verifies reachability from the remote default branch when one exists, discovers an exact closing commit only when unique, refuses ineligible or contradictory assertions, distinguishes a clean idempotent repeat from interrupted lifecycle repair, removes every stale assignee, and never claims the rescued work was built or independently verified by the run. Reports discover externally closed unsuccessful tickets before reconciliation, retain both original and reconciliation provenance afterwards, and keep dependents blocked by tracker closure alone until a done Ticket Resolution exists (issue #89).
+
 ## [0.13.0] – 2026-08-23
 
 ### Added
