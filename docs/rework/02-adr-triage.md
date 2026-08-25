@@ -49,6 +49,8 @@ Each record is classified twice, because the brief's four bins conflate two inde
 
 The brief's *move-to-standard* bin is the row where the record drops and the rule lands in an existing standard module; its *rules-doc line* bin is the row where the record drops or folds and the rule lands in a rules-doc module.
 
+**Three rows were corrected after the fact, in #134.** ADR-0008, ADR-0015 and ADR-0029 were recorded here as landing in `skills.md` on the belief that the standard already stated them; it stated none of the three, and #128 wrote all three into `collection.md` instead. The column now says `collection.md` for each, which is where the rule is stated and where it stays: what the collection publishes, what a Category is for, and what a flag promises about the collection's questions are all promises of the collection rather than facts about the files a Skill carries. The `Record` column is untouched — the C2 and C3 sets and their counts are what they were.
+
 Twenty-two records belong to orchestrate's runtime and die with that Skill in phase 3; they are the rows whose justification says so, and `run.py` or the orchestrate tests cite nearly all of them, which is why they outlive phase 1. `†` is a narrower mark inside that class: the twenty-one whose field evidence the `/dispatch` design should cite from git rather than rediscover. ADR-0058 is the twenty-second — orchestrate runtime, cited by `run.py`, but its own premise is already outrun, so there is nothing there to carry forward.
 
 ### Proposed consolidation records
@@ -71,14 +73,14 @@ Twenty-two records belong to orchestrate's runtime and die with that Skill in ph
 | 0005 | One set per layer, no harness matrix | C1 | `collection.md` | Record says itself it is now trivially true; the why is the reason the matrix never grew. |
 | 0006 | Transport installs only the Manager | C1 | `collection.md` | Current law. |
 | 0007 | A new Catalog entry is offered | C1 | `collection.md` | Rich why — the consent trade was deliberately overturned; carry it. |
-| 0008 | Portable skills, no command files | C3 | `skills.md` | Already stated in the standard's spirit; the why is the portability stance. |
+| 0008 | Portable skills, no command files | C3 | `collection.md` | What the collection publishes, so it sits with the rest of how the collection reaches a machine; the why is the portability stance. |
 | 0009 | Refuse, do not install | C1 | `collection.md` | Current law, cited from shipped bodies. |
 | 0010 | Select, not Setup | DROP | — | Nothing survives that ADR-0035 and ADR-0043 do not state. |
 | 0011 | Update re-checks dependencies | C1 | `collection.md` | Current law. |
 | 0012 | Skill owns dependencies | C3 | `skills.md` | Already a rule in the standard; the record is its citation. |
 | 0013 | A Project cannot hide a Global skill | C1 | `collection.md` | Current law with a real rejected alternative. |
 | 0014 | Setup records the harness list | DROP | — | Marked **Retired** in its own first line. |
-| 0015 | Skills grouped by category | C3 | `skills.md` | Current law; identity is the name, not the path. |
+| 0015 | Skills grouped by category | C3 | `collection.md` | A Category is visible only in Select's list, so the rule sits with the verb; identity is the name, not the path. |
 | 0016 | `docs/` versus `agents.d/` | DROP | agents-md's own files | Stated in `references/placement.md`; cited nowhere outside `docs/adr/`. |
 | 0017 | `CLAUDE.md` is a one-line bridge | DROP | agents-md's own files | Same; half of it is already superseded by ADR-0019. |
 | 0018 | `agents-md` is model-invoked with safe writes | C3 | `skills.md` | The model-invocation half generalised into ADR-0094; the write set is the Skill's own. |
@@ -92,7 +94,7 @@ Twenty-two records belong to orchestrate's runtime and die with that Skill in ph
 | 0026 | Delegation's user scope is per-harness | DROP | delegation's own files | One Skill's scope behaviour; the why is a harness fact, not a trade-off. |
 | 0027 | Bare `/kntnt` is Help | C1 | `collection.md` | Record says itself it is now trivially true. |
 | 0028 | Update re-adds what deviates | C1 | `collection.md` | The transport-defect why is worth keeping; the rule is one line. |
-| 0029 | `--yes` means assume yes everywhere | C2 | `skills.md` | Two clauses already withdrawn by ADR-0059; what survives is one rule. |
+| 0029 | `--yes` means assume yes everywhere | C2 | `collection.md` | Two clauses already withdrawn by ADR-0059; what survives is a promise about the collection's questions and its deletion gates, stated with the verbs that ask them. |
 | 0030 | A harness Capability is a Dependency | C1 | `collection.md` | Current law, cited from shipped bodies. |
 | 0035 | Targets are detected, never recorded | C1 | `collection.md` | Current law with a strong rejected alternative. |
 | 0036 | A change is reported from the disk | C1 | `collection.md` | Current law; the issue-7 evidence is the why. |
