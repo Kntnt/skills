@@ -3769,6 +3769,187 @@ def test_a_review_extension_is_addressable_apart_from_the_base_half() -> None:
         )
 
 
+# The editorial resources, and the genres and techniques a user selects among
+# by name. A Skill resolves a selection against the directory itself, so these
+# names are no registry anything reads at run time (ADR-0095): they are the
+# floor the suite holds the Collection to, so that a resource renamed or gone
+# is caught here rather than by the user who meets a refusal instead of a
+# draft.
+EDITORIAL = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
+INSTALLED_GENRES = ("general", "article", "report", "press-release")
+INSTALLED_TECHNIQUES = ("abt", "pac")
+
+# The resources shipped with review guidance of their own. `general` is the
+# default genre and carries none yet, and a base half standing alone is a
+# complete resource (ADR-0095).
+REVIEWED_RESOURCES = (
+    "genres/article",
+    "genres/report",
+    "genres/press-release",
+    "techniques/abt",
+    "techniques/pac",
+)
+
+
+def _editorial_resources() -> list[Path]:
+    """Every genre and technique base half, review extensions excluded."""
+
+    resources = [
+        path
+        for directory in ("genres", "techniques")
+        for path in sorted((EDITORIAL / directory).glob("*.md"))
+        if not path.name.endswith(".review.md")
+    ]
+
+    # A glob that matched nothing would pass every assertion over it.
+    assert resources
+    return resources
+
+
+def test_the_genres_and_techniques_a_user_selects_ship_in_the_library() -> None:
+    """Selection is worth having only where there is something to select.
+
+    Genre is more than its default and technique more than none because these
+    resources sit beside the base contract, where every Skill that reads the
+    contract reaches them on the same terms (ADR-0076). The directory is the
+    installed set, so a name with no file is a refusal rather than a default
+    quietly supplied in its place (ADR-0095).
+    """
+
+    for name in INSTALLED_GENRES:
+        path = EDITORIAL / "genres" / f"{name}.md"
+        assert path.is_file(), (
+            f"{path}: `{name}` is a genre this Collection installs, and the"
+            f" directory is what a Skill resolves a selection against. Absent"
+            f" here, the value is refused wherever anybody selects it"
+            f" (ADR-0095). See {STANDARD}."
+        )
+
+    for name in INSTALLED_TECHNIQUES:
+        path = EDITORIAL / "techniques" / f"{name}.md"
+        assert path.is_file(), (
+            f"{path}: `{name}` is a technique this Collection installs, and a"
+            f" technique applies because it was selected. Absent here, there"
+            f" is nothing to select and nothing states its arc (ADR-0095). See"
+            f" {STANDARD}."
+        )
+
+
+def test_each_selectable_resource_carries_its_review_guidance_beside_it() -> None:
+    """Diagnostics ship with the requirement they diagnose, and separately.
+
+    A resource whose base half states requirements and whose review half is
+    missing leaves a reviewing Skill to invent the diagnostics, which is how a
+    review acquires a target the writer was never told about. The extension is
+    a file of its own so that a Skill which only writes never loads it
+    (ADR-0095).
+    """
+
+    for name in REVIEWED_RESOURCES:
+        base = EDITORIAL / f"{name}.md"
+        extension = EDITORIAL / f"{name}.review.md"
+        assert base.is_file(), (
+            f"{base}: the base half is what a draft is written against, and"
+            f" the review half below extends it (ADR-0095). See {STANDARD}."
+        )
+        assert extension.is_file(), (
+            f"{extension}: `{name}` states requirements and ships no review"
+            f" guidance for them, leaving a reviewing Skill to invent its own"
+            f" diagnostics for rules somebody else wrote (ADR-0095). See"
+            f" {STANDARD}."
+        )
+
+
+def test_a_genre_or_technique_says_what_it_is_before_it_says_what_it_asks() -> None:
+    """Listing what is installed reads the top of a file and stops.
+
+    The directory is the installed set, so anything showing a user what they
+    may select opens each resource and reads its name and its opening
+    paragraph. A file that begins with its rules makes that a choice between
+    showing nothing and loading everything (ADR-0095).
+    """
+
+    for path in _editorial_resources():
+        lines = path.read_text(encoding="utf-8").splitlines()
+
+        assert lines and re.fullmatch(r"# \S.*", lines[0]), (
+            f"{path}: a resource opens with `# <Name>`, which is what names it"
+            f" wherever the installed set is shown (ADR-0095). See {STANDARD}."
+        )
+
+        # The summary is whatever prose stands between the title and the first
+        # section heading.
+        summary: list[str] = []
+        for line in lines[1:]:
+            if line.startswith("## "):
+                break
+            summary.append(line)
+        assert any(line.strip() for line in summary), (
+            f"{path}: the title is followed straight by a section, so a Skill"
+            f" showing what is installed has nothing to show but the name"
+            f" (ADR-0095). See {STANDARD}."
+        )
+
+
+def test_a_genre_or_technique_binds_no_consumers_grammar() -> None:
+    """A shared resource states an outcome, never a flag spelling.
+
+    Every editorial Skill declares its own Formal Invocation, so an option
+    named in a resource all of them read is either a second copy of that
+    grammar or a name the next Skill is not free to choose (ADR-0091,
+    ADR-0095).
+    """
+
+    for path in sorted(EDITORIAL.rglob("*.md")):
+        if path.name == "README.md":
+            continue
+
+        # Match a long-option spelling, never the reserved separator.
+        flags = sorted(
+            set(
+                re.findall(
+                    r"(?<![\w-])--[A-Za-z][\w-]*", path.read_text(encoding="utf-8")
+                )
+            )
+        )
+        assert flags == [], (
+            f"{flags}: {path} names a consumer's flag spelling, which binds a"
+            f" grammar the consuming Skill owns (ADR-0095). See {STANDARD}."
+        )
+
+
+def test_no_editorial_resource_pins_a_rule_to_one_installed_language() -> None:
+    """The editorial half is language-independent, and the split is the point.
+
+    What a genre or a technique asks for holds in every language the
+    Collection installs; what writing well in one language takes lives in that
+    language's own resource, which is the only place a Skill looks for it
+    (ADR-0087, ADR-0095). A rule here naming one language would be applied to
+    drafts written in the others.
+    """
+
+    languages = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "languages"
+    codes = sorted(
+        path.stem for path in languages.glob("*.md") if path.name != "README.md"
+    )
+
+    # A rename in the languages directory must not silently empty this check.
+    assert codes
+
+    for path in sorted(EDITORIAL.rglob("*.md")):
+        if path.name == "README.md":
+            continue
+
+        text = path.read_text(encoding="utf-8")
+        named = [code for code in codes if re.search(rf"\b{re.escape(code)}\b", text)]
+        assert named == [], (
+            f"{named}: {path} pins a rule to a single Language Resource. The"
+            f" editorial contract is language-independent, and guidance true"
+            f" of one language belongs in that language's resource (ADR-0087,"
+            f" ADR-0095). See {STANDARD}."
+        )
+
+
 def test_write_ships_in_the_editorial_category_and_invokes_no_peer() -> None:
     """Running an editorial pipeline stays the user's separate choice.
 

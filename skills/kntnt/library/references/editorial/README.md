@@ -30,7 +30,7 @@ Each of these documents has a base half and an optional review half, and the rev
 
 The extension holds diagnostics, examples, edge cases, ambiguity resolution, and minimum-safe-correction guidance for the requirements its base half already states. It introduces no independent target — anything a draft has to meet is a base rule, and belongs in the base half where the writing Skill will actually see it — and it restates no base rule in other words, because a requirement and its diagnostic drift apart the moment both claim to say what is required.
 
-Writing the review half is the work of the Skill that reviews, and its absence is not a defect: a base half with no extension beside it is a complete resource.
+The review half is written for the Skill that reviews, and it ships beside the base half whose requirements it diagnoses rather than waiting for that Skill to exist: diagnostics written later, by somebody reading the requirements from outside, are how a review acquires a target the writer was never given. Its absence is not a defect either — a base half with no extension beside it is a complete resource.
 
 ## The anti-slop catalogue
 
