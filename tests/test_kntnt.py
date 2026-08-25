@@ -6143,6 +6143,182 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
     )
 
 
+# The Skill whose mode is addressed through a command path, the pages that
+# path answers to, and the `--`-prefixed spelling it no longer has. The
+# spellings went rather than becoming aliases: two spellings for one form are
+# the ambiguity ADR-0103 removes, and an alias would keep it (issue #115).
+TLDR_DIR = REPO_ROOT / "skills" / "agents" / "tldr"
+TLDR_COMMANDS = frozenset({"on.md", "off.md", "status.md"})
+FLAG_SPELLING = re.compile(r"--(?:on|off|status)\b")
+
+
+def _tldr_readme_section() -> str:
+    """The README's own entry for `/tldr`, which states the forms it accepts."""
+
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    return readme.partition("\n### tldr\n")[2].partition("\n### ")[0]
+
+
+def test_tldr_ships_and_routes_one_manpage_per_command_path() -> None:
+    """`on`, `off`, and `status` each answer to their own help route.
+
+    A command path is exactly what a page under `help/` answers to (ADR-0077),
+    so the three pages are what make these tokens a path rather than operands —
+    and what lets a refusal quote the grammar the invalid form violated rather
+    than the whole Skill's.
+    """
+
+    help_directory = TLDR_DIR / "help"
+    assert help_directory.is_dir(), (
+        f"{TLDR_DIR}: the mode is addressed through a command path, and every"
+        f" public command path has an addressable manpage under `help/`"
+        f" (ADR-0077, ADR-0103). See {STANDARD}."
+    )
+
+    actual = {
+        str(page.relative_to(help_directory)) for page in help_directory.rglob("*.md")
+    }
+    assert actual == set(TLDR_COMMANDS), (
+        f"{TLDR_DIR}: the command page tree is {sorted(actual)}, while the"
+        f" accepted command paths are {sorted(TLDR_COMMANDS)} (ADR-0077,"
+        f" ADR-0103). See {STANDARD}."
+    )
+
+    body = TLDR_DIR / "SKILL.md"
+    help_section = _section(body.read_text(encoding="utf-8"), "## Help", body)
+    for relative in sorted(TLDR_COMMANDS):
+        assert f"`$HERE/help/{relative}`" in help_section, (
+            f"{body}: the `## Help` section does not route the `{relative}`"
+            f" manpage. `/<skill> <command-path> --help` prints the most"
+            f" specific recognized path's page verbatim (ADR-0077). See"
+            f" {STANDARD}."
+        )
+    assert "-h" in help_section, (
+        f"{body}: `-h` is the identical short route into an addressed page,"
+        f" so the command paths answer to it too (ADR-0077). See {STANDARD}."
+    )
+
+
+def test_tldr_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
+    """No `--`-prefixed spelling survives anywhere the Skill is described.
+
+    The flag spellings go rather than becoming aliases. Two spellings for one
+    form is the ambiguity ADR-0103 exists to remove, and a Skill has no parser
+    — the agent reading these files is the whole of the enforcement — so a
+    spelling left standing on any surface is a spelling that is accepted.
+    """
+
+    surfaces = sorted(TLDR_DIR.rglob("*.md"))
+
+    # A glob that matched nothing would pass the loop below without reading a
+    # single surface, which is the one outcome this check exists to catch.
+    assert surfaces
+
+    for path in surfaces:
+        found = sorted(set(FLAG_SPELLING.findall(path.read_text(encoding="utf-8"))))
+        assert not found, (
+            f"{path}: {found} is a `--`-prefixed spelling of a command path."
+            f" `on`, `off`, and `status` are reached as a command path and by"
+            f" no second spelling, the flags having gone rather than become"
+            f" aliases (ADR-0103). See {STANDARD}."
+        )
+
+    section = _tldr_readme_section()
+    assert section.strip(), (
+        f"{REPO_ROOT / 'README.md'}: the `### tldr` section could not be"
+        f" found, so this check judged nothing. See {STANDARD}."
+    )
+    assert not FLAG_SPELLING.findall(section), (
+        f"{REPO_ROOT / 'README.md'}: the `### tldr` section still writes a"
+        f" `--`-prefixed spelling of a command path (ADR-0103). See"
+        f" {STANDARD}."
+    )
+    for form in ("/tldr on", "/tldr status"):
+        assert form in section, (
+            f"{REPO_ROOT / 'README.md'}: the `### tldr` section does not state"
+            f" the `{form}` form. The README is where somebody decides whether"
+            f" they want the Skill, so it states the forms it accepts"
+            f" (ADR-0103). See {STANDARD}."
+        )
+
+
+def test_tldr_accepts_no_unseparated_text_after_its_name_or_command_path() -> None:
+    """The free-text operand is gone, and the separator is the one channel.
+
+    `/tldr` was the only Skill in the collection whose formal grammar accepted
+    free text, which is what forced its mode onto flags in the first place.
+    The Invocation Envelope's reserved separator now carries what the operand
+    carried, so the operand is a second unseparated channel for one thing and
+    goes with the ambiguity it caused (ADR-0078, ADR-0103).
+    """
+
+    body = TLDR_DIR / "SKILL.md"
+    text = body.read_text(encoding="utf-8")
+    arguments = _section(text, "## Arguments", body)
+    page = (TLDR_DIR / "help.md").read_text(encoding="utf-8")
+
+    assert "\n## POSITIONAL ARGUMENTS\n" not in page, (
+        f"{TLDR_DIR / 'help.md'}: the page still documents a positional"
+        f" argument. The Skill takes no operand, and an empty conventional"
+        f" section is omitted rather than filled (ADR-0103). See {STANDARD}."
+    )
+
+    unseparated = (
+        "A token that is neither a recognized command path nor a declared flag"
+    )
+    assert unseparated in arguments, (
+        f"{body}: the argument prose does not refuse unseparated text after"
+        f" the Skill name or a command path. Anything not carried by a"
+        f" recognized token is an invalid form rather than an instruction"
+        f" (ADR-0103). See {STANDARD}."
+    )
+
+
+def test_tldr_reads_its_replacement_answer_from_the_contextual_instruction() -> None:
+    """What the operand did is not lost, and the body says where it went.
+
+    Widening the range, naming a language, narrowing the subject, and
+    constraining the output are each a choice the Skill's contract leaves
+    open, which is exactly what a Contextual Instruction is permitted to
+    settle — so the step that settles the range and the step that writes the
+    replacement answer read it, and an instruction that would widen the Skill
+    takes the Envelope's context refusal rather than a syntax refusal.
+    """
+
+    body = TLDR_DIR / "SKILL.md"
+    text = body.read_text(encoding="utf-8")
+    arguments = _section(text, "## Arguments", body)
+    steps = _section(text, "## Steps", body)
+
+    for phrase in (
+        "widen the range",
+        "name a language",
+        "narrow the subject",
+        "constrain the output",
+    ):
+        assert phrase in arguments, (
+            f"{body}: the argument prose does not say that a request to"
+            f" {phrase} arrives through the Contextual Instruction. The"
+            f" operand carried it before, and a capability whose channel is"
+            f" unwritten is a capability nobody can reach (ADR-0078,"
+            f" ADR-0103). See {STANDARD}."
+        )
+
+    for marker in ("settle the range", "replacement answer"):
+        reading = [line for line in steps.splitlines() if marker in line]
+        assert reading, (
+            f"{body}: no step names {marker!r}, so this check judged nothing."
+            f" See {STANDARD}."
+        )
+        for line in reading:
+            assert "Contextual Instruction" in line, (
+                f"{body}: the step `{line.strip()[:60]}...` no longer reads the"
+                f" Contextual Instruction. It is where the free-form tail's"
+                f" work went, so a step that does not read it silently drops"
+                f" what the user asked for (ADR-0103). See {STANDARD}."
+            )
+
+
 def test_delegation_reports_checked_observations_and_imports_none() -> None:
     """Routed delegation may leave evidence, and only a checked outcome may.
 
