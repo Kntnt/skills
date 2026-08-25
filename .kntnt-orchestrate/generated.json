@@ -1,0 +1,8 @@
+{
+  "generated": [
+    {
+      "files": ["skills/kntnt/catalog.json"],
+      "command": "KNTNT_SOURCE=. uv run skills/kntnt/scripts/kntnt.py catalog --write"
+    }
+  ]
+}

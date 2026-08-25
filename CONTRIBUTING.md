@@ -31,6 +31,8 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
 
    Nothing is authored by hand and no version is bumped — the digest is computed from the files. The fourth check below fails on a catalog that has fallen behind.
 
+   That same line is declared in `.kntnt-orchestrate/generated.json`, which is where an unattended `/orchestrate` run reads what this repository generates. Two branches that each regenerated the catalog honestly cannot merge, so the run answers a collision confined to it by running the line above on the merged tree rather than by asking somebody to settle a file nobody wrote ([ADR-0106](docs/adr/0106-a-collision-in-generated-files-is-regenerated-not-repaired.md)). A generated file added later belongs in that declaration beside this instruction.
+
    Because that digest is computed over the files' bytes, the repository pins line endings to LF in `.gitattributes` — a checkout that normalises them would regenerate every digest and fail that same check.
 5. **Run the tests.** The Python engines under a Skill's `scripts/` or the Collection Library's `library/scripts/` are covered by a pytest suite under `tests/`. Four commands verify a change, each provisioning its tool through `uv`:
 

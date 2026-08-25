@@ -4581,6 +4581,250 @@ def test_integrate_keeps_the_working_tree_of_a_ticket_it_could_not_merge(
     assert _git(repo, "status", "--porcelain").stdout == ""
 
 
+# Where a repository declares which of its files are generated and what
+# regenerates each, and one such declaration's shell line. Both are stated
+# here rather than imported for the reason the outcome marker is: a test that
+# built them from the engine's own constants would pass on the engine and the
+# declaration being wrong together.
+GENERATED_DECLARATION = ".kntnt-orchestrate/generated.json"
+CATALOGUE_COMMAND = "cat parts/*.txt | sort > catalog.txt"
+
+
+def _declares(*files: str, command: str = CATALOGUE_COMMAND) -> dict[str, Any]:
+    """Render a declaration naming *files* as the output of *command*."""
+
+    return {"generated": [{"files": list(files), "command": command}]}
+
+
+def _declaring_repo(path: Path, declaration: dict[str, Any] | None = None) -> Path:
+    """Build a repository whose catalogue is the sorted parts beside it.
+
+    The catalogue stands in for this repository's own: a file no hand writes,
+    whose bytes are a function of the tree, and which two tickets that each
+    ran the generator honestly cannot produce the same version of.
+    """
+
+    repo = _init_repo(path)
+    (repo / "parts").mkdir()
+    (repo / "parts" / "base.txt").write_text("base\n", encoding="utf-8")
+    (repo / "catalog.txt").write_text("base\n", encoding="utf-8")
+    if declaration is not None:
+        declared = repo / GENERATED_DECLARATION
+        declared.parent.mkdir(parents=True, exist_ok=True)
+        declared.write_text(json.dumps(declaration), encoding="utf-8")
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-m", "the generated catalogue")
+
+    return repo
+
+
+def _collided_over_the_catalogue(
+    repo: Path, also: str | None = None
+) -> dict[int, Path]:
+    """Build two tickets that each regenerated the catalogue, and merge the first.
+
+    What is left is the collision this repository's own runs kept hitting: #9
+    on the run branch, #10 in a working tree of its own, and a generated file
+    both of them wrote from their own half of the tree. Where *also* is named,
+    both tickets write that file too, so the collision reaches past what any
+    generator produces.
+    """
+
+    trees = {}
+    for number, part in ((9, "nine"), (10, "ten")):
+        tree = Path(
+            json.loads(_engine(repo, "isolate", "--ticket", str(number)).stdout)[
+                "worktree"
+            ]
+        )
+        (tree / "parts" / f"{part}.txt").write_text(f"{part}\n", encoding="utf-8")
+        (tree / "catalog.txt").write_text(f"base\n{part}\n", encoding="utf-8")
+        if also is not None:
+            (tree / also).write_text(f"{part}\n", encoding="utf-8")
+        _git(tree, "add", "-A")
+        _git(tree, "commit", "-m", f"build #{number}")
+        trees[number] = tree
+    assert _engine(repo, "integrate", "--ticket", "9").returncode == 0
+
+    return trees
+
+
+def test_integrate_settles_a_collision_confined_to_generated_files_by_regenerating(
+    tmp_path: Path,
+) -> None:
+    """Two tickets that each ran the same generator cannot produce the same
+    bytes, so they collide in its output forever. The output is a function of
+    the merged tree, so the run runs the generator there and commits what it
+    produced, rather than paying a repair and a verdict to reproduce what one
+    command already knows."""
+
+    repo = _declaring_repo(tmp_path / "proj", _declares("catalog.txt"))
+    trees = _collided_over_the_catalogue(repo)
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["merged"] is True
+    assert answer["regenerated"] == ["catalog.txt"]
+    assert answer["collisions"] == []
+    assert (repo / "catalog.txt").read_text(encoding="utf-8") == "base\nnine\nten\n"
+    assert (repo / "parts" / "nine.txt").is_file()
+    assert (repo / "parts" / "ten.txt").is_file()
+    assert not trees[10].exists()
+    assert _git(repo, "status", "--porcelain").stdout == ""
+
+    # The commit is the merge itself rather than one on top of it, and it says
+    # on the branch what settled the collision.
+    parents = _git(repo, "rev-list", "--parents", "-1", "HEAD").stdout.split()
+    assert len(parents) == 3
+    assert "regenerating" in _git(repo, "log", "-1", "--format=%B").stdout
+
+
+def test_integrate_repairs_a_collision_that_reaches_past_the_generated_files(
+    tmp_path: Path,
+) -> None:
+    """A collision that also touches a file nothing generates is a
+    disagreement two builders made, and no generator answers it. The mixed
+    case takes the repair path whole, generated file and all."""
+
+    repo = _declaring_repo(tmp_path / "proj", _declares("catalog.txt"))
+    trees = _collided_over_the_catalogue(repo, also="graph.py")
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["merged"] is False
+    assert answer["collisions"] == ["catalog.txt", "graph.py"]
+    assert answer["regenerated"] == []
+    assert answer["worktree"] == str(trees[10])
+    assert trees[10].is_dir()
+    assert (repo / "catalog.txt").read_text(encoding="utf-8") == "base\nnine\n"
+    assert _git(repo, "status", "--porcelain").stdout == ""
+
+
+def test_integrate_repairs_a_collision_in_a_file_no_declaration_names(
+    tmp_path: Path,
+) -> None:
+    """What counts as generated is read off the declaration and never guessed
+    from what a file looks like, so a repository that declares something else
+    collides in its catalogue exactly as one that declares nothing does."""
+
+    repo = _declaring_repo(tmp_path / "proj", _declares("index.txt"))
+    trees = _collided_over_the_catalogue(repo)
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["collisions"] == ["catalog.txt"]
+    assert answer["regenerated"] == []
+    assert trees[10].is_dir()
+    assert (repo / "catalog.txt").read_text(encoding="utf-8") == "base\nnine\n"
+    assert _git(repo, "status", "--porcelain").stdout == ""
+
+
+def test_integrate_repairs_a_generated_collision_the_generator_could_not_settle(
+    tmp_path: Path,
+) -> None:
+    """A generator that fails has settled nothing, so the collision is the
+    collision it was: the merge is undone, the branch is left as it was, and
+    the repair path answers it as it answers any other."""
+
+    repo = _declaring_repo(
+        tmp_path / "proj", _declares("catalog.txt", command="exit 3")
+    )
+    trees = _collided_over_the_catalogue(repo)
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["collisions"] == ["catalog.txt"]
+    assert answer["regenerated"] == []
+    assert trees[10].is_dir()
+    assert (repo / "catalog.txt").read_text(encoding="utf-8") == "base\nnine\n"
+    assert _git(repo, "status", "--porcelain").stdout == ""
+
+
+def test_integrate_repairs_a_generated_collision_whose_generator_wrote_elsewhere(
+    tmp_path: Path,
+) -> None:
+    """A generator that touches a file its declaration never named has widened
+    that declaration without saying so, and what it wrote there is nobody's
+    decision to commit. The collision stands and takes the repair path, and
+    what the generator wrote outside its declaration is left where a developer
+    sees it rather than reverted by a run that did not write it."""
+
+    repo = _declaring_repo(
+        tmp_path / "proj",
+        _declares(
+            "catalog.txt",
+            command=f"{CATALOGUE_COMMAND} && echo stray >> parts/base.txt",
+        ),
+    )
+    trees = _collided_over_the_catalogue(repo)
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["collisions"] == ["catalog.txt"]
+    assert answer["regenerated"] == []
+    assert trees[10].is_dir()
+    assert (repo / "catalog.txt").read_text(encoding="utf-8") == "base\nnine\n"
+    assert (repo / "parts" / "base.txt").read_text(encoding="utf-8") == "base\nstray\n"
+
+
+def test_integrate_repairs_a_generated_collision_whose_generator_left_a_new_file(
+    tmp_path: Path,
+) -> None:
+    """The same rule reaches a file nothing tracked before: an output the
+    declaration does not name is an output the run cannot account for, so the
+    merge is undone and what the generator left stands where a developer sees
+    it rather than inside a commit."""
+
+    repo = _declaring_repo(
+        tmp_path / "proj",
+        _declares(
+            "catalog.txt",
+            command=f"{CATALOGUE_COMMAND} && echo stray > index.txt",
+        ),
+    )
+    trees = _collided_over_the_catalogue(repo)
+
+    result = _engine(repo, "integrate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["collisions"] == ["catalog.txt"]
+    assert answer["regenerated"] == []
+    assert trees[10].is_dir()
+    assert (repo / "catalog.txt").read_text(encoding="utf-8") == "base\nnine\n"
+    assert (repo / "index.txt").read_text(encoding="utf-8") == "stray\n"
+
+
+def test_report_names_the_ticket_a_regeneration_settled(tmp_path: Path) -> None:
+    """A collision settled by regeneration is neither a plain merge nor a
+    repaired collision, and the run's account says which it was — read off the
+    branch's own merges, where it outlives the session that made it."""
+
+    repo = _declaring_repo(tmp_path / "proj", _declares("catalog.txt"))
+    _collided_over_the_catalogue(repo)
+    assert _engine(repo, "integrate", "--ticket", "10").returncode == 0
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+    )
+
+    result = _engine(repo, "report", env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["regenerated"] == [{"ticket": 10, "files": ["catalog.txt"]}]
+
+
 def test_integrate_refuses_work_a_working_tree_never_committed(
     tmp_path: Path,
 ) -> None:

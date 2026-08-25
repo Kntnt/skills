@@ -111,6 +111,10 @@ _Avoid_: exclusive ticket, serial ticket, locked wave, blocked by everything
 An explicit maintainer acknowledgement that a ticket with an unsuccessful Run Outcome was completed outside Orchestrate and now has a done Ticket Resolution. It preserves the unsuccessful Run Outcome as provenance.
 _Avoid_: retry, overwrite, superseding outcome
 
+**Declared Generated File**:
+A file a repository states is the output of a command rather than of a decision, named together with that command in `.kntnt-orchestrate/generated.json`. An Orchestrate collision confined to such files is settled by running those commands on the merged tree and committing the result, with no collision repair; a collision touching any other file is repaired as before. What counts is the declaration, never how a file looks (ADR-0106).
+_Avoid_: build artifact, derived file, generated output
+
 **Enabled**:
 A skill present on disk in a layer, in each Detected Harness's skills directory for that layer.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)

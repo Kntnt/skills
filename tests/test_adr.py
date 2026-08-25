@@ -60,6 +60,7 @@ RELATIONS = {
     ("0048", "0103"),
     ("0080", "0103"),
     ("0096", "0105"),
+    ("0055", "0106"),
 }
 
 # The flag-refusal rule and the reasoning an installed reader needs. `delegation`
@@ -310,6 +311,40 @@ def test_the_derived_valued_registry_preserves_the_hand_list_record_history() ->
     # The road not taken is named: a staleness check cannot see the flag whose
     # every surface spells it wrong, which is the violation the rule exists for.
     assert "staleness check" in later
+
+
+def test_the_regenerated_collision_preserves_the_repair_record_history() -> None:
+    """The regeneration points past ADR-0055 without rewriting what it decided.
+
+    ADR-0055 settled how a collision two builders' decisions produced is
+    answered: repaired on the losing branch, verified by a session that did not
+    make the resolution, and rebuilt once where that verdict fails. All of that
+    stands. Only its claim over every collision was outrun, by the class that
+    carries no decision at all — the output of a deterministic command, which
+    two builders who each ran it honestly cannot produce the same version of
+    (issue #122).
+    """
+
+    earlier = (ADR / "0055-a-collision-is-repaired-on-the-losing-branch.md").read_text(
+        encoding="utf-8"
+    )
+    later = (
+        ADR / "0106-a-collision-in-generated-files-is-regenerated-not-repaired.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "a resolution that cannot be verified is not a resolution" in earlier
+    assert "The repair happens on the losing ticket's own branch" in earlier
+    assert "narrowed by ADR-0106" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "narrows ADR-0055" in later
+
+    # The road not taken is named: the README section stays builder-owned,
+    # because a ticket whose acceptance criteria name one has to ship it to
+    # pass its own verification.
+    assert "README" in later
 
 
 def test_a_pointer_names_a_later_record() -> None:

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -14,6 +15,16 @@ DEVIATION_RECORD = (
     / "adr"
     / "0066-the-reference-validator-is-a-baseline-not-a-gate.md"
 )
+
+# Where this repository declares which of its files are generated and what
+# regenerates each. An unattended run reads it to tell a collision that carries
+# a disagreement from one a command already answers (ADR-0106).
+GENERATED = REPO_ROOT / ".kntnt-orchestrate" / "generated.json"
+
+# The Catalog, and the line the guide tells a contributor to regenerate it
+# with. The declaration beside it has to spell that line the same way.
+CATALOG = "skills/kntnt/catalog.json"
+REGENERATION = "KNTNT_SOURCE=. uv run skills/kntnt/scripts/kntnt.py catalog --write"
 
 # The reference implementation is fetched from a subdirectory of the
 # specification's own repository, so the whole of how it is obtained is in the
@@ -77,3 +88,26 @@ def test_no_check_ci_runs_is_the_reference_validator() -> None:
 
     assert "skills-ref" not in ci
     assert "agentskills" not in ci
+
+
+def test_the_catalog_is_declared_generated_with_the_line_the_guide_gives() -> None:
+    """The one file in this repository no hand writes says so where a run reads it.
+
+    Every wave that merges two Skill-touching tickets collides in the Catalog,
+    and always will: its bytes are a digest of the tree, so two builders who
+    each regenerated it honestly cannot produce the same version. The
+    declaration is what lets a run answer that with the command rather than
+    with a repair (ADR-0106), and the command it names is the guide's own — a
+    declaration spelling it some other way would regenerate something else.
+    """
+
+    declared = json.loads(GENERATED.read_text(encoding="utf-8"))["generated"]
+    catalog = [entry for entry in declared if CATALOG in entry["files"]]
+
+    assert catalog, (
+        f"{GENERATED}: nothing declares {CATALOG} generated, so a wave that"
+        f" collides in it pays a repair for what one command already knows."
+        f" See ADR-0106."
+    )
+    assert [entry["command"] for entry in catalog] == [REGENERATION]
+    assert REGENERATION in _contributing()
