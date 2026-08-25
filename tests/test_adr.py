@@ -57,6 +57,8 @@ RELATIONS = {
     ("0059", "0078"),
     ("0073", "0079"),
     ("0072", "0098"),
+    ("0048", "0103"),
+    ("0080", "0103"),
     ("0096", "0105"),
 }
 
@@ -237,6 +239,46 @@ def test_the_gate_failing_mechanical_recut_preserves_the_wave_check_history() ->
     # The road not taken is named, a fourth shape being a fourth thing two
     # briefs can state inconsistently.
     assert "fourth verdict shape" in later
+
+
+def test_the_command_path_grammar_preserves_the_tldr_record_history() -> None:
+    """The command path points past two records without rewriting either.
+
+    ADR-0048's portable standing-instruction mechanism, its two scopes, and
+    its persistence decisions all stand; only its closing argument for
+    reaching the mode by flags was outrun, by the reserved separator the
+    Invocation Envelope gave the whole collection (issue #115). ADR-0080 said
+    in passing that it left that grammar intact, and that sentence went with
+    it.
+    """
+
+    standing = (ADR / "0048-tldr-mode-is-a-standing-instruction.md").read_text(
+        encoding="utf-8"
+    )
+    reframing = (ADR / "0080-tldr-selects-for-the-owner-of-the-outcome.md").read_text(
+        encoding="utf-8"
+    )
+    later = (ADR / "0103-tldr-addresses-its-mode-through-a-command-path.md").read_text(
+        encoding="utf-8"
+    )
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "the mode reached by flags rather than by bare words" in standing
+    assert "A flag can never be mistaken for prose" in standing
+    assert "withdrawn by ADR-0103" in standing
+
+    assert "persistence decisions intact" in reframing
+    assert "amended by ADR-0103" in reframing
+
+    # Declare the same relations from the later record for the scan in both
+    # directions.
+    assert "withdraws from ADR-0048" in later
+    assert "amends ADR-0080" in later
+
+    # The channel the operand's work moves to, which the removal rests on
+    # entirely, and the cost of having to type the separator for it.
+    assert "Contextual Instruction" in later
+    assert "reserved separator" in later
 
 
 def test_the_derived_valued_registry_preserves_the_hand_list_record_history() -> None:

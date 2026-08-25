@@ -63,7 +63,7 @@ Leave the decision to delegate, planning, briefing, verification, and the final 
 
 ### tldr
 
-Reframe the previous answer at the level and focus useful to the person who owns the outcome, or keep later replies concise and decision-relevant by default. A bare `/tldr` answers the substance again without handing over every implementation detail; `--on` applies the same perspective only to subsequent replies. Run `/tldr [instruction]`, `/tldr --on|--off [--user] [--yes]` or `/tldr --status`.
+Reframe the previous answer at the level and focus useful to the person who owns the outcome, or keep later replies concise and decision-relevant by default. A bare `/tldr` answers the substance again without handing over every implementation detail; `on` applies the same perspective only to subsequent replies. Run `/tldr`, `/tldr on|off [--user] [--yes]` or `/tldr status`. The grammar takes no free text: a request that widens the range, names a language, narrows the subject, or constrains the output goes after the reserved separator, as `/tldr -- only the security part`.
 
 ### commit
 
