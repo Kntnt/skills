@@ -8,16 +8,14 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 AGENTS = REPO_ROOT / "AGENTS.md"
 
-# The record that binds whoever writes a ticket in this repository. It is named
-# here rather than looked up, because what has to hold is that this particular
-# record is pointed at — a guide that lists four other files and omits this one
-# is what the pointer exists to prevent.
-TICKET_RECORD = (
-    "docs/adr/0067-a-ticket-asserts-only-what-stays-true-until-it-is-built.md"
-)
+# The rules module that binds whoever writes a ticket in this repository. It is
+# named here rather than looked up, because what has to hold is that this
+# particular module is pointed at — a guide that lists every other file an
+# agent may need and omits this one is what the pointer exists to prevent.
+TICKETS = "docs/rules/tickets.md"
 
 # The rules module carrying what a Skill's own shipped files must hold. Named
-# here for the same reason the record above is: what has to hold is that this
+# here for the same reason the module above is: what has to hold is that this
 # particular module is pointed at, before anything has been written.
 STANDARD = "docs/rules/skills.md"
 
@@ -33,20 +31,21 @@ def _references() -> dict[str, str]:
     return {match.group(1): match.group(2) for match in REFERENCE.finditer(text)}
 
 
-def test_agents_md_points_at_the_record_that_binds_ticket_authors() -> None:
-    """An agent about to write a ticket has to meet the convention somewhere.
+def test_agents_md_points_at_the_rules_a_ticket_author_is_held_to() -> None:
+    """An agent about to write a ticket has to meet the rules somewhere.
 
-    The convention is prose and lives in a record; this file is what an agent
-    always has loaded, so the record is reachable only if this file names it
-    (issue #67). The clause matters as much as the path: a reader skims the
-    list for the occasion, and an entry whose occasion never says *ticket* is
-    an entry a ticket author skips.
+    The rules are prose and live in one module — what a ticket may assert
+    while it waits (ADR-0067), and when it declares that it builds alone
+    (ADR-0099). This file is what an agent always has loaded, so the module is
+    reachable only if this file names it (issue #67). The clause matters as
+    much as the path: a reader skims the list for the occasion, and an entry
+    whose occasion never says *ticket* is an entry a ticket author skips.
     """
 
     references = _references()
 
-    assert TICKET_RECORD in references
-    assert "ticket" in references[TICKET_RECORD]
+    assert TICKETS in references
+    assert "ticket" in references[TICKETS]
 
 
 def test_every_file_agents_md_references_exists() -> None:
