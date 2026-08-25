@@ -11,6 +11,10 @@
 | 2 | Build the five skills | TODO | Pipeline order: frame → to-slices → compile → dispatch → land |
 | 3 | Bootstrap, takeover, cleanup | TODO | Dispatch executes its own remaining tickets; acceptance test; takeover merge; final cleanup ticket |
 
+## Checkpoint protocol
+
+The gated skills (to-tickets, implement, and later the pipeline's own) are user-invocation-only and never summon themselves; the agent never invokes them either. At every checkpoint the agent instead ends its turn by handing Thomas the exact line to run — skill, arguments, and contextual instruction prefilled, for example: `/to-tickets -- Label each ticket rework + rework-ready-for-agent instead of ready-for-agent; milestone "Skills 2.0"` — with the ground prepared so the skill lands on ready state (the approved breakdown before to-tickets, a ready ticket before implement). Paraphrasing the step in place of requesting the invocation is a protocol violation: if the line is not handed over, the checkpoint has not been reached.
+
 ## Phase 1 — doc reform
 
 Work with the existing tools (the current grilling/to-tickets chain), since the new pipeline does not exist yet. The order matters: recon before questions, so Thomas is never asked anything the pile itself can answer.
