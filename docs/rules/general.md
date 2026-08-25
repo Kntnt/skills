@@ -1,14 +1,14 @@
-# Coding standard — General
+# Rules — how code is written
 
 Read before writing or changing any code.
 
-Project coding standard. General rules apply to all code; language- and framework-specific rules live in companion modules.
+This module of the rules document covers code form. General rules apply to all code; language- and framework-specific rules live in companion modules.
 
 ## Priority order
 
 When two rules conflict, the higher-priority rule wins:
 
-1. **This standard** — this document and its companion modules.
+1. **The rules document** — this module and its companions.
 2. **The language's recommended standard** — PSR-12 (PHP), the WordPress Coding Standards (WordPress), the TypeScript handbook, MDN's JavaScript style.
 3. **Best practice** — well-reasoned community advice (Airbnb JS, Clean Code, the WordPress Plugin Handbook).
 4. **Widely accepted conventions** — what most code in the wild looks like.
@@ -41,7 +41,7 @@ These principles often conflict. Find the design that best honours all of them �
 
 ### Code is read as prose
 
-Code is read as prose; the reader is always a senior developer fluent in the language and framework. A file is a chapter; a class or function is a section; a *paragraph* (Swedish *stycke*) — consecutive statements that logically belong together — is the basic unit inside a block, with a `//` comment as its topic sentence; a statement is a sentence. The paragraphing rule below is the most central in this standard.
+Code is read as prose; the reader is always a senior developer fluent in the language and framework. A file is a chapter; a class or function is a section; a *paragraph* (Swedish *stycke*) — consecutive statements that logically belong together — is the basic unit inside a block, with a `//` comment as its topic sentence; a statement is a sentence. The paragraphing rule below is the most central in this module.
 
 ### Paragraphs and comments
 
@@ -114,9 +114,9 @@ Write a guard only where a real, present condition needs it — an untrusted bou
 
 When a change alters a shared symbol's contract, signature, or effective behaviour, enumerate every caller — grep, an IDE's find-references — before finishing, and update all of them in the same change. Never leave some callers updated to the new contract and others stranded on the old one: a diff that reads as locally consistent within the files it touches can still leave the codebase globally inconsistent, a gap a review that only reads the diff structurally misses. When bringing every caller up to date would genuinely ripple beyond the task at hand, say so explicitly in the summary or handoff — never apply the change to only the callers already in view and leave the rest half-done.
 
-A rule this repository documents is a shared contract in the same sense, so the sweep reaches the prose that shows it, and how a document is treated turns on what it asserts rather than on what it displays. A decision record asserting something the change falsifies carries the outrun pointer its own convention requires and is not otherwise rewritten. A record whose decision stands while an incidental example spells something the change removed is corrected in place and owes no pointer: the pointer names what was narrowed, so writing one where nothing was narrowed states something false, and the suite cannot catch it — it checks that a record claiming a takeover is answered by a pointer back, never that a pointer is answered by a claim. Released history is left exactly as it stands, the changelog and closed tickets included, being an account of what shipped rather than of what holds now.
+A rule this repository documents is a shared contract in the same sense, so the sweep reaches the prose that shows it, and how a document is treated turns on what it asserts rather than on what it displays. A decision record asserting something the change falsifies is left exactly as it stands: it describes the world at its own date, and what applies now is the rules document's to say, so nothing is annotated into the archive (`docs.md`). A record whose decision stands while an incidental example spells something the change removed is corrected in place, that being a defect in the record rather than a decision it has been outrun on. Released history is left exactly as it stands, the changelog and closed tickets included, being an account of what shipped rather than of what holds now.
 
-Where the change takes a decision record in a rule area binding more than one Skill, state the resulting rule in this standard or its companion modules in the same change, and cite the record for the reasoning rather than restating it. A contributor has to be able to learn what holds today without reading the records forward and applying supersessions by hand: the records carry why and when, this standard carries what is true now. A rule governing one Skill's own behaviour needs nothing here, that Skill's shipped documents being where a reader already meets it.
+Where the change takes a decision record in a rule area binding more than one Skill, state the resulting rule in the rules document in the same change, and cite the record for the reasoning rather than restating it. A contributor has to be able to learn what holds today without reading the records forward and applying supersessions by hand: the records carry why and when, the rules document carries what is true now. A rule governing one Skill's own behaviour needs nothing here, that Skill's shipped documents being where a reader already meets it.
 
 ### Identifiers
 

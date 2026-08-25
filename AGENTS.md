@@ -20,8 +20,9 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 ## References
 
 - `CONTEXT.md` — read when using a Collection term
-- `docs/adr/` — read when deciding collection architecture
+- `docs/adr/` — read when tracing why a rule became what it is
 - `docs/rules/collection.md` — read when changing what a Manager verb promises, how the collection reaches a machine, or how a Skill routes delegated work
+- `docs/rules/docs.md` — read when deciding where a rule or a document belongs, writing a decision record, adding a pointer to this list, or authoring a Skill body
 - `docs/rules/general.md` — read when writing code
 - `docs/rules/python.md` — read when writing Python
 - `docs/rules/skills.md` — read when adding a Skill or changing the files one ships

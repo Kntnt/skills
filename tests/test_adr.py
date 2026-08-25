@@ -16,7 +16,7 @@ SKILLS = REPO_ROOT / "skills"
 # written rather than only where records supersede each other.
 CITING_DOCS = ("CONTEXT.md", "README.md", "AGENTS.md", "CONTRIBUTING.md")
 
-# The two other places a record is cited from: the coding standard, which names
+# The two other places a record is cited from: the rules document, which names
 # a rule in a phrase and cites the record carrying its reasoning, and the suite
 # itself, whose assertion messages do the same for the reader whose check has
 # just gone red (issue #69). A pointer is the one part of that arrangement free

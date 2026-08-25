@@ -11,7 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS = REPO_ROOT / "skills"
 
 # The record settling the order, cited by every failure below and by the
-# coding standard's own statement of the rule.
+# rules document's own statement of the rule.
 RECORD = "ADR-0097"
 
 # The optional Contextual Instruction closes every form and belongs to no

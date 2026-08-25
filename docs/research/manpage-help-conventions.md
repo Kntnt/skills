@@ -2,7 +2,7 @@
 
 ## Question and repository context
 
-This note asks which established conventions should govern the Collection's user-facing `help.md` files. It records evidence rather than adding a second coding standard; the normative rule belongs in [`docs/rules/skills.md`](../rules/skills.md).
+This note asks which established conventions should govern the Collection's user-facing `help.md` files. It records evidence rather than adding a second statement of the rule; the normative rule belongs in [`docs/rules/skills.md`](../rules/skills.md).
 
 The repository currently makes one Markdown artifact serve three help spellings: `--help`, `-h`, and `help` print `help.md` verbatim, and the same file is called the Skill's man page ([ADR-0044](../adr/0044-help-lives-with-the-skill.md)). No file is installed into a numbered system manual section and no roff formatter adds a title, indentation, font changes, indexing metadata, or a pager. The result is therefore a project-specific hybrid: a complete reference page delivered through a help route, not an installed Unix man page.
 
@@ -21,7 +21,7 @@ An installed command page is a separately addressable document, normally in manu
 
 Terminal `--help` is immediate invocation guidance. GNU's standard calls it brief, while `help2man` recommends a synopsis, a very short explanation including normal or default behaviour, options, useful behavioural qualifications, a few examples when valuable, and support links near the end. It must be safe to request without starting the command's normal work.
 
-The repository has deliberately selected a third profile: the long reference is the direct response to every help spelling. That can be retained, but the coding standard should describe it honestly as a **man-page-shaped Markdown reference**, not imply that the files are installed man pages or that upstream man-page standards require full terminal help. If a concise tier like ripgrep's `-h` is ever desired, that is a product-interface change beyond editorial reformatting; the current ADR makes all three routes identical.
+The repository has deliberately selected a third profile: the long reference is the direct response to every help spelling. That can be retained, but the rules document should describe it honestly as a **man-page-shaped Markdown reference**, not imply that the files are installed man pages or that upstream man-page standards require full terminal help. If a concise tier like ripgrep's `-h` is ever desired, that is a product-interface change beyond editorial reformatting; the current ADR makes all three routes identical.
 
 ## Structure that should govern these pages
 
@@ -37,7 +37,7 @@ For this repository, the corresponding Markdown profile should be:
 4. Use `## DESCRIPTION` for the normal case, defaults, inputs, outputs, side effects, and the smallest mental model needed to use the Skill. Keep option-specific details under `OPTIONS` and omit implementation history, internal machinery, rejected alternatives, issue evidence, and architectural rationale unless one is essential to correct use.
 5. Use `## POSITIONAL ARGUMENTS` or another precise conventional argument heading when operands need definition, followed by `## OPTIONS` for flags. Group a short and long alias as one term, state what each option changes, and include its default, constraints, repeatability, and important interactions where those facts matter.
 6. Add only relevant standard sections after `OPTIONS`: for example `ENVIRONMENT`, `FILES`, `CAVEATS`, or `EXAMPLES`. Prefer a precise standard section over putting unrelated material into `NOTES`; `man-pages(7)` defines `NOTES` only as miscellaneous notes.
-7. Keep `DEPENDENCIES` as an explicit Collection-specific extension for the reader deciding whether to Enable a Skill. Its mandatory presence, including `None`, is a local product decision rather than man-page convention and should be labelled that way in the coding standard.
+7. Keep `DEPENDENCIES` as an explicit Collection-specific extension for the reader deciding whether to Enable a Skill. Its mandatory presence, including `None`, is a local product decision rather than man-page convention and should be labelled that way in the rules document.
 8. End with `## SEE ALSO`. An installed page uses a comma-separated list ordered by manual section and then name, without a final period. These Skills have no numbered manual-section identity, so list related Skill invocations concisely and consistently rather than inventing references such as `commit(1)`.
 
 The current blanket requirements that every page contain `NOTES` and `OPTIONS`, even without useful content, are not supported by the sources: traditional sections are selected for relevant content. Conversely, the current page opening of a title followed by an unlabelled summary omits the conventional `NAME` section. Those are the clearest structural corrections to the existing repository rule; keeping an explicit empty `DEPENDENCIES` section remains justified by the page's Collection-specific enablement audience, not by man-page convention.

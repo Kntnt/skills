@@ -1,4 +1,4 @@
-# Coding standard — Python
+# Rules — how Python is written
 
 Read before writing or changing Python.
 

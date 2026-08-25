@@ -14,7 +14,7 @@ SKILLS = REPO_ROOT / "skills"
 DOCS = REPO_ROOT / "docs"
 
 # The record settling the spelling, cited by every failure below and by the
-# coding standard's own statement of the rule.
+# rules document's own statement of the rule.
 RECORD = "ADR-0096"
 
 # An `argparse` action that consumes no value. Everything else — the default
@@ -220,7 +220,7 @@ Run `uv run engine.py emit --unshipped value` and read what it says.
 def _scanned() -> list[Path]:
     """Every file this rule is read out of, repository order.
 
-    The files a Skill ships and the documents the coding standard governs. The
+    The files a Skill ships and the documents the rules document governs. The
     changelog and the closed tickets are deliberately outside it: they record
     what was true when they were written (ADR-0096).
     """

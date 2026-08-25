@@ -1,4 +1,4 @@
-# Coding standard — Skills
+# Rules — what a Skill ships
 
 Read before adding a Skill to this collection, or changing the files an existing one ships.
 
@@ -52,7 +52,7 @@ The frontmatter is YAML and is read by a real YAML parser, so anything YAML acce
 
 ### Body
 
-The body carries only what the agent executes, which is why prose is the seam a Skill is held at (ADR-0046).
+The body carries only what the agent executes, which is why prose is the seam a Skill is held at (ADR-0046). This section governs what the body has to carry; how its prose is written is `/writing-for-agents`, which [`docs.md`](docs.md) states every body is authored under.
 
 - **The dependency preamble is present exactly when the dependency lists are not empty.** A Skill with nothing to declare calls no checker, because the call could only ever report an empty list and would itself declare `uv` (ADR-0012). Where the preamble is present it invokes the checker as `check --here="$HERE"` and names `npx skills add Kntnt/skills` as the fix for a missing Manager.
 - **An `## Invocation Envelope` section precedes `## Help` and Formal Invocation parsing.** It reads and follows the `## INVOCATION ENVELOPE` section of the Skill's own `$HERE/help.md`, applies Help and Arguments only to the separated Formal Invocation, and passes only that formal part to scripts or nested formal parsers. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance; only a conflict that cannot be discovered until after a legitimate effect may stop later effects and report the exact partial outcome. The local page keeps a directly installed Skill self-contained while carrying the same caller-neutral split, validation order, semantic boundaries, refusal categories, Conversation Context rule, and selective propagation to nested Skills as every other page (ADR-0078).
@@ -84,7 +84,7 @@ The root manpage ships as `help.md` beside its `SKILL.md` and is a file the Skil
 - **All other sections are selected by content.** Use conventional uppercase headings and conventional order where they fit: `## COMMANDS`, `## POSITIONAL ARGUMENTS`, `## OPTIONS`, `## ENVIRONMENT`, `## FILES`, `## EXIT STATUS`, `## DIAGNOSTICS`, `## EXAMPLES`, `## NOTES`, then `## SEE ALSO`. A precise page-specific heading may replace a generic one where it improves retrieval. Omit an empty section instead of filling it with a statement that nothing is there; `DEPENDENCIES` is the sole local exception. `NOTES` is miscellaneous material, not a required home for details that belong elsewhere.
 - **Arguments and options use tagged prose rather than generic lists.** Put the complete term on its own paragraph — literal tokens bold and metavariables italic — followed by its unbulleted description paragraph. State the default, constraints, repeatability, and important interactions where they matter. Put demonstrations under `EXAMPLES`, never in `SYNOPSIS`, and include only examples that resolve a non-obvious form, default, destructive boundary, or output shape.
 - **The refusal is documented as well as performed.** Put invalid-form behaviour under `DIAGNOSTICS`, including that a flag with no work to do is refused rather than ignored, so strictness is reference information rather than miscellaneous commentary. End `SEE ALSO` with terse related invocations, not invented manual-section references.
-- **Markdown carries the semantics, not roff syntax.** Use the uppercase section hierarchy and semantic emphasis above without roff macros, escapes, formatter spacing, or manual-section numbers. Every prose paragraph remains on one physical Markdown line under this repository's general standard, even though the Linux man-pages project uses semantic line breaks in roff source. Review the rendered page at a narrow terminal-like width as well as in source.
+- **Markdown carries the semantics, not roff syntax.** Use the uppercase section hierarchy and semantic emphasis above without roff macros, escapes, formatter spacing, or manual-section numbers. Every prose paragraph remains on one physical Markdown line under this repository's general rules, even though the Linux man-pages project uses semantic line breaks in roff source. Review the rendered page at a narrow terminal-like width as well as in source.
 
 ## `agents/openai.yaml`
 
