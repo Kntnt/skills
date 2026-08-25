@@ -68,9 +68,9 @@ Spelling: *-our* in *colour*, *behaviour*, *favour*; *-re* in *centre*, *theatre
 
 Noun and verb pairs are spelled differently: *licence* the noun and *license* the verb, *practice* the noun and *practise* the verb, *advice* the noun and *advise* the verb. The noun–verb distinction is not optional in British English.
 
-Both *-ise* and *-ize* are correct; only inconsistency within one document is an error. *Analyse*, *paralyse*, and their relatives are always *-yse*.
+Both *-ise* and *-ize* are correct British English. *Analyse*, *paralyse*, and their relatives are always *-yse*.
 
-Dates: *24 August 2026*, or *24/08/2026* in numeric form. No comma between month and year. Times: *2.30pm* or *14:30*; both current, and consistency is what is corrected.
+Dates: *24 August 2026*, or *24/08/2026* in numeric form. No comma between month and year. Times: *2.30pm* or *14:30*; both are current British forms.
 
 Numbers: decimal point, comma as the thousands separator, currency symbol before the amount — *£1,250.00*, *1,000,000*. Percentages are written *50%* without a space.
 
@@ -78,6 +78,6 @@ Quotation marks: single outer and double inner, or the reverse where the documen
 
 Abbreviations that end in the last letter of the full word take no full stop: *Mr*, *Mrs*, *Ms*, *Dr*, *St*. Truncations do: *Prof.*, *Jan.*, *ed.* Initialisms are set without points: *BBC*, *UK*, *NHS*.
 
-Collective agreement is variation and not error. *The team are* and *the team is* are both correct; correct only a text that alternates within one passage.
+Collective agreement is variation and not error: *the team are* and *the team is* are both correct. The unit here is the passage rather than the whole text, because the choice tracks whether the members or the body are acting, and one document may properly need both.
 
-Where both forms are established — *judgment* and *judgement*, *inquiry* and *enquiry*, the serial comma present or absent — the text's own choice stands.
+Established in more than one form here, none of them the error: *judgment* and *judgement*, *inquiry* and *enquiry*, the serial comma present or absent.

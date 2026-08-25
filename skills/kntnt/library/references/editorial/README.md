@@ -1,6 +1,6 @@
 # Editorial resources
 
-This directory holds the editorial contract the Collection's editorial Skills are written and reviewed against: [`base.md`](base.md), the genres under `genres/`, the techniques under `techniques/`, and [`anti-slop.md`](anti-slop.md) beside them. This page is the format they are written to. Read it before adding a genre or a technique, or before changing what the base contract or the anti-slop catalogue holds.
+This directory holds the editorial contract the Collection's editorial Skills are written and reviewed against: [`base.md`](base.md), the genres under `genres/`, the techniques under `techniques/`, and [`anti-slop.md`](anti-slop.md) and [`mechanics.md`](mechanics.md) beside them. This page is the format they are written to. Read it before adding a genre or a technique, or before changing what the base contract, the anti-slop catalogue, or the mechanics contract holds.
 
 Everything here is language-independent and written in English. The language-specific half lives beside it in [`../languages/`](../languages/README.md), one resource per language, and the two are loaded together at run time. A rule that is only true of one language belongs there and never here.
 
@@ -39,6 +39,14 @@ The review half is written for the Skill that reviews, and it ships beside the b
 It is diagnostic throughout and states no target of its own. A Skill reading it beside the base contract meets nothing the contract does not already hold; a Skill contracted to apply that pass alone reads it without the contract and has what it needs. Its examples are English and semantic, like every other example here, and the words, phrases, punctuation, and constructions that only exist in one language belong to that language's own anti-slop scope.
 
 Where it carries wording or a substantial portion of an upstream catalogue, the upstream notice ships inside the file, because a reader of an installed Skill receives the file and not this repository.
+
+## The mechanics contract
+
+`mechanics.md` holds the rules of objective correctness that do not depend on which language a text is in — today the clause boundary a comma may and may not carry, and the rule that where a language establishes more than one correct form the text's own choice stands. A Skill contracted to mechanical correction reads it together with the resolved language's mechanics scope, and the two together are that run's rules.
+
+It sits here for the reason the anti-slop catalogue does: what is true of every installed language has to be written somewhere that is not one of them. Written once per language it would be one rule made into as many things to keep true, and the copies would be free to disagree about what is an error; written nowhere, a rule nobody states is decided by whoever is reading.
+
+Nothing in it may be a preference, which is what separates it from the base contract beside it. The base contract holds what a first draft has to be, and a text can fail it and still be correct; this document holds what is wrong whatever the writer intended. A rule that turns on the language — spelling, inflection, agreement, a language's own punctuation, its conventions for dates, numbers, currency, and quotation — belongs to that language's resource, and the resource is the more specific instruction wherever the two meet. Otherwise it is written exactly as its siblings here are: outcomes rather than procedure, no Skill and no option named, and English examples applied semantically in the target language.
 
 ## Adding a genre or a technique
 

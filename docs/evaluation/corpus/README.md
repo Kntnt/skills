@@ -102,10 +102,10 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 ### `flawed-en-US`
 
 - **Files** — `prose/flawed-en-US.md`
-- **Covers** — mechanically flawed prose; locale mechanics
-- **Material** — American English prose about rewriting an importer, carrying misspellings, a possessive-for-contraction error, a duplicated word, missing apostrophes, `would of`, two subject-verb disagreements, a comma splice, and a missing plural.
-- **Use** — the main fixture for complete mechanical correction, and for the boundary between correcting and rewriting.
-- **Reject** — American spellings changed to British ones, sentences restructured, hedges added or removed, or the closing opinion softened. Correcting the mechanics is the whole of the job.
+- **Covers** — mechanically flawed prose; locale mechanics; sentence-boundary punctuation
+- **Material** — American English prose about rewriting an importer, carrying misspellings, a possessive-for-contraction error, a duplicated word, missing apostrophes, `would of`, two subject-verb disagreements, a missing plural, and two commas joining main clauses: one in *The bug were not in the parsing at all, it was in a silent retry* where the second clause explains the first, and one in *We finished in March, the finance team got a new reporting tool the same month* where the two clauses are unrelated.
+- **Use** — the main fixture for complete mechanical correction, for the boundary between correcting and rewriting, and for the clause boundary a comma may and may not carry, which the fixture stages in both directions.
+- **Reject** — American spellings changed to British ones, sentences restructured, hedges added or removed, or the closing opinion softened. The comma before *it was in a silent retry* is established usage in both shipped languages and is rejected as a correction; the unrelated pair is an error, and correcting it anywhere but at the joint — reordering the clauses, merging them, or supplying a conjunction rather than replacing the comma with a period or a semicolon — is rejected as well. Correcting the mechanics is the whole of the job.
 
 ### `flawed-sv`
 
