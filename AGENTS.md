@@ -9,6 +9,7 @@ A ground-up rebuild of this collection is in progress on the branch `rework`, ch
 - The branch `rework` and the worktree `../skills-rework` are EXEMPT from every cleanup instruction. "Remove all worktrees", "delete all branches", "make sure everything is merged and tidy" and the like apply to everything EXCEPT these two. Never delete, merge, rebase, or prune them.
 - Tickets labeled `rework` (milestone "Skills 2.0") belong to the rebuild. Their ready state is `rework-ready-for-agent` — never add the plain `ready-for-agent` label to them, never work them from an ordinary session, and never pass them to /orchestrate, not even by explicit ticket number. Rework sessions, conversely, leave `ready-for-agent` tickets alone.
 - The only rebuild artifact permitted on `main` is this section.
+- On this branch (`rework`) only: agents commit and push to `origin rework` at their own discretion — no approval from Thomas needed (standing authorization, 2026-08-25). `main` keeps its own convention (commit per ticket, never push). Before working here, read `docs/rework/00-brief.md` and `docs/rework/01-plan.md` in full.
 
 ## Ground rules (authoritative)
 
