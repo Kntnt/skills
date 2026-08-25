@@ -7,3 +7,4 @@ A record holds one provider family. Two families are compared by reading their t
 A re-run is a new record rather than an edit to an old one. What a configuration did on a given day is history, and a later repair does not change it.
 
 - [`proofread-claude-2026-08-25.md`](proofread-claude-2026-08-25.md) — the Proofread Skill against the corpus at `e2e162c`, in Claude Code on `claude-opus-5`, for issue #107.
+- [`write-claude-2026-08-25.md`](write-claude-2026-08-25.md) — the Write Skill against the corpus at `059e8bc`, in Claude Code on `claude-opus-5`, for issue #108.
