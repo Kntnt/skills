@@ -17,6 +17,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - A flag of the Collection's own grammar that takes a value now attaches it with `=`, written `--flag=value`, everywhere the Collection writes one: every `argument-hint`, every manpage `SYNOPSIS`, `OPTIONS`, and example, the argument prose and steps of every Skill body, every invocation of the Collection's own engines a body constructs, and the flag prose in the README, `CONTEXT.md`, and the decision records. The space-separated spelling most Skills used before is gone, and the suite fails on it. The attached form is the only one an optional value has, the only one that stays unambiguous where a value begins with `-` or is empty, and the only one that keeps a flag and its value a single token — which is what matters where a model composes an invocation into free text rather than a shell splitting it into arguments. No flag was added, removed, renamed, or changed in meaning; the engines' own parsers still accept both spellings, and a `git`, `gh`, `uv`, or `npx` command line a Skill constructs keeps its own tool's grammar. ADR-0096 is the record (issue #113).
 
+### Fixed
+
+- The flag-grammar suite check's registry of valued flags now lists the six the two new editorial Skills introduced — `--frontmatter`, `--genre`, `--in-place`, `--language`, `--output`, and `--technique` — which it had silently stopped answering for, so a space-separated spelling of any of them fails the suite again instead of passing unseen.
+
 ## [0.14.0] – 2026-08-24
 
 ### Changed
