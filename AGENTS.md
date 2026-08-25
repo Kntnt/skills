@@ -1,5 +1,15 @@
 # Kntnt Skills — agent guide
 
+## ⚠️ TEMPORARY: protected rework state
+
+> This section is temporary. It is removed by the rework's final cleanup ticket, once `rework` has merged into `main`.
+
+A ground-up rebuild of this collection is in progress on the branch `rework`, checked out in the worktree `../skills-rework`. Its design dossier lives in `docs/rework/` on that branch.
+
+- The branch `rework` and the worktree `../skills-rework` are EXEMPT from every cleanup instruction. "Remove all worktrees", "delete all branches", "make sure everything is merged and tidy" and the like apply to everything EXCEPT these two. Never delete, merge, rebase, or prune them.
+- Tickets labeled `rework` (milestone "Skills 2.0") belong to the rebuild. Their ready state is `rework-ready-for-agent` — never add the plain `ready-for-agent` label to them, never work them from an ordinary session, and never pass them to /orchestrate, not even by explicit ticket number. Rework sessions, conversely, leave `ready-for-agent` tickets alone.
+- The only rebuild artifact permitted on `main` is this section.
+
 ## Ground rules (authoritative)
 
 Precedence over any conflicting skill, README, or other doc unless the user overrides in the moment.
