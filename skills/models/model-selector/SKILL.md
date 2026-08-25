@@ -19,15 +19,11 @@ Configure the exact model versions and subscription/API channels available to on
 
 **Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run "<checker>" check --here="$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
 
-`$HERE` is the directory that contains this SKILL.md.
+`$HERE` is the directory that contains this SKILL.md, and `$LIBRARY` is `library/` under the Manager directory that contains the checker — absent, tell the user to run `/kntnt update`, then stop.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop. If `--help` or `-h` immediately follows a recognized command path, print that path's page from the table below verbatim and stop before setup, reads, research, or writes.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop, and `--help` or `-h` immediately following a recognized command path prints that path's page from the table below verbatim and stops before setup, reads, research, or writes.
 
 | Command path | Manpage |
 | --- | --- |
@@ -71,7 +67,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `--data=<path>` is valid on every form except `observe`, which reads no profile or evidence at all, and overrides the default data directory. `--artifact=<path>` is valid only for `observe`, where it is required, and names the caller-owned file the observations are written into. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`. `--on`, `--off`, `--status`, `--review=<identity>`, `--action=save|failed|ignore` and `--harness=<name>` are valid only for `capture`: `--harness` only with `--on`, `--action` only with `--review`, and `--on` and `--off` never together.
 
-Anything outside these forms is invalid, an operand written before a flag among them. Where the invocation starts with a recognized command path, name in one line what was wrong, print the `## SYNOPSIS` from that path's manpage in the Help table verbatim, point at `/model-selector <command-path> --help`, change nothing, and stop. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/model-selector --help` for the page in full instead. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
+Anything outside these forms is invalid, an operand written before a flag among them. Refuse it as `$LIBRARY/references/invocation-envelope.md` says, addressing the page the table above gives the most specific recognized command path; change nothing and stop.
 
 ## Evidence first
 

@@ -15,15 +15,11 @@ metadata:
 
 Re-answer the reply above from the perspective of the person who owns the outcome, and turn the same TL;DR perspective on or off for later replies.
 
-`$HERE` is the directory that contains this SKILL.md.
+`$HERE` is the directory that contains this SKILL.md, and `$LIBRARY` is `library/` under the Manager directory beside it — `$HERE/../kntnt/library/` if it exists, else `kntnt/library/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them); absent, tell the user to run `/kntnt update`, then stop.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop. If they are `on --help` or `on -h`, print `$HERE/help/on.md` verbatim and stop. If they are `off --help` or `off -h`, print `$HERE/help/off.md` verbatim and stop. If they are `status --help` or `status -h`, print `$HERE/help/status.md` verbatim and stop.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop, and `on`, `off`, or `status` followed by `--help` or `-h` prints `$HERE/help/on.md`, `$HERE/help/off.md`, or `$HERE/help/status.md` verbatim and stops.
 
 ## Arguments
 
@@ -40,11 +36,9 @@ Invalid forms, each refused the same way:
 - `--user` or `--yes` on the bare form or on `status`. Neither has work to do where nothing is written.
 - A flag-spelled command path. The mode has one spelling, the bare word, and a `--`-prefixed variant of it is an undeclared flag like any other.
 
-A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
-
 ## Steps
 
-1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, then print the `## SYNOPSIS` section of the most specific recognized page verbatim and point at that path's help route — `$HERE/help/on.md`, `$HERE/help/off.md`, or `$HERE/help/status.md` with `/tldr on --help`, `/tldr off --help`, or `/tldr status --help`. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/tldr --help` for the page in full. Change nothing and stop. Done when the form is settled, or you have stopped.
+1. Parse the arguments by the rules above. An invalid form is refused as `$LIBRARY/references/invocation-envelope.md` says, addressing the page of the most specific recognized command path; change nothing and stop. Done when the form is settled, or you have stopped.
 2. Bare form: settle the range, reading the Contextual Instruction where one was given. The default is everything you have written since the user's last input, plus whatever earlier context that range refers to and would be unintelligible without; an instruction that widens or narrows it moves it as it says. Done when the range is settled.
 3. Bare form, range empty: say there is no preceding answer to reframe and stop. If compaction has made the requested range incomplete, state that limit and use only the part still visible rather than implying complete coverage. Done when the available range is known, or you have stopped.
 4. Bare form: read [`mode.md`](references/mode.md). Treat the invocation as feedback that the preceding answer missed the useful level, focus, or density, and answer its substance again under that perspective; merely shortening its existing structure does not satisfy the request. Write the replacement answer under any Contextual Instruction given — the language it names, the subject it narrows to, the shape it constrains. Stop; nothing below applies to this form. Done when the replacement answer is shown.

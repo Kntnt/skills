@@ -5,11 +5,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from support.contract import STANDARD
-
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ADR = REPO_ROOT / "docs" / "adr"
-SKILLS = REPO_ROOT / "skills"
 
 # The prose outside the collection that cites records the same way a record
 # cites another one, so a number that has gone stale is caught wherever it is
@@ -62,14 +59,6 @@ RELATIONS = {
     ("0096", "0105"),
     ("0055", "0106"),
 }
-
-# The flag-refusal rule and the reasoning an installed reader needs. `delegation`
-# states the rule in a longer sentence than its siblings, so what is pinned is
-# the shared clause and rationale rather than the sentence in full.
-REFUSAL_CLAUSE = "A flag is refused rather than ignored where it has no work to do here"
-REFUSAL_RATIONALE = (
-    "a flag accepted and ignored teaches that flags sometimes do nothing"
-)
 
 
 def _records() -> dict[str, list[str]]:
@@ -377,43 +366,4 @@ def test_a_pointer_names_a_later_record() -> None:
         f"{invalid}: a pointer names the record that outran the one carrying"
         f" it, so it must cite a record that exists and comes later."
         f" See ADR-0075."
-    )
-
-
-def _skill_bodies() -> list[Path]:
-    """Every `SKILL.md` the collection ships, the Manager's among them."""
-
-    return sorted(SKILLS.glob("*/*/SKILL.md")) + sorted(SKILLS.glob("*/SKILL.md"))
-
-
-def test_the_flag_refusal_rule_carries_its_rationale_in_every_body() -> None:
-    """The installed instruction carries its refusal rationale itself."""
-
-    bodies = _skill_bodies()
-
-    # A glob that matched nothing, or a clause reworded out of every body,
-    # would leave the loop below with nothing to judge and pass regardless.
-    assert bodies
-
-    carrying: list[str] = []
-    unsupported: list[str] = []
-    for path in bodies:
-        where = str(path.relative_to(REPO_ROOT))
-        for paragraph in path.read_text(encoding="utf-8").split("\n\n"):
-            if REFUSAL_CLAUSE not in paragraph:
-                continue
-            carrying.append(where)
-            if REFUSAL_RATIONALE not in paragraph:
-                unsupported.append(where)
-
-    assert carrying, (
-        f"no skill body carries the clause {REFUSAL_CLAUSE!r}, so this check"
-        f" judged nothing. Every skill states the flag-refusal rule in that"
-        f" wording, and a rewording that drops it takes the check with it."
-        f" See {STANDARD}."
-    )
-    assert unsupported == [], (
-        f"{unsupported}: the flag-refusal rule needs the reason an installed"
-        f" reader uses to apply it, not repository-only provenance. See"
-        f" {STANDARD}."
     )

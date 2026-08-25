@@ -97,10 +97,8 @@ def test_the_skill_declares_no_flag_it_would_have_to_refuse() -> None:
         f" quietly accepted here teaches the opposite of what every other skill"
         f" in the collection teaches. See {STANDARD}."
     )
-    assert (
-        "a flag accepted and ignored teaches that flags sometimes do nothing" in text
-    ), (
+    assert "$LIBRARY/references/invocation-envelope.md" in text, (
         f"{SKILL / 'SKILL.md'}: the paragraph refusing a flag with no work"
-        f" carries the reason an installed reader needs to apply the rule. See"
-        f" {STANDARD}."
+        f" points at the one place that rule and the reason an installed reader"
+        f" applies it are written. See {STANDARD}."
     )

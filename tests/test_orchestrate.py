@@ -1701,9 +1701,13 @@ def test_invalid_reconcile_form_routes_to_reconcile_synopsis() -> None:
     instructions = (SKILL / "SKILL.md").read_text(encoding="utf-8")
 
     # Route recognized malformed forms to the addressed subcommand contract.
+    # The refusal's own shape — what it names, the synopsis it prints, and the
+    # addressed page's `--help` route it closes with — is the collection's and
+    # is stated once in the Library, so what the body carries is which page a
+    # recognized `reconcile` form addresses rather than a second copy of it.
     assert "invalid recognized `reconcile` form" in instructions
     assert "`$HERE/help/reconcile.md`" in instructions
-    assert "`/orchestrate reconcile --help`" in instructions
+    assert "$LIBRARY/references/invocation-envelope.md" in instructions
 
 
 # Every brief that tells its subagent to run the project's verification gate.

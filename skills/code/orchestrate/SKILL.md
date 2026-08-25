@@ -20,21 +20,17 @@ Read the tracker, and work the `ready-for-agent` tickets it holds on the branch 
 
 The payload's `capabilities` are the half of the check no script can do — you are the harness, so you answer. For each one, say whether its `confirm` sentence is true of you. Any that is not: give its `how`, do no work, install nothing, stop. Exit 0 is not a go-ahead until every one is answered.
 
-`$HERE` is the directory that contains this SKILL.md.
+`$HERE` is the directory that contains this SKILL.md, and `$LIBRARY` is `library/` under the Manager directory that contains the checker — absent, tell the user to run `/kntnt update`, then stop.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop. If they are `reconcile --help` or `reconcile -h`, print `$HERE/help/reconcile.md` verbatim and stop.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop, and `reconcile --help` or `reconcile -h` prints `$HERE/help/reconcile.md` verbatim and stops.
 
 ## Arguments
 
 `/orchestrate [--dry-run] [--at-once=<n>] [--model=<name>] [--deliberation=<low|medium|high|xhigh|max>] [--yes] [#<ticket-or-spec> ...]` or `/orchestrate reconcile [--commit=<commit>] [--yes] #<ticket>`, and nothing else. The order is part of the form: a ticket or spec reference written before a flag is refused, not repaired. A run may be aimed at as many tickets and specs as the user cares to name. Reconciliation names exactly one ticket. `--model` locks only the building model and `--deliberation` locks only the building deliberation; neither reaches a verdict. `--state-dir` is yours to pass rather than the developer's to type, and step 1 says where it comes from.
 
-Anything else is an invalid form. For an invalid recognized `reconcile` form, name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help/reconcile.md` verbatim, and point at `/orchestrate reconcile --help` for the page in full. Without that recognized subcommand, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/orchestrate --help` for the page in full. Then start nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
+Anything else is an invalid form. Refuse it as `$LIBRARY/references/invocation-envelope.md` says, addressing `$HERE/help/reconcile.md` for an invalid recognized `reconcile` form and `$HERE/help.md` otherwise, then start nothing and stop.
 
 ## Steps
 

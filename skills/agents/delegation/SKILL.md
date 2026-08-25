@@ -20,15 +20,11 @@ While delegation mode is on, you orchestrate — think, plan, brief, verify — 
 
 The payload's `capabilities` are the half of the check no script can do — you are the harness, so you answer. For each one, say whether its `confirm` sentence is true of you. Any that is not: give its `how`, change nothing, stop. Exit 0 is not a go-ahead until every one is answered.
 
-`$HERE` is the directory that contains this SKILL.md.
+`$HERE` is the directory that contains this SKILL.md, and `$LIBRARY` is `library/` under the Manager directory that contains the checker — absent, tell the user to run `/kntnt update`, then stop.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop.
 
 ## Arguments
 
@@ -52,8 +48,6 @@ Invalid forms, each refused the same way:
 - Two scopes, two states, or a state alongside `status`.
 - An out-of-order form: a bare `session`, `project`, `user`, `on`, `off`, or `status` written before any flag, such as `/delegation project --on` or `/delegation status --yes`.
 
-A flag is refused rather than ignored where it has no work to do here, and an incomplete form is refused rather than asked about, because a flag accepted and ignored teaches that flags sometimes do nothing and a question asked in place of the grammar leaves the user guessing at what the grammar is.
-
 ## The mode
 
 `$HERE/references/mode.md` is the single source of truth for what the mode says. Read it, and copy it verbatim wherever it is needed; state it in no other words.
@@ -73,7 +67,7 @@ The verdict is the effective state here and now:
 
 ## Steps
 
-1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/delegation --help` for the page in full. Change nothing and stop. Done when scope and state are settled, or you have stopped.
+1. Parse the arguments by the rules above. An invalid form is refused as `$LIBRARY/references/invocation-envelope.md` says; change nothing and stop. Done when scope and state are settled, or you have stopped.
 2. Scope `project` or `user`, any state: read [`persist.md`](references/persist.md) and follow it, then go to the report. Done when the block is written, removed, or read.
 3. Session `on`, `off`, or a toggle of the current verdict. Going on: read `$HERE/references/mode.md` and adopt it as a standing instruction for the rest of this session. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
 4. Write `{"active": true}` or `{"active": false}`, and nothing else, to `kntnt-delegation.json` in whatever per-session scratchpad or temporary directory your harness gives you, so a compaction cannot lose the state. No such directory: the conversation alone carries it. `status` writes nothing. Done when that file matches the session state, or there is nowhere to write it.
