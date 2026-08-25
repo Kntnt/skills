@@ -1,5 +1,5 @@
 interface:
   display_name: "Redline"
-  short_description: "Review a text editorially, then proofread it once"
+  short_description: "Review a text editorially, correct what it finds, then proofread it once"
 policy:
   allow_implicit_invocation: false
