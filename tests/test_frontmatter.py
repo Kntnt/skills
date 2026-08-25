@@ -240,7 +240,7 @@ def test_a_skill_with_nothing_to_declare_carries_the_marker_anyway() -> None:
     now any `kntnt.` key at all, and the four lists written empty carry it.
     """
 
-    frontmatter = _frontmatter("agents/tldr/SKILL.md")
+    frontmatter = _frontmatter("agents/brief/SKILL.md")
 
     assert kntnt.collection_block(frontmatter) is not None
     assert kntnt.skill_deps(frontmatter) == {

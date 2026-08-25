@@ -15,10 +15,20 @@
       "capabilities": []
     },
     {
+      "name": "brief",
+      "category": "agents",
+      "description": "Reframe what was just said for the person who owns the outcome, and turn Brief mode on or off so later replies stay concise and decision-relevant.",
+      "digest": "9f1c2128191463c55669c70d0040c0e15a3914487f46e8107f8d955ac2211243",
+      "binaries": [],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "71f264b954f50c843c9e6154ab4f49a017eaeaabd8181940d6f72bb4b4c5690a",
+      "digest": "05e688bed2ee7a2b89b37c10e1d7f83e825dca2e18c243061bb0859b05d60cc3",
       "binaries": [
         "uv"
       ],
@@ -29,16 +39,6 @@
       "capabilities": [
         "subagents"
       ]
-    },
-    {
-      "name": "tldr",
-      "category": "agents",
-      "description": "Reframe what was just said for the person who owns the outcome, and turn TL;DR mode on or off so later replies stay concise and decision-relevant.",
-      "digest": "401637a3fe9e536881a2aa7e69f13fd807eb747cdd55e31b936b42ff34eb82da",
-      "binaries": [],
-      "skills": [],
-      "externals": [],
-      "capabilities": []
     },
     {
       "name": "commit",

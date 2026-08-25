@@ -5148,7 +5148,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     assert "model-selector" in help_page
     assert (
         "model-selector"
-        in readme.partition("### delegation")[2].partition("### tldr")[0]
+        in readme.partition("### delegation")[2].partition("### commit")[0]
     )
     entry = next(item for item in catalog["skills"] if item["name"] == "delegation")
     assert entry["skills"] == ["model-selector"]
@@ -7154,19 +7154,96 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
 # path answers to, and the `--`-prefixed spelling it no longer has. The
 # spellings went rather than becoming aliases: two spellings for one form are
 # the ambiguity ADR-0103 removes, and an alias would keep it (issue #115).
-TLDR_DIR = REPO_ROOT / "skills" / "agents" / "tldr"
-TLDR_COMMANDS = frozenset({"on.md", "off.md", "status.md"})
+BRIEF_DIR = REPO_ROOT / "skills" / "agents" / "brief"
+BRIEF_COMMANDS = frozenset({"on.md", "off.md", "status.md"})
 FLAG_SPELLING = re.compile(r"--(?:on|off|status)\b")
 
+# The name the Skill answered to before ADR-0113, in both the spellings it was
+# written in: the command's own `tldr` and the standing mode's `TL;DR`.
+FORMER_NAME = re.compile(r"(?i)tl;?dr")
 
-def _tldr_readme_section() -> str:
-    """The README's own entry for `/tldr`, which states the forms it accepts."""
+# The shipped surfaces the former name may not survive on. Records and released
+# changelog entries are deliberately outside it: a record's decision stands and
+# an entry is an account of what shipped, so neither is rewritten (ADR-0075).
+SHIPPED_TEXT = frozenset({".md", ".json", ".yaml", ".yml", ".py", ".txt"})
+
+
+def _shipped_surfaces() -> list[Path]:
+    """Every file a user of this collection reads the Skill's name from."""
+
+    return [
+        *sorted(
+            path
+            for path in (REPO_ROOT / "skills").rglob("*")
+            if path.is_file() and path.suffix in SHIPPED_TEXT
+        ),
+        REPO_ROOT / "README.md",
+        REPO_ROOT / "CONTEXT.md",
+    ]
+
+
+def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None:
+    """One name for the command and for the standing mode it carries.
+
+    `tldr` named the bare form and nothing else. The standing mode adopts a
+    perspective for later replies and deliberately revisits nothing, so under
+    the old name `on` read as *turn the too-long-didn't-read on* and promised
+    a summary that never arrived. A Skill has no parser — the agent reading
+    these files is the whole of the enforcement — so a surface left spelling
+    the old name is a second name the Skill still answers to (ADR-0113).
+    """
+
+    assert BRIEF_DIR.is_dir(), (
+        f"{BRIEF_DIR}: the Skill's directory is its name under its Category,"
+        f" and the rename is not done while the old one is what exists"
+        f" (ADR-0113). See {STANDARD}."
+    )
+    assert not (REPO_ROOT / "skills" / "agents" / "tldr").exists(), (
+        f"{REPO_ROOT / 'skills' / 'agents' / 'tldr'}: the old directory is"
+        f" still here, so the collection ships the Skill under two names"
+        f" (ADR-0113). See {STANDARD}."
+    )
+
+    body = (BRIEF_DIR / "SKILL.md").read_text(encoding="utf-8")
+    assert "\nname: brief\n" in body, (
+        f"{BRIEF_DIR / 'SKILL.md'}: the `name` frontmatter is what every"
+        f" reader outside this collection resolves the Skill by, so it spells"
+        f" the name the directory does (ADR-0113). See {STANDARD}."
+    )
+
+    persistence = (BRIEF_DIR / "references" / "persist.md").read_text(encoding="utf-8")
+    for marker in ("<!-- kntnt:brief -->", "<!-- /kntnt:brief -->"):
+        assert marker in persistence, (
+            f"{BRIEF_DIR / 'references' / 'persist.md'}: the managed block's"
+            f" markers name the Skill, and the Skill writes and reads only the"
+            f" one spelling — a second accepted marker is a compatibility"
+            f" branch that never leaves the file (ADR-0113). See {STANDARD}."
+        )
+
+    surfaces = _shipped_surfaces()
+
+    # A glob that matched nothing would pass the loop below without reading a
+    # single surface, which is the one outcome this check exists to catch.
+    assert len(surfaces) > 2
+
+    for path in surfaces:
+        found = sorted(set(FORMER_NAME.findall(path.read_text(encoding="utf-8"))))
+        assert not found, (
+            f"{path}: {found} spells the name the Skill and its standing mode"
+            f" no longer answer to. Every shipped surface names it `brief`,"
+            f" the records and the released changelog entries excepted"
+            f" (ADR-0113). See {STANDARD}."
+        )
+
+
+def _brief_readme_section() -> str:
+    """The README's own entry for `/brief`, which states the forms it accepts."""
 
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-    return readme.partition("\n### tldr\n")[2].partition("\n### ")[0]
+    return readme.partition("\n### brief\n")[2].partition("\n### ")[0]
 
 
-def test_tldr_ships_and_routes_one_manpage_per_command_path() -> None:
+def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
     """`on`, `off`, and `status` each answer to their own help route.
 
     A command path is exactly what a page under `help/` answers to (ADR-0077),
@@ -7175,9 +7252,9 @@ def test_tldr_ships_and_routes_one_manpage_per_command_path() -> None:
     than the whole Skill's.
     """
 
-    help_directory = TLDR_DIR / "help"
+    help_directory = BRIEF_DIR / "help"
     assert help_directory.is_dir(), (
-        f"{TLDR_DIR}: the mode is addressed through a command path, and every"
+        f"{BRIEF_DIR}: the mode is addressed through a command path, and every"
         f" public command path has an addressable manpage under `help/`"
         f" (ADR-0077, ADR-0103). See {STANDARD}."
     )
@@ -7185,15 +7262,15 @@ def test_tldr_ships_and_routes_one_manpage_per_command_path() -> None:
     actual = {
         str(page.relative_to(help_directory)) for page in help_directory.rglob("*.md")
     }
-    assert actual == set(TLDR_COMMANDS), (
-        f"{TLDR_DIR}: the command page tree is {sorted(actual)}, while the"
-        f" accepted command paths are {sorted(TLDR_COMMANDS)} (ADR-0077,"
+    assert actual == set(BRIEF_COMMANDS), (
+        f"{BRIEF_DIR}: the command page tree is {sorted(actual)}, while the"
+        f" accepted command paths are {sorted(BRIEF_COMMANDS)} (ADR-0077,"
         f" ADR-0103). See {STANDARD}."
     )
 
-    body = TLDR_DIR / "SKILL.md"
+    body = BRIEF_DIR / "SKILL.md"
     help_section = _section(body.read_text(encoding="utf-8"), "## Help", body)
-    for relative in sorted(TLDR_COMMANDS):
+    for relative in sorted(BRIEF_COMMANDS):
         assert f"`$HERE/help/{relative}`" in help_section, (
             f"{body}: the `## Help` section does not route the `{relative}`"
             f" manpage. `/<skill> <command-path> --help` prints the most"
@@ -7206,7 +7283,7 @@ def test_tldr_ships_and_routes_one_manpage_per_command_path() -> None:
     )
 
 
-def test_tldr_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
+def test_brief_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
     """No `--`-prefixed spelling survives anywhere the Skill is described.
 
     The flag spellings go rather than becoming aliases. Two spellings for one
@@ -7215,7 +7292,7 @@ def test_tldr_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
     spelling left standing on any surface is a spelling that is accepted.
     """
 
-    surfaces = sorted(TLDR_DIR.rglob("*.md"))
+    surfaces = sorted(BRIEF_DIR.rglob("*.md"))
 
     # A glob that matched nothing would pass the loop below without reading a
     # single surface, which is the one outcome this check exists to catch.
@@ -7230,42 +7307,42 @@ def test_tldr_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
             f" aliases (ADR-0103). See {STANDARD}."
         )
 
-    section = _tldr_readme_section()
+    section = _brief_readme_section()
     assert section.strip(), (
-        f"{REPO_ROOT / 'README.md'}: the `### tldr` section could not be"
+        f"{REPO_ROOT / 'README.md'}: the `### brief` section could not be"
         f" found, so this check judged nothing. See {STANDARD}."
     )
     assert not FLAG_SPELLING.findall(section), (
-        f"{REPO_ROOT / 'README.md'}: the `### tldr` section still writes a"
+        f"{REPO_ROOT / 'README.md'}: the `### brief` section still writes a"
         f" `--`-prefixed spelling of a command path (ADR-0103). See"
         f" {STANDARD}."
     )
-    for form in ("/tldr on", "/tldr status"):
+    for form in ("/brief on", "/brief status"):
         assert form in section, (
-            f"{REPO_ROOT / 'README.md'}: the `### tldr` section does not state"
+            f"{REPO_ROOT / 'README.md'}: the `### brief` section does not state"
             f" the `{form}` form. The README is where somebody decides whether"
             f" they want the Skill, so it states the forms it accepts"
             f" (ADR-0103). See {STANDARD}."
         )
 
 
-def test_tldr_accepts_no_unseparated_text_after_its_name_or_command_path() -> None:
+def test_brief_accepts_no_unseparated_text_after_its_name_or_command_path() -> None:
     """The free-text operand is gone, and the separator is the one channel.
 
-    `/tldr` was the only Skill in the collection whose formal grammar accepted
+    `/brief` was the only Skill in the collection whose formal grammar accepted
     free text, which is what forced its mode onto flags in the first place.
     The Invocation Envelope's reserved separator now carries what the operand
     carried, so the operand is a second unseparated channel for one thing and
     goes with the ambiguity it caused (ADR-0078, ADR-0103).
     """
 
-    body = TLDR_DIR / "SKILL.md"
+    body = BRIEF_DIR / "SKILL.md"
     text = body.read_text(encoding="utf-8")
     arguments = _section(text, "## Arguments", body)
-    page = (TLDR_DIR / "help.md").read_text(encoding="utf-8")
+    page = (BRIEF_DIR / "help.md").read_text(encoding="utf-8")
 
     assert "\n## POSITIONAL ARGUMENTS\n" not in page, (
-        f"{TLDR_DIR / 'help.md'}: the page still documents a positional"
+        f"{BRIEF_DIR / 'help.md'}: the page still documents a positional"
         f" argument. The Skill takes no operand, and an empty conventional"
         f" section is omitted rather than filled (ADR-0103). See {STANDARD}."
     )
@@ -7281,7 +7358,7 @@ def test_tldr_accepts_no_unseparated_text_after_its_name_or_command_path() -> No
     )
 
 
-def test_tldr_reads_its_replacement_answer_from_the_contextual_instruction() -> None:
+def test_brief_reads_its_replacement_answer_from_the_contextual_instruction() -> None:
     """What the operand did is not lost, and the body says where it went.
 
     Widening the range, naming a language, narrowing the subject, and
@@ -7292,7 +7369,7 @@ def test_tldr_reads_its_replacement_answer_from_the_contextual_instruction() -> 
     takes the Envelope's context refusal rather than a syntax refusal.
     """
 
-    body = TLDR_DIR / "SKILL.md"
+    body = BRIEF_DIR / "SKILL.md"
     text = body.read_text(encoding="utf-8")
     arguments = _section(text, "## Arguments", body)
     steps = _section(text, "## Steps", body)

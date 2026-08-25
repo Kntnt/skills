@@ -1,38 +1,38 @@
-# tldr
+# brief
 
 ## NAME
 
-tldr - reframe the previous response or keep later responses concise
+brief - reframe the previous response or keep later responses concise
 
 ## SYNOPSIS
 
-**/tldr** [**--** *INSTRUCTION*]
+**/brief** [**--** *INSTRUCTION*]
 
-**/tldr** (**on**|**off**) [**--user**] [**--yes**] [**--** *INSTRUCTION*]
+**/brief** (**on**|**off**) [**--user**] [**--yes**] [**--** *INSTRUCTION*]
 
-**/tldr** **status** [**--** *INSTRUCTION*]
+**/brief** **status** [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-`tldr` has two modes of operation. Without a command path it treats the invocation as feedback that the preceding answer missed the useful level, focus, or density, then answers that substance again together with any earlier context needed to understand it. It reframes even an answer that was already short instead of merely compressing the same structure.
+`brief` has two modes of operation. Without a command path it treats the invocation as feedback that the preceding answer missed the useful level, focus, or density, then answers that substance again together with any earlier context needed to understand it. It reframes even an answer that was already short instead of merely compressing the same structure.
 
 The replacement answer speaks to a technically capable person who owns the outcome without expecting them to hold every implementation detail. It leads with the conclusion, keeps practical implications and material decisions, omits internal mechanics by default, and uses whatever structure fits the content. Any action or decision genuinely requiring the user is explicit; no heading, list, or empty verdict is mandatory.
 
 With `on` or `off`, the Skill controls the same perspective as a standing instruction for subsequent replies. Turning it on does not revisit or summarise the preceding answer. An explicit request for more detail overrides its default level for that reply.
 
-The grammar is closed: the Skill takes no free-text operand, and nothing beyond a command path and its flags belongs before the reserved separator. A request that widens the range, names a language, narrows the subject, or constrains the output is a Contextual Instruction and is written after `--`, as `/tldr -- only the security part`.
+The grammar is closed: the Skill takes no free-text operand, and nothing beyond a command path and its flags belongs before the reserved separator. A request that widens the range, names a language, narrows the subject, or constrains the output is a Contextual Instruction and is written after `--`, as `/brief -- only the security part`.
 
-TL;DR mode applies to replies in the conversation, not to source files, documentation, comments, commit messages, other artifacts, or general-purpose text and file compression.
+Brief mode applies to replies in the conversation, not to source files, documentation, comments, commit messages, other artifacts, or general-purpose text and file compression.
 
 ## COMMANDS
 
 **on**
 
-Enable TL;DR mode for the selected scope.
+Enable Brief mode for the selected scope.
 
 **off**
 
-Disable TL;DR mode for the selected scope.
+Disable Brief mode for the selected scope.
 
 **status**
 
@@ -60,19 +60,19 @@ A managed block in this Harness's global context file. There is no Project scope
 
 ## DIAGNOSTICS
 
-An incomplete or invalid form is refused rather than ignored. The Skill names the error, prints the `SYNOPSIS` of the most specific recognized page, changes nothing, and points at that path's help route: `/tldr on --nonsense` is answered with the grammar of `on` rather than with the whole Skill's. A flag is refused rather than ignored where it has no work to do here, so `/tldr --user` and `/tldr --yes` are invalid without `on` or `off`, while `/tldr on --user --yes` is valid.
+An incomplete or invalid form is refused rather than ignored. The Skill names the error, prints the `SYNOPSIS` of the most specific recognized page, changes nothing, and points at that path's help route: `/brief on --nonsense` is answered with the grammar of `on` rather than with the whole Skill's. A flag is refused rather than ignored where it has no work to do here, so `/brief --user` and `/brief --yes` are invalid without `on` or `off`, while `/brief on --user --yes` is valid.
 
-Unseparated text is not an instruction. A token after the Skill name or after a command path that is neither a recognized command path nor a declared flag is an invalid form, and so is a second command path; `/tldr only the security part` is refused rather than obeyed.
+Unseparated text is not an instruction. A token after the Skill name or after a command path that is neither a recognized command path nor a declared flag is an invalid form, and so is a second command path; `/brief only the security part` is refused rather than obeyed.
 
 A replacement answer whose requested range is partly unavailable after context compaction states that limit instead of presenting an incomplete result as complete.
 
 ## EXAMPLES
 
-**/tldr -- bara säkerhetsdelen**
+**/brief -- bara säkerhetsdelen**
 
 Re-answer only the security-related part of the previous response, the narrowing arriving as a Contextual Instruction.
 
-**/tldr on --user**
+**/brief on --user**
 
 Show and confirm a user-level block that keeps later replies concise and decision-relevant in the current Harness without revisiting the preceding answer.
 
@@ -104,4 +104,4 @@ None.
 
 ## SEE ALSO
 
-**/tldr on --help**, **/tldr off --help**, **/tldr status --help**, **/delegation --help**, **/kntnt select**
+**/brief on --help**, **/brief off --help**, **/brief status --help**, **/delegation --help**, **/kntnt select**

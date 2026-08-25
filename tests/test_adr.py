@@ -314,6 +314,36 @@ def test_the_command_path_grammar_preserves_the_tldr_record_history() -> None:
     assert "reserved separator" in later
 
 
+def test_the_rename_record_settles_one_name_and_leaves_the_standard_alone() -> None:
+    """A rename that falsifies no decision takes over no record's ground.
+
+    ADR-0113 settles what this one Skill is called. It names what `tldr` got
+    right and what `brief` costs, so the trade is on the record rather than
+    only the outcome, and it states no collection-wide rule about whether a
+    Skill's name has to hold for every form it offers — which is why the
+    coding standard, where a rule binding more than one Skill would have to be
+    written, cites it nowhere (issue #124).
+    """
+
+    record = (ADR / "0113-the-reframing-skill-is-named-brief.md").read_text(
+        encoding="utf-8"
+    )
+
+    # What the old name got right, and what the new one costs.
+    assert "instantly legible" in record
+    assert "What this costs" in record
+
+    # No decision is falsified, so no pointer is written in either direction.
+    assert not POINTER.search(record)
+    assert not CLAIM.search(record)
+
+    for path in sorted(STANDARD_DIR.glob("*.md")):
+        assert "ADR-0113" not in path.read_text(encoding="utf-8"), (
+            f"{path}: the rename states no rule binding more than one Skill,"
+            f" and a citation here would say it does. See {STANDARD}."
+        )
+
+
 def test_the_derived_valued_registry_preserves_the_hand_list_record_history() -> None:
     """The derivation points past ADR-0096 without rewriting the cost it accepted.
 
