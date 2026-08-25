@@ -2,7 +2,7 @@
 name: delegation
 description: Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.
 disable-model-invocation: true
-argument-hint: "[session|--session] | [session|project|user|--session|--project|--user] on|off|--on|--off [--yes] | [session|project|user|--session|--project|--user] status|--status [-- <instruction>]"
+argument-hint: "[session|--session] | [--session|--project|--user] [--on|--off] [--yes] [session|project|user] [on|off] | [--session|--project|--user] [--status] [session|project|user] [status] [-- <instruction>]"
 compatibility: Requires uv, model-selector, and a harness that can run subagents
 metadata:
   kntnt.internal: "true"
@@ -32,7 +32,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 ## Arguments
 
-One scope and one state, bare or flagged, in any order: `/delegation project on`, `/delegation --project --on`, and `/delegation --on --project` all mean the same.
+One scope and one state, bare or flagged, in either order among themselves, and with every flag before every bare word: `/delegation project on`, `/delegation --project --on`, and `/delegation --on --project` all mean the same.
 
 - scope — `session` (the default), `project`, `user`.
 - state — `on`, `off`, `status`.
@@ -50,6 +50,7 @@ Invalid forms, each refused the same way:
 - `--yes` without `on` or `off`.
 - `project` or `user` with no state. Flipping a file in the user's home configuration, or a committed file in a shared repo, off an inferred state is the wrong default, and an error infers nothing either.
 - Two scopes, two states, or a state alongside `status`.
+- An out-of-order form: a bare `session`, `project`, `user`, `on`, `off`, or `status` written before any flag, such as `/delegation project --on` or `/delegation status --yes`.
 
 A flag is refused rather than ignored where it has no work to do here, and an incomplete form is refused rather than asked about, because a flag accepted and ignored teaches that flags sometimes do nothing and a question asked in place of the grammar leaves the user guessing at what the grammar is.
 

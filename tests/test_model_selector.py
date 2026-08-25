@@ -2851,8 +2851,8 @@ def test_observation_cli_accepts_the_attached_spelling_its_skill_body_writes(
 
     # Take the two command lines from the Skill body instead of restating them.
     body = _read("SKILL.md")
-    assert "observe <path> --artifact=<path>" in body
-    assert "record <path> --data=<directory>" in body
+    assert "observe --artifact=<path> <path>" in body
+    assert "record --data=<directory> <path>" in body
 
     # Emit through the process seam with the attached spelling.
     script = str(MODEL_SELECTOR / "scripts" / "observations.py")
@@ -2860,7 +2860,7 @@ def test_observation_cli_accepts_the_attached_spelling_its_skill_body_writes(
     attempts.write_text(json.dumps(_attempts()), encoding="utf-8")
     artifact = tmp_path / "scratch" / "observations.json"
     emitted = subprocess.run(
-        ["uv", "run", script, "observe", str(attempts), f"--artifact={artifact}"],
+        ["uv", "run", script, "observe", f"--artifact={artifact}", str(attempts)],
         check=False,
         capture_output=True,
         text=True,
@@ -2871,7 +2871,7 @@ def test_observation_cli_accepts_the_attached_spelling_its_skill_body_writes(
     # Import the emitted artifact with the attached spelling as well.
     data = tmp_path / "data"
     imported = subprocess.run(
-        ["uv", "run", script, "record", str(artifact), f"--data={data}"],
+        ["uv", "run", script, "record", f"--data={data}", str(artifact)],
         check=False,
         capture_output=True,
         text=True,
@@ -2912,7 +2912,7 @@ def test_observation_contract_is_public_sanitized_and_never_auto_imported() -> N
 
     _assert_contains_all(public_contract, required_fragments)
     assert "| `observe` | `$HERE/help/observe.md` |" in skill
-    assert "/model-selector observe <path>" in skill
+    assert "/model-selector observe --artifact=<path> <path>" in skill
 
 
 def test_observation_contract_pins_its_outcome_and_refusal_vocabulary() -> None:

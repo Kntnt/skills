@@ -8,9 +8,9 @@ delegation - control delegation mode for a session, Project, or user
 
 **/delegation** [**session**|**--session**] [**--** *INSTRUCTION*]
 
-**/delegation** [**session**|**project**|**user**|**--session**|**--project**|**--user**] (**on**|**off**|**--on**|**--off**) [**--yes**] [**--** *INSTRUCTION*]
+**/delegation** [**--session**|**--project**|**--user**] [**--on**|**--off**] [**--yes**] [**session**|**project**|**user**] [**on**|**off**] [**--** *INSTRUCTION*]
 
-**/delegation** [**session**|**project**|**user**|**--session**|**--project**|**--user**] (**status**|**--status**) [**--** *INSTRUCTION*]
+**/delegation** [**--session**|**--project**|**--user**] [**--status**] [**session**|**project**|**user**] [**status**] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -18,7 +18,7 @@ delegation - control delegation mode for a session, Project, or user
 
 Predictably noisy tool work can stay in a subagent's context and return as a distilled result.
 
-With no arguments, it toggles the session scope. An explicit `on` or `off` changes the selected scope. `status` reports the selected scope, or all scopes when no scope is given. Scope and state may be written as bare words or equivalent long options, in either order.
+With no arguments, it toggles the session scope. An explicit `on` or `off` changes the selected scope. `status` reports the selected scope, or all scopes when no scope is given. Scope and state may be written as bare words or as equivalent long options, in either order among themselves; every long option precedes every bare word, and exactly one scope and one state are given whichever spelling is used.
 
 The effective verdict is resolved in this order: an explicit session instruction wins; otherwise the mode is on when a managed block exists in a Project or user context file loaded by the current Harness. Project and user blocks contain identical instructions and therefore cannot create different mode definitions.
 
@@ -76,7 +76,7 @@ The Skill shows the selected file and exact managed block before writing unless 
 
 ## DIAGNOSTICS
 
-A persistent scope without a state, more than one scope or state, `status` combined with another state, and `--yes` without `on` or `off` are invalid. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/delegation --help`.
+A persistent scope without a state, more than one scope or state, `status` combined with another state, `--yes` without `on` or `off`, and a bare word written before any option are invalid. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/delegation --help`.
 
 An option with no work to do is refused rather than ignored. In particular, `/delegation status --yes` is invalid.
 

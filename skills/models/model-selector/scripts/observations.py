@@ -889,6 +889,34 @@ def _rebuild_frontiers(directory: Path, accepted: list[dict[str, Any]]) -> list[
     return affected
 
 
+def _operands_first(arguments: list[str]) -> list[str]:
+    """Return the same arguments with the operands ahead of the options.
+
+    The Skills write one invocation order — the command path, then the flags,
+    then the operands (ADR-0097) — while this parser reads its path first. The
+    engines stay permissive rather than refusing a spelling of their own
+    (ADR-0096), so both orders are normalised here instead of one of them
+    becoming a special case downstream.
+    """
+
+    operands: list[str] = []
+    options: list[str] = []
+    index = 0
+    while index < len(arguments):
+        token = arguments[index]
+        index += 1
+        if not token.startswith("--"):
+            operands.append(token)
+            continue
+
+        # A separated value belongs to the flag before it and travels with it.
+        options.append(token)
+        if "=" not in token and index < len(arguments):
+            options.append(arguments[index])
+            index += 1
+    return operands + options
+
+
 def _option(rest: list[str], name: str) -> str | None:
     """Return the sole option's value in either spelling, or None where it is not one."""
 
@@ -902,6 +930,7 @@ def _option(rest: list[str], name: str) -> str | None:
 def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     """Emit one artifact from completed attempts into caller-owned scratch."""
 
+    arguments = _operands_first(arguments)
     if not arguments or arguments[0].startswith("-"):
         return _artifact_refusal("invalid_arguments", "Observe needs one path."), 2
     destination: Path | None = None
@@ -954,6 +983,7 @@ def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
 def _record_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     """Import one reported artifact into the selected evidence directory."""
 
+    arguments = _operands_first(arguments)
     if not arguments or arguments[0].startswith("-"):
         return _artifact_refusal("invalid_arguments", "Record needs one path."), 2
     rest = arguments[1:]

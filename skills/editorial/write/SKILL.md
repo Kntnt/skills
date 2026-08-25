@@ -2,7 +2,7 @@
 name: write
 description: Turn a brief and its source material into one truthful first draft in the target language, and stop there.
 disable-model-invocation: true
-argument-hint: '[<brief>] [--genre=<genre>] [--technique=<technique>] [--language=<language>] [--frontmatter=<yes|no>] [--output=<response|path>] [-- <instruction>]'
+argument-hint: '[--genre=<genre>] [--technique=<technique>] [--language=<language>] [--frontmatter=<yes|no>] [--output=<response|path>] [<brief>] [-- <instruction>]'
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -32,7 +32,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 ## Arguments
 
-`/write [<brief>] [--genre=<genre>] [--technique=<technique>] [--language=<language>] [--frontmatter=<yes|no>] [--output=<response|path>]`, and nothing else.
+`/write [--genre=<genre>] [--technique=<technique>] [--language=<language>] [--frontmatter=<yes|no>] [--output=<response|path>] [<brief>]`, and nothing else.
 
 - `<brief>` is free text in any language. It may state what to write and it may point at material — a local path, a URL, a passage pasted in whole.
 - `--genre=<genre>` names a resource under `$LIBRARY/references/editorial/genres/`, by its filename without the extension.
@@ -50,6 +50,7 @@ Invalid forms, each refused the same way:
 - `--language` reaching no installed Language Resource, or more than one.
 - `--output` naming a path whose parent directory does not exist, or naming a local file that supplied material for this run.
 - Nothing to write: no brief, no material, and no applicable guidance in context.
+- An out-of-order form: the brief written before an option rather than after every option.
 
 Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/write --help` for the page in full. Then write nothing, deliver nothing, and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
@@ -74,7 +75,7 @@ A recognized Kntnt map whose value cannot be used — a language nothing install
 
 1. Parse the arguments by the rules above. An invalid form takes the refusal named there. Done when the form is settled, or you have stopped.
 2. Gather the material: text inline in the brief, local files and URLs it points at, applicable Contextual Instruction, and applicable Conversation Context. Several sources feed one draft, and reading a file selects no destination. Done when everything the draft is answerable to is in hand, or you have refused for want of anything to write.
-3. Resolve genre, technique, language, and the output options by `## Resolution`. A genre or technique is verified against the resources actually installed in the two directories named above. A language selector is verified by `uv run "$LIBRARY/scripts/languages.py" resolve "<selector>" --scope=composition`, whose non-zero exit says which of the ways it failed and takes the refusal in `## Arguments`; an unlisted description of a language is interpreted first, then proposed as one installed candidate and verified through that same command. Where the language of the request and the material is materially ambiguous or mixed, name the candidates and ask before anything is written. Done when all five are settled, or you have asked or refused.
+3. Resolve genre, technique, language, and the output options by `## Resolution`. A genre or technique is verified against the resources actually installed in the two directories named above. A language selector is verified by `uv run "$LIBRARY/scripts/languages.py" resolve --scope=composition "<selector>"`, whose non-zero exit says which of the ways it failed and takes the refusal in `## Arguments`; an unlisted description of a language is interpreted first, then proposed as one installed candidate and verified through that same command. Where the language of the request and the material is materially ambiguous or mixed, name the candidates and ask before anything is written. Done when all five are settled, or you have asked or refused.
 4. Settle the Output Target against `$LIBRARY/references/delivery.md`, and refuse a contradictory or unwritable destination before anything is written. In-place Editing is not offered here: this Skill creates a text and never replaces the material its brief came from, so an output path equal to a supplied file is refused rather than honoured. Done when the destination is known, or you have refused.
 5. Load the contract, and nothing besides it: `$LIBRARY/references/editorial/base.md`, the selected genre from `$LIBRARY/references/editorial/genres/`, the resolved technique from `$LIBRARY/references/editorial/techniques/` where one was selected, and the composition scope the resolver already returned in step 3. A resource's review half — the file named for it with `.review.md` — belongs to the Skills that review, and so do the language's other scopes; none of them is loaded here. Done when those four are loaded and nothing else has been.
 6. Write one draft that satisfies that contract. Source Fidelity is the invariant over all of it: invent no fact, and preserve attribution, uncertainty, scope, chronology, and causality exactly as the material has them. Where the material is speech to be quoted, read [`quotations.md`](references/quotations.md) first. Done when the draft is complete.

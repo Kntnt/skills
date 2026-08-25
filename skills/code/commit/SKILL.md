@@ -2,7 +2,7 @@
 name: commit
 description: Commit the working tree on the current branch, without pushing.
 disable-model-invocation: true
-argument-hint: '[<message>] [--yes] [-- <instruction>]'
+argument-hint: '[--yes] [<message>] [-- <instruction>]'
 compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
@@ -32,7 +32,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 ## Arguments
 
-`/commit [<message>] [--yes]`, and nothing else.
+`/commit [--yes] [<message>]`, and nothing else. The order is part of the form: an operand written before a flag is refused, not repaired.
 
 Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/commit --help` for the page in full. Then commit nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 

@@ -6,7 +6,11 @@ model-selector config - inspect or revise the model and access profile
 
 ## SYNOPSIS
 
-**/model-selector** **config** [**show**|**add** (**model**|**channel**)|**edit** (**model**|**channel**) *ID*|**remove** (**model**|**channel**) *ID*|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **config** [**show**|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
+**/model-selector** **config** **add** [**--data=**_PATH_] (**model**|**channel**) [**--** *INSTRUCTION*]
+
+**/model-selector** **config** (**edit**|**remove**) [**--data=**_PATH_] (**model**|**channel**) *ID* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -48,7 +52,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`
 
 ## DIAGNOSTICS
 
-An unknown or incomplete configuration subcommand is refused rather than ignored. The Skill prints the addressed page's SYNOPSIS, changes nothing, and points to the corresponding `--help` invocation.
+An unknown or incomplete configuration subcommand is refused rather than ignored. The Skill prints the addressed page's SYNOPSIS, changes nothing, and points to the corresponding `--help` invocation. An operand written before an option is out of order and is refused the same way.
 
 ## INVOCATION ENVELOPE
 

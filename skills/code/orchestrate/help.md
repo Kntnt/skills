@@ -6,9 +6,9 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 ## SYNOPSIS
 
-**/orchestrate** [*TICKET-OR-SPEC*...] [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--yes**] [**--** *INSTRUCTION*]
+**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
 
-**/orchestrate reconcile** *TICKET* [**--commit=**_COMMIT_] [**--yes**] [**--** *INSTRUCTION*]
+**/orchestrate reconcile** [**--commit=**_COMMIT_] [**--yes**] *TICKET* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -166,7 +166,7 @@ Builders leave proposed entries for files every ticket must append to, such as a
 
 ## DIAGNOSTICS
 
-An invalid reference, option, option value, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`.
+An invalid reference, option, option value, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`. An operand written before an option is out of order and is refused the same way.
 
 Routing is refused rather than adjusted. A response that is not this run's frozen snapshot, that changes that snapshot under its own identity, that is not the plan's starting frontier in plan order, that carries `--model` or `--deliberation` other than the ones the first frontier was routed under, or that decides a verdict role is rejected and nothing is frozen. A claim, amend, repair, rebuild, or wave fix whose exact role has no acceptable decision in that frozen account is refused before it runs. A route refusal is reported with its stable reason code and starts no work.
 
@@ -178,7 +178,7 @@ The working tree must contain no uncommitted non-ignored work when the run plans
 
 Print the dependency-wave plan and proposed read-only routing decisions for every open `ready-for-agent` ticket without claiming one.
 
-**/orchestrate #14 #21 --at-once=2 --deliberation=high**
+**/orchestrate --at-once=2 --deliberation=high #14 #21**
 
 Work the union of two ticket or spec references with at most two concurrent builders.
 

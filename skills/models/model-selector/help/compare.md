@@ -6,7 +6,7 @@ model-selector compare - report comparable model-system frontiers
 
 ## SYNOPSIS
 
-**/model-selector** **compare** *WORKLOAD* [**--decision=route**|**--decision=renew**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **compare** [**--decision=route**|**--decision=renew**] [**--data=**_PATH_] *WORKLOAD* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -32,7 +32,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`
 
 ## DIAGNOSTICS
 
-An absent workload or unsupported option is refused rather than ignored. An incomparable cohort is reported rather than silently combined. Invalid syntax prints this SYNOPSIS and points to `/model-selector compare --help`.
+An absent workload or unsupported option is refused rather than ignored. An incomparable cohort is reported rather than silently combined. Invalid syntax prints this SYNOPSIS and points to `/model-selector compare --help`. An operand written before an option is out of order and is refused the same way.
 
 ## INVOCATION ENVELOPE
 

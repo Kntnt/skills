@@ -6,7 +6,7 @@ model-selector observe - turn judged routed attempts into an importable artifact
 
 ## SYNOPSIS
 
-**/model-selector** **observe** *PATH* **--artifact=**_PATH_ [**--** *INSTRUCTION*]
+**/model-selector** **observe** **--artifact=**_PATH_ *PATH* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -36,7 +36,7 @@ One JSON object naming the artifact, the run keys newly written to it, the ident
 
 ## DIAGNOSTICS
 
-Invalid arguments, an unreadable path, malformed JSON, and a malformed envelope produce a machine-readable top-level `artifact_refusal`, exit status 2, and no traceback. An attempt that no external judgement established, that launched nothing, that was interrupted, that was graded by its own author, or that carries material rather than identities is refused individually and named with its stable code, leaving its peers' results intact.
+Invalid arguments, an unreadable path, malformed JSON, and a malformed envelope produce a machine-readable top-level `artifact_refusal`, exit status 2, and no traceback. An attempt that no external judgement established, that launched nothing, that was interrupted, that was graded by its own author, or that carries material rather than identities is refused individually and named with its stable code, leaving its peers' results intact. An operand written before an option is out of order and is refused the same way.
 
 ## INVOCATION ENVELOPE
 

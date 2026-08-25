@@ -6,7 +6,7 @@ write - turn a brief and its source material into one first draft
 
 ## SYNOPSIS
 
-**/write** [*BRIEF*] [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--frontmatter**=*BOOLEAN*] [**--output**=*TARGET*] [**--** *INSTRUCTION*]
+**/write** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--frontmatter**=*BOOLEAN*] [**--output**=*TARGET*] [*BRIEF*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -83,7 +83,7 @@ Where the artifact needs frontmatter of its own, the map is merged into it rathe
 
 An incomplete or invalid form is refused rather than ignored, and a flag with no work to do here is refused rather than accepted and forgotten. The refusal names what was wrong, prints the SYNOPSIS, points to `/write --help`, and leaves nothing behind: no file created, none overwritten, and no draft half-delivered.
 
-The cases are an unknown option, an option written without a value, an option repeated, a boolean outside its vocabulary, a genre or technique that is not installed, a language selector that reaches no installed resource or more than one, a destination that cannot be written, an output path equal to a file that supplied material, and an invocation with nothing to write.
+The cases are an unknown option, an option written without a value, an option repeated, a boolean outside its vocabulary, a genre or technique that is not installed, a language selector that reaches no installed resource or more than one, a destination that cannot be written, an output path equal to a file that supplied material, an invocation with nothing to write, and a brief written before an option rather than after every option.
 
 A materially ambiguous or mixed language is a question rather than a refusal: the candidates are named and the run waits, because writing in a guessed language wastes the draft rather than the invocation.
 

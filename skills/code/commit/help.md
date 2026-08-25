@@ -6,7 +6,7 @@ commit - commit the current working tree without pushing
 
 ## SYNOPSIS
 
-**/commit** [*MESSAGE*] [**--yes**] [**--** *INSTRUCTION*]
+**/commit** [**--yes**] [*MESSAGE*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -30,7 +30,7 @@ Commit without waiting for confirmation.
 
 ## DIAGNOSTICS
 
-An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, commits nothing, and points to `/commit --help`.
+An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, commits nothing, and points to `/commit --help`. An operand written before an option is out of order and is refused the same way.
 
 A working tree with nothing to commit is a successful no-op and is reported as such.
 

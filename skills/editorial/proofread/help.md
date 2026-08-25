@@ -6,9 +6,9 @@ proofread - correct a text's mechanical language errors and nothing else
 
 ## SYNOPSIS
 
-**/proofread** [*TEXT*|*PATH*|*URL*] [**--language**=*LANGUAGE*] [**--output**=*TARGET*] [**--** *INSTRUCTION*]
+**/proofread** [**--language**=*LANGUAGE*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
 
-**/proofread** *PATH* [**--language**=*LANGUAGE*] **--in-place**[=**on**|**off**] [**--** *INSTRUCTION*]
+**/proofread** [**--language**=*LANGUAGE*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -52,7 +52,7 @@ Replace the file the text came from with the result. It accepts `yes`, `on`, and
 
 An incomplete or invalid form is refused rather than repaired or ignored. The Skill names in one line what was wrong, prints the SYNOPSIS, corrects nothing, writes nothing, and points at `/proofread --help`. A flag with no work to do is refused rather than ignored, an accepted and ignored flag teaching that flags sometimes do nothing.
 
-Refused before any side effect, so that nothing is left half done: an undeclared flag, a missing or invalid option value, more than one text in one invocation, **--output** together with **--in-place**, an output path equal to the input path, in-place editing of inline text, a URL, or a read-only or non-local source, and a destination whose parent directory does not exist.
+Refused before any side effect, so that nothing is left half done: an undeclared flag, a text written before a flag rather than after every flag, a missing or invalid option value, more than one text in one invocation, **--output** together with **--in-place**, an output path equal to the input path, in-place editing of inline text, a URL, or a read-only or non-local source, and a destination whose parent directory does not exist.
 
 A `kntnt` map naming a language that is neither a canonical code nor an installed alias, where no **--language** value supersedes it, is reported as unusable artifact metadata. The run stops rather than reinterpreting the value, so a spelling such as `en_UK` never quietly becomes `en_GB`.
 
@@ -64,11 +64,11 @@ A text whose language cannot be settled — mixed, or a description matching no 
 
 Correct the mechanical errors in `report.md`, infer the language from the file, and return the corrected text in the response. `report.md` itself is left alone.
 
-**/proofread report.md --in-place**
+**/proofread --in-place report.md**
 
 Correct the same file and replace it with the result. If nothing needed correcting, the file is not rewritten and a short status says so.
 
-**/proofread notes.md --language=en_GB --output=~/texts**
+**/proofread --language=en_GB --output=~/texts notes.md**
 
 Correct `notes.md` under British English mechanics and deliver it into the existing directory `~/texts`, under a filename derived from the source and never over an existing file.
 

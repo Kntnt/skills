@@ -6,7 +6,7 @@ model-selector record - append validated local evaluation observations
 
 ## SYNOPSIS
 
-**/model-selector** **record** *PATH* [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **record** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -28,7 +28,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`
 
 ## DIAGNOSTICS
 
-An unreadable path, invalid observation, unsupported option, or conflicting run identity is refused rather than ignored. The Skill prints this SYNOPSIS, appends nothing, and points to `/model-selector record --help`.
+An unreadable path, invalid observation, unsupported option, or conflicting run identity is refused rather than ignored. The Skill prints this SYNOPSIS, appends nothing, and points to `/model-selector record --help`. An operand written before an option is out of order and is refused the same way.
 
 ## INVOCATION ENVELOPE
 

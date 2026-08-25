@@ -6,21 +6,25 @@ model-selector - compare configured AI model systems by price and performance
 
 ## SYNOPSIS
 
-**/model-selector** [**recommend**] [*WORKLOAD*] [**--decision=route**|**--decision=renew**] [**--budget=**_AMOUNT_|**--quality=**_SCORE_] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** [**recommend**] [**--decision=route**|**--decision=renew**] [**--budget=**_AMOUNT_|**--quality=**_SCORE_] [**--data=**_PATH_] [*WORKLOAD*] [**--** *INSTRUCTION*]
 
-**/model-selector** **route** *PATH* [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **route** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
 
-**/model-selector** (**chart**|**compare**) *WORKLOAD* [**--decision=route**|**--decision=renew**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** (**chart**|**compare**) [**--decision=route**|**--decision=renew**] [**--data=**_PATH_] *WORKLOAD* [**--** *INSTRUCTION*]
 
 **/model-selector** **setup** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
-**/model-selector** **config** [**show**|**add** (**model**|**channel**)|**edit** (**model**|**channel**) *ID*|**remove** (**model**|**channel**) *ID*|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **config** [**show**|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
+**/model-selector** **config** **add** [**--data=**_PATH_] (**model**|**channel**) [**--** *INSTRUCTION*]
+
+**/model-selector** **config** (**edit**|**remove**) [**--data=**_PATH_] (**model**|**channel**) *ID* [**--** *INSTRUCTION*]
 
 **/model-selector** **update** [**--force**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
-**/model-selector** **observe** *PATH* **--artifact=**_PATH_ [**--** *INSTRUCTION*]
+**/model-selector** **observe** **--artifact=**_PATH_ *PATH* [**--** *INSTRUCTION*]
 
-**/model-selector** **record** *PATH* [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **record** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
 
 **/model-selector** **capture** **--on** [**--harness=**_NAME_] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
@@ -164,13 +168,13 @@ An append-only, effective-dated record under the selected data directory. Config
 
 ## DIAGNOSTICS
 
-An incomplete form, unsupported combination, or option with no work to do is refused rather than ignored. The Skill names the error, prints the addressed command's SYNOPSIS, changes nothing, and points to that command's `--help` page.
+An incomplete form, unsupported combination, or option with no work to do is refused rather than ignored. The Skill names the error, prints the addressed command's SYNOPSIS, changes nothing, and points to that command's `--help` page. An operand written before an option is out of order and is refused the same way.
 
 No changed source is a successful `update`. Unreachable or insufficient evidence is reported without turning unavailable data into a zero or an invented comparison.
 
 ## EXAMPLES
 
-**/model-selector recommend repository refactor --decision=route**
+**/model-selector recommend --decision=route repository refactor**
 
 Select an exact configured system for a repository-refactoring workload using marginal routing economics.
 

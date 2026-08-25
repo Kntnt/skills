@@ -2,7 +2,7 @@
 name: model-selector
 description: Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.
 disable-model-invocation: true
-argument-hint: "[recommend] [<workload>] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] | chart|compare <workload> [--decision=route|renew] [--data=<path>] | route|record <path> [--data=<path>] | observe <path> --artifact=<path> | capture --on [--harness=<name>] [--data=<path>] | capture --off|--status [--data=<path>] | capture --review=<identity> --action=save|failed|ignore [--data=<path>] | config [<subcommand> ...] [--data=<path>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
+argument-hint: "[recommend] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] [<workload>] | chart|compare [--decision=route|renew] [--data=<path>] <workload> | route|record [--data=<path>] <path> | observe --artifact=<path> <path> | capture --on [--harness=<name>] [--data=<path>] | capture --off|--status [--data=<path>] | capture --review=<identity> --action=save|failed|ignore [--data=<path>] | config [show|history|reset] [--data=<path>] | config add|edit|remove [--data=<path>] model|channel [<id>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -63,7 +63,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `/model-selector route <path>` | Resolve a structured request artifact into ordered exact launch decisions. |
 | `/model-selector chart\|compare <workload>` | Show comparable frontier tables and plotting data. |
 | `/model-selector update [--force]` | Revalidate due discovery, pricing, and benchmark indexes once. |
-| `/model-selector observe <path> --artifact=<path>` | Turn completed routed attempts into a sanitized importable artifact in caller-owned scratch. |
+| `/model-selector observe --artifact=<path> <path>` | Turn completed routed attempts into a sanitized importable artifact in caller-owned scratch. |
 | `/model-selector capture --on\|--off\|--status` | Opt in to automatic local capture during ordinary work, stop it, or report its health. |
 | `/model-selector capture --review=<identity> --action=save\|failed\|ignore` | Settle one pending capture a human has to judge. |
 | `/model-selector record <path>` | Validate and append unseen local run observations. |
@@ -71,7 +71,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 `--data=<path>` is valid on every form except `observe`, which reads no profile or evidence at all, and overrides the default data directory. `--artifact=<path>` is valid only for `observe`, where it is required, and names the caller-owned file the observations are written into. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`. `--on`, `--off`, `--status`, `--review=<identity>`, `--action=save|failed|ignore` and `--harness=<name>` are valid only for `capture`: `--harness` only with `--on`, `--action` only with `--review`, and `--on` and `--off` never together.
 
-Anything outside these forms is invalid. Where the invocation starts with a recognized command path, name in one line what was wrong, print the `## SYNOPSIS` from that path's manpage in the Help table verbatim, point at `/model-selector <command-path> --help`, change nothing, and stop. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/model-selector --help` for the page in full instead. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
+Anything outside these forms is invalid, an operand written before a flag among them. Where the invocation starts with a recognized command path, name in one line what was wrong, print the `## SYNOPSIS` from that path's manpage in the Help table verbatim, point at `/model-selector <command-path> --help`, change nothing, and stop. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/model-selector --help` for the page in full instead. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
 ## Evidence first
 
@@ -132,7 +132,7 @@ No source changed is a successful update. Complete when every due source has a r
 
 ## Observe
 
-Read `$HERE/references/run-observations.md` and follow it exactly. Run `uv run "$HERE/scripts/observations.py" observe <path> --artifact=<path>` and emit the helper's JSON response without commentary. The attempts come from the caller that routed the work; this Skill re-resolves no model, no deliberation control and no evidence, and adds nothing the attempt did not establish. Observe is offline and starts no setup, research, evaluation, profile write, ledger write or derived-frontier write; the artifact it writes is the caller's own file and is imported only where the user invokes `record` on it. Report the artifact path, what became importable, what was skipped as identical, what conflicted and every refused attempt with its stable code. Never present an unjudged, self-graded or interrupted attempt as importable evidence.
+Read `$HERE/references/run-observations.md` and follow it exactly. Run `uv run "$HERE/scripts/observations.py" observe --artifact=<path> <path>` and emit the helper's JSON response without commentary. The attempts come from the caller that routed the work; this Skill re-resolves no model, no deliberation control and no evidence, and adds nothing the attempt did not establish. Observe is offline and starts no setup, research, evaluation, profile write, ledger write or derived-frontier write; the artifact it writes is the caller's own file and is imported only where the user invokes `record` on it. Report the artifact path, what became importable, what was skipped as identical, what conflicted and every refused attempt with its stable code. Never present an unjudged, self-graded or interrupted attempt as importable evidence.
 
 ## Capture
 
@@ -146,7 +146,7 @@ Making the Skill Disabled removes every integration this feature owns without a 
 
 ## Record
 
-Read `$HERE/references/evidence-ledger.md` and `$HERE/references/run-observations.md`. Run `uv run "$HERE/scripts/observations.py" record <path> --data=<directory>` and render its report. It validates provenance, configuration fingerprint, benchmark key, token categories, cost, outcome and timestamps for every supplied observation, appends only unseen run keys, skips identical duplicates, rejects conflicting duplicates rather than overwriting them, and rebuilds only the derived frontiers whose eligible run set changed. This is the only ledger mutation in the observation contract, and it happens because the user asked for it. Report accepted, skipped and rejected records.
+Read `$HERE/references/evidence-ledger.md` and `$HERE/references/run-observations.md`. Run `uv run "$HERE/scripts/observations.py" record --data=<directory> <path>` and render its report. It validates provenance, configuration fingerprint, benchmark key, token categories, cost, outcome and timestamps for every supplied observation, appends only unseen run keys, skips identical duplicates, rejects conflicting duplicates rather than overwriting them, and rebuilds only the derived frontiers whose eligible run set changed. This is the only ledger mutation in the observation contract, and it happens because the user asked for it. Report accepted, skipped and rejected records.
 
 ## Status
 

@@ -6,7 +6,7 @@ push - commit the working tree and push the current branch
 
 ## SYNOPSIS
 
-**/push** [*MESSAGE*] [**--yes**] [**--** *INSTRUCTION*]
+**/push** [**--yes**] [*MESSAGE*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -28,7 +28,7 @@ Commit and push without waiting for confirmation.
 
 ## DIAGNOSTICS
 
-An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, commits and pushes nothing, and points to `/push --help`.
+An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, commits and pushes nothing, and points to `/push --help`. An operand written before an option is out of order and is refused the same way.
 
 A clean tree on a branch already level with its upstream is a successful no-op and is reported as such.
 

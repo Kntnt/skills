@@ -2,7 +2,7 @@
 name: agents-md
 description: "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`."
 disable-model-invocation: false
-argument-hint: "[path] [--force] [--yes] [-- <instruction>]"
+argument-hint: "[--force] [--yes] [path] [-- <instruction>]"
 compatibility: Requires git and uv
 metadata:
   kntnt.internal: "true"
@@ -30,7 +30,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 
 ## Arguments
 
-`/agents-md [path] [--force] [--yes]`, and nothing else.
+`/agents-md [--force] [--yes] [path]`, and nothing else. The order is part of the form: an operand written before a flag is refused, not repaired.
 
 `path`, when present, must resolve inside the current repository root. The Skill never creates or changes user-level, home-directory, Harness-global, or system-level agent instructions.
 

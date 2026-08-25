@@ -6,7 +6,7 @@ agents-md - tend a project's always-loaded agent instructions
 
 ## SYNOPSIS
 
-**/agents-md** [*PATH*] [**--force**] [**--yes**] [**--** *INSTRUCTION*]
+**/agents-md** [**--force**] [**--yes**] [*PATH*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -38,7 +38,7 @@ The report names every retained, moved, replaced, or rejected fact and the sourc
 
 ## DIAGNOSTICS
 
-An invalid path, unknown option, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/agents-md --help`.
+An invalid path, unknown option, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/agents-md --help`. An operand written before an option is out of order and is refused the same way.
 
 A Project with no qualifying fact is a successful no-op and is reported as such.
 

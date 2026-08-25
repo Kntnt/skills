@@ -6,7 +6,7 @@ release - publish a version from the default branch
 
 ## SYNOPSIS
 
-**/release** [**minor**|**major**|*X.Y.Z*] [**--no-build**] [**--yes**] [**--** *INSTRUCTION*]
+**/release** [**--no-build**] [**--yes**] [**minor**|**major**|*X.Y.Z*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -42,7 +42,7 @@ Release without waiting for confirmation.
 
 ## DIAGNOSTICS
 
-An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, publishes nothing, and points to `/release --help`.
+An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, publishes nothing, and points to `/release --help`. An operand written before an option is out of order and is refused the same way.
 
 A branch other than the default branch, an empty `[Unreleased]`, or a version that cannot be rewritten unambiguously stops the release before a partial bump is left behind.
 

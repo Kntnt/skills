@@ -6,7 +6,7 @@ model-selector config edit - revise one model selection or access channel
 
 ## SYNOPSIS
 
-**/model-selector** **config** **edit** (**model**|**channel**) *ID* [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **config** **edit** [**--data=**_PATH_] (**model**|**channel**) *ID* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -32,7 +32,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`
 
 ## DIAGNOSTICS
 
-An unknown ID, missing argument, invalid revision, or unsupported option is refused rather than ignored. The Skill prints this SYNOPSIS, writes nothing, and points to `/model-selector config edit --help`.
+An unknown ID, missing argument, invalid revision, or unsupported option is refused rather than ignored. The Skill prints this SYNOPSIS, writes nothing, and points to `/model-selector config edit --help`. An operand written before an option is out of order and is refused the same way.
 
 ## INVOCATION ENVELOPE
 

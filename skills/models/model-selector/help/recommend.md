@@ -6,7 +6,7 @@ model-selector recommend - select an exact configured model system for a workloa
 
 ## SYNOPSIS
 
-**/model-selector** **recommend** [*WORKLOAD*] [**--decision=route**|**--decision=renew**] [**--budget=**_AMOUNT_|**--quality=**_SCORE_] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **recommend** [**--decision=route**|**--decision=renew**] [**--budget=**_AMOUNT_|**--quality=**_SCORE_] [**--data=**_PATH_] [*WORKLOAD*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -46,11 +46,11 @@ Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`
 
 ## DIAGNOSTICS
 
-An absent profile starts guided setup. An unsupported option, incompatible threshold pair, or insufficiently identified workload is refused rather than ignored; the Skill prints this SYNOPSIS, changes nothing, and points to `/model-selector recommend --help`.
+An absent profile starts guided setup. An unsupported option, incompatible threshold pair, or insufficiently identified workload is refused rather than ignored; the Skill prints this SYNOPSIS, changes nothing, and points to `/model-selector recommend --help`. An operand written before an option is out of order and is refused the same way.
 
 ## EXAMPLES
 
-**/model-selector recommend repository refactor --decision=route**
+**/model-selector recommend --decision=route repository refactor**
 
 Select a configured system for repository refactoring using marginal routing economics.
 

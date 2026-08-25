@@ -5,7 +5,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "b8a303f6473c27db404467f514ef73b195eaf73ad9aabb75ec85f41cc138fca5",
+      "digest": "b512caf871fd7b583535f41e43d924919248fe894b98ff95bc6627b1df9ac076",
       "binaries": [
         "git",
         "uv"
@@ -18,7 +18,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "e8391621506227986d8522c72e28b0f7f9f4b913ad64b167a4c484efec05ac2f",
+      "digest": "8a509654af77eea31e2333db06ef4ef180157089aee545ad88a375f4628a4bca",
       "binaries": [
         "uv"
       ],
@@ -44,7 +44,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "4f9185aac78c7c29a629173df9d470dfd5319284d8e4fae5d01674ff9ff87a85",
+      "digest": "a8b2dcdbb434dbbf282b44eb0d39e69317ba501c4a5010145336144a97d1dbb4",
       "binaries": [
         "git",
         "uv"
@@ -57,7 +57,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "dd40770ba9f58eb57d31dea8209c99e3cd0a10f37238cecdb0fa70fd91e9911b",
+      "digest": "c18b3f582e6785e06da82687bedc9bb6e2fed3363b65d022fd6f28359b50b147",
       "binaries": [
         "git",
         "gh",
@@ -75,7 +75,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "28eda833fdd638d34c68bf3e8e29c3b5e840ad25d73653ad393bf3c19094b1c7",
+      "digest": "b3f8693a29756671acd141cde16e66f22c962890ac600aa35d569d63a1d8eec3",
       "binaries": [
         "git",
         "uv"
@@ -105,7 +105,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "c84641de0422b87def973021d1f6911f19807814867b03f889cc28bface523bc",
+      "digest": "aa97a9cd344ddb853d450608c7b7b75fd9c5d7897e8a5329b4e8c03553242705",
       "binaries": [
         "git",
         "uv"
@@ -120,7 +120,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "9db268c304bd230de3eca70682d6543eb5f6ca82fc9613d953ffcbf8445b554b",
+      "digest": "e8f1ae916fa2e717cf3c2021eb032d592f145cb47215ec39abae5dfc4bebc62f",
       "binaries": [
         "uv"
       ],
@@ -132,7 +132,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",
-      "digest": "3ec1f6997bc79e29774079cd1d28194073672352234c9328986736664c52b19d",
+      "digest": "f5e7d73048b018fb176a70dad42f02a868f1e4fc33f616b5580ff6a395d2184b",
       "binaries": [
         "uv"
       ],
@@ -144,7 +144,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "53b68ed52af9da38691b2779da8e18fb0cc0d0bb37100374dae62ae155f00450",
+      "digest": "71df564e1b216afd3245e1994ef5b8df5911c98edfa731a88167067441556f1d",
       "binaries": [
         "uv"
       ],

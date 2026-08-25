@@ -94,6 +94,14 @@ BOLD_INVOCATION = re.compile(r"\*\*(/[^*\n]+)\*\*")
 # or another flag is neither.
 VALUE = re.compile(r"^(?:[<\"'$]|[*_][A-Za-z]|[A-Za-z0-9])")
 
+# A flag whose value is optional and that an operand may follow, with the whole
+# of the vocabulary it accepts. Written bare it is compliant, and the operands
+# now come after every flag (ADR-0097), so the token behind it is an operand
+# rather than a value: `/proofread --in-place report.md` is the ordinary
+# invocation. Only a token from the flag's own vocabulary is read as a
+# space-separated value, which still refuses `--in-place on`.
+OPTIONAL_VALUE = {"--in-place": frozenset({"on", "off", "yes", "no", "true", "false"})}
+
 
 # One line per surface the scan reads, each carrying a flag it has to catch and
 # a flag it must leave alone: the frontmatter hint, a body's engine invocation,
@@ -109,6 +117,8 @@ uv run engine.py apply commit --message hello
 The `--on` and `--off` names are applied as a delta.
 Run `uv run engine.py plan --at-once=2 --dry-run` first.
 **--project**[=**on**|**off**]
+**/proofread --in-place report.md**
+**/proofread --in-place on report.md**
 """
 
 
@@ -145,6 +155,12 @@ def _in_command_line(fragment: str) -> list[tuple[str, str]]:
         # not one.
         token = rest.split(maxsplit=1)[0] if rest.strip() else ""
         if not token or token.startswith("-") or not VALUE.match(token):
+            continue
+
+        # A flag whose value is optional carries an operand behind it far more
+        # often than a value, so only its own vocabulary counts as one.
+        vocabulary = OPTIONAL_VALUE.get(name)
+        if vocabulary is not None and token.strip("`\"'.,").lower() not in vocabulary:
             continue
         found.append((name, token))
     return found
@@ -200,6 +216,7 @@ def test_the_scan_recognises_a_space_separated_flag_in_each_surface() -> None:
         (3, "--commit"),
         (4, "--on"),
         (6, "--message"),
+        (12, "--in-place"),
     ]
 
 

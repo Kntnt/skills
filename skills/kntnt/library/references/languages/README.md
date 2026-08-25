@@ -64,7 +64,7 @@ Then check it:
 
 ```
 uv run skills/kntnt/library/scripts/languages.py validate
-uv run skills/kntnt/library/scripts/languages.py resolve <code> --scope=mechanics
+uv run skills/kntnt/library/scripts/languages.py resolve --scope=mechanics <code>
 ```
 
 `validate` holds every installed resource to this page — the frontmatter vocabulary, the canonical spellings, the alias cap, the scope headings, the requirement that every resource can answer all four scopes itself or through its base, and that no two of them answer to the same selector. The filename convention is the one rule here it does not check. `resolve` is what a Skill actually calls, so running it once on the new code is what proves the resource is reachable by the selectors a person will type.

@@ -6,7 +6,7 @@ orchestrate reconcile - record work completed outside Orchestrate
 
 ## SYNOPSIS
 
-**/orchestrate reconcile** *TICKET* [**--commit=**_COMMIT_] [**--yes**] [**--** *INSTRUCTION*]
+**/orchestrate reconcile** [**--commit=**_COMMIT_] [**--yes**] *TICKET* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -36,7 +36,7 @@ Ask no question. If commit discovery does not establish exactly one candidate, r
 
 ## DIAGNOSTICS
 
-An open ticket, a ticket without an unsuccessful Run Outcome, a commit outside the default branch, ambiguous commit discovery, and a contradictory repeat are refused before tracker state changes. A flag is refused rather than ignored where it has no work to do here.
+An open ticket, a ticket without an unsuccessful Run Outcome, a commit outside the default branch, ambiguous commit discovery, and a contradictory repeat are refused before tracker state changes. A flag is refused rather than ignored where it has no work to do here. An operand written before an option is out of order and is refused the same way.
 
 ## EXAMPLES
 
@@ -44,7 +44,7 @@ An open ticket, a ticket without an unsuccessful Run Outcome, a commit outside t
 
 Reconcile ticket 14 using its unique default-branch closing commit, or ask for the commit when the evidence is not unique.
 
-**/orchestrate reconcile #14 --commit=71ec0de**
+**/orchestrate reconcile --commit=71ec0de #14**
 
 Reconcile ticket 14 to an explicitly named completion commit after verifying it is on the default branch.
 

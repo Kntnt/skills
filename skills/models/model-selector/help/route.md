@@ -6,7 +6,7 @@ model-selector route - resolve delegated work into exact launch decisions
 
 ## SYNOPSIS
 
-**/model-selector route** *PATH* [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector route** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -34,7 +34,7 @@ One JSON object conforming to `references/route-response.schema.json`, with `sch
 
 ## DIAGNOSTICS
 
-A malformed artifact is refused before routing. Invalid CLI arguments, unreadable paths, and malformed JSON produce a machine-readable top-level `artifact_refusal`, an empty decision list, exit status 2, and no traceback. Request-level invalid profile state, ambiguous or unavailable overrides, unknown safety ceiling, above-main override, unrepresentable verdict inheritance, and an empty safe candidate set produce stable refused decisions with no launch instruction.
+A malformed artifact is refused before routing. Invalid CLI arguments, unreadable paths, and malformed JSON produce a machine-readable top-level `artifact_refusal`, an empty decision list, exit status 2, and no traceback. Request-level invalid profile state, ambiguous or unavailable overrides, unknown safety ceiling, above-main override, unrepresentable verdict inheritance, and an empty safe candidate set produce stable refused decisions with no launch instruction. An operand written before an option is out of order and is refused the same way.
 
 ## INVOCATION ENVELOPE
 

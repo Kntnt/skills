@@ -6,7 +6,7 @@ model-selector config add - add a model selection or access channel
 
 ## SYNOPSIS
 
-**/model-selector** **config** **add** (**model**|**channel**) [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **config** **add** [**--data=**_PATH_] (**model**|**channel**) [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -32,7 +32,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`
 
 ## DIAGNOSTICS
 
-A missing kind, unsupported kind, invalid revision, or unsupported option is refused rather than ignored. The Skill prints this SYNOPSIS, writes nothing, and points to `/model-selector config add --help`.
+A missing kind, unsupported kind, invalid revision, or unsupported option is refused rather than ignored. The Skill prints this SYNOPSIS, writes nothing, and points to `/model-selector config add --help`. An operand written before an option is out of order and is refused the same way.
 
 ## INVOCATION ENVELOPE
 

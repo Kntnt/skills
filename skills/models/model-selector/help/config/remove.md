@@ -6,7 +6,7 @@ model-selector config remove - remove one model selection or access channel
 
 ## SYNOPSIS
 
-**/model-selector** **config** **remove** (**model**|**channel**) *ID* [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **config** **remove** [**--data=**_PATH_] (**model**|**channel**) *ID* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -32,7 +32,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`
 
 ## DIAGNOSTICS
 
-An unknown ID, referenced channel without a resolution, declined confirmation, or unsupported option writes nothing. Invalid syntax is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector config remove --help`.
+An unknown ID, referenced channel without a resolution, declined confirmation, or unsupported option writes nothing. Invalid syntax is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector config remove --help`. An operand written before an option is out of order and is refused the same way.
 
 ## INVOCATION ENVELOPE
 
