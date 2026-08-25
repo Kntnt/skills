@@ -17,6 +17,8 @@ Neither was installed that way to begin with. Unslop was not on this machine at 
 
 Each run was its own Claude Code turn with no memory of any other, driven headless from the user's home directory so that no run read this repository, this ticket, the criteria below, or the Skill's own source tree. Each ran against its own copy of the corpus, staged exactly as [`../corpus/README.md`](../corpus/README.md) says: `cp -R docs/evaluation/corpus`, an empty `out/` beside it, and `chmod a-w` on `output/readonly-source.md`. `$RUN` below abbreviates that copy's root, `/Users/thomas/Projects/skills/.git/kntnt-orchestrate/111.scratch/runs/<id>`; invocations are otherwise verbatim, and the paths as typed carried the unabbreviated form. **side effects** is read from a `sha256` inventory of the whole working copy taken before and after each run, never from what the run said about itself.
 
+Two runs were made after that sitting had ended and the install had been taken down again: the two under **Criteria the corpus does not stage on its own** that answer the code half of the preservation criterion. Rather than reinstall globally, they reached the Skill through a project-scoped skills directory holding the same two trees — `unslop` and `kntnt` copied from the corpus commit, checked with `diff -r` the same way — so that nothing outside this ticket's own scratch directory had to be written to. The seam is the same one: `/unslop` typed as the whole of a turn, `$HERE` resolving the checker by the same relative path, and the same Collection Library behind it, all three visible in those two traces. Their turns were driven from the directory that holds that skills directory and nothing else.
+
 Every run inherited `~/.claude/CLAUDE.md`, which every session on this machine inherits. It is recorded because its instructions are visible in some traces — runs cleaned up their own temporary files — and none of them touches editorial behaviour.
 
 Judging was done from the delivered reply, the filesystem inventory, and the run's own recorded tool trace, fixture by fixture, before any GPT-family record existed to compare with. The tool trace is part of the evidence because three of this Skill's obligations are invisible in the reply by design: what a correction subagent was actually given, whether a returned correction was reviewed again, and what the run loaded before reading the text. The Skill's contract keeps that correspondence out of its output, so a record judging it from the output alone could only take the run's word for it. No Codex Harness and no GPT model was started, controlled, or invoked from this session, directly or through any tool, script, or subagent.
@@ -45,7 +47,7 @@ The criterion identifiers are stable across entries:
 - `loading` — only what step 5 names is read: the shared catalogue and the resolved language's anti-slop scope, and no base contract, genre, technique, or other language scope.
 - `leak` — the pass's own working, and its correspondence with a correction subagent, stay out of the output.
 
-Forty-seven invocations are recorded below. Forty of them run corpus fixtures; the last seven, under **Criteria the corpus does not stage on its own**, settle three things the corpus supplies no material for — the loop's third stopping condition, three refusals the Skill's own DIAGNOSTICS name and no fixture reaches, and a control that isolates the one failure this run found. Three of those seven staged run-local probe material as `$RUN/probe/` beside `$RUN/corpus/`, quoted in full where it is used. One further entry carries no invocation of its own: `response-default`, which is a situation every destination-less run exercises.
+Forty-nine invocations are recorded below. Forty of them run corpus fixtures; the last nine, under **Criteria the corpus does not stage on its own**, settle four things the corpus supplies no material for — the loop's third stopping condition, the code half of the preservation criterion, three refusals the Skill's own DIAGNOSTICS name and no fixture reaches, and a control that isolates the one failure this run found. Five of those nine staged run-local probe material as `$RUN/probe/` beside `$RUN/corpus/`, quoted in full where it is used. One further entry carries no invocation of its own: `response-default`, which is a situation every destination-less run exercises.
 
 ## Prose
 
@@ -683,11 +685,11 @@ Forty-seven invocations are recorded below. Forty of them run corpus fixtures; t
 ### `response-default`
 
 - **fixture** — `response-default`
-- **invocation** — none of its own. Thirty-four of the forty-seven invocations in this record name neither `--output` nor `--in-place`, and each of them is this situation.
+- **invocation** — none of its own. Thirty-five of the forty-nine invocations in this record name neither `--output` nor `--in-place`, and each of them is this situation.
 - **contextual instruction** — `none`
 - **output target** — `response`
 - **observed delivery** — in every one of those runs, the result came back in the response and nothing else.
-- **side effects** — none, in every one of them. Forty of the forty-seven before-and-after inventories are identical, and the seven that are not belong to the seven runs that named a file or a directory.
+- **side effects** — none, in every one of them. Forty-one of the forty-nine before-and-after inventories are identical, and the eight that are not belong to the eight runs that named a file or a directory.
 - **criteria** —
   - `target` — `pass` — the default was kept wherever it was not overridden, and supplying a local file as material never selected a destination.
   - `effects` — `pass` — no file created, replaced, or removed anywhere under `$RUN` by any run that named no destination.
@@ -884,9 +886,9 @@ Forty-seven invocations are recorded below. Forty of them run corpus fixtures; t
 
 ## Criteria the corpus does not stage on its own
 
-Three things the ticket asks for have no fixture. The loop's third stopping condition needs a correction that makes no relevant progress, and every corpus fixture that reaches the loop at all either converges or leaves findings the budget ran out on. Four of the refusals the Skill's own DIAGNOSTICS section names have no fixture either. And the failure recorded above on `brief-short` needed a control before it could be filed against the right thing.
+Four things the ticket asks for have no fixture. The loop's third stopping condition needs a correction that makes no relevant progress, and every corpus fixture that reaches the loop at all either converges or leaves findings the budget ran out on. The preservation criterion names code, and the corpus carries none: ``grep -rl '`' ../corpus/`` and `grep -rlE '^    \S' ../corpus/` reach no fixture prose, and the index's coverage vocabulary has no tag for it. That gap is filed as #150 rather than closed here by adding to the corpus. Three of the refusals the Skill's own DIAGNOSTICS section names have no fixture either. And the failure recorded above on `brief-short` needed a control before it could be filed against the right thing.
 
-These nine invocations were made under the same install, the same harness, and the same before-and-after inventory as the thirty-eight above. Four of them staged run-local material as `$RUN/probe/` beside `$RUN/corpus/`, which is quoted in full where it is used. Nothing in the corpus was touched: no fixture, no index entry, and no floor, so `corpus commit 26155fd` still says what it said and the GPT-family run has the same material to answer.
+These nine invocations were made under the same harness and the same before-and-after inventory as the forty above, and under the same install but for the last two, whose route is in **Run conditions**. Five of them staged run-local material as `$RUN/probe/` beside `$RUN/corpus/`, which is quoted in full where it is used. Nothing in the corpus was touched: no fixture, no index entry, and no floor, so `corpus commit 26155fd` still says what it said and the GPT-family run has the same material to answer.
 
 ### `probe/single-finding.md` — the loop's third stopping condition
 
@@ -948,6 +950,93 @@ The English one is the same shape with the same patterns.
 - **defects filed** — none.
 - **notes** — the attempt failed and the result is worth more than the attempt would have been. A pass that treats a verbatim quotation as the writer's prose would have produced the stopping condition by refusing to repair it; what happened instead is that the pass never called it a finding, which is the better behaviour and the one the correction brief's own instruction about quotations anticipates.
 
+### `probe/code-slop-en.md` — the code half of the preservation criterion
+
+The material is an article whose prose carries the catalogue's patterns and which also carries code the prose does not concern: a fenced Python block, an indented block, and two inline spans. The prose *inside* the code carries the same patterns as the article around it, the identifiers are named after two of those patterns, and the exception message holds a misspelling. A pass that read a code sample as the writer's prose, or that reached for the mechanical layer on the way past, would therefore leave a mark impossible to miss:
+
+`````markdown
+# Unlocking the Power of Retry Logic in Modern Distributed Systems
+
+In today's fast-paced engineering landscape, the way services recover from failure has never been more important. It's not just about resilience — it's about fundamentally rethinking how systems behave under pressure. Studies show that most outages begin as a transient error nobody handled.
+
+The naive approach is a fixed delay. Consider the following implementation, which many teams still ship:
+
+```python
+def retry(fn, attempts=5):
+    """In today's fast-paced world, retrying is not just about resilience —
+    it's about survival. Studies show that most failures are transient.
+
+    At the end of the day, the key to success is patience."""
+    for i in range(attempts):
+        try:
+            return fn()
+        except TransientError:
+            # It's not just a delay — it's a backoff. This is a paradigm shift.
+            time.sleep(2 ** i)
+    raise ExhaustedError("Furthermore, the recieved response never arrived.")
+```
+
+But what does this actually mean in practice? At its core, exponential backoff is about respecting the server. It's about acknowledging that a struggling service needs room. It's about recognising that every client retrying in lockstep is a thundering herd.
+
+The remedy is jitter. Experts agree that full jitter is the right default, and the change is a single expression. Call `not_just_about()` on the delay, or set the module flag `STUDIES_SHOW = True`, and the sleep becomes:
+
+    # In conclusion, the key to success is randomness.
+    sleep = random.uniform(0, min(cap, base * 2 ** i))
+    log.debug("It is worth noting that the delay was %s", sleep)
+
+Teams report fewer cascades. Teams report shorter incidents. Teams report calmer on-call rotations. Furthermore, jittered backoff enables distributed clients to spread their load seamlessly across the recovery window, fostering a healthier system where every request can be served, regardless of when the failure began.
+
+At the end of the day, the future of resilience isn't about choosing between retrying and failing fast. It's about finding the right balance for your unique system and context. One thing is certain: the teams that thrive in the years ahead will be those that master this balance.
+`````
+
+Two runs, differing in the Correction Budget and the destination. The first reviews without correcting, which shows what the pass calls a finding; the second corrects twice into a file, which shows what survives a run that does change the text. Preservation is only testable on the second: a text nothing happened to proves nothing about what a repair leaves alone.
+
+#### `probe/code-slop-en.md` (review only)
+
+- **fixture** — none; run-local probe material
+- **invocation** — `/unslop --max=0 $RUN/probe/code-slop-en.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — the complete text came back in the response, followed by fifteen located findings, every one of them unresolved, each given by line and named by its pattern.
+- **side effects** — none. The inventory is identical before and after.
+- **criteria** —
+  - `preserve` — `pass` — the returned text is byte-identical to the fixture, `sha256` `e589024d…`, code and prose alike. `--max=0` is a review, and a review returns the artifact rather than a version of it.
+  - `detect` — `pass` — six of the catalogue's seven patterns, each found by name: the title's inflation, the empty opening and the false contrast and *Studies show* in the first paragraph, the *But what does this actually mean in practice?* throat-clear, two anaphoric triplets, *Experts agree*, the trailing participial clause, and the whole closing paragraph. The seventh, synonym cycling, is absent because the material stages none — retry logic, backoff, and jitter are three things rather than three names for one.
+  - `lens` — `pass` — no genre, no technique, no structural expectation, and no comment on the article's shape beyond the patterns.
+  - `no-mechanics` — `pass` — `recieved` inside the exception message is not mentioned anywhere in the fifteen findings, and no mechanical pass appears in the trace.
+  - `budget` — `pass` — `0` delegated nothing; the trace carries no subagent.
+  - `language` — `pass` — `en_GB` inferred from *recognising*, verified against the installed resource.
+  - `loading` — `pass` — the catalogue and the `en_GB` `anti-slop` scope, and nothing else. No tool call in the trace reads `base.md`, a genre, or a technique.
+  - `target` — `pass` — no destination named, the response received the artifact.
+  - `effects` — `pass` — the inventory is identical before and after.
+- **unresolved findings** — all fifteen.
+- **defects filed** — #149.
+- **notes** — three of the fifteen sit inside the code — the docstring, which the run reports as four patterns in one finding, and the two comments — and the run drew its own boundary within the block: *Repair the prose only — `retry`, `attempts`, `TransientError`, `ExhaustedError` and the message string are the program, not the text, and stay exactly as they are.* The correcting run below reached the opposite answer on the same material. Neither reading breaks a criterion here, and nothing in the Skill or in the correction brief settles which is right, so the disagreement is filed as #149 rather than judged.
+
+#### `probe/code-slop-en.md` (two corrections, written to a file)
+
+- **fixture** — none; run-local probe material
+- **invocation** — `/unslop --max=2 --output=$RUN/out/code-post.md $RUN/probe/code-slop-en.md`
+- **contextual instruction** — `none`
+- **output target** — `$RUN/out/code-post.md`
+- **observed delivery** — the path, a line saying no findings remain, and a summary: ten findings, both correction rounds spent, and what the re-reading after the first round found.
+- **side effects** — `out/code-post.md` created. Nothing else; the fixture itself is byte-identical afterwards.
+- **criteria** —
+  - `preserve` — `pass` — **this is the entry that carries the code half of the ticket's preservation criterion.** The run rewrote or cut the title and five paragraphs, so it is a run that genuinely changed the text; `diff` between the fixture and the delivered file has two hunks and twelve changed lines, every one of them prose, and the seventeen lines that are code come through as one identical run, `sha256` `aea186a9…` on both sides. The fenced Python block is byte-identical from ```` ```python ```` to ```` ``` ````, including the docstring, the comment, and the `recieved` misspelling in the exception message; the indented block is byte-identical, including its own *In conclusion, the key to success is randomness* comment and the *It is worth noting that* in its log format string; and both inline spans survive in a paragraph the run did edit, which lost its *Experts agree* clause and kept the spans exactly. `not_just_about()` and `STUDIES_SHOW` are named after two of the patterns the run was hunting and it renamed neither.
+  - `lens` — `pass` — nothing outside the anti-slop lens was corrected. No genre, no technique, no structural expectation, and every changed line answers a finding the run named.
+  - `no-mechanics` — `pass` — `recieved` is still misspelled in the delivered file, no mechanical pass appears in the trace, and the run says so itself: *mechanical correction is a separate gesture, and no mechanical pass ran.*
+  - `detect` — `pass` — ten findings, across the same six patterns the review above reached; synonym cycling has nothing to find here either.
+  - `budget` — `pass` — `2` given and `2` spent, as a ceiling reached rather than a quota filled: the second round exists because the re-reading found something, not because a unit was left.
+  - `fresh` — `pass` — two subagents, each started fresh. Both prompts open *You have not seen this text before*, and each carries the complete current text and the complete current findings inline rather than by a path. The second carries the text as the first round left it.
+  - `verify` — `pass` — the re-reading after round 1 found that stating the false contrast's second half on its own had left *Retry logic is about fundamentally rethinking how systems behave under pressure* standing as the opening — a new instance of a pattern the repair created. Round 2 removed it, and the re-reading after that came back clean.
+  - `stop` — `pass` — the budget was spent and the last re-reading found nothing, so the run ended with no findings rather than with findings it had run out of budget for.
+  - `language` — `pass` — `en_GB` by inference, no flag and no map in play.
+  - `target` — `pass` — the artifact went to the named path, which did not exist and was created.
+  - `effects` — `pass` — exactly one file appears in the inventory diff, at the path named, and nothing else changed.
+- **unresolved findings** — none.
+- **defects filed** — #149, shared with the review above; #150 for the corpus gap this material stands in for.
+- **notes** — the ten findings are all outside the code, and the run gave its own reason for that opposite decision: *I treated code as verbatim material … the docstring and comments sit inside samples the text presents as source that ships in the real world.* Both runs left every byte of code alone, which is what `preserve` asks; what they disagree about is whether the prose inside a sample is a finding at all, which is #149.
+
 ### `slop-heavy` supplied inline — the control for #147
 
 - **fixture** — `slop-heavy`, supplied inline rather than by path
@@ -991,8 +1080,8 @@ Three of the invalid forms the Skill's DIAGNOSTICS section names have no fixture
 
 ## What this record establishes, and what it does not
 
-Every fixture the corpus provides for this Skill was run. None was skipped, so no entry above carries a skip for that reason. Two criterion lines are `skipped` and each says why: `budget` on `brief-short`, where no correction loop ran because the run never reached one, and `stop` on the two quotation probes, which were staged for a condition they turned out not to reach and are recorded with the reason rather than removed. Of the 317 criterion lines in this record, 312 pass, three fail, and those two are skipped.
+Every fixture the corpus provides for this Skill was run. None was skipped, so no entry above carries a skip for that reason. Two criterion lines are `skipped` and each says why: `budget` on `brief-short`, where no correction loop ran because the run never reached one, and `stop` on the two quotation probes, which were staged for a condition they turned out not to reach and are recorded with the reason rather than removed. Of the 337 criterion lines in this record, 332 pass, three fail, and those two are skipped.
 
-Three criterion lines failed, all three on one entry and all three for one cause, which is #147. The rest held: the patterns are caught in both supported languages, on Swedish instances and on ten of the Swedish scope's own items as well as on the shared catalogue's seven; clean fixtures come back with the short status rather than a rewritten text; a fixture's mechanical errors are still in it afterwards; no mechanical pass ran in any of the forty-seven traces; no genre, technique, or structural expectation entered any run, and two were refused when an invocation named them; the Correction Budget behaved as the loop contract specifies at `0`, at the default, and at `2` and `3`, with a fresh subagent per correction carrying the complete text and complete findings directly, a re-reading after each, and all three stopping conditions observed; language precedence held at each of its levels, and a recognized `kntnt` map supplied the language without being created, completed, synchronized, or otherwise disturbed, including on two runs that changed the text and one that wrote it to a file; frontmatter, formatting, and quotations came through untouched wherever the findings did not concern them; no run remarked on source material it was not given; and the output contract was exercised through the real Skill seam across all ten behaviours the ticket lists, with no partial effect behind any refusal.
+Three criterion lines failed, all three on one entry and all three for one cause, which is #147. The rest held: the patterns are caught in both supported languages, on Swedish instances and on ten of the Swedish scope's own items as well as on the shared catalogue's seven; clean fixtures come back with the short status rather than a rewritten text; a fixture's mechanical errors are still in it afterwards; no mechanical pass ran in any of the forty-nine traces; no genre, technique, or structural expectation entered any run, and two were refused when an invocation named them; the Correction Budget behaved as the loop contract specifies at `0`, at the default, and at `2` and `3`, with a fresh subagent per correction carrying the complete text and complete findings directly, a re-reading after each, and all three stopping conditions observed; language precedence held at each of its levels, and a recognized `kntnt` map supplied the language without being created, completed, synchronized, or otherwise disturbed, including on two runs that changed the text and one that wrote it to a file; frontmatter, formatting, code, and quotations came through untouched wherever the findings did not concern them, the code half on run-local material because the corpus stages none, and on a run that rewrote the title and five paragraphs around a fenced block it did not touch a byte of; no run remarked on source material it was not given; and the output contract was exercised through the real Skill seam across all ten behaviours the ticket lists, with no partial effect behind any refusal.
 
-Two defects were found and filed rather than absorbed, and one existing defect was extended to a second Skill. Nothing in the corpus, the protocol, or the criteria was changed to accommodate any of them.
+Three defects were found and filed rather than absorbed — #147, #148, and #149 — and one existing defect, #145, was extended to a second Skill. One gap in the corpus itself was found and filed as #150 rather than closed by adding to the corpus under the run that needed it. Nothing in the corpus, the protocol, or the criteria was changed to accommodate any of them.
