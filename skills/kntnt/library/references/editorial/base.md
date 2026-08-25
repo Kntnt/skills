@@ -50,11 +50,15 @@ Keep one name for one thing. Cycling through synonyms for a term the text has al
 
 Every claim is supported by what the text or its material actually holds, and the strength of the wording matches the strength of the support. Evidence for a tendency does not license a law; one case does not license *always*; a correlation is not written as a cause.
 
+Circumstantial detail about the case the text reports is a claim like any other. A duration, a manner, a motive, an absence — something that did not happen, a decision nobody took — and a state of affairs offered as background are each an assertion about the case, and each is either carried by the material or absent from the text. Detail of that kind is what a draft invents first, because it reads as prose rather than as an assertion and so survives the writer's own reading of it: *the few minutes before the meeting began* and *nobody thought to object* are inventions wherever the material gives no duration and records no such absence.
+
 Attribution is exact. Who said it, who found it, and how they know are part of the claim, not decoration on it. *Studies show*, *experts agree*, and *it is widely believed* attribute to nobody and can be neither checked nor contradicted; name the source or drop the claim.
 
 Uncertainty is stated where it exists and not manufactured where it does not. A hedge on a fact the material states plainly is as inaccurate as a certainty on something the material leaves open.
 
 Nothing is inflated. A change is not *a revolution*, a useful tool is not *a game-changer*, and an ordinary decision is not *unprecedented*. Importance that the material supports needs no adjective; importance it does not support is not made true by one.
+
+A length that was asked for is a constraint on how much of the material to use, and never a licence to add to it. Where the material cannot fill it, the text is delivered at the length the material supports, and what further material would close the gap is named beside it. A text brought up to the requested number with detail the material does not carry has met the requirement that was easy to check and broken the one that mattered.
 
 ## Openings and endings
 

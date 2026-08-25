@@ -3950,6 +3950,95 @@ def test_no_editorial_resource_pins_a_rule_to_one_installed_language() -> None:
         )
 
 
+def _base_contract_section(name: str) -> str:
+    """The body of one `## ` section of the shared base contract.
+
+    Where a rule stands in that document is part of the rule: a requirement
+    about what may be claimed, filed under `Words`, has been put away from the
+    requirement it qualifies and from the reader who needs it (ADR-0095).
+    """
+
+    text = (EDITORIAL / "base.md").read_text(encoding="utf-8")
+    for section in re.split(r"^## ", text, flags=re.MULTILINE)[1:]:
+        heading, _, body = section.partition("\n")
+        if heading.strip() == name:
+            return body
+
+    return ""
+
+
+def test_the_base_contract_makes_circumstantial_detail_a_claim() -> None:
+    """The shape an invented fact takes when it reads as prose.
+
+    A duration, a manner, a motive, an absence, a state of affairs given as
+    background: each asserts something about the case the text reports, and
+    each survives a writer's own reading precisely because it does not look
+    like an assertion. Unstated, the requirement that every claim be supported
+    is read as covering figures and attributions alone, which is the form every
+    Source Fidelity failure the Claude-family evaluation found actually took
+    (issue #138).
+    """
+
+    claims = _base_contract_section("Claims")
+
+    # A contract reworded out of this heading would leave nothing to judge and
+    # would pass every assertion below it.
+    assert claims, (
+        f"{EDITORIAL / 'base.md'}: the contract states what a claim owes its"
+        f" reader under `## Claims`, and there is no such section to read"
+        f" (ADR-0095). See {STANDARD}."
+    )
+
+    lowered = claims.lower()
+
+    assert "circumstantial detail" in lowered, (
+        f"{EDITORIAL / 'base.md'}: the `Claims` section requires support for"
+        f" every claim and never says that circumstantial detail about the"
+        f" reported case is one, so the detail that reads as prose is the"
+        f" detail a draft invents (issue #138). See {STANDARD}."
+    )
+
+    unnamed = [
+        form
+        for form in ("duration", "manner", "motive", "absence", "background")
+        if form not in lowered
+    ]
+    assert unnamed == [], (
+        f"{unnamed}: forms circumstantial detail takes that the `Claims`"
+        f" section does not name, each of them observed as an unsupported fact"
+        f" in a delivered draft (issue #138). See {STANDARD}."
+    )
+
+
+def test_the_base_contract_settles_a_stated_length_against_the_material() -> None:
+    """A length that was asked for, and material too thin to reach it.
+
+    Both fixtures that failed Source Fidelity stated a word count their
+    material could not fill, and the drafts reached it by supplying detail the
+    brief did not carry. Nothing said which of the two gives way. The rule is
+    therefore stated beside the requirement it protects, and it settles the
+    conflict in one direction: the length gives way, and the shortfall is named
+    rather than filled (issue #138).
+    """
+
+    claims = _base_contract_section("Claims").lower()
+
+    assert claims
+
+    for clause in (
+        "never a licence to add to it",
+        "the length the material supports",
+        "what further material would close",
+    ):
+        assert clause in claims, (
+            f"{EDITORIAL / 'base.md'}: the `Claims` section leaves a stated"
+            f" length free to license material the source does not carry,"
+            f" which is the conflict every observed failure was decided the"
+            f" wrong way round ({clause!r} unstated, issue #138). See"
+            f" {STANDARD}."
+        )
+
+
 def test_write_ships_in_the_editorial_category_and_invokes_no_peer() -> None:
     """Running an editorial pipeline stays the user's separate choice.
 
@@ -4010,6 +4099,45 @@ def test_write_loads_only_what_a_first_draft_is_written_against() -> None:
             f" the Skills contracted to act on it (ADR-0087, ADR-0095). See"
             f" {STANDARD}."
         )
+
+
+def test_write_accounts_for_what_it_did_with_the_material() -> None:
+    """A run reporting its own fidelity has made a claim about the draft.
+
+    Every Source Fidelity failure the Claude-family evaluation found shipped
+    under a report saying that every claim traced to the brief. So the account
+    is answerable to the contract the draft is written under: it says where the
+    material stopped when the draft is short of a stated length, and asserts
+    nothing about the draft that the run has not established. It remains an
+    account and never a second pass — Write still stops at the first draft
+    (ADR-0088, issue #138).
+    """
+
+    directory = REPO_ROOT / "skills" / "editorial" / "write"
+    text = "\n".join(
+        path.read_text(encoding="utf-8") for path in sorted(directory.rglob("*.md"))
+    )
+
+    assert "short of a stated length" in text, (
+        f"{directory}: nothing tells a run to say where the material stopped"
+        f" when the draft comes in under a length the brief asked for, which"
+        f" is the one moment a draft is under pressure to invent (issue #138)."
+        f" See {STANDARD}."
+    )
+
+    assert "fidelity it has not established" in text, (
+        f"{directory}: the run's account may still report the draft as"
+        f" faithful without having checked, which is what every failing run"
+        f" did (issue #138). See {STANDARD}."
+    )
+
+    # The account says what the run did with the material; it never reviews the
+    # draft it has just written (ADR-0088).
+    assert "perform neither, and offer neither as a next step" in text, (
+        f"{directory}: Write no longer stops at the first draft, so the"
+        f" account of a run has become the review pass this Skill does not"
+        f" have (ADR-0088). See {STANDARD}."
+    )
 
 
 # The Skill this wave's mechanical pass ships as, read at the one seam a test
@@ -4086,6 +4214,26 @@ REDLINE = REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md"
 # history of its own to fall back on.
 REDLINE_HELP = REDLINE.parent / "help.md"
 REDLINE_CORRECTION = REDLINE.parent / "references" / "correction.md"
+
+# The licence the correction briefs used to carry, which left each run to
+# decide for itself whether to hand the brief over or write it somewhere and
+# send a path instead. Across a handful of runs of one Skill in one Harness,
+# four independently chose the same fixed path under `/tmp`, two of those
+# overlapped in time, and one run's brief was deleted underneath it and read
+# back as another run's brief against an unrelated text (issue #143).
+IMPROVISED_HANDOVER = (
+    "writing the filled-in brief to a file",
+    "costs less than repeating it",
+)
+
+# What stands in its place: one handover, named once, with nothing left for a
+# run to invent. The brief is the subagent's whole instruction, and it is
+# never written anywhere a second process could read, replace, or delete it
+# (ADR-0118).
+HANDOVER_RULE = (
+    "the whole of its instruction",
+    "Never write it to a file",
+)
 
 # The shared catalogue of machine-sounding prose, and the seven patterns the
 # specification requires it to carry.
@@ -4517,6 +4665,52 @@ def test_each_correction_is_delegated_to_a_subagent_that_carries_no_history() ->
     )
 
 
+def _assert_one_handover_with_nothing_left_to_invent(brief: Path, body: Path) -> None:
+    """Hold one Skill's correction brief to the Collection's single handover.
+
+    The brief carries the complete Text Artifact and the complete findings —
+    the whole of what a correction round is answerable to, and the user's own
+    text among it. A run free to choose how that travels is a run that chooses
+    differently from the next one, and a predictable path under a shared
+    temporary directory is a name anything else on the machine can read,
+    replace, or delete for as long as the round lasts (ADR-0118).
+    """
+
+    filled = brief.read_text(encoding="utf-8")
+    dispatch = body.read_text(encoding="utf-8")
+
+    for licence in IMPROVISED_HANDOVER:
+        for path, text in ((brief, filled), (body, dispatch)):
+            assert licence not in text, (
+                f"{path}: the run is still licensed to write the filled-in"
+                f" brief somewhere and send a path in its place, so how the"
+                f" user's text reaches a correction subagent is settled anew"
+                f" every run (ADR-0107, ADR-0118). See {STANDARD}."
+            )
+
+    for rule in HANDOVER_RULE:
+        assert rule in filled, (
+            f"{brief}: the brief does not say that it reaches the subagent"
+            f" directly, as the whole of its instruction and never as a file"
+            f" a second process could hold, so the delivery of the complete"
+            f" text and the complete findings is left to whatever the"
+            f" dispatching session invents (ADR-0107, ADR-0118). See"
+            f" {STANDARD}."
+        )
+
+    assert "delivered as that brief says" in dispatch, (
+        f"{body}: the delegating step reaches the brief for what to fill in"
+        f" and not for how to hand it over, which is the half of the brief"
+        f" that was improvised (ADR-0107, ADR-0118). See {STANDARD}."
+    )
+
+
+def test_the_correction_brief_is_handed_over_rather_than_left_on_disk() -> None:
+    """One handover, named once, for the Skill the defect was observed in."""
+
+    _assert_one_handover_with_nothing_left_to_invent(REDLINE_CORRECTION, REDLINE)
+
+
 def test_a_correction_is_verified_by_review_rather_than_by_its_own_report() -> None:
     """The one reader who cannot check a repair is the agent that made it.
 
@@ -4914,6 +5108,18 @@ def test_unslop_carries_the_collections_one_correction_budget_contract() -> None
             f" made against a contract the review never applied is a change"
             f" nobody asked for (ADR-0112). See {STANDARD}."
         )
+
+
+def test_unslops_correction_brief_is_handed_over_the_same_single_way() -> None:
+    """The handover is the Collection's, so it does not stop at one Skill.
+
+    Unslop dispatches corrections from a brief carrying the same user text
+    under the same licence to improvise, and a rule holding in one Skill and
+    not the other is the per-run choice again with a Skill's name on it
+    (ADR-0112, ADR-0118).
+    """
+
+    _assert_one_handover_with_nothing_left_to_invent(UNSLOP_CORRECTION, UNSLOP)
 
 
 def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:

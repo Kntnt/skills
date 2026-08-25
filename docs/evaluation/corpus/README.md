@@ -123,6 +123,14 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Use** — the fixture for anti-slop review, and for the difference between a review that names patterns and one that only dislikes the text.
 - **Reject** — a review that finds nothing, a correction that removes the patterns and the content with them, and findings phrased as style preference where the pattern has a name.
 
+### `slop-heavy-sv`
+
+- **Files** — `prose/slop-heavy-sv.md`
+- **Covers** — ai slop; swedish ai slop
+- **Material** — a Swedish essay about digital customer service carrying the patterns in concentration, the way `slop-heavy` carries the English ones, and beside them the items the Swedish anti-slop scope names that English has no counterpart for: the Swedish empty openings and closings, the imported false contrast, the Swedish metaphor stock, superlative inflation, a comma after a fronted connective adverb where Swedish takes none, English punctuation carried across — the em dash, curly English quotation marks, a serial comma inside a Swedish list, and `&` standing in for *och* — the triad reflex, wholesale-translated hedging, and authority attributed to nobody.
+- **Use** — the fixture for anti-slop review in Swedish. Supply the file path, with the language left to inference on one run and named explicitly on another. The shared catalogue is English and is applied by what each pattern does rather than by its words, so this is where that claim and the language's own scope are exercised in a language the catalogue is not written in.
+- **Reject** — a review that finds nothing in a text built out of the patterns, an answer in any language but Swedish or a text rewritten into English, findings phrased as style preference where the pattern has a name, and a correction that removes the patterns and the content with them.
+
 ### `resembles-abt`
 
 - **Files** — `prose/resembles-abt.md`
@@ -164,6 +172,14 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Material** — a Swedish Text Artifact whose Kntnt map says `genre: report`, `technique: pac`, `language: en_US`, contradicting both the body and the invocation below.
 - **Use** — invoke naming the Swedish language and the article genre, and naming no technique. Genre and language are then settled by the invocation, and only the technique falls through to the map.
 - **Reject** — a metadata value overriding an explicit one, an explicit value for one parameter suppressing the map for the other two, and the file delivered with a Kntnt map still contradicting the configuration the run actually resolved.
+
+### `handoff-partial`
+
+- **Files** — `frontmatter/handoff-partial.md`
+- **Covers** — partial handoff metadata; ambiguous language
+- **Material** — a Text Artifact whose Kntnt map carries `technique: abt` and neither of the other two keys, over a note about a newsletter that alternates Swedish and English inside its paragraphs, so that nothing in the artifact settles a language on its own.
+- **Use** — invoke naming the report genre, no technique, and no language, with a Contextual Instruction naming Swedish as the language. Each of the first three levels of the resolution order then settles one parameter in a single run: the invocation settles the genre, the map settles the technique, and the Contextual Instruction settles the language the map leaves absent and the text cannot supply. It is the fixture for per-field resolution across all three at once, which a complete map makes unstageable.
+- **Reject** — the two absent keys read as a reason to stop, to ask for a complete map, or to treat the map as unusable metadata; the technique taken from anywhere but the map, or refused because the map is incomplete; a language question asked where the Contextual Instruction has already named one; and the file delivered with a Kntnt map contradicting the configuration the run actually resolved.
 
 ### `handoff-unusable`
 

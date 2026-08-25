@@ -132,7 +132,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "6ee4df8f1c69eedcfddd5fe62ffff5b452fe98c2e62e814c2f7a7b75124b144d",
+      "digest": "13712afad6fd9424eb2e0c30eeca3f60fe20073efb0fb8e3b4999427c89f9118",
       "binaries": [
         "uv"
       ],
@@ -148,7 +148,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "2d47c1f585b6e67a7d38627aee38e9d2c15f00749e7137ffa371fbe1465cbe38",
+      "digest": "056affe80a3458ea33481d3978a6670a842b564e3c822bbae8ffa51acdb1f536",
       "binaries": [
         "uv"
       ],
@@ -162,7 +162,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",
-      "digest": "f5e7d73048b018fb176a70dad42f02a868f1e4fc33f616b5580ff6a395d2184b",
+      "digest": "9caa87ef760d7b2b0cf67e3c3cb83b0ccc335b4dae0d8f2b0a16596ea29f6d28",
       "binaries": [
         "uv"
       ],
