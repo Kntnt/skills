@@ -72,6 +72,8 @@ An incomplete or invalid form is refused rather than repaired or ignored. The Sk
 
 Refused before any side effect, so that nothing is left half done: an undeclared flag, a text written before a flag rather than after every flag, a missing or invalid option value, an option given twice, a genre or technique nothing installs, a language selector reaching no installed resource or more than one, a Correction Budget that is not a non-negative integer, more than one text in one invocation, **--output** together with **--in-place**, an output path equal to the input path, in-place editing of inline text, a URL, or a read-only or non-local source, and a destination whose parent directory does not exist.
 
+That list is the whole of what is refused over the form of an invocation, and the two paragraphs below are the only further places a run stops. Any other invocation is reviewed, whatever the text turns out to be: a brief, an outline, or notes supplied where the finished piece was expected is read against the resolved genre like any other text, and being that rather than the piece is the review's finding — usually its first — rather than a reason to decline the run or to send you to another Skill.
+
 A `kntnt` map naming a genre, technique, or language nothing installs, where no flag supersedes it, is reported as unusable artifact metadata. The run stops rather than reinterpreting the value, so a spelling such as `en_UK` never quietly becomes `en_GB`.
 
 A text whose language cannot be settled — mixed, or a description matching no installed resource uniquely — produces one question rather than a guess. Nothing has been written at that point, so the question costs nothing to answer either way.
