@@ -10,7 +10,7 @@ kntnt - manage which collection Skills are Enabled
 
 **/kntnt** **help** [*COMMAND*] [**--** *INSTRUCTION*]
 
-**/kntnt** **select** [**--on** *SKILL*]... [**--off** *SKILL*]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
+**/kntnt** **select** [**--on=**_SKILL_]... [**--off=**_SKILL_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
 **/kntnt** **update** [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
@@ -44,11 +44,11 @@ Remove the Collection from the machine, with the Manager removed last. Project c
 
 ## OPTIONS
 
-**--on** *SKILL*
+**--on=**_SKILL_
 
 Enable a named Skill without opening the Select list. Valid only with `select` and repeatable.
 
-**--off** *SKILL*
+**--off=**_SKILL_
 
 Disable a named Skill without opening the Select list. Valid only with `select`, repeatable, and gated by `--yes` because it deletes files.
 

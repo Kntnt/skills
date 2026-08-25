@@ -6,7 +6,7 @@ orchestrate reconcile - record work completed outside Orchestrate
 
 ## SYNOPSIS
 
-**/orchestrate reconcile** *TICKET* [**--commit** *COMMIT*] [**--yes**] [**--** *INSTRUCTION*]
+**/orchestrate reconcile** *TICKET* [**--commit=**_COMMIT_] [**--yes**] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -26,7 +26,7 @@ Exactly one bare ticket reference, such as `#14`. Reconciliation never accepts a
 
 ## OPTIONS
 
-**--commit** *COMMIT*
+**--commit=**_COMMIT_
 
 Name the commit that completed the ticket. The commit may be any revision Git resolves to a commit, but the resolved commit must be reachable from the default branch.
 
@@ -44,7 +44,7 @@ An open ticket, a ticket without an unsuccessful Run Outcome, a commit outside t
 
 Reconcile ticket 14 using its unique default-branch closing commit, or ask for the commit when the evidence is not unique.
 
-**/orchestrate reconcile #14 --commit 71ec0de**
+**/orchestrate reconcile #14 --commit=71ec0de**
 
 Reconcile ticket 14 to an explicitly named completion commit after verifying it is on the default branch.
 

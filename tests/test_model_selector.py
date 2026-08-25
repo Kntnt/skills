@@ -2844,6 +2844,45 @@ def test_observation_cli_writes_only_the_artifact_the_caller_named(
         assert "Traceback" not in refused.stderr
 
 
+def test_observation_cli_accepts_the_attached_spelling_its_skill_body_writes(
+    tmp_path: Path,
+) -> None:
+    """The engine parses the one flag spelling the Skill body prescribes."""
+
+    # Take the two command lines from the Skill body instead of restating them.
+    body = _read("SKILL.md")
+    assert "observe <path> --artifact=<path>" in body
+    assert "record <path> --data=<directory>" in body
+
+    # Emit through the process seam with the attached spelling.
+    script = str(MODEL_SELECTOR / "scripts" / "observations.py")
+    attempts = tmp_path / "attempts.json"
+    attempts.write_text(json.dumps(_attempts()), encoding="utf-8")
+    artifact = tmp_path / "scratch" / "observations.json"
+    emitted = subprocess.run(
+        ["uv", "run", script, "observe", str(attempts), f"--artifact={artifact}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert emitted.returncode == 0, emitted.stdout
+    assert json.loads(emitted.stdout)["artifact"] == str(artifact)
+
+    # Import the emitted artifact with the attached spelling as well.
+    data = tmp_path / "data"
+    imported = subprocess.run(
+        ["uv", "run", script, "record", str(artifact), f"--data={data}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert imported.returncode == 0, imported.stdout
+    report = json.loads(imported.stdout)
+    assert report["verb"] == "record"
+    assert len(report["accepted"]) == 1
+    assert (data / "run-observations.jsonl").exists()
+
+
 def test_observation_contract_is_public_sanitized_and_never_auto_imported() -> None:
     """A routed caller can emit evidence, and only the user imports it."""
 

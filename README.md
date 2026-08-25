@@ -40,7 +40,7 @@ The Manager detects Harnesses afresh on every run. When it changes a layer, it w
 |---|---|
 | `/kntnt` | Show Manager help |
 | `/kntnt select [--project]` | Inspect the Catalog and change what is Enabled |
-| `/kntnt select --on <skill> --yes` | Enable a named Skill without opening the list |
+| `/kntnt select --on=<skill> --yes` | Enable a named Skill without opening the list |
 | `/kntnt update [--project]` | Refresh the Manager and Enabled Skills whose files differ, remove Withdrawn Skills, report new Skills and re-check Dependencies |
 | `/kntnt uninstall` | Remove Global Skills and then the Manager; leave Project copies alone |
 
@@ -83,7 +83,7 @@ Check whether tickets can be built unattended before a run begins. Each ticket i
 
 ### orchestrate
 
-Work the tracker's `ready-for-agent` tickets in Dependency waves on the current branch. Orchestrate preflights each execution role through model-selector's frozen public route Interface, while independent verdicts inherit the complete main seat. Each ticket is claimed, built by a subagent and independently verified, and every outcome is recorded on its ticket. Attempts an independent verdict judged are reported as an importable model-selector artifact in the run's own scratch, which nothing imports on the developer's behalf. The run neither pushes nor releases. Run it for all ready tickets, named tickets or the children of a spec with `/orchestrate [#ticket-or-spec ...] [--dry-run] [--at-once N] [--model NAME] [--deliberation low|medium|high|xhigh|max] [--yes]`. Where a failed or conflicted ticket was finished by hand afterwards, `/orchestrate reconcile #<ticket> [--commit <commit>] [--yes]` records that without rewriting the attempt.
+Work the tracker's `ready-for-agent` tickets in Dependency waves on the current branch. Orchestrate preflights each execution role through model-selector's frozen public route Interface, while independent verdicts inherit the complete main seat. Each ticket is claimed, built by a subagent and independently verified, and every outcome is recorded on its ticket. Attempts an independent verdict judged are reported as an importable model-selector artifact in the run's own scratch, which nothing imports on the developer's behalf. The run neither pushes nor releases. Run it for all ready tickets, named tickets or the children of a spec with `/orchestrate [#ticket-or-spec ...] [--dry-run] [--at-once=N] [--model=NAME] [--deliberation=low|medium|high|xhigh|max] [--yes]`. Where a failed or conflicted ticket was finished by hand afterwards, `/orchestrate reconcile #<ticket> [--commit=<commit>] [--yes]` records that without rewriting the attempt.
 
 ### write
 

@@ -761,12 +761,12 @@ def test_amend_recovery_uses_the_recorded_phase_without_minting_an_attempt() -> 
     assert "`amends_spent`" in step
     assert "`amend_state`" in step
     assert "`attempt`" in step
-    assert "--attempt <1-or-2>" in step
-    assert "--phase building" in step
-    assert "--phase verifying" in step
-    assert "--phase passed" in step
-    assert "--phase failed" in step
-    assert "--verdict-file <path>" in step
+    assert "--attempt=<1-or-2>" in step
+    assert "--phase=building" in step
+    assert "--phase=verifying" in step
+    assert "--phase=passed" in step
+    assert "--phase=failed" in step
+    assert "--verdict-file=<path>" in step
     assert "`newly_recorded` false" in step
     assert "resume that recorded attempt" in step
     assert "Never call `amend` with a different attempt for the same verdict" in step
@@ -1230,7 +1230,7 @@ def test_the_build_step_routes_a_discovered_edge_to_the_blocked_outcome() -> Non
         f" ticket carries is a question parked under ADR-0070 (ADR-0073)."
     )
     assert "a ticket without a done Ticket Resolution is an edge" in step
-    assert "--outcome blocked" in step, (
+    assert "--outcome=blocked" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 routes a discovered dependency to the"
         f" engine's blocked outcome, which writes the corrected edge rather"
         f" than a failure (ADR-0073)."
@@ -1827,7 +1827,7 @@ def test_the_manpage_model_entry_locks_one_dimension_and_no_verdict() -> None:
     """The flag narrows to its own dimension; the other stays automatic."""
 
     where = SKILL / "help.md"
-    model_entry = _manpage_entry("OPTIONS", "**--model**")
+    model_entry = _manpage_entry("OPTIONS", "**--model=**")
 
     assert "Lock only the building model dimension" in model_entry, (
         f"{where}: the `--model` entry says what naming a model does now — it"
@@ -1854,7 +1854,7 @@ def test_the_manpage_deliberation_entry_takes_the_five_portable_levels() -> None
     """The portable scale is exactly five values, and a sixth is refused."""
 
     where = SKILL / "help.md"
-    entry = _manpage_entry("OPTIONS", "**--deliberation**")
+    entry = _manpage_entry("OPTIONS", "**--deliberation=**")
 
     assert "Lock only the building deliberation dimension" in entry, (
         f"{where}: the `--deliberation` entry locks the deliberation dimension"

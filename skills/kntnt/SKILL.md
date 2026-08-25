@@ -2,7 +2,7 @@
 name: kntnt
 description: Manage this collection — which skills are Enabled, in Global and in each Project.
 disable-model-invocation: true
-argument-hint: "[help [command]] | select [--on <skill>] [--off <skill>] [--project[=on|off]] [--yes] [--dry-run] | update [--project[=on|off]] [--yes] [--dry-run] | uninstall [--yes] [--dry-run] [-- <instruction>]"
+argument-hint: "[help [command]] | select [--on=<skill>] [--off=<skill>] [--project[=on|off]] [--yes] [--dry-run] | update [--project[=on|off]] [--yes] [--dry-run] | uninstall [--yes] [--dry-run] [-- <instruction>]"
 compatibility: Requires uv, and npx plus network access for the transport and the Catalog fetch
 ---
 
@@ -25,7 +25,7 @@ If the arguments are `help`, `--help`, `-h`, `help <command>`, `<subcommand> --h
 ## Arguments
 
 - no args / `help` `[command]` — Help for the manager or one of its verbs. Bare `/kntnt` means Help.
-- `select` `[--on <skill>]` `[--off <skill>]` `[--project]` `[--yes]` `[--dry-run]` — Select: print the Catalog as a list, answer for a row the user asks to read in full, and take the answer. `--on` and `--off` name skills instead, as often as there are names, and open no list; `--yes` with neither opens none either and only puts what is already Enabled into good order.
+- `select` `[--on=<skill>]` `[--off=<skill>]` `[--project]` `[--yes]` `[--dry-run]` — Select: print the Catalog as a list, answer for a row the user asks to read in full, and take the answer. `--on` and `--off` name skills instead, as often as there are names, and open no list; `--yes` with neither opens none either and only puts what is already Enabled into good order.
 - `update` `[--project]` `[--yes]` `[--dry-run]` — refresh this collection, then re-check Dependencies.
 - `uninstall` `[--yes]` `[--dry-run]` — remove this collection from this machine, the Manager last.
 
