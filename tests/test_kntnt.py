@@ -4204,6 +4204,156 @@ def test_proofread_delivers_through_the_shared_output_contract() -> None:
     )
 
 
+# The language-independent half of objective correctness, beside the contract a
+# first draft is written against and the catalogue of machine-sounding prose.
+# Proofread reads none of its siblings and this one by name (ADR-0121).
+MECHANICS = EDITORIAL / "mechanics.md"
+
+# The directory the mechanics scopes live in, and the rule each of them used to
+# close with on its own. Three copies of one sentence is one rule that can come
+# to disagree with itself, and the copy that decides a case the shared contract
+# now names as an error is the disagreement (issue #125).
+LANGUAGE_RESOURCES = (
+    REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "languages"
+)
+VARIANT_RULE = "the text's own choice stands"
+
+# The conditional the shared contract turns a clause boundary on, and the
+# correction it names. Both are pinned: a rule stated unconditionally would
+# start correcting a construction the authorities in both shipped languages
+# accept, and a correction that may reach past the joint is a rewrite.
+BOUNDARY_RULE = (
+    "an error where the second does not explain, specify, restate, or stand in"
+    " direct contrast to the first"
+)
+BOUNDARY_EXCEPTION = "not an error where"
+MINIMUM_CORRECTION = (
+    "becomes a period or a semicolon",
+    "nothing else about the sentence moves",
+)
+
+
+def test_the_collection_library_carries_the_shared_mechanics_contract() -> None:
+    """Objective correctness has a language-independent half, and it has a home.
+
+    Both shipped languages' authorities draw the clause-boundary line the same
+    way and differ only in how strictly they default, so the rule is not
+    language-specific and a scope is the wrong place for it: written once per
+    language it is a rule that can disagree with itself, and written nowhere it
+    is decided by whoever is reading (ADR-0121, issue #125).
+    """
+
+    assert MECHANICS.is_file(), (
+        f"{MECHANICS}: the rules of objective correctness that do not depend on"
+        f" the language are stated once, beside the contract a draft is written"
+        f" against, rather than once in every Language Resource (ADR-0121)."
+        f" See {STANDARD}."
+    )
+
+    text = MECHANICS.read_text(encoding="utf-8")
+
+    assert BOUNDARY_RULE in text, (
+        f"{MECHANICS}: the contract states no conditional for a comma joining"
+        f" two main clauses, so the joint is judged by whoever is reading."
+        f" Whether the clauses cohere is what decides it (ADR-0121). See"
+        f" {STANDARD}."
+    )
+    assert BOUNDARY_EXCEPTION in text, (
+        f"{MECHANICS}: the contract names the error and not the accepted case,"
+        f" which is how a mechanical pass starts correcting the"
+        f" negative-positive contrast both shipped languages accept"
+        f" (ADR-0121). See {STANDARD}."
+    )
+    for phrase in MINIMUM_CORRECTION:
+        assert phrase in text, (
+            f"{MECHANICS}: the minimum safe correction is a change at the joint"
+            f" alone, and {phrase!r} is not in the contract. A correction free"
+            f" to reach past the joint is a rewrite (ADR-0121). See {STANDARD}."
+        )
+
+
+def test_proofread_reads_the_shared_mechanics_contract_and_no_other() -> None:
+    """One document is admitted by name, and the exclusion is otherwise intact.
+
+    Proofread loads the resolved language's mechanics scope and this contract,
+    and the two together are that run's rules. Everything else in the editorial
+    set belongs to the Skills contracted to apply it, and a mechanical pass
+    holding the wider contract is one round away from applying it (ADR-0087,
+    ADR-0112, ADR-0121).
+    """
+
+    text = PROOFREAD.read_text(encoding="utf-8")
+
+    assert "$LIBRARY/references/editorial/mechanics.md" in text, (
+        f"{PROOFREAD}: the body never reaches the shared mechanics contract, so"
+        f" the rules of objective correctness that do not depend on the"
+        f" language reach a run only where some language happens to restate"
+        f" them (ADR-0121). See {STANDARD}."
+    )
+
+    for pointer in (
+        "editorial/base.md",
+        "editorial/base.review.md",
+        "editorial/anti-slop.md",
+        "editorial/genres/",
+        "editorial/techniques/",
+    ):
+        assert pointer not in text, (
+            f"{PROOFREAD}: the body reaches `{pointer}`, which is editorial"
+            f" guidance this Skill is contracted not to apply. One document is"
+            f" admitted by name and nothing else is (ADR-0112, ADR-0121). See"
+            f" {STANDARD}."
+        )
+
+
+def test_the_established_variant_rule_is_stated_once_for_every_language() -> None:
+    """A rule written three times is a rule that can disagree with itself.
+
+    Each shipped mechanics scope used to close by saying that where several
+    forms are established the text's own choice stands, and Proofread's own
+    body said it a fourth time. That sentence is what kept a comma splice
+    standing on four independent runs, so it is stated once, where it can be
+    worded not to reach an error the contract names (ADR-0121, issue #125).
+    """
+
+    contract = MECHANICS.read_text(encoding="utf-8")
+
+    assert VARIANT_RULE in contract, (
+        f"{MECHANICS}: the shared contract does not say that where several"
+        f" forms are established the text's own choice stands, so the rule the"
+        f" Language Resources no longer carry is stated nowhere (ADR-0121)."
+        f" See {STANDARD}."
+    )
+    assert "preserves nothing the rules in hand name as an error" in contract, (
+        f"{MECHANICS}: the rule is stated without the limit that keeps it from"
+        f" reaching an error the contract itself names, which is the reading"
+        f" that left the splice standing (ADR-0121, issue #125). See"
+        f" {STANDARD}."
+    )
+
+    resources = [
+        path
+        for path in sorted(LANGUAGE_RESOURCES.glob("*.md"))
+        if path.name != "README.md"
+    ]
+
+    # A renamed directory would leave the loop below judging nothing.
+    assert resources
+
+    restating = [
+        str(path.relative_to(REPO_ROOT))
+        for path in resources + [PROOFREAD]
+        if VARIANT_RULE in path.read_text(encoding="utf-8")
+    ]
+    assert restating == [], (
+        f"{restating}: the rule the shared mechanics contract holds is stated"
+        f" here as well. A rule enters a scope because the language genuinely"
+        f" differs or because the generic rule was observed to fail there, and"
+        f" a rule written twice is a rule that can disagree with itself"
+        f" (ADR-0087, ADR-0121). See {STANDARD}."
+    )
+
+
 # The Skill this wave's editorial review ships as, read at the one seam a test
 # has: the body is the whole of what the agent executes (ADR-0046).
 REDLINE = REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md"

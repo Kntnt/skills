@@ -41,7 +41,7 @@ The criterion identifiers are stable across entries: `trigger` (the Skill starte
   - `effects` — `pass` — the inventory is identical before and after.
 - **unresolved findings** — none.
 - **defects filed** — #125.
-- **notes** — the comma splice the fixture plants in *The bug were not in the parsing at all, it was in a silent retry* was left, and named in the reply as a preference rather than an error. Every other run over this fixture did the same, for the same stated reason. That is the defect filed as #125; it is recorded here rather than absorbed by softening this entry.
+- **notes** — the comma in *The bug were not in the parsing at all, it was in a silent retry* was left, and named in the reply as a preference rather than an error. Every other run over this fixture did the same, for the same stated reason. That was filed as the defect #125, on the corpus's premise that the sentence carried a planted comma splice. It did not: checked against Garner, the Chicago Manual's Q&A, and Språkrådet, the negative-positive joint is accepted usage in both shipped languages, and the retention and the reason given for it were both correct. #125 was rewritten to say so, and what it built is the written rule the runs had none of — the entry stands as it was judged, and the defect it names was the corpus's, not the Skill's.
 
 ## `flawed-en-US` (In-place Editing)
 
@@ -58,7 +58,7 @@ The criterion identifiers are stable across entries: `trigger` (the Skill starte
   - `effects` — `pass` — exactly one file changed, and it is the one named.
 - **unresolved findings** — none.
 - **defects filed** — none.
-- **notes** — the comma splice is untouched here too; see #125.
+- **notes** — that same comma is untouched here too, correctly; see the note on the entry above and #125.
 
 ## `flawed-sv`
 
