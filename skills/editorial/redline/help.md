@@ -54,7 +54,7 @@ The language or locale whose editorial guidance applies. It accepts a canonical 
 
 **--max**=*N*
 
-The Correction Budget: how many substantive corrections the review may delegate. It takes a non-negative integer, and this release accepts `0` alone, which is also the default. A negative, non-integral, or otherwise malformed value is refused, and so is a positive one, which asks for correction this release does not perform.
+The Correction Budget: how many substantive corrections the review may delegate. It takes a non-negative integer, and this release accepts `0` alone, which is also the default. A negative, non-integral, or otherwise malformed value is refused, and so is a positive one, which asks for correction this release does not perform. What a budget counts, once there is one to spend, is corrections and only corrections: a re-read that verifies a correction spends none of it, and neither does the closing mechanical pass, which changes no substance. A budget is a ceiling rather than a quota, so a review with no findings left stops there rather than spending what remains.
 
 **--output**=*TARGET*
 

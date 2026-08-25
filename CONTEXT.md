@@ -39,7 +39,7 @@ Optional metadata carried with a Text Artifact that records the resolved genre, 
 _Avoid_: required frontmatter, source brief, invocation cache
 
 **Correction Budget**:
-The maximum number of subagent corrections Redline may apply after its initial review. A review that verifies a correction and the final Proofread pass spend none of the budget, and Redline stops early when no findings remain.
+The maximum number of subagent corrections Redline may apply after its initial review. What a budget counts, and what spends none of it, is stated in that Skill's own shipped documents.
 _Avoid_: iteration count, review count, retry limit
 
 **Output Target**:
