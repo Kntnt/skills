@@ -4,7 +4,9 @@ Give this to a subagent started fresh for one correction, filled in from the run
 
 `<text>` is the current Text Artifact pasted whole — the text as it stands after every correction so far, never the text as it arrived and never an extract of it. `<findings>` is every finding of the most recent review, in the order it was recorded, each pasted whole under the same rule. `<genre>`, `<technique>` and `<language>` are the values the run resolved, written as the resources are named; write `none` for `<technique>` where no technique was resolved, and drop the sentence naming its resource with it. `<library>` is the Collection Library path this run resolved.
 
-Tell the subagent nothing else. Not what an earlier round found, not what an earlier correction attempted, not which findings you think matter most, and not your reading of what the text is trying to do — that reading is the thing a fresh subagent is dispatched to be without. Where writing the filled-in brief to a file and telling the subagent to read it costs less than repeating it, do that instead; what matters is that the brief is the whole of what reaches it.
+Tell the subagent nothing else. Not what an earlier round found, not what an earlier correction attempted, not which findings you think matter most, and not your reading of what the text is trying to do — that reading is the thing a fresh subagent is dispatched to be without.
+
+Hand the filled-in brief to the subagent directly, as the whole of its instruction, and hand it over no other way. Never write it to a file and send a path in its place: this brief holds the user's text entire and every finding standing against it, and a file is a name some other process can read, replace, or delete for as long as the round lasts. A long text makes a long brief, and a long brief is passed whole anyway — trimming it, summarising it, and pointing at it are the three things this brief exists to rule out.
 
 ---
 

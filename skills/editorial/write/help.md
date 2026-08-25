@@ -60,6 +60,8 @@ A recognized Kntnt map is the reserved `kntnt` key and its `genre`, `technique`,
 
 Every claim in the draft is supported by the supplied material, and attribution, uncertainty, scope, chronology, and causality are preserved. Nothing is added because it would round the text off.
 
+A length the brief asks for is a constraint on how much of the material to use, not a licence to add to it. Where the material cannot fill it, the draft comes back at the length the material supports and the reply says what further material would close the gap.
+
 Inside a direct quotation, spoken syntax, fillers, and searching repetition may be repaired. Meaning, stance, certainty, distinctive wording, and a speaker's own self-correction may not, and nothing is added. Where fidelity is uncertain, the draft paraphrases with careful attribution instead of assembling a quotation that sounds better than the material supports.
 
 Whether a quoted person has approved their quotation is a human arrangement. Nothing here verifies it or stands in for it.
