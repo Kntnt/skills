@@ -258,12 +258,25 @@ DELIBERATION_LEVELS = ("low", "medium", "high", "xhigh", "max")
 # finds its way back to the role and the ticket it was made for. The names are
 # this Skill's own — it writes the requests — and the engine reads them so a
 # claim, an amend, and the account can each ask whether the thing about to run
-# was routed at all.
+# was routed at all. A wave's fix carries one further name beside its own, for
+# the single escalated round a changed-nothing fix buys (ADR-0110).
 ROUTE_REQUEST = re.compile(
     r"^(?:(?P<role>build|repair|rebuild)-(?P<ticket>\d+)"
     r"|amend-(?P<amended>\d+)-(?P<attempt>\d+)"
-    r"|wave-fix-(?P<wave>\d+))\Z"
+    r"|wave-fix-(?P<wave>\d+)(?P<escalated>-escalated)?)\Z"
 )
+
+# What that further decision is named: the wave's own fix request with this
+# suffix. There is exactly one such name per wave and no name at all for a
+# second, and the engine refuses a second under it, the escalation being one
+# round rather than a ladder (ADR-0110).
+WAVE_FIX_ESCALATION = "-escalated"
+
+# The stable reason model-selector inherits under where no complete adapter on
+# the active Harness can express a safe point. A run every one of whose
+# decisions came back that way has one fact about its Harness rather than one
+# fact per ticket, and says it once (ADR-0110).
+INHERITED_FOR_NO_ADAPTER = "unavailable_selection_controls"
 
 # Where a run keeps the routed attempts an external verdict has judged, and
 # where the sanitized artifact model-selector makes of them is written. Both
@@ -987,9 +1000,38 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
         "main_seat": routing.main_seat,
         "model": routing.model,
         "deliberation": routing.deliberation,
+        "routing_capability": routing_capability(routing.decisions),
         "snapshot": routing.snapshot,
         "decisions": [asdict(record) for record in routing.decisions],
     }
+
+
+def routing_capability(records: list[RouteRecord]) -> str | None:
+    """Return the one routing fact a whole run shares, or None where it has none.
+
+    Where the frozen context leaves no complete adapter that can express a safe
+    point, every building role decided under it inherits the main seat, and
+    every later one will too — the context is frozen for the night. That is one
+    fact about the Harness rather than one fact per ticket, so it is stated
+    once, before the run, instead of being decoded from a dozen identical
+    inheritance reasons in the account after it (ADR-0110).
+    """
+
+    if not records:
+        return None
+
+    for record in records:
+        decision = record.decision
+        if str(decision.get("status")) != ROUTE_INHERIT:
+            return None
+        inherited = cast(dict[str, Any], decision.get("inheritance") or {})
+        if str(inherited.get("reason")) != INHERITED_FOR_NO_ADAPTER:
+            return None
+
+    return (
+        "no complete adapter on this Harness can express a safe point, so every "
+        "building role this run launches inherits the main seat"
+    )
 
 
 def frozen_routing(
@@ -2623,6 +2665,7 @@ def emit_route(
         {
             "verb": "route",
             "snapshot_identity": identity,
+            "routing_capability": routing_capability(records),
             "decisions": [asdict(record) for record in records],
             "refused": refusals,
         }
@@ -2717,6 +2760,49 @@ def batch_refusal(state: RunState, records: list[RouteRecord]) -> str | None:
     )
 
 
+def escalated_wave(request_id: str) -> str | None:
+    """Return the wave whose fix round *request_id* escalates, or None."""
+
+    named = ROUTE_REQUEST.match(request_id)
+    if named is None or not named["escalated"]:
+        return None
+    return str(named["wave"])
+
+
+def escalation_refusal(routing: Routing, records: list[RouteRecord]) -> str | None:
+    """Return why an escalated wave fix may not be frozen, or None where it may.
+
+    A changed-nothing fix round under a selected configuration buys exactly one
+    further decision, because the inference the stop rests on — no fix the
+    fixer could make means the finding was never mechanical — is restored the
+    moment the fixer holds the main seat. Both halves of that bound are asked
+    here rather than left to the step that describes them: an escalation
+    follows a round this run actually routed, and it happens once (ADR-0110).
+    """
+
+    held = [record.request_id for record in routing.decisions]
+    for record in records:
+        wave = escalated_wave(record.request_id)
+        if wave is None:
+            continue
+
+        if f"wave-fix-{wave}" not in held:
+            return (
+                f"{record.request_id} escalates a fix round this run never "
+                f"routed: an escalation carries the wave-fix-{wave} round it "
+                "follows as its verified failure"
+            )
+        if record.request_id in held:
+            return (
+                f"{record.request_id} stands in this run's frozen routing "
+                "already: a changed-nothing fix round buys exactly one further "
+                "decision, and a second changed-nothing round stops the run"
+            )
+        held.append(record.request_id)
+
+    return None
+
+
 def cmd_route(
     cwd: Path,
     response: Path,
@@ -2789,6 +2875,9 @@ def cmd_route(
         relocked := locks_refusal(routing, model, deliberation, "this response")
     ) is not None:
         return fail(relocked)
+
+    if (escalated := escalation_refusal(routing, records)) is not None:
+        return fail(escalated)
 
     routing.decisions.extend(records)
     try:
