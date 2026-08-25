@@ -134,4 +134,4 @@ The current Harness must be able to spawn subagents. The Skill asks the Harness 
 
 ## SEE ALSO
 
-**/delegation on --help**, **/delegation off --help**, **/delegation status --help**, **/tldr --help**, **/kntnt select**
+**/delegation on --help**, **/delegation off --help**, **/delegation status --help**, **/brief --help**, **/kntnt select**

@@ -65,7 +65,7 @@ _Avoid_: prompt, context
 
 **Contextual Instruction**:
 Optional natural-language guidance that accompanies a Formal Invocation without becoming part of its grammar. It may clarify or narrow choices within the Skill's contract and overrides older conversational preferences within those choices, but cannot contradict or widen the contract and may be omitted when the conversation already carries the needed context.
-_Avoid_: brief, prose argument, extra arguments
+_Avoid_: prose argument, extra arguments
 
 **Conversation Context**:
 The surrounding session material available to the agent independently of the current Invocation Envelope. Applicable guidance may inform Skill execution under the same contract boundaries as a Contextual Instruction without becoming part of either the Formal Invocation or the Contextual Instruction.
