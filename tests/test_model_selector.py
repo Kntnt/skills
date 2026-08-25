@@ -203,6 +203,33 @@ def _automatic_low_snapshot() -> dict[str, Any]:
     return snapshot
 
 
+def _carried_control_snapshot() -> dict[str, Any]:
+    """Provide a seam that selects the model and inherits the deliberation.
+
+    The frozen main seat carries a native value no configured control mapping
+    supplies, so a decision holding that value can only have resolved it from
+    the seat itself rather than from the point it launches.
+    """
+
+    # Freeze an inherited main-seat control the worker point never maps.
+    snapshot = _complete_routing_snapshot()
+    seat_native = {"effort": "session-inherited"}
+    snapshot["main_seat"]["native_deliberation"] = seat_native
+
+    # Replace the addressable translation with one carried by inheritance.
+    adapter = snapshot["harness"]["adapter_specs"][0]
+    adapter["adapter_id"] = "codex-carried-subagent"
+    adapter["native_controls"] = [seat_native]
+    adapter["launch"]["native_control_flags"] = {
+        "effort": {"carried_by": "inheritance"}
+    }
+    adapter["inheritance_attestation"] = {
+        "carried_by_default": True,
+        "verified": "A subagent spawned here runs at this session's own effort.",
+    }
+    return snapshot
+
+
 def test_route_selects_an_exact_launchable_point() -> None:
     """The public seam returns a complete Harness-native launch decision."""
 
@@ -725,7 +752,11 @@ def test_route_inherits_without_a_profile_or_discriminating_evidence() -> None:
     snapshot["evidence"]["records"] = []
     snapshot["override_policy"]["cold_start"] = "inherit"
     uncertain = _load_router().route(
-        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(reversible=False, checker={"kind": "none"})],
+        }
     )["decisions"][0]
 
     # Assert both safe inheritance reasons remain explicit and distinct.
@@ -758,6 +789,193 @@ def test_route_inherits_when_automatic_execution_lacks_selection_controls() -> N
         }
         for portable in ("low", "medium", "high", "xhigh", "max")
     ]
+
+
+def test_route_launches_a_deliberation_control_the_harness_carries() -> None:
+    """A control the Harness applies by inheritance completes the exact point."""
+
+    # Route automatic execution across a seam that selects only the model.
+    decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": _carried_control_snapshot(),
+            "requests": [_request()],
+        }
+    )["decisions"][0]
+
+    # Assert the launch names the seat's exact control and emits no flag for it.
+    launch = decision["launch"]
+    assert decision["status"] == "selected"
+    assert launch["adapter_id"] == "codex-carried-subagent"
+    assert launch["native_deliberation"] == {"effort": "session-inherited"}
+    assert launch["portable_deliberation"] == "xhigh"
+    assert launch["arguments"] == {
+        "model": "worker-v2",
+        "surface": "subagent",
+        "service_tier": "standard",
+        "tools": ["shell", "apply_patch"],
+        "sandbox": "workspace-write",
+        "network": "disabled",
+    }
+
+
+def test_route_binds_carried_evidence_to_the_seat_it_resolved() -> None:
+    """The fingerprint follows the frozen seat, and evidence accrues to it."""
+
+    # Route once and feed that decision's own exact measurement back in.
+    router = _load_router()
+    snapshot = _carried_control_snapshot()
+    artifact = {
+        "schema_version": 1,
+        "context": snapshot,
+        "requests": [_request()],
+    }
+    decision = router.route(deepcopy(artifact))["decisions"][0]
+    measured = deepcopy(snapshot)
+    measured["evidence"]["records"] = [_measurement_record(decision)]
+    remeasured = router.route(
+        {"schema_version": 1, "context": measured, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Route the same point again after only the inherited seat value moved.
+    moved = deepcopy(snapshot)
+    moved_native = {"effort": "session-inherited-max"}
+    moved["main_seat"]["native_deliberation"] = moved_native
+    moved["harness"]["adapter_specs"][0]["native_controls"] = [moved_native]
+    moved_decision = router.route(
+        {"schema_version": 1, "context": moved, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Assert evidence binds to the carried configuration and only to it.
+    fingerprint = decision["launch"]["configuration_fingerprint"]
+    assert remeasured["evidence_class"] == "measurement_based"
+    assert remeasured["launch"]["configuration_fingerprint"] == fingerprint
+    assert moved_decision["launch"]["native_deliberation"] == moved_native
+    assert moved_decision["launch"]["configuration_fingerprint"] != fingerprint
+
+
+def test_route_refuses_a_carried_mapping_without_its_attestation() -> None:
+    """An unverified claim about a Harness cannot complete a point."""
+
+    # Remove only the declaring session's attestation from the same adapter.
+    snapshot = _carried_control_snapshot()
+    del snapshot["harness"]["adapter_specs"][0]["inheritance_attestation"]
+    decision = _load_router().route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Assert the mapping alone launches nothing and stays visibly unreachable.
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
+    assert "launch" not in decision
+    assert {exclusion["code"] for exclusion in decision["audit"]["exclusions"]} == {
+        "adapter_unreachable"
+    }
+
+
+def test_route_refuses_a_lock_on_a_control_inheritance_carries() -> None:
+    """A carried dimension is not one a request can lock."""
+
+    # Lock each dimension separately across the same carried seam.
+    router = _load_router()
+    snapshot = _carried_control_snapshot()
+    locked = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+    model_locked = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"model": "worker-v2"})],
+        }
+    )["decisions"][0]
+
+    # Assert the carried lock refuses while the addressable lock still selects.
+    assert locked["status"] == "refused"
+    assert locked["reason"]["code"] == "unavailable_override"
+    assert {exclusion["code"] for exclusion in locked["audit"]["exclusions"]} == {
+        "carried_control_not_selectable"
+    }
+    assert model_locked["status"] == "selected"
+    assert model_locked["launch"]["native_deliberation"] == {
+        "effort": "session-inherited"
+    }
+
+
+def test_route_escalates_no_rung_along_a_carried_control() -> None:
+    """A dimension the adapter cannot address offers no adjacency to escalate."""
+
+    # Bind an externally verified failure to the exact carried point.
+    router = _load_router()
+    snapshot = _carried_control_snapshot()
+    launch = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request()],
+        }
+    )["decisions"][0]["launch"]
+    prior = {
+        field: launch[field]
+        for field in (
+            "configuration_fingerprint",
+            "model",
+            "channel",
+            "surface",
+            "serving_mode",
+            "adapter_id",
+            "portable_deliberation",
+            "native_deliberation",
+        )
+    }
+    request = _request(
+        retry_available=True,
+        prior=prior,
+        verified_failure={
+            **prior,
+            "outcome": "failed",
+            "checker": {"kind": "external", "signal": "pytest"},
+        },
+    )
+
+    # Route the retry the caller already owns across the same seam.
+    decision = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [request]}
+    )["decisions"][0]
+
+    # Assert no rung is invented in a dimension inheritance decides.
+    assert decision["status"] == "selected"
+    assert decision["next_escalation"] is None
+
+
+def test_route_cold_starts_the_work_its_contract_promises_a_heuristic() -> None:
+    """The documented cold start runs under exactly the guards it states."""
+
+    # Decline unmeasured automatic cold starts in the frozen override policy.
+    router = _load_router()
+    snapshot = _complete_routing_snapshot()
+    snapshot["override_policy"]["cold_start"] = "inherit"
+    checked = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+    consequential = router.route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(reversible=False, checker={"kind": "none"})],
+        }
+    )["decisions"][0]
+
+    # Assert reversible checked work starts weak while the rest still inherits.
+    assert checked["status"] == "selected"
+    assert checked["evidence_class"] == "heuristic"
+    assert checked["launch"]["portable_deliberation"] == "low"
+    assert consequential["status"] == "inherit"
+    assert consequential["inheritance"]["reason"] == "insufficient_evidence"
 
 
 def test_route_refuses_a_locked_request_that_could_only_inherit() -> None:
@@ -2255,6 +2473,25 @@ def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
         "external checker or declared failure signal",
         "one adjacent portable level on the same model",
         "Cash, rolling quota, weekly quota, allocated subscription cost, and latency",
+    }
+
+    _assert_contains_all(contract, required_fragments)
+
+
+def test_route_contract_pins_the_carried_control_and_its_cold_start() -> None:
+    """A dimension inheritance decides is stated by the contract, not implied."""
+
+    contract = _read("references/model-routing.md")
+    required_fragments = {
+        "carried by inheritance",
+        "emits no launch argument",
+        "different fact from a missing mapping",
+        "inheritance_attestation",
+        "verified against what the Harness actually does",
+        "carried_control_not_selectable",
+        "no reachable adjacency",
+        "override_policy.cold_start",
+        "Reversible, objectively checked work takes the heuristic",
     }
 
     _assert_contains_all(contract, required_fragments)

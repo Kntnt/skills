@@ -22,6 +22,10 @@ COMMERCIAL_DIMENSIONS: tuple[str, ...] = (
     "latency",
 )
 
+# The one launch destination that names no flag: a native control the active
+# Harness applies to a spawned subagent from the session it inherits from.
+CARRIED_DESTINATION: dict[str, str] = {"carried_by": "inheritance"}
+
 # Share the inheritance states that require further evidence work.
 EVIDENCE_INHERITANCE_REASONS: frozenset[str] = frozenset(
     {
@@ -341,6 +345,32 @@ def _fingerprint(
     return _canonical_digest(value)
 
 
+def _is_carried(destination: Any) -> bool:
+    """Recognize the destination that names inheritance rather than a flag."""
+
+    return destination == CARRIED_DESTINATION
+
+
+def _carries_control(adapter: dict[str, Any]) -> bool:
+    """Answer whether one adapter leaves a native control to inheritance."""
+
+    return any(
+        _is_carried(destination)
+        for destination in adapter["launch"]["native_control_flags"].values()
+    )
+
+
+def _attests_inheritance(adapter: dict[str, Any]) -> bool:
+    """Require the declaring session's attestation for a carried control.
+
+    The shipped schema validates the attestation wherever one is present, so
+    a carried mapping declared without one is a claim about the Harness that
+    nobody verified, and the adapter cannot launch anything.
+    """
+
+    return "inheritance_attestation" in adapter
+
+
 def _launch_destinations_are_unique(adapter: dict[str, Any]) -> bool:
     """Prevent complete-point fields from overwriting one launch argument."""
 
@@ -348,12 +378,19 @@ def _launch_destinations_are_unique(adapter: dict[str, Any]) -> bool:
     launch = adapter.get("launch", {})
     native_flags = launch.get("native_control_flags", {})
     policy_flags = launch.get("policy_flags", {})
+    emitted_controls = [
+        destination
+        for destination in (
+            native_flags.values() if isinstance(native_flags, dict) else []
+        )
+        if not _is_carried(destination)
+    ]
     destinations = [
         launch.get("model_flag"),
         launch.get("surface_flag"),
         launch.get("serving_mode_flag"),
         launch.get("tools_flag"),
-        *(native_flags.values() if isinstance(native_flags, dict) else []),
+        *emitted_controls,
         *(policy_flags.values() if isinstance(policy_flags, dict) else []),
     ]
     return all(isinstance(value, str) and value for value in destinations) and len(
@@ -383,6 +420,10 @@ def _adapter_can_launch(
     ):
         return False
 
+    # Admit a carried destination only where its session attested the Harness.
+    if _carries_control(adapter) and not _attests_inheritance(adapter):
+        return False
+
     # Require a complete translation for every launch-relevant point field.
     launch = adapter.get("launch", {})
     native_flags = launch.get("native_control_flags", {})
@@ -405,12 +446,34 @@ def _launch_adapter(
     native: dict[str, Any],
     snapshot: dict[str, Any],
 ) -> dict[str, Any] | None:
-    """Resolve the first deterministic concrete adapter for an exact point."""
+    """Resolve the first deterministic adapter that addresses an exact point."""
 
     compatible = [
         adapter
         for adapter in snapshot["harness"]["adapter_specs"]
-        if _adapter_can_launch(adapter, point, native, snapshot)
+        if not _carries_control(adapter)
+        and _adapter_can_launch(adapter, point, native, snapshot)
+    ]
+    return min(compatible, key=lambda adapter: adapter["adapter_id"], default=None)
+
+
+def _carried_adapter(
+    point: dict[str, Any],
+    snapshot: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Resolve the adapter that launches a point at the seat's own control.
+
+    A carried control is not a dimension this module selects over, so such an
+    adapter is reachable only at the frozen main seat's exact native value and
+    never through the portable expansion an addressable adapter is matched by.
+    """
+
+    native = snapshot["main_seat"]["native_deliberation"]
+    compatible = [
+        adapter
+        for adapter in snapshot["harness"]["adapter_specs"]
+        if _carries_control(adapter)
+        and _adapter_can_launch(adapter, point, native, snapshot)
     ]
     return min(compatible, key=lambda adapter: adapter["adapter_id"], default=None)
 
@@ -435,6 +498,7 @@ def _launch_arguments(
         {
             launch["native_control_flags"][field]: value
             for field, value in native.items()
+            if not _is_carried(launch["native_control_flags"][field])
         }
     )
     arguments.update(
@@ -458,17 +522,38 @@ def _control_capability(point: dict[str, Any], portable: str) -> float:
     return float(point["control_capabilities"][portable])
 
 
+def _model_within_main_seat(point: dict[str, Any], snapshot: dict[str, Any]) -> bool:
+    """Apply the frozen model dimension of the authority ceiling on its own.
+
+    A carried deliberation control launches at the seat's own value, so the
+    model is the only dimension such a point can exceed the ceiling in.
+    """
+
+    model_ceiling = snapshot["main_seat"]["model_capability"]
+    return model_ceiling is not None and _model_capability(point) <= float(
+        model_ceiling
+    )
+
+
+def _candidate_control_capability(
+    candidate: Candidate, snapshot: dict[str, Any]
+) -> float:
+    """Read the deliberation authority one candidate actually launches under."""
+
+    if _carries_control(candidate.adapter):
+        return float(snapshot["main_seat"]["deliberation_capability"])
+    return _control_capability(candidate.point, candidate.portable)
+
+
 def _within_main_seat(
     point: dict[str, Any], portable: str, snapshot: dict[str, Any]
 ) -> bool:
     """Apply both frozen model and deliberation authority ceilings."""
 
-    main_seat = snapshot["main_seat"]
-    model_ceiling = main_seat["model_capability"]
-    deliberation_ceiling = main_seat["deliberation_capability"]
-    if model_ceiling is None or deliberation_ceiling is None:
+    deliberation_ceiling = snapshot["main_seat"]["deliberation_capability"]
+    if deliberation_ceiling is None:
         return False
-    return _model_capability(point) <= float(model_ceiling) and _control_capability(
+    return _model_within_main_seat(point, snapshot) and _control_capability(
         point, portable
     ) <= float(deliberation_ceiling)
 
@@ -555,6 +640,47 @@ def _candidate_pool(request: dict[str, Any], snapshot: dict[str, Any]) -> Candid
                 )
             )
             variant_exclusion_codes.append("mapping_unavailable")
+            continue
+
+        # Refuse to let a request lock a dimension inheritance decides.
+        carried = _carried_adapter(point, snapshot)
+        if carried is not None and portable_lock is not None:
+            exclusions.append(
+                _exclusion(
+                    "carried_control_not_selectable",
+                    "The active Harness carries this deliberation control by "
+                    "inheritance.",
+                    point,
+                    portable_lock,
+                )
+            )
+            variant_exclusion_codes.append("carried_control_not_selectable")
+            continue
+
+        # Resolve a carried control from the frozen main seat rather than
+        # expanding a dimension this seam cannot address.
+        if carried is not None:
+            main_seat = snapshot["main_seat"]
+            carried_portable = cast(str, main_seat["portable_deliberation"])
+            if not _model_within_main_seat(point, snapshot):
+                exclusions.append(
+                    _exclusion(
+                        "above_main_seat_ceiling",
+                        "The complete point exceeds the frozen main seat.",
+                        point,
+                        carried_portable,
+                    )
+                )
+                variant_exclusion_codes.append("above_main_seat_ceiling")
+                continue
+            candidates.append(
+                Candidate(
+                    point,
+                    carried_portable,
+                    main_seat["native_deliberation"],
+                    carried,
+                )
+            )
             continue
 
         # Evaluate only the locked value or each mapped value in scale order.
@@ -1129,7 +1255,7 @@ def _resolve_selection_policy(
         evidence_pool.unknown,
         key=lambda item: (
             _model_capability(item.point),
-            _control_capability(item.point, item.portable),
+            _candidate_control_capability(item, snapshot),
             PORTABLE_LEVELS.index(item.portable),
         ),
     )
@@ -1280,6 +1406,15 @@ def _audit(
     }
 
 
+def _is_objectively_checked(request: dict[str, Any]) -> bool:
+    """Recognize reversible work whose failure an independent signal catches."""
+
+    return request["reversible"] and request["checker"]["kind"] in {
+        "external",
+        "declared",
+    }
+
+
 def _escalation(
     request: dict[str, Any],
     candidate: Candidate,
@@ -1309,15 +1444,19 @@ def _escalation(
 
     # Suppress any retry not granted, checked, failed, and exactly matched.
     if (
-        not request.get("reversible")
+        not _is_objectively_checked(request)
         or request.get("retry_available") is not True
-        or checker.get("kind") not in {"external", "declared"}
         or not failure
         or failure.get("outcome") != "failed"
         or failure.get("checker") != checker
         or any(prior.get(field) != value for field, value in exact_attempt.items())
         or any(failure.get(field) != value for field, value in exact_attempt.items())
     ):
+        return None
+
+    # Move only along a dimension this adapter addresses: a control the
+    # Harness carries has no adjacency, the seat alone deciding its value.
+    if _carries_control(adapter):
         return None
 
     # Resolve one adjacent supported point beneath the main-seat ceiling.
@@ -1515,6 +1654,18 @@ def _execution_decision(
     ):
         return _refused(request, snapshot, "above_main_seat_ceiling")
 
+    # Name a lock on a dimension inheritance decides rather than an empty set.
+    if not pool.candidates and set(pool.variant_exclusion_codes) == {
+        "carried_control_not_selectable"
+    }:
+        return _refused(
+            request,
+            snapshot,
+            "unavailable_override",
+            "The active Harness carries this deliberation control by inheritance.",
+            list(pool.exclusions),
+        )
+
     # Preserve automatic fresh-context delegation when controls are unavailable.
     if not pool.candidates:
         if (
@@ -1539,11 +1690,14 @@ def _execution_decision(
             list(pool.exclusions),
         )
 
-    # Honor a frozen policy that declines unmeasured automatic cold starts.
+    # Honor a frozen policy that declines unmeasured automatic cold starts,
+    # except for the reversible objectively checked work whose failure the
+    # caller's own checker catches and whose start the contract promises.
     if (
         not snapshot["evidence"].get("records")
         and not overrides
         and snapshot["override_policy"].get("cold_start") != "select"
+        and not _is_objectively_checked(request)
     ):
         return _inherit(request, snapshot, "insufficient_evidence")
 

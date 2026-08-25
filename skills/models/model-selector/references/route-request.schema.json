@@ -175,6 +175,24 @@
       },
       "additionalProperties": false
     },
+    "carried_destination": {
+      "type": "object",
+      "required": ["carried_by"],
+      "properties": {"carried_by": {"const": "inheritance"}},
+      "additionalProperties": false
+    },
+    "control_destination": {
+      "oneOf": [{"$ref": "#/$defs/non_empty_string"}, {"$ref": "#/$defs/carried_destination"}]
+    },
+    "inheritance_attestation": {
+      "type": "object",
+      "required": ["carried_by_default", "verified"],
+      "properties": {
+        "carried_by_default": {"const": true},
+        "verified": {"$ref": "#/$defs/non_empty_string"}
+      },
+      "additionalProperties": false
+    },
     "launch_translation": {
       "type": "object",
       "required": ["model_flag", "surface_flag", "serving_mode_flag", "native_control_flags", "tools_flag", "policy_flags"],
@@ -182,7 +200,7 @@
         "model_flag": {"$ref": "#/$defs/non_empty_string"},
         "surface_flag": {"$ref": "#/$defs/non_empty_string"},
         "serving_mode_flag": {"$ref": "#/$defs/non_empty_string"},
-        "native_control_flags": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/non_empty_string"}},
+        "native_control_flags": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/control_destination"}},
         "tools_flag": {"$ref": "#/$defs/non_empty_string"},
         "policy_flags": {"type": "object", "additionalProperties": {"$ref": "#/$defs/non_empty_string"}}
       },
@@ -201,7 +219,8 @@
         "native_controls": {"type": "array", "items": {"$ref": "#/$defs/native_control"}},
         "tool_sets": {"type": "array", "items": {"$ref": "#/$defs/string_array"}},
         "policies": {"type": "array", "items": {"$ref": "#/$defs/policy"}},
-        "launch": {"$ref": "#/$defs/launch_translation"}
+        "launch": {"$ref": "#/$defs/launch_translation"},
+        "inheritance_attestation": {"$ref": "#/$defs/inheritance_attestation"}
       },
       "additionalProperties": false
     },
