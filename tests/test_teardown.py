@@ -79,9 +79,9 @@ def test_a_skill_declaring_no_integration_is_not_run_at_all(tmp_path: Path) -> N
     manager = _manager()
     layer = tmp_path / "skills"
     layer.mkdir()
-    _skill(layer, "tldr", integrations=None)
+    _skill(layer, "brief", integrations=None)
 
-    assert manager.teardown_integrations(["tldr"], [layer]) == []
+    assert manager.teardown_integrations(["brief"], [layer]) == []
 
 
 def test_a_teardown_that_fails_is_reported_and_never_fatal(tmp_path: Path) -> None:

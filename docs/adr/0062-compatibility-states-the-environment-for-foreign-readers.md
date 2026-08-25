@@ -8,4 +8,4 @@ The Agent Skills specification defines `compatibility` as the field a skill stat
 
 **No `compatibility` names a harness product.** The specification's own example is *Designed for Claude Code (or similar products)*, and that is exactly what this collection is not: one set across many harnesses (ADR-0005, ADR-0008). Where a skill needs something of the harness it names the Capability rather than the product that has it (ADR-0030) — `/delegation` and `/orchestrate` say `subagents` — so the field stays true wherever the collection is installed.
 
-**The mirror rule of ADR-0012 holds here.** `/tldr` has no binary, no Capability, and no collection Dependency, so it carries no `compatibility` for the same reason it calls no checker; the day it gains a requirement it gains the field alongside it.
+**The mirror rule of ADR-0012 holds here.** `/brief` has no binary, no Capability, and no collection Dependency, so it carries no `compatibility` for the same reason it calls no checker; the day it gains a requirement it gains the field alongside it.
