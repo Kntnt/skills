@@ -32,7 +32,7 @@ The command path is the Skill name followed by the literal subcommand tokens tha
 
 Where a Skill offers the same choice as an operand and as a long-option alias, the flag spelling sits with the flags and the operand spelling with the operands, and no documented form is left ambiguous about which of the two it is using. A single form can then no longer make such a slot mandatory, because the slot appears in two regions of the line; state the exclusivity under `DIAGNOSTICS` instead. A `git`, `gh`, `uv`, or `npx` command line a body constructs keeps the order that tool documents, on the boundary ADR-0096 already draws for flag spelling.
 
-The suite reads every `argument-hint` and every `## SYNOPSIS` line and fails where a flag follows an operand, or where a subcommand token answering to a page under `help/` follows a flag. An alternation naming both spellings of one slot — `[**session**|**--session**]` — is one unit rather than a sequence, and is allowed only where everything before it is path or flag and everything after it is operand.
+The suite reads every `argument-hint` and every `## SYNOPSIS` line and fails where a flag follows an operand, or where a subcommand token answering to a page under `help/` follows a flag. An alternation naming both spellings of one slot — `[**scope**|**--scope**]` — is one unit rather than a sequence, and is allowed only where everything before it is path or flag and everything after it is operand.
 
 ## `SKILL.md`
 
