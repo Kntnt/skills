@@ -54,7 +54,7 @@ A different subagent receives the same ticket record but none of the builder's c
 
 **Integrate**
 
-Verified work is committed and integrated into the run branch. After each wave, the full Project gate runs on the combined branch and an independent coherence review checks cross-ticket facts that tests may not cover. Mechanical coherence findings are fixed by another subagent and checked again until a round is clean; a failed gate, an unresolved choice, or a fix that makes no progress stops the run.
+Verified work is committed and integrated into the run branch. After each wave, the full Project gate runs on the combined branch and an independent coherence review checks cross-ticket facts that tests may not cover. Its verdict turns on whether fixing what it found requires somebody to decide something, not on whether every gate command passed. Mechanical findings — a failing command among them, where the review states the exact correction and what already decided it — are fixed by another subagent and checked again until a round is clean. An unresolved choice, a gate failure whose correction the review cannot state, a named command still failing after the one fix round it buys, or a fix that makes no progress stops the run.
 
 **Close**
 

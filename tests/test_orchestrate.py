@@ -11,7 +11,9 @@ SKILL = REPO_ROOT / "skills" / "code" / "orchestrate"
 # Every brief this skill hands a subagent that is told to run something the
 # project gates a change on. A run interviewed for issue #75 lost more turns to
 # a suite that outlived its subagent's patience than to anything else, so each
-# of these carries the same instruction about a command that takes long.
+# of these carries the same instruction about a command that takes long. The
+# fixer is among them since a finding may carry a failing gate command's
+# determined edit and the fixer may re-run that one command (ADR-0098).
 VERIFYING_BRIEFS = (
     "brief.md",
     "verify.md",
@@ -19,13 +21,11 @@ VERIFYING_BRIEFS = (
     "repaired.md",
     "wave.md",
     "amend.md",
+    "fix.md",
 )
 
-# Every brief the skill hands out, the wave check's fixer included. The fixer
-# runs no gate — the wave check reruns it on the branch the fixer leaves — so
-# the waiting rule is not its to carry, while the confinement rule is every
-# subagent's (ADR-0072).
-ALL_BRIEFS = (*VERIFYING_BRIEFS, "fix.md")
+# Every brief the skill hands out, the wave check's fixer included.
+ALL_BRIEFS = VERIFYING_BRIEFS
 
 # Which briefs the run hands a subagent that writes a ticket's code — the
 # first build and the amend. Declared once: the invariant test quantifies
@@ -956,6 +956,17 @@ def test_the_wave_brief_reads_the_branch_for_coherence_beside_its_gate() -> None
     )
 
 
+def _verdict_shape(shape: str) -> str:
+    """One bullet of the wave brief's verdict, named by its bold opening."""
+
+    for line in _brief("wave.md").splitlines():
+        if line.startswith(f"- **{shape}.**"):
+            return line
+    raise AssertionError(
+        f"{SKILL / 'references' / 'wave.md'}: the verdict has no {shape} shape."
+    )
+
+
 def test_the_wave_briefs_verdict_has_three_shapes() -> None:
     """A clean pass, mechanical findings, or a stop — and nothing softer.
 
@@ -1002,6 +1013,253 @@ def test_the_wave_briefs_verdict_has_three_shapes() -> None:
         f" a verdict the checker is not sure of is a stop, never something"
         f" softer (ADR-0072)."
     )
+
+
+def test_the_wave_verdict_branches_on_determination_not_on_a_green_gate() -> None:
+    """The two axes are orthogonal, and one overnight run is the proof.
+
+    Two tickets forked before the sibling that settled a spelling landed, so
+    their gate lines shipped in the spelling that sibling's own check
+    forbids. The correction was two lines the settling record already
+    determined, and the check's own verdict called it mechanical — then the
+    run stopped anyway, because the mechanical verdict was admitted only on a
+    green gate. A defect both mechanical and gate-failing had no verdict to
+    fall into, and nine tickets were abandoned (ADR-0098, issue #117).
+    """
+
+    text = _brief("wave.md")
+    where = SKILL / "references" / "wave.md"
+    mechanical = _verdict_shape("Mechanical findings")
+    stop = _verdict_shape("A stop")
+
+    assert "never on whether every command passed" in text, (
+        f"{where}: the brief says what the verdict turns on — whether fixing"
+        f" what was found requires somebody to decide something — and what it"
+        f" does not turn on, a green gate (ADR-0098)."
+    )
+    assert "Every command passed" not in mechanical, (
+        f"{where}: a green gate is no longer a condition of the mechanical"
+        f" verdict. With it there, a defect that is both mechanical and"
+        f" gate-failing has no verdict to fall into (ADR-0098)."
+    )
+    mechanical_covers_both = (
+        "whether the finding came from your reading or from a failing gate command"
+    )
+    assert mechanical_covers_both in mechanical, (
+        f"{where}: the mechanical shape covers a finding from the reading and"
+        f" one from a failing gate command alike — the axis is determination,"
+        f" not where the finding came from (ADR-0098)."
+    )
+    assert "a gate failure whose correction is not so determined" in stop, (
+        f"{where}: the stop shape is the undetermined gate failure, not the"
+        f" failing command as such (ADR-0098)."
+    )
+
+
+def test_a_gate_failing_finding_is_mechanical_only_when_written_down() -> None:
+    """A constructive obligation, or the mechanical claim is a checker's word for it.
+
+    A fixer that has not read what the checker read can apply the edit only
+    where the finding names the command, states the exact correction, and
+    cites the decided thing it restates (ADR-0098).
+    """
+
+    text = _brief("wave.md")
+    where = SKILL / "references" / "wave.md"
+
+    assert "constructive obligation" in text, (
+        f"{where}: the brief names the obligation a failing command is"
+        f" reported mechanical under (ADR-0098)."
+    )
+    assert "names the failing command" in text, (
+        f"{where}: the finding names the command that failed, or the fixer"
+        f" cannot tell which failure the edit belongs to (ADR-0098)."
+    )
+    assert (
+        "the file, the symbol or surface, the text as it stands, and the text"
+        " as it must stand" in text
+    ), (
+        f"{where}: the brief says what the exact correction consists of, so"
+        f" the fixer applies it rather than deriving one (ADR-0098)."
+    )
+    assert "the decided thing the correction restates" in text, (
+        f"{where}: the finding cites what already decided the edit — the"
+        f" record, the standard, the sibling's landed work — which is the"
+        f" whole of why nobody has to decide anything (ADR-0098)."
+    )
+    assert "is not mechanical, whatever it looks like" in text, (
+        f"{where}: a gate failure the checker cannot write down in that form"
+        f" is a stop however mechanical it looks, the writing-down being the"
+        f" test rather than the impression (ADR-0098)."
+    )
+
+
+def test_a_gate_failing_finding_buys_one_fix_round() -> None:
+    """A determined fix that did not determine the outcome has been falsified.
+
+    The mechanical claim on a failing command is a claim of full
+    determination, so the command still failing after its round is the stop —
+    even after a round that changed things (ADR-0098).
+    """
+
+    text = _brief("wave.md")
+    where = SKILL / "references" / "wave.md"
+    step = _step(11)
+
+    assert "buys exactly one fix round" in text, (
+        f"{where}: the brief bounds what a finding naming a failing command"
+        f" buys — exactly one fix round to turn that command green"
+        f" (ADR-0098)."
+    )
+    assert "even after a round that changed things" in text, (
+        f"{where}: the bound holds even where the round changed things, so it"
+        f" is not the existing changed-nothing bound wearing new clothes"
+        f" (ADR-0098)."
+    )
+    assert "a new finding with its own single round" in text, (
+        f"{where}: a different command failing in a later round is a new"
+        f" finding with its own round rather than a continuation of the spent"
+        f" one (ADR-0098)."
+    )
+    assert "single-round bound" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 applies the bound the brief states"
+        f" rather than restating it — the run is what counts the rounds"
+        f" (ADR-0098)."
+    )
+
+    # The loop's existing bounds are untouched by the new one.
+    assert "a round finds nothing" in step and "a round changes nothing" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 keeps the loop's existing end and"
+        f" stop bounds beside the new one (ADR-0072, ADR-0098)."
+    )
+
+
+def test_the_re_check_is_bound_by_what_earlier_rounds_declined() -> None:
+    """Three rounds read the same forward reference; the third won by speaking last.
+
+    Two declined to report it on grounds the branch's own records state, and
+    the third had it deleted with no new fact. The dismissals came from peer
+    checkers with the same evidence, so they bind (ADR-0098, issue #117).
+    """
+
+    text = _brief("wave.md")
+    instructions = _instructions("wave.md")
+    where = SKILL / "references" / "wave.md"
+    step = _step(11)
+
+    assert "`<declined>`" in text, (
+        f"{where}: the brief carries what earlier rounds of this wave's check"
+        f" considered and declined. A round told nothing of them re-decides"
+        f" what a peer already settled (ADR-0098)."
+    )
+    assert "`<declined>`" in instructions, (
+        f"{where}: the fill-in instructions say what `<declined>` is replaced"
+        f" with — a placeholder nothing explains is handed out unfilled"
+        f" (ADR-0098)."
+    )
+    assert "with the ground" in instructions, (
+        f"{where}: each declined finding travels with the ground the earlier"
+        f" round stated, a dismissal without its ground being nothing the"
+        f" next round can weigh (ADR-0098)."
+    )
+    assert "only on grounds the earlier reading did not have" in text, (
+        f"{where}: a declined finding is re-raised only on grounds the"
+        f" earlier reading did not have (ADR-0098)."
+    )
+    assert "name those grounds in your verdict" in text, (
+        f"{where}: the new grounds are named in the verdict, so a re-raised"
+        f" finding is checkable rather than a matter of who speaks last"
+        f" (ADR-0098)."
+    )
+    assert "peer checkers" in text, (
+        f"{where}: the brief says why the dismissals bind — they came from"
+        f" peer checkers with the same evidence, so this is not a session"
+        f" grading its own work (ADR-0098)."
+    )
+    assert "`<declined>`" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 fills the re-check's `<declined>`"
+        f" from the second round on, the run being the only party that has"
+        f" the earlier rounds' verdicts (ADR-0098)."
+    )
+
+
+def test_the_fix_brief_applies_a_determined_gate_edit_and_reports_the_rerun() -> None:
+    """The fixer may touch a failed gate now, and only where the finding determined it.
+
+    It applies that edit and no repair of its own, may re-run the one named
+    command, and reports what it said — the wave check's own re-run still
+    decides (ADR-0098).
+    """
+
+    text = _brief("fix.md")
+    where = SKILL / "references" / "fix.md"
+
+    assert "Do not fix a gate failure" not in text, (
+        f"{where}: the blanket refusal is gone — a gate failure whose edit"
+        f" the finding carries is exactly what the fixer is here for"
+        f" (ADR-0098)."
+    )
+    assert "and only that edit" in text, (
+        f"{where}: the fixer applies the finding's determined edit and only"
+        f" that edit, never a repair of its own devising (ADR-0098)."
+    )
+    assert "a gate failure no finding names is not yours" in text, (
+        f"{where}: a failing command no finding carries an edit for stays"
+        f" untouched, as every defect of the fixer's own discovery does"
+        f" (ADR-0098)."
+    )
+    assert "re-run the command that finding names" in text, (
+        f"{where}: the fixer may re-run the one command the finding names —"
+        f" that one, never the gate (ADR-0098)."
+    )
+    assert "Report the result and nothing more" in text, (
+        f"{where}: the re-run is reported, never acted on: the wave check's"
+        f" own re-run is what decides (ADR-0098)."
+    )
+    assert "The coder is never the finder or tester" in text, (
+        f"{where}: the third separation is stated in words, where a coder now"
+        f" touches a failed gate (ADR-0098)."
+    )
+
+
+# The bounds the re-cut adds, each by the clause that states it. A bound lives
+# in exactly one of the surfaces below and is referenced from the others, so
+# there is no second copy to drift (ADR-0098).
+RECUT_BOUNDS = {
+    "the constructive obligation": (
+        "the file, the symbol or surface, the text as it stands, and the text"
+        " as it must stand"
+    ),
+    "the single-round bound": "buys exactly one fix round",
+    "the declined-findings bind": "only on grounds the earlier reading did not have",
+}
+
+# Every surface the run acts from, as against the record that decides. A
+# decision record states the decision by definition; these state it operationally.
+ACTING_SURFACES = (
+    SKILL / "references" / "wave.md",
+    SKILL / "references" / "fix.md",
+    SKILL / "SKILL.md",
+    SKILL / "help.md",
+)
+
+
+def test_each_recut_bound_is_stated_in_one_surface() -> None:
+    """Two briefs stating one bound is two bounds, and the run acts on the one it read."""
+
+    for bound, clause in RECUT_BOUNDS.items():
+        stating = [
+            path
+            for path in ACTING_SURFACES
+            if clause in path.read_text(encoding="utf-8")
+        ]
+
+        assert len(stating) == 1, (
+            f"{SKILL}: {bound} is stated in exactly one surface and"
+            f" referenced from the others. Stated in"
+            f" {sorted(str(path.relative_to(SKILL)) for path in stating)}"
+            f" (ADR-0098)."
+        )
 
 
 def test_the_wave_brief_still_changes_nothing_and_never_fixes() -> None:
@@ -1212,7 +1470,18 @@ def test_the_manpage_describes_the_wave_loop_and_what_stops_it() -> None:
     )
     assert "makes no progress stops the run" in entry, (
         f"{where}: the manpage says a non-progressing fix stops the run beside"
-        f" a failed gate and an unresolved choice (ADR-0072)."
+        f" an unresolved choice and an undetermined gate failure (ADR-0072,"
+        f" ADR-0098)."
+    )
+    assert "not on whether every gate command passed" in entry, (
+        f"{where}: the manpage says what the post-merge verdict turns on, a"
+        f" developer otherwise reading the old account in which any failed"
+        f" gate ends the night (ADR-0098)."
+    )
+    assert "a failed gate," not in entry, (
+        f"{where}: a failed gate is no longer a stop in itself — one whose"
+        f" correction the review can write down exactly is fixed like any"
+        f" other mechanical finding (ADR-0098)."
     )
 
 

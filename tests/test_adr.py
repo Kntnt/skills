@@ -56,6 +56,7 @@ RELATIONS = {
     ("0063", "0077"),
     ("0059", "0078"),
     ("0073", "0079"),
+    ("0072", "0098"),
 }
 
 # The flag-refusal rule and the reasoning an installed reader needs. `delegation`
@@ -204,6 +205,37 @@ def test_ticket_resolution_supersession_preserves_blocker_record_history() -> No
     # Declare the same relation from the later record for the scan in both
     # directions.
     assert "supersedes ADR-0073" in later
+
+
+def test_the_gate_failing_mechanical_recut_preserves_the_wave_check_history() -> None:
+    """The re-cut points past ADR-0072 without rewriting the world it decided in.
+
+    ADR-0072 settled that the wave check reads coherence and that its fixes
+    loop to a fixed point, both of which stand. Only its comparison of a
+    non-mechanical finding to a failed gate was outrun, by a run in which a
+    defect was mechanical and gate-failing at once (issue #117).
+    """
+
+    earlier = (
+        ADR
+        / "0072-the-wave-check-reads-coherence-and-its-fixes-loop-to-a-fixed-point.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR / "0098-a-fully-determined-fix-is-mechanical-whatever-the-gate-says.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "it stops the run exactly as a failed gate does" in earlier
+    assert "The loop runs to a fixed point" in earlier
+    assert "superseded by ADR-0098" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "supersedes ADR-0072" in later
+
+    # The road not taken is named, a fourth shape being a fourth thing two
+    # briefs can state inconsistently.
+    assert "fourth verdict shape" in later
 
 
 def test_a_pointer_names_a_later_record() -> None:
