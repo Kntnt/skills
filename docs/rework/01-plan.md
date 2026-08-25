@@ -7,7 +7,7 @@
 | Phase | Title | Status | Notes |
 |-------|-------|--------|-------|
 | 0 | Establish the track | DONE (2026-08-25) | Worktree `../skills-rework` + branch `rework`; AGENTS.md protection section on `main` and (extended) here; labels `rework`, `rework-ready-for-agent`; milestone "Skills 2.0"; this dossier |
-| 1 | Doc reform | IN PROGRESS | Steps 1–2 DONE (2026-08-25): triage in `02-adr-triage.md`, decisions and eleven slices in `03-doc-reform.md`. Next: step 3, the `/to-tickets` checkpoint |
+| 1 | Doc reform | IN PROGRESS | Steps 1–3 DONE (2026-08-25): triage in `02-adr-triage.md`, decisions and eleven slices in `03-doc-reform.md`, tickets #127–#137 on the milestone (T1→#127 … T11→#137; #132 and #137 are Solo Tickets). Next: step 4, execution |
 | 2 | Build the five skills | TODO | Pipeline order: frame → to-slices → compile → dispatch → land |
 | 3 | Bootstrap, takeover, cleanup | TODO | Dispatch executes its own remaining tickets; acceptance test; takeover merge; final cleanup ticket |
 
