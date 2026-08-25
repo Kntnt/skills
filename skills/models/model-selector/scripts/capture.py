@@ -241,7 +241,7 @@ def _integrations() -> Any:
 
     Harness-specific installation is not this feature's knowledge to hold: it is
     the Library's, so that a second Skill needing the same thing finds it there
-    rather than reaching into this one (ADR-0012).
+    rather than reaching into this one (ADR-0109).
     """
 
     here = Path(__file__).resolve().parent

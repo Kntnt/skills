@@ -1,3 +1,0 @@
-# Delegation's user scope is per-harness; its project scope is not
-
-ADR-0005 keeps one desired set across every Harness, but `delegation` writes a standing instruction into a context file, and there is no cross-agent convention for a global one: Claude Code loads `~/.claude/CLAUDE.md`, other harnesses load their own. So `/delegation user on` covers the harness it runs in, and the user runs it again elsewhere. Project scope has a convention — `AGENTS.md`, bridged where a harness needs it — so one write covers every harness in that directory. The Manager is not involved: detection says where skills are installed, not which context files a standing instruction belongs in.

@@ -12,16 +12,16 @@ SKILLS = REPO_ROOT / "skills"
 
 # The record settling the order, cited by every failure below and by the
 # rules document's own statement of the rule.
-RECORD = "ADR-0097"
+RECORD = "ADR-0108"
 
 # The optional Contextual Instruction closes every form and belongs to no
-# region of the order, so it is removed before a form is read (ADR-0078). It is
+# region of the order, so it is removed before a form is read (ADR-0108). It is
 # matched after the emphasis has gone, which is the one spelling both the
 # manpage form and the harness hint share.
 SUFFIX = re.compile(r"\[--\s*(?:INSTRUCTION|<instruction>)\]\s*$")
 
 # A flag's attached value is part of the flag rather than an operand beside it
-# (ADR-0096): the bracketed optional spelling, a metavariable that may itself
+# (ADR-0108): the bracketed optional spelling, a metavariable that may itself
 # offer alternatives, and a plain value, which carries any bare alternatives
 # written after it rather than letting them read as operands.
 ATTACHED_GROUP = re.compile(r"\[=[^\]]*\]")
@@ -45,7 +45,7 @@ def _command_paths(directory: Path) -> set[str]:
     This is the boundary the order rule draws between the command path and the
     operands: a token belongs to the path when a page answers to it, which a
     builder can test against the shipped tree rather than against judgement
-    (ADR-0077).
+    (ADR-0108).
     """
 
     root = directory / "help"
@@ -134,7 +134,7 @@ def violations(
 ) -> list[str]:
     """Return what is out of order in one form, as one sentence per fault.
 
-    A form is the command path, then the flags, then the operands (ADR-0097).
+    A form is the command path, then the flags, then the operands (ADR-0108).
     An alternation naming both spellings of one slot is a single slot rather
     than a sequence, so it is read as one unit and allowed only at the boundary
     between the two regions: everything before it path or flag, everything
@@ -199,7 +199,7 @@ def test_the_scan_recognises_an_out_of_order_form_in_each_surface() -> None:
 
 
 def test_every_argument_hint_writes_its_forms_in_the_invocation_order() -> None:
-    """The harness advertises the order the Skill accepts (ADR-0097)."""
+    """The harness advertises the order the Skill accepts (ADR-0108)."""
 
     skills = _shipped_skills()
 

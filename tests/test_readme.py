@@ -46,7 +46,7 @@ def test_the_readme_documents_exactly_the_skills_the_catalog_names() -> None:
     which Skills need which binaries and which Capabilities — is prose, and
     prose cannot be held against the dependency declarations without being
     generated from them, which this collection declines to do. It is read by
-    eye, exactly like a `compatibility` field's soft requirements (ADR-0062),
+    eye, exactly like a `compatibility` field's soft requirements (ADR-0109),
     and a Skill whose dependencies change without that paragraph changing is
     still caught by nobody. See `docs/rules/skills.md`.
     """

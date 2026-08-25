@@ -19,7 +19,7 @@ def home() -> Path:
     """Return the home the Global layer is written under.
 
     `HOME` and nothing else, because that is what the real transport resolves
-    its global directory through — the property a Sandbox stands on (ADR-0042).
+    its global directory through — the property a Sandbox stands on (ADR-0107).
     A double that read a variable of its own would write inside the Sandbox
     whether or not the manager had redirected the one that matters, and a dry
     run that escaped into the real home would pass the suite anyway.
@@ -118,7 +118,7 @@ def copy_skill(name: str, dest: Path) -> None:
     """Replace *name* in *dest* with the collection's copy of it.
 
     `npx skills add` empties the skill's directory before copying rather than
-    merging into it, so nothing that was there survives. ADR-0028 records why
+    merging into it, so nothing that was there survives. ADR-0107 records why
     this double has to model that rather than copy over what it finds.
     """
 

@@ -9,4 +9,4 @@ The corpus was built from the specification rather than from any Skill's impleme
 
 Nothing here is a pytest suite. The suite under `tests/` checks that this corpus stays complete and self-describing; it does not run a model, and no test in this repository asserts a sentence a model has to write.
 
-The reasoning is recorded in [ADR-0093](../adr/0093-one-corpus-evaluated-separately-inside-each-provider-family.md).
+The reasoning is recorded in [ADR-0110](../adr/0110-what-an-editorial-skill-is-held-to.md).

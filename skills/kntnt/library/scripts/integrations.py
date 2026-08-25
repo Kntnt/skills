@@ -11,14 +11,14 @@ learning three Harnesses' file formats and each one inventing its own idea of
 what it owns, so the mechanics live here once and the feature supplies only its
 owner identity and the command to run.
 
-Disk is the truth (ADR-0003). Nothing here remembers what it installed: an
+Disk is the truth (ADR-0107). Nothing here remembers what it installed: an
 install reads the Harness's file, converges it, and reads it back, and a removal
 finds its own entries by the owner they carry. That makes both idempotent, and
 it makes a hand-edited or externally repaired Harness the state everything works
 from rather than a state nothing can account for.
 
 A Harness whose supported lifecycle cannot carry the contract is reported as an
-Unsatisfied capability (ADR-0030) rather than silently skipped, because a
+Unsatisfied capability (ADR-0107) rather than silently skipped, because a
 feature that believes it is installed where it is not is worse than one that
 knows it is not.
 """

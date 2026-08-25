@@ -57,7 +57,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "a685bdef043321ce1ded5d28b2ac0ff838c0620cb2bdada1766423f230a6a152",
+      "digest": "f14ce95037bdd121e7ab8e0fdb2fbf93eaa0b664c7f1fad9bc5136b6a2f7db55",
       "binaries": [
         "git",
         "gh",
@@ -160,7 +160,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "61e9c48f8ab3178c95eccba66e6f6a76fb80ba18a5c37b7e3e6a10f204890482",
+      "digest": "928691ef76168685c04f90827dc4059e23ca964f243db7368c7d9cac310c7bf8",
       "binaries": [
         "uv"
       ],

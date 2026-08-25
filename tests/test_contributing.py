@@ -13,7 +13,7 @@ DEVIATION_RECORD = (
     REPO_ROOT
     / "docs"
     / "adr"
-    / "0066-the-reference-validator-is-a-baseline-not-a-gate.md"
+    / "0112-how-this-repository-records-decisions-and-writes-tickets.md"
 )
 
 # Where this repository declares which of its files are generated and what
@@ -53,17 +53,33 @@ def test_contributing_gives_the_line_that_obtains_the_reference_validator() -> N
     assert verbs == {"validate", "read-properties"}
 
 
-def test_the_guide_and_the_record_spell_the_invocation_the_same_way() -> None:
-    """One command line, written in two places, and neither free to drift."""
+def test_the_record_leaves_the_invocation_to_the_guide() -> None:
+    """One command line, in one place, so no second copy can drift from it.
+
+    The record argues what standing the tool is given and names the guide as
+    where the commands live; the guide is where a contributor types them. A
+    copy in the archive would be a copy nothing keeps true, a record not being
+    rewritten when the line it quotes moves (ADR-0112).
+    """
 
     record = DEVIATION_RECORD.read_text(encoding="utf-8")
-    validate = next(
-        match.group(0)
-        for match in INVOCATION.finditer(_contributing())
-        if match.group(1) == "validate"
+
+    # A record that had stopped arguing the deviation at all would satisfy the
+    # absence below by saying nothing, which is the one way this passes wrong.
+    assert "skills-ref" in record, (
+        f"{DEVIATION_RECORD}: the record no longer names the tool, so the"
+        f" absence asserted below judges nothing."
     )
 
-    assert validate in record
+    assert "CONTRIBUTING.md" in record, (
+        f"{DEVIATION_RECORD}: the record does not name the guide, so a reader"
+        f" it sends looking for the commands is sent nowhere."
+    )
+    assert INVOCATION.search(record) is None, (
+        f"{DEVIATION_RECORD}: the record carries its own copy of the"
+        f" invocation. A record is not rewritten when the line moves, so the"
+        f" copy is one nothing keeps true."
+    )
 
 
 def test_the_guide_points_at_the_record_that_settles_the_red_run() -> None:
@@ -73,14 +89,14 @@ def test_the_guide_points_at_the_record_that_settles_the_red_run() -> None:
     restating why the two deviating fields are shipped knowingly.
     """
 
-    assert "ADR-0066" in _contributing()
+    assert "ADR-0112" in _contributing()
     assert DEVIATION_RECORD.exists()
 
 
 def test_no_check_ci_runs_is_the_reference_validator() -> None:
     """The tool is a baseline to compare against, and a gate would be red.
 
-    ADR-0066 reads it as a state that must not regress rather than one that
+    ADR-0112 reads it as a state that must not regress rather than one that
     must pass, so a CI job running it would fail every build there is.
     """
 

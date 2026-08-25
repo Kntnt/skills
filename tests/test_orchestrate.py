@@ -400,7 +400,7 @@ def test_the_building_brief_hands_the_builder_the_numbers_it_may_take() -> None:
     assert "one above the highest" in text, (
         f"{where}: the brief says next free means one above the highest, so a"
         f" reservation that expires is a gap rather than a number the next"
-        f" ticket backfills (ADR-0067)."
+        f" ticket backfills (ADR-0112)."
     )
 
 
@@ -2129,7 +2129,7 @@ def test_every_building_role_is_routed_and_named_for_what_it_builds() -> None:
     assert "bounded adjacent escalation" in _step(9), (
         f"{SKILL / 'SKILL.md'}: step 9 says what an amend's decision may do"
         f" with the verified failure it carries — only the bounded adjacent"
-        f" escalation the Interface returns (ADR-0083)."
+        f" escalation the Interface returns (ADR-0111)."
     )
 
 
@@ -2138,7 +2138,7 @@ def test_the_amend_routes_each_attempt_as_its_own_request() -> None:
 
     A continuation that reused attempt one's decision would carry the point
     that had already been tried and found wanting, and the bounded escalation
-    the failed verdict buys would have nowhere to appear (ADR-0083).
+    the failed verdict buys would have nowhere to appear (ADR-0111).
     """
 
     step = _step(9)
@@ -2151,7 +2151,7 @@ def test_the_amend_routes_each_attempt_as_its_own_request() -> None:
     assert "consumes the amend the ticket was already spending" in step, (
         f"{SKILL / 'SKILL.md'}: step 9 says an escalation spends no new"
         f" attempt: it consumes the amend the ticket was already spending, or"
-        f" the two-attempt bound would not be a bound (ADR-0083)."
+        f" the two-attempt bound would not be a bound (ADR-0111)."
     )
 
 
@@ -2173,7 +2173,7 @@ def test_the_manpage_model_entry_locks_one_dimension_and_no_verdict() -> None:
     assert "never falls through" in model_entry, (
         f"{where}: the `--model` entry says an exact model that cannot be"
         f" launched is refused rather than replaced by a neighbour"
-        f" (ADR-0083)."
+        f" (ADR-0111)."
     )
     assert "exact main-seat inheritance" in model_entry, (
         f"{where}: the `--model` entry says every verdict keeps exact"
@@ -2195,12 +2195,12 @@ def test_the_manpage_deliberation_entry_takes_the_five_portable_levels() -> None
     for level in ("low", "medium", "high", "xhigh", "max"):
         assert f"`{level}`" in entry, (
             f"{where}: the `--deliberation` entry names {level}, one of the"
-            f" five public portable values (ADR-0083)."
+            f" five public portable values (ADR-0111)."
         )
     assert "refused rather than normalized" in entry, (
         f"{where}: the `--deliberation` entry says another value is refused"
         f" rather than read as a neighbour — a level the Interface cannot map"
-        f" is a level nothing can launch (ADR-0083)."
+        f" is a level nothing can launch (ADR-0111)."
     )
     assert "exact main-seat inheritance" in entry, (
         f"{where}: the `--deliberation` entry says a verdict is never affected"
@@ -2273,7 +2273,7 @@ def test_the_dependency_on_model_selector_is_declared_everywhere_it_is_read() ->
     assert "public Interface" in skill or "public Model Routing Module" in skill, (
         f"{SKILL / 'SKILL.md'}: the body reaches model-selector through its"
         f" public Interface alone — never its private references, private"
-        f" scripts, or a second copy of its selection rules (ADR-0083)."
+        f" scripts, or a second copy of its selection rules (ADR-0111)."
     )
 
 
@@ -2391,7 +2391,7 @@ def test_the_report_renders_the_route_facts_or_says_why_it_cannot() -> None:
     assert "evidence class" in step and "exclusions" in step, (
         f"{SKILL / 'SKILL.md'}: step 12 renders each decision's evidence class"
         f" and exclusions, so a reported inheritance can be told from a"
-        f" measured selection (ADR-0083)."
+        f" measured selection (ADR-0111)."
     )
     assert "`routing_reason` says why" in step, (
         f"{SKILL / 'SKILL.md'}: step 12 says why there is no route account"
@@ -2428,7 +2428,7 @@ def test_a_launch_lost_after_the_claim_is_a_mechanical_hinder() -> None:
     )
     assert "never replaced by a neighbouring point" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 says an exact override is not swapped"
-        f" for something launchable when its own point goes away (ADR-0083)."
+        f" for something launchable when its own point goes away (ADR-0111)."
     )
 
 

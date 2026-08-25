@@ -238,7 +238,7 @@ STATE_HOME = "kntnt-orchestrate"
 
 # The version of model-selector's public route response this engine reads. The
 # Interface is the only cross-Skill seam, and a response from another version
-# of it is refused rather than guessed at (ADR-0083).
+# of it is refused rather than guessed at (ADR-0111).
 ROUTE_SCHEMA_VERSION = 1
 
 # What one public decision can be: an exact launch, a safe inheritance, or a
@@ -269,7 +269,7 @@ ROUTE_REQUEST = re.compile(
 # where the sanitized artifact model-selector makes of them is written. Both
 # sit in the run's own scratch, are named by the engine so a report and an
 # import mean the same two files, and neither is ever a repository file
-# (ADR-0089).
+# (ADR-0111).
 ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
 OBSERVATION_FILE = "kntnt-orchestrate-observations.json"
 
@@ -371,7 +371,7 @@ BLOCKED_BY_LINE = re.compile(
 # as the edge above: a heading with the reason under it, or a sentence carrying
 # it. It names nobody, because what it excludes is every ticket that could add
 # a new instance of what it is rewriting — instances that do not exist when the
-# ticket is written, which is why no edge can say this (ADR-0099).
+# ticket is written, which is why no edge can say this (ADR-0112).
 SOLO_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**builds[ -]alone\**\s*:?", re.IGNORECASE)
 
 # The line the breakdown names a ticket's parent spec on, written the same two
@@ -706,7 +706,7 @@ def allocate(cwd: Path, number: int) -> dict[str, Any]:
         # wave's reservations are disjoint however its isolations overlap. A
         # reservation nobody uses expires as a gap, which the numbering
         # allows: next free is one above the highest, never the lowest hole
-        # (ADR-0067).
+        # (ADR-0112).
         held = reserved_numbers(home, number)
         if not held:
             taken = numbers_in_flight(home)
@@ -816,7 +816,7 @@ class Ticket:
     `builds_alone` is the ticket's own declaration that it shares its wave with
     nobody: a repository-wide invariant it rewrites is a rule every shipped
     file is under, including the files a concurrent sibling has not written yet
-    (ADR-0099).
+    (ADR-0112).
 
     `worktree` is the one thing here the tracker cannot say and the repository
     can: where this ticket's work stands, for as long as a working tree of its
@@ -907,7 +907,7 @@ class RouteRecord:
 
     `decision` is model-selector's own answer, kept whole and never
     interpreted: this Skill consumes the Interface and owns none of the
-    selection rules behind it (ADR-0083). What the engine adds is the reading
+    selection rules behind it (ADR-0111). What the engine adds is the reading
     of the request name it chose itself — which `role` the decision governs and,
     where the role belongs to one ticket, which ticket — so a claim, an amend,
     and the account can each find the decision that covers what is about to run.
@@ -1905,7 +1905,7 @@ def waves_of(tickets: list[Ticket]) -> tuple[list[list[int]], list[int]]:
     would have, and takes it alone. Its admissible siblings fall to the wave
     behind it — they are not blocked by it, and no edge could say they must
     wait, because what it excludes is every ticket that would write a new
-    instance of the invariant it is rewriting (ADR-0099).
+    instance of the invariant it is rewriting (ADR-0112).
     """
 
     waiting = {ticket.number: set(ticket.blocked_by) for ticket in tickets}
@@ -2584,7 +2584,7 @@ def routed_response(
     Only the structure this engine acts on is checked here — the version of the
     Interface, the frozen context's identity and main seat, and each decision's
     request name and status. Everything inside a decision is model-selector's
-    to say and is kept exactly as it said it (ADR-0083).
+    to say and is kept exactly as it said it (ADR-0111).
     """
 
     try:
@@ -2741,7 +2741,7 @@ def cmd_route(
         return fail(str(exc))
 
     # A whole-artifact refusal is not a decision about any one role, so it is
-    # read before the decisions are and freezes nothing at all (ADR-0083).
+    # read before the decisions are and freezes nothing at all (ADR-0111).
     refusal = answered.get("artifact_refusal")
     if refusal is not None:
         emit_route(None, [], [{"request_id": None, **cast(dict[str, Any], refusal)}])
@@ -4322,7 +4322,7 @@ def cmd_observe(
     touched here, and the artifact model-selector makes of it is imported only
     where the developer asks for it explicitly. A decision nothing judged stays
     audit data, a verdict role is refused by name, and a second outcome for the
-    same attempt overwrites neither itself nor the first (ADR-0089).
+    same attempt overwrites neither itself nor the first (ADR-0111).
     """
 
     # Refuse a verdict by name before the account is read at all: the seat a
@@ -4540,7 +4540,7 @@ def add_shared_flags(parser: argparse.ArgumentParser) -> None:
 
     No question is asked here — a script has no terminal to ask one in — but
     every verb takes `--yes`, so the skill can pass the user's own arguments
-    straight through without turning it into a crash (ADR-0029). `--state-dir`
+    straight through without turning it into a crash (ADR-0108). `--state-dir`
     is on every verb for the other half of the same reason: the harness knows
     where this session's scratch directory is and the engine does not, and a
     verb that could not be told would be a verb whose part of the run is
@@ -4558,7 +4558,7 @@ def add_deliberation_flag(parser: argparse.ArgumentParser) -> None:
     The five public levels are the whole of the portable scale, and a value
     outside them is refused rather than normalised: a level the Interface
     cannot map is a level nothing can launch, and quietly reading it as a
-    neighbour would be the fall-through overrides never make (ADR-0083).
+    neighbour would be the fall-through overrides never make (ADR-0111).
     """
 
     parser.add_argument("--deliberation", choices=DELIBERATION_LEVELS)
@@ -4569,7 +4569,7 @@ def add_scope_flag(parser: argparse.ArgumentParser) -> None:
 
     Only the two verbs that read a set take it. A verb already given one ticket
     by number is aimed, and taking a second way of saying which ticket would
-    state something untrue about what happened — which is where ADR-0029 draws
+    state something untrue about what happened — which is where ADR-0108 draws
     the line between a flag that is merely meaningless and one that misleads.
     """
 

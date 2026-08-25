@@ -635,14 +635,14 @@ def test_commit_skill_does_not_push() -> None:
         f"{body}: this skill writes to the repository, so it carries"
         f" `disable-model-invocation: true` and is reached only when the user"
         f" types it. The field is what keeps a verb the user asks for from"
-        f" becoming a verb a session may decide to run (ADR-0066). See"
+        f" becoming a verb a session may decide to run (ADR-0112). See"
         f" {STANDARD}."
     )
     assert "git push" not in text, (
         f"{body}: this skill commits and stops. Pushing is `/push`, a skill of"
         f" its own that declares this one — a body that pushed as well would"
         f" publish work on a step the user confirmed as a commit, and the body"
-        f" is the whole of what the agent executes (ADR-0046). See {STANDARD}."
+        f" is the whole of what the agent executes (ADR-0109). See {STANDARD}."
     )
     assert "$LIBRARY/scripts/ship.py" in text, (
         f"{body}: the body calls the Collection Library's `scripts/ship.py`"
@@ -653,7 +653,7 @@ def test_commit_skill_does_not_push() -> None:
     assert "$LIBRARY/references/changelog.md" in text, (
         f"{body}: the body follows the Collection Library's changelog"
         f" reference, so the same procedure serves every Skill that reconciles"
-        f" `[Unreleased]` rather than belonging to one consumer (ADR-0076)."
+        f" `[Unreleased]` rather than belonging to one consumer (ADR-0109)."
         f" See {STANDARD}."
     )
 
@@ -666,14 +666,14 @@ def test_push_follows_commit_then_pushes() -> None:
         f"{body}: this skill writes to a remote, so it carries"
         f" `disable-model-invocation: true` and is reached only when the user"
         f" types it. The field is what keeps a verb the user asks for from"
-        f" becoming a verb a session may decide to run (ADR-0066). See"
+        f" becoming a verb a session may decide to run (ADR-0112). See"
         f" {STANDARD}."
     )
     assert "../commit/SKILL.md" in text, (
         f"{body}: the body follows the commit skill rather than restating its"
         f" steps. That skill is what this one declares in `kntnt.skills`, and a"
         f" second copy of the commit sequence is a copy that drifts from the"
-        f" one the suite checks (ADR-0012). See {STANDARD}."
+        f" one the suite checks (ADR-0109). See {STANDARD}."
     )
     assert "apply push" in text, (
         f"{body}: the push itself is `ship.py apply push`, not a git command in"
@@ -691,12 +691,12 @@ def test_release_follows_push_after_bump() -> None:
         f"{body}: this skill tags and publishes, so it carries"
         f" `disable-model-invocation: true` and is reached only when the user"
         f" types it. A release starting itself is not a trade any argument pays"
-        f" for (ADR-0066). See {STANDARD}."
+        f" for (ADR-0112). See {STANDARD}."
     )
     assert "../push/SKILL.md" in text, (
         f"{body}: the body follows the push skill rather than restating it."
         f" That skill is what this one declares in `kntnt.skills`, and it is"
-        f" what carries the commit before the tag is cut (ADR-0012). See"
+        f" what carries the commit before the tag is cut (ADR-0109). See"
         f" {STANDARD}."
     )
     for verb in ("apply bump", "apply tag", "apply publish"):
@@ -711,5 +711,5 @@ def test_release_follows_push_after_bump() -> None:
         f" says what it does. A flag advertised in one place and absent from"
         f" another is a grammar that disagrees with itself, and the body is the"
         f" half the agent executes — it would refuse the flag its own hint"
-        f" offered (ADR-0059). See {STANDARD}."
+        f" offered (ADR-0108). See {STANDARD}."
     )

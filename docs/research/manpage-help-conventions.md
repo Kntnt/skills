@@ -4,7 +4,7 @@
 
 This note asks which established conventions should govern the Collection's user-facing `help.md` files. It records evidence rather than adding a second statement of the rule; the normative rule belongs in [`docs/rules/skills.md`](../rules/skills.md).
 
-The repository currently makes one Markdown artifact serve three help spellings: `--help`, `-h`, and `help` print `help.md` verbatim, and the same file is called the Skill's man page ([ADR-0044](../adr/0044-help-lives-with-the-skill.md)). No file is installed into a numbered system manual section and no roff formatter adds a title, indentation, font changes, indexing metadata, or a pager. The result is therefore a project-specific hybrid: a complete reference page delivered through a help route, not an installed Unix man page.
+The repository currently makes one Markdown artifact serve three help spellings: `--help`, `-h`, and `help` print `help.md` verbatim, and the same file is called the Skill's man page ([ADR-0108](../adr/0108-how-an-invocation-is-read.md)). No file is installed into a numbered system manual section and no roff formatter adds a title, indentation, font changes, indexing metadata, or a pager. The result is therefore a project-specific hybrid: a complete reference page delivered through a help route, not an installed Unix man page.
 
 ## Source authority and limits
 
@@ -46,7 +46,7 @@ The current blanket requirements that every page contain `NOTES` and `OPTIONS`, 
 
 In a command synopsis, literal command text and options are conventionally bold, while replaceable arguments are italic. Square brackets mean optional, a vertical bar separates alternatives, and an ellipsis marks repetition. POSIX uses multiple synopsis lines when mutually exclusive arguments create distinct valid invocation forms; `man(1)` likewise says the synopsis pattern should match every possible invocation and may use several exclusive forms.
 
-In Markdown, map those semantics rather than copying roff escapes: render a literal invocation or flag in bold, render a metavar in italics, and leave the punctuation literal. A flag that takes a value attaches it with `=`, which is this Collection's own rule rather than a convention of the sources above (ADR-0096), and closes the bold run after the `=` so the metavariable stays legible markup. Use stable, descriptive metavariables such as *SKILL*, *PATH*, and *COUNT*. Use one spelling for repetition throughout, preferably the portable ASCII `...`, and attach it to the syntactic unit that repeats.
+In Markdown, map those semantics rather than copying roff escapes: render a literal invocation or flag in bold, render a metavar in italics, and leave the punctuation literal. A flag that takes a value attaches it with `=`, which is this Collection's own rule rather than a convention of the sources above (ADR-0108), and closes the bold run after the `=` so the metavariable stays legible markup. Use stable, descriptive metavariables such as *SKILL*, *PATH*, and *COUNT*. Use one spelling for repetition throughout, preferably the portable ASCII `...`, and attach it to the syntactic unit that repeats.
 
 For example:
 

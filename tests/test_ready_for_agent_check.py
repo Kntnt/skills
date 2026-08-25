@@ -25,7 +25,7 @@ def test_the_body_forbids_reviewing_a_ticket_in_this_context() -> None:
         f"{SKILL / 'SKILL.md'}: the body forbids reviewing a ticket in the"
         f" session that holds it, in those words. The isolation is the whole"
         f" mechanism, and the body is the only thing an agent executes"
-        f" (ADR-0046) — implied, it is skipped by whichever agent finds"
+        f" (ADR-0109) — implied, it is skipped by whichever agent finds"
         f" spawning a subagent inconvenient. See {STANDARD}."
     )
     assert "subagent" in text, (

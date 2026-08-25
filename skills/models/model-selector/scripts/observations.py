@@ -893,9 +893,9 @@ def _operands_first(arguments: list[str]) -> list[str]:
     """Return the same arguments with the operands ahead of the options.
 
     The Skills write one invocation order — the command path, then the flags,
-    then the operands (ADR-0097) — while this parser reads its path first. The
+    then the operands (ADR-0108) — while this parser reads its path first. The
     engines stay permissive rather than refusing a spelling of their own
-    (ADR-0096), so both orders are normalised here instead of one of them
+    (ADR-0108), so both orders are normalised here instead of one of them
     becoming a special case downstream.
     """
 

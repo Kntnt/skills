@@ -15,7 +15,7 @@ DOCS = REPO_ROOT / "docs"
 
 # The record settling the spelling, cited by every failure below and by the
 # rules document's own statement of the rule.
-RECORD = "ADR-0096"
+RECORD = "ADR-0108"
 
 # An `argparse` action that consumes no value. Everything else — the default
 # `store`, `append`, `extend`, a custom action class — takes one.
@@ -24,7 +24,7 @@ VALUELESS_ACTIONS = frozenset(
 )
 
 # The helper the one engine that reads its options by hand calls to take a
-# flag's value out of its arguments (ADR-0096): `observations.py`, for
+# flag's value out of its arguments (ADR-0108): `observations.py`, for
 # `observe --artifact` and `record --data`. A call to it is that engine's
 # declaration that the flag it names carries a value.
 HAND_PARSED_OPTION = "_option"
@@ -61,7 +61,7 @@ VALUE = re.compile(r"^(?:[<\"'$]|[*_][A-Za-z]|[A-Za-z0-9])")
 
 # A flag whose value is optional and that an operand may follow, with the whole
 # of the vocabulary it accepts. Written bare it is compliant, and the operands
-# now come after every flag (ADR-0097), so the token behind it is an operand
+# now come after every flag (ADR-0108), so the token behind it is an operand
 # rather than a value: `/proofread --in-place report.md` is the ordinary
 # invocation. Only a token from the flag's own vocabulary is read as a
 # space-separated value, which still refuses `--in-place on`. This decides
@@ -78,7 +78,7 @@ def options_declaring_a_value(page: str) -> set[str]:
     spellings are read, the attached one and the space-separated one, because a
     flag written with a space on every surface it appears on is precisely the
     violation this file exists to catch — a derivation blind to it would let
-    that flag out of the set for the same reason nobody noticed it (ADR-0105).
+    that flag out of the set for the same reason nobody noticed it (ADR-0108).
     """
 
     if "\n## OPTIONS\n" not in page:
@@ -102,7 +102,7 @@ def engine_flags_taking_a_value(source: str) -> set[str]:
     the declaration, and a parser is built inside the function that immediately
     parses with it, so there is nothing to introspect without running the
     engine's command line. Both seams the collection has are read — the
-    `argparse` declarations, and the hand-rolled one ADR-0096 names.
+    `argparse` declarations, and the hand-rolled one ADR-0108 names.
     """
 
     declared: set[str] = set()
@@ -159,13 +159,13 @@ def derived_valued_flags(
     Skill body constructing a call to one of the collection's Python engines.
     A flag taking no value is absent, because nothing about it is under this
     rule, and so is every flag belonging to `git`, `gh`, `uv`, or `npx`, whose
-    grammar is not this collection's to normalise (ADR-0096).
+    grammar is not this collection's to normalise (ADR-0108).
 
     The two sources between them are complete. The suite already holds a
     Skill's `argument-hint`, its `## SYNOPSIS`, and its `## OPTIONS` to one
     identical set of flags, so the option terms name every flag any Skill
     surface offers; the engines' own declarations carry the rest, the flags
-    only a Skill body ever writes (ADR-0105).
+    only a Skill body ever writes (ADR-0108).
     """
 
     documented = set[str]().union(*(options_declaring_a_value(page) for page in pages))
@@ -188,7 +188,7 @@ def _shipped_engines() -> list[Path]:
 
 
 # The valued set, derived at test time from the declarations the collection
-# already holds to completeness rather than enumerated beside them (ADR-0105).
+# already holds to completeness rather than enumerated beside them (ADR-0108).
 VALUED_FLAGS = derived_valued_flags(
     [path.read_text(encoding="utf-8") for path in _shipped_pages()],
     [path.read_text(encoding="utf-8") for path in _shipped_engines()],
@@ -200,7 +200,7 @@ VALUED_FLAGS = derived_valued_flags(
 # a manpage term, a manpage example, a fenced block, a bare mention in prose, an
 # already-attached value, and the optional value written bare. The last line is
 # the case only a derived registry reaches, its flag being declared nowhere the
-# collection ships (ADR-0105).
+# collection ships (ADR-0108).
 SAMPLE = """argument-hint: '[--at-once <n>] [--yes]'
 Run `uv run engine.py record --ticket <number>` and read what it says.
 **--commit** *COMMIT*
@@ -222,7 +222,7 @@ def _scanned() -> list[Path]:
 
     The files a Skill ships and the documents the rules document governs. The
     changelog and the closed tickets are deliberately outside it: they record
-    what was true when they were written (ADR-0096).
+    what was true when they were written (ADR-0108).
     """
 
     roots = sorted(SKILLS.rglob("*.md")) + sorted(DOCS.rglob("*.md"))
@@ -312,7 +312,7 @@ def test_the_scan_recognises_a_space_separated_flag_in_each_surface() -> None:
     it can be written on. The last line is the case a hand-written registry
     could not reach — its flag is declared nowhere the collection ships, so
     only a set derived from the sample's own declarations carries it
-    (ADR-0105).
+    (ADR-0108).
     """
 
     valued = derived_valued_flags([SAMPLE_PAGE], [SAMPLE_ENGINE])
@@ -330,7 +330,7 @@ def test_the_scan_recognises_a_space_separated_flag_in_each_surface() -> None:
 
 
 def test_no_valued_flag_of_the_collections_grammar_is_written_with_a_space() -> None:
-    """`--flag=value`, on every surface the collection owns (ADR-0096)."""
+    """`--flag=value`, on every surface the collection owns (ADR-0108)."""
 
     scanned = _scanned()
 
@@ -376,7 +376,7 @@ def test_the_standard_states_the_attached_form_and_cites_the_record() -> None:
 # terms and one engine's parser, between them declaring every flag the sample
 # names. `--unshipped` is declared by neither shipped file, so a hand-written
 # registry could not have carried it and only the derivation reaches it
-# (ADR-0105).
+# (ADR-0108).
 SAMPLE_PAGE = """# example(1)
 
 ## OPTIONS

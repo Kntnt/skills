@@ -757,7 +757,7 @@ def test_report_accounts_for_the_tickets_in_scope(tmp_path: Path) -> None:
 
 
 def test_every_verb_accepts_yes(tmp_path: Path) -> None:
-    """ADR-0029: the flag reaches every verb, including those that ask nothing."""
+    """ADR-0108: the flag reaches every verb, including those that ask nothing."""
 
     repo = _init_repo(tmp_path / "proj")
     scratch = tmp_path / "scratch"
@@ -1481,7 +1481,7 @@ def test_a_deliberation_outside_the_portable_scale_is_refused_not_read(
 
     Reading an unmappable level as the nearest one it resembles would be the
     fall-through an exact override never makes: a level the Interface cannot
-    map is a level nothing can launch (ADR-0083).
+    map is a level nothing can launch (ADR-0111).
     """
 
     repo = _init_repo(tmp_path / "proj")
