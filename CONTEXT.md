@@ -103,6 +103,10 @@ _Avoid_: current outcome, ticket status
 The current account of whether the work requested by a ticket is complete. Report groups tickets by Ticket Resolution while retaining any earlier Run Outcome as provenance.
 _Avoid_: run outcome, tracker state
 
+**Solo Ticket**:
+A ticket that shares its wave with no other ticket, declared on a line of its own body opening `Builds alone`. An author writes that line where the ticket's subject is a repository-wide invariant — a rule every shipped file is under, which the ticket rewrites or newly enforces — because a blocking edge names a ticket, and what such a ticket excludes is every new instance a concurrent sibling would write. Orchestrate places it in the first wave its blockers admit it in and gives it that wave alone (ADR-0099).
+_Avoid_: exclusive ticket, serial ticket, locked wave, blocked by everything
+
 **Reconciliation**:
 An explicit maintainer acknowledgement that a ticket with an unsuccessful Run Outcome was completed outside Orchestrate and now has a done Ticket Resolution. It preserves the unsuccessful Run Outcome as provenance.
 _Avoid_: retry, overwrite, superseding outcome

@@ -361,6 +361,13 @@ BLOCKED_BY_LINE = re.compile(
     r"^\s*(?:#{1,6}\s+)?\**blocked[ -]by\**\s*:?", re.IGNORECASE
 )
 
+# The line a ticket declares itself a Solo Ticket on, written the same two ways
+# as the edge above: a heading with the reason under it, or a sentence carrying
+# it. It names nobody, because what it excludes is every ticket that could add
+# a new instance of what it is rewriting — instances that do not exist when the
+# ticket is written, which is why no edge can say this (ADR-0099).
+SOLO_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**builds[ -]alone\**\s*:?", re.IGNORECASE)
+
 # The line the breakdown names a ticket's parent spec on, written the same two
 # ways: a heading with the reference under it, or a sentence carrying it.
 PARENT_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**parent\b\**\s*:?", re.IGNORECASE)
@@ -789,6 +796,11 @@ class Ticket:
     `amend_state` identifies the exact current builder, verifier, or verdict
     phase and retains the verdict a resumed amend builder needs.
 
+    `builds_alone` is the ticket's own declaration that it shares its wave with
+    nobody: a repository-wide invariant it rewrites is a rule every shipped
+    file is under, including the files a concurrent sibling has not written yet
+    (ADR-0099).
+
     `worktree` is the one thing here the tracker cannot say and the repository
     can: where this ticket's work stands, for as long as a working tree of its
     own holds it. It is None for a ticket built straight on the branch, and for
@@ -808,6 +820,7 @@ class Ticket:
     collided_with: list[int]
     amends_spent: int
     amend_state: AmendState | None
+    builds_alone: bool = False
     worktree: str | None = None
 
 
@@ -1337,6 +1350,11 @@ class Plan:
     was interrupted before recording, which are in `workable` like any other,
     the claim on them being already its own.
 
+    `solo` is the part of that shape a reader would otherwise have to infer:
+    the tickets laid out in `waves` that declared they build alone, which is
+    why each of them holds a wave nothing else is in. A ticket already recorded
+    or stranded is in no wave and so in none of this either.
+
     `at_once` is the ceiling the developer set on how many tickets are built at
     the same time, and `starting` is what that makes of the frontier: the
     tickets this wave works, which is `workable` cut to the ceiling. `worktrees`
@@ -1381,6 +1399,7 @@ class Plan:
     stranded: list[int]
     blocked: list[int]
     waves: list[list[int]]
+    solo: list[int]
     never_workable: list[int]
 
 
@@ -1435,6 +1454,12 @@ def body_edges(body: str) -> list[int]:
     """Return the tickets a `Blocked by` line in *body* names."""
 
     return references_under(body, BLOCKED_BY_LINE, "Blocked by")
+
+
+def body_solo(body: str) -> bool:
+    """Say whether a `Builds alone` line in *body* makes it a Solo Ticket."""
+
+    return any(SOLO_LINE.match(line) for line in body.splitlines())
 
 
 def body_parent(body: str) -> int | None:
@@ -1857,9 +1882,17 @@ def waves_of(tickets: list[Ticket]) -> tuple[list[list[int]], list[int]]:
     empty, which is what a cycle or a blocker outside the scope produces: the
     tickets left over are workable in no wave of this run, and the walk ends
     rather than turning over a frontier that never grows.
+
+    A Solo Ticket is the one exception, and it is not an exception to the
+    graph: it takes the first wave the blockers admit it in, exactly as it
+    would have, and takes it alone. Its admissible siblings fall to the wave
+    behind it — they are not blocked by it, and no edge could say they must
+    wait, because what it excludes is every ticket that would write a new
+    instance of the invariant it is rewriting (ADR-0099).
     """
 
     waiting = {ticket.number: set(ticket.blocked_by) for ticket in tickets}
+    alone = {ticket.number for ticket in tickets if ticket.builds_alone}
     settled: set[int] = set()
     waves: list[list[int]] = []
     while waiting:
@@ -1868,6 +1901,13 @@ def waves_of(tickets: list[Ticket]) -> tuple[list[list[int]], list[int]]:
         )
         if not wave:
             break
+
+        # Where the frontier holds more than one ticket that rides alone, each
+        # still rides alone: the first takes this wave and the rest come round
+        # again, one wave at a time, in the order the plan already reads in.
+        riding = next((number for number in wave if number in alone), None)
+        if riding is not None:
+            wave = [riding]
 
         waves.append(wave)
         settled.update(wave)
@@ -1991,6 +2031,7 @@ def ticket_from(
         collided_with=collided_with,
         amends_spent=amend_state.attempt if amend_state else 0,
         amend_state=amend_state,
+        builds_alone=body_solo(str(item["body"])),
     )
 
 
@@ -2371,6 +2412,11 @@ def build_plan(
         stranded=stranded,
         blocked=[ticket.number for ticket in tickets if ticket.number not in frontier],
         waves=waves,
+        solo=[
+            ticket.number
+            for ticket in tickets
+            if ticket.builds_alone and ticket.number not in settled
+        ],
         never_workable=never_workable,
     )
 

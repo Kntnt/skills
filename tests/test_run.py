@@ -893,6 +893,149 @@ def test_plan_offers_every_ticket_whose_blockers_are_met_in_the_same_wave(
     assert plan["waves"] == [[9, 10], [11]]
 
 
+def test_plan_gives_a_solo_ticket_a_wave_of_its_own(tmp_path: Path) -> None:
+    """A ticket that rewrites an invariant every shipped file is under says so
+    in its own body, and the plan says back that it rides alone."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the spelling", body="## Builds alone\n\nIt rewrites it.\n")
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["waves"] == [[9]]
+    assert plan["workable"] == [9]
+    assert plan["solo"] == [9]
+    assert plan["tickets"][0]["builds_alone"] is True
+
+
+def test_plan_moves_a_solo_tickets_admissible_siblings_out_of_its_wave(
+    tmp_path: Path,
+) -> None:
+    """No blocking edge could express this: the ticket is not blocked by its
+    siblings, it is exclusive of every ticket that could add a new instance of
+    the form it is outlawing, and those instances do not exist yet."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the spelling", body="Builds alone: it rewrites it."),
+                _ticket(10, "a new skill"),
+                _ticket(11, "another new skill"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["waves"] == [[9], [10, 11]]
+    assert plan["workable"] == [9]
+    assert plan["blocked"] == [10, 11]
+    assert plan["solo"] == [9]
+
+
+def test_plan_gives_a_blocked_solo_ticket_the_first_wave_that_admits_it(
+    tmp_path: Path,
+) -> None:
+    """The marker moves nothing forward: the graph still says where the ticket
+    may start, and the wave it starts in is the first one that admits it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the skeleton"),
+                _ticket(
+                    10,
+                    "the spelling",
+                    blocked_by=[(9, "OPEN")],
+                    body="**Builds alone**",
+                ),
+                _ticket(11, "a new skill", blocked_by=[(9, "OPEN")]),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["waves"] == [[9], [10], [11]]
+    assert plan["workable"] == [9]
+    assert plan["solo"] == [10]
+
+
+def test_plan_does_not_call_a_recorded_solo_ticket_one_that_rides_a_wave(
+    tmp_path: Path,
+) -> None:
+    """A ticket this run already settled is laid out in no wave at all, so it
+    holds none to itself either — the declaration is spent with the work."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(
+                    9,
+                    "the spelling",
+                    body="Builds alone: it rewrites it.",
+                    comments=[_recorded("done", "HEAD")],
+                ),
+                _ticket(10, "a new skill"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["recorded"] == [9]
+    assert plan["waves"] == [[10]]
+    assert plan["solo"] == []
+
+
+def test_plan_leaves_what_a_solo_ticket_blocks_where_the_graph_puts_it(
+    tmp_path: Path,
+) -> None:
+    """Blocking behaves as it does today: what waits on a Solo Ticket waits in
+    the wave after it, which is where an edge alone would have put it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(9, "the spelling", body="Builds alone: it rewrites it."),
+                _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["waves"] == [[9], [10]]
+    assert plan["workable"] == [9]
+    assert plan["solo"] == [9]
+    assert plan["tickets"][1]["builds_alone"] is False
+
+
 def test_plan_does_not_let_a_closed_done_blocker_block(tmp_path: Path) -> None:
     """A done Ticket Resolution establishes the work the edge names."""
 
