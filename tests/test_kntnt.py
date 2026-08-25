@@ -4087,6 +4087,26 @@ REDLINE = REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md"
 REDLINE_HELP = REDLINE.parent / "help.md"
 REDLINE_CORRECTION = REDLINE.parent / "references" / "correction.md"
 
+# The licence the correction briefs used to carry, which left each run to
+# decide for itself whether to hand the brief over or write it somewhere and
+# send a path instead. Across a handful of runs of one Skill in one Harness,
+# four independently chose the same fixed path under `/tmp`, two of those
+# overlapped in time, and one run's brief was deleted underneath it and read
+# back as another run's brief against an unrelated text (issue #143).
+IMPROVISED_HANDOVER = (
+    "writing the filled-in brief to a file",
+    "costs less than repeating it",
+)
+
+# What stands in its place: one handover, named once, with nothing left for a
+# run to invent. The brief is the subagent's whole instruction, and it is
+# never written anywhere a second process could read, replace, or delete it
+# (ADR-0118).
+HANDOVER_RULE = (
+    "the whole of its instruction",
+    "Never write it to a file",
+)
+
 # The shared catalogue of machine-sounding prose, and the seven patterns the
 # specification requires it to carry.
 ANTI_SLOP = (
@@ -4352,6 +4372,52 @@ def test_each_correction_is_delegated_to_a_subagent_that_carries_no_history() ->
         f" and the previous attempt biases the next (ADR-0107). See"
         f" {STANDARD}."
     )
+
+
+def _assert_one_handover_with_nothing_left_to_invent(brief: Path, body: Path) -> None:
+    """Hold one Skill's correction brief to the Collection's single handover.
+
+    The brief carries the complete Text Artifact and the complete findings —
+    the whole of what a correction round is answerable to, and the user's own
+    text among it. A run free to choose how that travels is a run that chooses
+    differently from the next one, and a predictable path under a shared
+    temporary directory is a name anything else on the machine can read,
+    replace, or delete for as long as the round lasts (ADR-0118).
+    """
+
+    filled = brief.read_text(encoding="utf-8")
+    dispatch = body.read_text(encoding="utf-8")
+
+    for licence in IMPROVISED_HANDOVER:
+        for path, text in ((brief, filled), (body, dispatch)):
+            assert licence not in text, (
+                f"{path}: the run is still licensed to write the filled-in"
+                f" brief somewhere and send a path in its place, so how the"
+                f" user's text reaches a correction subagent is settled anew"
+                f" every run (ADR-0107, ADR-0118). See {STANDARD}."
+            )
+
+    for rule in HANDOVER_RULE:
+        assert rule in filled, (
+            f"{brief}: the brief does not say that it reaches the subagent"
+            f" directly, as the whole of its instruction and never as a file"
+            f" a second process could hold, so the delivery of the complete"
+            f" text and the complete findings is left to whatever the"
+            f" dispatching session invents (ADR-0107, ADR-0118). See"
+            f" {STANDARD}."
+        )
+
+    assert "delivered as that brief says" in dispatch, (
+        f"{body}: the delegating step reaches the brief for what to fill in"
+        f" and not for how to hand it over, which is the half of the brief"
+        f" that was improvised (ADR-0107, ADR-0118). See {STANDARD}."
+    )
+
+
+def test_the_correction_brief_is_handed_over_rather_than_left_on_disk() -> None:
+    """One handover, named once, for the Skill the defect was observed in."""
+
+    _assert_one_handover_with_nothing_left_to_invent(REDLINE_CORRECTION, REDLINE)
 
 
 def test_a_correction_is_verified_by_review_rather_than_by_its_own_report() -> None:
@@ -4751,6 +4817,18 @@ def test_unslop_carries_the_collections_one_correction_budget_contract() -> None
             f" made against a contract the review never applied is a change"
             f" nobody asked for (ADR-0112). See {STANDARD}."
         )
+
+
+def test_unslops_correction_brief_is_handed_over_the_same_single_way() -> None:
+    """The handover is the Collection's, so it does not stop at one Skill.
+
+    Unslop dispatches corrections from a brief carrying the same user text
+    under the same licence to improvise, and a rule holding in one Skill and
+    not the other is the per-run choice again with a Skill's name on it
+    (ADR-0112, ADR-0118).
+    """
+
+    _assert_one_handover_with_nothing_left_to_invent(UNSLOP_CORRECTION, UNSLOP)
 
 
 def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:
