@@ -1,0 +1,5 @@
+interface:
+  display_name: "Unslop"
+  short_description: "Apply the anti-slop pass alone to a text that is otherwise finished"
+policy:
+  allow_implicit_invocation: false

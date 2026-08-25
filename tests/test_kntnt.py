@@ -4461,6 +4461,399 @@ def test_the_anti_slop_catalogue_is_shared_rather_than_one_skills_property() -> 
     )
 
 
+# The Skill that applies the anti-slop pass alone, read at the one seam a test
+# has: the body is the whole of what the agent executes (ADR-0046). Its
+# manpage, and the brief its correcting subagents are started from.
+UNSLOP = REPO_ROOT / "skills" / "editorial" / "unslop" / "SKILL.md"
+UNSLOP_HELP = UNSLOP.parent / "help.md"
+UNSLOP_CORRECTION = UNSLOP.parent / "references" / "correction.md"
+
+
+def _unslop() -> str:
+    """Every Markdown file the Skill ships, concatenated.
+
+    A rule about what this Skill may load or reach is a rule about all of its
+    files: a pointer the body never writes reaches just as far from the brief
+    a subagent is started from.
+    """
+
+    paths = sorted(UNSLOP.parent.rglob("*.md"))
+
+    # A directory that is not there would leave every assertion over it with
+    # nothing to judge and pass regardless.
+    assert paths, (
+        f"{UNSLOP.parent}: the Skill that applies the anti-slop pass alone"
+        f" ships in the Collection's editorial category (ADR-0112). See"
+        f" {STANDARD}."
+    )
+    return "\n".join(path.read_text(encoding="utf-8") for path in paths)
+
+
+def _unslop_field(name: str) -> str:
+    """Return one of the Skill's frontmatter fields, as the file writes it."""
+
+    body = UNSLOP.read_text(encoding="utf-8")
+    frontmatter = body.partition("---\n")[2].partition("\n---\n")[0]
+    for line in frontmatter.splitlines():
+        if line.startswith(f"{name}:"):
+            return line.partition(":")[2].strip()
+    return ""
+
+
+def test_unslop_loads_only_the_lens_it_applies() -> None:
+    """Reading no more than it may act on is the whole point of the split.
+
+    One lens applied alone loads the shared catalogue and the resolved
+    language's anti-slop scope, and nothing else: no base contract, no genre,
+    no technique, and none of the composition, review, or mechanics scopes.
+    A Skill holding rules it is contracted not to apply is a Skill one round
+    away from applying them, which is how a single pass becomes the whole
+    editorial contract nobody asked for (ADR-0087, ADR-0112).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8")
+    shipped = _unslop()
+
+    assert "$LIBRARY/references/editorial/anti-slop.md" in body, (
+        f"{UNSLOP}: the body never reaches the shared anti-slop catalogue, so"
+        f" the one pass this Skill exists to apply is applied from memory"
+        f" (ADR-0101, ADR-0112). See {STANDARD}."
+    )
+    assert "--scope=anti-slop" in body, (
+        f"{UNSLOP}: the body never asks the resolver for the `anti-slop`"
+        f" scope, which is where a language's own slop words, phrases,"
+        f" punctuation, and constructions live (ADR-0087). See {STANDARD}."
+    )
+    for scope in ("composition", "review", "mechanics"):
+        assert f"--scope={scope}" not in shipped, (
+            f"{UNSLOP.parent}: the Skill asks the resolver for the `{scope}`"
+            f" scope, which belongs to the Skills contracted to act on it. A"
+            f" caller asks for the scopes it can act on and is given those and"
+            f" no others (ADR-0087, ADR-0112). See {STANDARD}."
+        )
+    for pointer in (
+        "editorial/base.md",
+        "editorial/base.review.md",
+        "editorial/genres/",
+        "editorial/techniques/",
+    ):
+        assert pointer not in shipped, (
+            f"{UNSLOP.parent}: the Skill reaches `{pointer}`, which is part of"
+            f" the editorial contract it selects none of. Typing the whole"
+            f" contract to get one lens is the gesture this Skill exists to"
+            f" replace (ADR-0112). See {STANDARD}."
+        )
+
+    hint = _unslop_field("argument-hint")
+    for option in ("--language=", "--max=", "--output=", "--in-place"):
+        assert option in hint, (
+            f"{UNSLOP}: `argument-hint` offers no `{option}`, and the four"
+            f" editorial options this Skill resolves are spelled as its peers"
+            f" spell them (ADR-0112). See {STANDARD}."
+        )
+    for option in ("--genre", "--technique"):
+        assert option not in hint, (
+            f"{UNSLOP}: `argument-hint` offers `{option}`, which selects part"
+            f" of an editorial contract this Skill never loads. A flag"
+            f" accepted here would be a flag with no work to do (ADR-0112)."
+            f" See {STANDARD}."
+        )
+
+
+def test_unslop_reads_the_shared_catalogue_without_reaching_into_a_peer() -> None:
+    """A peer's private files are not an interface, whoever needs them.
+
+    The catalogue lives in the Collection Library precisely so a second
+    consumer can apply the pass without the Skill that needed it first
+    becoming the implementation owner of its rules (ADR-0076, ADR-0101).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8")
+    shipped = _unslop()
+
+    assert "$LIBRARY" in body, (
+        f"{UNSLOP}: the body defines no Collection Library, so the shared"
+        f" catalogue and the language resources are reached from wherever the"
+        f" session happens to look (ADR-0076). See {STANDARD}."
+    )
+    for peer in ("redline", "write", "proofread"):
+        assert f"../{peer}/" not in shipped, (
+            f"{UNSLOP.parent}: the Skill reads `{peer}`'s own files. A Skill"
+            f" may follow a declared Dependency's public `SKILL.md` and never"
+            f" its `references/` or its `scripts/` (ADR-0076). See {STANDARD}."
+        )
+
+    private = sorted(
+        path
+        for path in UNSLOP.parent.rglob("*.md")
+        if "anti-slop" in path.name or "slop" in path.stem
+    )
+    assert private == [], (
+        f"{private}: the Skill ships a catalogue of its own beside the shared"
+        f" one, which is the second copy the Library exists to prevent"
+        f" (ADR-0076, ADR-0101). See {STANDARD}."
+    )
+
+
+def test_unslop_runs_no_mechanical_pass_and_names_the_separate_gesture() -> None:
+    """One pass was asked for, and one pass is what comes back.
+
+    Redline closes with a mechanical pass because it has just applied a whole
+    editorial contract. This Skill applied one lens, so it proofreads nothing,
+    declares no Dependency on a proofreading peer, and says on its own page
+    which gesture a reader wants for mechanical errors instead (ADR-0112).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8")
+
+    assert '\n  kntnt.skills: ""\n' in body, (
+        f"{UNSLOP}: the Skill declares a Dependency on a peer Skill. It calls"
+        f" none — a Skill that ran a mechanical pass would be delivering work"
+        f" its caller did not ask for (ADR-0112). See {STANDARD}."
+    )
+    assert "$HERE/../proofread/SKILL.md" not in body, (
+        f"{UNSLOP}: the body invokes the mechanical pass. This Skill was asked"
+        f" for one pass and gives one pass (ADR-0112). See {STANDARD}."
+    )
+
+    manpage = UNSLOP_HELP.read_text(encoding="utf-8")
+    assert "proofread" in manpage, (
+        f"{UNSLOP_HELP}: the page never names the separate gesture for"
+        f" mechanical errors, so a reader whose text still has typos after"
+        f" this pass is left to discover that it was never going to fix them"
+        f" (ADR-0112). See {STANDARD}."
+    )
+
+
+def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
+    """Availability is one contract, not one per invocation.
+
+    Every correction goes to a subagent, so subagents are a hard Capability
+    whatever Correction Budget an invocation names, and the shared resolver
+    the language is settled through needs the Collection's normal runtime
+    (ADR-0062, ADR-0107).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8")
+
+    assert '\n  kntnt.capabilities: "subagents"\n' in body, (
+        f"{UNSLOP}: subagents are a hard Capability of this Skill whatever the"
+        f" Correction Budget in force is, a conditional declaration being an"
+        f" availability contract that changes with the invocation (ADR-0062)."
+        f" See {STANDARD}."
+    )
+    assert '\n  kntnt.binaries: "uv"\n' in body, (
+        f"{UNSLOP}: the Skill runs the Collection's resolver and declares none"
+        f" of the runtime it takes to run it (ADR-0062). See {STANDARD}."
+    )
+    assert 'check --here="$HERE"' in body, (
+        f"{UNSLOP}: the dependency lists are not empty and the body calls no"
+        f" checker, so an Unsatisfied Dependency is met as a failure rather"
+        f" than as a refusal. See {STANDARD}."
+    )
+
+    compatibility = _unslop_field("compatibility")
+    for requirement in ("uv", "subagents"):
+        assert requirement in compatibility, (
+            f"{UNSLOP}: `compatibility` does not name {requirement!r}, and it"
+            f" is the one field a reader outside this collection knows to look"
+            f" at (ADR-0062). See {STANDARD}."
+        )
+
+
+def test_unslop_is_started_by_a_person_rather_than_by_a_model() -> None:
+    """*This text reads like AI* is a judgement a person makes.
+
+    A model reaching for this pass unasked would be rewriting a text on its
+    own reading of how the text sounds, which is exactly the call the author
+    is entitled to make. Both files say so, because Codex reads only the
+    sidecar and the harness reads only the frontmatter (ADR-0094, ADR-0112).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8")
+
+    assert "\ndisable-model-invocation: true\n" in body, (
+        f"{UNSLOP}: the frontmatter leaves this Skill open to a model starting"
+        f" it, so a text is unslopped because something judged that it sounded"
+        f" wrong rather than because anybody asked (ADR-0094, ADR-0112). See"
+        f" {STANDARD}."
+    )
+
+    sidecar = (UNSLOP.parent / "agents" / "openai.yaml").read_text(encoding="utf-8")
+    assert "allow_implicit_invocation: false" in sidecar, (
+        f"{UNSLOP.parent / 'agents' / 'openai.yaml'}: the sidecar leaves this"
+        f" Skill implicitly invocable, and it is the only copy of that"
+        f" decision Codex reads (ADR-0094). See {STANDARD}."
+    )
+
+
+def test_unslop_carries_the_collections_one_correction_budget_contract() -> None:
+    """One loop contract in the Collection, reused rather than restated.
+
+    The budget is any non-negative integer defaulting to one; each correction
+    goes to a subagent started fresh with the complete text and the complete
+    findings; the budget falls once per correction; the returned text is
+    reviewed again rather than accepted on its own report; and the loop stops
+    on clean text, on no relevant progress, and on the spent budget
+    (ADR-0107). The brief carries no genre and no technique, because this
+    Skill resolves neither (ADR-0112).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8")
+
+    for phrase, missing in (
+        ("non-negative integer", "the range the budget accepts"),
+        ("defaults to `1`", "the default an ordinary invocation gets"),
+        ("once per correction", "the decrement the caller's bound depends on"),
+        ("unspent", "the early stop that leaves clean text alone"),
+        ("no relevant progress", "the stop for a round that changed nothing"),
+        ("budget is spent", "the stop that carries findings to a person"),
+        ("fresh", "the subagent that carries no earlier round's framing"),
+    ):
+        assert phrase in body, (
+            f"{UNSLOP}: the body does not carry {missing}, so this Skill's"
+            f" loop is a second set of semantics beside the one the Collection"
+            f" already has (ADR-0107, ADR-0112). See {STANDARD}."
+        )
+    assert "reviewed again" in body or "review it again" in body, (
+        f"{UNSLOP}: the body never reviews a corrected text again, so a"
+        f" correction is accepted on the report of whoever made it"
+        f" (ADR-0107). See {STANDARD}."
+    )
+
+    assert UNSLOP_CORRECTION.is_file(), (
+        f"{UNSLOP_CORRECTION}: a correcting subagent is started from a brief"
+        f" this Skill alone opens, which belongs under its `references/`"
+        f" (ADR-0063, ADR-0107). See {STANDARD}."
+    )
+    assert "references/correction.md" in body, (
+        f"{UNSLOP}: the body never reaches the correction brief, so what a"
+        f" fresh subagent receives is left to the session that dispatches it"
+        f" (ADR-0107). See {STANDARD}."
+    )
+
+    brief = UNSLOP_CORRECTION.read_text(encoding="utf-8").lower()
+    for phrase, missing in (
+        ("complete", "the complete current Text Artifact"),
+        ("finding", "the complete current findings"),
+        ("preserve", "the requirement to preserve unaffected material"),
+        ("language", "the resolved language"),
+    ):
+        assert phrase in brief, (
+            f"{UNSLOP_CORRECTION}: the brief does not carry {missing}, so a"
+            f" subagent with no history of its own repairs something other"
+            f" than the text as it now stands (ADR-0107). See {STANDARD}."
+        )
+    for parameter in ("genre", "technique"):
+        assert parameter not in brief, (
+            f"{UNSLOP_CORRECTION}: the brief passes on a {parameter}, which"
+            f" this Skill resolves nowhere and loads nothing for. A correction"
+            f" made against a contract the review never applied is a change"
+            f" nobody asked for (ADR-0112). See {STANDARD}."
+        )
+
+
+def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:
+    """One parameter, the Collection's own precedence, and no metadata written.
+
+    The language falls through the Formal Invocation, a recognized Kntnt map,
+    the Contextual Instruction, the Conversation Context, inference, and then
+    the language of the supplied text. A map may supply that one value; no map
+    is created and none is brought into line with what the run resolved,
+    because this Skill resolves nothing a map records (ADR-0088, ADR-0112).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8")
+
+    for level in (
+        "Formal Invocation",
+        "Contextual Instruction",
+        "Conversation Context",
+    ):
+        assert level in body, (
+            f"{UNSLOP}: the body names no {level} in its language precedence,"
+            f" so the order this Collection resolves a parameter in is this"
+            f" Skill's own (ADR-0088). See {STANDARD}."
+        )
+    assert "kntnt" in body and "frontmatter" in body, (
+        f"{UNSLOP}: the body never says which frontmatter is this"
+        f" collection's, so unrelated document fields read as configuration"
+        f" (ADR-0088). See {STANDARD}."
+    )
+    assert "created or synchronized" in body, (
+        f"{UNSLOP}: the body does not say that no Kntnt map is created or"
+        f" synchronized. This Skill resolves one value of the three a map"
+        f" carries, so writing one would record a configuration it never"
+        f" settled (ADR-0088, ADR-0112). See {STANDARD}."
+    )
+    assert "$LIBRARY/scripts/languages.py" in body, (
+        f"{UNSLOP}: the body resolves its language through something other"
+        f" than the Collection Library's resolver, which is deterministic and"
+        f" shared by every editorial Skill (ADR-0087, ADR-0076). See"
+        f" {STANDARD}."
+    )
+
+
+def test_unslop_delivers_shared_and_judges_only_the_text_in_front_of_it() -> None:
+    """Two contracts this Skill consumes rather than restates.
+
+    Where a result goes, when a source may be replaced, and what an unchanged
+    run returns are stated once in the Collection Library (ADR-0091). Source
+    material is somebody else's contract, and a caveat about material nobody
+    supplied is noise in every run that was never a Write run (ADR-0088).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8")
+
+    assert "$LIBRARY/references/delivery.md" in body, (
+        f"{UNSLOP}: the body delivers its Text Artifact without following the"
+        f" Collection Library's delivery contract, so the Output Target,"
+        f" In-place Editing, its refusals, and the no-change status are this"
+        f" Skill's own account of rules it shares with its peers (ADR-0091,"
+        f" ADR-0076). See {STANDARD}."
+    )
+    assert "`my-file-2.md`" not in body, (
+        f"{UNSLOP}: the body spells out the shared collision sequence instead"
+        f" of following the contract that owns it, which is one rule made into"
+        f" two things to keep true (ADR-0091). See {STANDARD}."
+    )
+    assert "source material" in body, (
+        f"{UNSLOP}: the body says nothing about source material, so nothing"
+        f" stops a pass from asking for material it was never given"
+        f" (ADR-0088). See {STANDARD}."
+    )
+    assert "Source Fidelity" in body, (
+        f"{UNSLOP}: the body never names Source Fidelity as somebody else's"
+        f" contract, and the boundary is what keeps this Skill usable where no"
+        f" Write invocation and no material exist (ADR-0088). See {STANDARD}."
+    )
+
+
+def test_the_unslop_manpage_names_the_patterns_a_finding_may_be() -> None:
+    """A reader deciding whether to run this needs to know what it looks for.
+
+    The seven patterns are the whole of what a finding may be here, and the
+    page that describes the Skill is where somebody outside the run reads
+    them. They are applied by what they do in the target language rather than
+    matched as English strings (ADR-0101, ADR-0112).
+    """
+
+    manpage = UNSLOP_HELP.read_text(encoding="utf-8").lower()
+
+    missing = [pattern for pattern in SLOP_PATTERNS if pattern not in manpage]
+    assert missing == [], (
+        f"{missing}: the page does not name these patterns, and they are the"
+        f" whole of what this Skill finds (ADR-0101, ADR-0112). See"
+        f" {STANDARD}."
+    )
+    assert "semantic" in manpage, (
+        f"{UNSLOP_HELP}: the page does not say that the catalogue's English"
+        f" examples are applied as semantic patterns in the target language,"
+        f" which is what makes one compact catalogue work on every language"
+        f" the Collection installs (ADR-0101). See {STANDARD}."
+    )
+
+
 def test_the_base_contracts_review_extension_restates_no_base_rule() -> None:
     """A requirement and its diagnostic must not both claim to state the rule.
 
