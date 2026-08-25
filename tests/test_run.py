@@ -6197,6 +6197,61 @@ def test_a_ticket_gets_its_reservation_back_unchanged_under_contention(
     assert fresh["reservations"] == [{"directory": "docs/adr", "number": "0004"}]
 
 
+def _logging_git(directory: Path) -> dict[str, str]:
+    """Put a git on PATH that says when it is inside a worktree command.
+
+    Git's worktree administration is one shared read-modify-write: listing the
+    trees and adding one both read every entry under `.git/worktrees`, so an
+    entry a sibling add has made and not yet filled in reads as a corrupt
+    repository. Whether two isolations are ever in there together is a window
+    a few milliseconds wide, so a test of it would pass or fail on scheduling
+    luck. The stand-in writes a line on the way in and on the way out and
+    dawdles inside an add, which makes an overlap certain to show rather than
+    certain to be missed.
+    """
+
+    # The stand-in must reach the real git however this machine names it,
+    # because PATH names the stand-in itself once it is installed.
+    real = shutil.which("git")
+    assert real is not None
+
+    return fake_binary_on_path(
+        directory,
+        "git",
+        "#!/bin/sh\n"
+        f'if [ "$1" != worktree ]; then exec "{real}" "$@"; fi\n'
+        'echo in >> "$WORKTREE_LOG"\n'
+        'if [ "$2" = add ]; then sleep 2; fi\n'
+        f'"{real}" "$@"\n'
+        "status=$?\n"
+        'echo out >> "$WORKTREE_LOG"\n'
+        "exit $status\n",
+    ) | {"WORKTREE_LOG": str(directory / "worktree.log")}
+
+
+def test_overlapping_isolates_take_turns_through_gits_worktree_machinery(
+    tmp_path: Path,
+) -> None:
+    """A wave whose isolations are started together enters git's own worktree
+    administration twice at once, and git does not survive that: an add reads
+    every entry under `.git/worktrees`, and a sibling entry made but not yet
+    filled in is read as a corrupt repository rather than as a tree being
+    made. It cost a ticket a working tree it could have had, once in some
+    thousands of overlaps — often enough to reach a run and rare enough to
+    look like a flake. So the isolations take turns through that one stretch,
+    however far they overlap on either side of it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _logging_git(tmp_path)
+
+    answers = _isolated_at_once(repo, [9, 10], env=env)
+
+    marks = Path(env["WORKTREE_LOG"]).read_text(encoding="utf-8").split()
+    assert marks, "the stand-in was never asked for a worktree command"
+    assert marks == ["in", "out"] * (len(marks) // 2)
+    assert sorted(Path(answer["worktree"]).name for answer in answers) == ["10", "9"]
+
+
 def test_a_repository_that_numbers_nothing_is_unmoved_by_overlapping_isolates(
     tmp_path: Path,
 ) -> None:
@@ -7002,6 +7057,53 @@ def test_observe_repeats_without_multiplying_and_refuses_a_conflict(
     assert Path(json.loads(first.stdout)["attempts"]).read_bytes() == written
 
 
+def test_observe_takes_any_commit_this_repository_resolves_and_keeps_the_digest(
+    tmp_path: Path,
+) -> None:
+    """A builder reaches for the reference it has — the abbreviation git printed
+    when it committed, or the head it is standing on — and neither is a forty-hex
+    digest. Both name the same commit here, so both are taken, and what the
+    artifact identity carries is the full digest either way."""
+
+    repo, scratch, env = _routed(
+        tmp_path, decisions=[_selected("build-9"), _selected("amend-9-1")]
+    )
+    digest = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    abbreviated = _observed(
+        repo, scratch, env, "build-9", "pass", "--commit", digest[:8]
+    )
+    symbolic = _observed(repo, scratch, env, "amend-9-1", "pass", "--commit", "HEAD")
+
+    assert abbreviated.returncode == 0, abbreviated.stderr
+    assert symbolic.returncode == 0, symbolic.stderr
+    attempts = _attempts_file(symbolic)["attempts"]
+    assert [attempt["artifact_hashes"] for attempt in attempts] == [
+        [f"sha1:{digest}"],
+        [f"sha1:{digest}"],
+    ]
+
+
+def test_observe_refuses_a_commit_nothing_resolves_and_names_what_it_would_take(
+    tmp_path: Path,
+) -> None:
+    """A digest of some other checkout is forty hex characters and still names
+    nothing here, so the rule the refusal enforces is resolution rather than
+    shape — and it says which references resolve, rather than leaving the caller
+    to guess at the one form the check used to accept."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    refused = _observed(repo, scratch, env, "build-9", "pass", "--commit", "c" * 40)
+    account = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert refused.returncode == 1
+    assert "c" * 40 in refused.stderr
+    assert "resolve" in refused.stderr
+    assert "HEAD" in refused.stderr
+    assert json.loads(account.stdout)["observations"]["observed"] == 0
+
+
 def test_report_names_the_artifact_a_run_may_import_and_never_imports(
     tmp_path: Path,
 ) -> None:
@@ -7037,6 +7139,7 @@ def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
     )
     metrics = tmp_path / "metrics.json"
     metrics.write_text(json.dumps({"rolling_quota": 4.0}), encoding="utf-8")
+    digest = _git(repo, "rev-parse", "HEAD").stdout.strip()
 
     _observed(repo, scratch, env, "build-9", "fail")
     last = _observed(
@@ -7048,7 +7151,7 @@ def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
         "--metrics",
         str(metrics),
         "--commit",
-        "b" * 40,
+        digest,
     )
     emitted = observations.observe(_attempts_file(last))
     artifact = observations.merge(None, emitted["observations"])["artifact"]
@@ -7057,7 +7160,7 @@ def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
     assert emitted["refusals"] == []
     assert len(emitted["observations"]) == 2
     assert emitted["observations"][1]["quota"]["rolling"] == 4.0
-    assert emitted["observations"][1]["artifact_hashes"] == ["sha1:" + "b" * 40]
+    assert emitted["observations"][1]["artifact_hashes"] == [f"sha1:{digest}"]
     assert len(imported["accepted"]) == 2
     assert imported["rejected"] == []
 

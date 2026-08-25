@@ -14,7 +14,8 @@ import re
 import shutil
 import subprocess
 import sys
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
@@ -303,10 +304,6 @@ OBSERVED_OUTCOMES: dict[str, tuple[str, str | None, str]] = {
     "blocked": ("abstain", "discovered_dependency", "tracker"),
     "collision": ("abstain", "merge_collision", "harness"),
 }
-
-# What a commit is as a sanitized artifact identity: the digest itself, under
-# the algorithm that produced it, and never a path into anybody's checkout.
-COMMIT_DIGEST = re.compile(r"^[0-9a-f]{40}$")
 
 # The roles that are never routed. A verdict inherits the complete main seat
 # exactly, so a decision made for one is refused at this seam rather than left
@@ -608,6 +605,22 @@ def numbered_registries(cwd: Path) -> dict[str, int]:
     return highest
 
 
+@contextmanager
+def allocation_lock(home: Path) -> Iterator[None]:
+    """Hold the lock a wave's overlapping isolations take turns under.
+
+    A caller that finds it taken waits: the work behind it is bounded and
+    short, and a refusal would turn solved contention into a ticket with
+    nowhere to build. Closing the file releases it, as does the death of the
+    process.
+    """
+
+    home.mkdir(parents=True, exist_ok=True)
+    with (home / ALLOCATION_LOCK).open("a") as guard:
+        fcntl.flock(guard, fcntl.LOCK_EX)
+        yield
+
+
 def reserved_numbers(home: Path, number: int) -> list[dict[str, str]]:
     """Return what isolate reserved ticket *number*, or nothing where it has none.
 
@@ -676,13 +689,8 @@ def allocate(cwd: Path, number: int) -> dict[str, Any]:
     scratch = home / f"{number}{SCRATCH_SUFFIX}"
     scratch.mkdir(parents=True, exist_ok=True)
 
-    # The whole read-modify-write happens with the lock held. A caller that
-    # finds it taken waits: the work behind it is bounded and short, and a
-    # refusal would turn solved contention into a ticket with nowhere to
-    # build. Closing the file releases it, as does the death of the process.
-    with (home / ALLOCATION_LOCK).open("a") as guard:
-        fcntl.flock(guard, fcntl.LOCK_EX)
-
+    # The whole read-modify-write happens with the lock held.
+    with allocation_lock(home):
         # A ticket already holding numbers keeps them, under contention
         # exactly as without it. One arriving new takes the next past both
         # the registry's highest and whatever any reservation holds, so a
@@ -2958,8 +2966,53 @@ def isolate(cwd: Path, number: int) -> int:
     repository's numbered registries (ADR-0071).
     """
 
-    run_branch = current_branch(cwd)
-    open_now = open_worktrees(cwd, run_branch)
+    home = worktree_home(cwd)
+
+    # Reading what a run has open and adding to it are one read-modify-write on
+    # state git keeps for the whole repository, so they happen under the same
+    # lock the reservations do. Git's own machinery is what forces it: both
+    # listing the trees and adding one read every entry under `.git/worktrees`,
+    # so an entry a sibling add has made and not yet filled in is read as a
+    # corrupt repository rather than as a tree being made, and the ticket is
+    # refused a tree it could have had. A wave whose isolations are started
+    # together — which is how an orchestrator starts independent calls — enters
+    # that stretch twice at once; here it takes turns and overlaps everywhere
+    # else.
+    with allocation_lock(home):
+        run_branch = current_branch(cwd)
+        open_now = open_worktrees(cwd, run_branch)
+        branch = worktree_branch(run_branch, number)
+        path = home / str(number)
+
+        # A ticket picked up again is made nothing at all, the emit below
+        # answering with the tree it was left in.
+        if number not in open_now:
+            # A branch with nothing checked out on it is work an earlier run
+            # left behind and this one would silently build over, so it is
+            # named instead.
+            if git_ok(cwd, "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"):
+                return fail(
+                    f"#{number} already has the branch '{branch}' and no working "
+                    "tree holding it: look at what is on it, then delete it"
+                )
+
+            # A working tree standing at this ticket's path that is not this
+            # run's is another branch's run, interrupted or failed and left to
+            # be looked at. Building over it would take that branch's work for
+            # this ticket's.
+            if path.exists():
+                return fail(
+                    f"#{number} already has a working tree at {path} that belongs "
+                    "to another run: look at what is in it, then remove it with "
+                    "`git worktree remove`"
+                )
+
+            try:
+                git(cwd, "worktree", "add", str(path), "-b", branch)
+            except RunError as exc:
+                raise RunError(
+                    f"#{number} could not be given a working tree: {exc}"
+                ) from exc
 
     # The invocation is the resume here as everywhere else (ADR-0052): a ticket
     # picked up again goes on in the working tree it was left in.
@@ -2975,31 +3028,6 @@ def isolate(cwd: Path, number: int) -> int:
             }
         )
         return 0
-
-    # A branch with nothing checked out on it is work an earlier run left
-    # behind and this one would silently build over, so it is named instead.
-    branch = worktree_branch(run_branch, number)
-    if git_ok(cwd, "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"):
-        return fail(
-            f"#{number} already has the branch '{branch}' and no working tree "
-            "holding it: look at what is on it, then delete it"
-        )
-
-    # A working tree standing at this ticket's path that is not this run's is
-    # another branch's run, interrupted or failed and left to be looked at.
-    # Building over it would take that branch's work for this ticket's.
-    path = worktree_home(cwd) / str(number)
-    if path.exists():
-        return fail(
-            f"#{number} already has a working tree at {path} that belongs to "
-            "another run: look at what is in it, then remove it with `git "
-            "worktree remove`"
-        )
-
-    try:
-        git(cwd, "worktree", "add", str(path), "-b", branch)
-    except RunError as exc:
-        raise RunError(f"#{number} could not be given a working tree: {exc}") from exc
 
     emit(
         {
@@ -4076,6 +4104,7 @@ def read_measurements(path: str | None) -> dict[str, Any]:
 
 
 def cmd_observe(
+    cwd: Path,
     request_id: str,
     outcome: str,
     started_at: str | None,
@@ -4107,8 +4136,22 @@ def cmd_observe(
         return fail(unrouted)
     held = cast(Routing, routing)
     decided = cast(RouteRecord, held.decided(request_id))
-    if commit is not None and not COMMIT_DIGEST.match(commit):
-        return fail(f"{commit} is not a commit this run can name as an artifact")
+
+    # An artifact identity is the digest itself and never a path into anybody's
+    # checkout, but the caller has whatever reference its own commit gave it —
+    # an abbreviation, a branch, the head it is standing on. So the repository
+    # resolves what was named and the full digest is what gets recorded, and a
+    # reference nothing resolves is refused in terms of what would be taken.
+    if commit is not None:
+        try:
+            commit = git(cwd, "rev-parse", "--verify", f"{commit}^{{commit}}").strip()
+        except RunError:
+            return fail(
+                f"{commit} is not a commit this repository resolves: name one it "
+                "does — a digest, an abbreviation of one, or a reference such as "
+                "a branch, a tag, or HEAD"
+            )
+
     if not isinstance(held.snapshot.get("harness"), dict):
         return fail(
             "this run's frozen snapshot names no Harness, and an observation is "
@@ -4467,6 +4510,7 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.verb == "observe":
         return cmd_observe(
+            cwd,
             args.request,
             args.outcome,
             args.started_at,
