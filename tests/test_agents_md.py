@@ -16,10 +16,10 @@ TICKET_RECORD = (
     "docs/adr/0067-a-ticket-asserts-only-what-stays-true-until-it-is-built.md"
 )
 
-# The coding-standard module carrying what a Skill's own shipped files must
-# hold. Named here for the same reason the record above is: what has to hold is
-# that this particular module is pointed at, before anything has been written.
-STANDARD = "docs/coding-standard/skills.md"
+# The rules module carrying what a Skill's own shipped files must hold. Named
+# here for the same reason the record above is: what has to hold is that this
+# particular module is pointed at, before anything has been written.
+STANDARD = "docs/rules/skills.md"
 
 # Every entry under `## References` is a backticked path, an em dash, and the
 # clause saying when to read it.

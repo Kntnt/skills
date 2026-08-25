@@ -8,7 +8,7 @@
 
 Three findings from the sweep matter more than any individual classification.
 
-**A living rules document already exists, and the convention for keeping it is already written down.** `docs/coding-standard/skills.md` states current law as rules and cites the record for the reasoning instead of repeating it; `docs/coding-standard/general.md` makes that a duty in its *Refactoring completeness* section — *the records carry why and when, this standard carries what is true now*, and a change that moves a record in a rule area binding more than one Skill must state the resulting rule in the standard in the same change. The reform is therefore not the invention of a format. It is the completion of one that covers Skill *form* and stops there.
+**A living rules document already exists, and the convention for keeping it is already written down.** `docs/rules/skills.md` states current law as rules and cites the record for the reasoning instead of repeating it; `docs/rules/general.md` makes that a duty in its *Refactoring completeness* section — *the records carry why and when, this standard carries what is true now*, and a change that moves a record in a rule area binding more than one Skill must state the resulting rule in the standard in the same change. The reform is therefore not the invention of a format. It is the completion of one that covers Skill *form* and stops there.
 
 **`CONTEXT.md` is a second rules document wearing a glossary's clothes.** Its entries for Select, Update, Uninstall, Assume yes, Digest, Deviating, Withdrawn, Catalog, Partial, Detected Harness and Capability are normative specifications several paragraphs long, not definitions. That is where the Manager's behavioural law actually lives today. Anyone answering *what applies now* has three places to look, and the records are only one of them.
 
@@ -18,9 +18,9 @@ Three findings from the sweep matter more than any individual classification.
 
 | Place | What it holds | Bearing on the reform |
 |---|---|---|
-| `docs/coding-standard/general.md` | Code form, design philosophy, refactoring completeness, naming, packaging, tooling | Already the rules-doc format. Absorbs, does not compete. |
-| `docs/coding-standard/python.md` | Python baseline, PEP 723, tooling | Unaffected. |
-| `docs/coding-standard/skills.md` | What a Skill ships: frontmatter, body, grammar, Library, manpages, Codex sidecar, README | Already the rules doc for Skill form. 32 ADR citations point here from it. |
+| `docs/rules/general.md` | Code form, design philosophy, refactoring completeness, naming, packaging, tooling | Already the rules-doc format. Absorbs, does not compete. |
+| `docs/rules/python.md` | Python baseline, PEP 723, tooling | Unaffected. |
+| `docs/rules/skills.md` | What a Skill ships: frontmatter, body, grammar, Library, manpages, Codex sidecar, README | Already the rules doc for Skill form. 32 ADR citations point here from it. |
 | `CONTEXT.md` | Domain glossary — in practice, the Manager's behavioural spec | Needs a decision: glossary or law. |
 | `AGENTS.md` | Ground rules + `read when` References lines | The router. Gets the rules doc's entry. |
 | `CONTRIBUTING.md` | The four checks, catalog regeneration, reference-validator comparison | Procedure; unaffected except for ADR links. |
@@ -45,9 +45,9 @@ Each record is classified twice, because the brief's four bins conflate two inde
 
 **Record** — what happens to the file: `DROP` (deleted; git remembers), `C1`–`C6` (folded into a named consolidation record), `KEEP` (stays standalone).
 
-**Rule lands in** — where the still-binding rule is stated afterwards: a rules-doc module, an existing coding-standard module, that Skill's own shipped files, or `—` where nothing binding survives.
+**Rule lands in** — where the still-binding rule is stated afterwards: a rules-doc module, an existing standard module, that Skill's own shipped files, or `—` where nothing binding survives.
 
-The brief's *move-to-standard* bin is the row where the record drops and the rule lands in a coding-standard module; its *rules-doc line* bin is the row where the record drops or folds and the rule lands in a rules-doc module.
+The brief's *move-to-standard* bin is the row where the record drops and the rule lands in an existing standard module; its *rules-doc line* bin is the row where the record drops or folds and the rule lands in a rules-doc module.
 
 Twenty-two records belong to orchestrate's runtime and die with that Skill in phase 3; they are the rows whose justification says so, and `run.py` or the orchestrate tests cite nearly all of them, which is why they outlive phase 1. `†` is a narrower mark inside that class: the twenty-one whose field evidence the `/dispatch` design should cite from git rather than rediscover. ADR-0058 is the twenty-second — orchestrate runtime, cited by `run.py`, but its own premise is already outrun, so there is nothing there to carry forward.
 

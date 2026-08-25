@@ -21,7 +21,7 @@ CITING_DOCS = ("CONTEXT.md", "README.md", "AGENTS.md", "CONTRIBUTING.md")
 # itself, whose assertion messages do the same for the reader whose check has
 # just gone red (issue #69). A pointer is the one part of that arrangement free
 # to drift, so both are held to the same check as the prose above.
-STANDARD_DIR = REPO_ROOT / "docs" / "coding-standard"
+STANDARD_DIR = REPO_ROOT / "docs" / "rules"
 TESTS = REPO_ROOT / "tests"
 
 # A record's file is `NNNN-slug.md` and its number is that four-digit prefix;

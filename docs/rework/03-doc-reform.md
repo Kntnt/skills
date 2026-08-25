@@ -4,7 +4,7 @@
 
 ## What was decided
 
-**The rules document is `docs/rules/`.** `docs/coding-standard/` is renamed to it and gains three modules: `collection.md` (the Manager's behavioural law), `tickets.md` (how a ticket is written), and `docs.md` (how this repository records decisions). The existing `general.md`, `python.md` and `skills.md` move unchanged in content. No shipped Skill file points at the old path — the rename touches `AGENTS.md`, `CONTRIBUTING.md`, `skills.md`'s own internal links and the suite, and nothing else.
+**The rules document is `docs/rules/`.** The former coding standard directory is renamed to it and gains three modules: `collection.md` (the Manager's behavioural law), `tickets.md` (how a ticket is written), and `docs.md` (how this repository records decisions). The existing `general.md`, `python.md` and `skills.md` move unchanged in content. No shipped Skill file points at the old path — the rename touches `AGENTS.md`, `CONTRIBUTING.md`, the research note under `docs/research/`, the suite and this dossier, and nothing else.
 
 **`CONTEXT.md` keeps its name and place and holds definitions only.** Every normative sentence in it moves to `docs/rules/collection.md`; what stays is the term, what it means, and its *Avoid* list. This also makes the file safe against Matt Pocock's `/grill-with-docs` regenerating it: today a regeneration would destroy specifications that live nowhere else, and afterwards it costs at most some wording.
 
@@ -22,7 +22,7 @@
 
 Eleven tickets. Each is sized for one fresh context window and declares its blocking edges. Two rewrite a rule every shipped file is under and therefore declare `Builds alone` (ADR-0099). None of them names a record number for a record it creates; each consolidation ticket takes the next free number at the time of writing and its commit says which number was taken (ADR-0067).
 
-**T1 — Rename `docs/coding-standard/` to `docs/rules/`.** Move the three modules unchanged, update the References lines in `AGENTS.md`, the standard's own internal links, `CONTRIBUTING.md` step 3, and every path the suite resolves. No prose changes. *Blocked by: nothing.* Delivers: one directory whose name says what it holds, with a green suite.
+**T1 — Rename the coding standard directory to `docs/rules/`.** Move the three modules unchanged, update the References lines in `AGENTS.md`, the links pointing into the standard from elsewhere, `CONTRIBUTING.md` step 3, and every path the suite resolves. No prose changes. *Blocked by: nothing.* Delivers: one directory whose name says what it holds, with a green suite.
 
 **T2 — `docs/rules/collection.md`.** State the Manager's behavioural law as rules: layers and detection, the transport boundary, the Catalog and its fallback, the Digest and *Deviating*, what Select, Update and Uninstall each promise, the dependency gate and Capabilities, disk-as-truth and disk-as-report, the Sandbox, the renderer boundary. Draw from the records the triage bins `C1` and from `CONTEXT.md`'s normative sentences, citing each record for the reasoning rather than restating it. *Blocked by: T1.* Delivers: a reader can learn what the Manager promises without opening a record.
 
