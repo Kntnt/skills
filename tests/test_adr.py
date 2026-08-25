@@ -59,6 +59,7 @@ RELATIONS = {
     ("0072", "0098"),
     ("0048", "0103"),
     ("0080", "0103"),
+    ("0096", "0105"),
 }
 
 # The flag-refusal rule and the reasoning an installed reader needs. `delegation`
@@ -278,6 +279,37 @@ def test_the_command_path_grammar_preserves_the_tldr_record_history() -> None:
     # entirely, and the cost of having to type the separator for it.
     assert "Contextual Instruction" in later
     assert "reserved separator" in later
+
+
+def test_the_derived_valued_registry_preserves_the_hand_list_record_history() -> None:
+    """The derivation points past ADR-0096 without rewriting the cost it accepted.
+
+    ADR-0096 settled the spelling a valued flag takes its value in, which
+    stands. Only the price it accepted for the check behind that rule — a flag
+    table maintained by hand — was outrun, by the first two Skills added after
+    it, which introduced six valued flags the table never learned (issue #121).
+    """
+
+    earlier = (
+        ADR / "0096-a-valued-flag-attaches-its-value-with-an-equals-sign.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR
+        / "0105-the-valued-flag-registry-derives-from-the-collections-own-declarations.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "the flag table the check reads is maintained by hand" in earlier
+    assert "the price of a scan that does not have to parse Python" in earlier
+    assert "narrowed by ADR-0105" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "narrows ADR-0096" in later
+
+    # The road not taken is named: a staleness check cannot see the flag whose
+    # every surface spells it wrong, which is the violation the rule exists for.
+    assert "staleness check" in later
 
 
 def test_a_pointer_names_a_later_record() -> None:
