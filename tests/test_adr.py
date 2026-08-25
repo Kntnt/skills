@@ -61,6 +61,7 @@ RELATIONS = {
     ("0080", "0103"),
     ("0096", "0105"),
     ("0055", "0106"),
+    ("0098", "0110"),
 }
 
 # The flag-refusal rule and the reasoning an installed reader needs. `delegation`
@@ -240,6 +241,37 @@ def test_the_gate_failing_mechanical_recut_preserves_the_wave_check_history() ->
     # The road not taken is named, a fourth shape being a fourth thing two
     # briefs can state inconsistently.
     assert "fourth verdict shape" in later
+
+
+def test_the_escalated_fix_round_preserves_the_no_progress_bound_history() -> None:
+    """The escalation points past ADR-0098 without rewriting the world it decided in.
+
+    ADR-0098's constructive obligation, its single-round bound, and its
+    declined-findings bind all stand. Only its closing restatement of the
+    no-progress bound — a round that changes nothing stops the run — was
+    outrun, by a fixer that may now hold a seat cheaper than the one the
+    inference assumed (issue #120).
+    """
+
+    earlier = (
+        ADR / "0098-a-fully-determined-fix-is-mechanical-whatever-the-gate-says.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR / "0110-a-changed-nothing-fix-round-escalates-once-from-a-selected-seat.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "a round that changes nothing stops the run" in earlier
+    assert "buys exactly one fix round" in earlier
+    assert "amended by ADR-0110" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "amends ADR-0098" in later
+
+    # The road not taken is named, a no-op on the main seat being the
+    # non-mechanical case wearing the mechanical one's clothes.
+    assert "unconditional" in later
 
 
 def test_the_command_path_grammar_preserves_the_tldr_record_history() -> None:

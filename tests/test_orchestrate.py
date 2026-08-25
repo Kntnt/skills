@@ -1189,7 +1189,7 @@ def test_a_gate_failing_finding_buys_one_fix_round() -> None:
     # The loop's existing bounds are untouched by the new one.
     assert "a round finds nothing" in step and "a round changes nothing" in step, (
         f"{SKILL / 'SKILL.md'}: step 11 keeps the loop's existing end and"
-        f" stop bounds beside the new one (ADR-0072, ADR-0098)."
+        f" stop bounds beside the new one (ADR-0072, ADR-0098, ADR-0110)."
     )
 
 
@@ -1481,7 +1481,137 @@ def test_the_wave_step_loops_check_fix_check_to_a_fixed_point() -> None:
         f"{SKILL / 'SKILL.md'}: step 11 stops the run when a round changes"
         f" nothing — findings repeating with no fix the fixer can make is"
         f" the non-mechanical case wearing the mechanical one's clothes"
-        f" (ADR-0072)."
+        f" (ADR-0072), which ADR-0110 conditions on the seat that fixer held"
+        f" without removing."
+    )
+
+
+def test_the_wave_fix_request_states_the_facts_that_price_it() -> None:
+    """The strongest net the run owns, stated in the request rather than assumed.
+
+    The check that demanded the fix re-runs the gate and re-reads the branch,
+    the fix is a commit on a branch that check reads whole, and the loop owns
+    the retry. Those are the facts the routing contract prices cheap
+    selection and bounded escalation on, and a request that states none of
+    them is asking to be decided from nothing (ADR-0110).
+    """
+
+    step = _step(11)
+
+    assert "declared external checker" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11's fix request names the wave check's"
+        f" own re-run as its declared external checker — the fact the routing"
+        f" contract prices a cheap start on (ADR-0110)."
+    )
+    assert "reversible" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11's fix request states that the work is"
+        f" reversible, a fix being a commit on a branch the check reads whole"
+        f" (ADR-0110)."
+    )
+    assert "the retry the loop owns" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11's fix request states the retry the"
+        f" loop already owns, which is what a bounded escalation may consume"
+        f" and never mint (ADR-0110)."
+    )
+    assert "owns no selection rule beyond stating them" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 says this Skill owns no selection rule"
+        f" beyond stating those facts — the frozen decision is the routing"
+        f" module's (ADR-0074, ADR-0110)."
+    )
+    assert "no tier ladder" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 says no tier ladder of this Skill's"
+        f" own stands anywhere near the dispatch: the checker's finding format"
+        f" is the evidence and the request carries it (ADR-0110)."
+    )
+
+
+def test_a_changed_nothing_round_escalates_once_from_a_selected_seat() -> None:
+    """A fractional saving must not buy a dead run, and the escalation is bounded.
+
+    The inference behind the old stop — no fix the fixer could make means the
+    finding was never mechanical — is valid only where the fixer held the
+    strongest seat. Under a selected configuration a silent no-op may mean
+    only that the fixer was too cheap (ADR-0110).
+    """
+
+    step = _step(11)
+
+    assert "`wave-fix-<n>-escalated`" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 names the one further request a"
+        f" changed-nothing round routes, so the decision it launches on can be"
+        f" found again (ADR-0085, ADR-0110)."
+    )
+    assert "verified failure" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 carries the changed-nothing round into"
+        f" that request as a verified failure with the wave check as its"
+        f" checker — self-confidence is not verification (ADR-0110)."
+    )
+    assert "dispatch the same findings once more" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 dispatches the same findings to"
+        f" whatever the escalation comes back with, rather than a rewriting of"
+        f" them (ADR-0110)."
+    )
+    assert "held the main seat" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 stops the run where the changed-nothing"
+        f" round's fixer already held the main seat — the non-mechanical case"
+        f" wearing the mechanical one's clothes, its meaning restored"
+        f" (ADR-0110)."
+    )
+    assert "a second changed-nothing round stops the run" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 stops the run on a second"
+        f" changed-nothing round whatever seat its fixer held: the escalation"
+        f" is one, not a ladder (ADR-0110)."
+    )
+    assert "the engine refuses a second" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 says the bound is enforced rather than"
+        f" asked for — the route verb itself refuses a second escalation for a"
+        f" wave (ADR-0110)."
+    )
+
+
+def test_the_manpage_describes_the_one_escalated_fix_round() -> None:
+    """A developer reading the page has to know a no-op round is not always the end."""
+
+    where = SKILL / "help.md"
+    entry = _manpage_entry("TICKET EXECUTION", "**Integrate**")
+
+    assert "makes no progress stops the run" in entry, (
+        f"{where}: the manpage keeps the no-progress stop, which is still what"
+        f" a changed-nothing round on the main seat reaches (ADR-0098,"
+        f" ADR-0110)."
+    )
+    assert "escalates once" in entry, (
+        f"{where}: the manpage says a no-progress round escalates once before"
+        f" the stop, so a developer reading the account of a stopped run knows"
+        f" what was already spent (ADR-0110)."
+    )
+    assert "selected configuration" in entry, (
+        f"{where}: the manpage says which fixer the escalation is for — one"
+        f" that ran on a selected configuration rather than on the main seat"
+        f" (ADR-0110)."
+    )
+    assert "external checker" in entry, (
+        f"{where}: the manpage says the fix request states the facts that"
+        f" price it, the review's own re-run among them (ADR-0110)."
+    )
+
+
+def test_the_plan_and_the_dry_preflight_state_an_inherit_only_harness_once() -> None:
+    """One fact about the Harness, read before the night rather than after it."""
+
+    assert "routing capability" in _step(2), (
+        f"{SKILL / 'SKILL.md'}: step 2's dry preflight renders the routing"
+        f" capability the frozen context leaves the run, beside the proposed"
+        f" decisions (ADR-0110)."
+    )
+    assert "`routing_capability`" in _step(12), (
+        f"{SKILL / 'SKILL.md'}: step 12 renders the routing capability the"
+        f" account carries (ADR-0110)."
+    )
+    assert "say it once" in _step(12), (
+        f"{SKILL / 'SKILL.md'}: step 12 states that capability once rather"
+        f" than as each decision's inheritance reason — twelve identical"
+        f" inheritances are one fact about the Harness (ADR-0110)."
     )
 
 

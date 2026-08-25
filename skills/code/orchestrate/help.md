@@ -54,7 +54,7 @@ A different subagent receives the same ticket record but none of the builder's c
 
 **Integrate**
 
-Verified work is committed and integrated into the run branch. After each wave, the full Project gate runs on the combined branch and an independent coherence review checks cross-ticket facts that tests may not cover. Its verdict turns on whether fixing what it found requires somebody to decide something, not on whether every gate command passed. Mechanical findings — a failing command among them, where the review states the exact correction and what already decided it — are fixed by another subagent and checked again until a round is clean. An unresolved choice, a gate failure whose correction the review cannot state, a named command still failing after the one fix round it buys, or a fix that makes no progress stops the run.
+Verified work is committed and integrated into the run branch. After each wave, the full Project gate runs on the combined branch and an independent coherence review checks cross-ticket facts that tests may not cover. Its verdict turns on whether fixing what it found requires somebody to decide something, not on whether every gate command passed. Mechanical findings — a failing command among them, where the review states the exact correction and what already decided it — are fixed by another subagent and checked again until a round is clean. The fix request states the facts that price it — the review's own re-run as its external checker, reversible work, and the retry the loop owns — and what they buy is the routing module's to decide. An unresolved choice, a gate failure whose correction the review cannot state, a named command still failing after the one fix round it buys, or a fix that makes no progress stops the run. A fix that changed nothing escalates once first where the fixer that made it ran on a selected configuration rather than on the main seat: the run routes one further decision carrying that round as a verified failure, dispatches the same findings to it, and stops on a second changed-nothing round whatever seat it ran on.
 
 **Close**
 
@@ -124,7 +124,7 @@ The report also names the commit on which the run's work is based. A ticket reco
 
 **--dry-run**
 
-Read the tracker, resolve the requested scope, and report the dependency-wave graph and read-only routing readiness/proposed decisions without commenting on, parking, claiming, starting setup, or writing model-selector configuration, ledger, or run-state data.
+Read the tracker, resolve the requested scope, and report the dependency-wave graph, read-only routing readiness/proposed decisions, and the routing capability the frozen context leaves the run — one line where no complete adapter can express a safe point and every building role will inherit the main seat — without commenting on, parking, claiming, starting setup, or writing model-selector configuration, ledger, or run-state data.
 
 **--at-once=**_COUNT_
 
@@ -172,7 +172,7 @@ Builders leave proposed entries for files every ticket must append to, such as a
 
 An invalid reference, option, option value, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`. An operand written before an option is out of order and is refused the same way.
 
-Routing is refused rather than adjusted. A response that is not this run's frozen snapshot, that changes that snapshot under its own identity, that is not the plan's starting frontier in plan order, that carries `--model` or `--deliberation` other than the ones the first frontier was routed under, or that decides a verdict role is rejected and nothing is frozen. A claim, amend, repair, rebuild, or wave fix whose exact role has no acceptable decision in that frozen account is refused before it runs. A route refusal is reported with its stable reason code and starts no work.
+Routing is refused rather than adjusted. A response that is not this run's frozen snapshot, that changes that snapshot under its own identity, that is not the plan's starting frontier in plan order, that carries `--model` or `--deliberation` other than the ones the first frontier was routed under, or that decides a verdict role is rejected and nothing is frozen. A claim, amend, repair, rebuild, or wave fix whose exact role has no acceptable decision in that frozen account is refused before it runs. A route refusal is reported with its stable reason code and starts no work. An escalated wave fix is refused where the run routed no fix round for that wave, and a second escalated wave fix for one wave is refused outright: a changed-nothing round buys exactly one.
 
 The working tree must contain no uncommitted non-ignored work when the run plans and immediately before a ticket closes. Commit or stash such work and restart. A repository with no ready ticket, no workable frontier, or only externally claimed work is reported without starting a build.
 

@@ -1847,6 +1847,137 @@ def test_route_freezes_every_execution_role_the_workflow_dispatches(
     ]
 
 
+def test_route_accepts_one_escalated_wave_fix_and_refuses_a_second(
+    tmp_path: Path,
+) -> None:
+    """A changed-nothing fix round buys exactly one further decision.
+
+    A silent no-op under a selected configuration may mean only that the
+    fixer was too cheap, so the run escalates once. A second escalation would
+    be the same inference drawn twice, and what refuses it is the engine
+    rather than the paragraph that describes it (ADR-0110).
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+    _route(repo, tmp_path, scratch, env, [_selected("wave-fix-2")], name="fix.json")
+
+    first = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("wave-fix-2-escalated")],
+        name="escalated.json",
+    )
+    second = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("wave-fix-2-escalated")],
+        name="again.json",
+    )
+
+    assert first.returncode == 0, first.stderr
+    assert json.loads(first.stdout)["decisions"][0]["role"] == "wave-fix"
+    assert second.returncode == 1
+    assert "wave-fix-2-escalated" in second.stderr
+    assert "exactly one further decision" in second.stderr
+
+
+def test_route_refuses_an_escalated_wave_fix_that_follows_no_round(
+    tmp_path: Path,
+) -> None:
+    """An escalation carries a no-op round as its verified failure, so a round ran."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("wave-fix-3-escalated")],
+        name="orphan.json",
+    )
+
+    assert result.returncode == 1
+    assert "wave-fix-3" in result.stderr
+    assert "never routed" in result.stderr
+
+
+def test_the_route_account_states_an_inherit_only_harness_once(
+    tmp_path: Path,
+) -> None:
+    """Twelve identical inheritances are one fact about the Harness, said once.
+
+    Where the frozen context leaves no complete adapter that can express a
+    safe point, every building role of the night will inherit the main seat.
+    The plan and the routing preflight say so in a line, rather than leaving
+    a developer to decode the same reason ticket by ticket after the run
+    (ADR-0110).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+    routed = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_inherited("build-9", "unavailable_selection_controls")],
+    )
+    replanned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert routed.returncode == 0, routed.stderr
+    stated = json.loads(routed.stdout)["routing_capability"]
+    assert stated is not None and "no complete adapter" in stated
+    assert json.loads(replanned.stdout)["routing"]["routing_capability"] == stated
+
+
+def test_a_dry_route_states_the_routing_capability_before_the_night(
+    tmp_path: Path,
+) -> None:
+    """A dry run is where that line is read before the night rather than after it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_inherited("build-9", "unavailable_selection_controls")],
+        dry_run=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert "no complete adapter" in json.loads(result.stdout)["routing_capability"]
+
+
+def test_one_selected_decision_leaves_no_routing_capability_line(
+    tmp_path: Path,
+) -> None:
+    """A Harness that can express one safe point is not an inherit-only Harness."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    replanned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert json.loads(replanned.stdout)["routing"]["routing_capability"] is None
+
+
 def test_a_launch_lost_after_a_claim_is_rerouted_from_the_same_snapshot(
     tmp_path: Path,
 ) -> None:
