@@ -15,7 +15,7 @@ The Skill was run as a user of it runs it: `/redline …` as the whole of a Clau
 
 The install did not begin that way. Redline was not installed on this machine at all, and the Library that was installed predated the genres, the techniques, the anti-slop catalogue, and the base review extension — so `--genre=article`, `--technique=abt`, and the whole of the review half named resources that were not there. The Skill was therefore installed and the Library brought up to the corpus commit, with the previous Library kept aside and put back when the runs were finished, and the installed Redline removed again; the machine ends as it began.
 
-Thirty-six invocations are recorded below, and four more under **Runs discarded**; two further entries carry no invocation of their own — `response-default`, which is a situation every destination-less run exercises, and `interview-transcript`, which was not run and says why. Each ran in its own turn with no memory of any other, and in its own copy of the corpus, staged exactly as [`../corpus/README.md`](../corpus/README.md) says: `cp -R docs/evaluation/corpus`, an empty `out/` beside it, and `chmod a-w` on `output/readonly-source.md`. `$RUN` below abbreviates that copy's root, `/Users/thomas/Projects/skills/.git/kntnt-orchestrate/109.scratch/runs/<id>`; invocations are otherwise verbatim, and the paths as typed carried the unabbreviated form. **side effects** is read from a `sha256` inventory of the whole working copy taken before and after each run, never from what the run said about itself.
+Forty-three invocations are recorded below, and four more under **Runs discarded**; two further entries carry no invocation of their own — `response-default`, which is a situation every destination-less run exercises, and `interview-transcript`, which was not run and says why. Thirty-six of the forty-three were made first; the last seven, under **Criteria the corpus could not stage on its own**, were made afterwards, one at a time with nothing else in flight, to judge three criteria the corpus supplies no material for. They ran under the same install, the same harness, and the same before-and-after inventory, and four of them staged run-local probe material as `$RUN/probe/` beside `$RUN/corpus/`, quoted in full where they are recorded. Each ran in its own turn with no memory of any other, and in its own copy of the corpus, staged exactly as [`../corpus/README.md`](../corpus/README.md) says: `cp -R docs/evaluation/corpus`, an empty `out/` beside it, and `chmod a-w` on `output/readonly-source.md`. `$RUN` below abbreviates that copy's root, `/Users/thomas/Projects/skills/.git/kntnt-orchestrate/109.scratch/runs/<id>`; invocations are otherwise verbatim, and the paths as typed carried the unabbreviated form. **side effects** is read from a `sha256` inventory of the whole working copy taken before and after each run, never from what the run said about itself.
 
 The runs were driven from the user's home directory rather than from this repository, so no run read this repository, the ticket, the criteria below, or the Skill's own source. Each run did inherit `~/.claude/CLAUDE.md`, which every session on this machine inherits; it is recorded because two of its instructions are visible in the traces — runs cleaned up their own temporary files and checked for stray background shells before finishing — and neither touches editorial behaviour.
 
@@ -46,9 +46,11 @@ The criterion identifiers are stable across entries:
 
 Two things about the criteria are worth a later reader's attention.
 
-`anti-slop` is judged in English only, and every Swedish entry below records it as `skipped`. The corpus carries one fixture of concentrated slop and it is English; its Swedish fixtures are competent prose whose defects are mechanical or structural. A Skill that finds no anti-slop pattern in a text that has none has not been tested for whether it would find one, so the Swedish half of that acceptance criterion is not established by this run. That is a gap in the corpus rather than a result about the Skill, and #142 is where it is written down.
+`anti-slop` is judged in English on every corpus fixture, and every Swedish corpus entry below records it as `skipped`. The corpus carries one fixture of concentrated slop and it is English; its Swedish fixtures are competent prose whose defects are mechanical or structural, and a Skill that finds no pattern in a text that has none has not been tested for whether it would find one. The Swedish half is judged instead on run-local material, under **Criteria the corpus could not stage on its own** below, where all seven of the catalogue's patterns are found in Swedish on Swedish instances. The gap is in the corpus rather than in the Skill, and #142 is where it is written down and stays open.
 
-`precedence` in the form the ticket names — a flag, a metadata value, and a contextual value each settling a different parameter in one invocation — cannot be staged from this corpus. Both fixtures carrying a `kntnt` map carry a complete one, so the map always outranks any Contextual Instruction for all three parameters and a contextual value can never settle anything beside it. What the runs below do establish is the same independence across two invocations: `handoff-conflicting` settles two parameters by flag and takes the third from the map, and `frontmatter-unrelated` settles one by flag, one by Contextual Instruction, and one by inference. The missing partial-map fixture is #142's second half.
+`precedence` in the form the ticket names — a flag, a metadata value, and a contextual value each settling a different parameter in one invocation — cannot be staged from this corpus. Both fixtures carrying a `kntnt` map carry a complete one, so the map always outranks any Contextual Instruction for all three parameters at once and a contextual value can never settle anything beside it. What the corpus entries below establish is the same independence in the arrangements the corpus does reach: `handoff-conflicting` settles two parameters by flag and takes the third from the map, `handoff-unusable` shows one flag deciding whether the same unusable map stops a run, and `frontmatter-unrelated` settles one by flag, one by Contextual Instruction, and one by inference. The three-source form is judged on run-local material carrying a one-key map, under **Criteria the corpus could not stage on its own** below, in two invocations that rotate which source settles which parameter. The missing partial-map fixture is #142's second half and stays open.
+
+`stop` names which of the three conditions ended a loop, and the corpus reaches two of them on its own: no findings with the budget unspent, and the budget spent with findings left. The third — a correction that makes no relevant progress — needs a review whose remaining findings a corrector may not repair, and no corpus fixture run at the genre it was written in produces one. It is judged below on two corpus fixtures held to a genre they are not written in, which needs no new material and no change to the corpus: only the invocation is new.
 
 ## `slop-heavy` (review only, budget zero)
 
@@ -888,6 +890,263 @@ Two things about the criteria are worth a later reader's attention.
 - **unresolved findings** — none.
 - **defects filed** — none.
 - **notes** — none.
+
+## Criteria the corpus could not stage on its own
+
+Three of this ticket's acceptance criteria name situations the shared corpus has no material for, and a criterion left unjudged is not a result. They are judged here, in seven further invocations made after the thirty-six above, one at a time with nothing else in flight, under the same install, the same harness, and the same before-and-after inventory.
+
+Nothing in the corpus was changed to close them. Two of the three are staged on run-local probe material, reproduced in full below and staged into each throwaway working copy as `$RUN/probe/` beside `$RUN/corpus/`; the corpus commit those entries name is still `6d476db`, because no fixture, no index entry, and no `Reject` line was touched. The third needed no new material at all: it is staged on corpus fixtures held to a genre they are not written in. The corpus's own gap — no Swedish fixture carrying concentrated slop, and no partial `kntnt` map — is real and stays open as #142; probe material judges the Skill without pretending the corpus can.
+
+Probe material is quoted here rather than described so that a GPT-family run can reproduce it exactly, which is what the recording format exists for.
+
+### `probe/partial-map-sv.md`
+
+An internal note in Swedish about dropping a daily stand-up, carrying a `kntnt` map with one key. It is not a press release and does not resemble one, so a `genre` of `press-release` can only have come from the map.
+
+```markdown
+---
+kntnt:
+  genre: press-release
+---
+
+# Vi slutade med den dagliga avstämningen
+
+Utvecklingsgruppen hade ett stående möte varje morgon klockan nio. Det tog femton minuter när det gick fort och trettiofem när någon hade fastnat i något. I januari bytte vi det mot en skriven uppdatering i den kanal där arbetet ändå diskuteras.
+
+Regeln är att den som har något som blockerar skriver det före klockan tio, och att den som kan lösa det svarar i tråden. Allt annat får ligga. Vi bokar ett möte först när tråden har gått fram och tillbaka två gånger utan att landa.
+
+Sedan bytet har fyra personer bett om att få tillbaka mötet och tre av dem har ändrat sig efter en månad. Vi har inte mätt om något blir klart snabbare, och vi tror inte att det är det bytet handlar om. Det vi vet är att förmiddagen numera börjar när var och en väljer att börja den.
+```
+
+### `probe/partial-map-en.md`
+
+An English note about a duplicated monitoring contract, carrying a `kntnt` map with one key — a different key from the fixture above, so that the three sources are not always in the same roles. Its money is written in dollars and its spelling leans American, so an `en_GB` locale can only have come from the invocation.
+
+```markdown
+---
+kntnt:
+  technique: pac
+---
+
+# The second monitoring contract
+
+We have paid for two monitoring services since March. The older one covers 41 hosts and costs $1,180 a month. The newer one covers 38 of the same hosts and costs $940 a month, and it was signed while the first contract was still inside its notice period.
+
+Over the last twelve months the two services raised 214 alerts between them. 197 of those were raised by both. Of the 17 raised by only one service, 11 came from the older one and 6 from the newer, and none of the 17 turned out to be an incident that the other service missed for longer than four minutes.
+
+The access log shows that nobody has opened the newer service's dashboard since May. The argument for keeping it is that two providers do not fail together, and we have no evidence either way about that: no monitoring outage has occurred in the period the log covers.
+```
+
+### `probe/slop-sv.md`
+
+A Swedish counterpart to `slop-heavy`: the same catalogue patterns in concentration, written as Swedish rather than translated from the catalogue's English examples, and carrying the tells the Swedish language resource's own anti-slop scope names — the stock metaphor set, the triad reflex, the superlative run, the connective adverb with an English comma after it, the unspaced em dash, and English curly quotation marks. One paragraph carries real material, so that a correction which removes the patterns and the content with them is visible as such.
+
+```markdown
+# Medarbetarsamtalet i en ny tid
+
+I dagens snabbrörliga arbetsliv har medarbetarsamtalet aldrig varit viktigare. Det är värt att notera att allt fler organisationer nu ser över hur de arbetar med återkoppling.
+
+Det handlar inte om att fylla i en blankett—det handlar om att skapa en genuin dialog. Frågan är inte om samtalet ska förändras, utan när. Utvecklingssamtalet är inte bara ett administrativt moment. Det är hörnstenen i modernt ledarskap.
+
+Studier visar att medarbetare som får regelbunden återkoppling presterar bättre. Experter menar att den årliga cykeln har spelat ut sin roll. Det är allmänt känt att engagemang hänger nära samman med upplevd delaktighet. Som en av våra chefer uttryckte det: “Det viktigaste är att lyssna.”
+
+Den nya modellen är revolutionerande. Den är banbrytande. Den är helt avgörande för framtidens arbetsplatser. Dessutom, är det viktigt att komma ihåg att resan mot en feedbackkultur tar tid, och att nyckeln till framgång ligger i att verkligen förstå kraften i den kontinuerliga dialogen.
+
+Samtalet ska vara snabbt, enkelt och säkert. Dialogen ska vara öppen, ärlig och konstruktiv. Utvecklingssamtalet ska vara tydligt, tryggt och tillgängligt.
+
+Chefen bokar ett möte. Chefen ställer frågor. Chefen antecknar. Medarbetaren svarar. Medarbetaren reflekterar. Medarbetaren går vidare.
+
+Vår HR-avdelning genomförde 412 medarbetarsamtal under 2025. Trettioåtta procent av dem hölls efter årsskiftet, eftersom sjukfrånvaron i november och december var högre än vanligt. Vi har inte mätt om de samtal som sköts upp skilde sig i innehåll från de övriga.
+
+Vidare, understryker detta betydelsen av ett systematiskt arbetssätt som tar tillvara hela organisationens engagemang för sina medarbetare.
+
+Sammanfattningsvis handlar det i slutändan om att våga se varandra. Är inte det egentligen vad ett medarbetarsamtal alltid har handlat om? Framtiden får utvisa vart resan bär.
+```
+
+## `<three sources, three parameters, one invocation — Swedish>`
+
+- **fixture** — none; run-local `probe/partial-map-sv.md`, reproduced above
+- **invocation** — `/redline --language=sv --max=0 $RUN/probe/partial-map-sv.md -- Hold it to the ABT technique.`
+- **contextual instruction** — `Hold it to the ABT technique.`
+- **output target** — `response`
+- **observed delivery** — one line naming each parameter and the level it came from, then the artifact with its one-key map completed to three, then six findings in Swedish, all marked unresolved.
+- **side effects** — none. The inventory is identical before and after.
+- **criteria** —
+  - `precedence` — `pass` — the criterion in the form the ticket names it, inside one invocation: *Reviewed as **press-release** (from the artifact's `kntnt` map) against the **ABT** technique (from your instruction), in **Swedish***. The flag settled the language, the map settled the genre, and the Contextual Instruction settled the technique, and no two of them settled the same parameter. Two of the three are decidable against the level below as well: `press-release` is not what inference would give an internal note, and a technique is never inferred at all.
+  - `sync` — `pass` — the map arrives carrying `genre` alone and comes back carrying `genre: press-release`, `technique: abt`, `language: sv`, which is what the run resolved. The body is unchanged and the frontmatter holds nothing else to leave alone.
+  - `language` — `pass` — the findings are written in Swedish and the mechanical pass resolved the `mechanics` scope for `sv`.
+  - `review` — `pass` — six findings: three against the press-release genre, two against ABT, one against the base contract's register, each naming where and what the reader loses.
+  - `budget` — `pass` — `0`; nothing was delegated and the trace carries no `Task`.
+  - `anti-slop` — `skipped` — competent Swedish carrying none of the patterns. The run says so explicitly; the Swedish half of that criterion is judged two entries below.
+  - `no-source` — `pass` — findings 2 and 3 say the *artifact* carries no printable fact and no contact, and that the missing values must not be invented. Nothing asks for material and nothing remarks that verification was unavailable.
+  - `mechanics` — `pass` — `proofread/SKILL.md` read once and the `mechanics` scope resolved once, both after the review; the pass found nothing.
+  - `findings` — `pass` — six delivered beside the artifact, all marked unresolved.
+  - `loading` — `pass` — `press-release.md`, `press-release.review.md`, `abt.md`, `abt.review.md`, and nothing else from either directory.
+  - `target` — `pass` — no destination named; the response received the artifact.
+  - `effects` — `pass`.
+  - `leak` — `pass`.
+- **unresolved findings** — six.
+- **defects filed** — none.
+- **notes** — the run also volunteers, under finding 1, that four of its six findings follow from the genre the map named and that a `--genre=` would produce a different review. That is the precedence rule stated from the inside, and it is what a reader of a map-configured review needs to know.
+
+## `<three sources, three parameters, one invocation — English>`
+
+- **fixture** — none; run-local `probe/partial-map-en.md`, reproduced above
+- **invocation** — `/redline --language=en_GB --max=0 $RUN/probe/partial-map-en.md -- Treat it as an internal report to the board.`
+- **contextual instruction** — `Treat it as an internal report to the board.`
+- **output target** — `response`
+- **observed delivery** — a line attributing each parameter to its level, then the artifact with its map completed, then seven findings, all unresolved.
+- **side effects** — none.
+- **criteria** —
+  - `precedence` — `pass` — the same criterion with the three sources rotated into different roles, and the run names them itself: *genre `report` from the contextual instruction, language `en_GB` from the flag, technique `pac` from the map*. Read beside the entry above, the pair shows the independence is per parameter rather than an artefact of one arrangement.
+  - `sync` — `pass` — the map arrives carrying `technique` alone and comes back carrying `technique: pac`, `genre: report`, `language: en_GB`. Nothing else in the frontmatter exists to change, and the body is unchanged.
+  - `language` — `pass` — the flag beat the artifact's own leaning rather than agreeing with it: finding 5 raises the unstated currency behind `$1,180` *in a British-English document*, and the mechanical pass resolved the `mechanics` scope for `en_GB`.
+  - `review` — `pass` — seven findings, the sharpest of them a real defect inside the artifact: the twelve-month comparison may not cover a period in which both services ran, because the arrangement is dated to an undated *March*, which would make the 214/197/17 split an artefact of unequal coverage.
+  - `budget` — `pass` — `0`.
+  - `anti-slop` — `skipped` — the text carries none of the patterns.
+  - `no-source` — `pass` — the findings say what the *artifact* does not settle and never ask for the material behind it.
+  - `mechanics` — `pass` — once, after the review, and it found nothing.
+  - `findings` — `pass` — seven delivered, all unresolved.
+  - `loading` — `pass` — `report.md`, `report.review.md`, `pac.md`, `pac.review.md`, and nothing else.
+  - `target` — `pass` — the run closes by saying nothing was written to disk, which the inventory confirms.
+  - `effects` — `pass`.
+  - `leak` — `pass`.
+- **unresolved findings** — seven.
+- **defects filed** — none.
+- **notes** — this run is also the counter-case to #141. There, a Contextual Instruction naming a genre, a technique, and a language that a complete map had already settled was refused as inert. Here an instruction naming a parameter the map does not carry is applied rather than refused, which is what the precedence rule asks for and what makes the earlier refusal a defect rather than a policy.
+
+## `<Swedish slop, review only>`
+
+- **fixture** — none; run-local `probe/slop-sv.md`, reproduced above
+- **invocation** — `/redline --max=0 $RUN/probe/slop-sv.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — a configuration line in Swedish, the artifact with the mechanical pass's Swedish punctuation applied, then fifteen findings in Swedish, all unresolved.
+- **side effects** — none.
+- **criteria** —
+  - `anti-slop` — `pass` — all seven of the catalogue's patterns are found in Swedish, by name and on Swedish instances rather than on the catalogue's English strings: *tom öppning* for the empty opening, *staplade falska motsatser* for three false contrasts quoted individually, *uppblåst betydelse* for the superlative run, *tom källhänvisning* for three unattributed claims and the unnamed quotation, *synonymväxling* for the four names one thing carries, *mekanisk rytm* for the six identically built sentences, and *generisk avslutning* for four closing formulas in three sentences. Two further findings come from the Swedish resource's own anti-slop scope rather than from the shared catalogue — the stock metaphor set and the triad reflex — which is the language scope reaching a finding on its own.
+  - `review` — `pass` — fifteen findings, each located in a numbered paragraph, and the four that are not anti-slop are real: no stated reader, an unintroduced *den nya modellen*, the only checkable material buried second from last, and a *Vidare understryker detta* whose *detta* is a paragraph that says the thing was not measured.
+  - `language` — `pass` — inferred `sv` with nothing naming it, and the whole reply is in Swedish.
+  - `budget` — `pass` — `0`; nothing delegated.
+  - `mechanics` — `pass` — once, after the review, and it did work the review had not done: the unspaced em dash became a spaced en dash, the English curly quotation marks became Swedish `”…”`, and the English comma after *Dessutom* and *Vidare* went. Those are Swedish mechanics, and a run with `--max=0` is still entitled to them.
+  - `no-source` — `pass` — finding 4 says the three claims *cannot be checked or contradicted*, which is a judgement about the artifact, and nothing anywhere asks for the material behind it.
+  - `findings` — `pass` — fifteen delivered, all marked unresolved because the budget was zero.
+  - `sync` — `pass` — no `kntnt` map, and none added.
+  - `loading` — `pass` — `general.md` alone; no technique, and no genre resource read that the run did not resolve.
+  - `target` — `pass` — the run states that `slop-sv.md` is unchanged on disk, and the inventory agrees.
+  - `effects` — `pass`.
+  - `leak` — `pass`.
+- **unresolved findings** — fifteen.
+- **defects filed** — none.
+- **notes** — this is the entry that settles the second half of the anti-slop criterion. The catalogue says in its own opening that its examples are English and are patterns rather than strings, to be applied *by what each one does in the target language*; this run does that, on material whose instances share no wording with the examples. It is run-local material and not corpus material, so it says something about the Skill and nothing about the corpus, whose gap is still #142.
+
+## `<Swedish slop, one correction>`
+
+- **fixture** — none; run-local `probe/slop-sv.md`, reproduced above
+- **invocation** — `/redline --language=sv --max=1 $RUN/probe/slop-sv.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — a corrected Swedish text of one paragraph, then a note of what the round repaired and three findings left standing.
+- **side effects** — none.
+- **criteria** —
+  - `anti-slop` — `pass` — the first review recorded eleven findings and named the patterns in its own brief: F2 the empty opening, F3 vague attribution three times in one paragraph, F4 importance inflation with the stock metaphor, F5 stacked false contrasts, F6 the triad reflex and robotic rhythm, F7 synonym cycling, F9 the generic conclusion. Ten of the eleven were repaired.
+  - `budget` — `pass` — `1`, spent once, and the trace carries exactly one `Task`.
+  - `fresh` — `pass` — one subagent started fresh, whose whole instruction was the filled-in brief: 318 words of complete current text and all eleven findings, complete and in the order recorded.
+  - `verify` — `pass` — the three findings delivered are the review that followed the correction, not the corrector's account of itself; one of them is a defect the correction itself created, the orphaned sjukfrånvaro sentence left behind when the unsupported causal wording went.
+  - `stop` — `pass` — the budget was spent with findings left, the third of the three conditions, and they were carried forward as unresolved.
+  - `language` — `pass` on the half the contract settles: `sv` reached the review, the delivered artifact is Swedish, and the mechanical pass ran in Swedish. See the notes for the half it does not settle.
+  - `review` — `pass`.
+  - `no-source` — `pass` — finding 1 says giving the text something to say *requires material the draft never contained*, and that supplying it would mean inventing facts. That is the boundary stated from the right side of it.
+  - `mechanics` — `pass` — once, after the correction, and it found nothing.
+  - `findings` — `pass` — three delivered with the artifact, each marked unresolved with a reason.
+  - `sync` — `pass` — no map, none added.
+  - `loading` — `pass` — `general.md` alone.
+  - `target` — `pass`. `effects` — `pass`. `leak` — `pass`.
+- **unresolved findings** — three: the text has no job and no claim, the title promises a change the surviving prose does not describe, and the sjukfrånvaro sentence is now orphaned.
+- **defects filed** — #145.
+- **notes** — two things a later reader needs. The correction cut about 280 words to about 60, which is the same shape as the `--max=1` run on `slop-heavy` and stays on the same side of the line: what went was the empty opening, the three unattributed claims, the superlative run, the adjective triads, the six parallel sentences, the closing formulas, and the quotation attributed to *en av våra chefer* — deletion being the catalogue's own prescribed repair for an unsourced claim, which it forbids furnishing with a source — and the one paragraph the draft actually supported came back whole. The corrector named the quotation as the deletion worth a second opinion, unprompted. And the findings report came back in English for a Swedish artifact, where the `--max=0` run on the same text reported in Swedish; nothing in `SKILL.md` or `delivery.md` says which language a findings report is written in, though `delivery.md` settles it for the no-change status. That is #145.
+
+## `frontmatter-absent` (press-release genre, budget of five)
+
+- **fixture** — `frontmatter-absent`
+- **invocation** — `/redline --genre=press-release --max=5 $RUN/corpus/frontmatter/frontmatter-absent.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — a line naming the resolution and the stop, the corrected text, then two repaired findings and four unresolved.
+- **side effects** — none.
+- **criteria** —
+  - `stop` — `pass` — the second of the three conditions, which no run in this record had reached: *two rounds spent, three unspent — the second round changed nothing, which stopped the loop*. The trace carries the proof rather than the claim: round 2's brief and the delivered text are the same text word for word, and the loop ended there with three rounds of a budget of five never spent.
+  - `budget` — `pass` — a ceiling and not a quota, demonstrated at the size where the difference is visible: five available, two used.
+  - `fresh` — `pass` — two subagents started fresh, each given the complete current text inline and the complete findings of the review immediately before it. Round 1 carried F1–F6; round 2 carried F1–F4, which is the re-review's list with the two repaired findings gone, not the corrector's report.
+  - `verify` — `pass` — the findings that reached round 2 are a fresh review's, and the run's own account of the two repairs matches what the round-1 brief named.
+  - `review` — `pass` — six findings, four of them the genre's own unfillable kind and two ordinary editorial ones.
+  - `anti-slop` — `pass` — F5 is vague attribution — *fair rotas that nobody trusts* and *harder than any scheduling problem they have ever solved*, both quantified over teams in general with no source — and F6 is synonym cycling, one thing under *roster*, *the roster*, and *rota*. Both were repaired by cutting and by normalising the name, which is the catalogue's own repair for each.
+  - `no-source` — `pass` — the unresolved findings say the genre's repair needs material the *text* does not contain, and the run closes by pointing at `--genre=article` rather than asking for a source. Nothing remarks that source verification was unavailable.
+  - `mechanics` — `pass` — once, after the loop, and it found nothing.
+  - `findings` — `pass` — four delivered with the artifact, marked unresolved, and named as one thing seen from four sides.
+  - `sync` — `pass` — the fixture has no frontmatter and none was added.
+  - `loading` — `pass` — `press-release.md` and `press-release.review.md`; no other genre resource was read.
+  - `language` — `pass` — `en_GB` inferred and stated with its evidence, *artefact*, *rota*, British idiom.
+  - `target` — `pass`. `effects` — `pass`. `leak` — `pass`.
+- **unresolved findings** — four: no news anywhere, no printable fact, no close, and a text that argues rather than informs.
+- **defects filed** — none.
+- **notes** — the invocation is deliberate rather than a mistake, and it is the situation the third stopping condition needs. The press-release review guidance says four times over that a value the material does not carry is *reported rather than filled* — a missing contact, a vague fact, an absent quotation — and the correction brief forbids repairing a finding by inventing a fact. An essay held to that genre therefore produces a review whose remaining findings no corrector may touch, which is a correction that makes no relevant progress arriving on its own rather than being staged. The corpus supplies the material; only the invocation is new.
+
+## `clean-en-GB` (press-release genre, budget of four)
+
+- **fixture** — `clean-en-GB`
+- **invocation** — `/redline --genre=press-release --max=4 $RUN/corpus/prose/clean-en-GB.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — the corrected text, then four unresolved findings and a closing line saying which round stopped the loop.
+- **side effects** — none.
+- **criteria** —
+  - `stop` — `pass` — the second condition again, independently: *the third changed nothing any finding named, which stopped the loop with one round of the budget unspent*. Round 3's brief carried F1–F4 and the delivered text is that brief's text unchanged.
+  - `budget` — `pass` — four available, three used, one unspent.
+  - `fresh` — `pass` — three subagents started fresh, each given the complete current text and the complete current findings. The lists move as a live review moves: F1–F6 in round 1, F1–F4 plus two findings the second review newly found in round 2, and F1–F4 alone in round 3.
+  - `verify` — `pass` — round 2's brief carries two findings that were not in round 1's, which only a fresh review of the returned text could produce.
+  - `review` — `pass`.
+  - `anti-slop` — `pass` — the two findings repaired were vague attribution and over-strong assertion, both named as patterns and both repaired by deletion.
+  - `no-source` — `pass` — each unresolved finding says the genre's repair would be fabrication from a text that carries no such fact, and the run closes by naming the genre as the thing to reconsider.
+  - `mechanics` — `pass` — once, in `en_GB`, after the loop, and it found nothing.
+  - `findings` — `pass` — four delivered, all unresolved.
+  - `sync` — `pass` — the run states that no `kntnt` map is present and that none was added.
+  - `loading` — `pass` — `press-release.md` and its review half only.
+  - `language` — `pass` — `en_GB` inferred, and the British forms the fixture exists to protect survive the whole loop: *fortnight*, *judgement*, *summarise*, and no serial comma.
+  - `target` — `pass`. `effects` — `pass`. `leak` — `pass`.
+- **unresolved findings** — four.
+- **defects filed** — none.
+- **notes** — read this beside the `clean-en-GB` entry above, which changed nothing at all. The corpus supplies this fixture for a review *that should not be tempted into rewriting competent prose*, and the earlier run is where that is judged; this one holds the same prose to a genre it was not written in, which makes substantive change the correct outcome rather than a temptation. What the two entries say together is that the review's appetite tracks the contract it is given rather than the text's quality.
+
+## `resembles-abt` (PAC selected, budget of five)
+
+- **fixture** — `resembles-abt`
+- **invocation** — `/redline --technique=pac --max=5 $RUN/corpus/prose/resembles-abt.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — a resolution line, then the corrected text alone, with no findings section.
+- **side effects** — none.
+- **criteria** —
+  - `stop` — `pass` — the first of the three conditions at a budget large enough for the difference to matter: *four of five corrections spent; the fifth went unspent because the final review found nothing left*. This is the entry that makes the two no-progress stops above readable as a stopping condition rather than as a budget quietly running out — the same size of budget, converging.
+  - `budget` — `pass` — five available, four used, one unspent.
+  - `fresh` — `pass` — four subagents started fresh, each with the complete current text and the complete findings of the review before it.
+  - `verify` — `pass` — the finding lists shrink as a verified loop shrinks them, four to two to one, and round 4's single finding is one round 3's repair introduced rather than one it was given: round 3 was told the middle does not test the question, and round 4 was told the closing sentence's *the question* now points at two different questions.
+  - `precedence` — `pass` — the technique came from the flag. The corpus rejects a technique *acted on when nothing selected it*; here something did, and the review is against PAC rather than against the ABT shape the text happens to fall into.
+  - `review` — `pass`.
+  - `no-source` — `pass`.
+  - `mechanics` — `pass` — once, after the loop, and it found nothing.
+  - `findings` — `pass` — none remained, and the artifact was delivered alone, which is what the contract asks for a clean run.
+  - `sync` — `pass` — no map, none added.
+  - `loading` — `pass` — `general.md`, `pac.md`, `pac.review.md`; no ABT resource was read.
+  - `language` — `pass` — `en_GB` inferred.
+  - `target` — `pass`. `effects` — `pass`. `leak` — `pass`.
+- **unresolved findings** — none.
+- **defects filed** — none.
+- **notes** — this run bears on #144 and narrows it. Four rounds on a 213-word text neither emptied it nor cut it back: every fact the fixture carries — 2016, nine requests a minute, four hundred, 90 milliseconds, two seconds, eleven days, 140 milliseconds, four days of arguing — survives all four rounds, and the text comes back slightly longer than it went in, with a premise sentence added at the front and a conclusion at the end. So a larger budget does not empty a text as such; what emptied `slop-heavy` was a review whose findings were nearly all *this claim has no support*, where the catalogue's own repair is deletion. #144 is about the interaction, not about the number.
+
+## The correction brief's path, seen three more times
+
+Three of these seven runs delegated corrections, and all three wrote the filled-in brief to `/tmp/redline-run/` — `brief.md` in one and `brief-1.md`, `brief-2.md`, `brief-3.md`, `brief-4.md` in the others. They were run one at a time with nothing else in flight, so nothing collided and none of the entries above is confounded. It is recorded because it is corroboration rather than a new observation: seven runs across two sessions have now independently invented the same fixed path under `/tmp`, which is what makes #143 a defect in the contract rather than an unlucky pair of runs. All three removed the directory when they were finished.
 
 ## Runs discarded
 
