@@ -28,7 +28,7 @@ A criterion may be judged `skipped`, and a skipped criterion says why in the sam
 
 ## The recording format
 
-One record per evaluation, holding one entry per fixture run. [`record-template.md`](record-template.md) is the skeleton; records live in [`records/`](records/README.md) and are named `<skill>-<provider-family>-<YYYY-MM-DD>.md`.
+One record per evaluation, holding one entry per fixture run. [`record-template.md`](record-template.md) is the skeleton; records live in [`records/`](records/README.md) and are named `<skill>-<provider-family>-<YYYY-MM-DD>.md`. Where a re-run lands on the same date as the record it follows, the name takes the issue it was run for after the date, because the convention above has nowhere else to put two records of one Skill and one family on one day.
 
 The record's own header carries the identity of the run:
 

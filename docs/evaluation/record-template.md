@@ -1,6 +1,6 @@
 # Record template
 
-Copy this file into [`records/`](records/README.md), name it `<skill>-<provider-family>-<YYYY-MM-DD>.md`, and fill it in as the run goes rather than afterwards. The fields are defined in [`protocol.md`](protocol.md); this is only their skeleton.
+Copy this file into [`records/`](records/README.md), name it `<skill>-<provider-family>-<YYYY-MM-DD>.md`, and fill it in as the run goes rather than afterwards. Where a re-run lands on the same date as the record it follows, the name takes the issue it was run for after the date, because the convention above has nowhere else to put two records of one Skill and one family on one day. The fields are defined in [`protocol.md`](protocol.md); this is only their skeleton.
 
 Keep one fixture section per fixture run, including the ones that were skipped. A fixture missing from a record reads later as a fixture that passed.
 
