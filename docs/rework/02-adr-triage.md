@@ -49,7 +49,7 @@ Each record is classified twice, because the brief's four bins conflate two inde
 
 The brief's *move-to-standard* bin is the row where the record drops and the rule lands in a coding-standard module; its *rules-doc line* bin is the row where the record drops or folds and the rule lands in a rules-doc module.
 
-`†` marks a record carrying field evidence the `/dispatch` design should cite from git rather than rediscover.
+Twenty-two records belong to orchestrate's runtime and die with that Skill in phase 3; they are the rows whose justification says so, and `run.py` or the orchestrate tests cite nearly all of them, which is why they outlive phase 1. `†` is a narrower mark inside that class: the twenty-one whose field evidence the `/dispatch` design should cite from git rather than rediscover. ADR-0058 is the twenty-second — orchestrate runtime, cited by `run.py`, but its own premise is already outrun, so there is nothing there to carry forward.
 
 ### Proposed consolidation records
 
@@ -165,8 +165,8 @@ The brief's *move-to-standard* bin is the row where the record drops and the rul
 
 | Bin | Records |
 |---|---|
-| `DROP` — orchestrate runtime (dies with the Skill) | 21 |
-| `DROP` — rules already in the Skill's own files, or already superseded | 15 |
+| `DROP` — orchestrate runtime (dies with the Skill in phase 3) | 22 |
+| `DROP` — rules already in the Skill's own files, or already superseded | 14 |
 | `C1` — the distribution model | 25 |
 | `C2` — the invocation grammar | 8 |
 | `C3` — what a Skill ships | 12 |
@@ -174,7 +174,7 @@ The brief's *move-to-standard* bin is the row where the record drops and the rul
 | `C5` — routing and evidence | 4 |
 | `C6` — decisions and tickets | 4 |
 | `KEEP` | 1 |
-| **Total** | **96 → 7 records** |
+| **Total** | **96 → 29 after phase 1, → 7 once orchestrate goes** |
 
 ## Consequences the reform has to carry
 
