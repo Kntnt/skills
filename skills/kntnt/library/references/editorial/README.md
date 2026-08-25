@@ -1,6 +1,6 @@
 # Editorial resources
 
-This directory holds the editorial contract the Collection's editorial Skills are written and reviewed against: [`base.md`](base.md), the genres under `genres/`, and the techniques under `techniques/`. This page is the format they are written to. Read it before adding a genre or a technique, or before changing what the base contract holds.
+This directory holds the editorial contract the Collection's editorial Skills are written and reviewed against: [`base.md`](base.md), the genres under `genres/`, the techniques under `techniques/`, and [`anti-slop.md`](anti-slop.md) beside them. This page is the format they are written to. Read it before adding a genre or a technique, or before changing what the base contract or the anti-slop catalogue holds.
 
 Everything here is language-independent and written in English. The language-specific half lives beside it in [`../languages/`](../languages/README.md), one resource per language, and the two are loaded together at run time. A rule that is only true of one language belongs there and never here.
 
@@ -31,6 +31,14 @@ Each of these documents has a base half and an optional review half, and the rev
 The extension holds diagnostics, examples, edge cases, ambiguity resolution, and minimum-safe-correction guidance for the requirements its base half already states. It introduces no independent target — anything a draft has to meet is a base rule, and belongs in the base half where the writing Skill will actually see it — and it restates no base rule in other words, because a requirement and its diagnostic drift apart the moment both claim to say what is required.
 
 Writing the review half is the work of the Skill that reviews, and its absence is not a defect: a base half with no extension beside it is a complete resource.
+
+## The anti-slop catalogue
+
+`anti-slop.md` is the collection's own condensed adaptation of the patterns that mark machine-sounding prose: what each looks like, what it costs the reader, and the smallest change that removes it. It sits here rather than under a Skill because more than one Skill applies that pass, and a copy under the first of them would make that Skill the owner of its peer's rules.
+
+It is diagnostic throughout and states no target of its own. A Skill reading it beside the base contract meets nothing the contract does not already hold; a Skill contracted to apply that pass alone reads it without the contract and has what it needs. Its examples are English and semantic, like every other example here, and the words, phrases, punctuation, and constructions that only exist in one language belong to that language's own anti-slop scope.
+
+Where it carries wording or a substantial portion of an upstream catalogue, the upstream notice ships inside the file, because a reader of an installed Skill receives the file and not this repository.
 
 ## Adding a genre or a technique
 

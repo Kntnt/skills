@@ -44,6 +44,7 @@ VALUED_FLAGS = frozenset(
         "--id",
         "--in-place",
         "--language",
+        "--max",
         "--message",
         "--metrics",
         "--model",

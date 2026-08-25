@@ -129,6 +129,22 @@
       "capabilities": []
     },
     {
+      "name": "redline",
+      "category": "editorial",
+      "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — report what the review found, and finish with exactly one mechanical pass.",
+      "digest": "68656966ec7d5406f8ea36d1dc92d272c68c690984d5f3683f3340f23879d92f",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [
+        "proofread"
+      ],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",
