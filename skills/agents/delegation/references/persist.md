@@ -28,7 +28,7 @@ Write exactly this, last in the file, one blank line after whatever precedes it 
 
 - `on` over an existing block rewrites it from the current `mode.md`, so `on` is idempotent and doubles as the refresh.
 - `off` removes the whole block, both markers included, and nothing else.
-- **Stale** — the lines between the second comment and the closing marker differ from `$HERE/references/mode.md`. `status` reports it and names `/delegation <scope> on` as the fix.
+- **Stale** — the lines between the second comment and the closing marker differ from `$HERE/references/mode.md`. `status` reports it and names `/delegation on --project` or `/delegation on --user` as the fix.
 - Two blocks in one file, or a marker without its pair: change nothing, report, ask.
 
 ## Confirmation
@@ -41,4 +41,4 @@ Show the exact target file, the exact insertion, and any bridge file to be creat
 
 ## Taking effect
 
-`on` also adopts `mode.md` for the current session, exactly as session `on` does, so the mode does not wait for a restart; `off` likewise suspends it here and now. Neither writes the session state file — the block in the context file is the record.
+`on` also adopts `mode.md` for the current session, exactly as it does in the session scope, so the mode does not wait for a restart; `off` likewise suspends it here and now. Neither writes the session state file — the block in the context file is the record.

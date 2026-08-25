@@ -4804,7 +4804,10 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "`on` over an existing block rewrites it from the current `mode.md`",
         "`off` removes the whole block, both markers included, and nothing else",
         "lines between the second comment and the closing marker differ",
-        "`status` reports it and names `/delegation <scope> on` as the fix",
+        (
+            "`status` reports it and names `/delegation on --project` or"
+            " `/delegation on --user` as the fix"
+        ),
     }
     missing_persistence = sorted(
         fragment
@@ -6678,17 +6681,14 @@ def test_no_hint_form_offers_a_combination_its_synopsis_forbids() -> None:
 def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None:
     """`--yes` answers a confirmation, and `status` never asks for one.
 
-    The grammar is flat today — `[session|project|user] [on|off|status]
-    [--yes]` — while the flag is only ever acted on where a persistent scope is
-    written, so `/delegation status --yes` reads as a flag that does nothing.
+    The flag is only ever acted on where a persistent scope is written, so
+    `/delegation status --yes` reads as a flag that does nothing — the case
+    ADR-0059 settled, and one the command-path grammar leaves exactly as it
+    found it (ADR-0109).
     """
 
-    directory = REPO_ROOT / "skills" / "agents" / "delegation"
-    page = (directory / "help.md").read_text(encoding="utf-8")
-    forms = [
-        *_hint(directory).split(" | "),
-        *_section(page, "## SYNOPSIS", directory / "help.md").splitlines(),
-    ]
+    directory = DELEGATION_DIR
+    forms = _delegation_forms()
 
     assert any("--yes" in form for form in forms), (
         f"{directory}: no form of the grammar names `--yes`, so this check"
@@ -6709,13 +6709,14 @@ def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None
 
 
 def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
-    """`/delegation --user` with no state prints the synopsis and stops.
+    """`/delegation --user` with no command path prints the synopsis and stops.
 
     Its two halves disagreed: the arguments asked for `on`, `off`, or `status`
     while step 1 stopped. The half the agent executes is the true one (ADR-0046),
     and `--yes` settles it beyond consistency — a question with three outcomes
     has no answer under the flag (ADR-0029), so *ask* needs a special case
-    there and *error* needs none.
+    there and *error* needs none. The form is now a scope flag with no command
+    path, and it is refused for the same reason (ADR-0109).
     """
 
     directory = REPO_ROOT / "skills" / "agents" / "delegation"
@@ -6725,7 +6726,7 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
     incomplete = [
         line
         for line in _section(skill, "## Arguments", directory / "SKILL.md").splitlines()
-        if "no state" in line
+        if "no command path" in line
     ]
     assert incomplete, (
         f"{directory}: the parse rules no longer name the incomplete form, so"
@@ -6930,6 +6931,211 @@ def test_tldr_reads_its_replacement_answer_from_the_contextual_instruction() -> 
                 f" work went, so a step that does not read it silently drops"
                 f" what the user asked for (ADR-0103). See {STANDARD}."
             )
+
+
+# The other Skill whose mode is addressed through a command path, the pages
+# that path answers to, and the spellings it no longer has. Its scope became a
+# flag and the session, being the default, lost its name with them: one intent
+# has one spelling where a scope word, a state word, six aliases, and a free
+# order gave it a dozen (issue #116).
+DELEGATION_DIR = REPO_ROOT / "skills" / "agents" / "delegation"
+DELEGATION_COMMANDS = frozenset({"on.md", "off.md", "status.md"})
+ALIAS_SPELLING = re.compile(r"--(?:on|off|status|session)\b")
+SCOPE_OPERAND = re.compile(r"(?<![-\w])(?:session|project|user)\b")
+
+
+def _delegation_readme_section() -> str:
+    """The README's own entry for `/delegation`, which states the forms it takes."""
+
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    return readme.partition("\n### delegation\n")[2].partition("\n### ")[0]
+
+
+def _delegation_forms() -> list[str]:
+    """Every form the Skill's grammar surfaces write, hint and synopsis alike."""
+
+    forms = list(_hint(DELEGATION_DIR).split(" | "))
+    pages = [
+        DELEGATION_DIR / "help.md",
+        *sorted((DELEGATION_DIR / "help").rglob("*.md")),
+    ]
+    for page in pages:
+        section = _section(page.read_text(encoding="utf-8"), "## SYNOPSIS", page)
+        forms.extend(line for line in section.splitlines() if line.strip())
+    return forms
+
+
+def test_delegation_ships_and_routes_one_manpage_per_command_path() -> None:
+    """`on`, `off`, and `status` each answer to their own help route.
+
+    A command path is exactly what a page under `help/` answers to (ADR-0077),
+    so the three pages are what make these tokens a path rather than operands,
+    and what lets a refusal quote the grammar the invalid form violated rather
+    than the whole Skill's (ADR-0109).
+    """
+
+    help_directory = DELEGATION_DIR / "help"
+    assert help_directory.is_dir(), (
+        f"{DELEGATION_DIR}: the mode is addressed through a command path, and"
+        f" every public command path has an addressable manpage under `help/`"
+        f" (ADR-0077, ADR-0109). See {STANDARD}."
+    )
+
+    actual = {
+        str(page.relative_to(help_directory)) for page in help_directory.rglob("*.md")
+    }
+    assert actual == set(DELEGATION_COMMANDS), (
+        f"{DELEGATION_DIR}: the command page tree is {sorted(actual)}, while"
+        f" the accepted command paths are {sorted(DELEGATION_COMMANDS)}"
+        f" (ADR-0077, ADR-0109). See {STANDARD}."
+    )
+
+    body = DELEGATION_DIR / "SKILL.md"
+    help_section = _section(body.read_text(encoding="utf-8"), "## Help", body)
+    for relative in sorted(DELEGATION_COMMANDS):
+        assert f"`$HERE/help/{relative}`" in help_section, (
+            f"{body}: the `## Help` section does not route the `{relative}`"
+            f" manpage. `/<skill> <command-path> --help` prints the most"
+            f" specific recognized path's page verbatim (ADR-0077). See"
+            f" {STANDARD}."
+        )
+    assert "-h" in help_section, (
+        f"{body}: `-h` is the identical short route into an addressed page,"
+        f" so the command paths answer to it too (ADR-0077). See {STANDARD}."
+    )
+
+
+def test_delegation_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
+    """No `--`-prefixed spelling survives anywhere the Skill is described.
+
+    The alias set goes rather than being deprecated. Two spellings for one form
+    is the defect, a period in which both work is the defect with a schedule
+    attached, and a Skill has no parser — the agent reading these files is the
+    whole of the enforcement — so a spelling left standing on any surface is a
+    spelling that is accepted (ADR-0109).
+    """
+
+    surfaces = sorted(DELEGATION_DIR.rglob("*.md"))
+
+    # A glob that matched nothing would pass the loop below without reading a
+    # single surface, which is the one outcome this check exists to catch.
+    assert surfaces
+
+    for path in surfaces:
+        found = sorted(set(ALIAS_SPELLING.findall(path.read_text(encoding="utf-8"))))
+        assert not found, (
+            f"{path}: {found} is a `--`-prefixed spelling of a command path or"
+            f" of the unnamed default scope. `on`, `off`, and `status` are"
+            f" reached as a command path and by no second spelling, and the"
+            f" session scope has no spelling at all (ADR-0109). See"
+            f" {STANDARD}."
+        )
+
+    section = _delegation_readme_section()
+    assert section.strip(), (
+        f"{REPO_ROOT / 'README.md'}: the `### delegation` section could not be"
+        f" found, so this check judged nothing. See {STANDARD}."
+    )
+    assert not ALIAS_SPELLING.findall(section), (
+        f"{REPO_ROOT / 'README.md'}: the `### delegation` section still writes"
+        f" a `--`-prefixed spelling of a command path (ADR-0109). See"
+        f" {STANDARD}."
+    )
+    for form in ("/delegation on", "/delegation status"):
+        assert form in section, (
+            f"{REPO_ROOT / 'README.md'}: the `### delegation` section does not"
+            f" state the `{form}` form. The README is where somebody decides"
+            f" whether they want the Skill, so it states the forms it accepts"
+            f" (ADR-0109). See {STANDARD}."
+        )
+
+
+def test_delegation_takes_its_scope_as_a_flag_and_never_as_an_operand() -> None:
+    """The scope is a flag, and the default scope is not nameable.
+
+    `--project` and `--user` name the two persistent scopes; the session is
+    what giving neither selects, and the bare invocation is the only way to
+    write a session toggle. That removes the last pair of spellings for one
+    thing, at the cost of a user no longer being able to write the default
+    scope for emphasis (ADR-0109).
+    """
+
+    forms = _delegation_forms()
+
+    # A surface list that came back empty would leave the loop below judging
+    # nothing, which is the one outcome this check exists to catch.
+    assert forms
+
+    for form in forms:
+        found = sorted(set(SCOPE_OPERAND.findall(form)))
+        assert not found, (
+            f"{DELEGATION_DIR}: the form `{form.strip()}` writes {found} as a"
+            f" bare operand. A scope is named by a flag or not at all, and the"
+            f" session is the unnamed default (ADR-0097, ADR-0109). See"
+            f" {STANDARD}."
+        )
+
+    page = (DELEGATION_DIR / "help.md").read_text(encoding="utf-8")
+    assert {"--project", "--user"} <= _flags(_optional_section(page, "## OPTIONS")), (
+        f"{DELEGATION_DIR / 'help.md'}: `## OPTIONS` no longer declares both"
+        f" scope flags, so the two persistent scopes have no spelling at all"
+        f" (ADR-0109). See {STANDARD}."
+    )
+
+
+def test_delegation_accepts_no_unseparated_free_text_and_interrogates_nothing() -> None:
+    """Prose stops being a form, and the interrogation clause goes with it.
+
+    The Skill answered *is it on?* as `status` while asking about anything
+    wider, so its formal grammar accepted free text at one narrow width and
+    interrogated it above that. The reserved separator carries instructions
+    collection-wide (ADR-0078), so an unrecognized bare token is refused like
+    any other invalid form (ADR-0109).
+    """
+
+    body = DELEGATION_DIR / "SKILL.md"
+    text = body.read_text(encoding="utf-8")
+    arguments = _section(text, "## Arguments", body)
+    page = (DELEGATION_DIR / "help.md").read_text(encoding="utf-8")
+
+    unseparated = (
+        "A token that is neither a recognized command path nor a declared flag"
+    )
+    assert unseparated in arguments, (
+        f"{body}: the argument prose does not refuse unseparated text after"
+        f" the Skill name or a command path. Anything not carried by a"
+        f" recognized token is an invalid form rather than an instruction"
+        f" (ADR-0109). See {STANDARD}."
+    )
+    assert "Prose is not a form" not in text, (
+        f"{body}: the interrogation clause is still in the body. Prose is not"
+        f" a form at any width, so nothing is asked about in place of the"
+        f" grammar (ADR-0109). See {STANDARD}."
+    )
+    assert "Unseparated text is not an instruction" in page, (
+        f"{DELEGATION_DIR / 'help.md'}: `DIAGNOSTICS` does not say that"
+        f" unseparated text is refused rather than read as guidance"
+        f" (ADR-0109). See {STANDARD}."
+    )
+
+
+def test_delegation_reports_every_scope_when_no_scope_flag_is_given() -> None:
+    """`status` keeps the reach it had when the scope was an operand.
+
+    Nothing about what the Skill does moves here. The one behaviour the new
+    grammar could quietly have lost is the report that covers all three scopes,
+    because the form that produced it was a bare `status` with no scope word
+    beside it (ADR-0109).
+    """
+
+    body = DELEGATION_DIR / "SKILL.md"
+    arguments = _section(body.read_text(encoding="utf-8"), "## Arguments", body)
+
+    assert "`status` with no scope flag reports all three scopes." in arguments, (
+        f"{body}: the parse rules no longer say that `status` without a scope"
+        f" flag reports every scope. The scope became a flag; what `status`"
+        f" reaches did not (ADR-0109). See {STANDARD}."
+    )
 
 
 def test_delegation_reports_checked_observations_and_imports_none() -> None:

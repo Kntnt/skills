@@ -182,7 +182,7 @@ SAMPLE = (
     ("**/orchestrate** [**--yes**] **reconcile** *TICKET*", True),
     ("[--yes] [<message>]", False),
     ("**/commit** [**--yes**] [*MESSAGE*]", True),
-    ("**/delegation** [**session**|**--session**]", True),
+    ("**/example** [**scope**|**--scope**]", True),
 )
 
 

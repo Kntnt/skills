@@ -443,8 +443,6 @@ def test_the_valued_set_is_derived_from_the_collections_own_declarations() -> No
             "--dry-run",
             "--force",
             "--no-build",
-            "--session",
-            "--status",
             "--user",
             "--write",
             "--yes",
