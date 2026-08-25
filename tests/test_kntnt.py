@@ -4076,6 +4076,269 @@ def test_proofread_delivers_through_the_shared_output_contract() -> None:
     )
 
 
+# The Skill this wave's editorial review ships as, read at the one seam a test
+# has: the body is the whole of what the agent executes (ADR-0046).
+REDLINE = REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md"
+
+# The shared catalogue of machine-sounding prose, and the seven patterns the
+# specification requires it to carry.
+ANTI_SLOP = (
+    REPO_ROOT
+    / "skills"
+    / "kntnt"
+    / "library"
+    / "references"
+    / "editorial"
+    / "anti-slop.md"
+)
+SLOP_PATTERNS = (
+    "false contrast",
+    "empty opening",
+    "importance inflation",
+    "vague attribution",
+    "synonym cycling",
+    "robotic rhythm",
+    "generic conclusion",
+)
+
+
+def test_redline_reviews_a_text_artifact_that_nothing_here_wrote() -> None:
+    """Provenance is an optimisation, never an entry condition (ADR-0088).
+
+    Redline takes any Text Artifact — Write's, a human's, or one produced
+    somewhere else entirely. Handoff Metadata is read where a recognized map
+    exists and is never required and never created where it is absent, or a
+    reviewing Skill would only be usable as the second stage of a pipeline.
+    """
+
+    assert REDLINE.is_file(), (
+        f"{REDLINE}: Redline ships in the Collection's editorial category. See"
+        f" {STANDARD}."
+    )
+
+    text = REDLINE.read_text(encoding="utf-8")
+
+    assert "never creates" in text or "never created" in text, (
+        f"{REDLINE}: the body does not say that Handoff Metadata is never"
+        f" created where a Text Artifact carries none. Requiring or writing it"
+        f" would make provenance an entry condition instead of a shortcut"
+        f" (ADR-0088). See {STANDARD}."
+    )
+    assert "kntnt" in text and "frontmatter" in text, (
+        f"{REDLINE}: the body never says which frontmatter is this"
+        f" collection's, so unrelated document fields read as configuration"
+        f" (ADR-0088). See {STANDARD}."
+    )
+
+
+def test_redline_loads_the_contract_it_reviews_against() -> None:
+    """A review is only as good as the document it is read against.
+
+    Redline reads the base contract and its review extension, the selected
+    genre and technique with theirs, the shared anti-slop catalogue, and the
+    three scopes of the resolved Language Resource it may act on. Mechanics
+    belong to the closing Proofread pass, which resolves them itself
+    (ADR-0087, ADR-0095).
+    """
+
+    text = REDLINE.read_text(encoding="utf-8")
+
+    for pointer in (
+        "$LIBRARY/references/editorial/base.md",
+        "$LIBRARY/references/editorial/base.review.md",
+        "$LIBRARY/references/editorial/anti-slop.md",
+    ):
+        assert pointer in text, (
+            f"{REDLINE}: the body never reaches `{pointer}`, so part of what"
+            f" the review is read against is not loaded (ADR-0095). See"
+            f" {STANDARD}."
+        )
+
+    for scope in ("composition", "review", "anti-slop"):
+        assert f"--scope={scope}" in text, (
+            f"{REDLINE}: the body never asks the resolver for the `{scope}`"
+            f" scope, which is language-specific guidance this Skill is"
+            f" contracted to apply (ADR-0087). See {STANDARD}."
+        )
+    assert "--scope=mechanics" not in text, (
+        f"{REDLINE}: the body asks for the `mechanics` scope, which belongs to"
+        f" the closing Proofread pass and is resolved there. A caller asks for"
+        f" the scopes it can act on and is given those and no others"
+        f" (ADR-0087). See {STANDARD}."
+    )
+    assert ".review.md" in text.replace("base.review.md", ""), (
+        f"{REDLINE}: the body loads no review extension for the selected genre"
+        f" or technique, so the diagnostic half of those resources is written"
+        f" for a reader that never opens it (ADR-0095). See {STANDARD}."
+    )
+
+
+def test_redline_leaves_source_fidelity_to_the_skill_that_owns_it() -> None:
+    """A reviewing Skill has no source material, and says nothing about it.
+
+    Redline reviews the Text Artifact against its editorial contract. It never
+    compares the artifact with source material and never reports that source
+    verification was unavailable, because a caveat about material nobody
+    supplied is noise in every run that was never a Write run (ADR-0088).
+    """
+
+    text = REDLINE.read_text(encoding="utf-8")
+
+    assert "source material" in text, (
+        f"{REDLINE}: the body says nothing about source material, so nothing"
+        f" stops a review from asking for material it was never given"
+        f" (ADR-0088). See {STANDARD}."
+    )
+    assert "Source Fidelity" in text, (
+        f"{REDLINE}: the body never names Source Fidelity as somebody else's"
+        f" contract, and the boundary is what keeps this Skill usable where no"
+        f" Write invocation and no material exist (ADR-0088). See {STANDARD}."
+    )
+
+
+def test_redline_invokes_proofread_once_and_declares_what_it_needs() -> None:
+    """The mechanical pass is last, and both requirements are hard.
+
+    Proofread is a declared Skill Dependency followed through its public
+    `SKILL.md` rather than through its private files (ADR-0076), and subagents
+    are a hard Capability whatever Correction Budget is in force, so the Skill
+    has one honest availability contract rather than one per invocation.
+    """
+
+    text = REDLINE.read_text(encoding="utf-8")
+
+    assert "$HERE/../proofread/SKILL.md" in text, (
+        f"{REDLINE}: the body never follows Proofread's public `SKILL.md`, so"
+        f" the closing mechanical pass is either absent or performed by"
+        f" Redline itself (ADR-0088, ADR-0076). See {STANDARD}."
+    )
+    assert '\n  kntnt.skills: "proofread"\n' in text, (
+        f"{REDLINE}: Proofread is invoked and not declared, so Select cannot"
+        f" show what Redline needs before it is Enabled (ADR-0088). See"
+        f" {STANDARD}."
+    )
+    assert '\n  kntnt.capabilities: "subagents"\n' in text, (
+        f"{REDLINE}: subagents are a hard Capability of this Skill whatever"
+        f" the Correction Budget in force is, a conditional declaration being"
+        f" an availability contract that changes with the invocation"
+        f" (ADR-0062). See {STANDARD}."
+    )
+
+
+def test_redline_delivers_through_the_shared_output_contract() -> None:
+    """The rule has one owner, and a consumer follows it rather than repeating it.
+
+    Where a result goes, when a source file may be replaced by it, and what
+    happens when nothing changed are stated once in the Collection Library
+    (ADR-0091). A Skill restating them in its own body is a second copy free
+    to drift from the one every other Skill delivers by.
+    """
+
+    text = REDLINE.read_text(encoding="utf-8")
+
+    assert "$LIBRARY/references/delivery.md" in text, (
+        f"{REDLINE}: the body delivers its Text Artifact without following the"
+        f" Collection Library's delivery contract, so the Output Target,"
+        f" In-place Editing, its refusals, and the no-change status are this"
+        f" Skill's own account of rules it shares with its peers (ADR-0091,"
+        f" ADR-0076). See {STANDARD}."
+    )
+    assert "`my-file-2.md`" not in text, (
+        f"{REDLINE}: the body spells out the shared collision sequence instead"
+        f" of following the contract that owns it, which is one rule made into"
+        f" two things to keep true (ADR-0091). See {STANDARD}."
+    )
+
+
+def test_the_anti_slop_catalogue_is_shared_rather_than_one_skills_property() -> None:
+    """Two Skills apply this pass, so neither owns the other's rules.
+
+    The catalogue is a condensed adaptation the collection owns, which is what
+    keeps an external Skill out of the dependency lists, and it ships in the
+    Collection Library because a peer applying the pass alone must read it
+    without reaching into Redline's own files (ADR-0076, ADR-0101).
+    """
+
+    assert ANTI_SLOP.is_file(), (
+        f"{ANTI_SLOP}: the anti-slop catalogue has more than one consumer, so"
+        f" it belongs to the Collection Library rather than to the Skill that"
+        f" happened to need it first (ADR-0076, ADR-0101). See {STANDARD}."
+    )
+
+    catalogue = ANTI_SLOP.read_text(encoding="utf-8").lower()
+    missing = [pattern for pattern in SLOP_PATTERNS if pattern not in catalogue]
+    assert missing == [], (
+        f"{missing}: the anti-slop catalogue does not carry these patterns,"
+        f" which are the ones the collection undertook to catch (ADR-0101)."
+        f" See {STANDARD}."
+    )
+
+    assert "MIT" in ANTI_SLOP.read_text(encoding="utf-8"), (
+        f"{ANTI_SLOP}: the catalogue adapts a substantial part of an upstream"
+        f" MIT-licensed catalogue and ships without the upstream notice its"
+        f" terms require (ADR-0101). See {STANDARD}."
+    )
+
+    private = sorted(
+        path
+        for directory in _shipped_skills()
+        for path in directory.rglob("*.md")
+        if "anti-slop" in path.name
+    )
+    assert private == [], (
+        f"{private}: a Skill ships its own copy of the anti-slop catalogue,"
+        f" which makes one consumer the implementation owner of the other's"
+        f" rules (ADR-0076, ADR-0101). See {STANDARD}."
+    )
+
+
+def test_the_base_contracts_review_extension_restates_no_base_rule() -> None:
+    """A requirement and its diagnostic must not both claim to state the rule.
+
+    The extension holds diagnostics, examples, edge cases, ambiguity
+    resolution, and minimum-safe-correction guidance for requirements the base
+    half already states. A sentence carried over from the base half is one
+    rule made into two things to keep true, free to drift the moment either is
+    edited (ADR-0095).
+    """
+
+    editorial = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
+    extension = editorial / "base.review.md"
+
+    assert extension.is_file(), (
+        f"{extension}: the base contract ships without the review extension"
+        f" the reviewing Skills read it through (ADR-0095). See {STANDARD}."
+    )
+
+    review = extension.read_text(encoding="utf-8")
+
+    # The same rule the base half is held to: a shared document naming a
+    # consumer's flag would bind a grammar the consuming Skill owns.
+    flags = sorted(set(re.findall(r"(?<![\w-])--[A-Za-z][\w-]*", review)))
+    assert flags == [], (
+        f"{flags}: the review extension names a consumer's flag spelling,"
+        f" which binds a grammar the consuming Skill owns (ADR-0095). See"
+        f" {STANDARD}."
+    )
+
+    # A sentence long enough to be a rule rather than a turn of phrase.
+    base = (editorial / "base.md").read_text(encoding="utf-8")
+    sentences = [
+        sentence.strip()
+        for sentence in re.split(r"(?<=[.!?])\s+", base)
+        if len(sentence.strip()) >= 40
+    ]
+    assert sentences
+
+    carried = sorted(sentence for sentence in sentences if sentence in review)
+    assert carried == [], (
+        f"{carried}: the review extension repeats the base half word for word."
+        f" Anything a draft has to meet is a base rule and belongs where the"
+        f" writing Skill will see it; the extension says how a failure is"
+        f" recognised and repaired (ADR-0095). See {STANDARD}."
+    )
+
+
 def test_a_skill_reads_shared_implementation_only_from_the_collection_library() -> None:
     """A peer Skill is a Dependency, never an implementation owner."""
 
