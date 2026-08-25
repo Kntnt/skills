@@ -160,6 +160,10 @@ Two records of one run. The claim account — claimed tickets, tracker login, pl
 
 Each routed attempt an independent verdict judged is recorded in the same session state directory, and the run's final report names both that account and the sanitized artifact `/model-selector observe` writes from it. The artifact holds statistical metadata about the configurations the run launched — exact point, outcome, available cost, quota, and latency facts, and provenance — and no prompt, response, reasoning, source content, diff, terminal output, secret, or unnecessary absolute path. Nothing is imported by the run: `/model-selector record` is the explicit invocation that accepts it into the evidence ledger.
 
+**.kntnt-orchestrate/generated.json**
+
+The repository's own declaration of which of its files are generated and the command that produces each. An integration collision confined to declared files is settled by regenerating those files on the merged tree with the commands declared for them, and committing the result, with no repair dispatched and the wave check reading the result like any other work on the branch. A collision touching any file no declaration names takes the repair path unchanged, and so does one whose generator did not settle it. A repository with no such file, or one nothing can read, has every collision repaired as before.
+
 **Run-owned append files**
 
 Builders leave proposed entries for files every ticket must append to, such as a changelog, in ticket-specific notes. The orchestrator applies those notes serially after each wave, and the combined branch verifies the entries with the rest of the work.

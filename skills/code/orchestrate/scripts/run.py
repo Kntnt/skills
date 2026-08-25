@@ -199,7 +199,16 @@ RECORDED_BLOCKED = re.compile(rf"<!--\s*{MARKER}\s+blocked-by=[\d,]+\s*-->")
 # the branch. It is what lets the branch say whose work a file carries, which
 # is how a collision names the ticket on the other side of it rather than only
 # the files the two tickets both touched.
-MERGED_TICKET = re.compile(rf"<!--\s*{MARKER}\s+merged=(\d+)\s*-->")
+MERGED_TICKET = re.compile(
+    rf"<!--\s*{MARKER}\s+merged=(\d+)(?:\s+regenerated=(\S+))?\s*-->"
+)
+
+# Where a repository says which of its files are generated and what regenerates
+# each. It is read rather than inferred: a file is generated because the
+# repository declares it so, never because the engine recognised its name or
+# its shape (ADR-0106). A repository that declares nothing has no collision
+# settled this way, and every collision takes the repair path as before.
+GENERATED_DECLARATION = ".kntnt-orchestrate/generated.json"
 
 # Who a claim assigns the ticket to. The tracker's own relation for "somebody
 # is on this" is the claim: it needs no label created and no convention
@@ -3092,8 +3101,22 @@ def integrate(cwd: Path, number: int) -> int:
     # afterwards which ticket brought which file.
     built_on = current_branch(path)
     merged = git_result(cwd, "merge", "--no-ff", "-m", merge_message(number), built_on)
+
+    # A collision the repository's own generators answer is not a collision two
+    # builders have to settle: where every file it touched is declared
+    # generated, the generator is run on the merged tree and what it produced
+    # is committed, and no repair is dispatched (ADR-0106). Anything else, the
+    # mixed case included, is refused exactly as it always was. The collision
+    # is read first because settling one resolves it: what the refusal names
+    # has to be what the merge left, not what an attempt at it left behind.
+    regenerated: list[str] = []
     if merged.returncode != 0:
-        return refuse_merge(cwd, number, path, built_on, merged)
+        collisions = git_result(cwd, "diff", "--name-only", "--diff-filter=U")
+        files = collisions.stdout.split()
+        settled = settle_by_regenerating(cwd, number, files)
+        if settled is None:
+            return refuse_merge(cwd, number, path, built_on, merged, files)
+        regenerated = settled
 
     # The machine ends tidy: what is merged is on the branch the developer
     # comes back to, so the working tree it was built in and the branch it was
@@ -3113,6 +3136,7 @@ def integrate(cwd: Path, number: int) -> int:
             "commit": commit,
             "worktree": None if removed.returncode == 0 else str(path),
             "collisions": [],
+            "regenerated": regenerated,
             "reason": None,
         }
     )
@@ -3125,6 +3149,7 @@ def refuse_merge(
     path: Path,
     built_on: str,
     merged: subprocess.CompletedProcess[str],
+    files: list[str],
 ) -> int:
     """Undo a merge that did not go through, and say what stopped it.
 
@@ -3133,13 +3158,15 @@ def refuse_merge(
     blocking edge the ticket breakdown was missing, which is how one run
     improves the next one — and the files alone would leave the developer to
     work out whose work they had run into.
+
+    *files* is what the merge left half-merged, read by the caller while the
+    repository could still say it: an attempt at settling the collision stages
+    what it settled, and a reading taken after one would name fewer files than
+    the merge actually collided in.
     """
 
-    # What is left half-merged is read before the merge is undone, that being
-    # the only moment the repository can say which files the two tickets both
-    # touched.
-    collisions = git_result(cwd, "diff", "--name-only", "--diff-filter=U")
-    files = collisions.stdout.split()
+    # Whose work the collision ran into, before the merge that carries the
+    # answer is undone.
     against = tickets_touching(cwd, files, built_on)
     git_result(cwd, "merge", "--abort")
 
@@ -3162,6 +3189,7 @@ def refuse_merge(
             "commit": None,
             "worktree": str(path),
             "collisions": files,
+            "regenerated": [],
             "collided_with": against,
             "reason": reason,
         }
@@ -3169,24 +3197,198 @@ def refuse_merge(
     return 2
 
 
-def merge_message(number: int) -> str:
+def merge_message(number: int, regenerated: list[str] | None = None) -> str:
     """Render the message of the merge that brings ticket *number* over.
 
     One line a developer reading the branch can read, and a marker the engine
     reads back: which ticket a commit carried is the branch's own answer, and a
     branch that cannot give it can name no ticket on the other side of a
     collision.
+
+    A merge that collided only in generated files says so in both halves. The
+    branch is where that fact outlives the session that made it, which is what
+    lets the run's own account name a regeneration as what it was rather than
+    as a merge that went through untroubled (ADR-0106).
     """
 
-    return f"Merge #{number} into the run branch\n\n<!-- {MARKER} merged={number} -->"
+    settled = (
+        "\n\nThe collision in "
+        + ", ".join(regenerated)
+        + " was confined to files this repository declares generated, and was"
+        + " settled by regenerating them on the merged tree."
+        if regenerated
+        else ""
+    )
+    marked = f" regenerated={','.join(regenerated)}" if regenerated else ""
+
+    return (
+        f"Merge #{number} into the run branch{settled}"
+        f"\n\n<!-- {MARKER} merged={number}{marked} -->"
+    )
 
 
-def merges_on_branch(cwd: Path) -> list[tuple[int, str]]:
-    """Return the ticket each of this branch's own merges carried, newest first.
+@dataclass(frozen=True)
+class Generator:
+    """One declared generated output, and the command that produces it."""
 
-    Only the merges a run made are here — the marker is what says so — and only
-    along the first parent, that being the run branch's own history rather than
-    everything the tickets brought with them.
+    files: tuple[str, ...]
+    command: str
+
+
+def declared_generators(cwd: Path) -> list[Generator]:
+    """Return what this repository declares generated, and what regenerates it.
+
+    A declaration nobody can read declares nothing: an absent, unreadable, or
+    malformed file leaves the list empty, and an entry that does not name both
+    its files and its command is left out of it. Every one of those failures
+    can only narrow what counts as generated, so the worst a broken
+    declaration costs is the repair path a collision would have taken anyway.
+    """
+
+    try:
+        declaration = json.loads(
+            (cwd / GENERATED_DECLARATION).read_text(encoding="utf-8")
+        )
+    except (OSError, ValueError):
+        return []
+
+    # The shape is checked rather than trusted: this file is prose somebody
+    # wrote, and what it licenses is a command the run executes.
+    entries = declaration.get("generated") if isinstance(declaration, dict) else None
+    if not isinstance(entries, list):
+        return []
+
+    declared = []
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        files = entry.get("files")
+        command = entry.get("command")
+        if not isinstance(command, str) or not isinstance(files, list):
+            continue
+        if not files or not all(isinstance(name, str) for name in files):
+            continue
+        declared.append(Generator(files=tuple(files), command=command))
+
+    return declared
+
+
+def settle_by_regenerating(
+    cwd: Path, number: int, collisions: list[str]
+) -> list[str] | None:
+    """Settle a collision confined to declared-generated files, or answer None.
+
+    A generated file is the output of a deterministic command, so two builders
+    who each ran it honestly cannot produce the same bytes and will collide in
+    it forever. There is no disagreement in such a collision for anybody to
+    settle: the merged tree already determines what the file says, and running
+    the generator there is what says it (ADR-0106).
+
+    None is every other case — a collision reaching past what the repository
+    declares, a repository that declares nothing, a generator that failed, one
+    whose output did not settle what the merge could not, and one that wrote
+    outside what it declares. The merge itself is left standing in each of
+    them, for the caller to refuse and undo as it always did.
+    """
+
+    # Confinement is the whole of the question: every file the merge could not
+    # settle has to be one the repository declares generated.
+    touched = set(collisions)
+    generators = declared_generators(cwd)
+    declared = {name for generator in generators for name in generator.files}
+    if not touched or not touched <= declared:
+        return None
+
+    # Only the generators the collision actually reaches are run, and each is
+    # run in the merged tree rather than in either side of it.
+    running = [
+        generator for generator in generators if touched.intersection(generator.files)
+    ]
+    for generator in running:
+        if not run_generator(cwd, generator):
+            return None
+
+    # What a generator that ran declares it wrote is staged whole: an output
+    # the collision did not touch is still this generator's own, and staging
+    # only the conflicted half would leave the tree disagreeing with itself.
+    produced = sorted({name for generator in running for name in generator.files})
+    staged = git_result(cwd, "add", "--", *produced)
+    if staged.returncode != 0:
+        return None
+
+    # A file the generators did not rewrite is one regeneration did not settle,
+    # whatever the declaration said, so the collision stands as a collision.
+    if git_result(cwd, "diff", "--name-only", "--diff-filter=U").stdout.split():
+        return None
+
+    # A generator that touched anything its declaration does not name has
+    # widened that declaration without saying so, and what it wrote there is
+    # nobody's decision to commit. The tree the run commits is the one the
+    # declaration accounts for, or the collision stands.
+    outside = git_result(cwd, "diff", "--name-only").stdout.split()
+    outside += git_result(
+        cwd, "ls-files", "--others", "--exclude-standard"
+    ).stdout.split()
+    if outside:
+        return None
+
+    committed = git_result(cwd, "commit", "-m", merge_message(number, produced))
+    if committed.returncode != 0:
+        return None
+
+    return produced
+
+
+def run_generator(cwd: Path, generator: Generator) -> bool:
+    """Run one declared generator in *cwd*, and say whether it succeeded.
+
+    The command is run through a shell because that is how the repository's own
+    guide writes it — an environment assignment in front of it, a pipe or a
+    redirection in it — and a declaration a contributor cannot copy from the
+    guide it lives beside is one that will drift from it. A command named there
+    is trusted exactly as far as the code the merge is already bringing onto
+    this branch, the declaration being a file of the same repository.
+    """
+
+    ran = subprocess.run(
+        generator.command,
+        cwd=cwd,
+        shell=True,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    return ran.returncode == 0
+
+
+def regenerated_merges(cwd: Path, accounted: set[int]) -> list[dict[str, Any]]:
+    """Return the merges this branch settled by regenerating, ticket by ticket.
+
+    Read off the branch's own merge markers for the reason a collision's
+    counterpart is (ADR-0055): what a run did is a fact about the branch it did
+    it on, and a report that remembered it instead would have nothing to say
+    about a run some other session finished. Only the tickets *accounted* names
+    are here — a branch worked more than once carries the merges of every run
+    it carried, and a regeneration outside this report's scope belongs to
+    somebody else's account of it.
+    """
+
+    return [
+        {"ticket": number, "files": regenerated.split(",")}
+        for number, regenerated, _ in merges_on_branch(cwd)
+        if regenerated and number in accounted
+    ]
+
+
+def merges_on_branch(cwd: Path) -> list[tuple[int, str, str]]:
+    """Return what each of this branch's own merges carried, newest first.
+
+    Each entry is the ticket the merge brought, the generated files a
+    regeneration settled its collision in as the marker spells them, and the
+    commit itself. Only the merges a run made are here — the marker is what
+    says so — and only along the first parent, that being the run branch's own
+    history rather than everything the tickets brought with them.
     """
 
     record = git(cwd, "log", "--first-parent", "--format=%H%x1f%B%x1e")
@@ -3195,7 +3397,7 @@ def merges_on_branch(cwd: Path) -> list[tuple[int, str]]:
         commit, _, message = entry.strip().partition("\x1f")
         carried = MERGED_TICKET.search(message)
         if carried:
-            found.append((int(carried.group(1)), commit))
+            found.append((int(carried.group(1)), carried.group(2) or "", commit))
 
     return found
 
@@ -3220,7 +3422,7 @@ def tickets_touching(cwd: Path, files: list[str], built_on: str) -> list[int]:
     touched = set(files)
     return sorted(
         number
-        for number, commit in merges_on_branch(cwd)
+        for number, _, commit in merges_on_branch(cwd)
         if not git_ok(cwd, "merge-base", "--is-ancestor", commit, built_on)
         and touched.intersection(
             git(cwd, "diff", "--name-only", f"{commit}^1", commit).split()
@@ -4288,6 +4490,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
         )
         say_where_work_stands(cwd, tickets, branch)
         base = run_base(cwd, tickets)
+        regenerated = regenerated_merges(cwd, {ticket.number for ticket in tickets})
     except RunError as exc:
         return fail(str(exc))
 
@@ -4318,6 +4521,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
             "routing": routing_details(routing),
             "routing_reason": routing_reason,
             "observations": observed_details(routing, state_path),
+            "regenerated": regenerated,
             "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],

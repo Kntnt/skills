@@ -525,6 +525,65 @@ def test_the_integration_step_applies_the_waves_notes_before_the_wave_check() ->
     )
 
 
+def test_a_collision_confined_to_generated_files_is_regenerated_not_repaired() -> None:
+    """A file a command writes carries no disagreement for a repair to settle.
+
+    Two builders who each ran the same generator honestly cannot produce the
+    same bytes, so every wave that merges two Skill-touching tickets collides
+    in the Catalog — predictably, and forever. Step 8 answers that with the
+    command rather than with a routed repair and a second verdict (ADR-0106).
+    """
+
+    step = _step(8)
+
+    assert "declares generated" in step, (
+        f"{SKILL / 'SKILL.md'}: step 8 says the files are the ones the"
+        f" repository declares generated. What counts is read off a"
+        f" declaration and never guessed from a file (ADR-0106)."
+    )
+    assert "no repair is dispatched" in step, (
+        f"{SKILL / 'SKILL.md'}: step 8 says no repair is dispatched for such a"
+        f" collision. Paying a repair subagent and a re-verification to"
+        f" reproduce what one command already knows is the whole of what this"
+        f" removes (ADR-0106)."
+    )
+    assert "step 11 reads the branch whole" in step, (
+        f"{SKILL / 'SKILL.md'}: step 8 says what licenses a regeneration"
+        f" committed ahead of a verdict — the same reading that licenses this"
+        f" step's own note-applying commits (ADR-0071, ADR-0106)."
+    )
+
+
+def test_the_wave_check_reads_what_the_run_committed_ahead_of_a_verdict() -> None:
+    """The check that follows is the whole licence for committing before one."""
+
+    step = _step(11)
+
+    assert "regenerating" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 says it is the reading that follows"
+        f" everything this run committed without a verdict of its own — the"
+        f" applied notes and a regenerated collision alike. That reading is"
+        f" the whole licence for the commit (ADR-0106)."
+    )
+
+
+def test_the_manpage_accounts_for_the_repositorys_generated_declaration() -> None:
+    """A developer has to find out here why one collision never reached a repair."""
+
+    where = SKILL / "help.md"
+    entry = _manpage_entry("FILES", "**.kntnt-orchestrate/generated.json**")
+
+    assert "regenerat" in entry, (
+        f"{where}: the entry says the declared files are regenerated on the"
+        f" merged tree rather than repaired (ADR-0106)."
+    )
+    assert "repair" in entry, (
+        f"{where}: the entry says which collisions still take the repair path,"
+        f" a declaration that quietly widened being the failure to fear"
+        f" (ADR-0106)."
+    )
+
+
 def test_the_manpage_accounts_for_the_files_the_run_writes() -> None:
     """A developer reading the page has to know why no builder's commit carries its changelog line."""
 
