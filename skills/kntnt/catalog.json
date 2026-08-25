@@ -162,7 +162,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",
-      "digest": "f5e7d73048b018fb176a70dad42f02a868f1e4fc33f616b5580ff6a395d2184b",
+      "digest": "9caa87ef760d7b2b0cf67e3c3cb83b0ccc335b4dae0d8f2b0a16596ea29f6d28",
       "binaries": [
         "uv"
       ],

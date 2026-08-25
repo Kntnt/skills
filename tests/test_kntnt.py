@@ -3950,6 +3950,95 @@ def test_no_editorial_resource_pins_a_rule_to_one_installed_language() -> None:
         )
 
 
+def _base_contract_section(name: str) -> str:
+    """The body of one `## ` section of the shared base contract.
+
+    Where a rule stands in that document is part of the rule: a requirement
+    about what may be claimed, filed under `Words`, has been put away from the
+    requirement it qualifies and from the reader who needs it (ADR-0095).
+    """
+
+    text = (EDITORIAL / "base.md").read_text(encoding="utf-8")
+    for section in re.split(r"^## ", text, flags=re.MULTILINE)[1:]:
+        heading, _, body = section.partition("\n")
+        if heading.strip() == name:
+            return body
+
+    return ""
+
+
+def test_the_base_contract_makes_circumstantial_detail_a_claim() -> None:
+    """The shape an invented fact takes when it reads as prose.
+
+    A duration, a manner, a motive, an absence, a state of affairs given as
+    background: each asserts something about the case the text reports, and
+    each survives a writer's own reading precisely because it does not look
+    like an assertion. Unstated, the requirement that every claim be supported
+    is read as covering figures and attributions alone, which is the form every
+    Source Fidelity failure the Claude-family evaluation found actually took
+    (issue #138).
+    """
+
+    claims = _base_contract_section("Claims")
+
+    # A contract reworded out of this heading would leave nothing to judge and
+    # would pass every assertion below it.
+    assert claims, (
+        f"{EDITORIAL / 'base.md'}: the contract states what a claim owes its"
+        f" reader under `## Claims`, and there is no such section to read"
+        f" (ADR-0095). See {STANDARD}."
+    )
+
+    lowered = claims.lower()
+
+    assert "circumstantial detail" in lowered, (
+        f"{EDITORIAL / 'base.md'}: the `Claims` section requires support for"
+        f" every claim and never says that circumstantial detail about the"
+        f" reported case is one, so the detail that reads as prose is the"
+        f" detail a draft invents (issue #138). See {STANDARD}."
+    )
+
+    unnamed = [
+        form
+        for form in ("duration", "manner", "motive", "absence", "background")
+        if form not in lowered
+    ]
+    assert unnamed == [], (
+        f"{unnamed}: forms circumstantial detail takes that the `Claims`"
+        f" section does not name, each of them observed as an unsupported fact"
+        f" in a delivered draft (issue #138). See {STANDARD}."
+    )
+
+
+def test_the_base_contract_settles_a_stated_length_against_the_material() -> None:
+    """A length that was asked for, and material too thin to reach it.
+
+    Both fixtures that failed Source Fidelity stated a word count their
+    material could not fill, and the drafts reached it by supplying detail the
+    brief did not carry. Nothing said which of the two gives way. The rule is
+    therefore stated beside the requirement it protects, and it settles the
+    conflict in one direction: the length gives way, and the shortfall is named
+    rather than filled (issue #138).
+    """
+
+    claims = _base_contract_section("Claims").lower()
+
+    assert claims
+
+    for clause in (
+        "never a licence to add to it",
+        "the length the material supports",
+        "what further material would close",
+    ):
+        assert clause in claims, (
+            f"{EDITORIAL / 'base.md'}: the `Claims` section leaves a stated"
+            f" length free to license material the source does not carry,"
+            f" which is the conflict every observed failure was decided the"
+            f" wrong way round ({clause!r} unstated, issue #138). See"
+            f" {STANDARD}."
+        )
+
+
 def test_write_ships_in_the_editorial_category_and_invokes_no_peer() -> None:
     """Running an editorial pipeline stays the user's separate choice.
 
@@ -4010,6 +4099,45 @@ def test_write_loads_only_what_a_first_draft_is_written_against() -> None:
             f" the Skills contracted to act on it (ADR-0087, ADR-0095). See"
             f" {STANDARD}."
         )
+
+
+def test_write_accounts_for_what_it_did_with_the_material() -> None:
+    """A run reporting its own fidelity has made a claim about the draft.
+
+    Every Source Fidelity failure the Claude-family evaluation found shipped
+    under a report saying that every claim traced to the brief. So the account
+    is answerable to the contract the draft is written under: it says where the
+    material stopped when the draft is short of a stated length, and asserts
+    nothing about the draft that the run has not established. It remains an
+    account and never a second pass — Write still stops at the first draft
+    (ADR-0088, issue #138).
+    """
+
+    directory = REPO_ROOT / "skills" / "editorial" / "write"
+    text = "\n".join(
+        path.read_text(encoding="utf-8") for path in sorted(directory.rglob("*.md"))
+    )
+
+    assert "short of a stated length" in text, (
+        f"{directory}: nothing tells a run to say where the material stopped"
+        f" when the draft comes in under a length the brief asked for, which"
+        f" is the one moment a draft is under pressure to invent (issue #138)."
+        f" See {STANDARD}."
+    )
+
+    assert "fidelity it has not established" in text, (
+        f"{directory}: the run's account may still report the draft as"
+        f" faithful without having checked, which is what every failing run"
+        f" did (issue #138). See {STANDARD}."
+    )
+
+    # The account says what the run did with the material; it never reviews the
+    # draft it has just written (ADR-0088).
+    assert "perform neither, and offer neither as a next step" in text, (
+        f"{directory}: Write no longer stops at the first draft, so the"
+        f" account of a run has become the review pass this Skill does not"
+        f" have (ADR-0088). See {STANDARD}."
+    )
 
 
 # The Skill this wave's mechanical pass ships as, read at the one seam a test
