@@ -4351,6 +4351,75 @@ def test_redline_reviews_the_operand_whatever_it_turns_out_to_be() -> None:
     )
 
 
+# The sentence of the shared Invocation Envelope that refuses guidance a
+# higher-precedence source has already settled. The closure this ticket adds is
+# a statement about the form of an invocation, and says nothing about where else
+# a run halts: whether that envelope rule and the editorial precedence can both
+# stand is issue #146's question and a maintainer's to answer (issue #141).
+REDLINE_ENVELOPE_REFUSAL = (
+    "Valid but irrelevant, ineffective, materially ambiguous, conflicting, or"
+    " scope-widening guidance takes the distinct context refusal"
+)
+
+# A sentence claiming to enumerate every place a run may halt is the shape of
+# the overreach, whichever words it is written in.
+_CLAIMS_EVERY = ("only", "whole of", "sole ", "exhaust")
+_A_HALT = ("halt", "stop")
+
+
+def _sentences(passage: str) -> list[str]:
+    """Split a passage into sentences, leaving `help.md` and its like intact."""
+
+    return [
+        sentence for sentence in re.split(r"(?<=\.)\s+", passage) if sentence.strip()
+    ]
+
+
+def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
+    """The closed list is closed over invocation forms, and nothing wider.
+
+    Saying that the list of invalid forms is the whole of what that section
+    refuses is a statement about the form of an invocation. A statement about
+    every place a run may halt would be something else: the shared Invocation
+    Envelope refuses guidance that is ineffective against a higher-precedence
+    source, which is a collection-wide rule that 42 shipped manpages carry, and
+    whether it can stand beside the editorial precedence is issue #146's
+    question rather than this Skill's to settle on its own (issue #141).
+    """
+
+    passages = {
+        REDLINE: _section(REDLINE.read_text(encoding="utf-8"), "## Arguments", REDLINE),
+        REDLINE_HELP: _section(
+            REDLINE_HELP.read_text(encoding="utf-8"), "## DIAGNOSTICS", REDLINE_HELP
+        ),
+    }
+    for where, passage in passages.items():
+        for sentence in _sentences(passage):
+            lowered = sentence.lower()
+            overreaches = any(claim in lowered for claim in _CLAIMS_EVERY) and any(
+                halt in lowered for halt in _A_HALT
+            )
+            assert not overreaches, (
+                f"{where}: a sentence claims to name every place a run may"
+                f" halt — {sentence!r}. The list closed here is closed over the"
+                f" form of an invocation; the `## INVOCATION ENVELOPE` section"
+                f" every shipped manpage carries refuses ineffective guidance"
+                f" too, and reconciling the two is issue #146 rather than"
+                f" anything this Skill decides alone (issue #141). See"
+                f" {STANDARD}."
+            )
+
+    envelope = _section(
+        REDLINE_HELP.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", REDLINE_HELP
+    )
+    assert REDLINE_ENVELOPE_REFUSAL in envelope, (
+        f"{REDLINE_HELP}: the envelope no longer refuses ineffective guidance."
+        f" Closing the list of invalid forms says what this Skill reviews; it"
+        f" does not repeal a rule every shipped manpage carries, which is issue"
+        f" #146's to decide (issue #141). See {STANDARD}."
+    )
+
+
 def test_the_correction_budget_is_any_non_negative_integer_defaulting_to_one() -> None:
     """One correction and one chance to verify it is the ordinary review.
 
