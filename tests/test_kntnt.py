@@ -4328,6 +4328,153 @@ def test_redline_loads_the_contract_it_reviews_against() -> None:
     )
 
 
+# The two Skills that settle a genre through the shared precedence, and the
+# clauses the inference rule is held to in both of them. A genre inferred
+# rather than named is settled against the installed filenames and the opening
+# of each installed genre resource, and against nothing further of any of them
+# (ADR-0115). The licence is one paragraph, compared here across both bodies,
+# because an inference rule that holds in one Skill and not the other is two
+# rules for one precedence.
+WRITE = REPO_ROOT / "skills" / "editorial" / "write" / "SKILL.md"
+GENRE_INFERENCE_LICENCE = (
+    "may read a single thing besides that listing: the opening of each"
+    " installed genre resource"
+)
+GENRE_INFERENCE_BOUND = "Read that far and no further."
+
+# What each body's loading step admits, unchanged by the licence above: the
+# clause opening it and the clause closing the door behind it.
+LOADING_CLAUSES = {
+    "write": (
+        "Load the contract, and nothing besides it",
+        "Done when those four are loaded and nothing else has been.",
+    ),
+    "redline": (
+        "Load what the review is read against, and nothing besides it",
+        "Done when those are loaded and nothing else has been.",
+    ),
+}
+
+
+def _inference_paragraph(path: Path) -> str:
+    """Return the one paragraph of a body saying what inference may read."""
+
+    carrying = [
+        paragraph
+        for paragraph in path.read_text(encoding="utf-8").split("\n\n")
+        if GENRE_INFERENCE_LICENCE in paragraph
+    ]
+    assert len(carrying) == 1, (
+        f"{path}: the body states what a run may read to infer a genre in"
+        f" {len(carrying)} paragraphs. Inference is licensed once, by name,"
+        f" where the genre is resolved (ADR-0115). See {STANDARD}."
+    )
+    return carrying[0]
+
+
+def test_inferring_a_genre_reads_the_installed_openings_and_nothing_further() -> None:
+    """A run inferring a genre follows an instruction rather than improvising one.
+
+    The precedence puts inference above the default, and the only reading the
+    resolution step used to authorise was the directory listing — which carries
+    filenames. A run therefore had a question the installed names could not
+    answer, and answered it by opening a candidate resource to find out what it
+    asks for (issues #139, #140). The resource format already carries the
+    answer more cheaply: every genre opens with its name and a paragraph saying
+    what it is, so that is what inference reads, and it stops there
+    (ADR-0095, ADR-0115).
+    """
+
+    for path in (WRITE, REDLINE):
+        paragraph = _inference_paragraph(path)
+
+        assert GENRE_INFERENCE_BOUND in paragraph, (
+            f"{path}: the body says what inference may read and not where the"
+            f" reading stops, so a candidate opened for its opening may be"
+            f" read to the end (ADR-0115). See {STANDARD}."
+        )
+        assert "no other" in paragraph, (
+            f"{path}: the body licenses inference without saying that the"
+            f" loading step is unchanged by it, so what resolution read reads"
+            f" as what loading admits (ADR-0115). See {STANDARD}."
+        )
+
+
+def test_the_two_skills_infer_a_genre_in_the_same_terms() -> None:
+    """One precedence, one question, one answer.
+
+    Write and Redline resolve a genre through the same precedence, so an
+    inference rule stated in one and not the other — or stated differently in
+    each — is two rules a user meets as one (ADR-0115).
+    """
+
+    assert _inference_paragraph(WRITE) == _inference_paragraph(REDLINE), (
+        f"{WRITE} and {REDLINE}: the two bodies say different things about"
+        f" what a run may read to infer a genre, for one precedence they"
+        f" share (ADR-0115). See {STANDARD}."
+    )
+
+
+def test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading() -> None:
+    """Anything inference reads is licensed where inference happens.
+
+    The resolution step owns the question, so the licence is stated there and
+    the loading step still admits what it always admitted: the base contract,
+    the resolved genre, the language scopes the resolver returned, and an
+    optional technique — with the review halves Redline already loads beside
+    them (ADR-0095, ADR-0115).
+    """
+
+    for path in (WRITE, REDLINE):
+        text = path.read_text(encoding="utf-8")
+        resolution = text.partition("\n## Resolution\n")[2].partition("\n## Steps\n")[0]
+
+        assert GENRE_INFERENCE_LICENCE in resolution, (
+            f"{path}: what inference may read is licensed outside"
+            f" `## Resolution`, which is where the genre is settled"
+            f" (ADR-0115). See {STANDARD}."
+        )
+
+        for clause in LOADING_CLAUSES[path.parent.name]:
+            assert clause in text, (
+                f"{path}: the loading step no longer carries {clause!r}, so"
+                f" the door the licence above must not widen is open"
+                f" (ADR-0095, ADR-0115). See {STANDARD}."
+            )
+
+
+def test_the_resource_format_records_what_inference_is_given_to_read() -> None:
+    """The opening is a requirement on every resource, not a courtesy.
+
+    Inference now depends on it, so the format page says so beside the format
+    it governs — a resource whose opening does not say what it is leaves a run
+    choosing between installed genres nothing to read but the filename, and
+    the reading it would fall back on is the one this rule removed
+    (ADR-0115).
+    """
+
+    readme = EDITORIAL / "README.md"
+    text = readme.read_text(encoding="utf-8")
+
+    assert "inferred rather than named" in text, (
+        f"{readme}: the format page does not say that a genre inferred rather"
+        f" than named is inferred against these openings, so the requirement"
+        f" reads as a convenience anybody may drop (ADR-0115). See {STANDARD}."
+    )
+
+    # The page ships to an installed reader, who has no ADR directory, so the
+    # record is cited from the standard instead.
+    assert "ADR-0115" not in text, (
+        f"{readme}: an installed reader receives this page and not this"
+        f" repository's records, so the rule is carried here and the citation"
+        f" in {STANDARD}."
+    )
+    assert "ADR-0115" in (REPO_ROOT / STANDARD).read_text(encoding="utf-8"), (
+        f"{STANDARD}: the rule binds every Skill resolving a genre and is"
+        f" stated here without the record carrying its reasoning (ADR-0115)."
+    )
+
+
 def test_redline_leaves_source_fidelity_to_the_skill_that_owns_it() -> None:
     """A reviewing Skill has no source material, and says nothing about it.
 
