@@ -4717,7 +4717,7 @@ def test_a_correction_is_verified_by_review_rather_than_by_its_own_report() -> N
     )
 
 
-def test_the_correction_loop_stops_on_each_of_its_three_conditions() -> None:
+def test_the_correction_loop_still_stops_on_its_first_three_conditions() -> None:
     """A loop with one exit is a loop that spends everything it is given.
 
     It stops when no findings remain, leaving the rest of the budget unspent
@@ -5104,6 +5104,107 @@ def test_unslops_correction_brief_is_handed_over_the_same_single_way() -> None:
     """
 
     _assert_one_handover_with_nothing_left_to_invent(UNSLOP_CORRECTION, UNSLOP)
+
+
+# The two guards that keep a longer loop from emptying a thin text (ADR-0120),
+# each pinned by the clause the rule is stated in. The first two are the
+# dispatching run's, which is the only party holding what the text used to be;
+# the last four are the correction brief's, where a repair is made.
+LOOP_HISTORY = "every state the text has passed through"
+REPAIR_CREATED_STOP = "a finding an earlier round's own repair created"
+FOUR_CONDITIONS = "at the first of four conditions"
+CLAIM_KEPT = "leaves that claim standing"
+CLAIM_TAKEN = "take the claim with it"
+DEFECT_IS_THE_PASSAGE = "is the whole of the passage"
+NOT_A_LENGTH = "never about how much of the text is left"
+
+
+def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
+    """A loop answering for its own work repairs what it did last round.
+
+    On a text whose defect is that it has little to say, every round can make
+    relevant progress and every round can be smaller than the last: the three
+    original conditions cannot see it, because deleting the passage a finding
+    names is progress by each of their tests. The dispatching run holds every
+    state the text has passed through and is the only party that does — the
+    subagent is fresh by design and the re-review reads the text in front of
+    it — so the fourth condition is stated where that history lives, and it
+    carries the outstanding findings forward as its three siblings do
+    (ADR-0107, ADR-0120).
+    """
+
+    for body, page in ((REDLINE, REDLINE_HELP), (UNSLOP, UNSLOP_HELP)):
+        text = body.read_text(encoding="utf-8")
+
+        assert FOUR_CONDITIONS in text, (
+            f"{body}: the correction loop still stops at the first of three"
+            f" conditions, none of which can see a round that removed the"
+            f" passage rather than repairing it (ADR-0120). See {STANDARD}."
+        )
+        assert REPAIR_CREATED_STOP in text, (
+            f"{body}: the loop has no stop for a re-review that reports what"
+            f" an earlier round's repair did, so the next round is spent"
+            f" correcting the loop's own work (ADR-0120). See {STANDARD}."
+        )
+        assert LOOP_HISTORY in text, (
+            f"{body}: the delegating step never says the run holds what the"
+            f" text used to be, and no other party in the round holds it, so"
+            f" the stop above is read against nothing (ADR-0120). See"
+            f" {STANDARD}."
+        )
+        assert "whichever of its three conditions" not in text, (
+            f"{body}: the delivery step still counts the loop's conditions at"
+            f" three, so one of them carries findings forward that the step"
+            f" says nothing about (ADR-0120). See {STANDARD}."
+        )
+
+        assert REPAIR_CREATED_STOP in page.read_text(encoding="utf-8"), (
+            f"{page}: the manpage lists the stops a caller can meet and this"
+            f" one is missing, so a run that ends early ends for a reason the"
+            f" page does not carry (ADR-0120). See {STANDARD}."
+        )
+
+
+def test_a_repair_that_would_take_the_claim_with_it_is_left_and_reported() -> None:
+    """The brief forbids inventing a fact and said nothing about emptying.
+
+    A finding whose only repair removes the claim the passage carries comes
+    back for a person to settle, exactly as one that cannot be repaired
+    without inventing a fact already does. The catalogue's own deletions are
+    untouched by that: where the pattern is the whole of the passage, cutting
+    it takes no claim with it. And the judgement is about the passage in front
+    of the subagent rather than about how much text is left, because the two
+    runs this was observed on sit either side of the line at almost the same
+    length (ADR-0120).
+    """
+
+    for brief in (REDLINE_CORRECTION, UNSLOP_CORRECTION):
+        text = brief.read_text(encoding="utf-8")
+
+        assert CLAIM_KEPT in text, (
+            f"{brief}: the brief never says the smallest change keeps the"
+            f" claim a passage carries beside the pattern, so deleting the"
+            f" passage entire is a compliant repair (ADR-0120). See"
+            f" {STANDARD}."
+        )
+        assert CLAIM_TAKEN in text, (
+            f"{brief}: a repair that cannot remove the pattern without"
+            f" removing the claim is still performed silently, where the same"
+            f" brief stops for a fact it would have to invent (ADR-0120). See"
+            f" {STANDARD}."
+        )
+        assert DEFECT_IS_THE_PASSAGE in text, (
+            f"{brief}: the rule does not distinguish itself from the"
+            f" catalogue's prescribed deletions, so an empty opening or a"
+            f" generic conclusion becomes a finding for a person (ADR-0120)."
+            f" See {STANDARD}."
+        )
+        assert NOT_A_LENGTH in text, (
+            f"{brief}: the rule is not held away from the length of the text,"
+            f" and a subagent measuring what is left would stop repairing a"
+            f" short text and go on emptying a long one (ADR-0120). See"
+            f" {STANDARD}."
+        )
 
 
 def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:
