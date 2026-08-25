@@ -145,6 +145,20 @@
       ]
     },
     {
+      "name": "unslop",
+      "category": "editorial",
+      "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
+      "digest": "2d47c1f585b6e67a7d38627aee38e9d2c15f00749e7137ffa371fbe1465cbe38",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",

@@ -29,7 +29,7 @@ The Write Skill's truthful representation of the material supplied for a new tex
 _Avoid_: fact-checking, source validation, Redline verification
 
 **Text Artifact**:
-One coherent text that Write creates or that Redline or Proofread processes. Write may use several source materials to create one Text Artifact; Redline and Proofread each process exactly one Text Artifact per invocation.
+One coherent text that Write creates or that an editorial Skill processes. Write may use several source materials to create one Text Artifact; every Skill that processes one — Redline, Proofread, Unslop — takes exactly one Text Artifact per invocation.
 _Avoid_: document batch, input collection, text payload
 
 **Handoff Metadata**:
@@ -37,7 +37,7 @@ Optional metadata carried with a Text Artifact that records the resolved genre, 
 _Avoid_: required frontmatter, source brief, invocation cache
 
 **Correction Budget**:
-The maximum number of subagent corrections Redline may apply after its initial review. A review that verifies a correction and the final Proofread pass spend none of the budget, and Redline stops early when no findings remain.
+The maximum number of subagent corrections a correcting Skill may apply after its initial review. A review that verifies a correction and Redline's final Proofread pass spend none of the budget, and the loop stops early when no findings remain. Redline and Unslop carry the same contract; only what they review against differs.
 _Avoid_: iteration count, review count, retry limit
 
 **Output Target**:
