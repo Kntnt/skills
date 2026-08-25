@@ -23,10 +23,12 @@ REQUIRED_COVERAGE = frozenset(
         "clean prose",
         "mechanically flawed prose",
         "ai slop",
+        "swedish ai slop",
         "genre",
         "technique",
         "handoff metadata present",
         "handoff metadata conflicting",
+        "partial handoff metadata",
         "unrelated frontmatter",
         "no frontmatter",
         "inline material",
@@ -68,6 +70,34 @@ FIELD = re.compile(r"^- \*\*([A-Za-z ]+)\*\* — (.+)$", re.MULTILINE)
 # A path a field names, written the way every other path in this repository's
 # prose is written.
 PATH = re.compile(r"`([A-Za-z0-9_./-]+\.(?:md|txt))`")
+
+# The Swedish Language Resource, whose `## Anti-slop` scope is loaded beside
+# the shared catalogue whenever a Skill applies the anti-slop pass in Swedish.
+# Its items are Swedish strings rather than patterns to be read semantically,
+# so a fixture either carries them or does not.
+SWEDISH = (
+    REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "languages" / "sv.md"
+)
+
+# How an item is written inside that scope, and the shortest one worth
+# matching on: the scope also italicises punctuation samples, which are not
+# items a fixture can be said to carry.
+ITEM = re.compile(r"\*([^*\n]+)\*")
+ITEM_FLOOR = 4
+
+# How many of that scope's items a fixture carries before it is concentrated
+# slop rather than prose that happens to contain one of them.
+SWEDISH_ITEMS = 12
+
+# The parameters a Kntnt map may settle, and the three levels of the
+# resolution order a single invocation can be made to exercise at once.
+PARAMETERS = ("genre", "technique", "language")
+LEVELS = ("invocation", "map", "contextual instruction")
+
+# The leading YAML of a Text Artifact, and the Kntnt map inside it.
+FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
+KNTNT = re.compile(r"^kntnt:\n((?:[ \t]+\S.*\n?)+)", re.MULTILINE)
+KEY = re.compile(r"^[ \t]+([A-Za-z_-]+):", re.MULTILINE)
 
 # The record fields an evaluation writes. A later cross-family comparison is
 # made by reading records rather than by re-running anything, so a field
@@ -159,6 +189,51 @@ def _fixture_files() -> set[str]:
     }
 
 
+def _tagged(tag: str) -> dict[str, dict[str, str]]:
+    """Every fixture claiming one coverage tag, mapped to its fields."""
+
+    return {
+        name: _fields(body)
+        for name, body in _entries().items()
+        if tag
+        in {claim.strip() for claim in _fields(body).get("Covers", "").split(";")}
+    }
+
+
+def _material(fields: dict[str, str]) -> str:
+    """The text of every file one fixture entry names, concatenated."""
+
+    return "\n".join(
+        (CORPUS / name).read_text(encoding="utf-8")
+        for name in PATH.findall(fields.get("Files", ""))
+    )
+
+
+def _swedish_anti_slop_items() -> set[str]:
+    """The items the Swedish Language Resource's own anti-slop scope names."""
+
+    sections = SWEDISH.read_text(encoding="utf-8").split("\n## ")
+    scope = next(part for part in sections if part.startswith("Anti-slop\n"))
+
+    return {
+        item.strip().lower()
+        for item in ITEM.findall(scope)
+        if len(item.strip()) >= ITEM_FLOOR and any(char.isalpha() for char in item)
+    }
+
+
+def _kntnt_keys(text: str) -> set[str]:
+    """The keys the Kntnt map in a Text Artifact's leading YAML carries."""
+
+    frontmatter = FRONTMATTER.match(text)
+    if frontmatter is None:
+        return set()
+
+    block = KNTNT.search(frontmatter.group(1))
+
+    return set() if block is None else set(KEY.findall(block.group(1)))
+
+
 def test_the_corpus_lives_at_one_discoverable_location() -> None:
     """A fixture is reachable from the guide an agent always has loaded."""
 
@@ -228,6 +303,67 @@ def test_the_index_and_the_corpus_directory_describe_the_same_fixtures() -> None
         f"{undocumented}: present in the corpus and named by no entry, so an"
         f" evaluator meets material with no account of what it is for."
     )
+
+
+def test_the_corpus_stages_concentrated_slop_in_swedish() -> None:
+    """The anti-slop pass is asked for in a language the catalogue is not in.
+
+    The shared catalogue is one condensed English document applied by what
+    each pattern does, and every language carries its own scope of items
+    beside it. A corpus whose only concentrated slop is English can say
+    nothing about whether either half reaches Swedish: a run that finds no
+    pattern in a text that has none has not shown that it would find one
+    (issue #142).
+    """
+
+    items = _swedish_anti_slop_items()
+
+    # A scope reworded out of its italics would leave nothing to count and
+    # would pass whatever the fixture carried.
+    assert len(items) >= SWEDISH_ITEMS
+
+    fixtures = _tagged("swedish ai slop")
+    assert fixtures
+
+    thin = {
+        name: len(carried)
+        for name, fields in fixtures.items()
+        if len(carried := {item for item in items if item in _material(fields).lower()})
+        < SWEDISH_ITEMS
+    }
+
+    assert thin == {}, (
+        f"{thin}: fewer than {SWEDISH_ITEMS} of the Swedish scope's own items,"
+        f" which is a text that happens to contain slop rather than one that"
+        f" stages it in concentration."
+    )
+
+
+def test_a_fixture_leaves_a_kntnt_map_partial_for_a_lower_level_to_settle() -> None:
+    """Level 3 exists to settle what levels 1 and 2 leave open.
+
+    A complete map settles every parameter the invocation does not, so a
+    corpus carrying only complete maps can stage any two of the first three
+    levels and never all three. The fixture that carries a partial map is
+    where a flag, a metadata value, and a contextual value settle three
+    different parameters in one invocation, and its entry says which
+    parameter each level is expected to settle so that an evaluator stages
+    the case rather than deriving it (issue #142).
+    """
+
+    fixtures = _tagged("partial handoff metadata")
+    assert fixtures
+
+    for name, fields in fixtures.items():
+        carried = _kntnt_keys(_material(fields)) & set(PARAMETERS)
+        assert 0 < len(carried) < len(PARAMETERS), (
+            f"{name}: a map carrying {sorted(carried)} leaves no parameter for"
+            f" a level below it to settle."
+        )
+
+        use = fields.get("Use", "").lower()
+        unnamed = [word for word in PARAMETERS + LEVELS if word not in use]
+        assert unnamed == [], f"{name}: the staging leaves {unnamed} to be derived"
 
 
 def test_the_protocol_states_what_blinded_judging_rejects() -> None:
