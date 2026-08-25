@@ -2,7 +2,7 @@
 
 ## NAME
 
-redline - review one text against the editorial contract and close with one mechanical pass
+redline - review one text against the editorial contract, correct what it finds, and close with one mechanical pass
 
 ## SYNOPSIS
 
@@ -12,7 +12,7 @@ redline - review one text against the editorial contract and close with one mech
 
 ## DESCRIPTION
 
-`redline` reads one text against this collection's editorial contract, reports what the review found, and finishes with exactly one mechanical pass. What it reads the text against is the base contract, the selected genre, the optional technique, the shared anti-slop catalogue, and the composition, review and anti-slop guidance of the resolved language — each with the diagnostic half a reviewer needs on top of the half a draft is written to.
+`redline` reads one text against this collection's editorial contract, repairs what the review found as far as its Correction Budget reaches, reports whatever is left, and finishes with exactly one mechanical pass. What it reads the text against is the base contract, the selected genre, the optional technique, the shared anti-slop catalogue, and the composition, review and anti-slop guidance of the resolved language — each with the diagnostic half a reviewer needs on top of the half a draft is written to.
 
 No provenance is required. A text this collection wrote, a text a person wrote, and a text produced somewhere else entirely are all reviewed the same way. Where a text carries a `kntnt` map in its leading frontmatter, that map supplies defaults and is brought into line with what the run resolved; where it carries none, none is added, and a text without one is never worth less to this Skill than a text with one.
 
@@ -22,15 +22,17 @@ Ordinary document frontmatter is never configuration. A `language`, `lang`, `gen
 
 Source material is outside the contract. The review judges what is in front of it and never asks for the interview, the brief, or the research a text was written from — it neither compares the text against them nor remarks that it could not. A contradiction, an unsupported claim, or an editorial defect visible inside the text itself remains an ordinary finding. Checking a text against the material it came from belongs to the Skill that wrote it.
 
-The mechanical pass is last and happens once. After the review, `redline` runs `proofread` on the resulting text with the resolved language supplied explicitly, and nothing substantive follows it — running it last is what keeps a later edit from putting mechanical errors back into a text that was just cleaned of them. Only guidance relevant to mechanical correction is passed on; the genre, the technique, the Correction Budget, and unrelated outer context are not.
+The mechanical pass is last and happens once. After the review and whatever correction it led to, `redline` runs `proofread` on the resulting text with the resolved language supplied explicitly, and nothing substantive follows it — running it last is what keeps a later edit from putting mechanical errors back into a text that was just cleaned of them. Only guidance relevant to mechanical correction is passed on; the genre, the technique, the Correction Budget, and unrelated outer context are not.
 
-The Correction Budget bounds how many substantive corrections a review may delegate. **This release accepts a budget of zero alone, which is also its default**: the review runs, its findings come back for you to act on, and the closing mechanical pass is still performed. Correction under a positive budget is the half of this Skill that is not here yet, and a positive value is refused rather than quietly treated as zero.
+The Correction Budget bounds how many substantive corrections a review may delegate. It is any non-negative integer and **defaults to one**, so an ordinary review buys one correction and one chance to verify it. A budget of zero reviews without correcting: the findings come back for you to act on, and the closing mechanical pass still happens. A larger number bounds a longer loop, and it bounds rather than requires — a text with nothing left to correct stops with the rest of the budget unspent.
+
+Every correction is made by a subagent started fresh for it, carrying no earlier findings and no earlier attempt, so the framing of one round cannot bias the next. It is given the complete current text, the complete findings of the most recent review, the resolved genre, technique and language, and the requirement to leave alone everything those findings do not concern. What comes back is then reviewed again from the top rather than believed: an agent reporting on its own repair is the one reader who cannot check it. The loop stops when no findings remain, when a correction makes no relevant progress — the findings it was given still standing with nothing they named changed — or when the budget is spent, and the last two deliver the text with the findings that are left, marked as unresolved, for you to finish.
 
 One invocation processes one text. Several paths, a glob reaching more than one file, or a directory of texts is refused rather than resolved into a configuration per file, because the language, the destination, the findings, and any replacement of a source are settled once and for one text.
 
 Delivery changes nothing on disk unless it is asked to. The default target is the response; **--output** names a file or an existing directory, and **--in-place** replaces the single writable local file the text came from. A run with findings left delivers the text to that target and reports the findings separately, whether or not anything in the text changed, and a run aimed at a file leaves the findings in the response beside it. A clean run delivers the text alone, and a clean run aimed at the response or at its own source that changed nothing writes nothing and returns a short no-change status in the text's own language.
 
-The review's own working is not output. The reasoning behind a finding, the passages weighed and dismissed, and anything exchanged with a nested Skill stay inside the run; what comes back is the text and, where any remain, the findings.
+The review's own working is not output. The reasoning behind a finding, the passages weighed and dismissed, and anything exchanged with a correction subagent or a nested Skill stay inside the run; what comes back is the text and, where any remain, the findings.
 
 ## POSITIONAL ARGUMENTS
 
@@ -54,7 +56,7 @@ The language or locale whose editorial guidance applies. It accepts a canonical 
 
 **--max**=*N*
 
-The Correction Budget: how many substantive corrections the review may delegate. It takes a non-negative integer, and this release accepts `0` alone, which is also the default. A negative, non-integral, or otherwise malformed value is refused, and so is a positive one, which asks for correction this release does not perform.
+The Correction Budget: the greatest number of substantive corrections the review may delegate. It takes any non-negative integer and defaults to `1`. `0` reviews and reports without correcting, still running the closing mechanical pass; a larger number is a ceiling rather than a quota, and a run that has nothing left to correct stops with the rest unspent. A negative, non-integral, or otherwise malformed value is refused before anything is reviewed or written.
 
 **--output**=*TARGET*
 
@@ -68,7 +70,7 @@ Replace the file the text came from with the result. It accepts `yes`, `on`, and
 
 An incomplete or invalid form is refused rather than repaired or ignored. The Skill names in one line what was wrong, prints the SYNOPSIS, reviews nothing, writes nothing, and points at `/redline --help`. A flag with no work to do is refused rather than ignored, an accepted and ignored flag teaching that flags sometimes do nothing.
 
-Refused before any side effect, so that nothing is left half done: an undeclared flag, a text written before a flag rather than after every flag, a missing or invalid option value, an option given twice, a genre or technique nothing installs, a language selector reaching no installed resource or more than one, a Correction Budget outside the accepted range, more than one text in one invocation, **--output** together with **--in-place**, an output path equal to the input path, in-place editing of inline text, a URL, or a read-only or non-local source, and a destination whose parent directory does not exist.
+Refused before any side effect, so that nothing is left half done: an undeclared flag, a text written before a flag rather than after every flag, a missing or invalid option value, an option given twice, a genre or technique nothing installs, a language selector reaching no installed resource or more than one, a Correction Budget that is not a non-negative integer, more than one text in one invocation, **--output** together with **--in-place**, an output path equal to the input path, in-place editing of inline text, a URL, or a read-only or non-local source, and a destination whose parent directory does not exist.
 
 A `kntnt` map naming a genre, technique, or language nothing installs, where no flag supersedes it, is reported as unusable artifact metadata. The run stops rather than reinterpreting the value, so a spelling such as `en_UK` never quietly becomes `en_GB`.
 
@@ -78,7 +80,11 @@ A text whose language cannot be settled — mixed, or a description matching no 
 
 **/redline article.md**
 
-Review `article.md` under the general genre and its own language, proofread the result, and return it in the response with any findings beside it. `article.md` itself is left alone.
+Review `article.md` under the general genre and its own language, delegate one correction for what the review found and review the result again to verify it, proofread that, and return it in the response with any findings still unresolved beside it. `article.md` itself is left alone.
+
+**/redline --max=0 article.md**
+
+Review `article.md` and correct nothing: the findings come back for you to act on yourself, and the closing mechanical pass is still performed.
 
 **/redline --genre=press-release --language=sv --in-place utkast.md**
 

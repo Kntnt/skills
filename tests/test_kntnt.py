@@ -4080,6 +4080,13 @@ def test_proofread_delivers_through_the_shared_output_contract() -> None:
 # has: the body is the whole of what the agent executes (ADR-0046).
 REDLINE = REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md"
 
+# Its manpage, and the brief a correcting subagent is started from. The brief
+# is a file only this Skill opens, so it lives under the Skill's `references/`
+# (ADR-0063), and it is the whole of what reaches a subagent that has no
+# history of its own to fall back on.
+REDLINE_HELP = REDLINE.parent / "help.md"
+REDLINE_CORRECTION = REDLINE.parent / "references" / "correction.md"
+
 # The shared catalogue of machine-sounding prose, and the seven patterns the
 # specification requires it to carry.
 ANTI_SLOP = (
@@ -4247,6 +4254,168 @@ def test_redline_delivers_through_the_shared_output_contract() -> None:
         f"{REDLINE}: the body spells out the shared collision sequence instead"
         f" of following the contract that owns it, which is one rule made into"
         f" two things to keep true (ADR-0091). See {STANDARD}."
+    )
+
+
+def test_the_correction_budget_is_any_non_negative_integer_defaulting_to_one() -> None:
+    """One correction and one chance to verify it is the ordinary review.
+
+    The budget is a ceiling on delegated corrections rather than a quota to
+    reach: `0` reviews and reports without correcting, the default `1` buys
+    one correction and the re-review that verifies it, and a higher number
+    bounds a longer loop explicitly (ADR-0107). Every surface a caller reads
+    says the same range and the same default, and the release that accepted
+    zero alone is gone from all of them.
+    """
+
+    body = REDLINE.read_text(encoding="utf-8")
+    manpage = REDLINE_HELP.read_text(encoding="utf-8")
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+
+    for path, text in ((REDLINE, body), (REDLINE_HELP, manpage)):
+        assert "non-negative integer" in text, (
+            f"{path}: the Correction Budget's range is not stated, so what"
+            f" `--max` accepts is left to be discovered by refusal"
+            f" (ADR-0107). See {STANDARD}."
+        )
+        assert (
+            "release accepts" not in text and "release does not accept" not in text
+        ), (
+            f"{path}: the budget is still documented against what one release"
+            f" accepts, which is the half-built Skill this one has left"
+            f" (ADR-0107). See {STANDARD}."
+        )
+
+    assert "defaults to `1`" in body, (
+        f"{REDLINE}: the body does not default the Correction Budget to `1`,"
+        f" so an ordinary review either corrects nothing or corrects without"
+        f" a bound nobody wrote down (ADR-0107). See {STANDARD}."
+    )
+    assert "`1`" in _optional_section(manpage, "## OPTIONS"), (
+        f"{REDLINE_HELP}: the `--max` option does not state its default, which"
+        f" is what a reader deciding whether to name it needs (ADR-0107). See"
+        f" {STANDARD}."
+    )
+    assert "zero alone" not in readme, (
+        f"{REPO_ROOT / 'README.md'}: the `### redline` section still says the"
+        f" Correction Budget accepts zero alone. The README is where somebody"
+        f" decides whether they want the Skill, and it is describing a release"
+        f" that has been outrun (ADR-0107). See {STANDARD}."
+    )
+
+
+def test_each_correction_is_delegated_to_a_subagent_that_carries_no_history() -> None:
+    """A repair is attempted by somebody the last attempt cannot have framed.
+
+    Fresh means no earlier findings and no earlier attempts, and the brief is
+    the whole of what reaches the subagent: the complete current Text
+    Artifact, the complete current findings, the resolved editorial
+    parameters, and the requirement to preserve what the findings do not
+    concern (ADR-0107). A summary of any of those is this session's reading
+    of the text, which is the very thing the fresh subagent exists to be
+    without.
+    """
+
+    body = REDLINE.read_text(encoding="utf-8")
+
+    assert REDLINE_CORRECTION.is_file(), (
+        f"{REDLINE_CORRECTION}: a correcting subagent is started from a brief"
+        f" this Skill alone opens, which belongs under its `references/`"
+        f" (ADR-0063, ADR-0107). See {STANDARD}."
+    )
+    assert "references/correction.md" in body, (
+        f"{REDLINE}: the body never reaches the correction brief, so what a"
+        f" fresh subagent receives is left to the session that dispatches it"
+        f" (ADR-0107). See {STANDARD}."
+    )
+
+    brief = REDLINE_CORRECTION.read_text(encoding="utf-8")
+    for phrase, missing in (
+        ("complete", "the complete current Text Artifact"),
+        ("finding", "the complete current findings"),
+        ("preserve", "the requirement to preserve unaffected material"),
+    ):
+        assert phrase in brief.lower(), (
+            f"{REDLINE_CORRECTION}: the brief does not carry {missing}, so a"
+            f" subagent with no history of its own repairs something other"
+            f" than the text as it now stands (ADR-0107). See {STANDARD}."
+        )
+    for parameter in ("genre", "technique", "language"):
+        assert parameter in brief.lower(), (
+            f"{REDLINE_CORRECTION}: the brief passes on no {parameter}, so the"
+            f" repair is made against a contract other than the one the review"
+            f" found the text wanting against (ADR-0107). See {STANDARD}."
+        )
+    assert "fresh" in body.lower(), (
+        f"{REDLINE}: the body does not say that each correction goes to a"
+        f" fresh subagent, so one context accumulates every round's framing"
+        f" and the previous attempt biases the next (ADR-0107). See"
+        f" {STANDARD}."
+    )
+
+
+def test_a_correction_is_verified_by_review_rather_than_by_its_own_report() -> None:
+    """The one reader who cannot check a repair is the agent that made it.
+
+    Every returned text is reviewed again against everything the first review
+    was read against, and the budget falls by exactly one per correction, so a
+    round that returned nothing usable still costs what it spent (ADR-0107).
+    """
+
+    body = REDLINE.read_text(encoding="utf-8")
+
+    assert "reviewed again" in body or "review it again" in body, (
+        f"{REDLINE}: the body never reviews a corrected text again, so a"
+        f" correction is accepted on the report of whoever made it"
+        f" (ADR-0107). See {STANDARD}."
+    )
+    assert "once per correction" in body, (
+        f"{REDLINE}: the body does not say the budget falls once per"
+        f" correction, so the bound a caller named is not the bound the loop"
+        f" keeps (ADR-0107). See {STANDARD}."
+    )
+
+
+def test_the_correction_loop_stops_on_each_of_its_three_conditions() -> None:
+    """A loop with one exit is a loop that spends everything it is given.
+
+    It stops when no findings remain, leaving the rest of the budget unspent
+    so clean text is not rewritten for the sake of a number; it stops when a
+    correction makes no relevant progress, saying what remains rather than
+    repeating a no-op round; and it stops when the budget is spent, delivering
+    the text with the findings that are left (ADR-0107). The closing
+    mechanical pass happens once after the loop whatever stopped it, and
+    nothing substantive follows it.
+    """
+
+    body = REDLINE.read_text(encoding="utf-8")
+
+    assert "unspent" in body, (
+        f"{REDLINE}: the body never leaves budget unspent, so a clean text is"
+        f" corrected again to use up a number the caller named as a ceiling"
+        f" (ADR-0107). See {STANDARD}."
+    )
+    assert "no relevant progress" in body, (
+        f"{REDLINE}: the body has no stop for a correction that changed"
+        f" nothing the findings named, so the loop repeats a round already"
+        f" shown to achieve nothing (ADR-0107). See {STANDARD}."
+    )
+    assert "budget is spent" in body or "budget is exhausted" in body, (
+        f"{REDLINE}: the body never stops on the spent budget, so the bound"
+        f" the caller named bounds nothing (ADR-0107). See {STANDARD}."
+    )
+    assert "$HERE/../proofread/SKILL.md" in body, (
+        f"{REDLINE}: the closing mechanical pass is gone from the body"
+        f" (ADR-0088). See {STANDARD}."
+    )
+
+    loop = body.index("Correction Budget", body.index("## Steps"))
+    proofread = body.index("$HERE/../proofread/SKILL.md")
+    assert loop < proofread, (
+        f"{REDLINE}: the mechanical pass is invoked before the correction loop"
+        f" it is meant to close, so a correction can put mechanical errors"
+        f" back into a text already cleaned of them (ADR-0088, ADR-0107). See"
+        f" {STANDARD}."
     )
 
 
