@@ -87,7 +87,7 @@ Verbs take no person or number marking: *jag är*, *vi är*, *de är*. Adjective
 
 Numbers use a decimal comma and a space as the thousands separator: *3,14*, *1 000 000*. A percentage takes a space before the sign: *50 %*. A range takes an unspaced en dash: *2020–2024*, *sidorna 12–18*.
 
-Dates are written *2026-08-24* or *24 augusti 2026*; month names and weekdays are lowercase, as are nationalities and languages — *svenska*, *måndag*, *en tysk forskare*. Clock times are written *kl. 14.30* or *14:30*; both are current, so preserve whichever the text uses and make it consistent.
+Dates are written *2026-08-24* or *24 augusti 2026*; month names and weekdays are lowercase, as are nationalities and languages — *svenska*, *måndag*, *en tysk forskare*. Clock times are written *kl. 14.30* or *14:30*; both are current.
 
 Currency follows the amount: *1 250 kr*, *250 000 SEK*, with a space before the unit.
 
@@ -99,4 +99,4 @@ Genitive takes *s* without an apostrophe, and nothing at all after *s*, *x*, or 
 
 Only the first word of a heading or title is capitalised, along with any proper noun in it. Title case is English and is an error in Swedish.
 
-Where two forms are both listed in *Svenska Akademiens ordlista* — *paket* and *paketet*, *-are* and *-er* plurals in the cases that allow both, *ska* and *skall* — the text's own choice stands. Correct only inconsistency within one text, never preference.
+Two forms both listed in *Svenska Akademiens ordlista* are both established Swedish, neither of them the error: *paket* and *paketet*, *-are* and *-er* plurals in the cases that allow both, *ska* and *skall*.

@@ -4204,6 +4204,156 @@ def test_proofread_delivers_through_the_shared_output_contract() -> None:
     )
 
 
+# The language-independent half of objective correctness, beside the contract a
+# first draft is written against and the catalogue of machine-sounding prose.
+# Proofread reads none of its siblings and this one by name (ADR-0121).
+MECHANICS = EDITORIAL / "mechanics.md"
+
+# The directory the mechanics scopes live in, and the rule each of them used to
+# close with on its own. Three copies of one sentence is one rule that can come
+# to disagree with itself, and the copy that decides a case the shared contract
+# now names as an error is the disagreement (issue #125).
+LANGUAGE_RESOURCES = (
+    REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "languages"
+)
+VARIANT_RULE = "the text's own choice stands"
+
+# The conditional the shared contract turns a clause boundary on, and the
+# correction it names. Both are pinned: a rule stated unconditionally would
+# start correcting a construction the authorities in both shipped languages
+# accept, and a correction that may reach past the joint is a rewrite.
+BOUNDARY_RULE = (
+    "an error where the second does not explain, specify, restate, or stand in"
+    " direct contrast to the first"
+)
+BOUNDARY_EXCEPTION = "not an error where"
+MINIMUM_CORRECTION = (
+    "becomes a period or a semicolon",
+    "nothing else about the sentence moves",
+)
+
+
+def test_the_collection_library_carries_the_shared_mechanics_contract() -> None:
+    """Objective correctness has a language-independent half, and it has a home.
+
+    Both shipped languages' authorities draw the clause-boundary line the same
+    way and differ only in how strictly they default, so the rule is not
+    language-specific and a scope is the wrong place for it: written once per
+    language it is a rule that can disagree with itself, and written nowhere it
+    is decided by whoever is reading (ADR-0121, issue #125).
+    """
+
+    assert MECHANICS.is_file(), (
+        f"{MECHANICS}: the rules of objective correctness that do not depend on"
+        f" the language are stated once, beside the contract a draft is written"
+        f" against, rather than once in every Language Resource (ADR-0121)."
+        f" See {STANDARD}."
+    )
+
+    text = MECHANICS.read_text(encoding="utf-8")
+
+    assert BOUNDARY_RULE in text, (
+        f"{MECHANICS}: the contract states no conditional for a comma joining"
+        f" two main clauses, so the joint is judged by whoever is reading."
+        f" Whether the clauses cohere is what decides it (ADR-0121). See"
+        f" {STANDARD}."
+    )
+    assert BOUNDARY_EXCEPTION in text, (
+        f"{MECHANICS}: the contract names the error and not the accepted case,"
+        f" which is how a mechanical pass starts correcting the"
+        f" negative-positive contrast both shipped languages accept"
+        f" (ADR-0121). See {STANDARD}."
+    )
+    for phrase in MINIMUM_CORRECTION:
+        assert phrase in text, (
+            f"{MECHANICS}: the minimum safe correction is a change at the joint"
+            f" alone, and {phrase!r} is not in the contract. A correction free"
+            f" to reach past the joint is a rewrite (ADR-0121). See {STANDARD}."
+        )
+
+
+def test_proofread_reads_the_shared_mechanics_contract_and_no_other() -> None:
+    """One document is admitted by name, and the exclusion is otherwise intact.
+
+    Proofread loads the resolved language's mechanics scope and this contract,
+    and the two together are that run's rules. Everything else in the editorial
+    set belongs to the Skills contracted to apply it, and a mechanical pass
+    holding the wider contract is one round away from applying it (ADR-0087,
+    ADR-0112, ADR-0121).
+    """
+
+    text = PROOFREAD.read_text(encoding="utf-8")
+
+    assert "$LIBRARY/references/editorial/mechanics.md" in text, (
+        f"{PROOFREAD}: the body never reaches the shared mechanics contract, so"
+        f" the rules of objective correctness that do not depend on the"
+        f" language reach a run only where some language happens to restate"
+        f" them (ADR-0121). See {STANDARD}."
+    )
+
+    for pointer in (
+        "editorial/base.md",
+        "editorial/base.review.md",
+        "editorial/anti-slop.md",
+        "editorial/genres/",
+        "editorial/techniques/",
+    ):
+        assert pointer not in text, (
+            f"{PROOFREAD}: the body reaches `{pointer}`, which is editorial"
+            f" guidance this Skill is contracted not to apply. One document is"
+            f" admitted by name and nothing else is (ADR-0112, ADR-0121). See"
+            f" {STANDARD}."
+        )
+
+
+def test_the_established_variant_rule_is_stated_once_for_every_language() -> None:
+    """A rule written three times is a rule that can disagree with itself.
+
+    Each shipped mechanics scope used to close by saying that where several
+    forms are established the text's own choice stands, and Proofread's own
+    body said it a fourth time. That sentence is what kept a comma splice
+    standing on four independent runs, so it is stated once, where it can be
+    worded not to reach an error the contract names (ADR-0121, issue #125).
+    """
+
+    contract = MECHANICS.read_text(encoding="utf-8")
+
+    assert VARIANT_RULE in contract, (
+        f"{MECHANICS}: the shared contract does not say that where several"
+        f" forms are established the text's own choice stands, so the rule the"
+        f" Language Resources no longer carry is stated nowhere (ADR-0121)."
+        f" See {STANDARD}."
+    )
+    assert "preserves nothing the rules in hand name as an error" in contract, (
+        f"{MECHANICS}: the rule is stated without the limit that keeps it from"
+        f" reaching an error the contract itself names, which is the reading"
+        f" that left the splice standing (ADR-0121, issue #125). See"
+        f" {STANDARD}."
+    )
+
+    resources = [
+        path
+        for path in sorted(LANGUAGE_RESOURCES.glob("*.md"))
+        if path.name != "README.md"
+    ]
+
+    # A renamed directory would leave the loop below judging nothing.
+    assert resources
+
+    restating = [
+        str(path.relative_to(REPO_ROOT))
+        for path in resources + [PROOFREAD]
+        if VARIANT_RULE in path.read_text(encoding="utf-8")
+    ]
+    assert restating == [], (
+        f"{restating}: the rule the shared mechanics contract holds is stated"
+        f" here as well. A rule enters a scope because the language genuinely"
+        f" differs or because the generic rule was observed to fail there, and"
+        f" a rule written twice is a rule that can disagree with itself"
+        f" (ADR-0087, ADR-0121). See {STANDARD}."
+    )
+
+
 # The Skill this wave's editorial review ships as, read at the one seam a test
 # has: the body is the whole of what the agent executes (ADR-0046).
 REDLINE = REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md"
@@ -4880,7 +5030,7 @@ def test_a_correction_is_verified_by_review_rather_than_by_its_own_report() -> N
     )
 
 
-def test_the_correction_loop_stops_on_each_of_its_three_conditions() -> None:
+def test_the_correction_loop_still_stops_on_its_first_three_conditions() -> None:
     """A loop with one exit is a loop that spends everything it is given.
 
     It stops when no findings remain, leaving the rest of the budget unspent
@@ -5267,6 +5417,107 @@ def test_unslops_correction_brief_is_handed_over_the_same_single_way() -> None:
     """
 
     _assert_one_handover_with_nothing_left_to_invent(UNSLOP_CORRECTION, UNSLOP)
+
+
+# The two guards that keep a longer loop from emptying a thin text (ADR-0120),
+# each pinned by the clause the rule is stated in. The first two are the
+# dispatching run's, which is the only party holding what the text used to be;
+# the last four are the correction brief's, where a repair is made.
+LOOP_HISTORY = "every state the text has passed through"
+REPAIR_CREATED_STOP = "a finding an earlier round's own repair created"
+FOUR_CONDITIONS = "at the first of four conditions"
+CLAIM_KEPT = "leaves that claim standing"
+CLAIM_TAKEN = "take the claim with it"
+DEFECT_IS_THE_PASSAGE = "is the whole of the passage"
+NOT_A_LENGTH = "never about how much of the text is left"
+
+
+def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
+    """A loop answering for its own work repairs what it did last round.
+
+    On a text whose defect is that it has little to say, every round can make
+    relevant progress and every round can be smaller than the last: the three
+    original conditions cannot see it, because deleting the passage a finding
+    names is progress by each of their tests. The dispatching run holds every
+    state the text has passed through and is the only party that does — the
+    subagent is fresh by design and the re-review reads the text in front of
+    it — so the fourth condition is stated where that history lives, and it
+    carries the outstanding findings forward as its three siblings do
+    (ADR-0107, ADR-0120).
+    """
+
+    for body, page in ((REDLINE, REDLINE_HELP), (UNSLOP, UNSLOP_HELP)):
+        text = body.read_text(encoding="utf-8")
+
+        assert FOUR_CONDITIONS in text, (
+            f"{body}: the correction loop still stops at the first of three"
+            f" conditions, none of which can see a round that removed the"
+            f" passage rather than repairing it (ADR-0120). See {STANDARD}."
+        )
+        assert REPAIR_CREATED_STOP in text, (
+            f"{body}: the loop has no stop for a re-review that reports what"
+            f" an earlier round's repair did, so the next round is spent"
+            f" correcting the loop's own work (ADR-0120). See {STANDARD}."
+        )
+        assert LOOP_HISTORY in text, (
+            f"{body}: the delegating step never says the run holds what the"
+            f" text used to be, and no other party in the round holds it, so"
+            f" the stop above is read against nothing (ADR-0120). See"
+            f" {STANDARD}."
+        )
+        assert "whichever of its three conditions" not in text, (
+            f"{body}: the delivery step still counts the loop's conditions at"
+            f" three, so one of them carries findings forward that the step"
+            f" says nothing about (ADR-0120). See {STANDARD}."
+        )
+
+        assert REPAIR_CREATED_STOP in page.read_text(encoding="utf-8"), (
+            f"{page}: the manpage lists the stops a caller can meet and this"
+            f" one is missing, so a run that ends early ends for a reason the"
+            f" page does not carry (ADR-0120). See {STANDARD}."
+        )
+
+
+def test_a_repair_that_would_take_the_claim_with_it_is_left_and_reported() -> None:
+    """The brief forbids inventing a fact and said nothing about emptying.
+
+    A finding whose only repair removes the claim the passage carries comes
+    back for a person to settle, exactly as one that cannot be repaired
+    without inventing a fact already does. The catalogue's own deletions are
+    untouched by that: where the pattern is the whole of the passage, cutting
+    it takes no claim with it. And the judgement is about the passage in front
+    of the subagent rather than about how much text is left, because the two
+    runs this was observed on sit either side of the line at almost the same
+    length (ADR-0120).
+    """
+
+    for brief in (REDLINE_CORRECTION, UNSLOP_CORRECTION):
+        text = brief.read_text(encoding="utf-8")
+
+        assert CLAIM_KEPT in text, (
+            f"{brief}: the brief never says the smallest change keeps the"
+            f" claim a passage carries beside the pattern, so deleting the"
+            f" passage entire is a compliant repair (ADR-0120). See"
+            f" {STANDARD}."
+        )
+        assert CLAIM_TAKEN in text, (
+            f"{brief}: a repair that cannot remove the pattern without"
+            f" removing the claim is still performed silently, where the same"
+            f" brief stops for a fact it would have to invent (ADR-0120). See"
+            f" {STANDARD}."
+        )
+        assert DEFECT_IS_THE_PASSAGE in text, (
+            f"{brief}: the rule does not distinguish itself from the"
+            f" catalogue's prescribed deletions, so an empty opening or a"
+            f" generic conclusion becomes a finding for a person (ADR-0120)."
+            f" See {STANDARD}."
+        )
+        assert NOT_A_LENGTH in text, (
+            f"{brief}: the rule is not held away from the length of the text,"
+            f" and a subagent measuring what is left would stop repairing a"
+            f" short text and go on emptying a long one (ADR-0120). See"
+            f" {STANDARD}."
+        )
 
 
 def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:
@@ -7406,6 +7657,175 @@ def test_invocation_envelope_carries_worked_split_outcomes() -> None:
                 f" issue #87 split unpinned at the executable prose seam"
                 f" (ADR-0078). See {STANDARD}."
             )
+
+
+# The sentence ADR-0078 shipped, before its *ineffective* was narrowed. No page
+# may keep it: it made suppression by a documented precedence a refusal ground,
+# which is the contradiction issue #146 caught.
+UNNARROWED_CONTEXT_REFUSAL = (
+    "Valid but irrelevant, ineffective, materially ambiguous, conflicting, or"
+    " scope-widening guidance takes the distinct context refusal"
+)
+
+# The narrowed rule, carried in the same words by every shipped page: what
+# *unaddressable* now means, what happens instead to guidance a documented
+# precedence has settled against, and what the no-partial-application rule
+# still reaches (ADR-0122).
+NARROWED_CONTEXT_REFUSAL = (
+    "Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or"
+    " scope-widening guidance takes the distinct context refusal"
+)
+SUPPRESSION_RULE = (
+    "Unaddressable is guidance with no addressable effect at all — guidance"
+    " touching nothing this Skill's contract addresses — and never guidance a"
+    " documented precedence has already settled against, which is suppressed"
+    " instead: suppression is that precedence working, so the run continues and"
+    " the delivery names the suppressed guidance beside the resolved"
+    " configuration where saying so is useful. Only guidance that is part"
+    " invalid — part conflicting, part scope-widening, or part unaddressable —"
+    " goes unapplied as a whole; one parameter suppressed and another landing is"
+    " an ordinary invocation."
+)
+
+# The same outcome stated where an editorial Skill actually resolves its
+# parameters, so a reader of the ladder meets it beside the level that is
+# there to be overridden (ADR-0122).
+SUPPRESSED_INSTRUCTION_OUTCOME = (
+    "Suppression is that precedence working rather than an error: a Contextual"
+    " Instruction every higher level has already settled leaves nothing for it"
+    " to settle, and the run continues rather than refusing it as unaddressable"
+    " guidance. Where saying so is useful, the delivery names the suppressed"
+    " instruction beside the resolved configuration."
+)
+
+
+def test_the_context_refusal_narrows_ineffective_to_unaddressable_guidance() -> None:
+    """A value a documented precedence settled against is suppressed, not refused.
+
+    Every shipped page carried ADR-0078's *ineffective* in the same words, and
+    on an invocation whose Contextual Instruction the flags and the artifact's
+    map had already settled, that word required a refusal while the editorial
+    precedence ladder required the run to continue (issue #146). The narrowing
+    is carried in the same words in every page, or the collection has two
+    contracts again.
+    """
+
+    # Discover every page so a future command path inherits the narrowing.
+    for manpage in _manpages():
+        envelope = _section(
+            manpage.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", manpage
+        )
+
+        assert UNNARROWED_CONTEXT_REFUSAL not in envelope, (
+            f"{manpage}: the envelope still refuses *ineffective* guidance"
+            f" without saying what that reaches, so a Contextual Instruction a"
+            f" documented precedence has settled against is a refusal ground"
+            f" again (ADR-0122). See {STANDARD}."
+        )
+        assert NARROWED_CONTEXT_REFUSAL in envelope, (
+            f"{manpage}: the envelope no longer names the context refusal's"
+            f" categories in the collection's shared wording (ADR-0122). See"
+            f" {STANDARD}."
+        )
+        assert SUPPRESSION_RULE in envelope, (
+            f"{manpage}: the envelope omits the narrowed rule, so this page"
+            f" says something different from its siblings about a suppressed"
+            f" Contextual Instruction (ADR-0122). See {STANDARD}."
+        )
+
+
+def test_the_skill_standard_carries_the_narrowed_context_refusal() -> None:
+    """Contributors meet the narrowing where the envelope clauses are written."""
+
+    standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
+
+    for phrase in (
+        "no addressable effect at all",
+        "suppressed rather than refused",
+        "ADR-0122",
+    ):
+        assert phrase in standard, (
+            f"{STANDARD}: the contributor standard omits {phrase!r}, so its"
+            f" envelope clauses still describe the unnarrowed refusal"
+            f" (ADR-0122)."
+        )
+
+
+def test_every_editorial_skill_states_the_suppressed_instruction_outcome() -> None:
+    """The ladder says what happens to the level it exists to override.
+
+    Each editorial Skill resolves its parameters through one precedence with
+    the Contextual Instruction at level 3, and level 3 exists so that levels 1
+    and 2 can settle a parameter over it. Redline, Write, and Unslop state
+    that ladder under `## Resolution`; Proofread states the same ladder in its
+    resolving step. Wherever it is stated, the outcome of a suppressed
+    instruction is stated with it, in one wording (ADR-0122).
+    """
+
+    for body in (WRITE, REDLINE, UNSLOP, PROOFREAD):
+        assert SUPPRESSED_INSTRUCTION_OUTCOME in body.read_text(encoding="utf-8"), (
+            f"{body}: the precedence says a higher level suppresses a lower one"
+            f" and not what becomes of the run, leaving the envelope's refusal"
+            f" to answer for it (ADR-0122). See {STANDARD}."
+        )
+
+
+# The same outcome in the words a user reads, beside the ladder each editorial
+# manpage already states (ADR-0122).
+SUPPRESSED_INSTRUCTION_FOR_THE_READER = (
+    "A Contextual Instruction every higher level has already settled is"
+    " suppressed rather than refused: the run continues, and the delivery names"
+    " the suppressed instruction beside the resolved configuration where saying"
+    " so is useful."
+)
+
+
+def test_every_editorial_manpage_states_the_suppressed_instruction_outcome() -> None:
+    """The user meets the ladder's outcome where the user meets the ladder.
+
+    Each editorial manpage states the precedence to the person deciding what to
+    type. A user who names a language in an instruction against a text whose
+    map already carries one needs to read what becomes of it before the run
+    tells them (ADR-0122).
+    """
+
+    for body in (WRITE, REDLINE, UNSLOP, PROOFREAD):
+        manpage = body.parent / "help.md"
+        assert SUPPRESSED_INSTRUCTION_FOR_THE_READER in manpage.read_text(
+            encoding="utf-8"
+        ), (
+            f"{manpage}: the page states the precedence without stating what a"
+            f" suppressed Contextual Instruction costs the run (ADR-0122). See"
+            f" {STANDARD}."
+        )
+
+
+def test_redline_works_the_wholly_suppressed_instruction_as_an_example() -> None:
+    """The invocation the contradiction was found on is worked on the page.
+
+    An explicit genre flag against a text whose `kntnt` map carries genre,
+    technique, and language leaves the Contextual Instruction nothing to
+    settle. That invocation took a refusal in the Claude-family evaluation
+    (issue #146); it is an ordinary review, and the page says so beside the
+    invocations that are less interesting (ADR-0122).
+    """
+
+    examples = _section(
+        REDLINE_HELP.read_text(encoding="utf-8"), "## EXAMPLES", REDLINE_HELP
+    )
+
+    assert (
+        "**/redline --genre=report --max=0 handoff.md -- Review it as a PAC piece in Swedish.**"
+        in examples
+    ), (
+        f"{REDLINE_HELP}: the invocation the two rules disagreed on is not"
+        f" worked on the page, so nothing here says it is a review rather than"
+        f" a refusal (ADR-0122). See {STANDARD}."
+    )
+    assert "suppressed" in examples, (
+        f"{REDLINE_HELP}: the worked invocation does not name the suppression"
+        f" the delivery reports (ADR-0122). See {STANDARD}."
+    )
 
 
 def test_skill_standard_requires_every_invocation_envelope_surface() -> None:

@@ -62,6 +62,8 @@ RELATIONS = {
     ("0096", "0105"),
     ("0055", "0106"),
     ("0098", "0110"),
+    ("0107", "0120"),
+    ("0078", "0122"),
 }
 
 # The flag-refusal rule and the reasoning an installed reader needs. `delegation`
@@ -274,6 +276,39 @@ def test_the_escalated_fix_round_preserves_the_no_progress_bound_history() -> No
     assert "unconditional" in later
 
 
+def test_the_emptying_guard_preserves_the_three_exit_loop_history() -> None:
+    """The fourth stop points past ADR-0107 without rewriting its three.
+
+    ADR-0107's fresh delegation, its verification by review, and each of the
+    three exits it named all stand. Only its claim that those three are the
+    whole of the loop was outrun, by a fixture on which every round made
+    relevant progress and the text still came back emptier at a budget of
+    three than at a budget of one (issue #144).
+    """
+
+    earlier = (
+        ADR / "0107-a-correction-is-delegated-fresh-and-verified-by-review.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR / "0120-a-repair-removes-the-pattern-and-not-the-claim-it-carries.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "the loop has three exits" in earlier
+    assert "no relevant progress" in earlier
+    assert "amended by ADR-0107" not in earlier
+    assert "amended by ADR-0120" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "amends ADR-0107" in later
+
+    # The road not taken is named: the two runs the defect was observed on sit
+    # either side of the line at almost the same length, so nothing that
+    # measures the text can tell them apart.
+    assert "shrink" in later
+
+
 def test_the_command_path_grammar_preserves_the_tldr_record_history() -> None:
     """The command path points past two records without rewriting either.
 
@@ -407,6 +442,45 @@ def test_the_regenerated_collision_preserves_the_repair_record_history() -> None
     # because a ticket whose acceptance criteria name one has to ship it to
     # pass its own verification.
     assert "README" in later
+
+
+def test_the_suppressed_instruction_preserves_the_envelope_record_history() -> None:
+    """The narrowing points past ADR-0078 without rewriting the world it decided in.
+
+    ADR-0078's split, its validation order, its semantic boundaries, and every
+    other refusal category it named all stand. Only its word *ineffective* was
+    outrun, by an invocation whose Contextual Instruction a documented
+    precedence had already settled against — suppression being what that
+    precedence is for, and not an error condition (issue #146).
+    """
+
+    earlier = (
+        ADR
+        / "0078-an-invocation-envelope-separates-strict-grammar-from-contextual-instruction.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR
+        / "0122-guidance-a-precedence-has-settled-is-suppressed-rather-than-ineffective.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "materially ambiguous, or scope-widening guidance receives a" in earlier
+    assert "Mixed guidance is not partially applied" in earlier
+    assert "narrowed by ADR-0122" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "narrows ADR-0078" in later
+
+    # The precedence order itself is untouched: what changed is the fate of a
+    # value the order has already settled against.
+    assert "precedence order" in later
+
+    # The road not taken is named twice over: rewriting the editorial ladders
+    # so that level 3 could not be overridden, and reading the two rules as
+    # already reconcilable with the run at fault.
+    assert "level 3" in later
+    assert "misapplied" in later
 
 
 def test_a_pointer_names_a_later_record() -> None:

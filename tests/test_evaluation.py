@@ -54,6 +54,7 @@ OPTIONAL_COVERAGE = frozenset(
         "no-change status",
         "refusal",
         "unusable metadata",
+        "sentence-boundary punctuation",
     }
 )
 
@@ -337,6 +338,37 @@ def test_the_corpus_stages_concentrated_slop_in_swedish() -> None:
         f" which is a text that happens to contain slop rather than one that"
         f" stages it in concentration."
     )
+
+
+def test_a_fixture_stages_both_sides_of_the_clause_boundary_rule() -> None:
+    """A conditional rule is provable only where the corpus stages both answers.
+
+    A comma joining two main clauses is an error where the second does not
+    cohere with the first and correct usage where it does, and both shipped
+    languages' authorities draw that line the same way. A corpus carrying only
+    the accepted joint can say nothing about whether a run corrects the other,
+    and a corpus carrying only the error would reward a Skill that corrects
+    every such comma it meets (issue #125).
+    """
+
+    fixtures = _tagged("sentence-boundary punctuation")
+    assert fixtures
+
+    for name, fields in fixtures.items():
+        described = f"{fields.get('Material', '')} {fields.get('Reject', '')}".lower()
+
+        for half in ("explains", "unrelated"):
+            assert half in described, (
+                f"{name}: the entry does not say which of its comma-joined"
+                f" clause pairs is the error and which is established usage, so"
+                f" an evaluator has to derive the conditional from the prose."
+            )
+
+        assert "joint" in described, (
+            f"{name}: the entry says nothing about how the erroneous joint is"
+            f" corrected, and a correction free to reach past it is the"
+            f" substantive edit the protocol rejects."
+        )
 
 
 def test_a_fixture_leaves_a_kntnt_map_partial_for_a_lower_level_to_settle() -> None:

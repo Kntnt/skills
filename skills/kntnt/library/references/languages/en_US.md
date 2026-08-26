@@ -70,12 +70,12 @@ Dates: *August 24, 2026*, with a comma after the year when the date sits inside 
 
 Numbers: decimal point, comma as the thousands separator, currency symbol before the amount — *$1,250.00*, *1,000,000*. Percentages are written *50%* without a space, or *50 percent* in news style.
 
-Times: *2:30 p.m.* in Chicago style, *2:30 pm* in others; one form per document.
+Times: *2:30 p.m.* in Chicago style, *2:30 pm* in others; both are current American forms.
 
 Quotation marks: double outer and single inner. Commas and periods go inside the closing quotation mark whether or not they belong to the quoted matter; colons and semicolons go outside; question and exclamation marks follow the sense.
 
-Abbreviations take periods where British usage omits them: *Mr.*, *Mrs.*, *Ms.*, *Dr.*, *St.* Initialisms are set without them: *FBI*, *NASA*. *US* and *U.S.* are both current; one per document.
+Abbreviations take periods where British usage omits them: *Mr.*, *Mrs.*, *Ms.*, *Dr.*, *St.* Initialisms are set without them: *FBI*, *NASA*. *US* and *U.S.* are both current.
 
 Em dashes are set unspaced, *like—this*. En dashes take ranges: *pages 12–18*, *2020–2024*.
 
-Where both forms are established — the serial comma present or absent, *toward* and *towards*, *gray* and *grey* — the text's own choice stands, and only inconsistency within one text is corrected.
+Established in more than one form here, none of them the error: the serial comma present or absent, *toward* and *towards*, *gray* and *grey*.

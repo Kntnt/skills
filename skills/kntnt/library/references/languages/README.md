@@ -46,11 +46,11 @@ A caller asks for the scopes it can act on and is given those and no others, so 
 
 **Anti-slop** is the words, phrases, punctuation, and constructions that mark machine-sounding prose in this language specifically. The generic anti-slop patterns are shared and language-independent; what belongs here is what those patterns cannot see — a phrase that only exists in this language, a punctuation convention a generating model imports from English, a tell that a text was translated rather than written.
 
-**Mechanics** is objective correctness: spelling, inflection, agreement, punctuation, and locale conventions for dates, numbers, currency, and quotation. Nothing here may be a preference. Where two forms are both correct, say so and say that the original is preserved, rather than naming one of them the error.
+**Mechanics** is objective correctness in this language: spelling, inflection, agreement, punctuation, and locale conventions for dates, numbers, currency, and quotation. Nothing here may be a preference. Where two forms are both correct, say that both are established here and leave it there — what a Skill does about established variation is stated once for every language, in the shared mechanics contract beside this directory, and a scope that says it again is a second copy free to disagree with the first.
 
 ## What does not belong in a scope
 
-Generic editorial rules stay out. A rule that is true of good writing in general belongs to the shared contract every Skill loads, and its English examples are applied semantically in the target language rather than translated into a copy here.
+Generic editorial rules stay out. A rule that is true of good writing in general belongs to the shared contract every Skill loads, and its English examples are applied semantically in the target language rather than translated into a copy here. So does a rule of objective correctness that holds in the same way in every language: it belongs to the shared mechanics contract, which a Skill correcting mechanics loads beside the scope, and a mechanics scope states only what its own language settles differently.
 
 A rule enters a scope for one of two reasons only: the language genuinely differs, or the generic rule was observed to fail on this language. Anything else duplicates a rule that is already true somewhere else, and a rule written twice is a rule that can disagree with itself.
 
