@@ -57,7 +57,7 @@
       "name": "frame",
       "category": "code",
       "description": "Map a task before anything is built. Codebase recon runs beside an interview, the questions put to the owner are the ones neither the code nor the repository's own rules could answer, and what comes out is a Frame Record the next Skill builds from.",
-      "digest": "6cd0dee897f973f9e12a1e70f5906074095d588a8598abc21b98794c43741c3b",
+      "digest": "cf5aa053665515077647839c0924b2e43a615336423cacfa6a2287e2978b905f",
       "binaries": [
         "uv"
       ],
@@ -129,6 +129,20 @@
       "skills": [
         "push"
       ],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "to-slices",
+      "category": "code",
+      "description": "Turn one complete Frame Record into an approved decision issue and executable tracer-bullet child tickets.",
+      "digest": "db03efec1f2316dc7422b19c500db1d6898296009f1dbef1215f8c05cdd1c284",
+      "binaries": [
+        "git",
+        "gh",
+        "uv"
+      ],
+      "skills": [],
       "externals": [],
       "capabilities": []
     },

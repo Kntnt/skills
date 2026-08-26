@@ -44,7 +44,7 @@ The record on disk, and a closing report naming what was mapped, what the owner 
 
 `.kntnt/frames/<slug>.md`
 
-The Frame Record, one file per framing, in the repository being framed. It is untracked and is a working artifact rather than a durable account of decisions; the format and lifecycle are stated in `library/references/frame-record.md` in the Collection Library. Nothing consumes a record yet, so records accumulate until a run's opening report offers them for discarding.
+The Frame Record, one file per framing, in the repository being framed. It is untracked and is a working artifact rather than a durable account of decisions; the format and lifecycle are stated in `library/references/frame-record.md` in the Collection Library. `/to-slices` consumes a complete record only after its approved issue set has been published and verified.
 
 `.git/info/exclude`
 
@@ -86,4 +86,4 @@ The current Harness must be able to spawn subagents. Recon in the main context i
 
 ## SEE ALSO
 
-**/model-selector route --help**, **/kntnt select**
+**/to-slices --help**, **/model-selector route --help**, **/kntnt select**
