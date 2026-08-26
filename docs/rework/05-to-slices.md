@@ -1,8 +1,8 @@
 # Phase 2, step 1 — `/to-slices`, as designed
 
-> Draft written 2026-08-26 against commit `c7393f1`, from the `/to-slices` section of `00-brief.md`, the three requirements inherited from `04-frame.md`, and what this codebase and the existing `/to-spec` and `/to-tickets` Skills answer. It is the input to the owner-level round (step 2). Deleted with the rest of `docs/rework/` by the final cleanup ticket.
+> Draft written 2026-08-26 against commit `c7393f1`, from the `/to-slices` section of `00-brief.md`, the three requirements inherited from `04-frame.md`, and what this codebase and the existing `/to-spec` and `/to-tickets` Skills answer. It was the input to the owner-level round (step 2), which ran on 2026-08-26 and settled both residuals; it is now the input to the ticket breakdown. Deleted with the rest of `docs/rework/` by the final cleanup ticket.
 
-The dossier states what `/to-slices` is for; this file is the design that satisfies it, the boundaries judged along the way, and the few consequences only the owner can settle. Everything outside *Residuals for the owner* is resolved from `docs/rules/`, from the Frame Record contract, from the Skills this one replaces, and from the configured tracker.
+The dossier states what `/to-slices` is for; this file is the design that satisfies it, the boundaries judged along the way, and what the owner settled. Everything here is settled — resolved from `docs/rules/`, from the Frame Record contract, from the Skills this one replaces, and from the configured tracker, or answered by Thomas in the round recorded below. Nothing in it is still a question.
 
 ## What the Skill is
 
@@ -16,9 +16,9 @@ The Interface takes one Frame Record. A path operand addresses it directly. Bare
 
 The Skill reads `$LIBRARY/references/frame-record.md` and validates the contract before synthesising anything: the seven headings are present in order, every address-bearing entry has an address, every ledger decision still in force names a frame, and every open entry names its owner and what would answer it. A malformed or unfinished record is left untouched and returned to `/frame --resume=<path>` with the defect named.
 
-The framing commit is the currency of the handoff. Where `HEAD` no longer equals the commit section 1 names, `/to-slices` does not quietly reinterpret findings made against another tree; it hands back `/frame --resume=<path>`, whose existing resume contract re-reads the frames and re-checks findings touched by the intervening diff. Once the record names the current `HEAD`, that commit becomes every published ticket's vantage point.
+The framing commit is the currency of the handoff. `/to-slices` compares the commit section 1 names with `HEAD`. Where they differ, it reads the intervening diff before deciding that the findings have gone stale. If every changed path is a file named by an entry in section 7, the diff is framing's own durable output rather than a changed world: `/to-slices` verifies that containment, stamps section 1 with the current `HEAD`, and continues. Any changed path outside that manifest hands back `/frame --resume=<path>`, whose existing resume contract re-reads the frames and re-checks findings touched by the intervening diff. Once the record names the current `HEAD`, that commit becomes every published ticket's vantage point.
 
-Section 7 is checked entry by entry before publication. Every address must still resolve, because the decision document is about to become the manifest `/land` follows after the record is gone. Whether those entries must also be committed before publication is an owner residual below; silently treating a local-only edit as durable is not one of the choices.
+Section 7 is checked entry by entry before publication. Every entry must resolve from `HEAD`, not merely from the working tree, because the decision document is about to become the manifest `/land` follows after the record is gone. Nothing requires the rest of the tree to be clean. An entry that exists only locally stops publication with the exact entry and file named and a precise instruction to commit that knowledge; `/to-slices` stages and commits nothing itself. The resulting knowledge-only move of `HEAD` is the exception above, so the next invocation can stamp the new vantage and continue without sending unchanged findings through `/frame` again.
 
 ## Synthesis, not transcription
 
@@ -42,6 +42,8 @@ The document has these sections:
 8. **Provenance** — the Frame Record's relative path, its framing commit, the commit this set was published against, and any source issue.
 
 The decision issue is not executable work and never receives the repository's ready-for-agent label. It receives any scope label and milestone the repository's tracker convention or the Contextual Instruction requires. Its child relation, not a ready label, is how later readers know what work belongs to it.
+
+The decision issue stays open while any child is still live. Once every child has reached a terminal state — landed, or explicitly abandoned as `wontfix` — `/land` closes the parent as part of the same knowledge closure that reconciles its section 7 manifest. That closing duty belongs to `/land`'s mini-cycle and is recorded here rather than implemented early by `/to-slices`.
 
 The shape belongs in `$LIBRARY/references/slices.md`, not inside `/to-slices`: `/to-slices` writes it, `/compile` reads the child contract, and `/land` reads the parent and its knowledge manifest. Starting it in one Skill would make the writer the owner of its consumers' input Interface, the same false ownership `frame-record.md` avoided.
 
@@ -140,20 +142,20 @@ The implementation also updates `/frame`'s closing handoff and manpage, adds the
 
 It does not frame or reopen settled owner decisions. It does not write code, prototype, compile a plan, author a test file, allocate a serial resource, compute a dispatch wave, claim a ticket, or close a source request. It does not publish a horizontal implementation checklist and call it slicing. It leaves exact files and current code to `/compile`, scheduling to `/dispatch`, and landed-ticket closure plus knowledge reconciliation to `/land`.
 
-## Residuals for the owner
+## Settled by the owner
 
-Two, both consequences the owner lives with rather than facts the repository can answer. Each carries the recommendation this design would take if it heard nothing back.
+The two consequences the repository could not answer were put to Thomas on 2026-08-26 and answered in one round. They are recorded here as decisions, not as open questions; the frontier is empty.
 
-**R1 — How long the decision issue stays open.** It can close as soon as the child tickets are published, treating it as a document rather than work, or stay open as the progress umbrella until every child has landed or been explicitly abandoned. *Recommended: keep it open and let `/land` close it when the last child reaches a terminal state.* GitHub then shows the unfinished outcome without labeling the parent ready for execution, and the final close becomes part of the knowledge-closure step that already reads it. The cost is one lifecycle duty inherited by `/land`.
+**R1 — The decision issue stays open through delivery.** It is the progress umbrella until every child has landed or been explicitly abandoned as `wontfix`; `/land` then closes it as part of the knowledge-closure step that already reads it. GitHub shows the unfinished outcome without labeling the parent ready for execution, and `/land`'s mini-cycle inherits the closing duty.
 
-**R2 — Whether framing knowledge must be in history before publication.** Section 7 may name glossary or decision-record edits `/frame` wrote into the working tree without committing. `/to-slices` can require those exact entries to be reachable from `HEAD` before it publishes, or publish while the only copy may still be local and uncommitted; auto-committing them would take a separate authority and risks sweeping unrelated edits from the same files. *Recommended: require them committed, without requiring the whole tree clean.* The manifest the decision issue preserves then resolves in every clone `/compile`, `/dispatch`, and `/land` may run from. The cost is a stop with a precise commit handoff on framings that wrote knowledge and did not already land it.
+**R2 — Framing knowledge must be in history before publication.** Every section 7 entry must be reachable from `HEAD`, without requiring the rest of the tree to be clean. A local-only entry stops with a precise commit handoff, and `/to-slices` never auto-commits: doing so would take separate authority and could sweep unrelated edits from the same files. The manifest the decision issue preserves therefore resolves in every clone `/compile`, `/dispatch`, and `/land` may run from. Committing the framing's own section 7 files does not stale its findings; the exception under *The input, and when it is ready* verifies that limited diff, stamps the current `HEAD` as the new vantage, and continues.
 
-## The slices, provisionally
+## The slices
 
-Two tickets under the recommended answers, pending the round above. Both fit one fresh context, and neither is a Solo Ticket — nothing here rewrites a rule every shipped file is under.
+Two tickets under the settled answers, pending the owner's approval of the breakdown. Both fit one fresh context, and neither is a Solo Ticket — nothing here rewrites a rule every shipped file is under.
 
 **S1 — The durable slice contract in the Collection Library.** `library/references/slices.md` states the decision issue, child ticket, seam contract, compilation hint, graph, provenance, and knowledge-manifest shapes their writer and later readers share, with suite coverage for its resolved pointers. *Blocked by: nothing.* Delivers: the durable Interface `/to-slices` writes and `/compile` plus `/land` can rely on without reading a peer's internals.
 
 **S2 — `/to-slices` publishes an approved slice set.** The Skill directory, its local slicing and publishing references, README section, Catalog entry, and tests; it validates and synthesises one Frame Record, previews the complete graph, publishes the verified parent and children recoverably, and deletes the record only on success. The same ticket adds `/frame`'s prefilled `/to-slices <path>` line and `SEE ALSO` entry. *Blocked by: S1.* Delivers: a framed task turned into durable decisions and ready tracer-bullet tickets, with the next pipeline handoff visible at the Skill that produces its input.
 
-If R1 keeps the parent open, its closing duty is recorded here for `/land`'s mini-cycle rather than implemented early. If R2 requires committed knowledge, the handoff wording and `/to-slices` preflight carry that gate inside S2.
+The parent-closing duty is recorded here for `/land`'s mini-cycle rather than implemented early. The committed-knowledge gate, its precise stop, and the knowledge-only vantage exception land inside S2's handoff wording and preflight.
