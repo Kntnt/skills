@@ -1,8 +1,8 @@
 # Phase 2, step 1 — `/compile`, as designed
 
-> Draft written 2026-08-26 against commit `7dd014a`, from the `/compile` section of `00-brief.md`, the handoff inherited from `05-to-slices.md`, the executable-child contract in the Collection Library, and the compile-time duties rescued from `/orchestrate`. It is the input to the owner-level round (step 2). Deleted with the rest of `docs/rework/` by the final cleanup ticket.
+> Draft written 2026-08-26 against commit `7dd014a`, from the `/compile` section of `00-brief.md`, the handoff inherited from `05-to-slices.md`, the executable-child contract in the Collection Library, and the compile-time duties rescued from `/orchestrate`. The owner-level round (step 2) settled both residuals on 2026-08-26; it is now the input to approval of the ticket breakdown. Deleted with the rest of `docs/rework/` by the final cleanup ticket.
 
-The dossier states what `/compile` is for; this file is the design that satisfies it, the boundaries judged along the way, and the few consequences only the owner can settle. Everything outside *Residuals for the owner* is resolved from `docs/rules/`, from `$LIBRARY/references/slices.md`, from the current pipeline Skills, and from the compile-time half of the workflow `/dispatch` will replace.
+The dossier states what `/compile` is for; this file is the design that satisfies it, the boundaries judged along the way, and what the owner settled. Everything here is settled — resolved from `docs/rules/`, from `$LIBRARY/references/slices.md`, from the current pipeline Skills, from the compile-time half of the workflow `/dispatch` will replace, or answered by Thomas in the round recorded below. Nothing in it is still a question.
 
 ## What the Skill is
 
@@ -80,7 +80,7 @@ The compiler writes finished, runnable tests at the seam the child contract sele
 
 The canonical test files stay in the plan bundle. `/dispatch` materialises them into the executor's isolated working tree, makes them non-writable as a guardrail, and gives the executor their commands but not permission to edit their paths. The bundle fingerprints remain outside the executor's working tree; review re-hashes every materialised file and rejects a changed, replaced, or deleted test even if its command is green. Read-only is therefore enforced at the review seam, not claimed as an operating-system security barrier against a process running as the same user.
 
-Whether the accepted test files become permanent repository tests or verifier-only artifacts is an owner residual below. In either form their authorship and integrity do not move: the executor implements against tests it cannot redefine, and `/dispatch` is the party that places or retires them.
+The accepted test files become permanent repository tests. `/dispatch` materialises their exact accepted bytes beside the implementation, verifies them against the bundle after execution, and lands them itself; the executor implements against tests it cannot redefine and never owns their paths. The authorship separation therefore survives integration rather than ending at the verdict.
 
 ## The cold read
 
@@ -94,7 +94,7 @@ The fresh-context read makes `subagents` a hard Capability. It adds no model-sel
 
 A bundle is accepted only after its seam test has the recorded baseline result, its cold read passes, its manifest agrees with its files, and the final `HEAD` and tracker fingerprints still match. Plans that fail independently do not roll back accepted siblings, and a ticket parked for information does not stop the rest of the batch.
 
-Under the recommended owner answer, accepted bundles live under the repository's Git common directory at `.git/kntnt-pipeline/plans/<ticket>/`, resolved through `git rev-parse --git-common-dir` rather than by assuming `.git` is a directory. That address is shared by linked worktrees, invisible to `git status`, durable across an interrupted session, and local to the clone whose exact objects and branch it names. A temporary sibling directory is renamed into place only after acceptance, so interruption leaves either the previous accepted bundle or no accepted bundle rather than half of one.
+Accepted bundles live under the repository's Git common directory at `.git/kntnt-pipeline/plans/<ticket>/`, resolved through `git rev-parse --git-common-dir` rather than by assuming `.git` is a directory. That address is shared by linked worktrees, invisible to `git status`, durable across an interrupted session, and local to the clone whose exact objects and branch it names. A temporary sibling directory is renamed into place only after acceptance, so interruption leaves either the previous accepted bundle or no accepted bundle rather than half of one.
 
 A plan is fresh only while repository identity, integration branch, `HEAD`, source fingerprint, and bundle fingerprint all match. A fresh plan makes the ticket ineligible for another bare compile; an explicit reference reports it already compiled and writes nothing. A stale bundle is never repaired in place: the next compilation replaces it atomically from current inputs. `/dispatch` consumes a fresh bundle, archives only the run journal it needs for its own recovery, and removes the bundle when the ticket lands or is parked.
 
@@ -105,6 +105,8 @@ No plan or excerpt is posted to the tracker. The tracker holds durable intent an
 The `/compile` implementation ticket completes `/to-slices`' deferred handoff. After verified publication, `/to-slices`' closing report gains one exact next line listing every executable child in approved snapshot order: `/compile #<child> #<child> ...`. Its manpage adds **/compile --help** to `SEE ALSO`. Both changes land with the successor that makes them truthful.
 
 `/dispatch` does not exist on the day `/compile` lands. The first version therefore closes in `$LIBRARY/references/tldr-mode.md` with the plans accepted, tickets parked and their exact questions, plans already fresh and skipped, the captured `HEAD`, and the plan-bundle paths. It names that `/dispatch` will consume them later but invents no invocation for a missing Skill. The `/dispatch` implementation ticket will add `/compile`'s prefilled next line and `SEE ALSO` entry under the same handoff rule.
+
+The `/dispatch` brief inherits five requirements together, so the test-placement mechanism cannot be separated from the lifecycle that makes it trustworthy. It consumes only a fresh accepted plan bundle and retires that bundle when the ticket lands or is parked; materialises the compiler-owned test overlay into the isolated executor tree, preserves the accepted bytes as read-only to the executor, verifies them by re-hashing against the canonical bundle, and lands those exact files beside the implementation; adds `/compile`'s prefilled `/dispatch` line and **/dispatch --help** entry only when the successor ships; moves `delegation`'s `references/mode.md` into the Collection Library rather than reading peer internals; and cites the field evidence of the 21 `†`-marked records in `docs/rework/02-adr-triage.md` from git history rather than rediscovering it.
 
 ## What it ships
 
@@ -125,7 +127,7 @@ The implementation also updates `/to-slices`' closing handoff and manpage, adds 
 
 ## Boundaries judged rather than followed
 
-**The plan is a local runtime baton, not a tracker comment or repository document.** The durable ticket deliberately excludes exactly what the plan adds, and publishing those excerpts and allocations beside it would restore the stale second account the just-in-time split removed. The Git common directory is the one local address linked worktrees share without dirtying the repository. The owner still settles the cross-clone consequence below.
+**The plan is a local runtime baton, not a tracker comment or repository document.** The durable ticket deliberately excludes exactly what the plan adds, and publishing those excerpts and allocations beside it would restore the stale second account the just-in-time split removed. The Git common directory is the one local address linked worktrees share without dirtying the repository; losing it costs a cheap recompile rather than a recovery protocol.
 
 **The shared runtime contract and the authoring rule are different documents.** `$LIBRARY/references/compiled-plan.md` is installed implementation that `/compile` and `/dispatch` execute. `docs/rules/pipeline.md` tells contributors what the three Skill Interfaces must continue to promise and earns the `AGENTS.md` pointer forecast in `04-frame.md`. Each points at the other's subject instead of copying its detail.
 
@@ -145,17 +147,17 @@ The implementation also updates `/to-slices`' closing handoff and manpage, adds 
 
 It does not frame, reopen owner decisions, slice work, alter the blocking graph, compute a dispatch wave, route or launch an executor, claim a ticket, implement code, merge, close a child or parent, reconcile knowledge, or import routing evidence. It does not let a test become the compiler's hidden way of changing product intent. It produces the execution contract and its independent tests; `/dispatch` owns everything that happens after that baton is accepted.
 
-## Residuals for the owner
+## Settled by the owner
 
-Two, both consequences the owner lives with rather than facts the repository can answer. Each carries the recommendation this design would take if it heard nothing back.
+The two consequences the repository could not answer were put to Thomas on 2026-08-26 and answered in one round. They are recorded here as decisions, not as open questions; the frontier is empty.
 
-**R1 — Whether a compiled plan is deliberately local to one clone.** It can live under the Git common directory, giving `/compile` and linked `/dispatch` worktrees one invisible, interruption-safe baton bound to the exact objects they share, or be published somewhere another clone can fetch it. *Recommended: keep it clone-local and ephemeral.* A portable plan would have to ship its test files and code excerpts through a durable store, authenticate that store, and still refuse unless the receiving clone had the same `HEAD` and tracker source; that buys transport without relaxing a single freshness condition. The cost is explicit: compilation and dispatch happen in the same clone, and losing its Git directory loses accepted plans, which are then recompiled rather than recovered.
+**R1 — Compiled plans are clone-local and ephemeral under the Git common directory.** Portability would buy transport while leaving every freshness condition intact, plus add storage and authentication machinery for tests and excerpts. Compilation and dispatch therefore happen in the same clone; losing its Git directory loses accepted plans, and the recovery is a cheap recompile rather than a portable plan protocol.
 
-**R2 — Whether compiler-owned seam tests remain in the repository after landing.** `/dispatch` can merge the exact accepted files beside the executor's implementation, or use them only as verifier artifacts and remove them after the verdict. *Recommended: land them as permanent regression tests.* The seam contract then survives the run that enforced it, future changes keep paying the same behavioural debt, and authorship separation still holds because the dispatcher, never the executor, owns their bytes. The cost is more test files and occasional adaptation to a repository's preferred test organisation; removing them instead keeps the tree smaller but turns the strongest acceptance evidence into disposable run state.
+**R2 — Accepted compiler-owned seam tests land as permanent regression tests.** The dispatcher, never the executor, owns their bytes: it materialises the overlay, verifies the files by re-hashing against the canonical bundle after execution, and lands the exact accepted files beside the implementation. That placement mechanism is an explicit inherited requirement on the `/dispatch` brief together with plan-bundle consumption and retirement, `/compile`'s handoff line and `SEE ALSO`, the delegation-mode move, and the field evidence behind the `†` records.
 
-## The slices, provisionally
+## The slices
 
-Two tickets under the recommended answers, pending the round above. Both fit one fresh context, and neither is a Solo Ticket — the shared rules govern three pipeline Skills rather than rewriting an invariant every shipped file is under.
+Two tickets under the settled answers, awaiting the owner's separate approval of the breakdown. Both fit one fresh context, and neither is a Solo Ticket — the shared rules govern three pipeline Skills rather than rewriting an invariant every shipped file is under.
 
 **S1 — The compiled-plan Interface and shared pipeline rules.** `$LIBRARY/references/compiled-plan.md` states the two-register bundle, manifest, exact footprint, serial allocation, source and `HEAD` freshness, compiler-owned test overlay, and lifecycle `/compile` and `/dispatch` share. `docs/rules/pipeline.md` plus its `AGENTS.md` pointer states the common ticket-selection grammar and cross-Skill ownership rules, with focused contract and pointer coverage. *Blocked by: nothing.* Delivers: one deep Interface for every plan producer and consumer, before either side depends on private prose.
 
