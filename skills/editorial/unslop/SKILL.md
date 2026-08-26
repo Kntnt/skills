@@ -71,7 +71,7 @@ One editorial parameter is resolved here, the language, and it takes the first o
 5. Inference from the Text Artifact itself.
 6. The language of the supplied text, which is what inference reads and what the default already is.
 
-A value found at one level suppresses the levels below it. A language is settled rather than guessed: where the artifact is materially ambiguous or mixed, with no dominant language or alternation inside paragraphs, name the candidates and ask before anything is read against the catalogue.
+A value found at one level suppresses the levels below it. Suppression is that precedence working rather than an error: a Contextual Instruction every higher level has already settled leaves nothing for it to settle, and the run continues rather than refusing it as unaddressable guidance. Where saying so is useful, the delivery names the suppressed instruction beside the resolved configuration. A language is settled rather than guessed: where the artifact is materially ambiguous or mixed, with no dominant language or alternation inside paragraphs, name the candidates and ask before anything is read against the catalogue.
 
 No Kntnt map is created or synchronized. A map that exists supplies the language and is otherwise left exactly where it is, an artifact carrying none has none added to it, and the rest of the frontmatter comes through as it arrived — this Skill settles one of the three values such a map records, so writing one would claim a configuration it never resolved.
 

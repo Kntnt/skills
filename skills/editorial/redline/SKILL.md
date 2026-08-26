@@ -76,7 +76,7 @@ Genre, technique, and language are each resolved on their own, in this order of 
 5. Inference from the Text Artifact itself.
 6. The parameter's default: `general` for genre, no technique, and the language of the Text Artifact.
 
-A value found at one level suppresses the levels below it for that parameter alone. An explicit genre beside a language read out of the map and a technique taken from an instruction is an ordinary invocation, not a conflict.
+A value found at one level suppresses the levels below it for that parameter alone. An explicit genre beside a language read out of the map and a technique taken from an instruction is an ordinary invocation, not a conflict. Suppression is that precedence working rather than an error: a Contextual Instruction every higher level has already settled leaves nothing for it to settle, and the run continues rather than refusing it as unaddressable guidance. Where saying so is useful, the delivery names the suppressed instruction beside the resolved configuration.
 
 Two things are never inferred. A technique applies because it was selected — by the invocation, the map, or an instruction that names one — and never because the text happens to fall into its shape. A language is settled rather than guessed: where the artifact is materially ambiguous or mixed, with no dominant language or alternation inside paragraphs, name the candidates and ask before anything is reviewed.
 
