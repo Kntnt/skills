@@ -164,7 +164,6 @@ class Resource:
             "aliases": list(self.aliases),
             "default_for": list(self.default_for),
             "inherits": self.inherits,
-            "path": str(self.path),
         }
 
 
@@ -548,7 +547,6 @@ def cmd_resolve(directory: Path, selector: str, wanted: list[str]) -> int:
         "territory": resource.territory,
         "territory_name": resource.territory_name,
         "inherits": resource.inherits,
-        "path": str(resource.path),
         "scopes": {
             scope: scope_of(inventory, resource, scope, bodies) for scope in wanted
         },
