@@ -4590,6 +4590,44 @@ def test_proofread_reads_only_the_mechanics_scope_of_a_language_resource() -> No
         )
 
 
+def test_proofread_rechecks_swedish_noun_number_agreement() -> None:
+    """An explicit Swedish run catches the staged noun-number disagreement.
+
+    The general correction pass named noun-modifier agreement but left
+    `olika bild` unchanged when Swedish came from `--language`. A dedicated
+    agreement re-read makes the missed category a completion condition on the
+    same pass regardless of which precedence level supplied the selector
+    (issue #164).
+    """
+
+    text = PROOFREAD.read_text(encoding="utf-8")
+
+    # Pin both the observed miss and its mechanically required correction.
+    for phrase in ("`olika bild`", "`olika bilder`"):
+        assert phrase in text, (
+            f"{PROOFREAD}: the agreement pass does not name {phrase}, so the"
+            f" Swedish noun-number regression is no longer held at the Skill's"
+            f" public execution seam (issue #164). See {STANDARD}."
+        )
+
+    start = text.rindex("Before this step is done", 0, text.index("`olika bild`"))
+    end = text.index("A resolved locale", start)
+    rule = text[start:end]
+
+    # Require the second look and keep explicit selection on the ordinary path.
+    for requirement in (
+        "agreement-only re-read",
+        "noun and modifier",
+        "whether `--language` named the language",
+    ):
+        assert requirement in rule, (
+            f"{PROOFREAD}: the Swedish noun-number example lacks"
+            f" {requirement!r}, so correcting the example is not a completion"
+            f" condition on explicit-language runs (issue #164). See"
+            f" {STANDARD}."
+        )
+
+
 def test_proofread_preserves_the_locale_divergent_date_under_either_locale() -> None:
     """A locale settles mechanics, not which reading an ambiguous date meant.
 
