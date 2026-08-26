@@ -1,0 +1,240 @@
+# Phase 2, step 1 — `/dispatch`, as designed
+
+> Draft written 2026-08-26 against commit `6be8cee`, from the `/dispatch` section of `00-brief.md`, the compiled-plan Interface and pipeline rules landed by `/compile`, the delegation doctrine and model-selector's public Route Interface, and the field evidence preserved in git for the twenty-one `†` records named by `02-adr-triage.md`. This is the input to the owner-level round (step 2); the three residuals at the end are not settled yet. Deleted with the rest of `docs/rework/` by the final cleanup ticket.
+
+The dossier states what `/dispatch` is for; this file is the design that satisfies it, the inherited runtime package it preserves without carrying `/orchestrate`'s machinery forward, the boundaries judged along the way, and the consequences the owner still has to settle. Everything above **Residuals for the owner** is fixed by the canonical design, the current rules, or the codebase unless a residual explicitly says that its recommended answer is being used provisionally.
+
+## What the Skill is
+
+`/dispatch` is the pipeline's operating system. It selects fresh accepted compiled plans whose blockers have landed, computes only the frontier that can execute now, routes cheap executors into disposable worktrees, reviews their work on the unchanged main seat, and lands approved changes serially on the branch where the invocation began. Each landing changes the world the scheduler reads, so it recomputes the frontier from tracker edges, current Git reachability, and the remaining plan footprints rather than carrying a frozen wave plan forward.
+
+Compilation has already decided what the work means, exactly where it may write, which identifiers it owns, how it is checked, and which seam-test bytes express the contract. Dispatch decides whether an execution satisfies that contract and how an approved result reaches the integration branch. It does not reinterpret the ticket, rewrite the plan, or let scheduling become another source of product intent.
+
+## Invocation and selection
+
+The live forms are `/dispatch [--at-once=<n>] [--model=<name>] [--deliberation=<low|medium|high|xhigh|max>] [--yes]` and `/dispatch [--at-once=<n>] [--model=<name>] [--deliberation=<low|medium|high|xhigh|max>] #<ticket> ...`. The read-only forms add `--dry-run` and omit `--yes`. Every flag precedes every operand, explicit references preserve their written order, and the shared pipeline grammar in `docs/rules/pipeline.md` governs the references and the bare confirmation.
+
+Bare live invocation selects every dispatch-eligible ticket in ascending issue order, displays the complete selection, and asks one yes-or-no question; `--yes` answers it without asking. Explicit references are the complete confirmed selection. An explicit reference that is not eligible refuses the complete live invocation rather than silently narrowing it. A dry run has no mutation to confirm: it renders the present graph, footprint exclusions, first executable frontier, provisional later waves, and Route readiness without opening a journal, assigning a ticket, creating a worktree, or persisting a routing decision; `--yes` therefore has no work beside `--dry-run` and is refused.
+
+A ticket is dispatch-eligible only when it is an open executable child in the current repository, its accepted bundle is fresh under `$LIBRARY/references/compiled-plan.md`, every declared blocker has a landing commit reachable from the current integration tip, and no active journal already owns it. Issue closure is not the landing signal — `/land` owns tracker closure — and a closed blocker with no reachable landed change does not make dependent code exist.
+
+An active journal on the current integration branch is resolved before new selection. The exact live invocation recorded there resumes that run and never starts a second one; a different invocation reports the active run and its exact resume line rather than mixing two scopes or two routing policies on one branch.
+
+## The landed-change baton
+
+Under the recommended answer to R1, one dispatcher-authored landing commit is the durable baton between `/dispatch` and `/land`. It carries the implementation patch, the exact compiler-owned tests, and every dispatcher-owned shared write for one ticket, plus `Kntnt-Ticket: #<ticket>` and `Kntnt-Plan: sha256:<bundle-fingerprint>` trailers. Executor commits are scratch history and do not land. The custom trailers avoid closing the issue before knowledge closure while making the landing discoverable in every clone from Git alone.
+
+`/dispatch` treats a blocker as landed only when exactly one reachable commit carries its `Kntnt-Ticket` trailer and the commit is on the integration history being built. `/land` later uses the same commit as the implementation vantage it verifies and closes over. This contract belongs in `$LIBRARY/references/landed-change.md`, because dispatch writes it and land reads it; neither Skill may hide the other's input in a private reference or clone-local journal.
+
+The journal records the landing commit as recovery and audit evidence, but it is not the durable landed-change baton. A journal can disappear with the Git common directory; a reachable commit cannot disappear without the code disappearing with it.
+
+## Runtime scheduling
+
+Every scheduling turn reads the live dependency graph, the current integration tip, the journal's terminal states, and the exact footprints of still-fresh consumed plans. It admits blockers first, gives a Solo Ticket a frontier of its own, and otherwise greedily fills the frontier in selection order up to `--at-once`, whose default is `1`.
+
+Two plans do not execute together when either writes a path the other reads or writes. Executor-owned `modifies`, `creates`, and `deletes` paths and compiler-owned test destinations are writes for this comparison. Dispatcher-owned shared writes do not exclude siblings: executors never touch them and the dispatcher applies their proposals serially on the combined tree. Pre-allocated serial resources likewise do not exclude siblings, because `/compile` has already assigned disjoint identifiers from one batch counter.
+
+The frontier is a current decision, not a promise about a later wave. Every member is freshness-checked against the same integration tip immediately before execution and forks from that tip. Once those executions have started, a sibling landing does not retroactively stale their already-consumed inputs; integration review judges each patch against the newer combined tip. A ticket that had not started when the tip moved must present a fresh plan at its own execution handoff.
+
+That last rule is where REBUILD appears in an ordinary dependency chain. Landing a blocker changes `HEAD`, so a dependent plan compiled before that landing is no longer executable. `/dispatch` records that it needs one rebuild, completes everything not waiting on it, and hands the owner `/compile #<ticket>` followed by the exact original `/dispatch` resume line. The user-only `/compile` Skill is never invoked, copied, or simulated by `/dispatch`; once the fresh bundle exists, the same dispatch invocation consumes it and continues.
+
+## Delegation and execution
+
+The delegation doctrine moves from `skills/agents/delegation/references/mode.md` to `$LIBRARY/references/delegation-mode.md`. `delegation` updates its body and persistence reference to read that one file, and `/dispatch` reads the same file as its doctrine. The text is copied or pointed to, never paraphrased into dispatch-specific policy; `docs/rules/skills.md` forbids a Skill from reading a peer's private `references/`, and ownership follows these two consumers into the Collection Library.
+
+Every executor attempt routes through model-selector's public `/model-selector route` Interface. `--model` locks only the model field and `--deliberation` only the portable deliberation field; omission leaves that field to Route. A selected decision launches exactly its native controls, inheritance still launches the executor on the exact main seat without overrides, and refusal launches nothing. Each decision is journalled append-only before the attempt it governs. Resume reuses that exact recorded decision; it never asks current profiles, evidence, prices, aliases, or Harness mappings to reproduce an old answer.
+
+The executor receives the complete `plan.md`, a worktree at the plan's captured `HEAD`, the materialised compiler-owned tests, its exact allowed write paths and serial allocations, and a ticket-specific scratch directory. It needs no tracker, rules archaeology, compiler notes, sibling brief, or dispatch journal. It may ignore the Advisory appendix, but every part of the Binding contract remains owed. It reports implementation choices, every departure from the advisory route, and proposed content for dispatcher-owned paths; its report is input to review, never evidence of success.
+
+The dispatcher remains the tech lead on the unchanged main seat. Understanding, scheduling, STOP-condition judgement, review, verdicts, conflict questions, and the final report are not routed. A REVISE continues the same executor context while that context exists. The recommended answer to R3 defines the interruption case: the journal rehydrates the same recorded execution role and Route point in a fresh context from the complete plan, last accepted patch, and exact review findings, without spending another revision merely because a Harness context could not survive a process interruption.
+
+Every routed attempt that the dispatcher's review has actually judged may be emitted through `/model-selector observe` under the delegation doctrine. The sanitized artifact lives beside the archived journal and is named in the final report; `/model-selector record` remains the owner's separate act, and no run imports evidence into the ledger.
+
+## Disposable worktrees and durable patches
+
+Every attempt executes in a linked worktree below `<git-common-dir>/kntnt-pipeline/dispatch/worktrees/<run>/<ticket>/<attempt>/`, even at `--at-once=1`. Isolation is no longer a consequence of concurrency: it is what keeps executor writes, compiler-owned tests, local owner work, and the integration branch in separate ownership domains. Temporary branches use `kntnt-dispatch/<run>/<ticket>/<attempt>` and are caches; the journal, not a branch or worktree, is the recovery source.
+
+After an executor returns, the dispatcher inventories the complete tree delta before trusting the report. It snapshots all created, modified, deleted, mode-changed, symlink, and binary content as a full-index binary Git patch against the attempt base, records the ordered changed-path set and patch digest, and writes the patch durably before recording `patch-captured`. A temporary Git index seeded from the base makes untracked files and deletions part of the snapshot without adding dispatcher materialisations to the executor's own patch.
+
+A patch that violates footprint or test ownership is retained only as rejected-attempt evidence and is never replayed into a revision. The next REVISE begins from the last accepted checkpoint — or the clean captured base when none exists — with the complete rejection finding. A patch that passes ownership checks becomes the current in-flight checkpoint and is enough to recreate the attempt in a new worktree. Once a checkpoint event exists, its worktree and branch may be removed immediately; an interruption before that event merely repeats the same recorded attempt and spends no verdict or retry.
+
+The one deliberate exception is a conflict handed to Thomas. That event names one exact worktree and branch and marks them retained; every other dispatch resource is still cleaned. Thomas may resolve that tree directly or answer with an instruction. The resumed invocation records the instruction, re-hashes the protected tests, reviews the complete resolution, lands it if it passes, and then removes the retained resources. An instruction that changes durable product intent is posted to the child and requires a new `/compile`; a mechanical resolution already inside the Binding contract does not.
+
+## Compiler-owned seam tests
+
+Consumption copies the accepted bundle byte-for-byte into a temporary journal escrow, recalculates its bundle fingerprint, and atomically publishes the verified escrow before recording `bundle-consumed`. All later materialisation comes from that escrow, so an interrupted run does not depend on a mutable `accepted` pointer or on another process retaining an unreferenced bundle directory.
+
+For every attempt, the dispatcher writes the escrowed test bytes to their manifest destinations and may make them read-only as a guardrail. Before and after execution it computes each destination's Git blob identity and compares it with `compiled_blob`; permissions and a green command are never accepted as proof. A changed, replaced, deleted, or relocated compiler-owned test rejects the complete execution result.
+
+Review and landing never take the test bytes back from the executor tree. The dispatcher materialises the canonical escrow bytes again in the landing candidate, verifies their blob identities, runs their commands, and commits those exact bytes beside the implementation. Where a destination existed at the captured base, the accepted compiled blob replaces that base blob exactly; there is no three-way merge of test authorship. The landing journal event records the destination and compiled blob from the consumed manifest, and recovery verifies the same blobs at the landed commit before it may retire the bundle.
+
+## Tech-lead review and verdicts
+
+The dispatcher reviews the repository result rather than the executor's account. It verifies every consumed bundle identity and STOP condition, compares the complete changed-path set with the exact executor footprint, re-hashes every compiler-owned test, reads the full diff, runs every done-criterion check and focused seam command, and runs the complete repository gate. It then judges deviations: replacing an Advisory step with a better route is permitted when reported and inside the Binding contract; no report can authorize an out-of-footprint write, changed test, weakened invariant, missing criterion, or wider product decision. An undocumented deviation is a review failure because the executor has withheld part of the change the tech lead is judging.
+
+The four verdicts have disjoint work:
+
+- **APPROVE** — every binding identity, ownership check, done criterion, seam command, full-diff review, and repository gate passes. The exact accepted executor patch may enter landing.
+- **REVISE** — the current plan remains honest and the dispatcher can state a concrete correction inside its Binding contract. The same executor role gets the complete finding and at most two review-informed rounds after the initial attempt. Every round receives another full review; there is no partial approval, and a rejected patch is never silently trimmed into the next one.
+- **REBUILD** — the current `HEAD` or a fresh integration fact makes the plan itself the wrong vantage. The journal releases that consumed escrow as superseded but leaves the accepted slot for `/compile` to replace atomically, the child is recompiled against the new tip through the explicit `/compile` checkpoint, and a fresh executor starts once. A second condition requiring rebuild becomes PARK rather than an unbounded loop.
+- **PARK** — proceeding needs an owner decision, both revisions are exhausted, the one rebuild has not produced an integrable result, or the run cannot establish a safe next action. The dispatcher records the complete reason and exact question or handoff, retains the patch evidence required below, removes the executable-ready state and adds `needs-info` only for an owner-owned requirement, and performs no speculative implementation.
+
+The constructive boundary behind REVISE is inherited from the old mechanical-fix evidence: a correction is executable only when the dispatcher can name the failed check, the exact defect, and the already-binding contract that determines the correction. “Try again” is not a revision brief. A finding that requires choosing between two intents is PARK, even when the edit itself looks small.
+
+## Landing inside the loop
+
+For one APPROVE, the dispatcher creates a fresh landing candidate from the current integration tip, applies only the accepted executor patch, materialises the canonical seam tests, and applies dispatcher-owned writes serially. An append proposal is applied as one ticket's block; a generated output is regenerated only from an exact repository declaration or plan command, and any write outside the manifest's dispatcher-owned paths rejects the candidate. The dispatcher reads the combined diff and runs the ticket's seam tests plus the repository gate on that combined tree.
+
+Under the recommended R1 answer, a passing candidate becomes one landing commit with the two pipeline trailers and the integration branch advances to it only if its tip still equals the one the candidate forked from. The dispatcher then verifies reachability, trailer identity, tree identity, and the compiled test blobs before recording `landed`. Nothing later forks until that event is durable. A concurrent external branch move, a red combined gate, or an unexplained tree mismatch stops the advance and is reviewed from the candidate rather than guessed around on the owner's branch.
+
+The scheduler immediately recomputes after each landed event. This is why merging is part of scheduling rather than a later phase: the next frontier forks from code its blockers actually delivered, plan freshness is checked at the moment it matters, and conflicts are not stockpiled into a separate merge queue.
+
+The first integration incompatibility that a fresh plan could honestly absorb takes REBUILD. If the fresh rebuild still cannot integrate, or if the conflict exposes a choice between settled intents, the dispatcher completes every ticket not blocked by it and pauses with the exact human handoff: what landed, what is parked or stranded, the retained conflict worktree and branch, the immutable-test warning, and the one decision Thomas must make. The same dispatch invocation resumes, verifies, lands, and cleans; there is no `/merge` Skill and no second owner of the resources `/dispatch` created.
+
+## Run-journal contract
+
+The journal lives below `<git-common-dir>/kntnt-pipeline/dispatch/`. `active/<sha256-of-full-integration-ref>/` is the one active slot for a branch; `archive/<opened-UTC>-<run-fingerprint>/` holds completed runs, with UTC rendered without path punctuation. The run fingerprint covers repository identity, full integration ref, opening `HEAD`, normalized live Formal Invocation, the exact effective Contextual Instruction bytes, selected tickets in order, `--at-once`, and the two Route override fields. Applicable Conversation Context that materially guides execution is made explicit in the displayed resume line and recorded instruction before confirmation, so recovery never depends on prose a compaction may drop. The metadata stores all of those values explicitly, so a path digest is never asked to explain what it identified.
+
+One small local helper, `skills/code/dispatch/scripts/journal.py`, owns only transactional journal persistence. It creates or validates the active slot, stores and hashes an artifact before the event that refers to it, writes each event as one immutable zero-padded RFC 8785 JSON file by temporary sibling plus file and parent-directory flush plus atomic rename, chains every event to the SHA-256 of its predecessor, projects the current run and ticket states, and archives a terminal journal atomically. Journal values use the same no-floating-point domain as the compiled-plan manifest. It does not select tickets, read the tracker, compute waves, route, judge, patch, merge, or decide a verdict. This is the one deterministic seam the rebuild keeps: not a workflow engine, but the crash-consistency boundary prose cannot test.
+
+The immutable opening metadata is followed by events sufficient to decide every replay without session memory: selection; consumed bundle receipt and escrow digest; Route decision for each named attempt; assignment; attempt base and start; patch capture and changed paths; review verdict and complete finding; rebuild request; owner answer; landing start and candidate identity; human-conflict retention; landed commit; parked or stranded reason; bundle retirement; resource cleanup; observation artifact; and run completion. Ticket state is a projection of that log, never a second mutable account beside it.
+
+Artifacts live beside the events and are always written first: consumed three-part bundle escrows, Route responses, executor patches, review findings too large for an event, dispatcher-write proposals, and observation inputs. Every reference carries its SHA-256 and byte length. A missing artifact, broken event chain, non-contiguous sequence, mismatched invocation, or contradictory Git state is a refusal to continue, not permission to infer the missing state from a surviving worktree.
+
+### Recovery matrix
+
+| Last durable state | Recovery action |
+| --- | --- |
+| `attempt-started`, no patch event | Remove or ignore the disposable worktree, recreate the same base and escrowed tests, and replay the same named attempt under its recorded Route decision; no REVISE or REBUILD is spent. |
+| `patch-captured`, no review | Recreate a clean worktree, apply the verified patch, materialise and re-hash the escrowed tests, and perform tech-lead review without rerunning the executor. |
+| `REVISE` recorded | Continue the live executor context when available; otherwise apply R3, rehydrating the same role and Route point from the last accepted patch and exact finding without minting another round. |
+| `landing-started`, no `landed` event | Inspect the integration ref and candidate. If the exact candidate commit is reachable and its trailers, tree, and test blobs match, record it landed; if the ref still names the old tip, rebuild the landing candidate from journal artifacts; any other ref state stops. |
+| `REBUILD` recorded | Require one fresh accepted bundle from the exact `/compile #<ticket>` handoff, verify that its source and `HEAD` match the journal's new tip, then record its consumption and launch one fresh executor. |
+| `human-conflict` recorded | Preserve only the named worktree and branch, accept Thomas's direct resolution or journalled instruction, re-hash the compiler-owned tests, and repeat full review before landing. |
+| `landed` or `parked`, no retirement/cleanup event | Re-establish the terminal fact from Git and tracker evidence, complete idempotent bundle retirement and resource cleanup, then append the missing events; never execute the ticket again in this run. |
+| `stranded`, no cleanup event | Re-establish the named blocker or refusal, remove run-owned escrow and disposable resources, and leave an untouched accepted slot for a later dispatch or a stale slot for `/compile` to replace; never call that cleanup retirement. |
+
+The matrix deliberately distinguishes an executor finishing from the patch becoming durable, and a candidate commit existing from the integration ref reaching it. Those are the two interruption windows that otherwise duplicate paid work or land a commit twice.
+
+## Consumption, retirement, and archive contents
+
+`bundle-consumed` binds one immutable fingerprint for one ticket and one execution base. The canonical plan slot remains untouched while the run is active, while the journal escrow makes recovery independent of it. A later accepted-pointer replacement never changes the consumed input; it merely makes that pointer a different bundle the retiring run has no authority to delete.
+
+Retirement starts only after `landed` or `parked` is durable. For landed work, recovery first proves the landing commit reachable and verifies every compiler-owned destination at its compiled blob. For parked work, it first proves the tracker mutation and exact question where `needs-info` was required. The run then removes the `accepted` pointer only if it still names the consumed fingerprint, removes that immutable directory only when no pointer names it, deletes the escrow, and records `bundle-retired`. An interruption anywhere in that sequence is safe because the terminal event tells recovery whether cleanup, not execution, is next. A stranded ticket is not retired: an untouched fresh bundle remains eligible for a later run, while a bundle made stale by a discovered edge or moved source remains for `/compile`'s atomic replacement path.
+
+The archived receipt keeps repository, ref, base, source fingerprints, bundle fingerprint, exact footprint classes, allocations, test destinations and compiled blobs, command and done-criterion identifiers, Route decisions, review verdicts, and terminal commit or reason. It does not keep `plan.md`, current excerpts, or an executor copy of compiler-owned tests after retirement. Landed implementation patches are deleted because the reachable landing commit is their durable copy. Under the recommended R2 answer, the latest parked patch remains beside the compact archive until that ticket later lands or is explicitly abandoned; it is evidence and recoverable partial work, never authority to apply itself to a newly compiled plan.
+
+Completion is machine-checkable: every selected ticket projects to landed, parked, or stranded with an exact reason; every non-retained worktree and temporary branch the run created is gone; any deliberately retained conflict resource is named by an active pause rather than a completed run; every landed or parked consumed bundle is retired and every stranded escrow is released without deleting its canonical slot; the integration tree is clean; the active slot is gone; and the journal has been atomically moved to `archive/`. The final report is rendered from that archive in `$LIBRARY/references/tldr-mode.md`'s register rather than from the session's recollection.
+
+## Tracker lifecycle and the three outcomes
+
+Routing precedes assignment. Immediately before an executor starts, `/dispatch` assigns the child to the authenticated user; a ticket already owned by another actor is not taken. PARK posts the exact owner question where there is one, changes only the repository's configured executable-ready state to `needs-info`, preserves scope labels and milestone, and unassigns the child. These are claims reduced to their useful surface rather than rebuilt as a subsystem.
+
+Landing leaves the child open and assigned. `/land` owns the later done-criterion spot-check, tracker comment and closure, parent lifecycle, downstream refresh, and knowledge reconciliation. The Git landing baton lets a dependent ticket proceed before those closure duties are complete without pretending that a closed issue is what made the code exist.
+
+The report has exactly three ticket states. **Landed** names the reachable landing commit and bundle fingerprint. **Parked** names the complete owner question or exhausted-review/conflict handoff and what tracker state changed. **Stranded** names the non-landed blocker, route or environment refusal, stopped integration, or newly discovered edge that prevented execution without turning it into a product question. A discovered numbered dependency is written as a native blocking relation or its documented fallback and reported stranded rather than failed; an answer with no ticket to point at is PARK. History stays in the archived event log, while these three states are the current run account.
+
+## The handoff, and the order things land in
+
+The `/dispatch` implementation ticket completes `/compile`'s deferred handoff. After verified publication, `/compile`'s closing report gains one exact next line containing the accepted tickets that are dispatch-eligible now, in compile-selection order: `/dispatch #<ticket> #<ticket> ...`. Accepted plans still waiting on blockers are named separately and omitted from an invocation that would be invalid. If no accepted plan is currently eligible, `/compile` states the blocker frontier and invents no empty handoff. Its manpage adds **/dispatch --help** to `SEE ALSO`. Both changes land with the successor that makes them truthful.
+
+`/land` does not exist on the day `/dispatch` lands. The first version therefore closes with landing commits, parked questions, stranded reasons, the active or archived journal path as the run state requires, any deliberately retained conflict resource, and the exact `/compile` plus resume lines a REBUILD requires; it names that `/land` will close the durable loop later but invents no invocation for a missing Skill. The `/land` implementation ticket will add `/dispatch`'s prefilled next line and **/land --help** entry under the same handoff rule.
+
+## Git-historical evidence carried forward
+
+`02-adr-triage.md` marked twenty-one deleted runtime records with `†` because their field evidence must reach this design from git rather than be rediscovered. The address in each row is the record's introduction commit and original path; `git show <address>` reads it, while `git show 17eb896^:<path>` reads its final form immediately before the phase-1 deletion. The disposition states what this design carries and what it deliberately replaces.
+
+| ADR | Git-historical address | Field evidence and disposition here |
+| --- | --- | --- |
+| 0050 | `6e12f31:docs/adr/0050-all-deterministic-reasoning-behind-one-seam.md` | Untestable deterministic bookkeeping drifted in prose. The monolithic engine dies; one small transactional journal seam keeps only crash consistency testable. |
+| 0051 | `44477bd:docs/adr/0051-the-tracker-remembers-what-a-run-recorded.md` | A run's result must outlive its session and be visible. Reachable landing commits and tracker parking are durable truth; the journal keeps run history without becoming ticket resolution. |
+| 0052 | `2d6e7d2:docs/adr/0052-the-invocation-is-the-resume.md` | A resume flag asks the owner to know hidden state. The exact invocation resolves the branch's active journal and continues it. |
+| 0053 | `435abb5:docs/adr/0053-a-scope-narrows-the-set-never-the-rules.md` | Naming work cannot waive blockers or safety. Explicit references narrow selection while every freshness, footprint, test, and blocker gate still holds. |
+| 0054 | `007ddeb:docs/adr/0054-the-ceiling-carries-the-isolation-decision.md` | Concurrent builders sharing a tree corrupt ownership, and later waves need earlier work. Isolation now applies at every ceiling; merge remains inside the scheduling loop. |
+| 0055 | `1f11945:docs/adr/0055-a-collision-is-repaired-on-the-losing-branch.md` | Conflict work must stay off the integration branch until independently judged, and a changed base justifies one rebuild. Fresh landing candidates, one REBUILD, and the retained human-conflict tree preserve that boundary. |
+| 0056 | `21dcd57:docs/adr/0056-a-run-refuses-a-working-tree-it-cannot-account-for.md` | Uncommitted owner work was swept into tickets or misread as collision. Dispatch requires a clean integration tree before opening or advancing a run. |
+| 0057 | `6de0b9f:docs/adr/0057-a-working-tree-belongs-to-the-run-branch-it-was-cut-from.md` | A path alone let one branch adopt another run's worktree. Journal metadata binds every resource to repository, integration ref, run, ticket, base, and attempt. |
+| 0064 | `99467e0:docs/adr/0064-a-run-works-the-branch-it-was-left-on.md` | A default-branch refusal created ceremony without safety. Dispatch lands on the checked-out branch, including the default branch, and never pushes. |
+| 0065 | `22308d3:docs/adr/0065-the-requirement-is-the-whole-thread.md` | Builders missed decisions recorded in comments. Compile fingerprints the complete child and parent sources; dispatch rechecks those fingerprints and gives the executor the self-contained result. |
+| 0069 | `116c126:docs/adr/0069-a-failed-verification-buys-one-amend-as-a-collision-buys-one-rebuild.md` | A concrete independent failure changes the next executor's conditions. REVISE carries the exact tech-lead finding and stays bounded. |
+| 0070 | `116c126:docs/adr/0070-a-run-asks-at-plan-time-or-not-at-all.md` | Mid-run owner questions ruined unattended nights while mechanical hinders were misclassified as failure. Compile moves known questions earlier; dispatch PARKs genuine decisions, states deterministic corrections itself, and reports once. |
+| 0071 | `116c126:docs/adr/0071-what-parallel-tickets-share-the-run-allocates.md` | Parallel tickets duplicated serial numbers and spent large repair cost on shared append files. Compile pre-allocates identifiers; executors propose shared writes and dispatch applies them serially. |
+| 0072 | `116c126:docs/adr/0072-the-wave-check-reads-coherence-and-its-fixes-loop-to-a-fixed-point.md` | Independently green branches contradicted one another only after combination. The dispatcher reads the complete combined diff and runs seam plus repository gates for every serial landing. |
+| 0073 | `116c126:docs/adr/0073-a-discovered-edge-corrects-the-graph-rather-than-burning-the-ticket.md` | A missing numbered dependency is graph information, not failed implementation. Dispatch records the edge, strands the child truthfully, and lets a future fresh plan rebuild it on the required code. |
+| 0074 | `116c126:docs/adr/0074-building-may-be-delegated-down-the-verdict-never-is.md` | Cheap builders were not the weak point; strong independent verdicts caught costly defects. Executors route down, while every dispatch verdict remains on the unchanged main seat. |
+| 0079 | `4d0f22e:docs/adr/0079-a-run-outcome-is-history-and-a-ticket-resolution-is-current.md` | Attempt history and current completion diverge after outside recovery. The archive preserves run events, Git states what landed now, and `/land` owns the tracker resolution. |
+| 0084 | `d62328c:docs/adr/0084-a-fresh-amended-verdict-buys-one-continuation-amend.md` | A fresh post-amend verdict exposed new bounded defects that one amend could not absorb. REVISE permits two review-informed rounds and no third. |
+| 0085 | `46c21c1:docs/adr/0085-orchestrate-routes-execution-and-inherits-verdicts.md` | Model-only judgement was irreproducible and incomplete. Route supplies exact complete executor points, journalled before launch; verdicts inherit the complete main seat and are never routed. |
+| 0098 | `6c7fe29:docs/adr/0098-a-fully-determined-fix-is-mechanical-whatever-the-gate-says.md` | A red gate can still have a fully determined correction, but only under a constructive obligation. REVISE requires the exact defect, correction boundary, and binding source; otherwise PARK. |
+| 0106 | `27c1ad5:docs/adr/0106-a-collision-in-generated-files-is-regenerated-not-repaired.md` | Generated Catalog collisions consumed repair sessions despite having one deterministic answer. Manifest-declared dispatcher writes are regenerated or applied on the combined tree and checked there, while undeclared writes remain conflicts. |
+
+ADR-0058 is the twenty-second deleted orchestrate-runtime record and intentionally has no `†`: its report-bound premise was already outrun, so this design carries nothing from it. The table above is exhaustive for the marked set.
+
+## What it ships
+
+`skills/code/dispatch/`, with one deliberately small journal helper and no workflow engine.
+
+- `SKILL.md` — frontmatter plus the executable frames and completion criteria. `disable-model-invocation: true`; an argument hint exposing dry run, concurrency, field-level Route overrides, bare confirmation, and explicit ticket alternatives; `kntnt.binaries: "git gh uv"`, `kntnt.skills: "model-selector"`, empty External list, and `kntnt.capabilities: "subagents"`.
+- `help.md` — the root manpage in the fixed profile, including selection, the three outcomes, files, recovery, strict diagnostics, and the four verdicts.
+- `agents/openai.yaml` — the Codex sidecar, mirroring the user-only invocation policy.
+- `references/executor.md` — the bounded execution brief that carries the complete compiled plan, worktree, scratch, immutable tests, and dispatcher-write proposal channel.
+- `references/review.md` — the tech-lead review frame and the exact APPROVE, REVISE, REBUILD, and PARK boundary.
+- `references/recovery.md` — the event vocabulary, recovery matrix, conflict handoff, and bundle-retirement order consumed only by this Skill.
+- `scripts/journal.py` — transactional event and artifact persistence only, with no tracker, scheduler, Route, Git integration, or verdict policy.
+
+Two Collection Library changes have multiple consumers by construction:
+
+- `library/references/delegation-mode.md` — the exact doctrine moved from `delegation`'s private reference and read by both `delegation` and `/dispatch`.
+- `library/references/landed-change.md` — under R1, the landing commit, trailers, reachability, and open-until-land contract shared by `/dispatch` and `/land`.
+
+The implementation also updates `delegation`'s body, persistence reference, and tests; adds `/compile`'s prefilled dispatch handoff and `SEE ALSO`; adds the README section and Catalog entry; and covers selection, footprint scheduling, exact Route replay, immutable tests, every verdict bound, patch recovery, interrupted landing, retirement races, conflict retention, exit cleanup, and the twenty-one historical dispositions in the suite.
+
+## Boundaries judged rather than followed
+
+**REBUILD crosses an explicit user checkpoint.** The dossier says to recompile, while the checkpoint protocol says user-invoked pipeline Skills never summon themselves and peers never copy one another's internals. The only coherent reading is a durable `REBUILD` state plus exact `/compile` and resume handoffs. It costs an invocation between dependency waves and keeps the compiler the only author of a plan or seam test.
+
+**A worktree is always isolated, even at the default ceiling of one.** ADR-0054 made isolation conditional because `/orchestrate` treated the branch worktree as the sequential builder's workplace. Dispatch's independent test ownership, patch checkpoint, and disposable recovery make that old optimization false economy: the integration tree is now only the landing target.
+
+**The accepted plan is escrowed, not locked in place.** `compiled-plan.md` has no consumer lease, and adding one would make `/compile` and `/dispatch` coordinate through a second mutable pointer. A verified byte-for-byte escrow gives recovery its own copy without changing the canonical bundle format; terminal retirement removes both and leaves only the receipt fields recovery and audit require.
+
+**The journal helper is the narrow exception to the no-runtime goal.** An event referring to a patch that was not durably written, or a landing recorded before its ref moved, is not prose variance but data loss. Atomic artifact-before-event persistence and hash-chain validation are deterministic, testable, and one concern. Scheduling, routing, review, Git integration, and tracker policy stay outside it, so the old engine does not regrow behind the exception.
+
+**The journal is not a portable run.** Like compiled plans, it is bound to one clone's Git common directory and object store. Losing that directory loses active patches and routing decisions; the safe recovery is to inspect tracker and Git state, recompile unfinished tickets, and start a new run rather than claim the old routing context was recovered.
+
+**One active run per integration branch is enough.** Two dispatchers advancing one ref cannot both make a truthful fresh-tip scheduling decision. Other branches have independent active slots and may run concurrently; one branch serializes its own operating system.
+
+**A changed compiler-owned test is a rejected result, not an edit to drop.** The all-or-nothing scope rule forbids salvaging the implementation half silently. REVISE restarts from the last accepted checkpoint and tells the same executor role what violated ownership; landing always writes canonical bytes from escrow.
+
+**Generated and shared writes are one ownership class, not one mechanism.** Some are regenerated, some appended, and some edited from a proposal. The common law is that the executor never writes them, the manifest names their exact paths, the dispatcher applies them serially on the combined tree, and the complete result passes review.
+
+**No separate branch-level coherence subagent survives.** The new dispatcher is already the top-tier tech lead, reads the full diff, and runs every combined gate after each serial landing. Compiler-owned seam tests replace the independent ticket verifier, while the main-seat review absorbs the integrated-branch judgement. Recreating the old finder/fixer/checker loop would reintroduce runtime subsystems after compilation removed their cause.
+
+## What this Skill deliberately does not do
+
+It does not frame work, reopen owner decisions, slice tickets, compile or repair a plan, author or modify a compiler-owned test, allocate a serial identifier, close a ticket or parent, reconcile knowledge, push, tag, release, import model evidence, or reconcile an outside completion. It does not execute raw tickets, freeze a whole-run schedule, keep successful worktrees, or use issue closure as a substitute for code reachability. `/compile` owns the contract before it; `/land` owns knowledge and tracker closure after it.
+
+## Residuals for the owner
+
+Three, all consequences visible outside the implementation rather than facts the repository can answer. Each carries the recommendation this design uses provisionally.
+
+**R1 — Where “landed but not yet closed” is recorded.** The dispatcher can write one commit per ticket with `Kntnt-Ticket` and `Kntnt-Plan` trailers, or post a tracker comment and make Git reachability a second lookup. *Recommended: the Git trailers and one dispatcher-authored landing commit.* The code and its lifecycle marker then travel together to every clone, blockers can be proved present on the exact integration history, and `/land` can close the issue later without a comment changing the compiled source at the landing boundary. The cost is a permanent trailer convention and squashing executor scratch commits into one ticket commit.
+
+**R2 — How long partial work from a parked ticket survives.** The terminal archive can retain the latest full binary patch until the ticket later lands or is explicitly abandoned, or delete it with the plan and require the next executor to begin from nothing. *Recommended: retain it, but never auto-apply it to a fresh plan.* Worktrees remain disposable and Thomas can inspect or deliberately reuse paid work after answering the question, while the new compiler contract still decides whether any hunk remains valid. The cost is clone-local disk use and a later `/land` cleanup duty for the final disposition.
+
+**R3 — What “the same executor” means after process interruption.** A live REVISE can continue the exact subagent context, but no portable Harness contract promises that context survives. Recovery can rehydrate a fresh context at the same recorded Route point with the complete plan, accepted patch, and exact finding without spending a round, or treat the lost context as a failed revision and consume scarce repair capacity. *Recommended: rehydrate without spending a round and report that recovery used a fresh context.* The behavioural inputs and execution configuration are identical and the dispatcher re-verifies everything; the cost is acknowledging that sameness means one execution role and evidence chain, not literally one surviving model conversation.
+
+## The slices, provisionally
+
+Four tickets under the recommended answers, pending the owner round. Each fits one fresh context, and none is a Solo Ticket — no slice rewrites an invariant every shipped file is under.
+
+**S1 — The delegation doctrine moves into the Collection Library.** `library/references/delegation-mode.md` becomes the single copy; `delegation`'s body and persistence reference point there; its tests and Catalog follow. *Blocked by: nothing.* Delivers: one exact doctrine both the mode-setting Skill and the dispatcher may consume without reading peer internals.
+
+**S2 — The transactional dispatch journal.** The local helper, event and artifact schema, branch-scoped active slot, hash-chain validation, recovery projection, archive transition, and focused crash-window fixtures. It knows no tracker, scheduler, Route policy, verdict, or merge semantics. *Blocked by: nothing.* Delivers: durable patch and event persistence deep enough that disposable worktrees and idempotent resume are real rather than promised in prose.
+
+**S3 — The landed-change Interface.** Under R1, `library/references/landed-change.md` fixes the one-commit shape, both trailers, reachability rule, blocker meaning, and open-until-land lifecycle, with shared contract tests. *Blocked by: nothing.* Delivers: the durable Git baton `/dispatch` writes and `/land` will consume.
+
+**S4 — `/dispatch` executes, reviews, lands, and recovers compiled plans.** The Skill directory and local references, README section, Catalog entry, and behavioural suite; selection and dry run, live footprint scheduling, Route decisions, claims, bundle escrow and retirement, immutable test placement, patch checkpoints, four verdicts, serial landing, conflict handoff, three-state reporting, observation artifacts, and completion cleanup. The same ticket adds `/compile`'s eligible-plan handoff and **/dispatch --help** `SEE ALSO` entry. *Blocked by: S1, S2, S3.* Delivers: compiled plans turned into verified commits on the invocation branch, with no surviving routine worktree or dispatch branch and one exact resume path for every interruption window.
+
+## Checkpoint
+
+`/grilling docs/rework/07-dispatch.md -- Ask one owner-level frontier round covering only R1–R3, keep the inherited package and provisional slices fixed, and do not start /dispatch or enter phase 3.`
