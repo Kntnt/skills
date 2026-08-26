@@ -17,6 +17,8 @@ Each fixture ran in a Claude Code agent session of its own, started from this se
 
 **side effects** is read from a `sha256` inventory of the whole working copy taken before and after each run, never from what the run said about itself. Where a run delivered to a file, the file on disk is what was judged; where it delivered to the response, the reply is.
 
+**What the inventory covered, and what it did not.** The inventory above is taken over the staged copy of the corpus and nothing else, so a file written outside it would not have appeared in any entry's **side effects**. The Write evaluation for the same date found that this matters — one of its runs wrote its artifact into the Harness's scratchpad while reporting that nothing had been written, which is #180. The same check was made here: at the end of the session the scratchpad held nothing this Skill's runs had put there.
+
 Three conditions of this machine and this method are worth a later reader's attention.
 
 - **`/proofread` is ambiguous here.** A legacy plugin, `kntnt-text-skills:proofread` (version 0.10.0), is installed beside the Collection's Skill and answers to the same bare name, exactly as the previous Claude record for this Skill describes. Every by-name run below therefore carried one added routing sentence — that two Skills answer to `proofread` here, that the user means the Skill named exactly `proofread`, and that the plugin is not it. The sentence names which Skill to start and says nothing about what to do once it starts.

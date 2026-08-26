@@ -17,6 +17,8 @@ Each fixture ran in a Claude Code agent session of its own, started from this se
 
 **side effects** is read from a `sha256` inventory of the whole working copy taken before and after each run, never from what the run said about itself.
 
+**What the inventory covered, and what it did not.** The inventory above is taken over the staged copy of the corpus and nothing else, so a file written outside it would not have appeared in any entry's **side effects**. The Write evaluation for the same date found that this matters — one of its runs wrote its artifact into the Harness's scratchpad while reporting that nothing had been written, which is #180. The same check was made here: at the end of the session the scratchpad held nothing this Skill's runs had put there.
+
 **How the Skill was started.** Unslop carries `disable-model-invocation: true`, so the Skill tool refuses to start it from inside a turn and a sub-session never receives an expanded slash command. Each run was therefore handed what the Harness itself gives a user-invoked Skill: the installed `SKILL.md` named as the turn's instructions, with `$HERE` named as the directory holding it. The run read that file from disk and followed it, including the checker it runs, the resolver it runs, the references it loads, and the correction subagents it starts. The Write record for the same date sets the reasoning out in full.
 
 Judging was done from the delivered reply and the filesystem inventory alone, against the criteria below, fixture by fixture, before any GPT-family record existed to compare with. No Codex Harness and no GPT model was started, controlled, or invoked from this session, directly or through any tool, script, or subagent.

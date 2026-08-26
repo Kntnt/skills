@@ -17,6 +17,8 @@ Each fixture ran in a Claude Code agent session of its own, started from this se
 
 **side effects** is read from a `sha256` inventory of the whole working copy taken before and after each run, never from what the run said about itself. Where a run delivered to a file, the file on disk is what was judged.
 
+**What the inventory covered, and what it did not.** The inventory above is taken over the staged copy of the corpus and nothing else, so a file written outside it would not have appeared in any entry's **side effects**. That turned out to matter, and it is why this paragraph exists: at the end of the session the Harness's own scratchpad directory held exactly one file no run of this evaluation had been asked to create. It came from Write, and the correction it forced is recorded on the `brief-short (inline material, response default)` entry below and filed as #180. The same check found nothing left by any run of the other three Skills.
+
 **How the Skill was started, and why it is worth saying.** Write carries `disable-model-invocation: true`, which is the point of it — the Skill is reserved for a user typing `/write`. That flag also means the Skill tool refuses to start it from inside a turn, and a sub-session receives a prompt rather than an expanded slash command. Sixteen runs were driven that way first and every one of them was refused, correctly and for the same stated reason; they are recorded under **Runs discarded** and carry no criteria.
 
 What each run below was given instead is what the Harness itself gives a user-invoked Skill: its own instructions. The turn named `/Users/thomas/.claude/skills/write/SKILL.md` as the turn's instructions and `$HERE` as the directory holding it, and the run read that file from disk and followed it — including the checker it runs, the resolver it runs, and every reference it loads. The Collection's own vocabulary is what makes this the same seam rather than an imitation of one: a user-invoked Skill's body *is* static instructions, not a preprocessed template, so a turn carrying those instructions is the turn a user's slash command produces. Nothing was paraphrased, summarised, or supplied out of band; the bytes came from the installed Skill, and a run that read past what the Skill told it to read would be visible in its own account of what it loaded.
@@ -34,7 +36,7 @@ As in the record this one follows, `loading` counts `delivery.md` and `quotation
 - **contextual instruction** — `none`
 - **output target** — `response`
 - **observed delivery** — the complete draft in the response, frontmatter and all, followed by the resolved configuration, the length against the material, three things that would close the gap, and two judgement calls flagged for the user's eye.
-- **side effects** — none.
+- **side effects** — `draft.md` created in the Harness's scratchpad directory, holding the complete delivered draft. Nothing under the staged copy of the corpus.
 - **criteria** —
   - `fidelity` — `pass` — the brief's six facts and no seventh. *We have not measured whether anything shipped faster* is not merely kept but argued: the draft says it will not imply otherwise, and gives the reason — three months in a six-person team cannot tell a process change apart from everything else in those three months. *Nobody asked to go back* is reported and then weakened in the same breath, on the ground that people seldom campaign to reinstate a meeting, which is the draft declining to let a fact carry more than it can.
   - `genre` — `pass` — `general` inferred, named as the contract a blog post is written against.
@@ -43,11 +45,11 @@ As in the record this one follows, `loading` counts `delivery.md` and `quotation
   - `register` — `pass` — written for other small teams, with the cost placed before the benefit; the reply flags that ordering as a choice rather than making it silently.
   - `handoff` — `pass` — a `kntnt` map with `general`, `none`, `en_GB`.
   - `stops` — `pass` — no review or proofreading, and neither offered as a next step.
-  - `target` — `pass` — no destination was named and the draft stayed in the response.
-  - `effects` — `pass` — no file was created, replaced, or removed anywhere under the working copy.
+  - `target` — `fail` — **an incorrect side effect.** The draft came back in the response, and a complete copy of it was also written to `draft.md` in the Harness's scratchpad directory. Nothing in the turn named a destination; the second run's turn carried no filesystem path at all, so the location came from the Harness's standing instruction to use its scratchpad for working files rather than from the user. The delivery contract is unconditional — a run that keeps the default *creates no file, touches no file, and makes no directory*.
+  - `effects` — `fail` — the same finding, and the worse half of it: the reply says *output to this response, so nothing was written to disk* while the file is on disk. A caller reading that account has no way to learn that a copy of their text exists somewhere they did not ask for it.
 - **unresolved findings** — three gaps in the material, and the four-and-a-half-hours arithmetic flagged as derived rather than supplied.
-- **defects filed** — none.
-- **notes** — this is the fixture's inline-supply case: the brief was pasted into the invocation rather than named as a file, which is the one thing the corpus asks be exercised at least once. An earlier run of this same invocation is recorded under **Runs discarded**; it wrote a file, and the harness sentence it carried is the reason it is not this entry.
+- **defects filed** — #180.
+- **notes** — this is the fixture's inline-supply case: the brief was pasted into the invocation rather than named as a file, which is the one thing the corpus asks be exercised at least once. The two failures above were found after the rest of this record was written, during the session's own cleanup, and then reproduced: a second run of the same invocation from a fresh working copy wrote the same file, was watched from outside, and left it there. The file survived the run rather than being removed, so it is not a scratch buffer tidied away — several runs of the sibling Skills in this evaluation did report removing theirs. An earlier run of this invocation is recorded under **Runs discarded** for a different reason, and what it wrote is now readable as the same behaviour rather than as the harness sentence it carried.
 
 ## `brief-short` (new file)
 
@@ -667,7 +669,7 @@ Nine fixtures were not run against this Skill. Each is recorded here rather than
 
 ## What this record establishes, and what it does not
 
-Thirty-four fixture runs, all of them clean. No criterion failed anywhere in this record, and no defect was filed.
+Thirty-four fixture runs. Thirty-three are clean; one carries two failing criteria. On `brief-short` supplied inline with no destination named, the draft came back in the response and a complete copy of it was also left on disk in the Harness's scratchpad, with the run reporting that nothing had been written. That is filed as #180, and it was found during cleanup rather than during judging — the inventories covered the staged corpus copy and not the ground outside it, which is now said under **Run conditions**.
 
 Source Fidelity is the invariant these runs were most likely to break and did not. Every figure in the `factual-source-long` draft was checked against the source and every one of them is in it; all four of that fixture's named rejections were avoided, and the two the draft could most easily have committed — a causal claim about one of three simultaneous changes, and a survey figure quoted as a catchment figure — are declined in the draft's own words. `interview-transcript` came back with the fillers gone, the hedges standing, the self-correction preserved as the exclusion it is, and the one doubtful attribution paraphrased inside the speaker's own. Two runs report deleting sentences of their own on a final check, one of them a *twenty-minute interval* where the source says a twenty-minute *watch*.
 
