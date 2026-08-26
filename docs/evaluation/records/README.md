@@ -13,7 +13,11 @@ Where a re-run lands on the same date as the record it follows, the name takes t
 - [`redline-claude-2026-08-25.md`](redline-claude-2026-08-25.md) — the Redline Skill against the corpus at `6d476db`, in Claude Code on `claude-opus-5`, for issue #109.
 - [`write-claude-2026-08-25-138.md`](write-claude-2026-08-25-138.md) — the two briefs that state a length their material cannot fill, re-run against the Write Skill as issue #138 changed it, at the corpus commit `c922071`, in Claude Code on `claude-opus-5`.
 - [`unslop-claude-2026-08-25.md`](unslop-claude-2026-08-25.md) — the Unslop Skill against the corpus at `26155fd`, in Claude Code on `claude-opus-5`, for issue #111.
+- [`proofread-gpt-2026-08-26.md`](proofread-gpt-2026-08-26.md) — the Proofread Skill against the corpus at `46ba9c1`, in Codex CLI `0.149.1` on `gpt-5.6-sol`, for issue #155.
+- [`write-gpt-2026-08-26.md`](write-gpt-2026-08-26.md) — the Write Skill against the corpus at `46ba9c1`, in Codex CLI `0.149.1` on `gpt-5.6-sol`, for issue #157.
 - [`proofread-claude-2026-08-26.md`](proofread-claude-2026-08-26.md) — the Proofread Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #156.
 - [`write-claude-2026-08-26.md`](write-claude-2026-08-26.md) — the Write Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #158.
+- [`redline-gpt-2026-08-26.md`](redline-gpt-2026-08-26.md) — the Redline Skill against the corpus at `46ba9c1`, in Codex CLI `0.149.1` on `gpt-5.6-sol`, for issue #159.
+- [`unslop-gpt-2026-08-26.md`](unslop-gpt-2026-08-26.md) — the Unslop Skill against the corpus at `46ba9c1`, in Codex CLI `0.149.1` on `gpt-5.6-sol`, for issue #161.
 - [`redline-claude-2026-08-26.md`](redline-claude-2026-08-26.md) — the Redline Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #160.
 - [`unslop-claude-2026-08-26.md`](unslop-claude-2026-08-26.md) — the Unslop Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #162.
