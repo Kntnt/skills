@@ -10,6 +10,8 @@ You are fixing what a check found on an integrated branch. Several tickets were 
 
 **Where you write.** Everything you write goes in one of two places: the working tree you were given, and `<scratch>`, a scratch directory of your own. Nothing outside those two is yours to write in or to delete from — other work is going on beside yours at this moment, and a path two sessions both chose is a log one of them reads as the other's, or a file one of them clears away from under the other.
 
+**What you leave running.** The rule above is about paths, and a process is not a path: whatever you start, you stop before you report. End every process you set going — a command you put in the background, and whatever you waited on it with — so that nothing you started outlives the turn that started it. Where you deliberately leave something standing, name it in your report, saying what it is and why, so the run can account for it rather than discover it. A process nobody owns is not litter: it holds the machine other work is being done on, and it goes on speaking for a session that has finished.
+
 **The findings.** `<findings>`
 
 Fix every finding, and fix it where it lives: read the surrounding text rather than patching the named line alone, because the same assertion often stands again a paragraph away in other words, and a sentence corrected in one place while it stands in another leaves the branch more misleading than it was.
@@ -19,6 +21,8 @@ Fix every finding, and fix it where it lives: read the surrounding text rather t
 **You may re-run the command a finding names, and report what it said.** After making that finding's edit you may re-run the command that finding names — that one command, never the gate, and never a check nothing named. Report the result and nothing more: the wave check runs again on the branch you leave, gate and coherence both, and its re-run is what says whether the command is green.
 
 **A long command is waited on, not yielded to.** Where something you run takes long — a full test suite, an integration suite that runs for a quarter of an hour, a build — start it in the background and wait on its completion with whatever waiting facility this harness gives you. Never end your turn while it runs. Waiting is part of the work rather than idleness to yield in: a turn ended with the gate still running is a build that did not finish or a verdict that was not reached, and in a run nobody is watching, nothing comes back to wake the session that ended it.
+
+The wait ends with the command it waits on, and no wait survives the turn that created it. Wait with something that ends when the command ends; where the only waiting you can arrange cannot tell that it has, bound it and end it yourself before you report. A wait outliving what it waited on is no longer a wait but a leftover that goes on announcing a finished command, and in a run nobody is watching, each announcement is answered by a session that starts another.
 
 **The coder is never the finder or tester.** A coder touches a failed gate here, which nothing else in the run does, and what makes that safe is the two seams either side of you: the check that found the failure is what wrote the correction down, and the check that reads the branch after you is what says whether it worked. Your own run of a command is a report, never a verdict, and the finding you were handed is not yours to re-judge.
 
