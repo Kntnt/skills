@@ -11,6 +11,9 @@ PROTOCOL = EVALUATION / "protocol.md"
 TEMPLATE = EVALUATION / "record-template.md"
 CORPUS = EVALUATION / "corpus"
 INDEX = CORPUS / "README.md"
+MODEL_INVOKED_PROOFREAD_RECORD = (
+    EVALUATION / "records" / "proofread-gpt-2026-08-26-170.md"
+)
 
 # The material the wave has to survive, one tag per kind. A fixture entry
 # declares what it covers from this vocabulary, and the corpus is complete when
@@ -270,6 +273,41 @@ def test_the_corpus_lives_at_one_discoverable_location() -> None:
     assert PROTOCOL.exists()
     assert TEMPLATE.exists()
     assert "docs/evaluation/protocol.md" in agents
+
+
+def test_model_invoked_proofread_regression_observes_loaded_resources() -> None:
+    """Both implicit triggers are judged at the rule-loading seam.
+
+    A correct artifact cannot show which guidance was in context. The
+    regression therefore records the Harness trace for both model-invocation
+    branches and names the scoped resolver output and every admitted resource
+    directly (issue #170).
+    """
+
+    text = MODEL_INVOKED_PROOFREAD_RECORD.read_text(encoding="utf-8")
+
+    for heading in (
+        "model trigger by proofreading term",
+        "model trigger by mechanical-only request",
+    ):
+        start = text.index(f"## `flawed-en-US` — {heading}")
+        end = text.find("\n## ", start + 1)
+        entry = text[start:] if end == -1 else text[start:end]
+
+        for evidence in (
+            "Harness trace",
+            "resolve --scope=mechanics",
+            "only the `mechanics` scope",
+            "editorial/mechanics.md",
+            "No Language Resource file was opened",
+            "no composition, review, or anti-slop guidance",
+        ):
+            assert evidence in entry, (
+                f"{MODEL_INVOKED_PROOFREAD_RECORD}: the {heading} entry does"
+                f" not record {evidence!r}, so its rule-loading verdict can"
+                f" be inferred from the artifact instead of observed in the"
+                f" Harness trace (issue #170)."
+            )
 
 
 def test_every_fixture_entry_documents_the_fixture_on_its_own() -> None:

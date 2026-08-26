@@ -70,3 +70,5 @@ uv run skills/kntnt/library/scripts/languages.py resolve --scope=mechanics <code
 ```
 
 `validate` holds every installed resource to this page — the frontmatter vocabulary, the canonical spellings, the alias cap, the scope headings, the requirement that every resource can answer all four scopes itself or through its base, and that no two of them answer to the same selector. The filename convention is the one rule here it does not check. `resolve` is what a Skill actually calls, so running it once on the new code is what proves the resource is reachable by the selectors a person will type.
+
+Successful `list` and `resolve` output reports the language identity and selectors a caller needs, and `resolve` includes only the scope content it was asked for. Neither response reports the backing file path: the returned scope is the guidance a caller uses, not a pointer to the complete Language Resource around that scope boundary.

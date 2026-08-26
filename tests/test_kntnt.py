@@ -4314,6 +4314,37 @@ def test_write_accounts_for_what_it_did_with_the_material() -> None:
 PROOFREAD = REPO_ROOT / "skills" / "editorial" / "proofread" / "SKILL.md"
 
 
+def test_model_invoked_proofread_joins_the_named_invocation_path() -> None:
+    """The trigger decides whether the Skill starts, not how it executes.
+
+    A model-invoked request carries no typed Formal Invocation, so without an
+    explicit join it can become a second path that bypasses the scoped resolver
+    in the numbered steps. Both trigger branches enter those same steps before
+    any language or editorial resource is loaded (issue #170).
+    """
+
+    text = PROOFREAD.read_text(encoding="utf-8")
+    steps = text.index("## Steps")
+    join = text.index("A model-invoked run", 0, steps)
+    rule = text[join:steps]
+
+    assert "changes only how the Skill starts" in rule, (
+        f"{PROOFREAD}: model invocation can still become a second execution"
+        f" path instead of changing only whether Proofread starts (issue"
+        f" #170). See {STANDARD}."
+    )
+    assert "same numbered steps" in rule, (
+        f"{PROOFREAD}: the model-invoked path never joins the numbered path"
+        f" used by invocation by name, so it may bypass scoped rule loading"
+        f" (issue #170). See {STANDARD}."
+    )
+    assert "before loading any language or editorial resource" in rule, (
+        f"{PROOFREAD}: the two invocation paths do not converge before rule"
+        f" loading, which is the boundary the Harness trace showed them"
+        f" crossing differently (issue #170). See {STANDARD}."
+    )
+
+
 def test_proofread_reads_only_the_mechanics_scope_of_a_language_resource() -> None:
     """Scoping buys frugality, and the body is where it is spent or wasted.
 

@@ -262,6 +262,21 @@ def test_an_unrequested_scope_leaves_no_trace_in_the_output(tmp_path: Path) -> N
         assert absent not in result.stdout
 
 
+def test_resolver_output_does_not_expose_resource_paths() -> None:
+    """Scoped output is the resource, not a pointer around the scope boundary.
+
+    A model handed the backing path can open the complete Language Resource
+    after the resolver has correctly returned one scope. Neither inventory nor
+    resolution exposes that implementation detail (issue #170).
+    """
+
+    listing = _json(_run("list"))
+    resolved = _json(_resolve("en_US", "--scope=mechanics"))
+
+    assert all("path" not in resource for resource in listing["resources"])
+    assert "path" not in resolved
+
+
 def test_requesting_no_scope_returns_identity_alone() -> None:
     """Selecting a language is a question a caller may ask without a body."""
 

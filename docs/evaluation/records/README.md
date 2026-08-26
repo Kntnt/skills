@@ -21,3 +21,4 @@ Where a re-run lands on the same date as the record it follows, the name takes t
 - [`unslop-gpt-2026-08-26.md`](unslop-gpt-2026-08-26.md) — the Unslop Skill against the corpus at `46ba9c1`, in Codex CLI `0.149.1` on `gpt-5.6-sol`, for issue #161.
 - [`redline-claude-2026-08-26.md`](redline-claude-2026-08-26.md) — the Redline Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #160.
 - [`unslop-claude-2026-08-26.md`](unslop-claude-2026-08-26.md) — the Unslop Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #162.
+- [`proofread-gpt-2026-08-26-170.md`](proofread-gpt-2026-08-26-170.md) — Proofread's two model-invocation triggers re-run against `flawed-en-US` at `d0ec602`, in Codex CLI `0.149.1` on `gpt-5.6-sol`, with the loaded resources judged from each Harness trace for issue #170.

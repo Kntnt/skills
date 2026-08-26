@@ -22,6 +22,8 @@ Correct the mechanical language errors in one supplied Text Artifact, and change
 
 `$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
 
+A model-invoked run changes only how the Skill starts. Once started, it takes the specific Text Artifact the current turn identifies as the omitted operand and enters the same numbered steps as invocation by name. The paths join before loading any language or editorial resource; the trigger wording is not a second source of rules or an alternate execution path.
+
 ## Invocation Envelope
 
 Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
