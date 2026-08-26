@@ -4557,7 +4557,7 @@ def test_model_invoked_proofread_joins_the_named_invocation_path() -> None:
 
 
 def test_model_invoked_proofread_settles_its_output_target_before_writing() -> None:
-    """Natural-language invocation never turns a source into a destination.
+    """Natural-language invocation does not infer the source as its destination.
 
     A model-invoked run has no Formal Invocation to carry an output option, so
     the Skill and its manpage must settle the same natural-language boundary:
@@ -4608,6 +4608,38 @@ def test_model_invoked_proofread_settles_its_output_target_before_writing() -> N
             f"{help_path}: the model-invocation paragraph does not retain the"
             f" {refusal!r} In-place Editing refusal (issue #168). See"
             f" {STANDARD}."
+        )
+
+    model_invocation_cases = (
+        (
+            "Fix the spelling and grammar mistakes in case.md",
+            "delivers to the response",
+        ),
+        (
+            "Fix the grammar errors in case.md and save the corrections",
+            "asks which destination the caller intends",
+        ),
+        (
+            "Update case.md with the grammar corrections",
+            "selects In-place Editing",
+        ),
+        (
+            "Write the corrected text to corrected.md",
+            "selects corrected.md as a separate Output Target",
+        ),
+    )
+
+    for request, outcome in model_invocation_cases:
+        contract = f"`{request}` {outcome}"
+        assert contract in body_rule, (
+            f"{PROOFREAD}: the model-invoked destination rule does not"
+            f" classify {request!r} as {outcome!r}, leaving the observed"
+            f" behavioural boundary implicit (issue #168). See {STANDARD}."
+        )
+        assert contract in help_rule, (
+            f"{help_path}: the model-invocation paragraph does not classify"
+            f" {request!r} as {outcome!r}, so its concrete destination rule"
+            f" disagrees with the Skill body (issue #168). See {STANDARD}."
         )
 
 
