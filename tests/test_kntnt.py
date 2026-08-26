@@ -5172,6 +5172,17 @@ def test_redline_invokes_proofread_once_and_declares_what_it_needs() -> None:
         f" the closing mechanical pass is either absent or performed by"
         f" Redline itself (ADR-0088, ADR-0076). See {STANDARD}."
     )
+    closing_pass = next(line for line in text.splitlines() if line.startswith("9. "))
+    for requirement in (
+        "Invoke the installed Proofread Skill exactly once",
+        "current complete Text Artifact",
+        "Do not perform, select, or apply any mechanical corrections yourself",
+    ):
+        assert requirement in closing_pass, (
+            f"{REDLINE}: the closing step does not require {requirement!r}, so"
+            f" Redline can substitute its own selective mechanical pass for"
+            f" the installed Proofread Skill (issue #174). See {STANDARD}."
+        )
     assert '\n  kntnt.skills: "proofread"\n' in text, (
         f"{REDLINE}: Proofread is invoked and not declared, so Select cannot"
         f" show what Redline needs before it is Enabled (ADR-0088). See"
