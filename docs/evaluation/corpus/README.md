@@ -131,6 +131,22 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Use** — the fixture for anti-slop review in Swedish. Supply the file path, with the language left to inference on one run and named explicitly on another. The shared catalogue is English and is applied by what each pattern does rather than by its words, so this is where that claim and the language's own scope are exercised in a language the catalogue is not written in.
 - **Reject** — a review that finds nothing in a text built out of the patterns, an answer in any language but Swedish or a text rewritten into English, findings phrased as style preference where the pattern has a name, and a correction that removes the patterns and the content with them.
 
+### `code-carrying`
+
+- **Files** — `prose/code-carrying.md`
+- **Covers** — code; ai slop; mechanically flawed prose
+- **Material** — an article about kill switches whose prose carries the catalogue's patterns and three mechanical errors of its own — `Its` for *It's*, a subject-verb disagreement, and a duplicated word — wrapped around code the prose does not concern: a fenced JavaScript block, an indented block, and two inline code spans. The code is baited on both layers too: the comment, the docstring and the thrown message carry the same patterns as the article around them, two identifiers are named after patterns a pass is hunting, and two mechanical errors sit inside it — `recieved`, in a thrown message and again in an inline span naming a field, and `seperate`, in the indented block's comment.
+- **Use** — supply the file path to any of the editorial passes. A run that changes nothing shows nothing here, so this is the fixture for a pass that does change the text: the prose earns findings on both layers, and the code is what has to survive them.
+- **Reject** — a finding located inside a code sample, and code that does not come back byte for byte: the docstring's or the comments' patterns rewritten, either misspelling corrected, an identifier renamed, or an inline span edited. A sample is quoted material in all three of its forms, which [ADR-0125](../../adr/0125-a-code-sample-is-quoted-material-and-produces-no-findings.md) settles. Prose *about* code is ordinary prose, so the article's own mechanical errors are a mechanical pass's to correct and an anti-slop pass's to leave alone, and the patterns in its sentences are the reverse.
+
+### `code-carrying-sv`
+
+- **Files** — `prose/code-carrying-sv.md`
+- **Covers** — code; ai slop; mechanically flawed prose
+- **Material** — the Swedish counterpart on the same subject, whose prose carries the Swedish patterns and four mechanical errors of its own — a `de`/`dem` error, a misspelling, a compound written apart, and a duplicated word — around a fenced Python block, an indented block, and two inline code spans. The comment, the docstring and the raised message are Swedish and carry the same patterns as the article; inside the code sit `emmot` in a string literal and `seperat uppdaterings loop` in a comment, a misspelling and a compound written apart that are somebody's program rather than somebody's prose, and one inline span names a field misspelled the same way.
+- **Use** — supply the file path, with the language left to inference on one run and named explicitly on another. It exists for the reason `slop-heavy-sv` does: a rule stated in English and exercised only in English has not been shown to reach the other shipped language, and a mechanical pass tempted by a misspelling is tempted in whatever language it reads.
+- **Reject** — a finding located inside a code sample, and code that does not come back byte for byte: `emmot` corrected, the compound in the comment joined, the docstring's patterns rewritten, an identifier renamed, or an inline span edited. Prose *about* code is ordinary prose, so the article's own four mechanical errors are a mechanical pass's to correct in Swedish and an anti-slop pass's to leave alone.
+
 ### `resembles-abt`
 
 - **Files** — `prose/resembles-abt.md`
