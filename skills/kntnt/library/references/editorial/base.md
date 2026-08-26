@@ -50,7 +50,11 @@ Keep one name for one thing. Cycling through synonyms for a term the text has al
 
 Every claim is supported by what the text or its material actually holds, and the strength of the wording matches the strength of the support. Evidence for a tendency does not license a law; one case does not license *always*; a correlation is not written as a cause.
 
+Causality requires causal support. A sequence or correlation stays a sequence or correlation unless the material attributes one event to the other. A causal verb such as *caused*, *shortened*, or *led to* asserts that attribution, and a causal hedge such as *suggests that it shortened* still asserts it more tentatively rather than preserving chronology. The same boundary holds in the title, summary, headings, and body; no prominent or compressed part of the artifact receives a licence the body does not have.
+
 Circumstantial detail about the case the text reports is a claim like any other. A duration, a manner, a motive, an absence — something that did not happen, a decision nobody took — and a state of affairs offered as background are each an assertion about the case, and each is either carried by the material or absent from the text. Detail of that kind is what a draft invents first, because it reads as prose rather than as an assertion and so survives the writer's own reading of it: *the few minutes before the meeting began* and *nobody thought to object* are inventions wherever the material gives no duration and records no such absence.
+
+An evaluative characterisation is a claim beyond the fact it describes. A count is not *high*, *low*, *modest*, or otherwise relative unless the material supplies the comparison, target, capacity, or speaker assessment that makes it so. Without that support, state the count and its exclusions without classifying its size; an exact number does not make the unsupported adjective true.
 
 Attribution is exact. Who said it, who found it, and how they know are part of the claim, not decoration on it. *Studies show*, *experts agree*, and *it is widely believed* attribute to nobody and can be neither checked nor contradicted; name the source or drop the claim.
 

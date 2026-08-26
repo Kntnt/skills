@@ -4179,6 +4179,67 @@ def test_the_base_contract_makes_circumstantial_detail_a_claim() -> None:
     )
 
 
+def test_the_base_contract_makes_relative_characterisation_a_claim() -> None:
+    """A supported count does not support an assessment of its size.
+
+    The interview supplies eleven full services and excludes shorter jobs, but
+    it supplies no comparison, target, capacity, or speaker assessment. Calling
+    that volume modest therefore adds a claim even though the number is exact
+    (issue #171).
+    """
+
+    claims = _base_contract_section("Claims").lower()
+
+    assert claims
+
+    for term in (
+        "evaluative characterisation",
+        "count",
+        "high",
+        "low",
+        "modest",
+        "comparison",
+        "target",
+        "capacity",
+        "speaker assessment",
+        "exclusions",
+    ):
+        assert term in claims, (
+            f"{EDITORIAL / 'base.md'}: the `Claims` section leaves a factual"
+            f" count free to acquire an unsupported relative assessment"
+            f" ({term!r} unstated, issue #171). See {STANDARD}."
+        )
+
+
+def test_the_base_contract_preserves_chronology_without_claiming_causality() -> None:
+    """A hedge does not turn an unsupported causal attribution into sequence.
+
+    The source stages an earlier channel change and a later response-time
+    reduction but attributes neither to the other. The title, summary, and body
+    therefore owe the source chronology without causal verbs or causal hedges
+    (issues #171 and #172).
+    """
+
+    claims = _base_contract_section("Claims").lower()
+
+    assert claims
+
+    for term in (
+        "causal verb",
+        "causal hedge",
+        "sequence",
+        "correlation",
+        "title",
+        "summary",
+        "body",
+    ):
+        assert term in claims, (
+            f"{EDITORIAL / 'base.md'}: the `Claims` section leaves chronology"
+            f" free to become unsupported causality in part of the artifact"
+            f" ({term!r} unstated, issues #171 and #172). See {STANDARD}."
+        )
+
+
 def test_the_base_contract_settles_a_stated_length_against_the_material() -> None:
     """A length that was asked for, and material too thin to reach it.
 
