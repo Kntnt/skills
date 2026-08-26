@@ -228,8 +228,8 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Files** — none
 - **Covers** — response default
 - **Material** — no material of its own; run it with `frontmatter-absent` or any prose fixture.
-- **Use** — invoke with no output named at all, from the working copy.
-- **Reject** — any file created, replaced, or removed anywhere under `$WORK` by a run that named no destination.
+- **Use** — invoke with no output named at all, from the working copy, and take a before-and-after filesystem inventory of the whole staged working copy and the separate Harness scratch area rather than inspecting only the supplied material's directory.
+- **Reject** — any file created, replaced, or removed in any writable location in the evaluation workspace by a run that named no destination, including a working copy of the artifact left in Harness scratch.
 
 ### `new-file`
 

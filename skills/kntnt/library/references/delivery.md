@@ -4,7 +4,9 @@ Every Skill that produces a Text Artifact delivers it the same way. This documen
 
 ## The response is the default
 
-The default Output Target is the agent response. A run that keeps the default delivers the complete Text Artifact in the response and changes nothing on the filesystem: it creates no file, touches no file, and makes no directory.
+The default Output Target is the agent response. A run that keeps the default delivers the complete Text Artifact in the response and changes nothing on the filesystem: it creates no file, touches no file, and makes no directory. That includes scratch files and working copies of the artifact, wherever the Harness says temporary files belong.
+
+A Harness convention identifies where an authorized temporary file belongs; it does not authorize a write. If a run genuinely needs a scratch file while composing, it removes that file before delivery and restores the filesystem to the state in which it found it. Before reporting delivery, the run checks the filesystem locations it used, including the Harness scratch area, and never reports that nothing was written while a copy of the artifact remains on disk.
 
 An Output Target is independent of where the source material came from. Supplying a local file as source material selects no destination, and a run that reads a file still delivers to the response until the caller names somewhere else. Persisting a result is the caller's explicit choice, and making that choice is the whole of the authorization for it.
 

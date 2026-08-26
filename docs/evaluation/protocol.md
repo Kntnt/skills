@@ -48,7 +48,7 @@ Each fixture entry carries what was asked and what happened:
 - **contextual instruction** — any natural-language guidance supplied beside it, verbatim, or `none`.
 - **output target** — where the result was directed, or `response`.
 - **observed delivery** — what came back and where it landed, in a sentence. Not the text itself.
-- **side effects** — every file created, replaced, or removed, and `none` where that is what happened. This is the half of the record that is checked rather than described, so it is written from the filesystem and not from the Skill's report of itself.
+- **side effects** — every file created, replaced, or removed, and `none` where that is what happened. This is the half of the record that is checked rather than described, so it is written from a before-and-after filesystem inventory and not from the Skill's report of itself. The inventory covers every writable location staged for the run, including the whole working copy and any separate Harness scratch area; inspecting only the directory that holds the supplied material cannot establish that a response-targeted run left nothing elsewhere.
 - **criteria** — one line per criterion: its identifier, `pass`, `fail`, or `skipped`, and one sentence of evidence. A `fail` names which of the five rejections it is.
 - **unresolved findings** — findings delivered with the artifact and left unresolved, or `none`.
 - **defects filed** — the issue numbers opened for defects this fixture exposed, or `none`.
