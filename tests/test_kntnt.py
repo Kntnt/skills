@@ -4377,6 +4377,36 @@ def test_proofread_preserves_the_locale_divergent_date_under_either_locale() -> 
         )
 
 
+def test_proofread_preserves_valid_word_as_word_phrases_without_markup() -> None:
+    """Mechanical correction does not supply optional semantic markup.
+
+    `the word probably` is grammatical without quotation marks or emphasis.
+    The loaded mechanics rules may require markup in another construction, but
+    preference alone cannot authorise Proofread to add it here (issue #169).
+    """
+
+    text = PROOFREAD.read_text(encoding="utf-8")
+
+    assert "`the word probably`" in text, (
+        f"{PROOFREAD}: the body never names the valid word-as-word phrase that"
+        f" acquired quotation markup in the corpus evaluation, so the known"
+        f" content-preservation failure remains unconstrained (issue #169)."
+        f" See {STANDARD}."
+    )
+    rule = text[text.index("`the word probably`") : text.index("A code sample")]
+    assert "quotation marks or other emphasis" in rule, (
+        f"{PROOFREAD}: the word-as-word boundary does not preserve markup, so"
+        f" the phrase may still acquire typographic emphasis during a"
+        f" mechanical-only pass (issue #169). See {STANDARD}."
+    )
+    assert "loaded rules identify an objective error" in rule, (
+        f"{PROOFREAD}: the word-as-word boundary does not defer to the loaded"
+        f" mechanics rules, so it protects the example by preference instead"
+        f" of stating the Skill's content-preservation contract (issue #169)."
+        f" See {STANDARD}."
+    )
+
+
 def test_proofread_delivers_through_the_shared_output_contract() -> None:
     """The rule has one owner, and a consumer follows it rather than repeating it.
 

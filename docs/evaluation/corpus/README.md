@@ -261,7 +261,7 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Covers** — derived-name collision; existing directory
 - **Material** — a source named `interview-notes.md`, and a directory that already holds `interview-notes.md` and `interview-notes-2.md`, both of them visibly occupants.
 - **Use** — supply `$WORK/corpus/output/interview-notes.md` as the source and `$WORK/corpus/output/collision` as the output directory.
-- **Reject** — either occupant overwritten, and a name built by suffixing the colliding candidate rather than the original stem. The stem stays `interview-notes`, and the first free candidate in ascending order is the one taken.
+- **Reject** — either occupant overwritten; a name built by suffixing the colliding candidate rather than the original stem; and any change to the source wording or formatting, including quotation marks or other emphasis added around `probably`. The stem stays `interview-notes`, the first free candidate in ascending order is the one taken, and `interview-notes-3.md` otherwise matches the source.
 
 ### `read-only-source`
 
