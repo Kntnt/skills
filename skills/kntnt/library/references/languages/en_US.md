@@ -74,8 +74,10 @@ Times: *2:30 p.m.* in Chicago style, *2:30 pm* in others; both are current Ameri
 
 Quotation marks: double outer and single inner. Commas and periods go inside the closing quotation mark whether or not they belong to the quoted matter; colons and semicolons go outside; question and exclamation marks follow the sense.
 
+A sentence-initial connective adverb may stand with or without a following comma: *Therefore we did* and *Therefore, we did* are both correct.
+
 Abbreviations take periods where British usage omits them: *Mr.*, *Mrs.*, *Ms.*, *Dr.*, *St.* Initialisms are set without them: *FBI*, *NASA*. *US* and *U.S.* are both current.
 
-Em dashes are set unspaced, *like—this*. En dashes take ranges: *pages 12–18*, *2020–2024*.
+Em dashes are set unspaced, *like—this*; a spaced em dash as in *like — this* is an error. En dashes take ranges: *pages 12–18*, *2020–2024*.
 
 Established in more than one form here, none of them the error: the serial comma present or absent, *toward* and *towards*, *gray* and *grey*.
