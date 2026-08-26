@@ -4796,15 +4796,12 @@ def test_redline_reviews_the_operand_whatever_it_turns_out_to_be() -> None:
     )
 
 
-# The sentence of the shared Invocation Envelope that refuses guidance a
-# higher-precedence source has already settled. The closure this ticket adds is
-# a statement about the form of an invocation, and says nothing about where else
-# a run halts: whether that envelope rule and the editorial precedence can both
-# stand is issue #146's question and a maintainer's to answer (issue #141).
-REDLINE_ENVELOPE_REFUSAL = (
-    "Valid but irrelevant, ineffective, materially ambiguous, conflicting, or"
-    " scope-widening guidance takes the distinct context refusal"
-)
+# The section a reader is sent to for the halts this list does not speak for.
+# The closure is a statement about the form of an invocation; the shared
+# Invocation Envelope refuses irrelevant, unaddressable, materially ambiguous,
+# conflicting, and scope-widening guidance whatever this list says, and naming
+# it is what keeps the closure from reading as the whole story (ADR-0122).
+REDLINE_ELSEWHERE = "`## INVOCATION ENVELOPE`"
 
 # A sentence claiming to enumerate every place a run may halt is the shape of
 # the overreach, whichever words it is written in.
@@ -4826,10 +4823,14 @@ def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
     Saying that the list of invalid forms is the whole of what that section
     refuses is a statement about the form of an invocation. A statement about
     every place a run may halt would be something else: the shared Invocation
-    Envelope refuses guidance that is ineffective against a higher-precedence
-    source, which is a collection-wide rule that 42 shipped manpages carry, and
-    whether it can stand beside the editorial precedence is issue #146's
-    question rather than this Skill's to settle on its own (issue #141).
+    Envelope refuses irrelevant, unaddressable, materially ambiguous,
+    conflicting, and scope-widening guidance, and each value the run resolves
+    and each destination it settles carries its own refusal beside itself. The
+    first build of this closure enumerated those halts and left the envelope
+    out, and a run reading the enumeration as the set had no reason left to
+    consult the section this file binds itself to two headings earlier. So the
+    closure says what it governs and points at the rest rather than counting it
+    (ADR-0122, issue #141).
     """
 
     passages = {
@@ -4847,22 +4848,18 @@ def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
             assert not overreaches, (
                 f"{where}: a sentence claims to name every place a run may"
                 f" halt — {sentence!r}. The list closed here is closed over the"
-                f" form of an invocation; the `## INVOCATION ENVELOPE` section"
-                f" every shipped manpage carries refuses ineffective guidance"
-                f" too, and reconciling the two is issue #146 rather than"
-                f" anything this Skill decides alone (issue #141). See"
-                f" {STANDARD}."
+                f" form of an invocation, and the halts written elsewhere are"
+                f" pointed at rather than counted: an enumeration that misses"
+                f" one repeals it for whoever reads the enumeration as the set"
+                f" (ADR-0122, issue #141). See {STANDARD}."
             )
 
-    envelope = _section(
-        REDLINE_HELP.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", REDLINE_HELP
-    )
-    assert REDLINE_ENVELOPE_REFUSAL in envelope, (
-        f"{REDLINE_HELP}: the envelope no longer refuses ineffective guidance."
-        f" Closing the list of invalid forms says what this Skill reviews; it"
-        f" does not repeal a rule every shipped manpage carries, which is issue"
-        f" #146's to decide (issue #141). See {STANDARD}."
-    )
+        assert REDLINE_ELSEWHERE in passage, (
+            f"{where}: the closure calls its list whole and never points at"
+            f" the {REDLINE_ELSEWHERE} section, leaving a run to read a"
+            f" closure over invocation form as a closure over every refusal"
+            f" this Skill makes (ADR-0122, issue #141). See {STANDARD}."
+        )
 
 
 def test_the_correction_budget_is_any_non_negative_integer_defaulting_to_one() -> None:
