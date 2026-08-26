@@ -2,7 +2,7 @@
 name: compile
 description: Compile ready executable child tickets into fresh, independently checked executor-plan bundles.
 disable-model-invocation: true
-argument-hint: '[--yes] [#<ticket> ...] [-- <instruction>]'
+argument-hint: '[--yes] | [#<ticket> ...] [-- <instruction>]'
 compatibility: Requires git, gh, and uv, plus a Harness that can spawn subagents
 metadata:
   kntnt.internal: "true"
@@ -28,7 +28,7 @@ Read `$LIBRARY/references/invocation-envelope.md` and follow it before help rout
 
 ## Arguments
 
-`/compile [--yes] [#<ticket> ...]`, and nothing else. Every ticket reference is a local `#`-prefixed issue number. Flags precede operands, and explicit references preserve the order written.
+`/compile [--yes]` or `/compile #<ticket> ...`, and nothing else. Every ticket reference is a local `#`-prefixed issue number. Explicit references preserve the order written.
 
 - `--yes` — answer yes without asking at the bare selection checkpoint. With explicit references there is no question to answer, so refuse `--yes` beside explicit references rather than ignoring it.
 - `#<ticket> ...` — the complete explicit selection. Each reference must name an open executable child in the current repository; parent decision issues, qualified references, ranges, bare numbers, and free text are invalid operands.
@@ -37,7 +37,7 @@ An undeclared flag, a flag after an operand, or any invalid operand is refused a
 
 ## Selection
 
-Read `docs/rules/pipeline.md` from the repository being compiled when it exists, then resolve the repository's tracker convention from its always-loaded agent file and selected issue-tracker document. Resolve the configured executable-ready state, including every required scope label, rather than assuming plain `ready-for-agent`.
+Resolve the repository's tracker convention from its always-loaded agent file and selected issue-tracker document. Resolve the configured executable-ready state, including every required scope label, rather than assuming plain `ready-for-agent`.
 
 Explicit references are the complete selection and need no confirmation. Report an explicitly selected child with a fresh accepted bundle as already fresh and leave it unchanged; report an ineligible reference precisely rather than silently dropping it.
 
@@ -67,7 +67,7 @@ Read [`compiling.md`](references/compiling.md). Reconcile each durable vantage a
 
 Materialise each candidate's test overlay over a clean detached tree at the captured `HEAD` and run every focused command. Accept a red baseline only at the intended behavioural assertion for missing ticket behaviour; syntax, import, fixture, collection, environment, or unrelated assertion failure rejects the candidate. Seal every accepted test's destination, base blob, and compiled blob; an executor never owns those bytes.
 
-After recon fixes every plan's serial needs, allocate once per registry across the deterministic selected-ticket order. Account for committed identifiers and allocations held by other fresh plans at the captured `HEAD`. A plan receives exact identifiers, and needing another identifier is a STOP condition rather than authority to rescan or extend the allocation.
+After recon fixes every plan's serial-resource count, apply the batch allocation contract in `$LIBRARY/references/compiled-plan.md` across the complete deterministic selection. A plan receives exact identifiers; any later need for another identifier reaches that contract's STOP condition.
 
 ## Cold read
 
@@ -79,9 +79,9 @@ Only a concrete PASS accepts the candidate. Correct a mechanical finding and giv
 
 Immediately before acceptance, verify that the integration branch still points at the captured `HEAD`; re-read the child and parent sources; recalculate the child source fingerprint, parent source fingerprint, and bundle fingerprint; and validate every manifest reference and bundle byte against `$LIBRARY/references/compiled-plan.md`. A changed branch restarts the batch. A changed tracker source recompiles that child and sends the new candidate to a new cold reader.
 
-The plan root is `<git-common-dir>/kntnt-pipeline/plans/<ticket>/`, commonly `.git/kntnt-pipeline/plans/<ticket>/`. Publish the verified candidate as one immutable bundle directory at `.git/kntnt-pipeline/plans/<ticket>/bundles/<fingerprint>/`, using the fingerprint hexadecimal without its `sha256:` prefix, then replace the `accepted` pointer by atomic rename only after the directory is complete. Never edit an immutable bundle directory or expose a partial candidate. Follow the shared Interface for identical interrupted candidates, replacement, cleanup, and recovery.
+The plan root is `<git-common-dir>/kntnt-pipeline/plans/<ticket>/`. Publish the verified candidate as one immutable bundle directory at `<git-common-dir>/kntnt-pipeline/plans/<ticket>/bundles/<fingerprint>/`, using the fingerprint hexadecimal without its `sha256:` prefix, then replace the `accepted` pointer by atomic rename only after the directory is complete. Never edit an immutable bundle directory or expose a partial candidate. Follow the shared Interface for identical interrupted candidates, replacement, cleanup, and recovery.
 
-Successful compilation changes no tracker state. The bundle remains clone-local and untracked; no plan, excerpt, allocation, or test is posted to the issue.
+Bundle acceptance itself changes no tracker state. An owner answer is persisted before compilation and an owner-incomplete child is parked as stated above; no plan, excerpt, allocation, or test is posted to the issue. The bundle remains clone-local and untracked.
 
 ## Completion
 

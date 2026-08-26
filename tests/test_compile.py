@@ -42,7 +42,7 @@ def test_the_body_selects_executable_children_without_scheduling_them() -> None:
     text = _assert_contract_markers(
         BODY,
         (
-            "/compile [--yes] [#<ticket> ...]",
+            "`/compile [--yes]` or `/compile #<ticket> ...`",
             "preserve the order written",
             "ascending issue number",
             "configured executable-ready state",
@@ -56,6 +56,12 @@ def test_the_body_selects_executable_children_without_scheduling_them() -> None:
     assert "refuse `--yes` beside explicit references" in text, (
         f"{BODY}: explicit ticket references already confirm the selection, so"
         f" `--yes` has no work there and must be refused. See {STANDARD}."
+    )
+
+    # Keep the harness hint from advertising the forbidden combined form.
+    assert "argument-hint: '[--yes] | [#<ticket> ...]" in text, (
+        f"{BODY}: the argument hint must expose bare confirmation and explicit"
+        f" selection as alternatives. See {STANDARD}."
     )
 
 
@@ -139,16 +145,14 @@ def test_compiling_builds_the_complete_shared_bundle_without_rewriting_it() -> N
 def test_serial_allocations_are_batch_wide_and_never_extended() -> None:
     """Concurrent plans cannot claim the same repository serial identity."""
 
-    # Hold the one-pass allocation rule and its exhaustion boundary.
+    # Keep local judgement on counts while the shared Interface owns allocation.
     _assert_contract_markers(
         COMPILING,
         (
-            "once per registry",
-            "deterministic selected-ticket order",
-            "highest committed identifier",
-            "other fresh plans at the captured `HEAD`",
-            "Gaps are not reused",
-            "another identifier is a STOP condition",
+            "$LIBRARY/references/compiled-plan.md",
+            "serial-resource count",
+            "whole selected batch",
+            "dynamic serial need",
         ),
         "Every accepted plan in the batch must carry an exclusive fixed allocation.",
     )
@@ -177,7 +181,7 @@ def test_every_corrected_bundle_receives_a_new_cold_reader() -> None:
     """Plan acceptance is an independent verdict on the exact candidate."""
 
     # Hold isolation, inherited authority, complete checks, and verdict shape.
-    _assert_contract_markers(
+    text = _assert_contract_markers(
         COLD_READ,
         (
             "fresh-context subagent",
@@ -194,17 +198,21 @@ def test_every_corrected_bundle_receives_a_new_cold_reader() -> None:
         "The compiler cannot accept its own intent as evidence that an executor can follow the plan.",
     )
 
+    # Require provenance to be recovered from the bundle, not repeated by its author.
+    assert "Captured repository identity" not in text
+    assert "Captured integration branch" not in text
+
 
 def test_bundle_fixtures_distinguish_every_consumer_boundary() -> None:
     """Worked states pin freshness, test ownership, and exact scope."""
 
     # Require the concrete outcomes the ticket selected as fixture coverage.
     fixtures: tuple[str, ...] = (
-        "| Valid |",
-        "| Stale source |",
-        "| Changed HEAD |",
-        "| Changed test |",
-        "| Out of footprint |",
+        "| Valid | Every Git, source, bundle, footprint, allocation, and test identity agrees | Send the complete candidate to cold read |",
+        "| Stale source | A child or parent fingerprint changed while Git and bundle identities still agree | Recompile that child from the complete current thread |",
+        "| Changed HEAD | The integration branch moved while tracker and bundle identities still agree | Restart the whole batch from the new tip |",
+        "| Changed test | The overlay or materialised compiler-owned test differs from its compiled blob | Reject the candidate or execution result; never accept altered test bytes |",
+        "| Out of footprint | A required or resulting executor write has no exact executor-owned class | Reject the candidate or execution result; widen only through honest recompilation |",
     )
 
     # Assert the local judgement reference applies every shared fixture.
@@ -224,7 +232,7 @@ def test_acceptance_publishes_one_immutable_bundle_and_atomic_pointer() -> None:
     _assert_contract_markers(
         BODY,
         (
-            ".git/kntnt-pipeline/plans/<ticket>/bundles/<fingerprint>/",
+            "<git-common-dir>/kntnt-pipeline/plans/<ticket>/bundles/<fingerprint>/",
             "immutable bundle directory",
             "accepted` pointer",
             "atomic rename",

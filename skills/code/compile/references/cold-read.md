@@ -1,17 +1,15 @@
 # Cold-read verdict
 
-Fill this brief only after a candidate bundle is complete. Launch one fresh-context subagent on the exact inherited main seat and give it only the bundle and a clean detached tree at the captured `HEAD`, with this filled brief naming both. It receives no tracker access, compiler notes, prior verdict, or explanation of what the compiler meant.
+Fill this brief only after a candidate bundle is complete. Launch one fresh-context subagent on the exact inherited main seat and give it only the bundle and a clean detached tree, with this filled brief naming both paths. It receives no tracker access, compiler notes, repeated provenance, prior verdict, or explanation of what the compiler meant.
 
 ## Inputs
 
 - Bundle: `<absolute-candidate-bundle-path>`
 - Clean detached tree: `<absolute-worktree-path>`
-- Captured repository identity: `<host/owner/repository>`
-- Captured integration branch and full HEAD: `<branch> <object-id>`
 
 ## Verdict task
 
-Cold-read the bundle as the complete contract a fresh executor would receive. Read `$LIBRARY/references/compiled-plan.md` from the clean tree's installed Manager boundary only when the bundle directs you there for validation; do not seek missing intent from the tracker, conversation, compiler, or peer Skill internals.
+Cold-read the bundle as the complete contract a fresh executor would receive. Recover repository identity, integration branch, and full `HEAD` from the bundle itself and verify the clean tree against them; do not seek missing intent from the tracker, conversation, compiler, or peer Skill internals.
 
 Return `PASS` only when every check below succeeds. Return `FAIL` with concrete findings otherwise; each finding names the bundle path or tree evidence, the requirement that fails, and whether the defect is mechanical or exposes an owner-owned gap.
 

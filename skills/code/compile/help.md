@@ -18,7 +18,7 @@ Explicit ticket references are compiled in written order and start without anoth
 
 Compilation reads committed content from a temporary detached worktree and runs the untouched repository gate once before compiling the batch. Unrelated local edits are not absorbed. A branch move restarts the batch, a tracker-source move recompiles the affected child, and a red untouched baseline stops without parking tickets.
 
-A child whose durable source leaves an owner-owned requirement unresolved is parked independently: one complete question is posted, its executable-ready state is replaced with `needs-info`, and its scope labels and milestone remain. Successful compilation does not change tracker state.
+A child whose durable source leaves an owner-owned requirement unresolved is parked independently: one complete question is posted, its executable-ready state is replaced with `needs-info`, and its scope labels and milestone remain. An applicable owner answer is written to the child before compilation. Bundle acceptance itself changes no tracker state.
 
 Accepted bundles are clone-local under the Git common directory. Each accepted pointer selects one complete immutable fingerprinted bundle containing the human plan, machine manifest, and compiler-owned test overlay. No bundle content is posted to the tracker.
 

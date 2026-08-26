@@ -57,7 +57,7 @@
       "name": "compile",
       "category": "code",
       "description": "Compile ready executable child tickets into fresh, independently checked executor-plan bundles.",
-      "digest": "23a7db84bc19e791e9b96e084e2b19944a6af58e3545dea8502653838b3a805f",
+      "digest": "31dbf8806a922f9088999800239a6de71089c30b79f5b271f590a3a0a7304994",
       "binaries": [
         "git",
         "gh",

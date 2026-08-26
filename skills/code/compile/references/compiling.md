@@ -20,9 +20,7 @@ Inspect all call sites and consumers of a changed shared contract before fixing 
 
 ## Allocate serial resources
 
-Complete scope recon for the whole batch before assigning any serial identity. Allocation runs once per registry in deterministic selected-ticket order. Begin above the highest committed identifier and every identifier held by other fresh plans at the captured `HEAD`, then give each plan the exact consecutive count its accepted scope requires.
-
-Gaps are not reused, including gaps left by an accepted plan that never lands. Record each registry under the footprint and each exact identifier in allocations. Needing another identifier is a STOP condition; the executor does not rescan, borrow, fill a gap, or extend the plan.
+Determine each plan's exact serial-resource count during scope recon; a possible dynamic serial need means scope is not fixed yet. Only after the whole selected batch has settled may the Skill apply `$LIBRARY/references/compiled-plan.md`'s allocation rule. Record its resulting registries and identifiers without restating or varying that shared algorithm.
 
 ## Write the two registers
 
