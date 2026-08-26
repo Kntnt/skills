@@ -24,6 +24,7 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/rules/collection.md` — read when changing what a Manager verb promises, how the collection reaches a machine, or how a Skill routes delegated work
 - `docs/rules/docs.md` — read when deciding where a rule or a document belongs, writing a decision record, adding a pointer to this list, or authoring a Skill body
 - `docs/rules/general.md` — read when writing code
+- `docs/rules/pipeline.md` — read when changing how pipeline Skills select tickets, decide plan freshness, or own seam tests
 - `docs/rules/python.md` — read when writing Python
 - `docs/rules/skills.md` — read when adding a Skill or changing the files one ships
 - `docs/rules/tickets.md` — read when writing a ticket
