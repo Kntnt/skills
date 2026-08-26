@@ -4,6 +4,11 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- `/proofread` now preserves an ambiguous numeric date such as `3/4` under both British and American English when locale alone cannot establish the intended reading, rather than expanding or reordering it and introducing unsupported information (issue #166).
+- Language-specific punctuation errors now live in each Language Resource's mechanics scope, so `/proofread` receives the same Swedish comma, dash, quotation-mark, list, and ampersand rules whether the language is inferred or named. The British dash convention moved beside its other mechanics, American English now explicitly rejects spaced em dashes, and both English locales preserve the established comma variation after a sentence-initial connective adverb; anti-slop scopes refer to mechanical rules without duplicating them (issue #167).
+
 ## [0.17.0] – 2026-08-26
 
 ### Added
