@@ -5779,6 +5779,21 @@ CLAIM_KEPT = "leaves that claim standing"
 CLAIM_TAKEN = "take the claim with it"
 DEFECT_IS_THE_PASSAGE = "is the whole of the passage"
 NOT_A_LENGTH = "never about how much of the text is left"
+WRAPPED_FACT: str = (
+    "We finished in March, the finance team got a new reporting tool the same month."
+)
+WRAPPED_FACT_REPAIR: str = (
+    "We finished in March. The finance team got a new reporting tool the same month."
+)
+SLOP_HEAVY_CLAIMS: tuple[str, ...] = (
+    "meeting load",
+    "documentation",
+    "decisions",
+    "satisfaction",
+    "distributed work",
+    "adoption conditions",
+    "synchronous/asynchronous trade-off",
+)
 
 
 def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
@@ -5867,6 +5882,95 @@ def test_a_repair_that_would_take_the_claim_with_it_is_left_and_reported() -> No
             f" short text and go on emptying a long one (ADR-0120). See"
             f" {STANDARD}."
         )
+
+
+def test_a_punctuation_repair_removes_the_defect_and_keeps_its_fact() -> None:
+    """A defect at a punctuation joint does not license deleting either clause.
+
+    The fixture's second clause is a fact rather than the defect. Splitting the
+    unrelated clauses is the smallest repair because it removes the implication
+    created by their joint while leaving both claims standing (issue #179).
+    """
+
+    for brief in (REDLINE_CORRECTION, UNSLOP_CORRECTION):
+        text = brief.read_text(encoding="utf-8")
+
+        assert WRAPPED_FACT in text, (
+            f"{brief}: the correction contract has no worked case where a defect"
+            f" is wrapped around a fact, so the principle that a repair keeps the"
+            f" claim standing remains abstract (issue #179). See {STANDARD}."
+        )
+        assert WRAPPED_FACT_REPAIR in text, (
+            f"{brief}: the worked punctuation-joint case does not show the"
+            f" smaller repair that removes the implication while preserving the"
+            f" reporting-tool fact (issue #179). See {STANDARD}."
+        )
+
+
+def test_a_correction_of_concentrated_patterns_preserves_each_claim() -> None:
+    """Many findings do not turn a content-bearing text into a summary exercise.
+
+    The concentrated anti-slop fixture carries seven distinct claims through
+    passages that also carry named patterns. Each claim remains independently
+    protected even when one round receives all of the findings (issue #179).
+    """
+
+    for brief in (REDLINE_CORRECTION, UNSLOP_CORRECTION):
+        text = brief.read_text(encoding="utf-8").lower()
+
+        assert "before and after" in text and "every claim" in text, (
+            f"{brief}: the correction contract does not require a claim-level"
+            f" comparison of the returned text with the text the round received,"
+            f" so several valid findings may still collapse into a summary"
+            f" (issue #179). See {STANDARD}."
+        )
+        for claim in SLOP_HEAVY_CLAIMS:
+            assert claim in text, (
+                f"{brief}: the catastrophic worked case does not protect the"
+                f" claim about {claim}, so correcting the concentrated patterns"
+                f" may still discard it silently (issue #179). See {STANDARD}."
+            )
+
+
+def test_re_review_rejects_and_reports_a_correction_that_loses_a_claim() -> None:
+    """The dispatching run can see loss that a fresh re-review cannot infer.
+
+    Comparing the returned artifact with the pre-round artifact catches a claim
+    that disappeared even when the shorter text is clean against the editorial
+    lens. The bad correction is rejected, and every removal remains visible in
+    both the correction account and the run's delivery (issue #179).
+    """
+
+    surfaces = (
+        (REDLINE, REDLINE_CORRECTION, REDLINE_HELP),
+        (UNSLOP, UNSLOP_CORRECTION, UNSLOP_HELP),
+    )
+    for body_path, brief_path, help_path in surfaces:
+        body = body_path.read_text(encoding="utf-8").lower()
+        brief = brief_path.read_text(encoding="utf-8").lower()
+        help_page = help_path.read_text(encoding="utf-8").lower()
+
+        assert "pre-round text artifact" in body, (
+            f"{body_path}: re-review has no comparison with the text before the"
+            f" correction, so content the round deleted is invisible once only"
+            f" the shortened artifact remains (issue #179). See {STANDARD}."
+        )
+        assert "reject the returned correction" in body, (
+            f"{body_path}: a correction that improperly removes a claim can still"
+            f" become the current artifact after its loss is detected"
+            f" (issue #179). See {STANDARD}."
+        )
+        for path, text in (
+            (body_path, body),
+            (brief_path, brief),
+            (help_path, help_page),
+        ):
+            assert "every removed claim" in text, (
+                f"{path}: the Skill describes a correction report or delivery"
+                f" without requiring every removed claim to be named, so a reader"
+                f" without the source cannot see what went (issue #179). See"
+                f" {STANDARD}."
+            )
 
 
 def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:
