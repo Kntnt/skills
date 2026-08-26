@@ -3657,6 +3657,92 @@ def test_the_shared_delivery_contract_binds_no_consumers_grammar() -> None:
     assert "`my-file.md`, `my-file-2.md`, `my-file-3.md`" in contract
 
 
+# The shared delivery contract, the language rule it already carried for the
+# one response element it reached, and the words that answer the same question
+# for what a run reports beside a text it did deliver (issue #145).
+DELIVERY = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "delivery.md"
+DELIVERY_STATUS_LANGUAGE = (
+    "That status is written in the language of the Text Artifact rather than"
+    " the language of the invocation"
+)
+DELIVERY_REPORT_LANGUAGE = (
+    "in the language of the Text Artifact rather than the language of the invocation"
+)
+
+# The two Skills that report findings beside a delivered artifact today, and
+# the clause each manpage gives the reader who has to act on those findings.
+REPORTING_SKILLS = ("redline", "unslop")
+REPORTING_STEP = "report the findings separately"
+REPORTING_PAGE_CLAUSE = "reports the findings separately, in the text's own language"
+
+
+def test_the_shared_delivery_contract_settles_a_findings_reports_language() -> None:
+    """One text never yields a status in its own language and findings in another.
+
+    The contract settled the language of exactly one response element, the
+    short no-change status, and the steps that report findings beside a
+    delivered artifact settled none. So the same Swedish text came back with
+    fifteen Swedish findings in one run and an English report in the next, and
+    neither run disobeyed anything written down (issue #145). The answer is the
+    status rule's, because the reader is the status rule's reader: whoever has
+    to finish the work a correction budget did not (ADR-0123).
+    """
+
+    contract = DELIVERY.read_text(encoding="utf-8")
+
+    # Hold the rule that was already settled, in the words that settled it.
+    assert DELIVERY_STATUS_LANGUAGE in contract, (
+        f"{DELIVERY}: the no-change status no longer names the language it is"
+        f" written in, which is the rule a findings report is held to the same"
+        f" answer as (ADR-0091, ADR-0123). See {STANDARD}."
+    )
+
+    # And hold the same answer given, once, for a findings report.
+    reporting = [
+        paragraph for paragraph in contract.split("\n\n") if "findings" in paragraph
+    ]
+    assert reporting, (
+        f"{DELIVERY}: the shared contract says nothing about a findings"
+        f" report, so the language of one is decided per run and one text"
+        f" yields a Swedish status beside an English finding list"
+        f" (ADR-0123). See {STANDARD}."
+    )
+    assert any(DELIVERY_REPORT_LANGUAGE in paragraph for paragraph in reporting), (
+        f"{DELIVERY}: the shared contract reaches a findings report without"
+        f" saying which language it is written in, which is the gap that let"
+        f" the same Swedish artifact be reported on in Swedish in one run and"
+        f" in English in the next (ADR-0123). See {STANDARD}."
+    )
+
+    # A consumer follows that answer rather than carrying one of its own.
+    for name in REPORTING_SKILLS:
+        body_path = REPO_ROOT / "skills" / "editorial" / name / "SKILL.md"
+        body = body_path.read_text(encoding="utf-8")
+        assert REPORTING_STEP in body, (
+            f"{body_path}: this Skill no longer reports findings beside the"
+            f" artifact it delivers, so the list of Skills the shared language"
+            f" rule is checked against has gone stale (ADR-0123). See"
+            f" {STANDARD}."
+        )
+        assert DELIVERY_REPORT_LANGUAGE not in body, (
+            f"{body_path}: the body states the findings-report language"
+            f" itself, which is a second copy of a rule the shared delivery"
+            f" contract owns and is free to drift from it (ADR-0091,"
+            f" ADR-0123). See {STANDARD}."
+        )
+
+        # The reader who has to act on the findings meets the answer too.
+        page_path = body_path.parent / "help.md"
+        page = page_path.read_text(encoding="utf-8")
+        assert REPORTING_PAGE_CLAUSE in page, (
+            f"{page_path}: the manpage tells its reader which language a"
+            f" no-change status is in and leaves the findings beside a"
+            f" delivered text unanswered, which is the half of the behaviour"
+            f" the reader of those findings needs (ADR-0123). See"
+            f" {STANDARD}."
+        )
+
+
 def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     """One statement of what a first draft has to be, read from both sides.
 

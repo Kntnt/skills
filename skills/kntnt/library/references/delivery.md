@@ -1,6 +1,6 @@
 # Delivery
 
-Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, when a source file may be replaced instead, what happens when nothing changed, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
+Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
 
 ## The response is the default
 
@@ -47,6 +47,12 @@ A response-targeted run and an in-place run that changed nothing write nothing a
 That status is written in the language of the Text Artifact rather than the language of the invocation, so a Swedish text that needed no work is reported on in Swedish.
 
 An explicitly selected different file or directory still receives the complete Text Artifact when nothing changed. Creating that artifact is what was asked for, and a destination left empty because the text needed no work is a request refused without saying so. A directory destination derives its filename and resolves collisions exactly as it would for a changed text.
+
+## The language of a report about the text
+
+A run that reports on the text beside the text itself — the findings it carries forward, and which of them are unresolved — writes that report in the language of the Text Artifact rather than the language of the invocation, exactly as the no-change status above is written. So a Swedish artifact reviewed from an English-language invocation comes back with Swedish findings, whether the run corrected anything or was asked to correct nothing at all, and one text never produces a status in its own language beside a finding list in another.
+
+Who reads it is what decides this. A report about a text is read by the reader of that text, who has to finish whatever the run left undone, and a report in whichever language the invocation happened to be written in reaches that reader in a language nothing about the text promised. The invocation's language is how the run was asked for; the artifact's language is what the run is about.
 
 ## Refusals
 
