@@ -3743,6 +3743,89 @@ def test_the_shared_delivery_contract_settles_a_findings_reports_language() -> N
         )
 
 
+# The shared delivery contract's answer to what the response of a run that
+# named a destination carries: where the text went and the findings the file
+# cannot hold, and never the text itself (issue #148).
+DELIVERY_NO_ECHO = "does not repeat the Text Artifact in the response"
+DELIVERY_NO_ECHO_UNCHANGED = "whether or not the pass changed anything"
+DELIVERY_RESPONSE_DEFAULT = (
+    "A run that keeps the default delivers the complete Text Artifact in the response"
+)
+
+
+def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
+    """A caller who named a file is not handed that file's text back.
+
+    The contract settled where the artifact goes and what a response-targeted
+    run does, and said nothing about what a file-targeted run may put in the
+    response beside the findings. So six recorded runs named the destination
+    and printed no text, and the seventh named the destination and printed all
+    four paragraphs of an artifact byte-identical to the source the caller
+    already had (issue #148). The answer is the no-change rule's, for the
+    no-change rule's reason: repeating a text into the response spends output
+    on what the caller is already holding (ADR-0124).
+    """
+
+    contract = DELIVERY.read_text(encoding="utf-8")
+
+    # The rule is stated once, and where the caller's destination is settled.
+    sections = [
+        section for section in contract.split("\n## ") if DELIVERY_NO_ECHO in section
+    ]
+    assert len(sections) == 1, (
+        f"{DELIVERY}: the shared contract states in {len(sections)} of its"
+        f" sections that a run delivering to a named destination does not"
+        f" repeat the artifact in the response, and the rule that let one run"
+        f" of seven echo a text the caller was already holding is settled"
+        f" once or not at all (ADR-0124). See {STANDARD}."
+    )
+    rule = sections[0]
+
+    # The response still says where the text went and still carries the
+    # findings, which are the half of the answer a file cannot hold.
+    assert "derived filename" in rule, (
+        f"{DELIVERY}: the response of a file-targeted run no longer names the"
+        f" filename a directory destination derived, which is the one thing"
+        f" the caller cannot read off their own invocation (ADR-0124). See"
+        f" {STANDARD}."
+    )
+    assert "findings" in rule, (
+        f"{DELIVERY}: the response of a file-targeted run is emptied of the"
+        f" findings as well as the text, which leaves the run with nothing to"
+        f" report rather than with the report the file cannot carry"
+        f" (ADR-0124). See {STANDARD}."
+    )
+
+    # And it holds for the run that found nothing to change, which is the run
+    # the echo was actually seen on.
+    assert DELIVERY_NO_ECHO_UNCHANGED in rule, (
+        f"{DELIVERY}: the rule is silent on the unchanged case, so a run that"
+        f" writes a file byte-identical to its source becomes the one run"
+        f" that echoes a text the caller had before it started (ADR-0124)."
+        f" See {STANDARD}."
+    )
+
+    # The default is untouched: a run that named no destination has nowhere
+    # else to deliver the artifact.
+    assert DELIVERY_RESPONSE_DEFAULT in contract, (
+        f"{DELIVERY}: the response-targeted default no longer delivers the"
+        f" complete artifact in the response, which is where a run that named"
+        f" no destination has to put it (ADR-0091, ADR-0124). See"
+        f" {STANDARD}."
+    )
+
+    # A consumer follows that answer rather than carrying one of its own.
+    for name in REPORTING_SKILLS:
+        for filename in ("SKILL.md", "help.md"):
+            consumer = REPO_ROOT / "skills" / "editorial" / name / filename
+            assert DELIVERY_NO_ECHO not in consumer.read_text(encoding="utf-8"), (
+                f"{consumer}: this states what a file-targeted run's response"
+                f" carries itself, which is a second copy of a rule the shared"
+                f" delivery contract owns and is free to drift from it"
+                f" (ADR-0091, ADR-0124). See {STANDARD}."
+            )
+
+
 def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     """One statement of what a first draft has to be, read from both sides.
 

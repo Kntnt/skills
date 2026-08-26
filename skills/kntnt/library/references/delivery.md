@@ -1,6 +1,6 @@
 # Delivery
 
-Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
+Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, what the response carries when it went somewhere else, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
 
 ## The response is the default
 
@@ -26,6 +26,12 @@ That gives a stem and an extension, and the stem stays as it is for every delive
 
 A numbered candidate is never adopted as the new stem. A third delivery into a directory already holding the first two is `my-file-3.md` and never `my-file-2-2.md`, whose stem would fork the sequence in two and leave the directory recording how many times the same text arrived rather than which arrival it was. Ascending order with the first free name also means a number freed by a deleted file is used again before a higher one is taken.
 
+## What the response carries when a destination was named
+
+A run that delivers to an explicit destination does not repeat the Text Artifact in the response. The response says where the text went — the derived filename included, where the destination was a directory — and carries what the file cannot: the findings the run reports beside the text, and which of them are unresolved. Naming a destination is saying where the text goes, and printing it again spends output on what the caller is already holding, doubly so when the file just written holds it too.
+
+That holds whether or not the pass changed anything. A run that writes a file byte-identical to the source it read reports the destination and says the text needed no work, and does not become the one run that echoes a text the caller had before it started. The response is the default target precisely because a run that names no destination has nowhere else to put the artifact; naming one moves the text out of the response rather than duplicating it there.
+
 ## In-place Editing
 
 In-place Editing replaces the single local file that supplied the Text Artifact with the result, instead of delivering it anywhere else. It is available only to a Skill whose work is to return a changed version of a text the caller already has.
@@ -46,7 +52,7 @@ A response-targeted run and an in-place run that changed nothing write nothing a
 
 That status is written in the language of the Text Artifact rather than the language of the invocation, so a Swedish text that needed no work is reported on in Swedish.
 
-An explicitly selected different file or directory still receives the complete Text Artifact when nothing changed. Creating that artifact is what was asked for, and a destination left empty because the text needed no work is a request refused without saying so. A directory destination derives its filename and resolves collisions exactly as it would for a changed text.
+An explicitly selected different file or directory still receives the complete Text Artifact when nothing changed. Creating that artifact is what was asked for, and a destination left empty because the text needed no work is a request refused without saying so. A directory destination derives its filename and resolves collisions exactly as it would for a changed text, and the response reports the destination without repeating the artifact beside it, exactly as for a run that changed something.
 
 ## The language of a report about the text
 
