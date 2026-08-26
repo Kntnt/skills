@@ -16,7 +16,7 @@ The rules whose reasoning is settled in a decision record are named here in a ph
 
 ## Where a rule goes
 
-**The subject decides the module.** A rule binding whoever writes here belongs in `docs/rules/`, in the module whose subject it is: `general.md` for code form, `python.md` for the language, `skills.md` for what a Skill ships, `collection.md` for what the Manager and the collection promise, `tickets.md` for what a ticket may claim and declare, and this module for how any of it is written down. A subject none of them covers is a new module, which is a new pointer in `AGENTS.md` in the same change.
+**The subject decides the module.** A rule binding whoever writes here belongs in `docs/rules/`, in the module whose subject it is: `general.md` for code form, `python.md` for the language, `skills.md` for what a Skill ships, `collection.md` for what the Manager and the collection promise, `tickets.md` for what a ticket may claim and declare, `pipeline.md` for promises shared by pipeline Skills, and this module for how any of it is written down. A subject none of them covers is a new module, which is a new pointer in `AGENTS.md` in the same change.
 
 **A definition is not a rule, and lives in `CONTEXT.md`.** That file says what a capitalised term means and what to avoid calling it; what is *true of* the term is a rule and belongs in the module that governs it. An entry that specifies behaviour is a rule wearing a glossary's clothes, and a reader looking for the law then has two places to look and no way to tell which is current.
 

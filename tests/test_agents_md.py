@@ -82,3 +82,26 @@ def test_agents_md_points_at_the_standard_a_new_skill_is_held_to() -> None:
 
     assert STANDARD in references
     assert "skill" in references[STANDARD].lower()
+
+
+def test_rule_placement_names_every_specialized_rule_module() -> None:
+    """The placement inventory stays complete as rule subjects are added."""
+
+    # Isolate the inventory rather than accepting a filename cited elsewhere.
+    rules_directory = REPO_ROOT / "docs" / "rules"
+    placement_rules = rules_directory / "docs.md"
+    text = placement_rules.read_text(encoding="utf-8")
+    placement = text.split("## Where a rule goes", maxsplit=1)[1].split(
+        "## What earns a record", maxsplit=1
+    )[0]
+
+    # Require every specialized module to appear in the placement inventory.
+    expected = {
+        path.name for path in rules_directory.glob("*.md") if path != placement_rules
+    }
+    missing = sorted(name for name in expected if f"`{name}`" not in placement)
+
+    assert missing == [], (
+        f"{placement_rules}: the placement inventory omits these rule modules:"
+        f" {missing}. A new subject needs both its module and its routing entry."
+    )
