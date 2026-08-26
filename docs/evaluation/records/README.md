@@ -16,3 +16,4 @@ Where a re-run lands on the same date as the record it follows, the name takes t
 - [`proofread-claude-2026-08-26.md`](proofread-claude-2026-08-26.md) — the Proofread Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #156.
 - [`write-claude-2026-08-26.md`](write-claude-2026-08-26.md) — the Write Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #158.
 - [`redline-claude-2026-08-26.md`](redline-claude-2026-08-26.md) — the Redline Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #160.
+- [`unslop-claude-2026-08-26.md`](unslop-claude-2026-08-26.md) — the Unslop Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #162.
