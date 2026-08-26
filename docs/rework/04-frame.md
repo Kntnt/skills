@@ -130,7 +130,7 @@ The five points this design could not settle were put to Thomas on 2026-08-26 an
 
 Three tickets, the owner round having settled everything they rest on. Sized for one fresh context window each, and none of them a Solo Ticket — nothing here rewrites a rule every shipped file is under.
 
-**S1 — The TL;DR mode moves into the Collection Library.** `library/references/tldr-mode.md` becomes the single copy; `tldr`'s `SKILL.md`, its `persist.md`, and its help pages point there; the suite and the Catalog follow. *Blocked by: nothing.* Delivers: a register any Skill may adopt without reading a peer's internals.
+**S1 — The TL;DR mode moves into the Collection Library.** `library/references/tldr-mode.md` becomes the single copy, and `tldr`'s `SKILL.md` and its `persist.md` point there — its help pages describe the mode without naming the file, so nothing in them changes. The suite's assertion on the persist template becomes per-Skill, `delegation` keeping its own local mode until the mini-cycle that moves it, and the Catalog follows. *Blocked by: nothing.* Delivers: a register any Skill may adopt without reading a peer's internals.
 
 **S2 — The Frame Record format in the Library.** `library/references/frame-record.md`: the seven sections, what each is for, what a consumer may rely on, and the record's lifecycle — a baton its consumer deletes, section 7 doubling as the manifest that `/frame` withdraws knowledge against and `/land` checks it against. *Blocked by: nothing.* Delivers: the input contract `/to-slices` will be written against, before either end of it exists.
 
