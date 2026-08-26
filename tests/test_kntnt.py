@@ -3799,6 +3799,106 @@ def test_the_collection_library_carries_the_frame_record_format() -> None:
     )
 
 
+def test_the_collection_library_carries_the_durable_slice_contract() -> None:
+    """The writer and both later readers share one durable Interface.
+
+    The decision issue preserves the approved decisions and graph after the
+    Frame Record is consumed; each child preserves enough intent for fresh
+    compilation. The contract belongs to none of the three Skills, so its
+    complete shape and lifecycle live in the Collection Library.
+    """
+
+    contract = MANAGER_DIR / "library" / "references" / "slices.md"
+    assert contract.is_file(), (
+        f"{contract}: the durable slice contract is stated once, in the"
+        f" Collection Library. `/to-slices` writes it, `/compile` reads its"
+        f" child shape, and `/land` closes over its parent shape. See"
+        f" {STANDARD}."
+    )
+
+    # Fix both issue skeletons so every writer and reader addresses the same
+    # durable fields rather than inferring a peer Skill's private format.
+    text = contract.read_text(encoding="utf-8")
+    fence_sections = text.split("```")
+    assert len(fence_sections) >= 5, (
+        f"{contract}: the decision issue and executable child each need one"
+        f" copyable skeleton. See {STANDARD}."
+    )
+    assert fence_sections[1].strip().splitlines() == [
+        "## Outcome",
+        "## Scope",
+        "## Decisions",
+        "## Constraints",
+        "## Slices",
+        "## Open experiments",
+        "## Knowledge to reconcile",
+        "## Provenance",
+    ], f"{contract}: the decision issue shape is incomplete. See {STANDARD}."
+    assert fence_sections[3].strip().splitlines() == [
+        "## What to build",
+        "## Acceptance criteria",
+        "## Seam contract",
+        "## Compilation hints",
+        "## Vantage point",
+    ], f"{contract}: the executable child shape is incomplete. See {STANDARD}."
+
+    # Hold the three ownership directions at the shared Interface: its writer,
+    # the compiler of executable children, and the closer of the parent.
+    for promise in (
+        "`/to-slices` writes",
+        "`/compile` reads",
+        "`/land` reads",
+    ):
+        assert promise in text, (
+            f"{contract}: `{promise}` no longer states one consumer's duty at"
+            f" the shared Interface. See {STANDARD}."
+        )
+
+    # Preserve the approved graph for provenance and interrupted publication,
+    # while keeping tracker relations authoritative for live scheduling.
+    for promise in (
+        "native tracker relations are the live graph",
+        "approved slice snapshot",
+        "recovery state",
+        "delivered behaviour, seam, blockers, and Solo Ticket status",
+    ):
+        assert promise in text, (
+            f"{contract}: `{promise}` is required to keep provenance separate"
+            f" from the live scheduling graph. See {STANDARD}."
+        )
+
+    # Keep every durable input the later compiler needs without letting a
+    # waiting ticket become a cache of the current implementation.
+    for promise in (
+        "observable acceptance criteria",
+        "Parent",
+        "Blocked by",
+        "Builds alone",
+        "code excerpts",
+        "line numbers",
+        "reserved serial numbers",
+    ):
+        assert promise in text, (
+            f"{contract}: `{promise}` is part of the executable child contract"
+            f" or its durability boundary. See {STANDARD}."
+        )
+
+    # The parent closes only after every child has a final disposition and the
+    # complete knowledge manifest has been checked against the implementation.
+    for promise in (
+        "relative Frame Record path",
+        "framing commit",
+        "publication commit",
+        "every child is landed or explicitly abandoned",
+        "every knowledge entry",
+        "reconciled against the implementation",
+    ):
+        assert promise in text, (
+            f"{contract}: `{promise}` is required for recovery or knowledge"
+            f" closure. See {STANDARD}."
+        )
+
+
 def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     """One statement of what a first draft has to be, read from both sides.
 
