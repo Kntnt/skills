@@ -16,6 +16,8 @@ proofread - correct a text's mechanical language errors and nothing else
 
 Everything else is preserved. Wording, meaning, tone, register, argument, structure, factual content, formatting and markup, code, links, and metadata come through untouched, and frontmatter comes through byte for byte. Where more than one form is correct — two established spellings, a serial comma present or absent, a variant the language's own mechanics name as valid — the text's own choice stands, because a preference is not an error; a construction the language's mechanics or the shared mechanics contract does name as an error is corrected, however consistently the text commits to it. Asking for mechanical correction never returns a rewrite, however much better the rewrite might have read.
 
+A code sample is quoted material. A fenced block, an indented block, and an inline code span are all read past rather than read against the rules, so a docstring, a comment, or a string literal inside one is never a finding and never changed, however much it sounds like the prose around it — a pass that cannot run the program does not rewrite the comments explaining it. Prose *about* code is ordinary prose and is read like every other sentence.
+
 The Skill needs no other Skill and no provenance. A text written by hand, produced elsewhere, or pasted out of another tool is proofread exactly as one this collection wrote.
 
 One invocation processes one text. Several paths, a glob reaching more than one file, or a directory of texts is refused rather than resolved into a configuration per file, because the language, the destination, and any replacement of a source are settled once and for one text.

@@ -5788,6 +5788,103 @@ def test_the_unslop_manpage_names_the_patterns_a_finding_may_be() -> None:
     )
 
 
+# The three Skills that run a pass over a finished text, the pages a reader
+# decides to run one from, and the two briefs a correction round travels in.
+# `write` composes a text rather than reading one against rules, so it states
+# no pass scope and is none of these.
+EDITORIAL_PASSES = (PROOFREAD, REDLINE, UNSLOP)
+EDITORIAL_PAGES = (PROOFREAD.parent / "help.md", REDLINE_HELP, UNSLOP_HELP)
+CORRECTION_BRIEFS = (REDLINE_CORRECTION, UNSLOP_CORRECTION)
+
+# What a pass does with a code sample, in the one wording every pass carries
+# (ADR-0125). Three Skills stating the rule in three sentences would be three
+# answers a run may pick between, and picking between them is the disagreement
+# the rule exists to end (issue #149).
+CODE_IS_QUOTED = (
+    "A code sample — a fenced block, an indented block, or an inline code"
+    " span — is quoted material rather than the text's own prose: its"
+    " contents are read past rather than read against the rules, so nothing"
+    " inside one is a finding and nothing inside one is changed, the"
+    " docstrings, comments, and string literals among them. Prose about code"
+    " is ordinary prose and is read like every other sentence."
+)
+
+# Code named in the enumeration a correction brief preserves, beside the
+# quotations and the formatting that enumeration already named.
+CODE_IS_PRESERVED = "every quotation, every code sample, every heading"
+
+# What the manpage tells the reader who has to decide whether this Skill will
+# touch the samples in their document.
+CODE_ON_THE_PAGE = "A code sample is quoted material"
+
+
+def test_every_editorial_pass_reads_past_a_code_sample() -> None:
+    """One text must not yield six findings in one run and none in the next.
+
+    Two runs of `/unslop` over one code-carrying article, alike in everything
+    but the Correction Budget, disagreed about whether the prose inside its
+    fenced Python block was the text: the review located three findings inside
+    the block — a docstring and two comments — and the correcting run
+    located none, each stating a defensible opposite reason. Neither disobeyed
+    anything, because nothing said which answer was right: the preservation
+    clause named quotations and formatting and stopped short of code, and the
+    catalogue said nothing about code at all (issue #149). A code sample is
+    quoted material, so nothing inside one is a finding and nothing inside one
+    is corrected (ADR-0125).
+    """
+
+    for body in EDITORIAL_PASSES:
+        assert CODE_IS_QUOTED in body.read_text(encoding="utf-8"), (
+            f"{body}: the pass does not say what a code sample is, so whether"
+            f" a docstring or a comment is a finding is settled per run and"
+            f" one text yields findings inside a code block in one invocation"
+            f" and none in the next (ADR-0125). See {STANDARD}."
+        )
+
+
+def test_every_correction_brief_preserves_code_beside_quotations() -> None:
+    """A round that may not find a defect in code may not repair one either.
+
+    The brief is the whole of what reaches a fresh subagent (ADR-0107), so a
+    preservation clause that names quotations and formatting and stops short
+    of code leaves the subagent to decide for itself whether a comment is the
+    writer's prose. It is the sample's content, and it comes back as it
+    arrived (ADR-0125).
+    """
+
+    for brief in CORRECTION_BRIEFS:
+        filled = brief.read_text(encoding="utf-8")
+        assert CODE_IS_PRESERVED in filled, (
+            f"{brief}: the preservation clause names quotations and formatting"
+            f" and stops short of code, so what a correction round does with a"
+            f" docstring is left to the subagent making it (ADR-0125). See"
+            f" {STANDARD}."
+        )
+        assert CODE_IS_QUOTED in filled, (
+            f"{brief}: the brief does not carry the clause that says what a"
+            f" code sample is, so the round is told to preserve code without"
+            f" being told why a finding never names anything inside one"
+            f" (ADR-0125). See {STANDARD}."
+        )
+
+
+def test_every_editorial_manpage_says_a_code_sample_is_quoted() -> None:
+    """Whether a pass will touch the samples in a document is reference material.
+
+    A reader deciding to run one of these over a document that carries code
+    reads the page, not the body, and what a pass leaves alone is observable
+    behaviour rather than machinery (ADR-0125).
+    """
+
+    for page in EDITORIAL_PAGES:
+        assert CODE_ON_THE_PAGE in page.read_text(encoding="utf-8"), (
+            f"{page}: the page does not tell the reader that a code sample is"
+            f" quoted material, so somebody deciding whether to run this over"
+            f" a document carrying code has to run it to find out"
+            f" (ADR-0125). See {STANDARD}."
+        )
+
+
 def test_the_base_contracts_review_extension_restates_no_base_rule() -> None:
     """A requirement and its diagnostic must not both claim to state the rule.
 
