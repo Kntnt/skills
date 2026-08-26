@@ -45,6 +45,42 @@ The loading verdict is intentionally independent of the delivered artifact. For 
 - **defects filed** — `none`
 - **notes** — The replacement is the already-filed model-invoked Output Target ambiguity in #168, which is outside #170. The run is evidence for this ticket's loading boundary only; its side effect is recorded rather than treated as a passing delivery verdict.
 
+## Fixtures deliberately skipped
+
+Every corpus fixture except `flawed-en-US` was skipped because #170 was a focused rerun of only the two model-trigger branches.
+
+- `brief-short` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `brief-article-abt` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `brief-report-pac` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `brief-press-release-sv` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `interview-transcript` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `factual-source-long` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `url-source` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `clean-en-GB` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `flawed-sv` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `slop-heavy` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `slop-heavy-sv` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `code-carrying` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `code-carrying-sv` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `resembles-abt` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `mixed-language` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `locale-divergent` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `handoff-present` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `handoff-conflicting` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `handoff-partial` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `handoff-unusable` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `frontmatter-unrelated` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `frontmatter-absent` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `response-default` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `new-file` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `existing-file` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `existing-directory` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `derived-name-collision` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `read-only-source` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `in-place-request` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `output-equals-source` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+- `output-and-in-place` — `skipped` — #170 was a focused rerun of only the two model-trigger branches.
+
 ## Outcome
 
 Both model-invocation branches now converge on the same scoped resolver path. In both traces the complete language-specific rule set in context was the `mechanics` content returned by `resolve --scope=mechanics`, and the only separately loaded editorial resource was the shared mechanics contract. No trace opened `en_US.md` or any other Language Resource file, so composition, review, and anti-slop scopes never entered either run's context.

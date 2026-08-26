@@ -12,7 +12,7 @@ An evaluation asserts nothing about exact prose and makes no claim that a model 
 
 ## Blinded semantic judging
 
-A criterion is a question answerable from the delivered artifact and the recorded side effects alone. Judging is blinded in that sense: the judgement is made against criteria fixed before the run, from what the run produced, and not from knowing which model produced it, not by comparison with another family's record, and not by comparison with a reference text somebody wrote earlier. Where the evaluator is also the judge — which it usually is — every fixture is judged before any other family's record is opened.
+A criterion is normally a question answerable from the delivered artifact and the recorded side effects alone. Where a contract governs loading and its observance cannot be inferred from either, the criterion is answerable from the recorded Harness trace instead. Judging remains blinded: the judgement is made against criteria fixed before the run, from what the run produced, and not from knowing which model produced it, not by comparison with another family's record, and not by comparison with a reference text somebody wrote earlier. Where the evaluator is also the judge — which it usually is — every fixture is judged before any other family's record is opened.
 
 Several valid texts pass. Two drafts from the same brief may share no sentence and both be correct, and a criterion that would separate them on wording is a criterion written wrongly. What a criterion tests is whether the contract held.
 
