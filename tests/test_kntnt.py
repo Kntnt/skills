@@ -3758,6 +3758,10 @@ DELIVERY_SCRATCH_SCOPE = (
 DELIVERY_TRUTHFUL_ACCOUNT = (
     "base the delivery account on the filesystem state that remains after cleanup"
 )
+UV_RUNTIME_CLEANUP = (
+    "Run every UV command in this Skill with a fresh private directory as `TMPDIR`,"
+    " and remove that directory after the command, including when it fails."
+)
 
 
 def test_response_delivery_cleans_scratch_files_and_reports_the_remaining_state() -> (
@@ -3802,6 +3806,86 @@ def test_response_delivery_cleans_scratch_files_and_reports_the_remaining_state(
             f" response-default cleanup and truthful-accounting rule into"
             f" this Text-Artifact Skill (issue #180)."
         )
+
+
+def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) -> None:
+    """Dependency commands do not turn response delivery into a filesystem write.
+
+    Every Text-Artifact Skill runs uv before delivery, and uv ordinarily
+    discovers a project and persists cache state. A response-targeted run must
+    suppress both behaviours even when Harness scratch looks like a project
+    and is also the configured cache location (issue #180).
+    """
+
+    # Read every declared uv command through the Skill interface the agent sees.
+    bodies = [
+        (REPO_ROOT / "skills" / "editorial" / name / "SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        for name in ("write", "redline", "proofread", "unslop")
+    ]
+    commands = [
+        command for body in bodies for command in re.findall(r"`(uv run [^`]+)`", body)
+    ]
+
+    # Make the separately inventoried Harness scratch area a discoverable uv project.
+    scratch = tmp_path / "harness-scratch"
+    scratch.mkdir()
+    (scratch / "pyproject.toml").write_text(
+        '[project]\nname = "response-default"\nversion = "0.0.0"\n',
+        encoding="utf-8",
+    )
+    before = {
+        path.relative_to(scratch): path.read_bytes()
+        for path in scratch.rglob("*")
+        if path.is_file()
+    }
+
+    # Execute uv with the safety options declared by the public runtime commands.
+    prefix = commands[0].partition(' "<checker>"')[0]
+    options = prefix.split()[2:]
+    env = os.environ.copy()
+    env["UV_CACHE_DIR"] = str(scratch / "uv-cache")
+    runtime_tmp = scratch / "uv-tmp"
+    runtime_tmp.mkdir()
+    env["TMPDIR"] = str(runtime_tmp)
+    subprocess.run(
+        [
+            "uv",
+            "run",
+            *options,
+            "--offline",
+            str(MANAGER_DIR / "library" / "scripts" / "languages.py"),
+            "resolve",
+            "--scope=composition",
+            "en",
+        ],
+        cwd=scratch,
+        env=env,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if all(UV_RUNTIME_CLEANUP in body for body in bodies):
+        shutil.rmtree(runtime_tmp)
+    after = {
+        path.relative_to(scratch): path.read_bytes()
+        for path in scratch.rglob("*")
+        if path.is_file()
+    }
+
+    assert after == before, (
+        "A response-targeted Text-Artifact run persisted uv project or cache"
+        f" files in Harness scratch: {sorted(after.keys() - before.keys())}"
+        " (issue #180)."
+    )
+    assert commands and all(
+        command.startswith("uv run --no-cache --no-project ") for command in commands
+    ), (
+        "Every uv command in a Text-Artifact Skill must suppress cache writes"
+        " and project discovery so the response default can leave every"
+        " filesystem location unchanged (issue #180)."
+    )
 
 
 def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
