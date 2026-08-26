@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.17.1] – 2026-08-26
+
 ### Fixed
 
 - `/proofread` now preserves an ambiguous numeric date such as `3/4` under both British and American English when locale alone cannot establish the intended reading, rather than expanding or reordering it and introducing unsupported information (issue #166).
