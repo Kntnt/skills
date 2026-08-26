@@ -101,6 +101,10 @@ _Avoid_: force, non-interactive, quiet, auto-approve
 A ticket that shares its wave with no other ticket, declared on a line of its own body opening `Builds alone`. When an author writes that line, and what a scheduler owes a ticket carrying it, are stated in `docs/rules/tickets.md`.
 _Avoid_: exclusive ticket, serial ticket, locked wave, blocked by everything
 
+**Frame Record**:
+The record a framing writes when it maps a task, and the input the Skill that slices that task into tickets reads. It is one untracked working file in the repository being framed rather than a durable account of decisions, and its seven sections and its lifecycle are stated in `skills/kntnt/library/references/frame-record.md`.
+_Avoid_: framing document, plan, spec, brief, design doc
+
 **Enabled**:
 A skill present on disk in a layer, in each Detected Harness's skills directory for that layer.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)

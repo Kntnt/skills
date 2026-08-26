@@ -3716,6 +3716,89 @@ def test_the_collection_library_carries_the_tldr_register() -> None:
     )
 
 
+def test_the_collection_library_carries_the_frame_record_format() -> None:
+    """One format, written where neither end of it owns the other.
+
+    A Frame Record is written by one Skill and read by another, so the format
+    is the contract between them. Held in the Library it belongs to neither:
+    under the writer it would make that Skill the owner of its consumer's
+    input contract, which is the ownership the Library exists to prevent
+    (ADR-0109).
+    """
+
+    contract = MANAGER_DIR / "library" / "references" / "frame-record.md"
+    assert contract.is_file(), (
+        f"{contract}: the Frame Record format is stated once, in the"
+        f" Collection Library. Its writer and its consumer are two Skills,"
+        f" and a format either of them held would be one Skill owning the"
+        f" other's contract (ADR-0109). See {STANDARD}."
+    )
+
+    # The seven sections are what a consumer opens a record to find, so the
+    # format fixes their headings and their order in one block a writer can
+    # copy and a reader can match against.
+    text = contract.read_text(encoding="utf-8")
+    fenced = text.split("```")
+    assert len(fenced) > 2, (
+        f"{contract}: the seven headings are fixed in one block a writer"
+        f" copies, and a format that only describes them in prose is one"
+        f" every writer spells differently. See {STANDARD}."
+    )
+    assert fenced[1].strip().splitlines() == [
+        "## 1. Task",
+        "## 2. Frames",
+        "## 3. Findings",
+        "## 4. Decided by the owner",
+        "## 5. Decision ledger",
+        "## 6. Open",
+        "## 7. Knowledge written",
+    ], (
+        f"{contract}: the record's seven sections are its whole contract, and"
+        f" a consumer finds one by the heading this file fixes. See"
+        f" {STANDARD}."
+    )
+
+    # Each of them is then said what it is for, in its own numbered section.
+    for number in range(1, 8):
+        assert f"### {number}." in text, (
+            f"{contract}: section {number} is named in the skeleton and"
+            f" nowhere explained, so a writer is told what to head it and not"
+            f" what to put under it. See {STANDARD}."
+        )
+
+    # A record is a baton: it lives outside the tracked tree, and its consumer
+    # deletes it once the durable layer holds what it carried. A format that
+    # left the lifecycle out would leave every framing lying in the repository
+    # as a second account of decisions the tracker already holds.
+    for promise in (
+        ".kntnt/frames/<slug>.md",
+        "baton rather than an archive",
+        "consumer deletes it once the decision document and the tickets are published",
+    ):
+        assert promise in text, (
+            f"{contract}: the record's lifecycle is part of its format, and"
+            f" `{promise}` is the part of it this file stopped saying. See"
+            f" {STANDARD}."
+        )
+
+    # Section 7 is the only list a discarded framing's knowledge can be
+    # withdrawn from and the only one a later pass can reconcile against.
+    assert "manifest, and it is the only one" in text, (
+        f"{contract}: section 7 is the sole list of what a framing wrote"
+        f" durably, and knowledge withdrawn or reconciled without it is"
+        f" knowledge guessed at. See {STANDARD}."
+    )
+
+    # A framing with nothing to ask and nothing left open is a complete
+    # record, and a consumer holding out for rounds that were never needed
+    # stalls on a task that was simply simple.
+    assert "degenerate case is a complete record" in text, (
+        f"{contract}: a record with no owner decisions and nothing open is a"
+        f" simple task framed without a round, and the format says so where a"
+        f" consumer will read it. See {STANDARD}."
+    )
+
+
 def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     """One statement of what a first draft has to be, read from both sides.
 
