@@ -48,6 +48,8 @@ A caller asks for the scopes it can act on and is given those and no others, so 
 
 **Mechanics** is objective correctness in this language: spelling, inflection, agreement, punctuation, and locale conventions for dates, numbers, currency, and quotation. Nothing here may be a preference. Where two forms are both correct, say that both are established here and leave it there — what a Skill does about established variation is stated once for every language, in the shared mechanics contract beside this directory, and a scope that says it again is a second copy free to disagree with the first.
 
+An objectively wrong punctuation form belongs in Mechanics even when its presence is also a language-specific generation tell. Anti-slop refers to that rule rather than restating it, so the form remains reachable to a mechanical pass and has one authoritative definition.
+
 ## What does not belong in a scope
 
 Generic editorial rules stay out. A rule that is true of good writing in general belongs to the shared contract every Skill loads, and its English examples are applied semantically in the target language rather than translated into a copy here. So does a rule of objective correctness that holds in the same way in every language: it belongs to the shared mechanics contract, which a Skill correcting mechanics loads beside the scope, and a mechanics scope states only what its own language settles differently.

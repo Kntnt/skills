@@ -191,6 +191,52 @@ def test_the_shipped_resources_validate() -> None:
     assert _json(result)["problems"] == []
 
 
+def test_swedish_imported_punctuation_errors_resolve_only_as_mechanics() -> None:
+    """A mechanical pass receives every planted Swedish punctuation error."""
+
+    result = _resolve("sv", "--scope=anti-slop", "--scope=mechanics")
+
+    assert result.returncode == 0, result.stderr
+    scopes = _json(result)["scopes"]
+    mechanics = scopes["mechanics"]["content"]
+    anti_slop = scopes["anti-slop"]["content"]
+    errors = (
+        "*Dessutom, är det viktigt*",
+        "*snabbare—det*",
+        "*“kundresa”*",
+        "*teknik, processer, och kultur*",
+        "*Service & support*",
+    )
+
+    for error in errors:
+        assert error in mechanics, error
+        assert error not in anti_slop, error
+
+
+def test_english_dash_and_connective_conventions_resolve_as_mechanics() -> None:
+    """Both English locales settle the punctuation baits a pass encounters."""
+
+    for code in ("en_GB", "en_US"):
+        result = _resolve(code, "--scope=anti-slop", "--scope=mechanics")
+
+        assert result.returncode == 0, result.stderr
+        mechanics = _json(result)["scopes"]["mechanics"]["content"]
+        assert "*Therefore we did*" in mechanics, code
+        assert "*Therefore, we did*" in mechanics, code
+
+    british = _json(_resolve("en_GB", "--scope=anti-slop", "--scope=mechanics"))[
+        "scopes"
+    ]
+    assert "*—like this—*" in british["mechanics"]["content"]
+    assert "*—like this—*" not in british["anti-slop"]["content"]
+
+    american = _json(_resolve("en_US", "--scope=mechanics"))["scopes"]["mechanics"][
+        "content"
+    ]
+    assert "*like — this*" in american
+    assert "*like—this*" in american
+
+
 # --- Scope selection ------------------------------------------------------
 
 
@@ -553,3 +599,12 @@ def test_the_format_is_documented_beside_the_resources_it_describes() -> None:
         assert scope in page
     for field in ("code", "aliases", "default-for", "inherits"):
         assert field in page
+
+
+def test_the_format_places_objective_punctuation_only_in_mechanics() -> None:
+    """Future resources keep mechanical rules reachable without duplicating them."""
+
+    page = (RESOURCES / "README.md").read_text(encoding="utf-8")
+
+    assert "An objectively wrong punctuation form belongs in Mechanics" in page
+    assert "Anti-slop refers to that rule rather than restating it" in page

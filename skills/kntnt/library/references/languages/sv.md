@@ -63,9 +63,9 @@ Metaphor stock: *en resa*, *navigera i landskapet*, *nyckeln till framgång*, *h
 
 Superlative inflation: *revolutionerande*, *banbrytande*, *otroligt kraftfull*, *helt avgörande*, *oöverträffad*. Swedish general-interest prose is understated, and a text that reaches for these in every paragraph reads as advertising copy whatever it was meant to be.
 
-Connective adverbs at the head of every paragraph — *Dessutom*, *Vidare*, *Följaktligen*, *Därtill*, *Sammantaget* — and, more tellingly, a comma after them where Swedish takes none: *Dessutom, är det viktigt att* is an English comma habit carried across.
+Connective adverbs at the head of every paragraph — *Dessutom*, *Vidare*, *Följaktligen*, *Därtill*, *Sammantaget* — are a generation tell when they become a template for the text's progression.
 
-Punctuation carried in from English: the unspaced em dash *—* where Swedish uses a spaced en dash *–*, curly English quotation marks *“…”* where Swedish uses *”…”* on both sides, the serial comma inside a Swedish list, and *&* standing in for *och* in running prose.
+A concentration of the objective punctuation errors identified in Mechanics is also evidence of English punctuation carried into generated Swedish. Refer to that scope for the forms; this scope does not restate them.
 
 The triad reflex: *snabbt, enkelt och säkert*, *tydligt, tryggt och tillgängligt*. Three adjectives where the writer had one thing to say.
 
@@ -91,7 +91,15 @@ Dates are written *2026-08-24* or *24 augusti 2026*; month names and weekdays ar
 
 Currency follows the amount: *1 250 kr*, *250 000 SEK*, with a space before the unit.
 
-Quotation marks are *”…”* — the same right-pointing mark at both ends. Quotation inside quotation uses *’…’*. Dialogue may instead be set with an em dash at the start of the line.
+A sentence-initial connective adverb takes no comma before the finite verb: *Dessutom är det viktigt*, not *Dessutom, är det viktigt*.
+
+A sentence-breaking dash is a spaced en dash: *snabbare – det*, not the unspaced em dash in *snabbare—det*. Ranges instead take an unspaced en dash, as stated above.
+
+Quotation marks are *”…”* — the same right-pointing mark at both ends — so English marks in *“kundresa”* are an error. Quotation inside quotation uses *’…’*. Dialogue may instead be set with an em dash at the start of the line.
+
+A simple list takes no serial comma: *teknik, processer och kultur*, not *teknik, processer, och kultur*.
+
+In running prose, *och* is written out: *Service och support*, not *Service & support*. Preserve an ampersand that belongs to a proper name or quoted matter.
 
 Abbreviations take periods: *t.ex.*, *bl.a.*, *dvs.*, *m.m.*, *osv.*, *ca* without one. An initialism compounded with a word takes a hyphen: *VD-brev*, *USA-baserad*, *EU-direktiv*.
 

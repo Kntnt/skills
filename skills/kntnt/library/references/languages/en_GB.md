@@ -58,7 +58,7 @@ The reskinning tell. Generated British English is very often American English wi
 
 Suffix inconsistency inside one text — *organise* in one paragraph and *recognize* in the next — is a generation artefact rather than a style, and it is worth naming as such rather than silently normalising, because it usually means the passage came from somewhere else.
 
-Punctuation carried in from American house style: the unspaced em dash *—like this—* where most British styles use a spaced en dash – like this – and double quotation marks throughout in a document whose own convention is single.
+A concentration of punctuation forms that conflict with the document's convention is a generation tell. Refer to Mechanics for the conventions; this scope does not restate them.
 
 The apologetic opening: *It is perhaps worth noting that*, *One might argue that*, *It would be fair to say that*. British hedging turned into an opening formula that says nothing before the sentence starts.
 
@@ -74,7 +74,11 @@ Dates: *24 August 2026*, or *24/08/2026* in numeric form. No comma between month
 
 Numbers: decimal point, comma as the thousands separator, currency symbol before the amount — *£1,250.00*, *1,000,000*. Percentages are written *50%* without a space.
 
+A sentence-breaking dash follows the document's house style. Most British styles use a spaced en dash, *– like this –*; the unspaced em dash *—like this—* is an error only where it conflicts with the document's established convention.
+
 Quotation marks: single outer and double inner, or the reverse where the document's own convention is the reverse. Punctuation belonging to the quoted matter goes inside the closing mark; punctuation belonging to the surrounding sentence goes outside.
+
+A sentence-initial connective adverb may stand with or without a following comma: *Therefore we did* and *Therefore, we did* are both correct.
 
 Abbreviations that end in the last letter of the full word take no full stop: *Mr*, *Mrs*, *Ms*, *Dr*, *St*. Truncations do: *Prof.*, *Jan.*, *ed.* Initialisms are set without points: *BBC*, *UK*, *NHS*.
 
