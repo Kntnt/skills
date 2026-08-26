@@ -1,6 +1,6 @@
 # Phase 2, step 1 — `/to-slices`, as designed
 
-> Draft written 2026-08-26 against commit `c7393f1`, from the `/to-slices` section of `00-brief.md`, the three requirements inherited from `04-frame.md`, and what this codebase and the existing `/to-spec` and `/to-tickets` Skills answer. It was the input to the owner-level round (step 2), which ran on 2026-08-26 and settled both residuals; it is now the input to the ticket breakdown. Deleted with the rest of `docs/rework/` by the final cleanup ticket.
+> Draft written 2026-08-26 against commit `c7393f1`, from the `/to-slices` section of `00-brief.md`, the three requirements inherited from `04-frame.md`, and what this codebase and the existing `/to-spec` and `/to-tickets` Skills answer. The owner-level round (step 2) settled both residuals on 2026-08-26, and Thomas approved the resulting design and ticket breakdown the same day; it is ready for publication. Deleted with the rest of `docs/rework/` by the final cleanup ticket.
 
 The dossier states what `/to-slices` is for; this file is the design that satisfies it, the boundaries judged along the way, and what the owner settled. Everything here is settled — resolved from `docs/rules/`, from the Frame Record contract, from the Skills this one replaces, and from the configured tracker, or answered by Thomas in the round recorded below. Nothing in it is still a question.
 
@@ -152,7 +152,7 @@ The two consequences the repository could not answer were put to Thomas on 2026-
 
 ## The slices
 
-Two tickets under the settled answers, pending the owner's approval of the breakdown. Both fit one fresh context, and neither is a Solo Ticket — nothing here rewrites a rule every shipped file is under.
+Two approved tickets under the settled answers. Both fit one fresh context, and neither is a Solo Ticket — nothing here rewrites a rule every shipped file is under.
 
 **S1 — The durable slice contract in the Collection Library.** `library/references/slices.md` states the decision issue, child ticket, seam contract, compilation hint, graph, provenance, and knowledge-manifest shapes their writer and later readers share, with suite coverage for its resolved pointers. *Blocked by: nothing.* Delivers: the durable Interface `/to-slices` writes and `/compile` plus `/land` can rely on without reading a peer's internals.
 
