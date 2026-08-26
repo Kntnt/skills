@@ -54,6 +54,22 @@
       "capabilities": []
     },
     {
+      "name": "frame",
+      "category": "code",
+      "description": "Map a task before anything is built. Codebase recon runs beside an interview, the questions put to the owner are the ones neither the code nor the repository's own rules could answer, and what comes out is a Frame Record the next Skill builds from.",
+      "digest": "6cd0dee897f973f9e12a1e70f5906074095d588a8598abc21b98794c43741c3b",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [
+        "model-selector"
+      ],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",

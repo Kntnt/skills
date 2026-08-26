@@ -1,0 +1,5 @@
+interface:
+  display_name: "Frame"
+  short_description: "Map a task before anything is built"
+policy:
+  allow_implicit_invocation: false
