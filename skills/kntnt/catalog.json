@@ -120,7 +120,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "b2a288334354d94c405486a120c0d46de03c76b595a5c5f5695f5ae7b8fb24d9",
+      "digest": "cb237ca99bd560472d2ad6cbdbe9758da37a3cd1c4aca6133eaa47f59a90cf56",
       "binaries": [
         "uv"
       ],
@@ -132,7 +132,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "e7a26a6f86dc7d3365e1e7bcb89e886d0277da947f43b24132fc8905403af50c",
+      "digest": "8b8baad44e0c9dc5c8cefce9d846cdac1a2f10a47cf7b71b92598e6db3beb2e2",
       "binaries": [
         "uv"
       ],
@@ -148,7 +148,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "7ebd46494579af2f23d3988dade532381f13d59a7ee1e29b9460103827527cd1",
+      "digest": "e167085f895c54561ce3b981f24fa4c8a5bd2409d48dc5453a8953875c0d23e3",
       "binaries": [
         "uv"
       ],
@@ -162,7 +162,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",
-      "digest": "b41b3d571f0b95ce78d2f2b4644a6280d13696152cdad22e195753c2f57edd90",
+      "digest": "2157e3e82d87c9cf4d4f6dafdbcfd14afd700ec706b08c07814a0b75812551da",
       "binaries": [
         "uv"
       ],

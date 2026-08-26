@@ -3751,6 +3751,57 @@ DELIVERY_NO_ECHO_UNCHANGED = "whether or not the pass changed anything"
 DELIVERY_RESPONSE_DEFAULT = (
     "A run that keeps the default delivers the complete Text Artifact in the response"
 )
+DELIVERY_SCRATCH_SCOPE = (
+    "That includes scratch files and working copies of the artifact, wherever the"
+    " Harness says temporary files belong"
+)
+DELIVERY_TRUTHFUL_ACCOUNT = (
+    "base the delivery account on the filesystem state that remains after cleanup"
+)
+
+
+def test_response_delivery_cleans_scratch_files_and_reports_the_remaining_state() -> (
+    None
+):
+    """The no-write default reaches Harness scratch and every consumer.
+
+    A Harness may tell an agent where temporary files belong without granting
+    permission to create one. The shared contract therefore owns both cleanup
+    and truthful reporting, while every Text-Artifact Skill carries the
+    operational instruction into its delivery step (issue #180).
+    """
+
+    contract = DELIVERY.read_text(encoding="utf-8")
+
+    assert DELIVERY_SCRATCH_SCOPE in contract, (
+        f"{DELIVERY}: the response default does not expressly cover the"
+        f" Harness scratch area, so a convention about where temporary files"
+        f" belong can be mistaken for permission to write one (issue #180)."
+    )
+    assert "does not authorize a write" in contract, (
+        f"{DELIVERY}: the contract names scratch files without distinguishing"
+        f" a Harness location convention from caller authorization"
+        f" (issue #180)."
+    )
+    assert "removes that file before delivery" in contract, (
+        f"{DELIVERY}: a response-targeted run may use scratch while composing"
+        f" without being told to restore the filesystem before delivery"
+        f" (issue #180)."
+    )
+    assert "never reports that nothing was written" in contract, (
+        f"{DELIVERY}: the response can claim no write while an artifact copy"
+        f" remains on disk (issue #180)."
+    )
+
+    for name in ("write", "redline", "proofread", "unslop"):
+        body_path = REPO_ROOT / "skills" / "editorial" / name / "SKILL.md"
+        body = body_path.read_text(encoding="utf-8")
+
+        assert DELIVERY_TRUTHFUL_ACCOUNT in body, (
+            f"{body_path}: the delivery step does not carry the shared"
+            f" response-default cleanup and truthful-accounting rule into"
+            f" this Text-Artifact Skill (issue #180)."
+        )
 
 
 def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:

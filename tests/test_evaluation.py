@@ -15,6 +15,7 @@ MODEL_INVOKED_PROOFREAD_RECORD = (
     EVALUATION / "records" / "proofread-gpt-2026-08-26-170.md"
 )
 UNSLOP_LOCALE_RECORD = EVALUATION / "records" / "unslop-gpt-2026-08-26-177.md"
+WRITE_RESPONSE_DEFAULT_RECORD = EVALUATION / "records" / "write-gpt-2026-08-26-180.md"
 
 # The material the wave has to survive, one tag per kind. A fixture entry
 # declares what it covers from this vocabulary, and the corpus is complete when
@@ -339,6 +340,66 @@ def test_unslop_locale_regression_stays_inside_the_anti_slop_lens() -> None:
                 f" criterion has not passed under both English locales"
                 f" (issue #177)."
             )
+
+
+def test_response_default_inventory_reaches_every_writable_evaluation_location() -> (
+    None
+):
+    """A response-targeted run is checked beyond its material directory.
+
+    The defect wrote an artifact into Harness scratch while the staged source
+    directory stayed clean. The fixture and protocol therefore require a
+    before-and-after inventory of both locations (issue #180).
+    """
+
+    response_default = _fields(_entries()["response-default"])
+    use = response_default["Use"]
+    reject = response_default["Reject"]
+    protocol = _protocol()
+
+    for expected in ("filesystem inventory", "Harness scratch area"):
+        assert expected in use, (
+            f"{INDEX}: response-default does not require {expected!r}, so an"
+            f" artifact outside the supplied material directory can escape"
+            f" the regression check (issue #180)."
+        )
+
+    assert "every writable location in the evaluation workspace" in reject, (
+        f"{INDEX}: response-default rejects writes only near its material"
+        f" rather than throughout the evaluation workspace (issue #180)."
+    )
+    assert "before-and-after filesystem inventory" in protocol, (
+        f"{PROTOCOL}: the side-effects field can still be copied from a"
+        f" Skill's account instead of observed across the run's writable"
+        f" locations (issue #180)."
+    )
+    assert "separate Harness scratch area" in protocol, (
+        f"{PROTOCOL}: the inventory scope does not expressly reach scratch"
+        f" outside the supplied material directory (issue #180)."
+    )
+
+
+def test_write_response_default_regression_leaves_the_wide_inventory_unchanged() -> (
+    None
+):
+    """A focused Write run passes the widened filesystem observation."""
+
+    text = WRITE_RESPONSE_DEFAULT_RECORD.read_text(encoding="utf-8")
+
+    for evidence in (
+        "whole staged working copy",
+        "separate Harness scratch area",
+        "before-and-after inventories were identical",
+        "`filesystem unchanged` — `pass`",
+        "`delivery account truthful` — `pass`",
+        "No artifact copy was written",
+    ):
+        assert evidence in text, (
+            f"{WRITE_RESPONSE_DEFAULT_RECORD}: the focused response-default"
+            f" regression does not record {evidence!r}, so it cannot show"
+            f" that the artifact stayed out of Harness scratch or that the"
+            f" delivery account matched the filesystem (issue #180)."
+        )
 
 
 def test_every_fixture_entry_documents_the_fixture_on_its_own() -> None:
