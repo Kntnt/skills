@@ -4702,6 +4702,166 @@ def test_redline_delivers_through_the_shared_output_contract() -> None:
     )
 
 
+# The closure the refusal list gained, and the two places it is written: the
+# Skill body a run executes, and the manpage a reader is pointed at. An
+# evaluation run refused a valid invocation over what its operand turned out to
+# say, which the list never named as invalid (issue #141).
+REDLINE_CLOSURE = "the whole of what this section refuses"
+REDLINE_GAP = "a gap in the list"
+REDLINE_PAGE_CLOSURE = "the whole of what is refused over the form of an invocation"
+
+# The two things the review step now says about the kind of text an artifact
+# turns out to be, and the sentence in the loading step that this ticket leaves
+# exactly as it was.
+REDLINE_KIND_IS_A_FINDING = "never a ground for declining"
+REDLINE_READS_NO_PEER = "reads no other Skill's instructions"
+REDLINE_LOADS_NOTHING_ELSE = (
+    "Load what the review is read against, and nothing besides it"
+)
+
+
+def test_redline_reviews_the_operand_whatever_it_turns_out_to_be() -> None:
+    """A valid invocation is reviewed, and the refusal list says it is closed.
+
+    The list of invalid forms enumerates what is refused and how, which leaves
+    a run free to read it as a list of examples. One did: a brief supplied
+    inline was declined as material the Skill had nothing to say about, and
+    Write's own `SKILL.md` and `help.md` were read to say so, while the same
+    material supplied as a file was reviewed and its being a brief was the
+    review's first finding. The list is closed, and the kind of text an
+    artifact turns out to be is a finding rather than a ground for stopping
+    (issue #141).
+    """
+
+    text = REDLINE.read_text(encoding="utf-8")
+    arguments = _section(text, "## Arguments", REDLINE)
+    steps = _section(text, "## Steps", REDLINE)
+
+    assert REDLINE_CLOSURE in arguments, (
+        f"{REDLINE}: the argument prose never says its list of invalid forms is"
+        f" closed, so a run that wants to refuse something the list does not"
+        f" name reads the list as examples. A refusal outside it teaches that a"
+        f" valid invocation sometimes does nothing, and which ones those are"
+        f" cannot be read off the page (issue #141). See {STANDARD}."
+    )
+    assert REDLINE_GAP in arguments, (
+        f"{REDLINE}: the argument prose does not say what a run wanting to"
+        f" refuse an unlisted form has actually found. A gap in the list is"
+        f" reported and the invocation is reviewed, rather than the run"
+        f" inventing a refusal the contract does not carry (issue #141). See"
+        f" {STANDARD}."
+    )
+
+    # The nine forms the evaluation saw refused correctly. The closure is a
+    # statement about the list and never a shortening of it.
+    listed = arguments.partition("Invalid forms, each refused the same way:\n\n")[
+        2
+    ].partition("\n\n")[0]
+    bullets = [line for line in listed.splitlines() if line.startswith("- ")]
+    assert len(bullets) == 9, (
+        f"{REDLINE}: the list of invalid forms carries {len(bullets)} entries"
+        f" rather than the nine the evaluation saw refused correctly. Closing"
+        f" the list states that it is complete; it removes nothing from it"
+        f" (issue #141). See {STANDARD}."
+    )
+
+    assert REDLINE_KIND_IS_A_FINDING in steps, (
+        f"{REDLINE}: no step says that what the artifact turns out to be is a"
+        f" finding rather than a ground for declining to review it. A brief"
+        f" supplied inline was declined for being a brief, while the same kind"
+        f" of material supplied as a file was reviewed and its being a brief"
+        f" was the first finding (issue #141). See {STANDARD}."
+    )
+    assert REDLINE_READS_NO_PEER in steps, (
+        f"{REDLINE}: no step says that judging what the artifact is reads no"
+        f" other Skill's instructions. The run that declined read Write's"
+        f" `SKILL.md` and `help.md` to propose a `/write` invocation, which is"
+        f" outside what the loading step admits (issue #141). See {STANDARD}."
+    )
+    assert REDLINE_LOADS_NOTHING_ELSE in steps, (
+        f"{REDLINE}: the loading step no longer says that what the review is"
+        f" read against is the whole of what is loaded. Closing the refusal"
+        f" list changes what is reviewed, never what a review opens (issue"
+        f" #141). See {STANDARD}."
+    )
+
+    diagnostics = _section(
+        REDLINE_HELP.read_text(encoding="utf-8"), "## DIAGNOSTICS", REDLINE_HELP
+    )
+    assert REDLINE_PAGE_CLOSURE in diagnostics, (
+        f"{REDLINE_HELP}: the page lists what is refused without saying that"
+        f" the list is the whole of it. The refusal is documented as well as"
+        f" performed, and a reader deciding what this Skill will do with a text"
+        f" reads this page (issue #141). See {STANDARD}."
+    )
+
+
+# The section a reader is sent to for the halts this list does not speak for.
+# The closure is a statement about the form of an invocation; the shared
+# Invocation Envelope refuses irrelevant, unaddressable, materially ambiguous,
+# conflicting, and scope-widening guidance whatever this list says, and naming
+# it is what keeps the closure from reading as the whole story (ADR-0122).
+REDLINE_ELSEWHERE = "`## INVOCATION ENVELOPE`"
+
+# A sentence claiming to enumerate every place a run may halt is the shape of
+# the overreach, whichever words it is written in.
+_CLAIMS_EVERY = ("only", "whole of", "sole ", "exhaust")
+_A_HALT = ("halt", "stop")
+
+
+def _sentences(passage: str) -> list[str]:
+    """Split a passage into sentences, leaving `help.md` and its like intact."""
+
+    return [
+        sentence for sentence in re.split(r"(?<=\.)\s+", passage) if sentence.strip()
+    ]
+
+
+def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
+    """The closed list is closed over invocation forms, and nothing wider.
+
+    Saying that the list of invalid forms is the whole of what that section
+    refuses is a statement about the form of an invocation. A statement about
+    every place a run may halt would be something else: the shared Invocation
+    Envelope refuses irrelevant, unaddressable, materially ambiguous,
+    conflicting, and scope-widening guidance, and each value the run resolves
+    and each destination it settles carries its own refusal beside itself. The
+    first build of this closure enumerated those halts and left the envelope
+    out, and a run reading the enumeration as the set had no reason left to
+    consult the section this file binds itself to two headings earlier. So the
+    closure says what it governs and points at the rest rather than counting it
+    (ADR-0122, issue #141).
+    """
+
+    passages = {
+        REDLINE: _section(REDLINE.read_text(encoding="utf-8"), "## Arguments", REDLINE),
+        REDLINE_HELP: _section(
+            REDLINE_HELP.read_text(encoding="utf-8"), "## DIAGNOSTICS", REDLINE_HELP
+        ),
+    }
+    for where, passage in passages.items():
+        for sentence in _sentences(passage):
+            lowered = sentence.lower()
+            overreaches = any(claim in lowered for claim in _CLAIMS_EVERY) and any(
+                halt in lowered for halt in _A_HALT
+            )
+            assert not overreaches, (
+                f"{where}: a sentence claims to name every place a run may"
+                f" halt — {sentence!r}. The list closed here is closed over the"
+                f" form of an invocation, and the halts written elsewhere are"
+                f" pointed at rather than counted: an enumeration that misses"
+                f" one repeals it for whoever reads the enumeration as the set"
+                f" (ADR-0122, issue #141). See {STANDARD}."
+            )
+
+        assert REDLINE_ELSEWHERE in passage, (
+            f"{where}: the closure calls its list whole and never points at"
+            f" the {REDLINE_ELSEWHERE} section, leaving a run to read a"
+            f" closure over invocation form as a closure over every refusal"
+            f" this Skill makes (ADR-0122, issue #141). See {STANDARD}."
+        )
+
+
 def test_the_correction_budget_is_any_non_negative_integer_defaulting_to_one() -> None:
     """One correction and one chance to verify it is the ordinary review.
 
