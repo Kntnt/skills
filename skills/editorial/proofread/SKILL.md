@@ -26,6 +26,8 @@ Run every UV command in this Skill with a fresh private directory as `TMPDIR`, a
 
 A model-invoked run changes only how the Skill starts. Once started, it takes the specific Text Artifact the current turn identifies as the omitted operand and enters the same numbered steps as invocation by name. The paths join before loading any language or editorial resource; the trigger wording is not a second source of rules or an alternate execution path.
 
+Where no Formal Invocation carries an Output Target, settle it from the current turn before correcting or writing. An unnamed destination resolves to the response. A file mentioned only as the location of the errors names no destination, while a turn that asks for the file itself to be changed selects In-place Editing and remains subject to every refusal that editing mode already carries, including inline text, a URL, an uploaded or read-only source, more than one text, and a simultaneous separate Output Target. Where the turn is materially ambiguous about the destination, ask which destination the caller intends and write nothing.
+
 ## Invocation Envelope
 
 Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.

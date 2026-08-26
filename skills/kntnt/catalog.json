@@ -120,7 +120,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "95a343911de23861b3e9bfcb1d8b1571efb1647a8647cccfadbcc9d4de797a26",
+      "digest": "ca9d174cd8dbe1f32f7ff77a1ada3e2603e9835d85f3a89959fe333ec1d34f26",
       "binaries": [
         "uv"
       ],
