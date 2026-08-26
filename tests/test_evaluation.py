@@ -16,6 +16,9 @@ MODEL_INVOKED_PROOFREAD_RECORD = (
 )
 UNSLOP_LOCALE_RECORD = EVALUATION / "records" / "unslop-gpt-2026-08-26-177.md"
 WRITE_RESPONSE_DEFAULT_RECORD = EVALUATION / "records" / "write-gpt-2026-08-26-180.md"
+REDLINE_CLOSING_PROOFREAD_RECORD = (
+    EVALUATION / "records" / "redline-gpt-2026-08-26-174.md"
+)
 
 # The material the wave has to survive, one tag per kind. A fixture entry
 # declares what it covers from this vocabulary, and the corpus is complete when
@@ -340,6 +343,27 @@ def test_unslop_locale_regression_stays_inside_the_anti_slop_lens() -> None:
                 f" criterion has not passed under both English locales"
                 f" (issue #177)."
             )
+
+
+def test_redline_closing_proofread_regression_records_complete_delegation() -> None:
+    """The focused GPT rerun observes delegation and every planted correction."""
+
+    text = REDLINE_CLOSING_PROOFREAD_RECORD.read_text(encoding="utf-8")
+
+    for evidence in (
+        "`complete delegation` — `pass`",
+        "Proofread's `SKILL.md` exactly once",
+        "`resolve --scope=mechanics sv` exactly once",
+        "complete current Text Artifact",
+        "`planted mechanics` — `pass`",
+        "`same planted result` — `pass`",
+        "`side effects` — `pass`",
+    ):
+        assert evidence in text, (
+            f"{REDLINE_CLOSING_PROOFREAD_RECORD}: the focused Redline rerun"
+            f" does not record {evidence!r}, so the closing Proofread verdict"
+            f" is not held at the complete nested-Skill seam (issue #174)."
+        )
 
 
 def test_response_default_inventory_reaches_every_writable_evaluation_location() -> (
