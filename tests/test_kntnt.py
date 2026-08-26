@@ -5263,6 +5263,7 @@ def test_redline_invokes_proofread_once_and_declares_what_it_needs() -> None:
     for requirement in (
         "Invoke the installed Proofread Skill exactly once",
         "current complete Text Artifact",
+        "--output=response",
         "Do not perform, select, or apply any mechanical corrections yourself",
     ):
         assert requirement in closing_pass, (
