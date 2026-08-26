@@ -7496,6 +7496,175 @@ def test_invocation_envelope_carries_worked_split_outcomes() -> None:
             )
 
 
+# The sentence ADR-0078 shipped, before its *ineffective* was narrowed. No page
+# may keep it: it made suppression by a documented precedence a refusal ground,
+# which is the contradiction issue #146 caught.
+UNNARROWED_CONTEXT_REFUSAL = (
+    "Valid but irrelevant, ineffective, materially ambiguous, conflicting, or"
+    " scope-widening guidance takes the distinct context refusal"
+)
+
+# The narrowed rule, carried in the same words by every shipped page: what
+# *unaddressable* now means, what happens instead to guidance a documented
+# precedence has settled against, and what the no-partial-application rule
+# still reaches (ADR-0122).
+NARROWED_CONTEXT_REFUSAL = (
+    "Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or"
+    " scope-widening guidance takes the distinct context refusal"
+)
+SUPPRESSION_RULE = (
+    "Unaddressable is guidance with no addressable effect at all — guidance"
+    " touching nothing this Skill's contract addresses — and never guidance a"
+    " documented precedence has already settled against, which is suppressed"
+    " instead: suppression is that precedence working, so the run continues and"
+    " the delivery names the suppressed guidance beside the resolved"
+    " configuration where saying so is useful. Only guidance that is part"
+    " invalid — part conflicting, part scope-widening, or part unaddressable —"
+    " goes unapplied as a whole; one parameter suppressed and another landing is"
+    " an ordinary invocation."
+)
+
+# The same outcome stated where an editorial Skill actually resolves its
+# parameters, so a reader of the ladder meets it beside the level that is
+# there to be overridden (ADR-0122).
+SUPPRESSED_INSTRUCTION_OUTCOME = (
+    "Suppression is that precedence working rather than an error: a Contextual"
+    " Instruction every higher level has already settled leaves nothing for it"
+    " to settle, and the run continues rather than refusing it as unaddressable"
+    " guidance. Where saying so is useful, the delivery names the suppressed"
+    " instruction beside the resolved configuration."
+)
+
+
+def test_the_context_refusal_narrows_ineffective_to_unaddressable_guidance() -> None:
+    """A value a documented precedence settled against is suppressed, not refused.
+
+    Every shipped page carried ADR-0078's *ineffective* in the same words, and
+    on an invocation whose Contextual Instruction the flags and the artifact's
+    map had already settled, that word required a refusal while the editorial
+    precedence ladder required the run to continue (issue #146). The narrowing
+    is carried in the same words in every page, or the collection has two
+    contracts again.
+    """
+
+    # Discover every page so a future command path inherits the narrowing.
+    for manpage in _manpages():
+        envelope = _section(
+            manpage.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", manpage
+        )
+
+        assert UNNARROWED_CONTEXT_REFUSAL not in envelope, (
+            f"{manpage}: the envelope still refuses *ineffective* guidance"
+            f" without saying what that reaches, so a Contextual Instruction a"
+            f" documented precedence has settled against is a refusal ground"
+            f" again (ADR-0122). See {STANDARD}."
+        )
+        assert NARROWED_CONTEXT_REFUSAL in envelope, (
+            f"{manpage}: the envelope no longer names the context refusal's"
+            f" categories in the collection's shared wording (ADR-0122). See"
+            f" {STANDARD}."
+        )
+        assert SUPPRESSION_RULE in envelope, (
+            f"{manpage}: the envelope omits the narrowed rule, so this page"
+            f" says something different from its siblings about a suppressed"
+            f" Contextual Instruction (ADR-0122). See {STANDARD}."
+        )
+
+
+def test_the_skill_standard_carries_the_narrowed_context_refusal() -> None:
+    """Contributors meet the narrowing where the envelope clauses are written."""
+
+    standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
+
+    for phrase in (
+        "no addressable effect at all",
+        "suppressed rather than refused",
+        "ADR-0122",
+    ):
+        assert phrase in standard, (
+            f"{STANDARD}: the contributor standard omits {phrase!r}, so its"
+            f" envelope clauses still describe the unnarrowed refusal"
+            f" (ADR-0122)."
+        )
+
+
+def test_every_editorial_skill_states_the_suppressed_instruction_outcome() -> None:
+    """The ladder says what happens to the level it exists to override.
+
+    Each editorial Skill resolves its parameters through one precedence with
+    the Contextual Instruction at level 3, and level 3 exists so that levels 1
+    and 2 can settle a parameter over it. Redline, Write, and Unslop state
+    that ladder under `## Resolution`; Proofread states the same ladder in its
+    resolving step. Wherever it is stated, the outcome of a suppressed
+    instruction is stated with it, in one wording (ADR-0122).
+    """
+
+    for body in (WRITE, REDLINE, UNSLOP, PROOFREAD):
+        assert SUPPRESSED_INSTRUCTION_OUTCOME in body.read_text(encoding="utf-8"), (
+            f"{body}: the precedence says a higher level suppresses a lower one"
+            f" and not what becomes of the run, leaving the envelope's refusal"
+            f" to answer for it (ADR-0122). See {STANDARD}."
+        )
+
+
+# The same outcome in the words a user reads, beside the ladder each editorial
+# manpage already states (ADR-0122).
+SUPPRESSED_INSTRUCTION_FOR_THE_READER = (
+    "A Contextual Instruction every higher level has already settled is"
+    " suppressed rather than refused: the run continues, and the delivery names"
+    " the suppressed instruction beside the resolved configuration where saying"
+    " so is useful."
+)
+
+
+def test_every_editorial_manpage_states_the_suppressed_instruction_outcome() -> None:
+    """The user meets the ladder's outcome where the user meets the ladder.
+
+    Each editorial manpage states the precedence to the person deciding what to
+    type. A user who names a language in an instruction against a text whose
+    map already carries one needs to read what becomes of it before the run
+    tells them (ADR-0122).
+    """
+
+    for body in (WRITE, REDLINE, UNSLOP, PROOFREAD):
+        manpage = body.parent / "help.md"
+        assert SUPPRESSED_INSTRUCTION_FOR_THE_READER in manpage.read_text(
+            encoding="utf-8"
+        ), (
+            f"{manpage}: the page states the precedence without stating what a"
+            f" suppressed Contextual Instruction costs the run (ADR-0122). See"
+            f" {STANDARD}."
+        )
+
+
+def test_redline_works_the_wholly_suppressed_instruction_as_an_example() -> None:
+    """The invocation the contradiction was found on is worked on the page.
+
+    An explicit genre flag against a text whose `kntnt` map carries genre,
+    technique, and language leaves the Contextual Instruction nothing to
+    settle. That invocation took a refusal in the Claude-family evaluation
+    (issue #146); it is an ordinary review, and the page says so beside the
+    invocations that are less interesting (ADR-0122).
+    """
+
+    examples = _section(
+        REDLINE_HELP.read_text(encoding="utf-8"), "## EXAMPLES", REDLINE_HELP
+    )
+
+    assert (
+        "**/redline --genre=report --max=0 handoff.md -- Review it as a PAC piece in Swedish.**"
+        in examples
+    ), (
+        f"{REDLINE_HELP}: the invocation the two rules disagreed on is not"
+        f" worked on the page, so nothing here says it is a review rather than"
+        f" a refusal (ADR-0122). See {STANDARD}."
+    )
+    assert "suppressed" in examples, (
+        f"{REDLINE_HELP}: the worked invocation does not name the suppression"
+        f" the delivery reports (ADR-0122). See {STANDARD}."
+    )
+
+
 def test_skill_standard_requires_every_invocation_envelope_surface() -> None:
     """Contributors meet the contract before discovered checks enforce it."""
 

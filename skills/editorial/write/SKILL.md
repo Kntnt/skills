@@ -65,7 +65,7 @@ Genre, technique, language, and the two output options are each resolved on thei
 5. Inference from what was requested and what the material is.
 6. The parameter's default: `general` for genre, no technique, the language of the request and the supplied material, the response for the Output Target, and on for the Kntnt map.
 
-A value found at one level suppresses the levels below it for that parameter alone. An explicit genre and a language taken from context are an ordinary invocation, not a conflict.
+A value found at one level suppresses the levels below it for that parameter alone. An explicit genre and a language taken from context are an ordinary invocation, not a conflict. Suppression is that precedence working rather than an error: a Contextual Instruction every higher level has already settled leaves nothing for it to settle, and the run continues rather than refusing it as unaddressable guidance. Where saying so is useful, the delivery names the suppressed instruction beside the resolved configuration.
 
 Two things are never inferred. A technique applies because it was selected — by the invocation, the map, or an instruction that names one — and never because the material or the draft happens to fall into its shape. A language is settled rather than guessed: where the request and the material are materially ambiguous or mixed, say what the candidates are and ask, before anything is written.
 

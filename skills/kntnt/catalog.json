@@ -5,7 +5,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "b512caf871fd7b583535f41e43d924919248fe894b98ff95bc6627b1df9ac076",
+      "digest": "6e38b776786c0a849daea7e6f80943f35f6a6a91500ed8777f4c1763f5350e7f",
       "binaries": [
         "git",
         "uv"
@@ -18,7 +18,7 @@
       "name": "brief",
       "category": "agents",
       "description": "Reframe what was just said for the person who owns the outcome, and turn Brief mode on or off so later replies stay concise and decision-relevant.",
-      "digest": "9f1c2128191463c55669c70d0040c0e15a3914487f46e8107f8d955ac2211243",
+      "digest": "2d32552bfa92793ab7f8b9027035cace1e404924d86cf9183186d8d7e5e2b962",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -28,7 +28,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "05e688bed2ee7a2b89b37c10e1d7f83e825dca2e18c243061bb0859b05d60cc3",
+      "digest": "63c98407a0aae830612caede8ce68937037a3af0b9881e43efbce22a8540cdd4",
       "binaries": [
         "uv"
       ],
@@ -44,7 +44,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "a8b2dcdbb434dbbf282b44eb0d39e69317ba501c4a5010145336144a97d1dbb4",
+      "digest": "01b8acc68544e42cd4a90959966df53438941122d9b22a0cfeeec7f6faaf58c1",
       "binaries": [
         "git",
         "uv"
@@ -57,7 +57,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "bcdda6ee1090d582d6bc1aaa719f76efdfdac55182395648aefaa61590752460",
+      "digest": "c8f8bf31b2e73230ab70100db599c61798a3ed830cba75e9e73a34455c86380f",
       "binaries": [
         "git",
         "gh",
@@ -75,7 +75,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "b3f8693a29756671acd141cde16e66f22c962890ac600aa35d569d63a1d8eec3",
+      "digest": "c7b13f8873d0ebaf35c323e42a46ca1f453f6553939df889f8ee91333d4e749f",
       "binaries": [
         "git",
         "uv"
@@ -90,7 +90,7 @@
       "name": "ready-for-agent-check",
       "category": "code",
       "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
-      "digest": "a2c347cd63d4a3309e87dc45d26ea7884e17f495a929c7633a27168c9d8f415a",
+      "digest": "0929e6f80cc2fc266a5b5c599330562db8d4ba87e0f74a4d611f41cd03415e21",
       "binaries": [
         "gh",
         "uv"
@@ -105,7 +105,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "aa97a9cd344ddb853d450608c7b7b75fd9c5d7897e8a5329b4e8c03553242705",
+      "digest": "e66e4663761c82b3efd3b18957074c9d6cd1d31865e69c8d652e40231690174c",
       "binaries": [
         "git",
         "uv"
@@ -120,7 +120,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "81ec5f858957f464b773ac3bac8db6b4a35e18ce1aaba8f46f19835646f72a5b",
+      "digest": "089ceb6b95d16d5f2fb39a09d971ba9f466bd61c0a3f8a9b9df4a7c3c6e4d680",
       "binaries": [
         "uv"
       ],
@@ -132,7 +132,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "a3b4714915e3c6c45655a6604e7dc2f1b6edc857cb7ec71fc134df5009028084",
+      "digest": "74b58c1cd2c01d85f9d2b7fd8b0831ff002ca80af9ae41db5de8bbd6ac12c256",
       "binaries": [
         "uv"
       ],
@@ -148,7 +148,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "53e8c2ad3e51907c6002cc1921696d270a30234c47ae1bdbfd9430190e891447",
+      "digest": "1717fdbb1ed673ad05b6852e23bc61e5c3c87f8f3dec2578cb47e3e61eb31a17",
       "binaries": [
         "uv"
       ],
@@ -162,7 +162,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",
-      "digest": "05329ac887e7632735cf0a7d8a929f54f511bdb8b348ce370475d41a8b8f78d0",
+      "digest": "b41b3d571f0b95ce78d2f2b4644a6280d13696152cdad22e195753c2f57edd90",
       "binaries": [
         "uv"
       ],
@@ -174,7 +174,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "4cafc473f6f796d6abb4d8a18aeb58b707a63ddb0a7cc8993cf4645533ebd493",
+      "digest": "705e48202fd2f2cf7323344531c9ff6457710a58929d3d6fdca6bb38c7d1915b",
       "binaries": [
         "uv"
       ],
