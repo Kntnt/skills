@@ -352,11 +352,13 @@ def test_response_default_inventory_reaches_every_writable_evaluation_location()
     before-and-after inventory of both locations (issue #180).
     """
 
+    # Read the fixture and protocol that govern the real Harness run.
     response_default = _fields(_entries()["response-default"])
     use = response_default["Use"]
     reject = response_default["Reject"]
     protocol = _protocol()
 
+    # Require the fixture to widen observation beyond supplied material.
     for expected in ("filesystem inventory", "Harness scratch area"):
         assert expected in use, (
             f"{INDEX}: response-default does not require {expected!r}, so an"
@@ -364,10 +366,12 @@ def test_response_default_inventory_reaches_every_writable_evaluation_location()
             f" the regression check (issue #180)."
         )
 
-    assert "every writable location in the evaluation workspace" in reject, (
+    # Reject a change in any one writable location.
+    assert "any writable location in the evaluation workspace" in reject, (
         f"{INDEX}: response-default rejects writes only near its material"
         f" rather than throughout the evaluation workspace (issue #180)."
     )
+    # Require the protocol to use observed state across that widened scope.
     assert "before-and-after filesystem inventory" in protocol, (
         f"{PROTOCOL}: the side-effects field can still be copied from a"
         f" Skill's account instead of observed across the run's writable"
@@ -384,8 +388,10 @@ def test_write_response_default_regression_leaves_the_wide_inventory_unchanged()
 ):
     """A focused Write run passes the widened filesystem observation."""
 
+    # Read the evidence produced by the focused real-Harness rerun.
     text = WRITE_RESPONSE_DEFAULT_RECORD.read_text(encoding="utf-8")
 
+    # Require the record to carry both the observation and its verdicts.
     for evidence in (
         "whole staged working copy",
         "separate Harness scratch area",

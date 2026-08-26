@@ -43,6 +43,16 @@ def _write(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def _filesystem_inventory(root: Path) -> dict[Path, tuple[str, bytes]]:
+    """Capture every directory and file below a filesystem root."""
+    return {
+        path.relative_to(root): (
+            ("directory", b"") if path.is_dir() else ("file", path.read_bytes())
+        )
+        for path in root.rglob("*")
+    }
+
+
 def _skill_md(
     name: str,
     *,
@@ -3777,6 +3787,7 @@ def test_response_delivery_cleans_scratch_files_and_reports_the_remaining_state(
 
     contract = DELIVERY.read_text(encoding="utf-8")
 
+    # Require the shared contract to own cleanup and truthful reporting.
     assert DELIVERY_SCRATCH_SCOPE in contract, (
         f"{DELIVERY}: the response default does not expressly cover the"
         f" Harness scratch area, so a convention about where temporary files"
@@ -3797,6 +3808,7 @@ def test_response_delivery_cleans_scratch_files_and_reports_the_remaining_state(
         f" remains on disk (issue #180)."
     )
 
+    # Require every Text-Artifact Skill to apply the shared delivery rule.
     for name in ("write", "redline", "proofread", "unslop"):
         body_path = REPO_ROOT / "skills" / "editorial" / name / "SKILL.md"
         body = body_path.read_text(encoding="utf-8")
@@ -3809,7 +3821,7 @@ def test_response_delivery_cleans_scratch_files_and_reports_the_remaining_state(
 
 
 def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) -> None:
-    """Dependency commands do not turn response delivery into a filesystem write.
+    """UV commands do not turn response delivery into a filesystem write.
 
     Every Text-Artifact Skill runs uv before delivery, and uv ordinarily
     discovers a project and persists cache state. A response-targeted run must
@@ -3817,7 +3829,7 @@ def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) 
     and is also the configured cache location (issue #180).
     """
 
-    # Read every declared uv command through the Skill interface the agent sees.
+    # Read every UV command through the public Skill interface.
     bodies = [
         (REPO_ROOT / "skills" / "editorial" / name / "SKILL.md").read_text(
             encoding="utf-8"
@@ -3828,20 +3840,21 @@ def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) 
         command for body in bodies for command in re.findall(r"`(uv run [^`]+)`", body)
     ]
 
-    # Make the separately inventoried Harness scratch area a discoverable uv project.
+    # Stage scratch as a project with an unchanged empty directory.
     scratch = tmp_path / "harness-scratch"
     scratch.mkdir()
     (scratch / "pyproject.toml").write_text(
         '[project]\nname = "response-default"\nversion = "0.0.0"\n',
         encoding="utf-8",
     )
-    before = {
-        path.relative_to(scratch): path.read_bytes()
-        for path in scratch.rglob("*")
-        if path.is_file()
-    }
+    baseline_empty = scratch / "baseline-empty"
+    baseline_empty.mkdir()
+    before = _filesystem_inventory(scratch)
 
-    # Execute uv with the safety options declared by the public runtime commands.
+    # Prove the observer includes directories before trusting the comparison.
+    assert baseline_empty.relative_to(scratch) in before
+
+    # Configure UV to attempt writes inside the inventoried scratch area.
     prefix = commands[0].partition(' "<checker>"')[0]
     options = prefix.split()[2:]
     env = os.environ.copy()
@@ -3849,36 +3862,38 @@ def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) 
     runtime_tmp = scratch / "uv-tmp"
     runtime_tmp.mkdir()
     env["TMPDIR"] = str(runtime_tmp)
+
+    # Execute a successful UV probe with the declared safety options.
     subprocess.run(
         [
             "uv",
             "run",
             *options,
             "--offline",
-            str(MANAGER_DIR / "library" / "scripts" / "languages.py"),
-            "resolve",
-            "--scope=composition",
-            "en",
+            "python",
+            "-c",
+            "pass",
         ],
         cwd=scratch,
         env=env,
-        check=False,
+        check=True,
         capture_output=True,
         text=True,
     )
+
+    # Apply the cleanup instruction only when every consumer carries it.
     if all(UV_RUNTIME_CLEANUP in body for body in bodies):
         shutil.rmtree(runtime_tmp)
-    after = {
-        path.relative_to(scratch): path.read_bytes()
-        for path in scratch.rglob("*")
-        if path.is_file()
-    }
 
+    # Compare every filesystem entry after cleanup with the baseline.
+    after = _filesystem_inventory(scratch)
     assert after == before, (
         "A response-targeted Text-Artifact run persisted uv project or cache"
         f" files in Harness scratch: {sorted(after.keys() - before.keys())}"
         " (issue #180)."
     )
+
+    # Confirm every Text-Artifact Skill declares the options under test.
     assert commands and all(
         command.startswith("uv run --no-cache --no-project ") for command in commands
     ), (
