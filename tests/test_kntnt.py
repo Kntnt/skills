@@ -5596,6 +5596,38 @@ def test_unslop_runs_no_mechanical_pass_and_names_the_separate_gesture() -> None
     )
 
 
+def test_unslop_never_reports_locale_mechanics_as_findings() -> None:
+    """Resolving a locale admits its anti-slop scope and no mechanics.
+
+    A locale is still needed for language-specific anti-slop patterns, but it
+    does not turn differences in spelling, vocabulary, dates, or currency into
+    findings. Those differences belong to the separate mechanical gesture
+    (issue #177).
+    """
+
+    body = UNSLOP.read_text(encoding="utf-8").lower()
+
+    assert (
+        "locale spelling, vocabulary, date, or currency differences are not findings"
+        in body
+    ), (
+        f"{UNSLOP}: resolving a locale is not kept explicitly separate from"
+        f" applying its mechanics, so locale spelling, vocabulary, dates, and"
+        f" currency can be reported through an anti-slop run (#177). See"
+        f" {STANDARD}."
+    )
+
+    manpage = UNSLOP_HELP.read_text(encoding="utf-8").lower()
+    assert (
+        "locale conventions for spelling, vocabulary, dates, and currency never"
+        " become findings" in manpage
+    ), (
+        f"{UNSLOP_HELP}: the page does not tell a caller that locale mechanics"
+        f" remain outside the findings when a locale is selected (#177). See"
+        f" {STANDARD}."
+    )
+
+
 def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
     """Availability is one contract, not one per invocation.
 

@@ -14,6 +14,7 @@ INDEX = CORPUS / "README.md"
 MODEL_INVOKED_PROOFREAD_RECORD = (
     EVALUATION / "records" / "proofread-gpt-2026-08-26-170.md"
 )
+UNSLOP_LOCALE_RECORD = EVALUATION / "records" / "unslop-gpt-2026-08-26-177.md"
 
 # The material the wave has to survive, one tag per kind. A fixture entry
 # declares what it covers from this vocabulary, and the corpus is complete when
@@ -307,6 +308,36 @@ def test_model_invoked_proofread_regression_observes_loaded_resources() -> None:
                 f" not record {evidence!r}, so its rule-loading verdict can"
                 f" be inferred from the artifact instead of observed in the"
                 f" Harness trace (issue #170)."
+            )
+
+
+def test_unslop_locale_regression_stays_inside_the_anti_slop_lens() -> None:
+    """Both English locales leave locale-divergent clean under Unslop.
+
+    The American run originally reported British spelling, vocabulary,
+    currency, and an ambiguous date as one anti-slop finding. A focused GPT
+    rerun over the same fixture holds both locale branches to the lens boundary
+    and records no unresolved finding (issue #177).
+    """
+
+    text = UNSLOP_LOCALE_RECORD.read_text(encoding="utf-8")
+
+    for locale in ("en_GB", "en_US"):
+        start = text.index(f"## `locale-divergent` — `{locale}`")
+        end = text.find("\n## ", start + 1)
+        entry = text[start:] if end == -1 else text[start:end]
+
+        for evidence in (
+            "`anti-slop lens` — `pass`",
+            "`mechanics preserved` — `pass`",
+            "**unresolved findings** — `none`",
+            "No anti-slop findings",
+        ):
+            assert evidence in entry, (
+                f"{UNSLOP_LOCALE_RECORD}: the {locale} entry does not record"
+                f" {evidence!r}, so the locale-divergent lens-boundary"
+                f" criterion has not passed under both English locales"
+                f" (issue #177)."
             )
 
 
