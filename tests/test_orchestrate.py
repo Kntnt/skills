@@ -24,7 +24,10 @@ VERIFYING_BRIEFS = (
     "fix.md",
 )
 
-# Every brief the skill hands out, the wave check's fixer included.
+# Every brief the skill hands out, the wave check's fixer included. Every one
+# of them carries the leftover rule as well, and no brief is exempt from it:
+# each of these tells its subagent to run something and to wait on it, so
+# every one of them can leave a process behind (issue #151).
 ALL_BRIEFS = VERIFYING_BRIEFS
 
 # Which briefs the run hands a subagent that writes a ticket's code — the
@@ -45,8 +48,9 @@ CODE_WRITING_BRIEFS = (
 CODE_WRITING_RULES = {
     "the reservation rule (ADR-0071)": "**Numbers are reserved for you.**",
     "the run-owned files rule (ADR-0071)": "**Some files are the run's to write, not yours.**",
-    "the waiting rule (issue #75)": "**A long command is waited on, not yielded to.**",
+    "the waiting rule (issue #75, issue #151)": "**A long command is waited on, not yielded to.**",
     "the confinement rule (ADR-0071)": "**Where you write.**",
+    "the leftover rule (ADR-0127)": "**What you leave running.**",
 }
 
 # The reference directory's remaining briefs, each with the reason the
@@ -73,13 +77,42 @@ def _instructions(name: str) -> str:
     return _brief(name).split("\n---\n", 1)[0]
 
 
-def _waiting_paragraph(text: str) -> str:
-    """The paragraph of a brief that tells its subagent to wait, or the empty string."""
+def _rule_statement(text: str, opening: str) -> str:
+    """One rule as a brief states it, or the empty string.
 
-    for paragraph in text.split("\n\n"):
-        if "in the background" in paragraph:
-            return paragraph.strip()
+    A rule is the paragraph opening with the rule's own bold sentence plus
+    every paragraph under it up to the next bold-opening paragraph, so a rule
+    that carries a placeholder and its follow-through is compared whole.
+    """
+
+    paragraphs = [paragraph.strip() for paragraph in text.split("\n\n")]
+    for index, paragraph in enumerate(paragraphs):
+        if paragraph.startswith(opening):
+            statement = [paragraph]
+            for following in paragraphs[index + 1 :]:
+                if following.startswith("**"):
+                    break
+                statement.append(following)
+            return "\n\n".join(statement)
     return ""
+
+
+def _waiting_rule(text: str) -> str:
+    """The waiting rule as a brief states it, whole, or the empty string.
+
+    Read through the same whole-rule reader every other carried rule is read
+    through: the rule says how a wait starts and what becomes of it, and a
+    reader that stopped at the first paragraph would leave the second half
+    free to drift brief by brief (issue #151).
+    """
+
+    return _rule_statement(text, "**A long command is waited on, not yielded to.**")
+
+
+def _leftover_rule(text: str) -> str:
+    """The leftover rule as a brief states it, whole, or the empty string."""
+
+    return _rule_statement(text, "**What you leave running.**")
 
 
 def _step(number: int) -> str:
@@ -156,46 +189,99 @@ def test_every_verifying_brief_tells_its_subagent_to_wait_out_a_long_command() -
         )
 
 
+def test_every_verifying_brief_says_what_becomes_of_the_wait() -> None:
+    """A rule complete about starting a wait and silent about ending it is half a rule.
+
+    A subagent read the rule literally, discharged it by arranging a wait that
+    could not notice its command had finished, and reported. The wait outlived
+    the command, the turn, and the subagent; each time it woke it woke the run,
+    and the run answered by arranging another. Nineteen of them were alive at
+    once before anybody looked (issue #151).
+    """
+
+    for name in VERIFYING_BRIEFS:
+        text = _brief(name)
+        where = SKILL / "references" / name
+
+        assert "The wait ends with the command it waits on" in text, (
+            f"{where}: the brief says the wait ends with the command it waits"
+            f" on. A rule that only says to start one is discharged by a wait"
+            f" that never stops (issue #151)."
+        )
+        assert "no wait survives the turn that created it" in text, (
+            f"{where}: the brief says no wait survives the turn that created"
+            f" it. A wait outliving its turn has nobody left to end it, and"
+            f" unattended it is what wakes the run next (issue #151)."
+        )
+        assert "bound it and end it yourself before you report" in text, (
+            f"{where}: the brief says what to do where the only waiting"
+            f" available cannot tell that its command finished — bound it and"
+            f" end it before reporting. Stated as a property rather than named"
+            f" as a tool, the rule stays harness-neutral (issue #151)."
+        )
+        assert "Never end your turn while it runs" in text, (
+            f"{where}: the amended rule still forbids ending the turn while"
+            f" the command runs. Ending a turn mid-gate is the more expensive"
+            f" failure, and nothing about ending a wait may make it easier"
+            f" (issue #75, issue #151)."
+        )
+
+
+def test_no_brief_names_a_way_to_wait() -> None:
+    """A brief that names one harness's tool is a brief that only works there.
+
+    The facility is deliberately unnamed, which is what the neutrality records
+    want — so what the amended rule adds is stated as properties the mechanism
+    must have rather than as the command that has them (ADR-0005, ADR-0030).
+    """
+
+    named = re.compile(
+        r"\b(sleep|pgrep|pkill|kill|wait\s+-n|bash|zsh|shell|cron|tail|"
+        r"claude|codex|cursor|copilot)\b",
+        re.IGNORECASE,
+    )
+
+    for name in ALL_BRIEFS:
+        text = _brief(name)
+        where = SKILL / "references" / name
+
+        for rule, statement in (
+            ("the waiting rule", _waiting_rule(text)),
+            ("the leftover rule", _leftover_rule(text)),
+        ):
+            found = named.findall(statement)
+            assert not found, (
+                f"{where}: {rule} names no harness, tool, or command as the"
+                f" way to wait or the way to stop — it states the properties"
+                f" the mechanism must have, and the subagent picks the"
+                f" mechanism its harness gives it. Named: {sorted(set(found))}"
+                f" (issue #151)."
+            )
+
+
 def test_the_briefs_state_the_waiting_rule_in_one_wording() -> None:
     """One rule stated six ways is six rules, and a subagent obeys the one it was given.
 
     The briefs are handed out one per subagent, so nothing but identical
-    wording keeps a builder and a verifier held to the same rule.
+    wording keeps a builder and a verifier held to the same rule. The rule is
+    compared whole, both halves of it: what the wait starts and what becomes
+    of it are one rule, and a second half free to drift is a second rule
+    (issue #151).
     """
 
-    stated = {name: _waiting_paragraph(_brief(name)) for name in VERIFYING_BRIEFS}
+    stated = {name: _waiting_rule(_brief(name)) for name in VERIFYING_BRIEFS}
     wordings = set(stated.values())
 
     assert "" not in wordings, (
-        f"{SKILL / 'references'}: every brief states the waiting rule in a"
-        f" paragraph of its own. These state none: "
-        f"{sorted(name for name, rule in stated.items() if not rule)}."
+        f"{SKILL / 'references'}: every brief states the waiting rule, opening"
+        f" `**A long command is waited on, not yielded to.**`. These state"
+        f" none: {sorted(name for name, rule in stated.items() if not rule)}."
     )
     assert len(wordings) == 1, (
         f"{SKILL / 'references'}: every brief states the waiting rule in the"
         f" same wording, so the briefs state one rule rather than one each."
         f" These differ: {sorted(stated)}."
     )
-
-
-def _rule_statement(text: str, opening: str) -> str:
-    """One rule as a brief states it, or the empty string.
-
-    A rule is the paragraph opening with the rule's own bold sentence plus
-    every paragraph under it up to the next bold-opening paragraph, so a rule
-    that carries a placeholder and its follow-through is compared whole.
-    """
-
-    paragraphs = [paragraph.strip() for paragraph in text.split("\n\n")]
-    for index, paragraph in enumerate(paragraphs):
-        if paragraph.startswith(opening):
-            statement = [paragraph]
-            for following in paragraphs[index + 1 :]:
-                if following.startswith("**"):
-                    break
-                statement.append(following)
-            return "\n\n".join(statement)
-    return ""
 
 
 def test_every_brief_the_reference_directory_holds_is_classified() -> None:
@@ -225,6 +311,14 @@ def test_every_brief_the_reference_directory_holds_is_classified() -> None:
         f" stale entry is a claim about nothing. Unclassified: "
         f"{sorted(on_disk - classified)}; stale: {sorted(classified - on_disk)}"
         f" (issue #85)."
+    )
+    assert on_disk == set(ALL_BRIEFS), (
+        f"{SKILL / 'references'}: ALL_BRIEFS names every brief the directory"
+        f" holds. The rules carried by every brief without exception — the"
+        f" confinement rule and the leftover rule — are quantified over that"
+        f" list, so a name missing from it is a brief those rules never reach."
+        f" Missing: {sorted(on_disk - set(ALL_BRIEFS))}; stale: "
+        f"{sorted(set(ALL_BRIEFS) - on_disk)} (issue #151)."
     )
 
 
@@ -295,6 +389,31 @@ def test_the_build_step_resumes_a_subagent_left_waiting() -> None:
         f"{SKILL / 'SKILL.md'}: step 6 says the waiting builder is resumed"
         f" rather than recorded. Recorded, an unfinished build becomes a failed"
         f" ticket nothing was wrong with (issue #75)."
+    )
+
+
+def test_the_build_step_accounts_for_what_a_subagent_left_running() -> None:
+    """A run that trusts each subagent to leave nothing behind has no answer when one does.
+
+    A subagent's work was committed and its report delivered, and the waits it
+    had started went on ending, one after another, each ending waking the run,
+    and the run answering each waking as though there were a subagent behind
+    it. Nineteen rounds of that, and nothing in the step could say what was
+    happening (ADR-0127, issue #151).
+    """
+
+    step = _step(6)
+
+    assert "still running" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 says the run looks for what a finished"
+        f" or triaged subagent left running. Trusting each subagent to leave"
+        f" nothing is what left nineteen of them running (ADR-0127)."
+    )
+    assert "swept rather than triaged" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 says a waking that is only such a"
+        f" leftover is swept rather than triaged. Triaged, it is dispatched"
+        f" again, and the dispatch starts the next leftover — which is the"
+        f" loop itself (ADR-0127)."
     )
 
 
@@ -372,6 +491,66 @@ def test_the_briefs_state_the_confinement_rule_in_one_wording() -> None:
     assert len(wordings) == 1, (
         f"{SKILL / 'references'}: every brief states the confinement rule in"
         f" the same wording, so the briefs state one rule rather than one each."
+        f" These differ: {sorted(stated)}."
+    )
+
+
+def test_every_brief_makes_its_subagent_stop_what_it_started() -> None:
+    """The confinement rule reaches paths, and a process is not a path.
+
+    Every brief bounds what its subagent may write and none of them bounded
+    what it may leave running, so a finished subagent's background command was
+    nobody's — outside the rule that confines a path, outside the report the
+    run reads, and still running against the tree the next subagent got. Every
+    brief carries this one and none is exempt: each of them tells its subagent
+    to run something and to wait on it (ADR-0127, issue #151).
+    """
+
+    for name in ALL_BRIEFS:
+        text = _brief(name)
+        where = SKILL / "references" / name
+
+        assert "**What you leave running.**" in text, (
+            f"{where}: the brief states the leftover rule in a paragraph of"
+            f" its own, opening `**What you leave running.**`. A subagent told"
+            f" only where it may write is told nothing about what it may leave"
+            f" behind (ADR-0127)."
+        )
+        assert "whatever you start, you stop" in text, (
+            f"{where}: the brief says the subagent stops what it started. That"
+            f" is the whole of the obligation, and it is what nothing said"
+            f" before (ADR-0127)."
+        )
+        assert "before you report" in text, (
+            f"{where}: the brief puts the stopping before the report, so the"
+            f" turn that started a process is the turn that ends it"
+            f" (ADR-0127)."
+        )
+        assert "name it in your report" in text, (
+            f"{where}: the brief says a process deliberately left standing is"
+            f" named in the report. Anything else the run has to discover, and"
+            f" the way it discovers one is by being woken by it (ADR-0127)."
+        )
+
+
+def test_the_briefs_state_the_leftover_rule_in_one_wording() -> None:
+    """One rule stated seven ways is seven rules, and a subagent obeys the one it was given.
+
+    Carried by the same mechanism the waiting rule and the confinement rule
+    are carried by, rather than by a second one beside it (issue #151).
+    """
+
+    stated = {name: _leftover_rule(_brief(name)) for name in ALL_BRIEFS}
+    wordings = set(stated.values())
+
+    assert "" not in wordings, (
+        f"{SKILL / 'references'}: every brief states the leftover rule,"
+        f" opening `**What you leave running.**`. These state none: "
+        f"{sorted(name for name, rule in stated.items() if not rule)}."
+    )
+    assert len(wordings) == 1, (
+        f"{SKILL / 'references'}: every brief states the leftover rule in the"
+        f" same wording, so the briefs state one rule rather than one each."
         f" These differ: {sorted(stated)}."
     )
 
