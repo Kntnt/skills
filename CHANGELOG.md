@@ -8,6 +8,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - `/proofread` now preserves an ambiguous numeric date such as `3/4` under both British and American English when locale alone cannot establish the intended reading, rather than expanding or reordering it and introducing unsupported information (issue #166).
 - Language-specific punctuation errors now live in each Language Resource's mechanics scope, so `/proofread` receives the same Swedish comma, dash, quotation-mark, list, and ampersand rules whether the language is inferred or named. The British dash convention moved beside its other mechanics, American English now explicitly rejects spaced em dashes, and both English locales preserve the established comma variation after a sentence-initial connective adverb; anti-slop scopes refer to mechanical rules without duplicating them (issue #167).
+- `/proofread` now preserves grammatically valid word-as-word phrases without adding quotation marks or other emphasis unless its loaded mechanics rules identify an objective error, including `the word probably` in the derived-name-collision fixture (issue #169).
+- Model-invoked `/proofread` now joins invocation by name before loading rules, and the language resolver no longer exposes backing resource paths that invite a caller around its scope filter. Both the proofreading-term and mechanical-only triggers were re-run under Codex with the Harness trace showing only the resolved mechanics scope and the shared mechanics contract loaded (issue #170).
 
 ## [0.17.0] – 2026-08-26
 
