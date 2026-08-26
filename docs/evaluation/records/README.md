@@ -14,3 +14,4 @@ Where a re-run lands on the same date as the record it follows, the name takes t
 - [`write-claude-2026-08-25-138.md`](write-claude-2026-08-25-138.md) — the two briefs that state a length their material cannot fill, re-run against the Write Skill as issue #138 changed it, at the corpus commit `c922071`, in Claude Code on `claude-opus-5`.
 - [`unslop-claude-2026-08-25.md`](unslop-claude-2026-08-25.md) — the Unslop Skill against the corpus at `26155fd`, in Claude Code on `claude-opus-5`, for issue #111.
 - [`proofread-claude-2026-08-26.md`](proofread-claude-2026-08-26.md) — the Proofread Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #156.
+- [`write-claude-2026-08-26.md`](write-claude-2026-08-26.md) — the Write Skill against the corpus at `46ba9c1`, in Claude Code on `claude-opus-5`, for issue #158.
