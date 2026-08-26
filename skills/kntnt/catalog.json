@@ -90,7 +90,7 @@
       "name": "ready-for-agent-check",
       "category": "code",
       "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
-      "digest": "39e32d4be8121fa7a46766ffc95c7474768e2ac1072cd7f01750811b759f2908",
+      "digest": "b574722f6f35ded80640a9cd2d0d400e6754783a1237d11addb9f015022c50cc",
       "binaries": [
         "gh",
         "uv"

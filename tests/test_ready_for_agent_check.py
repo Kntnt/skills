@@ -79,26 +79,3 @@ def test_the_review_brief_refuses_to_be_summarised() -> None:
         f" will not have is exactly what makes a thin ticket read as clear. See"
         f" {STANDARD}."
     )
-
-
-def test_the_skill_declares_no_flag_it_would_have_to_refuse() -> None:
-    """Nothing is written here, so `--yes` has no question to answer.
-
-    The Manager's own grammar rule is that a flag with no work is an error
-    rather than a no-op, and a skill that quietly accepted one would teach the
-    opposite of what every other skill in the collection teaches.
-    """
-
-    text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
-
-    assert "there is no question for `--yes` to answer" in text, (
-        f"{SKILL / 'SKILL.md'}: this skill writes nothing and asks nothing, so"
-        f" the body says plainly that `--yes` has no question to answer. A flag"
-        f" quietly accepted here teaches the opposite of what every other skill"
-        f" in the collection teaches. See {STANDARD}."
-    )
-    assert "$LIBRARY/references/invocation-envelope.md" in text, (
-        f"{SKILL / 'SKILL.md'}: the paragraph refusing a flag with no work"
-        f" points at the one place that rule and the reason an installed reader"
-        f" applies it are written. See {STANDARD}."
-    )

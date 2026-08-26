@@ -28,7 +28,7 @@ Read `$LIBRARY/references/invocation-envelope.md` and follow it before help rout
 
 ## Arguments
 
-`/ready-for-agent-check [#<ticket> ...]`, and nothing else. Every argument is a ticket reference; there are no flags, and none is missing. Nothing here is written, asked, or changed, so there is no question for `--yes` to answer and no gate for it to open.
+`/ready-for-agent-check [#<ticket> ...]`, and nothing else. Every argument is a ticket reference; there are no flags, and none is missing.
 
 Anything else is an invalid form. Refuse it as `$LIBRARY/references/invocation-envelope.md` says, then check nothing and stop.
 
