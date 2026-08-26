@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- `/proofread` now makes an agreement-only re-read regardless of whether its language is named explicitly or resolved from another source, correcting the staged Swedish `olika bild` to `olika bilder` while the existing mechanics rules correct `Drift & utveckling` to `Drift och utveckling` and fenced, indented, and inline code remains untouched (issue #164).
+- `/redline` now delegates its closing mechanical pass to the installed Proofread Skill exactly once with the complete current artifact and resolved language, adopts the complete result, and performs no selective or partial substitute of its own. The focused GPT Swedish zero-budget rerun corrected every planted mechanical error and left the staged filesystem unchanged (issue #174).
+- Model-invoked `/proofread` now resolves an unnamed Output Target to the response, treats a file named only as the location of errors as a source rather than a destination, routes explicit file-replacement requests through In-place Editing and its refusals, and asks before writing when the destination is ambiguous (issue #168).
+
 ## [0.17.1] – 2026-08-26
 
 ### Fixed
