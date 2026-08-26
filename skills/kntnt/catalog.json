@@ -34,7 +34,7 @@
       "name": "tldr",
       "category": "agents",
       "description": "Reframe what was just said for the person who owns the outcome, and turn TL;DR mode on or off so later replies stay concise and decision-relevant.",
-      "digest": "f21e93a77c285b64d726df73c8752c93a5fd36af0f77543a01aa98ee98fed632",
+      "digest": "ce5d7de820fb4610b5fd1358885db6a415291f56740e6dc3a8b9ab722ec09845",
       "binaries": [],
       "skills": [],
       "externals": [],

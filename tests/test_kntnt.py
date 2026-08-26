@@ -3680,6 +3680,42 @@ def test_the_shared_delivery_contract_binds_no_consumers_grammar() -> None:
     assert "`my-file.md`, `my-file-2.md`, `my-file-3.md`" in contract
 
 
+def test_the_collection_library_carries_the_tldr_register() -> None:
+    """The owner-facing register is the Library's, not a peer Skill's internal.
+
+    `tldr` is the register's only shipped consumer today; the Skills that will
+    adopt it as their voice toward the person who owns the outcome are the
+    reason it moved. Peer internals are not an interface — a Skill never reads
+    another Skill's `references/` — so a register a second Skill is written
+    against cannot wait under the first one to be needed, and `tldr` reads it
+    through `$LIBRARY` like any later consumer will (ADR-0109).
+    """
+
+    register = MANAGER_DIR / "library" / "references" / "tldr-mode.md"
+    assert register.is_file(), (
+        f"{register}: the TL;DR register is stated once, in the Collection"
+        f" Library. A copy under `tldr` would make that Skill the"
+        f" implementation owner of every peer written against the register"
+        f" (ADR-0109). See {STANDARD}."
+    )
+
+    # Hold the single copy itself, not merely the absence of the old address.
+    # Byte equality catches the copy a move leaves behind, which is the failure
+    # this rule prevents; a copy since edited is drift the pointers catch.
+    text = register.read_text(encoding="utf-8")
+    copies = sorted(
+        path.relative_to(REPO_ROOT)
+        for path in (REPO_ROOT / "skills").rglob("*.md")
+        if path.read_text(encoding="utf-8") == text
+    )
+    assert copies == [register.relative_to(REPO_ROOT)], (
+        f"{copies}: the TL;DR register ships verbatim more than once. A"
+        f" reference with several consumers has one authoritative copy in the"
+        f" Library, and a second copy is a register that can drift from itself"
+        f" (ADR-0109). See {STANDARD}."
+    )
+
+
 def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     """One statement of what a first draft has to be, read from both sides.
 
@@ -6717,6 +6753,74 @@ def test_tldr_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
             f" they want the Skill, so it states the forms it accepts."
             f" See {STANDARD}."
         )
+
+
+def test_tldr_addresses_its_register_through_the_library() -> None:
+    """Every shipped pointer at the register names the Library address.
+
+    The register moved out of `tldr`'s `references/` and the Skill now reaches
+    it as any consumer does. The persisted block's template is held here rather
+    than beside `delegation`'s, whose own mode is still local: one literal for
+    both Skills would pass whichever path it named and hide the other
+    (ADR-0109).
+    """
+
+    body = TLDR_DIR / "SKILL.md"
+    persist = TLDR_DIR / "references" / "persist.md"
+    former = TLDR_DIR / "references" / "mode.md"
+    text = body.read_text(encoding="utf-8")
+    persistence = persist.read_text(encoding="utf-8")
+
+    assert not former.exists(), (
+        f"{former}: the register is the Library's, and a local copy beside the"
+        f" Skill is the peer internal the move removed (ADR-0109)."
+        f" See {STANDARD}."
+    )
+
+    for surface, content in ((body, text), (persist, persistence)):
+        assert "references/mode.md" not in content, (
+            f"{surface}: a pointer still names the register's old address"
+            f" under the Skill's own `references/`. See {STANDARD}."
+        )
+
+    # The three steps that reach for the register — the replacement answer, the
+    # staleness `status` reports, and the standing instruction `on` adopts —
+    # each name the one address it now has.
+    steps = _section(text, "## Steps", body)
+    for marker in (
+        "Bare form: read",
+        "staleness",
+        "adopt it as a standing instruction",
+    ):
+        reading = [line for line in steps.splitlines() if marker in line]
+        assert reading, (
+            f"{body}: no step names {marker!r}, so this check judged nothing."
+            f" See {STANDARD}."
+        )
+        for line in reading:
+            assert "$LIBRARY/references/tldr-mode.md" in line, (
+                f"{body}: the step `{line.strip()[:60]}...` reaches for the"
+                f" register without naming its Library address (ADR-0109)."
+                f" See {STANDARD}."
+            )
+
+    required_persistence_fragments = {
+        "{the entire content of $LIBRARY/references/tldr-mode.md, verbatim}",
+        "`on` over an existing block rewrites it from the current `tldr-mode.md`",
+        "differ from `$LIBRARY/references/tldr-mode.md`",
+        "`status` reports it and names `/tldr on --user` as the fix",
+    }
+    missing = sorted(
+        fragment
+        for fragment in required_persistence_fragments
+        if fragment not in persistence
+    )
+    assert not missing, (
+        f"{persist}: the persisted block copies"
+        f" the register from the Library address, refreshes it from there, and"
+        f" diagnoses a stale copy against it; missing {missing}."
+        f" See {STANDARD}."
+    )
 
 
 def test_tldr_accepts_no_unseparated_text_after_its_name_or_command_path() -> None:
