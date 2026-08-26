@@ -70,4 +70,4 @@ The Manager must be Enabled so the dependency check and Collection Library are a
 
 ## SEE ALSO
 
-**/frame --help**
+**/frame --help**, **/compile --help**

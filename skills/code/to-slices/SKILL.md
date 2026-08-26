@@ -69,4 +69,4 @@ Read the entire published set back. Success requires the decision issue, every c
 
 ## Completion
 
-Close in the register of `$LIBRARY/references/tldr-mode.md`: name the decision issue, the approved children, the current unblocked frontier, and any unresolved publication state. The decision issue remains open and carries no executable ready label; every child receives the configured ready state. This version invents no `/compile` invocation before that Skill ships.
+Close in the register of `$LIBRARY/references/tldr-mode.md`: name the decision issue, the approved children, the current unblocked frontier, and any unresolved publication state. The decision issue remains open and carries no executable ready label; every child receives the configured ready state. After complete verified publication, hand over the exact next line with every executable child in approved snapshot order: `/compile #<child> #<child> ...`.

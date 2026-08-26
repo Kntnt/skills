@@ -1,0 +1,5 @@
+interface:
+  display_name: "Compile"
+  short_description: "Compile independently checked executor plans"
+policy:
+  allow_implicit_invocation: false

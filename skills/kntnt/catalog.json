@@ -54,6 +54,22 @@
       "capabilities": []
     },
     {
+      "name": "compile",
+      "category": "code",
+      "description": "Compile ready executable child tickets into fresh, independently checked executor-plan bundles.",
+      "digest": "23a7db84bc19e791e9b96e084e2b19944a6af58e3545dea8502653838b3a805f",
+      "binaries": [
+        "git",
+        "gh",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
       "name": "frame",
       "category": "code",
       "description": "Map a task before anything is built. Codebase recon runs beside an interview, the questions put to the owner are the ones neither the code nor the repository's own rules could answer, and what comes out is a Frame Record the next Skill builds from.",
@@ -136,7 +152,7 @@
       "name": "to-slices",
       "category": "code",
       "description": "Turn one complete Frame Record into an approved decision issue and executable tracer-bullet child tickets.",
-      "digest": "db03efec1f2316dc7422b19c500db1d6898296009f1dbef1215f8c05cdd1c284",
+      "digest": "4a33508d8aa36687fade957a1d7751d099aab81dcdfe9370c7ec9c0fd1ae0802",
       "binaries": [
         "git",
         "gh",
