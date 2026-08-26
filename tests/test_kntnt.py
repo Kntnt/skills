@@ -4556,6 +4556,93 @@ def test_model_invoked_proofread_joins_the_named_invocation_path() -> None:
     )
 
 
+def test_model_invoked_proofread_settles_its_output_target_before_writing() -> None:
+    """Natural-language invocation does not infer the source as its destination.
+
+    A model-invoked run has no Formal Invocation to carry an output option, so
+    the Skill and its manpage must settle the same natural-language boundary:
+    omission means response, an explicit request can select In-place Editing,
+    and ambiguity costs a question while the filesystem is untouched (issue
+    #168).
+    """
+
+    body = PROOFREAD.read_text(encoding="utf-8")
+    steps = body.index("## Steps")
+    join = body.index("A model-invoked run", 0, steps)
+    body_rule = body[join:steps]
+
+    help_path = PROOFREAD.with_name("help.md")
+    help_text = help_path.read_text(encoding="utf-8")
+    help_start = help_text.index("A model may start this Skill")
+    help_end = help_text.index("## POSITIONAL ARGUMENTS", help_start)
+    help_rule = help_text[help_start:help_end]
+
+    shared_clauses = (
+        "no Formal Invocation carries an Output Target",
+        "unnamed destination resolves to the response",
+        "only as the location of the errors names no destination",
+        "asks for the file itself to be changed selects In-place Editing",
+        "subject to every refusal",
+        "materially ambiguous about the destination",
+        "ask which destination the caller intends and write nothing",
+    )
+
+    for clause in shared_clauses:
+        assert clause in body_rule, (
+            f"{PROOFREAD}: the model-invoked destination rule does not state"
+            f" {clause!r}, leaving natural-language delivery unresolved"
+            f" (issue #168). See {STANDARD}."
+        )
+        assert clause in help_rule, (
+            f"{help_path}: the model-invocation paragraph does not state"
+            f" {clause!r}, so the user-facing destination rule disagrees with"
+            f" the Skill body (issue #168). See {STANDARD}."
+        )
+
+    for refusal in ("inline text", "a URL", "read-only", "more than one text"):
+        assert refusal in body_rule, (
+            f"{PROOFREAD}: model-invoked In-place Editing does not expressly"
+            f" retain the {refusal!r} refusal (issue #168). See {STANDARD}."
+        )
+        assert refusal in help_rule, (
+            f"{help_path}: the model-invocation paragraph does not retain the"
+            f" {refusal!r} In-place Editing refusal (issue #168). See"
+            f" {STANDARD}."
+        )
+
+    model_invocation_cases = (
+        (
+            "Fix the spelling and grammar mistakes in case.md",
+            "delivers to the response",
+        ),
+        (
+            "Fix the grammar errors in case.md and save the corrections",
+            "asks which destination the caller intends",
+        ),
+        (
+            "Update case.md with the grammar corrections",
+            "selects In-place Editing",
+        ),
+        (
+            "Write the corrected text to corrected.md",
+            "selects corrected.md as a separate Output Target",
+        ),
+    )
+
+    for request, outcome in model_invocation_cases:
+        contract = f"`{request}` {outcome}"
+        assert contract in body_rule, (
+            f"{PROOFREAD}: the model-invoked destination rule does not"
+            f" classify {request!r} as {outcome!r}, leaving the observed"
+            f" behavioural boundary implicit (issue #168). See {STANDARD}."
+        )
+        assert contract in help_rule, (
+            f"{help_path}: the model-invocation paragraph does not classify"
+            f" {request!r} as {outcome!r}, so its concrete destination rule"
+            f" disagrees with the Skill body (issue #168). See {STANDARD}."
+        )
+
+
 def test_proofread_reads_only_the_mechanics_scope_of_a_language_resource() -> None:
     """Scoping buys frugality, and the body is where it is spent or wasted.
 
