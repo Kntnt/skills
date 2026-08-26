@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.17.2] – 2026-08-26
+
 ### Fixed
 
 - `/proofread` now makes an agreement-only re-read regardless of whether its language is named explicitly or resolved from another source, correcting the staged Swedish `olika bild` to `olika bilder` while the existing mechanics rules correct `Drift & utveckling` to `Drift och utveckling` and fenced, indented, and inline code remains untouched (issue #164).
