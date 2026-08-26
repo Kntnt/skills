@@ -4348,6 +4348,35 @@ def test_proofread_reads_only_the_mechanics_scope_of_a_language_resource() -> No
         )
 
 
+def test_proofread_preserves_the_locale_divergent_date_under_either_locale() -> None:
+    """A locale settles mechanics, not which reading an ambiguous date meant.
+
+    The corpus's `3/4` may mean 3 April or March 4, and choosing either reading
+    adds information the Text Artifact does not carry. Both locale selections
+    are pinned because the same source has to survive either mechanical pass.
+    """
+
+    text = PROOFREAD.read_text(encoding="utf-8")
+
+    assert "`3/4`" in text, (
+        f"{PROOFREAD}: the body never names the corpus's ambiguous numeric"
+        f" date, so a run may expand it by treating locale order as evidence"
+        f" of what the source meant (issue #166). See {STANDARD}."
+    )
+    rule = text[text.index("`3/4`") : text.index("A code sample")]
+    assert "never expand or reorder it solely from locale" in rule, (
+        f"{PROOFREAD}: the ambiguous date is named without the preservation"
+        f" rule, so locale may still be treated as evidence of what the source"
+        f" meant (issue #166). See {STANDARD}."
+    )
+    for locale in ("en_GB", "en_US"):
+        assert locale in rule, (
+            f"{PROOFREAD}: the ambiguous-date rule does not cover {locale},"
+            f" so the corpus is protected under only one of the two locale"
+            f" selections it stages (issue #166). See {STANDARD}."
+        )
+
+
 def test_proofread_delivers_through_the_shared_output_contract() -> None:
     """The rule has one owner, and a consumer follows it rather than repeating it.
 
