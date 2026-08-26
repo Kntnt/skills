@@ -353,6 +353,52 @@ def test_the_corpus_covers_the_material_the_wave_has_to_survive() -> None:
     assert REQUIRED_COVERAGE <= claimed, f"uncovered: {REQUIRED_COVERAGE - claimed}"
 
 
+def test_interview_volume_assessments_are_source_fidelity_rejections() -> None:
+    """The supported count survives without an unsupported size judgement."""
+
+    rejection = _fields(_entries()["interview-transcript"])["Reject"].lower()
+
+    for term in (
+        "source fidelity",
+        "eleven full services",
+        "shorter jobs",
+        "high",
+        "low",
+        "modest",
+        "comparison",
+        "target",
+        "capacity",
+        "speaker assessment",
+    ):
+        assert term in rejection, (
+            f"interview-transcript: the fixture does not stage the supported"
+            f" count against its unsupported relative characterisation"
+            f" ({term!r} unstated, issue #171)."
+        )
+
+
+def test_handoff_chronology_rejects_causal_verbs_and_hedges_everywhere() -> None:
+    """Sequence remains sequence in every part and strength of the artifact."""
+
+    rejection = _fields(_entries()["handoff-conflicting"])["Reject"].lower()
+
+    for term in (
+        "source fidelity",
+        "chronology",
+        "causality",
+        "causal verb",
+        "causal hedge",
+        "title",
+        "summary",
+        "body",
+    ):
+        assert term in rejection, (
+            f"handoff-conflicting: the fixture leaves its before-and-after"
+            f" sequence free to become a causal claim ({term!r} unstated,"
+            f" issues #171 and #172)."
+        )
+
+
 def test_the_index_and_the_corpus_directory_describe_the_same_fixtures() -> None:
     """A file nothing documents, and an entry pointing at nothing, both fail."""
 

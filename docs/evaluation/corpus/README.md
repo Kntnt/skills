@@ -71,7 +71,7 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Covers** — interview transcript; local file material
 - **Material** — a transcript of spoken answers with fillers, self-interruption, repetition, a self-correction about a number, and broken syntax throughout.
 - **Use** — supply it as source material for a draft that quotes the speaker.
-- **Reject** — a direct quotation that adds information the speaker did not give, changes her stance or her certainty, removes her self-correction from eleven-plus-others to eleven, or smooths away her distinctive wording while still presenting the result inside quotation marks. Where fidelity is doubtful, a paraphrase is the correct move and a fluent invented quotation is not.
+- **Reject** — a direct quotation that adds information the speaker did not give, changes her stance or her certainty, removes her self-correction from eleven-plus-others to eleven, or smooths away her distinctive wording while still presenting the result inside quotation marks. Where fidelity is doubtful, a paraphrase is the correct move and a fluent invented quotation is not. Source Fidelity also rejects calling the eleven full services *high*, *low*, *modest*, or otherwise relative: the material supplies no comparison, target, capacity, or speaker assessment of scale. The count remains eleven full services with the shorter jobs excluded, preserving the speaker's correction without classifying its size.
 
 ### `factual-source-long`
 
@@ -187,7 +187,7 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Covers** — handoff metadata conflicting
 - **Material** — a Swedish Text Artifact whose Kntnt map says `genre: report`, `technique: pac`, `language: en_US`, contradicting both the body and the invocation below.
 - **Use** — invoke naming the Swedish language and the article genre, and naming no technique. Genre and language are then settled by the invocation, and only the technique falls through to the map.
-- **Reject** — a metadata value overriding an explicit one, an explicit value for one parameter suppressing the map for the other two, and the file delivered with a Kntnt map still contradicting the configuration the run actually resolved.
+- **Reject** — a metadata value overriding an explicit one, an explicit value for one parameter suppressing the map for the other two, and the file delivered with a Kntnt map still contradicting the configuration the run actually resolved. Source Fidelity rejects converting the before-and-after chronology into causality: both a causal verb and a causal hedge add an attribution the material does not support. The title, summary, and body obey the same boundary and preserve sequence without claiming that the new channel shortened the response time.
 
 ### `handoff-partial`
 
