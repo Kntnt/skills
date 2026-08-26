@@ -1,6 +1,6 @@
 # Phase 2, step 1 — `/compile`, as designed
 
-> Draft written 2026-08-26 against commit `7dd014a`, from the `/compile` section of `00-brief.md`, the handoff inherited from `05-to-slices.md`, the executable-child contract in the Collection Library, and the compile-time duties rescued from `/orchestrate`. The owner-level round (step 2) settled both residuals on 2026-08-26; it is now the input to approval of the ticket breakdown. Deleted with the rest of `docs/rework/` by the final cleanup ticket.
+> Draft written 2026-08-26 against commit `7dd014a`, from the `/compile` section of `00-brief.md`, the handoff inherited from `05-to-slices.md`, the executable-child contract in the Collection Library, and the compile-time duties rescued from `/orchestrate`. The owner-level round (step 2) settled both residuals on 2026-08-26, and Thomas approved the resulting design and ticket breakdown the same day; it is ready for publication. Deleted with the rest of `docs/rework/` by the final cleanup ticket.
 
 The dossier states what `/compile` is for; this file is the design that satisfies it, the boundaries judged along the way, and what the owner settled. Everything here is settled — resolved from `docs/rules/`, from `$LIBRARY/references/slices.md`, from the current pipeline Skills, from the compile-time half of the workflow `/dispatch` will replace, or answered by Thomas in the round recorded below. Nothing in it is still a question.
 
@@ -157,7 +157,7 @@ The two consequences the repository could not answer were put to Thomas on 2026-
 
 ## The slices
 
-Two tickets under the settled answers, awaiting the owner's separate approval of the breakdown. Both fit one fresh context, and neither is a Solo Ticket — the shared rules govern three pipeline Skills rather than rewriting an invariant every shipped file is under.
+Two approved tickets under the settled answers. Both fit one fresh context, and neither is a Solo Ticket — the shared rules govern three pipeline Skills rather than rewriting an invariant every shipped file is under.
 
 **S1 — The compiled-plan Interface and shared pipeline rules.** `$LIBRARY/references/compiled-plan.md` states the two-register bundle, manifest, exact footprint, serial allocation, source and `HEAD` freshness, compiler-owned test overlay, and lifecycle `/compile` and `/dispatch` share. `docs/rules/pipeline.md` plus its `AGENTS.md` pointer states the common ticket-selection grammar and cross-Skill ownership rules, with focused contract and pointer coverage. *Blocked by: nothing.* Delivers: one deep Interface for every plan producer and consumer, before either side depends on private prose.
 
