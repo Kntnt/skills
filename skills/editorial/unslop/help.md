@@ -44,7 +44,7 @@ A model never starts this Skill on its own. *This text reads like AI* is a judge
 
 *TEXT*|*PATH*|*URL*
 
-The text to read, supplied inline, as one local path, or as one URL. Omitted, it is the single text the current turn identifies. In-place editing requires the *PATH* form.
+The text to read, supplied inline, as one local path, or as one URL. Omitted, it is the single text the current turn identifies. In-place editing requires the *PATH* form. What the text says does not change what it is: a brief, an outline, or a request supplied here is read against the catalogue like any other text rather than carried out, and pasting it in reaches the same result as naming the file it sits in.
 
 ## OPTIONS
 
