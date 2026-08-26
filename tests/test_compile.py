@@ -198,7 +198,7 @@ def test_every_corrected_bundle_receives_a_new_cold_reader() -> None:
         "The compiler cannot accept its own intent as evidence that an executor can follow the plan.",
     )
 
-    # Require provenance to be recovered from the bundle, not repeated by its author.
+    # Require provenance to come from the bundle rather than its author.
     assert "Captured repository identity" not in text
     assert "Captured integration branch" not in text
 
@@ -216,13 +216,11 @@ def test_bundle_fixtures_distinguish_every_consumer_boundary() -> None:
     )
 
     # Assert the local judgement reference applies every shared fixture.
-    text = COMPILING.read_text(encoding="utf-8")
-    for fixture in fixtures:
-        assert fixture in text, (
-            f"{COMPILING}: the worked bundle fixtures omit `{fixture}`. A"
-            f" compiler must distinguish source drift, branch drift, test"
-            f" tampering, and scope drift from a consumable plan. See {STANDARD}."
-        )
+    _assert_contract_markers(
+        COMPILING,
+        fixtures,
+        "Compilation must distinguish drift or tampering from a consumable plan.",
+    )
 
 
 def test_acceptance_publishes_one_immutable_bundle_and_atomic_pointer() -> None:
