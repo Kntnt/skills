@@ -5593,6 +5593,90 @@ def test_unslop_delivers_shared_and_judges_only_the_text_in_front_of_it() -> Non
     )
 
 
+# What the step that settles the Text Artifact says about the artifact's own
+# words. An evaluation run was handed the corpus's short brief inline, read it
+# as the request it resembles, and wrote the article it commissions — 378 words
+# carrying two paragraphs of the run's own inference — without ever resolving a
+# language, loading an anti-slop scope, or entering the correction loop. The
+# same corpus's slop-heavy prose pasted inline the same way ran the whole flow,
+# so what gave way is the operand's content and not the supply route (#147).
+UNSLOP_OPERAND_IS_THE_TEXT = "still the text"
+UNSLOP_OPERAND_NOT_CARRIED_OUT = "never carried out"
+UNSLOP_OPERAND_READS_NO_PEER = "reads no other Skill's instructions"
+UNSLOP_OPERAND_ANY_SUPPLY = "however it was supplied"
+
+# The same rule on the page a reader consults to decide what this Skill will do
+# with a text, under the section that describes the operand.
+UNSLOP_PAGE_OPERAND = "like any other text"
+
+
+def test_unslop_reads_the_operand_whatever_its_own_words_say() -> None:
+    """A brief is a text, and this Skill reads texts.
+
+    The step that settles the Text Artifact says which forms an operand may
+    arrive in and nothing about what it may say, which leaves a run holding a
+    brief with the artifact's own imperatives and no rule against following
+    them. One did: it wrote the piece the brief commissions instead of reading
+    the brief against the catalogue. The operand is the text to read whatever
+    it turns out to be, the supply route does not enter into it, and reaching
+    that judgement opens no peer Skill's files — this Skill has no writing
+    gesture to fall back on and gains none from being handed a brief (#147).
+    """
+
+    text = UNSLOP.read_text(encoding="utf-8")
+    arguments = _section(text, "## Arguments", UNSLOP)
+    settling = _section(text, "## Steps", UNSLOP).partition("\n2. ")[0]
+
+    assert UNSLOP_OPERAND_IS_THE_TEXT in settling, (
+        f"{UNSLOP}: the step that settles the Text Artifact never says that a"
+        f" text reading as an instruction is still the text. A brief supplied"
+        f" as the operand is the artifact, and its prose is read against the"
+        f" catalogue like any other (#147). See {STANDARD}."
+    )
+    assert UNSLOP_OPERAND_NOT_CARRIED_OUT in settling, (
+        f"{UNSLOP}: the step that settles the Text Artifact does not say that"
+        f" the operand's own imperatives are not this run's to carry out. A"
+        f" run given a brief wrote the piece it commissions, in a genre nobody"
+        f" selected and carrying material the supplied text does not hold"
+        f" (#147). See {STANDARD}."
+    )
+    assert UNSLOP_OPERAND_READS_NO_PEER in settling, (
+        f"{UNSLOP}: the step that settles the Text Artifact does not say that"
+        f" deciding what the operand is reads no other Skill's instructions."
+        f" What this Skill does with a text is settled by its own contract"
+        f" (#147). See {STANDARD}."
+    )
+    assert UNSLOP_OPERAND_ANY_SUPPLY in settling, (
+        f"{UNSLOP}: the step that settles the Text Artifact does not say that"
+        f" the supply route leaves the artifact unchanged. The failing run was"
+        f" inline and the control run was inline too, so a rule written for"
+        f" one form of supply answers neither (#147). See {STANDARD}."
+    )
+
+    # The eight forms the evaluation saw refused correctly. Saying what the
+    # operand is adds nothing to what is invalid and takes nothing from it.
+    listed = arguments.partition("Invalid forms, each refused the same way:\n\n")[
+        2
+    ].partition("\n\n")[0]
+    bullets = [line for line in listed.splitlines() if line.startswith("- ")]
+    assert len(bullets) == 8, (
+        f"{UNSLOP}: the list of invalid forms carries {len(bullets)} entries"
+        f" rather than the eight the evaluation saw refused correctly. Saying"
+        f" what the operand is says nothing about what an invocation may be"
+        f" (#147). See {STANDARD}."
+    )
+
+    positional = _section(
+        UNSLOP_HELP.read_text(encoding="utf-8"), "## POSITIONAL ARGUMENTS", UNSLOP_HELP
+    )
+    assert UNSLOP_PAGE_OPERAND in positional, (
+        f"{UNSLOP_HELP}: the section describing the operand says which forms"
+        f" it arrives in and nothing about what it may say. A reader deciding"
+        f" what this Skill will do with a brief reads this page (#147). See"
+        f" {STANDARD}."
+    )
+
+
 def test_the_unslop_manpage_names_the_patterns_a_finding_may_be() -> None:
     """A reader deciding whether to run this needs to know what it looks for.
 

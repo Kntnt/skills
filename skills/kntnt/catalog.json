@@ -148,7 +148,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "1717fdbb1ed673ad05b6852e23bc61e5c3c87f8f3dec2578cb47e3e61eb31a17",
+      "digest": "cc19fdac75a84f1472973b3c04633e1cce9114e8ef8e378f6025a63e5e5796c8",
       "binaries": [
         "uv"
       ],
