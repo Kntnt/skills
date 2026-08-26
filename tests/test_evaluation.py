@@ -24,6 +24,7 @@ REQUIRED_COVERAGE = frozenset(
         "mechanically flawed prose",
         "ai slop",
         "swedish ai slop",
+        "code",
         "genre",
         "technique",
         "handoff metadata present",
@@ -89,6 +90,20 @@ ITEM_FLOOR = 4
 # How many of that scope's items a fixture carries before it is concentrated
 # slop rather than prose that happens to contain one of them.
 SWEDISH_ITEMS = 12
+
+# The three forms a code sample takes in Markdown. A pass reads past all of
+# them, so a fixture staging only the fenced one leaves the other two to be
+# settled per run, which is the defect ADR-0125 ends.
+FENCE = re.compile(r"^ {0,3}(?:```|~~~)", re.MULTILINE)
+FENCED_BLOCK = re.compile(r"^ {0,3}(```+|~~~+).*?^ {0,3}\1", re.MULTILINE | re.DOTALL)
+INDENTED_CODE = re.compile(r"^(?: {4}|\t)\S", re.MULTILINE)
+INLINE_CODE = re.compile(r"(?<!`)`[^`\n]+`(?!`)")
+
+# What a code-carrying entry has to tell an evaluator before the fixture means
+# anything: which forms the sample takes, that the code holds a mechanical
+# error of its own, that nothing inside it is a finding, and that every byte of
+# it survives.
+CODE_FORMS = ("fenced", "indented", "inline")
 
 # The parameters a Kntnt map may settle, and the three levels of the
 # resolution order a single invocation can be made to exercise at once.
@@ -208,6 +223,17 @@ def _material(fields: dict[str, str]) -> str:
         (CORPUS / name).read_text(encoding="utf-8")
         for name in PATH.findall(fields.get("Files", ""))
     )
+
+
+def _outside_fences(text: str) -> str:
+    """One fixture's text with its fenced blocks taken out.
+
+    An indented line and a backtick span inside a fence are part of the fenced
+    sample rather than a second and third form of code, so they are removed
+    before the other two are looked for.
+    """
+
+    return FENCED_BLOCK.sub("", text)
 
 
 def _swedish_anti_slop_items() -> set[str]:
@@ -491,3 +517,60 @@ def test_the_url_fixture_names_a_source_that_cannot_change_under_a_run() -> None
     for name in urls:
         body = entries[name]
         assert "https://" in body, f"{name}: claims a URL source and names none"
+
+
+def test_the_corpus_stages_code_a_pass_has_to_read_past() -> None:
+    """A code sample is quoted material, and the corpus has to hold some.
+
+    Every editorial Skill is under a preservation obligation that names code,
+    and ADR-0125 settles what a sample is to a pass: quoted material whose
+    contents produce no findings and are never altered. Neither claim is
+    answerable from a corpus carrying no code, which is what sent one
+    evaluation to run-local probe material the other provider family had
+    nothing to mirror (issue #150).
+
+    A fixture stages all three forms a sample takes, because a pass that reads
+    past a fence and edits an indented block honours none of the rule; it
+    carries a mechanical error inside the code, because the tempting change is
+    the one a mechanical pass makes on the way past; and its prose earns
+    findings, because a run that changes nothing has shown nothing about what
+    it leaves alone.
+    """
+
+    fixtures = _tagged("code")
+    assert fixtures
+
+    for name, fields in fixtures.items():
+        material = _material(fields)
+        assert FENCE.search(material), f"{name}: stages no fenced block"
+
+        outside = _outside_fences(material)
+        assert INDENTED_CODE.search(outside), (
+            f"{name}: stages no indented block outside its fences, so the form"
+            f" a pass is likeliest to mistake for prose is missing."
+        )
+        assert INLINE_CODE.search(outside), f"{name}: stages no inline code span"
+
+        described = f"{fields.get('Material', '')} {fields.get('Reject', '')}".lower()
+
+        absent = [form for form in CODE_FORMS if form not in described]
+        assert absent == [], (
+            f"{name}: the entry does not say the fixture carries {absent} code,"
+            f" so an evaluator has to find the forms by reading the material."
+        )
+
+        assert "mechanical" in described, (
+            f"{name}: the entry says nothing about the mechanical error inside"
+            f" the code, which is the correction a pass must not make and the"
+            f" one this fixture exists to catch."
+        )
+
+        reject = fields.get("Reject", "").lower()
+        assert "finding" in reject, (
+            f"{name}: the entry does not reject a finding located inside the"
+            f" code, which is half of what ADR-0125 settles."
+        )
+        assert "byte" in reject, (
+            f"{name}: the entry does not reject the code coming back altered,"
+            f" which is the other half."
+        )
