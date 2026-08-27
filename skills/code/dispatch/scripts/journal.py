@@ -1544,9 +1544,8 @@ def _validate_event_references(
 ) -> None:
     """Validate recovery pointers against the immutable prior prefix."""
 
-    # Each ticket consumes one initial bundle and at most one replacement from
-    # the single durable REBUILD boundary.
     if event_type is EventType.BUNDLE_CONSUMED:
+        # Count prior consumptions and enforce the one-replacement limit.
         ticket_events = [event for event in prior_events if event["ticket"] == ticket]
         consumed_bundles = [
             event
@@ -1558,6 +1557,7 @@ def _validate_event_references(
         if not consumed_bundles:
             return
 
+        # Find and verify the newer REBUILD boundary for the replacement.
         latest_rebuild = _latest_ticket_event(
             ticket_events, ticket, EventType.REBUILD_REQUESTED
         )
@@ -1568,6 +1568,8 @@ def _validate_event_references(
             raise JournalRefusal(
                 "duplicate bundle consumption requires a newer rebuild"
             )
+
+        # Find the bundle release recorded after that REBUILD boundary.
         release = next(
             (
                 event
@@ -1579,6 +1581,8 @@ def _validate_event_references(
         )
         if release is None:
             raise JournalRefusal("recompiled bundle requires post-rebuild release")
+
+        # Verify the replacement bundle against the recorded base and identity.
         rebuild_payload = cast(dict[str, JsonValue], latest_rebuild["payload"])
         bundle_payload = cast(dict[str, JsonValue], latest_bundle["payload"])
         if payload["execution_base"] != rebuild_payload["head"]:

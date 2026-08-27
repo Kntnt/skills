@@ -494,7 +494,7 @@ def _record_terminal(journal: Any, terminal: str) -> None:
     )
 
 
-def _record_rebuild_boundary(journal: Any, *, release: bool) -> None:
+def _record_rebuild_boundary(journal: Any, *, should_release_bundle: bool) -> None:
     """Record the shared prefix through an optional post-REBUILD release."""
 
     # Reach the single durable request for a replacement compiled bundle.
@@ -509,7 +509,7 @@ def _record_rebuild_boundary(journal: Any, *, release: bool) -> None:
     _record_event(journal, "rebuild-requested", ticket="#184")
 
     # Release the initial bundle only when the fixture crosses that boundary.
-    if release:
+    if should_release_bundle:
         _record_event(journal, "bundle-released", ticket="#184")
 
 
@@ -2078,7 +2078,7 @@ def test_rebuild_waits_through_release_for_new_verified_bundle(
     module = _load()
     opening = {**_opening(), "selection": ["#184"]}
     journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
-    _record_rebuild_boundary(journal, release=False)
+    _record_rebuild_boundary(journal, should_release_bundle=False)
     after_rebuild = journal.project()["tickets"]["#184"]["recovery_action"]
 
     # Releasing the old escrow leaves the durable recompile handoff unchanged.
@@ -2125,7 +2125,7 @@ def test_post_rebuild_bundle_consumption_refuses_unverified_recompilation(
     # Record the exact REBUILD boundary shared by every refusal.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
-    _record_rebuild_boundary(journal, release=case != "missing-release")
+    _record_rebuild_boundary(journal, should_release_bundle=case != "missing-release")
     payload = _recompiled_bundle_payload()
 
     # Keep one invalid bundle identity or omit the required release boundary.
@@ -2169,7 +2169,7 @@ def test_second_consumption_after_rebuild_replacement_is_refused(
     # Consume the initial bundle and one valid post-release replacement.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
-    _record_rebuild_boundary(journal, release=True)
+    _record_rebuild_boundary(journal, should_release_bundle=True)
     _record_event(
         journal,
         "bundle-consumed",
