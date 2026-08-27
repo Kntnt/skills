@@ -277,7 +277,7 @@ def test_pipeline_rules_are_reachable_without_copying_runtime_detail() -> None:
     agents = _read(AGENTS)
     expected_pointer = (
         "- `docs/rules/pipeline.md` — read when changing how pipeline Skills "
-        "select tickets, decide plan freshness, or own seam tests"
+        "select tickets, decide plan freshness or landed state, or own seam tests"
     )
     assert expected_pointer in agents, (
         f"{AGENTS}: the pipeline rules are not reachable for every class of"

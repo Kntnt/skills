@@ -31,3 +31,9 @@ Freshness is checked again at the handoff that relies on it. Compilation verifie
 The executor never owns compiler-owned seam tests and may not change, replace, delete, or relocate them. `/dispatch` materialises their accepted bytes, verifies them again after execution, rejects an execution result whose tests differ, and lands those exact bytes as permanent regression tests beside an approved implementation.
 
 Read-only filesystem permissions are a guardrail rather than the proof of ownership. Test integrity is decided by comparing the materialised files with the canonical bundle, and scope integrity is decided separately by comparing every changed path with the exact footprint.
+
+## Landed-change baton
+
+The installed runtime Interface is [`skills/kntnt/library/references/landed-change.md`](../../skills/kntnt/library/references/landed-change.md). `/dispatch` authors the landed-change baton, while `/compile` and `/land` consume it; no consumer substitutes tracker state or a clone-local journal for the reachable Git commit.
+
+A ticket has a selected baton only when exactly one matching landing commit is reachable from the integration history being evaluated. Blocker completion and the defensive compilation guard use that selection from the current integration tip. The child remains open after dispatch landing so `/land` can reconcile knowledge and tracker state before closure.
