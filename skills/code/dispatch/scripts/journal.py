@@ -1544,7 +1544,10 @@ def _validate_event_references(
 ) -> None:
     """Validate recovery pointers against the immutable prior prefix."""
 
+    # fmt: off
+    # Validate the initial bundle and its one optional REBUILD replacement.
     if event_type is EventType.BUNDLE_CONSUMED:
+
         # Count prior consumptions and enforce the one-replacement limit.
         ticket_events = [event for event in prior_events if event["ticket"] == ticket]
         consumed_bundles = [
@@ -1589,6 +1592,8 @@ def _validate_event_references(
             raise JournalRefusal("recompiled bundle targets a different head")
         if payload["bundle_fingerprint"] == bundle_payload["bundle_fingerprint"]:
             raise JournalRefusal("recompiled bundle repeats the old fingerprint")
+
+    # fmt: on
 
     # Sequence pointers bind a later receipt to one exact earlier boundary.
     references: dict[EventType, tuple[str, EventType]] = {
