@@ -4962,6 +4962,14 @@ def test_delegation_addresses_its_doctrine_through_the_library() -> None:
         f"{skill_body_path}: the mode's single-source rule does not name the Library"
         f" doctrine. See {STANDARD}."
     )
+    assert (
+        "copy it verbatim wherever it is needed; state it in no other words"
+        in mode_definition_text
+    ), (
+        f"{skill_body_path}: the consumer seam no longer requires the Library"
+        f" doctrine verbatim, so a local paraphrase could become policy."
+        f" See {STANDARD}."
+    )
 
     # Hold session adoption to the same exact source as the mode definition.
     skill_steps_text = _section(skill_body_text, "## Steps", skill_body_path)
