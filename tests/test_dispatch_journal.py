@@ -144,7 +144,7 @@ def _transition_resolution(
 ) -> dict[str, Any]:
     """Return a portable transition receipt resolved outside the helper."""
 
-    # Keep policy inputs explicit while the journal validates only their receipt.
+    # Keep policy explicit while the journal validates only its receipt.
     return {
         "executable_ready_label": "custom-ready",
         "target_label": target_label,
@@ -160,7 +160,7 @@ def _transition_resolution(
 def _pre_projection() -> dict[str, Any]:
     """Return the tracker state observed before a portable transition."""
 
-    # Describe the exact state against which the fixture transition was resolved.
+    # Describe the state against which the fixture transition was resolved.
     return {
         "labels": ["custom-ready", "scope:rework", "priority:high"],
         "milestone": "Skills Next",
@@ -291,6 +291,7 @@ def _event_payload(
             for entry in receipts.get("attempt-started", [])
             for field in ("worktree", "branch")
         ]
+
     # Sequence defaults bind dependent fixtures to the latest durable boundary.
     if ticket is not None:
         receipts = journal.project()["tickets"][ticket]["receipts"]
@@ -301,6 +302,7 @@ def _event_payload(
             entries = receipts.get(kind, [])
             return entries[-1]["sequence"] if entries else None
 
+        # Map each referencing event to its exact predecessor receipt kind.
         sequence_fields = {
             "revise-requested": ("review_sequence", "review-completed"),
             "executor-rehydrated": ("revision_sequence", "revise-requested"),
@@ -347,16 +349,19 @@ def _event_artifacts(
     return {**artifact_defaults.get(event_type, {}), **(artifacts or {})}
 
 
-def _recompiled_bundle_payload() -> dict[str, Any]:
-    """Return a bundle whose head and sources are fresh after REBUILD."""
+def _recompiled_bundle_payload(
+    source_fingerprints: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Return a bundle whose durable identity is valid after REBUILD."""
 
-    # Override every identity that could otherwise reuse the pre-REBUILD plan.
+    # Change the bundle identity and base while accepting recorded source facts.
     return {
         "bundle_fingerprint": f"sha256:{'6' * 64}",
         "execution_base": "4" * 40,
-        "source_fingerprints": {
-            "child_fingerprint": f"sha256:{'7' * 64}",
-            "parent_fingerprint": f"sha256:{'8' * 64}",
+        "source_fingerprints": source_fingerprints
+        or {
+            "child_fingerprint": f"sha256:{'3' * 64}",
+            "parent_fingerprint": f"sha256:{'4' * 64}",
         },
     }
 
@@ -489,6 +494,25 @@ def _record_terminal(journal: Any, terminal: str) -> None:
     )
 
 
+def _record_rebuild_boundary(journal: Any, *, release: bool) -> None:
+    """Record the shared prefix through an optional post-REBUILD release."""
+
+    # Reach the single durable request for a replacement compiled bundle.
+    _record_attempt(journal)
+    _record_event(journal, "patch-captured", ticket="#184")
+    _record_event(
+        journal,
+        "review-completed",
+        ticket="#184",
+        payload={"verdict": "REBUILD"},
+    )
+    _record_event(journal, "rebuild-requested", ticket="#184")
+
+    # Release the initial bundle only when the fixture crosses that boundary.
+    if release:
+        _record_event(journal, "bundle-released", ticket="#184")
+
+
 def _complete_terminal(journal: Any, terminal: str) -> None:
     """Advance one terminal ticket through every archive prerequisite."""
 
@@ -601,7 +625,7 @@ def test_opening_metadata_explains_every_fingerprint_input(tmp_path: Path) -> No
     journal = _open(module, tmp_path)
     metadata = json.loads((journal.path / "metadata.json").read_text(encoding="utf-8"))
 
-    # Verify every immutable fingerprint input remains independently inspectable.
+    # Verify every fingerprint input remains independently inspectable.
     assert metadata["schema"] == "kntnt.dispatch-journal/v1"
     assert metadata["opened_at"] == "2026-08-27T08:09:10Z"
     assert metadata["repository"] == "github.com/Kntnt/skills"
@@ -642,7 +666,7 @@ def test_events_are_canonical_contiguous_and_hash_chained(tmp_path: Path) -> Non
     first_bytes = events[0].read_bytes()
     second = json.loads(events[1].read_text(encoding="utf-8"))
 
-    # Assert contiguous sequence names, canonical encoding, and predecessor hash.
+    # Assert sequence names, canonical encoding, and predecessor hashes.
     assert [path.name for path in events] == [
         "00000001.json",
         "00000002.json",
@@ -906,7 +930,7 @@ def test_projection_distinguishes_each_recovery_window(
     if last_event == "tracker-transition-completed":
         _record_tracker_transition(journal, "T-LAND", None, ["thomas"])
 
-    # Assert the newest durable boundary selects the parameterized recovery action.
+    # Assert the newest boundary selects the expected recovery action.
     assert journal.project()["tickets"]["#184"]["recovery_action"] == expected_action
 
 
@@ -978,7 +1002,7 @@ def test_projection_is_idempotent_and_preserves_every_ticket_receipt(
     second = journal.project()
     after = sorted(path.relative_to(journal.path) for path in journal.path.rglob("*"))
 
-    # Verify deterministic projection, state neutrality, and full receipt retention.
+    # Verify deterministic projection, neutrality, and receipt retention.
     assert second == first
     assert after == before
     receipts = first["tickets"]["#184"]["receipts"]
@@ -1056,8 +1080,10 @@ def test_previous_head_still_validates_every_candidate_identity(
     landing = _record_landing_window(journal, "#184")
     evidence = _git_evidence(landing, "#184")
 
-    # Prove the valid previous-head state before changing one candidate fact.
+    # Validate the complete previous-head evidence before fault injection.
     assert journal.project(git_evidence=[evidence])
+
+    # Mutate exactly one candidate fact after the valid control assertion.
     evidence[field] = contradiction
 
     # Reject the single candidate fact changed by the parameterized fixture.
@@ -1081,6 +1107,8 @@ def test_git_evidence_selects_concurrent_windows_by_ticket_and_sequence(
 
     # Both exact windows validate regardless of their global event order.
     assert journal.project(git_evidence=evidence)
+
+    # Retarget one observation only after validating both exact windows.
     evidence[0]["landing_sequence"] = second["sequence"]
 
     # Reject evidence retargeted to the other concurrent ticket's window.
@@ -1116,7 +1144,7 @@ def test_git_evidence_cannot_agree_with_a_landing_that_contradicts_its_bundle(
 ) -> None:
     """R1 evidence remains independently bound to canonical bundle tests."""
 
-    # Start from a validated landing window, then model a corrupted historical map.
+    # Start from a validated landing window and its durable event prefix.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
     _record_attempt(journal)
@@ -1127,7 +1155,7 @@ def test_git_evidence_cannot_agree_with_a_landing_that_contradicts_its_bundle(
     evidence = _git_evidence(landing, "#184")
     evidence["test_blobs"] = contradictory
 
-    # Even mutually agreeing landing and Git observations cannot override bundle truth.
+    # Agreement between landing and Git cannot override the bundle.
     with pytest.raises(module.JournalRefusal, match="contradictory Git evidence"):
         module._validate_git_evidence(events, [evidence])
 
@@ -1346,7 +1374,7 @@ def test_archive_refuses_an_incomplete_run(tmp_path: Path) -> None:
 def test_event_vocabulary_covers_dispatch_without_owning_its_decisions() -> None:
     """Persistence names every boundary while policy remains in the Skill."""
 
-    # Load the typed vocabulary and enumerate the required persistence boundaries.
+    # Load the vocabulary and enumerate required persistence boundaries.
     module = _load()
     required = {
         "selection-recorded",
@@ -1435,6 +1463,12 @@ def test_business_state_uses_one_typed_representation() -> None:
     assert (
         module.TERMINAL_REQUIREMENTS[module.TerminalState.STRANDED].bundle_boundary
         is module.EventType.BUNDLE_RELEASED
+    )
+    assert (
+        module.TERMINAL_REQUIREMENTS[
+            module.TerminalState.STRANDED
+        ].requires_tracker_completion
+        is False
     )
     assert module.ARTIFACT_KIND_PATTERN.fullmatch("route-response")
     assert module.TICKET_REFERENCE_PATTERN.fullmatch("#184")
@@ -1561,7 +1595,7 @@ def test_newer_attempt_events_supersede_older_revision_state(tmp_path: Path) -> 
         artifacts={"patch": b"second patch"},
     )
 
-    # Verify recovery now follows the newer patch rather than older revision state.
+    # Verify recovery follows the newer patch instead of older state.
     assert journal.project()["tickets"]["#184"]["recovery_action"] == "review-patch"
 
 
@@ -1600,6 +1634,7 @@ def test_archive_requires_every_terminal_cleanup_boundary(tmp_path: Path) -> Non
             "tree": "4" * 40,
         },
     )
+
     # Refuse completion while the shared terminal prerequisites remain absent.
     with pytest.raises(module.JournalRefusal, match="cleanup"):
         _record_event(journal, "run-completed", payload={"tickets": {"#184": "landed"}})
@@ -1693,7 +1728,7 @@ def test_each_terminal_cleanup_boundary_reopens_to_one_projection(
 ) -> None:
     """Every terminal crash prefix reopens the same branch slot idempotently."""
 
-    # Record the selected terminal and preserve its deterministic opening inputs.
+    # Record the terminal and preserve deterministic opening inputs.
     module = _load()
     opening = {**_opening(), "selection": ["#184"]}
     journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
@@ -1822,7 +1857,7 @@ def test_archive_crashes_resume_to_the_same_compact_archive(
 
         monkeypatch.setattr(module.Path, "unlink", interrupt_deletion)
 
-    # Trigger the parameterized archive crash after all prerequisites are durable.
+    # Trigger the archive crash after all prerequisites are durable.
     with pytest.raises(OSError, match="simulated archive"):
         journal.archive()
 
@@ -1918,7 +1953,7 @@ def test_pending_archive_authenticates_every_compact_receipt_fact(
     patch_reference = receipt["tickets"]["#184"]["retained_patch"]
     patch_path = journal.path / patch_reference["path"]
 
-    # Mutate one canonical audit fact without changing the pending authenticator.
+    # Mutate one audit fact without changing the pending authenticator.
     if mutation == "terminal":
         receipt["tickets"]["#184"]["terminal"] = "landed"
     elif mutation == "continuation":
@@ -2014,31 +2049,36 @@ def test_owner_answer_resumes_its_exact_human_conflict(
         payload={"for_sequence": conflict["sequence"]},
     )
 
-    # Recovery follows the referenced conflict rather than the answer event name.
+    # Recovery follows the referenced conflict instead of the answer name.
     assert (
         journal.project()["tickets"]["#184"]["recovery_action"]
         == "resume-human-conflict"
     )
 
 
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    "source_fingerprints",
+    [
+        {
+            "child_fingerprint": f"sha256:{'3' * 64}",
+            "parent_fingerprint": f"sha256:{'4' * 64}",
+        },
+        {
+            "child_fingerprint": f"sha256:{'7' * 64}",
+            "parent_fingerprint": f"sha256:{'4' * 64}",
+        },
+    ],
+)
 def test_rebuild_waits_through_release_for_new_verified_bundle(
-    tmp_path: Path,
+    tmp_path: Path, source_fingerprints: dict[str, str]
 ) -> None:
-    """The exact REBUILD sequence advances only at later bundle consumption."""
+    """Source identity comparisons remain outside journal recovery policy."""
 
-    # Record one review that durably requires a new compiled plan.
+    # Stop once at REBUILD so the intermediate recovery action is observable.
     module = _load()
     opening = {**_opening(), "selection": ["#184"]}
     journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
-    _record_attempt(journal)
-    _record_event(journal, "patch-captured", ticket="#184")
-    _record_event(
-        journal,
-        "review-completed",
-        ticket="#184",
-        payload={"verdict": "REBUILD"},
-    )
-    _record_event(journal, "rebuild-requested", ticket="#184")
+    _record_rebuild_boundary(journal, release=False)
     after_rebuild = journal.project()["tickets"]["#184"]["recovery_action"]
 
     # Releasing the old escrow leaves the durable recompile handoff unchanged.
@@ -2046,28 +2086,33 @@ def test_rebuild_waits_through_release_for_new_verified_bundle(
     reopened = module.Journal.open(tmp_path, opening)
     after_release = reopened.project()["tickets"]["#184"]["recovery_action"]
 
-    # A later bundle consumption changes the head, fingerprint, and source audit.
+    # A later consumption changes the head and bundle fingerprint.
     _record_event(
         reopened,
         "bundle-consumed",
         ticket="#184",
-        payload=_recompiled_bundle_payload(),
+        payload=_recompiled_bundle_payload(source_fingerprints),
     )
     after_consumption = reopened.project()["tickets"]["#184"]["recovery_action"]
+    consumed_receipts = reopened.project()["tickets"]["#184"]["receipts"][
+        "bundle-consumed"
+    ]
 
-    # Compare the complete recovery-action sequence in one exact assertion.
+    # Compare recovery and confirm both source fingerprints remain durable.
     assert [after_rebuild, after_release, after_consumption] == [
         "await-recompile",
         "await-recompile",
         "continue-ticket",
     ]
+    assert consumed_receipts[-1]["payload"]["source_fingerprints"] == (
+        source_fingerprints
+    )
 
 
 @pytest.mark.parametrize(  # type: ignore[untyped-decorator]
     ("case", "message"),
     [
         ("old-bundle", "old fingerprint"),
-        ("stale-child-source", "stale sources"),
         ("wrong-head", "different head"),
         ("missing-release", "post-rebuild release"),
     ],
@@ -2077,30 +2122,15 @@ def test_post_rebuild_bundle_consumption_refuses_unverified_recompilation(
 ) -> None:
     """REBUILD advances only on a released and freshly identified compilation."""
 
-    # Record the exact old bundle and REBUILD boundary shared by every refusal.
+    # Record the exact REBUILD boundary shared by every refusal.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
-    _record_attempt(journal)
-    _record_event(journal, "patch-captured", ticket="#184")
-    _record_event(
-        journal,
-        "review-completed",
-        ticket="#184",
-        payload={"verdict": "REBUILD"},
-    )
-    _record_event(journal, "rebuild-requested", ticket="#184")
-    if case != "missing-release":
-        _record_event(journal, "bundle-released", ticket="#184")
+    _record_rebuild_boundary(journal, release=case != "missing-release")
     payload = _recompiled_bundle_payload()
 
-    # Keep exactly one old identity or omit the required release boundary.
+    # Keep one invalid bundle identity or omit the required release boundary.
     if case == "old-bundle":
         payload["bundle_fingerprint"] = f"sha256:{'2' * 64}"
-    elif case == "stale-child-source":
-        payload["source_fingerprints"] = {
-            "child_fingerprint": f"sha256:{'3' * 64}",
-            "parent_fingerprint": f"sha256:{'8' * 64}",
-        }
     elif case == "wrong-head":
         payload["execution_base"] = "9" * 40
 
@@ -2113,6 +2143,52 @@ def test_post_rebuild_bundle_consumption_refuses_unverified_recompilation(
             payload=payload,
         )
     assert journal.project()["tickets"]["#184"]["recovery_action"] == "await-recompile"
+
+
+def test_duplicate_initial_bundle_consumption_is_refused(tmp_path: Path) -> None:
+    """One ticket cannot consume twice before a durable REBUILD."""
+
+    # Record the ticket's selection and its one permitted initial consumption.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_event(journal, "selection-recorded")
+    _record_event(journal, "bundle-consumed", ticket="#184")
+    event_count = journal.validate()["event_count"]
+
+    # Refuse a duplicate even when it repeats the complete initial identity.
+    with pytest.raises(module.JournalRefusal, match="requires a newer rebuild"):
+        _record_event(journal, "bundle-consumed", ticket="#184")
+    assert journal.validate()["event_count"] == event_count
+
+
+def test_second_consumption_after_rebuild_replacement_is_refused(
+    tmp_path: Path,
+) -> None:
+    """The single REBUILD boundary authorizes exactly one replacement bundle."""
+
+    # Consume the initial bundle and one valid post-release replacement.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_rebuild_boundary(journal, release=True)
+    _record_event(
+        journal,
+        "bundle-consumed",
+        ticket="#184",
+        payload=_recompiled_bundle_payload(),
+    )
+    event_count = journal.validate()["event_count"]
+
+    # Refuse another new identity regardless of its otherwise valid schema.
+    payload = _recompiled_bundle_payload()
+    payload["bundle_fingerprint"] = f"sha256:{'9' * 64}"
+    with pytest.raises(module.JournalRefusal, match="already consumed"):
+        _record_event(
+            journal,
+            "bundle-consumed",
+            ticket="#184",
+            payload=payload,
+        )
+    assert journal.validate()["event_count"] == event_count
 
 
 @pytest.mark.parametrize(  # type: ignore[untyped-decorator]
@@ -2152,7 +2228,7 @@ def test_revision_context_mode_survives_reopen_and_archive(
         assert immediate["continuation"] == "fresh-context"
         assert immediate["recovery_action"] == "resume-revision"
 
-    # Later terminal facts must preserve the already projected continuation mode.
+    # Later terminal facts preserve the projected continuation mode.
     _record_event(journal, "stranded", ticket="#184")
     _complete_terminal(journal, "stranded")
     reopened = module.Journal.open(tmp_path, opening)

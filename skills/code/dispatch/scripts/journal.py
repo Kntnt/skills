@@ -118,7 +118,7 @@ class ContinuationMode(StrEnum):
 class TerminalRequirements(NamedTuple):
     """Describe the durable prerequisites for one terminal state."""
 
-    tracker_completion: bool
+    requires_tracker_completion: bool
     bundle_boundary: EventType
     bundle_action: RecoveryAction
     cleanup_action: RecoveryAction
@@ -145,19 +145,19 @@ TRANSITION_IDS: Final[frozenset[TransitionId]] = frozenset(TransitionId)
 TERMINAL_TYPES: Final[frozenset[TerminalState]] = frozenset(TerminalState)
 TERMINAL_REQUIREMENTS: Final[dict[TerminalState, TerminalRequirements]] = {
     TerminalState.LANDED: TerminalRequirements(
-        tracker_completion=True,
+        requires_tracker_completion=True,
         bundle_boundary=EventType.BUNDLE_RETIRED,
         bundle_action=RecoveryAction.RETIRE_BUNDLE,
         cleanup_action=RecoveryAction.CLEAN_RESOURCES,
     ),
     TerminalState.PARKED: TerminalRequirements(
-        tracker_completion=True,
+        requires_tracker_completion=True,
         bundle_boundary=EventType.BUNDLE_RETIRED,
         bundle_action=RecoveryAction.RETIRE_BUNDLE,
         cleanup_action=RecoveryAction.CLEAN_RESOURCES,
     ),
     TerminalState.STRANDED: TerminalRequirements(
-        tracker_completion=False,
+        requires_tracker_completion=False,
         bundle_boundary=EventType.BUNDLE_RELEASED,
         bundle_action=RecoveryAction.RELEASE_BUNDLE,
         cleanup_action=RecoveryAction.CLEAN_STRANDED,
@@ -1544,50 +1544,47 @@ def _validate_event_references(
 ) -> None:
     """Validate recovery pointers against the immutable prior prefix."""
 
-    # A post-REBUILD consumption is valid only after the old bundle was
-    # released and a genuinely new compilation targets the requested head.
+    # Each ticket consumes one initial bundle and at most one replacement from
+    # the single durable REBUILD boundary.
     if event_type is EventType.BUNDLE_CONSUMED:
         ticket_events = [event for event in prior_events if event["ticket"] == ticket]
+        consumed_bundles = [
+            event
+            for event in ticket_events
+            if _event_type(event) is EventType.BUNDLE_CONSUMED
+        ]
+        if len(consumed_bundles) >= 2:
+            raise JournalRefusal("ticket already consumed its REBUILD replacement")
+        if not consumed_bundles:
+            return
+
         latest_rebuild = _latest_ticket_event(
             ticket_events, ticket, EventType.REBUILD_REQUESTED
         )
-        latest_bundle = _latest_ticket_event(
-            ticket_events, ticket, EventType.BUNDLE_CONSUMED
-        )
-        if latest_rebuild is not None and (
-            latest_bundle is None
-            or cast(int, latest_rebuild["sequence"])
-            > cast(int, latest_bundle["sequence"])
+        latest_bundle = consumed_bundles[-1]
+        if latest_rebuild is None or cast(int, latest_rebuild["sequence"]) <= cast(
+            int, latest_bundle["sequence"]
         ):
-            if latest_bundle is None:
-                raise JournalRefusal("rebuild has no previous consumed bundle")
-            release = next(
-                (
-                    event
-                    for event in reversed(ticket_events)
-                    if _event_type(event) is EventType.BUNDLE_RELEASED
-                    and cast(int, event["sequence"])
-                    > cast(int, latest_rebuild["sequence"])
-                ),
-                None,
+            raise JournalRefusal(
+                "duplicate bundle consumption requires a newer rebuild"
             )
-            if release is None:
-                raise JournalRefusal("recompiled bundle requires post-rebuild release")
-            rebuild_payload = cast(dict[str, JsonValue], latest_rebuild["payload"])
-            bundle_payload = cast(dict[str, JsonValue], latest_bundle["payload"])
-            if payload["execution_base"] != rebuild_payload["head"]:
-                raise JournalRefusal("recompiled bundle targets a different head")
-            if payload["bundle_fingerprint"] == bundle_payload["bundle_fingerprint"]:
-                raise JournalRefusal("recompiled bundle repeats the old fingerprint")
-            current_sources = cast(dict[str, JsonValue], payload["source_fingerprints"])
-            previous_sources = cast(
-                dict[str, JsonValue], bundle_payload["source_fingerprints"]
-            )
-            if any(
-                current_sources[name] == previous_sources[name]
-                for name in previous_sources
-            ):
-                raise JournalRefusal("recompiled bundle repeats stale sources")
+        release = next(
+            (
+                event
+                for event in reversed(ticket_events)
+                if _event_type(event) is EventType.BUNDLE_RELEASED
+                and cast(int, event["sequence"]) > cast(int, latest_rebuild["sequence"])
+            ),
+            None,
+        )
+        if release is None:
+            raise JournalRefusal("recompiled bundle requires post-rebuild release")
+        rebuild_payload = cast(dict[str, JsonValue], latest_rebuild["payload"])
+        bundle_payload = cast(dict[str, JsonValue], latest_bundle["payload"])
+        if payload["execution_base"] != rebuild_payload["head"]:
+            raise JournalRefusal("recompiled bundle targets a different head")
+        if payload["bundle_fingerprint"] == bundle_payload["bundle_fingerprint"]:
+            raise JournalRefusal("recompiled bundle repeats the old fingerprint")
 
     # Sequence pointers bind a later receipt to one exact earlier boundary.
     references: dict[EventType, tuple[str, EventType]] = {
@@ -1881,7 +1878,7 @@ def _validate_terminal_prerequisites(
     tail_types = {_event_type(event) for event in tail[1:]}
     if EventType.RESOURCE_CLEANED not in tail_types:
         raise JournalRefusal(f"{boundary} precedes cleanup for {ticket}")
-    if requirements.tracker_completion and (
+    if requirements.requires_tracker_completion and (
         EventType.TRACKER_TRANSITION_COMPLETED not in tail_types
     ):
         raise JournalRefusal(f"{boundary} precedes tracker completion for {ticket}")
@@ -2142,7 +2139,7 @@ def _recovery_action(events: list[dict[str, JsonValue]]) -> str:
         terminal = TerminalState(event_types[terminal_index].value)
         requirements = TERMINAL_REQUIREMENTS[terminal]
         tail = event_types[terminal_index + 1 :]
-        if requirements.tracker_completion and (
+        if requirements.requires_tracker_completion and (
             EventType.TRACKER_TRANSITION_COMPLETED not in tail
         ):
             return RecoveryAction.COMPLETE_TRACKER_TRANSITION.value
