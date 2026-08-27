@@ -19,7 +19,7 @@ from contextlib import contextmanager
 from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
-from typing import Any, Final, TypedDict, cast
+from typing import Any, Final, NamedTuple, TypedDict, cast
 
 type JsonValue = None | bool | int | str | list[JsonValue] | dict[str, JsonValue]
 
@@ -115,6 +115,15 @@ class ContinuationMode(StrEnum):
     FRESH = "fresh-context"
 
 
+class TerminalRequirements(NamedTuple):
+    """Describe the durable prerequisites for one terminal state."""
+
+    tracker_completion: bool
+    bundle_boundary: EventType
+    bundle_action: RecoveryAction
+    cleanup_action: RecoveryAction
+
+
 class GitEvidence(TypedDict):
     """Carry observations for one exact ticket landing window."""
 
@@ -134,6 +143,26 @@ class GitEvidence(TypedDict):
 EVENT_TYPES: Final[frozenset[EventType]] = frozenset(EventType)
 TRANSITION_IDS: Final[frozenset[TransitionId]] = frozenset(TransitionId)
 TERMINAL_TYPES: Final[frozenset[TerminalState]] = frozenset(TerminalState)
+TERMINAL_REQUIREMENTS: Final[dict[TerminalState, TerminalRequirements]] = {
+    TerminalState.LANDED: TerminalRequirements(
+        tracker_completion=True,
+        bundle_boundary=EventType.BUNDLE_RETIRED,
+        bundle_action=RecoveryAction.RETIRE_BUNDLE,
+        cleanup_action=RecoveryAction.CLEAN_RESOURCES,
+    ),
+    TerminalState.PARKED: TerminalRequirements(
+        tracker_completion=True,
+        bundle_boundary=EventType.BUNDLE_RETIRED,
+        bundle_action=RecoveryAction.RETIRE_BUNDLE,
+        cleanup_action=RecoveryAction.CLEAN_RESOURCES,
+    ),
+    TerminalState.STRANDED: TerminalRequirements(
+        tracker_completion=False,
+        bundle_boundary=EventType.BUNDLE_RELEASED,
+        bundle_action=RecoveryAction.RELEASE_BUNDLE,
+        cleanup_action=RecoveryAction.CLEAN_STRANDED,
+    ),
+}
 ARTIFACT_KIND_PATTERN: Final[re.Pattern[str]] = re.compile(r"^[a-z][a-z0-9-]*$")
 TICKET_REFERENCE_PATTERN: Final[re.Pattern[str]] = re.compile(r"^#[1-9][0-9]*$")
 OBJECT_ID_PATTERN: Final[re.Pattern[str]] = re.compile(r"^[0-9a-f]{40,64}$")
@@ -608,7 +637,7 @@ class Journal:
                 value = json.loads(marker.read_bytes())
             except (OSError, json.JSONDecodeError) as error:
                 raise JournalRefusal("archive pending marker is malformed") from error
-            if value == {"run_fingerprint": fingerprint}:
+            if isinstance(value, dict) and value.get("run_fingerprint") == fingerprint:
                 candidates.append(marker.parent)
         if len(candidates) > 1:
             raise JournalRefusal("multiple pending archives match this invocation")
@@ -806,10 +835,12 @@ class Journal:
             receipt = _compact_archive_receipt(
                 self.metadata, events, projection, state["last_event_sha256"]
             )
-            _publish_or_verify(
-                self.path / ARCHIVE_RECEIPT_NAME, canonical_json(receipt)
-            )
-            marker = {"run_fingerprint": self.metadata["run_fingerprint"]}
+            receipt_bytes = canonical_json(receipt)
+            _publish_or_verify(self.path / ARCHIVE_RECEIPT_NAME, receipt_bytes)
+            marker = {
+                "run_fingerprint": self.metadata["run_fingerprint"],
+                "receipt_sha256": f"sha256:{sha256_hex(receipt_bytes)}",
+            }
             _publish_or_verify(self.path / ARCHIVE_PENDING_NAME, canonical_json(marker))
 
             # Path punctuation is removed while the fingerprint remains exact.
@@ -831,6 +862,7 @@ class Journal:
         """Delete retired bulk while preserving the receipt-selected artifacts."""
 
         receipt = self._read_archive_receipt()
+        self._validate_archive_authentication(receipt)
         retained_paths = _validate_retained_artifacts(self.path, receipt)
 
         # Artifact deletion is idempotent, so a crash resumes from the same
@@ -858,24 +890,34 @@ class Journal:
     def _validate_pending_archive(self) -> None:
         """Validate cleanup receipts without requiring already deleted bulk."""
 
-        # The pending marker binds this archive to the exact invocation that
-        # reopened it after the active-slot rename.
+        # The pending marker authenticates the exact receipt that authorizes
+        # cleanup after the active-slot rename.
+        receipt = self._read_archive_receipt()
+        self._validate_archive_authentication(receipt)
+        _validate_retained_artifacts(self.path, receipt)
+
+    def _validate_archive_authentication(self, receipt: dict[str, JsonValue]) -> None:
+        """Bind pending cleanup to one canonical compact receipt."""
+
+        # Read the marker independently so neither receipt can rewrite the
+        # expected digest used to authorize artifact deletion.
         marker_path = self.path / ARCHIVE_PENDING_NAME
         try:
             marker_bytes = marker_path.read_bytes()
             marker = json.loads(marker_bytes)
         except (OSError, json.JSONDecodeError) as error:
             raise JournalRefusal("archive pending marker is malformed") from error
-        expected_marker = {"run_fingerprint": self.metadata["run_fingerprint"]}
+        receipt_bytes = canonical_json(receipt)
+        expected_marker = {
+            "run_fingerprint": self.metadata["run_fingerprint"],
+            "receipt_sha256": f"sha256:{sha256_hex(receipt_bytes)}",
+        }
         if canonical_json(marker) != marker_bytes or marker != expected_marker:
             raise JournalRefusal("archive pending marker is not canonical or exact")
 
-        # Receipt validation is independent of retired artifacts, making every
-        # deletion boundary safe to replay after a crash.
-        receipt = self._read_archive_receipt()
+        # Invocation identity remains explicit inside the authenticated receipt.
         if receipt.get("run_fingerprint") != self.metadata["run_fingerprint"]:
             raise JournalRefusal("archive receipt names a different invocation")
-        _validate_retained_artifacts(self.path, receipt)
 
     def _read_archive_receipt(self) -> dict[str, JsonValue]:
         """Read the canonical compact receipt shared by archive operations."""
@@ -1489,6 +1531,7 @@ def _is_relative_posix_path(value: str) -> bool:
         bool(value)
         and not value.startswith("/")
         and not value.endswith("/")
+        and not any(marker in value for marker in ("*", "?", "[", "]"))
         and all(segment not in {"", ".", ".."} for segment in value.split("/"))
     )
 
@@ -1500,6 +1543,51 @@ def _validate_event_references(
     prior_events: list[dict[str, JsonValue]],
 ) -> None:
     """Validate recovery pointers against the immutable prior prefix."""
+
+    # A post-REBUILD consumption is valid only after the old bundle was
+    # released and a genuinely new compilation targets the requested head.
+    if event_type is EventType.BUNDLE_CONSUMED:
+        ticket_events = [event for event in prior_events if event["ticket"] == ticket]
+        latest_rebuild = _latest_ticket_event(
+            ticket_events, ticket, EventType.REBUILD_REQUESTED
+        )
+        latest_bundle = _latest_ticket_event(
+            ticket_events, ticket, EventType.BUNDLE_CONSUMED
+        )
+        if latest_rebuild is not None and (
+            latest_bundle is None
+            or cast(int, latest_rebuild["sequence"])
+            > cast(int, latest_bundle["sequence"])
+        ):
+            if latest_bundle is None:
+                raise JournalRefusal("rebuild has no previous consumed bundle")
+            release = next(
+                (
+                    event
+                    for event in reversed(ticket_events)
+                    if _event_type(event) is EventType.BUNDLE_RELEASED
+                    and cast(int, event["sequence"])
+                    > cast(int, latest_rebuild["sequence"])
+                ),
+                None,
+            )
+            if release is None:
+                raise JournalRefusal("recompiled bundle requires post-rebuild release")
+            rebuild_payload = cast(dict[str, JsonValue], latest_rebuild["payload"])
+            bundle_payload = cast(dict[str, JsonValue], latest_bundle["payload"])
+            if payload["execution_base"] != rebuild_payload["head"]:
+                raise JournalRefusal("recompiled bundle targets a different head")
+            if payload["bundle_fingerprint"] == bundle_payload["bundle_fingerprint"]:
+                raise JournalRefusal("recompiled bundle repeats the old fingerprint")
+            current_sources = cast(dict[str, JsonValue], payload["source_fingerprints"])
+            previous_sources = cast(
+                dict[str, JsonValue], bundle_payload["source_fingerprints"]
+            )
+            if any(
+                current_sources[name] == previous_sources[name]
+                for name in previous_sources
+            ):
+                raise JournalRefusal("recompiled bundle repeats stale sources")
 
     # Sequence pointers bind a later receipt to one exact earlier boundary.
     references: dict[EventType, tuple[str, EventType]] = {
@@ -1604,6 +1692,16 @@ def _validate_event_references(
         if patch_sequence != latest_patch:
             raise JournalRefusal("parked patch_sequence is not the latest patch")
 
+    # A landing window repeats the compiler-owned destinations and blob
+    # identities from the exact latest consumed bundle.
+    if event_type is EventType.LANDING_STARTED:
+        bundle = _latest_ticket_event(prior_events, ticket, EventType.BUNDLE_CONSUMED)
+        if bundle is None:
+            raise JournalRefusal("landing-started requires a consumed bundle")
+        bundle_payload = cast(dict[str, JsonValue], bundle["payload"])
+        if payload["test_blobs"] != _bundle_test_blobs(bundle_payload):
+            raise JournalRefusal("landing tests contradict the consumed bundle")
+
     # Bundle lifecycle receipts must name the latest consumed identity, never a
     # stale or caller-invented fingerprint.
     if event_type in {
@@ -1683,6 +1781,35 @@ def _require_prior_event(
     return event
 
 
+def _latest_ticket_event(
+    events: list[dict[str, JsonValue]],
+    ticket: str | None,
+    event_type: EventType,
+) -> dict[str, JsonValue] | None:
+    """Return the latest typed event for one ticket."""
+
+    return next(
+        (
+            event
+            for event in reversed(events)
+            if event["ticket"] == ticket and _event_type(event) is event_type
+        ),
+        None,
+    )
+
+
+def _bundle_test_blobs(payload: dict[str, JsonValue]) -> dict[str, str]:
+    """Return the canonical destination-to-blob mapping for one bundle."""
+
+    tests = cast(list[JsonValue], payload["tests"])
+    return {
+        cast(str, cast(dict[str, JsonValue], test)["destination"]): cast(
+            str, cast(dict[str, JsonValue], test)["compiled_blob"]
+        )
+        for test in tests
+    }
+
+
 def _validate_cleanup_order(
     ticket: str | None, prior_events: list[dict[str, JsonValue]]
 ) -> None:
@@ -1691,15 +1818,14 @@ def _validate_cleanup_order(
     tail = _events_after_latest_terminal(ticket, prior_events)
     if not tail:
         raise JournalRefusal("resource cleanup requires a terminal ticket state")
-    terminal = _event_type(tail[0])
-    if terminal in {EventType.LANDED, EventType.PARKED} and not any(
-        _event_type(event) is EventType.BUNDLE_RETIRED for event in tail[1:]
-    ):
-        raise JournalRefusal("landed or parked cleanup requires bundle retirement")
-    if terminal is EventType.STRANDED and not any(
-        _event_type(event) is EventType.BUNDLE_RELEASED for event in tail[1:]
-    ):
-        raise JournalRefusal("stranded cleanup requires bundle release")
+    terminal = TerminalState(_event_type(tail[0]).value)
+    requirements = TERMINAL_REQUIREMENTS[terminal]
+    tail_types = {_event_type(event) for event in tail[1:]}
+    if requirements.bundle_boundary not in tail_types:
+        raise JournalRefusal(
+            f"{terminal.value} cleanup requires "
+            f"{requirements.bundle_boundary.value.replace('-', ' ')}"
+        )
 
 
 def _events_after_latest_terminal(
@@ -1740,26 +1866,29 @@ def _validate_run_completion_payload(
             raise JournalRefusal(
                 f"run completion contradicts terminal state for {ticket}"
             )
-        if not any(
-            _event_type(event) is EventType.RESOURCE_CLEANED for event in tail[1:]
-        ):
-            raise JournalRefusal(f"run completion precedes cleanup for {ticket}")
-        if terminal in {TerminalState.LANDED, TerminalState.PARKED} and (
-            not any(
-                _event_type(event) is EventType.TRACKER_TRANSITION_COMPLETED
-                for event in tail[1:]
-            )
-            or not any(
-                _event_type(event) is EventType.BUNDLE_RETIRED for event in tail[1:]
-            )
-        ):
-            raise JournalRefusal(
-                f"run completion precedes tracker or retirement for {ticket}"
-            )
-        if terminal is TerminalState.STRANDED and not any(
-            _event_type(event) is EventType.BUNDLE_RELEASED for event in tail[1:]
-        ):
-            raise JournalRefusal(f"run completion precedes release for {ticket}")
+        _validate_terminal_prerequisites(ticket, terminal, tail, "run completion")
+
+
+def _validate_terminal_prerequisites(
+    ticket: str,
+    terminal: TerminalState,
+    tail: list[dict[str, JsonValue]],
+    boundary: str,
+) -> None:
+    """Require the shared terminal facts before completion or archive."""
+
+    requirements = TERMINAL_REQUIREMENTS[terminal]
+    tail_types = {_event_type(event) for event in tail[1:]}
+    if EventType.RESOURCE_CLEANED not in tail_types:
+        raise JournalRefusal(f"{boundary} precedes cleanup for {ticket}")
+    if requirements.tracker_completion and (
+        EventType.TRACKER_TRANSITION_COMPLETED not in tail_types
+    ):
+        raise JournalRefusal(f"{boundary} precedes tracker completion for {ticket}")
+    if requirements.bundle_boundary not in tail_types:
+        raise JournalRefusal(
+            f"{boundary} precedes {requirements.bundle_boundary.value} for {ticket}"
+        )
 
 
 def _validate_transition_plan(
@@ -2010,20 +2139,17 @@ def _recovery_action(events: list[dict[str, JsonValue]]) -> str:
         None,
     )
     if terminal_index is not None:
-        terminal = event_types[terminal_index]
+        terminal = TerminalState(event_types[terminal_index].value)
+        requirements = TERMINAL_REQUIREMENTS[terminal]
         tail = event_types[terminal_index + 1 :]
-        if terminal is EventType.STRANDED:
-            if EventType.BUNDLE_RELEASED not in tail:
-                return RecoveryAction.RELEASE_BUNDLE.value
-            if EventType.RESOURCE_CLEANED not in tail:
-                return RecoveryAction.CLEAN_STRANDED.value
-            return RecoveryAction.COMPLETE_RUN.value
-        if EventType.TRACKER_TRANSITION_COMPLETED not in tail:
+        if requirements.tracker_completion and (
+            EventType.TRACKER_TRANSITION_COMPLETED not in tail
+        ):
             return RecoveryAction.COMPLETE_TRACKER_TRANSITION.value
-        if EventType.BUNDLE_RETIRED not in tail:
-            return RecoveryAction.RETIRE_BUNDLE.value
+        if requirements.bundle_boundary not in tail:
+            return requirements.bundle_action.value
         if EventType.RESOURCE_CLEANED not in tail:
-            return RecoveryAction.CLEAN_RESOURCES.value
+            return requirements.cleanup_action.value
         return RecoveryAction.COMPLETE_RUN.value
 
     # A REBUILD remains authoritative through release of its old bundle. Only
@@ -2113,6 +2239,7 @@ def _validate_git_evidence(
         if bundle is None:
             raise JournalRefusal("Git evidence landing window has no bundle")
         bundle_payload = cast(dict[str, JsonValue], bundle["payload"])
+        bundle_test_blobs = _bundle_test_blobs(bundle_payload)
         expected_trailers = {
             "Kntnt-Ticket": evidence["ticket"],
             "Kntnt-Plan": cast(str, bundle_payload["bundle_fingerprint"]),
@@ -2124,6 +2251,8 @@ def _validate_git_evidence(
             evidence["candidate_commit"] != payload["candidate"]
             or evidence["candidate_tree"] != payload["tree"]
             or evidence["test_blobs"] != payload["test_blobs"]
+            or evidence["test_blobs"] != bundle_test_blobs
+            or payload["test_blobs"] != bundle_test_blobs
             or evidence["expected_trailers"] != expected_trailers
             or evidence["observed_trailers"] != expected_trailers
         ):
@@ -2212,18 +2341,7 @@ def _validate_archive_readiness(
                 f"archive requires terminal state for {ticket}"
             ) from error
         tail = _events_after_latest_terminal(ticket, events)
-        tail_types = [_event_type(event) for event in tail[1:]]
-        if EventType.RESOURCE_CLEANED not in tail_types:
-            raise JournalRefusal(f"archive requires cleanup for {ticket}")
-        if terminal in {TerminalState.LANDED, TerminalState.PARKED}:
-            if EventType.TRACKER_TRANSITION_COMPLETED not in tail_types:
-                raise JournalRefusal(
-                    f"archive requires tracker completion for {ticket}"
-                )
-            if EventType.BUNDLE_RETIRED not in tail_types:
-                raise JournalRefusal(f"archive requires retirement for {ticket}")
-        elif EventType.BUNDLE_RELEASED not in tail_types:
-            raise JournalRefusal(f"archive requires bundle release for {ticket}")
+        _validate_terminal_prerequisites(ticket, terminal, tail, "archive")
 
 
 def _compact_archive_receipt(

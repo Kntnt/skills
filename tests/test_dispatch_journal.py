@@ -21,6 +21,7 @@ CI_PATH: Final[Path] = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 def _load() -> ModuleType:
     """Load the shipped journal helper from its installed location."""
 
+    # Import the script as a module without adding its directory to sys.path.
     spec = importlib.util.spec_from_file_location("dispatch_journal", JOURNAL_PATH)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -33,6 +34,7 @@ def _opening(
 ) -> dict[str, Any]:
     """Return one complete set of immutable run-opening inputs."""
 
+    # Keep every fixture invocation explicit and reproducibly fingerprinted.
     return {
         "repository": "github.com/Kntnt/skills",
         "integration_ref": ref,
@@ -48,6 +50,7 @@ def _opening(
 def _open(module: ModuleType, root: Path, **changes: Any) -> Any:
     """Open one deterministic fixture journal."""
 
+    # Apply only the requested opening overrides before slot selection.
     opening = _opening()
     opening.update(changes)
     return module.Journal.open(root, opening, opened_at="2026-08-27T08:09:10Z")
@@ -56,6 +59,7 @@ def _open(module: ModuleType, root: Path, **changes: Any) -> Any:
 def _record_attempt(journal: Any, ticket: str = "#184") -> None:
     """Record the durable prefix shared by executor crash fixtures."""
 
+    # Persist global selection before beginning one selected ticket's attempt.
     _record_event(
         journal,
         "selection-recorded",
@@ -67,6 +71,7 @@ def _record_attempt(journal: Any, ticket: str = "#184") -> None:
 def _record_ticket_attempt(journal: Any, ticket: str) -> None:
     """Record one selected ticket from bundle consumption through attempt start."""
 
+    # Consume and route the compiled bundle before assigning disposable work.
     _record_event(
         journal,
         "bundle-consumed",
@@ -97,6 +102,7 @@ def _record_ticket_attempt(journal: Any, ticket: str) -> None:
 def _record_landing_window(journal: Any, ticket: str) -> dict[str, Any]:
     """Record one approved patch through its ticket-specific landing window."""
 
+    # Bind landing to the exact review of the captured ticket patch.
     _record_event(journal, "patch-captured", ticket=ticket)
     review = _record_event(journal, "review-completed", ticket=ticket)
     return _record_event(
@@ -112,6 +118,7 @@ def _git_evidence(
 ) -> dict[str, Any]:
     """Return complete R1 evidence for one exact landing event."""
 
+    # Derive every observation and expected trailer from the selected window.
     payload = landing["payload"]
     trailers = {
         "Kntnt-Ticket": ticket,
@@ -137,6 +144,7 @@ def _transition_resolution(
 ) -> dict[str, Any]:
     """Return a portable transition receipt resolved outside the helper."""
 
+    # Keep policy inputs explicit while the journal validates only their receipt.
     return {
         "executable_ready_label": "custom-ready",
         "target_label": target_label,
@@ -152,6 +160,7 @@ def _transition_resolution(
 def _pre_projection() -> dict[str, Any]:
     """Return the tracker state observed before a portable transition."""
 
+    # Describe the exact state against which the fixture transition was resolved.
     return {
         "labels": ["custom-ready", "scope:rework", "priority:high"],
         "milestone": "Skills Next",
@@ -313,6 +322,7 @@ def _event_payload(
         ):
             complete_payload["route_sequence"] = latest_sequence("route-recorded")
 
+    # Return the schema-complete payload after all context-sensitive defaults.
     return complete_payload
 
 
@@ -337,6 +347,20 @@ def _event_artifacts(
     return {**artifact_defaults.get(event_type, {}), **(artifacts or {})}
 
 
+def _recompiled_bundle_payload() -> dict[str, Any]:
+    """Return a bundle whose head and sources are fresh after REBUILD."""
+
+    # Override every identity that could otherwise reuse the pre-REBUILD plan.
+    return {
+        "bundle_fingerprint": f"sha256:{'6' * 64}",
+        "execution_base": "4" * 40,
+        "source_fingerprints": {
+            "child_fingerprint": f"sha256:{'7' * 64}",
+            "parent_fingerprint": f"sha256:{'8' * 64}",
+        },
+    }
+
+
 def _record_event(
     journal: Any,
     event_type: str,
@@ -348,6 +372,7 @@ def _record_event(
 ) -> dict[str, Any]:
     """Record one event assembled by the schema-complete fixture builders."""
 
+    # Keep normal recording separate from deliberate schema fault injection.
     return dict(
         journal.record(
             event_type,
@@ -379,6 +404,7 @@ def _record_incomplete_event(
     if missing_artifact is not None:
         artifacts.pop(missing_artifact)
 
+    # Exercise journal refusal with the independently damaged event surfaces.
     return dict(
         journal.record(
             event_type,
@@ -397,6 +423,7 @@ def _record_tracker_transition(
 ) -> dict[str, Any]:
     """Record one complete portable transition plan and verified completion."""
 
+    # Persist the exact resolved mutation before modeling its observed result.
     resolution = _transition_resolution(target_label, assignees)
     planned = _record_event(
         journal,
@@ -412,6 +439,7 @@ def _record_tracker_transition(
     if target_label is not None:
         labels.append(target_label)
 
+    # Repeat the resolution and observed projection in the completion boundary.
     return _record_event(
         journal,
         "tracker-transition-completed",
@@ -433,16 +461,19 @@ def _record_tracker_transition(
 def _record_terminal(journal: Any, terminal: str) -> None:
     """Record one schema-complete ticket through its terminal boundary."""
 
+    # Establish the shared attempt prefix before selecting a terminal route.
     _record_attempt(journal)
     if terminal == "stranded":
         _record_event(journal, "stranded", ticket="#184")
         return
 
+    # Landed and parked outcomes both require paid patch work to be durable.
     _record_event(journal, "patch-captured", ticket="#184")
     if terminal == "parked":
         _record_event(journal, "parked", ticket="#184")
         return
 
+    # A landed outcome binds approval, landing window, and terminal receipt.
     review = _record_event(journal, "review-completed", ticket="#184")
     landing = _record_event(
         journal,
@@ -461,6 +492,7 @@ def _record_terminal(journal: Any, terminal: str) -> None:
 def _complete_terminal(journal: Any, terminal: str) -> None:
     """Advance one terminal ticket through every archive prerequisite."""
 
+    # Record the terminal-specific tracker and bundle disposition boundaries.
     if terminal == "landed":
         _record_tracker_transition(journal, "T-LAND", None, ["thomas"])
         _record_event(journal, "bundle-retired", ticket="#184")
@@ -473,9 +505,45 @@ def _complete_terminal(journal: Any, terminal: str) -> None:
     _record_event(journal, "run-completed", payload={"tickets": {"#184": terminal}})
 
 
+def _leave_pending_archive(
+    module: ModuleType,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    observation: bool = False,
+) -> tuple[Any, dict[str, Any]]:
+    """Move one parked run while leaving authenticated cleanup pending."""
+
+    # Build a completed parked run with every retained artifact the case needs.
+    opening = {**_opening(), "selection": ["#184"]}
+    journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
+    _record_attempt(journal)
+    _record_event(journal, "patch-captured", ticket="#184")
+    _record_event(journal, "review-completed", ticket="#184")
+    if observation:
+        _record_event(journal, "observation-recorded", ticket="#184")
+    _record_event(journal, "parked", ticket="#184")
+    _complete_terminal(journal, "parked")
+    original_finalize = module.Journal._finalize_archive
+
+    # Interrupt exactly after the move so the next open exercises recovery.
+    def interrupt_cleanup(self: Any) -> None:
+        """Leave the archive at its authenticated pending boundary."""
+
+        raise OSError("simulated pending archive")
+
+    # Move the slot under interruption, then restore normal cleanup behavior.
+    monkeypatch.setattr(module.Journal, "_finalize_archive", interrupt_cleanup)
+    with pytest.raises(OSError, match="simulated pending archive"):
+        journal.archive()
+    monkeypatch.setattr(module.Journal, "_finalize_archive", original_finalize)
+    return journal, opening
+
+
 def _seed_artifact_event(journal: Any, event_type: str) -> None:
     """Record the exact predecessor prefix for one artifact crash fixture."""
 
+    # Seed global and bundle predecessors needed by early artifact events.
     if event_type in {"bundle-consumed", "route-recorded"}:
         _record_event(journal, "selection-recorded")
     if event_type == "bundle-consumed":
@@ -484,6 +552,7 @@ def _seed_artifact_event(journal: Any, event_type: str) -> None:
         _record_event(journal, "bundle-consumed", ticket="#184")
         return
 
+    # Seed the executor and review predecessors needed by later artifact events.
     _record_attempt(journal)
     if event_type in {"review-completed", "observation-recorded"}:
         _record_event(journal, "patch-captured", ticket="#184")
@@ -496,6 +565,7 @@ def test_branch_slots_are_independent_and_one_invocation_owns_each(
 ) -> None:
     """The full ref serializes one branch without blocking another branch."""
 
+    # Open the same ref twice and a distinct ref once under one journal root.
     module = _load()
     first = _open(module, tmp_path)
     resumed = module.Journal.open(
@@ -507,10 +577,12 @@ def test_branch_slots_are_independent_and_one_invocation_owns_each(
         opened_at="2026-08-27T09:00:00Z",
     )
 
+    # Verify ref-scoped ownership and deterministic slot naming.
     assert resumed.path == first.path
     assert other.path != first.path
     assert first.path.name == module.sha256_hex(b"refs/heads/rework")
 
+    # Refuse a competing invocation that resolves to the occupied branch slot.
     with pytest.raises(
         module.JournalRefusal, match="active run opening does not match"
     ):
@@ -524,10 +596,12 @@ def test_branch_slots_are_independent_and_one_invocation_owns_each(
 def test_opening_metadata_explains_every_fingerprint_input(tmp_path: Path) -> None:
     """The fingerprint identifies concrete metadata instead of replacing it."""
 
+    # Read the canonical opening metadata written for one deterministic run.
     module = _load()
     journal = _open(module, tmp_path)
     metadata = json.loads((journal.path / "metadata.json").read_text(encoding="utf-8"))
 
+    # Verify every immutable fingerprint input remains independently inspectable.
     assert metadata["schema"] == "kntnt.dispatch-journal/v1"
     assert metadata["opened_at"] == "2026-08-27T08:09:10Z"
     assert metadata["repository"] == "github.com/Kntnt/skills"
@@ -544,6 +618,7 @@ def test_opening_metadata_explains_every_fingerprint_input(tmp_path: Path) -> No
 def test_events_are_canonical_contiguous_and_hash_chained(tmp_path: Path) -> None:
     """Each immutable event proves its predecessor and exact canonical bytes."""
 
+    # Record a short prefix whose timestamps and ordering are deterministic.
     module = _load()
     journal = _open(module, tmp_path)
     _record_event(
@@ -562,10 +637,12 @@ def test_events_are_canonical_contiguous_and_hash_chained(tmp_path: Path) -> Non
         recorded_at="2026-08-27T08:11:00Z",
     )
 
+    # Read the published bytes needed to verify naming and hash continuity.
     events = sorted((journal.path / "events").iterdir())
     first_bytes = events[0].read_bytes()
     second = json.loads(events[1].read_text(encoding="utf-8"))
 
+    # Assert contiguous sequence names, canonical encoding, and predecessor hash.
     assert [path.name for path in events] == [
         "00000001.json",
         "00000002.json",
@@ -580,9 +657,11 @@ def test_events_are_canonical_contiguous_and_hash_chained(tmp_path: Path) -> Non
 def test_canonical_json_uses_the_manifest_domain_and_utf16_key_order() -> None:
     """JCS bytes reject floats and follow UTF-16 property ordering."""
 
+    # Construct keys whose Unicode and UTF-16 sort orders differ.
     module = _load()
     value = {"\ue000": 1, "\U00010000": 2, "line": "one\ntwo", "truth": True}
 
+    # Verify canonical output and refusal outside the shared numeric domain.
     assert (
         module.canonical_json(value).decode()
         == '{"line":"one\\ntwo","truth":true,"𐀀":2,"":1}'
@@ -596,6 +675,7 @@ def test_artifacts_are_durable_before_their_referring_event(
 ) -> None:
     """An event publication failure leaves at most an unreferenced artifact."""
 
+    # Reach a patch boundary and retain the publisher used by other writes.
     module = _load()
     journal = _open(module, tmp_path)
     _record_attempt(journal)
@@ -608,8 +688,10 @@ def test_artifacts_are_durable_before_their_referring_event(
             raise OSError("simulated event crash")
         original(path, content)
 
+    # Install the crash only for the authoritative event publication.
     monkeypatch.setattr(module, "_atomic_publish", interrupt_event)
 
+    # Attempt to record an event after its artifact has become durable.
     with pytest.raises(OSError, match="simulated event crash"):
         _record_event(
             journal,
@@ -619,6 +701,7 @@ def test_artifacts_are_durable_before_their_referring_event(
             artifacts={"patch": b"diff --git a/a b/a\n"},
         )
 
+    # Confirm recovery sees no event but may safely ignore the complete bulk.
     artifacts = list((journal.path / "artifacts" / "patch").iterdir())
     assert len(artifacts) == 1
     assert artifacts[0].read_bytes() == b"diff --git a/a b/a\n"
@@ -630,6 +713,7 @@ def test_event_publication_never_exposes_partial_or_temporary_bytes(
 ) -> None:
     """A rename-window crash leaves the authoritative sequence untouched."""
 
+    # Build the durable prefix immediately before ticket assignment.
     module = _load()
     journal = _open(module, tmp_path)
     _record_event(journal, "selection-recorded")
@@ -644,13 +728,16 @@ def test_event_publication_never_exposes_partial_or_temporary_bytes(
             raise OSError("simulated rename crash")
         original(source, destination)
 
+    # Interrupt only the rename that would publish the next event.
     monkeypatch.setattr(module.os, "replace", interrupt_rename)
 
+    # Exercise the temporary-file crash window.
     with pytest.raises(OSError, match="simulated rename crash"):
         _record_event(
             journal, "ticket-assigned", ticket="#184", payload={"assignee": "thomas"}
         )
 
+    # Verify that neither partial bytes nor an apparent fourth event escaped.
     assert journal.validate()["event_count"] == 3
 
 
@@ -659,6 +746,7 @@ def test_artifact_references_carry_digest_length_and_relative_path(
 ) -> None:
     """Every event can validate the exact durable bytes it names."""
 
+    # Record an observation whose exact bytes have a known digest and length.
     module = _load()
     journal = _open(module, tmp_path)
     _record_attempt(journal)
@@ -673,6 +761,7 @@ def test_artifact_references_carry_digest_length_and_relative_path(
     )
     reference = event["artifacts"]["observation-input"]
 
+    # Verify the complete relative artifact identity and aggregate validation.
     assert reference == {
         "path": f"artifacts/observation-input/{module.sha256_hex(b'{}\n')}",
         "sha256": f"sha256:{module.sha256_hex(b'{}\n')}",
@@ -702,6 +791,7 @@ def test_projection_distinguishes_each_recovery_window(
 ) -> None:
     """Resume derives one safe next action from the immutable prefix."""
 
+    # Establish the common executor prefix shared by every recovery boundary.
     module = _load()
     journal = _open(module, tmp_path)
     _record_attempt(journal)
@@ -816,6 +906,7 @@ def test_projection_distinguishes_each_recovery_window(
     if last_event == "tracker-transition-completed":
         _record_tracker_transition(journal, "T-LAND", None, ["thomas"])
 
+    # Assert the newest durable boundary selects the parameterized recovery action.
     assert journal.project()["tickets"]["#184"]["recovery_action"] == expected_action
 
 
@@ -824,6 +915,7 @@ def test_tracker_completion_repeats_and_verifies_the_portable_resolution(
 ) -> None:
     """Changed conventions cannot alter a transition already made durable."""
 
+    # Complete one parked transition with a portable resolved tracker receipt.
     module = _load()
     journal = _open(module, tmp_path)
     _record_attempt(journal)
@@ -838,9 +930,11 @@ def test_tracker_completion_repeats_and_verifies_the_portable_resolution(
     )
     completed = _record_tracker_transition(journal, "T-PARK-INFO", "needs-owner", [])
 
+    # Confirm the exact resolved mutation is part of validated state.
     assert completed["payload"]["resolution"]["target_label"] == "needs-owner"
     assert journal.validate()["event_count"] == 8
 
+    # Refuse a completion observation that contradicts the durable resolution.
     with pytest.raises(module.JournalRefusal, match="observed tracker projection"):
         resolution = _transition_resolution("needs-owner", [])
         _record_event(
@@ -866,6 +960,7 @@ def test_projection_is_idempotent_and_preserves_every_ticket_receipt(
 ) -> None:
     """A complete in-memory account is derived without a mutable state file."""
 
+    # Record recoverable executor receipts and snapshot every persistent path.
     module = _load()
     journal = _open(module, tmp_path)
     _record_attempt(journal)
@@ -878,10 +973,12 @@ def test_projection_is_idempotent_and_preserves_every_ticket_receipt(
     )
     before = sorted(path.relative_to(journal.path) for path in journal.path.rglob("*"))
 
+    # Project twice and snapshot the filesystem again around the read-only work.
     first = journal.project()
     second = journal.project()
     after = sorted(path.relative_to(journal.path) for path in journal.path.rglob("*"))
 
+    # Verify deterministic projection, state neutrality, and full receipt retention.
     assert second == first
     assert after == before
     receipts = first["tickets"]["#184"]["receipts"]
@@ -897,6 +994,7 @@ def test_validation_refuses_corrupt_durable_state(
 ) -> None:
     """Recovery never repairs or infers through an ambiguous journal."""
 
+    # Build a valid event and artifact prefix before injecting one corruption.
     module = _load()
     journal = _open(module, tmp_path)
     _record_attempt(journal)
@@ -925,6 +1023,7 @@ def test_validation_refuses_corrupt_durable_state(
     else:
         events[1].rename(events[1].with_name("00000003.json"))
 
+    # Refuse every ambiguous durable prefix instead of attempting repair.
     with pytest.raises(module.JournalRefusal):
         journal.validate()
 
@@ -984,8 +1083,53 @@ def test_git_evidence_selects_concurrent_windows_by_ticket_and_sequence(
     assert journal.project(git_evidence=evidence)
     evidence[0]["landing_sequence"] = second["sequence"]
 
+    # Reject evidence retargeted to the other concurrent ticket's window.
     with pytest.raises(module.JournalRefusal, match="sequence does not name"):
         journal.project(git_evidence=evidence)
+
+
+def test_landing_tests_are_bound_to_the_latest_consumed_bundle(tmp_path: Path) -> None:
+    """A caller cannot invent protected-test identities at landing time."""
+
+    # Reach an approved landing boundary backed by one canonical bundle map.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_attempt(journal)
+    _record_event(journal, "patch-captured", ticket="#184")
+    review = _record_event(journal, "review-completed", ticket="#184")
+
+    # Refuse a landing map that differs from its consumed bundle destination.
+    with pytest.raises(module.JournalRefusal, match="landing tests contradict"):
+        _record_event(
+            journal,
+            "landing-started",
+            ticket="#184",
+            payload={
+                "review_sequence": review["sequence"],
+                "test_blobs": {"tests/other.py": f"git:{'9' * 40}"},
+            },
+        )
+
+
+def test_git_evidence_cannot_agree_with_a_landing_that_contradicts_its_bundle(
+    tmp_path: Path,
+) -> None:
+    """R1 evidence remains independently bound to canonical bundle tests."""
+
+    # Start from a validated landing window, then model a corrupted historical map.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_attempt(journal)
+    landing = _record_landing_window(journal, "#184")
+    events = journal._read_validated()["events"]
+    contradictory = {"tests/other.py": f"git:{'9' * 40}"}
+    events[landing["sequence"] - 1]["payload"]["test_blobs"] = contradictory
+    evidence = _git_evidence(landing, "#184")
+    evidence["test_blobs"] = contradictory
+
+    # Even mutually agreeing landing and Git observations cannot override bundle truth.
+    with pytest.raises(module.JournalRefusal, match="contradictory Git evidence"):
+        module._validate_git_evidence(events, [evidence])
 
 
 def test_completion_archives_atomically_and_retains_a_parked_patch(
@@ -993,6 +1137,7 @@ def test_completion_archives_atomically_and_retains_a_parked_patch(
 ) -> None:
     """The active slot becomes one compact archive without losing paid work."""
 
+    # Complete a parked run containing one superseded and one retained patch.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
     _record_attempt(journal)
@@ -1026,9 +1171,11 @@ def test_completion_archives_atomically_and_retains_a_parked_patch(
     _record_event(journal, "resource-cleaned", ticket="#184")
     _record_event(journal, "run-completed", payload={"tickets": {"#184": "parked"}})
 
+    # Move the completed slot and read its compact authenticated receipt.
     archive = journal.archive()
     receipt = json.loads((archive / "receipt.json").read_text(encoding="utf-8"))
 
+    # Verify audit identity, R2 retention, and removal of retired bulk.
     assert journal.path == archive
     assert list((tmp_path / "active").iterdir()) == []
     assert archive.parent == tmp_path / "archive"
@@ -1123,13 +1270,75 @@ def test_bundle_consumption_refuses_invalid_compiled_plan_audit_fields(
         _record_event(journal, "bundle-consumed", ticket="#184", payload=payload)
 
 
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    ("footprint_field", "path"),
+    [
+        ("reads", "src/*.py"),
+        ("modifies", "src/file?.py"),
+        ("creates", "src/[ab].py"),
+        ("deletes", "docs/**/old.md"),
+        ("compiler_owned_tests", "tests/test_[ab].py"),
+        ("dispatcher_owned_writes", "skills/?/catalog.json"),
+        ("serial_resources", "docs/adr/[0-9]*"),
+    ],
+)
+def test_every_bundle_footprint_class_refuses_glob_syntax(
+    tmp_path: Path, footprint_field: str, path: str
+) -> None:
+    """Compiled footprint paths are literal relative POSIX identities."""
+
+    # Put one glob spelling into each independently validated footprint class.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_event(journal, "selection-recorded")
+    payload = _event_payload(journal, "bundle-consumed", ticket="#184")
+    payload["footprint"][footprint_field] = [path]
+    if footprint_field == "compiler_owned_tests":
+        payload["tests"][0]["destination"] = path
+    if footprint_field == "serial_resources":
+        payload["allocations"] = [{"registry": path, "identifiers": ["one"]}]
+
+    # No matching semantics may enter the durable compiled-plan receipt.
+    with pytest.raises(module.JournalRefusal, match="bundle footprint"):
+        _record_event(journal, "bundle-consumed", ticket="#184", payload=payload)
+
+
+def test_bundle_footprint_accepts_literal_relative_posix_paths(tmp_path: Path) -> None:
+    """Punctuation without glob meaning remains valid in compiled paths."""
+
+    # Exercise every footprint class with a distinct literal relative path.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_event(journal, "selection-recorded")
+    payload = _event_payload(journal, "bundle-consumed", ticket="#184")
+    payload["footprint"] = {
+        "reads": ["src/read-file.py"],
+        "modifies": ["src/modify_file.py"],
+        "creates": ["src/new.file+one.py"],
+        "deletes": ["docs/old-file.md"],
+        "compiler_owned_tests": ["tests/test.literal.py"],
+        "dispatcher_owned_writes": ["skills/kntnt/catalog-v2.json"],
+        "serial_resources": ["docs/adr"],
+    }
+    payload["tests"] = [
+        {"destination": "tests/test.literal.py", "compiled_blob": f"git:{'5' * 40}"}
+    ]
+    payload["allocations"] = [{"registry": "docs/adr", "identifiers": ["0113"]}]
+
+    # The schema accepts exact paths while preserving their literal spelling.
+    event = _record_event(journal, "bundle-consumed", ticket="#184", payload=payload)
+    assert event["payload"]["footprint"] == payload["footprint"]
+
+
 def test_archive_refuses_an_incomplete_run(tmp_path: Path) -> None:
     """Moving an active prefix cannot masquerade as terminal completion."""
 
+    # Leave one active run at a nonterminal executor boundary.
     module = _load()
     journal = _open(module, tmp_path)
     _record_attempt(journal)
 
+    # Refuse the archive move before any active-slot state changes.
     with pytest.raises(module.JournalRefusal, match="run-completed"):
         journal.archive()
 
@@ -1137,6 +1346,7 @@ def test_archive_refuses_an_incomplete_run(tmp_path: Path) -> None:
 def test_event_vocabulary_covers_dispatch_without_owning_its_decisions() -> None:
     """Persistence names every boundary while policy remains in the Skill."""
 
+    # Load the typed vocabulary and enumerate the required persistence boundaries.
     module = _load()
     required = {
         "selection-recorded",
@@ -1164,6 +1374,7 @@ def test_event_vocabulary_covers_dispatch_without_owning_its_decisions() -> None
         "run-completed",
     }
 
+    # Verify vocabulary coverage and the absence of external policy mechanisms.
     assert required <= module.EVENT_TYPES
     source = JOURNAL_PATH.read_text(encoding="utf-8")
     for forbidden in (
@@ -1181,15 +1392,18 @@ def test_internal_cli_opens_and_projects_the_same_validated_slot(
 ) -> None:
     """The Skill can drive the deep interface through stable JSON responses."""
 
+    # Prepare the same opening document for two separate CLI invocations.
     module = _load()
     opening_path = tmp_path / "opening.json"
     opening_path.write_text(json.dumps(_opening()), encoding="utf-8")
     arguments = ["--root", str(tmp_path / "journal"), "--opening", str(opening_path)]
 
+    # Open the slot and verify its immutable invocation identity.
     assert module.main(["open", *arguments]) == 0
     opened = json.loads(capfd.readouterr().out)
     assert opened["metadata"]["run_fingerprint"] == module.run_fingerprint(_opening())
 
+    # Project the same slot through the CLI without bypassing validation.
     assert module.main(["project", *arguments]) == 0
     projected = json.loads(capfd.readouterr().out)
     assert projected["tickets"]["#184"]["recovery_action"] == "start-ticket"
@@ -1198,8 +1412,10 @@ def test_internal_cli_opens_and_projects_the_same_validated_slot(
 def test_journal_is_in_both_strict_mypy_gates() -> None:
     """The shipped helper cannot regress outside the documented CI contract."""
 
+    # Name the exact script path that both strict gate definitions must include.
     journal_argument = "skills/code/dispatch/scripts/journal.py"
 
+    # Verify contributor and automation commands enforce the same typed surface.
     assert journal_argument in CONTRIBUTING_PATH.read_text(encoding="utf-8")
     assert journal_argument in CI_PATH.read_text(encoding="utf-8")
 
@@ -1207,13 +1423,19 @@ def test_journal_is_in_both_strict_mypy_gates() -> None:
 def test_business_state_uses_one_typed_representation() -> None:
     """Event, transition, terminal, and recovery values are typed once."""
 
+    # Load the public vocabulary exported by the persistence module.
     module = _load()
 
+    # Verify enum identities and self-describing lexical validators together.
     assert module.EventType.PATCH_CAPTURED.value == "patch-captured"
     assert module.TransitionId.LAND.value == "T-LAND"
     assert module.TerminalState.PARKED.value == "parked"
     assert module.RecoveryAction.REVIEW_PATCH.value == "review-patch"
     assert module.ContinuationMode.FRESH.value == "fresh-context"
+    assert (
+        module.TERMINAL_REQUIREMENTS[module.TerminalState.STRANDED].bundle_boundary
+        is module.EventType.BUNDLE_RELEASED
+    )
     assert module.ARTIFACT_KIND_PATTERN.fullmatch("route-response")
     assert module.TICKET_REFERENCE_PATTERN.fullmatch("#184")
     assert module.OBJECT_ID_PATTERN.fullmatch("1" * 40)
@@ -1230,11 +1452,13 @@ def test_every_event_refuses_an_incomplete_recovery_payload(
 ) -> None:
     """No vocabulary entry becomes durable without every recovery field."""
 
+    # Select one mandatory payload field from the parameterized event schema.
     module = _load()
     journal = _open(module, tmp_path)
     field = min(module.EVENT_PAYLOAD_FIELDS[module.EventType(event_type)])
     ticket = None if event_type in {"selection-recorded", "run-completed"} else "#184"
 
+    # Refuse the deliberately incomplete payload before event publication.
     with pytest.raises(module.JournalRefusal, match="payload fields are incomplete"):
         _record_incomplete_event(
             journal,
@@ -1243,6 +1467,7 @@ def test_every_event_refuses_an_incomplete_recovery_payload(
             missing_payload_field=field,
         )
 
+    # Confirm failed schema construction left no durable event behind.
     assert journal.validate()["event_count"] == 0
 
 
@@ -1262,9 +1487,11 @@ def test_every_artifact_event_refuses_incomplete_recovery_bulk(
 ) -> None:
     """Artifact-bearing boundaries publish only with their exact durable bulk."""
 
+    # Prepare an empty slot for one parameterized artifact-bearing event.
     module = _load()
     journal = _open(module, tmp_path)
 
+    # Refuse the event after removing exactly one required artifact kind.
     with pytest.raises(
         module.JournalRefusal, match="recovery artifacts are incomplete"
     ):
@@ -1275,12 +1502,14 @@ def test_every_artifact_event_refuses_incomplete_recovery_bulk(
             missing_artifact=artifact,
         )
 
+    # Confirm neither an event nor an incomplete recovery claim became durable.
     assert journal.validate()["event_count"] == 0
 
 
 def test_newer_attempt_events_supersede_older_revision_state(tmp_path: Path) -> None:
     """A later round, not an old monotone flag, decides recovery."""
 
+    # Record one complete first attempt ending in a durable revision request.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
     _record_attempt(journal)
@@ -1320,8 +1549,10 @@ def test_newer_attempt_events_supersede_older_revision_state(tmp_path: Path) -> 
         payload={"attempt": 2, "base": "1" * 40},
     )
 
+    # Verify the newer attempt boundary supersedes the earlier revision flag.
     assert journal.project()["tickets"]["#184"]["recovery_action"] == "replay-attempt"
 
+    # Capture the newer attempt's patch as the latest recovery boundary.
     _record_event(
         journal,
         "patch-captured",
@@ -1330,12 +1561,14 @@ def test_newer_attempt_events_supersede_older_revision_state(tmp_path: Path) -> 
         artifacts={"patch": b"second patch"},
     )
 
+    # Verify recovery now follows the newer patch rather than older revision state.
     assert journal.project()["tickets"]["#184"]["recovery_action"] == "review-patch"
 
 
 def test_archive_requires_every_terminal_cleanup_boundary(tmp_path: Path) -> None:
     """A terminal label alone cannot erase unfinished recovery work."""
 
+    # Stop a valid landed ticket before tracker, retirement, and cleanup facts.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
     _record_attempt(journal)
@@ -1367,6 +1600,7 @@ def test_archive_requires_every_terminal_cleanup_boundary(tmp_path: Path) -> Non
             "tree": "4" * 40,
         },
     )
+    # Refuse completion while the shared terminal prerequisites remain absent.
     with pytest.raises(module.JournalRefusal, match="cleanup"):
         _record_event(journal, "run-completed", payload={"tickets": {"#184": "landed"}})
 
@@ -1383,6 +1617,7 @@ def test_stranded_refuses_cleanup_before_bundle_release(tmp_path: Path) -> None:
     with pytest.raises(module.JournalRefusal, match="requires bundle release"):
         _record_event(journal, "resource-cleaned", ticket="#184")
 
+    # Confirm the refused cleanup did not invent landed/parked retirement state.
     assert "bundle-retired" not in journal.project()["tickets"]["#184"]["receipts"]
 
 
@@ -1458,6 +1693,7 @@ def test_each_terminal_cleanup_boundary_reopens_to_one_projection(
 ) -> None:
     """Every terminal crash prefix reopens the same branch slot idempotently."""
 
+    # Record the selected terminal and preserve its deterministic opening inputs.
     module = _load()
     opening = {**_opening(), "selection": ["#184"]}
     journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
@@ -1476,8 +1712,10 @@ def test_each_terminal_cleanup_boundary_reopens_to_one_projection(
     if boundary == "cleanup":
         _record_event(journal, "resource-cleaned", ticket="#184")
 
+    # Reopen directly after the selected terminal prerequisite boundary.
     reopened = module.Journal.open(tmp_path, opening)
 
+    # Verify slot identity and the exact next recovery action after the crash.
     assert reopened.path == journal.path
     assert reopened.project()["tickets"]["#184"]["recovery_action"] == expected_action
 
@@ -1500,6 +1738,7 @@ def test_each_artifact_event_crash_reopens_before_the_event(
 ) -> None:
     """Every artifact/event crash leaves only safe unreferenced durable bulk."""
 
+    # Seed the exact predecessor and snapshot its validated projection.
     module = _load()
     opening = _opening()
     journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
@@ -1514,13 +1753,17 @@ def test_each_artifact_event_crash_reopens_before_the_event(
             raise OSError("simulated event crash")
         original(path, content)
 
+    # Install the crash only at the authoritative event boundary.
     monkeypatch.setattr(module, "_atomic_publish", interrupt_event)
 
+    # Publish required artifact bytes before interrupting their referring event.
     with pytest.raises(OSError, match="simulated event crash"):
         _record_event(journal, event_type, ticket="#184")
 
+    # Reopen the same branch slot from the unchanged event prefix.
     reopened = module.Journal.open(tmp_path, opening)
 
+    # Verify both event count and complete projection match the pre-crash state.
     assert reopened.validate()["event_count"] == before["event_count"]
     assert reopened.project() == before
 
@@ -1535,6 +1778,7 @@ def test_archive_crashes_resume_to_the_same_compact_archive(
 ) -> None:
     """All archive crash windows resume without a second active run."""
 
+    # Complete one parked run ready for an atomic archive move.
     module = _load()
     opening = {**_opening(), "selection": ["#184"]}
     journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
@@ -1578,6 +1822,7 @@ def test_archive_crashes_resume_to_the_same_compact_archive(
 
         monkeypatch.setattr(module.Path, "unlink", interrupt_deletion)
 
+    # Trigger the parameterized archive crash after all prerequisites are durable.
     with pytest.raises(OSError, match="simulated archive"):
         journal.archive()
 
@@ -1592,6 +1837,7 @@ def test_archive_crashes_resume_to_the_same_compact_archive(
     projection = reopened.project()
     archive = reopened.archive()
 
+    # Verify recovery completes one archive and preserves its compact receipt.
     assert projection["completed"] is True
     assert projection["tickets"]["#184"]["terminal"] == "parked"
     assert list((tmp_path / "active").iterdir()) == []
@@ -1619,28 +1865,11 @@ def test_pending_archive_refuses_missing_or_changed_retained_artifacts(
 ) -> None:
     """Pending cleanup trusts retained bytes only after full identity checks."""
 
-    # Archive a parked patch and observation up to the pending-cleanup boundary.
+    # Leave a parked patch and observation at the pending-cleanup boundary.
     module = _load()
-    opening = {**_opening(), "selection": ["#184"]}
-    journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
-    _record_attempt(journal)
-    _record_event(journal, "patch-captured", ticket="#184")
-    _record_event(journal, "review-completed", ticket="#184")
-    _record_event(journal, "observation-recorded", ticket="#184")
-    _record_event(journal, "parked", ticket="#184")
-    _complete_terminal(journal, "parked")
-    original_finalize = module.Journal._finalize_archive
-
-    # Stop immediately after the atomic move, while all retained bytes exist.
-    def interrupt_cleanup(self: Any) -> None:
-        """Leave one pending archive ready for retained-byte corruption."""
-
-        raise OSError("simulated pending archive")
-
-    monkeypatch.setattr(module.Journal, "_finalize_archive", interrupt_cleanup)
-    with pytest.raises(OSError, match="simulated pending archive"):
-        journal.archive()
-    monkeypatch.setattr(module.Journal, "_finalize_archive", original_finalize)
+    journal, opening = _leave_pending_archive(
+        module, tmp_path, monkeypatch, observation=True
+    )
     receipt = json.loads((journal.path / "receipt.json").read_text(encoding="utf-8"))
     reference = next(
         item
@@ -1660,11 +1889,71 @@ def test_pending_archive_refuses_missing_or_changed_retained_artifacts(
         module.Journal.open(tmp_path, opening)
 
 
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    "mutation",
+    [
+        "terminal",
+        "continuation",
+        "route-audit",
+        "bundle-audit",
+        "event-count",
+        "final-event",
+        "retained-top-level",
+        "retained-nested",
+        "remove-both-r2-references",
+    ],
+)
+def test_pending_archive_authenticates_every_compact_receipt_fact(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    mutation: str,
+) -> None:
+    """Pending cleanup accepts only the exact receipt published before its move."""
+
+    # Leave a completed parked run at the authenticated archive boundary.
+    module = _load()
+    journal, opening = _leave_pending_archive(module, tmp_path, monkeypatch)
+    receipt_path = journal.path / "receipt.json"
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    patch_reference = receipt["tickets"]["#184"]["retained_patch"]
+    patch_path = journal.path / patch_reference["path"]
+
+    # Mutate one canonical audit fact without changing the pending authenticator.
+    if mutation == "terminal":
+        receipt["tickets"]["#184"]["terminal"] = "landed"
+    elif mutation == "continuation":
+        receipt["tickets"]["#184"]["continuation"] = "fresh-context"
+    elif mutation == "route-audit":
+        receipt["tickets"]["#184"]["route_decisions"][0]["attempt"] = 2
+    elif mutation == "bundle-audit":
+        receipt["tickets"]["#184"]["bundle"]["bundle_fingerprint"] = (
+            f"sha256:{'9' * 64}"
+        )
+    elif mutation == "event-count":
+        receipt["event_count"] += 1
+    elif mutation == "final-event":
+        receipt["final_event_sha256"] = f"sha256:{'9' * 64}"
+    elif mutation == "retained-top-level":
+        receipt["retained_artifacts"] = []
+    elif mutation == "retained-nested":
+        receipt["tickets"]["#184"]["retained_patch"] = None
+    else:
+        receipt["retained_artifacts"] = []
+        receipt["tickets"]["#184"]["retained_patch"] = None
+    receipt_path.write_bytes(module.canonical_json(receipt))
+
+    # Authentication refuses before altered references can authorize deletion.
+    with pytest.raises(module.JournalRefusal, match="pending marker"):
+        module.Journal.open(tmp_path, opening)
+    assert patch_path.is_file()
+
+
 def test_new_terminal_round_invalidates_older_completion_receipts(
     tmp_path: Path,
 ) -> None:
     """Tracker, retirement, and cleanup must follow the latest terminal event."""
 
+    # Complete every prerequisite for one initial landed terminal round.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
     _record_terminal(journal, "landed")
@@ -1682,6 +1971,7 @@ def test_new_terminal_round_invalidates_older_completion_receipts(
         payload={"landing_sequence": landing["sequence"]},
     )
 
+    # Verify the new terminal invalidates all older completion receipts.
     assert (
         journal.project()["tickets"]["#184"]["recovery_action"]
         == "complete-tracker-transition"
@@ -1694,11 +1984,12 @@ def test_new_terminal_round_invalidates_older_completion_receipts(
         )
 
 
-def test_rebuild_and_owner_answer_sequences_follow_the_newest_boundary(
+def test_owner_answer_resumes_its_exact_human_conflict(
     tmp_path: Path,
 ) -> None:
-    """Fresh rounds supersede old rebuilds while answers resume their conflict."""
+    """An owner answer resumes the exact landing conflict it references."""
 
+    # Reach a human-conflict boundary without duplicating the REBUILD contract.
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
     _record_attempt(journal)
@@ -1707,43 +1998,8 @@ def test_rebuild_and_owner_answer_sequences_follow_the_newest_boundary(
         journal,
         "review-completed",
         ticket="#184",
-        payload={"verdict": "REBUILD"},
+        payload={"verdict": "APPROVE"},
     )
-    _record_event(journal, "rebuild-requested", ticket="#184")
-
-    assert journal.project()["tickets"]["#184"]["recovery_action"] == "await-recompile"
-
-    # Releasing the stale bundle does not prove that recompilation completed.
-    _record_event(
-        journal,
-        "bundle-released",
-        ticket="#184",
-        payload={"reason": "rebuild requested"},
-    )
-    reopened = module.Journal.open(tmp_path, {**_opening(), "selection": ["#184"]})
-
-    assert reopened.project()["tickets"]["#184"]["recovery_action"] == "await-recompile"
-
-    # Only a new schema-validated bundle consumption advances recovery.
-    _record_event(journal, "bundle-consumed", ticket="#184")
-
-    assert journal.project()["tickets"]["#184"]["recovery_action"] == "continue-ticket"
-
-    _record_event(
-        journal,
-        "route-recorded",
-        ticket="#184",
-        payload={"attempt": 2},
-    )
-    _record_event(
-        journal,
-        "attempt-started",
-        ticket="#184",
-        payload={"attempt": 2, "attempt_id": "#184/2"},
-    )
-
-    assert journal.project()["tickets"]["#184"]["recovery_action"] == "replay-attempt"
-
     _record_event(
         journal,
         "landing-started",
@@ -1758,6 +2014,7 @@ def test_rebuild_and_owner_answer_sequences_follow_the_newest_boundary(
         payload={"for_sequence": conflict["sequence"]},
     )
 
+    # Recovery follows the referenced conflict rather than the answer event name.
     assert (
         journal.project()["tickets"]["#184"]["recovery_action"]
         == "resume-human-conflict"
@@ -1789,8 +2046,13 @@ def test_rebuild_waits_through_release_for_new_verified_bundle(
     reopened = module.Journal.open(tmp_path, opening)
     after_release = reopened.project()["tickets"]["#184"]["recovery_action"]
 
-    # A later bundle consumption has passed every schema and audit validator.
-    _record_event(reopened, "bundle-consumed", ticket="#184")
+    # A later bundle consumption changes the head, fingerprint, and source audit.
+    _record_event(
+        reopened,
+        "bundle-consumed",
+        ticket="#184",
+        payload=_recompiled_bundle_payload(),
+    )
     after_consumption = reopened.project()["tickets"]["#184"]["recovery_action"]
 
     # Compare the complete recovery-action sequence in one exact assertion.
@@ -1799,6 +2061,58 @@ def test_rebuild_waits_through_release_for_new_verified_bundle(
         "await-recompile",
         "continue-ticket",
     ]
+
+
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    ("case", "message"),
+    [
+        ("old-bundle", "old fingerprint"),
+        ("stale-child-source", "stale sources"),
+        ("wrong-head", "different head"),
+        ("missing-release", "post-rebuild release"),
+    ],
+)
+def test_post_rebuild_bundle_consumption_refuses_unverified_recompilation(
+    tmp_path: Path, case: str, message: str
+) -> None:
+    """REBUILD advances only on a released and freshly identified compilation."""
+
+    # Record the exact old bundle and REBUILD boundary shared by every refusal.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_attempt(journal)
+    _record_event(journal, "patch-captured", ticket="#184")
+    _record_event(
+        journal,
+        "review-completed",
+        ticket="#184",
+        payload={"verdict": "REBUILD"},
+    )
+    _record_event(journal, "rebuild-requested", ticket="#184")
+    if case != "missing-release":
+        _record_event(journal, "bundle-released", ticket="#184")
+    payload = _recompiled_bundle_payload()
+
+    # Keep exactly one old identity or omit the required release boundary.
+    if case == "old-bundle":
+        payload["bundle_fingerprint"] = f"sha256:{'2' * 64}"
+    elif case == "stale-child-source":
+        payload["source_fingerprints"] = {
+            "child_fingerprint": f"sha256:{'3' * 64}",
+            "parent_fingerprint": f"sha256:{'8' * 64}",
+        }
+    elif case == "wrong-head":
+        payload["execution_base"] = "9" * 40
+
+    # The failed consumption cannot supersede await-recompile durably.
+    with pytest.raises(module.JournalRefusal, match=message):
+        _record_event(
+            journal,
+            "bundle-consumed",
+            ticket="#184",
+            payload=payload,
+        )
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == "await-recompile"
 
 
 @pytest.mark.parametrize(  # type: ignore[untyped-decorator]
@@ -1833,6 +2147,12 @@ def test_revision_context_mode_survives_reopen_and_archive(
     # Only a lost executor context emits the explicit R3 durability boundary.
     if rehydrated:
         _record_event(journal, "executor-rehydrated", ticket="#184")
+        journal = module.Journal.open(tmp_path, opening)
+        immediate = journal.project()["tickets"]["#184"]
+        assert immediate["continuation"] == "fresh-context"
+        assert immediate["recovery_action"] == "resume-revision"
+
+    # Later terminal facts must preserve the already projected continuation mode.
     _record_event(journal, "stranded", ticket="#184")
     _complete_terminal(journal, "stranded")
     reopened = module.Journal.open(tmp_path, opening)
@@ -1847,3 +2167,49 @@ def test_revision_context_mode_survives_reopen_and_archive(
     # Final reporting can distinguish the mode and inspect exact R3 receipts.
     assert receipt["tickets"]["#184"]["continuation"] == expected_mode
     assert len(receipt["tickets"]["#184"]["rehydrations"]) == rehydration_count
+
+
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    ("case", "message"),
+    [
+        ("revision-sequence", "sequence does not name prior revise-requested"),
+        ("route-sequence", "sequence does not name prior route-recorded"),
+        ("attempt", "rehydration names a different revision attempt"),
+    ],
+)
+def test_r3_rehydration_refuses_mismatched_durable_identity(
+    tmp_path: Path, case: str, message: str
+) -> None:
+    """R3 cannot borrow a revision, Route point, or attempt identity."""
+
+    # Record one exact Route-to-revision chain eligible for fresh rehydration.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_attempt(journal)
+    _record_event(journal, "patch-captured", ticket="#184")
+    review = _record_event(
+        journal,
+        "review-completed",
+        ticket="#184",
+        payload={"verdict": "REVISE"},
+    )
+    revision = _record_event(journal, "revise-requested", ticket="#184")
+    payload: dict[str, Any] = {}
+
+    # Break only the durable identity named by this refusal case.
+    if case == "revision-sequence":
+        payload["revision_sequence"] = review["sequence"]
+    elif case == "route-sequence":
+        payload["route_sequence"] = review["sequence"]
+    else:
+        payload = {"attempt": 3, "revision_sequence": revision["sequence"]}
+
+    # No invalid R3 fact may become part of the projection or later archive.
+    with pytest.raises(module.JournalRefusal, match=message):
+        _record_event(
+            journal,
+            "executor-rehydrated",
+            ticket="#184",
+            payload=payload,
+        )
+    assert journal.project()["tickets"]["#184"]["continuation"] == "live-context"
