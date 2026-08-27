@@ -366,6 +366,36 @@ def _recompiled_bundle_payload(
     }
 
 
+def _record_pre_execution_rebuild(
+    journal: Any,
+    *,
+    previous_head: str = "1" * 40,
+    head: str = "4" * 40,
+) -> dict[str, Any]:
+    """Record one selected but unstarted plan becoming stale."""
+
+    # Persist selection as the evidence that this unstarted ticket belongs here.
+    selection = _record_event(journal, "selection-recorded")
+
+    # Record plan and Git identities without inventing a review receipt.
+    return dict(
+        journal.record(
+            "rebuild-requested",
+            ticket="#184",
+            payload={
+                "cause": "pre-execution-stale",
+                "selection_sequence": selection["sequence"],
+                "previous_head": previous_head,
+                "stale_bundle_fingerprint": f"sha256:{'2' * 64}",
+                "head": head,
+                "compile_invocation": "/compile #184",
+                "resume_invocation": "/dispatch #184",
+            },
+            artifacts={},
+        )
+    )
+
+
 def _record_event(
     journal: Any,
     event_type: str,
@@ -637,6 +667,31 @@ def test_opening_metadata_explains_every_fingerprint_input(tmp_path: Path) -> No
     assert metadata["at_once"] == 2
     assert metadata["route"] == {"model": None, "deliberation": "medium"}
     assert metadata["run_fingerprint"] == module.run_fingerprint(_opening())
+
+
+def test_effective_instruction_bytes_survive_open_and_resume_exactly(
+    tmp_path: Path,
+) -> None:
+    """Recovery owns the displayed materialized context without conversation memory."""
+
+    # Open with non-ASCII and line structure from materialized context.
+    module = _load()
+    instruction = "Behåll rework.\nPåverkar körning: rör inte #183–#185."
+    opening = {**_opening(), "instruction": instruction}
+    journal = module.Journal.open(
+        tmp_path,
+        opening,
+        opened_at="2026-08-27T08:09:10Z",
+    )
+    metadata = json.loads((journal.path / "metadata.json").read_bytes())
+
+    # Preserve exact UTF-8 and accept only that effective instruction.
+    assert metadata["instruction"].encode("utf-8") == instruction.encode("utf-8")
+    assert module.Journal.open(tmp_path, opening).path == journal.path
+    with pytest.raises(
+        module.JournalRefusal, match="active run opening does not match"
+    ):
+        module.Journal.open(tmp_path, {**opening, "instruction": f"{instruction} "})
 
 
 def test_events_are_canonical_contiguous_and_hash_chained(tmp_path: Path) -> None:
@@ -997,15 +1052,14 @@ def test_each_tracker_transition_keeps_concrete_resolution_receipts(
 ) -> None:
     """Every transition survives with non-default labels and convention sources."""
 
-    # Reach the transition's matching terminal state from one consumed attempt.
+    # Prepare one journal for the resolved transition fixture.
     module = _load()
     journal = _open(module, tmp_path)
-    if terminal == "landed":
-        # A landing transition follows independently verified Git evidence.
-        _record_terminal(journal, terminal)
 
+    # Reach the transition's matching terminal state from one consumed attempt.
+    if terminal == "landed":
+        _record_terminal(journal, terminal)
     else:
-        # A parking transition records its exact information or repair class.
         _record_attempt(journal)
         _record_event(journal, "patch-captured", ticket="#184")
         _record_event(
@@ -2170,6 +2224,131 @@ def test_rebuild_waits_through_release_for_new_verified_bundle(
     )
 
 
+def test_unstarted_stale_plan_records_pre_execution_rebuild_without_review(
+    tmp_path: Path,
+) -> None:
+    """A selected waiting plan can cross the one recompile checkpoint."""
+
+    # Record the stale plan against its selection and the integration head move.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    rebuild = _record_pre_execution_rebuild(journal)
+
+    # Project the user checkpoint without manufacturing post-review evidence.
+    assert "review_sequence" not in rebuild["payload"]
+    assert rebuild["payload"]["previous_head"] == "1" * 40
+    assert rebuild["payload"]["head"] == "4" * 40
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == (
+        "await-recompile"
+    )
+
+
+def test_unstarted_rebuild_refuses_a_bundle_for_the_wrong_new_head(
+    tmp_path: Path,
+) -> None:
+    """A pre-execution replacement is bound to its recorded integration HEAD."""
+
+    # Record the only permitted rebuild before any executor attempt starts.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_pre_execution_rebuild(journal)
+    payload = _recompiled_bundle_payload()
+    payload["execution_base"] = "9" * 40
+
+    # Refuse a bundle compiled for any tip other than the durable new HEAD.
+    with pytest.raises(module.JournalRefusal, match="different head"):
+        _record_event(journal, "bundle-consumed", ticket="#184", payload=payload)
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == (
+        "await-recompile"
+    )
+
+
+def test_unstarted_rebuild_resumes_from_new_bundle_on_recorded_head(
+    tmp_path: Path,
+) -> None:
+    """Recovery consumes the first bundle only after the durable recompile handoff."""
+
+    # Persist the pre-execution boundary and reopen without session memory.
+    module = _load()
+    opening = {**_opening(), "selection": ["#184"]}
+    journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
+    _record_pre_execution_rebuild(journal)
+    journal = module.Journal.open(tmp_path, opening)
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == (
+        "await-recompile"
+    )
+
+    # Accept one newly identified bundle bound to the recorded replacement HEAD.
+    consumed = _record_event(
+        journal,
+        "bundle-consumed",
+        ticket="#184",
+        payload=_recompiled_bundle_payload(),
+    )
+    assert consumed["payload"]["execution_base"] == "4" * 40
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == (
+        "continue-ticket"
+    )
+
+
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    "first_boundary",
+    ["pre-execution", "post-review"],
+)
+def test_rebuild_causes_share_one_ticket_budget(
+    tmp_path: Path,
+    first_boundary: str,
+) -> None:
+    """Either REBUILD cause exhausts the ticket's one shared allowance."""
+
+    # Spend the allowance through either supported evidence shape.
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    if first_boundary == "pre-execution":
+        _record_pre_execution_rebuild(journal)
+        _record_event(
+            journal,
+            "bundle-consumed",
+            ticket="#184",
+            payload=_recompiled_bundle_payload(),
+        )
+        _record_event(journal, "route-recorded", ticket="#184")
+        _record_event(journal, "ticket-assigned", ticket="#184")
+        _record_event(
+            journal,
+            "attempt-started",
+            ticket="#184",
+            payload={"base": "4" * 40},
+        )
+        _record_event(journal, "patch-captured", ticket="#184")
+        review = _record_event(
+            journal,
+            "review-completed",
+            ticket="#184",
+            payload={"verdict": "REBUILD"},
+        )
+        rebuild_payload = _event_payload(
+            journal,
+            "rebuild-requested",
+            ticket="#184",
+            payload={"review_sequence": review["sequence"]},
+        )
+    else:
+        _record_rebuild_boundary(journal, should_release_bundle=False)
+        rebuild_payload = journal.project()["tickets"]["#184"]["receipts"][
+            "rebuild-requested"
+        ][-1]["payload"]
+
+    # Refuse a second request through the shared budget.
+    with pytest.raises(module.JournalRefusal, match="spent its REBUILD budget"):
+        journal.record(
+            "rebuild-requested",
+            ticket="#184",
+            payload=rebuild_payload,
+            artifacts={},
+        )
+
+
 @pytest.mark.parametrize(  # type: ignore[untyped-decorator]
     ("case", "message"),
     [
@@ -2294,8 +2473,10 @@ def test_revision_context_mode_survives_reopen_and_archive(
     _complete_terminal(journal, "stranded")
     reopened = module.Journal.open(tmp_path, opening)
 
-    # Reopening projects the durable continuation mode without session memory.
-    assert reopened.project()["tickets"]["#184"]["continuation"] == expected_mode
+    # Reopen without spending a new revision receipt.
+    projected = reopened.project()["tickets"]["#184"]
+    assert projected["continuation"] == expected_mode
+    assert len(projected["receipts"]["revise-requested"]) == 1
 
     # The compact receipt preserves both the summary and exact R3 receipts.
     archive = reopened.archive()
@@ -2304,6 +2485,7 @@ def test_revision_context_mode_survives_reopen_and_archive(
     # Final reporting can distinguish the mode and inspect exact R3 receipts.
     assert receipt["tickets"]["#184"]["continuation"] == expected_mode
     assert len(receipt["tickets"]["#184"]["rehydrations"]) == rehydration_count
+    assert len(receipt["tickets"]["#184"]["reviews"]) == 1
 
 
 @pytest.mark.parametrize(  # type: ignore[untyped-decorator]

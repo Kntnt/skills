@@ -73,7 +73,7 @@
       "name": "dispatch",
       "category": "code",
       "description": "Execute, review, land, and recover fresh compiled plans on the current branch.",
-      "digest": "cfa2f4a2b51a6f98a3d1ea8beaae4b0dd04110b77013b4fe8dcc54eb525fa503",
+      "digest": "5cf22eb48c014a18350112e359b28a73f60455b3e1dfb70e9f9930c99971d701",
       "binaries": [
         "git",
         "gh",

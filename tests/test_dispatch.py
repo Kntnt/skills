@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import os
+import subprocess
 from pathlib import Path
+from typing import NamedTuple
 
 from support.contract import STANDARD, assert_contract_markers
 
@@ -17,28 +20,140 @@ COMPILE_BODY: Path = REPO_ROOT / "skills" / "code" / "compile" / "SKILL.md"
 COMPILE_HELP: Path = REPO_ROOT / "skills" / "code" / "compile" / "help.md"
 
 
-def _tracker_transition_rows() -> dict[str, tuple[str, str, str, str]]:
+class TrackerConvention(NamedTuple):
+    """Provide one resolved repository tracker vocabulary."""
+
+    executable_ready_label: str
+    needs_info_label: str
+    ready_for_human_label: str
+    scope_label: str
+
+
+class TrackerTransition(NamedTuple):
+    """Name the behavioural columns in one published transition row."""
+
+    trigger_notice: str
+    label_delta: str
+    assignment: str
+    preserved: str
+
+
+class MaterializedAttempt(NamedTuple):
+    """Name the Git identities in one materialized executor fixture."""
+
+    repository: Path
+    index_path: Path
+    base_tree: str
+    expected_test_blob: str
+
+
+def _git(
+    repository: Path,
+    *arguments: str,
+    environment: dict[str, str] | None = None,
+) -> str:
+    """Run one real Git command in a fixture repository."""
+
+    # Keep fixture commands isolated while retaining Git's normal environment.
+    completed = subprocess.run(
+        ("git", "-C", str(repository), *arguments),
+        check=True,
+        capture_output=True,
+        env={**os.environ, **(environment or {})},
+        text=True,
+    )
+
+    return completed.stdout.strip()
+
+
+def _materialized_attempt(
+    tmp_path: Path, *, replaces_test: bool
+) -> MaterializedAttempt:
+    """Create a repository whose canonical test is dispatcher-materialized."""
+
+    # Establish the captured attempt base with or without an older test blob.
+    repository = tmp_path / ("replacement" if replaces_test else "addition")
+    repository.mkdir()
+    _git(repository, "init", "--quiet")
+    _git(repository, "config", "user.name", "Dispatch Fixture")
+    _git(repository, "config", "user.email", "dispatch@example.test")
+    (repository / "app.py").write_text("VALUE = 1\n", encoding="utf-8")
+    if replaces_test:
+        (repository / "test_seam.py").write_text(
+            "assert VALUE == 0\n", encoding="utf-8"
+        )
+    _git(repository, "add", ".")
+    _git(repository, "commit", "--quiet", "-m", "captured base")
+
+    # Materialize canonical compiler bytes into a private dispatcher index.
+    (repository / "test_seam.py").write_text("assert VALUE == 2\n", encoding="utf-8")
+    index = repository / ".git" / "dispatch-materialized-index"
+    environment = {"GIT_INDEX_FILE": str(index)}
+    _git(repository, "read-tree", "HEAD", environment=environment)
+    _git(repository, "add", "--", "test_seam.py", environment=environment)
+    base_tree = _git(repository, "write-tree", environment=environment)
+    expected_test_blob = _git(repository, "hash-object", "--", "test_seam.py")
+
+    # Model one executor-owned change after the dispatcher materialization.
+    (repository / "app.py").write_text("VALUE = 2\n", encoding="utf-8")
+
+    return MaterializedAttempt(repository, index, base_tree, expected_test_blob)
+
+
+def _capture_executor_patch(attempt: MaterializedAttempt) -> str:
+    """Capture executor-owned paths against the materialized tree."""
+
+    # Stage only executor-owned results into the materialized private index.
+    environment = {"GIT_INDEX_FILE": str(attempt.index_path)}
+    _git(attempt.repository, "add", "--", "app.py", environment=environment)
+
+    return _git(
+        attempt.repository,
+        "diff",
+        "--cached",
+        "--binary",
+        "--full-index",
+        attempt.base_tree,
+        "--",
+        "app.py",
+        environment=environment,
+    )
+
+
+def _verify_canonical_test_blob(attempt: MaterializedAttempt) -> None:
+    """Reject a result whose separately inventoried test blob changed."""
+
+    # Compare the destination directly with the canonical escrow identity.
+    actual_blob = _git(attempt.repository, "hash-object", "--", "test_seam.py")
+    if actual_blob != attempt.expected_test_blob:
+        raise AssertionError("canonical test blob changed")
+
+
+def _tracker_transition_rows() -> dict[str, TrackerTransition]:
     """Parse the published tracker transition table into executable fixture rows."""
 
     # Collect the behavioural columns for stable transition identifiers.
-    rows: dict[str, tuple[str, str, str, str]] = {}
+    rows: dict[str, TrackerTransition] = {}
     for line in RECOVERY.read_text(encoding="utf-8").splitlines():
         if not line.startswith("| `T-"):
             continue
         cells = tuple(cell.strip() for cell in line.strip("|").split("|"))
-        rows[cells[0].strip("`")] = (cells[1], cells[2], cells[3], cells[4])
+        rows[cells[0].strip("`")] = TrackerTransition(*cells[1:5])
 
     return rows
 
 
 def _assert_tracker_convention(
-    rows: dict[str, tuple[str, str, str, str]],
-    convention: tuple[str, str, str, str],
+    rows: dict[str, TrackerTransition],
+    convention: TrackerConvention,
 ) -> None:
     """Project every transition through one non-default convention fixture."""
 
     # Resolve this fixture's lifecycle, preservation, and assignment facts.
-    executable, needs_info, ready_for_human, scope = convention
+    executable = convention.executable_ready_label
+    needs_info = convention.needs_info_label
+    ready_for_human = convention.ready_for_human_label
+    scope = convention.scope_label
     initial_labels = {executable, scope, "priority-critical"}
     target_labels = {
         "T-LAND": None,
@@ -58,18 +173,20 @@ def _assert_tracker_convention(
 
     # Execute all three symbolic rows through the resolved convention.
     for transition_id, target_label in target_labels.items():
-        _, label_delta, assignment, preserved = rows[transition_id]
+        transition = rows[transition_id]
         projected_labels = initial_labels - {executable}
         if target_label is not None:
             projected_labels.add(target_label)
-        projected_assignees = ("octocat",) if assignment == "Preserve" else ()
-        assert "Remove `executable_ready_label`" in label_delta
-        assert target_variables[transition_id] in label_delta
+        projected_assignees = (
+            ("octocat",) if transition.assignment == "Preserve" else ()
+        )
+        assert "Remove `executable_ready_label`" in transition.label_delta
+        assert target_variables[transition_id] in transition.label_delta
         assert scope in projected_labels
         assert executable not in projected_labels
         assert projected_assignees == expected_assignments[transition_id]
-        assert "`preserved_labels`" in preserved
-        assert "milestone" in preserved
+        assert "`preserved_labels`" in transition.preserved
+        assert "milestone" in transition.preserved
 
     # Keep published policy symbolic under this arbitrary vocabulary.
     text = RECOVERY.read_text(encoding="utf-8")
@@ -137,7 +254,7 @@ def test_dry_run_and_each_live_turn_recompute_the_current_frontier() -> None:
             "opens no journal",
             "blockers first",
             "Solo Ticket",
-            "greedily fills",
+            "greedily fill",
             "selection order",
             "recompute",
         ),
@@ -233,6 +350,63 @@ def test_attempts_become_durable_full_index_patches_before_disposal() -> None:
         ),
         "Recovery must survive removal of every ordinary attempt worktree and branch.",
     )
+
+
+def test_patch_capture_uses_materialized_base_and_separate_test_evidence() -> None:
+    """Patch authority excludes bytes supplied or owned by the dispatcher."""
+
+    # Pin the patch base, path ownership, and independent canonical-test check.
+    assert_contract_markers(
+        BODY,
+        (
+            "materialized attempt base",
+            "executor-owned `modifies`, `creates`, and `deletes`",
+            "excludes compiler-owned test destinations",
+            "dispatcher-owned writes",
+            "Inventory the test destinations separately",
+            "verify every destination's Git blob",
+            "rejects the complete execution result",
+        ),
+        "A dispatcher-supplied test must not appear to be executor work or evade tamper detection.",
+    )
+
+
+def test_executor_patch_excludes_unchanged_materialized_canonical_tests(
+    tmp_path: Path,
+) -> None:
+    """New and replaced seam tests remain outside the executor-owned patch."""
+
+    # Exercise both canonical-test shapes through a real temporary Git index.
+    for replaces_test in (False, True):
+        attempt = _materialized_attempt(tmp_path, replaces_test=replaces_test)
+        patch = _capture_executor_patch(attempt)
+
+        assert "diff --git a/app.py b/app.py" in patch
+        assert "test_seam.py" not in patch
+        _verify_canonical_test_blob(attempt)
+
+
+def test_tampered_materialized_test_rejects_the_complete_executor_result(
+    tmp_path: Path,
+) -> None:
+    """Patch exclusion cannot hide a changed compiler-owned destination."""
+
+    # Capture the allowed executor path after materializing the canonical base.
+    attempt = _materialized_attempt(tmp_path, replaces_test=False)
+    patch = _capture_executor_patch(attempt)
+    assert "test_seam.py" not in patch
+
+    # Independently inventoried blob verification rejects the whole result.
+    (attempt.repository / "test_seam.py").write_text(
+        "assert VALUE == 999\n",
+        encoding="utf-8",
+    )
+    try:
+        _verify_canonical_test_blob(attempt)
+    except AssertionError as error:
+        assert str(error) == "canonical test blob changed"
+    else:
+        raise AssertionError("tampered canonical test was accepted")
 
 
 def test_bundle_escrow_and_compiler_owned_tests_are_byte_authoritative() -> None:
@@ -353,9 +527,19 @@ def test_tracker_transitions_execute_against_non_default_label_conventions() -> 
 
     # Project the symbolic deltas through two non-default convention fixtures.
     rows = _tracker_transition_rows()
-    conventions: tuple[tuple[str, str, str, str], ...] = (
-        ("queued-for-bot", "awaiting-answer", "human-queue", "project-cerulean"),
-        ("robot-green", "question-open", "maintainer-needed", "release-sunrise"),
+    conventions: tuple[TrackerConvention, ...] = (
+        TrackerConvention(
+            executable_ready_label="queued-for-bot",
+            needs_info_label="awaiting-answer",
+            ready_for_human_label="human-queue",
+            scope_label="project-cerulean",
+        ),
+        TrackerConvention(
+            executable_ready_label="robot-green",
+            needs_info_label="question-open",
+            ready_for_human_label="maintainer-needed",
+            scope_label="release-sunrise",
+        ),
     )
 
     # Execute every transition against each repository's arbitrary vocabulary.
@@ -383,6 +567,47 @@ def test_recovery_matrix_covers_every_approved_interruption_window() -> None:
         ),
         "An interrupted run must neither repeat paid work nor skip an external mutation.",
     )
+
+
+def test_fresh_r3_context_is_durable_reported_and_free_of_revision_cost() -> None:
+    """Lost continuity remains visible without consuming correction budget."""
+
+    # Require recovery, public help, and final reporting to expose the R3 fact.
+    for path in (BODY, HELP, RECOVERY):
+        assert_contract_markers(
+            path,
+            (
+                "fresh-context",
+                "final report",
+                "without consuming a revision round",
+            ),
+            "A rehydrated REVISE must remain durable and visible after compaction.",
+        )
+
+
+def test_material_context_is_shown_and_persisted_before_confirmation() -> None:
+    """A confirmed run can recover without relying on conversation prose."""
+
+    # Pin selective context materialization and its byte-identical journal form.
+    text = assert_contract_markers(
+        BODY,
+        (
+            "Conversation Context that materially affects execution",
+            "omit context that does not affect execution",
+            "exact resume line",
+            "before confirmation",
+            "same UTF-8 bytes",
+            "effective instruction",
+            "never depends on conversation prose",
+        ),
+        "Confirmation and recovery must name the same self-contained invocation.",
+    )
+
+    # Materialize before displaying the command and confirmation question.
+    assert text.index(
+        "Conversation Context that materially affects execution"
+    ) < text.index("before confirmation")
+    assert text.index("before confirmation") < text.index("asks one yes-or-no question")
 
 
 def test_parked_patch_and_human_conflict_have_deliberate_retention() -> None:

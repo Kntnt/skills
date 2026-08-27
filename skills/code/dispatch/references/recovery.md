@@ -14,7 +14,7 @@ Every artifact is durable before the event that names it. Bundle escrows, Route 
 | --- | --- |
 | `attempt-started`, no patch event | Remove or ignore the disposable resources, recreate the same base and escrowed tests, and replay the named attempt under its recorded Route decision; spend no retry. |
 | `patch-captured`, no review | Recreate a clean worktree, verify and apply the patch, materialise canonical tests, and perform the complete review without rerunning the executor. |
-| `REVISE` recorded | Continue the live executor context; when it is unavailable, rehydrate the same execution role and Route point from the complete plan, last accepted patch, and exact finding without charging a revision for lost continuity. |
+| `REVISE` recorded | Continue the live executor context; when it is unavailable, record `fresh-context`, rehydrate the same execution role and Route point from the complete plan, last accepted patch, and exact finding without consuming a revision round. Preserve that fact for the final report. |
 | `landing-started`, no `landed` event | If the exact candidate is reachable and its trailers, tree, and test blobs agree, record it landed; if the ref remains at the old tip, rebuild the candidate from journal artifacts; any other ref state stops. |
 | `REBUILD` recorded | Require the fresh accepted bundle named by the durable `/compile #<ticket>` handoff, verify it against the journal's new tip, and start the one fresh executor. |
 | `human-conflict` recorded | Preserve only the named worktree and branch, accept the owner's direct resolution or durable instruction, re-hash tests, and repeat full review before landing. |
@@ -24,6 +24,8 @@ Every artifact is durable before the event that names it. Bundle escrows, Route 
 | `stranded`, no cleanup event | Re-establish the recorded blocker or refusal, release escrow and disposable resources, and preserve the untouched or stale canonical plan slot for later replacement or reuse. |
 
 The matrix separates an executor return from durable patch capture and a candidate commit from integration-ref advancement. Replaying either boundary from session memory risks duplicating paid work or landing twice.
+
+A review-driven REBUILD retains its exact `review_sequence` and existing post-review semantics. A selected but unstarted stale plan instead records pre-execution evidence: `selection_sequence`, previous `HEAD`, stale bundle fingerprint, and the new `HEAD`; it never invents `review_sequence`. Both forms project `await-recompile`, spend the same one-REBUILD budget, and permit the next accepted bundle only when its execution base equals the recorded new `HEAD` and its fingerprint differs from the stale bundle.
 
 ## Portable tracker-transition contract
 
@@ -51,6 +53,6 @@ A human conflict is the only resource-retention exception: preserve only the nam
 
 ## Outcomes and completion
 
-The projection has exactly three ticket outcomes. **Landed** names a reachable landing commit and bundle fingerprint. **Parked** names the complete owner question or exhausted-review/conflict handoff and verified tracker transition. **Stranded** names the blocker, Route or environment refusal, stopped integration, or discovered dependency that prevented execution without inventing an owner question.
+The projection has exactly three ticket outcomes. **Landed** names a reachable landing commit and bundle fingerprint. **Parked** names the complete owner question or exhausted-review/conflict handoff and verified tracker transition. **Stranded** names the blocker, Route or environment refusal, stopped integration, or discovered dependency that prevented execution without inventing an owner question. If an R3 receipt records `fresh-context`, explicitly name the rehydrated fresh-context in the final report and say it continued without consuming a revision round.
 
 Completion requires every selected ticket to have one exact terminal reason; the integration tree is clean; the active journal is atomically archived; all ordinary worktrees and temporary branches are removed; every landed or parked bundle is retired; every stranded escrow is released while its stranded canonical slot remains; and no retained conflict resource exists in a completed run. The archived receipt keeps identities, footprints, allocations, tests, Route decisions, verdicts, tracker receipts, and terminal evidence, but not retired plan or patch copies already durable in Git.

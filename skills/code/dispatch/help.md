@@ -20,7 +20,7 @@ dispatch - execute, review, land, and recover fresh compiled plans
 
 A ticket is dispatch-eligible when it is an open executable child in the current repository, has a fresh accepted bundle for the current integration branch and tip, every declared blocker has exactly one matching landing commit reachable from that tip, and no active journal already owns it. Issue closure is not evidence that code landed.
 
-Bare live selection lists every eligible ticket in ascending issue order and asks one confirmation; `--yes` answers it. Explicit references are already confirmed and preserve written order. Any ineligible explicit reference refuses the whole invocation rather than narrowing it.
+Bare live selection lists every eligible ticket in ascending issue order, materialises only Conversation Context that affects execution into a self-contained effective instruction, displays the exact resume line before confirmation, and asks once; `--yes` answers it. The journal stores the same instruction bytes, while irrelevant context is omitted. Explicit references are already confirmed and preserve written order. Any ineligible explicit reference refuses the whole invocation rather than narrowing it.
 
 Scheduling reads the current dependency graph, Git history, journal outcomes, and plan footprints on every turn. Blockers go first, a Solo Ticket runs alone, and otherwise the frontier fills in selection order to the concurrency ceiling. Two plans do not overlap when one writes a path the other reads or writes. The frontier is recomputed after each serial landing, so later waves are never frozen.
 
@@ -60,7 +60,7 @@ Answer yes at the bare live selection confirmation. It is invalid with explicit 
 
 ## OUTPUT
 
-A live run reports each selected ticket as Landed, Parked, or Stranded, with its exact evidence or reason. It names the active or archived journal, any deliberately retained human-conflict resource, any observation artifact, and exact `/compile` plus resume lines where REBUILD awaits its user checkpoint.
+A live run reports each selected ticket as Landed, Parked, or Stranded, with its exact evidence or reason. It names the active or archived journal, any deliberately retained human-conflict resource, any observation artifact, and exact `/compile` plus resume lines where REBUILD awaits its user checkpoint. When REVISE resumed as a recorded `fresh-context`, the final report explicitly names that rehydration and says it proceeded without consuming a revision round.
 
 A dry run reports only the current graph, exclusions, frontier, provisional later waves, and routing readiness.
 
@@ -84,7 +84,7 @@ Disposable attempt worktrees. A human conflict may deliberately retain one named
 
 ## RECOVERY
 
-Re-invoke the exact original command. The journal projection distinguishes attempt without patch, patch without review, lost REVISE context, interrupted landing, REBUILD, human conflict, terminal tracker transition, bundle retirement, and cleanup. Durable artifacts are replayed; missing state is never inferred from a surviving worktree or tracker label.
+Re-invoke the exact original command. The journal projection distinguishes attempt without patch, patch without review, lost REVISE context, interrupted landing, REBUILD, human conflict, terminal tracker transition, bundle retirement, and cleanup. A lost REVISE context is durably named `fresh-context`, survives into the final report, and continues without consuming a revision round. Durable artifacts are replayed; missing state is never inferred from a surviving worktree, tracker label, or conversation prose.
 
 Routine attempt resources are disposable after patch capture. A parked ticket's latest full patch remains inspectable until that ticket lands or is explicitly abandoned, but it never authorizes replay against a new plan.
 

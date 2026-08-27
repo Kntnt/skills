@@ -115,6 +115,12 @@ class ContinuationMode(StrEnum):
     FRESH = "fresh-context"
 
 
+class RebuildCause(StrEnum):
+    """Distinguish the evidence origin for one REBUILD boundary."""
+
+    PRE_EXECUTION_STALE = "pre-execution-stale"
+
+
 class TerminalRequirements(NamedTuple):
     """Describe the durable prerequisites for one terminal state."""
 
@@ -240,6 +246,17 @@ EVENT_PAYLOAD_FIELDS: Final[dict[EventType, frozenset[str]]] = {
     EventType.OBSERVATION_RECORDED: frozenset({"attempt"}),
     EventType.RUN_COMPLETED: frozenset({"tickets"}),
 }
+PRE_EXECUTION_REBUILD_FIELDS: Final[frozenset[str]] = frozenset(
+    {
+        "cause",
+        "selection_sequence",
+        "previous_head",
+        "stale_bundle_fingerprint",
+        "head",
+        "compile_invocation",
+        "resume_invocation",
+    }
+)
 
 # Bind artifact-bearing events to every byte stream recovery needs durable.
 EVENT_ARTIFACT_FIELDS: Final[dict[EventType, frozenset[str]]] = {
@@ -1188,8 +1205,13 @@ def _validate_event_payload(
 ) -> None:
     """Validate the receipts whose exact fields affect safe recovery."""
 
-    # Every event has one exact durable payload and artifact surface.
-    if set(payload) != EVENT_PAYLOAD_FIELDS[event_type]:
+    # REBUILD has one post-review shape and one pre-execution shape.
+    expected_fields = EVENT_PAYLOAD_FIELDS[event_type]
+    has_valid_fields = set(payload) == expected_fields or (
+        event_type is EventType.REBUILD_REQUESTED
+        and set(payload) == PRE_EXECUTION_REBUILD_FIELDS
+    )
+    if not has_valid_fields:
         raise JournalRefusal(f"{event_type.value} payload fields are incomplete")
     if artifact_kinds != EVENT_ARTIFACT_FIELDS[event_type]:
         raise JournalRefusal(f"{event_type.value} recovery artifacts are incomplete")
@@ -1356,6 +1378,13 @@ def _validate_common_payload_values(
         EventType.BUNDLE_RETIRED: ("bundle_fingerprint",),
     }.get(event_type, ()):
         _require_matching_string(payload, field, CONTENT_DIGEST_PATTERN)
+    if (
+        event_type is EventType.REBUILD_REQUESTED
+        and "stale_bundle_fingerprint" in payload
+    ):
+        _require_matching_string(
+            payload, "stale_bundle_fingerprint", CONTENT_DIGEST_PATTERN
+        )
     for field in {
         EventType.BUNDLE_CONSUMED: ("execution_base",),
         EventType.ATTEMPT_STARTED: ("base",),
@@ -1364,6 +1393,18 @@ def _validate_common_payload_values(
         EventType.LANDED: ("commit", "tree"),
     }.get(event_type, ()):
         _require_matching_string(payload, field, OBJECT_ID_PATTERN)
+    if event_type is EventType.REBUILD_REQUESTED and "previous_head" in payload:
+        previous_head = _require_matching_string(
+            payload, "previous_head", OBJECT_ID_PATTERN
+        )
+        if previous_head == payload["head"]:
+            raise JournalRefusal("pre-execution rebuild requires a changed head")
+
+    # Pre-execution REBUILD is explicit evidence rather than a review alias.
+    if event_type is EventType.REBUILD_REQUESTED and "cause" in payload:
+        if payload["cause"] != RebuildCause.PRE_EXECUTION_STALE.value:
+            raise JournalRefusal("pre-execution rebuild has an invalid cause")
+        _require_positive_integer(payload, "selection_sequence")
 
     # Lists and opaque objects must still have their recovery-required shape.
     for field in {
@@ -1557,13 +1598,30 @@ def _validate_event_references(
         ]
         if len(consumed_bundles) >= 2:
             raise JournalRefusal("ticket already consumed its REBUILD replacement")
-        if not consumed_bundles:
-            return
-
-        # Find and verify the newer REBUILD boundary for the replacement.
         latest_rebuild = _latest_ticket_event(
             ticket_events, ticket, EventType.REBUILD_REQUESTED
         )
+        if not consumed_bundles and latest_rebuild is None:
+            return
+
+        # A selected but unstarted stale plan consumes its first bundle only
+        # from the new HEAD and with a new compiled identity.
+        if not consumed_bundles:
+            if latest_rebuild is None:
+                raise JournalRefusal("pre-execution rebuild receipt is missing")
+            rebuild_payload = cast(dict[str, JsonValue], latest_rebuild["payload"])
+            if "selection_sequence" not in rebuild_payload:
+                raise JournalRefusal("post-review rebuild has no consumed bundle")
+            if payload["execution_base"] != rebuild_payload["head"]:
+                raise JournalRefusal("recompiled bundle targets a different head")
+            if (
+                payload["bundle_fingerprint"]
+                == rebuild_payload["stale_bundle_fingerprint"]
+            ):
+                raise JournalRefusal("recompiled bundle repeats the stale fingerprint")
+            return
+
+        # Find and verify the newer REBUILD boundary for the replacement.
         latest_bundle = consumed_bundles[-1]
         if latest_rebuild is None or cast(int, latest_rebuild["sequence"]) <= cast(
             int, latest_bundle["sequence"]
@@ -1602,7 +1660,6 @@ def _validate_event_references(
             "revision_sequence",
             EventType.REVISE_REQUESTED,
         ),
-        EventType.REBUILD_REQUESTED: ("review_sequence", EventType.REVIEW_COMPLETED),
         EventType.OWNER_ANSWERED: ("for_sequence", EventType.HUMAN_CONFLICT),
         EventType.LANDING_STARTED: ("review_sequence", EventType.REVIEW_COMPLETED),
         EventType.HUMAN_CONFLICT: ("landing_sequence", EventType.LANDING_STARTED),
@@ -1621,6 +1678,39 @@ def _validate_event_references(
             referenced_payload = cast(dict[str, JsonValue], referenced["payload"])
             if referenced_payload["attempt"] != payload["attempt"]:
                 raise JournalRefusal("rehydration names a different revision attempt")
+
+    # Both REBUILD causes spend one shared budget. Post-review keeps its exact
+    # review pointer; pre-execution proves selection and absence of an attempt.
+    if event_type is EventType.REBUILD_REQUESTED:
+        if any(
+            event["ticket"] == ticket
+            and _event_type(event) is EventType.REBUILD_REQUESTED
+            for event in prior_events
+        ):
+            raise JournalRefusal("ticket already spent its REBUILD budget")
+        if "review_sequence" in payload:
+            review_sequence = _require_positive_integer(payload, "review_sequence")
+            _require_prior_event(
+                prior_events,
+                review_sequence,
+                ticket,
+                EventType.REVIEW_COMPLETED,
+            )
+        else:
+            selection_sequence = _require_positive_integer(
+                payload, "selection_sequence"
+            )
+            selection = _require_prior_event(
+                prior_events,
+                selection_sequence,
+                None,
+                EventType.SELECTION_RECORDED,
+            )
+            selection_payload = cast(dict[str, JsonValue], selection["payload"])
+            if ticket not in cast(list[JsonValue], selection_payload["tickets"]):
+                raise JournalRefusal("pre-execution rebuild ticket was not selected")
+            if any(event["ticket"] == ticket for event in prior_events):
+                raise JournalRefusal("pre-execution rebuild ticket already started")
 
     # R3 rehydration binds the fresh context to the exact previously recorded
     # Route decision whose execution role and configuration it recreates.
