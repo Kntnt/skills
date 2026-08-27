@@ -16,6 +16,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 HARNESS_PATHS = REPO_ROOT / "skills" / "kntnt" / "harness-paths.json"
 MANAGER_DIR = REPO_ROOT / "skills" / "kntnt"
+DELEGATION_DOCTRINE: Path = (
+    MANAGER_DIR / "library" / "references" / "delegation-mode.md"
+)
 
 # The one place the Invocation Envelope contract is stated. A body writes the
 # pointer as `$LIBRARY/...`, the variable it defines itself; a manpage writes
@@ -3899,6 +3902,39 @@ def test_the_collection_library_carries_the_durable_slice_contract() -> None:
         )
 
 
+def test_the_collection_library_carries_the_delegation_doctrine() -> None:
+    """The delegation doctrine is the Library's, not one Skill's internal.
+
+    `delegation` and the future dispatcher consume the same policy. Peer
+    internals are not an interface, so the doctrine belongs at their shared
+    Library seam before the second consumer ships (ADR-0109).
+    """
+
+    # Resolve the doctrine at the shared seam before inspecting its ownership.
+    doctrine = DELEGATION_DOCTRINE
+    assert doctrine.is_file(), (
+        f"{doctrine}: the delegation doctrine is stated once, in the Collection"
+        f" Library. A copy under `delegation` would make that Skill the"
+        f" implementation owner of every peer that delegates execution"
+        f" (ADR-0109). See {STANDARD}."
+    )
+
+    # Hold the single copy itself, not merely the absence of the old address.
+    # Byte equality catches an unchanged compatibility copy left by the move.
+    text = doctrine.read_text(encoding="utf-8")
+    copies = sorted(
+        path.relative_to(REPO_ROOT)
+        for path in (REPO_ROOT / "skills").rglob("*.md")
+        if path.read_text(encoding="utf-8") == text
+    )
+    assert copies == [doctrine.relative_to(REPO_ROOT)], (
+        f"{copies}: the delegation doctrine ships verbatim more than once. A"
+        f" reference with several consumers has one authoritative copy in the"
+        f" Library, and a second copy is a policy that can drift from itself"
+        f" (ADR-0109). See {STANDARD}."
+    )
+
+
 def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     """One statement of what a first draft has to be, read from both sides.
 
@@ -4787,16 +4823,16 @@ def test_delegation_requires_subagents_and_says_so() -> None:
         f" go-ahead (ADR-0107). See {STANDARD}."
     )
 
-    mode = (path.parent / "references" / "mode.md").read_text(encoding="utf-8")
+    mode = DELEGATION_DOCTRINE.read_text(encoding="utf-8")
     assert "haiku" not in mode, (
-        f"{path.parent / 'references' / 'mode.md'}: the mode text names no"
+        f"{DELEGATION_DOCTRINE}: the mode text names no"
         f" model from one vendor's ladder. It is written into a committed"
         f" `AGENTS.md` that agents of any harness read, and the collection"
         f" is one set across harnesses (ADR-0107) — so it tells the reader"
         f" to pick from its own ladder. See {STANDARD}."
     )
     assert "Claude Code" not in mode, (
-        f"{path.parent / 'references' / 'mode.md'}: the mode text names no"
+        f"{DELEGATION_DOCTRINE}: the mode text names no"
         f" single harness. It is written into a committed `AGENTS.md` that"
         f" agents of any harness read, and an instruction addressed to one"
         f" of them is an instruction the rest cannot act on (ADR-0107)."
@@ -4815,7 +4851,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     directory = REPO_ROOT / "skills" / "agents" / "delegation"
     skill = (directory / "SKILL.md").read_text(encoding="utf-8")
     help_page = (directory / "help.md").read_text(encoding="utf-8")
-    mode = (directory / "references" / "mode.md").read_text(encoding="utf-8")
+    mode = DELEGATION_DOCTRINE.read_text(encoding="utf-8")
     persistence = (directory / "references" / "persist.md").read_text(encoding="utf-8")
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     catalog = json.loads(
@@ -4861,7 +4897,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         fragment for fragment in required_mode_fragments if fragment not in mode
     )
     assert not missing, (
-        f"{directory / 'references' / 'mode.md'}: delegation must route only chosen"
+        f"{DELEGATION_DOCTRINE}: delegation must route only chosen"
         f" execution through the public contract while preserving main-seat ownership;"
         f" missing {missing}."
     )
@@ -4872,8 +4908,9 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     # Keep project and user persistence as one refreshable mode contract.
     required_persistence_fragments = {
         "`project` and `user` keep the mode as a managed block",
-        "{the entire content of $HERE/references/mode.md, verbatim}",
-        "`on` over an existing block rewrites it from the current `mode.md`",
+        "verbatim}",
+        "`on` over an existing block rewrites it from the current",
+        "`on` is idempotent and doubles as the refresh",
         "`off` removes the whole block, both markers included, and nothing else",
         "lines between the second comment and the closing marker differ",
         "`status` reports it and names `/delegation <scope> on` as the fix",
@@ -4890,10 +4927,83 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     )
 
 
+def test_delegation_addresses_its_doctrine_through_the_library() -> None:
+    """Both delegation entry points consume the exact Library doctrine."""
+
+    # Read the body and persistence surfaces that consume the doctrine.
+    directory = REPO_ROOT / "skills" / "agents" / "delegation"
+    body = directory / "SKILL.md"
+    persist = directory / "references" / "persist.md"
+    former = directory / "references" / "mode.md"
+    pointer = "$LIBRARY/references/delegation-mode.md"
+    text = body.read_text(encoding="utf-8")
+    persistence = persist.read_text(encoding="utf-8")
+
+    # Reject a surviving private source at its former address.
+    assert not former.exists(), (
+        f"{former}: the doctrine is the Library's, and a local copy beside the"
+        f" Skill is the peer internal the move removed (ADR-0109)."
+        f" See {STANDARD}."
+    )
+
+    # Reject either consumer retaining a pointer to the private address.
+    for surface, content in ((body, text), (persist, persistence)):
+        assert "references/mode.md" not in content, (
+            f"{surface}: a pointer still names the doctrine's old private"
+            f" address. See {STANDARD}."
+        )
+
+    # The body names the exact source instead of paraphrasing the policy at the
+    # consumer seam, both where it defines the mode and where session `on`
+    # adopts it.
+    mode_section = _section(text, "## The mode", body)
+    assert pointer in mode_section, (
+        f"{body}: the mode's single-source rule does not name the Library"
+        f" doctrine. See {STANDARD}."
+    )
+    assert (
+        "copy it verbatim wherever it is needed; state it in no other words"
+        in mode_section
+    ), (
+        f"{body}: the consumer seam no longer requires the Library doctrine"
+        f" verbatim, so a local paraphrase could become policy. See {STANDARD}."
+    )
+
+    # Hold session adoption to the same exact source as the mode definition.
+    steps = _section(text, "## Steps", body)
+    adoption = [line for line in steps.splitlines() if "Going on: read" in line]
+    assert adoption, (
+        f"{body}: no session step adopts the doctrine, so this check judged"
+        f" nothing. See {STANDARD}."
+    )
+    assert all(pointer in line for line in adoption), (
+        f"{body}: session `on` does not consume the exact Library doctrine."
+        f" See {STANDARD}."
+    )
+
+    # Hold persistent copies, refreshes, and staleness checks to that source.
+    required_persistence_fragments = {
+        f"{{the entire content of {pointer}, verbatim}}",
+        "`on` over an existing block rewrites it from the current `delegation-mode.md`",
+        f"differ from `{pointer}`",
+        "`status` reports it and names `/delegation <scope> on` as the fix",
+    }
+    missing = sorted(
+        fragment
+        for fragment in required_persistence_fragments
+        if fragment not in persistence
+    )
+    assert not missing, (
+        f"{persist}: persistent delegation must copy, refresh, and compare the"
+        f" exact Library doctrine rather than restating its policy; missing"
+        f" {missing}. See {STANDARD}."
+    )
+
+
 def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() -> None:
     """The mode delegates noisy tool work before its raw result reaches the main agent."""
 
-    path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
+    path = DELEGATION_DOCTRINE
     mode = path.read_text(encoding="utf-8")
 
     required_fragments = {
@@ -6943,9 +7053,8 @@ def test_tldr_addresses_its_register_through_the_library() -> None:
 
     The register moved out of `tldr`'s `references/` and the Skill now reaches
     it as any consumer does. The persisted block's template is held here rather
-    than beside `delegation`'s, whose own mode is still local: one literal for
-    both Skills would pass whichever path it named and hide the other
-    (ADR-0109).
+    than in delegation's pointer test: one literal for both Skills would pass
+    whichever Library path it named and hide the other (ADR-0109).
     """
 
     body = TLDR_DIR / "SKILL.md"
@@ -7092,7 +7201,7 @@ def test_delegation_reports_checked_observations_and_imports_none() -> None:
     reaches the ledger until the user asks for it (issue #96).
     """
 
-    path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
+    path = DELEGATION_DOCTRINE
     mode = path.read_text(encoding="utf-8")
 
     required_fragments = {
