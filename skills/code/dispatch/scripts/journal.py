@@ -55,6 +55,7 @@ class EventType(StrEnum):
     DISPATCHER_WRITE_RECORDED = "dispatcher-write-recorded"
     REVIEW_COMPLETED = "review-completed"
     REVISE_REQUESTED = "revise-requested"
+    EXECUTOR_REHYDRATED = "executor-rehydrated"
     REBUILD_REQUESTED = "rebuild-requested"
     OWNER_ANSWERED = "owner-answered"
     LANDING_STARTED = "landing-started"
@@ -99,6 +100,7 @@ class RecoveryAction(StrEnum):
     RESUME_HUMAN_CONFLICT = "resume-human-conflict"
     COMPLETE_TRACKER_TRANSITION = "complete-tracker-transition"
     RETIRE_BUNDLE = "retire-bundle"
+    RELEASE_BUNDLE = "release-bundle"
     CLEAN_RESOURCES = "clean-resources"
     CLEAN_STRANDED = "clean-stranded"
     COMPLETE_RUN = "complete-run"
@@ -106,14 +108,25 @@ class RecoveryAction(StrEnum):
     COMPLETE = "complete"
 
 
-class GitEvidence(TypedDict):
-    """Carry fixed landing-window observations produced outside the helper."""
+class ContinuationMode(StrEnum):
+    """Distinguish live revision continuation from R3 rehydration."""
 
+    LIVE = "live-context"
+    FRESH = "fresh-context"
+
+
+class GitEvidence(TypedDict):
+    """Carry observations for one exact ticket landing window."""
+
+    ticket: str
+    landing_sequence: int
     integration_ref_head: str
-    candidate_commit: str | None
+    candidate_commit: str
     candidate_reachable: bool
-    candidate_tree: str | None
+    candidate_tree: str
     test_blobs: dict[str, str]
+    expected_trailers: dict[str, str]
+    observed_trailers: dict[str, str]
 
 
 # Publish typed vocabulary sets and self-describing lexical validators for
@@ -157,6 +170,9 @@ EVENT_PAYLOAD_FIELDS: Final[dict[EventType, frozenset[str]]] = {
     EventType.REVIEW_COMPLETED: frozenset({"attempt", "verdict", "finding_summary"}),
     EventType.REVISE_REQUESTED: frozenset(
         {"attempt", "prior_attempt", "review_sequence"}
+    ),
+    EventType.EXECUTOR_REHYDRATED: frozenset(
+        {"attempt", "revision_sequence", "route_sequence"}
     ),
     EventType.REBUILD_REQUESTED: frozenset(
         {"review_sequence", "head", "compile_invocation", "resume_invocation"}
@@ -700,7 +716,7 @@ class Journal:
         }
 
     def project(
-        self, *, git_evidence: Mapping[str, Any] | None = None
+        self, *, git_evidence: Sequence[Mapping[str, Any]] | None = None
     ) -> dict[str, JsonValue]:
         """Project run and ticket recovery state without mutating the journal.
 
@@ -815,15 +831,10 @@ class Journal:
         """Delete retired bulk while preserving the receipt-selected artifacts."""
 
         receipt = self._read_archive_receipt()
-        retained = receipt.get("retained_artifacts")
-        if not isinstance(retained, list) or any(
-            not isinstance(path, str) for path in retained
-        ):
-            raise JournalRefusal("archive retained-artifact receipt is malformed")
+        retained_paths = _validate_retained_artifacts(self.path, receipt)
 
         # Artifact deletion is idempotent, so a crash resumes from the same
         # marker without reconstructing decisions from absent bulk.
-        retained_paths = set(cast(list[str], retained))
         artifact_root = self.path / "artifacts"
         if artifact_root.exists():
             for path in sorted(artifact_root.rglob("*"), reverse=True):
@@ -864,6 +875,7 @@ class Journal:
         receipt = self._read_archive_receipt()
         if receipt.get("run_fingerprint") != self.metadata["run_fingerprint"]:
             raise JournalRefusal("archive receipt names a different invocation")
+        _validate_retained_artifacts(self.path, receipt)
 
     def _read_archive_receipt(self) -> dict[str, JsonValue]:
         """Read the canonical compact receipt shared by archive operations."""
@@ -897,9 +909,20 @@ class Journal:
                 terminal = TerminalState(cast(str, value.get("terminal")))
             except (TypeError, ValueError) as error:
                 raise JournalRefusal("archive ticket terminal is malformed") from error
+            continuation_value = value.get("continuation")
+            if continuation_value is not None:
+                try:
+                    continuation_value = ContinuationMode(
+                        cast(str, continuation_value)
+                    ).value
+                except (TypeError, ValueError) as error:
+                    raise JournalRefusal(
+                        "archive ticket continuation is malformed"
+                    ) from error
             tickets[ticket] = {
                 "last_event": terminal.value,
                 "terminal": terminal.value,
+                "continuation": continuation_value,
                 "receipts": {},
                 "recovery_action": RecoveryAction.ARCHIVE_RUN.value,
             }
@@ -1252,6 +1275,7 @@ def _validate_common_payload_values(
         EventType.PATCH_CAPTURED,
         EventType.REVIEW_COMPLETED,
         EventType.REVISE_REQUESTED,
+        EventType.EXECUTOR_REHYDRATED,
         EventType.HUMAN_CONFLICT,
         EventType.OBSERVATION_RECORDED,
     }
@@ -1353,12 +1377,13 @@ def _validate_bundle_audit_payload(payload: dict[str, JsonValue]) -> None:
     # Source identities must remain independently checkable after the escrowed
     # compiler artifacts are removed.
     sources = payload["source_fingerprints"]
-    if not isinstance(sources, dict) or any(
-        not isinstance(name, str)
-        or not name
-        or not isinstance(digest, str)
-        or not CONTENT_DIGEST_PATTERN.fullmatch(digest)
-        for name, digest in sources.items()
+    if (
+        not isinstance(sources, dict)
+        or set(sources) != {"child_fingerprint", "parent_fingerprint"}
+        or any(
+            not isinstance(digest, str) or not CONTENT_DIGEST_PATTERN.fullmatch(digest)
+            for digest in sources.values()
+        )
     ):
         raise JournalRefusal("bundle source_fingerprints are invalid")
 
@@ -1379,10 +1404,59 @@ def _validate_bundle_audit_payload(payload: dict[str, JsonValue]) -> None:
     for field, values in footprint.items():
         if (
             not isinstance(values, list)
-            or any(not isinstance(value, str) or not value for value in values)
+            or any(
+                not isinstance(value, str) or not _is_relative_posix_path(value)
+                for value in values
+            )
             or len(values) != len(set(cast(list[str], values)))
         ):
             raise JournalRefusal(f"bundle footprint {field} is invalid")
+
+    # The four executor/test write classes are disjoint, and dispatcher-owned
+    # writes overlap none of them, exactly as the compiled-plan Interface says.
+    write_fields = ("modifies", "creates", "deletes", "compiler_owned_tests")
+    write_sets = [set(cast(list[str], footprint[field])) for field in write_fields]
+    if any(
+        left & right
+        for index, left in enumerate(write_sets)
+        for right in write_sets[index + 1 :]
+    ):
+        raise JournalRefusal("bundle write footprint classes overlap")
+    dispatcher_writes = set(cast(list[str], footprint["dispatcher_owned_writes"]))
+    if any(dispatcher_writes & writes for writes in write_sets):
+        raise JournalRefusal("bundle dispatcher writes overlap another write class")
+
+    # Serial allocations retain their exact registry and identifiers, and may
+    # name only registries declared by the plan footprint.
+    allocations = payload["allocations"]
+    if not isinstance(allocations, list):
+        raise JournalRefusal("bundle allocations must be an array")
+    allocation_registries: set[str] = set()
+    serial_resources = set(cast(list[str], footprint["serial_resources"]))
+    for allocation in allocations:
+        if not isinstance(allocation, dict) or set(allocation) != {
+            "registry",
+            "identifiers",
+        }:
+            raise JournalRefusal("bundle allocation receipt is invalid")
+        registry = allocation["registry"]
+        identifiers = allocation["identifiers"]
+        if (
+            not isinstance(registry, str)
+            or registry not in serial_resources
+            or registry in allocation_registries
+            or not isinstance(identifiers, list)
+            or not identifiers
+            or any(
+                not isinstance(identifier, str) or not identifier
+                for identifier in identifiers
+            )
+            or len(identifiers) != len(set(cast(list[str], identifiers)))
+        ):
+            raise JournalRefusal("bundle allocation receipt is invalid")
+        allocation_registries.add(registry)
+    if allocation_registries != serial_resources:
+        raise JournalRefusal("bundle allocations do not cover serial_resources")
 
     # Test receipts preserve only their destination and compiled Git blob after
     # the compiler-owned byte copies are retired.
@@ -1394,11 +1468,29 @@ def _validate_bundle_audit_payload(payload: dict[str, JsonValue]) -> None:
             not isinstance(test, dict)
             or set(test) != {"destination", "compiled_blob"}
             or not isinstance(test["destination"], str)
-            or not test["destination"]
+            or not _is_relative_posix_path(test["destination"])
             or not isinstance(test["compiled_blob"], str)
             or not COMPILED_BLOB_PATTERN.fullmatch(test["compiled_blob"])
         ):
             raise JournalRefusal("bundle test receipt is invalid")
+    destinations = [
+        cast(str, cast(dict[str, JsonValue], test)["destination"]) for test in tests
+    ]
+    if len(destinations) != len(set(destinations)) or destinations != cast(
+        list[str], footprint["compiler_owned_tests"]
+    ):
+        raise JournalRefusal("bundle tests contradict compiler_owned_tests")
+
+
+def _is_relative_posix_path(value: str) -> bool:
+    """Return whether a string satisfies the compiled-plan path grammar."""
+
+    return (
+        bool(value)
+        and not value.startswith("/")
+        and not value.endswith("/")
+        and all(segment not in {"", ".", ".."} for segment in value.split("/"))
+    )
 
 
 def _validate_event_references(
@@ -1412,6 +1504,10 @@ def _validate_event_references(
     # Sequence pointers bind a later receipt to one exact earlier boundary.
     references: dict[EventType, tuple[str, EventType]] = {
         EventType.REVISE_REQUESTED: ("review_sequence", EventType.REVIEW_COMPLETED),
+        EventType.EXECUTOR_REHYDRATED: (
+            "revision_sequence",
+            EventType.REVISE_REQUESTED,
+        ),
         EventType.REBUILD_REQUESTED: ("review_sequence", EventType.REVIEW_COMPLETED),
         EventType.OWNER_ANSWERED: ("for_sequence", EventType.HUMAN_CONFLICT),
         EventType.LANDING_STARTED: ("review_sequence", EventType.REVIEW_COMPLETED),
@@ -1427,6 +1523,28 @@ def _validate_event_references(
             referenced_payload = cast(dict[str, JsonValue], referenced["payload"])
             if referenced_payload["attempt"] != payload["prior_attempt"]:
                 raise JournalRefusal("revision review names a different prior attempt")
+        elif event_type is EventType.EXECUTOR_REHYDRATED:
+            referenced_payload = cast(dict[str, JsonValue], referenced["payload"])
+            if referenced_payload["attempt"] != payload["attempt"]:
+                raise JournalRefusal("rehydration names a different revision attempt")
+
+    # R3 rehydration binds the fresh context to the exact previously recorded
+    # Route decision whose execution role and configuration it recreates.
+    if event_type is EventType.EXECUTOR_REHYDRATED:
+        route_sequence = _require_positive_integer(payload, "route_sequence")
+        route = _require_prior_event(
+            prior_events, route_sequence, ticket, EventType.ROUTE_RECORDED
+        )
+        revision = _require_prior_event(
+            prior_events,
+            cast(int, payload["revision_sequence"]),
+            ticket,
+            EventType.REVISE_REQUESTED,
+        )
+        route_payload = cast(dict[str, JsonValue], route["payload"])
+        revision_payload = cast(dict[str, JsonValue], revision["payload"])
+        if route_payload["attempt"] != revision_payload["prior_attempt"]:
+            raise JournalRefusal("rehydration Route point names a different attempt")
 
     # Attempt persistence is meaningful only beside the exact earlier attempt
     # boundary whose work it makes recoverable.
@@ -1578,6 +1696,10 @@ def _validate_cleanup_order(
         _event_type(event) is EventType.BUNDLE_RETIRED for event in tail[1:]
     ):
         raise JournalRefusal("landed or parked cleanup requires bundle retirement")
+    if terminal is EventType.STRANDED and not any(
+        _event_type(event) is EventType.BUNDLE_RELEASED for event in tail[1:]
+    ):
+        raise JournalRefusal("stranded cleanup requires bundle release")
 
 
 def _events_after_latest_terminal(
@@ -1634,6 +1756,10 @@ def _validate_run_completion_payload(
             raise JournalRefusal(
                 f"run completion precedes tracker or retirement for {ticket}"
             )
+        if terminal is TerminalState.STRANDED and not any(
+            _event_type(event) is EventType.BUNDLE_RELEASED for event in tail[1:]
+        ):
+            raise JournalRefusal(f"run completion precedes release for {ticket}")
 
 
 def _validate_transition_plan(
@@ -1820,6 +1946,7 @@ def _empty_ticket_projection() -> dict[str, JsonValue]:
     return {
         "last_event": None,
         "terminal": None,
+        "continuation": None,
         "receipts": {},
         "recovery_action": RecoveryAction.START_TICKET.value,
     }
@@ -1839,6 +1966,14 @@ def _apply_event(projection: dict[str, JsonValue], event: dict[str, JsonValue]) 
             "artifacts": event["artifacts"],
         }
     )
+
+    # Revision requests begin as live continuations; only a durable R3 event
+    # changes the reportable fact to fresh-context rehydration.
+    if event_type is EventType.REVISE_REQUESTED:
+        projection["continuation"] = ContinuationMode.LIVE.value
+    elif event_type is EventType.EXECUTOR_REHYDRATED:
+        projection["continuation"] = ContinuationMode.FRESH.value
+
     terminal_types = {
         EventType.LANDED: TerminalState.LANDED,
         EventType.PARKED: TerminalState.PARKED,
@@ -1878,11 +2013,11 @@ def _recovery_action(events: list[dict[str, JsonValue]]) -> str:
         terminal = event_types[terminal_index]
         tail = event_types[terminal_index + 1 :]
         if terminal is EventType.STRANDED:
-            return (
-                RecoveryAction.COMPLETE_RUN.value
-                if EventType.RESOURCE_CLEANED in tail
-                else RecoveryAction.CLEAN_STRANDED.value
-            )
+            if EventType.BUNDLE_RELEASED not in tail:
+                return RecoveryAction.RELEASE_BUNDLE.value
+            if EventType.RESOURCE_CLEANED not in tail:
+                return RecoveryAction.CLEAN_STRANDED.value
+            return RecoveryAction.COMPLETE_RUN.value
         if EventType.TRACKER_TRANSITION_COMPLETED not in tail:
             return RecoveryAction.COMPLETE_TRACKER_TRANSITION.value
         if EventType.BUNDLE_RETIRED not in tail:
@@ -1891,8 +2026,17 @@ def _recovery_action(events: list[dict[str, JsonValue]]) -> str:
             return RecoveryAction.CLEAN_RESOURCES.value
         return RecoveryAction.COMPLETE_RUN.value
 
-    # Nonterminal recovery follows the newest state-changing event. A new
-    # attempt or bundle naturally supersedes an older REVISE or REBUILD.
+    # A REBUILD remains authoritative through release of its old bundle. Only
+    # a later fully validated consumption proves recompilation completed.
+    latest_rebuild = _latest_event_index(event_types, EventType.REBUILD_REQUESTED)
+    latest_bundle = _latest_event_index(event_types, EventType.BUNDLE_CONSUMED)
+    if latest_rebuild is not None and (
+        latest_bundle is None or latest_bundle < latest_rebuild
+    ):
+        return RecoveryAction.AWAIT_RECOMPILE.value
+
+    # Other nonterminal recovery follows the newest state-changing event. A new
+    # attempt or verified bundle supersedes older revision state.
     last = event_types[-1]
     if last is EventType.OWNER_ANSWERED:
         payload = cast(dict[str, JsonValue], events[-1]["payload"])
@@ -1905,6 +2049,7 @@ def _recovery_action(events: list[dict[str, JsonValue]]) -> str:
         EventType.REBUILD_REQUESTED: RecoveryAction.AWAIT_RECOMPILE,
         EventType.LANDING_STARTED: RecoveryAction.RECONCILE_LANDING,
         EventType.REVISE_REQUESTED: RecoveryAction.RESUME_REVISION,
+        EventType.EXECUTOR_REHYDRATED: RecoveryAction.RESUME_REVISION,
         EventType.ATTEMPT_STARTED: RecoveryAction.REPLAY_ATTEMPT,
         EventType.ATTEMPT_RETURNED: RecoveryAction.REPLAY_ATTEMPT,
         EventType.PATCH_CAPTURED: RecoveryAction.REVIEW_PATCH,
@@ -1916,66 +2061,136 @@ def _recovery_action(events: list[dict[str, JsonValue]]) -> str:
     return RecoveryAction.START_TICKET.value
 
 
-def _validate_git_evidence(
-    events: list[dict[str, JsonValue]], evidence: Mapping[str, Any]
-) -> None:
-    """Validate fixed landing-window Git observations without reading Git."""
+def _latest_event_index(
+    event_types: list[EventType], expected: EventType
+) -> int | None:
+    """Return the latest index for one typed event, or null when absent."""
 
+    return next(
+        (
+            index
+            for index in range(len(event_types) - 1, -1, -1)
+            if event_types[index] is expected
+        ),
+        None,
+    )
+
+
+def _validate_git_evidence(
+    events: list[dict[str, JsonValue]], evidence_items: Sequence[Mapping[str, Any]]
+) -> None:
+    """Validate observations for explicitly identified landing windows."""
+
+    if not evidence_items:
+        raise JournalRefusal("Git evidence must be a non-empty array")
+
+    # Each ticket and sequence pair selects one window, preventing concurrent
+    # candidates from borrowing another ticket's observations.
+    seen: set[tuple[str, int]] = set()
+    for raw_evidence in evidence_items:
+        evidence = _validate_git_evidence_shape(raw_evidence)
+        identity = (evidence["ticket"], evidence["landing_sequence"])
+        if identity in seen:
+            raise JournalRefusal("duplicate Git evidence for landing window")
+        seen.add(identity)
+
+        landing = _require_prior_event(
+            events,
+            evidence["landing_sequence"],
+            evidence["ticket"],
+            EventType.LANDING_STARTED,
+        )
+        payload = cast(dict[str, JsonValue], landing["payload"])
+        bundle = next(
+            (
+                event
+                for event in reversed(events[: evidence["landing_sequence"] - 1])
+                if event["ticket"] == evidence["ticket"]
+                and _event_type(event) is EventType.BUNDLE_CONSUMED
+            ),
+            None,
+        )
+        if bundle is None:
+            raise JournalRefusal("Git evidence landing window has no bundle")
+        bundle_payload = cast(dict[str, JsonValue], bundle["payload"])
+        expected_trailers = {
+            "Kntnt-Ticket": evidence["ticket"],
+            "Kntnt-Plan": cast(str, bundle_payload["bundle_fingerprint"]),
+        }
+
+        # Candidate identity is checked even while the integration ref remains
+        # at previous_head; only reachability changes between the two states.
+        if (
+            evidence["candidate_commit"] != payload["candidate"]
+            or evidence["candidate_tree"] != payload["tree"]
+            or evidence["test_blobs"] != payload["test_blobs"]
+            or evidence["expected_trailers"] != expected_trailers
+            or evidence["observed_trailers"] != expected_trailers
+        ):
+            raise JournalRefusal("contradictory Git evidence for landing window")
+        if evidence["integration_ref_head"] == payload["previous_head"]:
+            if evidence["candidate_reachable"]:
+                raise JournalRefusal("candidate cannot be reachable from previous_head")
+        elif evidence["integration_ref_head"] == payload["candidate"]:
+            if not evidence["candidate_reachable"]:
+                raise JournalRefusal("landed candidate must be reachable")
+        else:
+            raise JournalRefusal("integration ref contradicts landing window")
+
+
+def _validate_git_evidence_shape(evidence: Mapping[str, Any]) -> GitEvidence:
+    """Return one fully typed R1 evidence receipt after shape validation."""
+
+    # Require the complete ticket/window, candidate, and trailer evidence set.
     required = {
+        "ticket",
+        "landing_sequence",
         "integration_ref_head",
         "candidate_commit",
         "candidate_reachable",
         "candidate_tree",
         "test_blobs",
+        "expected_trailers",
+        "observed_trailers",
     }
     if set(evidence) != required:
         raise JournalRefusal("Git evidence fields are incomplete")
+    ticket = evidence["ticket"]
+    landing_sequence = evidence["landing_sequence"]
+
+    # Validate the durable window selector before consulting the event log.
+    if (
+        not isinstance(ticket, str)
+        or not TICKET_REFERENCE_PATTERN.fullmatch(ticket)
+        or not isinstance(landing_sequence, int)
+        or isinstance(landing_sequence, bool)
+        or landing_sequence < 1
+    ):
+        raise JournalRefusal("Git evidence landing identity is invalid")
+
+    # Candidate identities are mandatory in previous and advanced states.
     if (
         not isinstance(evidence["integration_ref_head"], str)
         or not OBJECT_ID_PATTERN.fullmatch(evidence["integration_ref_head"])
-        or (
-            evidence["candidate_commit"] is not None
-            and (
-                not isinstance(evidence["candidate_commit"], str)
-                or not OBJECT_ID_PATTERN.fullmatch(evidence["candidate_commit"])
-            )
-        )
+        or not isinstance(evidence["candidate_commit"], str)
+        or not OBJECT_ID_PATTERN.fullmatch(evidence["candidate_commit"])
         or not isinstance(evidence["candidate_reachable"], bool)
-        or (
-            evidence["candidate_tree"] is not None
-            and (
-                not isinstance(evidence["candidate_tree"], str)
-                or not OBJECT_ID_PATTERN.fullmatch(evidence["candidate_tree"])
-            )
-        )
-        or not isinstance(evidence["test_blobs"], dict)
+        or not isinstance(evidence["candidate_tree"], str)
+        or not OBJECT_ID_PATTERN.fullmatch(evidence["candidate_tree"])
     ):
-        raise JournalRefusal("Git evidence has invalid field types")
-    _validate_blob_map(
-        cast(JsonValue, dict(evidence["test_blobs"])), "Git evidence test_blobs"
-    )
-    landing = next(
-        (
-            event
-            for event in reversed(events)
-            if _event_type(event) is EventType.LANDING_STARTED
-        ),
-        None,
-    )
-    if landing is None:
-        raise JournalRefusal("Git evidence has no durable landing window")
-    payload = cast(dict[str, JsonValue], landing["payload"])
-    head = evidence["integration_ref_head"]
-    if head == payload["previous_head"]:
-        return
-    if (
-        head != payload["candidate"]
-        or evidence["candidate_commit"] != payload["candidate"]
-        or evidence["candidate_reachable"] is not True
-        or evidence["candidate_tree"] != payload["tree"]
-        or evidence["test_blobs"] != payload["test_blobs"]
-    ):
-        raise JournalRefusal("contradictory Git evidence for landing window")
+        raise JournalRefusal("Git evidence has invalid candidate fields")
+    _validate_blob_map(cast(JsonValue, evidence["test_blobs"]), "test_blobs")
+
+    # Both expected and observed maps carry the complete fixed R1 trailer pair.
+    for field in ("expected_trailers", "observed_trailers"):
+        trailers = evidence[field]
+        if (
+            not isinstance(trailers, dict)
+            or set(trailers) != {"Kntnt-Ticket", "Kntnt-Plan"}
+            or any(not isinstance(value, str) for value in trailers.values())
+        ):
+            raise JournalRefusal(f"Git evidence {field} is invalid")
+    return cast(GitEvidence, dict(evidence))
 
 
 def _validate_archive_readiness(
@@ -2007,6 +2222,8 @@ def _validate_archive_readiness(
                 )
             if EventType.BUNDLE_RETIRED not in tail_types:
                 raise JournalRefusal(f"archive requires retirement for {ticket}")
+        elif EventType.BUNDLE_RELEASED not in tail_types:
+            raise JournalRefusal(f"archive requires bundle release for {ticket}")
 
 
 def _compact_archive_receipt(
@@ -2017,17 +2234,23 @@ def _compact_archive_receipt(
 ) -> dict[str, JsonValue]:
     """Build the prescribed audit receipt without retired executor bulk."""
 
-    # Each ticket keeps the exact compiled identities, routed decisions,
-    # reviews, and terminal receipt needed for audit and later knowledge closure.
+    # Each ticket keeps compiled identities, routed attempts, reviews, and the
+    # terminal receipt needed for audit and later knowledge closure.
     ticket_receipts: dict[str, JsonValue] = {}
-    retained_paths: set[str] = set()
+    retained_references: dict[str, dict[str, JsonValue]] = {}
+    projected_tickets = cast(dict[str, JsonValue], projection["tickets"])
     for ticket in cast(list[str], metadata["selection"]):
         ticket_events = [event for event in events if event["ticket"] == ticket]
         bundle = _latest_payload(ticket_events, EventType.BUNDLE_CONSUMED)
-        routes = [
-            cast(dict[str, JsonValue], event["payload"])["decision"]
+        routes: list[JsonValue] = [
+            cast(dict[str, JsonValue], event["payload"])
             for event in ticket_events
             if _event_type(event) is EventType.ROUTE_RECORDED
+        ]
+        rehydrations: list[JsonValue] = [
+            cast(dict[str, JsonValue], event["payload"])
+            for event in ticket_events
+            if _event_type(event) is EventType.EXECUTOR_REHYDRATED
         ]
         reviews: list[JsonValue] = [
             cast(dict[str, JsonValue], event["payload"])
@@ -2047,12 +2270,16 @@ def _compact_archive_receipt(
             raise JournalRefusal(f"archive receipt has no terminal event for {ticket}")
         retained_patch = _retained_parked_patch(ticket_events, terminal_event)
         if retained_patch is not None:
-            retained_paths.add(cast(str, retained_patch["path"]))
+            retained_references[cast(str, retained_patch["path"])] = retained_patch
+        projected_ticket = cast(dict[str, JsonValue], projected_tickets[ticket])
         ticket_receipts[ticket] = {
             "terminal": _event_type(terminal_event).value,
             "bundle": bundle,
             "route_decisions": routes,
+            "rehydrations": rehydrations,
+            "continuation": projected_ticket["continuation"],
             "reviews": reviews,
+            "bundle_release": _latest_payload(ticket_events, EventType.BUNDLE_RELEASED),
             "terminal_receipt": terminal_event["payload"],
             "retained_patch": retained_patch,
         }
@@ -2065,7 +2292,8 @@ def _compact_archive_receipt(
             continue
         reference = cast(dict[str, JsonValue], event["artifacts"])["observation-input"]
         observations.append(reference)
-        retained_paths.add(cast(str, cast(dict[str, JsonValue], reference)["path"]))
+        typed_reference = cast(dict[str, JsonValue], reference)
+        retained_references[cast(str, typed_reference["path"])] = typed_reference
 
     return {
         "schema": SCHEMA,
@@ -2083,8 +2311,92 @@ def _compact_archive_receipt(
         "final_event_sha256": final_event_sha256,
         "tickets": ticket_receipts,
         "observations": observations,
-        "retained_artifacts": cast(list[JsonValue], sorted(retained_paths)),
+        "retained_artifacts": cast(
+            list[JsonValue],
+            [retained_references[path] for path in sorted(retained_references)],
+        ),
     }
+
+
+def _validate_retained_artifacts(
+    archive: Path, receipt: dict[str, JsonValue]
+) -> set[str]:
+    """Verify every retained byte against all receipt identity fields."""
+
+    retained = receipt.get("retained_artifacts")
+    tickets = receipt.get("tickets")
+    observations = receipt.get("observations")
+    if (
+        not isinstance(retained, list)
+        or not isinstance(tickets, dict)
+        or not isinstance(observations, list)
+    ):
+        raise JournalRefusal("archive retained-artifact receipt is malformed")
+
+    # Nested ticket and observation receipts prescribe the complete retained
+    # set; the top-level list cannot silently omit or add an artifact.
+    expected_by_path: dict[str, dict[str, JsonValue]] = {}
+
+    def add_expected(reference: dict[str, JsonValue]) -> None:
+        """Collect one nested reference while allowing identical deduplication."""
+
+        path = reference.get("path")
+        if not isinstance(path, str):
+            raise JournalRefusal("archive retained-artifact path is malformed")
+        previous = expected_by_path.setdefault(path, reference)
+        if previous != reference:
+            raise JournalRefusal("archive retained-artifact receipts conflict")
+
+    for ticket_receipt in tickets.values():
+        if not isinstance(ticket_receipt, dict):
+            raise JournalRefusal("archive ticket receipt is malformed")
+        patch = ticket_receipt.get("retained_patch")
+        if patch is not None:
+            if not isinstance(patch, dict):
+                raise JournalRefusal("archive retained patch receipt is malformed")
+            add_expected(patch)
+    for observation in observations:
+        if not isinstance(observation, dict):
+            raise JournalRefusal("archive observation receipt is malformed")
+        add_expected(observation)
+    expected = [expected_by_path[path] for path in sorted(expected_by_path)]
+    if retained != expected:
+        raise JournalRefusal("archive retained-artifact set contradicts its receipt")
+
+    # Validate containment, digest, and byte length before any retired bulk is
+    # removed, so a missing or modified retained artifact is a clean refusal.
+    paths: set[str] = set()
+    for raw_reference in retained:
+        if not isinstance(raw_reference, dict):
+            raise JournalRefusal("archive retained-artifact entry is malformed")
+        reference = raw_reference
+        if set(reference) != {"path", "sha256", "byte_length"}:
+            raise JournalRefusal("archive retained-artifact identity is incomplete")
+        relative = reference["path"]
+        digest = reference["sha256"]
+        byte_length = reference["byte_length"]
+        if (
+            not isinstance(relative, str)
+            or not relative.startswith("artifacts/")
+            or not _is_relative_posix_path(relative)
+            or relative in paths
+            or not isinstance(digest, str)
+            or not CONTENT_DIGEST_PATTERN.fullmatch(digest)
+            or not isinstance(byte_length, int)
+            or isinstance(byte_length, bool)
+            or byte_length < 0
+        ):
+            raise JournalRefusal("archive retained-artifact identity is invalid")
+        if not relative.endswith(digest.removeprefix("sha256:")):
+            raise JournalRefusal("archive retained-artifact path contradicts digest")
+        path = archive / relative
+        if path.is_symlink() or not path.is_file():
+            raise JournalRefusal(f"retained artifact is missing: {relative}")
+        content = path.read_bytes()
+        if digest != f"sha256:{sha256_hex(content)}" or byte_length != len(content):
+            raise JournalRefusal(f"retained artifact identity changed: {relative}")
+        paths.add(relative)
+    return paths
 
 
 def _latest_payload(
@@ -2127,6 +2439,18 @@ def _read_json_object(path: Path) -> dict[str, Any]:
     return cast(dict[str, Any], value)
 
 
+def _read_json_array(path: Path) -> list[dict[str, Any]]:
+    """Read one command input as an array of JSON objects."""
+
+    try:
+        value = json.loads(path.read_bytes())
+    except (OSError, json.JSONDecodeError) as error:
+        raise JournalRefusal(f"cannot read JSON array from {path}") from error
+    if not isinstance(value, list) or any(not isinstance(item, dict) for item in value):
+        raise JournalRefusal(f"JSON input is not an object array: {path}")
+    return cast(list[dict[str, Any]], value)
+
+
 def _parse_args(argv: list[str]) -> argparse.Namespace:
     """Parse the small persistence interface used by the dispatch Skill."""
 
@@ -2164,7 +2488,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "validate":
             _emit(journal.validate())
         elif args.command == "project":
-            evidence = _read_json_object(args.evidence) if args.evidence else None
+            evidence = _read_json_array(args.evidence) if args.evidence else None
             _emit(journal.project(git_evidence=evidence))
         elif args.command == "record":
             event = _read_json_object(args.event)
