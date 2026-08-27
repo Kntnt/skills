@@ -84,4 +84,4 @@ The current Harness must be able to spawn subagents. Every accepted bundle requi
 
 ## SEE ALSO
 
-**/to-slices --help**, **/kntnt select**
+**/to-slices --help**, **/dispatch --help**, **/kntnt select**

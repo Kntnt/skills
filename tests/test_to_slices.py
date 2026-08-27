@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from support.contract import STANDARD
+from support.contract import STANDARD, assert_contract_markers
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 SKILL: Path = REPO_ROOT / "skills" / "code" / "to-slices"
@@ -15,30 +15,11 @@ FRAME_BODY: Path = REPO_ROOT / "skills" / "code" / "frame" / "SKILL.md"
 FRAME_HELP: Path = REPO_ROOT / "skills" / "code" / "frame" / "help.md"
 
 
-def _assert_contract_markers(
-    path: Path,
-    markers: tuple[str, ...],
-    consequence: str,
-) -> str:
-    """Return an agent document after holding its required contract markers."""
-
-    # Read the public prose seam once for every marker in this contract.
-    text = path.read_text(encoding="utf-8")
-
-    # Report the behavioural consequence of whichever obligation disappears.
-    for marker in markers:
-        assert marker in text, (
-            f"{path}: the contract must state `{marker}`. {consequence} See {STANDARD}."
-        )
-
-    return text
-
-
 def test_the_body_validates_the_frame_record_before_synthesis() -> None:
     """Invalid or stale framing returns to its producer with the baton intact."""
 
     # Hold every branch that distinguishes valid drift from resumed framing.
-    _assert_contract_markers(
+    assert_contract_markers(
         BODY,
         (
             "$LIBRARY/references/frame-record.md",
@@ -83,7 +64,7 @@ def test_the_body_previews_the_whole_graph_at_the_approval_seam() -> None:
     """The owner approves one complete durable graph rather than fragments."""
 
     # Hold the complete graph shape at the only owner checkpoint.
-    text = _assert_contract_markers(
+    text = assert_contract_markers(
         BODY,
         (
             "complete decision issue",
@@ -108,7 +89,7 @@ def test_the_slicing_reference_keeps_tickets_vertical_and_edges_semantic() -> No
     """Slice judgement preserves independently verifiable delivery."""
 
     # Pin every slice form and the distinction between necessity and order.
-    _assert_contract_markers(
+    assert_contract_markers(
         SLICING,
         (
             "Tracer bullets",
@@ -127,7 +108,7 @@ def test_publication_is_recoverable_and_deletion_waits_for_read_back() -> None:
     """A partial tracker transaction retains one exact recovery baton."""
 
     # Hold identity, ordering, relation, and verification obligations together.
-    text = _assert_contract_markers(
+    text = assert_contract_markers(
         PUBLISHING,
         (
             "Frame Record path and framing commit",

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Dispatch"
+  short_description: "Execute and land compiled plans"
+policy:
+  allow_implicit_invocation: false

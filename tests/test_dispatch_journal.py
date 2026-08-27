@@ -979,6 +979,67 @@ def test_tracker_completion_repeats_and_verifies_the_portable_resolution(
         )
 
 
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    ("transition_id", "terminal", "park_class", "target_label", "assignees"),
+    [
+        ("T-LAND", "landed", None, None, ["thomas"]),
+        ("T-PARK-INFO", "parked", "owner-info", "awaiting-context", []),
+        ("T-PARK-HUMAN", "parked", "human-repair", "manual-repair", []),
+    ],
+)
+def test_each_tracker_transition_keeps_concrete_resolution_receipts(
+    tmp_path: Path,
+    transition_id: str,
+    terminal: str,
+    park_class: str | None,
+    target_label: str | None,
+    assignees: list[str],
+) -> None:
+    """Every transition survives with non-default labels and convention sources."""
+
+    # Reach the transition's matching terminal state from one consumed attempt.
+    module = _load()
+    journal = _open(module, tmp_path)
+    if terminal == "landed":
+        # A landing transition follows independently verified Git evidence.
+        _record_terminal(journal, terminal)
+
+    else:
+        # A parking transition records its exact information or repair class.
+        _record_attempt(journal)
+        _record_event(journal, "patch-captured", ticket="#184")
+        _record_event(
+            journal,
+            "parked",
+            ticket="#184",
+            payload={"park_class": park_class},
+        )
+
+    # Persist and repeat the concrete convention resolution around mutation.
+    completed = _record_tracker_transition(
+        journal,
+        transition_id,
+        target_label,
+        assignees,
+    )
+    receipts = journal.project()["tickets"]["#184"]["receipts"]
+    planned = receipts["tracker-transition-planned"][-1]
+
+    # Verify both receipts preserve labels, assignment, and convention sources.
+    assert planned["payload"]["transition_id"] == transition_id
+    assert completed["payload"]["transition_id"] == transition_id
+    assert completed["payload"]["resolution"] == planned["payload"]["resolution"]
+    assert planned["payload"]["resolution"]["executable_ready_label"] == "custom-ready"
+    assert planned["payload"]["resolution"]["target_label"] == target_label
+    assert planned["payload"]["resolution"]["preserved_labels"] == [
+        "scope:rework",
+        "priority:high",
+    ]
+    assert completed["payload"]["observed_post_projection"]["assignees"] == assignees
+    assert planned["payload"]["resolution"]["agent_instruction_address"]
+    assert planned["payload"]["resolution"]["issue_tracker_convention_address"]
+
+
 def test_projection_is_idempotent_and_preserves_every_ticket_receipt(
     tmp_path: Path,
 ) -> None:

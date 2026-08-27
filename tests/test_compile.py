@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from support.contract import STANDARD
+from support.contract import STANDARD, assert_contract_markers
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 SKILL: Path = REPO_ROOT / "skills" / "code" / "compile"
@@ -16,30 +16,11 @@ TO_SLICES_BODY: Path = REPO_ROOT / "skills" / "code" / "to-slices" / "SKILL.md"
 TO_SLICES_HELP: Path = REPO_ROOT / "skills" / "code" / "to-slices" / "help.md"
 
 
-def _assert_contract_markers(
-    path: Path,
-    markers: tuple[str, ...],
-    consequence: str,
-) -> str:
-    """Return an agent document after holding its required contract markers."""
-
-    # Read the public prose seam once for every marker in this contract.
-    text = path.read_text(encoding="utf-8")
-
-    # Report the behavioural consequence of whichever obligation disappears.
-    for marker in markers:
-        assert marker in text, (
-            f"{path}: the contract must state `{marker}`. {consequence} See {STANDARD}."
-        )
-
-    return text
-
-
 def test_the_body_selects_executable_children_without_scheduling_them() -> None:
     """Selection is deterministic while blocker eligibility remains downstream."""
 
     # Hold explicit and bare selection against the shared pipeline grammar.
-    text = _assert_contract_markers(
+    text = assert_contract_markers(
         BODY,
         (
             "`/compile [--yes]` or `/compile #<ticket> ...`",
@@ -69,7 +50,7 @@ def test_the_body_reads_and_preserves_the_complete_durable_requirement() -> None
     """Later tracker context remains part of the plan's source of truth."""
 
     # Hold every durable input and the precedence rule at the public seam.
-    _assert_contract_markers(
+    assert_contract_markers(
         BODY,
         (
             "$LIBRARY/references/slices.md",
@@ -88,7 +69,7 @@ def test_the_body_parks_only_owner_incomplete_children() -> None:
     """One incomplete child does not turn a batch into tracker-wide failure."""
 
     # Keep the parking mutation narrow and sibling-independent.
-    _assert_contract_markers(
+    assert_contract_markers(
         BODY,
         (
             "one complete question",
@@ -106,7 +87,7 @@ def test_compilation_uses_one_clean_stable_vantage_for_the_batch() -> None:
     """Local edits and a red baseline never leak into an accepted plan."""
 
     # Pin the detached-tree baseline and both final source gates.
-    _assert_contract_markers(
+    assert_contract_markers(
         BODY,
         (
             "git rev-parse --git-common-dir",
@@ -126,7 +107,7 @@ def test_compiling_builds_the_complete_shared_bundle_without_rewriting_it() -> N
     """The local judgement reference produces the Library's deep Interface."""
 
     # Keep synthesis on the shared contract and require both plan registers.
-    _assert_contract_markers(
+    assert_contract_markers(
         COMPILING,
         (
             "$LIBRARY/references/compiled-plan.md",
@@ -146,7 +127,7 @@ def test_serial_allocations_are_batch_wide_and_never_extended() -> None:
     """Concurrent plans cannot claim the same repository serial identity."""
 
     # Keep local judgement on counts while the shared Interface owns allocation.
-    _assert_contract_markers(
+    assert_contract_markers(
         COMPILING,
         (
             "$LIBRARY/references/compiled-plan.md",
@@ -162,7 +143,7 @@ def test_compiler_owned_tests_are_red_for_the_intended_missing_behaviour() -> No
     """A setup failure or already-green test cannot become executor evidence."""
 
     # Pin test authorship, overlay identity, and the meaningful-red gate.
-    _assert_contract_markers(
+    assert_contract_markers(
         COMPILING,
         (
             "finished compiler-owned test",
@@ -181,7 +162,7 @@ def test_every_corrected_bundle_receives_a_new_cold_reader() -> None:
     """Plan acceptance is an independent verdict on the exact candidate."""
 
     # Hold isolation, inherited authority, complete checks, and verdict shape.
-    text = _assert_contract_markers(
+    text = assert_contract_markers(
         COLD_READ,
         (
             "fresh-context subagent",
@@ -216,7 +197,7 @@ def test_bundle_fixtures_distinguish_every_consumer_boundary() -> None:
     )
 
     # Assert the local judgement reference applies every shared fixture.
-    _assert_contract_markers(
+    assert_contract_markers(
         COMPILING,
         fixtures,
         "Compilation must distinguish drift or tampering from a consumable plan.",
@@ -227,7 +208,7 @@ def test_acceptance_publishes_one_immutable_bundle_and_atomic_pointer() -> None:
     """Interruption leaves the old accepted bundle or the complete new one."""
 
     # Pin the common-directory store and its immutable publication boundary.
-    _assert_contract_markers(
+    assert_contract_markers(
         BODY,
         (
             "<git-common-dir>/kntnt-pipeline/plans/<ticket>/bundles/<fingerprint>/",
@@ -242,11 +223,11 @@ def test_acceptance_publishes_one_immutable_bundle_and_atomic_pointer() -> None:
     )
 
 
-def test_completion_reports_every_selected_outcome_without_inventing_dispatch() -> None:
-    """The owner gets a complete batch report before the successor exists."""
+def test_completion_reports_every_selected_outcome_before_dispatch_handoff() -> None:
+    """The owner gets a complete batch report and one valid successor line."""
 
     # Hold the reporting partition and owner-facing register together.
-    _assert_contract_markers(
+    assert_contract_markers(
         BODY,
         (
             "$LIBRARY/references/tldr-mode.md",
@@ -256,7 +237,9 @@ def test_completion_reports_every_selected_outcome_without_inventing_dispatch() 
             "failed",
             "captured `HEAD`",
             "bundle paths",
-            "invent no `/dispatch` invocation",
+            "/dispatch #<ticket> #<ticket> ...",
+            "blocked plans separately",
+            "invent no empty handoff",
         ),
         "Every selected child needs one visible outcome without promising an unavailable successor.",
     )
@@ -284,7 +267,7 @@ def test_the_manpage_exposes_the_complete_compile_profile() -> None:
     """The public help describes selection, storage, output, and refusal."""
 
     # Pin the user-facing grammar and the important operational boundaries.
-    _assert_contract_markers(
+    assert_contract_markers(
         HELP,
         (
             "**/compile** [**--yes**] [**--** *INSTRUCTION*]",

@@ -57,13 +57,31 @@
       "name": "compile",
       "category": "code",
       "description": "Compile ready executable child tickets into fresh, independently checked executor-plan bundles.",
-      "digest": "31dbf8806a922f9088999800239a6de71089c30b79f5b271f590a3a0a7304994",
+      "digest": "85d3f3ace64c4dc805c5b4e3054aa0732da14fc931a0b173bbee98b9fcefb2cd",
       "binaries": [
         "git",
         "gh",
         "uv"
       ],
       "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "dispatch",
+      "category": "code",
+      "description": "Execute, review, land, and recover fresh compiled plans on the current branch.",
+      "digest": "cfa2f4a2b51a6f98a3d1ea8beaae4b0dd04110b77013b4fe8dcc54eb525fa503",
+      "binaries": [
+        "git",
+        "gh",
+        "uv"
+      ],
+      "skills": [
+        "model-selector"
+      ],
       "externals": [],
       "capabilities": [
         "subagents"

@@ -39,6 +39,8 @@ An undeclared flag, a flag after an operand, or any invalid operand is refused a
 
 Resolve the repository's tracker convention from its always-loaded agent file and selected issue-tracker document. Resolve the configured executable-ready state, including every required scope label, rather than assuming plain `ready-for-agent`.
 
+Before tracker selection, read `$LIBRARY/references/landed-change.md` and evaluate the current integration tip. A child with the selected reachable baton is ineligible for compilation even when executable-ready label drift makes its tracker projection look eligible. Zero matches leave the guard inactive; multiple matching reachable commits are ambiguous and refuse that child rather than being guessed through.
+
 Explicit references are the complete selection and need no confirmation. Report an explicitly selected child with a fresh accepted bundle as already fresh and leave it unchanged; report an ineligible reference precisely rather than silently dropping it.
 
 With no references, select every open executable child carrying the configured executable-ready state and lacking a fresh accepted bundle, ordered by ascending issue number. Render that complete selection and ask one yes-or-no question before work; `--yes` answers yes without asking. An empty selection is reported and changes nothing.
@@ -85,4 +87,6 @@ Bundle acceptance itself changes no tracker state. An owner answer is persisted 
 
 ## Completion
 
-Close in the register of `$LIBRARY/references/tldr-mode.md`. Partition every selected item exactly once as accepted, parked, already fresh, or failed; give the captured `HEAD`, all accepted bundle paths, each complete parking question, the red command or acceptance failure for failures, and any local overlap that will matter before execution. Name that accepted bundles are for `/dispatch`, but invent no `/dispatch` invocation before that Skill ships.
+Close in the register of `$LIBRARY/references/tldr-mode.md`. Partition every selected item exactly once as accepted, parked, already fresh, or failed; give the captured `HEAD`, all accepted bundle paths, each complete parking question, the red command or acceptance failure for failures, and any local overlap that will matter before execution.
+
+Re-evaluate accepted plans for dispatch eligibility from the captured tip. Emit one exact `/dispatch #<ticket> #<ticket> ...` handoff containing only currently eligible accepted plans in compile-selection order. Name accepted blocked plans separately with their blocker frontier; when none is currently eligible, invent no empty handoff.
