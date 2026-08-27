@@ -178,6 +178,7 @@ def test_selected_baton_exposes_the_implementation_vantage_and_plan_fingerprint(
 def test_contract_pins_blockers_lifecycle_compilation_and_journal_boundaries() -> None:
     """Every consumer interprets the same selected baton consistently."""
 
+    # Pin every promise shared by the baton consumers.
     text = CONTRACT.read_text(encoding="utf-8")
     for promise in (
         "exactly one matching landing commit",
