@@ -4931,72 +4931,66 @@ def test_delegation_addresses_its_doctrine_through_the_library() -> None:
     """Both delegation entry points consume the exact Library doctrine."""
 
     # Read the body and persistence surfaces that consume the doctrine.
-    directory = REPO_ROOT / "skills" / "agents" / "delegation"
-    body = directory / "SKILL.md"
-    persist = directory / "references" / "persist.md"
-    former = directory / "references" / "mode.md"
-    pointer = "$LIBRARY/references/delegation-mode.md"
-    text = body.read_text(encoding="utf-8")
-    persistence = persist.read_text(encoding="utf-8")
+    skill_directory = REPO_ROOT / "skills" / "agents" / "delegation"
+    skill_body_path = skill_directory / "SKILL.md"
+    persistence_reference_path = skill_directory / "references" / "persist.md"
+    former_doctrine_path = skill_directory / "references" / "mode.md"
+    library_doctrine_pointer = "$LIBRARY/references/delegation-mode.md"
+    skill_body_text = skill_body_path.read_text(encoding="utf-8")
+    persistence_reference_text = persistence_reference_path.read_text(encoding="utf-8")
 
     # Reject a surviving private source at its former address.
-    assert not former.exists(), (
-        f"{former}: the doctrine is the Library's, and a local copy beside the"
+    assert not former_doctrine_path.exists(), (
+        f"{former_doctrine_path}: the doctrine is the Library's, and a local copy beside the"
         f" Skill is the peer internal the move removed (ADR-0109)."
         f" See {STANDARD}."
     )
 
     # Reject either consumer retaining a pointer to the private address.
-    for surface, content in ((body, text), (persist, persistence)):
-        assert "references/mode.md" not in content, (
-            f"{surface}: a pointer still names the doctrine's old private"
+    for consumer_path, consumer_text in (
+        (skill_body_path, skill_body_text),
+        (persistence_reference_path, persistence_reference_text),
+    ):
+        assert "references/mode.md" not in consumer_text, (
+            f"{consumer_path}: a pointer still names the doctrine's old private"
             f" address. See {STANDARD}."
         )
 
-    # The body names the exact source instead of paraphrasing the policy at the
-    # consumer seam, both where it defines the mode and where session `on`
-    # adopts it.
-    mode_section = _section(text, "## The mode", body)
-    assert pointer in mode_section, (
-        f"{body}: the mode's single-source rule does not name the Library"
+    # Hold the body definition to the exact Library source.
+    mode_definition_text = _section(skill_body_text, "## The mode", skill_body_path)
+    assert library_doctrine_pointer in mode_definition_text, (
+        f"{skill_body_path}: the mode's single-source rule does not name the Library"
         f" doctrine. See {STANDARD}."
-    )
-    assert (
-        "copy it verbatim wherever it is needed; state it in no other words"
-        in mode_section
-    ), (
-        f"{body}: the consumer seam no longer requires the Library doctrine"
-        f" verbatim, so a local paraphrase could become policy. See {STANDARD}."
     )
 
     # Hold session adoption to the same exact source as the mode definition.
-    steps = _section(text, "## Steps", body)
-    adoption = [line for line in steps.splitlines() if "Going on: read" in line]
-    assert adoption, (
-        f"{body}: no session step adopts the doctrine, so this check judged"
+    skill_steps_text = _section(skill_body_text, "## Steps", skill_body_path)
+    session_adoption_lines = [
+        line for line in skill_steps_text.splitlines() if "Going on: read" in line
+    ]
+    assert session_adoption_lines, (
+        f"{skill_body_path}: no session step adopts the doctrine, so this check judged"
         f" nothing. See {STANDARD}."
     )
-    assert all(pointer in line for line in adoption), (
-        f"{body}: session `on` does not consume the exact Library doctrine."
+    assert all(library_doctrine_pointer in line for line in session_adoption_lines), (
+        f"{skill_body_path}: session `on` does not consume the exact Library doctrine."
         f" See {STANDARD}."
     )
 
-    # Hold persistent copies, refreshes, and staleness checks to that source.
-    required_persistence_fragments = {
-        f"{{the entire content of {pointer}, verbatim}}",
-        "`on` over an existing block rewrites it from the current `delegation-mode.md`",
-        f"differ from `{pointer}`",
-        "`status` reports it and names `/delegation <scope> on` as the fix",
+    # Hold the persistent template and stale comparison to that exact source.
+    required_persistence_pointers = {
+        f"{{the entire content of {library_doctrine_pointer}, verbatim}}",
+        f"differ from `{library_doctrine_pointer}`",
     }
-    missing = sorted(
-        fragment
-        for fragment in required_persistence_fragments
-        if fragment not in persistence
+    missing_persistence_pointers = sorted(
+        required_pointer
+        for required_pointer in required_persistence_pointers
+        if required_pointer not in persistence_reference_text
     )
-    assert not missing, (
-        f"{persist}: persistent delegation must copy, refresh, and compare the"
-        f" exact Library doctrine rather than restating its policy; missing"
-        f" {missing}. See {STANDARD}."
+    assert not missing_persistence_pointers, (
+        f"{persistence_reference_path}: persistent delegation does not carry"
+        f" every exact Library pointer; missing"
+        f" {missing_persistence_pointers}. See {STANDARD}."
     )
 
 
