@@ -12,6 +12,8 @@ import pytest  # type: ignore[import-not-found]  # CI's mypy command omits pytes
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 JOURNAL_PATH = REPO_ROOT / "skills" / "code" / "dispatch" / "scripts" / "journal.py"
+CONTRIBUTING_PATH = REPO_ROOT / "CONTRIBUTING.md"
+CI_PATH = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 
 
 def _load() -> ModuleType:
@@ -52,23 +54,32 @@ def _open(module: ModuleType, root: Path, **changes: Any) -> Any:
 def _record_attempt(journal: Any, ticket: str = "#184") -> None:
     """Record the durable prefix shared by executor crash fixtures."""
 
-    journal.record(
-        "selection-recorded", payload={"tickets": journal.metadata["selection"]}
+    _record_event(
+        journal,
+        "selection-recorded",
+        payload={"tickets": journal.metadata["selection"]},
     )
-    journal.record(
+    _record_event(
+        journal,
         "bundle-consumed",
         ticket=ticket,
         payload={"bundle_fingerprint": f"sha256:{'2' * 64}", "base": "1" * 40},
     )
-    journal.record(
+    _record_event(
+        journal,
         "route-recorded",
         ticket=ticket,
-        payload={"attempt": 1, "decision": "selected"},
+        payload={"attempt": 1, "decision": {"status": "selected"}},
         artifacts={"route-response": b'{"decision":"selected"}\n'},
     )
-    journal.record("ticket-assigned", ticket=ticket, payload={"assignee": "thomas"})
-    journal.record(
-        "attempt-started", ticket=ticket, payload={"attempt": 1, "base": "1" * 40}
+    _record_event(
+        journal, "ticket-assigned", ticket=ticket, payload={"assignee": "thomas"}
+    )
+    _record_event(
+        journal,
+        "attempt-started",
+        ticket=ticket,
+        payload={"attempt": 1, "base": "1" * 40},
     )
 
 
@@ -98,6 +109,296 @@ def _pre_projection() -> dict[str, Any]:
         "status": "open",
         "assignees": ["thomas"],
     }
+
+
+def _record_event(
+    journal: Any,
+    event_type: str,
+    *,
+    ticket: str | None = None,
+    payload: dict[str, Any] | None = None,
+    artifacts: dict[str, bytes] | None = None,
+    recorded_at: str | None = None,
+    omit_payload_field: str | None = None,
+    omit_artifact: str | None = None,
+) -> dict[str, Any]:
+    """Record one schema-complete event while tests vary only relevant fields."""
+
+    # Supply the recovery-complete receipt for every event vocabulary member.
+    payload_defaults: dict[str, dict[str, Any]] = {
+        "selection-recorded": {"tickets": journal.metadata["selection"]},
+        "bundle-consumed": {
+            "bundle_fingerprint": f"sha256:{'2' * 64}",
+            "execution_base": "1" * 40,
+            "source_fingerprints": {
+                "child": f"sha256:{'3' * 64}",
+                "parent": f"sha256:{'4' * 64}",
+            },
+            "footprint": {
+                "reads": [],
+                "modifies": ["skills/code/dispatch/scripts/journal.py"],
+                "creates": [],
+                "deletes": [],
+                "compiler_owned_tests": ["tests/test_dispatch_journal.py"],
+                "dispatcher_owned_writes": [],
+                "serial_resources": [],
+            },
+            "allocations": [],
+            "tests": [
+                {
+                    "destination": "tests/test_dispatch_journal.py",
+                    "compiled_blob": f"git:{'5' * 40}",
+                }
+            ],
+            "command_ids": ["seam", "gate"],
+            "done_criterion_ids": ["AC-1", "scope", "test-integrity"],
+        },
+        "bundle-released": {
+            "bundle_fingerprint": f"sha256:{'2' * 64}",
+            "reason": "stranded cleanup",
+        },
+        "route-recorded": {"attempt": 1, "decision": {"status": "selected"}},
+        "ticket-assigned": {"assignee": "thomas"},
+        "attempt-started": {
+            "attempt": 1,
+            "attempt_id": "#184/1",
+            "base": "1" * 40,
+            "worktree": "worktrees/run/184/1",
+            "branch": "kntnt-dispatch/run/184/1",
+        },
+        "attempt-returned": {"attempt": 1},
+        "patch-captured": {
+            "attempt": 1,
+            "changed_paths": ["skills/code/dispatch/scripts/journal.py"],
+        },
+        "dispatcher-write-recorded": {"paths": ["skills/kntnt/catalog.json"]},
+        "review-completed": {
+            "attempt": 1,
+            "verdict": "APPROVE",
+            "finding_summary": "All binding checks pass.",
+        },
+        "revise-requested": {
+            "attempt": 2,
+            "prior_attempt": 1,
+            "review_sequence": 1,
+        },
+        "rebuild-requested": {
+            "review_sequence": 1,
+            "head": "4" * 40,
+            "compile_invocation": "/compile #184",
+            "resume_invocation": "/dispatch #184",
+        },
+        "owner-answered": {"for_sequence": 1, "answer": "Use the binding plan."},
+        "landing-started": {
+            "review_sequence": 1,
+            "previous_head": "1" * 40,
+            "candidate": "3" * 40,
+            "tree": "4" * 40,
+            "test_blobs": {"tests/test_dispatch_journal.py": f"git:{'5' * 40}"},
+        },
+        "human-conflict": {
+            "landing_sequence": 1,
+            "attempt": 1,
+            "branch": "kntnt-dispatch/run/184/1",
+            "worktree": "worktrees/run/184/1",
+        },
+        "landed": {
+            "landing_sequence": 1,
+            "commit": "3" * 40,
+            "tree": "4" * 40,
+            "bundle_fingerprint": f"sha256:{'2' * 64}",
+            "test_blobs": {"tests/test_dispatch_journal.py": f"git:{'5' * 40}"},
+        },
+        "parked": {
+            "park_class": "owner-info",
+            "message": "Which outcome should win?",
+            "reason": "owner decision required",
+            "patch_sequence": None,
+        },
+        "stranded": {"reason": "route refused"},
+        "bundle-retired": {"bundle_fingerprint": f"sha256:{'2' * 64}"},
+        "resource-cleaned": {"resources": []},
+        "observation-recorded": {"attempt": 1},
+        "run-completed": {"tickets": {"#184": "landed"}},
+    }
+
+    # Supply the durable bytes required to recover each artifact boundary.
+    artifact_defaults: dict[str, dict[str, bytes]] = {
+        "bundle-consumed": {
+            "bundle-plan": b"# Plan\n",
+            "bundle-manifest": b"{}\n",
+            "bundle-tests": b"test bytes",
+        },
+        "route-recorded": {"route-response": b'{"decision":"selected"}\n'},
+        "patch-captured": {"patch": b"diff"},
+        "dispatcher-write-recorded": {"dispatcher-write-proposal": b"proposal"},
+        "review-completed": {"review-finding": b"review finding"},
+        "observation-recorded": {"observation-input": b"{}\n"},
+    }
+
+    # Translate first-generation fixture aliases before applying exact overrides.
+    overrides = dict(payload or {})
+    if event_type == "bundle-consumed" and "base" in overrides:
+        overrides["execution_base"] = overrides.pop("base")
+    if event_type == "parked":
+        if "class" in overrides:
+            overrides["park_class"] = overrides.pop("class")
+        if "question" in overrides:
+            overrides["message"] = overrides.pop("question")
+    if event_type == "bundle-retired" and "fingerprint" in overrides:
+        overrides["bundle_fingerprint"] = overrides.pop("fingerprint")
+    if event_type == "revise-requested" and "finding" in overrides:
+        overrides.pop("finding")
+    complete_payload = {**payload_defaults.get(event_type, {}), **overrides}
+    complete_artifacts = {**artifact_defaults.get(event_type, {}), **(artifacts or {})}
+
+    # Cleanup fixtures acknowledge every disposable attempt resource already
+    # named by the durable projection.
+    if event_type == "resource-cleaned" and "resources" not in overrides:
+        receipts = journal.project()["tickets"][ticket]["receipts"]
+        complete_payload["resources"] = [
+            entry["payload"][field]
+            for entry in receipts.get("attempt-started", [])
+            for field in ("worktree", "branch")
+        ]
+    if omit_payload_field is not None:
+        complete_payload.pop(omit_payload_field, None)
+    if omit_artifact is not None:
+        complete_artifacts.pop(omit_artifact, None)
+
+    # Sequence defaults bind dependent fixtures to the latest durable boundary.
+    if ticket is not None:
+        receipts = journal.project()["tickets"][ticket]["receipts"]
+
+        def latest_sequence(kind: str) -> int | None:
+            """Return the newest fixture receipt sequence for one event kind."""
+
+            entries = receipts.get(kind, [])
+            return entries[-1]["sequence"] if entries else None
+
+        sequence_fields = {
+            "revise-requested": ("review_sequence", "review-completed"),
+            "rebuild-requested": ("review_sequence", "review-completed"),
+            "owner-answered": ("for_sequence", "human-conflict"),
+            "landing-started": ("review_sequence", "review-completed"),
+            "human-conflict": ("landing_sequence", "landing-started"),
+            "landed": ("landing_sequence", "landing-started"),
+            "parked": ("patch_sequence", "patch-captured"),
+        }
+        if event_type in sequence_fields:
+            field, predecessor = sequence_fields[event_type]
+            if field not in (payload or {}):
+                complete_payload[field] = latest_sequence(predecessor)
+
+    return dict(
+        journal.record(
+            event_type,
+            ticket=ticket,
+            payload=complete_payload,
+            artifacts=complete_artifacts,
+            recorded_at=recorded_at,
+        )
+    )
+
+
+def _record_tracker_transition(
+    journal: Any,
+    transition_id: str,
+    target_label: str | None,
+    assignees: list[str],
+) -> dict[str, Any]:
+    """Record one complete portable transition plan and verified completion."""
+
+    resolution = _transition_resolution(target_label, assignees)
+    planned = _record_event(
+        journal,
+        "tracker-transition-planned",
+        ticket="#184",
+        payload={
+            "transition_id": transition_id,
+            "resolution": resolution,
+            "pre_projection": _pre_projection(),
+        },
+    )
+    labels = ["scope:rework", "priority:high"]
+    if target_label is not None:
+        labels.append(target_label)
+
+    return _record_event(
+        journal,
+        "tracker-transition-completed",
+        ticket="#184",
+        payload={
+            "transition_id": transition_id,
+            "planned_sequence": planned["sequence"],
+            "resolution": resolution,
+            "observed_post_projection": {
+                "labels": labels,
+                "milestone": "Skills Next",
+                "status": "open",
+                "assignees": assignees,
+            },
+        },
+    )
+
+
+def _record_terminal(journal: Any, terminal: str) -> None:
+    """Record one schema-complete ticket through its terminal boundary."""
+
+    _record_attempt(journal)
+    if terminal == "stranded":
+        _record_event(journal, "stranded", ticket="#184")
+        return
+
+    _record_event(journal, "patch-captured", ticket="#184")
+    if terminal == "parked":
+        _record_event(journal, "parked", ticket="#184")
+        return
+
+    review = _record_event(journal, "review-completed", ticket="#184")
+    landing = _record_event(
+        journal,
+        "landing-started",
+        ticket="#184",
+        payload={"review_sequence": review["sequence"]},
+    )
+    _record_event(
+        journal,
+        "landed",
+        ticket="#184",
+        payload={"landing_sequence": landing["sequence"]},
+    )
+
+
+def _complete_terminal(journal: Any, terminal: str) -> None:
+    """Advance one terminal ticket through every archive prerequisite."""
+
+    if terminal == "landed":
+        _record_tracker_transition(journal, "T-LAND", None, ["thomas"])
+        _record_event(journal, "bundle-retired", ticket="#184")
+    elif terminal == "parked":
+        _record_tracker_transition(journal, "T-PARK-INFO", "needs-owner", [])
+        _record_event(journal, "bundle-retired", ticket="#184")
+    _record_event(journal, "resource-cleaned", ticket="#184")
+    _record_event(journal, "run-completed", payload={"tickets": {"#184": terminal}})
+
+
+def _seed_artifact_event(journal: Any, event_type: str) -> None:
+    """Record the exact predecessor prefix for one artifact crash fixture."""
+
+    if event_type in {"bundle-consumed", "route-recorded"}:
+        _record_event(journal, "selection-recorded")
+    if event_type == "bundle-consumed":
+        return
+    if event_type == "route-recorded":
+        _record_event(journal, "bundle-consumed", ticket="#184")
+        return
+
+    _record_attempt(journal)
+    if event_type in {"review-completed", "observation-recorded"}:
+        _record_event(journal, "patch-captured", ticket="#184")
+    if event_type == "observation-recorded":
+        _record_event(journal, "review-completed", ticket="#184")
 
 
 def test_branch_slots_are_independent_and_one_invocation_owns_each(
@@ -155,12 +456,16 @@ def test_events_are_canonical_contiguous_and_hash_chained(tmp_path: Path) -> Non
 
     module = _load()
     journal = _open(module, tmp_path)
-    journal.record(
+    _record_event(
+        journal,
         "selection-recorded",
         payload={"tickets": ["#184", "#185"]},
         recorded_at="2026-08-27T08:10:00Z",
     )
-    journal.record(
+    _record_event(journal, "bundle-consumed", ticket="#184")
+    _record_event(journal, "route-recorded", ticket="#184")
+    _record_event(
+        journal,
         "ticket-assigned",
         ticket="#184",
         payload={"assignee": "thomas"},
@@ -171,10 +476,15 @@ def test_events_are_canonical_contiguous_and_hash_chained(tmp_path: Path) -> Non
     first_bytes = events[0].read_bytes()
     second = json.loads(events[1].read_text(encoding="utf-8"))
 
-    assert [path.name for path in events] == ["00000001.json", "00000002.json"]
+    assert [path.name for path in events] == [
+        "00000001.json",
+        "00000002.json",
+        "00000003.json",
+        "00000004.json",
+    ]
     assert first_bytes == module.canonical_json(json.loads(first_bytes))
     assert second["previous_sha256"] == f"sha256:{module.sha256_hex(first_bytes)}"
-    assert journal.validate()["event_count"] == 2
+    assert journal.validate()["event_count"] == 4
 
 
 def test_canonical_json_uses_the_manifest_domain_and_utf16_key_order() -> None:
@@ -198,6 +508,7 @@ def test_artifacts_are_durable_before_their_referring_event(
 
     module = _load()
     journal = _open(module, tmp_path)
+    _record_attempt(journal)
     original = module._atomic_publish
 
     def interrupt_event(path: Path, content: bytes) -> None:
@@ -210,7 +521,8 @@ def test_artifacts_are_durable_before_their_referring_event(
     monkeypatch.setattr(module, "_atomic_publish", interrupt_event)
 
     with pytest.raises(OSError, match="simulated event crash"):
-        journal.record(
+        _record_event(
+            journal,
             "patch-captured",
             ticket="#184",
             payload={"attempt": 1, "changed_paths": ["journal.py"]},
@@ -220,7 +532,7 @@ def test_artifacts_are_durable_before_their_referring_event(
     artifacts = list((journal.path / "artifacts" / "patch").iterdir())
     assert len(artifacts) == 1
     assert artifacts[0].read_bytes() == b"diff --git a/a b/a\n"
-    assert list((journal.path / "events").iterdir()) == []
+    assert journal.validate()["event_count"] == 5
 
 
 def test_event_publication_never_exposes_partial_or_temporary_bytes(
@@ -230,6 +542,9 @@ def test_event_publication_never_exposes_partial_or_temporary_bytes(
 
     module = _load()
     journal = _open(module, tmp_path)
+    _record_event(journal, "selection-recorded")
+    _record_event(journal, "bundle-consumed", ticket="#184")
+    _record_event(journal, "route-recorded", ticket="#184")
     original = module.os.replace
 
     def interrupt_rename(source: Path, destination: Path) -> None:
@@ -242,10 +557,11 @@ def test_event_publication_never_exposes_partial_or_temporary_bytes(
     monkeypatch.setattr(module.os, "replace", interrupt_rename)
 
     with pytest.raises(OSError, match="simulated rename crash"):
-        journal.record("ticket-assigned", ticket="#184", payload={"assignee": "thomas"})
+        _record_event(
+            journal, "ticket-assigned", ticket="#184", payload={"assignee": "thomas"}
+        )
 
-    assert list((journal.path / "events").iterdir()) == []
-    assert journal.validate()["event_count"] == 0
+    assert journal.validate()["event_count"] == 3
 
 
 def test_artifact_references_carry_digest_length_and_relative_path(
@@ -255,7 +571,11 @@ def test_artifact_references_carry_digest_length_and_relative_path(
 
     module = _load()
     journal = _open(module, tmp_path)
-    event = journal.record(
+    _record_attempt(journal)
+    _record_event(journal, "patch-captured", ticket="#184")
+    _record_event(journal, "review-completed", ticket="#184")
+    event = _record_event(
+        journal,
         "observation-recorded",
         ticket="#184",
         payload={"attempt": 1},
@@ -268,13 +588,14 @@ def test_artifact_references_carry_digest_length_and_relative_path(
         "sha256": f"sha256:{module.sha256_hex(b'{}\n')}",
         "byte_length": 3,
     }
-    assert journal.validate()["artifact_count"] == 1
+    assert journal.validate()["artifact_count"] == 7
 
 
 @pytest.mark.parametrize(  # type: ignore[untyped-decorator]
     ("last_event", "expected_action"),
     [
         ("attempt-started", "replay-attempt"),
+        ("attempt-returned", "replay-attempt"),
         ("patch-captured", "review-patch"),
         ("revise-requested", "resume-revision"),
         ("landing-started", "reconcile-landing"),
@@ -282,7 +603,7 @@ def test_artifact_references_carry_digest_length_and_relative_path(
         ("human-conflict", "resume-human-conflict"),
         ("landed", "complete-tracker-transition"),
         ("parked", "complete-tracker-transition"),
-        ("tracker-transition-completed", "retire-and-clean"),
+        ("tracker-transition-completed", "retire-bundle"),
         ("stranded", "clean-stranded"),
     ],
 )
@@ -296,8 +617,9 @@ def test_projection_distinguishes_each_recovery_window(
     _record_attempt(journal)
 
     # Extend the common prefix only as far as this crash fixture requires.
-    if last_event != "attempt-started":
-        journal.record(
+    if last_event not in {"attempt-started", "attempt-returned"}:
+        _record_event(
+            journal,
             "patch-captured",
             ticket="#184",
             payload={
@@ -306,37 +628,59 @@ def test_projection_distinguishes_each_recovery_window(
             },
             artifacts={"patch": b"diff"},
         )
-    if last_event == "revise-requested":
-        journal.record(
+    if last_event == "attempt-returned":
+        _record_event(journal, "attempt-returned", ticket="#184")
+    elif last_event == "revise-requested":
+        _record_event(
+            journal,
             "review-completed",
             ticket="#184",
             payload={"attempt": 1, "verdict": "REVISE"},
         )
-        journal.record(
+        _record_event(
+            journal,
             "revise-requested",
             ticket="#184",
             payload={"attempt": 2, "finding": "exact correction"},
         )
     elif last_event == "landing-started":
-        journal.record(
+        _record_event(
+            journal,
             "review-completed",
             ticket="#184",
             payload={"attempt": 1, "verdict": "APPROVE"},
         )
-        journal.record(
+        _record_event(
+            journal,
             "landing-started",
             ticket="#184",
             payload={"candidate": "3" * 40, "previous_head": "1" * 40},
         )
     elif last_event == "rebuild-requested":
-        journal.record(
+        _record_event(
+            journal,
             "review-completed",
             ticket="#184",
             payload={"attempt": 1, "verdict": "REBUILD"},
         )
-        journal.record("rebuild-requested", ticket="#184", payload={"head": "4" * 40})
+        _record_event(
+            journal, "rebuild-requested", ticket="#184", payload={"head": "4" * 40}
+        )
     elif last_event == "human-conflict":
-        journal.record(
+        review = _record_event(
+            journal,
+            "review-completed",
+            ticket="#184",
+            payload={"attempt": 1, "verdict": "REBUILD"},
+        )
+        _record_event(
+            journal,
+            "landing-started",
+            ticket="#184",
+            payload={"review_sequence": review["sequence"]},
+        )
+        _record_event(
+            journal,
             "human-conflict",
             ticket="#184",
             payload={
@@ -345,55 +689,39 @@ def test_projection_distinguishes_each_recovery_window(
             },
         )
     elif last_event in {"landed", "tracker-transition-completed"}:
-        journal.record(
+        _record_event(
+            journal,
             "review-completed",
             ticket="#184",
             payload={"attempt": 1, "verdict": "APPROVE"},
         )
-        journal.record(
+        _record_event(
+            journal,
             "landing-started",
             ticket="#184",
             payload={"candidate": "3" * 40, "previous_head": "1" * 40},
         )
-        journal.record(
-            "landed", ticket="#184", payload={"commit": "3" * 40, "tree": "4" * 40}
+        _record_event(
+            journal,
+            "landed",
+            ticket="#184",
+            payload={"commit": "3" * 40, "tree": "4" * 40},
         )
     elif last_event == "parked":
-        journal.record(
+        _record_event(
+            journal,
             "parked",
             ticket="#184",
             payload={"class": "owner-info", "question": "Which outcome should win?"},
         )
     elif last_event == "stranded":
-        journal.record("stranded", ticket="#184", payload={"reason": "route refused"})
+        _record_event(
+            journal, "stranded", ticket="#184", payload={"reason": "route refused"}
+        )
 
     # A completed tracker transition is the durable gate before retirement.
     if last_event == "tracker-transition-completed":
-        resolution = _transition_resolution(None, ["thomas"])
-        planned = journal.record(
-            "tracker-transition-planned",
-            ticket="#184",
-            payload={
-                "transition_id": "T-LAND",
-                "resolution": resolution,
-                "pre_projection": _pre_projection(),
-            },
-        )
-        journal.record(
-            "tracker-transition-completed",
-            ticket="#184",
-            payload={
-                "transition_id": "T-LAND",
-                "planned_sequence": planned["sequence"],
-                "resolution": resolution,
-                "observed_post_projection": {
-                    "labels": ["scope:rework", "priority:high"],
-                    "milestone": "Skills Next",
-                    "status": "open",
-                    "assignees": ["thomas"],
-                },
-            },
-        )
+        _record_tracker_transition(journal, "T-LAND", None, ["thomas"])
 
     assert journal.project()["tickets"]["#184"]["recovery_action"] == expected_action
 
@@ -405,47 +733,27 @@ def test_tracker_completion_repeats_and_verifies_the_portable_resolution(
 
     module = _load()
     journal = _open(module, tmp_path)
-    journal.record(
+    _record_attempt(journal)
+    _record_event(
+        journal,
         "parked",
         ticket="#184",
         payload={"class": "owner-info", "question": "Which outcome should win?"},
     )
-    resolution = _transition_resolution("needs-owner", [])
-    planned = journal.record(
-        "tracker-transition-planned",
-        ticket="#184",
-        payload={
-            "transition_id": "T-PARK-INFO",
-            "resolution": resolution,
-            "pre_projection": _pre_projection(),
-        },
-    )
-    completed = journal.record(
-        "tracker-transition-completed",
-        ticket="#184",
-        payload={
-            "transition_id": "T-PARK-INFO",
-            "planned_sequence": planned["sequence"],
-            "resolution": resolution,
-            "observed_post_projection": {
-                "labels": ["scope:rework", "priority:high", "needs-owner"],
-                "milestone": "Skills Next",
-                "status": "open",
-                "assignees": [],
-            },
-        },
-    )
+    completed = _record_tracker_transition(journal, "T-PARK-INFO", "needs-owner", [])
 
     assert completed["payload"]["resolution"]["target_label"] == "needs-owner"
-    assert journal.validate()["event_count"] == 3
+    assert journal.validate()["event_count"] == 8
 
     with pytest.raises(module.JournalRefusal, match="observed tracker projection"):
-        journal.record(
+        resolution = _transition_resolution("needs-owner", [])
+        _record_event(
+            journal,
             "tracker-transition-completed",
             ticket="#184",
             payload={
                 "transition_id": "T-PARK-INFO",
-                "planned_sequence": planned["sequence"],
+                "planned_sequence": completed["payload"]["planned_sequence"],
                 "resolution": resolution,
                 "observed_post_projection": {
                     "labels": ["scope:rework", "needs-info"],
@@ -465,7 +773,8 @@ def test_projection_is_idempotent_and_preserves_every_ticket_receipt(
     module = _load()
     journal = _open(module, tmp_path)
     _record_attempt(journal)
-    journal.record(
+    _record_event(
+        journal,
         "patch-captured",
         ticket="#184",
         payload={"attempt": 1, "changed_paths": ["journal.py"]},
@@ -494,14 +803,19 @@ def test_validation_refuses_corrupt_durable_state(
 
     module = _load()
     journal = _open(module, tmp_path)
-    journal.record(
+    _record_attempt(journal)
+    _record_event(
+        journal,
         "patch-captured",
         ticket="#184",
         payload={"attempt": 1},
         artifacts={"patch": b"diff"},
     )
-    journal.record(
-        "review-completed", ticket="#184", payload={"attempt": 1, "verdict": "APPROVE"}
+    _record_event(
+        journal,
+        "review-completed",
+        ticket="#184",
+        payload={"attempt": 1, "verdict": "APPROVE"},
     )
     events = sorted((journal.path / "events").iterdir())
 
@@ -524,19 +838,41 @@ def test_projection_refuses_contradictory_external_evidence(tmp_path: Path) -> N
 
     module = _load()
     journal = _open(module, tmp_path)
-    journal.record(
+    _record_attempt(journal)
+    _record_event(
+        journal,
+        "patch-captured",
+        ticket="#184",
+        payload={"attempt": 1},
+    )
+    review = _record_event(
+        journal,
+        "review-completed",
+        ticket="#184",
+        payload={"attempt": 1, "verdict": "APPROVE"},
+    )
+    _record_event(
+        journal,
         "landing-started",
         ticket="#184",
         payload={
+            "review_sequence": review["sequence"],
             "candidate": "3" * 40,
             "previous_head": "1" * 40,
-            "required_evidence": {"integration_ref_head": "1" * 40},
         },
     )
 
-    assert journal.project(evidence={"integration_ref_head": "1" * 40})
-    with pytest.raises(module.JournalRefusal, match="contradictory external evidence"):
-        journal.project(evidence={"integration_ref_head": "9" * 40})
+    evidence: dict[str, Any] = {
+        "integration_ref_head": "1" * 40,
+        "candidate_commit": None,
+        "candidate_reachable": False,
+        "candidate_tree": None,
+        "test_blobs": {},
+    }
+
+    assert journal.project(git_evidence=evidence)
+    with pytest.raises(module.JournalRefusal, match="contradictory Git evidence"):
+        journal.project(git_evidence={**evidence, "integration_ref_head": "9" * 40})
 
 
 def test_completion_archives_atomically_and_retains_a_parked_patch(
@@ -546,58 +882,57 @@ def test_completion_archives_atomically_and_retains_a_parked_patch(
 
     module = _load()
     journal = _open(module, tmp_path, selection=["#184"])
-    journal.record(
+    _record_attempt(journal)
+    older_patch = _record_event(
+        journal,
+        "patch-captured",
+        ticket="#184",
+        payload={"attempt": 1},
+        artifacts={"patch": b"superseded patch"},
+    )
+    latest_patch = _record_event(
+        journal,
         "patch-captured",
         ticket="#184",
         payload={"attempt": 1},
         artifacts={"patch": b"valuable patch"},
     )
-    journal.record(
+    _record_event(
+        journal,
         "parked",
         ticket="#184",
         payload={"class": "owner-info", "question": "Choose A or B?"},
     )
-    resolution = _transition_resolution("needs-owner", [])
-    planned = journal.record(
-        "tracker-transition-planned",
+    _record_tracker_transition(journal, "T-PARK-INFO", "needs-owner", [])
+    _record_event(
+        journal,
+        "bundle-retired",
         ticket="#184",
-        payload={
-            "transition_id": "T-PARK-INFO",
-            "resolution": resolution,
-            "pre_projection": _pre_projection(),
-        },
+        payload={"fingerprint": f"sha256:{'2' * 64}"},
     )
-    journal.record(
-        "tracker-transition-completed",
-        ticket="#184",
-        payload={
-            "transition_id": "T-PARK-INFO",
-            "planned_sequence": planned["sequence"],
-            "resolution": resolution,
-            "observed_post_projection": {
-                "labels": ["scope:rework", "priority:high", "needs-owner"],
-                "milestone": "Skills Next",
-                "status": "open",
-                "assignees": [],
-            },
-        },
-    )
-    journal.record(
-        "bundle-retired", ticket="#184", payload={"fingerprint": f"sha256:{'2' * 64}"}
-    )
-    journal.record("resource-cleaned", ticket="#184", payload={"resources": []})
-    journal.record("run-completed", payload={"tickets": {"#184": "parked"}})
+    _record_event(journal, "resource-cleaned", ticket="#184")
+    _record_event(journal, "run-completed", payload={"tickets": {"#184": "parked"}})
 
     archive = journal.archive()
     receipt = json.loads((archive / "receipt.json").read_text(encoding="utf-8"))
 
-    assert not journal.path.exists()
+    assert journal.path == archive
+    assert list((tmp_path / "active").iterdir()) == []
     assert archive.parent == tmp_path / "archive"
     assert receipt["run_fingerprint"] == module.run_fingerprint(
         {**_opening(), "selection": ["#184"]}
     )
     assert receipt["tickets"]["#184"]["terminal"] == "parked"
+    assert receipt["tickets"]["#184"]["bundle"]["source_fingerprints"]
+    assert receipt["retained_artifacts"] == [latest_patch["artifacts"]["patch"]["path"]]
+    assert not (archive / older_patch["artifacts"]["patch"]["path"]).exists()
+    assert (archive / latest_patch["artifacts"]["patch"]["path"]).is_file()
+    assert receipt["tickets"]["#184"]["bundle"]["footprint"]
+    assert receipt["tickets"]["#184"]["route_decisions"] == [{"status": "selected"}]
+    assert receipt["tickets"]["#184"]["retained_patch"]["byte_length"] == 14
     assert (archive / "artifacts" / "patch").is_dir()
+    assert not (archive / "artifacts" / "bundle-plan").exists()
+    assert not (archive / "artifacts" / "route-response").exists()
 
 
 def test_archive_refuses_an_incomplete_run(tmp_path: Path) -> None:
@@ -621,6 +956,7 @@ def test_event_vocabulary_covers_dispatch_without_owning_its_decisions() -> None
         "route-recorded",
         "ticket-assigned",
         "attempt-started",
+        "attempt-returned",
         "patch-captured",
         "review-completed",
         "revise-requested",
@@ -668,3 +1004,428 @@ def test_internal_cli_opens_and_projects_the_same_validated_slot(
     assert module.main(["project", *arguments]) == 0
     projected = json.loads(capfd.readouterr().out)
     assert projected["tickets"]["#184"]["recovery_action"] == "start-ticket"
+
+
+def test_journal_is_in_both_strict_mypy_gates() -> None:
+    """The shipped helper cannot regress outside the documented CI contract."""
+
+    journal_argument = "skills/code/dispatch/scripts/journal.py"
+
+    assert journal_argument in CONTRIBUTING_PATH.read_text(encoding="utf-8")
+    assert journal_argument in CI_PATH.read_text(encoding="utf-8")
+
+
+def test_business_state_uses_one_typed_representation() -> None:
+    """Event, transition, terminal, and recovery values are typed once."""
+
+    module = _load()
+
+    assert module.EventType.PATCH_CAPTURED.value == "patch-captured"
+    assert module.TransitionId.LAND.value == "T-LAND"
+    assert module.TerminalState.PARKED.value == "parked"
+    assert module.RecoveryAction.REVIEW_PATCH.value == "review-patch"
+    assert module.ARTIFACT_KIND_PATTERN.fullmatch("route-response")
+    assert module.TICKET_REFERENCE_PATTERN.fullmatch("#184")
+    assert module.OBJECT_ID_PATTERN.fullmatch("1" * 40)
+    assert module.CONTENT_DIGEST_PATTERN.fullmatch(f"sha256:{'2' * 64}")
+    assert module.COMPILED_BLOB_PATTERN.fullmatch(f"git:{'3' * 40}")
+    assert module.UTC_INSTANT_PATTERN.fullmatch("2026-08-27T08:09:10Z")
+
+
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    "event_type", [event_type.value for event_type in _load().EventType]
+)
+def test_every_event_refuses_an_incomplete_recovery_payload(
+    tmp_path: Path, event_type: str
+) -> None:
+    """No vocabulary entry becomes durable without every recovery field."""
+
+    module = _load()
+    journal = _open(module, tmp_path)
+    field = min(module.EVENT_PAYLOAD_FIELDS[module.EventType(event_type)])
+    ticket = None if event_type in {"selection-recorded", "run-completed"} else "#184"
+
+    with pytest.raises(module.JournalRefusal, match="payload fields are incomplete"):
+        _record_event(
+            journal,
+            event_type,
+            ticket=ticket,
+            omit_payload_field=field,
+        )
+
+    assert journal.validate()["event_count"] == 0
+
+
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    ("event_type", "artifact"),
+    [
+        ("bundle-consumed", "bundle-plan"),
+        ("route-recorded", "route-response"),
+        ("patch-captured", "patch"),
+        ("dispatcher-write-recorded", "dispatcher-write-proposal"),
+        ("review-completed", "review-finding"),
+        ("observation-recorded", "observation-input"),
+    ],
+)
+def test_every_artifact_event_refuses_incomplete_recovery_bulk(
+    tmp_path: Path, event_type: str, artifact: str
+) -> None:
+    """Artifact-bearing boundaries publish only with their exact durable bulk."""
+
+    module = _load()
+    journal = _open(module, tmp_path)
+
+    with pytest.raises(
+        module.JournalRefusal, match="recovery artifacts are incomplete"
+    ):
+        _record_event(
+            journal,
+            event_type,
+            ticket="#184",
+            omit_artifact=artifact,
+        )
+
+    assert journal.validate()["event_count"] == 0
+
+
+def test_newer_attempt_events_supersede_older_revision_state(tmp_path: Path) -> None:
+    """A later round, not an old monotone flag, decides recovery."""
+
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_attempt(journal)
+    _record_event(
+        journal,
+        "patch-captured",
+        ticket="#184",
+        payload={"attempt": 1, "changed_paths": ["journal.py"]},
+        artifacts={"patch": b"first patch"},
+    )
+    review = _record_event(
+        journal,
+        "review-completed",
+        ticket="#184",
+        payload={"attempt": 1, "verdict": "REVISE"},
+    )
+    _record_event(
+        journal,
+        "revise-requested",
+        ticket="#184",
+        payload={
+            "attempt": 2,
+            "prior_attempt": 1,
+            "review_sequence": review["sequence"],
+        },
+    )
+    _record_event(
+        journal,
+        "route-recorded",
+        ticket="#184",
+        payload={"attempt": 2},
+    )
+    _record_event(
+        journal,
+        "attempt-started",
+        ticket="#184",
+        payload={"attempt": 2, "base": "1" * 40},
+    )
+
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == "replay-attempt"
+
+    _record_event(
+        journal,
+        "patch-captured",
+        ticket="#184",
+        payload={"attempt": 2, "changed_paths": ["journal.py"]},
+        artifacts={"patch": b"second patch"},
+    )
+
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == "review-patch"
+
+
+def test_archive_requires_every_terminal_cleanup_boundary(tmp_path: Path) -> None:
+    """A terminal label alone cannot erase unfinished recovery work."""
+
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_attempt(journal)
+    _record_event(
+        journal,
+        "patch-captured",
+        ticket="#184",
+        payload={"attempt": 1},
+    )
+    review = _record_event(
+        journal,
+        "review-completed",
+        ticket="#184",
+        payload={"attempt": 1, "verdict": "APPROVE"},
+    )
+    landing = _record_event(
+        journal,
+        "landing-started",
+        ticket="#184",
+        payload={"review_sequence": review["sequence"]},
+    )
+    _record_event(
+        journal,
+        "landed",
+        ticket="#184",
+        payload={
+            "landing_sequence": landing["sequence"],
+            "commit": "3" * 40,
+            "tree": "4" * 40,
+        },
+    )
+    with pytest.raises(module.JournalRefusal, match="cleanup"):
+        _record_event(journal, "run-completed", payload={"tickets": {"#184": "landed"}})
+
+
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    ("terminal", "boundary", "expected_action"),
+    [
+        ("landed", "terminal", "complete-tracker-transition"),
+        ("landed", "tracker", "retire-bundle"),
+        ("landed", "retirement", "clean-resources"),
+        ("landed", "cleanup", "complete-run"),
+        ("parked", "terminal", "complete-tracker-transition"),
+        ("parked", "tracker", "retire-bundle"),
+        ("parked", "retirement", "clean-resources"),
+        ("parked", "cleanup", "complete-run"),
+        ("stranded", "terminal", "clean-stranded"),
+        ("stranded", "cleanup", "complete-run"),
+    ],
+)
+def test_each_terminal_cleanup_boundary_reopens_to_one_projection(
+    tmp_path: Path, terminal: str, boundary: str, expected_action: str
+) -> None:
+    """Every terminal crash prefix reopens the same branch slot idempotently."""
+
+    module = _load()
+    opening = {**_opening(), "selection": ["#184"]}
+    journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
+    _record_terminal(journal, terminal)
+
+    # Advance only through the durable boundary this crash fixture names.
+    if boundary in {"tracker", "retirement", "cleanup"}:
+        if terminal == "landed":
+            _record_tracker_transition(journal, "T-LAND", None, ["thomas"])
+        elif terminal == "parked":
+            _record_tracker_transition(journal, "T-PARK-INFO", "needs-owner", [])
+    if boundary in {"retirement", "cleanup"} and terminal != "stranded":
+        _record_event(journal, "bundle-retired", ticket="#184")
+    if boundary == "cleanup":
+        _record_event(journal, "resource-cleaned", ticket="#184")
+
+    reopened = module.Journal.open(tmp_path, opening)
+
+    assert reopened.path == journal.path
+    assert reopened.project()["tickets"]["#184"]["recovery_action"] == expected_action
+
+
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    "event_type",
+    [
+        "bundle-consumed",
+        "route-recorded",
+        "patch-captured",
+        "dispatcher-write-recorded",
+        "review-completed",
+        "observation-recorded",
+    ],
+)
+def test_each_artifact_event_crash_reopens_before_the_event(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    event_type: str,
+) -> None:
+    """Every artifact/event crash leaves only safe unreferenced durable bulk."""
+
+    module = _load()
+    opening = _opening()
+    journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
+    _seed_artifact_event(journal, event_type)
+    before = journal.project()
+    original = module._atomic_publish
+
+    def interrupt_event(path: Path, content: bytes) -> None:
+        """Crash only when the event would become authoritative."""
+
+        if path.parent.name == "events":
+            raise OSError("simulated event crash")
+        original(path, content)
+
+    monkeypatch.setattr(module, "_atomic_publish", interrupt_event)
+
+    with pytest.raises(OSError, match="simulated event crash"):
+        _record_event(journal, event_type, ticket="#184")
+
+    reopened = module.Journal.open(tmp_path, opening)
+
+    assert reopened.validate()["event_count"] == before["event_count"]
+    assert reopened.project() == before
+
+
+@pytest.mark.parametrize(  # type: ignore[untyped-decorator]
+    "crash_stage", ["before-move", "after-move", "during-cleanup"]
+)
+def test_archive_crashes_resume_to_the_same_compact_archive(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    crash_stage: str,
+) -> None:
+    """All archive crash windows resume without a second active run."""
+
+    module = _load()
+    opening = {**_opening(), "selection": ["#184"]}
+    journal = module.Journal.open(tmp_path, opening, opened_at="2026-08-27T08:09:10Z")
+    _record_terminal(journal, "parked")
+    _complete_terminal(journal, "parked")
+
+    # Interrupt the atomic move or either side of incremental bulk cleanup.
+    if crash_stage == "before-move":
+        original_replace = module.os.replace
+
+        def interrupt_move(source: Path, destination: Path) -> None:
+            """Crash at the one rename that releases the active branch slot."""
+
+            if Path(destination).parent == tmp_path / "archive":
+                raise OSError("simulated archive move crash")
+            original_replace(source, destination)
+
+        monkeypatch.setattr(module.os, "replace", interrupt_move)
+    elif crash_stage == "after-move":
+        original_finalize = module.Journal._finalize_archive
+
+        def interrupt_cleanup(self: Any) -> None:
+            """Crash after the atomic move and before retired bulk deletion."""
+
+            raise OSError("simulated archive cleanup crash")
+
+        monkeypatch.setattr(module.Journal, "_finalize_archive", interrupt_cleanup)
+    else:
+        original_unlink = module.Path.unlink
+        interrupted = False
+
+        def interrupt_deletion(path: Path, *, missing_ok: bool = False) -> None:
+            """Crash after one retired artifact has already been deleted."""
+
+            nonlocal interrupted
+            if not interrupted and "artifacts" in path.parts and path.is_file():
+                interrupted = True
+                original_unlink(path, missing_ok=missing_ok)
+                raise OSError("simulated archive deletion crash")
+            original_unlink(path, missing_ok=missing_ok)
+
+        monkeypatch.setattr(module.Path, "unlink", interrupt_deletion)
+
+    with pytest.raises(OSError, match="simulated archive"):
+        journal.archive()
+
+    # Restore the interrupted boundary before reopening the same invocation.
+    if crash_stage == "before-move":
+        monkeypatch.setattr(module.os, "replace", original_replace)
+    elif crash_stage == "after-move":
+        monkeypatch.setattr(module.Journal, "_finalize_archive", original_finalize)
+    else:
+        monkeypatch.setattr(module.Path, "unlink", original_unlink)
+    reopened = module.Journal.open(tmp_path, opening)
+    projection = reopened.project()
+    archive = reopened.archive()
+
+    assert projection["completed"] is True
+    assert projection["tickets"]["#184"]["terminal"] == "parked"
+    assert list((tmp_path / "active").iterdir()) == []
+    assert not (archive / ".archive-pending").exists()
+    assert (archive / "receipt.json").is_file()
+    assert (archive / "artifacts" / "patch").is_dir()
+    assert not (archive / "artifacts" / "bundle-plan").exists()
+
+
+def test_new_terminal_round_invalidates_older_completion_receipts(
+    tmp_path: Path,
+) -> None:
+    """Tracker, retirement, and cleanup must follow the latest terminal event."""
+
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_terminal(journal, "landed")
+    _record_tracker_transition(journal, "T-LAND", None, ["thomas"])
+    _record_event(journal, "bundle-retired", ticket="#184")
+    _record_event(journal, "resource-cleaned", ticket="#184")
+    landing = journal.project()["tickets"]["#184"]["receipts"]["landing-started"][-1]
+
+    # A newer terminal receipt starts a fresh completion tail even when its
+    # terminal kind matches the prior round.
+    _record_event(
+        journal,
+        "landed",
+        ticket="#184",
+        payload={"landing_sequence": landing["sequence"]},
+    )
+
+    assert (
+        journal.project()["tickets"]["#184"]["recovery_action"]
+        == "complete-tracker-transition"
+    )
+    with pytest.raises(module.JournalRefusal, match="precedes cleanup"):
+        _record_event(
+            journal,
+            "run-completed",
+            payload={"tickets": {"#184": "landed"}},
+        )
+
+
+def test_rebuild_and_owner_answer_sequences_follow_the_newest_boundary(
+    tmp_path: Path,
+) -> None:
+    """Fresh rounds supersede old rebuilds while answers resume their conflict."""
+
+    module = _load()
+    journal = _open(module, tmp_path, selection=["#184"])
+    _record_attempt(journal)
+    _record_event(journal, "patch-captured", ticket="#184")
+    review = _record_event(
+        journal,
+        "review-completed",
+        ticket="#184",
+        payload={"verdict": "REBUILD"},
+    )
+    _record_event(journal, "rebuild-requested", ticket="#184")
+
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == "await-recompile"
+
+    _record_event(journal, "bundle-consumed", ticket="#184")
+    _record_event(
+        journal,
+        "route-recorded",
+        ticket="#184",
+        payload={"attempt": 2},
+    )
+    _record_event(
+        journal,
+        "attempt-started",
+        ticket="#184",
+        payload={"attempt": 2, "attempt_id": "#184/2"},
+    )
+
+    assert journal.project()["tickets"]["#184"]["recovery_action"] == "replay-attempt"
+
+    _record_event(
+        journal,
+        "landing-started",
+        ticket="#184",
+        payload={"review_sequence": review["sequence"]},
+    )
+    conflict = _record_event(journal, "human-conflict", ticket="#184")
+    _record_event(
+        journal,
+        "owner-answered",
+        ticket="#184",
+        payload={"for_sequence": conflict["sequence"]},
+    )
+
+    assert (
+        journal.project()["tickets"]["#184"]["recovery_action"]
+        == "resume-human-conflict"
+    )
