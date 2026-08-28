@@ -2823,6 +2823,7 @@ def cmd_route(
     dry_run: bool,
     model: str | None,
     deliberation: str | None,
+    starting: list[int] | None,
 ) -> int:
     """Freeze one public model-selector route response for the rest of the run.
 
@@ -2850,19 +2851,32 @@ def cmd_route(
     except RunError as exc:
         return fail(str(exc))
 
-    # A dry run is read for what a run would do, so it reports the decisions
-    # and freezes none of them — there is no run for them to be frozen for.
+    # Collect role refusals before both modes enter the shared route gates.
     refusals = [
         {"request_id": record.request_id, **record.decision["reason"]}
         for record in records
         if not record.acceptable
     ]
-    if dry_run:
-        emit_route(str(snapshot["snapshot_identity"]), records, refusals)
-        return 2 if refusals else 0
 
+    # Rehydrate real state or bind a dry route to its in-memory plan frontier.
     state = remembered_state(state_path, cwd)
-    if state is None:
+    if dry_run and starting is None:
+        return fail(
+            "dry routing validates the plan's starting frontier: pass "
+            "--starting once for each ticket, in plan order"
+        )
+    if dry_run:
+        state = RunState(
+            branch=state.branch if state else current_branch(cwd),
+            label=state.label if state else READY_LABEL,
+            login=state.login if state else None,
+            claimed=state.claimed if state else [],
+            base=state.base if state else "",
+            starting=starting or [],
+        )
+    elif starting is not None:
+        return fail("--starting carries a dry plan and is refused on a real route")
+    elif state is None:
         return fail(
             "routing is frozen against the run the plan wrote down, so there is "
             "nothing to freeze it against yet: plan before routing"
@@ -2891,11 +2905,15 @@ def cmd_route(
     if (escalated := escalation_refusal(routing, records)) is not None:
         return fail(escalated)
 
+    # Extend the candidate account in memory before the persistence seam.
     routing.decisions.extend(records)
-    try:
-        write_routing(state_path, routing)
-    except RunError as exc:
-        return fail(str(exc))
+
+    # Freeze only a real route; dry mode reports the same gated candidate.
+    if not dry_run:
+        try:
+            write_routing(state_path, routing)
+        except RunError as exc:
+            return fail(str(exc))
 
     emit_route(routing.identity, records, refusals)
     return 2 if refusals else 0
@@ -4695,6 +4713,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     route.add_argument("--response", required=True, type=Path)
     route.add_argument("--dry-run", action="store_true")
     route.add_argument("--model")
+    route.add_argument("--starting", action="append", type=int)
     add_deliberation_flag(route)
     add_shared_flags(route)
 
@@ -4790,6 +4809,7 @@ def main(argv: list[str] | None = None) -> int:
             dry_run=args.dry_run,
             model=args.model,
             deliberation=args.deliberation,
+            starting=args.starting,
         )
     if args.verb == "claim":
         return cmd_claim(cwd, args.ticket, state_path)

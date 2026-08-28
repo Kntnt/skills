@@ -2619,9 +2619,11 @@ def test_routing_is_reached_before_every_claim_and_not_only_the_first() -> None:
 def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
     """A dry run is read for what a run would do, and a run it started is not that."""
 
+    # Read the executable step and its corresponding public option contract.
     step = _step(2)
-    option = _manpage_entry("OPTIONS", "**--dry-run**")
+    dry_run_option = _manpage_entry("OPTIONS", "**--dry-run**")
 
+    # Hold planning and routing on the read-only branch before ticket work.
     assert "read-only routing preflight" in step, (
         f"{SKILL / 'SKILL.md'}: step 2's dry run performs the routing"
         f" preflight, so what it reports is the decisions a real run would"
@@ -2654,9 +2656,12 @@ def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
     )
     assert "files, directories, migrations" in step
     assert "leaves no child process" in step
-    assert "repository, home, Codex state and cache" in option
-    assert "Manager and Skill installations" in option
-    assert "whether the preview succeeds or refuses" in option
+    assert "--starting=<number>" in step
+
+    # Hold the public page to every named persistent installation surface.
+    assert "repository, home, Codex state and cache" in dry_run_option
+    assert "Manager and Skill installations" in dry_run_option
+    assert "whether the preview succeeds or refuses" in dry_run_option
 
 
 def test_the_run_says_which_half_of_its_state_is_rebuilt_and_which_is_not() -> None:

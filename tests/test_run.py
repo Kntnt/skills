@@ -14,9 +14,13 @@ from types import ModuleType
 from typing import Any, cast
 
 from support.fake_binary import fake_binary_on_path
+from support.model_routing import complete_routing_snapshot
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUN = REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py"
+MODEL_ROUTE = (
+    REPO_ROOT / "skills" / "models" / "model-selector" / "scripts" / "route.py"
+)
 
 
 def _run() -> ModuleType:
@@ -466,6 +470,29 @@ def _response(
     }
 
 
+def _model_route_request(number: int) -> dict[str, Any]:
+    """Build one real public routing request for an Orchestrate build role."""
+
+    # Describe one reversible checked execution under a complete context.
+    return {
+        "schema_version": 1,
+        "context": complete_routing_snapshot(),
+        "requests": [
+            {
+                "request_id": f"build-{number}",
+                "authority": "execution",
+                "stage": "build",
+                "workload": "Change the Python parser",
+                "workload_cohort": "python-refactor",
+                "workload_tags": ["python"],
+                "reversible": True,
+                "checker": {"kind": "external", "signal": "pytest"},
+                "overrides": {},
+            }
+        ],
+    }
+
+
 def _route(
     repo: Path,
     tmp_path: Path,
@@ -478,6 +505,7 @@ def _route(
     dry_run: bool = False,
     model: str | None = None,
     deliberation: str | None = None,
+    starting: list[int] | None = None,
     name: str = "route.json",
 ) -> subprocess.CompletedProcess[str]:
     """Put one route response through the engine, as the preflight does.
@@ -499,6 +527,8 @@ def _route(
         args += ["--model", model]
     if deliberation is not None:
         args += ["--deliberation", deliberation]
+    for number in starting or []:
+        args += ["--starting", str(number)]
     if scratch is not None:
         args += ["--state-dir", str(scratch)]
     return _engine(repo, *args, env=env)
@@ -657,12 +687,39 @@ def _engine(
     )
 
 
+def _model_route(
+    cwd: Path,
+    request: dict[str, Any],
+    env: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
+    """Route one request through model-selector's stream-backed public CLI."""
+
+    # Preserve the deterministic Git environment while allowing fixture
+    # overrides.
+    merged = dict(_GIT_ENV)
+    if env:
+        merged.update(env)
+
+    # Exercise the same stdin transport the Skill uses during a dry run.
+    return subprocess.run(
+        ["uv", "run", str(MODEL_ROUTE), "/dev/stdin"],
+        cwd=cwd,
+        env=merged,
+        input=json.dumps(request),
+        text=True,
+        capture_output=True,
+        check=False,
+        timeout=ENGINE_TIMEOUT,
+    )
+
+
 def _tree_image(root: Path) -> dict[str, tuple[str, int, bytes | str]]:
     """Capture every entry, mode, target, and byte below *root*."""
 
     if not root.exists() and not root.is_symlink():
         return {".": ("missing", 0, b"")}
 
+    # Record every existing path without following directory symlinks.
     image: dict[str, tuple[str, int, bytes | str]] = {}
     for path in [root, *sorted(root.rglob("*"))]:
         name = "." if path == root else path.relative_to(root).as_posix()
@@ -1587,6 +1644,46 @@ def test_route_refuses_a_batch_that_is_not_the_plans_starting_frontier(
     assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
 
 
+def test_a_dry_route_refuses_a_batch_that_is_not_the_plans_frontier(
+    tmp_path: Path,
+) -> None:
+    """Preview reaches the same ordered-frontier gate as a real route."""
+
+    # Plan two tickets in their tracker order without persisting either one.
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
+    )
+    planned = _engine(
+        repo,
+        "plan",
+        "--dry-run",
+        "--at-once",
+        "2",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    # Reverse the response to prove dry routing applies the real batch gate.
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("build-10"), _selected("build-9")],
+        dry_run=True,
+        starting=[9, 10],
+    )
+
+    assert planned.returncode == 2, planned.stderr
+    assert result.returncode == 1
+    assert "starting frontier" in result.stderr
+    assert not scratch.exists()
+
+
 def test_a_dry_route_reports_its_decisions_and_freezes_nothing(tmp_path: Path) -> None:
     """A dry run is read for what a run would do, and a run it started is not that."""
 
@@ -1595,7 +1692,15 @@ def test_a_dry_route_reports_its_decisions_and_freezes_nothing(tmp_path: Path) -
     env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
 
     planned = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
-    result = _route(repo, tmp_path, scratch, env, [_selected("build-9")], dry_run=True)
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("build-9")],
+        dry_run=True,
+        starting=[9],
+    )
 
     assert planned.returncode == 2
     assert result.returncode == 0, result.stderr
@@ -1984,6 +2089,7 @@ def test_a_dry_route_states_the_routing_capability_before_the_night(
         env,
         [_inherited("build-9", "unavailable_selection_controls")],
         dry_run=True,
+        starting=[9],
     )
 
     assert result.returncode == 0, result.stderr
@@ -3957,6 +4063,7 @@ def test_a_missing_legacy_source_creates_no_state_directory(tmp_path: Path) -> N
 def test_an_invalid_legacy_source_creates_no_state_directory(tmp_path: Path) -> None:
     """Migration validates legacy state before publishing it at the new path."""
 
+    # Stage readable JSON that does not carry a complete state document.
     scratch = tmp_path / "scratch"
     scratch.mkdir()
     legacy = scratch / STATE_FILE
@@ -3965,6 +4072,7 @@ def test_an_invalid_legacy_source_creates_no_state_directory(tmp_path: Path) -> 
 
     _run().carry_state_forward(scratch / STATE_HOME / STATE_FILE)
 
+    # Preserve the invalid source without creating its protected destination.
     assert legacy.read_bytes() == original
     assert not (scratch / STATE_HOME).exists()
 
@@ -4035,6 +4143,8 @@ def _assert_dry_preview_is_state_neutral(
         "--response",
         "/dev/stdin",
         "--dry-run",
+        "--starting",
+        "9",
         "--state-dir",
         str(scratch),
         env=env,
@@ -4056,14 +4166,19 @@ def test_a_successful_dry_preview_leaves_every_surface_unchanged(
 ) -> None:
     """A complete proposed launch reaches the no-write seam without a trace."""
 
+    # Route one complete selected response through the state-neutral fixture.
     decision = _selected("build-9")
     decision["launch"]["arguments"] = {
         "model": "the-cheapest",
         "reasoning_effort": "medium",
     }
+    routed = _assert_dry_preview_is_state_neutral(
+        tmp_path,
+        decision,
+        0,
+    )
 
-    routed = _assert_dry_preview_is_state_neutral(tmp_path, decision, 0)
-
+    # Preserve the exact launch arguments through the reporting seam.
     assert routed["decisions"][0]["decision"]["launch"]["arguments"] == {
         "model": "the-cheapest",
         "reasoning_effort": "medium",
@@ -4115,19 +4230,20 @@ def test_dry_and_real_runs_match_until_the_state_write_seam(tmp_path: Path) -> N
         real_plan.pop(field)
     assert preview_plan == real_plan
 
+    # Derive one response through model-selector's real stream-backed route.
+    selected = _model_route(repo, _model_route_request(9), env)
+    assert selected.returncode == 0, selected.stderr
+    response = selected.stdout
+
     # Feed the identical public response through dry and mutating route paths.
-    decision = _selected("build-9")
-    decision["launch"]["arguments"] = {
-        "model": "the-cheapest",
-        "reasoning_effort": "medium",
-    }
-    response = json.dumps(_response([decision]))
     preview_route = _engine(
         repo,
         "route",
         "--response",
         "/dev/stdin",
         "--dry-run",
+        "--starting",
+        "9",
         "--state-dir",
         str(preview_scratch),
         env=env,
@@ -4144,7 +4260,7 @@ def test_dry_and_real_runs_match_until_the_state_write_seam(tmp_path: Path) -> N
         input_text=response,
     )
 
-    # The proposed launch is the launched configuration; only persistence differs.
+    # Compare the launch configurations before inspecting persistence.
     assert preview_route.returncode == 0, preview_route.stderr
     assert real_route.returncode == 0, real_route.stderr
     assert json.loads(preview_route.stdout) == json.loads(real_route.stdout)
@@ -4152,8 +4268,14 @@ def test_dry_and_real_runs_match_until_the_state_write_seam(tmp_path: Path) -> N
         "arguments"
     ]
     assert arguments == {
-        "model": "the-cheapest",
-        "reasoning_effort": "medium",
+        "model": "worker-v2",
+        "surface": "subagent",
+        "service_tier": "standard",
+        "reasoning_effort": "low",
+        "reasoning_summary": "auto",
+        "tools": ["shell", "apply_patch"],
+        "sandbox": "workspace-write",
+        "network": "disabled",
     }
     assert not preview_scratch.exists()
     assert (real_scratch / STATE_HOME / STATE_FILE).is_file()
