@@ -12,7 +12,7 @@ kntnt update - refresh the Collection and re-check Dependencies
 
 `kntnt update` re-copies every Enabled Skill in the targeted layer whose files differ from the current Catalog Digest and leaves matching Skills unchanged. Global is the default layer. Re-copying overwrites local changes to a Skill.
 
-The Manager is refreshed on every successful update because it is not a Catalog entry and has no Digest. A Withdrawn Skill is removed from the targeted layer without confirmation. A newly added Catalog Skill is reported and offered for Enablement; accepting the offer Enables only that Skill, and any Unsatisfied Dependency is reported afterwards.
+The Manager is staged on every successful update because it is not a Catalog entry and its top-level publication Digest excludes the generated Catalog, so that Digest cannot establish full-tree identity before acquisition. An identical staged Manager remains untouched. A Withdrawn Skill is removed from the targeted layer without confirmation. A newly added Catalog Skill is reported and offered for Enablement; accepting the offer Enables only that Skill, and any Unsatisfied Dependency is reported afterwards.
 
 After file changes, Update checks every Dependency and Capability again. It is the only command that replaces the stored Catalog, preserving the comparison needed to identify new and Withdrawn entries on a later run.
 

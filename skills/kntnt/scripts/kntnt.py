@@ -7,6 +7,8 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
+import fcntl
 import hashlib
 import json
 import os
@@ -19,6 +21,7 @@ import urllib.error
 import urllib.request
 from collections.abc import Iterator
 from contextlib import contextmanager
+from dataclasses import dataclass
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, cast
@@ -29,6 +32,13 @@ ORIGIN = "Kntnt/skills"
 MANAGER = "kntnt"
 UNIVERSAL_PROJECT = ".agents/skills"
 CANONICAL_GLOBAL = "~/.agents/skills"
+
+# Directory-relative sentinel used when Linux receives absolute paths.
+AT_FDCWD = -100
+
+# Platform flags that request an atomic exchange rather than replacement.
+RENAME_EXCHANGE = 2
+RENAME_SWAP = 2
 
 # What a verb exits with when the disk does not show the change it made. The
 # payload is still emitted: the user has to be told which skills and where.
@@ -68,6 +78,50 @@ class ManagerError(RuntimeError):
     def __init__(self, message: str, code: int = 1) -> None:
         super().__init__(message)
         self.code = code
+
+
+@dataclass(frozen=True)
+class Publication:
+    """One verified candidate and the physical target it may replace."""
+
+    name: str
+    candidate: Path
+    target: Path
+
+
+@dataclass(frozen=True)
+class Withdrawal:
+    """One physical active target omitted by the selected generation."""
+
+    name: str
+    target: Path
+
+
+@dataclass(frozen=True)
+class PreparedWithdrawal:
+    """One withdrawal and the adjacent path retaining its old tree."""
+
+    name: str
+    target: Path
+    backup: Path
+
+
+@dataclass(frozen=True)
+class PublishedTree:
+    """One active target exchanged by the current publication transaction."""
+
+    target: Path
+    backup: Path
+    active_before: bool
+    active_after: bool
+
+
+@dataclass(frozen=True)
+class RollbackFailure:
+    """One old tree a failed publication could not restore."""
+
+    backup: Path
+    detail: str
 
 
 def fail(message: str, code: int = 1) -> int:
@@ -431,6 +485,7 @@ def capability_notes(names: list[str]) -> list[dict[str, str]]:
 # the two can agree only through this list (ADR-0041). A pattern ending in `/`
 # is a directory name skipped wherever it occurs; any other matches a filename.
 DIGEST_IGNORE = ("__pycache__/", "*.pyc")
+MANAGER_DIGEST_IGNORE = frozenset({"catalog.json"})
 
 
 def digest_ignores(relative: str) -> bool:
@@ -449,7 +504,7 @@ def digest_ignores(relative: str) -> bool:
     return False
 
 
-def directory_digest(directory: Path) -> str:
+def directory_digest(directory: Path, *, ignored: frozenset[str] = frozenset()) -> str:
     """Digest a skill directory over its sorted relative paths and file contents.
 
     The one freshness question the manager can answer honestly is whether two
@@ -465,7 +520,7 @@ def directory_digest(directory: Path) -> str:
     files = sorted(
         (path.relative_to(directory).as_posix(), path)
         for path in directory.rglob("*")
-        if path.is_file()
+        if path.is_file() and path.relative_to(directory).as_posix() not in ignored
     )
 
     # Hash the files the collection ships and pass the artefacts by. A NUL
@@ -480,6 +535,14 @@ def directory_digest(directory: Path) -> str:
         digest.update(hashlib.sha256(path.read_bytes()).digest())
 
     return digest.hexdigest()
+
+
+def manager_digest(directory: Path) -> str:
+    """Digest a Manager tree without its recursively generated Catalog."""
+
+    # Break the Catalog's self-reference while covering every other shipped
+    # file.
+    return directory_digest(directory, ignored=MANAGER_DIGEST_IGNORE)
 
 
 # The Catalog this run reasons from, and whether the origin supplied it. Held
@@ -543,13 +606,28 @@ def write_catalog(catalog: dict[str, Any]) -> None:
 
     path = here() / "catalog.json"
     text = json.dumps(catalog, indent=2, ensure_ascii=False) + "\n"
+    encoded = text.encode("utf-8")
+
+    # An identical snapshot is no write, preserving the Manager tree's identity.
+    try:
+        if path.read_bytes() == encoded:
+            return
+    except OSError:
+        pass
 
     # Sibling rather than a temporary directory: `replace` is only atomic
     # within one filesystem, and the directory the file lands in is the one
     # place guaranteed to be on it.
-    temporary = path.with_name(f"{path.name}.tmp")
-    temporary.write_text(text, encoding="utf-8")
-    temporary.replace(path)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(encoded)
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def stored_catalog() -> dict[str, Any] | None:
@@ -812,17 +890,25 @@ def enabled_names(harnesses: list[str], *, global_layer: bool) -> list[str]:
     return names
 
 
-def run_transport(args: list[str], *, internal: bool = False) -> None:
+def run_transport(
+    args: list[str],
+    *,
+    internal: bool = False,
+    cwd: Path | None = None,
+    environment: dict[str, str] | None = None,
+) -> None:
     """Run the transport. Skill files move only through this call."""
 
     raw = os.environ.get("KNTNT_TRANSPORT", "npx --yes skills")
     command = [*shlex.split(raw), *args]
     env = os.environ.copy()
+    if environment is not None:
+        env.update(environment)
     if internal:
         env["INSTALL_INTERNAL_SKILLS"] = "1"
     result = subprocess.run(
         command,
-        cwd=project_root(),
+        cwd=cwd or project_root(),
         env=env,
         text=True,
         capture_output=True,
@@ -831,6 +917,460 @@ def run_transport(args: list[str], *, internal: bool = False) -> None:
     if result.returncode != 0:
         detail = (result.stderr or result.stdout).strip()
         raise ManagerError(detail or f"transport failed: {' '.join(args)}")
+
+
+def transport_args(
+    names: list[str], harnesses: list[str], *, global_layer: bool
+) -> list[str]:
+    """Build the one transport invocation that acquires *names*."""
+
+    args = ["add", collection_source()]
+    for name in names:
+        args.extend(["--skill", name])
+    for harness in harnesses:
+        args.extend(["--agent", harness])
+    if global_layer:
+        args.append("--global")
+    args.append("--yes")
+    return args
+
+
+def staging_environment(root: Path) -> dict[str, str]:
+    """Create and return the homes an isolated transport acquisition uses."""
+
+    staging_home = root / SANDBOX_HOME
+    staging_project = root / SANDBOX_PROJECT
+    staging_home.mkdir()
+    staging_project.mkdir()
+    return {
+        "HOME": str(staging_home),
+        "KNTNT_HOME": str(staging_home),
+        "KNTNT_PROJECT": str(staging_project),
+    }
+
+
+def staged_skill_dirs(
+    root: Path, harness: str, *, global_layer: bool
+) -> list[tuple[Path, Path]]:
+    """Pair possible staged skill directories with their active counterparts."""
+
+    return [
+        (
+            sandbox_path(directory, root, global_layer=global_layer),
+            directory,
+        )
+        for directory in skill_dirs(harness, global_layer=global_layer)
+    ]
+
+
+def local_source_skill(name: str) -> Path | None:
+    """Return *name* in a local Collection origin, when this run has one."""
+
+    source = Path(collection_source())
+    if not source.is_dir():
+        return None
+    if name == MANAGER:
+        candidate = source / "skills" / MANAGER
+        return candidate if (candidate / "SKILL.md").is_file() else None
+    for skill_md in source.glob("skills/*/*/SKILL.md"):
+        if skill_md.parent.name == name:
+            return skill_md.parent
+    return None
+
+
+def required_digest(value: Any, subject: str) -> str:
+    """Return one valid SHA-256 Digest or refuse the selected Catalog."""
+
+    try:
+        decoded = bytes.fromhex(value) if isinstance(value, str) else b""
+    except ValueError:
+        decoded = b""
+    if len(decoded) != hashlib.sha256().digest_size:
+        raise ManagerError(f"{subject} carries no valid Digest")
+    return cast(str, value)
+
+
+def expected_candidate_digest(name: str) -> str:
+    """Return the source-of-truth Digest available for a staged candidate."""
+
+    source = local_source_skill(name)
+    if source is not None:
+        return manager_digest(source) if name == MANAGER else directory_digest(source)
+    if name == MANAGER:
+        return required_digest(
+            load_catalog().get("manager_digest"), "selected Catalog Manager"
+        )
+    entry = catalog_entries().get(name, {})
+    return required_digest(entry.get("digest"), f"selected Catalog entry '{name}'")
+
+
+def validate_manager_candidate(candidate: Path) -> None:
+    """Reject a staged Manager that cannot serve its own public entrypoints."""
+
+    required = (
+        "SKILL.md",
+        "agents/openai.yaml",
+        "catalog.json",
+        "harness-paths.json",
+        "help.md",
+        "help/help.md",
+        "help/select.md",
+        "help/uninstall.md",
+        "help/update.md",
+        "library/references/changelog.md",
+        "library/references/delivery.md",
+        "library/scripts/integrations.py",
+        "library/scripts/languages.py",
+        "library/scripts/ship.py",
+        "scripts/kntnt.py",
+        "steps/help.md",
+        "steps/select.md",
+        "steps/uninstall.md",
+        "steps/update.md",
+    )
+    missing = [
+        relative for relative in required if not (candidate / relative).is_file()
+    ]
+    if missing:
+        raise ManagerError(f"staged Manager is missing {', '.join(missing)}")
+
+    # Verify every shipped interface is readable before checking structured
+    # data and executable helpers more deeply.
+    contents = {
+        relative: (candidate / relative).read_text(encoding="utf-8")
+        for relative in required
+    }
+    catalog = json.loads(contents["catalog.json"])
+    if not isinstance(catalog, dict) or not isinstance(catalog.get("skills"), list):
+        raise ManagerError("staged Manager carries a corrupt Catalog")
+    paths = json.loads(contents["harness-paths.json"])
+    if not isinstance(paths, dict):
+        raise ManagerError("staged Manager carries a corrupt harness path table")
+    agent = yaml.safe_load(contents["agents/openai.yaml"])
+    if not isinstance(agent, dict):
+        raise ManagerError("staged Manager carries a corrupt agent declaration")
+
+    # Every Python helper is part of the runtime contract, not an opaque
+    # sidecar.
+    for relative, content in contents.items():
+        if relative.endswith(".py"):
+            compile(content, str(candidate / relative), "exec")
+
+    # The acquired Manager must carry the same Catalog that selected this run.
+    if catalog != load_catalog():
+        raise ManagerError("staged Manager carries another Collection Catalog")
+
+
+def validate_candidate(name: str, candidate: Path, expected_digest: str) -> str:
+    """Return a candidate's Digest after validating its readable contract."""
+
+    try:
+        if not candidate.is_dir():
+            raise ManagerError(f"transport did not acquire '{name}'")
+        frontmatter = parse_frontmatter(
+            (candidate / "SKILL.md").read_text(encoding="utf-8")
+        )
+        if frontmatter.get("name") != name:
+            raise ManagerError(f"staged '{name}' declares another name")
+        if name == MANAGER:
+            validate_manager_candidate(candidate)
+        digest = (
+            manager_digest(candidate)
+            if name == MANAGER
+            else directory_digest(candidate)
+        )
+    except (
+        OSError,
+        UnicodeDecodeError,
+        json.JSONDecodeError,
+        yaml.YAMLError,
+        SyntaxError,
+    ) as exc:
+        raise ManagerError(f"staged '{name}' could not be verified: {exc}") from exc
+
+    if digest != expected_digest:
+        raise ManagerError(f"staged '{name}' differs from the selected Collection")
+    return digest
+
+
+def physical_target(target: Path) -> Path:
+    """Resolve a logical skill path to the physical publication target."""
+
+    return target.resolve(strict=False)
+
+
+def acquisition_targets(
+    root: Path,
+    names: list[str],
+    harnesses: list[str],
+    *,
+    global_layer: bool,
+) -> list[Publication]:
+    """Validate staged files and map them to every physical active target."""
+
+    publications: dict[Path, Publication] = {}
+    for name in names:
+        expected = expected_candidate_digest(name)
+        candidates: dict[Path, Path] = {}
+        for harness in harnesses:
+            found = [
+                (staged / name, active / name)
+                for staged, active in staged_skill_dirs(
+                    root, harness, global_layer=global_layer
+                )
+                if (staged / name).is_dir()
+            ]
+            if not found:
+                raise ManagerError(f"transport did not acquire '{name}' for {harness}")
+            for candidate, target in found:
+                candidates[candidate] = physical_target(target)
+
+        # Every transport output must be the same verified Collection tree.
+        digests = {
+            validate_candidate(name, candidate, expected) for candidate in candidates
+        }
+        if len(digests) != 1:
+            raise ManagerError(f"transport acquired mixed generations of '{name}'")
+        source = next(iter(candidates))
+        for target in candidates.values():
+            publications[target] = Publication(name, source, target)
+
+        # The running Manager may sit outside the layer's Detected Harnesses.
+        if name == MANAGER:
+            target = physical_target(here())
+            publications[target] = Publication(name, source, target)
+
+    return [
+        publication
+        for _, publication in sorted(
+            publications.items(), key=lambda item: str(item[0])
+        )
+    ]
+
+
+def withdrawal_targets(
+    names: list[str], harnesses: list[str], *, global_layer: bool
+) -> list[Withdrawal]:
+    """Map withdrawn logical paths to their distinct physical active trees."""
+
+    withdrawals: dict[Path, Withdrawal] = {}
+    for name in names:
+        for harness in harnesses:
+            for directory in skill_dirs(harness, global_layer=global_layer):
+                logical = directory / name
+                if not logical.is_dir():
+                    continue
+                target = physical_target(logical)
+                withdrawals[target] = Withdrawal(name, target)
+
+    return [
+        withdrawal
+        for _, withdrawal in sorted(withdrawals.items(), key=lambda item: str(item[0]))
+    ]
+
+
+@contextmanager
+def publication_locks(parents: list[Path]) -> Iterator[None]:
+    """Serialize Collection publishers by locking their stable parent dirs."""
+
+    descriptors: list[int] = []
+    try:
+        for parent in sorted(set(parents), key=str):
+            descriptor = os.open(parent, os.O_RDONLY)
+            descriptors.append(descriptor)
+            fcntl.flock(descriptor, fcntl.LOCK_EX)
+        yield
+    finally:
+        for descriptor in reversed(descriptors):
+            fcntl.flock(descriptor, fcntl.LOCK_UN)
+            os.close(descriptor)
+
+
+def atomic_exchange(first: Path, second: Path) -> None:
+    """Atomically exchange two non-empty directory entries on macOS or Linux."""
+
+    library = ctypes.CDLL(None, use_errno=True)
+    first_raw = os.fsencode(first)
+    second_raw = os.fsencode(second)
+    if sys.platform == "darwin":
+        operation = library.renamex_np
+        operation.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint]
+        operation.restype = ctypes.c_int
+        result = operation(first_raw, second_raw, RENAME_SWAP)
+    elif sys.platform.startswith("linux"):
+        operation = library.renameat2
+        operation.argtypes = [
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_uint,
+        ]
+        operation.restype = ctypes.c_int
+        result = operation(AT_FDCWD, first_raw, AT_FDCWD, second_raw, RENAME_EXCHANGE)
+    else:
+        raise ManagerError(
+            f"atomic directory publication is unsupported on {sys.platform}"
+        )
+    if result != 0:
+        error = ctypes.get_errno()
+        raise OSError(error, os.strerror(error), str(second))
+
+
+def remove_publication_tree(path: Path) -> None:
+    """Remove one private staging or backup tree after a transaction."""
+
+    if not path.exists() and not path.is_symlink():
+        return
+    if path.is_symlink():
+        path.unlink()
+    else:
+        shutil.rmtree(path)
+
+
+def rollback_publications(
+    published: list[PublishedTree],
+) -> list[RollbackFailure]:
+    """Restore every old tree already exchanged by a failed transaction."""
+
+    failures: list[RollbackFailure] = []
+    for publication in reversed(published):
+        try:
+            if publication.active_before and publication.active_after:
+                atomic_exchange(publication.backup, publication.target)
+            elif publication.active_after:
+                os.replace(publication.target, publication.backup)
+            else:
+                os.replace(publication.backup, publication.target)
+        except OSError as exc:
+            failures.append(
+                RollbackFailure(publication.backup, f"{publication.target}: {exc}")
+            )
+    return failures
+
+
+def publish_candidates(
+    publications: list[Publication], withdrawals: list[Withdrawal] | None = None
+) -> None:
+    """Publish one complete generation, rolling every changed target back."""
+
+    withdrawals = withdrawals or []
+    created: list[Path] = []
+    prepared: list[Publication] = []
+    retired: list[PreparedWithdrawal] = []
+    published: list[PublishedTree] = []
+    preserved: set[Path] = set()
+    try:
+        # Create only the missing layer roots needed by a fully verified
+        # acquisition.
+        for publication in publications:
+            missing: list[Path] = []
+            parent = publication.target.parent
+            while not parent.exists():
+                missing.append(parent)
+                parent = parent.parent
+            created.extend(reversed(missing))
+            publication.target.parent.mkdir(parents=True, exist_ok=True)
+
+        parents = [publication.target.parent for publication in publications]
+        parents.extend(withdrawal.target.parent for withdrawal in withdrawals)
+        with publication_locks(parents):
+            # Prepare every same-filesystem candidate before the first exchange.
+            for publication in publications:
+                if publication.target.exists() and not publication.target.is_dir():
+                    raise ManagerError(
+                        f"publication target '{publication.target}' is not a directory"
+                    )
+                candidate_digest = directory_digest(publication.candidate)
+                if (
+                    publication.target.is_dir()
+                    and directory_digest(publication.target) == candidate_digest
+                ):
+                    continue
+                staging = Path(
+                    tempfile.mkdtemp(
+                        prefix=f".{publication.target.name}.kntnt-stage-",
+                        dir=publication.target.parent,
+                    )
+                )
+                staging.rmdir()
+                prepared.append(
+                    Publication(publication.name, staging, publication.target)
+                )
+                shutil.copytree(
+                    publication.candidate, staging, copy_function=shutil.copy2
+                )
+                if directory_digest(staging) != candidate_digest:
+                    raise ManagerError(
+                        f"staging copy for '{publication.target.name}' "
+                        "could not be verified"
+                    )
+
+            # Reserve every rollback path before the active generation moves.
+            for withdrawal in withdrawals:
+                if not withdrawal.target.is_dir():
+                    continue
+                backup = Path(
+                    tempfile.mkdtemp(
+                        prefix=f".{withdrawal.target.name}.kntnt-retired-",
+                        dir=withdrawal.target.parent,
+                    )
+                )
+                backup.rmdir()
+                retired.append(
+                    PreparedWithdrawal(withdrawal.name, withdrawal.target, backup)
+                )
+
+            # Exchange each complete directory entry without an unreadable
+            # interval.
+            for publication in prepared:
+                replaced = publication.target.exists()
+                if replaced:
+                    atomic_exchange(publication.candidate, publication.target)
+                else:
+                    os.replace(publication.candidate, publication.target)
+                published.append(
+                    PublishedTree(
+                        publication.target,
+                        publication.candidate,
+                        active_before=replaced,
+                        active_after=True,
+                    )
+                )
+
+            # Remove omissions only while their old trees remain available to
+            # roll back.
+            for omission in retired:
+                os.replace(omission.target, omission.backup)
+                published.append(
+                    PublishedTree(
+                        omission.target,
+                        omission.backup,
+                        active_before=True,
+                        active_after=False,
+                    )
+                )
+    except (ManagerError, OSError) as exc:
+        rollback_failures = rollback_publications(published)
+        detail = f"publication failed: {exc}"
+        if rollback_failures:
+            preserved = {failure.backup for failure in rollback_failures}
+            detail += "; rollback failed: " + "; ".join(
+                failure.detail for failure in rollback_failures
+            )
+        raise ManagerError(detail) from exc
+    finally:
+        for publication in prepared:
+            if publication.candidate not in preserved:
+                remove_publication_tree(publication.candidate)
+        for omission in retired:
+            if omission.backup not in preserved:
+                remove_publication_tree(omission.backup)
+        for directory in reversed(created):
+            try:
+                directory.rmdir()
+            except OSError:
+                pass
 
 
 # The variables a Sandbox redirects. `HOME` is what the transport resolves the
@@ -1075,17 +1615,36 @@ def add_skills(
 ) -> dict[str, Any]:
     """Enable *names* on *harnesses* in the targeted layer, and verify it."""
 
-    # Nothing to place is not a call: the transport refuses an empty selection.
-    if names and harnesses:
-        args = ["add", collection_source()]
-        for name in names:
-            args.extend(["--skill", name])
-        for harness in harnesses:
-            args.extend(["--agent", harness])
-        if global_layer:
-            args.append("--global")
-        args.append("--yes")
-        run_transport(args, internal=True)
+    try:
+        # Acquire and verify the complete generation before any active tree
+        # moves.
+        if names and harnesses:
+            with tempfile.TemporaryDirectory(prefix="kntnt-acquire-") as temporary:
+                root = Path(temporary)
+                environment = staging_environment(root)
+                run_transport(
+                    transport_args(names, harnesses, global_layer=global_layer),
+                    internal=True,
+                    cwd=root / SANDBOX_PROJECT,
+                    environment=environment,
+                )
+                publications = acquisition_targets(
+                    root, names, harnesses, global_layer=global_layer
+                )
+                publish_candidates(publications)
+    except ManagerError as exc:
+        relay_transport(str(exc))
+        return {
+            "intended": list(names),
+            "confirmed": [],
+            "failed": [
+                {
+                    "name": name,
+                    "directories": target_dirs(harnesses, global_layer=global_layer),
+                }
+                for name in names
+            ],
+        }
 
     return verified_outcome(
         names, harnesses, global_layer=global_layer, expect_present=True
@@ -1146,6 +1705,27 @@ def teardown_integrations(
 
             reported.append(_teardown(name, script))
     return reported
+
+
+def stage_integration_owners(root: Path, withdrawals: list[Withdrawal]) -> list[Path]:
+    """Copy withdrawn owners so teardown can run after publication succeeds."""
+
+    staged: list[Path] = []
+    for index, withdrawal in enumerate(withdrawals):
+        destination = root / "retired-integrations" / str(index)
+        try:
+            shutil.copytree(
+                withdrawal.target,
+                destination / withdrawal.name,
+                symlinks=True,
+            )
+        except OSError as exc:
+            raise ManagerError(
+                f"could not stage integrations owned by '{withdrawal.name}': {exc}"
+            ) from exc
+        staged.append(destination)
+
+    return staged
 
 
 def _teardown(name: str, script: Path) -> dict[str, Any]:
@@ -1219,45 +1799,22 @@ def remove_skills(
     }
 
 
-def placement_outcome(
+def failed_placement_outcome(
     names: list[str], harnesses: list[str], *, global_layer: bool
 ) -> dict[str, Any]:
-    """Place *names* and report the outcome, whatever the transport did.
+    """Report a refresh transaction that published none of its candidates."""
 
-    The mirror of `removal_outcome`, for the half of a run that puts files
-    there. Update deletes what the collection has Withdrawn before it places
-    anything, so a transport failure that escaped would cost the user the
-    report of a deletion that has already happened — a change the disk shows
-    and nothing says (ADR-0036).
-
-    A refusal is every name failing, and not the presence test the other
-    mirror re-reads the disk for. The transport declines the whole call before
-    anything moves, so nothing in the batch landed; and presence cannot answer
-    a refresh in any case, the files it would have replaced being already
-    there. Absence, which is what a removal is verified by, has no such
-    problem. The directories named are the ones the layer covers, because
-    where to look is the whole use the user has for them.
-
-    The reason goes to the user even so, on stderr rather than in the payload.
-    Every name failing is the condition the other mirror guards on, so here it
-    always holds.
-    """
-
-    try:
-        return add_skills(names, harnesses, global_layer=global_layer)
-    except ManagerError as exc:
-        relay_transport(str(exc))
-        return {
-            "intended": list(names),
-            "confirmed": [],
-            "failed": [
-                {
-                    "name": name,
-                    "directories": target_dirs(harnesses, global_layer=global_layer),
-                }
-                for name in names
-            ],
-        }
+    return {
+        "intended": list(names),
+        "confirmed": [],
+        "failed": [
+            {
+                "name": name,
+                "directories": target_dirs(harnesses, global_layer=global_layer),
+            }
+            for name in names
+        ],
+    }
 
 
 def removal_outcome(
@@ -1266,7 +1823,7 @@ def removal_outcome(
     """Remove *names* and report the outcome, whatever the transport did.
 
     The transport takes the whole call down when it declines one name, so a
-    removal that has to carry on regardless — Update's withdrawals, Uninstall
+    removal that has to carry on regardless — an ordinary Disable or Uninstall
     deciding whether the Manager may go — reads that failure off the disk
     rather than raising it. What the run intended is unchanged either way;
     only the split between confirmed and failed differs.
@@ -1288,7 +1845,41 @@ def removal_outcome(
         # else's error over it would be telling the user about nothing.
         if outcome["failed"]:
             relay_transport(str(exc))
-        return outcome
+    return outcome
+
+
+def withdrawal_report(
+    names: list[str],
+    harnesses: list[str],
+    *,
+    global_layer: bool,
+    integrations: list[dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    """Report each withdrawn name from the active installation on disk."""
+
+    outcome = verified_outcome(
+        names, harnesses, global_layer=global_layer, expect_present=False
+    )
+    failed = {str(item["name"]): item["directories"] for item in outcome["failed"]}
+    report: list[dict[str, Any]] = [
+        (
+            {"name": name, "disk": "failed", "directories": failed[name]}
+            if name in failed
+            else {"name": name, "disk": "removed"}
+        )
+        for name in names
+    ]
+
+    # Keep each external result beside the file removal owned by that Skill.
+    by_name: dict[str, list[dict[str, Any]]] = {}
+    for answer in integrations or []:
+        by_name.setdefault(str(answer["name"]), []).append(answer)
+    for item in report:
+        name = str(item["name"])
+        if name in by_name:
+            item["integrations"] = by_name[name]
+
+    return report
 
 
 def withdrawn_names(harnesses: list[str], *, global_layer: bool) -> list[str]:
@@ -1324,37 +1915,61 @@ def withdrawn_names(harnesses: list[str], *, global_layer: bool) -> list[str]:
     return sorted(withdrawn)
 
 
-def withdraw_skills(
-    names: list[str], harnesses: list[str], *, global_layer: bool
-) -> list[dict[str, Any]]:
-    """Take the skills the collection has withdrawn off the disk.
+def refresh_outcome(
+    names: list[str],
+    withdrawn: list[str],
+    harnesses: list[str],
+    *,
+    global_layer: bool,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Acquire and publish the complete selected Collection generation."""
 
-    A skill that has left the Catalog can no longer be updated, supported, or
-    reasoned about, so it is removed without asking (ADR-0037). It goes through
-    Disable's own removal — the collection has one way to delete skill files —
-    and each name is reported with what the disk then showed: `removed` where
-    the files are gone, `failed` with the directories they survive in. A
-    failure is one skill's, not the run's: whatever else Update had to do still
-    happens.
+    integrations: list[dict[str, Any]] = []
+    try:
+        with tempfile.TemporaryDirectory(prefix="kntnt-acquire-") as temporary:
+            root = Path(temporary)
+            publications: list[Publication] = []
+            if names and harnesses:
+                environment = staging_environment(root)
+                run_transport(
+                    transport_args(names, harnesses, global_layer=global_layer),
+                    internal=True,
+                    cwd=root / SANDBOX_PROJECT,
+                    environment=environment,
+                )
+                publications = acquisition_targets(
+                    root, names, harnesses, global_layer=global_layer
+                )
 
-    *names* is what `withdrawn_names` swept off this layer, so every one of
-    them was on disk when it looked. There is no verdict for a skill that was
-    never here, because there is no such name to give one to.
-    """
+            # Preserve integration owners without changing external state before
+            # every active filesystem target has committed.
+            withdrawals = withdrawal_targets(
+                withdrawn, harnesses, global_layer=global_layer
+            )
+            integration_owners = stage_integration_owners(root, withdrawals)
+            publish_candidates(publications, withdrawals)
 
-    outcome = removal_outcome(names, harnesses, global_layer=global_layer)
+            # Publication has no remaining failure point, so external teardown
+            # cannot leave a rolled-back tree without the integrations it owns.
+            integrations = teardown_integrations(withdrawn, integration_owners)
+    except ManagerError as exc:
+        relay_transport(str(exc))
+        return (
+            failed_placement_outcome(names, harnesses, global_layer=global_layer),
+            withdrawal_report(withdrawn, harnesses, global_layer=global_layer),
+        )
 
-    # Every name was on disk when the sweep looked, so each one has an outcome
-    # to report rather than a reason it was skipped.
-    failed = {str(item["name"]): item["directories"] for item in outcome["failed"]}
-    report: list[dict[str, Any]] = []
-    for name in names:
-        if name in failed:
-            report.append({"name": name, "disk": "failed", "directories": failed[name]})
-        else:
-            report.append({"name": name, "disk": "removed"})
-
-    return report
+    return (
+        verified_outcome(
+            names, harnesses, global_layer=global_layer, expect_present=True
+        ),
+        withdrawal_report(
+            withdrawn,
+            harnesses,
+            global_layer=global_layer,
+            integrations=integrations,
+        ),
+    )
 
 
 def require_yes(yes: bool, deletion: str) -> None:
@@ -1979,14 +2594,12 @@ def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
     # legible after the fact (ADR-0007).
     adopted = new_names if yes else []
 
-    # Only the reporting half rests on the comparison above. What has been
-    # withdrawn is asked of the disk (ADR-0037), and only where the origin
-    # answered: deleting files on the strength of a fallback list is the one
-    # thing a stale Catalog must never be allowed to do.
+    # What has been withdrawn is asked of the disk (ADR-0037), and only where
+    # the origin answered. Its removal waits until acquisition and publication
+    # succeed, so a failed replacement leaves the complete old Collection.
     withdrawn = (
         withdrawn_names(harnesses, global_layer=global_layer) if refreshed else []
     )
-    withdrawals = withdraw_skills(withdrawn, harnesses, global_layer=global_layer)
 
     desired = enabled_names(harnesses, global_layer=global_layer)
     refresh, current = refresh_change(desired, harnesses, global_layer=global_layer)
@@ -2005,22 +2618,22 @@ def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
     # re-copies the whole directory and is idempotent, so it is the refresh —
     # and it is why the Digest may gate it: what is skipped here is skipped for
     # being the collection's own files already, not for one file agreeing.
-    # A refusal here is read rather than raised: the withdrawals above have
-    # already been deleted, and the run has to report them.
-    outcome = placement_outcome(place, harnesses, global_layer=global_layer)
+    # A refusal here is read rather than raised so the run can report the
+    # failed replacement while leaving every active tree as it was. Omitted
+    # Skills join the same rollback set rather than being removed afterward.
+    outcome, withdrawals = refresh_outcome(
+        place,
+        withdrawn,
+        harnesses,
+        global_layer=global_layer,
+    )
 
     # Update is the collection's one writer of the snapshot, and what holds it
-    # back is exactly what the offer is about. The difference against this file
-    # is the whole of what makes an entry new, so a run that set out to Enable
-    # one and did not place it must leave the file as it was: reported once and
-    # gone before the user could act on it is the failure this guards
-    # (ADR-0007). Nothing else holds it back. A refresh that did not land is
-    # found again by its Digest on the next run, and a withdrawal that did not
-    # land is found again by asking the disk — neither reads this file, so
-    # freezing it for their sake would only leave the fallback describing an
-    # older collection than the one the origin just answered with.
+    # back is any failed replacement. The difference against this file is the
+    # whole of what makes an entry new, so a failed run must leave the prior
+    # snapshot beside the prior readable Manager (ADR-0007).
     unplaced = {item["name"] for item in outcome["failed"]} & set(adopted)
-    if refreshed and not unplaced:
+    if refreshed and not global_layer and not outcome["failed"] and not unplaced:
         write_catalog(load_catalog())
 
     unsatisfied: list[dict[str, str]] = []
@@ -2477,7 +3090,12 @@ def generate_catalog(source: Path) -> dict[str, Any]:
                 "capabilities": deps["capabilities"],
             }
         )
-    return {"origin": ORIGIN, "skills": entries}
+    manager = skills_root / MANAGER
+    return {
+        "origin": ORIGIN,
+        "manager_digest": manager_digest(manager),
+        "skills": entries,
+    }
 
 
 def cmd_catalog(*, write: bool) -> int:

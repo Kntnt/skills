@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import shutil
+import sys
 from pathlib import Path
 from types import ModuleType
 
@@ -23,12 +24,13 @@ def _manager() -> ModuleType:
 
     # The loader API answers with optionals, so both are narrowed before use:
     # a missing script is a broken checkout and has to say which file.
-    spec = importlib.util.spec_from_file_location("kntnt_manager", KNTNT_PY)
+    spec = importlib.util.spec_from_file_location("kntnt_digest", KNTNT_PY)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot import the manager from {KNTNT_PY}")
 
-    # Execute the script under its own module object and hand that back.
+    # Register postponed annotations while executing the module object.
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 

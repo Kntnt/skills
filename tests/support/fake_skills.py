@@ -128,6 +128,9 @@ def copy_skill(name: str, dest: Path) -> None:
     target = dest / name
     if target.is_dir():
         shutil.rmtree(target)
+
+    # Expose the real wipe-and-copy seam to deterministic integration tests.
+    pause_at_copy_gap(name)
     target.mkdir(parents=True)
 
     # Copy the skill in, every file of it and none of its directory entries.
@@ -138,6 +141,27 @@ def copy_skill(name: str, dest: Path) -> None:
         out = target / relative
         out.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(path, out)
+
+
+def pause_at_copy_gap(name: str) -> None:
+    """Wait at the transport's destructive copy seam when a fixture asks.
+
+    Named pipes make both halves deterministic without a timing loop: the
+    fixture receives one byte only after the old tree is gone, then releases
+    the transport with one byte after it has made its concurrent observation.
+    """
+
+    barrier = os.environ.get("KNTNT_TRANSPORT_BARRIER")
+    paused_name = os.environ.get("KNTNT_TRANSPORT_PAUSE")
+    if not barrier or paused_name != name:
+        return
+
+    # Announce the absent entrypoint, then wait for the observing reader.
+    root = Path(barrier)
+    with (root / "ready").open("wb", buffering=0) as ready:
+        ready.write(b"1")
+    with (root / "resume").open("rb", buffering=0) as resume:
+        resume.read(1)
 
 
 def update_skill(name: str, dest: Path) -> None:

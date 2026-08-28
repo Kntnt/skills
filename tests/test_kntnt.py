@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import os
 import re
 import shutil
 import subprocess
+import sys
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -53,6 +56,60 @@ def _filesystem_inventory(root: Path) -> dict[Path, tuple[str, bytes]]:
     }
 
 
+def _tree_identity(root: Path) -> dict[Path, tuple[int, int, int]]:
+    """Capture every entry's physical identity and modification timestamp."""
+
+    return {
+        path.relative_to(root): (
+            path.stat().st_dev,
+            path.stat().st_ino,
+            path.stat().st_mtime_ns,
+        )
+        for path in (root, *root.rglob("*"))
+    }
+
+
+def _publication_artifacts(root: Path) -> list[Path]:
+    """Return private staging, rollback, or temporary publication entries."""
+
+    markers = (
+        ".kntnt-stage-",
+        ".kntnt-retired-",
+        ".kntnt-backup-",
+        ".kntnt-lock",
+        ".tmp",
+    )
+    return [
+        path for path in root.rglob("*") if any(mark in path.name for mark in markers)
+    ]
+
+
+def _manager_module() -> Any:
+    """Load the Manager engine for focused publication transaction tests."""
+
+    spec = importlib.util.spec_from_file_location("kntnt_publication", KNTNT_PY)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _generation_from_open_tree(root: Path) -> tuple[str, str]:
+    """Read both generation markers through one stable directory handle."""
+
+    directory = os.open(root, os.O_RDONLY)
+    try:
+        values: list[str] = []
+        for name in ("generation-a.txt", "generation-b.txt"):
+            descriptor = os.open(name, os.O_RDONLY, dir_fd=directory)
+            with os.fdopen(descriptor, encoding="utf-8") as handle:
+                values.append(handle.read().strip())
+        return values[0], values[1]
+    finally:
+        os.close(directory)
+
+
 def _skill_md(
     name: str,
     *,
@@ -61,6 +118,7 @@ def _skill_md(
     skills: list[str] | None = None,
     externals: list[str] | None = None,
     capabilities: list[str] | None = None,
+    integrations: str | None = None,
     body: str = "",
 ) -> str:
     lines = [
@@ -71,6 +129,8 @@ def _skill_md(
         "metadata:",
         '  kntnt.internal: "true"',
     ]
+    if integrations is not None:
+        lines.append(f'  kntnt.integrations: "{integrations}"')
 
     # Every list is written, empty or not: the four keys are what carries the
     # marker, and a skill declaring nothing still has to be recognisably ours.
@@ -240,8 +300,8 @@ def _world(
     shutil.copy(HARNESS_PATHS, here / "harness-paths.json")
     _write(here / "catalog.json", _catalog(entries))
     _write(here / "SKILL.md", _skill_md("kntnt", description="Manager."))
-    _ship_manpages(here)
-    _ship_manpages(source / "skills" / "kntnt")
+    _ship_manager_interface(here)
+    _ship_manager_interface(source / "skills" / "kntnt")
 
     # The running Manager has the same Library its refreshed copy will carry.
     shutil.copytree(MANAGER_DIR / "library", here / "library")
@@ -249,15 +309,17 @@ def _world(
     return {"home": home, "project": project, "source": source, "here": here}
 
 
-def _ship_manpages(manager: Path) -> None:
-    """Give *manager* the help files the collection ships beside its script.
+def _ship_manager_interface(manager: Path) -> None:
+    """Give *manager* the agent-facing resources shipped beside its script.
 
-    Help is a file the manager prints rather than a string it holds, so a
-    fixture without these files is a manager that cannot answer at all.
+    Help and steps are files the Manager reads rather than strings it holds,
+    so a fixture without them is a Manager that cannot answer at all.
     """
 
     shutil.copy(MANAGER_DIR / "help.md", manager / "help.md")
     shutil.copytree(MANAGER_DIR / "help", manager / "help", dirs_exist_ok=True)
+    shutil.copytree(MANAGER_DIR / "agents", manager / "agents", dirs_exist_ok=True)
+    shutil.copytree(MANAGER_DIR / "steps", manager / "steps", dirs_exist_ok=True)
 
 
 def _present(world: dict[str, Path], root: str, *harness_dirs: str) -> None:
@@ -465,6 +527,79 @@ def _transport_add(
         text=True,
         capture_output=True,
         check=False,
+    )
+
+
+def _transport_barrier(path: Path) -> Path:
+    """Create the two one-shot FIFOs used to pause the faithful transport."""
+
+    path.mkdir()
+    os.mkfifo(path / "ready")
+    os.mkfifo(path / "resume")
+    return path
+
+
+def _release_transport(barrier: Path) -> None:
+    """Release a transport waiting after its destructive directory removal."""
+
+    with (barrier / "resume").open("wb", buffering=0) as resume:
+        resume.write(b"1")
+
+
+def _start_transport_add(
+    world: dict[str, Path], name: str, barrier: Path
+) -> subprocess.Popen[str]:
+    """Start the stand-in transport with its copy gap held open."""
+
+    env = _env(world)
+    env["KNTNT_TRANSPORT_BARRIER"] = str(barrier)
+    env["KNTNT_TRANSPORT_PAUSE"] = name
+    return subprocess.Popen(
+        [
+            "uv",
+            "run",
+            str(FAKE_SKILLS),
+            "add",
+            str(world["source"]),
+            "--skill",
+            name,
+            "--agent",
+            "claude-code",
+            "--global",
+            "--yes",
+        ],
+        cwd=world["project"],
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+
+def _start_installed_update(
+    world: dict[str, Path], installed: Path, barrier: Path
+) -> subprocess.Popen[str]:
+    """Start an installed Manager while transport is held at the copy gap."""
+
+    env = _env(world)
+    env["KNTNT_HERE"] = str(installed)
+    env["KNTNT_TRANSPORT"] = f"uv run {FAKE_SKILLS}"
+    env["KNTNT_TRANSPORT_BARRIER"] = str(barrier)
+    env["KNTNT_TRANSPORT_PAUSE"] = "kntnt"
+    return subprocess.Popen(
+        [
+            "uv",
+            "run",
+            "--quiet",
+            str(installed / "scripts" / "kntnt.py"),
+            "apply",
+            "update",
+        ],
+        cwd=world["project"],
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
 
 
@@ -974,7 +1109,7 @@ def test_unchecking_a_dependency_is_reported_and_not_blocked(tmp_path: Path) -> 
 def test_apply_select_reads_what_a_dependency_lacks_off_the_disk(
     tmp_path: Path,
 ) -> None:
-    """A Dependency the transport never placed is absent, whatever the answer said."""
+    """A missing candidate keeps its dependent out of the active transaction."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -982,8 +1117,8 @@ def test_apply_select_reads_what_a_dependency_lacks_off_the_disk(
     result = _run(world, "apply", "select", "alpha", "beta", skip=["alpha"])
 
     payload = _json(result)
-    assert [item["name"] for item in payload["failed"]] == ["alpha"]
-    assert payload["unsatisfied"] == {"beta": ["alpha"]}
+    assert [item["name"] for item in payload["failed"]] == ["alpha", "beta"]
+    assert payload["unsatisfied"] == {}
 
 
 def test_apply_select_project_counts_a_global_dependency_as_satisfied(
@@ -1804,7 +1939,7 @@ def test_update_enables_a_new_catalog_entry_in_the_layer_it_was_aimed_at(
 
 
 def test_update_reports_a_new_entry_that_never_landed(tmp_path: Path) -> None:
-    """A new entry is placed by the path every placement takes, disk and all."""
+    """One missing candidate prevents the whole refresh set from publication."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1816,7 +1951,7 @@ def test_update_reports_a_new_entry_that_never_landed(tmp_path: Path) -> None:
     assert result.returncode != 0
     payload = _json(result)
     assert payload["enabled"] == ["delta"]
-    assert [item["name"] for item in payload["failed"]] == ["delta"]
+    assert [item["name"] for item in payload["failed"]] == payload["intended"]
 
 
 def test_update_re_checks_what_a_newly_enabled_skill_needs(tmp_path: Path) -> None:
@@ -2613,6 +2748,42 @@ def test_update_removes_a_skill_the_collection_has_withdrawn(tmp_path: Path) -> 
     assert _json(result)["removed"] == [{"name": "gamma", "disk": "removed"}]
 
 
+def test_update_reports_integration_teardown_beside_the_withdrawal(
+    tmp_path: Path,
+) -> None:
+    """The staged owner still answers beside its committed file removal."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(
+        gamma / "SKILL.md",
+        _skill_md("gamma", integrations="scripts/remove.py"),
+    )
+    _write(
+        gamma / "scripts" / "remove.py",
+        "import json\n"
+        "json.dump({'removed': [{'harness': 'claude-code'}]}, __import__('sys').stdout)\n",
+    )
+    _run(world, "apply", "select", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "apply", "update")
+
+    assert result.returncode == 0, result.stderr
+    removed = _json(result)["removed"]
+    assert removed[0]["name"] == "gamma"
+    assert removed[0]["disk"] == "removed"
+    assert removed[0]["integrations"] == [
+        {
+            "name": "gamma",
+            "status": "removed",
+            "detail": None,
+            "removed": [{"harness": "claude-code"}],
+        }
+    ]
+
+
 def test_update_never_asks_the_transport_for_a_withdrawn_skill(
     tmp_path: Path,
 ) -> None:
@@ -2649,35 +2820,33 @@ def test_update_with_project_withdraws_only_from_the_project(tmp_path: Path) -> 
     assert (world["home"] / ".claude" / "skills" / "gamma" / "SKILL.md").is_file()
 
 
-def test_update_refreshes_the_rest_when_a_withdrawal_fails(tmp_path: Path) -> None:
-    """A transport that refuses one removal does not get to end the run."""
+def test_update_publishes_withdrawals_without_transport_removal(
+    tmp_path: Path,
+) -> None:
+    """An omission joins the verified generation instead of a second command."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
     _run(world, "apply", "select", "alpha", "gamma")
     _withdraw(world, "gamma", "text", _SURVIVORS)
     _write(world["source"] / "skills" / "code" / "alpha" / "notes.md", "revised\n")
+    log = tmp_path / "transport.jsonl"
 
-    result = _run(world, "apply", "update", refuse=["gamma"])
+    result = _run(world, "apply", "update", refuse=["gamma"], log=log)
 
-    assert result.returncode != 0
+    assert result.returncode == 0, result.stderr
     payload = _json(result)
-    assert payload["removed"] == [
-        {
-            "name": "gamma",
-            "disk": "failed",
-            "directories": [str(world["home"] / ".claude" / "skills")],
-        }
-    ]
+    assert payload["removed"] == [{"name": "gamma", "disk": "removed"}]
     assert "alpha" in payload["confirmed"]
     installed = world["home"] / ".claude" / "skills" / "alpha" / "notes.md"
     assert installed.read_text(encoding="utf-8") == "revised\n"
+    assert not [call for call in _calls(log) if call["command"] == "remove"]
 
 
-def test_update_reports_the_withdrawal_it_made_when_a_refresh_is_refused(
+def test_update_preserves_a_withdrawal_when_a_refresh_is_refused(
     tmp_path: Path,
 ) -> None:
-    """A transport that refuses a placement does not get to hide a deletion."""
+    """Nothing leaves the prior Collection before replacement can publish."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -2688,8 +2857,14 @@ def test_update_reports_the_withdrawal_it_made_when_a_refresh_is_refused(
 
     assert result.returncode != 0
     payload = _json(result)
-    assert payload["removed"] == [{"name": "gamma", "disk": "removed"}]
-    assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
+    assert payload["removed"] == [
+        {
+            "name": "gamma",
+            "disk": "failed",
+            "directories": [str(world["home"] / ".claude" / "skills")],
+        }
+    ]
+    assert (world["home"] / ".claude" / "skills" / "gamma").is_dir()
     assert {item["name"] for item in payload["failed"]} == {"kntnt", "alpha"}
     assert payload["confirmed"] == []
 
@@ -2750,22 +2925,31 @@ def test_the_relayed_reason_never_reaches_the_payload(tmp_path: Path) -> None:
     assert "refused" not in result.stdout
 
 
-def test_a_refused_removal_relays_what_the_transport_said(tmp_path: Path) -> None:
-    """The other mirror, which has swallowed the reason since long before #36."""
+def test_a_refused_select_removal_relays_what_the_transport_said(
+    tmp_path: Path,
+) -> None:
+    """Ordinary removal still relays the transport's refusal."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "select", "alpha", "gamma")
-    _withdraw(world, "gamma", "text", _SURVIVORS)
+    _run(world, "apply", "select", "gamma")
 
-    result = _run(world, "apply", "update", refuse=["gamma"])
+    result = _run(
+        world,
+        "apply",
+        "select",
+        "--off",
+        "gamma",
+        "--yes",
+        refuse=["gamma"],
+    )
 
     assert result.returncode != 0
     assert "the transport said:" in result.stderr
     assert "error: skills gamma refused" in result.stderr
 
 
-def test_a_removal_the_disk_confirms_says_nothing_the_transport_said(
+def test_a_select_removal_the_disk_confirms_says_nothing_the_transport_said(
     tmp_path: Path,
 ) -> None:
     """A transport that grumbled while doing the job is what the disk absorbs.
@@ -2777,14 +2961,21 @@ def test_a_removal_the_disk_confirms_says_nothing_the_transport_said(
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
-    _run(world, "apply", "select", "alpha", "gamma")
-    _withdraw(world, "gamma", "text", _SURVIVORS)
+    _run(world, "apply", "select", "gamma")
 
-    result = _run(world, "apply", "update", grumble=["gamma"])
+    result = _run(
+        world,
+        "apply",
+        "select",
+        "--off",
+        "gamma",
+        "--yes",
+        grumble=["gamma"],
+    )
 
     assert result.returncode == 0, result.stderr
     assert not (world["home"] / ".claude" / "skills" / "gamma").exists()
-    assert _json(result)["removed"] == [{"name": "gamma", "disk": "removed"}]
+    assert _json(result)["removed"] == ["gamma"]
     assert "the transport said:" not in result.stderr
     assert "ledger" not in result.stderr
 
@@ -3067,7 +3258,7 @@ def test_update_reports_a_declaration_it_cannot_read(tmp_path: Path) -> None:
 
 
 def test_update_reports_a_gated_refresh_that_never_landed(tmp_path: Path) -> None:
-    """The Digest decides what is copied; the disk still decides what is reported."""
+    """The Digest-selected set publishes only when every candidate exists."""
 
     world = _digested_world(tmp_path)
     _present(world, "home", ".claude")
@@ -3080,7 +3271,7 @@ def test_update_reports_a_gated_refresh_that_never_landed(tmp_path: Path) -> Non
 
     assert result.returncode != 0
     payload = _json(result)
-    assert [item["name"] for item in payload["failed"]] == ["alpha"]
+    assert [item["name"] for item in payload["failed"]] == payload["intended"]
     assert payload["current"] == [], "a Skill that never landed is not current"
 
 
@@ -3209,6 +3400,452 @@ def test_the_transport_discards_a_hand_edit_to_a_file_of_the_skill(
     assert result.returncode == 0, result.stderr
     source = world["source"] / "skills" / "code" / "alpha" / "SKILL.md"
     assert installed.read_bytes() == source.read_bytes()
+
+
+def test_the_transport_fixture_reproduces_the_wipe_and_copy_gap(
+    tmp_path: Path,
+) -> None:
+    """The faithful transport exposes its absent Manager entrypoint seam."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    assert _transport_add(world, "kntnt").returncode == 0
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    barrier = _transport_barrier(tmp_path / "transport-barrier")
+    process = _start_transport_add(world, "kntnt", barrier)
+
+    # Observe the exact interval the real transport leaves unreadable.
+    with (barrier / "ready").open("rb", buffering=0) as ready:
+        ready.read(1)
+    try:
+        assert not (installed / "SKILL.md").exists()
+    finally:
+        _release_transport(barrier)
+
+    stdout, stderr = process.communicate(timeout=10)
+    assert process.returncode == 0, stderr or stdout
+    assert (installed / "SKILL.md").is_file()
+
+
+def test_update_keeps_the_old_manager_active_while_transport_acquires_the_new(
+    tmp_path: Path,
+) -> None:
+    """Acquisition happens away from the entrypoint readers are using."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    manager = world["source"] / "skills" / "kntnt"
+    _write(manager / "generation.txt", "old\n")
+    assert _transport_add(world, "kntnt").returncode == 0
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    _write(manager / "generation.txt", "new\n")
+    barrier = _transport_barrier(tmp_path / "manager-barrier")
+    process = _start_installed_update(world, installed, barrier)
+
+    # A staged transport gap must leave the complete old Manager available.
+    with (barrier / "ready").open("rb", buffering=0) as ready:
+        ready.read(1)
+    try:
+        assert (installed / "SKILL.md").is_file()
+        assert (installed / "generation.txt").read_text(encoding="utf-8") == "old\n"
+    finally:
+        _release_transport(barrier)
+
+    stdout, stderr = process.communicate(timeout=10)
+    assert process.returncode == 0, stderr or stdout
+    assert (installed / "generation.txt").read_text(encoding="utf-8") == "new\n"
+
+
+def test_concurrent_reader_observes_only_a_complete_manager_generation(
+    tmp_path: Path,
+) -> None:
+    """Publication exposes one whole directory tree at every observation."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    manager = world["source"] / "skills" / "kntnt"
+    for name in ("generation-a.txt", "generation-b.txt"):
+        _write(manager / name, "old\n")
+    assert _transport_add(world, "kntnt").returncode == 0
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    for name in ("generation-a.txt", "generation-b.txt"):
+        _write(manager / name, "new\n")
+    barrier = _transport_barrier(tmp_path / "reader-barrier")
+    process = _start_installed_update(world, installed, barrier)
+    with (barrier / "ready").open("rb", buffering=0) as ready:
+        ready.read(1)
+
+    observations: list[tuple[str, str] | str] = []
+    stopped = threading.Event()
+
+    # Read through one opened tree so the observation itself has one generation.
+    def observe() -> None:
+        while not stopped.is_set():
+            try:
+                observations.append(_generation_from_open_tree(installed))
+            except (FileNotFoundError, NotADirectoryError):
+                observations.append("missing")
+
+    reader = threading.Thread(target=observe)
+    reader.start()
+    _release_transport(barrier)
+    stdout, stderr = process.communicate(timeout=10)
+    observations.append(_generation_from_open_tree(installed))
+    stopped.set()
+    reader.join(timeout=5)
+
+    assert process.returncode == 0, stderr or stdout
+    assert observations
+    assert set(observations) <= {("old", "old"), ("new", "new")}
+    assert ("old", "old") in observations
+    assert ("new", "new") in observations
+
+
+def test_update_does_not_republish_an_identical_staged_manager(
+    tmp_path: Path,
+) -> None:
+    """An identical candidate preserves every installed inode and timestamp."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    assert _transport_add(world, "kntnt").returncode == 0
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    before = _tree_identity(installed)
+
+    result = _run(world, "apply", "update", installed=installed)
+
+    assert result.returncode == 0, result.stderr
+    assert _tree_identity(installed) == before
+
+
+def test_manager_acquisition_failure_preserves_the_prior_generation(
+    tmp_path: Path,
+) -> None:
+    """A refused fetch publishes nothing and leaves no transaction artifacts."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    assert _transport_add(world, "kntnt").returncode == 0
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    before = _tree_identity(installed)
+    _publish_delta(world)
+
+    result = _run(world, "apply", "update", installed=installed, refuse=["kntnt"])
+
+    assert result.returncode != 0
+    assert _tree_identity(installed) == before
+    assert _publication_artifacts(tmp_path) == []
+
+
+def test_acquisition_failure_does_not_remove_a_withdrawn_installed_skill(
+    tmp_path: Path,
+) -> None:
+    """The old Collection remains complete until replacement publishes."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "gamma")
+    _install_manager(world)
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    before = _tree_identity(world["home"] / ".claude" / "skills")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _run(world, "apply", "update", installed=installed, refuse=["kntnt"])
+
+    assert result.returncode != 0
+    assert _tree_identity(world["home"] / ".claude" / "skills") == before
+    assert _publication_artifacts(tmp_path) == []
+
+
+def test_manager_validation_failure_preserves_the_prior_generation(
+    tmp_path: Path,
+) -> None:
+    """A corrupt staged Manager never reaches the active installation."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    assert _transport_add(world, "kntnt").returncode == 0
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    before = _tree_identity(installed)
+    _write(
+        world["source"] / "skills" / "kntnt" / "harness-paths.json",
+        "not json\n",
+    )
+
+    result = _run(world, "apply", "update", installed=installed)
+
+    assert result.returncode != 0
+    assert _tree_identity(installed) == before
+    assert _publication_artifacts(tmp_path) == []
+
+
+def test_incomplete_manager_interface_preserves_the_prior_generation(
+    tmp_path: Path,
+) -> None:
+    """A staged Manager missing an agent-facing entrypoint cannot publish."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    assert _transport_add(world, "kntnt").returncode == 0
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    before = _tree_identity(installed)
+    (world["source"] / "skills" / "kntnt" / "steps" / "update.md").unlink()
+
+    result = _run(world, "apply", "update", installed=installed)
+
+    assert result.returncode != 0
+    assert _tree_identity(installed) == before
+    assert _publication_artifacts(tmp_path) == []
+
+
+def test_manager_digest_rejects_a_missing_collection_library_resource(
+    tmp_path: Path,
+) -> None:
+    """Remote verification covers files outside the fixed interface list."""
+
+    world = _world(tmp_path)
+    module = _manager_module()
+    catalog = module.generate_catalog(world["source"])
+    module._CATALOG = (catalog, True)
+    candidate = tmp_path / "candidate"
+    shutil.copytree(world["source"] / "skills" / "kntnt", candidate)
+    _write(candidate / "catalog.json", json.dumps(catalog))
+    (candidate / "library" / "references" / "editorial" / "anti-slop.md").unlink()
+
+    try:
+        module.validate_candidate("kntnt", candidate, catalog["manager_digest"])
+    except module.ManagerError:
+        pass
+    else:
+        raise AssertionError("an incomplete Manager matched its Catalog Digest")
+
+
+def test_remote_manager_requires_a_catalog_digest() -> None:
+    """A legacy or truncated remote Catalog cannot disable verification."""
+
+    module = _manager_module()
+    module._CATALOG = ({"origin": "Kntnt/skills", "skills": []}, True)
+    module.local_source_skill = lambda name: None
+
+    try:
+        module.expected_candidate_digest("kntnt")
+    except module.ManagerError:
+        pass
+    else:
+        raise AssertionError("a remote Manager had no selected Digest")
+
+
+def test_remote_catalog_skill_requires_a_digest() -> None:
+    """A truncated Catalog entry cannot disable candidate verification."""
+
+    module = _manager_module()
+    module._CATALOG = (
+        {
+            "origin": "Kntnt/skills",
+            "skills": [{"name": "alpha"}],
+        },
+        True,
+    )
+    module.local_source_skill = lambda name: None
+
+    try:
+        module.expected_candidate_digest("alpha")
+    except module.ManagerError:
+        pass
+    else:
+        raise AssertionError("a remote Catalog Skill had no selected Digest")
+
+
+def test_publication_failure_rolls_back_every_exchanged_tree(
+    tmp_path: Path,
+) -> None:
+    """A later exchange failure restores earlier targets and removes backups."""
+
+    module = _manager_module()
+    targets = [tmp_path / "one" / "alpha", tmp_path / "two" / "alpha"]
+    candidates = [tmp_path / "candidate-one", tmp_path / "candidate-two"]
+    for target in targets:
+        _write(target / "generation.txt", "old\n")
+    for candidate in candidates:
+        _write(candidate / "generation.txt", "new\n")
+    before = [_tree_identity(target) for target in targets]
+    exchange = module.atomic_exchange
+    exchanges = 0
+
+    # Fail only the second publication; the third exchange is the rollback.
+    def fail_second_exchange(first: Path, second: Path) -> None:
+        nonlocal exchanges
+        exchanges += 1
+        if exchanges == 2:
+            raise OSError("injected publication failure")
+        exchange(first, second)
+
+    module.atomic_exchange = fail_second_exchange
+    try:
+        module.publish_candidates(
+            [
+                module.Publication("alpha", candidates[0], targets[0]),
+                module.Publication("alpha", candidates[1], targets[1]),
+            ]
+        )
+    except module.ManagerError:
+        pass
+    else:
+        raise AssertionError("publication failure was not reported")
+
+    assert [_tree_identity(target) for target in targets] == before
+    assert _publication_artifacts(tmp_path) == []
+
+
+def test_withdrawal_failure_rolls_back_the_published_generation(
+    tmp_path: Path,
+) -> None:
+    """An omitted tree that cannot retire restores every replacement."""
+
+    module = _manager_module()
+    target = tmp_path / "skills" / "alpha"
+    candidate = tmp_path / "candidate"
+    withdrawn = tmp_path / "skills" / "gamma"
+    _write(target / "generation.txt", "old\n")
+    _write(candidate / "generation.txt", "new\n")
+    _write(withdrawn / "generation.txt", "old\n")
+    before = (_tree_identity(target), _tree_identity(withdrawn))
+    replace = module.os.replace
+
+    # Refuse the omission only after the replacement has exchanged.
+    def fail_withdrawal(source: Path, destination: Path) -> None:
+        if Path(source) == withdrawn:
+            raise OSError("injected withdrawal failure")
+        replace(source, destination)
+
+    module.os.replace = fail_withdrawal
+    try:
+        module.publish_candidates(
+            [module.Publication("alpha", candidate, target)],
+            [module.Withdrawal("gamma", withdrawn)],
+        )
+    except module.ManagerError:
+        pass
+    else:
+        raise AssertionError("withdrawal failure was not reported")
+
+    assert (_tree_identity(target), _tree_identity(withdrawn)) == before
+    assert _publication_artifacts(tmp_path) == []
+
+
+def test_failed_publication_never_tears_down_withdrawn_integrations(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    """External teardown begins only after the filesystem transaction."""
+
+    world = _world(tmp_path)
+    module = _manager_module()
+    target = world["home"] / ".claude" / "skills" / "gamma"
+    target.parent.mkdir(parents=True)
+    shutil.copytree(world["source"] / "skills" / "text" / "gamma", target)
+    module._HARNESS_PATHS = {
+        "claude-code": {
+            "global": "~/.claude/skills",
+            "project": ".claude/skills",
+        }
+    }
+    monkeypatch.setenv("KNTNT_HOME", str(world["home"]))
+    monkeypatch.setenv("KNTNT_PROJECT", str(world["project"]))
+    teardowns: list[list[str]] = []
+
+    # Inject a publication refusal after the integration owner has been staged.
+    def refuse_publication(publications: list[Any], withdrawals: list[Any]) -> None:
+        raise module.ManagerError("injected publication failure")
+
+    monkeypatch.setattr(module, "publish_candidates", refuse_publication)
+    monkeypatch.setattr(
+        module,
+        "teardown_integrations",
+        lambda names, directories: teardowns.append(names),
+    )
+
+    _, withdrawals = module.refresh_outcome(
+        [], ["gamma"], ["claude-code"], global_layer=True
+    )
+
+    assert teardowns == []
+    assert target.is_dir()
+    assert withdrawals[0]["disk"] == "failed"
+
+
+def test_symlinked_logical_targets_publish_to_one_physical_tree(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    """Aliases produce one physical publication and retain their links."""
+
+    world = _world(tmp_path)
+    module = _manager_module()
+    physical = world["home"] / "shared" / "skills"
+    physical.mkdir(parents=True)
+    first = world["home"] / ".first" / "skills"
+    second = world["home"] / ".second" / "skills"
+    first.parent.mkdir()
+    second.parent.mkdir()
+    first.symlink_to(physical, target_is_directory=True)
+    second.symlink_to(physical, target_is_directory=True)
+    module._HARNESS_PATHS = {
+        "first": {"global": "~/.first/skills", "project": ".first/skills"},
+        "second": {"global": "~/.second/skills", "project": ".second/skills"},
+    }
+    monkeypatch.setenv("KNTNT_HOME", str(world["home"]))
+    monkeypatch.setenv("KNTNT_PROJECT", str(world["project"]))
+    monkeypatch.setenv("KNTNT_SOURCE", str(world["source"]))
+    root = tmp_path / "staging"
+    (root / "home").mkdir(parents=True)
+    (root / "project").mkdir()
+    source = world["source"] / "skills" / "code" / "alpha"
+    for harness in ("first", "second"):
+        staged, _ = module.staged_skill_dirs(root, harness, global_layer=True)[0]
+        shutil.copytree(source, staged / "alpha")
+
+    publications = module.acquisition_targets(
+        root, ["alpha"], ["first", "second"], global_layer=True
+    )
+    module.publish_candidates(publications)
+
+    assert len(publications) == 1
+    assert first.is_symlink() and second.is_symlink()
+    assert _tree(physical / "alpha") == _tree(source)
+
+
+def test_symlinked_withdrawal_stages_one_physical_integration_owner(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    """Aliases of one withdrawn tree cannot execute teardown twice."""
+
+    world = _world(tmp_path)
+    module = _manager_module()
+    physical = world["home"] / "shared" / "skills"
+    shutil.copytree(
+        world["source"] / "skills" / "text" / "gamma",
+        physical / "gamma",
+    )
+    first = world["home"] / ".first" / "skills"
+    second = world["home"] / ".second" / "skills"
+    first.parent.mkdir()
+    second.parent.mkdir()
+    first.symlink_to(physical, target_is_directory=True)
+    second.symlink_to(physical, target_is_directory=True)
+    module._HARNESS_PATHS = {
+        "first": {"global": "~/.first/skills", "project": ".first/skills"},
+        "second": {"global": "~/.second/skills", "project": ".second/skills"},
+    }
+    monkeypatch.setenv("KNTNT_HOME", str(world["home"]))
+    monkeypatch.setenv("KNTNT_PROJECT", str(world["project"]))
+
+    withdrawals = module.withdrawal_targets(
+        ["gamma"], ["first", "second"], global_layer=True
+    )
+    owners = module.stage_integration_owners(tmp_path / "staging", withdrawals)
+
+    assert len(withdrawals) == 1
+    assert len(owners) == 1
+    assert (owners[0] / "gamma" / "SKILL.md").is_file()
 
 
 def test_unchecking_refuses_without_yes(tmp_path: Path) -> None:
@@ -6774,8 +7411,19 @@ def test_the_generated_catalog_digests_each_skill_directory(tmp_path: Path) -> N
     digests_before = {entry["name"]: entry["digest"] for entry in before["skills"]}
     digests_after = {entry["name"]: entry["digest"] for entry in after["skills"]}
     assert all(len(digest) == 64 for digest in digests_before.values())
+    assert len(before["manager_digest"]) == 64
     assert digests_after["alpha"] != digests_before["alpha"]
     assert digests_after["beta"] == digests_before["beta"]
+    assert after["manager_digest"] == before["manager_digest"]
+
+    # The top-level Digest covers shared resources no Skill entry owns.
+    _write(
+        world["source"] / "skills" / "kntnt" / "library" / "extra.md",
+        "more\n",
+    )
+    changed_manager = _json(_run(world, "catalog"))
+
+    assert changed_manager["manager_digest"] != before["manager_digest"]
 
 
 def test_delegation_requires_subagents_and_says_so() -> None:
@@ -7206,7 +7854,7 @@ def test_select_project_reports_a_removal_the_transport_did_not_make(
     ]
 
 
-def test_a_partly_applied_verb_reports_both_sets_and_still_fails(
+def test_a_failed_candidate_aborts_the_whole_placement_transaction(
     tmp_path: Path,
 ) -> None:
     world = _world(tmp_path)
@@ -7217,9 +7865,9 @@ def test_a_partly_applied_verb_reports_both_sets_and_still_fails(
     assert result.returncode != 0
     payload = _json(result)
     assert payload["intended"] == ["alpha", "beta"]
-    assert payload["confirmed"] == ["alpha"]
-    assert [item["name"] for item in payload["failed"]] == ["beta"]
-    assert (world["home"] / ".claude" / "skills" / "alpha" / "SKILL.md").is_file()
+    assert payload["confirmed"] == []
+    assert [item["name"] for item in payload["failed"]] == ["alpha", "beta"]
+    assert not (world["home"] / ".claude" / "skills" / "alpha").exists()
 
 
 def test_a_failed_removal_names_only_the_directory_it_survived_in(
@@ -7241,7 +7889,7 @@ def test_a_failed_removal_names_only_the_directory_it_survived_in(
 
 
 def test_update_reports_a_refresh_that_never_landed(tmp_path: Path) -> None:
-    """Update reaches a Harness installed since the last Enable, or says so."""
+    """One missing Harness candidate prevents every target from publication."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -7253,10 +7901,13 @@ def test_update_reports_a_refresh_that_never_landed(tmp_path: Path) -> None:
     assert result.returncode != 0
     payload = _json(result)
     assert "alpha" in payload["intended"]
-    assert [item["name"] for item in payload["failed"]] == ["alpha"]
-    assert payload["failed"][0]["directories"] == [
-        str(world["home"] / ".config" / "crush" / "skills")
-    ]
+    assert [item["name"] for item in payload["failed"]] == payload["intended"]
+    assert payload["failed"][0]["directories"] == sorted(
+        [
+            str(world["home"] / ".claude" / "skills"),
+            str(world["home"] / ".config" / "crush" / "skills"),
+        ]
+    )
 
 
 def test_a_verb_that_changes_nothing_is_clean(tmp_path: Path) -> None:
