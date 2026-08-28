@@ -19,6 +19,7 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 
 ## References
 
+- `agents.d/rework-handoff.md` — read when starting or resuming any session on branch `rework` until phase 3 cleanup is complete
 - `CONTEXT.md` — read when using a Collection term
 - `docs/adr/` — read when tracing why a rule became what it is
 - `docs/rules/collection.md` — read when changing what a Manager verb promises, how the collection reaches a machine, or how a Skill routes delegated work
