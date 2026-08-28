@@ -16,9 +16,9 @@ from typing import Any, cast
 from support.fake_binary import fake_binary_on_path
 from support.model_routing import complete_routing_snapshot
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-RUN = REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py"
-MODEL_ROUTE = (
+REPO_ROOT: Path = Path(__file__).resolve().parent.parent
+RUN: Path = REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py"
+MODEL_ROUTE: Path = (
     REPO_ROOT / "skills" / "models" / "model-selector" / "scripts" / "route.py"
 )
 
@@ -666,17 +666,24 @@ def _git_spy(tmp_path: Path) -> dict[str, str]:
     return env | {"SPY_LOG": str(tmp_path / "git.log")}
 
 
-def _engine(
+def _project_script(
     cwd: Path,
+    script: Path,
     *args: str,
     env: dict[str, str] | None = None,
     input_text: str | None = None,
 ) -> subprocess.CompletedProcess[str]:
+    """Run one repository script under the deterministic fixture environment."""
+
+    # Preserve the deterministic Git environment while allowing fixture
+    # overrides.
     merged = dict(_GIT_ENV)
     if env:
         merged.update(env)
+
+    # Apply the same bounded subprocess contract to every public script seam.
     return subprocess.run(
-        ["uv", "run", str(RUN), *args],
+        ["uv", "run", str(script), *args],
         cwd=cwd,
         env=merged,
         input=input_text,
@@ -687,6 +694,18 @@ def _engine(
     )
 
 
+def _engine(
+    cwd: Path,
+    *args: str,
+    env: dict[str, str] | None = None,
+    input_text: str | None = None,
+) -> subprocess.CompletedProcess[str]:
+    """Run one Orchestrate engine command through its public CLI."""
+
+    # Keep engine call sites focused on the command arguments under test.
+    return _project_script(cwd, RUN, *args, env=env, input_text=input_text)
+
+
 def _model_route(
     cwd: Path,
     request: dict[str, Any],
@@ -694,28 +713,20 @@ def _model_route(
 ) -> subprocess.CompletedProcess[str]:
     """Route one request through model-selector's stream-backed public CLI."""
 
-    # Preserve the deterministic Git environment while allowing fixture
-    # overrides.
-    merged = dict(_GIT_ENV)
-    if env:
-        merged.update(env)
-
     # Exercise the same stdin transport the Skill uses during a dry run.
-    return subprocess.run(
-        ["uv", "run", str(MODEL_ROUTE), "/dev/stdin"],
-        cwd=cwd,
-        env=merged,
-        input=json.dumps(request),
-        text=True,
-        capture_output=True,
-        check=False,
-        timeout=ENGINE_TIMEOUT,
+    return _project_script(
+        cwd,
+        MODEL_ROUTE,
+        "/dev/stdin",
+        env=env,
+        input_text=json.dumps(request),
     )
 
 
 def _tree_image(root: Path) -> dict[str, tuple[str, int, bytes | str]]:
     """Capture every entry, mode, target, and byte below *root*."""
 
+    # Preserve an absent root as comparable snapshot state.
     if not root.exists() and not root.is_symlink():
         return {".": ("missing", 0, b"")}
 
@@ -1678,10 +1689,87 @@ def test_a_dry_route_refuses_a_batch_that_is_not_the_plans_frontier(
         starting=[9, 10],
     )
 
+    # Require the same refusal without leaving the dry session behind.
     assert planned.returncode == 2, planned.stderr
     assert result.returncode == 1
     assert "starting frontier" in result.stderr
     assert not scratch.exists()
+
+
+def test_a_dry_route_uses_the_claims_derived_by_its_plan(tmp_path: Path) -> None:
+    """Preview discards stale remembered claims exactly as a real plan does."""
+
+    # Seed two equivalent sessions with a remembered claim the tracker prunes.
+    repo = _init_repo(tmp_path / "proj")
+    preview_scratch = tmp_path / "preview-scratch"
+    real_scratch = tmp_path / "real-scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    seeded = _engine(
+        repo,
+        "plan",
+        "--state-dir",
+        str(preview_scratch),
+        env=env,
+    )
+    assert seeded.returncode == 0, seeded.stderr
+    state_path = preview_scratch / STATE_HOME / STATE_FILE
+    stale = json.loads(state_path.read_text(encoding="utf-8"))
+    stale["claimed"] = [99]
+    state_path.write_text(json.dumps(stale), encoding="utf-8")
+    shutil.copytree(preview_scratch, real_scratch)
+    before = _tree_image(preview_scratch)
+
+    # Derive both plans from the same tracker and stale remembered account.
+    preview_plan = _engine(
+        repo,
+        "plan",
+        "--dry-run",
+        "--state-dir",
+        str(preview_scratch),
+        env=env,
+    )
+    real_plan = _engine(
+        repo,
+        "plan",
+        "--state-dir",
+        str(real_scratch),
+        env=env,
+    )
+    response = json.dumps(_response([_selected("build-9")]))
+
+    # Route both plan-derived frontiers through the same public response.
+    preview_route = _engine(
+        repo,
+        "route",
+        "--response",
+        "/dev/stdin",
+        "--dry-run",
+        "--starting",
+        "9",
+        "--state-dir",
+        str(preview_scratch),
+        env=env,
+        input_text=response,
+    )
+    real_route = _engine(
+        repo,
+        "route",
+        "--response",
+        "/dev/stdin",
+        "--state-dir",
+        str(real_scratch),
+        env=env,
+        input_text=response,
+    )
+
+    # Match the real result while retaining the stale preview fixture bytewise.
+    assert preview_plan.returncode == 2, preview_plan.stderr
+    assert real_plan.returncode == 0, real_plan.stderr
+    assert json.loads(preview_plan.stdout)["run_claimed"] == []
+    assert preview_route.returncode == 0, preview_route.stderr
+    assert real_route.returncode == 0, real_route.stderr
+    assert preview_route.stdout == real_route.stdout
+    assert _tree_image(preview_scratch) == before
 
 
 def test_a_dry_route_reports_its_decisions_and_freezes_nothing(tmp_path: Path) -> None:

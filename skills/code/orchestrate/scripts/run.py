@@ -1421,6 +1421,11 @@ class Plan:
     was interrupted before recording, which are in `workable` like any other,
     the claim on them being already its own.
 
+    `run_claimed` is the complete live claim account the plan derives for this
+    run: `resuming` inside the current scope plus any live claims preserved
+    outside an explicitly aimed scope. It is the claim state written for a real
+    run and carried only in memory through a dry route.
+
     `solo` is the part of that shape a reader would otherwise have to infer:
     the tickets laid out in `waves` that declared they build alone, which is
     why each of them holds a wave nothing else is in. A ticket already recorded
@@ -1466,6 +1471,7 @@ class Plan:
     starting: list[int]
     claimed: list[int]
     resuming: list[int]
+    run_claimed: list[int]
     recorded: list[int]
     stranded: list[int]
     blocked: list[int]
@@ -2458,6 +2464,11 @@ def build_plan(
     claimed = [ticket.number for ticket in held if ticket.number not in resuming]
     workable = sorted(frontier.difference(claimed))
 
+    # Derive the exact claim account a real plan writes and a dry plan carries.
+    run_claimed = sorted(
+        set(resuming) | claimed_elsewhere(remembered, scope, listed, tickets)
+    )
+
     plan = Plan(
         verb="plan",
         ready=True,
@@ -2479,6 +2490,7 @@ def build_plan(
         starting=workable[:at_once],
         claimed=claimed,
         resuming=resuming,
+        run_claimed=run_claimed,
         recorded=recorded,
         stranded=stranded,
         blocked=[ticket.number for ticket in tickets if ticket.number not in frontier],
@@ -2534,10 +2546,7 @@ def build_plan(
                 branch=branch,
                 label=READY_LABEL,
                 login=login or (remembered.login if remembered else None),
-                claimed=sorted(
-                    set(resuming)
-                    | claimed_elsewhere(remembered, scope, listed, tickets)
-                ),
+                claimed=plan.run_claimed,
                 base=run_base(cwd, tickets),
                 starting=plan.starting,
             ),
@@ -2824,6 +2833,7 @@ def cmd_route(
     model: str | None,
     deliberation: str | None,
     starting: list[int] | None,
+    run_claimed: list[int] | None,
 ) -> int:
     """Freeze one public model-selector route response for the rest of the run.
 
@@ -2870,12 +2880,15 @@ def cmd_route(
             branch=state.branch if state else current_branch(cwd),
             label=state.label if state else READY_LABEL,
             login=state.login if state else None,
-            claimed=state.claimed if state else [],
+            claimed=run_claimed or [],
             base=state.base if state else "",
             starting=starting or [],
         )
-    elif starting is not None:
-        return fail("--starting carries a dry plan and is refused on a real route")
+    elif starting is not None or run_claimed is not None:
+        return fail(
+            "--starting and --run-claimed carry a dry plan and are refused on "
+            "a real route"
+        )
     elif state is None:
         return fail(
             "routing is frozen against the run the plan wrote down, so there is "
@@ -4714,6 +4727,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     route.add_argument("--dry-run", action="store_true")
     route.add_argument("--model")
     route.add_argument("--starting", action="append", type=int)
+    route.add_argument("--run-claimed", action="append", type=int)
     add_deliberation_flag(route)
     add_shared_flags(route)
 
@@ -4810,6 +4824,7 @@ def main(argv: list[str] | None = None) -> int:
             model=args.model,
             deliberation=args.deliberation,
             starting=args.starting,
+            run_claimed=args.run_claimed,
         )
     if args.verb == "claim":
         return cmd_claim(cwd, args.ticket, state_path)

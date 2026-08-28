@@ -2657,6 +2657,7 @@ def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
     assert "files, directories, migrations" in step
     assert "leaves no child process" in step
     assert "--starting=<number>" in step
+    assert "--run-claimed=<number>" in step
 
     # Hold the public page to every named persistent installation surface.
     assert "repository, home, Codex state and cache" in dry_run_option
