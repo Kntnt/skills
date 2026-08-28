@@ -1148,6 +1148,20 @@ def observation_file(path: Path | None) -> Path | None:
     return None if path is None else path.parent / OBSERVATION_FILE
 
 
+def decode_state(contents: str) -> RunState:
+    """Decode one complete state document or raise on invalid content."""
+
+    stored = json.loads(contents)
+    return RunState(
+        branch=str(stored["branch"]),
+        label=str(stored["label"]),
+        login=None if stored["login"] is None else str(stored["login"]),
+        claimed=[int(number) for number in stored["claimed"]],
+        base=str(stored["base"]),
+        starting=[int(number) for number in stored["starting"]],
+    )
+
+
 def carry_state_forward(path: Path | None) -> None:
     """Move a state file left at the old place into the one it lives in now.
 
@@ -1163,14 +1177,19 @@ def carry_state_forward(path: Path | None) -> None:
     if path is None or path.exists():
         return
 
-    # Both ends of the move can fail — a directory that will not be made, an
-    # old file that is not there, which is every run started since — and each
-    # is answered the same way: as no state, which the run rebuilds.
+    # Prove the former source is readable state before creating its new parent.
+    legacy_state_path = path.parent.parent / STATE_FILE
+    try:
+        legacy_state = legacy_state_path.read_text(encoding="utf-8")
+        decode_state(legacy_state)
+    except (OSError, UnicodeError, TypeError, ValueError, KeyError):
+        return
+
+    # Move readable legacy state into the protected session subdirectory.
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        left = path.parent.parent / STATE_FILE
-        path.write_text(left.read_text(encoding="utf-8"), encoding="utf-8")
-        left.unlink()
+        path.write_text(legacy_state, encoding="utf-8")
+        legacy_state_path.unlink()
     except OSError:
         pass
 
@@ -1188,18 +1207,11 @@ def read_state(path: Path | None, branch: str) -> RunState | None:
         return None
 
     try:
-        stored = json.loads(path.read_text(encoding="utf-8"))
-        if stored["branch"] != branch or stored["label"] != READY_LABEL:
+        stored = decode_state(path.read_text(encoding="utf-8"))
+        if stored.branch != branch or stored.label != READY_LABEL:
             return None
-        return RunState(
-            branch=str(stored["branch"]),
-            label=str(stored["label"]),
-            login=None if stored["login"] is None else str(stored["login"]),
-            claimed=[int(number) for number in stored["claimed"]],
-            base=str(stored["base"]),
-            starting=[int(number) for number in stored["starting"]],
-        )
-    except (OSError, TypeError, ValueError, KeyError):
+        return stored
+    except (OSError, UnicodeError, TypeError, ValueError, KeyError):
         return None
 
 
@@ -4749,10 +4761,17 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     """Dispatch one verb. Return an exit code."""
 
+    # Resolve the invocation and its session-scoped state location.
     args = parse_args(argv if argv is not None else sys.argv[1:])
     cwd = Path.cwd()
     state_path = state_file(args.state_dir)
-    carry_state_forward(state_path)
+    is_dry_run = args.verb in {"plan", "route"} and args.dry_run
+
+    # Migrate legacy state only for verbs whose contract permits writes.
+    if not is_dry_run:
+        carry_state_forward(state_path)
+
+    # Dispatch the selected verb against the resolved repository and state.
     if args.verb == "plan":
         return cmd_plan(
             cwd,

@@ -124,7 +124,7 @@ The report also names the commit on which the run's work is based. A ticket reco
 
 **--dry-run**
 
-Read the tracker, resolve the requested scope, and report the dependency-wave graph, read-only routing readiness/proposed decisions, and the routing capability the frozen context leaves the run — one line where no complete adapter can express a safe point and every building role will inherit the main seat — without commenting on, parking, claiming, starting setup, or writing model-selector configuration, ledger, or run-state data.
+Read the tracker, resolve the requested scope, and report the dependency-wave graph, read-only routing readiness/proposed decisions, and the routing capability the frozen context leaves the run — one line where no complete adapter can express a safe point and every building role will inherit the main seat — without commenting on, parking, claiming, starting setup, or writing model-selector configuration, ledger, or run-state data. Its routing request and response remain stream-backed; it leaves no child process behind, and the repository, home, Codex state and cache, Orchestrate session and legacy state, Manager and Skill installations, GitHub, Git refs and index, worktrees, locks, and temporary storage remain byte-for-byte as they were whether the preview succeeds or refuses.
 
 **--at-once=**_COUNT_
 

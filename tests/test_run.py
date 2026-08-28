@@ -637,7 +637,10 @@ def _git_spy(tmp_path: Path) -> dict[str, str]:
 
 
 def _engine(
-    cwd: Path, *args: str, env: dict[str, str] | None = None
+    cwd: Path,
+    *args: str,
+    env: dict[str, str] | None = None,
+    input_text: str | None = None,
 ) -> subprocess.CompletedProcess[str]:
     merged = dict(_GIT_ENV)
     if env:
@@ -646,11 +649,32 @@ def _engine(
         ["uv", "run", str(RUN), *args],
         cwd=cwd,
         env=merged,
+        input=input_text,
         text=True,
         capture_output=True,
         check=False,
         timeout=ENGINE_TIMEOUT,
     )
+
+
+def _tree_image(root: Path) -> dict[str, tuple[str, int, bytes | str]]:
+    """Capture every entry, mode, target, and byte below *root*."""
+
+    if not root.exists() and not root.is_symlink():
+        return {".": ("missing", 0, b"")}
+
+    image: dict[str, tuple[str, int, bytes | str]] = {}
+    for path in [root, *sorted(root.rglob("*"))]:
+        name = "." if path == root else path.relative_to(root).as_posix()
+        mode = path.lstat().st_mode & 0o7777
+        if path.is_symlink():
+            image[name] = ("symlink", mode, os.readlink(path))
+        elif path.is_dir():
+            image[name] = ("directory", mode, b"")
+        else:
+            image[name] = ("file", mode, path.read_bytes())
+
+    return image
 
 
 def test_plan_returns_every_ready_for_agent_ticket_and_all_of_them_workable(
@@ -3917,7 +3941,223 @@ def test_a_dry_run_leaves_no_state_behind(tmp_path: Path) -> None:
 
     assert result.returncode == 2, result.stderr
     assert json.loads(result.stdout)["state"] is None
-    assert not (scratch / STATE_HOME / STATE_FILE).exists()
+    assert not scratch.exists()
+
+
+def test_a_missing_legacy_source_creates_no_state_directory(tmp_path: Path) -> None:
+    """Migration proves its source exists before making a destination."""
+
+    scratch = tmp_path / "scratch"
+
+    _run().carry_state_forward(scratch / STATE_HOME / STATE_FILE)
+
+    assert not scratch.exists()
+
+
+def test_an_invalid_legacy_source_creates_no_state_directory(tmp_path: Path) -> None:
+    """Migration validates legacy state before publishing it at the new path."""
+
+    scratch = tmp_path / "scratch"
+    scratch.mkdir()
+    legacy = scratch / STATE_FILE
+    original = b'{"branch":"work"}\n'
+    legacy.write_bytes(original)
+
+    _run().carry_state_forward(scratch / STATE_HOME / STATE_FILE)
+
+    assert legacy.read_bytes() == original
+    assert not (scratch / STATE_HOME).exists()
+
+
+def _assert_dry_preview_is_state_neutral(
+    tmp_path: Path,
+    decision: dict[str, Any],
+    expected_route_code: int,
+) -> dict[str, Any]:
+    """Exercise dry planning and routing across a byte-snapshotted world."""
+
+    # Stage every persistent surface the no-write contract names.
+    surfaces = tmp_path / "surfaces"
+    surfaces.mkdir()
+    repo = _init_repo(surfaces / "repository")
+    home = surfaces / "home"
+    codex = home / ".codex"
+    scratch = surfaces / "session"
+    temporary = surfaces / "temporary"
+    files = {
+        repo / ".kntnt-orchestrate" / "sentinel.txt": b"repository state\n",
+        repo / ".codex" / "skills" / "project-skill" / "SKILL.md": b"project skill\n",
+        codex / "state" / "sentinel.json": b'{"state":true}\n',
+        codex / "cache" / "sentinel.bin": b"codex cache\x00",
+        codex / "skills" / "kntnt" / "SKILL.md": b"manager installation\n",
+        codex / "skills" / "orchestrate" / "SKILL.md": b"skill installation\n",
+        home / ".cache" / "sentinel.bin": b"home cache\x00",
+        scratch / STATE_FILE: b'{"legacy":true}\n',
+        temporary / "sentinel.bin": b"temporary surface\x00",
+    }
+    for path, content in files.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+
+    # Stand in read-only tracker data and keep observation logs outside scope.
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+    )
+    observations = tmp_path / "observations"
+    observations.mkdir()
+    env["GH_LOG"] = str(observations / "gh.log")
+    env |= fake_binary_on_path(
+        tmp_path,
+        "uv",
+        f'#!/bin/sh\n[ "$1" = "run" ] || exit 64\nshift\nexec "{sys.executable}" "$@"\n',
+    )
+    env |= {
+        "HOME": str(home),
+        "CODEX_HOME": str(codex),
+        "XDG_CACHE_HOME": str(home / ".cache"),
+        "TMPDIR": str(temporary),
+    }
+    before = _tree_image(surfaces)
+
+    # Exercise the same plan and route parsers without path-backed artifacts.
+    planned = _engine(
+        repo,
+        "plan",
+        "--dry-run",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    routed = _engine(
+        repo,
+        "route",
+        "--response",
+        "/dev/stdin",
+        "--dry-run",
+        "--state-dir",
+        str(scratch),
+        env=env,
+        input_text=json.dumps(_response([decision])),
+    )
+
+    # Hold every byte and tracker mutation surface at the explicit write seam.
+    assert planned.returncode == 2, planned.stderr
+    assert json.loads(planned.stdout)["starting"] == [9]
+    assert routed.returncode == expected_route_code, routed.stderr
+    assert _tree_image(surfaces) == before
+    mutations = ("api --method", "issue edit", "issue comment", "issue close")
+    assert not any(call.startswith(mutations) for call in _gh_calls(env).splitlines())
+    return cast(dict[str, Any], json.loads(routed.stdout))
+
+
+def test_a_successful_dry_preview_leaves_every_surface_unchanged(
+    tmp_path: Path,
+) -> None:
+    """A complete proposed launch reaches the no-write seam without a trace."""
+
+    decision = _selected("build-9")
+    decision["launch"]["arguments"] = {
+        "model": "the-cheapest",
+        "reasoning_effort": "medium",
+    }
+
+    routed = _assert_dry_preview_is_state_neutral(tmp_path, decision, 0)
+
+    assert routed["decisions"][0]["decision"]["launch"]["arguments"] == {
+        "model": "the-cheapest",
+        "reasoning_effort": "medium",
+    }
+
+
+def test_a_refused_dry_preview_leaves_every_surface_unchanged(
+    tmp_path: Path,
+) -> None:
+    """A proposed route refusal exits two without acquiring a write path."""
+
+    routed = _assert_dry_preview_is_state_neutral(
+        tmp_path,
+        _refused("build-9"),
+        2,
+    )
+
+    assert routed["refused"][0]["code"] == "unverifiable_ceiling"
+
+
+def test_dry_and_real_runs_match_until_the_state_write_seam(tmp_path: Path) -> None:
+    """Preview and execution derive one plan and exact launch instruction."""
+
+    # Give both invocations the same repository and read-only tracker facts.
+    repo = _init_repo(tmp_path / "repository")
+    preview_scratch = tmp_path / "preview"
+    real_scratch = tmp_path / "real"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+    )
+
+    # Compare every planning fact that precedes the explicit state write.
+    preview = _engine(
+        repo,
+        "plan",
+        "--dry-run",
+        "--state-dir",
+        str(preview_scratch),
+        env=env,
+    )
+    real = _engine(repo, "plan", "--state-dir", str(real_scratch), env=env)
+    assert preview.returncode == 2, preview.stderr
+    assert real.returncode == 0, real.stderr
+    preview_plan = json.loads(preview.stdout)
+    real_plan = json.loads(real.stdout)
+    for field in ("dry_run", "ready", "reason", "state"):
+        preview_plan.pop(field)
+        real_plan.pop(field)
+    assert preview_plan == real_plan
+
+    # Feed the identical public response through dry and mutating route paths.
+    decision = _selected("build-9")
+    decision["launch"]["arguments"] = {
+        "model": "the-cheapest",
+        "reasoning_effort": "medium",
+    }
+    response = json.dumps(_response([decision]))
+    preview_route = _engine(
+        repo,
+        "route",
+        "--response",
+        "/dev/stdin",
+        "--dry-run",
+        "--state-dir",
+        str(preview_scratch),
+        env=env,
+        input_text=response,
+    )
+    real_route = _engine(
+        repo,
+        "route",
+        "--response",
+        "/dev/stdin",
+        "--state-dir",
+        str(real_scratch),
+        env=env,
+        input_text=response,
+    )
+
+    # The proposed launch is the launched configuration; only persistence differs.
+    assert preview_route.returncode == 0, preview_route.stderr
+    assert real_route.returncode == 0, real_route.stderr
+    assert json.loads(preview_route.stdout) == json.loads(real_route.stdout)
+    arguments = json.loads(real_route.stdout)["decisions"][0]["decision"]["launch"][
+        "arguments"
+    ]
+    assert arguments == {
+        "model": "the-cheapest",
+        "reasoning_effort": "medium",
+    }
+    assert not preview_scratch.exists()
+    assert (real_scratch / STATE_HOME / STATE_FILE).is_file()
+    assert (real_scratch / STATE_HOME / ROUTING_FILE).is_file()
 
 
 def test_claim_refuses_a_claim_in_this_developers_name_the_run_never_took(

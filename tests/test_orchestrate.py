@@ -2620,6 +2620,7 @@ def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
     """A dry run is read for what a run would do, and a run it started is not that."""
 
     step = _step(2)
+    option = _manpage_entry("OPTIONS", "**--dry-run**")
 
     assert "read-only routing preflight" in step, (
         f"{SKILL / 'SKILL.md'}: step 2's dry run performs the routing"
@@ -2639,11 +2640,23 @@ def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
         f" a frozen snapshot being state a dry run may not leave behind"
         f" (issue #94)."
     )
+    assert "both travel through stream-backed paths" in step, (
+        f"{SKILL / 'SKILL.md'}: step 2 transports both routing artifacts without"
+        f" creating a path-backed request or response (issue #189)."
+    )
+    assert "/model-selector route /dev/stdin" in step
+    assert "--response=/dev/stdin" in step
+    assert "refuse the dry run instead of writing either artifact" in step
     assert "without claiming, starting setup, or writing" in step, (
         f"{SKILL / 'SKILL.md'}: step 2 names what a dry run does not write —"
         f" model-selector configuration, evidence, ledger, and run state among"
         f" them (issue #94)."
     )
+    assert "files, directories, migrations" in step
+    assert "leaves no child process" in step
+    assert "repository, home, Codex state and cache" in option
+    assert "Manager and Skill installations" in option
+    assert "whether the preview succeeds or refuses" in option
 
 
 def test_the_run_says_which_half_of_its_state_is_rebuilt_and_which_is_not() -> None:
