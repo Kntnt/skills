@@ -22,7 +22,7 @@ kntnt - manage which collection Skills are Enabled
 
 With no command, `kntnt` prints this page. Each command prints its own page through `/kntnt <command> --help` or `/kntnt help <command>`. The Manager documents only its own commands. Select lists every Catalog Skill, Enabled or not. An Enabled Skill prints its page through `/<skill> --help`; Select can display the page for a Skill that is not yet Enabled.
 
-Select and Update target Global by default. With `--project`, they target the current Project. Harnesses are detected on each run rather than configured or remembered.
+Select and Update target Global by default. With `--project`, they target the current Project. Harnesses are detected on each run rather than configured or remembered. A real Global Update without formal `--yes` shows its complete plan and waits for a later user response; the internal Apply accepts only that exact current plan.
 
 ## COMMANDS
 
@@ -58,7 +58,7 @@ Target the current Project instead of Global. `--project=off` has the same effec
 
 **--yes**
 
-Assume yes for every yes-or-no question. Valid with `select`, `update`, and `uninstall`.
+Assume yes for every yes-or-no question. Valid with `select`, `update`, and `uninstall`. On a real Global Update, only the flag in the current Formal Invocation authorizes unattended application; contextual, remembered, or handed-off intent does not.
 
 **--dry-run**
 
@@ -67,6 +67,8 @@ Run the changing command in a temporary home seeded with this Collection's files
 ## DIAGNOSTICS
 
 An unknown command or an option with no work to do is refused rather than ignored. The Manager names the error, prints the addressed command's SYNOPSIS, performs no work, and points to the full page. No command accepts `--force`.
+
+A real Global Update refuses Apply before the first write unless formal `--yes` authorizes the current invocation or a later user response authorizes the exact complete plan just shown. A changed plan must be shown and answered again.
 
 A failed Catalog fetch falls back to the stored Catalog where the command can safely operate from it. The report identifies the Catalog source and any limitation caused by fallback.
 

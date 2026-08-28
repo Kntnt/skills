@@ -53,6 +53,9 @@ EXIT_CHANGE_FAILED = 1
 # being kept waiting to be told.
 ORIGIN_TIMEOUT = 5
 
+# Domain-separate approval identities from every other Digest in the Manager.
+UPDATE_APPROVAL_VERSION: int = 1
+
 BINARY_HOW = {
     "uv": "install uv from https://docs.astral.sh/uv/",
     "git": "install git",
@@ -2378,6 +2381,59 @@ def refresh_change(
     return refresh, current
 
 
+def update_approval_identity(payload: dict[str, Any]) -> str:
+    """Identify one complete Update payload under the approval contract."""
+
+    canonical = json.dumps(
+        payload,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    prefix = f"kntnt-update-plan-v{UPDATE_APPROVAL_VERSION}\0".encode()
+    return hashlib.sha256(prefix + canonical).hexdigest()
+
+
+def resolve_update_plan(*, global_layer: bool) -> tuple[list[str], dict[str, Any]]:
+    """Resolve Update's targets and complete content-bound plan together."""
+
+    # Resolve the exact target state and Catalog difference the plan describes.
+    harnesses = target_harnesses(global_layer=global_layer)
+    refresh, current = refresh_change(
+        enabled_names(harnesses, global_layer=global_layer),
+        harnesses,
+        global_layer=global_layer,
+    )
+    new = new_entry_names(stored_catalog())
+    refreshed = catalog_from_origin()
+
+    # Withdrawals are safe to name only when the origin answered; the stored
+    # Catalog cannot establish what the Collection has stopped shipping.
+    remove = withdrawn_names(harnesses, global_layer=global_layer) if refreshed else []
+
+    # Assemble every mutation and target the agent renders before confirmation.
+    payload: dict[str, Any] = {
+        "action": "update",
+        "layer": "global" if global_layer else "project",
+        "refresh": refresh,
+        "current": current,
+        "new": new,
+        "enable": new,
+        "remove": remove,
+        "catalog_refreshed": refreshed,
+        "directories": target_dirs(harnesses, global_layer=global_layer),
+    }
+
+    # Bind both possible answers to distinct complete plans; a response may
+    # accept the offered Enablements or leave every new entry Disabled.
+    without_enablement = {**payload, "enable": []}
+    payload["approval"] = update_approval_identity(payload)
+    payload["approval_without_enablement"] = update_approval_identity(
+        without_enablement
+    )
+    return harnesses, payload
+
+
 def cmd_plan_select(*, global_layer: bool) -> int:
     """Print the list the user reads and answers. Nothing is written."""
 
@@ -2545,27 +2601,12 @@ def cmd_plan_update(*, global_layer: bool) -> int:
     — nothing reaches the disk ahead of the question it belongs to (ADR-0047).
     """
 
-    harnesses = target_harnesses(global_layer=global_layer)
-    refresh, current = refresh_change(
-        enabled_names(harnesses, global_layer=global_layer),
-        harnesses,
-        global_layer=global_layer,
-    )
-    emit(
-        {
-            "action": "update",
-            "layer": "global" if global_layer else "project",
-            "refresh": refresh,
-            "current": current,
-            "new": new_entry_names(stored_catalog()),
-            "catalog_refreshed": catalog_from_origin(),
-            "directories": target_dirs(harnesses, global_layer=global_layer),
-        }
-    )
+    _, payload = resolve_update_plan(global_layer=global_layer)
+    emit(payload)
     return 0
 
 
-def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
+def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> int:
     """Refresh this collection, Enable what is new where the offer is answered.
 
     The offer is the one question Update asks, and `--yes` is how an answer
@@ -2575,18 +2616,34 @@ def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
     nobody answered has been told nothing (ADR-0007).
     """
 
-    harnesses = target_harnesses(global_layer=global_layer)
+    harnesses, plan = resolve_update_plan(global_layer=global_layer)
+
+    # A direct Apply call carries no evidence that the current interaction
+    # authorized a Global mutation, whatever surrounding mission invoked it.
+    if global_layer and _SANDBOX is None:
+        if approval is None:
+            raise ManagerError(
+                "global update requires the current plan's approval; run plan "
+                "update and obtain a new user confirmation first",
+                2,
+            )
+        approval_key = "approval" if yes else "approval_without_enablement"
+        if approval != plan[approval_key]:
+            raise ManagerError(
+                "the approved global update plan changed; run plan update, show "
+                "the complete new plan, and obtain a new user confirmation",
+                2,
+            )
 
     # What changed is the difference between the snapshot this Manager stored
     # and what the origin carries now, so the old half is read off the file
     # itself: the shared loader is already holding the new one.
-    stored = stored_catalog()
-    new_names = new_entry_names(stored)
+    new_names = cast(list[str], plan["new"])
 
     # Every verb reasons from the origin, and whether it answered is what the
     # rest of the run is gated on: what may be deleted as Withdrawn, and
     # whether the snapshot below is worth writing at all.
-    refreshed = catalog_from_origin()
+    refreshed = cast(bool, plan["catalog_refreshed"])
 
     # The answer to the offer, and the whole of what a run places beyond a
     # refresh. Every name it adds is in the report, which is what makes an
@@ -2597,12 +2654,11 @@ def cmd_apply_update(*, global_layer: bool, yes: bool) -> int:
     # What has been withdrawn is asked of the disk (ADR-0037), and only where
     # the origin answered. Its removal waits until acquisition and publication
     # succeed, so a failed replacement leaves the complete old Collection.
-    withdrawn = (
-        withdrawn_names(harnesses, global_layer=global_layer) if refreshed else []
-    )
+    withdrawn = cast(list[str], plan["remove"])
 
     desired = enabled_names(harnesses, global_layer=global_layer)
-    refresh, current = refresh_change(desired, harnesses, global_layer=global_layer)
+    refresh = cast(list[str], plan["refresh"])
+    current = cast(list[str], plan["current"])
 
     # An adopted entry is a placement like any other, so it joins the refresh
     # rather than travelling beside it: one transport call, one reading of the
@@ -3157,6 +3213,12 @@ def add_dry_run_flag(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--dry-run", action="store_true")
 
 
+def add_approval_flag(parser: argparse.ArgumentParser) -> None:
+    """Add the opaque plan approval accepted only by Update's Apply half."""
+
+    parser.add_argument("--approval")
+
+
 def normalize_argv(argv: list[str]) -> list[str]:
     """Turn bare `--project` into the argv pair argparse reads it as.
 
@@ -3247,6 +3309,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     add_project_flag(apply_update)
     add_yes_flag(apply_update)
     add_dry_run_flag(apply_update)
+    add_approval_flag(apply_update)
     apply_uninstall = apply_sub.add_parser("uninstall")
     add_yes_flag(apply_uninstall)
     add_dry_run_flag(apply_uninstall)
@@ -3322,7 +3385,11 @@ def run_command(args: argparse.Namespace) -> int:
     if args.verb == "uninstall":
         return cmd_apply_uninstall(yes=args.yes)
     if args.verb == "update":
-        return cmd_apply_update(global_layer=parse_layer(args.project), yes=args.yes)
+        return cmd_apply_update(
+            global_layer=parse_layer(args.project),
+            yes=args.yes,
+            approval=args.approval,
+        )
     return cmd_apply_select(
         args.skills,
         on=args.on,

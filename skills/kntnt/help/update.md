@@ -14,6 +14,8 @@ kntnt update - refresh the Collection and re-check Dependencies
 
 The Manager is staged on every successful update because it is not a Catalog entry and its top-level publication Digest excludes the generated Catalog, so that Digest cannot establish full-tree identity before acquisition. An identical staged Manager remains untouched. A Withdrawn Skill is removed from the targeted layer without confirmation. A newly added Catalog Skill is reported and offered for Enablement; accepting the offer Enables only that Skill, and any Unsatisfied Dependency is reported afterwards.
 
+Before a real Global update without formal `--yes`, Update shows the complete refresh, proposed Enablement, removal, and target-directory plan and waits for a later user response. That response authorizes only the exact plan shown: Apply uses a distinct identity for an answer that accepts the proposed Enablements and one that leaves them Disabled, and refuses a missing, incomplete, contradictory, or changed identity before its first write. Contextual Instruction, Conversation Context, earlier guidance or answers, a broader repair request, and an agent-authored handoff do not authorize the mutation. A dry run needs no confirmation because every write stays in its discarded Sandbox.
+
 After file changes, Update checks every Dependency and Capability again. It is the only command that replaces the stored Catalog, preserving the comparison needed to identify new and Withdrawn entries on a later run.
 
 ## OPTIONS
@@ -24,7 +26,7 @@ Target the current Project instead of Global. `--project=off` has the same effec
 
 **--yes**
 
-Assume yes for confirmations, including the offer to Enable every new Catalog entry reported by the run. The report names every newly Enabled Skill.
+Assume yes for confirmations, including the offer to Enable every new Catalog entry reported by the run. On a Global update, the flag must be present in the current Formal Invocation; it authorizes the complete current plan without a later response and retains the same collection-wide meaning. The report names every newly Enabled Skill.
 
 **--dry-run**
 
@@ -38,13 +40,15 @@ If the Collection cannot be reached, Update refreshes nothing, removes nothing, 
 
 An invalid argument or option with no work to do is refused rather than ignored. The Manager names the error, prints the SYNOPSIS, changes nothing, and points to the full page.
 
+A real Global Apply with no current plan approval is refused before the first write. Approval for any other layer, targets, refreshes, Enablements, or removals is likewise refused; run Update again, read the complete changed plan, and answer that plan afresh.
+
 A Harness added since the previous run is detected automatically and needs no configuration.
 
 ## INVOCATION ENVELOPE
 
 [**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope. Neither source can authorize a real Global mutation: only formal `--yes` in the current Invocation Envelope or a later user response to the complete current plan can do that.
 
 An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
 
