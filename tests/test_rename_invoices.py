@@ -431,6 +431,41 @@ date_format = "%d-%m-%Y"
             plan["items"][0]["target_name"], "31-08-2026_Beispiel_BELEG.pdf"
         )
 
+    def test_profile_preserves_counterparty_period_before_description(self) -> None:
+        """Keep valid legal-name punctuation inside the rendered filename."""
+
+        # Define the recurring document family that supplied the observed
+        # counterparty and product description.
+        config = self.write_toml(
+            "ovation-config.toml",
+            """
+version = 2
+
+[[profiles]]
+name = "ovation-novamira"
+markers = ["Ovation S.r.l.", "Novamira Pro"]
+counterparty = "Ovation S.r.l."
+types = ["receipt"]
+date_labels = ["Date"]
+descriptions = { "Novamira Pro" = "nOvamira" }
+""",
+        )
+        self.create_pdf("source.pdf")
+        texts = {
+            "source.pdf": (
+                "Ovation S.r.l.\nDate: 2026-06-24\n"
+                "Description: Novamira Pro - Agency - Lifetime\n"
+            ),
+        }
+        plan = self.plan("receipt", texts, config_path=config)
+
+        # Preserve the period because the description and extension keep it
+        # away from the cross-platform-invalid end of the filename.
+        self.assertEqual(
+            plan["items"][0]["target_name"],
+            "[RECEIPT][2026-06-24] Ovation S.r.l. - nOvamira.pdf",
+        )
+
     def test_document_type_is_required_and_never_aliased(self) -> None:
         """Require the exact explicit document type at the command seam."""
 
@@ -545,6 +580,59 @@ templat = "{date} {counterparty}.{extension}"
         self.assertEqual(
             resolved["items"][0]["target_name"], "[INVOICE][2026-09-05] Acme.pdf"
         )
+
+    def test_embedded_owner_identity_is_not_used_as_counterparty(self) -> None:
+        """Reject a layout-expanded owner identity before rendering a filename."""
+
+        # Reproduce a PDF line that prefixes the configured owner with its
+        # organization number.
+        config = self.write_toml(
+            "owner-config.toml",
+            """
+version = 2
+
+[extraction]
+owner_markers = ["Kntnt Sweden"]
+""",
+        )
+        self.create_pdf("source.pdf")
+        texts = {
+            "source.pdf": ("Invoice date: 2026-07-28\n556886-2956 Kntnt Sweden AB\n"),
+        }
+        plan = self.plan(
+            "supplier-invoice",
+            texts,
+            locales=("en", "sv"),
+            config_path=config,
+        )
+        item = plan["items"][0]
+
+        # Keep unsupported counterparties in review instead of embedding the
+        # document owner's identity in a filename.
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIsNone(item["metadata"]["counterparty"])
+        self.assertIn("counterparty", item["issues"])
+
+    def test_multi_column_legal_entity_line_requires_review(self) -> None:
+        """Reject a legal-name candidate contaminated by another PDF column."""
+
+        # Reproduce a layout-preserving extraction that places unrelated
+        # account data before a legal entity on the same physical line.
+        self.create_pdf("source.pdf")
+        texts = {
+            "source.pdf": (
+                "Invoice date: 2026-07-28\n"
+                "Account 12345                         Acme LLC\n"
+            ),
+        }
+        plan = self.plan("supplier-invoice", texts)
+        item = plan["items"][0]
+
+        # Escalate ambiguous column structure instead of flattening it into a
+        # plausible-looking but unsupported counterparty.
+        self.assertEqual(item["status"], "needs_review")
+        self.assertIsNone(item["metadata"]["counterparty"])
+        self.assertIn("counterparty", item["issues"])
 
     def test_customer_invoice_uses_recipient_and_requires_identifier(self) -> None:
         """Honor type semantics independently of the document title."""

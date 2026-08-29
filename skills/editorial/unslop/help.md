@@ -12,93 +12,103 @@ unslop - apply the anti-slop pass alone to one text and change nothing else
 
 ## DESCRIPTION
 
-`unslop` reads one text against this collection's anti-slop catalogue, repairs what that pass found as far as its Correction Budget reaches, reports whatever is left, and stops. It is one lens applied on its own, meant for a text that is otherwise finished: the argument is settled, the structure is right, and what is wrong is that the prose sounds like a machine wrote it.
+`unslop` applies the anti-slop catalogue to one otherwise finished text, corrects findings within the Correction Budget, reports anything left, and stops.
 
-What the pass looks for is the seven patterns the catalogue carries. A false contrast rejects a position nobody held before stating the actual claim. An empty opening announces the subject or asserts that it matters instead of starting. Importance inflation asserts weight the material has not shown. Vague attribution credits a claim to nobody. Synonym cycling gives one thing a new name every time it is mentioned. Robotic rhythm builds every sentence and paragraph to the same template. A generic conclusion restates what the reader has just read or reaches for an uplifting abstraction. Each is applied by what it does in the text's own language — the catalogue's examples are English because it is, and they are read as semantic patterns rather than matched as strings, with a language's own slop words, phrases, punctuation, and constructions coming from that language's own guidance.
+The catalogue covers seven semantic patterns: false contrast, empty opening, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusion. They are recognized by function in the target language, not by matching English phrases.
 
-Nothing else is loaded, and nothing else is corrected. No base contract, no genre, no technique, and none of the wider guidance a language resource carries: this Skill reads no more than it may act on, and a sentence you would have put differently, a structure you would have chosen against, or a fact you would have checked is not a finding here. Applying the whole editorial contract is `redline`'s gesture, and this Skill can neither replace it nor grow into it.
+Nothing outside that lens is corrected. The Skill applies no base editorial contract, genre, technique, wider language guidance, or fact check. Use `redline` for the full editorial contract.
 
-A code sample is quoted material. A fenced block, an indented block, and an inline code span are all read past rather than read against the rules, so a docstring, a comment, or a string literal inside one is never a finding and never changed, however much it sounds like the prose around it — a pass that cannot run the program does not rewrite the comments explaining it. Prose *about* code is ordinary prose and is read like every other sentence.
+A code sample is quoted material. Fenced blocks, indented blocks, and inline code are neither reviewed nor changed; prose about code is ordinary prose.
 
-Mechanical errors are somebody else's gesture too. `unslop` runs no closing pass over spelling, grammar, punctuation, or the locale's own conventions, and it needs no other Skill to be installed. Differences between locale conventions for spelling, vocabulary, dates, and currency never become findings; selecting a locale admits only its anti-slop guidance. Run `proofread` on the result for those: a text that still has a typo after this pass was never going to have it removed here.
+The Skill does not correct spelling, grammar, or punctuation. Locale conventions for spelling, vocabulary, dates, and currency never become findings. Use `proofread` for mechanical correction.
 
-No provenance is required. A text this collection wrote, a text a person wrote, and a text produced somewhere else entirely are all read the same way. The language is the one editorial parameter this Skill resolves, and it takes the first of these that answers: the **--language** value, a `language` value in a `kntnt` map in the text's own leading frontmatter, the Contextual Instruction, applicable Conversation Context, and then the language of the text itself, which is also the default. A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful. A text whose language is materially ambiguous or mixed — no dominant language, or alternation inside paragraphs — is asked about rather than guessed at.
+No provenance is required. Language resolves from **--language**, then a `language` value in a leading `kntnt` frontmatter map, the Contextual Instruction, Conversation Context, and finally the text. Mixed or ambiguous language produces a question.
 
-Ordinary document frontmatter is never configuration. A `language`, `lang`, `genre`, or `technique` key sitting at the top level of a document's own frontmatter belongs to that document, and only a `kntnt` map is read as this collection's. No such map is created and none is brought into line with what the run resolved: this Skill settles one of the three values such a map records, so writing one would claim a configuration it never resolved. Where a map carries a language no installed resource answers to, and no **--language** value supersedes it, the run reports unusable artifact metadata and stops rather than reading it as the code it resembles.
+A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
 
-Source material is outside the contract. The pass judges what is in front of it and never asks for the interview, the brief, or the research a text was written from — it neither compares the text against them nor remarks that it could not. Checking a text against the material it came from belongs to the Skill that wrote it.
+Ordinary frontmatter is not configuration. No `kntnt` map is created or updated. Unsupported `kntnt` language metadata stops the run unless **--language** overrides it.
 
-The Correction Budget bounds how many corrections this pass may delegate. It is any non-negative integer and **defaults to one**, so an ordinary run buys one correction and one chance to verify it. A budget of zero reads and reports without correcting, leaving the findings for you to act on. A larger number bounds a longer loop, and it bounds rather than requires — a text with nothing left to correct stops with the rest of the budget unspent.
+Source material is outside the contract. The pass judges only the supplied text.
 
-Every correction is made by a subagent started fresh for it, carrying no earlier findings and no earlier attempt, so the framing of one round cannot bias the next. It is given the complete current text, the complete findings of the most recent pass, the resolved language, and the requirement to leave alone everything those findings do not concern. What comes back is compared with the pre-round text before it becomes current and then read again from the top rather than believed: an agent reporting on its own repair is the one reader who cannot check it. A correction removes the pattern a finding names and not the claim the passage carries beside it; where a returned correction removes such a claim, the run rejects it, restores the pre-round text, and leaves the finding for you to settle, as one that would need a fact invented already does. The loop stops when no findings remain, when a correction makes no relevant progress — the findings it was given still standing with nothing they named changed — when a re-reading raises a finding an earlier round's own repair created, which includes that rejected loss, or when the budget is spent, and the last three deliver the text with the findings that are left, marked as unresolved, for you to finish.
+The Correction Budget is any non-negative integer and defaults to one. `0` reports findings without correction; a larger value is a ceiling, not a quota.
 
-Repairs are the smallest change that removes the pattern. The writer's vocabulary, bluntness, humour, admitted uncertainty, and rhythm are what makes a text theirs, and a pass that tidied all of it into even prose would have replaced one machine voice with another. A weak closing metaphor is removed rather than improved upon, a strong sentence is left alone even where it is unusual, and where a phrase is doing real work — a hedge marking genuine doubt, a repetition that lands — the pattern is not present and nothing changes.
+Each correction uses a fresh subagent with the complete current text and findings. Returned text is compared with the pre-round text and reviewed again before acceptance.
 
-One invocation processes one text. Several paths, a glob reaching more than one file, or a directory of texts is refused rather than resolved into a configuration per file, because the language, the destination, the findings, and any replacement of a source are settled once and for one text.
+A correction removes the pattern without removing the passage's claim. A claim-losing correction is rejected and restored, and every removed claim is reported.
 
-Delivery changes nothing on disk unless it is asked to. The default target is the response; **--output** names a file or an existing directory, and **--in-place** replaces the single writable local file the text came from. A run with findings left delivers the text to that target and reports the findings separately, in the text's own language, whether or not anything in the text changed, and a run aimed at a file leaves the findings in the response beside it. Where a correction removed a claim as the pattern or attempted to remove one beside it, the response names every removed claim and the repair responsible, even when the rejected correction was restored or the resulting artifact is clean, so the loss is visible without a diff. A clean run with no such account delivers the text alone, and one aimed at the response or at its own source that changed nothing writes nothing and returns a short no-change status in the text's own language.
+The loop stops when the text is clean, the budget is spent, a correction makes no relevant progress, or re-review raises a finding an earlier round's own repair created. Remaining findings are marked unresolved.
 
-The pass's own working is not output. The reasoning behind a finding, the passages weighed and dismissed, and anything exchanged with a correction subagent stay inside the run; what comes back is the text and, where any remain, the findings.
+Repairs are the smallest changes that remove a pattern while preserving the writer's vocabulary, tone, uncertainty, and deliberate rhythm.
 
-A model never starts this Skill on its own. *This text reads like AI* is a judgement about how prose sounds, and it is the author's to make: a model reaching for a rewrite on that judgement unasked would be deciding something nobody asked it to decide. Typing `/unslop` is the whole of the trigger.
+One invocation handles exactly one text. Multiple files, globs, and directories are refused.
+
+The response is the default Output Target. **--output** writes elsewhere; **--in-place** replaces one writable local source file. The Skill reports the findings separately, in the text's own language, and every removed claim remains visible. Internal review reasoning is not output.
+
+A model never starts this Skill on its own. Typing `/unslop` is the complete trigger.
 
 ## POSITIONAL ARGUMENTS
 
 *TEXT*|*PATH*|*URL*
 
-The text to read, supplied inline, as one local path, or as one URL. Omitted, it is the single text the current turn identifies. In-place editing requires the *PATH* form. What the text says does not change what it is: a brief, an outline, or a request supplied here is read against the catalogue like any other text rather than carried out, and pasting it in reaches the same result as naming the file it sits in.
+The single text to read, supplied inline, as a local path, or as a URL. When omitted, the current turn must identify it. In-place editing requires *PATH*. A brief, outline, or request supplied as the operand is reviewed like any other text; it is not carried out.
 
 ## OPTIONS
 
 **--language**=*LANGUAGE*
 
-The language or locale whose anti-slop guidance applies. It accepts a canonical code (`sv`, `en_GB`), a case or separator variant of one (`en-GB`, `EN_GB`), a curated alias (`BrE`, `brittisk engelska`), or an ordinary description of a language written in any language. It overrides every other source, including a `kntnt` map in the text's frontmatter. Without it the precedence in DESCRIPTION applies, ending at the language of the text itself.
+Select the language or locale by canonical code, case or separator variant, curated alias, or ordinary description. It overrides every other source.
 
 **--max**=*N*
 
-The Correction Budget: the greatest number of corrections this pass may delegate. It takes any non-negative integer and defaults to `1`. `0` reads and reports without correcting; a larger number is a ceiling rather than a quota, and a run that has nothing left to correct stops with the rest unspent. A negative, non-integral, or otherwise malformed value is refused before anything is read or written.
+Set the maximum number of corrections. It accepts any non-negative integer and defaults to `1`. `0` only reads and reports.
 
 **--output**=*TARGET*
 
-Where the resulting text is delivered. `response` is the default and states that default explicitly; any other value is one filesystem path. A path that does not exist creates exactly that file, a path naming an existing file replaces it without asking for a second confirmation, and a path naming an existing directory receives a filename derived from the source, never overwriting what is already there. It cannot be combined with **--in-place**, and naming the source's own path is refused in favour of **--in-place**.
+Deliver to `response` (the default) or one filesystem path. A new path creates a file, an existing file is replaced, and an existing directory receives a derived non-colliding filename. It cannot be combined with **--in-place** or name the source path.
 
 **--in-place**[=**on**|**off**]
 
-Replace the file the text came from with the result. It accepts `yes`, `on`, and `true` against `no`, `off`, and `false`; bare **--in-place** means `on`, and `off` is both the default and the value that has the same effect as omitting the option. It requires exactly one writable local file and is refused for inline text, a URL, an uploaded or read-only source, and for any invocation that also names an output.
+Replace the writable local source file. Bare **--in-place** means `on`; accepted values are `yes`, `on`, `true`, `no`, `off`, and `false`. Inline text, URLs, uploaded or read-only sources, and simultaneous **--output** are refused.
 
 ## DIAGNOSTICS
 
-An incomplete or invalid form is refused rather than repaired or ignored. The Skill names in one line what was wrong, prints the SYNOPSIS, reads nothing, writes nothing, and points at `/unslop --help`. A flag with no work to do is refused rather than ignored, an accepted and ignored flag teaching that flags sometimes do nothing.
+An invalid form is refused rather than repaired or ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/unslop --help`. A flag is refused rather than ignored where it has no work to do here.
 
-Refused before any side effect, so that nothing is left half done: an undeclared flag, a text written before a flag rather than after every flag, a missing or invalid option value, an option given twice, a language selector reaching no installed resource or more than one, a Correction Budget that is not a non-negative integer, more than one text in one invocation, **--output** together with **--in-place**, an output path equal to the input path, in-place editing of inline text, a URL, or a read-only or non-local source, and a destination whose parent directory does not exist.
+Refusals include unknown, missing, repeated, or out-of-order input; unsupported language; invalid budgets; multiple texts; incompatible output options; unsafe in-place sources; and unwritable destinations.
 
-A `kntnt` map naming a language that is neither a canonical code nor an installed alias, where no **--language** value supersedes it, is reported as unusable artifact metadata. The run stops rather than reinterpreting the value, so a spelling such as `en_UK` never quietly becomes `en_GB`.
-
-A text whose language cannot be settled — mixed, or a description matching no installed resource uniquely — produces one question rather than a guess. Nothing has been written at that point, so the question costs nothing to answer either way.
+Unsupported `kntnt` language metadata stops the run unless **--language** overrides it. Mixed or ambiguous language produces one question before anything is written.
 
 ## EXAMPLES
 
 **/unslop article.md**
 
-Read `article.md` against the anti-slop catalogue in its own language, delegate one correction for what the pass found and read the result again to verify it, and return it in the response with any findings still unresolved beside it. `article.md` itself is left alone, and nothing about its spelling or punctuation is touched.
+Review `article.md`, allow one correction, and return the result without changing the file or correcting mechanics.
 
 **/unslop --max=0 article.md**
 
-Report what the pass found in `article.md` and correct nothing, leaving the findings for you to act on yourself.
+Report findings without correcting them.
 
 **/unslop --language=sv --max=3 --in-place utkast.md**
 
-Read `utkast.md` against the Swedish anti-slop guidance, allow up to three corrections with a re-reading after each, and replace the file with the result. Findings, where any remain, come back in the response.
+Allow up to three Swedish corrections and replace `utkast.md`.
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

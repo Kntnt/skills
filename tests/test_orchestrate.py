@@ -143,7 +143,12 @@ def _manpage_entry(heading: str, term: str) -> str:
     paragraphs = _manpage_section(heading).strip().split("\n\n")
     for index, paragraph in enumerate(paragraphs[:-1]):
         if paragraph.startswith(term):
-            return paragraphs[index + 1]
+            description: list[str] = []
+            for following in paragraphs[index + 1 :]:
+                if following.startswith("**"):
+                    break
+                description.append(following)
+            return "\n\n".join(description)
 
     raise AssertionError(
         f"{SKILL / 'help.md'}: the {heading} section has no entry starting {term}."

@@ -10,7 +10,9 @@ model-selector route - resolve delegated work into exact launch decisions
 
 ## DESCRIPTION
 
-Read one versioned structured request or an ordered batch from *PATH* and print a structured response containing a frozen routing snapshot and exactly one `selected`, `inherit`, or `refused` decision per input in the same order. A selected decision identifies its exact model, adapter, channel, surface, native deliberation control, serving mode, tools, policy, configuration fingerprint, complete Harness-native launch arguments, evidence class, provenance, exclusions, and bounded next escalation. Only a selected decision carries launch overrides; every refusal carries a stable reason.
+Read one versioned request or ordered batch from *PATH*. Return a frozen snapshot and one `selected`, `inherit`, or `refused` decision per input in the same order.
+
+A selection includes its exact configuration, Harness-native launch arguments, evidence, exclusions, and bounded next escalation. A refusal carries a stable reason and no launch override.
 
 Route is offline, non-interactive, and read-only. It never starts setup, performs research or evaluation, refreshes evidence, writes configuration, or writes the evidence ledger. A missing profile or evidence that cannot discriminate safely can yield audited inheritance; invalid or unsafe state yields refusal.
 
@@ -20,13 +22,13 @@ The portable deliberation values are `low`, `medium`, `high`, `xhigh`, and `max`
 
 *PATH*
 
-A UTF-8 JSON artifact conforming to `references/route-request.schema.json`. It is one envelope with integer `schema_version: 1`, an ordered `requests` array, and either a previously returned `snapshot` or current read-only `context` that the public Skill adapter derives from local profile/evidence and active Harness facts before invoking the internal script. The Model Routing Module in `references/model-routing.md` is the complete behavioral contract.
+A UTF-8 JSON artifact conforming to `references/route-request.schema.json`, with `schema_version: 1`, ordered `requests`, and either a returned `snapshot` or current `context`. See `references/model-routing.md` for the full contract.
 
 ## OPTIONS
 
 **--data=**_PATH_
 
-Read the current profile and evidence from *PATH* only when the request does not carry a snapshot. The public Skill adapter consumes this flag while it derives the canonical `context`; the internal script receives only the resulting artifact path. The default is `~/.kntnt/model-selector/`. Route never writes there.
+Read profile and evidence from *PATH* when the request has no snapshot. The default is `~/.kntnt/model-selector/`; Route never writes there.
 
 ## OUTPUT
 
@@ -34,17 +36,27 @@ One JSON object conforming to `references/route-response.schema.json`, with `sch
 
 ## DIAGNOSTICS
 
-A malformed artifact is refused before routing. Invalid CLI arguments, unreadable paths, and malformed JSON produce a machine-readable top-level `artifact_refusal`, an empty decision list, exit status 2, and no traceback. Request-level invalid profile state, ambiguous or unavailable overrides, unknown safety ceiling, above-main override, unrepresentable verdict inheritance, and an empty safe candidate set produce stable refused decisions with no launch instruction. An operand written before an option is out of order and is refused the same way.
+Malformed artifacts, arguments, paths, and JSON produce top-level `artifact_refusal`, an empty decision list, exit status 2, and no traceback.
+
+Unsafe or unrepresentable request state produces a stable refused decision with no launch instruction. Out-of-order arguments are refused.
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 ## DEPENDENCIES
 

@@ -10,65 +10,67 @@ write - turn a brief and its source material into one first draft
 
 ## DESCRIPTION
 
-`write` turns a direct brief into one first draft and stops there. It reviews nothing afterwards, proofreads nothing, and invokes no other Skill: running an editorial pipeline over a draft is a separate choice, made after reading the draft rather than instead of reading it.
+`write` turns a brief and its source material into one first draft. It does not review or proofread the result.
 
-The material may be anything the Harness can reach. Text pasted into the invocation, local files, URLs, guidance given after the reserved separator, and material already in the conversation are all usable, and several of them may feed one draft — an interview transcript and its background reading can stay where they already are. Supplying a file selects no destination: by default the draft comes back in the response and nothing on disk changes.
+Sources may be inline text, local files, URLs, the Contextual Instruction, or Conversation Context. Several sources may feed one draft. Supplying a file does not select an output; the response is the default.
 
-The genre, the technique, the language, and where the result goes are all settled before a word is written. Each is resolved on its own, by the precedence under `RESOLUTION`, so an explicitly named genre sits happily beside a language taken from the conversation. Genre defaults to `general`, which is a complete contract rather than the absence of one. No technique applies unless one was selected. The language defaults to the language of the request and the material, and material too mixed to settle is a question rather than a guess.
+Genre, technique, language, and output resolve independently before writing. Genre defaults to `general`, technique defaults to none, and language defaults to the request and material. Ambiguous or mixed language produces a question.
 
-What the draft is written against is deliberately small: the Collection's base editorial contract, the selected genre, the selected technique where there is one, and the composition guidance of the resolved language. Review, anti-slop, and mechanics guidance belong to the Skills contracted to act on them and are not loaded here.
+The draft follows the base editorial contract, resolved genre, optional technique, and resolved language's composition guidance. It uses no review, anti-slop, or mechanics guidance.
 
-The draft is answerable to its material. `write` invents no facts, and attribution, uncertainty, scope, chronology, and causality survive into the text as the material has them. Spoken quotations may be repaired within a narrow boundary — see `SOURCE FIDELITY` — and where fidelity is doubtful the draft paraphrases rather than manufacturing a quotation.
+Every claim must be supported by the supplied material. Attribution, uncertainty, scope, chronology, and causality are preserved; uncertain quotations are paraphrased.
 
-By default the delivered artifact carries Handoff Metadata, a small reserved map in leading YAML frontmatter recording what this run resolved, so that a later review can recover the configuration cheaply. It is one option to turn off.
+Handoff Metadata is added by default so a later review can reuse the resolved genre, technique, and language.
 
 ## POSITIONAL ARGUMENTS
 
 *BRIEF*
 
-Free text in any language, saying what to write and pointing at whatever the draft should be built from — a path, a URL, or a passage pasted in whole. It may be omitted where the conversation or an instruction after the reserved separator already carries the brief; an invocation with no brief, no material, and no applicable guidance has nothing to write and is refused.
+What to write and which sources to use, in any language. It may be omitted when the Contextual Instruction or conversation already supplies the brief. An invocation with no usable brief or material is refused.
 
 ## OPTIONS
 
 **--genre**=*GENRE*
 
-The kind of text to write, named as an installed genre. Defaults to `general`. The installed genres are the resources in the Collection Library's editorial `genres/` directory, and the value is a resource's filename without its extension; a value naming no installed resource is refused rather than falling back to the default.
+Select an installed genre by filename without its extension. The default is `general`; an unknown genre is refused.
 
 **--technique**=*TECHNIQUE*
 
-A structural technique the draft has to satisfy, named as an installed technique and resolved the same way as a genre. There is no default: a technique applies because it was selected, and is never inferred from a draft's or a source's resemblance to one.
+Select an installed structural technique. There is no default, and a technique is never inferred from resemblance.
 
 **--language**=*LANGUAGE*
 
-The language to write in. Accepts a canonical code such as `sv` or `en_GB`, a curated alias such as `BrE` or `brittisk engelska`, or a description in words, which is interpreted and then verified against what is installed. Case and separators carry no meaning, so `en-GB` and `EN_GB` reach the same resource. Without it, the language is the language of the request and the supplied material.
+Select the output language by canonical code, curated alias, or ordinary description. Case and separator variants are accepted. Without the option, the request and material determine the language.
 
 **--frontmatter**=*BOOLEAN*
 
-Whether to attach Handoff Metadata. Accepts `yes`, `on`, or `true` and `no`, `off`, or `false`; the default is on. Turning it off suppresses the reserved Kntnt map alone and never the frontmatter the requested artifact itself needs.
+Control Handoff Metadata. Accepted values are `yes`, `on`, `true`, `no`, `off`, and `false`; the default is on. Turning it off removes only the Kntnt map.
 
 **--output**=*TARGET*
 
-Where the draft goes: the keyword `response`, which is the default, or one filesystem path. A path that does not exist is created; a path naming an existing file is overwritten, naming it being the authorization; a path naming an existing directory receives a file whose name is derived from the source or the working title. A path equal to a local file that supplied material is refused — this Skill creates a text and never replaces the material its brief came from.
+Deliver to `response` (the default) or one filesystem path. A new path creates a file, an existing file is replaced, and an existing directory receives a derived filename. A source path cannot also be the output.
 
 ## RESOLUTION
 
-Genre, technique, language, and the output options are each resolved independently, in this order: the Formal Invocation; a recognized Kntnt map in the leading frontmatter of supplied material; the current Contextual Instruction; applicable Conversation Context; inference from what was requested and supplied; then the parameter's default. A value found at one level suppresses the levels below it for that parameter alone, never for the others. A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
+Each parameter resolves from the Formal Invocation, a recognized `kntnt` frontmatter map, the Contextual Instruction, Conversation Context, inference, and finally its default. The first value found wins for that parameter only.
 
-A recognized Kntnt map is the reserved `kntnt` key and its `genre`, `technique`, and `language` values. Ordinary document frontmatter is never read as configuration, whatever its keys are called, and the map never carries output options. A map whose value cannot be used — a language code the Collection does not carry, a genre or technique that is not installed — is reported as unusable artifact metadata rather than quietly read as something near it, unless the invocation already settled that parameter itself.
+A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
+
+Only `genre`, `technique`, and `language` under a leading `kntnt` map are configuration. Ordinary frontmatter and output settings are not. Unsupported map values stop the run unless the Formal Invocation overrides them.
 
 ## SOURCE FIDELITY
 
-Every claim in the draft is supported by the supplied material, and attribution, uncertainty, scope, chronology, and causality are preserved. Nothing is added because it would round the text off.
+Every claim must be supported by the supplied material. Attribution, uncertainty, scope, chronology, and causality are preserved.
 
-A length the brief asks for is a constraint on how much of the material to use, not a licence to add to it. Where the material cannot fill it, the draft comes back at the length the material supports and the reply says what further material would close the gap.
+A requested length limits selection; it never licenses invention. When the material is insufficient, the draft is shorter and the response names what is missing.
 
-Inside a direct quotation, spoken syntax, fillers, and searching repetition may be repaired. Meaning, stance, certainty, distinctive wording, and a speaker's own self-correction may not, and nothing is added. Where fidelity is uncertain, the draft paraphrases with careful attribution instead of assembling a quotation that sounds better than the material supports.
+Spoken syntax, fillers, and searching repetition may be repaired inside quotations. Meaning, stance, certainty, distinctive wording, and self-corrections are preserved. Doubtful quotations are paraphrased with attribution.
 
-Whether a quoted person has approved their quotation is a human arrangement. Nothing here verifies it or stands in for it.
+Quotation approval remains a human responsibility.
 
 ## HANDOFF METADATA
 
-The attached map carries exactly three normalized values — the resolved genre, the resolved technique or `none`, and the canonical language code — under a reserved `kntnt` key in leading YAML frontmatter:
+The map records the resolved genre, technique or `none`, and canonical language code:
 
 ```
 ---
@@ -79,39 +81,47 @@ kntnt:
 ---
 ```
 
-Where the artifact needs frontmatter of its own, the map is merged into it rather than written as a second block. The invocation's raw argument, the source material, and the options this run was given are never embedded.
+The map is merged into existing frontmatter. It never embeds the invocation, sources, or options.
 
 ## DIAGNOSTICS
 
-An incomplete or invalid form is refused rather than ignored, and a flag with no work to do here is refused rather than accepted and forgotten. The refusal names what was wrong, prints the SYNOPSIS, points to `/write --help`, and leaves nothing behind: no file created, none overwritten, and no draft half-delivered.
+An invalid form is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, points to `/write --help`, and leaves no output. A flag is refused rather than ignored where it has no work to do here.
 
-The cases are an unknown option, an option written without a value, an option repeated, a boolean outside its vocabulary, a genre or technique that is not installed, a language selector that reaches no installed resource or more than one, a destination that cannot be written, an output path equal to a file that supplied material, an invocation with nothing to write, and a brief written before an option rather than after every option.
+Refusals include unknown, missing, repeated, or out-of-order input; unsupported resources; invalid booleans; unwritable or source-equal output; and an invocation with nothing to write.
 
-A materially ambiguous or mixed language is a question rather than a refusal: the candidates are named and the run waits, because writing in a guessed language wastes the draft rather than the invocation.
+Mixed or ambiguous language produces a question before writing.
 
 ## EXAMPLES
 
 **/write draft a short note for the team from notes.md**
 
-One draft in the response, in the language of the brief and the notes, with the general genre and Handoff Metadata attached.
+Create one draft in the response with the general genre and Handoff Metadata.
 
 **/write --language=sv --output=./drafts/ interview.md and background.md**
 
-One Swedish draft built from two sources, delivered into an existing directory under a filename derived from the source, without overwriting anything already there. Naming an installed genre or technique alongside is what makes the draft that kind of text.
+Create a Swedish draft from two sources and deliver it under `./drafts/`.
 
 **/write --frontmatter=no summarise https://example.org/report for a newsletter**
 
-A draft carrying no Kntnt map, for a destination whose own frontmatter conventions are not this Skill's business.
+Create a draft without a Kntnt map.
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

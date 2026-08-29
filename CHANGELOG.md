@@ -4,6 +4,17 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.18.2] – 2026-08-29
+
+### Changed
+
+- The README and shipped manpages now use shorter, screen-sized paragraphs and compact purpose and invocation summaries, while the shared Invocation Envelope rules remain complete and consistent. The documentation standard now records the same constraints for future Skills.
+
+### Fixed
+
+- `/rename-invoices` now preserves periods in valid counterparty names when a filename continues with a description, while still rejecting values that consist only of periods.
+- `/rename-invoices` now rejects configured owner identities embedded in longer extracted candidates and rejects candidates spanning multiple PDF columns, sending ambiguous documents to manual review instead of naming the wrong counterparty.
+
 ## [0.18.1] – 2026-08-29
 
 ### Changed

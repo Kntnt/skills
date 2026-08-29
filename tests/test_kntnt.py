@@ -9633,18 +9633,18 @@ UNNARROWED_CONTEXT_REFUSAL = (
 # still reaches (ADR-0122).
 NARROWED_CONTEXT_REFUSAL = (
     "Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or"
-    " scope-widening guidance takes the distinct context refusal"
+    " scope-widening guidance takes the distinct context refusal."
 )
 SUPPRESSION_RULE = (
-    "Unaddressable is guidance with no addressable effect at all — guidance"
-    " touching nothing this Skill's contract addresses — and never guidance a"
-    " documented precedence has already settled against, which is suppressed"
-    " instead: suppression is that precedence working, so the run continues and"
-    " the delivery names the suppressed guidance beside the resolved"
-    " configuration where saying so is useful. Only guidance that is part"
-    " invalid — part conflicting, part scope-widening, or part unaddressable —"
-    " goes unapplied as a whole; one parameter suppressed and another landing is"
-    " an ordinary invocation."
+    "Unaddressable guidance can affect nothing inside the Skill's contract.",
+    (
+        "Guidance settled by a documented precedence is suppressed instead: the run"
+        " continues and reports the suppression where useful."
+    ),
+    (
+        "Suppression for one parameter does not invalidate guidance that applies to"
+        " another."
+    ),
 )
 
 # The same outcome stated where an editorial Skill actually resolves its
@@ -9687,7 +9687,7 @@ def test_the_context_refusal_narrows_ineffective_to_unaddressable_guidance() -> 
             f" categories in the collection's shared wording (ADR-0122). See"
             f" {STANDARD}."
         )
-        assert SUPPRESSION_RULE in envelope, (
+        assert all(rule in envelope for rule in SUPPRESSION_RULE), (
             f"{manpage}: the envelope omits the narrowed rule, so this page"
             f" says something different from its siblings about a suppressed"
             f" Contextual Instruction (ADR-0122). See {STANDARD}."

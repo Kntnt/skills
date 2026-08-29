@@ -12,105 +12,117 @@ redline - review one text against the editorial contract, correct what it finds,
 
 ## DESCRIPTION
 
-`redline` reads one text against this collection's editorial contract, repairs what the review found as far as its Correction Budget reaches, reports whatever is left, and finishes with exactly one mechanical pass. What it reads the text against is the base contract, the selected genre, the optional technique, the shared anti-slop catalogue, and the composition, review and anti-slop guidance of the resolved language — each with the diagnostic half a reviewer needs on top of the half a draft is written to.
+`redline` reviews one text against the base editorial contract, resolved genre, optional technique, anti-slop catalogue, and resolved language guidance. It corrects findings within the Correction Budget, reports anything left, and ends with one mechanical pass.
 
-No provenance is required. A text this collection wrote, a text a person wrote, and a text produced somewhere else entirely are all reviewed the same way. Where a text carries a `kntnt` map in its leading frontmatter, that map supplies defaults and is brought into line with what the run resolved; where it carries none, none is added, and a text without one is never worth less to this Skill than a text with one.
+No provenance is required. A leading `kntnt` frontmatter map supplies defaults and is updated to match the run; no map is created when none exists.
 
-Genre, technique and language are resolved independently, each taking the first of these that answers: the invocation, a `kntnt` map in the text's own frontmatter, the Contextual Instruction, applicable Conversation Context, inference from the text, and then the default — the general genre, no technique, and the language of the text itself. A value found at one level suppresses the levels below it for that parameter alone, so an explicit genre sits perfectly well beside a language read out of frontmatter and a technique named in an instruction. A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful. A technique is never inferred from a text that merely resembles one, and a text whose language is mixed produces a question rather than a guess.
+Genre, technique, and language resolve independently from the Formal Invocation, `kntnt` metadata, the Contextual Instruction, Conversation Context, inference, and defaults. Defaults are `general`, no technique, and the text's language. A technique is never inferred, and mixed language produces a question.
 
-Ordinary document frontmatter is never configuration. A `language`, `lang`, `genre`, or `technique` key at the top level of a document's own frontmatter belongs to that document, and only a `kntnt` map is read as this collection's. Where such a map names a genre, technique, or language nothing here installs, and no flag supersedes it, the run reports unusable artifact metadata and stops rather than reading it as the value it resembles.
+A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
 
-Source material is outside the contract. The review judges what is in front of it and never asks for the interview, the brief, or the research a text was written from — it neither compares the text against them nor remarks that it could not. A contradiction, an unsupported claim, or an editorial defect visible inside the text itself remains an ordinary finding. Checking a text against the material it came from belongs to the Skill that wrote it.
+Ordinary frontmatter is not configuration. Unsupported `kntnt` values stop the run unless the corresponding flag overrides them.
 
-A code sample is quoted material. A fenced block, an indented block, and an inline code span are all read past rather than read against the rules, so a docstring, a comment, or a string literal inside one is never a finding and never changed, however much it sounds like the prose around it — a pass that cannot run the program does not rewrite the comments explaining it. Prose *about* code is ordinary prose and is read like every other sentence.
+Source material is outside the contract. The review judges only the supplied text; visible contradictions or unsupported claims may still be findings.
 
-The mechanical pass is last and happens once. After the review and whatever correction it led to, `redline` runs `proofread` on the resulting text with the resolved language supplied explicitly, and nothing substantive follows it — running it last is what keeps a later edit from putting mechanical errors back into a text that was just cleaned of them. Only guidance relevant to mechanical correction is passed on; the genre, the technique, the Correction Budget, and unrelated outer context are not.
+A code sample is quoted material. Fenced blocks, indented blocks, and inline code are neither reviewed nor changed; prose about code is ordinary prose.
 
-The Correction Budget bounds how many substantive corrections a review may delegate. It is any non-negative integer and **defaults to one**, so an ordinary review buys one correction and one chance to verify it. A budget of zero reviews without correcting: the findings come back for you to act on, and the closing mechanical pass still happens. A larger number bounds a longer loop, and it bounds rather than requires — a text with nothing left to correct stops with the rest of the budget unspent.
+The final `proofread` pass runs exactly once with the resolved language. No substantive edit follows it, and only mechanically relevant guidance is forwarded.
 
-Every correction is made by a subagent started fresh for it, carrying no earlier findings and no earlier attempt, so the framing of one round cannot bias the next. It is given the complete current text, the complete findings of the most recent review, the resolved genre, technique and language, and the requirement to leave alone everything those findings do not concern. What comes back is compared with the pre-round text before it becomes current and then reviewed again from the top rather than believed: an agent reporting on its own repair is the one reader who cannot check it. A correction repairs the defect a finding names and not the claim the passage carries beside it; where a returned correction removes such a claim, the run rejects it, restores the pre-round text, and leaves the finding for you to settle, as one that would need a fact invented already does. The loop stops when no findings remain, when a correction makes no relevant progress — the findings it was given still standing with nothing they named changed — when a re-review raises a finding an earlier round's own repair created, which includes that rejected loss, or when the budget is spent, and the last three deliver the text with the findings that are left, marked as unresolved, for you to finish.
+The Correction Budget is any non-negative integer and defaults to one. `0` reports findings without substantive correction but still runs the final mechanical pass. A larger value is a ceiling, not a quota.
 
-One invocation processes one text. Several paths, a glob reaching more than one file, or a directory of texts is refused rather than resolved into a configuration per file, because the language, the destination, the findings, and any replacement of a source are settled once and for one text.
+Each correction uses a fresh subagent with the complete current text and current findings. Returned text is compared with the pre-round text and reviewed again before acceptance.
 
-Delivery changes nothing on disk unless it is asked to. The default target is the response; **--output** names a file or an existing directory, and **--in-place** replaces the single writable local file the text came from. A run with findings left delivers the text to that target and reports the findings separately, in the text's own language, whether or not anything in the text changed, and a run aimed at a file leaves the findings in the response beside it. Where a correction removed a claim as the defect or attempted to remove one beside it, the response names every removed claim and the repair responsible, even when the rejected correction was restored or the resulting artifact is clean, so the loss is visible without a diff. A clean run with no such account delivers the text alone, and one aimed at the response or at its own source that changed nothing writes nothing and returns a short no-change status in the text's own language.
+A correction must repair the finding without removing the passage's claim. A claim-losing correction is rejected and restored, and every removed claim is reported.
 
-The review's own working is not output. The reasoning behind a finding, the passages weighed and dismissed, and anything exchanged with a correction subagent or a nested Skill stay inside the run; what comes back is the text and, where any remain, the findings.
+The loop stops when the text is clean, the budget is spent, a correction makes no relevant progress, or re-review raises a finding an earlier round's own repair created. Remaining findings are marked unresolved.
+
+One invocation handles exactly one text. Multiple files, globs, and directories are refused.
+
+The response is the default Output Target. **--output** writes elsewhere; **--in-place** replaces one writable local source file. The Skill reports the findings separately, in the text's own language, and every removed claim remains visible. Internal review reasoning is not output.
 
 ## POSITIONAL ARGUMENTS
 
 *TEXT*|*PATH*|*URL*
 
-The text to review, supplied inline, as one local path, or as one URL. Omitted, it is the single text the current turn identifies. In-place editing requires the *PATH* form.
+The single text to review, supplied inline, as a local path, or as a URL. When omitted, the current turn must identify it. In-place editing requires *PATH*.
 
 ## OPTIONS
 
 **--genre**=*GENRE*
 
-The kind of text this is, named by an installed genre resource. `general` is the default and is a complete contract rather than the absence of one. A genre nothing installs is refused rather than falling back to the default.
+Select an installed genre. The default is `general`; an unknown genre is refused.
 
 **--technique**=*TECHNIQUE*
 
-A structural technique the text is held to, named by an installed technique resource. There is no default and none is ever inferred: a technique applies because the invocation, a `kntnt` map, or an instruction selected it, never because the text happens to fall into its shape.
+Select an installed structural technique. There is no default, and resemblance never selects one.
 
 **--language**=*LANGUAGE*
 
-The language or locale whose editorial guidance applies. It accepts a canonical code (`sv`, `en_GB`), a case or separator variant of one (`en-GB`, `EN_GB`), a curated alias (`BrE`, `brittisk engelska`), or an ordinary description of a language written in any language. It overrides every other source, including a `kntnt` map in the text's frontmatter, and it is the language handed to the closing mechanical pass.
+Select the language or locale by canonical code, case or separator variant, curated alias, or ordinary description. It overrides every other source and is passed to `proofread`.
 
 **--max**=*N*
 
-The Correction Budget: the greatest number of substantive corrections the review may delegate. It takes any non-negative integer and defaults to `1`. `0` reviews and reports without correcting, still running the closing mechanical pass; a larger number is a ceiling rather than a quota, and a run that has nothing left to correct stops with the rest unspent. A negative, non-integral, or otherwise malformed value is refused before anything is reviewed or written.
+Set the maximum number of substantive corrections. It accepts any non-negative integer and defaults to `1`. `0` only reviews and reports; the final mechanical pass still runs.
 
 **--output**=*TARGET*
 
-Where the resulting text is delivered. `response` is the default and states that default explicitly; any other value is one filesystem path. A path that does not exist creates exactly that file, a path naming an existing file replaces it without asking for a second confirmation, and a path naming an existing directory receives a filename derived from the source, never overwriting what is already there. It cannot be combined with **--in-place**, and naming the source's own path is refused in favour of **--in-place**.
+Deliver to `response` (the default) or one filesystem path. A new path creates a file, an existing file is replaced, and an existing directory receives a derived non-colliding filename. It cannot be combined with **--in-place** or name the source path.
 
 **--in-place**[=**on**|**off**]
 
-Replace the file the text came from with the result. It accepts `yes`, `on`, and `true` against `no`, `off`, and `false`; bare **--in-place** means `on`, and `off` is both the default and the value that has the same effect as omitting the option. It requires exactly one writable local file and is refused for inline text, a URL, an uploaded or read-only source, and for any invocation that also names an output.
+Replace the writable local source file. Bare **--in-place** means `on`; accepted values are `yes`, `on`, `true`, `no`, `off`, and `false`. Inline text, URLs, uploaded or read-only sources, and simultaneous **--output** are refused.
 
 ## DIAGNOSTICS
 
-An incomplete or invalid form is refused rather than repaired or ignored. The Skill names in one line what was wrong, prints the SYNOPSIS, reviews nothing, writes nothing, and points at `/redline --help`. A flag with no work to do is refused rather than ignored, an accepted and ignored flag teaching that flags sometimes do nothing.
+An invalid form is refused rather than repaired or ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/redline --help`. A flag is refused rather than ignored where it has no work to do here.
 
-Refused before any side effect, so that nothing is left half done: an undeclared flag, a text written before a flag rather than after every flag, a missing or invalid option value, an option given twice, a genre or technique nothing installs, a language selector reaching no installed resource or more than one, a Correction Budget that is not a non-negative integer, more than one text in one invocation, **--output** together with **--in-place**, an output path equal to the input path, in-place editing of inline text, a URL, or a read-only or non-local source, and a destination whose parent directory does not exist.
+Refusals include unknown, missing, repeated, or out-of-order input; unsupported resources; invalid budgets; multiple texts; incompatible output options; unsafe in-place sources; and unwritable destinations. This is the whole of what is refused over the form of an invocation.
 
-That list is the whole of what is refused over the form of an invocation. What a run stops for otherwise is written in the paragraphs below and in the `## INVOCATION ENVELOPE` section. An invocation whose form the list does not name is reviewed, whatever the text turns out to be: a brief, an outline, or notes supplied where the finished piece was expected is read against the resolved genre like any other text, and being that rather than the piece is the review's finding — usually its first — rather than a reason to decline the run or to send you to another Skill.
+Other stops are documented with the value they concern and under `## INVOCATION ENVELOPE`.
 
-A `kntnt` map naming a genre, technique, or language nothing installs, where no flag supersedes it, is reported as unusable artifact metadata. The run stops rather than reinterpreting the value, so a spelling such as `en_UK` never quietly becomes `en_GB`.
+A valid text is reviewed even when it is a brief, outline, or notes. Its incompleteness becomes a finding, not a refusal.
 
-A text whose language cannot be settled — mixed, or a description matching no installed resource uniquely — produces one question rather than a guess. Nothing has been written at that point, so the question costs nothing to answer either way.
+Unsupported `kntnt` metadata stops the run unless a flag overrides it. Mixed or ambiguous language produces one question before anything is written.
 
 ## EXAMPLES
 
 **/redline article.md**
 
-Review `article.md` under the general genre and its own language, delegate one correction for what the review found and review the result again to verify it, proofread that, and return it in the response with any findings still unresolved beside it. `article.md` itself is left alone.
+Review `article.md`, allow one correction, proofread the result, and return it without changing the file.
 
 **/redline --max=0 article.md**
 
-Review `article.md` and correct nothing: the findings come back for you to act on yourself, and the closing mechanical pass is still performed.
+Report editorial findings without correcting them; the final mechanical pass still runs.
 
 **/redline --genre=press-release --language=sv --in-place utkast.md**
 
-Review `utkast.md` as a Swedish press release, proofread it in Swedish, and replace the file with the result. Findings, where any remain, come back in the response.
+Review and replace `utkast.md` as a Swedish press release.
 
 **/redline --technique=abt --output=~/reviewed draft.md**
 
-Review `draft.md` against the ABT technique as well as its genre and deliver the result into the existing directory `~/reviewed`, under a filename derived from the source and never over an existing file.
+Apply the ABT technique and deliver a non-colliding file under `~/reviewed`.
 
 **/redline --genre=report --max=0 handoff.md -- Review it as a PAC piece in Swedish.**
 
-Review `handoff.md` as a report, correcting nothing. Where the text's `kntnt` map already carries a technique and a language, the flag and the map have settled every parameter the instruction names, so the instruction is suppressed and the review runs: the report names the suppressed instruction beside the configuration it was reviewed under.
+Review `handoff.md` as a report without substantive correction. If its `kntnt` map already settles technique and language, the Contextual Instruction is suppressed and the review still runs.
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

@@ -10,37 +10,39 @@ rename-invoices - plan and apply safe filenames for accounting PDFs
 
 ## DESCRIPTION
 
-`rename-invoices` reads every PDF directly inside the current directory by default or one explicitly selected folder, extracts text with Poppler, and builds deterministic filenames from an explicit document type and one or more configured locales. It does not search subdirectories, infer the document type, use OCR, or treat an existing filename as evidence.
+`rename-invoices` extracts text from PDFs directly inside one folder and builds deterministic filenames from an explicit document type and configured locales. It does not recurse, infer the type, use OCR, or trust existing filenames as evidence.
 
-By default, the Skill applies the fresh validated plan created during the same run after review and explicit confirmation. Before changing any filename, it shows every exact old-to-new mapping and asks `Apply these filename changes? Yes/No.`; `--yes` supplies the Yes answer without waiting. `--dry-run` instead reports proposed mappings, files already carrying their verified canonical names, and documents whose date, counterparty, description, identifier, extraction, or target collision still needs review without renaming or asking. Source bytes and destinations are checked again before the first rename, and an edited or stale plan is refused.
+By default, the Skill applies the reviewed plan after asking `Apply these filename changes? Yes/No.` **--yes** answers yes; **--dry-run** reports the plan without changes.
 
-Bundled settings define supplier invoices, receipts, customer invoices, and credit notes. A personal configuration below `~/.kntnt/rename-invoices/` may select locales, replace filename conventions, add document types, or add complete locales without changing the Skill.
+Every source and destination is rechecked before application. Stale, edited, unresolved, or colliding plans are refused.
+
+Bundled settings cover supplier invoices, receipts, customer invoices, and credit notes. Personal settings under `~/.kntnt/rename-invoices/` can add or override types, locales, and filename conventions.
 
 ## OPTIONS
 
 **--folder=**_PATH_
 
-Process the direct PDF children of this directory. Defaults to `.` (the current working directory). The filesystem root and the user's home directory are refused as dangerously broad targets.
+Process direct PDF children of *PATH*. Defaults to `.`; filesystem root and the user's home directory are refused.
 
 **--type=**_NAME_
 
-Use this exact configured document type. The Skill never infers or aliases it.
+Select an exact configured document type. It is never inferred or aliased.
 
 **--config=**_FILE_
 
-Use this TOML settings file instead of a discovered personal `config.toml`. It remains layered over the bundled defaults.
+Use this TOML file instead of discovered personal settings, layered over bundled defaults.
 
 **--no-config**
 
-Ignore discovered personal settings and personal locale files. One or more `--locale` flags are then required; explicit `--locale-file` flags remain valid.
+Ignore discovered personal settings and locales. At least one **--locale** is then required; explicit **--locale-file** remains valid.
 
 **--locale=**_NAME_
 
-Select a document locale. Repeat the flag for mixed-language folders; the first locale supplies localized standard filename prefixes. Repeated flags replace the configured locale list for this run.
+Select a locale; repeat for mixed-language folders. The first locale supplies standard filename prefixes. Explicit values replace configured locales.
 
 **--locale-file=**_FILE_
 
-Use one complete locale TOML file for its declared locale. Repeat as needed. Each supplied locale must also be selected by `--locale` or the settings file.
+Use a complete locale TOML file; repeat as needed. Its locale must also be selected.
 
 **--prefix=**_TEXT_
 
@@ -48,7 +50,7 @@ Override the selected document type's filename prefix.
 
 **--template=**_TEMPLATE_
 
-Override the complete filename template. It must retain the required date, counterparty, extension, and policy-dependent identifier fields.
+Override the filename template while retaining required date, counterparty, extension, and identifier fields.
 
 **--date-format=**_FORMAT_
 
@@ -68,27 +70,27 @@ Override the optional identifier segment template.
 
 **--date-source=**_SOURCE_
 
-Override the selected type's semantic date-source priority. Repeat in descending priority.
+Override date-source priority; repeat in descending order.
 
 **--counterparty-source=**_issuer_|_recipient_
 
-Choose which accounting party becomes the counterparty in the filename.
+Choose the filename's counterparty.
 
 **--identifier-policy=**_always_|_collision_|_never_
 
-Require identifiers on every filename, add them only to otherwise colliding filenames, or omit them.
+Always include identifiers, include them only for collisions, or omit them.
 
 **--overrides=**_FILE_
 
-Read reviewed per-file semantic decisions from a JSON object keyed by exact source filename. Only unresolved fields may be supplied, and direct edits to a generated plan remain invalid.
+Read reviewed unresolved fields from JSON keyed by exact source filename. Direct plan edits remain invalid.
 
 **--yes**
 
-Answer Yes to the application question without waiting for confirmation. It cannot be combined with **--dry-run**.
+Apply without waiting for confirmation. Incompatible with **--dry-run**.
 
 **--dry-run**
 
-Report the fresh plan after review without renaming files or asking for confirmation. It cannot be combined with **--yes**.
+Report the reviewed plan without renaming or confirmation. Incompatible with **--yes**.
 
 ## FILES
 
@@ -110,27 +112,27 @@ Bundled complete locale files.
 
 ## DIAGNOSTICS
 
-An invalid, incomplete, unknown, conflicting, or out-of-order form is refused rather than repaired or ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/rename-invoices --help`. A flag with no work to do is refused rather than ignored, so **--yes** and **--dry-run** cannot be combined.
+An invalid, incomplete, conflicting, or out-of-order form is refused rather than repaired or ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/rename-invoices --help`. A flag is refused rather than ignored where it has no work to do here.
 
-A missing `pdftotext`, invalid TOML, unknown configuration field, missing locale, unknown document type, empty folder, broad target folder, unreadable PDF, ambiguous date, unresolved counterparty, required identifier, or filename collision is reported before application. Reviewable document uncertainty remains visible as `needs_review`; application requires that count to be zero.
+Configuration, extraction, broad-target, evidence, and collision errors are reported before application. Every `needs_review` item must be resolved.
 
-If a source changed, disappeared, or gained an occupied destination after planning, application is refused. A filesystem failure during the two-phase rename is reported after a best-effort rollback; the reported folder state is authoritative.
+Changed sources or occupied destinations refuse application. A rename failure triggers best-effort rollback and an authoritative folder-state report.
 
 ## EXAMPLES
 
-Preview Swedish supplier-invoice names without changing files:
+Preview Swedish supplier-invoice names:
 
 ```text
 /rename-invoices --type=supplier-invoice --locale=sv --dry-run
 ```
 
-Apply receipt names across a mixed English and Swedish folder after answering the confirmation question:
+Apply receipt names in a mixed English and Swedish folder after confirmation:
 
 ```text
 /rename-invoices --folder=~/Accounting/Receipts --type=receipt --locale=en --locale=sv
 ```
 
-Apply the same plan without waiting for confirmation:
+Apply without confirmation:
 
 ```text
 /rename-invoices --folder=~/Accounting/Receipts --type=receipt --locale=en --locale=sv --yes
@@ -138,13 +140,21 @@ Apply the same plan without waiting for confirmation:
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

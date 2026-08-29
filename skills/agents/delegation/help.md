@@ -14,13 +14,13 @@ delegation - control delegation mode for a session, Project, or user
 
 ## DESCRIPTION
 
-`delegation` controls a mode in which the main agent decides whether delegation is worthwhile, plans, briefs, orchestrates, and verifies while subagents execute. Once the main agent has chosen to delegate, it sends only that execution through model-selector's public `route` Interface. Routing never changes the main agent's model or deliberation configuration.
+Delegation mode leaves planning, delegation decisions, briefing, and verification with the main agent while subagents execute selected work. Model Selector routes delegated execution without changing the main agent's configuration.
 
-Predictably noisy tool work can stay in a subagent's context and return as a distilled result.
+No arguments toggles the current session. `on` and `off` change the selected scope; `status` reports one scope or all three.
 
-With no arguments, it toggles the session scope. `on` and `off` change the scope the flags select, and `status` reports that scope, or all three when no scope flag is given. The grammar is closed and carries no operand: `on`, `off`, and `status` are command paths, `--project` and `--user` name the two persistent scopes, and the session is the unnamed default that giving neither selects. A bare invocation is therefore the only way to write a session toggle.
+The Skill takes no operand. The unnamed default is the session; **--project** and **--user** select persistent scopes. Only a bare `/delegation` toggles the session.
 
-The effective verdict is resolved in this order: an explicit session instruction wins; otherwise the mode is on when a managed block exists in a Project or user context file loaded by the current Harness. Project and user blocks contain identical instructions and therefore cannot create different mode definitions.
+An explicit session setting wins over loaded Project and user blocks.
 
 ## COMMANDS
 
@@ -54,33 +54,33 @@ Write or remove a persistent Project or user block without waiting for confirmat
 
 **session**
 
-The default, and the scope a bare invocation toggles. It has no flag and no operand: giving neither `--project` nor `--user` is what selects it. The state is also recorded in the Harness's per-session scratch directory when one exists, so context compaction does not silently lose it.
+The default and the scope a bare invocation toggles. Session scratch preserves it across context compaction when available.
 
 **project**
 
-Selected by `--project`. The Skill writes or removes a managed block in the context file this Project already loads. A committed block applies to everyone using the Project.
+Selected by **--project**. A managed context block can be committed for everyone using the Project.
 
 **user**
 
-Selected by `--user`. The Skill writes or removes the same managed block in this Harness's global context file. There is no cross-agent convention for a global context file, so this scope covers the Harness it runs in.
+Selected by **--user**. A managed block applies to the current Harness's global context.
 
 ## FILES
 
 **kntnt-delegation.json**
 
-Optional state in the Harness's per-session scratch directory. It preserves session state across context compaction and does not outlive the session.
+Optional session scratch state used across context compaction.
 
 **Project and user context files**
 
-The Skill shows the selected file and exact managed block before writing unless `--yes` is present. A block whose text differs from the current Skill is reported as stale; applying `on` rewrites it in place.
+The Skill shows the selected file and managed block before writing unless **--yes** is present. `on` refreshes a stale block.
 
 ## DIAGNOSTICS
 
-An invalid form is refused rather than ignored. The Skill names the error, prints the SYNOPSIS of the most specific recognized page, changes nothing, and points at that path's help route: `/delegation on --nonsense` is answered with the grammar of `on` rather than with the whole Skill's. A flag is refused rather than ignored where it has no work to do here, so `/delegation status --yes` and both scope flags at once are invalid, while `/delegation on --project --yes` is valid.
+An invalid form is refused rather than ignored. The Skill names the error, prints the SYNOPSIS for the most specific page, changes nothing, and points to that page. A flag is refused rather than ignored where it has no work to do here.
 
-A scope flag with no command path is refused rather than inferred. `/delegation --user` names a file without saying what to do with it, and flipping a file in a home configuration or a committed file in a shared repository off an inferred state is the wrong default; an error infers nothing either.
+**--yes** requires `on` or `off`; scope flags are mutually exclusive and require a command path. Unseparated text and a second command path are invalid.
 
-Unseparated text is not an instruction. A token after the Skill name or after a command path that is neither a recognized command path nor a declared flag is an invalid form, and so is a second command path or a `--`-prefixed spelling of one; `/delegation is it on everywhere?` is refused rather than answered.
+Unseparated text is not an instruction.
 
 ## EXAMPLES
 
@@ -98,13 +98,21 @@ Report all three scopes and the effective verdict.
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

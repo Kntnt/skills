@@ -18,11 +18,15 @@ kntnt - manage which collection Skills are Enabled
 
 ## DESCRIPTION
 
-`kntnt` is the Collection's Manager and only namespaced entry point. It lists, Enables, refreshes, and removes Collection Skills across every detected Harness in a Global or Project layer. Other Skills are invoked by their own names.
+`kntnt` lists, Enables, refreshes, and removes Collection Skills across detected Harnesses. Other Skills are invoked by their own names.
 
-With no command, `kntnt` prints this page. Each command prints its own page through `/kntnt <command> --help` or `/kntnt help <command>`. The Manager documents only its own commands. Select lists every Catalog Skill, Enabled or not. An Enabled Skill prints its page through `/<skill> --help`; Select can display the page for a Skill that is not yet Enabled.
+Bare `kntnt` prints this page. Use `/kntnt <command> --help` or `/kntnt help <command>` for command help. Select can show help for a Skill that is not yet Enabled.
 
-Select and Update target Global by default. With `--project`, they target the current Project. Harnesses are detected on each run rather than configured or remembered. A real Global Update without formal `--yes` shows its complete plan and waits for a later user response; the internal Apply accepts only that exact current plan.
+Select lists every Catalog Skill, Enabled or not.
+
+Select and Update target Global by default; **--project** targets the current Project. Harnesses are detected on every run.
+
+A real Global Update without formal **--yes** shows its complete plan and applies only after approval of that exact plan.
 
 ## COMMANDS
 
@@ -58,29 +62,37 @@ Target the current Project instead of Global. `--project=off` has the same effec
 
 **--yes**
 
-Assume yes for every yes-or-no question. Valid with `select`, `update`, and `uninstall`. On a real Global Update, only the flag in the current Formal Invocation authorizes unattended application; contextual, remembered, or handed-off intent does not.
+Answer yes to every yes-or-no question. Valid with `select`, `update`, and `uninstall`. Only a current Formal Invocation's **--yes** authorizes unattended Global Update.
 
 **--dry-run**
 
-Run the changing command in a temporary home seeded with this Collection's files, report the outcome from that Sandbox, and discard it. Nothing on the machine changes. Valid with `select`, `update`, and `uninstall`.
+Run `select`, `update`, or `uninstall` in a discarded temporary home and report the result without changing the machine.
 
 ## DIAGNOSTICS
 
-An unknown command or an option with no work to do is refused rather than ignored. The Manager names the error, prints the addressed command's SYNOPSIS, performs no work, and points to the full page. No command accepts `--force`.
+An unknown command or a flag with no work to do is refused rather than ignored. The Manager prints the addressed SYNOPSIS, performs no work, and points to the full page. No command accepts **--force**.
 
-A real Global Update refuses Apply before the first write unless formal `--yes` authorizes the current invocation or a later user response authorizes the exact complete plan just shown. A changed plan must be shown and answered again.
+Global Update requires formal **--yes** or approval of the exact displayed plan. A changed plan requires fresh approval.
 
-A failed Catalog fetch falls back to the stored Catalog where the command can safely operate from it. The report identifies the Catalog source and any limitation caused by fallback.
+When safe, a failed Catalog fetch uses the stored Catalog and reports the resulting limits.
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

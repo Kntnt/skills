@@ -10,25 +10,29 @@ model-selector observe - turn judged routed attempts into an importable artifact
 
 ## DESCRIPTION
 
-Read completed routed attempts from *PATH* and write the sanitized run observations they establish into the caller-owned artifact named by **--artifact**. Each attempt is answered in input order, either by one observation or by one stable refusal, and the artifact is reported as importable only when every observation in it passes exactly the validation `/model-selector record` applies.
+Read completed routed attempts from *PATH* and write sanitized observations to **--artifact**. Each attempt yields one observation or stable refusal in input order. Importability uses the same validation as `/model-selector record`.
 
-An observation is statistical metadata rather than a transcript. It carries the exact routed point and the point that actually served, opaque session and task identity, workload stratum, benchmark identity, outcome with its external authority and checker, available token, tool, cost, quota, and latency facts, retries, both instants, provenance, and sanitized artifact hashes. It never carries prompts, responses, reasoning, ticket or source bodies, source files, diffs, terminal output, secrets, credentials, complete transcripts, or absolute paths where an opaque identity is sufficient. Every measurement the environment did not expose stays an explicit `null`.
+Observations are statistical metadata, not transcripts. They include routed and served configurations, opaque identities, workload stratum, outcome authority, available usage, cost, quota, latency, provenance, and sanitized artifact hashes. Missing measurements remain `null`.
 
-Only an external judgement establishes a decisive outcome: an independent verifier, an objective checker, a frozen rubric, a declared failure signal, or explicit user confirmation. A builder's or a subagent's self-report is refused rather than recorded, and a mechanical hinder, an open decision, a discovered dependency, a tracker failure, or a merge collision is retained as an infrastructure error or an abstention that never lowers a configuration's quality. A route decision no judgement completed remains audit data and is not serialized at all.
+Prompts, responses, reasoning, source material, diffs, terminal output, secrets, credentials, complete transcripts, and unnecessary absolute paths are excluded.
 
-Observe is offline, non-interactive, and idempotent. It starts no setup, performs no network access, research, or evaluation, and writes no profile, evidence ledger, or derived frontier. Repeating an identical attempt adds nothing to the artifact, and an identity already present with different content is surfaced as a conflict that overwrites neither side. Nothing is imported here: the artifact stays in caller-owned scratch until the user invokes `/model-selector record` on it.
+Only an independent verifier, objective checker, frozen rubric, declared failure signal, or explicit user confirmation establishes an outcome. Self-report is refused. Non-model failures remain infrastructure errors or abstentions and never lower measured quality.
+
+Observe is offline, non-interactive, and idempotent. It performs no setup, research, evaluation, or profile write. Identical attempts add nothing; conflicting identities overwrite neither side.
+
+Nothing is imported automatically. The artifact stays in caller-owned scratch until `/model-selector record` imports it.
 
 ## POSITIONAL ARGUMENTS
 
 *PATH*
 
-A UTF-8 JSON artifact holding integer `schema_version: 1` and an ordered `attempts` array. Each attempt carries its immutable route decision, opaque identities, workload stratum, attempt index, benchmark identity, active Harness, externally established outcome, completion instant, and whatever usage, cost, quota, and latency facts the environment exposed. The complete contract is `references/run-observations.md`.
+A UTF-8 JSON artifact with `schema_version: 1` and an ordered `attempts` array. See `references/run-observations.md` for the complete schema.
 
 ## OPTIONS
 
 **--artifact=**_PATH_
 
-Write the observations into the artifact at *PATH*, creating it when absent and merging into it when present. The file belongs to the caller, is normally a scratch path of the run that produced the attempts, and is the path an explicit import is later given.
+Create or merge the caller-owned observation artifact at *PATH*.
 
 ## OUTPUT
 
@@ -36,17 +40,27 @@ One JSON object naming the artifact, the run keys newly written to it, the ident
 
 ## DIAGNOSTICS
 
-Invalid arguments, an unreadable path, malformed JSON, and a malformed envelope produce a machine-readable top-level `artifact_refusal`, exit status 2, and no traceback. An attempt that no external judgement established, that launched nothing, that was interrupted, that was graded by its own author, or that carries material rather than identities is refused individually and named with its stable code, leaving its peers' results intact. An operand written before an option is out of order and is refused the same way.
+Invalid arguments, paths, JSON, or Envelope produce top-level `artifact_refusal`, exit status 2, and no traceback.
+
+Unjudged, unlaunched, interrupted, self-graded, or unsanitized attempts receive individual stable refusals while valid peers remain. Out-of-order arguments are refused.
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 ## DEPENDENCIES
 

@@ -1,12 +1,12 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "ba3906fda029e1e00c2919d403153cdd81c9f1a4d0ff3e3329e73f5fa09ae841",
+  "manager_digest": "8db54fe11477186f35b88e4bd9bb4a942358d2468728f1d035d9eea437301251",
   "skills": [
     {
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "6e38b776786c0a849daea7e6f80943f35f6a6a91500ed8777f4c1763f5350e7f",
+      "digest": "236643f7f2f868531ae5b2ca5b7c13d4aa026bafa6fc5fda144fc7a4d3f87a2a",
       "binaries": [
         "git",
         "uv"
@@ -19,7 +19,7 @@
       "name": "brief",
       "category": "agents",
       "description": "Reframe what was just said for the person who owns the outcome, and turn Brief mode on or off so later replies stay concise and decision-relevant.",
-      "digest": "2d32552bfa92793ab7f8b9027035cace1e404924d86cf9183186d8d7e5e2b962",
+      "digest": "7402b8250427f0739f62a5a13bd13abd46e2ba30bdf6839913c772d3431763e2",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -29,7 +29,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "63c98407a0aae830612caede8ce68937037a3af0b9881e43efbce22a8540cdd4",
+      "digest": "1b8499c4bc309fe3a5390484f96ce1f15225116c415e989299c95fde120bad6a",
       "binaries": [
         "uv"
       ],
@@ -45,7 +45,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "01b8acc68544e42cd4a90959966df53438941122d9b22a0cfeeec7f6faaf58c1",
+      "digest": "2ec9b11f95a7cbb6fff8ee624b4f6d9cd48bf35b621ae5b82db18f19b2c86dfb",
       "binaries": [
         "git",
         "uv"
@@ -58,7 +58,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "b69eeaa4565c898fcd79a109e2fe7c65a6da9bf7f74747cb64e216dfb62d9199",
+      "digest": "dbbf11df246e954cd13fdbc6a702ffaa035d30132fe7abb53a5246e6b10c95f2",
       "binaries": [
         "git",
         "gh",
@@ -76,7 +76,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "c7b13f8873d0ebaf35c323e42a46ca1f453f6553939df889f8ee91333d4e749f",
+      "digest": "7b3cd3da2e87332750240d648d8cfbdd173283cf0f1955c5e29f1ac3ad425d40",
       "binaries": [
         "git",
         "uv"
@@ -91,7 +91,7 @@
       "name": "ready-for-agent-check",
       "category": "code",
       "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
-      "digest": "0929e6f80cc2fc266a5b5c599330562db8d4ba87e0f74a4d611f41cd03415e21",
+      "digest": "07b9f635e1fb1134ee55772c7ac651195a75e432ccce6ce62441823f01617f69",
       "binaries": [
         "gh",
         "uv"
@@ -106,7 +106,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "e66e4663761c82b3efd3b18957074c9d6cd1d31865e69c8d652e40231690174c",
+      "digest": "21701afaf010525c1f72c5589576a826b45f20a790c1050382b84aab84f5c191",
       "binaries": [
         "git",
         "uv"
@@ -121,7 +121,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "943a3a03b04b739e501e27e3e191788823930342b16a6c752448ddf66cad6d81",
+      "digest": "faddb55928147b4462bebeb8618f3d425c5a972873d8103d453147cccf70214f",
       "binaries": [
         "uv"
       ],
@@ -133,7 +133,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "86950d37f0ece87fb8ca8ad74bf3aba1cbee85aa9043d9b43ff998f6b2444467",
+      "digest": "223dcaa4f3a6be59736eb04415542c091bf0efc2ad54f597ac1c2ae8ede1ef4c",
       "binaries": [
         "uv"
       ],
@@ -149,7 +149,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "885e0c7e96d6bdb9a8d1b6ecaf68c757c856f3b592456973aec3356295981f91",
+      "digest": "89e89edcef4ab9925bb28fd7c74034948bc19354aaf23d2b5b6292a09ed089f7",
       "binaries": [
         "uv"
       ],
@@ -163,7 +163,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there.",
-      "digest": "93f93704f3bd32c227349cdb36dd20f15ba4ba279c93176d9bc85966c0c3eccb",
+      "digest": "722e90f051b5947b7e054dd4d433abe2ff815a1e408ef8e73adf782d308bad3c",
       "binaries": [
         "uv"
       ],
@@ -175,7 +175,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "3f2b0723961835a0e1d6dbe0a045ac8126cef0e98685fc3e4c79c3763307cc82",
+      "digest": "8a9da476cfacc864cc554f465fbad1db68102fcad0864a08734160eda5e4a7c5",
       "binaries": [
         "uv"
       ],
@@ -187,7 +187,7 @@
       "name": "rename-invoices",
       "category": "producivity",
       "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
-      "digest": "ebb37ebbf31b2fcb22dd1a2ef06cd64e7315a0c5ce14a5d11f08162c0f8efcc3",
+      "digest": "a2b6213e180bb5c82b701f393d6ce21944dd83a663ca558650ddcce0a024a7d1",
       "binaries": [
         "pdftotext",
         "uv"

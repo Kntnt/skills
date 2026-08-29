@@ -12,23 +12,23 @@ kntnt select - list Collection Skills and change which are Enabled
 
 ## DESCRIPTION
 
-`kntnt select` displays the Catalog grouped by Category, with one row per Skill. Each row shows whether the Skill is Enabled in the targeted layer, its one-line description, any required Harness Capability, and incomplete or Deviating disk state. Global is the default layer.
+`kntnt select` shows the Catalog by Category, one Skill per row. Each row includes Enabled state, description, required Harness Capability, and incomplete or Deviating files. Global is the default layer.
 
-In list mode, reply in plain text with the desired checked set. The Manager resolves required Collection Skills, reports anything the answer would leave Unsatisfied, asks for confirmation, and then applies the complete answer to every Harness detected in the layer. Every row can be read in full before the list is answered; requesting its help displays that Skill's own page without closing or answering the list.
+In list mode, reply with the desired checked set. The Manager resolves required Collection Skills, reports anything left Unsatisfied, asks for confirmation, and applies the answer to every detected Harness. Every Skill can be read in full before answering.
 
-An answer that changes nothing writes nothing. A Skill whose files are present in only some target Harnesses is shown checked and incomplete; confirming repairs it. A Skill whose files differ from the Collection is shown Deviating, and re-copying it overwrites local changes.
+An unchanged answer writes nothing. Confirming repairs incomplete copies; refreshing Deviating files overwrites local changes.
 
-The explicit `--on` and `--off` form applies only the named deltas and opens no list. Existing unmentioned Skills retain their state and files.
+**--on** and **--off** apply only named changes without opening the list.
 
 ## OPTIONS
 
 **--on=**_SKILL_
 
-Enable *SKILL* in the targeted layer without opening the list. Repeatable. Required Collection Skills are added after one confirmation for the complete dependency closure.
+Enable *SKILL* without opening the list. Repeatable; required Collection Skills are confirmed together.
 
 **--off=**_SKILL_
 
-Disable *SKILL* in the targeted layer without opening the list. Repeatable and combinable with `--on`. Because it deletes files, the script requires `--yes`.
+Disable *SKILL* without opening the list. Repeatable, combinable with **--on**, and requires **--yes** because files are deleted.
 
 **--project**, **--project=on**
 
@@ -36,37 +36,37 @@ Target the current Project instead of Global. `--project=off` has the same effec
 
 **--yes**
 
-Assume yes for confirmations. With neither `--on` nor `--off`, it opens no list, Enables no new Skill, refreshes Enabled Skills that Deviate, and repairs incomplete copies.
+Answer yes to confirmations. Without **--on** or **--off**, it opens no list, Enables nothing new, and repairs Deviating or incomplete Enabled Skills.
 
 **--dry-run**
 
-Execute against a temporary home seeded with this Collection's files, report the Sandbox outcome, and discard it. Nothing in the selected layer changes. The isolated transport cache makes this slower than an ordinary run.
+Run in a discarded temporary home and report the result without changing the selected layer. The isolated cache makes this slower.
 
 ## SKILL STATES
 
 **Enabled**
 
-The Skill is present in the targeted layer. In the Project view, a Skill Enabled only in Global is identified separately because the Project has no copy to disable.
+The Skill is present in the targeted layer. Project view identifies Global-only Skills separately.
 
 **Incomplete**
 
-The Skill is present in only some detected Harnesses. This is a disk condition, not a third selectable state.
+The Skill is present in only some detected Harnesses. Confirming repairs it.
 
 **Deviating**
 
-The Skill's files differ from the Digest in the fetched Catalog. The comparison establishes difference, not which state is newer. Re-copying overwrites the layer's current files.
+The files differ from the Catalog Digest. Re-copying overwrites the layer's current files.
 
 **Locked**
 
-The Skill depends on an unchecked Collection Skill. The row names what must also be checked. Unchecking a Skill still needed by another checked Skill is allowed but reported as leaving the dependent Unsatisfied.
+The Skill depends on an unchecked Collection Skill. The row names it; leaving it unchecked is allowed but reported as Unsatisfied.
 
 ## OFFLINE OPERATION
 
-If the Collection cannot be reached, Select uses the stored Catalog and identifies it as the source. A page for a Skill absent from disk cannot be fetched. No Skill is marked current or Deviating, and no refresh is offered, because stored Digests describe the Collection as of the last Update.
+Offline, Select uses the stored Catalog. It cannot fetch help for absent Skills or identify current versus Deviating files, so it offers no refresh.
 
 ## DIAGNOSTICS
 
-An unknown Skill, invalid combination, or option with no work to do is refused rather than ignored. The Manager names the error, prints the SYNOPSIS, changes nothing, and points to the full page.
+An unknown Skill, invalid combination, or flag with no work to do is refused rather than ignored. The Manager prints the SYNOPSIS, changes nothing, and points to this page.
 
 The end of the list counts Withdrawn Skills found on disk. Update removes them.
 
@@ -82,13 +82,21 @@ Open no list and Enable nothing new; refresh Deviating Enabled Skills and repair
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 ## DEPENDENCIES
 

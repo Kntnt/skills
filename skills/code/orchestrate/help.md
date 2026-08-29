@@ -12,15 +12,19 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 ## DESCRIPTION
 
-`orchestrate` plans and works the current repository's open `ready-for-agent` tickets on the branch where it starts. It claims each ticket, delegates the build to a fresh subagent, delegates verification to a different subagent, integrates verified work, records the outcome on the tracker, and closes successful tickets. It does not push, tag, or release.
+`orchestrate` works the current repository's open `ready-for-agent` tickets on the current branch. Fresh subagents build and independently verify each ticket; verified work is integrated, recorded, and closed. The Skill never pushes, tags, or releases.
 
-Blocking relations produce dependency waves. Wave one contains tickets that can start immediately; each later wave contains work unblocked by earlier verified work. Native tracker dependency relations are authoritative when present. A ticket with no native relation may declare bare `#number` references on a `Blocked by` line. A closed blocker continues to block until it has a done Ticket Resolution. A ticket that opens a line with `Builds alone` is a Solo Ticket: it takes the first wave its blockers admit it in and takes that wave by itself, its otherwise admissible siblings falling to the wave behind it. An author writes that line where the ticket's subject is a repository-wide invariant — a rule every shipped file is under, which it rewrites or newly enforces — because no blocking edge can name the files a concurrent sibling has not written yet. The plan names every such ticket under `solo`.
+Blocking relations produce dependency waves. Native tracker relations take precedence over `Blocked by` lines. A closed blocker remains blocking until its Ticket Resolution is done.
 
-The orchestrating session makes every plan, triage, integration, and verification judgement. Run it from the most capable model available; those judgements are only as reliable as that model. Before any claim, it sends the starting frontier as one ordered batch through model-selector's public route Interface and freezes the returned snapshot for the whole run. Every later frontier, replacement claim, amend, collision repair, rebuild, and mechanical wave fix is decided from that same frozen snapshot, in a request of its own, before it runs; nothing is claimed or dispatched that it has no acceptable decision for. Builders, amenders, collision repairers, rebuilders, and mechanical wave fixers launch with their selected exact Harness-native controls, or on the exact main seat where the decision reported inheritance. Every ticket, amend, repair, and wave verdict inherits the orchestrator's complete model and deliberation configuration exactly and is never routed at all; no builder override or route decision can affect it.
+A ticket beginning a line with `Builds alone` is a Solo Ticket. It receives the first available wave by itself, and the plan marks it `solo`.
 
-Before claiming anything, the Skill reads every ticket in scope for a decision the text leaves open and asks all such questions in one batch. Answers are posted to the corresponding ticket before building. With `--yes`, an open decision cannot be answered, so the ticket is parked under `needs-info` with its question and the rest of the scope continues.
+The main session owns planning, triage, integration, and verification judgements. Run it from the most capable model available; those judgements are only as reliable as that model.
 
-`reconcile` is the explicit maintainer action for a ticket whose failed or conflicted unattended attempt was later completed outside Orchestrate. It preserves that Run Outcome, records a done Ticket Resolution naming the landed completion commit, and cleans stale workflow state without closing the already-closed ticket. See **/orchestrate reconcile --help**.
+Model Selector creates one frozen routing snapshot before claims. Builders and repair roles use decisions from that snapshot; independent verdicts always inherit the main session's exact model and deliberation configuration.
+
+Before claiming, the Skill asks all open ticket decisions in one batch and posts the answers to their tickets. With `--yes`, it parks such tickets under `needs-info` instead of guessing, then continues with the rest.
+
+`reconcile` records that a failed or conflicted attempt was later completed outside Orchestrate. See **/orchestrate reconcile --help**.
 
 ## COMMANDS
 
@@ -42,23 +46,31 @@ Naming a ticket narrows the scope but does not bypass blockers, claims, readines
 
 **Claim**
 
-The ticket is assigned before work starts. A ticket claimed by another user or another active run is skipped. An interrupted claim belonging to this run can be resumed when the tracker and branch support it.
+The ticket is assigned before work starts. Another user's or active run's claim is skipped. An interrupted claim from this run can resume when its identity is recoverable.
 
 **Build**
 
-A fresh subagent receives the ticket body, its complete comment thread, the parent spec and its testing decisions, the Project's verification commands, the requirement to build test-first, and isolated scratch and reservation data. It receives no private summary of the ticket. The verification gate is resolved once at the run's start from the Project's contributing guide or configured checks; every verifier receives that exact list and neither substitutes nor expands it.
+A fresh subagent receives the complete ticket thread, parent spec, Project instructions, verification commands, and isolated workspace data. It receives no private summary.
+
+The verification gate is resolved once at the run's start. Every verifier receives that exact list and neither substitutes nor expands it.
 
 **Verify**
 
-A different subagent receives the same ticket record but none of the builder's claims. It runs the Project's complete verification gate and checks every acceptance criterion. Delivery requests such as push, pull request, or release are reported but do not change the verdict because delivery is outside this Skill.
+A different subagent checks every acceptance criterion and the complete Project gate without seeing the builder's claims. Delivery requests such as push, pull request, or release are reported but do not change the verdict.
 
 **Integrate**
 
-Verified work is committed and integrated into the run branch. After each wave, the full Project gate runs on the combined branch and an independent coherence review checks cross-ticket facts that tests may not cover. Its verdict turns on whether fixing what it found requires somebody to decide something, not on whether every gate command passed. Mechanical findings — a failing command among them, where the review states the exact correction and what already decided it — are fixed by another subagent and checked again until a round is clean. The fix request states the facts that price it — the review's own re-run as its external checker, reversible work, and the retry the loop owns — and what they buy is the routing module's to decide. An unresolved choice, a gate failure whose correction the review cannot state, a named command still failing after the one fix round it buys, or a fix that makes no progress stops the run. A fix that changed nothing escalates once first where the fixer that made it ran on a selected configuration rather than on the main seat: the run routes one further decision carrying that round as a verified failure, dispatches the same findings to it, and stops on a second changed-nothing round whatever seat it ran on.
+Verified work is committed and integrated. After each wave, the complete Project gate and an independent coherence review check the combined branch.
+
+The verdict turns on whether correction requires a new decision, not on whether every gate command passed. Mechanical findings are fixed by another subagent and checked again until a round is clean.
+
+The fix request names its external checker, reversible work, and available retry. An unresolved choice, an undetermined gate correction, a command still failing after its fix round, or a fix that makes no progress stops the run.
+
+A no-progress fixer on a selected configuration escalates once. A second no-progress round stops the run.
 
 **Close**
 
-The ticket is closed only after its work is integrated and the combined branch passes. Its recorded outcome names the commit that carries the work.
+The ticket closes only after integration and a passing combined branch. Its outcome names the carrying commit.
 
 ## BUILDER STOPS
 
@@ -80,55 +92,61 @@ A stop that is neither mechanical, a genuine decision, nor a discovered dependen
 
 ## FAILURES AND COLLISIONS
 
-A verification failure receives amend 1. If its independent verifier also fails, that fresh complete verdict receives a second amend. Each attempt uses a fresh builder in the same ticket allocation and another fresh verifier with the ordinary full ticket brief; that verifier sees no earlier verdict or builder report. The path is bounded to at most two verifier-informed amends, and a failed final verdict after the second amend records the ticket failed with no third amend.
+A verification failure may receive at most two verifier-informed amends. Each uses a fresh builder and verifier. Failure after the second amend records the ticket failed, with no third amend.
 
-A merge collision is repaired on the ticket's own branch and verified against both tickets. If that repair fails, the ticket is rebuilt once from a clean base containing the work it collided with. A second collision records the ticket as conflicted.
+A merge collision is repaired and verified against both tickets. If repair fails, the ticket is rebuilt once from a clean base. A second collision records it as conflicted.
 
-With `--at-once=1`, unverified work is on the run branch, so an unrepaired failure stops later tickets. Above one, failures remain isolated and unrelated tickets continue; anything depending on failed work is stranded.
+With `--at-once=1`, an unrepaired failure stops later tickets. With concurrency, unrelated isolated tickets continue and dependants become stranded.
 
 ## CONTINUING A RUN
 
-Restart an interrupted run with the same invocation and durable per-session state directory. There is no resume option. Recorded outcomes remain settled, and numbered amend markers preserve the exact builder, verifier, passed-verdict, or failed-verdict phase together with the latest complete verdict needed by a resumed builder. The frozen routing account is not reconstructed from current profile, evidence, price, alias, or Harness state: where it is absent while a claim of this run's remains, or where it cannot be read at all, the run stops rather than routing its remaining work from a context it never ran under. `--model` and `--deliberation` are part of that account, so a re-invocation that changes or drops either is refused rather than treated as a continuation. Repeating the same named attempt and phase resumes it without appending another event or spending the next attempt. A legacy unnumbered amend marker counts as attempt one.
+Restart an interrupted run with the same invocation and state directory; there is no resume option. Recorded outcomes and numbered amend phases remain settled.
 
-A ticket still claimed by the current user is resumed only when the Skill can distinguish an interrupted claim from another active run. If the tracker cannot identify the current user, the Skill stops rather than guessing.
+The frozen routing account is not reconstructed from current profile, evidence, price, alias, or Harness state. If it is missing or unreadable while this run still owns a claim, the run stops.
+
+`--model` and `--deliberation` are part of that account. Changing or dropping either is refused. Repeating the same attempt and phase resumes it without spending another attempt.
+
+A current user's claim resumes only when it can be distinguished from another active run. Otherwise the Skill stops.
 
 ## OUTCOMES
 
-Every ticket in scope appears once in the final report. Report groups tickets by their current Ticket Resolution while ticket detail retains the immutable Run Outcome and completion provenance that produced or later corrected it.
+Every ticket appears once. Report groups tickets by their current Ticket Resolution while retaining Run Outcome and completion provenance.
 
-A recorded outcome and a current Ticket Resolution are different facts, wherever a ticket is read. The recorded outcome is the immutable record of one unattended attempt and never changes once written. The current Ticket Resolution is what the ticket's state is now: where no Reconciliation has been recorded, that state is the recorded outcome itself; where one has, the most recent Reconciliation states it instead, and the earlier outcome remains as unchanged history.
+Run Outcome and Ticket Resolution are different facts. The Run Outcome is the immutable record of one unattended attempt. Ticket Resolution says what the ticket's state is now; a later Reconciliation may change it without rewriting the earlier outcome.
 
 **done**
 
-The requested work is complete. An ordinary successful run was built, independently verified, integrated, recorded, and closed by Orchestrate. A reconciled ticket was completed outside Orchestrate; its detail preserves the unsuccessful Run Outcome, Reconciliation provenance, and completion commit, and does not claim Orchestrate built or independently verified that repair.
+The work is complete. A reconciled ticket was completed outside Orchestrate; its detail preserves the unsuccessful Run Outcome and does not claim Orchestrate built or independently verified the repair.
 
 **failed**
 
-Verification did not pass. The ticket detail's `amends_spent` distinguishes an exhausted two-amend verification-repair path from work that failed before an available continuation amend completed. Work remains in the ticket's isolated working tree or, at a ceiling of one, on the run branch.
+Verification did not pass. `amends_spent` distinguishes an exhausted two-amend path from work that failed before an available continuation completed. Work remains available for inspection.
 
 **conflicted**
 
-Neither the collision repair nor the single rebuild produced an integrable result. The report names the colliding ticket and files.
+Collision repair and the single rebuild both failed. The report names the ticket and files.
 
 **stranded**
 
-Waiting directly or indirectly on a ticket that failed.
+Waiting directly or indirectly on failed work.
 
 **never on the frontier**
 
-Never became workable because of a cycle, an open blocker outside the run, another claim, a stopped integration, or a parked open decision.
+Never became workable because of a cycle, external blocker, another claim, stopped integration, or parked decision.
 
-The report also names the commit on which the run's work is based. A ticket recorded blocked on newly discovered work appears under the outcome implied by that open blocker rather than in a sixth category.
+The report names its base commit. A ticket blocked on newly discovered work is reported under its blocker's outcome rather than in a sixth category.
 
 ## OPTIONS
 
 **--dry-run**
 
-Read the tracker, resolve the requested scope, and report the dependency-wave graph, read-only routing readiness/proposed decisions, and the routing capability the frozen context leaves the run — one line where no complete adapter can express a safe point and every building role will inherit the main seat — without commenting on, parking, claiming, starting setup, or writing model-selector configuration, ledger, or run-state data. Its routing request and response remain stream-backed; it leaves no child process behind, and the repository, home, Codex state and cache, Orchestrate session and legacy state, Manager and Skill installations, GitHub, Git refs and index, worktrees, locks, and temporary storage remain byte-for-byte as they were whether the preview succeeds or refuses.
+Report ticket scope, dependency waves, routing readiness, proposed decisions, and routing capability without claiming or changing tickets.
+
+Routing uses streams and leaves no child process. The repository, home, Codex state and cache, Manager and Skill installations, GitHub, Git state, worktrees, locks, and temporary storage remain unchanged whether the preview succeeds or refuses.
 
 **--at-once=**_COUNT_
 
-Build at most *COUNT* frontier tickets concurrently. The default is `1`. Values above one isolate each ticket in its own branch and working tree; `1` works directly on the current branch.
+Build at most *COUNT* frontier tickets concurrently. The default is `1`; larger values isolate tickets in separate branches and working trees.
 
 **--model=**_NAME_
 
@@ -150,31 +168,31 @@ Assume yes for every yes-or-no question. A ticket containing an open choice is p
 
 **.git/kntnt-orchestrate/**
 
-Working trees, branches, reservations, and ticket scratch space used when concurrency requires isolation. Successful ticket resources are removed after integration. Failed and conflicted resources remain for inspection; abandoned repair and blocked partial builds are discarded.
+Concurrent ticket worktrees, branches, reservations, and scratch space. Successful resources are removed; failed and conflicted resources remain for inspection.
 
 **Per-session state directory**
 
-Two records of one run. The claim account — claimed tickets, tracker login, planned frontier, and base commit — is remembered rather than relied on: the tracker and the branch reconstruct it, so losing it costs a tracker call. The frozen routing account — the snapshot every decision was made under, the invocation's model and deliberation locks, and every exact decision — has no second source, so the run refuses to plan, route, or claim without it rather than deciding remaining work from current profile, evidence, price, alias, or Harness state.
+Stores the recoverable claim account and the irreplaceable frozen routing snapshot. A missing routing snapshot stops a claimed run.
 
 **Routed observation artifact**
 
-Each routed attempt an independent verdict judged is recorded in the same session state directory, and the run's final report names both that account and the sanitized artifact `/model-selector observe` writes from it. The artifact holds statistical metadata about the configurations the run launched — exact point, outcome, available cost, quota, and latency facts, and provenance — and no prompt, response, reasoning, source content, diff, terminal output, secret, or unnecessary absolute path. Nothing is imported by the run: `/model-selector record` is the explicit invocation that accepts it into the evidence ledger.
+The final report names a sanitized Model Selector artifact for judged routed attempts. Orchestrate imports nothing; `/model-selector record` is the explicit import step.
 
 **.kntnt-orchestrate/generated.json**
 
-The repository's own declaration of which of its files are generated and the command that produces each. An integration collision confined to declared files is settled by regenerating those files on the merged tree with the commands declared for them, and committing the result, with no repair dispatched and the wave check reading the result like any other work on the branch. A collision touching any file no declaration names takes the repair path unchanged, and so does one whose generator did not settle it. A repository with no such file, or one nothing can read, has every collision repaired as before.
+Declares generated files and their commands. A collision confined to declared files is settled by regenerating them on the merged tree. Any undeclared or unresolved collision takes the repair path.
 
 **Run-owned append files**
 
-Builders leave proposed entries for files every ticket must append to, such as a changelog, in ticket-specific notes. The orchestrator applies those notes serially after each wave, and the combined branch verifies the entries with the rest of the work.
+Builders leave changes to shared append-only files in ticket-specific notes. The orchestrator applies those notes serially after each wave and verifies the result.
 
 ## DIAGNOSTICS
 
-An invalid reference, option, option value, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`. An operand written before an option is out of order and is refused the same way.
+An invalid reference, option, value, combination, or argument order is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`.
 
-Routing is refused rather than adjusted. A response that is not this run's frozen snapshot, that changes that snapshot under its own identity, that is not the plan's starting frontier in plan order, that carries `--model` or `--deliberation` other than the ones the first frontier was routed under, or that decides a verdict role is rejected and nothing is frozen. A claim, amend, repair, rebuild, or wave fix whose exact role has no acceptable decision in that frozen account is refused before it runs. A route refusal is reported with its stable reason code and starts no work. An escalated wave fix is refused where the run routed no fix round for that wave, and a second escalated wave fix for one wave is refused outright: a changed-nothing round buys exactly one.
+Routing is refused rather than adjusted. A changed snapshot, mismatched locks, routed verdict, or execution role without a decision starts no work and reports a stable reason code.
 
-The working tree must contain no uncommitted non-ignored work when the run plans and immediately before a ticket closes. Commit or stash such work and restart. A repository with no ready ticket, no workable frontier, or only externally claimed work is reported without starting a build.
+The working tree must be clean when planning and before closing a ticket. A scope with no workable ticket is reported without starting a build.
 
 ## EXAMPLES
 
@@ -188,13 +206,21 @@ Work the union of two ticket or spec references with at most two concurrent buil
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

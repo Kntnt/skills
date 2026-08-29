@@ -36,15 +36,17 @@ model-selector - compare configured AI model systems by price and performance
 
 ## DESCRIPTION
 
-`model-selector` compares complete model systems rather than bare model families. A comparison point includes an exact model release or resolved alias, effort or thinking budget, serving mode, Harness, tools, policies, access channel, and effective commercial schedule.
+`model-selector` compares complete model configurations: exact model, reasoning control, serving mode, Harness, tools, policies, access channel, and current commercial terms.
 
-First use creates a profile of the exact models and access channels available to the user. Channels may include subscriptions, direct metered APIs, gateway APIs, or other arrangements. The profile contains no credentials and is reused on later runs.
+Run `setup` first to record available models and channels. The reusable profile contains no credentials.
 
-Recommendations are selected from comparable Pareto frontiers. Cash, rolling-window quota, weekly quota, subscription credits, allocated plan cost, latency, and quality remain separate unless the user supplies an explicit shadow price. Included subscription usage may have zero marginal cash cost while consuming scarce quota.
+Recommendations use comparable Pareto frontiers. Cash, quota, credits, latency, and quality stay separate unless you provide a common valuation.
 
-When representative matched measurements do not determine the exact point, cold start first chooses the weakest plausibly capable enabled model and then its lowest plausibly sufficient supported reasoning control. Reversible, objectively checked work begins there and escalates one adjacent reasoning rung only after verified failure. High-consequence or irreversible work without a trustworthy checker uses the strongest plausible enabled configuration and refuses unsafe exploration.
+Without representative matched measurements, cold start chooses the weakest plausibly capable enabled model and its lowest plausibly sufficient supported reasoning control. Reversible checked work may move one adjacent reasoning rung after verified failure.
 
-The bundled seed contains dated public model identities, categorical low-confidence first-party capability priors, direct and gateway prices, and benchmark priors. Capability prose can choose a cold-start experiment but never becomes a numeric score or a measurement-based recommendation. The seed contains no access profile, entitlement, account quota, or local evaluation. Every result reports evidence source, date, uncertainty, exclusions, and missing evidence.
+High-consequence or irreversible work without a trustworthy checker uses the strongest plausible enabled configuration and refuses unsafe exploration.
+
+Every result labels its evidence source, date, uncertainty, exclusions, and missing evidence. Bundled public data is a prior, not local measurement.
 
 ## COMMANDS
 
@@ -140,31 +142,31 @@ For `update`, check every relevant mutable index once regardless of cadence. Kno
 
 ## OUTPUT
 
-`recommend` opens with exactly one text-bearing evidence banner: `🔵 HEURISTISK STARTPUNKT` for an exploratory point chosen from workload heuristics and capability priors, `🟠 BLANDAD EVIDENS` when measurements exist but a decision-relevant heuristic assumption remains, or `🟢 MÄTDATABASERAD REKOMMENDATION` when representative matched measurements determine the exact point and its conservative quality clears the floor. The words carry the status; emoji color only reinforces it. Every banner states the classification reason, confidence, missing evidence, and whether the point is an exploration start or a production recommendation.
+`recommend` starts with one evidence banner: `🔵 HEURISTISK STARTPUNKT`, `🟠 BLANDAD EVIDENS`, or `🟢 MÄTDATABASERAD REKOMMENDATION`. It states the classification reason, confidence, missing evidence, and whether the result is an exploration start or production recommendation.
 
-`route` emits structured `selected`, `inherit`, or `refused` decisions in request order. Only selection carries Harness-native launch arguments; every refusal carries a stable reason. Its returned snapshot freezes all routing inputs needed to reproduce later decisions.
+`route` returns ordered `selected`, `inherit`, or `refused` decisions and a reproducible frozen snapshot. Selections carry Harness-native launch arguments; refusals carry stable reasons.
 
-The recommendation names the exact configuration, its decision rule, comparable neighbours, exclusions, uncertainty, and staleness. If the evidence cannot support the comparison, it identifies the missing evidence and proposes the smallest discriminating evaluation instead of inventing a rank.
+A recommendation names the exact configuration, decision rule, comparable neighbours, exclusions, uncertainty, and staleness. Insufficient evidence produces a small discriminating evaluation instead of an invented rank.
 
-After a blue or orange banner, `Snabbaste vägen till mätdata` gives an agent-ready sequential and parallel experiment brief with frozen task inputs, exact adjacent configurations, checker, measurements, run bound, stopping rule, and a `record`-compatible observation artifact. `recommend` plans the experiment but performs no network request, evaluation, or write; normal work executes the brief, and no separate experiment command exists.
+After a blue or orange banner, `Snabbaste vägen till mätdata` provides a bounded sequential and parallel experiment brief and a `record`-compatible artifact. `recommend` plans the experiment but performs no network request, evaluation, or write.
 
-`chart` and `compare` report separate cash, quota, and renewal views unless explicit shadow prices make a common numeric axis valid. Missing metrics are represented as `null`, never zero.
+`chart` and `compare` keep cash, quota, and renewal views separate unless explicit shadow prices create a common axis. Missing metrics are `null`, never zero.
 
-`update` records an outcome for every due source and reports each appended change. Discovering a newer model does not replace an Enabled version automatically; use `config add` or `config edit` to change membership.
+`update` reports every checked source and appended change. A discovered model is not Enabled automatically.
 
 ## FILES
 
 **~/.kntnt/model-selector/config.json**
 
-The default active profile and its revision history. A user-supplied `--data` directory relocates it.
+The default active profile and revision history. **--data** relocates it.
 
 **~/.kntnt/model-selector/capture/**
 
-The capture store while capture is enabled: its configuration, per-session drafts, and bounded pending-review records. An imported capture is deleted immediately; nothing here is permanent evidence.
+Capture configuration, temporary session drafts, and bounded pending review. Imported captures are deleted.
 
 **Evidence ledger**
 
-An append-only, effective-dated record under the selected data directory. Configuration changes never delete it.
+Append-only effective-dated observations under the selected data directory.
 
 ## DIAGNOSTICS
 
@@ -188,13 +190,21 @@ Check every relevant mutable source once while retaining known immutable details
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

@@ -16,59 +16,59 @@ model-selector capture - opt in to automatic local run-evidence capture
 
 ## DESCRIPTION
 
-Turn ordinary work in a supported Harness into local evidence without anyone remembering to collect it. `record` imports a prepared observation and `observe` prepares one for deliberately routed work; neither covers the ordinary case, where the measurements that should eventually replace public benchmark priors are simply never written down.
+Capture turns ordinary work in Claude Code, Codex, or OpenCode into local Model Selector evidence.
 
-Capture is an explicit opt-in of an Enabled Skill rather than a consequence of enabling one, because it installs persistent local lifecycle integration and handles local metadata. **--on** states what it installs, what categories of metadata it retains, how that data is cleaned up, and how to turn it off, then installs one owned integration per named Harness and verifies the result from disk. Nothing is captured before that consent, and nothing that was already accepted is lost after it is withdrawn.
+It is explicit opt-in because **--on** installs persistent lifecycle integration. Nothing is captured before consent, and **--off** removes every owned hook without deleting accepted evidence.
 
-While capture is on, a small draft is created when substantive work begins in a session and updated only from lifecycle, usage, checker, quota, and latency signals. At an eligible completion boundary the draft becomes exactly one normalized observation and is imported into the existing evidence ledger, rebuilding only the derived frontiers whose eligible run set actually changed; the draft is then deleted. Ordinary work is not routed, so its observation records the exact main seat it inherited rather than a point somebody chose.
+During substantive work, the integration records bounded lifecycle, usage, checker, quota, and latency metadata. Eligible completed work becomes one normalized observation; temporary data is then removed.
 
-An outcome is established from outside the work or not at all. An objective checker, a frozen rubric, a declared failure signal, or the user's own confirmation may establish one; model self-confidence never does. Work that offers none waits in a bounded pending-review store until **--review** answers it or retention removes it, and an infrastructure error keeps its own outcome so that a broken environment can never lower a configuration's measured quality.
+Only an external checker, frozen rubric, declared failure signal, or user confirmation establishes success or failure. Unjudged work waits for **--review** in a bounded pending store.
 
-The synchronous hook path does bounded local metadata I/O and nothing else: no network request, no model call, no test run, no repository-wide hashing, no transcript scan, and no long-lived background work. It is fail-open, so a capture that cannot run costs the session nothing. Notifications are user-facing and debounced, and are never injected into the context of the model being measured.
+Hooks perform local metadata I/O only: no network request, model call, test run, repository-wide hash, transcript scan, or background daemon. Capture failures never interrupt the session.
 
 ## OPTIONS
 
 **--on**
 
-Consent to automatic capture and install the owned integration into each Harness named by **--harness**, defaulting to every supported Harness detected. Repeating it repairs and converges rather than installing twice. A Harness whose supported lifecycle cannot carry the contract reports an Unsatisfied integration capability and is never reported healthy.
+Install capture into each selected Harness, or every supported detected Harness by default. Repeating the command repairs the existing installation. Unsupported lifecycle capability is reported as Unsatisfied.
 
 **--off**
 
-Stop capture and remove every hook and adapter this feature owns, verifying the result from disk per Harness. Accepted evidence is preserved: turning a measurement off is not a reason to forget what it measured. Making the Skill Disabled does the same thing, so there is no second shutdown step to remember; an explicit purge of captured data, if ever wanted, remains a separate act.
+Remove every owned hook and adapter, verifying the result per Harness. Accepted evidence remains. Disabling the Skill performs the same cleanup.
 
 **--status**
 
-Report whether capture is enabled, adapter health per Harness, the pending-review count, the oldest pending age, storage in use, and the retention bounds. It reconciles abandoned drafts as it passes and performs no network access or evaluation.
+Report enablement, adapter health, pending-review count and age, storage use, and retention bounds. It also reconciles abandoned drafts without network access.
 
 **--review=**_IDENTITY_
 
-Settle one pending capture named by the opaque identity `--status` lists. Requires **--action**.
+Settle one pending capture listed by **--status**. Requires **--action**.
 
 **--action=save**, **--action=failed**, **--action=ignore**
 
-Answer a deferred review: record the work as a success, record it as a failure, or discard the capture without recording anything. A saved or failed outcome carries explicit user confirmation as its authority, which is what makes it evidence at all.
+Record the reviewed work as success or failure, or discard it. Saved outcomes carry explicit user confirmation.
 
 **--harness=**_NAME_
 
-Name a Harness to install into, repeatable. Supported values are `claude-code`, `codex`, and `opencode`. Without it, every supported Harness is installed into. The installed hook carries the Harness it was written for, so nothing later has to guess which one ran it.
+Select `claude-code`, `codex`, or `opencode`; repeat for several. Without this option, every supported detected Harness is selected.
 
 **--data=**_PATH_
 
-Use *PATH* as the data directory instead of `~/.kntnt/model-selector/`. The capture store, the evidence ledger, and the derived frontiers all live under the selected directory.
+Use *PATH* instead of `~/.kntnt/model-selector/` for capture data, evidence, and derived frontiers.
 
 ## RETAINED DATA
 
-Only what an observation is built from: opaque session and task identity, timestamps and Harness identity, the exact resolved model, deliberation control, serving mode and access channel, tool and policy fingerprints, checker identity and result, available token categories, tool counts, retries, fallbacks, provider bill, quota deltas, wall and first-useful-output latency, provenance, and sanitized artifact hashes.
+Capture retains opaque session and task IDs; timestamps and Harness; exact model configuration; tool and policy fingerprints; checker result; token, tool, retry, fallback, cost, quota, and latency measurements; provenance; and sanitized artifact hashes.
 
-Never full prompts, responses, reasoning, source files, diffs, terminal output, secrets, credentials, or complete Harness transcripts, and never an absolute path where an opaque identity is sufficient. Fields are copied onto an allow-list rather than stripped afterwards, so nothing forbidden enters by sitting beside something wanted.
+It never retains full prompts, responses, reasoning, source files, diffs, terminal output, secrets, credentials, complete transcripts, or unnecessary absolute paths. An allow-list controls every copied field.
 
 ## RETENTION
 
-An imported capture is deleted immediately, and an empty or irrelevant draft is discarded. Pending and failed captures are kept at most 30 days, 100 drafts, and 1 MiB in total; whichever bound is exceeded, the oldest go first. Cleanup is deterministic and runs at a session start or a status pass rather than from a daemon. Accepted evidence is never subject to these bounds.
+Imported, empty, and irrelevant drafts are deleted. Pending and failed captures are limited to 30 days, 100 drafts, and 1 MiB; oldest entries go first. Cleanup runs at session start or **--status**, never in a daemon. Accepted evidence is not subject to these limits.
 
 ## OUTPUT
 
-One JSON object. **--on** names the consent it obtained and each Harness's installation result; **--off** names each Harness's removal result; **--status** answers the five questions above; **--review** names what was imported or discarded.
+One JSON object reporting the requested installation, removal, status, or review result.
 
 ## DIAGNOSTICS
 
@@ -76,13 +76,21 @@ An unsupported Harness is reported as an Unsatisfied integration capability rath
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 ## DEPENDENCIES
 

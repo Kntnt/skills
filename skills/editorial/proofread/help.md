@@ -12,77 +12,91 @@ proofread - correct a text's mechanical language errors and nothing else
 
 ## DESCRIPTION
 
-`proofread` takes one text and removes its mechanical language errors. It corrects spelling, grammar, punctuation, agreement between subject and verb or noun and modifier, inflection, duplicated and missing words, and the locale's own conventions for dates, numbers, currency, and quotation.
+`proofread` corrects spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale conventions for dates, numbers, currency, and quotation in one text.
 
-Everything else is preserved. Wording, meaning, tone, register, argument, structure, factual content, formatting and markup, code, links, and metadata come through untouched, and frontmatter comes through byte for byte. Where more than one form is correct — two established spellings, a serial comma present or absent, a variant the language's own mechanics name as valid — the text's own choice stands, because a preference is not an error; a construction the language's mechanics or the shared mechanics contract does name as an error is corrected, however consistently the text commits to it. Asking for mechanical correction never returns a rewrite, however much better the rewrite might have read.
+It preserves wording, meaning, tone, structure, facts, formatting, code, links, metadata, and frontmatter. When several forms are correct, the text's existing choice stands. It never rewrites for style.
 
-A code sample is quoted material. A fenced block, an indented block, and an inline code span are all read past rather than read against the rules, so a docstring, a comment, or a string literal inside one is never a finding and never changed, however much it sounds like the prose around it — a pass that cannot run the program does not rewrite the comments explaining it. Prose *about* code is ordinary prose and is read like every other sentence.
+A code sample is quoted material. Fenced blocks, indented blocks, and inline code are neither checked nor changed; prose about code is treated as ordinary prose.
 
-The Skill needs no other Skill and no provenance. A text written by hand, produced elsewhere, or pasted out of another tool is proofread exactly as one this collection wrote.
+The text may come from any source, but one invocation handles exactly one text. Multiple files, globs, and directories are refused.
 
-One invocation processes one text. Several paths, a glob reaching more than one file, or a directory of texts is refused rather than resolved into a configuration per file, because the language, the destination, and any replacement of a source are settled once and for one text.
+Language resolves from **--language**, then a `language` value in a leading `kntnt` frontmatter map, the Contextual Instruction, Conversation Context, and finally the text. Mixed or ambiguous language produces a question.
 
-The language is resolved by a fixed precedence, and the first of these that answers wins: the **--language** value, a `language` value in a `kntnt` map in the text's own leading frontmatter, the Contextual Instruction, applicable Conversation Context, and then the language of the text itself, which is also the default. A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful. A text whose language is materially ambiguous or mixed — no dominant language, or alternation inside paragraphs — is asked about rather than guessed at. That language's mechanics scope and the shared mechanics contract are the whole of what is loaded; no composition, review, or anti-slop guidance is read.
+A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
 
-Ordinary document frontmatter is never configuration. A `language`, `lang`, `genre`, or `technique` key sitting at the top level of a document's own frontmatter belongs to that document, and only a `kntnt` map is read as this collection's. Where such a map carries a language no installed resource answers to, and no **--language** value supersedes it, the run reports unusable artifact metadata and stops rather than reading it as the code it resembles.
+Only the resolved language's mechanics guidance and the shared mechanics contract are used. Ordinary frontmatter is not configuration, and an unsupported `kntnt` language stops the run unless **--language** overrides it.
 
-Delivery changes nothing on disk unless it is asked to. The default target is the response; **--output** names a file or an existing directory, and **--in-place** replaces the single writable local file the text came from. A run that finds nothing to correct and was aimed at the response or at its own source writes nothing and returns a short no-change status in the text's own language; a run aimed at a different file or directory delivers the complete text whether or not anything changed.
+The default Output Target is the response. **--output** writes elsewhere; **--in-place** replaces the single writable local source file. An unchanged result is not rewritten unless delivery to another path was requested.
 
-A model may start this Skill on its own, but only for a specific text and only where the request either uses a proofreading term or is unambiguously limited to mechanical language errors. A request to edit, rewrite, polish, improve, tighten, or review a text is not such a request and does not start it. Typing `/proofread` starts it at any time, which is how the conservative contract stays directly reachable. Where no Formal Invocation carries an Output Target, settle it from the current turn before correcting or writing. An unnamed destination resolves to the response, and a file mentioned only as the location of the errors names no destination: the verbs *fix* and *correct* apply to the named errors, not to the file containing them. Thus `Fix the spelling and grammar mistakes in case.md` delivers to the response. A turn that explicitly names the response or a path other than the source as the destination selects that Output Target; for example, `Write the corrected text to corrected.md` selects corrected.md as a separate Output Target. A turn that asks for the file itself to be changed selects In-place Editing only when it explicitly names that file as the object of the change or as the destination of the corrected text; for example, `Update case.md with the grammar corrections` selects In-place Editing. It remains subject to every refusal that editing mode already carries, including inline text, a URL, an uploaded or read-only source, more than one text, and a simultaneous separate Output Target. A request to save, apply, or persist the corrections without naming where they go is materially ambiguous about the destination: `Fix the grammar errors in case.md and save the corrections` asks which destination the caller intends and writes nothing. For that case and any other material ambiguity about the destination, ask which destination the caller intends and write nothing.
+A model may start this Skill only for a specific text and an explicit proofreading request. Requests to edit, rewrite, polish, improve, tighten, or review do not trigger it; typing `/proofread` always does.
+
+Where no Formal Invocation carries an Output Target, the current turn must settle it. An unnamed destination resolves to the response, and a file named only as the location of the errors names no destination. `Fix the spelling and grammar mistakes in case.md` delivers to the response.
+
+An explicit separate destination selects that Output Target: `Write the corrected text to corrected.md` selects corrected.md as a separate Output Target. A request that asks for the file itself to be changed selects In-place Editing: `Update case.md with the grammar corrections` selects In-place Editing.
+
+In-place Editing remains subject to every refusal, including inline text, a URL, a read-only source, more than one text, or a simultaneous separate Output Target.
+
+A request that only says to save or apply the result is materially ambiguous about the destination: `Fix the grammar errors in case.md and save the corrections` asks which destination the caller intends. In every such case, ask which destination the caller intends and write nothing.
 
 ## POSITIONAL ARGUMENTS
 
 *TEXT*|*PATH*|*URL*
 
-The text to proofread, supplied inline, as one local path, or as one URL. Omitted, it is the single text the current turn identifies. In-place editing requires the *PATH* form.
+The single text to proofread, supplied inline, as a local path, or as a URL. When omitted, the current turn must identify it. In-place editing requires *PATH*.
 
 ## OPTIONS
 
 **--language**=*LANGUAGE*
 
-The language or locale whose mechanics apply. It accepts a canonical code (`sv`, `en_GB`), a case or separator variant of one (`en-GB`, `EN_GB`), a curated alias (`BrE`, `brittisk engelska`), or an ordinary description of a language written in any language. It overrides every other source, including a `kntnt` map in the text's frontmatter. Without it the precedence in DESCRIPTION applies, ending at the language of the text itself.
+Select the language or locale whose mechanics apply. Canonical codes, case or separator variants, curated aliases, and ordinary language descriptions are accepted. The option overrides every other source.
 
 **--output**=*TARGET*
 
-Where the resulting text is delivered. `response` is the default and states that default explicitly; any other value is one filesystem path. A path that does not exist creates exactly that file, a path naming an existing file replaces it without asking for a second confirmation, and a path naming an existing directory receives a filename derived from the source, never overwriting what is already there. It cannot be combined with **--in-place**, and naming the source's own path is refused in favour of **--in-place**.
+Deliver to `response` (the default) or one filesystem path. A new path creates a file, an existing file is replaced, and an existing directory receives a derived non-colliding filename. It cannot be combined with **--in-place** or name the source path.
 
 **--in-place**[=**on**|**off**]
 
-Replace the file the text came from with the result. It accepts `yes`, `on`, and `true` against `no`, `off`, and `false`; bare **--in-place** means `on`, and `off` is both the default and the value that has the same effect as omitting the option. It requires exactly one writable local file and is refused for inline text, a URL, an uploaded or read-only source, and for any invocation that also names an output.
+Replace the writable local source file. Bare **--in-place** means `on`; accepted values are `yes`, `on`, `true`, `no`, `off`, and `false`. Inline text, URLs, uploaded or read-only sources, and simultaneous **--output** are refused.
 
 ## DIAGNOSTICS
 
-An incomplete or invalid form is refused rather than repaired or ignored. The Skill names in one line what was wrong, prints the SYNOPSIS, corrects nothing, writes nothing, and points at `/proofread --help`. A flag with no work to do is refused rather than ignored, an accepted and ignored flag teaching that flags sometimes do nothing.
+An invalid form is refused rather than repaired or ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/proofread --help`. A flag is refused rather than ignored where it has no work to do here.
 
-Refused before any side effect, so that nothing is left half done: an undeclared flag, a text written before a flag rather than after every flag, a missing or invalid option value, more than one text in one invocation, **--output** together with **--in-place**, an output path equal to the input path, in-place editing of inline text, a URL, or a read-only or non-local source, and a destination whose parent directory does not exist.
+Refusals include undeclared or out-of-order input, invalid option values, multiple texts, incompatible output options, unsafe in-place sources, and destinations whose parent does not exist.
 
-A `kntnt` map naming a language that is neither a canonical code nor an installed alias, where no **--language** value supersedes it, is reported as unusable artifact metadata. The run stops rather than reinterpreting the value, so a spelling such as `en_UK` never quietly becomes `en_GB`.
-
-A text whose language cannot be settled — mixed, or a description matching no installed resource uniquely — produces one question rather than a guess. Nothing has been written at that point, so the question costs nothing to answer either way.
+Unsupported `kntnt` language metadata stops the run unless **--language** overrides it. Mixed or ambiguous language produces one question before anything is written.
 
 ## EXAMPLES
 
 **/proofread report.md**
 
-Correct the mechanical errors in `report.md`, infer the language from the file, and return the corrected text in the response. `report.md` itself is left alone.
+Correct `report.md` and return the result in the response without changing the file.
 
 **/proofread --in-place report.md**
 
-Correct the same file and replace it with the result. If nothing needed correcting, the file is not rewritten and a short status says so.
+Correct and replace `report.md`. An unchanged file is not rewritten.
 
 **/proofread --language=en_GB --output=~/texts notes.md**
 
-Correct `notes.md` under British English mechanics and deliver it into the existing directory `~/texts`, under a filename derived from the source and never over an existing file.
+Use British English mechanics and deliver a non-colliding file under `~/texts`.
 
 ## INVOCATION ENVELOPE
 
-[**--** *INSTRUCTION*] introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+[**--** *INSTRUCTION*] adds an optional Contextual Instruction. The first standalone, unquoted `--` is the reserved separator. Everything before it is the Formal Invocation; everything after it, including later `--` tokens, is guidance. The guidance may start on the same line or after blank lines and must contain non-whitespace text.
 
-A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+`--force`, `foo--bar`, `` `--` ``, and `"--"` are not separators. Without the separator, the whole payload remains formal input, including later lines and paragraphs.
 
-An empty instruction or malformed Formal Invocation takes the syntax refusal: the Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal: the Skill names the guidance and boundary, reports the mutation outcome, prints no synopsis, and stops without partial application. Unaddressable is guidance with no addressable effect at all — guidance touching nothing this Skill's contract addresses — and never guidance a documented precedence has already settled against, which is suppressed instead: suppression is that precedence working, so the run continues and the delivery names the suppressed guidance beside the resolved configuration where saying so is useful. Only guidance that is part invalid — part conflicting, part scope-widening, or part unaddressable — goes unapplied as a whole; one parameter suppressed and another landing is an ordinary invocation. Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict can only be discovered after a legitimate effect, the Skill stops before the next effect, reports the exact partial outcome, and does not roll work back unless it already promises atomic behaviour. Context on an exact help route is refused without rendering the help page.
+After validating the Formal Invocation, the Skill uses guidance to clarify or narrow open choices. Guidance cannot contradict formal input or an invariant, widen the Skill, bypass a gate, or request unrelated work. Redundant but applicable guidance is valid. Applicable Conversation Context follows the same limits.
 
-When this Skill invokes another Skill, it passes only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; it never forwards an outer instruction blindly. Successful execution adds no mandatory context acknowledgement, while an existing report identifies a materially changed choice when that choice belongs there.
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
 
 The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
 

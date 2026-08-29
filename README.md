@@ -3,116 +3,157 @@
 [![License](https://img.shields.io/github/license/Kntnt/skills)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/Kntnt/skills)](https://github.com/Kntnt/skills/releases/latest)
 
-[Agent Skills](https://agentskills.io) are portable. Their paths are not: Claude Code, Codex, OpenCode and other Harnesses look for Skills in different directories. Kntnt Skills resolves that mismatch with one Manager. Choose the Skills for a layer once, and the Manager writes them to every Detected Harness.
+You are in the right place if you want practical [agent skills](https://agentskills.io) for maintaining agent instructions, delegating work, shipping code, preparing tickets, editing prose, choosing AI models, and organizing accounting PDFs.
 
-The initial installation puts only the `kntnt` Manager on disk. Its Catalog lets you read every other Skill before you Enable it, keeps Global choices separate from Project extras and detects Harness paths for you.
+The collection works across Claude Code, Codex, OpenCode, and other harnesses. Its `kntnt` manager installs the skills you choose into every detected harness, while keeping machine-wide skills separate from project-specific ones.
 
 ## Quick start
 
-You need [uv](https://docs.astral.sh/uv/), `npx` and network access. Install the Manager:
+Make sure you have the prerequisites in place: [uv](https://docs.astral.sh/uv/), [npx](https://docs.npmjs.com/cli/v8/commands/npx), and network access.
+
+```sh
+TODO
+```
+
+Install Kntnt Skills:
 
 ```sh
 npx skills add Kntnt/skills
 ```
 
-Then open its Catalog from any Harness that can see `kntnt`:
+Open the catalog of available skills:
 
-```
+```text
 /kntnt select
 ```
 
-The Manager groups Skills by Category and marks those already Enabled. Each row explains the Skill and names any Harness Capability it needs; a locked row also names the Skill you need to check first. You can ask to read any Skill's full help before replying to the list in plain text, for example `check commit, push and brief`. Nothing is written until you confirm.
+Choose the skills you want in plain text. You can ask to read any skill's help before confirming the list.
 
-## Choose where Skills apply
+## Choose where skills apply
 
-Kntnt Skills keeps two layers. A Project adds to Global; it cannot hide a Global Skill.
-
-| Layer | What it is for | Select it with |
+| Layer | Purpose | Command |
 |---|---|---|
-| Global | Skills available on this machine | `/kntnt select` |
-| Project | Extra Skills for the current working directory, suitable for committing with the Project | `/kntnt select --project` |
+| Global | Make skills available on this machine | `/kntnt select` |
+| Project | Add skills for the current working directory | `/kntnt select --project` |
 
-The Manager detects Harnesses afresh on every run. When it changes a layer, it writes to every Harness present in that layer. If you install another supported Harness later, confirm the next Select list or run Update to copy your Enabled Skills into it. If no Harness is detected, the Manager uses only the shared `.agents/skills` directory.
+A project can add to the global set but cannot hide a global skill. The manager detects harnesses on every run; if none is detected, it uses `.agents/skills`.
 
 ## Manage the collection
 
 | Command | Result |
 |---|---|
-| `/kntnt` | Show Manager help |
-| `/kntnt select [--project]` | Inspect the Catalog and change what is Enabled |
-| `/kntnt select --on=<skill> --yes` | Enable a named Skill without opening the list |
-| `/kntnt update [--project]` | Refresh the Manager and Enabled Skills whose files differ, remove Withdrawn Skills, report new Skills and re-check Dependencies |
-| `/kntnt uninstall` | Remove Global Skills and then the Manager; leave Project copies alone |
+| `/kntnt` | Show manager help |
+| `/kntnt select [--project]` | View the catalog and change enabled skills |
+| `/kntnt select --on=<skill> --yes` | Enable a named skill without opening the list |
+| `/kntnt update [--project]` | Refresh changed skills and handle catalog changes |
+| `/kntnt uninstall` | Remove global skills and the manager |
 
-See `/kntnt help <command>` for all options. Select, Update and Uninstall accept `--dry-run`, which runs the operation against a temporary home and discards that home afterwards.
+Use `/kntnt help <command>` for manager details. Use `/<skill> --help` for an enabled skill.
 
-> [!IMPORTANT]
-> `--yes` answers every yes-or-no question with yes. On `/kntnt update --yes`, that includes Enabling every new Skill reported by the update.
-
-Enabled Skills are invoked by their own names, not through the Manager. Run `/<skill> --help` for a Skill you have. To inspect one you have not Enabled, ask for its help while the Select list is open.
+`--dry-run` is available for select, update, and uninstall. `--yes` answers every yes-or-no question with yes; on update, that includes enabling new skills.
 
 ## Usage
 
+These summaries help you choose a skill. Each skill's `--help` page contains its complete syntax, options, defaults, and failure behavior.
+
 ### agents-md
 
-Review `AGENTS.md` and `agents.d/` after a task and write only facts that the next session needs and cannot discover elsewhere. Use `--force` to create the initial structure. Run `/agents-md [--force] [--yes] [path]`.
+Keep a project's `AGENTS.md`, `CLAUDE.md`, and `agents.d/` concise and current. It records only useful facts that later sessions cannot discover elsewhere.
+
+Run `/agents-md [--force] [--yes] [path]`.
 
 ### brief
 
-Reframe the previous answer at the level and focus useful to the person who owns the outcome, or keep later replies concise and decision-relevant by default. A bare `/brief` answers the substance again without handing over every implementation detail; `on` applies the same perspective only to subsequent replies. Run `/brief`, `/brief on|off [--user] [--yes]` or `/brief status`. The grammar takes no free text: a request that widens the range, names a language, narrows the subject, or constrains the output goes after the reserved separator, as `/brief -- only the security part`.
+Reframe the previous answer at a more useful level, or keep later replies concise and decision-focused. The standing mode can apply to the session or the current harness's user context.
+
+Run `/brief`, `/brief on|off [--user] [--yes]`, or `/brief status`.
 
 ### delegation
 
-Leave the decision to delegate, planning, briefing, verification, and the final answer with the unchanged main agent while subagents execute the chosen work. Predictably noisy tool work can stay in a subagent's context and return as a distilled result. Delegated execution uses model-selector's public routing Interface for an exact supported launch point, explicit inheritance, or a refusal; it never changes the main agent's model or deliberation configuration. A judged execution may leave a sanitized observation artifact in scratch, imported only by an explicit `/model-selector record`. The mode can last for the current session or be saved in Project or user context. Run `/delegation` to toggle the session, `/delegation on|off [--project|--user] [--yes]` to set a standing mode, or `/delegation status [--project|--user]` to inspect one scope or every scope. The scope is a flag and the session is the unnamed default, so a bare `/delegation` is the only way to write a session toggle.
+Let the main agent decide, plan, and verify while subagents perform selected work routed by `model-selector`. The mode can apply to the session, project, or current harness user.
+
+Run `/delegation`, `/delegation on|off [--project|--user] [--yes]`, or `/delegation status [--project|--user]`.
 
 ### commit
 
-Commit the entire working tree without pushing. The Skill reconciles `CHANGELOG.md`, proposes `.gitignore` additions where needed, derives a subject unless you provide one and shows the proposed changes before confirmation. Run `/commit [--yes] [<message>]`.
+Reconcile the changelog, review the complete working tree, and create one commit without pushing. A message is derived when none is supplied.
+
+Run `/commit [--yes] [message]`.
 
 ### push
 
-Run the `commit` workflow, then push the current branch to its upstream. A clean working tree still allows existing unpushed commits to be sent. Run `/push [--yes] [<message>]`.
+Run the commit workflow, then push the current branch to its upstream. Existing unpushed commits can be pushed even when the working tree is clean.
+
+Run `/push [--yes] [message]`.
 
 ### release
 
-Create a version from the default branch: reconcile the changelog, derive or accept the version, update version files, push and tag. When `gh` and a GitHub remote are available, the Skill also publishes a GitHub release; it attaches an archive when the Project provides a conventional archive build. Run `/release [--no-build] [--yes] [minor|major|X.Y.Z]`.
+Publish a version from the default branch. The skill updates the changelog and version files, pushes, tags, and creates a GitHub release when `gh` and a GitHub remote are available.
+
+Run `/release [--no-build] [--yes] [minor|major|X.Y.Z]`.
 
 ### ready-for-agent-check
 
-Check whether tickets can be built unattended before a run begins. Each ticket is read in an isolated subagent context and checked against the current Project; the Skill reports anything that would stop or slow the builder and never changes the tracker. Run `/ready-for-agent-check [#ticket ...]`.
+Check whether GitHub tickets contain enough settled, current information for unattended implementation. It reports blockers and costs without changing the tracker.
+
+Run `/ready-for-agent-check [#ticket ...]`.
 
 ### orchestrate
 
-Work the tracker's `ready-for-agent` tickets in Dependency waves on the current branch. Orchestrate preflights each execution role through model-selector's frozen public route Interface, while independent verdicts inherit the complete main seat. Each ticket is claimed, built by a subagent and independently verified, and every outcome is recorded on its ticket. Attempts an independent verdict judged are reported as an importable model-selector artifact in the run's own scratch, which nothing imports on the developer's behalf. The run neither pushes nor releases. Run it for all ready tickets, named tickets or the children of a spec with `/orchestrate [--dry-run] [--at-once=N] [--model=NAME] [--deliberation=low|medium|high|xhigh|max] [--yes] [#ticket-or-spec ...]`. Where a failed or conflicted ticket was finished by hand afterwards, `/orchestrate reconcile [--commit=<commit>] [--yes] #<ticket>` records that without rewriting the attempt.
+Build `ready-for-agent` tickets in dependency waves. Fresh subagents implement and independently verify each ticket; successful work is integrated and recorded, but never pushed or released.
+
+Run `/orchestrate [--dry-run] [--at-once=N] [--model=NAME] [--deliberation=LEVEL] [--yes] [#ticket-or-spec ...]`.
+
+Use `/orchestrate reconcile [--commit=COMMIT] [--yes] #ticket` when a failed or conflicted attempt was completed outside orchestrate.
 
 ### proofread
 
-Correct one text's mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated and missing words, and the locale's own conventions for dates, numbers, currency and quotation — and change nothing else. Wording, meaning, tone, structure, facts, formatting, code and metadata are preserved, frontmatter comes through byte for byte, and where more than one form is correct the text's own choice stands. The language is resolved from the invocation, a `kntnt` map in the text's frontmatter, the surrounding conversation, or the text itself, and that language's mechanics scope is loaded together with the shared mechanics contract, which is the whole of what is read from the editorial resources; a text whose language is mixed produces a question rather than a guess. Delivery changes nothing on disk unless asked to: the result goes to the response by default, `--output` names a file or directory, and `--in-place` replaces the single writable local file the text came from. It is the one Skill here besides `agents-md` that a model may start on its own, and only for a specific text with an explicit proofreading request; a request to edit, rewrite, polish, improve or review a text does not reach it. Run `/proofread [--language=<selector>] [--output=<response|path>] [<text>|<path>|<url>]` or `/proofread [--language=<selector>] --in-place <path>`.
+Correct mechanical language errors in one text while preserving wording, meaning, tone, structure, formatting, code, and metadata. The result goes to the response unless another output or explicit in-place editing is selected.
+
+Run `/proofread [--language=LANGUAGE] [--output=TARGET] [text|path|url]` or `/proofread [--language=LANGUAGE] --in-place path`.
 
 ### redline
 
-Review one text against the collection's editorial contract, correct what the review found, then proofread it once and stop. What the review reads the text against is the base contract, the selected genre, the optional technique, the shared anti-slop catalogue, and the composition, review and anti-slop guidance of the resolved language. No provenance is needed: a text this collection wrote, a text a person wrote and a text produced elsewhere are all reviewed the same way, and a `kntnt` map in the text's frontmatter supplies defaults where one is there and is never created where it is not. Genre, technique and language each resolve on their own — from the invocation, that map, an instruction, the conversation, or the text itself — with the general genre, no technique and the text's own language as defaults; a technique is never inferred from a text that resembles one, and a mixed language is asked about. Source material is outside the contract: the review judges what is in front of it and never asks for the material a text came from, nor remarks that it could not. `--max` is the Correction Budget: any non-negative integer, one by default, bounding how many corrections the review may delegate. Every correction goes to a subagent started fresh for it, which carries no earlier findings and no earlier attempt and is given the complete current text, the complete current findings, the resolved parameters, and the requirement to leave everything else alone; what comes back is reviewed again rather than believed. A correction repairs the defect a finding names and not the claim the passage carries beside it, and a finding whose only repair would take that claim with it comes back for a person to settle, as one that would need a fact invented already does. The loop stops when no findings remain, when a correction makes no relevant progress, when a re-review raises a finding an earlier round's own repair created, or when the budget is spent, and the last three deliver the text with whatever is still unresolved. The mechanical pass runs last and once, so a later edit cannot put errors back. Findings that remain come back beside the delivered text, a clean run returns the text alone, and delivery follows the shared contract. Run `/redline [--genre=<genre>] [--technique=<technique>] [--language=<language>] [--max=<n>] [--output=<response|path>] [<text>|<path>|<url>]` or the same flags with `--in-place <path>`.
+Review one text against the editorial contract, correct findings within a bounded correction budget, and finish with one proofreading pass. Remaining findings are reported with the delivered text.
+
+Run `/redline [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--max=N] [--output=TARGET] [text|path|url]` or use `--in-place path`.
 
 ### unslop
 
-Read one text against the collection's anti-slop catalogue, correct what that pass found, and stop there. The seven patterns are the whole of what a finding may be — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm and generic conclusions — each applied by what it does in the text's own language rather than matched as an English string. It is the gesture for a text that is otherwise finished: nothing selects a genre, a technique or an editorial contract, nothing outside the lens is corrected, and no base contract or wider language guidance is even loaded, so a sentence you would have put differently is not a finding here. It runs no mechanical pass and needs no other Skill; `/proofread` is the separate gesture for spelling, grammar and punctuation, and `/redline` the one for the whole editorial contract, which this Skill can neither replace nor grow into. The language is the one parameter it resolves — from the invocation, a `kntnt` map in the text's frontmatter, an instruction, the conversation, or the text itself — and no such map is created or brought into line with the run, since only one of the three values a map records was ever settled. Source material is outside the contract, as it is for `/redline`. `--max` is the Correction Budget: any non-negative integer, one by default, each correction going to a subagent started fresh with the complete current text, the complete current findings and the resolved language, and what comes back read again rather than believed; a correction removes the pattern and not the claim the passage carries beside it, with a finding whose only repair would take that claim with it coming back for a person to settle; the loop stops on clean text, on a correction that made no relevant progress, on a re-reading that raises a finding an earlier round's own repair created, or on the spent budget, and the last three deliver whatever is still unresolved beside the text. A model never starts it — *this text reads like AI* is the author's judgement to make. Run `/unslop [--language=<language>] [--max=<n>] [--output=<response|path>] [<text>|<path>|<url>]` or the same flags with `--in-place <path>`.
+Remove seven defined patterns of machine-sounding prose from one otherwise finished text. It does not apply the wider editorial contract or correct spelling, grammar, and punctuation.
+
+Run `/unslop [--language=LANGUAGE] [--max=N] [--output=TARGET] [text|path|url]` or use `--in-place path`.
 
 ### write
 
-Turn a brief and its source material into one first draft, then stop. Material may be text in the invocation, local files, URLs, or what the conversation already holds, and several sources may feed one draft; supplying a file selects no destination, so the draft comes back in the response unless you name somewhere else. Genre, technique, language and output are each resolved on their own — from the invocation, a recognised Kntnt map in supplied frontmatter, an instruction, the conversation, or inference — with the general genre, no technique, and the language of the request as defaults; a mixed or ambiguous language is asked about rather than guessed. A genre or a technique is selected by name, and the names are the resources the Collection Library installs — the directory is the list, so a name with no resource behind it is refused rather than quietly replaced by the default, and nothing infers a technique from a draft's resemblance to one. The draft is answerable to its material: no invented facts, and attribution, uncertainty, scope, chronology and causality preserved, with spoken quotations repaired only inside a narrow boundary and paraphrased where fidelity is doubtful. By default the result carries Handoff Metadata recording the resolved genre, technique and language for a later review. Run `/write [--genre=<genre>] [--technique=<technique>] [--language=<language>] [--frontmatter=<yes|no>] [--output=<response|path>] [<brief>]`.
+Turn a brief and one or more sources into a first draft. It preserves source fidelity, resolves genre, technique, and language, and can attach handoff metadata for later review.
+
+Run `/write [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--frontmatter=BOOLEAN] [--output=TARGET] [brief]`.
 
 ### model-selector
 
-Compare complete model configurations rather than model names in isolation. The Skill records exact versions, effort settings, serving modes and access channels, then recommends from price-performance evidence without reducing cash, quota, latency and quality to one ratio. Its offline, read-only `route` form resolves a structured delegated workload or ordered batch into exact Harness-native selection, inheritance, or refusal decisions and returns the frozen routing snapshot. When measurements do not determine the exact point, it visibly labels the result heuristic or mixed, begins at the lowest plausibly sufficient configuration where exploration is safe, and emits a frozen sequential and parallel experiment brief; only representative matched measurements can produce a measurement-based recommendation. Routed work can hand back what an external checker judged: `/model-selector observe --artifact=<path> <path>` turns completed routed attempts into a sanitized artifact of statistical metadata in the caller's own scratch, and `/model-selector record <path>` is the explicit invocation that imports one into the evidence ledger. Ordinary work can be measured without anyone remembering to: `/model-selector capture --on` is an explicit opt-in that installs owned session lifecycle integration in Claude Code, Codex, or OpenCode, states what it retains before it writes anything, and turns judged sessions into the same normalized observations. Nothing inside the work grades the work — an objective checker, a declared failure signal, or your own confirmation does — and unjudged sessions wait in a bounded review store that is kept at most 30 days, 100 drafts, and 1 MiB. `/model-selector capture --off`, or making the Skill Disabled, removes every hook it owns and keeps the evidence. Start with `/model-selector setup`, then use `/model-selector recommend <workload>`, `/model-selector route <path>`, or `/model-selector --help`.
+Compare complete AI model configurations using local profiles, costs, quotas, latency, and measured quality. It can recommend a configuration, prepare comparisons, route delegated workloads, maintain evidence, and optionally capture judged runs.
+
+Start with `/model-selector setup`, then use `/model-selector recommend <workload>`, `/model-selector route <path>`, or `/model-selector --help`.
 
 ### rename-invoices
 
-Plan deterministic filenames for every text-based accounting PDF directly inside the current directory by default or an explicitly selected folder, using extracted document evidence, an explicit configured document type, and one or more selected locales. By default, it applies the fresh validated mappings after showing them and receiving a Yes/No confirmation; `--yes` supplies the Yes answer, while `--dry-run` reports proposed mappings, verified canonical names, and unresolved documents without renaming anything. Personal filename conventions, document types, profiles, and complete locales live below `~/.kntnt/rename-invoices/`. Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--yes|--dry-run]`, or `/rename-invoices --help` for every configuration and filename override.
+Plan and apply deterministic filenames for accounting PDFs using extracted document evidence, an explicit document type, and configured locales. By default, it applies after confirmation; `--yes` skips the question and `--dry-run` only reports the plan.
 
-**Dependencies.** `brief` has no Dependencies and works without `uv`; every other Skill needs `uv` and the Manager. `agents-md`, `commit`, `push`, `release` and `orchestrate` also need `git`; `rename-invoices` also needs Poppler's `pdftotext`. `orchestrate` and `ready-for-agent-check` need `gh`; `release` uses it only for the GitHub release step. `delegation` and `orchestrate` need `model-selector`, and `delegation`, `orchestrate` and `ready-for-agent-check` need a Harness that can spawn subagents. `model-selector`'s optional `capture` mode needs a Harness whose session lifecycle an integration can own — Claude Code, Codex, or OpenCode — and reports that capability Unsatisfied elsewhere; every other form of the Skill works without it. `write` needs `uv` and the Manager, whose Collection Library carries the editorial contract, the genres and techniques, and the Language Resources it reads. `redline` needs the same Library, the `proofread` Skill for its closing mechanical pass, and a Harness that can spawn subagents, which stays a requirement whatever Correction Budget an invocation names. `unslop` needs that Library for the anti-slop catalogue and the Language Resources, and a Harness that can spawn subagents on the same terms, and no other Skill. `push` needs `commit`, and `release` needs `push`. Select shows Dependencies on other Skills and Harness Capabilities and can offer required Skills from this Collection. Any Unsatisfied binary Dependency is reported when the Skill is invoked.
+Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--yes|--dry-run]`.
 
-## Contributing and licence
+## Dependencies
 
-Bug fixes, corrections and clarifications are welcome. Discuss new features or changes to existing behaviour in an issue before opening a pull request; the full workflow and verification commands are in [CONTRIBUTING.md](CONTRIBUTING.md).
+Most skills require `uv` and the manager. `brief` requires neither.
+
+Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`. `release` can finish without `gh`, but then skips the GitHub release.
+
+`push` requires `commit`; `release` requires `push`; `delegation` and `orchestrate` require `model-selector`; `redline` requires `proofread`.
+
+Delegation, orchestrate, ready for agent check, redline, and unslop require a harness that can spawn subagents. Select shows skill and harness requirements before enablement.
+
+## Contributing and license
+
+Bug fixes, corrections, and clarifications are welcome. Discuss features and behavior changes before opening a pull request; see [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and verification commands.
 
 Kntnt Skills is licensed under the [Apache License 2.0](LICENSE).

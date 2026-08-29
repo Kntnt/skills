@@ -1288,6 +1288,11 @@ def clean_counterparty(
 ) -> str | None:
     """Normalize one evidenced legal name to a safe common counterparty name."""
 
+    # Reject PDF column boundaries before whitespace normalization erases the
+    # evidence that the candidate combines unrelated fields.
+    if re.search(r"(?:\t|\s{2,})", value.strip()):
+        return None
+
     # Keep the source spelling while removing only configured terminal legal
     # suffixes.
     candidate = re.sub(r"\s+", " ", value).strip(" ,.;:-")
@@ -1301,6 +1306,39 @@ def clean_counterparty(
         return None
 
     return candidate
+
+
+def matches_owner_identity(
+    candidate: str,
+    owner_markers: Sequence[str],
+    legal_suffixes: Sequence[str],
+    ignored_values: Sequence[str],
+) -> bool:
+    """Return whether a candidate contains one configured owner identity."""
+
+    # Compare contiguous Unicode word sequences so PDF layout prefixes and
+    # punctuation cannot disguise the document owner's name.
+    candidate_words = tuple(
+        "".join(
+            character if character.isalnum() else " "
+            for character in candidate.casefold()
+        ).split()
+    )
+    for marker in owner_markers:
+        cleaned_marker = clean_counterparty(marker, legal_suffixes, ignored_values)
+        marker_words = tuple(
+            "".join(
+                character if character.isalnum() else " "
+                for character in (cleaned_marker or marker).casefold()
+            ).split()
+        )
+        if marker_words and any(
+            candidate_words[index : index + len(marker_words)] == marker_words
+            for index in range(len(candidate_words) - len(marker_words) + 1)
+        ):
+            return True
+
+    return False
 
 
 def find_counterparty(
@@ -1325,16 +1363,18 @@ def find_counterparty(
             else locale.recipient_labels
         )
     )
-    owner_markers = {
-        marker.casefold() for marker in settings.configuration.owner_markers
-    }
     for candidate in labeled_candidates(text, labels):
         cleaned = clean_counterparty(
             candidate,
             settings.configuration.legal_suffixes,
             settings.configuration.ignored_counterparty_values,
         )
-        if cleaned and cleaned.casefold() not in owner_markers:
+        if cleaned and not matches_owner_identity(
+            cleaned,
+            settings.configuration.owner_markers,
+            settings.configuration.legal_suffixes,
+            settings.configuration.ignored_counterparty_values,
+        ):
             return cleaned
 
     # Fall back only to a complete legal-entity line, excluding configured owner
@@ -1358,7 +1398,12 @@ def find_counterparty(
                 settings.configuration.legal_suffixes,
                 settings.configuration.ignored_counterparty_values,
             )
-            if cleaned and cleaned.casefold() not in owner_markers:
+            if cleaned and not matches_owner_identity(
+                cleaned,
+                settings.configuration.owner_markers,
+                settings.configuration.legal_suffixes,
+                settings.configuration.ignored_counterparty_values,
+            ):
                 return cleaned
 
     return None
@@ -1371,8 +1416,8 @@ def sanitize_filename_value(value: str, field: str) -> str:
     # Unicode.
     candidate = INVALID_FILENAME_CHARACTERS.sub("-", value)
     candidate = "".join(character for character in candidate if character.isprintable())
-    candidate = re.sub(r"\s+", " ", candidate).strip(" .")
-    if not candidate:
+    candidate = re.sub(r"\s+", " ", candidate).strip()
+    if not candidate or not candidate.strip("."):
         raise PlanError(f"Field {field} becomes empty after filename sanitization")
 
     return candidate
