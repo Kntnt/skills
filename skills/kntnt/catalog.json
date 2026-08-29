@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "5aeb507a3da74f680ec2632bd0a05447e785177e0b220a5129b8a1898035c528",
+  "manager_digest": "ba3906fda029e1e00c2919d403153cdd81c9f1a4d0ff3e3329e73f5fa09ae841",
   "skills": [
     {
       "name": "agents-md",
@@ -175,8 +175,21 @@
       "name": "model-selector",
       "category": "models",
       "description": "Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.",
-      "digest": "705e48202fd2f2cf7323344531c9ff6457710a58929d3d6fdca6bb38c7d1915b",
+      "digest": "3f2b0723961835a0e1d6dbe0a045ac8126cef0e98685fc3e4c79c3763307cc82",
       "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "rename-invoices",
+      "category": "producivity",
+      "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
+      "digest": "27747605ba6cb04f748ed23ebf602e5e7d94996055daef0f235e56681f2716b2",
+      "binaries": [
+        "pdftotext",
         "uv"
       ],
       "skills": [],

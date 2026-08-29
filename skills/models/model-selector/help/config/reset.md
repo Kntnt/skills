@@ -18,7 +18,7 @@ The next command that requires model selections starts guided setup.
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`.
+Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
 
 ## DIAGNOSTICS
 

@@ -28,4 +28,5 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/evaluation/protocol.md` — read when evaluating an editorial Skill against the fixture corpus
 - `skills/kntnt/library/references/languages/README.md` — read when adding or changing a Language Resource
 - `skills/kntnt/library/references/editorial/README.md` — read when adding or changing the editorial base contract, a genre, a technique, the anti-slop catalogue, or the shared mechanics contract
+- `agents.d/user-configuration.md` — read when adding or changing user-owned configuration for a Skill
 - `CONTRIBUTING.md` — read when running tests or opening a PR

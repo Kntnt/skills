@@ -60,6 +60,7 @@ BINARY_HOW = {
     "uv": "install uv from https://docs.astral.sh/uv/",
     "git": "install git",
     "gh": "install GitHub CLI (gh) from https://cli.github.com/",
+    "pdftotext": "install Poppler so pdftotext is available on PATH",
 }
 
 # A Capability is a Dependency on the Harness itself. No script can test one:

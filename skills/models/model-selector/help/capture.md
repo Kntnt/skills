@@ -54,7 +54,7 @@ Name a Harness to install into, repeatable. Supported values are `claude-code`, 
 
 **--data=**_PATH_
 
-Use *PATH* as the data directory instead of `~/.model-selector/`. The capture store, the evidence ledger, and the derived frontiers all live under the selected directory.
+Use *PATH* as the data directory instead of `~/.kntnt/model-selector/`. The capture store, the evidence ledger, and the derived frontiers all live under the selected directory.
 
 ## RETAINED DATA
 

@@ -26,7 +26,7 @@ A UTF-8 JSON artifact conforming to `references/route-request.schema.json`. It i
 
 **--data=**_PATH_
 
-Read the current profile and evidence from *PATH* only when the request does not carry a snapshot. The public Skill adapter consumes this flag while it derives the canonical `context`; the internal script receives only the resulting artifact path. The default is `~/.model-selector/`. Route never writes there.
+Read the current profile and evidence from *PATH* only when the request does not carry a snapshot. The public Skill adapter consumes this flag while it derives the canonical `context`; the internal script receives only the resulting artifact path. The default is `~/.kntnt/model-selector/`. Route never writes there.
 
 ## OUTPUT
 

@@ -18,7 +18,7 @@ The complete profile is shown before it is written. Reopening setup for an exist
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`.
+Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
 
 ## DIAGNOSTICS
 

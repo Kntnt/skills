@@ -26,6 +26,14 @@ def _load() -> Any:
     return module
 
 
+def test_default_data_uses_the_shared_kntnt_skill_directory() -> None:
+    """Keep model-selector's user data under the shared Kntnt root."""
+
+    # Assert the Collection-wide convention at the owning public seam.
+    module = _load()
+    assert module.default_data() == Path.home() / ".kntnt" / "model-selector"
+
+
 def _seat() -> dict[str, Any]:
     """Provide the exact main seat an ordinary session runs on."""
 

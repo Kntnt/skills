@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.18.0] – 2026-08-29
+
+### Added
+
+- `/rename-invoices` now plans deterministic filenames for text-based accounting PDFs from an explicit document type and locale set, reports unresolved evidence in a dry run by default, and applies only a fresh validated plan under `--apply`. Bundled English and Swedish locale resources, configurable document types and filename templates, personal configuration, Poppler extraction, manual-review boundaries, and collision-safe two-phase renames ship with the Skill.
+
+### Changed
+
+- Skill-specific user configuration now lives below `~/.kntnt/<skill-name>/`. Model Selector's default profile, evidence ledger, derived frontiers, and capture store move from `~/.model-selector/` to `~/.kntnt/model-selector/`, and the project agent guide records the shared convention for future Skills.
+
 ## [0.17.3] – 2026-08-29
 
 ### Changed

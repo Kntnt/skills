@@ -948,7 +948,7 @@ def _hook_command(supplied: list[str], data: Path) -> list[str]:
 def default_data() -> Path:
     """Return the data directory this Skill keeps its evidence in by default."""
 
-    return Path.home() / ".model-selector"
+    return Path.home() / ".kntnt" / "model-selector"
 
 
 def remove_integrations() -> dict[str, Any]:

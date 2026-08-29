@@ -1,0 +1,29 @@
+version = 2
+
+# Select every locale that may occur in the same document batch. The first locale supplies standard output prefixes.
+locales = ["en", "sv"]
+
+# Override only settings that differ from the bundled configuration.
+[output]
+date_format = "%Y-%m-%d"
+
+# Add identities that must never be selected as the other accounting party.
+[extraction]
+owner_markers = ["Example Consulting Ltd"]
+
+# Add local document types or override bundled types by their exact key.
+[types.card-purchase]
+prefix = "CARD PURCHASE"
+date_sources = ["purchase", "payment", "issue"]
+counterparty_source = "issuer"
+identifier_policy = "collision"
+
+# Add recurring-document profiles when content markers identify a provider reliably.
+[[profiles]]
+name = "example-provider"
+markers = ["Example Provider Ltd", "Service account"]
+counterparty = "Example Provider"
+types = ["card-purchase"]
+date_labels = ["Invoice date"]
+identifier_labels = ["Invoice number"]
+descriptions = { "Cloud hosting" = "Cloud hosting" }

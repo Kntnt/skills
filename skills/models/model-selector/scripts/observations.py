@@ -987,7 +987,7 @@ def _record_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     if not arguments or arguments[0].startswith("-"):
         return _artifact_refusal("invalid_arguments", "Record needs one path."), 2
     rest = arguments[1:]
-    directory = Path.home() / ".model-selector"
+    directory = Path.home() / ".kntnt" / "model-selector"
     if rest:
         data = _option(rest, "--data")
         if data is None:

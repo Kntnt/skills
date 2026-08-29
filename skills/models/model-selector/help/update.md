@@ -24,7 +24,7 @@ Check every relevant mutable index once regardless of cadence. Immutable details
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`.
+Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
 
 ## DIAGNOSTICS
 

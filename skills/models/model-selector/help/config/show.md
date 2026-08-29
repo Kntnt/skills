@@ -18,7 +18,7 @@ The command reads local configuration and evidence only; it performs no network 
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`.
+Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
 
 ## DIAGNOSTICS
 

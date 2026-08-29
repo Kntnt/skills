@@ -28,7 +28,7 @@ Compare marginal routing economics now or fixed-fee renewal economics. `route` i
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory instead of `~/.model-selector/`.
+Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
 
 ## DIAGNOSTICS
 

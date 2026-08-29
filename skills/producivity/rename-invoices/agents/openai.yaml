@@ -1,0 +1,6 @@
+interface:
+  display_name: "Rename Invoices"
+  short_description: "Rename accounting PDFs from explicit flags"
+
+policy:
+  allow_implicit_invocation: false

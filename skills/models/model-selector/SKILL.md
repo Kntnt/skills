@@ -75,7 +75,7 @@ Anything outside these forms is invalid, an operand written before a flag among 
 
 ## Evidence first
 
-Default data directory: `~/.model-selector/`. A user-supplied `--data=<path>` wins. Read `config.json` and existing evidence before any research or recommendation.
+Default data directory: `~/.kntnt/model-selector/`. A user-supplied `--data=<path>` wins. Read `config.json` and existing evidence before any research or recommendation.
 
 When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections except `route`. Route follows its own inheritance and refusal rules and never starts setup. Never install a bundled access combination as the user's configuration.
 

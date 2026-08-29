@@ -1,0 +1,47 @@
+version = 1
+locale = "en"
+numeric_date_order = "reject-ambiguous"
+ordinal_suffixes = ["st", "nd", "rd", "th"]
+identifier_labels = ["Invoice number", "Invoice no.", "Invoice no", "Invoice #", "Tax invoice number", "Receipt number", "Receipt no.", "Receipt no", "Receipt #", "Transaction ID", "Reference number"]
+issuer_labels = ["From", "Seller", "Supplier", "Vendor", "Merchant", "Issued by"]
+recipient_labels = ["Bill To", "Billed To", "Invoice To", "Customer", "Buyer", "Sold To"]
+legal_suffixes = ["Public Limited Company", "Proprietary Limited", "Pty Limited", "Incorporated", "Corporation", "Limited", "Company Limited by Guarantee", "Designated Activity Company", "Professional Corporation", "Unlimited Liability Corporation", "Pty Ltd", "Pty. Ltd.", "Ltd.", "Ltd", "LLC", "L.L.C.", "LLP", "L.L.P.", "PLC", "P.L.C.", "Inc.", "Inc", "Corp.", "Corp", "Co.", "DAC", "CLG", "ULC"]
+ignored_counterparty_values = ["Invoice", "Tax invoice", "Receipt", "Credit note"]
+
+[type_prefixes]
+supplier-invoice = "INVOICE"
+receipt = "RECEIPT"
+customer-invoice = "CUSTOMER INVOICE"
+credit-note = "CREDIT NOTE"
+
+[date_labels]
+issue = ["Date of issue", "Invoice date", "Issue date", "Date of invoice", "Tax invoice date", "Billed On"]
+purchase = ["Transaction Date", "Purchase date", "Date of purchase", "Receipt date", "Order date"]
+payment = ["Paid date", "Paid on", "Date paid", "Payment date", "Payment received", "Billing date"]
+due = ["Due date", "Date due", "Payment due"]
+
+[months]
+jan = 1
+january = 1
+feb = 2
+february = 2
+mar = 3
+march = 3
+apr = 4
+april = 4
+may = 5
+jun = 6
+june = 6
+jul = 7
+july = 7
+aug = 8
+august = 8
+sep = 9
+sept = 9
+september = 9
+oct = 10
+october = 10
+nov = 11
+november = 11
+dec = 12
+december = 12

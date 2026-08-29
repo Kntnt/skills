@@ -1,0 +1,46 @@
+version = 1
+locale = "sv"
+numeric_date_order = "dmy"
+ordinal_suffixes = []
+identifier_labels = ["Fakturanummer", "Fakturanr", "Faktura nr", "Kvittonummer", "Kvitt nummer", "Transaktions-ID", "Referensnummer"]
+issuer_labels = ["Från", "Säljare", "Leverantör", "Handlare", "Utfärdad av"]
+recipient_labels = ["Faktureras till", "Fakturera till", "Kund", "Köpare"]
+legal_suffixes = ["Sverige AB", "Aktiebolag", "AB (publ)", "AB", "Handelsbolag", "HB", "Kommanditbolag", "KB"]
+ignored_counterparty_values = ["Faktura", "Kvitto", "Kreditfaktura"]
+
+[type_prefixes]
+supplier-invoice = "FAKTURA"
+receipt = "KVITTO"
+customer-invoice = "KUNDFAKTURA"
+credit-note = "KREDITFAKTURA"
+
+[date_labels]
+issue = ["Fakturadatum", "Utställningsdatum", "Datum för utfärdande"]
+purchase = ["Transaktionsdatum", "Inköpsdatum", "Köpdatum", "Kvittodatum"]
+payment = ["Betaldatum", "Betald den", "Betalningsdatum", "Debiteringsdatum"]
+due = ["Förfallodatum", "Betalas senast"]
+
+[months]
+jan = 1
+januari = 1
+feb = 2
+februari = 2
+mar = 3
+mars = 3
+apr = 4
+april = 4
+maj = 5
+jun = 6
+juni = 6
+jul = 7
+juli = 7
+aug = 8
+augusti = 8
+sep = 9
+september = 9
+okt = 10
+oktober = 10
+nov = 11
+november = 11
+dec = 12
+december = 12

@@ -12,7 +12,7 @@ Use `seed_id` for import idempotency and retain the original retrieval timestamp
 
 ## Store
 
-Default directory: `~/.model-selector/`.
+Default directory: `~/.kntnt/model-selector/`.
 
 The active profile and its revision history are defined in `profile-management.md`; the files below are evidence, not current user settings.
 

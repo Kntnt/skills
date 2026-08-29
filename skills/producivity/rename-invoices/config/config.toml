@@ -1,0 +1,35 @@
+version = 2
+
+[output]
+template = "[{prefix}][{date}] {counterparty}{description_part}{identifier_part}.{extension}"
+date_format = "%Y-%m-%d"
+description_template = " - {description}"
+identifier_template = " - {identifier}"
+extension = "pdf"
+
+[extraction]
+owner_markers = []
+
+[types.supplier-invoice]
+prefix_key = "supplier-invoice"
+date_sources = ["issue"]
+counterparty_source = "issuer"
+identifier_policy = "collision"
+
+[types.receipt]
+prefix_key = "receipt"
+date_sources = ["purchase", "payment", "issue"]
+counterparty_source = "issuer"
+identifier_policy = "collision"
+
+[types.customer-invoice]
+prefix_key = "customer-invoice"
+date_sources = ["issue"]
+counterparty_source = "recipient"
+identifier_policy = "always"
+
+[types.credit-note]
+prefix_key = "credit-note"
+date_sources = ["issue"]
+counterparty_source = "issuer"
+identifier_policy = "always"

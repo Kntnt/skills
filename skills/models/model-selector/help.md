@@ -100,7 +100,7 @@ Write the observations into the caller-owned artifact at *PATH*, creating it whe
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory. Valid with every command except `observe`, which reads neither. The default is `~/.model-selector/`.
+Use *PATH* as the profile and evidence directory. Valid with every command except `observe`, which reads neither. The default is `~/.kntnt/model-selector/`.
 
 **--decision=route**, **--decision=renew**
 
@@ -154,11 +154,11 @@ After a blue or orange banner, `Snabbaste vägen till mätdata` gives an agent-r
 
 ## FILES
 
-**~/.model-selector/config.json**
+**~/.kntnt/model-selector/config.json**
 
 The default active profile and its revision history. A user-supplied `--data` directory relocates it.
 
-**~/.model-selector/capture/**
+**~/.kntnt/model-selector/capture/**
 
 The capture store while capture is enabled: its configuration, per-session drafts, and bounded pending-review records. An imported capture is deleted immediately; nothing here is permanent evidence.
 
