@@ -187,7 +187,7 @@
       "name": "rename-invoices",
       "category": "producivity",
       "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
-      "digest": "27747605ba6cb04f748ed23ebf602e5e7d94996055daef0f235e56681f2716b2",
+      "digest": "ebb37ebbf31b2fcb22dd1a2ef06cd64e7315a0c5ce14a5d11f08162c0f8efcc3",
       "binaries": [
         "pdftotext",
         "uv"

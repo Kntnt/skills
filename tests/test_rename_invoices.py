@@ -57,6 +57,56 @@ class RenameInvoicesTest(unittest.TestCase):
 
         return path
 
+    def test_dry_run_is_explicit_and_default_invocation_applies(self) -> None:
+        """Make non-mutating behavior opt-in at the public Skill boundary."""
+
+        # Read the executable contract and the two user-facing descriptions of
+        # its invocation.
+        body = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        help_page = (SKILL_ROOT / "help.md").read_text(encoding="utf-8")
+        readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
+        readme_section = readme.partition("\n### rename-invoices\n")[2].partition(
+            "\n### "
+        )[0]
+
+        # Advertise the opt-in preview consistently and retire the inverted
+        # mutation flag from every public surface.
+        for surface in (body, help_page, readme_section):
+            self.assertIn("--dry-run", surface)
+            self.assertNotIn("--apply", surface)
+
+        # Keep execution behavior explicit where the agent chooses between
+        # reporting the plan and applying it.
+        self.assertIn("With `--dry-run`, report", body)
+        self.assertIn("Without `--dry-run`, require", body)
+        self.assertIn("By default, the Skill applies", help_page)
+        self.assertIn("By default, it applies", readme_section)
+
+    def test_application_waits_for_confirmation_unless_yes_is_supplied(self) -> None:
+        """Require one explicit yes before the first filename changes."""
+
+        # Read the executable contract and the public explanations of its
+        # confirmation boundary.
+        body = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        help_page = (SKILL_ROOT / "help.md").read_text(encoding="utf-8")
+        readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
+        readme_section = readme.partition("\n### rename-invoices\n")[2].partition(
+            "\n### "
+        )[0]
+
+        # Offer unattended confirmation everywhere while keeping it mutually
+        # exclusive with a run that cannot write.
+        self.assertIn("[--yes|--dry-run]", body)
+        self.assertIn("[**--yes**|**--dry-run**]", help_page)
+        self.assertIn("[--yes|--dry-run]", readme_section)
+
+        # Ask the promised binary question only after the exact rename plan is
+        # ready, and treat formal --yes as its affirmative answer.
+        self.assertIn("Apply these filename changes? Yes/No.", body)
+        self.assertIn("Only an explicit Yes response", body)
+        self.assertIn("`--yes` answers that question Yes", body)
+        self.assertIn("Apply these filename changes? Yes/No.", help_page)
+
     def plan(
         self,
         document_type: str,
@@ -398,6 +448,31 @@ date_format = "%d-%m-%Y"
             renamer.PlanError, "Unknown document type 'invoice'"
         ):
             renamer.resolve_settings(configuration, "invoice")
+
+    def test_plan_defaults_to_the_current_directory(self) -> None:
+        """Use the invocation directory when no document folder is supplied."""
+
+        # Parse a complete plan invocation without the optional folder flag.
+        arguments = renamer.build_parser().parse_args(
+            ["plan", "--type", "receipt", "--locale", "en"]
+        )
+
+        # Preserve the relative spelling until normal folder validation resolves
+        # it against the process working directory.
+        self.assertEqual(arguments.folder, Path("."))
+
+        # Keep the optional flag and its default visible on every public
+        # invocation surface.
+        body = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        help_page = (SKILL_ROOT / "help.md").read_text(encoding="utf-8")
+        readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
+        readme_section = readme.partition("\n### rename-invoices\n")[2].partition(
+            "\n### "
+        )[0]
+        self.assertIn("[--folder=<path>] --type=<name>", body)
+        self.assertIn("[**--folder=**_PATH_] **--type=**_NAME_", help_page)
+        self.assertIn("Defaults to `.`", help_page)
+        self.assertIn("[--folder=<path>] --type=<name>", readme_section)
 
     def test_unknown_configuration_field_fails_before_folder_access(self) -> None:
         """Reject apparent overrides that contain a misspelled field."""

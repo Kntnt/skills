@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.18.1] – 2026-08-29
+
+### Changed
+
+- `/rename-invoices` now applies its fresh validated plan by default after showing every exact filename change and receiving a Yes/No confirmation; `--yes` supplies the affirmative answer, while `--dry-run` explicitly selects the non-mutating report and replaces `--apply`. The target `--folder` is now optional and defaults to the current directory.
+
 ## [0.18.0] – 2026-08-29
 
 ### Added

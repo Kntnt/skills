@@ -1877,9 +1877,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     plan_parser.add_argument(
         "--folder",
+        default=Path("."),
         type=Path,
-        required=True,
-        help="Folder whose direct PDF children are planned",
+        help="Folder whose direct PDF children are planned; defaults to .",
     )
     plan_parser.add_argument(
         "--type",

@@ -6,13 +6,13 @@ rename-invoices - plan and apply safe filenames for accounting PDFs
 
 ## SYNOPSIS
 
-**/rename-invoices** **--folder=**_PATH_ **--type=**_NAME_ [**--config=**_FILE_|**--no-config**] [**--locale=**_NAME_ ...] [**--locale-file=**_FILE_ ...] [**--prefix=**_TEXT_] [**--template=**_TEMPLATE_] [**--date-format=**_FORMAT_] [**--description-template=**_TEMPLATE_] [**--extension=**_EXTENSION_] [**--identifier-template=**_TEMPLATE_] [**--date-source=**_SOURCE_ ...] [**--counterparty-source=**_issuer_|_recipient_] [**--identifier-policy=**_always_|_collision_|_never_] [**--overrides=**_FILE_] [**--apply**] [**--** *INSTRUCTION*]
+**/rename-invoices** [**--folder=**_PATH_] **--type=**_NAME_ [**--config=**_FILE_|**--no-config**] [**--locale=**_NAME_ ...] [**--locale-file=**_FILE_ ...] [**--prefix=**_TEXT_] [**--template=**_TEMPLATE_] [**--date-format=**_FORMAT_] [**--description-template=**_TEMPLATE_] [**--extension=**_EXTENSION_] [**--identifier-template=**_TEMPLATE_] [**--date-source=**_SOURCE_ ...] [**--counterparty-source=**_issuer_|_recipient_] [**--identifier-policy=**_always_|_collision_|_never_] [**--overrides=**_FILE_] [**--yes**|**--dry-run**] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-`rename-invoices` reads every PDF directly inside one deliberately selected folder, extracts text with Poppler, and builds deterministic filenames from an explicit document type and one or more configured locales. It does not search subdirectories, infer the document type, use OCR, or treat an existing filename as evidence.
+`rename-invoices` reads every PDF directly inside the current directory by default or one explicitly selected folder, extracts text with Poppler, and builds deterministic filenames from an explicit document type and one or more configured locales. It does not search subdirectories, infer the document type, use OCR, or treat an existing filename as evidence.
 
-The default run is non-mutating: it reports proposed old-to-new mappings, files already carrying their verified canonical names, and documents whose date, counterparty, description, identifier, extraction, or target collision still needs review. `--apply` authorizes only the fresh validated plan created during the same run. Source bytes and destinations are checked again before the first rename, and an edited or stale plan is refused.
+By default, the Skill applies the fresh validated plan created during the same run after review and explicit confirmation. Before changing any filename, it shows every exact old-to-new mapping and asks `Apply these filename changes? Yes/No.`; `--yes` supplies the Yes answer without waiting. `--dry-run` instead reports proposed mappings, files already carrying their verified canonical names, and documents whose date, counterparty, description, identifier, extraction, or target collision still needs review without renaming or asking. Source bytes and destinations are checked again before the first rename, and an edited or stale plan is refused.
 
 Bundled settings define supplier invoices, receipts, customer invoices, and credit notes. A personal configuration below `~/.kntnt/rename-invoices/` may select locales, replace filename conventions, add document types, or add complete locales without changing the Skill.
 
@@ -20,7 +20,7 @@ Bundled settings define supplier invoices, receipts, customer invoices, and cred
 
 **--folder=**_PATH_
 
-Process the direct PDF children of this directory. The filesystem root and the user's home directory are refused as dangerously broad targets.
+Process the direct PDF children of this directory. Defaults to `.` (the current working directory). The filesystem root and the user's home directory are refused as dangerously broad targets.
 
 **--type=**_NAME_
 
@@ -82,9 +82,13 @@ Require identifiers on every filename, add them only to otherwise colliding file
 
 Read reviewed per-file semantic decisions from a JSON object keyed by exact source filename. Only unresolved fields may be supplied, and direct edits to a generated plan remain invalid.
 
-**--apply**
+**--yes**
 
-Apply the fresh validated plan after review. This is the only form that renames files.
+Answer Yes to the application question without waiting for confirmation. It cannot be combined with **--dry-run**.
+
+**--dry-run**
+
+Report the fresh plan after review without renaming files or asking for confirmation. It cannot be combined with **--yes**.
 
 ## FILES
 
@@ -106,7 +110,7 @@ Bundled complete locale files.
 
 ## DIAGNOSTICS
 
-An invalid, incomplete, unknown, or out-of-order form is refused rather than repaired or ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/rename-invoices --help`. A flag with no work to do is refused rather than ignored.
+An invalid, incomplete, unknown, conflicting, or out-of-order form is refused rather than repaired or ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/rename-invoices --help`. A flag with no work to do is refused rather than ignored, so **--yes** and **--dry-run** cannot be combined.
 
 A missing `pdftotext`, invalid TOML, unknown configuration field, missing locale, unknown document type, empty folder, broad target folder, unreadable PDF, ambiguous date, unresolved counterparty, required identifier, or filename collision is reported before application. Reviewable document uncertainty remains visible as `needs_review`; application requires that count to be zero.
 
@@ -114,16 +118,22 @@ If a source changed, disappeared, or gained an occupied destination after planni
 
 ## EXAMPLES
 
-Plan Swedish supplier-invoice names without changing files:
+Preview Swedish supplier-invoice names without changing files:
 
 ```text
-/rename-invoices --folder=~/Accounting/Incoming --type=supplier-invoice --locale=sv
+/rename-invoices --type=supplier-invoice --locale=sv --dry-run
 ```
 
-Apply receipt names across a mixed English and Swedish folder using personal defaults:
+Apply receipt names across a mixed English and Swedish folder after answering the confirmation question:
 
 ```text
-/rename-invoices --folder=~/Accounting/Receipts --type=receipt --locale=en --locale=sv --apply
+/rename-invoices --folder=~/Accounting/Receipts --type=receipt --locale=en --locale=sv
+```
+
+Apply the same plan without waiting for confirmation:
+
+```text
+/rename-invoices --folder=~/Accounting/Receipts --type=receipt --locale=en --locale=sv --yes
 ```
 
 ## INVOCATION ENVELOPE
