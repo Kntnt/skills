@@ -4,6 +4,17 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.17.3] – 2026-08-29
+
+### Changed
+
+- Global Manager updates now require authorization from the current interaction for the exact plan being applied. `$kntnt update --yes` remains unattended, while every other global update shows its complete plan and waits for a later confirmation; stale or changed plans and incidental repair or handoff instructions cannot authorize a mutation (issue #188).
+
+### Fixed
+
+- Manager refreshes now acquire and verify a complete candidate away from the active installation, publish changed generations without exposing a missing or mixed skill tree to concurrent readers, skip identical candidates, deduplicate logical paths resolving to one physical target, and leave the prior generation intact with no staging artifacts after acquisition, validation, or publication failure (issue #187).
+- `/orchestrate --dry-run` now follows the real planning and model-routing path through the explicit mutation seam while leaving repository, home, Codex, session, legacy, Manager, skill, Git, process, tracker, and temporary-artifact surfaces unchanged on both successful and refused previews. State carry-forward validates its source before creating a destination, never runs during a dry preview, and retains its real-run migration behavior (issue #189).
+
 ## [0.17.2] – 2026-08-26
 
 ### Fixed
