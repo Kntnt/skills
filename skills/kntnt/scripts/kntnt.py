@@ -598,8 +598,8 @@ def fetch_catalog() -> dict[str, Any]:
         raise ManagerError("Catalog at the origin is corrupt") from exc
 
 
-def write_catalog(catalog: dict[str, Any]) -> None:
-    """Store *catalog* beside the Manager that is running, in one move.
+def write_catalog_file(path: Path, catalog: dict[str, Any]) -> None:
+    """Store *catalog* at *path* in one move.
 
     Written to a sibling and renamed over the target, because a write in place
     is what leaves a half-written snapshot behind when a run is interrupted —
@@ -608,7 +608,6 @@ def write_catalog(catalog: dict[str, Any]) -> None:
     directory is atomic: what survives is the old file or the new one.
     """
 
-    path = here() / "catalog.json"
     text = json.dumps(catalog, indent=2, ensure_ascii=False) + "\n"
     encoded = text.encode("utf-8")
 
@@ -632,6 +631,12 @@ def write_catalog(catalog: dict[str, Any]) -> None:
         temporary.replace(path)
     finally:
         temporary.unlink(missing_ok=True)
+
+
+def write_catalog(catalog: dict[str, Any]) -> None:
+    """Store *catalog* beside the Manager that is running, in one move."""
+
+    write_catalog_file(here() / "catalog.json", catalog)
 
 
 def stored_catalog() -> dict[str, Any] | None:
@@ -1076,13 +1081,16 @@ def validate_candidate(name: str, candidate: Path, expected_digest: str) -> str:
         )
         if frontmatter.get("name") != name:
             raise ManagerError(f"staged '{name}' declares another name")
-        if name == MANAGER:
-            validate_manager_candidate(candidate)
         digest = (
             manager_digest(candidate)
             if name == MANAGER
             else directory_digest(candidate)
         )
+        if digest != expected_digest:
+            raise ManagerError(f"staged '{name}' differs from the selected Collection")
+        if name == MANAGER:
+            write_catalog_file(candidate / "catalog.json", load_catalog())
+            validate_manager_candidate(candidate)
     except (
         OSError,
         UnicodeDecodeError,
@@ -1092,8 +1100,6 @@ def validate_candidate(name: str, candidate: Path, expected_digest: str) -> str:
     ) as exc:
         raise ManagerError(f"staged '{name}' could not be verified: {exc}") from exc
 
-    if digest != expected_digest:
-        raise ManagerError(f"staged '{name}' differs from the selected Collection")
     return digest
 
 

@@ -3965,6 +3965,35 @@ def test_manager_validation_failure_preserves_the_prior_generation(
     assert _publication_artifacts(tmp_path) == []
 
 
+def test_manager_candidate_adopts_selected_catalog_when_digest_matches(
+    tmp_path: Path,
+) -> None:
+    """A transport-cached Catalog cannot strand an otherwise current Manager."""
+
+    world = _world(tmp_path)
+    module = _manager_module()
+    selected = module.generate_catalog(world["source"])
+    module._CATALOG = (selected, True)
+    candidate = tmp_path / "candidate"
+    shutil.copytree(world["source"] / "skills" / "kntnt", candidate)
+
+    # Reproduce a transport cache whose Manager files match the selected
+    # generation while its recursively generated Catalog predates that release.
+    stale = {**selected, "skills": []}
+    _write(candidate / "catalog.json", json.dumps(stale))
+
+    digest = module.validate_candidate(
+        "kntnt",
+        candidate,
+        selected["manager_digest"],
+    )
+
+    assert digest == selected["manager_digest"]
+    assert (
+        json.loads((candidate / "catalog.json").read_text(encoding="utf-8")) == selected
+    )
+
+
 def test_incomplete_manager_interface_preserves_the_prior_generation(
     tmp_path: Path,
 ) -> None:

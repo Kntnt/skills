@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.18.5] – 2026-08-30
+
+### Fixed
+
+- Global Update now accepts a transport-cached Manager whose shipped files match the selected `manager_digest`, replacing only its recursively generated Catalog with the exact Catalog that planned the run before structural verification and publication.
+
 ## [0.18.4] – 2026-08-30
 
 ### Fixed
