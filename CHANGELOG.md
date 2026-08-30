@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.18.6] – 2026-08-30
+
+### Fixed
+
+- Persistent delegation pointers now command agents to delegate by the companion policy instead of conditionally waiting for a separate mode-on instruction.
+
 ## [0.18.5] – 2026-08-30
 
 ### Fixed

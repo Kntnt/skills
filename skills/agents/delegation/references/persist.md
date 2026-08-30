@@ -23,7 +23,7 @@ Write exactly this pointer block last in the context file, with one blank line a
 
 ```markdown
 <!-- kntnt:delegation -->
-- @agents.d/kntnt-delegation.md — read and follow while delegation mode is on.
+- Delegate per @agents.d/kntnt-delegation.md.
 <!-- /kntnt:delegation -->
 ```
 
