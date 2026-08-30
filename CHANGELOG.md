@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.18.3] – 2026-08-30
+
+### Added
+
+- `docs/archive/claude-skills/` now preserves the final Proofread and Thomas Writer source documents from the former `claude-skills` repository as non-operational historical references with recorded provenance and checksums.
+
+### Changed
+
+- `/delegation` now persists a compact standing instruction in `agents.d/kntnt-delegation.md` and keeps only an `@` reference in `AGENTS.md` or `CLAUDE.md`; the instruction defers routing and observation mechanics to Model Selector's public interfaces so every project session loads substantially less text.
+
 ## [0.18.2] – 2026-08-29
 
 ### Changed

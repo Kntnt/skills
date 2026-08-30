@@ -34,21 +34,21 @@ Disable delegation mode in the selected scope.
 
 **status**
 
-Report scope state, the effective verdict, and any stale managed block without changing persistent state.
+Report scope state, the effective verdict, and any stale managed files without changing persistent state.
 
 ## OPTIONS
 
 **--project**
 
-Target the context file this Project already loads instead of the current session. A committed block applies to everyone using the Project.
+Target this Project's loaded context file and its companion mode file instead of the current session. A committed pair applies to everyone using the Project.
 
 **--user**
 
-Target this Harness's global context file instead of the current session. Run the Skill separately in another Harness to configure that Harness.
+Target this Harness's global context file and its companion mode file instead of the current session. Run the Skill separately in another Harness to configure that Harness.
 
 **--yes**
 
-Write or remove a persistent Project or user block without waiting for confirmation. It is valid only with `on` or `off`.
+Write or remove persistent Project or user files without waiting for confirmation. It is valid only with `on` or `off`.
 
 ## SCOPES
 
@@ -58,11 +58,11 @@ The default and the scope a bare invocation toggles. Session scratch preserves i
 
 **project**
 
-Selected by **--project**. A managed context block can be committed for everyone using the Project.
+Selected by **--project**. A managed context pointer and companion mode file can be committed for everyone using the Project.
 
 **user**
 
-Selected by **--user**. A managed block applies to the current Harness's global context.
+Selected by **--user**. A managed pointer and companion apply to the current Harness's global context.
 
 ## FILES
 
@@ -72,7 +72,11 @@ Optional session scratch state used across context compaction.
 
 **Project and user context files**
 
-The Skill shows the selected file and managed block before writing unless **--yes** is present. `on` refreshes a stale block.
+The Skill keeps only a managed `@agents.d/kntnt-delegation.md` pointer in the loaded context file.
+
+**agents.d/kntnt-delegation.md**
+
+The companion contains the mode. The Skill shows both managed files before writing unless **--yes** is present; `on` refreshes stale state.
 
 ## DIAGNOSTICS
 
@@ -90,7 +94,7 @@ Toggle delegation mode for the current session.
 
 **/delegation on --project**
 
-Show and confirm a managed Project block that enables the mode for later sessions.
+Show and confirm a managed Project pointer and companion that enable the mode for later sessions.
 
 **/delegation status**
 

@@ -7850,12 +7850,7 @@ def test_delegation_requires_subagents_and_says_so() -> None:
 
 
 def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
-    """The standing mode delegates only execution through model-selector route.
-
-    Delegation's public contract is the instruction copied unchanged to session,
-    Project, and user contexts. Hold the authority boundary at that seam rather
-    than duplicating model-selector's routing tests here.
-    """
+    """The compact mode delegates execution through model-selector's Interfaces."""
 
     directory = REPO_ROOT / "skills" / "agents" / "delegation"
     skill = (directory / "SKILL.md").read_text(encoding="utf-8")
@@ -7878,49 +7873,44 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     assert entry["skills"] == ["model-selector"]
 
     required_mode_fragments = {
-        "do this yourself",
-        "before Route is consulted",
-        "understanding, diagnosis, decisions, briefing, verification and the final answer",
+        "Explicit user choices",
+        "understanding, diagnosis, decisions, planning, briefs, verification, and the final answer",
         "main seat",
-        "only the execution subagent",
-        "public `/model-selector route` Interface",
-        "real execution brief",
-        "reversibility, consequence, context and tool demand",
-        "independent checker or declared failure signal",
-        "Keep the user's access profile and model inventory out of persistent mode context",
-        "explicit execution-model instruction locks only the model dimension",
-        "explicit `low`, `medium`, `high`, `xhigh`, or `max` deliberation instruction locks only the deliberation dimension",
-        "refuse it rather than replacing it",
-        "exact Harness-native launch controls",
-        "without explicit model or deliberation overrides",
-        "Route optimization was unavailable",
-        "no subagent is launched",
-        "starts no setup, research, evaluation, profile writes, or ledger writes",
-        "objective main-agent verification or the declared failure signal",
-        "never the execution subagent's self-confidence",
-        "strongest safe permitted point",
-        "brief + fresh-context reading + report",
-        "After you have decided to delegate",
+        "handoff costs less than direct work",
+        "when unsure, delegate",
+        "`/model-selector route`",
+        "full execution brief",
+        "user overrides",
+        "checker or failure signal",
+        "Follow its decision exactly",
+        "Verify results independently",
     }
     missing = sorted(
         fragment for fragment in required_mode_fragments if fragment not in mode
     )
     assert not missing, (
-        f"{directory / 'references' / 'mode.md'}: delegation must route only chosen"
-        f" execution through the public contract while preserving main-seat ownership;"
-        f" missing {missing}."
+        f"{directory / 'references' / 'mode.md'}: compact delegation must preserve"
+        f" main-seat authority and route execution through model-selector's public"
+        f" Interface; missing {missing}."
     )
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
-    assert "config.json" not in mode
+    assert {"config.json", "references/", "scripts/"}.isdisjoint(mode.split())
+    assert len(mode.split()) <= 130, (
+        f"{directory / 'references' / 'mode.md'}: the standing instruction has"
+        f" {len(mode.split())} words; keep it at or below 130 by leaving routing and"
+        f" observation implementation behind model-selector's public Interfaces."
+    )
 
-    # Keep project and user persistence as one refreshable mode contract.
+    # Keep persistent context to one pointer and one refreshable companion file.
     required_persistence_fragments = {
-        "`project` and `user` keep the mode as a managed block",
+        "one managed context pointer and one companion mode file",
+        "@agents.d/kntnt-delegation.md",
+        "- `agents.d/kntnt-delegation.md` — read when delegation mode is on.",
         "{the entire content of $HERE/references/mode.md, verbatim}",
-        "`on` over an existing block rewrites it from the current `mode.md`",
-        "`off` removes the whole block, both markers included, and nothing else",
-        "lines between the second comment and the closing marker differ",
+        "Never inline the mode text in the context file",
+        "`off` removes the pointer block and companion file",
+        "pointer block or companion file differs",
         (
             "`status` reports it and names `/delegation on --project` or"
             " `/delegation on --user` as the fix"
@@ -7933,8 +7923,8 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     )
     assert not missing_persistence, (
         f"{directory / 'references' / 'persist.md'}: persistent delegation must"
-        f" copy one authoritative mode verbatim, refresh it, remove it exactly, and"
-        f" diagnose stale copies; missing {missing_persistence}."
+        f" keep the always-loaded context to an @ pointer and manage the mode in its"
+        f" companion file; missing {missing_persistence}."
     )
 
 
@@ -7945,28 +7935,18 @@ def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() ->
     mode = path.read_text(encoding="utf-8")
 
     required_fragments = {
-        "Narrow at the source first.",
-        "predictably large and mostly irrelevant",
-        "the main agent does not need the raw material",
-        "expected main-context saving exceeds the cost",
-        "complete tool call",
-        "bounded extraction",
-        "direct answer",
-        "minimal supporting evidence",
-        "material anomalies or uncertainty",
-        "truncation or incomplete coverage",
-        "bounded semantic extraction",
-        "understanding, diagnosis, decisions, briefing, verification and the final answer",
-        "same-model context isolation",
-        "Post-hoc summarisation in the main context cannot recover context already spent",
+        "predictably noisy reads",
+        "narrow first",
+        "before raw output enters main context",
+        "bounded, task-shaped report",
     }
     missing = sorted(
         fragment for fragment in required_fragments if fragment not in mode
     )
     assert not missing, (
-        f"{path}: delegation mode must keep predictably noisy tool output out of the"
-        f" main context before the call, with a bounded task-shaped report; missing"
-        f" contract fragments: {missing}."
+        f"{path}: delegation mode must keep predictably noisy output out of the main"
+        f" context before the read and request a bounded task-shaped report; missing"
+        f" {missing}."
     )
 
 
@@ -10505,13 +10485,7 @@ def test_delegation_reports_every_scope_when_no_scope_flag_is_given() -> None:
 
 
 def test_delegation_reports_checked_observations_and_imports_none() -> None:
-    """Routed delegation may leave evidence, and only a checked outcome may.
-
-    The mode is copied verbatim into session, Project, and user contexts, so
-    what it says about evidence is the whole of delegation's observation
-    contract: an unchecked subjective success is not a measurement, and nothing
-    reaches the ledger until the user asks for it (issue #96).
-    """
+    """The compact mode reaches observation through its public Interface."""
 
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
     mode = path.read_text(encoding="utf-8")
@@ -10520,17 +10494,14 @@ def test_delegation_reports_checked_observations_and_imports_none() -> None:
         "/model-selector observe",
         "/model-selector record",
         "caller-owned scratch",
-        "objective checker, frozen rubric, declared failure signal, or explicit user confirmation",
-        "unchecked subjective success",
-        "never a checker",
-        "unavailable measurement stays `null`",
-        "no prompt, response, reasoning, source content, diff, terminal output, secret, or absolute path",
+        "externally judged routed attempt",
+        "user-only",
     }
     missing = sorted(
         fragment for fragment in required_fragments if fragment not in mode
     )
     assert not missing, (
-        f"{path}: routed delegation reports a sanitized observation artifact"
-        f" whose decisive outcomes are externally established, and imports"
-        f" nothing on the user's behalf (issue #96); missing {missing}."
+        f"{path}: routed delegation must hand externally judged attempts to"
+        f" model-selector's public observation Interface and leave imports to the"
+        f" user (issue #96); missing {missing}."
     )
