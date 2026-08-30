@@ -521,6 +521,47 @@ def test_proofread_bounds_the_trigger_its_description_advertises() -> None:
         )
 
 
+def test_model_selector_is_model_invoked_only_for_dependent_interfaces() -> None:
+    """Dependent Skills can reach routing without exposing user-only commands."""
+
+    skill_md = SKILLS / "models" / "model-selector" / "SKILL.md"
+    frontmatter = _frontmatter("models/model-selector/SKILL.md")
+
+    assert frontmatter.get("disable-model-invocation") is False, (
+        f"{skill_md}: delegation and orchestrate must reach this Skill's public"
+        f" routing and observation Interfaces without a user invoking it first"
+        f" (ADR-0132). See {STANDARD}."
+    )
+
+    description = str(frontmatter.get("description", "")).lower()
+    for term in ("another skill", "route", "observe"):
+        assert term in description, (
+            f"{skill_md}: the model-invocation description does not bound its"
+            f" dependency trigger with {term!r} (ADR-0094, ADR-0132). See"
+            f" {STANDARD}."
+        )
+
+    assert "do not use implicitly" in description, (
+        f"{skill_md}: the description does not separate dependent Interfaces"
+        f" from commands only an explicit user invocation starts (ADR-0132)."
+        f" See {STANDARD}."
+    )
+    for excluded in (
+        "recommend",
+        "setup",
+        "config",
+        "compare",
+        "capture",
+        "update",
+        "record",
+        "status",
+    ):
+        assert excluded in description, (
+            f"{skill_md}: the description does not exclude {excluded!r} from"
+            f" implicit invocation (ADR-0094, ADR-0132). See {STANDARD}."
+        )
+
+
 def test_the_standard_names_every_skill_a_model_may_start() -> None:
     """Model invocation is the exception here, so the exceptions are listed.
 
@@ -553,8 +594,8 @@ def test_the_standard_names_every_skill_a_model_may_start() -> None:
     )
 
     for name in invocable:
-        assert f"`/{name}`" in section, (
-            f"{STANDARD}: `/{name}` carries"
+        assert f"`${name}`" in section, (
+            f"{STANDARD}: `${name}` carries"
             f" `disable-model-invocation: false` and the sidecar section does"
             f" not name it among the Skills a model may start on its own."
             f" That sentence is where a reader learns model invocation is the"

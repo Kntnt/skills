@@ -1,7 +1,7 @@
 ---
 name: model-selector
-description: Configure, compare, and update price-performance evidence for chosen AI model versions, effort levels, and subscription or API access channels.
-disable-model-invocation: true
+description: Route delegated execution and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.
+disable-model-invocation: false
 argument-hint: "[recommend] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] [<workload>] | chart|compare [--decision=route|renew] [--data=<path>] <workload> | route|record [--data=<path>] <path> | observe --artifact=<path> <path> | capture --on [--harness=<name>] [--data=<path>] | capture --off|--status [--data=<path>] | capture --review=<identity> --action=save|failed|ignore [--data=<path>] | config [show|history|reset] [--data=<path>] | config add|edit|remove [--data=<path>] model|channel [<id>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:

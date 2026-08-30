@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.18.4] – 2026-08-30
+
+### Fixed
+
+- Delegation now invokes Model Selector with `$model-selector` in Codex and `/model-selector` in Claude, and Model Selector exposes only its dependent `route` and `observe` Interfaces to model invocation, so a missing command or tool endpoint no longer forces routed work into the local fallback.
+
 ## [0.18.3] – 2026-08-30
 
 ### Added

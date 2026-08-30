@@ -49,7 +49,7 @@ The user's explicit choice to replace the single writable local file that suppli
 _Avoid_: inline editing, automatic overwrite, mutable mode
 
 **User-invoked skill**:
-A skill the user starts by typing `/name`. Same gesture in every harness; the body is static instructions, not a preprocessed prompt template.
+A skill the user starts by name: `$name` in Codex and `/name` in Claude. The body is static instructions, not a preprocessed prompt template.
 _Avoid_: command, slash command
 
 **Model-invoked skill**:

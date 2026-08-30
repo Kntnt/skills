@@ -7840,13 +7840,6 @@ def test_delegation_requires_subagents_and_says_so() -> None:
         f" collection is one set across harnesses (ADR-0005) — so it tells the"
         f" reader to pick from its own ladder. See {STANDARD}."
     )
-    assert "Claude Code" not in mode, (
-        f"{path.parent / 'references' / 'mode.md'}: the mode text names no"
-        f" single harness. It is written into a committed `AGENTS.md` that"
-        f" agents of any harness read (ADR-0026), and an instruction addressed"
-        f" to one of them is an instruction the rest cannot act on (ADR-0005)."
-        f" See {STANDARD}."
-    )
 
 
 def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
@@ -7878,7 +7871,8 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "main seat",
         "handoff costs less than direct work",
         "when unsure, delegate",
-        "`/model-selector route`",
+        "`$model-selector route` in Codex",
+        "`/model-selector route` in Claude",
         "full execution brief",
         "user overrides",
         "checker or failure signal",
@@ -10491,8 +10485,9 @@ def test_delegation_reports_checked_observations_and_imports_none() -> None:
     mode = path.read_text(encoding="utf-8")
 
     required_fragments = {
-        "/model-selector observe",
-        "/model-selector record",
+        "`$model-selector observe` in Codex",
+        "`/model-selector observe` in Claude",
+        "Model Selector's `record` command",
         "caller-owned scratch",
         "externally judged routed attempt",
         "user-only",
