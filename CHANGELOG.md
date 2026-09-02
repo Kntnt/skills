@@ -6,6 +6,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
+- Add an atomic machine-readable Orchestrate progress dashboard for monitoring live and terminal run state.
 - `/delegation` now routes only a spawn onto a foreign surface, model, or deliberation override through Model Selector; a spawn the caller runs on the frozen main seat with no override is unrouted, produces no `observe` attempt, and is recorded by capture where capture is enabled. Judgment-in-noise roles still weigh a routed cheaper seat rather than defaulting to the main seat.
 - `/delegation` now names three execution paths and the work that selects each: pure execution with large output runs detached from the conversation and only its report is read back, judgment inside noisy data goes to a subagent for a bounded report, and a small bounded command stays on the main seat narrowed at the source. *When unsure, delegate* governs the choice between subagent and main seat, and the main seat stops what it detached or names it as left standing.
 - `/orchestrate` wave verdicts now rerun a strict failing test subset three times in isolation on the unchanged head and, only after all three pass, rerun the complete gate once; a green rerun records durable load-flake evidence and reports recurrence counts, while deterministic or repeated full-gate failures retain the existing failure path.
