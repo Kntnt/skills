@@ -128,6 +128,69 @@ def _step(number: int) -> str:
     return match.group(0)
 
 
+def test_top_level_session_transitions_publish_complete_progress_commands() -> None:
+    """Each top-level session transition supplies every required progress value."""
+
+    # Arrange the complete command owned by every top-level transition.
+    commands = {
+        2: 'uv run "$HERE/scripts/run.py" progress --phase=preflight --wave=<n> --completed=<count> --remaining=<count>',
+        6: 'uv run "$HERE/scripts/run.py" progress --phase=build --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>',
+        7: 'uv run "$HERE/scripts/run.py" progress --phase=verify --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>',
+        8: 'uv run "$HERE/scripts/run.py" progress --phase=note --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>',
+        9: 'uv run "$HERE/scripts/run.py" progress --phase=amend --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<1-or-2>',
+        11: 'uv run "$HERE/scripts/run.py" progress --phase=wave_verdict --wave=<n> --completed=<count> --remaining=<count>',
+    }
+
+    # Read each owning step as one contract surface.
+    steps = {number: _step(number) for number in commands}
+
+    # Assert every transition carries its full phase-specific command.
+    for step_number, command in commands.items():
+        assert command in steps[step_number], (
+            f"{SKILL / 'SKILL.md'}: step {step_number} must carry {command}."
+        )
+
+
+def test_non_dry_terminal_step_reports_even_when_nothing_started() -> None:
+    """The non-dry no-work path still derives its dashboard from report."""
+
+    # Read the one step that owns every terminal account.
+    terminal = _step(12)
+
+    # Assert no-work completion reaches the authoritative report projection.
+    assert 'run.py" report' in terminal and "outcome" in terminal, (
+        f"{SKILL / 'SKILL.md'}: step 12 derives the terminal dashboard from "
+        "the durable report."
+    )
+    assert (
+        "On a non-dry run, obtain the durable report even where nothing started."
+        in terminal
+    ), (
+        f"{SKILL / 'SKILL.md'}: step 12 terminalizes a non-dry dashboard "
+        "before returning the last plan's no-work account."
+    )
+
+
+def test_nested_dispatches_publish_complete_progress_commands() -> None:
+    """Resumed repairs, collision work, and wave fixers publish their phase."""
+
+    # Arrange each nested role's complete progress command.
+    ticket_build = 'uv run "$HERE/scripts/run.py" progress --phase=build --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>'
+    ticket_verify = 'uv run "$HERE/scripts/run.py" progress --phase=verify --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>'
+    wave_build = 'uv run "$HERE/scripts/run.py" progress --phase=build --wave=<n> --completed=<count> --remaining=<count>'
+
+    # Read all three steps containing nested dispatch paths.
+    resumed_repair = _step(5)
+    collision_resolution = _step(10)
+    wave_resolution = _step(11)
+
+    # Assert every nested dispatch carries its full role-specific command.
+    assert ticket_build in resumed_repair
+    assert ticket_build in collision_resolution
+    assert ticket_verify in collision_resolution
+    assert wave_build in wave_resolution
+
+
 def _manpage_section(heading: str) -> str:
     """Return one uppercase section from the orchestrate manpage."""
 
