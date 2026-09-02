@@ -977,9 +977,23 @@ def test_the_continuation_keeps_the_full_verdict_rule_and_fresh_sessions() -> No
     # Read the amend loop and its one shared building template.
     step = _step(9)
     amend = _brief("amend.md")
+    verify = _brief("verify.md")
 
-    # Keep the latest verdict whole for the builder and out of verification.
+    # Make each failed item searchable as a class across the owned surface.
+    assert (
+        "For each failed command or unmet criterion, add a `Defect Class:` line"
+        in verify
+    )
+    assert "generalizes the finding and is not a further finding" in verify
+    assert (
+        "For every Defect Class the verdict names, audit the whole surface the ticket owns"
+        in amend
+    )
+    assert "Where a finding carries no Defect Class" in amend
+
+    # Keep the latest class-bearing verdict whole and out of verification.
     assert "never a summary or an accumulation" in step
+    assert "pasted whole" in amend
     assert "fresh building subagent" in step
     assert "fresh verdict subagent" in step
     assert "`verify.md` unchanged" in step
