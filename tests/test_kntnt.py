@@ -8032,7 +8032,13 @@ def test_delegation_states_the_file_and_capped_inline_report_contract() -> None:
         f"{path}: delegation report contract is incomplete; missing {missing}."
     )
 
-    assert "Verify results independently." in mode
+    contract_start = mode.index("Every brief names a report file path")
+    contract_end = mode.index("Between subagent and main seat", contract_start)
+    contract = mode[contract_start:contract_end]
+    assert "the subagent writes complete findings there" in contract
+    assert "Verify results independently." in contract
+    assert "writing to disk" in mode
+    assert "default cap" not in mode.lower()
 
 
 def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> None:
