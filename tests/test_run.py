@@ -8725,6 +8725,56 @@ def test_progress_refuses_a_caller_supplied_terminal_outcome(tmp_path: Path) -> 
     assert progress_path.read_text(encoding="utf-8") == before
 
 
+def test_engine_transition_recreates_deleted_progress_with_current_counts(
+    tmp_path: Path,
+) -> None:
+    """A dashboard deletion cannot make the next transition report old progress."""
+
+    amendment = {
+        "body": f"<!-- {MARKER} amend=1 phase=verifying --> amend one is active"
+    }
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton", comments=[amendment])],
+        issues={9: _ready(9, comments=[amendment])},
+    )
+    current = _engine(
+        repo,
+        "progress",
+        "--phase=preflight",
+        "--wave=2",
+        "--completed=3",
+        "--remaining=4",
+        "--state-dir",
+        str(scratch),
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress_path.unlink()
+
+    transitioned = _engine(
+        repo,
+        "claim",
+        "--ticket=9",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    assert current.returncode == 0, current.stderr
+    assert transitioned.returncode == 0, transitioned.stderr
+    assert progress == {
+        "wave": 2,
+        "ticket": 9,
+        "phase": "preflight",
+        "amendments_spent": 1,
+        "tickets_completed": 3,
+        "tickets_remaining": 4,
+        "timestamp": progress["timestamp"],
+        "outcome": None,
+    }
+
+
 def _observations() -> ModuleType:
     """Import the model-selector observation module the artifacts are for."""
 

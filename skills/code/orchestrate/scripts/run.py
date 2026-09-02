@@ -904,6 +904,17 @@ def ticket_details(ticket: Ticket) -> dict[str, Any]:
 
 
 @dataclass
+class ProgressState:
+    """Session-supplied dashboard values no ticket transition can derive."""
+
+    wave: int
+    ticket: int | None
+    amendments_spent: int
+    tickets_completed: int
+    tickets_remaining: int
+
+
+@dataclass
 class RunState:
     """What one run remembers of itself between invocations.
 
@@ -927,8 +938,10 @@ class RunState:
 
     `contracts` projects the tracker declarations, and `contract_bases` holds
     the claim boundaries that the branch can no longer establish after work
-    begins. The frozen routing account is separately relied on and lives in a
-    file of its own rather than in this one (ADR-0085).
+    begins. `progress` remembers the session-supplied dashboard values that a
+    ticket transition cannot derive, so deleting the dashboard never makes it
+    an input. The frozen routing account is separately relied on and lives in
+    a file of its own rather than in this one (ADR-0085).
     """
 
     branch: str
@@ -939,6 +952,7 @@ class RunState:
     starting: list[int]
     contracts: dict[int, list[dict[str, Any]]]
     contract_bases: dict[int, str]
+    progress: ProgressState | None = None
     approval_expected: str | None = None
     approval_identity: str | None = None
     approval_payload: dict[str, Any] | None = None
@@ -1236,6 +1250,7 @@ def write_progress(
 
 
 def advance_progress(
+    cwd: Path,
     state_path: Path | None,
     phase: str,
     ticket: int,
@@ -1247,25 +1262,33 @@ def advance_progress(
     if destination is None:
         return
 
-    # Retain session-supplied wave totals while engine verbs mark boundaries.
-    try:
-        current = json.loads(destination.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, TypeError, ValueError):
-        current = {}
-    remembered = remembered_state(state_path, Path.cwd())
+    # Rebuild session-owned totals without consulting the disposable dashboard.
+    remembered = remembered_state(state_path, cwd)
+    current = remembered.progress if remembered is not None else None
     remaining = len(remembered.starting) if remembered is not None else 0
+
+    # Read a resumed ticket's durable amendment bound when the session's last
+    # transition concerned the whole wave or another ticket.
+    amendment_count = (
+        current.amendments_spent
+        if current is not None and current.ticket == ticket
+        else 0
+    )
+    if amendments_spent is None and (current is None or current.ticket != ticket):
+        try:
+            ticket_state = recorded_amend_state(ticket_view(cwd, ticket, "comments"))
+            amendment_count = ticket_state.attempt if ticket_state is not None else 0
+        except RunError:
+            pass
+
     write_progress(
         state_path,
         phase,
-        int(current.get("wave", 1)),
+        current.wave if current is not None else 1,
         ticket,
-        int(
-            current.get("amendments_spent", 0)
-            if amendments_spent is None
-            else amendments_spent
-        ),
-        int(current.get("tickets_completed", 0)),
-        int(current.get("tickets_remaining", remaining)),
+        amendment_count if amendments_spent is None else amendments_spent,
+        current.tickets_completed if current is not None else 0,
+        current.tickets_remaining if current is not None else remaining,
         None,
     )
 
@@ -1293,6 +1316,7 @@ def decode_state(contents: str) -> RunState:
     """Decode one complete state document or raise on invalid content."""
 
     stored = json.loads(contents)
+    progress = cast(dict[str, Any] | None, stored.get("progress"))
     return RunState(
         branch=str(stored["branch"]),
         label=str(stored["label"]),
@@ -1312,6 +1336,19 @@ def decode_state(contents: str) -> RunState:
                 dict[str, str], stored.get("contract_bases", {})
             ).items()
         },
+        progress=(
+            None
+            if progress is None
+            else ProgressState(
+                wave=int(progress["wave"]),
+                ticket=(
+                    None if progress["ticket"] is None else int(progress["ticket"])
+                ),
+                amendments_spent=int(progress["amendments_spent"]),
+                tickets_completed=int(progress["tickets_completed"]),
+                tickets_remaining=int(progress["tickets_remaining"]),
+            )
+        ),
         approval_expected=(
             None
             if stored.get("approval_expected") is None
@@ -1391,8 +1428,11 @@ def write_state(path: Path | None, state: RunState) -> str | None:
     if path is None:
         return None
 
-    # Preserve the established document byte shape when approval is unused.
+    # Preserve the established document byte shape when optional state is
+    # unused.
     details = asdict(state)
+    if state.progress is None:
+        details.pop("progress")
     if state.approval_met is None:
         details = {
             key: value
@@ -1509,6 +1549,17 @@ def remembered_state(path: Path | None, cwd: Path) -> RunState | None:
         return read_state(path, current_branch(cwd))
     except RunError:
         return None
+
+
+def remember_progress(path: Path | None, cwd: Path, progress: ProgressState) -> None:
+    """Keep session-owned dashboard values outside the disposable dashboard."""
+
+    state = remembered_state(path, cwd)
+    if state is None:
+        return
+
+    state.progress = progress
+    write_state(path, state)
 
 
 def _amend_claims(
@@ -2870,6 +2921,7 @@ def build_plan(
                     if ticket.commit_contract is not None
                 },
                 contract_bases=remembered.contract_bases if remembered else {},
+                progress=remembered.progress if remembered else None,
                 approval_expected=(
                     approval
                     if approval is not None
@@ -2912,6 +2964,7 @@ def build_plan(
                 starting=[],
                 contracts={},
                 contract_bases={},
+                progress=remembered.progress if remembered else None,
                 approval_expected=approval,
                 approval_identity=plan.approval_identity,
                 approval_payload=plan.approval_payload,
@@ -5428,17 +5481,14 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     }
 
     # Project the authoritative account into the terminal dashboard itself.
-    dashboard = progress_file(state_path)
-    if dashboard is not None:
-        try:
-            current = json.loads(dashboard.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, TypeError, ValueError):
-            current = {}
+    if progress_file(state_path) is not None:
+        remembered = remembered_state(state_path, cwd)
+        current = remembered.progress if remembered is not None else None
         completed = sum(len(outcome[group]) for group in OUTCOMES)
         write_progress(
             state_path,
             "wave_verdict",
-            int(current.get("wave", 1)),
+            current.wave if current is not None else 1,
             None,
             0,
             completed,
@@ -5627,19 +5677,19 @@ def main(argv: list[str] | None = None) -> int:
     if args.verb == "claim":
         result = cmd_claim(cwd, args.ticket, state_path)
         if result == 0:
-            advance_progress(state_path, "preflight", args.ticket)
+            advance_progress(cwd, state_path, "preflight", args.ticket)
         return result
     if args.verb == "park":
         return cmd_park(cwd, args.ticket, state_path)
     if args.verb == "isolate":
         result = cmd_isolate(cwd, args.ticket)
         if result == 0:
-            advance_progress(state_path, "isolate", args.ticket)
+            advance_progress(cwd, state_path, "isolate", args.ticket)
         return result
     if args.verb == "integrate":
         result = cmd_integrate(cwd, args.ticket, state_path)
         if result == 0:
-            advance_progress(state_path, "integrate", args.ticket)
+            advance_progress(cwd, state_path, "integrate", args.ticket)
         return result
     if args.verb == "rebuild":
         return cmd_rebuild(cwd, args.ticket)
@@ -5653,7 +5703,7 @@ def main(argv: list[str] | None = None) -> int:
             state_path,
         )
         if result == 0:
-            advance_progress(state_path, "amend", args.ticket, args.attempt)
+            advance_progress(cwd, state_path, "amend", args.ticket, args.attempt)
         return result
     if args.verb == "record":
         result = cmd_record(
@@ -5666,7 +5716,7 @@ def main(argv: list[str] | None = None) -> int:
             state_path,
         )
         if result == 0:
-            advance_progress(state_path, "note", args.ticket)
+            advance_progress(cwd, state_path, "note", args.ticket)
         return result
     if args.verb == "observe":
         return cmd_observe(
@@ -5682,6 +5732,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.verb == "flake":
         return cmd_flake(cwd, args.evidence, state_path)
     if args.verb == "progress":
+        remember_progress(
+            state_path,
+            cwd,
+            ProgressState(
+                wave=args.wave,
+                ticket=args.ticket,
+                amendments_spent=args.amends_spent,
+                tickets_completed=args.completed,
+                tickets_remaining=args.remaining,
+            ),
+        )
         written = write_progress(
             state_path,
             args.phase,
