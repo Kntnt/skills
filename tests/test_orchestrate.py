@@ -605,6 +605,31 @@ def test_the_isolation_step_says_what_isolate_answers() -> None:
     )
 
 
+def test_resume_semantics_are_explicit_at_each_workflow_boundary() -> None:
+    """Parking, isolation, dispatch, and reporting tell one lifetime story."""
+
+    text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    help_text = (SKILL / "help.md").read_text(encoding="utf-8")
+
+    assert "per-ticket-lifetime" in text
+    assert "preserved commits are its mandatory base" in text
+    assert "amends_inherited" in text
+    assert "amends_newly_spent" in text
+    assert "per-ticket-lifetime" in help_text
+    assert "parked attempt is resumed" in help_text
+    assert "amends_inherited" in help_text
+    assert "amends_newly_spent" in help_text
+
+
+def test_a_recorded_amend_state_never_returns_to_the_initial_build_path() -> None:
+    """Claim, isolate, and build route persisted amendment work to step nine."""
+
+    text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+
+    assert text.count("recorded `amend_state`") >= 3
+    assert "initial-build brief is never dispatched" in text
+
+
 def _fill_in_instructions() -> str:
     """The building brief's fill-in instructions — everything above the brief itself."""
 

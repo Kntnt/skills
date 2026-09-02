@@ -86,6 +86,8 @@ A deterministic environment problem is repaired by the orchestrator and the same
 
 An ambiguity, missing requirement, or design choice not settled by the ticket parks the ticket under `needs-info`, posts the question, releases the claim, and records no build outcome.
 
+The park report includes the ticket's lifetime `amends_spent`, so the remaining budget is known before it is resumed.
+
 **Discovered dependency**
 
 When the missing requirement is carried by another ticket without a done Ticket Resolution, the run writes the missing blocking edge to the tracker, releases the claim, discards the partial isolated build, and offers the ticket again after its blocker has a done Ticket Resolution. This does not consume the ticket's rebuild.
@@ -105,6 +107,12 @@ With `--at-once=1`, an unrepaired failure stops later tickets. With concurrency,
 ## CONTINUING A RUN
 
 Restart an interrupted run with the same invocation and state directory; there is no resume option. Recorded outcomes and numbered amend phases remain settled.
+
+The amendment limit is a per-ticket-lifetime budget. A parked attempt is resumed rather than forfeited: its tracker-backed `amends_spent` survives every park and resume, and subtracting that value from two gives the exact number of further amendments available.
+
+Preserved commits are the mandatory base of a resume, never discarded in favour of a rebuild from scratch. Before dispatch, Orchestrate brings the current run branch into the preserved ticket branch so resolved blockers and other integrated predecessors are present. Uncommitted preserved work waits for a person; an authored collision is repaired on the ticket branch and then judged by the resumed amend's fresh full-ticket verifier.
+
+Prior verdicts remain ticket evidence and the resumed amend receives the immediately preceding verdict verbatim. The report keeps `amends_spent` as the lifetime total and names attempts this invocation inherited under `amends_inherited` and attempts it newly spent under `amends_newly_spent`.
 
 The frozen routing account is not reconstructed from current profile, evidence, price, alias, or Harness state. If it is missing or unreadable while this run still owns a claim, the run stops.
 
