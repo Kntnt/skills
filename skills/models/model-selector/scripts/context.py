@@ -38,6 +38,7 @@ ADAPTER_TEMPLATE_SCHEMA: dict[str, Any] = json.loads(
 ROUTING_DEFAULTS: dict[str, Any] = json.loads(
     (SKILL_ROOT / "data" / "routing-defaults.json").read_text(encoding="utf-8")
 )
+ROUTING_DEFAULTS["portable_levels"] = list(route.PORTABLE_LEVELS)
 
 # Extend the routing validator with the three schemas this adapter owns.
 route.SCHEMAS_BY_ID.update(
@@ -189,8 +190,10 @@ def _capability_ranks(
             or isinstance(score, bool)
         ):
             continue
-        held = scores.setdefault(cast(str, benchmark), {})
-        held[model_seed_id] = max(float(score), held.get(model_seed_id, float("-inf")))
+        benchmark_scores = scores.setdefault(cast(str, benchmark), {})
+        benchmark_scores[model_seed_id] = max(
+            float(score), benchmark_scores.get(model_seed_id, float("-inf"))
+        )
 
     # Select the widest shared comparison, using newest version to break ties.
     choices = [
@@ -203,7 +206,7 @@ def _capability_ranks(
     selected = max(
         choices,
         key=lambda benchmark: (
-            sum(seed_ids.get(model) in scores[benchmark] for model in candidates),
+            sum(seed_ids.get(model) in scores[benchmark] for model in set(candidates)),
             _version_key(benchmark),
         ),
     )
@@ -243,7 +246,7 @@ def _portable_controls(
         controls = {portable: native}
         return controls, {portable: PORTABLE_RANKS[portable]}, [native], controls
 
-    # Separate auditable profile intent from verified launch support.
+    # Resolve only controls verified as supported for the selected model.
     supported = [
         value
         for value in (seed or {}).get("supported_controls", {}).get("effort", [])
@@ -253,14 +256,10 @@ def _portable_controls(
         default = seed.get("default_configuration", {}).get("effort") or "medium"
         supported = [default] if default in PORTABLE_RANKS else ["medium"]
     policy = selection["controls"]["effort"]
-    if policy["policy"] == "explicit":
-        mapped = [
-            value for value in (policy["values"] or []) if value in PORTABLE_RANKS
-        ]
-    else:
-        mapped = list(supported)
+    mapped = _policy_values(policy, supported)
+
     # Admit adapters only for values verified by seed and template evidence.
-    launchable = [value for value in mapped if value in supported]
+    launchable = list(mapped)
     if template is not None:
         admitted = set(template.get("supported_deliberation", PORTABLE_RANKS))
         launchable = [value for value in launchable if value in admitted]
@@ -322,6 +321,8 @@ def _specialized_adapter(
     launch["model_flag"] = _specialized_destination(
         launch["model_flag"], cast(str, model_value)
     )
+
+    # Build the concrete adapter around the specialized launch translation.
     adapter = {
         "adapter_id": template["adapter_template_id"],
         "channel": selection["channel_id"],
@@ -334,15 +335,21 @@ def _specialized_adapter(
         "policies": [{}],
         "launch": launch,
     }
+
+    # Bind every carried destination to the live session attestation.
     if route._carries_launch_value({"launch": launch}):
         attestation = runtime["harness"].get("inheritance_attestation")
         if not runtime["harness"]["inheritance"] or attestation is None:
             return None
         adapter["inheritance_attestation"] = deepcopy(attestation)
+
+    # Replace a carried deliberation mapping with the exact main-seat value.
     if template["deliberation_source"] == "carried":
         adapter["native_controls"] = [
             deepcopy(runtime["main_seat"]["native_deliberation"])
         ]
+
+    # Keep only concrete adapters admitted by the shared routing schema.
     if route._schema_errors(
         adapter,
         route.REQUEST_SCHEMA["$defs"]["adapter"],
@@ -350,6 +357,7 @@ def _specialized_adapter(
         "adapter",
     ):
         return None
+
     return adapter
 
 
@@ -436,6 +444,7 @@ def _derive_context(
     adapters: list[dict[str, Any]] = []
     mappings: list[dict[str, Any]] = []
     for selection in selections:
+        # Resolve the selection's seed or its explicitly unknown audit seed.
         canonical = cast(str, selection["canonical_provider_model_id"])
         seed = model_seeds.get(canonical)
         audit_seed = seed or {
@@ -445,6 +454,8 @@ def _derive_context(
                 "serving_mode": "standard",
             },
         }
+
+        # Match the selected Harness surface to one shipped adapter template.
         template = next(
             (
                 item
@@ -454,10 +465,15 @@ def _derive_context(
             ),
             None,
         )
+
+        # Freeze only supported mappings while retaining unknown selections.
         controls, control_capabilities, native_order, adapter_controls = (
             _portable_controls(selection, seed, template, runtime_seat)
         )
+
+        # Emit every selected serving mode as an independently auditable point.
         for mode in _serving_modes(selection, audit_seed):
+            # Specialize the reachable adapter without changing its template.
             adapter = (
                 None
                 if template is None
@@ -469,8 +485,12 @@ def _derive_context(
                     runtime,
                 )
             )
+
+            # Retain only adapters that can represent the verified controls.
             if adapter is not None:
                 adapters.append(adapter)
+
+            # Preserve the configured point even when no adapter can launch it.
             mappings.append(
                 {
                     "model": canonical,

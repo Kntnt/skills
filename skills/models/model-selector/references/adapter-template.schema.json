@@ -13,7 +13,7 @@
     "model_source": {"enum": ["canonical", "family_alias"]},
     "accepted_model_aliases": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}},
     "deliberation_source": {"enum": ["portable", "carried"]},
-    "supported_deliberation": {"type": "array", "items": {"enum": ["low", "medium", "high", "xhigh", "max"]}},
+    "supported_deliberation": {"type": "array", "items": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/portable_level"}},
     "serving_modes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/non_empty_string"}},
     "launch": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/launch_translation"}
   },

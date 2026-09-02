@@ -1,5 +1,4 @@
 {
-  "portable_levels": ["low", "medium", "high", "xhigh", "max"],
   "cold_start": "select",
   "quality_floor": 0.7,
   "shadow_prices": null

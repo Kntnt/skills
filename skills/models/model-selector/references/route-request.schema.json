@@ -19,6 +19,7 @@
     "non_empty_string": {"type": "string", "minLength": 1},
     "string_array": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}},
     "nullable_number": {"type": ["number", "null"]},
+    "portable_level": {"enum": ["low", "medium", "high", "xhigh", "max"]},
     "native_control": {
       "type": "object",
       "minProperties": 1,
@@ -57,7 +58,7 @@
         "surface": {"$ref": "#/$defs/non_empty_string"},
         "serving_mode": {"$ref": "#/$defs/non_empty_string"},
         "adapter_id": {"$ref": "#/$defs/non_empty_string"},
-        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "portable_deliberation": {"$ref": "#/$defs/portable_level"},
         "native_deliberation": {"$ref": "#/$defs/native_control"}
       },
       "additionalProperties": false
@@ -72,7 +73,7 @@
         "surface": {"$ref": "#/$defs/non_empty_string"},
         "serving_mode": {"$ref": "#/$defs/non_empty_string"},
         "adapter_id": {"$ref": "#/$defs/non_empty_string"},
-        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "portable_deliberation": {"$ref": "#/$defs/portable_level"},
         "native_deliberation": {"$ref": "#/$defs/native_control"},
         "outcome": {"const": "failed"},
         "checker": {"$ref": "#/$defs/checker"}
@@ -97,7 +98,7 @@
           "type": "object",
           "properties": {
             "model": {"$ref": "#/$defs/non_empty_string"},
-            "deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]}
+            "deliberation": {"$ref": "#/$defs/portable_level"}
           },
           "additionalProperties": false
         },
@@ -143,7 +144,7 @@
       "properties": {
         "configuration_fingerprint": {"$ref": "#/$defs/non_empty_string"},
         "model": {"$ref": "#/$defs/non_empty_string"},
-        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "portable_deliberation": {"$ref": "#/$defs/portable_level"},
         "native_deliberation": {"$ref": "#/$defs/native_control"},
         "channel": {"$ref": "#/$defs/non_empty_string"},
         "harness": {"$ref": "#/$defs/non_empty_string"},
@@ -264,7 +265,7 @@
         "serving_mode": {"$ref": "#/$defs/non_empty_string"},
         "adapter_id": {"$ref": "#/$defs/non_empty_string"},
         "native_deliberation": {"$ref": "#/$defs/native_control"},
-        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "portable_deliberation": {"$ref": "#/$defs/portable_level"},
         "model_capability": {"$ref": "#/$defs/nullable_number"},
         "deliberation_capability": {"$ref": "#/$defs/nullable_number"},
         "tools": {"$ref": "#/$defs/string_array"},
@@ -340,7 +341,7 @@
       "type": "object",
       "required": ["portable_levels", "cold_start", "quality_floor", "shadow_prices"],
       "properties": {
-        "portable_levels": {"const": ["low", "medium", "high", "xhigh", "max"]},
+        "portable_levels": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"$ref": "#/$defs/portable_level"}},
         "cold_start": {"enum": ["select", "inherit"]},
         "quality_floor": {"type": "number"},
         "shadow_prices": {"oneOf": [{"$ref": "#/$defs/shadow_prices"}, {"type": "null"}]}

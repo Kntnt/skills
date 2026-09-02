@@ -42,7 +42,7 @@
         "surface": {"$ref": "#/$defs/non_empty_string"},
         "serving_mode": {"$ref": "#/$defs/non_empty_string"},
         "native_deliberation": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/native_control"},
-        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "portable_deliberation": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/portable_level"},
         "tools": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/string_array"},
         "policy": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/policy"}
       },

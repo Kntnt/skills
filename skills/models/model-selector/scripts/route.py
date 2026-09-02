@@ -13,7 +13,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, cast
 
-PORTABLE_LEVELS: tuple[str, ...] = ("low", "medium", "high", "xhigh", "max")
 COMMERCIAL_DIMENSIONS: tuple[str, ...] = (
     "cash",
     "rolling_quota",
@@ -51,6 +50,11 @@ SCHEMAS_BY_ID: dict[str, dict[str, Any]] = {
     REQUEST_SCHEMA["$id"]: REQUEST_SCHEMA,
     RESPONSE_SCHEMA["$id"]: RESPONSE_SCHEMA,
 }
+
+# Derive the ordered runtime scale from the shared schema vocabulary.
+PORTABLE_LEVELS: tuple[str, ...] = tuple(
+    cast(list[str], REQUEST_SCHEMA["$defs"]["portable_level"]["enum"])
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -153,23 +157,21 @@ def _schema_errors(
             resolved_root,
             path,
         )
+    errors: list[str] = []
     if "oneOf" in schema:
         branches = [
             _schema_errors(value, branch, root, path) for branch in schema["oneOf"]
         ]
-        return (
-            []
-            if sum(not errors for errors in branches) == 1
-            else [f"{path} must match exactly one allowed shape"]
-        )
+        if sum(not branch_errors for branch_errors in branches) != 1:
+            errors.append(f"{path} must match exactly one allowed shape")
     if "allOf" in schema:
-        return [
+        errors.extend(
             error
             for branch in schema["allOf"]
             for error in _schema_errors(value, branch, root, path)
-        ]
+        )
     if "not" in schema and not _schema_errors(value, schema["not"], root, path):
-        return [f"{path} matches a forbidden shape"]
+        errors.append(f"{path} matches a forbidden shape")
 
     # Reject a mismatched primitive before collection-specific keywords run.
     expected_types = schema.get("type")
@@ -178,14 +180,13 @@ def _schema_errors(
             [expected_types] if isinstance(expected_types, str) else expected_types
         )
         if not any(_schema_type_matches(value, expected) for expected in allowed):
-            return [f"{path} has the wrong JSON type"]
-    if "const" in schema and value != schema["const"]:
-        return [f"{path} must equal {schema['const']!r}"]
-    if "enum" in schema and value not in schema["enum"]:
-        return [f"{path} is not an allowed value"]
+            return [*errors, f"{path} has the wrong JSON type"]
+    if "const" in schema and not _json_values_equal(value, schema["const"]):
+        return [*errors, f"{path} must equal {schema['const']!r}"]
+    if "enum" in schema and not _json_sequence_contains(schema["enum"], value):
+        return [*errors, f"{path} is not an allowed value"]
 
     # Validate object membership and each declared or patterned property.
-    errors: list[str] = []
     if isinstance(value, dict):
         required = schema.get("required", [])
         errors.extend(
@@ -291,6 +292,12 @@ def _snapshot_error(snapshot: dict[str, Any]) -> str | None:
                 "snapshot adapter inheritance attestation must equal "
                 "harness inventory revision"
             )
+
+    # Require the frozen override order to equal the shared portable scale.
+    if not _json_values_equal(
+        snapshot["override_policy"]["portable_levels"], list(PORTABLE_LEVELS)
+    ):
+        return "snapshot.override_policy.portable_levels has the wrong order"
 
     # Validate cross-field mapping invariants the schema cannot express.
     for point in snapshot["mappings"]:

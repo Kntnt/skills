@@ -83,6 +83,18 @@ def _runtime_context_request(**request_changes: Any) -> dict[str, Any]:
     }
 
 
+def _invoke_context(*arguments: str) -> subprocess.CompletedProcess[str]:
+    """Invoke the Context process through its shipped public CLI seam."""
+
+    return subprocess.run(
+        ["uv", "run", str(CONTEXT_SCRIPT), *arguments],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
 def _derive_context(
     tmp_path: Path,
     artifact: dict[str, Any],
@@ -101,13 +113,7 @@ def _derive_context(
     request.write_text(json.dumps(artifact), encoding="utf-8")
 
     # Exercise the shipped CLI grammar rather than importing its internals.
-    result = subprocess.run(
-        ["uv", "run", str(CONTEXT_SCRIPT), f"--data={data}", str(request)],
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    result = _invoke_context(f"--data={data}", str(request))
     assert result.returncode == 0, result.stdout + result.stderr
     return cast(dict[str, Any], json.loads(result.stdout))
 
@@ -260,9 +266,11 @@ def test_context_retains_seedless_and_unavailable_mode_selections(
         mapping for mapping in mappings if mapping["model"] == "seedless-model"
     )
 
-    # Keep the explicit portable value auditable in a schema-valid mapping.
+    # Keep the selection auditable without inventing unsupported mappings.
     assert retained["model_capability"] is None
-    assert retained["controls"] == {"max": {"effort": "max"}}
+    assert retained["controls"] == {}
+    assert retained["control_capabilities"] == {}
+    assert retained["native_control_order"] == []
     assert "artifact_refusal" not in _load_router().route(
         {
             "schema_version": 1,
@@ -331,6 +339,76 @@ def test_context_leaves_seedless_all_supported_controls_unknown(
     assert mapping["control_capabilities"] == {}
     assert mapping["native_control_order"] == []
     assert "artifact_refusal" not in _load_router().route(derived)
+
+
+def test_context_omits_unsupported_explicit_control_ranks(tmp_path: Path) -> None:
+    """Explicit profile intent cannot become an unsupported model mapping."""
+
+    # Request a portable value absent from the known model's supported seed.
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    grok = profile["model_selections"][-1]
+    grok["controls"]["effort"] = {"policy": "explicit", "values": ["max"]}
+    mappings = _derive_context(
+        tmp_path,
+        _runtime_context_request(),
+        json.dumps(profile).encode(),
+    )["context"]["mappings"]
+    mapping = next(item for item in mappings if item["model"] == "grok-4.6")
+
+    # Retain the selection while withholding unsupported control assertions.
+    assert mapping["controls"] == {}
+    assert mapping["control_capabilities"] == {}
+    assert mapping["native_control_order"] == []
+
+
+def test_context_benchmark_coverage_counts_distinct_models() -> None:
+    """Multiple channels for one model cannot outweigh wider coverage."""
+
+    # Give an older benchmark one duplicated model and a newer one another.
+    context = _load_context_module()
+    model_seeds = {
+        "main": {"seed_id": "model-main"},
+        "candidate-a": {"seed_id": "model-a"},
+        "candidate-b": {"seed_id": "model-b"},
+    }
+    records = [
+        {"record_type": "benchmark_definition_seed", "seed_id": "alpha:1"},
+        {"record_type": "benchmark_definition_seed", "seed_id": "beta:2"},
+        {
+            "record_type": "evaluation_prior_seed",
+            "benchmark_seed_id": "alpha:1",
+            "model_seed_id": "model-main",
+            "score": 30,
+        },
+        {
+            "record_type": "evaluation_prior_seed",
+            "benchmark_seed_id": "alpha:1",
+            "model_seed_id": "model-a",
+            "score": 10,
+        },
+        {
+            "record_type": "evaluation_prior_seed",
+            "benchmark_seed_id": "beta:2",
+            "model_seed_id": "model-main",
+            "score": 30,
+        },
+        {
+            "record_type": "evaluation_prior_seed",
+            "benchmark_seed_id": "beta:2",
+            "model_seed_id": "model-b",
+            "score": 20,
+        },
+    ]
+
+    # Let equal distinct coverage use the documented newest-version tiebreak.
+    ranks, main_rank = context._capability_ranks(
+        records,
+        model_seeds,
+        ["candidate-a", "candidate-a", "candidate-b"],
+        "main",
+    )
+    assert ranks == {"candidate-a": None, "candidate-b": 20}
+    assert main_rank == 30
 
 
 def test_context_keeps_an_unsupported_harness_on_the_main_seat(
@@ -523,13 +601,7 @@ def test_context_refuses_a_frozen_snapshot_with_a_stale_identity(
     )
 
     # Require Context itself to refuse before Route sees the artifact.
-    result = subprocess.run(
-        ["uv", "run", str(CONTEXT_SCRIPT), str(artifact)],
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    result = _invoke_context(str(artifact))
     refusal = json.loads(result.stdout)
     assert result.returncode == 2
     assert refusal["artifact_refusal"]["code"] == "invalid_context_input"
@@ -564,13 +636,7 @@ def test_context_refuses_a_frozen_attestation_for_another_inventory(
     )
 
     # Require Context to reject the contradiction despite the valid digest.
-    result = subprocess.run(
-        ["uv", "run", str(CONTEXT_SCRIPT), str(artifact)],
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    result = _invoke_context(str(artifact))
     assert result.returncode == 2
     assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
         "invalid_context_input"
@@ -602,13 +668,7 @@ def test_context_process_refusals_are_machine_readable(tmp_path: Path) -> None:
         "invalid_context_input",
     ]
     for arguments, code in zip(invocations, expected, strict=True):
-        result = subprocess.run(
-            ["uv", "run", str(CONTEXT_SCRIPT), *arguments],
-            cwd=REPO_ROOT,
-            text=True,
-            capture_output=True,
-            check=False,
-        )
+        result = _invoke_context(*arguments)
         refusal = json.loads(result.stdout)
         assert result.returncode == 2
         assert refusal["artifact_refusal"]["code"] == code
@@ -621,19 +681,7 @@ def test_context_refuses_a_flag_after_its_artifact_operand(tmp_path: Path) -> No
     # Put a valid flag after the path its synopsis requires it to precede.
     request = tmp_path / "context-request.json"
     request.write_text(json.dumps(_runtime_context_request()), encoding="utf-8")
-    result = subprocess.run(
-        [
-            "uv",
-            "run",
-            str(CONTEXT_SCRIPT),
-            str(request),
-            f"--data={tmp_path}",
-        ],
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    result = _invoke_context(str(request), f"--data={tmp_path}")
 
     # Assert the grammar refusal stays machine-readable.
     assert result.returncode == 2
@@ -650,13 +698,7 @@ def test_context_refuses_inconsistent_main_seat_surface(tmp_path: Path) -> None:
     artifact["runtime"]["main_seat"]["surface"] = "different"
     request = tmp_path / "context-request.json"
     request.write_text(json.dumps(artifact), encoding="utf-8")
-    result = subprocess.run(
-        ["uv", "run", str(CONTEXT_SCRIPT), str(request)],
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    result = _invoke_context(str(request))
 
     # Assert the cross-field contradiction reaches the stable refusal seam.
     assert result.returncode == 2
@@ -677,17 +719,35 @@ def test_context_refuses_an_attestation_for_another_inventory(tmp_path: Path) ->
     request.write_text(json.dumps(artifact), encoding="utf-8")
 
     # Refuse the contradiction at Context's public process boundary.
-    result = subprocess.run(
-        ["uv", "run", str(CONTEXT_SCRIPT), str(request)],
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    result = _invoke_context(str(request))
     assert result.returncode == 2
     assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
         "invalid_context_input"
     )
+
+
+def test_context_schema_consts_do_not_coerce_booleans_and_numbers(
+    tmp_path: Path,
+) -> None:
+    """Schema literals preserve JSON primitive types at the process boundary."""
+
+    # Contradict numeric and boolean constants through Python's equality quirk.
+    version = _runtime_context_request()
+    version["schema_version"] = True
+    attestation = _runtime_context_request()
+    attestation["runtime"]["harness"]["inheritance_attestation"][
+        "carried_by_default"
+    ] = 1
+    for index, artifact in enumerate((version, attestation)):
+        request = tmp_path / f"const-{index}.json"
+        request.write_text(json.dumps(artifact), encoding="utf-8")
+        result = _invoke_context(str(request))
+
+        # Refuse each coercive near-match through the same schema boundary.
+        assert result.returncode == 2, index
+        assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
+            "invalid_context_input"
+        )
 
 
 def _automatic_low_snapshot() -> dict[str, Any]:
