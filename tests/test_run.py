@@ -8688,6 +8688,43 @@ def test_progress_writes_the_latest_phase_atomically(tmp_path: Path) -> None:
     assert progress["tickets_remaining"] == 1
 
 
+def test_progress_refuses_a_caller_supplied_terminal_outcome(tmp_path: Path) -> None:
+    """Only the durable report may supply the terminal dashboard account."""
+
+    repo = _init_repo(tmp_path / "repo")
+    scratch = tmp_path / "scratch"
+    initial = _engine(
+        repo,
+        "progress",
+        "--phase=build",
+        "--wave=1",
+        "--ticket=9",
+        "--completed=0",
+        "--remaining=1",
+        "--state-dir",
+        str(scratch),
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    before = progress_path.read_text(encoding="utf-8")
+
+    supplied = _engine(
+        repo,
+        "progress",
+        "--phase=wave_verdict",
+        "--wave=1",
+        "--completed=1",
+        "--remaining=0",
+        "--outcome=caller-says-done",
+        "--state-dir",
+        str(scratch),
+    )
+
+    assert initial.returncode == 0, initial.stderr
+    assert supplied.returncode == 2
+    assert "unrecognized arguments: --outcome=caller-says-done" in supplied.stderr
+    assert progress_path.read_text(encoding="utf-8") == before
+
+
 def _observations() -> ModuleType:
     """Import the model-selector observation module the artifacts are for."""
 
