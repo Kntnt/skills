@@ -7896,6 +7896,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     assert entry["skills"] == ["model-selector"]
 
     required_mode_fragments = {
+        "Orchestrate; subagents execute",
         "Explicit user choices",
         "understanding, diagnosis, decisions, planning, briefs, verification, and the final answer",
         "main seat",
@@ -7906,8 +7907,11 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "full execution brief",
         "user overrides",
         "checker or failure signal",
+        "before spawning",
         "Follow its decision exactly",
+        "without changing the main seat",
         "Verify results independently",
+        "If subagents are unavailable, execute normally",
     }
     missing = sorted(
         fragment for fragment in required_mode_fragments if fragment not in mode
@@ -8013,18 +8017,23 @@ def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() ->
 def test_delegation_states_the_file_and_capped_inline_report_contract() -> None:
     """Delegation keeps complete findings on disk and conclusions inline."""
 
+    # Read the installed directive that governs every delegated brief.
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
     mode = path.read_text(encoding="utf-8")
 
+    # Pin each observable obligation of the report contract.
     required_fragments = {
         "report file path inside the spawn's own scratch",
         "complete findings there",
         "inline reply is capped by the brief",
+        "stated task-specific budget",
         "conclusions only",
         "no raw command output",
         "no file dumps",
         "main seat reads the file only when its decision needs the detail",
     }
+
+    # Report every missing obligation in one actionable failure.
     missing = sorted(
         fragment for fragment in required_fragments if fragment not in mode
     )
@@ -8032,13 +8041,24 @@ def test_delegation_states_the_file_and_capped_inline_report_contract() -> None:
         f"{path}: delegation report contract is incomplete; missing {missing}."
     )
 
+    # Keep the writer and independent-verification duty inside the contract.
     contract_start = mode.index("Every brief names a report file path")
     contract_end = mode.index("Between subagent and main seat", contract_start)
     contract = mode[contract_start:contract_end]
     assert "the subagent writes complete findings there" in contract
     assert "Verify results independently." in contract
+
+    # Preserve the detached path while forbidding a doctrine-wide numeric cap.
     assert "writing to disk" in mode
-    assert "default cap" not in mode.lower()
+    numeric_cap = re.search(
+        r"\b\d+(?:-\d+)?\s+(?:words?|lines?|bullets?)\b",
+        contract,
+        flags=re.IGNORECASE,
+    )
+    assert numeric_cap is None, (
+        f"{path}: the directive must not set a numeric default cap; found"
+        f" {numeric_cap.group(0)!r}."
+    )
 
 
 def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> None:
