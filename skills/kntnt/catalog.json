@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "0287f19b459cb71cdbe4cec7e2e04e89900beed6694d760f1cd5e7de782e4b85",
+  "manager_digest": "ffe1eff33fdd252cee4cd5b12ed3ac32cfb7cc17ef2c5e8432462224621f4b4b",
   "skills": [
     {
       "name": "agents-md",
@@ -76,7 +76,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "7b3cd3da2e87332750240d648d8cfbdd173283cf0f1955c5e29f1ac3ad425d40",
+      "digest": "cb66212aeb68669c3ea510074e2946c667b554470c47f2680c2d802c7ec6cfe9",
       "binaries": [
         "git",
         "uv"
@@ -106,7 +106,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "21701afaf010525c1f72c5589576a826b45f20a790c1050382b84aab84f5c191",
+      "digest": "02893844188ab47582ef4ac437fc48e9522c6e50b0c25b1dae1e94ba504d2045",
       "binaries": [
         "git",
         "uv"

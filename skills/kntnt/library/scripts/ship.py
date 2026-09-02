@@ -141,6 +141,7 @@ class Plan:
     unreleased_empty: bool | None = None
     gh: bool = False
     commits: list[dict[str, str]] = field(default_factory=list)
+    commit_count: int = 0
     gitignore_proposal: str | None = None
     build: dict[str, str] | None = None
 
@@ -311,13 +312,14 @@ def detect_build(cwd: Path) -> dict[str, str] | None:
     return None
 
 
-def build_plan(cwd: Path, mode: str) -> Plan:
+def build_plan(cwd: Path, mode: str, full: bool = False) -> Plan:
     """Gather plan facts for *mode* in *cwd*."""
 
     staged, tracked, untracked = status_paths(cwd)
     dirty = bool(staged or tracked or untracked)
     branch = current_branch(cwd)
     tag = last_tag(cwd)
+    commits = commit_subjects(cwd, tag)
     plan = Plan(
         mode=mode,
         ready=True,
@@ -330,7 +332,8 @@ def build_plan(cwd: Path, mode: str) -> Plan:
         unpushed=unpushed_count(cwd),
         last_tag=tag,
         gh=shutil.which("gh") is not None,
-        commits=commit_subjects(cwd, tag),
+        commits=commits,
+        commit_count=len(commits),
         gitignore_proposal=gitignore_proposal(cwd),
         unreleased_empty=unreleased_is_empty(cwd / "CHANGELOG.md"),
     )
@@ -339,6 +342,8 @@ def build_plan(cwd: Path, mode: str) -> Plan:
         if not dirty:
             plan.ready = False
             plan.reason = "nothing to commit"
+        if not plan.ready and not full:
+            plan.commits = []
         return plan
 
     if mode == "push":
@@ -348,6 +353,10 @@ def build_plan(cwd: Path, mode: str) -> Plan:
         elif not dirty and plan.unpushed == 0:
             plan.ready = False
             plan.reason = "everything up-to-date"
+        if not full and not plan.ready:
+            plan.commits = []
+        elif not full and len(plan.commits) > 6:
+            plan.commits = plan.commits[:3] + plan.commits[-3:]
         return plan
 
     plan.build = detect_build(cwd)
@@ -660,11 +669,11 @@ def _remote_host(url: str) -> str:
     return urlparse(url).hostname or ""
 
 
-def cmd_plan(cwd: Path, mode: str) -> int:
+def cmd_plan(cwd: Path, mode: str, full: bool = False) -> int:
     """Print a JSON plan and return 0, or 2 when there is nothing to do."""
 
     try:
-        plan = build_plan(cwd, mode)
+        plan = build_plan(cwd, mode, full)
     except GitError as exc:
         return fail(str(exc))
     print(json.dumps(asdict(plan), indent=2))
@@ -718,6 +727,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     plan = sub.add_parser("plan", help="Print a JSON plan and stop.")
     plan.add_argument("mode", choices=("commit", "push", "release"))
+    plan.add_argument("--full", action="store_true")
     add_yes_flag(plan)
 
     apply = sub.add_parser("apply", help="Apply a plan.")
@@ -753,7 +763,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
     cwd = Path.cwd()
     if args.command == "plan":
-        return cmd_plan(cwd, args.mode)
+        return cmd_plan(cwd, args.mode, args.full)
     return cmd_apply(cwd, args)
 
 

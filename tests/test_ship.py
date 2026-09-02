@@ -114,6 +114,32 @@ def test_plan_commit_exits_when_tree_is_clean(tmp_path: Path) -> None:
     plan = json.loads(result.stdout)
     assert plan["ready"] is False
     assert plan["reason"] == "nothing to commit"
+    assert plan["commits"] == []
+    assert plan["commit_count"] == 1
+    assert len(result.stdout) < 1000
+
+
+def test_plan_push_bounds_commits_and_full_restores_inventory(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    remote = _bare_remote(tmp_path)
+    _git(repo, "remote", "add", "origin", str(remote))
+    _git(repo, "push", "-u", "origin", "main")
+    for index in range(8):
+        (repo / "README.md").write_text(f"change {index}\n", encoding="utf-8")
+        _git(repo, "add", "README.md")
+        _git(repo, "commit", "-m", f"change {index}")
+
+    bounded = _ship(repo, "plan", "push")
+    full = _ship(repo, "plan", "--full", "push")
+
+    assert bounded.returncode == 0
+    bounded_plan = json.loads(bounded.stdout)
+    full_plan = json.loads(full.stdout)
+    assert bounded_plan["commit_count"] == len(full_plan["commits"]) == 9
+    assert len(bounded_plan["commits"]) == 6
+    assert {
+        key: value for key, value in bounded_plan.items() if key not in {"commits"}
+    } == {key: value for key, value in full_plan.items() if key not in {"commits"}}
 
 
 def test_plan_commit_proposes_gitignore_when_missing(tmp_path: Path) -> None:
