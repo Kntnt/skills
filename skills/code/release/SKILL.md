@@ -42,7 +42,7 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 2. If the plan's `branch` is not `default_branch`, stop and say to integrate onto the default branch first.
 3. Follow `$LIBRARY/references/changelog.md`. Empty `[Unreleased]` → stop; there is nothing to ship.
 4. Version: the `X.Y.Z` argument if given; else bump `current_version` by `major`/`minor` if given; else `Removed` or breaking → major (below 1.0.0 → minor), else `Added` → minor, else patch. Done when the version string is known.
-5. Show the plan, the changelog diff, the version, and the build command if any. If the user asks to see every commit, re-run `plan release --full` and show that plan. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
+5. Show the plan, the changelog diff, the version, and the build command if any. If the user asks to see every commit, re-run `plan --full release` and show that plan. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
 6. Run `uv run "$LIBRARY/scripts/ship.py" apply bump --version=X.Y.Z`. Done when stdout is the version.
 7. Follow `$HERE/../push/SKILL.md` with the Formal Invocation `--yes "Release X.Y.Z: <summary>"`. Summary is a short comma-separated reading of the changelog highlights. If the outer Contextual Instruction contains guidance relevant to push, append only that guidance after an explicit `--`; otherwise pass no Contextual Instruction. Done when stdout contains `pushed`.
 8. Run `uv run "$LIBRARY/scripts/ship.py" apply tag --version=X.Y.Z`. Done when stdout contains the tag.

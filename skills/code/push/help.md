@@ -14,6 +14,8 @@ push - commit the working tree and push the current branch
 
 The branch is pushed to its configured upstream. When it has none, the Skill sets one on `origin`. The plan is shown before pushing, and a confirmation already obtained by `commit` is reused instead of asking twice.
 
+The displayed plan uses a bounded commit excerpt; ask to see every commit to have the Skill re-run its plan with the full inventory.
+
 ## POSITIONAL ARGUMENTS
 
 *MESSAGE*

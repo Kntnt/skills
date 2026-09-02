@@ -30,6 +30,8 @@ BUILD_SCRIPTS = (
 )
 MAKE_TARGETS = ("zip", "dist", "archive", "release-zip")
 NPM_SCRIPTS = ("zip", "build:zip", "archive")
+COMMIT_EXCERPT_HEAD = 3
+COMMIT_EXCERPT_TAIL = 3
 
 GITIGNORE_BASE = """# OS
 .DS_Store
@@ -312,8 +314,8 @@ def detect_build(cwd: Path) -> dict[str, str] | None:
     return None
 
 
-def build_plan(cwd: Path, mode: str, full: bool = False) -> Plan:
-    """Gather plan facts for *mode* in *cwd*."""
+def build_plan(cwd: Path, mode: str, full_inventory: bool = False) -> Plan:
+    """Gather plan facts for *mode*, projecting the commit inventory when requested."""
 
     staged, tracked, untracked = status_paths(cwd)
     dirty = bool(staged or tracked or untracked)
@@ -342,7 +344,7 @@ def build_plan(cwd: Path, mode: str, full: bool = False) -> Plan:
         if not dirty:
             plan.ready = False
             plan.reason = "nothing to commit"
-        if not plan.ready and not full:
+        if not plan.ready and not full_inventory:
             plan.commits = []
         return plan
 
@@ -353,10 +355,15 @@ def build_plan(cwd: Path, mode: str, full: bool = False) -> Plan:
         elif not dirty and plan.unpushed == 0:
             plan.ready = False
             plan.reason = "everything up-to-date"
-        if not full and not plan.ready:
+        if not full_inventory and not plan.ready:
             plan.commits = []
-        elif not full and len(plan.commits) > 6:
-            plan.commits = plan.commits[:3] + plan.commits[-3:]
+        elif (
+            not full_inventory
+            and len(plan.commits) > COMMIT_EXCERPT_HEAD + COMMIT_EXCERPT_TAIL
+        ):
+            plan.commits = (
+                plan.commits[:COMMIT_EXCERPT_HEAD] + plan.commits[-COMMIT_EXCERPT_TAIL:]
+            )
         return plan
 
     plan.build = detect_build(cwd)
@@ -669,11 +676,11 @@ def _remote_host(url: str) -> str:
     return urlparse(url).hostname or ""
 
 
-def cmd_plan(cwd: Path, mode: str, full: bool = False) -> int:
-    """Print a JSON plan and return 0, or 2 when there is nothing to do."""
+def cmd_plan(cwd: Path, mode: str, full_inventory: bool = False) -> int:
+    """Print a compact or complete JSON plan and return its readiness status."""
 
     try:
-        plan = build_plan(cwd, mode, full)
+        plan = build_plan(cwd, mode, full_inventory)
     except GitError as exc:
         return fail(str(exc))
     print(json.dumps(asdict(plan), indent=2))
@@ -727,7 +734,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     plan = sub.add_parser("plan", help="Print a JSON plan and stop.")
     plan.add_argument("mode", choices=("commit", "push", "release"))
-    plan.add_argument("--full", action="store_true")
+    plan.add_argument("--full", dest="full_inventory", action="store_true")
     add_yes_flag(plan)
 
     apply = sub.add_parser("apply", help="Apply a plan.")
@@ -763,7 +770,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
     cwd = Path.cwd()
     if args.command == "plan":
-        return cmd_plan(cwd, args.mode, args.full)
+        return cmd_plan(cwd, args.mode, args.full_inventory)
     return cmd_apply(cwd, args)
 
 
