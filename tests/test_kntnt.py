@@ -8048,16 +8048,19 @@ def test_delegation_states_the_file_and_capped_inline_report_contract() -> None:
     assert "the subagent writes complete findings there" in contract
     assert "Verify results independently." in contract
 
-    # Preserve the detached path while forbidding a doctrine-wide numeric cap.
+    # Preserve the detached path while forbidding any doctrine-wide cap number.
     assert "writing to disk" in mode
-    numeric_cap = re.search(
-        r"\b\d+(?:-\d+)?\s+(?:words?|lines?|bullets?)\b",
-        contract,
+    default_number = re.search(
+        (
+            r"\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|"
+            r"eleven|twelve|dozen|hundred|thousand|\d+)\b"
+        ),
+        mode,
         flags=re.IGNORECASE,
     )
-    assert numeric_cap is None, (
+    assert default_number is None, (
         f"{path}: the directive must not set a numeric default cap; found"
-        f" {numeric_cap.group(0)!r}."
+        f" {default_number.group(0)!r}."
     )
 
 
