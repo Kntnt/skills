@@ -879,6 +879,35 @@ def test_the_question_step_asks_in_one_batch_between_plan_and_claim() -> None:
     )
 
 
+def test_the_first_plan_alone_carries_the_caller_supplied_approval() -> None:
+    """Approval binds the invocation's opening frontier, not later re-plans."""
+
+    skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+
+    assert "--approval" in skill
+    assert "first plan of this invocation" in skill
+    assert "step 3 or step 11 runs without `--approval`" in skill
+
+
+def test_the_manpage_documents_reproducible_plan_approval() -> None:
+    """A caller can derive the same canonical digest without the engine."""
+
+    synopsis = _manpage_section("SYNOPSIS")
+    options = _manpage_section("OPTIONS")
+
+    assert "**--approval=**_IDENTITY_" in synopsis
+    assert "**--approval=**_IDENTITY_" in options
+    assert "kntnt-orchestrate-plan-v1" in options
+    assert "NUL" in options
+    assert (
+        "branch, default_branch, scope, at_once, worktrees, model, "
+        "deliberation, waves, solo"
+    ) in options
+    assert "sorted keys" in options
+    assert "(',', ':')" in options
+    assert "SHA-256" in options
+
+
 def test_the_question_step_parks_rather_than_guesses_under_yes() -> None:
     """`--yes` answers yes/no, and *which default?* is not one of those.
 

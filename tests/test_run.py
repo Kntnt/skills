@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import os
@@ -708,6 +709,18 @@ def _engine(
 
     # Keep engine call sites focused on the command arguments under test.
     return _project_script(cwd, RUN, *args, env=env, input_text=input_text)
+
+
+def _approval_identity(payload: dict[str, Any]) -> str:
+    """Compute the documented approval identity independently of the engine."""
+
+    canonical = json.dumps(
+        payload,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(b"kntnt-orchestrate-plan-v1\0" + canonical).hexdigest()
 
 
 def _model_route(
@@ -2010,6 +2023,194 @@ def test_a_dry_route_reports_its_decisions_and_freezes_nothing(tmp_path: Path) -
     assert json.loads(result.stdout)["decisions"][0]["ticket"] == 9
     assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
     assert not (scratch / STATE_HOME / STATE_FILE).exists()
+
+
+def test_plan_identity_binds_the_authorized_frontier_and_not_ticket_comments(
+    tmp_path: Path,
+) -> None:
+    """A caller can reproduce the stable identity of exactly what may run."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    ticket = _ticket(7, "authorized", comments=[])
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [ticket]},
+        issues={7: _ready(7)},
+    )
+
+    first = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    assert first.returncode == 2
+    planned = json.loads(first.stdout)
+    payload = {
+        "branch": "work",
+        "default_branch": "main",
+        "scope": None,
+        "at_once": 1,
+        "worktrees": False,
+        "model": None,
+        "deliberation": None,
+        "waves": [[7]],
+        "solo": [],
+    }
+    assert planned["approval_identity"] == _approval_identity(payload)
+    assert "approval_payload" not in planned
+    assert "approval_expected" not in planned
+
+    ticket["comments"] = [{"body": "A later answer", "author": {"login": "owner"}}]
+    Path(env["GH_TICKETS"], "ready-for-agent.open.json").write_text(
+        json.dumps([ticket]), encoding="utf-8"
+    )
+    second = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    assert (
+        json.loads(second.stdout)["approval_identity"] == planned["approval_identity"]
+    )
+    assert not (scratch / STATE_HOME / STATE_FILE).exists()
+
+
+def test_plan_approval_mismatch_is_audited_and_blocks_claim_without_tracker_writes(
+    tmp_path: Path,
+) -> None:
+    """A changed caller expectation stops before a ticket can be claimed."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(8, "drifted")]},
+        issues={8: _ready(8)},
+    )
+
+    preview = _engine(
+        repo,
+        "plan",
+        "--dry-run",
+        "--approval",
+        "0" * 64,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    previewed = json.loads(preview.stdout)
+    assert "approval does not match" in previewed["reason"]
+    assert not (scratch / STATE_HOME / STATE_FILE).exists()
+
+    planned = _engine(
+        repo,
+        "plan",
+        "--approval",
+        "0" * 64,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    assert planned.returncode == 2
+    mismatch = json.loads(planned.stdout)
+    assert mismatch["ready"] is False
+    assert mismatch["approval_expected"] == "0" * 64
+    assert mismatch["approval_identity"] != mismatch["approval_expected"]
+    assert mismatch["approval_payload"]["waves"] == [[8]]
+
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["approval_expected"] == mismatch["approval_expected"]
+    assert state["approval_identity"] == mismatch["approval_identity"]
+    assert state["approval_payload"] == mismatch["approval_payload"]
+    assert state["approval_met"] is False
+    assert state["claimed"] == []
+    assert state["starting"] == []
+
+    unflagged = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert unflagged.returncode == 0
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["approval_met"] is False
+
+    claimed = _engine(
+        repo, "claim", "--ticket", "8", "--state-dir", str(scratch), env=env
+    )
+    assert claimed.returncode == 1
+    assert "approval" in claimed.stderr
+    assert "issue edit" not in _gh_calls(env)
+
+
+def test_matching_plan_approval_is_recorded_and_allows_the_run_to_continue(
+    tmp_path: Path,
+) -> None:
+    """The exact caller-authorized plan enters the ordinary routing flow."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "authorized")]},
+        issues={9: _ready(9)},
+    )
+    dry = _engine(repo, "plan", "--dry-run", env=env)
+    approval = json.loads(dry.stdout)["approval_identity"]
+
+    planned = _engine(
+        repo,
+        "plan",
+        "--approval",
+        approval,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    assert planned.returncode == 0
+    result = json.loads(planned.stdout)
+    assert result["ready"] is True
+    assert result["approval_expected"] == approval
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["approval_met"] is True
+    assert state["approval_expected"] == approval
+    assert state["approval_identity"] == approval
+
+
+def test_unflagged_plan_state_keeps_its_existing_shape(tmp_path: Path) -> None:
+    """The optional authorization mode adds no default run-state fields."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(12, "ordinary")]},
+        issues={12: _ready(12)},
+    )
+
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert not any(key.startswith("approval_") for key in state)
+
+
+def test_plan_identity_changes_with_ceiling_locks_and_frontier(tmp_path: Path) -> None:
+    """Every caller-controlled execution dimension changes authorization."""
+
+    repo = _init_repo(tmp_path / "proj")
+    tickets = [_ticket(10, "first"), _ticket(11, "second")]
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": tickets},
+        issues={10: _ready(10), 11: _ready(11)},
+    )
+
+    def identity(*args: str) -> str:
+        planned = _engine(repo, "plan", "--dry-run", *args, env=env)
+        return str(json.loads(planned.stdout)["approval_identity"])
+
+    identities = {
+        identity(),
+        identity("--at-once", "2"),
+        identity("--model", "builder"),
+        identity("--deliberation", "high"),
+        identity("--scope", "#10"),
+    }
+    assert len(identities) == 5
+
+    Path(env["GH_TICKETS"], "ready-for-agent.open.json").write_text(
+        json.dumps(tickets[:1]), encoding="utf-8"
+    )
+    assert identity() not in identities
 
 
 def test_route_refuses_a_response_that_is_not_a_public_route_response(

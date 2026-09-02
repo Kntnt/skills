@@ -6,7 +6,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 ## SYNOPSIS
 
-**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
+**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--approval=**_IDENTITY_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
 
 **/orchestrate reconcile** [**--commit=**_COMMIT_] [**--yes**] *TICKET* [**--** *INSTRUCTION*]
 
@@ -168,6 +168,12 @@ Lock only the building model dimension for every execution role. Model-selector 
 
 Lock only the building deliberation dimension for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`; another value is refused rather than normalized. Model-selector still selects model when it is omitted. Verdicts retain exact main-seat inheritance.
 
+**--approval=**_IDENTITY_
+
+Authorize the first plan of this invocation by its exact canonical identity. The engine compares the supplied and computed identities before routing or claiming, records both with the payload on a real plan, and refuses a mismatch. Dry runs emit the identity and payload but store nothing. Omitting this option keeps the ordinary flow.
+
+The payload fields, in order, are `branch, default_branch, scope, at_once, worktrees, model, deliberation, waves, solo`. Serialize that object as UTF-8 JSON with sorted keys, `ensure_ascii=False`, and separators `(',', ':')`. Prefix those bytes with the UTF-8 bytes of `kntnt-orchestrate-plan-v1`, followed by one NUL byte, then take the lowercase hexadecimal SHA-256 digest.
+
 **--commit=**_COMMIT_
 
 Name the default-branch commit that completed a reconciled ticket. It applies only to `reconcile`; the action discovers the commit when one exact closing-reference candidate exists.
@@ -184,7 +190,7 @@ Concurrent ticket worktrees, branches, reservations, and scratch space. Successf
 
 **Per-session state directory**
 
-Stores the recoverable claim account and the irreplaceable frozen routing snapshot. A missing routing snapshot stops a claimed run.
+Stores the recoverable claim account, the caller's expected and computed approval identities with their canonical payload, and the irreplaceable frozen routing snapshot. A missing routing snapshot or an unmet approval stops a claim.
 
 **Routed observation artifact**
 
@@ -207,6 +213,8 @@ The Skill-owned append-only ledger records load-induced flakes with their unchan
 An invalid reference, option, value, combination, or argument order is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`.
 
 Routing is refused rather than adjusted. A changed snapshot, mismatched locks, routed verdict, or execution role without a decision starts no work and reports a stable reason code.
+
+A mismatched approval reports the expected identity, computed identity, and canonical payload. A real mismatch stores that audit beside empty claim and starting lists but changes neither tracker nor repository; a dry-run mismatch stores nothing.
 
 The working tree must be clean when planning and before closing a ticket. A scope with no workable ticket is reported without starting a build.
 
