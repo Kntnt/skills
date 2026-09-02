@@ -6,7 +6,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 ## SYNOPSIS
 
-**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
+**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--approval=**_IDENTITY_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
 
 **/orchestrate reconcile** [**--commit=**_COMMIT_] [**--yes**] *TICKET* [**--** *INSTRUCTION*]
 
@@ -18,13 +18,15 @@ Blocking relations produce dependency waves. Native tracker relations take prece
 
 A ticket beginning a line with `Builds alone` is a Solo Ticket. It receives the first available wave by itself, and the plan marks it `solo`.
 
+A ticket may declare ordered multi-commit work with `Commit roles: implementation: src/**; evidence: docs/verification/**`. The keyword may be a sentence or heading; under a heading, write one `- role: pattern, pattern` entry per role. Patterns are Git pathspecs. A valid branch contains one or more complete passes, each role exactly once in declaration order and one commit per role; `.kntnt-orchestrate/` may accompany a role and a commit confined there is skipped. Later amendments append complete passes without rewriting earlier commits.
+
 The main session owns planning, triage, integration, and verification judgements. Run it from the most capable model available; those judgements are only as reliable as that model.
 
 Model Selector creates one frozen routing snapshot before claims. Builders and repair roles use decisions from that snapshot; independent verdicts always inherit the main session's exact model and deliberation configuration.
 
-Before claiming, the Skill asks all open ticket decisions in one batch and posts the answers to their tickets. With `--yes`, it parks such tickets under `needs-info` instead of guessing, then continues with the rest.
+Before any ticket is claimed, the Skill audits ticket text for open decisions in one batch and posts the answers to their tickets. It looks for concretely named gaps, including exact commands whose inputs the repository does not fix, an external service or account with no mutation path or owner, choices phrased as alternatives, and credentials or accounts whose owner is undeclared. With `--yes`, it parks such tickets under `needs-info` instead of guessing, then continues with the rest; uncertain cases proceed and retain the mid-work park as a backstop.
 
-`reconcile` records that a failed or conflicted attempt was later completed outside Orchestrate. See **/orchestrate reconcile --help**.
+`reconcile` records that a failed, conflicted, or parked attempt was later completed outside Orchestrate. See **/orchestrate reconcile --help**.
 
 ## COMMANDS
 
@@ -60,7 +62,9 @@ A different subagent checks every acceptance criterion and the complete Project 
 
 **Integrate**
 
-Verified work is committed and integrated. After each wave, the complete Project gate and an independent coherence review check the combined branch.
+Verified work is committed and integrated. After each wave, the complete Project gate and an independent coherence review check the combined branch. A strict subset of failing tests is rerun unchanged three times in isolation; three passes earn one unchanged full-gate rerun, and only a green full rerun turns the result into a pass recorded as a load-induced flake.
+
+Before integration—or at `record` when the ceiling is one—the engine refuses a declared pass that is incomplete, out of order, or touches paths outside its current role. The diagnostic names the commit and offending paths, nothing is merged or recorded, and the ticket tree remains available for inspection.
 
 The verdict turns on whether correction requires a new decision, not on whether every gate command passed. Mechanical findings are fixed by another subagent and checked again until a round is clean.
 
@@ -80,7 +84,9 @@ A deterministic environment problem is repaired by the orchestrator and the same
 
 **Genuine decision**
 
-An ambiguity, missing requirement, or design choice not settled by the ticket parks the ticket under `needs-info`, posts the question, releases the claim, and records no build outcome.
+An ambiguity, missing requirement, or design choice not settled by the ticket parks the ticket under `needs-info`, posts a decision-ready question quoting the ticket's sentence and naming what the ticket must state instead, releases the claim, and records no build outcome. The same record shape applies before claim and mid-work.
+
+The park report includes the ticket's lifetime `amends_spent`, so the remaining budget is known before it is resumed.
 
 **Discovered dependency**
 
@@ -102,6 +108,12 @@ With `--at-once=1`, an unrepaired failure stops later tickets. With concurrency,
 
 Restart an interrupted run with the same invocation and state directory; there is no resume option. Recorded outcomes and numbered amend phases remain settled.
 
+The amendment limit is a per-ticket-lifetime budget. A parked attempt is resumed rather than forfeited: its tracker-backed `amends_spent` survives every park and resume, and subtracting that value from two gives the exact number of further amendments available.
+
+Preserved commits are the mandatory base of a resume, never discarded in favour of a rebuild from scratch. Before dispatch, Orchestrate brings the current run branch into the preserved ticket branch so resolved blockers and other integrated predecessors are present. Uncommitted preserved work waits for a person; an authored collision is repaired on the ticket branch and then judged by the resumed amend's fresh full-ticket verifier.
+
+Prior verdicts remain ticket evidence and the resumed amend receives the immediately preceding verdict verbatim. The report keeps `amends_spent` as the lifetime total and names attempts this invocation inherited under `amends_inherited` and attempts it newly spent under `amends_newly_spent`.
+
 The frozen routing account is not reconstructed from current profile, evidence, price, alias, or Harness state. If it is missing or unreadable while this run still owns a claim, the run stops.
 
 `--model` and `--deliberation` are part of that account. Changing or dropping either is refused. Repeating the same attempt and phase resumes it without spending another attempt.
@@ -116,7 +128,7 @@ Run Outcome and Ticket Resolution are different facts. The Run Outcome is the im
 
 **done**
 
-The work is complete. A reconciled ticket was completed outside Orchestrate; its detail preserves the unsuccessful Run Outcome and does not claim Orchestrate built or independently verified the repair.
+The work is complete. A reconciled ticket was completed outside Orchestrate; its detail preserves an unsuccessful Run Outcome when one exists, leaves it absent after parking, and does not claim Orchestrate built or independently verified the repair.
 
 **failed**
 
@@ -156,6 +168,12 @@ Lock only the building model dimension for every execution role. Model-selector 
 
 Lock only the building deliberation dimension for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`; another value is refused rather than normalized. Model-selector still selects model when it is omitted. Verdicts retain exact main-seat inheritance.
 
+**--approval=**_IDENTITY_
+
+Authorize the first plan of this invocation by its exact canonical identity. The engine compares the supplied and computed identities before routing or claiming, records both with the payload on a real plan, and refuses a mismatch. Dry runs emit the identity and payload but store nothing. Omitting this option keeps the ordinary flow.
+
+The payload fields, in order, are `branch, default_branch, scope, at_once, worktrees, model, deliberation, waves, solo`. Serialize that object as UTF-8 JSON with sorted keys, `ensure_ascii=False`, and separators `(',', ':')`. Prefix those bytes with the UTF-8 bytes of `kntnt-orchestrate-plan-v1`, followed by one NUL byte, then take the lowercase hexadecimal SHA-256 digest.
+
 **--commit=**_COMMIT_
 
 Name the default-branch commit that completed a reconciled ticket. It applies only to `reconcile`; the action discovers the commit when one exact closing-reference candidate exists.
@@ -172,7 +190,9 @@ Concurrent ticket worktrees, branches, reservations, and scratch space. Successf
 
 **Per-session state directory**
 
-Stores the recoverable claim account and the irreplaceable frozen routing snapshot. A missing routing snapshot stops a claimed run.
+Stores the recoverable claim account, the caller's expected and computed approval identities with their canonical payload, and the irreplaceable frozen routing snapshot. A missing routing snapshot or an unmet approval stops a claim.
+
+The directory also contains `kntnt-orchestrate-progress.json`, an atomically replaced dashboard of the current wave, ticket, phase, amendment count, completed and remaining ticket counts, timestamp, and terminal outcome. The `report` verb projects its five outcome lists into the terminal dashboard directly, so the two accounts agree. It may lag a transition whose step did not report it and is never evidence or an input to an engine decision; the durable report remains authoritative. Deleting it harms nothing because the next transition recreates it.
 
 **Routed observation artifact**
 
@@ -186,11 +206,17 @@ Declares generated files and their commands. A collision confined to declared fi
 
 Builders leave changes to shared append-only files in ticket-specific notes. The orchestrator applies those notes serially after each wave and verifies the result.
 
+**~/.kntnt/orchestrate/flakes.jsonl**
+
+The Skill-owned append-only ledger records load-induced flakes with their unchanged-head isolation and full-rerun evidence. The final report names this run's flakes and how many earlier records each test has in the same repository.
+
 ## DIAGNOSTICS
 
 An invalid reference, option, value, combination, or argument order is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`.
 
 Routing is refused rather than adjusted. A changed snapshot, mismatched locks, routed verdict, or execution role without a decision starts no work and reports a stable reason code.
+
+A mismatched approval reports the expected identity, computed identity, and canonical payload. A real mismatch stores that audit beside empty claim and starting lists but changes neither tracker nor repository; a dry-run mismatch stores nothing.
 
 The working tree must be clean when planning and before closing a ticket. A scope with no workable ticket is reported without starting a build.
 

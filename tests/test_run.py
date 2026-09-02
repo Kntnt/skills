@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import os
@@ -133,6 +134,13 @@ STATE_HOME = "kntnt-orchestrate"
 # file is — a test that asked the engine where it wrote would be asking the
 # thing under test to grade itself.
 ROUTING_FILE = "kntnt-orchestrate-routing.json"
+
+# The dashboard is a public file contract rather than an engine constant.
+PROGRESS_FILE: str = "kntnt-orchestrate-progress.json"
+
+# Flake evidence is durable Skill-owned state, while this run's selection of
+# those records stays in its scratch account for the final report.
+FLAKE_LEDGER = Path(".kntnt/orchestrate/flakes.jsonl")
 
 # A stand-in that logs what git was asked to do and then lets the real git do
 # it. Everything the engine reads from the repository has to stay true, so
@@ -706,6 +714,18 @@ def _engine(
     return _project_script(cwd, RUN, *args, env=env, input_text=input_text)
 
 
+def _approval_identity(payload: dict[str, Any]) -> str:
+    """Compute the documented approval identity independently of the engine."""
+
+    canonical = json.dumps(
+        payload,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(b"kntnt-orchestrate-plan-v1\0" + canonical).hexdigest()
+
+
 def _model_route(
     cwd: Path,
     request: dict[str, Any],
@@ -846,6 +866,143 @@ def test_report_accounts_for_the_tickets_in_scope(tmp_path: Path) -> None:
     report = json.loads(result.stdout)
     assert [entry["number"] for entry in report["tickets"]] == [9, 10]
     assert report["never_on_frontier"] == [9, 10]
+
+
+def test_flake_records_evidence_idempotently_under_the_user_home(
+    tmp_path: Path,
+) -> None:
+    """One unchanged-head flake is one atomic durable ledger record."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    home = tmp_path / "home"
+    evidence = tmp_path / "flake.json"
+    evidence.write_text(
+        json.dumps(
+            {
+                "failing_tests": ["tests/test_poll.py::test_deadline"],
+                "isolation_results": ["passed", "passed", "passed"],
+                "full_rerun_result": "passed",
+                "narrowed_command": "pytest tests/test_poll.py::test_deadline",
+                "load_context": "full parallel gate",
+            }
+        ),
+        encoding="utf-8",
+    )
+    env = {**_tracker(tmp_path, {"ready-for-agent": []}), "HOME": str(home)}
+
+    first = _engine(
+        repo, "flake", "--evidence", str(evidence), "--state-dir", str(scratch), env=env
+    )
+    second = _engine(
+        repo, "flake", "--evidence", str(evidence), "--state-dir", str(scratch), env=env
+    )
+
+    assert first.returncode == 0, first.stderr
+    assert second.returncode == 0, second.stderr
+    assert json.loads(first.stdout)["recorded"] is True
+    assert json.loads(second.stdout)["recorded"] is False
+    records = [
+        json.loads(line)
+        for line in (home / FLAKE_LEDGER).read_text(encoding="utf-8").splitlines()
+    ]
+    assert len(records) == 1
+    assert records[0]["repository"]
+    assert records[0]["branch"] == "work"
+    assert records[0]["head"] == _git(repo, "rev-parse", "HEAD").stdout.strip()
+    assert records[0]["failing_tests"] == ["tests/test_poll.py::test_deadline"]
+    assert records[0]["isolation_results"] == ["passed", "passed", "passed"]
+    assert records[0]["full_rerun_result"] == "passed"
+    assert records[0]["timestamp"].endswith("Z")
+    assert not list((home / FLAKE_LEDGER).parent.glob("*.tmp"))
+
+
+def test_report_names_this_runs_flake_and_its_earlier_count(tmp_path: Path) -> None:
+    """The run report exposes recurrence without folding old flakes into this run."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    home = tmp_path / "home"
+    evidence = tmp_path / "flake.json"
+    payload = {
+        "failing_tests": ["tests/test_poll.py::test_deadline"],
+        "isolation_results": ["passed", "passed", "passed"],
+        "full_rerun_result": "passed",
+        "narrowed_command": "pytest tests/test_poll.py::test_deadline",
+        "load_context": "full parallel gate",
+    }
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+    env = {**_tracker(tmp_path, {"ready-for-agent": []}), "HOME": str(home)}
+    ledger = home / FLAKE_LEDGER
+    ledger.parent.mkdir(parents=True)
+    ledger.write_text(
+        json.dumps(
+            {
+                "repository": str(repo.resolve()),
+                "branch": "older-run",
+                "head": "older-head",
+                **payload,
+                "timestamp": "2026-01-01T00:00:00Z",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    recorded = _engine(
+        repo, "flake", "--evidence", str(evidence), "--state-dir", str(scratch), env=env
+    )
+    report = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert recorded.returncode == 0, recorded.stderr
+    assert report.returncode == 0, report.stderr
+    flakes = json.loads(report.stdout)["flakes"]
+    assert len(flakes) == 1
+    assert flakes[0]["failing_tests"] == ["tests/test_poll.py::test_deadline"]
+    assert flakes[0]["earlier_records"] == {"tests/test_poll.py::test_deadline": 1}
+
+
+def test_flake_refuses_conflicting_evidence_for_the_same_failure(
+    tmp_path: Path,
+) -> None:
+    """An idempotent replay may not overwrite a different account."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    home = tmp_path / "home"
+    evidence = tmp_path / "flake.json"
+    payload = {
+        "failing_tests": ["tests/test_poll.py::test_deadline"],
+        "isolation_results": ["passed", "passed", "passed"],
+        "full_rerun_result": "passed",
+        "narrowed_command": "pytest tests/test_poll.py::test_deadline",
+        "load_context": "full parallel gate",
+    }
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+    env = {**_tracker(tmp_path, {"ready-for-agent": []}), "HOME": str(home)}
+    assert (
+        _engine(
+            repo,
+            "flake",
+            "--evidence",
+            str(evidence),
+            "--state-dir",
+            str(scratch),
+            env=env,
+        ).returncode
+        == 0
+    )
+    evidence.write_text(
+        json.dumps({**payload, "load_context": "different load"}), encoding="utf-8"
+    )
+
+    result = _engine(
+        repo, "flake", "--evidence", str(evidence), "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode != 0
+    assert "different evidence" in result.stderr
+    assert len((home / FLAKE_LEDGER).read_text(encoding="utf-8").splitlines()) == 1
 
 
 def test_every_verb_accepts_yes(tmp_path: Path) -> None:
@@ -1007,6 +1164,79 @@ def test_plan_gives_a_solo_ticket_a_wave_of_its_own(tmp_path: Path) -> None:
     assert plan["workable"] == [9]
     assert plan["solo"] == [9]
     assert plan["tickets"][0]["builds_alone"] is True
+
+
+def test_plan_projects_a_declared_commit_contract_into_run_state(
+    tmp_path: Path,
+) -> None:
+    """A checking verb receives the tracker's contract from durable run state."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(
+                    9,
+                    "the release gate",
+                    body=(
+                        "Commit roles: implementation: src/**; "
+                        "evidence: docs/verification/**"
+                    ),
+                )
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    expected = [
+        {"name": "implementation", "patterns": ["src/**"]},
+        {"name": "evidence", "patterns": ["docs/verification/**"]},
+    ]
+    assert plan["tickets"][0]["commit_contract"] == expected
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["contracts"] == {"9": expected}
+
+
+def test_plan_projects_a_commit_contract_declared_under_a_heading(
+    tmp_path: Path,
+) -> None:
+    """The documented heading form reads each following list item as a role."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(
+                    9,
+                    "the release gate",
+                    body=(
+                        "## Commit roles\n\n"
+                        "- implementation: src/**\n"
+                        "- evidence: docs/verification/**\n"
+                    ),
+                )
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    expected = [
+        {"name": "implementation", "patterns": ["src/**"]},
+        {"name": "evidence", "patterns": ["docs/verification/**"]},
+    ]
+    assert plan["tickets"][0]["commit_contract"] == expected
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["contracts"] == {"9": expected}
 
 
 def test_plan_moves_a_solo_tickets_admissible_siblings_out_of_its_wave(
@@ -1796,6 +2026,194 @@ def test_a_dry_route_reports_its_decisions_and_freezes_nothing(tmp_path: Path) -
     assert json.loads(result.stdout)["decisions"][0]["ticket"] == 9
     assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
     assert not (scratch / STATE_HOME / STATE_FILE).exists()
+
+
+def test_plan_identity_binds_the_authorized_frontier_and_not_ticket_comments(
+    tmp_path: Path,
+) -> None:
+    """A caller can reproduce the stable identity of exactly what may run."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    ticket = _ticket(7, "authorized", comments=[])
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [ticket]},
+        issues={7: _ready(7)},
+    )
+
+    first = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    assert first.returncode == 2
+    planned = json.loads(first.stdout)
+    payload = {
+        "branch": "work",
+        "default_branch": "main",
+        "scope": None,
+        "at_once": 1,
+        "worktrees": False,
+        "model": None,
+        "deliberation": None,
+        "waves": [[7]],
+        "solo": [],
+    }
+    assert planned["approval_identity"] == _approval_identity(payload)
+    assert "approval_payload" not in planned
+    assert "approval_expected" not in planned
+
+    ticket["comments"] = [{"body": "A later answer", "author": {"login": "owner"}}]
+    Path(env["GH_TICKETS"], "ready-for-agent.open.json").write_text(
+        json.dumps([ticket]), encoding="utf-8"
+    )
+    second = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    assert (
+        json.loads(second.stdout)["approval_identity"] == planned["approval_identity"]
+    )
+    assert not (scratch / STATE_HOME / STATE_FILE).exists()
+
+
+def test_plan_approval_mismatch_is_audited_and_blocks_claim_without_tracker_writes(
+    tmp_path: Path,
+) -> None:
+    """A changed caller expectation stops before a ticket can be claimed."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(8, "drifted")]},
+        issues={8: _ready(8)},
+    )
+
+    preview = _engine(
+        repo,
+        "plan",
+        "--dry-run",
+        "--approval",
+        "0" * 64,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    previewed = json.loads(preview.stdout)
+    assert "approval does not match" in previewed["reason"]
+    assert not (scratch / STATE_HOME / STATE_FILE).exists()
+
+    planned = _engine(
+        repo,
+        "plan",
+        "--approval",
+        "0" * 64,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    assert planned.returncode == 2
+    mismatch = json.loads(planned.stdout)
+    assert mismatch["ready"] is False
+    assert mismatch["approval_expected"] == "0" * 64
+    assert mismatch["approval_identity"] != mismatch["approval_expected"]
+    assert mismatch["approval_payload"]["waves"] == [[8]]
+
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["approval_expected"] == mismatch["approval_expected"]
+    assert state["approval_identity"] == mismatch["approval_identity"]
+    assert state["approval_payload"] == mismatch["approval_payload"]
+    assert state["approval_met"] is False
+    assert state["claimed"] == []
+    assert state["starting"] == []
+
+    unflagged = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert unflagged.returncode == 0
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["approval_met"] is False
+
+    claimed = _engine(
+        repo, "claim", "--ticket", "8", "--state-dir", str(scratch), env=env
+    )
+    assert claimed.returncode == 1
+    assert "approval" in claimed.stderr
+    assert "issue edit" not in _gh_calls(env)
+
+
+def test_matching_plan_approval_is_recorded_and_allows_the_run_to_continue(
+    tmp_path: Path,
+) -> None:
+    """The exact caller-authorized plan enters the ordinary routing flow."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "authorized")]},
+        issues={9: _ready(9)},
+    )
+    dry = _engine(repo, "plan", "--dry-run", env=env)
+    approval = json.loads(dry.stdout)["approval_identity"]
+
+    planned = _engine(
+        repo,
+        "plan",
+        "--approval",
+        approval,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    assert planned.returncode == 0
+    result = json.loads(planned.stdout)
+    assert result["ready"] is True
+    assert result["approval_expected"] == approval
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["approval_met"] is True
+    assert state["approval_expected"] == approval
+    assert state["approval_identity"] == approval
+
+
+def test_unflagged_plan_state_keeps_its_existing_shape(tmp_path: Path) -> None:
+    """The optional authorization mode adds no default run-state fields."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(12, "ordinary")]},
+        issues={12: _ready(12)},
+    )
+
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert not any(key.startswith("approval_") for key in state)
+
+
+def test_plan_identity_changes_with_ceiling_locks_and_frontier(tmp_path: Path) -> None:
+    """Every caller-controlled execution dimension changes authorization."""
+
+    repo = _init_repo(tmp_path / "proj")
+    tickets = [_ticket(10, "first"), _ticket(11, "second")]
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": tickets},
+        issues={10: _ready(10), 11: _ready(11)},
+    )
+
+    def identity(*args: str) -> str:
+        planned = _engine(repo, "plan", "--dry-run", *args, env=env)
+        return str(json.loads(planned.stdout)["approval_identity"])
+
+    identities = {
+        identity(),
+        identity("--at-once", "2"),
+        identity("--model", "builder"),
+        identity("--deliberation", "high"),
+        identity("--scope", "#10"),
+    }
+    assert len(identities) == 5
+
+    Path(env["GH_TICKETS"], "ready-for-agent.open.json").write_text(
+        json.dumps(tickets[:1]), encoding="utf-8"
+    )
+    assert identity() not in identities
 
 
 def test_route_refuses_a_response_that_is_not_a_public_route_response(
@@ -2823,6 +3241,37 @@ def test_reconcile_records_external_completion_without_closing_again(
     assert "issue close" not in calls
 
 
+def test_reconcile_accepts_a_closed_parked_ticket_without_a_run_outcome(
+    tmp_path: Path,
+) -> None:
+    """A parked attempt may be completed by hand before any Run Outcome exists.
+
+    Reconciliation records that explicit completion and replaces the parked
+    lifecycle with the neutral history state used by Report.
+    """
+
+    # Present a closed parked ticket and a landed completion commit.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    ticket = _ticket(9, "parked work", claimed_by=["former-maintainer"])
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: ticket | {"state": "CLOSED", "labels": [{"name": "needs-info"}]}},
+    )
+
+    # Reconcile through the public maintainer invocation.
+    result = _engine(repo, "reconcile", "--ticket", "9", "--commit", head, env=env)
+
+    # Record marker-only completion and make it discoverable as history.
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["run_outcome"] is None
+    calls = _gh_calls(env)
+    assert "--remove-label needs-info" in calls
+    assert "--add-label orchestrated" in calls
+    assert f"reconciliation=done commit={head}" in calls
+
+
 def test_reconcile_refuses_ineligible_ticket_or_unlanded_commit_without_writes(
     tmp_path: Path,
 ) -> None:
@@ -3230,6 +3679,44 @@ def test_report_projects_reconciliation_as_done_with_failure_provenance(
     assert report["tickets"][0]["run_outcome"] == "failed"
     assert report["tickets"][0]["is_reconciled"] is True
     assert report["tickets"][0]["commit"] == head
+
+
+def test_report_keeps_marker_only_reconciliation_done_across_cycles(
+    tmp_path: Path,
+) -> None:
+    """Planning and consecutive reports share marker-only completion truth."""
+
+    # Present a parked ticket reconciled through the engine and its dependent.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    reconciled = _ticket(9, "parked work", comments=[_reconciled(head)])
+    dependent = _ticket(10, "dependent", blocked_by=[(9, "CLOSED")])
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [dependent]},
+        issues={9: reconciled | {"state": "CLOSED"}},
+        closed=[reconciled],
+    )
+
+    # Read the same history through planning and two report cycles.
+    plan = _engine(repo, "plan", env=env)
+    reports = [_engine(repo, "report", env=env) for _ in range(2)]
+
+    # Keep the dependent workable and account for both tickets exactly once.
+    assert plan.returncode == 0, plan.stderr
+    assert json.loads(plan.stdout)["workable"] == [10]
+    for result in reports:
+        assert result.returncode == 0, result.stderr
+        report = json.loads(result.stdout)
+        assert report["done"] == [9]
+        assert report["never_on_frontier"] == [10]
+        ticket = next(entry for entry in report["tickets"] if entry["number"] == 9)
+        assert ticket["commit"] == head
+        assert ticket["run_outcome"] is None
+        assert ticket["is_reconciled"] is True
+        accounted = [number for outcome in _ACCOUNT for number in report[outcome]]
+        assert sorted(accounted) == [9, 10]
+        assert len(accounted) == len(set(accounted))
 
 
 def test_report_keeps_closed_unreconciled_failure_under_failed(
@@ -6505,6 +6992,48 @@ def test_report_accounts_for_a_conflicted_ticket_with_the_one_it_hit(
     assert entry["collided_with"] == [9]
 
 
+def test_report_does_not_carry_a_previous_invocations_amendment_split(
+    tmp_path: Path,
+) -> None:
+    """Invocation-local amendment evidence never survives in run state."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    (scratch / STATE_HOME).mkdir(parents=True)
+    state = {
+        "branch": "work",
+        "label": "ready-for-agent",
+        "login": None,
+        "claimed": [10],
+        "base": _git(repo, "rev-parse", "HEAD").stdout.strip(),
+        "starting": [10],
+        "contracts": {},
+        "contract_bases": {},
+        "amendments": {"10": {"inherited": [1], "newly_spent": [2]}},
+    }
+    (scratch / STATE_HOME / STATE_FILE).write_text(json.dumps(state), encoding="utf-8")
+    comments = [
+        {
+            "body": (
+                f"<!-- {MARKER} amend=2 phase=building --> attempt two\n\n"
+                "Verifier verdict:\n\nStill failing.\n"
+            )
+        }
+    ]
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph", comments=comments)]},
+    )
+
+    result = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    entry = json.loads(result.stdout)["tickets"][0]
+    assert entry["amends_spent"] == 2
+    assert "amends_inherited" not in entry
+    assert "amends_newly_spent" not in entry
+
+
 def test_no_verb_pushes_while_the_developer_is_asleep(tmp_path: Path) -> None:
     """Isolating and integrating are git of a kind the earlier verbs never ran,
     and nothing leaves the machine in either."""
@@ -6714,6 +7243,87 @@ def test_isolate_still_resumes_the_working_tree_this_branchs_run_made(
     assert json.loads(first.stdout) == json.loads(second.stdout)
 
 
+def test_isolate_brings_a_preserved_ticket_forward_to_the_run_branch(
+    tmp_path: Path,
+) -> None:
+    """A resumed ticket keeps its commits and receives work integrated later."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "ticket.txt").write_text("preserved\n", encoding="utf-8")
+    _git(worktree, "add", "ticket.txt")
+    _git(worktree, "commit", "-m", "preserve ticket work")
+    (repo / "blocker.txt").write_text("resolved\n", encoding="utf-8")
+    _git(repo, "add", "blocker.txt")
+    _git(repo, "commit", "-m", "resolve blocker")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["brought_forward"] is True
+    assert (worktree / "ticket.txt").read_text(encoding="utf-8") == "preserved\n"
+    assert (worktree / "blocker.txt").read_text(encoding="utf-8") == "resolved\n"
+    assert _git(worktree, "show", "-s", "--format=%s", "HEAD").stdout.strip() == (
+        "Merge the run branch into #9"
+    )
+
+
+def test_isolate_refuses_to_resume_a_preserved_tree_with_uncommitted_work(
+    tmp_path: Path,
+) -> None:
+    """A parked builder's uncommitted work is left for a person to inspect."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "unfinished.txt").write_text("unfinished\n", encoding="utf-8")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert "uncommitted" in result.stderr
+    assert (worktree / "unfinished.txt").is_file()
+
+
+def test_isolate_reports_a_resume_collision_and_leaves_no_merge_started(
+    tmp_path: Path,
+) -> None:
+    """Authored disagreement takes the collision-repair path on the ticket tree."""
+
+    repo = _init_repo(tmp_path / "proj")
+    preserved = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "10").stdout)["worktree"]
+    )
+    predecessor = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (preserved / "graph.py").write_text("ticket ten\n", encoding="utf-8")
+    _git(preserved, "add", "graph.py")
+    _git(preserved, "commit", "-m", "preserve ticket ten")
+    (predecessor / "graph.py").write_text("ticket nine\n", encoding="utf-8")
+    _git(predecessor, "add", "graph.py")
+    _git(predecessor, "commit", "-m", "build ticket nine")
+    assert _engine(repo, "integrate", "--ticket", "9").returncode == 0
+
+    result = _engine(repo, "isolate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["collisions"] == ["graph.py"]
+    assert answer["collided_with"] == [9]
+    assert _git(preserved, "status", "--porcelain").stdout == ""
+    merge_head = Path(
+        _git(
+            preserved, "rev-parse", "--path-format=absolute", "--git-path", "MERGE_HEAD"
+        ).stdout.strip()
+    )
+    assert not merge_head.exists()
+
+
 def test_report_asks_only_for_what_was_closed_since_the_branch_left_the_default(
     tmp_path: Path,
 ) -> None:
@@ -6828,6 +7438,43 @@ def test_integrate_names_a_working_tree_it_could_not_take_away(
     assert answer["worktree"] == str(worktree)
     assert worktree.is_dir()
     assert "kntnt-orchestrate/work/9" in _git(repo, "branch", "--list").stdout
+
+
+def test_integrate_refuses_a_commit_outside_its_declared_role(tmp_path: Path) -> None:
+    """The first engine contact preserves certified violating history."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "wrong.txt").write_text("implementation\n", encoding="utf-8")
+    _git(worktree, "add", "wrong.txt")
+    _git(worktree, "commit", "-m", "implement")
+    (scratch / STATE_HOME).mkdir(parents=True)
+    state = {
+        "branch": "work",
+        "label": "ready-for-agent",
+        "login": None,
+        "claimed": [9],
+        "base": _git(repo, "rev-parse", "HEAD").stdout.strip(),
+        "starting": [9],
+        "contracts": {
+            "9": [
+                {"name": "implementation", "patterns": ["src/**"]},
+                {"name": "evidence", "patterns": ["evidence/**"]},
+            ]
+        },
+        "contract_bases": {},
+    }
+    (scratch / STATE_HOME / STATE_FILE).write_text(json.dumps(state), encoding="utf-8")
+
+    result = _engine(repo, "integrate", "--ticket", "9", "--state-dir", str(scratch))
+
+    assert result.returncode == 1
+    assert "wrong.txt" in result.stderr
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == state["base"]
+    assert worktree.is_dir()
 
 
 def test_integrate_says_what_stopped_a_merge_that_left_no_conflicted_file(
@@ -7988,6 +8635,336 @@ def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
     assert emitted["observations"][1]["artifact_hashes"] == [f"sha1:{digest}"]
     assert len(imported["accepted"]) == 2
     assert imported["rejected"] == []
+
+
+def test_progress_writes_a_complete_latest_phase_without_temp_residue(
+    tmp_path: Path,
+) -> None:
+    """A live update exposes one complete document and cleans its peer file."""
+
+    # Arrange an empty repository and session directory.
+    repo = _init_repo(tmp_path / "repo")
+    scratch = tmp_path / "scratch"
+
+    # Publish one live phase through the public progress verb.
+    first = _engine(
+        repo,
+        "progress",
+        "--phase=build",
+        "--wave=2",
+        "--ticket=9",
+        "--completed=3",
+        "--remaining=4",
+        "--amends-spent=1",
+        "--state-dir",
+        str(scratch),
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    # Assert the complete latest dashboard and atomic-write cleanup.
+    assert first.returncode == 0, first.stderr
+    assert progress == {
+        "wave": 2,
+        "ticket": 9,
+        "phase": "build",
+        "amendments_spent": 1,
+        "tickets_completed": 3,
+        "tickets_remaining": 4,
+        "timestamp": progress["timestamp"],
+        "outcome": None,
+    }
+    assert progress["timestamp"].endswith("Z")
+    assert list(progress_path.parent.glob(f".{PROGRESS_FILE}.*.tmp")) == []
+
+
+def test_report_projects_the_authoritative_terminal_progress(tmp_path: Path) -> None:
+    """The durable report alone supplies the terminal dashboard account."""
+
+    # Arrange a live dashboard and the tracker's authoritative scope.
+    repo = _init_repo(tmp_path / "repo")
+    scratch = tmp_path / "scratch"
+    live = _engine(
+        repo,
+        "progress",
+        "--phase=build",
+        "--wave=2",
+        "--ticket=9",
+        "--completed=0",
+        "--remaining=1",
+        "--state-dir",
+        str(scratch),
+    )
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "unfinished")]},
+        issues={9: _ready(9)},
+    )
+
+    # Render the durable account into the terminal dashboard.
+    terminal = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+    report = json.loads(terminal.stdout)
+
+    # Assert the dashboard is the report's exact terminal projection.
+    assert live.returncode == 0, live.stderr
+    assert terminal.returncode == 0, terminal.stderr
+    assert progress["ticket"] is None
+    assert progress["phase"] == "wave_verdict"
+    assert progress["outcome"] == {key: report[key] for key in _ACCOUNT}
+    assert progress["tickets_completed"] == 0
+    assert progress["tickets_remaining"] == 1
+
+
+def test_progress_refuses_a_caller_supplied_terminal_outcome(tmp_path: Path) -> None:
+    """Only the durable report may supply the terminal dashboard account."""
+
+    # Arrange a live dashboard whose bytes expose any illicit replacement.
+    repo = _init_repo(tmp_path / "repo")
+    scratch = tmp_path / "scratch"
+    initial = _engine(
+        repo,
+        "progress",
+        "--phase=build",
+        "--wave=1",
+        "--ticket=9",
+        "--completed=0",
+        "--remaining=1",
+        "--state-dir",
+        str(scratch),
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    before = progress_path.read_text(encoding="utf-8")
+
+    # Attempt to supply a terminal account through the live progress verb.
+    supplied = _engine(
+        repo,
+        "progress",
+        "--phase=wave_verdict",
+        "--wave=1",
+        "--completed=1",
+        "--remaining=0",
+        "--outcome=caller-says-done",
+        "--state-dir",
+        str(scratch),
+    )
+
+    # Assert the parser refuses the authority and preserves the dashboard.
+    assert initial.returncode == 0, initial.stderr
+    assert supplied.returncode == 2
+    assert "unrecognized arguments: --outcome=caller-says-done" in supplied.stderr
+    assert progress_path.read_text(encoding="utf-8") == before
+
+
+def test_engine_transition_recreates_deleted_progress_with_current_counts(
+    tmp_path: Path,
+) -> None:
+    """A dashboard deletion cannot make the next transition report old progress."""
+
+    # Arrange durable session values and tracker amendment provenance.
+    amendment = {
+        "body": f"<!-- {MARKER} amend=1 phase=verifying --> amend one is active"
+    }
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton", comments=[amendment])],
+        issues={9: _ready(9, comments=[amendment])},
+    )
+    current = _engine(
+        repo,
+        "progress",
+        "--phase=preflight",
+        "--wave=2",
+        "--completed=3",
+        "--remaining=4",
+        "--state-dir",
+        str(scratch),
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress_path.unlink()
+
+    # Advance through an engine-owned transition after dashboard deletion.
+    transitioned = _engine(
+        repo,
+        "claim",
+        "--ticket=9",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    # Assert the recreated dashboard retains every current session value.
+    assert current.returncode == 0, current.stderr
+    assert transitioned.returncode == 0, transitioned.stderr
+    assert progress == {
+        "wave": 2,
+        "ticket": 9,
+        "phase": "preflight",
+        "amendments_spent": 1,
+        "tickets_completed": 3,
+        "tickets_remaining": 4,
+        "timestamp": progress["timestamp"],
+        "outcome": None,
+    }
+
+
+def test_record_recreates_deleted_progress_with_completed_ticket_counted(
+    tmp_path: Path,
+) -> None:
+    """A recorded outcome immediately advances every recreated progress count."""
+
+    # Arrange a deleted dashboard backed by current session and tracker facts.
+    amendment = {"body": f"<!-- {MARKER} amend=1 phase=passed --> amend one passed"}
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton", comments=[amendment])],
+        issues={9: _ready(9, comments=[amendment])},
+    )
+    current = _engine(
+        repo,
+        "progress",
+        "--phase=verify",
+        "--wave=2",
+        "--ticket=9",
+        "--completed=3",
+        "--remaining=4",
+        "--state-dir",
+        str(scratch),
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress_path.unlink()
+
+    # Record one terminal ticket outcome after dashboard deletion.
+    transitioned = _engine(
+        repo,
+        "record",
+        "--ticket=9",
+        "--outcome=failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    # Assert the recreated dashboard counts the newly completed ticket.
+    assert current.returncode == 0, current.stderr
+    assert transitioned.returncode == 0, transitioned.stderr
+    assert progress == {
+        "wave": 2,
+        "ticket": 9,
+        "phase": "note",
+        "amendments_spent": 1,
+        "tickets_completed": 4,
+        "tickets_remaining": 3,
+        "timestamp": progress["timestamp"],
+        "outcome": None,
+    }
+
+
+def test_consecutive_records_accumulate_completed_ticket_counts(tmp_path: Path) -> None:
+    """Each recorded outcome advances the durable session progress baseline."""
+
+    # Arrange a two-ticket wave with no completed outcomes.
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton"), _ticket(10, "the joints")],
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+    current = _engine(
+        repo,
+        "progress",
+        "--phase=verify",
+        "--wave=1",
+        "--ticket=9",
+        "--completed=0",
+        "--remaining=2",
+        "--state-dir",
+        str(scratch),
+    )
+
+    # Record both outcomes without an intervening session progress call.
+    first = _engine(
+        repo,
+        "record",
+        "--ticket=9",
+        "--outcome=failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    second = _engine(
+        repo,
+        "record",
+        "--ticket=10",
+        "--outcome=failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    # Assert both engine-owned transitions accumulated in the dashboard.
+    assert current.returncode == 0, current.stderr
+    assert first.returncode == 0, first.stderr
+    assert second.returncode == 0, second.stderr
+    assert progress["tickets_completed"] == 2
+    assert progress["tickets_remaining"] == 0
+
+
+def _assert_long_engine_transition_publishes_progress_before_work(
+    monkeypatch: Any,
+    tmp_path: Path,
+    verb: str,
+    command_name: str,
+) -> None:
+    """Exercise one long engine transition against ordered boundary doubles."""
+
+    # Arrange ordered observers for dashboard publication and engine work.
+    run = _run()
+    events: list[str] = []
+
+    # Capture publication without depending on a repository fixture.
+    def publish(*_args: Any, **_kwargs: Any) -> None:
+        events.append("progress")
+
+    # Return a legitimate collision after the transition has done its work.
+    def collide(*_args: Any, **_kwargs: Any) -> int:
+        events.append("work")
+        return 2
+
+    # Replace both boundaries while retaining the public main dispatch.
+    monkeypatch.setattr(run, "advance_progress", publish)
+    monkeypatch.setattr(run, command_name, collide)
+
+    # Invoke one long engine-owned transition through the public argument path.
+    result = run.main([verb, "--ticket=9", "--state-dir", str(tmp_path / "session")])
+
+    # Assert publication precedes work and survives its collision outcome.
+    assert result == 2
+    assert events == ["progress", "work"]
+
+
+def test_isolate_publishes_progress_before_work(
+    monkeypatch: Any, tmp_path: Path
+) -> None:
+    """Isolation is visible while its work is still current."""
+
+    _assert_long_engine_transition_publishes_progress_before_work(
+        monkeypatch, tmp_path, "isolate", "cmd_isolate"
+    )
+
+
+def test_integrate_publishes_progress_before_work(
+    monkeypatch: Any, tmp_path: Path
+) -> None:
+    """Integration is visible while its work is still current."""
+
+    _assert_long_engine_transition_publishes_progress_before_work(
+        monkeypatch, tmp_path, "integrate", "cmd_integrate"
+    )
 
 
 def _observations() -> ModuleType:

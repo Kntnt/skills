@@ -6,6 +6,8 @@ One recorded outcome answered two questions until a failed or conflicted unatten
 
 **Reconciliation is an explicit maintainer assertion, never an inference from tracker closure.** A closed ticket may be a duplicate or rejected request, so the engine accepts reconciliation only when the ticket is already closed, its Run Outcome is failed or conflicted, and the named completion commit is reachable from the repository's default branch. These checks establish that the asserted repair landed without pretending that Orchestrate built or independently verified it.
 
+The Run Outcome precondition is amended by ADR-0142 for parked tickets whose completion predates any Run Outcome.
+
 **The maintainer normally names only the ticket.** Reconciliation finds the completion commit on the default branch when exactly one candidate can be established, and asks the maintainer to identify it when none or several remain. It never guesses. Repeating the same Reconciliation is a no-op; a later attempt naming a different completion commit is refused as contradictory rather than silently replacing the first assertion.
 
 **Reconciliation is an explicit Orchestrate action, not a maintenance tool or knowledge of marker grammar.** The completed ticket exchanges stale readiness and claim markers for a neutral history marker that lets later reports find it without presenting it as active work. The same truthful cleanup applies to successful tickets from the adoption of this model onward; existing tracker records are neither migrated nor given compatibility behavior solely for their old shape.
