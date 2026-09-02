@@ -14,6 +14,8 @@ commit - commit the current working tree without pushing
 
 Before committing, it reconciles `CHANGELOG.md` with the actual changes. It creates or extends `[Unreleased]`, avoids duplicating a change already recorded anywhere in the file, and edits no released section. When untracked files appear unsuitable for the repository, it includes a proposed `.gitignore` change in the same review.
 
+Commits made with plain git are an ordinary path: the next `/commit` or `/push` that finds a dirty tree, or `/release`, reads every commit since the last `v*` tag and records in `[Unreleased]` what `CHANGELOG.md` does not already hold; a second run adds nothing. The cost follows commit-subject quality: an informative subject can carry a changelog entry, while a thin subject makes the run open the diff. Because reconciliation is deferred, `[Unreleased]` may lag between plain commits and that run, so a repository whose changelog is contractual per commit maintains it in the committing workflow; the dedupe instruction keeps the later run from adding a second entry.
+
 The Skill uses *MESSAGE* when supplied. Otherwise it derives one concrete subject line from the new changelog entries or, for changes without a user-facing entry, from the diff. It shows the changelog diff, commit message, and any `.gitignore` proposal before writing unless `--yes` is present.
 
 ## POSITIONAL ARGUMENTS
