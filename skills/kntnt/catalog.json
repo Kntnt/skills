@@ -45,7 +45,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "2ec9b11f95a7cbb6fff8ee624b4f6d9cd48bf35b621ae5b82db18f19b2c86dfb",
+      "digest": "b68670af988139e57a834f48aff604a9a5cd99ed8681f0ea51e8ba9ca3df884d",
       "binaries": [
         "git",
         "uv"
@@ -76,7 +76,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "7b3cd3da2e87332750240d648d8cfbdd173283cf0f1955c5e29f1ac3ad425d40",
+      "digest": "99176889d3c7419a468699a24f7482800eb04611a78aefaf4b735e66226f7ebd",
       "binaries": [
         "git",
         "uv"
@@ -106,7 +106,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "21701afaf010525c1f72c5589576a826b45f20a790c1050382b84aab84f5c191",
+      "digest": "2d5416b561296288d87ee5a10e5b03b5fe4d0e4edf735010372deb4ac87b27bf",
       "binaries": [
         "git",
         "uv"
