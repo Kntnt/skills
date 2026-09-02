@@ -29,7 +29,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "c1a45ba0a10b7a7b7a4b872956e1dfe708b3669af354ec5eb7606166113fc822",
+      "digest": "f3e2505187e2a9c77ca913e181bb38e66147f83e5b0581fbeec66724d0486df3",
       "binaries": [
         "uv"
       ],

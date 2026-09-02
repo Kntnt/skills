@@ -10,7 +10,7 @@ delegation on - enable delegation mode in the selected scope
 
 ## DESCRIPTION
 
-`delegation on` adopts the mode as a standing instruction: the main agent decides whether delegation is worthwhile, plans, briefs, orchestrates, and verifies, while subagents execute what it chose to delegate. Once it has chosen, execution it runs on the frozen main seat with no model, deliberation, or surface override is not routed; all other execution goes through model-selector's public `route` Interface, and routing never changes the main agent's own model or deliberation configuration.
+`delegation on` adopts the mode as a standing instruction: the main agent decides whether delegation is worthwhile and which path execution takes — a process detached from the conversation, a subagent, or its own seat narrowed at the source — then plans, briefs, orchestrates, and verifies, while subagents execute what it chose to delegate. Once it has chosen, execution it runs on the frozen main seat with no model, deliberation, or surface override is not routed; all other execution goes through model-selector's public `route` Interface, and routing never changes the main agent's own model or deliberation configuration.
 
 The mode takes effect on the turn that switches it on, whichever scope was selected, so the mode does not wait for a restart. Without a scope flag the scope is this session alone, and context compaction may drop it — the Skill records the session state in the Harness's per-session scratch directory when one exists, so that it does not.
 
