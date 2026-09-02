@@ -398,7 +398,9 @@ PARENT_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**parent\b\**\s*:?", re.IGNORECASE
 # The ordered commit roles a ticket may declare, using the same heading or
 # sentence shape as the other body-line declarations.
 COMMIT_ROLES_LINE = re.compile(
-    r"^\s*(?:#{1,6}\s+)?\**commit[ -]roles\**\s*: ?", re.IGNORECASE
+    r"^\s*(?:#{1,6}\s+)?\**commit[ -]roles\**\s*: ?|"
+    r"^\s*#{1,6}\s+\**commit[ -]roles\**\s*$",
+    re.IGNORECASE,
 )
 
 # A line that continues the list under such a heading: an item, or a reference

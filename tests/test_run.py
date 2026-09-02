@@ -1045,6 +1045,43 @@ def test_plan_projects_a_declared_commit_contract_into_run_state(
     assert state["contracts"] == {"9": expected}
 
 
+def test_plan_projects_a_commit_contract_declared_under_a_heading(
+    tmp_path: Path,
+) -> None:
+    """The documented heading form reads each following list item as a role."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(
+                    9,
+                    "the release gate",
+                    body=(
+                        "## Commit roles\n\n"
+                        "- implementation: src/**\n"
+                        "- evidence: docs/verification/**\n"
+                    ),
+                )
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    expected = [
+        {"name": "implementation", "patterns": ["src/**"]},
+        {"name": "evidence", "patterns": ["docs/verification/**"]},
+    ]
+    assert plan["tickets"][0]["commit_contract"] == expected
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["contracts"] == {"9": expected}
+
+
 def test_plan_moves_a_solo_tickets_admissible_siblings_out_of_its_wave(
     tmp_path: Path,
 ) -> None:
