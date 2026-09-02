@@ -12,7 +12,11 @@ push - commit the working tree and push the current branch
 
 `push` runs the `commit` Skill with the supplied arguments and then pushes the current branch. A clean working tree does not stop the push; commits already made but not yet sent are still pushed.
 
+A clean-tree push does not reconcile the changelog, so plain commits are recorded at the next `/commit` that finds changes or at `/release`.
+
 The branch is pushed to its configured upstream. When it has none, the Skill sets one on `origin`. The plan is shown before pushing, and a confirmation already obtained by `commit` is reused instead of asking twice.
+
+The displayed plan uses a bounded commit excerpt; ask to see every commit to have the Skill re-run its plan with the full inventory.
 
 ## POSITIONAL ARGUMENTS
 

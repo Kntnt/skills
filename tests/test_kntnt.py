@@ -2755,6 +2755,26 @@ def test_manpage_writes_nothing_in_either_layer(tmp_path: Path) -> None:
     )
 
 
+def test_commit_manpage_states_plain_git_reconciliation_contract() -> None:
+    """The commit manpage makes deferred plain-git healing an explicit contract."""
+
+    page = REPO_ROOT / "skills" / "code" / "commit" / "help.md"
+    description = _section(page.read_text(encoding="utf-8"), "## DESCRIPTION", page)
+
+    assert (
+        "Commits made with plain git are an ordinary path: the next `/commit`"
+        " or `/push` that finds a dirty tree, or `/release`, reads every commit"
+        " since the last `v*` tag and records in `[Unreleased]` what"
+        " `CHANGELOG.md` does not already hold; a second run adds nothing."
+        " The cost follows commit-subject quality: an informative subject can"
+        " carry a changelog entry, while a thin subject makes the run open the"
+        " diff. Because reconciliation is deferred, `[Unreleased]` may lag"
+        " between plain commits and that run, so a repository whose changelog"
+        " is contractual per commit maintains it in the committing workflow;"
+        " the dedupe instruction keeps the later run from adding a second entry."
+    ) in description
+
+
 def test_manpage_says_the_collection_could_not_be_reached(tmp_path: Path) -> None:
     """No copy on disk and no origin is a thing to say, not a page to invent.
 

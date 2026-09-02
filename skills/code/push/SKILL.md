@@ -41,5 +41,5 @@ Anything else is an invalid form. Name in one line what was wrong, print the `##
 1. Follow `$HERE/../commit/SKILL.md` with the same Formal Invocation. If the outer Contextual Instruction contains guidance relevant to commit, append only that guidance after an explicit `--`; otherwise pass no Contextual Instruction. If commit stops because there is nothing to commit, continue. Done when the working tree is clean, or commit stopped as clean.
 2. Run `uv run "$LIBRARY/scripts/ship.py" plan push`. Done when stdout is a JSON plan, or the command exits 2.
 3. Exit 2: emit the plan's `reason` and stop.
-4. If commit did not already wait, show the plan and wait unless `--yes`. Done when the user confirms, `--yes` is set, or commit already confirmed.
+4. If commit did not already wait, show the plan and wait unless `--yes`. If the user asks to see every commit, re-run `plan --full push` and show that plan. Done when the user confirms, `--yes` is set, or commit already confirmed.
 5. Run `uv run "$LIBRARY/scripts/ship.py" apply push`. Done when stdout contains `pushed`.

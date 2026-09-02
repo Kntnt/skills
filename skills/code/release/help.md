@@ -10,9 +10,11 @@ release - publish a version from the default branch
 
 ## DESCRIPTION
 
-`release` turns `[Unreleased]` into a published version from the default branch. It reconciles and promotes the changelog under the current date, updates the files that carry the version, commits and pushes through the `push` Skill, creates and pushes an annotated tag, and publishes a GitHub release from the promoted changelog section.
+`release` turns `[Unreleased]` into a published version from the default branch. It reconciles regardless of the working tree and promotes the changelog under the current date, updates the files that carry the version, commits and pushes through the `push` Skill, creates and pushes an annotated tag, and publishes a GitHub release from the promoted changelog section.
 
 If the Project provides a conventional archive build, the resulting archive is attached to the release. The plan, changelog diff, selected version, and build command are shown before anything is written unless `--yes` is present.
+
+The displayed plan includes the complete changelog commit inventory; a request to see every commit is answered by re-running the plan with its full-inventory option.
 
 Without a version operand, the Skill derives the next version from `[Unreleased]`: a `Removed` section or breaking change selects a major bump, except below 1.0.0 where it selects a minor bump; `Added` selects minor; every other change selects patch.
 

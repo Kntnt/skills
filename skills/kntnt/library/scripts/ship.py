@@ -16,6 +16,7 @@ import sys
 import tomllib
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from typing import Final
 from urllib.parse import urlparse
 
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
@@ -30,6 +31,8 @@ BUILD_SCRIPTS = (
 )
 MAKE_TARGETS = ("zip", "dist", "archive", "release-zip")
 NPM_SCRIPTS = ("zip", "build:zip", "archive")
+COMMIT_EXCERPT_HEAD: Final = 3
+COMMIT_EXCERPT_TAIL: Final = 3
 
 GITIGNORE_BASE = """# OS
 .DS_Store
@@ -122,7 +125,11 @@ def _gh_ok(cwd: Path, *args: str) -> bool:
 
 @dataclass
 class Plan:
-    """Facts the calling skill shows, then feeds to apply."""
+    """Facts the calling skill shows, then feeds to apply.
+
+    ``commit_count`` always reports the complete changelog-baseline span,
+    including when ``commits`` contains only an excerpt.
+    """
 
     mode: str
     ready: bool
@@ -141,6 +148,7 @@ class Plan:
     unreleased_empty: bool | None = None
     gh: bool = False
     commits: list[dict[str, str]] = field(default_factory=list)
+    commit_count: int = 0
     gitignore_proposal: str | None = None
     build: dict[str, str] | None = None
 
@@ -311,13 +319,14 @@ def detect_build(cwd: Path) -> dict[str, str] | None:
     return None
 
 
-def build_plan(cwd: Path, mode: str) -> Plan:
-    """Gather plan facts for *mode* in *cwd*."""
+def build_plan(cwd: Path, mode: str, full_inventory: bool = False) -> Plan:
+    """Gather plan facts for *mode* and project commits when requested."""
 
     staged, tracked, untracked = status_paths(cwd)
     dirty = bool(staged or tracked or untracked)
     branch = current_branch(cwd)
     tag = last_tag(cwd)
+    commits = commit_subjects(cwd, tag)
     plan = Plan(
         mode=mode,
         ready=True,
@@ -330,7 +339,8 @@ def build_plan(cwd: Path, mode: str) -> Plan:
         unpushed=unpushed_count(cwd),
         last_tag=tag,
         gh=shutil.which("gh") is not None,
-        commits=commit_subjects(cwd, tag),
+        commits=commits,
+        commit_count=len(commits),
         gitignore_proposal=gitignore_proposal(cwd),
         unreleased_empty=unreleased_is_empty(cwd / "CHANGELOG.md"),
     )
@@ -339,6 +349,8 @@ def build_plan(cwd: Path, mode: str) -> Plan:
         if not dirty:
             plan.ready = False
             plan.reason = "nothing to commit"
+        if not plan.ready and not full_inventory:
+            plan.commits = []
         return plan
 
     if mode == "push":
@@ -348,6 +360,15 @@ def build_plan(cwd: Path, mode: str) -> Plan:
         elif not dirty and plan.unpushed == 0:
             plan.ready = False
             plan.reason = "everything up-to-date"
+        if not full_inventory and not plan.ready:
+            plan.commits = []
+        elif (
+            not full_inventory
+            and len(plan.commits) > COMMIT_EXCERPT_HEAD + COMMIT_EXCERPT_TAIL
+        ):
+            plan.commits = (
+                plan.commits[:COMMIT_EXCERPT_HEAD] + plan.commits[-COMMIT_EXCERPT_TAIL:]
+            )
         return plan
 
     plan.build = detect_build(cwd)
@@ -660,11 +681,11 @@ def _remote_host(url: str) -> str:
     return urlparse(url).hostname or ""
 
 
-def cmd_plan(cwd: Path, mode: str) -> int:
-    """Print a JSON plan and return 0, or 2 when there is nothing to do."""
+def cmd_plan(cwd: Path, mode: str, full_inventory: bool = False) -> int:
+    """Print a compact or complete JSON plan and return its readiness status."""
 
     try:
-        plan = build_plan(cwd, mode)
+        plan = build_plan(cwd, mode, full_inventory)
     except GitError as exc:
         return fail(str(exc))
     print(json.dumps(asdict(plan), indent=2))
@@ -718,6 +739,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     plan = sub.add_parser("plan", help="Print a JSON plan and stop.")
     plan.add_argument("mode", choices=("commit", "push", "release"))
+    plan.add_argument("--full", dest="full_inventory", action="store_true")
     add_yes_flag(plan)
 
     apply = sub.add_parser("apply", help="Apply a plan.")
@@ -753,7 +775,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
     cwd = Path.cwd()
     if args.command == "plan":
-        return cmd_plan(cwd, args.mode)
+        return cmd_plan(cwd, args.mode, args.full_inventory)
     return cmd_apply(cwd, args)
 
 
