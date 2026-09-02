@@ -8010,6 +8010,31 @@ def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() ->
     )
 
 
+def test_delegation_states_the_file_and_capped_inline_report_contract() -> None:
+    """Delegation keeps complete findings on disk and conclusions inline."""
+
+    path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
+    mode = path.read_text(encoding="utf-8")
+
+    required_fragments = {
+        "report file path inside the spawn's own scratch",
+        "complete findings there",
+        "inline reply is capped by the brief",
+        "conclusions only",
+        "no raw command output",
+        "no file dumps",
+        "main seat reads the file only when its decision needs the detail",
+    }
+    missing = sorted(
+        fragment for fragment in required_fragments if fragment not in mode
+    )
+    assert not missing, (
+        f"{path}: delegation report contract is incomplete; missing {missing}."
+    )
+
+    assert "Verify results independently." in mode
+
+
 def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> None:
     """The mode names every path that keeps noisy output out, not the subagent alone.
 
