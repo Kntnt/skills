@@ -136,6 +136,10 @@ Never became workable because of a cycle, external blocker, another claim, stopp
 
 The report names its base commit. A ticket blocked on newly discovered work is reported under its blocker's outcome rather than in a sixth category.
 
+## ROUTED OBSERVATIONS
+
+Orchestrate starts each routed attempt immediately before dispatch, finishes it at an independent verdict or terminal non-model condition, and imports eligible sanitized observations automatically. The final report lists imported, identically skipped, conflicting, and refused identities; ledger refusal never stops the run and requires no user import step.
+
 ## OPTIONS
 
 **--dry-run**
@@ -173,10 +177,6 @@ Concurrent ticket worktrees, branches, reservations, and scratch space. Successf
 **Per-session state directory**
 
 Stores the recoverable claim account and the irreplaceable frozen routing snapshot. A missing routing snapshot stops a claimed run.
-
-**Routed observations**
-
-Orchestrate starts each routed attempt immediately before dispatch, finishes it at an independent verdict or terminal non-model condition, and imports eligible sanitized observations through the shared Collection Library. The final report lists imported, identically skipped, conflicting, and refused identities; ledger refusal never stops the run and requires no user import step.
 
 **.kntnt-orchestrate/generated.json**
 

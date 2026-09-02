@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -40,12 +41,12 @@ def _library() -> Any:
 
 
 # Re-export the one shared implementation through the established Skill seam.
-_IMPLEMENTATION = _library()
+_IMPLEMENTATION: Any = _library()
 SCHEMA_VERSION: int = _IMPLEMENTATION.SCHEMA_VERSION
-observe = _IMPLEMENTATION.observe
-merge = _IMPLEMENTATION.merge
-validate = _IMPLEMENTATION.validate
-record = _IMPLEMENTATION.record
+observe: Callable[[Any], dict[str, Any]] = _IMPLEMENTATION.observe
+merge: Callable[[Any, list[dict[str, Any]]], dict[str, Any]] = _IMPLEMENTATION.merge
+validate: Callable[[Any], dict[str, str] | None] = _IMPLEMENTATION.validate
+record: Callable[[Any, Path], dict[str, Any]] = _IMPLEMENTATION.record
 
 
 def main(argv: list[str] | None = None) -> int:

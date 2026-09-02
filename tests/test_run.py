@@ -125,16 +125,16 @@ MARKER = "kntnt-orchestrate"
 # and the directory of its own it keeps it in, stated here for the same
 # reason: a test that asked the engine where it wrote would be asking the
 # thing under test to grade itself.
-STATE_FILE = "kntnt-orchestrate.json"
-STATE_HOME = "kntnt-orchestrate"
+STATE_FILE: str = "kntnt-orchestrate.json"
+STATE_HOME: str = "kntnt-orchestrate"
 
 # Where the run keeps the half of its state no tracker and no branch can
 # rebuild: the frozen routing snapshot, the invocation's own field locks, and
 # every exact decision made under them. Named here for the reason the state
 # file is — a test that asked the engine where it wrote would be asking the
 # thing under test to grade itself.
-ROUTING_FILE = "kntnt-orchestrate-routing.json"
-ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
+ROUTING_FILE: str = "kntnt-orchestrate-routing.json"
+ATTEMPTS_FILE: str = "kntnt-orchestrate-attempts.json"
 
 
 @pytest.fixture
@@ -7992,7 +7992,7 @@ def test_attempt_finish_reports_an_import_refusal_without_stopping(
     )
     report = _engine(repo, "report", "--state-dir", str(scratch), env=env)
 
-    # Persist the stable refusal instead of turning ledger failure into run failure.
+    # Persist the refusal without making ledger failure stop the run.
     assert finished.returncode == 0, finished.stderr
     refused = json.loads(report.stdout)["observations"]["refused"]
     assert refused == [{"attempt_id": "build-9", "code": "unsanitized_value"}]
@@ -8022,7 +8022,7 @@ def test_attempt_finish_retains_a_library_failure_without_stopping(
     def unavailable_library() -> Any:
         """Simulate a present Library that fails while being loaded."""
 
-        raise RuntimeError("library initialization failed")
+        raise OverflowError("library initialization failed")
 
     monkeypatch.setattr(engine, "routed_observations", unavailable_library)
 
@@ -8051,6 +8051,69 @@ def test_attempt_finish_retains_a_library_failure_without_stopping(
             "detail": "library initialization failed",
         }
     ]
+
+
+def test_conflicting_finish_never_imports_the_rejected_verdict(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A recovered import writes the retained verdict, never its conflict."""
+
+    # Start one attempt and make its first automatic import fail.
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+    assert _attempt_started(repo, scratch, env).returncode == 0
+    engine = _run()
+    monkeypatch.chdir(repo)
+    for name in ("HOME", "XDG_CACHE_HOME", "TMPDIR"):
+        monkeypatch.setenv(name, isolated_attempt_environment[name])
+    available_library = engine.routed_observations
+
+    def unavailable_library() -> Any:
+        """Make the retained pass wait for a later import replay."""
+
+        raise RuntimeError("first import failed")
+
+    monkeypatch.setattr(engine, "routed_observations", unavailable_library)
+    first = engine.main(
+        [
+            "attempt-finish",
+            "--request=build-9",
+            "--outcome=pass",
+            f"--state-dir={scratch}",
+        ]
+    )
+    capsys.readouterr()
+
+    # Recover the Library, then offer a conflicting failure verdict.
+    monkeypatch.setattr(engine, "routed_observations", available_library)
+    conflict = engine.main(
+        [
+            "attempt-finish",
+            "--request=build-9",
+            "--outcome=fail",
+            f"--state-dir={scratch}",
+        ]
+    )
+    capsys.readouterr()
+
+    # Keep the pass in both accounts while reporting the conflicting replay.
+    ledger = (
+        Path(isolated_attempt_environment["HOME"])
+        / ".kntnt/model-selector/run-observations.jsonl"
+    )
+    observation = json.loads(ledger.read_text(encoding="utf-8").splitlines()[0])
+    routing = json.loads(
+        (scratch / STATE_HOME / ROUTING_FILE).read_text(encoding="utf-8")
+    )
+    attempt = routing["attempts"][0]
+    assert first == 0
+    assert conflict == 1
+    assert attempt["outcome"]["result"] == "pass"
+    assert observation["outcome"] == "pass"
+    assert attempt["import"]["conflicting"] == [observation["run_key"]]
 
 
 def test_attempt_finish_requires_a_start_and_retires_collision(
@@ -8273,7 +8336,7 @@ def test_report_names_every_automatic_import_result(
     finished = _attempt_finished(repo, scratch, env)
     filled = _engine(repo, "report", "--state-dir", str(scratch), env=env)
 
-    # Report durable lifecycle and import identities, not a manual artifact step.
+    # Report durable lifecycle and import identities without a manual step.
     assert json.loads(empty.stdout)["observations"] == {
         "attempts": None,
         "observed": 0,

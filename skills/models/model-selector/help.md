@@ -86,7 +86,7 @@ Perform one bounded refresh of due model indexes, first-party capability sources
 
 **observe** *PATH*
 
-Turn completed routed attempts into sanitized run observations in a caller-owned artifact. Only an external judgement establishes an outcome and unavailable measurements stay `null`. The public command writes no ledger; Orchestrate instead imports eligible machine-judged attempts directly through the same shared Library at each verdict.
+Turn completed routed attempts into sanitized run observations in a caller-owned artifact. Only an external judgement establishes an outcome and unavailable measurements stay `null`. This command writes no ledger; Orchestrate's verdict path imports eligible machine-judged attempts automatically, while delegation leaves import to the user.
 
 **capture**
 

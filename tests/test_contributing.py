@@ -35,7 +35,7 @@ INVOCATION = re.compile(
 )
 
 # Shared runtime modules need the same static checking locally and in CI.
-ROUTED_OBSERVATIONS = "skills/kntnt/library/scripts/routed_observations.py"
+ROUTED_OBSERVATIONS: str = "skills/kntnt/library/scripts/routed_observations.py"
 
 
 def _contributing() -> str:

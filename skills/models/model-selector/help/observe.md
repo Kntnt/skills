@@ -20,7 +20,7 @@ Only an independent verifier, objective checker, frozen rubric, declared failure
 
 Observe is offline, non-interactive, and idempotent. It performs no setup, research, evaluation, or profile write. Identical attempts add nothing; conflicting identities overwrite neither side.
 
-This command imports nothing: delegation and other callers keep the artifact in caller-owned scratch until the user invokes `/model-selector record`. Orchestrate does not invoke this command at verdict; its engine imports eligible machine-judged attempts directly through the same shared Library.
+This command imports nothing: delegation and other callers keep the artifact in caller-owned scratch until the user invokes `/model-selector record`. Orchestrate's verdict path instead imports eligible machine-judged attempts automatically.
 
 ## POSITIONAL ARGUMENTS
 

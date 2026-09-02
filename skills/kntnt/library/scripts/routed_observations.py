@@ -24,7 +24,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, cast
 
-SCHEMA_VERSION = 1
+# The version shared by attempt and observation envelopes.
+SCHEMA_VERSION: int = 1
 
 # The workload strata an attempt may be charged to. Orchestrate's five building
 # roles are distinct strata because a mechanical wave fix and an initial build
@@ -99,27 +100,27 @@ POLICY_DIMENSIONS: tuple[str, ...] = (
 
 # What a score dimension may be called. A normalized identifier keeps free
 # prose, verdict text, and reviewer commentary out of a numeric record.
-SCORE_DIMENSION = re.compile(r"^[a-z][a-z0-9_]{0,31}$")
+SCORE_DIMENSION: re.Pattern[str] = re.compile(r"^[a-z][a-z0-9_]{0,31}$")
 
 # What a sanitized artifact identity looks like: an algorithm and its digest,
 # never a file name and never a path.
-ARTIFACT_HASH = re.compile(r"^[a-z0-9]+:[0-9a-f]{16,128}$")
+ARTIFACT_HASH: re.Pattern[str] = re.compile(r"^[a-z0-9]+:[0-9a-f]{16,128}$")
 
 # What an emitted string may never be. An absolute path names the machine the
 # work ran on, a newline is where a transcript starts, and a long value is
 # material rather than an identity.
-ABSOLUTE_PATH = re.compile(r"^(?:[/~]|[A-Za-z]:[\\/]|\\\\)")
-MAX_EMITTED_LENGTH = 200
+ABSOLUTE_PATH: re.Pattern[str] = re.compile(r"^(?:[/~]|[A-Za-z]:[\\/]|\\\\)")
+MAX_EMITTED_LENGTH: int = 200
 
 # Where the ledger keeps what this module writes, under the selected data
 # directory. Both names are the evidence ledger's own.
-LEDGER_FILE = "run-observations.jsonl"
-FRONTIER_FILE = "derived-frontiers.json"
+LEDGER_FILE: str = "run-observations.jsonl"
+FRONTIER_FILE: str = "derived-frontiers.json"
 
 # The confidence a conservative success rate is reported at. Wilson's interval
 # is used rather than the raw rate so one passing attempt cannot read as
 # certainty.
-WILSON_Z = 1.96
+WILSON_Z: float = 1.96
 
 
 def _refusal(attempt_id: Any, code: str, detail: str) -> dict[str, Any]:

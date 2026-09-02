@@ -4527,7 +4527,23 @@ def _import_refusal(attempt_id: str, code: str, detail: str) -> dict[str, list[A
 
 
 def _automatic_import(attempt: dict[str, Any]) -> dict[str, list[Any]]:
-    """Import one eligible attempt and reduce Library responses for reporting."""
+    """Import one eligible attempt without letting evidence stop the run."""
+
+    # Convert every Library failure into the stable non-fatal import account.
+    try:
+        return _automatic_import_unchecked(attempt)
+    except Exception as exc:  # noqa: BLE001 - ledger failure never stops the run
+        return _import_refusal(
+            str(attempt.get("attempt_id") or "unknown"),
+            "automatic_import_failed",
+            str(exc),
+        )
+
+
+def _automatic_import_unchecked(
+    attempt: dict[str, Any],
+) -> dict[str, list[Any]]:
+    """Import one eligible attempt and reduce expected Library responses."""
 
     attempt_id = str(attempt["attempt_id"])
     try:
@@ -4873,9 +4889,15 @@ def cmd_attempt_finish(
         except RunError as exc:
             return fail(str(exc))
 
-    # Replay the retained row for an identical finish and the offered row for a
-    # conflicting finish, so the Library records the exact skip or conflict.
-    imported = _automatic_import(offered if conflicting else retained)
+    # Replay only the retained verdict; a conflict never enters the ledger.
+    imported = _automatic_import(retained)
+    if conflicting:
+        run_keys = [
+            *imported["imported"],
+            *imported["identically_skipped"],
+            *imported["conflicting"],
+        ]
+        _extend_unique(imported["conflicting"], run_keys)
     details = _retain_import_result(retained, imported)
     try:
         written = _write_attempt_account(state_path, routing)
