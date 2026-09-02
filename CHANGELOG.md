@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- `/delegation` now routes only a spawn onto a foreign surface, model, or deliberation override through Model Selector; a spawn the caller runs on the frozen main seat with no override is unrouted, produces no `observe` attempt, and is recorded by capture where capture is enabled. Judgment-in-noise roles still weigh a routed cheaper seat rather than defaulting to the main seat.
+
 ## [0.18.6] – 2026-08-30
 
 ### Fixed
