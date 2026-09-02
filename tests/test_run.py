@@ -1150,6 +1150,79 @@ def test_plan_gives_a_solo_ticket_a_wave_of_its_own(tmp_path: Path) -> None:
     assert plan["tickets"][0]["builds_alone"] is True
 
 
+def test_plan_projects_a_declared_commit_contract_into_run_state(
+    tmp_path: Path,
+) -> None:
+    """A checking verb receives the tracker's contract from durable run state."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(
+                    9,
+                    "the release gate",
+                    body=(
+                        "Commit roles: implementation: src/**; "
+                        "evidence: docs/verification/**"
+                    ),
+                )
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    expected = [
+        {"name": "implementation", "patterns": ["src/**"]},
+        {"name": "evidence", "patterns": ["docs/verification/**"]},
+    ]
+    assert plan["tickets"][0]["commit_contract"] == expected
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["contracts"] == {"9": expected}
+
+
+def test_plan_projects_a_commit_contract_declared_under_a_heading(
+    tmp_path: Path,
+) -> None:
+    """The documented heading form reads each following list item as a role."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(
+                    9,
+                    "the release gate",
+                    body=(
+                        "## Commit roles\n\n"
+                        "- implementation: src/**\n"
+                        "- evidence: docs/verification/**\n"
+                    ),
+                )
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    expected = [
+        {"name": "implementation", "patterns": ["src/**"]},
+        {"name": "evidence", "patterns": ["docs/verification/**"]},
+    ]
+    assert plan["tickets"][0]["commit_contract"] == expected
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    assert state["contracts"] == {"9": expected}
+
+
 def test_plan_moves_a_solo_tickets_admissible_siblings_out_of_its_wave(
     tmp_path: Path,
 ) -> None:
@@ -6969,6 +7042,43 @@ def test_integrate_names_a_working_tree_it_could_not_take_away(
     assert answer["worktree"] == str(worktree)
     assert worktree.is_dir()
     assert "kntnt-orchestrate/work/9" in _git(repo, "branch", "--list").stdout
+
+
+def test_integrate_refuses_a_commit_outside_its_declared_role(tmp_path: Path) -> None:
+    """The first engine contact preserves certified violating history."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "wrong.txt").write_text("implementation\n", encoding="utf-8")
+    _git(worktree, "add", "wrong.txt")
+    _git(worktree, "commit", "-m", "implement")
+    (scratch / STATE_HOME).mkdir(parents=True)
+    state = {
+        "branch": "work",
+        "label": "ready-for-agent",
+        "login": None,
+        "claimed": [9],
+        "base": _git(repo, "rev-parse", "HEAD").stdout.strip(),
+        "starting": [9],
+        "contracts": {
+            "9": [
+                {"name": "implementation", "patterns": ["src/**"]},
+                {"name": "evidence", "patterns": ["evidence/**"]},
+            ]
+        },
+        "contract_bases": {},
+    }
+    (scratch / STATE_HOME / STATE_FILE).write_text(json.dumps(state), encoding="utf-8")
+
+    result = _engine(repo, "integrate", "--ticket", "9", "--state-dir", str(scratch))
+
+    assert result.returncode == 1
+    assert "wrong.txt" in result.stderr
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == state["base"]
+    assert worktree.is_dir()
 
 
 def test_integrate_says_what_stopped_a_merge_that_left_no_conflicted_file(

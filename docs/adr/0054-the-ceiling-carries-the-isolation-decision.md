@@ -13,3 +13,5 @@ Where each concurrent ticket is built is not. Two builders in one working tree i
 **Integration happens at the wave boundary, not at the end.** A ticket in a later wave is blocked by one in an earlier wave, which is to say it builds on that code; a working tree cut before the earlier wave was merged would not have it. So each verified ticket is merged as its wave completes, the full verification runs once on the branch as it then stands — which is the only place two tickets that pass alone and fail together are caught — and a failure there stops the run rather than spending the remaining hours building on top of it.
 
 **What this costs.** A developer who wants concurrency without worktrees, or worktrees without concurrency, cannot have either. The first is not a thing that works, and the second is a cost with no benefit, so what is lost is a choice nobody had a reason to make.
+
+This is narrowed by ADR-0138: a ceiling-one ticket with declared commit roles produces one or more complete multi-commit passes instead of one commit.
