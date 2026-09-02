@@ -3330,12 +3330,62 @@ def isolate(cwd: Path, number: int) -> int:
     # picked up again goes on in the working tree it was left in.
     if number in open_now:
         standing = Path(open_now[number])
+
+        # Preserved work is the mandatory base of a resume, but work not yet
+        # committed belongs to the parked builder and cannot be merged safely.
+        if git_result(standing, "status", "--porcelain").stdout:
+            return fail(
+                f"#{number} has uncommitted work in its preserved working tree: "
+                f"look at {standing} before resuming it"
+            )
+
+        # Bring resolved blockers and every other integrated predecessor into
+        # the preserved ticket branch before another builder sees the tree.
+        run_head = git(cwd, "rev-parse", run_branch).strip()
+        ticket_head = git(standing, "rev-parse", "HEAD").strip()
+        brought_forward = not git_ok(
+            standing, "merge-base", "--is-ancestor", run_head, ticket_head
+        )
+        if brought_forward:
+            message = f"Merge the run branch into #{number}"
+            merged = git_result(standing, "merge", "--no-ff", "-m", message, run_branch)
+            if merged.returncode != 0:
+                collisions = git_result(
+                    standing, "diff", "--name-only", "--diff-filter=U"
+                ).stdout.split()
+                settled = settle_by_regenerating(
+                    standing, number, collisions, commit_message=message
+                )
+                if settled is None:
+                    against = tickets_touching(cwd, collisions, ticket_head)
+                    git_result(standing, "merge", "--abort")
+                    emit(
+                        {
+                            "verb": "isolate",
+                            "ticket": number,
+                            "worktree": str(standing),
+                            "branch": current_branch(standing),
+                            "brought_forward": False,
+                            "collisions": collisions,
+                            "collided_with": against,
+                            "reason": (
+                                f"#{number} collided while bringing the run branch "
+                                "into its preserved working tree"
+                            ),
+                            **allocate(cwd, number),
+                        }
+                    )
+                    return 2
+
         emit(
             {
                 "verb": "isolate",
                 "ticket": number,
                 "worktree": str(standing),
                 "branch": current_branch(standing),
+                "brought_forward": brought_forward,
+                "collisions": [],
+                "collided_with": [],
                 **allocate(cwd, number),
             }
         )
@@ -3347,6 +3397,9 @@ def isolate(cwd: Path, number: int) -> int:
             "ticket": number,
             "worktree": str(path),
             "branch": branch,
+            "brought_forward": False,
+            "collisions": [],
+            "collided_with": [],
             **allocate(cwd, number),
         }
     )
@@ -3636,7 +3689,11 @@ def declared_generators(cwd: Path) -> list[Generator]:
 
 
 def settle_by_regenerating(
-    cwd: Path, number: int, collisions: list[str]
+    cwd: Path,
+    number: int,
+    collisions: list[str],
+    *,
+    commit_message: str | None = None,
 ) -> list[str] | None:
     """Settle a collision confined to declared-generated files, or answer None.
 
@@ -3694,7 +3751,9 @@ def settle_by_regenerating(
     if outside:
         return None
 
-    committed = git_result(cwd, "commit", "-m", merge_message(number, produced))
+    committed = git_result(
+        cwd, "commit", "-m", commit_message or merge_message(number, produced)
+    )
     if committed.returncode != 0:
         return None
 
@@ -5085,7 +5144,6 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     # are gone the account says so rather than reading what is current back as
     # though it had been (ADR-0085).
     routing, routing_reason, _ = frozen_routing(state_path)
-
     emit(
         {
             "verb": "report",

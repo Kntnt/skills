@@ -605,6 +605,69 @@ def test_the_isolation_step_says_what_isolate_answers() -> None:
     )
 
 
+def test_resume_semantics_are_explicit_at_each_workflow_boundary() -> None:
+    """Parking, isolation, dispatch, and reporting tell one lifetime story."""
+
+    text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    help_text = (SKILL / "help.md").read_text(encoding="utf-8")
+
+    assert "per-ticket-lifetime" in text
+    assert "preserved commits are its mandatory base" in text
+    assert "amends_inherited" in text
+    assert "amends_newly_spent" in text
+    assert "per-ticket-lifetime" in help_text
+    assert "parked attempt is resumed" in help_text
+    assert "amends_inherited" in help_text
+    assert "amends_newly_spent" in help_text
+
+
+def test_a_recorded_amend_state_never_returns_to_the_initial_build_path() -> None:
+    """Claim, isolate, and build route persisted amendment work to step nine."""
+
+    assert "recorded `amend_state`" in _step(4)
+    assert "step 9" in _step(4)
+    assert "recorded `amend_state`" in _step(5)
+    assert "step 9" in _step(5)
+    assert "recorded `amend_state`" in _step(6)
+    assert "initial-build brief" in _step(6)
+    assert "step 9" in _step(6)
+
+
+def test_the_isolation_step_routes_resume_collisions_to_deferred_verification() -> None:
+    """A resume collision is repaired before, and judged by, its amend."""
+
+    step = _step(5)
+
+    assert "Exit 2" in step
+    assert "repair-<number>" in step
+    assert "not verified or integrated" in step
+    assert "unresolved disagreement" in step
+    assert "without spending an amendment" in step
+    assert "step 9" in step
+
+
+def test_the_build_step_preserves_initial_commits_and_reports_a_parked_budget() -> None:
+    """Initial resumes retain their base and every mid-run park names its ledger."""
+
+    step = _step(6)
+
+    assert "commits already on the branch are the base and are not rewritten" in step
+    assert "`amends_spent`" in step
+    assert "plan entry" in step
+
+
+def test_the_report_step_renders_inherited_and_new_amendments_from_answers() -> None:
+    """The invocation-local split is rendered from retained amend answers."""
+
+    step = _step(12)
+
+    assert "`amends_inherited`" in step
+    assert "`amends_newly_spent`" in step
+    assert "`newly_recorded`" in step
+    assert "session memory" in step
+    assert "never written to durable run state" in step
+
+
 def _fill_in_instructions() -> str:
     """The building brief's fill-in instructions — everything above the brief itself."""
 

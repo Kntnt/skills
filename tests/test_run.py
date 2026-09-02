@@ -6719,6 +6719,48 @@ def test_report_accounts_for_a_conflicted_ticket_with_the_one_it_hit(
     assert entry["collided_with"] == [9]
 
 
+def test_report_does_not_carry_a_previous_invocations_amendment_split(
+    tmp_path: Path,
+) -> None:
+    """Invocation-local amendment evidence never survives in run state."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    (scratch / STATE_HOME).mkdir(parents=True)
+    state = {
+        "branch": "work",
+        "label": "ready-for-agent",
+        "login": None,
+        "claimed": [10],
+        "base": _git(repo, "rev-parse", "HEAD").stdout.strip(),
+        "starting": [10],
+        "contracts": {},
+        "contract_bases": {},
+        "amendments": {"10": {"inherited": [1], "newly_spent": [2]}},
+    }
+    (scratch / STATE_HOME / STATE_FILE).write_text(json.dumps(state), encoding="utf-8")
+    comments = [
+        {
+            "body": (
+                f"<!-- {MARKER} amend=2 phase=building --> attempt two\n\n"
+                "Verifier verdict:\n\nStill failing.\n"
+            )
+        }
+    ]
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph", comments=comments)]},
+    )
+
+    result = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    entry = json.loads(result.stdout)["tickets"][0]
+    assert entry["amends_spent"] == 2
+    assert "amends_inherited" not in entry
+    assert "amends_newly_spent" not in entry
+
+
 def test_no_verb_pushes_while_the_developer_is_asleep(tmp_path: Path) -> None:
     """Isolating and integrating are git of a kind the earlier verbs never ran,
     and nothing leaves the machine in either."""
@@ -6926,6 +6968,87 @@ def test_isolate_still_resumes_the_working_tree_this_branchs_run_made(
     assert first.returncode == 0, first.stderr
     assert second.returncode == 0, second.stderr
     assert json.loads(first.stdout) == json.loads(second.stdout)
+
+
+def test_isolate_brings_a_preserved_ticket_forward_to_the_run_branch(
+    tmp_path: Path,
+) -> None:
+    """A resumed ticket keeps its commits and receives work integrated later."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "ticket.txt").write_text("preserved\n", encoding="utf-8")
+    _git(worktree, "add", "ticket.txt")
+    _git(worktree, "commit", "-m", "preserve ticket work")
+    (repo / "blocker.txt").write_text("resolved\n", encoding="utf-8")
+    _git(repo, "add", "blocker.txt")
+    _git(repo, "commit", "-m", "resolve blocker")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["brought_forward"] is True
+    assert (worktree / "ticket.txt").read_text(encoding="utf-8") == "preserved\n"
+    assert (worktree / "blocker.txt").read_text(encoding="utf-8") == "resolved\n"
+    assert _git(worktree, "show", "-s", "--format=%s", "HEAD").stdout.strip() == (
+        "Merge the run branch into #9"
+    )
+
+
+def test_isolate_refuses_to_resume_a_preserved_tree_with_uncommitted_work(
+    tmp_path: Path,
+) -> None:
+    """A parked builder's uncommitted work is left for a person to inspect."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "unfinished.txt").write_text("unfinished\n", encoding="utf-8")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 1
+    assert "uncommitted" in result.stderr
+    assert (worktree / "unfinished.txt").is_file()
+
+
+def test_isolate_reports_a_resume_collision_and_leaves_no_merge_started(
+    tmp_path: Path,
+) -> None:
+    """Authored disagreement takes the collision-repair path on the ticket tree."""
+
+    repo = _init_repo(tmp_path / "proj")
+    preserved = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "10").stdout)["worktree"]
+    )
+    predecessor = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (preserved / "graph.py").write_text("ticket ten\n", encoding="utf-8")
+    _git(preserved, "add", "graph.py")
+    _git(preserved, "commit", "-m", "preserve ticket ten")
+    (predecessor / "graph.py").write_text("ticket nine\n", encoding="utf-8")
+    _git(predecessor, "add", "graph.py")
+    _git(predecessor, "commit", "-m", "build ticket nine")
+    assert _engine(repo, "integrate", "--ticket", "9").returncode == 0
+
+    result = _engine(repo, "isolate", "--ticket", "10")
+
+    assert result.returncode == 2, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["collisions"] == ["graph.py"]
+    assert answer["collided_with"] == [9]
+    assert _git(preserved, "status", "--porcelain").stdout == ""
+    merge_head = Path(
+        _git(
+            preserved, "rev-parse", "--path-format=absolute", "--git-path", "MERGE_HEAD"
+        ).stdout.strip()
+    )
+    assert not merge_head.exists()
 
 
 def test_report_asks_only_for_what_was_closed_since_the_branch_left_the_default(
