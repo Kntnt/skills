@@ -3037,6 +3037,37 @@ def test_reconcile_records_external_completion_without_closing_again(
     assert "issue close" not in calls
 
 
+def test_reconcile_accepts_a_closed_parked_ticket_without_a_run_outcome(
+    tmp_path: Path,
+) -> None:
+    """A parked attempt may be completed by hand before any Run Outcome exists.
+
+    Reconciliation records that explicit completion and replaces the parked
+    lifecycle with the neutral history state used by Report.
+    """
+
+    # Present a closed parked ticket and a landed completion commit.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    ticket = _ticket(9, "parked work", claimed_by=["former-maintainer"])
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": []},
+        issues={9: ticket | {"state": "CLOSED", "labels": [{"name": "needs-info"}]}},
+    )
+
+    # Reconcile through the public maintainer invocation.
+    result = _engine(repo, "reconcile", "--ticket", "9", "--commit", head, env=env)
+
+    # Record marker-only completion and make it discoverable as history.
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["run_outcome"] is None
+    calls = _gh_calls(env)
+    assert "--remove-label needs-info" in calls
+    assert "--add-label orchestrated" in calls
+    assert f"reconciliation=done commit={head}" in calls
+
+
 def test_reconcile_refuses_ineligible_ticket_or_unlanded_commit_without_writes(
     tmp_path: Path,
 ) -> None:
@@ -3444,6 +3475,44 @@ def test_report_projects_reconciliation_as_done_with_failure_provenance(
     assert report["tickets"][0]["run_outcome"] == "failed"
     assert report["tickets"][0]["is_reconciled"] is True
     assert report["tickets"][0]["commit"] == head
+
+
+def test_report_keeps_marker_only_reconciliation_done_across_cycles(
+    tmp_path: Path,
+) -> None:
+    """Planning and consecutive reports share marker-only completion truth."""
+
+    # Present a parked ticket reconciled through the engine and its dependent.
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    reconciled = _ticket(9, "parked work", comments=[_reconciled(head)])
+    dependent = _ticket(10, "dependent", blocked_by=[(9, "CLOSED")])
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [dependent]},
+        issues={9: reconciled | {"state": "CLOSED"}},
+        closed=[reconciled],
+    )
+
+    # Read the same history through planning and two report cycles.
+    plan = _engine(repo, "plan", env=env)
+    reports = [_engine(repo, "report", env=env) for _ in range(2)]
+
+    # Keep the dependent workable and account for both tickets exactly once.
+    assert plan.returncode == 0, plan.stderr
+    assert json.loads(plan.stdout)["workable"] == [10]
+    for result in reports:
+        assert result.returncode == 0, result.stderr
+        report = json.loads(result.stdout)
+        assert report["done"] == [9]
+        assert report["never_on_frontier"] == [10]
+        ticket = next(entry for entry in report["tickets"] if entry["number"] == 9)
+        assert ticket["commit"] == head
+        assert ticket["run_outcome"] is None
+        assert ticket["is_reconciled"] is True
+        accounted = [number for outcome in _ACCOUNT for number in report[outcome]]
+        assert sorted(accounted) == [9, 10]
+        assert len(accounted) == len(set(accounted))
 
 
 def test_report_keeps_closed_unreconciled_failure_under_failed(

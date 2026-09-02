@@ -26,7 +26,7 @@ Model Selector creates one frozen routing snapshot before claims. Builders and r
 
 Before claiming, the Skill asks all open ticket decisions in one batch and posts the answers to their tickets. With `--yes`, it parks such tickets under `needs-info` instead of guessing, then continues with the rest.
 
-`reconcile` records that a failed or conflicted attempt was later completed outside Orchestrate. See **/orchestrate reconcile --help**.
+`reconcile` records that a failed, conflicted, or parked attempt was later completed outside Orchestrate. See **/orchestrate reconcile --help**.
 
 ## COMMANDS
 
@@ -128,7 +128,7 @@ Run Outcome and Ticket Resolution are different facts. The Run Outcome is the im
 
 **done**
 
-The work is complete. A reconciled ticket was completed outside Orchestrate; its detail preserves the unsuccessful Run Outcome and does not claim Orchestrate built or independently verified the repair.
+The work is complete. A reconciled ticket was completed outside Orchestrate; its detail preserves an unsuccessful Run Outcome when one exists, leaves it absent after parking, and does not claim Orchestrate built or independently verified the repair.
 
 **failed**
 

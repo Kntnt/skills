@@ -1708,6 +1708,12 @@ def reconciled_at(item: dict[str, Any]) -> str | None:
     return completion_commit
 
 
+def resolution_is_done(item: dict[str, Any], run_outcome: str | None) -> bool:
+    """Say whether recorded history resolves *item* as completed work."""
+
+    return run_outcome == DONE or reconciled_at(item) is not None
+
+
 def as_references(numbers: list[int]) -> str:
     """Render ticket *numbers* the way a developer writes them."""
 
@@ -1855,9 +1861,9 @@ def blocker_still_blocks(cwd: Path, number: int, state: str) -> bool:
             f"#{number} is closed, but the tracker cannot say how its work resolved: {exc}"
         ) from exc
 
-    # Accept either an ordinary done Run Outcome or an external Reconciliation.
+    # Project completion through the same rule Report uses.
     outcome, _, _ = recorded_against(ticket)
-    return outcome != DONE and reconciled_at(ticket) is None
+    return not resolution_is_done(ticket, outcome)
 
 
 def unmet_blockers(
@@ -2196,7 +2202,7 @@ def ticket_from(
     # Project current resolution and amend phase without rewriting history.
     run_outcome = outcome
     reconciliation_commit = reconciled_at(item)
-    current_outcome = DONE if reconciliation_commit else outcome
+    current_outcome = DONE if resolution_is_done(item, outcome) else outcome
     amend_state = recorded_amend_state(item)
 
     return Ticket(
@@ -2358,7 +2364,7 @@ def tickets_in_scope(
 def tickets_recorded(
     listed: list[dict[str, Any]], scope: list[Aim] | None
 ) -> list[Ticket]:
-    """Return the closed tickets a run recorded an outcome on, oldest first.
+    """Return closed tickets carrying an outcome or Reconciliation, oldest first.
 
     Closing is what takes a ticket out of the open scope, so the report would
     lose exactly the tickets it most needs to name if it read that scope alone
@@ -2366,10 +2372,10 @@ def tickets_recorded(
     run recorded failed is closed too once a person finishes it, or once the
     tracker reads a commit trailer off the default branch, and it was this
     run's all the same: the run claimed it, built it, and wrote an outcome on
-    it. So every outcome is read back here, under the marker that stands last,
-    and a ticket closed carrying no marker of this engine's was never this
-    run's to account for — accounting for it would be a report nobody can
-    check.
+    it. A parked ticket reconciled after manual completion instead carries the
+    Reconciliation marker alone. Both engine facts are read back here, and a
+    ticket closed carrying neither was never this run's to account for —
+    accounting for it would be a report nobody can check.
     """
 
     # No edge is read off a finished ticket. There is nothing left for it to
@@ -2381,7 +2387,7 @@ def tickets_recorded(
             continue
         number = int(item["number"])
         outcome, commit, against = recorded_against(item)
-        if outcome is None:
+        if outcome is None and not resolution_is_done(item, outcome):
             continue
         try:
             tickets.append(
@@ -4285,6 +4291,8 @@ def complete_lifecycle(cwd: Path, number: int, ticket: dict[str, Any]) -> None:
     changes: list[str] = []
     if READY_LABEL in labels:
         changes.extend(("--remove-label", READY_LABEL))
+    if INFO_LABEL in labels:
+        changes.extend(("--remove-label", INFO_LABEL))
     if HISTORICAL_LABEL not in labels:
         changes.extend(("--add-label", HISTORICAL_LABEL))
     for holder in holders_of(ticket):
@@ -4300,6 +4308,7 @@ def has_completed_lifecycle(ticket: dict[str, Any]) -> bool:
     return (
         HISTORICAL_LABEL in labels
         and READY_LABEL not in labels
+        and INFO_LABEL not in labels
         and not holders_of(ticket)
     )
 
@@ -4518,7 +4527,7 @@ def cmd_record(
 
 def emit_reconciliation_result(
     number: int,
-    run_outcome: str,
+    run_outcome: str | None,
     commit: str,
     *,
     is_agreed: bool,
@@ -4540,7 +4549,7 @@ def emit_reconciliation_result(
 
 
 def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
-    """Resolve a closed unsuccessful ticket completed outside Orchestrate."""
+    """Resolve closed unsuccessful or parked work completed outside Orchestrate."""
 
     # Read every eligibility and lifecycle fact before allowing a tracker write.
     try:
@@ -4548,12 +4557,15 @@ def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
     except RunError as exc:
         return fail(f"the tracker cannot answer for #{number}: {exc}")
 
-    # Require closure and an unsuccessful unattended attempt as historical fact.
+    # Require closure and reject only outcomes outside the eligible histories.
     if str(ticket["state"]).upper() != CLOSED:
         return fail(f"#{number} is open; Reconciliation never closes a ticket")
     outcome, _, _ = recorded_against(ticket)
-    if outcome not in (FAILED, CONFLICTED):
-        return fail(f"#{number} has no failed or conflicted Run Outcome to reconcile")
+    if outcome not in (None, FAILED, CONFLICTED):
+        return fail(
+            f"#{number} has a {outcome} Run Outcome; Reconciliation requires a "
+            "failed or conflicted Run Outcome, or no Run Outcome after parking"
+        )
 
     # Validate an existing event before deciding between agreement and recovery.
     existing_commit = reconciled_at(ticket)
