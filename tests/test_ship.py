@@ -114,6 +114,84 @@ def test_plan_commit_exits_when_tree_is_clean(tmp_path: Path) -> None:
     plan = json.loads(result.stdout)
     assert plan["ready"] is False
     assert plan["reason"] == "nothing to commit"
+    assert plan["commits"] == []
+    assert plan["commit_count"] == 1
+    assert len(result.stdout) < 1000
+
+
+def test_plan_commit_full_restores_inventory_and_preserves_clean_keys(
+    tmp_path: Path,
+) -> None:
+    """The full override restores commits without changing the plan shape."""
+    repo = _init_repo(tmp_path / "proj")
+
+    bounded = _ship(repo, "plan", "commit")
+    full = _ship(repo, "plan", "--full", "commit")
+
+    bounded_plan = json.loads(bounded.stdout)
+    full_plan = json.loads(full.stdout)
+    assert set(bounded_plan) == set(full_plan)
+    assert bounded_plan["commits"] == []
+    assert full_plan["commit_count"] == len(full_plan["commits"]) == 1
+
+
+def test_plan_push_excerpt_has_exact_head_and_tail(tmp_path: Path) -> None:
+    """The bounded push projection keeps the three oldest and newest subjects."""
+    repo = _init_repo(tmp_path / "proj")
+    remote = _bare_remote(tmp_path)
+    _git(repo, "remote", "add", "origin", str(remote))
+    _git(repo, "push", "-u", "origin", "main")
+    for index in range(8):
+        (repo / "README.md").write_text(f"change {index}\n", encoding="utf-8")
+        _git(repo, "add", "README.md")
+        _git(repo, "commit", "-m", f"change {index}")
+
+    plan = json.loads(_ship(repo, "plan", "push").stdout)
+    assert [item["subject"] for item in plan["commits"]] == [
+        "init",
+        "change 0",
+        "change 1",
+        "change 5",
+        "change 6",
+        "change 7",
+    ]
+
+
+def test_plan_apply_rejects_full(tmp_path: Path) -> None:
+    """The inventory override belongs exclusively to the plan verb."""
+    repo = _init_repo(tmp_path / "proj")
+    # Arrange and act through the CLI parser to verify the verb boundary.
+    result = _ship(repo, "apply", "push", "--full")
+    # Assert argparse rejects the plan-only option.
+    assert result.returncode == 2
+
+
+def test_plan_push_bounds_commits_and_full_restores_inventory(tmp_path: Path) -> None:
+    """Bounded push output preserves the complete inventory under --full."""
+    repo = _init_repo(tmp_path / "proj")
+    remote = _bare_remote(tmp_path)
+    _git(repo, "remote", "add", "origin", str(remote))
+    _git(repo, "push", "-u", "origin", "main")
+    for index in range(8):
+        (repo / "README.md").write_text(f"change {index}\n", encoding="utf-8")
+        _git(repo, "add", "README.md")
+        _git(repo, "commit", "-m", f"change {index}")
+
+    bounded = _ship(repo, "plan", "push")
+    full = _ship(repo, "plan", "--full", "push")
+
+    assert bounded.returncode == 0
+    bounded_plan = json.loads(bounded.stdout)
+    full_plan = json.loads(full.stdout)
+    assert bounded_plan["commit_count"] == len(full_plan["commits"]) == 9
+    assert len(bounded_plan["commits"]) == 6
+    assert [item["subject"] for item in full_plan["commits"]] == [
+        "init",
+        *[f"change {index}" for index in range(8)],
+    ]
+    assert {
+        key: value for key, value in bounded_plan.items() if key not in {"commits"}
+    } == {key: value for key, value in full_plan.items() if key not in {"commits"}}
 
 
 def test_plan_commit_proposes_gitignore_when_missing(tmp_path: Path) -> None:
@@ -271,6 +349,10 @@ def test_plan_release_lists_commits_and_version(tmp_path: Path) -> None:
     (repo / "README.md").write_text("hello there\n", encoding="utf-8")
     _git(repo, "add", "README.md")
     _git(repo, "commit", "-m", "Greet better")
+    for index in range(7):
+        (repo / "README.md").write_text(f"release change {index}\n", encoding="utf-8")
+        _git(repo, "add", "README.md")
+        _git(repo, "commit", "-m", f"release change {index}")
 
     result = _ship(repo, "plan", "release")
 
@@ -282,7 +364,32 @@ def test_plan_release_lists_commits_and_version(tmp_path: Path) -> None:
     assert plan["unreleased_empty"] is False
     assert plan["build"] is None
     subjects = [c["subject"] for c in plan["commits"]]
-    assert "Greet better" in subjects
+    assert subjects == [
+        "Greet better",
+        *[f"release change {index}" for index in range(7)],
+    ]
+    assert len(plan["commits"]) == plan["commit_count"] == 8
+
+
+def test_plan_commit_dirty_tree_keeps_complete_inventory(tmp_path: Path) -> None:
+    """A ready commit plan retains every changelog-baseline commit."""
+    repo = _init_repo(tmp_path / "proj")
+    # Arrange a span longer than the bounded excerpt and leave the tree dirty.
+    expected = ["init"]
+    for index in range(8):
+        (repo / "README.md").write_text(f"change {index}\n", encoding="utf-8")
+        _git(repo, "add", "README.md")
+        _git(repo, "commit", "-m", f"change {index}")
+        expected.append(f"change {index}")
+    (repo / "pending.md").write_text("pending\n", encoding="utf-8")
+
+    # Act and assert that the ready plan keeps every subject in order.
+    result = _ship(repo, "plan", "commit")
+
+    assert result.returncode == 0
+    plan = json.loads(result.stdout)
+    assert [item["subject"] for item in plan["commits"]] == expected
+    assert plan["commit_count"] == len(expected)
 
 
 def test_plan_release_detects_zip_script(tmp_path: Path) -> None:
