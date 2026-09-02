@@ -2628,12 +2628,14 @@ def test_orchestrate_derives_context_before_every_route_call() -> None:
     dry_run = _step(2)
     routing = _step(3)
 
+    # Assert both paths derive context and pin the exact Claude runtime shape.
     assert dry_run.index("/model-selector context /dev/stdin") < dry_run.index(
         "/model-selector route /dev/stdin"
     )
     assert "/model-selector context <path>" in routing
     assert "/model-selector route <path>" in routing
     assert "never reconstruct its derivation rules" in routing
+    assert '`native_deliberation` exactly `{"effort": <level>}`' in routing
 
 
 def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:

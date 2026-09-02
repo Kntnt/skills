@@ -5,6 +5,7 @@ import importlib.util
 import json
 import re
 import subprocess
+import sys
 from copy import deepcopy
 from pathlib import Path
 from typing import Any, cast
@@ -28,6 +29,24 @@ def _load_router() -> Any:
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    return module
+
+
+def _load_context_module() -> Any:
+    """Load Context beside the exact routing module it imports at runtime."""
+
+    # Preserve the interpreter's module table across this isolated import.
+    previous = sys.modules.get("route")
+    sys.modules["route"] = _load_router()
+    path = MODEL_SELECTOR / "scripts" / "context.py"
+    spec = importlib.util.spec_from_file_location("model_selector_context", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    if previous is None:
+        del sys.modules["route"]
+    else:
+        sys.modules["route"] = previous
     return module
 
 
@@ -185,6 +204,7 @@ def test_context_retains_uncovered_selections_and_omits_disabled_ones(
     ]
     models = [mapping["model"] for mapping in mappings]
 
+    # Assert uncovered mappings remain while invalid selections do not enter.
     assert "grok-4.6" in models
     assert "gpt-5.6-luna" not in models
     assert [
@@ -224,6 +244,10 @@ def test_context_retains_seedless_and_unavailable_mode_selections(
             "requested_model_id": "seedless-model",
             "canonical_provider_model_id": "seedless-model",
             "provider_release_id": None,
+            "controls": {
+                **seedless["controls"],
+                "effort": {"policy": "explicit", "values": ["max"]},
+            },
         }
     )
     profile["model_selections"].append(seedless)
@@ -235,7 +259,21 @@ def test_context_retains_seedless_and_unavailable_mode_selections(
     retained = next(
         mapping for mapping in mappings if mapping["model"] == "seedless-model"
     )
+
+    # Keep the explicit portable value auditable in a schema-valid mapping.
     assert retained["model_capability"] is None
+    assert retained["controls"] == {"max": {"effort": "max"}}
+    assert "artifact_refusal" not in _load_router().route(
+        {
+            "schema_version": 1,
+            "context": _derive_context(
+                tmp_path / "seedless-route",
+                _runtime_context_request(),
+                json.dumps(profile).encode(),
+            )["context"],
+            "requests": [_request()],
+        }
+    )
 
     # Keep an explicitly selected but unavailable serving mode unlaunchable.
     unavailable = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
@@ -275,6 +313,7 @@ def test_context_keeps_an_unsupported_harness_on_the_main_seat(
     request["runtime"]["main_seat"]["surface"] = "unsupported"
     decision = _load_router().route(_derive_context(tmp_path, request))["decisions"][0]
 
+    # Assert the uncovered Harness inherits with a complete audit reason.
     assert decision["status"] == "inherit"
     assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
     assert {item["code"] for item in decision["audit"]["exclusions"]} == {
@@ -355,6 +394,7 @@ def test_context_rejects_incomplete_channel_billing_contract(tmp_path: Path) -> 
         json.dumps(profile).encode(),
     )
 
+    # Assert the invalid profile follows the normal absent-profile branch.
     assert derived["context"]["profile"] is None
     assert derived["context"]["mappings"] == []
 
@@ -375,6 +415,7 @@ def test_context_inherits_an_unknown_main_seat_without_overrides(
         "decisions"
     ][0]
 
+    # Assert automation inherits while the exact override remains strict.
     assert derived["context"]["mappings"] == []
     assert derived["context"]["main_seat"]["model_capability"] is None
     assert inherited["status"] == "inherit"
@@ -413,9 +454,44 @@ def test_context_returns_a_valid_frozen_snapshot_unchanged(tmp_path: Path) -> No
     )
     later = json.loads(result.stdout)
 
+    # Assert both the process result and embedded snapshot bytes are exact.
     assert result.returncode == 0
     assert b'"snapshot":' + raw_snapshot.encode() in result.stdout
     assert later["snapshot"] == snapshot
+
+
+def test_context_refuses_a_frozen_snapshot_with_a_stale_identity(
+    tmp_path: Path,
+) -> None:
+    """Context validates the identity of every snapshot it preserves."""
+
+    # Mutate a valid frozen fact without regenerating its identity.
+    first = _derive_context(tmp_path / "first", _runtime_context_request())
+    snapshot = _load_router().route(first)["snapshot"]
+    snapshot["profile"]["revision"] = "tampered"
+    artifact = tmp_path / "stale-snapshot.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "requests": [_request()],
+                "snapshot": snapshot,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    # Require Context itself to refuse before Route sees the artifact.
+    result = subprocess.run(
+        ["uv", "run", str(CONTEXT_SCRIPT), str(artifact)],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    refusal = json.loads(result.stdout)
+    assert result.returncode == 2
+    assert refusal["artifact_refusal"]["code"] == "invalid_context_input"
 
 
 def test_context_process_refusals_are_machine_readable(tmp_path: Path) -> None:
@@ -476,6 +552,7 @@ def test_context_refuses_a_flag_after_its_artifact_operand(tmp_path: Path) -> No
         check=False,
     )
 
+    # Assert the grammar refusal stays machine-readable.
     assert result.returncode == 2
     assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
         "invalid_arguments"
@@ -498,6 +575,32 @@ def test_context_refuses_inconsistent_main_seat_surface(tmp_path: Path) -> None:
         check=False,
     )
 
+    # Assert the cross-field contradiction reaches the stable refusal seam.
+    assert result.returncode == 2
+    assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
+        "invalid_context_input"
+    )
+
+
+def test_context_refuses_an_attestation_for_another_inventory(tmp_path: Path) -> None:
+    """One stable runtime identity governs inventory and inheritance."""
+
+    # Contradict the duplicated stable Harness identity in the request.
+    artifact = _runtime_context_request()
+    artifact["runtime"]["harness"]["inheritance_attestation"]["verified"] = (
+        "claude-code/different-surface"
+    )
+    request = tmp_path / "context-request.json"
+    request.write_text(json.dumps(artifact), encoding="utf-8")
+
+    # Refuse the contradiction at Context's public process boundary.
+    result = subprocess.run(
+        ["uv", "run", str(CONTEXT_SCRIPT), str(request)],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
     assert result.returncode == 2
     assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
         "invalid_context_input"
@@ -629,6 +732,7 @@ def test_route_emits_only_parameter_destinations_for_a_complete_point() -> None:
         }
     )["decisions"][0]
 
+    # Assert only the two declared parameter destinations are emitted.
     assert decision["launch"]["arguments"] == {
         "-m": "alias-worker-v2",
         "-c": "model_reasoning_effort=low",
@@ -648,6 +752,7 @@ def test_route_emits_only_parameter_destinations_for_a_complete_point() -> None:
             }
         )["decisions"][0]
 
+        # Assert the mismatched fixed value makes the adapter unreachable.
         assert refusal["status"] == "refused"
         assert refusal["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
 
@@ -687,8 +792,105 @@ def test_route_rejects_carried_facts_that_differ_from_the_main_seat() -> None:
             }
         )["decisions"][0]
 
+        # Assert each inherited mismatch makes the adapter unreachable.
         assert decision["status"] == "refused", field
         assert decision["audit"]["exclusions"][0]["code"] == ("adapter_unreachable")
+
+
+def test_route_compares_fixed_and_carried_json_values_by_type() -> None:
+    """Boolean and numeric point values never compare as the same JSON fact."""
+
+    # Give both destination forms the numeric counterpart of a boolean point.
+    for destination in (
+        {"fixed": 1},
+        {"carried_by": "inheritance"},
+    ):
+        snapshot = _complete_routing_snapshot()
+        point = snapshot["mappings"][0]
+        point["policy"]["toggle"] = True
+        adapter = snapshot["harness"]["adapter_specs"][0]
+        adapter["policies"] = [deepcopy(point["policy"])]
+        adapter["launch"]["policy_flags"]["toggle"] = destination
+        adapter["inheritance_attestation"] = {
+            "carried_by_default": True,
+            "verified": "codex/subagent",
+        }
+        snapshot["main_seat"]["policy"]["toggle"] = 1
+
+        # Reject both mismatches through the public routing seam.
+        decision = _load_router().route(
+            {
+                "schema_version": 1,
+                "context": snapshot,
+                "requests": [_request(overrides={"deliberation": "low"})],
+            }
+        )["decisions"][0]
+        assert decision["status"] == "refused", destination
+        assert decision["audit"]["exclusions"][0]["code"] == ("adapter_unreachable")
+
+
+def test_context_specializes_every_generalized_model_destination() -> None:
+    """Template specialization accepts every schema-valid destination form."""
+
+    # Prepare one shipped selection, template, and exact live runtime.
+    context = _load_context_module()
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    selection = next(
+        item
+        for item in profile["model_selections"]
+        if item["selection_id"] == "claude-opus"
+    )
+    template = json.loads(
+        (MODEL_SELECTOR / "data" / "adapters" / "claude-code-agent.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    runtime = _runtime_context_request()["runtime"]
+    controls = {"max": {"effort": "max"}}
+    canonical = selection["canonical_provider_model_id"]
+
+    # Specialize every valid model destination without assuming a dictionary.
+    for destination in (
+        "model",
+        {"parameter": "model"},
+        {"fixed": canonical},
+        {"carried_by": "inheritance"},
+    ):
+        candidate = deepcopy(template)
+        candidate["launch"]["model_flag"] = destination
+        specialized = context._specialized_adapter(
+            candidate,
+            selection,
+            "standard",
+            controls,
+            runtime,
+        )
+        assert specialized is not None, destination
+
+    # Attach an attestation whenever any launch field is carried.
+    portable = json.loads(
+        (
+            MODEL_SELECTOR / "data" / "adapters" / "claude-code-codex-exec.json"
+        ).read_text(encoding="utf-8")
+    )
+    portable["launch"]["tools_flag"] = {"carried_by": "inheritance"}
+    codex = next(
+        item
+        for item in profile["model_selections"]
+        if item["selection_id"] == "codex-sol"
+    )
+    specialized = context._specialized_adapter(
+        portable,
+        codex,
+        "standard",
+        controls,
+        runtime,
+    )
+    assert specialized is not None
+    assert (
+        specialized["inheritance_attestation"]
+        == (runtime["harness"]["inheritance_attestation"])
+    )
 
 
 def test_route_inherits_an_empty_mapping_set_before_an_unknown_ceiling() -> None:
@@ -708,6 +910,7 @@ def test_route_inherits_an_empty_mapping_set_before_an_unknown_ceiling() -> None
         }
     )["decisions"][0]
 
+    # Assert the unavailable selection controls inherit before ceiling checks.
     assert decision["status"] == "inherit"
     assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
 
@@ -728,6 +931,7 @@ def test_route_audits_an_unranked_mapping_before_inheriting() -> None:
         }
     )["decisions"][0]
 
+    # Assert the missing rank remains explicit in the inheritance audit.
     assert decision["status"] == "inherit"
     assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
     assert decision["audit"]["exclusions"][0]["code"] == ("capability_rank_unavailable")
@@ -747,6 +951,7 @@ def test_route_refuses_an_override_against_an_unranked_empty_pool() -> None:
         }
     )["decisions"][0]
 
+    # Assert an explicit lock receives its override-specific refusal.
     assert decision["status"] == "refused"
     assert decision["reason"]["code"] == "unavailable_override"
     assert decision["audit"]["exclusions"][0]["code"] == ("capability_rank_unavailable")

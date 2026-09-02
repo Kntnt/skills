@@ -233,34 +233,52 @@ def _policy_values(policy: dict[str, Any], supported: list[str]) -> list[str]:
 
 def _portable_controls(
     selection: dict[str, Any],
-    seed: dict[str, Any],
+    seed: dict[str, Any] | None,
     template: dict[str, Any] | None,
     main_seat: dict[str, Any],
-) -> tuple[dict[str, dict[str, Any]], dict[str, int], list[dict[str, Any]]]:
+) -> tuple[
+    dict[str, dict[str, Any]],
+    dict[str, int],
+    list[dict[str, Any]],
+    dict[str, dict[str, Any]],
+]:
     """Resolve exact native controls and their portable ordinal ranks."""
 
     # A carried adapter exposes exactly the main seat's inherited control.
     if template is not None and template["deliberation_source"] == "carried":
         portable = cast(str, main_seat["portable_deliberation"])
         native = cast(dict[str, Any], deepcopy(main_seat["native_deliberation"]))
-        return {portable: native}, {portable: PORTABLE_RANKS[portable]}, [native]
+        controls = {portable: native}
+        return controls, {portable: PORTABLE_RANKS[portable]}, [native], controls
 
-    # Intersect the model seed, persisted policy, and template's portable scale.
+    # Separate auditable profile intent from verified launch support.
     supported = [
         value
-        for value in seed.get("supported_controls", {}).get("effort", [])
+        for value in (seed or {}).get("supported_controls", {}).get("effort", [])
         if value in PORTABLE_RANKS
     ]
-    if not supported:
+    if seed is not None and not supported:
         default = seed.get("default_configuration", {}).get("effort") or "medium"
         supported = [default] if default in PORTABLE_RANKS else ["medium"]
+    policy = selection["controls"]["effort"]
+    if policy["policy"] == "explicit":
+        mapped = [
+            value for value in (policy["values"] or []) if value in PORTABLE_RANKS
+        ]
+    else:
+        mapped = list(supported)
+    if not mapped:
+        mapped = ["medium"]
+
+    # Admit adapters only for values verified by seed and template evidence.
+    launchable = [value for value in mapped if value in supported]
     if template is not None:
         admitted = set(template.get("supported_deliberation", PORTABLE_RANKS))
-        supported = [value for value in supported if value in admitted]
-    supported = _policy_values(selection["controls"]["effort"], supported)
-    controls = {value: {"effort": value} for value in supported}
-    capabilities = {value: PORTABLE_RANKS[value] for value in supported}
-    return controls, capabilities, list(controls.values())
+        launchable = [value for value in launchable if value in admitted]
+    controls = {value: {"effort": value} for value in mapped}
+    capabilities = {value: PORTABLE_RANKS[value] for value in mapped}
+    adapter_controls = {value: controls[value] for value in launchable}
+    return controls, capabilities, list(controls.values()), adapter_controls
 
 
 def _serving_modes(selection: dict[str, Any], seed: dict[str, Any]) -> list[str]:
@@ -276,6 +294,20 @@ def _serving_modes(selection: dict[str, Any], seed: dict[str, Any]) -> list[str]
         default = seed.get("default_configuration", {}).get("serving_mode")
         supported = [default or "standard"]
     return _policy_values(policy, supported)
+
+
+def _specialized_destination(destination: Any, value: str) -> Any:
+    """Bind a dynamic string while preserving fixed and carried destinations."""
+
+    # Turn every parameter form into a concrete adapter translation.
+    if isinstance(destination, str):
+        return {"parameter": destination, "value": value}
+    if isinstance(destination, dict) and "parameter" in destination:
+        specialized = deepcopy(destination)
+        template = specialized.get("value", "{value}")
+        specialized["value"] = cast(str, template).replace("{value}", value)
+        return specialized
+    return deepcopy(destination)
 
 
 def _specialized_adapter(
@@ -298,7 +330,9 @@ def _specialized_adapter(
 
     # Bind dynamic model identity while leaving the template immutable on disk.
     launch = deepcopy(template["launch"])
-    launch["model_flag"]["value"] = model_value
+    launch["model_flag"] = _specialized_destination(
+        launch["model_flag"], cast(str, model_value)
+    )
     adapter = {
         "adapter_id": template["adapter_template_id"],
         "channel": selection["channel_id"],
@@ -311,14 +345,15 @@ def _specialized_adapter(
         "policies": [{}],
         "launch": launch,
     }
-    if template["deliberation_source"] == "carried":
+    if route._carries_launch_value({"launch": launch}):
         attestation = runtime["harness"].get("inheritance_attestation")
         if not runtime["harness"]["inheritance"] or attestation is None:
             return None
+        adapter["inheritance_attestation"] = deepcopy(attestation)
+    if template["deliberation_source"] == "carried":
         adapter["native_controls"] = [
             deepcopy(runtime["main_seat"]["native_deliberation"])
         ]
-        adapter["inheritance_attestation"] = deepcopy(attestation)
     if route._schema_errors(
         adapter,
         route.REQUEST_SCHEMA["$defs"]["adapter"],
@@ -413,7 +448,8 @@ def _derive_context(
     mappings: list[dict[str, Any]] = []
     for selection in selections:
         canonical = cast(str, selection["canonical_provider_model_id"])
-        seed = model_seeds.get(canonical) or {
+        seed = model_seeds.get(canonical)
+        audit_seed = seed or {
             "supported_controls": {"effort": [], "serving_modes": []},
             "default_configuration": {
                 "effort": "medium",
@@ -429,14 +465,20 @@ def _derive_context(
             ),
             None,
         )
-        controls, control_capabilities, native_order = _portable_controls(
-            selection, seed, template, runtime_seat
+        controls, control_capabilities, native_order, adapter_controls = (
+            _portable_controls(selection, seed, template, runtime_seat)
         )
-        for mode in _serving_modes(selection, seed):
+        for mode in _serving_modes(selection, audit_seed):
             adapter = (
                 None
                 if template is None
-                else _specialized_adapter(template, selection, mode, controls, runtime)
+                else _specialized_adapter(
+                    template,
+                    selection,
+                    mode,
+                    adapter_controls,
+                    runtime,
+                )
             )
             if adapter is not None:
                 adapters.append(adapter)
@@ -510,22 +552,39 @@ def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
     process adapter to report as ``invalid_context_input``.
     """
 
+    # Reject structural input before reading any nested runtime facts.
     if error := _schema_error(artifact, CONTEXT_SCHEMA, "context_request"):
         raise ValueError(error)
 
-    # Refuse contradictory duplicates of the active Harness surface.
+    # Refuse contradictory duplicates of the active Harness identity.
     if "runtime" in artifact and (
         artifact["runtime"]["main_seat"]["surface"]
         != artifact["runtime"]["harness"]["surface"]
     ):
         raise ValueError("runtime main_seat.surface must equal harness.surface")
+    if "runtime" in artifact:
+        harness = artifact["runtime"]["harness"]
+        attestation = harness.get("inheritance_attestation")
+        if (
+            attestation is not None
+            and attestation["verified"] != harness["inventory_revision"]
+        ):
+            raise ValueError(
+                "runtime inheritance attestation must equal inventory revision"
+            )
+
+    # Preserve request order only after validating a reusable snapshot itself.
     requests = deepcopy(artifact["requests"])
     if "snapshot" in artifact:
+        if error := route._snapshot_error(artifact["snapshot"]):
+            raise ValueError(error)
         return {
             "schema_version": 1,
             "requests": requests,
             "snapshot": deepcopy(artifact["snapshot"]),
         }
+
+    # Derive current facts from optional validated local configuration.
     profile = _read_profile(data_directory)
     return {
         "schema_version": 1,

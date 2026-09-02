@@ -370,6 +370,26 @@ def _destination_value(destination: Any, value: Any) -> Any:
     return deepcopy(value)
 
 
+def _json_values_equal(left: Any, right: Any) -> bool:
+    """Compare JSON values without Python's boolean-number coercion."""
+
+    # Preserve JSON's distinct boolean and numeric primitive types recursively.
+    if isinstance(left, bool) or isinstance(right, bool):
+        return isinstance(left, bool) and isinstance(right, bool) and left == right
+    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+        return left == right
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(
+            _json_values_equal(left_item, right_item)
+            for left_item, right_item in zip(left, right, strict=True)
+        )
+    if isinstance(left, dict) and isinstance(right, dict):
+        return set(left) == set(right) and all(
+            _json_values_equal(left[key], right[key]) for key in left
+        )
+    return type(left) is type(right) and left == right
+
+
 def _destination_accepts(
     destination: Any,
     value: Any,
@@ -380,8 +400,12 @@ def _destination_accepts(
     if _destination_key(destination) is not None:
         return True
     if _is_carried(destination):
-        return bool(inherited is not _MISSING and value == inherited)
-    return bool(isinstance(destination, dict) and destination.get("fixed") == value)
+        return inherited is not _MISSING and _json_values_equal(value, inherited)
+    return bool(
+        isinstance(destination, dict)
+        and "fixed" in destination
+        and _json_values_equal(destination["fixed"], value)
+    )
 
 
 def _launch_destinations(adapter: dict[str, Any]) -> tuple[Any, ...]:

@@ -21,15 +21,6 @@
   "additionalProperties": false,
   "$defs": {
     "non_empty_string": {"type": "string", "minLength": 1},
-    "inheritance_attestation": {
-      "type": "object",
-      "required": ["carried_by_default", "verified"],
-      "properties": {
-        "carried_by_default": {"const": true},
-        "verified": {"$ref": "#/$defs/non_empty_string"}
-      },
-      "additionalProperties": false
-    },
     "runtime_harness": {
       "type": "object",
       "required": ["name", "surface", "inventory_revision", "inheritance"],
@@ -38,7 +29,7 @@
         "surface": {"$ref": "#/$defs/non_empty_string"},
         "inventory_revision": {"$ref": "#/$defs/non_empty_string"},
         "inheritance": {"type": "boolean"},
-        "inheritance_attestation": {"$ref": "#/$defs/inheritance_attestation"}
+        "inheritance_attestation": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/inheritance_attestation"}
       },
       "additionalProperties": false
     },
