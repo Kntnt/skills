@@ -1,0 +1,11 @@
+# Reconciliation can resolve a parked ticket
+
+A parked ticket has no Run Outcome: the unattended attempt stopped before reaching a verdict and returned the ticket to `needs-info`. A maintainer may nevertheless answer the question, complete the work outside Orchestrate, land it, and close the ticket. ADR-0079 required a failed or conflicted Run Outcome before Reconciliation, leaving that real completion without an engine-supported route into the done Ticket Resolution that planning already derived from a hand-written marker.
+
+**Reconciliation therefore accepts a closed ticket with a failed or conflicted Run Outcome, or with no Run Outcome.** The absent outcome is the parked case; it remains absent as historical provenance after Reconciliation. Closure and a completion commit reachable from the default branch remain mandatory, so absence never turns closure alone into inferred completion. This amends ADR-0079 only where it required an unsuccessful Run Outcome.
+
+**One completion predicate projects recorded history for both planning and reporting.** A done Run Outcome or a Reconciliation marker resolves a ticket done. The report retains every closed ticket carrying either fact, so a marker-only ticket appears under `done` with its completion commit, `is_reconciled` true, and no Run Outcome. The same predicate makes its dependents workable. The report's five lists remain exhaustive over every ticket the active or historical discovery labels place in scope.
+
+**Reconciliation replaces parked lifecycle state with history state.** The verb removes `needs-info` as well as stale readiness and assignments, and adds `orchestrated`, which is the report's existing discovery route. Hand-written markers left under `needs-info` remain outside the contract; discovery follows the lifecycle the verb establishes rather than adding another label query.
+
+**What this costs.** The public reconciliation result admits a missing Run Outcome, and a maintainer can assert completion after an attempt that Orchestrate never judged. The unchanged closure and landed-commit gates keep that assertion explicit and checkable, while one projection prevents planning and reporting from disagreeing about it.
