@@ -150,6 +150,28 @@ def test_every_session_owned_transition_updates_the_progress_dashboard() -> None
         f"{SKILL / 'SKILL.md'}: step 12 derives the terminal dashboard from "
         "the durable report."
     )
+    assert (
+        "On a non-dry run, obtain the durable report even where nothing started."
+        in terminal
+    ), (
+        f"{SKILL / 'SKILL.md'}: step 12 terminalizes a non-dry dashboard "
+        "before returning the last plan's no-work account."
+    )
+
+    resumed_repair = _step(5)
+    assert "Before that repairer is dispatched, mark" in resumed_repair, (
+        f"{SKILL / 'SKILL.md'}: step 5 reports a resumed collision repair "
+        "before dispatching it."
+    )
+
+    collision_resolution = _step(10)
+    assert "Before every builder dispatch in this step, mark" in collision_resolution
+    assert "before every verifier dispatch, mark" in collision_resolution
+
+    wave_resolution = _step(11)
+    assert "Before every wave-fix builder dispatch, mark" in wave_resolution, (
+        f"{SKILL / 'SKILL.md'}: step 11 reports every wave fixer before dispatching it."
+    )
 
 
 def _manpage_section(heading: str) -> str:

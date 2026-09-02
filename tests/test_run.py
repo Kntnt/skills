@@ -8775,6 +8775,56 @@ def test_engine_transition_recreates_deleted_progress_with_current_counts(
     }
 
 
+def test_record_recreates_deleted_progress_with_completed_ticket_counted(
+    tmp_path: Path,
+) -> None:
+    """A recorded outcome immediately advances every recreated progress count."""
+
+    amendment = {"body": f"<!-- {MARKER} amend=1 phase=passed --> amend one passed"}
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton", comments=[amendment])],
+        issues={9: _ready(9, comments=[amendment])},
+    )
+    current = _engine(
+        repo,
+        "progress",
+        "--phase=verify",
+        "--wave=2",
+        "--ticket=9",
+        "--completed=3",
+        "--remaining=4",
+        "--state-dir",
+        str(scratch),
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress_path.unlink()
+
+    transitioned = _engine(
+        repo,
+        "record",
+        "--ticket=9",
+        "--outcome=failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    assert current.returncode == 0, current.stderr
+    assert transitioned.returncode == 0, transitioned.stderr
+    assert progress == {
+        "wave": 2,
+        "ticket": 9,
+        "phase": "note",
+        "amendments_spent": 1,
+        "tickets_completed": 4,
+        "tickets_remaining": 3,
+        "timestamp": progress["timestamp"],
+        "outcome": None,
+    }
+
+
 def _observations() -> ModuleType:
     """Import the model-selector observation module the artifacts are for."""
 

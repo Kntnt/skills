@@ -295,6 +295,8 @@ INHERITED_FOR_NO_ADAPTER = "unavailable_selection_controls"
 # (ADR-0089).
 ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
 OBSERVATION_FILE = "kntnt-orchestrate-observations.json"
+
+# Where a caller polls the current non-authoritative run dashboard.
 PROGRESS_FILE = "kntnt-orchestrate-progress.json"
 PROGRESS_PHASES = (
     "preflight",
@@ -305,7 +307,6 @@ PROGRESS_PHASES = (
     "integrate",
     "note",
     "wave_verdict",
-    "dry_run",
 )
 
 # Durable flake evidence belongs to the Skill rather than to any repository.
@@ -1204,11 +1205,7 @@ def progress_file(path: Path | None) -> Path | None:
 def write_progress(
     state_path: Path | None,
     phase: str,
-    wave: int,
-    ticket: int | None,
-    amendments_spent: int,
-    tickets_completed: int,
-    tickets_remaining: int,
+    progress: ProgressState,
     outcome: dict[str, list[int]] | None,
 ) -> str | None:
     """Atomically replace the run dashboard, or do nothing without state."""
@@ -1219,32 +1216,18 @@ def write_progress(
 
     # Build the complete dashboard before exposing any bytes to pollers.
     dashboard = {
-        "wave": wave,
-        "ticket": ticket,
+        "wave": progress.wave,
+        "ticket": progress.ticket,
         "phase": phase,
-        "amendments_spent": amendments_spent,
-        "tickets_completed": tickets_completed,
-        "tickets_remaining": tickets_remaining,
+        "amendments_spent": progress.amendments_spent,
+        "tickets_completed": progress.tickets_completed,
+        "tickets_remaining": progress.tickets_remaining,
         "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "outcome": outcome,
     }
-    destination.parent.mkdir(parents=True, exist_ok=True)
 
     # Rename a flushed peer file so every concurrent read is complete JSON.
-    descriptor, temporary_name = tempfile.mkstemp(
-        dir=destination.parent, prefix=f".{destination.name}.", suffix=".tmp", text=True
-    )
-    temporary = Path(temporary_name)
-    try:
-        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
-            json.dump(dashboard, stream, indent=2)
-            stream.write("\n")
-            stream.flush()
-            os.fsync(stream.fileno())
-        temporary.replace(destination)
-    except BaseException:
-        temporary.unlink(missing_ok=True)
-        raise
+    write_atomically(destination, json.dumps(dashboard, indent=2) + "\n")
 
     return str(destination)
 
@@ -1255,6 +1238,7 @@ def advance_progress(
     phase: str,
     ticket: int,
     amendments_spent: int | None = None,
+    is_ticket_completed: bool = False,
 ) -> None:
     """Advance an existing dashboard, recreating it from durable run state."""
 
@@ -1274,21 +1258,33 @@ def advance_progress(
         if current is not None and current.ticket == ticket
         else 0
     )
-    if amendments_spent is None and (current is None or current.ticket != ticket):
+    if amendments_spent is None:
         try:
             ticket_state = recorded_amend_state(ticket_view(cwd, ticket, "comments"))
             amendment_count = ticket_state.attempt if ticket_state is not None else 0
         except RunError:
             pass
 
+    # A terminal record settles exactly one current ticket; blocked records
+    # leave it in the remaining scope.
+    completed = current.tickets_completed if current is not None else 0
+    remaining_count = current.tickets_remaining if current is not None else remaining
+    if is_ticket_completed:
+        completed += 1
+        remaining_count = max(remaining_count - 1, 0)
+
     write_progress(
         state_path,
         phase,
-        current.wave if current is not None else 1,
-        ticket,
-        amendment_count if amendments_spent is None else amendments_spent,
-        current.tickets_completed if current is not None else 0,
-        current.tickets_remaining if current is not None else remaining,
+        ProgressState(
+            wave=current.wave if current is not None else 1,
+            ticket=ticket,
+            amendments_spent=(
+                amendment_count if amendments_spent is None else amendments_spent
+            ),
+            tickets_completed=completed,
+            tickets_remaining=remaining_count,
+        ),
         None,
     )
 
@@ -5271,10 +5267,14 @@ def write_atomically(path: Path, contents: str) -> None:
     """Replace one complete text file without exposing a partial generation."""
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    descriptor, temporary = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent, text=True
+    )
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
             stream.write(contents)
+            stream.flush()
+            os.fsync(stream.fileno())
         Path(temporary).replace(path)
     finally:
         Path(temporary).unlink(missing_ok=True)
@@ -5461,6 +5461,8 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     # are gone the account says so rather than reading what is current back as
     # though it had been (ADR-0085).
     routing, routing_reason, _ = frozen_routing(state_path)
+
+    # Assemble the complete durable account from the facts read above.
     report = {
         "verb": "report",
         "label": READY_LABEL,
@@ -5488,11 +5490,13 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
         write_progress(
             state_path,
             "wave_verdict",
-            current.wave if current is not None else 1,
-            None,
-            0,
-            completed,
-            len(tickets) - completed,
+            ProgressState(
+                wave=current.wave if current is not None else 1,
+                ticket=None,
+                amendments_spent=0,
+                tickets_completed=completed,
+                tickets_remaining=len(tickets) - completed,
+            ),
             outcome,
         )
 
@@ -5716,7 +5720,13 @@ def main(argv: list[str] | None = None) -> int:
             state_path,
         )
         if result == 0:
-            advance_progress(cwd, state_path, "note", args.ticket)
+            advance_progress(
+                cwd,
+                state_path,
+                "note",
+                args.ticket,
+                is_ticket_completed=args.outcome in OUTCOMES,
+            )
         return result
     if args.verb == "observe":
         return cmd_observe(
@@ -5732,25 +5742,22 @@ def main(argv: list[str] | None = None) -> int:
     if args.verb == "flake":
         return cmd_flake(cwd, args.evidence, state_path)
     if args.verb == "progress":
+        progress = ProgressState(
+            wave=args.wave,
+            ticket=args.ticket,
+            amendments_spent=args.amends_spent,
+            tickets_completed=args.completed,
+            tickets_remaining=args.remaining,
+        )
         remember_progress(
             state_path,
             cwd,
-            ProgressState(
-                wave=args.wave,
-                ticket=args.ticket,
-                amendments_spent=args.amends_spent,
-                tickets_completed=args.completed,
-                tickets_remaining=args.remaining,
-            ),
+            progress,
         )
         written = write_progress(
             state_path,
             args.phase,
-            args.wave,
-            args.ticket,
-            args.amends_spent,
-            args.completed,
-            args.remaining,
+            progress,
             None,
         )
         emit({"verb": "progress", "progress": written})
