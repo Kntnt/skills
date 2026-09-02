@@ -834,6 +834,16 @@ def _candidate_pool(request: dict[str, Any], snapshot: dict[str, Any]) -> Candid
                 if portable in point["controls"]
             ]
         )
+        if not portable_values:
+            exclusions.append(
+                _exclusion(
+                    "mapping_unavailable",
+                    "No supported portable control is mapped for this model.",
+                    point,
+                )
+            )
+            variant_exclusion_codes.append("mapping_unavailable")
+            continue
         for portable in portable_values:
             native = point["controls"][portable]
 
@@ -1836,7 +1846,11 @@ def _execution_decision(
             and snapshot["harness"].get("inheritance")
             and pool.variant_exclusion_codes
             and set(pool.variant_exclusion_codes)
-            <= {"adapter_unreachable", "capability_rank_unavailable"}
+            <= {
+                "adapter_unreachable",
+                "capability_rank_unavailable",
+                "mapping_unavailable",
+            }
         ):
             return _inherit(
                 request,

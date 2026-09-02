@@ -338,6 +338,7 @@ def test_context_leaves_seedless_all_supported_controls_unknown(
     assert mapping["controls"] == {}
     assert mapping["control_capabilities"] == {}
     assert mapping["native_control_order"] == []
+
     assert "artifact_refusal" not in _load_router().route(derived)
 
 
@@ -359,6 +360,29 @@ def test_context_omits_unsupported_explicit_control_ranks(tmp_path: Path) -> Non
     assert mapping["controls"] == {}
     assert mapping["control_capabilities"] == {}
     assert mapping["native_control_order"] == []
+
+    # Route the isolated unavailable mapping as automatic execution work.
+    context = _derive_context(
+        tmp_path / "isolated",
+        _runtime_context_request(),
+        json.dumps(profile).encode(),
+    )["context"]
+    context["mappings"] = [
+        item for item in context["mappings"] if item["model"] == "grok-4.6"
+    ]
+    context["harness"]["adapter_specs"] = []
+    decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": context,
+            "requests": [_request()],
+        }
+    )["decisions"][0]
+
+    # Inherit with an explicit audit fact instead of refusing the empty pool.
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
+    assert decision["audit"]["exclusions"][0]["code"] == "mapping_unavailable"
 
 
 def test_context_benchmark_coverage_counts_distinct_models() -> None:

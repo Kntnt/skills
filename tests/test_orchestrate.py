@@ -2637,6 +2637,7 @@ def test_orchestrate_derives_context_before_every_route_call() -> None:
     assert "never reconstruct its derivation rules" in routing
     assert '`native_deliberation` exactly `{"effort": <level>}`' in routing
     assert "main-seat `model`, `surface`, portable deliberation" in routing
+    assert "main-seat `surface` equal to the Harness `surface`" in routing
     assert "`carried_by_default: true` and `verified`" in routing
 
 

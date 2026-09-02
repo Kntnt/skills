@@ -313,6 +313,8 @@ def _specialized_adapter(
         model_value = cast(str, selection["family"]).removeprefix("claude-")
         if model_value not in template.get("accepted_model_aliases", []):
             return None
+
+    # Require a selected template mode with at least one launchable control.
     if mode not in template["serving_modes"] or not controls:
         return None
 
@@ -409,6 +411,7 @@ def _derive_context(
         main_rank = None
         selections: list[dict[str, Any]] = []
     else:
+        # Retain only enabled selections whose persisted identity was validated.
         selections = [
             selection
             for selection in profile["model_selections"]
@@ -419,6 +422,8 @@ def _derive_context(
             cast(str, selection["canonical_provider_model_id"])
             for selection in selections
         ]
+
+        # Resolve the live main seat against exact configured model identities.
         configured_main = next(
             (
                 selection["canonical_provider_model_id"]
@@ -427,6 +432,8 @@ def _derive_context(
             ),
             None,
         )
+
+        # Withhold selection when the main seat has no comparable benchmark.
         if configured_main is None:
             ranks, main_rank, selections = {}, None, []
         else:
@@ -681,7 +688,7 @@ def _arguments(argv: list[str]) -> tuple[Path, Path] | None:
 def main(argv: list[str] | None = None) -> int:
     """Emit a route artifact on exit 0 or one stable refusal on exit 2."""
 
-    # Refuse malformed process input before reading configuration or seed data.
+    # Parse the strict attached-value grammar before reading any artifact.
     raw_snapshot: str | None = None
     arguments = _arguments(sys.argv[1:] if argv is None else argv)
     if arguments is None:
@@ -690,22 +697,27 @@ def main(argv: list[str] | None = None) -> int:
             "Context accepts [--data=<path>] followed by exactly one artifact path.",
         )
     else:
+        # Read the UTF-8 artifact without consulting configuration on failure.
         data_directory, artifact_path = arguments
         try:
             content = artifact_path.read_bytes().decode("utf-8")
         except (OSError, UnicodeDecodeError) as error:
             response = _refusal("unreadable_artifact", str(error))
         else:
+            # Parse JSON before recovering any raw snapshot member bytes.
             try:
                 artifact = json.loads(content)
             except json.JSONDecodeError as error:
                 response = _refusal("malformed_json", str(error))
             else:
+                # Derive or validate Context while preserving a supplied snapshot.
                 raw_snapshot = _raw_object_member(content, "snapshot")
                 try:
                     response = derive(artifact, data_directory)
                 except ValueError as error:
                     response = _refusal("invalid_context_input", str(error))
+
+    # Emit exactly one machine-readable response and its corresponding status.
     print(_render_response(response, raw_snapshot))
     return 2 if "artifact_refusal" in response else 0
 
