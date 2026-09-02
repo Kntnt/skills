@@ -955,11 +955,13 @@ def test_the_first_plan_alone_carries_the_caller_supplied_approval() -> None:
 def test_later_plans_stay_below_the_first_approved_payload() -> None:
     """Every shipped approval surface states the same durable ceiling rule."""
 
+    # Read every shipped surface that describes approval continuity.
     skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
     options = _manpage_section("OPTIONS")
     files = _manpage_section("FILES")
     diagnostics = _manpage_section("DIAGNOSTICS")
 
+    # Require one consistent ceiling contract across those surfaces.
     assert "authorization ceiling" in skill
     assert "Wave order and membership" in skill
     assert "authorization ceiling" in options

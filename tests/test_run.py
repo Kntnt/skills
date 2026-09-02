@@ -735,6 +735,7 @@ def _approved_run(
 ) -> tuple[Path, Path, dict[str, str], str]:
     """Start a run whose exact opening plan has caller approval."""
 
+    # Assemble one isolated repository and its tracker frontier.
     repo = _init_repo(tmp_path / "proj")
     scratch = tmp_path / "scratch"
     env = _tracker(
@@ -744,6 +745,7 @@ def _approved_run(
     )
     plan_args = ("--at-once", str(at_once))
 
+    # Preview and then match the exact opening approval identity.
     preview = _engine(repo, "plan", "--dry-run", *plan_args, env=env)
     approval = str(json.loads(preview.stdout)["approval_identity"])
     matched = _engine(
@@ -2208,6 +2210,7 @@ def test_unflagged_plan_refuses_a_ticket_outside_the_approval_ceiling(
 ) -> None:
     """A later frontier cannot add work the caller never authorized."""
 
+    # Start from one exactly approved ticket and retain its durable ceiling.
     first_ticket = _ticket(10, "authorized")
     repo, scratch, env, approval = _approved_run(
         tmp_path,
@@ -2217,11 +2220,13 @@ def test_unflagged_plan_refuses_a_ticket_outside_the_approval_ceiling(
     state_path = scratch / STATE_HOME / STATE_FILE
     ceiling = json.loads(state_path.read_text(encoding="utf-8"))
 
+    # Add a second ready ticket and replan without fresh approval.
     second_ticket = _ticket(11, "unapproved")
     _refile(env, "open", [first_ticket, second_ticket])
     drifted = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     result = json.loads(drifted.stdout)
 
+    # Refuse the widened frontier while preserving the original ceiling.
     assert drifted.returncode == 2
     assert result["ready"] is False
     assert result["reason"] == "the plan adds #11 outside the approval ceiling"
@@ -2234,6 +2239,7 @@ def test_unflagged_plan_refuses_a_ticket_outside_the_approval_ceiling(
         "approval_met": False,
     }
 
+    # Keep the existing claim guard closed after the approval drifts.
     claimed = _engine(
         repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
     )
@@ -2249,6 +2255,7 @@ def _assert_unflagged_plan_refuses_changed_approval_ceiling_parameter(
 ) -> None:
     """Assert one later execution parameter remains caller-authorized."""
 
+    # Start from a two-ticket run under the default execution parameters.
     tickets = [_ticket(10, "first"), _ticket(11, "second")]
     repo, scratch, env, _ = _approved_run(
         tmp_path,
@@ -2256,6 +2263,7 @@ def _assert_unflagged_plan_refuses_changed_approval_ceiling_parameter(
         issues={10: _ready(10), 11: _ready(11)},
     )
 
+    # Replan with one caller-selected execution parameter changed.
     drifted = _engine(
         repo,
         "plan",
@@ -2266,6 +2274,7 @@ def _assert_unflagged_plan_refuses_changed_approval_ceiling_parameter(
     )
     result = json.loads(drifted.stdout)
 
+    # Name that parameter as drift and close the approval gate.
     assert drifted.returncode == 2
     assert result["ready"] is False
     assert result["reason"].startswith(f"the plan changes {field_name} from ")
@@ -2313,16 +2322,19 @@ def test_unflagged_plan_refuses_a_branch_outside_the_approval_ceiling(
 ) -> None:
     """Changing branches cannot discard a matched approval from this run."""
 
+    # Start an approved run on its original work branch.
     repo, scratch, env, _ = _approved_run(
         tmp_path,
         [_ticket(10, "authorized")],
         issues={10: _ready(10)},
     )
 
+    # Change branches within the same invocation and replan without approval.
     _git(repo, "checkout", "-b", "other")
     drifted = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     result = json.loads(drifted.stdout)
 
+    # Record the changed branch as drift instead of forgetting the ceiling.
     assert drifted.returncode == 2
     assert result["reason"] == (
         "the plan changes branch from 'work' to 'other' outside the approval ceiling"
@@ -2331,6 +2343,7 @@ def test_unflagged_plan_refuses_a_branch_outside_the_approval_ceiling(
     assert state["branch"] == "other"
     assert state["approval_met"] is False
 
+    # Keep claims closed on the branch that exceeded the ceiling.
     claimed = _engine(
         repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
     )
@@ -2343,16 +2356,19 @@ def test_unflagged_plan_refuses_a_default_branch_outside_the_approval_ceiling(
 ) -> None:
     """The repository's default branch remains part of exact authorization."""
 
+    # Start an approved run under the repository's original default branch.
     repo, scratch, env, _ = _approved_run(
         tmp_path,
         [_ticket(10, "authorized")],
         issues={10: _ready(10)},
     )
 
+    # Rename the default branch and replan in the same invocation.
     _git(repo, "branch", "-m", "main", "master")
     drifted = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     result = json.loads(drifted.stdout)
 
+    # Name the default-branch change as the first ceiling violation.
     assert drifted.returncode == 2
     assert result["reason"] == (
         "the plan changes default_branch from 'main' to 'master' outside "
@@ -2365,6 +2381,7 @@ def test_unflagged_plan_refuses_a_lost_approval_ceiling_solo_lock(
 ) -> None:
     """An authorized Solo Ticket must remain alone while it remains planned."""
 
+    # Approve a frontier whose invariant ticket explicitly builds alone.
     solo = _ticket(10, "invariant", body="Builds alone: rewrites the rule.")
     sibling = _ticket(11, "sibling")
     repo, scratch, env, _ = _approved_run(
@@ -2373,11 +2390,13 @@ def test_unflagged_plan_refuses_a_lost_approval_ceiling_solo_lock(
         issues={10: _ready(10), 11: _ready(11)},
     )
 
+    # Remove only the surviving ticket's Solo declaration and replan.
     no_longer_solo = _ticket(10, "invariant")
     _refile(env, "open", [no_longer_solo, sibling])
     drifted = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     result = json.loads(drifted.stdout)
 
+    # Refuse the lost isolation guarantee and close the approval gate.
     assert drifted.returncode == 2
     assert result["ready"] is False
     assert result["reason"] == (
@@ -2392,6 +2411,7 @@ def test_parking_within_the_approval_ceiling_keeps_remaining_claims_open(
 ) -> None:
     """Removing parked work leaves every remaining authorized ticket claimable."""
 
+    # Approve and route two concurrent tickets before one needs a decision.
     parked = _ticket(10, "needs a decision")
     remaining = _ticket(11, "authorized")
     repo, scratch, env, _ = _approved_run(
@@ -2411,6 +2431,7 @@ def test_parking_within_the_approval_ceiling_keeps_remaining_claims_open(
     state_path = scratch / STATE_HOME / STATE_FILE
     ceiling = json.loads(state_path.read_text(encoding="utf-8"))["approval_payload"]
 
+    # Park one ticket and replan the remaining authorized work.
     result = _engine(
         repo, "park", "--ticket", "10", "--state-dir", str(scratch), env=env
     )
@@ -2431,6 +2452,7 @@ def test_parking_within_the_approval_ceiling_keeps_remaining_claims_open(
     assert state["approval_payload"] == ceiling
     assert state["approval_met"] is True
 
+    # Allow the existing claim seam to take the remaining ticket.
     claimed = _engine(
         repo, "claim", "--ticket", "11", "--state-dir", str(scratch), env=env
     )
@@ -2443,6 +2465,7 @@ def test_wave_advancement_can_merge_and_reorder_the_approval_ceiling(
 ) -> None:
     """Recomputed waves may reshape authorized work without widening it."""
 
+    # Approve work whose graph initially spans two waves.
     first = _ticket(10, "first")
     dependent = _ticket(11, "dependent", blocked_by=[(10, "OPEN")])
     concurrent = _ticket(12, "concurrent")
@@ -2455,11 +2478,13 @@ def test_wave_advancement_can_merge_and_reorder_the_approval_ceiling(
     ceiling = json.loads(state_path.read_text(encoding="utf-8"))
     assert ceiling["approval_payload"]["waves"] == [[10, 12], [11]]
 
+    # Settle the first wave and let the graph merge and reorder what remains.
     unblocked = _ticket(11, "dependent")
     _refile(env, "open", [unblocked, concurrent])
     advanced = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     result = json.loads(advanced.stdout)
 
+    # Accept the reshaped subset while retaining the first approved payload.
     assert advanced.returncode == 0, advanced.stderr
     assert result["ready"] is True
     assert result["waves"] == [[11, 12]]
@@ -2476,6 +2501,7 @@ def test_wave_advancement_can_split_inside_the_approval_ceiling(
 ) -> None:
     """A newly Solo authorized ticket may tighten a later wave without drift."""
 
+    # Approve two tickets that initially share one wave.
     first = _ticket(10, "first")
     second = _ticket(11, "second")
     repo, scratch, env, approval = _approved_run(
@@ -2487,11 +2513,13 @@ def test_wave_advancement_can_split_inside_the_approval_ceiling(
     state = json.loads(state_path.read_text(encoding="utf-8"))
     assert state["approval_payload"]["waves"] == [[10, 11]]
 
+    # Add a stricter Solo declaration without adding work to the frontier.
     tightened = _ticket(10, "first", body="Builds alone: tightens the run.")
     _refile(env, "open", [tightened, second])
     advanced = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     result = json.loads(advanced.stdout)
 
+    # Accept the split wave because every original Solo lock still holds.
     assert advanced.returncode == 0, advanced.stderr
     assert result["ready"] is True
     assert result["waves"] == [[10], [11]]
@@ -2504,6 +2532,7 @@ def test_wave_advancement_can_split_inside_the_approval_ceiling(
 def test_comment_changes_remain_inside_the_approval_ceiling(tmp_path: Path) -> None:
     """Thread answers do not change the identity or consume fresh approval."""
 
+    # Start from one approved ticket and its original thread.
     ticket = _ticket(10, "authorized")
     repo, scratch, env, approval = _approved_run(
         tmp_path,
@@ -2511,11 +2540,13 @@ def test_comment_changes_remain_inside_the_approval_ceiling(tmp_path: Path) -> N
         issues={10: _ready(10)},
     )
 
+    # Add only a tracker comment and replan the same ticket.
     ticket["comments"] = [{"body": "A later answer", "author": {"login": "owner"}}]
     _refile(env, "open", [ticket])
     replanned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
     result = json.loads(replanned.stdout)
 
+    # Preserve both readiness and the matched approval identity.
     assert replanned.returncode == 0, replanned.stderr
     assert result["ready"] is True
     assert result["approval_identity"] == approval
@@ -2529,6 +2560,7 @@ def test_matching_flagged_plan_recovers_from_approval_ceiling_drift(
 ) -> None:
     """Fresh exact approval replaces a refused ceiling and reopens claims."""
 
+    # Start from a ceiling that contains only the first ticket.
     first = _ticket(10, "first")
     repo, scratch, env, _ = _approved_run(
         tmp_path,
@@ -2537,6 +2569,7 @@ def test_matching_flagged_plan_recovers_from_approval_ceiling_drift(
         issues={10: _ready(10), 11: _ready(11)},
     )
 
+    # Add work and capture the identity of the refused replacement plan.
     second = _ticket(11, "second")
     _refile(env, "open", [first, second])
     drifted = _engine(
@@ -2551,6 +2584,7 @@ def test_matching_flagged_plan_recovers_from_approval_ceiling_drift(
     assert drifted.returncode == 2
     replacement = json.loads(drifted.stdout)["approval_identity"]
 
+    # Match the replacement identity to install it as the new ceiling.
     recovered = _engine(
         repo,
         "plan",
@@ -2572,6 +2606,7 @@ def test_matching_flagged_plan_recovers_from_approval_ceiling_drift(
     assert state["approval_payload"]["waves"] == [[10, 11]]
     assert state["approval_met"] is True
 
+    # Route and claim under the newly matched approval.
     routed = _route(
         repo,
         tmp_path,
@@ -2592,6 +2627,7 @@ def test_dry_run_reports_approval_ceiling_drift_without_writing_state(
 ) -> None:
     """A dry drift audit leaves the matched ceiling byte-for-byte intact."""
 
+    # Start from one approved ticket and snapshot its state bytes.
     first = _ticket(10, "first")
     repo, scratch, env, approval = _approved_run(
         tmp_path,
@@ -2601,6 +2637,7 @@ def test_dry_run_reports_approval_ceiling_drift_without_writing_state(
     state_path = scratch / STATE_HOME / STATE_FILE
     before = state_path.read_bytes()
 
+    # Preview an added ticket through the public dry-plan seam.
     _refile(env, "open", [first, _ticket(11, "second")])
     drifted = _engine(
         repo,
@@ -2612,6 +2649,7 @@ def test_dry_run_reports_approval_ceiling_drift_without_writing_state(
     )
     result = json.loads(drifted.stdout)
 
+    # Report drift without modifying the preserved state file.
     assert drifted.returncode == 2
     assert result["reason"] == "the plan adds #11 outside the approval ceiling"
     assert result["approval_expected"] == approval
