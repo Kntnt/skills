@@ -14,7 +14,7 @@ metadata:
 
 # delegation
 
-While delegation mode is on, you orchestrate — think, plan, brief, verify — and subagents execute only after model-selector has routed that execution. This skill turns the mode on or off. Your own model and reasoning effort stay the user's move — whatever your harness offers for changing them is theirs to run, never yours.
+While delegation mode is on, you orchestrate — think, plan, brief, verify — and subagents execute, routed through model-selector unless you run them on the frozen main seat with no override. This skill turns the mode on or off. Your own model and reasoning effort stay the user's move — whatever your harness offers for changing them is theirs to run, never yours.
 
 **Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run "<checker>" check --here="$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
 
