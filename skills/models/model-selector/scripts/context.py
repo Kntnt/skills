@@ -94,17 +94,29 @@ def migrate_profile(profile: dict[str, Any]) -> dict[str, Any]:
     return deepcopy(profile)
 
 
+def _profile_references_are_valid(profile: dict[str, Any]) -> bool:
+    """Accept only unambiguous channel references from every selection."""
+
+    channel_ids = [channel["channel_id"] for channel in profile["access_channels"]]
+    return len(channel_ids) == len(set(channel_ids)) and all(
+        selection["channel_id"] in channel_ids
+        for selection in profile["model_selections"]
+    )
+
+
 def _read_profile(data_directory: Path) -> dict[str, Any] | None:
     """Return one valid normalized profile or the missing-profile state."""
 
     try:
         raw = json.loads((data_directory / "config.json").read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         return None
     if not isinstance(raw, dict):
         return None
     profile = migrate_profile(raw)
-    return None if _schema_error(profile, PROFILE_SCHEMA, "profile") else profile
+    if _schema_error(profile, PROFILE_SCHEMA, "profile"):
+        return None
+    return profile if _profile_references_are_valid(profile) else None
 
 
 def _selection_aliases(selection: dict[str, Any]) -> list[str]:
@@ -710,7 +722,7 @@ def main(argv: list[str] | None = None) -> int:
             except json.JSONDecodeError as error:
                 response = _refusal("malformed_json", str(error))
             else:
-                # Derive or validate Context while preserving a supplied snapshot.
+                # Derive or validate Context while preserving the snapshot.
                 raw_snapshot = _raw_object_member(content, "snapshot")
                 try:
                     response = derive(artifact, data_directory)

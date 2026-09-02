@@ -493,8 +493,8 @@ def test_context_keeps_a_missing_attestation_auditable(tmp_path: Path) -> None:
 def test_context_treats_missing_or_invalid_profiles_as_absent(tmp_path: Path) -> None:
     """Configuration trouble inherits without setup or persistent repair."""
 
-    # Derive once without a profile and once from structurally invalid bytes.
-    for index, profile in enumerate((b"", b"{}")):
+    # Derive from missing, malformed, and structurally invalid profiles.
+    for index, profile in enumerate((b"", b"{}", b"\xff")):
         derived = _derive_context(
             tmp_path / str(index),
             _runtime_context_request(),
@@ -507,6 +507,29 @@ def test_context_treats_missing_or_invalid_profiles_as_absent(tmp_path: Path) ->
         assert derived["context"]["mappings"] == []
         assert decision["status"] == "inherit"
         assert decision["inheritance"]["reason"] == "missing_profile"
+
+
+def test_context_treats_dangling_profile_references_as_invalid(
+    tmp_path: Path,
+) -> None:
+    """A selection cannot attach to an access channel that does not exist."""
+
+    # Break one required profile relationship without changing either shape.
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    profile["model_selections"][0]["channel_id"] = "missing-channel"
+    derived = _derive_context(
+        tmp_path,
+        _runtime_context_request(),
+        json.dumps(profile).encode(),
+    )
+    decision = _load_router().route(derived)["decisions"][0]
+
+    # Reject the whole persisted profile through the absent-profile path.
+    assert derived["context"]["profile"] is None
+    assert derived["context"]["mappings"] == []
+    assert derived["context"]["harness"]["adapter_specs"] == []
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "missing_profile"
 
 
 def test_context_rejects_incomplete_channel_billing_contract(tmp_path: Path) -> None:
