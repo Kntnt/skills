@@ -34,6 +34,9 @@ INVOCATION = re.compile(
     r"#subdirectory=skills-ref skills-ref ([a-z-]+) <skill-directory>"
 )
 
+# Shared runtime modules need the same static checking locally and in CI.
+ROUTED_OBSERVATIONS = "skills/kntnt/library/scripts/routed_observations.py"
+
 
 def _contributing() -> str:
     return CONTRIBUTING.read_text(encoding="utf-8")
@@ -88,6 +91,13 @@ def test_no_check_ci_runs_is_the_reference_validator() -> None:
 
     assert "skills-ref" not in ci
     assert "agentskills" not in ci
+
+
+def test_shared_routed_observations_is_in_both_mypy_gates() -> None:
+    """The Library implementation is type-checked locally and in CI."""
+
+    assert ROUTED_OBSERVATIONS in _contributing()
+    assert ROUTED_OBSERVATIONS in CI.read_text(encoding="utf-8")
 
 
 def test_the_catalog_is_declared_generated_with_the_line_the_guide_gives() -> None:

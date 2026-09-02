@@ -174,9 +174,9 @@ Concurrent ticket worktrees, branches, reservations, and scratch space. Successf
 
 Stores the recoverable claim account and the irreplaceable frozen routing snapshot. A missing routing snapshot stops a claimed run.
 
-**Routed observation artifact**
+**Routed observations**
 
-The final report names a sanitized Model Selector artifact for judged routed attempts. Orchestrate imports nothing; `/model-selector record` is the explicit import step.
+Orchestrate starts each routed attempt immediately before dispatch, finishes it at an independent verdict or terminal non-model condition, and imports eligible sanitized observations through the shared Collection Library. The final report lists imported, identically skipped, conflicting, and refused identities; ledger refusal never stops the run and requires no user import step.
 
 **.kntnt-orchestrate/generated.json**
 

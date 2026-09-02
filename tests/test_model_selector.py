@@ -19,6 +19,9 @@ REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 MODEL_SELECTOR: Path = REPO_ROOT / "skills" / "models" / "model-selector"
 CONTEXT_SCRIPT: Path = MODEL_SELECTOR / "scripts" / "context.py"
 PROFILE_FIXTURE: Path = REPO_ROOT / "tests" / "support" / "model_selector_profile.json"
+ROUTED_OBSERVATIONS: Path = (
+    REPO_ROOT / "skills" / "kntnt" / "library" / "scripts" / "routed_observations.py"
+)
 
 
 def _load_router() -> Any:
@@ -3530,6 +3533,42 @@ def test_observe_emits_one_importable_observation_from_a_routed_attempt() -> Non
     assert observations.validate(observation) is None
 
 
+def test_run_identity_distinguishes_runs_without_changing_legacy_keys() -> None:
+    """An opaque run term separates periods while null preserves old identity."""
+
+    # Emit the same attempt through the legacy and run-scoped identity forms.
+    observations = _load_observations()
+    legacy = observations.observe(_attempts(_attempt()))["observations"][0]
+    scoped = observations.observe(_attempts(_attempt(run_identity="run-opaque-7")))[
+        "observations"
+    ][0]
+    configuration = legacy["configuration_fingerprint"]
+    expected = hashlib.sha256(
+        f"{configuration}|orchestrate-ticket-v1|ticket-96|null|1".encode()
+    ).hexdigest()
+
+    # Keep the historic key and validate the new top-level identity term.
+    assert legacy["run_identity"] is None
+    assert legacy["run_key"] == expected
+    assert scoped["run_identity"] == "run-opaque-7"
+    assert scoped["run_key"] != legacy["run_key"]
+    assert observations.validate(legacy) is None
+    assert observations.validate(scoped) is None
+
+
+def test_model_selector_observations_is_only_the_shared_library_adapter() -> None:
+    """One Library implementation serves the Skill CLI and Orchestrate."""
+
+    # Require the implementation and the four public functions at their seam.
+    assert ROUTED_OBSERVATIONS.is_file()
+    source = (MODEL_SELECTOR / "scripts" / "observations.py").read_text(
+        encoding="utf-8"
+    )
+    for function in ("observe", "merge", "validate", "record"):
+        assert f"def {function}(" not in source
+        assert function in source
+
+
 def test_observe_refuses_every_attempt_no_external_outcome_completed() -> None:
     """A route choice, a refusal and an interrupted run are audit data only."""
 
@@ -3654,7 +3693,7 @@ def test_observe_accepts_only_declared_signals_and_human_confirmation() -> None:
 
 
 def test_observe_keeps_workflow_conditions_out_of_model_quality() -> None:
-    """Hinders, decisions, dependencies, tracker faults and collisions differ."""
+    """Hinders, decisions, dependencies, and tracker faults differ."""
 
     # Observe every non-model condition the routed workflows can reach.
     observations = _load_observations()
@@ -3663,7 +3702,6 @@ def test_observe_keeps_workflow_conditions_out_of_model_quality() -> None:
         "tracker_failure": "infra_error",
         "open_decision": "abstain",
         "discovered_dependency": "abstain",
-        "merge_collision": "abstain",
     }
     attempts = [
         _attempt(
@@ -3685,7 +3723,7 @@ def test_observe_keeps_workflow_conditions_out_of_model_quality() -> None:
             "result": "fail",
             "authority": "independent_verifier",
             "checker": {"identity": "verify.md", "independent": True},
-            "condition": "merge_collision",
+            "condition": "mechanical_hinder",
             "scores": None,
         },
     )
@@ -3894,7 +3932,7 @@ def test_record_rebuilds_quality_from_judged_model_outcomes_alone(
 ) -> None:
     """Infrastructure and abstained attempts cannot lower a point's quality."""
 
-    # Import one passing attempt, then a hinder and a collision beside it.
+    # Import one passing attempt, then a hinder and an abstention beside it.
     observations = _load_observations()
     judged = observations.observe(_attempts())["observations"]
     observations.record(observations.merge(None, judged)["artifact"], tmp_path)
@@ -3916,7 +3954,7 @@ def test_record_rebuilds_quality_from_judged_model_outcomes_alone(
                 for index, (condition, result) in enumerate(
                     [
                         ("mechanical_hinder", "infra_error"),
-                        ("merge_collision", "abstain"),
+                        ("open_decision", "abstain"),
                     ]
                 )
             ]
@@ -4042,8 +4080,8 @@ def test_observation_cli_accepts_the_attached_spelling_its_skill_body_writes(
     assert (data / "run-observations.jsonl").exists()
 
 
-def test_observation_contract_is_public_sanitized_and_never_auto_imported() -> None:
-    """A routed caller can emit evidence, and only the user imports it."""
+def test_observation_contract_separates_public_and_orchestrated_imports() -> None:
+    """Delegation stays emission-only while Orchestrate imports at verdict."""
 
     skill = _read("SKILL.md")
     observe_page = _read("help/observe.md")
@@ -4052,7 +4090,10 @@ def test_observation_contract_is_public_sanitized_and_never_auto_imported() -> N
     public_contract = f"{skill}\n{observe_page}\n{record_page}\n{contract}"
     required_fragments = {
         "caller-owned scratch",
-        "never imported automatically",
+        "Orchestrate",
+        "automatically",
+        "shared Library",
+        "delegation",
         "objective checker",
         "frozen rubric",
         "declared failure signal",
@@ -4094,7 +4135,6 @@ def test_observation_contract_pins_its_outcome_and_refusal_vocabulary() -> None:
         "open_decision",
         "discovered_dependency",
         "tracker_failure",
-        "merge_collision",
         "infra_error",
         "abstain",
         "cheap-first",
@@ -4102,3 +4142,4 @@ def test_observation_contract_pins_its_outcome_and_refusal_vocabulary() -> None:
     }
 
     _assert_contains_all(contract, required_fragments)
+    assert "merge_collision" not in contract

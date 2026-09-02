@@ -13,6 +13,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, cast
 
+import pytest
 from support.fake_binary import fake_binary_on_path
 from support.model_routing import complete_routing_snapshot
 
@@ -133,6 +134,32 @@ STATE_HOME = "kntnt-orchestrate"
 # file is — a test that asked the engine where it wrote would be asking the
 # thing under test to grade itself.
 ROUTING_FILE = "kntnt-orchestrate-routing.json"
+ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
+
+
+@pytest.fixture
+def isolated_attempt_environment(tmp_path: Path) -> dict[str, str]:
+    """Keep every automatic observation import inside the test directory."""
+
+    # Provide every home-like surface the lifecycle subprocess may consult.
+    home = tmp_path / "home"
+    cache = tmp_path / "cache"
+    temporary = tmp_path / "temporary"
+    for directory in (home, cache, temporary):
+        directory.mkdir()
+
+    # Bypass uv's real caches while preserving the public `uv run` command.
+    environment = fake_binary_on_path(
+        tmp_path,
+        "uv",
+        f'#!/bin/sh\n[ "$1" = "run" ] || exit 64\nshift\nexec "{sys.executable}" "$@"\n',
+    )
+    return environment | {
+        "HOME": str(home),
+        "XDG_CACHE_HOME": str(cache),
+        "TMPDIR": str(temporary),
+    }
+
 
 # A stand-in that logs what git was asked to do and then lets the real git do
 # it. Everything the engine reads from the repository has to stay true, so
@@ -2670,6 +2697,56 @@ def test_claim_takes_the_ticket_on_the_tracker_before_any_work_starts(
     assert json.loads(result.stdout)["claimed"] is True
     calls = _gh_calls(env)
     assert "issue edit 9 --add-assignee @me" in calls
+
+
+def test_claim_amend_and_record_never_create_attempt_instants(tmp_path: Path) -> None:
+    """Only explicit lifecycle boundaries start or finish routed attempts."""
+
+    # Exercise the tracker verbs around a routed ticket without lifecycle calls.
+    repo, scratch, env = _routed(
+        tmp_path,
+        decisions=[_selected("build-9"), _selected("amend-9-1")],
+    )
+    verdict = tmp_path / "verdict.md"
+    verdict.write_text("Verification failed.\n", encoding="utf-8")
+    claim = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+    amend = _engine(
+        repo,
+        "amend",
+        "--ticket",
+        "9",
+        "--attempt",
+        "1",
+        "--phase",
+        "building",
+        "--verdict-file",
+        str(verdict),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    record = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    # Assert the three bookkeeping verbs leave the lifecycle account empty.
+    assert claim.returncode == 0, claim.stderr
+    assert amend.returncode == 0, amend.stderr
+    assert record.returncode == 0, record.stderr
+    routing = json.loads(
+        (scratch / STATE_HOME / ROUTING_FILE).read_text(encoding="utf-8")
+    )
+    assert routing["attempts"] == []
 
 
 def test_claim_refuses_a_ticket_another_session_already_has(tmp_path: Path) -> None:
@@ -7730,11 +7807,268 @@ def _observed(
     )
 
 
+def _attempt_started(
+    repo: Path,
+    scratch: Path,
+    env: dict[str, str],
+    request_id: str = "build-9",
+) -> subprocess.CompletedProcess[str]:
+    """Record the internal launch boundary for one routed request."""
+
+    return _engine(
+        repo,
+        "attempt-start",
+        "--request",
+        request_id,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+
+def _attempt_finished(
+    repo: Path,
+    scratch: Path,
+    env: dict[str, str],
+    outcome: str = "pass",
+    *extra: str,
+    request_id: str = "build-9",
+) -> subprocess.CompletedProcess[str]:
+    """Record and import the internal completion boundary for one request."""
+
+    return _engine(
+        repo,
+        "attempt-finish",
+        "--request",
+        request_id,
+        "--outcome",
+        outcome,
+        *extra,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+
 def _attempts_file(result: subprocess.CompletedProcess[str]) -> dict[str, Any]:
     """Return the attempt account one observe call answered with."""
 
     written = Path(json.loads(result.stdout)["attempts"])
     return cast(dict[str, Any], json.loads(written.read_text(encoding="utf-8")))
+
+
+def test_observation_library_resolves_every_shipped_layout(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Repository, Manager sibling, and Skill-local layouts share one loader."""
+
+    # Exercise the installed sibling and local fallback independently.
+    engine = _run()
+    for layout, candidate_index in (("installed", 1), ("fallback", 2)):
+        script = tmp_path / layout / "skills/orchestrate/scripts/run.py"
+        candidates = engine.observation_library_candidates(script)
+        library = candidates[candidate_index]
+        library.parent.mkdir(parents=True)
+        library.write_text(f'SOURCE = "{layout}"\n', encoding="utf-8")
+        monkeypatch.setattr(engine, "__file__", str(script))
+
+        assert engine.routed_observations().SOURCE == layout
+
+    # Report an actionable Manager refusal when no supported layout exists.
+    missing = tmp_path / "missing/skills/orchestrate/scripts/run.py"
+    monkeypatch.setattr(engine, "__file__", str(missing))
+    with pytest.raises(engine.RunError, match="install or update the Manager"):
+        engine.routed_observations()
+
+
+def test_attempt_lifecycle_persists_instants_and_imports_the_verdict(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """A launched request reaches the user's ledger when its verdict lands."""
+
+    # Route one request and isolate every home-like import surface.
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+    started = _attempt_started(repo, scratch, env)
+    first_routing = json.loads(
+        (scratch / STATE_HOME / ROUTING_FILE).read_text(encoding="utf-8")
+    )
+    repeated = _attempt_started(repo, scratch, env)
+    second_routing = json.loads(
+        (scratch / STATE_HOME / ROUTING_FILE).read_text(encoding="utf-8")
+    )
+
+    # Preserve the first launch instant across an idempotent start replay.
+    assert started.returncode == 0, started.stderr
+    assert repeated.returncode == 0, repeated.stderr
+    assert (
+        first_routing["attempts"][0]["started_at"]
+        == second_routing["attempts"][0]["started_at"]
+    )
+
+    # Finish from that instant and import the sanitized observation immediately.
+    finished = _attempt_finished(repo, scratch, env)
+    assert finished.returncode == 0, finished.stderr
+    routing = json.loads(
+        (scratch / STATE_HOME / ROUTING_FILE).read_text(encoding="utf-8")
+    )
+    attempt = routing["attempts"][0]
+    imported = attempt["import"]["imported"]
+    ledger = (
+        Path(isolated_attempt_environment["HOME"])
+        / ".kntnt/model-selector/run-observations.jsonl"
+    )
+    observation = json.loads(ledger.read_text(encoding="utf-8").splitlines()[0])
+
+    assert attempt["started_at"] == first_routing["attempts"][0]["started_at"]
+    assert attempt["completed_at"] >= attempt["started_at"]
+    assert len(imported) == 1
+    assert re.fullmatch(r"[0-9a-f]{64}", routing["run_identity"])
+    assert str(tmp_path) not in routing["run_identity"]
+    assert observation["run_key"] == imported[0]
+    assert observation["run_identity"] == routing["run_identity"]
+    assert observation["latency"]["wall_seconds"] is not None
+
+    # A completed request cannot create a second lifecycle start.
+    restarted = _attempt_started(repo, scratch, env)
+    assert restarted.returncode == 1
+    assert "already completed" in restarted.stderr
+
+
+def test_attempt_finish_replays_persist_skips_and_conflicts(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """Every replay is imported and reported without rewriting the verdict."""
+
+    # Finish one routed attempt, then replay its verdict and contradict it.
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+    assert _attempt_started(repo, scratch, env).returncode == 0
+    first = _attempt_finished(repo, scratch, env)
+    identical = _attempt_finished(repo, scratch, env)
+    conflicting = _attempt_finished(repo, scratch, env, "fail")
+    report = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    # Retain all import results while the first completed outcome stays intact.
+    assert first.returncode == 0, first.stderr
+    assert identical.returncode == 0, identical.stderr
+    assert conflicting.returncode == 1
+    routing = json.loads(
+        (scratch / STATE_HOME / ROUTING_FILE).read_text(encoding="utf-8")
+    )
+    attempt = routing["attempts"][0]
+    imported = attempt["import"]
+    assert attempt["outcome"]["result"] == "pass"
+    assert imported["imported"]
+    assert imported["identically_skipped"] == imported["imported"]
+    assert imported["conflicting"] == imported["imported"]
+    assert imported["refused"] == []
+    details = json.loads(report.stdout)["observations"]
+    assert details["attempts"] == str(scratch / STATE_HOME / ATTEMPTS_FILE)
+    assert details["observed"] == 1
+    assert {key: details[key] for key in imported} == imported
+
+
+def test_attempt_finish_reports_an_import_refusal_without_stopping(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """Rejected evidence stays visible while the run continues."""
+
+    # Supply a resolved model value the sanitizing Library must refuse.
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+    assert _attempt_started(repo, scratch, env).returncode == 0
+    finished = _attempt_finished(
+        repo,
+        scratch,
+        env,
+        "pass",
+        "--resolved-model",
+        "/private/model",
+    )
+    report = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    # Persist the stable refusal instead of turning ledger failure into run failure.
+    assert finished.returncode == 0, finished.stderr
+    refused = json.loads(report.stdout)["observations"]["refused"]
+    assert refused == [{"attempt_id": "build-9", "code": "unsanitized_value"}]
+    assert not (
+        Path(isolated_attempt_environment["HOME"])
+        / ".kntnt/model-selector/run-observations.jsonl"
+    ).exists()
+
+
+def test_attempt_finish_retains_a_library_failure_without_stopping(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A broken Library is reported after the completed verdict is persisted."""
+
+    # Start through the subprocess seam, then break only the external Library.
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+    assert _attempt_started(repo, scratch, env).returncode == 0
+    engine = _run()
+    monkeypatch.chdir(repo)
+    for name in ("HOME", "XDG_CACHE_HOME", "TMPDIR"):
+        monkeypatch.setenv(name, isolated_attempt_environment[name])
+
+    def unavailable_library() -> Any:
+        """Simulate a present Library that fails while being loaded."""
+
+        raise RuntimeError("library initialization failed")
+
+    monkeypatch.setattr(engine, "routed_observations", unavailable_library)
+
+    # Finish through the public command dispatcher despite the import failure.
+    status = engine.main(
+        [
+            "attempt-finish",
+            "--request=build-9",
+            "--outcome=pass",
+            f"--state-dir={scratch}",
+        ]
+    )
+    capsys.readouterr()
+
+    # Retain both the verdict and a stable refusal without failing the command.
+    assert status == 0
+    routing = json.loads(
+        (scratch / STATE_HOME / ROUTING_FILE).read_text(encoding="utf-8")
+    )
+    attempt = routing["attempts"][0]
+    assert attempt["outcome"]["result"] == "pass"
+    assert attempt["import"]["refused"] == [
+        {
+            "attempt_id": "build-9",
+            "code": "automatic_import_failed",
+            "detail": "library initialization failed",
+        }
+    ]
+
+
+def test_attempt_finish_requires_a_start_and_retires_collision(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """Only launched work and current outcomes can cross the finish boundary."""
+
+    # Exercise the two lifecycle refusals through the internal CLI.
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+    unstarted = _attempt_finished(repo, scratch, env)
+    collision = _attempt_finished(repo, scratch, env, "collision")
+
+    assert unstarted.returncode == 1
+    assert "attempt-start" in unstarted.stderr
+    assert collision.returncode == 2
+    assert "invalid choice: 'collision'" in collision.stderr
 
 
 def test_observe_records_only_a_routed_attempt_an_external_verdict_judged(
@@ -7820,7 +8154,7 @@ def test_observe_names_each_building_role_its_own_stratum_and_attempt(
 def test_observe_keeps_workflow_conditions_out_of_model_failure(
     tmp_path: Path,
 ) -> None:
-    """A hinder, a parked decision, a blocker and a collision are not failures."""
+    """A hinder, parked decision, blocker, and tracker fault are not failures."""
 
     repo, scratch, env = _routed(
         tmp_path,
@@ -7828,7 +8162,6 @@ def test_observe_keeps_workflow_conditions_out_of_model_failure(
             _selected("build-9"),
             _selected("amend-9-1"),
             _selected("amend-9-2"),
-            _selected("repair-9"),
             _selected("rebuild-9"),
         ],
     )
@@ -7836,7 +8169,6 @@ def test_observe_keeps_workflow_conditions_out_of_model_failure(
         "build-9": "hinder",
         "amend-9-1": "parked",
         "amend-9-2": "blocked",
-        "repair-9": "collision",
         "rebuild-9": "tracker-failure",
     }
 
@@ -7849,14 +8181,12 @@ def test_observe_keeps_workflow_conditions_out_of_model_failure(
         "infra_error",
         "abstain",
         "abstain",
-        "abstain",
         "infra_error",
     ]
     assert [attempt["outcome"]["condition"] for attempt in attempts] == [
         "mechanical_hinder",
         "open_decision",
         "discovered_dependency",
-        "merge_collision",
         "tracker_failure",
     ]
     assert all(attempt["outcome"]["checker"] is None for attempt in attempts)
@@ -7929,80 +8259,81 @@ def test_observe_refuses_a_commit_nothing_resolves_and_names_what_it_would_take(
     assert json.loads(account.stdout)["observations"]["observed"] == 0
 
 
-def test_report_names_the_artifact_a_run_may_import_and_never_imports(
+def test_report_names_every_automatic_import_result(
     tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
 ) -> None:
-    """The account carries the paths, and observing writes only under the state."""
+    """The account names ledger results without asking the user to import."""
 
+    # Compare the empty report with one completed and imported attempt.
     repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
     empty = _engine(repo, "report", "--state-dir", str(scratch), env=env)
-    observed = _observed(repo, scratch, env, "build-9", "pass")
+    assert _attempt_started(repo, scratch, env).returncode == 0
+    finished = _attempt_finished(repo, scratch, env)
     filled = _engine(repo, "report", "--state-dir", str(scratch), env=env)
 
+    # Report durable lifecycle and import identities, not a manual artifact step.
     assert json.loads(empty.stdout)["observations"] == {
         "attempts": None,
-        "artifact": None,
         "observed": 0,
+        "imported": [],
+        "identically_skipped": [],
+        "conflicting": [],
+        "refused": [],
     }
     account = json.loads(filled.stdout)["observations"]
     assert account["observed"] == 1
-    assert account["attempts"] == json.loads(observed.stdout)["attempts"]
-    assert account["artifact"] == json.loads(observed.stdout)["artifact"]
+    assert account["attempts"] == json.loads(finished.stdout)["attempts"]
+    assert account["imported"] == json.loads(finished.stdout)["import"]["imported"]
     assert Path(account["attempts"]).is_relative_to(scratch)
-    assert not Path(account["artifact"]).exists()
+    assert "artifact" not in account
     assert _engine(repo, "plan", env=env).returncode == 0
 
 
-def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
+def test_attempt_finishes_use_the_model_selector_import_contract(
     tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
 ) -> None:
-    """What the engine writes is what the ledger's own import validation takes."""
+    """Every finish reaches the shared ledger contract without a user step."""
 
-    observations = _observations()
+    # Finish two routed attempts through the isolated engine seam.
     repo, scratch, env = _routed(
         tmp_path, decisions=[_selected("build-9"), _selected("amend-9-1")]
     )
+    env |= isolated_attempt_environment
     metrics = tmp_path / "metrics.json"
     metrics.write_text(json.dumps({"rolling_quota": 4.0}), encoding="utf-8")
     digest = _git(repo, "rev-parse", "HEAD").stdout.strip()
 
-    _observed(repo, scratch, env, "build-9", "fail")
-    last = _observed(
+    assert _attempt_started(repo, scratch, env, "build-9").returncode == 0
+    first = _attempt_finished(repo, scratch, env, "fail")
+    assert _attempt_started(repo, scratch, env, "amend-9-1").returncode == 0
+    last = _attempt_finished(
         repo,
         scratch,
         env,
-        "amend-9-1",
         "pass",
         "--metrics",
         str(metrics),
         "--commit",
         digest,
+        request_id="amend-9-1",
     )
-    emitted = observations.observe(_attempts_file(last))
-    artifact = observations.merge(None, emitted["observations"])["artifact"]
-    imported = observations.record(artifact, tmp_path / "evidence")
 
-    assert emitted["refusals"] == []
-    assert len(emitted["observations"]) == 2
-    assert emitted["observations"][1]["quota"]["rolling"] == 4.0
-    assert emitted["observations"][1]["artifact_hashes"] == [f"sha1:{digest}"]
-    assert len(imported["accepted"]) == 2
-    assert imported["rejected"] == []
-
-
-def _observations() -> ModuleType:
-    """Import the model-selector observation module the artifacts are for."""
-
-    path = (
-        REPO_ROOT
-        / "skills"
-        / "models"
-        / "model-selector"
-        / "scripts"
-        / "observations.py"
+    # Read the default isolated ledger and persisted import account.
+    ledger = (
+        Path(isolated_attempt_environment["HOME"])
+        / ".kntnt/model-selector/run-observations.jsonl"
     )
-    spec = importlib.util.spec_from_file_location("kntnt_observations", path)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    imported = [json.loads(line) for line in ledger.read_text().splitlines()]
+    report = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    details = json.loads(report.stdout)["observations"]
+
+    assert first.returncode == 0, first.stderr
+    assert last.returncode == 0, last.stderr
+    assert len(imported) == 2
+    assert imported[1]["quota"]["rolling"] == 4.0
+    assert imported[1]["artifact_hashes"] == [f"sha1:{digest}"]
+    assert details["imported"] == [row["run_key"] for row in imported]
+    assert details["refused"] == []

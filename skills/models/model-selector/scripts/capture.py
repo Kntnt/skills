@@ -115,9 +115,7 @@ SEAT_ALLOWED = frozenset(
 # The conditions a non-model outcome may carry, and which of them are
 # infrastructure rather than an abstention.
 INFRA_CONDITIONS = frozenset({"mechanical_hinder", "tracker_failure"})
-ABSTAIN_CONDITIONS = frozenset(
-    {"open_decision", "discovered_dependency", "merge_collision"}
-)
+ABSTAIN_CONDITIONS = frozenset({"open_decision", "discovered_dependency"})
 
 
 def _observations() -> Any:

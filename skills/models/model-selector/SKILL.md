@@ -138,7 +138,7 @@ No source changed is a successful update. Complete when every due source has a r
 
 ## Observe
 
-Read `$HERE/references/run-observations.md` and follow it exactly. Run `uv run "$HERE/scripts/observations.py" observe --artifact=<path> <path>` and emit the helper's JSON response without commentary. The attempts come from the caller that routed the work; this Skill re-resolves no model, no deliberation control and no evidence, and adds nothing the attempt did not establish. Observe is offline and starts no setup, research, evaluation, profile write, ledger write or derived-frontier write; the artifact it writes is the caller's own file and is imported only where the user invokes `record` on it. Report the artifact path, what became importable, what was skipped as identical, what conflicted and every refused attempt with its stable code. Never present an unjudged, self-graded or interrupted attempt as importable evidence.
+Read `$HERE/references/run-observations.md` and follow it exactly. Run `uv run "$HERE/scripts/observations.py" observe --artifact=<path> <path>` and emit the helper's JSON response without commentary. The attempts come from the caller that routed the work; this Skill re-resolves no model, no deliberation control and no evidence, and adds nothing the attempt did not establish. Observe is offline and starts no setup, research, evaluation, profile write, ledger write or derived-frontier write. Delegation and other callers keep its artifact as their own file until the user invokes `record`; Orchestrate does not call this command at verdict and instead imports eligible machine-judged attempts through the same shared Collection Library. Report the artifact path, what became importable, what was skipped as identical, what conflicted and every refused attempt with its stable code. Never present an unjudged, self-graded or interrupted attempt as importable evidence.
 
 ## Capture
 
@@ -152,7 +152,7 @@ Making the Skill Disabled removes every integration this feature owns without a 
 
 ## Record
 
-Read `$HERE/references/evidence-ledger.md` and `$HERE/references/run-observations.md`. Run `uv run "$HERE/scripts/observations.py" record --data=<directory> <path>` and render its report. It validates provenance, configuration fingerprint, benchmark key, token categories, cost, outcome and timestamps for every supplied observation, appends only unseen run keys, skips identical duplicates, rejects conflicting duplicates rather than overwriting them, and rebuilds only the derived frontiers whose eligible run set changed. This is the only ledger mutation in the observation contract, and it happens because the user asked for it. Report accepted, skipped and rejected records.
+Read `$HERE/references/evidence-ledger.md` and `$HERE/references/run-observations.md`. Run `uv run "$HERE/scripts/observations.py" record --data=<directory> <path>` and render its report. It validates provenance, configuration fingerprint, benchmark key, token categories, cost, outcome and timestamps for every supplied observation, appends only unseen run keys, skips identical duplicates, rejects conflicting duplicates rather than overwriting them, and rebuilds only the derived frontiers whose eligible run set changed. This command is the user-owned ledger mutation; Orchestrate calls the shared Library's same `record` implementation directly for eligible machine-judged attempts, never this command. Report accepted, skipped and rejected records.
 
 ## Status
 

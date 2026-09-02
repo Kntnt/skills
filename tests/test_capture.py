@@ -159,6 +159,29 @@ def test_an_objectively_graded_run_imports_and_cleans_up(tmp_path: Path) -> None
     assert observation["routed"]["model"] == _seat()["model"]
 
 
+def test_a_retired_merge_collision_condition_is_not_recorded(tmp_path: Path) -> None:
+    """A merge collision belongs to a later repair, not this attempt's outcome."""
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+
+    # Finish through the public lifecycle seam with the retired condition.
+    _start(module, data, "session-1")
+    result = _finish(
+        module,
+        data,
+        "session-1",
+        error={"kind": "merge_collision"},
+        benchmark="python",
+    )
+
+    # Assert the obsolete condition never enters the normalized ledger.
+    assert result["imported"]["accepted"]
+    observation = _ledger(data)[0]
+    assert observation["outcome"] == "infra_error"
+    assert observation["non_model_condition"] == "mechanical_hinder"
+
+
 def test_unchecked_work_waits_for_a_human_rather_than_grading_itself(
     tmp_path: Path,
 ) -> None:

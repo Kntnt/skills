@@ -8,6 +8,8 @@ The obligation this opens on is narrowed by ADR-0133 on the Delegation side: a s
 
 **Model Selector is model-invoked only when another Skill requires its public `route` or `observe` Interface.** Its description is the complete trigger and excludes recommendations, setup, configuration, comparison, capture, evidence updates, recording, and status; those remain explicit user invocations. `record` remains user-only, so routed work still cannot import its own observation artifact (ADR-0089).
 
+The conclusion that routed work cannot import is narrowed by ADR-0137 for Orchestrate's direct use of the shared Library; the `record` command and delegation remain user-only.
+
 **A persisted cross-Harness instruction names each Harness's invocation syntax.** Codex uses `$model-selector`; Claude uses `/model-selector`. Neither spelling denotes a tool endpoint, and endpoint discovery is not an availability check for a Skill Dependency. Making the dependency model-invoked is what puts its description in model context so the caller can follow its `SKILL.md`.
 
 This spends the standing context of one narrow description. In return the public Interfaces ADR-0083 assigned to Model Selector are reachable by the Skills that depend on them, without copying routing or observation mechanics into every project's always-loaded delegation instruction.

@@ -12,7 +12,7 @@ model-selector record - append validated local evaluation observations
 
 `model-selector record` validates local evaluation observations at *PATH* and appends unseen records to the evidence ledger. Conflicting historical observations are preserved instead of overwritten. Only the derived frontiers whose eligible run set changed are rebuilt.
 
-The command records the exact model configuration, workload, metrics, units, provenance, and run identity needed for later comparisons. An artifact reported by `/model-selector observe` is accepted here unchanged, and this explicit invocation is the only thing that imports one: routed work never imports its own evidence.
+The command records the exact model configuration, workload, metrics, units, provenance, and run identity needed for later comparisons. An artifact reported by `/model-selector observe` is accepted here unchanged. This public command remains a user invocation; Orchestrate imports its eligible machine-judged attempts by calling the same shared Library rather than this command, while delegation remains emission-only.
 
 ## POSITIONAL ARGUMENTS
 

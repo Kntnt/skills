@@ -2781,45 +2781,41 @@ def test_a_launch_lost_after_the_claim_is_a_mechanical_hinder() -> None:
     )
 
 
-def test_a_judged_attempt_becomes_an_artifact_the_run_reports_and_never_imports() -> (
-    None
-):
-    """Evidence leaves the run as a path in its report, not as a ledger write.
+def test_every_judged_attempt_is_imported_at_its_lifecycle_boundary() -> None:
+    """Every routed dispatch and completion crosses the engine lifecycle seam."""
 
-    The verdict that decided a ticket is the only thing that establishes what a
-    routed attempt came to, so the observation is recorded where the verdict is
-    known, and the artifact made of it stays in the run's own scratch until the
-    developer imports it themselves (issue #96).
-    """
+    # Read every step that can launch or finish routed execution work.
+    claim = _step(4)
+    build = _step(6)
+    account = _step(8)
+    amend = _step(9)
+    repair = _step(10)
+    wave = _step(11)
+    report = _step(12)
 
-    step = _step(8)
-    account = _step(12)
+    # Start every routed role immediately before its own dispatch.
+    assert "attempt-start --request=build-<number>" in claim
+    assert "attempt-start --request=build-<number>" in build
+    assert "attempt-start --request=amend-<number>-<attempt>" in amend
+    assert "attempt-start --request=repair-<number>" in repair
+    assert "attempt-start --request=rebuild-<number>" in repair
+    assert "attempt-start --request=wave-fix-<n>" in wave
+    assert "attempt-start --request=wave-fix-<n>-escalated" in wave
 
-    assert "observe --request" in step, (
-        f"{SKILL / 'SKILL.md'}: step 8 records each routed attempt's externally"
-        f" established outcome, the verdict being what establishes it"
-        f" (issue #96)."
-    )
-    assert "builder's report establishes nothing" in step, (
-        f"{SKILL / 'SKILL.md'}: step 8 says what may establish an outcome — the"
-        f" independent verdict, never the builder's own account of its work"
-        f" (issue #96)."
-    )
-    assert "never a model failure" in step, (
-        f"{SKILL / 'SKILL.md'}: step 8 keeps a hinder, a parked decision, a"
-        f" discovered blocker, a tracker failure, and a collision apart from a"
-        f" model failure (issue #96)."
-    )
-    assert "wave-fix-<n>" in _step(11) and "observe" in _step(11), (
-        f"{SKILL / 'SKILL.md'}: step 11 observes the mechanical wave fix it"
-        f" routed, the wave check being that attempt's verdict (issue #96)."
-    )
-    assert "/model-selector observe" in account, (
-        f"{SKILL / 'SKILL.md'}: step 12 makes the artifact through"
-        f" model-selector's public Interface rather than writing evidence"
-        f" itself (issue #96)."
-    )
-    assert "/model-selector record" in account and "never imports" in account, (
-        f"{SKILL / 'SKILL.md'}: step 12 names the explicit import and says the"
-        f" run does not perform it (issue #96)."
-    )
+    # Finish only when a verdict or named non-model condition lands.
+    assert "attempt-finish --request=build-<number>" in account
+    assert "builder's report establishes nothing" in account
+    assert "attempt-finish --request=amend-<number>-<attempt>" in amend
+    assert "attempt-finish --request=repair-<number>" in repair
+    assert "attempt-finish --request=rebuild-<number>" in repair
+    assert "attempt-finish --request=wave-fix-<n>" in wave
+    assert "attempt-finish --request=wave-fix-<n>-escalated" in wave
+    assert "observe --request" not in account
+    assert "--started-at" not in account
+
+    # Render persisted automatic-import outcomes with no user import step.
+    for field in ("imported", "identically skipped", "conflicting", "refused"):
+        assert field in report
+    assert "/model-selector observe" not in report
+    assert "/model-selector record" not in report
+    assert "imports them automatically" in report

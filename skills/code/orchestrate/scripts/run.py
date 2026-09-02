@@ -9,8 +9,10 @@ from __future__ import annotations
 import argparse
 import fcntl
 import hashlib
+import importlib.util
 import json
 import re
+import secrets
 import shutil
 import subprocess
 import sys
@@ -324,8 +326,12 @@ OBSERVED_OUTCOMES: dict[str, tuple[str, str | None, str]] = {
     "tracker-failure": ("infra_error", "tracker_failure", "tracker"),
     "parked": ("abstain", "open_decision", "tracker"),
     "blocked": ("abstain", "discovered_dependency", "tracker"),
-    "collision": ("abstain", "merge_collision", "harness"),
 }
+
+# Machine judgements and non-model conditions may enter the ledger unattended.
+AUTOMATIC_AUTHORITIES: frozenset[str] = frozenset(
+    {"independent_verifier", "objective_checker", "declared_failure_signal"}
+)
 
 # The roles that are never routed. A verdict inherits the complete main seat
 # exactly, so a decision made for one is refused at this seam rather than left
@@ -963,6 +969,7 @@ class Routing:
     deliberation: str | None
     decisions: list[RouteRecord]
     attempts: list[dict[str, Any]] = field(default_factory=list)
+    run_identity: str = ""
 
     @property
     def identity(self) -> str:
@@ -1000,6 +1007,7 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
         "main_seat": routing.main_seat,
         "model": routing.model,
         "deliberation": routing.deliberation,
+        "run_identity": routing.run_identity or None,
         "routing_capability": routing_capability(routing.decisions),
         "snapshot": routing.snapshot,
         "decisions": [asdict(record) for record in routing.decisions],
@@ -1136,13 +1144,11 @@ def attempts_file(path: Path | None) -> Path | None:
 
 
 def observation_file(path: Path | None) -> Path | None:
-    """Return where model-selector is asked to write the run's own artifact.
+    """Return the legacy path for the run's observation artifact.
 
-    The engine names it rather than the session, so the path a report gives the
-    developer and the path an explicit import is handed are the same one. The
-    file is model-selector's to write and this run's to own: it sits in the
-    session's scratch beside the state, never in the repository, and nothing
-    here imports it.
+    Runs created before automatic per-attempt import may still carry this path,
+    so reports retain it as a backward-compatible historical detail. New runs
+    import each attempt through the shared Library at its finish boundary.
     """
 
     return None if path is None else path.parent / OBSERVATION_FILE
@@ -1272,6 +1278,7 @@ def read_routing(path: Path | None) -> Routing | None:
                 for record in cast(list[dict[str, Any]], held["decisions"])
             ],
             attempts=cast(list[dict[str, Any]], held["attempts"]),
+            run_identity=str(held.get("run_identity") or ""),
         )
     except (OSError, TypeError, ValueError, KeyError) as exc:
         raise RunError(
@@ -1305,6 +1312,7 @@ def write_routing(path: Path | None, routing: Routing) -> str:
                     "deliberation": routing.deliberation,
                     "decisions": [asdict(record) for record in routing.decisions],
                     "attempts": routing.attempts,
+                    "run_identity": routing.run_identity,
                 },
                 indent=2,
             )
@@ -2907,7 +2915,13 @@ def cmd_route(
             return fail(standing)
         if (opening := batch_refusal(state, records)) is not None:
             return fail(opening)
-        routing = Routing(snapshot, model, deliberation, [])
+        routing = Routing(
+            snapshot=snapshot,
+            model=model,
+            deliberation=deliberation,
+            decisions=[],
+            run_identity=secrets.token_hex(32),
+        )
     elif (stale := frozen_refusal(routing, snapshot)) is not None:
         return fail(stale)
     elif (
@@ -4325,6 +4339,38 @@ def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
     return 0
 
 
+def observation_library_candidates(script: Path | None = None) -> tuple[Path, ...]:
+    """Return every supported location of the shared observation Library."""
+
+    here = (script or Path(__file__)).resolve().parent
+    return (
+        here.parent.parent.parent / "kntnt/library/scripts/routed_observations.py",
+        here.parent.parent / "kntnt/library/scripts/routed_observations.py",
+        here.parent / "library/scripts/routed_observations.py",
+    )
+
+
+def routed_observations() -> Any:
+    """Load the shared observation Library without reaching into another Skill."""
+
+    # Resolve repository, installed-sibling, and Skill-local layouts in order.
+    for candidate in observation_library_candidates():
+        if not candidate.exists():
+            continue
+        spec = importlib.util.spec_from_file_location(
+            "kntnt_routed_observations", candidate
+        )
+        if spec is None or spec.loader is None:
+            continue
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    raise RunError(
+        "routed observation mechanics are missing; install or update the Manager"
+    )
+
+
 def observed_task(record: RouteRecord, request_id: str) -> str:
     """Return the opaque identity of the work one routed attempt was an attempt at.
 
@@ -4382,6 +4428,7 @@ def observed_attempt(
         + hashlib.sha256(f"{routing.identity}|{ROUTING_FILE}".encode()).hexdigest()[
             :16
         ],
+        "run_identity": routing.run_identity or None,
         "task_identity": task,
         "workload_stratum": stratum,
         "attempt_index": kin.index(request_id) + 1,
@@ -4437,6 +4484,178 @@ def read_measurements(path: str | None) -> dict[str, Any]:
     return cast(dict[str, Any], exposed)
 
 
+def _import_details() -> dict[str, list[Any]]:
+    """Return the empty durable account for one attempt's import results."""
+
+    return {
+        "imported": [],
+        "identically_skipped": [],
+        "conflicting": [],
+        "refused": [],
+    }
+
+
+def _extend_unique(target: list[Any], values: list[Any]) -> None:
+    """Append each new JSON value once while preserving arrival order."""
+
+    for value in values:
+        if value not in target:
+            target.append(value)
+
+
+def _retain_import_result(
+    attempt: dict[str, Any], result: dict[str, list[Any]]
+) -> dict[str, list[Any]]:
+    """Merge one automatic import result into the attempt's durable account."""
+
+    held = attempt.get("import")
+    retained = cast(dict[str, list[Any]], held) if isinstance(held, dict) else None
+    if retained is None or set(retained) != set(_import_details()):
+        retained = _import_details()
+    for key, values in result.items():
+        _extend_unique(retained[key], values)
+    attempt["import"] = retained
+    return retained
+
+
+def _import_refusal(attempt_id: str, code: str, detail: str) -> dict[str, list[Any]]:
+    """Return one retained automatic-import refusal for an attempt."""
+
+    result = _import_details()
+    result["refused"].append({"attempt_id": attempt_id, "code": code, "detail": detail})
+    return result
+
+
+def _automatic_import(attempt: dict[str, Any]) -> dict[str, list[Any]]:
+    """Import one eligible attempt and reduce Library responses for reporting."""
+
+    attempt_id = str(attempt["attempt_id"])
+    try:
+        library = routed_observations()
+        emitted = library.observe(
+            {"schema_version": OBSERVATION_SCHEMA_VERSION, "attempts": [attempt]}
+        )
+    except (
+        AttributeError,
+        ImportError,
+        KeyError,
+        OSError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+    ) as exc:
+        return _import_refusal(attempt_id, "automatic_import_failed", str(exc))
+
+    # Preserve process and per-attempt refusals without reaching the ledger.
+    if artifact_refusal := emitted.get("artifact_refusal"):
+        return _import_refusal(
+            attempt_id,
+            str(artifact_refusal.get("code") or "invalid_artifact"),
+            str(artifact_refusal.get("detail") or "Observation emission failed."),
+        )
+    refusals = [
+        {
+            "attempt_id": str(refusal.get("attempt_id") or attempt_id),
+            "code": str(refusal.get("code") or "observation_refused"),
+            "detail": str(refusal.get("detail") or "Observation emission failed."),
+        }
+        for refusal in emitted.get("refusals", [])
+    ]
+    if refusals:
+        result = _import_details()
+        result["refused"] = refusals
+        return result
+
+    # Import only external machine judgements and non-model conditions.
+    observations = [
+        observation
+        for observation in emitted.get("observations", [])
+        if observation.get("outcome_authority") in AUTOMATIC_AUTHORITIES
+        or observation.get("outcome") in {"abstain", "infra_error"}
+    ]
+    if not observations:
+        return _import_details()
+
+    try:
+        recorded = library.record(
+            {
+                "schema_version": OBSERVATION_SCHEMA_VERSION,
+                "observations": observations,
+            },
+            Path.home() / ".kntnt" / "model-selector",
+        )
+    except (
+        AttributeError,
+        KeyError,
+        OSError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+    ) as exc:
+        return _import_refusal(attempt_id, "automatic_import_failed", str(exc))
+
+    # Keep successful, duplicate, conflicting, and other refused identities.
+    result = _import_details()
+    result["imported"] = [str(key) for key in recorded.get("accepted", [])]
+    result["identically_skipped"] = [str(key) for key in recorded.get("skipped", [])]
+    for rejection in recorded.get("rejected", []):
+        run_key = rejection.get("run_key")
+        code = str(rejection.get("code") or "record_refused")
+        if run_key is not None and code == "conflicting_identity":
+            result["conflicting"].append(str(run_key))
+        else:
+            result["refused"].append(
+                {
+                    "attempt_id": attempt_id,
+                    "code": code,
+                    "detail": str(rejection.get("detail") or "Import was refused."),
+                }
+            )
+    return result
+
+
+def _resolve_observed_commit(cwd: Path, commit: str | None) -> str | None:
+    """Resolve an optional artifact reference to its full commit digest."""
+
+    if commit is None:
+        return None
+    try:
+        return git(cwd, "rev-parse", "--verify", f"{commit}^{{commit}}").strip()
+    except RunError as exc:
+        raise RunError(
+            f"{commit} is not a commit this repository resolves: name one it "
+            "does — a digest, an abbreviation of one, or a reference such as "
+            "a branch, a tag, or HEAD"
+        ) from exc
+
+
+def _write_attempt_account(path: Path | None, routing: Routing) -> Path:
+    """Persist routing and the completed-attempt envelope as one run account."""
+
+    write_routing(path, routing)
+    written = attempts_file(path)
+    if written is None:
+        raise RunError("observed attempts need the run's state directory")
+    completed = [attempt for attempt in routing.attempts if "outcome" in attempt]
+    try:
+        written.write_text(
+            json.dumps(
+                {
+                    "schema_version": OBSERVATION_SCHEMA_VERSION,
+                    "attempts": completed,
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        raise RunError(
+            f"this run's observed attempts could not be written: {exc}"
+        ) from exc
+    return written
+
+
 def cmd_observe(
     cwd: Path,
     request_id: str,
@@ -4476,15 +4695,10 @@ def cmd_observe(
     # an abbreviation, a branch, the head it is standing on. So the repository
     # resolves what was named and the full digest is what gets recorded, and a
     # reference nothing resolves is refused in terms of what would be taken.
-    if commit is not None:
-        try:
-            commit = git(cwd, "rev-parse", "--verify", f"{commit}^{{commit}}").strip()
-        except RunError:
-            return fail(
-                f"{commit} is not a commit this repository resolves: name one it "
-                "does — a digest, an abbreviation of one, or a reference such as "
-                "a branch, a tag, or HEAD"
-            )
+    try:
+        commit = _resolve_observed_commit(cwd, commit)
+    except RunError as exc:
+        return fail(str(exc))
 
     if not isinstance(held.snapshot.get("harness"), dict):
         return fail(
@@ -4520,20 +4734,8 @@ def cmd_observe(
         held.attempts.append(attempt)
 
     try:
-        write_routing(state_path, held)
-        written = cast(Path, attempts_file(state_path))
-        written.write_text(
-            json.dumps(
-                {
-                    "schema_version": OBSERVATION_SCHEMA_VERSION,
-                    "attempts": held.attempts,
-                },
-                indent=2,
-            )
-            + "\n",
-            encoding="utf-8",
-        )
-    except (RunError, OSError) as exc:
+        written = _write_attempt_account(state_path, held)
+    except RunError as exc:
         return fail(f"this run's observed attempts could not be written: {exc}")
 
     emit(
@@ -4555,6 +4757,152 @@ def cmd_observe(
     return 0
 
 
+def _routed_attempt(
+    request_id: str, state_path: Path | None, boundary: str
+) -> tuple[Routing, RouteRecord]:
+    """Return the frozen decision one internal lifecycle boundary addresses."""
+
+    route_record(request_id, {})
+    routing = read_routing(state_path)
+    refused = dispatch_refusal(routing, request_id, boundary)
+    if refused is not None:
+        raise RunError(refused)
+    held = cast(Routing, routing)
+    return held, cast(RouteRecord, held.decided(request_id))
+
+
+def cmd_attempt_start(request_id: str, state_path: Path | None) -> int:
+    """Persist the first launch instant of one routed execution request."""
+
+    try:
+        routing, record = _routed_attempt(
+            request_id, state_path, f"{request_id} is about to launch"
+        )
+    except RunError as exc:
+        return fail(str(exc))
+
+    # Preserve an in-flight start and refuse a request already completed.
+    standing = next(
+        (
+            attempt
+            for attempt in routing.attempts
+            if attempt["attempt_id"] == request_id
+        ),
+        None,
+    )
+    if standing is not None and "outcome" in standing:
+        return fail(f"{request_id} has already completed and cannot start again")
+    recorded = standing is None
+    if standing is None:
+        standing = {
+            "attempt_id": request_id,
+            "started_at": datetime.now(UTC)
+            .isoformat(timespec="seconds")
+            .replace("+00:00", "Z"),
+        }
+        routing.attempts.append(standing)
+        try:
+            write_routing(state_path, routing)
+        except RunError as exc:
+            return fail(str(exc))
+
+    emit(
+        {
+            "verb": "attempt-start",
+            "request_id": request_id,
+            "role": record.role,
+            "ticket": record.ticket,
+            "started_at": standing["started_at"],
+            "recorded": recorded,
+        }
+    )
+    return 0
+
+
+def cmd_attempt_finish(
+    cwd: Path,
+    request_id: str,
+    outcome: str,
+    metrics: str | None,
+    commit: str | None,
+    resolved_model: str | None,
+    state_path: Path | None,
+) -> int:
+    """Persist, observe, and import one routed request's completion boundary."""
+
+    try:
+        routing, record = _routed_attempt(
+            request_id, state_path, f"{request_id} has completed"
+        )
+        commit = _resolve_observed_commit(cwd, commit)
+        measurements = read_measurements(metrics)
+    except RunError as exc:
+        return fail(str(exc))
+
+    # Require a launch record before constructing the completed attempt.
+    index = next(
+        (
+            position
+            for position, attempt in enumerate(routing.attempts)
+            if attempt["attempt_id"] == request_id
+        ),
+        None,
+    )
+    if index is None:
+        return fail(f"{request_id} has no attempt-start to finish")
+    standing = routing.attempts[index]
+    offered = observed_attempt(
+        routing,
+        record,
+        request_id,
+        outcome,
+        cast(str | None, standing.get("started_at")),
+        measurements,
+        commit,
+        resolved_model,
+    )
+
+    # Persist a new completion before attempting the external ledger mutation.
+    completed = "outcome" in standing
+    conflicting = completed and _differs(standing, offered)
+    retained = standing if completed else offered
+    if not completed:
+        routing.attempts[index] = offered
+        try:
+            _write_attempt_account(state_path, routing)
+        except RunError as exc:
+            return fail(str(exc))
+
+    # Replay the retained row for an identical finish and the offered row for a
+    # conflicting finish, so the Library records the exact skip or conflict.
+    imported = _automatic_import(offered if conflicting else retained)
+    details = _retain_import_result(retained, imported)
+    try:
+        written = _write_attempt_account(state_path, routing)
+    except RunError as exc:
+        return fail(str(exc))
+
+    if conflicting:
+        return fail(
+            f"{request_id} already carries a different completed outcome; "
+            "the conflict was retained without overwriting it"
+        )
+
+    emit(
+        {
+            "verb": "attempt-finish",
+            "request_id": request_id,
+            "role": record.role,
+            "ticket": record.ticket,
+            "recorded": not completed,
+            "observed": sum(1 for attempt in routing.attempts if "outcome" in attempt),
+            "attempts": str(written),
+            "import": details,
+        }
+    )
+    return 0
+
+
 def _differs(standing: dict[str, Any], offered: dict[str, Any]) -> bool:
     """Say whether two observations of one attempt establish different facts.
 
@@ -4563,7 +4911,7 @@ def _differs(standing: dict[str, Any], offered: dict[str, Any]) -> bool:
     attempt decides whether the second entry conflicts with the first.
     """
 
-    ignored = {"completed_at"}
+    ignored = {"completed_at", "import"}
     return {key: value for key, value in standing.items() if key not in ignored} != {
         key: value for key, value in offered.items() if key not in ignored
     }
@@ -4572,19 +4920,41 @@ def _differs(standing: dict[str, Any], offered: dict[str, Any]) -> bool:
 def observed_details(
     routing: Routing | None, state_path: Path | None
 ) -> dict[str, Any]:
-    """Return where a run's importable observations stand, for its report.
+    """Return completed attempts and every retained automatic import result."""
 
-    Both paths are named only where there is something to import. The artifact
-    is model-selector's to write from the attempts beside it, and this run
-    reports it rather than importing it: the ledger write stays the developer's
-    explicit move.
-    """
+    # Aggregate each per-attempt account without multiplying replayed facts.
+    completed = (
+        []
+        if routing is None
+        else [attempt for attempt in routing.attempts if "outcome" in attempt]
+    )
+    details = _import_details()
+    for attempt in completed:
+        imported = attempt.get("import")
+        if not isinstance(imported, dict):
+            continue
+        for key in ("imported", "identically_skipped", "conflicting"):
+            values = imported.get(key)
+            if isinstance(values, list):
+                _extend_unique(details[key], values)
+        refusals = imported.get("refused")
+        if isinstance(refusals, list):
+            _extend_unique(
+                details["refused"],
+                [
+                    {
+                        "attempt_id": refusal.get("attempt_id"),
+                        "code": refusal.get("code"),
+                    }
+                    for refusal in refusals
+                    if isinstance(refusal, dict)
+                ],
+            )
 
-    observed = 0 if routing is None else len(routing.attempts)
     return {
-        "attempts": str(attempts_file(state_path)) if observed else None,
-        "artifact": str(observation_file(state_path)) if observed else None,
-        "observed": observed,
+        "attempts": str(attempts_file(state_path)) if completed else None,
+        "observed": len(completed),
+        **details,
     }
 
 
@@ -4784,6 +5154,24 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     observe.add_argument("--resolved-model")
     add_shared_flags(observe)
 
+    attempt_start = sub.add_parser(
+        "attempt-start", help="Start one internal routed attempt."
+    )
+    attempt_start.add_argument("--request", required=True)
+    add_shared_flags(attempt_start)
+
+    attempt_finish = sub.add_parser(
+        "attempt-finish", help="Finish one internal routed attempt."
+    )
+    attempt_finish.add_argument("--request", required=True)
+    attempt_finish.add_argument(
+        "--outcome", required=True, choices=tuple(OBSERVED_OUTCOMES)
+    )
+    attempt_finish.add_argument("--metrics")
+    attempt_finish.add_argument("--commit")
+    attempt_finish.add_argument("--resolved-model")
+    add_shared_flags(attempt_finish)
+
     report = sub.add_parser("report", help="Print the consolidated report.")
     add_scope_flag(report)
     add_shared_flags(report)
@@ -4861,6 +5249,18 @@ def main(argv: list[str] | None = None) -> int:
             args.request,
             args.outcome,
             args.started_at,
+            args.metrics,
+            args.commit,
+            args.resolved_model,
+            state_path,
+        )
+    if args.verb == "attempt-start":
+        return cmd_attempt_start(args.request, state_path)
+    if args.verb == "attempt-finish":
+        return cmd_attempt_finish(
+            cwd,
+            args.request,
+            args.outcome,
             args.metrics,
             args.commit,
             args.resolved_model,

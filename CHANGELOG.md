@@ -7,6 +7,7 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Added
 
 - Model Selector now derives complete frozen routing contexts from a versioned profile, shipped Claude Code adapter templates, exact runtime facts, independent numeric seed priors, and shipped routing defaults before Route resolves a decision.
+- Orchestrate now imports eligible machine-judged routed observations automatically at each verdict through the Collection Library, with explicit attempt lifecycle, replay-safe accounting, and per-run identities.
 
 ### Changed
 
