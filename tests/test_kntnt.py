@@ -8025,7 +8025,7 @@ def test_delegation_states_the_file_and_capped_inline_report_contract() -> None:
     required_fragments = {
         "report file path inside the spawn's own scratch",
         "complete findings there",
-        "inline reply is capped by the brief",
+        "brief caps the inline reply",
         "stated task-specific budget",
         "conclusions only",
         "no raw command output",
