@@ -891,12 +891,12 @@ def ticket_details(ticket: Ticket) -> dict[str, Any]:
 class RunState:
     """What one run remembers of itself between invocations.
 
-    It is remembered, never relied on: every answer this engine gives is read
-    off the tracker and the branch, and the same answer comes back where this
-    is absent (ADR-0051). What it buys is the one thing the tracker cannot
-    say — which of the claims standing in this developer's name are this run's
-    own, an interrupted run and a session running in parallel being the same
-    login on the same ticket.
+    Its ordinary account is remembered rather than relied on: the tracker and
+    branch can reproduce it when this state is absent (ADR-0051). Its declared
+    commit contracts and their claim boundaries are relied-on projections: a
+    declared ticket requires readable state to begin and enforce its contract,
+    while a checking verb with absent or unreadable state deliberately follows
+    the undeclared path (ADR-0138).
 
     `branch` and `label` are what the state is of: a scratch directory outlives
     a checkout, and a document describing another branch describes another run.
@@ -909,8 +909,9 @@ class RunState:
     frontier the last plan cut to the ceiling, kept so the preflight that
     follows can be held to routing that frontier and not some other set.
 
-    Everything here is a note of what the tracker and the branch already say.
-    The frozen routing account is the one thing that is not, and it lives in a
+    `contracts` projects the tracker declarations, and `contract_bases` holds
+    the claim boundaries that the branch can no longer establish after work
+    begins. The frozen routing account is separately relied on and lives in a
     file of its own rather than in this one (ADR-0085).
     """
 
@@ -1261,9 +1262,9 @@ def read_state(path: Path | None, branch: str) -> RunState | None:
 def write_state(path: Path | None, state: RunState) -> str | None:
     """Store *state* and return where, or None where it was not stored.
 
-    A scratch directory that cannot be written to is not a reason to stop: the
-    run goes on reading the tracker, and the next invocation rebuilds what this
-    one could not leave behind.
+    An ordinary run can continue from the tracker when its scratch directory
+    cannot be written. A declared ticket cannot begin unless its contract and
+    claim boundary can be stored there.
     """
 
     if path is None:
@@ -1283,10 +1284,11 @@ def read_routing(path: Path | None) -> Routing | None:
 
     Absence and damage are different answers here, and that is the whole point
     of the file. An ordinary state file nothing can read is answered as no
-    state, because the tracker and the branch say the same thing again. A
-    routing file nothing can read is answered as an error, because nothing else
-    holds what it held and reconstructing it would mean routing this run's
-    remaining work from a context it never ran under (ADR-0085).
+    state; ordinary account fields are recovered, and checking verbs
+    deliberately follow the undeclared path without its contract projection.
+    A routing file nothing can read is answered as an error, because nothing
+    else holds what it held and reconstructing it would mean routing this run's
+    remaining work from a context it never ran under (ADR-0085, ADR-0138).
     """
 
     stored = routing_file(path)
