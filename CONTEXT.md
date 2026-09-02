@@ -119,6 +119,38 @@ _Avoid_: build artifact, derived file, generated output
 The rule a verdict's finding is one instance of, named by the verifier on the line beside the finding. An amender answers the class rather than the instance: it audits every surface the ticket owns for other instances of the same rule and fixes each, so the next fresh verdict cannot fail the ticket on the same rule at a different line. Naming the class is part of the verdict, which travels to the amender whole (ADR-0084), and is never a separate step or a re-judgement (ADR-0074).
 _Avoid_: defect category, root cause, finding type, symptom, distillate
 
+**Seat**:
+One model running at one exact configuration (model, deliberation, channel, surface) in one role of a run.
+_Avoid_: agent, worker, instance, model slot
+
+**Main Seat**:
+The Seat the user chose for their own session. It owns every verdict, is the authority ceiling no routed Seat exceeds, and is never selected by the Collection.
+_Avoid_: parent model, orchestrator model, default model
+
+**Cohort**:
+The set of routed attempts that share a role and a kind of work, within which evidence is comparable and a Standing Policy acts. Evidence never crosses Cohorts as numeric input.
+_Avoid_: category, bucket, task type, benchmark
+
+**Standing Policy**:
+A per-Cohort rule kept in the user's configuration with shipped defaults. It fixes the Rung a Cohort starts at, moves that Rung one step up after repeated externally verified failures, never moves it down by itself, and bounds Exploration Attempts.
+_Avoid_: escalation rule, tier policy, auto-scaling, preset
+
+**Rung**:
+One adjacent step on the ladder a Cohort climbs: the next deliberation level on the same model, and, where deliberation is exhausted or not controllable, the next model up by capability regardless of provider.
+_Avoid_: tier, level, size, upgrade, model step
+
+**Outcome Authority**:
+What judged a routed attempt from outside it: an independent verifier, an objective checker, a declared failure signal, a frozen rubric, or the user. Work never grades itself, and only a judged attempt is evidence.
+_Avoid_: self-report, confidence, status, result
+
+**Time to Verified Pass**:
+The wall-clock time from a ticket's first routed attempt to the verdict that passed it, retries included. Routing minimises cost first and uses it to decide between configurations that tie on cost; a run started with `--fast` reverses that order.
+_Avoid_: latency, duration, response time, speed
+
+**Exploration Attempt**:
+A routed attempt deliberately placed one Rung below its Cohort's current rung to gain contrast, drawn from a budget and tagged so its outcome never counts against the production configuration.
+_Avoid_: experiment, probe, gamble, A/B test
+
 **Enabled**:
 A skill present on disk in a layer, in each Detected Harness's skills directory for that layer.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)
