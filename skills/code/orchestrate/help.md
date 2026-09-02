@@ -60,7 +60,7 @@ A different subagent checks every acceptance criterion and the complete Project 
 
 **Integrate**
 
-Verified work is committed and integrated. After each wave, the complete Project gate and an independent coherence review check the combined branch.
+Verified work is committed and integrated. After each wave, the complete Project gate and an independent coherence review check the combined branch. A strict subset of failing tests is rerun unchanged three times in isolation; three passes earn one unchanged full-gate rerun, and only a green full rerun turns the result into a pass recorded as a load-induced flake.
 
 The verdict turns on whether correction requires a new decision, not on whether every gate command passed. Mechanical findings are fixed by another subagent and checked again until a round is clean.
 
@@ -185,6 +185,10 @@ Declares generated files and their commands. A collision confined to declared fi
 **Run-owned append files**
 
 Builders leave changes to shared append-only files in ticket-specific notes. The orchestrator applies those notes serially after each wave and verifies the result.
+
+**~/.kntnt/orchestrate/flakes.jsonl**
+
+The Skill-owned append-only ledger records load-induced flakes with their unchanged-head isolation and full-rerun evidence. The final report names this run's flakes and how many earlier records each test has in the same repository.
 
 ## DIAGNOSTICS
 

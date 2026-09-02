@@ -10,10 +10,12 @@ import argparse
 import fcntl
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field
@@ -285,6 +287,13 @@ INHERITED_FOR_NO_ADAPTER = "unavailable_selection_controls"
 # (ADR-0089).
 ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
 OBSERVATION_FILE = "kntnt-orchestrate-observations.json"
+
+# Durable flake evidence belongs to the Skill rather than to any repository.
+# The run-local selection sits beside the rest of the session account so the
+# final report names this run's records without mistaking older ones for them.
+FLAKE_HOME = Path(".kntnt/orchestrate")
+FLAKE_LEDGER = "flakes.jsonl"
+RUN_FLAKES_FILE = "kntnt-orchestrate-flakes.json"
 
 # The version of model-selector's public observation contract this engine
 # writes. It is versioned separately from the route response because the two
@@ -1146,6 +1155,12 @@ def observation_file(path: Path | None) -> Path | None:
     """
 
     return None if path is None else path.parent / OBSERVATION_FILE
+
+
+def run_flakes_file(path: Path | None) -> Path | None:
+    """Return this run's durable-flake selection, where state is available."""
+
+    return None if path is None else path.parent / RUN_FLAKES_FILE
 
 
 def decode_state(contents: str) -> RunState:
@@ -4588,6 +4603,197 @@ def observed_details(
     }
 
 
+def repository_identity(cwd: Path) -> str:
+    """Return the stable public identity available for the current repository."""
+
+    remote = git_result(cwd, "config", "--get", "remote.origin.url")
+    return remote.stdout.strip() if remote.returncode == 0 else str(cwd.resolve())
+
+
+def flake_record(cwd: Path, evidence_path: Path) -> dict[str, Any]:
+    """Complete and validate one checker-produced load-flake record."""
+
+    try:
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise RunError(f"{evidence_path} does not hold flake evidence: {exc}") from exc
+    if not isinstance(evidence, dict):
+        raise RunError(f"{evidence_path} must hold one flake evidence object")
+
+    required = {
+        "failing_tests",
+        "isolation_results",
+        "full_rerun_result",
+        "narrowed_command",
+        "load_context",
+    }
+    if set(evidence) != required:
+        raise RunError(
+            f"{evidence_path} must hold exactly these fields: {', '.join(sorted(required))}"
+        )
+    if (
+        not isinstance(evidence["failing_tests"], list)
+        or not evidence["failing_tests"]
+        or not all(isinstance(test, str) and test for test in evidence["failing_tests"])
+    ):
+        raise RunError("flake evidence must name at least one failing test")
+    if evidence["isolation_results"] != ["passed", "passed", "passed"]:
+        raise RunError("a load flake requires three passing isolated reruns")
+    if evidence["full_rerun_result"] != "passed":
+        raise RunError("a load flake requires one passing full-gate rerun")
+    if not all(
+        isinstance(evidence[field], str) and evidence[field]
+        for field in ("narrowed_command", "load_context")
+    ):
+        raise RunError("flake evidence must name its narrowed command and load context")
+
+    return {
+        "repository": repository_identity(cwd),
+        "branch": current_branch(cwd),
+        "head": git(cwd, "rev-parse", "HEAD").strip(),
+        **evidence,
+        "timestamp": datetime.now(UTC)
+        .isoformat(timespec="seconds")
+        .replace("+00:00", "Z"),
+    }
+
+
+def flake_identity(record: dict[str, Any]) -> str:
+    """Identify one unchanged-head flake independently of its write time."""
+
+    stable = {key: value for key, value in record.items() if key != "timestamp"}
+    return hashlib.sha256(json.dumps(stable, sort_keys=True).encode()).hexdigest()
+
+
+def write_atomically(path: Path, contents: str) -> None:
+    """Replace one complete text file without exposing a partial generation."""
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            stream.write(contents)
+        Path(temporary).replace(path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
+def read_flake_ledger(path: Path) -> list[dict[str, Any]]:
+    """Read the append-only flake ledger, refusing malformed durable state."""
+
+    if not path.exists():
+        return []
+    try:
+        return [
+            cast(dict[str, Any], json.loads(line))
+            for line in path.read_text(encoding="utf-8").splitlines()
+        ]
+    except (OSError, ValueError) as exc:
+        raise RunError(f"the flake ledger could not be read: {exc}") from exc
+
+
+@contextmanager
+def flake_ledger_lock(ledger: Path) -> Iterator[None]:
+    """Serialize atomic ledger generations without leaving another state file."""
+
+    ledger.parent.mkdir(parents=True, exist_ok=True)
+    descriptor = os.open(ledger.parent, os.O_RDONLY)
+    try:
+        fcntl.flock(descriptor, fcntl.LOCK_EX)
+        yield
+    finally:
+        fcntl.flock(descriptor, fcntl.LOCK_UN)
+        os.close(descriptor)
+
+
+def cmd_flake(cwd: Path, evidence_path: Path, state_path: Path | None) -> int:
+    """Append one independently established load flake to Skill-owned state."""
+
+    ledger = Path.home() / FLAKE_HOME / FLAKE_LEDGER
+    try:
+        offered = flake_record(cwd, evidence_path)
+        identity = flake_identity(offered)
+        with flake_ledger_lock(ledger):
+            records = read_flake_ledger(ledger)
+            standing = next(
+                (
+                    record
+                    for record in records
+                    if record.get("repository") == offered["repository"]
+                    and record.get("branch") == offered["branch"]
+                    and record.get("head") == offered["head"]
+                    and record.get("failing_tests") == offered["failing_tests"]
+                ),
+                None,
+            )
+            if standing is not None and flake_identity(standing) != identity:
+                return fail(
+                    "this unchanged-head flake already carries different evidence; settle which record stands before recording it"
+                )
+            recorded = standing is None
+            if recorded:
+                records.append(offered)
+                write_atomically(
+                    ledger,
+                    "".join(
+                        f"{json.dumps(record, sort_keys=True)}\n" for record in records
+                    ),
+                )
+
+        run_path = run_flakes_file(state_path)
+        if run_path is not None:
+            run_ids = (
+                []
+                if not run_path.exists()
+                else cast(list[str], json.loads(run_path.read_text(encoding="utf-8")))
+            )
+            if identity not in run_ids:
+                run_ids.append(identity)
+                write_atomically(run_path, json.dumps(run_ids, indent=2) + "\n")
+    except (OSError, RunError, ValueError) as exc:
+        return fail(f"flake evidence could not be written: {exc}")
+
+    emit(
+        {
+            "verb": "flake",
+            "recorded": recorded,
+            "ledger": str(ledger),
+            "record": standing or offered,
+        }
+    )
+    return 0
+
+
+def reported_flakes(cwd: Path, state_path: Path | None) -> list[dict[str, Any]]:
+    """Return this run's flakes with earlier recurrence counts per test."""
+
+    run_path = run_flakes_file(state_path)
+    if run_path is None or not run_path.exists():
+        return []
+    ledger = read_flake_ledger(Path.home() / FLAKE_HOME / FLAKE_LEDGER)
+    identities = cast(list[str], json.loads(run_path.read_text(encoding="utf-8")))
+    repository = repository_identity(cwd)
+    reported: list[dict[str, Any]] = []
+    for index, record in enumerate(ledger):
+        if flake_identity(record) not in identities:
+            continue
+        earlier = ledger[:index]
+        reported.append(
+            {
+                **record,
+                "earlier_records": {
+                    test: sum(
+                        prior.get("repository") == repository
+                        and test in prior.get("failing_tests", [])
+                        for prior in earlier
+                    )
+                    for test in record["failing_tests"]
+                },
+            }
+        )
+    return reported
+
+
 def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int:
     """Print every ticket in scope grouped by current Ticket Resolution.
 
@@ -4623,7 +4829,8 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
         say_where_work_stands(cwd, tickets, branch)
         base = run_base(cwd, tickets)
         regenerated = regenerated_merges(cwd, {ticket.number for ticket in tickets})
-    except RunError as exc:
+        flakes = reported_flakes(cwd, state_path)
+    except (OSError, RunError, ValueError) as exc:
         return fail(str(exc))
 
     # Stranding is read off the open scope alone: a ticket that is finished has
@@ -4653,6 +4860,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
             "routing": routing_details(routing),
             "routing_reason": routing_reason,
             "observations": observed_details(routing, state_path),
+            "flakes": flakes,
             "regenerated": regenerated,
             "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
@@ -4784,6 +4992,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     observe.add_argument("--resolved-model")
     add_shared_flags(observe)
 
+    flake = sub.add_parser("flake", help="Record one load-induced test flake.")
+    flake.add_argument("--evidence", required=True, type=Path)
+    add_shared_flags(flake)
+
     report = sub.add_parser("report", help="Print the consolidated report.")
     add_scope_flag(report)
     add_shared_flags(report)
@@ -4866,6 +5078,8 @@ def main(argv: list[str] | None = None) -> int:
             args.resolved_model,
             state_path,
         )
+    if args.verb == "flake":
+        return cmd_flake(cwd, args.evidence, state_path)
     if args.verb == "reconcile":
         return cmd_reconcile(cwd, args.ticket, args.commit)
     return cmd_report(cwd, args.scope, state_path)
