@@ -128,6 +128,69 @@ def _step(number: int) -> str:
     return match.group(0)
 
 
+def test_top_level_session_transitions_publish_complete_progress_commands() -> None:
+    """Each top-level session transition supplies every required progress value."""
+
+    # Arrange the complete command owned by every top-level transition.
+    commands = {
+        2: 'uv run "$HERE/scripts/run.py" progress --phase=preflight --wave=<n> --completed=<count> --remaining=<count>',
+        6: 'uv run "$HERE/scripts/run.py" progress --phase=build --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>',
+        7: 'uv run "$HERE/scripts/run.py" progress --phase=verify --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>',
+        8: 'uv run "$HERE/scripts/run.py" progress --phase=note --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>',
+        9: 'uv run "$HERE/scripts/run.py" progress --phase=amend --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<1-or-2>',
+        11: 'uv run "$HERE/scripts/run.py" progress --phase=wave_verdict --wave=<n> --completed=<count> --remaining=<count>',
+    }
+
+    # Read each owning step as one contract surface.
+    steps = {number: _step(number) for number in commands}
+
+    # Assert every transition carries its full phase-specific command.
+    for step_number, command in commands.items():
+        assert command in steps[step_number], (
+            f"{SKILL / 'SKILL.md'}: step {step_number} must carry {command}."
+        )
+
+
+def test_non_dry_terminal_step_reports_even_when_nothing_started() -> None:
+    """The non-dry no-work path still derives its dashboard from report."""
+
+    # Read the one step that owns every terminal account.
+    terminal = _step(12)
+
+    # Assert no-work completion reaches the authoritative report projection.
+    assert 'run.py" report' in terminal and "outcome" in terminal, (
+        f"{SKILL / 'SKILL.md'}: step 12 derives the terminal dashboard from "
+        "the durable report."
+    )
+    assert (
+        "On a non-dry run, obtain the durable report even where nothing started."
+        in terminal
+    ), (
+        f"{SKILL / 'SKILL.md'}: step 12 terminalizes a non-dry dashboard "
+        "before returning the last plan's no-work account."
+    )
+
+
+def test_nested_dispatches_publish_complete_progress_commands() -> None:
+    """Resumed repairs, collision work, and wave fixers publish their phase."""
+
+    # Arrange each nested role's complete progress command.
+    ticket_build = 'uv run "$HERE/scripts/run.py" progress --phase=build --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>'
+    ticket_verify = 'uv run "$HERE/scripts/run.py" progress --phase=verify --wave=<n> --ticket=<number> --completed=<count> --remaining=<count> --amends-spent=<count>'
+    wave_build = 'uv run "$HERE/scripts/run.py" progress --phase=build --wave=<n> --completed=<count> --remaining=<count>'
+
+    # Read all three steps containing nested dispatch paths.
+    resumed_repair = _step(5)
+    collision_resolution = _step(10)
+    wave_resolution = _step(11)
+
+    # Assert every nested dispatch carries its full role-specific command.
+    assert ticket_build in resumed_repair
+    assert ticket_build in collision_resolution
+    assert ticket_verify in collision_resolution
+    assert wave_build in wave_resolution
+
+
 def _manpage_section(heading: str) -> str:
     """Return one uppercase section from the orchestrate manpage."""
 
@@ -605,6 +668,69 @@ def test_the_isolation_step_says_what_isolate_answers() -> None:
     )
 
 
+def test_resume_semantics_are_explicit_at_each_workflow_boundary() -> None:
+    """Parking, isolation, dispatch, and reporting tell one lifetime story."""
+
+    text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    help_text = (SKILL / "help.md").read_text(encoding="utf-8")
+
+    assert "per-ticket-lifetime" in text
+    assert "preserved commits are its mandatory base" in text
+    assert "amends_inherited" in text
+    assert "amends_newly_spent" in text
+    assert "per-ticket-lifetime" in help_text
+    assert "parked attempt is resumed" in help_text
+    assert "amends_inherited" in help_text
+    assert "amends_newly_spent" in help_text
+
+
+def test_a_recorded_amend_state_never_returns_to_the_initial_build_path() -> None:
+    """Claim, isolate, and build route persisted amendment work to step nine."""
+
+    assert "recorded `amend_state`" in _step(4)
+    assert "step 9" in _step(4)
+    assert "recorded `amend_state`" in _step(5)
+    assert "step 9" in _step(5)
+    assert "recorded `amend_state`" in _step(6)
+    assert "initial-build brief" in _step(6)
+    assert "step 9" in _step(6)
+
+
+def test_the_isolation_step_routes_resume_collisions_to_deferred_verification() -> None:
+    """A resume collision is repaired before, and judged by, its amend."""
+
+    step = _step(5)
+
+    assert "Exit 2" in step
+    assert "repair-<number>" in step
+    assert "not verified or integrated" in step
+    assert "unresolved disagreement" in step
+    assert "without spending an amendment" in step
+    assert "step 9" in step
+
+
+def test_the_build_step_preserves_initial_commits_and_reports_a_parked_budget() -> None:
+    """Initial resumes retain their base and every mid-run park names its ledger."""
+
+    step = _step(6)
+
+    assert "commits already on the branch are the base and are not rewritten" in step
+    assert "`amends_spent`" in step
+    assert "plan entry" in step
+
+
+def test_the_report_step_renders_inherited_and_new_amendments_from_answers() -> None:
+    """The invocation-local split is rendered from retained amend answers."""
+
+    step = _step(12)
+
+    assert "`amends_inherited`" in step
+    assert "`amends_newly_spent`" in step
+    assert "`newly_recorded`" in step
+    assert "session memory" in step
+    assert "never written to durable run state" in step
+
+
 def _fill_in_instructions() -> str:
     """The building brief's fill-in instructions — everything above the brief itself."""
 
@@ -816,6 +942,35 @@ def test_the_question_step_asks_in_one_batch_between_plan_and_claim() -> None:
     )
 
 
+def test_the_first_plan_alone_carries_the_caller_supplied_approval() -> None:
+    """Approval binds the invocation's opening frontier, not later re-plans."""
+
+    skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+
+    assert "--approval" in skill
+    assert "first plan of this invocation" in skill
+    assert "step 3 or step 11 runs without `--approval`" in skill
+
+
+def test_the_manpage_documents_reproducible_plan_approval() -> None:
+    """A caller can derive the same canonical digest without the engine."""
+
+    synopsis = _manpage_section("SYNOPSIS")
+    options = _manpage_section("OPTIONS")
+
+    assert "**--approval=**_IDENTITY_" in synopsis
+    assert "**--approval=**_IDENTITY_" in options
+    assert "kntnt-orchestrate-plan-v1" in options
+    assert "NUL" in options
+    assert (
+        "branch, default_branch, scope, at_once, worktrees, model, "
+        "deliberation, waves, solo"
+    ) in options
+    assert "sorted keys" in options
+    assert "(',', ':')" in options
+    assert "SHA-256" in options
+
+
 def test_the_question_step_parks_rather_than_guesses_under_yes() -> None:
     """`--yes` answers yes/no, and *which default?* is not one of those.
 
@@ -839,6 +994,50 @@ def test_the_question_step_parks_rather_than_guesses_under_yes() -> None:
         f"{SKILL / 'SKILL.md'}: step 3 writes the question on the ticket"
         f" before the label moves, so the parked ticket carries what a human"
         f" must answer to bring it back (ADR-0070)."
+    )
+
+
+def test_the_question_step_audits_concrete_external_decision_gaps() -> None:
+    """A detectable decision gap parks before claim rather than during build."""
+
+    step = _step(3)
+
+    for gap in (
+        "exact commands over inputs the repository does not fix",
+        "external service or account with no named mutation path or owner",
+        "choice phrased as alternatives",
+        "credentials or accounts whose owner is undeclared",
+    ):
+        assert gap in step, (
+            f"{SKILL / 'SKILL.md'}: step 3 names the detectable decision gap"
+            f" `{gap}`, so the main seat can park it before claim (issue #204)."
+        )
+
+    assert "only on a gap it can name concretely" in step, (
+        f"{SKILL / 'SKILL.md'}: step 3 is advisory-conservative and leaves"
+        f" uncertain cases to the existing mid-work backstop (issue #204)."
+    )
+
+
+def test_one_park_comment_shape_serves_claim_time_and_mid_work() -> None:
+    """Every parked-ticket record gives the maintainer a decision-ready question."""
+
+    question_step = _step(3)
+    build_step = _step(6)
+
+    for part in (
+        "sentence of the ticket quoted",
+        "decision it leaves open as a question",
+        "what the ticket must state instead",
+    ):
+        assert part in question_step, (
+            f"{SKILL / 'SKILL.md'}: step 3's single park-comment template"
+            f" includes the {part} (issue #204)."
+        )
+
+    assert "step 3's comment shape" in build_step, (
+        f"{SKILL / 'SKILL.md'}: the mid-work park refers to the claim-time"
+        f" comment shape instead of defining a second format (issue #204)."
     )
 
 
@@ -977,9 +1176,23 @@ def test_the_continuation_keeps_the_full_verdict_rule_and_fresh_sessions() -> No
     # Read the amend loop and its one shared building template.
     step = _step(9)
     amend = _brief("amend.md")
+    verify = _brief("verify.md")
 
-    # Keep the latest verdict whole for the builder and out of verification.
+    # Make each failed item searchable as a class across the owned surface.
+    assert (
+        "For each failed command or unmet criterion, add a `Defect Class:` line"
+        in verify
+    )
+    assert "generalizes the finding and is not a further finding" in verify
+    assert (
+        "For every Defect Class the verdict names, audit the whole surface the ticket owns"
+        in amend
+    )
+    assert "Where a finding carries no Defect Class" in amend
+
+    # Keep the latest class-bearing verdict whole and out of verification.
     assert "never a summary or an accumulation" in step
+    assert "pasted whole" in amend
     assert "fresh building subagent" in step
     assert "fresh verdict subagent" in step
     assert "`verify.md` unchanged" in step
@@ -1137,6 +1350,20 @@ def test_the_manpage_describes_the_triage_of_a_stop() -> None:
     )
 
 
+def test_the_manpage_says_concrete_decision_gaps_park_before_claim() -> None:
+    """The user-facing page promises the early audit and its conservative bound."""
+
+    where = SKILL / "help.md"
+    text = where.read_text(encoding="utf-8").lower()
+
+    assert "before any ticket is claimed" in text
+    assert "exact commands" in text
+    assert "external service" in text
+    assert "alternatives" in text
+    assert "credentials" in text
+    assert "concretely" in text
+
+
 def test_the_manpage_documents_the_open_decision_exception_to_yes() -> None:
     """The `--yes` entry promised every question an answer of yes; an open
     decision is now the documented exception, parked rather than guessed."""
@@ -1256,6 +1483,33 @@ def test_the_wave_briefs_verdict_has_three_shapes() -> None:
         f" a verdict the checker is not sure of is a stop, never something"
         f" softer (ADR-0072)."
     )
+
+
+def test_the_wave_brief_reruns_a_strict_failing_subset_without_changes() -> None:
+    """Isolation distinguishes load from deterministic failure without weakening the gate."""
+
+    text = _brief("wave.md")
+
+    assert "exactly those failing tests in isolation three times" in text
+    assert "one complete rerun" in text
+    assert "same unchanged head" in text
+    assert "exact narrowed command" in text
+    assert "every isolated result" in text
+    assert "second complete-gate failure is a stop, full stop" in text
+    assert "edits, skips, and retries with modification nothing" in text
+    assert "a check this list does not name is not run in its place" in text
+
+
+def test_the_skill_records_and_reports_load_flake_evidence() -> None:
+    """Durable evidence and recurrence counts travel through the engine seam."""
+
+    body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    help_page = (SKILL / "help.md").read_text(encoding="utf-8")
+
+    assert "flake --evidence=<path>" in body
+    assert "`failing_tests`" in body
+    assert "`earlier_records`" in body
+    assert "~/.kntnt/orchestrate/flakes.jsonl" in help_page
 
 
 def test_the_wave_verdict_branches_on_determination_not_on_a_green_gate() -> None:

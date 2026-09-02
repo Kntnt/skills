@@ -11,10 +11,18 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
+- Add an atomic machine-readable Orchestrate progress dashboard for monitoring live and terminal run state.
 - `/delegation` now routes only a spawn onto a foreign surface, model, or deliberation override through Model Selector; a spawn the caller runs on the frozen main seat with no override is unrouted, produces no `observe` attempt, and is recorded by capture where capture is enabled. Judgment-in-noise roles still weigh a routed cheaper seat rather than defaulting to the main seat.
 - `/delegation` now names three execution paths and the work that selects each: pure execution with large output runs detached from the conversation and only its report is read back, judgment inside noisy data goes to a subagent for a bounded report, and a small bounded command stays on the main seat narrowed at the source. *When unsure, delegate* governs the choice between subagent and main seat, and the main seat stops what it detached or names it as left standing.
 - `ship.py plan` emits bounded commit excerpts for not-ready and push plans, while ready commit and release plans retain the complete inventory; `--full` forces the complete form.
 - Document the plain-git workflow contract implied by changelog reconciliation.
+- `/orchestrate` wave verdicts now rerun a strict failing test subset three times in isolation on the unchanged head and, only after all three pass, rerun the complete gate once; a green rerun records durable load-flake evidence and reports recurrence counts, while deterministic or repeated full-gate failures retain the existing failure path.
+- Let Orchestrate execute ticket-declared, append-only multi-commit role contracts and refuse commits outside each role's allowed surfaces.
+- `/orchestrate` verifier verdicts now name a Defect Class for every failed command or unmet criterion, and amendment builders audit the ticket's whole owned surface for every instance of each class before reporting.
+- Define parked-ticket amendment budgets as lifetime-scoped, preserve and bring forward resumed work, and report inherited versus newly spent amendments.
+- Fixed Orchestrate reports omitting reconciled parked tickets that had no Run Outcome.
+- Added caller-supplied Orchestrate plan approval identities, allowing an exact dry-run frontier to be authorized and checked before any claim in one invocation.
+- `/orchestrate` now audits tickets for concretely named external decision gaps before claiming, parks detected gaps with a decision-ready question under `needs-info`, and reuses the same parked-ticket record for decisions found mid-work.
 
 ## [0.18.6] – 2026-08-30
 

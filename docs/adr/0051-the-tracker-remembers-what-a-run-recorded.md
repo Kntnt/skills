@@ -13,3 +13,5 @@ There are two places they could live. One is the run's own memory: a state file,
 So `record` writes one line on the ticket carrying a marked comment — machine-readable for the next run, prose for the developer — and `plan` and `report` read it back. A ticket with an outcome is settled and never offered again; what waits on a settled failure comes back stranded, which is the outcome a loop that only tracks what it can start drops without saying so. **The use of one mutable outcome as both the historical result of a run and the ticket's current report classification is superseded by ADR-0079: a Run Outcome stays immutable while Reconciliation may change the Ticket Resolution.**
 
 **What this costs.** A tracker call, and a scope query that has to ask for the tickets a run closed as well as the ones still open — a done ticket having left the open scope by being closed. Both are paid once per verb, and buy an account that stays true when the session that produced it is gone.
+
+This is narrowed by ADR-0138: a declared commit-role contract and its ceiling-one claim boundary live in run state; a checking verb with absent state follows the undeclared path.

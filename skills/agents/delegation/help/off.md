@@ -12,9 +12,9 @@ delegation off - disable delegation mode in the selected scope
 
 `delegation off` treats the standing mode instruction as inert history: the agent executes tasks itself again and spawns subagents only when the user asks. Delegating in general stays open — what stops is this Skill's own instruction.
 
-Without a scope flag it suspends the mode for this session alone, including where a Project or user pair is standing. Context already loaded for this session and its tokens are still paid; a compaction can drop the session instruction while the persistent pair survives, so run `/delegation off` again if delegating resumes.
+Without a scope flag it suspends the mode for this session alone, including where a Project or user trio is standing. Context already loaded for this session and its tokens are still paid; a compaction can drop the session instruction while the persistent trio survives, so run `/delegation off` again if delegating resumes.
 
-With `--project` or `--user` it removes the managed pointer block from that scope's context file and deletes its companion mode file after showing both exact removals. `off` is the exact undo of `on`, which is why no backup file is written, in git or out. Where neither managed file exists, the Skill says so and stops: nothing to remove is not an error.
+With `--project` or `--user` it removes the managed pointer block from that scope's context file and deletes both companion files after showing all three exact removals. `off` is the exact undo of `on`, which is why no backup file is written, in git or out. Where none of the three managed files exists, the Skill says so and stops: nothing to remove is not an error.
 
 ## OPTIONS
 
@@ -34,17 +34,17 @@ Remove the persistent files without waiting for confirmation. The session scope 
 
 An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/delegation off --help`. A flag is refused rather than ignored where it has no work to do here, so both scope flags at once are invalid, and any token after the command path that is neither a scope flag nor `--yes` is refused the same way.
 
-Two managed pointer blocks, a marker without its pair, or a companion without its pointer stop the removal: the Skill changes nothing, reports what it found, and asks.
+Two managed pointer blocks, a marker without its pair, a pointer with either companion missing, or either companion without its pointer stop the removal: the Skill changes nothing, reports what it found, and asks.
 
 ## EXAMPLES
 
 **/delegation off**
 
-Stop obeying the mode for the rest of this conversation, leaving any persistent pair in place.
+Stop obeying the mode for the rest of this conversation, leaving any persistent trio in place.
 
 **/delegation off --user**
 
-Show the managed pointer and companion in this Harness's global context and, once confirmed, remove both.
+Show the managed pointer and both companions in this Harness's global context and, once confirmed, remove all three.
 
 ## INVOCATION ENVELOPE
 

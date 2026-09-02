@@ -55,7 +55,7 @@ A flag is refused rather than ignored where it has no work to do here, and an in
 
 ## The mode
 
-`$HERE/references/mode.md` is the single source of truth for what the mode says. Read and adopt it verbatim. Persistent scopes follow [`persist.md`](references/persist.md): they copy it to a companion file and keep only an `@` pointer in the context file.
+`$HERE/references/mode.md` is the single source of truth for what the mode says. Read and adopt it verbatim. Persistent scopes follow [`persist.md`](references/persist.md): they copy the mode and fence to two companion files and keep only an `@` pointer block in the context file.
 
 Two states, no third:
 
@@ -67,13 +67,13 @@ Two states, no third:
 The verdict is the effective state here and now:
 
 - A session instruction given in this conversation wins — or one recorded in `kntnt-delegation.json` when a compaction has dropped it from view.
-- Otherwise: on if and only if a managed pointer in a context file this harness loads resolves to its readable companion. `--user` and `--project` write identical pointers and companions, so they cannot define different modes; either complete pair means on.
-- `off` in the session scope suspends obedience; standing context already loaded for this session and its tokens are still paid. A compaction can drop the session instruction while the persistent pair survives, so re-run `/delegation off` if delegating resumes.
+- Otherwise: on if and only if a managed pointer block in a context file this harness loads resolves to both readable companions. `--user` and `--project` write identical pointers and companions, so they cannot define different modes; either complete trio means on.
+- `off` in the session scope suspends obedience; standing context already loaded for this session and its tokens are still paid. A compaction can drop the session instruction while the persistent trio survives, so re-run `/delegation off` if delegating resumes.
 
 ## Steps
 
 1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, then print the `## SYNOPSIS` section of the most specific recognized page verbatim and point at that path's help route — `$HERE/help/on.md`, `$HERE/help/off.md`, or `$HERE/help/status.md` with `/delegation on --help`, `/delegation off --help`, or `/delegation status --help`. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/delegation --help` for the page in full. Change nothing and stop. Done when the form and the scope are settled, or you have stopped.
-2. `--project` or `--user`, with any command path: read [`persist.md`](references/persist.md) and follow it, then go to the report. Done when the pointer and companion are written, removed, or read.
-3. Session scope — `on`, `off`, or the bare invocation's toggle of the current verdict. Going on: read `$HERE/references/mode.md` and adopt it as a standing instruction for the rest of this session. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
+2. `--project` or `--user`, with any command path: read [`persist.md`](references/persist.md) and follow it, then go to the report. Done when the pointer and companions are written, removed, or read.
+3. Session scope — `on`, `off`, or the bare invocation's toggle of the current verdict. Going on: read `$HERE/references/mode.md` and adopt it as a standing instruction for the rest of this session. Read `$HERE/references/fence.md` as its canonical fence preamble, fill in the spawn-specific paths, and paste it at the top of every subagent brief, adding only any task-specific tightening. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
 4. Write `{"active": true}` or `{"active": false}`, and nothing else, to `kntnt-delegation.json` in whatever per-session scratchpad or temporary directory your harness gives you, so a compaction cannot lose the state. No such directory: the conversation alone carries it. `status` writes nothing. Done when that file matches the session state, or there is nowhere to write it.
 5. Report one line per scope touched — its state, then the verdict — and name any disagreement between the two, and any staleness found. Done when that report is shown.

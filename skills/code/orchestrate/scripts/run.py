@@ -11,11 +11,13 @@ import fcntl
 import hashlib
 import importlib.util
 import json
+import os
 import re
 import secrets
 import shutil
 import subprocess
 import sys
+import tempfile
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field
@@ -48,6 +50,10 @@ INFO_LABEL = "needs-info"
 # trusted to be the whole set, since a scope silently missing tickets is a run
 # that leaves work behind without saying so.
 TICKET_PAGE = 200
+
+# Approval identities have their own domain so equal JSON in another feature
+# can never authorize an Orchestrate run.
+APPROVAL_VERSION: int = 1
 
 # The outcomes a run records against a ticket and that settle it: a settled
 # ticket is never offered again. Stranded and never-on-the-frontier are read
@@ -160,7 +166,7 @@ MARKER = "kntnt-orchestrate"
 # them sharing any memory (ADR-0051).
 RECORDED_OUTCOME = re.compile(
     rf"<!--\s*{MARKER}\s+outcome=(\S+?)(?:\s+commit=(\S+?))?"
-    rf"(?:\s+collided-with=([\d,]+))?\s*-->"
+    rf"(?:\s+collided-with=([\d,]+))?(?:\s+contract-base=(\S+?))?\s*-->"
 )
 
 # Reconciliation is a distinct fact from the run outcome it follows. Keeping
@@ -204,6 +210,10 @@ RECORDED_BLOCKED = re.compile(rf"<!--\s*{MARKER}\s+blocked-by=[\d,]+\s*-->")
 MERGED_TICKET = re.compile(
     rf"<!--\s*{MARKER}\s+merged=(\d+)(?:\s+regenerated=(\S+))?\s*-->"
 )
+
+# A collision repair is run-owned history too, but remains distinct from the
+# integration markers used to account for tickets on the run branch.
+REPAIRED_TICKET = re.compile(rf"<!--\s*{MARKER}\s+repair=(\d+)\s*-->")
 
 # Where a repository says which of its files are generated and what regenerates
 # each. It is read rather than inferred: a file is generated because the
@@ -287,6 +297,28 @@ INHERITED_FOR_NO_ADAPTER = "unavailable_selection_controls"
 # (ADR-0089).
 ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
 OBSERVATION_FILE = "kntnt-orchestrate-observations.json"
+
+# Where a caller polls the current non-authoritative run dashboard.
+PROGRESS_FILE: str = "kntnt-orchestrate-progress.json"
+
+# The complete live phases a session or engine transition may publish.
+PROGRESS_PHASES: tuple[str, ...] = (
+    "preflight",
+    "isolate",
+    "build",
+    "verify",
+    "amend",
+    "integrate",
+    "note",
+    "wave_verdict",
+)
+
+# Durable flake evidence belongs to the Skill rather than to any repository.
+# The run-local selection sits beside the rest of the session account so the
+# final report names this run's records without mistaking older ones for them.
+FLAKE_HOME = Path(".kntnt/orchestrate")
+FLAKE_LEDGER = "flakes.jsonl"
+RUN_FLAKES_FILE = "kntnt-orchestrate-flakes.json"
 
 # The version of model-selector's public observation contract this engine
 # writes. It is versioned separately from the route response because the two
@@ -396,6 +428,14 @@ SOLO_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**builds[ -]alone\**\s*:?", re.IGNOR
 # The line the breakdown names a ticket's parent spec on, written the same two
 # ways: a heading with the reference under it, or a sentence carrying it.
 PARENT_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**parent\b\**\s*:?", re.IGNORECASE)
+
+# The ordered commit roles a ticket may declare, using the same heading or
+# sentence shape as the other body-line declarations.
+COMMIT_ROLES_LINE = re.compile(
+    r"^\s*(?:#{1,6}\s+)?\**commit[ -]roles\**\s*: ?|"
+    r"^\s*#{1,6}\s+\**commit[ -]roles\**\s*$",
+    re.IGNORECASE,
+)
 
 # A line that continues the list under such a heading: an item, or a reference
 # standing on its own line. Anything else ends it, so a `#12` further down the
@@ -857,6 +897,8 @@ class Ticket:
     amends_spent: int
     amend_state: AmendState | None
     builds_alone: bool = False
+    commit_contract: list[dict[str, Any]] | None = None
+    contract_base: str | None = None
     worktree: str | None = None
 
 
@@ -871,15 +913,26 @@ def ticket_details(ticket: Ticket) -> dict[str, Any]:
 
 
 @dataclass
+class ProgressState:
+    """Session-supplied dashboard values no ticket transition can derive."""
+
+    wave: int
+    ticket: int | None
+    amendments_spent: int
+    tickets_completed: int
+    tickets_remaining: int
+
+
+@dataclass
 class RunState:
     """What one run remembers of itself between invocations.
 
-    It is remembered, never relied on: every answer this engine gives is read
-    off the tracker and the branch, and the same answer comes back where this
-    is absent (ADR-0051). What it buys is the one thing the tracker cannot
-    say — which of the claims standing in this developer's name are this run's
-    own, an interrupted run and a session running in parallel being the same
-    login on the same ticket.
+    Its ordinary account is remembered rather than relied on: the tracker and
+    branch can reproduce it when this state is absent (ADR-0051). Its declared
+    commit contracts and their claim boundaries are relied-on projections: a
+    declared ticket requires readable state to begin and enforce its contract,
+    while a checking verb with absent or unreadable state deliberately follows
+    the undeclared path (ADR-0138).
 
     `branch` and `label` are what the state is of: a scratch directory outlives
     a checkout, and a document describing another branch describes another run.
@@ -892,9 +945,12 @@ class RunState:
     frontier the last plan cut to the ceiling, kept so the preflight that
     follows can be held to routing that frontier and not some other set.
 
-    Everything here is a note of what the tracker and the branch already say.
-    The frozen routing account is the one thing that is not, and it lives in a
-    file of its own rather than in this one (ADR-0085).
+    `contracts` projects the tracker declarations, and `contract_bases` holds
+    the claim boundaries that the branch can no longer establish after work
+    begins. `progress` remembers the session-supplied dashboard values that a
+    ticket transition cannot derive, so deleting the dashboard never makes it
+    an input. The frozen routing account is separately relied on and lives in
+    a file of its own rather than in this one (ADR-0085).
     """
 
     branch: str
@@ -903,6 +959,13 @@ class RunState:
     claimed: list[int]
     base: str
     starting: list[int]
+    contracts: dict[int, list[dict[str, Any]]]
+    contract_bases: dict[int, str]
+    progress: ProgressState | None = None
+    approval_expected: str | None = None
+    approval_identity: str | None = None
+    approval_payload: dict[str, Any] | None = None
+    approval_met: bool | None = None
 
 
 def state_file(directory: str | None) -> Path | None:
@@ -1143,6 +1206,99 @@ def attempts_file(path: Path | None) -> Path | None:
     return None if path is None else path.parent / ATTEMPTS_FILE
 
 
+def progress_file(path: Path | None) -> Path | None:
+    """Return where a caller polls the run's non-authoritative dashboard."""
+
+    return None if path is None else path.parent / PROGRESS_FILE
+
+
+def write_progress(
+    state_path: Path | None,
+    phase: str,
+    progress: ProgressState,
+    outcome: dict[str, list[int]] | None,
+) -> str | None:
+    """Atomically replace the run dashboard, or do nothing without state."""
+
+    # Resolve the dashboard beside this session's durable state.
+    destination = progress_file(state_path)
+    if destination is None:
+        return None
+
+    # Build the complete dashboard before exposing any bytes to pollers.
+    dashboard = {
+        "wave": progress.wave,
+        "ticket": progress.ticket,
+        "phase": phase,
+        "amendments_spent": progress.amendments_spent,
+        "tickets_completed": progress.tickets_completed,
+        "tickets_remaining": progress.tickets_remaining,
+        "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "outcome": outcome,
+    }
+
+    # Rename a flushed peer file so every concurrent read is complete JSON.
+    write_atomically(destination, json.dumps(dashboard, indent=2) + "\n")
+
+    return str(destination)
+
+
+def advance_progress(
+    cwd: Path,
+    state_path: Path | None,
+    phase: str,
+    ticket: int,
+    amendments_spent: int | None = None,
+    is_ticket_completed: bool = False,
+) -> None:
+    """Advance an existing dashboard, recreating it from durable run state."""
+
+    # Skip transitions for invocations without durable session state.
+    destination = progress_file(state_path)
+    if destination is None:
+        return
+
+    # Rebuild session-owned totals without consulting the disposable dashboard.
+    remembered = remembered_state(state_path, cwd)
+    current = remembered.progress if remembered is not None else None
+    remaining = len(remembered.starting) if remembered is not None else 0
+
+    # Read a resumed ticket's durable amendment bound when the session's last
+    # transition concerned the whole wave or another ticket.
+    amendment_count = (
+        current.amendments_spent
+        if current is not None and current.ticket == ticket
+        else 0
+    )
+    if amendments_spent is None:
+        try:
+            ticket_state = recorded_amend_state(ticket_view(cwd, ticket, "comments"))
+            amendment_count = ticket_state.attempt if ticket_state is not None else 0
+        except RunError:
+            pass
+
+    # A terminal record settles exactly one current ticket; blocked records
+    # leave it in the remaining scope.
+    completed = current.tickets_completed if current is not None else 0
+    remaining_count = current.tickets_remaining if current is not None else remaining
+    if is_ticket_completed:
+        completed += 1
+        remaining_count = max(remaining_count - 1, 0)
+
+    # Preserve the advanced baseline before projecting the latest dashboard.
+    progress = ProgressState(
+        wave=current.wave if current is not None else 1,
+        ticket=ticket,
+        amendments_spent=(
+            amendment_count if amendments_spent is None else amendments_spent
+        ),
+        tickets_completed=completed,
+        tickets_remaining=remaining_count,
+    )
+    remember_progress(state_path, cwd, progress)
+    write_progress(state_path, phase, progress, None)
+
+
 def observation_file(path: Path | None) -> Path | None:
     """Return the legacy path for the run's observation artifact.
 
@@ -1154,10 +1310,17 @@ def observation_file(path: Path | None) -> Path | None:
     return None if path is None else path.parent / OBSERVATION_FILE
 
 
+def run_flakes_file(path: Path | None) -> Path | None:
+    """Return this run's durable-flake selection, where state is available."""
+
+    return None if path is None else path.parent / RUN_FLAKES_FILE
+
+
 def decode_state(contents: str) -> RunState:
     """Decode one complete state document or raise on invalid content."""
 
     stored = json.loads(contents)
+    progress = cast(dict[str, Any] | None, stored.get("progress"))
     return RunState(
         branch=str(stored["branch"]),
         label=str(stored["label"]),
@@ -1165,6 +1328,43 @@ def decode_state(contents: str) -> RunState:
         claimed=[int(number) for number in stored["claimed"]],
         base=str(stored["base"]),
         starting=[int(number) for number in stored["starting"]],
+        contracts={
+            int(number): contract
+            for number, contract in cast(
+                dict[str, list[dict[str, Any]]], stored.get("contracts", {})
+            ).items()
+        },
+        contract_bases={
+            int(number): str(commit)
+            for number, commit in cast(
+                dict[str, str], stored.get("contract_bases", {})
+            ).items()
+        },
+        progress=(
+            None
+            if progress is None
+            else ProgressState(
+                wave=int(progress["wave"]),
+                ticket=(
+                    None if progress["ticket"] is None else int(progress["ticket"])
+                ),
+                amendments_spent=int(progress["amendments_spent"]),
+                tickets_completed=int(progress["tickets_completed"]),
+                tickets_remaining=int(progress["tickets_remaining"]),
+            )
+        ),
+        approval_expected=(
+            None
+            if stored.get("approval_expected") is None
+            else str(stored["approval_expected"])
+        ),
+        approval_identity=(
+            None
+            if stored.get("approval_identity") is None
+            else str(stored["approval_identity"])
+        ),
+        approval_payload=cast(dict[str, Any] | None, stored.get("approval_payload")),
+        approval_met=cast(bool | None, stored.get("approval_met")),
     )
 
 
@@ -1224,17 +1424,29 @@ def read_state(path: Path | None, branch: str) -> RunState | None:
 def write_state(path: Path | None, state: RunState) -> str | None:
     """Store *state* and return where, or None where it was not stored.
 
-    A scratch directory that cannot be written to is not a reason to stop: the
-    run goes on reading the tracker, and the next invocation rebuilds what this
-    one could not leave behind.
+    An ordinary run can continue from the tracker when its scratch directory
+    cannot be written. A declared ticket cannot begin unless its contract and
+    claim boundary can be stored there.
     """
 
     if path is None:
         return None
 
+    # Preserve the established document byte shape when optional state is
+    # unused.
+    details = asdict(state)
+    if state.progress is None:
+        details.pop("progress")
+    if state.approval_met is None:
+        details = {
+            key: value
+            for key, value in details.items()
+            if not key.startswith("approval_")
+        }
+
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(asdict(state), indent=2) + "\n", encoding="utf-8")
+        path.write_text(json.dumps(details, indent=2) + "\n", encoding="utf-8")
     except OSError:
         return None
 
@@ -1246,10 +1458,11 @@ def read_routing(path: Path | None) -> Routing | None:
 
     Absence and damage are different answers here, and that is the whole point
     of the file. An ordinary state file nothing can read is answered as no
-    state, because the tracker and the branch say the same thing again. A
-    routing file nothing can read is answered as an error, because nothing else
-    holds what it held and reconstructing it would mean routing this run's
-    remaining work from a context it never ran under (ADR-0085).
+    state; ordinary account fields are recovered, and checking verbs
+    deliberately follow the undeclared path without its contract projection.
+    A routing file nothing can read is answered as an error, because nothing
+    else holds what it held and reconstructing it would mean routing this run's
+    remaining work from a context it never ran under (ADR-0085, ADR-0138).
     """
 
     stored = routing_file(path)
@@ -1342,6 +1555,19 @@ def remembered_state(path: Path | None, cwd: Path) -> RunState | None:
         return read_state(path, current_branch(cwd))
     except RunError:
         return None
+
+
+def remember_progress(path: Path | None, cwd: Path, progress: ProgressState) -> None:
+    """Keep session-owned dashboard values outside the disposable dashboard."""
+
+    # Amend only an existing run account for the checked-out branch.
+    state = remembered_state(path, cwd)
+    if state is None:
+        return
+
+    # Preserve the next engine transition's reconstruction baseline.
+    state.progress = progress
+    write_state(path, state)
 
 
 def _amend_claims(
@@ -1486,6 +1712,48 @@ class Plan:
     waves: list[list[int]]
     solo: list[int]
     never_workable: list[int]
+    approval_expected: str | None = None
+    approval_identity: str | None = None
+    approval_payload: dict[str, Any] | None = None
+
+
+def plan_approval_payload(plan: Plan) -> dict[str, Any]:
+    """Return exactly the plan fields a caller authorizes."""
+
+    return {
+        "branch": plan.branch,
+        "default_branch": plan.default_branch,
+        "scope": plan.scope,
+        "at_once": plan.at_once,
+        "worktrees": plan.worktrees,
+        "model": plan.model,
+        "deliberation": plan.deliberation,
+        "waves": plan.waves,
+        "solo": plan.solo,
+    }
+
+
+def plan_approval_identity(payload: dict[str, Any]) -> str:
+    """Identify one authorized Orchestrate plan under its versioned domain."""
+
+    canonical = json.dumps(
+        payload,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    prefix = f"kntnt-orchestrate-plan-v{APPROVAL_VERSION}\0".encode()
+    return hashlib.sha256(prefix + canonical).hexdigest()
+
+
+def plan_details(plan: Plan) -> dict[str, Any]:
+    """Return the public plan, adding audit fields only when supplied."""
+
+    details = asdict(plan)
+    if plan.approval_expected is None:
+        details.pop("approval_expected")
+        details.pop("approval_payload")
+    return details
 
 
 def is_open_state(state: str) -> bool:
@@ -1547,6 +1815,60 @@ def body_solo(body: str) -> bool:
     return any(SOLO_LINE.match(line) for line in body.splitlines())
 
 
+def body_commit_contract(body: str) -> list[dict[str, Any]] | None:
+    """Return the ordered commit roles declared by *body*, if any.
+
+    The declaration is `Commit roles: role: pattern, pattern; role: pattern`.
+    A heading may instead put one `- role: patterns` entry on each following
+    line. Patterns are Git pathspecs, interpreted by Git at the checking seam.
+    """
+
+    # Collect the sentence remainder and any list entries below a heading.
+    written: list[str] = []
+    declared = False
+    lines = body.splitlines()
+    for index, line in enumerate(lines):
+        found = COMMIT_ROLES_LINE.match(line)
+        if not found:
+            continue
+        declared = True
+        if remainder := line[found.end() :].strip():
+            written.extend(part.strip() for part in remainder.split(";"))
+        for following in lines[index + 1 :]:
+            if not following.strip():
+                continue
+            if not EDGE_LIST_ITEM.match(following):
+                break
+            written.append(EDGE_LIST_ITEM.sub("", following, count=1).strip())
+
+    if not declared:
+        return None
+    if not written:
+        raise RunError(
+            "a `Commit roles` declaration must name at least one role and its "
+            "Git pathspecs"
+        )
+
+    # Refuse declarations whose roles or allowed surfaces are incomplete.
+    roles: list[dict[str, Any]] = []
+    for entry in written:
+        name, separator, surfaces = entry.partition(":")
+        patterns = [
+            pattern.strip() for pattern in surfaces.split(",") if pattern.strip()
+        ]
+        if not separator or not name.strip() or not patterns:
+            raise RunError(
+                "a `Commit roles` declaration must name each role and its "
+                "Git pathspecs as `role: pattern, pattern`"
+            )
+        roles.append({"name": name.strip(), "patterns": patterns})
+
+    if len({str(role["name"]) for role in roles}) != len(roles):
+        raise RunError("a `Commit roles` declaration names the same role twice")
+
+    return roles
+
+
 def body_parent(body: str) -> int | None:
     """Return the spec a `Parent` line in *body* names, if it names one.
 
@@ -1594,6 +1916,16 @@ def recorded_against(item: dict[str, Any]) -> tuple[str | None, str | None, list
     return outcome, commit, against
 
 
+def recorded_contract_base(item: dict[str, Any]) -> str | None:
+    """Return the latest recorded completion's optional contract provenance."""
+
+    base = None
+    for comment in item["comments"]:
+        if found := RECORDED_OUTCOME.search(str(comment["body"])):
+            base = found.group(4)
+    return base
+
+
 def reconciled_at(item: dict[str, Any]) -> str | None:
     """Return the completion commit named by *item*'s Reconciliation."""
 
@@ -1605,6 +1937,12 @@ def reconciled_at(item: dict[str, Any]) -> str | None:
             completion_commit = found.group(1)
 
     return completion_commit
+
+
+def resolution_is_done(item: dict[str, Any], run_outcome: str | None) -> bool:
+    """Say whether recorded history resolves *item* as completed work."""
+
+    return run_outcome == DONE or reconciled_at(item) is not None
 
 
 def as_references(numbers: list[int]) -> str:
@@ -1754,9 +2092,9 @@ def blocker_still_blocks(cwd: Path, number: int, state: str) -> bool:
             f"#{number} is closed, but the tracker cannot say how its work resolved: {exc}"
         ) from exc
 
-    # Accept either an ordinary done Run Outcome or an external Reconciliation.
+    # Project completion through the same rule Report uses.
     outcome, _, _ = recorded_against(ticket)
-    return outcome != DONE and reconciled_at(ticket) is None
+    return not resolution_is_done(ticket, outcome)
 
 
 def unmet_blockers(
@@ -2095,7 +2433,7 @@ def ticket_from(
     # Project current resolution and amend phase without rewriting history.
     run_outcome = outcome
     reconciliation_commit = reconciled_at(item)
-    current_outcome = DONE if reconciliation_commit else outcome
+    current_outcome = DONE if resolution_is_done(item, outcome) else outcome
     amend_state = recorded_amend_state(item)
 
     return Ticket(
@@ -2117,6 +2455,8 @@ def ticket_from(
         amends_spent=amend_state.attempt if amend_state else 0,
         amend_state=amend_state,
         builds_alone=body_solo(str(item["body"])),
+        commit_contract=body_commit_contract(str(item["body"])),
+        contract_base=recorded_contract_base(item),
     )
 
 
@@ -2255,7 +2595,7 @@ def tickets_in_scope(
 def tickets_recorded(
     listed: list[dict[str, Any]], scope: list[Aim] | None
 ) -> list[Ticket]:
-    """Return the closed tickets a run recorded an outcome on, oldest first.
+    """Return closed tickets carrying an outcome or Reconciliation, oldest first.
 
     Closing is what takes a ticket out of the open scope, so the report would
     lose exactly the tickets it most needs to name if it read that scope alone
@@ -2263,10 +2603,10 @@ def tickets_recorded(
     run recorded failed is closed too once a person finishes it, or once the
     tracker reads a commit trailer off the default branch, and it was this
     run's all the same: the run claimed it, built it, and wrote an outcome on
-    it. So every outcome is read back here, under the marker that stands last,
-    and a ticket closed carrying no marker of this engine's was never this
-    run's to account for — accounting for it would be a report nobody can
-    check.
+    it. A parked ticket reconciled after manual completion instead carries the
+    Reconciliation marker alone. Both engine facts are read back here, and a
+    ticket closed carrying neither was never this run's to account for —
+    accounting for it would be a report nobody can check.
     """
 
     # No edge is read off a finished ticket. There is nothing left for it to
@@ -2278,7 +2618,7 @@ def tickets_recorded(
             continue
         number = int(item["number"])
         outcome, commit, against = recorded_against(item)
-        if outcome is None:
+        if outcome is None and not resolution_is_done(item, outcome):
             continue
         try:
             tickets.append(
@@ -2340,6 +2680,19 @@ def run_base(cwd: Path, tickets: list[Ticket]) -> str:
     # one ticket after another, and an earlier commit where the branch forked
     # and came back — either way a base the whole run is contained by.
     oldest = git(cwd, "merge-base", "--octopus", *on_branch).strip()
+
+    # A ceiling-one multi-commit ticket records the real pre-pass boundary,
+    # which remains available after the scratch state has gone.
+    oldest_ticket = next(
+        (
+            ticket
+            for ticket in tickets
+            if ticket.resolution.commit == oldest and ticket.contract_base
+        ),
+        None,
+    )
+    if oldest_ticket is not None:
+        return cast(str, oldest_ticket.contract_base)
 
     # A run whose first recorded commit is the repository's root sits on that
     # commit itself: there is nothing before it to name.
@@ -2425,6 +2778,7 @@ def build_plan(
     deliberation: str | None,
     state_path: Path | None,
     reference: str | None,
+    approval: str | None,
 ) -> Plan:
     """Gather what a run in *cwd* would work, and whether it may start."""
 
@@ -2511,6 +2865,12 @@ def build_plan(
         never_workable=never_workable,
     )
 
+    # Identify the complete caller-authorized frontier independently of ticket
+    # prose, tracker comments, and the branch's moving base commit.
+    plan.approval_expected = approval
+    plan.approval_payload = plan_approval_payload(plan)
+    plan.approval_identity = plan_approval_identity(plan.approval_payload)
+
     # A run works the branch the developer left it on, whichever branch that
     # is (ADR-0064), so the tree it would commit in is the only thing left to
     # refuse about the state it starts in: a run cannot tell work the developer
@@ -2541,6 +2901,12 @@ def build_plan(
     ) is not None:
         plan.ready = False
         plan.reason = adrift
+    if approval is not None and approval != plan.approval_identity:
+        plan.ready = False
+        plan.reason = (
+            "the caller's approval does not match this plan: expected "
+            f"{approval}, computed {plan.approval_identity}"
+        )
 
     # A run that may start leaves what it remembers of itself where this
     # session's scratch is, written from here because this is the verb that has
@@ -2557,6 +2923,60 @@ def build_plan(
                 claimed=plan.run_claimed,
                 base=run_base(cwd, tickets),
                 starting=plan.starting,
+                contracts={
+                    ticket.number: ticket.commit_contract
+                    for ticket in tickets
+                    if ticket.commit_contract is not None
+                },
+                contract_bases=remembered.contract_bases if remembered else {},
+                progress=remembered.progress if remembered else None,
+                approval_expected=(
+                    approval
+                    if approval is not None
+                    else remembered.approval_expected
+                    if remembered
+                    else None
+                ),
+                approval_identity=(
+                    plan.approval_identity
+                    if approval is not None
+                    else remembered.approval_identity
+                    if remembered
+                    else None
+                ),
+                approval_payload=(
+                    plan.approval_payload
+                    if approval is not None
+                    else remembered.approval_payload
+                    if remembered
+                    else None
+                ),
+                approval_met=(
+                    True
+                    if approval is not None
+                    else remembered.approval_met
+                    if remembered
+                    else None
+                ),
+            ),
+        )
+    elif not dry_run and approval is not None and approval != plan.approval_identity:
+        plan.state = write_state(
+            state_path,
+            RunState(
+                branch=branch,
+                label=READY_LABEL,
+                login=remembered.login if remembered else None,
+                claimed=[],
+                base=run_base(cwd, tickets),
+                starting=[],
+                contracts={},
+                contract_bases={},
+                progress=remembered.progress if remembered else None,
+                approval_expected=approval,
+                approval_identity=plan.approval_identity,
+                approval_payload=plan.approval_payload,
+                approval_met=False,
             ),
         )
 
@@ -2572,6 +2992,7 @@ def cmd_plan(
     deliberation: str | None,
     state_path: Path | None,
     reference: str | None,
+    approval: str | None,
 ) -> int:
     """Print the plan, and answer whether work may start."""
 
@@ -2592,11 +3013,12 @@ def cmd_plan(
             deliberation=deliberation,
             state_path=state_path,
             reference=reference,
+            approval=approval,
         )
     except RunError as exc:
         return fail(str(exc))
 
-    emit(asdict(plan))
+    emit(plan_details(plan))
     return 0 if plan.ready else 2
 
 
@@ -2891,6 +3313,8 @@ def cmd_route(
             claimed=run_claimed or [],
             base=state.base if state else "",
             starting=starting or [],
+            contracts=state.contracts if state else {},
+            contract_bases=state.contract_bases if state else {},
         )
     elif starting is not None or run_claimed is not None:
         return fail(
@@ -2996,6 +3420,15 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     # the tracker nothing to take.
     holders = holders_of(ticket)
     remembered = remembered_state(state_path, cwd)
+
+    # Keep a failed caller expectation between the plan and the first tracker
+    # mutation until a later flagged plan proves the authorized identity.
+    if remembered and remembered.approval_met is False:
+        return fail(
+            "this run's caller-supplied approval has not matched a plan; run "
+            "a flagged plan with the computed approval identity before claiming"
+        )
+
     try:
         mine = my_login(cwd, remembered) if holders else None
     except RunError as exc:
@@ -3022,6 +3455,21 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     if unrouted is not None:
         return fail(unrouted)
 
+    # A declared ceiling-one walk needs the boundary from before its builder
+    # starts. An existing claim without that durable boundary cannot invent it
+    # from a branch the builder may already have changed.
+    contract = remembered.contracts.get(number) if remembered else None
+    if (
+        holders
+        and contract is not None
+        and remembered is not None
+        and number not in remembered.contract_bases
+    ):
+        return fail(
+            f"#{number} declares commit roles but its saved claim head is absent; "
+            "the contract boundary cannot be moved to the current HEAD"
+        )
+
     # A ticket this run already holds is already claimed, and asking the
     # tracker to assign it again would write nothing it does not already say.
     if not holders:
@@ -3030,7 +3478,31 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
         except RunError as exc:
             return fail(f"#{number} could not be claimed: {exc}")
 
-    remember_claim(state_path, cwd, number)
+    # Persist both the claim and its immutable contract anchor before a builder
+    # can be dispatched, releasing a newly added tracker claim if that fails.
+    if remembered is not None:
+        remembered.claimed = sorted(set(remembered.claimed) | {number})
+        if contract is not None:
+            remembered.contract_bases.setdefault(
+                number, git(cwd, "rev-parse", "HEAD").strip()
+            )
+        if write_state(state_path, remembered) is None:
+            if not holders:
+                try:
+                    gh(
+                        cwd,
+                        "issue",
+                        "edit",
+                        str(number),
+                        "--remove-assignee",
+                        CLAIM_ASSIGNEE,
+                    )
+                except RunError:
+                    pass
+            return fail(f"#{number}'s claim could not be persisted")
+
+    if remembered is None:
+        remember_claim(state_path, cwd, number)
     emit({"verb": "claim", "ticket": number, "claimed": True, "reason": None})
     return 0
 
@@ -3173,12 +3645,62 @@ def isolate(cwd: Path, number: int) -> int:
     # picked up again goes on in the working tree it was left in.
     if number in open_now:
         standing = Path(open_now[number])
+
+        # Preserved work is the mandatory base of a resume, but work not yet
+        # committed belongs to the parked builder and cannot be merged safely.
+        if git_result(standing, "status", "--porcelain").stdout:
+            return fail(
+                f"#{number} has uncommitted work in its preserved working tree: "
+                f"look at {standing} before resuming it"
+            )
+
+        # Bring resolved blockers and every other integrated predecessor into
+        # the preserved ticket branch before another builder sees the tree.
+        run_head = git(cwd, "rev-parse", run_branch).strip()
+        ticket_head = git(standing, "rev-parse", "HEAD").strip()
+        brought_forward = not git_ok(
+            standing, "merge-base", "--is-ancestor", run_head, ticket_head
+        )
+        if brought_forward:
+            message = f"Merge the run branch into #{number}"
+            merged = git_result(standing, "merge", "--no-ff", "-m", message, run_branch)
+            if merged.returncode != 0:
+                collisions = git_result(
+                    standing, "diff", "--name-only", "--diff-filter=U"
+                ).stdout.split()
+                settled = settle_by_regenerating(
+                    standing, number, collisions, commit_message=message
+                )
+                if settled is None:
+                    against = tickets_touching(cwd, collisions, ticket_head)
+                    git_result(standing, "merge", "--abort")
+                    emit(
+                        {
+                            "verb": "isolate",
+                            "ticket": number,
+                            "worktree": str(standing),
+                            "branch": current_branch(standing),
+                            "brought_forward": False,
+                            "collisions": collisions,
+                            "collided_with": against,
+                            "reason": (
+                                f"#{number} collided while bringing the run branch "
+                                "into its preserved working tree"
+                            ),
+                            **allocate(cwd, number),
+                        }
+                    )
+                    return 2
+
         emit(
             {
                 "verb": "isolate",
                 "ticket": number,
                 "worktree": str(standing),
                 "branch": current_branch(standing),
+                "brought_forward": brought_forward,
+                "collisions": [],
+                "collided_with": [],
                 **allocate(cwd, number),
             }
         )
@@ -3190,22 +3712,75 @@ def isolate(cwd: Path, number: int) -> int:
             "ticket": number,
             "worktree": str(path),
             "branch": branch,
+            "brought_forward": False,
+            "collisions": [],
+            "collided_with": [],
             **allocate(cwd, number),
         }
     )
     return 0
 
 
-def cmd_integrate(cwd: Path, number: int) -> int:
+def cmd_integrate(cwd: Path, number: int, state_path: Path | None) -> int:
     """Merge ticket *number*'s work into the run branch and tidy up after it."""
 
     try:
-        return integrate(cwd, number)
+        return integrate(cwd, number, state_path)
     except RunError as exc:
         return fail(str(exc))
 
 
-def integrate(cwd: Path, number: int) -> int:
+def commit_contract_refusal(
+    cwd: Path,
+    base: str,
+    head: str,
+    contract: list[dict[str, Any]],
+) -> str | None:
+    """Return why commits from *base* to *head* violate *contract*, if they do."""
+
+    # Walk authored history in its append order; run-owned marked merges and
+    # commits confined to the run's private directory are outside role passes.
+    commits = git(
+        cwd, "rev-list", "--reverse", "--first-parent", f"{base}..{head}"
+    ).split()
+    role_index = 0
+    for commit in commits:
+        message = git(cwd, "show", "-s", "--format=%B", commit)
+        if MERGED_TICKET.search(message) or REPAIRED_TICKET.search(message):
+            continue
+        paths = git(cwd, "diff", "--name-only", f"{commit}^1", commit).split()
+        checked = [path for path in paths if not path.startswith(".kntnt-orchestrate/")]
+        if not checked:
+            continue
+
+        role = contract[role_index % len(contract)]
+        allowed = set(
+            git(
+                cwd,
+                "diff",
+                "--name-only",
+                f"{commit}^1",
+                commit,
+                "--",
+                *cast(list[str], role["patterns"]),
+            ).split()
+        )
+        offending = sorted(set(checked).difference(allowed))
+        if offending:
+            return (
+                f"commit {commit} is the {role['name']} role and touches "
+                f"paths outside its declared surfaces: {', '.join(offending)}"
+            )
+        role_index += 1
+
+    if role_index % len(contract):
+        expected = contract[role_index % len(contract)]["name"]
+        return f"the commit sequence ends before its next {expected} role"
+
+    return None
+
+
+def integrate(cwd: Path, number: int, state_path: Path | None = None) -> int:
     """Bring ticket *number*'s work onto the branch the developer comes back to.
 
     Called per verified ticket as its wave completes rather than at the end of
@@ -3241,6 +3816,15 @@ def integrate(cwd: Path, number: int) -> int:
             f"#{number} has work its working tree never committed, and merging "
             f"the branch would leave it behind: look at {path}"
         )
+
+    # Refuse certified history that does not form complete declared passes
+    # before the run branch is changed in any way.
+    state = remembered_state(state_path, cwd)
+    contract = state.contracts.get(number) if state else None
+    if contract is not None:
+        base = git(cwd, "merge-base", "HEAD", current_branch(path)).strip()
+        if refusal := commit_contract_refusal(path, base, "HEAD", contract):
+            return fail(f"#{number} cannot be integrated: {refusal}")
 
     # The merge itself, kept as its own commit so what a ticket delivered
     # stays legible on the branch afterwards, and marked so the branch can say
@@ -3420,7 +4004,11 @@ def declared_generators(cwd: Path) -> list[Generator]:
 
 
 def settle_by_regenerating(
-    cwd: Path, number: int, collisions: list[str]
+    cwd: Path,
+    number: int,
+    collisions: list[str],
+    *,
+    commit_message: str | None = None,
 ) -> list[str] | None:
     """Settle a collision confined to declared-generated files, or answer None.
 
@@ -3478,7 +4066,9 @@ def settle_by_regenerating(
     if outside:
         return None
 
-    committed = git_result(cwd, "commit", "-m", merge_message(number, produced))
+    committed = git_result(
+        cwd, "commit", "-m", commit_message or merge_message(number, produced)
+    )
     if committed.returncode != 0:
         return None
 
@@ -3860,7 +4450,12 @@ def amend_note(attempt: int, phase: str, verdict: str | None) -> str:
     return f"<!-- {MARKER} amend={attempt} phase={phase} --> {note}{retained}"
 
 
-def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
+def outcome_note(
+    outcome: str,
+    commit: str | None,
+    against: list[int],
+    contract_base: str | None = None,
+) -> str:
     """Render what is written on a ticket when its outcome is recorded.
 
     One line, carrying a marker a later run can read the outcome back out of
@@ -3875,9 +4470,10 @@ def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
         if against
         else ""
     )
+    anchored = f" contract-base={contract_base}" if contract_base else ""
     said = f" It collided with {as_references(against)}." if against else ""
 
-    return f"<!-- {MARKER} outcome={outcome}{named}{marked} --> {NOTES[outcome]}{said}"
+    return f"<!-- {MARKER} outcome={outcome}{named}{marked}{anchored} --> {NOTES[outcome]}{said}"
 
 
 def blocked_note(waiting_on: list[int]) -> str:
@@ -4004,6 +4600,8 @@ def complete_lifecycle(cwd: Path, number: int, ticket: dict[str, Any]) -> None:
     changes: list[str] = []
     if READY_LABEL in labels:
         changes.extend(("--remove-label", READY_LABEL))
+    if INFO_LABEL in labels:
+        changes.extend(("--remove-label", INFO_LABEL))
     if HISTORICAL_LABEL not in labels:
         changes.extend(("--add-label", HISTORICAL_LABEL))
     for holder in holders_of(ticket):
@@ -4019,6 +4617,7 @@ def has_completed_lifecycle(ticket: dict[str, Any]) -> bool:
     return (
         HISTORICAL_LABEL in labels
         and READY_LABEL not in labels
+        and INFO_LABEL not in labels
         and not holders_of(ticket)
     )
 
@@ -4134,6 +4733,19 @@ def cmd_record(
         except RunError:
             return fail(f"this repository has no commit {named}")
 
+    # At a ceiling of one this is the integration gate: measure only the
+    # declared ticket's history from the head saved when it was first claimed.
+    remembered = remembered_state(state_path, cwd)
+    contract = remembered.contracts.get(number) if remembered else None
+    contract_base = remembered.contract_bases.get(number) if remembered else None
+    if outcome == DONE and contract is not None:
+        if contract_base is None:
+            return fail(f"#{number} declares commit roles but has no saved claim head")
+        if refusal := commit_contract_refusal(
+            cwd, contract_base, cast(str, commit), contract
+        ):
+            return fail(f"#{number} cannot be recorded done: {refusal}")
+
     # The tracker is asked for the ticket before anything is written to it, so
     # a number it cannot answer for is refused rather than half-recorded. The
     # assignees come along because a blocked outcome releases this run's claim.
@@ -4181,7 +4793,9 @@ def cmd_record(
     note = (
         blocked_note(waiting)
         if outcome == BLOCKED
-        else outcome_note(outcome, commit, collided)
+        else outcome_note(
+            outcome, commit, collided, contract_base if outcome == DONE else None
+        )
     )
     try:
         if outcome == DONE:
@@ -4222,7 +4836,7 @@ def cmd_record(
 
 def emit_reconciliation_result(
     number: int,
-    run_outcome: str,
+    run_outcome: str | None,
     commit: str,
     *,
     is_agreed: bool,
@@ -4244,7 +4858,7 @@ def emit_reconciliation_result(
 
 
 def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
-    """Resolve a closed unsuccessful ticket completed outside Orchestrate."""
+    """Resolve closed unsuccessful or parked work completed outside Orchestrate."""
 
     # Read every eligibility and lifecycle fact before allowing a tracker write.
     try:
@@ -4252,12 +4866,15 @@ def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
     except RunError as exc:
         return fail(f"the tracker cannot answer for #{number}: {exc}")
 
-    # Require closure and an unsuccessful unattended attempt as historical fact.
+    # Require closure and reject only outcomes outside the eligible histories.
     if str(ticket["state"]).upper() != CLOSED:
         return fail(f"#{number} is open; Reconciliation never closes a ticket")
     outcome, _, _ = recorded_against(ticket)
-    if outcome not in (FAILED, CONFLICTED):
-        return fail(f"#{number} has no failed or conflicted Run Outcome to reconcile")
+    if outcome not in (None, FAILED, CONFLICTED):
+        return fail(
+            f"#{number} has a {outcome} Run Outcome; Reconciliation requires a "
+            "failed or conflicted Run Outcome, or no Run Outcome after parking"
+        )
 
     # Validate an existing event before deciding between agreement and recovery.
     existing_commit = reconciled_at(ticket)
@@ -4980,6 +5597,204 @@ def observed_details(
     }
 
 
+def repository_identity(cwd: Path) -> str:
+    """Return the stable public identity available for the current repository."""
+
+    remote = git_result(cwd, "config", "--get", "remote.origin.url")
+    return remote.stdout.strip() if remote.returncode == 0 else str(cwd.resolve())
+
+
+def flake_record(cwd: Path, evidence_path: Path) -> dict[str, Any]:
+    """Complete and validate one checker-produced load-flake record."""
+
+    try:
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise RunError(f"{evidence_path} does not hold flake evidence: {exc}") from exc
+    if not isinstance(evidence, dict):
+        raise RunError(f"{evidence_path} must hold one flake evidence object")
+
+    required = {
+        "failing_tests",
+        "isolation_results",
+        "full_rerun_result",
+        "narrowed_command",
+        "load_context",
+    }
+    if set(evidence) != required:
+        raise RunError(
+            f"{evidence_path} must hold exactly these fields: {', '.join(sorted(required))}"
+        )
+    if (
+        not isinstance(evidence["failing_tests"], list)
+        or not evidence["failing_tests"]
+        or not all(isinstance(test, str) and test for test in evidence["failing_tests"])
+    ):
+        raise RunError("flake evidence must name at least one failing test")
+    if evidence["isolation_results"] != ["passed", "passed", "passed"]:
+        raise RunError("a load flake requires three passing isolated reruns")
+    if evidence["full_rerun_result"] != "passed":
+        raise RunError("a load flake requires one passing full-gate rerun")
+    if not all(
+        isinstance(evidence[field], str) and evidence[field]
+        for field in ("narrowed_command", "load_context")
+    ):
+        raise RunError("flake evidence must name its narrowed command and load context")
+
+    return {
+        "repository": repository_identity(cwd),
+        "branch": current_branch(cwd),
+        "head": git(cwd, "rev-parse", "HEAD").strip(),
+        **evidence,
+        "timestamp": datetime.now(UTC)
+        .isoformat(timespec="seconds")
+        .replace("+00:00", "Z"),
+    }
+
+
+def flake_identity(record: dict[str, Any]) -> str:
+    """Identify one unchanged-head flake independently of its write time."""
+
+    stable = {key: value for key, value in record.items() if key != "timestamp"}
+    return hashlib.sha256(json.dumps(stable, sort_keys=True).encode()).hexdigest()
+
+
+def write_atomically(path: Path, contents: str) -> None:
+    """Replace one complete text file without exposing a partial generation."""
+
+    # Allocate the replacement beside its destination for a same-volume rename.
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent, text=True
+    )
+
+    # Flush a complete replacement before exposing it under the durable name.
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            stream.write(contents)
+            stream.flush()
+            os.fsync(stream.fileno())
+        Path(temporary).replace(path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
+def read_flake_ledger(path: Path) -> list[dict[str, Any]]:
+    """Read the append-only flake ledger, refusing malformed durable state."""
+
+    if not path.exists():
+        return []
+    try:
+        return [
+            cast(dict[str, Any], json.loads(line))
+            for line in path.read_text(encoding="utf-8").splitlines()
+        ]
+    except (OSError, ValueError) as exc:
+        raise RunError(f"the flake ledger could not be read: {exc}") from exc
+
+
+@contextmanager
+def flake_ledger_lock(ledger: Path) -> Iterator[None]:
+    """Serialize atomic ledger generations without leaving another state file."""
+
+    ledger.parent.mkdir(parents=True, exist_ok=True)
+    descriptor = os.open(ledger.parent, os.O_RDONLY)
+    try:
+        fcntl.flock(descriptor, fcntl.LOCK_EX)
+        yield
+    finally:
+        fcntl.flock(descriptor, fcntl.LOCK_UN)
+        os.close(descriptor)
+
+
+def cmd_flake(cwd: Path, evidence_path: Path, state_path: Path | None) -> int:
+    """Append one independently established load flake to Skill-owned state."""
+
+    ledger = Path.home() / FLAKE_HOME / FLAKE_LEDGER
+    try:
+        offered = flake_record(cwd, evidence_path)
+        identity = flake_identity(offered)
+        with flake_ledger_lock(ledger):
+            records = read_flake_ledger(ledger)
+            standing = next(
+                (
+                    record
+                    for record in records
+                    if record.get("repository") == offered["repository"]
+                    and record.get("branch") == offered["branch"]
+                    and record.get("head") == offered["head"]
+                    and record.get("failing_tests") == offered["failing_tests"]
+                ),
+                None,
+            )
+            if standing is not None and flake_identity(standing) != identity:
+                return fail(
+                    "this unchanged-head flake already carries different evidence; settle which record stands before recording it"
+                )
+            recorded = standing is None
+            if recorded:
+                records.append(offered)
+                write_atomically(
+                    ledger,
+                    "".join(
+                        f"{json.dumps(record, sort_keys=True)}\n" for record in records
+                    ),
+                )
+
+        run_path = run_flakes_file(state_path)
+        if run_path is not None:
+            run_ids = (
+                []
+                if not run_path.exists()
+                else cast(list[str], json.loads(run_path.read_text(encoding="utf-8")))
+            )
+            if identity not in run_ids:
+                run_ids.append(identity)
+                write_atomically(run_path, json.dumps(run_ids, indent=2) + "\n")
+    except (OSError, RunError, ValueError) as exc:
+        return fail(f"flake evidence could not be written: {exc}")
+
+    emit(
+        {
+            "verb": "flake",
+            "recorded": recorded,
+            "ledger": str(ledger),
+            "record": standing or offered,
+        }
+    )
+    return 0
+
+
+def reported_flakes(cwd: Path, state_path: Path | None) -> list[dict[str, Any]]:
+    """Return this run's flakes with earlier recurrence counts per test."""
+
+    run_path = run_flakes_file(state_path)
+    if run_path is None or not run_path.exists():
+        return []
+    ledger = read_flake_ledger(Path.home() / FLAKE_HOME / FLAKE_LEDGER)
+    identities = cast(list[str], json.loads(run_path.read_text(encoding="utf-8")))
+    repository = repository_identity(cwd)
+    reported: list[dict[str, Any]] = []
+    for index, record in enumerate(ledger):
+        if flake_identity(record) not in identities:
+            continue
+        earlier = ledger[:index]
+        reported.append(
+            {
+                **record,
+                "earlier_records": {
+                    test: sum(
+                        prior.get("repository") == repository
+                        and test in prior.get("failing_tests", [])
+                        for prior in earlier
+                    )
+                    for test in record["failing_tests"]
+                },
+            }
+        )
+    return reported
+
+
 def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int:
     """Print every ticket in scope grouped by current Ticket Resolution.
 
@@ -5015,7 +5830,8 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
         say_where_work_stands(cwd, tickets, branch)
         base = run_base(cwd, tickets)
         regenerated = regenerated_merges(cwd, {ticket.number for ticket in tickets})
-    except RunError as exc:
+        flakes = reported_flakes(cwd, state_path)
+    except (OSError, RunError, ValueError) as exc:
         return fail(str(exc))
 
     # Stranding is read off the open scope alone: a ticket that is finished has
@@ -5028,6 +5844,16 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     }
     stranded = stranded_behind(open_scope)
     accounted = set(stranded).union(*recorded.values())
+    never_on_frontier = [
+        ticket.number for ticket in tickets if ticket.number not in accounted
+    ]
+    outcome = {
+        DONE: recorded[DONE],
+        FAILED: recorded[FAILED],
+        CONFLICTED: recorded[CONFLICTED],
+        "stranded": stranded,
+        "never_on_frontier": never_on_frontier,
+    }
 
     # The route account is rendered from what was frozen or not at all: the
     # decisions a night was worked under are auditable exactly, and where they
@@ -5035,27 +5861,41 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     # though it had been (ADR-0085).
     routing, routing_reason, _ = frozen_routing(state_path)
 
-    emit(
-        {
-            "verb": "report",
-            "label": READY_LABEL,
-            "scope": None if scope is None else [asdict(aim) for aim in scope],
-            "branch": branch,
-            "base": base,
-            "routing": routing_details(routing),
-            "routing_reason": routing_reason,
-            "observations": observed_details(routing, state_path),
-            "regenerated": regenerated,
-            "tickets": [ticket_details(ticket) for ticket in tickets],
-            "done": recorded[DONE],
-            "failed": recorded[FAILED],
-            "conflicted": recorded[CONFLICTED],
-            "stranded": stranded,
-            "never_on_frontier": [
-                ticket.number for ticket in tickets if ticket.number not in accounted
-            ],
-        }
-    )
+    # Assemble the complete durable account from the facts read above.
+    report = {
+        "verb": "report",
+        "label": READY_LABEL,
+        "scope": None if scope is None else [asdict(aim) for aim in scope],
+        "branch": branch,
+        "base": base,
+        "routing": routing_details(routing),
+        "routing_reason": routing_reason,
+        "observations": observed_details(routing, state_path),
+        "flakes": flakes,
+        "regenerated": regenerated,
+        "tickets": [ticket_details(ticket) for ticket in tickets],
+        **outcome,
+    }
+
+    # Project the authoritative account into the terminal dashboard itself.
+    if progress_file(state_path) is not None:
+        remembered = remembered_state(state_path, cwd)
+        current = remembered.progress if remembered is not None else None
+        completed = sum(len(outcome[group]) for group in OUTCOMES)
+        write_progress(
+            state_path,
+            "wave_verdict",
+            ProgressState(
+                wave=current.wave if current is not None else 1,
+                ticket=None,
+                amendments_spent=0,
+                tickets_completed=completed,
+                tickets_remaining=len(tickets) - completed,
+            ),
+            outcome,
+        )
+
+    emit(report)
     return 0
 
 
@@ -5110,6 +5950,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan.add_argument("--dry-run", action="store_true")
     plan.add_argument("--at-once", type=int, default=ONE_AT_A_TIME)
     plan.add_argument("--model")
+    plan.add_argument("--approval")
     add_deliberation_flag(plan)
     add_scope_flag(plan)
     add_shared_flags(plan)
@@ -5194,6 +6035,19 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     attempt_finish.add_argument("--resolved-model")
     add_shared_flags(attempt_finish)
 
+    flake = sub.add_parser("flake", help="Record one load-induced test flake.")
+    flake.add_argument("--evidence", required=True, type=Path)
+    add_shared_flags(flake)
+
+    progress = sub.add_parser("progress", help="Replace the run progress dashboard.")
+    progress.add_argument("--phase", required=True, choices=PROGRESS_PHASES)
+    progress.add_argument("--wave", required=True, type=int)
+    progress.add_argument("--ticket", type=int)
+    progress.add_argument("--amends-spent", type=int, default=0)
+    progress.add_argument("--completed", required=True, type=int)
+    progress.add_argument("--remaining", required=True, type=int)
+    add_shared_flags(progress)
+
     report = sub.add_parser("report", help="Print the consolidated report.")
     add_scope_flag(report)
     add_shared_flags(report)
@@ -5224,6 +6078,7 @@ def main(argv: list[str] | None = None) -> int:
             deliberation=args.deliberation,
             state_path=state_path,
             reference=args.scope,
+            approval=args.approval,
         )
     if args.verb == "route":
         return cmd_route(
@@ -5237,17 +6092,22 @@ def main(argv: list[str] | None = None) -> int:
             run_claimed=args.run_claimed,
         )
     if args.verb == "claim":
-        return cmd_claim(cwd, args.ticket, state_path)
+        result = cmd_claim(cwd, args.ticket, state_path)
+        if result == 0:
+            advance_progress(cwd, state_path, "preflight", args.ticket)
+        return result
     if args.verb == "park":
         return cmd_park(cwd, args.ticket, state_path)
     if args.verb == "isolate":
+        advance_progress(cwd, state_path, "isolate", args.ticket)
         return cmd_isolate(cwd, args.ticket)
     if args.verb == "integrate":
-        return cmd_integrate(cwd, args.ticket)
+        advance_progress(cwd, state_path, "integrate", args.ticket)
+        return cmd_integrate(cwd, args.ticket, state_path)
     if args.verb == "rebuild":
         return cmd_rebuild(cwd, args.ticket)
     if args.verb == "amend":
-        return cmd_amend(
+        result = cmd_amend(
             cwd,
             args.ticket,
             args.attempt,
@@ -5255,8 +6115,11 @@ def main(argv: list[str] | None = None) -> int:
             args.verdict_file,
             state_path,
         )
+        if result == 0:
+            advance_progress(cwd, state_path, "amend", args.ticket, args.attempt)
+        return result
     if args.verb == "record":
-        return cmd_record(
+        result = cmd_record(
             cwd,
             args.ticket,
             args.outcome,
@@ -5265,6 +6128,15 @@ def main(argv: list[str] | None = None) -> int:
             args.blocked_by,
             state_path,
         )
+        if result == 0:
+            advance_progress(
+                cwd,
+                state_path,
+                "note",
+                args.ticket,
+                is_ticket_completed=args.outcome in OUTCOMES,
+            )
+        return result
     if args.verb == "observe":
         return cmd_observe(
             cwd,
@@ -5288,6 +6160,20 @@ def main(argv: list[str] | None = None) -> int:
             args.resolved_model,
             state_path,
         )
+    if args.verb == "flake":
+        return cmd_flake(cwd, args.evidence, state_path)
+    if args.verb == "progress":
+        progress = ProgressState(
+            wave=args.wave,
+            ticket=args.ticket,
+            amendments_spent=args.amends_spent,
+            tickets_completed=args.completed,
+            tickets_remaining=args.remaining,
+        )
+        remember_progress(state_path, cwd, progress)
+        written = write_progress(state_path, args.phase, progress, None)
+        emit({"verb": "progress", "progress": written})
+        return 0
     if args.verb == "reconcile":
         return cmd_reconcile(cwd, args.ticket, args.commit)
     return cmd_report(cwd, args.scope, state_path)
