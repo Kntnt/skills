@@ -8010,6 +8010,104 @@ def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() ->
     )
 
 
+def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> None:
+    """The mode names every path that keeps noisy output out, not the subagent alone.
+
+    A production night's savings came from three mechanisms, and the one the
+    directive named ranked second: a process detached from the conversation with
+    its output on disk carried the build logs and test suites, a subagent earned
+    its brief where judgment had to be exercised inside noisy data, and a small
+    bounded command was cheapest narrowed at the source on the main seat
+    (ADR-0134). A directive naming the subagent alone invites a fenced brief and
+    reply for pure command execution, where either other path is cheaper.
+    """
+
+    directory = REPO_ROOT / "skills" / "agents" / "delegation"
+    path = directory / "references" / "mode.md"
+    mode = path.read_text(encoding="utf-8")
+    on_page = (directory / "help" / "on.md").read_text(encoding="utf-8")
+
+    # Each path is introduced by the shape of work that selects it, and *report*
+    # is the word for what the main seat reads back from a detached process.
+    required_fragments = {
+        "Pure execution with large output",
+        "detached from the conversation",
+        "read only the report",
+        "search the rest",
+        "Judgment inside noisy data",
+        "goes to a subagent",
+        "small bounded command",
+        "narrowed at the source",
+    }
+    missing = sorted(
+        fragment for fragment in required_fragments if fragment not in mode
+    )
+    assert not missing, (
+        f"{path}: the standing instruction must name all three execution paths"
+        f" with the work that selects each — a detached process whose report is"
+        f" read and whose rest is searched, a subagent for judgment inside noisy"
+        f" data, and the main seat narrowed at the source for a small bounded"
+        f" command (ADR-0134); missing {missing}."
+    )
+
+    # *When unsure, delegate* survives and governs the subagent-versus-main-seat
+    # choice alone: a detached process exercises no judgment, so uncertainty
+    # about judgment never selects it (ADR-0134).
+    assert (
+        "Between subagent and main seat, delegate when handoff costs less than"
+        " direct work; when unsure, delegate."
+    ) in mode, (
+        f"{path}: *when unsure, delegate* stays, scoped to the choice between a"
+        f" subagent and the main seat rather than to the detached process"
+        f" (ADR-0134)."
+    )
+
+    # A process the main seat detached is the main seat's to stop, or to name as
+    # left standing, as a subagent's leftovers are the subagent's (ADR-0127).
+    assert "stop it or name it as left standing" in mode, (
+        f"{path}: the main seat ends what it detached, or names it as left"
+        f" standing in its report, so no process outlives the turn that started"
+        f" it unaccounted for (ADR-0127, ADR-0134)."
+    )
+
+    # The directive is committed into a context file every Harness reads, so it
+    # names the property of a detached process and never a tool or a flag.
+    named_tools = {
+        "codex exec",
+        "run_in_background",
+        "nohup",
+        "setsid",
+        "tmux",
+        "disown",
+        "Monitor",
+    }
+    named = sorted(tool for tool in named_tools if tool in mode)
+    flags = sorted(
+        token for token in mode.split() if token.startswith("--") or token == "&"
+    )
+    assert not named and not flags, (
+        f"{path}: the detached path is stated as a property — a process detached"
+        f" from the conversation, its output on disk — and never as one Harness's"
+        f" tool or flag (ADR-0005, ADR-0030, ADR-0134); found {named + flags}."
+    )
+
+    # The roles list is written once: the counterweight sentence names the
+    # judgment-in-noise roles, and the subagent path names the property.
+    assert mode.count("distillation") == 1, (
+        f"{path}: the judgment-in-noise roles are listed once, in the"
+        f" counterweight sentence, and the subagent path names the property"
+        f" rather than a second list (ADR-0133, ADR-0134)."
+    )
+
+    # The manpage describes the mode, so it names the three paths beside the
+    # decision it already attributes to the main agent.
+    assert "detached from the conversation" in on_page, (
+        f"{directory / 'help' / 'on.md'}: the manpage says the main agent chooses"
+        f" the execution path, so it names the detached process beside the"
+        f" subagent and the narrowed main seat (ADR-0134)."
+    )
+
+
 def test_catalog_generation_rejects_a_name_that_is_not_the_directory(
     tmp_path: Path,
 ) -> None:
