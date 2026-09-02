@@ -7945,6 +7945,36 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f" weigh a routed cheaper seat for judgment-in-noise roles (ADR-0133);"
         f" missing {missing_boundary}."
     )
+
+    # Keep both routing paths and their boundary in one caller-chosen sentence.
+    routing_boundary = next(
+        (
+            sentence
+            for sentence in re.split(r"(?<=\.)\s+", mode)
+            if "frozen main seat" in sentence
+        ),
+        None,
+    )
+    assert routing_boundary is not None
+
+    # Prevent either side of the boundary from drifting into another sentence.
+    required_boundary_sentence_fragments = {
+        "is not routed",
+        "verdict authority",
+        "before spawning",
+        "foreign surface, model, or deliberation override",
+        "full execution brief",
+    }
+    missing_boundary_sentence = sorted(
+        fragment
+        for fragment in required_boundary_sentence_fragments
+        if fragment not in routing_boundary
+    )
+    assert not missing_boundary_sentence, (
+        f"{directory / 'references' / 'mode.md'}: the routed and unrouted paths"
+        f" must share one sentence; missing {missing_boundary_sentence}."
+    )
+
     assert "exploration" not in mode.lower(), (
         f"{directory / 'references' / 'mode.md'}: the counterweight names no"
         f" exploration policy, because none exists (ADR-0067, ADR-0133)."
@@ -8041,19 +8071,33 @@ def test_delegation_states_the_file_and_capped_inline_report_contract() -> None:
         f"{path}: delegation report contract is incomplete; missing {missing}."
     )
 
-    # Keep the writer and independent-verification duty inside the contract.
+    # Isolate the report contract from later delegation doctrine.
     contract_start = mode.index("Every brief names a report file path")
     contract_end = mode.index("Between subagent and main seat", contract_start)
     contract = mode[contract_start:contract_end]
+
+    # Assign the complete report to the subagent explicitly.
     assert "the subagent writes complete findings there" in contract
-    assert "Verify results independently." in contract
+
+    # Keep independent verification immediately beside the report contract.
+    assert (
+        "main seat reads the file only when its decision needs the detail."
+        " Verify results independently."
+    ) in contract, (
+        f"{path}: independent verification must immediately follow the report"
+        f" contract, with no intervening doctrine."
+    )
 
     # Preserve the detached path while forbidding any doctrine-wide cap number.
     assert "writing to disk" in mode
     default_number = re.search(
         (
             r"\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|"
-            r"eleven|twelve|dozen|hundred|thousand|\d+)\b"
+            r"eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|"
+            r"eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|"
+            r"eighty|ninety|dozen|score|hundred|thousand|million|billion|"
+            r"trillion|quadrillion|quintillion|sextillion|septillion|"
+            r"octillion|nonillion|decillion|\d+)\b"
         ),
         mode,
         flags=re.IGNORECASE,
