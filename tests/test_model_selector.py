@@ -209,6 +209,52 @@ def test_context_retains_uncovered_selections_and_omits_disabled_ones(
     assert "gpt-5.6-luna" not in {mapping["model"] for mapping in unvalidated}
 
 
+def test_context_retains_seedless_and_unavailable_mode_selections(
+    tmp_path: Path,
+) -> None:
+    """Every enabled validated profile selection stays visible for audit."""
+
+    # Add a validated model absent from the seed and preserve its unknown rank.
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    seedless = deepcopy(profile["model_selections"][-1])
+    seedless.update(
+        {
+            "selection_id": "seedless",
+            "family": "seedless",
+            "requested_model_id": "seedless-model",
+            "canonical_provider_model_id": "seedless-model",
+            "provider_release_id": None,
+        }
+    )
+    profile["model_selections"].append(seedless)
+    mappings = _derive_context(
+        tmp_path / "seedless",
+        _runtime_context_request(),
+        json.dumps(profile).encode(),
+    )["context"]["mappings"]
+    retained = next(
+        mapping for mapping in mappings if mapping["model"] == "seedless-model"
+    )
+    assert retained["model_capability"] is None
+
+    # Keep an explicitly selected but unavailable serving mode unlaunchable.
+    unavailable = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    grok = unavailable["model_selections"][-1]
+    grok["controls"]["serving_modes"] = {
+        "policy": "explicit",
+        "values": ["batch"],
+    }
+    unavailable_mappings = _derive_context(
+        tmp_path / "unavailable-mode",
+        _runtime_context_request(),
+        json.dumps(unavailable).encode(),
+    )["context"]["mappings"]
+    assert any(
+        mapping["model"] == "grok-4.6" and mapping["serving_mode"] == "batch"
+        for mapping in unavailable_mappings
+    )
+
+
 def test_context_keeps_an_unsupported_harness_on_the_main_seat(
     tmp_path: Path,
 ) -> None:
@@ -244,7 +290,7 @@ def test_context_keeps_a_missing_attestation_auditable(tmp_path: Path) -> None:
     del request["runtime"]["harness"]["inheritance_attestation"]
     derived = _derive_context(tmp_path, request)
 
-    # Retain configured Claude points while making their launch seam unavailable.
+    # Retain configured Claude points while their launch seam is unavailable.
     adapters = derived["context"]["harness"]["adapter_specs"]
     mappings = derived["context"]["mappings"]
     assert not [adapter for adapter in adapters if adapter["surface"] == "agent-tool"]
@@ -281,6 +327,38 @@ def test_context_treats_missing_or_invalid_profiles_as_absent(tmp_path: Path) ->
         assert decision["inheritance"]["reason"] == "missing_profile"
 
 
+def test_context_rejects_incomplete_channel_billing_contract(tmp_path: Path) -> None:
+    """A persisted channel cannot validate without its billing-specific facts."""
+
+    # Remove one required subscription fact from an otherwise complete profile.
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    for channel in profile["access_channels"]:
+        channel.update({"region": "global", "currency": "USD", "sources": []})
+        if channel["billing_type"] == "subscription":
+            channel.update(
+                {
+                    "tier": None,
+                    "billing_period": "month",
+                    "recurring_amount": None,
+                    "tax_treatment": None,
+                    "included_overage_policy": "included_only",
+                    "reset_windows": None,
+                    "quota_multipliers": {},
+                }
+            )
+        else:
+            channel["rate_source"] = None
+    del profile["access_channels"][0]["currency"]
+    derived = _derive_context(
+        tmp_path,
+        _runtime_context_request(),
+        json.dumps(profile).encode(),
+    )
+
+    assert derived["context"]["profile"] is None
+    assert derived["context"]["mappings"] == []
+
+
 def test_context_inherits_an_unknown_main_seat_without_overrides(
     tmp_path: Path,
 ) -> None:
@@ -312,16 +390,31 @@ def test_context_returns_a_valid_frozen_snapshot_unchanged(tmp_path: Path) -> No
     first = _derive_context(tmp_path, _runtime_context_request())
     snapshot = _load_router().route(first)["snapshot"]
 
-    # Ask context to wrap a later request around those same frozen facts.
-    later = _derive_context(
-        tmp_path,
-        {
-            "schema_version": 1,
-            "requests": [_request(request_id="build-2")],
-            "snapshot": snapshot,
-        },
+    # Preserve a deliberately formatted snapshot through the process boundary.
+    raw_snapshot = json.dumps(snapshot, indent=3, sort_keys=False).replace("\n", "\r\n")
+    raw_requests = json.dumps([_request(request_id="build-2")])
+    request = tmp_path / "frozen-context-request.json"
+    request.write_text(
+        f'{{"schema_version":1,"requests":{raw_requests},"snapshot":{raw_snapshot}}}',
+        encoding="utf-8",
     )
+    result = subprocess.run(
+        [
+            "uv",
+            "run",
+            str(CONTEXT_SCRIPT),
+            f"--data={tmp_path / 'model-selector'}",
+            str(request),
+        ],
+        cwd=REPO_ROOT,
+        text=False,
+        capture_output=True,
+        check=False,
+    )
+    later = json.loads(result.stdout)
 
+    assert result.returncode == 0
+    assert b'"snapshot":' + raw_snapshot.encode() in result.stdout
     assert later["snapshot"] == snapshot
 
 
@@ -333,14 +426,18 @@ def test_context_process_refusals_are_machine_readable(tmp_path: Path) -> None:
     malformed.write_text("{", encoding="utf-8")
     invalid = tmp_path / "invalid.json"
     invalid.write_text("{}", encoding="utf-8")
+    undecodable = tmp_path / "undecodable.json"
+    undecodable.write_bytes(b"\xff")
     invocations = [
         [],
         [str(tmp_path / "absent.json")],
+        [str(undecodable)],
         [str(malformed)],
         [str(invalid)],
     ]
     expected = [
         "invalid_arguments",
+        "unreadable_artifact",
         "unreadable_artifact",
         "malformed_json",
         "invalid_context_input",
@@ -362,7 +459,7 @@ def test_context_process_refusals_are_machine_readable(tmp_path: Path) -> None:
 def test_context_refuses_a_flag_after_its_artifact_operand(tmp_path: Path) -> None:
     """The process grammar never silently repairs out-of-order arguments."""
 
-    # Put a valid flag after the path its public synopsis requires it to precede.
+    # Put a valid flag after the path its synopsis requires it to precede.
     request = tmp_path / "context-request.json"
     request.write_text(json.dumps(_runtime_context_request()), encoding="utf-8")
     result = subprocess.run(
@@ -555,6 +652,45 @@ def test_route_emits_only_parameter_destinations_for_a_complete_point() -> None:
         assert refusal["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
 
 
+def test_route_rejects_carried_facts_that_differ_from_the_main_seat() -> None:
+    """A carried destination completes only the seat's exact inherited fact."""
+
+    # Exercise every generalized non-control destination against a mismatch.
+    for field in ("model", "surface", "serving_mode", "tools", "policy"):
+        snapshot = _complete_routing_snapshot()
+        adapter = snapshot["harness"]["adapter_specs"][0]
+        adapter["inheritance_attestation"] = {
+            "carried_by_default": True,
+            "verified": "codex/subagent",
+        }
+        carried = {"carried_by": "inheritance"}
+        if field == "model":
+            adapter["launch"]["model_flag"] = carried
+        elif field == "surface":
+            adapter["launch"]["surface_flag"] = carried
+            snapshot["main_seat"]["surface"] = "main-seat"
+        elif field == "serving_mode":
+            adapter["launch"]["serving_mode_flag"] = carried
+            snapshot["main_seat"]["serving_mode"] = "fast"
+        elif field == "tools":
+            adapter["launch"]["tools_flag"] = carried
+            snapshot["main_seat"]["tools"] = []
+        else:
+            adapter["launch"]["policy_flags"]["sandbox"] = carried
+            snapshot["main_seat"]["policy"]["sandbox"] = "read-only"
+
+        decision = _load_router().route(
+            {
+                "schema_version": 1,
+                "context": snapshot,
+                "requests": [_request(overrides={"deliberation": "low"})],
+            }
+        )["decisions"][0]
+
+        assert decision["status"] == "refused", field
+        assert decision["audit"]["exclusions"][0]["code"] == ("adapter_unreachable")
+
+
 def test_route_inherits_an_empty_mapping_set_before_an_unknown_ceiling() -> None:
     """Unavailable selection data leaves an automatic request on its seat."""
 
@@ -594,6 +730,25 @@ def test_route_audits_an_unranked_mapping_before_inheriting() -> None:
 
     assert decision["status"] == "inherit"
     assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
+    assert decision["audit"]["exclusions"][0]["code"] == ("capability_rank_unavailable")
+
+
+def test_route_refuses_an_override_against_an_unranked_empty_pool() -> None:
+    """An exact lock never falls through to a generic empty-set refusal."""
+
+    # Keep the matching configured point visible but unavailable to comparison.
+    snapshot = _complete_routing_snapshot()
+    snapshot["mappings"][0]["model_capability"] = None
+    decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"model": "worker-v2"})],
+        }
+    )["decisions"][0]
+
+    assert decision["status"] == "refused"
+    assert decision["reason"]["code"] == "unavailable_override"
     assert decision["audit"]["exclusions"][0]["code"] == ("capability_rank_unavailable")
 
 
@@ -670,7 +825,7 @@ def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
 
     # Assert no partial launch instruction escapes the adapter filter.
     assert unreachable["status"] == "refused"
-    assert unreachable["reason"]["code"] == "empty_safe_candidate_set"
+    assert unreachable["reason"]["code"] == "unavailable_override"
     assert unreachable["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
 
     # Collide model and native destinations in an otherwise complete adapter.
@@ -688,7 +843,7 @@ def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
 
     # Assert one argument destination can never overwrite another field.
     assert collision["status"] == "refused"
-    assert collision["reason"]["code"] == "empty_safe_candidate_set"
+    assert collision["reason"]["code"] == "unavailable_override"
     assert collision["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
 
     # Resolve launch-policy and non-launch commercial mutations separately.
@@ -3137,7 +3292,7 @@ def test_observe_leaves_unavailable_metrics_null_and_totals_cheap_first() -> Non
     response = observations.observe(_attempts(cheap, escalated))
     first, second = response["observations"]
 
-    # Assert unavailable metrics stay null and the policy accounts for all three.
+    # Assert null metrics and the policy account for all three cases.
     assert first["cost"]["cash"] is None
     assert first["tokens"]["input"] is None
     assert first["quota"]["rolling"] == 3.0

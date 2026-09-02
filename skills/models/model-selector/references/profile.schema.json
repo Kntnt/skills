@@ -19,6 +19,7 @@
   "$defs": {
     "non_empty_string": {"type": "string", "minLength": 1},
     "nullable_string": {"type": ["string", "null"]},
+    "nullable_number": {"type": ["number", "null"]},
     "control_policy": {
       "type": "object",
       "required": ["policy", "values"],
@@ -46,17 +47,58 @@
     },
     "access_channel": {
       "type": "object",
-      "required": ["channel_id", "provider", "billing_type"],
+      "required": ["channel_id", "provider", "billing_type", "region", "sources"],
       "properties": {
         "channel_id": {"$ref": "#/$defs/non_empty_string"},
         "provider": {"$ref": "#/$defs/non_empty_string"},
         "surface": {"$ref": "#/$defs/non_empty_string"},
         "gateway": {"$ref": "#/$defs/non_empty_string"},
-        "billing_type": {"enum": ["subscription", "direct_api", "gateway_api", "other"]}
+        "billing_type": {"enum": ["subscription", "direct_api", "gateway_api", "other"]},
+        "region": {"$ref": "#/$defs/nullable_string"},
+        "plan": {"$ref": "#/$defs/non_empty_string"},
+        "tier": {"$ref": "#/$defs/nullable_string"},
+        "billing_period": {"$ref": "#/$defs/non_empty_string"},
+        "currency": {"$ref": "#/$defs/non_empty_string"},
+        "recurring_amount": {"$ref": "#/$defs/nullable_number"},
+        "tax_treatment": {"$ref": "#/$defs/nullable_string"},
+        "included_overage_policy": {"$ref": "#/$defs/non_empty_string"},
+        "reset_windows": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}}
+          ]
+        },
+        "quota_multipliers": {"type": "object", "additionalProperties": {"$ref": "#/$defs/nullable_number"}},
+        "rate_source": {"$ref": "#/$defs/nullable_string"},
+        "sources": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}}
       },
-      "oneOf": [
-        {"required": ["surface"], "not": {"required": ["gateway"]}},
-        {"required": ["gateway"], "not": {"required": ["surface"]}}
+      "allOf": [
+        {
+          "oneOf": [
+            {"required": ["surface"], "not": {"required": ["gateway"]}},
+            {"required": ["gateway"], "not": {"required": ["surface"]}}
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "properties": {"billing_type": {"const": "subscription"}},
+              "required": ["billing_type", "plan", "tier", "billing_period", "currency", "recurring_amount", "tax_treatment", "included_overage_policy", "reset_windows", "quota_multipliers"]
+            },
+            {
+              "properties": {"billing_type": {"const": "direct_api"}},
+              "required": ["billing_type", "currency", "rate_source"]
+            },
+            {
+              "properties": {"billing_type": {"const": "gateway_api"}},
+              "required": ["billing_type", "currency", "rate_source"]
+            },
+            {
+              "properties": {"billing_type": {"const": "other"}},
+              "required": ["billing_type"]
+            }
+          ]
+        }
       ],
       "additionalProperties": true
     },

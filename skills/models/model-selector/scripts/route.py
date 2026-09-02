@@ -25,6 +25,7 @@ COMMERCIAL_DIMENSIONS: tuple[str, ...] = (
 # The one launch destination that names no flag: a native control the active
 # Harness applies to a spawned subagent from the session it inherits from.
 CARRIED_DESTINATION: dict[str, str] = {"carried_by": "inheritance"}
+_MISSING: object = object()
 
 # Share the inheritance states that require further evidence work.
 EVIDENCE_INHERITANCE_REASONS: frozenset[str] = frozenset(
@@ -369,11 +370,17 @@ def _destination_value(destination: Any, value: Any) -> Any:
     return deepcopy(value)
 
 
-def _destination_accepts(destination: Any, value: Any) -> bool:
+def _destination_accepts(
+    destination: Any,
+    value: Any,
+    inherited: Any = _MISSING,
+) -> bool:
     """Require a valid destination whose fixed value matches the point."""
 
-    if _destination_key(destination) is not None or _is_carried(destination):
+    if _destination_key(destination) is not None:
         return True
+    if _is_carried(destination):
+        return bool(inherited is not _MISSING and value == inherited)
     return bool(isinstance(destination, dict) and destination.get("fixed") == value)
 
 
@@ -463,24 +470,42 @@ def _adapter_can_launch(
     launch = adapter.get("launch", {})
     native_flags = launch.get("native_control_flags", {})
     policy_flags = launch.get("policy_flags", {})
+    main_seat = snapshot["main_seat"]
+    main_native = main_seat["native_deliberation"]
+    main_policy = main_seat["policy"]
     return (
-        _destination_accepts(launch.get("model_flag"), point["model"])
+        _destination_accepts(
+            launch.get("model_flag"), point["model"], main_seat["model"]
+        )
         and _destination_accepts(
             launch.get("surface_flag"),
             point.get("surface", snapshot["harness"]["surface"]),
+            main_seat["surface"],
         )
-        and _destination_accepts(launch.get("serving_mode_flag"), point["serving_mode"])
-        and _destination_accepts(launch.get("tools_flag"), point.get("tools", []))
+        and _destination_accepts(
+            launch.get("serving_mode_flag"),
+            point["serving_mode"],
+            main_seat["serving_mode"],
+        )
+        and _destination_accepts(
+            launch.get("tools_flag"),
+            point.get("tools", []),
+            main_seat["tools"],
+        )
         and isinstance(native_flags, dict)
         and set(native) <= set(native_flags)
         and all(
-            _destination_accepts(native_flags[field], value)
+            _destination_accepts(
+                native_flags[field], value, main_native.get(field, _MISSING)
+            )
             for field, value in native.items()
         )
         and isinstance(policy_flags, dict)
         and set(point.get("policy", {})) <= set(policy_flags)
         and all(
-            _destination_accepts(policy_flags[field], value)
+            _destination_accepts(
+                policy_flags[field], value, main_policy.get(field, _MISSING)
+            )
             for field, value in point.get("policy", {}).items()
         )
         and _launch_destinations_are_unique(adapter)
@@ -1650,7 +1675,7 @@ def _decision(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, An
             return _refused(request, snapshot, "unrepresentable_verdict_inheritance")
         return _inherit(request, snapshot, "verdict_authority")
 
-    # Refuse rather than drop a lock that an unparameterized launch cannot carry.
+    # Refuse instead of dropping a lock an unparameterized launch cannot carry.
     decision = _execution_decision(request, snapshot)
     if decision["status"] == "inherit" and request["overrides"]:
         reason = decision["inheritance"]["reason"]
@@ -1737,6 +1762,16 @@ def _execution_decision(
             snapshot,
             "unavailable_override",
             "The active Harness carries this deliberation control by inheritance.",
+            list(pool.exclusions),
+        )
+
+    # Resolve every other explicit empty pool to its stable lock refusal.
+    if overrides and not pool.candidates:
+        return _refused(
+            request,
+            snapshot,
+            "unavailable_override",
+            "No exact configured point can carry every explicit override.",
             list(pool.exclusions),
         )
 

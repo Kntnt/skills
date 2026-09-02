@@ -1478,7 +1478,7 @@ RECUT_BOUNDS = {
 }
 
 # Every surface the run acts from, as against the record that decides. A
-# decision record states the decision by definition; these state it operationally.
+# decision record states the decision by definition; these state it in use.
 ACTING_SURFACES = (
     SKILL / "references" / "wave.md",
     SKILL / "references" / "fix.md",

@@ -16,21 +16,10 @@ from typing import Any, cast
 
 import route
 
-# Pin the portable authority scale and the dimensions routing keeps independent.
+# Derive routing-owned scales without creating a second source of truth.
 PORTABLE_RANKS: dict[str, int] = {
-    "low": 1,
-    "medium": 2,
-    "high": 3,
-    "xhigh": 4,
-    "max": 5,
+    level: rank for rank, level in enumerate(route.PORTABLE_LEVELS, start=1)
 }
-COMMERCIAL_DIMENSIONS: tuple[str, ...] = (
-    "cash",
-    "rolling_quota",
-    "weekly_quota",
-    "allocated_subscription_cost",
-    "latency",
-)
 
 # Load the immutable schemas and defaults relative to the installed Skill.
 SKILL_ROOT: Path = Path(__file__).resolve().parent.parent
@@ -103,7 +92,11 @@ def _read_templates() -> list[dict[str, Any]]:
 
 
 def migrate_profile(profile: dict[str, Any]) -> dict[str, Any]:
-    """Normalize a persisted profile in memory without rewriting its bytes."""
+    """Isolate in-memory migration while version 1 is the only documented shape.
+
+    The detached value protects persisted bytes from both current normalization
+    and a later version-specific transformation.
+    """
 
     return deepcopy(profile)
 
@@ -273,10 +266,16 @@ def _portable_controls(
 def _serving_modes(selection: dict[str, Any], seed: dict[str, Any]) -> list[str]:
     """Expand one selection into every admitted model serving mode."""
 
+    policy = selection["controls"]["serving_modes"]
+    if policy["policy"] == "explicit":
+        return cast(list[str], policy["values"] or [])
     supported = cast(
         list[str], seed.get("supported_controls", {}).get("serving_modes", [])
     )
-    return _policy_values(selection["controls"]["serving_modes"], supported)
+    if not supported:
+        default = seed.get("default_configuration", {}).get("serving_mode")
+        supported = [default or "standard"]
+    return _policy_values(policy, supported)
 
 
 def _specialized_adapter(
@@ -333,7 +332,7 @@ def _specialized_adapter(
 def _commercial() -> dict[str, None]:
     """Represent every per-attempt commercial dimension as unmeasured."""
 
-    return {dimension: None for dimension in COMMERCIAL_DIMENSIONS}
+    return {dimension: None for dimension in route.COMMERCIAL_DIMENSIONS}
 
 
 def _main_channel(profile: dict[str, Any], harness: str, model: str) -> str:
@@ -356,7 +355,8 @@ def _derive_context(
 ) -> dict[str, Any]:
     """Derive one complete current routing context without persistent writes."""
 
-    # Freeze stable seed facts and the exact runtime seat supplied by the caller.
+    # Freeze stable seed facts and the exact runtime seat supplied by the
+    # caller.
     records = _read_seed()
     manifest = next(
         record for record in records if record["record_type"] == "seed_manifest"
@@ -413,9 +413,13 @@ def _derive_context(
     mappings: list[dict[str, Any]] = []
     for selection in selections:
         canonical = cast(str, selection["canonical_provider_model_id"])
-        seed = model_seeds.get(canonical)
-        if seed is None:
-            continue
+        seed = model_seeds.get(canonical) or {
+            "supported_controls": {"effort": [], "serving_modes": []},
+            "default_configuration": {
+                "effort": "medium",
+                "serving_mode": "standard",
+            },
+        }
         template = next(
             (
                 item
@@ -500,7 +504,11 @@ def _derive_context(
 
 
 def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
-    """Return a route artifact from one validated context request."""
+    """Validate one request without turning absent configuration into setup.
+
+    Invalid request or contradictory runtime facts raise ``ValueError`` for the
+    process adapter to report as ``invalid_context_input``.
+    """
 
     if error := _schema_error(artifact, CONTEXT_SCHEMA, "context_request"):
         raise ValueError(error)
@@ -536,6 +544,53 @@ def _refusal(code: str, detail: str) -> dict[str, Any]:
     }
 
 
+def _skip_json_whitespace(content: str, index: int) -> int:
+    """Advance to the next byte-bearing JSON token."""
+
+    while index < len(content) and content[index] in " \t\r\n":
+        index += 1
+    return index
+
+
+def _raw_object_member(content: str, target: str) -> str | None:
+    """Recover one top-level JSON value with its original internal bytes."""
+
+    # Walk only validated JSON tokens so strings cannot impersonate member keys.
+    decoder = json.JSONDecoder()
+    index = _skip_json_whitespace(content, 0)
+    if index >= len(content) or content[index] != "{":
+        return None
+    index += 1
+    matched: str | None = None
+    while True:
+        index = _skip_json_whitespace(content, index)
+        if index >= len(content) or content[index] == "}":
+            return matched
+        key, index = decoder.raw_decode(content, index)
+        index = _skip_json_whitespace(content, index)
+        if not isinstance(key, str) or index >= len(content) or content[index] != ":":
+            return None
+        value_start = _skip_json_whitespace(content, index + 1)
+        _, value_end = decoder.raw_decode(content, value_start)
+        if key == target:
+            matched = content[value_start:value_end]
+        index = _skip_json_whitespace(content, value_end)
+        if index >= len(content) or content[index] not in ",}":
+            return None
+        if content[index] == "}":
+            return matched
+        index += 1
+
+
+def _render_response(response: dict[str, Any], raw_snapshot: str | None) -> str:
+    """Keep a validated frozen snapshot byte-exact inside its new envelope."""
+
+    if "snapshot" not in response or raw_snapshot is None:
+        return json.dumps(response, sort_keys=True, separators=(",", ":"))
+    requests = json.dumps(response["requests"], sort_keys=True, separators=(",", ":"))
+    return f'{{"schema_version":1,"requests":{requests},"snapshot":{raw_snapshot}}}'
+
+
 def _arguments(argv: list[str]) -> tuple[Path, Path] | None:
     """Parse the public attached-value grammar without repairing invalid forms."""
 
@@ -556,9 +611,10 @@ def _arguments(argv: list[str]) -> tuple[Path, Path] | None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Read one context artifact and emit a route artifact or stable refusal."""
+    """Emit a route artifact on exit 0 or one stable refusal on exit 2."""
 
     # Refuse malformed process input before reading configuration or seed data.
+    raw_snapshot: str | None = None
     arguments = _arguments(sys.argv[1:] if argv is None else argv)
     if arguments is None:
         response = _refusal(
@@ -568,8 +624,8 @@ def main(argv: list[str] | None = None) -> int:
     else:
         data_directory, artifact_path = arguments
         try:
-            content = artifact_path.read_text(encoding="utf-8")
-        except OSError as error:
+            content = artifact_path.read_bytes().decode("utf-8")
+        except (OSError, UnicodeDecodeError) as error:
             response = _refusal("unreadable_artifact", str(error))
         else:
             try:
@@ -577,11 +633,12 @@ def main(argv: list[str] | None = None) -> int:
             except json.JSONDecodeError as error:
                 response = _refusal("malformed_json", str(error))
             else:
+                raw_snapshot = _raw_object_member(content, "snapshot")
                 try:
                     response = derive(artifact, data_directory)
                 except ValueError as error:
                     response = _refusal("invalid_context_input", str(error))
-    print(json.dumps(response, sort_keys=True, separators=(",", ":")))
+    print(_render_response(response, raw_snapshot))
     return 2 if "artifact_refusal" in response else 0
 
 

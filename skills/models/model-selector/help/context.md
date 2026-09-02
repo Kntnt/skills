@@ -10,7 +10,7 @@ model-selector context - derive complete current routing context
 
 ## DESCRIPTION
 
-Read one versioned context request from *PATH*. A first-call request combines ordered route requests with exact runtime Harness and main-seat facts; the command reads the selected profile and shipped routing data, then returns a complete artifact accepted by `route`. A later-call request combines new ordered requests with a previously frozen snapshot and returns that snapshot unchanged.
+Read one versioned context request from *PATH*. A first-call request combines ordered route requests with exact runtime Harness and main-seat facts; the command reads the selected profile and shipped routing data, then returns a complete artifact accepted by `route`. A later-call request combines new ordered requests with a previously frozen snapshot and returns that snapshot byte-for-byte unchanged.
 
 Context is offline, non-interactive, and read-only. It never starts setup, performs network access, research, evaluation, or evidence refresh, and never writes configuration, evidence, or any other persistent state. Missing or invalid configuration yields a `null` profile and audited inheritance rather than setup.
 

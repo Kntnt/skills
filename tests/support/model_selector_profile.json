@@ -12,20 +12,44 @@
       "provider": "anthropic",
       "surface": "claude-code",
       "billing_type": "subscription",
-      "plan": "max"
+      "region": "global",
+      "plan": "max",
+      "tier": "20x",
+      "billing_period": "month",
+      "currency": "USD",
+      "recurring_amount": null,
+      "tax_treatment": null,
+      "included_overage_policy": "included_only",
+      "reset_windows": null,
+      "quota_multipliers": {},
+      "sources": ["fixture:user-confirmed"]
     },
     {
       "channel_id": "codex-subscription",
       "provider": "openai",
       "surface": "codex-app",
       "billing_type": "subscription",
-      "plan": "pro"
+      "region": "global",
+      "plan": "pro",
+      "tier": null,
+      "billing_period": "month",
+      "currency": "USD",
+      "recurring_amount": null,
+      "tax_treatment": null,
+      "included_overage_policy": "included_only",
+      "reset_windows": null,
+      "quota_multipliers": {},
+      "sources": ["fixture:user-confirmed"]
     },
     {
       "channel_id": "uncovered-api",
       "provider": "spacexai",
       "surface": "opencode",
-      "billing_type": "direct_api"
+      "billing_type": "direct_api",
+      "region": "global",
+      "currency": "USD",
+      "rate_source": "fixture:seed-evidence",
+      "sources": ["fixture:seed-evidence"]
     }
   ],
   "model_selections": [
