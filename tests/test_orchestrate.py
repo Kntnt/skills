@@ -131,20 +131,25 @@ def _step(number: int) -> str:
 def test_every_session_owned_transition_updates_the_progress_dashboard() -> None:
     """Dispatch, verdict, notes, and wave checks expose their phase promptly."""
 
+    # Map every top-level session transition to its required dashboard phase.
     phases = {
         2: "preflight",
         6: "build",
         7: "verify",
         8: "note",
+        9: "amend",
         11: "wave_verdict",
     }
+
+    # Require the exact progress command at every mapped transition.
     for step_number, phase in phases.items():
         step = _step(step_number)
-        assert 'run.py" progress' in step and phase in step, (
+        assert f"progress --phase={phase}" in step, (
             f"{SKILL / 'SKILL.md'}: step {step_number} reports {phase} through "
             "the progress verb at the transition it owns."
         )
 
+    # Require terminal reporting even when the run had no work to start.
     terminal = _step(12)
     assert 'run.py" report' in terminal and "outcome" in terminal, (
         f"{SKILL / 'SKILL.md'}: step 12 derives the terminal dashboard from "
@@ -158,18 +163,21 @@ def test_every_session_owned_transition_updates_the_progress_dashboard() -> None
         "before returning the last plan's no-work account."
     )
 
+    # Cover the resumed collision repair nested inside isolation.
     resumed_repair = _step(5)
-    assert "Before that repairer is dispatched, mark" in resumed_repair, (
+    assert "progress --phase=build" in resumed_repair, (
         f"{SKILL / 'SKILL.md'}: step 5 reports a resumed collision repair "
         "before dispatching it."
     )
 
+    # Cover both nested collision-resolution dispatch roles.
     collision_resolution = _step(10)
-    assert "Before every builder dispatch in this step, mark" in collision_resolution
-    assert "before every verifier dispatch, mark" in collision_resolution
+    assert "progress --phase=build" in collision_resolution
+    assert "progress --phase=verify" in collision_resolution
 
+    # Cover the fixers nested inside the wave-verdict loop.
     wave_resolution = _step(11)
-    assert "Before every wave-fix builder dispatch, mark" in wave_resolution, (
+    assert "progress --phase=build" in wave_resolution, (
         f"{SKILL / 'SKILL.md'}: step 11 reports every wave fixer before dispatching it."
     )
 

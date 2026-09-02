@@ -1210,6 +1210,7 @@ def write_progress(
 ) -> str | None:
     """Atomically replace the run dashboard, or do nothing without state."""
 
+    # Resolve the dashboard beside this session's durable state.
     destination = progress_file(state_path)
     if destination is None:
         return None
@@ -1242,6 +1243,7 @@ def advance_progress(
 ) -> None:
     """Advance an existing dashboard, recreating it from durable run state."""
 
+    # Skip transitions for invocations without durable session state.
     destination = progress_file(state_path)
     if destination is None:
         return
@@ -1273,20 +1275,18 @@ def advance_progress(
         completed += 1
         remaining_count = max(remaining_count - 1, 0)
 
-    write_progress(
-        state_path,
-        phase,
-        ProgressState(
-            wave=current.wave if current is not None else 1,
-            ticket=ticket,
-            amendments_spent=(
-                amendment_count if amendments_spent is None else amendments_spent
-            ),
-            tickets_completed=completed,
-            tickets_remaining=remaining_count,
+    # Preserve the advanced baseline before projecting the latest dashboard.
+    progress = ProgressState(
+        wave=current.wave if current is not None else 1,
+        ticket=ticket,
+        amendments_spent=(
+            amendment_count if amendments_spent is None else amendments_spent
         ),
-        None,
+        tickets_completed=completed,
+        tickets_remaining=remaining_count,
     )
+    remember_progress(state_path, cwd, progress)
+    write_progress(state_path, phase, progress, None)
 
 
 def observation_file(path: Path | None) -> Path | None:
@@ -1550,10 +1550,12 @@ def remembered_state(path: Path | None, cwd: Path) -> RunState | None:
 def remember_progress(path: Path | None, cwd: Path, progress: ProgressState) -> None:
     """Keep session-owned dashboard values outside the disposable dashboard."""
 
+    # Amend only an existing run account for the checked-out branch.
     state = remembered_state(path, cwd)
     if state is None:
         return
 
+    # Preserve the next engine transition's reconstruction baseline.
     state.progress = progress
     write_state(path, state)
 
@@ -5266,10 +5268,13 @@ def flake_identity(record: dict[str, Any]) -> str:
 def write_atomically(path: Path, contents: str) -> None:
     """Replace one complete text file without exposing a partial generation."""
 
+    # Allocate the replacement beside its destination for a same-volume rename.
     path.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temporary = tempfile.mkstemp(
         prefix=f".{path.name}.", suffix=".tmp", dir=path.parent, text=True
     )
+
+    # Flush a complete replacement before exposing it under the durable name.
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
             stream.write(contents)
@@ -5475,11 +5480,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
         "flakes": flakes,
         "regenerated": regenerated,
         "tickets": [ticket_details(ticket) for ticket in tickets],
-        "done": recorded[DONE],
-        "failed": recorded[FAILED],
-        "conflicted": recorded[CONFLICTED],
-        "stranded": stranded,
-        "never_on_frontier": never_on_frontier,
+        **outcome,
     }
 
     # Project the authoritative account into the terminal dashboard itself.
@@ -5749,11 +5750,7 @@ def main(argv: list[str] | None = None) -> int:
             tickets_completed=args.completed,
             tickets_remaining=args.remaining,
         )
-        remember_progress(
-            state_path,
-            cwd,
-            progress,
-        )
+        remember_progress(state_path, cwd, progress)
         written = write_progress(
             state_path,
             args.phase,

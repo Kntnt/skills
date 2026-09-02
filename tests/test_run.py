@@ -8640,8 +8640,11 @@ def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
 def test_progress_writes_the_latest_phase_atomically(tmp_path: Path) -> None:
     """A polling caller always gets one complete current dashboard document."""
 
+    # Arrange an empty repository and session directory.
     repo = _init_repo(tmp_path / "repo")
     scratch = tmp_path / "scratch"
+
+    # Publish one live phase through the public progress verb.
     first = _engine(
         repo,
         "progress",
@@ -8657,6 +8660,7 @@ def test_progress_writes_the_latest_phase_atomically(tmp_path: Path) -> None:
     progress_path = scratch / STATE_HOME / PROGRESS_FILE
     progress = json.loads(progress_path.read_text(encoding="utf-8"))
 
+    # Assert the complete latest dashboard and atomic-write cleanup.
     assert first.returncode == 0, first.stderr
     assert progress == {
         "wave": 2,
@@ -8671,15 +8675,38 @@ def test_progress_writes_the_latest_phase_atomically(tmp_path: Path) -> None:
     assert progress["timestamp"].endswith("Z")
     assert list(progress_path.parent.glob(f".{PROGRESS_FILE}.*.tmp")) == []
 
+
+def test_report_projects_the_authoritative_terminal_progress(tmp_path: Path) -> None:
+    """The durable report alone supplies the terminal dashboard account."""
+
+    # Arrange a live dashboard and the tracker's authoritative scope.
+    repo = _init_repo(tmp_path / "repo")
+    scratch = tmp_path / "scratch"
+    live = _engine(
+        repo,
+        "progress",
+        "--phase=build",
+        "--wave=2",
+        "--ticket=9",
+        "--completed=0",
+        "--remaining=1",
+        "--state-dir",
+        str(scratch),
+    )
     env = _tracker(
         tmp_path,
         {"ready-for-agent": [_ticket(9, "unfinished")]},
         issues={9: _ready(9)},
     )
+
+    # Render the durable account into the terminal dashboard.
     terminal = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
     progress = json.loads(progress_path.read_text(encoding="utf-8"))
     report = json.loads(terminal.stdout)
 
+    # Assert the dashboard is the report's exact terminal projection.
+    assert live.returncode == 0, live.stderr
     assert terminal.returncode == 0, terminal.stderr
     assert progress["ticket"] is None
     assert progress["phase"] == "wave_verdict"
@@ -8691,6 +8718,7 @@ def test_progress_writes_the_latest_phase_atomically(tmp_path: Path) -> None:
 def test_progress_refuses_a_caller_supplied_terminal_outcome(tmp_path: Path) -> None:
     """Only the durable report may supply the terminal dashboard account."""
 
+    # Arrange a live dashboard whose bytes expose any illicit replacement.
     repo = _init_repo(tmp_path / "repo")
     scratch = tmp_path / "scratch"
     initial = _engine(
@@ -8707,6 +8735,7 @@ def test_progress_refuses_a_caller_supplied_terminal_outcome(tmp_path: Path) -> 
     progress_path = scratch / STATE_HOME / PROGRESS_FILE
     before = progress_path.read_text(encoding="utf-8")
 
+    # Attempt to supply a terminal account through the live progress verb.
     supplied = _engine(
         repo,
         "progress",
@@ -8719,6 +8748,7 @@ def test_progress_refuses_a_caller_supplied_terminal_outcome(tmp_path: Path) -> 
         str(scratch),
     )
 
+    # Assert the parser refuses the authority and preserves the dashboard.
     assert initial.returncode == 0, initial.stderr
     assert supplied.returncode == 2
     assert "unrecognized arguments: --outcome=caller-says-done" in supplied.stderr
@@ -8730,6 +8760,7 @@ def test_engine_transition_recreates_deleted_progress_with_current_counts(
 ) -> None:
     """A dashboard deletion cannot make the next transition report old progress."""
 
+    # Arrange durable session values and tracker amendment provenance.
     amendment = {
         "body": f"<!-- {MARKER} amend=1 phase=verifying --> amend one is active"
     }
@@ -8751,6 +8782,7 @@ def test_engine_transition_recreates_deleted_progress_with_current_counts(
     progress_path = scratch / STATE_HOME / PROGRESS_FILE
     progress_path.unlink()
 
+    # Advance through an engine-owned transition after dashboard deletion.
     transitioned = _engine(
         repo,
         "claim",
@@ -8761,6 +8793,7 @@ def test_engine_transition_recreates_deleted_progress_with_current_counts(
     )
     progress = json.loads(progress_path.read_text(encoding="utf-8"))
 
+    # Assert the recreated dashboard retains every current session value.
     assert current.returncode == 0, current.stderr
     assert transitioned.returncode == 0, transitioned.stderr
     assert progress == {
@@ -8780,6 +8813,7 @@ def test_record_recreates_deleted_progress_with_completed_ticket_counted(
 ) -> None:
     """A recorded outcome immediately advances every recreated progress count."""
 
+    # Arrange a deleted dashboard backed by current session and tracker facts.
     amendment = {"body": f"<!-- {MARKER} amend=1 phase=passed --> amend one passed"}
     repo, scratch, env = _routed(
         tmp_path,
@@ -8800,6 +8834,7 @@ def test_record_recreates_deleted_progress_with_completed_ticket_counted(
     progress_path = scratch / STATE_HOME / PROGRESS_FILE
     progress_path.unlink()
 
+    # Record one terminal ticket outcome after dashboard deletion.
     transitioned = _engine(
         repo,
         "record",
@@ -8811,6 +8846,7 @@ def test_record_recreates_deleted_progress_with_completed_ticket_counted(
     )
     progress = json.loads(progress_path.read_text(encoding="utf-8"))
 
+    # Assert the recreated dashboard counts the newly completed ticket.
     assert current.returncode == 0, current.stderr
     assert transitioned.returncode == 0, transitioned.stderr
     assert progress == {
@@ -8823,6 +8859,57 @@ def test_record_recreates_deleted_progress_with_completed_ticket_counted(
         "timestamp": progress["timestamp"],
         "outcome": None,
     }
+
+
+def test_consecutive_records_accumulate_completed_ticket_counts(tmp_path: Path) -> None:
+    """Each recorded outcome advances the durable session progress baseline."""
+
+    # Arrange a two-ticket wave with no completed outcomes.
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton"), _ticket(10, "the joints")],
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+    current = _engine(
+        repo,
+        "progress",
+        "--phase=verify",
+        "--wave=1",
+        "--ticket=9",
+        "--completed=0",
+        "--remaining=2",
+        "--state-dir",
+        str(scratch),
+    )
+
+    # Record both outcomes without an intervening session progress call.
+    first = _engine(
+        repo,
+        "record",
+        "--ticket=9",
+        "--outcome=failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    second = _engine(
+        repo,
+        "record",
+        "--ticket=10",
+        "--outcome=failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    # Assert both engine-owned transitions accumulated in the dashboard.
+    assert current.returncode == 0, current.stderr
+    assert first.returncode == 0, first.stderr
+    assert second.returncode == 0, second.stderr
+    assert progress["tickets_completed"] == 2
+    assert progress["tickets_remaining"] == 0
 
 
 def _observations() -> ModuleType:
