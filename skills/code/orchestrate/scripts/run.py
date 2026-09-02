@@ -923,7 +923,6 @@ class RunState:
     starting: list[int]
     contracts: dict[int, list[dict[str, Any]]]
     contract_bases: dict[int, str]
-    amendments: dict[int, dict[str, list[int]]]
 
 
 def state_file(directory: str | None) -> Path | None:
@@ -1202,17 +1201,6 @@ def decode_state(contents: str) -> RunState:
             int(number): str(commit)
             for number, commit in cast(
                 dict[str, str], stored.get("contract_bases", {})
-            ).items()
-        },
-        amendments={
-            int(number): {
-                "inherited": [int(attempt) for attempt in account.get("inherited", [])],
-                "newly_spent": [
-                    int(attempt) for attempt in account.get("newly_spent", [])
-                ],
-            }
-            for number, account in cast(
-                dict[str, dict[str, list[int]]], stored.get("amendments", {})
             ).items()
         },
     )
@@ -2691,19 +2679,6 @@ def build_plan(
                     if ticket.commit_contract is not None
                 },
                 contract_bases=remembered.contract_bases if remembered else {},
-                amendments=(
-                    remembered.amendments
-                    if remembered
-                    else {
-                        ticket.number: {
-                            "inherited": [ticket.amend_state.attempt],
-                            "newly_spent": [],
-                        }
-                        for ticket in tickets
-                        if ticket.amend_state is not None
-                        and ticket.amend_state.phase != AMEND_BUILDING
-                    }
-                ),
             ),
         )
 
@@ -3040,7 +3015,6 @@ def cmd_route(
             starting=starting or [],
             contracts=state.contracts if state else {},
             contract_bases=state.contract_bases if state else {},
-            amendments=state.amendments if state else {},
         )
     elif starting is not None or run_claimed is not None:
         return fail(
@@ -4063,10 +4037,6 @@ def cmd_amend(
                 f"amend {attempt} phase {phase} is already recorded with a "
                 "different verifier verdict"
             )
-        if phase == AMEND_BUILDING:
-            remember_amendment_dispatch(
-                state_path, cwd, number, attempt, inherited=True
-            )
         emit(
             {
                 "verb": "amend",
@@ -4122,9 +4092,6 @@ def cmd_amend(
             f"#{number} amend {attempt} phase {phase} could not be recorded: {exc}"
         )
 
-    if phase == AMEND_BUILDING:
-        remember_amendment_dispatch(state_path, cwd, number, attempt, inherited=False)
-
     emit(
         {
             "verb": "amend",
@@ -4138,31 +4105,6 @@ def cmd_amend(
         }
     )
     return 0
-
-
-def remember_amendment_dispatch(
-    state_path: Path | None,
-    cwd: Path,
-    number: int,
-    attempt: int,
-    *,
-    inherited: bool,
-) -> None:
-    """Remember how this invocation acquired one amendment attempt."""
-
-    state = remembered_state(state_path, cwd)
-    if state is None:
-        return
-
-    account = state.amendments.setdefault(number, {"inherited": [], "newly_spent": []})
-    if attempt in account["newly_spent"]:
-        return
-
-    key = "inherited" if inherited else "newly_spent"
-    if attempt not in account[key]:
-        account[key].append(attempt)
-        account[key].sort()
-        write_state(state_path, state)
 
 
 def amend_note(attempt: int, phase: str, verdict: str | None) -> str:
@@ -5202,21 +5144,6 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     # are gone the account says so rather than reading what is current back as
     # though it had been (ADR-0085).
     routing, routing_reason, _ = frozen_routing(state_path)
-    remembered = remembered_state(state_path, cwd)
-
-    # The tracker owns the lifetime total; session memory owns only the split
-    # between attempts this invocation inherited and newly spent.
-    reported_tickets = []
-    for ticket in tickets:
-        account = remembered.amendments.get(ticket.number, {}) if remembered else {}
-        reported_tickets.append(
-            ticket_details(ticket)
-            | {
-                "amends_inherited": account.get("inherited", []),
-                "amends_newly_spent": account.get("newly_spent", []),
-            }
-        )
-
     emit(
         {
             "verb": "report",
@@ -5229,7 +5156,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
             "observations": observed_details(routing, state_path),
             "flakes": flakes,
             "regenerated": regenerated,
-            "tickets": reported_tickets,
+            "tickets": [ticket_details(ticket) for ticket in tickets],
             "done": recorded[DONE],
             "failed": recorded[FAILED],
             "conflicted": recorded[CONFLICTED],

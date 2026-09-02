@@ -665,6 +665,7 @@ def test_the_report_step_renders_inherited_and_new_amendments_from_answers() -> 
     assert "`amends_newly_spent`" in step
     assert "`newly_recorded`" in step
     assert "session memory" in step
+    assert "never written to durable run state" in step
 
 
 def _fill_in_instructions() -> str:

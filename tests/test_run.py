@@ -6719,10 +6719,10 @@ def test_report_accounts_for_a_conflicted_ticket_with_the_one_it_hit(
     assert entry["collided_with"] == [9]
 
 
-def test_report_distinguishes_inherited_and_newly_spent_amendments(
+def test_report_does_not_carry_a_previous_invocations_amendment_split(
     tmp_path: Path,
 ) -> None:
-    """A lifetime total is split by what this invocation dispatched."""
+    """Invocation-local amendment evidence never survives in run state."""
 
     repo = _init_repo(tmp_path / "proj")
     scratch = tmp_path / "scratch"
@@ -6757,8 +6757,8 @@ def test_report_distinguishes_inherited_and_newly_spent_amendments(
     assert result.returncode == 0, result.stderr
     entry = json.loads(result.stdout)["tickets"][0]
     assert entry["amends_spent"] == 2
-    assert entry["amends_inherited"] == [1]
-    assert entry["amends_newly_spent"] == [2]
+    assert "amends_inherited" not in entry
+    assert "amends_newly_spent" not in entry
 
 
 def test_no_verb_pushes_while_the_developer_is_asleep(tmp_path: Path) -> None:
