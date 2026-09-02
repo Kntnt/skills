@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kntnt.dev/schemas/model-selector/profile-v1.json",
+  "title": "Model-selector profile",
+  "type": "object",
+  "required": ["schema_version", "profile_id", "revision", "created_at", "updated_at", "currency", "region", "access_channels", "model_selections"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "profile_id": {"$ref": "#/$defs/non_empty_string"},
+    "revision": {"type": ["integer", "string"]},
+    "created_at": {"$ref": "#/$defs/non_empty_string"},
+    "updated_at": {"$ref": "#/$defs/non_empty_string"},
+    "currency": {"$ref": "#/$defs/non_empty_string"},
+    "region": {"$ref": "#/$defs/non_empty_string"},
+    "access_channels": {"type": "array", "items": {"$ref": "#/$defs/access_channel"}},
+    "model_selections": {"type": "array", "items": {"$ref": "#/$defs/model_selection"}}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "non_empty_string": {"type": "string", "minLength": 1},
+    "nullable_string": {"type": ["string", "null"]},
+    "control_policy": {
+      "type": "object",
+      "required": ["policy", "values"],
+      "properties": {
+        "policy": {"enum": ["default", "all_supported", "explicit"]},
+        "values": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}}
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "controls": {
+      "type": "object",
+      "required": ["effort", "thinking", "reasoning", "serving_modes"],
+      "properties": {
+        "effort": {"$ref": "#/$defs/control_policy"},
+        "thinking": {"$ref": "#/$defs/control_policy"},
+        "reasoning": {"$ref": "#/$defs/control_policy"},
+        "serving_modes": {"$ref": "#/$defs/control_policy"}
+      },
+      "additionalProperties": false
+    },
+    "access_channel": {
+      "type": "object",
+      "required": ["channel_id", "provider", "billing_type"],
+      "properties": {
+        "channel_id": {"$ref": "#/$defs/non_empty_string"},
+        "provider": {"$ref": "#/$defs/non_empty_string"},
+        "surface": {"$ref": "#/$defs/non_empty_string"},
+        "gateway": {"$ref": "#/$defs/non_empty_string"},
+        "billing_type": {"enum": ["subscription", "direct_api", "gateway_api", "other"]}
+      },
+      "oneOf": [
+        {"required": ["surface"], "not": {"required": ["gateway"]}},
+        {"required": ["gateway"], "not": {"required": ["surface"]}}
+      ],
+      "additionalProperties": true
+    },
+    "model_selection": {
+      "type": "object",
+      "required": ["selection_id", "provider", "family", "requested_model_id", "canonical_provider_model_id", "provider_release_id", "resolved_target", "version_kind", "validation_status", "channel_id", "harness_surface", "controls", "fallback_policy", "enabled", "watch_for_newer_versions"],
+      "properties": {
+        "selection_id": {"$ref": "#/$defs/non_empty_string"},
+        "provider": {"$ref": "#/$defs/non_empty_string"},
+        "family": {"$ref": "#/$defs/non_empty_string"},
+        "requested_model_id": {"$ref": "#/$defs/non_empty_string"},
+        "canonical_provider_model_id": {"$ref": "#/$defs/non_empty_string"},
+        "provider_release_id": {"$ref": "#/$defs/nullable_string"},
+        "resolved_target": {"$ref": "#/$defs/nullable_string"},
+        "version_kind": {"enum": ["pinned_release", "provider_release_slug", "mutable_alias"]},
+        "validation_status": {"$ref": "#/$defs/non_empty_string"},
+        "channel_id": {"$ref": "#/$defs/non_empty_string"},
+        "harness_surface": {"$ref": "#/$defs/non_empty_string"},
+        "controls": {"$ref": "#/$defs/controls"},
+        "fallback_policy": {},
+        "enabled": {"type": "boolean"},
+        "watch_for_newer_versions": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # Model-selector owns exact frozen routing
 
+Its session-assembled context and narrower launch-destination assumptions are superseded by ADR-0136; the pure frozen routing core and its selection authority remain in force.
+
 Delegated execution needs a compact decision that another Skill can launch, while model-selector's recommendation is deliberately a detailed human report and may begin first-use setup. Letting each caller translate that report would duplicate selection policy, conceal unsupported native controls, and allow unattended work to drift when profiles, aliases, prices, evidence, or Harness capabilities change.
 
 **Model-selector owns one public route Interface beside human recommend.** Route consumes one versioned structured request or an ordered batch and returns ordered discriminated selection, inheritance, or refusal decisions. Only selection contains an exact Harness-native launch instruction; inheritance audits why no override is safe, and refusal has a stable reason. Both forms share complete-point filtering, evidence classes, multidimensional costs, uncertainty, and escalation semantics, while recommend retains its frontier neighbors, banners, and experiment brief.

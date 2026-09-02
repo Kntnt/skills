@@ -58,7 +58,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "dbbf11df246e954cd13fdbc6a702ffaa035d30132fe7abb53a5246e6b10c95f2",
+      "digest": "a461ff8de53e7beef18f66b0ec5942579ab0e074f381879f6f47fda73b6efcec",
       "binaries": [
         "git",
         "gh",
@@ -174,8 +174,8 @@
     {
       "name": "model-selector",
       "category": "models",
-      "description": "Route delegated execution and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
-      "digest": "6bcd802672d30ae9efbffa481647b7fd28b58878f51a5eccf4c9c46b921b5da2",
+      "description": "Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
+      "digest": "e86e0e676ef40bf7c6f4199b6325abfcd8b48d91b0bdaa438a7b1242e641cf21",
       "binaries": [
         "uv"
       ],

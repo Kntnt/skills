@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "adapter_template_id": "claude-code-agent",
+  "harness": "claude-code",
+  "surface": "agent-tool",
+  "covers": ["claude-code"],
+  "model_source": "family_alias",
+  "accepted_model_aliases": ["haiku", "sonnet", "opus", "fable"],
+  "deliberation_source": "carried",
+  "serving_modes": ["standard"],
+  "launch": {
+    "model_flag": {"parameter": "model", "value": "{value}"},
+    "surface_flag": {"fixed": "agent-tool"},
+    "serving_mode_flag": {"fixed": "standard"},
+    "native_control_flags": {"effort": {"carried_by": "inheritance"}},
+    "tools_flag": {"fixed": []},
+    "policy_flags": {}
+  }
+}

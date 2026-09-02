@@ -1,5 +1,7 @@
 # Model Selector is model-invoked at dependent Interfaces
 
+Its dependent verb list is narrowed by ADR-0136 to include the public `context` Interface before `route`.
+
 Delegation and Orchestrate must route execution before they spawn it and may observe an externally judged attempt afterward. Both declare Model Selector as a Skill Dependency, but Model Selector was user-invoked only. A dependent instruction could therefore name its public `route` Interface while Codex omitted the Skill from model context and reported that no slash command or tool endpoint existed. The dependency was on disk and still unreachable by its callers.
 
 The obligation this opens on is narrowed by ADR-0133 on the Delegation side: a spawn the caller runs on the frozen main seat with no model, deliberation, or surface override is not routed, and only a spawn onto a foreign surface, model, or deliberation override routes before it is spawned; Orchestrate routes every execution role as before.

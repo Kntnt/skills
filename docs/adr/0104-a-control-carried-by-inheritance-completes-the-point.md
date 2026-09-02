@@ -1,5 +1,7 @@
 # A control carried by inheritance completes the point
 
+Its native-control-only destination vocabulary is superseded by ADR-0136, which applies parameter, fixed, and carried destinations to every launch-relevant field.
+
 The overnight run that closed #99–#103 and #113 routed twelve execution decisions and inherited every one of them, each with the same reason: no selection control was available. The module behaved exactly as designed. `_adapter_can_launch` admits a candidate only through a concrete adapter carrying a complete flag translation, and the Harness in play — Claude Code spawning through its Agent tool — selects a model family while exposing no deliberation control on a subagent at all. No honest adapter could exist, so every candidate was excluded as unreachable and the audit trail came back complete, honest, and inert. Model selection was unavailable in exactly the Harness the maintainer works in, and had been since routing shipped.
 
 That framing hid a fact. On a Harness that applies the spawning session's own deliberation value to the subagent it starts, the control is not unknown: it is the frozen main seat's exact value, which the routing snapshot already carries and which every verdict already inherits. The point was complete all along. What was missing was a way to say so.

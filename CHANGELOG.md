@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- Model Selector now derives complete frozen routing contexts from a versioned profile, shipped Claude Code adapter templates, exact runtime facts, independent numeric seed priors, and shipped routing defaults before Route resolves a decision.
+
 ### Changed
 
 - `/delegation` now routes only a spawn onto a foreign surface, model, or deliberation override through Model Selector; a spawn the caller runs on the frozen main seat with no override is unrouted, produces no `observe` attempt, and is recorded by capture where capture is enabled. Judgment-in-noise roles still weigh a routed cheaper seat rather than defaulting to the main seat.

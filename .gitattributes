@@ -1,3 +1,6 @@
 # The Catalog's Digest is computed over file bytes, so a checkout that
 # normalises line endings would regenerate every Digest in the Collection.
 * text=auto eol=lf
+
+# Preserve whitespace-only separators in the verbatim observed CLI help fixture.
+tests/support/codex_cli_0_152_1_exec_help.txt whitespace=-blank-at-eol

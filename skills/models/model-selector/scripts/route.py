@@ -348,7 +348,49 @@ def _fingerprint(
 def _is_carried(destination: Any) -> bool:
     """Recognize the destination that names inheritance rather than a flag."""
 
-    return destination == CARRIED_DESTINATION
+    return bool(destination == CARRIED_DESTINATION)
+
+
+def _destination_key(destination: Any) -> str | None:
+    """Return the native argument key emitted by one destination."""
+
+    if isinstance(destination, str):
+        return destination
+    if isinstance(destination, dict) and isinstance(destination.get("parameter"), str):
+        return cast(str, destination["parameter"])
+    return None
+
+
+def _destination_value(destination: Any, value: Any) -> Any:
+    """Render a parameter destination's value without changing exact facts."""
+
+    if isinstance(destination, dict) and isinstance(destination.get("value"), str):
+        return cast(str, destination["value"]).replace("{value}", str(value))
+    return deepcopy(value)
+
+
+def _destination_accepts(destination: Any, value: Any) -> bool:
+    """Require a valid destination whose fixed value matches the point."""
+
+    if _destination_key(destination) is not None or _is_carried(destination):
+        return True
+    return bool(isinstance(destination, dict) and destination.get("fixed") == value)
+
+
+def _launch_destinations(adapter: dict[str, Any]) -> tuple[Any, ...]:
+    """Collect every scalar and mapped destination declared by an adapter."""
+
+    launch = adapter.get("launch", {})
+    native = launch.get("native_control_flags", {})
+    policy = launch.get("policy_flags", {})
+    return (
+        launch.get("model_flag"),
+        launch.get("surface_flag"),
+        launch.get("serving_mode_flag"),
+        launch.get("tools_flag"),
+        *(native.values() if isinstance(native, dict) else ()),
+        *(policy.values() if isinstance(policy, dict) else ()),
+    )
 
 
 def _carries_control(adapter: dict[str, Any]) -> bool:
@@ -357,6 +399,14 @@ def _carries_control(adapter: dict[str, Any]) -> bool:
     return any(
         _is_carried(destination)
         for destination in adapter["launch"]["native_control_flags"].values()
+    )
+
+
+def _carries_launch_value(adapter: dict[str, Any]) -> bool:
+    """Answer whether any complete-point fact is carried by inheritance."""
+
+    return any(
+        _is_carried(destination) for destination in _launch_destinations(adapter)
     )
 
 
@@ -374,28 +424,13 @@ def _attests_inheritance(adapter: dict[str, Any]) -> bool:
 def _launch_destinations_are_unique(adapter: dict[str, Any]) -> bool:
     """Prevent complete-point fields from overwriting one launch argument."""
 
-    # Gather every scalar and mapped destination the adapter can emit.
-    launch = adapter.get("launch", {})
-    native_flags = launch.get("native_control_flags", {})
-    policy_flags = launch.get("policy_flags", {})
-    emitted_controls = [
-        destination
-        for destination in (
-            native_flags.values() if isinstance(native_flags, dict) else []
-        )
-        if not _is_carried(destination)
+    # Compare only emitted parameters; fixed and carried facts emit nothing.
+    keys = [
+        key
+        for destination in _launch_destinations(adapter)
+        if (key := _destination_key(destination)) is not None
     ]
-    destinations = [
-        launch.get("model_flag"),
-        launch.get("surface_flag"),
-        launch.get("serving_mode_flag"),
-        launch.get("tools_flag"),
-        *emitted_controls,
-        *(policy_flags.values() if isinstance(policy_flags, dict) else []),
-    ]
-    return all(isinstance(value, str) and value for value in destinations) and len(
-        destinations
-    ) == len(set(destinations))
+    return len(keys) == len(set(keys))
 
 
 def _adapter_can_launch(
@@ -420,8 +455,8 @@ def _adapter_can_launch(
     ):
         return False
 
-    # Admit a carried destination only where its session attested the Harness.
-    if _carries_control(adapter) and not _attests_inheritance(adapter):
+    # Admit carried destinations only where the session attested the Harness.
+    if _carries_launch_value(adapter) and not _attests_inheritance(adapter):
         return False
 
     # Require a complete translation for every launch-relevant point field.
@@ -429,14 +464,25 @@ def _adapter_can_launch(
     native_flags = launch.get("native_control_flags", {})
     policy_flags = launch.get("policy_flags", {})
     return (
-        isinstance(launch.get("model_flag"), str)
-        and isinstance(launch.get("surface_flag"), str)
-        and isinstance(launch.get("serving_mode_flag"), str)
-        and isinstance(launch.get("tools_flag"), str)
+        _destination_accepts(launch.get("model_flag"), point["model"])
+        and _destination_accepts(
+            launch.get("surface_flag"),
+            point.get("surface", snapshot["harness"]["surface"]),
+        )
+        and _destination_accepts(launch.get("serving_mode_flag"), point["serving_mode"])
+        and _destination_accepts(launch.get("tools_flag"), point.get("tools", []))
         and isinstance(native_flags, dict)
         and set(native) <= set(native_flags)
+        and all(
+            _destination_accepts(native_flags[field], value)
+            for field, value in native.items()
+        )
         and isinstance(policy_flags, dict)
         and set(point.get("policy", {})) <= set(policy_flags)
+        and all(
+            _destination_accepts(policy_flags[field], value)
+            for field, value in point.get("policy", {}).items()
+        )
         and _launch_destinations_are_unique(adapter)
     )
 
@@ -486,27 +532,31 @@ def _launch_arguments(
 ) -> dict[str, Any]:
     """Translate one complete point into Harness-native launch arguments."""
 
-    # Translate the complete point without dropping multi-field native controls.
+    # Pair every exact-point value with its declared launch destination.
     launch = adapter["launch"]
-    arguments = {
-        launch["model_flag"]: point["model"],
-        launch["surface_flag"]: point.get("surface", snapshot["harness"]["surface"]),
-        launch["serving_mode_flag"]: point["serving_mode"],
-        launch["tools_flag"]: deepcopy(point.get("tools", [])),
-    }
-    arguments.update(
-        {
-            launch["native_control_flags"][field]: value
+    destinations = [
+        (launch["model_flag"], point["model"]),
+        (
+            launch["surface_flag"],
+            point.get("surface", snapshot["harness"]["surface"]),
+        ),
+        (launch["serving_mode_flag"], point["serving_mode"]),
+        (launch["tools_flag"], point.get("tools", [])),
+        *(
+            (launch["native_control_flags"][field], value)
             for field, value in native.items()
-            if not _is_carried(launch["native_control_flags"][field])
-        }
-    )
-    arguments.update(
-        {
-            launch["policy_flags"][field]: value
+        ),
+        *(
+            (launch["policy_flags"][field], value)
             for field, value in point.get("policy", {}).items()
-        }
-    )
+        ),
+    ]
+
+    # Emit parameter destinations only, rendering an optional value template.
+    arguments: dict[str, Any] = {}
+    for destination, value in destinations:
+        if (key := _destination_key(destination)) is not None:
+            arguments[key] = _destination_value(destination, value)
     return arguments
 
 
@@ -616,6 +666,18 @@ def _candidate_pool(request: dict[str, Any], snapshot: dict[str, Any]) -> Candid
             )
             continue
         model_matches.append(point)
+
+        # Retain incomparable selections in the snapshot but never rank them.
+        if point["model_capability"] is None:
+            exclusions.append(
+                _exclusion(
+                    "capability_rank_unavailable",
+                    "No shared benchmark ranks this model against the main seat.",
+                    point,
+                )
+            )
+            variant_exclusion_codes.append("capability_rank_unavailable")
+            continue
 
         # Require frozen capability facts for the normalized workload needs.
         if not required_capabilities <= set(point["capabilities"]):
@@ -1618,12 +1680,24 @@ def _execution_decision(
     if not snapshot["profile"].get("valid"):
         return _refused(request, snapshot, "invalid_profile")
 
+    # Keep missing selection controls on the exact seat for automatic work.
+    if (
+        not snapshot["mappings"]
+        and not request["overrides"]
+        and snapshot["harness"].get("inheritance")
+    ):
+        return _inherit(request, snapshot, "unavailable_selection_controls")
+
     # Refuse selection when either frozen authority dimension is unknown.
     if (
         snapshot["main_seat"].get("model_capability") is None
         or snapshot["main_seat"].get("deliberation_capability") is None
     ):
         return _refused(request, snapshot, "unknown_main_seat_ceiling")
+
+    # Preserve an explicit lock as a refusal when no point can carry it.
+    if not snapshot["mappings"]:
+        return _refused(request, snapshot, "unavailable_override")
 
     # Reuse one hard-filter result for selection, refusals, and audit output.
     overrides = request["overrides"]
@@ -1672,7 +1746,8 @@ def _execution_decision(
             not overrides
             and snapshot["harness"].get("inheritance")
             and pool.variant_exclusion_codes
-            and set(pool.variant_exclusion_codes) == {"adapter_unreachable"}
+            and set(pool.variant_exclusion_codes)
+            <= {"adapter_unreachable", "capability_rank_unavailable"}
         ):
             return _inherit(
                 request,

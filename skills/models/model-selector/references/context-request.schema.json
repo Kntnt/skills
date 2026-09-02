@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kntnt.dev/schemas/model-selector/context-request-v1.json",
+  "title": "Model-selector context request",
+  "type": "object",
+  "required": ["schema_version", "requests"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "requests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/request"}
+    },
+    "runtime": {"$ref": "#/$defs/runtime"},
+    "snapshot": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/snapshot"}
+  },
+  "oneOf": [
+    {"required": ["runtime"], "not": {"required": ["snapshot"]}},
+    {"required": ["snapshot"], "not": {"required": ["runtime"]}}
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "non_empty_string": {"type": "string", "minLength": 1},
+    "inheritance_attestation": {
+      "type": "object",
+      "required": ["carried_by_default", "verified"],
+      "properties": {
+        "carried_by_default": {"const": true},
+        "verified": {"$ref": "#/$defs/non_empty_string"}
+      },
+      "additionalProperties": false
+    },
+    "runtime_harness": {
+      "type": "object",
+      "required": ["name", "surface", "inventory_revision", "inheritance"],
+      "properties": {
+        "name": {"$ref": "#/$defs/non_empty_string"},
+        "surface": {"$ref": "#/$defs/non_empty_string"},
+        "inventory_revision": {"$ref": "#/$defs/non_empty_string"},
+        "inheritance": {"type": "boolean"},
+        "inheritance_attestation": {"$ref": "#/$defs/inheritance_attestation"}
+      },
+      "additionalProperties": false
+    },
+    "runtime_main_seat": {
+      "type": "object",
+      "required": ["model", "surface", "serving_mode", "native_deliberation", "portable_deliberation", "tools", "policy"],
+      "properties": {
+        "model": {"$ref": "#/$defs/non_empty_string"},
+        "channel": {"$ref": "#/$defs/non_empty_string"},
+        "surface": {"$ref": "#/$defs/non_empty_string"},
+        "serving_mode": {"$ref": "#/$defs/non_empty_string"},
+        "native_deliberation": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/native_control"},
+        "portable_deliberation": {"enum": ["low", "medium", "high", "xhigh", "max"]},
+        "tools": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/string_array"},
+        "policy": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/policy"}
+      },
+      "additionalProperties": false
+    },
+    "runtime": {
+      "type": "object",
+      "required": ["harness", "main_seat"],
+      "properties": {
+        "harness": {"$ref": "#/$defs/runtime_harness"},
+        "main_seat": {"$ref": "#/$defs/runtime_main_seat"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,8 +1,8 @@
 ---
 name: model-selector
-description: Route delegated execution and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.
+description: Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.
 disable-model-invocation: false
-argument-hint: "[recommend] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] [<workload>] | chart|compare [--decision=route|renew] [--data=<path>] <workload> | route|record [--data=<path>] <path> | observe --artifact=<path> <path> | capture --on [--harness=<name>] [--data=<path>] | capture --off|--status [--data=<path>] | capture --review=<identity> --action=save|failed|ignore [--data=<path>] | config [show|history|reset] [--data=<path>] | config add|edit|remove [--data=<path>] model|channel [<id>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
+argument-hint: "[recommend] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] [<workload>] | chart|compare [--decision=route|renew] [--data=<path>] <workload> | context|record [--data=<path>] <path> | route <path> | observe --artifact=<path> <path> | capture --on [--harness=<name>] [--data=<path>] | capture --off|--status [--data=<path>] | capture --review=<identity> --action=save|failed|ignore [--data=<path>] | config [show|history|reset] [--data=<path>] | config add|edit|remove [--data=<path>] model|channel [<id>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -32,6 +32,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | Command path | Manpage |
 | --- | --- |
 | `recommend` | `$HERE/help/recommend.md` |
+| `context` | `$HERE/help/context.md` |
 | `route` | `$HERE/help/route.md` |
 | `chart` | `$HERE/help/chart.md` |
 | `compare` | `$HERE/help/compare.md` |
@@ -60,6 +61,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `/model-selector config remove model\|channel <id>` | Remove one model selection or access channel after confirmation. |
 | `/model-selector config history\|reset` | Show configuration history, or reset the active configuration after confirmation. |
 | `/model-selector [recommend] [<workload>]` | Recommend from stored evidence. Infer the current task only when the workload is omitted and unambiguous. |
+| `/model-selector context <path>` | Derive a complete route artifact from stored selections and exact runtime facts, or wrap a frozen snapshot unchanged. |
 | `/model-selector route <path>` | Resolve a structured request artifact into ordered exact launch decisions. |
 | `/model-selector chart\|compare <workload>` | Show comparable frontier tables and plotting data. |
 | `/model-selector update [--force]` | Revalidate due discovery, pricing, and benchmark indexes once. |
@@ -69,7 +71,7 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `/model-selector record <path>` | Validate and append unseen local run observations. |
 | `/model-selector status` | Report the profile, evidence vintage, due sources, and gaps. |
 
-`--data=<path>` is valid on every form except `observe`, which reads no profile or evidence at all, and overrides the default data directory. `--artifact=<path>` is valid only for `observe`, where it is required, and names the caller-owned file the observations are written into. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`. `--on`, `--off`, `--status`, `--review=<identity>`, `--action=save|failed|ignore` and `--harness=<name>` are valid only for `capture`: `--harness` only with `--on`, `--action` only with `--review`, and `--on` and `--off` never together.
+`--data=<path>` is valid on every form except `observe` and `route`, which read no profile or evidence at all, and overrides the default data directory. `--artifact=<path>` is valid only for `observe`, where it is required, and names the caller-owned file the observations are written into. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`. `--on`, `--off`, `--status`, `--review=<identity>`, `--action=save|failed|ignore` and `--harness=<name>` are valid only for `capture`: `--harness` only with `--on`, `--action` only with `--review`, and `--on` and `--off` never together.
 
 Anything outside these forms is invalid, an operand written before a flag among them. Where the invocation starts with a recognized command path, name in one line what was wrong, print the `## SYNOPSIS` from that path's manpage in the Help table verbatim, point at `/model-selector <command-path> --help`, change nothing, and stop. With no recognized command path, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim and point at `/model-selector --help` for the page in full instead. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
 
@@ -77,7 +79,7 @@ Anything outside these forms is invalid, an operand written before a flag among 
 
 Default data directory: `~/.kntnt/model-selector/`. A user-supplied `--data=<path>` wins. Read `config.json` and existing evidence before any research or recommendation.
 
-When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections except `route`. Route follows its own inheritance and refusal rules and never starts setup. Never install a bundled access combination as the user's configuration.
+When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections except `context` and `route`. Context derives the missing-profile state and Route follows its own inheritance and refusal rules; neither starts setup. Never install a bundled access combination as the user's configuration.
 
 When no evidence ledger exists, use only the configured models covered by `$HERE/data/seed-evidence.jsonl` as dated seed priors. `recommend` reads applicable seed evidence without writing and may read applicable `capability_prior_seed` rows in place when no newer ledger record exists. Relevant matched measurements override capability priors, which choose only cold-start experiments and never supply numeric evidence or clear a quality floor. `update` initializes applicable ledger records, preserving retrieval dates and sources. Never present the seed as current after its stated date.
 
@@ -108,9 +110,13 @@ Immediately after a blue or orange banner, emit a section titled `Snabbaste väg
 
 Complete when the recommendation names an exact configuration and decision rule, every named alternative is comparable, and the user can see why dominated candidates lost.
 
+## Context
+
+Read `$HERE/references/model-routing.md` and validate the input against `$HERE/references/context-request.schema.json`. Run `uv run "$HERE/scripts/context.py" [--data=<path>] <path>` and emit its JSON response without commentary. The runtime form reads the normalized profile, shipped seed, adapter templates, and routing defaults; specializes exact mappings from the caller-supplied Harness and main-seat facts; and returns one complete route artifact. The snapshot form validates and returns the supplied frozen snapshot unchanged beside the current ordered requests. Context never enters setup and performs no network access, evaluation, research, or persistent write.
+
 ## Route
 
-Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the artifact against `$HERE/references/route-request.schema.json`; when it has no frozen snapshot, derive `context` from the selected data directory plus the active Harness, exact main seat, mappings, commercial policy, and normalized categorical workload requirements, then let the module freeze it through `freeze_context()`. Run `uv run "$HERE/scripts/route.py" <path>` with that canonical artifact and emit the helper's JSON response without commentary. The formal `--data` flag is consumed by this Skill adapter before the internal script invocation. Route never enters setup and performs no network access, evaluation, research, or persistent write.
+Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the complete artifact against `$HERE/references/route-request.schema.json`, run `uv run "$HERE/scripts/route.py" <path>`, and emit the helper's JSON response without commentary. A caller with runtime facts invokes Context first and passes its response directly to Route; Route never reconstructs derivation rules. Route never starts setup, performs no network access, evaluation, or research, and writes no configuration or evidence.
 
 ## Chart
 

@@ -9656,6 +9656,7 @@ _MODEL_SELECTOR_MANPAGES = frozenset(
     {
         "chart.md",
         "compare.md",
+        "context.md",
         "config.md",
         "config/add.md",
         "config/edit.md",

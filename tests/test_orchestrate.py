@@ -2621,6 +2621,21 @@ def test_routing_is_reached_before_every_claim_and_not_only_the_first() -> None:
     )
 
 
+def test_orchestrate_derives_context_before_every_route_call() -> None:
+    """The caller supplies runtime facts while Model Selector owns derivation."""
+
+    # Read both preflight paths that can create a first or later route request.
+    dry_run = _step(2)
+    routing = _step(3)
+
+    assert dry_run.index("/model-selector context /dev/stdin") < dry_run.index(
+        "/model-selector route /dev/stdin"
+    )
+    assert "/model-selector context <path>" in routing
+    assert "/model-selector route <path>" in routing
+    assert "never reconstruct its derivation rules" in routing
+
+
 def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
     """A dry run is read for what a run would do, and a run it started is not that."""
 

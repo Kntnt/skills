@@ -6,7 +6,7 @@ model-selector route - resolve delegated work into exact launch decisions
 
 ## SYNOPSIS
 
-**/model-selector route** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
+**/model-selector route** *PATH* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -23,12 +23,6 @@ The portable deliberation values are `low`, `medium`, `high`, `xhigh`, and `max`
 *PATH*
 
 A UTF-8 JSON artifact conforming to `references/route-request.schema.json`, with `schema_version: 1`, ordered `requests`, and either a returned `snapshot` or current `context`. See `references/model-routing.md` for the full contract.
-
-## OPTIONS
-
-**--data=**_PATH_
-
-Read profile and evidence from *PATH* when the request has no snapshot. The default is `~/.kntnt/model-selector/`; Route never writes there.
 
 ## OUTPUT
 

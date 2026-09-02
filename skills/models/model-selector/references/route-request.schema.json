@@ -182,7 +182,25 @@
       "additionalProperties": false
     },
     "control_destination": {
-      "oneOf": [{"$ref": "#/$defs/non_empty_string"}, {"$ref": "#/$defs/carried_destination"}]
+      "oneOf": [
+        {"$ref": "#/$defs/non_empty_string"},
+        {"$ref": "#/$defs/carried_destination"},
+        {
+          "type": "object",
+          "required": ["fixed"],
+          "properties": {"fixed": {}},
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["parameter"],
+          "properties": {
+            "parameter": {"$ref": "#/$defs/non_empty_string"},
+            "value": {"$ref": "#/$defs/non_empty_string"}
+          },
+          "additionalProperties": false
+        }
+      ]
     },
     "inheritance_attestation": {
       "type": "object",
@@ -197,12 +215,12 @@
       "type": "object",
       "required": ["model_flag", "surface_flag", "serving_mode_flag", "native_control_flags", "tools_flag", "policy_flags"],
       "properties": {
-        "model_flag": {"$ref": "#/$defs/non_empty_string"},
-        "surface_flag": {"$ref": "#/$defs/non_empty_string"},
-        "serving_mode_flag": {"$ref": "#/$defs/non_empty_string"},
+        "model_flag": {"$ref": "#/$defs/control_destination"},
+        "surface_flag": {"$ref": "#/$defs/control_destination"},
+        "serving_mode_flag": {"$ref": "#/$defs/control_destination"},
         "native_control_flags": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/control_destination"}},
-        "tools_flag": {"$ref": "#/$defs/non_empty_string"},
-        "policy_flags": {"type": "object", "additionalProperties": {"$ref": "#/$defs/non_empty_string"}}
+        "tools_flag": {"$ref": "#/$defs/control_destination"},
+        "policy_flags": {"type": "object", "additionalProperties": {"$ref": "#/$defs/control_destination"}}
       },
       "additionalProperties": false
     },
@@ -275,7 +293,7 @@
         "channel": {"$ref": "#/$defs/non_empty_string"},
         "surface": {"$ref": "#/$defs/non_empty_string"},
         "serving_mode": {"$ref": "#/$defs/non_empty_string"},
-        "model_capability": {"type": "number"},
+        "model_capability": {"$ref": "#/$defs/nullable_number"},
         "controls": {
           "type": "object",
           "minProperties": 1,
@@ -341,7 +359,7 @@
         "evidence": {"$ref": "#/$defs/evidence"},
         "harness": {"$ref": "#/$defs/harness"},
         "main_seat": {"$ref": "#/$defs/main_seat"},
-        "mappings": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/mapping"}},
+        "mappings": {"type": "array", "items": {"$ref": "#/$defs/mapping"}},
         "override_policy": {"$ref": "#/$defs/override_policy"}
       },
       "additionalProperties": false

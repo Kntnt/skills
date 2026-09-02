@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "profile_id": "fixture-profile",
+  "revision": 7,
+  "created_at": "2026-08-23T00:00:00Z",
+  "updated_at": "2026-08-23T00:00:00Z",
+  "currency": "USD",
+  "region": "global",
+  "access_channels": [
+    {
+      "channel_id": "claude-subscription",
+      "provider": "anthropic",
+      "surface": "claude-code",
+      "billing_type": "subscription",
+      "plan": "max"
+    },
+    {
+      "channel_id": "codex-subscription",
+      "provider": "openai",
+      "surface": "codex-app",
+      "billing_type": "subscription",
+      "plan": "pro"
+    },
+    {
+      "channel_id": "uncovered-api",
+      "provider": "spacexai",
+      "surface": "opencode",
+      "billing_type": "direct_api"
+    }
+  ],
+  "model_selections": [
+    {
+      "selection_id": "claude-haiku",
+      "provider": "anthropic",
+      "family": "claude-haiku",
+      "requested_model_id": "haiku",
+      "canonical_provider_model_id": "claude-haiku-4-5-20251001",
+      "provider_release_id": "claude-haiku-4-5-20251001",
+      "resolved_target": null,
+      "version_kind": "pinned_release",
+      "validation_status": "validated",
+      "channel_id": "claude-subscription",
+      "harness_surface": "claude-code",
+      "controls": {
+        "effort": {"policy": "all_supported", "values": null},
+        "thinking": {"policy": "default", "values": null},
+        "reasoning": {"policy": "default", "values": null},
+        "serving_modes": {"policy": "all_supported", "values": null}
+      },
+      "fallback_policy": null,
+      "enabled": true,
+      "watch_for_newer_versions": true
+    },
+    {
+      "selection_id": "claude-sonnet",
+      "provider": "anthropic",
+      "family": "claude-sonnet",
+      "requested_model_id": "sonnet",
+      "canonical_provider_model_id": "claude-sonnet-5",
+      "provider_release_id": "claude-sonnet-5",
+      "resolved_target": null,
+      "version_kind": "pinned_release",
+      "validation_status": "validated",
+      "channel_id": "claude-subscription",
+      "harness_surface": "claude-code",
+      "controls": {
+        "effort": {"policy": "all_supported", "values": null},
+        "thinking": {"policy": "default", "values": null},
+        "reasoning": {"policy": "default", "values": null},
+        "serving_modes": {"policy": "all_supported", "values": null}
+      },
+      "fallback_policy": null,
+      "enabled": true,
+      "watch_for_newer_versions": true
+    },
+    {
+      "selection_id": "claude-opus",
+      "provider": "anthropic",
+      "family": "claude-opus",
+      "requested_model_id": "opus",
+      "canonical_provider_model_id": "claude-opus-5",
+      "provider_release_id": "claude-opus-5",
+      "resolved_target": null,
+      "version_kind": "pinned_release",
+      "validation_status": "validated",
+      "channel_id": "claude-subscription",
+      "harness_surface": "claude-code",
+      "controls": {
+        "effort": {"policy": "all_supported", "values": null},
+        "thinking": {"policy": "default", "values": null},
+        "reasoning": {"policy": "default", "values": null},
+        "serving_modes": {"policy": "all_supported", "values": null}
+      },
+      "fallback_policy": null,
+      "enabled": true,
+      "watch_for_newer_versions": true
+    },
+    {
+      "selection_id": "claude-fable",
+      "provider": "anthropic",
+      "family": "claude-fable",
+      "requested_model_id": "fable",
+      "canonical_provider_model_id": "claude-fable-5",
+      "provider_release_id": "claude-fable-5",
+      "resolved_target": null,
+      "version_kind": "pinned_release",
+      "validation_status": "validated",
+      "channel_id": "claude-subscription",
+      "harness_surface": "claude-code",
+      "controls": {
+        "effort": {"policy": "all_supported", "values": null},
+        "thinking": {"policy": "default", "values": null},
+        "reasoning": {"policy": "default", "values": null},
+        "serving_modes": {"policy": "all_supported", "values": null}
+      },
+      "fallback_policy": null,
+      "enabled": true,
+      "watch_for_newer_versions": true
+    },
+    {
+      "selection_id": "codex-sol",
+      "provider": "openai",
+      "family": "gpt-5.6-sol",
+      "requested_model_id": "gpt-5.6-sol",
+      "canonical_provider_model_id": "gpt-5.6-sol",
+      "provider_release_id": "gpt-5.6-sol",
+      "resolved_target": null,
+      "version_kind": "provider_release_slug",
+      "validation_status": "validated",
+      "channel_id": "codex-subscription",
+      "harness_surface": "codex-app",
+      "controls": {
+        "effort": {"policy": "all_supported", "values": null},
+        "thinking": {"policy": "default", "values": null},
+        "reasoning": {"policy": "default", "values": null},
+        "serving_modes": {"policy": "all_supported", "values": null}
+      },
+      "fallback_policy": null,
+      "enabled": true,
+      "watch_for_newer_versions": true
+    },
+    {
+      "selection_id": "disabled-luna",
+      "provider": "openai",
+      "family": "gpt-5.6-luna",
+      "requested_model_id": "gpt-5.6-luna",
+      "canonical_provider_model_id": "gpt-5.6-luna",
+      "provider_release_id": "gpt-5.6-luna",
+      "resolved_target": null,
+      "version_kind": "provider_release_slug",
+      "validation_status": "validated",
+      "channel_id": "codex-subscription",
+      "harness_surface": "codex-app",
+      "controls": {
+        "effort": {"policy": "all_supported", "values": null},
+        "thinking": {"policy": "default", "values": null},
+        "reasoning": {"policy": "default", "values": null},
+        "serving_modes": {"policy": "all_supported", "values": null}
+      },
+      "fallback_policy": null,
+      "enabled": false,
+      "watch_for_newer_versions": true
+    },
+    {
+      "selection_id": "uncovered-grok",
+      "provider": "spacexai",
+      "family": "grok",
+      "requested_model_id": "grok-4.6",
+      "canonical_provider_model_id": "grok-4.6",
+      "provider_release_id": null,
+      "resolved_target": null,
+      "version_kind": "mutable_alias",
+      "validation_status": "validated",
+      "channel_id": "uncovered-api",
+      "harness_surface": "opencode",
+      "controls": {
+        "effort": {"policy": "explicit", "values": ["high"]},
+        "thinking": {"policy": "default", "values": null},
+        "reasoning": {"policy": "default", "values": null},
+        "serving_modes": {"policy": "all_supported", "values": null}
+      },
+      "fallback_policy": null,
+      "enabled": true,
+      "watch_for_newer_versions": true
+    }
+  ]
+}

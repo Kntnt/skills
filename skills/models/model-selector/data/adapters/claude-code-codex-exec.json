@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "adapter_template_id": "claude-code-codex-exec",
+  "harness": "claude-code",
+  "surface": "codex-exec",
+  "covers": ["codex-app", "codex"],
+  "model_source": "canonical",
+  "deliberation_source": "portable",
+  "supported_deliberation": ["low", "medium", "high", "xhigh", "max"],
+  "serving_modes": ["standard"],
+  "launch": {
+    "model_flag": {"parameter": "-m", "value": "{value}"},
+    "surface_flag": {"fixed": "codex-exec"},
+    "serving_mode_flag": {"fixed": "standard"},
+    "native_control_flags": {"effort": {"parameter": "-c", "value": "model_reasoning_effort={value}"}},
+    "tools_flag": {"fixed": []},
+    "policy_flags": {}
+  }
+}

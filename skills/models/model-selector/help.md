@@ -8,7 +8,9 @@ model-selector - compare configured AI model systems by price and performance
 
 **/model-selector** [**recommend**] [**--decision=route**|**--decision=renew**] [**--budget=**_AMOUNT_|**--quality=**_SCORE_] [**--data=**_PATH_] [*WORKLOAD*] [**--** *INSTRUCTION*]
 
-**/model-selector** **route** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
+**/model-selector** **context** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
+
+**/model-selector** **route** *PATH* [**--** *INSTRUCTION*]
 
 **/model-selector** (**chart**|**compare**) [**--decision=route**|**--decision=renew**] [**--data=**_PATH_] *WORKLOAD* [**--** *INSTRUCTION*]
 
@@ -53,6 +55,10 @@ Every result labels its evidence source, date, uncertainty, exclusions, and miss
 **recommend** [*WORKLOAD*]
 
 Choose one exact configuration and report its nearest cheaper and stronger comparable frontier neighbours. Bare `/model-selector` uses this command when the current workload is unambiguous.
+
+**context** *PATH*
+
+Derive a complete route artifact from persisted selections and exact runtime Harness facts, or validate and carry a frozen snapshot unchanged for a later routing call.
 
 **route** *PATH*
 
@@ -102,7 +108,7 @@ Write the observations into the caller-owned artifact at *PATH*, creating it whe
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory. Valid with every command except `observe`, which reads neither. The default is `~/.kntnt/model-selector/`.
+Use *PATH* as the profile and evidence directory. Valid with every command except `observe` and `route`, which read neither. The default is `~/.kntnt/model-selector/`.
 
 **--decision=route**, **--decision=renew**
 
@@ -144,7 +150,7 @@ For `update`, check every relevant mutable index once regardless of cadence. Kno
 
 `recommend` starts with one evidence banner: `🔵 HEURISTISK STARTPUNKT`, `🟠 BLANDAD EVIDENS`, or `🟢 MÄTDATABASERAD REKOMMENDATION`. It states the classification reason, confidence, missing evidence, and whether the result is an exploration start or production recommendation.
 
-`route` returns ordered `selected`, `inherit`, or `refused` decisions and a reproducible frozen snapshot. Selections carry Harness-native launch arguments; refusals carry stable reasons.
+`context` returns ordered requests beside derived current context or an unchanged frozen snapshot. `route` returns ordered `selected`, `inherit`, or `refused` decisions and a reproducible frozen snapshot. Selections carry Harness-native launch arguments; refusals carry stable reasons.
 
 A recommendation names the exact configuration, decision rule, comparable neighbours, exclusions, uncertainty, and staleness. Insufficient evidence produces a small discriminating evaluation instead of an invented rank.
 
@@ -183,6 +189,10 @@ Select an exact configured system for a repository-refactoring workload using ma
 **/model-selector route ./routing-request.json**
 
 Resolve a caller-owned request artifact without changing profile or evidence state.
+
+**/model-selector context ./context-request.json**
+
+Derive the complete route input from stored selections and caller-supplied runtime facts without setup or writes.
 
 **/model-selector update --force**
 

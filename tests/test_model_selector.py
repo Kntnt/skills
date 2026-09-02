@@ -16,6 +16,8 @@ from support.model_routing import (
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 MODEL_SELECTOR: Path = REPO_ROOT / "skills" / "models" / "model-selector"
+CONTEXT_SCRIPT: Path = MODEL_SELECTOR / "scripts" / "context.py"
+PROFILE_FIXTURE: Path = REPO_ROOT / "tests" / "support" / "model_selector_profile.json"
 
 
 def _load_router() -> Any:
@@ -27,6 +29,382 @@ def _load_router() -> Any:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def _runtime_context_request(**request_changes: Any) -> dict[str, Any]:
+    """Provide exact session facts beside one ordered routing request."""
+
+    # Pin the strongest scored fixture model and its top portable control.
+    request = _request()
+    request.update(request_changes)
+    return {
+        "schema_version": 1,
+        "requests": [request],
+        "runtime": {
+            "harness": {
+                "name": "claude-code",
+                "surface": "claude-code",
+                "inventory_revision": "claude-code/agent-tool",
+                "inheritance": True,
+                "inheritance_attestation": {
+                    "carried_by_default": True,
+                    "verified": "claude-code/agent-tool",
+                },
+            },
+            "main_seat": {
+                "model": "claude-opus-5",
+                "surface": "claude-code",
+                "serving_mode": "standard",
+                "native_deliberation": {"effort": "max"},
+                "portable_deliberation": "max",
+                "tools": [],
+                "policy": {},
+            },
+        },
+    }
+
+
+def _derive_context(
+    tmp_path: Path,
+    artifact: dict[str, Any],
+    profile: bytes | None = None,
+) -> dict[str, Any]:
+    """Invoke the public context process against an isolated fixture profile."""
+
+    # Place the persisted profile and request at their public filesystem seams.
+    data = tmp_path / "model-selector"
+    data.mkdir(parents=True, exist_ok=True)
+    if profile is None:
+        profile = PROFILE_FIXTURE.read_bytes()
+    if profile:
+        (data / "config.json").write_bytes(profile)
+    request = tmp_path / "context-request.json"
+    request.write_text(json.dumps(artifact), encoding="utf-8")
+
+    # Exercise the shipped CLI grammar rather than importing its internals.
+    result = subprocess.run(
+        ["uv", "run", str(CONTEXT_SCRIPT), f"--data={data}", str(request)],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    return cast(dict[str, Any], json.loads(result.stdout))
+
+
+def test_context_derives_a_routeable_claude_code_artifact(tmp_path: Path) -> None:
+    """Stored selections and session facts become one accepted route context."""
+
+    # Derive current context and feed it unchanged to the routing Interface.
+    derived = _derive_context(tmp_path, _runtime_context_request())
+    routed = _load_router().route(derived)
+
+    # Assert automatic routing selected a complete shipped-adapter launch.
+    assert routed["decisions"][0]["status"] == "selected"
+    assert routed["decisions"][0]["launch"]["arguments"] == {"model": "haiku"}
+    assert routed["snapshot"]["profile"] == {"revision": "7", "valid": True}
+    assert routed["snapshot"]["override_policy"] == {
+        "portable_levels": ["low", "medium", "high", "xhigh", "max"],
+        "cold_start": "select",
+        "quality_floor": 0.7,
+        "shadow_prices": None,
+    }
+    assert routed["snapshot"]["evidence"] == {
+        "identity": f"sha256:{hashlib.sha256(b'[]').hexdigest()}",
+        "vintage": "2026-08-23",
+        "records": [],
+    }
+    ranks = {
+        mapping["model"]: mapping["model_capability"]
+        for mapping in derived["context"]["mappings"]
+    }
+    assert ranks == {
+        "claude-haiku-4-5-20251001": 30.0,
+        "claude-sonnet-5": 55.0,
+        "claude-opus-5": 63.0,
+        "claude-fable-5": 62.0,
+        "gpt-5.6-sol": 61.0,
+        "grok-4.6": 61.0,
+    }
+    assert all(
+        set(mapping["commercial"].values()) == {None}
+        for mapping in derived["context"]["mappings"]
+    )
+    assert (tmp_path / "model-selector" / "config.json").read_bytes() == (
+        PROFILE_FIXTURE.read_bytes()
+    )
+
+
+def test_context_maps_observed_codex_max_and_ignores_ultra(tmp_path: Path) -> None:
+    """The pinned CLI dialect launches portable controls and nothing wider."""
+
+    # Lock the OpenAI fixture selection at the highest portable CLI value.
+    derived = _derive_context(
+        tmp_path,
+        _runtime_context_request(
+            overrides={"model": "gpt-5.6-sol", "deliberation": "max"}
+        ),
+    )
+    routed = _load_router().route(derived)
+
+    # Assert exact Codex syntax and the boundary below observed `ultra`.
+    assert routed["decisions"][0]["launch"]["arguments"] == {
+        "-m": "gpt-5.6-sol",
+        "-c": "model_reasoning_effort=max",
+    }
+    mapping = next(
+        item
+        for item in derived["context"]["mappings"]
+        if item["model"] == "gpt-5.6-sol"
+    )
+    cli = json.loads(
+        (REPO_ROOT / "tests" / "support" / "codex_cli_0_152_1.json").read_text()
+    )
+    cli_help = (
+        REPO_ROOT / "tests" / "support" / "codex_cli_0_152_1_exec_help.txt"
+    ).read_text()
+    cli_sol = next(item for item in cli["models"] if item["id"] == "gpt-5.6-sol")
+    assert cli["version"] == "codex-cli 0.152.1"
+    assert cli["config_reference"].endswith("/openai/codex/blob/main/docs/config.md")
+    assert "-c, --config <key=value>" in cli_help
+    assert "-m, --model <MODEL>" in cli_help
+    assert "max" in mapping["controls"]
+    assert "ultra" in cli_sol["supported_reasoning_levels"]
+    assert "ultra" not in mapping["controls"]
+
+
+def test_context_retains_uncovered_selections_and_omits_disabled_ones(
+    tmp_path: Path,
+) -> None:
+    """Profile normalization stays auditable beyond available adapters."""
+
+    # Derive mappings from every enabled validated selection in the fixture.
+    mappings = _derive_context(tmp_path, _runtime_context_request())["context"][
+        "mappings"
+    ]
+    models = [mapping["model"] for mapping in mappings]
+
+    assert "grok-4.6" in models
+    assert "gpt-5.6-luna" not in models
+    assert [
+        mapping["serving_mode"]
+        for mapping in mappings
+        if mapping["model"] == "claude-opus-5"
+    ] == ["standard", "fast"]
+
+    # Turn the disabled covered selection on but leave it unvalidated.
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    luna = next(
+        selection
+        for selection in profile["model_selections"]
+        if selection["canonical_provider_model_id"] == "gpt-5.6-luna"
+    )
+    luna.update({"enabled": True, "validation_status": "pending"})
+    unvalidated = _derive_context(
+        tmp_path / "unvalidated",
+        _runtime_context_request(),
+        json.dumps(profile).encode(),
+    )["context"]["mappings"]
+    assert "gpt-5.6-luna" not in {mapping["model"] for mapping in unvalidated}
+
+
+def test_context_keeps_an_unsupported_harness_on_the_main_seat(
+    tmp_path: Path,
+) -> None:
+    """A valid context with no matching adapter preserves inherited execution."""
+
+    # Describe a Harness no shipped template covers at the same top-ranked seat.
+    request = _runtime_context_request()
+    request["runtime"]["harness"] = {
+        "name": "unsupported",
+        "surface": "unsupported",
+        "inventory_revision": "unsupported/worker",
+        "inheritance": True,
+        "inheritance_attestation": {
+            "carried_by_default": True,
+            "verified": "unsupported/worker",
+        },
+    }
+    request["runtime"]["main_seat"]["surface"] = "unsupported"
+    decision = _load_router().route(_derive_context(tmp_path, request))["decisions"][0]
+
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
+    assert {item["code"] for item in decision["audit"]["exclusions"]} == {
+        "adapter_unreachable"
+    }
+
+
+def test_context_keeps_a_missing_attestation_auditable(tmp_path: Path) -> None:
+    """An unverifiable carried seam removes only its concrete adapters."""
+
+    # Remove the live-session fact no persisted profile can honestly supply.
+    request = _runtime_context_request()
+    del request["runtime"]["harness"]["inheritance_attestation"]
+    derived = _derive_context(tmp_path, request)
+
+    # Retain configured Claude points while making their launch seam unavailable.
+    adapters = derived["context"]["harness"]["adapter_specs"]
+    mappings = derived["context"]["mappings"]
+    assert not [adapter for adapter in adapters if adapter["surface"] == "agent-tool"]
+    assert [mapping for mapping in mappings if mapping["surface"] == "agent-tool"]
+
+    # A Harness that disclaims inheritance cannot validate a carried adapter.
+    unsupported = _runtime_context_request()
+    unsupported["runtime"]["harness"]["inheritance"] = False
+    unsupported_adapters = _derive_context(tmp_path / "unsupported", unsupported)[
+        "context"
+    ]["harness"]["adapter_specs"]
+    assert not [
+        adapter
+        for adapter in unsupported_adapters
+        if adapter["surface"] == "agent-tool"
+    ]
+
+
+def test_context_treats_missing_or_invalid_profiles_as_absent(tmp_path: Path) -> None:
+    """Configuration trouble inherits without setup or persistent repair."""
+
+    # Derive once without a profile and once from structurally invalid bytes.
+    for index, profile in enumerate((b"", b"{}")):
+        derived = _derive_context(
+            tmp_path / str(index),
+            _runtime_context_request(),
+            profile,
+        )
+        decision = _load_router().route(derived)["decisions"][0]
+
+        assert derived["context"]["profile"] is None
+        assert derived["context"]["mappings"] == []
+        assert decision["status"] == "inherit"
+        assert decision["inheritance"]["reason"] == "missing_profile"
+
+
+def test_context_inherits_an_unknown_main_seat_without_overrides(
+    tmp_path: Path,
+) -> None:
+    """A main seat outside the numeric comparison never gains a fake ceiling."""
+
+    # Use the documented seed gap with and without an exact model lock.
+    automatic = _runtime_context_request()
+    automatic["runtime"]["main_seat"]["model"] = "claude-fable-5-1"
+    derived = _derive_context(tmp_path / "automatic", automatic)
+    inherited = _load_router().route(derived)["decisions"][0]
+    locked = deepcopy(automatic)
+    locked["requests"][0]["overrides"] = {"model": "claude-fable-5"}
+    refused = _load_router().route(_derive_context(tmp_path / "locked", locked))[
+        "decisions"
+    ][0]
+
+    assert derived["context"]["mappings"] == []
+    assert derived["context"]["main_seat"]["model_capability"] is None
+    assert inherited["status"] == "inherit"
+    assert inherited["inheritance"]["reason"] == "unavailable_selection_controls"
+    assert refused["status"] == "refused"
+    assert refused["reason"]["code"] == "unknown_main_seat_ceiling"
+
+
+def test_context_returns_a_valid_frozen_snapshot_unchanged(tmp_path: Path) -> None:
+    """Later routing calls reuse the exact snapshot established on first call."""
+
+    # Freeze the first derived context through the public route Interface.
+    first = _derive_context(tmp_path, _runtime_context_request())
+    snapshot = _load_router().route(first)["snapshot"]
+
+    # Ask context to wrap a later request around those same frozen facts.
+    later = _derive_context(
+        tmp_path,
+        {
+            "schema_version": 1,
+            "requests": [_request(request_id="build-2")],
+            "snapshot": snapshot,
+        },
+    )
+
+    assert later["snapshot"] == snapshot
+
+
+def test_context_process_refusals_are_machine_readable(tmp_path: Path) -> None:
+    """Malformed process input never escapes as a Python traceback."""
+
+    # Exercise each filesystem and JSON failure through the installed process.
+    malformed = tmp_path / "malformed.json"
+    malformed.write_text("{", encoding="utf-8")
+    invalid = tmp_path / "invalid.json"
+    invalid.write_text("{}", encoding="utf-8")
+    invocations = [
+        [],
+        [str(tmp_path / "absent.json")],
+        [str(malformed)],
+        [str(invalid)],
+    ]
+    expected = [
+        "invalid_arguments",
+        "unreadable_artifact",
+        "malformed_json",
+        "invalid_context_input",
+    ]
+    for arguments, code in zip(invocations, expected, strict=True):
+        result = subprocess.run(
+            ["uv", "run", str(CONTEXT_SCRIPT), *arguments],
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        refusal = json.loads(result.stdout)
+        assert result.returncode == 2
+        assert refusal["artifact_refusal"]["code"] == code
+        assert "Traceback" not in result.stderr
+
+
+def test_context_refuses_a_flag_after_its_artifact_operand(tmp_path: Path) -> None:
+    """The process grammar never silently repairs out-of-order arguments."""
+
+    # Put a valid flag after the path its public synopsis requires it to precede.
+    request = tmp_path / "context-request.json"
+    request.write_text(json.dumps(_runtime_context_request()), encoding="utf-8")
+    result = subprocess.run(
+        [
+            "uv",
+            "run",
+            str(CONTEXT_SCRIPT),
+            str(request),
+            f"--data={tmp_path}",
+        ],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
+        "invalid_arguments"
+    )
+
+
+def test_context_refuses_inconsistent_main_seat_surface(tmp_path: Path) -> None:
+    """The exact main seat cannot silently differ from its invoking Harness."""
+
+    # Contradict the invariant that the runtime contract records twice.
+    artifact = _runtime_context_request()
+    artifact["runtime"]["main_seat"]["surface"] = "different"
+    request = tmp_path / "context-request.json"
+    request.write_text(json.dumps(artifact), encoding="utf-8")
+    result = subprocess.run(
+        ["uv", "run", str(CONTEXT_SCRIPT), str(request)],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
+        "invalid_context_input"
+    )
 
 
 def _automatic_low_snapshot() -> dict[str, Any]:
@@ -115,6 +493,108 @@ def test_route_selects_an_exact_launchable_point() -> None:
         "summary": "auto",
     }
     assert result["snapshot"]["profile"]["revision"] == "profile-7"
+
+
+def test_route_emits_only_parameter_destinations_for_a_complete_point() -> None:
+    """Fixed and inherited facts stay exact without becoming arguments."""
+
+    # Declare all destination forms on one concrete launch adapter.
+    snapshot = _complete_routing_snapshot()
+    adapter = snapshot["harness"]["adapter_specs"][0]
+    adapter["launch"] = {
+        "model_flag": {"parameter": "-m", "value": "alias-{value}"},
+        "surface_flag": {"fixed": "subagent"},
+        "serving_mode_flag": {"fixed": "standard"},
+        "native_control_flags": {
+            "effort": {
+                "parameter": "-c",
+                "value": "model_reasoning_effort={value}",
+            },
+            "summary": {"fixed": "auto"},
+        },
+        "tools_flag": {"carried_by": "inheritance"},
+        "policy_flags": {
+            "sandbox": {"fixed": "workspace-write"},
+            "network": {"carried_by": "inheritance"},
+        },
+    }
+    adapter["inheritance_attestation"] = {
+        "carried_by_default": True,
+        "verified": "codex/subagent",
+    }
+
+    # Route through the public seam and inspect only the native launch result.
+    decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+
+    assert decision["launch"]["arguments"] == {
+        "-m": "alias-worker-v2",
+        "-c": "model_reasoning_effort=low",
+    }
+
+    # Make fixed native and policy facts disagree with the selected point.
+    for field, value in (("summary", "detailed"), ("sandbox", "read-only")):
+        mismatched = deepcopy(snapshot)
+        destinations = mismatched["harness"]["adapter_specs"][0]["launch"]
+        group = "native_control_flags" if field == "summary" else "policy_flags"
+        destinations[group][field] = {"fixed": value}
+        refusal = _load_router().route(
+            {
+                "schema_version": 1,
+                "context": mismatched,
+                "requests": [_request(overrides={"deliberation": "low"})],
+            }
+        )["decisions"][0]
+
+        assert refusal["status"] == "refused"
+        assert refusal["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
+
+
+def test_route_inherits_an_empty_mapping_set_before_an_unknown_ceiling() -> None:
+    """Unavailable selection data leaves an automatic request on its seat."""
+
+    # Represent a valid context with no comparable or launchable selections.
+    snapshot = _complete_routing_snapshot()
+    snapshot["mappings"] = []
+    snapshot["main_seat"]["model_capability"] = None
+
+    # Route the automatic request through the same public artifact boundary.
+    decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request()],
+        }
+    )["decisions"][0]
+
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
+
+
+def test_route_audits_an_unranked_mapping_before_inheriting() -> None:
+    """An incomparable configured model stays visible but never launches."""
+
+    # Keep the mapping complete while withholding only its comparable rank.
+    snapshot = _complete_routing_snapshot()
+    snapshot["mappings"][0]["model_capability"] = None
+
+    # Resolve the automatic request and retain the unavailable-rank reason.
+    decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request()],
+        }
+    )["decisions"][0]
+
+    assert decision["status"] == "inherit"
+    assert decision["inheritance"]["reason"] == "unavailable_selection_controls"
+    assert decision["audit"]["exclusions"][0]["code"] == ("capability_rank_unavailable")
 
 
 def test_route_uses_a_complete_harness_adapter_and_point_fingerprint() -> None:
