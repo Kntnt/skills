@@ -14,6 +14,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Define parked-ticket amendment budgets as lifetime-scoped, preserve and bring forward resumed work, and report inherited versus newly spent amendments.
 - Fixed Orchestrate reports omitting reconciled parked tickets that had no Run Outcome.
 - Added caller-supplied Orchestrate plan approval identities, allowing an exact dry-run frontier to be authorized and checked before any claim in one invocation.
+- `/orchestrate` now audits tickets for concretely named external decision gaps before claiming, parks detected gaps with a decision-ready question under `needs-info`, and reuses the same parked-ticket record for decisions found mid-work.
 
 ## [0.18.6] – 2026-08-30
 
