@@ -6,7 +6,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 import sys
@@ -48,13 +47,6 @@ route.SCHEMAS_BY_ID.update(
         ADAPTER_TEMPLATE_SCHEMA["$id"]: ADAPTER_TEMPLATE_SCHEMA,
     }
 )
-
-
-def _canonical_digest(value: Any) -> str:
-    """Hash one JSON value through the routing contract's canonical form."""
-
-    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
-    return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
 
 
 def _schema_error(value: Any, schema: dict[str, Any], path: str) -> str | None:
@@ -267,9 +259,6 @@ def _portable_controls(
         ]
     else:
         mapped = list(supported)
-    if not mapped:
-        mapped = ["medium"]
-
     # Admit adapters only for values verified by seed and template evidence.
     launchable = [value for value in mapped if value in supported]
     if template is not None:
@@ -401,7 +390,7 @@ def _derive_context(
     runtime_seat = runtime["main_seat"]
     evidence_records: list[dict[str, Any]] = []
     evidence = {
-        "identity": _canonical_digest(evidence_records),
+        "identity": route._canonical_digest(evidence_records),
         "vintage": manifest["as_of"],
         "records": evidence_records,
     }

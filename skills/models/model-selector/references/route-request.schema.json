@@ -296,7 +296,6 @@
         "model_capability": {"$ref": "#/$defs/nullable_number"},
         "controls": {
           "type": "object",
-          "minProperties": 1,
           "properties": {
             "low": {"$ref": "#/$defs/native_control"},
             "medium": {"$ref": "#/$defs/native_control"},
@@ -308,7 +307,6 @@
         },
         "control_capabilities": {
           "type": "object",
-          "minProperties": 1,
           "properties": {
             "low": {"type": "number"},
             "medium": {"type": "number"},
@@ -318,7 +316,7 @@
           },
           "additionalProperties": false
         },
-        "native_control_order": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/native_control"}},
+        "native_control_order": {"type": "array", "items": {"$ref": "#/$defs/native_control"}},
         "tools": {"$ref": "#/$defs/string_array"},
         "policy": {"$ref": "#/$defs/policy"},
         "capabilities": {"$ref": "#/$defs/string_array"},

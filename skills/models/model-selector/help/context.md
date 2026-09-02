@@ -18,7 +18,7 @@ Context is offline, non-interactive, and read-only. It never starts setup, perfo
 
 *PATH*
 
-A UTF-8 JSON artifact conforming to `references/context-request.schema.json`, with `schema_version: 1`, ordered `requests`, and exactly one of `runtime` or `snapshot`. Runtime names the active Harness, stable inventory identity, inheritance support and optional inheritance attestation whose `verified` value must equal that inventory identity, plus the exact main-seat model, surface, serving mode, portable and native deliberation, tools, policy, and optional channel. Context itself refuses a supplied snapshot whose frozen facts no longer match its `snapshot_identity`.
+A UTF-8 JSON artifact conforming to `references/context-request.schema.json`, with `schema_version: 1`, ordered `requests`, and exactly one of `runtime` or `snapshot`. Runtime names the active Harness, stable inventory identity, inheritance support and optional inheritance attestation whose `verified` value must equal that inventory identity, plus the exact main-seat model, surface, serving mode, portable and native deliberation, tools, policy, and optional channel. Context itself refuses a supplied snapshot whose frozen facts no longer match its `snapshot_identity` or whose adapter attestation differs from the frozen Harness inventory identity.
 
 ## OPTIONS
 

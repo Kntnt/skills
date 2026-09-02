@@ -282,15 +282,28 @@ def _snapshot_structure_error(snapshot: Any, definition: str) -> str | None:
 def _snapshot_error(snapshot: dict[str, Any]) -> str | None:
     """Return the first cross-field snapshot invariant violation, if one exists."""
 
+    # Bind every frozen adapter attestation to the Harness inventory identity.
+    inventory = snapshot["harness"]["inventory_revision"]
+    for adapter in snapshot["harness"]["adapter_specs"]:
+        attestation = adapter.get("inheritance_attestation")
+        if attestation is not None and attestation["verified"] != inventory:
+            return (
+                "snapshot adapter inheritance attestation must equal "
+                "harness inventory revision"
+            )
+
     # Validate cross-field mapping invariants the schema cannot express.
     for point in snapshot["mappings"]:
         native_order = point["native_control_order"]
         control_capabilities = point["control_capabilities"]
         if (
-            any(native not in native_order for native in point["controls"].values())
+            any(
+                not _json_sequence_contains(native_order, native)
+                for native in point["controls"].values()
+            )
             or (
                 "max" in point["controls"]
-                and point["controls"]["max"] != native_order[-1]
+                and not _json_values_equal(point["controls"]["max"], native_order[-1])
             )
             or set(control_capabilities) != set(point["controls"])
         ):
@@ -390,6 +403,12 @@ def _json_values_equal(left: Any, right: Any) -> bool:
     return type(left) is type(right) and left == right
 
 
+def _json_sequence_contains(values: list[Any], target: Any) -> bool:
+    """Find one exact JSON value without Python's coercive membership test."""
+
+    return any(_json_values_equal(value, target) for value in values)
+
+
 def _destination_accepts(
     destination: Any,
     value: Any,
@@ -480,9 +499,13 @@ def _adapter_can_launch(
         != point.get("surface", snapshot["harness"]["surface"])
         or point["model"] not in adapter.get("models", [])
         or point["serving_mode"] not in adapter.get("serving_modes", [])
-        or native not in adapter.get("native_controls", [])
-        or point.get("tools", []) not in adapter.get("tool_sets", [])
-        or point.get("policy", {}) not in adapter.get("policies", [])
+        or not _json_sequence_contains(adapter.get("native_controls", []), native)
+        or not _json_sequence_contains(
+            adapter.get("tool_sets", []), point.get("tools", [])
+        )
+        or not _json_sequence_contains(
+            adapter.get("policies", []), point.get("policy", {})
+        )
     ):
         return False
 

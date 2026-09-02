@@ -293,6 +293,46 @@ def test_context_retains_seedless_and_unavailable_mode_selections(
     )
 
 
+def test_context_leaves_seedless_all_supported_controls_unknown(
+    tmp_path: Path,
+) -> None:
+    """An absent seed never invents portable controls or capability ranks."""
+
+    # Add a seedless selection that requests only verified supported controls.
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    seedless = deepcopy(profile["model_selections"][-1])
+    seedless.update(
+        {
+            "selection_id": "seedless-all",
+            "family": "seedless-all",
+            "requested_model_id": "seedless-all-model",
+            "canonical_provider_model_id": "seedless-all-model",
+            "provider_release_id": None,
+            "controls": {
+                **seedless["controls"],
+                "effort": {"policy": "all_supported", "values": None},
+            },
+        }
+    )
+    profile["model_selections"].append(seedless)
+    derived = _derive_context(
+        tmp_path,
+        _runtime_context_request(),
+        json.dumps(profile).encode(),
+    )
+    mapping = next(
+        item
+        for item in derived["context"]["mappings"]
+        if item["model"] == "seedless-all-model"
+    )
+
+    # Preserve explicit unknowns in a valid, unlaunchable frozen mapping.
+    assert mapping["controls"] == {}
+    assert mapping["control_capabilities"] == {}
+    assert mapping["native_control_order"] == []
+    assert "artifact_refusal" not in _load_router().route(derived)
+
+
 def test_context_keeps_an_unsupported_harness_on_the_main_seat(
     tmp_path: Path,
 ) -> None:
@@ -360,6 +400,7 @@ def test_context_treats_missing_or_invalid_profiles_as_absent(tmp_path: Path) ->
         )
         decision = _load_router().route(derived)["decisions"][0]
 
+        # Assert both absent-profile forms produce the same safe inheritance.
         assert derived["context"]["profile"] is None
         assert derived["context"]["mappings"] == []
         assert decision["status"] == "inherit"
@@ -492,6 +533,48 @@ def test_context_refuses_a_frozen_snapshot_with_a_stale_identity(
     refusal = json.loads(result.stdout)
     assert result.returncode == 2
     assert refusal["artifact_refusal"]["code"] == "invalid_context_input"
+
+
+def test_context_refuses_a_frozen_attestation_for_another_inventory(
+    tmp_path: Path,
+) -> None:
+    """Frozen adapter attestations retain the Harness inventory identity."""
+
+    # Freeze a self-consistent snapshot carrying a contradictory attestation.
+    first = _derive_context(tmp_path / "first", _runtime_context_request())
+    router = _load_router()
+    snapshot = router.route(first)["snapshot"]
+    carried = next(
+        adapter
+        for adapter in snapshot["harness"]["adapter_specs"]
+        if adapter.get("inheritance_attestation")
+    )
+    carried["inheritance_attestation"]["verified"] = "wrong/inventory"
+    snapshot = router.freeze_context(snapshot)
+    artifact = tmp_path / "wrong-attestation.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "requests": [_request()],
+                "snapshot": snapshot,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    # Require Context to reject the contradiction despite the valid digest.
+    result = subprocess.run(
+        ["uv", "run", str(CONTEXT_SCRIPT), str(artifact)],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 2
+    assert json.loads(result.stdout)["artifact_refusal"]["code"] == (
+        "invalid_context_input"
+    )
 
 
 def test_context_process_refusals_are_machine_readable(tmp_path: Path) -> None:
@@ -647,7 +730,7 @@ def _carried_control_snapshot() -> dict[str, Any]:
     }
     adapter["inheritance_attestation"] = {
         "carried_by_default": True,
-        "verified": "A subagent spawned here runs at this session's own effort.",
+        "verified": "inventory-3",
     }
     return snapshot
 
@@ -720,7 +803,7 @@ def test_route_emits_only_parameter_destinations_for_a_complete_point() -> None:
     }
     adapter["inheritance_attestation"] = {
         "carried_by_default": True,
-        "verified": "codex/subagent",
+        "verified": "inventory-3",
     }
 
     # Route through the public seam and inspect only the native launch result.
@@ -766,7 +849,7 @@ def test_route_rejects_carried_facts_that_differ_from_the_main_seat() -> None:
         adapter = snapshot["harness"]["adapter_specs"][0]
         adapter["inheritance_attestation"] = {
             "carried_by_default": True,
-            "verified": "codex/subagent",
+            "verified": "inventory-3",
         }
         carried = {"carried_by": "inheritance"}
         if field == "model":
@@ -784,6 +867,7 @@ def test_route_rejects_carried_facts_that_differ_from_the_main_seat() -> None:
             adapter["launch"]["policy_flags"]["sandbox"] = carried
             snapshot["main_seat"]["policy"]["sandbox"] = "read-only"
 
+        # Route each complete inherited mismatch through the public seam.
         decision = _load_router().route(
             {
                 "schema_version": 1,
@@ -813,7 +897,7 @@ def test_route_compares_fixed_and_carried_json_values_by_type() -> None:
         adapter["launch"]["policy_flags"]["toggle"] = destination
         adapter["inheritance_attestation"] = {
             "carried_by_default": True,
-            "verified": "codex/subagent",
+            "verified": "inventory-3",
         }
         snapshot["main_seat"]["policy"]["toggle"] = 1
 
@@ -827,6 +911,53 @@ def test_route_compares_fixed_and_carried_json_values_by_type() -> None:
         )["decisions"][0]
         assert decision["status"] == "refused", destination
         assert decision["audit"]["exclusions"][0]["code"] == ("adapter_unreachable")
+
+
+def test_route_compares_adapter_facts_as_exact_json_values() -> None:
+    """Adapter membership cannot coerce booleans into supported numbers."""
+
+    # Give the point a boolean policy fact and the adapter numeric support.
+    snapshot = _complete_routing_snapshot()
+    point = snapshot["mappings"][0]
+    point["policy"]["toggle"] = True
+    adapter = snapshot["harness"]["adapter_specs"][0]
+    supported = deepcopy(point["policy"])
+    supported["toggle"] = 1
+    adapter["policies"] = [supported]
+    adapter["launch"]["policy_flags"]["toggle"] = "toggle"
+
+    # Reject the unsupported exact point before argument translation.
+    decision = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request(overrides={"deliberation": "low"})],
+        }
+    )["decisions"][0]
+    assert decision["status"] == "refused"
+    assert decision["audit"]["exclusions"][0]["code"] == "adapter_unreachable"
+
+
+def test_route_validates_native_order_as_exact_json_values() -> None:
+    """A frozen mapping cannot coerce a native boolean into a number."""
+
+    # Contradict one mapped native value only through Python's equality quirk.
+    snapshot = _complete_routing_snapshot()
+    point = snapshot["mappings"][0]
+    point["controls"] = {"low": {"toggle": True}}
+    point["control_capabilities"] = {"low": 1}
+    point["native_control_order"] = [{"toggle": 1}]
+
+    # Refuse the structurally valid but cross-field-inexact snapshot.
+    response = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": snapshot,
+            "requests": [_request()],
+        }
+    )
+    assert response["decisions"][0]["status"] == "refused"
+    assert response["decisions"][0]["reason"]["code"] == "invalid_snapshot"
 
 
 def test_context_specializes_every_generalized_model_destination() -> None:
