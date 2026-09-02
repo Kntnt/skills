@@ -70,7 +70,7 @@ Run `/brief`, `/brief on|off [--user] [--yes]`, or `/brief status`.
 
 ### delegation
 
-Let the main agent decide, plan, and verify while subagents perform selected work routed by `model-selector`. The mode can apply to the session, project, or current harness user.
+Let the main agent decide, plan, and verify while subagents perform selected work routed by `model-selector` unless run on the frozen main seat with no override. The mode can apply to the session, project, or current harness user.
 
 Run `/delegation`, `/delegation on|off [--project|--user] [--yes]`, or `/delegation status [--project|--user]`.
 

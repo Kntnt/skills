@@ -14,7 +14,7 @@ delegation - control delegation mode for a session, Project, or user
 
 ## DESCRIPTION
 
-Delegation mode leaves planning, delegation decisions, briefing, and verification with the main agent while subagents execute selected work. Model Selector routes delegated execution without changing the main agent's configuration.
+Delegation mode leaves planning, delegation decisions, briefing, and verification with the main agent while subagents execute selected work. Model Selector routes delegated execution without changing the main agent's configuration; a spawn on the frozen main seat with no model, deliberation, or surface override is not routed.
 
 No arguments toggles the current session. `on` and `off` change the selected scope; `status` reports one scope or all three.
 
