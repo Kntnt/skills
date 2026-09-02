@@ -16,6 +16,7 @@ import sys
 import tomllib
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from typing import Final
 from urllib.parse import urlparse
 
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
@@ -30,8 +31,8 @@ BUILD_SCRIPTS = (
 )
 MAKE_TARGETS = ("zip", "dist", "archive", "release-zip")
 NPM_SCRIPTS = ("zip", "build:zip", "archive")
-COMMIT_EXCERPT_HEAD = 3
-COMMIT_EXCERPT_TAIL = 3
+COMMIT_EXCERPT_HEAD: Final = 3
+COMMIT_EXCERPT_TAIL: Final = 3
 
 GITIGNORE_BASE = """# OS
 .DS_Store
@@ -124,7 +125,11 @@ def _gh_ok(cwd: Path, *args: str) -> bool:
 
 @dataclass
 class Plan:
-    """Facts the calling skill shows, then feeds to apply."""
+    """Facts the calling skill shows, then feeds to apply.
+
+    ``commit_count`` always reports the complete changelog-baseline span,
+    including when ``commits`` contains only an excerpt.
+    """
 
     mode: str
     ready: bool
@@ -315,7 +320,7 @@ def detect_build(cwd: Path) -> dict[str, str] | None:
 
 
 def build_plan(cwd: Path, mode: str, full_inventory: bool = False) -> Plan:
-    """Gather plan facts for *mode*, projecting the commit inventory when requested."""
+    """Gather plan facts for *mode* and project commits when requested."""
 
     staged, tracked, untracked = status_paths(cwd)
     dirty = bool(staged or tracked or untracked)
