@@ -7878,6 +7878,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     skill = (directory / "SKILL.md").read_text(encoding="utf-8")
     help_page = (directory / "help.md").read_text(encoding="utf-8")
     mode = (directory / "references" / "mode.md").read_text(encoding="utf-8")
+    on_page = (directory / "help" / "on.md").read_text(encoding="utf-8")
     persistence = (directory / "references" / "persist.md").read_text(encoding="utf-8")
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     catalog = json.loads(
@@ -7917,12 +7918,48 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f" Interface; missing {missing}."
     )
 
+    # The caller chooses the path, and the boundary is the seat the spawn runs
+    # on: unrouted on the frozen main seat with no override, routed for every
+    # foreign surface, model, or deliberation override (ADR-0133).
+    required_boundary_fragments = {
+        "frozen main seat",
+        "no model, deliberation, or surface override",
+        "is not routed",
+        "verdict authority",
+        "foreign surface, model, or deliberation override",
+        "distillation, summarization, evidence collection",
+        "routed cheaper seat",
+        "frictionless main seat",
+    }
+    missing_boundary = sorted(
+        fragment for fragment in required_boundary_fragments if fragment not in mode
+    )
+    assert not missing_boundary, (
+        f"{directory / 'references' / 'mode.md'}: the standing instruction must"
+        f" state, as the caller's choice, that a spawn on the frozen main seat with"
+        f" no override is unrouted and that every other spawn routes, and must"
+        f" weigh a routed cheaper seat for judgment-in-noise roles (ADR-0133);"
+        f" missing {missing_boundary}."
+    )
+    assert "exploration" not in mode.lower(), (
+        f"{directory / 'references' / 'mode.md'}: the counterweight names no"
+        f" exploration policy, because none exists (ADR-0067, ADR-0133)."
+    )
+    assert "frozen main seat" in on_page and "public `route` Interface" in on_page, (
+        f"{directory / 'help' / 'on.md'}: the manpage says what goes through"
+        f" model-selector's public `route` Interface, so it names the unrouted"
+        f" frozen main seat beside it (ADR-0133)."
+    )
+
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
     assert {"config.json", "references/", "scripts/"}.isdisjoint(mode.split())
-    assert len(mode.split()) <= 130, (
+    assert len(mode.split()) <= 300, (
         f"{directory / 'references' / 'mode.md'}: the standing instruction has"
-        f" {len(mode.split())} words; keep it at or below 130 by leaving routing and"
-        f" observation implementation behind model-selector's public Interfaces."
+        f" {len(mode.split())} words; keep it at or below 300. That ceiling is the"
+        f" budget for the whole doctrine — the routing boundary and the additions"
+        f" issues #207, #208, #209, and #210 make to it — and it is met by leaving"
+        f" routing and observation implementation behind model-selector's public"
+        f" Interfaces."
     )
 
     # Keep persistent context to one pointer and one refreshable companion file.
@@ -10520,6 +10557,8 @@ def test_delegation_reports_checked_observations_and_imports_none() -> None:
         "caller-owned scratch",
         "externally judged routed attempt",
         "user-only",
+        "unrouted spawn",
+        "capture records it as the inheritance that actually happened",
     }
     missing = sorted(
         fragment for fragment in required_fragments if fragment not in mode
@@ -10527,5 +10566,6 @@ def test_delegation_reports_checked_observations_and_imports_none() -> None:
     assert not missing, (
         f"{path}: routed delegation must hand externally judged attempts to"
         f" model-selector's public observation Interface and leave imports to the"
-        f" user (issue #96); missing {missing}."
+        f" user (issue #96), and an unrouted spawn produces no `observe` attempt"
+        f" and is left to capture (ADR-0133); missing {missing}."
     )
