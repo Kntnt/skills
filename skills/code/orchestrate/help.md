@@ -24,7 +24,7 @@ The main session owns planning, triage, integration, and verification judgements
 
 Model Selector creates one frozen routing snapshot before claims. Builders and repair roles use decisions from that snapshot; independent verdicts always inherit the main session's exact model and deliberation configuration.
 
-Before claiming, the Skill asks all open ticket decisions in one batch and posts the answers to their tickets. With `--yes`, it parks such tickets under `needs-info` instead of guessing, then continues with the rest.
+Before any ticket is claimed, the Skill audits ticket text for open decisions in one batch and posts the answers to their tickets. It looks for concretely named gaps, including exact commands whose inputs the repository does not fix, an external service or account with no mutation path or owner, choices phrased as alternatives, and credentials or accounts whose owner is undeclared. With `--yes`, it parks such tickets under `needs-info` instead of guessing, then continues with the rest; uncertain cases proceed and retain the mid-work park as a backstop.
 
 `reconcile` records that a failed, conflicted, or parked attempt was later completed outside Orchestrate. See **/orchestrate reconcile --help**.
 
@@ -84,7 +84,7 @@ A deterministic environment problem is repaired by the orchestrator and the same
 
 **Genuine decision**
 
-An ambiguity, missing requirement, or design choice not settled by the ticket parks the ticket under `needs-info`, posts the question, releases the claim, and records no build outcome.
+An ambiguity, missing requirement, or design choice not settled by the ticket parks the ticket under `needs-info`, posts a decision-ready question quoting the ticket's sentence and naming what the ticket must state instead, releases the claim, and records no build outcome. The same record shape applies before claim and mid-work.
 
 The park report includes the ticket's lifetime `amends_spent`, so the remaining budget is known before it is resumed.
 

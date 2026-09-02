@@ -934,6 +934,50 @@ def test_the_question_step_parks_rather_than_guesses_under_yes() -> None:
     )
 
 
+def test_the_question_step_audits_concrete_external_decision_gaps() -> None:
+    """A detectable decision gap parks before claim rather than during build."""
+
+    step = _step(3)
+
+    for gap in (
+        "exact commands over inputs the repository does not fix",
+        "external service or account with no named mutation path or owner",
+        "choice phrased as alternatives",
+        "credentials or accounts whose owner is undeclared",
+    ):
+        assert gap in step, (
+            f"{SKILL / 'SKILL.md'}: step 3 names the detectable decision gap"
+            f" `{gap}`, so the main seat can park it before claim (issue #204)."
+        )
+
+    assert "only on a gap it can name concretely" in step, (
+        f"{SKILL / 'SKILL.md'}: step 3 is advisory-conservative and leaves"
+        f" uncertain cases to the existing mid-work backstop (issue #204)."
+    )
+
+
+def test_one_park_comment_shape_serves_claim_time_and_mid_work() -> None:
+    """Every parked-ticket record gives the maintainer a decision-ready question."""
+
+    question_step = _step(3)
+    build_step = _step(6)
+
+    for part in (
+        "sentence of the ticket quoted",
+        "decision it leaves open as a question",
+        "what the ticket must state instead",
+    ):
+        assert part in question_step, (
+            f"{SKILL / 'SKILL.md'}: step 3's single park-comment template"
+            f" includes the {part} (issue #204)."
+        )
+
+    assert "step 3's comment shape" in build_step, (
+        f"{SKILL / 'SKILL.md'}: the mid-work park refers to the claim-time"
+        f" comment shape instead of defining a second format (issue #204)."
+    )
+
+
 def test_the_build_step_triages_a_stop_before_recording_anything() -> None:
     """A stop is not an outcome until the orchestrator has read what it stopped on.
 
@@ -1241,6 +1285,20 @@ def test_the_manpage_describes_the_triage_of_a_stop() -> None:
         f"{where}: the manpage routes every remaining stop through the"
         f" verification-failure path and its amend (issue #74)."
     )
+
+
+def test_the_manpage_says_concrete_decision_gaps_park_before_claim() -> None:
+    """The user-facing page promises the early audit and its conservative bound."""
+
+    where = SKILL / "help.md"
+    text = where.read_text(encoding="utf-8").lower()
+
+    assert "before any ticket is claimed" in text
+    assert "exact commands" in text
+    assert "external service" in text
+    assert "alternatives" in text
+    assert "credentials" in text
+    assert "concretely" in text
 
 
 def test_the_manpage_documents_the_open_decision_exception_to_yes() -> None:
