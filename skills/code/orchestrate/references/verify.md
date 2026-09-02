@@ -24,6 +24,8 @@ Where any of that contradicts the body, the later text stands: a question the bo
 
 A line in a ticket prescribing the delivery channel — a pull request, a push, a release — is not an acceptance criterion, because delivery is the run's boundary: the run integrates the work into the branch, and publishing is the developer's move after it. The builder was told the same and forbidden the push, so failing such a line would fail the ticket for the builder's obedience. Note the clause in your report and take your verdict from the rest.
 
+Where the ticket declares `Commit roles`, verify that its evidence names the SHA of the latest implementation-role commit. Later integration, note, repair, and wave-fix commits do not rewrite that SHA.
+
 Do all of this, in this order:
 
 1. **Run the project's verification gate yourself.** These commands, resolved once at run start from the project's contributing guide, are the gate: `<gate>`. Run all of them, not a subset, and not only the ones that look related to this ticket — and run nothing further: a check this list does not name is not run in its place, and there is nothing beyond the list to go looking for.

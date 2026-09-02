@@ -158,7 +158,7 @@ MARKER = "kntnt-orchestrate"
 # them sharing any memory (ADR-0051).
 RECORDED_OUTCOME = re.compile(
     rf"<!--\s*{MARKER}\s+outcome=(\S+?)(?:\s+commit=(\S+?))?"
-    rf"(?:\s+collided-with=([\d,]+))?\s*-->"
+    rf"(?:\s+collided-with=([\d,]+))?(?:\s+contract-base=(\S+?))?\s*-->"
 )
 
 # Reconciliation is a distinct fact from the run outcome it follows. Keeping
@@ -202,6 +202,10 @@ RECORDED_BLOCKED = re.compile(rf"<!--\s*{MARKER}\s+blocked-by=[\d,]+\s*-->")
 MERGED_TICKET = re.compile(
     rf"<!--\s*{MARKER}\s+merged=(\d+)(?:\s+regenerated=(\S+))?\s*-->"
 )
+
+# A collision repair is run-owned history too, but remains distinct from the
+# integration markers used to account for tickets on the run branch.
+REPAIRED_TICKET = re.compile(rf"<!--\s*{MARKER}\s+repair=(\d+)\s*-->")
 
 # Where a repository says which of its files are generated and what regenerates
 # each. It is read rather than inferred: a file is generated because the
@@ -390,6 +394,12 @@ SOLO_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**builds[ -]alone\**\s*:?", re.IGNOR
 # The line the breakdown names a ticket's parent spec on, written the same two
 # ways: a heading with the reference under it, or a sentence carrying it.
 PARENT_LINE = re.compile(r"^\s*(?:#{1,6}\s+)?\**parent\b\**\s*:?", re.IGNORECASE)
+
+# The ordered commit roles a ticket may declare, using the same heading or
+# sentence shape as the other body-line declarations.
+COMMIT_ROLES_LINE = re.compile(
+    r"^\s*(?:#{1,6}\s+)?\**commit[ -]roles\**\s*: ?", re.IGNORECASE
+)
 
 # A line that continues the list under such a heading: an item, or a reference
 # standing on its own line. Anything else ends it, so a `#12` further down the
@@ -851,6 +861,8 @@ class Ticket:
     amends_spent: int
     amend_state: AmendState | None
     builds_alone: bool = False
+    commit_contract: list[dict[str, Any]] | None = None
+    contract_base: str | None = None
     worktree: str | None = None
 
 
@@ -897,6 +909,8 @@ class RunState:
     claimed: list[int]
     base: str
     starting: list[int]
+    contracts: dict[int, list[dict[str, Any]]]
+    contract_bases: dict[int, str]
 
 
 def state_file(directory: str | None) -> Path | None:
@@ -1159,6 +1173,18 @@ def decode_state(contents: str) -> RunState:
         claimed=[int(number) for number in stored["claimed"]],
         base=str(stored["base"]),
         starting=[int(number) for number in stored["starting"]],
+        contracts={
+            int(number): contract
+            for number, contract in cast(
+                dict[str, list[dict[str, Any]]], stored.get("contracts", {})
+            ).items()
+        },
+        contract_bases={
+            int(number): str(commit)
+            for number, commit in cast(
+                dict[str, str], stored.get("contract_bases", {})
+            ).items()
+        },
     )
 
 
@@ -1539,6 +1565,60 @@ def body_solo(body: str) -> bool:
     return any(SOLO_LINE.match(line) for line in body.splitlines())
 
 
+def body_commit_contract(body: str) -> list[dict[str, Any]] | None:
+    """Return the ordered commit roles declared by *body*, if any.
+
+    The declaration is `Commit roles: role: pattern, pattern; role: pattern`.
+    A heading may instead put one `- role: patterns` entry on each following
+    line. Patterns are Git pathspecs, interpreted by Git at the checking seam.
+    """
+
+    # Collect the sentence remainder and any list entries below a heading.
+    written: list[str] = []
+    declared = False
+    lines = body.splitlines()
+    for index, line in enumerate(lines):
+        found = COMMIT_ROLES_LINE.match(line)
+        if not found:
+            continue
+        declared = True
+        if remainder := line[found.end() :].strip():
+            written.extend(part.strip() for part in remainder.split(";"))
+        for following in lines[index + 1 :]:
+            if not following.strip():
+                continue
+            if not EDGE_LIST_ITEM.match(following):
+                break
+            written.append(EDGE_LIST_ITEM.sub("", following, count=1).strip())
+
+    if not declared:
+        return None
+    if not written:
+        raise RunError(
+            "a `Commit roles` declaration must name at least one role and its "
+            "Git pathspecs"
+        )
+
+    # Refuse declarations whose roles or allowed surfaces are incomplete.
+    roles: list[dict[str, Any]] = []
+    for entry in written:
+        name, separator, surfaces = entry.partition(":")
+        patterns = [
+            pattern.strip() for pattern in surfaces.split(",") if pattern.strip()
+        ]
+        if not separator or not name.strip() or not patterns:
+            raise RunError(
+                "a `Commit roles` declaration must name each role and its "
+                "Git pathspecs as `role: pattern, pattern`"
+            )
+        roles.append({"name": name.strip(), "patterns": patterns})
+
+    if len({str(role["name"]) for role in roles}) != len(roles):
+        raise RunError("a `Commit roles` declaration names the same role twice")
+
+    return roles
+
+
 def body_parent(body: str) -> int | None:
     """Return the spec a `Parent` line in *body* names, if it names one.
 
@@ -1584,6 +1664,16 @@ def recorded_against(item: dict[str, Any]) -> tuple[str | None, str | None, list
             against = numbers_in(found.group(3))
 
     return outcome, commit, against
+
+
+def recorded_contract_base(item: dict[str, Any]) -> str | None:
+    """Return the latest recorded completion's optional contract provenance."""
+
+    base = None
+    for comment in item["comments"]:
+        if found := RECORDED_OUTCOME.search(str(comment["body"])):
+            base = found.group(4)
+    return base
 
 
 def reconciled_at(item: dict[str, Any]) -> str | None:
@@ -2109,6 +2199,8 @@ def ticket_from(
         amends_spent=amend_state.attempt if amend_state else 0,
         amend_state=amend_state,
         builds_alone=body_solo(str(item["body"])),
+        commit_contract=body_commit_contract(str(item["body"])),
+        contract_base=recorded_contract_base(item),
     )
 
 
@@ -2333,6 +2425,19 @@ def run_base(cwd: Path, tickets: list[Ticket]) -> str:
     # and came back — either way a base the whole run is contained by.
     oldest = git(cwd, "merge-base", "--octopus", *on_branch).strip()
 
+    # A ceiling-one multi-commit ticket records the real pre-pass boundary,
+    # which remains available after the scratch state has gone.
+    oldest_ticket = next(
+        (
+            ticket
+            for ticket in tickets
+            if ticket.resolution.commit == oldest and ticket.contract_base
+        ),
+        None,
+    )
+    if oldest_ticket is not None:
+        return cast(str, oldest_ticket.contract_base)
+
     # A run whose first recorded commit is the repository's root sits on that
     # commit itself: there is nothing before it to name.
     try:
@@ -2549,6 +2654,12 @@ def build_plan(
                 claimed=plan.run_claimed,
                 base=run_base(cwd, tickets),
                 starting=plan.starting,
+                contracts={
+                    ticket.number: ticket.commit_contract
+                    for ticket in tickets
+                    if ticket.commit_contract is not None
+                },
+                contract_bases=remembered.contract_bases if remembered else {},
             ),
         )
 
@@ -2883,6 +2994,8 @@ def cmd_route(
             claimed=run_claimed or [],
             base=state.base if state else "",
             starting=starting or [],
+            contracts=state.contracts if state else {},
+            contract_bases=state.contract_bases if state else {},
         )
     elif starting is not None or run_claimed is not None:
         return fail(
@@ -3008,6 +3121,21 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     if unrouted is not None:
         return fail(unrouted)
 
+    # A declared ceiling-one walk needs the boundary from before its builder
+    # starts. An existing claim without that durable boundary cannot invent it
+    # from a branch the builder may already have changed.
+    contract = remembered.contracts.get(number) if remembered else None
+    if (
+        holders
+        and contract is not None
+        and remembered is not None
+        and number not in remembered.contract_bases
+    ):
+        return fail(
+            f"#{number} declares commit roles but its saved claim head is absent; "
+            "the contract boundary cannot be moved to the current HEAD"
+        )
+
     # A ticket this run already holds is already claimed, and asking the
     # tracker to assign it again would write nothing it does not already say.
     if not holders:
@@ -3016,7 +3144,31 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
         except RunError as exc:
             return fail(f"#{number} could not be claimed: {exc}")
 
-    remember_claim(state_path, cwd, number)
+    # Persist both the claim and its immutable contract anchor before a builder
+    # can be dispatched, releasing a newly added tracker claim if that fails.
+    if remembered is not None:
+        remembered.claimed = sorted(set(remembered.claimed) | {number})
+        if contract is not None:
+            remembered.contract_bases.setdefault(
+                number, git(cwd, "rev-parse", "HEAD").strip()
+            )
+        if write_state(state_path, remembered) is None:
+            if not holders:
+                try:
+                    gh(
+                        cwd,
+                        "issue",
+                        "edit",
+                        str(number),
+                        "--remove-assignee",
+                        CLAIM_ASSIGNEE,
+                    )
+                except RunError:
+                    pass
+            return fail(f"#{number}'s claim could not be persisted")
+
+    if remembered is None:
+        remember_claim(state_path, cwd, number)
     emit({"verb": "claim", "ticket": number, "claimed": True, "reason": None})
     return 0
 
@@ -3182,16 +3334,66 @@ def isolate(cwd: Path, number: int) -> int:
     return 0
 
 
-def cmd_integrate(cwd: Path, number: int) -> int:
+def cmd_integrate(cwd: Path, number: int, state_path: Path | None) -> int:
     """Merge ticket *number*'s work into the run branch and tidy up after it."""
 
     try:
-        return integrate(cwd, number)
+        return integrate(cwd, number, state_path)
     except RunError as exc:
         return fail(str(exc))
 
 
-def integrate(cwd: Path, number: int) -> int:
+def commit_contract_refusal(
+    cwd: Path,
+    base: str,
+    head: str,
+    contract: list[dict[str, Any]],
+) -> str | None:
+    """Return why commits from *base* to *head* violate *contract*, if they do."""
+
+    # Walk authored history in its append order; run-owned marked merges and
+    # commits confined to the run's private directory are outside role passes.
+    commits = git(
+        cwd, "rev-list", "--reverse", "--first-parent", f"{base}..{head}"
+    ).split()
+    role_index = 0
+    for commit in commits:
+        message = git(cwd, "show", "-s", "--format=%B", commit)
+        if MERGED_TICKET.search(message) or REPAIRED_TICKET.search(message):
+            continue
+        paths = git(cwd, "diff", "--name-only", f"{commit}^1", commit).split()
+        checked = [path for path in paths if not path.startswith(".kntnt-orchestrate/")]
+        if not checked:
+            continue
+
+        role = contract[role_index % len(contract)]
+        allowed = set(
+            git(
+                cwd,
+                "diff",
+                "--name-only",
+                f"{commit}^1",
+                commit,
+                "--",
+                *cast(list[str], role["patterns"]),
+            ).split()
+        )
+        offending = sorted(set(checked).difference(allowed))
+        if offending:
+            return (
+                f"commit {commit} is the {role['name']} role and touches "
+                f"paths outside its declared surfaces: {', '.join(offending)}"
+            )
+        role_index += 1
+
+    if role_index % len(contract):
+        expected = contract[role_index % len(contract)]["name"]
+        return f"the commit sequence ends before its next {expected} role"
+
+    return None
+
+
+def integrate(cwd: Path, number: int, state_path: Path | None = None) -> int:
     """Bring ticket *number*'s work onto the branch the developer comes back to.
 
     Called per verified ticket as its wave completes rather than at the end of
@@ -3227,6 +3429,15 @@ def integrate(cwd: Path, number: int) -> int:
             f"#{number} has work its working tree never committed, and merging "
             f"the branch would leave it behind: look at {path}"
         )
+
+    # Refuse certified history that does not form complete declared passes
+    # before the run branch is changed in any way.
+    state = remembered_state(state_path, cwd)
+    contract = state.contracts.get(number) if state else None
+    if contract is not None:
+        base = git(cwd, "merge-base", "HEAD", current_branch(path)).strip()
+        if refusal := commit_contract_refusal(path, base, "HEAD", contract):
+            return fail(f"#{number} cannot be integrated: {refusal}")
 
     # The merge itself, kept as its own commit so what a ticket delivered
     # stays legible on the branch afterwards, and marked so the branch can say
@@ -3846,7 +4057,12 @@ def amend_note(attempt: int, phase: str, verdict: str | None) -> str:
     return f"<!-- {MARKER} amend={attempt} phase={phase} --> {note}{retained}"
 
 
-def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
+def outcome_note(
+    outcome: str,
+    commit: str | None,
+    against: list[int],
+    contract_base: str | None = None,
+) -> str:
     """Render what is written on a ticket when its outcome is recorded.
 
     One line, carrying a marker a later run can read the outcome back out of
@@ -3861,9 +4077,10 @@ def outcome_note(outcome: str, commit: str | None, against: list[int]) -> str:
         if against
         else ""
     )
+    anchored = f" contract-base={contract_base}" if contract_base else ""
     said = f" It collided with {as_references(against)}." if against else ""
 
-    return f"<!-- {MARKER} outcome={outcome}{named}{marked} --> {NOTES[outcome]}{said}"
+    return f"<!-- {MARKER} outcome={outcome}{named}{marked}{anchored} --> {NOTES[outcome]}{said}"
 
 
 def blocked_note(waiting_on: list[int]) -> str:
@@ -4120,6 +4337,19 @@ def cmd_record(
         except RunError:
             return fail(f"this repository has no commit {named}")
 
+    # At a ceiling of one this is the integration gate: measure only the
+    # declared ticket's history from the head saved when it was first claimed.
+    remembered = remembered_state(state_path, cwd)
+    contract = remembered.contracts.get(number) if remembered else None
+    contract_base = remembered.contract_bases.get(number) if remembered else None
+    if outcome == DONE and contract is not None:
+        if contract_base is None:
+            return fail(f"#{number} declares commit roles but has no saved claim head")
+        if refusal := commit_contract_refusal(
+            cwd, contract_base, cast(str, commit), contract
+        ):
+            return fail(f"#{number} cannot be recorded done: {refusal}")
+
     # The tracker is asked for the ticket before anything is written to it, so
     # a number it cannot answer for is refused rather than half-recorded. The
     # assignees come along because a blocked outcome releases this run's claim.
@@ -4167,7 +4397,9 @@ def cmd_record(
     note = (
         blocked_note(waiting)
         if outcome == BLOCKED
-        else outcome_note(outcome, commit, collided)
+        else outcome_note(
+            outcome, commit, collided, contract_base if outcome == DONE else None
+        )
     )
     try:
         if outcome == DONE:
@@ -4833,7 +5065,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.verb == "isolate":
         return cmd_isolate(cwd, args.ticket)
     if args.verb == "integrate":
-        return cmd_integrate(cwd, args.ticket)
+        return cmd_integrate(cwd, args.ticket, state_path)
     if args.verb == "rebuild":
         return cmd_rebuild(cwd, args.ticket)
     if args.verb == "amend":

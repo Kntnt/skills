@@ -18,6 +18,8 @@ Blocking relations produce dependency waves. Native tracker relations take prece
 
 A ticket beginning a line with `Builds alone` is a Solo Ticket. It receives the first available wave by itself, and the plan marks it `solo`.
 
+A ticket may declare ordered multi-commit work with `Commit roles: implementation: src/**; evidence: docs/verification/**`. The keyword may be a sentence or heading; under a heading, write one `- role: pattern, pattern` entry per role. Patterns are Git pathspecs. A valid branch contains one or more complete passes, each role exactly once in declaration order and one commit per role; `.kntnt-orchestrate/` may accompany a role and a commit confined there is skipped. Later amendments append complete passes without rewriting earlier commits.
+
 The main session owns planning, triage, integration, and verification judgements. Run it from the most capable model available; those judgements are only as reliable as that model.
 
 Model Selector creates one frozen routing snapshot before claims. Builders and repair roles use decisions from that snapshot; independent verdicts always inherit the main session's exact model and deliberation configuration.
@@ -61,6 +63,8 @@ A different subagent checks every acceptance criterion and the complete Project 
 **Integrate**
 
 Verified work is committed and integrated. After each wave, the complete Project gate and an independent coherence review check the combined branch.
+
+Before integration—or at `record` when the ceiling is one—the engine refuses a declared pass that is incomplete, out of order, or touches paths outside its current role. The diagnostic names the commit and offending paths, nothing is merged or recorded, and the ticket tree remains available for inspection.
 
 The verdict turns on whether correction requires a new decision, not on whether every gate command passed. Mechanical findings are fixed by another subagent and checked again until a round is clean.
 
