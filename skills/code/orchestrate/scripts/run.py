@@ -49,6 +49,10 @@ INFO_LABEL = "needs-info"
 # that leaves work behind without saying so.
 TICKET_PAGE = 200
 
+# Approval identities have their own domain so equal JSON in another feature
+# can never authorize an Orchestrate run.
+APPROVAL_VERSION: int = 1
+
 # The outcomes a run records against a ticket and that settle it: a settled
 # ticket is never offered again. Stranded and never-on-the-frontier are read
 # off the graph rather than recorded, so neither is one.
@@ -923,6 +927,10 @@ class RunState:
     starting: list[int]
     contracts: dict[int, list[dict[str, Any]]]
     contract_bases: dict[int, str]
+    approval_expected: str | None = None
+    approval_identity: str | None = None
+    approval_payload: dict[str, Any] | None = None
+    approval_met: bool | None = None
 
 
 def state_file(directory: str | None) -> Path | None:
@@ -1203,6 +1211,18 @@ def decode_state(contents: str) -> RunState:
                 dict[str, str], stored.get("contract_bases", {})
             ).items()
         },
+        approval_expected=(
+            None
+            if stored.get("approval_expected") is None
+            else str(stored["approval_expected"])
+        ),
+        approval_identity=(
+            None
+            if stored.get("approval_identity") is None
+            else str(stored["approval_identity"])
+        ),
+        approval_payload=cast(dict[str, Any] | None, stored.get("approval_payload")),
+        approval_met=cast(bool | None, stored.get("approval_met")),
     )
 
 
@@ -1270,9 +1290,18 @@ def write_state(path: Path | None, state: RunState) -> str | None:
     if path is None:
         return None
 
+    # Preserve the established document byte shape when approval is unused.
+    details = asdict(state)
+    if state.approval_met is None:
+        details = {
+            key: value
+            for key, value in details.items()
+            if not key.startswith("approval_")
+        }
+
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(asdict(state), indent=2) + "\n", encoding="utf-8")
+        path.write_text(json.dumps(details, indent=2) + "\n", encoding="utf-8")
     except OSError:
         return None
 
@@ -1523,6 +1552,48 @@ class Plan:
     waves: list[list[int]]
     solo: list[int]
     never_workable: list[int]
+    approval_expected: str | None = None
+    approval_identity: str | None = None
+    approval_payload: dict[str, Any] | None = None
+
+
+def plan_approval_payload(plan: Plan) -> dict[str, Any]:
+    """Return exactly the plan fields a caller authorizes."""
+
+    return {
+        "branch": plan.branch,
+        "default_branch": plan.default_branch,
+        "scope": plan.scope,
+        "at_once": plan.at_once,
+        "worktrees": plan.worktrees,
+        "model": plan.model,
+        "deliberation": plan.deliberation,
+        "waves": plan.waves,
+        "solo": plan.solo,
+    }
+
+
+def plan_approval_identity(payload: dict[str, Any]) -> str:
+    """Identify one authorized Orchestrate plan under its versioned domain."""
+
+    canonical = json.dumps(
+        payload,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    prefix = f"kntnt-orchestrate-plan-v{APPROVAL_VERSION}\0".encode()
+    return hashlib.sha256(prefix + canonical).hexdigest()
+
+
+def plan_details(plan: Plan) -> dict[str, Any]:
+    """Return the public plan, adding audit fields only when supplied."""
+
+    details = asdict(plan)
+    if plan.approval_expected is None:
+        details.pop("approval_expected")
+        details.pop("approval_payload")
+    return details
 
 
 def is_open_state(state: str) -> bool:
@@ -2541,6 +2612,7 @@ def build_plan(
     deliberation: str | None,
     state_path: Path | None,
     reference: str | None,
+    approval: str | None,
 ) -> Plan:
     """Gather what a run in *cwd* would work, and whether it may start."""
 
@@ -2627,6 +2699,12 @@ def build_plan(
         never_workable=never_workable,
     )
 
+    # Identify the complete caller-authorized frontier independently of ticket
+    # prose, tracker comments, and the branch's moving base commit.
+    plan.approval_expected = approval
+    plan.approval_payload = plan_approval_payload(plan)
+    plan.approval_identity = plan_approval_identity(plan.approval_payload)
+
     # A run works the branch the developer left it on, whichever branch that
     # is (ADR-0064), so the tree it would commit in is the only thing left to
     # refuse about the state it starts in: a run cannot tell work the developer
@@ -2657,6 +2735,12 @@ def build_plan(
     ) is not None:
         plan.ready = False
         plan.reason = adrift
+    if approval is not None and approval != plan.approval_identity:
+        plan.ready = False
+        plan.reason = (
+            "the caller's approval does not match this plan: expected "
+            f"{approval}, computed {plan.approval_identity}"
+        )
 
     # A run that may start leaves what it remembers of itself where this
     # session's scratch is, written from here because this is the verb that has
@@ -2679,6 +2763,52 @@ def build_plan(
                     if ticket.commit_contract is not None
                 },
                 contract_bases=remembered.contract_bases if remembered else {},
+                approval_expected=(
+                    approval
+                    if approval is not None
+                    else remembered.approval_expected
+                    if remembered
+                    else None
+                ),
+                approval_identity=(
+                    plan.approval_identity
+                    if approval is not None
+                    else remembered.approval_identity
+                    if remembered
+                    else None
+                ),
+                approval_payload=(
+                    plan.approval_payload
+                    if approval is not None
+                    else remembered.approval_payload
+                    if remembered
+                    else None
+                ),
+                approval_met=(
+                    True
+                    if approval is not None
+                    else remembered.approval_met
+                    if remembered
+                    else None
+                ),
+            ),
+        )
+    elif not dry_run and approval is not None and approval != plan.approval_identity:
+        plan.state = write_state(
+            state_path,
+            RunState(
+                branch=branch,
+                label=READY_LABEL,
+                login=remembered.login if remembered else None,
+                claimed=[],
+                base=run_base(cwd, tickets),
+                starting=[],
+                contracts={},
+                contract_bases={},
+                approval_expected=approval,
+                approval_identity=plan.approval_identity,
+                approval_payload=plan.approval_payload,
+                approval_met=False,
             ),
         )
 
@@ -2694,6 +2824,7 @@ def cmd_plan(
     deliberation: str | None,
     state_path: Path | None,
     reference: str | None,
+    approval: str | None,
 ) -> int:
     """Print the plan, and answer whether work may start."""
 
@@ -2714,11 +2845,12 @@ def cmd_plan(
             deliberation=deliberation,
             state_path=state_path,
             reference=reference,
+            approval=approval,
         )
     except RunError as exc:
         return fail(str(exc))
 
-    emit(asdict(plan))
+    emit(plan_details(plan))
     return 0 if plan.ready else 2
 
 
@@ -3114,6 +3246,15 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     # the tracker nothing to take.
     holders = holders_of(ticket)
     remembered = remembered_state(state_path, cwd)
+
+    # Keep a failed caller expectation between the plan and the first tracker
+    # mutation until a later flagged plan proves the authorized identity.
+    if remembered and remembered.approval_met is False:
+        return fail(
+            "this run's caller-supplied approval has not matched a plan; run "
+            "a flagged plan with the computed approval identity before claiming"
+        )
+
     try:
         mine = my_login(cwd, remembered) if holders else None
     except RunError as exc:
@@ -5220,6 +5361,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan.add_argument("--dry-run", action="store_true")
     plan.add_argument("--at-once", type=int, default=ONE_AT_A_TIME)
     plan.add_argument("--model")
+    plan.add_argument("--approval")
     add_deliberation_flag(plan)
     add_scope_flag(plan)
     add_shared_flags(plan)
@@ -5320,6 +5462,7 @@ def main(argv: list[str] | None = None) -> int:
             deliberation=args.deliberation,
             state_path=state_path,
             reference=args.scope,
+            approval=args.approval,
         )
     if args.verb == "route":
         return cmd_route(
