@@ -12,6 +12,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - Let Orchestrate execute ticket-declared, append-only multi-commit role contracts and refuse commits outside each role's allowed surfaces.
 - `/orchestrate` verifier verdicts now name a Defect Class for every failed command or unmet criterion, and amendment builders audit the ticket's whole owned surface for every instance of each class before reporting.
 - Define parked-ticket amendment budgets as lifetime-scoped, preserve and bring forward resumed work, and report inherited versus newly spent amendments.
+- Fixed Orchestrate reports omitting reconciled parked tickets that had no Run Outcome.
+- Added caller-supplied Orchestrate plan approval identities, allowing an exact dry-run frontier to be authorized and checked before any claim in one invocation.
 
 ## [0.18.6] – 2026-08-30
 
