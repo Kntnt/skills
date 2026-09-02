@@ -1195,7 +1195,7 @@ def write_progress(
     amendments_spent: int,
     tickets_completed: int,
     tickets_remaining: int,
-    outcome: str | None,
+    outcome: dict[str, list[int]] | None,
 ) -> str | None:
     """Atomically replace the run dashboard, or do nothing without state."""
 
@@ -1240,7 +1240,6 @@ def advance_progress(
     phase: str,
     ticket: int,
     amendments_spent: int | None = None,
-    outcome: str | None = None,
 ) -> None:
     """Advance an existing dashboard, recreating it from durable run state."""
 
@@ -1267,7 +1266,7 @@ def advance_progress(
         ),
         int(current.get("tickets_completed", 0)),
         int(current.get("tickets_remaining", remaining)),
-        outcome,
+        None,
     )
 
 
@@ -5393,34 +5392,61 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     }
     stranded = stranded_behind(open_scope)
     accounted = set(stranded).union(*recorded.values())
+    never_on_frontier = [
+        ticket.number for ticket in tickets if ticket.number not in accounted
+    ]
+    outcome = {
+        DONE: recorded[DONE],
+        FAILED: recorded[FAILED],
+        CONFLICTED: recorded[CONFLICTED],
+        "stranded": stranded,
+        "never_on_frontier": never_on_frontier,
+    }
 
     # The route account is rendered from what was frozen or not at all: the
     # decisions a night was worked under are auditable exactly, and where they
     # are gone the account says so rather than reading what is current back as
     # though it had been (ADR-0085).
     routing, routing_reason, _ = frozen_routing(state_path)
-    emit(
-        {
-            "verb": "report",
-            "label": READY_LABEL,
-            "scope": None if scope is None else [asdict(aim) for aim in scope],
-            "branch": branch,
-            "base": base,
-            "routing": routing_details(routing),
-            "routing_reason": routing_reason,
-            "observations": observed_details(routing, state_path),
-            "flakes": flakes,
-            "regenerated": regenerated,
-            "tickets": [ticket_details(ticket) for ticket in tickets],
-            "done": recorded[DONE],
-            "failed": recorded[FAILED],
-            "conflicted": recorded[CONFLICTED],
-            "stranded": stranded,
-            "never_on_frontier": [
-                ticket.number for ticket in tickets if ticket.number not in accounted
-            ],
-        }
-    )
+    report = {
+        "verb": "report",
+        "label": READY_LABEL,
+        "scope": None if scope is None else [asdict(aim) for aim in scope],
+        "branch": branch,
+        "base": base,
+        "routing": routing_details(routing),
+        "routing_reason": routing_reason,
+        "observations": observed_details(routing, state_path),
+        "flakes": flakes,
+        "regenerated": regenerated,
+        "tickets": [ticket_details(ticket) for ticket in tickets],
+        "done": recorded[DONE],
+        "failed": recorded[FAILED],
+        "conflicted": recorded[CONFLICTED],
+        "stranded": stranded,
+        "never_on_frontier": never_on_frontier,
+    }
+
+    # Project the authoritative account into the terminal dashboard itself.
+    dashboard = progress_file(state_path)
+    if dashboard is not None:
+        try:
+            current = json.loads(dashboard.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, TypeError, ValueError):
+            current = {}
+        completed = sum(len(outcome[group]) for group in OUTCOMES)
+        write_progress(
+            state_path,
+            "wave_verdict",
+            int(current.get("wave", 1)),
+            None,
+            0,
+            completed,
+            len(tickets) - completed,
+            outcome,
+        )
+
+    emit(report)
     return 0
 
 
@@ -5553,7 +5579,6 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     progress.add_argument("--amends-spent", type=int, default=0)
     progress.add_argument("--completed", required=True, type=int)
     progress.add_argument("--remaining", required=True, type=int)
-    progress.add_argument("--outcome")
     add_shared_flags(progress)
 
     report = sub.add_parser("report", help="Print the consolidated report.")
@@ -5665,7 +5690,7 @@ def main(argv: list[str] | None = None) -> int:
             args.amends_spent,
             args.completed,
             args.remaining,
-            args.outcome,
+            None,
         )
         emit({"verb": "progress", "progress": written})
         return 0

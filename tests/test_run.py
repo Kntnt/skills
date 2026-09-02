@@ -8671,25 +8671,21 @@ def test_progress_writes_the_latest_phase_atomically(tmp_path: Path) -> None:
     assert progress["timestamp"].endswith("Z")
     assert list(progress_path.parent.glob(f".{PROGRESS_FILE}.*.tmp")) == []
 
-    progress_path.unlink()
-    terminal = _engine(
-        repo,
-        "progress",
-        "--phase=wave_verdict",
-        "--wave=2",
-        "--completed=7",
-        "--remaining=0",
-        "--outcome=done",
-        "--state-dir",
-        str(scratch),
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "unfinished")]},
+        issues={9: _ready(9)},
     )
+    terminal = _engine(repo, "report", "--state-dir", str(scratch), env=env)
     progress = json.loads(progress_path.read_text(encoding="utf-8"))
+    report = json.loads(terminal.stdout)
 
     assert terminal.returncode == 0, terminal.stderr
     assert progress["ticket"] is None
-    assert progress["outcome"] == "done"
-    assert progress["tickets_completed"] == 7
-    assert progress["tickets_remaining"] == 0
+    assert progress["phase"] == "wave_verdict"
+    assert progress["outcome"] == {key: report[key] for key in _ACCOUNT}
+    assert progress["tickets_completed"] == 0
+    assert progress["tickets_remaining"] == 1
 
 
 def _observations() -> ModuleType:

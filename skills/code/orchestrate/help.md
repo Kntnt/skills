@@ -192,7 +192,7 @@ Concurrent ticket worktrees, branches, reservations, and scratch space. Successf
 
 Stores the recoverable claim account, the caller's expected and computed approval identities with their canonical payload, and the irreplaceable frozen routing snapshot. A missing routing snapshot or an unmet approval stops a claim.
 
-The directory also contains `kntnt-orchestrate-progress.json`, an atomically replaced dashboard of the current wave, ticket, phase, amendment count, completed and remaining ticket counts, timestamp, and terminal outcome. It may lag a transition whose step did not report it and is never evidence or an input to an engine decision; the durable report remains authoritative. Deleting it harms nothing because the next transition recreates it.
+The directory also contains `kntnt-orchestrate-progress.json`, an atomically replaced dashboard of the current wave, ticket, phase, amendment count, completed and remaining ticket counts, timestamp, and terminal outcome. The `report` verb projects its five outcome lists into the terminal dashboard directly, so the two accounts agree. It may lag a transition whose step did not report it and is never evidence or an input to an engine decision; the durable report remains authoritative. Deleting it harms nothing because the next transition recreates it.
 
 **Routed observation artifact**
 

@@ -137,7 +137,6 @@ def test_every_session_owned_transition_updates_the_progress_dashboard() -> None
         7: "verify",
         8: "note",
         11: "wave_verdict",
-        12: "outcome",
     }
     for step_number, phase in phases.items():
         step = _step(step_number)
@@ -145,6 +144,12 @@ def test_every_session_owned_transition_updates_the_progress_dashboard() -> None
             f"{SKILL / 'SKILL.md'}: step {step_number} reports {phase} through "
             "the progress verb at the transition it owns."
         )
+
+    terminal = _step(12)
+    assert 'run.py" report' in terminal and "outcome" in terminal, (
+        f"{SKILL / 'SKILL.md'}: step 12 derives the terminal dashboard from "
+        "the durable report."
+    )
 
 
 def _manpage_section(heading: str) -> str:
