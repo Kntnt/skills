@@ -135,6 +135,9 @@ STATE_HOME = "kntnt-orchestrate"
 # thing under test to grade itself.
 ROUTING_FILE = "kntnt-orchestrate-routing.json"
 
+# The dashboard is a public file contract rather than an engine constant.
+PROGRESS_FILE = "kntnt-orchestrate-progress.json"
+
 # Flake evidence is durable Skill-owned state, while this run's selection of
 # those records stays in its scratch account for the final report.
 FLAKE_LEDGER = Path(".kntnt/orchestrate/flakes.jsonl")
@@ -8632,6 +8635,61 @@ def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
     assert emitted["observations"][1]["artifact_hashes"] == [f"sha1:{digest}"]
     assert len(imported["accepted"]) == 2
     assert imported["rejected"] == []
+
+
+def test_progress_writes_the_latest_phase_atomically(tmp_path: Path) -> None:
+    """A polling caller always gets one complete current dashboard document."""
+
+    repo = _init_repo(tmp_path / "repo")
+    scratch = tmp_path / "scratch"
+    first = _engine(
+        repo,
+        "progress",
+        "--phase=build",
+        "--wave=2",
+        "--ticket=9",
+        "--completed=3",
+        "--remaining=4",
+        "--amends-spent=1",
+        "--state-dir",
+        str(scratch),
+    )
+    progress_path = scratch / STATE_HOME / PROGRESS_FILE
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    assert first.returncode == 0, first.stderr
+    assert progress == {
+        "wave": 2,
+        "ticket": 9,
+        "phase": "build",
+        "amendments_spent": 1,
+        "tickets_completed": 3,
+        "tickets_remaining": 4,
+        "timestamp": progress["timestamp"],
+        "outcome": None,
+    }
+    assert progress["timestamp"].endswith("Z")
+    assert list(progress_path.parent.glob(f".{PROGRESS_FILE}.*.tmp")) == []
+
+    progress_path.unlink()
+    terminal = _engine(
+        repo,
+        "progress",
+        "--phase=wave_verdict",
+        "--wave=2",
+        "--completed=7",
+        "--remaining=0",
+        "--outcome=done",
+        "--state-dir",
+        str(scratch),
+    )
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+
+    assert terminal.returncode == 0, terminal.stderr
+    assert progress["ticket"] is None
+    assert progress["outcome"] == "done"
+    assert progress["tickets_completed"] == 7
+    assert progress["tickets_remaining"] == 0
 
 
 def _observations() -> ModuleType:

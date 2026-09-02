@@ -295,6 +295,18 @@ INHERITED_FOR_NO_ADAPTER = "unavailable_selection_controls"
 # (ADR-0089).
 ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
 OBSERVATION_FILE = "kntnt-orchestrate-observations.json"
+PROGRESS_FILE = "kntnt-orchestrate-progress.json"
+PROGRESS_PHASES = (
+    "preflight",
+    "isolate",
+    "build",
+    "verify",
+    "amend",
+    "integrate",
+    "note",
+    "wave_verdict",
+    "dry_run",
+)
 
 # Durable flake evidence belongs to the Skill rather than to any repository.
 # The run-local selection sits beside the rest of the session account so the
@@ -1167,6 +1179,96 @@ def attempts_file(path: Path | None) -> Path | None:
     """Return where the run writes the routed attempts a verdict has judged."""
 
     return None if path is None else path.parent / ATTEMPTS_FILE
+
+
+def progress_file(path: Path | None) -> Path | None:
+    """Return where a caller polls the run's non-authoritative dashboard."""
+
+    return None if path is None else path.parent / PROGRESS_FILE
+
+
+def write_progress(
+    state_path: Path | None,
+    phase: str,
+    wave: int,
+    ticket: int | None,
+    amendments_spent: int,
+    tickets_completed: int,
+    tickets_remaining: int,
+    outcome: str | None,
+) -> str | None:
+    """Atomically replace the run dashboard, or do nothing without state."""
+
+    destination = progress_file(state_path)
+    if destination is None:
+        return None
+
+    # Build the complete dashboard before exposing any bytes to pollers.
+    dashboard = {
+        "wave": wave,
+        "ticket": ticket,
+        "phase": phase,
+        "amendments_spent": amendments_spent,
+        "tickets_completed": tickets_completed,
+        "tickets_remaining": tickets_remaining,
+        "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "outcome": outcome,
+    }
+    destination.parent.mkdir(parents=True, exist_ok=True)
+
+    # Rename a flushed peer file so every concurrent read is complete JSON.
+    descriptor, temporary_name = tempfile.mkstemp(
+        dir=destination.parent, prefix=f".{destination.name}.", suffix=".tmp", text=True
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            json.dump(dashboard, stream, indent=2)
+            stream.write("\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        temporary.replace(destination)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+
+    return str(destination)
+
+
+def advance_progress(
+    state_path: Path | None,
+    phase: str,
+    ticket: int,
+    amendments_spent: int | None = None,
+    outcome: str | None = None,
+) -> None:
+    """Advance an existing dashboard, recreating it from durable run state."""
+
+    destination = progress_file(state_path)
+    if destination is None:
+        return
+
+    # Retain session-supplied wave totals while engine verbs mark boundaries.
+    try:
+        current = json.loads(destination.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, TypeError, ValueError):
+        current = {}
+    remembered = remembered_state(state_path, Path.cwd())
+    remaining = len(remembered.starting) if remembered is not None else 0
+    write_progress(
+        state_path,
+        phase,
+        int(current.get("wave", 1)),
+        ticket,
+        int(
+            current.get("amendments_spent", 0)
+            if amendments_spent is None
+            else amendments_spent
+        ),
+        int(current.get("tickets_completed", 0)),
+        int(current.get("tickets_remaining", remaining)),
+        outcome,
+    )
 
 
 def observation_file(path: Path | None) -> Path | None:
@@ -5444,6 +5546,16 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     flake.add_argument("--evidence", required=True, type=Path)
     add_shared_flags(flake)
 
+    progress = sub.add_parser("progress", help="Replace the run progress dashboard.")
+    progress.add_argument("--phase", required=True, choices=PROGRESS_PHASES)
+    progress.add_argument("--wave", required=True, type=int)
+    progress.add_argument("--ticket", type=int)
+    progress.add_argument("--amends-spent", type=int, default=0)
+    progress.add_argument("--completed", required=True, type=int)
+    progress.add_argument("--remaining", required=True, type=int)
+    progress.add_argument("--outcome")
+    add_shared_flags(progress)
+
     report = sub.add_parser("report", help="Print the consolidated report.")
     add_scope_flag(report)
     add_shared_flags(report)
@@ -5488,17 +5600,26 @@ def main(argv: list[str] | None = None) -> int:
             run_claimed=args.run_claimed,
         )
     if args.verb == "claim":
-        return cmd_claim(cwd, args.ticket, state_path)
+        result = cmd_claim(cwd, args.ticket, state_path)
+        if result == 0:
+            advance_progress(state_path, "preflight", args.ticket)
+        return result
     if args.verb == "park":
         return cmd_park(cwd, args.ticket, state_path)
     if args.verb == "isolate":
-        return cmd_isolate(cwd, args.ticket)
+        result = cmd_isolate(cwd, args.ticket)
+        if result == 0:
+            advance_progress(state_path, "isolate", args.ticket)
+        return result
     if args.verb == "integrate":
-        return cmd_integrate(cwd, args.ticket, state_path)
+        result = cmd_integrate(cwd, args.ticket, state_path)
+        if result == 0:
+            advance_progress(state_path, "integrate", args.ticket)
+        return result
     if args.verb == "rebuild":
         return cmd_rebuild(cwd, args.ticket)
     if args.verb == "amend":
-        return cmd_amend(
+        result = cmd_amend(
             cwd,
             args.ticket,
             args.attempt,
@@ -5506,8 +5627,11 @@ def main(argv: list[str] | None = None) -> int:
             args.verdict_file,
             state_path,
         )
+        if result == 0:
+            advance_progress(state_path, "amend", args.ticket, args.attempt)
+        return result
     if args.verb == "record":
-        return cmd_record(
+        result = cmd_record(
             cwd,
             args.ticket,
             args.outcome,
@@ -5516,6 +5640,9 @@ def main(argv: list[str] | None = None) -> int:
             args.blocked_by,
             state_path,
         )
+        if result == 0:
+            advance_progress(state_path, "note", args.ticket)
+        return result
     if args.verb == "observe":
         return cmd_observe(
             cwd,
@@ -5529,6 +5656,19 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.verb == "flake":
         return cmd_flake(cwd, args.evidence, state_path)
+    if args.verb == "progress":
+        written = write_progress(
+            state_path,
+            args.phase,
+            args.wave,
+            args.ticket,
+            args.amends_spent,
+            args.completed,
+            args.remaining,
+            args.outcome,
+        )
+        emit({"verb": "progress", "progress": written})
+        return 0
     if args.verb == "reconcile":
         return cmd_reconcile(cwd, args.ticket, args.commit)
     return cmd_report(cwd, args.scope, state_path)

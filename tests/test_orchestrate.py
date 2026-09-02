@@ -128,6 +128,25 @@ def _step(number: int) -> str:
     return match.group(0)
 
 
+def test_every_session_owned_transition_updates_the_progress_dashboard() -> None:
+    """Dispatch, verdict, notes, and wave checks expose their phase promptly."""
+
+    phases = {
+        2: "preflight",
+        6: "build",
+        7: "verify",
+        8: "note",
+        11: "wave_verdict",
+        12: "outcome",
+    }
+    for step_number, phase in phases.items():
+        step = _step(step_number)
+        assert 'run.py" progress' in step and phase in step, (
+            f"{SKILL / 'SKILL.md'}: step {step_number} reports {phase} through "
+            "the progress verb at the transition it owns."
+        )
+
+
 def _manpage_section(heading: str) -> str:
     """Return one uppercase section from the orchestrate manpage."""
 
