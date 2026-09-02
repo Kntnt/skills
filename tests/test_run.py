@@ -134,6 +134,10 @@ STATE_HOME = "kntnt-orchestrate"
 # thing under test to grade itself.
 ROUTING_FILE = "kntnt-orchestrate-routing.json"
 
+# Flake evidence is durable Skill-owned state, while this run's selection of
+# those records stays in its scratch account for the final report.
+FLAKE_LEDGER = Path(".kntnt/orchestrate/flakes.jsonl")
+
 # A stand-in that logs what git was asked to do and then lets the real git do
 # it. Everything the engine reads from the repository has to stay true, so
 # this observes rather than substitutes.
@@ -846,6 +850,143 @@ def test_report_accounts_for_the_tickets_in_scope(tmp_path: Path) -> None:
     report = json.loads(result.stdout)
     assert [entry["number"] for entry in report["tickets"]] == [9, 10]
     assert report["never_on_frontier"] == [9, 10]
+
+
+def test_flake_records_evidence_idempotently_under_the_user_home(
+    tmp_path: Path,
+) -> None:
+    """One unchanged-head flake is one atomic durable ledger record."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    home = tmp_path / "home"
+    evidence = tmp_path / "flake.json"
+    evidence.write_text(
+        json.dumps(
+            {
+                "failing_tests": ["tests/test_poll.py::test_deadline"],
+                "isolation_results": ["passed", "passed", "passed"],
+                "full_rerun_result": "passed",
+                "narrowed_command": "pytest tests/test_poll.py::test_deadline",
+                "load_context": "full parallel gate",
+            }
+        ),
+        encoding="utf-8",
+    )
+    env = {**_tracker(tmp_path, {"ready-for-agent": []}), "HOME": str(home)}
+
+    first = _engine(
+        repo, "flake", "--evidence", str(evidence), "--state-dir", str(scratch), env=env
+    )
+    second = _engine(
+        repo, "flake", "--evidence", str(evidence), "--state-dir", str(scratch), env=env
+    )
+
+    assert first.returncode == 0, first.stderr
+    assert second.returncode == 0, second.stderr
+    assert json.loads(first.stdout)["recorded"] is True
+    assert json.loads(second.stdout)["recorded"] is False
+    records = [
+        json.loads(line)
+        for line in (home / FLAKE_LEDGER).read_text(encoding="utf-8").splitlines()
+    ]
+    assert len(records) == 1
+    assert records[0]["repository"]
+    assert records[0]["branch"] == "work"
+    assert records[0]["head"] == _git(repo, "rev-parse", "HEAD").stdout.strip()
+    assert records[0]["failing_tests"] == ["tests/test_poll.py::test_deadline"]
+    assert records[0]["isolation_results"] == ["passed", "passed", "passed"]
+    assert records[0]["full_rerun_result"] == "passed"
+    assert records[0]["timestamp"].endswith("Z")
+    assert not list((home / FLAKE_LEDGER).parent.glob("*.tmp"))
+
+
+def test_report_names_this_runs_flake_and_its_earlier_count(tmp_path: Path) -> None:
+    """The run report exposes recurrence without folding old flakes into this run."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    home = tmp_path / "home"
+    evidence = tmp_path / "flake.json"
+    payload = {
+        "failing_tests": ["tests/test_poll.py::test_deadline"],
+        "isolation_results": ["passed", "passed", "passed"],
+        "full_rerun_result": "passed",
+        "narrowed_command": "pytest tests/test_poll.py::test_deadline",
+        "load_context": "full parallel gate",
+    }
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+    env = {**_tracker(tmp_path, {"ready-for-agent": []}), "HOME": str(home)}
+    ledger = home / FLAKE_LEDGER
+    ledger.parent.mkdir(parents=True)
+    ledger.write_text(
+        json.dumps(
+            {
+                "repository": str(repo.resolve()),
+                "branch": "older-run",
+                "head": "older-head",
+                **payload,
+                "timestamp": "2026-01-01T00:00:00Z",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    recorded = _engine(
+        repo, "flake", "--evidence", str(evidence), "--state-dir", str(scratch), env=env
+    )
+    report = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert recorded.returncode == 0, recorded.stderr
+    assert report.returncode == 0, report.stderr
+    flakes = json.loads(report.stdout)["flakes"]
+    assert len(flakes) == 1
+    assert flakes[0]["failing_tests"] == ["tests/test_poll.py::test_deadline"]
+    assert flakes[0]["earlier_records"] == {"tests/test_poll.py::test_deadline": 1}
+
+
+def test_flake_refuses_conflicting_evidence_for_the_same_failure(
+    tmp_path: Path,
+) -> None:
+    """An idempotent replay may not overwrite a different account."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    home = tmp_path / "home"
+    evidence = tmp_path / "flake.json"
+    payload = {
+        "failing_tests": ["tests/test_poll.py::test_deadline"],
+        "isolation_results": ["passed", "passed", "passed"],
+        "full_rerun_result": "passed",
+        "narrowed_command": "pytest tests/test_poll.py::test_deadline",
+        "load_context": "full parallel gate",
+    }
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+    env = {**_tracker(tmp_path, {"ready-for-agent": []}), "HOME": str(home)}
+    assert (
+        _engine(
+            repo,
+            "flake",
+            "--evidence",
+            str(evidence),
+            "--state-dir",
+            str(scratch),
+            env=env,
+        ).returncode
+        == 0
+    )
+    evidence.write_text(
+        json.dumps({**payload, "load_context": "different load"}), encoding="utf-8"
+    )
+
+    result = _engine(
+        repo, "flake", "--evidence", str(evidence), "--state-dir", str(scratch), env=env
+    )
+
+    assert result.returncode != 0
+    assert "different evidence" in result.stderr
+    assert len((home / FLAKE_LEDGER).read_text(encoding="utf-8").splitlines()) == 1
 
 
 def test_every_verb_accepts_yes(tmp_path: Path) -> None:

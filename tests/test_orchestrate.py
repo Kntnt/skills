@@ -1258,6 +1258,33 @@ def test_the_wave_briefs_verdict_has_three_shapes() -> None:
     )
 
 
+def test_the_wave_brief_reruns_a_strict_failing_subset_without_changes() -> None:
+    """Isolation distinguishes load from deterministic failure without weakening the gate."""
+
+    text = _brief("wave.md")
+
+    assert "exactly those failing tests in isolation three times" in text
+    assert "one complete rerun" in text
+    assert "same unchanged head" in text
+    assert "exact narrowed command" in text
+    assert "every isolated result" in text
+    assert "second complete-gate failure is a stop, full stop" in text
+    assert "edits, skips, and retries with modification nothing" in text
+    assert "a check this list does not name is not run in its place" in text
+
+
+def test_the_skill_records_and_reports_load_flake_evidence() -> None:
+    """Durable evidence and recurrence counts travel through the engine seam."""
+
+    body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    help_page = (SKILL / "help.md").read_text(encoding="utf-8")
+
+    assert "flake --evidence=<path>" in body
+    assert "`failing_tests`" in body
+    assert "`earlier_records`" in body
+    assert "~/.kntnt/orchestrate/flakes.jsonl" in help_page
+
+
 def test_the_wave_verdict_branches_on_determination_not_on_a_green_gate() -> None:
     """The two axes are orthogonal, and one overnight run is the proof.
 
