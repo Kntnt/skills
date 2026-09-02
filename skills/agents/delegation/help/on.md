@@ -14,9 +14,9 @@ delegation on - enable delegation mode in the selected scope
 
 The mode takes effect on the turn that switches it on, whichever scope was selected, so the mode does not wait for a restart. Without a scope flag the scope is this session alone, and context compaction may drop it — the Skill records the session state in the Harness's per-session scratch directory when one exists, so that it does not.
 
-With `--project` or `--user`, the Skill shows the context file's managed `@agents.d/kntnt-delegation.md` pointer, the companion mode file, and any bridge before writing. A committed Project pair applies to everyone using the repository.
+With `--project` or `--user`, the Skill shows the context file's managed `@agents.d/kntnt-delegation.md` pointer, the mode and fence companion files, and any bridge before writing. A committed Project trio applies to everyone using the repository.
 
-Repeating `on` refreshes an existing or stale pointer and companion.
+Repeating `on` refreshes an existing or stale pointer and both companions.
 
 ## OPTIONS
 
@@ -36,17 +36,17 @@ Write the persistent files without waiting for confirmation. The session scope h
 
 An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/delegation on --help`. A flag is refused rather than ignored where it has no work to do here, so both scope flags at once are invalid, and any token after the command path that is neither a scope flag nor `--yes` is refused the same way.
 
-Two managed pointer blocks, a marker without its pair, or a companion without its pointer stop the write: the Skill changes nothing, reports what it found, and asks.
+Two managed pointer blocks, a marker without its pair, a pointer with either companion missing, or either companion without its pointer stop the write: the Skill changes nothing, reports what it found, and asks.
 
 ## EXAMPLES
 
 **/delegation on**
 
-Adopt the mode for the rest of this conversation, leaving any persistent pair alone.
+Adopt the mode for the rest of this conversation, leaving any persistent trio alone.
 
 **/delegation on --project --yes**
 
-Write the managed pointer and companion into the Project without asking for confirmation first.
+Write the managed pointer and both companions into the Project without asking for confirmation first.
 
 ## INVOCATION ENVELOPE
 

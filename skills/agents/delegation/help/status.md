@@ -12,7 +12,7 @@ delegation status - report the mode's state in one scope or in all three
 
 `delegation status` reports the state of the selected scope, the effective verdict, and any staleness. With no scope flag it reports all three scopes, which is what makes a disagreement between standing persistent state and a session instruction visible in one line. It writes nothing, in any scope, and asks nothing, because it changes nothing.
 
-Persistent state is stale when its pointer block or companion mode file differs from what the Skill would write today. The report names that condition rather than silently treating the pair as current, and names `/delegation on --project` or `/delegation on --user` as the fix because `on` rewrites both managed files.
+Persistent state is stale when its pointer block or either companion file differs from what the Skill would write today. The report names that condition rather than silently treating the trio as current, and names `/delegation on --project` or `/delegation on --user` as the fix because `on` rewrites all three managed files.
 
 ## OPTIONS
 
@@ -34,7 +34,7 @@ An invalid form is refused rather than ignored. The Skill names the error, print
 
 **/delegation status**
 
-Report all three scopes, the effective verdict, and whether each standing pointer and companion still match what the Skill would write today.
+Report all three scopes, the effective verdict, and whether each standing pointer and both companions still match what the Skill would write today.
 
 **/delegation status --project**
 

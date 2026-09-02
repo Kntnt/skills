@@ -40,11 +40,11 @@ Report scope state, the effective verdict, and any stale managed files without c
 
 **--project**
 
-Target this Project's loaded context file and its companion mode file instead of the current session. A committed pair applies to everyone using the Project.
+Target this Project's loaded context file and its two companion files instead of the current session. A committed trio applies to everyone using the Project.
 
 **--user**
 
-Target this Harness's global context file and its companion mode file instead of the current session. Run the Skill separately in another Harness to configure that Harness.
+Target this Harness's global context file and its two companion files instead of the current session. Run the Skill separately in another Harness to configure that Harness.
 
 **--yes**
 
@@ -58,11 +58,11 @@ The default and the scope a bare invocation toggles. Session scratch preserves i
 
 **project**
 
-Selected by **--project**. A managed context pointer and companion mode file can be committed for everyone using the Project.
+Selected by **--project**. A managed context pointer and two companion files can be committed for everyone using the Project.
 
 **user**
 
-Selected by **--user**. A managed pointer and companion apply to the current Harness's global context.
+Selected by **--user**. A managed pointer and two companions apply to the current Harness's global context.
 
 ## FILES
 
@@ -72,11 +72,15 @@ Optional session scratch state used across context compaction.
 
 **Project and user context files**
 
-The Skill keeps only a managed `@agents.d/kntnt-delegation.md` pointer in the loaded context file.
+The Skill keeps a managed `@agents.d/kntnt-delegation.md` pointer and a read-when line for the fence in the loaded context file.
 
 **agents.d/kntnt-delegation.md**
 
-The companion contains the mode. The Skill shows both managed files before writing unless **--yes** is present; `on` refreshes stale state.
+The companion contains the mode.
+
+**agents.d/kntnt-delegation-fence.md**
+
+The companion contains the canonical fence. The Skill shows all three managed files before writing unless **--yes** is present; `on` refreshes stale state.
 
 ## DIAGNOSTICS
 
@@ -94,7 +98,7 @@ Toggle delegation mode for the current session.
 
 **/delegation on --project**
 
-Show and confirm a managed Project pointer and companion that enable the mode for later sessions.
+Show and confirm a managed Project pointer and two companions that enable the mode for later sessions.
 
 **/delegation status**
 

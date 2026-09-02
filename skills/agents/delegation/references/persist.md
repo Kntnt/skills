@@ -1,6 +1,6 @@
 # Persistent scopes
 
-`project` and `user` keep one managed context pointer and one companion mode file. `$HERE` is the directory that contains `SKILL.md`.
+`project` and `user` keep one managed context pointer and two companion files. `$HERE` is the directory that contains `SKILL.md`.
 
 ## Targets
 
@@ -15,7 +15,7 @@ The pointer must land in a context file this harness loads automatically in ever
 3. No `AGENTS.md`, but this harness has its own Project file (`CLAUDE.md`, `GEMINI.md`, …) → write the pointer there.
 4. No context file at all → create `AGENTS.md` with the title line `# <project> — agent guide` and the pointer, plus this harness's bridge. Name every file in one confirmation. The user has asked for a standing instruction, so the `agents-md` Skill's write-nothing default does not apply.
 
-The companion is `agents.d/kntnt-delegation.md` under the Project root or under the directory holding the user context file. The context pointer always addresses it as `@agents.d/kntnt-delegation.md`. An existing companion without one well-formed managed pointer is a conflict: change nothing, report it, and ask.
+The companions are `agents.d/kntnt-delegation.md` and `agents.d/kntnt-delegation-fence.md` under the Project root or under the directory holding the user context file. The context pointer always addresses both. A pointer with either companion missing or either companion without its pointer is a conflict: change nothing, report it, and ask.
 
 ## Managed files
 
@@ -24,10 +24,11 @@ Write exactly this pointer block last in the context file, with one blank line a
 ```markdown
 <!-- kntnt:delegation -->
 - Delegate per @agents.d/kntnt-delegation.md.
+- `agents.d/kntnt-delegation-fence.md` — read when briefing a subagent.
 <!-- /kntnt:delegation -->
 ```
 
-Write exactly this companion file:
+Write exactly this mode companion file:
 
 ```markdown
 - `agents.d/kntnt-delegation.md` — read when delegation mode is on.
@@ -35,19 +36,25 @@ Write exactly this companion file:
 {the entire content of $HERE/references/mode.md, verbatim}
 ```
 
-- `on` rewrites the pointer block and companion from the current Skill, so it is idempotent and refreshes stale state.
-- `off` removes the pointer block and companion file, and nothing else.
-- **Stale** — the pointer block or companion file differs from what the current Skill writes. `status` reports it and names `/delegation on --project` or `/delegation on --user` as the fix.
-- Two blocks in one file, a marker without its pair, or a companion without its pointer: change nothing, report, and ask.
+Write exactly this fence companion file:
+
+```markdown
+{the entire content of $HERE/references/fence.md, verbatim}
+```
+
+- `on` rewrites the pointer block and both companions from the current Skill, so it is idempotent and refreshes stale state.
+- `off` removes the pointer block and both companion files, and nothing else.
+- **Stale** — the pointer block or either companion file differs from what the current Skill writes. `status` reports it and names `/delegation on --project` or `/delegation on --user` as the fix.
+- Two blocks in one file, a marker without its pair, a pointer with either companion missing, or either companion without its pointer: change nothing, report, and ask.
 
 ## Confirmation
 
-Show the context file and exact pointer insertion or removal, the companion path and exact write or removal, and any bridge file to be created, then wait for a yes unless `--yes` was passed. These files are hand-curated, and the confirmation absorbs a wrong target before anything is written.
+Show the context file and exact pointer insertion or removal, both companion paths and exact writes or removals, and any bridge file to be created, then wait for a yes unless `--yes` was passed. These files are hand-curated, and the confirmation absorbs a wrong target before anything is written.
 
-- `project` says that both managed files are normally committed — everyone who clones the repository gets the mode, and every agent that follows the pointer gets the same instruction.
-- `project` whose context file or companion already has uncommitted changes says so, preventing the mode change from being mistaken for unrelated work in progress.
+- `project` says that all three managed files are normally committed — everyone who clones the repository gets the mode and fence, and every agent that follows the pointer gets the same instruction.
+- `project` whose context file or either companion already has uncommitted changes says so, preventing the mode change from being mistaken for unrelated work in progress.
 - No backup file, in git or out. `off` is the exact undo of `on`, and Project scope works outside git too.
 
 ## Taking effect
 
-`on` also adopts `mode.md` for the current session, exactly as it does in session scope, so the mode does not wait for a restart; `off` likewise suspends it here and now. Neither writes the session state file — the pointer and companion are the persistent record.
+`on` also adopts `mode.md` for the current session, exactly as it does in session scope, so the mode does not wait for a restart; `off` likewise suspends it here and now. Neither writes the session state file — the pointer and companions are the persistent record.
