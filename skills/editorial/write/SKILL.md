@@ -1,7 +1,7 @@
 ---
 name: write
-description: Turn a brief and its source material into one truthful first draft in the target language, and stop there.
-disable-model-invocation: true
+description: Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.
+disable-model-invocation: false
 argument-hint: '[--genre=<genre>] [--technique=<technique>] [--language=<language>] [--frontmatter=<yes|no>] [--output=<response|path>] [<brief>] [-- <instruction>]'
 compatibility: Requires uv
 metadata:

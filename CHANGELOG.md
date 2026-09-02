@@ -23,6 +23,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Fixed Orchestrate reports omitting reconciled parked tickets that had no Run Outcome.
 - Added caller-supplied Orchestrate plan approval identities, allowing an exact dry-run frontier to be authorized and checked before any claim in one invocation.
 - `/orchestrate` now audits tickets for concretely named external decision gaps before claiming, parks detected gaps with a decision-ready question under `needs-info`, and reuses the same parked-ticket record for decisions found mid-work.
+- `/write` may now be started by a model, and only when the literal token `/write` appears in the request or in an instruction the request points at; a bare request to write or draft something stays outside the trigger, and the Codex sidecar says the same (ADR-0094).
 
 ## [0.18.6] – 2026-08-30
 
