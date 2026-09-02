@@ -115,6 +115,10 @@ _Avoid_: retry, overwrite, superseding outcome
 A file a repository states is the output of a command rather than of a decision, named together with that command in `.kntnt-orchestrate/generated.json`. An Orchestrate collision confined to such files is settled by running those commands on the merged tree and committing the result, with no collision repair; a collision touching any other file is repaired as before. What counts is the declaration, never how a file looks (ADR-0106).
 _Avoid_: build artifact, derived file, generated output
 
+**Defect Class**:
+The rule a verdict's finding is one instance of, named by the verifier on the line beside the finding. An amender answers the class rather than the instance: it audits every surface the ticket owns for other instances of the same rule and fixes each, so the next fresh verdict cannot fail the ticket on the same rule at a different line. Naming the class is part of the verdict, which travels to the amender whole (ADR-0084), and is never a separate step or a re-judgement (ADR-0074).
+_Avoid_: defect category, root cause, finding type, symptom, distillate
+
 **Enabled**:
 A skill present on disk in a layer, in each Detected Harness's skills directory for that layer.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)
