@@ -136,7 +136,7 @@ STATE_HOME = "kntnt-orchestrate"
 ROUTING_FILE = "kntnt-orchestrate-routing.json"
 
 # The dashboard is a public file contract rather than an engine constant.
-PROGRESS_FILE = "kntnt-orchestrate-progress.json"
+PROGRESS_FILE: str = "kntnt-orchestrate-progress.json"
 
 # Flake evidence is durable Skill-owned state, while this run's selection of
 # those records stays in its scratch account for the final report.
@@ -8637,8 +8637,10 @@ def test_observed_attempts_are_accepted_by_an_explicit_model_selector_import(
     assert imported["rejected"] == []
 
 
-def test_progress_writes_the_latest_phase_atomically(tmp_path: Path) -> None:
-    """A polling caller always gets one complete current dashboard document."""
+def test_progress_writes_a_complete_latest_phase_without_temp_residue(
+    tmp_path: Path,
+) -> None:
+    """A live update exposes one complete document and cleans its peer file."""
 
     # Arrange an empty repository and session directory.
     repo = _init_repo(tmp_path / "repo")

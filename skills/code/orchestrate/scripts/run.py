@@ -297,8 +297,10 @@ ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
 OBSERVATION_FILE = "kntnt-orchestrate-observations.json"
 
 # Where a caller polls the current non-authoritative run dashboard.
-PROGRESS_FILE = "kntnt-orchestrate-progress.json"
-PROGRESS_PHASES = (
+PROGRESS_FILE: str = "kntnt-orchestrate-progress.json"
+
+# The complete live phases a session or engine transition may publish.
+PROGRESS_PHASES: tuple[str, ...] = (
     "preflight",
     "isolate",
     "build",
@@ -5751,12 +5753,7 @@ def main(argv: list[str] | None = None) -> int:
             tickets_remaining=args.remaining,
         )
         remember_progress(state_path, cwd, progress)
-        written = write_progress(
-            state_path,
-            args.phase,
-            progress,
-            None,
-        )
+        written = write_progress(state_path, args.phase, progress, None)
         emit({"verb": "progress", "progress": written})
         return 0
     if args.verb == "reconcile":
