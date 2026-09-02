@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - `/delegation` now names three execution paths and the work that selects each: pure execution with large output runs detached from the conversation and only its report is read back, judgment inside noisy data goes to a subagent for a bounded report, and a small bounded command stays on the main seat narrowed at the source. *When unsure, delegate* governs the choice between subagent and main seat, and the main seat stops what it detached or names it as left standing.
 - `/orchestrate` wave verdicts now rerun a strict failing test subset three times in isolation on the unchanged head and, only after all three pass, rerun the complete gate once; a green rerun records durable load-flake evidence and reports recurrence counts, while deterministic or repeated full-gate failures retain the existing failure path.
 - Let Orchestrate execute ticket-declared, append-only multi-commit role contracts and refuse commits outside each role's allowed surfaces.
+- `/orchestrate` verifier verdicts now name a Defect Class for every failed command or unmet criterion, and amendment builders audit the ticket's whole owned surface for every instance of each class before reporting.
+- Define parked-ticket amendment budgets as lifetime-scoped, preserve and bring forward resumed work, and report inherited versus newly spent amendments.
 
 ## [0.18.6] – 2026-08-30
 
