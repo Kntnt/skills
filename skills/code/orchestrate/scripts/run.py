@@ -5689,15 +5689,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.verb == "park":
         return cmd_park(cwd, args.ticket, state_path)
     if args.verb == "isolate":
-        result = cmd_isolate(cwd, args.ticket)
-        if result == 0:
-            advance_progress(cwd, state_path, "isolate", args.ticket)
-        return result
+        advance_progress(cwd, state_path, "isolate", args.ticket)
+        return cmd_isolate(cwd, args.ticket)
     if args.verb == "integrate":
-        result = cmd_integrate(cwd, args.ticket, state_path)
-        if result == 0:
-            advance_progress(cwd, state_path, "integrate", args.ticket)
-        return result
+        advance_progress(cwd, state_path, "integrate", args.ticket)
+        return cmd_integrate(cwd, args.ticket, state_path)
     if args.verb == "rebuild":
         return cmd_rebuild(cwd, args.ticket)
     if args.verb == "amend":

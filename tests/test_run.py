@@ -8914,6 +8914,59 @@ def test_consecutive_records_accumulate_completed_ticket_counts(tmp_path: Path) 
     assert progress["tickets_remaining"] == 0
 
 
+def _assert_long_engine_transition_publishes_progress_before_work(
+    monkeypatch: Any,
+    tmp_path: Path,
+    verb: str,
+    command_name: str,
+) -> None:
+    """Exercise one long engine transition against ordered boundary doubles."""
+
+    # Arrange ordered observers for dashboard publication and engine work.
+    run = _run()
+    events: list[str] = []
+
+    # Capture publication without depending on a repository fixture.
+    def publish(*_args: Any, **_kwargs: Any) -> None:
+        events.append("progress")
+
+    # Return a legitimate collision after the transition has done its work.
+    def collide(*_args: Any, **_kwargs: Any) -> int:
+        events.append("work")
+        return 2
+
+    # Replace both boundaries while retaining the public main dispatch.
+    monkeypatch.setattr(run, "advance_progress", publish)
+    monkeypatch.setattr(run, command_name, collide)
+
+    # Invoke one long engine-owned transition through the public argument path.
+    result = run.main([verb, "--ticket=9", "--state-dir", str(tmp_path / "session")])
+
+    # Assert publication precedes work and survives its collision outcome.
+    assert result == 2
+    assert events == ["progress", "work"]
+
+
+def test_isolate_publishes_progress_before_work(
+    monkeypatch: Any, tmp_path: Path
+) -> None:
+    """Isolation is visible while its work is still current."""
+
+    _assert_long_engine_transition_publishes_progress_before_work(
+        monkeypatch, tmp_path, "isolate", "cmd_isolate"
+    )
+
+
+def test_integrate_publishes_progress_before_work(
+    monkeypatch: Any, tmp_path: Path
+) -> None:
+    """Integration is visible while its work is still current."""
+
+    _assert_long_engine_transition_publishes_progress_before_work(
+        monkeypatch, tmp_path, "integrate", "cmd_integrate"
+    )
+
+
 def _observations() -> ModuleType:
     """Import the model-selector observation module the artifacts are for."""
 
