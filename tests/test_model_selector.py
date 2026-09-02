@@ -3455,6 +3455,9 @@ def _attempt(**changes: Any) -> dict[str, Any]:
         "task_identity": "ticket-96",
         "workload_stratum": "initial_build",
         "attempt_index": 1,
+        "stage": "build",
+        "workload_cohort": "python-refactor",
+        "workload_tags": ["python"],
         "harness": {"name": "codex", "inventory_revision": "inventory-3"},
         "benchmark": {
             "key": "orchestrate-ticket-v1",
@@ -3869,6 +3872,18 @@ def test_observe_merges_identically_and_never_overwrites_a_conflict() -> None:
     assert clash["artifact"]["observations"] == first["artifact"]["observations"]
 
 
+def _frontier_point(derived: dict[str, Any], benchmark_key: str) -> dict[str, Any]:
+    """Return the single point of the frontier one benchmark key identifies."""
+
+    frontiers = [
+        frontier
+        for frontier in derived["frontiers"].values()
+        if frontier["benchmark_key"] == benchmark_key
+    ]
+    assert len(frontiers) == 1, derived
+    return cast(dict[str, Any], frontiers[0]["points"][0])
+
+
 def test_record_appends_unseen_observations_and_only_affected_frontiers(
     tmp_path: Path,
 ) -> None:
@@ -3904,10 +3919,23 @@ def test_record_appends_unseen_observations_and_only_affected_frontiers(
     )
     assert first["rejected"] == []
     assert len(ledger.read_text("utf-8").strip().splitlines()) == 2
-    assert sorted(first["frontiers_rebuilt"]) == [
-        "delegation-extract-v1",
-        "orchestrate-ticket-v1",
+    assert first["frontiers_rebuilt"] == [
+        {
+            "benchmark_key": "delegation-extract-v1",
+            "stage": "build",
+            "workload_cohort": "python-refactor",
+            "workload_tags": ["python"],
+        },
+        {
+            "benchmark_key": "orchestrate-ticket-v1",
+            "stage": "build",
+            "workload_cohort": "python-refactor",
+            "workload_tags": ["python"],
+        },
     ]
+    assert sorted(
+        entry["benchmark_key"] for entry in frontiers["frontiers"].values()
+    ) == ["delegation-extract-v1", "orchestrate-ticket-v1"]
     assert not (tmp_path / "config.json").exists()
 
     # Import the same artifact again, then one changed observation.
@@ -3962,18 +3990,311 @@ def test_record_rebuilds_quality_from_judged_model_outcomes_alone(
     )["observations"]
     observations.record(observations.merge(None, conditioned)["artifact"], tmp_path)
     after = json.loads((tmp_path / "derived-frontiers.json").read_text("utf-8"))
-    point = after["frontiers"]["orchestrate-ticket-v1"]["points"][0]
+    point = _frontier_point(after, "orchestrate-ticket-v1")
 
     # Assert quality counts only judged model outcomes and keeps the rest apart.
     assert point["runs"] == 1
     assert point["successes"] == 1
     assert point["excluded"] == {"infra_error": 1, "abstain": 1}
     assert (
-        after["frontiers"]["orchestrate-ticket-v1"]["points"][0]["quality_lower_bound"]
-        == measured["frontiers"]["orchestrate-ticket-v1"]["points"][0][
-            "quality_lower_bound"
-        ]
+        point["quality_lower_bound"]
+        == (_frontier_point(measured, "orchestrate-ticket-v1")["quality_lower_bound"])
     )
+    assert (
+        point["quality_upper_bound"]
+        == (_frontier_point(measured, "orchestrate-ticket-v1")["quality_upper_bound"])
+    )
+
+
+def _two_candidate_profile() -> bytes:
+    """Narrow the fixture to one weak and one strong exactly launchable point.
+
+    A route decision only becomes measurement-based once every launchable
+    candidate has exact evidence, so a ledger that closes the loop has to cover
+    the whole candidate set. Two points is the smallest set that still has
+    something to choose between.
+    """
+
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    kept = []
+    for selection in profile["model_selections"]:
+        if selection["canonical_provider_model_id"] not in (
+            "claude-haiku-4-5-20251001",
+            "claude-opus-5",
+        ):
+            continue
+        selection["controls"]["effort"] = {"policy": "explicit", "values": ["max"]}
+        selection["controls"]["serving_modes"] = {
+            "policy": "explicit",
+            "values": ["standard"],
+        }
+        kept.append(selection)
+    profile["model_selections"] = kept
+    return json.dumps(profile).encode()
+
+
+def _judged_attempts(
+    decision: dict[str, Any], count: int, result: str, offset: int
+) -> list[dict[str, Any]]:
+    """Build one externally judged batch of attempts against one exact point."""
+
+    return [
+        _attempt(
+            attempt_id=f"build-{offset + index}",
+            task_identity=f"ticket-{offset + index}",
+            harness={
+                "name": "claude-code",
+                "inventory_revision": "claude-code/agent-tool",
+            },
+            decision=decision,
+            outcome={
+                "result": result,
+                "authority": "independent_verifier",
+                "checker": {"identity": "verify.md", "independent": True},
+                "condition": None,
+                "scores": None,
+            },
+        )
+        for index in range(count)
+    ]
+
+
+def _import(observations: Any, directory: Path, attempts: list[dict[str, Any]]) -> None:
+    """Emit and import one batch, refusing to proceed on any refusal."""
+
+    produced = observations.observe({"schema_version": 1, "attempts": attempts})
+    assert produced["refusals"] == [], produced["refusals"]
+    report = observations.record(
+        observations.merge(None, produced["observations"])["artifact"], directory
+    )
+    assert report["rejected"] == [], report["rejected"]
+
+
+def test_the_projected_ledger_reaches_a_measured_decision_with_nothing_written(
+    tmp_path: Path,
+) -> None:
+    """Judged attempts become the next decision's evidence with no user step.
+
+    This is the evidence loop end to end and in one place: a route decision,
+    the attempts an external verdict judged, the ledger they were imported
+    into, and the next decision over the same profile — with `evidence.records`
+    derived from the ledger every time and hand-written nowhere.
+    """
+
+    # Route the cold start, whose ledger holds nothing at all yet.
+    profile = _two_candidate_profile()
+    router = _load_router()
+    data = tmp_path / "model-selector"
+    cold = _derive_context(tmp_path, _runtime_context_request(), profile)
+    weak, strong = router.route(
+        {
+            "schema_version": 1,
+            "context": cold["context"],
+            "requests": [
+                _request(),
+                _request(request_id="route-2", overrides={"model": "claude-opus-5"}),
+            ],
+        }
+    )["decisions"]
+
+    assert cold["context"]["evidence"]["records"] == []
+    assert weak["evidence_class"] == "heuristic"
+    assert weak["launch"]["model"] == "claude-haiku-4-5-20251001"
+
+    # Import six passes, which the shipped floor is deliberately above.
+    observations = _load_observations()
+    _import(observations, data, _judged_attempts(weak, 6, "pass", 0))
+    six = _derive_context(tmp_path, _runtime_context_request(), profile)
+    below = router.route(six)["decisions"][0]
+    projected = six["context"]["evidence"]["records"][0]
+
+    # Assert the ledger is read as evidence and the floor still refuses it.
+    assert len(six["context"]["evidence"]["records"]) == 1
+    assert (
+        projected["configuration_fingerprint"]
+        == (weak["launch"]["configuration_fingerprint"])
+    )
+    assert projected["stage"] == "build"
+    assert projected["workload_cohort"] == "python-refactor"
+    assert projected["representative"] is True
+    assert projected["coverage"] == {"decision_relevant": True}
+    assert projected["quality"] == 1.0
+    assert projected["uncertainty"]["lower_bound"] < 0.7
+    assert projected["uncertainty"]["upper_bound"] == 1.0
+    assert below["evidence_class"] == "heuristic"
+    assert {exclusion["code"] for exclusion in below["audit"]["exclusions"]} == {
+        "quality_floor_not_cleared"
+    }
+
+    # Cover the whole candidate set, the weak point clearing the floor alone.
+    _import(observations, data, _judged_attempts(weak, 4, "pass", 6))
+    _import(observations, data, _judged_attempts(strong, 4, "fail", 100))
+    measured = _derive_context(tmp_path, _runtime_context_request(), profile)
+    decided = router.route(measured)["decisions"][0]
+    evidence = measured["context"]["evidence"]
+
+    # Assert the next decision is measured, and says so from the ledger alone.
+    assert decided["evidence_class"] == "measurement_based"
+    assert decided["launch"]["model"] == "claude-haiku-4-5-20251001"
+    assert len(evidence["records"]) == 2
+    canonical = json.dumps(
+        evidence["records"], sort_keys=True, separators=(",", ":")
+    ).encode()
+    assert evidence["identity"] == f"sha256:{hashlib.sha256(canonical).hexdigest()}"
+    assert evidence["vintage"] == "2026-08-24T10:04:00Z"
+
+
+def test_a_projection_keeps_every_cohort_and_unnamed_row_apart(
+    tmp_path: Path,
+) -> None:
+    """One fingerprint measured in two Cohorts is two measurements, not one."""
+
+    # Import the same exact point under two stages, one passing and one not.
+    observations = _load_observations()
+    decision = _routed_decision()
+    _import(
+        observations,
+        tmp_path,
+        _judged_attempts(decision, 2, "pass", 0)
+        + [
+            attempt | {"stage": "rebuild"}
+            for attempt in _judged_attempts(decision, 2, "fail", 50)
+        ]
+        + [
+            {
+                key: value
+                for key, value in attempt.items()
+                if key not in ("stage", "workload_cohort", "workload_tags")
+            }
+            for attempt in _judged_attempts(decision, 2, "pass", 90)
+        ],
+    )
+    projected = observations.projected_evidence(tmp_path)
+    derived = json.loads((tmp_path / "derived-frontiers.json").read_text("utf-8"))
+    ledger = (tmp_path / "run-observations.jsonl").read_text("utf-8")
+
+    # Assert each stage states its own quality and the unnamed rows state none.
+    assert len(ledger.strip().splitlines()) == 6
+    assert [
+        (record["stage"], record["quality"]) for record in projected["records"]
+    ] == [("build", 1.0), ("rebuild", 0.0)]
+    assert len(derived["frontiers"]) == 2
+    assert sorted(frontier["stage"] for frontier in derived["frontiers"].values()) == [
+        "build",
+        "rebuild",
+    ]
+    assert all(
+        point["runs"] == 2
+        for frontier in derived["frontiers"].values()
+        for point in frontier["points"]
+    )
+
+
+def test_a_damaged_ledger_row_yields_no_evidence_rather_than_a_refusal(
+    tmp_path: Path,
+) -> None:
+    """The ledger is a file Context does not own, so damage in it is not an error.
+
+    It is append-only JSONL a user may hand-write and an interrupted append may
+    truncate. A row missing an identity the projection reads must leave the
+    route with no evidence, not with a traceback where a decision belongs.
+    """
+
+    # A row naming a Cohort but no benchmark names no frontier and no record.
+    observations = _load_observations()
+    keyless = tmp_path / "keyless"
+    keyless.mkdir()
+    (keyless / "run-observations.jsonl").write_text(
+        json.dumps(
+            {
+                "run_key": "keyless",
+                "stage": "build",
+                "workload_cohort": "python-refactor",
+                "workload_tags": [],
+                "configuration_fingerprint": "sha256:point",
+                "outcome": "pass",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    assert observations.projected_evidence(keyless) == {
+        "records": [],
+        "vintage": None,
+    }
+
+    # Derive context over a ledger whose row the reader itself cannot index.
+    data = tmp_path / "model-selector"
+    data.mkdir(parents=True)
+    (data / "run-observations.jsonl").write_text(
+        json.dumps({"benchmark_key": "orchestrate-ticket-v1"}) + "\n",
+        encoding="utf-8",
+    )
+    derived = _derive_context(tmp_path, _runtime_context_request())
+    routed = _load_router().route(derived)
+
+    # Assert the route still decides, from the shipped seed's own date.
+    assert derived["context"]["evidence"]["records"] == []
+    assert derived["context"]["evidence"]["vintage"] == "2026-08-23"
+    assert routed["decisions"][0]["status"] == "selected"
+
+
+def test_a_rebuild_discards_a_frontier_written_under_an_older_identity(
+    tmp_path: Path,
+) -> None:
+    """A derived summary is reproducible, so an old shape is dropped, not kept.
+
+    Before a frontier was identified by its whole Cohort it was identified by
+    its benchmark key alone. Leaving such an entry beside the new ones would
+    put two shapes in one file permanently, the old one never rebuilt and
+    readable under no current identity (issue #191).
+    """
+
+    # Import one judged attempt over a frontier file of the older shape.
+    observations = _load_observations()
+    stale = {"points": [{"configuration_fingerprint": "sha256:old", "runs": 3}]}
+    (tmp_path / "derived-frontiers.json").write_text(
+        json.dumps(
+            {"schema_version": 1, "frontiers": {"orchestrate-ticket-v1": stale}}
+        ),
+        encoding="utf-8",
+    )
+    _import(observations, tmp_path, _judged_attempts(_routed_decision(), 1, "pass", 0))
+    derived = json.loads((tmp_path / "derived-frontiers.json").read_text("utf-8"))
+
+    # Assert only the rebuilt current-shape frontier survives the rebuild.
+    assert [entry["benchmark_key"] for entry in derived["frontiers"].values()] == [
+        "orchestrate-ticket-v1"
+    ]
+    assert all("workload_cohort" in entry for entry in derived["frontiers"].values())
+
+
+def test_observe_carries_the_cohort_the_routed_request_named() -> None:
+    """The three identity fields travel with the attempt, or none of them do."""
+
+    # Observe one attempt naming a Cohort, one naming half of it, and one bad.
+    observations = _load_observations()
+    named, partial = observations.observe(
+        _attempts(
+            _attempt(workload_tags=["python", "parser", "python"]),
+            _attempt(
+                attempt_id="build-97",
+                task_identity="ticket-97",
+                workload_cohort=None,
+            ),
+        )
+    )["observations"]
+    refused = observations.observe(_attempts(_attempt(stage=17)))
+
+    # Assert tags normalize, half a Cohort is none, and a malformed one refuses.
+    assert named["stage"] == "build"
+    assert named["workload_cohort"] == "python-refactor"
+    assert named["workload_tags"] == ["parser", "python"]
+    assert partial["stage"] is None
+    assert partial["workload_cohort"] is None
+    assert partial["workload_tags"] is None
+    assert refused["observations"] == []
+    assert refused["refusals"][0]["code"] == "invalid_attempt"
 
 
 def test_record_applies_the_same_validation_as_emission(tmp_path: Path) -> None:

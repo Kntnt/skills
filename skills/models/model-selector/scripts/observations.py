@@ -47,6 +47,9 @@ observe: Callable[[Any], dict[str, Any]] = _IMPLEMENTATION.observe
 merge: Callable[[Any, list[dict[str, Any]]], dict[str, Any]] = _IMPLEMENTATION.merge
 validate: Callable[[Any], dict[str, str] | None] = _IMPLEMENTATION.validate
 record: Callable[[Any, Path], dict[str, Any]] = _IMPLEMENTATION.record
+projected_evidence: Callable[[Path], dict[str, Any]] = (
+    _IMPLEMENTATION.projected_evidence
+)
 
 
 def main(argv: list[str] | None = None) -> int:

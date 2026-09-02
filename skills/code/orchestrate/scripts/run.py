@@ -336,6 +336,11 @@ OBSERVED_STRATA: dict[str, str] = {
     "wave-fix": "mechanical_wave_fix",
 }
 
+# The namespace this Skill's Cohorts are named under. A ledger is shared with
+# every other routed caller, so an Orchestrate initial build has to be nameable
+# apart from anybody else's work of the same kind.
+OBSERVED_COHORT_PREFIX = "orchestrate/"
+
 # Which independent verdict establishes each role's outcome. A builder's own
 # report establishes nothing, so the checker an observation names is always the
 # brief of the session that judged it and never the one that did the work.
@@ -993,12 +998,21 @@ class RouteRecord:
     of the request name it chose itself — which `role` the decision governs and,
     where the role belongs to one ticket, which ticket — so a claim, an amend,
     and the account can each find the decision that covers what is about to run.
+
+    `stage`, `workload_cohort`, and `workload_tags` are the same reading again:
+    the Cohort the decision was made for, computed once here and frozen with
+    the decision, so the observation a later verdict writes names the Cohort
+    the request named rather than one reconstructed from a response that never
+    echoed it.
     """
 
     request_id: str
     role: str
     ticket: int | None
     decision: dict[str, Any]
+    stage: str
+    workload_cohort: str
+    workload_tags: list[str]
 
     @property
     def acceptable(self) -> bool:
@@ -1487,6 +1501,9 @@ def read_routing(path: Path | None) -> Routing | None:
                         None if record["ticket"] is None else int(record["ticket"])
                     ),
                     decision=cast(dict[str, Any], record["decision"]),
+                    stage=str(record["stage"]),
+                    workload_cohort=str(record["workload_cohort"]),
+                    workload_tags=[str(tag) for tag in record["workload_tags"]],
                 )
                 for record in cast(list[dict[str, Any]], held["decisions"])
             ],
@@ -3022,6 +3039,25 @@ def cmd_plan(
     return 0 if plan.ready else 2
 
 
+def workload_identity(role: str) -> dict[str, Any]:
+    """Return the Cohort one building role's work belongs to.
+
+    A Cohort is a role and a kind of work, and the request name this Skill
+    writes is where the engine already reads both. The stage is that role; the
+    Cohort is the workload stratum the role is charged to, under this Skill's
+    own namespace; and the tags are empty, those two facts being the whole of
+    what Orchestrate states about the work it routes. Deriving all three from
+    the name alone is what lets the request the agent writes and the decision
+    the engine froze name the same Cohort without either checking the other.
+    """
+
+    return {
+        "stage": role,
+        "workload_cohort": f"{OBSERVED_COHORT_PREFIX}{OBSERVED_STRATA[role]}",
+        "workload_tags": [],
+    }
+
+
 def route_record(request_id: str, decision: dict[str, Any]) -> RouteRecord:
     """Read one decision's request name back into the role it was made for.
 
@@ -3051,11 +3087,14 @@ def route_record(request_id: str, decision: dict[str, Any]) -> RouteRecord:
         )
 
     # One of the three alternatives matched, and each names its own role.
+    ticket: int | None
     if named["role"]:
-        return RouteRecord(request_id, named["role"], int(named["ticket"]), decision)
-    if named["amended"]:
-        return RouteRecord(request_id, "amend", int(named["amended"]), decision)
-    return RouteRecord(request_id, "wave-fix", None, decision)
+        role, ticket = str(named["role"]), int(named["ticket"])
+    elif named["amended"]:
+        role, ticket = "amend", int(named["amended"])
+    else:
+        role, ticket = "wave-fix", None
+    return RouteRecord(request_id, role, ticket, decision, **workload_identity(role))
 
 
 def read_response(response: Path) -> dict[str, Any]:
@@ -5048,6 +5087,9 @@ def observed_attempt(
         "run_identity": routing.run_identity or None,
         "task_identity": task,
         "workload_stratum": stratum,
+        "stage": record.stage,
+        "workload_cohort": record.workload_cohort,
+        "workload_tags": list(record.workload_tags),
         "attempt_index": kin.index(request_id) + 1,
         "harness": routing.snapshot["harness"],
         "benchmark": {

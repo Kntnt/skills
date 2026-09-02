@@ -80,7 +80,7 @@ A `CapabilityPrior` is categorical evidence for choosing a cold-start experiment
 
 `EvaluationConfiguration`: fingerprint plus model-version and access-channel keys, effort/thinking budget, mode, harness commit, prompt/tool hashes, cache/context/retry/fallback policies, maximum output and resource profile.
 
-`RunObservation`: run key, configuration and benchmark keys, task/seed/attempt, pass/fail/abstain/infra-error and raw dimension scores, all token categories, tool counts, provider bill, price schedule used, resolved model/fallback, wall/first-useful-output latency, timestamps and sanitized artifact hashes.
+`RunObservation`: run key, configuration and benchmark keys, the routed request's `stage`, `workload_cohort` and `workload_tags` or their three nulls, task/seed/attempt, pass/fail/abstain/infra-error and raw dimension scores, all token categories, tool counts, provider bill, price schedule used, resolved model/fallback, wall/first-useful-output latency, timestamps and sanitized artifact hashes. The three identity fields are defined in `run-observations.md`, which also defines the frontier they place the row in.
 
 ## Conditional update
 
@@ -100,7 +100,7 @@ A source without usable validators still receives one bounded fetch per due pass
 
 For `record`, reject observations missing configuration identity, benchmark identity, outcome, provenance or timestamps. Reject quota observations that combine provider-charged usage with a second model multiplier, or raw usage without the applicable multiplier. Missing token categories may be explicit `null`; never silently convert them to zero. Separate infrastructure errors from model failures. A duplicate run key with identical content is skipped; a duplicate with different content is a conflict and changes nothing.
 
-Recompute only derived frontiers whose eligible run set changed. Derived files may be replaced because they are reproducible from append-only source records.
+Recompute only derived frontiers whose eligible run set changed. A frontier is identified by benchmark key, stage, workload cohort and sorted workload tags together; rows differing on any of them are never compared as one frontier, and a row naming no cohort enters none. Derived files may be replaced because they are reproducible from append-only source records.
 
 ## Change report
 

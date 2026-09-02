@@ -112,7 +112,7 @@ Complete when the recommendation names an exact configuration and decision rule,
 
 ## Context
 
-Read `$HERE/references/model-routing.md` and validate the input against `$HERE/references/context-request.schema.json`. Run `uv run "$HERE/scripts/context.py" [--data=<path>] <path>` and emit its JSON response without commentary. The runtime form reads the normalized profile, shipped seed, adapter templates, and routing defaults; specializes exact mappings from the caller-supplied Harness and main-seat facts; and returns one complete route artifact. The snapshot form validates and returns the supplied frozen snapshot unchanged beside the current ordered requests. Context never enters setup and performs no network access, evaluation, research, or persistent write.
+Read `$HERE/references/model-routing.md` and validate the input against `$HERE/references/context-request.schema.json`. Run `uv run "$HERE/scripts/context.py" [--data=<path>] <path>` and emit its JSON response without commentary. The runtime form reads the normalized profile, shipped seed, adapter templates, routing defaults, and the selected evidence ledger; specializes exact mappings from the caller-supplied Harness and main-seat facts; projects the ledger into `context.evidence.records`, so an attempt an external verdict judged reaches the next decision with nothing written by hand; and returns one complete route artifact. The snapshot form validates and returns the supplied frozen snapshot unchanged beside the current ordered requests. Context never enters setup and performs no network access, evaluation, research, or persistent write.
 
 ## Route
 
@@ -152,7 +152,7 @@ Making the Skill Disabled removes every integration this feature owns without a 
 
 ## Record
 
-Read `$HERE/references/evidence-ledger.md` and `$HERE/references/run-observations.md`. Run `uv run "$HERE/scripts/observations.py" record --data=<directory> <path>` and render its report. It validates provenance, configuration fingerprint, benchmark key, token categories, cost, outcome and timestamps for every supplied observation, appends only unseen run keys, skips identical duplicates, rejects conflicting duplicates rather than overwriting them, and rebuilds only the derived frontiers whose eligible run set changed. This command is the user-owned ledger mutation; Orchestrate calls the shared Library's same `record` implementation directly for eligible machine-judged attempts, never this command. Report accepted, skipped and rejected records.
+Read `$HERE/references/evidence-ledger.md` and `$HERE/references/run-observations.md`. Run `uv run "$HERE/scripts/observations.py" record --data=<directory> <path>` and render its report. It validates provenance, configuration fingerprint, benchmark key, token categories, cost, outcome and timestamps for every supplied observation, appends only unseen run keys, skips identical duplicates, rejects conflicting duplicates rather than overwriting them, and rebuilds only the derived frontiers whose eligible run set changed, each named by its benchmark key, stage, workload cohort and workload tags. This command is the user-owned ledger mutation; Orchestrate calls the shared Library's same `record` implementation directly for eligible machine-judged attempts, never this command. Report accepted, skipped and rejected records.
 
 ## Status
 

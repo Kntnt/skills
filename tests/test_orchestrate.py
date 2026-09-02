@@ -2895,6 +2895,37 @@ def test_orchestrate_derives_context_before_every_route_call() -> None:
     assert "`carried_by_default: true` and `verified`" in routing
 
 
+def test_every_execution_request_names_the_cohort_its_own_name_states() -> None:
+    """The request and the frozen decision name one Cohort, or evidence never matches.
+
+    The engine derives the Cohort from the request name and freezes it with the
+    decision; the agent writes the same three fields into the request from the
+    same name. Two derivations of one fact stay together only while both are
+    written down, and a request naming a different Cohort than the observation
+    would leave every past run's evidence inapplicable to the next (issue #191).
+    """
+
+    routing = _step(3)
+
+    assert "`stage` is the role token of the request name" in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 states the stage every execution request"
+        f" carries, which is the role token of its own name (issue #191)."
+    )
+    assert "`orchestrate/` followed by that role's workload stratum" in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 states the Cohort as this Skill's"
+        f" namespace and the role's workload stratum (issue #191)."
+    )
+    assert "`workload_tags` is empty" in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 says the tags are empty rather than"
+        f" leaving a caller to invent narrowing tags (issue #191)."
+    )
+    assert "the engine derives the same three from the same name" in routing.lower(), (
+        f"{SKILL / 'SKILL.md'}: step 3 says the engine derives the same Cohort"
+        f" from the same request name, which is why the request the module"
+        f" routes and the observation the ledger keeps agree (issue #191)."
+    )
+
+
 def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
     """A dry run is read for what a run would do, and a run it started is not that."""
 

@@ -8578,6 +8578,16 @@ def test_attempt_lifecycle_persists_instants_and_imports_the_verdict(
     assert observation["run_identity"] == routing["run_identity"]
     assert observation["latency"]["wall_seconds"] is not None
 
+    # The imported row names the Cohort the routed request named, which is
+    # what a later route reads it back as evidence for (issue #191).
+    decided = routing["decisions"][0]
+    assert decided["stage"] == "build"
+    assert decided["workload_cohort"] == "orchestrate/initial_build"
+    assert decided["workload_tags"] == []
+    assert observation["stage"] == "build"
+    assert observation["workload_cohort"] == "orchestrate/initial_build"
+    assert observation["workload_tags"] == []
+
     # A completed request cannot create a second lifecycle start.
     restarted = _attempt_started(repo, scratch, env)
     assert restarted.returncode == 1

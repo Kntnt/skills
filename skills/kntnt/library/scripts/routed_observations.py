@@ -22,7 +22,7 @@ import sys
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, TypedDict, cast
 
 # The version shared by attempt and observation envelopes.
 SCHEMA_VERSION: int = 1
@@ -121,6 +121,33 @@ FRONTIER_FILE: str = "derived-frontiers.json"
 # is used rather than the raw rate so one passing attempt cannot read as
 # certainty.
 WILSON_Z: float = 1.96
+
+# What one derived frontier is identified by: the check the outcomes came from,
+# the stage of the run, the Cohort of the work, and the tags narrowing it. Rows
+# differing on any member are never compared as one frontier.
+type FrontierIdentity = tuple[str, str, str, tuple[str, ...]]
+
+
+class WorkloadIdentity(TypedDict):
+    """The Cohort a carrier names, or the three absences that name none."""
+
+    stage: str | None
+    workload_cohort: str | None
+    workload_tags: list[str] | None
+
+
+# The plain identity strings a projected evidence record reads off the routed
+# point the ledger row kept. The native control is the sixth and is the
+# Harness's own object rather than a string, so it is held to its own shape;
+# `harness` is a seventh that the routed point does not carry itself and comes
+# from the row's provenance instead.
+ROUTED_IDENTITIES: tuple[str, ...] = (
+    "model",
+    "portable_deliberation",
+    "channel",
+    "surface",
+    "serving_mode",
+)
 
 
 def _refusal(attempt_id: Any, code: str, detail: str) -> dict[str, Any]:
@@ -227,7 +254,54 @@ def _attempt_error(attempt: Any) -> str | None:
         return "harness.name must identify the active Harness."
     if not isinstance(attempt.get("decision"), dict):
         return "decision must be the public route decision this attempt ran on."
+    return _identity_error(attempt)
+
+
+def _identity_error(carrier: dict[str, Any]) -> str | None:
+    """Return why a workload identity cannot be read, or None where it can.
+
+    The three fields name the Cohort of the request a routed attempt answered,
+    and they are optional: every row written before routed callers carried one
+    is still a row, and automatic capture observes work nobody routed at all.
+    What is refused is a field that is present and is not the identity it
+    claims to be, which is a different thing from a field that is absent.
+    """
+
+    for field in ("stage", "workload_cohort"):
+        value = carrier.get(field)
+        if value is not None and (not isinstance(value, str) or not value):
+            return f"{field} must be a non-empty string where it is present."
+    tags = carrier.get("workload_tags")
+    if tags is not None and (
+        not isinstance(tags, list)
+        or any(not isinstance(tag, str) or not tag for tag in tags)
+    ):
+        return "workload_tags must be non-empty strings where they are present."
     return None
+
+
+def _workload_identity(carrier: dict[str, Any]) -> WorkloadIdentity:
+    """Return the Cohort a carrier names, or the three explicit absences.
+
+    A Cohort is one identity rather than three fields that happen to sit
+    together, so a carrier holding only some of them names none: half a Cohort
+    would let a projected record assert a stage against runs that never
+    declared a workload.
+    """
+
+    stage, cohort = carrier.get("stage"), carrier.get("workload_cohort")
+    tags = carrier.get("workload_tags")
+    if (
+        not isinstance(stage, str)
+        or not isinstance(cohort, str)
+        or not isinstance(tags, list)
+    ):
+        return {"stage": None, "workload_cohort": None, "workload_tags": None}
+    return {
+        "stage": stage,
+        "workload_cohort": cohort,
+        "workload_tags": sorted({str(tag) for tag in tags}),
+    }
 
 
 def _outcome_refusal(attempt: dict[str, Any], outcome: Any) -> str | None:
@@ -440,6 +514,7 @@ def _observation(attempt: dict[str, Any]) -> tuple[dict[str, Any] | None, str, s
         "seed": attempt.get("seed") if isinstance(attempt.get("seed"), str) else None,
         "attempt_index": attempt["attempt_index"],
         "workload_stratum": attempt["workload_stratum"],
+        **_workload_identity(attempt),
         "configuration_fingerprint": configuration["configuration_fingerprint"],
         "benchmark_key": attempt["benchmark"]["key"],
         "routed": {
@@ -655,6 +730,8 @@ def validate(observation: Any) -> dict[str, str] | None:
         return {"code": code, "detail": "An external judgement establishes an outcome."}
     if observation["workload_stratum"] not in STRATA:
         return {"code": "invalid_observation", "detail": "Unknown workload stratum."}
+    if detail := _identity_error(observation):
+        return {"code": "invalid_observation", "detail": detail}
     if not isinstance(observation.get("provenance"), dict) or not observation[
         "provenance"
     ].get("snapshot_identity"):
@@ -742,15 +819,22 @@ def _ledger(directory: Path) -> dict[str, dict[str, Any]]:
     return held
 
 
-def _wilson_lower_bound(successes: int, runs: int) -> float | None:
-    """Return the conservative success rate of one configuration, or None."""
+def _wilson_bounds(successes: int, runs: int) -> tuple[float | None, float | None]:
+    """Return the two-sided conservative interval of one configuration.
+
+    Both ends are kept rather than the lower one alone, because the interval
+    is what a decision is made against: a point whose bounds are far apart is
+    an unfinished measurement rather than a measured mediocrity, and only the
+    pair says which of the two it is.
+    """
 
     if runs == 0:
-        return None
+        return None, None
     rate = successes / runs
     centre = rate + WILSON_Z**2 / (2 * runs)
     spread = WILSON_Z * math.sqrt((rate * (1 - rate) + WILSON_Z**2 / (4 * runs)) / runs)
-    return round((centre - spread) / (1 + WILSON_Z**2 / runs), 6)
+    divisor = 1 + WILSON_Z**2 / runs
+    return round((centre - spread) / divisor, 6), round((centre + spread) / divisor, 6)
 
 
 def _mean(values: list[float | int | None]) -> float | None:
@@ -760,8 +844,68 @@ def _mean(values: list[float | int | None]) -> float | None:
     return sum(known) / len(known) if values and len(known) == len(values) else None
 
 
+def _frontier_identity(record: dict[str, Any]) -> FrontierIdentity | None:
+    """Return the exact frontier one ledger row belongs to, or None for no frontier.
+
+    A frontier compares configurations, so everything else about the work it
+    compares them on has to be held still: the check the outcome came from,
+    the stage of the run, the Cohort the work belongs to, and the tags that
+    narrow it. A row naming no Cohort is comparable within nothing, which is
+    why it stays in the ledger and enters no frontier.
+    """
+
+    named = _workload_identity(record)
+    stage, cohort, tags = (
+        named["stage"],
+        named["workload_cohort"],
+        named["workload_tags"],
+    )
+    benchmark_key = record.get("benchmark_key")
+    if stage is None or cohort is None or tags is None:
+        return None
+    if not isinstance(benchmark_key, str) or not benchmark_key:
+        return None
+    return benchmark_key, stage, cohort, tuple(tags)
+
+
+def _frontier_named(identity: FrontierIdentity) -> dict[str, Any]:
+    """Return one frontier identity in the four fields a reader reads it by."""
+
+    benchmark_key, stage, cohort, tags = identity
+    return {
+        "benchmark_key": benchmark_key,
+        "stage": stage,
+        "workload_cohort": cohort,
+        "workload_tags": list(tags),
+    }
+
+
+def _frontier_key(identity: FrontierIdentity) -> str:
+    """Return the stable storage key of one frontier identity.
+
+    The identity is four values rather than one name, and joining them into a
+    readable key would make the separator part of the contract. The digest
+    keys the entry; the entry itself carries all four fields in the open.
+    """
+
+    return _digest(_frontier_named(identity))
+
+
+def _frontier_groups(
+    records: list[dict[str, Any]],
+) -> dict[FrontierIdentity, list[dict[str, Any]]]:
+    """Group every ledger row that names a frontier under the frontier it names."""
+
+    grouped: dict[FrontierIdentity, list[dict[str, Any]]] = {}
+    for record in records:
+        identity = _frontier_identity(record)
+        if identity is not None:
+            grouped.setdefault(identity, []).append(record)
+    return {identity: grouped[identity] for identity in sorted(grouped)}
+
+
 def _frontier(records: list[dict[str, Any]]) -> dict[str, Any]:
-    """Return one benchmark's frontier from the runs eligible for it.
+    """Return one frontier from the runs eligible for it.
 
     Quality is read from judged model outcomes alone. An infrastructure error
     and an abstention are counted where they happened and kept out of the rate,
@@ -772,21 +916,25 @@ def _frontier(records: list[dict[str, Any]]) -> dict[str, Any]:
     for fingerprint in sorted(
         {str(record["configuration_fingerprint"]) for record in records}
     ):
-        cohort = [
+        at_point = [
             record
             for record in records
             if record["configuration_fingerprint"] == fingerprint
         ]
-        judged = [record for record in cohort if record["outcome"] in DECISIVE_RESULTS]
+        judged = [
+            record for record in at_point if record["outcome"] in DECISIVE_RESULTS
+        ]
         successes = sum(1 for record in judged if record["outcome"] == "pass")
+        lower, upper = _wilson_bounds(successes, len(judged))
         points.append(
             {
                 "configuration_fingerprint": fingerprint,
                 "runs": len(judged),
                 "successes": successes,
-                "quality_lower_bound": _wilson_lower_bound(successes, len(judged)),
+                "quality_lower_bound": lower,
+                "quality_upper_bound": upper,
                 "excluded": {
-                    result: sum(1 for r in cohort if r["outcome"] == result)
+                    result: sum(1 for r in at_point if r["outcome"] == result)
                     for result in CONDITIONAL_RESULTS
                 },
                 "cost": {
@@ -862,7 +1010,7 @@ def record(artifact: Any, directory: Path) -> dict[str, Any]:
             accepted.append(observation)
 
     # Append accepted rows, then rebuild only the frontiers whose set changed.
-    frontiers: list[str] = []
+    frontiers: list[dict[str, Any]] = []
     if accepted:
         directory.mkdir(parents=True, exist_ok=True)
         with (directory / LEDGER_FILE).open("a", encoding="utf-8") as ledger:
@@ -879,23 +1027,143 @@ def record(artifact: Any, directory: Path) -> dict[str, Any]:
     }
 
 
-def _rebuild_frontiers(directory: Path, accepted: list[dict[str, Any]]) -> list[str]:
+def _rebuild_frontiers(
+    directory: Path, accepted: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
     """Recompute the derived frontiers whose eligible run set actually changed."""
 
+    # A row naming no Cohort is ledger accounting and no frontier's member, so
+    # an import made entirely of such rows rebuilds nothing and says so.
+    affected = sorted(
+        {
+            identity
+            for identity in (
+                _frontier_identity(observation) for observation in accepted
+            )
+            if identity is not None
+        }
+    )
+    if not affected:
+        return []
+
+    # Keep only entries written under the current frontier identity. The file
+    # is a reproducible summary of append-only rows, so an entry from an older
+    # shape is discarded rather than migrated or left beside the new ones.
     path = directory / FRONTIER_FILE
     derived: dict[str, Any] = {"schema_version": SCHEMA_VERSION, "frontiers": {}}
     if path.exists():
-        derived = json.loads(path.read_text(encoding="utf-8"))
-    affected = sorted({str(observation["benchmark_key"]) for observation in accepted})
-    records = list(_ledger(directory).values())
-    for benchmark_key in affected:
-        derived["frontiers"][benchmark_key] = _frontier(
-            [record for record in records if record["benchmark_key"] == benchmark_key]
-        )
+        held = json.loads(path.read_text(encoding="utf-8"))
+        derived["frontiers"] = {
+            key: entry
+            for key, entry in held.get("frontiers", {}).items()
+            if isinstance(entry, dict) and "workload_cohort" in entry
+        }
+
+    grouped = _frontier_groups(list(_ledger(directory).values()))
+    for identity in affected:
+        derived["frontiers"][_frontier_key(identity)] = {
+            **_frontier_named(identity),
+            **_frontier(grouped.get(identity, [])),
+        }
     path.write_text(
         json.dumps(derived, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    return affected
+    return [_frontier_named(identity) for identity in affected]
+
+
+def _projected_record(
+    identity: FrontierIdentity, point: dict[str, Any], row: dict[str, Any]
+) -> dict[str, Any] | None:
+    """Return the evidence record one frontier point states, or None for none.
+
+    The interval comes from the point, the exact configuration from the row
+    that ran on it, and the Cohort from the frontier all its rows share. A
+    point with no decisive run states nothing here: the numeric quality and
+    the interval an evidence record requires do not exist for it, and a
+    missing measurement is never a zero.
+    """
+
+    lower, upper = point["quality_lower_bound"], point["quality_upper_bound"]
+    if not point["runs"] or lower is None or upper is None:
+        return None
+
+    # Read the exact point off the routed decision the ledger row kept whole.
+    routed = row.get("routed")
+    routed = routed if isinstance(routed, dict) else {}
+    provenance = row.get("provenance")
+    provenance = provenance if isinstance(provenance, dict) else {}
+    named: dict[str, Any] = {field: routed.get(field) for field in ROUTED_IDENTITIES}
+    named["harness"] = provenance.get("harness")
+    native = routed.get("native_deliberation")
+
+    # Refuse to name a point whose own identity the ledger does not hold whole.
+    if any(not isinstance(value, str) or not value for value in named.values()):
+        return None
+    if not isinstance(native, dict) or not native:
+        return None
+
+    _, stage, cohort, tags = identity
+    return {
+        "configuration_fingerprint": str(point["configuration_fingerprint"]),
+        **named,
+        "native_deliberation": native,
+        "stage": stage,
+        "workload_cohort": cohort,
+        "workload_tags": list(tags),
+        "representative": True,
+        "coverage": {"decision_relevant": True},
+        "uncertainty": {"lower_bound": lower, "upper_bound": upper},
+        "quality": round(point["successes"] / point["runs"], 6),
+        "stale": False,
+    }
+
+
+def project(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Return what a ledger states as routing evidence, and how new it is.
+
+    This is the ledger read as evidence rather than as accounting: one record
+    per exact configuration inside one frontier, carrying the conservative
+    interval that frontier's judged runs establish (ADR-0145). Nothing is
+    classified here: the route module owns the only classifier there is
+    (ADR-0083), and a second one answering the same question in a second place
+    is exactly what would let `record` and `route` disagree about one ledger.
+    """
+
+    projected: list[dict[str, Any]] = []
+    vintages: list[str] = []
+    for identity, rows in _frontier_groups(records).items():
+        for point in _frontier(rows)["points"]:
+            # Order one point's rows so the record names the same one twice.
+            members = sorted(
+                (
+                    row
+                    for row in rows
+                    if row["configuration_fingerprint"]
+                    == point["configuration_fingerprint"]
+                ),
+                key=lambda row: str(row["run_key"]),
+            )
+
+            # Keep only points the ledger states a whole measurement for.
+            evidence = _projected_record(identity, point, members[0])
+            if evidence is None:
+                continue
+
+            # Date the evidence by the rows it was actually derived from.
+            projected.append(evidence)
+            vintages.extend(
+                str(row["completed_at"])
+                for row in members
+                if isinstance(row.get("completed_at"), str)
+            )
+
+    return {"records": projected, "vintage": max(vintages) if vintages else None}
+
+
+def projected_evidence(directory: Path) -> dict[str, Any]:
+    """Return the evidence records the ledger under *directory* states."""
+
+    return project(list(_ledger(directory).values()))
 
 
 def _operands_first(arguments: list[str]) -> list[str]:

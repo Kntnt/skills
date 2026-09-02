@@ -28,7 +28,7 @@ Read `config.json` from *PATH*. The default is `~/.kntnt/model-selector/`; Conte
 
 ## OUTPUT
 
-One JSON object with `schema_version`, the ordered `requests`, and either a complete current `context` or the supplied frozen `snapshot`. Current context retains every enabled validated selection, reports unavailable comparable ranks as `null`, specializes only adapters the active Harness can launch, and carries shipped override defaults. Commercial dimensions remain `null` until exact measurements exist.
+One JSON object with `schema_version`, the ordered `requests`, and either a complete current `context` or the supplied frozen `snapshot`. Current context retains every enabled validated selection, reports unavailable comparable ranks as `null`, specializes only adapters the active Harness can launch, and carries shipped override defaults. `evidence.records` is the selected evidence ledger projected into the route contract's own evidence records, `evidence.vintage` the newest instant among the rows behind them, and `evidence.identity` their digest; an absent or unreadable ledger simply yields no records. Commercial dimensions remain `null` until exact measurements exist.
 
 ## DIAGNOSTICS
 

@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 import sys
@@ -48,6 +49,27 @@ route.SCHEMAS_BY_ID.update(
         ADAPTER_TEMPLATE_SCHEMA["$id"]: ADAPTER_TEMPLATE_SCHEMA,
     }
 )
+
+
+def _observations() -> Any:
+    """Load the Skill's own observation seam beside the routing module.
+
+    Context reads the evidence ledger through exactly the module the public
+    `observe` and `record` commands run on, rather than reimplementing the
+    projection here: the ledger has one reading, and two would be two answers
+    to the same question about the same file.
+    """
+
+    path = SKILL_ROOT / "scripts" / "observations.py"
+    spec = importlib.util.spec_from_file_location("model_selector_observations", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"{path} is not a loadable observation seam")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+OBSERVATIONS: Any = _observations()
 
 
 def _schema_error(value: Any, schema: dict[str, Any], path: str) -> str | None:
@@ -375,6 +397,51 @@ def _specialized_adapter(
     return adapter
 
 
+def _evidence(data_directory: Path, seed_vintage: str) -> dict[str, Any]:
+    """Return the routing evidence the ledger states, ready to be frozen.
+
+    The records are the ledger's own projection, which is what closes the loop
+    between one run and the next: an attempt an external verdict judged becomes
+    a record the route module classifies, with nothing written by hand in
+    between. An absent, unreadable, or empty ledger is simply no evidence, and
+    the routing rules answer that with inheritance rather than with an error.
+    """
+
+    # Read the ledger as a file this command does not own. It is append-only
+    # JSONL a user may hand-write and an interrupted append may truncate, so it
+    # can be absent, unreadable, not JSON, or a row missing an identity the
+    # projection reads by name — and none of that is a reason to refuse a route
+    # the routing rules can answer without any evidence at all.
+    try:
+        projected = OBSERVATIONS.projected_evidence(data_directory)
+    except (OSError, UnicodeDecodeError, ValueError, KeyError):
+        projected = {"records": [], "vintage": None}
+
+    # Admit only records the shared routing schema accepts, so one damaged
+    # ledger row refuses itself instead of the whole artifact it sits in.
+    records = [
+        record
+        for record in projected["records"]
+        if not route._schema_errors(
+            record,
+            route.REQUEST_SCHEMA["$defs"]["evidence_record"],
+            route.REQUEST_SCHEMA,
+            "evidence_record",
+        )
+    ]
+
+    # Date the evidence by exactly the records it holds. Where a row was
+    # dropped, the projection's instant may belong to it, so the shipped seed's
+    # date is what can still be defended.
+    complete = len(records) == len(projected["records"])
+    vintage = projected["vintage"] if records and complete else None
+    return {
+        "identity": route._canonical_digest(records),
+        "vintage": vintage or seed_vintage,
+        "records": records,
+    }
+
+
 def _commercial() -> dict[str, None]:
     """Represent every per-attempt commercial dimension as unmeasured."""
 
@@ -398,6 +465,7 @@ def _main_channel(profile: dict[str, Any], harness: str, model: str) -> str:
 def _derive_context(
     runtime: dict[str, Any],
     profile: dict[str, Any] | None,
+    data_directory: Path,
 ) -> dict[str, Any]:
     """Derive one complete current routing context without persistent writes."""
 
@@ -410,12 +478,7 @@ def _derive_context(
     model_seeds = _seed_models(records)
     runtime_harness = runtime["harness"]
     runtime_seat = runtime["main_seat"]
-    evidence_records: list[dict[str, Any]] = []
-    evidence = {
-        "identity": route._canonical_digest(evidence_records),
-        "vintage": manifest["as_of"],
-        "records": evidence_records,
-    }
+    evidence = _evidence(data_directory, cast(str, manifest["as_of"]))
 
     # Missing or invalid configuration is a normal inheritance context.
     if profile is None:
@@ -617,7 +680,7 @@ def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
     return {
         "schema_version": 1,
         "requests": requests,
-        "context": _derive_context(artifact["runtime"], profile),
+        "context": _derive_context(artifact["runtime"], profile, data_directory),
     }
 
 

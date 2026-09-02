@@ -148,7 +148,7 @@ def test_an_objectively_graded_run_imports_and_cleans_up(tmp_path: Path) -> None
     result = _finish(module, data, "session-1", checker=_checker(), benchmark="python")
 
     assert result["imported"]["accepted"], result
-    assert result["imported"]["frontiers_rebuilt"] == ["python"]
+    assert result["imported"]["frontiers_rebuilt"] == []
     assert _drafts(data) == []
     assert _pending(data) == []
 
@@ -236,12 +236,12 @@ def test_a_harness_error_is_not_a_model_failure(tmp_path: Path) -> None:
     assert observation["outcome"] == "infra_error"
     assert observation["non_model_condition"] == "mechanical_hinder"
 
-    # The frontier counts it beside the judged runs rather than inside them.
-    frontier = json.loads((data / "derived-frontiers.json").read_text(encoding="utf-8"))
-    point = next(iter(frontier["frontiers"].values()))["points"][0]
-    assert point["runs"] == 0
-    assert point["quality_lower_bound"] is None
-    assert point["excluded"]["infra_error"] == 1
+    # Captured work answered no routed request, so it names no Cohort and is
+    # comparable within no frontier: the row is kept, and nothing derives a
+    # quality from it in either direction.
+    assert observation["stage"] is None
+    assert observation["workload_cohort"] is None
+    assert not (data / "derived-frontiers.json").exists()
 
 
 def test_model_self_confidence_never_grades_a_run(tmp_path: Path) -> None:

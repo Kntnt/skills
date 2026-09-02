@@ -8,6 +8,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - Model Selector now derives complete frozen routing contexts from a versioned profile, shipped Claude Code adapter templates, exact runtime facts, independent numeric seed priors, and shipped routing defaults before Route resolves a decision.
 - Orchestrate now imports eligible machine-judged routed observations automatically at each verdict through the Collection Library, with explicit attempt lifecycle, replay-safe accounting, and per-run identities.
+- Run observations now carry the Cohort of the route request they answered — `stage`, `workload_cohort`, and `workload_tags` — derived frontiers are identified by that Cohort beside the benchmark key and carry both Wilson bounds, and Model Selector's context derivation projects the ledger into `context.evidence.records`, so an externally judged Orchestrate attempt reaches the next run's decision with nothing written by hand (ADR-0145).
 
 ### Changed
 
