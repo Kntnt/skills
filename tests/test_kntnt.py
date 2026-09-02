@@ -7891,6 +7891,40 @@ def test_delegation_requires_subagents_and_says_so() -> None:
     )
 
 
+def test_delegation_subagents_do_not_redelegate_without_a_scoped_grant() -> None:
+    """The directive keeps project delegation one level deep by default."""
+
+    # Read the installed directive that governs delegated briefs.
+    path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
+    mode = path.read_text(encoding="utf-8")
+
+    # Pin the default and its only project-doctrine exception.
+    required_fragments = {
+        "subagents execute and do not re-delegate",
+        "brief may grant an explicit exception",
+        "names what may be spawned and why",
+        "full delegation contract",
+        "routing, fencing, and bounded reports",
+    }
+    missing = sorted(
+        fragment for fragment in required_fragments if fragment not in mode
+    )
+    assert not missing, (
+        f"{path}: the re-delegation boundary is incomplete; missing {missing}."
+    )
+
+
+def test_delegation_skill_owned_subagents_follow_their_skill_contract() -> None:
+    """A Skill's internal delegation remains under that Skill's own contract."""
+
+    # Read the installed directive that a Skill-running subagent also receives.
+    path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
+    mode = path.read_text(encoding="utf-8")
+
+    # Keep Skill-owned delegation distinct from a brief-granted exception.
+    assert "Skill-owned subagents follow their Skill's contract." in mode
+
+
 def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     """The compact mode delegates execution through model-selector's Interfaces."""
 
@@ -7920,7 +7954,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "Explicit user choices",
         "understanding, diagnosis, decisions, planning, briefs, verification, and the final answer",
         "main seat",
-        "handoff costs less than direct work",
+        "Between subagent and main seat, delegate when handoff is cheaper",
         "when unsure, delegate",
         "`$model-selector route` in Codex",
         "`/model-selector route` in Claude",
@@ -7928,8 +7962,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "user overrides",
         "checker or failure signal",
         "before spawning",
-        "Follow its decision exactly",
-        "without changing the main seat",
+        "follow its decision without changing the main seat",
         "Verify results independently",
         "If subagents are unavailable, execute normally",
     }
@@ -7949,7 +7982,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "frozen main seat",
         "no model, deliberation, or surface override",
         "is not routed",
-        "verdict authority",
+        "nor is verdict authority",
         "foreign surface, model, or deliberation override",
         "distillation, summarization, evidence collection",
         "routed cheaper seat",
@@ -7980,7 +8013,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     # Prevent either side of the boundary from drifting into another sentence.
     required_boundary_sentence_fragments = {
         "is not routed",
-        "verdict authority",
+        "nor is verdict authority",
         "before spawning",
         "foreign surface, model, or deliberation override",
         "full execution brief",
@@ -8049,10 +8082,9 @@ def test_delegation_keeps_predictably_noisy_tool_output_out_of_main_context() ->
     mode = path.read_text(encoding="utf-8")
 
     required_fragments = {
-        "predictably noisy reads",
-        "narrow first",
-        "before raw output enters main context",
+        "Give noisy-data judgment to a subagent",
         "bounded, task-shaped report",
+        "Narrow predictably noisy reads, then delegate before raw output enters main context",
     }
     missing = sorted(
         fragment for fragment in required_fragments if fragment not in mode
@@ -8071,45 +8103,25 @@ def test_delegation_states_the_file_and_capped_inline_report_contract() -> None:
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
     mode = path.read_text(encoding="utf-8")
 
-    # Pin each observable obligation of the report contract.
-    required_fragments = {
-        "report file path inside the spawn's own scratch",
-        "complete findings there",
-        "brief caps the inline reply",
-        "stated task-specific budget",
-        "conclusions only",
-        "no raw command output",
-        "no file dumps",
-        "main seat reads the file only when its decision needs the detail",
+    # Pin each complete relationship in the bounded-report contract.
+    required_sentences = {
+        "Every brief gives the spawn a scratch report path and task-specific inline cap.",
+        (
+            "The subagent writes complete findings there and replies with conclusions"
+            " only—no raw output or file dumps."
+        ),
+        "Read the report only when a decision needs detail.",
+        "Verify results independently.",
     }
-
-    # Report every missing obligation in one actionable failure.
     missing = sorted(
-        fragment for fragment in required_fragments if fragment not in mode
+        sentence for sentence in required_sentences if sentence not in mode
     )
     assert not missing, (
         f"{path}: delegation report contract is incomplete; missing {missing}."
     )
 
-    # Isolate the report contract from later delegation doctrine.
-    contract_start = mode.index("Every brief names a report file path")
-    contract_end = mode.index("Between subagent and main seat", contract_start)
-    contract = mode[contract_start:contract_end]
-
-    # Assign the complete report to the subagent explicitly.
-    assert "the subagent writes complete findings there" in contract
-
-    # Keep independent verification immediately beside the report contract.
-    assert (
-        "main seat reads the file only when its decision needs the detail."
-        " Verify results independently."
-    ) in contract, (
-        f"{path}: independent verification must immediately follow the report"
-        f" contract, with no intervening doctrine."
-    )
-
     # Preserve the detached path while forbidding any doctrine-wide cap number.
-    assert "writing to disk" in mode
+    assert "output on disk" in mode
     default_number = re.search(
         (
             r"\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|"
@@ -8148,12 +8160,11 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
     # Each path is introduced by the shape of work that selects it, and *report*
     # is the word for what the main seat reads back from a detached process.
     required_fragments = {
-        "Pure execution with large output",
+        "Run large-output pure execution",
         "detached from the conversation",
-        "read only the report",
+        "read its report",
         "search the rest",
-        "Judgment inside noisy data",
-        "goes to a subagent",
+        "Give noisy-data judgment to a subagent with a bounded, task-shaped report",
         "small bounded command",
         "narrowed at the source",
     }
@@ -8172,8 +8183,8 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
     # choice alone: a detached process exercises no judgment, so uncertainty
     # about judgment never selects it (ADR-0134).
     assert (
-        "Between subagent and main seat, delegate when handoff costs less than"
-        " direct work; when unsure, delegate."
+        "Between subagent and main seat, delegate when handoff is cheaper;"
+        " when unsure, delegate."
     ) in mode, (
         f"{path}: *when unsure, delegate* stays, scoped to the choice between a"
         f" subagent and the main seat rather than to the detached process"
@@ -10769,12 +10780,12 @@ def test_delegation_reports_checked_observations_and_imports_none() -> None:
     required_fragments = {
         "`$model-selector observe` in Codex",
         "`/model-selector observe` in Claude",
-        "Model Selector's `record` command",
+        "Model Selector's `record` remains user-only",
         "caller-owned scratch",
         "externally judged routed attempt",
         "user-only",
         "unrouted spawn",
-        "capture records it as the inheritance that actually happened",
+        "where capture is enabled, it records actual inheritance",
     }
     missing = sorted(
         fragment for fragment in required_fragments if fragment not in mode
