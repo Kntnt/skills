@@ -20,6 +20,7 @@ import json
 import math
 import re
 import sys
+from collections.abc import Callable, Collection
 from copy import deepcopy
 from datetime import UTC, datetime
 from functools import cache
@@ -127,6 +128,13 @@ EXPLORATION_POLICY: str = "exploration"
 # Where the Standing Policy this ledger ratchets lives: the Library's own
 # module, beside this one.
 STANDING_POLICY_MODULE: str = "standing_policy.py"
+
+# The Library's own argument grammar, beside this module, and the flags of this
+# engine that carry no value. The grammar is told which they are rather than
+# knowing one engine's by name, so a valueless flag added here never takes the
+# operand written behind it (ADR-0152).
+ARGUMENT_GRAMMAR_MODULE: str = "argument_grammar.py"
+VALUELESS_FLAGS: frozenset[str] = frozenset()
 
 # Who may judge an attempt a policy is allowed to move on. A frozen rubric and
 # the user's own word establish an outcome perfectly well, but a ratchet that
@@ -1625,42 +1633,43 @@ def projected_evidence(directory: Path) -> dict[str, Any]:
     return project(list(_ledger(directory).values()))
 
 
+def _argument_grammar() -> Any:
+    """Load the argument grammar this engine reads its command line with.
+
+    The grammar is the Library's own module rather than this engine's habit,
+    and it is loaded from beside this one by path, exactly as the Standing
+    Policy store above is: a peer Skill's `scripts/` is not an interface this
+    module may reach into, and neither is a `sys.path` it does not own
+    (ADR-0149).
+    """
+
+    path = Path(__file__).resolve().parent / ARGUMENT_GRAMMAR_MODULE
+    spec = importlib.util.spec_from_file_location("kntnt_argument_grammar", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("the argument grammar is missing from the Library")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+# The one implementation, bound to the names this engine parses with.
+_GRAMMAR: Any = _argument_grammar()
+_option: Callable[[list[str], str], str | None] = _GRAMMAR.option
+_split: Callable[[list[str], Collection[str]], tuple[list[str], list[str]]] = (
+    _GRAMMAR.split
+)
+
+
 def _operands_first(arguments: list[str]) -> list[str]:
     """Return the same arguments with the operands ahead of the options.
 
     The Skills write one invocation order — the command path, then the flags,
-    then the operands (ADR-0097) — while this parser reads its path first. The
-    engines stay permissive rather than refusing a spelling of their own
-    (ADR-0096), so both orders are normalised here instead of one of them
-    becoming a special case downstream.
+    then the operands (ADR-0097) — while this parser reads its path first, so
+    the shared grammar normalises both into the one this engine reads.
     """
 
-    operands: list[str] = []
-    options: list[str] = []
-    index = 0
-    while index < len(arguments):
-        token = arguments[index]
-        index += 1
-        if not token.startswith("--"):
-            operands.append(token)
-            continue
-
-        # A separated value belongs to the flag before it and travels with it.
-        options.append(token)
-        if "=" not in token and index < len(arguments):
-            options.append(arguments[index])
-            index += 1
+    operands, options = _split(arguments, VALUELESS_FLAGS)
     return operands + options
-
-
-def _option(rest: list[str], name: str) -> str | None:
-    """Return the sole option's value in either spelling, or None where it is not one."""
-
-    if len(rest) == 1 and rest[0].startswith(f"{name}="):
-        return rest[0].split("=", 1)[1]
-    if len(rest) == 2 and rest[0] == name:
-        return rest[1]
-    return None
 
 
 def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:

@@ -34,8 +34,11 @@ INVOCATION = re.compile(
     r"#subdirectory=skills-ref skills-ref ([a-z-]+) <skill-directory>"
 )
 
-# Shared runtime modules need the same static checking locally and in CI.
-ROUTED_OBSERVATIONS: str = "skills/kntnt/library/scripts/routed_observations.py"
+# The Collection Library's shared modules, which need the same static checking
+# locally and in CI. They are read off the shipped tree rather than listed
+# here: a module named in one invocation and forgotten in the other is exactly
+# what a pin holding one hardcoded path cannot see.
+LIBRARY_SCRIPTS = REPO_ROOT / "skills" / "kntnt" / "library" / "scripts"
 
 
 def _contributing() -> str:
@@ -93,11 +96,31 @@ def test_no_check_ci_runs_is_the_reference_validator() -> None:
     assert "agentskills" not in ci
 
 
-def test_shared_routed_observations_is_in_both_mypy_gates() -> None:
-    """The Library implementation is type-checked locally and in CI."""
+def test_every_shared_library_module_is_in_both_mypy_gates() -> None:
+    """The Library's implementation is type-checked locally and in CI alike.
 
-    assert ROUTED_OBSERVATIONS in _contributing()
-    assert ROUTED_OBSERVATIONS in CI.read_text(encoding="utf-8")
+    The two invocations are written out in full in two files, so the one thing
+    that can go wrong is a module reaching one of them: an engine added to the
+    guide and forgotten in the workflow is checked on a contributor's machine
+    and nowhere else, which is the failure a green pull request hides.
+    """
+
+    modules = sorted(LIBRARY_SCRIPTS.glob("*.py"))
+
+    # A directory that came back empty would leave the loop below judging
+    # nothing at all, which is the one outcome this check exists to catch.
+    assert modules
+
+    contributing = _contributing()
+    ci = CI.read_text(encoding="utf-8")
+    for module in modules:
+        named = module.relative_to(REPO_ROOT).as_posix()
+        for where, text in ((CONTRIBUTING, contributing), (CI, ci)):
+            assert named in text, (
+                f"{where.name}: {named} is a Collection Library module and is"
+                f" not named in the mypy invocation there, so it is not"
+                f" type-checked by both of the gates every other one is."
+            )
 
 
 def test_the_catalog_is_declared_generated_with_the_line_the_guide_gives() -> None:

@@ -26,9 +26,11 @@ them mean, and only the route module holds that ladder.
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import os
 import sys
+from collections.abc import Callable, Collection
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -39,6 +41,12 @@ SCHEMA_VERSION: int = 1
 # The two files the store owns, beside `config.json` in the data directory.
 POLICY_FILE: str = "standing-policy.json"
 HISTORY_FILE: str = "standing-policy-history.jsonl"
+
+# The Library's own argument grammar, beside this module, and the flags of this
+# engine that carry no value. The grammar is told which they are rather than
+# knowing one engine's by name (ADR-0152).
+ARGUMENT_GRAMMAR_MODULE: str = "argument_grammar.py"
+VALUELESS_FLAGS: frozenset[str] = frozenset({"--yes"})
 
 # The shipped default layer, as constants rather than as data: the failure
 # threshold is read from here by the same import that evaluates it, and a
@@ -334,14 +342,30 @@ def _refusal(code: str, detail: str) -> dict[str, Any]:
     }
 
 
-def _option(rest: list[str], name: str) -> str | None:
-    """Return the sole option's value in either spelling, or None where it is not one."""
+def _argument_grammar() -> Any:
+    """Load the argument grammar this engine reads its command line with.
 
-    if len(rest) == 1 and rest[0].startswith(f"{name}="):
-        return rest[0].split("=", 1)[1]
-    if len(rest) == 2 and rest[0] == name:
-        return rest[1]
-    return None
+    The grammar is the Library's own module rather than this engine's habit,
+    and it is loaded from beside this one by path: a peer Skill's `scripts/` is
+    not an interface this module may reach into, and neither is a `sys.path` it
+    does not own (ADR-0149).
+    """
+
+    path = Path(__file__).resolve().parent / ARGUMENT_GRAMMAR_MODULE
+    spec = importlib.util.spec_from_file_location("kntnt_argument_grammar", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("the argument grammar is missing from the Library")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+# The one implementation, bound to the names this engine parses with.
+_GRAMMAR: Any = _argument_grammar()
+_option: Callable[[list[str], str], str | None] = _GRAMMAR.option
+_split: Callable[[list[str], Collection[str]], tuple[list[str], list[str]]] = (
+    _GRAMMAR.split
+)
 
 
 def _data_directory(flags: list[str]) -> Path | None:
@@ -351,32 +375,6 @@ def _data_directory(flags: list[str]) -> Path | None:
         return Path.home() / ".kntnt" / "model-selector"
     value = _option(flags, "--data")
     return None if value is None else Path(value).expanduser()
-
-
-def _split(arguments: list[str]) -> tuple[list[str], list[str]]:
-    """Separate operands from options whichever order the caller wrote them in.
-
-    The Skills write the flags before the operands (ADR-0097) while this parser
-    reads its Cohort first, and the engines stay permissive about a spelling of
-    their own (ADR-0096), so both orders are normalised here.
-    """
-
-    operands: list[str] = []
-    options: list[str] = []
-    index = 0
-    while index < len(arguments):
-        token = arguments[index]
-        index += 1
-        if not token.startswith("--"):
-            operands.append(token)
-            continue
-
-        # A separated value belongs to the flag before it and travels with it.
-        options.append(token)
-        if "=" not in token and token != "--yes" and index < len(arguments):
-            options.append(arguments[index])
-            index += 1
-    return operands, options
 
 
 def _show(directory: Path, cohort: str | None) -> dict[str, Any]:
@@ -418,7 +416,7 @@ def _policy_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
             "Use policy show [<cohort>] or policy reset [<cohort>].",
         ), 2
     action, *rest = arguments
-    operands, options = _split(rest)
+    operands, options = _split(rest, VALUELESS_FLAGS)
     confirmed = "--yes" in options
     options = [option for option in options if option != "--yes"]
     if len(operands) > 1:
