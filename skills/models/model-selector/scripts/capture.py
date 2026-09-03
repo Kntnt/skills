@@ -58,16 +58,25 @@ ABANDONED_AFTER_SECONDS = 6 * 60 * 60
 REVIEW_ACTIONS: tuple[str, ...] = ("save", "failed", "ignore")
 
 # Every lifecycle signal this feature understands, per Harness family. A stop is
-# an observation that a turn ended and never that its work succeeded.
-START_EVENTS = frozenset({"SessionStart", "session.created"})
-TURN_EVENTS = frozenset({"Stop", "SubagentStop", "session.idle"})
+# an observation that a turn ended and never that its work succeeded. Codex
+# CLI 0.153.0 names its own moments in camelCase (`sessionStart`, `stop`,
+# `sessionEnd`), confirmed from its installed binary's own `HookEventName`,
+# never in Claude Code's PascalCase.
+START_EVENTS = frozenset({"SessionStart", "sessionStart", "session.created"})
+TURN_EVENTS = frozenset({"Stop", "stop", "SubagentStop", "session.idle"})
 ERROR_EVENTS = frozenset({"session.error"})
-END_EVENTS = frozenset({"SessionEnd", "session.deleted"})
+END_EVENTS = frozenset({"SessionEnd", "sessionEnd", "session.deleted"})
 
 # Where a Harness names the lifecycle moment inside the payload rather than on
 # the command line. Claude Code and Codex both do, so a hook installed without a
-# per-event command still knows which moment it is answering.
-EVENT_FIELDS: tuple[str, ...] = ("hook_event_name", "event", "type")
+# per-event command still knows which moment it is answering. `eventName` is
+# Codex's own field for this everywhere else its JSON API names a moment
+# (`hooks/list`'s `HookMetadata`, its `HookRunSummary` notifications); its
+# hook-invocation payload was not directly observable — every attempt to
+# drive a hook to fire, trust-bypassed or not, ran into Codex's own
+# session/auth lifecycle rather than a shape problem — so this is carried as
+# the same convention rather than as a confirmed reading of that payload.
+EVENT_FIELDS: tuple[str, ...] = ("hook_event_name", "eventName", "event", "type")
 
 # The measurements a draft may carry, so that an object named `measurements` in
 # a Harness payload cannot smuggle material in under a wanted key.
@@ -367,6 +376,50 @@ def disable(data: Path, root: Path) -> dict[str, Any]:
             encoding="utf-8",
         )
     return {"enabled": False, "harnesses": removed}
+
+
+def _opencode_session_id(payload: dict[str, Any]) -> str | None:
+    """Return the session identity OpenCode's own event envelope carries.
+
+    OpenCode's plugin hands its event object on unmodified (ADR-0090: it
+    interprets nothing), and that object never carries the identity where
+    Claude Code and Codex do — it nests it inside `properties`, and at a
+    different path per event: `session.idle` names it directly as
+    `sessionID`, while `session.created` and `session.deleted` embed it in
+    the session record at `info.id`.
+    """
+
+    properties = payload.get("properties")
+    if not isinstance(properties, dict):
+        return None
+    session_id = properties.get("sessionID")
+    if isinstance(session_id, str) and session_id:
+        return session_id
+    info = properties.get("info")
+    if isinstance(info, dict):
+        info_id = info.get("id")
+        if isinstance(info_id, str) and info_id:
+            return info_id
+    return None
+
+
+def _normalized(payload: Any) -> dict[str, Any]:
+    """Return one lifecycle payload with a Harness's own envelope unwrapped.
+
+    Claude Code and Codex already hand over a flat payload naming what this
+    feature needs directly, under the keys `_clean` allow-lists. OpenCode's
+    forwarded event does not, so its session identity is found here once
+    rather than by every caller of `_clean` re-deriving OpenCode's own shape.
+    """
+
+    if not isinstance(payload, dict):
+        return {}
+    if isinstance(payload.get("session_id"), str) and payload["session_id"]:
+        return payload
+    session_id = _opencode_session_id(payload)
+    if session_id is None:
+        return payload
+    return {**payload, "session_id": session_id}
 
 
 def _clean(payload: Any) -> dict[str, Any]:
@@ -764,7 +817,7 @@ def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     if not config(data).get("enabled"):
         return _idle()
 
-    clean = _clean(payload)
+    clean = _clean(_normalized(payload))
     session = clean.get("session_id")
     if not session:
         return _idle()

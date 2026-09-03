@@ -30,7 +30,7 @@ Hooks perform local metadata I/O only: no network request, model call, test run,
 
 **--on**
 
-Install capture into each selected Harness, or every supported detected Harness by default. Repeating the command repairs the existing installation. Unsupported lifecycle capability is reported as Unsatisfied.
+Install capture into each selected Harness, or every supported detected Harness by default. Repeating the command repairs the existing installation. Unsupported lifecycle capability is reported as Unsatisfied. Codex reviews a new or changed hook before running it; a Codex integration that installed correctly is reported gated — present, not yet active — naming what to do to clear the review.
 
 **--off**
 
@@ -72,7 +72,7 @@ One JSON object reporting the requested installation, removal, status, or review
 
 ## DIAGNOSTICS
 
-An unsupported Harness is reported as an Unsatisfied integration capability rather than silently skipped. An installation or removal that only partly applied is reported per Harness and never as a complete one. A failure inside the hook path is swallowed by design and never reaches the session it was called from.
+An unsupported Harness is reported as an Unsatisfied integration capability rather than silently skipped. A Harness that gates a new integration behind a user's trust review, as Codex does, is reported gated rather than healthy; this Skill never forges that trust decision or writes a trust record on the user's behalf. An installation or removal that only partly applied is reported per Harness and never as a complete one. A failure inside the hook path is swallowed by design and never reaches the session it was called from.
 
 ## INVOCATION ENVELOPE
 

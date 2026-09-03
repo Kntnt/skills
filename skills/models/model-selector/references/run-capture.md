@@ -14,7 +14,11 @@ Making the Skill Disabled is sufficient to stop capture and remove what it owns.
 
 Adapters exist for Claude Code, Codex, and OpenCode, whose supported lifecycle APIs can carry the contract: the first two through their owned hook tables, the third through a plugin file named for its owner. Session start, agent stop or idle, session end, and error are the moments observed. Each is an observation and none is a verdict — a stop says a turn ended, never that its work succeeded.
 
-A Harness outside that set reports an Unsatisfied integration capability and is never reported healthy. A script cannot know which Harness invoked it and must not guess, so the Skill names the active Harness when installing, and the shared mechanics live in the Collection Library rather than in this Skill, where a second consumer finds them instead of reaching in here.
+Each adapter is verified against what its own Harness actually reads — event names, entry shape, and file location established from that Harness as installed, never assumed from a sibling's. Claude Code and Codex both name their moments in PascalCase and camelCase respectively and keep an owned hook table in their own file, but Codex's entry is its own flat `command`-handler shape, never Claude Code's nested matcher group. A Harness outside the supported set, or one whose accepted shape cannot be established, reports an Unsatisfied integration capability and is never reported healthy.
+
+Codex additionally reviews a hook that is new or has changed before it will run it, and this collection forges no trust decision and writes no trust record on the user's behalf — a gate is the Harness's own. A Codex integration that is correctly written is reported gated: present, and not yet active, naming what the user does to clear the review. OpenCode's plugin hands its event object on unmodified and redirects it onto the invoked command's own standard input, which is what carries the session identity nested inside it and what keeps the command from ever inheriting the session's own standard input, which a hook that reads it to end-of-file could otherwise block on.
+
+A script cannot know which Harness invoked it and must not guess, so the Skill names the active Harness when installing, and the shared mechanics live in the Collection Library rather than in this Skill, where a second consumer finds them instead of reaching in here.
 
 ## The pipeline
 
