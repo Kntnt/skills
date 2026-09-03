@@ -332,14 +332,60 @@ def reset(directory: Path, cohort: str | None = None) -> list[str]:
     return removed
 
 
-def _refusal(code: str, detail: str) -> dict[str, Any]:
+def _refusal(verb: str, code: str, detail: str) -> dict[str, Any]:
     """Return the one machine-readable shape a refused invocation takes."""
 
     return {
         "schema_version": SCHEMA_VERSION,
-        "verb": "policy",
+        "verb": verb,
         "refusal": {"code": code, "detail": detail},
     }
+
+
+def _row_count(path: Path) -> int:
+    """Return how many non-blank JSONL lines one file holds."""
+
+    return sum(
+        1 for line in path.read_text(encoding="utf-8").splitlines() if line.strip()
+    )
+
+
+def purge_paths(directory: Path) -> list[dict[str, Any]]:
+    """Return what this store owns, present or not, sized by row or byte.
+
+    A Standing Policy override is measurement, not configuration: a Cohort
+    ratcheted by verified failures that no longer exist is a claim with
+    nothing behind it (ADR-0159, narrowing ADR-0149 and ADR-0150). This is the
+    preview `config reset --evidence` renders before it writes anything, and
+    the same report `purge` returns once it has.
+    """
+
+    entries: list[dict[str, Any]] = []
+    for name, unit in ((POLICY_FILE, "bytes"), (HISTORY_FILE, "rows")):
+        path = directory / name
+        if not path.exists():
+            entries.append({"path": str(path), "present": False})
+            continue
+        count = _row_count(path) if unit == "rows" else path.stat().st_size
+        entries.append(
+            {"path": str(path), "present": True, "unit": unit, "count": count}
+        )
+    return entries
+
+
+def purge(directory: Path) -> list[dict[str, Any]]:
+    """Remove both files this store owns outright, and report what went.
+
+    Unlike `reset`, nothing here is restored to a shipped default and no
+    history row is appended — the history file goes with the override it
+    explains, because both are the measurement a threshold trip rested on
+    rather than configuration to preserve (ADR-0159).
+    """
+
+    report = purge_paths(directory)
+    for name in (POLICY_FILE, HISTORY_FILE):
+        (directory / name).unlink(missing_ok=True)
+    return report
 
 
 def _argument_grammar() -> Any:
@@ -412,6 +458,7 @@ def _policy_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     # Read the action, then the optional Cohort operand, then the flags.
     if not arguments or arguments[0] not in {"show", "reset"}:
         return _refusal(
+            "policy",
             "invalid_arguments",
             "Use policy show [<cohort>] or policy reset [<cohort>].",
         ), 2
@@ -420,10 +467,12 @@ def _policy_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     confirmed = "--yes" in options
     options = [option for option in options if option != "--yes"]
     if len(operands) > 1:
-        return _refusal("invalid_arguments", "At most one Cohort is addressed."), 2
+        return _refusal(
+            "policy", "invalid_arguments", "At most one Cohort is addressed."
+        ), 2
     directory = _data_directory(options)
     if directory is None:
-        return _refusal("invalid_arguments", "Unsupported options."), 2
+        return _refusal("policy", "invalid_arguments", "Unsupported options."), 2
     cohort = operands[0] if operands else None
 
     if action == "show":
@@ -433,6 +482,7 @@ def _policy_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     # caller has not stated it wants.
     if not confirmed:
         return _refusal(
+            "policy",
             "unconfirmed_reset",
             "A reset restores the shipped default; re-run it with --yes.",
         ), 2
@@ -447,18 +497,57 @@ def _policy_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     }, 0
 
 
+def _purge_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
+    """Preview or perform this store's purge, `--yes` gating only the write.
+
+    Unlike `policy reset`, an unconfirmed call is not refused: it writes
+    nothing either way, so the preview decision 3 requires is a second success
+    shape rather than a second unconfirmed-write one (issue #227).
+    """
+
+    operands, options = _split(arguments, VALUELESS_FLAGS)
+    if operands:
+        return _refusal("purge", "invalid_arguments", "purge takes no operand."), 2
+    confirmed = "--yes" in options
+    options = [option for option in options if option != "--yes"]
+    directory = _data_directory(options)
+    if directory is None:
+        return _refusal("purge", "invalid_arguments", "Unsupported options."), 2
+
+    if not confirmed:
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "verb": "purge",
+            "confirmed": False,
+            "data": str(directory),
+            "paths": purge_paths(directory),
+        }, 0
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "verb": "purge",
+        "confirmed": True,
+        "data": str(directory),
+        "paths": purge(directory),
+    }, 0
+
+
 def main(argv: list[str] | None = None) -> int:
     """Route one command to its seam and emit only machine-readable JSON."""
 
     arguments = sys.argv[1:] if argv is None else argv
-    if not arguments or arguments[0] != "policy":
+    commands: dict[str, Callable[[list[str]], tuple[dict[str, Any], int]]] = {
+        "policy": _policy_command,
+        "purge": _purge_command,
+    }
+    if not arguments or arguments[0] not in commands:
         response: dict[str, Any] = _refusal(
+            "policy",
             "invalid_arguments",
-            "Use policy show [<cohort>] or policy reset [<cohort>].",
+            "Use policy show [<cohort>], policy reset [<cohort>], or purge.",
         )
         status = 2
     else:
-        response, status = _policy_command(arguments[1:])
+        response, status = commands[arguments[0]](arguments[1:])
     print(json.dumps(response, sort_keys=True, separators=(",", ":")))
     return status
 

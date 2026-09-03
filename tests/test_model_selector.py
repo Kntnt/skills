@@ -5307,6 +5307,214 @@ def test_observation_cli_writes_only_the_artifact_the_caller_named(
         assert "Traceback" not in refused.stderr
 
 
+def test_the_ledger_purge_counts_rows_for_jsonl_and_bytes_for_the_summary(
+    tmp_path: Path,
+) -> None:
+    """`purge` sizes the two JSONL stores in rows and the JSON summary in bytes.
+
+    The ledger, its frontiers, and the quota store are measurement (ADR-0145,
+    ADR-0159): rows that cannot become evidence are removed rather than
+    repaired, which is the whole point of the verb.
+    """
+
+    observations = _load_observations()
+    _import(observations, tmp_path, _judged_attempts(_routed_decision(), 1, "pass", 0))
+    (tmp_path / "quota-observations.jsonl").write_text(
+        json.dumps({"access_channel_key": "sha256:channel"}) + "\n", encoding="utf-8"
+    )
+    ledger = tmp_path / "run-observations.jsonl"
+    frontiers = tmp_path / "derived-frontiers.json"
+    quota = tmp_path / "quota-observations.jsonl"
+    assert ledger.exists() and frontiers.exists()
+
+    # A preview reports every path's exact size and writes nothing.
+    preview = observations.purge_paths(tmp_path)
+    by_path = {entry["path"]: entry for entry in preview}
+    assert by_path[str(ledger)] == {
+        "path": str(ledger),
+        "present": True,
+        "unit": "rows",
+        "count": 1,
+    }
+    assert by_path[str(quota)] == {
+        "path": str(quota),
+        "present": True,
+        "unit": "rows",
+        "count": 1,
+    }
+    assert by_path[str(frontiers)] == {
+        "path": str(frontiers),
+        "present": True,
+        "unit": "bytes",
+        "count": frontiers.stat().st_size,
+    }
+    assert ledger.exists(), "a preview must write nothing"
+
+    # Confirmed, purge removes all three and reports exactly what it found.
+    removed = observations.purge(tmp_path)
+    assert removed == preview
+    assert not ledger.exists()
+    assert not frontiers.exists()
+    assert not quota.exists()
+
+
+def test_the_ledger_purge_reports_every_absent_path_as_absent(
+    tmp_path: Path,
+) -> None:
+    """An empty data directory purges as a no-op on every path."""
+
+    observations = _load_observations()
+    report = observations.purge(tmp_path)
+    assert report == [
+        {"path": str(tmp_path / "run-observations.jsonl"), "present": False},
+        {"path": str(tmp_path / "derived-frontiers.json"), "present": False},
+        {"path": str(tmp_path / "quota-observations.jsonl"), "present": False},
+    ]
+    assert not list(tmp_path.iterdir())
+
+
+def test_the_observation_cli_purge_previews_without_yes_and_removes_with_it(
+    tmp_path: Path,
+) -> None:
+    """The Skill's own seam reaches the Library's purge without reimplementing it."""
+
+    script = str(MODEL_SELECTOR / "scripts" / "observations.py")
+    observations = _load_observations()
+    _import(observations, tmp_path, _judged_attempts(_routed_decision(), 1, "pass", 0))
+
+    preview = subprocess.run(
+        ["uv", "run", script, "purge", f"--data={tmp_path}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert preview.returncode == 0, preview.stdout + preview.stderr
+    rendered = json.loads(preview.stdout)
+    assert rendered["confirmed"] is False
+    assert (tmp_path / "run-observations.jsonl").exists()
+
+    done = subprocess.run(
+        ["uv", "run", script, "purge", "--yes", f"--data={tmp_path}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert done.returncode == 0, done.stdout + done.stderr
+    assert json.loads(done.stdout)["confirmed"] is True
+    assert not (tmp_path / "run-observations.jsonl").exists()
+
+    # An unsupported option is refused rather than ignored.
+    unsupported = subprocess.run(
+        ["uv", "run", script, "purge", "--all", f"--data={tmp_path}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert unsupported.returncode == 2
+    assert (
+        json.loads(unsupported.stdout)["artifact_refusal"]["code"]
+        == "invalid_arguments"
+    )
+
+
+def test_evidence_reset_removes_exactly_seven_paths_and_leaves_the_rest_byte_identical(
+    tmp_path: Path,
+) -> None:
+    """The three owning engines' `purge`, run together, are decision 1's set.
+
+    Every other file `references/evidence-ledger.md`'s `## Store` table
+    names, and `config.json` and its history, are untouched byte for byte
+    (issue #227).
+    """
+
+    data = tmp_path / "model-selector"
+    data.mkdir()
+
+    observations = _load_observations()
+    policy = _load_standing_policy()
+    spec = importlib.util.spec_from_file_location(
+        "model_selector_capture_for_reset", MODEL_SELECTOR / "scripts" / "capture.py"
+    )
+    assert spec and spec.loader
+    capture = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(capture)
+
+    # Populate every file this act removes.
+    _import(observations, data, _judged_attempts(_routed_decision(), 1, "pass", 0))
+    (data / "quota-observations.jsonl").write_text(
+        json.dumps({"access_channel_key": "sha256:channel"}) + "\n", encoding="utf-8"
+    )
+    policy.move_starting_rung(
+        data,
+        "orchestrate/amend",
+        {"model": "worker-v3", "portable_deliberation": "high"},
+        {"kind": "failure_threshold", "run_keys": ["run-1", "run-2"]},
+    )
+    capture.enable(
+        data,
+        tmp_path / "home",
+        ["claude-code"],
+        ["uv", "run", "capture.py", "hook"],
+    )
+    seat = {"model": "worker-v2-2026-05-01", "portable_deliberation": "medium"}
+    capture.hook(
+        data,
+        "SessionStart",
+        {"session_id": "session-1", "harness": "claude-code", "seat": seat},
+    )
+    capture.hook(
+        data, "SessionEnd", {"session_id": "session-1", "harness": "claude-code"}
+    )
+
+    # Populate every file this act must leave untouched: the profile, and
+    # every record type `references/evidence-ledger.md`'s `## Store` table
+    # names beyond the three files just written.
+    survivors = {
+        "config.json": '{"schema_version": 1}\n',
+        "config-history.jsonl": '{"revision": 1}\n',
+        "source-states.jsonl": '{"source_key": "sha256:s"}\n',
+        "access-channel-snapshots.jsonl": '{"key": "sha256:a"}\n',
+        "model-versions.jsonl": '{"key": "sha256:m"}\n',
+        "alias-bindings.jsonl": '{"provider": "anthropic"}\n',
+        "capability-priors.jsonl": '{"key": "sha256:c"}\n',
+        "price-schedules.jsonl": '{"key": "sha256:p"}\n',
+        "subscription-schedules.jsonl": '{"key": "sha256:sub"}\n',
+        "access-mode-availability.jsonl": '{"key": "sha256:mode"}\n',
+        "benchmark-definitions.jsonl": '{"key": "sha256:bench"}\n',
+        "evaluation-configurations.jsonl": '{"fingerprint": "sha256:eval"}\n',
+    }
+    for name, content in survivors.items():
+        (data / name).write_text(content, encoding="utf-8")
+    before = {name: (data / name).read_bytes() for name in survivors}
+
+    removed_paths = {
+        "run-observations.jsonl",
+        "derived-frontiers.json",
+        "quota-observations.jsonl",
+        "standing-policy.json",
+        "standing-policy-history.jsonl",
+    }
+    for name in removed_paths:
+        assert (data / name).exists(), name
+    assert (data / "capture").exists()
+    assert (data / "usage-records.jsonl").exists()
+
+    # Confirmed, run every owning engine's purge together.
+    observations.purge(data)
+    policy.purge(data)
+    capture.purge(data)
+
+    # Assert exactly the seven measurement paths are gone.
+    for name in removed_paths:
+        assert not (data / name).exists(), name
+    assert not (data / "capture").exists()
+    assert not (data / "usage-records.jsonl").exists()
+
+    # Assert everything else is byte-identical, `config.json` included.
+    for name, original in before.items():
+        assert (data / name).read_bytes() == original, name
+
+
 def test_observation_cli_accepts_the_attached_spelling_its_skill_body_writes(
     tmp_path: Path,
 ) -> None:
@@ -5584,6 +5792,97 @@ def test_the_policy_cli_shows_the_default_and_resets_only_when_confirmed(
 
     # An unsupported option is refused rather than ignored.
     unsupported = _invoke_policy("policy", "show", "--all", f"--data={tmp_path}")
+    assert unsupported.returncode == 2
+    assert json.loads(unsupported.stdout)["refusal"]["code"] == "invalid_arguments"
+
+
+def test_the_policy_store_purge_reports_rows_and_bytes_before_removing_both_files(
+    tmp_path: Path,
+) -> None:
+    """`purge` counts the JSON override in bytes and the JSONL history in rows.
+
+    A Standing Policy override is measurement (ADR-0159): `config reset
+    --evidence` discards it and its history outright, rather than restoring
+    the shipped default the way `reset` does.
+    """
+
+    policy = _load_standing_policy()
+    policy.move_starting_rung(
+        tmp_path,
+        "orchestrate/amend",
+        {"model": "worker-v3", "portable_deliberation": "high"},
+        {"kind": "failure_threshold", "run_keys": ["run-1", "run-2"]},
+    )
+    store = tmp_path / "standing-policy.json"
+    history = tmp_path / "standing-policy-history.jsonl"
+
+    # A preview reports both exact paths and their size, and writes nothing.
+    preview = policy.purge_paths(tmp_path)
+    by_path = {entry["path"]: entry for entry in preview}
+    assert set(by_path) == {str(store), str(history)}
+    assert by_path[str(store)] == {
+        "path": str(store),
+        "present": True,
+        "unit": "bytes",
+        "count": store.stat().st_size,
+    }
+    assert by_path[str(history)] == {
+        "path": str(history),
+        "present": True,
+        "unit": "rows",
+        "count": 1,
+    }
+    assert store.exists() and history.exists()
+
+    # Confirmed, purge removes both files and reports exactly what it found.
+    removed = policy.purge(tmp_path)
+    assert removed == preview
+    assert not store.exists()
+    assert not history.exists()
+    assert policy.effective_policy(tmp_path, "orchestrate/amend")["revision"] == 0
+
+
+def test_the_policy_store_purge_reports_an_absent_store_as_absent(
+    tmp_path: Path,
+) -> None:
+    """An empty data directory purges as a no-op on both paths."""
+
+    policy = _load_standing_policy()
+    report = policy.purge(tmp_path)
+    assert report == [
+        {"path": str(tmp_path / "standing-policy.json"), "present": False},
+        {"path": str(tmp_path / "standing-policy-history.jsonl"), "present": False},
+    ]
+    assert not list(tmp_path.iterdir())
+
+
+def test_the_policy_cli_purge_previews_without_yes_and_removes_with_it(
+    tmp_path: Path,
+) -> None:
+    """Unlike `policy reset`, a purge preview is a success and not a refusal."""
+
+    policy = _load_standing_policy()
+    policy.move_starting_rung(
+        tmp_path,
+        "orchestrate/amend",
+        {"model": "worker-v3", "portable_deliberation": "high"},
+        {"kind": "failure_threshold", "run_keys": ["run-1", "run-2"]},
+    )
+
+    preview = _invoke_policy("purge", f"--data={tmp_path}")
+    assert preview.returncode == 0, preview.stdout + preview.stderr
+    rendered = json.loads(preview.stdout)
+    assert rendered["confirmed"] is False
+    assert (tmp_path / "standing-policy.json").exists()
+
+    done = _invoke_policy("purge", "--yes", f"--data={tmp_path}")
+    assert done.returncode == 0, done.stdout + done.stderr
+    assert json.loads(done.stdout)["confirmed"] is True
+    assert not (tmp_path / "standing-policy.json").exists()
+    assert not (tmp_path / "standing-policy-history.jsonl").exists()
+
+    # An unsupported option is refused rather than ignored.
+    unsupported = _invoke_policy("purge", "--all", f"--data={tmp_path}")
     assert unsupported.returncode == 2
     assert json.loads(unsupported.stdout)["refusal"]["code"] == "invalid_arguments"
 

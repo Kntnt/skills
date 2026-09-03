@@ -6,7 +6,9 @@ model-selector config - inspect or revise the model and access profile
 
 ## SYNOPSIS
 
-**/model-selector** **config** [**show**|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **config** [**show**|**history**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
+**/model-selector** **config** **reset** [**--evidence**] [**--yes**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 **/model-selector** **config** **add** [**--data=**_PATH_] (**model**|**channel**) [**--** *INSTRUCTION*]
 
@@ -18,7 +20,7 @@ model-selector config - inspect or revise the model and access profile
 
 `model-selector config` manages the persisted profile without network access or evaluations. Bare `config` is equivalent to `config show`.
 
-Configuration changes are validated, saved as revisions, and reported with any newly due evidence or invalidated frontiers. They never delete the evidence ledger.
+Configuration changes are validated, saved as revisions, and reported with any newly due evidence or invalidated frontiers. An ordinary configuration change never deletes the evidence ledger; `config reset --evidence` is the one exception, discarding it by name after confirmation and leaving the profile untouched.
 
 ## COMMANDS
 
@@ -48,13 +50,21 @@ Display profile revision timestamps and summaries.
 
 **reset**
 
-Remove the active profile after confirmation while retaining history and evidence.
+Remove the active profile after confirmation while retaining history and evidence; `--evidence` is the mirror move, discarding this machine's own measurement after confirmation while retaining the profile and its history.
 
 ## OPTIONS
 
 **--data=**_PATH_
 
 Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
+
+**--evidence**
+
+For `reset`, discard this machine's own measurement rather than the profile. See `/model-selector config reset --help`.
+
+**--yes**
+
+For `reset --evidence`, answer its confirmation yes rather than asking. Valid only combined with `--evidence`.
 
 ## DIAGNOSTICS
 

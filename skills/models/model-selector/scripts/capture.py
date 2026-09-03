@@ -27,6 +27,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -693,6 +694,66 @@ def status(data: Path, root: Path) -> dict[str, Any]:
     }
 
 
+def _row_count(path: Path) -> int:
+    """Return how many non-blank JSONL lines one file holds."""
+
+    return sum(
+        1 for line in path.read_text(encoding="utf-8").splitlines() if line.strip()
+    )
+
+
+def purge_paths(data: Path) -> list[dict[str, Any]]:
+    """Return what this feature owns beyond the ledger, present or not.
+
+    This is the preview `config reset --evidence` renders before it removes
+    the whole `capture/` subdirectory — configuration, drafts, and all — and
+    the Usage Record store beside it, keeping the Harness hooks installed
+    (issue #227). `capture/` is a directory rather than a JSONL file, so it is
+    sized in bytes; the Usage Record store is JSONL, sized in rows.
+    """
+
+    directory = home(data)
+    ledger = data / USAGE_LEDGER_FILE
+    entries: list[dict[str, Any]] = []
+    if directory.exists():
+        entries.append(
+            {
+                "path": str(directory),
+                "present": True,
+                "unit": "bytes",
+                "count": _storage(data),
+            }
+        )
+    else:
+        entries.append({"path": str(directory), "present": False})
+    if ledger.exists():
+        entries.append(
+            {
+                "path": str(ledger),
+                "present": True,
+                "unit": "rows",
+                "count": _row_count(ledger),
+            }
+        )
+    else:
+        entries.append({"path": str(ledger), "present": False})
+    return entries
+
+
+def purge(data: Path) -> list[dict[str, Any]]:
+    """Remove everything this feature owns beyond the ledger, and report it.
+
+    Removing `capture/` turns capture off, because its `capture.json` consent
+    record goes with it; the Harness hooks stay installed, since this verb
+    never touches them, and `capture --on` turns capture back on.
+    """
+
+    report = purge_paths(data)
+    shutil.rmtree(home(data), ignore_errors=True)
+    (data / USAGE_LEDGER_FILE).unlink(missing_ok=True)
+    return report
+
+
 def _hook_command(supplied: list[str], data: Path) -> list[str]:
     """Return the command a Harness runs for a lifecycle event.
 
@@ -741,7 +802,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "action",
-        choices=("enable", "disable", "hook", "status", "remove-integrations"),
+        choices=("enable", "disable", "hook", "status", "remove-integrations", "purge"),
     )
 
     # Every action but the Manager's teardown is invoked by this Skill, which
@@ -754,6 +815,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--event", default="")
     parser.add_argument("--owner", default=owner())
     parser.add_argument("--seat", default="")
+
+    # `--yes` gates only `purge`'s write, exactly as `config reset --evidence`
+    # needs it: a preview without it is a success, never a refusal.
+    parser.add_argument("--yes", action="store_true")
     return parser.parse_args(argv)
 
 
@@ -787,6 +852,16 @@ def main(argv: list[str] | None = None) -> int:
         _emit(enable(data, root, args.harness, args.command, seat))
     elif args.action == "disable":
         _emit(disable(data, root))
+    elif args.action == "purge":
+        _emit(
+            {
+                "schema_version": SCHEMA_VERSION,
+                "verb": "purge",
+                "confirmed": args.yes,
+                "data": str(data),
+                "paths": purge(data) if args.yes else purge_paths(data),
+            }
+        )
     else:
         _emit(status(data, root))
     return 0

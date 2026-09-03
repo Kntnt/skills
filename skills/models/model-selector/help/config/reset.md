@@ -2,11 +2,13 @@
 
 ## NAME
 
-model-selector config reset - remove the active profile while retaining evidence
+model-selector config reset - remove the active profile, or discard this machine's own measurement
 
 ## SYNOPSIS
 
 **/model-selector** **config** **reset** [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
+**/model-selector** **config** **reset** **--evidence** [**--yes**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -14,15 +16,25 @@ model-selector config reset - remove the active profile while retaining evidence
 
 The next command that requires model selections starts guided setup.
 
+`--evidence` is the mirror move: bare `config reset` removes configuration and keeps measurement, `--evidence` removes measurement and keeps configuration. It shows the exact paths and the row or byte count of everything this machine measured — the evidence ledger and its derived frontiers, the quota store, the Standing Policy override and its history, capture and the Usage Record store — names any of them the selected data directory does not hold as absent, requests confirmation or reads it from a supplied `--yes`, then removes exactly those paths and reports what went, per path, by count of rows or bytes. `config.json`, its history, and every other file `references/evidence-ledger.md`'s `## Store` table names are untouched. Removing `capture/` turns capture off, because its consent record goes with it; `/model-selector capture --on` turns it back on.
+
 ## OPTIONS
 
 **--data=**_PATH_
 
 Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
 
+**--evidence**
+
+Discard this machine's own measurement instead of the profile. See `DESCRIPTION`.
+
+**--yes**
+
+Answer `--evidence`'s confirmation yes rather than asking, for an unattended run. Valid only combined with `--evidence`.
+
 ## DIAGNOSTICS
 
-A declined confirmation, absent profile, or unsupported option changes nothing. Invalid syntax is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector config reset --help`.
+A declined confirmation, an absent profile or absent measurement, or an unsupported option changes nothing. Invalid syntax is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector config reset --help`. `--yes` is refused, not ignored, on every other form of this Skill, `config reset` bare included.
 
 ## INVOCATION ENVELOPE
 

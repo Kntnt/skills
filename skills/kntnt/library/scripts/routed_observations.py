@@ -134,7 +134,7 @@ STANDING_POLICY_MODULE: str = "standing_policy.py"
 # knowing one engine's by name, so a valueless flag added here never takes the
 # operand written behind it (ADR-0152).
 ARGUMENT_GRAMMAR_MODULE: str = "argument_grammar.py"
-VALUELESS_FLAGS: frozenset[str] = frozenset({"--import"})
+VALUELESS_FLAGS: frozenset[str] = frozenset({"--import", "--yes"})
 
 # Who may judge an attempt a machine is allowed to act on unasked. A frozen
 # rubric and the user's own word establish an outcome perfectly well, but
@@ -174,9 +174,13 @@ ABSOLUTE_PATH: re.Pattern[str] = re.compile(r"^(?:[/~]|[A-Za-z]:[\\/]|\\\\)")
 MAX_EMITTED_LENGTH: int = 200
 
 # Where the ledger keeps what this module writes, under the selected data
-# directory. Both names are the evidence ledger's own.
+# directory. All three names are the evidence ledger's own; `QUOTA_FILE` is
+# defined here, beside the other two, so `references/evidence-ledger.md`'s
+# `## Store` table answers to code rather than to a filename nothing wrote
+# down (issue #227).
 LEDGER_FILE: str = "run-observations.jsonl"
 FRONTIER_FILE: str = "derived-frontiers.json"
+QUOTA_FILE: str = "quota-observations.jsonl"
 
 # The confidence a conservative success rate is reported at. Wilson's interval
 # is used rather than the raw rate so one passing attempt cannot read as
@@ -1410,8 +1414,11 @@ def _evaluate_standing_policy(
     This is the ratchet's only seam, and it sits inside `record` so that the
     engine's automatic import at each verdict and the user's own `record` verb
     reach it identically — a policy that moved for one and not the other would
-    be two policies. It only ever moves a Cohort up; the way back down is
-    `config policy reset`, which a person asks for (ADR-0149). A row naming no
+    be two policies. It only ever moves a Cohort up; what brings it back down
+    is a deliberate act of the user's: `config policy reset`, which a person
+    asks for and which restores the shipped default while keeping the history
+    (ADR-0149), or `config reset --evidence`, which discards the measurement
+    the movement rests on and the history with it (ADR-0159). A row naming no
     Cohort is ledger accounting and moves nothing.
     """
 
@@ -1662,6 +1669,61 @@ def projected_evidence(directory: Path) -> dict[str, Any]:
     return project(list(_ledger(directory).values()))
 
 
+def _row_count(path: Path) -> int:
+    """Return how many non-blank JSONL lines one file holds."""
+
+    return sum(
+        1 for line in path.read_text(encoding="utf-8").splitlines() if line.strip()
+    )
+
+
+# Every path this ledger owns, and how each is sized: the two JSONL stores by
+# row, and the derived summary — one JSON object, not JSONL — by byte.
+_OWNED_PATHS: tuple[tuple[str, str], ...] = (
+    (LEDGER_FILE, "rows"),
+    (FRONTIER_FILE, "bytes"),
+    (QUOTA_FILE, "rows"),
+)
+
+
+def purge_paths(directory: Path) -> list[dict[str, Any]]:
+    """Return what this ledger owns, present or not, sized by row or byte.
+
+    A row that cannot become evidence — naming no Cohort, or predating the
+    Cohort fields entirely — is permanently inert (ADR-0145), and this is the
+    preview `config reset --evidence` renders before it removes exactly this
+    ledger, its derived frontiers, and the quota store beside them, keeping
+    every other file `references/evidence-ledger.md`'s `## Store` table names
+    (issue #227).
+    """
+
+    entries: list[dict[str, Any]] = []
+    for name, unit in _OWNED_PATHS:
+        path = directory / name
+        if not path.exists():
+            entries.append({"path": str(path), "present": False})
+            continue
+        count = _row_count(path) if unit == "rows" else path.stat().st_size
+        entries.append(
+            {"path": str(path), "present": True, "unit": unit, "count": count}
+        )
+    return entries
+
+
+def purge(directory: Path) -> list[dict[str, Any]]:
+    """Remove every path this ledger owns, and report what went.
+
+    Nothing here is migrated, backfilled, or reinterpreted: a row this ledger
+    cannot turn into evidence is removed rather than repaired, which is the
+    whole point of the verb (issue #227).
+    """
+
+    report = purge_paths(directory)
+    for name, _unit in _OWNED_PATHS:
+        (directory / name).unlink(missing_ok=True)
+    return report
+
+
 def _argument_grammar() -> Any:
     """Load the argument grammar this engine reads its command line with.
 
@@ -1876,6 +1938,45 @@ def _record_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
     return {"verb": "record", **record(read, directory)}, 0
 
 
+def _purge_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
+    """Preview or perform this ledger's purge, `--yes` gating only the write.
+
+    Unlike `record`'s validation refusals, an unconfirmed call is not an
+    error: it writes nothing either way, so the preview a caller needs before
+    confirming is a second success shape rather than a second unconfirmed-
+    write one (issue #227).
+    """
+
+    operands, options = _split(arguments, VALUELESS_FLAGS)
+    if operands:
+        return _artifact_refusal("invalid_arguments", "purge takes no operand."), 2
+    confirmed = "--yes" in options
+    given = _flags([option for option in options if option != "--yes"], ("--data",))
+    if options.count("--yes") > 1 or given is None:
+        return _artifact_refusal("invalid_arguments", "Unsupported options."), 2
+    directory = (
+        Path(given["--data"]).expanduser()
+        if "--data" in given
+        else Path.home() / ".kntnt" / "model-selector"
+    )
+
+    if not confirmed:
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "verb": "purge",
+            "confirmed": False,
+            "data": str(directory),
+            "paths": purge_paths(directory),
+        }, 0
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "verb": "purge",
+        "confirmed": True,
+        "data": str(directory),
+        "paths": purge(directory),
+    }, 0
+
+
 def _read(path: str) -> tuple[Any, dict[str, Any] | None]:
     """Return one JSON artifact, or the process refusal that replaces it."""
 
@@ -1893,10 +1994,14 @@ def main(argv: list[str] | None = None) -> int:
     """Route one command to its seam and emit only machine-readable JSON."""
 
     arguments = sys.argv[1:] if argv is None else argv
-    commands = {"observe": _observe_command, "record": _record_command}
+    commands = {
+        "observe": _observe_command,
+        "record": _record_command,
+        "purge": _purge_command,
+    }
     if not arguments or arguments[0] not in commands:
         response: dict[str, Any] = _artifact_refusal(
-            "invalid_arguments", "Use observe <path> or record <path>."
+            "invalid_arguments", "Use observe <path>, record <path>, or purge."
         )
         status = 2
     else:
