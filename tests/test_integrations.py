@@ -47,44 +47,60 @@ def test_every_supported_harness_installs_its_own_shape(tmp_path: Path) -> None:
 
     assert _settings(tmp_path / "claude-code")["hooks"]["SessionStart"]
 
-    # Codex CLI 0.153.0 names its own lifecycle events in camelCase, never in
-    # the PascalCase Claude Code and the earlier adapter both used.
-    assert _codex_hooks(tmp_path / "codex")["hooks"]["stop"]
+    # Codex's `hooks.json` deserializes through its own `HookEventsToml`,
+    # confirmed live against `codex app-server`'s `hooks/list`: PascalCase
+    # event keys, the same as Claude Code's `settings.json`. `sessionStart` /
+    # `stop` / `sessionEnd` is a different surface — the camelCase
+    # `HookEventName` `hooks/list` itself reports back — and is silently
+    # dropped when written into the config file.
+    assert _codex_hooks(tmp_path / "codex")["hooks"]["Stop"]
 
     plugin = tmp_path / "opencode" / ".config" / "opencode" / "plugins"
     assert list(plugin.glob("*.js"))
 
 
-def test_codex_hooks_use_the_harnesss_own_camel_case_event_names(
+def test_codex_hooks_use_the_harnesss_own_pascal_case_event_names(
     tmp_path: Path,
 ) -> None:
-    """Codex's `hooks.json` is keyed by its own event names, not Claude Code's."""
+    """Codex's `hooks.json` is keyed by the same event names Claude Code uses.
+
+    `HookEventsToml` — the struct `~/.codex/hooks.json` deserializes into — is
+    confirmed live (`codex app-server`, `initialize` + `hooks/list`) to accept
+    `SessionStart` / `Stop` / `SessionEnd`, PascalCase, and to silently ignore
+    the camelCase spelling: a hook count of zero and no warning, not a schema
+    error. That camelCase spelling names a different struct entirely, the
+    app-server protocol's own `HookEventName`, which is what `hooks/list`
+    itself reports back — a normalized runtime view, never the config file's
+    own shape.
+    """
 
     module = _load()
     module.install(OWNER, "codex", tmp_path, COMMAND)
     written = _codex_hooks(tmp_path)
 
-    assert set(written["hooks"]) == {"sessionStart", "stop", "sessionEnd"}
-    assert not any(key[0].isupper() for key in written["hooks"])
+    assert set(written["hooks"]) == {"SessionStart", "Stop", "SessionEnd"}
 
 
-def test_codex_hook_entries_match_the_harnesss_own_handler_shape(
+def test_codex_hook_entries_match_the_harnesss_own_matcher_group(
     tmp_path: Path,
 ) -> None:
-    """A Codex entry is the flat `command`-handler shape its schema accepts.
+    """A Codex entry is the same nested matcher group Claude Code writes.
 
-    `codex app-server generate-json-schema` names this shape directly: a
-    `command`-handler hook requires `command` and `handlerType`, and is never
-    Claude Code's nested `{"hooks": [...]}` matcher group.
+    Confirmed live: a PascalCase key holding this nested `{"hooks": [...]}`
+    shape registers a hook (`hooks/list` reports it, `trustStatus` included);
+    the same key holding the flat `handlerType`/`command` shape the
+    app-server protocol's own `hooks/list` reports back registers nothing —
+    that flat shape belongs to the normalized runtime view, not to what
+    `HookEventsToml` accepts on disk.
     """
 
     module = _load()
     module.install(OWNER, "codex", tmp_path, COMMAND)
-    entry = _codex_hooks(tmp_path)["hooks"]["sessionStart"][0]
+    entry = _codex_hooks(tmp_path)["hooks"]["SessionStart"][0]
 
-    assert entry["handlerType"] == "command"
-    assert OWNER in entry["command"]
-    assert "hooks" not in entry
+    assert entry["hooks"][0]["type"] == "command"
+    assert OWNER in entry["hooks"][0]["command"]
+    assert "handlerType" not in entry
 
 
 def test_an_unsupported_harness_reports_an_unsatisfied_capability(

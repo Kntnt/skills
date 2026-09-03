@@ -20,12 +20,15 @@ from rather than a state nothing can account for.
 A Harness whose supported lifecycle cannot carry the contract is reported as an
 Unsatisfied capability (ADR-0030) rather than silently skipped, because a
 feature that believes it is installed where it is not is worse than one that
-knows it is not. Event names, entry shape, and file location are each Harness's
-own — established from that Harness as installed rather than assumed from a
-sibling's (ADR-0157) — and a Harness that gates a new integration behind a
-user's trust, as Codex does, is reported gated rather than healthy: present,
-not yet active, and never a trust decision this collection forges on the
-user's behalf.
+knows it is not. Event names, entry shape, and file location are established
+from each Harness as installed rather than assumed from a sibling's (ADR-0157)
+— Codex's own config file happens to accept the same PascalCase names and the
+same nested matcher group Claude Code's does, confirmed live rather than
+assumed, and is never the flat, camelCase shape its unrelated app-server
+protocol reports back. A Harness that gates a new integration behind a user's
+trust, as Codex does, is reported gated rather than healthy: present, not yet
+active, and never a trust decision this collection forges on the user's
+behalf.
 """
 
 from __future__ import annotations
@@ -41,11 +44,16 @@ from typing import Any
 # work in it succeeded.
 CLAUDE_EVENTS: tuple[str, ...] = ("SessionStart", "Stop", "SessionEnd")
 
-# Codex CLI 0.153.0's own configuration schema names lifecycle events in
-# camelCase — confirmed from the installed binary's `HookEventName` enum
-# (`codex app-server generate-json-schema`), never in Claude Code's
-# PascalCase, which the earlier adapter wrongly assumed applied here too.
-CODEX_EVENTS: tuple[str, ...] = ("sessionStart", "stop", "sessionEnd")
+# Codex CLI 0.153.0's own configuration file — `~/.codex/hooks.json`,
+# deserialized through its `HookEventsToml` — names lifecycle events in the
+# same PascalCase Claude Code's `settings.json` uses, confirmed live against
+# the installed binary (`codex app-server`, `initialize` + `hooks/list`): a
+# camelCase key here (`sessionStart`, `stop`, `sessionEnd`) is silently
+# ignored rather than read. That camelCase spelling names a different thing
+# — the app-server protocol's own `HookEventName`, the normalized runtime
+# view `hooks/list` itself reports back — and never the config file's own
+# shape, which an earlier draft of this adapter wrongly conflated with it.
+CODEX_EVENTS: tuple[str, ...] = ("SessionStart", "Stop", "SessionEnd")
 
 OPENCODE_EVENTS: tuple[str, ...] = (
     "session.created",
@@ -135,12 +143,12 @@ def _owned_command(owner: str, harness: str, command: list[str]) -> str:
 def _owns(entry: Any, owner: str) -> bool:
     """Return whether one hook entry was installed by *owner*.
 
-    Claude Code nests its handlers inside a matcher group's own `hooks` list;
-    Codex's own schema (`codex app-server generate-json-schema`) instead
-    holds `command` directly on the entry. Checking both shapes here is what
-    lets `_converge_hooks` and `_strip_hooks` stay one implementation shared
-    by every Harness that keeps an owned hook table, rather than forking per
-    Harness at every call site that walks one.
+    Both Harnesses this owns entries in write the same nested matcher group
+    — a top-level `hooks` list holding the handler. A flat entry with
+    `command` directly on it is also recognized, which costs nothing and
+    keeps a hand-edited or externally repaired file from being misread as
+    somebody else's, without either Harness's own config file ever being
+    written in that shape.
     """
 
     if not isinstance(entry, dict):
@@ -160,17 +168,13 @@ def _owns(entry: Any, owner: str) -> bool:
 def _hook_entry(owner: str, harness: str, command: list[str]) -> dict[str, Any]:
     """Return the one hook entry this owner installs per event.
 
-    Codex's own `command`-handler shape is flat — `handlerType` and `command`
-    directly on the entry, confirmed from the installed binary's own
-    generated JSON Schema — and is never Claude Code's nested matcher group.
+    Codex's own config file (`HookEventsToml`) accepts the same nested
+    `{"hooks": [...]}` matcher group Claude Code's `settings.json` does,
+    confirmed live against the installed binary — a flat `handlerType`/
+    `command` entry here registers nothing, because that shape belongs to
+    the app-server protocol's own runtime view, not to what this file reads.
     """
 
-    if harness == "codex":
-        return {
-            "handlerType": "command",
-            "command": _owned_command(owner, harness, command),
-            "async": False,
-        }
     return {
         "hooks": [
             {
