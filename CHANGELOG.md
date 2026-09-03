@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.19.0] – 2026-09-03
+
 ### Added
 
 - Model Selector now derives complete frozen routing contexts from a versioned profile, shipped Claude Code adapter templates, exact runtime facts, independent numeric seed priors, and shipped routing defaults before Route resolves a decision.
