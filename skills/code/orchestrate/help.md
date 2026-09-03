@@ -152,7 +152,7 @@ The report names its base commit. A ticket blocked on newly discovered work is r
 
 ## ROUTED OBSERVATIONS
 
-Orchestrate starts each routed attempt immediately before dispatch, finishes it at an independent verdict or terminal non-model condition, and imports eligible sanitized observations automatically. The final report lists imported, identically skipped, conflicting, and refused identities; ledger refusal never stops the run and requires no user import step.
+Orchestrate starts each routed attempt immediately before dispatch, finishes it at an independent verdict or terminal non-model condition, and imports eligible sanitized observations automatically. The final report lists imported, identically skipped, conflicting, and refused identities; ledger refusal never stops the run and requires no user import step. An import that brings a workload cohort to its verified-failure threshold moves that cohort's starting Rung one step up for the next run, and the report names the move, the count behind it, and the one command that restores it.
 
 The report gives each ticket its Time to Verified Pass — the seconds from its first routed launch to its first passing verdict, retries included — beside a status saying which of the four cases it is: `verified_pass` with a number, `not_started` where the run launched no attempt for it, `incomplete` where an attempt has not finished, and `not_passed` where every finished attempt failed, parked, or was blocked.
 

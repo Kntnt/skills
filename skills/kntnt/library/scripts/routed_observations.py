@@ -15,12 +15,14 @@ ledger mutation seam in this contract.
 """
 
 import hashlib
+import importlib.util
 import json
 import math
 import re
 import sys
 from copy import deepcopy
-from datetime import datetime
+from datetime import UTC, datetime
+from functools import cache
 from pathlib import Path
 from typing import Any, TypedDict, cast
 
@@ -101,6 +103,39 @@ POLICY_DIMENSIONS: tuple[str, ...] = (
 # What a score dimension may be called. A normalized identifier keeps free
 # prose, verdict text, and reviewer commentary out of a numeric record.
 SCORE_DIMENSION: re.Pattern[str] = re.compile(r"^[a-z][a-z0-9_]{0,31}$")
+
+# The Standing Policy facts one frozen decision carries into the row it
+# produces. A ratchet reads the ladder the run itself froze — its revision, its
+# Cohort, and its resolved Rungs — so a policy that has moved since cannot
+# reinterpret an attempt made under the one before it.
+STANDING_POLICY_FIELDS: tuple[str, ...] = (
+    "policy_revision",
+    "workload_cohort",
+    "starting_rung",
+    "current_rung",
+    "floor",
+    "ceiling",
+    "next_rung_up",
+)
+
+# Where the Standing Policy this ledger ratchets lives: the Library's own
+# module, beside this one.
+STANDING_POLICY_MODULE: str = "standing_policy.py"
+
+# Who may judge an attempt a policy is allowed to move on. A frozen rubric and
+# the user's own word establish an outcome perfectly well, but a ratchet that
+# escalates a Cohort without asking anybody is built on machine judgement
+# alone, which is the same three authorities Orchestrate imports at a verdict.
+POLICY_AUTHORITIES: frozenset[str] = frozenset(
+    {"independent_verifier", "objective_checker", "declared_failure_signal"}
+)
+
+# What one Cohort's threshold evaluation came to. Every import answers for
+# every Cohort it touched, because "nothing moved" is a finding too.
+POLICY_MOVED: str = "moved"
+POLICY_STALE: str = "stale_policy_context"
+POLICY_CEILING: str = "standing_policy_ceiling_reached"
+POLICY_BELOW: str = "below_threshold"
 
 # What a sanitized artifact identity looks like: an algorithm and its digest,
 # never a file name and never a path.
@@ -451,6 +486,20 @@ def _unsanitized(value: Any, path: str) -> str | None:
     return None
 
 
+def _audited_policy(audit: Any) -> dict[str, Any] | None:
+    """Return the Standing Policy one frozen decision ran under, or None.
+
+    A verdict inherits by authority rather than by policy and carries no block
+    at all, so absence is ordinary here rather than a fault: such a row is
+    evidence the ledger keeps and never evidence a policy may move on.
+    """
+
+    block = audit.get("standing_policy") if isinstance(audit, dict) else None
+    if not isinstance(block, dict):
+        return None
+    return {field: deepcopy(block.get(field)) for field in STANDING_POLICY_FIELDS}
+
+
 def _observation(attempt: dict[str, Any]) -> tuple[dict[str, Any] | None, str, str]:
     """Return the sanitized observation of one attempt, or its stable refusal.
 
@@ -578,6 +627,7 @@ def _observation(attempt: dict[str, Any]) -> tuple[dict[str, Any] | None, str, s
             "evidence_identity": provenance.get("evidence_identity"),
             "evidence_vintage": provenance.get("evidence_vintage"),
             "main_seat_model": provenance.get("main_seat_model"),
+            "standing_policy": _audited_policy(audit),
             "harness": attempt["harness"]["name"],
             "harness_inventory_revision": attempt["harness"].get("inventory_revision"),
         },
@@ -983,9 +1033,10 @@ def _dominates(peer: dict[str, Any], point: dict[str, Any]) -> bool:
 def record(artifact: Any, directory: Path) -> dict[str, Any]:
     """Append every complete unseen observation and rebuild what changed.
 
-    This is the only ledger mutation in the contract. An identity already held
-    with identical content is skipped; the same identity with different content
-    is a conflict that changes nothing at all.
+    This is the only ledger mutation in the contract, so it is also where the
+    Standing Policy of every Cohort the append touched is evaluated. An
+    identity already held with identical content is skipped; the same identity
+    with different content is a conflict that changes nothing at all.
     """
 
     accepted: list[dict[str, Any]] = []
@@ -1011,14 +1062,17 @@ def record(artifact: Any, directory: Path) -> dict[str, Any]:
         else:
             accepted.append(observation)
 
-    # Append accepted rows, then rebuild only the frontiers whose set changed.
+    # Append accepted rows, then rebuild only the frontiers whose set changed
+    # and evaluate the Standing Policy of every Cohort the append touched.
     frontiers: list[dict[str, Any]] = []
+    policies: list[dict[str, Any]] = []
     if accepted:
         directory.mkdir(parents=True, exist_ok=True)
         with (directory / LEDGER_FILE).open("a", encoding="utf-8") as ledger:
             for observation in accepted:
                 ledger.write(json.dumps(observation, sort_keys=True) + "\n")
         frontiers = _rebuild_frontiers(directory, accepted)
+        policies = _evaluate_standing_policy(directory, accepted)
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -1026,6 +1080,7 @@ def record(artifact: Any, directory: Path) -> dict[str, Any]:
         "skipped": skipped,
         "rejected": rejected,
         "frontiers_rebuilt": frontiers,
+        "standing_policy": policies,
     }
 
 
@@ -1071,6 +1126,259 @@ def _rebuild_frontiers(
         json.dumps(derived, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     return [_frontier_named(identity) for identity in affected]
+
+
+@cache
+def _standing_policy_store() -> Any:
+    """Load the Standing Policy store the ratchet reads and writes.
+
+    The store is the Library's own module rather than either Skill's, and it is
+    loaded from beside this one by path: a peer Skill's `scripts/` is not an
+    interface this module may reach into, and neither is a `sys.path` it does
+    not own (ADR-0149).
+    """
+
+    path = Path(__file__).resolve().parent / STANDING_POLICY_MODULE
+    spec = importlib.util.spec_from_file_location("kntnt_standing_policy", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("the Standing Policy store is missing from the Library")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _instant(value: Any) -> datetime | None:
+    """Return one comparable instant, reading a naive one as UTC.
+
+    The history writes UTC and an emitted row carries whatever its Harness
+    stated, so the two are made comparable here rather than at every ordering
+    and epoch test that needs them to be.
+    """
+
+    parsed = _timestamp(value)
+    if parsed is None:
+        return None
+    return parsed if parsed.tzinfo is not None else parsed.replace(tzinfo=UTC)
+
+
+def _carried_policy_block(row: dict[str, Any]) -> dict[str, Any]:
+    """Return the frozen Standing Policy one ledger row carries, or an empty one."""
+
+    provenance = row.get("provenance")
+    carried = (
+        provenance.get("standing_policy") if isinstance(provenance, dict) else None
+    )
+    return carried if isinstance(carried, dict) else {}
+
+
+def _rung(value: Any) -> dict[str, str] | None:
+    """Return one well-formed Rung — a model and a portable level — or None.
+
+    The store raises on anything else, and a hand-written artifact reaches
+    `record` without its carried policy being held to any shape, so the two
+    Rungs the ratchet reads are checked here rather than at the write.
+    """
+
+    if not isinstance(value, dict) or set(value) != {"model", "portable_deliberation"}:
+        return None
+    if any(not isinstance(level, str) or not level for level in value.values()):
+        return None
+    return {
+        "model": value["model"],
+        "portable_deliberation": value["portable_deliberation"],
+    }
+
+
+def _row_rung(row: dict[str, Any]) -> dict[str, str] | None:
+    """Return the Rung one ledger row actually ran on, or None where it names none."""
+
+    routed = row.get("routed")
+    routed = routed if isinstance(routed, dict) else {}
+    return _rung(
+        {
+            "model": routed.get("model"),
+            "portable_deliberation": routed.get("portable_deliberation"),
+        }
+    )
+
+
+def _epoch(rows: list[dict[str, Any]], cohort: str) -> datetime | None:
+    """Return when one Cohort's current policy epoch began, or None for none.
+
+    Every movement starts one — a threshold trip and a reset alike. Evidence
+    from before it has already been answered, so it can neither escalate the
+    same Cohort twice nor immediately undo the reset a person asked for.
+    """
+
+    started = [
+        instant
+        for row in rows
+        if row.get("workload_cohort") == cohort
+        and (instant := _instant(row.get("effective_at"))) is not None
+    ]
+    return max(started) if started else None
+
+
+def _eligible_at(
+    row: dict[str, Any], cohort: str, revision: int, epoch: datetime | None
+) -> datetime | None:
+    """Return when an eligible row completed, or None where it is not one.
+
+    Eligibility is what makes `N of M` mean anything, and a pass is as eligible
+    as a failure: one Cohort, one machine judgement, one Rung — the policy's
+    own start, so a retry that already escalated is not counted against the
+    start it escalated from — under the revision in force now and inside the
+    current epoch. An Exploration Attempt buys information at a Rung nobody
+    chose and is excluded with the rest.
+    """
+
+    if row.get("workload_cohort") != cohort:
+        return None
+    if row.get("outcome") not in DECISIVE_RESULTS:
+        return None
+    if row.get("outcome_authority") not in POLICY_AUTHORITIES:
+        return None
+    provenance = row.get("provenance")
+    if isinstance(provenance, dict) and provenance.get("exploration") is True:
+        return None
+    carried = _carried_policy_block(row)
+    if carried.get("policy_revision") != revision:
+        return None
+    rung = _row_rung(row)
+    if rung is None or carried.get("starting_rung") != rung:
+        return None
+    above = carried.get("next_rung_up")
+    if above is not None and _rung(above) is None:
+        return None
+    completed = _instant(row.get("completed_at"))
+    if completed is None or (epoch is not None and completed <= epoch):
+        return None
+    return completed
+
+
+def _policy_window(
+    directory: Path, cohort: str, revision: int, epoch: datetime | None, size: int
+) -> list[dict[str, Any]]:
+    """Return the last *size* eligible rows of one Cohort, oldest first.
+
+    The order is the instant each row completed and then its run key, so two
+    rows the same Harness stamped alike still have one place each. The window
+    need not be full: a Cohort with three eligible rows is judged on three.
+    """
+
+    ordered = sorted(
+        (
+            (completed, str(row["run_key"]), row)
+            for row in _ledger(directory).values()
+            if (completed := _eligible_at(row, cohort, revision, epoch)) is not None
+        ),
+        key=lambda entry: (entry[0], entry[1]),
+    )
+    return [row for _, _, row in ordered[-size:]]
+
+
+def _failure_threshold(store: Any, effective: dict[str, Any]) -> tuple[int, int]:
+    """Return the failures and the window one Cohort trips at.
+
+    The shipped pair is the whole of version 1 and nothing sets it, so a
+    threshold of any other shape reached the store by hand. It is answered with
+    the shipped numbers rather than by refusing to evaluate a policy the store
+    itself still reads perfectly well.
+    """
+
+    shipped = store.DEFAULT_FAILURE_THRESHOLD
+    threshold = effective.get("failure_threshold")
+    stated = threshold if isinstance(threshold, dict) else {}
+    failures, window = stated.get("failures"), stated.get("window")
+    if any(
+        isinstance(value, bool) or not isinstance(value, int) or value < 1
+        for value in (failures, window)
+    ):
+        return int(shipped["failures"]), int(shipped["window"])
+    return cast(int, failures), cast(int, window)
+
+
+def _evaluate_cohort(
+    store: Any, directory: Path, cohort: str, accepted: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Ratchet one Cohort where the import brought it to its failure threshold."""
+
+    effective = store.effective_policy(directory, cohort)
+    revision = int(effective["revision"])
+    needed, size = _failure_threshold(store, effective)
+    account: dict[str, Any] = {
+        "workload_cohort": cohort,
+        "threshold": {"failures": needed, "window": size},
+        "failures": 0,
+        "window": 0,
+        "run_keys": [],
+        "row": None,
+    }
+
+    # Keep an in-flight run frozen under an older revision from moving a policy
+    # another run or a reset has already changed. Its evidence stays in the
+    # ledger; only its authority over the policy is gone.
+    if not any(
+        observation.get("workload_cohort") == cohort
+        and _carried_policy_block(observation).get("policy_revision") == revision
+        for observation in accepted
+    ):
+        return account | {"outcome": POLICY_STALE}
+
+    # Count the verified failures among the rows this epoch leaves eligible.
+    epoch = _epoch(store.history(directory), cohort)
+    window = _policy_window(directory, cohort, revision, epoch, size)
+    failed = [row for row in window if row["outcome"] == "fail"]
+    account |= {
+        "failures": len(failed),
+        "window": len(window),
+        "run_keys": [str(row["run_key"]) for row in failed],
+    }
+    if len(failed) < needed:
+        return account | {"outcome": POLICY_BELOW}
+
+    # Move to the Rung the triggering failure's own frozen decision named next,
+    # and stop where that decision already stood at the Cohort's ceiling.
+    triggering = failed[-1]
+    rung = _rung(_carried_policy_block(triggering).get("next_rung_up"))
+    if rung is None:
+        return account | {"outcome": POLICY_CEILING}
+    store.move_starting_rung(
+        directory,
+        cohort,
+        rung,
+        {
+            "kind": store.THRESHOLD_CAUSE,
+            "run_keys": account["run_keys"],
+            "source_run_identity": triggering.get("run_identity"),
+        },
+    )
+    return account | {"outcome": POLICY_MOVED, "row": store.history(directory)[-1]}
+
+
+def _evaluate_standing_policy(
+    directory: Path, accepted: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Answer for every Cohort one import touched, moving the ones that tripped.
+
+    This is the ratchet's only seam, and it sits inside `record` so that the
+    engine's automatic import at each verdict and the user's own `record` verb
+    reach it identically — a policy that moved for one and not the other would
+    be two policies. It only ever moves a Cohort up; the way back down is
+    `config policy reset`, which a person asks for (ADR-0149). A row naming no
+    Cohort is ledger accounting and moves nothing.
+    """
+
+    store = _standing_policy_store()
+    touched = sorted(
+        {
+            observation["workload_cohort"]
+            for observation in accepted
+            if isinstance(observation.get("workload_cohort"), str)
+            and observation["workload_cohort"]
+        }
+    )
+    return [_evaluate_cohort(store, directory, cohort, accepted) for cohort in touched]
 
 
 def _ordered_chain(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:

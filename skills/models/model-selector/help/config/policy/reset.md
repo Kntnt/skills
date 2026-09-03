@@ -48,10 +48,6 @@ A nested Skill receives only relevant guidance through an explicit Contextual In
 
 `uv` runs the Skill's dependency check.
 
-## DEPENDENCIES
-
-`uv` runs the Skill's dependency check.
-
 ## SEE ALSO
 
 **/model-selector config policy show --help**, **/model-selector config reset --help**, **/model-selector route --help**

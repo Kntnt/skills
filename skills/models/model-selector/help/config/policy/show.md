@@ -12,6 +12,8 @@ model-selector config policy show - display the Standing Policy and what moved i
 
 `model-selector config policy show` displays the effective Standing Policy: the Rung routing starts an unmeasured Cohort at, the inclusive floor and ceiling it stays between, the failure threshold that may move it, and the exploration budget. With no *COHORT* it shows the shipped default, every Cohort that has moved, and the whole movement history. With one it shows only that Cohort's effective policy and its own history.
 
+Every movement in that history was appended by one of two things: the failure threshold, which the evidence import evaluates whenever it records judged attempts and which names the run keys that tripped it, or `config policy reset`, which names nobody. Nothing else writes the store, and nothing moves a Cohort down.
+
 The shipped default prints its values symbolically — `cold_start`, `weakest_enabled`, `main_seat` — because each one resolves against the candidate ladder of the individual request, and each printed line says so. A moved Cohort prints the exact Rung stored for it.
 
 The command reads local configuration only; it performs no network access, evaluation, or write. Bare `/model-selector config policy` has the same effect.

@@ -104,6 +104,14 @@ For `record`, reject observations missing configuration identity, benchmark iden
 
 Recompute only derived frontiers whose eligible run set changed. A frontier is identified by benchmark key, stage, workload cohort and sorted workload tags together; rows differing on any of them are never compared as one frontier, and a row naming no cohort enters none. Derived files may be replaced because they are reproducible from append-only source records.
 
+## Standing policy movement
+
+Every observation carries the Standing Policy its own frozen decision ran under in `provenance.standing_policy`: the Cohort, its `policy_revision`, and the resolved `starting_rung`, `current_rung`, `floor`, `ceiling` and `next_rung_up`. A verdict inherits by authority rather than by policy and carries none. An old row is therefore always read against the ladder its own run froze; the current store is never used to reinterpret it.
+
+`record` evaluates the failure threshold once per cohort the import touched, after the append, for the automatic import at a verdict and the user's own invocation alike. A row is eligible when it names that cohort, is decisive, was judged by an independent verifier, an objective checker or a declared failure signal, carries no exploration tag, carries the cohort's current `policy_revision`, ran on exactly its own carried `starting_rung`, and completed after the cohort's current policy epoch — which every threshold movement and every reset begins anew. The window is the last M eligible rows by `completed_at` ascending and then `run_key`, passes included and not necessarily full; at N or more failures in it the cohort moves to the last triggering failure's own carried `next_rung_up`, naming every failing run key and the run identity behind it. A carried `next_rung_up` of `null` is the ceiling and appends nothing.
+
+Movement is upward only, and `config policy reset` is the sole way back. Evidence whose carried revision no longer matches the cohort's is kept in the ledger and moves nothing. `record` reports, per touched cohort, `moved` with the appended history row, `standing_policy_ceiling_reached`, `stale_policy_context`, or `below_threshold`, each with the failure count, the rows in the window and the threshold behind it.
+
 ## Change report
 
 Report relevant new model versions, alias changes, capability-prior changes, price or subscription schedules, quota-rule changes, deprecations, benchmark versions, imported or missing configured points, frontier membership changes, stale/provisional sources and failures. Name zero changes explicitly; never manufacture work by refreshing immutable details.

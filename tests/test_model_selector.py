@@ -3914,6 +3914,31 @@ def test_observe_emits_one_importable_observation_from_a_routed_attempt() -> Non
     assert observations.validate(observation) is None
 
 
+def test_observe_carries_the_frozen_standing_policy_into_the_observation() -> None:
+    """An attempt is judged on the ladder its own run froze, never on today's."""
+
+    # Observe one selected attempt whose frozen decision names its own policy.
+    observations = _load_observations()
+    attempt = _attempt()
+    audited = attempt["decision"]["audit"]["standing_policy"]
+    observation = observations.observe(_attempts(attempt))["observations"][0]
+
+    # Assert the block travels whole and drops nothing the evaluation reads.
+    assert observation["provenance"]["standing_policy"] == {
+        field: audited[field]
+        for field in (
+            "policy_revision",
+            "workload_cohort",
+            "starting_rung",
+            "current_rung",
+            "floor",
+            "ceiling",
+            "next_rung_up",
+        )
+    }
+    assert observations.validate(observation) is None
+
+
 def test_run_identity_distinguishes_runs_without_changing_legacy_keys() -> None:
     """An opaque run term separates periods while null preserves old identity."""
 
@@ -5318,3 +5343,186 @@ def test_the_policy_command_is_documented_where_a_reader_looks_for_it() -> None:
             "kntnt-standing-policy-v1",
         },
     )
+
+
+def _judged(index: int, result: str, **changes: Any) -> dict[str, Any]:
+    """Return one externally judged attempt at the Cohort's own starting Rung."""
+
+    judged: dict[str, Any] = {
+        "attempt_id": f"build-{index}",
+        "attempt_index": index,
+        "run_identity": "run-night-1",
+        "started_at": f"2026-08-24T1{index}:00:00Z",
+        "completed_at": f"2026-08-24T1{index}:04:00Z",
+        "outcome": {
+            "result": result,
+            "authority": "independent_verifier",
+            "checker": {"identity": "verify.md", "independent": True},
+            "condition": None,
+            "scores": None,
+        },
+    }
+    return _attempt(**(judged | changes))
+
+
+def _imported(observations: Any, directory: Path, *judged: dict[str, Any]) -> Any:
+    """Import externally judged attempts through the one ledger mutation seam."""
+
+    produced = observations.observe(_attempts(*judged))["observations"]
+    return observations.record(
+        observations.merge(None, produced)["artifact"], directory
+    )
+
+
+def test_record_ratchets_a_cohort_one_rung_up_at_its_failure_threshold(
+    tmp_path: Path,
+) -> None:
+    """Two verified failures in the window move the start and name their runs."""
+
+    # Import two externally verified failures at the Cohort's starting Rung.
+    observations = _load_observations()
+    policy = _load_standing_policy()
+    reported = _imported(observations, tmp_path, _judged(1, "fail"), _judged(2, "fail"))
+    evaluated = reported["standing_policy"][0]
+
+    # Assert one move, to the Rung the frozen decision itself named next.
+    assert [entry["workload_cohort"] for entry in reported["standing_policy"]] == [
+        "python-refactor"
+    ]
+    assert evaluated["outcome"] == "moved"
+    assert evaluated["failures"] == 2
+    assert evaluated["window"] == 2
+    assert evaluated["threshold"] == {"failures": 2, "window": 4}
+    assert sorted(evaluated["run_keys"]) == sorted(reported["accepted"])
+    assert evaluated["row"]["to"] == {
+        "model": "worker-v2",
+        "portable_deliberation": "medium",
+    }
+
+    # Assert the store and its history agree with what the report claimed.
+    effective = policy.effective_policy(tmp_path, "python-refactor")
+    assert effective["starting_rung"] == evaluated["row"]["to"]
+    assert effective["revision"] == 1
+    history = policy.history(tmp_path)
+    assert len(history) == 1
+    assert history[0]["cause"]["kind"] == "failure_threshold"
+    assert sorted(history[0]["cause"]["run_keys"]) == sorted(reported["accepted"])
+    assert history[0]["cause"]["source_run_identity"] == "run-night-1"
+
+
+def test_the_failure_window_holds_the_last_rows_and_counts_only_failures(
+    tmp_path: Path,
+) -> None:
+    """`fail, pass, pass, pass, fail` is one failure in a window of four."""
+
+    # Import five judged attempts whose oldest failure falls out of the window.
+    observations = _load_observations()
+    policy = _load_standing_policy()
+    reported = _imported(
+        observations,
+        tmp_path,
+        _judged(1, "fail"),
+        _judged(2, "pass"),
+        _judged(3, "pass"),
+        _judged(4, "pass"),
+        _judged(5, "fail"),
+    )
+    evaluated = reported["standing_policy"][0]
+
+    # Assert the window is the last four rows and holds one failure of them.
+    assert evaluated["outcome"] == "below_threshold"
+    assert evaluated["failures"] == 1
+    assert evaluated["window"] == 4
+    assert evaluated["row"] is None
+    assert policy.effective_policy(tmp_path, "python-refactor")["revision"] == 0
+    assert policy.history(tmp_path) == []
+
+
+def test_only_machine_judged_rows_at_the_starting_rung_reach_the_window(
+    tmp_path: Path,
+) -> None:
+    """An exploration, a retry, a soft judgement and damage teach no policy."""
+
+    # Emit five failures and disqualify four of them, each in its own way.
+    observations = _load_observations()
+    policy = _load_standing_policy()
+    produced = observations.observe(
+        _attempts(
+            _judged(1, "fail"),
+            _judged(2, "fail"),
+            _judged(
+                3,
+                "fail",
+                outcome={
+                    "result": "fail",
+                    "authority": "user_confirmation",
+                    "checker": {"identity": "the-user", "independent": True},
+                    "condition": None,
+                    "scores": None,
+                },
+            ),
+            _judged(4, "fail"),
+            _judged(5, "fail"),
+        )
+    )["observations"]
+    produced[0]["provenance"]["exploration"] = True
+    produced[1]["routed"]["portable_deliberation"] = "medium"
+    produced[4]["provenance"]["standing_policy"]["next_rung_up"] = {"model": ""}
+    artifact = observations.merge(None, produced)["artifact"]
+    evaluated = observations.record(artifact, tmp_path)["standing_policy"][0]
+
+    # Assert only the one comparable failure was counted, so nothing moved.
+    assert evaluated["outcome"] == "below_threshold"
+    assert evaluated["failures"] == 1
+    assert evaluated["window"] == 1
+    assert policy.effective_policy(tmp_path, "python-refactor")["revision"] == 0
+
+
+def test_a_cohort_at_its_ceiling_records_the_evidence_and_moves_nothing(
+    tmp_path: Path,
+) -> None:
+    """The ladder ends where the frozen decision said it did, not one Rung past."""
+
+    # Import two failures whose own decision found no Rung above the one it ran.
+    observations = _load_observations()
+    policy = _load_standing_policy()
+    produced = observations.observe(_attempts(_judged(1, "fail"), _judged(2, "fail")))[
+        "observations"
+    ]
+    for observation in produced:
+        observation["provenance"]["standing_policy"]["next_rung_up"] = None
+    artifact = observations.merge(None, produced)["artifact"]
+    reported = observations.record(artifact, tmp_path)
+    evaluated = reported["standing_policy"][0]
+
+    # Assert the threshold tripped, the evidence landed, and the policy did not.
+    assert evaluated["outcome"] == "standing_policy_ceiling_reached"
+    assert evaluated["failures"] == 2
+    assert len(reported["accepted"]) == 2
+    assert policy.effective_policy(tmp_path, "python-refactor")["revision"] == 0
+    assert policy.history(tmp_path) == []
+
+
+def test_evidence_frozen_under_an_older_revision_never_moves_a_policy_again(
+    tmp_path: Path,
+) -> None:
+    """A ratcheted Cohort stays where it is until a person resets it."""
+
+    # Ratchet the Cohort once, then replay a second run frozen before the move.
+    observations = _load_observations()
+    policy = _load_standing_policy()
+    _imported(observations, tmp_path, _judged(1, "fail"), _judged(2, "fail"))
+    moved = policy.effective_policy(tmp_path, "python-refactor")
+    stale = _imported(observations, tmp_path, _judged(3, "fail"), _judged(4, "fail"))
+    evaluated = stale["standing_policy"][0]
+
+    # Assert the later evidence is kept and its authority over the policy is not.
+    assert evaluated["outcome"] == "stale_policy_context"
+    assert evaluated["row"] is None
+    assert len(stale["accepted"]) == 2
+    assert policy.effective_policy(tmp_path, "python-refactor") == moved
+    assert len(policy.history(tmp_path)) == 1
+
+    # Assert the reset a person asks for is the only way back down.
+    assert policy.reset(tmp_path, "python-refactor") == ["python-refactor"]
+    assert policy.effective_policy(tmp_path, "python-refactor")["revision"] == 0

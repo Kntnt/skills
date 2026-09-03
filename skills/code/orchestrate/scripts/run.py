@@ -396,6 +396,13 @@ AUTOMATIC_AUTHORITIES: frozenset[str] = frozenset(
     {"independent_verifier", "objective_checker", "declared_failure_signal"}
 )
 
+# What a Cohort's Standing Policy evaluation came to when the ledger actually
+# moved it, and the one command that puts it back. The run reports both rather
+# than leaving a developer to find out at the next freeze that a Cohort now
+# starts a Rung higher (ADR-0149).
+POLICY_MOVED: str = "moved"
+POLICY_RESET_COMMAND: str = "/model-selector config policy reset"
+
 # The roles that are never routed. A verdict inherits the complete main seat
 # exactly, so a decision made for one is refused at this seam rather than left
 # for a paragraph to forbid: what cannot be persisted cannot reach a verifier
@@ -5372,6 +5379,7 @@ def _import_details() -> dict[str, list[Any]]:
         "identically_skipped": [],
         "conflicting": [],
         "refused": [],
+        "standing_policy": [],
     }
 
 
@@ -5494,6 +5502,7 @@ def _automatic_import_unchecked(
     result = _import_details()
     result["imported"] = [str(key) for key in recorded.get("accepted", [])]
     result["identically_skipped"] = [str(key) for key in recorded.get("skipped", [])]
+    result["standing_policy"] = list(recorded.get("standing_policy", []))
     for rejection in recorded.get("rejected", []):
         run_key = rejection.get("run_key")
         code = str(rejection.get("code") or "record_refused")
@@ -5835,7 +5844,12 @@ def observed_details(
         imported = attempt.get("import")
         if not isinstance(imported, dict):
             continue
-        for key in ("imported", "identically_skipped", "conflicting"):
+        for key in (
+            "imported",
+            "identically_skipped",
+            "conflicting",
+            "standing_policy",
+        ):
             values = imported.get(key)
             if isinstance(values, list):
                 _extend_unique(details[key], values)
@@ -5857,7 +5871,39 @@ def observed_details(
         "attempts": str(attempts_file(state_path)) if completed else None,
         "observed": len(completed),
         **details,
+        "standing_policy": _escalated_cohorts(details["standing_policy"]),
     }
+
+
+def _escalated_cohorts(evaluated: list[Any]) -> list[dict[str, Any]]:
+    """Return the Cohorts this run's own evidence ratcheted, and the way back.
+
+    Only the movements: a Cohort the threshold left where it was is an outcome
+    the ledger accounted for and not a fact the night has to report. Each one
+    carries the count behind it and the single command that undoes it, so the
+    developer reads the decision and its reversal in the same line.
+    """
+
+    moved: list[dict[str, Any]] = []
+    for entry in evaluated:
+        if not isinstance(entry, dict) or entry.get("outcome") != POLICY_MOVED:
+            continue
+        row = entry.get("row")
+        row = row if isinstance(row, dict) else {}
+        cohort = str(entry.get("workload_cohort"))
+        moved.append(
+            {
+                "workload_cohort": cohort,
+                "from": row.get("from"),
+                "to": row.get("to"),
+                "failures": entry.get("failures"),
+                "window": entry.get("window"),
+                "threshold": entry.get("threshold"),
+                "run_keys": entry.get("run_keys"),
+                "reset": f"{POLICY_RESET_COMMAND} {cohort}",
+            }
+        )
+    return moved
 
 
 def repository_identity(cwd: Path) -> str:

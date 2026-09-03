@@ -456,9 +456,17 @@ def _snapshot(identity: str = "frozen", **fields: Any) -> dict[str, Any]:
 
 
 def _selected(
-    request_id: str, model: str = "the-cheapest", **fields: Any
+    request_id: str,
+    model: str = "the-cheapest",
+    cohort: str = "orchestrate/initial_build",
+    **fields: Any,
 ) -> dict[str, Any]:
-    """Build one selected decision, carrying the exact controls a role launches on."""
+    """Build one selected decision, carrying the exact controls a role launches on.
+
+    The audited Standing Policy travels with it exactly as `route` emits one,
+    because the ledger row this decision becomes is evaluated against the
+    ladder its own run froze rather than against whatever the store says later.
+    """
 
     return {
         "request_id": request_id,
@@ -480,6 +488,19 @@ def _selected(
                 "evidence_vintage": "2026-08-01T00:00:00Z",
                 "harness_inventory_revision": "inventory-3",
                 "main_seat_model": "the-strongest",
+            },
+            "standing_policy": {
+                "policy_revision": 0,
+                "workload_cohort": cohort,
+                "starting_rung": {
+                    "model": model,
+                    "portable_deliberation": "medium",
+                },
+                "current_rung": {"model": model, "portable_deliberation": "medium"},
+                "floor": {"model": model, "portable_deliberation": "low"},
+                "ceiling": {"model": "the-strongest", "portable_deliberation": "high"},
+                "next_rung_up": {"model": model, "portable_deliberation": "high"},
+                "start_fallback": None,
             },
         },
     } | fields
@@ -9421,9 +9442,12 @@ def test_attempt_finish_replays_persist_skips_and_conflicts(
     assert imported["conflicting"] == imported["imported"]
     assert imported["refused"] == []
     details = json.loads(report.stdout)["observations"]
+    identities = ("imported", "identically_skipped", "conflicting", "refused")
     assert details["attempts"] == str(scratch / STATE_HOME / ATTEMPTS_FILE)
     assert details["observed"] == 1
-    assert {key: details[key] for key in imported} == imported
+    assert {key: details[key] for key in identities} == {
+        key: imported[key] for key in identities
+    }
 
 
 def test_attempt_finish_reports_an_import_refusal_without_stopping(
@@ -9798,6 +9822,7 @@ def test_report_names_every_automatic_import_result(
         "identically_skipped": [],
         "conflicting": [],
         "refused": [],
+        "standing_policy": [],
     }
     account = json.loads(filled.stdout)["observations"]
     assert account["observed"] == 1
@@ -9806,6 +9831,65 @@ def test_report_names_every_automatic_import_result(
     assert Path(account["attempts"]).is_relative_to(scratch)
     assert "artifact" not in account
     assert _engine(repo, "plan", env=env).returncode == 0
+
+
+def test_report_names_every_cohort_this_run_ratcheted_and_how_to_undo_it(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """A Cohort that keeps failing moves itself, and the account says how to undo it."""
+
+    # Fail two build attempts in one Cohort, which is its shipped threshold.
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the frame")]},
+        issues={9: _ready(9), 10: _ready(10)},
+    )
+    assert _preflight(repo, tmp_path, scratch, env, plan_args=("--at-once", "2")) == [
+        9,
+        10,
+    ]
+    env |= isolated_attempt_environment
+    for request in ("build-9", "build-10"):
+        assert _attempt_started(repo, scratch, env, request).returncode == 0
+        finished = _attempt_finished(repo, scratch, env, "fail", request_id=request)
+        assert finished.returncode == 0, finished.stderr
+
+    report = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    escalated = json.loads(report.stdout)["observations"]["standing_policy"]
+
+    # Report the move, the count behind it, and the one command that undoes it.
+    assert report.returncode == 0, report.stderr
+    assert len(escalated) == 1
+    assert escalated[0]["workload_cohort"] == "orchestrate/initial_build"
+    assert escalated[0]["from"] == "cold_start"
+    assert escalated[0]["to"] == {
+        "model": "the-cheapest",
+        "portable_deliberation": "high",
+    }
+    assert escalated[0]["failures"] == 2
+    assert escalated[0]["window"] == 2
+    assert escalated[0]["threshold"] == {"failures": 2, "window": 4}
+    assert len(escalated[0]["run_keys"]) == 2
+    assert escalated[0]["reset"] == (
+        "/model-selector config policy reset orchestrate/initial_build"
+    )
+
+    # The next run starts the Cohort one Rung up, and a rerun invents no second move.
+    policy = json.loads(
+        (
+            Path(isolated_attempt_environment["HOME"])
+            / ".kntnt/model-selector/standing-policy.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert policy["cohorts"]["orchestrate/initial_build"]["starting_rung"] == {
+        "model": "the-cheapest",
+        "portable_deliberation": "high",
+    }
+    rerun = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    assert json.loads(rerun.stdout)["observations"]["standing_policy"] == escalated
 
 
 def test_attempt_finishes_use_the_model_selector_import_contract(
