@@ -336,3 +336,489 @@ def test_removal_leaves_no_empty_leavings_of_ours(tmp_path: Path) -> None:
     module.remove(OWNER, "claude-code", tmp_path)
 
     assert "hooks" not in _settings(tmp_path)
+
+
+# --- The session-record reader (#225) ---------------------------------------
+
+
+def _load_session_records() -> Any:
+    """Load the shipped session-record reader from its installed path."""
+
+    path = LIBRARY / "session_records.py"
+    spec = importlib.util.spec_from_file_location("kntnt_session_records", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _turn(
+    model: str,
+    effort: str,
+    *,
+    timestamp: str,
+    input: int = 0,
+    output: int = 0,
+    cache_read: int = 0,
+    cache_creation: int = 0,
+    thinking: int | None = None,
+) -> str:
+    """Provide one assistant line exactly as Claude Code's own transcript writes it."""
+
+    usage: dict[str, Any] = {
+        "input_tokens": input,
+        "output_tokens": output,
+        "cache_read_input_tokens": cache_read,
+        "cache_creation_input_tokens": cache_creation,
+    }
+    if thinking is not None:
+        usage["output_tokens_details"] = {"thinking_tokens": thinking}
+    return json.dumps(
+        {
+            "type": "assistant",
+            "isSidechain": False,
+            "message": {"model": model, "usage": usage},
+            "effort": effort,
+            "timestamp": timestamp,
+        }
+    )
+
+
+def _subagent_turn(
+    model: str,
+    effort: str,
+    *,
+    timestamp: str,
+    input: int = 0,
+    output: int = 0,
+    cache_read: int = 0,
+    cache_creation: int = 0,
+    thinking: int | None = None,
+) -> str:
+    """Provide one assistant line as a subagent's own transcript writes it."""
+
+    usage: dict[str, Any] = {
+        "input_tokens": input,
+        "output_tokens": output,
+        "cache_read_input_tokens": cache_read,
+        "cache_creation_input_tokens": cache_creation,
+    }
+    if thinking is not None:
+        usage["output_tokens_details"] = {"thinking_tokens": thinking}
+    return json.dumps(
+        {
+            "type": "assistant",
+            "isSidechain": True,
+            "agentId": "a1",
+            "message": {"model": model, "usage": usage},
+            "effort": effort,
+            "sessionId": "the-parent-session",
+            "timestamp": timestamp,
+        }
+    )
+
+
+def test_only_claude_code_is_a_supported_harness_at_this_ticket() -> None:
+    """Codex and OpenCode reading follows once those integrations are verified."""
+
+    module = _load_session_records()
+    assert module.SUPPORTED == ("claude-code",)
+
+
+def test_an_unsupported_harness_yields_nothing_to_read(tmp_path: Path) -> None:
+    """A Harness this reader does not know is an absence, never a guess."""
+
+    module = _load_session_records()
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        _turn("claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1)
+        + "\n",
+        encoding="utf-8",
+    )
+
+    assert module.usage("codex", str(transcript)) == []
+
+
+def test_a_missing_record_yields_nothing_to_read(tmp_path: Path) -> None:
+    """A session the Harness never wrote is an absence, not an error."""
+
+    module = _load_session_records()
+    assert module.usage("claude-code", str(tmp_path / "never-written.jsonl")) == []
+
+
+def test_no_transcript_path_yields_nothing_to_read() -> None:
+    """Nothing to open is nothing to read, and never a guessed location."""
+
+    module = _load_session_records()
+    assert module.usage("claude-code", None) == []
+    assert module.usage("claude-code", "") == []
+
+
+def test_a_truncated_or_garbled_record_yields_whatever_survives(tmp_path: Path) -> None:
+    """A broken line is skipped rather than raised; a whole file of them reads empty."""
+
+    module = _load_session_records()
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        "\n".join(
+            [
+                _turn(
+                    "claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1
+                ),
+                "{ not json at all",
+                "",
+                "not even an object",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    groups = module.usage("claude-code", str(transcript))
+
+    assert len(groups) == 1
+    assert groups[0]["tokens"]["input"] == 1
+
+    garbled_only = tmp_path / "session-2.jsonl"
+    garbled_only.write_text("{ nope\nstill nope\n", encoding="utf-8")
+    assert module.usage("claude-code", str(garbled_only)) == []
+
+
+def test_the_exact_model_and_deliberation_are_read_from_the_finished_transcript(
+    tmp_path: Path,
+) -> None:
+    """A finished session's own record names its Seat, never a stale guess."""
+
+    module = _load_session_records()
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        _turn(
+            "claude-opus-5",
+            "high",
+            timestamp="2026-09-01T10:00:00Z",
+            input=10,
+            output=20,
+            cache_read=5,
+            cache_creation=3,
+            thinking=7,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    groups = module.usage("claude-code", str(transcript))
+
+    assert len(groups) == 1
+    group = groups[0]
+    assert group["role"] == "main"
+    assert group["model"] == "claude-opus-5"
+    assert group["native_deliberation"] == "high"
+    assert group["tokens"] == {
+        "input": 10,
+        "output": 20,
+        "cache_read": 5,
+        "cache_creation": 3,
+        "thinking": 7,
+    }
+    assert group["started_at"] == "2026-09-01T10:00:00Z"
+    assert group["completed_at"] == "2026-09-01T10:00:00Z"
+
+
+def test_token_categories_absent_from_a_turn_stay_null_rather_than_zero(
+    tmp_path: Path,
+) -> None:
+    """A missing usage category is never read as though it were a zero."""
+
+    module = _load_session_records()
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        json.dumps(
+            {
+                "type": "assistant",
+                "isSidechain": False,
+                "message": {"model": "claude-opus-5", "usage": {}},
+                "effort": "high",
+                "timestamp": "2026-09-01T10:00:00Z",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    group = module.usage("claude-code", str(transcript))[0]
+
+    assert group["tokens"] == {
+        "input": None,
+        "output": None,
+        "cache_read": None,
+        "cache_creation": None,
+        "thinking": None,
+    }
+
+
+def test_turns_in_the_same_seat_are_summed_and_timed_on_first_and_last(
+    tmp_path: Path,
+) -> None:
+    """Two turns of one Seat give its total usage and its own active window."""
+
+    module = _load_session_records()
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        "\n".join(
+            [
+                _turn(
+                    "claude-opus-5",
+                    "high",
+                    timestamp="2026-09-01T10:00:00Z",
+                    input=10,
+                    output=20,
+                ),
+                _turn(
+                    "claude-opus-5",
+                    "high",
+                    timestamp="2026-09-01T10:05:00Z",
+                    input=1,
+                    output=2,
+                    thinking=4,
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    groups = module.usage("claude-code", str(transcript))
+
+    assert len(groups) == 1
+    group = groups[0]
+    assert group["tokens"]["input"] == 11
+    assert group["tokens"]["output"] == 22
+    assert group["tokens"]["thinking"] == 4
+    assert group["started_at"] == "2026-09-01T10:00:00Z"
+    assert group["completed_at"] == "2026-09-01T10:05:00Z"
+
+
+def test_a_session_that_switched_model_mid_way_yields_one_group_per_seat(
+    tmp_path: Path,
+) -> None:
+    """The main transcript's own turns split into a Seat per configuration."""
+
+    module = _load_session_records()
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        "\n".join(
+            [
+                _turn(
+                    "claude-sonnet-5",
+                    "high",
+                    timestamp="2026-09-01T10:00:00Z",
+                    input=10,
+                ),
+                _turn(
+                    "claude-opus-5", "high", timestamp="2026-09-01T10:05:00Z", input=1
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    groups = module.usage("claude-code", str(transcript))
+
+    assert len(groups) == 2
+    models = {group["model"] for group in groups}
+    assert models == {"claude-sonnet-5", "claude-opus-5"}
+    assert {group["role"] for group in groups} == {"main"}
+
+
+def test_a_subagents_turns_are_read_from_its_own_companion_directory(
+    tmp_path: Path,
+) -> None:
+    """The Harness's record of one session is a transcript and a companion
+    directory: a subagent's turns live beside it, never as a flag inline."""
+
+    module = _load_session_records()
+    session = tmp_path / "session-1"
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        _turn("claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=10)
+        + "\n",
+        encoding="utf-8",
+    )
+    subagents = session / "subagents"
+    subagents.mkdir(parents=True)
+    (subagents / "agent-a1.jsonl").write_text(
+        _subagent_turn(
+            "claude-sonnet-5", "medium", timestamp="2026-09-01T10:01:00Z", input=3
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    groups = module.usage("claude-code", str(transcript))
+
+    assert len(groups) == 2
+    by_role = {group["role"]: group for group in groups}
+    assert by_role["main"]["model"] == "claude-opus-5"
+    assert by_role["delegated"]["model"] == "claude-sonnet-5"
+    assert by_role["delegated"]["native_deliberation"] == "medium"
+    assert by_role["delegated"]["tokens"]["input"] == 3
+
+
+def test_two_subagents_on_the_same_seat_are_summed_into_one(tmp_path: Path) -> None:
+    """Two delegated turns on one configuration are one Seat's usage, not two."""
+
+    module = _load_session_records()
+    session = tmp_path / "session-1"
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        _turn("claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1)
+        + "\n",
+        encoding="utf-8",
+    )
+    subagents = session / "subagents"
+    subagents.mkdir(parents=True)
+    (subagents / "agent-a1.jsonl").write_text(
+        _subagent_turn(
+            "claude-sonnet-5", "medium", timestamp="2026-09-01T10:01:00Z", input=3
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (subagents / "agent-a2.jsonl").write_text(
+        _subagent_turn(
+            "claude-sonnet-5", "medium", timestamp="2026-09-01T10:02:00Z", input=5
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    groups = module.usage("claude-code", str(transcript))
+
+    delegated = [group for group in groups if group["role"] == "delegated"]
+    assert len(delegated) == 1
+    assert delegated[0]["tokens"]["input"] == 8
+
+
+def test_a_missing_output_tokens_details_stays_null_rather_than_zero(
+    tmp_path: Path,
+) -> None:
+    """`output_tokens_details` is absent on most subagent lines; that is an
+    absence for `thinking`, never a zero (readiness addendum to #225)."""
+
+    module = _load_session_records()
+    session = tmp_path / "session-1"
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        _turn("claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1)
+        + "\n",
+        encoding="utf-8",
+    )
+    subagents = session / "subagents"
+    subagents.mkdir(parents=True)
+    (subagents / "agent-a1.jsonl").write_text(
+        _subagent_turn(
+            "claude-sonnet-5", "medium", timestamp="2026-09-01T10:01:00Z", input=3
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    delegated = next(
+        group
+        for group in module.usage("claude-code", str(transcript))
+        if group["role"] == "delegated"
+    )
+
+    assert delegated["tokens"]["thinking"] is None
+
+
+def test_a_non_assistant_line_is_never_read_as_a_turn(tmp_path: Path) -> None:
+    """A user or tool-result line carries no model and no usage of its own."""
+
+    module = _load_session_records()
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        "\n".join(
+            [
+                json.dumps(
+                    {
+                        "type": "user",
+                        "message": {"content": "the whole brief"},
+                        "timestamp": "2026-09-01T09:59:00Z",
+                    }
+                ),
+                _turn(
+                    "claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    groups = module.usage("claude-code", str(transcript))
+
+    assert len(groups) == 1
+    assert "the whole brief" not in json.dumps(groups)
+
+
+def test_no_prompt_response_reasoning_tool_output_or_path_reaches_a_group(
+    tmp_path: Path,
+) -> None:
+    """The read is field by field onto an allow-list, and copies nothing else."""
+
+    module = _load_session_records()
+    session = tmp_path / "session-1"
+    transcript = tmp_path / "session-1.jsonl"
+    line = json.loads(
+        _turn("claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1)
+    )
+    line["message"]["content"] = [{"type": "text", "text": "the whole answer"}]
+    line["cwd"] = "/Users/thomas/Projects/skills"
+    line["message"]["reasoning"] = "the whole thinking"
+    line["toolUseResult"] = {"stdout": "pytest ...", "diff": "--- a/x\n+++ b/x"}
+    transcript.write_text(json.dumps(line) + "\n", encoding="utf-8")
+    subagents = session / "subagents"
+    subagents.mkdir(parents=True)
+    (subagents / "agent-a1.jsonl").write_text(
+        _subagent_turn(
+            "claude-sonnet-5", "medium", timestamp="2026-09-01T10:01:00Z", input=1
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    written = json.dumps(module.usage("claude-code", str(transcript)))
+
+    for forbidden in (
+        "the whole answer",
+        "the whole thinking",
+        "pytest ...",
+        "+++ b/x",
+        "/Users/thomas",
+    ):
+        assert forbidden not in written
+
+
+def test_reading_walks_no_further_than_the_sessions_own_files(tmp_path: Path) -> None:
+    """No encoding is derived and no other session's files are opened."""
+
+    module = _load_session_records()
+    other_session = tmp_path / "other-session.jsonl"
+    other_session.write_text(
+        _turn("claude-haiku-5", "low", timestamp="2026-09-01T09:00:00Z", input=999)
+        + "\n",
+        encoding="utf-8",
+    )
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text(
+        _turn("claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1)
+        + "\n",
+        encoding="utf-8",
+    )
+
+    groups = module.usage("claude-code", str(transcript))
+
+    assert len(groups) == 1
+    assert groups[0]["model"] == "claude-opus-5"

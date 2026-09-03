@@ -96,6 +96,46 @@ def _drafts(data: Path) -> list[Path]:
     return sorted((data / "capture" / "drafts").glob("*.json"))
 
 
+def _assistant_line(
+    model: str,
+    effort: str,
+    *,
+    timestamp: str,
+    is_sidechain: bool = False,
+    input: int = 0,
+    output: int = 0,
+    cache_read: int = 0,
+    cache_creation: int = 0,
+    thinking: int | None = None,
+) -> str:
+    """Provide one assistant line exactly as Claude Code's own transcript writes it."""
+
+    usage: dict[str, Any] = {
+        "input_tokens": input,
+        "output_tokens": output,
+        "cache_read_input_tokens": cache_read,
+        "cache_creation_input_tokens": cache_creation,
+    }
+    if thinking is not None:
+        usage["output_tokens_details"] = {"thinking_tokens": thinking}
+    return json.dumps(
+        {
+            "type": "assistant",
+            "isSidechain": is_sidechain,
+            "message": {"model": model, "usage": usage},
+            "effort": effort,
+            "timestamp": timestamp,
+        }
+    )
+
+
+def _write_transcript(path: Path, *lines: str) -> None:
+    """Write one Claude Code session transcript, creating its directory."""
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def test_enabling_the_skill_alone_captures_nothing(tmp_path: Path) -> None:
     """Capture starts on an explicit opt-in, never on the Skill being Enabled."""
 
@@ -721,3 +761,295 @@ def test_no_pending_review_notification_or_retention_surface_remains() -> None:
         "REVIEW_ACTIONS",
     ):
         assert not hasattr(module, removed), removed
+
+
+# --- Reading the finished session's own record (#225) ------------------------
+
+
+def test_a_finished_session_reads_its_exact_model_effort_and_tokens_from_the_record(
+    tmp_path: Path,
+) -> None:
+    """The Seat and the usage come from the Harness's own record, not a guess."""
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    transcript = tmp_path / "session-1.jsonl"
+    _write_transcript(
+        transcript,
+        _assistant_line(
+            "claude-opus-5",
+            "high",
+            timestamp="2026-09-01T10:00:00Z",
+            input=10,
+            output=20,
+            cache_read=5,
+            cache_creation=3,
+            thinking=7,
+        ),
+    )
+
+    _start(module, data, "session-1")
+    result = _finish(module, data, "session-1", transcript_path=str(transcript))
+
+    assert result["recorded"]
+    record = _usage_records(data)[0]
+    assert record["seat"]["model"] == "claude-opus-5"
+    assert record["seat"]["native_deliberation"] == "high"
+    assert record["usage"]["tokens"] == {
+        "input": 10,
+        "output": 20,
+        "cache_read": 5,
+        "cache_creation": 3,
+        "thinking": 7,
+    }
+
+
+def test_the_configured_seats_own_channel_and_surface_survive_the_record_read(
+    tmp_path: Path,
+) -> None:
+    """The record supplies model and deliberation; the rest is still configuration."""
+
+    module = _load()
+    data = tmp_path / "data"
+    module.enable(data, tmp_path / "home", ["claude-code"], _command(), _seat())
+    transcript = tmp_path / "session-1.jsonl"
+    _write_transcript(
+        transcript,
+        _assistant_line(
+            "claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1
+        ),
+    )
+
+    module.hook(
+        data, "SessionStart", {"session_id": "session-1", "harness": "claude-code"}
+    )
+    module.hook(
+        data,
+        "SessionEnd",
+        {
+            "session_id": "session-1",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+        },
+    )
+
+    record = _usage_records(data)[0]
+    assert record["seat"]["model"] == "claude-opus-5"
+    assert record["seat"]["channel"] == _seat()["channel"]
+    assert record["seat"]["surface"] == _seat()["surface"]
+
+
+def test_a_session_that_delegated_work_writes_a_second_record_for_that_seat(
+    tmp_path: Path,
+) -> None:
+    """A subagent's turns are counted against its own Seat, never the main one's."""
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    session_dir = tmp_path / "session-1"
+    transcript = tmp_path / "session-1.jsonl"
+    _write_transcript(
+        transcript,
+        _assistant_line(
+            "claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=10
+        ),
+    )
+    _write_transcript(
+        session_dir / "subagents" / "agent-a1.jsonl",
+        _assistant_line(
+            "claude-sonnet-5",
+            "medium",
+            timestamp="2026-09-01T10:01:00Z",
+            is_sidechain=True,
+            input=3,
+        ),
+    )
+
+    _start(module, data, "session-1")
+    result = _finish(module, data, "session-1", transcript_path=str(transcript))
+
+    records = _usage_records(data)
+    assert len(result["recorded"]) == 2
+    assert len(records) == 2
+
+    by_model = {record["seat"]["model"]: record for record in records}
+    assert by_model["claude-opus-5"]["usage"]["tokens"]["input"] == 10
+    assert by_model["claude-sonnet-5"]["usage"]["tokens"]["input"] == 3
+
+    # The delegated Seat's own surface is not the main session's to lend.
+    delegated = by_model["claude-sonnet-5"]
+    for field in ("channel", "surface", "adapter_id", "serving_mode"):
+        assert delegated["seat"][field] is None, field
+    assert delegated["seat"]["native_deliberation"] == "medium"
+
+
+def test_a_missing_record_still_writes_the_row_with_every_measurement_null(
+    tmp_path: Path,
+) -> None:
+    """A Harness that kept no readable record is an absence, not a failure.
+
+    Nothing here names a seat at all — no payload and no opt-in — so the row
+    still measures nothing, exactly as it did before this ticket.
+    """
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+
+    module.hook(
+        data, "SessionStart", {"session_id": "session-1", "harness": "claude-code"}
+    )
+    result = module.hook(
+        data,
+        "SessionEnd",
+        {
+            "session_id": "session-1",
+            "harness": "claude-code",
+            "transcript_path": str(tmp_path / "never-written.jsonl"),
+        },
+    )
+
+    assert result["recorded"]
+    record = _usage_records(data)[0]
+    assert record["usage"]["tokens"] is None
+    assert record["seat"]["model"] is None
+
+
+def test_a_truncated_record_still_writes_the_row_and_never_raises(
+    tmp_path: Path,
+) -> None:
+    """An unparseable line is skipped; the row is still written."""
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    transcript = tmp_path / "session-1.jsonl"
+    transcript.write_text("{ not json at all\nstill not json\n", encoding="utf-8")
+
+    _start(module, data, "session-1")
+    result = _finish(module, data, "session-1", transcript_path=str(transcript))
+
+    assert result["recorded"]
+    assert _usage_records(data)[0]["usage"]["tokens"] is None
+
+
+def test_no_forbidden_content_reaches_a_usage_record_from_a_read_transcript(
+    tmp_path: Path,
+) -> None:
+    """Even a transcript packed with everything forbidden yields none of it."""
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    session_dir = tmp_path / "session-1"
+    transcript = tmp_path / "session-1.jsonl"
+    line = json.loads(
+        _assistant_line(
+            "claude-opus-5", "high", timestamp="2026-09-01T10:00:00Z", input=1
+        )
+    )
+    line["message"]["content"] = [{"type": "text", "text": "the whole answer"}]
+    line["message"]["reasoning"] = "the whole thinking"
+    line["cwd"] = "/Users/thomas/Projects/skills"
+    line["toolUseResult"] = {"stdout": "pytest ...", "diff": "--- a/x\n+++ b/x"}
+    _write_transcript(transcript, json.dumps(line))
+    _write_transcript(
+        session_dir / "subagents" / "agent-a1.jsonl",
+        _assistant_line(
+            "claude-sonnet-5",
+            "medium",
+            timestamp="2026-09-01T10:01:00Z",
+            is_sidechain=True,
+            input=1,
+        ),
+    )
+
+    _start(module, data, "session-1")
+    result = _finish(module, data, "session-1", transcript_path=str(transcript))
+
+    assert result["recorded"]
+    written = json.dumps(_usage_records(data)) + json.dumps(result)
+    for forbidden in (
+        "the whole answer",
+        "the whole thinking",
+        "pytest ...",
+        "+++ b/x",
+        "/Users/thomas",
+        str(transcript),
+    ):
+        assert forbidden not in written
+
+
+def test_the_transcript_path_never_reaches_a_persisted_draft(tmp_path: Path) -> None:
+    """A locate-only field is read to open the record and retained nowhere."""
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    transcript = tmp_path / "the-session-transcript.jsonl"
+
+    module.hook(
+        data,
+        "Stop",
+        {
+            "session_id": "session-1",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+        },
+    )
+    written = "\n".join(
+        path.read_text(encoding="utf-8") for path in (data / "capture").rglob("*.json")
+    )
+
+    assert str(transcript) not in written
+    assert "transcript_path" not in written
+
+
+def test_transcript_path_is_an_allowed_payload_field(tmp_path: Path) -> None:
+    """The locate-only field is named on the allow-list rather than inferred."""
+
+    module = _load()
+    assert "transcript_path" in module.PAYLOAD_ALLOWED
+
+
+def test_status_names_which_harnesses_supply_measurements(tmp_path: Path) -> None:
+    """A store of empty rows is not something to leave for the user to discover."""
+
+    module = _load()
+    data = tmp_path / "data"
+    module.enable(data, tmp_path / "home", ["claude-code", "codex"], _command())
+    reported = module.status(data, tmp_path / "home")
+
+    by_harness = {entry["harness"]: entry for entry in reported["harnesses"]}
+    assert by_harness["claude-code"]["measurements"] is True
+    assert by_harness["codex"]["measurements"] is False
+
+
+def test_an_unreadable_record_falls_back_to_whatever_the_lifecycle_signals_gave(
+    tmp_path: Path,
+) -> None:
+    """A payload-supplied seat still measures a session the record cannot describe."""
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+
+    module.hook(
+        data,
+        "SessionStart",
+        {
+            "session_id": "session-1",
+            "harness": "claude-code",
+            "seat": _seat(),
+            "measurements": {"tokens": {"input": 42}},
+        },
+    )
+    result = module.hook(
+        data,
+        "SessionEnd",
+        {
+            "session_id": "session-1",
+            "harness": "claude-code",
+            "transcript_path": str(tmp_path / "never-written.jsonl"),
+        },
+    )
+
+    assert result["recorded"]
+    record = _usage_records(data)[0]
+    assert record["seat"]["model"] == _seat()["model"]
+    assert record["usage"]["tokens"] == {"input": 42}
