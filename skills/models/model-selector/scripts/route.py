@@ -2812,9 +2812,13 @@ def _experiment_fingerprints(
 
     Every point named here is one the request can actually launch, so the pool
     is the one the Standing Policy left rather than the raw hard-filtered
-    construction, and the step between two points is the same Rung the routing
-    decision climbs. A brief that named a second implementation of adjacency
-    could tell a reader to measure a configuration routing would refuse.
+    construction. Where an exact point was selected, the step above it is the
+    same Rung the routing decision climbs, because it is resolved by the same
+    call: a brief that named a second implementation of adjacency could tell a
+    reader to measure a configuration routing would refuse. The inherited path
+    has no such step to name — it lists the measured frontier first and fills
+    the rest from that same pool, so its points are comparable evidence rather
+    than an escalation pair.
     """
 
     # Re-derive the exact bounded ladder the selection itself resolved over.
@@ -2894,12 +2898,12 @@ def _experiment_brief(
     # absence rather than promising a comparison it did not supply.
     comparable = len(fingerprints) > 1
     sequential_plan = (
-        "Run the weakest listed point, then only its permitted adjacent escalation after checker-confirmed failure."
+        "Run the weakest listed point, then the next listed point only after checker-confirmed failure."
         if comparable
         else "Run the single listed point: this request reaches no further Rung, so there is nothing to compare it against and no escalation to spend a confirmed failure on."
     )
     parallel_plan = (
-        "Run isolated adjacent points against the same frozen workload and checker when the caller grants parallel capacity."
+        "Run the listed points in isolation against the same frozen workload and checker when the caller grants parallel capacity."
         if comparable
         else "Run the single listed point alone: with nothing to compare it against, parallel capacity buys no second point here."
     )

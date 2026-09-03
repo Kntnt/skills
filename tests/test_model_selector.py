@@ -3356,17 +3356,22 @@ def test_route_and_recommend_share_selection_but_not_presentation() -> None:
     assert recommendation["experiment_brief"]["parallel_plan"]
 
 
-def _brief_of(snapshot: dict[str, Any], **changes: Any) -> Any:
-    """Return the experiment brief one recommended request actually receives."""
+def _recommendation_of(snapshot: dict[str, Any], **changes: Any) -> Any:
+    """Return the whole recommendation one request actually receives."""
 
-    recommendation = _load_router().recommend(
+    return _load_router().recommend(
         {
             "schema_version": 1,
             "context": deepcopy(snapshot),
             "requests": [_request(**changes)],
         }
     )["recommendations"][0]
-    return recommendation["experiment_brief"]
+
+
+def _brief_of(snapshot: dict[str, Any], **changes: Any) -> Any:
+    """Return the experiment brief one recommended request actually receives."""
+
+    return _recommendation_of(snapshot, **changes)["experiment_brief"]
 
 
 def _brief_rungs(
@@ -3459,6 +3464,53 @@ def test_experiment_brief_says_plainly_when_it_has_nothing_to_compare() -> None:
     assert "nothing to compare" not in paired["sequential_plan"]
     assert "nothing to compare" not in paired["parallel_plan"]
     assert paired["run_bound"] == 4
+
+
+def test_a_pinned_deliberation_never_reaches_the_inherited_brief_path() -> None:
+    """Neither route to an inherited brief survives a pinned deliberation.
+
+    The inherited path appends from the bounded pool without asking the shared
+    resolver, so a lock reaching it would name a point at the level the lock
+    forbids (ADR-0146). It carries no guard of its own because nothing reaches
+    it under a lock: verdict authority keeps its overrides but inherits for a
+    reason that emits no brief, and evidence-driven inheritance resolves an
+    exact point as soon as a lock is present. This test fails the day either
+    of those two facts changes.
+    """
+
+    router = _load_router()
+
+    # Inherit on the one authority whose overrides survive: no brief at all.
+    snapshot = _ladder_snapshot()
+    verdict = _recommendation_of(
+        snapshot, authority="verdict", overrides={"deliberation": "low"}
+    )
+    assert verdict["decision"]["status"] == "inherit"
+    reason = verdict["decision"]["inheritance"]["reason"]
+    assert reason == "verdict_authority"
+    assert reason not in router.EVIDENCE_INHERITANCE_REASONS
+    assert verdict["experiment_brief"] is None
+
+    # Pin the deliberation where the same snapshot would otherwise inherit.
+    unmeasured = _ladder_snapshot()
+    unmeasured["override_policy"]["cold_start"] = "inherit"
+    unchecked = {"checker": {"kind": "none"}}
+    locked = _recommendation_of(
+        unmeasured, overrides={"deliberation": "low"}, **unchecked
+    )
+
+    # Assert the lock resolves an exact point, so the selected guard answers it.
+    assert locked["decision"]["status"] == "selected"
+    assert len(locked["experiment_brief"]["configuration_fingerprints"]) == 1
+    assert "nothing to compare" in locked["experiment_brief"]["sequential_plan"]
+
+    # Assert the very same snapshot does reach the inherited path unlocked.
+    free = _recommendation_of(unmeasured, **unchecked)
+    assert free["decision"]["status"] == "inherit"
+    assert free["decision"]["inheritance"]["reason"] in (
+        router.EVIDENCE_INHERITANCE_REASONS
+    )
+    assert len(free["experiment_brief"]["configuration_fingerprints"]) == 2
 
 
 def test_route_totally_validates_nested_snapshot_and_request_families() -> None:
@@ -3674,7 +3726,7 @@ def test_uncertain_results_include_an_agent_ready_experiment_brief() -> None:
         "observation artifact and import form accepted by `model-selector record`",
         "quota-efficient sequential plan",
         "time-efficient parallel plan",
-        "isolated agents run the listed adjacent configurations against the same frozen task and checker",
+        "isolated agents run the listed configurations against the same frozen task and checker",
         "the same Rung routing escalates along",
         "there is nothing to compare it against",
     }
