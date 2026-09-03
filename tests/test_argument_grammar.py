@@ -145,14 +145,18 @@ def test_the_policy_engine_keeps_every_refusal_it_answers_with(
 ) -> None:
     """Each refused line, by the code and the exit status it comes back with."""
 
-    usage = (
+    top_level_usage = (
+        "invalid_arguments",
+        "Use policy show [<cohort>], policy reset [<cohort>], or purge.",
+    )
+    policy_usage = (
         "invalid_arguments",
         "Use policy show [<cohort>] or policy reset [<cohort>].",
     )
     refused = {
-        (): usage,
-        ("policy",): usage,
-        ("policy", "audit"): usage,
+        (): top_level_usage,
+        ("policy",): policy_usage,
+        ("policy", "audit"): policy_usage,
         ("policy", "show", "one", "two"): (
             "invalid_arguments",
             "At most one Cohort is addressed.",
@@ -165,6 +169,8 @@ def test_the_policy_engine_keeps_every_refusal_it_answers_with(
             "unconfirmed_reset",
             "A reset restores the shipped default; re-run it with --yes.",
         ),
+        ("purge", "operand"): ("invalid_arguments", "purge takes no operand."),
+        ("purge", "--unknown=1"): ("invalid_arguments", "Unsupported options."),
     }
 
     for argv, expected in refused.items():
@@ -229,7 +235,7 @@ def test_the_observation_engine_keeps_every_refusal_it_answers_with(
     attempts = _attempts(tmp_path)
     malformed = tmp_path / "malformed.json"
     malformed.write_text("{not json", encoding="utf-8")
-    usage = ("invalid_arguments", "Use observe <path> or record <path>.")
+    usage = ("invalid_arguments", "Use observe <path>, record <path>, or purge.")
     refused: dict[tuple[str, ...], tuple[str, str]] = {
         (): usage,
         ("import",): usage,
@@ -257,6 +263,9 @@ def test_the_observation_engine_keeps_every_refusal_it_answers_with(
             "invalid_artifact",
             "The artifact contains an unsupported top-level field.",
         ),
+        ("purge", "operand"): ("invalid_arguments", "purge takes no operand."),
+        ("purge", "--unknown=1"): ("invalid_arguments", "Unsupported options."),
+        ("purge", "--yes", "--yes"): ("invalid_arguments", "Unsupported options."),
     }
 
     for argv, (code, detail) in refused.items():

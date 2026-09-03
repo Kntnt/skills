@@ -16,7 +16,9 @@ model-selector - compare configured AI model systems by price and performance
 
 **/model-selector** **setup** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
-**/model-selector** **config** [**show**|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **config** [**show**|**history**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
+**/model-selector** **config** **reset** [**--evidence**] [**--yes**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 **/model-selector** **config** **add** [**--data=**_PATH_] (**model**|**channel**) [**--** *INSTRUCTION*]
 
@@ -139,6 +141,14 @@ Install into the named Harness, repeatable; `claude-code`, `codex`, or `opencode
 **--force**
 
 For `update`, check every relevant mutable index once regardless of cadence. Known immutable details and existing observations remain untouched.
+
+**--evidence**
+
+For `config reset`, discard this machine's own measurement — the evidence ledger and its derived frontiers, the quota store, the Standing Policy override and its history, capture and the Usage Record store — after confirmation, while keeping the profile, its history, and researched public facts. Valid only for `config reset`; bare `config reset` removes the profile and keeps this same measurement.
+
+**--yes**
+
+Answer `--evidence`'s confirmation yes rather than asking, for an unattended run. Valid only combined with `--evidence`, and refused rather than ignored on every other form, `config reset` bare included.
 
 ## OUTPUT
 

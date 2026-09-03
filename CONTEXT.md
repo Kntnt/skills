@@ -132,7 +132,7 @@ The set of routed attempts that share a role and a kind of work, within which ev
 _Avoid_: category, bucket, task type, benchmark
 
 **Standing Policy**:
-A per-Cohort rule kept in the user's configuration with shipped defaults. It fixes the Rung a Cohort starts at, moves that Rung one step up after repeated externally verified failures, never moves it down by itself, and bounds Exploration Attempts.
+A per-Cohort rule kept as script-owned state beside the user's configuration, with shipped defaults. It fixes the Rung a Cohort starts at, moves that Rung one step up after repeated externally verified failures, never moves it down by itself, and bounds Exploration Attempts.
 _Avoid_: escalation rule, tier policy, auto-scaling, preset
 
 **Rung**:

@@ -452,6 +452,123 @@ def test_disabling_removes_the_integration_and_keeps_usage_records(
     assert _drafts(data) == []
 
 
+def test_purge_reports_the_capture_home_in_bytes_and_the_ledger_in_rows(
+    tmp_path: Path,
+) -> None:
+    """A preview sizes the directory by byte and the JSONL store by row.
+
+    Removing `capture/` turns capture off, because its `capture.json` consent
+    record goes with it — the Harness hooks stay installed, and `capture
+    --on` turns it back on (issue #227).
+    """
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    _start(module, data, "session-1")
+    _finish(module, data, "session-1")
+    home = module.home(data)
+    ledger = data / "usage-records.jsonl"
+    assert home.exists() and ledger.exists()
+
+    # A preview reports both exact paths and their size, and writes nothing.
+    preview = module.purge_paths(data)
+    by_path = {entry["path"]: entry for entry in preview}
+    assert by_path[str(home)] == {
+        "path": str(home),
+        "present": True,
+        "unit": "bytes",
+        "count": module.status(data, tmp_path / "home")["storage_bytes"],
+    }
+    assert by_path[str(ledger)] == {
+        "path": str(ledger),
+        "present": True,
+        "unit": "rows",
+        "count": 1,
+    }
+    assert home.exists() and ledger.exists(), "a preview must write nothing"
+
+
+def test_purge_removes_the_capture_home_and_the_usage_ledger(tmp_path: Path) -> None:
+    """Confirmed, purge removes both and reports exactly what it found.
+
+    The hooks a Harness already runs stay installed: making the Skill
+    Disabled is what removes those, and this verb never touches them.
+    """
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    _start(module, data, "session-1")
+    _finish(module, data, "session-1")
+    home = module.home(data)
+    ledger = data / "usage-records.jsonl"
+
+    preview = module.purge_paths(data)
+    removed = module.purge(data)
+
+    assert removed == preview
+    assert not home.exists()
+    assert not ledger.exists()
+
+    # The Harness's own hook file is untouched: this verb never reaches it.
+    settings = json.loads(
+        (tmp_path / "home" / ".claude" / "settings.json").read_text(encoding="utf-8")
+    )
+    assert settings["hooks"]["SessionStart"]
+
+    # A lifecycle signal after the purge starts a fresh draft: capture is off
+    # only because `capture.json` went with the home directory, exactly as
+    # `disable` would leave it, and a later opt-in writes the file again.
+    _start(module, data, "session-2")
+    assert _drafts(data) == []
+
+
+def test_purge_reports_an_absent_home_and_ledger_as_absent(tmp_path: Path) -> None:
+    """A data directory that never captured anything purges as a no-op."""
+
+    module = _load()
+    data = tmp_path / "data"
+    report = module.purge(data)
+
+    assert report == [
+        {"path": str(module.home(data)), "present": False},
+        {"path": str(data / "usage-records.jsonl"), "present": False},
+    ]
+    assert not data.exists() or not list(data.iterdir())
+
+
+def test_the_purge_cli_previews_without_yes_and_removes_with_it(
+    tmp_path: Path,
+) -> None:
+    """Unlike a destructive reset elsewhere in the collection, a purge preview
+    is a success rather than a refusal — it simply writes nothing yet."""
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    _start(module, data, "session-1")
+    _finish(module, data, "session-1")
+
+    preview = subprocess.run(
+        [sys.executable, str(CAPTURE), "purge", "--data", str(data)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert preview.returncode == 0, preview.stdout + preview.stderr
+    rendered = json.loads(preview.stdout)
+    assert rendered["confirmed"] is False
+    assert module.home(data).exists()
+
+    done = subprocess.run(
+        [sys.executable, str(CAPTURE), "purge", "--yes", "--data", str(data)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert done.returncode == 0, done.stdout + done.stderr
+    assert json.loads(done.stdout)["confirmed"] is True
+    assert not module.home(data).exists()
+
+
 def test_an_unsupported_harness_is_never_reported_healthy(tmp_path: Path) -> None:
     """A Harness that cannot carry the contract says so instead of pretending."""
 

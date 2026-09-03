@@ -12,7 +12,7 @@ model-selector config policy reset - restore the shipped Standing Policy for a C
 
 `model-selector config policy reset` removes a Cohort's stored override and appends one history row saying the user restored it. With *COHORT* it restores that Cohort. With no operand it restores every overridden Cohort, appending one row per Cohort removed. Resetting a Cohort nothing ever moved changes nothing and records nothing.
 
-This is the only downward move a Standing Policy makes: the failure threshold ratchets a Cohort up and never back. The Skill shows the exact store path and the Cohorts about to be restored, and asks for confirmation before writing.
+This is the narrower of the Standing Policy's two downward moves. A Cohort ratchets up only from its failure threshold, and only a deliberate act of the user's brings it back down: this command, which restores the shipped default for one Cohort and keeps the history, or `config reset --evidence`, which discards the measurement the movement rests on and the history with it. The Skill shows the exact store path and the Cohorts about to be restored, and asks for confirmation before writing.
 
 Evidence, derived frontiers, and the model and access profile are untouched. The restored default reaches the next frozen routing context, never a run already under way.
 

@@ -53,6 +53,8 @@ machine_judged: Callable[[list[dict[str, Any]]], list[dict[str, Any]]] = (
 projected_evidence: Callable[[Path], dict[str, Any]] = (
     _IMPLEMENTATION.projected_evidence
 )
+purge_paths: Callable[[Path], list[dict[str, Any]]] = _IMPLEMENTATION.purge_paths
+purge: Callable[[Path], list[dict[str, Any]]] = _IMPLEMENTATION.purge
 
 
 def main(argv: list[str] | None = None) -> int:

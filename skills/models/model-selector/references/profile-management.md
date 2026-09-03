@@ -69,7 +69,7 @@ When an old ledger has access records but no `config.json`, offer to import the 
 | `/model-selector config policy [show] [<cohort>]` | Show the effective Standing Policy and the movements behind it; no network or writes. |
 | `/model-selector config policy reset [<cohort>]` | Restore the shipped Standing Policy for one Cohort or for all of them after confirmation; retain the history. |
 | `/model-selector config history` | Show revision timestamps and summaries from local history; no network or writes. |
-| `/model-selector config reset` | Confirm the exact configuration path, append a tombstone and remove only `config.json`; retain evidence and history. |
+| `/model-selector config reset [--evidence] [--yes]` | Confirm the exact paths and their row or byte counts, then remove them: bare removes configuration and keeps measurement, appending a tombstone and removing only `config.json`; `--evidence` removes measurement and keeps configuration, discarding the evidence ledger, the Standing Policy, capture and the Usage Record store. `--yes` answers `--evidence`'s confirmation unattended. |
 
 After any add, edit or remove, report sources newly due, selections now lacking evidence and derived frontiers invalidated. Configuration commands consult local evidence only and never trigger network access or evaluations. A supplied release absent from local evidence may be saved with `validation_status: unverified`; it remains excluded from decisive recommendations until `/model-selector update` validates it.
 

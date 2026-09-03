@@ -54,7 +54,7 @@ The frozen `override_policy.standing_policy` carries a `default` entry and a `co
 
 Bounds are read on the total order of `model_capability` and then position on the portable scale, both ends inclusive; a Rung whose deliberation the Harness carries is compared on the model dimension alone, launching as it does at the seat's own control. An otherwise eligible point outside the resolved range is excluded as `standing_policy_out_of_bounds` and is gone for every later step, so the same resolved ceiling bounds selection and escalation alike. A concrete `starting_rung` replaces both cold-start branches where the exact Rung is still an eligible reachable candidate; where it is not, routing falls back to the cold start and audits `standing_policy_start_unavailable` rather than clamping silently or guessing a replacement. A concrete bound naming a model the snapshot no longer ranks bounds nothing and resolves to the ladder's own end.
 
-A Standing Policy ratchets up only. Nothing moves it down but a user's `config policy reset`, it is stored by scripts rather than edited by hand, and it enters the snapshot identity, so a change is a new snapshot and never reaches a run already frozen.
+A Standing Policy ratchets up only. Nothing moves it down but a deliberate act of the user's — `config policy reset`, which restores the shipped default and keeps the history, or `config reset --evidence`, which discards the measurement the movement rests on and the history with it — it is stored by scripts rather than edited by hand, and it enters the snapshot identity, so a change is a new snapshot and never reaches a run already frozen.
 
 ## Exploration
 

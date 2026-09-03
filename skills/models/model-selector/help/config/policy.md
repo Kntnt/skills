@@ -10,7 +10,7 @@ model-selector config policy - inspect or restore the Standing Policy routing st
 
 ## DESCRIPTION
 
-`model-selector config policy` reads and restores the Standing Policy, which is where one workload Cohort starts on the Rung ladder and how far up and down that ladder routing may go. It ships working: nothing has to be set for routing to have a policy, and there is no `set`. A Cohort's policy moves only when measured failures trip its threshold, and it moves only upward; the one way back down is this command's `reset`.
+`model-selector config policy` reads and restores the Standing Policy, which is where one workload Cohort starts on the Rung ladder and how far up and down that ladder routing may go. It ships working: nothing has to be set for routing to have a policy, and there is no `set`. A Cohort's policy moves only when measured failures trip its threshold, and it moves only upward; what brings it back down is a deliberate act of the user's — this command's `reset`, which restores the shipped default and keeps the history, or `config reset --evidence`, which discards the measurement the movement rests on and the history with it.
 
 The policy lives beside `config.json` in the selected data directory, as `standing-policy.json` with an append-only `standing-policy-history.jsonl` next to it. Only Cohorts something moved are stored there; every other Cohort has the shipped default. The store is script-owned and is never hand-edited, so the profile's own `config.lock` protocol does not apply to it.
 
