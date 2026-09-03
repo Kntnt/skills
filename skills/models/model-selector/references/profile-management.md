@@ -10,6 +10,8 @@ The selected data directory contains:
 | --- | --- |
 | `config.json` | Current validated configuration and active revision. |
 | `config-history.jsonl` | Append-only prior revisions and tombstones. |
+| `standing-policy.json` | Script-owned Standing Policy overrides, one entry per moved workload Cohort. |
+| `standing-policy-history.jsonl` | Append-only Standing Policy movements and their causes. |
 
 `config.json` contains `schema_version`, `profile_id`, `revision`, `created_at`, `updated_at`, `currency`, `region`, refresh cadences, access channels, model selections and optional quota shadow prices. Give every channel and model selection a stable user-facing ID.
 
@@ -28,6 +30,14 @@ Routing policy has shipped defaults rather than profile-owned setup fields: `col
 Serialize writes with an atomically created `config.lock` directory containing owner and timestamp metadata. While holding the lock, re-read and verify the expected revision/content hash, abort on a concurrent change, recover any prior `config.previous.*.json` snapshot missing from history, and validate every reference. Write the new revision to a temporary sibling, preserve the current state as `config.previous.<revision>.json`, atomically replace `config.json`, append the preserved revision to `config-history.jsonl` idempotently by profile/revision, then remove the preserved snapshot and lock. Report and retain recoverable files if any step fails. A removal creates a new revision; it does not delete ledger evidence. A reset follows the same lock protocol, appends a tombstone and removes `config.json` only after the user confirms the exact path.
 
 If `config.lock` already exists, inspect its owner and timestamp without modifying it. Stop for a live or unverifiable owner. When the owner can be proven dead and the lock is older than ten minutes, atomically rename it to `config.lock.abandoned.<UTC timestamp>` before retrying; retain and report that recovery artifact instead of deleting it silently.
+
+## Standing policy
+
+The Standing Policy is where one workload Cohort starts on the Rung ladder and how far up and down that ladder routing may go. It is not part of the profile and is never edited by hand: the shipped default is a complete working policy, the store holds only the overrides a measured failure threshold created, and the `config.lock` protocol above does not apply to it. Both files are owned by the Collection Library's `scripts/standing_policy.py`, which `config policy` invokes and which the context derivation reads.
+
+The shipped default is `starting_rung: "cold_start"`, `floor: "weakest_enabled"`, `ceiling: "main_seat"`, a failure threshold of 2 failures in a window of 4, and an exploration budget of `epsilon` 0.1, one attempt per run, seed `kntnt-standing-policy-v1`. Those first three values are symbolic and resolve against each individual request's candidate ladder; they are never materialized into the user file merely because routing read them. A Cohort with no entry has revision 0; its first override starts at revision 1 and each later movement raises its own revision by one. In version 1 nobody sets a floor, a ceiling, a threshold, an epsilon, or a budget: only `starting_rung` is ever stored, and only by a threshold trip.
+
+`standing-policy.json` carries `schema_version` and a `cohorts` object keyed by the canonical `workload_cohort`. Each history row carries `effective_at`, the Cohort, `from`, `to`, `revision_before`, `revision_after`, and a `cause`: a `failure_threshold` cause names the run keys that tripped it, and a `reset` cause names none, having no evidence behind it beyond the user asking. `config policy show` reads both and writes nothing; `config policy reset` removes one Cohort's override, or every one of them where no Cohort is named, and appends one row per Cohort restored.
 
 When `config.json` is invalid, preserve its exact bytes as `config.invalid.<UTC timestamp>.json` with user-only permissions before setup writes a replacement. Report the archive path.
 
@@ -56,6 +66,8 @@ When an old ledger has access records but no `config.json`, offer to import the 
 | `/model-selector config add channel` | Interview one access channel; leave it unused only when the user confirms that intent. |
 | `/model-selector config edit [model|channel] <id>` | Show the exact current record, collect changed fields and save a validated revision. |
 | `/model-selector config remove [model|channel] <id>` | Show the exact target and consequences, then save a revision after confirmation. A referenced channel must be reassigned or its dependent model selections removed in the same revision. |
+| `/model-selector config policy [show] [<cohort>]` | Show the effective Standing Policy and the movements behind it; no network or writes. |
+| `/model-selector config policy reset [<cohort>]` | Restore the shipped Standing Policy for one Cohort or for all of them after confirmation; retain the history. |
 | `/model-selector config history` | Show revision timestamps and summaries from local history; no network or writes. |
 | `/model-selector config reset` | Confirm the exact configuration path, append a tombstone and remove only `config.json`; retain evidence and history. |
 

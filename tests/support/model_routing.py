@@ -5,6 +5,35 @@ from __future__ import annotations
 from typing import Any
 
 
+def standing_policy(cohorts: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
+    """Provide the shipped Standing Policy exactly as the store projects it.
+
+    The shipped values are written out here rather than imported, so a change
+    to the store's own constants has to be answered deliberately in the
+    fixtures that pin what routing sees.
+    """
+
+    default = {
+        "revision": 0,
+        "starting_rung": "cold_start",
+        "floor": "weakest_enabled",
+        "ceiling": "main_seat",
+        "failure_threshold": {"failures": 2, "window": 4},
+        "exploration": {
+            "epsilon": 0.1,
+            "max_per_run": 1,
+            "seed": "kntnt-standing-policy-v1",
+        },
+    }
+    return {
+        "schema_version": 1,
+        "default": default,
+        "cohorts": {
+            cohort: default | entry for cohort, entry in sorted((cohorts or {}).items())
+        },
+    }
+
+
 def routing_snapshot() -> dict[str, Any]:
     """Provide one frozen exact-point routing context."""
 
@@ -130,6 +159,7 @@ def complete_routing_snapshot() -> dict[str, Any]:
             "quality_floor": 0.9,
             "shadow_prices": None,
             "objective": "cost_first",
+            "standing_policy": standing_policy(),
         }
     )
     snapshot["evidence"]["records"] = []

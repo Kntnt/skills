@@ -2,7 +2,7 @@
 name: model-selector
 description: Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.
 disable-model-invocation: false
-argument-hint: "[recommend] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] [<workload>] | chart|compare [--decision=route|renew] [--data=<path>] <workload> | context|record [--data=<path>] <path> | route <path> | observe --artifact=<path> <path> | capture --on [--harness=<name>] [--data=<path>] | capture --off|--status [--data=<path>] | capture --review=<identity> --action=save|failed|ignore [--data=<path>] | config [show|history|reset] [--data=<path>] | config add|edit|remove [--data=<path>] model|channel [<id>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
+argument-hint: "[recommend] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] [<workload>] | chart|compare [--decision=route|renew] [--data=<path>] <workload> | context|record [--data=<path>] <path> | route <path> | observe --artifact=<path> <path> | capture --on [--harness=<name>] [--data=<path>] | capture --off|--status [--data=<path>] | capture --review=<identity> --action=save|failed|ignore [--data=<path>] | config [show|history|reset] [--data=<path>] | config add|edit|remove [--data=<path>] model|channel [<id>] | config policy [show|reset] [--data=<path>] [<cohort>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -19,7 +19,7 @@ Configure the exact model versions and subscription/API channels available to on
 
 **Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run "<checker>" check --here="$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
 
-`$HERE` is the directory that contains this SKILL.md.
+`$HERE` is the directory that contains this SKILL.md. `$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
 
 ## Invocation Envelope
 
@@ -42,6 +42,9 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `config add` | `$HERE/help/config/add.md` |
 | `config edit` | `$HERE/help/config/edit.md` |
 | `config remove` | `$HERE/help/config/remove.md` |
+| `config policy` | `$HERE/help/config/policy.md` |
+| `config policy show` | `$HERE/help/config/policy/show.md` |
+| `config policy reset` | `$HERE/help/config/policy/reset.md` |
 | `config history` | `$HERE/help/config/history.md` |
 | `config reset` | `$HERE/help/config/reset.md` |
 | `update` | `$HERE/help/update.md` |
@@ -60,6 +63,8 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 | `/model-selector config edit model\|channel <id>` | Edit one model selection or access channel. |
 | `/model-selector config remove model\|channel <id>` | Remove one model selection or access channel after confirmation. |
 | `/model-selector config history\|reset` | Show configuration history, or reset the active configuration after confirmation. |
+| `/model-selector config policy [show] [<cohort>]` | Show the Standing Policy each workload Cohort routes under, and what moved it. |
+| `/model-selector config policy reset [<cohort>]` | Restore the shipped Standing Policy for one Cohort, or for every overridden Cohort, after confirmation. |
 | `/model-selector [recommend] [<workload>]` | Recommend from stored evidence. Infer the current task only when the workload is omitted and unambiguous. |
 | `/model-selector context <path>` | Derive a complete route artifact from stored selections and exact runtime facts, or wrap a frozen snapshot unchanged. |
 | `/model-selector route <path>` | Resolve a structured request artifact into ordered exact launch decisions. |
@@ -92,6 +97,14 @@ One point means `model version × effort/thinking × harness × tools × policy 
 Read `$HERE/references/profile-management.md`. Setup is mandatory on first use and persistent thereafter. `setup` performs a complete guided review; `config` applies the requested inspection or narrow revision. Ask one question at a time, preserve unambiguous input already given, show the resulting profile before writing and keep evidence history independent from configuration membership.
 
 Complete when every enabled pinned release or explicitly accepted mutable alias points to a valid subscription, direct API, gateway API or other access channel, and the saved revision can be inspected without repeating the interview.
+
+## Standing policy
+
+Read `$HERE/references/profile-management.md`. The Standing Policy is where one workload Cohort starts on the Rung ladder and the inclusive floor and ceiling routing stays between. It ships working and has no `set`: a Cohort moves only upward, only when measured failures trip its threshold, and only a reset moves it back. It is script-owned state beside `config.json`, never hand-edited, and the profile's `config.lock` protocol does not apply to it.
+
+Run `uv run "$LIBRARY/scripts/standing_policy.py" policy show [<cohort>] --data=<directory>` for `config policy [show]` and render its JSON: the effective starting Rung, floor, ceiling, failure threshold, and exploration budget, plus the rows that moved the Cohort with the run keys behind each. Say for each shipped symbolic value — `cold_start`, `weakest_enabled`, `main_seat` — that it resolves per request against that request's own candidate ladder. `show` never writes.
+
+For `config policy reset [<cohort>]`, show the exact store path and every Cohort about to be restored, obtain confirmation the way every destructive configuration act does, then run the same script as `policy reset [<cohort>] --yes --data=<directory>` and report the Cohorts restored. A declined confirmation writes nothing. Evidence, derived frontiers, and the profile are untouched, and the restored default reaches the next frozen routing context rather than a run already under way.
 
 ## Recommend
 

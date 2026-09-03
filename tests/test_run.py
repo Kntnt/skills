@@ -435,6 +435,22 @@ def _snapshot(identity: str = "frozen", **fields: Any) -> dict[str, Any]:
             "portable_levels": ["low", "medium", "high", "xhigh", "max"],
             "cold_start": "inherit",
             "objective": "cost_first",
+            "standing_policy": {
+                "schema_version": 1,
+                "default": {
+                    "revision": 0,
+                    "starting_rung": "cold_start",
+                    "floor": "weakest_enabled",
+                    "ceiling": "main_seat",
+                    "failure_threshold": {"failures": 2, "window": 4},
+                    "exploration": {
+                        "epsilon": 0.1,
+                        "max_per_run": 1,
+                        "seed": "kntnt-standing-policy-v1",
+                    },
+                },
+                "cohorts": {},
+            },
         },
     } | fields
 

@@ -67,7 +67,29 @@
         },
         "decision_policy": {"$ref": "#/$defs/non_empty_string"},
         "exclusions": {"type": "array", "items": {"$ref": "#/$defs/exclusion"}},
-        "frontier": {"type": "array", "items": {"$ref": "#/$defs/frontier_entry"}}
+        "frontier": {"type": "array", "items": {"$ref": "#/$defs/frontier_entry"}},
+        "standing_policy": {"$ref": "#/$defs/standing_policy_audit"}
+      },
+      "additionalProperties": false
+    },
+    "nullable_rung": {
+      "oneOf": [
+        {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/rung"},
+        {"type": "null"}
+      ]
+    },
+    "standing_policy_audit": {
+      "type": "object",
+      "required": ["policy_revision", "workload_cohort", "starting_rung", "current_rung", "floor", "ceiling", "next_rung_up", "start_fallback"],
+      "properties": {
+        "policy_revision": {"type": "integer"},
+        "workload_cohort": {"type": ["string", "null"]},
+        "starting_rung": {"$ref": "#/$defs/nullable_rung"},
+        "current_rung": {"$ref": "#/$defs/nullable_rung"},
+        "floor": {"$ref": "#/$defs/nullable_rung"},
+        "ceiling": {"$ref": "#/$defs/nullable_rung"},
+        "next_rung_up": {"$ref": "#/$defs/nullable_rung"},
+        "start_fallback": {"enum": ["standing_policy_start_unavailable", null]}
       },
       "additionalProperties": false
     },

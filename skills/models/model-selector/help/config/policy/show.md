@@ -1,54 +1,20 @@
-# model-selector config
+# model-selector config policy show
 
 ## NAME
 
-model-selector config - inspect or revise the model and access profile
+model-selector config policy show - display the Standing Policy and what moved it
 
 ## SYNOPSIS
 
-**/model-selector** **config** [**show**|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
-
-**/model-selector** **config** **add** [**--data=**_PATH_] (**model**|**channel**) [**--** *INSTRUCTION*]
-
-**/model-selector** **config** (**edit**|**remove**) [**--data=**_PATH_] (**model**|**channel**) *ID* [**--** *INSTRUCTION*]
-
-**/model-selector** **config** **policy** [**show**|**reset**] [**--data=**_PATH_] [*COHORT*] [**--** *INSTRUCTION*]
+**/model-selector** **config** **policy** **show** [**--data=**_PATH_] [*COHORT*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-`model-selector config` manages the persisted profile without network access or evaluations. Bare `config` is equivalent to `config show`.
+`model-selector config policy show` displays the effective Standing Policy: the Rung routing starts an unmeasured Cohort at, the inclusive floor and ceiling it stays between, the failure threshold that may move it, and the exploration budget. With no *COHORT* it shows the shipped default, every Cohort that has moved, and the whole movement history. With one it shows only that Cohort's effective policy and its own history.
 
-Configuration changes are validated, saved as revisions, and reported with any newly due evidence or invalidated frontiers. They never delete the evidence ledger.
+The shipped default prints its values symbolically — `cold_start`, `weakest_enabled`, `main_seat` — because each one resolves against the candidate ladder of the individual request, and each printed line says so. A moved Cohort prints the exact Rung stored for it.
 
-## COMMANDS
-
-**show**
-
-Display the active profile. This is the default when no configuration subcommand is supplied.
-
-**add** (**model**|**channel**)
-
-Add one model selection or access channel through a guided interview.
-
-**edit** (**model**|**channel**) *ID*
-
-Edit one identified model selection or access channel.
-
-**remove** (**model**|**channel**) *ID*
-
-Remove one identified selection or channel after confirmation.
-
-**policy**
-
-Inspect or restore the Standing Policy each workload Cohort routes under.
-
-**history**
-
-Display profile revision timestamps and summaries.
-
-**reset**
-
-Remove the active profile after confirmation while retaining history and evidence.
+The command reads local configuration only; it performs no network access, evaluation, or write. Bare `/model-selector config policy` has the same effect.
 
 ## OPTIONS
 
@@ -58,7 +24,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-sele
 
 ## DIAGNOSTICS
 
-An unknown or incomplete configuration subcommand is refused rather than ignored. The Skill prints the addressed page's SYNOPSIS, changes nothing, and points to the corresponding `--help` invocation. An operand written before an option is out of order and is refused the same way.
+An absent store is reported as the shipped default rather than as an error. An unsupported option is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector config policy show --help`.
 
 ## INVOCATION ENVELOPE
 
@@ -82,6 +48,10 @@ A nested Skill receives only relevant guidance through an explicit Contextual In
 
 `uv` runs the Skill's dependency check.
 
+## DEPENDENCIES
+
+`uv` runs the Skill's dependency check.
+
 ## SEE ALSO
 
-**/model-selector config show --help**, **/model-selector config add --help**, **/model-selector config edit --help**, **/model-selector config remove --help**, **/model-selector config policy --help**, **/model-selector config history --help**, **/model-selector config reset --help**
+**/model-selector config policy reset --help**, **/model-selector config show --help**, **/model-selector route --help**

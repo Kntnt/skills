@@ -32,6 +32,8 @@ The active profile and its revision history are defined in `profile-management.m
 | `run-observations.jsonl` | Raw per-task attempt outcomes, usage, bill and latency. |
 | `derived-frontiers.json` | Reproducible disposable summaries; safe to replace after source records are unchanged. |
 
+`standing-policy.json` and `standing-policy-history.jsonl` sit in the same directory but belong to neither this reference nor the profile: they hold the Standing Policy each workload Cohort routes under, are written only by the Collection Library's own policy store, and are documented in `profile-management.md`. A movement of that policy is caused by measured evidence and names the run keys behind it, but it is not evidence and enters no frontier.
+
 JSONL source records are append-only. Correct a bad row by appending a superseding row that names its predecessor; never edit history. Write through a temporary sibling and atomic rename when the host supports it. Restrict permissions to the user because prompts, paths and usage may be sensitive. Do not store response bodies or secrets; store artifact hashes and sanitized excerpts.
 
 Every external fact needs source URI, retrieval timestamp, parser version and source content hash. Account-specific facts may instead cite the originating config profile/revision, user confirmation timestamp and record hash. Unproven facts are `provisional` and cannot select a winner.

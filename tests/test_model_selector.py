@@ -14,6 +14,7 @@ from urllib.parse import urlparse
 from support.model_routing import (
     complete_routing_snapshot as _complete_routing_snapshot,
 )
+from support.model_routing import standing_policy as _standing_policy_fixture
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 MODEL_SELECTOR: Path = REPO_ROOT / "skills" / "models" / "model-selector"
@@ -141,6 +142,7 @@ def test_context_derives_a_routeable_claude_code_artifact(tmp_path: Path) -> Non
         "quality_floor": 0.7,
         "shadow_prices": None,
         "objective": "cost_first",
+        "standing_policy": _standing_policy_fixture(),
     }
     assert routed["snapshot"]["evidence"] == {
         "identity": f"sha256:{hashlib.sha256(b'[]').hexdigest()}",
@@ -4941,3 +4943,378 @@ def test_observation_contract_pins_its_outcome_and_refusal_vocabulary() -> None:
 
     _assert_contains_all(contract, required_fragments)
     assert "merge_collision" not in contract
+
+
+STANDING_POLICY: Path = (
+    REPO_ROOT / "skills" / "kntnt" / "library" / "scripts" / "standing_policy.py"
+)
+
+
+def _load_standing_policy() -> Any:
+    """Load the shared Standing Policy store from its installed Library path."""
+
+    spec = importlib.util.spec_from_file_location(
+        "kntnt_standing_policy", STANDING_POLICY
+    )
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_standing_policy_ships_a_working_default_before_any_user_step(
+    tmp_path: Path,
+) -> None:
+    """An empty data directory already answers with the shipped policy."""
+
+    policy = _load_standing_policy()
+    effective = policy.effective_policy(tmp_path, "orchestrate/initial_build")
+
+    # Assert the shipped symbolic defaults the whole contract is written against.
+    assert effective == {
+        "revision": 0,
+        "starting_rung": "cold_start",
+        "floor": "weakest_enabled",
+        "ceiling": "main_seat",
+        "failure_threshold": {"failures": 2, "window": 4},
+        "exploration": {
+            "epsilon": 0.1,
+            "max_per_run": 1,
+            "seed": "kntnt-standing-policy-v1",
+        },
+    }
+    assert not list(tmp_path.iterdir()), "reading the policy wrote a user file"
+
+
+def test_a_threshold_movement_and_a_reset_round_trip_through_the_store(
+    tmp_path: Path,
+) -> None:
+    """A moved Cohort keeps its own revision, its history, and its cause."""
+
+    policy = _load_standing_policy()
+    rung = {"model": "worker-v3", "portable_deliberation": "high"}
+
+    # Move one Cohort and read the exact override back through the same seam.
+    moved = policy.move_starting_rung(
+        tmp_path,
+        "orchestrate/amend",
+        rung,
+        {"kind": "failure_threshold", "run_keys": ["run-1", "run-2"]},
+    )
+    assert moved["revision"] == 1
+    effective = policy.effective_policy(tmp_path, "orchestrate/amend")
+    assert effective["starting_rung"] == rung
+    assert effective["revision"] == 1
+    assert policy.effective_policy(tmp_path, "other")["revision"] == 0
+
+    # Assert the append-only history states what moved the Cohort and from where.
+    history = policy.history(tmp_path)
+    assert len(history) == 1
+    assert history[0]["workload_cohort"] == "orchestrate/amend"
+    assert history[0]["from"] == "cold_start"
+    assert history[0]["to"] == rung
+    assert history[0]["revision_before"] == 0
+    assert history[0]["revision_after"] == 1
+    assert history[0]["cause"] == {
+        "kind": "failure_threshold",
+        "run_keys": ["run-1", "run-2"],
+    }
+    assert history[0]["effective_at"]
+
+    # Reset restores the shipped default and appends exactly one more row.
+    removed = policy.reset(tmp_path, "orchestrate/amend")
+    assert removed == ["orchestrate/amend"]
+    assert policy.effective_policy(tmp_path, "orchestrate/amend")["revision"] == 0
+    reset_row = policy.history(tmp_path)[1]
+    assert reset_row["cause"] == {"kind": "reset"}
+    assert reset_row["to"] == "cold_start"
+    assert reset_row["revision_before"] == 1
+    assert reset_row["revision_after"] == 0
+
+
+def _invoke_policy(*arguments: str) -> subprocess.CompletedProcess[str]:
+    """Run the shipped Standing Policy CLI exactly as the Skill invokes it."""
+
+    return subprocess.run(
+        [sys.executable, str(STANDING_POLICY), *arguments],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
+def test_the_policy_cli_shows_the_default_and_resets_only_when_confirmed(
+    tmp_path: Path,
+) -> None:
+    """`show` never writes and `reset` follows the destructive confirmation."""
+
+    policy = _load_standing_policy()
+    policy.move_starting_rung(
+        tmp_path,
+        "orchestrate/amend",
+        {"model": "worker-v3", "portable_deliberation": "high"},
+        {"kind": "failure_threshold", "run_keys": ["run-1", "run-2"]},
+    )
+
+    # The whole store renders the shipped default beside every moved Cohort.
+    shown = _invoke_policy("policy", "show", f"--data={tmp_path}")
+    assert shown.returncode == 0, shown.stdout + shown.stderr
+    rendered = json.loads(shown.stdout)
+    assert rendered["default"]["starting_rung"] == "cold_start"
+    assert rendered["cohorts"]["orchestrate/amend"]["revision"] == 1
+    assert len(rendered["history"]) == 1
+
+    # One Cohort narrows the same page to that Cohort's own effective policy.
+    narrowed = json.loads(
+        _invoke_policy(
+            "policy", "show", "orchestrate/amend", f"--data={tmp_path}"
+        ).stdout
+    )
+    assert narrowed["effective"]["starting_rung"]["model"] == "worker-v3"
+    assert "cohorts" not in narrowed
+
+    # An unconfirmed reset changes nothing and says how to confirm it.
+    refused = _invoke_policy("policy", "reset", f"--data={tmp_path}")
+    assert refused.returncode == 2
+    assert json.loads(refused.stdout)["refusal"]["code"] == "unconfirmed_reset"
+    assert policy.effective_policy(tmp_path, "orchestrate/amend")["revision"] == 1
+
+    # A confirmed operand-free reset removes every override and records each.
+    done = _invoke_policy("policy", "reset", "--yes", f"--data={tmp_path}")
+    assert done.returncode == 0, done.stdout + done.stderr
+    assert json.loads(done.stdout)["reset"] == ["orchestrate/amend"]
+    assert policy.effective_policy(tmp_path, "orchestrate/amend")["revision"] == 0
+    assert len(policy.history(tmp_path)) == 2
+
+    # An unsupported option is refused rather than ignored.
+    unsupported = _invoke_policy("policy", "show", "--all", f"--data={tmp_path}")
+    assert unsupported.returncode == 2
+    assert json.loads(unsupported.stdout)["refusal"]["code"] == "invalid_arguments"
+
+
+def test_the_derivation_freezes_the_standing_policy_into_the_snapshot_identity(
+    tmp_path: Path,
+) -> None:
+    """A policy change is a new snapshot and can never reach a running run."""
+
+    policy = _load_standing_policy()
+    shipped = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": _derive_context(tmp_path, _runtime_context_request())["context"],
+            "requests": [_request()],
+        }
+    )
+
+    # The shipped default travels with every snapshot, needing no user step.
+    frozen = shipped["snapshot"]["override_policy"]["standing_policy"]
+    assert frozen == {
+        "schema_version": 1,
+        "default": policy.shipped_default(),
+        "cohorts": {},
+    }
+
+    # Moving one Cohort changes the frozen facts, so the identity moves with it.
+    policy.move_starting_rung(
+        tmp_path / "model-selector",
+        "python-refactor",
+        {"model": "claude-sonnet-5", "portable_deliberation": "high"},
+        {"kind": "failure_threshold", "run_keys": ["run-1", "run-2"]},
+    )
+    moved = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": _derive_context(tmp_path, _runtime_context_request())["context"],
+            "requests": [_request()],
+        }
+    )
+    frozen_cohorts = moved["snapshot"]["override_policy"]["standing_policy"]["cohorts"]
+    assert frozen_cohorts["python-refactor"]["revision"] == 1
+    assert (
+        moved["snapshot"]["snapshot_identity"]
+        != shipped["snapshot"]["snapshot_identity"]
+    )
+
+
+def _bounded_snapshot(**entry: Any) -> dict[str, Any]:
+    """Freeze one Cohort override into the shared complete routing snapshot."""
+
+    snapshot = _complete_routing_snapshot()
+    snapshot["override_policy"]["standing_policy"] = _standing_policy_fixture(
+        {"python-refactor": {"revision": 1, **entry}}
+    )
+    return snapshot
+
+
+def test_route_excludes_every_point_outside_the_standing_policy_bounds() -> None:
+    """A Rung the policy does not reach is excluded, named, and never climbed."""
+
+    # Cap one Cohort below the seat and take the strongest reachable start.
+    router = _load_router()
+    snapshot = _bounded_snapshot(
+        ceiling={"model": "worker-v2", "portable_deliberation": "high"}
+    )
+    request = _request(reversible=False, checker={"kind": "none"})
+    decision = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [request]}
+    )["decisions"][0]
+
+    # Assert the strongest point inside the bounds won and the rest are named.
+    assert decision["launch"]["portable_deliberation"] == "high"
+    out_of_bounds = {
+        exclusion["portable_deliberation"]
+        for exclusion in decision["exclusions"]
+        if exclusion["code"] == "standing_policy_out_of_bounds"
+    }
+    assert out_of_bounds == {"xhigh", "max"}
+
+    # Assert the same resolved ceiling bounds the escalation ladder.
+    ceiling = _bounded_snapshot(
+        ceiling={"model": "worker-v2", "portable_deliberation": "low"}
+    )
+    selected = router.route(
+        {"schema_version": 1, "context": ceiling, "requests": [_request()]}
+    )["decisions"][0]
+    prior, verified_failure = _verified_failure_binding(selected)
+    capped = router.route(
+        {
+            "schema_version": 1,
+            "context": ceiling,
+            "requests": [
+                _request(
+                    retry_available=True,
+                    prior=prior,
+                    verified_failure=verified_failure,
+                )
+            ],
+        }
+    )["decisions"][0]
+    assert selected["launch"]["portable_deliberation"] == "low"
+    assert capped["next_escalation"] is None
+
+
+def test_route_starts_an_unmeasured_cohort_at_the_rung_its_policy_names() -> None:
+    """A moved Cohort starts where the policy put it, or says why it cannot."""
+
+    # Start the same cold request at a Rung above the cold-start heuristic.
+    router = _load_router()
+    snapshot = _bounded_snapshot(
+        starting_rung={"model": "worker-v2", "portable_deliberation": "high"}
+    )
+    decision = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+    assert decision["launch"]["portable_deliberation"] == "high"
+    assert decision["audit"]["decision_policy"] == "standing_policy_start"
+
+    # Assert the audit states the policy the decision ran under.
+    standing = decision["audit"]["standing_policy"]
+    assert standing["policy_revision"] == 1
+    assert standing["workload_cohort"] == "python-refactor"
+    assert standing["starting_rung"] == {
+        "model": "worker-v2",
+        "portable_deliberation": "high",
+    }
+    assert standing["current_rung"] == {
+        "model": "worker-v2",
+        "portable_deliberation": "high",
+    }
+    assert standing["floor"] == {"model": "worker-v2", "portable_deliberation": "low"}
+    assert standing["ceiling"] == {"model": "worker-v2", "portable_deliberation": "max"}
+    assert standing["next_rung_up"] == {
+        "model": "worker-v2",
+        "portable_deliberation": "xhigh",
+    }
+    assert standing["start_fallback"] is None
+
+    # A Rung the current profile no longer reaches falls back and says so.
+    unreachable = _bounded_snapshot(
+        starting_rung={"model": "retired-v1", "portable_deliberation": "high"}
+    )
+    fallen_back = router.route(
+        {"schema_version": 1, "context": unreachable, "requests": [_request()]}
+    )["decisions"][0]
+    assert fallen_back["launch"]["portable_deliberation"] == "low"
+    assert fallen_back["audit"]["decision_policy"] == "cold_start_weakest"
+    assert (
+        fallen_back["audit"]["standing_policy"]["start_fallback"]
+        == "standing_policy_start_unavailable"
+    )
+
+
+def test_the_standing_policy_audit_survives_an_inheritance_with_no_candidate() -> None:
+    """An inheritance still names the policy, with its concrete members null."""
+
+    # Remove every mapping so nothing survives to resolve a bound against.
+    snapshot = _complete_routing_snapshot()
+    snapshot["mappings"] = []
+    decision = _load_router().route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+
+    assert decision["status"] == "inherit"
+    assert decision["audit"]["standing_policy"] == {
+        "policy_revision": 0,
+        "workload_cohort": "python-refactor",
+        "starting_rung": None,
+        "current_rung": None,
+        "floor": None,
+        "ceiling": None,
+        "next_rung_up": None,
+        "start_fallback": None,
+    }
+
+
+def test_route_contract_pins_the_standing_policy_and_its_bounds() -> None:
+    """The policy routing starts from is stated by the contract, not implied."""
+
+    contract = _read("references/model-routing.md")
+    required_fragments = {
+        "override_policy.standing_policy",
+        "workload_cohort",
+        "weakest_enabled",
+        "main_seat",
+        "cold_start",
+        "standing_policy_out_of_bounds",
+        "standing_policy_start_unavailable",
+        "audit.standing_policy",
+        "ratchets up only",
+        "compared on the model dimension alone",
+        "enters the snapshot identity",
+    }
+
+    _assert_contains_all(contract, required_fragments)
+
+
+def test_the_policy_command_is_documented_where_a_reader_looks_for_it() -> None:
+    """`config policy` is one grammar across the body, the pages, and the store."""
+
+    skill = _read("SKILL.md")
+    parent = _read("help/config.md")
+    page = _read("help/config/policy.md")
+    store = _read("references/profile-management.md")
+
+    # The command routes to its three pages and states its own invocation.
+    for relative in (
+        "config/policy.md",
+        "config/policy/show.md",
+        "config/policy/reset.md",
+    ):
+        assert f"| `$HERE/help/{relative}` |" in skill, relative
+    assert "config policy [show|reset] [--data=<path>] [<cohort>]" in skill
+    assert '"$LIBRARY/scripts/standing_policy.py" policy show' in skill
+    assert "policy reset [<cohort>] --yes --data=<directory>" in skill
+
+    # The parent page lists it, and the store says where it lives and why.
+    assert "**policy**" in parent
+    assert "**show**" in page and "**reset**" in page
+    _assert_contains_all(
+        store,
+        {
+            "standing-policy.json",
+            "standing-policy-history.jsonl",
+            "config.lock",
+            "revision 0",
+            "kntnt-standing-policy-v1",
+        },
+    )

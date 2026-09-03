@@ -30,7 +30,7 @@ jobs:
         run: uvx ruff format --check .
 
       - name: Type-check
-        run: uvx --with types-PyYAML --with pytest mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/routed_observations.py skills/models/model-selector/scripts/context.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py tests
+        run: uvx --with types-PyYAML --with pytest mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/routed_observations.py skills/kntnt/library/scripts/standing_policy.py skills/models/model-selector/scripts/context.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py tests
 
       - name: Test
         run: uv run --with pytest --with pyyaml pytest -q

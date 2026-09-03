@@ -95,6 +95,26 @@ class EvidencePool:
 
 
 @dataclass(frozen=True, slots=True)
+class StandingPolicy:
+    """Bind one Cohort's frozen Standing Policy to the ladder it resolves on.
+
+    The frozen policy is symbolic, so every member here is the concrete Rung
+    the symbols came to mean for this one request. `resolved` is false where no
+    candidate survived to resolve them against, which is the one state in which
+    the policy is still named and none of its Rungs exist.
+    """
+
+    revision: int
+    cohort: str | None
+    resolved: bool
+    floor: dict[str, str] | None
+    ceiling: dict[str, str] | None
+    starting_rung: dict[str, str] | None
+    start: Candidate | None
+    start_fallback: str | None
+
+
+@dataclass(frozen=True, slots=True)
 class SelectionOutcome:
     """Carry one resolved candidate and the policy facts that selected it."""
 
@@ -892,6 +912,245 @@ def _candidate_pool(request: dict[str, Any], snapshot: dict[str, Any]) -> Candid
     )
 
 
+def _rung(candidate: Candidate) -> dict[str, str]:
+    """Name the exact two-dimensional Rung one candidate occupies."""
+
+    return {
+        "model": candidate.point["model"],
+        "portable_deliberation": candidate.portable,
+    }
+
+
+def _rung_position(candidate: Candidate) -> tuple[float, int]:
+    """Place one candidate on the total Rung order the bounds are read in."""
+
+    return (
+        _model_capability(candidate.point),
+        PORTABLE_LEVELS.index(candidate.portable),
+    )
+
+
+def _bound_position(
+    bound: Any,
+    candidates: Sequence[Candidate],
+    symbolic: str,
+    snapshot: dict[str, Any],
+) -> tuple[tuple[float, int], dict[str, str]]:
+    """Resolve one symbolic or concrete bound against this request's ladder.
+
+    A symbolic bound means the end of the ladder the request already reaches,
+    so it excludes nothing by construction: `weakest_enabled` is the weakest
+    surviving candidate and `main_seat` the strongest, the frozen seat ceiling
+    having already removed everything above the seat. A concrete Rung is read
+    on the same order, and one naming a model the snapshot no longer ranks
+    falls back to the symbolic end rather than bounding by a guess.
+    """
+
+    extreme = min if symbolic == "weakest_enabled" else max
+    end = extreme(candidates, key=_rung_position)
+    if bound != symbolic and isinstance(bound, dict):
+        capability = next(
+            (
+                float(point["model_capability"])
+                for point in snapshot["mappings"]
+                if point["model"] == bound["model"]
+                and point["model_capability"] is not None
+            ),
+            None,
+        )
+        if capability is not None:
+            portable = cast(str, bound["portable_deliberation"])
+            return (capability, PORTABLE_LEVELS.index(portable)), {
+                "model": cast(str, bound["model"]),
+                "portable_deliberation": portable,
+            }
+    return _rung_position(end), _rung(end)
+
+
+def _within_bounds(
+    candidate: Candidate,
+    floor: tuple[float, int],
+    ceiling: tuple[float, int],
+) -> bool:
+    """Apply both inclusive bounds, on the model dimension where it is the only one."""
+
+    capability = _model_capability(candidate.point)
+    if _carries_control(candidate.adapter):
+        return floor[0] <= capability <= ceiling[0]
+    return floor <= _rung_position(candidate) <= ceiling
+
+
+def _cold_start_policy(request: dict[str, Any]) -> str:
+    """Name the cold-start endpoint this request's own safety facts require."""
+
+    return (
+        "cold_start_strongest"
+        if not request["reversible"] and request["checker"]["kind"] == "none"
+        else "cold_start_weakest"
+    )
+
+
+def _cold_start_candidate(
+    request: dict[str, Any],
+    snapshot: dict[str, Any],
+    candidates: Sequence[Candidate],
+) -> Candidate:
+    """Choose the weakest or strongest complete candidate the policy requires.
+
+    The caller supplies a non-empty set: a cold start with nothing to start on
+    is an inheritance, decided before this endpoint is asked for.
+    """
+
+    choose = max if _cold_start_policy(request) == "cold_start_strongest" else min
+    return choose(
+        candidates,
+        key=lambda item: (
+            _model_capability(item.point),
+            _candidate_control_capability(item, snapshot),
+            PORTABLE_LEVELS.index(item.portable),
+        ),
+    )
+
+
+def _standing_entry(
+    request: dict[str, Any], snapshot: dict[str, Any]
+) -> tuple[dict[str, Any], str | None]:
+    """Read the frozen policy one Cohort routes under, or the shipped default.
+
+    The Cohort key is the request's literal `workload_cohort`, byte for byte. A
+    request naming none routes under the shipped default and can never receive
+    an override.
+    """
+
+    policy = snapshot["override_policy"]["standing_policy"]
+    cohort = request.get("workload_cohort")
+    entry = policy["cohorts"].get(cohort) if isinstance(cohort, str) else None
+    return (policy["default"] if entry is None else entry), (
+        cohort if isinstance(cohort, str) else None
+    )
+
+
+def _unresolved_standing_policy(
+    request: dict[str, Any], snapshot: dict[str, Any]
+) -> StandingPolicy:
+    """Name one Cohort's policy where no ladder exists to resolve its Rungs on."""
+
+    entry, cohort = _standing_entry(request, snapshot)
+    return StandingPolicy(
+        int(entry["revision"]), cohort, False, None, None, None, None, None
+    )
+
+
+def _standing_policy(
+    request: dict[str, Any],
+    snapshot: dict[str, Any],
+    pool: CandidatePool,
+) -> tuple[StandingPolicy, CandidatePool]:
+    """Resolve the Standing Policy and the ladder it leaves this request.
+
+    Bounds resolve first, against every candidate the request already reaches,
+    because a concrete starting Rung has to be reachable inside them to be the
+    start. What comes back is the policy as concrete Rungs and the pool with
+    every out-of-bounds point moved into the audited exclusions.
+    """
+
+    entry, cohort = _standing_entry(request, snapshot)
+    revision = int(entry["revision"])
+    if not pool.candidates:
+        return _unresolved_standing_policy(request, snapshot), pool
+
+    # Resolve both inclusive bounds and exclude every point outside them.
+    floor, floor_rung = _bound_position(
+        entry["floor"], pool.candidates, "weakest_enabled", snapshot
+    )
+    ceiling, ceiling_rung = _bound_position(
+        entry["ceiling"], pool.candidates, "main_seat", snapshot
+    )
+    inside: list[Candidate] = []
+    exclusions = list(pool.exclusions)
+    variant_codes = list(pool.variant_exclusion_codes)
+    for candidate in pool.candidates:
+        if _within_bounds(candidate, floor, ceiling):
+            inside.append(candidate)
+            continue
+        exclusions.append(
+            _exclusion(
+                "standing_policy_out_of_bounds",
+                "The complete point lies outside this Cohort's Standing Policy.",
+                candidate.point,
+                candidate.portable,
+            )
+        )
+        variant_codes.append("standing_policy_out_of_bounds")
+    bounded = CandidatePool(
+        pool.model_matches, tuple(inside), tuple(exclusions), tuple(variant_codes)
+    )
+
+    # Resolve the start inside those bounds, auditing a Rung nothing reaches.
+    stored = entry["starting_rung"]
+    start: Candidate | None = None
+    fallback: str | None = None
+    if stored != "cold_start":
+        matches = [
+            candidate
+            for candidate in inside
+            if candidate.point["model"] == stored["model"]
+            and candidate.portable == stored["portable_deliberation"]
+        ]
+        if matches:
+            start = min(matches, key=_rung_order)
+        else:
+            fallback = "standing_policy_start_unavailable"
+    starting_rung = (
+        _rung(
+            start
+            if start is not None
+            else _cold_start_candidate(request, snapshot, inside)
+        )
+        if inside
+        else None
+    )
+    return StandingPolicy(
+        revision,
+        cohort,
+        bool(inside),
+        floor_rung,
+        ceiling_rung,
+        starting_rung,
+        start,
+        fallback,
+    ), bounded
+
+
+def _seat_rung(snapshot: dict[str, Any]) -> dict[str, str]:
+    """Name the Rung an inherited launch runs on: the frozen main seat itself."""
+
+    main_seat = snapshot["main_seat"]
+    return {
+        "model": cast(str, main_seat["model"]),
+        "portable_deliberation": cast(str, main_seat["portable_deliberation"]),
+    }
+
+
+def _standing_audit(
+    standing: StandingPolicy,
+    current: dict[str, str] | None,
+    next_rung_up: dict[str, str] | None,
+) -> dict[str, Any]:
+    """Report the exact policy one decision ran under, Rung by Rung."""
+
+    return {
+        "policy_revision": standing.revision,
+        "workload_cohort": standing.cohort,
+        "starting_rung": deepcopy(standing.starting_rung),
+        "current_rung": deepcopy(current),
+        "floor": deepcopy(standing.floor),
+        "ceiling": deepcopy(standing.ceiling),
+        "next_rung_up": deepcopy(next_rung_up),
+        "start_fallback": standing.start_fallback,
+    }
+
+
 def _variant_fingerprint(
     point: dict[str, Any],
     portable: str,
@@ -1409,6 +1668,7 @@ def _resolve_measured_policy(
     snapshot: dict[str, Any],
     measured: list[tuple[Candidate, dict[str, Any]]],
     exclusions: list[dict[str, Any]],
+    standing: StandingPolicy,
 ) -> SelectionOutcome | dict[str, Any]:
     """Resolve exact measurements through human economics or Pareto policy."""
 
@@ -1432,6 +1692,7 @@ def _resolve_measured_policy(
                 snapshot,
                 "underdetermined_frontier",
                 audit,
+                standing,
             )
         candidate = winner
 
@@ -1449,7 +1710,7 @@ def _resolve_measured_policy(
         else:
             ordered = _objective_order(frontier, snapshot)
             if isinstance(ordered, str):
-                return _inherit(request, snapshot, ordered, audit)
+                return _inherit(request, snapshot, ordered, audit, standing)
             candidate, decision_policy = ordered
 
     # Preserve the measured frontier and filtering facts with the chosen point.
@@ -1466,6 +1727,7 @@ def _resolve_selection_policy(
     snapshot: dict[str, Any],
     evidence_pool: EvidencePool,
     exclusions: list[dict[str, Any]],
+    standing: StandingPolicy,
 ) -> SelectionOutcome | dict[str, Any]:
     """Resolve evidence state into one candidate or honest inheritance."""
 
@@ -1481,11 +1743,14 @@ def _resolve_selection_policy(
                 "frontier": _frontier_audit(frontier, snapshot),
                 "exclusions": deepcopy(exclusions),
             },
+            standing,
         )
 
     # Resolve measured alternatives through explicit economics or Pareto policy.
     if measured:
-        return _resolve_measured_policy(request, snapshot, measured, exclusions)
+        return _resolve_measured_policy(
+            request, snapshot, measured, exclusions, standing
+        )
 
     # Refuse to treat a heuristic point as measured economic evidence.
     if "economics" in request:
@@ -1494,6 +1759,7 @@ def _resolve_selection_policy(
             snapshot,
             "insufficient_evidence",
             {"exclusions": deepcopy(exclusions)},
+            standing,
         )
 
     # Inherit when every candidate has exact evidence below the quality floor.
@@ -1503,28 +1769,21 @@ def _resolve_selection_policy(
             snapshot,
             "quality_floor_not_cleared",
             {"exclusions": deepcopy(exclusions)},
+            standing,
         )
 
-    # Choose the workload-safe cold-start endpoint when measurements are absent.
-    decision_policy = (
-        "cold_start_strongest"
-        if not request["reversible"] and request["checker"]["kind"] == "none"
-        else "cold_start_weakest"
-    )
-
-    # Choose the weakest or strongest complete candidate required by the policy.
-    choose = max if decision_policy == "cold_start_strongest" else min
-    candidate = choose(
-        evidence_pool.unknown,
-        key=lambda item: (
-            _model_capability(item.point),
-            _candidate_control_capability(item, snapshot),
-            PORTABLE_LEVELS.index(item.portable),
-        ),
-    )
+    # Start where the Cohort's Standing Policy puts it, and fall back to the
+    # workload-safe cold-start endpoint wherever the policy names none.
+    if standing.start is not None and standing.start in evidence_pool.unknown:
+        return SelectionOutcome(
+            standing.start,
+            "standing_policy_start",
+            (),
+            tuple(deepcopy(exclusions)),
+        )
     return SelectionOutcome(
-        candidate,
-        decision_policy,
+        _cold_start_candidate(request, snapshot, evidence_pool.unknown),
+        _cold_start_policy(request),
         (),
         tuple(deepcopy(exclusions)),
     )
@@ -1536,6 +1795,7 @@ def _selected_decision(
     records: list[dict[str, Any]],
     selection: SelectionOutcome,
     candidates: Sequence[Candidate],
+    standing: StandingPolicy,
 ) -> dict[str, Any]:
     """Serialize one resolved candidate as the complete selected result."""
 
@@ -1603,6 +1863,13 @@ def _selected_decision(
                 "decision_policy": selection.decision_policy,
                 "frontier": deepcopy(list(selection.frontier)),
                 "exclusions": deepcopy(exclusions),
+                "standing_policy": _standing_audit(
+                    standing,
+                    _rung(candidate),
+                    _rung(rung)
+                    if (rung := _adjacent_rung(candidates, candidate, "up"))
+                    else None,
+                ),
             },
         ),
     }
@@ -1612,6 +1879,7 @@ def _selection_decision(
     request: dict[str, Any],
     snapshot: dict[str, Any],
     pool: CandidatePool,
+    standing: StandingPolicy,
 ) -> dict[str, Any]:
     """Resolve one selected or underdetermined decision from an eligible pool."""
 
@@ -1630,12 +1898,15 @@ def _selection_decision(
         snapshot,
         evidence_pool,
         exclusions,
+        standing,
     )
     if isinstance(outcome, dict):
         return outcome
 
     # Serialize a launch only after policy resolved one complete candidate.
-    return _selected_decision(request, snapshot, records, outcome, pool.candidates)
+    return _selected_decision(
+        request, snapshot, records, outcome, pool.candidates, standing
+    )
 
 
 def _audit(
@@ -1874,9 +2145,20 @@ def _inherit(
     snapshot: dict[str, Any],
     reason: str,
     audit: dict[str, Any] | None = None,
+    standing: StandingPolicy | None = None,
 ) -> dict[str, Any]:
-    """Return an audited no-override result with the frozen main seat."""
+    """Return an audited no-override result with the frozen main seat.
 
+    An execution decision carries the Standing Policy it ran under even here,
+    where the launched Rung is the seat itself and nothing climbs above it. A
+    verdict carries none: it inherits by authority rather than by policy.
+    """
+
+    facts = deepcopy(audit or {})
+    if standing is not None:
+        facts["standing_policy"] = _standing_audit(
+            standing, _seat_rung(snapshot) if standing.resolved else None, None
+        )
     return {
         "request_id": request["request_id"],
         "status": "inherit",
@@ -1884,7 +2166,7 @@ def _inherit(
             "reason": reason,
             "main_seat": deepcopy(snapshot["main_seat"]),
         },
-        "audit": _audit(snapshot, audit),
+        "audit": _audit(snapshot, facts),
     }
 
 
@@ -1959,9 +2241,13 @@ def _execution_decision(
     request locks a dimension that an inherited launch could not carry.
     """
 
+    # Name the Cohort's policy from the first inheritance onward, even where
+    # no candidate ever survives to give its symbolic Rungs a meaning.
+    unresolved = _unresolved_standing_policy(request, snapshot)
+
     # Distinguish absent profile state from invalid persisted state.
     if snapshot.get("profile") is None:
-        return _inherit(request, snapshot, "missing_profile")
+        return _inherit(request, snapshot, "missing_profile", standing=unresolved)
     if not snapshot["profile"].get("valid"):
         return _refused(request, snapshot, "invalid_profile")
 
@@ -1971,7 +2257,12 @@ def _execution_decision(
         and not request["overrides"]
         and snapshot["harness"].get("inheritance")
     ):
-        return _inherit(request, snapshot, "unavailable_selection_controls")
+        return _inherit(
+            request,
+            snapshot,
+            "unavailable_selection_controls",
+            standing=unresolved,
+        )
 
     # Refuse selection when either frozen authority dimension is unknown.
     if (
@@ -1987,7 +2278,9 @@ def _execution_decision(
     # Reuse one hard-filter result for selection, refusals, and audit output.
     overrides = request["overrides"]
     deliberation = overrides.get("deliberation")
-    pool = _candidate_pool(request, snapshot)
+    standing, pool = _standing_policy(
+        request, snapshot, _candidate_pool(request, snapshot)
+    )
 
     # Refuse model locks that resolve to no enabled exact point.
     if overrides.get("model") and not pool.model_matches:
@@ -2053,6 +2346,7 @@ def _execution_decision(
                 snapshot,
                 "unavailable_selection_controls",
                 {"exclusions": list(pool.exclusions)},
+                standing,
             )
 
         # Refuse every other empty safe set with the hard-filter audit.
@@ -2073,9 +2367,9 @@ def _execution_decision(
         and snapshot["override_policy"].get("cold_start") != "select"
         and not _is_objectively_checked(request)
     ):
-        return _inherit(request, snapshot, "insufficient_evidence")
+        return _inherit(request, snapshot, "insufficient_evidence", standing=standing)
 
-    return _selection_decision(request, snapshot, pool)
+    return _selection_decision(request, snapshot, pool, standing)
 
 
 def route(artifact: Any) -> dict[str, Any]:

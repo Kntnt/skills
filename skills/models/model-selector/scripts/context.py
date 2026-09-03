@@ -69,7 +69,40 @@ def _observations() -> Any:
     return module
 
 
+def _standing_policy() -> Any:
+    """Load the shared Standing Policy store from the installed Library.
+
+    The store is Library-owned because the import that moves it and the two
+    Model Selector surfaces that read it are three callers of one file, and a
+    peer Skill's `scripts/` is not an interface any of them may reach into.
+    The candidates are the repository, an installed Manager sibling, and a
+    Skill-local fallback, exactly as the observation seam resolves its own.
+    """
+
+    candidates = (
+        SKILL_ROOT.parent.parent / "kntnt/library/scripts/standing_policy.py",
+        SKILL_ROOT.parent / "kntnt/library/scripts/standing_policy.py",
+        SKILL_ROOT / "library/scripts/standing_policy.py",
+    )
+    for candidate in candidates:
+        if not candidate.exists():
+            continue
+        spec = importlib.util.spec_from_file_location(
+            "kntnt_standing_policy", candidate
+        )
+        if spec is None or spec.loader is None:
+            continue
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    raise RuntimeError(
+        "the Standing Policy store is missing; install or update the Manager"
+    )
+
+
 OBSERVATIONS: Any = _observations()
+STANDING_POLICY: Any = _standing_policy()
 
 
 def _schema_error(value: Any, schema: dict[str, Any], path: str) -> str | None:
@@ -633,7 +666,10 @@ def _derive_context(
         "main_seat": main_seat,
         "mappings": mappings,
         "override_policy": deepcopy(ROUTING_DEFAULTS)
-        | {"objective": runtime["objective"]},
+        | {
+            "objective": runtime["objective"],
+            "standing_policy": STANDING_POLICY.frozen_policy(data_directory),
+        },
     }
 
 

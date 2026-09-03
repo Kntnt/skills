@@ -1,54 +1,30 @@
-# model-selector config
+# model-selector config policy
 
 ## NAME
 
-model-selector config - inspect or revise the model and access profile
+model-selector config policy - inspect or restore the Standing Policy routing starts from
 
 ## SYNOPSIS
-
-**/model-selector** **config** [**show**|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
-
-**/model-selector** **config** **add** [**--data=**_PATH_] (**model**|**channel**) [**--** *INSTRUCTION*]
-
-**/model-selector** **config** (**edit**|**remove**) [**--data=**_PATH_] (**model**|**channel**) *ID* [**--** *INSTRUCTION*]
 
 **/model-selector** **config** **policy** [**show**|**reset**] [**--data=**_PATH_] [*COHORT*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-`model-selector config` manages the persisted profile without network access or evaluations. Bare `config` is equivalent to `config show`.
+`model-selector config policy` reads and restores the Standing Policy, which is where one workload Cohort starts on the Rung ladder and how far up and down that ladder routing may go. It ships working: nothing has to be set for routing to have a policy, and there is no `set`. A Cohort's policy moves only when measured failures trip its threshold, and it moves only upward; the one way back down is this command's `reset`.
 
-Configuration changes are validated, saved as revisions, and reported with any newly due evidence or invalidated frontiers. They never delete the evidence ledger.
+The policy lives beside `config.json` in the selected data directory, as `standing-policy.json` with an append-only `standing-policy-history.jsonl` next to it. Only Cohorts something moved are stored there; every other Cohort has the shipped default. The store is script-owned and is never hand-edited, so the profile's own `config.lock` protocol does not apply to it.
+
+A policy change is frozen into the next routing context and covered by its snapshot identity, so it reaches the next run rather than one already under way.
 
 ## COMMANDS
 
-**show**
+**show** [*COHORT*]
 
-Display the active profile. This is the default when no configuration subcommand is supplied.
+Display the effective policy, its bounds, and the movements behind it. This is the default when no policy subcommand is supplied.
 
-**add** (**model**|**channel**)
+**reset** [*COHORT*]
 
-Add one model selection or access channel through a guided interview.
-
-**edit** (**model**|**channel**) *ID*
-
-Edit one identified model selection or access channel.
-
-**remove** (**model**|**channel**) *ID*
-
-Remove one identified selection or channel after confirmation.
-
-**policy**
-
-Inspect or restore the Standing Policy each workload Cohort routes under.
-
-**history**
-
-Display profile revision timestamps and summaries.
-
-**reset**
-
-Remove the active profile after confirmation while retaining history and evidence.
+Restore the shipped default for one Cohort, or for every overridden Cohort, after confirmation.
 
 ## OPTIONS
 
@@ -58,7 +34,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-sele
 
 ## DIAGNOSTICS
 
-An unknown or incomplete configuration subcommand is refused rather than ignored. The Skill prints the addressed page's SYNOPSIS, changes nothing, and points to the corresponding `--help` invocation. An operand written before an option is out of order and is refused the same way.
+An unknown policy subcommand, a second Cohort operand, or an operand written after an option is refused rather than ignored. The Skill prints the addressed page's SYNOPSIS, changes nothing, and points to the corresponding `--help` invocation.
 
 ## INVOCATION ENVELOPE
 
@@ -82,6 +58,10 @@ A nested Skill receives only relevant guidance through an explicit Contextual In
 
 `uv` runs the Skill's dependency check.
 
+## DEPENDENCIES
+
+`uv` runs the Skill's dependency check.
+
 ## SEE ALSO
 
-**/model-selector config show --help**, **/model-selector config add --help**, **/model-selector config edit --help**, **/model-selector config remove --help**, **/model-selector config policy --help**, **/model-selector config history --help**, **/model-selector config reset --help**
+**/model-selector config policy show --help**, **/model-selector config policy reset --help**, **/model-selector config show --help**

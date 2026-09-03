@@ -1,54 +1,20 @@
-# model-selector config
+# model-selector config policy reset
 
 ## NAME
 
-model-selector config - inspect or revise the model and access profile
+model-selector config policy reset - restore the shipped Standing Policy for a Cohort
 
 ## SYNOPSIS
 
-**/model-selector** **config** [**show**|**history**|**reset**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
-
-**/model-selector** **config** **add** [**--data=**_PATH_] (**model**|**channel**) [**--** *INSTRUCTION*]
-
-**/model-selector** **config** (**edit**|**remove**) [**--data=**_PATH_] (**model**|**channel**) *ID* [**--** *INSTRUCTION*]
-
-**/model-selector** **config** **policy** [**show**|**reset**] [**--data=**_PATH_] [*COHORT*] [**--** *INSTRUCTION*]
+**/model-selector** **config** **policy** **reset** [**--data=**_PATH_] [*COHORT*] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-`model-selector config` manages the persisted profile without network access or evaluations. Bare `config` is equivalent to `config show`.
+`model-selector config policy reset` removes a Cohort's stored override and appends one history row saying the user restored it. With *COHORT* it restores that Cohort. With no operand it restores every overridden Cohort, appending one row per Cohort removed. Resetting a Cohort nothing ever moved changes nothing and records nothing.
 
-Configuration changes are validated, saved as revisions, and reported with any newly due evidence or invalidated frontiers. They never delete the evidence ledger.
+This is the only downward move a Standing Policy makes: the failure threshold ratchets a Cohort up and never back. The Skill shows the exact store path and the Cohorts about to be restored, and asks for confirmation before writing.
 
-## COMMANDS
-
-**show**
-
-Display the active profile. This is the default when no configuration subcommand is supplied.
-
-**add** (**model**|**channel**)
-
-Add one model selection or access channel through a guided interview.
-
-**edit** (**model**|**channel**) *ID*
-
-Edit one identified model selection or access channel.
-
-**remove** (**model**|**channel**) *ID*
-
-Remove one identified selection or channel after confirmation.
-
-**policy**
-
-Inspect or restore the Standing Policy each workload Cohort routes under.
-
-**history**
-
-Display profile revision timestamps and summaries.
-
-**reset**
-
-Remove the active profile after confirmation while retaining history and evidence.
+Evidence, derived frontiers, and the model and access profile are untouched. The restored default reaches the next frozen routing context, never a run already under way.
 
 ## OPTIONS
 
@@ -58,7 +24,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-sele
 
 ## DIAGNOSTICS
 
-An unknown or incomplete configuration subcommand is refused rather than ignored. The Skill prints the addressed page's SYNOPSIS, changes nothing, and points to the corresponding `--help` invocation. An operand written before an option is out of order and is refused the same way.
+A declined confirmation changes nothing. An unsupported option is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector config policy reset --help`.
 
 ## INVOCATION ENVELOPE
 
@@ -82,6 +48,10 @@ A nested Skill receives only relevant guidance through an explicit Contextual In
 
 `uv` runs the Skill's dependency check.
 
+## DEPENDENCIES
+
+`uv` runs the Skill's dependency check.
+
 ## SEE ALSO
 
-**/model-selector config show --help**, **/model-selector config add --help**, **/model-selector config edit --help**, **/model-selector config remove --help**, **/model-selector config policy --help**, **/model-selector config history --help**, **/model-selector config reset --help**
+**/model-selector config policy show --help**, **/model-selector config reset --help**, **/model-selector route --help**
