@@ -2,7 +2,7 @@
 
 ## NAME
 
-model-selector capture - opt in to automatic local run-evidence capture
+model-selector capture - opt in to automatic local usage capture
 
 ## SYNOPSIS
 
@@ -12,17 +12,15 @@ model-selector capture - opt in to automatic local run-evidence capture
 
 **/model-selector** **capture** **--status** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
-**/model-selector** **capture** **--review=**_IDENTITY_ **--action=save**|**--action=failed**|**--action=ignore** [**--data=**_PATH_] [**--** *INSTRUCTION*]
-
 ## DESCRIPTION
 
-Capture turns ordinary work in Claude Code, Codex, or OpenCode into local Model Selector evidence.
+Capture turns ordinary work in Claude Code, Codex, or OpenCode into a local Usage Record: what one finished session cost and how long it took on the exact Seat it ran on.
 
-It is explicit opt-in because **--on** installs persistent lifecycle integration. Nothing is captured before consent, and **--off** removes every owned hook without deleting accepted evidence.
+It is explicit opt-in because **--on** installs persistent lifecycle integration. Nothing is captured before consent, and **--off** removes every owned hook without deleting Usage Records already appended.
 
-During substantive work, the integration records bounded lifecycle, usage, checker, quota, and latency metadata. Eligible completed work becomes one normalized observation; temporary data is then removed.
+During substantive work, the integration records bounded lifecycle, Seat, and usage metadata. A session's end turns it into one Usage Record per Seat it ran on, appended immediately; temporary data is then removed.
 
-Only an external checker, frozen rubric, declared failure signal, or user confirmation establishes success or failure. Unjudged work waits for **--review** in a bounded pending store.
+Capture measures ordinary work; it never judges it. A Usage Record carries no outcome, no checker, and no Cohort, enters no derived frontier, and produces no evidence record. Nothing waits for a human, ever.
 
 Hooks perform local metadata I/O only: no network request, model call, test run, repository-wide hash, transcript scan, or background daemon. Capture failures never interrupt the session.
 
@@ -34,19 +32,11 @@ Install capture into each selected Harness, or every supported detected Harness 
 
 **--off**
 
-Remove every owned hook and adapter, verifying the result per Harness. Accepted evidence remains. Disabling the Skill performs the same cleanup.
+Remove every owned hook and adapter, verifying the result per Harness. Usage Records already appended remain. Disabling the Skill performs the same cleanup.
 
 **--status**
 
-Report enablement, adapter health, pending-review count and age, storage use, and retention bounds. It also reconciles abandoned drafts without network access.
-
-**--review=**_IDENTITY_
-
-Settle one pending capture listed by **--status**. Requires **--action**.
-
-**--action=save**, **--action=failed**, **--action=ignore**
-
-Record the reviewed work as success or failure, or discard it. Saved outcomes carry explicit user confirmation.
+Report enablement, adapter health, and storage use, without network access.
 
 **--harness=**_NAME_
 
@@ -54,21 +44,17 @@ Select `claude-code`, `codex`, or `opencode`; repeat for several. Without this o
 
 **--data=**_PATH_
 
-Use *PATH* instead of `~/.kntnt/model-selector/` for capture data, evidence, and derived frontiers.
+Use *PATH* instead of `~/.kntnt/model-selector/` for capture data, the evidence ledger, and the Usage Record store.
 
 ## RETAINED DATA
 
-Capture retains opaque session and task IDs; timestamps and Harness; exact model configuration; tool and policy fingerprints; checker result; token, tool, retry, fallback, cost, quota, and latency measurements; provenance; and sanitized artifact hashes.
+Capture retains the opaque session identity and usage key; the Harness and its inventory revision; the exact Seat — model, deliberation control, serving mode, access channel, and tool and policy fingerprints; the usage categories the environment exposed — tokens, tool calls, retries, cost, quota, latency, and fallback; and the two instants a Seat ran between.
 
 It never retains full prompts, responses, reasoning, source files, diffs, terminal output, secrets, credentials, complete transcripts, or unnecessary absolute paths. An allow-list controls every copied field.
 
-## RETENTION
-
-Imported, empty, and irrelevant drafts are deleted. Pending and failed captures are limited to 30 days, 100 drafts, and 1 MiB; oldest entries go first. Cleanup runs at session start or **--status**, never in a daemon. Accepted evidence is not subject to these limits.
-
 ## OUTPUT
 
-One JSON object reporting the requested installation, removal, status, or review result.
+One JSON object reporting the requested installation, removal, or status result.
 
 ## DIAGNOSTICS
 
