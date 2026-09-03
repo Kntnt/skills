@@ -6,7 +6,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 ## SYNOPSIS
 
-**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--approval=**_IDENTITY_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
+**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--fast**] [**--approval=**_IDENTITY_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
 
 **/orchestrate reconcile** [**--commit=**_COMMIT_] [**--yes**] *TICKET* [**--** *INSTRUCTION*]
 
@@ -23,6 +23,8 @@ A ticket may declare ordered multi-commit work with `Commit roles: implementatio
 The main session owns planning, triage, integration, and verification judgements. Run it from the most capable model available; those judgements are only as reliable as that model.
 
 Model Selector creates one frozen routing snapshot before claims. Builders and repair roles use decisions from that snapshot; independent verdicts always inherit the main session's exact model and deliberation configuration.
+
+Where several measured configurations clear the quality floor, the run selects the cheapest of them, and the fastest of them under **--fast**. The objective is frozen with the snapshot and reported with it.
 
 Before any ticket is claimed, the Skill audits ticket text for open decisions in one batch and posts the answers to their tickets. It looks for concretely named gaps, including exact commands whose inputs the repository does not fix, an external service or account with no mutation path or owner, choices phrased as alternatives, and credentials or accounts whose owner is undeclared. With `--yes`, it parks such tickets under `needs-info` instead of guessing, then continues with the rest; uncertain cases proceed and retain the mid-work park as a backstop.
 
@@ -152,6 +154,8 @@ The report names its base commit. A ticket blocked on newly discovered work is r
 
 Orchestrate starts each routed attempt immediately before dispatch, finishes it at an independent verdict or terminal non-model condition, and imports eligible sanitized observations automatically. The final report lists imported, identically skipped, conflicting, and refused identities; ledger refusal never stops the run and requires no user import step.
 
+The report gives each ticket its Time to Verified Pass — the seconds from its first routed launch to its first passing verdict, retries included — beside a status saying which of the four cases it is: `verified_pass` with a number, `not_started` where the run launched no attempt for it, `incomplete` where an attempt has not finished, and `not_passed` where every finished attempt failed, parked, or was blocked.
+
 ## OPTIONS
 
 **--dry-run**
@@ -171,6 +175,10 @@ Lock only the building model dimension for every execution role. Model-selector 
 **--deliberation=**_LEVEL_
 
 Lock only the building deliberation dimension for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`; another value is refused rather than normalized. Model-selector still selects model when it is omitted. Verdicts retain exact main-seat inheritance.
+
+**--fast**
+
+Select the fastest configuration that holds quality rather than the cheapest one. The objective is frozen for the whole run alongside `--model` and `--deliberation`, so a resumed invocation that adds or drops it is refused before anything is claimed. It changes nothing about the quality floor: a configuration that does not clear it is not chosen for being quick.
 
 **--approval=**_IDENTITY_
 

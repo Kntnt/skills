@@ -18,7 +18,7 @@ Context is offline, non-interactive, and read-only. It never starts setup, perfo
 
 *PATH*
 
-A UTF-8 JSON artifact conforming to `references/context-request.schema.json`, with `schema_version: 1`, ordered `requests`, and exactly one of `runtime` or `snapshot`. Runtime names the active Harness, stable inventory identity, inheritance support and optional inheritance attestation whose `verified` value must equal that inventory identity, plus the exact main-seat model, surface, serving mode, portable and native deliberation, tools, policy, and optional channel. Context itself refuses a supplied snapshot whose frozen facts no longer match its `snapshot_identity` or whose adapter attestation differs from the frozen Harness inventory identity.
+A UTF-8 JSON artifact conforming to `references/context-request.schema.json`, with `schema_version: 1`, ordered `requests`, and exactly one of `runtime` or `snapshot`. Runtime names the active Harness, stable inventory identity, inheritance support and optional inheritance attestation whose `verified` value must equal that inventory identity, plus the exact main-seat model, surface, serving mode, portable and native deliberation, tools, policy, and optional channel. It also names the run's `objective`, `cost_first` or `time_first`, which the derivation copies into the frozen `override_policy`; a snapshot carries it there already and names no objective of its own. Context itself refuses a supplied snapshot whose frozen facts no longer match its `snapshot_identity` or whose adapter attestation differs from the frozen Harness inventory identity.
 
 ## OPTIONS
 
@@ -28,7 +28,7 @@ Read `config.json` from *PATH*. The default is `~/.kntnt/model-selector/`; Conte
 
 ## OUTPUT
 
-One JSON object with `schema_version`, the ordered `requests`, and either a complete current `context` or the supplied frozen `snapshot`. Current context retains every enabled validated selection, reports unavailable comparable ranks as `null`, specializes only adapters the active Harness can launch, and carries shipped override defaults. `evidence.records` is the selected evidence ledger projected into the route contract's own evidence records, `evidence.vintage` the newest instant among the rows behind them, and `evidence.identity` their digest; an absent or unreadable ledger simply yields no records. Commercial dimensions remain `null` until exact measurements exist.
+One JSON object with `schema_version`, the ordered `requests`, and either a complete current `context` or the supplied frozen `snapshot`. Current context retains every enabled validated selection, reports unavailable comparable ranks as `null`, specializes only adapters the active Harness can launch, and carries shipped override defaults. `evidence.records` is the selected evidence ledger projected into the route contract's own evidence records, `evidence.vintage` the newest instant among the rows behind them, and `evidence.identity` their digest; an absent or unreadable ledger simply yields no records. Commercial dimensions of a mapping remain `null` until exact measurements exist, and the objective the request named is carried in `override_policy.objective`.
 
 ## DIAGNOSTICS
 

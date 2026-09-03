@@ -50,10 +50,11 @@
     },
     "runtime": {
       "type": "object",
-      "required": ["harness", "main_seat"],
+      "required": ["harness", "main_seat", "objective"],
       "properties": {
         "harness": {"$ref": "#/$defs/runtime_harness"},
-        "main_seat": {"$ref": "#/$defs/runtime_main_seat"}
+        "main_seat": {"$ref": "#/$defs/runtime_main_seat"},
+        "objective": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/objective"}
       },
       "additionalProperties": false
     }

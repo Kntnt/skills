@@ -32,6 +32,7 @@ EVIDENCE_INHERITANCE_REASONS: frozenset[str] = frozenset(
     {
         "insufficient_evidence",
         "underdetermined_frontier",
+        "objective_metrics_missing",
         "quality_floor_not_cleared",
     }
 )
@@ -55,6 +56,12 @@ SCHEMAS_BY_ID: dict[str, dict[str, Any]] = {
 # Derive the ordered runtime scale from the shared schema vocabulary.
 PORTABLE_LEVELS: tuple[str, ...] = tuple(
     cast(list[str], REQUEST_SCHEMA["$defs"]["portable_level"]["enum"])
+)
+
+# The two objectives a frozen policy states its measured tie-break in, read
+# from the same schema so the code and the contract share one vocabulary.
+OBJECTIVES: tuple[str, ...] = tuple(
+    cast(list[str], REQUEST_SCHEMA["$defs"]["objective"]["enum"])
 )
 
 
@@ -1049,17 +1056,30 @@ def _quality_lower_bound(record: dict[str, Any]) -> float:
     return float(record["quality"])
 
 
+def _observed_commercial(record: dict[str, Any]) -> dict[str, Any]:
+    """Read what one evidence record observed, its absences included.
+
+    A price card is what a configuration is advertised to cost; this is what
+    it was measured to cost, which is the only one of the two a measured
+    selection may be made on. A record carrying no `commercial` object states
+    no measurement rather than a free one, so every dimension of it is
+    unknown, and an unknown dimension never sorts before or after a reading.
+    """
+
+    observed = record.get("commercial")
+    observed = observed if isinstance(observed, dict) else {}
+    return {dimension: observed.get(dimension) for dimension in COMMERCIAL_DIMENSIONS}
+
+
 def _measurement_dominates(
-    candidate: Candidate,
     record: dict[str, Any],
-    other_candidate: Candidate,
     other_record: dict[str, Any],
 ) -> bool:
     """Apply multidimensional dominance only when every compared fact is known."""
 
     # Read every cost axis without inventing unavailable values.
-    costs = candidate.point["commercial"]
-    other_costs = other_candidate.point["commercial"]
+    costs = _observed_commercial(record)
+    other_costs = _observed_commercial(other_record)
     if any(
         not _is_number(costs[dimension]) or not _is_number(other_costs[dimension])
         for dimension in COMMERCIAL_DIMENSIONS
@@ -1089,7 +1109,7 @@ def _pareto_frontier(
         item
         for index, item in enumerate(measured)
         if not any(
-            _measurement_dominates(other[0], other[1], item[0], item[1])
+            _measurement_dominates(other[1], item[1])
             for other_index, other in enumerate(measured)
             if other_index != index
         )
@@ -1097,13 +1117,13 @@ def _pareto_frontier(
 
 
 def _shadow_cost(
-    candidate: Candidate,
+    record: dict[str, Any],
     shadow_prices: dict[str, Any],
 ) -> float | None:
     """Calculate a scenario cost only from a complete explicit conversion policy."""
 
-    # Require known commercial values and prices for every non-cash dimension.
-    commercial = candidate.point["commercial"]
+    # Require known observed values and prices for every non-cash dimension.
+    commercial = _observed_commercial(record)
     priced_dimensions = tuple(
         dimension for dimension in COMMERCIAL_DIMENSIONS if dimension != "cash"
     )
@@ -1135,7 +1155,7 @@ def _frontier_audit(
             "model": candidate.point["model"],
             "portable_deliberation": candidate.portable,
             "quality_lower_bound": _quality_lower_bound(record),
-            "commercial": deepcopy(candidate.point["commercial"]),
+            "commercial": _observed_commercial(record),
         }
         for candidate, record in frontier
     ]
@@ -1276,6 +1296,114 @@ def _economic_candidate(
     )
 
 
+def _priced_candidate(
+    frontier: list[tuple[Candidate, dict[str, Any]]],
+    snapshot: dict[str, Any],
+) -> tuple[Candidate, str] | None:
+    """Resolve the frontier through a complete frozen conversion policy, or not.
+
+    A user who declared what a quota minute is worth in cash has stated a
+    tradeoff this module has no better answer to, so the declaration outranks
+    the default objective. What it cannot do is decide half a frontier: a
+    price missing for one dimension, a dimension no point measured, or two
+    scenarios costing the same all leave the tradeoff open, and the objective
+    order decides it instead of the run inheriting.
+    """
+
+    shadow_prices = snapshot["override_policy"].get("shadow_prices")
+    if not isinstance(shadow_prices, dict):
+        return None
+    priced = [
+        (_shadow_cost(record, shadow_prices), candidate)
+        for candidate, record in frontier
+    ]
+    if not priced or any(cost is None for cost, _ in priced):
+        return None
+
+    minimum = min(float(cost) for cost, _ in priced if cost is not None)
+    winners = [
+        candidate
+        for cost, candidate in priced
+        if cost is not None and float(cost) == minimum
+    ]
+    return (winners[0], "explicit_shadow_prices") if len(winners) == 1 else None
+
+
+def _ladder_position(candidate: Candidate) -> tuple[float, int]:
+    """Position one candidate on the Rung ladder, the cheaper Rung first."""
+
+    return (
+        _model_capability(candidate.point),
+        PORTABLE_LEVELS.index(candidate.portable),
+    )
+
+
+def _objective_order(
+    frontier: list[tuple[Candidate, dict[str, Any]]],
+    snapshot: dict[str, Any],
+) -> tuple[Candidate, str] | str:
+    """Order the surviving frontier by the objective the snapshot froze.
+
+    The objective is the maintainer's standing answer to the question a
+    multidimensional frontier leaves open: the cheapest configuration that
+    holds quality, and the fastest one only when the run asked for it. Both
+    orders are lexicographic over observed means, `cost_first` comparing cash
+    then Time to Verified Pass and `time_first` the reverse, so neither
+    invents an exchange rate between the two that nobody declared.
+
+    A seat billed by subscription exposes no per-attempt cash at all, and a
+    frontier where every point is unpriced is that seat rather than a gap in
+    the ledger: `cost_first` then orders by the Rung ladder, whose cheaper end
+    is the cheaper configuration by construction. A frontier where only some
+    points carry a price is a gap, and so is any unmeasured time, and neither
+    is ordered at all. Returns the chosen candidate and the policy that chose
+    it, or the reason no order could.
+    """
+
+    objective = snapshot["override_policy"].get("objective")
+    objective = objective if objective in OBJECTIVES else OBJECTIVES[0]
+    observed = [
+        (candidate, _observed_commercial(record)) for candidate, record in frontier
+    ]
+
+    # Refuse to order on a dimension some points measured and others did not.
+    if any(not _is_number(commercial["latency"]) for _, commercial in observed):
+        return "objective_metrics_missing"
+    priced = [_is_number(commercial["cash"]) for _, commercial in observed]
+    if any(priced) and not all(priced):
+        return "objective_metrics_missing"
+
+    # Name the order before applying it, the unpriced seat included.
+    if objective == "time_first":
+        decision_policy = "time_first"
+    elif all(priced):
+        decision_policy = "cost_first"
+    else:
+        decision_policy = "cost_first_rung_order"
+
+    # Rank every surviving point on the named order's own keys.
+    ranked: list[tuple[Any, Candidate]] = []
+    for candidate, commercial in observed:
+        latency = float(cast(float, commercial["latency"]))
+        ladder = _ladder_position(candidate)
+        if decision_policy == "time_first":
+            cash = float(cast(float, commercial["cash"])) if all(priced) else 0.0
+            ranked.append(((latency, cash, ladder), candidate))
+        elif decision_policy == "cost_first":
+            ranked.append(
+                ((float(cast(float, commercial["cash"])), latency), candidate)
+            )
+        else:
+            ranked.append(((ladder, latency), candidate))
+
+    # Accept only an order that separates one point from every other.
+    best = min(key for key, _ in ranked)
+    winners = [candidate for key, candidate in ranked if key == best]
+    if len(winners) != 1:
+        return "underdetermined_frontier"
+    return winners[0], decision_policy
+
+
 def _resolve_measured_policy(
     request: dict[str, Any],
     snapshot: dict[str, Any],
@@ -1312,34 +1440,17 @@ def _resolve_measured_policy(
         candidate = frontier[0][0]
         decision_policy = "pareto_dominance"
 
-    # Resolve a tradeoff only through complete frozen shadow prices.
+    # Resolve a tradeoff through a declared conversion policy where the user
+    # supplied one, and through the objective the snapshot froze otherwise.
     else:
-        shadow_prices = snapshot["override_policy"].get("shadow_prices")
-        priced = (
-            [(_shadow_cost(item[0], shadow_prices), item) for item in frontier]
-            if isinstance(shadow_prices, dict)
-            else []
-        )
-        if not priced or any(cost is None for cost, _ in priced):
-            return _inherit(
-                request,
-                snapshot,
-                "underdetermined_frontier",
-                audit,
-            )
-        minimum = min(float(cost) for cost, _ in priced if cost is not None)
-        winners = [
-            item for cost, item in priced if cost is not None and float(cost) == minimum
-        ]
-        if len(winners) != 1:
-            return _inherit(
-                request,
-                snapshot,
-                "underdetermined_frontier",
-                audit,
-            )
-        candidate = winners[0][0]
-        decision_policy = "explicit_shadow_prices"
+        declared = _priced_candidate(frontier, snapshot)
+        if declared is not None:
+            candidate, decision_policy = declared
+        else:
+            ordered = _objective_order(frontier, snapshot)
+            if isinstance(ordered, str):
+                return _inherit(request, snapshot, ordered, audit)
+            candidate, decision_policy = ordered
 
     # Preserve the measured frontier and filtering facts with the chosen point.
     return SelectionOutcome(
@@ -2035,6 +2146,9 @@ def _recommendation_evidence_state(
         "underdetermined_frontier": [
             "an explicit policy that resolves the measured frontier"
         ],
+        "objective_metrics_missing": [
+            "an observed cash and Time to Verified Pass mean for every frontier point"
+        ],
         "insufficient_evidence": [
             "representative exact-point evidence for every launchable candidate"
         ],
@@ -2193,9 +2307,10 @@ def _recommendation_uncertainty(
         entry["configuration_fingerprint"]
         for entry in decision["audit"].get("frontier", [])
     }
-    filter_to_frontier = inheritance_reason == "underdetermined_frontier" and bool(
-        frontier
-    )
+    filter_to_frontier = inheritance_reason in {
+        "underdetermined_frontier",
+        "objective_metrics_missing",
+    } and bool(frontier)
     relevant = [
         candidate
         for candidate in candidates

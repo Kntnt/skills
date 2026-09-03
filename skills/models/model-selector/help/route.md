@@ -14,6 +14,8 @@ Read one versioned request or ordered batch from *PATH*. Return a frozen snapsho
 
 A selection includes its exact configuration, Harness-native launch arguments, evidence, exclusions, and bounded next escalation. That escalation is one adjacent Rung: the next mapped deliberation level on the same model, or the next enabled model up by capability where that scale is exhausted or the Harness carries the control, entered at the lowest level of its own the request still reaches, and never above the main seat. A refusal carries a stable reason and no launch override.
 
+Where several measured configurations clear the quality floor and no one of them dominates the rest, the frozen `override_policy.objective` decides between them: `cost_first`, the default, takes the lowest observed cash and breaks a tie on the lowest Time to Verified Pass, and `time_first` reverses the two. Complete shadow prices the profile declared still take precedence over it, and a frontier the applicable order cannot separate — or one whose points do not all carry the means it compares — still inherits, audited.
+
 Route is offline, non-interactive, and read-only. It never starts setup, performs research or evaluation, refreshes evidence, writes configuration, or writes the evidence ledger. A missing profile or evidence that cannot discriminate safely can yield audited inheritance; invalid or unsafe state yields refusal.
 
 The portable deliberation values are `low`, `medium`, `high`, `xhigh`, and `max`. Omission selects automatically. Native names and numeric budgets are not public input. Each usable value resolves through the snapshot to a verified exact native value; unsupported values are refused rather than approximated.

@@ -102,7 +102,7 @@ Run `/ready-for-agent-check [#ticket ...]`.
 
 Build `ready-for-agent` tickets in dependency waves. Fresh subagents implement and independently verify each ticket; successful work is integrated and recorded, but never pushed or released.
 
-Run `/orchestrate [--dry-run] [--at-once=N] [--model=NAME] [--deliberation=LEVEL] [--yes] [#ticket-or-spec ...]`.
+Run `/orchestrate [--dry-run] [--at-once=N] [--model=NAME] [--deliberation=LEVEL] [--fast] [--approval=IDENTITY] [--yes] [#ticket-or-spec ...]`.
 
 Use `/orchestrate reconcile [--commit=COMMIT] [--yes] #ticket` when a failed or conflicted attempt was completed outside orchestrate.
 

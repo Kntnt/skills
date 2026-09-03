@@ -365,6 +365,16 @@ OBSERVED_OUTCOMES: dict[str, tuple[str, str | None, str]] = {
     "blocked": ("abstain", "discovered_dependency", "tracker"),
 }
 
+# The four things a report can say about a ticket's Time to Verified Pass.
+# Only the first carries a number; the other three are the three different
+# silences an absent measurement can be, kept apart so a reader never has to
+# guess which one a missing value was (ADR-0147).
+NOT_STARTED: str = "not_started"
+VERIFIED_PASS: str = "verified_pass"
+INCOMPLETE: str = "incomplete"
+NOT_PASSED: str = "not_passed"
+
+
 # Machine judgements and non-model conditions may enter the ledger unattended.
 AUTOMATIC_AUTHORITIES: frozenset[str] = frozenset(
     {"independent_verifier", "objective_checker", "declared_failure_signal"}
@@ -907,14 +917,31 @@ class Ticket:
     worktree: str | None = None
 
 
-def ticket_details(ticket: Ticket) -> dict[str, Any]:
-    """Return the established flat public representation of *ticket*."""
+def ticket_details(
+    ticket: Ticket, timing: dict[int, dict[str, Any]] | None = None
+) -> dict[str, Any]:
+    """Return the established flat public representation of *ticket*.
+
+    `timing` is the run's own Time to Verified Pass account where the caller
+    has one. A ticket absent from it launched no routed attempt in this run,
+    which is a fact about the run rather than a gap in the report, so it is
+    stated as `not_started` rather than left out.
+    """
 
     # The domain groups resolution provenance, while the public engine contract
     # retains its established top-level fields for callers and renderers.
     details = asdict(ticket)
     resolution = cast(dict[str, Any], details.pop("resolution"))
-    return details | resolution
+    if timing is None:
+        return details | resolution
+    measured = timing.get(
+        ticket.number,
+        {
+            "time_to_verified_pass_seconds": None,
+            "time_to_verified_pass_status": NOT_STARTED,
+        },
+    )
+    return details | resolution | measured
 
 
 @dataclass
@@ -1047,7 +1074,11 @@ class Routing:
     and override policy — and the current versions of all of that are a
     different context, not a recovered one. `model` and `deliberation` are the
     invocation's own field locks, frozen beside it because a resume that
-    changed them would be a second run reporting as the first. `decisions` is
+    changed them would be a second run reporting as the first. `fast` is the
+    third of them and the run's objective: set, the night is routed to the
+    fastest configuration that holds quality rather than the cheapest one, and
+    a resume that added or dropped it would be routing the rest of the work
+    against a different objective than the half already built. `decisions` is
     every exact decision made under that context, in the order they were made,
     which is what the outcome account is audited from. `attempts` is what an
     external verdict later established about those decisions, kept beside them
@@ -1059,6 +1090,7 @@ class Routing:
     model: str | None
     deliberation: str | None
     decisions: list[RouteRecord]
+    fast: bool = False
     attempts: list[dict[str, Any]] = field(default_factory=list)
     run_identity: str = ""
 
@@ -1098,6 +1130,7 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
         "main_seat": routing.main_seat,
         "model": routing.model,
         "deliberation": routing.deliberation,
+        "fast": routing.fast,
         "run_identity": routing.run_identity or None,
         "routing_capability": routing_capability(routing.decisions),
         "snapshot": routing.snapshot,
@@ -1194,6 +1227,7 @@ def routing_refusal(
     resuming: list[int],
     model: str | None,
     deliberation: str | None,
+    fast: bool,
 ) -> str | None:
     """Return why a plan may not start on this run's routing, or None where it may.
 
@@ -1219,7 +1253,7 @@ def routing_refusal(
             "record or release those claims before a fresh run freezes its own"
         )
 
-    return locks_refusal(routing, model, deliberation, "this invocation")
+    return locks_refusal(routing, model, deliberation, fast, "this invocation")
 
 
 def routing_file(path: Path | None) -> Path | None:
@@ -1532,6 +1566,7 @@ def read_routing(path: Path | None) -> Routing | None:
             deliberation=(
                 None if held["deliberation"] is None else str(held["deliberation"])
             ),
+            fast=bool(held.get("fast")),
             decisions=[
                 RouteRecord(
                     request_id=str(record["request_id"]),
@@ -1579,6 +1614,7 @@ def write_routing(path: Path | None, routing: Routing) -> str:
                     "snapshot": routing.snapshot,
                     "model": routing.model,
                     "deliberation": routing.deliberation,
+                    "fast": routing.fast,
                     "decisions": [asdict(record) for record in routing.decisions],
                     "attempts": routing.attempts,
                     "run_identity": routing.run_identity,
@@ -1729,10 +1765,11 @@ class Plan:
     lands straight on the branch with nothing to integrate (ADR-0054).
 
     `model` and `deliberation` are the field-level locks this invocation puts
-    on every building role, and `routing` is the frozen route account they were
-    frozen into — its identity, the main seat every verdict inherits, the
-    snapshot a later request carries back unchanged, and every exact decision
-    made under it. `routing_reason` is the other half of that answer: where
+    on every building role, `fast` is the objective it puts on the whole run —
+    the fastest configuration that holds quality rather than the cheapest —
+    and `routing` is the frozen route account all three were frozen into: its
+    identity, the main seat every verdict inherits, the snapshot a later
+    request carries back unchanged, and every exact decision made under it. `routing_reason` is the other half of that answer: where
     there is no account to render, it says why, so a report never fills the gap
     in from what is current. `scope` is what the run was aimed at where it was
     aimed at anything — one entry per reference the developer named, and the
@@ -1749,6 +1786,7 @@ class Plan:
     worktrees: bool
     model: str | None
     deliberation: str | None
+    fast: bool
     state: str | None
     routing: dict[str, Any] | None
     routing_reason: str | None
@@ -2873,6 +2911,7 @@ def build_plan(
     at_once: int,
     model: str | None,
     deliberation: str | None,
+    fast: bool,
     state_path: Path | None,
     reference: str | None,
     approval: str | None,
@@ -2937,6 +2976,7 @@ def build_plan(
         worktrees=at_once > ONE_AT_A_TIME,
         model=model,
         deliberation=deliberation,
+        fast=fast,
         state=None,
         routing=routing_details(routing),
         routing_reason=routing_reason,
@@ -3016,7 +3056,7 @@ def build_plan(
             "person has all the work this one could start"
         )
     elif (
-        adrift := routing_refusal(routing, damaged, resuming, model, deliberation)
+        adrift := routing_refusal(routing, damaged, resuming, model, deliberation, fast)
     ) is not None:
         plan.ready = False
         plan.reason = adrift
@@ -3114,6 +3154,7 @@ def cmd_plan(
     at_once: int,
     model: str | None,
     deliberation: str | None,
+    fast: bool,
     state_path: Path | None,
     reference: str | None,
     approval: str | None,
@@ -3135,6 +3176,7 @@ def cmd_plan(
             at_once=at_once,
             model=model,
             deliberation=deliberation,
+            fast=fast,
             state_path=state_path,
             reference=reference,
             approval=approval,
@@ -3290,28 +3332,38 @@ def frozen_refusal(routing: Routing, snapshot: dict[str, Any]) -> str | None:
 
 
 def locks_refusal(
-    routing: Routing, model: str | None, deliberation: str | None, invocation: str
+    routing: Routing,
+    model: str | None,
+    deliberation: str | None,
+    fast: bool,
+    invocation: str,
 ) -> str | None:
-    """Return why *model* and *deliberation* are not this run's locks, or None."""
+    """Return why these locks are not this run's own, or None where they are."""
 
-    if (model, deliberation) == (routing.model, routing.deliberation):
+    if (model, deliberation, fast) == (
+        routing.model,
+        routing.deliberation,
+        routing.fast,
+    ):
         return None
 
     return (
-        f"{invocation} locks {described_locks(model, deliberation)} where this "
-        f"run's routing was frozen for {described_locks(routing.model, routing.deliberation)}: "
+        f"{invocation} locks {described_locks(model, deliberation, fast)} where "
+        "this run's routing was frozen for "
+        f"{described_locks(routing.model, routing.deliberation, routing.fast)}: "
         "the fields the first frontier was routed under cannot change mid-run"
     )
 
 
-def described_locks(model: str | None, deliberation: str | None) -> str:
-    """Say in words which building fields an invocation locked."""
+def described_locks(model: str | None, deliberation: str | None, fast: bool) -> str:
+    """Say in words which building fields and objective an invocation locked."""
 
     named = [
         f"--model={model}" if model else "no model",
         f"--deliberation={deliberation}" if deliberation else "no deliberation",
+        "--fast" if fast else "no fast",
     ]
-    return " and ".join(named)
+    return ", ".join(named[:-1]) + f", and {named[-1]}"
 
 
 def claims_refusal(state: RunState) -> str | None:
@@ -3400,6 +3452,29 @@ def escalation_refusal(routing: Routing, records: list[RouteRecord]) -> str | No
     return None
 
 
+def objective_refusal(snapshot: dict[str, Any], fast: bool) -> str | None:
+    """Return why a snapshot's objective is not this invocation's, or None.
+
+    `--fast` is a promise about how the night selects, and the selection is
+    made inside the frozen snapshot rather than here. A context composed
+    without the lock the invocation carries would leave the flag saying one
+    thing and the routing doing another for the whole run, which is worse than
+    refusing before the first claim.
+    """
+
+    wanted = "time_first" if fast else "cost_first"
+    policy = snapshot.get("override_policy")
+    frozen = policy.get("objective") if isinstance(policy, dict) else None
+    if frozen == wanted:
+        return None
+    invoked = "--fast" if fast else "no --fast"
+    return (
+        f"this invocation was made with {invoked} and its frozen context "
+        f"selects for {frozen!r}: compose the context request with objective "
+        f"{wanted!r}, or invoke the run the other way"
+    )
+
+
 def cmd_route(
     cwd: Path,
     response: Path,
@@ -3408,6 +3483,7 @@ def cmd_route(
     dry_run: bool,
     model: str | None,
     deliberation: str | None,
+    fast: bool,
     starting: list[int] | None,
     run_claimed: list[int] | None,
 ) -> int:
@@ -3485,17 +3561,20 @@ def cmd_route(
             return fail(standing)
         if (opening := batch_refusal(state, records)) is not None:
             return fail(opening)
+        if (mismatched := objective_refusal(snapshot, fast)) is not None:
+            return fail(mismatched)
         routing = Routing(
             snapshot=snapshot,
             model=model,
             deliberation=deliberation,
+            fast=fast,
             decisions=[],
             run_identity=secrets.token_hex(32),
         )
     elif (stale := frozen_refusal(routing, snapshot)) is not None:
         return fail(stale)
     elif (
-        relocked := locks_refusal(routing, model, deliberation, "this response")
+        relocked := locks_refusal(routing, model, deliberation, fast, "this response")
     ) is not None:
         return fail(relocked)
 
@@ -5175,6 +5254,7 @@ def observed_attempt(
         for held in routing.decisions
         if observed_task(held, held.request_id) == task
     ]
+    position = kin.index(request_id)
 
     # Say which point actually served, where the environment named another.
     decision = record.decision
@@ -5187,6 +5267,7 @@ def observed_attempt(
 
     return {
         "attempt_id": request_id,
+        "prior_attempt_id": kin[position - 1] if position else None,
         "session_identity": "session-"
         + hashlib.sha256(f"{routing.identity}|{ROUTING_FILE}".encode()).hexdigest()[
             :16
@@ -5197,7 +5278,7 @@ def observed_attempt(
         "stage": record.stage,
         "workload_cohort": record.workload_cohort,
         "workload_tags": list(record.workload_tags),
-        "attempt_index": kin.index(request_id) + 1,
+        "attempt_index": position + 1,
         "harness": routing.snapshot["harness"],
         "benchmark": {
             "key": f"orchestrate-{stratum.replace('_', '-')}",
@@ -5944,6 +6025,88 @@ def reported_flakes(cwd: Path, state_path: Path | None) -> list[dict[str, Any]]:
     return reported
 
 
+def _attempt_passed(attempt: dict[str, Any]) -> bool:
+    """Say whether one completed attempt carries an external passing verdict."""
+
+    outcome = attempt.get("outcome")
+    return isinstance(outcome, dict) and outcome.get("result") == "pass"
+
+
+def _instant(value: Any) -> datetime | None:
+    """Parse one engine-written instant, or None where none was written."""
+
+    if not isinstance(value, str):
+        return None
+    try:
+        return datetime.fromisoformat(value)
+    except ValueError:
+        return None
+
+
+def verified_pass_timing(routing: Routing | None) -> dict[int, dict[str, Any]]:
+    """Return each ticket's Time to Verified Pass and the status that reads it.
+
+    The measure runs from a ticket's first routed launch to the instant its
+    first passing verdict landed, retries included: a cheap configuration that
+    needed two tries took as long as both of them, and a report that showed
+    only the successful try would price the policy as though the failures had
+    been free. Both boundaries are the engine's own instants rather than
+    anything a session reports about itself (ADR-0137).
+
+    The status is what tells an absent number from a zero. A ticket nothing
+    launched, a ticket whose every launched attempt finished without a pass,
+    and a ticket still in flight are three different silences, and each of
+    them is decided by engine facts alone.
+    """
+
+    if routing is None:
+        return {}
+
+    # Group the run's attempts under the ticket whose decision launched them.
+    numbered = {
+        record.request_id: record.ticket
+        for record in routing.decisions
+        if record.ticket is not None
+    }
+    grouped: dict[int, list[dict[str, Any]]] = {}
+    for attempt in routing.attempts:
+        number = numbered.get(str(attempt.get("attempt_id")))
+        if number is not None:
+            grouped.setdefault(number, []).append(attempt)
+
+    # Read each ticket's own boundaries, or say which silence it is in.
+    timing: dict[int, dict[str, Any]] = {}
+    for number, attempts in grouped.items():
+        launched = [
+            instant
+            for instant in (_instant(attempt.get("started_at")) for attempt in attempts)
+            if instant is not None
+        ]
+        passed = [
+            instant
+            for instant in (
+                _instant(attempt.get("completed_at"))
+                for attempt in attempts
+                if _attempt_passed(attempt)
+            )
+            if instant is not None
+        ]
+        seconds: float | None = None
+        if any(_attempt_passed(attempt) for attempt in attempts):
+            status = VERIFIED_PASS
+            if launched and passed:
+                seconds = (min(passed) - min(launched)).total_seconds()
+        elif any("outcome" not in attempt for attempt in attempts):
+            status = INCOMPLETE
+        else:
+            status = NOT_PASSED
+        timing[number] = {
+            "time_to_verified_pass_seconds": seconds,
+            "time_to_verified_pass_status": status,
+        }
+    return timing
+
+
 def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int:
     """Print every ticket in scope grouped by current Ticket Resolution.
 
@@ -6022,7 +6185,9 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
         "observations": observed_details(routing, state_path),
         "flakes": flakes,
         "regenerated": regenerated,
-        "tickets": [ticket_details(ticket) for ticket in tickets],
+        "tickets": [
+            ticket_details(ticket, verified_pass_timing(routing)) for ticket in tickets
+        ],
         **outcome,
     }
 
@@ -6100,6 +6265,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan.add_argument("--at-once", type=int, default=ONE_AT_A_TIME)
     plan.add_argument("--model")
     plan.add_argument("--approval")
+    plan.add_argument("--fast", action="store_true")
     add_deliberation_flag(plan)
     add_scope_flag(plan)
     add_shared_flags(plan)
@@ -6108,6 +6274,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     route.add_argument("--response", required=True, type=Path)
     route.add_argument("--dry-run", action="store_true")
     route.add_argument("--model")
+    route.add_argument("--fast", action="store_true")
     route.add_argument("--starting", action="append", type=int)
     route.add_argument("--run-claimed", action="append", type=int)
     add_deliberation_flag(route)
@@ -6225,6 +6392,7 @@ def main(argv: list[str] | None = None) -> int:
             at_once=args.at_once,
             model=args.model,
             deliberation=args.deliberation,
+            fast=args.fast,
             state_path=state_path,
             reference=args.scope,
             approval=args.approval,
@@ -6237,6 +6405,7 @@ def main(argv: list[str] | None = None) -> int:
             dry_run=args.dry_run,
             model=args.model,
             deliberation=args.deliberation,
+            fast=args.fast,
             starting=args.starting,
             run_claimed=args.run_claimed,
         )

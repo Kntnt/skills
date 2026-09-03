@@ -632,7 +632,8 @@ def _derive_context(
         },
         "main_seat": main_seat,
         "mappings": mappings,
-        "override_policy": deepcopy(ROUTING_DEFAULTS),
+        "override_policy": deepcopy(ROUTING_DEFAULTS)
+        | {"objective": runtime["objective"]},
     }
 
 

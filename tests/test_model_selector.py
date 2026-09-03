@@ -53,7 +53,9 @@ def _load_context_module() -> Any:
     return module
 
 
-def _runtime_context_request(**request_changes: Any) -> dict[str, Any]:
+def _runtime_context_request(
+    objective: str = "cost_first", **request_changes: Any
+) -> dict[str, Any]:
     """Provide exact session facts beside one ordered routing request."""
 
     # Pin the strongest scored fixture model and its top portable control.
@@ -63,6 +65,7 @@ def _runtime_context_request(**request_changes: Any) -> dict[str, Any]:
         "schema_version": 1,
         "requests": [request],
         "runtime": {
+            "objective": objective,
             "harness": {
                 "name": "claude-code",
                 "surface": "claude-code",
@@ -137,6 +140,7 @@ def test_context_derives_a_routeable_claude_code_artifact(tmp_path: Path) -> Non
         "cold_start": "select",
         "quality_floor": 0.7,
         "shadow_prices": None,
+        "objective": "cost_first",
     }
     assert routed["snapshot"]["evidence"] == {
         "identity": f"sha256:{hashlib.sha256(b'[]').hexdigest()}",
@@ -1744,12 +1748,20 @@ def test_route_honors_independent_overrides_and_matched_lower_evidence() -> None
             ],
         }
     )["decisions"][0]
+    observed = {
+        "cash": 1.0,
+        "rolling_quota": 2.0,
+        "weekly_quota": 3.0,
+        "allocated_subscription_cost": 1.0,
+        "latency": 4.0,
+    }
     snapshot["evidence"]["records"] = [
-        _measurement_record(low),
+        _measurement_record(low, commercial=dict(observed)),
         _measurement_record(
             high,
             quality=0.9,
             uncertainty={"lower_bound": 0.9, "upper_bound": 0.92},
+            commercial=dict(observed),
         ),
     ]
 
@@ -2956,11 +2968,13 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
             first_decision,
             quality=0.94,
             uncertainty={"lower_bound": 0.92, "upper_bound": 0.96},
+            commercial=deepcopy(first["commercial"]),
         ),
         _measurement_record(
             second_decision,
             quality=0.96,
             uncertainty={"lower_bound": 0.94, "upper_bound": 0.98},
+            commercial=deepcopy(second["commercial"]),
         ),
     ]
 
@@ -2973,16 +2987,38 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         }
     )["decisions"][0]
 
-    # Assert incomparable dimensions produce audited inheritance.
-    assert ambiguous["status"] == "inherit"
-    assert ambiguous["inheritance"]["reason"] == "underdetermined_frontier"
+    # Assert the frozen objective takes the cheapest measured point.
+    assert ambiguous["status"] == "selected"
+    assert ambiguous["launch"]["model"] == "worker-v2"
+    assert ambiguous["audit"]["decision_policy"] == "cost_first"
     assert len(ambiguous["audit"]["frontier"]) == 2
+
+    # Reverse the objective and take the fastest measured point instead.
+    fast = deepcopy(snapshot)
+    fast["override_policy"]["objective"] = "time_first"
+    hurried = router.route(
+        {
+            "schema_version": 1,
+            "context": fast,
+            "requests": [_request()],
+        }
+    )["decisions"][0]
+
+    # Assert only the objective changed which of the two points is chosen.
+    assert hurried["status"] == "selected"
+    assert hurried["launch"]["model"] == "worker-v3"
+    assert hurried["audit"]["decision_policy"] == "time_first"
+
+    # Leave both objectives without an order by tying both of their axes.
+    tied = deepcopy(snapshot)
+    for record in tied["evidence"]["records"]:
+        record["commercial"] = {**record["commercial"], "cash": 1.0, "latency": 4.0}
 
     # Adapt the unresolved measured frontier with its explicit quality rubric.
     unresolved = router.recommend(
         {
             "schema_version": 1,
-            "context": snapshot,
+            "context": tied,
             "requests": [
                 _request(
                     rubric={"kind": "binary", "pass_condition": "pytest passes"},
@@ -3027,6 +3063,7 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         {
             "quality": 0.91,
             "uncertainty": {"lower_bound": 0.9, "upper_bound": 0.92},
+            "commercial": deepcopy(dominated["mappings"][1]["commercial"]),
         }
     )
     dominant = router.route(
@@ -3082,6 +3119,94 @@ def test_route_uses_pareto_costs_and_only_explicit_shadow_prices() -> None:
         "upper_bound": 0.98,
     }
     assert recommendation["experiment_brief"] is None
+
+
+def test_objective_order_resolves_a_subscription_seat_and_names_its_gaps() -> None:
+    """An unpriced seat orders by Rung; a half-measured frontier orders not at all."""
+
+    # Configure two exact points a subscription seat exposes no cash for.
+    router = _load_router()
+    snapshot = _automatic_low_snapshot()
+    first = snapshot["mappings"][0]
+    second = deepcopy(first)
+    second.update({"model": "worker-v3", "model_capability": 80})
+    snapshot["mappings"].append(second)
+    snapshot["harness"]["adapter_specs"][0]["models"].append("worker-v3")
+
+    # Resolve each exact point before binding representative measurements.
+    decisions = [
+        router.route(
+            {
+                "schema_version": 1,
+                "context": snapshot,
+                "requests": [_request(overrides={"model": model})],
+            }
+        )["decisions"][0]
+        for model in ("worker-v2", "worker-v3")
+    ]
+    unpriced = {
+        "cash": None,
+        "rolling_quota": None,
+        "weekly_quota": None,
+        "allocated_subscription_cost": None,
+        "latency": 9.0,
+    }
+    snapshot["evidence"]["records"] = [
+        _measurement_record(decisions[0], commercial=dict(unpriced)),
+        _measurement_record(
+            decisions[1],
+            quality=0.96,
+            uncertainty={"lower_bound": 0.94, "upper_bound": 0.98},
+            commercial={**unpriced, "latency": 3.0},
+        ),
+    ]
+
+    # Order a wholly unpriced frontier by the cheaper Rung under the default.
+    thrifty = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Assert the weaker Rung wins without any cash ever being exposed.
+    assert thrifty["status"] == "selected"
+    assert thrifty["launch"]["model"] == "worker-v2"
+    assert thrifty["audit"]["decision_policy"] == "cost_first_rung_order"
+
+    # Reverse the objective and let the measured time decide instead.
+    hurried = deepcopy(snapshot)
+    hurried["override_policy"]["objective"] = "time_first"
+    quickest = router.route(
+        {"schema_version": 1, "context": hurried, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Assert the faster point wins where nothing separates the two on cash.
+    assert quickest["status"] == "selected"
+    assert quickest["launch"]["model"] == "worker-v3"
+    assert quickest["audit"]["decision_policy"] == "time_first"
+
+    # Price exactly one of the two points and leave the other as it was.
+    partial = deepcopy(snapshot)
+    partial["evidence"]["records"][1]["commercial"]["cash"] = 2.0
+    halved = router.route(
+        {"schema_version": 1, "context": partial, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Assert a dimension only some points measured orders nothing at all.
+    assert halved["status"] == "inherit"
+    assert halved["inheritance"]["reason"] == "objective_metrics_missing"
+    assert len(halved["audit"]["frontier"]) == 2
+
+    # Withhold the measured time from one point and keep the cash on both.
+    timeless = deepcopy(snapshot)
+    for record, cash in zip(timeless["evidence"]["records"], (1.0, 2.0)):
+        record["commercial"] |= {"cash": cash}
+    timeless["evidence"]["records"][0]["commercial"]["latency"] = None
+    untimed = router.route(
+        {"schema_version": 1, "context": timeless, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Assert an unmeasured time leaves even the cash-first order unusable.
+    assert untimed["status"] == "inherit"
+    assert untimed["inheritance"]["reason"] == "objective_metrics_missing"
 
 
 def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> None:
@@ -3183,7 +3308,7 @@ def test_recommend_preserves_budget_and_renewal_selection_in_shared_core() -> No
         "budget_cash",
     ]
     assert routed[3]["status"] == "inherit"
-    assert routed[3]["inheritance"]["reason"] == "underdetermined_frontier"
+    assert routed[3]["inheritance"]["reason"] == "objective_metrics_missing"
 
 
 def test_route_and_recommend_share_selection_but_not_presentation() -> None:
@@ -4439,6 +4564,107 @@ def test_a_projection_keeps_every_cohort_and_unnamed_row_apart(
         for frontier in derived["frontiers"].values()
         for point in frontier["points"]
     )
+
+
+def test_a_projected_point_is_priced_by_the_whole_chain_that_reached_it(
+    tmp_path: Path,
+) -> None:
+    """A retry's cost and elapsed time belong to the point its pass landed on."""
+
+    # Import one cheap failure and the escalated retry that finally passed.
+    observations = _load_observations()
+    cheap = _routed_decision()
+    strong = deepcopy(cheap)
+    strong["launch"] |= {
+        "model": "worker-v3",
+        "configuration_fingerprint": "fingerprint-worker-v3",
+    }
+    failed = _attempt(
+        attempt_id="build-96",
+        decision=cheap,
+        outcome={
+            "result": "fail",
+            "authority": "independent_verifier",
+            "checker": {"identity": "verify.md", "independent": True},
+            "condition": None,
+            "scores": None,
+        },
+        run_identity="run-1",
+        started_at="2026-08-24T10:00:00Z",
+        completed_at="2026-08-24T10:05:00Z",
+        measurements={"cash": 1.0, "retries": 0},
+    )
+    passed = _attempt(
+        attempt_id="amend-96-1",
+        prior_attempt_id="build-96",
+        attempt_index=2,
+        workload_stratum="amend",
+        stage="amend",
+        benchmark={
+            "key": "orchestrate-amend",
+            "name": "orchestrate-ticket",
+            "version": "1",
+            "cohort": "python-refactor",
+            "tags": ["python"],
+        },
+        decision=strong,
+        run_identity="run-1",
+        started_at="2026-08-24T10:05:00Z",
+        completed_at="2026-08-24T10:11:00Z",
+        measurements={"cash": 4.0, "retries": 1},
+    )
+    _import(observations, tmp_path, [failed, passed])
+    projected = {
+        record["configuration_fingerprint"]: record
+        for record in observations.projected_evidence(tmp_path)["records"]
+    }
+
+    # Assert the escalation is priced in the Cohort its own pass belongs to.
+    assert [record["stage"] for record in projected.values()] == ["amend", "build"] or [
+        record["stage"] for record in projected.values()
+    ] == ["build", "amend"]
+    assert projected["fingerprint-worker-v3"]["commercial"]["cash"] == 5.0
+    assert projected["fingerprint-worker-v3"]["commercial"]["latency"] == 660.0
+    assert projected["fingerprint-worker-v3"]["commercial"]["rolling_quota"] is None
+    assert projected[cheap["launch"]["configuration_fingerprint"]]["commercial"] == {
+        "cash": None,
+        "rolling_quota": None,
+        "weekly_quota": None,
+        "allocated_subscription_cost": None,
+        "latency": None,
+    }
+
+    # Assert the ledger holds the links a later reader rebuilds the chain from.
+    ledger = [
+        json.loads(line)
+        for line in (tmp_path / "run-observations.jsonl")
+        .read_text("utf-8")
+        .splitlines()
+    ]
+    assert [row["attempt_id"] for row in ledger] == ["build-96", "amend-96-1"]
+    assert [row["prior_attempt_id"] for row in ledger] == [None, "build-96"]
+
+
+def test_a_chain_no_verdict_passed_prices_no_point_at_all(tmp_path: Path) -> None:
+    """An unfinished measurement never reads as the cheapest point on a frontier."""
+
+    # Import one task whose only routed attempt was judged a failure.
+    observations = _load_observations()
+    _import(
+        observations,
+        tmp_path,
+        _judged_attempts(_routed_decision(), 1, "fail", 0)
+        + [
+            attempt | {"measurements": {"cash": 2.0, "retries": 0}}
+            for attempt in _judged_attempts(_routed_decision(), 1, "pass", 7)
+        ],
+    )
+    projected = observations.projected_evidence(tmp_path)["records"]
+
+    # Assert only the chain that passed contributed a cash mean at all.
+    assert len(projected) == 1
+    assert projected[0]["commercial"]["cash"] == 2.0
+    assert projected[0]["quality"] == 0.5
 
 
 def test_a_damaged_ledger_row_yields_no_evidence_rather_than_a_refusal(

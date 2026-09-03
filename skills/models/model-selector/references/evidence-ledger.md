@@ -80,7 +80,7 @@ A `CapabilityPrior` is categorical evidence for choosing a cold-start experiment
 
 `EvaluationConfiguration`: fingerprint plus model-version and access-channel keys, effort/thinking budget, mode, harness commit, prompt/tool hashes, cache/context/retry/fallback policies, maximum output and resource profile.
 
-`RunObservation`: run key, configuration and benchmark keys, the routed request's `stage`, `workload_cohort` and `workload_tags` or their three nulls, task/seed/attempt, pass/fail/abstain/infra-error and raw dimension scores, all token categories, tool counts, provider bill, price schedule used, resolved model/fallback, wall/first-useful-output latency, timestamps and sanitized artifact hashes. The three identity fields are defined in `run-observations.md`, which also defines the frontier they place the row in.
+`RunObservation`: run key, the attempt's own identity and the identity of the attempt it followed, configuration and benchmark keys, the routed request's `stage`, `workload_cohort` and `workload_tags` or their three nulls, task/seed/attempt, pass/fail/abstain/infra-error and raw dimension scores, all token categories, tool counts, provider bill, price schedule used, resolved model/fallback, wall/first-useful-output latency, timestamps and sanitized artifact hashes. The three identity fields are defined in `run-observations.md`, which also defines the frontier they place the row in.
 
 ## Conditional update
 

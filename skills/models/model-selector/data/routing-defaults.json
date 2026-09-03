@@ -1,5 +1,6 @@
 {
   "cold_start": "select",
   "quality_floor": 0.7,
-  "shadow_prices": null
+  "shadow_prices": null,
+  "objective": "cost_first"
 }

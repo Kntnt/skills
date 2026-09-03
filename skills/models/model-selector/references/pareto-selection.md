@@ -96,10 +96,20 @@ Configuration `A` dominates `B` only within a common cost basis: `A` costs no mo
 
 - Budget: highest conservative quality with conservative cost `<= B`; ties go to lower cost, then lower p90 latency.
 - Quality floor: lowest conservative cost with conservative quality `>= Q`; ties go to higher quality, then lower p90 latency.
-- No threshold: show the frontier and choose its knee only when a workload owner supplied marginal value. Otherwise recommend a small frontier experiment, not an arbitrary ratio winner.
+- No threshold: apply the frozen objective. `cost_first` takes the lowest observed cash and breaks a tie on the lowest Time to Verified Pass; `time_first` reverses the two. Neither invents an exchange rate between the axes, so a frontier the applicable order cannot separate still recommends a small frontier experiment rather than an arbitrary ratio winner.
 - Traffic mix: minimize weighted expected policy cost subject to every protected stratum's quality floor; never let easy traffic hide a failing hard tail.
 
 Show p90 latency as a third metric. Report hardest-decile quality and cost beside the overall result when available.
+
+## Objective
+
+The standing objective is the cheapest configuration that holds quality, and the fastest one only where the run asked for it. It is frozen with the rest of the routing context, so every decision of one run is made under one objective and a resumed run cannot change it halfway.
+
+Compare on observed means — what the configuration was measured to cost and to take — never on the price its mapping advertises. Cost is the whole policy: a chain's cash is every attempt it took to reach a pass, and its Time to Verified Pass is the run from the chain's first launch to the instant its first passing verdict landed, both charged to the configuration that finally passed. A chain no verdict passed contributes neither, because a censored attempt is not a fast free one.
+
+A user's own declared shadow prices outrank the objective, being a tradeoff they stated and this reference has no better answer to. Where they cannot decide — a price missing, a dimension nothing measured, or two scenarios costing the same — the objective decides instead.
+
+Where no surviving point exposes cash at all, which is what a subscription seat looks like from inside, `cost_first` orders by the Rung ladder, whose cheaper end is the cheaper configuration by construction. Where only some points expose it, nothing is ordered: a half-measured dimension is a gap in the ledger rather than a free point on the frontier.
 
 ## Escalation
 

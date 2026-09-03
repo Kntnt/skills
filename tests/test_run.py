@@ -434,6 +434,7 @@ def _snapshot(identity: str = "frozen", **fields: Any) -> dict[str, Any]:
         "override_policy": {
             "portable_levels": ["low", "medium", "high", "xhigh", "max"],
             "cold_start": "inherit",
+            "objective": "cost_first",
         },
     } | fields
 
@@ -540,6 +541,7 @@ def _route(
     dry_run: bool = False,
     model: str | None = None,
     deliberation: str | None = None,
+    fast: bool = False,
     starting: list[int] | None = None,
     name: str = "route.json",
 ) -> subprocess.CompletedProcess[str]:
@@ -562,6 +564,8 @@ def _route(
         args += ["--model", model]
     if deliberation is not None:
         args += ["--deliberation", deliberation]
+    if fast:
+        args.append("--fast")
     for number in starting or []:
         args += ["--starting", str(number)]
     if scratch is not None:
@@ -3377,6 +3381,180 @@ def test_a_resumed_run_stops_where_the_invocation_changes_its_locks(
     assert "deliberation" in json.loads(changed.stdout)["reason"]
     assert omitted.returncode == 2
     assert json.loads(omitted.stdout)["ready"] is False
+
+
+def _fast_snapshot(identity: str = "frozen") -> dict[str, Any]:
+    """Build the frozen context a `--fast` run's objective is selected under."""
+
+    snapshot = _snapshot(identity)
+    snapshot["override_policy"] = snapshot["override_policy"] | {
+        "objective": "time_first"
+    }
+    return snapshot
+
+
+def test_a_fast_run_freezes_its_objective_and_refuses_a_resume_without_it(
+    tmp_path: Path,
+) -> None:
+    """The objective a night selected under cannot change halfway through it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    opening = _engine(repo, "plan", "--fast", "--state-dir", str(scratch), env=env)
+    assert opening.returncode == 0, opening.stderr
+    assert json.loads(opening.stdout)["fast"] is True
+    assert (
+        _route(
+            repo,
+            tmp_path,
+            scratch,
+            env,
+            [_selected("build-9")],
+            snapshot=_fast_snapshot(),
+            fast=True,
+        ).returncode
+        == 0
+    )
+
+    dropped = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    kept = _engine(repo, "plan", "--fast", "--state-dir", str(scratch), env=env)
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    # Assert the lock behaves exactly as the two field locks beside it do.
+    assert dropped.returncode == 2
+    assert json.loads(dropped.stdout)["ready"] is False
+    assert "fast" in json.loads(dropped.stdout)["reason"]
+    assert kept.returncode == 0
+    assert json.loads(kept.stdout)["ready"] is True
+    assert json.loads(reported.stdout)["routing"]["fast"] is True
+
+
+def test_a_route_refuses_a_context_frozen_for_the_other_objective(
+    tmp_path: Path,
+) -> None:
+    """A flag that said one thing while the routing did another would be a lie."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    assert (
+        _engine(repo, "plan", "--fast", "--state-dir", str(scratch), env=env).returncode
+        == 0
+    )
+    cheap = _route(repo, tmp_path, scratch, env, [_selected("build-9")], fast=True)
+
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    quick = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_selected("build-9")],
+        snapshot=_fast_snapshot(),
+        name="quick.json",
+    )
+
+    # Assert neither half of the disagreement is allowed to freeze a run.
+    assert cheap.returncode == 1
+    assert "cost_first" in cheap.stderr
+    assert quick.returncode == 1
+    assert "time_first" in quick.stderr
+
+
+def test_the_report_times_every_ticket_to_its_first_verified_pass(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """The measure covers the retry, and each silence says which silence it is."""
+
+    # Finish a failed cheap attempt and the escalated one that then passed.
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[_ticket(9, "the skeleton"), _ticket(11, "the other one")],
+        issues={9: _ready(9), 11: _ready(11)},
+        decisions=[_selected("build-9"), _selected("amend-9-1")],
+    )
+    env |= isolated_attempt_environment
+    assert _attempt_started(repo, scratch, env, "build-9").returncode == 0
+    assert _attempt_finished(repo, scratch, env, "fail").returncode == 0
+    assert _attempt_started(repo, scratch, env, "amend-9-1").returncode == 0
+    assert (
+        _attempt_finished(repo, scratch, env, "pass", request_id="amend-9-1").returncode
+        == 0
+    )
+
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    timed = {
+        ticket["number"]: (
+            ticket["time_to_verified_pass_status"],
+            ticket["time_to_verified_pass_seconds"],
+        )
+        for ticket in json.loads(reported.stdout)["tickets"]
+    }
+
+    # Assert the retried ticket carries a number and the untouched one does not.
+    assert reported.returncode == 0, reported.stderr
+    assert timed[9][0] == "verified_pass"
+    assert timed[9][1] is not None and timed[9][1] >= 0
+    assert timed[11] == ("not_started", None)
+
+
+def test_the_report_tells_an_unfinished_attempt_from_a_failed_one(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """A ticket in flight and a ticket that never passed are different silences."""
+
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+    assert _attempt_started(repo, scratch, env, "build-9").returncode == 0
+    in_flight = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    assert _attempt_finished(repo, scratch, env, "fail").returncode == 0
+    settled = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    def status(result: subprocess.CompletedProcess[str]) -> tuple[str, Any]:
+        """Read the one ticket's Time to Verified Pass out of one report."""
+
+        ticket = json.loads(result.stdout)["tickets"][0]
+        return (
+            ticket["time_to_verified_pass_status"],
+            ticket["time_to_verified_pass_seconds"],
+        )
+
+    # Assert neither silence is reported as a measurement of any kind.
+    assert status(in_flight) == ("incomplete", None)
+    assert status(settled) == ("not_passed", None)
+
+
+def test_a_finished_attempt_names_the_attempt_it_followed(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """The engine owns the chain link, a session having no account to read it from."""
+
+    repo, scratch, env = _routed(
+        tmp_path, decisions=[_selected("build-9"), _selected("amend-9-1")]
+    )
+    env |= isolated_attempt_environment
+    assert _attempt_started(repo, scratch, env, "build-9").returncode == 0
+    assert _attempt_finished(repo, scratch, env, "fail").returncode == 0
+    assert _attempt_started(repo, scratch, env, "amend-9-1").returncode == 0
+    finished = _attempt_finished(repo, scratch, env, "pass", request_id="amend-9-1")
+    attempts = json.loads(
+        Path(json.loads(finished.stdout)["attempts"]).read_text("utf-8")
+    )["attempts"]
+
+    # Assert the first attempt opens the chain and the second names it.
+    assert [attempt["prior_attempt_id"] for attempt in attempts] == [None, "build-9"]
 
 
 def test_a_fresh_run_plans_before_it_has_routed_anything(tmp_path: Path) -> None:

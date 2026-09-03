@@ -499,6 +499,7 @@ def _observation(attempt: dict[str, Any]) -> tuple[dict[str, Any] | None, str, s
     ):
         return None, "unsanitized_artifact_hash", "Artifact identities are digests."
 
+    prior = attempt.get("prior_attempt_id")
     observation = {
         "run_key": _run_key(
             configuration["configuration_fingerprint"],
@@ -508,6 +509,8 @@ def _observation(attempt: dict[str, Any]) -> tuple[dict[str, Any] | None, str, s
             attempt["attempt_index"],
             attempt.get("run_identity"),
         ),
+        "attempt_id": attempt["attempt_id"],
+        "prior_attempt_id": prior if isinstance(prior, str) and prior else None,
         "run_identity": attempt.get("run_identity"),
         "session_identity": attempt["session_identity"],
         "task_id": attempt["task_identity"],
@@ -587,24 +590,21 @@ def _observation(attempt: dict[str, Any]) -> tuple[dict[str, Any] | None, str, s
     return observation, "", ""
 
 
-def _policy_account(
-    observation: dict[str, Any], prior: dict[str, Any], charge: Any
-) -> dict[str, Any]:
+def _policy_account(chain: list[dict[str, Any]], charge: Any) -> dict[str, Any]:
     """Return what a cheap-first policy actually cost across its whole sequence.
 
-    The policy is charged for the attempt that failed, for the checker that
-    judged it, and for the retry that followed. A dimension no contributor
-    exposed stays null rather than reading as a saving.
+    The policy is charged for every attempt that failed, for the checker that
+    judged them, and for the retry that finally passed — however many links
+    that took, because a policy that escalates twice cost what both
+    escalations cost. A dimension no contributor exposed stays null rather
+    than reading as a saving.
     """
 
     charge = charge if isinstance(charge, dict) else {}
     charged: dict[str, float | int | None] = {}
     for dimension in POLICY_DIMENSIONS:
-        contributions = [
-            _dimension(prior, dimension),
-            _dimension(observation, dimension),
-            _number(charge.get(dimension)),
-        ]
+        contributions = [_dimension(link, dimension) for link in chain]
+        contributions.append(_number(charge.get(dimension)))
         charged[dimension] = (
             None
             if any(value is None for value in contributions)
@@ -612,8 +612,8 @@ def _policy_account(
         )
     return {
         "identity": "cheap_first",
-        "attempts": [prior["run_key"], observation["run_key"]],
-        "retries": observation["retries"],
+        "attempts": [link["run_key"] for link in chain],
+        "retries": chain[-1]["retries"],
         "charged": charged,
     }
 
@@ -642,7 +642,7 @@ def observe(artifact: Any) -> dict[str, Any]:
 
     observations: list[dict[str, Any]] = []
     refusals: list[dict[str, Any]] = []
-    emitted: dict[str, dict[str, Any]] = {}
+    chains: dict[str, list[dict[str, Any]]] = {}
     for attempt in artifact["attempts"]:
         observation, code, detail = _observation(attempt)
         if observation is None:
@@ -653,10 +653,12 @@ def observe(artifact: Any) -> dict[str, Any]:
             continue
 
         # Charge an escalated attempt to the policy its whole sequence spent.
-        prior = emitted.get(attempt.get("prior_attempt_id"))
-        if prior is not None:
+        prior_id = attempt.get("prior_attempt_id")
+        held = chains.get(prior_id, []) if isinstance(prior_id, str) else []
+        chain = [*held, observation]
+        if len(chain) > 1:
             observation["policy"] = _policy_account(
-                observation, prior, attempt.get("checker_charge")
+                chain, attempt.get("checker_charge")
             )
 
         # Report only what an explicit import would accept unchanged.
@@ -665,7 +667,7 @@ def observe(artifact: Any) -> dict[str, Any]:
                 _refusal(attempt["attempt_id"], invalid["code"], invalid["detail"])
             )
             continue
-        emitted[attempt["attempt_id"]] = observation
+        chains[attempt["attempt_id"]] = chain
         observations.append(observation)
 
     return {
@@ -1071,8 +1073,124 @@ def _rebuild_frontiers(
     return [_frontier_named(identity) for identity in affected]
 
 
+def _ordered_chain(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Order one task's attempts inside one run as they were actually made.
+
+    `attempt_index` is what each row states about its own place; the links
+    `prior_attempt_id` holds are what the rows after it state about the
+    sequence. The links are followed where the ledger holds a whole unbroken
+    one, and validate the order when they do; a chain from before they were
+    written, or one whose links do not reach every row exactly once, is still
+    ordered by the index every row has always carried.
+    """
+
+    by_index = sorted(
+        rows, key=lambda row: (int(row["attempt_index"]), str(row["run_key"]))
+    )
+    named = {
+        str(row["attempt_id"]): row
+        for row in rows
+        if isinstance(row.get("attempt_id"), str)
+    }
+    heads = [row for row in rows if row.get("prior_attempt_id") is None]
+    if len(by_index) < 2 or len(named) != len(rows) or len(heads) != 1:
+        return by_index
+
+    # Walk the links forward, stopping at the first one that is not a chain.
+    following: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        prior = row.get("prior_attempt_id")
+        if isinstance(prior, str) and prior not in following:
+            following[prior] = row
+    linked = [heads[0]]
+    seen = {str(heads[0]["attempt_id"])}
+    while (next_row := following.get(str(linked[-1]["attempt_id"]))) is not None:
+        if str(next_row["attempt_id"]) in seen:
+            break
+        seen.add(str(next_row["attempt_id"]))
+        linked.append(next_row)
+    return linked if len(linked) == len(rows) else by_index
+
+
+def _chain_commercial(
+    records: list[dict[str, Any]],
+) -> dict[tuple[FrontierIdentity, str], dict[str, Any]]:
+    """Return what each frontier point's successful chains were measured to cost.
+
+    A chain is one task's routed attempts inside one run, and it is grouped
+    from the whole ledger rather than from one frontier: a cheap build that
+    failed and the amend that then passed are different strata, so a chain
+    assembled inside one frontier would never see the escalation it exists to
+    price. What the chain cost is all of it — the attempt that failed, the
+    checker that judged it, and the retry after it — and Time to Verified Pass
+    is the run from its first launch to the instant its first passing verdict
+    landed, retries included. Both are charged to the configuration that
+    finally passed, because a cheap point that needed two escalations to get
+    there saved nobody anything, and they are charged inside the Cohort that
+    pass belongs to, a row being evidence only there (ADR-0145). A chain no
+    verdict passed contributes nothing at all: an unfinished measurement is
+    not a fast free one, and a censored zero is what would make it look like
+    the cheapest point on the frontier.
+    """
+
+    chains: dict[tuple[Any, str], list[dict[str, Any]]] = {}
+    for record in records:
+        # A row the ledger does not hold whole belongs to no chain: it is
+        # damaged accounting rather than one link of a policy's sequence.
+        if not isinstance(record.get("task_id"), str) or not isinstance(
+            record.get("attempt_index"), int
+        ):
+            continue
+        key = (record.get("run_identity"), str(record["task_id"]))
+        chains.setdefault(key, []).append(record)
+
+    # Charge each whole chain, once, to the point its first pass landed on.
+    spent: dict[tuple[FrontierIdentity, str], list[float | int | None]] = {}
+    elapsed: dict[tuple[FrontierIdentity, str], list[float | int | None]] = {}
+    for chain in chains.values():
+        ordered = _ordered_chain(chain)
+        passed = next(
+            (
+                position
+                for position, row in enumerate(ordered)
+                if row["outcome"] == "pass"
+            ),
+            None,
+        )
+        if passed is None:
+            continue
+        winner = ordered[passed]
+        identity = _frontier_identity(winner)
+        if identity is None:
+            continue
+        point = (identity, str(winner["configuration_fingerprint"]))
+        reached = ordered[: passed + 1]
+        cash = [_dimension(row, "cash") for row in reached]
+        spent.setdefault(point, []).append(
+            None if any(value is None for value in cash) else sum(cash)  # type: ignore[arg-type]
+        )
+        elapsed.setdefault(point, []).append(
+            _elapsed(reached[0].get("started_at"), winner.get("completed_at"))
+        )
+
+    # Report a mean only where every contributing chain carried the measure.
+    return {
+        point: {
+            "cash": _mean(spent[point]),
+            "rolling_quota": None,
+            "weekly_quota": None,
+            "allocated_subscription_cost": None,
+            "latency": _mean(elapsed[point]),
+        }
+        for point in spent
+    }
+
+
 def _projected_record(
-    identity: FrontierIdentity, point: dict[str, Any], row: dict[str, Any]
+    identity: FrontierIdentity,
+    point: dict[str, Any],
+    row: dict[str, Any],
+    commercial: dict[str, Any],
 ) -> dict[str, Any] | None:
     """Return the evidence record one frontier point states, or None for none.
 
@@ -1115,6 +1233,7 @@ def _projected_record(
         "uncertainty": {"lower_bound": lower, "upper_bound": upper},
         "quality": round(point["successes"] / point["runs"], 6),
         "stale": False,
+        "commercial": commercial,
     }
 
 
@@ -1131,6 +1250,14 @@ def project(records: list[dict[str, Any]]) -> dict[str, Any]:
 
     projected: list[dict[str, Any]] = []
     vintages: list[str] = []
+    unknown: dict[str, Any] = {
+        "cash": None,
+        "rolling_quota": None,
+        "weekly_quota": None,
+        "allocated_subscription_cost": None,
+        "latency": None,
+    }
+    charged = _chain_commercial(records)
     for identity, rows in _frontier_groups(records).items():
         for point in _frontier(rows)["points"]:
             # Order one point's rows so the record names the same one twice.
@@ -1145,7 +1272,14 @@ def project(records: list[dict[str, Any]]) -> dict[str, Any]:
             )
 
             # Keep only points the ledger states a whole measurement for.
-            evidence = _projected_record(identity, point, members[0])
+            evidence = _projected_record(
+                identity,
+                point,
+                members[0],
+                charged.get(
+                    (identity, str(point["configuration_fingerprint"])), dict(unknown)
+                ),
+            )
             if evidence is None:
                 continue
 

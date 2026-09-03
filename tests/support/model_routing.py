@@ -125,7 +125,12 @@ def complete_routing_snapshot() -> dict[str, Any]:
 
     # Freeze selection policy and remove nominal evidence from cold-start tests.
     snapshot["override_policy"].update(
-        {"cold_start": "select", "quality_floor": 0.9, "shadow_prices": None}
+        {
+            "cold_start": "select",
+            "quality_floor": 0.9,
+            "shadow_prices": None,
+            "objective": "cost_first",
+        }
     )
     snapshot["evidence"]["records"] = []
 
