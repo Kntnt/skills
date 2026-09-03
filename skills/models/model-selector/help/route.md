@@ -12,7 +12,7 @@ model-selector route - resolve delegated work into exact launch decisions
 
 Read one versioned request or ordered batch from *PATH*. Return a frozen snapshot and one `selected`, `inherit`, or `refused` decision per input in the same order.
 
-A selection includes its exact configuration, Harness-native launch arguments, evidence, exclusions, and bounded next escalation. A refusal carries a stable reason and no launch override.
+A selection includes its exact configuration, Harness-native launch arguments, evidence, exclusions, and bounded next escalation. That escalation is one adjacent Rung: the next mapped deliberation level on the same model, or the next enabled model up by capability where that scale is exhausted or the Harness carries the control, entered at the lowest level of its own the request still reaches, and never above the main seat. A refusal carries a stable reason and no launch override.
 
 Route is offline, non-interactive, and read-only. It never starts setup, performs research or evaluation, refreshes evidence, writes configuration, or writes the evidence ledger. A missing profile or evidence that cannot discriminate safely can yield audited inheritance; invalid or unsafe state yields refusal.
 

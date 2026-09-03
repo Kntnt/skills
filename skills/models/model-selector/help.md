@@ -44,7 +44,7 @@ Run `setup` first to record available models and channels. The reusable profile 
 
 Recommendations use comparable Pareto frontiers. Cash, quota, credits, latency, and quality stay separate unless you provide a common valuation.
 
-Without representative matched measurements, cold start chooses the weakest plausibly capable enabled model and its lowest plausibly sufficient supported reasoning control. Reversible checked work may move one adjacent reasoning rung after verified failure.
+Without representative matched measurements, cold start chooses the weakest plausibly capable enabled model and its lowest plausibly sufficient supported reasoning control. Reversible checked work may move one adjacent Rung after verified failure: the next reasoning control on the same model, or the next model up by capability where that scale is exhausted or the Harness carries the control.
 
 High-consequence or irreversible work without a trustworthy checker uses the strongest plausible enabled configuration and refuses unsafe exploration.
 

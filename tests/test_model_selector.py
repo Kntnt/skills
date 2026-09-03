@@ -8,7 +8,7 @@ import subprocess
 import sys
 from copy import deepcopy
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Literal, cast
 from urllib.parse import urlparse
 
 from support.model_routing import (
@@ -845,6 +845,249 @@ def _carried_control_snapshot() -> dict[str, Any]:
     return snapshot
 
 
+def _ladder_mapping(
+    template: dict[str, Any],
+    model: str,
+    capability: int,
+    cash: float | None,
+    levels: tuple[str, ...],
+    serving_mode: str = "standard",
+) -> dict[str, Any]:
+    """Copy one complete configured point onto a further rung of the ladder."""
+
+    # Reuse the template's verified native controls so one adapter reaches all.
+    point = deepcopy(template)
+    point.update(
+        {
+            "model": model,
+            "model_capability": capability,
+            "serving_mode": serving_mode,
+            "controls": {level: template["controls"][level] for level in levels},
+            "control_capabilities": {
+                level: template["control_capabilities"][level] for level in levels
+            },
+        }
+    )
+    point["commercial"]["cash"] = cash
+    return point
+
+
+def _ladder_snapshot() -> dict[str, Any]:
+    """Provide a Harness whose reachable points form a two-dimensional ladder.
+
+    The base point leaves a gap inside its own scale, two models share the
+    next capability at different cash, one of them is reached through two
+    serving modes, and the capability above that is priced in one mapping and
+    unknown in the other.
+    """
+
+    # Keep the complete point as the template every further rung is copied from.
+    snapshot = _complete_routing_snapshot()
+    base = snapshot["mappings"][0]
+    template = deepcopy(base)
+
+    # Climb from one sparse scale into equal, cheaper, and unpriced models.
+    snapshot["mappings"].extend(
+        [
+            _ladder_mapping(template, "worker-v3", 85, 5.0, ("medium", "xhigh")),
+            _ladder_mapping(template, "worker-v4", 85, 2.0, ("low", "high")),
+            _ladder_mapping(
+                template, "worker-v4", 85, 2.0, ("low",), serving_mode="priority"
+            ),
+            _ladder_mapping(template, "worker-v5", 95, None, ("low",)),
+            _ladder_mapping(template, "worker-v6", 95, 7.0, ("low",)),
+        ]
+    )
+
+    # Leave an unmapped level inside the scale the ladder starts on.
+    base["controls"] = {level: base["controls"][level] for level in ("low", "high")}
+    base["control_capabilities"] = {
+        level: base["control_capabilities"][level] for level in ("low", "high")
+    }
+
+    # Let the one frozen adapter reach every model and serving mode declared.
+    adapter = snapshot["harness"]["adapter_specs"][0]
+    adapter["models"] = sorted({point["model"] for point in snapshot["mappings"]})
+    adapter["serving_modes"] = ["standard", "priority"]
+    return snapshot
+
+
+def _ladder_candidates(snapshot: dict[str, Any]) -> tuple[Any, ...]:
+    """Return every exact point one plain automatic request still reaches."""
+
+    router = _load_router()
+    return cast(
+        tuple[Any, ...], router._candidate_pool(_request(), snapshot).candidates
+    )
+
+
+def _candidate_at(
+    candidates: tuple[Any, ...],
+    model: str,
+    portable: str,
+    serving_mode: str = "standard",
+) -> Any:
+    """Name one exact candidate on the ladder the way a reader names a rung."""
+
+    return next(
+        candidate
+        for candidate in candidates
+        if candidate.point["model"] == model
+        and candidate.point["serving_mode"] == serving_mode
+        and candidate.portable == portable
+    )
+
+
+def _rung_of(
+    candidates: tuple[Any, ...],
+    current: Any,
+    direction: Literal["up", "down"] = "up",
+) -> tuple[str, str, str] | None:
+    """Reduce one resolved Rung to the identity a test can read."""
+
+    rung = _load_router()._adjacent_rung(candidates, current, direction)
+    if rung is None:
+        return None
+    return (rung.point["model"], rung.point["serving_mode"], rung.portable)
+
+
+def test_adjacent_rung_climbs_the_scale_then_the_cheapest_next_model() -> None:
+    """A Rung is the next mapped level, then the next model up by capability."""
+
+    # Read the ladder from the pool one automatic request actually reaches.
+    candidates = _ladder_candidates(_ladder_snapshot())
+
+    # Assert the scale is climbed in order with its unmapped level skipped.
+    assert _rung_of(candidates, _candidate_at(candidates, "worker-v2", "low")) == (
+        "worker-v2",
+        "standard",
+        "high",
+    )
+
+    # Assert an exhausted scale steps to the cheapest mapping one capability
+    # up, entered at the lowest portable value that mapping supplies.
+    assert _rung_of(candidates, _candidate_at(candidates, "worker-v2", "high")) == (
+        "worker-v4",
+        "priority",
+        "low",
+    )
+
+    # Assert a known price is preferred to one the snapshot does not know.
+    assert _rung_of(candidates, _candidate_at(candidates, "worker-v4", "high")) == (
+        "worker-v6",
+        "standard",
+        "low",
+    )
+
+    # Assert the top of the ladder offers nothing further to climb.
+    assert _rung_of(candidates, _candidate_at(candidates, "worker-v6", "low")) is None
+
+
+def test_adjacent_rung_descends_the_same_ladder_into_the_cheapest_model() -> None:
+    """Down is the mirror, except that cost still prefers the cheaper model."""
+
+    # Read the same ladder the upward direction climbs.
+    candidates = _ladder_candidates(_ladder_snapshot())
+    down: Literal["down"] = "down"
+
+    # Assert the scale descends in order and stops at its own floor.
+    assert _rung_of(
+        candidates, _candidate_at(candidates, "worker-v2", "high"), down
+    ) == (
+        "worker-v2",
+        "standard",
+        "low",
+    )
+    assert (
+        _rung_of(candidates, _candidate_at(candidates, "worker-v2", "low"), down)
+        is None
+    )
+
+    # Assert a descent enters the lower model at the highest value it maps.
+    assert _rung_of(
+        candidates, _candidate_at(candidates, "worker-v4", "low", "priority"), down
+    ) == ("worker-v2", "standard", "high")
+
+    # Assert the cheaper known price still wins a descending tie.
+    assert _rung_of(
+        candidates, _candidate_at(candidates, "worker-v6", "low"), down
+    ) == (
+        "worker-v4",
+        "priority",
+        "low",
+    )
+
+
+def test_adjacent_rung_never_leaves_the_pool_the_request_reaches() -> None:
+    """Both main-seat ceilings bound the ladder before adjacency is read."""
+
+    # Lower the frozen model ceiling beneath every model above the first.
+    snapshot = _ladder_snapshot()
+    snapshot["main_seat"]["model_capability"] = 80
+    candidates = _ladder_candidates(snapshot)
+
+    # Assert an exhausted scale under that ceiling offers no model to climb.
+    assert _rung_of(candidates, _candidate_at(candidates, "worker-v2", "high")) is None
+
+
+def _carried_ladder_snapshot() -> dict[str, Any]:
+    """Provide a carried seam with one further enabled model above its own."""
+
+    # Add a stronger model the same inheriting adapter can also launch.
+    snapshot = _carried_control_snapshot()
+    template = deepcopy(snapshot["mappings"][0])
+    snapshot["mappings"].append(
+        _ladder_mapping(template, "worker-v3", 85, 2.0, ("low", "high"))
+    )
+    snapshot["harness"]["adapter_specs"][0]["models"] = ["worker-v2", "worker-v3"]
+    return snapshot
+
+
+def _verified_failure_binding(
+    decision: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Bind an externally verified failure to the exact point that launched."""
+
+    launch = decision["launch"]
+    prior = {
+        field: launch[field]
+        for field in (
+            "configuration_fingerprint",
+            "model",
+            "channel",
+            "surface",
+            "serving_mode",
+            "adapter_id",
+            "portable_deliberation",
+            "native_deliberation",
+        )
+    }
+    return prior, {
+        **prior,
+        "outcome": "failed",
+        "checker": {"kind": "external", "signal": "pytest"},
+    }
+
+
+def _escalation_of(snapshot: dict[str, Any], **changes: Any) -> Any:
+    """Route one request twice: once to launch, once to escalate its failure."""
+
+    router = _load_router()
+    decision = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request(**changes)]}
+    )["decisions"][0]
+    prior, verified_failure = _verified_failure_binding(decision)
+    escalating = _request(
+        retry_available=True,
+        prior=prior,
+        verified_failure=verified_failure,
+        **changes,
+    )
+    return router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [escalating]}
+    )["decisions"][0]["next_escalation"]
+
+
 def test_route_selects_an_exact_launchable_point() -> None:
     """The public seam returns a complete Harness-native launch decision."""
 
@@ -1582,30 +1825,11 @@ def test_route_emits_only_a_bounded_adjacent_escalation() -> None:
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [_request(overrides={"deliberation": "low"})],
+            "requests": [_request()],
         }
     )["decisions"][0]
-    launch = selected["launch"]
-    prior = {
-        field: launch[field]
-        for field in (
-            "configuration_fingerprint",
-            "model",
-            "channel",
-            "surface",
-            "serving_mode",
-            "adapter_id",
-            "portable_deliberation",
-            "native_deliberation",
-        )
-    }
-    verified_failure = {
-        **prior,
-        "outcome": "failed",
-        "checker": {"kind": "external", "signal": "pytest"},
-    }
+    prior, verified_failure = _verified_failure_binding(selected)
     request = _request(
-        overrides={"deliberation": "low"},
         retry_available=True,
         prior=prior,
         verified_failure=verified_failure,
@@ -1615,6 +1839,7 @@ def test_route_emits_only_a_bounded_adjacent_escalation() -> None:
     )["decisions"][0]["next_escalation"]
 
     # Assert the one adjacent step is complete and consumes an existing retry.
+    assert selected["launch"]["portable_deliberation"] == "low"
     assert escalation["model"] == "worker-v2"
     assert escalation["portable_deliberation"] == "medium"
     assert escalation["native_deliberation"] == {"effort": "medium"}
@@ -1652,6 +1877,9 @@ def test_route_emits_only_a_bounded_adjacent_escalation() -> None:
             }
         )["decisions"][0]
         assert decision["next_escalation"] is None, mismatch
+
+    # Assert a request that pinned the deliberation itself climbs nothing.
+    assert _escalation_of(snapshot, overrides={"deliberation": "low"}) is None
 
     # Lower the main-seat ceiling beneath the otherwise valid adjacent step.
     bounded = deepcopy(snapshot)
@@ -1831,50 +2059,73 @@ def test_route_refuses_a_lock_on_a_control_inheritance_carries() -> None:
     }
 
 
-def test_route_escalates_no_rung_along_a_carried_control() -> None:
-    """A dimension the adapter cannot address offers no adjacency to escalate."""
+def test_route_escalates_into_the_next_model_along_a_carried_control() -> None:
+    """Where the seat alone decides deliberation, the model is the step."""
 
-    # Bind an externally verified failure to the exact carried point.
+    # Route the seam that inherits its control and has a model above it.
     router = _load_router()
-    snapshot = _carried_control_snapshot()
-    launch = router.route(
+    snapshot = _carried_ladder_snapshot()
+    decision = router.route(
+        {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+    )["decisions"][0]
+
+    # Assert the cold start still holds the weakest model at the seat's value.
+    assert decision["status"] == "selected"
+    assert decision["launch"]["model"] == "worker-v2"
+    assert decision["launch"]["portable_deliberation"] == "xhigh"
+
+    # Assert the retry the caller owns steps into the next model up, launching
+    # at the inherited deliberation it carries rather than a value it claims.
+    escalation = _escalation_of(snapshot)
+    assert escalation["model"] == "worker-v3"
+    assert escalation["adapter_id"] == "codex-carried-subagent"
+    assert escalation["portable_deliberation"] == "xhigh"
+    assert escalation["native_deliberation"] == {"effort": "session-inherited"}
+    assert escalation["configuration_fingerprint"].startswith("sha256:")
+    assert "reasoning_effort" not in escalation["arguments"]
+    assert escalation["consumes_existing_retry"] is True
+
+    # Assert the same seam with no model above it emits no rung at all.
+    assert _escalation_of(_carried_control_snapshot()) is None
+
+
+def test_route_keeps_the_ladder_inside_an_explicit_model_lock() -> None:
+    """A locked model bounds the pool, so no Rung climbs out of it."""
+
+    # Exhaust the first model's scale at the one level it maps.
+    snapshot = _ladder_snapshot()
+    base = snapshot["mappings"][0]
+    base["controls"] = {"low": base["controls"]["low"]}
+    base["control_capabilities"] = {"low": base["control_capabilities"]["low"]}
+
+    # Assert the same exhausted scale steps into the next model when free.
+    assert _escalation_of(snapshot)["model"] == "worker-v4"
+
+    # Assert the lock leaves that step outside the points the request reaches.
+    assert _escalation_of(snapshot, overrides={"model": "worker-v2"}) is None
+
+
+def test_route_emits_no_rung_under_a_deliberation_lock_in_either_dimension() -> None:
+    """A pinned deliberation is the caller's own value, not a rung to leave."""
+
+    # Route a ladder whose next model is reachable at the locked level itself.
+    snapshot = _ladder_snapshot()
+    locked = {"deliberation": "low"}
+    decision = _load_router().route(
         {
             "schema_version": 1,
             "context": snapshot,
-            "requests": [_request()],
+            "requests": [_request(overrides=locked)],
         }
-    )["decisions"][0]["launch"]
-    prior = {
-        field: launch[field]
-        for field in (
-            "configuration_fingerprint",
-            "model",
-            "channel",
-            "surface",
-            "serving_mode",
-            "adapter_id",
-            "portable_deliberation",
-            "native_deliberation",
-        )
-    }
-    request = _request(
-        retry_available=True,
-        prior=prior,
-        verified_failure={
-            **prior,
-            "outcome": "failed",
-            "checker": {"kind": "external", "signal": "pytest"},
-        },
-    )
-
-    # Route the retry the caller already owns across the same seam.
-    decision = router.route(
-        {"schema_version": 1, "context": snapshot, "requests": [request]}
     )["decisions"][0]
 
-    # Assert no rung is invented in a dimension inheritance decides.
-    assert decision["status"] == "selected"
-    assert decision["next_escalation"] is None
+    # Assert the lock holds the exact level it names on the weakest model.
+    assert decision["launch"]["model"] == "worker-v2"
+    assert decision["launch"]["portable_deliberation"] == "low"
+
+    # Assert the same failure climbs a model when free and nothing when locked.
+    assert _escalation_of(snapshot)["model"] == "worker-v2"
+    assert _escalation_of(snapshot, overrides=locked) is None
 
 
 def test_route_cold_starts_the_work_its_contract_promises_a_heuristic() -> None:
@@ -3135,14 +3386,14 @@ def test_cold_start_chooses_the_lowest_safe_complete_configuration() -> None:
         "weakest plausibly capable enabled model",
         "lowest plausibly sufficient supported reasoning control",
         "task complexity, ambiguity, context demand, autonomy, tool use, reversibility, consequence of failure and objective checkability",
-        "escalate exactly one adjacent reasoning rung",
+        "escalate exactly one adjacent Rung",
         "strongest plausible enabled configuration",
         "refuse unsafe exploration",
     }
     public_rules = {
         "weakest plausibly capable enabled model",
         "lowest plausibly sufficient supported reasoning control",
-        "one adjacent reasoning rung",
+        "one adjacent Rung",
         "strongest plausible enabled configuration",
         "unsafe exploration",
     }
@@ -3396,7 +3647,7 @@ def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
         "matched evidence may prefer a lower portable level",
         "Missing evidence remains unknown",
         "external checker or declared failure signal",
-        "one adjacent portable level on the same model",
+        "the next model up by `model_capability`",
         "Cash, rolling quota, weekly quota, allocated subscription cost, and latency",
     }
 
@@ -3414,7 +3665,7 @@ def test_route_contract_pins_the_carried_control_and_its_cold_start() -> None:
         "inheritance_attestation",
         "verified against what the Harness actually does",
         "carried_control_not_selectable",
-        "no reachable adjacency",
+        "the Harness carries the deliberation control and no adapter addresses it",
         "override_policy.cold_start",
         "Reversible, objectively checked work takes the heuristic",
     }

@@ -8,10 +8,11 @@ import hashlib
 import json
 import math
 import sys
+from collections.abc import Sequence
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Literal, cast
 
 COMMERCIAL_DIMENSIONS: tuple[str, ...] = (
     "cash",
@@ -1423,6 +1424,7 @@ def _selected_decision(
     snapshot: dict[str, Any],
     records: list[dict[str, Any]],
     selection: SelectionOutcome,
+    candidates: Sequence[Candidate],
 ) -> dict[str, Any]:
     """Serialize one resolved candidate as the complete selected result."""
 
@@ -1482,6 +1484,7 @@ def _selected_decision(
             candidate,
             snapshot,
             fingerprint,
+            candidates,
         ),
         "audit": _audit(
             snapshot,
@@ -1521,7 +1524,7 @@ def _selection_decision(
         return outcome
 
     # Serialize a launch only after policy resolved one complete candidate.
-    return _selected_decision(request, snapshot, records, outcome)
+    return _selected_decision(request, snapshot, records, outcome, pool.candidates)
 
 
 def _audit(
@@ -1566,11 +1569,107 @@ def _is_objectively_checked(request: dict[str, Any]) -> bool:
     }
 
 
+def _mapping_identity(point: dict[str, Any]) -> str:
+    """Identify one configured mapping by the whole of its frozen content."""
+
+    return _canonical_digest(point)
+
+
+def _rung_order(candidate: Candidate) -> tuple[Any, ...]:
+    """Order equally adjacent targets by price first and identity after it.
+
+    A cash value the snapshot does not know sorts after every known one, so an
+    unpriced model is never climbed into ahead of one somebody costed.
+    """
+
+    point = candidate.point
+    cash = point["commercial"]["cash"]
+    return (
+        0 if _is_number(cash) else 1,
+        float(cash) if _is_number(cash) else 0.0,
+        point["model"],
+        point["channel"],
+        point["surface"],
+        point["serving_mode"],
+        candidate.adapter["adapter_id"],
+        PORTABLE_LEVELS.index(candidate.portable),
+    )
+
+
+def _adjacent_rung(
+    candidates: Sequence[Candidate],
+    current: Candidate,
+    direction: Literal["up", "down"],
+) -> Candidate | None:
+    """Resolve the one Rung adjacent to a candidate, or nothing at the end.
+
+    The ladder has two dimensions. Inside one exact mapping the Rung is the
+    next mapped portable value in `PORTABLE_LEVELS` order, unmapped values
+    skipped rather than refused. Where that mapping offers no further value —
+    the end of its own scale, or a deliberation control the Harness carries
+    and no adapter addresses — the Rung is the next model by `model_capability`
+    regardless of provider, each mapping at that capability collapsed to the
+    one value the direction enters it at and the cheapest known price chosen
+    between them. `candidates` is the pool the request already reaches, so
+    every hard filter, explicit lock, adapter, and main-seat ceiling has
+    applied before adjacency is read and no excluded point returns here; the
+    ordering is the frozen snapshot's own numbers (ADR-0083).
+    """
+
+    # Read both scales in the direction of travel so one comparison serves both.
+    sign = 1 if direction == "up" else -1
+
+    def level(candidate: Candidate) -> int:
+        """Position one candidate on the portable scale, ordered by direction."""
+
+        return sign * PORTABLE_LEVELS.index(candidate.portable)
+
+    def capability(candidate: Candidate) -> float:
+        """Position one candidate on the model scale, ordered by direction."""
+
+        return sign * _model_capability(candidate.point)
+
+    # Step inside the current mapping for as long as its own scale runs on.
+    mapping = _mapping_identity(current.point)
+    within = [
+        candidate
+        for candidate in candidates
+        if _mapping_identity(candidate.point) == mapping
+        and level(candidate) > level(current)
+    ]
+    if within:
+        return min(within, key=level)
+
+    # Take the nearest model beyond this one once that scale is exhausted.
+    beyond = [
+        candidate
+        for candidate in candidates
+        if capability(candidate) > capability(current)
+    ]
+    if not beyond:
+        return None
+    nearest = min(capability(candidate) for candidate in beyond)
+
+    # Collapse every mapping at that capability to the one exact point the
+    # direction enters it at, so a target is one launch rather than a set.
+    entries: dict[str, Candidate] = {}
+    for candidate in beyond:
+        if capability(candidate) != nearest:
+            continue
+        key = _mapping_identity(candidate.point)
+        held = entries.get(key)
+        if held is None or level(candidate) < level(held):
+            entries[key] = candidate
+
+    return min(entries.values(), key=_rung_order)
+
+
 def _escalation(
     request: dict[str, Any],
     candidate: Candidate,
     snapshot: dict[str, Any],
     fingerprint: str,
+    candidates: Sequence[Candidate],
 ) -> dict[str, Any] | None:
     """Describe one existing-retry step only after externally bound failure."""
 
@@ -1605,43 +1704,29 @@ def _escalation(
     ):
         return None
 
-    # Move only along a dimension this adapter addresses: a control the
-    # Harness carries has no adjacency, the seat alone deciding its value.
-    if _carries_control(adapter):
+    # Emit nothing where the request pinned the dimension a Rung would move:
+    # a locked deliberation is the exact value the caller asked to run at.
+    if request["overrides"].get("deliberation") is not None:
         return None
 
-    # Resolve one adjacent supported point beneath the main-seat ceiling.
-    adjacent_index = PORTABLE_LEVELS.index(portable) + 1
-    if adjacent_index >= len(PORTABLE_LEVELS):
+    # Resolve the one adjacent Rung among the points this request reaches. A
+    # locked model bounds that pool to itself, an alias covering two models
+    # having already refused, so no further guard keeps the ladder inside it.
+    rung = _adjacent_rung(candidates, candidate, "up")
+    if rung is None:
         return None
-    adjacent = PORTABLE_LEVELS[adjacent_index]
-    if adjacent not in point["controls"]:
-        return None
-    adjacent_native = point["controls"][adjacent]
-    if not _within_main_seat(point, adjacent, snapshot):
-        return None
-    adjacent_adapter = _launch_adapter(point, adjacent_native, snapshot)
-    if adjacent_adapter is None:
-        return None
-    adjacent_fingerprint = _variant_fingerprint(
-        point,
-        adjacent,
-        adjacent_native,
-        adjacent_adapter,
-        snapshot,
-    )
 
     # Return the complete next launch while consuming no new attempt.
     return {
-        "model": point["model"],
-        "adapter_id": adjacent_adapter["adapter_id"],
-        "portable_deliberation": adjacent,
-        "native_deliberation": deepcopy(adjacent_native),
-        "configuration_fingerprint": adjacent_fingerprint,
+        "model": rung.point["model"],
+        "adapter_id": rung.adapter["adapter_id"],
+        "portable_deliberation": rung.portable,
+        "native_deliberation": deepcopy(rung.native),
+        "configuration_fingerprint": _candidate_fingerprint(rung, snapshot),
         "arguments": _launch_arguments(
-            adjacent_adapter,
-            point,
-            adjacent_native,
+            rung.adapter,
+            rung.point,
+            rung.native,
             snapshot,
         ),
         "consumes_existing_retry": True,

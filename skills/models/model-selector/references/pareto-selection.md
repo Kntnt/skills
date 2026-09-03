@@ -14,7 +14,7 @@ Apply hard filters first: model availability, context, modalities, data residenc
 
 When representative matched measurements do not determine the exact point, make the cold-start choice in two stages: choose the weakest plausibly capable enabled model, then choose the lowest plausibly sufficient supported reasoning control for that model. Judge plausibility categorically from task complexity, ambiguity, context demand, autonomy, tool use, reversibility, consequence of failure and objective checkability. This heuristic chooses an experiment; it does not manufacture a benchmark score, confidence interval, cost observation or Pareto point.
 
-For objectively checkable, reversible work, begin at the lowest plausible complete configuration and escalate exactly one adjacent reasoning rung only after failure is verified by an external checker or declared failure signal. Stop at the first rung whose conservative quality clears the declared floor. Compare the whole policy with always starting stronger by charging every failed attempt, checker run, retry, quota charge, cost and added latency.
+For objectively checkable, reversible work, begin at the lowest plausible complete configuration and escalate exactly one adjacent Rung only after failure is verified by an external checker or declared failure signal — the next supported reasoning control on the same model, or, where that scale is exhausted or the Harness carries the control, the next enabled model up by capability regardless of provider. Stop at the first rung whose conservative quality clears the declared floor. Compare the whole policy with always starting stronger by charging every failed attempt, checker run, retry, quota charge, cost and added latency.
 
 For high-consequence or irreversible work without a trustworthy external checker, select the strongest plausible enabled configuration and refuse unsafe exploration. Keep that point classified as heuristic unless representative matched evidence supports the exact configuration.
 
@@ -37,7 +37,7 @@ Immediately after a blue or orange banner, emit a section titled `Snabbaste väg
 - required quality, cost, quota, latency, failure, retry and provenance measurements, charging every failed attempt, checker run, retry and added latency;
 - a bounded run budget and a confidence-based stopping rule rather than a fixed observation count;
 - the observation artifact and import form accepted by `model-selector record`;
-- a quota-efficient sequential plan that starts at the lowest plausible point and escalates one adjacent reasoning rung only after externally verified failure; and
+- a quota-efficient sequential plan that starts at the lowest plausible point and escalates one adjacent reasoning level on the same model only after externally verified failure; and
 - a time-efficient parallel plan in which isolated agents run adjacent configurations against the same frozen task and checker.
 
 `recommend` emits the brief but executes no work. The ordinary work path runs it, and `record` validates and imports the resulting observations.
