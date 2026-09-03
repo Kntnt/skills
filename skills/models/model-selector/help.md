@@ -24,7 +24,7 @@ model-selector - compare configured AI model systems by price and performance
 
 **/model-selector** **update** [**--force**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
-**/model-selector** **observe** **--artifact=**_PATH_ *PATH* [**--** *INSTRUCTION*]
+**/model-selector** **observe** **--artifact=**_PATH_ [**--import** [**--data=**_PATH_]] *PATH* [**--** *INSTRUCTION*]
 
 **/model-selector** **record** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
 
@@ -86,7 +86,7 @@ Perform one bounded refresh of due model indexes, first-party capability sources
 
 **observe** *PATH*
 
-Turn completed routed attempts into sanitized run observations in a caller-owned artifact. Only an external judgement establishes an outcome and unavailable measurements stay `null`. This command writes no ledger; Orchestrate's verdict path imports eligible machine-judged attempts automatically, while delegation leaves import to the user.
+Turn completed routed attempts into sanitized run observations in a caller-owned artifact. Only an external judgement establishes an outcome and unavailable measurements stay `null`. Without **--import** it writes no ledger and the artifact waits for `record`; with it, a routed caller's machine-judged observations are filed in the same call.
 
 **capture**
 
@@ -106,9 +106,13 @@ Report the profile, evidence vintage, due sources, gaps, and provisional facts w
 
 Write the observations into the caller-owned artifact at *PATH*, creating it when absent and merging into it when present. Required by `observe` and valid with no other command.
 
+**--import**
+
+For `observe`, file this call's machine-judged observations in the evidence ledger and rebuild only the frontiers whose eligible run set changed. An outcome a frozen rubric or a person established is never filed by it, and a ledger refusal is reported rather than raised.
+
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory. Valid with every command except `observe` and `route`, which read neither. The default is `~/.kntnt/model-selector/`.
+Use *PATH* as the profile and evidence directory. Valid with every command except `route`, which reads neither, and on `observe` only with **--import**, which is the one thing that command writes evidence for. The default is `~/.kntnt/model-selector/`.
 
 **--decision=route**, **--decision=renew**
 

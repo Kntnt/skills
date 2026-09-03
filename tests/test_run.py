@@ -9389,6 +9389,63 @@ def test_observation_library_resolves_every_shipped_layout(
         engine.routed_observations()
 
 
+def test_the_engine_imports_only_what_the_library_calls_machine_judged(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The engine asks what may be filed rather than holding its own copy.
+
+    The stand-in Library answers with the one row the engine's own retired
+    constant would never have picked, so a run that files it is a run that
+    asked rather than decided (issue #222).
+    """
+
+    # Answer one verdict through a Library that remembers what reached it.
+    engine = _run()
+    filed: list[list[dict[str, Any]]] = []
+    emitted = [
+        {"run_key": "a", "outcome_authority": "user_confirmation", "outcome": "pass"},
+        {
+            "run_key": "b",
+            "outcome_authority": "independent_verifier",
+            "outcome": "pass",
+        },
+    ]
+
+    class _Library:
+        """Stand in for the shared Library at every seam the engine reaches."""
+
+        SCHEMA_VERSION = 1
+
+        @staticmethod
+        def observe(envelope: dict[str, Any]) -> dict[str, Any]:
+            return {"observations": emitted, "refusals": []}
+
+        @staticmethod
+        def machine_judged(
+            observations: list[dict[str, Any]],
+        ) -> list[dict[str, Any]]:
+            return [row for row in observations if row["run_key"] == "a"]
+
+        @staticmethod
+        def record(artifact: dict[str, Any], directory: Path) -> dict[str, Any]:
+            filed.append(artifact["observations"])
+            return {
+                "accepted": ["a"],
+                "skipped": [],
+                "rejected": [],
+                "standing_policy": [],
+            }
+
+    monkeypatch.setattr(engine, "routed_observations", lambda: _Library)
+    result = engine._automatic_import({"attempt_id": "build-9"})
+
+    # Assert the Library's answer is what reached the ledger, and no copy of it.
+    assert [row["run_key"] for row in filed[0]] == ["a"]
+    assert result["imported"] == ["a"]
+    assert result["refused"] == []
+    assert not hasattr(engine, "AUTOMATIC_AUTHORITIES")
+
+
 def test_attempt_lifecycle_persists_instants_and_imports_the_verdict(
     tmp_path: Path,
     isolated_attempt_environment: dict[str, str],

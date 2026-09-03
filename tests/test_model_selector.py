@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Literal, cast
 from urllib.parse import urlparse
 
+import pytest
 from support.model_routing import (
     complete_routing_snapshot as _complete_routing_snapshot,
 )
@@ -4431,6 +4432,247 @@ def test_observe_merges_identically_and_never_overwrites_a_conflict() -> None:
     assert clash["artifact"]["observations"] == first["artifact"]["observations"]
 
 
+def _observe_command(
+    argv: list[str], capsys: pytest.CaptureFixture[str]
+) -> tuple[dict[str, Any], int]:
+    """Run one `observe` command line and return its report and exit status."""
+
+    status = _load_observations().main(argv)
+    return cast(dict[str, Any], json.loads(capsys.readouterr().out)), status
+
+
+def _ledger_rows(directory: Path) -> list[dict[str, Any]]:
+    """Return every observation the ledger under *directory* holds."""
+
+    path = directory / "run-observations.jsonl"
+    if not path.exists():
+        return []
+    return [
+        json.loads(line)
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
+def test_observe_imports_the_machine_judged_attempt_it_was_asked_to_import(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """One call emits the caller's artifact and files the evidence behind it."""
+
+    # Observe one independently judged attempt with the import asked for.
+    source = tmp_path / "attempts.json"
+    source.write_text(json.dumps(_attempts()), encoding="utf-8")
+    artifact = tmp_path / "artifact.json"
+    data = tmp_path / "data"
+    report, status = _observe_command(
+        [
+            "observe",
+            str(source),
+            f"--artifact={artifact}",
+            "--import",
+            f"--data={data}",
+        ],
+        capsys,
+    )
+
+    # Assert the artifact is what it always was and the ledger now holds it.
+    rows = _ledger_rows(data)
+    written = json.loads(artifact.read_text(encoding="utf-8"))
+    assert status == 0
+    assert [row["run_key"] for row in rows] == report["importable"]
+    assert written["observations"] == rows
+    assert report["import"]["imported"] == report["importable"]
+    assert report["import"]["identically_skipped"] == []
+    assert report["import"]["conflicting"] == []
+    assert report["import"]["refused"] == []
+    assert [
+        (answer["workload_cohort"], answer["outcome"])
+        for answer in report["import"]["standing_policy"]
+    ] == [("python-refactor", "below_threshold")]
+
+
+def test_observe_repeated_skips_the_row_it_already_filed(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An import run twice adds one row and says the second was the same one."""
+
+    # Import the same judged attempt twice into the same evidence directory.
+    source = tmp_path / "attempts.json"
+    source.write_text(json.dumps(_attempts()), encoding="utf-8")
+    data = tmp_path / "data"
+    argv = [
+        "observe",
+        str(source),
+        f"--artifact={tmp_path / 'artifact.json'}",
+        "--import",
+        f"--data={data}",
+    ]
+    first = _observe_command(argv, capsys)[0]
+    again, status = _observe_command(argv, capsys)
+
+    # Assert the ledger holds the one row and the repeat changed nothing.
+    rows = _ledger_rows(data)
+    assert status == 0
+    assert len(rows) == 1
+    assert again["import"]["imported"] == []
+    assert again["import"]["identically_skipped"] == first["import"]["imported"]
+
+
+def test_observe_writes_no_ledger_where_no_import_was_asked_for(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The verb a user runs by hand keeps its one side effect: the artifact."""
+
+    # Observe the same judged attempt without the import flag.
+    source = tmp_path / "attempts.json"
+    source.write_text(json.dumps(_attempts()), encoding="utf-8")
+    artifact = tmp_path / "artifact.json"
+    data = tmp_path / "data"
+    report, status = _observe_command(
+        ["observe", str(source), f"--artifact={artifact}"], capsys
+    )
+
+    # A ledger directory without the flag is an unsupported option, not a hint.
+    refusal, refused_status = _observe_command(
+        ["observe", str(source), f"--data={data}"], capsys
+    )
+
+    assert status == 0
+    assert report["import"] is None
+    assert report["importable"]
+    assert not data.exists()
+    assert refused_status == 2
+    assert refusal["artifact_refusal"]["code"] == "invalid_arguments"
+
+
+def test_observe_imports_no_outcome_only_a_human_established(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A rubric and a person stay the user's own `record`, import or not."""
+
+    # Observe the two authorities no caller may file without a human.
+    rubric = _attempt(
+        attempt_id="delegate-1",
+        workload_stratum="delegated_execution",
+        outcome={
+            "result": "pass",
+            "authority": "frozen_rubric",
+            "checker": {"identity": "rubric-7", "independent": True},
+            "condition": None,
+            "scores": None,
+        },
+    )
+    confirmed = _attempt(
+        attempt_id="delegate-2",
+        attempt_index=2,
+        workload_stratum="delegated_execution",
+        outcome={
+            "result": "pass",
+            "authority": "user_confirmation",
+            "checker": {"identity": "user", "independent": True},
+            "condition": None,
+            "scores": None,
+        },
+    )
+    source = tmp_path / "attempts.json"
+    source.write_text(json.dumps(_attempts(rubric, confirmed)), encoding="utf-8")
+    artifact = tmp_path / "artifact.json"
+    data = tmp_path / "data"
+    report, status = _observe_command(
+        [
+            "observe",
+            str(source),
+            f"--artifact={artifact}",
+            "--import",
+            f"--data={data}",
+        ],
+        capsys,
+    )
+
+    # Assert both stay importable by hand and neither reached the ledger.
+    assert status == 0
+    assert len(report["importable"]) == 2
+    assert report["import"]["imported"] == []
+    assert _ledger_rows(data) == []
+
+
+def test_observe_reports_a_ledger_refusal_without_failing_the_caller(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Evidence that cannot be filed stops nothing the caller was doing."""
+
+    # Point the import at a path no ledger directory can be created under.
+    source = tmp_path / "attempts.json"
+    source.write_text(json.dumps(_attempts()), encoding="utf-8")
+    artifact = tmp_path / "artifact.json"
+    blocked = tmp_path / "blocked"
+    blocked.write_text("", encoding="utf-8")
+    report, status = _observe_command(
+        [
+            "observe",
+            str(source),
+            f"--artifact={artifact}",
+            "--import",
+            f"--data={blocked}",
+        ],
+        capsys,
+    )
+
+    # Assert the artifact stands and the refusal is named rather than raised.
+    assert status == 0
+    assert json.loads(artifact.read_text(encoding="utf-8"))["observations"]
+    assert report["import"]["imported"] == []
+    assert [
+        (refusal["run_key"], refusal["code"]) for refusal in report["import"]["refused"]
+    ] == [(report["importable"][0], "automatic_import_failed")]
+
+
+def test_the_machine_judged_rule_is_the_librarys_and_admits_no_self_report() -> None:
+    """One eligibility rule serves both routed callers (issue #222)."""
+
+    # Ask the Library which of every authority it would file without a human.
+    observations = _load_observations()
+    judged = observations.observe(
+        _attempts(
+            _attempt(),
+            _attempt(
+                attempt_id="build-97",
+                attempt_index=2,
+                outcome={
+                    "result": "pass",
+                    "authority": "user_confirmation",
+                    "checker": {"identity": "user", "independent": True},
+                    "condition": None,
+                    "scores": None,
+                },
+            ),
+            _attempt(
+                attempt_id="build-98",
+                attempt_index=3,
+                outcome={
+                    "result": "abstain",
+                    "authority": "harness",
+                    "checker": None,
+                    "condition": "open_decision",
+                    "scores": None,
+                },
+            ),
+        )
+    )["observations"]
+    eligible = observations.machine_judged(judged)
+
+    # Assert the machine authorities and the non-model conditions, and no more.
+    assert [observation["outcome_authority"] for observation in judged] == [
+        "independent_verifier",
+        "user_confirmation",
+        "harness",
+    ]
+    assert [observation["run_key"] for observation in eligible] == [
+        judged[0]["run_key"],
+        judged[2]["run_key"],
+    ]
+
+
 def _frontier_point(derived: dict[str, Any], benchmark_key: str) -> dict[str, Any]:
     """Return the single point of the frontier one benchmark key identifies."""
 
@@ -5072,7 +5314,7 @@ def test_observation_cli_accepts_the_attached_spelling_its_skill_body_writes(
 
     # Take the two command lines from the Skill body instead of restating them.
     body = _read("SKILL.md")
-    assert "observe --artifact=<path> <path>" in body
+    assert "observe --artifact=<path> [--import] [--data=<directory>] <path>" in body
     assert "record --data=<directory> <path>" in body
 
     # Emit through the process seam with the attached spelling.
@@ -5136,7 +5378,7 @@ def test_observation_contract_separates_public_and_orchestrated_imports() -> Non
 
     _assert_contains_all(public_contract, required_fragments)
     assert "| `observe` | `$HERE/help/observe.md` |" in skill
-    assert "/model-selector observe --artifact=<path> <path>" in skill
+    assert "/model-selector observe --artifact=<path> [--import] <path>" in skill
 
 
 def test_observation_contract_pins_its_outcome_and_refusal_vocabulary() -> None:

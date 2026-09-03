@@ -395,12 +395,6 @@ VERIFIED_PASS: str = "verified_pass"
 INCOMPLETE: str = "incomplete"
 NOT_PASSED: str = "not_passed"
 
-
-# Machine judgements and non-model conditions may enter the ledger unattended.
-AUTOMATIC_AUTHORITIES: frozenset[str] = frozenset(
-    {"independent_verifier", "objective_checker", "declared_failure_signal"}
-)
-
 # What a Cohort's Standing Policy evaluation came to when the ledger actually
 # moved it, and the one command that puts it back. The run reports both rather
 # than leaving a developer to find out at the next freeze that a Cohort now
@@ -5548,13 +5542,9 @@ def _automatic_import_unchecked(
         result["refused"] = refusals
         return result
 
-    # Import only external machine judgements and non-model conditions.
-    observations = [
-        observation
-        for observation in emitted.get("observations", [])
-        if observation.get("outcome_authority") in AUTOMATIC_AUTHORITIES
-        or observation.get("outcome") in {"abstain", "infra_error"}
-    ]
+    # Import only what the Library calls machine-judged, which is the one
+    # eligibility rule both routed callers read (issue #222).
+    observations = library.machine_judged(emitted.get("observations", []))
     if not observations:
         return _import_details()
 

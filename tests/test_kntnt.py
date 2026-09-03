@@ -8174,13 +8174,15 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
     assert {"config.json", "references/", "scripts/"}.isdisjoint(mode.split())
-    assert len(mode.split()) <= 300, (
+    assert len(mode.split()) <= 355, (
         f"{directory / 'references' / 'mode.md'}: the standing instruction has"
-        f" {len(mode.split())} words; keep it at or below 300. That ceiling is the"
-        f" budget for the whole doctrine — the routing boundary and the additions"
-        f" issues #207, #208, #209, and #210 make to it — and it is met by leaving"
-        f" routing and observation implementation behind model-selector's public"
-        f" Interfaces."
+        f" {len(mode.split())} words; keep it at or below 355. That ceiling is the"
+        f" budget for the whole doctrine — the routing boundary, the additions"
+        f" issues #207, #208, #209, and #210 make to it, and the Cohort and import"
+        f" issue #222 adds — and it is met by leaving routing and observation"
+        f" implementation behind model-selector's public Interfaces. The ceiling"
+        f" rose once, by what those last two obligations cost to state, rather"
+        f" than by trimming doctrine to fit them (ADR-0154)."
     )
 
     # Keep one pointer and two refreshable companion files.
@@ -10913,8 +10915,8 @@ def test_delegation_reports_every_scope_when_no_scope_flag_is_given() -> None:
     )
 
 
-def test_delegation_reports_checked_observations_and_imports_none() -> None:
-    """The compact mode reaches observation through its public Interface."""
+def test_delegation_names_its_cohort_and_files_machine_judged_evidence() -> None:
+    """The compact mode routes a Cohort and files what a machine judged."""
 
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
     mode = path.read_text(encoding="utf-8")
@@ -10922,10 +10924,15 @@ def test_delegation_reports_checked_observations_and_imports_none() -> None:
     required_fragments = {
         "`$model-selector observe` in Codex",
         "`/model-selector observe` in Claude",
-        "Model Selector's `record` remains user-only",
-        "caller-owned scratch",
         "externally judged routed attempt",
-        "user-only",
+        "caller-owned scratch",
+        "`--import`",
+        "`stage` `delegated-execution`",
+        "`delegation/delegated_execution`",
+        "`benchmark.key` per workload",
+        "independent verifier, objective checker, or declared failure signal",
+        "let a refusal stop nothing",
+        "`record` remains the user's for a frozen rubric",
         "unrouted spawn",
         "where capture is enabled, it records actual inheritance",
     }
@@ -10933,8 +10940,10 @@ def test_delegation_reports_checked_observations_and_imports_none() -> None:
         fragment for fragment in required_fragments if fragment not in mode
     )
     assert not missing, (
-        f"{path}: routed delegation must hand externally judged attempts to"
-        f" model-selector's public observation Interface and leave imports to the"
-        f" user (issue #96), and an unrouted spawn produces no `observe` attempt"
-        f" and is left to capture (ADR-0133); missing {missing}."
+        f"{path}: routed delegation names one Cohort so its rows are comparable"
+        f" within the work they were for, and files its machine-judged attempts"
+        f" through the public observation Interface with no user step, leaving"
+        f" `record` for a rubric or a person (ADR-0154, issue #222); an unrouted"
+        f" spawn still produces no `observe` attempt and is left to capture"
+        f" (ADR-0133); missing {missing}."
     )

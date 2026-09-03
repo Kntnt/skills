@@ -242,6 +242,14 @@ def test_the_observation_engine_keeps_every_refusal_it_answers_with(
             "invalid_arguments",
             "Unsupported options.",
         ),
+        ("observe", str(attempts), "--import", "--import"): (
+            "invalid_arguments",
+            "Unsupported options.",
+        ),
+        ("observe", str(attempts), f"--data={tmp_path}"): (
+            "invalid_arguments",
+            "Unsupported options.",
+        ),
         ("record",): ("invalid_arguments", "Record needs one path."),
         ("record", str(tmp_path / "absent.json")): ("unreadable_artifact", ""),
         ("record", str(malformed)): ("malformed_json", ""),

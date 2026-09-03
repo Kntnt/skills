@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "5749185c7022f60b6e4229e1fff6646ea72495ab726ed37439eeae9993304672",
+  "manager_digest": "e699b0690177f96d3e3618739c5b4ffea10099c9a4a10f61e6ad2878cb973982",
   "skills": [
     {
       "name": "agents-md",
@@ -29,7 +29,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "4b86bf27a9c03be9d3e25b6be2eef7595c6ca043d213e07b88b7491fae73c52a",
+      "digest": "c1f39aeeddfa2fa7298bb5f1c4a80398d01bf3a494cca21c43e42ad1eb588f43",
       "binaries": [
         "uv"
       ],
@@ -58,7 +58,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "0d080c715704263c083b107fcb051bda81638b7c9119813ab7732bdf16f5e506",
+      "digest": "2f72f390f7932d50cda5581b7d83b5b8b78f37177dd1d7d8dbe1e0bad00c7034",
       "binaries": [
         "git",
         "gh",
@@ -175,7 +175,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
-      "digest": "300b225f98d5657a8d9f0bc89f731c7431e2258354c8ee667485dd502944d156",
+      "digest": "7f32b7442f4974e441a36f420a7075e89078475632df2de0cac8c56600464aed",
       "binaries": [
         "uv"
       ],

@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- `/delegation` now files the evidence it produces. Every execution request it routes names its Cohort — `stage` `delegated-execution`, `workload_cohort` `delegation/delegated_execution`, no tags — and the observation an externally judged attempt produces is imported in the same call through the new `--import` flag on `/model-selector observe`, which writes the caller-owned artifact exactly as before and then files what a machine judged. One Cohort rather than one per role is what keeps those rows comparable: a frontier is identified by the `benchmark.key` a brief names per workload beside the Cohort, so unlike delegated work stays apart without splitting one Cohort into a frontier per brief. What may be filed without a person — an outcome an independent verifier, an objective checker or a declared failure signal established, plus the `abstain` and `infra_error` conditions no model produced — is now the Collection Library's `machine_judged`, which Orchestrate's automatic import at each verdict reads instead of the constant it used to keep, so two seams writing one ledger cannot come to disagree about what may enter it. `--data` is valid on `observe` only alongside `--import`; without the flag the verb writes the artifact and nothing else, so the `observe` a user runs by hand acquires no ledger side effect. A conflicting identity, a row the ledger will not take, and a ledger that cannot be written at all are each reported per run key and stop nothing, and `/model-selector record` remains the user's own for a frozen rubric or their word (ADR-0154, superseding the delegation half of ADR-0089 and narrowing ADR-0132 and ADR-0137).
+
 ## [0.19.0] – 2026-09-03
 
 ### Added

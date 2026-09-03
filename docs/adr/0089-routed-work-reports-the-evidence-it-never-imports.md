@@ -14,7 +14,7 @@ The merge-collision conclusion is superseded by ADR-0137. A collision found afte
 
 **Emission is the caller's, import is the user's.** The artifact is written into caller-owned scratch, its path is named in the report the caller was already giving, and nothing else happens. No ledger, no derived frontier, no profile, no repository file, no tracker state, and no lifecycle hook is touched by a night's work; `/model-selector record` is the only thing that imports one, and a person runs it. Identical observations are idempotent at both seams, and an identity offered twice with different content is surfaced as a conflict that overwrites neither side, because two disagreeing accounts of one attempt are a question for a human rather than a race for the last write.
 
-The user-only import rule is superseded by ADR-0137 for machine-judged Orchestrate attempts; delegation and the public `record` command retain it.
+The user-only import rule is superseded by ADR-0137 for machine-judged Orchestrate attempts and superseded by ADR-0154 for delegation's; the public `record` command retains it.
 
 **One contract rather than two.** Model-selector owns emission as well as import: the same module builds the observation, validates it with exactly the validation an explicit import applies, and appends it. Orchestrate and delegation reach it only through the public Interface — Orchestrate records each attempt's established outcome in its own account and hands the collected attempts over, delegation does the same from its standing instruction — and neither reimplements sanitization, validation, or key derivation. Issue #91's opt-in automatic capture reuses this contract instead of creating a second normalized representation of routed work.
 

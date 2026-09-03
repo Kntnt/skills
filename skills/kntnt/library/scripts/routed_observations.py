@@ -134,15 +134,27 @@ STANDING_POLICY_MODULE: str = "standing_policy.py"
 # knowing one engine's by name, so a valueless flag added here never takes the
 # operand written behind it (ADR-0152).
 ARGUMENT_GRAMMAR_MODULE: str = "argument_grammar.py"
-VALUELESS_FLAGS: frozenset[str] = frozenset()
+VALUELESS_FLAGS: frozenset[str] = frozenset({"--import"})
 
-# Who may judge an attempt a policy is allowed to move on. A frozen rubric and
-# the user's own word establish an outcome perfectly well, but a ratchet that
-# escalates a Cohort without asking anybody is built on machine judgement
-# alone, which is the same three authorities Orchestrate imports at a verdict.
-POLICY_AUTHORITIES: frozenset[str] = frozenset(
+# Who may judge an attempt a machine is allowed to act on unasked. A frozen
+# rubric and the user's own word establish an outcome perfectly well, but
+# neither is a judgement the run itself reached, so the ratchet that escalates
+# a Cohort and the import that files a row with no user step read these three
+# and no others (issue #222).
+MACHINE_AUTHORITIES: frozenset[str] = frozenset(
     {"independent_verifier", "objective_checker", "declared_failure_signal"}
 )
+
+# What else a routed caller may file unasked: the outcomes no model produced.
+# A hinder, an open decision, a discovered dependency, and a tracker failure
+# are what happened rather than a verdict on a configuration, and they are kept
+# by the same import that keeps the verdicts.
+NON_MODEL_OUTCOMES: frozenset[str] = frozenset({"abstain", "infra_error"})
+
+# The stable code an import refuses under where the ledger itself could not be
+# reached. It is the caller's account of a write that did not happen, never a
+# reason for the work that produced the row to stop (ADR-0137).
+IMPORT_FAILED: str = "automatic_import_failed"
 
 # What one Cohort's threshold evaluation came to. Every import answers for
 # every Cohort it touched, because "nothing moved" is a finding too.
@@ -1101,6 +1113,23 @@ def record(artifact: Any, directory: Path) -> dict[str, Any]:
     }
 
 
+def machine_judged(observations: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return the observations a routed caller may file without asking anybody.
+
+    This is the collection's one eligibility rule, and it has two callers:
+    Orchestrate's automatic import at each verdict, and the import a routed
+    caller asks `observe` for. A second copy of it is how two seams writing one
+    ledger would come to disagree about what may enter it (issue #222).
+    """
+
+    return [
+        observation
+        for observation in observations
+        if observation.get("outcome_authority") in MACHINE_AUTHORITIES
+        or observation.get("outcome") in NON_MODEL_OUTCOMES
+    ]
+
+
 def _rebuild_frontiers(
     directory: Path, accepted: list[dict[str, Any]]
 ) -> list[dict[str, Any]]:
@@ -1253,7 +1282,7 @@ def _eligible_at(
         return None
     if row.get("outcome") not in DECISIVE_RESULTS:
         return None
-    if row.get("outcome_authority") not in POLICY_AUTHORITIES:
+    if row.get("outcome_authority") not in MACHINE_AUTHORITIES:
         return None
     provenance = row.get("provenance")
     if isinstance(provenance, dict) and provenance.get("exploration") is True:
@@ -1672,20 +1701,116 @@ def _operands_first(arguments: list[str]) -> list[str]:
     return operands + options
 
 
-def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
-    """Emit one artifact from completed attempts into caller-owned scratch."""
+def _flags(options: list[str], names: Collection[str]) -> dict[str, str] | None:
+    """Return what each option this engine has was given, or None for the rest.
 
-    arguments = _operands_first(arguments)
-    if not arguments or arguments[0].startswith("-"):
+    The grammar keeps a separated value directly behind its flag, so the line
+    reads as one flag at a time however the caller spelled it. A flag this
+    command does not have, one written twice, and one with nothing behind it
+    are each the whole line's refusal rather than a value quietly dropped.
+    """
+
+    given: dict[str, str] = {}
+    rest = list(options)
+    while rest:
+        token = rest.pop(0)
+        name = token.split("=", 1)[0]
+        taken = [token] if "=" in token else [token, *rest[:1]]
+        value = _option(taken, name)
+        if name not in names or name in given or value is None:
+            return None
+        given[name] = value
+        if "=" not in token:
+            rest.pop(0)
+    return given
+
+
+def _import_observations(
+    observations: list[dict[str, Any]], directory: Path
+) -> dict[str, Any]:
+    """File the observations this call may file, and report every identity.
+
+    A ledger that cannot be written is reported as the refusal it is and never
+    raised: the caller asking for this has already done the work the row
+    describes, and evidence is not a reason to fail it (ADR-0137).
+    """
+
+    # Answer with an empty account where this call observed nothing fileable.
+    account: dict[str, Any] = {
+        "imported": [],
+        "identically_skipped": [],
+        "conflicting": [],
+        "refused": [],
+        "standing_policy": [],
+    }
+    eligible = machine_judged(observations)
+    if not eligible:
+        return account
+
+    # File them, and turn a ledger this call cannot write into its own refusal.
+    try:
+        filed = record(
+            {"schema_version": SCHEMA_VERSION, "observations": eligible}, directory
+        )
+    except (OSError, RuntimeError, TypeError, ValueError) as error:
+        account["refused"] = [
+            {
+                "run_key": str(observation["run_key"]),
+                "code": IMPORT_FAILED,
+                "detail": str(error),
+            }
+            for observation in eligible
+        ]
+        return account
+
+    # Keep the accepted, duplicate, conflicting, and refused identities apart.
+    account["imported"] = [str(key) for key in filed["accepted"]]
+    account["identically_skipped"] = [str(key) for key in filed["skipped"]]
+    account["standing_policy"] = filed["standing_policy"]
+    for rejection in filed["rejected"]:
+        run_key = rejection.get("run_key")
+        if run_key is not None and rejection.get("code") == "conflicting_identity":
+            account["conflicting"].append(str(run_key))
+        else:
+            account["refused"].append(rejection)
+    return account
+
+
+def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
+    """Emit one artifact from completed attempts, and file what it may.
+
+    The artifact is what this command has always written. The import is the
+    routed caller's, asked for by name: the verb a user runs by hand keeps its
+    one side effect, and the caller that wants its evidence filed says so and
+    names the ledger it goes to (issue #222).
+    """
+
+    # Read the one operand and the flags, refusing a ledger nothing writes.
+    operands, options = _split(arguments, VALUELESS_FLAGS)
+    if not operands or operands[0].startswith("-"):
         return _artifact_refusal("invalid_arguments", "Observe needs one path."), 2
-    destination: Path | None = None
-    rest = arguments[1:]
-    if rest:
-        artifact = _option(rest, "--artifact")
-        if artifact is None:
-            return _artifact_refusal("invalid_arguments", "Unsupported options."), 2
-        destination = Path(artifact)
-    read, failure = _read(arguments[0])
+    asked_to_import = "--import" in options
+    given = _flags(
+        [option for option in options if option != "--import"],
+        ("--artifact", "--data"),
+    )
+    if (
+        len(operands) > 1
+        or options.count("--import") > 1
+        or given is None
+        or ("--data" in given and not asked_to_import)
+    ):
+        return _artifact_refusal("invalid_arguments", "Unsupported options."), 2
+
+    # Name the artifact this call writes and the ledger an import would reach.
+    destination = None if "--artifact" not in given else Path(given["--artifact"])
+    directory = (
+        Path(given["--data"]).expanduser()
+        if "--data" in given
+        else Path.home() / ".kntnt" / "model-selector"
+    )
+
+    read, failure = _read(operands[0])
     if failure is not None:
         return failure, 2
     response = observe(read)
@@ -1702,6 +1827,7 @@ def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
         "conflicts": [],
         "refusals": response["refusals"],
         "observations": response["observations"],
+        "import": None,
     }
     if destination is not None:
         existing = None
@@ -1722,6 +1848,10 @@ def _observe_command(arguments: list[str]) -> tuple[dict[str, Any], int]:
         report["importable"] = [
             str(observation["run_key"]) for observation in response["observations"]
         ]
+
+    # File the eligible observations where the caller asked this call to.
+    if asked_to_import:
+        report["import"] = _import_observations(response["observations"], directory)
     return report, 0
 
 

@@ -6,7 +6,7 @@ model-selector observe - turn judged routed attempts into an importable artifact
 
 ## SYNOPSIS
 
-**/model-selector** **observe** **--artifact=**_PATH_ *PATH* [**--** *INSTRUCTION*]
+**/model-selector** **observe** **--artifact=**_PATH_ [**--import** [**--data=**_PATH_]] *PATH* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -20,7 +20,7 @@ Only an independent verifier, objective checker, frozen rubric, declared failure
 
 Observe is offline, non-interactive, and idempotent. It performs no setup, research, evaluation, or profile write. Identical attempts add nothing; conflicting identities overwrite neither side.
 
-This command imports nothing: delegation and other callers keep the artifact in caller-owned scratch until the user invokes `/model-selector record`. Orchestrate's verdict path instead imports eligible machine-judged attempts automatically.
+Without **--import** this command imports nothing, and the artifact waits in caller-owned scratch for `/model-selector record`. With it, the observations an independent verifier, objective checker, or declared failure signal established, and the conditions no model produced, are filed in the same call; a frozen rubric and a person's own word are never filed by it. Orchestrate's verdict path reaches the same shared implementation directly.
 
 ## POSITIONAL ARGUMENTS
 
@@ -34,15 +34,27 @@ A UTF-8 JSON artifact with `schema_version: 1` and an ordered `attempts` array. 
 
 Create or merge the caller-owned observation artifact at *PATH*.
 
+**--import**
+
+File the machine-judged observations of this call in the evidence ledger, rebuilding only the derived frontiers whose eligible run set changed and evaluating the Standing Policy of every cohort the import touched. A routed caller asks for this; the verb keeps its single side effect without it.
+
+**--data=**_PATH_
+
+Use *PATH* instead of `~/.kntnt/model-selector/` as the evidence directory **--import** writes. Valid only alongside it, this command reading no evidence of its own.
+
 ## OUTPUT
 
 One JSON object naming the artifact, the run keys newly written to it, the identical ones skipped, any conflicting identities, and one stable refusal per attempt that could not become an observation.
+
+With **--import** it also carries the import account: the identities filed, the identical ones the ledger already held, the conflicting ones it kept both sides of, every refusal with its stable code, and each touched cohort's Standing Policy answer. Without the flag that account is `null`.
 
 ## DIAGNOSTICS
 
 Invalid arguments, paths, JSON, or Envelope produce top-level `artifact_refusal`, exit status 2, and no traceback.
 
 Unjudged, unlaunched, interrupted, self-graded, or unsanitized attempts receive individual stable refusals while valid peers remain. Out-of-order arguments are refused.
+
+A ledger that refuses or cannot be written is reported in the import account and never raised: the work an observation describes is already done, and the exit status stays 0. **--data** written without **--import** is an unsupported option rather than a hint.
 
 ## INVOCATION ENVELOPE
 

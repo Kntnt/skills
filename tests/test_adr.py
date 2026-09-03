@@ -80,6 +80,9 @@ RELATIONS = {
     ("0138", "0148"),
     ("0133", "0151"),
     ("0134", "0151"),
+    ("0089", "0154"),
+    ("0132", "0154"),
+    ("0137", "0154"),
 }
 
 # The flag-refusal rule and the reasoning an installed reader needs. `delegation`
