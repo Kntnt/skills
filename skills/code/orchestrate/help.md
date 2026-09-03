@@ -174,9 +174,11 @@ Lock only the building deliberation dimension for every execution role. *LEVEL* 
 
 **--approval=**_IDENTITY_
 
-Authorize the first plan of this invocation by its exact canonical identity. The engine compares the supplied and computed identities before routing or claiming, records both with the payload on a real plan, and refuses a mismatch. Dry runs emit the identity and payload but store nothing. Omitting this option keeps the ordinary flow.
+Authorize the first plan of this invocation by its exact canonical identity. The engine compares the supplied and computed identities before routing or claiming, records both with the payload on a real plan, and refuses a mismatch. The first matched payload becomes the authorization ceiling for later unflagged plans. Dry runs emit the identity and payload but store nothing. Omitting this option keeps the ordinary flow.
 
 The payload fields, in order, are `branch, default_branch, scope, at_once, worktrees, model, deliberation, waves, solo`. Serialize that object as UTF-8 JSON with sorted keys, `ensure_ascii=False`, and separators `(',', ':')`. Prefix those bytes with the UTF-8 bytes of `kntnt-orchestrate-plan-v1`, followed by one NUL byte, then take the lowercase hexadecimal SHA-256 digest.
+
+A later unflagged plan stays within the authorization ceiling only while `branch`, `default_branch`, `scope`, `at_once`, `worktrees`, `model`, and `deliberation` remain equal, every planned ticket appeared in the ceiling's waves, and every ceiling Solo Ticket still planned remains Solo. Wave order and membership among remaining tickets may change. Drift leaves the expected identity and ceiling payload intact, records the drifted identity, marks the expectation unmet, and keeps claims closed until a flagged plan exactly matches and installs its payload as the new ceiling.
 
 **--commit=**_COMMIT_
 
@@ -194,7 +196,7 @@ Concurrent ticket worktrees, branches, reservations, and scratch space. Successf
 
 **Per-session state directory**
 
-Stores the recoverable claim account, the caller's expected and computed approval identities with their canonical payload, and the irreplaceable frozen routing snapshot. A missing routing snapshot or an unmet approval stops a claim.
+Stores the recoverable claim account, the caller's expected and computed approval identities, and the irreplaceable frozen routing snapshot. The first matched approval payload is the authorization ceiling for later unflagged plans. A missing routing snapshot or an unmet approval stops a claim.
 
 The directory also contains `kntnt-orchestrate-progress.json`, an atomically replaced dashboard of the current wave, ticket, phase, amendment count, completed and remaining ticket counts, timestamp, and terminal outcome. The `report` verb projects its five outcome lists into the terminal dashboard directly, so the two accounts agree. It may lag a transition whose step did not report it and is never evidence or an input to an engine decision; the durable report remains authoritative. Deleting it harms nothing because the next transition recreates it.
 
@@ -216,7 +218,7 @@ An invalid reference, option, value, combination, or argument order is refused r
 
 Routing is refused rather than adjusted. A changed snapshot, mismatched locks, routed verdict, or execution role without a decision starts no work and reports a stable reason code.
 
-A mismatched approval reports the expected identity, computed identity, and canonical payload. A real mismatch stores that audit beside empty claim and starting lists but changes neither tracker nor repository; a dry-run mismatch stores nothing.
+A mismatched approval reports the expected identity, computed identity, and canonical payload. A later plan that exceeds a matched ceiling names the first protected field, added ticket, or lost Solo constraint, preserves the ceiling audit, and makes approval unmet. A real mismatch or drift changes neither tracker nor repository; a dry-run mismatch or drift stores nothing.
 
 The working tree must be clean when planning and before closing a ticket. A scope with no workable ticket is reported without starting a build.
 

@@ -952,6 +952,24 @@ def test_the_first_plan_alone_carries_the_caller_supplied_approval() -> None:
     assert "step 3 or step 11 runs without `--approval`" in skill
 
 
+def test_later_plans_stay_below_the_first_approved_payload() -> None:
+    """Every shipped approval surface states the same durable ceiling rule."""
+
+    # Read every shipped surface that describes approval continuity.
+    skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    options = _manpage_section("OPTIONS")
+    files = _manpage_section("FILES")
+    diagnostics = _manpage_section("DIAGNOSTICS")
+
+    # Require one consistent ceiling contract across those surfaces.
+    assert "authorization ceiling" in skill
+    assert "Wave order and membership" in skill
+    assert "authorization ceiling" in options
+    assert "Wave order and membership" in options
+    assert "approval payload is the authorization ceiling" in files
+    assert "first protected field, added ticket, or lost Solo constraint" in diagnostics
+
+
 def test_the_manpage_documents_reproducible_plan_approval() -> None:
     """A caller can derive the same canonical digest without the engine."""
 

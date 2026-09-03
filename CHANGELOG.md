@@ -23,6 +23,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Define parked-ticket amendment budgets as lifetime-scoped, preserve and bring forward resumed work, and report inherited versus newly spent amendments.
 - Fixed Orchestrate reports omitting reconciled parked tickets that had no Run Outcome.
 - Added caller-supplied Orchestrate plan approval identities, allowing an exact dry-run frontier to be authorized and checked before any claim in one invocation.
+- A matched `/orchestrate` approval is now an authorization ceiling for the rest of the invocation: a later unflagged plan preserves the met expectation only while the protected run parameters, the authorized ticket set, and every remaining Solo constraint hold, and a plan outside the ceiling names the first violation, keeps the ceiling audit, and refuses every claim until another flagged plan matches (ADR-0144).
 - `/orchestrate` now audits tickets for concretely named external decision gaps before claiming, parks detected gaps with a decision-ready question under `needs-info`, and reuses the same parked-ticket record for decisions found mid-work.
 - `/write` may now be started by a model, and only when the literal token `/write` appears in the request or in an instruction the request points at; a bare request to write or draft something stays outside the trigger, and the Codex sidecar says the same (ADR-0094).
 

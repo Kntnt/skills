@@ -20,10 +20,10 @@ import sys
 import tempfile
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
-from typing import Any, cast
+from typing import Any, TypedDict, cast
 
 # The label that says the thinking behind a ticket is finished. A ticket
 # without it is never planned, never claimed, and never built.
@@ -928,6 +928,20 @@ class ProgressState:
     tickets_remaining: int
 
 
+class ApprovalPayload(TypedDict):
+    """The complete plan surface one caller authorizes."""
+
+    branch: str
+    default_branch: str | None
+    scope: list[dict[str, Any]] | None
+    at_once: int
+    worktrees: bool
+    model: str | None
+    deliberation: str | None
+    waves: list[list[int]]
+    solo: list[int]
+
+
 @dataclass
 class RunState:
     """What one run remembers of itself between invocations.
@@ -969,7 +983,7 @@ class RunState:
     progress: ProgressState | None = None
     approval_expected: str | None = None
     approval_identity: str | None = None
-    approval_payload: dict[str, Any] | None = None
+    approval_payload: ApprovalPayload | None = None
     approval_met: bool | None = None
 
 
@@ -1377,7 +1391,7 @@ def decode_state(contents: str) -> RunState:
             if stored.get("approval_identity") is None
             else str(stored["approval_identity"])
         ),
-        approval_payload=cast(dict[str, Any] | None, stored.get("approval_payload")),
+        approval_payload=cast(ApprovalPayload | None, stored.get("approval_payload")),
         approval_met=cast(bool | None, stored.get("approval_met")),
     )
 
@@ -1414,25 +1428,50 @@ def carry_state_forward(path: Path | None) -> None:
         pass
 
 
-def read_state(path: Path | None, branch: str) -> RunState | None:
-    """Return what the run remembered of itself, or None where nothing does.
+def read_unscoped_state(path: Path | None) -> RunState | None:
+    """Return one readable state document without applying run scope.
 
     The file is a boundary like any other: a session killed mid-write, a hand
-    edit, or a scratch directory carried over to another branch all produce
-    something this cannot read, and each is answered the same way — as no state
-    at all, which is a state the engine already knows how to work from.
+    edit, or an absent scratch directory all produce something this cannot
+    read, and each is answered the same way — as no state at all, which is a
+    state the engine already knows how to work from.
     """
 
+    # Return the established no-state result where no boundary exists.
     if path is None:
         return None
 
+    # Collapse every unreadable or malformed boundary into that same result.
     try:
-        stored = decode_state(path.read_text(encoding="utf-8"))
-        if stored.branch != branch or stored.label != READY_LABEL:
-            return None
-        return stored
+        return decode_state(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, TypeError, ValueError, KeyError):
         return None
+
+
+def read_state(path: Path | None, branch: str) -> RunState | None:
+    """Return what this branch's run remembered, or None where nothing does."""
+
+    # Keep ordinary state scoped to the active branch and readiness label.
+    stored = read_unscoped_state(path)
+    if stored is None or stored.branch != branch or stored.label != READY_LABEL:
+        return None
+    return stored
+
+
+def read_plan_state(path: Path | None, branch: str) -> RunState | None:
+    """Return plan state, retaining an approval across a branch change."""
+
+    # Read the session once and keep the readiness label as its scope boundary.
+    stored = read_unscoped_state(path)
+    if stored is None or stored.label != READY_LABEL:
+        return None
+
+    # A state directory identifies one invocation, whose approval must detect
+    # rather than disappear on the branch change it was written to prevent;
+    # unapproved state remains scoped to its original branch.
+    if stored.branch != branch and stored.approval_met is None:
+        return None
+    return stored
 
 
 def write_state(path: Path | None, state: RunState) -> str | None:
@@ -1731,10 +1770,10 @@ class Plan:
     never_workable: list[int]
     approval_expected: str | None = None
     approval_identity: str | None = None
-    approval_payload: dict[str, Any] | None = None
+    approval_payload: ApprovalPayload | None = None
 
 
-def plan_approval_payload(plan: Plan) -> dict[str, Any]:
+def plan_approval_payload(plan: Plan) -> ApprovalPayload:
     """Return exactly the plan fields a caller authorizes."""
 
     return {
@@ -1750,7 +1789,7 @@ def plan_approval_payload(plan: Plan) -> dict[str, Any]:
     }
 
 
-def plan_approval_identity(payload: dict[str, Any]) -> str:
+def plan_approval_identity(payload: ApprovalPayload) -> str:
     """Identify one authorized Orchestrate plan under its versioned domain."""
 
     canonical = json.dumps(
@@ -1761,6 +1800,47 @@ def plan_approval_identity(payload: dict[str, Any]) -> str:
     ).encode("utf-8")
     prefix = f"kntnt-orchestrate-plan-v{APPROVAL_VERSION}\0".encode()
     return hashlib.sha256(prefix + canonical).hexdigest()
+
+
+def approval_ceiling_refusal(plan: Plan, ceiling: ApprovalPayload) -> str | None:
+    """Return why *plan* exceeds its first approved payload, if it does."""
+
+    # Keep every execution dimension equal to its caller-authorized value.
+    current = plan_approval_payload(plan)
+    fixed_fields = (
+        ("branch", ceiling["branch"], current["branch"]),
+        ("default_branch", ceiling["default_branch"], current["default_branch"]),
+        ("scope", ceiling["scope"], current["scope"]),
+        ("at_once", ceiling["at_once"], current["at_once"]),
+        ("worktrees", ceiling["worktrees"], current["worktrees"]),
+        ("model", ceiling["model"], current["model"]),
+        ("deliberation", ceiling["deliberation"], current["deliberation"]),
+    )
+    for field_name, authorized_value, current_value in fixed_fields:
+        if current_value != authorized_value:
+            return (
+                f"the plan changes {field_name} from {authorized_value!r} "
+                f"to {current_value!r} outside the approval ceiling"
+            )
+
+    # Reject work whose identity was absent from the authorized frontier.
+    authorized = {int(number) for wave in ceiling["waves"] for number in wave}
+    for wave in plan.waves:
+        for number in wave:
+            if number not in authorized:
+                return f"the plan adds #{number} outside the approval ceiling"
+
+    # Keep an authorized Solo Ticket isolated until it leaves the plan.
+    current_tickets = {number for wave in plan.waves for number in wave}
+    current_solo = set(plan.solo)
+    for number in ceiling["solo"]:
+        if number in current_tickets and number not in current_solo:
+            return (
+                f"the plan removes Solo protection from #{number} "
+                "outside the approval ceiling"
+            )
+
+    return None
 
 
 def plan_details(plan: Plan) -> dict[str, Any]:
@@ -2805,7 +2885,7 @@ def build_plan(
     # that was never built.
     branch = current_branch(cwd)
     default = default_branch(cwd)
-    remembered = read_state(state_path, branch)
+    remembered = read_plan_state(state_path, branch)
     routing, routing_reason, damaged = frozen_routing(state_path)
     listed = open_listing(cwd)
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
@@ -2888,6 +2968,28 @@ def build_plan(
     plan.approval_payload = plan_approval_payload(plan)
     plan.approval_identity = plan_approval_identity(plan.approval_payload)
 
+    # Hold later unflagged work below the first caller-authorized frontier.
+    ceiling_refusal: str | None = None
+    drifted_state: RunState | None = None
+    if (
+        approval is None
+        and remembered is not None
+        and remembered.approval_met is True
+        and remembered.approval_payload is not None
+    ):
+        ceiling_refusal = approval_ceiling_refusal(plan, remembered.approval_payload)
+
+        # Preserve the ceiling audit while recording the refused identity.
+        if ceiling_refusal is not None:
+            plan.approval_expected = remembered.approval_expected
+            plan.approval_payload = remembered.approval_payload
+            drifted_state = replace(
+                remembered,
+                branch=branch,
+                approval_identity=plan.approval_identity,
+                approval_met=False,
+            )
+
     # A run works the branch the developer left it on, whichever branch that
     # is (ADR-0064), so the tree it would commit in is the only thing left to
     # refuse about the state it starts in: a run cannot tell work the developer
@@ -2924,6 +3026,9 @@ def build_plan(
             "the caller's approval does not match this plan: expected "
             f"{approval}, computed {plan.approval_identity}"
         )
+    elif ceiling_refusal is not None:
+        plan.ready = False
+        plan.reason = ceiling_refusal
 
     # A run that may start leaves what it remembers of itself where this
     # session's scratch is, written from here because this is the verb that has
@@ -2977,6 +3082,8 @@ def build_plan(
                 ),
             ),
         )
+    elif not dry_run and drifted_state is not None:
+        plan.state = write_state(state_path, drifted_state)
     elif not dry_run and approval is not None and approval != plan.approval_identity:
         plan.state = write_state(
             state_path,
