@@ -14,6 +14,8 @@ ready-for-agent-check - find ticket defects that would stop an unattended builde
 
 Each reviewer receives the ticket's complete thread: the original body followed by every comment in chronological order with author and date. Later comments override conflicting earlier text, and acceptance criteria added in comments remain criteria. The reviewer receives no explanation or intent from the invoking session.
 
+The builder it measures against is a Seat no more capable than the reviewer and possibly considerably less: less deliberation, a smaller model, or both. The reviewer's own ease is not the measure, and a fact the reviewer obtained by knowing where to look is reported as a fact the ticket has to locate.
+
 The reviewer also checks ticket claims against the current Project. Stale paths, symbols, line references, reserved identifiers, enumerations, and other repository facts are reported beside the current state.
 
 ## POSITIONAL ARGUMENTS
@@ -32,7 +34,7 @@ The ticket presents alternatives without choosing one, defers a value to a perso
 
 **Unevaluable condition**
 
-The work branches on a condition the builder cannot determine from the ticket and Project.
+The work branches on a condition the builder could not determine from the ticket or the Project without knowing where to look.
 
 **Indeterminate criterion**
 
@@ -44,7 +46,7 @@ The current Project no longer supports a path, symbol, line, identifier, count, 
 
 **Missing fact**
 
-The ticket requires a command, convention, term, or source it neither carries nor locates.
+The ticket requires a command, convention, term, or source that it neither carries nor locates and that the builder could not obtain from the Project without knowing where to look.
 
 **Open scope**
 
@@ -56,15 +58,15 @@ Completion requires product judgement, external authority, a deferred design dec
 
 ## OUTPUT
 
-The report gives each ticket one verdict: whether a builder could carry it from start to finish. It then lists every finding under two classes.
+The report gives each ticket one verdict: whether a builder could carry it from start to finish. It then lists every finding under two classes. An inference the reviewer had to make to get past a sentence — an intent the ticket does not state, a choice between readings it allows, a fact it neither carries nor locates — is a finding on that sentence and falls under one of those two classes; there is no third.
 
 **Stops**
 
-Conditions a builder cannot pass without asking. Each finding quotes the relevant ticket text, states the question it creates, and names what the ticket must settle.
+Conditions a builder cannot pass without asking, the reviewer's own inferences among them where the builder could not have made the same one. Each finding quotes the relevant ticket text, states the question it creates, and names what the ticket must settle.
 
 **Costs**
 
-Conditions a builder can pass only by reconciling stale information, resolving ambiguity twice, or finding omitted facts.
+Conditions a builder can pass only by reconciling stale information, resolving ambiguity twice, or finding omitted facts. Every other inference the reviewer had to make lands here.
 
 There is no partial pass. An uncertain reviewer returns no, because uncertainty can stop an unattended run.
 

@@ -81,6 +81,26 @@ def test_the_review_brief_refuses_to_be_summarised() -> None:
     )
 
 
+def test_the_review_brief_names_the_builder_it_measures_against() -> None:
+    """The reviewer's own ease is not the builder's, so the brief has to say whose is.
+
+    The reviewer runs on whatever Seat the harness gives a subagent, and the
+    builder is routed at or below it. A brief that leaves the builder unnamed
+    is answered from the reviewer's own capability, and a strong reviewer
+    reports a ticket clean for a reason the ticket does not carry.
+    """
+
+    text = (SKILL / "references" / "review.md").read_text(encoding="utf-8")
+
+    assert "no more capable than you" in text, (
+        f"{SKILL / 'references' / 'review.md'}: the brief names the builder as"
+        f" a Seat no more capable than the reviewer. Unnamed, every test"
+        f" phrased as what a builder could do is answered from the reviewer's"
+        f" own capability, which is the one thing the ticket cannot carry"
+        f" (ADR-0155). See {STANDARD}."
+    )
+
+
 def test_the_skill_declares_no_flag_it_would_have_to_refuse() -> None:
     """Nothing is written here, so `--yes` has no question to answer.
 
