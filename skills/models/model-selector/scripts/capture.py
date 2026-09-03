@@ -81,6 +81,13 @@ MEASUREMENT_ALLOWED = frozenset(
 # anything is written, so nothing forbidden can arrive by sitting beside what
 # is wanted. A Usage Record carries no outcome, so a payload's checker and
 # error content are never read for their value, only the event name is.
+#
+# `transcript_path` is locate-only (#225): it is read at a session's end to
+# open that session's own finished record through the Collection Library's
+# reader, and it never reaches a draft written to disk or a Usage Record —
+# `_hook` reads it locally out of the cleaned payload and passes it straight
+# to `_finish` without ever folding it into the draft this dict's other
+# fields build up.
 PAYLOAD_ALLOWED = frozenset(
     {
         "session_id",
@@ -88,6 +95,7 @@ PAYLOAD_ALLOWED = frozenset(
         "harness_inventory_revision",
         "seat",
         "measurements",
+        "transcript_path",
     }
 )
 SEAT_ALLOWED = frozenset(
@@ -208,6 +216,36 @@ def _integrations() -> Any:
             spec.loader.exec_module(module)
             return module
     raise RuntimeError("the Collection Library's integration mechanics are missing")
+
+
+def _session_records() -> Any:
+    """Load the Collection Library's session-record reader.
+
+    Reading a finished session's own record is Harness-specific mechanics of
+    exactly the kind ADR-0090 already put in the Library, so it lives beside
+    `integrations.py` rather than here — a second consumer finds it there
+    instead of reaching into this Skill (#225).
+    """
+
+    here = Path(__file__).resolve().parent
+    for candidate in (
+        here.parent.parent.parent
+        / "kntnt"
+        / "library"
+        / "scripts"
+        / "session_records.py",
+        here.parent / "library" / "scripts" / "session_records.py",
+    ):
+        if candidate.exists():
+            spec = importlib.util.spec_from_file_location(
+                "kntnt_session_records", candidate
+            )
+            if spec is None or spec.loader is None:
+                continue
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            return module
+    raise RuntimeError("the Collection Library's session-record reader is missing")
 
 
 def owner() -> str:
@@ -567,16 +605,75 @@ def _append(directory: Path, records: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _finish(data: Path, draft: dict[str, Any]) -> dict[str, Any]:
+def _measured_seats(
+    harness: str | None, transcript_path: Any, configured: dict[str, Any]
+) -> list[dict[str, Any]] | None:
+    """Return this session's own Seats and usage as its finished record states them.
+
+    The Seat and the usage are read from the Harness's own record of the
+    finished session where one can be read at all: the exact model, the
+    deliberation control in force, and the token categories the Harness
+    counted — nothing else is taken from it (#225 decision 1). The record
+    supplies neither channel, surface, adapter, nor serving mode for any
+    Seat, so the main Seat keeps those from *configured* — the seat this
+    session's own lifecycle signals already established — while a delegated
+    Seat the record cannot describe carries an explicit null on each of them
+    rather than borrowing the main Seat's answer.
+
+    Returns None where nothing could be read at all, so the caller falls back
+    to whatever the lifecycle signals themselves already established — a
+    missing, truncated, or unparseable record is an absence, never a raised
+    error (ADR-0156 decision 4, applied to this read by ADR-0158).
+    """
+
+    if not harness or not isinstance(transcript_path, str) or not transcript_path:
+        return None
+    try:
+        groups = _session_records().usage(harness, transcript_path)
+    except Exception:  # noqa: BLE001 - a broken record is an absence, not a failure
+        return None
+    if not groups:
+        return None
+
+    entries = []
+    for group in groups:
+        seat = (
+            {key: configured.get(key) for key in SEAT_ALLOWED}
+            if group.get("role") == "main"
+            else dict.fromkeys(SEAT_ALLOWED)
+        )
+        seat["model"] = group.get("model")
+        seat["native_deliberation"] = group.get("native_deliberation")
+        entries.append(
+            {
+                "seat": seat,
+                "started_at": group.get("started_at"),
+                "completed_at": group.get("completed_at"),
+                "measurements": {"tokens": group.get("tokens")},
+            }
+        )
+    return entries
+
+
+def _finish(
+    data: Path, draft: dict[str, Any], harness: str | None, transcript_path: Any
+) -> dict[str, Any]:
     """Answer one session-ending signal: append its Usage Records and forget the draft.
 
     A session that ran on more than one Seat produces one Usage Record per
-    Seat. A session that ended abruptly — an error included, there being no
-    outcome left for an error to carry — contributes whatever its own record
-    establishes and nothing more; nothing here waits for a human.
+    Seat, read from the Harness's own finished record where one can be read
+    (`_measured_seats`) and from what the lifecycle signals themselves
+    already established otherwise. A session that ended abruptly — an error
+    included, there being no outcome left for an error to carry — contributes
+    whatever its own record establishes and nothing more; nothing here waits
+    for a human.
     """
 
-    records = [_usage_record(draft, entry) for entry in draft.get("seats", {}).values()]
+    measured = _measured_seats(harness, transcript_path, draft.get("seat") or {})
+    entries = (
+        measured if measured is not None else list(draft.get("seats", {}).values())
+    )
+    records = [_usage_record(draft, entry) for entry in entries]
     appended = _append(data, records)
     _draft_path(data, draft["session_key"]).unlink(missing_ok=True)
     return {"ok": True, "fail_open": False, **appended}
@@ -663,7 +760,12 @@ def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     }
 
     if event in END_EVENTS or event in ERROR_EVENTS:
-        return _finish(data, draft)
+        return _finish(
+            data,
+            draft,
+            clean.get("harness") or draft.get("harness"),
+            clean.get("transcript_path"),
+        )
 
     # A start or a turn is a draft update and nothing more.
     _store(_draft_path(data, session), draft)
@@ -679,14 +781,25 @@ def _storage(data: Path) -> int:
 
 
 def status(data: Path, root: Path) -> dict[str, Any]:
-    """Report capture's own state, without a network request or an evaluation."""
+    """Report capture's own state, without a network request or an evaluation.
+
+    Each Harness's own health is reported beside whether its finished session
+    record can supply measurements at all (#225): a store of Usage Records
+    that stays empty because a Harness keeps no readable record is something
+    to say plainly here, never something left for the user to discover from
+    the store itself.
+    """
 
     integrations = _integrations()
+    reader = _session_records()
     current = config(data)
     return {
         "enabled": bool(current.get("enabled")),
         "harnesses": [
-            integrations.health(owner(), harness, root)
+            {
+                **integrations.health(owner(), harness, root),
+                "measurements": harness in reader.SUPPORTED,
+            }
             for harness in current.get("harnesses") or []
         ],
         "storage_bytes": _storage(data),

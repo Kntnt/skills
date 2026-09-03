@@ -18,11 +18,11 @@ Capture turns ordinary work in Claude Code, Codex, or OpenCode into a local Usag
 
 It is explicit opt-in because **--on** installs persistent lifecycle integration. Nothing is captured before consent, and **--off** removes every owned hook without deleting Usage Records already appended.
 
-During substantive work, the integration records bounded lifecycle, Seat, and usage metadata. A session's end turns it into one Usage Record per Seat it ran on, appended immediately; temporary data is then removed.
+During substantive work, the integration records bounded lifecycle, Seat, and usage metadata. At a session's end, a Harness that keeps its own readable record of the session — Claude Code, at this writing — has that record read once, and its exact model, deliberation control, and token categories replace whatever the lifecycle signals themselves gathered; a session that delegated work writes a further record for each subagent Seat, counted apart from the main one. A Harness with no such record, or one that cannot be read, still turns the session into one Usage Record per Seat from its lifecycle signals alone, appended immediately; temporary data is then removed either way.
 
 Capture measures ordinary work; it never judges it. A Usage Record carries no outcome, no checker, and no Cohort, enters no derived frontier, and produces no evidence record. Nothing waits for a human, ever.
 
-Hooks perform local metadata I/O only: no network request, model call, test run, repository-wide hash, transcript scan, or background daemon. Capture failures never interrupt the session.
+Hooks perform local metadata I/O only: no network request, model call, test run, repository-wide hash, or background daemon. Every lifecycle signal but the session's own last one reads nothing beyond its own payload; only that last signal may read the finished session's own record, bounded to that one session's files and nothing broader. Capture failures never interrupt the session.
 
 ## OPTIONS
 
@@ -36,7 +36,7 @@ Remove every owned hook and adapter, verifying the result per Harness. Usage Rec
 
 **--status**
 
-Report enablement, adapter health, and storage use, without network access.
+Report enablement, adapter health, whether each Harness's own finished session record can supply measurements, and storage use, without network access.
 
 **--harness=**_NAME_
 
@@ -50,7 +50,7 @@ Use *PATH* instead of `~/.kntnt/model-selector/` for capture data, the evidence 
 
 Capture retains the opaque session identity and usage key; the Harness and its inventory revision; the exact Seat — model, deliberation control, serving mode, access channel, and tool and policy fingerprints; the usage categories the environment exposed — tokens, tool calls, retries, cost, quota, latency, and fallback; and the two instants a Seat ran between.
 
-It never retains full prompts, responses, reasoning, source files, diffs, terminal output, secrets, credentials, complete transcripts, or unnecessary absolute paths. An allow-list controls every copied field.
+It never retains full prompts, responses, reasoning, source files, diffs, terminal output, secrets, credentials, complete transcripts, or unnecessary absolute paths. An allow-list controls every copied field, and reads the finished session's own record field by field onto that same boundary: the path to that record is used only to open it and is never itself retained.
 
 ## OUTPUT
 
