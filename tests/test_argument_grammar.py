@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import importlib.util
+import inspect
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, get_args, get_type_hints
 
 import pytest
 
@@ -30,6 +31,15 @@ def _load(name: str, filename: str) -> Any:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def _declared(module: Any, name: str) -> Any:
+    """Resolve one module-level annotation, deferred to a string or not."""
+
+    annotation = module.__annotations__[name]
+    if isinstance(annotation, str):
+        return eval(annotation, vars(module))
+    return annotation
 
 
 def _policy(argv: list[str], capsys: pytest.CaptureFixture[str]) -> Any:
@@ -319,3 +329,39 @@ def test_no_library_engine_carries_its_own_copy_of_the_shared_grammar() -> None:
         f" carries a second answer to how this collection's command lines are"
         f" read, and the two drift apart a token at a time. See {GRAMMAR}."
     )
+
+
+def test_both_engines_bind_the_grammar_the_library_itself_declares() -> None:
+    """One declared shape, checked against the code mypy cannot reach.
+
+    Each engine loads this grammar by path and restates its two functions'
+    signatures in its own annotations. mypy checks every call site against
+    those restatements and can never compare them with the implementation,
+    which arrives through a dynamic load it does not follow. A signature
+    changed here would therefore leave both engines type-checking their
+    callers against a shape nothing has any more, in silence.
+    """
+
+    grammar = _load("kntnt_argument_grammar", GRAMMAR)
+
+    # Assert the declared shape describes the functions this module ships.
+    for alias, function in (
+        (grammar.OptionReader, grammar.option),
+        (grammar.SplitReader, grammar.split),
+    ):
+        parameters, returns = get_args(alias.__value__)
+        hints = get_type_hints(function)
+        named = list(inspect.signature(function).parameters)
+        assert [hints[name] for name in named] == list(parameters)
+        assert hints["return"] == returns
+
+    # Assert both engines bind those functions and declare that same shape.
+    for name, filename in (
+        ("kntnt_standing_policy", "standing_policy.py"),
+        ("kntnt_routed_observations", "routed_observations.py"),
+    ):
+        engine = _load(name, filename)
+        assert inspect.signature(engine._option) == inspect.signature(grammar.option)
+        assert inspect.signature(engine._split) == inspect.signature(grammar.split)
+        assert _declared(engine, "_option") == grammar.OptionReader.__value__
+        assert _declared(engine, "_split") == grammar.SplitReader.__value__

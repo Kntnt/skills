@@ -28,7 +28,14 @@ interface to reach into, and neither is a `sys.path` a module does not own
 
 from __future__ import annotations
 
-from collections.abc import Collection
+from collections.abc import Callable, Collection
+
+# The one declaration of how an engine binds this grammar. Neither engine can
+# import it — each loads this module by path (ADR-0149) and restates the shape
+# in its own annotations — so the suite beside them is what holds all three to
+# one signature rather than mypy, which never sees behind a dynamic load.
+type OptionReader = Callable[[list[str], str], str | None]
+type SplitReader = Callable[[list[str], Collection[str]], tuple[list[str], list[str]]]
 
 
 def option(rest: list[str], name: str) -> str | None:
