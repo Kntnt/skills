@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import re
@@ -673,6 +674,56 @@ def _derive_context(
     }
 
 
+def _exploration_draw(
+    seed: str, snapshot_identity: str, run_identity: str, request_id: str
+) -> float:
+    """Draw one request's exploration number from facts that cannot move.
+
+    Routing is deterministic and a reused snapshot reproduces its decisions
+    (ADR-0083, ADR-0085), so the draw is derived here and carried into the
+    request rather than made inside the route module. The four facts are the
+    Cohort's policy seed, the frozen context, the run, and the request, joined
+    by a single newline; the digest's first 53 bits over `2^53` are the value,
+    which is every bit a float can hold without rounding.
+    """
+
+    material = f"{seed}\n{snapshot_identity}\n{run_identity}\n{request_id}"
+    digest = hashlib.sha256(material.encode("utf-8")).digest()
+    return (int.from_bytes(digest[:7], "big") >> 3) / float(1 << 53)
+
+
+def _with_exploration(
+    requests: list[dict[str, Any]],
+    snapshot_identity: str,
+    standing_policy: dict[str, Any],
+    run_identity: Any,
+    attempts_used: Any,
+) -> list[dict[str, Any]]:
+    """Write this run's exploration facts into each request that can carry them.
+
+    A request naming no Cohort has no policy to draw against and a caller
+    naming no run has no account to spend from — a dry run being exactly that —
+    so both leave the requests as they arrived.
+    """
+
+    if not isinstance(run_identity, str) or not run_identity:
+        return requests
+    used = attempts_used if isinstance(attempts_used, dict) else {}
+    for request in requests:
+        cohort = request.get("workload_cohort")
+        if not isinstance(cohort, str):
+            continue
+        entry = standing_policy["cohorts"].get(cohort, standing_policy["default"])
+        request["exploration_draw"] = _exploration_draw(
+            str(entry["exploration"]["seed"]),
+            snapshot_identity,
+            run_identity,
+            str(request["request_id"]),
+        )
+        request["exploration_attempts_used"] = int(used.get(cohort, 0))
+    return requests
+
+
 def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
     """Validate one request without turning absent configuration into setup.
 
@@ -703,21 +754,41 @@ def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
 
     # Preserve request order only after validating a reusable snapshot itself.
     requests = deepcopy(artifact["requests"])
+    run_identity = artifact.get("run_identity")
+    attempts_used = artifact.get("exploration_attempts_used")
     if "snapshot" in artifact:
         if error := route._snapshot_error(artifact["snapshot"]):
             raise ValueError(error)
+        snapshot = deepcopy(artifact["snapshot"])
         return {
             "schema_version": 1,
-            "requests": requests,
-            "snapshot": deepcopy(artifact["snapshot"]),
+            "requests": _with_exploration(
+                requests,
+                str(snapshot["snapshot_identity"]),
+                snapshot["override_policy"]["standing_policy"],
+                run_identity,
+                attempts_used,
+            ),
+            "snapshot": snapshot,
         }
 
     # Derive current facts from optional validated local configuration.
     profile = _read_profile(data_directory)
+    context = _derive_context(artifact["runtime"], profile, data_directory)
+
+    # Freeze the context here to reach the identity the draw is derived from.
+    # The identity `route` computes later is the same function of the same
+    # facts, so the two never disagree and no second freezing rule exists.
     return {
         "schema_version": 1,
-        "requests": requests,
-        "context": _derive_context(artifact["runtime"], profile, data_directory),
+        "requests": _with_exploration(
+            requests,
+            str(route.freeze_context(context)["snapshot_identity"]),
+            context["override_policy"]["standing_policy"],
+            run_identity,
+            attempts_used,
+        ),
+        "context": context,
     }
 
 

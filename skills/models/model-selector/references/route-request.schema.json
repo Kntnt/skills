@@ -105,7 +105,9 @@
         "retry_available": {"type": "boolean"},
         "prior": {"$ref": "#/$defs/exact_attempt"},
         "verified_failure": {"$ref": "#/$defs/verified_failure"},
-        "economics": {"$ref": "#/$defs/economics"}
+        "economics": {"$ref": "#/$defs/economics"},
+        "exploration_draw": {"type": "number"},
+        "exploration_attempts_used": {"type": "integer"}
       },
       "additionalProperties": false
     },

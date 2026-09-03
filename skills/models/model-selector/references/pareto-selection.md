@@ -16,7 +16,7 @@ When representative matched measurements do not determine the exact point, make 
 
 For objectively checkable, reversible work, begin at the lowest plausible complete configuration and escalate exactly one adjacent Rung only after failure is verified by an external checker or declared failure signal — the next supported reasoning control on the same model, or, where that scale is exhausted or the Harness carries the control, the next enabled model up by capability regardless of provider. Stop at the first rung whose conservative quality clears the declared floor. Compare the whole policy with always starting stronger by charging every failed attempt, checker run, retry, quota charge, cost and added latency.
 
-For high-consequence or irreversible work without a trustworthy external checker, select the strongest plausible enabled configuration and refuse unsafe exploration. Keep that point classified as heuristic unless representative matched evidence supports the exact configuration.
+For high-consequence or irreversible work without a trustworthy external checker, select the strongest plausible enabled configuration and refuse unsafe exploration. An *exploration start* here is a cold-start classification of a point nothing has measured, and is a different thing from the Exploration Attempt `route` places one Rung below a Cohort's production Rung on a budget. Keep that point classified as heuristic unless representative matched evidence supports the exact configuration.
 
 ## Evidence class and output
 

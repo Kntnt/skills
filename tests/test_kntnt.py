@@ -8161,7 +8161,10 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
 
     assert "exploration" not in mode.lower(), (
         f"{directory / 'references' / 'mode.md'}: the counterweight names no"
-        f" exploration policy, because none exists (ADR-0067, ADR-0133)."
+        f" exploration policy. Routing has one — the budgeted Exploration"
+        f" Attempt of ADR-0151 — and the directive still states none, because"
+        f" it asks the cheap-seat question and decides no probe (ADR-0067,"
+        f" ADR-0133)."
     )
     assert "frozen main seat" in on_page and "public `route` Interface" in on_page, (
         f"{directory / 'help' / 'on.md'}: the manpage says what goes through"

@@ -12,7 +12,9 @@
       "items": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/request"}
     },
     "runtime": {"$ref": "#/$defs/runtime"},
-    "snapshot": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/snapshot"}
+    "snapshot": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/snapshot"},
+    "run_identity": {"$ref": "#/$defs/non_empty_string"},
+    "exploration_attempts_used": {"type": "object", "additionalProperties": {"type": "integer"}}
   },
   "oneOf": [
     {"required": ["runtime"], "not": {"required": ["snapshot"]}},

@@ -118,6 +118,12 @@ STANDING_POLICY_FIELDS: tuple[str, ...] = (
     "next_rung_up",
 )
 
+# The decision policy that names an Exploration Attempt. A row carrying it
+# bought contrast at a Rung nobody would run production on, so the ratchet
+# reads it and steps over it rather than counting it as a verdict on the
+# Cohort's own Rung (ADR-0151).
+EXPLORATION_POLICY: str = "exploration"
+
 # Where the Standing Policy this ledger ratchets lives: the Library's own
 # module, beside this one.
 STANDING_POLICY_MODULE: str = "standing_policy.py"
@@ -628,6 +634,9 @@ def _observation(attempt: dict[str, Any]) -> tuple[dict[str, Any] | None, str, s
             "evidence_vintage": provenance.get("evidence_vintage"),
             "main_seat_model": provenance.get("main_seat_model"),
             "standing_policy": _audited_policy(audit),
+            "exploration": audit.get("decision_policy") == EXPLORATION_POLICY
+            if isinstance(audit, dict)
+            else False,
             "harness": attempt["harness"]["name"],
             "harness_inventory_revision": attempt["harness"].get("inventory_revision"),
         },

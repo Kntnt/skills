@@ -56,6 +56,16 @@ Bounds are read on the total order of `model_capability` and then position on th
 
 A Standing Policy ratchets up only. Nothing moves it down but a user's `config policy reset`, it is stored by scripts rather than edited by hand, and it enters the snapshot identity, so a change is a new snapshot and never reaches a run already frozen.
 
+## Exploration
+
+Each entry's `exploration` names an `epsilon`, a `max_per_run` budget, and a `seed`. Where a draw lands inside epsilon and the budget is unspent, routing returns an Exploration Attempt: the one Rung below the point ordinary selection resolved, chosen by the same adjacency `next_escalation` climbs and read downward. It is a different thing from `recommend`'s *exploration start*, which classifies a cold-start point nothing has measured.
+
+A request is explorable only where it states reversible work, an external or declared `checker`, `retry_available: true`, and a `workload_cohort`; carries an `exploration_draw`; carries neither `prior` nor `verified_failure`, a retry existing to spend the escalation a verified failure earned; and routes under a frozen `objective` of `cost_first`. An explicit `model` or `deliberation` lock outranks the draw: where the step would move a locked dimension, ordinary production selection is returned. The destination may equal the resolved inclusive floor and never falls below it, the pool being bounded before adjacency is read.
+
+`exploration_draw` is a number in `[0, 1)` the caller supplies and `route` never invents; `exploration_attempts_used` is what this Cohort has already spent in this run. Both are optional, and a request carrying neither routes exactly as it did before either existed. Across one ordered batch `route` carries its own per-Cohort counter, initialized from the stated count and raised on each accepted exploration, so an opening batch cannot spend a budget of one twice. Two requests of one Cohort stating different counts refuse the whole artifact as `inconsistent_exploration_state`. The count is a ceiling on accepted decisions rather than on launches: an attempt prepared for dispatch and then prevented still spends it.
+
+An exploration decision's `audit.decision_policy` is `exploration`, and its `audit.exploration` names the `production_rung` it stepped from, the `selected_rung` it launched on, and the `production_decision_policy` the ordinary order would have reported. The attempt that follows a failed one is routed as any other retry: production selection returns the Cohort's own Rung, with no escalation bound to it, the prior point not being the one selection chose.
+
 ## Bounded escalation
 
 Emit a bounded next escalation only for reversible, objectively checked execution with an external checker or declared failure signal and `retry_available: true`. Self-confidence is not verification. The prior point, selected point, failure record, native control, adapter, and checker identity must all describe the same failed attempt. Without matched policy evidence supporting a different route, the next escalation is one adjacent Rung. Escalation returns that Rung's model, native control, fingerprint, and full launch arguments, consumes only a retry the caller already owns, and creates no attempt.

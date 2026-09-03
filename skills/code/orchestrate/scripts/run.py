@@ -357,6 +357,11 @@ OBSERVED_STRATA: dict[str, str] = {
 # apart from anybody else's work of the same kind.
 OBSERVED_COHORT_PREFIX = "orchestrate/"
 
+# What model-selector calls a decision it placed one Rung below the Cohort's
+# production Rung. The engine reads the name and counts it; the rule that
+# emitted it is model-selector's alone (ADR-0151).
+EXPLORATION_POLICY: str = "exploration"
+
 # Which independent verdict establishes each role's outcome. A builder's own
 # report establishes nothing, so the checker an observation names is always the
 # brief of the session that judged it and never the one that did the work.
@@ -1014,6 +1019,12 @@ class RunState:
     frontier the last plan cut to the ceiling, kept so the preflight that
     follows can be held to routing that frontier and not some other set.
 
+    `run_identity` is the opaque name this run is known by wherever its work
+    is later read back — every route request's draw, every observation, every
+    ledger row. It is minted by the first plan that may start, kept here, and
+    copied into the routing account when that account is created, so a dry run
+    composes none and a resumed invocation reports the one it already has.
+
     `contracts` projects the tracker declarations, and `contract_bases` holds
     the claim boundaries that the branch can no longer establish after work
     begins. `progress` remembers the session-supplied dashboard values that a
@@ -1030,6 +1041,7 @@ class RunState:
     starting: list[int]
     contracts: dict[int, list[dict[str, Any]]]
     contract_bases: dict[int, str]
+    run_identity: str | None = None
     progress: ProgressState | None = None
     approval_expected: str | None = None
     approval_identity: str | None = None
@@ -1159,6 +1171,26 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
         "snapshot": routing.snapshot,
         "decisions": [asdict(record) for record in routing.decisions],
     }
+
+
+def exploration_attempts(routing: Routing | None) -> dict[str, int]:
+    """Return what each Cohort has already spent of its exploration budget.
+
+    An Exploration Attempt is an accepted decision model-selector tagged as
+    one, and the account is the run's only durable record of them. Requests
+    are counted once by name, so a request routed twice — a resume, a reroute
+    after a mechanical repair — spends the budget once (ADR-0151).
+    """
+
+    if routing is None:
+        return {}
+
+    explored: dict[str, set[str]] = {}
+    for record in routing.decisions:
+        audit = cast(dict[str, Any], record.decision.get("audit") or {})
+        if audit.get("decision_policy") == EXPLORATION_POLICY:
+            explored.setdefault(record.workload_cohort, set()).add(record.request_id)
+    return {cohort: len(named) for cohort, named in sorted(explored.items())}
 
 
 def routing_capability(records: list[RouteRecord]) -> str | None:
@@ -1425,6 +1457,9 @@ def decode_state(contents: str) -> RunState:
                 dict[str, str], stored.get("contract_bases", {})
             ).items()
         },
+        run_identity=(
+            None if stored.get("run_identity") is None else str(stored["run_identity"])
+        ),
         progress=(
             None
             if progress is None
@@ -1547,6 +1582,8 @@ def write_state(path: Path | None, state: RunState) -> str | None:
     details = asdict(state)
     if state.progress is None:
         details.pop("progress")
+    if state.run_identity is None:
+        details.pop("run_identity")
     if state.approval_met is None:
         details = {
             key: value
@@ -1787,6 +1824,12 @@ class Plan:
     ticket is built in a working tree of its own, and at exactly one the work
     lands straight on the branch with nothing to integrate (ADR-0054).
 
+    `run_identity` is the opaque name this run is known by, minted by the first
+    plan that may start and `null` on a dry one, and `exploration_attempts_used`
+    is what each Cohort has already spent of its exploration budget in this
+    run's frozen routing account. The agent copies both into the next context
+    request, which is where the draw and the budget are read (ADR-0151).
+
     `model` and `deliberation` are the field-level locks this invocation puts
     on every building role, `fast` is the objective it puts on the whole run —
     the fastest configuration that holds quality rather than the cheapest —
@@ -1832,6 +1875,8 @@ class Plan:
     approval_expected: str | None = None
     approval_identity: str | None = None
     approval_payload: ApprovalPayload | None = None
+    run_identity: str | None = None
+    exploration_attempts_used: dict[str, int] = field(default_factory=dict)
 
 
 def plan_approval_payload(plan: Plan) -> ApprovalPayload:
@@ -3025,6 +3070,16 @@ def build_plan(
         never_workable=never_workable,
     )
 
+    # Name the run itself. A dry run composes no identity, so the preflight it
+    # renders draws no Exploration Attempt and never disagrees with the night
+    # that follows it; a real plan carries forward whatever the run already has
+    # and mints one where it has none (ADR-0151).
+    carried_identity = (routing.run_identity if routing else None) or (
+        remembered.run_identity if remembered else None
+    )
+    plan.run_identity = None if dry_run else carried_identity
+    plan.exploration_attempts_used = exploration_attempts(routing)
+
     # Identify the complete caller-authorized frontier independently of ticket
     # prose, tracker comments, and the branch's moving base commit.
     plan.approval_expected = approval
@@ -3049,6 +3104,7 @@ def build_plan(
             drifted_state = replace(
                 remembered,
                 branch=branch,
+                run_identity=carried_identity,
                 approval_identity=plan.approval_identity,
                 approval_met=False,
             )
@@ -3099,6 +3155,7 @@ def build_plan(
     # that left a file behind would have started something after all. A login
     # nothing asked for this time is the one already remembered.
     if plan.ready:
+        plan.run_identity = carried_identity or secrets.token_hex(32)
         plan.state = write_state(
             state_path,
             RunState(
@@ -3114,6 +3171,7 @@ def build_plan(
                     if ticket.commit_contract is not None
                 },
                 contract_bases=remembered.contract_bases if remembered else {},
+                run_identity=plan.run_identity,
                 progress=remembered.progress if remembered else None,
                 approval_expected=(
                     approval
@@ -3159,6 +3217,7 @@ def build_plan(
                 starting=[],
                 contracts={},
                 contract_bases={},
+                run_identity=carried_identity,
                 progress=remembered.progress if remembered else None,
                 approval_expected=approval,
                 approval_identity=plan.approval_identity,
@@ -3319,14 +3378,24 @@ def routed_response(
 
 
 def emit_route(
-    identity: str | None, records: list[RouteRecord], refusals: list[dict[str, Any]]
+    identity: str | None,
+    records: list[RouteRecord],
+    refusals: list[dict[str, Any]],
+    routing: Routing | None = None,
 ) -> None:
-    """Print what one route call decided, and what it refused."""
+    """Print what one route call decided, what it refused, and what it spent.
+
+    The exploration account is reported here as well as on the plan, because a
+    mid-wave request is composed from the last thing the engine said rather
+    than from a plan the wave has already left behind (ADR-0151).
+    """
 
     emit(
         {
             "verb": "route",
             "snapshot_identity": identity,
+            "run_identity": (routing.run_identity or None) if routing else None,
+            "exploration_attempts_used": exploration_attempts(routing),
             "routing_capability": routing_capability(records),
             "decisions": [asdict(record) for record in records],
             "refused": refusals,
@@ -3560,6 +3629,7 @@ def cmd_route(
             starting=starting or [],
             contracts=state.contracts if state else {},
             contract_bases=state.contract_bases if state else {},
+            run_identity=state.run_identity if state else None,
         )
     elif starting is not None or run_claimed is not None:
         return fail(
@@ -3586,13 +3656,16 @@ def cmd_route(
             return fail(opening)
         if (mismatched := objective_refusal(snapshot, fast)) is not None:
             return fail(mismatched)
+        # A dry route freezes nothing and so mints nothing: it reports the
+        # identity the run already carries, or none at all (ADR-0151).
         routing = Routing(
             snapshot=snapshot,
             model=model,
             deliberation=deliberation,
             fast=fast,
             decisions=[],
-            run_identity=secrets.token_hex(32),
+            run_identity=(state.run_identity if state else None)
+            or ("" if dry_run else secrets.token_hex(32)),
         )
     elif (stale := frozen_refusal(routing, snapshot)) is not None:
         return fail(stale)
@@ -3614,7 +3687,7 @@ def cmd_route(
         except RunError as exc:
             return fail(str(exc))
 
-    emit_route(routing.identity, records, refusals)
+    emit_route(routing.identity, records, refusals, routing)
     return 2 if refusals else 0
 
 

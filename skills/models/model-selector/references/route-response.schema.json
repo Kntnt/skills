@@ -68,7 +68,8 @@
         "decision_policy": {"$ref": "#/$defs/non_empty_string"},
         "exclusions": {"type": "array", "items": {"$ref": "#/$defs/exclusion"}},
         "frontier": {"type": "array", "items": {"$ref": "#/$defs/frontier_entry"}},
-        "standing_policy": {"$ref": "#/$defs/standing_policy_audit"}
+        "standing_policy": {"$ref": "#/$defs/standing_policy_audit"},
+        "exploration": {"$ref": "#/$defs/exploration_audit"}
       },
       "additionalProperties": false
     },
@@ -77,6 +78,16 @@
         {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/rung"},
         {"type": "null"}
       ]
+    },
+    "exploration_audit": {
+      "type": "object",
+      "required": ["production_rung", "selected_rung", "production_decision_policy"],
+      "properties": {
+        "production_rung": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/rung"},
+        "selected_rung": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/rung"},
+        "production_decision_policy": {"$ref": "#/$defs/non_empty_string"}
+      },
+      "additionalProperties": false
     },
     "standing_policy_audit": {
       "type": "object",

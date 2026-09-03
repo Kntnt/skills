@@ -116,12 +116,18 @@ class StandingPolicy:
 
 @dataclass(frozen=True, slots=True)
 class SelectionOutcome:
-    """Carry one resolved candidate and the policy facts that selected it."""
+    """Carry one resolved candidate and the policy facts that selected it.
+
+    `exploration` is present only where the budgeted downward term replaced
+    the point ordinary selection resolved, and holds the two Rungs and the
+    name the production order would have reported.
+    """
 
     candidate: Candidate
     decision_policy: str
     frontier: tuple[dict[str, Any], ...]
     exclusions: tuple[dict[str, Any], ...]
+    exploration: dict[str, Any] | None = None
 
 
 def _schema_type_matches(value: Any, expected: str) -> bool:
@@ -365,6 +371,16 @@ def _request_error(request: Any) -> str | None:
     )
     if errors:
         return errors[0]
+
+    # Hold the caller's exploration facts to the ranges the contract states.
+    # The draw is a number the derivation computed, never one this module may
+    # bless into range, and a negative spend would buy an attempt back.
+    draw = request.get("exploration_draw")
+    if draw is not None and not 0.0 <= float(draw) < 1.0:
+        return "request.exploration_draw must lie in [0, 1)"
+    used = request.get("exploration_attempts_used")
+    if used is not None and int(used) < 0:
+        return "request.exploration_attempts_used counts from zero"
 
     return None
 
@@ -1870,6 +1886,11 @@ def _selected_decision(
                     if (rung := _adjacent_rung(candidates, candidate, "up"))
                     else None,
                 ),
+                **(
+                    {"exploration": deepcopy(selection.exploration)}
+                    if selection.exploration is not None
+                    else {}
+                ),
             },
         ),
     }
@@ -1880,6 +1901,7 @@ def _selection_decision(
     snapshot: dict[str, Any],
     pool: CandidatePool,
     standing: StandingPolicy,
+    used: dict[str, int],
 ) -> dict[str, Any]:
     """Resolve one selected or underdetermined decision from an eligible pool."""
 
@@ -1902,6 +1924,10 @@ def _selection_decision(
     )
     if isinstance(outcome, dict):
         return outcome
+
+    # Spend the Cohort's exploration budget before the decision is serialized,
+    # a production outcome nothing drew staying exactly what it was.
+    outcome = _exploration(request, snapshot, outcome, pool.candidates, used)
 
     # Serialize a launch only after policy resolved one complete candidate.
     return _selected_decision(
@@ -2044,6 +2070,110 @@ def _adjacent_rung(
             entries[key] = candidate
 
     return min(entries.values(), key=_rung_order)
+
+
+def _is_first_attempt(request: dict[str, Any]) -> bool:
+    """Recognize a task's first routed attempt rather than a retry of one.
+
+    A retry exists to spend the escalation a verified failure earned, so it is
+    never moved down whatever the draw says: the request that carries a prior
+    point or the failure of one is answered by ordinary production selection
+    (ADR-0151).
+    """
+
+    return not request.get("prior") and not request.get("verified_failure")
+
+
+def _is_explorable(request: dict[str, Any], snapshot: dict[str, Any]) -> bool:
+    """Say whether this request may buy contrast one Rung below production.
+
+    Everything here is a fact the request already states or the run already
+    froze: reversible work an external or declared checker judges, a retry the
+    caller owns, a first attempt, a named Cohort, a draw the derivation
+    supplied, and the cost-first objective — a run started for speed buys no
+    information at the price of a slower night.
+    """
+
+    return (
+        _is_objectively_checked(request)
+        and request.get("retry_available") is True
+        and _is_first_attempt(request)
+        and isinstance(request.get("workload_cohort"), str)
+        and _is_number(request.get("exploration_draw"))
+        and snapshot["override_policy"]["objective"] == "cost_first"
+    )
+
+
+def _keeps_explicit_locks(
+    request: dict[str, Any], production: Candidate, lower: Candidate
+) -> bool:
+    """Say whether the downward step leaves both exact field locks untouched.
+
+    An explicit `--model` or `--deliberation` is the value the caller asked to
+    run at, and no budget outranks it: a step that would move a locked
+    dimension makes the request unexplorable rather than overriding the lock.
+    """
+
+    overrides = request["overrides"]
+    if (
+        overrides.get("deliberation") is not None
+        and lower.portable != production.portable
+    ):
+        return False
+    return not (
+        overrides.get("model") and lower.point["model"] != production.point["model"]
+    )
+
+
+def _exploration(
+    request: dict[str, Any],
+    snapshot: dict[str, Any],
+    outcome: SelectionOutcome,
+    candidates: Sequence[Candidate],
+    used: dict[str, int],
+) -> SelectionOutcome:
+    """Replace one production selection with its budgeted Exploration Attempt.
+
+    The Rung stepped from is the one ordinary selection just returned, and the
+    step is the same two-dimensional geometry `next_escalation` climbs, read
+    downward (ADR-0146). `candidates` is already inside the Cohort's inclusive
+    floor, so a destination at the floor is reachable and one below it does not
+    exist to be reached. The budget is counted here, on the accepted decision
+    rather than on a launch nobody can promise happened: an attempt prepared
+    for dispatch and then prevented spends its Cohort's budget, so the cap can
+    never be exceeded and is at worst underused (ADR-0151).
+    """
+
+    if not _is_explorable(request, snapshot):
+        return outcome
+
+    # Compare the derivation's draw with this Cohort's own budget.
+    entry, _ = _standing_entry(request, snapshot)
+    budget = entry["exploration"]
+    cohort = cast(str, request["workload_cohort"])
+    spent = used.setdefault(cohort, int(request.get("exploration_attempts_used") or 0))
+    if float(request["exploration_draw"]) >= float(budget["epsilon"]) or spent >= int(
+        budget["max_per_run"]
+    ):
+        return outcome
+
+    # Resolve the one Rung below, honouring both exact field locks over it.
+    lower = _adjacent_rung(candidates, outcome.candidate, "down")
+    if lower is None or not _keeps_explicit_locks(request, outcome.candidate, lower):
+        return outcome
+
+    used[cohort] = spent + 1
+    return SelectionOutcome(
+        lower,
+        "exploration",
+        outcome.frontier,
+        outcome.exclusions,
+        {
+            "production_rung": _rung(outcome.candidate),
+            "selected_rung": _rung(lower),
+            "production_decision_policy": outcome.decision_policy,
+        },
+    )
 
 
 def _escalation(
@@ -2208,7 +2338,9 @@ def _artifact_error(artifact: Any) -> str | None:
     return None
 
 
-def _decision(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, Any]:
+def _decision(
+    request: dict[str, Any], snapshot: dict[str, Any], used: dict[str, int]
+) -> dict[str, Any]:
     """Resolve one request while keeping explicit locks above inheritance."""
 
     # Keep every verdict on the exact immutable main seat.
@@ -2218,7 +2350,7 @@ def _decision(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, An
         return _inherit(request, snapshot, "verdict_authority")
 
     # Refuse instead of dropping a lock an unparameterized launch cannot carry.
-    decision = _execution_decision(request, snapshot)
+    decision = _execution_decision(request, snapshot, used)
     if decision["status"] == "inherit" and request["overrides"]:
         reason = decision["inheritance"]["reason"]
         return _refused(
@@ -2232,7 +2364,7 @@ def _decision(request: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, An
 
 
 def _execution_decision(
-    request: dict[str, Any], snapshot: dict[str, Any]
+    request: dict[str, Any], snapshot: dict[str, Any], used: dict[str, int]
 ) -> dict[str, Any]:
     """Apply hard refusals and inheritance before exact-point selection.
 
@@ -2369,7 +2501,34 @@ def _execution_decision(
     ):
         return _inherit(request, snapshot, "insufficient_evidence", standing=standing)
 
-    return _selection_decision(request, snapshot, pool, standing)
+    return _selection_decision(request, snapshot, pool, standing, used)
+
+
+def _exploration_state(requests: list[Any]) -> dict[str, int] | None:
+    """Initialize the batch's per-Cohort exploration counter, or refuse it.
+
+    One artifact routes one batch, and the count of Exploration Attempts a
+    Cohort has already had is carried state rather than something this module
+    derives. Two requests of one Cohort disagreeing about it is the caller
+    holding two accounts of the same run, which is refused rather than settled
+    by picking one (ADR-0151).
+    """
+
+    supplied: dict[str, set[int]] = {}
+    for request in requests:
+        if not isinstance(request, dict):
+            continue
+        cohort = request.get("workload_cohort")
+        used = request.get("exploration_attempts_used")
+        if (
+            isinstance(cohort, str)
+            and isinstance(used, int)
+            and not isinstance(used, bool)
+        ):
+            supplied.setdefault(cohort, set()).add(used)
+    if any(len(counts) > 1 for counts in supplied.values()):
+        return None
+    return {cohort: counts.pop() for cohort, counts in supplied.items()}
 
 
 def route(artifact: Any) -> dict[str, Any]:
@@ -2378,6 +2537,14 @@ def route(artifact: Any) -> dict[str, Any]:
     # Refuse malformed envelopes once, before any request is interpreted.
     if error := _artifact_error(artifact):
         return _artifact_refusal("invalid_request", error)
+
+    # Refuse a batch that states two exploration accounts for one Cohort.
+    used = _exploration_state(artifact["requests"])
+    if used is None:
+        return _artifact_refusal(
+            "inconsistent_exploration_state",
+            "Requests for one Cohort must carry one exploration attempt count.",
+        )
 
     # Validate current facts or a reusable snapshot before identity is trusted.
     requests = artifact["requests"]
@@ -2398,7 +2565,7 @@ def route(artifact: Any) -> dict[str, Any]:
         decisions = [
             _refused(request, snapshot, "invalid_request", error)
             if (error := _request_error(request))
-            else _decision(request, snapshot)
+            else _decision(request, snapshot, used)
             for request in requests
         ]
 

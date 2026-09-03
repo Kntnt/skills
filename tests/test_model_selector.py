@@ -5526,3 +5526,344 @@ def test_evidence_frozen_under_an_older_revision_never_moves_a_policy_again(
     # Assert the reset a person asks for is the only way back down.
     assert policy.reset(tmp_path, "python-refactor") == ["python-refactor"]
     assert policy.effective_policy(tmp_path, "python-refactor")["revision"] == 0
+
+
+def _exploring_snapshot(**exploration: Any) -> dict[str, Any]:
+    """Freeze a Cohort whose Standing Policy starts a Rung above the floor.
+
+    Exploration steps down, so a Cohort already started at the bottom of its
+    own ladder has nowhere to go. The fixture ratchets the shipped Cohort up
+    to `high`, which is what a threshold trip leaves behind and the state the
+    exploration term exists to buy contrast against.
+    """
+
+    snapshot = _complete_routing_snapshot()
+    snapshot["override_policy"]["standing_policy"] = _standing_policy_fixture(
+        {
+            "python-refactor": {
+                "revision": 3,
+                "starting_rung": {
+                    "model": "worker-v2",
+                    "portable_deliberation": "high",
+                },
+                **(
+                    {
+                        "exploration": {
+                            "epsilon": 0.1,
+                            "max_per_run": 1,
+                            "seed": "kntnt-standing-policy-v1",
+                        }
+                        | exploration
+                    }
+                    if exploration
+                    else {}
+                ),
+            }
+        }
+    )
+    return snapshot
+
+
+def _explorable_request(**changes: Any) -> dict[str, Any]:
+    """Build the first routed attempt of retry-owned externally checked work."""
+
+    stated = {
+        "retry_available": True,
+        "exploration_draw": 0.05,
+        "exploration_attempts_used": 0,
+    }
+    stated.update(changes)
+    return _request(**stated)
+
+
+def _explored(snapshot: dict[str, Any], *requests: dict[str, Any]) -> Any:
+    """Route one ordered batch against a frozen exploring snapshot."""
+
+    return _load_router().route(
+        {
+            "schema_version": 1,
+            "context": deepcopy(snapshot),
+            "requests": [deepcopy(request) for request in requests],
+        }
+    )["decisions"]
+
+
+def test_a_drawn_exploration_launches_one_rung_below_the_production_rung() -> None:
+    """The budgeted downward step is taken, named, and priced as exploration."""
+
+    # Route the first attempt of reversible externally checked work.
+    decision = _explored(_exploring_snapshot(), _explorable_request())[0]
+
+    # Assert the launch is the Rung below the one production would have taken.
+    assert decision["status"] == "selected"
+    assert decision["launch"]["portable_deliberation"] == "medium"
+    assert decision["audit"]["decision_policy"] == "exploration"
+    assert decision["audit"]["exploration"] == {
+        "production_rung": {"model": "worker-v2", "portable_deliberation": "high"},
+        "selected_rung": {"model": "worker-v2", "portable_deliberation": "medium"},
+        "production_decision_policy": "standing_policy_start",
+    }
+
+    # Assert the Standing Policy audit still names where the Cohort stands.
+    standing = decision["audit"]["standing_policy"]
+    assert standing["starting_rung"] == {
+        "model": "worker-v2",
+        "portable_deliberation": "high",
+    }
+    assert standing["current_rung"] == {
+        "model": "worker-v2",
+        "portable_deliberation": "medium",
+    }
+
+
+def test_no_exploration_is_emitted_without_the_facts_that_make_one_safe() -> None:
+    """Every eligibility fact is load-bearing on its own."""
+
+    snapshot = _exploring_snapshot()
+    ineligible = {
+        "an undrawn request": _explorable_request(exploration_draw=None),
+        "a draw at epsilon": _explorable_request(exploration_draw=0.1),
+        "a spent budget": _explorable_request(exploration_attempts_used=1),
+        "irreversible work": _explorable_request(reversible=False),
+        "unchecked work": _explorable_request(checker={"kind": "none"}),
+        "a retry the caller does not own": _explorable_request(retry_available=False),
+        "a Cohort the request never names": _explorable_request(workload_cohort=None),
+    }
+
+    # Route each request that misses exactly one fact the term requires. A
+    # request naming no Cohort routes under the shipped default and cold starts
+    # at its own floor, which is the one case that moves for another reason.
+    for named, request in ineligible.items():
+        stated = {field: value for field, value in request.items() if value is not None}
+        decision = _explored(snapshot, stated)[0]
+        assert decision["status"] == "selected", named
+        assert decision["audit"]["decision_policy"] != "exploration", named
+        assert "exploration" not in decision["audit"], named
+        if "workload_cohort" in stated:
+            assert decision["launch"]["portable_deliberation"] == "high", named
+
+
+def test_a_run_frozen_for_speed_and_a_cohort_at_its_floor_explore_nothing() -> None:
+    """`--fast` and the inclusive floor each end exploration on their own."""
+
+    # Freeze the same Cohort for the other objective the run could have named.
+    fast = _exploring_snapshot()
+    fast["override_policy"]["objective"] = "time_first"
+    hurried = _explored(fast, _explorable_request())[0]
+    assert hurried["audit"]["decision_policy"] == "standing_policy_start"
+    assert "exploration" not in hurried["audit"]
+
+    # Start the Cohort at the weakest Rung its own ladder reaches.
+    floored = _exploring_snapshot()
+    floored["override_policy"]["standing_policy"] = _standing_policy_fixture(
+        {
+            "python-refactor": {
+                "revision": 3,
+                "starting_rung": {
+                    "model": "worker-v2",
+                    "portable_deliberation": "low",
+                },
+            }
+        }
+    )
+    bottomed = _explored(floored, _explorable_request())[0]
+    assert bottomed["launch"]["portable_deliberation"] == "low"
+    assert "exploration" not in bottomed["audit"]
+
+
+def test_a_retry_is_never_moved_down_however_the_draw_fell() -> None:
+    """The attempt that exists to escalate is never the one that explores."""
+
+    # Route the amend of a verified failure at the Cohort's production Rung.
+    snapshot = _exploring_snapshot()
+    first = _explored(snapshot, _explorable_request(exploration_draw=0.9))[0]
+    launch = first["launch"]
+    attempt = {
+        "configuration_fingerprint": launch["configuration_fingerprint"],
+        "model": launch["model"],
+        "channel": launch["channel"],
+        "surface": launch["surface"],
+        "serving_mode": launch["serving_mode"],
+        "adapter_id": launch["adapter_id"],
+        "portable_deliberation": launch["portable_deliberation"],
+        "native_deliberation": launch["native_deliberation"],
+    }
+    amend = _explored(
+        snapshot,
+        _explorable_request(
+            request_id="route-2",
+            prior=dict(attempt),
+            verified_failure={
+                "outcome": "failed",
+                "checker": {"kind": "external", "signal": "pytest"},
+                **attempt,
+            },
+        ),
+    )[0]
+
+    # Assert the retry stays on production and keeps the Rung above it.
+    assert amend["launch"]["portable_deliberation"] == "high"
+    assert "exploration" not in amend["audit"]
+    assert amend["next_escalation"]["portable_deliberation"] == "xhigh"
+
+
+def test_one_cohort_spends_its_whole_budget_on_the_first_request_that_draws() -> None:
+    """The batch counter caps a Cohort at one accepted attempt per run."""
+
+    # Route two drawn requests of one Cohort in one ordered batch.
+    first, second = _explored(
+        _exploring_snapshot(),
+        _explorable_request(request_id="build-1"),
+        _explorable_request(request_id="build-2"),
+    )
+
+    # Assert the cap held on the second without the ledger being consulted.
+    assert first["audit"]["decision_policy"] == "exploration"
+    assert second["audit"]["decision_policy"] == "standing_policy_start"
+    assert second["launch"]["portable_deliberation"] == "high"
+
+
+def test_two_accounts_of_one_cohort_refuse_the_whole_artifact() -> None:
+    """A caller holding two counts for one Cohort is refused, not reconciled."""
+
+    # Route one batch whose two requests disagree about what the run has spent.
+    answered = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": _exploring_snapshot(),
+            "requests": [
+                _explorable_request(request_id="build-1", exploration_attempts_used=0),
+                _explorable_request(request_id="build-2", exploration_attempts_used=1),
+            ],
+        }
+    )
+
+    # Assert nothing was decided and the refusal names the disagreement.
+    assert answered["decisions"] == []
+    assert answered["artifact_refusal"]["code"] == "inconsistent_exploration_state"
+
+
+def test_an_exact_lock_outranks_the_draw_that_would_move_it() -> None:
+    """A pinned deliberation is the value the caller asked to run at."""
+
+    # Draw an exploration on a request that pins the dimension it would move.
+    decision = _explored(
+        _exploring_snapshot(), _explorable_request(overrides={"deliberation": "high"})
+    )[0]
+
+    # Assert the lock stands and no downward step was taken under it.
+    assert decision["launch"]["portable_deliberation"] == "high"
+    assert "exploration" not in decision["audit"]
+
+
+def test_routing_is_byte_identical_where_epsilon_is_zero_or_no_draw_falls() -> None:
+    """The term is inert unless a draw actually lands inside it."""
+
+    # Route one artifact under a zero epsilon and one under the shipped budget.
+    silent = _explored(
+        _exploring_snapshot(epsilon=0), _explorable_request(exploration_draw=0.0)
+    )
+    undrawn = _explored(
+        _exploring_snapshot(), _explorable_request(exploration_draw=0.5)
+    )
+
+    # Compare the decisions byte for byte, the policy block being part of the
+    # snapshot identity the two artifacts deliberately differ in.
+    def _comparable(decisions: Any) -> str:
+        stripped = deepcopy(decisions)
+        for decision in stripped:
+            decision["audit"]["snapshot_identity"] = "identity"
+            decision["audit"]["standing_policy"]["policy_revision"] = 0
+        return json.dumps(stripped, sort_keys=True)
+
+    assert _comparable(silent) == _comparable(undrawn)
+    assert "exploration" not in silent[0]["audit"]
+
+
+def test_the_derivation_computes_the_draw_the_route_module_never_makes(
+    tmp_path: Path,
+) -> None:
+    """The draw is an input to the artifact, reproducible from its own facts."""
+
+    # Derive one context request carrying this run's identity and its account.
+    artifact = _runtime_context_request()
+    artifact["run_identity"] = "run-opaque-7"
+    artifact["exploration_attempts_used"] = {"python-refactor": 1}
+    derived = _derive_context(tmp_path, artifact)
+    request = derived["requests"][0]
+
+    # Assert the draw is the documented hash of the four facts behind it.
+    identity = _load_router().freeze_context(derived["context"])["snapshot_identity"]
+    material = f"kntnt-standing-policy-v1\n{identity}\nrun-opaque-7\nroute-1".encode()
+    expected = (
+        int.from_bytes(hashlib.sha256(material).digest()[:7], "big") >> 3
+    ) / float(1 << 53)
+    assert request["exploration_draw"] == expected
+    assert 0.0 <= request["exploration_draw"] < 1.0
+    assert request["exploration_attempts_used"] == 1
+
+    # Assert the same request derived twice draws exactly the same number.
+    again = _derive_context(tmp_path, artifact)
+    assert again["requests"][0]["exploration_draw"] == expected
+
+
+def test_a_run_that_names_no_identity_composes_no_draw_at_all(
+    tmp_path: Path,
+) -> None:
+    """A dry run's preflight can render no Exploration Attempt."""
+
+    # Derive the same request without the run identity a real plan mints.
+    derived = _derive_context(tmp_path, _runtime_context_request())
+
+    # Assert nothing exploration-shaped reached the request.
+    assert "exploration_draw" not in derived["requests"][0]
+    assert "exploration_attempts_used" not in derived["requests"][0]
+
+
+def test_an_exploration_tag_travels_from_the_decision_into_its_observation() -> None:
+    """The one field #217's window reads is copied by the observe allow-list."""
+
+    # Observe two attempts whose frozen decisions differ only in their policy.
+    observations = _load_observations()
+    explored = _routed_decision()
+    explored["audit"]["decision_policy"] = "exploration"
+    explored["audit"]["exploration"] = {
+        "production_rung": {"model": "worker-v2", "portable_deliberation": "high"},
+        "selected_rung": {"model": "worker-v2", "portable_deliberation": "medium"},
+        "production_decision_policy": "standing_policy_start",
+    }
+    produced = observations.observe(
+        _attempts(
+            _judged(1, "fail", decision=explored),
+            _judged(2, "fail"),
+        )
+    )["observations"]
+
+    # Assert the tag is copied, and only for the attempt that carried it.
+    assert produced[0]["provenance"]["exploration"] is True
+    assert produced[1]["provenance"]["exploration"] is False
+
+
+def test_an_exploration_row_never_moves_the_standing_policy_it_ran_under(
+    tmp_path: Path,
+) -> None:
+    """A purchase of information is not evidence about the production Rung."""
+
+    # Import two verified failures, one of them a tagged Exploration Attempt.
+    observations = _load_observations()
+    policy = _load_standing_policy()
+    explored = _routed_decision()
+    explored["audit"]["decision_policy"] = "exploration"
+    reported = _imported(
+        observations,
+        tmp_path,
+        _judged(1, "fail", decision=explored),
+        _judged(2, "fail"),
+    )
+
+    # Assert both rows landed and only the production one entered the window.
+    assert len(reported["accepted"]) == 2
+    evaluated = reported["standing_policy"][0]
+    assert evaluated["outcome"] == "below_threshold"
+    assert evaluated["failures"] == 1
+    assert policy.effective_policy(tmp_path, "python-refactor")["revision"] == 0

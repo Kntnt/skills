@@ -5565,7 +5565,9 @@ def test_dry_and_real_runs_match_until_the_state_write_seam(tmp_path: Path) -> N
         {"ready-for-agent": [_ticket(9, "the skeleton")]},
     )
 
-    # Compare every planning fact that precedes the explicit state write.
+    # Compare every planning fact that precedes the explicit state write. The
+    # run's own identity is one of that write's products, minted by the plan
+    # that may start and never composed by a dry one (ADR-0151).
     preview = _engine(
         repo,
         "plan",
@@ -5579,7 +5581,7 @@ def test_dry_and_real_runs_match_until_the_state_write_seam(tmp_path: Path) -> N
     assert real.returncode == 0, real.stderr
     preview_plan = json.loads(preview.stdout)
     real_plan = json.loads(real.stdout)
-    for field in ("dry_run", "ready", "reason", "state"):
+    for field in ("dry_run", "ready", "reason", "state", "run_identity"):
         preview_plan.pop(field)
         real_plan.pop(field)
     assert preview_plan == real_plan
@@ -5614,10 +5616,18 @@ def test_dry_and_real_runs_match_until_the_state_write_seam(tmp_path: Path) -> N
         input_text=response,
     )
 
-    # Compare the launch configurations before inspecting persistence.
+    # Compare the launch configurations before inspecting persistence. The run
+    # identity is again the state write's own product: the preview never wrote
+    # one to carry, and the real route copied the one its plan minted.
     assert preview_route.returncode == 0, preview_route.stderr
     assert real_route.returncode == 0, real_route.stderr
-    assert json.loads(preview_route.stdout) == json.loads(real_route.stdout)
+    previewed, executed = (
+        json.loads(preview_route.stdout),
+        json.loads(real_route.stdout),
+    )
+    assert previewed.pop("run_identity") is None
+    assert re.fullmatch(r"[0-9a-f]{64}", executed.pop("run_identity"))
+    assert previewed == executed
     arguments = json.loads(real_route.stdout)["decisions"][0]["decision"]["launch"][
         "arguments"
     ]
@@ -10268,3 +10278,79 @@ def test_integrate_publishes_progress_before_work(
     _assert_long_engine_transition_publishes_progress_before_work(
         monkeypatch, tmp_path, "integrate", "cmd_integrate"
     )
+
+
+def test_the_first_real_plan_mints_the_run_identity_a_dry_one_never_composes(
+    tmp_path: Path,
+) -> None:
+    """One opaque identity names the run, from the plan that starts it."""
+
+    # Plan a startable run and read what it wrote down about itself.
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+    plan = json.loads(planned.stdout)
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+
+    # Assert the identity is opaque, remembered, and reported from the state.
+    assert re.fullmatch(r"[0-9a-f]{64}", plan["run_identity"])
+    assert state["run_identity"] == plan["run_identity"]
+    assert str(tmp_path) not in plan["run_identity"]
+    assert plan["exploration_attempts_used"] == {}
+
+    # Assert a later plan of the same run reports the identity it already has.
+    again = json.loads(
+        _engine(repo, "plan", "--state-dir", str(scratch), env=env).stdout
+    )
+    assert again["run_identity"] == plan["run_identity"]
+
+    # Assert a dry plan composes none, so its preflight can draw nothing.
+    dry = json.loads(
+        _engine(
+            repo, "plan", "--dry-run", "--state-dir", str(tmp_path / "dry"), env=env
+        ).stdout
+    )
+    assert dry["run_identity"] is None
+
+
+def test_the_routing_account_adopts_the_run_identity_the_plan_minted(
+    tmp_path: Path,
+) -> None:
+    """The account copies the run's identity rather than minting a second one."""
+
+    # Route the frontier the plan named and read both accounts back.
+    _, scratch, _ = _routed(tmp_path)
+    state = json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8"))
+    routing = json.loads(
+        (scratch / STATE_HOME / ROUTING_FILE).read_text(encoding="utf-8")
+    )
+
+    assert routing["run_identity"] == state["run_identity"]
+
+
+def test_every_route_output_reports_what_each_cohort_has_already_explored(
+    tmp_path: Path,
+) -> None:
+    """The count a later context request copies comes from the frozen account."""
+
+    # Route one frontier whose decision is a tagged Exploration Attempt.
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    explored = _selected("build-9")
+    explored["audit"]["decision_policy"] = "exploration"
+    routed = _route(repo, tmp_path, scratch, env, [explored])
+    assert routed.returncode == 0, routed.stderr
+
+    # Assert the route output and the next plan both name the same spend.
+    assert json.loads(routed.stdout)["exploration_attempts_used"] == {
+        "orchestrate/initial_build": 1
+    }
+    planned = json.loads(
+        _engine(repo, "plan", "--state-dir", str(scratch), env=env).stdout
+    )
+    assert planned["exploration_attempts_used"] == {"orchestrate/initial_build": 1}
+    assert planned["run_identity"] == json.loads(routed.stdout)["run_identity"]

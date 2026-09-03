@@ -162,6 +162,8 @@ The report gives each ticket its Time to Verified Pass — the seconds from its 
 
 Report ticket scope, dependency waves, routing readiness, proposed decisions, and routing capability without claiming or changing tickets.
 
+A dry run mints no run identity, so its preflight can render no Exploration Attempt: a night that starts afterwards may route a role one Rung below what the preview showed, the draw being a fact about a run that did not exist yet.
+
 Routing uses streams and leaves no child process. The repository, home, Codex state and cache, Manager and Skill installations, GitHub, Git state, worktrees, locks, and temporary storage remain unchanged whether the preview succeeds or refuses.
 
 **--at-once=**_COUNT_
