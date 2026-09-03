@@ -46,9 +46,61 @@ def test_every_supported_harness_installs_its_own_shape(tmp_path: Path) -> None:
         assert result["harness"] == harness
 
     assert _settings(tmp_path / "claude-code")["hooks"]["SessionStart"]
+
+    # Codex's `hooks.json` deserializes through its own `HookEventsToml`,
+    # confirmed live against `codex app-server`'s `hooks/list`: PascalCase
+    # event keys, the same as Claude Code's `settings.json`. `sessionStart` /
+    # `stop` / `sessionEnd` is a different surface — the camelCase
+    # `HookEventName` `hooks/list` itself reports back — and is silently
+    # dropped when written into the config file.
     assert _codex_hooks(tmp_path / "codex")["hooks"]["Stop"]
+
     plugin = tmp_path / "opencode" / ".config" / "opencode" / "plugins"
     assert list(plugin.glob("*.js"))
+
+
+def test_codex_hooks_use_the_harnesss_own_pascal_case_event_names(
+    tmp_path: Path,
+) -> None:
+    """Codex's `hooks.json` is keyed by the same event names Claude Code uses.
+
+    `HookEventsToml` — the struct `~/.codex/hooks.json` deserializes into — is
+    confirmed live (`codex app-server`, `initialize` + `hooks/list`) to accept
+    `SessionStart` / `Stop` / `SessionEnd`, PascalCase, and to silently ignore
+    the camelCase spelling: a hook count of zero and no warning, not a schema
+    error. That camelCase spelling names a different struct entirely, the
+    app-server protocol's own `HookEventName`, which is what `hooks/list`
+    itself reports back — a normalized runtime view, never the config file's
+    own shape.
+    """
+
+    module = _load()
+    module.install(OWNER, "codex", tmp_path, COMMAND)
+    written = _codex_hooks(tmp_path)
+
+    assert set(written["hooks"]) == {"SessionStart", "Stop", "SessionEnd"}
+
+
+def test_codex_hook_entries_match_the_harnesss_own_matcher_group(
+    tmp_path: Path,
+) -> None:
+    """A Codex entry is the same nested matcher group Claude Code writes.
+
+    Confirmed live: a PascalCase key holding this nested `{"hooks": [...]}`
+    shape registers a hook (`hooks/list` reports it, `trustStatus` included);
+    the same key holding the flat `handlerType`/`command` shape the
+    app-server protocol's own `hooks/list` reports back registers nothing —
+    that flat shape belongs to the normalized runtime view, not to what
+    `HookEventsToml` accepts on disk.
+    """
+
+    module = _load()
+    module.install(OWNER, "codex", tmp_path, COMMAND)
+    entry = _codex_hooks(tmp_path)["hooks"]["SessionStart"][0]
+
+    assert entry["hooks"][0]["type"] == "command"
+    assert OWNER in entry["hooks"][0]["command"]
+    assert "handlerType" not in entry
 
 
 def test_an_unsupported_harness_reports_an_unsatisfied_capability(
@@ -163,6 +215,40 @@ def test_health_reports_each_harness_separately(tmp_path: Path) -> None:
     assert module.health(OWNER, "cursor", tmp_path)["status"] == "unsatisfied"
 
 
+def test_codex_health_is_gated_rather_than_healthy(tmp_path: Path) -> None:
+    """Codex reviews a new hook before it runs it, so a fully written Codex
+    integration is reported gated, never healthy, until a human clears it.
+
+    `HookTrustStatus` (`managed`, `untrusted`, `trusted`, `modified`) and the
+    TUI's own startup review ("Hooks need review... Trust all and continue...
+    Continue without trusting (hooks won't run)") both confirm the gate; this
+    collection forges no trust decision on the user's behalf, so it can never
+    observe a Codex hook cross into `trusted` and must never call it healthy.
+    """
+
+    module = _load()
+    module.install(OWNER, "codex", tmp_path, COMMAND)
+    result = module.health(OWNER, "codex", tmp_path)
+
+    assert result["status"] == "gated"
+    assert result["entries"] == 3
+    assert result["detail"]
+    assert "trust" in result["detail"].lower()
+
+
+def test_codex_install_names_the_trust_review_the_user_clears(
+    tmp_path: Path,
+) -> None:
+    """Installation itself says the integration is present and not yet active."""
+
+    module = _load()
+    result = module.install(OWNER, "codex", tmp_path, COMMAND)
+
+    assert result["status"] == "installed"
+    assert result["detail"]
+    assert "trust" in result["detail"].lower()
+
+
 def test_repair_restores_an_integration_removed_behind_our_back(
     tmp_path: Path,
 ) -> None:
@@ -175,7 +261,7 @@ def test_repair_restores_an_integration_removed_behind_our_back(
     result = module.install(OWNER, "codex", tmp_path, COMMAND)
 
     assert result["status"] == "installed"
-    assert module.health(OWNER, "codex", tmp_path)["status"] == "healthy"
+    assert module.health(OWNER, "codex", tmp_path)["status"] == "gated"
 
 
 def test_the_owner_is_carried_in_what_is_written(tmp_path: Path) -> None:
@@ -192,11 +278,19 @@ def test_every_supported_harness_survives_a_whole_lifecycle(tmp_path: Path) -> N
     """Install, repair, install again, remove, remove again — for each of them."""
 
     module = _load()
+
+    # Codex never reaches "healthy" here: it gates a new hook behind a trust
+    # review this collection cannot and must not clear on the user's behalf.
+    expected_active = {
+        "claude-code": "healthy",
+        "codex": "gated",
+        "opencode": "healthy",
+    }
     for harness in ("claude-code", "codex", "opencode"):
         root = tmp_path / harness
         assert module.install(OWNER, harness, root, COMMAND)["status"] == "installed"
         assert module.install(OWNER, harness, root, COMMAND)["status"] == "installed"
-        assert module.health(OWNER, harness, root)["status"] == "healthy"
+        assert module.health(OWNER, harness, root)["status"] == expected_active[harness]
 
         first = module.remove(OWNER, harness, root)
         second = module.remove(OWNER, harness, root)
@@ -204,6 +298,34 @@ def test_every_supported_harness_survives_a_whole_lifecycle(tmp_path: Path) -> N
         assert first["status"] == "removed", harness
         assert second["status"] == "removed", harness
         assert module.health(OWNER, harness, root)["status"] == "absent", harness
+
+
+def test_opencode_plugin_delivers_the_event_on_standard_input(
+    tmp_path: Path,
+) -> None:
+    """The event payload — and the session identity inside it — reaches the
+    hook, and the child never inherits this process's own standard input.
+
+    OpenCode's own event carries the session identity nested inside it
+    (`session.idle`'s `properties.sessionID`, `session.created`'s
+    `properties.info.id`), never on the command line; a plugin that ran the
+    owned command with only `--event=<type>` discarded that identity, and one
+    that left standard input unredirected handed the child the caller's own
+    standard input, which a hook reading to end-of-file can block on. Bun's
+    shell forwards a parent's real standard input to a spawned command unless
+    a redirect names an explicit source, so `< ${...}` here is what keeps a
+    fail-open hook from ever blocking on it.
+    """
+
+    module = _load()
+    module.install(OWNER, "opencode", tmp_path, COMMAND)
+    source = (tmp_path / ".config" / "opencode" / "plugins" / f"{OWNER}.js").read_text(
+        encoding="utf-8"
+    )
+
+    assert "JSON.stringify(event)" in source
+    assert "< ${" in source
+    assert "--event=${event.type}`.quiet().nothrow();" not in source
 
 
 def test_removal_leaves_no_empty_leavings_of_ours(tmp_path: Path) -> None:

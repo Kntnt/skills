@@ -20,7 +20,15 @@ from rather than a state nothing can account for.
 A Harness whose supported lifecycle cannot carry the contract is reported as an
 Unsatisfied capability (ADR-0030) rather than silently skipped, because a
 feature that believes it is installed where it is not is worse than one that
-knows it is not.
+knows it is not. Event names, entry shape, and file location are established
+from each Harness as installed rather than assumed from a sibling's (ADR-0157)
+— Codex's own config file happens to accept the same PascalCase names and the
+same nested matcher group Claude Code's does, confirmed live rather than
+assumed, and is never the flat, camelCase shape its unrelated app-server
+protocol reports back. A Harness that gates a new integration behind a user's
+trust, as Codex does, is reported gated rather than healthy: present, not yet
+active, and never a trust decision this collection forges on the user's
+behalf.
 """
 
 from __future__ import annotations
@@ -35,7 +43,18 @@ from typing import Any
 # observations rather than verdicts: a stop says a turn ended, never that the
 # work in it succeeded.
 CLAUDE_EVENTS: tuple[str, ...] = ("SessionStart", "Stop", "SessionEnd")
+
+# Codex CLI 0.153.0's own configuration file — `~/.codex/hooks.json`,
+# deserialized through its `HookEventsToml` — names lifecycle events in the
+# same PascalCase Claude Code's `settings.json` uses, confirmed live against
+# the installed binary (`codex app-server`, `initialize` + `hooks/list`): a
+# camelCase key here (`sessionStart`, `stop`, `sessionEnd`) is silently
+# ignored rather than read. That camelCase spelling names a different thing
+# — the app-server protocol's own `HookEventName`, the normalized runtime
+# view `hooks/list` itself reports back — and never the config file's own
+# shape, which an earlier draft of this adapter wrongly conflated with it.
 CODEX_EVENTS: tuple[str, ...] = ("SessionStart", "Stop", "SessionEnd")
+
 OPENCODE_EVENTS: tuple[str, ...] = (
     "session.created",
     "session.idle",
@@ -50,6 +69,20 @@ SUPPORTED: tuple[str, ...] = ("claude-code", "codex", "opencode")
 UNSATISFIED = (
     "this Harness exposes no supported session lifecycle an integration can "
     "own; run the feature in Claude Code, Codex, or OpenCode instead"
+)
+
+# Codex reviews a hook that is new or has changed before it will ever run it
+# (its own `HookTrustStatus`: `managed`, `untrusted`, `trusted`, `modified`,
+# and the CLI's own startup copy: "Hooks need review... Trust all and
+# continue... Continue without trusting (hooks won't run)"). This collection
+# does not forge that trust decision or write a trust record on the user's
+# behalf (ADR-0157), so a fully written Codex integration is reported gated —
+# present, not yet active — and named to the user, rather than healthy.
+CODEX_TRUST_GATE = (
+    "Codex reviews a new or changed hook before it will run it. Start Codex "
+    'and accept the review ("Trust all and continue"), or pass '
+    "--dangerously-bypass-hook-trust, to activate this integration; until "
+    "then it is written to disk but will not run."
 )
 
 
@@ -108,23 +141,39 @@ def _owned_command(owner: str, harness: str, command: list[str]) -> str:
 
 
 def _owns(entry: Any, owner: str) -> bool:
-    """Return whether one hook entry was installed by *owner*."""
+    """Return whether one hook entry was installed by *owner*.
+
+    Both Harnesses this owns entries in write the same nested matcher group
+    — a top-level `hooks` list holding the handler. A flat entry with
+    `command` directly on it is also recognized, which costs nothing and
+    keeps a hand-edited or externally repaired file from being misread as
+    somebody else's, without either Harness's own config file ever being
+    written in that shape.
+    """
 
     if not isinstance(entry, dict):
         return False
     handlers = entry.get("hooks")
-    if not isinstance(handlers, list):
-        return False
-    return any(
-        isinstance(handler, dict)
-        and isinstance(handler.get("command"), str)
-        and f"--owner={owner}" in handler["command"]
-        for handler in handlers
-    )
+    if isinstance(handlers, list):
+        return any(
+            isinstance(handler, dict)
+            and isinstance(handler.get("command"), str)
+            and f"--owner={owner}" in handler["command"]
+            for handler in handlers
+        )
+    command = entry.get("command")
+    return isinstance(command, str) and f"--owner={owner}" in command
 
 
 def _hook_entry(owner: str, harness: str, command: list[str]) -> dict[str, Any]:
-    """Return the one hook entry this owner installs per event."""
+    """Return the one hook entry this owner installs per event.
+
+    Codex's own config file (`HookEventsToml`) accepts the same nested
+    `{"hooks": [...]}` matcher group Claude Code's `settings.json` does,
+    confirmed live against the installed binary — a flat `handlerType`/
+    `command` entry here registers nothing, because that shape belongs to
+    the app-server protocol's own runtime view, not to what this file reads.
+    """
 
     return {
         "hooks": [
@@ -235,8 +284,16 @@ export const KntntOwnedCapture = async ({{ $ }}) => ({{
     if (!WATCHED.includes(event.type)) return;
 
     // Fail open: a capture that cannot run must never hold up the session.
+    // The event is redirected onto the command's own standard input rather
+    // than left unspecified, which is what carries the session identity
+    // nested inside it — OpenCode never puts one on the command line — and
+    // is also what keeps Bun's shell from handing the child this process's
+    // own standard input, which a hook that reads to end-of-file could
+    // otherwise block on for as long as this session's own stdin stays open.
     try {{
-      await $`${{COMMAND}} --event=${{event.type}}`.quiet().nothrow();
+      await $`${{COMMAND}} --event=${{event.type}} < ${{new Response(JSON.stringify(event))}}`
+        .quiet()
+        .nothrow();
     }} catch {{
       // An integration owned by {owner} never becomes the session's problem.
     }}
@@ -310,12 +367,21 @@ def install(owner: str, harness: str, root: Path, command: list[str]) -> dict[st
             "detail": str(exc),
         }
 
+    # A write that succeeded for Codex is still not an active integration: the
+    # Harness itself gates a new hook behind a trust review this collection
+    # never clears on the user's behalf (ADR-0157), so installation says so
+    # here rather than waiting for a later health check to be asked.
+    gated = installed and harness == "codex"
     return {
         "harness": harness,
         "status": "installed" if installed else "failed",
         "entries": entries,
         "capability": None,
-        "detail": None if installed else "the integration is not on disk after writing",
+        "detail": (
+            CODEX_TRUST_GATE
+            if gated
+            else (None if installed else "the integration is not on disk after writing")
+        ),
     }
 
 
@@ -386,10 +452,13 @@ def health(owner: str, harness: str, root: Path) -> dict[str, Any]:
 
     # Some but not all of what we install is a Harness that would fire for one
     # moment and not another, which is not health and is not absence either.
+    # A fully written Codex integration is a third case again: present, but
+    # never observably active, because only the Harness's own trust review —
+    # never this collection — can cross it into "healthy" (ADR-0157).
     if entries == 0:
         status = "absent"
     elif entries == expected:
-        status = "healthy"
+        status = "gated" if harness == "codex" else "healthy"
     else:
         status = "degraded"
     return {
@@ -397,7 +466,7 @@ def health(owner: str, harness: str, root: Path) -> dict[str, Any]:
         "status": status,
         "entries": entries,
         "capability": None,
-        "detail": None,
+        "detail": CODEX_TRUST_GATE if status == "gated" else None,
     }
 
 

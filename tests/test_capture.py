@@ -424,6 +424,25 @@ def test_an_unsupported_harness_is_never_reported_healthy(tmp_path: Path) -> Non
     assert module.status(data, tmp_path / "home")["harnesses"][0]["status"] != "healthy"
 
 
+def test_a_gated_harness_is_never_reported_healthy_either(tmp_path: Path) -> None:
+    """Codex's own trust review is reported through the same presence field.
+
+    `/model-selector status` carries `healthy`, `gated`, and `absent` in the
+    one per-Harness field this ticket's own key interfaces name — the
+    lifecycle ticket (#223) that would otherwise define this section has not
+    landed, so the state is added to the field that already exists rather
+    than to one this ticket invents.
+    """
+
+    module = _load()
+    data = tmp_path / "data"
+    module.enable(data, tmp_path / "home", ["codex"], _command())
+    reported = module.status(data, tmp_path / "home")
+
+    assert reported["harnesses"][0]["harness"] == "codex"
+    assert reported["harnesses"][0]["status"] == "gated"
+
+
 def test_the_manager_can_ask_capture_to_remove_its_own_integrations(
     tmp_path: Path,
 ) -> None:
@@ -531,6 +550,77 @@ def test_a_harness_naming_the_event_in_its_payload_is_understood(
 
     assert result["recorded"]
     assert _drafts(data) == []
+
+
+def test_the_opencode_event_envelope_yields_a_session_identity(
+    tmp_path: Path,
+) -> None:
+    """OpenCode hands its own event object over unmodified (ADR-0090): the
+    plugin interprets nothing, so the session identity nested inside that
+    event — never on the command line, and at a different path per event —
+    has to reach the hook from the payload itself.
+    """
+
+    module = _load()
+    data = _enabled(module, tmp_path, "opencode")
+
+    module.hook(
+        data,
+        "",
+        {
+            "type": "session.created",
+            "harness": "opencode",
+            "properties": {"info": {"id": "session-1"}},
+        },
+    )
+    assert len(_drafts(data)) == 1
+
+    result = module.hook(
+        data,
+        "",
+        {
+            "type": "session.deleted",
+            "harness": "opencode",
+            "properties": {"info": {"id": "session-1"}},
+        },
+    )
+
+    assert _drafts(data) == []
+    assert result["recorded"]
+    assert _usage_records(data)[0]["session_identity"] == module._opaque("session-1")
+
+
+def test_the_opencode_idle_events_own_session_field_is_understood(
+    tmp_path: Path,
+) -> None:
+    """`session.idle` nests the identity directly under `sessionID`, a
+    different path than `session.created` and `session.deleted` use, and
+    both still name the same session."""
+
+    module = _load()
+    data = _enabled(module, tmp_path, "opencode")
+
+    module.hook(
+        data,
+        "",
+        {
+            "type": "session.created",
+            "harness": "opencode",
+            "properties": {"info": {"id": "session-2"}},
+        },
+    )
+    module.hook(
+        data,
+        "",
+        {
+            "type": "session.idle",
+            "harness": "opencode",
+            "properties": {"sessionID": "session-2"},
+        },
+    )
+
+    # One draft, updated by the second event rather than orphaned as a second one.
+    assert len(_drafts(data)) == 1
 
 
 def test_the_installed_hook_carries_the_data_directory_it_was_enabled_for(
