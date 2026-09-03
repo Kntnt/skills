@@ -32,8 +32,6 @@ model-selector - compare configured AI model systems by price and performance
 
 **/model-selector** **capture** (**--off**|**--status**) [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
-**/model-selector** **capture** **--review=**_IDENTITY_ (**--action=save**|**--action=failed**|**--action=ignore**) [**--data=**_PATH_] [**--** *INSTRUCTION*]
-
 **/model-selector** **status** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
@@ -90,7 +88,7 @@ Turn completed routed attempts into sanitized run observations in a caller-owned
 
 **capture**
 
-Opt in to automatic local run-evidence capture during ordinary Harness work, report its health, settle one deferred review, or turn it off again. Its page states what is installed, what is retained, and how long.
+Opt in to automatic local usage capture during ordinary Harness work, report its health, or turn it off again. Its page states what is installed and what is retained.
 
 **record** *PATH*
 
@@ -128,19 +126,11 @@ For `recommend`, select the lowest conservative comparable cost that clears the 
 
 **--on**, **--off**
 
-Consent to automatic capture and install its owned lifecycle integration, or stop it and remove every hook this feature owns. Valid only for `capture`. Accepted evidence survives `--off`, and making the Skill Disabled removes the same integrations without a second step.
+Consent to automatic capture and install its owned lifecycle integration, or stop it and remove every hook this feature owns. Valid only for `capture`. Accepted Usage Records survive `--off`, and making the Skill Disabled removes the same integrations without a second step.
 
 **--status**
 
-Report capture's own state: whether it is enabled, adapter health per Harness, pending-review count, oldest pending age, storage in use, and the retention bounds. Valid only for `capture`, and distinct from the `status` command, which reports the profile and the evidence.
-
-**--review=**_IDENTITY_
-
-Settle the pending capture named by *IDENTITY*. Valid only for `capture`, and requires `--action`.
-
-**--action=save**, **--action=failed**, **--action=ignore**
-
-Record a reviewed capture as a success, record it as a failure, or discard it. Valid only with `--review`, where explicit user confirmation is what makes the outcome evidence.
+Report capture's own state: whether it is enabled, adapter health per Harness, and storage in use. Valid only for `capture`, and distinct from the `status` command, which reports the profile and the evidence.
 
 **--harness=**_NAME_
 
@@ -172,11 +162,15 @@ The default active profile and revision history. **--data** relocates it.
 
 **~/.kntnt/model-selector/capture/**
 
-Capture configuration, temporary session drafts, and bounded pending review. Imported captures are deleted.
+Capture configuration and temporary session drafts. A draft is deleted the moment its session ends.
 
 **Evidence ledger**
 
 Append-only effective-dated observations under the selected data directory.
+
+**~/.kntnt/model-selector/usage-records.jsonl**
+
+Append-only Usage Records, one per Seat a finished session ran on, beside the evidence ledger. Carries no outcome and is never quality.
 
 ## DIAGNOSTICS
 

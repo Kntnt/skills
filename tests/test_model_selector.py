@@ -5373,7 +5373,6 @@ def test_observation_contract_separates_public_and_orchestrated_imports() -> Non
         "transcripts",
         "absolute paths",
         "artifact hashes",
-        "#91",
     }
 
     _assert_contains_all(public_contract, required_fragments)

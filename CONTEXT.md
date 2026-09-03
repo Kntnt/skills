@@ -151,6 +151,10 @@ _Avoid_: latency, duration, response time, speed
 A routed attempt deliberately placed one Rung below its Cohort's current rung to gain contrast, drawn from a budget and tagged so its outcome never counts against the production configuration.
 _Avoid_: experiment, probe, gamble, A/B test
 
+**Usage Record**:
+What one finished session on one Seat cost and how long it took, carrying no outcome and entering no frontier or quality figure.
+_Avoid_: run observation, evidence, telemetry, metric
+
 **Enabled**:
 A skill present on disk in a layer, in each Detected Harness's skills directory for that layer.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)

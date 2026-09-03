@@ -132,7 +132,7 @@ Run `/write [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--fro
 
 ### model-selector
 
-Compare complete AI model configurations using local profiles, costs, quotas, latency, and measured quality. It can recommend a configuration, derive reproducible routing context, route delegated workloads, maintain evidence, and optionally capture judged runs.
+Compare complete AI model configurations using local profiles, costs, quotas, latency, and measured quality. It can recommend a configuration, derive reproducible routing context, route delegated workloads, maintain evidence, and optionally capture local session usage.
 
 Start with `/model-selector setup`, then use `/model-selector recommend <workload>`, `/model-selector context <path>`, `/model-selector route <path>`, or `/model-selector --help`.
 

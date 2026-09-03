@@ -2,29 +2,23 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Capture local run evidence automatically during ordinary Harness work.
+"""Capture local session usage automatically during ordinary Harness work.
 
-`record` can import a prepared observation, and `observe` can prepare one for
-work a caller deliberately routed. Neither covers the ordinary case: a user
-works in their Harness all day and the evidence that should eventually replace
-public benchmark priors is never written down, because writing it down is a
-thing they have to remember to do.
+A user works in their Harness all day, and what that costs — the Seat it ran
+on, what it used, how long it took — is never written down, because writing
+it down is a thing they have to remember to do. This is that capture, and it
+measures ordinary work; it never judges it (ADR-0156). An ordinary session has
+no independent verifier in it, so a finished session produces a Usage Record
+rather than a `RunObservation`: one per Seat it ran on, carrying no outcome,
+no checker, and no Cohort, appended to its own store the moment the session
+ends. Nothing waits for a human, ever.
 
-This is that capture, and it is an explicit opt-in of an Enabled Skill rather
-than a consequence of enabling one, because it installs persistent Harness
-integration and handles local metadata. What it writes is the minimum an
-observation needs: identities are opaque, measurements the environment did not
-expose stay `null`, and no prompt, response, reasoning, diff, terminal output,
-or transcript is ever copied. What it produces is the same normalized
-`RunObservation` the routed contract produces (issue #96) — one representation,
-extended with the stratum ordinary work belongs to, never a second one.
-
-Nothing here grades a run. An outcome needs an objective checker, a declared
-failure signal, or the user's own confirmation; a session that offers none waits
-in a bounded pending-review store until a human answers it or retention takes
-it. Model self-confidence is refused rather than believed, and an infrastructure
-error keeps its own outcome so that it can never lower a configuration's
-measured quality.
+This is an explicit opt-in of an Enabled Skill rather than a consequence of
+enabling one, because it installs persistent Harness integration and handles
+local session metadata. What it writes is the minimum a Usage Record needs:
+identities are opaque, measurements the environment did not expose stay
+`null`, and no prompt, response, reasoning, diff, terminal output, or
+transcript is ever copied.
 """
 
 from __future__ import annotations
@@ -40,28 +34,12 @@ from typing import Any
 
 SCHEMA_VERSION = 1
 
-# The stratum ordinary interactive work belongs to. The routed strata name work
-# a caller deliberately launched; this names the work nobody routed at all.
-INTERACTIVE_STRATUM = "interactive_session"
-
-# The maintainer's retention decision: pending and failed drafts live at most
-# thirty days, and never more than a hundred of them or a mebibyte in total.
-RETENTION_DAYS = 30
-RETENTION_DRAFTS = 100
-RETENTION_BYTES = 1024 * 1024
-
-# A draft nobody has touched for this long belongs to a session that ended
-# without ever saying so, which is the abrupt-termination case reconciliation
-# exists for.
-ABANDONED_AFTER_SECONDS = 6 * 60 * 60
-
-REVIEW_ACTIONS: tuple[str, ...] = ("save", "failed", "ignore")
-
-# Every lifecycle signal this feature understands, per Harness family. A stop is
-# an observation that a turn ended and never that its work succeeded. Codex
-# CLI 0.153.0 names its own moments in camelCase (`sessionStart`, `stop`,
-# `sessionEnd`), confirmed from its installed binary's own `HookEventName`,
-# never in Claude Code's PascalCase.
+# Every lifecycle signal this feature understands, per Harness family. A stop
+# is one turn of an ongoing session and never a session's own end; a Seat's
+# Usage Record is timed on its own first and last such turn. Codex CLI 0.153.0
+# names its own moments in camelCase (`sessionStart`, `stop`, `sessionEnd`),
+# confirmed from its installed binary's own `HookEventName`, never in Claude
+# Code's PascalCase.
 START_EVENTS = frozenset({"SessionStart", "sessionStart", "session.created"})
 TURN_EVENTS = frozenset({"Stop", "stop", "SubagentStop", "session.idle"})
 ERROR_EVENTS = frozenset({"session.error"})
@@ -78,8 +56,10 @@ END_EVENTS = frozenset({"SessionEnd", "sessionEnd", "session.deleted"})
 # the same convention rather than as a confirmed reading of that payload.
 EVENT_FIELDS: tuple[str, ...] = ("hook_event_name", "eventName", "event", "type")
 
-# The measurements a draft may carry, so that an object named `measurements` in
-# a Harness payload cannot smuggle material in under a wanted key.
+# The usage categories a Usage Record may carry, so that an object named
+# `measurements` in a Harness payload cannot smuggle material in under a
+# wanted key. Named rather than counted, so a key added here is a key this
+# comment still describes (ADR-0156).
 MEASUREMENT_ALLOWED = frozenset(
     {
         "tokens",
@@ -92,20 +72,18 @@ MEASUREMENT_ALLOWED = frozenset(
     }
 )
 
-# The only fields a lifecycle payload may contribute. Everything else a Harness
-# sends — and Harnesses send whole transcripts — is dropped before anything is
-# written, so nothing forbidden can arrive by sitting beside what is wanted.
+# The only fields a lifecycle payload may contribute. Everything else a
+# Harness sends — and Harnesses send whole transcripts — is dropped before
+# anything is written, so nothing forbidden can arrive by sitting beside what
+# is wanted. A Usage Record carries no outcome, so a payload's checker and
+# error content are never read for their value, only the event name is.
 PAYLOAD_ALLOWED = frozenset(
     {
         "session_id",
         "harness",
         "harness_inventory_revision",
         "seat",
-        "benchmark",
-        "checker",
-        "error",
         "measurements",
-        "task",
     }
 )
 SEAT_ALLOWED = frozenset(
@@ -121,31 +99,25 @@ SEAT_ALLOWED = frozenset(
     }
 )
 
-# The conditions a non-model outcome may carry, and which of them are
-# infrastructure rather than an abstention.
-INFRA_CONDITIONS = frozenset({"mechanical_hinder", "tracker_failure"})
-ABSTAIN_CONDITIONS = frozenset({"open_decision", "discovered_dependency"})
-
-
-def _observations() -> Any:
-    """Load the observation contract this Skill already ships.
-
-    Capture reuses that contract rather than restating it: the same
-    normalization, the same validation, and the same ledger rules answer for
-    automatically captured work as for work a caller routed.
-    """
-
-    path = Path(__file__).resolve().parent / "observations.py"
-    spec = importlib.util.spec_from_file_location("model_selector_observations", path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError("the observation contract could not be loaded")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+# Where the Usage Record store lives, beside the evidence ledger under the
+# selected data directory, and the fields every row carries. Named once here
+# rather than left for a consumer to infer, following the Library's own
+# precedent for its ledger file (`LEDGER_FILE` in `routed_observations.py`).
+USAGE_LEDGER_FILE = "usage-records.jsonl"
+USAGE_RECORD_FIELDS: tuple[str, ...] = (
+    "usage_key",
+    "session_identity",
+    "harness",
+    "seat",
+    "usage",
+    "started_at",
+    "completed_at",
+    "elapsed_seconds",
+)
 
 
 def _now() -> str:
-    """Return this instant, as the contract writes instants."""
+    """Return this instant, as a Usage Record writes instants."""
 
     return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
@@ -159,15 +131,6 @@ def _parsed(instant: Any) -> datetime | None:
         return datetime.fromisoformat(instant)
     except ValueError:
         return None
-
-
-def _age(instant: Any) -> float | None:
-    """Return how many seconds ago *instant* was, or None where it is unusable."""
-
-    parsed = _parsed(instant)
-    if parsed is None:
-        return None
-    return (datetime.now(UTC) - parsed).total_seconds()
 
 
 def _opaque(value: Any) -> str:
@@ -200,12 +163,6 @@ def _drafts(data: Path) -> Path:
     return home(data) / "drafts"
 
 
-def _pending(data: Path) -> Path:
-    """Return where captures awaiting a human are kept."""
-
-    return home(data) / "pending"
-
-
 def config(data: Path) -> dict[str, Any]:
     """Return the capture configuration, or the off state where there is none."""
 
@@ -222,25 +179,6 @@ def config(data: Path) -> dict[str, Any]:
     except (OSError, ValueError):
         return off
     return loaded if isinstance(loaded, dict) else off
-
-
-def retention(data: Path) -> dict[str, int]:
-    """Return the retention bounds pending and failed captures are held under."""
-
-    stored = config(data).get("retention")
-    if isinstance(stored, dict) and {"days", "drafts", "bytes"} <= set(stored):
-        return {key: int(stored[key]) for key in ("days", "drafts", "bytes")}
-    return {
-        "days": RETENTION_DAYS,
-        "drafts": RETENTION_DRAFTS,
-        "bytes": RETENTION_BYTES,
-    }
-
-
-def review_actions() -> tuple[str, ...]:
-    """Return the choices a deferred review offers."""
-
-    return REVIEW_ACTIONS
 
 
 def _integrations() -> Any:
@@ -280,20 +218,21 @@ CONSENT = {
         "owned by this feature and removed with it."
     ),
     "retained": (
-        "Only observation metadata: opaque session and task identities, "
-        "timestamps, the exact resolved configuration, checker identity and "
-        "result, and available usage, cost, quota and latency values. Never "
-        "prompts, responses, reasoning, source, diffs, terminal output, "
-        "secrets or transcripts."
+        "Only Usage Record fields: the opaque session identity and usage key, "
+        "the Harness and its inventory revision, the exact Seat the work ran "
+        "on, the usage categories the environment exposed, and the two "
+        "instants a session ran between. Never prompts, responses, reasoning, "
+        "source, diffs, terminal output, secrets or transcripts."
     ),
     "cleanup": (
-        f"An imported capture is deleted immediately. Pending and failed "
-        f"captures are kept at most {RETENTION_DAYS} days, {RETENTION_DRAFTS} "
-        f"drafts and {RETENTION_BYTES} bytes, oldest removed first."
+        "A finished session is appended to the Usage Record store immediately, "
+        "one record per Seat it ran on. There is no waiting store, nothing is "
+        "queued for review, and nothing expires."
     ),
     "opt_out": (
         "Run `capture disable`, or make model-selector Disabled: either removes "
-        "every hook this feature owns and keeps the evidence already accepted."
+        "every hook this feature owns and keeps the Usage Records already "
+        "appended."
     ),
 }
 
@@ -311,7 +250,7 @@ def enable(
     payload carries it — a Harness reports what happened, not what it is — and a
     script may not guess it, so the agent that knows supplies it once here and
     every session captured afterwards is fingerprinted from it. Without it,
-    captured work has no configuration to be evidence about.
+    captured work has no configuration to be measured about.
     """
 
     integrations = _integrations()
@@ -326,7 +265,6 @@ def enable(
 
     home(data).mkdir(parents=True, exist_ok=True)
     _drafts(data).mkdir(exist_ok=True)
-    _pending(data).mkdir(exist_ok=True)
     _config_path(data).write_text(
         json.dumps(
             {
@@ -335,11 +273,6 @@ def enable(
                 "consented_at": _now(),
                 "seat": {key: (seat or {}).get(key) for key in SEAT_ALLOWED},
                 "harnesses": named,
-                "retention": {
-                    "days": RETENTION_DAYS,
-                    "drafts": RETENTION_DRAFTS,
-                    "bytes": RETENTION_BYTES,
-                },
             },
             indent=2,
             sort_keys=True,
@@ -351,16 +284,15 @@ def enable(
         "enabled": True,
         "consent": dict(CONSENT),
         "harnesses": installed,
-        "retention": retention(data),
     }
 
 
 def disable(data: Path, root: Path) -> dict[str, Any]:
     """Stop capture and remove every integration this feature owns.
 
-    Accepted evidence is untouched. Turning a measurement off is not a reason to
-    forget what it already measured, and a purge is a separate act the user has
-    to ask for by name.
+    Accepted Usage Records are untouched. Turning a measurement off is not a
+    reason to forget what it already measured, and a purge is a separate act
+    the user has to ask for by name.
     """
 
     integrations = _integrations()
@@ -450,7 +382,7 @@ def _configured_harness(data: Path) -> str | None:
     The installer writes the Harness into the command it installs, so an
     ordinary hook always names one. Where a caller has not, one configured
     Harness answers it and several cannot: guessing between them would file a
-    session's evidence under a configuration it never ran on.
+    session's usage under a configuration it never ran on.
     """
 
     configured = config(data).get("harnesses")
@@ -498,11 +430,12 @@ def _store(path: Path, record: dict[str, Any]) -> None:
 def _seat_of(
     draft: dict[str, Any], payload: dict[str, Any], configured: dict[str, Any]
 ) -> dict[str, Any]:
-    """Return the exact seat this session ran on, as far as it is known.
+    """Return the exact seat this lifecycle signal says work ran on.
 
-    A payload that names one wins, because a session can be running on something
-    other than what was configured; what the opt-in recorded is the fallback,
-    and an empty seat is the honest answer where neither said.
+    A payload that names one wins, because a session can be running on
+    something other than what was configured; the seat this draft is
+    currently tracking is the fallback, and the seat recorded at opt-in
+    answers where neither said.
     """
 
     seat = payload.get("seat")
@@ -514,244 +447,135 @@ def _seat_of(
     return configured if isinstance(configured, dict) else {}
 
 
-def _outcome(payload: dict[str, Any]) -> tuple[dict[str, Any] | None, str | None]:
-    """Return the outcome an external judgement established, or why there is none.
+def _touch_seat(
+    seats: dict[str, dict[str, Any]],
+    seat: dict[str, Any],
+    measurements: Any,
+    now: str,
+) -> dict[str, dict[str, Any]]:
+    """Return *seats* with one Seat's own active window opened or extended.
 
-    Nothing in the session may establish its own outcome. A checker names itself
-    and is independent, a declared failure signal comes from the Harness, and a
-    human's confirmation comes from a review. Everything else waits.
+    A Usage Record's instants are its own Seat's first and last turn rather
+    than the whole session's, because a session that changed Seat mid-way ran
+    two configurations and each is timed on what it actually did (ADR-0156
+    decision 3). Usage attribution between two Seats active in one session is
+    issue #225's to settle; here, the usage last observed while a Seat was
+    current is what that Seat's own record carries.
     """
 
-    error = payload.get("error")
-    if isinstance(error, dict):
-        condition = error.get("kind")
-        if condition in INFRA_CONDITIONS:
-            return {"result": "infra_error", "condition": condition}, None
-        if condition in ABSTAIN_CONDITIONS:
-            return {"result": "abstain", "condition": condition}, None
-        return {"result": "infra_error", "condition": "mechanical_hinder"}, None
-
-    checker = payload.get("checker")
-    if not isinstance(checker, dict):
-        return None, None
-    if checker.get("authority") == "self_report" or not checker.get("independent"):
-        return None, "self_reported_outcome"
-    result = checker.get("result")
-    if result not in ("pass", "fail"):
-        return None, "unchecked_outcome"
+    key = _opaque(json.dumps(seat, sort_keys=True))
+    existing = seats.get(key) or {}
     return {
-        "result": result,
-        "authority": checker.get("authority") or "objective_checker",
-        "checker": {
-            "identity": checker.get("identity"),
-            "independent": True,
+        **seats,
+        key: {
+            "seat": seat,
+            "started_at": existing.get("started_at") or now,
+            "completed_at": now,
+            "measurements": (
+                measurements
+                if isinstance(measurements, dict)
+                else existing.get("measurements") or {}
+            ),
         },
-    }, None
+    }
 
 
-def _attempt(draft: dict[str, Any], outcome: dict[str, Any]) -> dict[str, Any]:
-    """Return the routed-contract attempt one completed session amounts to.
+def _elapsed_seconds(started: Any, completed: Any) -> float | None:
+    """Return the seconds between two instants, or None where either is unusable."""
 
-    Ordinary work runs on the session's own main seat rather than on a point
-    anybody routed to, which is exactly what an inherited decision is. Recording
-    it that way keeps one normalized representation instead of inventing a
-    second one for work that was never routed.
+    first, last = _parsed(started), _parsed(completed)
+    return None if first is None or last is None else (last - first).total_seconds()
+
+
+def _usage_key(session_identity: str, seat: dict[str, Any]) -> str:
+    """Return the stable idempotency key of one session's Usage Record on one Seat.
+
+    Idempotency is by session identity and Seat: the same finished session
+    appended twice is skipped under this key, not repeated (ADR-0156 decision 2).
     """
 
-    measurements = draft.get("measurements")
-    attempt: dict[str, Any] = {
-        "attempt_id": draft["session_identity"],
+    canonical = json.dumps(
+        {"session_identity": session_identity, "seat": seat}, sort_keys=True
+    )
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _usage_record(draft: dict[str, Any], entry: dict[str, Any]) -> dict[str, Any]:
+    """Return one Usage Record: what one finished session cost on one Seat.
+
+    It carries no outcome, no checker, and no Cohort — a Usage Record is never
+    quality — only the identities, the Seat, the usage the environment
+    exposed, and the two instants between which that Seat actually ran.
+    """
+
+    seat = {key: (entry.get("seat") or {}).get(key) for key in SEAT_ALLOWED}
+    measurements = entry.get("measurements") or {}
+    started = entry.get("started_at")
+    completed = entry.get("completed_at")
+    return {
+        "usage_key": _usage_key(draft["session_identity"], seat),
         "session_identity": draft["session_identity"],
-        "task_identity": draft["task_identity"],
-        "workload_stratum": INTERACTIVE_STRATUM,
-        "attempt_index": 1,
         "harness": {
             "name": draft.get("harness"),
             "inventory_revision": draft.get("harness_inventory_revision"),
         },
-        "benchmark": {"key": draft.get("benchmark") or INTERACTIVE_STRATUM},
-        "decision": _decision(draft),
-        "outcome": _outcome_block(outcome),
-        "started_at": draft.get("started_at"),
-        "completed_at": draft.get("completed_at") or _now(),
+        "seat": seat,
+        "usage": {key: measurements.get(key) for key in MEASUREMENT_ALLOWED},
+        "started_at": started,
+        "completed_at": completed,
+        "elapsed_seconds": _elapsed_seconds(started, completed),
     }
-    if isinstance(measurements, dict):
-        attempt["measurements"] = measurements
-    return attempt
 
 
-def _decision(draft: dict[str, Any]) -> dict[str, Any]:
-    """Return the decision an ordinary session amounts to.
+def _usage_ledger(directory: Path) -> dict[str, dict[str, Any]]:
+    """Return every Usage Record the store already holds, keyed by usage key."""
 
-    Nothing was routed, so the status is the inheritance that actually happened:
-    the work ran on the session's own main seat, and the contract fingerprints
-    it from that seat. Provenance names the captured environment rather than a
-    frozen routing snapshot, because there was no routing to freeze — the
-    identity is stable for one seat in one Harness, so the same environment
-    observed twice is the same provenance.
+    path = directory / USAGE_LEDGER_FILE
+    if not path.exists():
+        return {}
+    held: dict[str, dict[str, Any]] = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            record = json.loads(line)
+            held[str(record["usage_key"])] = record
+    return held
+
+
+def _append(directory: Path, records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Append every unseen Usage Record to the store beside the evidence ledger.
+
+    A record whose usage key the store already holds is skipped rather than
+    repeated: the same finished session appended twice adds nothing the
+    second time.
     """
 
-    seat = draft.get("seat") or {}
+    held = _usage_ledger(directory)
+    accepted = [record for record in records if record["usage_key"] not in held]
+    skipped = [record["usage_key"] for record in records if record["usage_key"] in held]
+    if accepted:
+        directory.mkdir(parents=True, exist_ok=True)
+        with (directory / USAGE_LEDGER_FILE).open("a", encoding="utf-8") as ledger:
+            for record in accepted:
+                ledger.write(json.dumps(record, sort_keys=True) + "\n")
     return {
-        "status": "inherit",
-        "inheritance": {"main_seat": seat},
-        "evidence_class": "captured_local_run",
-        "audit": {
-            "snapshot_identity": "capture:"
-            + _opaque(
-                json.dumps(
-                    {"seat": seat, "harness": draft.get("harness")}, sort_keys=True
-                )
-            ),
-            "provenance": {
-                "main_seat_model": seat.get("model"),
-                "profile_revision": draft.get("profile_revision"),
-                "evidence_identity": draft.get("evidence_identity"),
-                "evidence_vintage": draft.get("evidence_vintage"),
-            },
-        },
+        "recorded": [record["usage_key"] for record in accepted],
+        "skipped": skipped,
     }
 
 
-def _outcome_block(outcome: dict[str, Any]) -> dict[str, Any]:
-    """Return one established outcome in the shape the contract reads."""
+def _finish(data: Path, draft: dict[str, Any]) -> dict[str, Any]:
+    """Answer one session-ending signal: append its Usage Records and forget the draft.
 
-    if outcome["result"] in ("infra_error", "abstain"):
-        return {
-            "result": outcome["result"],
-            "authority": "harness",
-            "condition": outcome["condition"],
-        }
-    return {
-        "result": outcome["result"],
-        "authority": outcome["authority"],
-        "checker": outcome["checker"],
-    }
-
-
-def _import(data: Path, attempt: dict[str, Any]) -> dict[str, Any]:
-    """Normalize one attempt through the contract and import what it yields."""
-
-    observations = _observations()
-    emitted = observations.observe(
-        {"schema_version": observations.SCHEMA_VERSION, "attempts": [attempt]}
-    )
-    if not emitted.get("observations"):
-        return {"imported": None, "refusals": emitted.get("refusals", [])}
-    imported = observations.record(
-        {
-            "schema_version": observations.SCHEMA_VERSION,
-            "observations": emitted["observations"],
-        },
-        data,
-    )
-    return {"imported": imported, "refusals": emitted.get("refusals", [])}
-
-
-def _review_notice(data: Path, identity: str) -> dict[str, Any] | None:
-    """Return the user-facing notice that one capture is waiting on them.
-
-    Work nobody judged is the one case where capture needs a person, so the
-    person is told — with the identity to answer and the three answers there
-    are. Debounced like every other notice, and out of the model's context for
-    the same reason.
+    A session that ran on more than one Seat produces one Usage Record per
+    Seat. A session that ended abruptly — an error included, there being no
+    outcome left for an error to carry — contributes whatever its own record
+    establishes and nothing more; nothing here waits for a human.
     """
 
-    return _notice(
-        data,
-        "review",
-        f"A captured session is waiting for your judgement: {identity}. "
-        f"Answer it with /model-selector capture --review={identity} "
-        f"--action=save|failed|ignore.",
-    )
-
-
-def _notification(data: Path, accepted: list[str]) -> dict[str, Any] | None:
-    """Return the user-facing notice for an accepted import, debounced.
-
-    A notice is for the person, never for the model: repeating it every session
-    would be noise, and putting it anywhere an agent reads would change the very
-    configuration being measured.
-    """
-
-    if not accepted:
-        return None
-    return _notice(
-        data, "accepted", f"{len(accepted)} local run observation(s) accepted."
-    )
-
-
-def _notice(data: Path, kind: str, text: str) -> dict[str, Any] | None:
-    """Return one debounced user-facing notice, or None where it is too soon."""
-
-    marker = home(data) / f"notified-{kind}.json"
-    try:
-        last = json.loads(marker.read_text(encoding="utf-8")).get("at")
-    except (OSError, ValueError):
-        last = None
-    age = _age(last)
-    if age is not None and age < 60 * 60:
-        return None
-    _store(marker, {"at": _now()})
-    return {"channel": "user", "text": text}
-
-
-def _complete(
-    data: Path, draft: dict[str, Any], payload: dict[str, Any]
-) -> dict[str, Any]:
-    """Answer one completion boundary: import it, or leave it for a human."""
-
-    outcome, refusal = _outcome(payload)
-    draft = {
-        **draft,
-        "completed_at": _now(),
-        "updated_at": _now(),
-        "benchmark": payload.get("benchmark") or draft.get("benchmark"),
-        "seat": _seat_of(draft, payload, _configured_seat(data)),
-    }
+    records = [_usage_record(draft, entry) for entry in draft.get("seats", {}).values()]
+    appended = _append(data, records)
     _draft_path(data, draft["session_key"]).unlink(missing_ok=True)
-
-    # An outcome nobody established is not this feature's to invent.
-    if outcome is None:
-        pending = _pending(data) / f"{draft['session_identity']}.json"
-        _store(pending, {**draft, "refusal": refusal})
-        return {
-            "ok": True,
-            "fail_open": False,
-            "pending": draft["session_identity"],
-            "imported": None,
-            "refusals": [{"code": refusal}] if refusal else [],
-            "notification": _review_notice(data, draft["session_identity"]),
-        }
-
-    result = _import(data, _attempt(draft, outcome))
-    imported = result["imported"]
-
-    # Nothing importable is not nothing that happened: the work waits for a
-    # human with the reason attached, rather than being discarded quietly.
-    if imported is None:
-        _store(
-            _pending(data) / f"{draft['session_identity']}.json",
-            {**draft, "refusals": result["refusals"]},
-        )
-        return {
-            "ok": True,
-            "fail_open": False,
-            "pending": draft["session_identity"],
-            "imported": None,
-            "refusals": result["refusals"],
-            "notification": _review_notice(data, draft["session_identity"]),
-        }
-
-    accepted = list(imported["accepted"])
-    return {
-        "ok": True,
-        "fail_open": False,
-        "pending": None,
-        "imported": imported,
-        "refusals": result["refusals"],
-        "notification": _notification(data, accepted),
-    }
+    return {"ok": True, "fail_open": False, **appended}
 
 
 def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
@@ -770,10 +594,8 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
             "ok": False,
             "fail_open": True,
             "detail": type(exc).__name__,
-            "pending": None,
-            "imported": None,
-            "refusals": [],
-            "notification": None,
+            "recorded": [],
+            "skipped": [],
         }
 
 
@@ -798,16 +620,9 @@ def _moment(event: str, payload: Any) -> str:
 
 
 def _idle() -> dict[str, Any]:
-    """Return the answer for a signal capture is not listening for."""
+    """Return the answer for a signal that neither opens nor closes a session."""
 
-    return {
-        "ok": True,
-        "fail_open": False,
-        "pending": None,
-        "imported": None,
-        "refusals": [],
-        "notification": None,
-    }
+    return {"ok": True, "fail_open": False, "recorded": [], "skipped": []}
 
 
 def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
@@ -822,125 +637,33 @@ def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     if not session:
         return _idle()
 
+    now = _now()
     held = _draft(data, session) or {
         "schema_version": SCHEMA_VERSION,
         "session_key": session,
         "session_identity": _opaque(session),
-        "task_identity": _opaque(clean.get("task") or session),
         "harness": clean.get("harness") or _configured_harness(data),
         "harness_inventory_revision": clean.get("harness_inventory_revision"),
-        "started_at": _now(),
         "seat": {},
+        "seats": {},
     }
+    seat = _seat_of(held, clean, _configured_seat(data))
     draft = {
         **held,
         "session_key": session,
-        "updated_at": _now(),
-        "seat": _seat_of(held, clean, _configured_seat(data)),
-        "benchmark": clean.get("benchmark") or held.get("benchmark"),
+        "updated_at": now,
+        "seat": seat,
+        "seats": _touch_seat(
+            held.get("seats") or {}, seat, clean.get("measurements"), now
+        ),
     }
-    if isinstance(clean.get("measurements"), dict):
-        draft["measurements"] = clean["measurements"]
 
-    if event in END_EVENTS or (event in TURN_EVENTS and _judged(clean)):
-        return _complete(data, draft, clean)
-    if event in ERROR_EVENTS:
-        return _complete(data, draft, {**clean, "error": clean.get("error") or {}})
+    if event in END_EVENTS or event in ERROR_EVENTS:
+        return _finish(data, draft)
 
-    # A start or an unjudged turn is a draft update and nothing more.
+    # A start or a turn is a draft update and nothing more.
     _store(_draft_path(data, session), draft)
     return _idle()
-
-
-def _judged(payload: dict[str, Any]) -> bool:
-    """Return whether this signal carries an external judgement of the work."""
-
-    return isinstance(payload.get("checker"), dict) or isinstance(
-        payload.get("error"), dict
-    )
-
-
-def review(data: Path, identity: str, action: str) -> dict[str, Any]:
-    """Settle one pending capture the way a human answered it."""
-
-    if action not in REVIEW_ACTIONS:
-        raise ValueError(f"action must be one of {', '.join(REVIEW_ACTIONS)}")
-    path = _pending(data) / f"{identity}.json"
-    if not path.exists():
-        return {"imported": None, "reviewed": None}
-
-    draft = json.loads(path.read_text(encoding="utf-8"))
-    path.unlink()
-    if action == "ignore":
-        return {"imported": None, "reviewed": "ignore"}
-
-    outcome = {
-        "result": "pass" if action == "save" else "fail",
-        "authority": "user_confirmation",
-        "checker": {"identity": "user", "independent": True},
-    }
-    result = _import(data, _attempt(draft, outcome))
-    return {**result, "reviewed": action}
-
-
-def _records(directory: Path) -> list[Path]:
-    """Return every stored capture in *directory*, oldest first."""
-
-    if not directory.exists():
-        return []
-    return sorted(directory.glob("*.json"), key=lambda path: path.stat().st_mtime)
-
-
-def reconcile(data: Path) -> dict[str, Any]:
-    """Reconcile abandoned drafts and apply the retention bounds.
-
-    Deterministic and daemon-free: it runs at a start or a status pass, decides
-    from what is on disk, and removes the oldest first wherever a bound is
-    exceeded.
-    """
-
-    bounds = retention(data)
-    reconciled = 0
-    for path in _records(_drafts(data)):
-        try:
-            draft = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            path.unlink(missing_ok=True)
-            continue
-        age = _age(draft.get("updated_at"))
-        if age is None or age < ABANDONED_AFTER_SECONDS:
-            continue
-
-        # A session that ended without saying so is unjudged work, not a
-        # success and not a failure: it goes to review like any other.
-        path.unlink(missing_ok=True)
-        _store(_pending(data) / f"{draft['session_identity']}.json", draft)
-        reconciled += 1
-
-    expired = 0
-    for path in _records(_pending(data)):
-        try:
-            record = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            path.unlink(missing_ok=True)
-            expired += 1
-            continue
-        age = _age(record.get("updated_at"))
-        if age is not None and age > bounds["days"] * 86400:
-            path.unlink(missing_ok=True)
-            expired += 1
-
-    # Hard bounds are applied oldest first, so a bound is a deterministic
-    # eviction rather than a refusal of the work happening now.
-    held = _records(_pending(data))
-    while len(held) > bounds["drafts"]:
-        held.pop(0).unlink(missing_ok=True)
-        expired += 1
-    while sum(path.stat().st_size for path in held) > bounds["bytes"] and held:
-        held.pop(0).unlink(missing_ok=True)
-        expired += 1
-
-    return {"reconciled": reconciled, "expired": expired, "pending": len(held)}
 
 
 def _storage(data: Path) -> int:
@@ -956,29 +679,13 @@ def status(data: Path, root: Path) -> dict[str, Any]:
 
     integrations = _integrations()
     current = config(data)
-
-    # A status pass is one of the two moments abandoned work is reconciled at,
-    # so what it reports is the state after that sweep rather than before it.
-    if current.get("enabled"):
-        reconcile(data)
-
-    pending = _records(_pending(data))
-    ages = [
-        _age(json.loads(path.read_text(encoding="utf-8")).get("updated_at"))
-        for path in pending
-    ]
-    known = [age for age in ages if age is not None]
     return {
         "enabled": bool(current.get("enabled")),
         "harnesses": [
             integrations.health(owner(), harness, root)
             for harness in current.get("harnesses") or []
         ],
-        "pending": len(pending),
-        "pending_identities": [path.stem for path in pending],
-        "oldest_pending_age_seconds": max(known) if known else None,
         "storage_bytes": _storage(data),
-        "retention": retention(data),
     }
 
 
@@ -1007,14 +714,14 @@ def remove_integrations() -> dict[str, Any]:
 
     This is the word the Manager says when the Skill is being made Disabled,
     withdrawn, or uninstalled: it runs while these files still exist, takes the
-    hooks out of every Harness, and leaves the accepted evidence alone. It is
-    answerable at any time, because removing what is already gone is a state
+    hooks out of every Harness, and leaves the accepted Usage Records alone. It
+    is answerable at any time, because removing what is already gone is a state
     rather than an error.
     """
 
     data = default_data()
     result = disable(data, Path.home())
-    return {"removed": result["harnesses"], "evidence_preserved": True}
+    return {"removed": result["harnesses"], "usage_records_preserved": True}
 
 
 def _emit(payload: dict[str, Any]) -> None:
@@ -1030,15 +737,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "action",
-        choices=(
-            "enable",
-            "disable",
-            "hook",
-            "status",
-            "reconcile",
-            "review",
-            "remove-integrations",
-        ),
+        choices=("enable", "disable", "hook", "status", "remove-integrations"),
     )
 
     # Every action but the Manager's teardown is invoked by this Skill, which
@@ -1049,8 +748,6 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--harness", action="append", default=[])
     parser.add_argument("--command", action="append", default=[])
     parser.add_argument("--event", default="")
-    parser.add_argument("--id", dest="identity", default="")
-    parser.add_argument("--action", dest="review_action", default="")
     parser.add_argument("--owner", default=owner())
     parser.add_argument("--seat", default="")
     return parser.parse_args(argv)
@@ -1086,12 +783,8 @@ def main(argv: list[str] | None = None) -> int:
         _emit(enable(data, root, args.harness, args.command, seat))
     elif args.action == "disable":
         _emit(disable(data, root))
-    elif args.action == "status":
-        _emit(status(data, root))
-    elif args.action == "reconcile":
-        _emit(reconcile(data))
     else:
-        _emit(review(data, args.identity, args.review_action))
+        _emit(status(data, root))
     return 0
 
 
