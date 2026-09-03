@@ -29,6 +29,10 @@ All notable changes to this project are documented here. The format follows [Kee
 - `/orchestrate` now audits tickets for concretely named external decision gaps before claiming, parks detected gaps with a decision-ready question under `needs-info`, and reuses the same parked-ticket record for decisions found mid-work.
 - `/write` may now be started by a model, and only when the literal token `/write` appears in the request or in an instruction the request points at; a bare request to write or draft something stays outside the trigger, and the Codex sidecar says the same (ADR-0094).
 
+### Fixed
+
+- `/orchestrate` no longer refuses a resumed ticket at integration because of its own bring-forward merge. The merge a resume makes to bring the run branch into a preserved ticket branch now carries `<!-- kntnt-orchestrate brought-forward=<number> -->` and is skipped by the declared commit-role walk beside the marked integration and repair commits, so a builder's complete role passes are read as they stand. An unmarked merge remains authored ticket history and occupies the next role exactly as before (ADR-0148).
+
 ## [0.18.6] – 2026-08-30
 
 ### Fixed

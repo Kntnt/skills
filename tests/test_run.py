@@ -8013,6 +8013,32 @@ def test_isolate_brings_a_preserved_ticket_forward_to_the_run_branch(
     )
 
 
+def test_isolate_marks_the_bring_forward_merge_as_run_owned(tmp_path: Path) -> None:
+    """The resume's own merge says whose it is in durable history.
+
+    The subject line is for a person reading the branch, and reading it back is
+    reading prose. The marker is what the engine answers from, and it is stated
+    here as the contract rather than imported: a test built from the engine's
+    own constant would pass on both halves being wrong together."""
+
+    repo = _init_repo(tmp_path / "proj")
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "ticket.txt").write_text("preserved\n", encoding="utf-8")
+    _git(worktree, "add", "ticket.txt")
+    _git(worktree, "commit", "-m", "preserve ticket work")
+    (repo / "blocker.txt").write_text("resolved\n", encoding="utf-8")
+    _git(repo, "add", "blocker.txt")
+    _git(repo, "commit", "-m", "resolve blocker")
+
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    message = _git(worktree, "show", "-s", "--format=%B", "HEAD").stdout
+    assert f"<!-- {MARKER} brought-forward=9 -->" in message
+
+
 def test_isolate_refuses_to_resume_a_preserved_tree_with_uncommitted_work(
     tmp_path: Path,
 ) -> None:
@@ -8182,6 +8208,50 @@ def test_integrate_names_a_working_tree_it_could_not_take_away(
     assert "kntnt-orchestrate/work/9" in _git(repo, "branch", "--list").stdout
 
 
+# The two ordered roles a declared ticket's commits pass through in these
+# tests, and the surfaces each one owns. One declaration serves every check
+# below, so what a test varies is the history the contract is held against.
+_CONTRACT: list[dict[str, Any]] = [
+    {"name": "implementation", "patterns": ["src/**"]},
+    {"name": "evidence", "patterns": ["evidence/**"]},
+]
+
+
+def _declared_run_state(repo: Path, scratch: Path, number: int) -> dict[str, Any]:
+    """Save run state declaring *number*'s commit roles, and return what it says.
+
+    A checking verb reads the tracker's declaration out of durable run state
+    rather than off the ticket, so a test of the contract has to leave that
+    state where the engine looks for it.
+    """
+
+    state = {
+        "branch": "work",
+        "label": "ready-for-agent",
+        "login": None,
+        "claimed": [number],
+        "base": _git(repo, "rev-parse", "HEAD").stdout.strip(),
+        "starting": [number],
+        "contracts": {str(number): _CONTRACT},
+        "contract_bases": {},
+    }
+    (scratch / STATE_HOME).mkdir(parents=True)
+    (scratch / STATE_HOME / STATE_FILE).write_text(json.dumps(state), encoding="utf-8")
+    return state
+
+
+def _authored_pass(worktree: Path) -> None:
+    """Commit one complete pass through the declared roles, in their order."""
+
+    # Each role owns one directory, so its commit writes inside that one alone.
+    for role in _CONTRACT:
+        surface = worktree / str(role["patterns"][0]).partition("/")[0]
+        surface.mkdir()
+        (surface / "part.txt").write_text(f"{role['name']}\n", encoding="utf-8")
+        _git(worktree, "add", "--", str(surface))
+        _git(worktree, "commit", "-m", str(role["name"]))
+
+
 def test_integrate_refuses_a_commit_outside_its_declared_role(tmp_path: Path) -> None:
     """The first engine contact preserves certified violating history."""
 
@@ -8193,23 +8263,7 @@ def test_integrate_refuses_a_commit_outside_its_declared_role(tmp_path: Path) ->
     (worktree / "wrong.txt").write_text("implementation\n", encoding="utf-8")
     _git(worktree, "add", "wrong.txt")
     _git(worktree, "commit", "-m", "implement")
-    (scratch / STATE_HOME).mkdir(parents=True)
-    state = {
-        "branch": "work",
-        "label": "ready-for-agent",
-        "login": None,
-        "claimed": [9],
-        "base": _git(repo, "rev-parse", "HEAD").stdout.strip(),
-        "starting": [9],
-        "contracts": {
-            "9": [
-                {"name": "implementation", "patterns": ["src/**"]},
-                {"name": "evidence", "patterns": ["evidence/**"]},
-            ]
-        },
-        "contract_bases": {},
-    }
-    (scratch / STATE_HOME / STATE_FILE).write_text(json.dumps(state), encoding="utf-8")
+    state = _declared_run_state(repo, scratch, 9)
 
     result = _engine(repo, "integrate", "--ticket", "9", "--state-dir", str(scratch))
 
@@ -8217,6 +8271,68 @@ def test_integrate_refuses_a_commit_outside_its_declared_role(tmp_path: Path) ->
     assert "wrong.txt" in result.stderr
     assert _git(repo, "rev-parse", "HEAD").stdout.strip() == state["base"]
     assert worktree.is_dir()
+
+
+def test_integrate_accepts_a_resumed_role_sequence_the_run_brought_forward(
+    tmp_path: Path,
+) -> None:
+    """The merge a resume makes occupies none of the ticket's declared roles.
+
+    A resumed ticket's branch carries a merge nobody authored: the run brought
+    its preserved base forward before handing the tree back. Counting that
+    merge as a role commit rejects a builder whose own commits form complete
+    allowed passes, which is a refusal about the engine's own scaffolding
+    (issue #219)."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    _authored_pass(worktree)
+
+    # Move the run branch on, so resuming the ticket has something to bring in.
+    (repo / "blocker.txt").write_text("resolved\n", encoding="utf-8")
+    _git(repo, "add", "blocker.txt")
+    _git(repo, "commit", "-m", "resolve blocker")
+    resumed = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+    assert resumed["brought_forward"] is True
+
+    _declared_run_state(repo, scratch, 9)
+    result = _engine(repo, "integrate", "--ticket", "9", "--state-dir", str(scratch))
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["merged"] is True
+
+
+def test_integrate_still_counts_an_unmarked_merge_as_authored_role_history(
+    tmp_path: Path,
+) -> None:
+    """A merge the run did not make carries work somebody authored, so it takes
+    the next declared role and answers for that role's surfaces exactly as a
+    plain commit does. Exempting merges by their shape rather than by the
+    engine's own marker would let arbitrary history in unchecked."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    isolated = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+    worktree = Path(isolated["worktree"])
+    _authored_pass(worktree)
+
+    # Bring a side branch of the builder's own onto the ticket branch.
+    _git(worktree, "checkout", "-b", "aside")
+    (worktree / "notes.txt").write_text("authored elsewhere\n", encoding="utf-8")
+    _git(worktree, "add", "notes.txt")
+    _git(worktree, "commit", "-m", "note it down")
+    _git(worktree, "checkout", str(isolated["branch"]))
+    _git(worktree, "merge", "--no-ff", "-m", "merge my own aside", "aside")
+
+    state = _declared_run_state(repo, scratch, 9)
+    result = _engine(repo, "integrate", "--ticket", "9", "--state-dir", str(scratch))
+
+    assert result.returncode == 1
+    assert "notes.txt" in result.stderr
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == state["base"]
 
 
 def test_integrate_says_what_stopped_a_merge_that_left_no_conflicted_file(

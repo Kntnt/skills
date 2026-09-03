@@ -215,6 +215,22 @@ MERGED_TICKET = re.compile(
 # integration markers used to account for tickets on the run branch.
 REPAIRED_TICKET = re.compile(rf"<!--\s*{MARKER}\s+repair=(\d+)\s*-->")
 
+# The same marker once more, on the merge a resume makes to bring the run
+# branch into a preserved ticket branch. That merge is the engine's own
+# scaffolding rather than anything a builder wrote, and the marker is what says
+# so: a subject line is prose, and prose is not what durable history is read
+# back from (ADR-0148).
+BROUGHT_FORWARD = re.compile(rf"<!--\s*{MARKER}\s+brought-forward=(\d+)\s*-->")
+
+# Every marker that says a commit is the run's own rather than a builder's.
+# The declared commit-role walk reads these, so an engine-made commit whose
+# marker is missing here is read as work the ticket declared (ADR-0148).
+RUN_OWNED: tuple[re.Pattern[str], ...] = (
+    MERGED_TICKET,
+    REPAIRED_TICKET,
+    BROUGHT_FORWARD,
+)
+
 # Where a repository says which of its files are generated and what regenerates
 # each. It is read rather than inferred: a file is generated because the
 # repository declares it so, never because the engine recognised its name or
@@ -3887,7 +3903,7 @@ def isolate(cwd: Path, number: int) -> int:
             standing, "merge-base", "--is-ancestor", run_head, ticket_head
         )
         if brought_forward:
-            message = f"Merge the run branch into #{number}"
+            message = bring_forward_message(number)
             merged = git_result(standing, "merge", "--no-ff", "-m", message, run_branch)
             if merged.returncode != 0:
                 collisions = git_result(
@@ -3971,7 +3987,7 @@ def commit_contract_refusal(
     role_index = 0
     for commit in commits:
         message = git(cwd, "show", "-s", "--format=%B", commit)
-        if MERGED_TICKET.search(message) or REPAIRED_TICKET.search(message):
+        if any(marker.search(message) for marker in RUN_OWNED):
             continue
         paths = git(cwd, "diff", "--name-only", f"{commit}^1", commit).split()
         checked = [path for path in paths if not path.startswith(".kntnt-orchestrate/")]
@@ -4179,6 +4195,23 @@ def merge_message(number: int, regenerated: list[str] | None = None) -> str:
     return (
         f"Merge #{number} into the run branch{settled}"
         f"\n\n<!-- {MARKER} merged={number}{marked} -->"
+    )
+
+
+def bring_forward_message(number: int) -> str:
+    """Render the message of the merge that brings ticket *number* forward.
+
+    A resumed ticket is handed back a tree standing where the run branch now
+    does, and the merge that puts it there is the engine's, not the builder's.
+    One line a developer reading the branch can read, and the same marker the
+    engine reads back, because the alternative is deciding what a commit is
+    from its subject line — which is how the merge came to be counted as a
+    commit the ticket declared (ADR-0148).
+    """
+
+    return (
+        f"Merge the run branch into #{number}"
+        f"\n\n<!-- {MARKER} brought-forward={number} -->"
     )
 
 
