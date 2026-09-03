@@ -3345,18 +3345,120 @@ def test_route_and_recommend_share_selection_but_not_presentation() -> None:
     assert recommendation["frontier_neighbors"] == []
     assert recommendation["uncertainty"]["status"] == "unknown"
     fingerprints = recommendation["experiment_brief"]["configuration_fingerprints"]
-    assert (
-        fingerprints[0]
-        == route_result["decisions"][0]["launch"]["configuration_fingerprint"]
-    )
-    assert len(fingerprints) == 2
-    assert fingerprints[0] != fingerprints[1]
+    assert fingerprints == [
+        route_result["decisions"][0]["launch"]["configuration_fingerprint"]
+    ]
     assert recommendation["experiment_brief"]["checker"] == {
         "kind": "external",
         "signal": "pytest",
     }
     assert recommendation["experiment_brief"]["sequential_plan"]
     assert recommendation["experiment_brief"]["parallel_plan"]
+
+
+def _brief_of(snapshot: dict[str, Any], **changes: Any) -> Any:
+    """Return the experiment brief one recommended request actually receives."""
+
+    recommendation = _load_router().recommend(
+        {
+            "schema_version": 1,
+            "context": deepcopy(snapshot),
+            "requests": [_request(**changes)],
+        }
+    )["recommendations"][0]
+    return recommendation["experiment_brief"]
+
+
+def _brief_rungs(
+    snapshot: dict[str, Any], brief: dict[str, Any], **changes: Any
+) -> list[tuple[str, str]]:
+    """Name every point one brief lists the way a reader names a Rung."""
+
+    router = _load_router()
+    pool = router._candidate_pool(_request(**changes), deepcopy(snapshot))
+    _, bounded = router._standing_policy(_request(**changes), deepcopy(snapshot), pool)
+    by_fingerprint = {
+        router._candidate_fingerprint(candidate, snapshot): (
+            candidate.point["model"],
+            candidate.portable,
+        )
+        for candidate in bounded.candidates
+    }
+    return [
+        by_fingerprint.get(fingerprint, ("outside-the-bounded-pool", fingerprint))
+        for fingerprint in brief["configuration_fingerprints"]
+    ]
+
+
+def test_experiment_brief_names_no_point_a_deliberation_lock_forbids() -> None:
+    """A lock is not a Rung, so the brief has nothing to compare (ADR-0146)."""
+
+    # Lock the weakest level on a ladder whose own scale runs further up.
+    snapshot = _complete_routing_snapshot()
+    locked = {"deliberation": "low"}
+    brief = _brief_of(snapshot, overrides=locked)
+
+    # Assert the brief names the launch point alone, as the escalation does.
+    assert _brief_rungs(snapshot, brief, overrides=locked) == [("worker-v2", "low")]
+    assert _escalation_of(snapshot, overrides=locked) is None
+
+
+def test_experiment_brief_reaches_the_next_model_along_a_carried_control() -> None:
+    """Where the seat carries deliberation, the comparable point is a model."""
+
+    # Recommend the seam that inherits its control and has a model above it.
+    snapshot = _carried_ladder_snapshot()
+    brief = _brief_of(snapshot)
+
+    # Assert the brief climbs the same Rung the routing escalation climbs.
+    assert _brief_rungs(snapshot, brief) == [
+        ("worker-v2", "xhigh"),
+        ("worker-v3", "xhigh"),
+    ]
+    assert _escalation_of(snapshot)["model"] == "worker-v3"
+
+
+def test_experiment_brief_stays_inside_a_cohort_ceiling_when_inherited() -> None:
+    """The inherited brief reads the pool the Standing Policy left, too."""
+
+    # Decline the unmeasured cold start so the decision inherits with a brief.
+    snapshot = _ladder_snapshot()
+    snapshot["override_policy"]["cold_start"] = "inherit"
+    snapshot["override_policy"]["standing_policy"] = _standing_policy_fixture(
+        {
+            "python-refactor": {
+                "ceiling": {"model": "worker-v2", "portable_deliberation": "low"}
+            }
+        }
+    )
+    unchecked = {"checker": {"kind": "none"}}
+    brief = _brief_of(snapshot, **unchecked)
+
+    # Assert the ceiling bounds the brief exactly as it bounds the selection.
+    assert _brief_rungs(snapshot, brief, **unchecked) == [("worker-v2", "low")]
+
+
+def test_experiment_brief_says_plainly_when_it_has_nothing_to_compare() -> None:
+    """A brief that reaches one point plans for one point and says so."""
+
+    # Contrast a locked request with the same ladder left free to escalate.
+    snapshot = _ladder_snapshot()
+    alone = _brief_of(snapshot, overrides={"deliberation": "low"}, retry_available=True)
+    paired = _brief_of(snapshot, retry_available=True)
+
+    # Assert both plans state the absence rather than promising a comparison.
+    assert len(alone["configuration_fingerprints"]) == 1
+    assert "nothing to compare" in alone["sequential_plan"]
+    assert "nothing to compare" in alone["parallel_plan"]
+
+    # Assert the run bound keeps its derivation: one point, one owned retry.
+    assert alone["run_bound"] == 2
+
+    # Assert a brief that does reach a second point still plans to compare.
+    assert len(paired["configuration_fingerprints"]) == 2
+    assert "nothing to compare" not in paired["sequential_plan"]
+    assert "nothing to compare" not in paired["parallel_plan"]
+    assert paired["run_bound"] == 4
 
 
 def test_route_totally_validates_nested_snapshot_and_request_families() -> None:
@@ -3572,7 +3674,9 @@ def test_uncertain_results_include_an_agent_ready_experiment_brief() -> None:
         "observation artifact and import form accepted by `model-selector record`",
         "quota-efficient sequential plan",
         "time-efficient parallel plan",
-        "isolated agents run adjacent configurations against the same frozen task and checker",
+        "isolated agents run the listed adjacent configurations against the same frozen task and checker",
+        "the same Rung routing escalates along",
+        "there is nothing to compare it against",
     }
 
     _assert_contains_all(execution_contract, brief_contract)

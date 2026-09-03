@@ -2808,7 +2808,17 @@ def _experiment_fingerprints(
     decision: dict[str, Any],
     snapshot: dict[str, Any],
 ) -> list[str]:
-    """Freeze exact comparable points for selected and inherited evidence paths."""
+    """Freeze exact comparable points for selected and inherited evidence paths.
+
+    Every point named here is one the request can actually launch, so the pool
+    is the one the Standing Policy left rather than the raw hard-filtered
+    construction, and the step between two points is the same Rung the routing
+    decision climbs. A brief that named a second implementation of adjacency
+    could tell a reader to measure a configuration routing would refuse.
+    """
+
+    # Re-derive the exact bounded ladder the selection itself resolved over.
+    _, pool = _standing_policy(request, snapshot, _candidate_pool(request, snapshot))
 
     # Start inherited experiments with their measured frontier and safe pool.
     if decision["status"] != "selected":
@@ -2816,7 +2826,7 @@ def _experiment_fingerprints(
             entry["configuration_fingerprint"]
             for entry in decision["audit"].get("frontier", [])
         ]
-        for candidate in _candidate_pool(request, snapshot).candidates:
+        for candidate in pool.candidates:
             fingerprint = _candidate_fingerprint(candidate, snapshot)
             if fingerprint not in fingerprints:
                 fingerprints.append(fingerprint)
@@ -2825,29 +2835,26 @@ def _experiment_fingerprints(
     # Begin a selected experiment with its exact launch point.
     launch = decision["launch"]
     fingerprints = [launch["configuration_fingerprint"]]
-    adjacent_index = PORTABLE_LEVELS.index(launch["portable_deliberation"]) + 1
-    if adjacent_index >= len(PORTABLE_LEVELS):
+
+    # Compare nothing beside a dimension the request pinned: a lock is not a
+    # Rung, and the routing decision refuses to escalate one (ADR-0146).
+    if request["overrides"].get("deliberation") is not None:
         return fingerprints
-    adjacent = PORTABLE_LEVELS[adjacent_index]
-    points = [
-        point
-        for point in snapshot["mappings"]
-        if point["model"] == launch["model"]
-        and point["channel"] == launch["channel"]
-        and point["surface"] == launch["surface"]
-        and point["serving_mode"] == launch["serving_mode"]
-        and point["tools"] == launch["tools"]
-        and point["policy"] == launch["policy"]
-        and adjacent in point["controls"]
-    ]
-    if not points or not _within_main_seat(points[0], adjacent, snapshot):
-        return fingerprints
-    native = points[0]["controls"][adjacent]
-    adapter = _launch_adapter(points[0], native, snapshot)
-    if adapter is not None:
-        fingerprints.append(
-            _variant_fingerprint(points[0], adjacent, native, adapter, snapshot)
-        )
+
+    # Ask the shared resolver for the one Rung above the launch, exactly as
+    # the routing decision's next escalation asks it.
+    current = next(
+        (
+            candidate
+            for candidate in pool.candidates
+            if _candidate_fingerprint(candidate, snapshot)
+            == launch["configuration_fingerprint"]
+        ),
+        None,
+    )
+    rung = None if current is None else _adjacent_rung(pool.candidates, current, "up")
+    if rung is not None:
+        fingerprints.append(_candidate_fingerprint(rung, snapshot))
     return fingerprints
 
 
@@ -2880,6 +2887,23 @@ def _experiment_brief(
         "pass_condition": deepcopy(request["checker"]),
     }
 
+    # Plan only what the brief actually lists. Where the request reaches no
+    # comparable point — a pinned deliberation, the top of the ladder, or a
+    # pool offering no further Rung — measuring the one point it can launch
+    # is still the whole of the evidence path, so the section states the
+    # absence rather than promising a comparison it did not supply.
+    comparable = len(fingerprints) > 1
+    sequential_plan = (
+        "Run the weakest listed point, then only its permitted adjacent escalation after checker-confirmed failure."
+        if comparable
+        else "Run the single listed point: this request reaches no further Rung, so there is nothing to compare it against and no escalation to spend a confirmed failure on."
+    )
+    parallel_plan = (
+        "Run isolated adjacent points against the same frozen workload and checker when the caller grants parallel capacity."
+        if comparable
+        else "Run the single listed point alone: with nothing to compare it against, parallel capacity buys no second point here."
+    )
+
     # Freeze inputs, controls, measurements, bounds, and record import form.
     return {
         "workload": request["workload"],
@@ -2901,8 +2925,8 @@ def _experiment_brief(
         ],
         "run_bound": len(fingerprints) * (2 if request.get("retry_available") else 1),
         "stopping_rule": "Stop when confidence makes the conservative quality bound clear the floor or the finite run bound is spent.",
-        "sequential_plan": "Run the weakest listed point, then only its permitted adjacent escalation after checker-confirmed failure.",
-        "parallel_plan": "Run isolated adjacent points against the same frozen workload and checker when the caller grants parallel capacity.",
+        "sequential_plan": sequential_plan,
+        "parallel_plan": parallel_plan,
         "observation_artifact": {
             "schema_version": 1,
             "configuration_fingerprints": deepcopy(fingerprints),

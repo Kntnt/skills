@@ -33,12 +33,14 @@ Classification follows confidence, representativeness and decision-relevant cove
 Immediately after a blue or orange banner, emit a section titled `Snabbaste vägen till mätdata`. It is a frozen, agent-executable experiment brief, not a suggestion to be redesigned during the run. Include:
 
 - the workload artifact, cohort, rubric, quality floor, and external checker or declared failure signal;
-- the exact configuration fingerprints to compare, changing only the intended model or reasoning control while every other identity field stays frozen;
+- the exact configuration fingerprints to measure — the launch point and, where the request reaches one, the comparable Rung above it — changing only the intended model or reasoning control while every other identity field stays frozen;
 - required quality, cost, quota, latency, failure, retry and provenance measurements, charging every failed attempt, checker run, retry and added latency;
 - a bounded run budget and a confidence-based stopping rule rather than a fixed observation count;
 - the observation artifact and import form accepted by `model-selector record`;
-- a quota-efficient sequential plan that starts at the lowest plausible point and escalates one adjacent reasoning level on the same model only after externally verified failure; and
-- a time-efficient parallel plan in which isolated agents run adjacent configurations against the same frozen task and checker.
+- a quota-efficient sequential plan that starts at the lowest listed point and escalates one adjacent Rung — the next reasoning control on the same model, or the next enabled model up by capability where that scale is exhausted or the Harness carries the control — only after externally verified failure; and
+- a time-efficient parallel plan in which isolated agents run the listed adjacent configurations against the same frozen task and checker.
+
+Every point the brief lists is one the request can actually launch — the candidate pool its own hard filters, explicit locks and Cohort Standing Policy left — and the step between two of them is the same Rung routing escalates along, resolved by the same ladder rather than by a second reading of it. Where the request reaches no comparable point at all, because it pinned the deliberation, exhausted the ladder, or is bounded to the one point it starts on, the section still appears with that single point and both plans state plainly that there is nothing to compare it against; measuring it is what turns a heuristic starting point into evidence, and `record` accepts the resulting observation as it does any other.
 
 `recommend` emits the brief but executes no work. The ordinary work path runs it, and `record` validates and imports the resulting observations.
 
