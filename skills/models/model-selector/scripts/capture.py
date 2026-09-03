@@ -36,10 +36,14 @@ SCHEMA_VERSION = 1
 
 # Every lifecycle signal this feature understands, per Harness family. A stop
 # is one turn of an ongoing session and never a session's own end; a Seat's
-# Usage Record is timed on its own first and last such turn. Codex CLI 0.153.0
-# names its own moments in camelCase (`sessionStart`, `stop`, `sessionEnd`),
-# confirmed from its installed binary's own `HookEventName`, never in Claude
-# Code's PascalCase.
+# Usage Record is timed on its own first and last such turn. Codex CLI
+# 0.153.0's own `hooks.json` names its moments in the same PascalCase Claude
+# Code's `settings.json` does, which is what this feature's own hook table is
+# registered under; the camelCase spellings (`sessionStart`, `stop`,
+# `sessionEnd`) are the app-server protocol's own `HookEventName`, the
+# normalized runtime view `hooks/list` reports back, and are accepted here as
+# the same convention rather than as a confirmed reading of any payload
+# (ADR-0157).
 START_EVENTS = frozenset({"SessionStart", "sessionStart", "session.created"})
 TURN_EVENTS = frozenset({"Stop", "stop", "SubagentStop", "session.idle"})
 ERROR_EVENTS = frozenset({"session.error"})

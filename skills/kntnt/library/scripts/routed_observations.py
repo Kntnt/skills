@@ -34,8 +34,8 @@ SCHEMA_VERSION: int = 1
 # roles are distinct strata because a mechanical wave fix and an initial build
 # are different work, and an amend is a different attempt at the same work;
 # delegation's execution subagent is the sixth. The seventh is the work nobody
-# routed at all — an ordinary interactive session, which automatic capture
-# observes on the main seat it ran on rather than on a point somebody chose.
+# routed at all — an ordinary interactive session, which automatic capture no
+# longer produces (ADR-0156).
 STRATA: tuple[str, ...] = (
     "initial_build",
     "amend",
@@ -323,9 +323,9 @@ def _identity_error(carrier: dict[str, Any]) -> str | None:
 
     The three fields name the Cohort of the request a routed attempt answered,
     and they are optional: every row written before routed callers carried one
-    is still a row, and automatic capture observes work nobody routed at all.
-    What is refused is a field that is present and is not the identity it
-    claims to be, which is a different thing from a field that is absent.
+    is still a row. What is refused is a field that is present and is not the
+    identity it claims to be, which is a different thing from a field that is
+    absent.
     """
 
     for field in ("stage", "workload_cohort"):
