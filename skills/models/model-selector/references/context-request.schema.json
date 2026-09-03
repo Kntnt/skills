@@ -14,7 +14,7 @@
     "runtime": {"$ref": "#/$defs/runtime"},
     "snapshot": {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/snapshot"},
     "run_identity": {"$ref": "#/$defs/non_empty_string"},
-    "exploration_attempts_used": {"type": "object", "additionalProperties": {"type": "integer"}}
+    "explored_request_ids": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}}}
   },
   "oneOf": [
     {"required": ["runtime"], "not": {"required": ["snapshot"]}},

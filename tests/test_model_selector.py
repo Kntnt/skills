@@ -4694,6 +4694,49 @@ def test_a_chain_no_verdict_passed_prices_no_point_at_all(tmp_path: Path) -> Non
     assert projected[0]["quality"] == 0.5
 
 
+def test_two_runless_sessions_at_one_task_are_two_chains_rather_than_one(
+    tmp_path: Path,
+) -> None:
+    """Unrelated runs at one task never merge into a single charge.
+
+    A row naming no run — a hand recorded observation, a row older than run
+    identity — falls back to its session for the chain boundary. Grouping
+    those by task alone would read two unrelated attempts as one chain and
+    charge both to whichever configuration happened to pass.
+    """
+
+    # Import one failed attempt from one session and, at the same task, a
+    # later passing attempt from another — neither naming a run.
+    observations = _load_observations()
+    failed = _attempt(
+        attempt_id="build-a",
+        session_identity="session-a",
+        task_identity="ticket-shared",
+        attempt_index=1,
+        outcome={
+            "result": "fail",
+            "authority": "independent_verifier",
+            "checker": {"identity": "verify.md", "independent": True},
+            "condition": None,
+            "scores": None,
+        },
+        measurements={"cash": 10.0, "retries": 0},
+    )
+    passed = _attempt(
+        attempt_id="build-b",
+        session_identity="session-b",
+        task_identity="ticket-shared",
+        attempt_index=2,
+        measurements={"cash": 3.0, "retries": 0},
+    )
+    _import(observations, tmp_path, [failed, passed])
+    projected = observations.projected_evidence(tmp_path)["records"]
+
+    # Assert the pass was charged its own session only, not the other's failure.
+    assert len(projected) == 1
+    assert projected[0]["commercial"]["cash"] == 3.0
+
+
 def test_a_damaged_ledger_row_yields_no_evidence_rather_than_a_refusal(
     tmp_path: Path,
 ) -> None:
@@ -4985,6 +5028,37 @@ def _load_standing_policy() -> Any:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def test_a_damaged_store_is_reported_rather_than_read_as_an_unmoved_cohort(
+    tmp_path: Path,
+) -> None:
+    """A file that will not parse is not the same fact as no file at all.
+
+    Routing keeps working either way, because the shipped default is a whole
+    policy — but a damaged store puts every ratcheted Cohort back at its cold
+    start, and that is indistinguishable from a Cohort that never moved
+    unless the command a human reads says which one it found.
+    """
+
+    policy = _load_standing_policy()
+
+    # An absent store is no override and nothing to report.
+    assert policy.store_is_damaged(tmp_path) is False
+
+    # A present store that will not parse is reported as damaged.
+    (tmp_path / "standing-policy.json").write_text("{not json", encoding="utf-8")
+    assert policy.store_is_damaged(tmp_path) is True
+
+    # So is one that parses to something other than a policy.
+    (tmp_path / "standing-policy.json").write_text('["cohorts"]', encoding="utf-8")
+    assert policy.store_is_damaged(tmp_path) is True
+
+    # A whole store is not damaged, however empty its Cohorts are.
+    (tmp_path / "standing-policy.json").write_text(
+        json.dumps({"schema_version": 1, "cohorts": {}}), encoding="utf-8"
+    )
+    assert policy.store_is_damaged(tmp_path) is False
 
 
 def test_standing_policy_ships_a_working_default_before_any_user_step(
@@ -5328,7 +5402,7 @@ def test_the_policy_command_is_documented_where_a_reader_looks_for_it() -> None:
         assert f"| `$HERE/help/{relative}` |" in skill, relative
     assert "config policy [show|reset] [--data=<path>] [<cohort>]" in skill
     assert '"$LIBRARY/scripts/standing_policy.py" policy show' in skill
-    assert "policy reset [<cohort>] --yes --data=<directory>" in skill
+    assert "policy reset --yes --data=<directory> [<cohort>]" in skill
 
     # The parent page lists it, and the store says where it lives and why.
     assert "**policy**" in parent
@@ -5788,7 +5862,7 @@ def test_the_derivation_computes_the_draw_the_route_module_never_makes(
     # Derive one context request carrying this run's identity and its account.
     artifact = _runtime_context_request()
     artifact["run_identity"] = "run-opaque-7"
-    artifact["exploration_attempts_used"] = {"python-refactor": 1}
+    artifact["explored_request_ids"] = {"python-refactor": ["route-0"]}
     derived = _derive_context(tmp_path, artifact)
     request = derived["requests"][0]
 
@@ -5805,6 +5879,28 @@ def test_the_derivation_computes_the_draw_the_route_module_never_makes(
     # Assert the same request derived twice draws exactly the same number.
     again = _derive_context(tmp_path, artifact)
     assert again["requests"][0]["exploration_draw"] == expected
+
+
+def test_a_rerouted_batch_starts_from_the_count_its_first_routing_saw(
+    tmp_path: Path,
+) -> None:
+    """A resume reproduces its own decision instead of paying for it twice."""
+
+    # Route one batch whose own request the account already explored.
+    artifact = _runtime_context_request()
+    artifact["run_identity"] = "run-opaque-7"
+    cohort = str(artifact["requests"][0]["workload_cohort"])
+    request_id = str(artifact["requests"][0]["request_id"])
+    artifact["explored_request_ids"] = {cohort: [request_id]}
+
+    # Assert its own attempt is discounted, leaving the budget where it was.
+    derived = _derive_context(tmp_path, artifact)
+    assert derived["requests"][0]["exploration_attempts_used"] == 0
+
+    # Assert an unrelated Cohort's spend is untouched by this batch.
+    artifact["explored_request_ids"] = {cohort: [request_id, "build-99"]}
+    again = _derive_context(tmp_path, artifact)
+    assert again["requests"][0]["exploration_attempts_used"] == 1
 
 
 def test_a_run_that_names_no_identity_composes_no_draw_at_all(

@@ -3545,6 +3545,38 @@ def test_the_report_times_every_ticket_to_its_first_verified_pass(
     assert timed[11] == ("not_started", None)
 
 
+def test_a_pass_whose_instants_are_unreadable_is_never_timed_as_one(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """`verified_pass` always carries a number, so a pass without one is a silence.
+
+    Both boundaries are the engine's own instants, but the account they live
+    in is a file on disk. A pass whose launch instant comes back unreadable
+    must fall to the silence that says which boundary is missing rather than
+    reporting a pass the report cannot price.
+    """
+
+    # Finish one passing attempt, then damage its launch instant on disk.
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+    assert _attempt_started(repo, scratch, env, "build-9").returncode == 0
+    assert _attempt_finished(repo, scratch, env, "pass").returncode == 0
+    routing_path = scratch / STATE_HOME / ROUTING_FILE
+    routing = json.loads(routing_path.read_text(encoding="utf-8"))
+    for attempt in routing["attempts"]:
+        attempt["started_at"] = "not an instant"
+    routing_path.write_text(json.dumps(routing), encoding="utf-8")
+
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    ticket = json.loads(reported.stdout)["tickets"][0]
+
+    # Assert the report says which boundary it lacks instead of claiming a time.
+    assert reported.returncode == 0, reported.stderr
+    assert ticket["time_to_verified_pass_seconds"] is None
+    assert ticket["time_to_verified_pass_status"] == "not_started"
+
+
 def test_the_report_tells_an_unfinished_attempt_from_a_failed_one(
     tmp_path: Path,
     isolated_attempt_environment: dict[str, str],
@@ -10298,7 +10330,7 @@ def test_the_first_real_plan_mints_the_run_identity_a_dry_one_never_composes(
     assert re.fullmatch(r"[0-9a-f]{64}", plan["run_identity"])
     assert state["run_identity"] == plan["run_identity"]
     assert str(tmp_path) not in plan["run_identity"]
-    assert plan["exploration_attempts_used"] == {}
+    assert plan["explored_request_ids"] == {}
 
     # Assert a later plan of the same run reports the identity it already has.
     again = json.loads(
@@ -10346,11 +10378,11 @@ def test_every_route_output_reports_what_each_cohort_has_already_explored(
     assert routed.returncode == 0, routed.stderr
 
     # Assert the route output and the next plan both name the same spend.
-    assert json.loads(routed.stdout)["exploration_attempts_used"] == {
-        "orchestrate/initial_build": 1
+    assert json.loads(routed.stdout)["explored_request_ids"] == {
+        "orchestrate/initial_build": ["build-9"]
     }
     planned = json.loads(
         _engine(repo, "plan", "--state-dir", str(scratch), env=env).stdout
     )
-    assert planned["exploration_attempts_used"] == {"orchestrate/initial_build": 1}
+    assert planned["explored_request_ids"] == {"orchestrate/initial_build": ["build-9"]}
     assert planned["run_identity"] == json.loads(routed.stdout)["run_identity"]

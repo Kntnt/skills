@@ -692,12 +692,31 @@ def _exploration_draw(
     return (int.from_bytes(digest[:7], "big") >> 3) / float(1 << 53)
 
 
+def _spent(explored: Any, batch: set[str]) -> dict[str, int]:
+    """Count each Cohort's spent budget, discounting the batch being routed.
+
+    A request the account already explored and that this batch routes again is
+    the same attempt reaching `route` a second time, so counting it would move
+    the batch off the count its first routing saw and answer it at a different
+    Rung. Discounting it is what makes a resume reproduce its own decision
+    (ADR-0151).
+    """
+
+    if not isinstance(explored, dict):
+        return {}
+    spent: dict[str, int] = {}
+    for cohort, named in explored.items():
+        if isinstance(named, list):
+            spent[cohort] = len({str(name) for name in named} - batch)
+    return spent
+
+
 def _with_exploration(
     requests: list[dict[str, Any]],
     snapshot_identity: str,
     standing_policy: dict[str, Any],
     run_identity: Any,
-    attempts_used: Any,
+    explored: Any,
 ) -> list[dict[str, Any]]:
     """Write this run's exploration facts into each request that can carry them.
 
@@ -708,7 +727,7 @@ def _with_exploration(
 
     if not isinstance(run_identity, str) or not run_identity:
         return requests
-    used = attempts_used if isinstance(attempts_used, dict) else {}
+    spent = _spent(explored, {str(request["request_id"]) for request in requests})
     for request in requests:
         cohort = request.get("workload_cohort")
         if not isinstance(cohort, str):
@@ -720,7 +739,7 @@ def _with_exploration(
             run_identity,
             str(request["request_id"]),
         )
-        request["exploration_attempts_used"] = int(used.get(cohort, 0))
+        request["exploration_attempts_used"] = spent.get(cohort, 0)
     return requests
 
 
@@ -755,7 +774,7 @@ def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
     # Preserve request order only after validating a reusable snapshot itself.
     requests = deepcopy(artifact["requests"])
     run_identity = artifact.get("run_identity")
-    attempts_used = artifact.get("exploration_attempts_used")
+    explored = artifact.get("explored_request_ids")
     if "snapshot" in artifact:
         if error := route._snapshot_error(artifact["snapshot"]):
             raise ValueError(error)
@@ -767,7 +786,7 @@ def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
                 str(snapshot["snapshot_identity"]),
                 snapshot["override_policy"]["standing_policy"],
                 run_identity,
-                attempts_used,
+                explored,
             ),
             "snapshot": snapshot,
         }
@@ -786,7 +805,7 @@ def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
             str(route.freeze_context(context)["snapshot_identity"]),
             context["override_policy"]["standing_policy"],
             run_identity,
-            attempts_used,
+            explored,
         ),
         "context": context,
     }

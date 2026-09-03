@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "1987c9639a7a02b01ac1a53b7fe9cf2d447e9dd7f8f6d322456a6ae3d0bdd9bf",
+  "manager_digest": "b25c40c6dca70362b46435092b32b7a3a9eb675c3483be993242c4e57fc6d1c3",
   "skills": [
     {
       "name": "agents-md",
@@ -58,7 +58,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "df0cd6995710e918ff3c51ef3478672bdf0e620f1bef1bc060a71b1ae05d50b0",
+      "digest": "0d080c715704263c083b107fcb051bda81638b7c9119813ab7732bdf16f5e506",
       "binaries": [
         "git",
         "gh",
@@ -175,7 +175,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
-      "digest": "3ed6d23f410d4c117310a63b6b363e9fda2e2fa10310cc37889a7d2b62b0e82d",
+      "digest": "aae252af0bfc042124068061334f86e4759ba490ddb155f44267aaf8db71d7b4",
       "binaries": [
         "uv"
       ],

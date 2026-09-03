@@ -112,6 +112,26 @@ def _entry_is_usable(entry: Any) -> bool:
     return _rung_error(entry.get("starting_rung")) is None
 
 
+def store_is_damaged(directory: Path) -> bool:
+    """Say whether a stored layer exists but cannot be read as one.
+
+    An absent file is a Cohort that never moved; a present file that will not
+    parse is every ratcheted Cohort silently back at its cold start, and the
+    two are indistinguishable in the policy alone. Routing still proceeds on
+    the shipped default — a complete policy is always available — so this is
+    what `show` reads to say which of the two the operator is looking at.
+    """
+
+    path = directory / POLICY_FILE
+    if not path.exists():
+        return False
+    try:
+        stored = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, ValueError):
+        return True
+    return not isinstance(stored, dict) or not isinstance(stored.get("cohorts"), dict)
+
+
 def read_policy(directory: Path) -> dict[str, Any]:
     """Read the user layer, answering an absent or damaged file as no override."""
 
@@ -363,12 +383,14 @@ def _show(directory: Path, cohort: str | None) -> dict[str, Any]:
     """Render the effective policy and the movements behind it."""
 
     rows = history(directory)
+    damaged = store_is_damaged(directory)
     if cohort is not None:
         return {
             "schema_version": SCHEMA_VERSION,
             "verb": "policy",
             "action": "show",
             "data": str(directory),
+            "store_damaged": damaged,
             "workload_cohort": cohort,
             "effective": effective_policy(directory, cohort),
             "history": [row for row in rows if row.get("workload_cohort") == cohort],
@@ -378,6 +400,7 @@ def _show(directory: Path, cohort: str | None) -> dict[str, Any]:
         "verb": "policy",
         "action": "show",
         "data": str(directory),
+        "store_damaged": damaged,
         "workload_cohort": None,
         "default": shipped_default(),
         "cohorts": frozen_policy(directory)["cohorts"],

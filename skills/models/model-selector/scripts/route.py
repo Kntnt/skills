@@ -59,10 +59,13 @@ PORTABLE_LEVELS: tuple[str, ...] = tuple(
 )
 
 # The two objectives a frozen policy states its measured tie-break in, read
-# from the same schema so the code and the contract share one vocabulary.
+# from the same schema so the code and the contract share one vocabulary. The
+# default is named rather than indexed, so reordering the enum cannot silently
+# change which objective an unstated policy is read at.
 OBJECTIVES: tuple[str, ...] = tuple(
     cast(list[str], REQUEST_SCHEMA["$defs"]["objective"]["enum"])
 )
+DEFAULT_OBJECTIVE = "cost_first"
 
 
 @dataclass(frozen=True, slots=True)
@@ -938,7 +941,11 @@ def _rung(candidate: Candidate) -> dict[str, str]:
 
 
 def _rung_position(candidate: Candidate) -> tuple[float, int]:
-    """Place one candidate on the total Rung order the bounds are read in."""
+    """Place one candidate on the total Rung order, the cheaper Rung first.
+
+    The bounds are read in this order, and it is the tiebreak `time_first`
+    falls back on where two configurations cost the same time.
+    """
 
     return (
         _model_capability(candidate.point),
@@ -1053,7 +1060,14 @@ def _unresolved_standing_policy(
 
     entry, cohort = _standing_entry(request, snapshot)
     return StandingPolicy(
-        int(entry["revision"]), cohort, False, None, None, None, None, None
+        revision=int(entry["revision"]),
+        cohort=cohort,
+        resolved=False,
+        floor=None,
+        ceiling=None,
+        starting_rung=None,
+        start=None,
+        start_fallback=None,
     )
 
 
@@ -1604,15 +1618,6 @@ def _priced_candidate(
     return (winners[0], "explicit_shadow_prices") if len(winners) == 1 else None
 
 
-def _ladder_position(candidate: Candidate) -> tuple[float, int]:
-    """Position one candidate on the Rung ladder, the cheaper Rung first."""
-
-    return (
-        _model_capability(candidate.point),
-        PORTABLE_LEVELS.index(candidate.portable),
-    )
-
-
 def _objective_order(
     frontier: list[tuple[Candidate, dict[str, Any]]],
     snapshot: dict[str, Any],
@@ -1636,7 +1641,7 @@ def _objective_order(
     """
 
     objective = snapshot["override_policy"].get("objective")
-    objective = objective if objective in OBJECTIVES else OBJECTIVES[0]
+    objective = objective if objective in OBJECTIVES else DEFAULT_OBJECTIVE
     observed = [
         (candidate, _observed_commercial(record)) for candidate, record in frontier
     ]
@@ -1660,7 +1665,7 @@ def _objective_order(
     ranked: list[tuple[Any, Candidate]] = []
     for candidate, commercial in observed:
         latency = float(cast(float, commercial["latency"]))
-        ladder = _ladder_position(candidate)
+        ladder = _rung_position(candidate)
         if decision_policy == "time_first":
             cash = float(cast(float, commercial["cash"])) if all(priced) else 0.0
             ranked.append(((latency, cash, ladder), candidate))

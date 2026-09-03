@@ -10,7 +10,7 @@ model-selector config policy show - display the Standing Policy and what moved i
 
 ## DESCRIPTION
 
-`model-selector config policy show` displays the effective Standing Policy: the Rung routing starts an unmeasured Cohort at, the inclusive floor and ceiling it stays between, the failure threshold that may move it, and the exploration budget. With no *COHORT* it shows the shipped default, every Cohort that has moved, and the whole movement history. With one it shows only that Cohort's effective policy and its own history.
+`model-selector config policy show` displays the effective Standing Policy: the Rung routing starts an unmeasured Cohort at, the inclusive floor and ceiling it stays between, the failure threshold that may move it, and the exploration budget. With no *COHORT* it shows the shipped default, every Cohort that has moved, and the whole movement history. With one it shows only that Cohort's effective policy and its own history. It also reports `store_damaged`: routing always has a complete policy because the shipped default is one, so a stored layer that will not parse never stops a run — but it does put every ratcheted Cohort back at its cold start, and this is what tells that apart from a Cohort that never moved.
 
 Every movement in that history was appended by one of two things: the failure threshold, which the evidence import evaluates whenever it records judged attempts and which names the run keys that tripped it, or `config policy reset`, which names nobody. Nothing else writes the store, and nothing moves a Cohort down.
 
@@ -45,10 +45,6 @@ Unaddressable guidance can affect nothing inside the Skill's contract. Guidance 
 Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
 
 A nested Skill receives only relevant guidance through an explicit Contextual Instruction. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
-
-## DEPENDENCIES
-
-`uv` runs the Skill's dependency check.
 
 ## DEPENDENCIES
 

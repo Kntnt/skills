@@ -1434,8 +1434,9 @@ def _chain_commercial(
 ) -> dict[tuple[FrontierIdentity, str], dict[str, Any]]:
     """Return what each frontier point's successful chains were measured to cost.
 
-    A chain is one task's routed attempts inside one run, and it is grouped
-    from the whole ledger rather than from one frontier: a cheap build that
+    A chain is one task's routed attempts inside one run — the session that
+    produced them where a row names no run — and it is grouped from the whole
+    ledger rather than from one frontier: a cheap build that
     failed and the amend that then passed are different strata, so a chain
     assembled inside one frontier would never see the escalation it exists to
     price. What the chain cost is all of it — the attempt that failed, the
@@ -1450,7 +1451,7 @@ def _chain_commercial(
     the cheapest point on the frontier.
     """
 
-    chains: dict[tuple[Any, str], list[dict[str, Any]]] = {}
+    chains: dict[tuple[str, str], list[dict[str, Any]]] = {}
     for record in records:
         # A row the ledger does not hold whole belongs to no chain: it is
         # damaged accounting rather than one link of a policy's sequence.
@@ -1458,8 +1459,15 @@ def _chain_commercial(
             record.get("attempt_index"), int
         ):
             continue
-        key = (record.get("run_identity"), str(record["task_id"]))
-        chains.setdefault(key, []).append(record)
+
+        # A chain is one run's sequence. A row naming no run — a hand recorded
+        # observation, a row older than run identity — falls back to the
+        # session that produced it, which is a required field and is the same
+        # boundary: grouping those by task alone would assemble attempts from
+        # unrelated runs into one chain and charge the whole of it once.
+        run = record.get("run_identity")
+        boundary = run if isinstance(run, str) and run else record["session_identity"]
+        chains.setdefault((str(boundary), str(record["task_id"])), []).append(record)
 
     # Charge each whole chain, once, to the point its first pass landed on.
     spent: dict[tuple[FrontierIdentity, str], list[float | int | None]] = {}

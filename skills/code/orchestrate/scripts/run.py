@@ -1173,13 +1173,16 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
     }
 
 
-def exploration_attempts(routing: Routing | None) -> dict[str, int]:
-    """Return what each Cohort has already spent of its exploration budget.
+def explored_requests(routing: Routing | None) -> dict[str, list[str]]:
+    """Return which requests each Cohort has already explored in this run.
 
     An Exploration Attempt is an accepted decision model-selector tagged as
-    one, and the account is the run's only durable record of them. Requests
-    are counted once by name, so a request routed twice — a resume, a reroute
-    after a mechanical repair — spends the budget once (ADR-0151).
+    one, and the account is the run's only durable record of them. What
+    travels is the request names rather than their count, because the count
+    the derivation needs excludes the batch about to be routed and only the
+    derivation sees that batch: a request routed twice — a resume, a reroute
+    after a mechanical repair — starts from the count its first routing saw
+    and reproduces the same decision (ADR-0151).
     """
 
     if routing is None:
@@ -1190,7 +1193,7 @@ def exploration_attempts(routing: Routing | None) -> dict[str, int]:
         audit = cast(dict[str, Any], record.decision.get("audit") or {})
         if audit.get("decision_policy") == EXPLORATION_POLICY:
             explored.setdefault(record.workload_cohort, set()).add(record.request_id)
-    return {cohort: len(named) for cohort, named in sorted(explored.items())}
+    return {cohort: sorted(named) for cohort, named in sorted(explored.items())}
 
 
 def routing_capability(records: list[RouteRecord]) -> str | None:
@@ -1825,18 +1828,20 @@ class Plan:
     lands straight on the branch with nothing to integrate (ADR-0054).
 
     `run_identity` is the opaque name this run is known by, minted by the first
-    plan that may start and `null` on a dry one, and `exploration_attempts_used`
-    is what each Cohort has already spent of its exploration budget in this
-    run's frozen routing account. The agent copies both into the next context
-    request, which is where the draw and the budget are read (ADR-0151).
+    plan that may start and `null` on a dry one, and `explored_request_ids`
+    names, per Cohort, the requests this run's frozen routing account already
+    holds an Exploration Attempt for. The agent copies both into the next
+    context request, which is where the draw and the budget are read, and
+    which subtracts the batch it is routing from the names (ADR-0151).
 
     `model` and `deliberation` are the field-level locks this invocation puts
     on every building role, `fast` is the objective it puts on the whole run —
     the fastest configuration that holds quality rather than the cheapest —
     and `routing` is the frozen route account all three were frozen into: its
     identity, the main seat every verdict inherits, the snapshot a later
-    request carries back unchanged, and every exact decision made under it. `routing_reason` is the other half of that answer: where
-    there is no account to render, it says why, so a report never fills the gap
+    request carries back unchanged, and every exact decision made under it.
+    `routing_reason` is the other half of that answer: where there is no
+    account to render, it says why, so a report never fills the gap
     in from what is current. `scope` is what the run was aimed at where it was
     aimed at anything — one entry per reference the developer named, and the
     tickets are the union of what they resolved to — and `state` is where the
@@ -1876,7 +1881,7 @@ class Plan:
     approval_identity: str | None = None
     approval_payload: ApprovalPayload | None = None
     run_identity: str | None = None
-    exploration_attempts_used: dict[str, int] = field(default_factory=dict)
+    explored_request_ids: dict[str, list[str]] = field(default_factory=dict)
 
 
 def plan_approval_payload(plan: Plan) -> ApprovalPayload:
@@ -3078,7 +3083,7 @@ def build_plan(
         remembered.run_identity if remembered else None
     )
     plan.run_identity = None if dry_run else carried_identity
-    plan.exploration_attempts_used = exploration_attempts(routing)
+    plan.explored_request_ids = explored_requests(routing)
 
     # Identify the complete caller-authorized frontier independently of ticket
     # prose, tracker comments, and the branch's moving base commit.
@@ -3395,7 +3400,7 @@ def emit_route(
             "verb": "route",
             "snapshot_identity": identity,
             "run_identity": (routing.run_identity or None) if routing else None,
-            "exploration_attempts_used": exploration_attempts(routing),
+            "explored_request_ids": explored_requests(routing),
             "routing_capability": routing_capability(records),
             "decisions": [asdict(record) for record in records],
             "refused": refusals,
@@ -5940,11 +5945,13 @@ def observed_details(
                 ],
             )
 
+    # The ledger retains every evaluated Cohort; the report shows the movements.
+    escalated = _escalated_cohorts(details.pop("standing_policy"))
     return {
         "attempts": str(attempts_file(state_path)) if completed else None,
         "observed": len(completed),
         **details,
-        "standing_policy": _escalated_cohorts(details["standing_policy"]),
+        "standing_policy": escalated,
     }
 
 
@@ -6245,9 +6252,18 @@ def verified_pass_timing(routing: Routing | None) -> dict[int, dict[str, Any]]:
         ]
         seconds: float | None = None
         if any(_attempt_passed(attempt) for attempt in attempts):
-            status = VERIFIED_PASS
+            # A pass is only claimed where both of its own boundaries survived
+            # the state file: `verified_pass` always carries a number, so a
+            # ticket whose instants came back unreadable falls to the silence
+            # that describes which boundary is missing rather than reporting a
+            # pass with nothing to price it by.
             if launched and passed:
                 seconds = (min(passed) - min(launched)).total_seconds()
+                status = VERIFIED_PASS
+            elif launched:
+                status = INCOMPLETE
+            else:
+                status = NOT_STARTED
         elif any("outcome" not in attempt for attempt in attempts):
             status = INCOMPLETE
         else:
@@ -6326,6 +6342,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     routing, routing_reason, _ = frozen_routing(state_path)
 
     # Assemble the complete durable account from the facts read above.
+    timing = verified_pass_timing(routing)
     report = {
         "verb": "report",
         "label": READY_LABEL,
@@ -6337,9 +6354,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
         "observations": observed_details(routing, state_path),
         "flakes": flakes,
         "regenerated": regenerated,
-        "tickets": [
-            ticket_details(ticket, verified_pass_timing(routing)) for ticket in tickets
-        ],
+        "tickets": [ticket_details(ticket, timing) for ticket in tickets],
         **outcome,
     }
 
