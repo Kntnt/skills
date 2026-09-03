@@ -5173,7 +5173,7 @@ def test_standing_policy_ships_a_working_default_before_any_user_step(
     policy = _load_standing_policy()
     effective = policy.effective_policy(tmp_path, "orchestrate/initial_build")
 
-    # Assert the shipped symbolic defaults the whole contract is written against.
+    # Assert the shipped symbolic defaults the contract is written against.
     assert effective == {
         "revision": 0,
         "starting_rung": "cold_start",
@@ -5210,7 +5210,7 @@ def test_a_threshold_movement_and_a_reset_round_trip_through_the_store(
     assert effective["revision"] == 1
     assert policy.effective_policy(tmp_path, "other")["revision"] == 0
 
-    # Assert the append-only history states what moved the Cohort and from where.
+    # Assert the append-only history says what moved the Cohort and from where.
     history = policy.history(tmp_path)
     assert len(history) == 1
     assert history[0]["workload_cohort"] == "orchestrate/amend"
@@ -5694,7 +5694,7 @@ def test_evidence_frozen_under_an_older_revision_never_moves_a_policy_again(
     stale = _imported(observations, tmp_path, _judged(3, "fail"), _judged(4, "fail"))
     evaluated = stale["standing_policy"][0]
 
-    # Assert the later evidence is kept and its authority over the policy is not.
+    # Assert later evidence is kept and its authority over the policy is not.
     assert evaluated["outcome"] == "stale_policy_context"
     assert evaluated["row"] is None
     assert len(stale["accepted"]) == 2

@@ -9919,7 +9919,7 @@ def test_report_names_every_cohort_this_run_ratcheted_and_how_to_undo_it(
         "/model-selector config policy reset orchestrate/initial_build"
     )
 
-    # The next run starts the Cohort one Rung up, and a rerun invents no second move.
+    # The next run starts the Cohort one Rung up; a rerun adds no second move.
     policy = json.loads(
         (
             Path(isolated_attempt_environment["HOME"])
