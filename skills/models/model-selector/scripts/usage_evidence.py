@@ -145,7 +145,7 @@ def _mean(values: list[float | None]) -> float | None:
 
     A category no contributing record measured stays unmeasured for the
     point too, the same rule `routed_observations.py`'s own `_mean` applies
-    to a chain's cost, applied here to a Seat's observed usage.
+    to a chain's cost, applied here to one model's observed usage.
     """
 
     known = [value for value in values if value is not None]

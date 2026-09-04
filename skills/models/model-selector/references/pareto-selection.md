@@ -145,6 +145,6 @@ Return:
 4. Dominated named candidates and the point that dominates each.
 5. Evidence cohort, vintage, uncertainty and missing coverage.
 6. Smallest next evaluation that could change the decision.
-7. Observed usage per named Seat, beside this shape and never inside it: see `## Observed usage`.
+7. Observed usage per named point, per model and never per Seat, beside this shape and never inside it: see `## Observed usage`.
 
 Call a public benchmark result a prior, not a deployment guarantee. A decisive production recommendation requires representative local evidence.
