@@ -14,6 +14,11 @@ from pathlib import Path
 from typing import Any
 
 from support.contract import STANDARD
+from support.editorial import (
+    GENRE_TECHNIQUE_HEADING,
+    ordinary_technique,
+    ordinary_technique_section,
+)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
@@ -6492,10 +6497,9 @@ def test_the_resource_format_records_what_inference_is_given_to_read() -> None:
     )
 
 
-# The section a genre closes with, and the level the two Skills read it at.
-# The level is one sentence both bodies carry word for word: one precedence
-# with one question cannot have two answers (ADR-0164).
-GENRE_TECHNIQUE_HEADING = "## The technique this genre is ordinarily written with"
+# The level the two Skills read that section at. It is one sentence both
+# bodies carry word for word: one precedence with one question cannot have two
+# answers (ADR-0164).
 GENRE_TECHNIQUE_LEVEL = (
     "6. For the technique alone: the technique the resolved genre names as the"
     " one it is ordinarily written with, where that genre names one."
@@ -6505,20 +6509,6 @@ TECHNIQUE_SELECTION_SOURCES = (
     " an instruction that names one, or the genre that was resolved — and never"
     " because the"
 )
-
-
-def _ordinary_technique(path: Path) -> str:
-    """Return what a genre's base half states its ordinary technique to be."""
-
-    below = path.read_text(encoding="utf-8").partition(f"\n{GENRE_TECHNIQUE_HEADING}\n")
-    assert below[1], (
-        f"{path}: the genre states nothing about the technique it is"
-        f" ordinarily written with, so a run that resolved it and named no"
-        f" technique has nothing to read and the arc this kind of text"
-        f" ordinarily has is reached only by a user who knew to ask"
-        f" (ADR-0164). See {STANDARD}."
-    )
-    return below[2].partition("\n## ")[0].strip()
 
 
 def test_every_genre_names_the_technique_it_is_ordinarily_written_with() -> None:
@@ -6543,14 +6533,21 @@ def test_every_genre_names_the_technique_it_is_ordinarily_written_with() -> None
         if path.name.endswith(".review.md"):
             continue
 
-        stated = _ordinary_technique(path)
+        stated = ordinary_technique_section(path)
+        assert stated is not None, (
+            f"{path}: the genre states nothing about the technique it is"
+            f" ordinarily written with, so a run that resolved it and named no"
+            f" technique has nothing to read and the arc this kind of text"
+            f" ordinarily has is reached only by a user who knew to ask"
+            f" (ADR-0164). See {STANDARD}."
+        )
         assert stated, (
             f"{path}: the section naming this genre's ordinary technique is"
             f" empty, which states neither a technique nor that the genre has"
             f" none (ADR-0164). See {STANDARD}."
         )
 
-        named = stated.split()[0].strip(".,").lower()
+        named = ordinary_technique(stated)
         assert named == "none" or named in installed, (
             f"{path}: the genre opens that section with {named!r}, which is"
             f" neither `none` nor a technique this Collection installs, so the"

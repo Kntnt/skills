@@ -5,6 +5,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from support.editorial import ordinary_technique, ordinary_technique_section
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EVALUATION = REPO_ROOT / "docs" / "evaluation"
 PROTOCOL = EVALUATION / "protocol.md"
@@ -35,6 +37,7 @@ REQUIRED_COVERAGE = frozenset(
         "code",
         "genre",
         "technique",
+        "genre-supplied technique",
         "handoff metadata present",
         "handoff metadata conflicting",
         "partial handoff metadata",
@@ -98,6 +101,13 @@ ITEM_FLOOR = 4
 # How many of that scope's items a fixture carries before it is concentrated
 # slop rather than prose that happens to contain one of them.
 SWEDISH_ITEMS = 12
+
+# The installed genres a Skill resolves a selection against. The directory is
+# the list, so what a genre supplies is read from the files here rather than
+# from anything enumerating them.
+GENRES = (
+    REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial" / "genres"
+)
 
 # The three forms a code sample takes in Markdown. A pass reads past all of
 # them, so a fixture staging only the fenced one leaves the other two to be
@@ -255,6 +265,38 @@ def _swedish_anti_slop_items() -> set[str]:
         for item in ITEM.findall(scope)
         if len(item.strip()) >= ITEM_FLOOR and any(char.isalpha() for char in item)
     }
+
+
+def _genre_technique(genre: str) -> str:
+    """The technique one installed genre's base half says it is written with.
+
+    `none` where the genre names none. Reading it from the directory is what
+    lets a fixture's premise be checked rather than restated beside it, and
+    the resource format's own suite is what holds the section to being there.
+    """
+
+    section = ordinary_technique_section(GENRES / f"{genre}.md")
+    assert section, f"{genre}: neither names a technique nor states it has none"
+
+    return ordinary_technique(section)
+
+
+def _named_genre(fixture: str) -> str:
+    """The one installed genre a fixture's staging names on the invocation."""
+
+    use = _fields(_entries()[fixture])["Use"].lower()
+    named = {
+        path.stem
+        for path in GENRES.glob("*.md")
+        if not path.name.endswith(".review.md") and f"{path.stem} genre" in use
+    }
+
+    assert len(named) == 1, (
+        f"{fixture}: the staging names {sorted(named)} rather than exactly one"
+        f" genre, so what the run resolves is left to inference."
+    )
+
+    return named.pop()
 
 
 def _kntnt_keys(text: str) -> set[str]:
@@ -628,6 +670,42 @@ def test_a_fixture_leaves_a_kntnt_map_partial_for_a_lower_level_to_settle() -> N
         use = fields.get("Use", "").lower()
         unnamed = [word for word in PARAMETERS + LEVELS if word not in use]
         assert unnamed == [], f"{name}: the staging leaves {unnamed} to be derived"
+
+
+def test_an_arc_fixture_names_the_genre_that_settles_its_technique() -> None:
+    """A genre supplies a technique, so a fixture about one names its genre.
+
+    Both of these fixtures turn on what the run resolved rather than on what
+    the material looks like, and a staging that leaves the genre to inference
+    hands that back: the genres installed beside the material settle which
+    contract it is read against, so the same entry means one thing today and
+    another after a genre is added or reworded elsewhere. Naming the genre
+    fixes the entry, and this is where the naming is held to what the genre
+    directory actually says (issue #248).
+    """
+
+    # The fixture for the rule that nothing infers a technique from a text's
+    # shape needs a genre supplying none, or the arc it rejects can have
+    # arrived legitimately and the entry no longer separates a pass from a
+    # failure without the evaluator reasoning it out.
+    resembles = _named_genre("resembles-abt")
+    assert _genre_technique(resembles) == "none", (
+        f"resembles-abt: the {resembles} genre supplies a technique of its"
+        f" own, so a reported arc is a legitimate resolution and the fixture"
+        f" no longer isolates the rule it exists for."
+    )
+
+    # Its counterpart needs the opposite, the arc being what a correct run is
+    # expected to reach and its provenance the only thing left to get wrong.
+    fixtures = _tagged("genre-supplied technique")
+    assert fixtures
+
+    for name in fixtures:
+        genre = _named_genre(name)
+        assert _genre_technique(genre) != "none", (
+            f"{name}: the {genre} genre supplies no technique, so the fixture"
+            f" stages nothing at the level of the resolution order it claims."
+        )
 
 
 def test_the_protocol_states_what_blinded_judging_rejects() -> None:

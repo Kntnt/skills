@@ -152,8 +152,16 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Files** — `prose/resembles-abt.md`
 - **Covers** — technique; clean prose
 - **Material** — a competent account of adding a second server which happens to fall into an and-but-therefore shape, and even uses the word *therefore* to open its third paragraph.
-- **Use** — supply it with no technique selected. It is the fixture for the rule that a technique applies because it was selected, not because the text resembles it.
+- **Use** — supply it with the general genre selected and no technique selected, and with no technique named anywhere else either. The general genre names no technique, so nothing above the invocation or below it can put an arc on this text; where the Skill resolves no genre at all, supply the file as it stands and the invocation is already complete. It is the fixture for the rule that a technique applies because it was selected, not because the text resembles it.
 - **Reject** — a resolved technique of ABT reported, recorded in metadata, or acted on when nothing selected it.
+
+### `genre-supplies-pac`
+
+- **Files** — `prose/genre-supplies-pac.md`
+- **Covers** — genre; genre-supplied technique
+- **Material** — a flat register of a tool library's fourth year: stock counted by category, membership and loan figures, opening hours, paid and volunteer time, repairs, and a budget against what was spent, closing on a paragraph that says where each group of figures came from. Nothing in it is a claim that could be false being tested against evidence, and no counter-argument is weighed anywhere, so the analytical arc cannot have been taken from the material. Nothing in it describes a real association, service, or person.
+- **Use** — supply the file path with the report genre selected and no technique named anywhere: not on the invocation, not in a Kntnt map, not in a Contextual Instruction, and not in the surrounding context. The report genre's base half names PAC, which a Skill's resolution order reads below everything the user or the material says and above no technique at all, so this is the fixture for that level of the order.
+- **Reject** — an arc applied with no source stated for it, and any source stated for it other than the resolved genre. The technique itself is not the failure here: PAC is what a run that resolved the report genre and nothing of its own is expected to arrive at, and what the run owes the reader is where it came from.
 
 ### `mixed-language`
 
