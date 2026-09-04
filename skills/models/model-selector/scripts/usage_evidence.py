@@ -100,7 +100,7 @@ def _records(directory: Path) -> list[dict[str, Any]]:
 
 
 def _names(record: dict[str, Any], point: dict[str, Any]) -> bool:
-    """Return whether one Usage Record's own Seat names one recommended point."""
+    """Return whether one Usage Record's own Seat ran the model a point names."""
 
     seat = record.get("seat")
     if not isinstance(seat, dict):

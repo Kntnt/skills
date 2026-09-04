@@ -142,7 +142,9 @@ A recommendation names the exact configuration, decision rule, comparable neighb
 
 After a blue or orange banner, `Snabbaste vägen till mätdata` provides a bounded sequential and parallel experiment brief and a `record`-compatible artifact. `recommend` plans the experiment but performs no network request, evaluation, or write.
 
-`chart` and `compare` keep cash, quota, and renewal views separate unless explicit shadow prices create a common axis. Missing metrics are `null`, never zero.
+`Observerad förbrukning` follows, reporting what each named model has actually cost and taken from this machine's own Usage Records, with the count, the vintage and the deliberations behind each figure. Matching is by model alone, so two points differing only in deliberation carry the same figures, and none of it enters a frontier or chooses anything.
+
+`chart` and `compare` keep cash, quota, and renewal views separate unless explicit shadow prices create a common axis, and carry the same usage figures as columns. Missing metrics are `null`, never zero.
 
 `update` reports every checked source and appended change. A discovered model is not Enabled automatically.
 

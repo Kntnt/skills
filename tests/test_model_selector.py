@@ -6693,7 +6693,16 @@ def _usage_record(
     elapsed_seconds: float | None = 300.0,
     **seat_overrides: Any,
 ) -> dict[str, Any]:
-    """Provide one Usage Record shaped exactly as `capture.py` appends it."""
+    """Provide one Usage Record in the store's own shape, for a reader test.
+
+    Deliberately fuller than anything `capture.py` appends today: it resolves a
+    portable deliberation, a channel, a surface, an adapter and a serving mode,
+    none of which a Seat read from a finished session's own record carries. That
+    is what these tests want — a record varying in every field the reader might
+    key on. It is not evidence about what capture writes, and a test that needs
+    that drives capture itself; asserting this shape was capture's is what kept
+    a green suite over a reader that matched nothing.
+    """
 
     seat = {
         "model": model,
@@ -6773,6 +6782,91 @@ def test_usage_by_seat_states_an_unsupported_figure_as_absent(tmp_path: Path) ->
             "vintage": {"earliest": None, "latest": None},
         }
     ]
+
+
+def _sections(text: str) -> list[tuple[str, str]]:
+    """Return every `##` section of one document as its heading and its body."""
+
+    parts = text.split("\n## ")
+    return [("## " + part.split("\n", 1)[0], part) for part in parts[1:]]
+
+
+def test_every_surface_describing_observed_usage_says_the_join_is_the_model() -> None:
+    """No shipped statement about what the reader reports may say per Seat.
+
+    Four rounds of review found this defect four times, each in a surface the
+    round before had not swept, because nothing in the suite pins one word of
+    it: these documents are read here only for the cold-start rules and the
+    evidence banner. This is the pin.
+
+    It finds the sections itself rather than naming them, because the fourth
+    round's own finding sat in a section a list of the obvious ones missed —
+    `references/pareto-selection.md`'s recommendation-shape enumeration, not
+    its `## Observed usage`. Any section that comes to mention observed usage
+    is covered the moment it does.
+
+    A statement about what capture *writes* is still per Seat and stays true:
+    `SKILL.md`'s `## Capture` says exactly that and never mentions this
+    reader, so it is not among the sections this collects.
+    """
+
+    # Every form four rounds of review actually found, the possessive included:
+    # "every named Seat's observed usage" matches none of the "per …" shapes.
+    forbidden = (
+        "per named Seat",
+        "per Seat",
+        "for that Seat",
+        "for its own Seat",
+        "Seat's observed usage",
+        "Seat's own observed usage",
+    )
+    mentions = ("Observerad förbrukning", "usage_by_seat", "Observed usage")
+
+    def affirmed(body: str, claim: str) -> bool:
+        """Return whether *body* asserts *claim* rather than denying it.
+
+        A document may say "per model and never per Seat", which carries the
+        forbidden words while stating the opposite. Only an assertion is a
+        defect, so the denials come out before the words are looked for.
+        """
+
+        for denial in (f"never {claim}", f"rather than {claim}", f"not {claim}"):
+            body = body.replace(denial, "")
+        return claim in body
+
+    covered = 0
+    for path in (
+        MODEL_SELECTOR / "SKILL.md",
+        MODEL_SELECTOR / "references" / "pareto-selection.md",
+    ):
+        for heading, body in _sections(path.read_text(encoding="utf-8")):
+            if not any(mention in body for mention in mentions):
+                continue
+            covered += 1
+            for claim in forbidden:
+                assert not affirmed(body, claim), (
+                    f"{path.name} {heading} still says {claim!r} of what the"
+                    " reader reports; the join is the model alone, no Seat"
+                    " capture writes resolving a portable deliberation"
+                    " (ADR-0162)."
+                )
+    assert covered >= 4, (
+        f"only {covered} sections mention observed usage; the pin has lost its subject"
+    )
+
+    # The three manpages describe only this, so they are checked whole.
+    for name in ("recommend.md", "chart.md", "compare.md"):
+        text = (MODEL_SELECTOR / "help" / name).read_text(encoding="utf-8")
+        for claim in forbidden:
+            assert not affirmed(text, claim), f"help/{name} still says {claim!r}"
+
+    # The reader's own prose, and the shape it promises callers.
+    reader = (MODEL_SELECTOR / "scripts" / "usage_evidence.py").read_text(
+        encoding="utf-8"
+    )
+    assert "per named model" in reader
+    assert "per named Seat" not in reader
+    assert "deliberations" in reader
 
 
 def test_usage_by_seat_matches_every_record_that_names_the_same_model(

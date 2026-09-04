@@ -4,9 +4,11 @@
 # ///
 """Read one Harness's own record of a finished session, field by field.
 
-Capture learns the Seat it measures from an argument supplied once at
-opt-in, which is a guess that goes stale the moment the user changes model
-or effort, and no lifecycle payload carries either (issue #225). Some
+Capture used to learn the Seat it measures from an argument supplied once at
+opt-in, which was a guess that went stale the moment the user changed model
+or effort, and no lifecycle payload carries either (issue #225). That
+argument is gone entirely — capture follows the Skill's own Enabled state and
+asks for nothing — so this module is now the only source of a Seat there is. Some
 Harnesses keep their own record of a session as it runs, and that record —
 read once, after the session's last lifecycle event, never during it — names
 the exact model and deliberation control each turn actually ran under and
