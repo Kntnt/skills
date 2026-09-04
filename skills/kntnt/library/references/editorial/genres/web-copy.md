@@ -24,4 +24,4 @@ It adds no requirement the base contract already holds. Register, structure, sen
 
 ## The technique this genre is ordinarily written with
 
-ABT ([`abt.md`](../techniques/abt.md)). A page with one thing to say carries the arc across the whole of it; more often the reader meets it inside a section, which has to stand alone for whoever entered there and can carry a complete small arc of its own. Where a page is neither — a set of facts somebody came to look up — nothing is built to give it one.
+ABT ([`abt.md`](../techniques/abt.md)). A page with one thing to say carries the arc across the whole of it. More often the reader meets it inside a section that has to stand alone for whoever entered there, and an arc at that scale is the nested one the technique states, subordinate on the terms stated there rather than a second arc of its own. Where a page is a set of facts somebody came to look up, the arc has little to do and does it in little space; a page is not released from a technique the run resolved because of what its material turned out to be.

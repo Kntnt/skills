@@ -54,7 +54,7 @@ Select an installed genre. The default is `general`; an unknown genre is refused
 
 **--technique**=*TECHNIQUE*
 
-Select an installed structural technique. Where none is named here, in the text's `kntnt` map, or in an instruction, the resolved genre's ordinary technique applies. Resemblance never selects one.
+Select an installed structural technique. Where none is named here, in the text's `kntnt` map, in an instruction, or in applicable conversation context, the resolved genre's ordinary technique applies. To review against no technique, say so in an instruction or carry `technique: none` in the map: this flag takes an installed name and cannot say none. Resemblance never selects one.
 
 **--language**=*LANGUAGE*
 

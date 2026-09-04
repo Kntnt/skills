@@ -91,7 +91,7 @@ Level 6 belongs to the technique alone, and it is read after the genre is settle
 
 Handoff Metadata is never required and never created. A Text Artifact carrying no `kntnt` map is reviewed exactly like one that carries a complete one, and no map is added to it. Where a recognized map exists, it is used as defaults here and synchronized to the resolved configuration in step 8.
 
-`none` written for the technique in a recognized map is a value rather than a gap. It says that the run which wrote the map resolved no technique, so it settles the parameter where the map sits, above the genre's level, rather than naming a resource that is not installed.
+`none` for the technique is a value rather than a gap, and it is how the genre's arc is refused. Written in a recognized map it says that the run which wrote the map resolved no technique; said in an instruction or in Conversation Context it says the same thing at that level. Either settles the parameter where it sits, above the genre's level, so the genre supplies nothing and the draft has no arc. It names no resource, so it is not the uninstalled value the refusal below reaches. `--technique` takes an installed name and has no spelling for this, which is why the levels below the invocation are where it is said.
 
 A recognized Kntnt map whose value cannot be used — a language nothing installs, a genre or technique that is not there — is reported as unusable artifact metadata and stops the run, unless the Formal Invocation already settled that parameter. It is never quietly read as the nearest usable value, so a spelling such as `en_UK` never becomes `en_GB` on its own.
 

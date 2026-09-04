@@ -24,4 +24,4 @@
 
 **Proportion follows the material.** Nothing here says three paragraphs, three sections, or equal thirds. Any part may be a sentence and any part may be most of the text, so long as each is present and the reader can tell which is which.
 
-**The arc is written inside the genre, not over it.** Where the selected genre fixes something — what a press release puts in its first sentence, where a report puts its answer — that convention stands and the arc is built to accommodate it. A technique shapes the spine of a text; it does not release the text from being the kind of thing it is.
+**The arc is written inside the genre, not over it.** A technique shapes the spine of a text; it does not release the text from being the kind of thing it is. Where the selected genre fixes something — what a press release puts in its first sentence, which parts a case study carries and in what order — that is settled before the arc is built, and the arc is built in a text that already has it.

@@ -34,4 +34,4 @@ It adds no requirement the base contract already holds. Register, structure, sen
 
 ## The technique this genre is ordinarily written with
 
-PAC ([`pac.md`](../techniques/pac.md)). This reader is checking something, so what a section of a report owes them is a claim that could be false, the material that tests it, and what the test settled. ABT is not this genre's arc and is no fallback for it: a report told as a complication and its consequence hands a story to somebody who came for a result they can act on and argue with.
+PAC ([`pac.md`](../techniques/pac.md)). This reader is checking something rather than being carried anywhere, and that arc is the one built for a reader who wants to see the reasoning tested; what it asks of a section is stated there. ABT is not this genre's arc and is no fallback for it: a report told as a complication and its consequence hands a story to somebody who came for a result they can act on and argue with.
