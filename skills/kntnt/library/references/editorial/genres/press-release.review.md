@@ -2,15 +2,25 @@
 
 Diagnostics for the requirements the press release genre's base half states, for a Skill reviewing a draft written against them. Nothing here is a requirement: every target a draft has to meet is in the base half, where the Skill that wrote the draft could see it, and a finding raised here is raised against a rule stated there. The examples are English and are patterns — apply what one does, in the language of the draft, rather than looking for its words.
 
+## The shape
+
+**Test.** Read the draft for its parts alone, ignoring how well each one is written: a headline, a summary that works with it as a news item, attributed comment, a body, background, contact details, and a standing description last. A part standing somewhere else in that sequence is a finding, and so is a part the material supplies and the draft leaves out.
+
+**Failure.** A paragraph about what the organisation does before the news; the standing description at the top, or worked into the body as though it were background; contact details between body paragraphs; a comment placed before the recipient has been told what it is a comment on; background spliced through the body, so a journalist cannot lift a passage without carrying it along; a comment reporting a fact the body should carry, which spends the release's one attributed sentence on something anybody could have written.
+
+**Edge.** A part the material cannot supply is absent rather than invented, and that is a finding against the material rather than against the order. The parts are what a recipient expects to find and not sections to be labelled: a release carrying them in order owes no heading announcing each one, and a part is not missing because it runs to a single paragraph.
+
+**Minimum safe correction.** Move the misplaced part whole and change nothing inside it — a part in the wrong place is rarely also badly written, and rewriting it while moving it turns one finding into two. Where a part is missing and the material carries what it needs, assemble it from the material. Where the material carries nothing for it, leave it out and raise the finding against the material.
+
 ## The first sentence
 
-**Test.** Read the first sentence alone and ask whether an editor could tell from it what happened, who did it, and when. Anything they would have to read on to learn is a finding.
+**Test.** Read the summary's first sentence alone and ask whether an editor could tell from it what happened, who did it, and when. Anything they would have to read on to learn is a finding.
 
 **Failure.** *Fagervik City Library is delighted to announce a new initiative* — an announcement about an announcement. *For many households, a broken appliance means an expensive choice* — a scene that could open anything. A first sentence naming the organisation and its values before it names the news.
 
 **Edge.** Where the material genuinely has no date — a thing that has already happened and is being announced now — the *when* is that it has happened, and the sentence says so rather than manufacturing a schedule.
 
-**Minimum safe correction.** Find the sentence in the draft that does carry the news, move it to the front, and delete the opening it replaces. Where no sentence carries it, assemble one from the material's own facts and nothing else.
+**Minimum safe correction.** Find the sentence in the draft that does carry the news, move it to the front of the summary, and delete the opening it replaces. Where no sentence carries it, assemble one from the material's own facts and nothing else.
 
 ## Printable facts
 
