@@ -53,6 +53,8 @@ Check that the register is one register. Swedish shifts sharply between *ni*-for
 
 Check reported speech against the mark it is set in. Sentences inside *”…”* better formed than anything a person says aloud have been repaired behind a mark that promised they would not be, and the mark is the error rather than the repair. A text that moves between the two marks for one speaker with no reason a reader can see has chosen neither.
 
+Read for the loan that arrived with the draft rather than with the field. *Regulatorer* is *tillsynsmyndigheter* or *myndigheter*, *adressera* in the sense of taking something up is *ta upp* or *behandla*, *leverera* in the sense of giving is *ge* or *erbjuda*, *metrik* is *mätvärde* or *nyckeltal*, and an *approach* is an *angreppssätt* or an *ansats*. The pairs are illustrative rather than a list to work through: which loans a Swedish text keeps is settled in Composition, and what a review adds is noticing the ones that are there because the sentence was thought in English.
+
 Look for the English participle rendered mechanically as an *-ande* form. *Ökande kostnader* is Swedish; a paragraph in which every subject carries an *-ande* modifier is an English draft in Swedish clothes.
 
 Finally, check the sentence rhythm the way a Swedish reader hears it: known information before new, one main idea per sentence, and no clause postponed behind three others.
@@ -93,6 +95,8 @@ Verbs take no person or number marking: *jag är*, *vi är*, *de är*. Adjective
 
 Numbers use a decimal comma and a space as the thousands separator: *3,14*, *1 000 000*. A percentage takes a space before the sign: *50 %*. A range takes an unspaced en dash: *2020–2024*, *sidorna 12–18*.
 
+In running prose a percentage and a degree are written out: *14 procent*, *45 grader*. The sign belongs to technical, statistical, and tabular text, where the temperature degree is spaced as the percentage sign is — *25 °C* — and the angular degree closes up on the number: *90°*.
+
 Dates are written *2026-08-24* or *24 augusti 2026*; month names and weekdays are lowercase, as are nationalities and languages — *svenska*, *måndag*, *en tysk forskare*. Clock times are written *kl. 14.30* or *14:30*; both are current.
 
 Currency follows the amount: *1 250 kr*, *250 000 SEK*, with a space before the unit.
@@ -109,10 +113,14 @@ A simple list takes no serial comma: *teknik, processer och kultur*, not *teknik
 
 In running prose, *och* is written out: *Service och support*, not *Service & support*. Preserve an ampersand that belongs to a proper name or quoted matter.
 
-Abbreviations take periods: *t.ex.*, *bl.a.*, *dvs.*, *m.m.*, *osv.*, *ca* without one. An initialism that has become an everyday Swedish word is written in lower case and without periods — *vd*, *tv*, *it*, *sms*, *dna* — while one that has not stays in capitals: *SEO*, *GDPR*, *EU*. An initialism compounded with a word takes a hyphen and keeps whichever case it has on its own: *vd-brev*, *USA-baserad*, *EU-direktiv*.
+Abbreviations take periods: *t.ex.*, *bl.a.*, *dvs.*, *m.m.*, *osv.*, *ca* without one. The period marks where a word was cut short, which is what decides a form nobody has listed: an abbreviation that stops before the word's end keeps it — *dir.*, *kap.*, *fig.* — and one that carries the word's own last letter takes none, as *dr*, *kr*, *nr*, and *tfn* do. *Ca* is the exception the list is there for: the word is cut short and the form is still settled without a period.
+
+An initialism that has become an everyday Swedish word is written in lower case and without periods — *vd*, *tv*, *it*, *sms*, *dna*, *bnp*, *brf* — while one that has not stays in capitals: *SEO*, *GDPR*, *EU*. Neither set is closed. What puts an initialism in the first of them is that Swedish has stopped reading it as letters standing for words and reads it as a word of its own — one a reader takes at sight, inflects, and compounds without stopping at what it abbreviates — so a form nobody would need expanded belongs there whether or not it is listed here. An initialism compounded with a word takes a hyphen and keeps whichever case it has on its own: *vd-brev*, *USA-baserad*, *EU-direktiv*.
 
 Genitive takes *s* without an apostrophe, and nothing at all after *s*, *x*, or *z*: *företagets resultat*, *Lars hus*.
 
 Only the first word of a heading or title is capitalised, along with any proper noun in it. Title case is English and is an error in Swedish.
+
+A greeting line ends with an exclamation mark or with nothing at all: *Hej Susanne!*, *Hej Susanne*. The comma of *Hej Susanne,* is the English convention and reads as imported. A closing takes no comma either — *Med vänlig hälsning* stands on its own line, and the name stands on the next.
 
 Two forms both listed in *Svenska Akademiens ordlista* are both established Swedish, neither of them the error: *i dag* and *idag*, *ska* and *skall*, *över huvud taget* and *överhuvudtaget*.
