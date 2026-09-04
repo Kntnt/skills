@@ -5360,6 +5360,7 @@ INSTALLED_GENRES = (
     "teaser",
     "column",
     "opinion",
+    "web-copy",
 )
 INSTALLED_TECHNIQUES = ("abt", "pac")
 
@@ -5373,6 +5374,7 @@ REVIEWED_RESOURCES = (
     "genres/teaser",
     "genres/column",
     "genres/opinion",
+    "genres/web-copy",
     "techniques/abt",
     "techniques/pac",
 )
