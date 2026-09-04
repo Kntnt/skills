@@ -184,10 +184,16 @@ def _integrations() -> Any:
     rather than reaching into this one (ADR-0012).
     """
 
+    # Two layouts, tried in turn: this repository's own
+    # `skills/models/model-selector/scripts/` sits three directories above
+    # `skills/kntnt/library/`, while an Enabled Skill's installed copy — the
+    # only copy the Manager's own install and remove seams ever run (#223) —
+    # sits at `<layer>/model-selector/scripts/`, two directories above the
+    # sibling `<layer>/kntnt/library/`.
     here = Path(__file__).resolve().parent
     for candidate in (
         here.parent.parent.parent / "kntnt" / "library" / "scripts" / "integrations.py",
-        here.parent / "library" / "scripts" / "integrations.py",
+        here.parent.parent / "kntnt" / "library" / "scripts" / "integrations.py",
     ):
         if candidate.exists():
             spec = importlib.util.spec_from_file_location(
@@ -210,6 +216,7 @@ def _session_records() -> Any:
     instead of reaching into this Skill (#225).
     """
 
+    # The same two layouts `_integrations` resolves, for the same reason.
     here = Path(__file__).resolve().parent
     for candidate in (
         here.parent.parent.parent
@@ -217,7 +224,7 @@ def _session_records() -> Any:
         / "library"
         / "scripts"
         / "session_records.py",
-        here.parent / "library" / "scripts" / "session_records.py",
+        here.parent.parent / "kntnt" / "library" / "scripts" / "session_records.py",
     ):
         if candidate.exists():
             spec = importlib.util.spec_from_file_location(

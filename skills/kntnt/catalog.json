@@ -175,7 +175,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
-      "digest": "16ac3405b0bc7ba0b1e9bc0d09c23943ecac6f962fc9e1de6ccd8995f3817fdc",
+      "digest": "1766adfc9932776a28b85fb18673dfe58cb8aa436bbfc53aa0a0907fa8f75f68",
       "binaries": [
         "uv"
       ],

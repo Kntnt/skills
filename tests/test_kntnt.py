@@ -3257,6 +3257,60 @@ def test_select_at_the_project_layer_installs_no_integration(tmp_path: Path) -> 
     assert not (ran.parent / "ran.json").exists()
 
 
+def test_selecting_the_real_model_selector_installs_from_its_installed_layout(
+    tmp_path: Path,
+) -> None:
+    """The Manager's own install seam runs the shipped capture.py, not a stub.
+
+    Every install test above hands the Manager a script stub that never
+    touches the Collection Library. The real `capture.py` has to resolve the
+    Library from where the Manager actually runs it once a Skill is
+    Enabled — `<layer>/model-selector/scripts/capture.py`, beside the sibling
+    `<layer>/kntnt/library/` — two directories above the script rather than
+    the repository's three (#223's own headline seam). A stub cannot see a
+    Library path resolved for the wrong layout; only the shipped script can.
+
+    `_world` keeps the running Manager (`world["here"]`) outside both `home`
+    and `project` on purpose, so a Global layer it built has no `kntnt` of its
+    own. The real machine is never in that state: the Manager the user runs
+    `select` through is itself installed at `<layer>/kntnt`, which is what
+    makes it `$HERE` for every other Skill sharing that layer. This fixture
+    restores that one fact rather than the fixture's deliberate deviation.
+    """
+
+    entries = [*_SURVIVORS, _entry("model-selector", "models", binaries=["uv"])]
+    world = _world(tmp_path, entries)
+    shutil.rmtree(world["source"] / "skills" / "models" / "model-selector")
+    shutil.copytree(
+        MODEL_SELECTOR_DIR, world["source"] / "skills" / "models" / "model-selector"
+    )
+    _present(world, "home", ".claude")
+    kntnt_home = world["home"] / ".claude" / "skills" / "kntnt"
+    _write(kntnt_home / "SKILL.md", _skill_md("kntnt", description="Manager."))
+    shutil.copytree(MANAGER_DIR / "library", kntnt_home / "library")
+
+    result = _run(world, "apply", "select", "model-selector")
+
+    assert result.returncode == 0, result.stderr
+    attempted = _json(result)["integrations"]["attempted"]
+    assert len(attempted) == 1
+    assert attempted[0]["name"] == "model-selector"
+    assert attempted[0]["status"] == "installed", attempted[0]["detail"]
+    installed = attempted[0]["installed"]
+    assert [row["harness"] for row in installed] == ["claude-code"]
+    assert installed[0]["status"] == "installed"
+
+    settings_path = world["home"] / ".claude" / "settings.json"
+    settings = json.loads(settings_path.read_text(encoding="utf-8"))
+    assert "SessionStart" in settings.get("hooks", {})
+
+    off = _run(world, "apply", "select", "--off", "model-selector", "--yes")
+
+    assert off.returncode == 0, off.stderr
+    settings_after = json.loads(settings_path.read_text(encoding="utf-8"))
+    assert not settings_after.get("hooks", {}).get("SessionStart")
+
+
 def test_selecting_an_unchanged_skill_again_does_not_reinstall(tmp_path: Path) -> None:
     """A Skill already current is neither placed nor refreshed, so it is not
     asked to install again (#223 decision 1): asking is scoped to the seams

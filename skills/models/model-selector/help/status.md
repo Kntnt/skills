@@ -10,9 +10,11 @@ model-selector status - report profile and evidence readiness
 
 ## DESCRIPTION
 
-`model-selector status` reports the active profile, evidence vintage, due sources, coverage gaps, provisional facts, low-confidence capability priors, and configuration selections without network access or writes.
+`model-selector status` reports the active profile, evidence vintage, due sources, coverage gaps, provisional facts, low-confidence capability priors, configuration selections, and capture's own health without network access or writes.
 
 The report distinguishes evidence that is absent, stale by configured cadence, provisional, or inapplicable rather than collapsing those states into one readiness value.
+
+Capture's own health is adapter presence per Harness this collection has an adapter for (`healthy`, `gated`, `degraded`, `absent`, or `unsatisfied`), whether that Harness's own finished session record can supply measurements at all, and how many bytes the capture store holds. This section performs no network request and writes nothing.
 
 ## OPTIONS
 
