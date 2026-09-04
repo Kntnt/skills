@@ -14,6 +14,8 @@ model-selector chart - report comparable model-system frontiers without choosing
 
 Cash, quota, and renewal views remain separate unless the profile supplies an explicit shadow price that makes a shared numeric axis valid. Unavailable metrics are `null`, never zero.
 
+Each row also carries observed usage for its own Seat, drawn from this machine's own Usage Record store: the mean of each token category the Harness counted, the mean elapsed seconds, and the record count and vintage behind them, `null` where no record supports one. A Usage Record enters no frontier and chooses nothing, so these figures never feed the quality or cost columns beside them.
+
 ## POSITIONAL ARGUMENTS
 
 *WORKLOAD*

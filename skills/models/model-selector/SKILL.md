@@ -125,7 +125,9 @@ Start every recommendation with exactly one prominent, text-bearing status banne
 
 Immediately after a blue or orange banner, emit a section titled `Snabbaste vägen till mätdata` using the frozen experiment-brief contract in `$HERE/references/pareto-selection.md`. `recommend` remains offline and read-only: it plans the experiment but performs no network request, evaluation, or write. Normal work executes the brief, and `record` imports its observation artifact; do not add or imply an experiment command.
 
-Complete when the recommendation names an exact configuration and decision rule, every named alternative is comparable, and the user can see why dominated candidates lost.
+After the banner and any experiment brief, emit a section titled `Observerad förbrukning` beside the recommendation and never merged into it: name the selected point and its frontier neighbors — the same points named above, and no wider pool — and, for each, resolve its own `model` and `portable_deliberation` and pass the ordered list through the `usage_by_seat()` Interface in `$HERE/scripts/usage_evidence.py` against the selected data directory. Report each returned figure exactly as it came back: the mean of each token category the Usage Record store actually holds for that Seat, the mean elapsed seconds, and the Usage Record count and the earliest/latest instant behind them. State a figure no record supports as absent rather than as zero, and never let one feed the quality or cost figures above it — a Usage Record enters no frontier, clears no quality floor, breaks no tie, and chooses nothing; the recommendation above is made in full before this section is ever read.
+
+Complete when the recommendation names an exact configuration and decision rule, every named alternative is comparable, the user can see why dominated candidates lost, and every named Seat's observed usage is reported or stated absent.
 
 ## Context
 
@@ -137,7 +139,7 @@ Read `$HERE/references/model-routing.md` and follow its public Model Routing Mod
 
 ## Chart
 
-Follow `recommend` through frontier construction without selecting one winner. For each comparable cohort, emit a compact table containing exact configuration, conservative quality, marginal USD per success, five-hour quota burn per success, weekly quota burn per success, allocated subscription USD per success and p90 latency. Use `null`, not zero, for unavailable metrics. Then emit plotting-ready CSV in a fenced block. Produce a single mixed-channel x-axis only when the user supplied a shadow price; otherwise render separate cash, quota and renewal views and explain why they cannot honestly share one numeric x-axis.
+Follow `recommend` through frontier construction without selecting one winner. For each comparable cohort, emit a compact table containing exact configuration, conservative quality, marginal USD per success, five-hour quota burn per success, weekly quota burn per success, allocated subscription USD per success and p90 latency. Add, for each row's own `model` and `portable_deliberation` resolved through the `usage_by_seat()` Interface in `$HERE/scripts/usage_evidence.py`: the mean of each token category the Usage Record store holds for it, the mean elapsed seconds, and the Usage Record count and vintage span behind them. Use `null`, not zero, for unavailable metrics, the usage columns included — a Usage Record enters no frontier and chooses nothing, so it never feeds the quality or cost columns beside it. Then emit plotting-ready CSV in a fenced block, one column per figure the table carries. Produce a single mixed-channel x-axis only when the user supplied a shadow price; otherwise render separate cash, quota and renewal views and explain why they cannot honestly share one numeric x-axis.
 
 ## Update
 
