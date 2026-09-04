@@ -30,7 +30,7 @@ Diagnostics for the requirements the case-study genre's base half states, for a 
 
 **Ambiguity.** Where the material is a summary of what somebody said rather than their words, there are no quotations to be had, and a draft cannot meet this by manufacturing them: the finding is against the material, and what the draft owes meanwhile is exact attribution rather than quotation marks. Where the material holds a few real remarks and no more, the finding is the same, and what to do about it — go back to the interviewee, or deliver a text the genre's own terms call a project description — belongs to whoever owns the text.
 
-**Edge.** A quotation may be shortened, or its spoken syntax repaired, within the boundary the writing Skill works under. What a review finds here is a quotation the material does not support, one that says nothing, or one that leaves the person who said it looking more careless, more grudging, or more foolish than the material does.
+**Edge.** A repaired quotation is not what a review finds here; the base half says which boundary that repair is judged against. What a review finds is a quotation the material does not support, one that says nothing, or one that leaves the person who said it looking more careless, more grudging, or more foolish than the material does.
 
 **Minimum safe correction.** Where a bridge and its quotation say the same thing, cut the bridge back to what the quotation does not carry — ordinarily who is speaking and when — and leave the quotation untouched. Where the writer's prose has taken the substance, look in the material for the sentence in which the customer says it and put that in its place. Never write the quotation the draft is short of.
 

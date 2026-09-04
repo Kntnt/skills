@@ -66,7 +66,7 @@ Diagnostics for the requirements the article genre's base half states, for a Ski
 
 ## The parts at the top
 
-**Test.** Read the headline, the standfirst, the lead and the first section in sequence. Then cover each of the first three in turn and ask what the reader no longer has; where the answer is nothing, the part covered was repeating another.
+**Test.** Read the headline, the standfirst, the lead and the first section in sequence. Then cover each of the first three in turn and ask what the reader no longer has; where the answer is nothing, the part covered was repeating another. The first section cannot be covered, so read its opening sentence against the lead instead: where it carries the lead again, the finding is the same one.
 
 **Failure.** A lead restating the standfirst in longer sentences; a standfirst that is the headline with a verb added to it; a first section opening by explaining what the lead has just explained; a lead and a standfirst that begin on the same words, which tells a reader who arrived from the teaser that they have gone in a circle.
 
