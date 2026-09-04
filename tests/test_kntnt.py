@@ -5352,7 +5352,15 @@ def test_a_review_extension_is_addressable_apart_from_the_base_half() -> None:
 # is caught here rather than by the user who meets a refusal instead of a
 # draft.
 EDITORIAL = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
-INSTALLED_GENRES = ("general", "article", "report", "press-release", "teaser")
+INSTALLED_GENRES = (
+    "general",
+    "article",
+    "report",
+    "press-release",
+    "teaser",
+    "column",
+    "opinion",
+)
 INSTALLED_TECHNIQUES = ("abt", "pac")
 
 # The resources shipped with review guidance of their own. `general` is the
@@ -5363,6 +5371,8 @@ REVIEWED_RESOURCES = (
     "genres/report",
     "genres/press-release",
     "genres/teaser",
+    "genres/column",
+    "genres/opinion",
     "techniques/abt",
     "techniques/pac",
 )
