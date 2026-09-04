@@ -44,6 +44,16 @@ Every point the brief lists is one the request can actually launch — the candi
 
 `recommend` emits the brief but executes no work. The ordinary work path runs it, and `record` validates and imports the resulting observations.
 
+## Observed usage
+
+Use this section for `recommend`, `chart` and `compare` alike. A Usage Record is what one finished ordinary session cost and how long it took on one Seat — no verdict, no Cohort, no configuration fingerprint. It never chooses: it enters no frontier, clears no quality floor, breaks no tie, and never makes a point eligible that quality evidence excluded. The whole of the frontier above is built and ordered without it.
+
+Emit a section titled `Observerad förbrukning`, beside the frontier or the table and never merged into it, for exactly the points a caller already named: `recommend` names the selected point and its frontier neighbors, and no wider pool; `chart` and `compare` name every point their own table renders. Resolve each named point's own `model` and `portable_deliberation` — the coarsest identity a frontier neighbor and a Usage Record's own Seat both carry, so it is the join key throughout, the selected launch included — and pass the ordered list through the `usage_by_seat()` Interface in `$HERE/scripts/usage_evidence.py` against the selected data directory.
+
+Report, per point: the mean of each token category the Usage Record store actually holds for it, per record; the mean elapsed seconds per record; the count of Usage Records behind those means; and the earliest and latest instant any of them names. A mean is reported only where every contributing Usage Record carried that measurement — the same rule a chain's own observed cost mean already applies. State everything else as absent rather than as zero, exactly as an unmeasured quality or cost figure already is.
+
+The same profile and ledger, with and without Usage Records, select the same point: this section is read only after `recommend`, `chart` and `compare` have already derived and ordered their own answer in full, and nothing it reports changes that answer.
+
 ## Metrics
 
 Prefer objective local outcomes: hidden tests, repository tests, exact data checks or frozen blinded rubrics. For binary tasks report pass rate with Wilson or bootstrap 95% interval. For graded work retain rubric dimensions; use a composite only when its versioned weights express the workload's value.
@@ -135,5 +145,6 @@ Return:
 4. Dominated named candidates and the point that dominates each.
 5. Evidence cohort, vintage, uncertainty and missing coverage.
 6. Smallest next evaluation that could change the decision.
+7. Observed usage per named Seat, beside this shape and never inside it: see `## Observed usage`.
 
 Call a public benchmark result a prior, not a deployment guarantee. A decisive production recommendation requires representative local evidence.

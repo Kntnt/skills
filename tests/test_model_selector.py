@@ -55,6 +55,28 @@ def _load_context_module() -> Any:
     return module
 
 
+def _load_capture() -> Any:
+    """Load the shipped capture module from its installed path."""
+
+    path = MODEL_SELECTOR / "scripts" / "capture.py"
+    spec = importlib.util.spec_from_file_location("model_selector_capture", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_usage_evidence() -> Any:
+    """Load the shipped Usage Record reader module from its installed path."""
+
+    path = MODEL_SELECTOR / "scripts" / "usage_evidence.py"
+    spec = importlib.util.spec_from_file_location("model_selector_usage_evidence", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def _runtime_context_request(
     objective: str = "cost_first", **request_changes: Any
 ) -> dict[str, Any]:
@@ -6659,3 +6681,243 @@ def test_an_exploration_row_never_moves_the_standing_policy_it_ran_under(
     assert evaluated["outcome"] == "below_threshold"
     assert evaluated["failures"] == 1
     assert policy.effective_policy(tmp_path, "python-refactor")["revision"] == 0
+
+
+def _usage_record(
+    *,
+    model: str = "worker-v2",
+    portable_deliberation: str | None = "medium",
+    tokens: dict[str, float | None] | None = None,
+    started_at: str | None = "2026-08-01T00:00:00Z",
+    completed_at: str | None = "2026-08-01T00:05:00Z",
+    elapsed_seconds: float | None = 300.0,
+    **seat_overrides: Any,
+) -> dict[str, Any]:
+    """Provide one Usage Record shaped exactly as `capture.py` appends it."""
+
+    seat = {
+        "model": model,
+        "resolved_alias": None,
+        "portable_deliberation": portable_deliberation,
+        "native_deliberation": {"effort": "medium"},
+        "channel": "subscription-max",
+        "surface": "cli",
+        "adapter_id": "claude-code",
+        "serving_mode": "standard",
+        **seat_overrides,
+    }
+    canonical = json.dumps(seat, sort_keys=True)
+    return {
+        "usage_key": hashlib.sha256(canonical.encode("utf-8")).hexdigest(),
+        "session_identity": hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:32],
+        "harness": {"name": "claude-code", "inventory_revision": None},
+        "seat": seat,
+        "usage": {
+            "tokens": tokens
+            if tokens is not None
+            else {"input": 100.0, "output": 50.0},
+            "tool_calls": None,
+            "retries": None,
+            "cost": None,
+            "quota": None,
+            "latency": None,
+            "fallback_from": None,
+        },
+        "started_at": started_at,
+        "completed_at": completed_at,
+        "elapsed_seconds": elapsed_seconds,
+    }
+
+
+def _write_usage_ledger(directory: Path, *records: dict[str, Any]) -> None:
+    """Append every *records* row to one data directory's Usage Record store."""
+
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / "usage-records.jsonl"
+    with path.open("a", encoding="utf-8") as ledger:
+        for record in records:
+            ledger.write(json.dumps(record) + "\n")
+
+
+def test_usage_evidence_reads_the_exact_store_capture_owns_and_writes(
+    tmp_path: Path,
+) -> None:
+    """The reader's own ledger file name never drifts from the writer's."""
+
+    usage_evidence = _load_usage_evidence()
+    capture = _load_capture()
+    assert usage_evidence.USAGE_LEDGER_FILE == capture.USAGE_LEDGER_FILE
+
+
+def test_usage_by_seat_states_an_unsupported_figure_as_absent(tmp_path: Path) -> None:
+    """A point no Usage Record names reports zero records and nothing invented."""
+
+    usage_evidence = _load_usage_evidence()
+
+    # Ask about a point over an empty store, and one over a store that names
+    # only a different model.
+    _write_usage_ledger(tmp_path, _usage_record(model="worker-v2"))
+    summaries = usage_evidence.usage_by_seat(
+        tmp_path,
+        [{"model": "worker-v3", "portable_deliberation": "medium"}],
+    )
+
+    assert summaries == [
+        {
+            "model": "worker-v3",
+            "portable_deliberation": "medium",
+            "records": 0,
+            "tokens": {},
+            "elapsed_seconds": None,
+            "vintage": {"earliest": None, "latest": None},
+        }
+    ]
+
+
+def test_usage_by_seat_matches_only_the_same_model_and_portable_deliberation(
+    tmp_path: Path,
+) -> None:
+    """Two named points draw only the Usage Records that name each one exactly."""
+
+    usage_evidence = _load_usage_evidence()
+    _write_usage_ledger(
+        tmp_path,
+        _usage_record(model="worker-v2", portable_deliberation="medium"),
+        _usage_record(model="worker-v2", portable_deliberation="medium"),
+        # A different portable deliberation on the same model is a different
+        # Seat, and never folded into the first point's count.
+        _usage_record(model="worker-v2", portable_deliberation="high"),
+        # A different model is never folded in either.
+        _usage_record(model="worker-v3", portable_deliberation="medium"),
+        # A delegated Seat's own record capture writes with no resolved
+        # portable deliberation at all names no point.
+        _usage_record(model="worker-v2", portable_deliberation=None),
+    )
+
+    summaries = usage_evidence.usage_by_seat(
+        tmp_path,
+        [
+            {"model": "worker-v2", "portable_deliberation": "medium"},
+            {"model": "worker-v2", "portable_deliberation": "high"},
+        ],
+    )
+
+    assert [summary["records"] for summary in summaries] == [2, 1]
+
+
+def test_usage_by_seat_means_a_token_category_only_where_every_record_carries_it(
+    tmp_path: Path,
+) -> None:
+    """A category one matched record never measured stays null for the point."""
+
+    usage_evidence = _load_usage_evidence()
+    _write_usage_ledger(
+        tmp_path,
+        _usage_record(tokens={"input": 100.0, "output": 50.0}),
+        # This record never measured `output` at all, and measured
+        # `cache_read` where the other record did not.
+        _usage_record(tokens={"input": 300.0, "cache_read": 10.0}),
+    )
+
+    summary = usage_evidence.usage_by_seat(
+        tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
+    )[0]
+
+    assert summary["records"] == 2
+    assert summary["tokens"]["input"] == 200.0
+    assert summary["tokens"]["output"] is None
+    assert summary["tokens"]["cache_read"] is None
+
+
+def test_usage_by_seat_means_elapsed_seconds_only_when_every_record_carries_it(
+    tmp_path: Path,
+) -> None:
+    """An incomplete session, still open, leaves the point's own mean null."""
+
+    usage_evidence = _load_usage_evidence()
+    _write_usage_ledger(
+        tmp_path,
+        _usage_record(elapsed_seconds=100.0),
+        _usage_record(elapsed_seconds=None),
+    )
+
+    summary = usage_evidence.usage_by_seat(
+        tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
+    )[0]
+
+    assert summary["records"] == 2
+    assert summary["elapsed_seconds"] is None
+
+
+def test_usage_by_seat_reports_the_span_of_instants_matched_records_cover(
+    tmp_path: Path,
+) -> None:
+    """Vintage is the earliest and latest instant among the matched records."""
+
+    usage_evidence = _load_usage_evidence()
+    _write_usage_ledger(
+        tmp_path,
+        _usage_record(
+            started_at="2026-08-03T10:00:00Z", completed_at="2026-08-03T10:05:00Z"
+        ),
+        _usage_record(
+            started_at="2026-07-20T09:00:00Z", completed_at="2026-07-20T09:02:00Z"
+        ),
+    )
+
+    summary = usage_evidence.usage_by_seat(
+        tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
+    )[0]
+
+    assert summary["vintage"] == {
+        "earliest": "2026-07-20T09:00:00Z",
+        "latest": "2026-08-03T10:05:00Z",
+    }
+
+
+def test_usage_by_seat_skips_a_malformed_line_and_an_absent_store(
+    tmp_path: Path,
+) -> None:
+    """A hand-broken store answers with an absence, never a raised error."""
+
+    usage_evidence = _load_usage_evidence()
+
+    # No store at all under this directory yet.
+    absent = usage_evidence.usage_by_seat(
+        tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
+    )
+    assert absent[0]["records"] == 0
+
+    # A store whose one line is not JSON, beside a good one.
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    path = tmp_path / "usage-records.jsonl"
+    path.write_text(
+        "not json at all\n" + json.dumps(_usage_record()) + "\n", encoding="utf-8"
+    )
+    summary = usage_evidence.usage_by_seat(
+        tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
+    )[0]
+    assert summary["records"] == 1
+
+
+def test_usage_by_seat_preserves_the_order_and_repetition_of_the_named_points(
+    tmp_path: Path,
+) -> None:
+    """One point named twice is answered twice, in exactly the order given."""
+
+    usage_evidence = _load_usage_evidence()
+    _write_usage_ledger(tmp_path, _usage_record(model="worker-v2"))
+
+    points = [
+        {"model": "worker-v3", "portable_deliberation": "medium"},
+        {"model": "worker-v2", "portable_deliberation": "medium"},
+        {"model": "worker-v2", "portable_deliberation": "medium"},
+    ]
+    summaries = usage_evidence.usage_by_seat(tmp_path, points)
+
+    assert [summary["model"] for summary in summaries] == [
+        "worker-v3",
+        "worker-v2",
+        "worker-v2",
+    ]
+    assert [summary["records"] for summary in summaries] == [0, 1, 1]

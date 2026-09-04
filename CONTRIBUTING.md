@@ -39,7 +39,7 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
    ```
    uvx ruff check .
    uvx ruff format --check .
-   uvx --with types-PyYAML --with pytest mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/routed_observations.py skills/kntnt/library/scripts/session_records.py skills/kntnt/library/scripts/standing_policy.py skills/models/model-selector/scripts/context.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py tests
+   uvx --with types-PyYAML --with pytest mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/routed_observations.py skills/kntnt/library/scripts/session_records.py skills/kntnt/library/scripts/standing_policy.py skills/models/model-selector/scripts/context.py skills/models/model-selector/scripts/usage_evidence.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py tests
    uv run --with pytest --with pyyaml pytest
    ```
 

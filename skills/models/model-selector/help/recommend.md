@@ -24,6 +24,8 @@ The result names the decision rule, nearest cheaper and stronger comparable neig
 
 After a blue or orange banner, a section titled `Snabbaste vägen till mätdata` supplies frozen inputs, the exact configurations to measure — the launch point and the one adjacent Rung the request can reach, or the measured frontier and the launchable points beside it where no exact point was selected, or that point alone where it reaches no second one, in which case both plans say there is nothing to compare — the checker and measurements, a bounded confidence-based stop, and both a quota-efficient sequential mode and a time-efficient parallel mode. The resulting observation artifact is accepted by `model-selector record`. `recommend` plans the experiment but performs no network request, evaluation, or write; normal work executes the brief, and there is no experiment command.
 
+A section titled `Observerad förbrukning` follows, beside the recommendation and never inside it. For the selected point and its frontier neighbors, it reports what this machine's own Usage Record store holds for that Seat: the mean of each token category the Harness counted, the mean elapsed seconds, and the record count and vintage behind them. A figure no record supports is stated as absent, never as zero, and none of it enters the frontier, clears the quality floor, or chooses anything — the same profile and ledger, with and without Usage Records, select the same point.
+
 ## POSITIONAL ARGUMENTS
 
 *WORKLOAD*
