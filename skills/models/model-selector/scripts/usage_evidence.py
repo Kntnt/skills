@@ -108,9 +108,9 @@ def _names(record: dict[str, Any], point: dict[str, Any]) -> bool:
 def _deliberations(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Return every portable deliberation the matched records carry, and how many.
 
-    Known levels first, in their own order, then the unresolved ones under
-    `null` — which is where every record capture writes today lands, the Seat
-    having no portable form to read from a finished session's own record.
+    Known levels first, sorted, then the unresolved ones under `null` — which
+    is where every record capture writes today lands, the Seat having no
+    portable form to read from a finished session's own record.
     """
 
     counts: dict[str | None, int] = {}

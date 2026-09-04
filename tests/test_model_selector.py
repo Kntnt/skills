@@ -6852,16 +6852,56 @@ def test_a_usage_record_capture_itself_wrote_reaches_the_reader(tmp_path: Path) 
 
     Every other test here hands the reader a Usage Record it shaped itself, so
     none of them can see the reader asking for a Seat field capture no longer
-    supplies. This one drives capture's own hook and reads back what it wrote.
+    supplies. This one drives capture's own hook against a transcript shaped as
+    Claude Code writes one, and reads back what capture wrote — including the
+    model, so the join is pinned on a value that actually varies rather than on
+    two nulls comparing equal.
     """
 
     capture = _load_capture()
     usage_evidence = _load_usage_evidence()
 
+    transcript = tmp_path / "session.jsonl"
+    transcript.write_text(
+        "\n".join(
+            json.dumps(
+                {
+                    "type": "assistant",
+                    "isSidechain": False,
+                    "message": {
+                        "model": model,
+                        "usage": {
+                            "input_tokens": 10,
+                            "output_tokens": 20,
+                            "cache_read_input_tokens": 5,
+                            "cache_creation_input_tokens": 3,
+                        },
+                    },
+                    "effort": "high",
+                    "timestamp": stamp,
+                }
+            )
+            for model, stamp in (
+                ("claude-opus-5", "2026-09-01T10:00:00Z"),
+                ("claude-opus-5", "2026-09-01T10:04:00Z"),
+            )
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
     data = tmp_path / "data"
     capture.install(data, tmp_path / "home", ["claude-code"], ["true"])
-    capture.hook(data, "SessionStart", {"session_id": "session-1"})
-    capture.hook(data, "SessionEnd", {"session_id": "session-1"})
+    capture.hook(data, "SessionStart", {"session_id": "s-1", "harness": "claude-code"})
+    capture.hook(
+        data,
+        "SessionEnd",
+        {
+            "session_id": "s-1",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+        },
+    )
 
     written = [
         json.loads(line)
@@ -6871,16 +6911,26 @@ def test_a_usage_record_capture_itself_wrote_reaches_the_reader(tmp_path: Path) 
     ]
     assert written, "capture wrote no Usage Record to read back"
     seat = written[0]["seat"]
-    # The premise the join rests on: a real record resolves no portable form.
+    # The model capture read out of the transcript, and the premise the join
+    # rests on: a real record resolves no portable form for it.
+    assert seat["model"] == "claude-opus-5"
     assert seat["portable_deliberation"] is None
 
-    summary = usage_evidence.usage_by_seat(
-        tmp_path / "data",
-        [{"model": seat["model"], "portable_deliberation": "high"}],
-    )[0]
+    matched, unmatched = usage_evidence.usage_by_seat(
+        data,
+        [
+            {"model": "claude-opus-5", "portable_deliberation": "high"},
+            {"model": "claude-sonnet-5", "portable_deliberation": "high"},
+        ],
+    )
 
-    assert summary["records"] == 1
-    assert summary["deliberations"] == [{"portable_deliberation": None, "records": 1}]
+    assert matched["records"] == 1
+    assert matched["deliberations"] == [{"portable_deliberation": None, "records": 1}]
+    assert matched["tokens"]
+    # A different model draws nothing, so the model is genuinely the key rather
+    # than two absent fields comparing equal.
+    assert unmatched["records"] == 0
+    assert unmatched["deliberations"] == []
 
 
 def test_usage_by_seat_means_a_token_category_only_where_every_record_carries_it(
