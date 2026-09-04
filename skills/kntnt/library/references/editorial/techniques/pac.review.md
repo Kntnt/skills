@@ -54,9 +54,39 @@ A review reaches this document because PAC was the resolved technique for the dr
 
 **Failure.** Headings reading *Premise*, *Analysis*, *Conclusion* over three paragraphs of exposition; a text whose structure is the technique's vocabulary and whose content is a description.
 
-**Edge.** Naming the parts is neither required nor forbidden, and a report may name its sections for what they hold without that being this failure.
+**Edge.** The finding here is the missing relation and not the heading over it. A draft with no headings at all can fail this one, and a draft whose sections are labelled with the parts they are, over relations that do hold, is a finding under visibility instead.
 
 **Minimum safe correction.** Raise the missing relation as the finding and leave the headings; renaming a section that holds the wrong thing hides the fault rather than repairing it.
+
+## Visibility
+
+**Test.** Read the headings alone, and the first sentence of each section where there are none. Ask what that list tells a reader. Where it names the parts of the arc rather than what each section established, that is one finding; where the path from claim to result cannot be made out from it at all, that is the other.
+
+**Failure.** Sections labelled with the parts they are, in whatever words the draft's language has for them, over an arc that does hold — the reader is shown the machinery and not the result. Its opposite: an analysis whose evidence, weighing, and result are spread evenly through undifferentiated paragraphs, so that a reader who wants to check the reasoning has to reassemble it first.
+
+**Edge.** A text with no headings is not hiding its arc. What counts is whether a reader can follow the path, not whether the layout announces it, and a short analysis in continuous prose is often the clearest form there is.
+
+**Minimum safe correction.** Rename each section for what it establishes, taking the words from the section's own findings. Where the arc is hidden rather than mislabelled, the repair is to the order of the material and is a finding to raise rather than an edit to make in passing.
+
+## Scale
+
+**Test.** Ask of each large section what claim it takes up and what it settled. A long document in which that question has one answer for the whole and none per section is a finding.
+
+**Failure.** A premise stated in the opening, sections that each add material to it, and one test arriving once the material is all in; a section that describes an area rather than taking up a claim about it.
+
+**Edge.** A short text carries one arc across the whole of it, and that is the ordinary shape rather than an over-stretched premise. What is at issue here is what a long document does with its sections.
+
+**Minimum safe correction.** Give each large section the claim it is already testing and let it say what the test settled, taking both from what the section holds. Where a section tests nothing, that is a finding about the document's shape rather than a premise to be written for it.
+
+## Partial arcs
+
+**Test.** For every section missing a part, find that part elsewhere in the document. A conclusion left to be gathered later is checked against the later section; a premise said to be established earlier is checked against the earlier one.
+
+**Failure.** A section stopping after its analysis in a document that never gathers the conclusions; a section concluding from a premise nothing anywhere states, so that the reader is handed the claim and the verdict together; a part left out of a text that has no other section for it to be in.
+
+**Edge.** A section need not announce the arrangement. Where the document's order already makes plain that the conclusions are collected together, a section ending on its analysis is complete, and a local conclusion added to it pre-empts the one that comes later.
+
+**Minimum safe correction.** Where the missing part exists and the connection to it is what is absent, restore the connection in the section's own terms — which earlier premise this analyses, which later section gathers this. Where the missing part does not exist at all, raise that rather than writing a conclusion the section was never given the material to reach.
 
 ## Proportion
 
