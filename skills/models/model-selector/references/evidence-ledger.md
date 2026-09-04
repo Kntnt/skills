@@ -45,6 +45,7 @@ Every external fact needs source URI, retrieval timestamp, parser version and so
 Normalize ordered objects before hashing. Preserve exact protected identifiers. `canonical_json` is compact JSON with object keys sorted — `json.dumps(value, sort_keys=True, separators=(",", ":"))` in the shipped idiom.
 
 ```text
+source_key = sha256(uri)
 model_version_key = sha256(provider | canonical_model_id | provider_release_id)
 model_reference_key = sha256(provider | canonical_model_id | version_kind | provider_release_id_or_alias)
 capability_prior_key = sha256(provider | model_version_or_reference_key | source_uri | effective_at_or_retrieved_at | normalized_tags | claim_hash)
@@ -62,7 +63,22 @@ OpenAI release slugs without an exposed dated snapshot use version kind `provide
 
 ## Required records
 
-`SourceState`: `source_key`, URI, provider, kind, ETag, Last-Modified, content hash, last checked/changed timestamps, parser version and status.
+`SourceState`: `record_type`, always `SourceState`; `source_key`; `uri`, the source's address and the only input to its key; `provider`, the slug of the party the source belongs to — the model provider, the gateway or the independent evaluator that publishes it; `kind`, one of the six values below; `status`, one of the five below; `etag`, `last_modified` and `content_hash`; `last_checked_at`, the time of the last retrieval, null on a source no pass has retrieved; `last_changed_at`, the time the content was last seen to differ, null where no change is recorded; `parser_version`, the parser that read the source; and `finding`.
+
+`kind` says what the source is. The vocabulary is closed, and a row carries exactly one of these six:
+
+| `kind` | What the source is |
+| --- | --- |
+| `model_release_index` | A provider's model list or release index. |
+| `model_detail` | One model's first-party detail page. |
+| `capability_source` | A first-party page making a qualitative capability claim. |
+| `benchmark_release_index` | An independent evaluator's release index. |
+| `commercial_terms` | A provider's pricing or subscription terms. |
+| `gateway_rate_card` | A gateway's rate card. |
+
+`status` says how the pass left the source, and it takes one of five values. `unchanged`, `changed`, `unreachable` and `invalid` are the four outcomes of a source that was due and retrieved; `not_due` is the fifth, and it is what a source gets that the pass considered and left alone because its cadence had not elapsed. A row therefore exists for every source the pass considered, not only for every source it retrieved.
+
+`etag`, `last_modified` and `content_hash` are the validators conditional retrieval reads — the first two as the response offers them, the third a hash of the fetched content for a source that offers neither — and each may be null. `finding` is human-readable prose recording what the pass made of the source, and nothing parses it.
 
 `AccessChannelSnapshot`: key, originating config profile/revision and channel ID, provider, surface or gateway, billing type, exact account plan/tier, region, currency, tax treatment, included-only or overage policy, actual recurring bill when supplied, source and valid interval. Snapshot a configured channel when evidence or observations first use it; later config changes create a new key and never rewrite prior observations.
 
@@ -94,7 +110,7 @@ The evaluated system identity a local attempt ran under is no record here and no
 
 ## Conditional update
 
-Default cadence: model/release indexes and commercial terms weekly; benchmark release indexes monthly. The current configuration may override these values. Check only sources required by enabled selections and families marked `watch_for_newer_versions`. Record `unchanged`, `changed`, `unreachable` or `invalid` for every due source.
+Default cadence: model/release indexes and commercial terms weekly; benchmark release indexes monthly. The current configuration may override these values. Check only sources required by enabled selections and families marked `watch_for_newer_versions`. Record a `SourceState` status for every source the pass considers — one of the four fetched outcomes for a due source, and `not_due` for one whose cadence has not elapsed.
 
 1. Conditionally retrieve model indexes, release notes, deprecation feeds and mutable first-party capability sources using ETag or Last-Modified; otherwise hash the index content. Refresh capability sources on the existing model/release-source cadence, and append a new low-confidence `CapabilityPrior` only when the sourced claim or its normalized tags change.
 2. Compute discovered version keys for configured selections and watched families. Fetch first-party detail pages only for relevant keys absent from `model-versions.jsonl`; a known immutable detail is never fetched again. Report a watched newer version without enabling or substituting it.
