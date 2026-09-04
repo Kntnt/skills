@@ -25,3 +25,7 @@ It does not explain the offering. A passage setting out how the supplier's produ
 It does not report from outside. An article's writer stands behind the material and reports it in their own voice; a case study's writer holds the text together while somebody else talks. The two can be built from the same interview, and what separates them is who the reader hears.
 
 It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+ABT ([`abt.md`](../techniques/abt.md)). What the customer has to tell is a narrative: what they were doing, what stopped working, what they did about it and what it changed. The arc runs under the parts above and is carried by the customer's own words, so what the reader follows is the account rather than a shape the writer put on it.

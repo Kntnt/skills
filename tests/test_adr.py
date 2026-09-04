@@ -55,6 +55,7 @@ RELATIONS = {
     ("0090", "0160"),
     ("0158", "0160"),
     ("0161", "0162"),
+    ("0095", "0164"),
     ("0017", "0019"),
     ("0029", "0059"),
     ("0050", "0059"),
@@ -509,6 +510,48 @@ def test_the_suppressed_instruction_preserves_the_envelope_record_history() -> N
     # already reconcilable with the run at fault.
     assert "level 3" in later
     assert "misapplied" in later
+
+
+def test_the_genre_supplied_technique_preserves_the_no_default_record_history() -> None:
+    """The genre's arc points past ADR-0095 without rewriting what it decided.
+
+    ADR-0095's one shared contract, its one file per genre and technique, the
+    directory as the list, the refusal of a value with no file, and `general`
+    as a complete default contract all stand. Only its clause that there is no
+    default technique was outrun, by installed genres that are not neutral
+    about the arc they are ordinarily written with — and the reason that
+    clause gave, that a technique is never applied because a text resembles
+    one, is what the later record leaves exactly as it was.
+    """
+
+    earlier = (
+        ADR
+        / "0095-a-first-drafts-requirements-are-stated-once-and-review-guidance-extends-them.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR / "0164-a-genre-names-the-technique-it-is-ordinarily-written-with.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert (
+        "a value with no file is refused rather than resolved to a default" in earlier
+    )
+    assert "never because a text resembles one" in earlier
+    assert "amended by ADR-0164" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "amends ADR-0095" in later
+
+    # The prohibition that clause gave its reason for stands, and so does the
+    # licence a run has when it infers a genre.
+    assert "has not selected one" in later
+    assert "ADR-0115" in later
+
+    # The road not taken is named twice over: one arc for the whole Collection,
+    # and a registry pairing each genre with its technique.
+    assert "default technique for the Collection" in later
+    assert "registry" in later
 
 
 def test_a_pointer_names_a_later_record() -> None:

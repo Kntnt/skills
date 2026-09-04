@@ -14,9 +14,9 @@ redline - review one text against the editorial contract, correct what it finds,
 
 `redline` reviews one text against the base editorial contract, resolved genre, optional technique, anti-slop catalogue, and resolved language guidance. It corrects findings within the Correction Budget, reports anything left, and ends with one mechanical pass.
 
-No provenance is required. A leading `kntnt` frontmatter map supplies defaults and is updated to match the run; no map is created when none exists.
+No provenance is required. A leading `kntnt` frontmatter map supplies defaults and is updated to match the run; no map is created when none exists. A `technique: none` in that map is its value for no technique rather than a missing one, so a text written without one is reviewed without one.
 
-Genre, technique, and language resolve independently from the Formal Invocation, `kntnt` metadata, the Contextual Instruction, Conversation Context, inference, and defaults. Defaults are `general`, no technique, and the text's language. A technique is never inferred, and mixed language produces a question.
+Genre, technique, and language resolve independently from the Formal Invocation, `kntnt` metadata, the Contextual Instruction, Conversation Context, inference, the resolved genre's ordinary technique, and defaults. Defaults are `general`, no technique, and the text's language. The delivery says which technique was resolved and where it came from. A technique is never inferred, and mixed language produces a question.
 
 A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
 
@@ -54,7 +54,7 @@ Select an installed genre. The default is `general`; an unknown genre is refused
 
 **--technique**=*TECHNIQUE*
 
-Select an installed structural technique. There is no default, and resemblance never selects one.
+Select an installed structural technique. Where none is named here, in the text's `kntnt` map, or in an instruction, the resolved genre's ordinary technique applies. Resemblance never selects one.
 
 **--language**=*LANGUAGE*
 

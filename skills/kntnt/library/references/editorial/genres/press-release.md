@@ -25,3 +25,7 @@ An announcement written for the editor deciding whether there is a story here an
 It does not write the journalist's article for them, and it does not narrate. Background, colour, and interpretation are theirs to add or leave out; what the release owes them is the news, the facts in a usable form, and somebody to ask.
 
 It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+None. The order of the parts above is the whole of a release's structure, and it is a recipient's habit rather than an arc: the news, then what somebody says it means, then the facts to lift. An arc built over it would take the news off the first sentence, which is the one thing a release cannot spend.

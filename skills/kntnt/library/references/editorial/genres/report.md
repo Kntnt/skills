@@ -31,3 +31,7 @@ A document written for people who asked for it and will act on what it says — 
 It does not persuade beyond what the evidence carries, and it does not perform. Rhetoric, an arresting opening, and a conclusion that reaches for significance all belong to texts whose reader has to be won; this reader is already obliged to read it, and what they need from it is that every sentence be accountable.
 
 It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+PAC ([`pac.md`](../techniques/pac.md)). This reader is checking something, so what a section of a report owes them is a claim that could be false, the material that tests it, and what the test settled. ABT is not this genre's arc and is no fallback for it: a report told as a complication and its consequence hands a story to somebody who came for a result they can act on and argue with.

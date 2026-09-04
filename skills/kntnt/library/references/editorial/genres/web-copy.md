@@ -21,3 +21,7 @@ It does not settle what is on the page. Which sections a page carries, what stan
 It is not an article with subheadings put into it. An article's reader chose the piece and reads it in the order it was written, so its prose may build, hold something back, and rest on what stood four paragraphs earlier; the same prose divided up afterwards has the appearance a scanner reads for and none of what they need underneath it. Where the text really is to be read through, because its reader chose it and means to finish, that is an article; where it is written for a named group to act on and return to, that is a report.
 
 It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+ABT ([`abt.md`](../techniques/abt.md)). A page with one thing to say carries the arc across the whole of it; more often the reader meets it inside a section, which has to stand alone for whoever entered there and can carry a complete small arc of its own. Where a page is neither — a set of facts somebody came to look up — nothing is built to give it one.

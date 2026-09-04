@@ -19,3 +19,7 @@ The default genre: the contract a text gets when nobody named a content type. It
 It does not stand in for a genre that exists. Where the request names a content type the Collection installs, that genre's contract is the one to load; this one is what applies when nothing was named and nothing in the request implies a named kind.
 
 It adds no requirement the base contract does not already hold. Everything about register, structure, sentences, words, claims, openings, endings, formatting, and consistency is stated there once, and repeating any of it here would make one rule two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+None. This is the contract a text gets when nobody named a kind of text, and a kind nobody named brings no arc with it. What puts a technique on a text here is a selection, and this genre is not one.

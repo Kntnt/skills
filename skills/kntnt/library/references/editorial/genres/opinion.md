@@ -25,3 +25,7 @@ It does not draw. A column takes the reader along and lets the point arrive; an 
 It does not weigh from outside. An article reports and lets the material carry what it carries; a report analyses from a position it has not taken; an opinion piece argues from one it has declared and declares it at the top. A draft that sets out the considerations without committing to any of them is an article on the same subject, and the reader who came to the opinion page still does not know what anybody thinks.
 
 It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+ABT ([`abt.md`](../techniques/abt.md)), and here it may show. The case is a complication and what follows from it — this is how things stand, this is what cuts against it, this is therefore what should happen — and the close the genre asks for is that consequence put as an ask. A reader deciding whether to argue back is entitled to see the steps, which is the same arc a column is at pains to hide.

@@ -29,3 +29,7 @@ A piece written to be published and read voluntarily — in a newspaper, a magaz
 It does not make every text a news story. An article may be an argument, a profile, an explanation, or an account of what happened, and the angle and the audience decide which; what none of them becomes is a document written to be filed. Where the material is a question a named group has to decide, that is a report, and where it is an announcement addressed to editors, that is a press release.
 
 It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+ABT ([`abt.md`](../techniques/abt.md)). An article's reader may stop at any sentence, and what holds them is a complication they are following: the situation as it stood, the thing that cut against it, and what came of that. The arc runs underneath the parts above rather than over them, and a reader carried by it never has to see it.

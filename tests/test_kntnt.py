@@ -6492,6 +6492,188 @@ def test_the_resource_format_records_what_inference_is_given_to_read() -> None:
     )
 
 
+# The section a genre closes with, and the level the two Skills read it at.
+# The level is one sentence both bodies carry word for word: one precedence
+# with one question cannot have two answers (ADR-0164).
+GENRE_TECHNIQUE_HEADING = "## The technique this genre is ordinarily written with"
+GENRE_TECHNIQUE_LEVEL = (
+    "6. For the technique alone: the technique the resolved genre names as the"
+    " one it is ordinarily written with, where that genre names one."
+)
+TECHNIQUE_SELECTION_SOURCES = (
+    "A technique applies because it was selected — by the invocation, the map,"
+    " an instruction that names one, or the genre that was resolved — and never"
+    " because the"
+)
+
+
+def _ordinary_technique(path: Path) -> str:
+    """Return what a genre's base half states its ordinary technique to be."""
+
+    below = path.read_text(encoding="utf-8").partition(f"\n{GENRE_TECHNIQUE_HEADING}\n")
+    assert below[1], (
+        f"{path}: the genre states nothing about the technique it is"
+        f" ordinarily written with, so a run that resolved it and named no"
+        f" technique has nothing to read and the arc this kind of text"
+        f" ordinarily has is reached only by a user who knew to ask"
+        f" (ADR-0164). See {STANDARD}."
+    )
+    return below[2].partition("\n## ")[0].strip()
+
+
+def test_every_genre_names_the_technique_it_is_ordinarily_written_with() -> None:
+    """The directory is the list, so the statement is owed by every file in it.
+
+    A genre's base half names the technique that genre is ordinarily written
+    with, or states that it has none, and the check is exhaustive over the
+    directory rather than over any list written anywhere — which is what keeps
+    adding a genre a matter of writing one file (ADR-0095, ADR-0164).
+    """
+
+    installed = {
+        path.stem
+        for path in (EDITORIAL / "techniques").glob("*.md")
+        if not path.name.endswith(".review.md")
+    }
+
+    # A glob that matched nothing would accept any name a genre wrote.
+    assert installed
+
+    for path in sorted((EDITORIAL / "genres").glob("*.md")):
+        if path.name.endswith(".review.md"):
+            continue
+
+        stated = _ordinary_technique(path)
+        assert stated, (
+            f"{path}: the section naming this genre's ordinary technique is"
+            f" empty, which states neither a technique nor that the genre has"
+            f" none (ADR-0164). See {STANDARD}."
+        )
+
+        named = stated.split()[0].strip(".,").lower()
+        assert named == "none" or named in installed, (
+            f"{path}: the genre opens that section with {named!r}, which is"
+            f" neither `none` nor a technique this Collection installs, so the"
+            f" level that reads it resolves to a resource that is not there"
+            f" (ADR-0164). See {STANDARD}."
+        )
+
+
+def test_the_genre_is_a_level_of_every_technique_resolution_order() -> None:
+    """A named genre supplies the arc, and only where nothing above it did.
+
+    The genre's level sits below the invocation, a recognized map and an
+    instruction, and above no technique at all, so a user who names a
+    technique gets the one they named and a user who names none gets the arc
+    that kind of text ordinarily has (ADR-0164).
+    """
+
+    for path in (WRITE, REDLINE):
+        text = path.read_text(encoding="utf-8")
+        resolution = text.partition("\n## Resolution\n")[2].partition("\n## Steps\n")[0]
+
+        assert GENRE_TECHNIQUE_LEVEL in resolution, (
+            f"{path}: the resolution order carries no level for the technique"
+            f" the resolved genre names, so a run that names a kind of text"
+            f" and no technique writes to no arc while the genre it resolved"
+            f" states one (ADR-0164). See {STANDARD}."
+        )
+
+        # The level is read after the genre is settled, and out of that genre.
+        assert "Settle the genre before the technique" in text, (
+            f"{path}: nothing orders the two, so the technique may be settled"
+            f" against a genre the run has not yet resolved (ADR-0164). See"
+            f" {STANDARD}."
+        )
+
+        # The default it stands above is unchanged and still the foot.
+        assert "7. The parameter's default: `general` for genre, no technique" in (
+            resolution
+        ), (
+            f"{path}: no technique at all is no longer the level below the"
+            f" genre's, so the genre either sits at the foot of the order or"
+            f" has displaced the default (ADR-0164). See {STANDARD}."
+        )
+
+
+def test_naming_a_technique_is_still_not_inferring_one() -> None:
+    """The genre carries a selection; nothing reads an arc off a text.
+
+    What the amendment changes is where a selection may come from, never that
+    a technique comes from a selection. A text that falls into a shape has not
+    selected one, and both bodies say so in the same words they always did
+    (ADR-0095, ADR-0115, ADR-0164).
+    """
+
+    for path, tail in (
+        (WRITE, "material or the draft happens"),
+        (REDLINE, "text happens"),
+    ):
+        text = path.read_text(encoding="utf-8")
+
+        assert TECHNIQUE_SELECTION_SOURCES in text, (
+            f"{path}: the body no longer names the four things that can select"
+            f" a technique, so a run meets a genre supplying one with no rule"
+            f" saying it may (ADR-0164). See {STANDARD}."
+        )
+        assert f"{TECHNIQUE_SELECTION_SOURCES} {tail}" in text, (
+            f"{path}: the prohibition on applying a technique because the text"
+            f" falls into its shape no longer follows the sources that may"
+            f" select one (ADR-0095, ADR-0164). See {STANDARD}."
+        )
+
+        # A genre is settled against the installed openings, and the statement
+        # the genre carries stays out of them.
+        assert GENRE_TECHNIQUE_HEADING not in _inference_paragraph(path), (
+            f"{path}: the licence for inferring a genre reaches the section a"
+            f" genre states its ordinary technique in, which puts an arc in"
+            f" front of a run still deciding which genre this is (ADR-0115,"
+            f" ADR-0164). See {STANDARD}."
+        )
+
+
+def test_the_delivery_says_where_a_resolved_technique_came_from() -> None:
+    """A user who named no technique can see why the text has an arc.
+
+    The genre supplying one is invisible unless the run says so, and a reader
+    who meets an arc they did not ask for has no way to tell a resolved
+    technique from a Skill inventing one (ADR-0164).
+    """
+
+    for path in (WRITE, REDLINE):
+        text = path.read_text(encoding="utf-8")
+
+        assert "naming the genre where the genre supplied it" in text, (
+            f"{path}: the delivery account never says where a resolved"
+            f" technique came from, so a genre-supplied arc arrives"
+            f" unexplained (ADR-0164). See {STANDARD}."
+        )
+
+
+def test_the_resource_format_places_the_ordinary_technique_below_the_opening() -> None:
+    """The author of the next genre meets the rule where the format is stated.
+
+    The statement is owed by every genre and belongs below its requirements,
+    outside the opening a genre is inferred against — a technique named in the
+    opening would be read as evidence about which genre applies (ADR-0115,
+    ADR-0164).
+    """
+
+    readme = EDITORIAL / "README.md"
+    text = readme.read_text(encoding="utf-8")
+
+    assert "ordinarily written with" in text, (
+        f"{readme}: the format page says nothing about the technique a genre"
+        f" names, so the next genre is written without one and the"
+        f" contradiction is visible only in a run (ADR-0164). See {STANDARD}."
+    )
+    assert "below the requirements" in text, (
+        f"{readme}: the format page does not say where the statement goes, so"
+        f" the next genre may put it in the opening a run reads to infer a"
+        f" genre (ADR-0115, ADR-0164). See {STANDARD}."
+    )
+
+
 def test_redline_leaves_source_fidelity_to_the_skill_that_owns_it() -> None:
     """A reviewing Skill has no source material, and says nothing about it.
 

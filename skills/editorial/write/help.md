@@ -14,7 +14,7 @@ write - turn a brief and its source material into one first draft
 
 Sources may be inline text, local files, URLs, the Contextual Instruction, or Conversation Context. Several sources may feed one draft. Supplying a file does not select an output; the response is the default.
 
-Genre, technique, language, and output resolve independently before writing. Genre defaults to `general`, technique defaults to none, and language defaults to the request and material. Ambiguous or mixed language produces a question.
+Genre, technique, language, and output resolve independently before writing. Genre defaults to `general`, and language to the request and material. Where nothing names a technique, the resolved genre supplies the one that kind of text is ordinarily written with, and a genre naming none leaves the draft with none. The delivery says which technique was resolved and where it came from. Ambiguous or mixed language produces a question.
 
 The draft follows the base editorial contract, resolved genre, optional technique, and resolved language's composition guidance. It uses no review, anti-slop, or mechanics guidance.
 
@@ -36,7 +36,7 @@ Select an installed genre by filename without its extension. The default is `gen
 
 **--technique**=*TECHNIQUE*
 
-Select an installed structural technique. There is no default, and a technique is never inferred from resemblance.
+Select an installed structural technique. Where none is named here, in the material's `kntnt` map, or in an instruction, the resolved genre's ordinary technique applies. A technique is never inferred from resemblance.
 
 **--language**=*LANGUAGE*
 
@@ -52,7 +52,7 @@ Deliver to `response` (the default) or one filesystem path. A new path creates a
 
 ## RESOLUTION
 
-Each parameter resolves from the Formal Invocation, a recognized `kntnt` frontmatter map, the Contextual Instruction, Conversation Context, inference, and finally its default. The first value found wins for that parameter only.
+Each parameter resolves from the Formal Invocation, a recognized `kntnt` frontmatter map, the Contextual Instruction, Conversation Context, inference, and finally its default; the technique has one level more, the resolved genre's ordinary technique, just above that default. The first value found wins for that parameter only.
 
 A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
 
@@ -81,7 +81,7 @@ kntnt:
 ---
 ```
 
-The map is merged into existing frontmatter. It never embeds the invocation, sources, or options.
+The map is merged into existing frontmatter. It never embeds the invocation, sources, or options. A later run reads `technique: none` as no technique rather than as a missing value, so a draft written without one is reviewed without one.
 
 ## DIAGNOSTICS
 

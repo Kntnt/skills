@@ -27,3 +27,7 @@ It does not sell harder than the source can pay for. The constructions written t
 It does not take a voice the source does not have. A teaser is the source's own first move towards somebody who has not met it, so it sounds like the source compressed: a teaser for one person's article written in the register of a marketing department has mis-sold the text before the reader reaches it, and a teaser for a case study written in the writer's own voice, where the source holds the client's, has done the same thing in the other direction.
 
 It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+ABT ([`abt.md`](../techniques/abt.md)). The movement asked for above is that arc at the scale of the whole text — a footing, something that unsettles it, and a consequence the reader is in no doubt follows — so naming it here names what a teaser is already doing.

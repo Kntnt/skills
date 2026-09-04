@@ -27,3 +27,7 @@ It does not step back behind its material. An article's writer stands behind wha
 It fixes no sequence of parts. There is no opening a column owes and no part that has to stand in a particular place: the movement belongs to the reflection, and where it goes is the writer's to find in the material. A column assembled to a pattern reads as one, which costs it the only thing the genre has.
 
 It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+ABT ([`abt.md`](../techniques/abt.md)). A column draws rather than argues, and what draws is a complication the reader follows to its arrival. Here the arc is subject to the genre's own rule above that the shaping never shows: it is what the piece is built on and never what the reader is watching.

@@ -26,7 +26,9 @@ The directory is the list. Nothing enumerates the installed genres or techniques
 
 A resource opens with `# <Name>` and a first paragraph saying in one or two sentences what this genre or technique is, so that a Skill listing what is installed has something to show without loading the rest. That opening is also what a genre inferred rather than named is inferred against: a Skill settling an unnamed genre reads the directory listing and these openings, and nothing further of any resource it does not resolve. It is therefore a requirement on every resource rather than a courtesy — an opening that does not say what its genre is leaves a Skill choosing between them nothing but the filename, and the reading it would fall back on is the whole resource. Below that it states its requirements, and it states only what the base contract does not: a rule repeated here is one rule made into two things to keep true.
 
-`general` is the default genre and therefore the contract an unspecified content type gets in full. There is no default technique: a technique applies because it was selected, and nothing anywhere gives a Skill grounds to infer one from a draft's shape.
+A genre's base half names the technique that genre is ordinarily written with, or states that it has none, and every genre in the directory states one or the other. That is a statement of practice rather than a requirement on the draft: a Skill's resolution order reads it below everything the user or the material says and above no technique at all, so somebody who names a kind of text and no technique gets the arc that kind of text ordinarily has, and somebody who names a technique gets the one they named. It is written as its own section below the requirements, where a run choosing between installed genres never reaches it — the openings are what an unnamed genre is settled against, and a technique named up there would be read as evidence about which genre this is.
+
+`general` is the default genre and therefore the contract an unspecified content type gets in full. A technique applies because it was selected — by the person invoking, by the material's own metadata, by an instruction, or by the genre that was resolved — and nothing anywhere gives a Skill grounds to infer one from a draft's shape.
 
 ## Review extensions
 
@@ -54,4 +56,4 @@ Nothing in it may be a preference, which is what separates it from the base cont
 
 ## Adding a genre or a technique
 
-Write one file in the right directory, name it for the canonical value, and give it a base half. Add the review extension beside it if there is diagnostic guidance to carry. Then check that a Skill can reach it: the value is the filename, so anything that reads the directory finds it without an edit anywhere else.
+Write one file in the right directory, name it for the canonical value, and give it a base half. A genre's base half closes by naming the technique that genre is ordinarily written with, or by stating that it has none, which is the one statement here nothing else can supply for it. Add the review extension beside it if there is diagnostic guidance to carry. Then check that a Skill can reach it: the value is the filename, so anything that reads the directory finds it without an edit anywhere else.
