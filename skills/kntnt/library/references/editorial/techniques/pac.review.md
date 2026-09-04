@@ -100,9 +100,9 @@ A review reaches this document because PAC was the resolved technique for the dr
 
 ## Inside the genre
 
-**Test.** Where the genre fixes where something goes, find that part and ask what it is doing there. An opening answer that is also the only place the document settles anything is this arc's conclusion standing in the genre's place, and an opening answer the draft defers is this arc taking a place the genre had already claimed.
+**Test.** Where the genre fixes where something goes, find that part and ask what it is doing there. An opening answer that is also the only place the document settles anything is this arc's conclusion standing in the genre's place, and a part the draft has moved from where the genre put it is this arc taking a position the genre had already settled. Whether the genre's own placement rule was met is a finding for the genre and not for this document.
 
-**Failure.** A report whose opening states the finding and whose sections then lay the material out without any of them settling anything: the document tests one claim once, and its result stands before the reader has met any of the evidence for it. Its opposite: a report that saves its answer for the end because that is where the arc concludes, leaving a reader who was owed a verdict at the top to read to the bottom for one.
+**Failure.** A report whose opening states the finding and whose sections then lay the material out without any of them settling anything: the document tests one claim once, and its result stands before the reader has met any of the evidence for it. Its opposite: a draft that moves the answer the genre had placed, because that is where this arc concludes — the technique deciding a position the genre had already settled.
 
 **Edge.** The opening answer and a section's conclusion may say the same thing without either being a finding: where one section settles the question the report was asked, the document says it twice, once as its answer and once where the work was done. What makes it a finding is a document that says it at the top alone, its sections having been left with material and no result.
 

@@ -60,6 +60,8 @@ Jargon is judged by the reader, not by the word. Ask whether this reader uses th
 
 An intensifier is tested by removing it. If the sentence means the same, it was decoration; if it means less, it was carrying information and the underlying claim may be the thing to check.
 
+Read the words that describe people, motives, and reasons for what they imply as well as for what they name, and check each implication against the material. A verb of frequency where the material records one occasion, a word for whose benefit something was done where the material says only that it was done, and a modifier of manner the material never characterises are the three that arrive unnoticed, because each reads as description rather than as a claim. The correction is the plainer word the material does support, not a hedge in front of the one it does not.
+
 For each abbreviation, find the first place the text uses it and the place the full name appears. The full name arriving afterwards, or not at all, is the finding. An abbreviation counts as established only where this reader already takes it for a word, which is not the same as the writer knowing it well, so read the draft once as somebody meeting the subject rather than working in it. Where the abbreviation appears only once or twice, restoring the full name throughout is the smaller correction; otherwise move the name up to the first use and leave both sentences otherwise alone.
 
 ## Reading the claims

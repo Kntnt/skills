@@ -4,7 +4,7 @@ Diagnostics for the requirements the press release genre's base half states, for
 
 ## The shape
 
-**Test.** Read the draft for its parts alone, ignoring how well each one is written: a headline, a summary that works with it as a news item, attributed comment, a body, background, contact details, and a standing description last. A part standing somewhere else in that sequence is a finding, and so is a part the material supplies and the draft leaves out.
+**Test.** Read the draft for its parts alone, ignoring how well each one is written, and check the sequence against the one the base half states — down to the notes, which sit below the release rather than inside it. A part standing somewhere else in that sequence is a finding, and so is a part the material supplies and the draft leaves out.
 
 **Failure.** A paragraph about what the organisation does before the news; the standing description at the top, or worked into the body as though it were background; contact details between body paragraphs; a comment placed before the recipient has been told what it is a comment on; background spliced through the body, so a journalist cannot lift a passage without carrying it along; a comment reporting a fact the body should carry, which spends the release's one attributed sentence on something anybody could have written.
 
@@ -68,9 +68,9 @@ Diagnostics for the requirements the press release genre's base half states, for
 
 **Failure.** A contact name with no way to reach them; an embargo stated in the material and absent from the release; three paragraphs of organisational history at the end of a page-long release.
 
-**Edge.** Where the material gives no contact and no embargo, none is invented, and the release simply ends. A missing contact is a finding against the material, reported rather than filled.
+**Edge.** A missing contact is a finding against the material, reported rather than filled, and the same holds for an embargo the material never states.
 
-**Minimum safe correction.** Restore the material's contact details or embargo verbatim, and cut the standing description to what a recipient would actually use.
+**Minimum safe correction.** Restore the material's contact details or embargo verbatim, and cut the standing description back at the point it stops being of use to a recipient.
 
 ## Length
 

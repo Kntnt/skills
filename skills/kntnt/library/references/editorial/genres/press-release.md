@@ -16,7 +16,7 @@ An announcement written for the editor deciding whether there is a story here an
 
 **It reads as information rather than as selling.** The recipient's job is to be sceptical of it, and prose that argues for its subject invites exactly the scepticism the facts then have to survive. What survives is what the material supports and the recipient can check.
 
-**What the release ends with is the material's.** The contact is a named person with the role that makes them worth ringing and a way to reach them that the material gives; a name by itself is not a contact. A time from which the release may be published appears where the material states one. The standing description is cut to what a recipient would actually use. Where the material gives nothing for one of these parts, the release ends without it rather than with something written to fill the place.
+**What the release ends with is the material's.** The contact is a named person with the role that makes them worth ringing and a way to reach them that the material gives; a name by itself is not a contact. A time from which the release may be published appears where the material states one. The standing description carries what a recipient would use and stops there. Where the material gives nothing for one of these parts, the release ends without it rather than with something written to fill the place.
 
 **It is short.** A release is a page and not a document. Detail beyond what the news needs goes into the notes at the end or is left for the recipient to ask about.
 
