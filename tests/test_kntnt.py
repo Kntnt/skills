@@ -3190,6 +3190,134 @@ def test_update_reports_integration_teardown_beside_the_withdrawal(
     ]
 
 
+def _install_stub() -> str:
+    """Answer `install-integrations` with one row per named Harness (#223)."""
+
+    return (
+        "import json, sys\n"
+        "harnesses = [\n"
+        "    a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--harness=')\n"
+        "]\n"
+        "json.dump(\n"
+        "    {\n"
+        "        'installed': [\n"
+        "            {'harness': h, 'status': 'installed'} for h in harnesses\n"
+        "        ],\n"
+        "        'unsupported': {'count': 0, 'supported': ['claude-code']},\n"
+        "    },\n"
+        "    sys.stdout,\n"
+        ")\n"
+    )
+
+
+def test_select_installs_a_newly_enabled_skills_own_integration(
+    tmp_path: Path,
+) -> None:
+    """Enabling a Skill that declares integrations installs them at once."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/install.py"))
+    _write(gamma / "scripts" / "install.py", _install_stub())
+
+    result = _run(world, "apply", "select", "gamma")
+
+    assert result.returncode == 0, result.stderr
+    integrations = _json(result)["integrations"]
+    assert integrations["note"] is None
+    assert integrations["attempted"] == [
+        {
+            "name": "gamma",
+            "status": "installed",
+            "detail": None,
+            "installed": [{"harness": "claude-code", "status": "installed"}],
+            "unsupported": {"count": 0, "supported": ["claude-code"]},
+        }
+    ]
+
+
+def test_select_at_the_project_layer_installs_no_integration(tmp_path: Path) -> None:
+    """Capture installs from the Global layer alone (#223 decision 4)."""
+
+    world = _world(tmp_path)
+    _present(world, "project", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/install.py"))
+    _write(gamma / "scripts" / "install.py", _install_stub())
+
+    result = _run(world, "apply", "select", "--project", "gamma")
+
+    assert result.returncode == 0, result.stderr
+    integrations = _json(result)["integrations"]
+    assert integrations["attempted"] == []
+    assert integrations["note"]
+    ran = world["project"] / ".claude" / "skills" / "gamma" / "scripts" / "install.py"
+    assert ran.is_file(), "gamma's own files still land in the Project layer"
+    assert not (ran.parent / "ran.json").exists()
+
+
+def test_selecting_an_unchanged_skill_again_does_not_reinstall(tmp_path: Path) -> None:
+    """A Skill already current is neither placed nor refreshed, so it is not
+    asked to install again (#223 decision 1): asking is scoped to the seams
+    that place or refresh a Skill's own files."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/install.py"))
+    _write(
+        gamma / "scripts" / "install.py",
+        "from pathlib import Path\n"
+        "Path(__file__).with_name('calls.log').open('a').write('x')\n"
+        + _install_stub(),
+    )
+
+    _run(world, "apply", "select", "gamma")
+    result = _run(world, "apply", "select", "gamma")
+
+    assert result.returncode == 0, result.stderr
+    assert _json(result)["integrations"]["attempted"] == []
+    calls = world["home"] / ".claude" / "skills" / "gamma" / "scripts" / "calls.log"
+    assert calls.read_text(encoding="utf-8") == "x"
+
+
+def test_update_installs_a_newly_adopted_entrys_own_integration(
+    tmp_path: Path,
+) -> None:
+    """An adopted entry is a placement like any other, so it is asked too."""
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    _run(world, "apply", "select", "alpha")
+    _write(
+        world["source"] / "skills" / "kntnt" / "catalog.json",
+        _catalog([_entry("alpha", "code", binaries=["git"]), _entry("delta", "code")]),
+    )
+    _write(
+        world["source"] / "skills" / "code" / "delta" / "SKILL.md",
+        _skill_md("delta", integrations="scripts/install.py"),
+    )
+    _write(
+        world["source"] / "skills" / "code" / "delta" / "scripts" / "install.py",
+        _install_stub(),
+    )
+    _write(world["source"] / "skills" / "code" / "delta" / "help.md", _manpage("delta"))
+
+    result = _apply_update(world, "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["enabled"] == ["delta"]
+    integrations = payload["integrations"]
+    assert integrations["note"] is None
+    by_name = {item["name"]: item for item in integrations["attempted"]}
+    assert by_name["delta"]["status"] == "installed"
+    assert by_name["delta"]["installed"] == [
+        {"harness": "claude-code", "status": "installed"}
+    ]
+
+
 def test_update_never_asks_the_transport_for_a_withdrawn_skill(
     tmp_path: Path,
 ) -> None:
@@ -3322,6 +3450,7 @@ def test_the_relayed_reason_never_reaches_the_payload(tmp_path: Path) -> None:
         "enabled",
         "current",
         "removed",
+        "integrations",
         "catalog_refreshed",
         "unsatisfied",
         "capabilities",
@@ -9818,7 +9947,6 @@ _MODEL_SELECTOR_MANPAGES = frozenset(
         "config/remove.md",
         "config/reset.md",
         "config/show.md",
-        "capture.md",
         "observe.md",
         "recommend.md",
         "record.md",

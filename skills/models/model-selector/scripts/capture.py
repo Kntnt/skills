@@ -13,12 +13,18 @@ rather than a `RunObservation`: one per Seat it ran on, carrying no outcome,
 no checker, and no Cohort, appended to its own store the moment the session
 ends. Nothing waits for a human, ever.
 
-This is an explicit opt-in of an Enabled Skill rather than a consequence of
-enabling one, because it installs persistent Harness integration and handles
-local session metadata. What it writes is the minimum a Usage Record needs:
-identities are opaque, measurements the environment did not expose stay
-`null`, and no prompt, response, reasoning, diff, terminal output, or
-transcript is ever copied.
+Capture follows this Skill's own Enabled state and asks for nothing beyond
+it (#223). The Manager installs this feature's owned lifecycle integration
+into every supported Detected Harness of the Global layer the moment the
+Skill is Enabled, placed, or refreshed, and removes every entry the moment
+it is Disabled — the same two seams that already place and remove the
+Skill's own files. There is no second opt-in, no consent prompt, and no
+configuration state of this feature's own to go stale: disk is the one
+truth (ADR-0090), so a hook either runs because a Harness's own
+configuration names it or it does not run at all. What it writes is the
+minimum a Usage Record needs: identities are opaque, measurements the
+environment did not expose stay `null`, and no prompt, response, reasoning,
+diff, terminal output, or transcript is ever copied.
 """
 
 from __future__ import annotations
@@ -164,34 +170,10 @@ def home(data: Path) -> Path:
     return data / "capture"
 
 
-def _config_path(data: Path) -> Path:
-    """Return where the capture configuration is kept."""
-
-    return home(data) / "capture.json"
-
-
 def _drafts(data: Path) -> Path:
     """Return where per-session drafts are kept."""
 
     return home(data) / "drafts"
-
-
-def config(data: Path) -> dict[str, Any]:
-    """Return the capture configuration, or the off state where there is none."""
-
-    off: dict[str, Any] = {
-        "schema_version": SCHEMA_VERSION,
-        "enabled": False,
-        "harnesses": [],
-    }
-    path = _config_path(data)
-    if not path.exists():
-        return off
-    try:
-        loaded = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        return off
-    return loaded if isinstance(loaded, dict) else off
 
 
 def _integrations() -> Any:
@@ -255,102 +237,59 @@ def owner() -> str:
     return "kntnt.model-selector.capture"
 
 
-CONSENT = {
-    "integration": (
-        "Local session lifecycle hooks are installed into each named Harness, "
-        "owned by this feature and removed with it."
-    ),
-    "retained": (
-        "Only Usage Record fields: the opaque session identity and usage key, "
-        "the Harness and its inventory revision, the exact Seat the work ran "
-        "on, the usage categories the environment exposed, and the two "
-        "instants a session ran between. Never prompts, responses, reasoning, "
-        "source, diffs, terminal output, secrets or transcripts."
-    ),
-    "cleanup": (
-        "A finished session is appended to the Usage Record store immediately, "
-        "one record per Seat it ran on. There is no waiting store, nothing is "
-        "queued for review, and nothing expires."
-    ),
-    "opt_out": (
-        "Run `capture disable`, or make model-selector Disabled: either removes "
-        "every hook this feature owns and keeps the Usage Records already "
-        "appended."
-    ),
-}
-
-
-def enable(
-    data: Path,
-    root: Path,
-    harnesses: list[str],
-    command: list[str],
-    seat: dict[str, Any] | None = None,
+def install(
+    data: Path, root: Path, harnesses: list[str], command: list[str]
 ) -> dict[str, Any]:
-    """Opt in to automatic capture and install the integration it needs.
+    """Install this feature's owned integration, idempotently.
 
-    *seat* is the exact main seat this Harness is running on. No lifecycle
-    payload carries it — a Harness reports what happened, not what it is — and a
-    script may not guess it, so the agent that knows supplies it once here and
-    every session captured afterwards is fingerprinted from it. Without it,
-    captured work has no configuration to be measured about.
+    This is the word the Manager says at every seam that places or refreshes
+    an Enabled Skill's files (#223): install, repair, and refresh are the
+    same convergence over whatever is on disk (ADR-0090), so being asked
+    twice changes nothing. Naming no Harness means every Harness the
+    Collection Library has an adapter for.
+
+    Only a named Harness the Library's `integrations.SUPPORTED` actually
+    holds an adapter for is attempted; the rest is reported as a single
+    count naming the supported set rather than one row each, because a
+    caller naming Detected Harnesses in bulk — this collection ships an
+    adapter for three of the seventy-odd this machine may have — would
+    otherwise bury the outcome that matters under rows for Harnesses no
+    adapter exists for (#223 decision 3).
     """
 
     integrations = _integrations()
-
-    # Naming no Harness means every Harness an adapter exists for, which is what
-    # the consent the user just gave says it installs into.
+    supported = set(integrations.SUPPORTED)
     named = list(harnesses) or list(integrations.SUPPORTED)
+    attempted = [harness for harness in named if harness in supported]
+    unsupported = [harness for harness in named if harness not in supported]
     runs = _hook_command(command, data)
     installed = [
-        integrations.install(owner(), harness, root, runs) for harness in named
+        integrations.install(owner(), harness, root, runs) for harness in attempted
     ]
-
-    home(data).mkdir(parents=True, exist_ok=True)
-    _drafts(data).mkdir(exist_ok=True)
-    _config_path(data).write_text(
-        json.dumps(
-            {
-                "schema_version": SCHEMA_VERSION,
-                "enabled": True,
-                "consented_at": _now(),
-                "seat": {key: (seat or {}).get(key) for key in SEAT_ALLOWED},
-                "harnesses": named,
-            },
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
     return {
-        "enabled": True,
-        "consent": dict(CONSENT),
-        "harnesses": installed,
+        "installed": installed,
+        "unsupported": {"count": len(unsupported), "supported": sorted(supported)},
     }
 
 
 def disable(data: Path, root: Path) -> dict[str, Any]:
-    """Stop capture and remove every integration this feature owns.
+    """Remove every integration this feature owns, wherever it installed one.
 
-    Accepted Usage Records are untouched. Turning a measurement off is not a
-    reason to forget what it already measured, and a purge is a separate act
-    the user has to ask for by name.
+    Accepted Usage Records are untouched. Every Harness the Collection
+    Library has an adapter for is attempted, whether or not this machine
+    ever held our entry there: removal reads the Harness's own file and
+    converges it (ADR-0090), so trying one that never carried our entry is a
+    converged state rather than an error, and there is no separate on/off
+    flag of this feature's own left to update — the Harness's own
+    configuration is the one truth capture ever reads.
     """
 
     integrations = _integrations()
-    current = config(data)
     removed = [
         integrations.remove(owner(), harness, root)
-        for harness in current.get("harnesses") or list(integrations.SUPPORTED)
+        for harness in integrations.SUPPORTED
     ]
-
-    if _config_path(data).exists():
-        _config_path(data).write_text(
-            json.dumps({**current, "enabled": False}, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
-    return {"enabled": False, "harnesses": removed}
+    return {"harnesses": removed}
 
 
 def _opencode_session_id(payload: dict[str, Any]) -> str | None:
@@ -419,29 +358,6 @@ def _clean(payload: Any) -> dict[str, Any]:
     return kept
 
 
-def _configured_harness(data: Path) -> str | None:
-    """Return the Harness a payload that named none must have come from.
-
-    The installer writes the Harness into the command it installs, so an
-    ordinary hook always names one. Where a caller has not, one configured
-    Harness answers it and several cannot: guessing between them would file a
-    session's usage under a configuration it never ran on.
-    """
-
-    configured = config(data).get("harnesses")
-    if isinstance(configured, list) and len(configured) == 1:
-        named = configured[0]
-        return named if isinstance(named, str) else None
-    return None
-
-
-def _configured_seat(data: Path) -> dict[str, Any]:
-    """Return the seat recorded when capture was opted in to."""
-
-    seat = config(data).get("seat")
-    return seat if isinstance(seat, dict) else {}
-
-
 def _draft_path(data: Path, session: str) -> Path:
     """Return where one session's draft is kept."""
 
@@ -470,15 +386,16 @@ def _store(path: Path, record: dict[str, Any]) -> None:
     )
 
 
-def _seat_of(
-    draft: dict[str, Any], payload: dict[str, Any], configured: dict[str, Any]
-) -> dict[str, Any]:
+def _seat_of(draft: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
     """Return the exact seat this lifecycle signal says work ran on.
 
     A payload that names one wins, because a session can be running on
-    something other than what was configured; the seat this draft is
-    currently tracking is the fallback, and the seat recorded at opt-in
-    answers where neither said.
+    something other than what the draft already tracks; the seat this draft
+    is currently tracking is the fallback. Nothing is supplied at
+    installation any more (#223 decision 7): the Seat comes from the
+    Harness's own record of the finished session, read once at that
+    session's end (`_measured_seats`), or from an explicit null where
+    neither a payload nor that record ever named one.
     """
 
     seat = payload.get("seat")
@@ -487,7 +404,7 @@ def _seat_of(
     held = draft.get("seat")
     if isinstance(held, dict) and held.get("model"):
         return held
-    return configured if isinstance(configured, dict) else {}
+    return {}
 
 
 def _touch_seat(
@@ -728,12 +645,15 @@ def _idle() -> dict[str, Any]:
 
 
 def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
-    """Answer one lifecycle signal under an opted-in configuration."""
+    """Answer one lifecycle signal.
+
+    There is no separate on/off state of this feature's own to check any
+    more (#223): a hook only ever runs because a Harness's own configuration
+    names it, which only happens once this Skill's integration has been
+    installed, so answering the signal is the whole of the work.
+    """
 
     event = _moment(event, payload)
-    if not config(data).get("enabled"):
-        return _idle()
-
     clean = _clean(_normalized(payload))
     session = clean.get("session_id")
     if not session:
@@ -744,12 +664,12 @@ def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
         "schema_version": SCHEMA_VERSION,
         "session_key": session,
         "session_identity": _opaque(session),
-        "harness": clean.get("harness") or _configured_harness(data),
+        "harness": clean.get("harness"),
         "harness_inventory_revision": clean.get("harness_inventory_revision"),
         "seat": {},
         "seats": {},
     }
-    seat = _seat_of(held, clean, _configured_seat(data))
+    seat = _seat_of(held, clean)
     draft = {
         **held,
         "session_key": session,
@@ -784,24 +704,26 @@ def _storage(data: Path) -> int:
 def status(data: Path, root: Path) -> dict[str, Any]:
     """Report capture's own state, without a network request or an evaluation.
 
-    Each Harness's own health is reported beside whether its finished session
-    record can supply measurements at all (#225): a store of Usage Records
-    that stays empty because a Harness keeps no readable record is something
-    to say plainly here, never something left for the user to discover from
-    the store itself.
+    Every Harness the Collection Library has an adapter for is reported,
+    whether or not this machine happens to hold our entry there right now —
+    there is no separate configuration of this feature's own left to consult
+    (#223): the Harness's own file is read fresh, exactly as `install` and
+    `remove` already read it (ADR-0090). Each one's health is reported beside
+    whether its finished session record can supply measurements at all
+    (#225): a store of Usage Records that stays empty because a Harness
+    keeps no readable record is something to say plainly here, never
+    something left for the user to discover from the store itself.
     """
 
     integrations = _integrations()
     reader = _session_records()
-    current = config(data)
     return {
-        "enabled": bool(current.get("enabled")),
         "harnesses": [
             {
                 **integrations.health(owner(), harness, root),
                 "measurements": harness in reader.SUPPORTED,
             }
-            for harness in current.get("harnesses") or []
+            for harness in integrations.SUPPORTED
         ],
         "storage_bytes": _storage(data),
     }
@@ -856,9 +778,10 @@ def purge_paths(data: Path) -> list[dict[str, Any]]:
 def purge(data: Path) -> list[dict[str, Any]]:
     """Remove everything this feature owns beyond the ledger, and report it.
 
-    Removing `capture/` turns capture off, because its `capture.json` consent
-    record goes with it; the Harness hooks stay installed, since this verb
-    never touches them, and `capture --on` turns capture back on.
+    The Harness hooks stay installed, since this verb never touches them and
+    there is no on/off flag of this feature's own for a purge to clear any
+    more (#223): a session that starts after a purge is captured exactly as
+    one before it was, into a `capture/` this verb's own removal recreates.
     """
 
     report = purge_paths(data)
@@ -870,9 +793,9 @@ def purge(data: Path) -> list[dict[str, Any]]:
 def _hook_command(supplied: list[str], data: Path) -> list[str]:
     """Return the command a Harness runs for a lifecycle event.
 
-    The data directory travels inside it. A hook installed for one directory and
-    run against another is a hook that reads an empty configuration and answers
-    every session as though capture were off.
+    The data directory travels inside it. A hook installed for one directory
+    and run against another writes its drafts and records where nobody looks
+    for them.
     """
 
     command = list(supplied) or ["uv", "run", str(Path(__file__).resolve()), "hook"]
@@ -885,6 +808,20 @@ def default_data() -> Path:
     """Return the data directory this Skill keeps its evidence in by default."""
 
     return Path.home() / ".kntnt" / "model-selector"
+
+
+def install_integrations(harnesses: list[str]) -> dict[str, Any]:
+    """Install this feature's owned integration, resolving its own data and root.
+
+    This is the mirror of `remove_integrations`, the other word the Manager
+    says at the seams that place or refresh an Enabled Skill's files (#223):
+    it resolves this Skill's own default data directory and Harness root
+    itself, because the Manager asking for it must not have to know where
+    this Skill keeps its evidence (ADR-0090), exactly as removal already
+    does for the opposite word.
+    """
+
+    return install(default_data(), Path.home(), harnesses, [])
 
 
 def remove_integrations() -> dict[str, Any]:
@@ -915,19 +852,25 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "action",
-        choices=("enable", "disable", "hook", "status", "remove-integrations", "purge"),
+        choices=(
+            "install-integrations",
+            "remove-integrations",
+            "hook",
+            "status",
+            "purge",
+        ),
     )
 
-    # Every action but the Manager's teardown is invoked by this Skill, which
-    # resolves the data directory itself; the teardown is invoked by something
-    # that must not have to know where this Skill keeps its evidence.
+    # Every action but the Manager's own two — install and remove — is
+    # invoked by this Skill, which resolves the data directory itself; the
+    # Manager's two are invoked by something that must not have to know
+    # where this Skill keeps its evidence.
     parser.add_argument("--data", default=str(default_data()))
     parser.add_argument("--root", default=str(Path.home()))
     parser.add_argument("--harness", action="append", default=[])
     parser.add_argument("--command", action="append", default=[])
     parser.add_argument("--event", default="")
     parser.add_argument("--owner", default=owner())
-    parser.add_argument("--seat", default="")
 
     # `--yes` gates only `purge`'s write, exactly as `config reset --evidence`
     # needs it: a preview without it is a success, never a refusal.
@@ -957,14 +900,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.action == "remove-integrations":
         _emit(remove_integrations())
-    elif args.action == "enable":
-        try:
-            seat = json.loads(args.seat) if args.seat else {}
-        except ValueError:
-            seat = {}
-        _emit(enable(data, root, args.harness, args.command, seat))
-    elif args.action == "disable":
-        _emit(disable(data, root))
+    elif args.action == "install-integrations":
+        _emit(install_integrations(args.harness))
     elif args.action == "purge":
         _emit(
             {

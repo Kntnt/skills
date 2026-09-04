@@ -30,10 +30,6 @@ model-selector - compare configured AI model systems by price and performance
 
 **/model-selector** **record** [**--data=**_PATH_] *PATH* [**--** *INSTRUCTION*]
 
-**/model-selector** **capture** **--on** [**--harness=**_NAME_] [**--data=**_PATH_] [**--** *INSTRUCTION*]
-
-**/model-selector** **capture** (**--off**|**--status**) [**--data=**_PATH_] [**--** *INSTRUCTION*]
-
 **/model-selector** **status** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
@@ -49,6 +45,8 @@ Without representative matched measurements, cold start chooses the weakest plau
 High-consequence or irreversible work without a trustworthy checker uses the strongest plausible enabled configuration and refuses unsafe exploration.
 
 Every result labels its evidence source, date, uncertainty, exclusions, and missing evidence. Bundled public data is a prior, not local measurement.
+
+Enabling this Skill installs session lifecycle integration into each supported Detected Harness in the Global layer. It retains only the Seat a session ran on, usage counts, timestamps, and opaque identifiers — never prompts, responses, reasoning, file contents, or paths. Disabling the Skill removes every entry this integration owns and keeps what was already measured.
 
 ## COMMANDS
 
@@ -88,17 +86,13 @@ Perform one bounded refresh of due model indexes, first-party capability sources
 
 Turn completed routed attempts into sanitized run observations in a caller-owned artifact. Only an external judgement establishes an outcome and unavailable measurements stay `null`. Without **--import** it writes no ledger and the artifact waits for `record`; with it, a routed caller's machine-judged observations are filed in the same call.
 
-**capture**
-
-Opt in to automatic local usage capture during ordinary Harness work, report its health, or turn it off again. Its page states what is installed and what is retained.
-
 **record** *PATH*
 
 Validate and append unseen local evaluation observations. Conflicting historical observations are preserved rather than overwritten.
 
 **status**
 
-Report the profile, evidence vintage, due sources, gaps, and provisional facts without network access or writes.
+Report the profile, evidence vintage, due sources, gaps, provisional facts, and capture's own health without network access or writes.
 
 ## OPTIONS
 
@@ -125,18 +119,6 @@ For `recommend`, select the highest conservative quality within a budget when ev
 **--quality=**_SCORE_
 
 For `recommend`, select the lowest conservative comparable cost that clears the quality floor. Mutually exclusive with `--budget`.
-
-**--on**, **--off**
-
-Consent to automatic capture and install its owned lifecycle integration, or stop it and remove every hook this feature owns. Valid only for `capture`. Accepted Usage Records survive `--off`, and making the Skill Disabled removes the same integrations without a second step.
-
-**--status**
-
-Report capture's own state: whether it is enabled, adapter health per Harness, and storage in use. Valid only for `capture`, and distinct from the `status` command, which reports the profile and the evidence.
-
-**--harness=**_NAME_
-
-Install into the named Harness, repeatable; `claude-code`, `codex`, or `opencode`. Valid only with `--on`, and defaults to every supported Harness.
 
 **--force**
 
@@ -172,7 +154,7 @@ The default active profile and revision history. **--data** relocates it.
 
 **~/.kntnt/model-selector/capture/**
 
-Capture configuration and temporary session drafts. A draft is deleted the moment its session ends.
+Temporary per-session drafts. A draft is deleted the moment its session ends.
 
 **Evidence ledger**
 

@@ -1774,6 +1774,150 @@ def _teardown(name: str, script: Path) -> dict[str, Any]:
     return {"name": name, "status": "removed", "detail": None, "removed": removed}
 
 
+# What a Project-layer placement leaves out. An owned entry is keyed by owner
+# inside a Harness's own configuration, so a Global and a Project Enable of
+# the same Skill would write and remove one another's single entry —
+# measurement is a property of the machine, not of a working directory
+# (issue #223 decision 4).
+PROJECT_LAYER_INTEGRATIONS_NOTE = (
+    "the Project layer installs no integration; only a Global Enable does"
+)
+
+
+def install_integrations(
+    names: list[str], directories: list[Path], harnesses: list[str]
+) -> list[dict[str, Any]]:
+    """Ask every skill in *names* that owns Harness integrations to install them.
+
+    The mirror of `teardown_integrations`: the same declaration
+    (`metadata.kntnt.integrations`), the same per-skill script, the other
+    word (issue #223 decision 1). It runs after a placement or a refresh has
+    landed the skill's files, so the script it declares is there to run.
+
+    Detected Harnesses are the Manager's own to resolve and pass, because a
+    script may not sniff which Harness invoked it (ADR-0030) and the Manager
+    already knows what this machine has (issue #223 decision 2); which of
+    those a supported adapter actually exists for is the declared script's
+    own answer to give back; every Detected Harness is handed on regardless
+    of size. Install, repair, and refresh stay the same convergence over
+    whatever is on disk (ADR-0090), so asking an already-installed skill
+    again changes nothing, and a failed installation is reported per skill
+    and never raised, exactly as a failed teardown is.
+    """
+
+    reported: list[dict[str, Any]] = []
+    for name in names:
+        for directory in directories:
+            skill = directory / name
+            body = skill / "SKILL.md"
+            if not body.exists():
+                continue
+            try:
+                declared = (
+                    collection_block(
+                        parse_frontmatter(body.read_text(encoding="utf-8"))
+                    )
+                    or {}
+                ).get("integrations")
+            except OSError:
+                continue
+            if not isinstance(declared, str) or not declared.strip():
+                continue
+
+            # A declaration is a path inside the skill, and only inside it, the
+            # same rule teardown enforces for the same reason.
+            script = (skill / declared).resolve()
+            if not script.is_relative_to(skill.resolve()):
+                reported.append(
+                    {
+                        "name": name,
+                        "status": "failed",
+                        "detail": f"{declared} points outside the skill's own directory",
+                        "installed": [],
+                    }
+                )
+                continue
+
+            reported.append(_install(name, script, harnesses))
+    return reported
+
+
+def _install(name: str, script: Path, harnesses: list[str]) -> dict[str, Any]:
+    """Run one skill's declared install and read what it says it installed."""
+
+    if not script.exists():
+        return {
+            "name": name,
+            "status": "failed",
+            "detail": f"{script.name} is declared but not installed",
+            "installed": [],
+        }
+    try:
+        completed = subprocess.run(
+            [
+                "uv",
+                "run",
+                "--quiet",
+                str(script),
+                "install-integrations",
+                *[f"--harness={harness}" for harness in harnesses],
+            ],
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=120,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        return {"name": name, "status": "failed", "detail": str(exc), "installed": []}
+
+    if completed.returncode != 0:
+        return {
+            "name": name,
+            "status": "failed",
+            "detail": (completed.stderr or completed.stdout).strip()[:200],
+            "installed": [],
+        }
+    try:
+        answered = json.loads(completed.stdout)
+        installed = answered.get("installed", []) if isinstance(answered, dict) else []
+        unsupported = (
+            answered.get("unsupported") if isinstance(answered, dict) else None
+        )
+    except ValueError:
+        installed, unsupported = [], None
+    report = {
+        "name": name,
+        "status": "installed",
+        "detail": None,
+        "installed": installed,
+    }
+    if unsupported:
+        report["unsupported"] = unsupported
+    return report
+
+
+def placement_integrations(
+    names: list[str],
+    directories: list[Path],
+    harnesses: list[str],
+    *,
+    global_layer: bool,
+) -> dict[str, Any]:
+    """Report what an Enabled skill's own install call did, or why none ran.
+
+    Capture installs from the Global layer alone (issue #223 decision 4), so
+    a Project-layer placement attempts nothing and names the reason in this
+    report's one `note` line rather than silently doing nothing.
+    """
+
+    if not global_layer:
+        return {"attempted": [], "note": PROJECT_LAYER_INTEGRATIONS_NOTE}
+    return {
+        "attempted": install_integrations(names, directories, harnesses),
+        "note": None,
+    }
+
+
 def remove_skills(
     names: list[str], harnesses: list[str], *, global_layer: bool
 ) -> dict[str, Any]:
@@ -2521,6 +2665,9 @@ def cmd_apply_select(
             "placed": place,
             "removed": remove,
             "noop": noop,
+            "integrations": placement_integrations(
+                placed["confirmed"], directories, harnesses, global_layer=global_layer
+            ),
             "unsatisfied": unsatisfied_on_disk(harnesses, global_layer=global_layer),
             "layer": "global" if global_layer else "project",
             "catalog_refreshed": catalog_from_origin(),
@@ -2746,6 +2893,12 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
             "enabled": adopted,
             "current": current,
             "removed": withdrawals,
+            "integrations": placement_integrations(
+                outcome["confirmed"],
+                layer_dirs(harnesses, global_layer=global_layer),
+                harnesses,
+                global_layer=global_layer,
+            ),
             "catalog_refreshed": refreshed,
             "unsatisfied": unsatisfied,
             "capabilities": capabilities,
