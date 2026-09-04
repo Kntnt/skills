@@ -29,28 +29,26 @@ where this module is called from, not a rule every caller has to remember.
 
 ## Matching a Usage Record to a named point
 
-`recommend`'s frontier-neighbour entries (`_frontier_audit` in `route.py`)
-carry only `model` and `portable_deliberation`, never the finer identity
-fields — `channel`, `surface`, `native_deliberation`, `adapter_id` — the
-selected launch happens to carry too. A Usage Record's own Seat is finer
-than that for a session's own main turns, and coarser still for a delegated
-subagent's: the Collection Library's `session_records.py` can read a
-subagent's exact model and native deliberation control from Claude Code's
-own transcript, but never its channel, surface, adapter or serving mode
-(issue #225), so those stay an explicit `null` on every delegated Seat
-capture writes.
+The join key is `model`, and nothing finer. `recommend`'s frontier-neighbour
+entries (`_frontier_audit` in `route.py`) carry `model` and
+`portable_deliberation`, and a Usage Record's own Seat carries a model too —
+but never a portable deliberation, on any Seat capture writes. The Collection
+Library's `session_records.py` reads a session's exact model and the Harness's
+own native effort control out of the finished transcript, and no portable
+form exists to read; the one thing that ever supplied one, an opt-in argument
+naming the Seat by hand, is gone, because Enabling the Skill is now the whole
+gesture and nothing is supplied at installation. Joining on the pair would
+therefore match nothing at all, on every machine.
 
-`(model, portable_deliberation)` is therefore the coarsest identity both a
-named point and a Usage Record's Seat can name, and the only one every kind
-of named point — a selected launch and a frontier neighbour alike — can
-supply without this module re-deriving anything `route.py`'s selection core
-already owns. Every point is matched by exactly this pair, launch included:
-using a finer key for one row and a coarser one for another would make one
-table's record count mean two different things. A Usage Record whose Seat
-carries no resolved portable deliberation at all — every delegated Seat
-capture writes today — matches no point and is absent from every row's
-count; that is a known, stated limitation of what issue #225 resolved, not a
-silent gap.
+What that costs is real and is stated rather than hidden: two named points
+that differ only in deliberation share one model, so they draw the same
+records and report the same figures. `deliberations` in each summary is what
+keeps that honest — it names every portable deliberation the matched records
+actually carry, and how many carry each, so a reader can see when one figure
+stands for a mixture rather than for the row it sits on. A record whose Seat
+resolved no portable deliberation at all, which is every record capture
+writes today, is counted there under `null`.
+
 """
 
 from __future__ import annotations
@@ -104,9 +102,29 @@ def _names(record: dict[str, Any], point: dict[str, Any]) -> bool:
     seat = record.get("seat")
     if not isinstance(seat, dict):
         return False
-    return seat.get("model") == point.get("model") and seat.get(
-        "portable_deliberation"
-    ) == point.get("portable_deliberation")
+    return seat.get("model") == point.get("model")
+
+
+def _deliberations(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return every portable deliberation the matched records carry, and how many.
+
+    Known levels first, in their own order, then the unresolved ones under
+    `null` — which is where every record capture writes today lands, the Seat
+    having no portable form to read from a finished session's own record.
+    """
+
+    counts: dict[str | None, int] = {}
+    for record in records:
+        seat = record.get("seat")
+        level = seat.get("portable_deliberation") if isinstance(seat, dict) else None
+        counts[level if isinstance(level, str) and level else None] = (
+            counts.get(level if isinstance(level, str) and level else None, 0) + 1
+        )
+    known = sorted(level for level in counts if level is not None)
+    ordered = [*known, *([None] if None in counts else [])]
+    return [
+        {"portable_deliberation": level, "records": counts[level]} for level in ordered
+    ]
 
 
 def _instants(record: dict[str, Any]) -> list[str]:
@@ -184,20 +202,21 @@ def usage_by_seat(
     *points* is the exact ordered list a caller names for one request or one
     frontier row: the selected launch where one was selected, its frontier
     neighbours, or every point a chart table renders — each a `{"model":
-    ..., "portable_deliberation": ...}` pair, the coarsest identity both a
-    named point and a Usage Record's own Seat can name (see the module
-    docstring). Nothing here reads a frontier, clears a quality floor, or
-    breaks a tie: this function is called after a decision already exists,
-    never from inside making one.
+    ..., "portable_deliberation": ...}` pair, of which only `model` is
+    matched on (see the module docstring). Nothing here reads a frontier,
+    clears a quality floor, or breaks a tie: this function is called after a
+    decision already exists, never from inside making one.
 
     Each returned entry echoes the point's own `model` and
     `portable_deliberation`, then reports `records` (the Usage Record count
-    behind it), `tokens` (one mean per category any matched record actually
-    names, or `null` where any one of them did not carry it), `elapsed_seconds`
-    (mean, same rule), and `vintage` (`earliest` and `latest` instant any
-    matched record names, or both `null` for none). A point no Usage Record
-    names returns `records: 0` and every other field `null` or empty — an
-    absence stated plainly, never a zero.
+    behind it), `deliberations` (every portable deliberation those records
+    carry and how many carry each, unresolved ones under `null`), `tokens`
+    (one mean per category any matched record actually names, or `null` where
+    any one of them did not carry it), `elapsed_seconds` (mean, same rule),
+    and `vintage` (`earliest` and `latest` instant any matched record names,
+    or both `null` for none). A point no Usage Record names returns
+    `records: 0` and every other field `null` or empty — an absence stated
+    plainly, never a zero.
     """
 
     all_records = _records(directory)
@@ -210,6 +229,7 @@ def usage_by_seat(
                 "model": point.get("model"),
                 "portable_deliberation": point.get("portable_deliberation"),
                 "records": len(matched),
+                "deliberations": _deliberations(matched),
                 "tokens": {
                     category: _token_mean(matched, category)
                     for category in _token_categories(matched)

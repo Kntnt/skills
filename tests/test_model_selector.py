@@ -6767,6 +6767,7 @@ def test_usage_by_seat_states_an_unsupported_figure_as_absent(tmp_path: Path) ->
             "model": "worker-v3",
             "portable_deliberation": "medium",
             "records": 0,
+            "deliberations": [],
             "tokens": {},
             "elapsed_seconds": None,
             "vintage": {"earliest": None, "latest": None},
@@ -6774,35 +6775,112 @@ def test_usage_by_seat_states_an_unsupported_figure_as_absent(tmp_path: Path) ->
     ]
 
 
-def test_usage_by_seat_matches_only_the_same_model_and_portable_deliberation(
+def test_usage_by_seat_matches_every_record_that_names_the_same_model(
     tmp_path: Path,
 ) -> None:
-    """Two named points draw only the Usage Records that name each one exactly."""
+    """The join is the model alone, because no Seat capture writes carries more."""
 
     usage_evidence = _load_usage_evidence()
     _write_usage_ledger(
         tmp_path,
         _usage_record(model="worker-v2", portable_deliberation="medium"),
         _usage_record(model="worker-v2", portable_deliberation="medium"),
-        # A different portable deliberation on the same model is a different
-        # Seat, and never folded into the first point's count.
+        # A different portable deliberation on the same model is drawn in too:
+        # joining on the pair would match nothing at all, because a Seat read
+        # from a finished session's own record never resolves a portable form.
         _usage_record(model="worker-v2", portable_deliberation="high"),
-        # A different model is never folded in either.
-        _usage_record(model="worker-v3", portable_deliberation="medium"),
-        # A delegated Seat's own record capture writes with no resolved
-        # portable deliberation at all names no point.
+        # A record with no resolved portable deliberation — which is every
+        # record capture writes today — is drawn in on its model like any other.
         _usage_record(model="worker-v2", portable_deliberation=None),
+        # A different model is never folded in.
+        _usage_record(model="worker-v3", portable_deliberation="medium"),
     )
 
     summaries = usage_evidence.usage_by_seat(
         tmp_path,
         [
             {"model": "worker-v2", "portable_deliberation": "medium"},
-            {"model": "worker-v2", "portable_deliberation": "high"},
+            {"model": "worker-v3", "portable_deliberation": "medium"},
         ],
     )
 
-    assert [summary["records"] for summary in summaries] == [2, 1]
+    assert [summary["records"] for summary in summaries] == [4, 1]
+
+
+def test_usage_by_seat_names_the_deliberations_behind_each_figure(
+    tmp_path: Path,
+) -> None:
+    """A figure standing for a mixture says so, rather than passing as one Seat's."""
+
+    usage_evidence = _load_usage_evidence()
+    _write_usage_ledger(
+        tmp_path,
+        _usage_record(model="worker-v2", portable_deliberation="medium"),
+        _usage_record(model="worker-v2", portable_deliberation="medium"),
+        _usage_record(model="worker-v2", portable_deliberation="high"),
+        _usage_record(model="worker-v2", portable_deliberation=None),
+    )
+
+    summary = usage_evidence.usage_by_seat(
+        tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
+    )[0]
+
+    # Known levels in their own order, the unresolved ones last under null.
+    assert summary["deliberations"] == [
+        {"portable_deliberation": "high", "records": 1},
+        {"portable_deliberation": "medium", "records": 2},
+        {"portable_deliberation": None, "records": 1},
+    ]
+
+
+def test_a_point_no_record_names_reports_no_deliberations(tmp_path: Path) -> None:
+    """An absence names nothing behind it, rather than an empty level."""
+
+    usage_evidence = _load_usage_evidence()
+    _write_usage_ledger(tmp_path, _usage_record(model="worker-v2"))
+
+    summary = usage_evidence.usage_by_seat(
+        tmp_path, [{"model": "worker-v9", "portable_deliberation": "low"}]
+    )[0]
+
+    assert summary["records"] == 0
+    assert summary["deliberations"] == []
+
+
+def test_a_usage_record_capture_itself_wrote_reaches_the_reader(tmp_path: Path) -> None:
+    """The writer and the reader meet on a real record, not on a hand-built one.
+
+    Every other test here hands the reader a Usage Record it shaped itself, so
+    none of them can see the reader asking for a Seat field capture no longer
+    supplies. This one drives capture's own hook and reads back what it wrote.
+    """
+
+    capture = _load_capture()
+    usage_evidence = _load_usage_evidence()
+
+    data = tmp_path / "data"
+    capture.install(data, tmp_path / "home", ["claude-code"], ["true"])
+    capture.hook(data, "SessionStart", {"session_id": "session-1"})
+    capture.hook(data, "SessionEnd", {"session_id": "session-1"})
+
+    written = [
+        json.loads(line)
+        for line in (data / capture.USAGE_LEDGER_FILE)
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    assert written, "capture wrote no Usage Record to read back"
+    seat = written[0]["seat"]
+    # The premise the join rests on: a real record resolves no portable form.
+    assert seat["portable_deliberation"] is None
+
+    summary = usage_evidence.usage_by_seat(
+        tmp_path / "data",
+        [{"model": seat["model"], "portable_deliberation": "high"}],
+    )[0]
+
+    assert summary["records"] == 1
+    assert summary["deliberations"] == [{"portable_deliberation": None, "records": 1}]
 
 
 def test_usage_by_seat_means_a_token_category_only_where_every_record_carries_it(
