@@ -46,6 +46,15 @@ CLAIM = re.compile(
 # floor only grows, and a pattern that drifted from the prose would otherwise
 # match nothing and judge nothing.
 RELATIONS = {
+    ("0090", "0156"),
+    ("0133", "0156"),
+    ("0145", "0156"),
+    ("0090", "0158"),
+    ("0149", "0159"),
+    ("0150", "0159"),
+    ("0090", "0160"),
+    ("0158", "0160"),
+    ("0161", "0162"),
     ("0017", "0019"),
     ("0029", "0059"),
     ("0050", "0059"),

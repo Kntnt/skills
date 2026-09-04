@@ -6758,7 +6758,7 @@ def test_usage_evidence_reads_the_exact_store_capture_owns_and_writes(
     assert usage_evidence.USAGE_LEDGER_FILE == capture.USAGE_LEDGER_FILE
 
 
-def test_usage_by_seat_states_an_unsupported_figure_as_absent(tmp_path: Path) -> None:
+def test_usage_by_model_states_an_unsupported_figure_as_absent(tmp_path: Path) -> None:
     """A point no Usage Record names reports zero records and nothing invented."""
 
     usage_evidence = _load_usage_evidence()
@@ -6766,7 +6766,7 @@ def test_usage_by_seat_states_an_unsupported_figure_as_absent(tmp_path: Path) ->
     # Ask about a point over an empty store, and one over a store that names
     # only a different model.
     _write_usage_ledger(tmp_path, _usage_record(model="worker-v2"))
-    summaries = usage_evidence.usage_by_seat(
+    summaries = usage_evidence.usage_by_model(
         tmp_path,
         [{"model": "worker-v3", "portable_deliberation": "medium"}],
     )
@@ -6820,7 +6820,7 @@ def test_every_surface_describing_observed_usage_says_the_join_is_the_model() ->
         "Seat's observed usage",
         "Seat's own observed usage",
     )
-    mentions = ("Observerad förbrukning", "usage_by_seat", "Observed usage")
+    mentions = ("Observerad förbrukning", "usage_by_model", "Observed usage")
 
     def affirmed(body: str, claim: str) -> bool:
         """Return whether *body* asserts *claim* rather than denying it.
@@ -6869,7 +6869,7 @@ def test_every_surface_describing_observed_usage_says_the_join_is_the_model() ->
     assert "deliberations" in reader
 
 
-def test_usage_by_seat_matches_every_record_that_names_the_same_model(
+def test_usage_by_model_matches_every_record_that_names_the_same_model(
     tmp_path: Path,
 ) -> None:
     """The join is the model alone, because no Seat capture writes carries more."""
@@ -6890,7 +6890,7 @@ def test_usage_by_seat_matches_every_record_that_names_the_same_model(
         _usage_record(model="worker-v3", portable_deliberation="medium"),
     )
 
-    summaries = usage_evidence.usage_by_seat(
+    summaries = usage_evidence.usage_by_model(
         tmp_path,
         [
             {"model": "worker-v2", "portable_deliberation": "medium"},
@@ -6901,7 +6901,7 @@ def test_usage_by_seat_matches_every_record_that_names_the_same_model(
     assert [summary["records"] for summary in summaries] == [4, 1]
 
 
-def test_usage_by_seat_names_the_deliberations_behind_each_figure(
+def test_usage_by_model_names_the_deliberations_behind_each_figure(
     tmp_path: Path,
 ) -> None:
     """A figure standing for a mixture says so, rather than passing as one Seat's."""
@@ -6915,7 +6915,7 @@ def test_usage_by_seat_names_the_deliberations_behind_each_figure(
         _usage_record(model="worker-v2", portable_deliberation=None),
     )
 
-    summary = usage_evidence.usage_by_seat(
+    summary = usage_evidence.usage_by_model(
         tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
     )[0]
 
@@ -6933,7 +6933,7 @@ def test_a_point_no_record_names_reports_no_deliberations(tmp_path: Path) -> Non
     usage_evidence = _load_usage_evidence()
     _write_usage_ledger(tmp_path, _usage_record(model="worker-v2"))
 
-    summary = usage_evidence.usage_by_seat(
+    summary = usage_evidence.usage_by_model(
         tmp_path, [{"model": "worker-v9", "portable_deliberation": "low"}]
     )[0]
 
@@ -7010,7 +7010,7 @@ def test_a_usage_record_capture_itself_wrote_reaches_the_reader(tmp_path: Path) 
     assert seat["model"] == "claude-opus-5"
     assert seat["portable_deliberation"] is None
 
-    matched, unmatched = usage_evidence.usage_by_seat(
+    matched, unmatched = usage_evidence.usage_by_model(
         data,
         [
             {"model": "claude-opus-5", "portable_deliberation": "high"},
@@ -7027,7 +7027,7 @@ def test_a_usage_record_capture_itself_wrote_reaches_the_reader(tmp_path: Path) 
     assert unmatched["deliberations"] == []
 
 
-def test_usage_by_seat_means_a_token_category_only_where_every_record_carries_it(
+def test_usage_by_model_means_a_token_category_only_where_every_record_carries_it(
     tmp_path: Path,
 ) -> None:
     """A category one matched record never measured stays null for the point."""
@@ -7041,7 +7041,7 @@ def test_usage_by_seat_means_a_token_category_only_where_every_record_carries_it
         _usage_record(tokens={"input": 300.0, "cache_read": 10.0}),
     )
 
-    summary = usage_evidence.usage_by_seat(
+    summary = usage_evidence.usage_by_model(
         tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
     )[0]
 
@@ -7051,7 +7051,7 @@ def test_usage_by_seat_means_a_token_category_only_where_every_record_carries_it
     assert summary["tokens"]["cache_read"] is None
 
 
-def test_usage_by_seat_means_elapsed_seconds_only_when_every_record_carries_it(
+def test_usage_by_model_means_elapsed_seconds_only_when_every_record_carries_it(
     tmp_path: Path,
 ) -> None:
     """An incomplete session, still open, leaves the point's own mean null."""
@@ -7063,7 +7063,7 @@ def test_usage_by_seat_means_elapsed_seconds_only_when_every_record_carries_it(
         _usage_record(elapsed_seconds=None),
     )
 
-    summary = usage_evidence.usage_by_seat(
+    summary = usage_evidence.usage_by_model(
         tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
     )[0]
 
@@ -7071,7 +7071,7 @@ def test_usage_by_seat_means_elapsed_seconds_only_when_every_record_carries_it(
     assert summary["elapsed_seconds"] is None
 
 
-def test_usage_by_seat_reports_the_span_of_instants_matched_records_cover(
+def test_usage_by_model_reports_the_span_of_instants_matched_records_cover(
     tmp_path: Path,
 ) -> None:
     """Vintage is the earliest and latest instant among the matched records."""
@@ -7087,7 +7087,7 @@ def test_usage_by_seat_reports_the_span_of_instants_matched_records_cover(
         ),
     )
 
-    summary = usage_evidence.usage_by_seat(
+    summary = usage_evidence.usage_by_model(
         tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
     )[0]
 
@@ -7097,7 +7097,7 @@ def test_usage_by_seat_reports_the_span_of_instants_matched_records_cover(
     }
 
 
-def test_usage_by_seat_skips_a_malformed_line_and_an_absent_store(
+def test_usage_by_model_skips_a_malformed_line_and_an_absent_store(
     tmp_path: Path,
 ) -> None:
     """A hand-broken store answers with an absence, never a raised error."""
@@ -7105,7 +7105,7 @@ def test_usage_by_seat_skips_a_malformed_line_and_an_absent_store(
     usage_evidence = _load_usage_evidence()
 
     # No store at all under this directory yet.
-    absent = usage_evidence.usage_by_seat(
+    absent = usage_evidence.usage_by_model(
         tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
     )
     assert absent[0]["records"] == 0
@@ -7116,13 +7116,13 @@ def test_usage_by_seat_skips_a_malformed_line_and_an_absent_store(
     path.write_text(
         "not json at all\n" + json.dumps(_usage_record()) + "\n", encoding="utf-8"
     )
-    summary = usage_evidence.usage_by_seat(
+    summary = usage_evidence.usage_by_model(
         tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
     )[0]
     assert summary["records"] == 1
 
 
-def test_usage_by_seat_preserves_the_order_and_repetition_of_the_named_points(
+def test_usage_by_model_preserves_the_order_and_repetition_of_the_named_points(
     tmp_path: Path,
 ) -> None:
     """One point named twice is answered twice, in exactly the order given."""
@@ -7135,7 +7135,7 @@ def test_usage_by_seat_preserves_the_order_and_repetition_of_the_named_points(
         {"model": "worker-v2", "portable_deliberation": "medium"},
         {"model": "worker-v2", "portable_deliberation": "medium"},
     ]
-    summaries = usage_evidence.usage_by_seat(tmp_path, points)
+    summaries = usage_evidence.usage_by_model(tmp_path, points)
 
     assert [summary["model"] for summary in summaries] == [
         "worker-v3",

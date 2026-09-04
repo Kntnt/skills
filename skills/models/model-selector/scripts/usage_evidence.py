@@ -197,7 +197,7 @@ def _token_mean(records: list[dict[str, Any]], category: str) -> float | None:
     return _mean([_number(_tokens(record).get(category)) for record in records])
 
 
-def usage_by_seat(
+def usage_by_model(
     directory: Path, points: list[dict[str, Any]]
 ) -> list[dict[str, Any]]:
     """Return one observed-usage summary per named point, in the order given.
