@@ -18,19 +18,21 @@ The active profile and its revision history are defined in `profile-management.m
 
 | File | Record type |
 | --- | --- |
-| `source-states.jsonl` | Mutable source check state and provenance. |
-| `access-channel-snapshots.jsonl` | Immutable commercial-channel identity used by observations. |
-| `model-versions.jsonl` | Immutable validated model releases. |
-| `alias-bindings.jsonl` | Effective-dated alias-to-version bindings. |
-| `capability-priors.jsonl` | Append-only dated first-party qualitative capability claims. |
-| `price-schedules.jsonl` | Effective-dated rates, thresholds, tool fees and serving premiums. |
-| `subscription-schedules.jsonl` | Effective-dated monthly fees, included surfaces, quota rules and credit fallback. |
-| `access-mode-availability.jsonl` | Effective-dated effort/thinking and serving-mode support per model and access surface. |
-| `quota-observations.jsonl` | Timestamped before/after session and weekly allowance readings. |
-| `benchmark-definitions.jsonl` | Dataset, manifest, harness, grader, weights and resource identity. |
-| `evaluation-configurations.jsonl` | Complete evaluated system identity. |
-| `run-observations.jsonl` | Raw per-task attempt outcomes, usage, bill and latency. |
-| `derived-frontiers.json` | Reproducible disposable summaries; safe to replace after source records are unchanged. |
+| `source-states.jsonl` | `SourceState` — mutable source check state and provenance. |
+| `access-channel-snapshots.jsonl` | `AccessChannelSnapshot` — immutable commercial-channel identity used by observations. |
+| `model-versions.jsonl` | `ModelVersion` — immutable validated model releases. |
+| `alias-bindings.jsonl` | `AliasBinding` — effective-dated alias-to-version bindings. |
+| `capability-priors.jsonl` | `CapabilityPrior` — append-only dated first-party qualitative capability claims. |
+| `price-schedules.jsonl` | `PriceSchedule` — effective-dated rates, thresholds, tool fees and serving premiums. |
+| `subscription-schedules.jsonl` | `SubscriptionSchedule` — effective-dated monthly fees, included surfaces, quota rules and credit fallback. |
+| `access-mode-availability.jsonl` | `AccessModeAvailability` — effective-dated effort/thinking and serving-mode support per model and access surface. |
+| `quota-observations.jsonl` | `QuotaObservation` — timestamped before/after session and weekly allowance readings. |
+| `benchmark-definitions.jsonl` | `BenchmarkDefinition` — dataset, manifest, harness, grader, weights and resource identity. |
+| `evaluation-configurations.jsonl` | `EvaluationConfiguration` — independent published benchmark scores for a model at a published configuration. |
+| `run-observations.jsonl` | `RunObservation` — raw per-task attempt outcomes, usage, bill and latency. |
+| `derived-frontiers.json` | No record type of its own — reproducible disposable summaries; safe to replace after source records are unchanged. |
+
+Every record in `## Required records` is written to the one file named beside it above and to no other; the twelve record types and the twelve JSONL files correspond one to one. `derived-frontiers.json` is a summary rebuilt from those rows, so nothing appends a record to it.
 
 `standing-policy.json` and `standing-policy-history.jsonl` sit in the same directory but belong to neither this reference nor the profile: they hold the Standing Policy each workload Cohort routes under, are written only by the Collection Library's own policy store, and are documented in `profile-management.md`. A movement of that policy is caused by measured evidence and names the run keys behind it, but it is not evidence and enters no frontier.
 
@@ -40,7 +42,7 @@ Every external fact needs source URI, retrieval timestamp, parser version and so
 
 ## Keys
 
-Normalize ordered objects before hashing. Preserve exact protected identifiers.
+Normalize ordered objects before hashing. Preserve exact protected identifiers. `canonical_json` is compact JSON with object keys sorted — `json.dumps(value, sort_keys=True, separators=(",", ":"))` in the shipped idiom.
 
 ```text
 model_version_key = sha256(provider | canonical_model_id | provider_release_id)
@@ -50,6 +52,8 @@ access_channel_key = sha256(config_profile_id | channel_id | canonical_channel_c
 price_schedule_key = sha256(provider | model_version_key | channel | region | effective_from | rate_card_hash)
 subscription_schedule_key = sha256(access_channel_key | effective_from | terms_hash)
 benchmark_key = sha256(benchmark_name | version | dataset_hash | harness_commit | grader_version)
+configuration_hash = sha256(canonical_json(configuration))
+evaluation_key = sha256(model_key | benchmark_key | configuration_hash)
 config_fingerprint = sha256(model_version_key | access_channel_key | effort | thinking_budget | mode | harness_commit | prompt_hashes | toolset_hash | cache_policy | retry_policy | fallback_policy | resource_profile)
 run_key = sha256(config_fingerprint | benchmark_key | task_id | seed | attempt_index)
 ```
@@ -64,7 +68,7 @@ OpenAI release slugs without an exposed dated snapshot use version kind `provide
 
 `ModelVersion`: key, provider, canonical and provider release IDs, display family/name, release date, version semantics, modalities, context/output limits, supported controls, first-party source and discovery timestamp. Freeze after validation.
 
-`AliasBinding`: provider, alias, target model-version key, valid interval and resolver evidence.
+`AliasBinding`: `record_type`, `alias`, `provider`, `canonical_model_id`, `model_reference_key`, `target_model_version_key` — null until the alias resolves — `resolution_status` such as `documented_alias_unresolved`, `status` such as `provisional_until_resolved`, `resolver_evidence`, `sources`, `valid_from` and `valid_to`. `model_reference_key` is the member every join against an unresolved alias reads, the benchmark prior below included.
 
 `CapabilityPrior`: stable prior key, exact model-version key or provisional model-reference key, first-party source URL, provider, retrieval time, source effective time when stated, normalized workload and capability tags, the qualitative claim with its verbatim-excerpt or faithful-paraphrase form and language, status, predecessor when superseding, and explicitly `low` confidence. A changed claim appends a new row that names its predecessor; it never rewrites history.
 
@@ -80,9 +84,13 @@ A `CapabilityPrior` is categorical evidence for choosing a cold-start experiment
 
 `BenchmarkDefinition`: key, name/version, task-manifest and dataset hashes, harness commit, grader/judge versions, score transform, category weights, resource limits, repeats and source.
 
-`EvaluationConfiguration`: fingerprint plus model-version and access-channel keys, effort/thinking budget, mode, harness commit, prompt/tool hashes, cache/context/retry/fallback policies, maximum output and resource profile.
+`EvaluationConfiguration`: `record_type`, always `EvaluationConfiguration`; `evaluation_key`; `model_key`; `benchmark_key`, matching a `BenchmarkDefinition`; `configuration`, the published evaluated configuration such as `{"effort": "max", "serving_mode": "standard", "thinking": "adaptive"}`, whose members vary by publisher and whose `effort` may be `null`; `score`, the published numeric score on that benchmark; `published_cost_usd_per_task`; `output_tokens_per_second`; `status`; `source`, the publisher URL; `provenance`, `{"origin": "seed"}` on a row imported from the bundled seed; `retrieved_at`; and `seed_id`, the originating `evaluation_prior_seed` id, absent on a row that came from elsewhere.
 
-`RunObservation`: run key, the attempt's own identity and the identity of the attempt it followed, configuration and benchmark keys, the routed request's `stage`, `workload_cohort` and `workload_tags` or their three nulls, task/seed/attempt, pass/fail/abstain/infra-error and raw dimension scores, all token categories, tool counts, provider bill, price schedule used, resolved model/fallback, wall/first-useful-output latency, timestamps and sanitized artifact hashes. The three identity fields are defined in `run-observations.md`, which also defines the frontier they place the row in.
+This record is an independent published measurement of a model at a published configuration — a benchmark prior, and never a local attempt. `model_key` holds either a validated `ModelVersion`'s `model_version_key` or, for a model still behind a mutable alias, an `AliasBinding`'s `model_reference_key`; the alias-backed case is exactly what `status: independent_dated_prior_for_mutable_alias` marks, against `independent_dated_prior` for a resolved identity. `score` is the only quality member: `published_cost_usd_per_task` and `output_tokens_per_second` are commercial and throughput facts and no capability rank derives from them. An imported seed row keeps the seed's original retrieval timestamp, status and sources.
+
+The evaluated system identity a local attempt ran under is no record here and no row of its own anywhere: the configuration fingerprint is computed as `config_fingerprint` in `## Keys` and carried inline on every `RunObservation` as `configuration_fingerprint`, which is where `run-observations.md` describes it and where a reader looking for the setup behind an attempt finds it.
+
+`RunObservation`: run key, the attempt's own identity and the identity of the attempt it followed, configuration fingerprint and benchmark key, the routed request's `stage`, `workload_cohort` and `workload_tags` or their three nulls, task/seed/attempt, pass/fail/abstain/infra-error and raw dimension scores, all token categories, tool counts, provider bill, price schedule used, resolved model/fallback, wall/first-useful-output latency, timestamps and sanitized artifact hashes. The three identity fields are defined in `run-observations.md`, which also defines the frontier they place the row in.
 
 ## Conditional update
 
@@ -93,7 +101,7 @@ Default cadence: model/release indexes and commercial terms weekly; benchmark re
 3. Resolve mutable aliases. Close a prior binding and append the new target when it changes.
 4. Revalidate direct and gateway API rate cards and subscription/usage-limit pages independently of model discovery. Append scheduled future rates or terms immediately; close prior intervals only from the documented effective time.
 5. Revalidate benchmark releases and harness repositories. Any dataset, manifest, grader, weighting or harness change creates a new benchmark key; never relabel old observations.
-6. Generate missing configuration and run keys only for enabled selections and modes. Execute nothing unless the user explicitly requested evaluation; `update` discovers gaps and reports them.
+6. Generate missing configuration fingerprints and run keys only for enabled selections and modes. Execute nothing unless the user explicitly requested evaluation; `update` discovers gaps and reports them.
 7. Reprice metered token/tool usage under the requested current schedule in derived output. Preserve original provider bill and published historical cost. Recompute subscription allocation from the selected billing-period observations without translating quota into API tokens.
 
 A source without usable validators still receives one bounded fetch per due pass. `--force` ignores cadence once; it does not bypass fingerprints or fetch known detail pages.
