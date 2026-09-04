@@ -1,6 +1,6 @@
 # General
 
-The default genre: the contract a text gets when nobody named a content type. It is a complete contract rather than the absence of one, and it is what a note, a memo, a blog post, a letter, an explanation, or a piece of prose whose kind has no name is written against.
+The default genre: the contract a text gets when nobody named a content type. It is a complete contract rather than the absence of one, and it is what a note, a memo, a letter, an explanation, or a piece of prose whose kind has no name is written against.
 
 ## What this genre asks for
 
