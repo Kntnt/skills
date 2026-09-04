@@ -14,13 +14,13 @@ Diagnostics for the requirements the report genre's base half states, for a Skil
 
 ## The answer first
 
-**Test.** Cover everything after the first two paragraphs. What is left should tell the reader what to do or what is the case.
+**Test.** Cover everything after the first two paragraphs. What is left should tell the reader what to do or what is the case. Then read it beside the question the report states: what stands at the top has to answer that question, and not the narrower one a section took up.
 
-**Failure.** A report that reasons through the evidence and reaches its recommendation in the final section; a first paragraph that says the question is difficult, that the evidence is mixed, or what the report will do, rather than what it found.
+**Failure.** A report that reasons through the evidence and reaches its recommendation in the final section; a first paragraph that says the question is difficult, that the evidence is mixed, or what the report will do, rather than what it found. Also an opening carrying what one section settled — the cost comparison's result, the twelve-month alert history's finding — where the report's own answer belongs, so that the reader is handed a part of the case as though it were the verdict.
 
-**Edge.** Where the material genuinely settles nothing, the answer at the top is that it settles nothing, stated as plainly as any other answer, together with what it would take to settle it. That is an answer, not a missing one.
+**Edge.** Where the material genuinely settles nothing, the answer at the top is that it settles nothing, stated as plainly as any other answer, together with what it would take to settle it. That is an answer, not a missing one. A section that reaches its own result at its own end is not a finding here either: what this rule fixes is where the report's answer stands, and a draft that gives it at the top meets the rule however the sections below arrange their own work.
 
-**Minimum safe correction.** Move the existing finding to the top unchanged and delete whatever it replaced there. Do not strengthen it in the move: a recommendation stated more firmly at the top than it was at the bottom is a new claim.
+**Minimum safe correction.** Move the existing finding to the top unchanged and delete whatever it replaced there. Do not strengthen it in the move: a recommendation stated more firmly at the top than it was at the bottom is a new claim. Where the top carries a section's result instead, the result goes back to the section that earned it and the report's answer takes its place; where the draft states no such answer anywhere, that is a finding about what the report concluded rather than a sentence to compose for it.
 
 ## Figures
 

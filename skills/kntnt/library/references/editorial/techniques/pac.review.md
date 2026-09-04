@@ -97,3 +97,13 @@ A review reaches this document because PAC was the resolved technique for the dr
 **Edge.** No ratio is prescribed, and a short premise with a long analysis is the ordinary shape rather than an imbalance.
 
 **Minimum safe correction.** Cut from the setup what the analysis does not use. Adding to the analysis means going back to the material, and where the material has nothing more, the finding is that the analysis is as complete as the material allows.
+
+## Inside the genre
+
+**Test.** Where the genre fixes where something goes, find that part and ask what it is doing there. An opening answer that is also the only place the document settles anything is this arc's conclusion standing in the genre's place, and an opening answer the draft defers is this arc taking a place the genre had already claimed.
+
+**Failure.** A report whose opening states the finding and whose sections then lay the material out without any of them settling anything: the document tests one claim once, and its result stands before the reader has met any of the evidence for it. Its opposite: a report that saves its answer for the end because that is where the arc concludes, leaving a reader who was owed a verdict at the top to read to the bottom for one.
+
+**Edge.** The opening answer and a section's conclusion may say the same thing without either being a finding: where one section settles the question the report was asked, the document says it twice, once as its answer and once where the work was done. What makes it a finding is a document that says it at the top alone, its sections having been left with material and no result.
+
+**Minimum safe correction.** Give each section the result its own material reaches, and leave the opening answer where the genre puts it — moving that answer down is never the repair here, the rule that was broken not being the genre's. Where the sections have nothing of their own to settle, that is a finding about the document's shape rather than conclusions to be written for it.
