@@ -42,7 +42,7 @@ Where it carries wording or a substantial portion of an upstream catalogue, the 
 
 ## The mechanics contract
 
-`mechanics.md` holds the rules of objective correctness that do not depend on which language a text is in — today the clause boundary a comma may and may not carry, and the rule that where a language establishes more than one correct form the text's own choice stands. A Skill contracted to mechanical correction reads it together with the resolved language's mechanics scope, and the two together are that run's rules.
+`mechanics.md` holds the rules of objective correctness that do not depend on which language a text is in — today the clause boundary a comma may and may not carry, what each way of setting a quotation requires of the punctuation and capitalisation around it, the ordinary capitalisation of a spelled-out abbreviation, the one convention a list holds throughout, and the rule that where a language establishes more than one correct form the text's own choice stands. A Skill contracted to mechanical correction reads it together with the resolved language's mechanics scope, and the two together are that run's rules.
 
 It sits here for the reason the anti-slop catalogue does: what is true of every installed language has to be written somewhere that is not one of them. Written once per language it would be one rule made into as many things to keep true, and the copies would be free to disagree about what is an error; written nowhere, a rule nobody states is decided by whoever is reading.
 
