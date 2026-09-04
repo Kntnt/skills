@@ -2,6 +2,16 @@
 
 Diagnostics for the requirements the article genre's base half states, for a Skill reviewing a draft written against them. Nothing here is a requirement: every target a draft has to meet is in the base half, where the Skill that wrote the draft could see it, and a finding raised here is raised against a rule stated there. The examples are English and are patterns — apply what one does, in the language of the draft, rather than looking for its words.
 
+## The shape
+
+**Test.** Read the draft for its parts alone, ignoring how well any of them is written: a headline, a standfirst set off above the body, a byline, then the body opening on its lead. A part that is absent, and a part standing somewhere else in that sequence, are both findings.
+
+**Failure.** Prose under a title and nothing else, so whoever features the article has to write a standfirst for it; a standfirst that has become the body's first paragraph, so the article opens twice; a lead written as the second half of a sentence the standfirst began; a byline naming somebody the request does not name.
+
+**Edge.** The parts are what a reader recognises rather than sections to be labelled: a standfirst owes no label announcing itself, and a byline is a name. Where the artifact is a passage, a section, or a fragment rather than a whole article, the parts the surrounding text already carries are not written again for it.
+
+**Minimum safe correction.** Move a part that is in the wrong place and leave its wording alone. Where the standfirst is missing, write it from what the article already says and hold it to what the teaser genre asks of one. Where a byline was invented, remove it rather than softening it.
+
 ## The angle
 
 **Test.** Say what the article claims, in one sentence, using only what the draft actually says. If that sentence names a subject rather than something asserted about it, or if two sentences are needed, the angle is not settled in the text.
@@ -53,6 +63,36 @@ Diagnostics for the requirements the article genre's base half states, for a Ski
 **Edge.** Where the artifact is a passage, a message, or a fragment, no title is expected and none is invented for it.
 
 **Minimum safe correction.** Rewrite the title to the sentence the angle test above already produced. Leave the body alone: a title is cheaper to change than the text under it.
+
+## The parts at the top
+
+**Test.** Read the headline, the standfirst, the lead and the first section in sequence. Then cover each of the first three in turn and ask what the reader no longer has; where the answer is nothing, the part covered was repeating another.
+
+**Failure.** A lead restating the standfirst in longer sentences; a standfirst that is the headline with a verb added to it; a first section opening by explaining what the lead has just explained; a lead and a standfirst that begin on the same words, which tells a reader who arrived from the teaser that they have gone in a circle.
+
+**Edge.** All four are about one thing, so the fault is overlap in what the reader is given and never overlap of subject: a standfirst and a lead may turn on the same incident and still do different jobs. A reader who met the standfirst as a teaser elsewhere meets it twice by design; what they must not meet is the lead saying it a third time.
+
+**Minimum safe correction.** Rewrite the lead rather than the standfirst, which has to work for a reader who has not arrived while the lead has the whole body to open on. Cut the sentence that repeats and let the one after it stand first: a lead usually repeats in its opening sentence alone.
+
+## The scale
+
+**Test.** Look at the draft as a page before reading it, then read the stretches that stand out: a paragraph running past what the eye takes in at once, or a screenful with nothing breaking it, and ask what the reader is holding while they get through it.
+
+**Failure.** A paragraph carrying three movements because all three were true; a section running on because no subheading suggested itself; and the fault from the other side, a subheading every second paragraph, which turns an argument into a run of announcements.
+
+**Edge.** The measure is what the reader can hold and never a count: a paragraph that earns its length is not a finding, and a section that has finished early is not one either. A number is an indication of the scale, so nothing is added to a section to reach one and nothing already found to belong is cut to come under one.
+
+**Minimum safe correction.** Split a paragraph at the movement it turns on rather than at its midpoint, and put a subheading where the text already changes subject. Where a stretch is long because it holds two things, the second is where the subheading goes; where it is long because it says one thing at length, cutting is the repair and a subheading only hides it.
+
+## The closing
+
+**Test.** Read the opening and the last section together, and ask what the reader was promised and what they leave holding. Then ask what the close gives them to do, and whether they could do it tomorrow with what the article showed them.
+
+**Failure.** An article that stops where the material ran out; a close naming an action the article never gave the reader the means to take; a call to somewhere the request never named; a promise made in the standfirst that the last section quietly does not keep.
+
+**Edge.** The action need not be large, and it need not be commercial: a question to put to their own case is one. Where the article's job is to explain rather than to move somebody, what the reader can do is see something differently, and a close naming that plainly is a close.
+
+**Minimum safe correction.** Take the action from what the article has already established and put it where the close now stands. Where the request names no destination, name the action alone; never invent a place to send the reader.
 
 ## Length
 
