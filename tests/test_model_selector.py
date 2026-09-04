@@ -6825,7 +6825,7 @@ def test_usage_by_seat_names_the_deliberations_behind_each_figure(
         tmp_path, [{"model": "worker-v2", "portable_deliberation": "medium"}]
     )[0]
 
-    # Known levels in their own order, the unresolved ones last under null.
+    # Known levels sorted, the unresolved ones last under null.
     assert summary["deliberations"] == [
         {"portable_deliberation": "high", "records": 1},
         {"portable_deliberation": "medium", "records": 2},

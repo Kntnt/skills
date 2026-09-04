@@ -2,7 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Summarize observed Usage Record cost and elapsed time, per named Seat.
+"""Summarize observed Usage Record cost and elapsed time, per named model.
 
 `recommend`, `chart` and `compare` build their answer from derived
 frontiers, and a frontier is quality: judged runs grouped into points, with
@@ -13,11 +13,14 @@ enters no frontier, clears no quality floor, breaks no tie, and never makes a
 point eligible that quality evidence excluded (issue #226 decision 2).
 
 What a Usage Record can answer is a different, equally real question none of
-that evidence answers: what has a Seat this recommendation names actually
-cost and taken, on this machine, so far. This module is that answer, read
-straight from the store `capture.py` appends to (`usage-records.jsonl`,
-beside the evidence ledger under the selected data directory) and reported
-per Seat, beside a recommendation or a frontier table and never inside it.
+that evidence answers: what has a model this recommendation names actually
+cost and taken, on this machine, so far. Per model rather than per Seat,
+because the join below is the model alone — a Seat is what capture measures,
+and what this reader can still tell apart is the model it ran. This module is
+that answer, read straight from the store `capture.py` appends to
+(`usage-records.jsonl`, beside the evidence ledger under the selected data
+directory) and reported beside a recommendation or a frontier table, never
+inside it.
 
 It is a Skill-owned reader rather than a Collection Library module: nothing
 outside this Skill's own `recommend`, `chart` and `compare` renders this
