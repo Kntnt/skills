@@ -56,6 +56,7 @@ RELATIONS = {
     ("0158", "0160"),
     ("0161", "0162"),
     ("0095", "0164"),
+    ("0136", "0165"),
     ("0017", "0019"),
     ("0029", "0059"),
     ("0050", "0059"),
@@ -552,6 +553,45 @@ def test_the_genre_supplied_technique_preserves_the_no_default_record_history() 
     # and a registry pairing each genre with its technique.
     assert "default technique for the Collection" in later
     assert "registry" in later
+
+
+def test_the_rejected_profile_preserves_the_one_missing_facts_record_history() -> None:
+    """The split profile state points past ADR-0136 without rewriting it.
+
+    Everything ADR-0136 decided about inheriting rather than triggering setup
+    stands, the rejected profile included: it inherits exactly as the absent
+    one does. What the later record narrows is that record's premise that a
+    missing profile and an invalid one are one state — and the refusal it
+    retires was unreachable from every real profile, so no behaviour ADR-0136
+    described was ever produced by it.
+    """
+
+    earlier = (
+        ADR / "0136-model-selector-derives-routing-context-from-shipped-adapters.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR / "0165-a-stored-profile-that-does-not-validate-is-rejected-not-absent.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claim intact and add only the sanctioned pointer.
+    assert "A missing or invalid profile, no comparable main seat" in earlier
+    assert "preserve the exact main seat" in earlier
+    assert "narrowed by ADR-0165" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "narrows ADR-0136" in later
+
+    # What the later record settles: the split itself, the token routing
+    # renders it as, and the refusal code that leaves the public Module.
+    assert "rejected_profile" in later
+    assert "invalid_profile" in later
+    assert "setup" in later
+
+    # The road not taken is named: a migration for a shape with exactly one
+    # documented version, and refusing the run instead of inheriting.
+    assert "No migration is written" in later
+    assert "start nothing" in later
 
 
 def test_a_pointer_names_a_later_record() -> None:

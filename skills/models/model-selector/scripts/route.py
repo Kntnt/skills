@@ -2382,11 +2382,15 @@ def _execution_decision(
     # no candidate ever survives to give its symbolic Rungs a meaning.
     unresolved = _unresolved_standing_policy(request, snapshot)
 
-    # Distinguish absent profile state from invalid persisted state.
-    if snapshot.get("profile") is None:
+    # Distinguish an absent profile from one that was read and rejected. A
+    # rejected profile inherits rather than refusing: a refusal would stop an
+    # unattended run outright, where inheritance costs it its optimisation
+    # and the distinct reason is what says which happened (ADR-0165).
+    profile = snapshot.get("profile")
+    if profile is None:
         return _inherit(request, snapshot, "missing_profile", standing=unresolved)
-    if not snapshot["profile"].get("valid"):
-        return _refused(request, snapshot, "invalid_profile")
+    if profile.get("rejection") is not None:
+        return _inherit(request, snapshot, "rejected_profile", standing=unresolved)
 
     # Keep missing selection controls on the exact seat for automatic work.
     if (

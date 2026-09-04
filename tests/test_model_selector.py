@@ -158,7 +158,7 @@ def test_context_derives_a_routeable_claude_code_artifact(tmp_path: Path) -> Non
     # Assert automatic routing selected a complete shipped-adapter launch.
     assert routed["decisions"][0]["status"] == "selected"
     assert routed["decisions"][0]["launch"]["arguments"] == {"model": "haiku"}
-    assert routed["snapshot"]["profile"] == {"revision": "7", "valid": True}
+    assert routed["snapshot"]["profile"] == {"revision": "7"}
     assert routed["snapshot"]["override_policy"] == {
         "portable_levels": ["low", "medium", "high", "xhigh", "max"],
         "cold_start": "select",
@@ -522,46 +522,173 @@ def test_context_keeps_a_missing_attestation_auditable(tmp_path: Path) -> None:
     ]
 
 
-def test_context_treats_missing_or_invalid_profiles_as_absent(tmp_path: Path) -> None:
-    """Configuration trouble inherits without setup or persistent repair."""
+def test_context_separates_an_absent_profile_from_a_rejected_one(
+    tmp_path: Path,
+) -> None:
+    """A file that is there is never reported as one that is not.
 
-    # Derive from missing, malformed, and structurally invalid profiles.
-    for index, profile in enumerate((b"", b"{}", b"\xff")):
+    Absence is `config.json` not existing. A file that is present and cannot
+    be read, parsed, or validated was configured by somebody and discarded by
+    this command, so it is reported as rejected with what rejected it and the
+    way back (issue #245).
+    """
+
+    # Derive from an absent file, a schema failure, and an undecodable file.
+    router = _load_router()
+    states = {}
+    for label, profile in (("absent", b""), ("schema", b"{}"), ("decode", b"\xff")):
         derived = _derive_context(
-            tmp_path / str(index),
+            tmp_path / label,
             _runtime_context_request(),
             profile,
         )
-        decision = _load_router().route(derived)["decisions"][0]
+        states[label] = (
+            derived["context"]["profile"],
+            router.route(derived)["decisions"][0],
+        )
 
-        # Assert both absent-profile forms produce the same safe inheritance.
-        assert derived["context"]["profile"] is None
-        assert derived["context"]["mappings"] == []
-        assert decision["status"] == "inherit"
-        assert decision["inheritance"]["reason"] == "missing_profile"
+        # Every state withholds the selections none of them could validate.
+        assert derived["context"]["mappings"] == [], label
+
+    # Only a file that is not there at all is the absent state.
+    absent, absent_decision = states["absent"]
+    assert absent is None
+    assert absent_decision["status"] == "inherit"
+    assert absent_decision["inheritance"]["reason"] == "missing_profile"
+
+    # A present file names what rejected it and re-running setup as the way
+    # back, specifically enough to tell a stale shape from a corrupted file.
+    for label, expected in (("schema", "schema_version"), ("decode", "read")):
+        rejected, decision = states[label]
+        assert rejected is not None, label
+        assert "revision" not in rejected, label
+        assert expected in rejected["rejection"], label
+        assert "setup" in rejected["rejection"], label
+        assert decision["status"] == "inherit", label
+        assert decision["inheritance"]["reason"] == "rejected_profile", label
 
 
-def test_context_treats_dangling_profile_references_as_invalid(
-    tmp_path: Path,
-) -> None:
-    """A selection cannot attach to an access channel that does not exist."""
+def test_context_rejects_a_profile_that_is_not_a_json_object(tmp_path: Path) -> None:
+    """A file that decodes cleanly to the wrong kind of value is still a file.
 
-    # Break one required profile relationship without changing either shape.
-    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
-    profile["model_selections"][0]["channel_id"] = "missing-channel"
+    It is neither a decode failure nor a schema violation — the profile
+    contract is never consulted — so it takes the same shape as the file that
+    could not be read: named as what it is.
+    """
+
     derived = _derive_context(
         tmp_path,
         _runtime_context_request(),
-        json.dumps(profile).encode(),
+        b'["not a profile"]',
     )
     decision = _load_router().route(derived)["decisions"][0]
 
-    # Reject the whole persisted profile through the absent-profile path.
-    assert derived["context"]["profile"] is None
-    assert derived["context"]["mappings"] == []
-    assert derived["context"]["harness"]["adapter_specs"] == []
-    assert decision["status"] == "inherit"
-    assert decision["inheritance"]["reason"] == "missing_profile"
+    # Report the present file rather than the absent-profile state.
+    assert "JSON object" in derived["context"]["profile"]["rejection"]
+    assert "setup" in derived["context"]["profile"]["rejection"]
+    assert decision["inheritance"]["reason"] == "rejected_profile"
+
+
+def test_context_rejects_unresolvable_channel_references_by_name(
+    tmp_path: Path,
+) -> None:
+    """A selection resolves to exactly one configured access channel.
+
+    Neither of the two ways that can fail — a channel that does not exist and
+    a channel identifier configured twice — is an absent profile, so both are
+    reported as the present file they were read from.
+    """
+
+    # Break each profile relationship in turn without changing either shape.
+    router = _load_router()
+    dangling = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    dangling["model_selections"][0]["channel_id"] = "missing-channel"
+    duplicated = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    duplicated["access_channels"].append(deepcopy(duplicated["access_channels"][0]))
+
+    for label, profile in (("dangling", dangling), ("duplicated", duplicated)):
+        derived = _derive_context(
+            tmp_path / label,
+            _runtime_context_request(),
+            json.dumps(profile).encode(),
+        )
+        decision = router.route(derived)["decisions"][0]
+
+        # Withhold every configured point the broken relationship reaches.
+        assert derived["context"]["mappings"] == [], label
+        assert derived["context"]["harness"]["adapter_specs"] == [], label
+
+        # Name the unresolved relationship and the way back, and inherit.
+        rejection = derived["context"]["profile"]["rejection"]
+        assert "access channel" in rejection, label
+        assert "setup" in rejection, label
+        assert decision["status"] == "inherit", label
+        assert decision["inheritance"]["reason"] == "rejected_profile", label
+
+
+def test_a_rejected_profile_survives_the_freeze_it_is_routed_from(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The rejection is a frozen fact, not a passing remark of one command.
+
+    `freeze_context()` is the context plus an identity, so anything under
+    `context.profile` is already in the snapshot; a snapshot re-supplied to a
+    later request has to validate against the shipped request contract and
+    reach the same decision it reached the first time (issue #245).
+    """
+
+    # File one machine-judged attempt into the ledger the derivation reads,
+    # so the evidence beside the rejected profile is evidence that exists.
+    router = _load_router()
+    data = tmp_path / "model-selector"
+    source = tmp_path / "attempts.json"
+    source.write_text(json.dumps(_attempts()), encoding="utf-8")
+    _observe_command(
+        [
+            "observe",
+            str(source),
+            f"--artifact={tmp_path / 'artifact.json'}",
+            "--import",
+            f"--data={data}",
+        ],
+        capsys,
+    )
+
+    # Route a rejected profile once from current facts and once from the
+    # frozen snapshot that routing returned.
+    derived = _derive_context(
+        tmp_path,
+        _runtime_context_request(),
+        b'{"schema_version": 1}',
+    )
+    first = router.route(derived)
+    snapshot = first["snapshot"]
+    second = router.route(
+        {"schema_version": 1, "snapshot": snapshot, "requests": [_request()]}
+    )
+
+    # The frozen snapshot carries the rejection and satisfies the contract.
+    assert "rejection" in snapshot["profile"]
+    assert (
+        router._schema_errors(
+            {"schema_version": 1, "snapshot": snapshot, "requests": [_request()]},
+            router.REQUEST_SCHEMA,
+            router.REQUEST_SCHEMA,
+            "request",
+        )
+        == []
+    )
+
+    # Re-supplying it reaches the same audited inheritance, and the audit
+    # claims no profile revision it never read.
+    assert first["decisions"][0]["inheritance"]["reason"] == "rejected_profile"
+    assert second["decisions"][0]["inheritance"]["reason"] == "rejected_profile"
+    assert second["decisions"][0]["audit"]["provenance"]["profile_revision"] is None
+
+    # The ledger is read before and independently of the profile branch, so
+    # a rejected profile withholds the selections and not the measurement.
+    assert derived["context"]["evidence"]["records"] != []
+    assert snapshot["evidence"] == derived["context"]["evidence"]
 
 
 def test_context_rejects_incomplete_channel_billing_contract(tmp_path: Path) -> None:
@@ -592,9 +719,41 @@ def test_context_rejects_incomplete_channel_billing_contract(tmp_path: Path) -> 
         json.dumps(profile).encode(),
     )
 
-    # Assert the invalid profile follows the normal absent-profile branch.
-    assert derived["context"]["profile"] is None
+    # Assert the rejected profile names the contract it no longer matches
+    # rather than being reported as a profile nobody wrote.
+    rejection = derived["context"]["profile"]["rejection"]
+    assert "profile contract" in rejection
+    assert "access_channels" in rejection
+    assert "setup" in rejection
     assert derived["context"]["mappings"] == []
+
+
+def test_context_rejects_a_model_selection_that_fails_the_contract(
+    tmp_path: Path,
+) -> None:
+    """A selection is a rejection site of its own, not only a channel is.
+
+    The stored profile this ticket was filed against fails at every access
+    channel and at a model selection besides, so a rejection reported only
+    from the channels would not name the shape the defect was found in.
+    """
+
+    # Break one selection's persisted identity without touching a channel.
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    del profile["model_selections"][0]["version_kind"]
+    derived = _derive_context(
+        tmp_path,
+        _runtime_context_request(),
+        json.dumps(profile).encode(),
+    )
+    decision = _load_router().route(derived)["decisions"][0]
+
+    # Name the failing selection rather than the channels that validated.
+    rejection = derived["context"]["profile"]["rejection"]
+    assert "model_selections" in rejection
+    assert "version_kind" in rejection
+    assert "setup" in rejection
+    assert decision["inheritance"]["reason"] == "rejected_profile"
 
 
 def test_context_inherits_an_unknown_main_seat_without_overrides(
@@ -2203,11 +2362,15 @@ def test_route_refuses_a_locked_request_that_could_only_inherit() -> None:
     router = _load_router()
     absent = _complete_routing_snapshot()
     absent["profile"] = None
+    rejected = _complete_routing_snapshot()
+    rejected["profile"] = {"rejection": "config.json does not match the contract."}
     unreachable = _complete_routing_snapshot()
     unreachable["harness"]["adapter_specs"] = []
     cases: list[tuple[str, dict[str, Any], dict[str, Any]]] = [
         ("missing profile with a locked model", absent, {"model": "worker-v2"}),
         ("missing profile with a locked level", absent, {"deliberation": "low"}),
+        ("rejected profile with a locked model", rejected, {"model": "worker-v2"}),
+        ("rejected profile with a locked level", rejected, {"deliberation": "low"}),
         ("unavailable controls with a lock", unreachable, {"deliberation": "low"}),
     ]
 
@@ -2279,6 +2442,20 @@ def test_route_names_the_blocked_lock_in_its_refusal_detail() -> None:
     assert decision["reason"]["code"] == "unavailable_override"
     assert "missing_profile" in decision["reason"]["detail"]
 
+    # A rejected profile blocks the same lock under its own branch name, so a
+    # reader of the detail can tell which of the two states stopped them.
+    rejected = _complete_routing_snapshot()
+    rejected["profile"] = {"rejection": "config.json does not match the contract."}
+    blocked = _load_router().route(
+        {
+            "schema_version": 1,
+            "context": rejected,
+            "requests": [_request(overrides={"model": "worker-v2"})],
+        }
+    )["decisions"][0]
+    assert blocked["reason"]["code"] == "unavailable_override"
+    assert "rejected_profile" in blocked["reason"]["detail"]
+
 
 def test_route_still_inherits_when_execution_locks_nothing() -> None:
     """Automatic dimensions keep every documented graceful inheritance branch."""
@@ -2287,14 +2464,18 @@ def test_route_still_inherits_when_execution_locks_nothing() -> None:
     router = _load_router()
     absent = _complete_routing_snapshot()
     absent["profile"] = None
+    rejected = _complete_routing_snapshot()
+    rejected["profile"] = {"rejection": "config.json does not match the contract."}
     unreachable = _complete_routing_snapshot()
     unreachable["harness"]["adapter_specs"] = []
     expected = {
         "missing_profile": absent,
+        "rejected_profile": rejected,
         "unavailable_selection_controls": unreachable,
     }
 
-    # Assert absence and unavailable controls still delegate with fresh context.
+    # Assert every branch still delegates with fresh context rather than
+    # stopping the caller that asked for a model.
     for reason, snapshot in expected.items():
         decision = router.route(
             {"schema_version": 1, "context": snapshot, "requests": [_request()]}
@@ -2309,9 +2490,6 @@ def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
 
     # Build one controlled case for every stable unsafe-state family.
     cases: list[tuple[dict[str, Any], dict[str, Any], str]] = []
-    invalid = _complete_routing_snapshot()
-    invalid["profile"]["valid"] = False
-    cases.append((invalid, _request(), "invalid_profile"))
     cases.append(
         (
             _complete_routing_snapshot(),
@@ -3541,7 +3719,7 @@ def test_route_totally_validates_nested_snapshot_and_request_families() -> None:
 
     # Enumerate malformed values across every shared snapshot family.
     snapshot_changes: list[tuple[str, Any]] = [
-        ("profile", {"revision": 7, "valid": True}),
+        ("profile", {"revision": 7}),
         (
             "evidence",
             {"identity": "ledger-9", "vintage": "2026-08-01T00:00:00Z", "records": {}},
@@ -3935,7 +4113,7 @@ def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
 
     contract = _read("references/model-routing.md")
     required_fragments = {
-        "invalid_profile",
+        "rejected_profile",
         "ambiguous_override",
         "unavailable_override",
         "unknown_main_seat_ceiling",

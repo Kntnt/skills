@@ -13,7 +13,7 @@ import re
 import sys
 from copy import deepcopy
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, NamedTuple, cast
 
 import route
 
@@ -140,16 +140,6 @@ def _read_templates() -> list[dict[str, Any]]:
     return sorted(templates, key=lambda item: item["adapter_template_id"])
 
 
-def migrate_profile(profile: dict[str, Any]) -> dict[str, Any]:
-    """Isolate in-memory migration while version 1 is the only documented shape.
-
-    The detached value protects persisted bytes from both current normalization
-    and a later version-specific transformation.
-    """
-
-    return deepcopy(profile)
-
-
 def _profile_references_are_valid(profile: dict[str, Any]) -> bool:
     """Accept only unambiguous channel references from every selection."""
 
@@ -160,19 +150,68 @@ def _profile_references_are_valid(profile: dict[str, Any]) -> bool:
     )
 
 
-def _read_profile(data_directory: Path) -> dict[str, Any] | None:
-    """Return one valid normalized profile or the missing-profile state."""
+class StoredProfile(NamedTuple):
+    """One reading of `config.json` in exactly one of three states.
 
+    A validated profile carries `profile`. An absent one carries neither
+    member, absence being the file not existing and nothing else. A profile
+    that was read and rejected carries `rejection`, saying what rejected it
+    and naming the interview that writes a current one (ADR-0165).
+    """
+
+    profile: dict[str, Any] | None = None
+    rejection: str | None = None
+
+
+def _rejected(cause: str) -> StoredProfile:
+    """Reject a stored profile with its cause and the one way back."""
+
+    return StoredProfile(
+        rejection=f"{cause} Re-run `/model-selector setup` to write a current profile."
+    )
+
+
+def _read_profile(data_directory: Path) -> StoredProfile:
+    """Read the stored profile as valid, absent, or present and rejected.
+
+    Version 1 is the only documented shape and nothing migrates an older one
+    into it: the profile is a short interview `setup` recreates, and the
+    shapes that predate the contract diverge too far to bridge without
+    inventing facts (ADR-0165).
+    """
+
+    # An unreadable or undecodable file was still configured by somebody, so
+    # only its non-existence is the absent state.
     try:
         raw = json.loads((data_directory / "config.json").read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
-        return None
+    except FileNotFoundError:
+        return StoredProfile()
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        return _rejected(
+            f"config.json could not be read: {type(error).__name__}: {error}."
+        )
+
+    # A value of the wrong kind never reaches the contract to be judged by it.
     if not isinstance(raw, dict):
-        return None
-    profile = migrate_profile(raw)
-    if _schema_error(profile, PROFILE_SCHEMA, "profile"):
-        return None
-    return profile if _profile_references_are_valid(profile) else None
+        return _rejected("config.json does not hold a JSON object.")
+
+    # Name the failing path and constraint the shared interpreter reports, so
+    # a stale shape reads differently from a corrupted file.
+    profile = cast(dict[str, Any], raw)
+    if error_detail := _schema_error(profile, PROFILE_SCHEMA, "profile"):
+        return _rejected(
+            f"config.json does not match the current profile contract: {error_detail}."
+        )
+
+    # The contract judges each selection alone, so the relationship between
+    # them is the one thing left to reject the profile as a whole on.
+    if not _profile_references_are_valid(profile):
+        return _rejected(
+            "config.json holds a model selection that does not resolve to"
+            " exactly one configured access channel."
+        )
+
+    return StoredProfile(profile=profile)
 
 
 def _selection_aliases(selection: dict[str, Any]) -> list[str]:
@@ -496,9 +535,23 @@ def _main_channel(profile: dict[str, Any], harness: str, model: str) -> str:
     return "unconfigured" if selection is None else cast(str, selection["channel_id"])
 
 
+def _profile_state(stored: StoredProfile) -> dict[str, Any] | None:
+    """Represent the reading as the frozen state routing discriminates on.
+
+    A validated profile is its revision; a rejected one is what rejected it,
+    carrying no revision at all because a profile can fail the contract on
+    that very member and no trustworthy value exists to put there. An absent
+    profile is the null state it always was.
+    """
+
+    if stored.profile is not None:
+        return {"revision": str(stored.profile["revision"])}
+    return None if stored.rejection is None else {"rejection": stored.rejection}
+
+
 def _derive_context(
     runtime: dict[str, Any],
-    profile: dict[str, Any] | None,
+    stored: StoredProfile,
     data_directory: Path,
 ) -> dict[str, Any]:
     """Derive one complete current routing context without persistent writes."""
@@ -514,7 +567,9 @@ def _derive_context(
     runtime_seat = runtime["main_seat"]
     evidence = _evidence(data_directory, cast(str, manifest["as_of"]))
 
-    # Missing or invalid configuration is a normal inheritance context.
+    # An absent or rejected profile is a normal inheritance context; neither
+    # state withholds the evidence the ledger holds independently of it.
+    profile = stored.profile
     if profile is None:
         ranks: dict[str, float | None] = {}
         main_rank = None
@@ -653,9 +708,7 @@ def _derive_context(
     }
     return {
         "snapshot_version": 1,
-        "profile": None
-        if profile is None
-        else {"revision": str(profile["revision"]), "valid": True},
+        "profile": _profile_state(stored),
         "evidence": evidence,
         "harness": {
             "name": runtime_harness["name"],
@@ -792,8 +845,8 @@ def derive(artifact: Any, data_directory: Path) -> dict[str, Any]:
         }
 
     # Derive current facts from optional validated local configuration.
-    profile = _read_profile(data_directory)
-    context = _derive_context(artifact["runtime"], profile, data_directory)
+    stored = _read_profile(data_directory)
+    context = _derive_context(artifact["runtime"], stored, data_directory)
 
     # Freeze the context here to reach the identity the draw is derived from.
     # The identity `route` computes later is the same function of the same

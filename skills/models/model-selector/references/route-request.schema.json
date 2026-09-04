@@ -123,13 +123,20 @@
       "additionalProperties": false
     },
     "profile": {
-      "type": "object",
-      "required": ["revision", "valid"],
-      "properties": {
-        "revision": {"$ref": "#/$defs/non_empty_string"},
-        "valid": {"type": "boolean"}
-      },
-      "additionalProperties": false
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["revision"],
+          "properties": {"revision": {"$ref": "#/$defs/non_empty_string"}},
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["rejection"],
+          "properties": {"rejection": {"$ref": "#/$defs/non_empty_string"}},
+          "additionalProperties": false
+        }
+      ]
     },
     "uncertainty": {
       "type": "object",

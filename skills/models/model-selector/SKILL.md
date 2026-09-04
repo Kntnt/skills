@@ -82,7 +82,7 @@ Anything outside these forms is invalid, an operand written before a flag among 
 
 Default data directory: `~/.kntnt/model-selector/`. A user-supplied `--data=<path>` wins. Read `config.json` and existing evidence before any research or recommendation.
 
-When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections except `context` and `route`. Context derives the missing-profile state and Route follows its own inheritance and refusal rules; neither starts setup. Never install a bundled access combination as the user's configuration.
+When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections except `context` and `route`. Context derives the absent-profile state for a `config.json` that is not there and the rejected-profile state for one it read and could not validate, and Route inherits on both rather than refusing; neither starts setup. Never install a bundled access combination as the user's configuration.
 
 When no evidence ledger exists, use only the configured models covered by `$HERE/data/seed-evidence.jsonl` as dated seed priors. `recommend` reads applicable seed evidence without writing and may read applicable `capability_prior_seed` rows in place when no newer ledger record exists. Relevant matched measurements override capability priors, which choose only cold-start experiments and never supply numeric evidence or clear a quality floor. `update` initializes applicable ledger records, preserving retrieval dates and sources. Never present the seed as current after its stated date.
 
@@ -129,7 +129,7 @@ Complete when the recommendation names an exact configuration and decision rule,
 
 ## Context
 
-Read `$HERE/references/model-routing.md` and validate the input against `$HERE/references/context-request.schema.json`. Run `uv run "$HERE/scripts/context.py" [--data=<path>] <path>` and emit its JSON response without commentary. The runtime form reads the normalized profile, shipped seed, adapter templates, routing defaults, and the selected evidence ledger; specializes exact mappings from the caller-supplied Harness and main-seat facts; projects the ledger into `context.evidence.records`, so an attempt an external verdict judged reaches the next decision with nothing written by hand; and returns one complete route artifact. The snapshot form validates and returns the supplied frozen snapshot unchanged beside the current ordered requests. Context never enters setup and performs no network access, evaluation, research, or persistent write.
+Read `$HERE/references/model-routing.md` and validate the input against `$HERE/references/context-request.schema.json`. Run `uv run "$HERE/scripts/context.py" [--data=<path>] <path>` and emit its JSON response without commentary. The runtime form reads the validated profile, shipped seed, adapter templates, routing defaults, and the selected evidence ledger; specializes exact mappings from the caller-supplied Harness and main-seat facts; projects the ledger into `context.evidence.records`, so an attempt an external verdict judged reaches the next decision with nothing written by hand; and returns one complete route artifact. The snapshot form validates and returns the supplied frozen snapshot unchanged beside the current ordered requests. Context never enters setup and performs no network access, evaluation, research, or persistent write.
 
 ## Route
 

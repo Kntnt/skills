@@ -40,7 +40,7 @@ def routing_snapshot() -> dict[str, Any]:
     # Describe the smallest exact-point context used by routing unit tests.
     return {
         "snapshot_version": 1,
-        "profile": {"revision": "profile-7", "valid": True},
+        "profile": {"revision": "profile-7"},
         "evidence": {
             "identity": "ledger-9",
             "vintage": "2026-08-01T00:00:00Z",
