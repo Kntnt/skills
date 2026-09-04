@@ -25,7 +25,11 @@ Definiteness is marked twice. An adjective before a definite noun takes both the
 
 The s-passive is the ordinary Swedish passive and is shorter than its periphrastic alternative: *rapporten skickas på fredag*, not *rapporten blir skickad på fredag*. Both exist; the s-form is the unmarked one, and the *bli*-form carries a change-of-state reading that is often not intended.
 
-*Du* is the default address in Swedish prose, including business and journalism. *Ni* to a single reader is either archaic or a deliberate distancing, and reads as a translation from a language that has a formal pronoun. *Man* is the ordinary generic pronoun and is idiomatic where English would use *you*, *we*, or a passive.
+*Du* is the default address in Swedish prose, including business and journalism. *Ni* to a single reader is either archaic or a deliberate distancing, and reads as a translation from a language that has a formal pronoun.
+
+*Man* is a fallback rather than the ordinary generic pronoun. It is justified where the agent genuinely is anybody at all or is genuinely unknown, and where naming one would claim more than the material carries. Where the sentence has a real subject to hand — the reader, the writer, the organisation, the profession, the study — that subject is what the sentence takes. A text that reaches for *man* with any of those available reads as evasive, and it is usually where an English draft's *you*, *we*, or passive has landed rather than anything the writer chose.
+
+Speech that the text reports is ordinarily set with a speech dash rather than in quotation marks: an interview answer, a remark at a meeting, anything a person said that the text renders readable. Quotation marks reserve the exact wording, and a writer reaches for them where the phrasing itself is the point — where it is what is new, where it is disputed, or where the text is about how the thing was said. What each of the two marks promises a reader is settled in Mechanics; this scope does not restate it.
 
 Genitive takes a bare *s* with no apostrophe: *Kntnts kunder*, *Sveriges riksdag*. A name already ending in *s*, *x*, or *z* takes nothing at all: *Anders bok*, *Marx teori*.
 
@@ -47,6 +51,8 @@ Prepositional filler multiplies in Swedish official prose: *i syfte att* for *f�
 
 Check that the register is one register. Swedish shifts sharply between *ni*-formality, *du*-directness, and youth-informal, and a text that mixes them reads as assembled rather than written.
 
+Check reported speech against the mark it is set in. Sentences inside *”…”* better formed than anything a person says aloud have been repaired behind a mark that promised they would not be, and the mark is the error rather than the repair. A text that moves between the two marks for one speaker with no reason a reader can see has chosen neither.
+
 Look for the English participle rendered mechanically as an *-ande* form. *Ökande kostnader* is Swedish; a paragraph in which every subject carries an *-ande* modifier is an English draft in Swedish clothes.
 
 Finally, check the sentence rhythm the way a Swedish reader hears it: known information before new, one main idea per sentence, and no clause postponed behind three others.
@@ -57,7 +63,7 @@ Openings that mark generated Swedish: *I dagens snabbrörliga värld*, *I en tid
 
 Closings of the same kind: *Sammanfattningsvis*, *Avslutningsvis kan vi konstatera att*, *I slutändan handlar det om*, *Framtiden får utvisa*. A Swedish text that has made its point stops.
 
-The imported false contrast: *Det handlar inte bara om X — det handlar om Y*, *Inte bara ... utan också ...*, *Det är inte X. Det är Y.* as a paragraph of its own. The construction exists in Swedish, but its density in generated text is the tell.
+The imported false contrast: *Det handlar inte bara om X – det handlar om Y*, *Inte bara ... utan också ...*, *Det är inte X. Det är Y.* as a paragraph of its own. The construction exists in Swedish, but its density in generated text is the tell.
 
 Metaphor stock: *en resa*, *navigera i landskapet*, *nyckeln till framgång*, *hörnstenen i*, *ta det till nästa nivå*, *game changer*, *att verkligen förstå kraften i*. These arrive as a set rather than because the writer meant any of them.
 
@@ -93,18 +99,20 @@ Currency follows the amount: *1 250 kr*, *250 000 SEK*, with a space before the 
 
 A sentence-initial connective adverb takes no comma before the finite verb: *Dessutom är det viktigt*, not *Dessutom, är det viktigt*.
 
-A sentence-breaking dash is a spaced en dash: *snabbare – det*, not the unspaced em dash in *snabbare—det*. Ranges instead take an unspaced en dash, as stated above.
+The Swedish dash is the en dash. Every use of it takes a space on each side — the sentence-breaking dash in *snabbare – det*, the parenthetical insertion, and the speech dash that opens a line of dialogue — except the range, which is unspaced as above. The em dash belongs to English typography, so *snabbare—det* is an error wherever it stands.
 
-Quotation marks are *”…”* — the same right-pointing mark at both ends — so English marks in *“kundresa”* are an error. Quotation inside quotation uses *’…’*. Dialogue may instead be set with an em dash at the start of the line.
+Quotation marks are *”…”* — the same right-pointing mark at both ends — so English marks in *“kundresa”* are an error. Quotation inside quotation uses *’…’*.
+
+The two marks Swedish sets somebody's speech in promise the reader different things, and which of them a text uses is a claim about its source rather than a matter of taste. Wording inside *”…”* is the speaker's own, and the text vouches for it word for word. A speech dash opens the line with the spaced en dash, is closed by nothing, and claims the content and the meaning as the speaker's while leaving the wording repairable within the boundary the writing Skill works under: *– Det gick fortare än vi trodde, säger hon.* Repaired wording set inside quotation marks is therefore false about the source rather than a typographic slip. Where one speaker carries on into a new paragraph, that paragraph opens with a speech dash of its own.
 
 A simple list takes no serial comma: *teknik, processer och kultur*, not *teknik, processer, och kultur*.
 
 In running prose, *och* is written out: *Service och support*, not *Service & support*. Preserve an ampersand that belongs to a proper name or quoted matter.
 
-Abbreviations take periods: *t.ex.*, *bl.a.*, *dvs.*, *m.m.*, *osv.*, *ca* without one. An initialism compounded with a word takes a hyphen: *VD-brev*, *USA-baserad*, *EU-direktiv*.
+Abbreviations take periods: *t.ex.*, *bl.a.*, *dvs.*, *m.m.*, *osv.*, *ca* without one. An initialism that has become an everyday Swedish word is written in lower case and without periods — *vd*, *tv*, *it*, *sms*, *dna* — while one that has not stays in capitals: *SEO*, *GDPR*, *EU*. An initialism compounded with a word takes a hyphen and keeps whichever case it has on its own: *vd-brev*, *USA-baserad*, *EU-direktiv*.
 
 Genitive takes *s* without an apostrophe, and nothing at all after *s*, *x*, or *z*: *företagets resultat*, *Lars hus*.
 
 Only the first word of a heading or title is capitalised, along with any proper noun in it. Title case is English and is an error in Swedish.
 
-Two forms both listed in *Svenska Akademiens ordlista* are both established Swedish, neither of them the error: *paket* and *paketet*, *-are* and *-er* plurals in the cases that allow both, *ska* and *skall*.
+Two forms both listed in *Svenska Akademiens ordlista* are both established Swedish, neither of them the error: *i dag* and *idag*, *ska* and *skall*, *över huvud taget* and *överhuvudtaget*.

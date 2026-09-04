@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- The Swedish Language Resource no longer contradicts itself about the dash or reverses two rules this Collection holds. Its Mechanics scope said a sentence-breaking dash is a spaced en dash and three sentences later allowed dialogue to be set with an unspaced em dash; there is now one convention — the en dash, spaced in every use including the speech dash, unspaced only in a range — and the em dash is named as English typography wherever it stands. The distinction Swedish makes between verbatim quotation and rendered attribution is back and stated as what each mark promises a reader rather than as typography alone: wording inside `”…”` is the speaker's own and is vouched for word for word, while the speech dash claims the content and the meaning and leaves the wording repairable within the boundary the writing Skill's own quotation reference already sets, so repaired wording behind quotation marks is false about the source rather than a typographic slip. Composition says which of the two is ordinary in reported Swedish speech and what reserves the other, and Review gains the diagnostic for a mismatch between them. *Man* is no longer described as the ordinary generic pronoun, which reads as evasive in Swedish professional prose and is usually where an English draft's *you*, *we*, or passive landed: it is a fallback, justified where the agent genuinely is anybody or genuinely unknown and where naming one would claim more than the material carries. Mechanics now states that an initialism which has become an everyday Swedish word is written in lower case without periods — *vd*, *tv*, *it*, *sms*, *dna* — while one that has not stays in capitals, and the compound example obeys the class it illustrates, *vd-brev* rather than *VD-brev*. Two further examples that contradicted their own rule were corrected: the established-variant line now gives genuine *Svenska Akademiens ordlista* doublets, and the one Swedish string elsewhere in the file that still used an em dash no longer does.
+
 ## [0.20.0] – 2026-09-04
 
 ### Added
