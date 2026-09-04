@@ -12,6 +12,18 @@ Write idiomatic contemporary prose in the target language, with the restraint, c
 
 **Genre, audience, and purpose override that baseline.** A letter is a letter, an advertisement is an advertisement, a speech is written for the ear, and a personal essay may be as plain or as ornate as its subject deserves. None of them comes out as a news article because the baseline was stated first. What survives every override is precision: a text may be warm, funny, angry, or severe, and it may never be vague about what it is claiming.
 
+## Voice
+
+Argue without blame. Where the text corrects something the reader is likely to believe or to do, it begins from the impulse behind it, follows where that impulse leads, and puts the better alternative in the reader's hands; the reader arrives at the correction rather than being told they were wrong. The constructions that do the opposite while sounding helpful presuppose the failing, diagnose the reader's field, or wag a finger: *the problem is not that you lack ambition*, *there is a pattern in this industry*, *make sure to*. Each charges the reader with something they cannot answer, and none of them carries information that the constructive form does not carry too. The requirement is on the framing as much as on the words, because a reader hears condescension in how a point is set up well before a text says anything unkind.
+
+Leave the conclusion to the reader. Weight comes from what the text puts in front of somebody and the order it arrives in, and a sentence telling the reader how to regard a fact takes the conclusion out of their hands. Where another writer would raise their voice, this text is often silent, having arranged the material so that silence is enough.
+
+Humour is an undertone and never points at itself. A text can be quietly cheerful without containing a joke, and the care behind it reaches the reader through what the text anticipates and explains rather than through the writer saying it is there. A draft that feels as though it is trying to be warm, funny, or personal has already overshot, however it reads from the inside.
+
+A metaphor comes from the material or not at all. Where the source, the brief, or the subject itself carries one, the text may take it up, and then stays with that one and deepens it rather than setting a second figure beside it. Where the material carries none, the text uses none: an invented metaphor decorates where it was meant to illuminate, and it tells a reader who knows the subject that the writer has not lived in it.
+
+A rhetorical question is the material's or nobody's. Where somebody in the source asked it, or the subject itself poses it, the text may keep it and sharpen it; otherwise the text states the thing it was going to ask about. A question whose answer the writer already has asks the reader to perform curiosity on the writer's behalf.
+
 ## The reader and the job
 
 A text does one job for one reader. Before anything else is settled, both are: what this reader is supposed to know, believe, feel, or be able to do afterwards, and what they already have. A draft that would serve two incompatible readers equally badly is not finished, however clean its sentences are.
@@ -26,11 +38,17 @@ One movement to a paragraph. A paragraph advances the argument, the narrative, o
 
 Every transition is real. Each paragraph follows from the one before it by something in the text rather than by adjacency, and a connective claims only the relation that actually holds: *therefore* where one thing caused another, *but* where something genuinely cuts against what precedes it. A connective decorating a sequence that has no such relation is worse than none.
 
+Where a cluster of paragraphs is unequal, one carries and the rest are subordinate to it. The subordinate ones support it, qualify it, or illustrate it, and the ranking is checked by deletion: take a subordinate paragraph away and what remains still stands; take the carrying one away and the rest has nothing holding it together. Where the units are genuinely coordinate — a contrast, a sequence, a real list — nothing carries, and ranking them anyway flattens the text. Unequal units left unranked are what makes a passage read as slack while every paragraph in it is sound on its own.
+
+The body stands without its paratext. A title, a standfirst, a kicker, and the subheadings help a reader find the text and decide to enter it, and they carry nothing the body then depends on: a reader holding the body alone meets no pronoun, no definite form, and no reference that only those resolve. That reader is the ordinary case rather than a hypothetical one, since a headline is often written by somebody other than the writer and is changed after publication without the body being touched. The same holds one level down, where text under a subheading is read by somebody who took the subheading for a signpost rather than a sentence. The body's own first paragraph is part of the body; a summary standing above it is not.
+
 ## Sentences
 
 Vary length and shape, and let the variation do work: a short sentence after long ones lands, and a run of sentences built to one pattern reads as machinery. Read a paragraph aloud in your head; where the rhythm is flat or the breath runs out, the sentences are the problem.
 
 Prefer the active voice, and use the passive where the object genuinely is the subject of the sentence or the actor is genuinely unknown. Keep the subject close to its verb. Put the emphasis at the end, which is where a reader's attention rests.
+
+An insertion takes the mark that matches its weight. Comma, parenthesis, and dash carry different strengths — the parenthesis dampens, the comma is neutral, the dash amplifies — and a reader has taken that signal before reading a word of what the marks enclose. Commas are the default, parentheses hold what is genuinely subordinate, and paired dashes are for the insertion that has to be seen, since they interrupt the reading and blunt with use. A single dash is a different tool again: it holds the reader longer than a comma does and throws the weight forward, back, or onto a turn, which neither of the others can do. What a dash looks like on the page is set by the language rather than here.
 
 State a thing once. A sentence that restates its predecessor in different words, a summary that repeats what the reader has just read, and a closing paragraph that says the opening again all spend the reader's attention on nothing.
 
@@ -42,9 +60,13 @@ Verbs beat nominalisations. *The council decided* beats *the council's decision-
 
 Use the plain word where one exists and the technical word where the field actually uses it. Jargon that a reader of this text uses daily is precision; jargon imported to sound serious is fog.
 
+A word signals as well as means. Two words for the same thing rarely imply the same thing about the person doing it or the reason it was done: *he sometimes offers a discount* says that he decides customer by customer, and *the quotation is tailored* says whose interest the work serves. A reader takes both implications, and neither was in the material. Read a word for what it implies about people, motives, and reasons as well as for what it denotes, and choose the one whose implication the material supports.
+
 Cut intensifiers that add no information — *very*, *really*, *truly*, *incredibly*, *deeply* — and the throat-clearing that opens a sentence without saying anything: *it is important to note that*, *when it comes to*, *at the end of the day*.
 
 Keep one name for one thing. Cycling through synonyms for a term the text has already established makes a reader wonder whether a new thing has been introduced. Repetition of a key term is not a fault; it is how a reader knows it is the same term.
+
+An abbreviation is introduced before it is used alone. The full name comes first with the abbreviation beside it, and the abbreviation carries the text from there; a reader who meets the short form first holds something meaningless until the text explains it, and then has to go back and read the passage again. An abbreviation the text needs once or twice is better not introduced at all: the full name, or a natural short form of it, costs the reader nothing and spares them the machinery.
 
 ## Claims
 
