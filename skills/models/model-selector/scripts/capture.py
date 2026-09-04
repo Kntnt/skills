@@ -748,10 +748,10 @@ def purge_paths(data: Path) -> list[dict[str, Any]]:
     """Return what this feature owns beyond the ledger, present or not.
 
     This is the preview `config reset --evidence` renders before it removes
-    the whole `capture/` subdirectory — configuration, drafts, and all — and
-    the Usage Record store beside it, keeping the Harness hooks installed
-    (issue #227). `capture/` is a directory rather than a JSONL file, so it is
-    sized in bytes; the Usage Record store is JSONL, sized in rows.
+    the whole `capture/` subdirectory — drafts and all — and the Usage Record
+    store beside it, keeping the Harness hooks installed (issue #227).
+    `capture/` is a directory rather than a JSONL file, so it is sized in
+    bytes; the Usage Record store is JSONL, sized in rows.
     """
 
     directory = home(data)
