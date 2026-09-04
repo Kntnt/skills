@@ -49,10 +49,10 @@ def _seat(**overrides: str) -> dict[str, Any]:
 
 
 def _enabled(module: Any, tmp_path: Path, harness: str = "claude-code") -> Path:
-    """Opt in to capture in an isolated data directory and Harness root."""
+    """Install capture in an isolated data directory and Harness root."""
 
     data = tmp_path / "data"
-    module.enable(data, tmp_path / "home", [harness], _command())
+    module.install(data, tmp_path / "home", [harness], _command())
     return data
 
 
@@ -136,36 +136,37 @@ def _write_transcript(path: Path, *lines: str) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def test_enabling_the_skill_alone_captures_nothing(tmp_path: Path) -> None:
-    """Capture starts on an explicit opt-in, never on the Skill being Enabled."""
+# `test_enabling_the_skill_alone_captures_nothing` is removed: it pinned the
+# opt-in contract this ticket ends (#223) — a hook fired directly, bypassing
+# any install, and expected no-op. There is no longer a separate on/off state
+# for a hook invocation to be gated on: a hook only ever runs because a
+# Harness's own configuration names it, which only happens once this
+# feature's integration has actually been installed, so the question the
+# removed test asked no longer has a meaningful negative case to assert.
+
+
+def test_installing_reports_per_harness_results(tmp_path: Path) -> None:
+    """Installing answers with what each named Harness's own install did.
+
+    There is no more consent to state before anything is written (#223
+    decision 9): the disclosure moved to this Skill's own `help.md`, read
+    before Select answers, and installing is simply the Manager's own word,
+    answered in JSON.
+    """
 
     module = _load()
-    data = tmp_path / "data"
-
-    # Drive a whole session's lifecycle without ever opting in.
-    _start(module, data, "session-1")
-    _finish(module, data, "session-1")
-
-    assert not (data / "capture").exists() or not _drafts(data)
-    assert _usage_records(data) == []
-
-
-def test_the_first_opt_in_states_what_it_installs_and_retains(tmp_path: Path) -> None:
-    """Consent names the integration, the retained data, cleanup and the way out."""
-
-    module = _load()
-    result = module.enable(
+    result = module.install(
         tmp_path / "data", tmp_path / "home", ["claude-code"], _command()
     )
-    consent = result["consent"]
 
-    assert result["enabled"] is True
-    for subject in ("integration", "retained", "cleanup", "opt_out"):
-        assert consent[subject]
-    assert "Seat" in consent["retained"]
-    assert "usage" in consent["retained"].lower()
-    assert "no waiting store" in consent["cleanup"]
-    assert result["harnesses"][0]["status"] == "installed"
+    assert "consent" not in result
+    assert "enabled" not in result
+    assert result["installed"][0]["harness"] == "claude-code"
+    assert result["installed"][0]["status"] == "installed"
+    assert result["unsupported"] == {
+        "count": 0,
+        "supported": ["claude-code", "codex", "opencode"],
+    }
 
 
 def test_a_finished_session_writes_one_usage_record_and_cleans_up(
@@ -390,9 +391,12 @@ def test_the_hook_path_is_fail_open(tmp_path: Path) -> None:
 
     # A draft store that cannot be written is still a hook that exits clean.
     drafts = data / "capture" / "drafts"
-    for stale in drafts.glob("*.json"):
-        stale.unlink()
-    drafts.rmdir()
+    if drafts.is_dir():
+        for stale in drafts.glob("*.json"):
+            stale.unlink()
+        drafts.rmdir()
+    else:
+        drafts.parent.mkdir(parents=True, exist_ok=True)
     drafts.write_text("not a directory", encoding="utf-8")
     result = module.hook(data, "SessionStart", {"session_id": "session-1"})
 
@@ -413,7 +417,13 @@ def test_the_hook_path_is_fail_open(tmp_path: Path) -> None:
 
 
 def test_status_reports_health_and_storage(tmp_path: Path) -> None:
-    """Status answers what it is enabled, healthy, and using, nothing more."""
+    """Status answers what is healthy and using, nothing more.
+
+    There is no separate `enabled` flag any more (#223): every Harness the
+    Collection Library has an adapter for is reported, whatever this machine
+    happens to hold right now, because the Harness's own file is the one
+    truth capture reads.
+    """
 
     module = _load()
     data = _enabled(module, tmp_path)
@@ -421,9 +431,11 @@ def test_status_reports_health_and_storage(tmp_path: Path) -> None:
     _finish(module, data, "session-1")
     reported = module.status(data, tmp_path / "home")
 
-    assert reported["enabled"] is True
-    assert reported["harnesses"][0]["harness"] == "claude-code"
-    assert reported["harnesses"][0]["status"] == "healthy"
+    assert "enabled" not in reported
+    by_harness = {entry["harness"]: entry for entry in reported["harnesses"]}
+    assert set(by_harness) == {"claude-code", "codex", "opencode"}
+    assert by_harness["claude-code"]["status"] == "healthy"
+    assert by_harness["codex"]["status"] == "absent"
     assert reported["storage_bytes"] >= 0
     assert "pending" not in reported
     assert "retention" not in reported
@@ -432,7 +444,7 @@ def test_status_reports_health_and_storage(tmp_path: Path) -> None:
 def test_disabling_removes_the_integration_and_keeps_usage_records(
     tmp_path: Path,
 ) -> None:
-    """Turning capture off is not a purge of what it already established."""
+    """Disabling is not a purge of what capture already established."""
 
     module = _load()
     data = _enabled(module, tmp_path)
@@ -442,14 +454,12 @@ def test_disabling_removes_the_integration_and_keeps_usage_records(
 
     result = module.disable(data, tmp_path / "home")
 
-    assert result["enabled"] is False
-    assert result["harnesses"][0]["status"] == "removed"
+    assert "enabled" not in result
+    by_harness = {entry["harness"]: entry for entry in result["harnesses"]}
+    assert by_harness["claude-code"]["status"] == "removed"
     assert _usage_records(data) == kept
-    assert module.status(data, tmp_path / "home")["enabled"] is False
-
-    # And with capture off, a lifecycle signal writes nothing again.
-    _start(module, data, "session-2")
-    assert _drafts(data) == []
+    status = module.status(data, tmp_path / "home")
+    assert all(entry["status"] == "absent" for entry in status["harnesses"])
 
 
 def test_purge_reports_the_capture_home_in_bytes_and_the_ledger_in_rows(
@@ -457,9 +467,8 @@ def test_purge_reports_the_capture_home_in_bytes_and_the_ledger_in_rows(
 ) -> None:
     """A preview sizes the directory by byte and the JSONL store by row.
 
-    Removing `capture/` turns capture off, because its `capture.json` consent
-    record goes with it — the Harness hooks stay installed, and `capture
-    --on` turns it back on (issue #227).
+    Removing `capture/` clears its stored drafts; the Harness hooks stay
+    installed and keep measuring (issue #227).
     """
 
     module = _load()
@@ -515,11 +524,11 @@ def test_purge_removes_the_capture_home_and_the_usage_ledger(tmp_path: Path) -> 
     )
     assert settings["hooks"]["SessionStart"]
 
-    # A lifecycle signal after the purge starts a fresh draft: capture is off
-    # only because `capture.json` went with the home directory, exactly as
-    # `disable` would leave it, and a later opt-in writes the file again.
+    # There is no on/off flag of this feature's own left for a purge to clear
+    # (#223): a session that starts after a purge is captured exactly as one
+    # before it was, into a `capture/` this next signal recreates.
     _start(module, data, "session-2")
-    assert _drafts(data) == []
+    assert len(_drafts(data)) == 1
 
 
 def test_purge_reports_an_absent_home_and_ledger_as_absent(tmp_path: Path) -> None:
@@ -569,35 +578,41 @@ def test_the_purge_cli_previews_without_yes_and_removes_with_it(
     assert not module.home(data).exists()
 
 
-def test_an_unsupported_harness_is_never_reported_healthy(tmp_path: Path) -> None:
-    """A Harness that cannot carry the contract says so instead of pretending."""
+def test_an_unsupported_harness_is_collapsed_to_a_single_count(tmp_path: Path) -> None:
+    """A Harness no adapter exists for is never attempted, never one row each.
 
-    module = _load()
-    data = tmp_path / "data"
-    result = module.enable(data, tmp_path / "home", ["cursor"], _command())
-
-    assert result["harnesses"][0]["status"] == "unsatisfied"
-    assert result["harnesses"][0]["capability"]
-    assert module.status(data, tmp_path / "home")["harnesses"][0]["status"] != "healthy"
-
-
-def test_a_gated_harness_is_never_reported_healthy_either(tmp_path: Path) -> None:
-    """Codex's own trust review is reported through the same presence field.
-
-    `/model-selector status` carries `healthy`, `gated`, and `absent` in the
-    one per-Harness field this ticket's own key interfaces name — the
-    lifecycle ticket (#223) that would otherwise define this section has not
-    landed, so the state is added to the field that already exists rather
-    than to one this ticket invents.
+    A caller naming Detected Harnesses in bulk would otherwise get one
+    Unsatisfied row per Harness this collection has no adapter for — seventy
+    of them, as of this ticket — burying the outcome that matters (#223
+    decision 3). Named Harnesses no adapter exists for are reported as a
+    single count naming the supported set instead.
     """
 
     module = _load()
     data = tmp_path / "data"
-    module.enable(data, tmp_path / "home", ["codex"], _command())
+    result = module.install(data, tmp_path / "home", ["cursor", "windsurf"], _command())
+
+    assert result["installed"] == []
+    assert result["unsupported"] == {
+        "count": 2,
+        "supported": ["claude-code", "codex", "opencode"],
+    }
+    assert all(
+        entry["status"] != "healthy"
+        for entry in module.status(data, tmp_path / "home")["harnesses"]
+    )
+
+
+def test_a_gated_harness_is_never_reported_healthy_either(tmp_path: Path) -> None:
+    """Codex's own trust review is reported through the same presence field."""
+
+    module = _load()
+    data = tmp_path / "data"
+    module.install(data, tmp_path / "home", ["codex"], _command())
     reported = module.status(data, tmp_path / "home")
 
-    assert reported["harnesses"][0]["harness"] == "codex"
-    assert reported["harnesses"][0]["status"] == "gated"
+    by_harness = {entry["harness"]: entry for entry in reported["harnesses"]}
+    assert by_harness["codex"]["status"] == "gated"
 
 
 def test_the_manager_can_ask_capture_to_remove_its_own_integrations(
@@ -780,14 +795,14 @@ def test_the_opencode_idle_events_own_session_field_is_understood(
     assert len(_drafts(data)) == 1
 
 
-def test_the_installed_hook_carries_the_data_directory_it_was_enabled_for(
+def test_the_installed_hook_carries_the_data_directory_it_was_installed_for(
     tmp_path: Path,
 ) -> None:
-    """A hook pointed at another directory reads an empty configuration."""
+    """A hook pointed at another directory writes where nobody looks for it."""
 
     module = _load()
     data = tmp_path / "elsewhere"
-    module.enable(data, tmp_path / "home", ["claude-code"], [])
+    module.install(data, tmp_path / "home", ["claude-code"], [])
     settings = json.loads(
         (tmp_path / "home" / ".claude" / "settings.json").read_text(encoding="utf-8")
     )
@@ -796,16 +811,17 @@ def test_the_installed_hook_carries_the_data_directory_it_was_enabled_for(
     assert f"--data {data}" in command
 
 
-def test_opting_in_without_naming_a_harness_installs_into_every_one(
+def test_naming_no_harness_installs_into_every_supported_one(
     tmp_path: Path,
 ) -> None:
-    """The consent says every supported Harness, so it cannot install none."""
+    """Naming no Harness means every Harness an adapter exists for."""
 
     module = _load()
-    result = module.enable(tmp_path / "data", tmp_path / "home", [], _command())
+    result = module.install(tmp_path / "data", tmp_path / "home", [], _command())
 
-    assert len(result["harnesses"]) == 3
-    assert {entry["status"] for entry in result["harnesses"]} == {"installed"}
+    assert len(result["installed"]) == 3
+    assert {entry["status"] for entry in result["installed"]} == {"installed"}
+    assert result["unsupported"]["count"] == 0
 
 
 def test_a_nested_payload_object_is_filtered_by_its_own_keys(tmp_path: Path) -> None:
@@ -829,21 +845,14 @@ def test_a_nested_payload_object_is_filtered_by_its_own_keys(tmp_path: Path) -> 
     )
 
 
-def test_the_seat_recorded_at_opt_in_fingerprints_later_sessions(
-    tmp_path: Path,
-) -> None:
-    """No Harness payload names the seat, so the agent supplies it once."""
-
-    module = _load()
-    data = tmp_path / "data"
-    module.enable(data, tmp_path / "home", ["claude-code"], _command(), _seat())
-
-    # A whole session whose payloads never mention the seat at all.
-    module.hook(data, "SessionStart", {"session_id": "session-1"})
-    result = module.hook(data, "SessionEnd", {"session_id": "session-1"})
-
-    assert result["recorded"]
-    assert _usage_records(data)[0]["seat"]["model"] == _seat()["model"]
+# `test_the_seat_recorded_at_opt_in_fingerprints_later_sessions` is removed:
+# nothing is supplied at installation any more (#223 decision 7) — the
+# `--seat` argument, the configured-seat fallback, and the `seat` key in the
+# capture configuration are all gone, so there is no opt-in seat left for a
+# later session with no payload seat to fall back on. What replaced it is
+# `test_a_session_with_no_seat_known_at_all_still_writes_a_usage_record`
+# below, unchanged: such a session still writes a Usage Record, its Seat
+# fields explicit nulls.
 
 
 def test_a_session_with_no_seat_known_at_all_still_writes_a_usage_record(
@@ -878,6 +887,37 @@ def test_no_pending_review_notification_or_retention_surface_remains() -> None:
         "REVIEW_ACTIONS",
     ):
         assert not hasattr(module, removed), removed
+
+
+def test_no_separate_consent_or_configuration_state_remains() -> None:
+    """Capture follows the Skill's own Enabled state and asks for nothing (#223).
+
+    There is no second opt-in, no consent text, no stored on/off flag, and no
+    Harness-guessing fallback left: disk — the Harness's own configuration —
+    is the one truth capture ever reads (ADR-0090).
+    """
+
+    module = _load()
+    for removed in (
+        "CONSENT",
+        "enable",
+        "config",
+        "_config_path",
+        "_configured_harness",
+        "_configured_seat",
+    ):
+        assert not hasattr(module, removed), removed
+
+    # The mirror word replaces the old opt-in action, and the old actions no
+    # longer parse at all.
+    assert module.parse_args(["install-integrations"]).action == "install-integrations"
+    for stale in ("enable", "disable"):
+        try:
+            module.parse_args([stale])
+        except SystemExit as exc:
+            assert exc.code != 0
+        else:
+            raise AssertionError(f"{stale!r} still parses as an action")
 
 
 # --- Reading the finished session's own record (#225) ------------------------
@@ -921,14 +961,19 @@ def test_a_finished_session_reads_its_exact_model_effort_and_tokens_from_the_rec
     }
 
 
-def test_the_configured_seats_own_channel_and_surface_survive_the_record_read(
+def test_a_record_read_with_no_payload_seat_leaves_channel_and_surface_null(
     tmp_path: Path,
 ) -> None:
-    """The record supplies model and deliberation; the rest is still configuration."""
+    """Nothing is supplied at installation any more, so nothing is left to fall
+    back on but the record and the payload themselves (#223 decision 7).
+
+    The record supplies the exact model and the deliberation control; a
+    session whose payloads never named a seat either has no configured seat
+    left to borrow channel or surface from, so both stay an explicit null.
+    """
 
     module = _load()
-    data = tmp_path / "data"
-    module.enable(data, tmp_path / "home", ["claude-code"], _command(), _seat())
+    data = _enabled(module, tmp_path)
     transcript = tmp_path / "session-1.jsonl"
     _write_transcript(
         transcript,
@@ -952,8 +997,9 @@ def test_the_configured_seats_own_channel_and_surface_survive_the_record_read(
 
     record = _usage_records(data)[0]
     assert record["seat"]["model"] == "claude-opus-5"
-    assert record["seat"]["channel"] == _seat()["channel"]
-    assert record["seat"]["surface"] == _seat()["surface"]
+    assert record["seat"]["native_deliberation"] == "high"
+    assert record["seat"]["channel"] is None
+    assert record["seat"]["surface"] is None
 
 
 def test_a_session_that_delegated_work_writes_a_second_record_for_that_seat(
@@ -1130,7 +1176,7 @@ def test_status_names_which_harnesses_supply_measurements(tmp_path: Path) -> Non
 
     module = _load()
     data = tmp_path / "data"
-    module.enable(data, tmp_path / "home", ["claude-code", "codex"], _command())
+    module.install(data, tmp_path / "home", ["claude-code", "codex"], _command())
     reported = module.status(data, tmp_path / "home")
 
     by_harness = {entry["harness"]: entry for entry in reported["harnesses"]}

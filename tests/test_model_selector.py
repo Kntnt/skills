@@ -5472,7 +5472,7 @@ def test_evidence_reset_removes_exactly_seven_paths_and_leaves_the_rest_byte_ide
         {"model": "worker-v3", "portable_deliberation": "high"},
         {"kind": "failure_threshold", "run_keys": ["run-1", "run-2"]},
     )
-    capture.enable(
+    capture.install(
         data,
         tmp_path / "home",
         ["claude-code"],
