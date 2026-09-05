@@ -2,6 +2,8 @@
 
 > Temporary design dossier, written 2026-08-25 from a design conversation between Thomas and Claude. This directory is deleted by the rebuild's final cleanup ticket once `rework` has merged into `main`; git preserves the history. Do not treat anything here as permanent documentation.
 
+> **Superseded 2026-09-05.** The endgame below is withdrawn: `main` has moved too far to be taken over, so `main` survives and this branch is read-only source material whose improvements are brought to `main` one ordinary ticket at a time. The five pipeline Skills stay here until Thomas asks for them. The temporary section of `AGENTS.md` on `main` is the authority; it overrides this file, `01-plan.md`, and the extended section of `AGENTS.md` on this branch.
+
 ## Read this first
 
 You are on the `rework` branch of `github.com/Kntnt/skills`, normally checked out in the worktree `../skills-rework` beside the main checkout at `~/Projects/skills`. This file is the complete context for the rebuild: why it exists, what has been decided, and how to work here. The companion `01-plan.md` holds the phases and current status. Read both in full before touching anything. The temporary section at the top of `AGENTS.md` states the protection and separation rules; they are absolute.
