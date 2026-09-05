@@ -17,7 +17,7 @@ Capture follows this Skill's own Enabled state and asks for nothing beyond
 it (#223). The Manager installs this feature's owned lifecycle integration
 into every supported Detected Harness of the Global layer the moment the
 Skill is Enabled, placed, or refreshed, and removes every entry the moment
-it is Disabled — the same two seams that already place and remove the
+it is Disabled there — the same two seams that already place and remove the
 Skill's own files. There is no second opt-in, no consent prompt, and no
 configuration state of this feature's own to go stale: disk is the one
 truth (ADR-0090), so a hook either runs because a Harness's own
@@ -866,8 +866,11 @@ def install_integrations(harnesses: list[str]) -> dict[str, Any]:
 def remove_integrations() -> dict[str, Any]:
     """Remove every integration this feature owns, wherever it installed one.
 
-    This is the word the Manager says when the Skill is being made Disabled,
-    withdrawn, or uninstalled: it runs while these files still exist, takes the
+    This is the word the Manager says when the Skill is being made Disabled in
+    the Global layer, withdrawn from it, or uninstalled: the Project layer is
+    never removing what it never installed, so the Manager's own gate is what
+    keeps this from clearing a Global Enable's entries from inside a working
+    directory. It runs while these files still exist, takes the
     hooks out of every Harness, and leaves the accepted Usage Records alone. It
     is answerable at any time, because removing what is already gone is a state
     rather than an error.

@@ -1678,6 +1678,9 @@ def teardown_integrations(
     collection does not own cannot be allowed to hold up the removal of files
     it does own, and a partial removal reported is a partial removal the user
     can finish by hand.
+
+    Which layer may ask this at all is not decided here. `removal_integrations`
+    is the gate, and every caller reaches this through it.
     """
 
     reported: list[dict[str, Any]] = []
@@ -1799,6 +1802,15 @@ PROJECT_LAYER_INTEGRATIONS_NOTE = (
     "the Project layer installs no integration; only a Global Enable does"
 )
 
+# The other half of that same sentence, and a second thing to say rather than
+# a widening of the first: a run that installed none and a run that removed
+# none are different answers. Every owned entry a Project-layer run can reach
+# belongs to a Global Enable, because that layer installs none of its own, so
+# tearing one down there would take away what the other layer still describes.
+PROJECT_LAYER_REMOVAL_NOTE = (
+    "the Project layer removes no integration; only a Global Disable does"
+)
+
 
 def install_integrations(
     names: list[str], directories: list[Path], harnesses: list[str]
@@ -1862,10 +1874,9 @@ def _install(name: str, script: Path, harnesses: list[str]) -> dict[str, Any]:
     """Run one skill's declared install and read what it says it installed.
 
     From `home()`, and answering an unresolvable one per skill, for the reasons
-    `_teardown` states. The two words are one seam and take no layer between
-    them: no Project-layer install exists at all (ADR-0160), and the removal
-    word, which does run in both layers, wants a directory of its own no more
-    than this one does.
+    `_teardown` states. Neither word takes a layer between here and the script:
+    the Project layer reaches neither of them at all (ADR-0160), so what each
+    resolves against is the machine's own home and never a working directory.
     """
 
     if not script.exists():
@@ -1942,6 +1953,29 @@ def placement_integrations(
     }
 
 
+def removal_integrations(
+    names: list[str], directories: list[Path], *, global_layer: bool
+) -> dict[str, Any]:
+    """Report what a departing skill's own teardown did, or why none ran.
+
+    The mirror of `placement_integrations`, gating the same layer for the same
+    reason (ADR-0160). A Project-layer run cannot be removing anything a
+    Project-layer run installed, because that layer installs nothing: whatever
+    it could reach inside a Harness's own configuration was put there by a
+    Global Enable that is still standing, and taking it away would leave that
+    Enable describing a machine state that no longer exists.
+
+    The directories come from the caller and are never resolved here. The two
+    callers hold different ones: an uncheck hands the run's own layer, while a
+    withdrawal hands the copies staged in a temporary directory, its files
+    having already left every layer by the time it asks.
+    """
+
+    if not global_layer:
+        return {"attempted": [], "note": PROJECT_LAYER_REMOVAL_NOTE}
+    return {"attempted": teardown_integrations(names, directories), "note": None}
+
+
 def remove_skills(
     names: list[str], harnesses: list[str], *, global_layer: bool
 ) -> dict[str, Any]:
@@ -1951,8 +1985,10 @@ def remove_skills(
     files that know how to remove it are the files this is about to delete.
     """
 
-    integrations = teardown_integrations(
-        names, layer_dirs(harnesses, global_layer=global_layer)
+    integrations = removal_integrations(
+        names,
+        layer_dirs(harnesses, global_layer=global_layer),
+        global_layer=global_layer,
     )
 
     # Nothing to remove is not a call: the transport refuses an empty selection.
@@ -2129,7 +2165,11 @@ def refresh_outcome(
 
             # Publication has no remaining failure point, so external teardown
             # cannot leave a rolled-back tree without the integrations it owns.
-            integrations = teardown_integrations(withdrawn, integration_owners)
+            # The gate's own note is dropped here rather than widening this
+            # return for a reader that does not exist yet (issue #258).
+            integrations = removal_integrations(
+                withdrawn, integration_owners, global_layer=global_layer
+            )["attempted"]
     except ManagerError as exc:
         relay_transport(str(exc))
         return (
@@ -2755,6 +2795,14 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
             "confirmed": [*outcome["confirmed"], *manager["confirmed"]],
             "failed": manager["failed"],
         }
+    elif "integrations" in outcome:
+        # The branch that carries the whole outcome to the user emits the
+        # teardown records themselves, as it always has: this verb is Global
+        # and the gate has nothing to tell it, so the answer's note stays
+        # inside the process until something reports it (issue #258). A
+        # transport that refused outright returns an outcome with no teardown
+        # in it at all, which is why the key is asked for rather than assumed.
+        outcome = {**outcome, "integrations": outcome["integrations"]["attempted"]}
 
     emit(
         {

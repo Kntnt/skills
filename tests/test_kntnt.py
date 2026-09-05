@@ -3302,6 +3302,78 @@ def test_select_at_the_project_layer_installs_no_integration(tmp_path: Path) -> 
     assert not (ran.parent / "ran.json").exists()
 
 
+def _teardown_recorder(record: Path) -> str:
+    """Answer either word and record which one, where the run cannot delete it.
+
+    The stubs above write beside themselves, which says nothing on the two
+    removal paths: an uncheck deletes the Skill's own directory, and a
+    withdrawal runs a staged copy in a temporary one, so a record written
+    there leaves with the run that made it.
+    """
+
+    return (
+        "import json, sys\n"
+        "from pathlib import Path\n"
+        f"with Path({str(record)!r}).open('a') as handle:\n"
+        "    handle.write(sys.argv[1] + '\\n')\n"
+        "json.dump(\n"
+        "    {'installed': [], 'removed': [{'harness': 'claude-code'}]},\n"
+        "    sys.stdout,\n"
+        ")\n"
+    )
+
+
+def test_select_at_the_project_layer_removes_no_integration(tmp_path: Path) -> None:
+    """The mirror of the placement gate: unchecking here tears nothing down.
+
+    Every owned entry a Project-layer run could reach belongs to a Global
+    Enable, because that layer installs none of its own (ADR-0160), and an
+    owned entry is the machine's rather than the working directory's.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "project", ".claude")
+    record = tmp_path / "words.log"
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _teardown_recorder(record))
+    assert _run(world, "apply", "select", "--project", "gamma").returncode == 0
+
+    result = _run(world, "apply", "select", "--project", "--off", "gamma", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    assert not (world["project"] / ".claude" / "skills" / "gamma").exists()
+    assert not record.exists(), record.read_text(encoding="utf-8")
+
+
+def test_update_at_the_project_layer_tears_down_no_withdrawn_integration(
+    tmp_path: Path,
+) -> None:
+    """A withdrawal reaches the same gate, over the copies it staged.
+
+    The withdrawn Skill's files leave the Project layer, and the entry a
+    Global Enable owns inside a Harness's own configuration stays. Nothing
+    was attempted, so the withdrawal's own record says nothing about a
+    teardown rather than claiming an empty one.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "project", ".claude")
+    record = tmp_path / "words.log"
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _teardown_recorder(record))
+    assert _run(world, "apply", "select", "--project", "gamma").returncode == 0
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _apply_update(world, "--project")
+
+    assert result.returncode == 0, result.stderr
+    assert not (world["project"] / ".claude" / "skills" / "gamma").exists()
+    assert not record.exists(), record.read_text(encoding="utf-8")
+    assert _json(result)["removed"] == [{"name": "gamma", "disk": "removed"}]
+
+
 def test_selecting_the_real_model_selector_installs_from_its_installed_layout(
     tmp_path: Path,
 ) -> None:
