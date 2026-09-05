@@ -100,7 +100,7 @@ Pass the user's `--approval` through to `plan` on the first plan of this invocat
 
    Done when every collision has been repaired, rebuilt, recorded conflicted, or its ticket parked.
 
-At exactly one concurrency, the final serial branch gate runs before the report. There is no integrated wave to check, so the run reads its own branch instead.
+At exactly one concurrency, the final serial branch gate runs before the report. there is no integrated wave to check, so the run reads its own branch instead.
 
 A failed serial gate reports the branch as not green and changes no ticket outcome.
 
