@@ -4648,6 +4648,28 @@ def _operand_faults(
     return None, operands
 
 
+def _trailing_flag_fault(
+    form: Form, tokens: list[Token], label: str, declared: set[str]
+) -> str | None:
+    """Refuse a declared flag written after the first operand.
+
+    Flags come before operands in the collection's one order, so a flag the
+    Skill declares is out of order there rather than a word of the text — the
+    refusal every page's DIAGNOSTICS states. It names the flag the way the
+    flag position would: a flag the addressed form takes is out of order, and
+    one it does not take is one it takes nowhere.
+    """
+
+    specs = {spec.name for spec in _specs(form.flags)}
+    for token in tokens[1:]:
+        name = token.text.partition("=")[0]
+        if name in declared:
+            if name in specs:
+                return f"'{name}' is written after an operand"
+            return f"{label} takes no '{name}'"
+    return None
+
+
 def validate(
     skill_dir: Path, grammar: Grammar, path: list[str], tokens: list[Token], formal: str
 ) -> tuple[str | None, dict[str, Any]]:
@@ -4678,6 +4700,11 @@ def validate(
         else None
     )
 
+    # A declared flag written after an operand is out of order, which every
+    # page's DIAGNOSTICS promises to refuse; a dash-prefixed word the Skill
+    # declares no flag for is text, there being nothing for it to shadow.
+    declared = hint_flags(skill_dir) if not free_operands else set()
+
     best = (-1, "")
     for form in grammar.forms:
         if not _path_matches(form, path):
@@ -4694,9 +4721,15 @@ def validate(
             if fault is not None:
                 candidate = (1, fault)
             else:
-                fault, operands = _operand_faults(
-                    form, operand_tokens, formal, label, unknown
+                fault = (
+                    None
+                    if unknown is not None
+                    else _trailing_flag_fault(form, operand_tokens, label, declared)
                 )
+                if fault is None:
+                    fault, operands = _operand_faults(
+                        form, operand_tokens, formal, label, unknown
+                    )
                 if fault is not None:
                     candidate = (2, fault)
                 else:

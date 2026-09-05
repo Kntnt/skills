@@ -11,6 +11,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import pytest
 from support.contract import STANDARD
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -584,7 +585,8 @@ SHIPPED_CASES: dict[str, list[Case]] = {
     "code/commit": [
         ("", {"flags": {}, "operands": []}),
         ("--yes", {"flags": {"--yes": True}, "operands": []}),
-        ("fix the --yes bug", {"flags": {}, "operands": ["fix the --yes bug"]}),
+        ("fix the --yes bug", None),
+        ("fix the --legacy path", {"flags": {}, "operands": ["fix the --legacy path"]}),
         ("--yes fix it", {"flags": {"--yes": True}, "operands": ["fix it"]}),
         ('"fix the parser"', {"operands": ['"fix the parser"']}),
         ("--bogus fix it", None),
@@ -706,6 +708,7 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ),
         ("--yes", None),
         ("help --yes", None),
+        ("help select --yes", None),
         ("select --force", None),
         ("uninstall --project", None),
         ("updat --yes", None),
@@ -845,18 +848,7 @@ def test_every_shipped_skills_documented_forms_are_read_as_its_pages_state_them(
                     f" and the engine accepted it ({RECORD}). See {STANDARD}."
                 )
                 assert "see '/" in reading.text, (relative, payload, reading.text)
-                if relative == "kntnt":
-                    assert "see '/kntnt" in reading.text, (
-                        relative,
-                        payload,
-                        reading.text,
-                    )
-                else:
-                    assert "--help'" in reading.text, (
-                        relative,
-                        payload,
-                        reading.text,
-                    )
+                assert "--help'" in reading.text, (relative, payload, reading.text)
             else:
                 assert reading.status == EXIT_VALID, (
                     f"/{directory.name} {payload!r}: the SYNOPSIS admits this"
@@ -956,6 +948,12 @@ def test_manager_refusals_use_the_engine_diagnostics_and_route(tmp_path: Path) -
             MANAGER_DIR / "help" / "help.md",
             "/kntnt help --help",
         ),
+        (
+            "help select --yes",
+            "'/kntnt help' takes no '--yes'",
+            MANAGER_DIR / "help" / "help.md",
+            "/kntnt help --help",
+        ),
         ("sel", "unknown command 'sel'", MANAGER_DIR / "help.md", "/kntnt --help"),
         (
             "select --force",
@@ -984,6 +982,45 @@ def test_manager_refusals_use_the_engine_diagnostics_and_route(tmp_path: Path) -
         assert result.returncode == EXIT_REFUSED, payload
         assert result.stdout == expected, payload
         assert result.stderr == "", payload
+
+
+def test_manager_refusals_name_what_the_script_named_before_the_move() -> None:
+    """Every documented Manager refusal keeps its substance across the move.
+
+    Before the body moved onto the engine each of these forms reached the
+    script, whose refusal named the stray flag, quoted the addressed verb's
+    SYNOPSIS and pointed at its page. The engine's refusal names the same
+    flag and quotes the same SYNOPSIS. Only the spelling is the engine's —
+    `'/kntnt select' takes no '--force'` and `see '/kntnt select --help'`
+    where the script wrote `select takes no '--force'` and `see '/kntnt help
+    select'` — which is the one contract ADR-0181 gives every Skill, on
+    stdout, and the two routes open the same page.
+    """
+
+    engine = _engine()
+    cases = (
+        ("select --force", ["plan", "select", "--force"], "--force"),
+        ("uninstall --project", ["plan", "uninstall", "--project"], "--project"),
+        ("update --on=foo", ["apply", "update", "--on=foo"], "--on"),
+        ("help --yes", ["help", "--yes"], "--yes"),
+        ("help select --yes", ["help", "select", "--yes"], "--yes"),
+    )
+
+    for payload, argv, flag in cases:
+        reading = engine.read_invocation(MANAGER_DIR, payload)
+        with pytest.raises(engine.ManagerError) as refused:
+            engine.parse_args(argv)
+        before = str(refused.value)
+
+        assert reading.status == EXIT_REFUSED, payload
+        assert refused.value.code == EXIT_REFUSED, payload
+        engine_first, _, engine_rest = reading.text.partition("\n\n")
+        script_first, _, script_rest = before.partition("\n\n")
+        assert f"'{flag}" in engine_first and f"'{flag}" in script_first, payload
+        engine_synopsis = engine_rest.rpartition("\n\nsee '")[0]
+        script_synopsis = script_rest.rpartition("\n\nsee '")[0]
+        assert engine_synopsis == script_synopsis, payload
+        assert reading.text.rstrip("\n").endswith("--help'"), payload
 
 
 # --- The record and the rule --------------------------------------------------
