@@ -2,23 +2,25 @@
 
 ## NAME
 
-brief - reframe the previous response or keep later responses concise
+brief - keep this conversation's replies concise and decision-relevant
 
 ## SYNOPSIS
 
-**/brief** [**--** *INSTRUCTION*]
-
-**/brief** (**on**|**off**) [**--user**] [**--yes**] [**--** *INSTRUCTION*]
+**/brief** (**on**|**off**) [**--** *INSTRUCTION*]
 
 **/brief** **status** [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-Bare `brief` re-answers the preceding response at a more useful level, focus, or density. It leads with the conclusion and keeps practical implications, decisions, and required user actions.
+`on` adopts the Brief perspective for later replies: it leads with the conclusion, keeps practical implications, decisions, and required user actions, and drops the narration around them. `off` drops the perspective again. Neither revisits the preceding answer, and an explicit request for detail overrides the mode for that reply.
 
-`on` and `off` control the same perspective for later replies. Turning it on does not revisit the preceding answer, and an explicit request for detail overrides the mode for that reply.
+The state belongs to the conversation it is typed in and to nothing else. It holds until `off` or until that conversation ends, and it is never observable in another window, another project, or a later session — two conversations open on the same project hold independent states, and `status` is how you ask which one you are sitting in.
 
-The Skill takes no free-text operand. Put any narrowing or output guidance after `--`, as `/brief -- only the security part`.
+Nothing is written anywhere. There is no settings key, no style file, and no state on disk, in any Harness: the mode lives in this conversation and ends with it, leaving nothing behind. A standing default across sessions is the user's own configuration rather than this Skill's business.
+
+The mode takes effect on the turn it is typed, so the report of the change already obeys it.
+
+The Skill takes no free-text operand and declares no flag. Put any guidance about the run after `--`, as `/brief on -- svara på svenska`.
 
 Brief mode affects conversation replies, not code, documentation, commit messages, or other artifacts.
 
@@ -26,53 +28,31 @@ Brief mode affects conversation replies, not code, documentation, commit message
 
 **on**
 
-Enable Brief mode for the selected scope.
+Adopt the Brief perspective for the rest of this conversation.
 
 **off**
 
-Disable Brief mode for the selected scope.
+Drop the Brief perspective for the rest of this conversation.
 
 **status**
 
-Report session and user state, the effective verdict, and any stale managed block, without writing anything.
-
-## OPTIONS
-
-**--user**
-
-Target this Harness's user context instead of the current session. The Skill shows the file and exact managed block before writing.
-
-**--yes**
-
-Write or remove the user block without waiting for confirmation. It is valid only with `on` or `off`.
-
-## SCOPES
-
-**session**
-
-The default. It applies only to subsequent replies in the current conversation and is stored nowhere else. Context compaction may drop it.
-
-**user**
-
-A managed block in this Harness's global context file. There is no Project scope because conversational perspective and density are reader preferences rather than a shared Project convention.
+Report whether the perspective is on or off in this conversation, without changing anything.
 
 ## DIAGNOSTICS
 
-An invalid form is refused rather than ignored. The Skill names the error, prints the most specific SYNOPSIS, changes nothing, and points to that page. A flag is refused rather than ignored where it has no work to do here.
+An invalid form is refused rather than ignored. The Skill names the error, prints the most specific SYNOPSIS, changes nothing, and points to that page. A flag is refused rather than ignored where it has no work to do here: this grammar declares no flag at all, so every `--`-prefixed token is undeclared and refused as one, and so is any token that does not open a recognized command path.
 
-**--user** and **--yes** require `on` or `off`. Unseparated text and a second command path are invalid.
-
-If context compaction removed part of the requested range, the replacement answer states that limit.
+A command path is required. A bare **/brief**, a second command path, and unseparated text are each an invalid form.
 
 ## EXAMPLES
 
-**/brief -- bara säkerhetsdelen**
+**/brief on**
 
-Re-answer only the security-related part of the previous response, the narrowing arriving as a Contextual Instruction.
+Keep later replies in this conversation concise and decision-relevant, leaving the preceding answer untouched.
 
-**/brief on --user**
+**/brief status**
 
-Show and confirm a user-level block that keeps later replies concise and decision-relevant in the current Harness without revisiting the preceding answer.
+Report whether this conversation is currently in Brief mode.
 
 ## INVOCATION ENVELOPE
 
@@ -110,4 +90,4 @@ None.
 
 ## SEE ALSO
 
-**/brief on --help**, **/brief off --help**, **/brief status --help**, **/delegation --help**, **/kntnt select**
+**/brief on --help**, **/brief off --help**, **/brief status --help**, **/tldr --help**, **/delegation --help**, **/kntnt select**

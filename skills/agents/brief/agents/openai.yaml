@@ -1,5 +1,5 @@
 interface:
   display_name: "Brief"
-  short_description: "Reframe answers and keep replies concise"
+  short_description: "Turn concise replies on or off for this conversation"
 policy:
   allow_implicit_invocation: false

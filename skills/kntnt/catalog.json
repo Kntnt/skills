@@ -18,8 +18,8 @@
     {
       "name": "brief",
       "category": "agents",
-      "description": "Reframe what was just said for the person who owns the outcome, and turn Brief mode on or off so later replies stay concise and decision-relevant.",
-      "digest": "7402b8250427f0739f62a5a13bd13abd46e2ba30bdf6839913c772d3431763e2",
+      "description": "Turn Brief mode on or off for the conversation it is typed in, and report which of the two it is in, so replies stay concise and decision-relevant.",
+      "digest": "f19128d1411d2f14047d4ba7f502c5636aae243cd61f06352cc38a16b5af8894",
       "binaries": [],
       "skills": [],
       "externals": [],

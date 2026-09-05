@@ -2,7 +2,7 @@
 
 ## NAME
 
-brief status - report the mode's state in both scopes
+brief status - report whether this conversation is in Brief mode
 
 ## SYNOPSIS
 
@@ -10,21 +10,21 @@ brief status - report the mode's state in both scopes
 
 ## DESCRIPTION
 
-`brief status` reports the session state, the user state, the verdict those two produce, and any staleness. It writes nothing, in either scope, and reframes nothing.
+`brief status` reports one bit: whether the Brief perspective is on or off in this conversation. It writes nothing, changes nothing, and reframes nothing.
 
-A user-scope block is stale when its text differs from the perspective the Skill would write today. The report names that condition rather than silently treating the block as current, and names `/brief on --user` as the fix, `on` over an existing block being a rewrite from the current text.
+It exists because the state belongs to the conversation it was set in. Two windows open on the same project hold independent states, and this is the only way to ask which one you are sitting in.
 
-The command takes no option. It targets no scope because it reports both, and it asks no question because it changes nothing.
+There is nothing else to report: the state is held in this conversation and written nowhere, so there is no second state for this one to be weighed against.
 
 ## DIAGNOSTICS
 
-An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/brief status --help`. Every flag the Skill declares belongs to a form that writes, so any flag on this path has no work to do here and is refused; so is any token after the command path.
+An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/brief status --help`. A flag is refused rather than ignored where it has no work to do here: this grammar declares no flag at all, so every `--`-prefixed token is undeclared and refused as one, and so is any token that does not open a recognized command path.
 
 ## EXAMPLES
 
 **/brief status**
 
-Report both scopes, the resulting verdict, and whether the user-level block still matches the perspective the Skill would write today.
+Report whether this conversation is currently in Brief mode.
 
 ## INVOCATION ENVELOPE
 

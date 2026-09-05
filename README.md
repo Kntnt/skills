@@ -64,9 +64,9 @@ Run `/agents-md [--force] [--yes] [path]`.
 
 ### brief
 
-Reframe the previous answer at a more useful level, or keep later replies concise and decision-focused. The standing mode can apply to the session or the current harness's user context.
+Keep later replies concise and decision-focused, and drop the perspective again when you are done with it. The mode belongs to the conversation it is typed in: it holds until you turn it off or the conversation ends, nothing is written anywhere, and two windows on the same project hold independent states.
 
-Run `/brief`, `/brief on|off [--user] [--yes]`, or `/brief status`.
+Run `/brief on` or `/brief off`. Run `/brief status` to see which state this conversation is in.
 
 ### delegation
 

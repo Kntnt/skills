@@ -10913,9 +10913,10 @@ def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None
     stands in, and never the token's shape (ADR-0168). `/tldr` is the sibling
     Skill's own path, so it is a citation of a different command and passes.
     Every other occurrence is this Skill wearing the old name again and fails:
-    in a `name:` frontmatter, in a managed block's marker, as `TL;DR` in
-    prose, and in a path of this Skill's own such as `/brief tldr` — which is
-    a command path too, and fails precisely because the path is this one's.
+    in a `name:` frontmatter, as `TL;DR` in prose, and in a path of this
+    Skill's own such as `/brief tldr` — which is a command path too, and fails
+    precisely because the path is this one's. The managed block whose markers
+    named the Skill is gone with the persistence itself (ADR-0170).
     """
 
     assert BRIEF_DIR.is_dir(), (
@@ -10930,15 +10931,6 @@ def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None
         f" reader outside this collection resolves the Skill by, so it spells"
         f" the name the directory does (ADR-0113). See {STANDARD}."
     )
-
-    persistence = (BRIEF_DIR / "references" / "persist.md").read_text(encoding="utf-8")
-    for marker in ("<!-- kntnt:brief -->", "<!-- /kntnt:brief -->"):
-        assert marker in persistence, (
-            f"{BRIEF_DIR / 'references' / 'persist.md'}: the managed block's"
-            f" markers name the Skill, and the Skill writes and reads only the"
-            f" one spelling — a second accepted marker is a compatibility"
-            f" branch that never leaves the file (ADR-0113). See {STANDARD}."
-        )
 
     surfaces = _brief_surfaces()
 
@@ -11058,11 +11050,14 @@ def test_brief_accepts_no_unseparated_text_after_its_name_or_command_path() -> N
     The Invocation Envelope's reserved separator now carries what the operand
     carried, so the operand is a second unseparated channel for one thing and
     goes with the ambiguity it caused (ADR-0078, ADR-0103).
+
+    What went with the flags is the argument prose this used to pin, which
+    refused a token that was neither a recognised command path nor a declared
+    flag. The grammar declares none, so the body's refusal cites the command
+    path alone and there is no second half of that sentence to hold it to
+    (ADR-0170). What the page must still not carry is a positional argument.
     """
 
-    body = BRIEF_DIR / "SKILL.md"
-    text = body.read_text(encoding="utf-8")
-    arguments = _section(text, "## Arguments", body)
     page = (BRIEF_DIR / "help.md").read_text(encoding="utf-8")
 
     assert "\n## POSITIONAL ARGUMENTS\n" not in page, (
@@ -11070,61 +11065,6 @@ def test_brief_accepts_no_unseparated_text_after_its_name_or_command_path() -> N
         f" argument. The Skill takes no operand, and an empty conventional"
         f" section is omitted rather than filled (ADR-0103). See {STANDARD}."
     )
-
-    unseparated = (
-        "A token that is neither a recognized command path nor a declared flag"
-    )
-    assert unseparated in arguments, (
-        f"{body}: the argument prose does not refuse unseparated text after"
-        f" the Skill name or a command path. Anything not carried by a"
-        f" recognized token is an invalid form rather than an instruction"
-        f" (ADR-0103). See {STANDARD}."
-    )
-
-
-def test_brief_reads_its_replacement_answer_from_the_contextual_instruction() -> None:
-    """What the operand did is not lost, and the body says where it went.
-
-    Widening the range, naming a language, narrowing the subject, and
-    constraining the output are each a choice the Skill's contract leaves
-    open, which is exactly what a Contextual Instruction is permitted to
-    settle — so the step that settles the range and the step that writes the
-    replacement answer read it, and an instruction that would widen the Skill
-    takes the Envelope's context refusal rather than a syntax refusal.
-    """
-
-    body = BRIEF_DIR / "SKILL.md"
-    text = body.read_text(encoding="utf-8")
-    arguments = _section(text, "## Arguments", body)
-    steps = _section(text, "## Steps", body)
-
-    for phrase in (
-        "widen the range",
-        "name a language",
-        "narrow the subject",
-        "constrain the output",
-    ):
-        assert phrase in arguments, (
-            f"{body}: the argument prose does not say that a request to"
-            f" {phrase} arrives through the Contextual Instruction. The"
-            f" operand carried it before, and a capability whose channel is"
-            f" unwritten is a capability nobody can reach (ADR-0078,"
-            f" ADR-0103). See {STANDARD}."
-        )
-
-    for marker in ("settle the range", "replacement answer"):
-        reading = [line for line in steps.splitlines() if marker in line]
-        assert reading, (
-            f"{body}: no step names {marker!r}, so this check judged nothing."
-            f" See {STANDARD}."
-        )
-        for line in reading:
-            assert "Contextual Instruction" in line, (
-                f"{body}: the step `{line.strip()[:60]}...` no longer reads the"
-                f" Contextual Instruction. It is where the free-form tail's"
-                f" work went, so a step that does not read it silently drops"
-                f" what the user asked for (ADR-0103). See {STANDARD}."
-            )
 
 
 # The other Skill whose mode is addressed through a command path, the pages

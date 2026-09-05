@@ -2,45 +2,29 @@
 
 ## NAME
 
-brief off - disable Brief mode for the selected scope
+brief off - drop the Brief perspective for this conversation
 
 ## SYNOPSIS
 
-**/brief off** [**--user**] [**--yes**] [**--** *INSTRUCTION*]
+**/brief off** [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-`brief off` treats the standing Brief instruction as inert history for subsequent replies. It changes nothing about the preceding answer and reframes nothing.
+`brief off` treats the standing Brief instruction as inert history for the rest of this conversation. It changes nothing about the preceding answer and reframes nothing.
 
-It takes effect on the turn that switches it off, so the report of the removal is already written without the perspective. Without `--user` it suspends the mode for this session alone. With `--user` it removes the managed block from this Harness's global context file, both markers included and nothing else, after showing the exact target and the exact removal.
+It takes effect on the turn that switches it off, so the report of the change is already written without the perspective. It reaches this conversation and nothing else, exactly as `on` does.
 
-`off` is an exact undo of `on`, which is why no backup file is written, in git or out. Where there is no block to remove, the Skill says so and stops: nothing to remove is not an error.
-
-## OPTIONS
-
-**--user**
-
-Target this Harness's user context instead of the current session. There is no Project scope: conversational perspective and density are reader preferences rather than a shared Project convention.
-
-**--yes**
-
-Remove the user block without waiting for confirmation. The session scope has nothing to confirm, so the flag is answered by the user scope's confirmation alone.
+Nothing is removed, because nothing was written. `off` where the mode was never on is not an error: the Skill says so and stops.
 
 ## DIAGNOSTICS
 
-An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/brief off --help`. A flag is refused rather than ignored where it has no work to do here, and any token after the command path that is neither `--user` nor `--yes` is refused the same way.
-
-Two managed blocks in one file, or a marker without its pair, stop the removal: the Skill changes nothing, reports what it found, and asks.
+An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/brief off --help`. A flag is refused rather than ignored where it has no work to do here: this grammar declares no flag at all, so every `--`-prefixed token is undeclared and refused as one, and so is any token that does not open a recognized command path.
 
 ## EXAMPLES
 
 **/brief off**
 
-Stop applying the Brief perspective to later replies in this conversation, leaving any user-level block alone.
-
-**/brief off --user**
-
-Show the managed block in this Harness's global context file and, once confirmed, remove it together with both markers.
+Stop applying the Brief perspective to later replies in this conversation.
 
 ## INVOCATION ENVELOPE
 
