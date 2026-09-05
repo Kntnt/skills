@@ -8,12 +8,19 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 AGENTS = REPO_ROOT / "AGENTS.md"
 
-# The record that binds whoever writes a ticket in this repository. It is named
+# The module that binds whoever writes a ticket in this repository. It is named
 # here rather than looked up, because what has to hold is that this particular
-# record is pointed at — a guide that lists four other files and omits this one
+# module is pointed at — a guide that lists four other files and omits this one
 # is what the pointer exists to prevent.
-TICKET_RECORD = (
-    "docs/adr/0067-a-ticket-asserts-only-what-stays-true-until-it-is-built.md"
+TICKET_RULES = "docs/rules/tickets.md"
+
+# The two records the module states in a phrase and cites. They are reachable
+# through it and are not entries of their own: an author who meets the rules in
+# three places meets them in none, and the guide is where the one place is
+# named (issue #266).
+TICKET_RECORDS = (
+    "docs/adr/0067-a-ticket-asserts-only-what-stays-true-until-it-is-built.md",
+    "docs/adr/0099-a-ticket-that-rewrites-an-invariant-declares-that-it-builds-alone.md",
 )
 
 # The coding-standard module carrying what a Skill's own shipped files must
@@ -33,20 +40,35 @@ def _references() -> dict[str, str]:
     return {match.group(1): match.group(2) for match in REFERENCE.finditer(text)}
 
 
-def test_agents_md_points_at_the_record_that_binds_ticket_authors() -> None:
+def test_agents_md_points_at_the_module_that_binds_ticket_authors() -> None:
     """An agent about to write a ticket has to meet the convention somewhere.
 
-    The convention is prose and lives in a record; this file is what an agent
-    always has loaded, so the record is reachable only if this file names it
-    (issue #67). The clause matters as much as the path: a reader skims the
-    list for the occasion, and an entry whose occasion never says *ticket* is
-    an entry a ticket author skips.
+    The convention is prose and lives in a rules module; this file is what an
+    agent always has loaded, so the module is reachable only if this file names
+    it (issue #67, issue #266). The clause matters as much as the path: a
+    reader skims the list for the occasion, and an entry whose occasion never
+    says *ticket* is an entry a ticket author skips.
     """
 
     references = _references()
 
-    assert TICKET_RECORD in references
-    assert "ticket" in references[TICKET_RECORD]
+    assert TICKET_RULES in references
+    assert "ticket" in references[TICKET_RULES]
+
+
+def test_agents_md_points_at_no_ticket_record_directly() -> None:
+    """One occasion is answered by one entry, or it is answered by none.
+
+    The rules a ticket author is under are settled across two records and a
+    practice neither of them states, and an author who meets them in three
+    entries reads whichever one they happen to open. The module states all of
+    it and cites the records; the guide therefore names the module and lets the
+    records be reached through it (issue #266).
+    """
+
+    references = _references()
+
+    assert [record for record in TICKET_RECORDS if record in references] == []
 
 
 def test_every_file_agents_md_references_exists() -> None:
