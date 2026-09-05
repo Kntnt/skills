@@ -3686,6 +3686,14 @@ def declaration_fault_at(skill_dir: Path) -> str | None:
     path = skill_dir / "SKILL.md"
     if not path.is_file():
         return f"no SKILL.md at {skill_dir}"
+
+    # The Manager asked about itself is the one caller that is ours and carries
+    # no marker: it is no Catalog entry, and the sweep must never read it as
+    # one. It declares nothing this gate tests — `uv`, its one dependency, is
+    # what runs the gate — so its declaration is read as the empty one rather
+    # than as unreadable, which is what lets its body call `invoke` (ADR-0181).
+    if skill_dir.resolve().name == MANAGER:
+        return None
     return marker_fault(parse_frontmatter(path.read_text(encoding="utf-8")))
 
 

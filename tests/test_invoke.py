@@ -906,6 +906,39 @@ def test_a_refusal_quotes_the_addressed_pages_own_synopsis_and_route() -> None:
     assert reading.text.rstrip("\n").endswith("see '/kntnt --help'")
 
 
+# --- The Manager on the engine -----------------------------------------------
+
+
+def test_the_managers_own_directory_passes_the_dependency_gate(tmp_path: Path) -> None:
+    """`invoke --here=<manager>` answers, although the Manager carries no marker.
+
+    The Manager is no Catalog entry and the sweep must never read it as one,
+    so its `SKILL.md` carries no `kntnt.` key — the one shape the gate
+    otherwise refuses as an unreadable declaration (ADR-0175). Asked about
+    itself it declares nothing: `uv`, its one dependency, is what runs the
+    check, and a body that calls the engine has no other preamble to make.
+    """
+
+    result = _invoke(MANAGER_DIR, "", tmp_path)
+
+    assert result.returncode == EXIT_VALID, (result.stdout, result.stderr)
+    payload = json.loads(result.stdout)
+    assert payload["ok"] is True
+    assert payload["path"] == []
+    assert payload["dependencies"] == {
+        "ok": True,
+        "unsatisfied": [],
+        "capabilities": [],
+    }
+
+    result = _invoke(MANAGER_DIR, "select --help", tmp_path)
+
+    assert result.returncode == EXIT_HELP, (result.stdout, result.stderr)
+    assert result.stdout.rstrip("\n") == (
+        (MANAGER_DIR / "help" / "select.md").read_text(encoding="utf-8").rstrip("\n")
+    )
+
+
 # --- The record and the rule --------------------------------------------------
 
 

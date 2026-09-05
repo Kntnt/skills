@@ -5122,6 +5122,24 @@ def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
         )
         section = text.partition(marker)[2].partition("\n## ")[0]
 
+        # A body that calls the engine names no route: the engine reads the
+        # routes off the shipped pages and prints the addressed one itself, so
+        # a route written into the body would be a second copy free to drift.
+        if _calls_the_engine(text):
+            assert ENGINE_CALL in section and "stdin" in section, (
+                f"{path}: the body calls the engine, so its `## Invocation`"
+                f" section is that call, with the payload on stdin (ADR-0181)."
+                f" See {STANDARD}."
+            )
+            for route in ("`$HERE/help.md`", "--help", "`-h`"):
+                assert route not in section, (
+                    f"{path}: the body calls the engine and still names a help"
+                    f" route ({route}); the engine prints the addressed page,"
+                    f" so the route is read off the pages and nowhere else"
+                    f" (ADR-0181). See {STANDARD}."
+                )
+            continue
+
         assert "`$HERE/help.md`" in section, (
             f"{path}: the `## Invocation` section prints `$HERE/help.md`"
             f" verbatim rather than summarising it. The manpage is a file a"
@@ -10355,30 +10373,31 @@ def test_an_internal_subcommand_is_not_published_as_a_manpage() -> None:
         assert published == (name in _USER_FACING), name
 
 
-def test_help_takes_no_flags_and_says_so(tmp_path: Path) -> None:
+def test_help_takes_no_flags_and_the_engine_refuses_one() -> None:
     """`/kntnt help --yes` is an error, not a page with a note above it.
 
-    The refusal is the script's, so the prose that routes the invocation hands
-    the flag on rather than answering for it (ADR-0176).
+    The refusal was the script's and is now the engine's, read off the help
+    verb's own page before any step runs, so the step file neither routes a
+    help flag nor says what the verb takes: a flag it named would be a second
+    grammar beside the page the engine reads (ADR-0181).
     """
 
-    steps = (REPO_ROOT / "skills" / "kntnt" / "steps" / "help.md").read_text(
-        encoding="utf-8"
-    )
+    steps = (MANAGER_DIR / "steps" / "help.md").read_text(encoding="utf-8")
 
-    assert "no flags" in steps
     assert _options("help") == ""
+    for phrase in ("no flags", "help flag", "`-h`", "<subcommand> --help"):
+        assert phrase not in steps, (
+            f"{MANAGER_DIR / 'steps' / 'help.md'}: the step routes or refuses"
+            f" a help flag ({phrase!r}), which the engine does before the step"
+            f" is read (ADR-0181). See {STANDARD}."
+        )
 
-    # `--help` is how the verb is reached (`SKILL.md` routes it here), so the
-    # steps have to exempt it or `/kntnt --help` is met with a complaint about
-    # the very argument that asked for the page.
-    assert "--help" in steps
+    reading = _manager_module().read_invocation(MANAGER_DIR, "help --yes")
 
-    world = _world(tmp_path)
-    result = _run(world, "help", "--yes")
-
-    assert result.returncode == 2
-    assert result.stdout == ""
+    assert reading.status == 2
+    assert "--yes" in reading.text.splitlines()[0]
+    assert _synopsis(MANAGER_DIR / "help" / "help.md") in reading.text
+    assert reading.invocation == {}
 
 
 def test_an_unknown_subcommand_is_refused_with_the_managers_own_synopsis(
@@ -10451,30 +10470,55 @@ def test_the_route_into_help_is_not_a_flag_on_a_verb(tmp_path: Path) -> None:
         assert result.stdout.strip() == shipped, args
 
 
-def test_each_manager_subcommand_routes_help_flags_to_its_manpage(
+def test_every_manager_help_form_prints_through_the_engine_what_the_script_printed(
     tmp_path: Path,
 ) -> None:
-    """A help flag after a public verb addresses that verb, not the Manager."""
+    """Each help form prints the same page as before, now read by the engine.
+
+    The script routed these forms until the body moved onto the engine; the
+    engine reads them off the shipped pages instead. What the user sees is
+    held identical by printing both: the engine's answer to each form against
+    what the script's `help` verb prints for the page it addresses, root forms
+    and a help flag after each public verb alike (ADR-0181).
+    """
 
     world = _world(tmp_path)
+    engine = _manager_module()
 
-    for verb in _USER_FACING:
-        shipped = (MANAGER_DIR / "help" / f"{verb}.md").read_text(encoding="utf-8")
-        for flag in ("--help", "-h"):
-            result = _run(world, verb, flag)
+    forms: list[tuple[str, tuple[str, ...]]] = [
+        ("--help", ()),
+        ("-h", ()),
+        ("help", ()),
+        *(
+            (f"{verb} {flag}", ("help", verb))
+            for verb in _USER_FACING
+            for flag in ("--help", "-h")
+        ),
+    ]
+    for payload, before in forms:
+        reading = engine.read_invocation(MANAGER_DIR, payload)
+        printed = _run(world, *before)
 
-            assert result.returncode == 0, (
-                f"/kntnt {verb} {flag} failed instead of printing that verb's"
-                f" manpage: {result.stderr} (ADR-0176). See {STANDARD}."
-            )
-            assert result.stdout.strip() == shipped.strip(), (
-                f"/kntnt {verb} {flag} did not print help/{verb}.md verbatim"
-                f" (ADR-0176). See {STANDARD}."
-            )
-            assert result.stderr == "", (
-                f"/kntnt {verb} {flag} printed the page but also diagnosed a"
-                f" help route as an error (ADR-0176). See {STANDARD}."
-            )
+        assert printed.returncode == 0, (payload, printed.stderr)
+        assert reading.status == 3, (
+            f"/kntnt {payload} did not print a page through the engine:"
+            f" {reading.text} (ADR-0181). See {STANDARD}."
+        )
+        assert reading.text.rstrip("\n") == printed.stdout.rstrip("\n"), (
+            f"/kntnt {payload} prints a different page through the engine than"
+            f" the script printed (ADR-0181). See {STANDARD}."
+        )
+
+    # Bare `/kntnt` is the one help form that is a valid form rather than an
+    # exact help route: the engine hands it to the Steps as an empty path, and
+    # the help step prints the root page through the script as it always did.
+    reading = engine.read_invocation(MANAGER_DIR, "")
+
+    assert reading.status == 0
+    assert reading.invocation["path"] == []
+    assert _run(world, "help").stdout.strip() == (
+        (MANAGER_DIR / "help.md").read_text(encoding="utf-8").strip()
+    )
 
 
 def test_the_dependency_gate_is_invoked_with_no_flag_in_every_skill() -> None:
@@ -10501,12 +10545,15 @@ def test_the_dependency_gate_is_invoked_with_no_flag_in_every_skill() -> None:
         )
 
 
-def test_the_manager_hands_an_unknown_subcommand_to_the_script() -> None:
-    """The fallback to the help step was the tolerance in the other half.
+def test_the_manager_reads_its_verb_off_the_engines_path() -> None:
+    """An unknown word never reaches the Steps: the engine refuses it first.
 
-    A typo answered by silently running Help is how everything after it became
-    Help's arguments, so the step is gone and the script answers instead — and
-    the agent prints what comes back rather than authoring a refusal.
+    The fallback to the help step was the tolerance in the other half — a typo
+    answered by silently running Help is how everything after it became Help's
+    arguments — and the script's own refusal replaced it. The engine now
+    refuses the word against the Manager's root page before any step is read,
+    so the Steps carry no fallback at all and take the verb from `path`
+    (ADR-0181).
     """
 
     steps = (
@@ -10515,8 +10562,41 @@ def test_the_manager_hands_an_unknown_subcommand_to_the_script() -> None:
         .partition("\n## Steps\n")[2]
     )
 
-    assert 'scripts/kntnt.py" <subcommand>' in steps
+    assert "`path`" in steps
+    assert 'scripts/kntnt.py" <subcommand>' not in steps
     assert "steps/help.md" not in steps
+
+    reading = _manager_module().read_invocation(MANAGER_DIR, "sel")
+
+    assert reading.status == 2
+    assert "sel" in reading.text.splitlines()[0]
+    assert _synopsis(MANAGER_DIR / "help.md") in reading.text
+
+
+def test_the_manager_body_carries_no_refusal_and_no_verb_grammar_of_its_own() -> None:
+    """What the engine knows is written nowhere in the body.
+
+    The verb list with its flags, the sentence that said what the script does
+    with a flag a verb has no use for, and the sentence that said Help takes no
+    flags were three copies of a grammar the engine reads off the
+    `argument-hint` and the shipped pages. `## Arguments` keeps what the engine
+    cannot know — what `--project`, `--yes` and `--dry-run` mean to the verbs
+    (ADR-0181).
+    """
+
+    text = (MANAGER_DIR / "SKILL.md").read_text(encoding="utf-8")
+    body = text.partition("\n## Invocation\n")[2]
+
+    for phrase in ("refus", "synopsis", "takes no flags", "[--yes]", "[--dry-run]"):
+        assert phrase not in body.lower(), (
+            f"{MANAGER_DIR / 'SKILL.md'}: the body restates a refusal or a verb's"
+            f" grammar ({phrase!r}), which the engine reads off the pages"
+            f" (ADR-0181). See {STANDARD}."
+        )
+    arguments = _section(text, "## Arguments", MANAGER_DIR / "SKILL.md")
+    for flag in ("--project", "--yes", "--dry-run"):
+        assert flag in arguments, flag
+    assert "only `--yes` in the current Formal Invocation" in arguments
 
 
 def test_no_verb_accepts_force(tmp_path: Path) -> None:
@@ -10554,6 +10634,21 @@ def _shipped_skills() -> list[Path]:
     directories = sorted(p.parent for p in (REPO_ROOT / "skills").glob("*/*/SKILL.md"))
     assert directories
     return directories
+
+
+# The call a body makes to read its invocation through the engine (ADR-0181).
+ENGINE_CALL = 'invoke --here="$HERE"'
+
+
+def _calls_the_engine(text: str) -> bool:
+    """True where a body reads its invocation through the engine.
+
+    The Manager's body does; every other shipped body still performs the
+    Envelope split and the help routing itself, and is held to the prose that
+    says so until it moves (ADR-0181).
+    """
+
+    return ENGINE_CALL in text
 
 
 def _skill_bodies() -> list[Path]:
@@ -10838,14 +10933,18 @@ def test_every_skill_exposes_the_invocation_envelope_before_its_grammar() -> Non
             f"{body}: Envelope splitting must precede help routing and formal"
             f" validation (ADR-0176). See {STANDARD}."
         )
-        assert "before help routing or formal validation" in envelope.lower(), (
-            f"{body}: the executable section does not state its required"
-            f" ordering (ADR-0176). See {STANDARD}."
-        )
         assert ENVELOPE_POINTER in envelope, (
             f"{body}: the body reads its executable Envelope contract from the"
             f" one place it is stated, `{ENVELOPE_POINTER}`, rather than"
             f" carrying a copy of it (ADR-0177, ADR-0176). See {STANDARD}."
+        )
+        # The split and the parser boundary are the engine's in a body that
+        # calls it, so only a body that still performs them states them.
+        if _calls_the_engine(text):
+            continue
+        assert "before help routing or formal validation" in envelope.lower(), (
+            f"{body}: the executable section does not state its required"
+            f" ordering (ADR-0176). See {STANDARD}."
         )
         assert "only the Formal Invocation reaches" in envelope, (
             f"{body}: scripts and nested parsers receive only Formal Invocation"
@@ -11150,21 +11249,28 @@ def test_nested_skill_calls_propagate_only_relevant_context_explicitly() -> None
         )
 
 
-def test_manager_help_passes_only_formal_arguments_to_its_script() -> None:
-    """The help adapter never hands the Contextual Instruction to argparse."""
+def test_the_help_step_hands_the_script_the_operand_the_engine_read() -> None:
+    """The help step runs the script on the engine's `operands`, never the payload.
 
-    # Read the adapter that turns the Manager's help route into script input.
+    The engine splits the Contextual Instruction off and hands it back as
+    `instruction`, so a step that reads `operands` cannot leak it into
+    argparse; the whole-payload wording that once could is refused by name
+    (ADR-0181, ADR-0176).
+    """
+
     steps = (MANAGER_DIR / "steps" / "help.md").read_text(encoding="utf-8")
 
-    # Refuse the old whole-payload wording and require the new parser boundary.
-    assert "Formal Invocation arguments" in steps, (
-        f"{MANAGER_DIR / 'steps' / 'help.md'}: the Manager must pass only Formal"
-        f" Invocation input to its parser (ADR-0176). See {STANDARD}."
+    assert "`operands`" in steps, (
+        f"{MANAGER_DIR / 'steps' / 'help.md'}: the step takes the help verb's"
+        f" operand from the engine's `operands` (ADR-0181). See {STANDARD}."
     )
-    assert "Every other argument the user gave" not in steps, (
-        f"{MANAGER_DIR / 'steps' / 'help.md'}: whole-payload forwarding would"
-        f" leak Contextual Instruction into argparse (ADR-0176). See {STANDARD}."
-    )
+    assert 'scripts/kntnt.py" help' in steps
+    for phrase in ("Every other argument the user gave", "Formal Invocation arguments"):
+        assert phrase not in steps, (
+            f"{MANAGER_DIR / 'steps' / 'help.md'}: the step forwards what it"
+            f" reads off the payload itself rather than what the engine read"
+            f" (ADR-0181). See {STANDARD}."
+        )
 
 
 def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() -> None:
