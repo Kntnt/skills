@@ -2,19 +2,21 @@
 
 ## NAME
 
-kntnt select - list Collection Skills and change which are Enabled
+kntnt select - list Collection Skills and Features and change which are Enabled
 
 ## SYNOPSIS
 
 **/kntnt** **select** [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
-**/kntnt** **select** [**--on=**_SKILL_]... [**--off=**_SKILL_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
+**/kntnt** **select** [**--on=**_ENTRY_]... [**--off=**_ENTRY_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-`kntnt select` shows the Catalog by Category, one Skill per row. Each row includes Enabled state, description, required Harness Capability, and incomplete or Deviating files. Global is the default layer.
+`kntnt select` shows the Catalog in two groups: its Skills by Category, one Skill per row, and under them its Features. Each Skill row includes Enabled state, description, required Harness Capability, and incomplete or Deviating files. Each Feature row includes Enabled state, description, the Harnesses it serves, and what it writes and where. Global is the default layer.
 
-In list mode, reply with the desired checked set. The Manager resolves required Collection Skills, reports anything left Unsatisfied, asks for confirmation, and applies the answer to every detected Harness. Every Skill can be read in full before answering.
+A Feature is a Catalog entry that owns Harness Integrations and nothing else: no Harness loads it, no Skill depends on it, and enabling it writes only into Harness configuration and files the user maintains. Features are Global only — the Project layer installs and removes no integration — and `--project` reports that instead of offering them.
+
+In list mode, reply with the desired checked set; both groups are answered together, and a Feature never shares a name with a Skill. The Manager resolves required Collection Skills, reports anything left Unsatisfied, asks for confirmation, and applies the answer to every detected Harness. Every Skill can be read in full before answering.
 
 An unchanged answer writes nothing. Confirming repairs incomplete copies; refreshing Deviating files overwrites local changes.
 
@@ -22,13 +24,13 @@ An unchanged answer writes nothing. Confirming repairs incomplete copies; refres
 
 ## OPTIONS
 
-**--on=**_SKILL_
+**--on=**_ENTRY_
 
-Enable *SKILL* without opening the list. Repeatable; required Collection Skills are confirmed together.
+Enable *ENTRY* — a Skill or a Feature — without opening the list. Repeatable; required Collection Skills are confirmed together.
 
-**--off=**_SKILL_
+**--off=**_ENTRY_
 
-Disable *SKILL* without opening the list. Repeatable, combinable with **--on**, and requires **--yes** because files are deleted.
+Disable *ENTRY* without opening the list. Repeatable, combinable with **--on**, and requires **--yes**: unchecking a Skill deletes files, and unchecking a Feature takes what it wrote back out of Harness configuration.
 
 **--project**, **--project=on**
 
@@ -36,13 +38,13 @@ Target the current Project instead of Global. `--project=off` has the same effec
 
 **--yes**
 
-Answer yes to confirmations. Without **--on** or **--off**, it opens no list, Enables nothing new, and repairs Deviating or incomplete Enabled Skills.
+Answer yes to confirmations, including the one a Feature raises when a single-valued setting it wants is already held by another command. Without **--on** or **--off**, it opens no list, Enables nothing new, and repairs Deviating or incomplete Enabled Skills — so it never replaces a held setting on its own, only alongside the name that asked for it.
 
 **--dry-run**
 
 Run in a discarded temporary home and report the result without changing the selected layer. The isolated cache makes this slower.
 
-## SKILL STATES
+## ENTRY STATES
 
 **Enabled**
 
@@ -50,7 +52,7 @@ The Skill is present in the targeted layer. Project view identifies Global-only 
 
 **Incomplete**
 
-The Skill is present in only some detected Harnesses. Confirming repairs it.
+The Skill is present, or the Feature installed, in only some detected Harnesses. Confirming repairs it.
 
 **Deviating**
 
@@ -58,13 +60,15 @@ The files differ from the Catalog Digest. Re-copying overwrites the layer's curr
 
 **Locked**
 
-The Skill depends on an unchecked Collection Skill. The row names it; leaving it unchecked is allowed but reported as Unsatisfied.
+The Skill depends on an unchecked Collection Skill. The row names it; leaving it unchecked is allowed but reported as Unsatisfied. A Feature is locked where no detected Harness is one it serves; the row says so rather than hiding it.
 
 ## FILES
 
 **Harness Integrations**
 
-A Skill may own a Harness Integration: what it writes into a Harness's own configuration so the Harness calls that Skill at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. Checking a Skill in Global asks that Skill to install what it owns, and unchecking one asks it to remove them before its files go; the Project layer installs and removes none. The report says what became of each.
+A Skill may own a Harness Integration, and a Feature owns nothing else: what it writes into a Harness's own configuration so the Harness calls it at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. A Feature owns Harness Integrations and nothing else, so this is the whole of what enabling or disabling one does. Checking an entry in Global asks it to install what it owns, and unchecking one asks it to remove them; the Project layer installs and removes none. The report says what became of each.
+
+A Feature may also write into a global instruction file a Harness reads — `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md` — and into a single-valued setting such as Claude Code's status line. Prose is written inside a fenced ownership marker and removal takes exactly that fence away. A single-valued setting another command already holds is never overwritten unquestioned: the row names what holds it and the confirmation asks whether to replace it, which **--yes** answers along with everything else it asks. Nothing is kept of what is replaced. What each Feature writes is on its row before the checkbox, and repeated in the confirmation before anything is written.
 
 ## OFFLINE OPERATION
 
@@ -72,7 +76,7 @@ Offline, Select uses the stored Catalog. It cannot fetch help for absent Skills 
 
 ## DIAGNOSTICS
 
-An unknown Skill, invalid combination, or flag with no work to do is refused rather than ignored. The Manager prints the SYNOPSIS, changes nothing, and points to this page.
+An unknown Skill or Feature, invalid combination, or flag with no work to do is refused rather than ignored. The Manager prints the SYNOPSIS, changes nothing, and points to this page.
 
 The end of the list counts Withdrawn Skills found on disk. Update removes them.
 
