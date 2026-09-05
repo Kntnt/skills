@@ -99,28 +99,3 @@ def test_the_review_brief_names_the_builder_it_measures_against() -> None:
         f" own capability, which is the one thing the ticket cannot carry"
         f" (ADR-0155). See {STANDARD}."
     )
-
-
-def test_the_skill_declares_no_flag_it_would_have_to_refuse() -> None:
-    """Nothing is written here, so `--yes` has no question to answer.
-
-    The Manager's own grammar rule is that a flag with no work is an error
-    rather than a no-op, and a skill that quietly accepted one would teach the
-    opposite of what every other skill in the collection teaches.
-    """
-
-    text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
-
-    assert "there is no question for `--yes` to answer" in text, (
-        f"{SKILL / 'SKILL.md'}: this skill writes nothing and asks nothing, so"
-        f" the body says plainly that `--yes` has no question to answer. A flag"
-        f" quietly accepted here teaches the opposite of what every other skill"
-        f" in the collection teaches. See {STANDARD}."
-    )
-    assert (
-        "a flag accepted and ignored teaches that flags sometimes do nothing" in text
-    ), (
-        f"{SKILL / 'SKILL.md'}: the paragraph refusing a flag with no work"
-        f" carries the reason an installed reader needs to apply the rule. See"
-        f" {STANDARD}."
-    )

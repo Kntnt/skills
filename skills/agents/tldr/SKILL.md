@@ -15,15 +15,11 @@ metadata:
 
 Explain the reply above again for somebody who did not follow it. The answer is treated as correct and inaccessible, never as bloated, so what comes back carries the background the original assumed and ends by naming what is now required of the reader.
 
-`$HERE` is the directory that contains this SKILL.md.
+`$HERE` is the directory that contains this SKILL.md, and `$LIBRARY` is `library/` under the Manager directory beside it — `$HERE/../kntnt/library/` if it exists, else `kntnt/library/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them); absent, tell the user to run `/kntnt update`, then stop.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop.
 
 ## Arguments
 
@@ -33,11 +29,11 @@ If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim a
 - The same instruction may arrive as a Contextual Instruction behind the reserved separator. `/tldr bara säkerhetsdelen` and `/tldr -- bara säkerhetsdelen` are both valid and mean the same thing: with no command path in the grammar there is no verb for prose to shadow, so the separator is offered here rather than required.
 - A token that opens with a dash is part of that instruction like any other word. This grammar declares no flag, so `/tldr --foo bar` is guidance to obey as written or to refuse as guidance that widens the Skill, and never an undeclared flag.
 
-The one invalid form is a malformed Envelope: a reserved separator with no instruction behind it. Nothing else here is a syntax refusal, there being no flag to be undeclared and no form to be incomplete. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing; here the same rule is what makes a dash-token prose, this grammar having no flag for one to be mistaken for.
+The one invalid form is a malformed Envelope: a reserved separator with no instruction behind it, refused as `$LIBRARY/references/invocation-envelope.md` says. Nothing else here is a syntax refusal, there being no flag to be undeclared and no form to be incomplete — this grammar declares no flag for a dash-token to be mistaken for, which is what leaves such a token prose.
 
 ## Steps
 
-1. Parse the arguments by the rules above. An invalid form: name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/tldr --help` for the page in full. Change nothing and stop. Done when the form is settled, or you have stopped.
+1. Parse the arguments by the rules above. An invalid form is refused as `$LIBRARY/references/invocation-envelope.md` says; change nothing and stop. Done when the form is settled, or you have stopped.
 2. Settle the range. It is the preceding assistant output, plus whatever earlier context that output refers to and would be unintelligible without. It is never a pasted document, a file, or tool output the user points at — those are things to act on, and this Skill acts on what was said about them. An instruction may narrow the range; it cannot move it off the preceding answer. Done when the range is settled.
 3. Range empty: say there is no preceding answer to explain and stop. Where compaction has left the range incomplete, state that limit and use only the part still visible rather than implying complete coverage. Done when the available range is known, or you have stopped.
 4. Read [`mode.md`](references/mode.md) and re-explain the range under it. Treat the invocation as evidence that the answer was pitched at the wrong reader, not that it was too long for its own purpose: it may be an article, a research answer, a requested explanation, review output, or a long design discussion, each long with reason. Start from what the answer meant and say that instead; rewriting its sentences more tersely does not satisfy the request. Write under the instruction given — the language it names, the subject it narrows to, the shape it constrains. Done when the re-explanation is shown.

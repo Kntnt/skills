@@ -24,13 +24,9 @@ Run every UV command in this Skill with a fresh private directory as `TMPDIR`, a
 
 `$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop.
 
 ## Arguments
 
@@ -65,9 +61,9 @@ Invalid forms, each refused the same way:
 - More than one Text Artifact — several paths, a glob reaching more than one file, or a directory of texts.
 - An out-of-order form: the Text Artifact written before a flag rather than after every flag.
 
-Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/redline --help` for the page in full. Then review nothing, write nothing, and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
+Refuse it as `$LIBRARY/references/invocation-envelope.md` says, then review nothing, write nothing, and stop.
 
-Those forms are the whole of what this section refuses. What it refuses is the form of an invocation, and where a run halts over something else — the `## INVOCATION ENVELOPE` this file binds itself to before any of this, a value it resolves, a destination it cannot write to — that is written beside the thing itself, which this list neither adds to nor takes from. Whatever the operand turns out to say, and whatever the review will have to say about it, an invocation whose form this list does not name is reviewed. A run that finds itself wanting to refuse a form the list does not name has found a gap in the list rather than a reason to stop: review the invocation, and name the gap beside the findings where it is worth naming. The rule above says why a flag with no work to do is refused rather than ignored; refusing a form this list does not name is the opposite failure, and teaches that a valid invocation sometimes does nothing without saying which ones.
+Those forms are the whole of what this section refuses. What it refuses is the form of an invocation, and where a run halts over something else — the `## INVOCATION ENVELOPE` this file binds itself to before any of this, a value it resolves, a destination it cannot write to — that is written beside the thing itself, which this list neither adds to nor takes from. Whatever the operand turns out to say, and whatever the review will have to say about it, an invocation whose form this list does not name is reviewed. A run that finds itself wanting to refuse a form the list does not name has found a gap in the list rather than a reason to stop: review the invocation, and name the gap beside the findings where it is worth naming. The Invocation Envelope says why a flag with no work to do is refused rather than ignored; refusing a form this list does not name is the opposite failure, and teaches that a valid invocation sometimes does nothing without saying which ones.
 
 ## Resolution
 

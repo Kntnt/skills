@@ -28,13 +28,9 @@ A model-invoked run changes only how the Skill starts. Once started, it takes th
 
 Where no Formal Invocation carries an Output Target, settle it from the current turn before correcting or writing. An unnamed destination resolves to the response, and a file mentioned only as the location of the errors names no destination: the verbs *fix* and *correct* apply to the named errors, not to the file containing them. Thus `Fix the spelling and grammar mistakes in case.md` delivers to the response. A turn that explicitly names the response or a path other than the source as the destination selects that Output Target; for example, `Write the corrected text to corrected.md` selects corrected.md as a separate Output Target. A turn that asks for the file itself to be changed selects In-place Editing only when it explicitly names that file as the object of the change or as the destination of the corrected text; for example, `Update case.md with the grammar corrections` selects In-place Editing. It remains subject to every refusal that editing mode already carries, including inline text, a URL, an uploaded or read-only source, more than one text, and a simultaneous separate Output Target. A request to save, apply, or persist the corrections without naming where they go is materially ambiguous about the destination: `Fix the grammar errors in case.md and save the corrections` asks which destination the caller intends and writes nothing. For that case and any other material ambiguity about the destination, ask which destination the caller intends and write nothing.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop.
 
 ## Arguments
 
@@ -59,7 +55,7 @@ Invalid forms, each refused the same way:
 - More than one Text Artifact — several paths, a glob reaching more than one file, or a directory of texts.
 - An out-of-order form: the Text Artifact written before a flag rather than after every flag.
 
-Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/proofread --help` for the page in full. Then correct nothing, write nothing, and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
+Refuse it as `$LIBRARY/references/invocation-envelope.md` says, then correct nothing, write nothing, and stop.
 
 ## Steps
 

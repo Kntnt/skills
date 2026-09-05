@@ -24,13 +24,9 @@ Run every UV command in this Skill with a fresh private directory as `TMPDIR`, a
 
 `$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop.
 
 ## Arguments
 
@@ -60,7 +56,7 @@ Invalid forms, each refused the same way:
 - More than one Text Artifact — several paths, a glob reaching more than one file, or a directory of texts.
 - An out-of-order form: the Text Artifact written before a flag rather than after every flag.
 
-Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/unslop --help` for the page in full. Then read nothing, write nothing, and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
+Refuse it as `$LIBRARY/references/invocation-envelope.md` says, then read nothing, write nothing, and stop.
 
 ## Resolution
 
