@@ -24,6 +24,8 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/rules/general.md` — read when writing code
 - `docs/rules/python.md` — read when writing Python
 - `docs/rules/skills.md` — read when adding a Skill or changing the files one ships
+- `docs/rules/collection.md` — read when changing what a Manager verb promises, or how the collection reaches a machine
+- `docs/rules/routing.md` — read when changing how a Skill routes delegated work, or what it may file as evidence
 - `docs/rules/tickets.md` — read when writing a ticket
 - `docs/evaluation/protocol.md` — read when evaluating an editorial Skill against the fixture corpus
 - `skills/kntnt/library/references/languages/README.md` — read when adding or changing a Language Resource

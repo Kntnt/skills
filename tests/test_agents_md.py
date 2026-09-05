@@ -28,6 +28,16 @@ TICKET_RECORDS = (
 # that this particular module is pointed at, before anything has been written.
 STANDARD = "docs/rules/skills.md"
 
+# The rules modules stating what the Manager's verbs promise and how a Skill
+# routes delegated work, each with the word a reader skims the list for. Named
+# here for the same reason the two above are: an agent about to change a verb's
+# behaviour, or how work is delegated, has to be able to find the law before
+# they write anything.
+BEHAVIOUR = {
+    "docs/rules/collection.md": "manager",
+    "docs/rules/routing.md": "route",
+}
+
 # Every entry under `## References` is a backticked path, an em dash, and the
 # clause saying when to read it.
 REFERENCE = re.compile(r"^- `([^`]+)` — (read when [^\n]+)$", re.MULTILINE)
@@ -105,3 +115,21 @@ def test_agents_md_points_at_the_standard_a_new_skill_is_held_to() -> None:
 
     assert STANDARD in references
     assert "skill" in references[STANDARD].lower()
+
+
+def test_agents_md_points_at_the_law_the_collection_behaves_under() -> None:
+    """What a verb promises is law, and law nobody can find is not consulted.
+
+    The Manager's behavioural law and the routing law it delegates work under
+    live in their own modules under `docs/rules/`, and this file is what an
+    agent always has loaded, so they are reachable before anything is changed
+    only if this file names them (issue #264). The clause matters as much as
+    the path: a reader skims the list for the occasion, so an entry for the
+    Manager's law that never says *Manager* is one its reader skips.
+    """
+
+    references = _references()
+
+    for path, occasion in BEHAVIOUR.items():
+        assert path in references
+        assert occasion in references[path].lower()
