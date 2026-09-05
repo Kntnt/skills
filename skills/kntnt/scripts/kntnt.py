@@ -1678,6 +1678,9 @@ def teardown_integrations(
     collection does not own cannot be allowed to hold up the removal of files
     it does own, and a partial removal reported is a partial removal the user
     can finish by hand.
+
+    Which layer may ask this at all is not decided here. `removal_integrations`
+    is the gate, and every caller reaches this through it.
     """
 
     reported: list[dict[str, Any]] = []
@@ -1739,7 +1742,22 @@ def stage_integration_owners(root: Path, withdrawals: list[Withdrawal]) -> list[
 
 
 def _teardown(name: str, script: Path) -> dict[str, Any]:
-    """Run one skill's declared teardown and read what it says it removed."""
+    """Run one skill's declared teardown and read what it says it removed.
+
+    From `home()` rather than from wherever the Manager was invoked. The same
+    run that asks this may have just replaced the Manager's own installed
+    tree, and a directory unlinked under a running process is one no launcher
+    can start from — the failure arriving before the declared script is
+    reached at all (issue #257). This seam hands the script everything it
+    needs on the command line, so it has no working directory of its own to
+    want, and the home Global paths resolve against is what no run of this
+    collection removes.
+
+    Where no home can be resolved at all, `Path.home()` raises `RuntimeError`
+    rather than the `OSError` a missing directory would be, so the caught
+    failure covers both: an unresolvable home is reported per skill like every
+    other failure of this call, never raised (ADR-0090).
+    """
 
     if not script.exists():
         return {
@@ -1751,12 +1769,13 @@ def _teardown(name: str, script: Path) -> dict[str, Any]:
     try:
         completed = subprocess.run(
             ["uv", "run", "--quiet", str(script), "remove-integrations"],
+            cwd=home(),
             text=True,
             capture_output=True,
             check=False,
             timeout=120,
         )
-    except (OSError, subprocess.SubprocessError) as exc:
+    except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
         return {"name": name, "status": "failed", "detail": str(exc), "removed": []}
 
     if completed.returncode != 0:
@@ -1781,6 +1800,15 @@ def _teardown(name: str, script: Path) -> dict[str, Any]:
 # (issue #223 decision 4).
 PROJECT_LAYER_INTEGRATIONS_NOTE = (
     "the Project layer installs no integration; only a Global Enable does"
+)
+
+# The other half of that same sentence, and a second thing to say rather than
+# a widening of the first: a run that installed none and a run that removed
+# none are different answers. Every owned entry a Project-layer run can reach
+# belongs to a Global Enable, because that layer installs none of its own, so
+# tearing one down there would take away what the other layer still describes.
+PROJECT_LAYER_REMOVAL_NOTE = (
+    "the Project layer removes no integration; only a Global Disable does"
 )
 
 
@@ -1843,7 +1871,13 @@ def install_integrations(
 
 
 def _install(name: str, script: Path, harnesses: list[str]) -> dict[str, Any]:
-    """Run one skill's declared install and read what it says it installed."""
+    """Run one skill's declared install and read what it says it installed.
+
+    From `home()`, and answering an unresolvable one per skill, for the reasons
+    `_teardown` states. Neither word takes a layer between here and the script:
+    the Project layer reaches neither of them at all (ADR-0160), so what each
+    resolves against is the machine's own home and never a working directory.
+    """
 
     if not script.exists():
         return {
@@ -1862,12 +1896,13 @@ def _install(name: str, script: Path, harnesses: list[str]) -> dict[str, Any]:
                 "install-integrations",
                 *[f"--harness={harness}" for harness in harnesses],
             ],
+            cwd=home(),
             text=True,
             capture_output=True,
             check=False,
             timeout=120,
         )
-    except (OSError, subprocess.SubprocessError) as exc:
+    except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
         return {"name": name, "status": "failed", "detail": str(exc), "installed": []}
 
     if completed.returncode != 0:
@@ -1918,18 +1953,70 @@ def placement_integrations(
     }
 
 
+def removal_integrations(
+    names: list[str], directories: list[Path], *, global_layer: bool
+) -> dict[str, Any]:
+    """Report what a departing skill's own teardown did, or why none ran.
+
+    The mirror of `placement_integrations`, gating the same layer for the same
+    reason (ADR-0160). A Project-layer run cannot be removing anything a
+    Project-layer run installed, because that layer installs nothing: whatever
+    it could reach inside a Harness's own configuration was put there by a
+    Global Enable that is still standing, and taking it away would leave that
+    Enable describing a machine state that no longer exists.
+
+    The directories come from the caller and are never resolved here. The two
+    callers hold different ones: an uncheck hands the run's own layer, while a
+    withdrawal hands the copies staged in a temporary directory, its files
+    having already left every layer by the time it asks.
+    """
+
+    if not global_layer:
+        return unattempted_removal(global_layer=global_layer)
+    return {"attempted": teardown_integrations(names, directories), "note": None}
+
+
+def unattempted_removal(*, global_layer: bool) -> dict[str, Any]:
+    """Return the answer of a run that tore no integration down in this layer.
+
+    The gate's own `note` without any records beside it. A Project-layer run
+    has that sentence to give for itself, and a run that failed before its
+    teardown could run has the same answer to carry rather than none at all —
+    neither of them may ask a skill anything to arrive at it (issue #258).
+    """
+
+    return {
+        "attempted": [],
+        "note": None if global_layer else PROJECT_LAYER_REMOVAL_NOTE,
+    }
+
+
+def joined_integrations(
+    first: dict[str, Any], second: dict[str, Any]
+) -> dict[str, Any]:
+    """Return two teardown answers as the one answer a verb reports.
+
+    Uninstall tears down twice — the collection's skills, then the Manager —
+    and both are one run's account of what left this machine's Harnesses. The
+    note is a fact about the layer rather than about either half, so the two
+    cannot disagree about it and the first that has one carries it.
+    """
+
+    return {
+        "attempted": [*first["attempted"], *second["attempted"]],
+        "note": first["note"] or second["note"],
+    }
+
+
 def remove_skills(
     names: list[str], harnesses: list[str], *, global_layer: bool
 ) -> dict[str, Any]:
     """Disable *names* on *harnesses* in the targeted layer, and verify it.
 
-    What a skill installed outside its own directory goes first, because the
-    files that know how to remove it are the files this is about to delete.
+    What a skill installed outside its own directory has already gone by the
+    time this runs: `removal_outcome` asks for it first, because the files
+    that know how to remove it are the files this is about to delete.
     """
-
-    integrations = teardown_integrations(
-        names, layer_dirs(harnesses, global_layer=global_layer)
-    )
 
     # Nothing to remove is not a call: the transport refuses an empty selection.
     if names and harnesses:
@@ -1941,16 +2028,9 @@ def remove_skills(
         args.append("--yes")
         run_transport(args, internal=True)
 
-    # What a skill installed outside its own directory is reported beside what
-    # the disk says of the files: a Harness this run could not clear is state
-    # the user is left with, and silence about it is the one thing that would
-    # make it theirs without their knowing (ADR-0036).
-    return {
-        **verified_outcome(
-            names, harnesses, global_layer=global_layer, expect_present=False
-        ),
-        "integrations": integrations,
-    }
+    return verified_outcome(
+        names, harnesses, global_layer=global_layer, expect_present=False
+    )
 
 
 def failed_placement_outcome(
@@ -1986,8 +2066,20 @@ def removal_outcome(
     to the user on stderr, which is the only place it is told.
     """
 
+    # What a skill installed outside its own directory goes first, because the
+    # files that know how to remove it are the files the transport is about to
+    # delete — and the answer is held out here, outside the call that can
+    # raise. A run that pulled a Skill's hooks out of a Harness and then met a
+    # refusal has changed the machine, and an exception carrying that away
+    # unreported is the one outcome not available (ADR-0036, issue #258).
+    integrations = removal_integrations(
+        names,
+        layer_dirs(harnesses, global_layer=global_layer),
+        global_layer=global_layer,
+    )
+
     try:
-        return remove_skills(names, harnesses, global_layer=global_layer)
+        outcome = remove_skills(names, harnesses, global_layer=global_layer)
     except ManagerError as exc:
         outcome = verified_outcome(
             names, harnesses, global_layer=global_layer, expect_present=False
@@ -1999,7 +2091,12 @@ def removal_outcome(
         # else's error over it would be telling the user about nothing.
         if outcome["failed"]:
             relay_transport(str(exc))
-    return outcome
+
+    # What a skill installed outside its own directory is reported beside what
+    # the disk says of the files: a Harness this run could not clear is state
+    # the user is left with, and silence about it is the one thing that would
+    # make it theirs without their knowing (ADR-0036).
+    return {**outcome, "removed_integrations": integrations}
 
 
 def withdrawal_report(
@@ -2075,10 +2172,19 @@ def refresh_outcome(
     harnesses: list[str],
     *,
     global_layer: bool,
-) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """Acquire and publish the complete selected Collection generation."""
+) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, Any]]:
+    """Acquire and publish the complete selected Collection generation.
 
-    integrations: list[dict[str, Any]] = []
+    Three things come back: what the disk says of the placements, one report
+    per withdrawal carrying that Skill's own teardown records, and the whole
+    teardown answer — whose `note` has nowhere to sit in a per-Skill list and
+    is the one thing a Project-layer run has to say for itself (issue #258).
+    """
+
+    # The gate's own answer for this layer, asking no skill anything, so a
+    # failure before the teardown runs still carries the note the payload
+    # needs and no run tears anything down twice.
+    integrations = unattempted_removal(global_layer=global_layer)
     try:
         with tempfile.TemporaryDirectory(prefix="kntnt-acquire-") as temporary:
             root = Path(temporary)
@@ -2105,12 +2211,15 @@ def refresh_outcome(
 
             # Publication has no remaining failure point, so external teardown
             # cannot leave a rolled-back tree without the integrations it owns.
-            integrations = teardown_integrations(withdrawn, integration_owners)
+            integrations = removal_integrations(
+                withdrawn, integration_owners, global_layer=global_layer
+            )
     except ManagerError as exc:
         relay_transport(str(exc))
         return (
             failed_placement_outcome(names, harnesses, global_layer=global_layer),
             withdrawal_report(withdrawn, harnesses, global_layer=global_layer),
+            integrations,
         )
 
     return (
@@ -2121,8 +2230,9 @@ def refresh_outcome(
             withdrawn,
             harnesses,
             global_layer=global_layer,
-            integrations=integrations,
+            integrations=integrations["attempted"],
         ),
+        integrations,
     )
 
 
@@ -2606,6 +2716,9 @@ def cmd_apply_select(
     Both halves of the answer are one verb's work, so both are reported
     together: `intended`, `confirmed`, and `failed` cover the run, and
     `placed` and `removed` say which way each intended name went (ADR-0036).
+    Each half's Harness Integrations answer beside it — `integrations` for
+    what a placement installed, `removed_integrations` for what an uncheck
+    tore down — so one key means one thing across every verb (issue #258).
 
     The answer arrives in one of two forms and never both. Skill names are the
     whole checked set, which is how the list is answered; `--as-is`, `--on`,
@@ -2668,6 +2781,7 @@ def cmd_apply_select(
             "integrations": placement_integrations(
                 placed["confirmed"], directories, harnesses, global_layer=global_layer
             ),
+            "removed_integrations": removed["removed_integrations"],
             "unsatisfied": unsatisfied_on_disk(harnesses, global_layer=global_layer),
             "layer": "global" if global_layer else "project",
             "catalog_refreshed": catalog_from_origin(),
@@ -2716,9 +2830,11 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
     # read while the snapshot it may have come from is still on disk.
     refreshed = catalog_from_origin()
 
-    outcome = removal_outcome(
+    collection = removal_outcome(
         enabled_names(harnesses, global_layer=True), harnesses, global_layer=True
     )
+    integrations = collection["removed_integrations"]
+    outcome = {key: collection[key] for key in ("intended", "confirmed", "failed")}
 
     # The Manager goes last, and only where the rest of the collection really
     # left: it is the one skill that can be asked to finish the job, and a
@@ -2726,6 +2842,9 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
     # one whose Manager outlives them by a run.
     if not outcome["failed"]:
         manager = removal_outcome([MANAGER], harnesses, global_layer=True)
+        integrations = joined_integrations(
+            integrations, manager["removed_integrations"]
+        )
         outcome = {
             "intended": [*outcome["intended"], *manager["intended"]],
             "confirmed": [*outcome["confirmed"], *manager["confirmed"]],
@@ -2735,6 +2854,10 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
     emit(
         {
             **outcome,
+            # Both teardowns, under the key every verb's removal answers
+            # under: this one places nothing, so `integrations` — which means
+            # a placement everywhere else — never appears here (issue #258).
+            "removed_integrations": integrations,
             "catalog_refreshed": refreshed,
             "layer": "global",
             "directories": directories,
@@ -2831,7 +2954,7 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
     # A refusal here is read rather than raised so the run can report the
     # failed replacement while leaving every active tree as it was. Omitted
     # Skills join the same rollback set rather than being removed afterward.
-    outcome, withdrawals = refresh_outcome(
+    outcome, withdrawals, withdrawn_integrations = refresh_outcome(
         place,
         withdrawn,
         harnesses,
@@ -2899,6 +3022,12 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
                 harnesses,
                 global_layer=global_layer,
             ),
+            # The withdrawal teardown's own records already sit beside each
+            # withdrawal in `removed`, so what is left to carry here is the
+            # answer's `note` — the sentence a Project-layer run has for a
+            # user who would otherwise believe their machine-wide integration
+            # went with the files (issue #258).
+            "removed_integrations": {**withdrawn_integrations, "attempted": []},
             "catalog_refreshed": refreshed,
             "unsatisfied": unsatisfied,
             "capabilities": capabilities,

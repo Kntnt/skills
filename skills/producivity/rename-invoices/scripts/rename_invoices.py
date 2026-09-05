@@ -1050,7 +1050,11 @@ def extract_pdf_text(path: Path) -> str:
     """Extract layout-preserving text through Poppler pdftotext."""
 
     # Keep Poppler as the sole production extractor and capture output without
-    # temporary artifacts.
+    # temporary artifacts. It inherits the caller's working directory on
+    # purpose: the document folder is resolved absolute before any file reaches
+    # here and the text comes back on standard output, so nothing this call
+    # touches is named relative to a directory — and the one it starts in is
+    # the user's own, which no run of this Skill replaces.
     process = subprocess.run(
         ["pdftotext", "-layout", str(path), "-"],
         capture_output=True,

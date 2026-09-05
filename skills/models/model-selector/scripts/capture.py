@@ -17,7 +17,7 @@ Capture follows this Skill's own Enabled state and asks for nothing beyond
 it (#223). The Manager installs this feature's owned lifecycle integration
 into every supported Detected Harness of the Global layer the moment the
 Skill is Enabled, placed, or refreshed, and removes every entry the moment
-it is Disabled — the same two seams that already place and remove the
+it is Disabled there — the same two seams that already place and remove the
 Skill's own files. There is no second opt-in, no consent prompt, and no
 configuration state of this feature's own to go stale: disk is the one
 truth (ADR-0090), so a hook either runs because a Harness's own
@@ -38,7 +38,7 @@ import sys
 from contextlib import suppress
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, TextIO
 
 SCHEMA_VERSION = 1
 
@@ -638,6 +638,11 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     unattended source refresh, which reaches the network only as bounded
     conditional metadata retrieval under a stated budget, in a module of its
     own (ADR-0167).
+
+    The object returned here is a diagnostic and never a Harness's protocol,
+    so the command line writes it to standard error and leaves standard output
+    empty: a Harness reads its own hook's standard output as its own protocol
+    and refuses an object carrying fields from anywhere else (#259).
     """
 
     try:
@@ -861,8 +866,11 @@ def install_integrations(harnesses: list[str]) -> dict[str, Any]:
 def remove_integrations() -> dict[str, Any]:
     """Remove every integration this feature owns, wherever it installed one.
 
-    This is the word the Manager says when the Skill is being made Disabled,
-    withdrawn, or uninstalled: it runs while these files still exist, takes the
+    This is the word the Manager says when the Skill is being made Disabled in
+    the Global layer, withdrawn from it, or uninstalled: the Project layer is
+    never removing what it never installed, so the Manager's own gate is what
+    keeps this from clearing a Global Enable's entries from inside a working
+    directory. It runs while these files still exist, takes the
     hooks out of every Harness, and leaves the accepted Usage Records alone. It
     is answerable at any time, because removing what is already gone is a state
     rather than an error.
@@ -873,11 +881,24 @@ def remove_integrations() -> dict[str, Any]:
     return {"removed": result["harnesses"], "usage_records_preserved": True}
 
 
-def _emit(payload: dict[str, Any]) -> None:
-    """Print one machine-readable answer."""
+def _emit(payload: dict[str, Any], stream: TextIO | None = None) -> None:
+    """Print one machine-readable answer, on *stream* or on standard output.
 
-    json.dump(payload, sys.stdout, indent=2, sort_keys=True)
-    sys.stdout.write("\n")
+    A Harness that runs a hook it owns reads what that hook writes on standard
+    output as its own protocol, so `hook` — the one action a Harness ever runs
+    — hands standard error in here and leaves that channel empty (#259). Every
+    other action answers where it always has, because the Manager's two
+    integration words and this Skill's own two report verbs are read from
+    standard output by whatever asked for them.
+
+    The stream is resolved at call time rather than bound as a default, so a
+    caller that replaced the process's own streams is answered on the ones it
+    installed.
+    """
+
+    target = sys.stdout if stream is None else stream
+    json.dump(payload, target, indent=2, sort_keys=True)
+    target.write("\n")
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -920,7 +941,9 @@ def main(argv: list[str] | None = None) -> int:
     root = Path(args.root)
 
     # The hook is the only action a Harness runs, and it is fail-open whatever
-    # reaches it — including a payload that is not JSON at all.
+    # reaches it — including a payload that is not JSON at all. Its answer goes
+    # to standard error, because the channel it would otherwise print on is the
+    # one the Harness reads back as its own protocol (#259).
     if args.action == "hook":
         try:
             payload = json.loads(sys.stdin.read() or "{}")
@@ -929,7 +952,7 @@ def main(argv: list[str] | None = None) -> int:
         named = args.harness[0] if args.harness else None
         if named and isinstance(payload, dict) and not payload.get("harness"):
             payload["harness"] = named
-        _emit(hook(data, args.event, payload))
+        _emit(hook(data, args.event, payload), sys.stderr)
         return 0
 
     if args.action == "remove-integrations":

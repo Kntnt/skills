@@ -416,6 +416,123 @@ def test_the_hook_path_is_fail_open(tmp_path: Path) -> None:
     assert data.exists()
 
 
+def _ran(action: str, *arguments: str, stdin: str = "") -> Any:
+    """Run one capture action the way something outside this suite runs it."""
+
+    return subprocess.run(
+        [sys.executable, str(CAPTURE), action, *arguments],
+        input=stdin,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def test_the_hook_path_leaves_the_harnesss_own_channel_empty(tmp_path: Path) -> None:
+    """A Harness reads its own hook's standard output as its own protocol.
+
+    Codex parses what a hook it owns prints there and refuses an object
+    carrying fields from anywhere else — its own binary says `hook returned
+    invalid session start JSON output`, and the user sees a failed session
+    start and a failed turn while the hook itself ran, did its work, and
+    exited zero (#259). So the diagnostic object leaves on standard error and
+    the channel a Harness reads stays empty, on every path.
+    """
+
+    module = _load()
+    data = _enabled(module, tmp_path)
+    started = _ran(
+        "hook",
+        "--event=SessionStart",
+        "--data",
+        str(data),
+        stdin=json.dumps({"session_id": "session-1", "harness": "claude-code"}),
+    )
+
+    assert started.returncode == 0
+    assert started.stdout == ""
+    assert json.loads(started.stderr)["ok"] is True
+
+    # And the fail-open answer travels the same way rather than falling back
+    # onto the channel the Harness reads.
+    drafts = data / "capture" / "drafts"
+    if drafts.is_dir():
+        for stale in drafts.glob("*.json"):
+            stale.unlink()
+        drafts.rmdir()
+    drafts.write_text("not a directory", encoding="utf-8")
+    broken = _ran(
+        "hook",
+        "--event=SessionStart",
+        "--data",
+        str(data),
+        stdin=json.dumps({"session_id": "session-2", "harness": "claude-code"}),
+    )
+
+    assert broken.returncode == 0
+    assert broken.stdout == ""
+    answered = json.loads(broken.stderr)
+    assert answered["ok"] is False
+    assert answered["fail_open"] is True
+
+
+def test_no_other_action_answers_anywhere_but_standard_output(tmp_path: Path) -> None:
+    """Only the one action a Harness runs moved.
+
+    `install-integrations` and `remove-integrations` are the Manager's own two
+    words at the seams that place and remove an Enabled Skill's files, and
+    their JSON answer is the seam's own answer; `status` and `purge` are read
+    by this Skill's own instructions and by the person who typed them. Nothing
+    but a Harness parses a stream as a protocol, and a Harness runs none of
+    these four.
+    """
+
+    home = tmp_path / "home"
+    home.mkdir()
+    for action in ("install-integrations", "status", "purge", "remove-integrations"):
+        completed = subprocess.run(
+            [sys.executable, str(CAPTURE), action],
+            text=True,
+            capture_output=True,
+            env={**os.environ, "HOME": str(home)},
+            check=False,
+        )
+
+        assert completed.returncode == 0, completed.stderr
+        assert json.loads(completed.stdout), action
+
+
+def test_the_installed_command_is_the_one_it_installs_today(tmp_path: Path) -> None:
+    """Moving the channel moves no argument onto the installed command line.
+
+    Codex records its trust decision per hook entry, keyed over the entry as
+    written, so an argument added here re-gates the hook: it stops running
+    until the user reviews it again. A Harness and a person therefore invoke
+    the identical command line, which is also why the channel moved for both
+    of them at once rather than for whoever could be told apart (#259).
+    """
+
+    module = _load()
+    data = tmp_path / "data"
+    module.install(data, tmp_path / "home", ["codex"], [])
+    hooks = json.loads(
+        (tmp_path / "home" / ".codex" / "hooks.json").read_text(encoding="utf-8")
+    )
+
+    assert hooks["hooks"]["SessionStart"][0]["hooks"][0]["command"] == " ".join(
+        [
+            "uv",
+            "run",
+            str(CAPTURE),
+            "hook",
+            "--data",
+            str(data),
+            f"--owner={module.owner()}",
+            "--harness=codex",
+        ]
+    )
+
+
 def test_status_reports_health_and_storage(tmp_path: Path) -> None:
     """Status answers what is healthy and using, nothing more.
 

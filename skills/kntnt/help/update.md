@@ -34,6 +34,12 @@ Answer yes to confirmations, including Enabling every new Catalog entry. For Glo
 
 Run in a discarded temporary home and report the result without changing the selected layer. The isolated cache makes this slower.
 
+## FILES
+
+**Harness Integrations**
+
+A Skill may own a Harness Integration: what it writes into a Harness's own configuration so the Harness calls that Skill at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. Refreshing a Skill in Global asks that Skill to install what it owns again, and a Withdrawn Skill is asked to remove them before its files go; the Project layer installs and removes none. The report says what became of each.
+
 ## OFFLINE OPERATION
 
 Offline, Update changes nothing and leaves the stored Catalog untouched.

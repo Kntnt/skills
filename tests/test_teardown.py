@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from types import ModuleType
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 
@@ -39,6 +41,19 @@ json.dump(
     },
     sys.stdout,
 )
+"""
+
+
+# The stand-in that answers either word and records the directory it was run
+# from. What a seam hands the script is on the command line, so where the
+# script starts is the Manager's own choice to make and the one thing this
+# script has to report back.
+CWD_SCRIPT = """#!/usr/bin/env python3
+import json, os, sys
+from pathlib import Path
+
+Path(sys.argv[0]).parent.joinpath("cwd.txt").write_text(os.getcwd())
+json.dump({"removed": [], "installed": []}, sys.stdout)
 """
 
 
@@ -275,3 +290,111 @@ def test_installing_twice_asks_the_same_convergent_word_again(tmp_path: Path) ->
     second = manager.install_integrations(["model-selector"], [layer], ["claude-code"])
 
     assert first[0]["status"] == second[0]["status"] == "installed"
+
+
+# --- Where a seam runs the script from: the home, never the caller's cwd (#257)
+
+
+def _recorded_cwd(skill: Path) -> Path:
+    """Return the directory the stand-in script says it was started in."""
+
+    return Path((skill / "scripts" / "cwd.txt").read_text(encoding="utf-8")).resolve()
+
+
+def _staged(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> tuple[Path, Path, Path]:
+    """Arrange one owner, a Global home, and an invoking directory beside it."""
+
+    home = tmp_path / "home"
+    elsewhere = tmp_path / "elsewhere"
+    layer = tmp_path / "skills"
+    for directory in (home, elsewhere, layer):
+        directory.mkdir()
+    monkeypatch.setenv("KNTNT_HOME", str(home))
+    monkeypatch.chdir(elsewhere)
+    skill = _skill(
+        layer,
+        "model-selector",
+        integrations="scripts/capture.py",
+        script_body=CWD_SCRIPT,
+    )
+    return home, layer, skill
+
+
+def test_a_teardown_runs_from_the_home_and_not_from_the_invoking_directory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The home Global paths resolve against is what no run of this deletes."""
+
+    manager = _manager()
+    home, layer, skill = _staged(tmp_path, monkeypatch)
+
+    reported = manager.teardown_integrations(["model-selector"], [layer])
+
+    assert reported[0]["status"] == "removed"
+    assert _recorded_cwd(skill) == home.resolve()
+
+
+def test_an_install_runs_from_the_home_and_not_from_the_invoking_directory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The mirror word starts where the removal word does, in either layer."""
+
+    manager = _manager()
+    home, layer, skill = _staged(tmp_path, monkeypatch)
+
+    reported = manager.install_integrations(
+        ["model-selector"], [layer], ["claude-code"]
+    )
+
+    assert reported[0]["status"] == "installed"
+    assert _recorded_cwd(skill) == home.resolve()
+
+
+def _unresolvable_home(manager: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Leave this machine with no home to resolve, the way `Path.home()` can."""
+
+    def raising() -> Path:
+        raise RuntimeError("Could not determine home directory")
+
+    monkeypatch.delenv("KNTNT_HOME", raising=False)
+    monkeypatch.setattr(manager.Path, "home", staticmethod(raising))
+
+
+def test_a_teardown_with_no_resolvable_home_is_reported_rather_than_raised(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """External state cannot hold up the files this collection owns (ADR-0090)."""
+
+    manager = _manager()
+    _, layer, _ = _staged(tmp_path, monkeypatch)
+    _unresolvable_home(manager, monkeypatch)
+
+    reported = manager.teardown_integrations(["model-selector"], [layer])
+
+    assert reported[0] == {
+        "name": "model-selector",
+        "status": "failed",
+        "detail": "Could not determine home directory",
+        "removed": [],
+    }
+
+
+def test_an_install_with_no_resolvable_home_is_reported_rather_than_raised(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The same failure of the same call, answered the same way."""
+
+    manager = _manager()
+    _, layer, _ = _staged(tmp_path, monkeypatch)
+    _unresolvable_home(manager, monkeypatch)
+
+    reported = manager.install_integrations(
+        ["model-selector"], [layer], ["claude-code"]
+    )
+
+    assert reported[0] == {
+        "name": "model-selector",
+        "status": "failed",
+        "detail": "Could not determine home directory",
+        "installed": [],
+    }

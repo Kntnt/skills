@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "bff4aa1843385398abc5f8f1f9d5efe55557740aac1fb47c4e265a46d3dd2e5d",
+  "manager_digest": "6d4bce17d6312166def42d5f0252244e006b9627756ed3615baeb05c11638b24",
   "skills": [
     {
       "name": "agents-md",
@@ -185,7 +185,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
-      "digest": "56fcc24f74113d95002811e285b753f0cc111a4497dc5938b5afe7c4fcc4773e",
+      "digest": "b3164ae9ec96e3e9bcf7a550356d9e12c9d34aaca66e2bd0d8afef13a1e745b8",
       "binaries": [
         "uv"
       ],
@@ -197,7 +197,7 @@
       "name": "rename-invoices",
       "category": "producivity",
       "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
-      "digest": "a2b6213e180bb5c82b701f393d6ce21944dd83a663ca558650ddcce0a024a7d1",
+      "digest": "cc81de60138b99c8854e5f9fb2c3ebc7e9f5d31e4fd11f747f4f2b723da2b4d9",
       "binaries": [
         "pdftotext",
         "uv"

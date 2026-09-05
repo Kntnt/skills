@@ -55,6 +55,42 @@ CLAUDE_EVENTS: tuple[str, ...] = ("SessionStart", "Stop", "SessionEnd")
 # shape, which an earlier draft of this adapter wrongly conflated with it.
 CODEX_EVENTS: tuple[str, ...] = ("SessionStart", "Stop", "SessionEnd")
 
+# What an installed entry asks its Harness for, in seconds, at any moment the
+# Harness states no lower ceiling of its own.
+HOOK_TIMEOUT_SECONDS = 10
+
+# The moments a Harness will not give that much, established from the Harness
+# as installed rather than assumed (ADR-0157). Codex (codex-cli 0.153.4),
+# driven through `codex app-server` — `initialize`, an `initialized`
+# notification, then `hooks/list`, standard input held open, `CODEX_HOME`
+# pointed at the hook table under test — reports each entry's honoured
+# `timeoutSec` beside a `warnings` array. Asked for 999, 10, 5 and 4 in turn it
+# answers the same way every time: `SessionStart` and `Stop` are honoured
+# exactly as asked, `SessionEnd` is three seconds whatever was asked, and the
+# clamp is named in `warnings` — which is what the user was being told on every
+# session for as long as this asked for ten there. Asked for three, it honours
+# three and `warnings` comes back empty.
+#
+# Three seconds is a ceiling on the work that moment does, so what that work
+# costs is written down here for whoever next spends it. Session end is the one
+# place in the hook path permitted to reach the network (ADR-0167): `_finish`
+# dispatches the unattended source refresh there and nowhere else, and that
+# refresh's network portion is itself hard-capped at `refresh.BUDGET_SECONDS`,
+# two seconds, against a monotonic deadline. A whole session-end invocation,
+# launcher included, with every source in a real store forced due and fetched
+# over the real network, completed in 1.1 to 1.7 seconds across repeated runs —
+# about a second of margin under this ceiling. Raising that budget spends that
+# margin, and beyond it Codex truncates the pass rather than this entry being
+# given the longer run it asked for.
+#
+# The other two Harnesses state no ceiling for this table to meet. Claude Code
+# exposes nothing that answers what it would honour the way `hooks/list` does,
+# so its ten seconds is what it is installed with rather than what it was told,
+# and no clamp has been observed there. OpenCode loads a plugin module instead
+# of reading a hook table, and the file installed there carries no timeout at
+# all.
+HARNESS_TIMEOUT_CEILINGS: dict[str, dict[str, int]] = {"codex": {"SessionEnd": 3}}
+
 OPENCODE_EVENTS: tuple[str, ...] = (
     "session.created",
     "session.idle",
@@ -165,8 +201,26 @@ def _owns(entry: Any, owner: str) -> bool:
     return isinstance(command, str) and f"--owner={owner}" in command
 
 
-def _hook_entry(owner: str, harness: str, command: list[str]) -> dict[str, Any]:
-    """Return the one hook entry this owner installs per event.
+def _hook_timeout(harness: str, event: str) -> int:
+    """Return the timeout *harness* honours for an entry at *event*.
+
+    Asking for more than a Harness gives is not a longer run; it is a clamp the
+    Harness reports back to the user at every session. So an entry asks for
+    what its own Harness accepts at that one moment, and
+    `HARNESS_TIMEOUT_CEILINGS` is where what each was observed to accept is
+    written down.
+    """
+
+    ceiling = HARNESS_TIMEOUT_CEILINGS.get(harness, {}).get(event)
+    return (
+        HOOK_TIMEOUT_SECONDS if ceiling is None else min(HOOK_TIMEOUT_SECONDS, ceiling)
+    )
+
+
+def _hook_entry(
+    owner: str, harness: str, command: list[str], event: str
+) -> dict[str, Any]:
+    """Return the one hook entry this owner installs at *event*.
 
     Codex's own config file (`HookEventsToml`) accepts the same nested
     `{"hooks": [...]}` matcher group Claude Code's `settings.json` does,
@@ -180,7 +234,7 @@ def _hook_entry(owner: str, harness: str, command: list[str]) -> dict[str, Any]:
             {
                 "type": "command",
                 "command": _owned_command(owner, harness, command),
-                "timeout": 10,
+                "timeout": _hook_timeout(harness, event),
             }
         ]
     }
@@ -209,7 +263,7 @@ def _converge_hooks(
             for entry in (existing if isinstance(existing, list) else [])
             if not _owns(entry, owner)
         ]
-        hooks[event] = [*others, _hook_entry(owner, harness, command)]
+        hooks[event] = [*others, _hook_entry(owner, harness, command, event)]
     return {**document, "hooks": hooks}
 
 
