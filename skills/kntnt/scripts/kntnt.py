@@ -12,6 +12,7 @@ import fcntl
 import hashlib
 import json
 import os
+import re
 import shlex
 import shutil
 import subprocess
@@ -19,9 +20,9 @@ import sys
 import tempfile
 import urllib.error
 import urllib.request
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, cast
@@ -3796,8 +3797,8 @@ def skill_is_effective(name: str) -> bool:
     return False
 
 
-def cmd_check(skill_dir: Path) -> int:
-    """Refuse when a Dependency at *skill_dir* is Unsatisfied.
+def dependency_verdict(skill_dir: Path) -> tuple[int, dict[str, Any]]:
+    """Answer the dependency gate for *skill_dir*: an exit status and its payload.
 
     `capabilities` is the unfinished half of the check: each entry is a
     Dependency this script cannot test, handed to the agent to answer. Exit 0
@@ -3815,22 +3816,29 @@ def cmd_check(skill_dir: Path) -> int:
     # so the fault reaches the user rather than an empty stop (ADR-0175).
     fault = declaration_fault_at(skill_dir)
     if fault is not None:
-        emit(
-            {
-                "ok": False,
-                "unsatisfied": [unreadable_declaration(skill_dir, fault)],
-                "capabilities": [],
-            }
-        )
-        return 2
+        return EXIT_REFUSED, {
+            "ok": False,
+            "unsatisfied": [unreadable_declaration(skill_dir, fault)],
+            "capabilities": [],
+        }
 
     capabilities = capabilities_at(skill_dir)
     missing = unsatisfied_at(skill_dir)
     if missing:
-        emit({"ok": False, "unsatisfied": missing, "capabilities": capabilities})
-        return 2
-    emit({"ok": True, "unsatisfied": [], "capabilities": capabilities})
-    return 0
+        return EXIT_REFUSED, {
+            "ok": False,
+            "unsatisfied": missing,
+            "capabilities": capabilities,
+        }
+    return 0, {"ok": True, "unsatisfied": [], "capabilities": capabilities}
+
+
+def cmd_check(skill_dir: Path) -> int:
+    """Refuse when a Dependency at *skill_dir* is Unsatisfied."""
+
+    status, payload = dependency_verdict(skill_dir)
+    emit(payload)
+    return status
 
 
 def enabled_manpage(name: str) -> Path | None:
@@ -3950,7 +3958,8 @@ def addressed_page(argv: list[str]) -> tuple[Path, str]:
     A verb the manager documents answers with its own page. Anything else —
     an internal subcommand, or a word that is no subcommand at all — answers
     with the manager's own, and nothing is published to make the first case
-    fit: `manpage`, `check`, and `catalog` are nobody's verbs (ADR-0177).
+    fit: `manpage`, `check`, `invoke`, and `catalog` are nobody's verbs
+    (ADR-0177).
     """
 
     verb = addressed_verb(argv)
@@ -4010,6 +4019,750 @@ def cmd_manpage(name: str) -> int:
     """Print one collection skill's manpage, whether or not it is Enabled."""
 
     print(skill_manpage(name))
+    return 0
+
+
+# ---------------------------------------------------------------------------
+# The invocation engine: one reader of every Skill's Invocation Envelope.
+#
+# The collection's grammar is strict — an undeclared flag refused, an operand
+# before a flag refused, an incomplete form refused, never repaired — and it
+# used to be carried out by the model, per invocation, from a contract it
+# read. It is executed here instead, once, from the surfaces a Skill already
+# ships: the `argument-hint`, and the `## SYNOPSIS` and `## OPTIONS` of the
+# addressed manpage (ADR-0181). Nothing is declared anew, so a page the engine
+# cannot read is a fault the suite meets rather than a grammar guessed at.
+# ---------------------------------------------------------------------------
+
+# What the engine exits with. A refusal shares the checker's status, being the
+# one non-zero answer every body documents a response to — print stdout and
+# stop; a page is told apart from it so a test can tell the two answers apart.
+EXIT_REFUSED = 2
+EXIT_HELP = 3
+
+# The reserved separator, matched as a standalone unquoted token and nowhere
+# else: `--force`, `foo--bar`, `` `--` `` and `"--"` all stay formal data.
+SEPARATOR = "--"
+
+# The exact help forms at the root of every Skill, and the two that address a
+# command path's own page (ADR-0176).
+ROOT_HELP_FORMS = ("--help", "-h", "help")
+PATH_HELP_FLAGS = ("--help", "-h")
+
+# The characters that open a quoted run inside the payload. A run opens only
+# at the start of a token or straight after `=`, so an apostrophe inside a
+# word — *don't* — is a letter and not the start of a quotation.
+QUOTES = "\"'`"
+
+# A long flag as the collection spells one, on every surface.
+FLAG_NAME = re.compile(r"--[a-z][a-z0-9-]*")
+
+# A bold run holding the Skill's name and a command path in one span, as
+# `**/brief on**`, which the units below want as one bold token per word.
+BOLD_RUN = re.compile(r"\*\*(/[^*|=\[\]()]+ [^*|=\[\]()]+)\*\*")
+
+# The optional Contextual Instruction closing every form, which belongs to no
+# region of the order and is removed before a form is read (ADR-0176).
+FORM_SUFFIX = re.compile(r"\[\*\*--\*\*\s*\*INSTRUCTION\*\]\s*$")
+
+# The three ways a flag carries a value: none, required, or optional. A form
+# and the declaration it answers to are both read in these terms.
+VALUE_NONE = "none"
+VALUE_REQUIRED = "required"
+VALUE_OPTIONAL = "optional"
+
+
+@dataclass(frozen=True)
+class Token:
+    """One whitespace-separated token of a payload, verbatim, with its span."""
+
+    text: str
+    start: int
+    end: int
+
+
+@dataclass(frozen=True)
+class FlagSpec:
+    """One flag as a page declares it: how it carries a value, and whether it repeats."""
+
+    name: str
+    value: str
+    repeat: bool = False
+
+
+@dataclass(frozen=True)
+class FlagGroup:
+    """A bracketed unit of flags: alternatives, each a sequence of flags or groups.
+
+    `[--project|--user]` is one optional group with two alternatives, so at
+    most one of them may be written; `(--yes|--dry-run)` would require one;
+    `[--import [--data=PATH]]` nests a group inside an alternative, so the
+    inner flag is admitted only where the outer one is written.
+    """
+
+    optional: bool
+    alternatives: tuple[tuple[FlagSpec | FlagGroup, ...], ...]
+
+
+@dataclass(frozen=True)
+class PathUnit:
+    """One command-path slot of a form: the literal tokens it admits."""
+
+    alternatives: frozenset[str]
+    optional: bool
+
+
+@dataclass(frozen=True)
+class OperandUnit:
+    """One operand slot of a form.
+
+    A slot naming only literals — `(model|channel)` — admits exactly those
+    tokens; a slot naming a metavariable admits anything, which is where the
+    engine stops: what a path, a URL, or an inline text is stays the Skill's.
+    """
+
+    literals: frozenset[str]
+    free: bool
+    optional: bool
+    repeat: bool
+    label: str
+
+
+@dataclass(frozen=True)
+class Form:
+    """One `## SYNOPSIS` form in the collection's order: path, flags, operands."""
+
+    path: tuple[PathUnit, ...]
+    flags: tuple[FlagGroup, ...]
+    operands: tuple[OperandUnit, ...]
+
+
+@dataclass(frozen=True)
+class Grammar:
+    """What one manpage declares: its forms, and the route to read it in full."""
+
+    page: Path
+    route: str
+    forms: tuple[Form, ...]
+
+
+@dataclass(frozen=True)
+class Reading:
+    """The engine's answer: an exit status, the text to print, and the reading.
+
+    On a valid form the status is 0 and `invocation` carries the command path,
+    the flags with their values, the operands in order, and the Contextual
+    Instruction or None. On a help form the text is the addressed page; on a
+    refusal it is the collection's refusal for a person.
+    """
+
+    status: int
+    text: str = ""
+    invocation: dict[str, Any] = field(default_factory=dict)
+
+
+def tokenize(text: str) -> list[Token]:
+    """Split *text* on whitespace outside quotes, keeping every token verbatim.
+
+    A quoted run holds its spaces and is kept with its quotes: the engine
+    decides nothing about what an operand means, so it strips nothing off one.
+    An unbalanced quote runs to the end rather than failing, prose being what
+    a free-text operand is made of.
+    """
+
+    tokens: list[Token] = []
+    index = 0
+    while index < len(text):
+        if text[index].isspace():
+            index += 1
+            continue
+        start = index
+        quote: str | None = None
+        while index < len(text):
+            character = text[index]
+            if quote is not None:
+                if character == quote:
+                    quote = None
+            elif character.isspace():
+                break
+            elif character in QUOTES and (index == start or text[index - 1] == "="):
+                quote = character
+            index += 1
+        tokens.append(Token(text[start:index], start, index))
+    return tokens
+
+
+def split_envelope(payload: str) -> tuple[str, str | None]:
+    """Split the payload at the first standalone unquoted `--`.
+
+    Returns the Formal Invocation and the Contextual Instruction: None where
+    no separator was written, the empty string where one was written with
+    nothing behind it — which is the syntax refusal, told apart from the
+    absence of a separator so the caller can refuse it.
+    """
+
+    for token in tokenize(payload):
+        if token.text == SEPARATOR:
+            return payload[: token.start].strip(), payload[token.end :].strip()
+    return payload.strip(), None
+
+
+def command_paths(skill_dir: Path) -> set[str]:
+    """Every command path a page under this Skill's `help/` answers to."""
+
+    root = skill_dir / "help"
+    return {
+        " ".join(page.relative_to(root).with_suffix("").parts)
+        for page in root.rglob("*.md")
+    }
+
+
+def hint_flags(skill_dir: Path) -> set[str]:
+    """The flags the Skill's `argument-hint` advertises, the harness-facing grammar."""
+
+    for line in (skill_dir / "SKILL.md").read_text(encoding="utf-8").splitlines():
+        if line.startswith("argument-hint:"):
+            return set(FLAG_NAME.findall(line))
+    raise ManagerError(f"{skill_dir / 'SKILL.md'} declares no argument-hint")
+
+
+def _plain(markup: str) -> str:
+    """Strip the manpage emphasis off one atom."""
+
+    return markup.replace("**", "").replace("*", "").strip("_")
+
+
+def _split_top(text: str, separators: str) -> list[str]:
+    """Split *text* on any of *separators* outside brackets and parentheses."""
+
+    parts: list[str] = []
+    current: list[str] = []
+    depth = 0
+    for character in text:
+        if character in "[(":
+            depth += 1
+        elif character in "])":
+            depth -= 1
+        if depth == 0 and character in separators:
+            if current:
+                parts.append("".join(current))
+                current = []
+            continue
+        current.append(character)
+    if current:
+        parts.append("".join(current))
+    return [part.strip() for part in parts if part.strip()]
+
+
+def _flag_spec(atom: str) -> FlagSpec:
+    """Read one flag atom, in either spelling of an attached value.
+
+    `**--data=**_PATH_` and `**--language**=*LANGUAGE*` both carry a required
+    value, `**--in-place**[=**on**|**off**]` an optional one, `**--yes**` none.
+    """
+
+    plain = atom.replace("**", "")
+    match = FLAG_NAME.match(plain)
+    if match is None:
+        raise ManagerError(f"the engine cannot read the flag `{atom}`")
+    rest = plain[match.end() :]
+    if rest.startswith("[="):
+        value = VALUE_OPTIONAL
+    elif rest.startswith("="):
+        value = VALUE_REQUIRED
+    else:
+        value = VALUE_NONE
+    return FlagSpec(match.group(0), value)
+
+
+def _strip_repeat(text: str) -> tuple[str, bool]:
+    """Take a trailing `...` off *text*, saying whether one was there."""
+
+    if text.endswith("..."):
+        return text[:-3].rstrip(), True
+    return text, False
+
+
+def _unwrap(unit: str) -> tuple[str, bool, bool]:
+    """Open one unit: its content, whether it is optional, whether it repeats.
+
+    The repeat marker is written inside the bracket on one page and outside
+    it on another — `[*TICKET*...]` and `[**--on=**_ENTRY_]...` — and both
+    spellings mean the same thing.
+    """
+
+    unit, repeat = _strip_repeat(unit.strip())
+    optional = unit.startswith("[") and unit.endswith("]")
+    grouped = optional or (unit.startswith("(") and unit.endswith(")"))
+    content, inner_repeat = _strip_repeat(unit[1:-1].strip() if grouped else unit)
+    return content, optional, repeat or inner_repeat
+
+
+def _parse_flag_unit(unit: str) -> FlagGroup:
+    """Read one unit made of flags into a group, however it is bracketed."""
+
+    content, optional, repeat = _unwrap(unit)
+
+    alternatives: list[tuple[FlagSpec | FlagGroup, ...]] = []
+    seen: set[str] = set()
+    for alternative in _split_top(content, "|"):
+        items: list[FlagSpec | FlagGroup] = []
+        for piece in _split_top(alternative, " \t"):
+            if piece.startswith(("[", "(")):
+                items.append(_parse_flag_unit(piece))
+            elif piece.replace("**", "").startswith("--"):
+                spec = _flag_spec(piece)
+                items.append(FlagSpec(spec.name, spec.value, repeat))
+            elif alternatives or items:
+                # A bare value alternative behind a valued flag, as
+                # `--counterparty-source=issuer|recipient` writes its
+                # vocabulary; the vocabulary is the Skill's to judge.
+                continue
+            else:
+                raise ManagerError(f"the engine cannot read the unit `{unit}`")
+        if not items:
+            continue
+
+        # `[--decision=route|--decision=renew]` is one flag written twice, not
+        # two alternatives that may not be combined.
+        key = "|".join(item.name for item in items if isinstance(item, FlagSpec))
+        if len(items) == 1 and key in seen:
+            continue
+        seen.add(key)
+        alternatives.append(tuple(items))
+    return FlagGroup(optional, tuple(alternatives))
+
+
+def _atoms(unit: str) -> list[str]:
+    """The alternatives one non-flag unit offers, with their markup."""
+
+    return _split_top(_unwrap(unit)[0], "|")
+
+
+def _is_flag_unit(unit: str) -> bool:
+    """Whether every atom of *unit* is a flag."""
+
+    inner = unit.lstrip("[(")
+    return inner.startswith(("**--", "--"))
+
+
+def _is_literal(atom: str) -> bool:
+    return atom.startswith("**") and not atom.startswith("**--")
+
+
+def _parse_operand_unit(unit: str) -> OperandUnit:
+    """Read one operand slot off a form."""
+
+    _, optional, repeat = _unwrap(unit)
+    atoms = _atoms(unit)
+    literals = frozenset(_plain(atom) for atom in atoms if _is_literal(atom))
+    free = any(not _is_literal(atom) for atom in atoms)
+    if any(atom.replace("**", "").startswith("--") for atom in atoms):
+        raise ManagerError(f"the engine cannot read the unit `{unit}`")
+    return OperandUnit(
+        literals, free, optional, repeat, "|".join(_plain(atom) for atom in atoms)
+    )
+
+
+def parse_form(form: str, known: set[str]) -> Form:
+    """Read one `## SYNOPSIS` form: the command path, then flags, then operands.
+
+    A token belongs to the path exactly when a page answers to it (ADR-0176),
+    which is what tells `**config** [**show**|**history**]` from
+    `(**model**|**channel**)`: the first extends a path a page answers to and
+    the second does not.
+    """
+
+    text = FORM_SUFFIX.sub("", form.strip()).strip()
+    text = BOLD_RUN.sub(
+        lambda m: " ".join(f"**{w}**" for w in m.group(1).split()), text
+    )
+    units = _split_top(text, " \t")
+    if not units or not _plain(units[0]).startswith("/"):
+        raise ManagerError(f"the engine cannot read the form `{form}`")
+    units = units[1:]
+
+    # Consume the command path: leading literal units every alternative of
+    # which extends a path a page under `help/` answers to.
+    path: list[PathUnit] = []
+    prefix: list[str] = []
+    while units and not _is_flag_unit(units[0]):
+        atoms = _atoms(units[0])
+        names = [_plain(atom) for atom in atoms if _is_literal(atom)]
+        if len(names) != len(atoms) or not names:
+            break
+        if not all(" ".join([*prefix, name]) in known for name in names):
+            break
+        path.append(PathUnit(frozenset(names), units[0].startswith("[")))
+        prefix.append(names[0])
+        units.pop(0)
+
+    # Then the flags, then the operands, and nothing out of that order.
+    flags: list[FlagGroup] = []
+    while units and _is_flag_unit(units[0]):
+        flags.append(_parse_flag_unit(units.pop(0)))
+    operands = [_parse_operand_unit(unit) for unit in units]
+    return Form(tuple(path), tuple(flags), tuple(operands))
+
+
+def _specs(items: Iterable[FlagSpec | FlagGroup]) -> Iterator[FlagSpec]:
+    """Every flag named anywhere in *items*, groups opened as deep as they go."""
+
+    for item in items:
+        if isinstance(item, FlagSpec):
+            yield item
+        else:
+            for alternative in item.alternatives:
+                yield from _specs(alternative)
+
+
+def _names(items: Iterable[FlagSpec | FlagGroup]) -> str:
+    """The flags of one alternative, written as a person would read them."""
+
+    return " ".join(spec.name for spec in _specs(items))
+
+
+def declared_flags(page: Path) -> dict[str, FlagSpec]:
+    """Every flag the page's `## OPTIONS` declares, with how it carries a value.
+
+    A term written twice — `**--project**, **--project=on**` — declares one
+    flag whose value is optional; a page without the section declares none.
+    """
+
+    text = read_manpage(page)
+    if "\n## OPTIONS\n" not in text:
+        return {}
+    kinds: dict[str, set[str]] = {}
+    section = text.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
+    for line in section.splitlines():
+        term = line.strip()
+        if not term.startswith("**-"):
+            continue
+        for piece in term.split(", "):
+            spec = _flag_spec(piece.strip())
+            kinds.setdefault(spec.name, set()).add(spec.value)
+    declared: dict[str, FlagSpec] = {}
+    for name, seen in kinds.items():
+        if VALUE_OPTIONAL in seen or seen == {VALUE_NONE, VALUE_REQUIRED}:
+            value = VALUE_OPTIONAL
+        else:
+            value = next(iter(seen))
+        declared[name] = FlagSpec(name, value)
+    return declared
+
+
+def page_grammar(skill_dir: Path, page: Path) -> Grammar:
+    """Read the grammar one manpage declares, or refuse a page the engine cannot read.
+
+    The flags a form names and the flags `## OPTIONS` declares are one set,
+    which the suite holds for every shipped page; a page where they differ is
+    a grammar with two readings, and the engine refuses to pick one.
+
+    Raises:
+        ManagerError: the page has no `## SYNOPSIS`, a form is out of the
+            collection's order, or its forms and its `## OPTIONS` disagree.
+    """
+
+    known = command_paths(skill_dir)
+    forms = tuple(
+        parse_form(line, known)
+        for line in synopsis_of(page).splitlines()
+        if line.strip()
+    )
+    if not forms:
+        raise ManagerError(f"'{page}' ships no form in its Synopsis")
+    declared = set(declared_flags(page))
+    named = {spec.name for form in forms for spec in _specs(form.flags)}
+    if named != declared:
+        raise ManagerError(
+            f"'{page}' names {sorted(named)} in its SYNOPSIS and "
+            f"{sorted(declared)} in its OPTIONS; the engine reads one flag set"
+        )
+
+    relative = page.relative_to(skill_dir)
+    path = (
+        " ".join(relative.with_suffix("").parts[1:])
+        if relative.parts[0] == "help"
+        else ""
+    )
+    route = f"/{skill_dir.name} {path} --help".replace("  ", " ")
+    return Grammar(page, route, forms)
+
+
+def address(skill_dir: Path, tokens: list[Token]) -> tuple[list[str], Path]:
+    """Return the command path the tokens open with, and the page that answers to it."""
+
+    known = command_paths(skill_dir)
+    path: list[str] = []
+    for token in tokens:
+        if " ".join([*path, token.text]) not in known:
+            break
+        path.append(token.text)
+    page = (
+        skill_dir / "help" / (Path(*path).with_suffix(".md"))
+        if path
+        else skill_dir / "help.md"
+    )
+    return path, page
+
+
+def _refusal(problem: str, grammar: Grammar) -> Reading:
+    """The collection's refusal for a person: what was wrong, the SYNOPSIS, the route."""
+
+    text = f"{problem}\n\n{synopsis_of(grammar.page)}\n\nsee '{grammar.route}'"
+    return Reading(EXIT_REFUSED, text)
+
+
+def _read_flags(tokens: list[Token]) -> tuple[dict[str, list[str | bool]], str | None]:
+    """Read the flag tokens into name → the values written, or name a malformed one."""
+
+    present: dict[str, list[str | bool]] = {}
+    for token in tokens:
+        name, has_value, value = token.text.partition("=")
+        if FLAG_NAME.fullmatch(name) is None:
+            return present, f"'{token.text}' is not a flag of this collection's grammar"
+        present.setdefault(name, []).append(value if has_value else True)
+    return present, None
+
+
+def _touched(alternative: tuple[FlagSpec | FlagGroup, ...], present: set[str]) -> bool:
+    for item in alternative:
+        if isinstance(item, FlagSpec):
+            if item.name in present:
+                return True
+        elif any(_touched(inner, present) for inner in item.alternatives):
+            return True
+    return False
+
+
+def _group_fault(group: FlagGroup, present: set[str]) -> str | None:
+    """Say what the written flags break of one group's structure, or None."""
+
+    touched = [alt for alt in group.alternatives if _touched(alt, present)]
+    if len(touched) > 1:
+        names = ", ".join(f"'{_names(alternative)}'" for alternative in touched)
+        return f"{names} may not be combined"
+    if not touched:
+        if group.optional:
+            return None
+        wanted = " or ".join(_names(alternative) for alternative in group.alternatives)
+        return f"the form requires {wanted}"
+    for item in touched[0]:
+        if isinstance(item, FlagSpec):
+            if item.name not in present:
+                return f"the form requires {item.name}"
+        else:
+            fault = _group_fault(item, present)
+            if fault is not None:
+                return fault
+    return None
+
+
+def _flag_faults(
+    form: Form, present: dict[str, list[str | bool]], label: str
+) -> tuple[str | None, dict[str, Any]]:
+    """Hold the written flags to one form, returning the fault or the flag values."""
+
+    specs = {spec.name: spec for spec in _specs(form.flags)}
+    values: dict[str, Any] = {}
+    for name, written in present.items():
+        spec = specs.get(name)
+        if spec is None:
+            return f"{label} takes no '{name}'", {}
+        if len(written) > 1 and not spec.repeat:
+            return f"'{name}' is written more than once", {}
+        for value in written:
+            if value is True and spec.value == VALUE_REQUIRED:
+                return f"'{name}' requires a value, written {name}=...", {}
+            if value is not True and spec.value == VALUE_NONE:
+                return f"'{name}' takes no value", {}
+        values[name] = list(written) if spec.repeat else written[0]
+    for group in form.flags:
+        fault = _group_fault(group, set(present))
+        if fault is not None:
+            return fault, {}
+    return None, values
+
+
+def _path_matches(form: Form, path: list[str]) -> bool:
+    index = 0
+    for unit in form.path:
+        if index < len(path) and path[index] in unit.alternatives:
+            index += 1
+        elif not unit.optional:
+            return False
+    return index == len(path)
+
+
+def _operand_faults(
+    form: Form, tokens: list[Token], formal: str, label: str, unknown: str | None
+) -> tuple[str | None, list[str]]:
+    """Hold the operand tokens to one form's slots: present, absent, one, many.
+
+    A last single slot takes the rest of *formal* verbatim from its first
+    token, which is what lets an inline text keep its lines and a message keep
+    a word that looks like a flag; a repeatable slot takes one token each.
+    """
+
+    operands: list[str] = []
+    index = 0
+    for position, unit in enumerate(form.operands):
+        if index >= len(tokens):
+            if unit.optional:
+                continue
+            wanted = ", ".join(sorted(unit.literals)) if not unit.free else unit.label
+            return f"{label} requires {wanted}", []
+        token = tokens[index]
+        if unit.free:
+            if unit.repeat:
+                operands.extend(item.text for item in tokens[index:])
+                index = len(tokens)
+            elif position == len(form.operands) - 1:
+                operands.append(formal[token.start :].strip())
+                index = len(tokens)
+            else:
+                operands.append(token.text)
+                index += 1
+        elif token.text in unit.literals:
+            operands.append(token.text)
+            index += 1
+        elif unit.optional:
+            continue
+        else:
+            return (
+                f"'{token.text}' is not one of {', '.join(sorted(unit.literals))}",
+                [],
+            )
+    if index < len(tokens):
+        if unknown is not None and not form.operands:
+            return unknown, []
+        return f"{label} takes no operand '{tokens[index].text}'", []
+    return None, operands
+
+
+def validate(
+    skill_dir: Path, grammar: Grammar, path: list[str], tokens: list[Token], formal: str
+) -> tuple[str | None, dict[str, Any]]:
+    """Hold one Formal Invocation to the addressed page's forms.
+
+    Every form is tried; the first that admits the invocation answers. Where
+    none does, the fault reported is the one from the form that got furthest —
+    past the path, past the flags — so that a refusal names the flag rather
+    than a command the user never addressed.
+    """
+
+    label = f"'/{skill_dir.name}{' ' + ' '.join(path) if path else ''}'"
+    rest = tokens[len(path) :]
+    known = command_paths(skill_dir)
+
+    # A Skill declaring no flag and no command path takes a dash-prefixed
+    # token as operand (ADR-0176): there is nothing for it to be mistaken for.
+    free_operands = not hint_flags(skill_dir) and not known
+    boundary = 0
+    if not free_operands:
+        while boundary < len(rest) and rest[boundary].text.startswith("-"):
+            boundary += 1
+    present, malformed = _read_flags(rest[:boundary])
+    operand_tokens = rest[boundary:]
+    unknown = (
+        f"unknown command '{operand_tokens[0].text}'"
+        if operand_tokens and not path and known
+        else None
+    )
+
+    best = (-1, "")
+    for form in grammar.forms:
+        if not _path_matches(form, path):
+            wanted = (
+                " or ".join(sorted(form.path[0].alternatives))
+                if form.path
+                else "no command"
+            )
+            candidate = (0, f"{label} requires a command: {wanted}")
+        elif malformed is not None:
+            candidate = (1, malformed)
+        else:
+            fault, flags = _flag_faults(form, present, label)
+            if fault is not None:
+                candidate = (1, fault)
+            else:
+                fault, operands = _operand_faults(
+                    form, operand_tokens, formal, label, unknown
+                )
+                if fault is not None:
+                    candidate = (2, fault)
+                else:
+                    return None, {"path": path, "flags": flags, "operands": operands}
+        if candidate[0] > best[0]:
+            best = candidate
+    return best[1], {}
+
+
+def read_invocation(skill_dir: Path, payload: str) -> Reading:
+    """Read one Skill's Invocation Envelope: split, route help, validate.
+
+    The dependency check is the caller's; this is the grammar half, which the
+    suite runs against every shipped Skill's real pages.
+    """
+
+    formal, instruction = split_envelope(payload)
+    tokens = tokenize(formal)
+    words = [token.text for token in tokens]
+
+    # A root help form is read off the whole payload, before `help` can be
+    # taken for the command path a Manager page of that name answers to.
+    root_help = words in [[form] for form in ROOT_HELP_FORMS]
+    path, page = (
+        ([], skill_dir / "help.md") if root_help else address(skill_dir, tokens)
+    )
+    grammar = page_grammar(skill_dir, page)
+
+    # A separator with nothing behind it is the syntax refusal.
+    if instruction == "":
+        return _refusal(
+            "the reserved separator `--` is followed by no instruction", grammar
+        )
+
+    # An exact help form prints the addressed page and stops; a Contextual
+    # Instruction beside one is the context refusal, the page not rendered.
+    exact_help = root_help or (
+        bool(path) and words[len(path) :] in [[flag] for flag in PATH_HELP_FLAGS]
+    )
+    if exact_help:
+        if instruction is not None:
+            return Reading(
+                EXIT_REFUSED,
+                f"context refusal: the Contextual Instruction {instruction!r} accompanies"
+                f" an exact help form, whose output is fixed, so it can settle nothing;"
+                f" the page was not rendered and nothing was changed",
+            )
+        return Reading(EXIT_HELP, read_manpage(page))
+
+    fault, invocation = validate(skill_dir, grammar, path, tokens, formal)
+    if fault is not None:
+        return _refusal(fault, grammar)
+    return Reading(0, invocation={**invocation, "instruction": instruction})
+
+
+def cmd_invoke(skill_dir: Path) -> int:
+    """Read the invocation on stdin for the Skill at *skill_dir*.
+
+    In order: the dependency check `check` makes, so one call replaces the
+    preamble's; then the Envelope split, help routing, and validation. An
+    Unsatisfied Dependency takes the refusal path with the payload `check`
+    prints; a valid form answers with the reading and that same payload.
+    """
+
+    status, dependencies = dependency_verdict(skill_dir)
+    if status != 0:
+        emit(dependencies)
+        return status
+
+    reading = read_invocation(skill_dir, sys.stdin.read())
+    if reading.status != 0:
+        print(reading.text)
+        return reading.status
+    emit({"ok": True, **reading.invocation, "dependencies": dependencies})
     return 0
 
 
@@ -4301,6 +5054,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     check = sub.add_parser("check", help="Refuse when a Dependency is Unsatisfied.")
     check.add_argument("--here", required=True, type=Path)
 
+    # The engine every Skill hands its invocation to, on stdin (ADR-0181). Its
+    # own command line stays with argparse like every other verb's; what it
+    # reads strictly is the Skill's grammar, not its own.
+    invoke = sub.add_parser("invoke", help="Read one Skill's invocation from stdin.")
+    invoke.add_argument("--here", required=True, type=Path)
+
     catalog = sub.add_parser(
         "catalog", help="Generate the Catalog from a local source."
     )
@@ -4405,6 +5164,8 @@ def run_command(args: argparse.Namespace) -> int:
         return cmd_manpage(args.skill)
     if args.command == "check":
         return cmd_check(args.here)
+    if args.command == "invoke":
+        return cmd_invoke(args.here)
     # Catalog's `--write` is the one write this script makes outside a layer,
     # so it is the one place besides Apply where the flag has anything to
     # honour — and honouring it is the only reason Catalog keeps a flag no

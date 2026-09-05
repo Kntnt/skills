@@ -10252,6 +10252,7 @@ _FLAG_TABLE = {
     "uninstall": frozenset({"--yes", "--dry-run"}),
     "manpage": frozenset[str](),
     "check": frozenset[str](),
+    "invoke": frozenset[str](),
     "catalog": frozenset({"--dry-run"}),
 }
 
@@ -10276,6 +10277,9 @@ def _invocations(world: dict[str, Path]) -> dict[str, tuple[tuple[str, ...], ...
         "manpage": (("manpage", "alpha"),),
         "check": (
             ("check", "--here", str(world["source"] / "skills" / "text" / "gamma")),
+        ),
+        "invoke": (
+            ("invoke", "--here", str(world["source"] / "skills" / "text" / "gamma")),
         ),
         "catalog": (("catalog",),),
     }
@@ -10341,7 +10345,7 @@ def test_the_parser_takes_exactly_the_flags_the_table_allows(tmp_path: Path) -> 
 def test_an_internal_subcommand_is_not_published_as_a_manpage() -> None:
     """Strictness is satisfied by the parser, never by documenting a non-verb.
 
-    `manpage`, `check`, and `catalog` are in the flag table because the rule
+    `manpage`, `check`, `invoke`, and `catalog` are in the flag table because the rule
     has no exceptions, and a page under `help/` would make them read as verbs
     a user is invited to type (ADR-0177).
     """
