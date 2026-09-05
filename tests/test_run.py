@@ -8143,8 +8143,6 @@ def test_dry_run_with_worktrees_conducts_the_same_isolation_preflight(
     assert "dry run" in plan["reason"]
 
 
-
-
 def test_plan_works_a_tree_whose_only_changes_the_repository_ignores(
     tmp_path: Path,
 ) -> None:

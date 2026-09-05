@@ -2949,6 +2949,19 @@ def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
 
     # Read the executable step and its corresponding public option contract.
     step = _step(2)
+    preflight_step = _step(1)
+    assert "git rev-parse --git-common-dir" in preflight_step, (
+        f"{SKILL / 'SKILL.md'}: step 1 must derive the common Git directory"
+        " before probing ticket-worktree access (issue #278)."
+    )
+    assert "git -C <worktree-directory>" in preflight_step, (
+        f"{SKILL / 'SKILL.md'}: step 1 must probe the ticket-worktree"
+        " directory through the orchestrating session (issue #278)."
+    )
+    assert "`--at-once=1`" in preflight_step, (
+        f"{SKILL / 'SKILL.md'}: a refused probe must name the concurrency-one"
+        " alternative (issue #278)."
+    )
     dry_run_option = _manpage_entry("OPTIONS", "**--dry-run**")
 
     # Hold planning and routing on the read-only branch before ticket work.

@@ -3060,42 +3060,6 @@ def no_ticket_reason(scope: list[Aim] | None) -> str:
     return f"nothing {named} names is an open ticket carrying '{READY_LABEL}'"
 
 
-def worktree_isolation_refusal(cwd: Path) -> str | None:
-    """Return why a run may not operate a ticket worktree, or None where it may.
-
-    A run above a concurrency of one builds each ticket in a worktree of its own,
-    isolated inside the repository's common Git directory. The session running
-    Orchestrate may not issue Git commands there — the Harness refuses an agent's
-    Git command addressed anywhere else — so a builder dispatched into its own
-    worktree would be unable to commit.
-
-    This preflight establishes that the session may operate the worktree directory
-    with one read-only Git command, derived from the repository rather than
-    assumed. Where that command is refused, the run reports it and starts nothing,
-    taking the same path an unready plan already takes: no ticket claimed, no
-    routing frozen, no worktree made.
-
-    A session that may operate the directory is unaffected: the probe passes and
-    the run proceeds exactly as it does today. A concurrency of one builds on the
-    branch already checked out and is unaffected regardless.
-    """
-
-    try:
-        # Issue a read-only command that accesses the worktree infrastructure.
-        # This verifies the session can operate in the git directory that holds
-        # worktree metadata before any work is claimed. The command fails if the
-        # session is held to a worktree and cannot access the common git directory.
-        git(cwd, "worktree", "list", "--porcelain")
-    except RunError as exc:
-        return (
-            f"this session cannot operate a ticket worktree: {exc}\n"
-            "with `--at-once=1` the run builds on the branch already checked out "
-            "and does not require access to the worktree directory"
-        )
-
-    return None
-
-
 def build_plan(
     cwd: Path,
     *,
@@ -3243,9 +3207,6 @@ def build_plan(
     elif (standing := uncommitted_refusal(cwd)) is not None:
         plan.ready = False
         plan.reason = standing
-    elif plan.worktrees and (isolation := worktree_isolation_refusal(cwd)) is not None:
-        plan.ready = False
-        plan.reason = isolation
     elif not tickets:
         plan.ready = False
         plan.reason = no_ticket_reason(scope)
