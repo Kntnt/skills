@@ -105,14 +105,24 @@ def _generation_from_open_tree(root: Path) -> tuple[str, str]:
 
     directory = os.open(root, os.O_RDONLY)
     try:
-        values: list[str] = []
-        for name in ("generation-a.txt", "generation-b.txt"):
-            descriptor = os.open(name, os.O_RDONLY, dir_fd=directory)
-            with os.fdopen(descriptor, encoding="utf-8") as handle:
-                values.append(handle.read().strip())
-        return values[0], values[1]
+        return _generation_inside(directory)
     finally:
         os.close(directory)
+
+
+def _generation_inside(directory: int) -> tuple[str, str]:
+    """Read both markers inside one already-opened directory.
+
+    Separated from opening the tree so a caller can tell the install being
+    unreadable from the pinned generation being retired under it.
+    """
+
+    values: list[str] = []
+    for name in ("generation-a.txt", "generation-b.txt"):
+        descriptor = os.open(name, os.O_RDONLY, dir_fd=directory)
+        with os.fdopen(descriptor, encoding="utf-8") as handle:
+            values.append(handle.read().strip())
+    return values[0], values[1]
 
 
 def _skill_md(
@@ -4071,17 +4081,34 @@ def test_concurrent_reader_observes_only_a_complete_manager_generation(
 
     observations: list[tuple[str, str] | str] = []
     stopped = threading.Event()
+    observing = threading.Event()
 
-    # Read through one opened tree so the observation itself has one generation.
+    # Read through one opened tree so the observation itself has one
+    # generation, and keep the two ways that reading can fail apart. Failing to
+    # open the install is the unreadable interval this test exists to forbid.
+    # Failing inside a tree already opened is the retired generation being
+    # cleaned up behind an exchange that already succeeded, which says nothing
+    # about whether publication was atomic.
     def observe() -> None:
         while not stopped.is_set():
             try:
-                observations.append(_generation_from_open_tree(installed))
+                directory = os.open(installed, os.O_RDONLY)
             except (FileNotFoundError, NotADirectoryError):
                 observations.append("missing")
+                continue
+            try:
+                observations.append(_generation_inside(directory))
+            except (FileNotFoundError, NotADirectoryError):
+                observations.append("retired")
+            finally:
+                os.close(directory)
+            observing.set()
 
+    # Publish only once the reader is running, so the old generation is
+    # observed by arrangement rather than by winning a scheduling race.
     reader = threading.Thread(target=observe)
     reader.start()
+    assert observing.wait(timeout=10), "the reader observed nothing before publication"
     _release_transport(barrier)
     stdout, stderr = process.communicate(timeout=10)
     observations.append(_generation_from_open_tree(installed))
@@ -4090,7 +4117,7 @@ def test_concurrent_reader_observes_only_a_complete_manager_generation(
 
     assert process.returncode == 0, stderr or stdout
     assert observations
-    assert set(observations) <= {("old", "old"), ("new", "new")}
+    assert set(observations) <= {("old", "old"), ("new", "new"), "retired"}
     assert ("old", "old") in observations
     assert ("new", "new") in observations
 
