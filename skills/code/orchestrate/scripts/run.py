@@ -2373,28 +2373,32 @@ def unmet_blockers(
     """Return the tickets still blocking *item*, as the tracker describes it.
 
     The tracker's own relation is the source wherever it carries an edge, and
-    the body is read only where it carries none — a fallback, never a second
-    source added to the first. Where the relation carries at least one edge, the
-    body is read as well, and any ticket the body names that the relation does
-    not is a refusal.
+    the body is read as a fallback only where it carries none — never as a
+    second source added to the first. A populated relation is still compared
+    with the body rather than trusted over it: an edge the body names and the
+    relation lacks is a disagreement between two sources, refused rather than
+    absorbed or dropped, because the one person who knows which is right has
+    to write the edge where it belongs (issue #277). The comparison is over
+    the tickets each source names, not over which of them still block.
     """
 
     # The relation carries each blocker's state with it, so nothing is asked.
     nodes = item["blockedBy"]["nodes"]
     if nodes:
-        # Get the set of tickets named in the relation.
+        # Refuse an edge only the body carries, naming exactly the tickets the
+        # relation lacks and each source's whole list, so the reader is told
+        # which edge to write and never that a carried edge is missing.
         relation_tickets = {int(node["number"]) for node in nodes}
-
-        # Read the body too and check for disagreement.
         body_tickets = set(body_edges(str(item["body"])))
-        missing = body_tickets - relation_tickets
+        missing = sorted(body_tickets - relation_tickets)
         if missing:
             raise RunError(
-                f"`Blocked by` line names {as_references(sorted(body_tickets))}, "
-                f"which the tracker relation does not carry. Relation names "
-                f"{as_references(sorted(relation_tickets))}. "
-                f"The missing {'edge' if len(missing) == 1 else 'edges'} "
-                f"{'belongs' if len(missing) == 1 else 'belong'} in the relation."
+                f"`Blocked by` line names {as_references(missing)}, which the "
+                "tracker relation does not carry. The body names "
+                f"{as_references(sorted(body_tickets))}; the relation names "
+                f"{as_references(sorted(relation_tickets))}. The missing "
+                f"{'edge belongs' if len(missing) == 1 else 'edges belong'} "
+                "in the relation."
             )
 
         return sorted(

@@ -1549,12 +1549,12 @@ def test_plan_keeps_a_ticket_blocked_by_open_work_outside_the_scope_blocked(
     assert plan["never_workable"] == [10]
 
 
-def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
+def test_plan_reads_an_inline_blocked_by_line_where_the_relation_carries_nothing(
     tmp_path: Path,
 ) -> None:
-    """Where the relation carries no edge, the body is read as a fallback and
-    becomes the sole source of blockers — a body line is read only there,
-    never as a second source added to the relation."""
+    """The edge may be written on the `Blocked by` line itself rather than in
+    a list under a heading, and where the relation carries nothing the body
+    is the sole source either way."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -1562,11 +1562,7 @@ def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
         {
             "ready-for-agent": [
                 _ticket(9, "the skeleton"),
-                _ticket(
-                    10,
-                    "the graph",
-                    body="Blocked by: #9",
-                ),
+                _ticket(10, "the graph", body="Blocked by: #9"),
             ]
         },
     )
@@ -1609,13 +1605,43 @@ def test_plan_refuses_a_body_edge_the_relation_does_not_carry(
 
     result = _engine(repo, "plan", env=env)
 
+    # The message is a claim about two sets, so what is asserted is the claim
+    # itself: the offending ticket named as the one the relation lacks, each
+    # source's full list, and where the edge belongs. A test that only looked
+    # for the numbers somewhere in the text passed three wordings that named
+    # a superset as missing or a difference as a whole list.
     assert result.returncode == 1
-    assert "#10" in result.stderr
-    # Both sets should be reported: body names #8, #9 and relation names #8
-    assert "#8" in result.stderr
-    assert "#9" in result.stderr
-    assert "Relation names" in result.stderr
-    assert "missing edge" in result.stderr
+    assert result.stderr.strip() == (
+        "error: #10: `Blocked by` line names #9, which the tracker relation does "
+        "not carry. The body names #8, #9; the relation names #8. The missing "
+        "edge belongs in the relation."
+    )
+
+
+def test_unmet_blockers_names_every_edge_the_relation_lacks_and_only_those() -> None:
+    """Each clause is predicated only of the tickets it holds for.
+
+    With two edges missing the first clause names exactly those two, the body
+    and relation lists are each given whole, and the closing sentence takes
+    the plural — so the message stays true whatever the two sets are.
+    """
+
+    engine = _run()
+    item = _ticket(
+        10,
+        "the graph",
+        blocked_by=[(8, "OPEN"), (9, "OPEN")],
+        body="## Blocked by\n\n- #8\n- #20\n- #21 — it settles the shape\n",
+    )
+
+    with pytest.raises(engine.RunError) as refused:
+        engine.unmet_blockers(Path("."), item, {})
+
+    assert str(refused.value) == (
+        "`Blocked by` line names #20, #21, which the tracker relation does not "
+        "carry. The body names #8, #20, #21; the relation names #8, #9. The "
+        "missing edges belong in the relation."
+    )
 
 
 def test_plan_precedence_when_body_names_only_tickets_the_relation_carries(
