@@ -68,11 +68,23 @@ CONSOLIDATIONS = {
 FOLD_HEADING = "## The records folded into this one"
 FOLDED = re.compile(r"^- ADR-(\d{4}) ")
 
-# The two files whose citation is the whole of the `RUNTIME` criterion: the
-# engine behind /orchestrate and the suite that holds it to its record.
+# The two files whose citation is sufficient evidence that a record is
+# /orchestrate's own machinery: the engine behind the Skill and the suite that
+# holds it to its record.
 RUNTIME_SOURCES = (
     REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py",
     TESTS / "test_orchestrate.py",
+)
+
+# The records binned `RUNTIME` on their subject alone, neither file citing them:
+# the deterministic seam (0050), the working-tree discipline (0056, 0057), the
+# amend and approval ceilings (0084, 0144), the flake protocol (0139), and the
+# parked-ticket lifecycle (0141, 0142, 0143). Whether a record is /orchestrate's
+# own machinery is not decidable from the tree, so the check below holds the
+# decidable half to the citation and this half to a list: a tenth uncited
+# `RUNTIME` row goes red until somebody adds it here on purpose.
+RUNTIME_BY_SUBJECT = frozenset(
+    ("0050", "0056", "0057", "0084", "0139", "0141", "0142", "0143", "0144")
 )
 
 # The two rules modules stating what the Manager promises and how a Skill
@@ -953,15 +965,21 @@ def test_each_consolidation_record_folds_exactly_its_bin() -> None:
     )
 
 
-def test_the_runtime_bin_is_exactly_what_orchestrates_own_files_cite() -> None:
-    """`RUNTIME` is a citation, not a reading of what a record is about.
+def test_the_runtime_bin_is_what_orchestrate_is_made_of() -> None:
+    """`RUNTIME` is a reading of what a record is about, evidenced by citation.
 
     /orchestrate stays on `main` and no rules module restates its machinery,
-    so a record its engine or its suite cites is neither consolidated nor
-    dropped. The criterion is the citation and nothing else: a record binned
-    `RUNTIME` that neither file cites would survive the sweep for a reason
-    nobody could check, and a record they cite that the sweep deletes leaves a
-    dangling pointer in the engine.
+    so a record of that machinery is neither consolidated nor dropped. A
+    citation from its engine or its suite is sufficient evidence that a record
+    is the machinery — a record they cite that the sweep deletes leaves a
+    dangling pointer in the engine — but it is not necessary: it undershot by
+    nine records of live law for a Skill that is staying.
+
+    So the citation half is checked in the one direction that still holds, and
+    the ground the equality used to guard is kept by naming it. Everything the
+    two files cite is `RUNTIME`; everything else in the bin is the nine records
+    admitted on their subject alone. A record binned `RUNTIME` that is neither
+    would survive the sweep for a reason nobody could check.
     """
 
     binned = _triage()
@@ -971,10 +989,15 @@ def test_the_runtime_bin_is_exactly_what_orchestrates_own_files_cite() -> None:
     assert cited
 
     runtime = {number for number, (bin_, _) in binned.items() if bin_ == "RUNTIME"}
-    assert runtime == set(cited), (
-        f"{runtime ^ set(cited)}: the RUNTIME bin is exactly the records"
-        f" {[str(p.relative_to(REPO_ROOT)) for p in RUNTIME_SOURCES]} cite,"
-        f" and no record is binned RUNTIME on any other ground."
+    assert set(cited) <= runtime, (
+        f"{set(cited) - runtime}: a record"
+        f" {[str(p.relative_to(REPO_ROOT)) for p in RUNTIME_SOURCES]} cites is"
+        f" /orchestrate's own machinery, so the sweep must not delete it."
+    )
+    assert runtime - set(cited) == set(RUNTIME_BY_SUBJECT), (
+        f"{(runtime - set(cited)) ^ set(RUNTIME_BY_SUBJECT)}: a record binned"
+        f" RUNTIME that neither file cites is admitted on its subject alone,"
+        f" which is a judgement RUNTIME_BY_SUBJECT names one record at a time."
     )
 
     # The note carries every file citing the record, so a reader of one row
