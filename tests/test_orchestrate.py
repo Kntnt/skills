@@ -3168,3 +3168,43 @@ def test_the_wave_check_reads_the_wave_it_merged_not_the_whole_branch() -> None:
         f" as the round before it — the narrowing is between waves, never"
         f" between rounds (ADR-0072, ADR-0171)."
     )
+
+
+def test_a_run_whose_snapshot_can_select_nothing_pays_the_ceremony_once() -> None:
+    """Two Skill invocations per wave, for an answer the frozen snapshot had given.
+
+    On a Harness whose snapshot can select nothing, every route of a run came
+    back the same inheritance, and each cost the orchestrating session the
+    Interface's own instructions and references in context again. The first
+    batch still goes through the Interface, because freezing the snapshot is
+    what establishes the fact; every later role is restated from the account
+    (ADR-0172).
+    """
+
+    step = _step(3)
+    where = SKILL / "SKILL.md"
+
+    assert "The first batch of a run is always model-selector's to decide" in step, (
+        f"{where}: step 3 keeps the first batch model-selector's — the frozen"
+        f" snapshot is what says whether anything can be selected (ADR-0172)."
+    )
+    assert "`routing.frozen_inheritance`" in step, (
+        f"{where}: step 3 reads the account-level fact off the plan or route"
+        f" output rather than judging inheritance reasons itself (ADR-0172)."
+    )
+    assert "route --inherit --request=<name>" in step, (
+        f"{where}: step 3 names the engine form that restates the frozen"
+        f" decision for a later role (ADR-0172)."
+    )
+    assert "invoke model-selector for none of them" in step, (
+        f"{where}: step 3 says the Interface is not invoked for a role the"
+        f" account restates — that is the whole of the saving (ADR-0172)."
+    )
+    assert "A refused `--inherit` is routed through model-selector" in step, (
+        f"{where}: a refusal sends the role back through the Interface, so"
+        f" nothing is ever decided by this Skill (ADR-0172)."
+    )
+    assert "/model-selector context <path>" in step, (
+        f"{where}: the Interface path stands beside the shortcut, the first"
+        f" batch and every selecting run still taking it (ADR-0085)."
+    )

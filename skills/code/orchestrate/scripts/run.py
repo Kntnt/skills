@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import fcntl
 import hashlib
 import importlib.util
@@ -312,6 +313,24 @@ INHERITED_FOR_NO_ADAPTER = "unavailable_selection_controls"
 # candidates are not safe — so it gets its own line rather than being merged
 # into that one (ADR-0166).
 INHERITED_FOR_NO_SAFE_CANDIDATE = "unavailable_safe_candidate"
+
+# The reasons under which an inheritance is a fact of the frozen snapshot
+# rather than of the request it answered: the profile the snapshot carries is
+# absent or rejected, or no configured point survives its Harness filtering.
+# Each is decided before anything about a request is read, so every automatic
+# request this Skill makes under the same snapshot comes back the same
+# decision, and the account may restate it for a new name instead of asking
+# again. Evidence too weak to select from is deliberately not among them: an
+# objectively checked request escapes that inheritance where an unchecked one
+# does not, so it is the request's own (ADR-0172).
+SNAPSHOT_INHERITANCE_REASONS = frozenset(
+    {
+        "missing_profile",
+        "rejected_profile",
+        INHERITED_FOR_NO_ADAPTER,
+        INHERITED_FOR_NO_SAFE_CANDIDATE,
+    }
+)
 
 # Where a run keeps the routed attempts an external verdict has judged, and
 # where the sanitized artifact model-selector makes of them is written. Both
@@ -1149,6 +1168,34 @@ class Routing:
         return made[-1] if made else None
 
 
+def frozen_inheritance(records: list[RouteRecord]) -> str | None:
+    """Return the one snapshot-level reason every decision inherits for, or None.
+
+    This is the fact `route --inherit` acts on. Where every decision the
+    account holds inherits, and all for one reason that is the snapshot's
+    rather than a request's, model-selector would answer the next automatic
+    request under that snapshot the same way, so the account may restate the
+    decision it holds. An account holding a selection, a refusal, a mix of
+    reasons, or an inheritance the request itself earned keeps every later
+    role model-selector's to decide (ADR-0172).
+    """
+
+    if not records:
+        return None
+
+    reasons: set[str] = set()
+    for record in records:
+        decision = record.decision
+        if str(decision.get("status")) != ROUTE_INHERIT:
+            return None
+        inherited = cast(dict[str, Any], decision.get("inheritance") or {})
+        reasons.add(str(inherited.get("reason")))
+
+    if len(reasons) == 1 and reasons <= SNAPSHOT_INHERITANCE_REASONS:
+        return reasons.pop()
+    return None
+
+
 def routing_details(routing: Routing | None) -> dict[str, Any] | None:
     """Return the public shape of a frozen routing account, or None.
 
@@ -1169,6 +1216,7 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
         "fast": routing.fast,
         "run_identity": routing.run_identity or None,
         "routing_capability": routing_capability(routing.decisions),
+        "frozen_inheritance": frozen_inheritance(routing.decisions),
         "snapshot": routing.snapshot,
         "decisions": [asdict(record) for record in routing.decisions],
     }
@@ -3708,6 +3756,87 @@ def cmd_route(
 
     emit_route(routing.identity, records, refusals, routing)
     return 2 if refusals else 0
+
+
+def cmd_inherit(
+    cwd: Path,
+    requests: list[str],
+    state_path: Path | None,
+    *,
+    model: str | None,
+    deliberation: str | None,
+    fast: bool,
+) -> int:
+    """Restate the frozen account's own inheritance for later roles of this run.
+
+    Model-selector decides the first batch of every run, and freezing that
+    snapshot is what establishes what it can select. Where it could select
+    nothing — no profile, a rejected profile, no adapter able to express a
+    point, no safe candidate — every later automatic request under the same
+    snapshot would come back the same decision, so this verb copies the
+    decision the account already holds under each new name instead of paying
+    the Interface twice per wave for an answer the run holds. Nothing is
+    decided here: the decision stays model-selector's own, changed in its name
+    and nothing else, and an account holding anything else sends the caller
+    back to the Interface (ADR-0172).
+    """
+
+    # Restating is a reading of the frozen account, so it needs one to read.
+    if remembered_state(state_path, cwd) is None:
+        return fail(
+            "routing is frozen against the run the plan wrote down, so there is "
+            "nothing to restate from yet: plan before routing"
+        )
+    try:
+        routing = read_routing(state_path)
+    except RunError as exc:
+        return fail(str(exc))
+    if routing is None:
+        return fail(
+            "nothing is frozen yet, and the first batch of a run is "
+            "model-selector's to decide: route it through the Interface"
+        )
+    if (
+        relocked := locks_refusal(routing, model, deliberation, fast, "this request")
+    ) is not None:
+        return fail(relocked)
+
+    # Only an inheritance the snapshot itself accounts for may be restated.
+    reason = frozen_inheritance(routing.decisions)
+    if reason is None:
+        return fail(
+            f"this run's frozen account holds a selection or an inheritance its "
+            f"request earned, so {', '.join(requests)} are model-selector's to "
+            "decide: route them through the Interface"
+        )
+
+    # Copy the frozen decision under each new name, refusing what no
+    # inheritance can answer before anything is copied.
+    frozen = routing.decisions[-1].decision
+    records: list[RouteRecord] = []
+    for request_id in requests:
+        if escalated_wave(request_id) is not None:
+            return fail(
+                f"{request_id} escalates a fix round, which is the one further "
+                "decision a selected seat can give: under inheritance a "
+                "changed-nothing round stops the run"
+            )
+        restated = copy.deepcopy(frozen)
+        restated["request_id"] = request_id
+        try:
+            records.append(route_record(request_id, restated))
+        except RunError as exc:
+            return fail(str(exc))
+
+    # Extend the account exactly as a routed response would have.
+    routing.decisions.extend(records)
+    try:
+        write_routing(state_path, routing)
+    except RunError as exc:
+        return fail(str(exc))
+
+    emit_route(routing.identity, records, [], routing)
+    return 0
 
 
 def claim_refusal(
@@ -6448,7 +6577,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     add_shared_flags(plan)
 
     route = sub.add_parser("route", help="Freeze one model-selector route response.")
-    route.add_argument("--response", required=True, type=Path)
+    route.add_argument("--response", type=Path)
+    route.add_argument("--inherit", action="store_true")
+    route.add_argument("--request", action="append")
     route.add_argument("--dry-run", action="store_true")
     route.add_argument("--model")
     route.add_argument("--fast", action="store_true")
@@ -6575,6 +6706,34 @@ def main(argv: list[str] | None = None) -> int:
             approval=args.approval,
         )
     if args.verb == "route":
+        # The two forms read different things and are refused where mixed:
+        # a response is model-selector's answer, an inheritance is the run's.
+        if args.inherit or args.request:
+            if not (args.inherit and args.request):
+                return fail(
+                    "--inherit restates the frozen account for one --request per "
+                    "role, and --request accompanies --inherit"
+                )
+            if args.response is not None or args.dry_run or args.starting:
+                return fail(
+                    "--inherit reads the frozen account and no response, so it "
+                    "takes no --response, --dry-run, --starting, or --run-claimed"
+                )
+            if args.run_claimed:
+                return fail("--inherit takes no --run-claimed: it is not a dry route")
+            return cmd_inherit(
+                cwd,
+                args.request,
+                state_path,
+                model=args.model,
+                deliberation=args.deliberation,
+                fast=args.fast,
+            )
+        if args.response is None:
+            return fail(
+                "route reads a model-selector response: pass --response=<path>, "
+                "or --inherit with one --request per role"
+            )
         return cmd_route(
             cwd,
             args.response,

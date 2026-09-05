@@ -47,6 +47,8 @@ CLAIM = re.compile(
 # match nothing and judge nothing.
 RELATIONS = {
     ("0072", "0171"),
+    ("0085", "0172"),
+    ("0133", "0172"),
     ("0090", "0156"),
     ("0133", "0156"),
     ("0145", "0156"),
@@ -310,6 +312,42 @@ def test_the_wave_scoped_reading_preserves_the_coherence_record_history() -> Non
     # directions, and keep what the earlier record decided standing whole.
     assert "narrows ADR-0072" in later
     assert "the loop runs to a fixed point" in later
+
+
+def test_the_restated_inheritance_preserves_both_records_it_narrows() -> None:
+    """The restatement points past ADR-0085 and ADR-0133 without rewriting either.
+
+    ADR-0085's route-before-claim invariant and its frozen account stand, and
+    so does ADR-0133's shortcut for delegation. Only their shared claim that
+    Orchestrate invokes the Interface for every execution role was outrun, by
+    runs that paid two Skill invocations per wave for an answer the frozen
+    snapshot had already given (ADR-0172).
+    """
+
+    routes = (
+        ADR / "0085-orchestrate-routes-execution-and-inherits-verdicts.md"
+    ).read_text(encoding="utf-8")
+    unrouted = (
+        ADR
+        / "0133-a-spawn-on-the-frozen-main-seat-is-unrouted-by-the-callers-choice.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR
+        / "0172-a-frozen-account-that-inherits-for-the-run-restates-its-own-decision.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointers.
+    assert "Route before claim is an invariant of the run" in routes
+    assert "narrowed by ADR-0172" in routes
+    assert "Orchestrate keeps routing every execution role" in unrouted
+    assert "narrowed by ADR-0172" in unrouted
+
+    # Declare both relations from the later record for the scan in both
+    # directions, and name the road ADR-0133 closed and this record reopens
+    # under a narrower condition.
+    assert "narrows ADR-0085" in later
+    assert "narrows ADR-0133" in later
+    assert "second emitter" in later
 
 
 def test_the_escalated_fix_round_preserves_the_no_progress_bound_history() -> None:

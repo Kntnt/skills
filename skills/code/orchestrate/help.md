@@ -22,7 +22,7 @@ A ticket may declare ordered multi-commit work with `Commit roles: implementatio
 
 The main session owns planning, triage, integration, and verification judgements. Run it from the most capable model available; those judgements are only as reliable as that model.
 
-Model Selector creates one frozen routing snapshot before claims. Builders and repair roles use decisions from that snapshot; independent verdicts always inherit the main session's exact model and deliberation configuration.
+Model Selector creates one frozen routing snapshot before claims. Builders and repair roles use decisions from that snapshot; independent verdicts always inherit the main session's exact model and deliberation configuration. Where that snapshot can select nothing — no profile, a rejected profile, no adapter able to express a point, or no safe candidate — every later role is decided from the frozen account itself, the decision Model Selector made restated under the new name, and Model Selector is invoked once per run rather than once per wave.
 
 Where several measured configurations clear the quality floor, the run selects the cheapest of them, and the fastest of them under **--fast**. The objective is frozen with the snapshot and reported with it.
 

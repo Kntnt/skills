@@ -10474,3 +10474,358 @@ def test_every_route_output_reports_what_each_cohort_has_already_explored(
     )
     assert planned["explored_request_ids"] == {"orchestrate/initial_build": ["build-9"]}
     assert planned["run_identity"] == json.loads(routed.stdout)["run_identity"]
+
+
+def test_a_later_role_is_restated_from_an_account_that_inherits_for_the_run(
+    tmp_path: Path,
+) -> None:
+    """One model-selector ceremony per run where the snapshot can select nothing.
+
+    A profile the snapshot carries as absent or rejected, or a Harness whose
+    filtering leaves no point, is decided before anything about a request is
+    read, so every later automatic request under that snapshot comes back the
+    same decision. The account restates it for the new name instead of paying
+    two Skill invocations for an answer it already holds (ADR-0172).
+    """
+
+    repo, scratch, env = _routed(
+        tmp_path, decisions=[_inherited("build-9", "rejected_profile")]
+    )
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    restated = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "amend-9-1",
+        "--request",
+        "wave-fix-1",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    replanned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert planned.returncode == 0, planned.stderr
+    assert json.loads(planned.stdout)["routing"]["frozen_inheritance"] == (
+        "rejected_profile"
+    )
+    assert restated.returncode == 0, restated.stderr
+    answered = json.loads(restated.stdout)
+    assert answered["verb"] == "route"
+    assert answered["snapshot_identity"] == "frozen"
+    assert answered["refused"] == []
+    assert [made["request_id"] for made in answered["decisions"]] == [
+        "amend-9-1",
+        "wave-fix-1",
+    ]
+    assert [made["workload_cohort"] for made in answered["decisions"]] == [
+        "orchestrate/amend",
+        "orchestrate/mechanical_wave_fix",
+    ]
+
+    # The decision is model-selector's own, restated under the new name and
+    # changed in nothing else: the engine decides nothing here.
+    frozen = json.loads(planned.stdout)["routing"]["decisions"][0]["decision"]
+    for made in answered["decisions"]:
+        assert made["decision"]["request_id"] == made["request_id"]
+        assert {k: v for k, v in made["decision"].items() if k != "request_id"} == {
+            k: v for k, v in frozen.items() if k != "request_id"
+        }
+
+    # And it is in the frozen account, where a claim or an amend finds it.
+    assert [
+        made["request_id"]
+        for made in json.loads(replanned.stdout)["routing"]["decisions"]
+    ] == ["build-9", "amend-9-1", "wave-fix-1"]
+
+
+def test_a_later_wave_is_restated_and_claimed_without_model_selector(
+    tmp_path: Path,
+) -> None:
+    """The wave the last one unblocked is decided from the account, then claimed.
+
+    Route before claim is untouched: the claim gate still refuses a ticket the
+    account holds no decision for, and what satisfies it is the restated
+    decision rather than a further Interface invocation (ADR-0085, ADR-0172).
+    """
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=[
+            _ticket(9, "the skeleton"),
+            _ticket(10, "the graph", blocked_by=[(9, "OPEN")]),
+        ],
+        issues={9: _ready(9), 10: _ready(10)},
+        decisions=[_inherited("build-9", "missing_profile")],
+    )
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    for args in (
+        ("claim", "--ticket", "9"),
+        ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
+    ):
+        assert (
+            _engine(repo, *args, "--state-dir", str(scratch), env=env).returncode == 0
+        ), args
+    _refile(env, "open", [_ticket(10, "the graph", blocked_by=[(9, "CLOSED")])])
+    _refile_issue(env, 9, {"state": "CLOSED", "comments": [_recorded("done", head)]})
+
+    replanned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    before = _engine(
+        repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
+    )
+    restated = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "build-10",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    after = _engine(
+        repo, "claim", "--ticket", "10", "--state-dir", str(scratch), env=env
+    )
+
+    assert replanned.returncode == 0, replanned.stderr
+    assert json.loads(replanned.stdout)["starting"] == [10]
+    assert json.loads(replanned.stdout)["routing"]["frozen_inheritance"] == (
+        "missing_profile"
+    )
+    assert before.returncode == 1
+    assert "#10" in before.stderr
+    assert restated.returncode == 0, restated.stderr
+    assert json.loads(restated.stdout)["snapshot_identity"] == "frozen"
+    assert after.returncode == 0, after.stderr
+
+
+def test_nothing_is_restated_where_the_account_holds_a_selection(
+    tmp_path: Path,
+) -> None:
+    """A snapshot that selected once may select differently for the next role."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "amend-9-1",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 1
+    assert "model-selector" in result.stderr
+    assert json.loads(planned.stdout)["routing"]["frozen_inheritance"] is None
+    assert [
+        made["request_id"]
+        for made in json.loads(planned.stdout)["routing"]["decisions"]
+    ] == ["build-9"]
+
+
+def test_nothing_is_restated_from_an_inheritance_the_request_itself_earned(
+    tmp_path: Path,
+) -> None:
+    """Evidence too weak to select from is a fact about a request, not the run.
+
+    An objectively checked request escapes that inheritance where an unchecked
+    one does not, so the next role may well be selected; only a reason decided
+    before the request is read may be restated (ADR-0172).
+    """
+
+    repo, scratch, env = _routed(
+        tmp_path, decisions=[_inherited("build-9", "insufficient_evidence")]
+    )
+
+    result = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "amend-9-1",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 1
+    assert "model-selector" in result.stderr
+
+
+def test_nothing_is_restated_before_a_first_snapshot_is_frozen(tmp_path: Path) -> None:
+    """The first batch of a run is model-selector's, and the flag has one shape."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+
+    unfrozen = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "build-9",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    unnamed = _engine(repo, "route", "--inherit", "--state-dir", str(scratch), env=env)
+    unflagged = _engine(
+        repo, "route", "--request", "build-9", "--state-dir", str(scratch), env=env
+    )
+    both = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "build-9",
+        "--response",
+        str(tmp_path / "route.json"),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    dry = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "build-9",
+        "--dry-run",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert unfrozen.returncode == 1
+    assert "model-selector" in unfrozen.stderr
+    assert unnamed.returncode == 1
+    assert "--request" in unnamed.stderr
+    assert unflagged.returncode == 1
+    assert "--inherit" in unflagged.stderr
+    assert both.returncode == 1
+    assert "--response" in both.stderr
+    assert dry.returncode == 1
+    assert "--dry-run" in dry.stderr
+
+
+def test_a_restated_decision_is_refused_for_a_verdict_and_for_an_escalation(
+    tmp_path: Path,
+) -> None:
+    """What no inheritance can answer is refused by name, before anything is copied.
+
+    A verdict is never routed at all (ADR-0085), and an escalated fix round is
+    the one further decision a selected seat can give — under inheritance a
+    changed-nothing round already stops the run (ADR-0110).
+    """
+
+    repo, scratch, env = _routed(
+        tmp_path, decisions=[_inherited("build-9", "missing_profile")]
+    )
+    fixed = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "wave-fix-1",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    assert fixed.returncode == 0, fixed.stderr
+
+    verdict = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "verify-9",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    escalated = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "wave-fix-1-escalated",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert verdict.returncode == 1
+    assert "verdict" in verdict.stderr
+    assert escalated.returncode == 1
+    assert "escalat" in escalated.stderr
+    assert [
+        made["request_id"]
+        for made in json.loads(planned.stdout)["routing"]["decisions"]
+    ] == ["build-9", "wave-fix-1"]
+
+
+def test_a_restated_request_is_held_to_the_runs_own_locks(tmp_path: Path) -> None:
+    """The locks the first frontier was routed under cannot change mid-run."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    planned = _engine(repo, "plan", "--fast", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+    fast = _snapshot(
+        override_policy=_snapshot()["override_policy"] | {"objective": "time_first"}
+    )
+    routed = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_inherited("build-9", "missing_profile")],
+        snapshot=fast,
+        fast=True,
+    )
+    assert routed.returncode == 0, routed.stderr
+
+    relocked = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "amend-9-1",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    held = _engine(
+        repo,
+        "route",
+        "--inherit",
+        "--request",
+        "amend-9-1",
+        "--fast",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert relocked.returncode == 1
+    assert "--fast" in relocked.stderr
+    assert held.returncode == 0, held.stderr
