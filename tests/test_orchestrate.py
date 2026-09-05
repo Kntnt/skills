@@ -128,6 +128,18 @@ def _step(number: int) -> str:
     return match.group(0)
 
 
+def _serial_wave_clause() -> str:
+    """Step 11's clause for a run building on the branch already checked out."""
+
+    step_eleven = _step(11)
+    marker = "Where `worktrees` is false"
+    assert marker in step_eleven, (
+        f"{SKILL / 'SKILL.md'}: step 11 says what a run at a concurrency of one"
+        " does with the branch it built on."
+    )
+    return step_eleven.partition(marker)[2]
+
+
 def test_top_level_session_transitions_publish_complete_progress_commands() -> None:
     """Each top-level session transition supplies every required progress value."""
 
@@ -2829,60 +2841,140 @@ def test_the_manpage_says_the_gate_is_resolved_once() -> None:
     )
 
 
-def test_serial_runs_gate_their_own_branch_before_reporting() -> None:
-    """A run that writes directly to its branch reads that final commit before reporting."""
+def test_the_serial_branch_gate_is_the_step_the_serial_path_leaves_by() -> None:
+    """Step 11's own serial clause carries the gate the run leaves for step 12 through."""
 
-    skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    clause = _serial_wave_clause()
 
-    assert "at exactly one" in skill.lower() and "before the report" in skill.lower(), (
-        f"{SKILL / 'SKILL.md'}: the serial path states that its own branch is"
-        " gated before the terminal report."
+    assert "run step 1's `plan` command again" in clause, (
+        f"{SKILL / 'SKILL.md'}: the serial clause settles whether another wave"
+        " follows rather than leaving that to a later step."
     )
-    assert "same commands resolved at run start" in skill, (
-        f"{SKILL / 'SKILL.md'}: the serial gate reuses the frozen verification"
-        " commands rather than resolving a new gate."
+    assert "`starting` is not empty" in clause and "`starting` empty" in clause, (
+        f"{SKILL / 'SKILL.md'}: the serial clause branches on the frontier the"
+        " fresh plan returns, which is what makes its gate the last wave's."
     )
-    assert "commit" in skill and "whether it passed" in skill, (
-        f"{SKILL / 'SKILL.md'}: the terminal report names the gate commit and result."
+    assert "go back through step 2 and step 3" in clause, (
+        f"{SKILL / 'SKILL.md'}: a serial run with another wave to build returns"
+        " through step 2 and step 3 as before."
     )
-    assert "branch as not green" in skill.lower(), (
-        f"{SKILL / 'SKILL.md'}: a failed serial gate qualifies the run without"
-        " changing ticket outcomes."
+    assert "same commands you resolved before the first wave was briefed" in clause, (
+        f"{SKILL / 'SKILL.md'}: the serial gate reuses the commands resolved at"
+        " run start rather than resolving a gate of its own."
     )
-    assert "there is no integrated wave to check" in skill, (
-        f"{SKILL / 'SKILL.md'}: serial runs distinguish the absence of a wave"
-        " merge from the need to read the run's own writing."
+    assert "on the branch as it stands" in clause, (
+        f"{SKILL / 'SKILL.md'}: the serial gate reads the branch as the run left it."
     )
-
-    assert "after the last wave" in skill and "before step 12" in skill, (
-        f"{SKILL / 'SKILL.md'}: the serial branch-writing path gates after its"
-        " last wave and before the report step."
+    assert "no session of its own" in clause and "no verdict" in clause, (
+        f"{SKILL / 'SKILL.md'}: a gate is a command, so the serial clause takes"
+        " no verdict and dispatches no subagent."
+    )
+    assert "changes no ticket's recorded outcome" in clause, (
+        f"{SKILL / 'SKILL.md'}: a failing serial gate leaves every ticket's own"
+        " independent verdict standing."
+    )
+    assert "not green" in clause, (
+        f"{SKILL / 'SKILL.md'}: a failing serial gate is reported as a branch"
+        " that is not green."
     )
     assert (
-        "where `worktrees` is false and this run wrote to the branch" in skill.lower()
+        "git rev-parse HEAD" in clause and "whether every command passed" in clause
     ), (
-        f"{SKILL / 'SKILL.md'}: the self-gate is limited to runs that wrote"
-        " their own branch, not no-work or dry-run paths."
-    )
-    assert "gate commit" in skill and "gate result" in skill, (
-        f"{SKILL / 'SKILL.md'}: step 12 renders the serial gate commit and"
-        " result from the engine's report."
+        f"{SKILL / 'SKILL.md'}: the serial clause retains the commit the gate ran"
+        " at and its result for the report."
     )
 
+    plan_again = clause.index("run step 1's `plan` command again")
+    gate = clause.index("same commands you resolved before the first wave was briefed")
+    assert plan_again < gate, (
+        f"{SKILL / 'SKILL.md'}: the gate follows the plan that establishes the"
+        " wave was the run's last, so it runs once per invocation."
+    )
 
-def test_serial_gate_is_wired_into_step_eleven_and_step_twelve() -> None:
-    """The serial gate is part of the real flow and its result is reportable."""
 
-    where = SKILL / "SKILL.md"
-    skill = where.read_text(encoding="utf-8")
-    step_eleven = skill.split("11. ", 1)[1].split("\n12. ", 1)[0]
-    assert "where `worktrees` is false and this run wrote to the branch" in skill
-    assert "run the same commands resolved at run start" in skill
-    assert "after the last wave and before step 12" in skill
-    assert "on a pass go back through step 2 and step 3" in step_eleven
-    assert "on a failure go to step 12" in step_eleven
-    assert "gate commit" in skill and "gate result" in skill
-    assert "branch is not green" in skill
+def test_the_serial_gate_adds_no_second_reading_to_the_worktree_path() -> None:
+    """The wave check remains the whole of an integrating run's branch reading."""
+
+    step_eleven = _step(11)
+    worktree_clause = step_eleven.split("Where `worktrees` is false", 1)[0]
+
+    assert "same commands you resolved before the first wave was briefed" not in (
+        worktree_clause
+    ), (
+        f"{SKILL / 'SKILL.md'}: a run using worktrees reads its integrated branch"
+        " through the wave check alone."
+    )
+    assert "nothing is added to the worktree path" in _serial_wave_clause(), (
+        f"{SKILL / 'SKILL.md'}: the serial clause says the worktree path is unchanged."
+    )
+
+
+def test_the_run_states_no_rule_between_its_numbered_steps() -> None:
+    """A rule of the procedure is a step's, not a paragraph standing beside one."""
+
+    tail = _step(10).split(
+        "Done when every collision has been repaired, rebuilt, recorded"
+        " conflicted, or its ticket parked.",
+        1,
+    )[1]
+
+    assert tail.strip() == "", (
+        f"{SKILL / 'SKILL.md'}: step 10 ends at its own Done when line; a rule"
+        " stated between the numbered steps is reached by no transition."
+    )
+
+
+def test_step_twelve_reports_the_serial_gate_commit_and_result() -> None:
+    """The report step itself renders the gate, against its no-session-memory rule."""
+
+    step_twelve = _step(12)
+
+    assert "step 11 has gated the branch" in step_twelve, (
+        f"{SKILL / 'SKILL.md'}: step 12 is not rendered until the serial branch"
+        " gate has run, whichever step sent the run here."
+    )
+    assert "the commit the gate ran at and whether it passed" in step_twelve, (
+        f"{SKILL / 'SKILL.md'}: the report names the commit the gate ran at and"
+        " whether it passed."
+    )
+    assert "branch is not green" in step_twelve, (
+        f"{SKILL / 'SKILL.md'}: a run whose gate failed is reported as a run"
+        " whose branch is not green rather than as done tickets alone."
+    )
+    assert (
+        "two exceptions to the rule against report rendering from session memory"
+        in (step_twelve)
+    ), (
+        f"{SKILL / 'SKILL.md'}: the engine holds no gate, so step 12 names the"
+        " gate as an exception to rendering without session memory."
+    )
+    assert (
+        "the one exception to the rule against report rendering" not in step_twelve
+    ), (
+        f"{SKILL / 'SKILL.md'}: the amend split is no longer the only exception"
+        " to that rule, and the report step may not say two things about it."
+    )
+
+
+def test_the_applied_notes_name_what_reads_them_on_either_path() -> None:
+    """The run's own writing is read before the report whether or not it integrates."""
+
+    notes = _step(8).split("Then write the wave's entries into the run's own files", 1)[
+        1
+    ]
+
+    assert "where `worktrees` is true the wave check reads them" in notes, (
+        f"{SKILL / 'SKILL.md'}: an integrating run's applied notes are read by"
+        " the wave check."
+    )
+    assert "where `worktrees` is false step 11's branch gate" in notes, (
+        f"{SKILL / 'SKILL.md'}: a serial run's applied notes are read by the"
+        " branch gate, the wave check it names not existing on that path."
+    )
+    assert "verified exactly like the work it describes" not in notes, (
+        f"{SKILL / 'SKILL.md'}: the unqualified claim that the run's own writing"
+        " is verified like the work it describes is false at a concurrency of one."
+    )
 
 
 def test_manpage_explains_the_serial_self_gate() -> None:
