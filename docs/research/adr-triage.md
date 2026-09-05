@@ -26,7 +26,7 @@ And one bin the rework did not need.
 
 ## How to read the table
 
-One row per record in `docs/adr/`, every record without exception: its number, its own title, its bin, whether the bin has a rework precedent, the rules module its surviving content goes to where it has one, and a note. The module names are the files under `docs/rules/` — `collection.md`, `skills.md`, `tickets.md`, `docs.md`, and `routing.md` where #264 splits the routing law out — which is `docs/coding-standard/` until #263 renames it.
+One row per record in `docs/adr/`, every record without exception: its number, its own title, its bin, whether the bin has a rework precedent, the rules module its surviving content goes to where it has one, and a note. The module names are the files under `docs/rules/` — `collection.md`, `skills.md`, `tickets.md`, `docs.md`, and `routing.md` where #264 splits the routing law out.
 
 The **New** column reads three ways. An em dash means the rework binned this record and this table keeps that bin. `new record` means the rework never saw the record and the bin is this ticket's judgement under the criteria above. `new bin` means the rework binned the record otherwise and this table departs; every such row is a `RUNTIME` row, `RUNTIME` being the only bin the rework did not have. The two marked classes are what a reader should read in one pass and correct by hand before #264 and #268 through #271 consume the table. A row the rework binned carries the rework's own note, in its words, with whatever `main` has since added to it appended.
 
@@ -220,9 +220,9 @@ The rework's inventory, brought up to date against `main`.
 
 | Place | What it holds | Bearing on the reform |
 |---|---|---|
-| `docs/coding-standard/general.md` | Code form, design philosophy, refactoring completeness, naming, packaging, tooling | Already the rules-doc format. Absorbs, does not compete. Becomes `docs/rules/general.md` in #263. |
-| `docs/coding-standard/python.md` | Python baseline, PEP 723, tooling | Unaffected beyond the rename. |
-| `docs/coding-standard/skills.md` | What a Skill ships: frontmatter, body, grammar, Library, manpages, Codex sidecar, README | Already the rules doc for Skill form; 53 record citations point out of it. #261 rewrites its grammar section before the reform reaches it. |
+| `docs/rules/general.md` | Code form, design philosophy, refactoring completeness, naming, packaging, tooling | Already the rules-doc format. Absorbs, does not compete. |
+| `docs/rules/python.md` | Python baseline, PEP 723, tooling | Unaffected beyond the rename. |
+| `docs/rules/skills.md` | What a Skill ships: frontmatter, body, grammar, Library, manpages, Codex sidecar, README | Already the rules doc for Skill form; 53 record citations point out of it. #261 rewrites its grammar section before the reform reaches it. |
 | `CONTEXT.md` | Domain glossary — in practice, the Manager's behavioural spec, and 4 record citations | Needs a decision: glossary or law. #265 holds it to definitions once `collection.md` exists. |
 | `AGENTS.md` | Ground rules and the `read when` References lines, two of which point at individual records by path — ADR-0067 and ADR-0099 | The router. Gains a line per rules module; the two record lines collapse into #266's one. |
 | `CONTRIBUTING.md` | The four checks, catalog regeneration, the reference-validator comparison; cites ADR-0066 and ADR-0106 | Procedure. Both records it cites survive the reform — ADR-0066 into the C6 record, ADR-0106 as `RUNTIME`. |
