@@ -224,7 +224,7 @@ The rework's inventory, brought up to date against `main`.
 | `docs/rules/python.md` | Python baseline, PEP 723, tooling | Unaffected beyond the rename. |
 | `docs/rules/skills.md` | What a Skill ships: frontmatter, body, grammar, Library, manpages, Codex sidecar, README | Already the rules doc for Skill form; 53 record citations point out of it. #261 rewrites its grammar section before the reform reaches it. |
 | `CONTEXT.md` | Domain glossary — in practice, the Manager's behavioural spec, and 4 record citations | Needs a decision: glossary or law. #265 holds it to definitions once `collection.md` exists. |
-| `AGENTS.md` | Ground rules and the `read when` References lines, two of which point at individual records by path — ADR-0067 and ADR-0099 | The router. Gains a line per rules module; the two record lines collapse into #266's one. |
+| `AGENTS.md` | Ground rules and the `read when` References lines, which name rules modules — none of them pointing at an individual record by path | The router. Gains a line per rules module; the two record lines collapse into #266's one. |
 | `CONTRIBUTING.md` | The four checks, catalog regeneration, the reference-validator comparison; cites ADR-0066 and ADR-0106 | Procedure. Both records it cites survive the reform — ADR-0066 into the C6 record, ADR-0106 as `RUNTIME`. |
 | `agents.d/user-configuration.md` | User-owned configuration for a Skill: where it lives and who may write it | Added since the fork. Unaffected. |
 | `docs/evaluation/protocol.md`, `docs/evaluation/corpus/`, `docs/evaluation/records/` | The evaluation protocol, its fixture corpus, and the records of runs against it | Unaffected; ADR-0093's rule lands in `docs.md` beside it. |
