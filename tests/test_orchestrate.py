@@ -2870,6 +2870,21 @@ def test_serial_runs_gate_their_own_branch_before_reporting() -> None:
     )
 
 
+def test_serial_gate_is_wired_into_step_eleven_and_step_twelve() -> None:
+    """The serial gate is part of the real flow and its result is reportable."""
+
+    where = SKILL / "SKILL.md"
+    skill = where.read_text(encoding="utf-8")
+    step_eleven = skill.split("11. ", 1)[1].split("\n12. ", 1)[0]
+    assert "where `worktrees` is false and this run wrote to the branch" in skill
+    assert "run the same commands resolved at run start" in skill
+    assert "after the last wave and before step 12" in skill
+    assert "on a pass go back through step 2 and step 3" in step_eleven
+    assert "on a failure go to step 12" in step_eleven
+    assert "gate commit" in skill and "gate result" in skill
+    assert "branch is not green" in skill
+
+
 def test_manpage_explains_the_serial_self_gate() -> None:
     """Help tells readers that concurrency one gates its branch before reporting."""
 
