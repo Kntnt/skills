@@ -125,6 +125,128 @@ def _read_seed() -> list[dict[str, Any]]:
     ]
 
 
+def _read_ledger_rows(data_directory: Path, store: str) -> list[dict[str, Any]]:
+    """Read one append-only ledger store, keeping only rows it can read.
+
+    The ledger is JSONL a user may hand-write and an interrupted append may
+    truncate, so an absent file, an unreadable one, and a row that is not a
+    JSON object are all simply no evidence — never a reason to refuse a
+    derivation the shipped seed answers on its own.
+    """
+
+    # Read the whole store, a file nobody has written yet being no evidence.
+    try:
+        content = (data_directory / store).read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return []
+
+    # Keep every row that is a JSON object, so one truncated append costs
+    # its own row rather than the store it sits in.
+    rows: list[dict[str, Any]] = []
+    for line in content.splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict):
+            rows.append(cast(dict[str, Any], row))
+
+    return rows
+
+
+class LedgerEvidence(NamedTuple):
+    """The ranking facts the local ledger holds beside the shipped seed.
+
+    `models` is every canonical model the ledger records at all, which is
+    what admits a selection `update` validated but may not write back into
+    the profile. `benchmarks` and `scores` are the benchmark priors, already
+    resolved out of the ledger's own key spaces (ADR-0166).
+    """
+
+    models: frozenset[str]
+    benchmarks: frozenset[str]
+    scores: dict[str, dict[str, float]]
+
+
+def _numeric_score(value: Any) -> float | None:
+    """Read a published score, a boolean being no score at all."""
+
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return None
+    return float(value)
+
+
+def _retain_maximum(
+    scores: dict[str, dict[str, float]], benchmark: str, model: str, score: float
+) -> None:
+    """Retain the maximum score one source states per model and benchmark."""
+
+    benchmark_scores = scores.setdefault(benchmark, {})
+    benchmark_scores[model] = max(score, benchmark_scores.get(model, float("-inf")))
+
+
+def _ledger_evidence(data_directory: Path) -> LedgerEvidence:
+    """Project the ledger's model, benchmark and evaluation stores.
+
+    Two key spaces meet here. An evaluation row names its model by the
+    `model_version_key` of a validated `ModelVersion` or by the
+    `model_reference_key` of an `AliasBinding`, and both records carry the
+    canonical identity the profile and the seed already speak. A benchmark is
+    identified by the seed row it was imported from, so a seed prior and its
+    re-import are one benchmark rather than two.
+    """
+
+    # Resolve every identity an evaluation row may name to one canonical model.
+    canonical_by_key = {
+        cast(str, row[key]): cast(str, row["canonical_model_id"])
+        for store, key in (
+            ("model-versions.jsonl", "model_version_key"),
+            ("alias-bindings.jsonl", "model_reference_key"),
+        )
+        for row in _read_ledger_rows(data_directory, store)
+        if isinstance(row.get(key), str)
+        and isinstance(row.get("canonical_model_id"), str)
+    }
+
+    # Bridge benchmark identity on the seed id the import preserved, a row
+    # naming none being a benchmark of its own.
+    benchmark_by_key = {
+        cast(str, row["benchmark_key"]): cast(str, row["seed_id"])
+        if isinstance(row.get("seed_id"), str)
+        else cast(str, row["benchmark_key"])
+        for row in _read_ledger_rows(data_directory, "benchmark-definitions.jsonl")
+        if isinstance(row.get("benchmark_key"), str)
+    }
+
+    # Retain the maximum published score per model within each benchmark.
+    scores: dict[str, dict[str, float]] = {}
+    for row in _read_ledger_rows(data_directory, "evaluation-configurations.jsonl"):
+        model_key = row.get("model_key")
+        benchmark_key = row.get("benchmark_key")
+        score = _numeric_score(row.get("score"))
+        if (
+            not isinstance(model_key, str)
+            or not isinstance(benchmark_key, str)
+            or score is None
+            or model_key not in canonical_by_key
+        ):
+            continue
+        _retain_maximum(
+            scores,
+            benchmark_by_key.get(benchmark_key, benchmark_key),
+            canonical_by_key[model_key],
+            score,
+        )
+
+    return LedgerEvidence(
+        frozenset(canonical_by_key.values()),
+        frozenset(benchmark_by_key.values()),
+        scores,
+    )
+
+
 def _read_templates() -> list[dict[str, Any]]:
     """Read validated adapter templates in deterministic identifier order."""
 
@@ -250,78 +372,95 @@ def _version_key(identifier: str) -> tuple[int, ...]:
     return tuple(int(part) for part in re.findall(r"\d+", final))
 
 
-def _active_benchmarks(records: list[dict[str, Any]]) -> set[str]:
-    """Keep only the newest version of every benchmark definition."""
+def _active_benchmarks(
+    records: list[dict[str, Any]], ledger_benchmarks: frozenset[str]
+) -> set[str]:
+    """Keep only the newest version of every benchmark definition.
 
+    Both sources define benchmarks, and a benchmark the ledger defines that
+    the seed never shipped is as eligible as any other: `ledger_benchmarks`
+    holds those identities, already bridged onto the seed's own where an
+    import preserved one (ADR-0166).
+    """
+
+    # Read the shipped definitions and the ledger's own in one identity space.
+    identifiers = [
+        cast(str, record["seed_id"])
+        for record in records
+        if record.get("record_type") == "benchmark_definition_seed"
+    ]
+
+    # Keep the highest version within each definition, a benchmark's version
+    # being the last colon-separated segment of its identity.
     latest: dict[str, str] = {}
-    for record in records:
-        if record.get("record_type") != "benchmark_definition_seed":
-            continue
-        identifier = cast(str, record["seed_id"])
+    for identifier in [*identifiers, *sorted(ledger_benchmarks)]:
         definition = identifier.rsplit(":", 1)[0]
         if definition not in latest or _version_key(identifier) > _version_key(
             latest[definition]
         ):
             latest[definition] = identifier
+
     return set(latest.values())
 
 
 def _capability_ranks(
     records: list[dict[str, Any]],
     model_seeds: dict[str, dict[str, Any]],
+    ledger: LedgerEvidence,
     candidates: list[str],
     main_model: str,
 ) -> tuple[dict[str, float | None], float | None]:
-    """Rank comparable models from one newest maximally covering benchmark."""
+    """Rank comparable models from one newest maximally covering benchmark.
 
-    # Resolve canonical model IDs to the identities carried by evaluation rows.
-    seed_ids = {
-        model: cast(str, seed["seed_id"]) for model, seed in model_seeds.items()
+    The comparison is selected on candidate coverage alone. Whether it scores
+    the main seat is no longer a condition of selecting it: a seat released
+    after the benchmark that ranks its candidates is unranked, and returning
+    no ranks at all cost the run every mapping where suspending the ceiling
+    costs it one number (ADR-0166).
+    """
+
+    # Read both sources in the canonical model space the profile speaks.
+    seed_models = {
+        cast(str, seed["seed_id"]): model for model, seed in model_seeds.items()
     }
-    main_seed_id = seed_ids.get(main_model)
-    if main_seed_id is None:
-        return {}, None
 
     # Retain maximum scores per model within every non-superseded benchmark.
     scores: dict[str, dict[str, float]] = {}
-    active = _active_benchmarks(records)
+    active = _active_benchmarks(records, ledger.benchmarks)
     for record in records:
         benchmark = record.get("benchmark_seed_id")
         model_seed_id = record.get("model_seed_id")
-        score = record.get("score")
+        score = _numeric_score(record.get("score"))
         if (
             record.get("record_type") != "evaluation_prior_seed"
             or benchmark not in active
             or not isinstance(model_seed_id, str)
-            or not isinstance(score, (int, float))
-            or isinstance(score, bool)
+            or model_seed_id not in seed_models
+            or score is None
         ):
             continue
-        benchmark_scores = scores.setdefault(cast(str, benchmark), {})
-        benchmark_scores[model_seed_id] = max(
-            float(score), benchmark_scores.get(model_seed_id, float("-inf"))
-        )
+        _retain_maximum(scores, cast(str, benchmark), seed_models[model_seed_id], score)
 
-    # Select the widest shared comparison, using newest version to break ties.
-    choices = [
-        benchmark
-        for benchmark, benchmark_scores in scores.items()
-        if main_seed_id in benchmark_scores
-    ]
-    if not choices:
+    # Let a local row supersede the seed's for the same model and benchmark.
+    # No timestamp arbitrates: an imported seed row keeps the seed's own
+    # retrieval time, so the two are the same age by construction.
+    for benchmark, ledger_scores in ledger.scores.items():
+        if benchmark in active:
+            scores.setdefault(benchmark, {}).update(ledger_scores)
+
+    # Select the widest candidate comparison, newest version breaking a tie.
+    if not scores:
         return {}, None
     selected = max(
-        choices,
+        scores,
         key=lambda benchmark: (
-            sum(seed_ids.get(model) in scores[benchmark] for model in set(candidates)),
+            sum(model in scores[benchmark] for model in set(candidates)),
             _version_key(benchmark),
         ),
     )
     selected_scores = scores[selected]
-    ranks = {
-        model: selected_scores.get(seed_ids.get(model, "")) for model in candidates
-    }
-    return ranks, selected_scores[main_seed_id]
+    ranks = {model: selected_scores.get(model) for model in candidates}
+    return ranks, selected_scores.get(main_model)
 
 
 def _policy_values(policy: dict[str, Any], supported: list[str]) -> list[str]:
@@ -566,6 +705,7 @@ def _derive_context(
     runtime_harness = runtime["harness"]
     runtime_seat = runtime["main_seat"]
     evidence = _evidence(data_directory, cast(str, manifest["as_of"]))
+    ledger = _ledger_evidence(data_directory)
 
     # An absent or rejected profile is a normal inheritance context; neither
     # state withholds the evidence the ledger holds independently of it.
@@ -575,12 +715,18 @@ def _derive_context(
         main_rank = None
         selections: list[dict[str, Any]] = []
     else:
-        # Retain only enabled selections whose persisted identity was validated.
+        # Admit an enabled selection the ledger records as a release or an
+        # alias binding. The profile's own status answers only where the
+        # ledger has never seen the model, `update` being forbidden to write
+        # that member back into the user's configuration (ADR-0166).
         selections = [
             selection
             for selection in profile["model_selections"]
             if selection["enabled"] is True
-            and selection["validation_status"] == "validated"
+            and (
+                selection["canonical_provider_model_id"] in ledger.models
+                or selection["validation_status"] == "validated"
+            )
         ]
         candidate_models = [
             cast(str, selection["canonical_provider_model_id"])
@@ -597,18 +743,19 @@ def _derive_context(
             None,
         )
 
-        # Withhold selection when the main seat has no comparable benchmark.
+        # Withhold selection only for a seat the user never configured. A
+        # configured seat no benchmark scores keeps every candidate and
+        # publishes its own rank as unknown.
         if configured_main is None:
             ranks, main_rank, selections = {}, None, []
         else:
             ranks, main_rank = _capability_ranks(
                 records,
                 model_seeds,
+                ledger,
                 candidate_models,
                 cast(str, configured_main),
             )
-            if main_rank is None:
-                selections = []
 
     # Specialize every enabled validated selection and serving mode in order.
     templates = _read_templates()

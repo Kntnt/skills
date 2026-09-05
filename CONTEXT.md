@@ -219,6 +219,10 @@ _Avoid_: requirement, prerequisite
 A dependency whose source is another collection, not this one.
 _Avoid_: third-party, upstream, peer
 
+**Capability Rank**:
+The number a Rung is read on: one model's score on the single benchmark that covers most of the candidates a request reaches, taken from the independent evaluation priors the shipped seed and the local evidence ledger hold, the ledger's own row superseding the seed's for the same model and benchmark. It is a published quality measurement and nothing else becomes one — not a first-party capability claim, not a price, not a throughput figure. A model that comparison never scored has no rank and is excluded from selection rather than being placed by a guess; a main seat with no rank suspends the ceiling it cannot state instead of acquiring one.
+_Avoid_: quality score, capability (that is the Dependency below), tier, strength
+
 **Capability**:
 A Dependency on what the running Harness can do rather than on what is on disk — spawning subagents, for one. No script can test one, because the Manager cannot know which Harness invoked it; the agent answers, being the Harness. The checker therefore reports the Capabilities a skill requires and the skill's own instructions make answering them part of the check. Select names them on the skill's row, so the user knows before choosing that it may refuse to work where they are. A skill declaring one is still Enabled everywhere; it refuses where the Capability is Unsatisfied.
 _Avoid_: feature, harness flag, platform check, gate

@@ -57,6 +57,8 @@ RELATIONS = {
     ("0161", "0162"),
     ("0095", "0164"),
     ("0136", "0165"),
+    ("0083", "0166"),
+    ("0136", "0166"),
     ("0017", "0019"),
     ("0029", "0059"),
     ("0050", "0059"),
@@ -592,6 +594,48 @@ def test_the_rejected_profile_preserves_the_one_missing_facts_record_history() -
     # documented version, and refusing the run instead of inheriting.
     assert "No migration is written" in later
     assert "start nothing" in later
+
+
+def test_the_suspended_ceiling_preserves_both_records_it_narrows() -> None:
+    """The unranked main seat points past two records without rewriting either.
+
+    ADR-0083's authority ceiling and ADR-0136's derivation both stand: an
+    execution point still cannot exceed a ceiling that exists, and a seat
+    absent from the profile still empties the mappings. What the later record
+    narrows is what happens where the ceiling cannot be stated at all, and
+    what counts as a selection the derivation may admit.
+    """
+
+    ceiling = (ADR / "0083-model-selector-owns-exact-frozen-routing.md").read_text(
+        encoding="utf-8"
+    )
+    derivation = (
+        ADR / "0136-model-selector-derives-routing-context-from-shipped-adapters.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR / "0166-an-unranked-main-seat-suspends-the-ceiling-it-cannot-state.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep both historical claims intact and add only the sanctioned pointers.
+    assert "refusals rather than optimistic fallbacks" in ceiling
+    assert "narrowed by ADR-0166" in ceiling
+    assert "unvalidated selections never become mappings" in derivation
+    assert "narrowed by ADR-0166" in derivation
+
+    # Declare the same relations from the later record for the scan in both
+    # directions.
+    assert "narrows ADR-0083" in later
+    assert "narrows ADR-0136" in later
+
+    # What the later record settles: the rank's two sources, the rule for a
+    # seat neither of them scores, and the token the empty pool now inherits.
+    assert "unavailable_safe_candidate" in later
+    assert "no_scored_evaluation_for_main_seat" in later
+    assert "candidate coverage alone" in later
+
+    # The substitutes named as rejected, so neither returns as an idea.
+    assert "Inheriting a predecessor's score" in later
+    assert "top of the ladder" in later
 
 
 def test_a_pointer_names_a_later_record() -> None:

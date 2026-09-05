@@ -306,6 +306,13 @@ WAVE_FIX_ESCALATION = "-escalated"
 # fact per ticket, and says it once (ADR-0110).
 INHERITED_FOR_NO_ADAPTER = "unavailable_selection_controls"
 
+# The stable reason model-selector inherits under where every configured
+# candidate was filtered out before a safe one remained. It is a different
+# fact about the run from the one above — the adapters are complete and the
+# candidates are not safe — so it gets its own line rather than being merged
+# into that one (ADR-0166).
+INHERITED_FOR_NO_SAFE_CANDIDATE = "unavailable_safe_candidate"
+
 # Where a run keeps the routed attempts an external verdict has judged, and
 # where the sanitized artifact model-selector makes of them is written. Both
 # sit in the run's own scratch, are named by the engine so a report and an
@@ -1199,23 +1206,36 @@ def routing_capability(records: list[RouteRecord]) -> str | None:
     fact about the Harness rather than one fact per ticket, so it is stated
     once, before the run, instead of being decoded from a dozen identical
     inheritance reasons in the account after it (ADR-0110).
+
+    An empty safe candidate set produces the same shape from a different
+    cause — the adapters are complete and no configured candidate survived
+    filtering — so it gets a line of its own rather than being merged into
+    that one (ADR-0166). A run that mixes the two states neither, exactly as
+    a run mixing inheritance with selection already does.
     """
 
     if not records:
         return None
 
+    reasons: set[str] = set()
     for record in records:
         decision = record.decision
         if str(decision.get("status")) != ROUTE_INHERIT:
             return None
         inherited = cast(dict[str, Any], decision.get("inheritance") or {})
-        if str(inherited.get("reason")) != INHERITED_FOR_NO_ADAPTER:
-            return None
+        reasons.add(str(inherited.get("reason")))
 
-    return (
-        "no complete adapter on this Harness can express a safe point, so every "
-        "building role this run launches inherits the main seat"
-    )
+    if reasons == {INHERITED_FOR_NO_ADAPTER}:
+        return (
+            "no complete adapter on this Harness can express a safe point, so "
+            "every building role this run launches inherits the main seat"
+        )
+    if reasons == {INHERITED_FOR_NO_SAFE_CANDIDATE}:
+        return (
+            "no configured candidate is safe to route to, so every building "
+            "role this run launches inherits the main seat"
+        )
+    return None
 
 
 def frozen_routing(

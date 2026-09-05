@@ -69,7 +69,8 @@
         "exclusions": {"type": "array", "items": {"$ref": "#/$defs/exclusion"}},
         "frontier": {"type": "array", "items": {"$ref": "#/$defs/frontier_entry"}},
         "standing_policy": {"$ref": "#/$defs/standing_policy_audit"},
-        "exploration": {"$ref": "#/$defs/exploration_audit"}
+        "exploration": {"$ref": "#/$defs/exploration_audit"},
+        "main_seat_ceiling": {"$ref": "#/$defs/main_seat_ceiling_audit"}
       },
       "additionalProperties": false
     },
@@ -78,6 +79,15 @@
         {"$ref": "https://kntnt.dev/schemas/model-selector/route-request-v1.json#/$defs/rung"},
         {"type": "null"}
       ]
+    },
+    "main_seat_ceiling_audit": {
+      "type": "object",
+      "required": ["model_dimension_enforced"],
+      "properties": {
+        "model_dimension_enforced": {"type": "boolean"},
+        "reason": {"const": "no_scored_evaluation_for_main_seat"}
+      },
+      "additionalProperties": false
     },
     "exploration_audit": {
       "type": "object",

@@ -703,12 +703,17 @@ def _model_within_main_seat(point: dict[str, Any], snapshot: dict[str, Any]) -> 
 
     A carried deliberation control launches at the seat's own value, so the
     model is the only dimension such a point can exceed the ceiling in.
+
+    A seat no benchmark scores suspends this dimension rather than acquiring
+    one: every ranked candidate is admitted, the audit says the ceiling was
+    not enforced, and a point the comparison never ranked gains nothing,
+    having been excluded as `capability_rank_unavailable` already (ADR-0166).
     """
 
+    if point["model_capability"] is None:
+        return False
     model_ceiling = snapshot["main_seat"]["model_capability"]
-    return model_ceiling is not None and _model_capability(point) <= float(
-        model_ceiling
-    )
+    return model_ceiling is None or _model_capability(point) <= float(model_ceiling)
 
 
 def _candidate_control_capability(
@@ -1940,6 +1945,34 @@ def _selection_decision(
     )
 
 
+def _main_seat_ceiling_audit(snapshot: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """State an unenforceable model ceiling, and nothing where it was enforced.
+
+    A rank is a quality number an independent evaluation published, and no
+    other member substitutes for one — cost sits on the same row and buys no
+    capability. So the decision reports the suspension instead of hiding it
+    behind a ceiling every candidate happened to clear (ADR-0166).
+
+    A snapshot with no configured point had no ceiling to enforce and makes
+    no such claim: an absent or rejected profile leaves the seat unranked
+    because the derivation never looked, which is a different fact.
+    """
+
+    main_seat = snapshot.get("main_seat")
+    if (
+        not isinstance(main_seat, dict)
+        or main_seat.get("model_capability") is not None
+        or not snapshot.get("mappings")
+    ):
+        return {}
+    return {
+        "main_seat_ceiling": {
+            "model_dimension_enforced": False,
+            "reason": "no_scored_evaluation_for_main_seat",
+        }
+    }
+
+
 def _audit(
     snapshot: dict[str, Any], facts: dict[str, Any] | None = None
 ) -> dict[str, Any]:
@@ -1969,6 +2002,7 @@ def _audit(
             if isinstance(main_seat, dict)
             else None,
         },
+        **_main_seat_ceiling_audit(snapshot),
         **deepcopy(facts or {}),
     }
 
@@ -2405,10 +2439,14 @@ def _execution_decision(
             standing=unresolved,
         )
 
-    # Refuse selection when either frozen authority dimension is unknown.
-    if (
-        snapshot["main_seat"].get("model_capability") is None
-        or snapshot["main_seat"].get("deliberation_capability") is None
+    # Refuse a snapshot whose deliberation dimension is unknown, that scale
+    # being fixed portable ordinals no derivation leaves out, and a model lock
+    # under a seat nothing scored, an exact model being the one request whose
+    # whole point is a model chosen against the seat's own authority. Every
+    # other request routes with the model dimension suspended (ADR-0166).
+    if snapshot["main_seat"].get("deliberation_capability") is None or (
+        request["overrides"].get("model")
+        and snapshot["main_seat"].get("model_capability") is None
     ):
         return _refused(request, snapshot, "unknown_main_seat_ceiling")
 
@@ -2471,26 +2509,30 @@ def _execution_decision(
 
     # Preserve automatic fresh-context delegation when controls are unavailable.
     if not pool.candidates:
-        if (
-            not overrides
-            and snapshot["harness"].get("inheritance")
-            and pool.variant_exclusion_codes
-            and set(pool.variant_exclusion_codes)
-            <= {
+        if snapshot["harness"].get("inheritance"):
+            missing_controls = bool(pool.variant_exclusion_codes) and set(
+                pool.variant_exclusion_codes
+            ) <= {
                 "adapter_unreachable",
                 "capability_rank_unavailable",
                 "mapping_unavailable",
             }
-        ):
+
+            # Tell the two causes apart: no complete adapter can express a
+            # safe point, against no configured candidate was safe to route
+            # to. Both inherit, an automatic request being one this caller
+            # cannot act on the reason for (ADR-0166).
             return _inherit(
                 request,
                 snapshot,
-                "unavailable_selection_controls",
+                "unavailable_selection_controls"
+                if missing_controls
+                else "unavailable_safe_candidate",
                 {"exclusions": list(pool.exclusions)},
                 standing,
             )
 
-        # Refuse every other empty safe set with the hard-filter audit.
+        # Refuse an empty safe set the Harness cannot answer by inheriting.
         return _refused(
             request,
             snapshot,

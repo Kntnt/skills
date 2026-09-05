@@ -460,6 +460,7 @@ def test_context_benchmark_coverage_counts_distinct_models() -> None:
     ranks, main_rank = context._capability_ranks(
         records,
         model_seeds,
+        context.LedgerEvidence(frozenset(), frozenset(), {}),
         ["candidate-a", "candidate-a", "candidate-b"],
         "main",
     )
@@ -756,12 +757,17 @@ def test_context_rejects_a_model_selection_that_fails_the_contract(
     assert decision["inheritance"]["reason"] == "rejected_profile"
 
 
-def test_context_inherits_an_unknown_main_seat_without_overrides(
+def test_context_inherits_a_main_seat_absent_from_the_profile(
     tmp_path: Path,
 ) -> None:
-    """A main seat outside the numeric comparison never gains a fake ceiling."""
+    """A main seat nobody configured never gains a fake ceiling.
 
-    # Use the documented seed gap with and without an exact model lock.
+    This is the absent-from-profile branch and not the unranked one: the
+    fixture profile has no selection and no alias for this release, so the
+    derivation never reaches a comparison to be outside of (ADR-0166).
+    """
+
+    # Use a seat the profile does not configure, with and without a lock.
     automatic = _runtime_context_request()
     automatic["runtime"]["main_seat"]["model"] = "claude-fable-5-1"
     derived = _derive_context(tmp_path / "automatic", automatic)
@@ -779,6 +785,216 @@ def test_context_inherits_an_unknown_main_seat_without_overrides(
     assert inherited["inheritance"]["reason"] == "unavailable_selection_controls"
     assert refused["status"] == "refused"
     assert refused["reason"]["code"] == "unknown_main_seat_ceiling"
+
+
+def _unranked_main_seat_profile() -> bytes:
+    """Move the fixture's fable selection onto a release nothing has scored.
+
+    The shared fixture profile is what every other context test reads for its
+    mapping counts, so the unranked main seat is arranged inside a copy of it:
+    one configured, enabled, validated selection whose release postdates the
+    shipped seed, which is exactly the shape `config edit` leaves behind when
+    a user moves to a newer version of a model they already run.
+    """
+
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    selection = next(
+        item
+        for item in profile["model_selections"]
+        if item["selection_id"] == "claude-fable"
+    )
+    selection.update(
+        {
+            "requested_model_id": "claude-fable-5-1",
+            "canonical_provider_model_id": "claude-fable-5-1",
+            "provider_release_id": "claude-fable-5-1",
+        }
+    )
+    return json.dumps(profile).encode()
+
+
+def _write_ledger(
+    data_directory: Path, stores: dict[str, list[dict[str, Any]]]
+) -> None:
+    """Write append-only rows into the ledger files named as they ship."""
+
+    data_directory.mkdir(parents=True, exist_ok=True)
+    for store, rows in stores.items():
+        lines = "".join(f"{json.dumps(row)}\n" for row in rows)
+        (data_directory / store).write_text(lines, encoding="utf-8")
+
+
+def _model_version(canonical: str, key: str) -> dict[str, Any]:
+    """Build one validated release exactly as `update` freezes it."""
+
+    return {
+        "record_type": "ModelVersion",
+        "model_version_key": key,
+        "provider": "anthropic",
+        "canonical_model_id": canonical,
+        "provider_release_id": canonical,
+        "seed_id": None,
+    }
+
+
+def _alias_binding(canonical: str, key: str) -> dict[str, Any]:
+    """Build one binding for an alias whose target is still undocumented."""
+
+    return {
+        "record_type": "AliasBinding",
+        "alias": canonical,
+        "provider": "spacexai",
+        "canonical_model_id": canonical,
+        "model_reference_key": key,
+        "target_model_version_key": None,
+        "resolution_status": "documented_alias_unresolved",
+        "status": "provisional_until_resolved",
+    }
+
+
+def _benchmark_prior(model_key: str, score: float) -> dict[str, Any]:
+    """Build one published benchmark prior against the seed's own benchmark."""
+
+    return {
+        "record_type": "EvaluationConfiguration",
+        "evaluation_key": f"evaluation:{model_key}",
+        "model_key": model_key,
+        "benchmark_key": "benchmark:artificial-analysis:intelligence-index:4.1.1",
+        "configuration": {"effort": "max", "serving_mode": "standard"},
+        "score": score,
+        "status": "independent_dated_prior",
+        "retrieved_at": "2026-09-02T00:00:00Z",
+    }
+
+
+def test_context_keeps_every_mapping_for_an_unranked_main_seat(
+    tmp_path: Path,
+) -> None:
+    """An unranked main seat suspends the ceiling instead of emptying routing.
+
+    The seat this defect was filed from has no benchmark prior anywhere, so
+    the derivation that waited for one answered every request with an empty
+    snapshot. It now costs the run its own rank and nothing else (ADR-0166).
+    """
+
+    # Derive one profile twice, changing only which seat the session runs on.
+    profile = _unranked_main_seat_profile()
+    ranked_request = _runtime_context_request()
+    unranked_request = _runtime_context_request()
+    unranked_request["runtime"]["main_seat"]["model"] = "claude-fable-5-1"
+    ranked = _derive_context(tmp_path / "ranked", ranked_request, profile)
+    unranked = _derive_context(tmp_path / "unranked", unranked_request, profile)
+
+    # Assert the unranked seat keeps every mapping and every candidate rank.
+    assert len(unranked["context"]["mappings"]) == 7
+    assert unranked["context"]["mappings"] == ranked["context"]["mappings"]
+    ranked_harness = ranked["context"]["harness"]
+    assert (
+        unranked["context"]["harness"]["adapter_specs"]
+        == (ranked_harness["adapter_specs"])
+    )
+    assert ranked["context"]["main_seat"]["model_capability"] == 63.0
+    assert unranked["context"]["main_seat"]["model_capability"] is None
+
+    # Assert an automatic request still resolves one exact launch under it.
+    decision = _load_router().route(unranked)["decisions"][0]
+    assert decision["status"] == "selected"
+    assert decision["audit"]["main_seat_ceiling"] == {
+        "model_dimension_enforced": False,
+        "reason": "no_scored_evaluation_for_main_seat",
+    }
+
+
+def test_context_ranks_a_release_only_the_local_ledger_scores(
+    tmp_path: Path,
+) -> None:
+    """A benchmark prior the ledger holds ranks a model the seed never saw."""
+
+    # Record the post-seed release and its published score, as `update` does.
+    _write_ledger(
+        tmp_path / "model-selector",
+        {
+            "model-versions.jsonl": [
+                _model_version("claude-fable-5-1", "model-version-fable")
+            ],
+            "evaluation-configurations.jsonl": [
+                _benchmark_prior("model-version-fable", 66.0)
+            ],
+        },
+    )
+    request = _runtime_context_request()
+    request["runtime"]["main_seat"]["model"] = "claude-fable-5-1"
+
+    context = _derive_context(tmp_path, request, _unranked_main_seat_profile())[
+        "context"
+    ]
+
+    # Assert the ledger's own row reaches the ceiling and the candidate ladder.
+    ranks = {point["model"]: point["model_capability"] for point in context["mappings"]}
+    assert context["main_seat"]["model_capability"] == 66.0
+    assert ranks["claude-fable-5-1"] == 66.0
+
+
+def test_context_ranks_an_alias_backed_model_the_ledger_rescored(
+    tmp_path: Path,
+) -> None:
+    """An evaluation row joins an alias binding, and the ledger supersedes the seed."""
+
+    # Score the unresolved alias the seed already ranks at 61.0.
+    _write_ledger(
+        tmp_path / "model-selector",
+        {
+            "alias-bindings.jsonl": [
+                _alias_binding("grok-4.6", "model-reference-grok")
+            ],
+            "evaluation-configurations.jsonl": [
+                _benchmark_prior("model-reference-grok", 64.0)
+            ],
+        },
+    )
+
+    context = _derive_context(tmp_path, _runtime_context_request())["context"]
+
+    # Assert the alias-backed row is read and outranks the seed's own score.
+    ranks = {point["model"]: point["model_capability"] for point in context["mappings"]}
+    assert ranks["grok-4.6"] == 64.0
+
+
+def test_context_admits_a_selection_the_ledger_records_as_validated(
+    tmp_path: Path,
+) -> None:
+    """The ledger's own validation admits a candidate the profile cannot.
+
+    `update` writes the ledger and is forbidden to rewrite the profile, so a
+    release it validated stayed excluded until the user ran `config edit`
+    by hand. The profile field answers only where the ledger is silent.
+    """
+
+    # Leave the alias-backed selection at the status `update` cannot rewrite.
+    profile = json.loads(PROFILE_FIXTURE.read_text(encoding="utf-8"))
+    selection = next(
+        item
+        for item in profile["model_selections"]
+        if item["selection_id"] == "uncovered-grok"
+    )
+    selection["validation_status"] = "documented_alias_unresolved"
+    stored = json.dumps(profile).encode()
+
+    # Derive it once with an empty ledger and once with the binding recorded.
+    without = _derive_context(tmp_path / "without", _runtime_context_request(), stored)
+    _write_ledger(
+        tmp_path / "with" / "model-selector",
+        {"alias-bindings.jsonl": [_alias_binding("grok-4.6", "model-reference-grok")]},
+    )
+    recorded = _derive_context(tmp_path / "with", _runtime_context_request(), stored)
+
+    # Assert only the ledger's record admits the selection as a candidate.
+    assert [point["model"] for point in without["context"]["mappings"]].count(
+        "grok-4.6"
+    ) == 0
+    assert [point["model"] for point in recorded["context"]["mappings"]].count(
+        "grok-4.6"
+    ) == 1
 
 
 def test_context_returns_a_valid_frozen_snapshot_unchanged(tmp_path: Path) -> None:
@@ -2468,10 +2684,13 @@ def test_route_still_inherits_when_execution_locks_nothing() -> None:
     rejected["profile"] = {"rejection": "config.json does not match the contract."}
     unreachable = _complete_routing_snapshot()
     unreachable["harness"]["adapter_specs"] = []
+    unsafe = _complete_routing_snapshot()
+    unsafe["mappings"][0]["model_capability"] = 101
     expected = {
         "missing_profile": absent,
         "rejected_profile": rejected,
         "unavailable_selection_controls": unreachable,
+        "unavailable_safe_candidate": unsafe,
     }
 
     # Assert every branch still delegates with fresh context rather than
@@ -2483,6 +2702,73 @@ def test_route_still_inherits_when_execution_locks_nothing() -> None:
         assert decision["status"] == "inherit", reason
         assert decision["inheritance"]["reason"] == reason
         assert "launch" not in decision
+
+
+def test_route_suspends_the_model_ceiling_it_cannot_enforce() -> None:
+    """An unranked main seat admits every ranked candidate and says so.
+
+    Suspension is exactly as wide as the gap it covers: the deliberation
+    dimension still binds, a candidate the comparison never ranked stays
+    excluded, and the audit states that the model dimension was not
+    enforced rather than letting a substitute number stand in (ADR-0166).
+    """
+
+    # Route one complete point under an enforced and then a suspended ceiling.
+    router = _load_router()
+    enforced = _complete_routing_snapshot()
+    suspended = _complete_routing_snapshot()
+    suspended["main_seat"]["model_capability"] = None
+    decisions = [
+        router.route(
+            {"schema_version": 1, "context": snapshot, "requests": [_request()]}
+        )["decisions"][0]
+        for snapshot in (enforced, suspended)
+    ]
+
+    # Assert the suspended ceiling launches exactly what the enforced one did.
+    assert [decision["status"] for decision in decisions] == ["selected", "selected"]
+    assert decisions[1]["launch"] == decisions[0]["launch"]
+    assert "main_seat_ceiling" not in decisions[0]["audit"]
+    assert decisions[1]["audit"]["main_seat_ceiling"] == {
+        "model_dimension_enforced": False,
+        "reason": "no_scored_evaluation_for_main_seat",
+    }
+
+    # Assert a lock on the dimension that still binds is answered exactly,
+    # only an exact model being chosen against the seat's own authority.
+    locked = router.route(
+        {
+            "schema_version": 1,
+            "context": suspended,
+            "requests": [_request(overrides={"deliberation": "high"})],
+        }
+    )["decisions"][0]
+    assert locked["status"] == "selected"
+    assert locked["launch"]["portable_deliberation"] == "high"
+
+    # Assert a snapshot with no point to filter claims nothing about a ceiling
+    # it never reached: an absent profile leaves the seat unranked for its own
+    # reason, which this member would otherwise misreport.
+    absent = _complete_routing_snapshot()
+    absent["profile"] = None
+    absent["main_seat"]["model_capability"] = None
+    absent["mappings"] = []
+    inherited = router.route(
+        {"schema_version": 1, "context": absent, "requests": [_request()]}
+    )["decisions"][0]
+    assert inherited["inheritance"]["reason"] == "missing_profile"
+    assert "main_seat_ceiling" not in inherited["audit"]
+
+    # Assert a candidate the comparison never ranked gains nothing from it.
+    unranked = deepcopy(suspended)
+    unranked["mappings"][0]["model_capability"] = None
+    decision = router.route(
+        {"schema_version": 1, "context": unranked, "requests": [_request()]}
+    )["decisions"][0]
+    assert decision["status"] == "inherit"
+    assert [item["code"] for item in decision["audit"]["exclusions"]] == [
+        "capability_rank_unavailable"
+    ]
 
 
 def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
@@ -2519,7 +2805,16 @@ def test_route_refuses_every_unsafe_family_without_launch_arguments() -> None:
     )
     unknown = _complete_routing_snapshot()
     unknown["main_seat"]["model_capability"] = None
-    cases.append((unknown, _request(), "unknown_main_seat_ceiling"))
+    cases.append(
+        (
+            unknown,
+            _request(overrides={"model": "worker-v2"}),
+            "unknown_main_seat_ceiling",
+        )
+    )
+    malformed = _complete_routing_snapshot()
+    malformed["main_seat"]["deliberation_capability"] = None
+    cases.append((malformed, _request(), "unknown_main_seat_ceiling"))
     above = _complete_routing_snapshot()
     above["mappings"][0]["model_capability"] = 101
     cases.append(
@@ -4071,6 +4366,33 @@ def test_commands_keep_capability_priors_offline_and_append_only() -> None:
     _assert_contains_all(skill, command_rules)
 
 
+def test_an_unranked_selection_makes_its_ranking_sources_due() -> None:
+    """The cadence rule carries the case that closes an unranked seat's gap.
+
+    Suspending a ceiling nothing can state and expediting what makes it
+    statable again are one design, so the forcing is written where the
+    cadence is — in the ledger reference and in the pass that reads it
+    (ADR-0166).
+    """
+
+    ledger_contract = _read("references/evidence-ledger.md")
+    skill = _read("SKILL.md")
+
+    # Name the case, the sources it makes due, and the ones it leaves alone.
+    _assert_contains_all(
+        ledger_contract,
+        {
+            "no capability rank",
+            "whatever their cadence says",
+            "`benchmark_release_index`",
+            "the model and release indexes are not made due",
+        },
+    )
+    _assert_contains_all(
+        skill, {"no capability rank", "due on this pass regardless of cadence"}
+    )
+
+
 def test_route_exposes_the_public_model_routing_contract() -> None:
     """Delegated callers receive ordered, exact, reproducible decisions."""
 
@@ -4121,6 +4443,11 @@ def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
         "unrepresentable_verdict_inheritance",
         "empty_safe_candidate_set",
         "unavailable_selection_controls",
+        "unavailable_safe_candidate",
+        "audit.main_seat_ceiling",
+        "no_scored_evaluation_for_main_seat",
+        "candidate coverage alone",
+        "model_reference_key",
         "locks only that dimension",
         "selected exactly or refused, never inherited",
         "reserved for automatic dimensions",

@@ -3157,6 +3157,37 @@ def test_a_dry_route_states_the_routing_capability_before_the_night(
     assert "no complete adapter" in json.loads(result.stdout)["routing_capability"]
 
 
+def test_an_unsafe_candidate_set_states_its_own_routing_capability(
+    tmp_path: Path,
+) -> None:
+    """The two inherit-only causes are different repairs, so they read apart.
+
+    No complete adapter can express a safe point is a fact about the Harness;
+    no configured candidate is safe to route to is a fact about what the
+    profile and the evidence leave standing. Merging them would tell a
+    developer to look in the wrong place (ADR-0166).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    result = _route(
+        repo,
+        tmp_path,
+        scratch,
+        env,
+        [_inherited("build-9", "unavailable_safe_candidate")],
+        dry_run=True,
+        starting=[9],
+    )
+
+    assert result.returncode == 0, result.stderr
+    stated = json.loads(result.stdout)["routing_capability"]
+    assert stated is not None and "no configured candidate is safe" in stated
+
+
 def test_one_selected_decision_leaves_no_routing_capability_line(
     tmp_path: Path,
 ) -> None:
