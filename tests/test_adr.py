@@ -56,6 +56,8 @@ CONSOLIDATIONS = {
     "C1": "0175",
     "C2": "0176",
     "C3": "0177",
+    "C4": "0178",
+    "C5": "0179",
 }
 
 # A consolidation record lists what it absorbed under one heading of its own,
