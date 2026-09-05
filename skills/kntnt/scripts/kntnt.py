@@ -4521,6 +4521,52 @@ def _refusal(problem: str, grammar: Grammar) -> Reading:
     return Reading(EXIT_REFUSED, text)
 
 
+def _manager_refusal(
+    skill_dir: Path, tokens: list[Token], grammar: Grammar, problem: str | None = None
+) -> Reading | None:
+    """Preserve the Manager's pre-engine diagnostics at its public seam.
+
+    The Manager predates the shared engine and its callers rely on its stderr
+    wording and Help route. Other Skills use the engine's common refusal
+    contract; this compatibility boundary keeps moving the Manager onto that
+    engine from changing the command people already know.
+    """
+
+    if skill_dir.name != MANAGER or not tokens:
+        return None
+
+    first = tokens[0].text
+    if first == "help":
+        flag = next(
+            (token.text for token in tokens[1:] if token.text.startswith("-")), None
+        )
+        if flag is None:
+            return None
+        page = skill_dir / "help" / "help.md"
+        return Reading(
+            EXIT_REFUSED,
+            f"error: help takes no '{flag}'\n\n{synopsis_of(page)}"
+            f"\n\nsee '/kntnt help help'",
+        )
+
+    if problem is None:
+        return None
+
+    command_page = subcommand_manpage(first)
+    if command_page is None:
+        return Reading(
+            EXIT_REFUSED,
+            f"error: unknown subcommand '{first}'\n\n{synopsis_of(grammar.page)}"
+            f"\n\nsee '/kntnt --help'",
+        )
+
+    return Reading(
+        EXIT_REFUSED,
+        f"error: unknown subcommand '{first}'\n\n{synopsis_of(command_page)}"
+        f"\n\nsee '/kntnt help {first}'",
+    )
+
+
 def _read_flags(tokens: list[Token]) -> tuple[dict[str, list[str | bool]], str | None]:
     """Read the flag tokens into name → the values written, or name a malformed one."""
 
@@ -4746,8 +4792,15 @@ def read_invocation(skill_dir: Path, payload: str) -> Reading:
             )
         return Reading(EXIT_HELP, read_manpage(page))
 
+    manager_refusal = _manager_refusal(skill_dir, tokens, grammar)
+    if manager_refusal is not None:
+        return manager_refusal
+
     fault, invocation = validate(skill_dir, grammar, path, tokens, formal)
     if fault is not None:
+        manager_refusal = _manager_refusal(skill_dir, tokens, grammar, fault)
+        if manager_refusal is not None:
+            return manager_refusal
         return _refusal(fault, grammar)
     return Reading(0, invocation={**invocation, "instruction": instruction})
 
@@ -4768,7 +4821,12 @@ def cmd_invoke(skill_dir: Path) -> int:
 
     reading = read_invocation(skill_dir, sys.stdin.read())
     if reading.status != 0:
-        print(reading.text)
+        stream = (
+            sys.stderr
+            if skill_dir.name == MANAGER and reading.status == EXIT_REFUSED
+            else sys.stdout
+        )
+        print(reading.text, file=stream)
         return reading.status
     emit({"ok": True, **reading.invocation, "dependencies": dependencies})
     return 0
