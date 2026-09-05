@@ -38,7 +38,7 @@ import sys
 from contextlib import suppress
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, TextIO
 
 SCHEMA_VERSION = 1
 
@@ -638,6 +638,11 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     unattended source refresh, which reaches the network only as bounded
     conditional metadata retrieval under a stated budget, in a module of its
     own (ADR-0167).
+
+    The object returned here is a diagnostic and never a Harness's protocol,
+    so the command line writes it to standard error and leaves standard output
+    empty: a Harness reads its own hook's standard output as its own protocol
+    and refuses an object carrying fields from anywhere else (#259).
     """
 
     try:
@@ -873,11 +878,24 @@ def remove_integrations() -> dict[str, Any]:
     return {"removed": result["harnesses"], "usage_records_preserved": True}
 
 
-def _emit(payload: dict[str, Any]) -> None:
-    """Print one machine-readable answer."""
+def _emit(payload: dict[str, Any], stream: TextIO | None = None) -> None:
+    """Print one machine-readable answer, on *stream* or on standard output.
 
-    json.dump(payload, sys.stdout, indent=2, sort_keys=True)
-    sys.stdout.write("\n")
+    A Harness that runs a hook it owns reads what that hook writes on standard
+    output as its own protocol, so `hook` — the one action a Harness ever runs
+    — hands standard error in here and leaves that channel empty (#259). Every
+    other action answers where it always has, because the Manager's two
+    integration words and this Skill's own two report verbs are read from
+    standard output by whatever asked for them.
+
+    The stream is resolved at call time rather than bound as a default, so a
+    caller that replaced the process's own streams is answered on the ones it
+    installed.
+    """
+
+    target = sys.stdout if stream is None else stream
+    json.dump(payload, target, indent=2, sort_keys=True)
+    target.write("\n")
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -920,7 +938,9 @@ def main(argv: list[str] | None = None) -> int:
     root = Path(args.root)
 
     # The hook is the only action a Harness runs, and it is fail-open whatever
-    # reaches it — including a payload that is not JSON at all.
+    # reaches it — including a payload that is not JSON at all. Its answer goes
+    # to standard error, because the channel it would otherwise print on is the
+    # one the Harness reads back as its own protocol (#259).
     if args.action == "hook":
         try:
             payload = json.loads(sys.stdin.read() or "{}")
@@ -929,7 +949,7 @@ def main(argv: list[str] | None = None) -> int:
         named = args.harness[0] if args.harness else None
         if named and isinstance(payload, dict) and not payload.get("harness"):
             payload["harness"] = named
-        _emit(hook(data, args.event, payload))
+        _emit(hook(data, args.event, payload), sys.stderr)
         return 0
 
     if args.action == "remove-integrations":
