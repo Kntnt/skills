@@ -23,11 +23,12 @@ INGRESS = ADR / "README.md"
 # place a reader can learn that the duty no longer binds them.
 RETIRED = "ADR-0075"
 
-# The reform's own record, cited from the module by its title because the
-# record itself is written by a later ticket. A title is what survives that
-# gap: the number does not exist yet, and a citation to a number no record
-# answers is what `tests/test_adr.py` already refuses.
-REFORM = "How this repository records decisions and writes tickets"
+# The reform's own record, which the module cited by title while it was still
+# unwritten and now cites by number, the record having been written (issue
+# #271). The number is what a reader can follow and what the suite can refuse
+# when nothing answers to it; a title is neither, and it was only ever the
+# stand-in for the gap between the module and the record it needed.
+REFORM = "ADR-0180"
 
 # The three criteria `/domain-modeling` states, which are the bar a decision
 # clears before it earns a record here at all.
@@ -155,8 +156,8 @@ def test_the_docs_module_retires_the_outrun_pointer_duty() -> None:
         f" retired, in that word."
     )
     assert REFORM in text, (
-        f"{REFORM!r}: the reform's own record is cited by title, its number"
-        f" being filled in by the ticket that writes it."
+        f"{REFORM}: the reform's own record is cited by number, which is where"
+        f" the reasoning for retiring the duty is carried."
     )
 
 
