@@ -1,14 +1,15 @@
 # Kntnt Skills — agent guide
 
-## ⚠️ TEMPORARY: protected rework state
+## ⚠️ TEMPORARY: the rework branch is a source, not a successor
 
-> This section is temporary. It is removed by the rework's final cleanup ticket, once `rework` has merged into `main`.
+> This section is temporary. It is removed once everything worth bringing over from `rework` has landed on `main` and the branch is deleted.
 
-A ground-up rebuild of this collection is in progress on the branch `rework`, checked out in the worktree `../skills-rework`. Its design dossier lives in `docs/rework/` on that branch.
+A ground-up rebuild of this collection was built on the branch `rework`, checked out in the worktree `../skills-rework`, with its design dossier in `docs/rework/` on that branch. On 2026-09-05 the direction was reversed: `main` has moved too far to be taken over, so **`main` is the surviving branch** and `rework` is read-only source material whose improvements are brought to `main` by cherry-pick or re-implementation, one ordinary ticket at a time. The endgame written in `docs/rework/00-brief.md` and `01-plan.md` on that branch no longer applies.
 
-- The branch `rework` and the worktree `../skills-rework` are EXEMPT from every cleanup instruction. "Remove all worktrees", "delete all branches", "make sure everything is merged and tidy" and the like apply to everything EXCEPT these two. Never delete, merge, rebase, or prune them.
-- Tickets labeled `rework` (milestone "Skills 2.0") belong to the rebuild. Their ready state is `rework-ready-for-agent` — never add the plain `ready-for-agent` label to them, never work them from an ordinary session, and never pass them to /orchestrate, not even by explicit ticket number. Rework sessions, conversely, leave `ready-for-agent` tickets alone.
-- The only rebuild artifact permitted on `main` is this section.
+- The branch `rework` and the worktree `../skills-rework` are still EXEMPT from every cleanup instruction. "Remove all worktrees", "delete all branches", "make sure everything is merged and tidy" and the like apply to everything EXCEPT these two. Never delete, merge, rebase, or prune them, and never commit to them.
+- Never merge `rework` into `main` or `main` into `rework`. What comes over comes over in ordinary `ready-for-agent` tickets on `main`, each naming the rework commit it re-implements; reading a file from the branch (`git show rework:<path>`) is how a builder sees the original.
+- The five pipeline Skills on `rework` — frame, to-slices, compile, dispatch, and the unbuilt land — stay there until Thomas asks for them. `/orchestrate` remains the collection's ticket runner on `main`.
+- Tickets labeled `rework` (milestone "Skills 2.0") are the closed history of the rebuild. Never reopen or work them, and never pass them to /orchestrate.
 
 ## Ground rules (authoritative)
 
