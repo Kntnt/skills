@@ -8,7 +8,7 @@
 frontiers, and a frontier is quality: judged runs grouped into points, with
 Wilson bounds and cost means attached (`references/pareto-selection.md`). A
 Usage Record has no verdict and belongs to no Cohort, so it reaches none of
-that by design (CONTEXT.md `Usage Record`) — it is never a selector input: it
+that by design (docs/rules/routing.md) — it is never a selector input: it
 enters no frontier, clears no quality floor, breaks no tie, and never makes a
 point eligible that quality evidence excluded (issue #226 decision 2).
 
