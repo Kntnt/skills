@@ -10,7 +10,7 @@ kntnt uninstall - remove the Collection from the machine
 
 ## DESCRIPTION
 
-`kntnt uninstall` removes every Catalog Skill Enabled in Global from every Harness detected in the user's home directory, then removes the Manager through the transport. The Manager is removed only after every other confirmed removal succeeds, so a partial run retains the command needed to finish.
+`kntnt uninstall` tears down every Feature Enabled in Global first, while the Manager they ship inside is still there to run them, then removes every Catalog Skill Enabled in Global from every Harness detected in the user's home directory, and then removes the Manager through the transport. The Manager is removed only after every other confirmed removal succeeds, so a partial run retains the command needed to finish.
 
 Project copies are never removed. They are part of their repositories and travel with those Projects.
 

@@ -91,7 +91,7 @@ The manager subcommand that refreshes this collection's skills and then checks e
 _Avoid_: upgrade, sync, pull
 
 **Uninstall**:
-The manager subcommand that takes this collection off this machine: every Catalog skill Enabled in Global, and the Manager itself. What it promises, including why it has no `--project` form, is stated in `docs/rules/collection.md`.
+The manager subcommand that takes this collection off this machine: every Feature Enabled in Global first, then every Catalog skill Enabled in Global, and the Manager itself. What it promises, including why it has no `--project` form, is stated in `docs/rules/collection.md`.
 _Avoid_: remove, delete, purge, reset
 
 **Help**:
@@ -179,11 +179,11 @@ The collection's declared list of its entries, Skills and Features alike, with t
 _Avoid_: manifest, registry, index, lockfile
 
 **Digest**:
-A content digest of a skill's directory as the collection ships it, computed over sorted relative paths and file contents, and carried by that skill's Catalog entry. The same computation over what is on disk answers the one freshness question the manager can answer honestly — are these the same files. When it is generated and what it ignores are stated in `docs/rules/collection.md`.
+A content digest of a Catalog entry's directory as the collection ships it, computed over sorted relative paths and file contents, and carried by that entry. The same computation over what is on disk answers the one freshness question the manager can answer honestly — are these the same files. When it is generated and what it ignores are stated in `docs/rules/collection.md`.
 _Avoid_: version, revision, release number, hash of SKILL.md
 
 **Deviating**:
-What a skill is when its files differ from the Digest the Catalog carries: a truncated install, a hand edit, or a Project copy that has fallen behind. Never *out of date* — the comparison sees two states and no history, so the manager cannot establish direction, and outside a lagging copy the commonest cause is the user's own edit. What is refreshed on the strength of it is stated in `docs/rules/collection.md`.
+What a Catalog entry is when its files differ from the Digest the Catalog carries: a truncated install, a hand edit, or a Project copy that has fallen behind. Never *out of date* — the comparison sees two states and no history, so the manager cannot establish direction, and outside a lagging copy the commonest cause is the user's own edit. What is refreshed on the strength of it is stated in `docs/rules/collection.md`.
 _Avoid_: out of date, stale, outdated, modified, dirty
 
 **Withdrawn**:
@@ -211,7 +211,7 @@ A coding agent that loads Agent Skills from a well-known directory (Claude Code,
 _Avoid_: agent, IDE, tool, client
 
 **Harness Integration**:
-What a Skill writes into a Harness's own configuration so that the Harness calls the Skill at its own lifecycle moments, rather than the user invoking it (ADR-0179). It is written outside the Skill's own directory, and is neither a Skill file nor something that deleting a Skill's files takes away. The owner identity travels inside what is written rather than beside it, and nothing keeps a register of what was installed, so install, repair, update, and removal are one convergent operation over whatever is on disk. `health` in the Collection Library reports one in five states rather than two — `healthy`, `gated`, `degraded`, `absent`, `unsatisfied` — of which `gated` is the one the name does not predict: a fully and correctly written integration the Harness holds inert behind its own trust review, neither absent nor healthy, and reported as itself (ADR-0179).
+What a Catalog entry — a Skill or a Feature — writes into a Harness's own configuration so that the Harness calls it at its own lifecycle moments, rather than the user invoking it (ADR-0173, ADR-0179). It is written outside the owner's own directory, and is neither a Skill file nor something that deleting a Skill's files takes away. The owner identity travels inside what is written rather than beside it, and nothing keeps a register of what was installed, so install, repair, update, and removal are one convergent operation over whatever is on disk. `health` in the Collection Library reports one in five states rather than two — `healthy`, `gated`, `degraded`, `absent`, `unsatisfied` — of which `gated` is the one the name does not predict: a fully and correctly written integration the Harness holds inert behind its own trust review, neither absent nor healthy, and reported as itself (ADR-0179).
 _Avoid_: extension, add-on, registration
 
 **Transport**:

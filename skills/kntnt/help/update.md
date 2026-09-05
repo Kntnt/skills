@@ -28,7 +28,7 @@ Target the current Project instead of Global. `--project=off` has the same effec
 
 **--yes**
 
-Answer yes to confirmations, including Enabling every new Catalog entry. For Global Update, the flag must be in the current Formal Invocation. The report names every newly Enabled Skill.
+Answer yes to confirmations, including Enabling every new Catalog Skill. For Global Update, the flag must be in the current Formal Invocation. The report names every newly Enabled Skill.
 
 **--dry-run**
 
