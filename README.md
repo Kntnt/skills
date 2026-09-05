@@ -148,6 +148,22 @@ Plan and apply deterministic filenames for accounting PDFs using extracted docum
 
 Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--yes|--dry-run]`.
 
+## Features
+
+Besides skills, the collection ships **features**: catalog entries that install nothing a harness loads and only write into a harness's own configuration. `/kntnt select` lists them as a second group under the skills, and a feature's row says what it writes and where before you check it. They apply to the machine rather than to a project, so `--project` offers none.
+
+### session-cleanup
+
+Leaves the machine as the session found it. It installs two things that only work together: a block in each harness's global instruction file asking the agent to record what it starts, and a session-lifecycle hook that stops exactly what was recorded. It kills only what a manifest names, and only while the recorded start time still matches, so a reused process id names something else and is left alone; it deletes only paths under a temp directory. It sweeps at session start as well as at session end, which covers a crash or a hard kill, and it skips a manifest whose terminal is still alive elsewhere. Every action goes to `~/.kntnt/session-cleanup/cleanup.log`, including a session that recorded nothing.
+
+Serves Claude Code, Codex, and OpenCode.
+
+### statusline
+
+A two-line Claude Code status line: path, worktree marker, branch, working-tree flags and any git operation in progress on the first; model, reasoning effort, context usage and the subscription windows on the second. It reads what the harness gives it plus one `git status`, calls no network service and reads no credential.
+
+`statusLine` holds one command rather than a list, so where it already runs something that is not this collection's, nothing is written and the run tells you what holds the slot. Serves Claude Code.
+
 ## Dependencies
 
 Most skills require `uv` and the manager. `brief` and `tldr` require neither.

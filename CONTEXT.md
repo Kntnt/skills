@@ -20,6 +20,10 @@ _Avoid_: namespace, group, tag, section
 A standalone Agent Skill with its own name. Collection skills are not namespaced under `kntnt`. The collection ships skills only — never harness `commands/` files. Every collection Skill ships its root help beside it and prints it when invoked with `--help`; a Skill with subcommands also ships and prints the addressed subcommand page for `/<skill> <command-path> --help`.
 _Avoid_: module, plugin, recipe, command, slash command
 
+**Feature**:
+A Catalog entry that owns Harness Integrations and nothing else (ADR-0173). No Harness loads it, the Transport never moves it, it has no directory in a skills tree, and nothing depends on it. It ships inside the Manager, Select lists Features as a second group under the Skills and answers both in one checked set, and its row states what it writes and where before it is checked. It is Global only, for the reason ADR-0160 gives capture: an owned entry is keyed by owner inside a Harness's own configuration, so a Project Enable and a Global one would write and remove each other's. Its Enabled state is what its Harnesses actually hold, never a file on disk.
+_Avoid_: setup, integration skill, plugin, add-on, hook
+
 **Language Resource**:
 The single installed source for one language or locale's editorial guidance. It carries the canonical language code, a bounded set of selector aliases, and separate scopes for composing, reviewing, catching machine-sounding prose, and correcting mechanics; a scope is named for the guidance it holds rather than for the Skill that reads it, and a locale variant may inherit the scopes of its base language. Generic editorial rules never move into a Language Resource merely because their examples are written in English.
 _Avoid_: language pack, translation, alias registry

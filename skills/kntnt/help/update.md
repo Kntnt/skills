@@ -38,7 +38,7 @@ Run in a discarded temporary home and report the result without changing the sel
 
 **Harness Integrations**
 
-A Skill may own a Harness Integration: what it writes into a Harness's own configuration so the Harness calls that Skill at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. Refreshing a Skill in Global asks that Skill to install what it owns again, and a Withdrawn Skill is asked to remove them before its files go; the Project layer installs and removes none. The report says what became of each.
+A Skill may own a Harness Integration: what it writes into a Harness's own configuration so the Harness calls that Skill at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. A Feature owns Harness Integrations and nothing else, so this is the whole of what enabling or disabling one does. Refreshing a Skill in Global asks that Skill to install what it owns again, and a Withdrawn Skill is asked to remove them before its files go; the Project layer installs and removes none. The report says what became of each.
 
 ## OFFLINE OPERATION
 

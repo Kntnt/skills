@@ -28,7 +28,7 @@ Execute against a temporary home seeded with this Collection's files, report the
 
 **Harness Integrations**
 
-A Skill may own a Harness Integration: what it writes into a Harness's own configuration so the Harness calls that Skill at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. Uninstall asks every Skill it removes, and then the Manager itself, to remove what it owns before its files go; it installs none. The report says what became of each.
+A Skill may own a Harness Integration: what it writes into a Harness's own configuration so the Harness calls that Skill at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. A Feature owns Harness Integrations and nothing else, so this is the whole of what enabling or disabling one does. Uninstall asks every Skill it removes, and then the Manager itself, to remove what it owns before its files go; it installs none. The report says what became of each.
 
 ## OFFLINE OPERATION
 

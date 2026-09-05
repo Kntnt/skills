@@ -1305,6 +1305,7 @@ _INTEGRATION_REPORT_SENTENCES = (
     "Report a `note` wherever it is not null: it says this layer installs or removes no integration, and a user who unchecked a Skill in a project has to be told that rather than left believing their machine-wide integration went with the files.",
     "A per-Harness entry that removed nothing — `removed` with `entries` at zero — is the converged state and adds nothing: a teardown attempts every Harness the collection has an adapter for, whether or not this machine ever held an entry there.",
     "What is reported comes from the records the payload carries and never from the run's own list of Skills, so a Skill that owns no Harness Integration adds nothing here.",
+    "A record here may name a Feature rather than a Skill: a Feature is a Catalog entry that owns Harness Integrations and nothing else, so its record is the whole of what enabling or disabling it did, and everything above about reading records per owner and per Harness applies to it unchanged.",
     "Done when the user has been told what became of every Harness Integration the payload names, or it named none.",
 )
 
@@ -1365,6 +1366,12 @@ def test_every_changing_verbs_page_names_the_state_outside_a_skills_directory() 
 
         assert "Harness Integration" in files, name
         assert "outside the Skill's own directory" in files, name
+
+        # And the second kind of owner the same sentence now has (ADR-0173).
+        assert (
+            "A Feature owns Harness Integrations and nothing else, so this is "
+            "the whole of what enabling or disabling one does." in files
+        ), name
 
         # The optional sections sit where the standard puts them: after the
         # description and before the collection's own DEPENDENCIES.
