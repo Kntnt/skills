@@ -1,0 +1,5 @@
+interface:
+  display_name: "TLDR"
+  short_description: "Explain the answer you delegated and did not follow"
+policy:
+  allow_implicit_invocation: false

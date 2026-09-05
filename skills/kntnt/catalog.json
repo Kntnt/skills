@@ -42,6 +42,16 @@
       ]
     },
     {
+      "name": "tldr",
+      "category": "agents",
+      "description": "Re-explain the answer just given for a senior developer who delegated the work and therefore does not hold its details, and say plainly what it now asks of them.",
+      "digest": "870a744d23a39b41acc2f58c12ea85c209769e98048606f0349134078f18535e",
+      "binaries": [],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",

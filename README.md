@@ -74,6 +74,12 @@ Let the main agent decide, plan, and verify while subagents perform selected wor
 
 Run `/delegation`, `/delegation on|off [--project|--user] [--yes]`, or `/delegation status [--project|--user]`.
 
+### tldr
+
+Explain the answer just given to somebody who delegated the work and therefore did not follow it. The reply is treated as correct but pitched at the wrong reader, so the re-explanation adds the background the original assumed and unpacks the terms belonging to this work alone, while the ordinary technical vocabulary you already use stays as it is. It always closes by naming what you have to do — or saying plainly that nothing is asked of you.
+
+Run `/tldr`, optionally followed by an instruction such as `/tldr bara säkerhetsdelen`.
+
 ### commit
 
 Reconcile the changelog, review the complete working tree, and create one commit without pushing. A message is derived when none is supplied.
@@ -144,7 +150,7 @@ Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--y
 
 ## Dependencies
 
-Most skills require `uv` and the manager. `brief` requires neither.
+Most skills require `uv` and the manager. `brief` and `tldr` require neither.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`. `release` can finish without `gh`, but then skips the GitHub release.
 
