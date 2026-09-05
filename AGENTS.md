@@ -26,8 +26,7 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/rules/skills.md` — read when adding a Skill or changing the files one ships
 - `docs/rules/collection.md` — read when changing what a Manager verb promises, or how the collection reaches a machine
 - `docs/rules/routing.md` — read when changing how a Skill routes delegated work, or what it may file as evidence
-- `docs/adr/0067-a-ticket-asserts-only-what-stays-true-until-it-is-built.md` — read when writing a ticket
-- `docs/adr/0099-a-ticket-that-rewrites-an-invariant-declares-that-it-builds-alone.md` — read when writing a ticket whose subject is a rule every shipped file is under
+- `docs/rules/tickets.md` — read when writing a ticket
 - `docs/evaluation/protocol.md` — read when evaluating an editorial Skill against the fixture corpus
 - `skills/kntnt/library/references/languages/README.md` — read when adding or changing a Language Resource
 - `skills/kntnt/library/references/editorial/README.md` — read when adding or changing the editorial base contract, a genre, a technique, the anti-slop catalogue, or the shared mechanics contract
