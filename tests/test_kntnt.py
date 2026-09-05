@@ -24,6 +24,13 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 HARNESS_PATHS = REPO_ROOT / "skills" / "kntnt" / "harness-paths.json"
 MANAGER_DIR = REPO_ROOT / "skills" / "kntnt"
+
+# The one place the Invocation Envelope contract is stated. A body writes the
+# pointer as `$LIBRARY/...`, the variable it defines itself; a manpage writes
+# the plain path, being printed to a person who has no such variable.
+ENVELOPE_POINTER = "$LIBRARY/references/invocation-envelope.md"
+ENVELOPE_PAGE_POINTER = "library/references/invocation-envelope.md"
+ENVELOPE_REFERENCE = MANAGER_DIR / "library" / "references" / "invocation-envelope.md"
 MODEL_SELECTOR_DIR = REPO_ROOT / "skills" / "models" / "model-selector"
 FAKE_SKILLS = REPO_ROOT / "tests" / "support" / "fake_skills.py"
 UV_CACHE = Path(os.environ.get("UV_CACHE_DIR") or Path.home() / ".cache" / "uv")
@@ -4634,12 +4641,11 @@ def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> No
 def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
     """Help lives with the skill: a file it prints, not prose it regenerates.
 
-    The route is read out of the `## Help` section rather than out of the body
-    at large. Both tokens it names are named again by the refusal clause every
-    body has to carry, so a body read whole answers yes for a skill whose
-    `## Help` section was deleted outright — and a skill that can no longer be
-    asked what it does is the failure this exists to catch. Asserting the route
-    inside the section requires the heading and pins the route to it at once.
+    The route is read out of the `## Invocation` section rather than out of the
+    body at large, because a body read whole would answer yes off a mention of
+    the manpage anywhere in it — and a skill that can no longer be asked what it
+    does is the failure this exists to catch. Asserting the route inside the
+    section requires the heading and pins the route to it at once.
     """
 
     for path in _skill_bodies():
@@ -4651,25 +4657,25 @@ def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
             f" from (ADR-0044). See {STANDARD}."
         )
 
-        marker = "\n## Help\n"
+        marker = "\n## Invocation\n"
         assert marker in text, (
-            f"{path}: every body carries a `## Help` section, which is where"
-            f" the route into the manpage lives. A skill is asked what it does"
-            f" by name, so the answer is a section of the body rather than one"
-            f" skill's habit (ADR-0044). See {STANDARD}."
+            f"{path}: every body carries a `## Invocation` section, which is"
+            f" where the route into the manpage lives. A skill is asked what it"
+            f" does by name, so the answer is a section of the body rather than"
+            f" one skill's habit (ADR-0044). See {STANDARD}."
         )
         section = text.partition(marker)[2].partition("\n## ")[0]
 
         assert "`$HERE/help.md`" in section, (
-            f"{path}: the `## Help` section prints `$HERE/help.md` verbatim"
-            f" rather than summarising it. The manpage is a file a reviewer can"
-            f" diff, not prose an agent regenerates each time (ADR-0044,"
-            f" ADR-0045). See {STANDARD}."
+            f"{path}: the `## Invocation` section prints `$HERE/help.md`"
+            f" verbatim rather than summarising it. The manpage is a file a"
+            f" reviewer can diff, not prose an agent regenerates each time"
+            f" (ADR-0044, ADR-0045). See {STANDARD}."
         )
         assert "--help" in section, (
-            f"{path}: the `## Help` section routes `--help` to the manpage,"
-            f" which is how every skill of this collection is asked what it"
-            f" does (ADR-0044). See {STANDARD}."
+            f"{path}: the `## Invocation` section routes `--help` to the"
+            f" manpage, which is how every skill of this collection is asked"
+            f" what it does (ADR-0044). See {STANDARD}."
         )
         assert "Arguments and Steps" not in text, (
             f"{path}: the body carries only what the agent executes, so its"
@@ -4776,19 +4782,29 @@ def test_every_manpage_synopsis_and_options_describe_the_same_flags() -> None:
 
 
 def test_every_manpage_documents_the_invocation_envelope() -> None:
-    """Every addressed help page exposes context without making it an option."""
+    """Every addressed help page exposes context without making it an option.
 
-    # Hold the context surface and the minimum explanation every page carries.
+    The page names the separator a reader meets in its own `SYNOPSIS` forms
+    and then sends them to the one reference stating the contract, rather than
+    carrying a copy of it. Forty-seven copies of one contract are forty-seven
+    things to keep true, and a page that drifted from its siblings would be a
+    contract with two readings and nothing to say which was meant.
+    """
+
+    # Hold the context surface and the pointer every page carries in its place.
     suffix = "[**--** *INSTRUCTION*]"
     required = (
         "Contextual Instruction",
-        "Conversation Context",
-        "Redundant but applicable guidance is valid",
-        "Before the first side effect, the Skill uses available read-only checks",
-        "exact partial outcome",
         "reserved separator",
-        "syntax refusal",
-        "context refusal",
+        ENVELOPE_PAGE_POINTER,
+    )
+
+    # The pointer the pages carry is prose rather than a `$LIBRARY` pointer the
+    # suite already follows, so its target is resolved here instead.
+    assert ENVELOPE_REFERENCE.is_file(), (
+        f"{ENVELOPE_REFERENCE}: every manpage sends its reader to"
+        f" `{ENVELOPE_PAGE_POINTER}` for the contract in full, and a pointer"
+        f" that dangles is a reader sent to nothing (ADR-0078). See {STANDARD}."
     )
 
     # Discover every page so future command paths inherit the same contract.
@@ -4806,8 +4822,14 @@ def test_every_manpage_documents_the_invocation_envelope() -> None:
             f" (ADR-0078). See {STANDARD}."
         )
         assert all(phrase in envelope for phrase in required), (
-            f"{manpage}: the envelope section does not explain the complete"
-            f" caller-visible contract required by ADR-0078. See {STANDARD}."
+            f"{manpage}: the envelope section names the separator and points at"
+            f" `{ENVELOPE_PAGE_POINTER}` for the contract in full (ADR-0078)."
+            f" See {STANDARD}."
+        )
+        assert "Redundant but applicable guidance is valid" not in envelope, (
+            f"{manpage}: the page restates the Envelope contract instead of"
+            f" pointing at the one place it is stated (ADR-0076, ADR-0078)."
+            f" See {STANDARD}."
         )
         assert "**--**" not in _optional_section(text, "## OPTIONS"), (
             f"{manpage}: the reserved separator is not an option and therefore"
@@ -10085,7 +10107,7 @@ def _skill_bodies() -> list[Path]:
 
 
 def _root_manpages() -> list[Path]:
-    """Every root page whose Envelope contract its own Skill executes."""
+    """Every root page whose Skill a reader reaches the Envelope through."""
 
     return [*(d / "help.md" for d in _shipped_skills()), MANAGER_DIR / "help.md"]
 
@@ -10242,7 +10264,7 @@ def test_model_selector_ships_and_routes_one_manpage_per_subcommand() -> None:
         str(path.relative_to(help_directory)) for path in help_directory.rglob("*.md")
     }
     skill = (MODEL_SELECTOR_DIR / "SKILL.md").read_text(encoding="utf-8")
-    help_section = _section(skill, "## Help", MODEL_SELECTOR_DIR / "SKILL.md")
+    help_section = _section(skill, "## Invocation", MODEL_SELECTOR_DIR / "SKILL.md")
 
     assert actual == _MODEL_SELECTOR_MANPAGES, (
         f"{MODEL_SELECTOR_DIR}: the subcommand page tree is {sorted(actual)},"
@@ -10251,15 +10273,16 @@ def test_model_selector_ships_and_routes_one_manpage_per_subcommand() -> None:
     )
     assert "--help" in help_section, (
         f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: subcommand pages exist but the"
-        f" Help section has no direct `--help` route to them (ADR-0077). See"
-        f" {STANDARD}."
+        f" `## Invocation` section has no direct `--help` route to them"
+        f" (ADR-0077). See {STANDARD}."
     )
 
     # Hold every file to an explicit deterministic route in the Skill body.
     for relative in _MODEL_SELECTOR_MANPAGES:
         assert f"`$HERE/help/{relative}`" in help_section, (
-            f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: the Help section does not"
-            f" route the `{relative}` manpage (ADR-0077). See {STANDARD}."
+            f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: the `## Invocation` section"
+            f" does not route the `{relative}` manpage (ADR-0077). See"
+            f" {STANDARD}."
         )
 
 
@@ -10342,29 +10365,33 @@ def test_every_skill_exposes_the_invocation_envelope_before_its_grammar() -> Non
     for body in _skill_bodies():
         # Read only the body surface the harness executes.
         text = body.read_text(encoding="utf-8")
-        envelope = _section(text, "## Invocation Envelope", body)
+        envelope = _section(text, "## Invocation", body)
 
         # Hold exposure, ordering, and the boundary into deterministic parsers.
         assert _hint(body.parent).endswith("[-- <instruction>]"), (
             f"{body}: the harness hint omits the optional Contextual"
             f" Instruction suffix required by ADR-0078. See {STANDARD}."
         )
-        assert text.index("\n## Invocation Envelope\n") < text.index("\n## Help\n"), (
+        assert text.index("\n## Invocation\n") < text.index("\n## Arguments\n"), (
             f"{body}: Envelope splitting must precede help routing and formal"
             f" validation (ADR-0078). See {STANDARD}."
         )
         assert "before help routing or formal validation" in envelope.lower(), (
-            f"{body}: the executable Envelope section does not state its"
-            f" required ordering (ADR-0078). See {STANDARD}."
+            f"{body}: the executable section does not state its required"
+            f" ordering (ADR-0078). See {STANDARD}."
         )
-        assert "`## INVOCATION ENVELOPE` section of `$HERE/help.md`" in envelope, (
-            f"{body}: a directly installed Skill must read its executable"
-            f" Envelope contract from its own root manpage (ADR-0078). See"
-            f" {STANDARD}."
+        assert ENVELOPE_POINTER in envelope, (
+            f"{body}: the body reads its executable Envelope contract from the"
+            f" one place it is stated, `{ENVELOPE_POINTER}`, rather than"
+            f" carrying a copy of it (ADR-0076, ADR-0078). See {STANDARD}."
         )
-        assert "Pass only the Formal Invocation to scripts" in envelope, (
+        assert "only the Formal Invocation reaches" in envelope, (
             f"{body}: scripts and nested parsers receive only Formal Invocation"
             f" input (ADR-0078). See {STANDARD}."
+        )
+        assert "Redundant but applicable guidance is valid" not in text, (
+            f"{body}: the body restates the Envelope contract instead of"
+            f" pointing at it (ADR-0076, ADR-0078). See {STANDARD}."
         )
 
 
@@ -10373,34 +10400,30 @@ def test_invocation_envelope_defines_the_reserved_separator_without_inference() 
 
     These are worked inputs from issue #87 rather than a parser reimplemented
     in the test: prose is the public seam for a Skill whose agent performs the
-    split, and every body above follows this one discovered reference.
+    split, and every body follows this one Library reference to reach it.
     """
 
-    # Discover every executable root contract, including the Manager's.
-    for root in _root_manpages():
-        text = _section(
-            root.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", root
-        )
+    text = ENVELOPE_REFERENCE.read_text(encoding="utf-8")
 
-        # Pin every separator distinction to literal issue examples.
-        for phrase in (
-            "same line",
-            "after blank lines",
-            "must contain non-whitespace text",
-            "including later `--` tokens",
-            "Without the separator",
-            "`--force`",
-            "`foo--bar`",
-            "`` `--` ``",
-            '`"--"`',
-            "Redundant but applicable guidance is valid",
-        ):
-            # Refuse the loss of an accepted or rejected separator distinction.
-            assert phrase in text, (
-                f"{root}: the executable Envelope omits {phrase!r}, so it no"
-                f" longer distinguishes an issue #87 syntax case (ADR-0078)."
-                f" See {STANDARD}."
-            )
+    # Pin every separator distinction to literal issue examples.
+    for phrase in (
+        "same line",
+        "after blank lines",
+        "must contain non-whitespace text",
+        "including later `--` tokens",
+        "Without the separator",
+        "`--force`",
+        "`foo--bar`",
+        "`` `--` ``",
+        '`"--"`',
+        "Redundant but applicable guidance is valid",
+    ):
+        # Refuse the loss of an accepted or rejected separator distinction.
+        assert phrase in text, (
+            f"{ENVELOPE_REFERENCE}: the executable Envelope omits {phrase!r},"
+            f" so it no longer distinguishes an issue #87 syntax case"
+            f" (ADR-0078). See {STANDARD}."
+        )
 
 
 def test_invocation_envelope_carries_worked_split_outcomes() -> None:
@@ -10417,20 +10440,17 @@ def test_invocation_envelope_carries_worked_split_outcomes() -> None:
         "| Exact help | `/skill --help -- Explain this page` | `/skill --help` | `Explain this page` | Context refusal; render nothing |",
     )
 
-    # Hold each Skill's locally executable examples to the independent outcomes.
-    for root in _root_manpages():
-        text = _section(
-            root.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", root
-        )
+    # Hold the one executable contract to the independently worked outcomes.
+    text = ENVELOPE_REFERENCE.read_text(encoding="utf-8")
 
-        # A missing row removes the expected result, not a descriptive word.
-        for case in cases:
-            # Refuse a scenario whose independently worked outcome disappeared.
-            assert case in text, (
-                f"{root}: worked Envelope outcomes omit `{case}`, leaving that"
-                f" issue #87 split unpinned at the executable prose seam"
-                f" (ADR-0078). See {STANDARD}."
-            )
+    # A missing row removes the expected result, not a descriptive word.
+    for case in cases:
+        # Refuse a scenario whose independently worked outcome disappeared.
+        assert case in text, (
+            f"{ENVELOPE_REFERENCE}: worked Envelope outcomes omit `{case}`,"
+            f" leaving that issue #87 split unpinned at the executable prose"
+            f" seam (ADR-0078). See {STANDARD}."
+        )
 
 
 # The sentence ADR-0078 shipped, before its *ineffective* was narrowed. No page
@@ -10480,31 +10500,41 @@ def test_the_context_refusal_narrows_ineffective_to_unaddressable_guidance() -> 
     on an invocation whose Contextual Instruction the flags and the artifact's
     map had already settled, that word required a refusal while the editorial
     precedence ladder required the run to continue (issue #146). The narrowing
-    is carried in the same words in every page, or the collection has two
-    contracts again.
+    now has one home, so what this holds is that the home carries it and that
+    no page or body has grown a second copy to disagree with.
     """
 
-    # Discover every page so a future command path inherits the narrowing.
-    for manpage in _manpages():
-        envelope = _section(
-            manpage.read_text(encoding="utf-8"), "## INVOCATION ENVELOPE", manpage
-        )
+    contract = ENVELOPE_REFERENCE.read_text(encoding="utf-8")
 
-        assert UNNARROWED_CONTEXT_REFUSAL not in envelope, (
-            f"{manpage}: the envelope still refuses *ineffective* guidance"
-            f" without saying what that reaches, so a Contextual Instruction a"
-            f" documented precedence has settled against is a refusal ground"
-            f" again (ADR-0122). See {STANDARD}."
+    assert UNNARROWED_CONTEXT_REFUSAL not in contract, (
+        f"{ENVELOPE_REFERENCE}: the envelope still refuses *ineffective*"
+        f" guidance without saying what that reaches, so a Contextual"
+        f" Instruction a documented precedence has settled against is a refusal"
+        f" ground again (ADR-0122). See {STANDARD}."
+    )
+    assert NARROWED_CONTEXT_REFUSAL in contract, (
+        f"{ENVELOPE_REFERENCE}: the envelope no longer names the context"
+        f" refusal's categories in the collection's shared wording (ADR-0122)."
+        f" See {STANDARD}."
+    )
+    assert all(rule in contract for rule in SUPPRESSION_RULE), (
+        f"{ENVELOPE_REFERENCE}: the envelope omits the narrowed rule, so the"
+        f" one place the collection states it says nothing about a suppressed"
+        f" Contextual Instruction (ADR-0122). See {STANDARD}."
+    )
+
+    # Discover every page and body so no second copy can drift from that one.
+    for path in [*_manpages(), *_skill_bodies()]:
+        text = path.read_text(encoding="utf-8")
+        assert UNNARROWED_CONTEXT_REFUSAL not in text, (
+            f"{path}: a copy of the refusal categories survives here, in the"
+            f" un-narrowed wording ADR-0122 withdrew. See {STANDARD}."
         )
-        assert NARROWED_CONTEXT_REFUSAL in envelope, (
-            f"{manpage}: the envelope no longer names the context refusal's"
-            f" categories in the collection's shared wording (ADR-0122). See"
-            f" {STANDARD}."
-        )
-        assert all(rule in envelope for rule in SUPPRESSION_RULE), (
-            f"{manpage}: the envelope omits the narrowed rule, so this page"
-            f" says something different from its siblings about a suppressed"
-            f" Contextual Instruction (ADR-0122). See {STANDARD}."
+        assert NARROWED_CONTEXT_REFUSAL not in text, (
+            f"{path}: the refusal categories are restated here instead of being"
+            f" read from `{ENVELOPE_PAGE_POINTER}`, which is a second copy of"
+            f" the contract free to drift from the first (ADR-0076, ADR-0122)."
+            f" See {STANDARD}."
         )
 
 
@@ -10611,8 +10641,9 @@ def test_skill_standard_requires_every_invocation_envelope_surface() -> None:
     # Hold all five authored surfaces and the separator's non-option status.
     for phrase in (
         "`[-- <instruction>]`",
-        "`## Invocation Envelope`",
-        "`## INVOCATION ENVELOPE` section of the Skill's own `$HERE/help.md`",
+        "`## Invocation`",
+        "`$LIBRARY/references/invocation-envelope.md`",
+        "`library/references/invocation-envelope.md`",
         "`[**--** *INSTRUCTION*]`",
         "`## INVOCATION ENVELOPE`",
         "separator, not an option",
@@ -10681,25 +10712,37 @@ def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() 
     same refusal, in the shape every refusal in this collection has: what was
     wrong, the synopsis of what was addressed, and where to read the page in
     full. The synopsis is the one shipped in `help.md`, never a second grammar
-    composed on the spot to answer with.
+    composed on the spot to answer with. That shape is one contract, so it is
+    stated once in the Library and pointed at from each body, and what a body
+    adds is only its own — which page a refusal addresses where the Skill has
+    more than one, and what it leaves undone when it stops.
     """
+
+    contract = ENVELOPE_REFERENCE.read_text(encoding="utf-8")
+
+    # Hold the shape itself where it is stated, rather than in each copy of it.
+    for phrase in (
+        "prints the addressed SYNOPSIS",
+        "the Skill's own `help.md` where no command path was recognized",
+        "that page's own `--help` route",
+    ):
+        assert phrase in contract, (
+            f"{ENVELOPE_REFERENCE}: the refusal shape omits {phrase!r}. A skill"
+            f" has no parser — the agent reading these files is the whole of"
+            f" the enforcement — so a refusal composed on the spot is a second"
+            f" grammar, free to drift from the one the page documents"
+            f" (ADR-0059). See {STANDARD}."
+        )
 
     for directory in _shipped_skills():
         skill = (directory / "SKILL.md").read_text(encoding="utf-8")
         page = (directory / "help.md").read_text(encoding="utf-8")
 
-        assert "`## SYNOPSIS` section of `$HERE/help.md`" in skill, (
-            f"{directory}: an invalid form is answered with the `## SYNOPSIS`"
-            f" section of `$HERE/help.md`, printed verbatim. A skill has no"
-            f" parser — the agent reading these files is the whole of the"
-            f" enforcement — so a refusal composed on the spot is a second"
-            f" grammar, free to drift from the one the page documents"
-            f" (ADR-0059). See {STANDARD}."
-        )
-        assert f"`/{directory.name} --help` for the page in full" in skill, (
-            f"{directory}: the refusal closes by pointing at"
-            f" `/{directory.name} --help`, so a user given one line of synopsis"
-            f" is told where the rest of the page is (ADR-0059). See"
+        assert ENVELOPE_POINTER in skill, (
+            f"{directory}: an invalid form is refused as `{ENVELOPE_POINTER}`"
+            f" says, which is where the one refusal shape is written. A body"
+            f" carrying its own copy is a second grammar, free to drift from"
+            f" the one the reference states (ADR-0059, ADR-0076). See"
             f" {STANDARD}."
         )
         assert "refused rather than ignored" in page, (
@@ -10707,6 +10750,64 @@ def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() 
             f" refused rather than ignored. The strictness is documented as"
             f" well as performed, or a reader meets it first as an error"
             f" (ADR-0059). See {STANDARD}."
+        )
+
+
+# The reason an installed reader applies the flag-refusal rule. It was written
+# into every body until the contract moved to the Library, where it now has the
+# one home a rule that never varies by Skill should have.
+REFUSAL_RATIONALE = (
+    "a flag accepted and ignored teaches that flags sometimes do nothing"
+)
+
+
+def test_the_reason_a_flag_is_refused_is_written_once() -> None:
+    """The rationale is the contract's, not each Skill's.
+
+    Sixteen bodies argued the same reason in the same words, which is the
+    rationale register of a decision record leaking into an instruction: an
+    agent does nothing differently for having read it, and sixteen copies are
+    sixteen things to keep true.
+    """
+
+    contract = ENVELOPE_REFERENCE.read_text(encoding="utf-8")
+
+    assert REFUSAL_RATIONALE in contract, (
+        f"{ENVELOPE_REFERENCE}: the flag-refusal rule is stated here without"
+        f" the reason an installed reader uses to apply it (ADR-0059). See"
+        f" {STANDARD}."
+    )
+    for body in _skill_bodies():
+        assert REFUSAL_RATIONALE not in body.read_text(encoding="utf-8"), (
+            f"{body}: the body argues why a flag with no work to do is refused"
+            f" rather than ignored. That reason belongs to the collection and"
+            f" is stated once, in `{ENVELOPE_PAGE_POINTER}` (ADR-0076,"
+            f" ADR-0059). See {STANDARD}."
+        )
+
+
+def test_the_skill_standard_states_that_flag_presence_follows_function() -> None:
+    """An author meets the rule before a reviewer has to notice its absence.
+
+    There is no collection-wide flag set, so a Skill that carries no `--yes`
+    has nothing to explain: the strict grammar refuses every undeclared flag
+    alike. What a body argues about a flag it does not have is prose no
+    assertion recognises, so that half is held in review; what is held here is
+    that the rule is written where an author reads it.
+    """
+
+    standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
+
+    for phrase in (
+        "its presence follows its function",
+        "no collection-wide flag set",
+        "documents no exception for it",
+        "ADR-0059",
+    ):
+        assert phrase in standard, (
+            f"{STANDARD}: the contributor standard omits {phrase!r}, so an"
+            f" author writing a Skill with no flags has nothing telling them"
+            f" not to argue the absence (ADR-0059)."
         )
 
 
@@ -11012,13 +11113,13 @@ def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
     )
 
     body = BRIEF_DIR / "SKILL.md"
-    help_section = _section(body.read_text(encoding="utf-8"), "## Help", body)
+    help_section = _section(body.read_text(encoding="utf-8"), "## Invocation", body)
     for relative in sorted(BRIEF_COMMANDS):
         assert f"`$HERE/help/{relative}`" in help_section, (
-            f"{body}: the `## Help` section does not route the `{relative}`"
-            f" manpage. `/<skill> <command-path> --help` prints the most"
-            f" specific recognized path's page verbatim (ADR-0077). See"
-            f" {STANDARD}."
+            f"{body}: the `## Invocation` section does not route the"
+            f" `{relative}` manpage. `/<skill> <command-path> --help` prints"
+            f" the most specific recognized path's page verbatim (ADR-0077)."
+            f" See {STANDARD}."
         )
     assert "-h" in help_section, (
         f"{body}: `-h` is the identical short route into an addressed page,"
@@ -11152,13 +11253,13 @@ def test_delegation_ships_and_routes_one_manpage_per_command_path() -> None:
     )
 
     body = DELEGATION_DIR / "SKILL.md"
-    help_section = _section(body.read_text(encoding="utf-8"), "## Help", body)
+    help_section = _section(body.read_text(encoding="utf-8"), "## Invocation", body)
     for relative in sorted(DELEGATION_COMMANDS):
         assert f"`$HERE/help/{relative}`" in help_section, (
-            f"{body}: the `## Help` section does not route the `{relative}`"
-            f" manpage. `/<skill> <command-path> --help` prints the most"
-            f" specific recognized path's page verbatim (ADR-0077). See"
-            f" {STANDARD}."
+            f"{body}: the `## Invocation` section does not route the"
+            f" `{relative}` manpage. `/<skill> <command-path> --help` prints"
+            f" the most specific recognized path's page verbatim (ADR-0077)."
+            f" See {STANDARD}."
         )
     assert "-h" in help_section, (
         f"{body}: `-h` is the identical short route into an addressed page,"

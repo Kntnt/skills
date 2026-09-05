@@ -10,17 +10,13 @@ compatibility: Requires uv, and npx plus network access for the transport and th
 
 The Manager. One namespaced entry point. Every other collection skill is invoked by its own name.
 
-`$HERE` is the directory that contains this SKILL.md.
+`$HERE` is the directory that contains this SKILL.md, and `$LIBRARY` is the Collection Library it ships, at `$HERE/library/`.
 
 **Dependencies.** `uv` on PATH. If it is missing, stop and tell the user to install uv from https://docs.astral.sh/uv/.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `help`, `--help`, `-h`, `help <command>`, `<subcommand> --help`, or `<subcommand> -h`, follow `$HERE/steps/help.md` and stop. `$HERE/help.md` is this Skill's own manpage, and `$HERE/help/<verb>.md` is the manpage of one verb; both are printed by that file rather than read by you. The Manager documents its own verbs and no Skill: a Skill the user has answers `/<skill> --help` itself, and one they do not have is read about from the `select` list.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `help`, `--help`, `-h`, `help <command>`, `<subcommand> --help`, and `<subcommand> -h` follow `$HERE/steps/help.md` and stop; `$HERE/help.md` is this Skill's own manpage and `$HERE/help/<verb>.md` the manpage of one verb, both printed by that file rather than read by you. The Manager documents its own verbs and no Skill: a Skill the user has answers `/<skill> --help` itself, and one they do not have is read about from the `select` list.
 
 ## Arguments
 
@@ -39,6 +35,6 @@ Which Harnesses a verb reaches is never asked and never recorded: every Harness 
 
 ## Steps
 
-1. Take the first argument as the subcommand. No arguments → `help`; the `## Help` section has already stopped every help form.
+1. Take the first argument as the subcommand. No arguments → `help`; the `## Invocation` section has already stopped every help form.
 2. Read `$HERE/steps/<subcommand>.md`. Where there is no such file the word is not one of the Manager's: run `uv run "$HERE/scripts/kntnt.py" <subcommand>`, emit what it answers with as it stands, and stop. It refuses with the unknown word, the Manager's own synopsis, and where to read the page in full — nothing after that word is passed on, guessed at, or acted on, and none of that text is yours to write.
 3. Follow that file. Done when it says to stop.

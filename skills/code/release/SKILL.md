@@ -22,19 +22,15 @@ Ship a version from the default branch: changelog, bump, push, tag, GitHub relea
 
 `$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
 
-## Invocation Envelope
+## Invocation
 
-Before help routing or formal validation, read the `## INVOCATION ENVELOPE` section of `$HERE/help.md` and follow it. Pass only the Formal Invocation to scripts and nested formal parsers. Apply Help and Arguments below only to the Formal Invocation.
-
-## Help
-
-If the arguments are `--help`, `-h`, or `help`, print `$HERE/help.md` verbatim and stop.
+Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop.
 
 ## Arguments
 
 `/release [--no-build] [--yes] [minor|major|X.Y.Z]`, and nothing else. The order is part of the form: an operand written before a flag is refused, not repaired.
 
-Anything else is an invalid form. Name in one line what was wrong, print the `## SYNOPSIS` section of `$HERE/help.md` verbatim, and point at `/release --help` for the page in full. Then ship nothing and stop. A flag is refused rather than ignored where it has no work to do here, because a flag accepted and ignored teaches that flags sometimes do nothing.
+Anything else is an invalid form. Refuse it as `$LIBRARY/references/invocation-envelope.md` says, then ship nothing and stop.
 
 ## Steps
 
