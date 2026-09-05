@@ -11,7 +11,7 @@ The set of skills, shared scripts, and shared documents shipped from the `kntnt/
 _Avoid_: package, plugin, marketplace, bundle
 
 **Collection Library**:
-The shared references and scripts shipped inside the Manager and available to every Collection Skill. It is not a Skill, a Catalog entry, or something the user Enables separately.
+The shared references and scripts shipped inside the Manager and available to every Collection Skill and Feature. It is not a Skill, a Catalog entry, or something the user Enables separately.
 _Avoid_: shared skill, utility skill, support skill
 
 **Category**:

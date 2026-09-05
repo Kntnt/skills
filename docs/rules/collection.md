@@ -16,7 +16,7 @@ The rules whose reasoning is settled in a decision record are named here in a ph
 
 **The Manager is the collection's only namespaced entry point** (ADR-0175). It is the always-enabled Skill named `kntnt`, and its verbs are its subcommands; every other Skill is invoked by its own name — `/commit`, never `/kntnt commit`. A Category groups the rows of Select's list so related Skills are read together, and is no part of a Skill's identity: a Skill keeps its name when it moves between Categories, and `--on=<category>` is not a thing (ADR-0177).
 
-**The Collection Library ships inside the Manager and is available to every Skill of this collection** (ADR-0177). It is not itself a Skill, not a Catalog entry, and not something the user Enables separately, so a Skill installed without the Manager reaches nothing there and says so; what belongs in it, and what stays a Skill's own, is `skills.md`.
+**The Collection Library ships inside the Manager and is available to every Skill and every Feature of this collection** (ADR-0177). It is not itself a Skill, not a Catalog entry, and not something the user Enables separately, so a Skill installed without the Manager reaches nothing there and says so; what belongs in it, and what stays a Skill's own, is `skills.md`.
 
 **The collection ships Skills, never a Harness's `commands/` files** (ADR-0177). What is portable across every Harness is the Skill; a command file is one Harness's shape with its own preprocessor, and shipping one would make the collection behave differently depending on where it landed.
 

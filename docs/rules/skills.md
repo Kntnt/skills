@@ -2,7 +2,7 @@
 
 Read before adding a Skill or a Feature to this collection, or changing the files either one ships.
 
-This module covers the form of a Catalog entry's own shipped files — a Skill's `SKILL.md`, its `help.md`, and what lives beside them, and a Feature's `FEATURE.md` — and the Collection Library shared among Skills and Features. It is not about what an entry does; it is about what every Skill and every Feature of this collection carries regardless of what it does and where shared implementation belongs. Read `general.md` first, and `python.md` too where the Skill or Library ships an engine.
+This module covers the form of a Catalog entry's own shipped files — a Skill's `SKILL.md`, its `help.md`, and what lives beside them, and a Feature's `FEATURE.md` — and the Collection Library shared among Skills and Features. It is not about what an entry does; it is about what every Skill and every Feature of this collection carries regardless of what it does and where shared implementation belongs. Read `general.md` first, and `python.md` too where the Skill, the Feature, or the Library ships an engine.
 
 Much of what follows is enforced by the test suite, and where it is, the assertion that fails names the rule and points back here. Not all of it is, and where the suite holds less of a rule than the rule says — the README paragraph nothing compares against anything, a manpage section checked for its heading and not for the prose beneath it — this document says so where the rule is stated, rather than leaving a contributor to infer it from a green run. Read a green fourth check as *nothing the suite watches broke*, never as *the form is right*.
 
