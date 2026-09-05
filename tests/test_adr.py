@@ -43,6 +43,13 @@ RUNTIME_SOURCES = (
     TESTS / "test_orchestrate.py",
 )
 
+# The two rules modules stating what the Manager promises and how a Skill
+# routes delegated work. Named here rather than discovered, because the check
+# below is that a record binned to one of them is cited there, and a scan that
+# read whatever `docs/rules/` happened to hold would hold a module a later
+# ticket still owes to records it has not been given.
+MODULES_STATING_THE_MANAGER_AND_ROUTING_LAW = ("collection.md", "routing.md")
+
 # A table row opens with the four-digit number of the record it bins, and its
 # third cell is the bin.
 TRIAGE_ROW = re.compile(r"^\|\s*(\d{4})\s*\|")
@@ -891,4 +898,58 @@ def test_the_runtime_bin_is_exactly_what_orchestrates_own_files_cite() -> None:
     assert unsourced == set(), (
         f"{unsourced}: a RUNTIME row's note names the file whose citation"
         f" is the whole of its bin."
+    )
+
+
+def _landings() -> dict[str, str]:
+    """Map each number the triage table bins to the cell naming its module."""
+
+    landing: dict[str, str] = {}
+    for line in TRIAGE.read_text(encoding="utf-8").splitlines():
+        match = TRIAGE_ROW.match(line)
+        if match is None:
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        landing[match.group(1)] = cells[4]
+    return landing
+
+
+def test_every_record_landing_in_a_written_module_is_cited_there() -> None:
+    """A rules module states the law, and the citation is what makes it checkable.
+
+    The triage's fifth column names the module a record's surviving content
+    goes to. A record that lands in a module already written and is cited
+    nowhere in it is content the reform dropped on the floor: the record is
+    still standing, so nothing has gone missing yet, but the sweep that
+    deletes it later would take law nobody restated (issue #264). Only the
+    modules this reform has written are read, because a module a later ticket
+    owes cannot be held to a record it has not been given yet.
+    """
+
+    landings = _landings()
+
+    written = {
+        name: (STANDARD_DIR / name).read_text(encoding="utf-8")
+        for name in MODULES_STATING_THE_MANAGER_AND_ROUTING_LAW
+        if (STANDARD_DIR / name).exists()
+    }
+
+    # A reform that has written neither module leaves nothing to judge.
+    assert written
+
+    uncited = sorted(
+        number
+        for number, cell in landings.items()
+        if any(f"`{name}`" in cell for name in written)
+        and not any(
+            f"ADR-{number}" in text
+            for name, text in written.items()
+            if f"`{name}`" in cell
+        )
+    )
+    assert uncited == [], (
+        f"{uncited}: the triage lands these records in"
+        f" {sorted(written)}, and a rules module that does not cite a record"
+        f" it lands states law resting on nothing. See"
+        f" docs/research/adr-triage.md."
     )
