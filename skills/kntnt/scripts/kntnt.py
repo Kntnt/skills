@@ -2339,25 +2339,6 @@ def validate_names(names: list[str]) -> list[str]:
     return cleaned
 
 
-def validate_feature_names(names: list[str]) -> frozenset[str]:
-    """Reject a `--replace` that names anything but a Catalog Feature.
-
-    A flag is refused rather than ignored where it has no work to do here: a
-    flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059),
-    and this one authorizes overwriting something the user wrote, which is the
-    last flag that may quietly apply to nothing.
-    """
-
-    known = feature_names()
-    for name in names:
-        if name not in known:
-            raise ManagerError(
-                f"--replace names '{name}', which is no Catalog Feature; only a "
-                "Feature holds a setting there is anything to replace"
-            )
-    return frozenset(names)
-
-
 def installed_freshness(name: str, digest: str, directories: list[Path]) -> str:
     """Say whether the copies of *name* on disk are the files *digest* names.
 
@@ -2840,7 +2821,7 @@ def feature_outcome(
     harnesses: list[str],
     *,
     global_layer: bool,
-    replace: frozenset[str] = frozenset(),
+    replace: bool = False,
 ) -> dict[str, Any]:
     """Install and tear down the answered Features, and verify both off the disk.
 
@@ -2852,9 +2833,10 @@ def feature_outcome(
 
     A Feature held off by something of the user's is not among those. Nothing
     was attempted there and nothing failed: a single-valued setting somebody
-    else holds is a question waiting on an answer this run was not given
-    (ADR-0174), so it is reported under `held` with what holds it, and the exit
-    code — which says a change the disk does not show — is left where it was.
+    else holds is a question, and *replace* is whether this run carries an
+    answer to it (ADR-0174). Without one it is reported under `held` with what
+    holds it, and the exit code — which says a change the disk does not show —
+    is left where it was.
     """
 
     if not global_layer:
@@ -2876,7 +2858,7 @@ def feature_outcome(
             name,
             "install-integrations",
             feature_serves(entries.get(name, {}), harnesses),
-            replace=name in replace,
+            replace=replace,
         )
         for name in place
     ]
@@ -3268,7 +3250,6 @@ def cmd_apply_select(
     as_is: bool,
     global_layer: bool,
     yes: bool,
-    replace: list[str] | None = None,
 ) -> int:
     """Make the targeted layer hold exactly the entries the answer checked.
 
@@ -3280,11 +3261,12 @@ def cmd_apply_select(
     (ADR-0173). What each Feature's own script did is reported beside every
     other owned integration, under the keys those already have.
 
-    `--replace` names the Features whose single-valued setting somebody else
-    holds and that the user has said may be overwritten. It is separate from
-    `--yes` and never implied by it: `--yes` answers the questions this verb
-    asks about its own work, and replacing a status line the user wrote is a
-    question about theirs, which an unattended run has nobody to ask (ADR-0174).
+    `--yes` is also the answer to the one question a Feature can raise about
+    something of the user's own: a single-valued setting another command
+    already holds. The row names that command and the confirmation asks whether
+    to replace it, and `--yes` is what says the asking is done — the same flag
+    that answers every other question this verb puts before it writes, rather
+    than a second one of its own (ADR-0174).
 
     Both halves of the answer are one verb's work, so both are reported
     together: `intended`, `confirmed`, and `failed` cover the run, and
@@ -3311,8 +3293,6 @@ def cmd_apply_select(
             "skill names are the whole answer, and --as-is, --on, and --off "
             "change the set on disk; give one form or the other"
         )
-
-    replacing = validate_feature_names(replace or [])
 
     harnesses = target_harnesses(global_layer=global_layer)
     directories = layer_dirs(harnesses, global_layer=global_layer)
@@ -3358,7 +3338,7 @@ def cmd_apply_select(
         feature_remove,
         harnesses,
         global_layer=global_layer,
-        replace=replacing,
+        replace=yes,
     )
     outcome = {
         "intended": [*placed["intended"], *removed["intended"]],
@@ -4353,13 +4333,6 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     # nobody at the list, and the two are refused together.
     apply_select = apply_sub.add_parser("select")
     apply_select.add_argument("skills", nargs="*")
-
-    # The user's answer about something of theirs, which `--yes` never stands
-    # in for: this authorizes overwriting a single-valued setting they wrote,
-    # and no unattended run has anybody to have asked (ADR-0174).
-    apply_select.add_argument(
-        "--replace", action="append", default=[], metavar="FEATURE"
-    )
     add_delta_flags(apply_select)
     add_project_flag(apply_select)
     add_yes_flag(apply_select)
@@ -4456,7 +4429,6 @@ def run_command(args: argparse.Namespace) -> int:
         as_is=args.as_is,
         global_layer=parse_layer(args.project),
         yes=args.yes,
-        replace=args.replace,
     )
 
 

@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "6b7e064b85c83fa92cfcb25f4d04f68094536db783a51a595a2a52e748facdde",
+  "manager_digest": "c41e1e0ea8fed53c3ccb9477ff2bd0da1424cd9388783e191d4c83dcc728d360",
   "skills": [
     {
       "name": "agents-md",
@@ -232,7 +232,7 @@
       "name": "statusline",
       "category": "environment",
       "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
-      "digest": "6638a1df16ff8f6254510a11d2f8d991c5aaecd7fa7422489d86dc15a91fea47",
+      "digest": "d7ec54c2040f496fe03f374f27732e674211c40efd0184ee6ec73c69cab17501",
       "binaries": [
         "git",
         "jq"

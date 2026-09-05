@@ -17,7 +17,8 @@ not ask for and no way forward from the list they are standing in. So an
 install that has not been told to replace what it found reports what holds the
 slot and writes nothing — which is what lets the question be asked where
 questions are asked — and one that has been told replaces it and names what
-went.
+went. `--replace` is how the Manager carries the user's answer down here; it is
+not a flag anybody types, the answer being given to Select's own confirmation.
 
 What this collection will not do either way is stash the displaced value
 somewhere of its own so that a later removal can put it back. That is a private

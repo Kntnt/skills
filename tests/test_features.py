@@ -463,10 +463,25 @@ def test_the_shipped_status_line_reads_no_credential_and_calls_nothing() -> None
         assert forbidden not in source
 
 
-def test_the_feature_writes_nothing_until_replace_carries_the_answer(
+def test_select_adds_no_flag_of_its_own_for_the_replacement_answer() -> None:
+    """One more thing asked in the one confirmation, not a second grammar.
+
+    `--yes` is what this collection has always meant by *answer yes to what you
+    are about to ask me*, so the question a held setting raises is answered
+    there rather than by a flag grown for one Feature's one setting (ADR-0174).
+    """
+
+    kntnt = _kntnt()
+    parsed = kntnt.parse_args(["apply", "select", "statusline", "--yes"])
+
+    assert parsed.yes is True
+    assert not hasattr(parsed, "replace")
+
+
+def test_the_feature_writes_nothing_until_the_answer_reaches_it(
     tmp_path: Path,
 ) -> None:
-    """`--yes` never stands in for an answer about the user's own status line."""
+    """The Manager carries the confirmation down; the Feature never assumes it."""
 
     _held_slot(tmp_path)
 
@@ -485,25 +500,6 @@ def test_the_feature_writes_nothing_until_replace_carries_the_answer(
     )
     assert told["installed"][0]["status"] == "installed"
     assert "kntnt.statusline" in _settings(tmp_path)["statusLine"]["command"]
-
-
-def test_replace_is_refused_where_it_names_no_feature() -> None:
-    """A flag accepted and ignored teaches that flags sometimes do nothing."""
-
-    kntnt = _kntnt()
-
-    try:
-        kntnt.validate_feature_names(["commit"])
-    except kntnt.ManagerError as exc:
-        assert "no Catalog Feature" in str(exc)
-    else:  # pragma: no cover - the refusal is the point
-        raise AssertionError("--replace named something that is not a Feature")
-
-    # Only the refusal is asserted. What the Catalog carries is fetched from
-    # the origin at every invocation, so a machine running this against a
-    # published Catalog older than these Features would be judging the
-    # network rather than the rule.
-    assert kntnt.validate_feature_names([]) == frozenset()
 
 
 def test_the_status_line_slot_is_taken_and_given_back(tmp_path: Path) -> None:
