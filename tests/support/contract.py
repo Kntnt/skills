@@ -5,3 +5,7 @@
 # points here, so a contributor whose check has just gone red is given the rule
 # and its reason in the message and the whole of it at this path (issue #69).
 STANDARD = "docs/coding-standard/skills.md"
+
+# The module stating the rules the language itself is held to, for the checks
+# whose subject is a shipped engine rather than the resources a Skill ships.
+PYTHON_STANDARD = "docs/coding-standard/python.md"

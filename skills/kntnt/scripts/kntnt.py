@@ -1739,7 +1739,22 @@ def stage_integration_owners(root: Path, withdrawals: list[Withdrawal]) -> list[
 
 
 def _teardown(name: str, script: Path) -> dict[str, Any]:
-    """Run one skill's declared teardown and read what it says it removed."""
+    """Run one skill's declared teardown and read what it says it removed.
+
+    From `home()` rather than from wherever the Manager was invoked. The same
+    run that asks this may have just replaced the Manager's own installed
+    tree, and a directory unlinked under a running process is one no launcher
+    can start from — the failure arriving before the declared script is
+    reached at all (issue #257). This seam hands the script everything it
+    needs on the command line, so it has no working directory of its own to
+    want, and the home Global paths resolve against is what no run of this
+    collection removes.
+
+    Where no home can be resolved at all, `Path.home()` raises `RuntimeError`
+    rather than the `OSError` a missing directory would be, so the caught
+    failure covers both: an unresolvable home is reported per skill like every
+    other failure of this call, never raised (ADR-0090).
+    """
 
     if not script.exists():
         return {
@@ -1751,12 +1766,13 @@ def _teardown(name: str, script: Path) -> dict[str, Any]:
     try:
         completed = subprocess.run(
             ["uv", "run", "--quiet", str(script), "remove-integrations"],
+            cwd=home(),
             text=True,
             capture_output=True,
             check=False,
             timeout=120,
         )
-    except (OSError, subprocess.SubprocessError) as exc:
+    except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
         return {"name": name, "status": "failed", "detail": str(exc), "removed": []}
 
     if completed.returncode != 0:
@@ -1843,7 +1859,14 @@ def install_integrations(
 
 
 def _install(name: str, script: Path, harnesses: list[str]) -> dict[str, Any]:
-    """Run one skill's declared install and read what it says it installed."""
+    """Run one skill's declared install and read what it says it installed.
+
+    From `home()`, and answering an unresolvable one per skill, for the reasons
+    `_teardown` states. The two words are one seam and take no layer between
+    them: no Project-layer install exists at all (ADR-0160), and the removal
+    word, which does run in both layers, wants a directory of its own no more
+    than this one does.
+    """
 
     if not script.exists():
         return {
@@ -1862,12 +1885,13 @@ def _install(name: str, script: Path, harnesses: list[str]) -> dict[str, Any]:
                 "install-integrations",
                 *[f"--harness={harness}" for harness in harnesses],
             ],
+            cwd=home(),
             text=True,
             capture_output=True,
             check=False,
             timeout=120,
         )
-    except (OSError, subprocess.SubprocessError) as exc:
+    except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
         return {"name": name, "status": "failed", "detail": str(exc), "installed": []}
 
     if completed.returncode != 0:

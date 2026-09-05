@@ -3225,6 +3225,36 @@ def _install_stub() -> str:
     )
 
 
+def _integration_stub() -> str:
+    """Answer either word, the way a Skill owning integrations has to.
+
+    One script is what a Skill declares, and a run reaching both seams asks it
+    the install word for the Skill it refreshed and the removal word for the
+    Skill it withdrew.
+    """
+
+    return (
+        "import json, sys\n"
+        "word = sys.argv[1]\n"
+        "harnesses = [\n"
+        "    a.split('=', 1)[1] for a in sys.argv[2:] if a.startswith('--harness=')\n"
+        "]\n"
+        "json.dump(\n"
+        "    {\n"
+        "        'installed': [\n"
+        "            {'harness': h, 'status': 'installed'} for h in harnesses\n"
+        "        ],\n"
+        "        'removed': (\n"
+        "            [{'harness': 'claude-code'}]\n"
+        "            if word == 'remove-integrations'\n"
+        "            else []\n"
+        "        ),\n"
+        "    },\n"
+        "    sys.stdout,\n"
+        ")\n"
+    )
+
+
 def test_select_installs_a_newly_enabled_skills_own_integration(
     tmp_path: Path,
 ) -> None:
@@ -4137,6 +4167,48 @@ def test_update_does_not_republish_an_identical_staged_manager(
 
     assert result.returncode == 0, result.stderr
     assert _tree_identity(installed) == before
+
+
+def test_a_replaced_manager_still_reaches_both_integration_seams(
+    tmp_path: Path,
+) -> None:
+    """A Skill's integrations land from a directory the same run deletes.
+
+    The Manager joins every Global refresh, so a run that replaces its tree
+    unlinks the directory the invoking agent was standing in — and a launcher
+    cannot start a Skill's declared script from a directory that is gone
+    (issue #257). Both seams are asked here in the one run: `alpha` is
+    refreshed and installs, `beta` is withdrawn and tears down, and the
+    staged Manager really differs from the installed one, so publication
+    swaps the tree rather than skipping an identical candidate.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    for name, category in (("alpha", "code"), ("beta", "code")):
+        skill = world["source"] / "skills" / category / name
+        _write(skill / "SKILL.md", _skill_md(name, integrations="scripts/own.py"))
+        _write(skill / "scripts" / "own.py", _integration_stub())
+    assert _run(world, "apply", "select", "alpha", "beta").returncode == 0
+    assert _transport_add(world, "kntnt").returncode == 0
+    installed = world["home"] / ".claude" / "skills" / "kntnt"
+    before = _tree_identity(installed)
+    _withdraw(world, "beta", "code", [_entry("alpha", "code")])
+
+    result = _apply_update(world, installed=installed, cwd=installed)
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert _tree_identity(installed) != before, (
+        "the staged Manager was identical, so nothing replaced the directory"
+        " the run was invoked from and the seams were never tested"
+    )
+    assert [row["status"] for row in payload["integrations"]["attempted"]] == [
+        "installed"
+    ], payload["integrations"]
+    assert [row["status"] for row in payload["removed"][0]["integrations"]] == [
+        "removed"
+    ], payload["removed"]
 
 
 def test_manager_acquisition_failure_preserves_the_prior_generation(

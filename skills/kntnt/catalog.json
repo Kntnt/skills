@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "bff4aa1843385398abc5f8f1f9d5efe55557740aac1fb47c4e265a46d3dd2e5d",
+  "manager_digest": "26eda0f9ed3c3a20a2a6627dcbc92faeb8a37db78867240ebc183bb10f2e8f74",
   "skills": [
     {
       "name": "agents-md",
@@ -197,7 +197,7 @@
       "name": "rename-invoices",
       "category": "producivity",
       "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
-      "digest": "a2b6213e180bb5c82b701f393d6ce21944dd83a663ca558650ddcce0a024a7d1",
+      "digest": "cc81de60138b99c8854e5f9fb2c3ebc7e9f5d31e4fd11f747f4f2b723da2b4d9",
       "binaries": [
         "pdftotext",
         "uv"
