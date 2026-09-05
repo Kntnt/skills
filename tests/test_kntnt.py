@@ -6941,12 +6941,18 @@ def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
     """
 
     passages = {
-        REDLINE: _section(REDLINE.read_text(encoding="utf-8"), "## Arguments", REDLINE),
-        REDLINE_HELP: _section(
-            REDLINE_HELP.read_text(encoding="utf-8"), "## DIAGNOSTICS", REDLINE_HELP
+        REDLINE: (
+            _section(REDLINE.read_text(encoding="utf-8"), "## Arguments", REDLINE),
+            ENVELOPE_POINTER,
+        ),
+        REDLINE_HELP: (
+            _section(
+                REDLINE_HELP.read_text(encoding="utf-8"), "## DIAGNOSTICS", REDLINE_HELP
+            ),
+            REDLINE_ELSEWHERE,
         ),
     }
-    for where, passage in passages.items():
+    for where, (passage, elsewhere) in passages.items():
         for sentence in _sentences(passage):
             lowered = sentence.lower()
             overreaches = any(claim in lowered for claim in _CLAIMS_EVERY) and any(
@@ -6961,9 +6967,9 @@ def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
                 f" (ADR-0122, issue #141). See {STANDARD}."
             )
 
-        assert REDLINE_ELSEWHERE in passage, (
+        assert elsewhere in passage, (
             f"{where}: the closure calls its list whole and never points at"
-            f" the {REDLINE_ELSEWHERE} section, leaving a run to read a"
+            f" the {elsewhere} section, leaving a run to read a"
             f" closure over invocation form as a closure over every refusal"
             f" this Skill makes (ADR-0122, issue #141). See {STANDARD}."
         )
