@@ -54,6 +54,8 @@ BINS = ("C1", "C2", "C3", "C4", "C5", "C6", "DROP", "KEEP", "RUNTIME")
 # is bound to its bin by the check below rather than by a row in the table.
 CONSOLIDATIONS = {
     "C1": "0175",
+    "C2": "0176",
+    "C3": "0177",
 }
 
 # A consolidation record lists what it absorbed under one heading of its own,
@@ -916,23 +918,33 @@ def test_the_triage_bins_every_record_exactly_once() -> None:
     assert unknown == set(), f"{unknown}: a bin outside {BINS} names no outcome."
 
 
-def test_the_distribution_record_folds_exactly_the_c1_bin() -> None:
-    """The C1 consolidation names the bin it absorbs, whole and with nothing else.
+def test_each_consolidation_record_folds_exactly_its_bin() -> None:
+    """A consolidation names the bin it absorbs, whole and with nothing else.
 
     A consolidation record is only worth the archive it replaces if the two
-    lists are the same list: a record the triage bins C1 that the fold list
+    lists are the same list: a record the triage bins here that the fold list
     omits is reasoning the sweep deletes and nothing carries, and a number the
     fold list names that the triage bins elsewhere is a record two
     consolidations both claim to have absorbed. The table is the list, so the
     comparison is against the table rather than against a hand copy of it.
+
+    Every bin the reform has written its record for is read in one pass, so a
+    consolidation ticket landing beside its siblings adds a line to the map at
+    the top of this file rather than a check of its own.
     """
 
-    folded = _fold_list(CONSOLIDATIONS["C1"])
-    binned = {number for number, (bin_, _) in _triage().items() if bin_ == "C1"}
+    binned = _triage()
 
-    assert folded == binned, (
-        f"{folded ^ binned}: the fold list of {CONSOLIDATIONS['C1']} and the"
-        f" C1 bin of docs/research/adr-triage.md name different records."
+    disagreeing = {}
+    for bin_, number in CONSOLIDATIONS.items():
+        folded = _fold_list(number)
+        absorbed = {n for n, (b, _) in binned.items() if b == bin_}
+        if folded != absorbed:
+            disagreeing[f"{bin_} ({number})"] = folded ^ absorbed
+
+    assert disagreeing == {}, (
+        f"{disagreeing}: a consolidation record's fold list and the bin it"
+        f" absorbs in docs/research/adr-triage.md name different records."
     )
 
 
