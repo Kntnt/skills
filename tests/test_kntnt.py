@@ -10845,24 +10845,58 @@ FLAG_SPELLING = re.compile(r"--(?:on|off|status)\b")
 # written in: the command's own `tldr` and the standing mode's `TL;DR`.
 FORMER_NAME = re.compile(r"(?i)tl;?dr")
 
-# The shipped surfaces the former name may not survive on. Records and released
-# changelog entries are deliberately outside it: a record's decision stands and
-# an entry is an account of what shipped, so neither is rewritten (ADR-0075).
+# The one form the former name may still take on this Skill's own surfaces: the
+# command path of the sibling Skill the name was freed for. What separates a
+# reference from a second name is whose path the token stands in, never the
+# token's shape, so the reframing Skill's own `/brief tldr` is no exception at
+# all (ADR-0168). A command path opens its own token, which is what the
+# lookbehind says: a `/tldr` continuing a filesystem path or a URL is a segment
+# of something else and invokes nothing. The group is the name inside the path,
+# which is where the scan below meets it — the prefix's own length settles
+# nothing.
+SIBLING_INVOCATION = re.compile(r"(?<![\w./-])/(tldr)\b")
+
+# The shipped text a reader resolves this Skill's name from. Records and
+# released changelog entries are deliberately outside it: a record's decision
+# stands and an entry is an account of what shipped, so neither is rewritten
+# (ADR-0075).
 SHIPPED_TEXT = frozenset({".md", ".json", ".yaml", ".yml", ".py", ".txt"})
 
 
-def _shipped_surfaces() -> list[Path]:
-    """Every file a user of this collection reads the Skill's name from."""
+def _brief_readme_section() -> str:
+    """The README's own entry for `/brief`, which states the forms it accepts."""
 
-    return [
-        *sorted(
-            path
-            for path in (REPO_ROOT / "skills").rglob("*")
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    return readme.partition("\n### brief\n")[2].partition("\n### ")[0]
+
+
+def _brief_surfaces() -> dict[str, str]:
+    """Every surface a user of this collection reads this Skill's name from.
+
+    Its own shipped text, its section of the root `README.md`, and its Catalog
+    entry — the reach the rename's hygiene always had, the collection-wide
+    sweep having been the cheapest enforcement of it while no other Skill could
+    bear the name (ADR-0168). Each surface is keyed by where a reader would go
+    to fix it, and a lookup that finds nothing yields an empty surface rather
+    than a missing one, so the caller's own emptiness check catches it.
+    """
+
+    catalog = json.loads((MANAGER_DIR / "catalog.json").read_text(encoding="utf-8"))
+    entry = next(
+        (skill for skill in catalog["skills"] if skill["name"] == "brief"), None
+    )
+
+    return {
+        **{
+            str(path): path.read_text(encoding="utf-8")
+            for path in sorted(BRIEF_DIR.rglob("*"))
             if path.is_file() and path.suffix in SHIPPED_TEXT
+        },
+        f"{REPO_ROOT / 'README.md'} (the `### brief` section)": _brief_readme_section(),
+        f"{MANAGER_DIR / 'catalog.json'} (the `brief` entry)": (
+            "" if entry is None else json.dumps(entry)
         ),
-        REPO_ROOT / "README.md",
-        REPO_ROOT / "CONTEXT.md",
-    ]
+    }
 
 
 def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None:
@@ -10874,16 +10908,19 @@ def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None
     a summary that never arrived. A Skill has no parser — the agent reading
     these files is the whole of the enforcement — so a surface left spelling
     the old name is a second name the Skill still answers to (ADR-0113).
+
+    What the check reads on those surfaces is whose command path the token
+    stands in, and never the token's shape (ADR-0168). `/tldr` is the sibling
+    Skill's own path, so it is a citation of a different command and passes.
+    Every other occurrence is this Skill wearing the old name again and fails:
+    in a `name:` frontmatter, in a managed block's marker, as `TL;DR` in
+    prose, and in a path of this Skill's own such as `/brief tldr` — which is
+    a command path too, and fails precisely because the path is this one's.
     """
 
     assert BRIEF_DIR.is_dir(), (
         f"{BRIEF_DIR}: the Skill's directory is its name under its Category,"
         f" and the rename is not done while the old one is what exists"
-        f" (ADR-0113). See {STANDARD}."
-    )
-    assert not (REPO_ROOT / "skills" / "agents" / "tldr").exists(), (
-        f"{REPO_ROOT / 'skills' / 'agents' / 'tldr'}: the old directory is"
-        f" still here, so the collection ships the Skill under two names"
         f" (ADR-0113). See {STANDARD}."
     )
 
@@ -10903,27 +10940,31 @@ def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None
             f" branch that never leaves the file (ADR-0113). See {STANDARD}."
         )
 
-    surfaces = _shipped_surfaces()
+    surfaces = _brief_surfaces()
 
-    # A glob that matched nothing would pass the loop below without reading a
-    # single surface, which is the one outcome this check exists to catch.
+    # Past the two fragments there has to be at least one of the Skill's own
+    # files: a glob that matched nothing, a README section that partitioned to
+    # nothing, or a Catalog the Skill has fallen out of would each pass the
+    # loop below without reading a surface, which is what this check catches.
     assert len(surfaces) > 2
+    assert all(text.strip() for text in surfaces.values())
 
-    for path in surfaces:
-        found = sorted(set(FORMER_NAME.findall(path.read_text(encoding="utf-8"))))
-        assert not found, (
-            f"{path}: {found} spells the name the Skill and its standing mode"
-            f" no longer answer to. Every shipped surface names it `brief`,"
-            f" the records and the released changelog entries excepted"
-            f" (ADR-0113). See {STANDARD}."
+    for where, text in surfaces.items():
+        sanctioned = {match.start(1) for match in SIBLING_INVOCATION.finditer(text)}
+        found = sorted(
+            {
+                match.group()
+                for match in FORMER_NAME.finditer(text)
+                if match.start() not in sanctioned
+            }
         )
-
-
-def _brief_readme_section() -> str:
-    """The README's own entry for `/brief`, which states the forms it accepts."""
-
-    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-    return readme.partition("\n### brief\n")[2].partition("\n### ")[0]
+        assert not found, (
+            f"{where}: {found} spells the name this Skill and its standing"
+            f" mode no longer answer to. On this Skill's own surfaces the"
+            f" former name stands only as `/tldr`, the sibling Skill's own"
+            f" command path; anywhere else it is a second name this one"
+            f" answers to (ADR-0113, ADR-0168). See {STANDARD}."
+        )
 
 
 def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:

@@ -60,6 +60,7 @@ RELATIONS = {
     ("0083", "0166"),
     ("0136", "0166"),
     ("0090", "0167"),
+    ("0113", "0168"),
     ("0017", "0019"),
     ("0029", "0059"),
     ("0050", "0059"),
@@ -391,6 +392,17 @@ def test_the_rename_record_settles_one_name_and_leaves_the_standard_alone() -> N
     Skill's name has to hold for every form it offers — which is why the
     coding standard, where a rule binding more than one Skill would have to be
     written, cites it nowhere (issue #124).
+
+    What moved is the pair of assertions that ADR-0113 carried neither a
+    pointer nor a takeover claim. It carries a pointer now: ADR-0168 narrowed
+    its closing correction of every occurrence of the former name to an
+    occurrence that invokes this Skill, and the answering sentence sits beside
+    that claim where ADR-0075 puts it (issue #253). The relation is read from
+    both ends by the scans above and stands in the floor of relations, so
+    dropping the two assertions loses no check. Everything else holds for the
+    reason it always did: what a later record outran is one hygiene claim and
+    not the naming decision, and a record narrowed from ahead still took over
+    nothing behind it and still states no rule the coding standard must carry.
     """
 
     record = (ADR / "0113-the-reframing-skill-is-named-brief.md").read_text(
@@ -400,10 +412,6 @@ def test_the_rename_record_settles_one_name_and_leaves_the_standard_alone() -> N
     # What the old name got right, and what the new one costs.
     assert "instantly legible" in record
     assert "What this costs" in record
-
-    # No decision is falsified, so no pointer is written in either direction.
-    assert not POINTER.search(record)
-    assert not CLAIM.search(record)
 
     for path in sorted(STANDARD_DIR.glob("*.md")):
         assert "ADR-0113" not in path.read_text(encoding="utf-8"), (
