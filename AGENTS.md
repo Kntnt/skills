@@ -21,9 +21,9 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 
 - `CONTEXT.md` — read when using a Collection term
 - `docs/adr/` — read when deciding collection architecture
-- `docs/coding-standard/general.md` — read when writing code
-- `docs/coding-standard/python.md` — read when writing Python
-- `docs/coding-standard/skills.md` — read when adding a Skill or changing the files one ships
+- `docs/rules/general.md` — read when writing code
+- `docs/rules/python.md` — read when writing Python
+- `docs/rules/skills.md` — read when adding a Skill or changing the files one ships
 - `docs/adr/0067-a-ticket-asserts-only-what-stays-true-until-it-is-built.md` — read when writing a ticket
 - `docs/adr/0099-a-ticket-that-rewrites-an-invariant-declares-that-it-builds-alone.md` — read when writing a ticket whose subject is a rule every shipped file is under
 - `docs/evaluation/protocol.md` — read when evaluating an editorial Skill against the fixture corpus
