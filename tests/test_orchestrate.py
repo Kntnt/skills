@@ -3122,3 +3122,49 @@ def test_every_judged_attempt_is_imported_at_its_lifecycle_boundary() -> None:
     assert "/model-selector observe" not in report
     assert "/model-selector record" not in report
     assert "imports them automatically" in report
+
+
+def test_the_wave_check_reads_the_wave_it_merged_not_the_whole_branch() -> None:
+    """A three-wave run read its first wave three times, on the run's dearest seat.
+
+    Each wave's check read the branch whole, so the reading grew with the run
+    and re-read work an earlier round had already read and passed. The wave's
+    own commits are what nothing has read yet, and the branch before them
+    goes on binding through the check that passed it (ADR-0171).
+    """
+
+    text = _brief("wave.md")
+    instructions = _instructions("wave.md")
+    where = SKILL / "references" / "wave.md"
+    step = _step(11)
+
+    assert "`<since>`" in instructions, (
+        f"{where}: the fill-in instructions say what `<since>` is replaced"
+        f" with — a placeholder nothing explains is handed out unfilled"
+        f" (ADR-0171)."
+    )
+    assert "read whole and passed by the check that ended the wave before" in text, (
+        f"{where}: the brief says why the branch before `<since>` is not read"
+        f" again for its own sake — the check that ended the previous wave"
+        f" read it whole and passed it (ADR-0171)."
+    )
+    assert "only where this wave's commits point" in text, (
+        f"{where}: the brief still sends the reading outside the wave, but"
+        f" only where the wave's commits lead — the registry a record joined,"
+        f" the citation a moved line broke, the prose the change made false"
+        f" (ADR-0171)."
+    )
+    assert "`<since>`" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 fills `<since>`, the run being the"
+        f" only party that saw the last clean pass (ADR-0171)."
+    )
+    assert "plan's `base`" in step, (
+        f"{SKILL / 'SKILL.md'}: step 11 falls back to the plan's `base` where"
+        f" this invocation holds no clean pass, so a resumed run reads whole"
+        f" rather than trusting a boundary nobody recorded (ADR-0171)."
+    )
+    assert "same `<since>`" in step, (
+        f"{SKILL / 'SKILL.md'}: a rerun after a fix carries the same `<since>`"
+        f" as the round before it — the narrowing is between waves, never"
+        f" between rounds (ADR-0072, ADR-0171)."
+    )

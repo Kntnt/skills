@@ -46,6 +46,7 @@ CLAIM = re.compile(
 # floor only grows, and a pattern that drifted from the prose would otherwise
 # match nothing and judge nothing.
 RELATIONS = {
+    ("0072", "0171"),
     ("0090", "0156"),
     ("0133", "0156"),
     ("0145", "0156"),
@@ -280,6 +281,35 @@ def test_the_gate_failing_mechanical_recut_preserves_the_wave_check_history() ->
     # The road not taken is named, a fourth shape being a fourth thing two
     # briefs can state inconsistently.
     assert "fourth verdict shape" in later
+
+
+def test_the_wave_scoped_reading_preserves_the_coherence_record_history() -> None:
+    """The narrowing points past ADR-0072 without rewriting the world it decided in.
+
+    ADR-0072 settled that the wave check reads coherence beside its gate and
+    that its fixes loop to a fixed point, both of which stand. Only the range
+    of the reading was outrun, by runs whose every wave re-read the whole
+    branch on the main seat and found there nothing an earlier round had not
+    already read and passed (ADR-0171).
+    """
+
+    earlier = (
+        ADR
+        / "0072-the-wave-check-reads-coherence-and-its-fixes-loop-to-a-fixed-point.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR / "0171-the-wave-check-reads-the-wave-it-merged-and-not-the-whole-branch.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claims intact and add only the sanctioned pointer.
+    assert "reads the integrated branch for coherence" in earlier
+    assert "The loop runs to a fixed point" in earlier
+    assert "narrowed by ADR-0171" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions, and keep what the earlier record decided standing whole.
+    assert "narrows ADR-0072" in later
+    assert "the loop runs to a fixed point" in later
 
 
 def test_the_escalated_fix_round_preserves_the_no_progress_bound_history() -> None:
