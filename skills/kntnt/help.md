@@ -2,7 +2,7 @@
 
 ## NAME
 
-kntnt - manage which collection Skills are Enabled
+kntnt - manage which collection Skills and Features are Enabled
 
 ## SYNOPSIS
 
@@ -10,7 +10,7 @@ kntnt - manage which collection Skills are Enabled
 
 **/kntnt** **help** [*COMMAND*] [**--** *INSTRUCTION*]
 
-**/kntnt** **select** [**--on=**_SKILL_]... [**--off=**_SKILL_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
+**/kntnt** **select** [**--on=**_ENTRY_]... [**--off=**_ENTRY_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
 **/kntnt** **update** [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
@@ -18,7 +18,7 @@ kntnt - manage which collection Skills are Enabled
 
 ## DESCRIPTION
 
-`kntnt` lists, Enables, refreshes, and removes Collection Skills across detected Harnesses. Other Skills are invoked by their own names.
+`kntnt` lists, Enables, refreshes, and removes Collection Skills and Features across detected Harnesses. Other Skills are invoked by their own names.
 
 Bare `kntnt` prints this page. Use `/kntnt <command> --help` or `/kntnt help <command>` for command help. Select can show help for a Skill that is not yet Enabled.
 
@@ -48,13 +48,13 @@ Remove the Collection from the machine, with the Manager removed last. Project c
 
 ## OPTIONS
 
-**--on=**_SKILL_
+**--on=**_ENTRY_
 
-Enable a named Skill without opening the Select list. Valid only with `select` and repeatable.
+Enable a named Catalog entry — a Skill or a Feature — without opening the Select list. Valid only with `select` and repeatable.
 
-**--off=**_SKILL_
+**--off=**_ENTRY_
 
-Disable a named Skill without opening the Select list. Valid only with `select`, repeatable, and gated by `--yes` because it deletes files.
+Disable a named Catalog entry without opening the Select list. Valid only with `select`, repeatable, and gated by `--yes`: unchecking a Skill deletes files, and unchecking a Feature takes what it wrote back out of Harness configuration.
 
 **--project**, **--project=on**
 

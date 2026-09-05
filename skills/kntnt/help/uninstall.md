@@ -38,7 +38,7 @@ Uninstall fetches the current Catalog when possible and otherwise uses the store
 
 `--project` and every other unsupported option are refused rather than ignored. The Manager names the error, prints the SYNOPSIS, removes nothing, and points to the full page.
 
-If any Skill cannot be removed, the Manager remains Enabled and the report names what is left.
+If any Feature cannot be torn down or any Skill cannot be removed, the Manager remains Enabled and the report names what is left.
 
 ## INVOCATION ENVELOPE
 
