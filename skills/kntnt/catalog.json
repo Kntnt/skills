@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "72f589bb6c6974177c08231dbfde038a6c4ce82a3151591fd619f1655721e0ce",
+  "manager_digest": "5f46fe62d702a7887608772de79b21e1cf207e1031cb6be57f53c83e9dd0e50e",
   "skills": [
     {
       "name": "agents-md",
@@ -105,7 +105,7 @@
       "name": "ready-for-agent-check",
       "category": "code",
       "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
-      "digest": "ea19051a84de63cdc0a91b92f441b17c155fa4f3217ab3a19ff6890f41585333",
+      "digest": "a1def91a95769f8fb6ff4fae3a8278dd5020d6b689b7c71d8a00d0c9434c6fc6",
       "binaries": [
         "gh",
         "uv"

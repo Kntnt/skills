@@ -4721,9 +4721,12 @@ def validate(
             if fault is not None:
                 candidate = (1, fault)
             else:
+                # The unknown-command reading is this form's only where it
+                # has no operand slot to take the token; where it has one, a
+                # declared flag behind that token is still out of order.
                 fault = (
                     None
-                    if unknown is not None
+                    if unknown is not None and not form.operands
                     else _trailing_flag_fault(form, operand_tokens, label, declared)
                 )
                 if fault is None:

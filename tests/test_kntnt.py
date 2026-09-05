@@ -10886,7 +10886,8 @@ def _opening(text: str) -> str:
 def test_every_skill_body_opens_with_the_engine_call() -> None:
     """The mechanics are the engine's, and the body says so once, before anything.
 
-    Sixteen bodies opened with the same checker discovery, the same Envelope
+    Fifteen bodies besides the Manager's opened with the same checker
+    discovery, the same Envelope
     pointer and the same help routes, and asked the model to perform them. The
     engine performs them now, so what a body opens with is where the engine is
     and how to call it: the Manager beside this Skill or under a Global
@@ -11324,6 +11325,43 @@ def test_a_form_the_grammar_forbids_is_refused_by_the_engine_and_documented() ->
         assert _synopsis(directory / "help.md") in reading.text, directory
         assert reading.text.rstrip("\n").endswith(f"see '/{directory.name} --help'"), (
             directory
+        )
+
+
+def test_a_skill_with_no_flag_and_no_command_path_documents_the_dash_token_it_takes() -> (
+    None
+):
+    """Where nothing can be shadowed, a dash-prefixed token is an operand, and the page says so.
+
+    The engine reads the condition off the surfaces — no flag in the
+    `argument-hint`, no page under `help/` — and takes `--bogus` as operand
+    on such a Skill, there being nothing for it to be mistaken for
+    (ADR-0176, ADR-0181). A `DIAGNOSTICS` that still promises to refuse
+    every option documents a refusal nobody performs, so the page states the
+    reading the engine makes instead, beside what the Skill then does with
+    a reference nothing resolves.
+    """
+
+    engine = _manager_module()
+    for directory in _shipped_skills():
+        if engine.hint_flags(directory) or (directory / "help").exists():
+            continue
+        page = (directory / "help.md").read_text(encoding="utf-8")
+        diagnostics = page.partition("\n## DIAGNOSTICS\n")[2].partition("\n## ")[0]
+
+        reading = engine.read_invocation(directory, "--bogus-flag")
+        assert reading.status == 0 and reading.invocation is not None, directory
+        assert reading.invocation["operands"] == ["--bogus-flag"], directory
+        assert "dash-prefixed token is read as" in diagnostics, (
+            f"{directory / 'help.md'}: this grammar declares no flag and no"
+            f" command path, so the engine takes a dash-prefixed token as"
+            f" operand rather than refusing it as an option (ADR-0181), and"
+            f" `DIAGNOSTICS` says what it is read as. See {STANDARD}."
+        )
+        assert "no options. Every option" not in diagnostics, (
+            f"{directory / 'help.md'}: `DIAGNOSTICS` promises to refuse every"
+            f" option, which the engine does not do on a grammar that declares"
+            f" none (ADR-0181). See {STANDARD}."
         )
 
 

@@ -614,10 +614,18 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("reconcile --dry-run #12", None),
         ("--bogus", None),
         ("--yes --yes", None),
+        # A declared flag after an operand is out of order on the root form too,
+        # where the grammar also has command paths (ADR-0176).
+        ("#12 --yes", None),
+        ("#12 --dry-run", None),
     ],
     "code/ready-for-agent-check": [
         ("", {"operands": []}),
         ("#12 #13", {"operands": ["#12", "#13"]}),
+        # No flag and no command path: a dash-prefixed token is a reference the
+        # Skill's own step resolves and refuses, never an option (ADR-0176).
+        ("--bogus-flag", {"flags": {}, "operands": ["--bogus-flag"]}),
+        ("#12 --yes", {"flags": {}, "operands": ["#12", "--yes"]}),
         ("--  ", None),
     ],
     "code/release": [
@@ -782,6 +790,8 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("config reset --yes", None),
         ("config bogus", None),
         ("status extra", None),
+        ("my workload --yes", None),
+        ("recommend my workload --data=x", None),
     ],
     "producivity/rename-invoices": [
         ("--type=invoice", {"flags": {"--type": "invoice"}, "operands": []}),

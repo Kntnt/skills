@@ -24,7 +24,7 @@ The reviewer also checks ticket claims against the current Project. Stale paths,
 
 One or more bare ticket references such as `#12`. When omitted, the Skill checks every open ticket carrying `ready-for-agent`. Named tickets are checked regardless of label so the result can inform whether they should receive it.
 
-A reference that does not resolve, is not a number, or uses the cross-repository form `owner/repo#number` makes the complete invocation invalid.
+A reference that does not resolve, is not a number, or uses the cross-repository form `owner/repo#number` makes the complete invocation invalid. This grammar declares no flag, so a dash-prefixed token such as `--yes` is a reference like any other, and one that resolves to nothing.
 
 ## REVIEW CRITERIA
 
@@ -72,7 +72,7 @@ There is no partial pass. An uncertain reviewer returns no, because uncertainty 
 
 ## DIAGNOSTICS
 
-The Skill accepts ticket references and no options. Every option and invalid reference is refused rather than ignored; it names the error, prints the SYNOPSIS, checks nothing, and points to `/ready-for-agent-check --help`.
+The Skill takes ticket references and no options. It declares no flag and no command path, so a dash-prefixed token is read as a ticket reference rather than as an option, and it is a reference nothing resolves. A reference nothing resolves — a dash-prefixed token, a number the tracker does not know, something that is not a number, the cross-repository form — is refused rather than ignored: the Skill names the reference, prints the SYNOPSIS, checks nothing, and points to `/ready-for-agent-check --help`. A malformed Envelope — a separator with no instruction behind it — is refused the same way.
 
 An empty resolved scope is a successful no-op and is reported as such.
 
