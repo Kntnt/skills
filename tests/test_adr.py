@@ -27,13 +27,15 @@ TESTS = REPO_ROOT / "tests"
 # settling a rule it states: what a ticket may assert (0067), the numbers a run
 # reserves so that it can (0071), the edge a discovered dependency corrects
 # rather than builds around (0073), the declaration an invariant ticket makes
-# (0099), and the thread that outranks the body it amends (0065). The module
-# names each rule in a phrase and cites its record rather than arguing it
-# again, so a rule that arrives without its number is one the reader can only
-# take on this file's word — and a number here that the module never states a
-# rule for is a citation with no rule under it (issue #266).
+# (0099), the thread that outranks the body it amends (0065), and the builder a
+# readiness review reads a ticket against (0180, the reform's own record, which
+# is where what ADR-0155 settled is now argued). The module names each rule in a
+# phrase and cites its record rather than arguing it again, so a rule that
+# arrives without its number is one the reader can only take on this file's word
+# — and a number here that the module never states a rule for is a citation with
+# no rule under it (issue #266).
 TICKET_RULES = STANDARD_DIR / "tickets.md"
-TICKET_RULE_RECORDS = ("0065", "0067", "0071", "0073", "0099")
+TICKET_RULE_RECORDS = ("0065", "0067", "0071", "0073", "0099", "0180")
 
 # The research notes, which cite records the same way, and among them the
 # triage table the archive reform is built from. The table names every record
@@ -58,6 +60,7 @@ CONSOLIDATIONS = {
     "C3": "0177",
     "C4": "0178",
     "C5": "0179",
+    "C6": "0180",
 }
 
 # A consolidation record lists what it absorbed under one heading of its own,
