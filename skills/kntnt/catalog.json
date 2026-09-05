@@ -68,7 +68,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "c5b87350758e7fab3c087221d961705af7735dbc8f6e313372d72ebe39ce3bd3",
+      "digest": "1dbd29d24b253ec8f333dea4bccafd74d5719b79bb5a7ad021dae2b55fd55e25",
       "binaries": [
         "git",
         "gh",
@@ -131,7 +131,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "bdd0835c56cad908c8707663a2c9023ec9a8db13170701a2a081e9e018f010f0",
+      "digest": "eec97adcd3f2e017913030249c21683a69280eb8ce491f545c3d76f39878b427",
       "binaries": [
         "uv"
       ],
@@ -159,7 +159,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "63ab1b8135b421bd05822c4c244f5380532eb84ed90b04e0e13baa10a0b5bc23",
+      "digest": "ac38cead466997cc57a357d0829a3a88e23df51935c6e0ea8147b02d67061753",
       "binaries": [
         "uv"
       ],

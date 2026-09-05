@@ -212,7 +212,7 @@ The directory also contains `kntnt-orchestrate-progress.json`, an atomically rep
 
 **.kntnt-orchestrate/generated.json**
 
-Declares generated files and their commands. A collision confined to declared files is settled by regenerating them on the merged tree. Any undeclared or unresolved collision takes the repair path.
+Declares generated files and their commands. A collision confined to declared files is settled by regenerating them on the merged tree and committing what the commands produced, with no collision repair. Any undeclared or unresolved collision takes the repair path. What counts is the declaration: a file is generated because this file names it and the command that rebuilds it, never because of how the file looks or what it is called.
 
 **Run-owned append files**
 
