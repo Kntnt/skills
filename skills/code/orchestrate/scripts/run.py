@@ -2390,7 +2390,7 @@ def unmet_blockers(
         missing = body_tickets - relation_tickets
         if missing:
             raise RunError(
-                f"#{int(item['number'])}: `Blocked by` line names {as_references(sorted(missing))}, "
+                f"`Blocked by` line names {as_references(sorted(body_tickets))}, "
                 f"which the tracker relation does not carry. Relation names "
                 f"{as_references(sorted(relation_tickets))}. "
                 f"The missing {'edge' if len(missing) == 1 else 'edges'} "

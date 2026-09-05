@@ -1611,8 +1611,11 @@ def test_plan_refuses_a_body_edge_the_relation_does_not_carry(
 
     assert result.returncode == 1
     assert "#10" in result.stderr
+    # Both sets should be reported: body names #8, #9 and relation names #8
+    assert "#8" in result.stderr
     assert "#9" in result.stderr
-    assert "relation" in result.stderr or "missing edge" in result.stderr
+    assert "Relation names" in result.stderr
+    assert "missing edge" in result.stderr
 
 
 def test_plan_precedence_when_body_names_only_tickets_the_relation_carries(
