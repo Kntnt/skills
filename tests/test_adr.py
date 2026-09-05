@@ -48,6 +48,19 @@ TRIAGE = RESEARCH_DIR / "adr-triage.md"
 # /orchestrate's own machinery.
 BINS = ("C1", "C2", "C3", "C4", "C5", "C6", "DROP", "KEEP", "RUNTIME")
 
+# The consolidation records, by the bin each one absorbs. A record here is
+# the reform's product rather than its subject: it carries the reasoning of
+# the records the sweep deletes, states no rule the rules modules state, and
+# is bound to its bin by the check below rather than by a row in the table.
+CONSOLIDATIONS = {
+    "C1": "0175",
+}
+
+# A consolidation record lists what it absorbed under one heading of its own,
+# one record per bullet, and the list ends where the next section begins.
+FOLD_HEADING = "## The records folded into this one"
+FOLDED = re.compile(r"^- ADR-(\d{4}) ")
+
 # The two files whose citation is the whole of the `RUNTIME` criterion: the
 # engine behind /orchestrate and the suite that holds it to its record.
 RUNTIME_SOURCES = (
@@ -853,6 +866,23 @@ def _runtime_citations() -> dict[str, list[str]]:
     return cited
 
 
+def _fold_list(number: str) -> set[str]:
+    """Read the numbers a consolidation record names as folded into itself.
+
+    The list is the record's own second section, one `ADR-NNNN` per bullet,
+    and it ends where the reasoning starts. Reading it rather than a copy of
+    it is the point: the record is what the deletion sweep is checked against.
+    """
+
+    record = next(ADR.glob(f"{number}-*.md")).read_text(encoding="utf-8")
+    section = record.split(FOLD_HEADING, 1)[1].split("\n## ", 1)[0]
+    return {
+        match.group(1)
+        for line in section.splitlines()
+        if (match := FOLDED.match(line)) is not None
+    }
+
+
 def test_the_triage_bins_every_record_exactly_once() -> None:
     """The tickets that fold the archive read the table as the whole list.
 
@@ -860,12 +890,22 @@ def test_the_triage_bins_every_record_exactly_once() -> None:
     deletion sweep leaves standing; a number the table bins and no record
     carries sends a sweep looking for a file that is not there. So the two
     sets are compared whole rather than one direction at a time.
+
+    The archive the table triages is the archive as it stood when the table
+    was written, and what the reform writes since is its product rather than
+    its subject: a consolidation record carries no bin because none of the
+    nine describes it, and #272 keeps it by naming it rather than by reading a
+    row. So the completeness claim reaches every number up to the highest the
+    table bins and stops there. Scoping it that way rather than exempting the
+    six by name is what lets the consolidation tickets land beside one another
+    without each of them having to amend this check.
     """
 
     binned = _triage()
     records = set(_records())
+    triaged_archive = max(binned)
 
-    unbinned = records - set(binned)
+    unbinned = {number for number in records - set(binned) if number <= triaged_archive}
     phantom = set(binned) - records
     assert (unbinned, phantom) == (set(), set()), (
         f"{unbinned} are records the triage does not bin and {phantom} are"
@@ -874,6 +914,26 @@ def test_the_triage_bins_every_record_exactly_once() -> None:
 
     unknown = {bin_ for bin_, _ in binned.values()} - set(BINS)
     assert unknown == set(), f"{unknown}: a bin outside {BINS} names no outcome."
+
+
+def test_the_distribution_record_folds_exactly_the_c1_bin() -> None:
+    """The C1 consolidation names the bin it absorbs, whole and with nothing else.
+
+    A consolidation record is only worth the archive it replaces if the two
+    lists are the same list: a record the triage bins C1 that the fold list
+    omits is reasoning the sweep deletes and nothing carries, and a number the
+    fold list names that the triage bins elsewhere is a record two
+    consolidations both claim to have absorbed. The table is the list, so the
+    comparison is against the table rather than against a hand copy of it.
+    """
+
+    folded = _fold_list(CONSOLIDATIONS["C1"])
+    binned = {number for number, (bin_, _) in _triage().items() if bin_ == "C1"}
+
+    assert folded == binned, (
+        f"{folded ^ binned}: the fold list of {CONSOLIDATIONS['C1']} and the"
+        f" C1 bin of docs/research/adr-triage.md name different records."
+    )
 
 
 def test_the_runtime_bin_is_exactly_what_orchestrates_own_files_cite() -> None:
