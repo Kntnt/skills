@@ -834,12 +834,19 @@ def _occupied(setting: Any, owner: str) -> str | None:
     """Return the foreign command holding the status line slot, or None.
 
     None covers both an empty slot and one this owner already holds, because
-    those are the two states an install may write into. Anything else is
-    somebody's status line, and this collection reports the slot as taken
-    rather than replacing it or remembering what it displaced (ADR-0090): the
-    setting is single-valued, so there is nowhere to put the old value that
-    would not be a private ledger, and a ledger is the one thing convergence
-    over disk has no place for.
+    those are the two states an install writes into without being told twice.
+    Anything else is somebody's status line, and what happens to it is the
+    user's to decide rather than this collection's to assume (ADR-0174): an
+    install that was not told to replace it reports what holds the slot and
+    writes nothing, and one that was told replaces it and says what went.
+
+    What is never done either way is remembering the displaced value so that a
+    later removal can put it back. The setting is single-valued, so there is
+    nowhere to keep the old one that would not be a private ledger, and a
+    ledger is the one thing convergence over disk has no place for (ADR-0090):
+    it goes stale the moment the user edits the setting by hand, and a removal
+    restoring a value they have since replaced is worse than one that restores
+    nothing.
     """
 
     if setting is None:
@@ -851,9 +858,22 @@ def _occupied(setting: Any, owner: str) -> str | None:
 
 
 def install_statusline(
-    owner: str, harness: str, root: Path, command: list[str]
+    owner: str,
+    harness: str,
+    root: Path,
+    command: list[str],
+    *,
+    replace: bool = False,
 ) -> dict[str, Any]:
-    """Point *harness*'s status line at *command*, unless the slot is somebody's."""
+    """Point *harness*'s status line at *command*, replacing another only if told.
+
+    A status line somebody else's command holds is a thing the user chose, and
+    what becomes of it is theirs to answer rather than this call's to decide
+    (ADR-0174). Untold, this reports what holds the slot and writes nothing, so
+    that the answer can be asked for where questions are asked; told, it writes
+    ours and names what it displaced, because that name is the whole of what is
+    left of the old value afterwards.
+    """
 
     if harness not in STATUSLINE_HARNESSES:
         return _unsatisfied_as(harness, STATUSLINE_UNSATISFIED)
@@ -862,18 +882,19 @@ def install_statusline(
     try:
         document = _read_json(path)
         held = _occupied(document.get("statusLine"), owner)
-        if held is not None:
+        if held is not None and not replace:
             return {
                 "harness": harness,
-                "status": "failed",
+                "status": "held",
                 "entries": 0,
                 "capability": None,
+                "held": held,
                 "detail": (
                     f"the statusLine setting in {path} already runs {held}, and it "
-                    "holds one command rather than a list; nothing was written and "
-                    "nothing of yours was remembered. Take that setting out "
-                    "yourself and enable this Feature again, or keep the status "
-                    "line you have and leave this Feature unchecked."
+                    "holds one command rather than a list. Nothing was written. "
+                    "Replacing it is the user's answer to give, and this "
+                    "collection keeps no copy of what it replaces, so a later "
+                    "Disable will not put that command back."
                 ),
             }
         _write_json(
@@ -897,7 +918,14 @@ def install_statusline(
         "status": "installed" if installed else "failed",
         "entries": 1 if installed else 0,
         "capability": None,
-        "detail": None if installed else "the status line is not set after writing",
+        "detail": (
+            (
+                f"the status line that ran {held} was replaced, and no copy of it "
+                "is kept anywhere"
+            )
+            if installed and held is not None
+            else (None if installed else "the status line is not set after writing")
+        ),
     }
 
 
@@ -957,12 +985,16 @@ def statusline_health(owner: str, harness: str, root: Path) -> dict[str, Any]:
             "detail": None,
         }
 
+    # A slot somebody else holds is absent for this owner and is not the same
+    # absence as an empty one: it names what the user would be answering about,
+    # and `held` carries that name so a row can ask rather than only report.
     held = _occupied(setting, owner)
     return {
         "harness": harness,
         "status": "absent",
         "entries": 0,
         "capability": None,
+        "held": held,
         "detail": None if held is None else f"the statusLine setting runs {held}",
     }
 
@@ -973,6 +1005,7 @@ def statusline_health(owner: str, harness: str, root: Path) -> dict[str, Any]:
 # first state present is the answer.
 _FOLD_ORDER: tuple[str, ...] = (
     "failed",
+    "held",
     "unsatisfied",
     "absent",
     "degraded",
@@ -1015,13 +1048,20 @@ def fold(records: list[dict[str, Any]]) -> dict[str, Any]:
         (str(record["capability"]) for record in records if record.get("capability")),
         None,
     )
-    return {
+    folded = {
         "harness": str(records[0]["harness"]),
         "status": status,
         "entries": sum(int(record.get("entries") or 0) for record in records),
         "capability": capability,
         "detail": " ".join(details) or None,
     }
+
+    # What holds a slot this owner wants survives the fold, because it is what
+    # the question put to the user is about.
+    held = next((record["held"] for record in records if record.get("held")), None)
+    if held is not None:
+        folded["held"] = held
+    return folded
 
 
 def _act(

@@ -6,9 +6,9 @@ kntnt select - list Collection Skills and Features and change which are Enabled
 
 ## SYNOPSIS
 
-**/kntnt** **select** [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
+**/kntnt** **select** [**--replace=**_FEATURE_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
-**/kntnt** **select** [**--on=**_ENTRY_]... [**--off=**_ENTRY_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
+**/kntnt** **select** [**--on=**_ENTRY_]... [**--off=**_ENTRY_]... [**--replace=**_FEATURE_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -31,6 +31,10 @@ Enable *ENTRY* — a Skill or a Feature — without opening the list. Repeatable
 **--off=**_ENTRY_
 
 Disable *ENTRY* without opening the list. Repeatable, combinable with **--on**, and requires **--yes**: unchecking a Skill deletes files, and unchecking a Feature takes what it wrote back out of Harness configuration.
+
+**--replace=**_FEATURE_
+
+Allow *FEATURE* to overwrite a single-valued setting another command already holds — today, Claude Code's `statusLine`. Repeatable, refused for anything that is not a Feature, and never implied by **--yes**: what happens to a status line you wrote is your answer to give, and an unattended run has nobody to ask. Nothing is kept of what is replaced, so Disabling the Feature afterwards clears the setting rather than restoring the old command.
 
 **--project**, **--project=on**
 
@@ -68,7 +72,7 @@ The Skill depends on an unchecked Collection Skill. The row names it; leaving it
 
 A Skill may own a Harness Integration, and a Feature owns nothing else: what it writes into a Harness's own configuration so the Harness calls it at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. A Feature owns Harness Integrations and nothing else, so this is the whole of what enabling or disabling one does. Checking an entry in Global asks it to install what it owns, and unchecking one asks it to remove them; the Project layer installs and removes none. The report says what became of each.
 
-A Feature may also write into a global instruction file a Harness reads — `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md` — and into a single-valued setting such as Claude Code's status line. Prose is written inside a fenced ownership marker and removal takes exactly that fence away; a single-valued setting already holding something else is reported as taken and never overwritten. What each Feature writes is on its row before the checkbox, and repeated in the confirmation before anything is written.
+A Feature may also write into a global instruction file a Harness reads — `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md` — and into a single-valued setting such as Claude Code's status line. Prose is written inside a fenced ownership marker and removal takes exactly that fence away. A single-valued setting another command already holds is never overwritten unquestioned: the row names what holds it, the confirmation asks whether to replace it, and only **--replace** writes over it. Nothing is kept of what is replaced. What each Feature writes is on its row before the checkbox, and repeated in the confirmation before anything is written.
 
 ## OFFLINE OPERATION
 

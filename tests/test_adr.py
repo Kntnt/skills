@@ -47,6 +47,7 @@ CLAIM = re.compile(
 # match nothing and judge nothing.
 RELATIONS = {
     ("0090", "0173"),
+    ("0173", "0174"),
     ("0072", "0171"),
     ("0085", "0172"),
     ("0133", "0172"),

@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "7b35db679c562fd8cf86c924adf136d10f835fa2a07e6000f2956fcce81b7d0d",
+  "manager_digest": "6b7e064b85c83fa92cfcb25f4d04f68094536db783a51a595a2a52e748facdde",
   "skills": [
     {
       "name": "agents-md",
@@ -232,7 +232,7 @@
       "name": "statusline",
       "category": "environment",
       "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
-      "digest": "56004b5e042464c454e7396b28583088ca373fe870a66ab67431f8b002fd6c87",
+      "digest": "6638a1df16ff8f6254510a11d2f8d991c5aaecd7fa7422489d86dc15a91fea47",
       "binaries": [
         "git",
         "jq"
@@ -242,7 +242,7 @@
         "claude-code"
       ],
       "writes": [
-        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting: where it already runs something that is not this collection's, nothing is written, the run reports the slot as taken and names what holds it, and nothing of yours is remembered anywhere. Disabling the Feature clears the setting where this collection holds it and leaves it alone where it does not."
+        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it."
       ]
     }
   ]

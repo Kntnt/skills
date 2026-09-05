@@ -162,23 +162,29 @@ def test_a_harness_with_no_instruction_file_is_reported_not_skipped() -> None:
     assert record["capability"] == integrations.INSTRUCTIONS_UNSATISFIED
 
 
-def test_a_status_line_somebody_else_holds_is_reported_not_taken(
-    tmp_path: Path,
-) -> None:
-    """A single-valued setting has no room beside its value, and no ledger under it."""
+def _held_slot(tmp_path: Path) -> dict[str, str]:
+    """Put somebody else's status line where this collection wants one."""
 
-    integrations = _integrations()
-    (tmp_path / ".claude").mkdir()
     mine = {"type": "command", "command": "~/mine.sh"}
+    (tmp_path / ".claude").mkdir(exist_ok=True)
     (tmp_path / ".claude" / "settings.json").write_text(
         json.dumps({"statusLine": mine}), "utf-8"
     )
+    return mine
+
+
+def test_a_status_line_somebody_else_holds_is_held_not_taken(tmp_path: Path) -> None:
+    """Untold, an install names what holds the slot and writes nothing."""
+
+    integrations = _integrations()
+    mine = _held_slot(tmp_path)
 
     record = integrations.install_statusline(
         "kntnt.statusline", "claude-code", tmp_path, ["bash", "/ours.sh"]
     )
 
-    assert record["status"] == "failed"
+    assert record["status"] == "held"
+    assert record["held"] == "~/mine.sh"
     assert "~/mine.sh" in str(record["detail"])
     assert _settings(tmp_path)["statusLine"] == mine
 
@@ -189,6 +195,36 @@ def test_a_status_line_somebody_else_holds_is_reported_not_taken(
     assert cleared["status"] == "removed"
     assert cleared["entries"] == 0
     assert _settings(tmp_path)["statusLine"] == mine
+
+
+def test_a_status_line_is_replaced_only_when_the_answer_says_so(
+    tmp_path: Path,
+) -> None:
+    """The answer arrives on the command line, because a script cannot ask."""
+
+    integrations = _integrations()
+    _held_slot(tmp_path)
+
+    record = integrations.install_statusline(
+        "kntnt.statusline", "claude-code", tmp_path, ["bash", "/ours.sh"], replace=True
+    )
+
+    assert record["status"] == "installed"
+    assert "~/mine.sh" in str(record["detail"])
+    assert "no copy of it is kept" in str(record["detail"])
+    assert "kntnt.statusline" in _settings(tmp_path)["statusLine"]["command"]
+
+
+def test_the_health_of_a_held_slot_names_what_holds_it(tmp_path: Path) -> None:
+    """A row can only ask about what it can name."""
+
+    integrations = _integrations()
+    _held_slot(tmp_path)
+
+    record = integrations.statusline_health("kntnt.statusline", "claude-code", tmp_path)
+
+    assert record["status"] == "absent"
+    assert record["held"] == "~/mine.sh"
 
 
 def test_an_owner_installs_only_the_moments_it_asked_for(tmp_path: Path) -> None:
@@ -425,6 +461,49 @@ def test_the_shipped_status_line_reads_no_credential_and_calls_nothing() -> None
 
     for forbidden in ("security find-generic-password", "curl", "api.anthropic.com"):
         assert forbidden not in source
+
+
+def test_the_feature_writes_nothing_until_replace_carries_the_answer(
+    tmp_path: Path,
+) -> None:
+    """`--yes` never stands in for an answer about the user's own status line."""
+
+    _held_slot(tmp_path)
+
+    untold = _answer(
+        STATUSLINE, "install-integrations", "--harness=claude-code", home=tmp_path
+    )
+    assert untold["installed"][0]["status"] == "held"
+    assert _settings(tmp_path)["statusLine"]["command"] == "~/mine.sh"
+
+    told = _answer(
+        STATUSLINE,
+        "install-integrations",
+        "--harness=claude-code",
+        "--replace",
+        home=tmp_path,
+    )
+    assert told["installed"][0]["status"] == "installed"
+    assert "kntnt.statusline" in _settings(tmp_path)["statusLine"]["command"]
+
+
+def test_replace_is_refused_where_it_names_no_feature() -> None:
+    """A flag accepted and ignored teaches that flags sometimes do nothing."""
+
+    kntnt = _kntnt()
+
+    try:
+        kntnt.validate_feature_names(["commit"])
+    except kntnt.ManagerError as exc:
+        assert "no Catalog Feature" in str(exc)
+    else:  # pragma: no cover - the refusal is the point
+        raise AssertionError("--replace named something that is not a Feature")
+
+    # Only the refusal is asserted. What the Catalog carries is fetched from
+    # the origin at every invocation, so a machine running this against a
+    # published Catalog older than these Features would be judging the
+    # network rather than the rule.
+    assert kntnt.validate_feature_names([]) == frozenset()
 
 
 def test_the_status_line_slot_is_taken_and_given_back(tmp_path: Path) -> None:

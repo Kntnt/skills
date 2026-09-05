@@ -2339,6 +2339,25 @@ def validate_names(names: list[str]) -> list[str]:
     return cleaned
 
 
+def validate_feature_names(names: list[str]) -> frozenset[str]:
+    """Reject a `--replace` that names anything but a Catalog Feature.
+
+    A flag is refused rather than ignored where it has no work to do here: a
+    flag accepted and ignored teaches that flags sometimes do nothing (ADR-0059),
+    and this one authorizes overwriting something the user wrote, which is the
+    last flag that may quietly apply to nothing.
+    """
+
+    known = feature_names()
+    for name in names:
+        if name not in known:
+            raise ManagerError(
+                f"--replace names '{name}', which is no Catalog Feature; only a "
+                "Feature holds a setting there is anything to replace"
+            )
+    return frozenset(names)
+
+
 def installed_freshness(name: str, digest: str, directories: list[Path]) -> str:
     """Say whether the copies of *name* on disk are the files *digest* names.
 
@@ -2558,8 +2577,15 @@ def feature_script(name: str) -> Path | None:
     return script
 
 
-def run_feature(name: str, word: str, harnesses: list[str]) -> dict[str, Any]:
+def run_feature(
+    name: str, word: str, harnesses: list[str], *, replace: bool = False
+) -> dict[str, Any]:
     """Say one word to one Feature's own script and read what it answers.
+
+    *replace* is the user's own answer about a single-valued setting somebody
+    else holds, carried to the Feature rather than assumed by it: a script
+    cannot ask (ADR-0029), so what it may overwrite arrives on its command line
+    from the verb that did the asking (ADR-0174).
 
     The same call shape a Skill's declared integrations get, for the same
     reasons: from `home()`, with the Detected Harnesses handed in because a
@@ -2587,6 +2613,7 @@ def run_feature(name: str, word: str, harnesses: list[str]) -> dict[str, Any]:
                 str(script),
                 word,
                 *[f"--harness={harness}" for harness in harnesses],
+                *(["--replace"] if replace else []),
             ],
             cwd=home(),
             text=True,
@@ -2731,6 +2758,16 @@ def feature_rows(harnesses: list[str], *, global_layer: bool) -> list[dict[str, 
         records = feature_records(name, serves) if serves else []
         state = state_of_records(records)
         details = [str(record["detail"]) for record in records if record.get("detail")]
+
+        # What somebody else's command holds of what this Feature wants. A
+        # single-valued setting has no room beside its value, so this is not a
+        # fact to report and move on from: it is the question the confirmation
+        # has to put to the user before anything is written (ADR-0174).
+        held = [
+            {"harness": str(record["harness"]), "held": str(record["held"])}
+            for record in records
+            if record.get("held")
+        ]
         rows.append(
             {
                 "name": name,
@@ -2743,6 +2780,7 @@ def feature_rows(harnesses: list[str], *, global_layer: bool) -> list[dict[str, 
                 "checked": state != "disabled",
                 "incomplete": state == "partial",
                 "freshness": feature_freshness(name, catalog_digest(entry)),
+                "held": held,
                 "locked": not serves,
                 "capability": None
                 if serves
@@ -2797,7 +2835,12 @@ def feature_change(
 
 
 def feature_outcome(
-    place: list[str], remove: list[str], harnesses: list[str], *, global_layer: bool
+    place: list[str],
+    remove: list[str],
+    harnesses: list[str],
+    *,
+    global_layer: bool,
+    replace: frozenset[str] = frozenset(),
 ) -> dict[str, Any]:
     """Install and tear down the answered Features, and verify both off the disk.
 
@@ -2806,6 +2849,12 @@ def feature_outcome(
     anything, so each one is asked afterwards what its Harnesses actually hold
     (ADR-0003). A Feature that could not be brought to the answered state is
     named with the Harnesses it was asked about, which is where to look.
+
+    A Feature held off by something of the user's is not among those. Nothing
+    was attempted there and nothing failed: a single-valued setting somebody
+    else holds is a question waiting on an answer this run was not given
+    (ADR-0174), so it is reported under `held` with what holds it, and the exit
+    code — which says a change the disk does not show — is left where it was.
     """
 
     if not global_layer:
@@ -2813,6 +2862,7 @@ def feature_outcome(
             "intended": [],
             "confirmed": [],
             "failed": [],
+            "held": [],
             "placed": [],
             "removed": [],
             "installed_integrations": [],
@@ -2826,19 +2876,34 @@ def feature_outcome(
             name,
             "install-integrations",
             feature_serves(entries.get(name, {}), harnesses),
+            replace=name in replace,
         )
         for name in place
     ]
     torn_down = [run_feature(name, "remove-integrations", []) for name in remove]
 
+    # What each install said was held, read off the records rather than asked
+    # for again: the question is about the state at the moment of writing.
+    holding = {
+        str(record["name"]): [
+            {"harness": entry["harness"], "held": entry["held"]}
+            for entry in record.get("installed", [])
+            if isinstance(entry, dict) and entry.get("held")
+        ]
+        for record in installed
+    }
+
     confirmed: list[str] = []
     failed: list[dict[str, Any]] = []
+    held: list[dict[str, Any]] = []
     for name, wanted in [(name, "enabled") for name in place] + [
         (name, "disabled") for name in remove
     ]:
         serves = feature_serves(entries.get(name, {}), harnesses)
         if feature_state(name, serves, global_layer=True) == wanted:
             confirmed.append(name)
+        elif holding.get(name):
+            held.append({"name": name, "held": holding[name]})
         else:
             failed.append({"name": name, "harnesses": serves})
 
@@ -2846,6 +2911,7 @@ def feature_outcome(
         "intended": [*place, *remove],
         "confirmed": confirmed,
         "failed": failed,
+        "held": held,
         "placed": place,
         "removed": remove,
         "installed_integrations": installed,
@@ -2861,6 +2927,7 @@ def unattempted_features(*, global_layer: bool) -> dict[str, Any]:
         "intended": [],
         "confirmed": [],
         "failed": [],
+        "held": [],
         "placed": [],
         "removed": [],
         "installed_integrations": [],
@@ -3201,6 +3268,7 @@ def cmd_apply_select(
     as_is: bool,
     global_layer: bool,
     yes: bool,
+    replace: list[str] | None = None,
 ) -> int:
     """Make the targeted layer hold exactly the entries the answer checked.
 
@@ -3211,6 +3279,12 @@ def cmd_apply_select(
     rather than folding two different kinds of evidence into one list
     (ADR-0173). What each Feature's own script did is reported beside every
     other owned integration, under the keys those already have.
+
+    `--replace` names the Features whose single-valued setting somebody else
+    holds and that the user has said may be overwritten. It is separate from
+    `--yes` and never implied by it: `--yes` answers the questions this verb
+    asks about its own work, and replacing a status line the user wrote is a
+    question about theirs, which an unattended run has nobody to ask (ADR-0174).
 
     Both halves of the answer are one verb's work, so both are reported
     together: `intended`, `confirmed`, and `failed` cover the run, and
@@ -3237,6 +3311,8 @@ def cmd_apply_select(
             "skill names are the whole answer, and --as-is, --on, and --off "
             "change the set on disk; give one form or the other"
         )
+
+    replacing = validate_feature_names(replace or [])
 
     harnesses = target_harnesses(global_layer=global_layer)
     directories = layer_dirs(harnesses, global_layer=global_layer)
@@ -3278,7 +3354,11 @@ def cmd_apply_select(
     placed = add_skills(place, harnesses, global_layer=global_layer)
     removed = removal_outcome(remove, harnesses, global_layer=global_layer)
     features = feature_outcome(
-        feature_place, feature_remove, harnesses, global_layer=global_layer
+        feature_place,
+        feature_remove,
+        harnesses,
+        global_layer=global_layer,
+        replace=replacing,
     )
     outcome = {
         "intended": [*placed["intended"], *removed["intended"]],
@@ -4273,6 +4353,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     # nobody at the list, and the two are refused together.
     apply_select = apply_sub.add_parser("select")
     apply_select.add_argument("skills", nargs="*")
+
+    # The user's answer about something of theirs, which `--yes` never stands
+    # in for: this authorizes overwriting a single-valued setting they wrote,
+    # and no unattended run has anybody to have asked (ADR-0174).
+    apply_select.add_argument(
+        "--replace", action="append", default=[], metavar="FEATURE"
+    )
     add_delta_flags(apply_select)
     add_project_flag(apply_select)
     add_yes_flag(apply_select)
@@ -4369,6 +4456,7 @@ def run_command(args: argparse.Namespace) -> int:
         as_is=args.as_is,
         global_layer=parse_layer(args.project),
         yes=args.yes,
+        replace=args.replace,
     )
 
 

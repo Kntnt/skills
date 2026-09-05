@@ -23,8 +23,10 @@ Glyphs come from a Nerd Font where the terminal is known to bundle one — Ghost
 
 ## Writes
 
-- `statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting: where it already runs something that is not this collection's, nothing is written, the run reports the slot as taken and names what holds it, and nothing of yours is remembered anywhere. Disabling the Feature clears the setting where this collection holds it and leaves it alone where it does not.
+- `statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it.
 
 ## Keeping your own
 
-Because `statusLine` holds one command, this Feature and a status line of your own are a choice rather than a pair. If you have one you would rather keep, leave this row unchecked: the install will not overwrite it, and it will tell you so rather than doing it quietly. If you want this one with something of your own on top, copy `statusline.sh` somewhere of your own, edit that copy, and point `statusLine` at it — enabling the Feature again converges the shipped file back to what the collection ships, so edits made in place do not survive an update.
+Because `statusLine` holds one command, this Feature and a status line of your own are a choice rather than a pair — and it is your choice, asked at the list rather than decided for you. Checking the row when something of yours is there names that command and asks whether to replace it; answering no leaves it exactly as it was.
+
+If you want this one with something of your own on top, copy `statusline.sh` somewhere of your own, edit that copy, and point `statusLine` at it — enabling the Feature again converges the shipped file back to what the collection ships, so edits made in place do not survive an update.

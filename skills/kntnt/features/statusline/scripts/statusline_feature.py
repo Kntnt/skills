@@ -8,16 +8,24 @@ A status line is a single-valued setting rather than a table: `statusLine` in
 `~/.claude/settings.json` names one command, and a second owner cannot be added
 beside the first. That changes what installation means here. A hook table entry
 is added to whatever is already there and taken back out by the owner it
-carries; a status line either is ours or is somebody's, and the honest answer to
-finding somebody's there is to say so and write nothing.
+carries; a status line either is ours or is somebody's.
 
-What this collection will not do is stash the displaced value somewhere of its
-own so that a later removal can put it back. That is a private ledger, and disk
-is the truth this collection converges on (ADR-0090): a ledger goes stale the
-moment the user edits the setting by hand, and a removal restoring a value the
-user has since replaced is worse than one that restores nothing. So the slot is
-reported as taken, the user is told what holds it and what they can do, and
-nothing of theirs is remembered anywhere.
+Finding somebody's there is a question and not a verdict (ADR-0174). Enabling
+this Feature is a user saying they want this status line, and answering that
+with *no, something is already there* leaves them holding an outcome they did
+not ask for and no way forward from the list they are standing in. So an
+install that has not been told to replace what it found reports what holds the
+slot and writes nothing — which is what lets the question be asked where
+questions are asked — and one that has been told replaces it and names what
+went.
+
+What this collection will not do either way is stash the displaced value
+somewhere of its own so that a later removal can put it back. That is a private
+ledger, and disk is the truth this collection converges on (ADR-0090): a ledger
+goes stale the moment the user edits the setting by hand, and a removal
+restoring a value the user has since replaced is worse than one that restores
+nothing. The name of what was replaced is in the report and nowhere else, which
+is why the question has to say so before it is answered.
 """
 
 from __future__ import annotations
@@ -84,8 +92,10 @@ def statusline_command() -> list[str]:
     return ["bash", shlex.quote(str(script))]
 
 
-def install_integrations(harnesses: list[str]) -> dict[str, Any]:
-    """Take the status line where it is free, and report it taken where it is not."""
+def install_integrations(
+    harnesses: list[str], *, replace: bool = False
+) -> dict[str, Any]:
+    """Take the status line, replacing another owner's only when told to."""
 
     integrations = _integrations()
     named = list(harnesses) or [HARNESS]
@@ -93,7 +103,9 @@ def install_integrations(harnesses: list[str]) -> dict[str, Any]:
     attempted = [harness for harness in named if harness == HARNESS]
     return {
         "installed": [
-            integrations.install_statusline(OWNER, harness, root, statusline_command())
+            integrations.install_statusline(
+                OWNER, harness, root, statusline_command(), replace=replace
+            )
             for harness in attempted
         ],
         "unsupported": {"count": len(named) - len(attempted)},
@@ -139,6 +151,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument("--harness", action="append", default=[])
     parser.add_argument("--owner", default=OWNER)
+
+    # The user's own answer, carried in rather than assumed: a script cannot
+    # ask (ADR-0029), so what it may overwrite has to arrive on its command
+    # line from whatever did the asking.
+    parser.add_argument("--replace", action="store_true")
     return parser.parse_args(argv)
 
 
@@ -147,7 +164,7 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parse_args(sys.argv[1:] if argv is None else argv)
     if args.action == "install-integrations":
-        _emit(install_integrations(args.harness))
+        _emit(install_integrations(args.harness, replace=args.replace))
     elif args.action == "remove-integrations":
         _emit(remove_integrations())
     else:
