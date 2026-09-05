@@ -894,21 +894,21 @@ def test_every_shipped_skill_routes_its_help_forms_to_its_pages() -> None:
 
 
 def test_a_refusal_quotes_the_addressed_pages_own_synopsis_and_route() -> None:
-    """The Manager's legacy refusal still addresses its public command page."""
+    """The Manager uses the common engine refusal for its addressed page."""
 
     engine = _engine()
 
     reading = engine.read_invocation(MANAGER_DIR, "select --force")
 
     assert reading.status == EXIT_REFUSED
-    assert reading.text.startswith("error: unknown subcommand 'select'\n\n")
+    assert reading.text.startswith("'/kntnt select' takes no '--force'\n\n")
     assert _synopsis(MANAGER_DIR / "help" / "select.md") in reading.text
-    assert reading.text.rstrip("\n").endswith("see '/kntnt help select'")
+    assert reading.text.rstrip("\n").endswith("see '/kntnt select --help'")
 
     reading = engine.read_invocation(MANAGER_DIR, "updat --yes")
 
     assert reading.status == EXIT_REFUSED
-    assert reading.text.startswith("error: unknown subcommand 'updat'\n\n")
+    assert reading.text.startswith("unknown command 'updat'\n\n")
     assert _synopsis(MANAGER_DIR / "help.md") in reading.text
     assert reading.text.rstrip("\n").endswith("see '/kntnt --help'")
 
@@ -946,50 +946,44 @@ def test_the_managers_own_directory_passes_the_dependency_gate(tmp_path: Path) -
     )
 
 
-def test_manager_refusals_keep_the_legacy_diagnostics_and_route(tmp_path: Path) -> None:
-    """The engine preserves the Manager's established refusal contract."""
+def test_manager_refusals_use_the_engine_diagnostics_and_route(tmp_path: Path) -> None:
+    """Manager refusals use the addressed page's common engine contract."""
 
     cases = (
         (
             "help --yes",
-            "help takes no '--yes'",
+            "'/kntnt help' takes no '--yes'",
             MANAGER_DIR / "help" / "help.md",
-            "/kntnt help help",
+            "/kntnt help --help",
         ),
-        ("sel", "unknown subcommand 'sel'", MANAGER_DIR / "help.md", "/kntnt --help"),
+        ("sel", "unknown command 'sel'", MANAGER_DIR / "help.md", "/kntnt --help"),
         (
             "select --force",
-            "unknown subcommand 'select'",
+            "'/kntnt select' takes no '--force'",
             MANAGER_DIR / "help" / "select.md",
-            "/kntnt help select",
+            "/kntnt select --help",
         ),
         (
             "uninstall --project",
-            "unknown subcommand 'uninstall'",
+            "'/kntnt uninstall' takes no '--project'",
             MANAGER_DIR / "help" / "uninstall.md",
-            "/kntnt help uninstall",
+            "/kntnt uninstall --help",
         ),
         (
             "update --on=foo",
-            "unknown subcommand 'update'",
+            "'/kntnt update' takes no '--on'",
             MANAGER_DIR / "help" / "update.md",
-            "/kntnt help update",
-        ),
-        (
-            "help select --yes",
-            "help takes no '--yes'",
-            MANAGER_DIR / "help" / "help.md",
-            "/kntnt help help",
+            "/kntnt update --help",
         ),
     )
 
     for payload, problem, page, route in cases:
         result = _invoke(MANAGER_DIR, payload, tmp_path)
 
-        expected = f"error: {problem}\n\n{_synopsis(page)}\n\nsee '{route}'\n"
+        expected = f"{problem}\n\n{_synopsis(page)}\n\nsee '{route}'\n"
         assert result.returncode == EXIT_REFUSED, payload
-        assert result.stdout == "", payload
-        assert result.stderr == expected, payload
+        assert result.stdout == expected, payload
+        assert result.stderr == "", payload
 
 
 # --- The record and the rule --------------------------------------------------
