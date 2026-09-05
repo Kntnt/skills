@@ -23,6 +23,18 @@ CITING_DOCS = ("CONTEXT.md", "README.md", "AGENTS.md", "CONTRIBUTING.md")
 STANDARD_DIR = REPO_ROOT / "docs" / "rules"
 TESTS = REPO_ROOT / "tests"
 
+# The rules module binding whoever writes a ticket here, and every record
+# settling a rule it states: what a ticket may assert (0067), the numbers a run
+# reserves so that it can (0071), the edge a discovered dependency corrects
+# rather than builds around (0073), the declaration an invariant ticket makes
+# (0099), and the thread that outranks the body it amends (0065). The module
+# names each rule in a phrase and cites its record rather than arguing it
+# again, so a rule that arrives without its number is one the reader can only
+# take on this file's word — and a number here that the module never states a
+# rule for is a citation with no rule under it (issue #266).
+TICKET_RULES = STANDARD_DIR / "tickets.md"
+TICKET_RULE_RECORDS = ("0065", "0067", "0071", "0073", "0099")
+
 # The research notes, which cite records the same way, and among them the
 # triage table the archive reform is built from. The table names every record
 # by its bare number rather than as a citation, so its completeness is checked
@@ -891,4 +903,30 @@ def test_the_runtime_bin_is_exactly_what_orchestrates_own_files_cite() -> None:
     assert unsourced == set(), (
         f"{unsourced}: a RUNTIME row's note names the file whose citation"
         f" is the whole of its bin."
+    )
+
+
+def test_the_ticket_rules_cite_the_record_behind_every_rule_they_state() -> None:
+    """A rule restated in a rules module carries the record that settled it.
+
+    The module exists so an author meets every rule in one place, and it buys
+    that by naming each rule in a phrase instead of re-arguing it. The record
+    is what makes the phrase checkable: it holds the field evidence, the
+    alternatives and their costs, and it is where a reader goes to find out
+    whether a rule is a finding or a taste. A rule stated there with no number
+    beside it is the one case the arrangement cannot survive — the reasoning
+    has been dropped rather than delegated (issue #266).
+
+    Equality rather than containment, because the two failures are the same
+    failure seen from either end: a rule whose record went uncited, and a
+    record cited for a rule the module no longer states.
+    """
+
+    cited = set(CITATION.findall(TICKET_RULES.read_text(encoding="utf-8")))
+
+    assert cited == set(TICKET_RULE_RECORDS), (
+        f"{cited ^ set(TICKET_RULE_RECORDS)}:"
+        f" {TICKET_RULES.relative_to(REPO_ROOT)} states each of its rules in a"
+        f" phrase and cites the record carrying its reasoning. See {STANDARD}"
+        f" for the same arrangement in the module beside it."
     )

@@ -8,7 +8,7 @@ Everything here binds the ticket itself: a document written once and built hours
 
 The capitalised term — Solo Ticket — is defined in [`CONTEXT.md`](../../CONTEXT.md). That file says what the term means; this module says what is true of it.
 
-The rules whose reasoning is settled in a decision record are named here in a phrase and cited to the record rather than argued again — the record is where the alternatives and their costs live, and a second telling of the argument is a second thing to keep true. What the two records this module rests on hold is field evidence: the tickets that collided, the numbers they lost, the run that ended on a branch contradicting itself. That is what a reader needs before deciding a rule is taste, and it is a reason to open the record rather than something to copy out of it.
+The rules whose reasoning is settled in a decision record are named here in a phrase and cited to the record rather than argued again — the record is where the alternatives and their costs live, and a second telling of the argument is a second thing to keep true. What those records hold is field evidence: the tickets that collided and the numbers they lost, the run that ended on a branch contradicting itself, the tickets built as their untriaged selves because a builder was handed a body and the answers were in the thread. That is what a reader needs before deciding a rule is taste, and it is a reason to open the record rather than something to copy out of it.
 
 ## What a ticket may assert
 
@@ -24,7 +24,7 @@ The rules whose reasoning is settled in a decision record are named here in a ph
 
 **Nothing enforces this, and that is the decision rather than an omission** (ADR-0067). Only the first rule is mechanically checkable, and the check would mean the suite reaching the tracker over the network, which nothing else here does, for one rule out of four. What the suite does refuse is the harm that reached the tree: a number two records claim, and a citation no record answers. The residual risk stands plainly — a ticket filed with a doomed number, a moved line or a stale enumeration is caught only by a builder or a verifier noticing, hours later, at the cost of a correction or a rebuild.
 
-**A closed ticket is never rewritten to comply.** It is the account of what was built, and the drift recorded in it is the evidence these rules rest on.
+**A closed ticket is never rewritten to comply** (ADR-0067). It is the account of what was built, and the drift recorded in it is the evidence these rules rest on.
 
 ## Builds alone
 
@@ -40,7 +40,7 @@ The rules whose reasoning is settled in a decision record are named here in a ph
 
 A ticket is written for a builder who has the ticket and nothing else, and checked by a verifier who has the ticket and the repository. Four parts carry that, and a ticket carries them in this order.
 
-**What to build**, under that heading, in prose. It states the change and the reasoning a builder needs to make it, not a transcript of the edits: the builder is given the body as it was filed rather than a summary of it, so what is not written here is not known. Where the change re-implements something that exists elsewhere — a commit on another branch, a Skill in another collection — the ticket names it and how to read it, rather than describing it from memory.
+**What to build**, under that heading, in prose. It states the change and the reasoning a builder needs to make it, not a transcript of the edits: the builder is given the body as it was filed rather than a summary of it (ADR-0065), so what is not written here is not known. Where the change re-implements something that exists elsewhere — a commit on another branch, a Skill in another collection — the ticket names it and how to read it, rather than describing it from memory.
 
 **Acceptance criteria**, under that heading, as a checkbox list. Each one is a statement a fresh agent can check against the repository as it then stands, without asking the author and without having watched the work: an independent verifier that never saw the building session checks each of them, and a criterion whose answer is *ask whoever wrote it* is a criterion that fails for the wrong reason. The last of them is the project's own verification, named as the test suite or as the four checks [`CONTRIBUTING.md`](../../CONTRIBUTING.md) lists, so that what a ticket is held to includes what everything else is held to.
 
@@ -52,10 +52,10 @@ A ticket that rewrites an invariant carries its `Builds alone` line too, in the 
 
 ## The thread outranks the body
 
-**A comment on a ticket outranks the body it amends, and the requirement is the whole thread rather than the body alone.** Where a comment contradicts the body, the later text stands: a question the body leaves open and a comment answers is answered, and the answer is the requirement. Acceptance criteria stated in a comment are acceptance criteria, and they are what the work is verified against — the brief a builder is given, the verifier's, and the amender's all carry the thread whole and all say so.
+**A comment on a ticket outranks the body it amends, and the requirement is the whole thread rather than the body alone** (ADR-0065). Where a comment contradicts the body, the later text stands: a question the body leaves open and a comment answers is answered, and the answer is the requirement. Acceptance criteria stated in a comment are acceptance criteria, and they are what the work is verified against — the brief a builder is given, the verifier's, and the amender's all carry the thread whole and all say so.
 
 **So a ticket is read to the end of its thread before it is built, oldest comment first, from the tracker rather than from memory.** In this collection the settled decisions and the acceptance criteria often arrive as a comment, and a ticket read as its body alone is a ticket read as its untriaged self.
 
 **A readiness addendum is one of those comments, and it voids what it amends.** Before a run, `/ready-for-agent-check` reads each `ready-for-agent` ticket the way an unattended builder will — one subagent per ticket, in a context that did not write it — and reports what would stop that builder; it writes nothing on the tracker, because what to do about a stop is the maintainer's to decide. What the maintainer then settles is written back onto the ticket as a comment, and that comment is the requirement wherever it touches the body: a criterion it replaces is replaced, a sentence it corrects is corrected, and a builder that has read only the body has read the version the check found wanting. An unattended run answers open questions the same way, writing each answer as a comment on its own ticket, which is how the answer reaches the builder at all.
 
-**The amendment is written as a comment rather than folded back into the body.** The body is the ticket as it was filed and the thread is where every change to it stays visible, with its author and its date; a body quietly rewritten is a ticket whose builder and whose verifier cannot tell what was decided after the fact from what was asked for in the first place.
+**The amendment is written as a comment rather than folded back into the body** (ADR-0065). The body is the ticket as it was filed and the thread is where every change to it stays visible, with its author and its date; a body quietly rewritten is a ticket whose builder and whose verifier cannot tell what was decided after the fact from what was asked for in the first place.
