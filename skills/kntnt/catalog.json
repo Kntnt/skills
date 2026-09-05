@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "b03fe864c77684d02f928814bbf8a56ac8d04af4cfd683d4eb95d09426d297c7",
+  "manager_digest": "eed55c2eca96738df7c6959323dae3b326040c8517f37cfdc4a97f48dcd38efc",
   "skills": [
     {
       "name": "agents-md",
@@ -68,7 +68,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "4c489743d1db8a523ae6d82538f543c9a1c3aa9d18b825a30c1b5cedd7118366",
+      "digest": "0e0b25d226ac4ccae0a795e599dcc27135d35f74b703700d0e6da1cbd8d73742",
       "binaries": [
         "git",
         "gh",

@@ -1549,11 +1549,12 @@ def test_plan_keeps_a_ticket_blocked_by_open_work_outside_the_scope_blocked(
     assert plan["never_workable"] == [10]
 
 
-def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
+def test_plan_reads_an_inline_blocked_by_line_where_the_relation_carries_nothing(
     tmp_path: Path,
 ) -> None:
-    """The relation is the tracker's own answer; a body line is the fallback,
-    never a second source added to it."""
+    """The edge may be written on the `Blocked by` line itself rather than in
+    a list under a heading, and where the relation carries nothing the body
+    is the sole source either way."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -1561,11 +1562,141 @@ def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
         {
             "ready-for-agent": [
                 _ticket(9, "the skeleton"),
+                _ticket(10, "the graph", body="Blocked by: #9"),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [9]
+    assert plan["blocked"] == [10]
+    assert plan["tickets"][1]["blocked_by"] == [9]
+
+
+def test_plan_refuses_a_body_edge_the_relation_does_not_carry(
+    tmp_path: Path,
+) -> None:
+    """A disagreement between the relation and the body is never silent.
+
+    Where the relation carries at least one edge, the body is read too, and
+    any ticket the body names that the relation does not is a refusal naming
+    that ticket, both sets, and that the missing edge belongs in the relation.
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(8, "the foundation"),
+                _ticket(9, "the skeleton"),
                 _ticket(
                     10,
                     "the graph",
-                    blocked_by=[(8, "CLOSED")],
-                    body="Blocked by: #9",
+                    blocked_by=[(8, "OPEN")],
+                    body="## Blocked by\n\n- #8\n- #9\n",
+                ),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    # The message is a claim about two sets, so what is asserted is the claim
+    # itself: the offending ticket named as the one the relation lacks, each
+    # source's full list, and where the edge belongs. A test that only looked
+    # for the numbers somewhere in the text passed three wordings that named
+    # a superset as missing or a difference as a whole list.
+    assert result.returncode == 1
+    assert result.stderr.strip() == (
+        "error: #10: `Blocked by` line names #9, which the tracker relation does "
+        "not carry. The body names #8, #9; the relation names #8. The missing "
+        "edge belongs in the relation."
+    )
+
+
+def test_unmet_blockers_names_every_edge_the_relation_lacks_and_only_those() -> None:
+    """Each clause is predicated only of the tickets it holds for.
+
+    With two edges missing the first clause names exactly those two, the body
+    and relation lists are each given whole, and the closing sentence takes
+    the plural — so the message stays true whatever the two sets are.
+    """
+
+    engine = _run()
+    item = _ticket(
+        10,
+        "the graph",
+        blocked_by=[(8, "OPEN"), (9, "OPEN")],
+        body="## Blocked by\n\n- #8\n- #20\n- #21 — it settles the shape\n",
+    )
+
+    with pytest.raises(engine.RunError) as refused:
+        engine.unmet_blockers(Path("."), item, {})
+
+    assert str(refused.value) == (
+        "`Blocked by` line names #20, #21, which the tracker relation does not "
+        "carry. The body names #8, #20, #21; the relation names #8, #9. The "
+        "missing edges belong in the relation."
+    )
+
+
+def test_plan_precedence_when_body_names_only_tickets_the_relation_carries(
+    tmp_path: Path,
+) -> None:
+    """Where the relation carries at least one edge, and the body names only
+    tickets the relation already carries, precedence holds and nothing changes
+    observable: the relation stays the source, and every plan reports the
+    blockers it reports today."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(8, "the foundation"),
+                _ticket(9, "the skeleton"),
+                _ticket(
+                    10,
+                    "the graph",
+                    blocked_by=[(8, "OPEN"), (9, "OPEN")],
+                    body="## Blocked by\n\n- #8\n",
+                ),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [8, 9]
+    assert plan["blocked"] == [10]
+    assert plan["tickets"][2]["blocked_by"] == [8, 9]
+
+
+def test_plan_allows_a_body_naming_the_same_closed_done_ticket_the_relation_carries(
+    tmp_path: Path,
+) -> None:
+    """The comparison is over tickets named, not over which still block, so a body
+    naming a blocker whose Ticket Resolution is done agrees with a relation
+    that carries it, regardless of outcome."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(8, "the foundation"),
+                _ticket(9, "the skeleton"),
+                _ticket(
+                    10,
+                    "the graph",
+                    blocked_by=[(8, "CLOSED"), (9, "OPEN")],
+                    body="## Blocked by\n\n- #8\n- #9\n",
                 ),
             ]
         },
@@ -1576,7 +1707,9 @@ def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
 
     assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["workable"] == [9, 10]
+    assert plan["workable"] == [8, 9]
+    assert plan["blocked"] == [10]
+    assert plan["tickets"][2]["blocked_by"] == [9]
 
 
 def test_plan_refuses_a_body_edge_naming_a_ticket_the_tracker_cannot_answer_for(

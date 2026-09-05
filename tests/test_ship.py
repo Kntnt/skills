@@ -78,6 +78,29 @@ CHANGELOG = """# Changelog
 """
 
 
+def test_plan_commit_works_on_a_branch_without_commits(tmp_path: Path) -> None:
+    """A first commit can be planned before the branch has any history."""
+
+    # Arrange a repository whose branch has no commits yet.
+    repo = tmp_path / "proj"
+    repo.mkdir()
+    _git(repo, "init", "-b", "main")
+    (repo / "README.md").write_text("hello\n", encoding="utf-8")
+
+    # Act through the same CLI the commit Skill calls.
+    result = _ship(repo, "plan", "commit")
+
+    # Assert the first change is ready with an empty history.
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["ready"] is True
+    assert plan["dirty"] is True
+    assert "README.md" in plan["untracked"]
+    assert plan["commits"] == []
+    assert plan["commit_count"] == 0
+    assert plan["last_tag"] is None
+
+
 def test_plan_commit_reports_tracked_dirty_file(tmp_path: Path) -> None:
     repo = _init_repo(tmp_path / "proj")
     (repo / "README.md").write_text("hello world\n", encoding="utf-8")

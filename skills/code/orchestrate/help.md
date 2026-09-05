@@ -14,7 +14,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 `orchestrate` works the current repository's open `ready-for-agent` tickets on the current branch. Fresh subagents build and independently verify each ticket; verified work is integrated, recorded, and closed. The Skill never pushes, tags, or releases.
 
-Blocking relations produce dependency waves. Native tracker relations take precedence over `Blocked by` lines. A closed blocker remains blocking until its Ticket Resolution is done.
+Blocking relations produce dependency waves. Native tracker relations take precedence over `Blocked by` lines. Where the tracker's relation carries at least one edge, the body's `Blocked by` list is read too, and any ticket the body names that the relation does not is a refusal. A closed blocker remains blocking until its Ticket Resolution is done.
 
 A ticket beginning a line with `Builds alone` is a Solo Ticket. It receives the first available wave by itself, and the plan marks it `solo`.
 
@@ -63,6 +63,8 @@ The verification gate is resolved once at the run's start. Every verifier receiv
 A different subagent checks every acceptance criterion and the complete Project gate without seeing the builder's claims. Delivery requests such as push, pull request, or release are reported but do not change the verdict.
 
 **Integrate**
+
+A run at a concurrency of one has no integrated wave to check, so before reporting it runs the same gate commands resolved at run start on its own branch as it stands, with no verdict and no session of its own. The report names the commit and whether it passed; a failure reports the run as having a branch that is not green without changing any ticket outcome. Runs using worktrees are unchanged: their wave check remains the reading of the integrated branch.
 
 Verified work is committed and integrated. After each wave, the complete Project gate runs on the combined branch and an independent coherence review reads what that wave merged onto it, the branch before the wave having been read and passed by the check that ended the wave before. A strict subset of failing tests is rerun unchanged three times in isolation; three passes earn one unchanged full-gate rerun, and only a green full rerun turns the result into a pass recorded as a load-induced flake.
 
@@ -231,6 +233,8 @@ Routing is refused rather than adjusted. A changed snapshot, mismatched locks, r
 A mismatched approval reports the expected identity, computed identity, and canonical payload. A later plan that exceeds a matched ceiling names the first protected field, added ticket, or lost Solo constraint, preserves the ceiling audit, and makes approval unmet. A real mismatch or drift changes neither tracker nor repository; a dry-run mismatch or drift stores nothing.
 
 The working tree must be clean when planning and before closing a ticket. A scope with no workable ticket is reported without starting a build.
+
+A run above `--at-once=1` builds each ticket in a worktree of its own, isolated inside the repository's common Git directory. Before any ticket is claimed, the orchestrating session probes that existing common Git directory with a read-only Git command; it does not probe the run-created ticket-worktree subdirectory. Where that command is refused — a session launched into its own worktree is held to that worktree and cannot issue Git commands outside it — the run reports the refusal, starts nothing, and names `--at-once=1` as the alternative, which builds on the branch already checked out and does not require access to the worktree directory.
 
 ## EXAMPLES
 

@@ -2373,13 +2373,34 @@ def unmet_blockers(
     """Return the tickets still blocking *item*, as the tracker describes it.
 
     The tracker's own relation is the source wherever it carries an edge, and
-    the body is read only where it carries none — a fallback, never a second
-    source added to the first.
+    the body is read as a fallback only where it carries none — never as a
+    second source added to the first. A populated relation is still compared
+    with the body rather than trusted over it: an edge the body names and the
+    relation lacks is a disagreement between two sources, refused rather than
+    absorbed or dropped, because the one person who knows which is right has
+    to write the edge where it belongs (issue #277). The comparison is over
+    the tickets each source names, not over which of them still block.
     """
 
     # The relation carries each blocker's state with it, so nothing is asked.
     nodes = item["blockedBy"]["nodes"]
     if nodes:
+        # Refuse an edge only the body carries, naming exactly the tickets the
+        # relation lacks and each source's whole list, so the reader is told
+        # which edge to write and never that a carried edge is missing.
+        relation_tickets = {int(node["number"]) for node in nodes}
+        body_tickets = set(body_edges(str(item["body"])))
+        missing = sorted(body_tickets - relation_tickets)
+        if missing:
+            raise RunError(
+                f"`Blocked by` line names {as_references(missing)}, which the "
+                "tracker relation does not carry. The body names "
+                f"{as_references(sorted(body_tickets))}; the relation names "
+                f"{as_references(sorted(relation_tickets))}. The missing "
+                f"{'edge belongs' if len(missing) == 1 else 'edges belong'} "
+                "in the relation."
+            )
+
         return sorted(
             {
                 int(node["number"])
