@@ -77,12 +77,17 @@ HOOK_TIMEOUT_SECONDS = 10
 # place in the hook path permitted to reach the network (ADR-0167): `_finish`
 # dispatches the unattended source refresh there and nowhere else, and that
 # refresh's network portion is itself hard-capped at `refresh.BUDGET_SECONDS`,
-# two seconds, against a monotonic deadline. A whole session-end invocation,
-# launcher included, with every source in a real store forced due and fetched
-# over the real network, completed in 1.1 to 1.7 seconds across repeated runs —
-# about a second of margin under this ceiling. Raising that budget spends that
-# margin, and beyond it Codex truncates the pass rather than this entry being
-# given the longer run it asked for.
+# two seconds, against a monotonic deadline. Ten whole session-end invocations
+# — launcher included, every source in a store forced due and fetched over the
+# real network — took between 1.22 and 1.98 seconds, timed in two independent
+# sets of five by two sessions on one machine. That figure is the spread those
+# ten runs were observed to take and not a bound on what a run can take: it is
+# one machine on a live network, a slower run is not ruled out, and a budget
+# sized against it is sized against that variance rather than against the
+# quick end of it. Just over a second separates the slowest of the ten from
+# this ceiling. Raising that budget spends that margin, and beyond it Codex
+# truncates the pass rather than this entry being given the longer run it
+# asked for.
 #
 # The other two Harnesses state no ceiling for this table to meet. Claude Code
 # exposes nothing that answers what it would honour the way `hooks/list` does,
