@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- Orchestrate now refuses a blocking edge that only a ticket's body names, instead of dropping it unread. A ticket's blockers came from the tracker's own relation wherever it carried an edge and from the body's `Blocked by` list only where it carried none, so a relation that was populated but incomplete was indistinguishable from a complete one: non-empty was the whole test, the body was never read, and the edge it alone carried was never looked at — the plan offered the ticket for building ahead of work it declared itself to depend on, and nothing said so. Observed in the unattended run of 2026-09-05, where a ticket naming two blockers under its own `## Blocked by` heading was planned on the one the relation held and was caught by hand before a build against a symbol that did not yet exist. Where the relation carries at least one edge the body is now read too, and any ticket the body names that the relation does not stops the plan with a refusal naming exactly those tickets as the ones the relation lacks, the whole list each source names, and that the missing edge belongs in the relation — a disagreement between two sources is refused rather than absorbed, because taking the union would resurrect a stale line triage had deliberately moved and stranding the ticket would call it blocked on an author's prose, and the one person who knows which is right has to write one edge. The comparison is over the tickets each source names rather than over the ones still blocking, so a body naming a blocker whose Ticket Resolution is done agrees with a relation that carries it. Precedence itself is untouched: a body naming only tickets the relation already carries changes nothing a plan reports, and a relation carrying no edge still falls back to the body exactly as before, its qualified-reference refusal included. `help.md` says what the two sources do when they disagree, beside the sentence that states their precedence (issue #277).
+
 ## [0.22.1] – 2026-09-05
 
 ### Changed
