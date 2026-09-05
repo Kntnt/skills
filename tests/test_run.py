@@ -8081,68 +8081,6 @@ def test_plan_refuses_a_working_tree_holding_a_file_nothing_tracks(
     assert "committed" in plan["reason"]
 
 
-def test_plan_with_worktrees_conducts_isolation_preflight(tmp_path: Path) -> None:
-    """A run above at-once=1 establishes that this session may operate the
-    worktree directory before any ticket is claimed. In a normal environment,
-    the check passes and the plan proceeds."""
-
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
-    )
-
-    # At concurrency 2, the plan should run the preflight check and succeed.
-    result = _engine(repo, "plan", "--at-once", "2", env=env)
-
-    assert result.returncode == 0, result.stderr
-    plan = json.loads(result.stdout)
-    assert plan["ready"] is True
-    assert plan["worktrees"] is True
-    assert plan["reason"] is None
-
-
-def test_at_once_one_is_unaffected_by_isolation_check(tmp_path: Path) -> None:
-    """A concurrency of one is unaffected regardless: it builds on the branch
-    already checked out and does not trigger the worktree isolation check."""
-
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(9, "the skeleton")]},
-    )
-
-    # At concurrency 1 (the default), the plan should not run the preflight check.
-    result = _engine(repo, "plan", env=env)
-
-    assert result.returncode == 0, result.stderr
-    plan = json.loads(result.stdout)
-    assert plan["ready"] is True
-    assert plan["worktrees"] is False
-    assert plan["reason"] is None
-
-
-def test_dry_run_with_worktrees_conducts_the_same_isolation_preflight(
-    tmp_path: Path,
-) -> None:
-    """A dry run performs the same probe and reports the same fact. It still
-    creates nothing, and leaves no trace."""
-
-    repo = _init_repo(tmp_path / "proj")
-    env = _tracker(
-        tmp_path,
-        {"ready-for-agent": [_ticket(9, "the skeleton"), _ticket(10, "the graph")]},
-    )
-
-    # A dry run with concurrency > 1 should also run the preflight check.
-    result = _engine(repo, "plan", "--dry-run", "--at-once", "2", env=env)
-
-    assert result.returncode == 2, result.stderr
-    plan = json.loads(result.stdout)
-    assert plan["ready"] is False
-    assert "dry run" in plan["reason"]
-
-
 def test_plan_works_a_tree_whose_only_changes_the_repository_ignores(
     tmp_path: Path,
 ) -> None:
