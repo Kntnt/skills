@@ -2,7 +2,7 @@
 
 Read before writing a decision record, before deciding where a rule belongs, and before authoring a document an agent loads.
 
-This module covers where a rule is written down in this repository, what earns a record in the archive, and how the two relate. It is not about what a ticket may claim while it waits, which is `tickets.md`, nor about the form of a Skill's shipped files, which is `skills.md`, nor about code form, which is `general.md`. It is the module a contributor reads when the question is *where does this go*.
+This module covers where a rule is written down in this repository, what earns a record in the archive, and how the two relate. It is not about what a ticket may claim while it waits, which is `tickets.md`, nor about the form of a Skill's or a Feature's shipped files, which is `skills.md`, nor about code form, which is `general.md`. It is the module a contributor reads when the question is *where does this go*.
 
 The capitalised terms are defined in [`CONTEXT.md`](../../CONTEXT.md). That file says what a term means; this module says what is true of it.
 

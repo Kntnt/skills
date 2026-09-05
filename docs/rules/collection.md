@@ -2,7 +2,7 @@
 
 Read before changing what a Manager verb promises, or how this collection reaches a machine.
 
-This module covers the collection's own behaviour: how it gets onto a machine, what each of the Manager's verbs promises, how a Dependency is answered, and the vocabulary those promises are stated in. It is not about the form of a Skill's shipped files, which is `skills.md`, nor about code form, which is `general.md`. How a Skill routes work it delegates, and what may be filed as evidence about it, is `routing.md`. A rule governing one Skill's own behaviour needs nothing here — that Skill's shipped documents are where a reader already meets it.
+This module covers the collection's own behaviour: how it gets onto a machine, what each of the Manager's verbs promises, how a Dependency is answered, and the vocabulary those promises are stated in. It is not about the form of a Skill's or a Feature's shipped files, which is `skills.md`, nor about code form, which is `general.md`. How a Skill routes work it delegates, and what may be filed as evidence about it, is `routing.md`. A rule governing one Skill's own behaviour needs nothing here — that Skill's shipped documents are where a reader already meets it.
 
 The capitalised terms — Catalog, Digest, Detected Harness, Enabled, Capability, and the rest — are defined in [`CONTEXT.md`](../../CONTEXT.md). That file says what a term means; this module says what is true of it.
 
