@@ -1,0 +1,232 @@
+"""The rules modules under `docs/rules/`, and the archive they hand a reader."""
+
+from __future__ import annotations
+
+import re
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+RULES = REPO_ROOT / "docs" / "rules"
+ADR = REPO_ROOT / "docs" / "adr"
+
+# The module saying where a rule is written down here, the module whose Body
+# section it takes the prose half of, and the archive's ingress page. Named
+# rather than discovered: what has to hold is that these particular files
+# carry these particular rules, and a scan over whatever `docs/rules/` happens
+# to hold would pass on a directory that lost the module entirely (issue #267).
+DOCS = RULES / "docs.md"
+SKILLS = RULES / "skills.md"
+INGRESS = ADR / "README.md"
+
+# The record whose duty the reform retires. It stays standing in the archive
+# and goes on stating the duty as of its own date, so the module is the only
+# place a reader can learn that the duty no longer binds them.
+RETIRED = "ADR-0075"
+
+# The reform's own record, cited from the module by its title because the
+# record itself is written by a later ticket. A title is what survives that
+# gap: the number does not exist yet, and a citation to a number no record
+# answers is what `tests/test_adr.py` already refuses.
+REFORM = "How this repository records decisions and writes tickets"
+
+# The three criteria `/domain-modeling` states, which are the bar a decision
+# clears before it earns a record here at all.
+CRITERIA = ("hard to reverse", "surprising", "trade-off")
+
+# The `### Body` section of the module governing what a Skill ships, read to
+# the next level-two heading.
+BODY = re.compile(r"^### Body$(.*?)(?=^## )", re.MULTILINE | re.DOTALL)
+
+
+def _docs() -> str:
+    """The module saying where a rule and a decision go, lowercased."""
+
+    return DOCS.read_text(encoding="utf-8").lower()
+
+
+def test_the_docs_module_separates_what_applies_now_from_why_it_became_so() -> None:
+    """Two functions were living in one format, and only one document can serve each.
+
+    `docs/rules/` answers what applies now and is edited whenever a rule
+    changes; `docs/adr/` answers why a rule became what it is and is never
+    rewritten, which is exactly why it cannot answer the first question. An
+    agent that has to derive today's law by reading the archive forward is the
+    cost this split removes, so the module has to state both halves and the
+    relation between them (issue #267).
+    """
+
+    assert DOCS.exists(), f"{DOCS.relative_to(REPO_ROOT)} is where the model is stated."
+
+    text = _docs()
+
+    for phrase in (
+        "docs/rules/",
+        "docs/adr/",
+        "historical archive",
+        "loaded by default",
+    ):
+        assert phrase in text, (
+            f"{phrase!r}: {DOCS.relative_to(REPO_ROOT)} states which document"
+            f" is the authority on the present and which is the archive."
+        )
+
+    assert "edited rather than grown" in text, (
+        f"{DOCS.relative_to(REPO_ROOT)} says how the rules modules are kept"
+        f" current, a module grown by accretion being the pile again."
+    )
+
+
+def test_the_docs_module_states_the_bar_a_record_clears() -> None:
+    """An archive that admits everything costs every later reader the same attention.
+
+    The three criteria are what keep a how-text wearing a why-document's
+    clothes out of `docs/adr/`, and a decision failing any of them is a rule
+    that goes in a module instead. They are stated where a contributor is
+    already asking where something goes (issue #267).
+    """
+
+    text = _docs()
+
+    for criterion in CRITERIA:
+        assert criterion in text, (
+            f"{criterion!r}: {DOCS.relative_to(REPO_ROOT)} states the three"
+            f" criteria `/domain-modeling` holds a record to."
+        )
+
+
+def test_the_docs_module_leaves_one_skills_own_rule_out_of_the_centre() -> None:
+    """Audience decides placement, and it decides it before format does.
+
+    A rule only one Skill obeys is met by its reader in that Skill's own
+    shipped files, and a second statement in a rules module is a second thing
+    to keep true for a reader who was never going to look there (issue #267).
+    """
+
+    text = _docs()
+
+    assert "one skill's own behaviour" in text, (
+        f"{DOCS.relative_to(REPO_ROOT)} states that a rule governing one"
+        f" Skill's own behaviour lives in that Skill's shipped files."
+    )
+    assert "audience" in text, (
+        f"{DOCS.relative_to(REPO_ROOT)} states the test that settles where a"
+        f" document goes: who has to read it."
+    )
+
+
+def test_the_docs_module_states_the_convention_the_always_loaded_file_is_written_to() -> (
+    None
+):
+    """`AGENTS.md` is loaded into every session, so a rule stated there is loaded too.
+
+    What it does instead is route, and every entry is written to one shape so
+    that a reader skimming for the occasion finds the file. The module that
+    says where a document goes is where that convention is stated (issue #267).
+    """
+
+    text = _docs()
+
+    assert "agents.md" in text and "read when" in text, (
+        f"{DOCS.relative_to(REPO_ROOT)} states that `AGENTS.md` is a pointer"
+        f" list written to the `read when` convention."
+    )
+
+
+def test_the_docs_module_retires_the_outrun_pointer_duty() -> None:
+    """The pointer duty existed because the archive was read as current law.
+
+    A record whose premise a later one replaced went on asserting it, and the
+    reader who had nowhere better to look found a confident wrong answer. The
+    rules modules remove that reader, so the archive no longer has to be kept
+    self-consistent about a question it is not asked — and the module is the
+    only place that says so, the record stating the duty being immutable and
+    still standing (issue #267).
+    """
+
+    text = DOCS.read_text(encoding="utf-8")
+
+    assert RETIRED in text, (
+        f"{DOCS.relative_to(REPO_ROOT)} names the record whose duty it"
+        f" retires, or a reader who finds {RETIRED} still standing has no way"
+        f" to learn that it no longer binds them."
+    )
+    assert "retired" in text.lower(), (
+        f"{DOCS.relative_to(REPO_ROOT)} says the outrun-pointer duty is"
+        f" retired, in that word."
+    )
+    assert REFORM in text, (
+        f"{REFORM!r}: the reform's own record is cited by title, its number"
+        f" being filled in by the ticket that writes it."
+    )
+
+
+def test_the_docs_module_puts_a_skill_body_under_the_writing_skill() -> None:
+    """A Skill body is an instruction loaded into somebody else's session.
+
+    `skills.md` governs what the body carries; how its prose is written is
+    `/writing-for-agents`, and the two are read together. The pointer lives
+    here because this is the module about how a document is authored (issue
+    #267).
+    """
+
+    text = _docs()
+
+    assert "/writing-for-agents" in text, (
+        f"{DOCS.relative_to(REPO_ROOT)} states that every Skill body is"
+        f" authored under `/writing-for-agents`."
+    )
+
+
+def test_the_body_section_hands_a_skill_author_the_prose_half() -> None:
+    """An author reading `skills.md` meets what the body carries and nothing about how.
+
+    The two halves are split across two modules, and the split is invisible
+    from the module an author actually opens unless that module says where the
+    other half is (issue #267).
+    """
+
+    section = BODY.search(SKILLS.read_text(encoding="utf-8"))
+
+    # A renamed heading, or a level this pattern stops matching, would leave
+    # nothing to judge and pass regardless.
+    assert section is not None, (
+        f"{SKILLS.relative_to(REPO_ROOT)} carries a `### Body` section, which"
+        f" is where a body's requirements are stated."
+    )
+
+    assert "docs.md" in section.group(1), (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s Body section points at"
+        f" {DOCS.relative_to(REPO_ROOT)} for how a body's prose is written."
+    )
+
+
+def test_the_archive_ingress_hands_the_present_to_the_rules_modules() -> None:
+    """A reader who opens `docs/adr/` needs to be told what it is before they read it.
+
+    Every file under it is a record of its own date, and the directory as a
+    whole states what was decided at many dates with nothing in it saying
+    which survived. The ingress says so, names where the present is stated,
+    and says that nothing here is annotated when it is outrun — the absence of
+    a pointer meaning nothing at all (issue #267).
+    """
+
+    assert INGRESS.exists(), (
+        f"{INGRESS.relative_to(REPO_ROOT)} is the archive's ingress page."
+    )
+
+    text = INGRESS.read_text(encoding="utf-8").lower()
+
+    assert "historical" in text, (
+        f"{INGRESS.relative_to(REPO_ROOT)} says the directory is historical."
+    )
+    assert "docs/rules/" in text, (
+        f"{INGRESS.relative_to(REPO_ROOT)} names the rules modules as the"
+        f" authority on what applies now."
+    )
+    assert "as of its own date" in text, (
+        f"{INGRESS.relative_to(REPO_ROOT)} says a record is read as of its own date."
+    )
+    assert "annotat" in text, (
+        f"{INGRESS.relative_to(REPO_ROOT)} says nothing here is annotated"
+        f" when a later decision outruns it."
+    )

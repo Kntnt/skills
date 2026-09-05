@@ -28,6 +28,15 @@ TICKET_RECORDS = (
 # that this particular module is pointed at, before anything has been written.
 STANDARD = "docs/rules/skills.md"
 
+# The module saying where a rule and a decision are written down here, and the
+# archive it hands the reader for the other question. The archive's own entry
+# is checked for its occasion as much as for its path: it answered *deciding
+# collection architecture* while it was read as current law, and an entry that
+# goes on saying so sends the next agent to derive today's rules from a pile of
+# records written at many dates (issue #267).
+DOCS = "docs/rules/docs.md"
+ARCHIVE = "docs/adr/"
+
 # The rules modules stating what the Manager's verbs promise and how a Skill
 # routes delegated work, each with the word a reader skims the list for. Named
 # here for the same reason the two above are: an agent about to change a verb's
@@ -133,3 +142,36 @@ def test_agents_md_points_at_the_law_the_collection_behaves_under() -> None:
     for path, occasion in BEHAVIOUR.items():
         assert path in references
         assert occasion in references[path].lower()
+
+
+def test_agents_md_points_at_the_module_saying_where_a_rule_is_written_down() -> None:
+    """Where a rule goes is a question an author has before they write anything.
+
+    The answer is prose in a rules module — which document is the authority on
+    the present, what earns a record in the archive, where a rule binding one
+    Skill lives — and this file is what an agent always has loaded, so the
+    module is reachable only if this file names it (issue #267). The clause
+    matters as much as the path: a reader skims the list for the occasion, so
+    an entry whose occasion never says *record* is one its reader skips.
+    """
+
+    references = _references()
+
+    assert DOCS in references
+    assert "record" in references[DOCS].lower()
+
+
+def test_agents_md_sends_a_reader_to_the_archive_for_why_and_not_for_law() -> None:
+    """The archive answers why a rule became what it is, and nothing else.
+
+    An entry offering it as the place to decide architecture is the confusion
+    the rules modules exist to end, restated in the one file every session
+    loads: it sends an agent to derive what binds them from records written at
+    many different dates, none of which says which of them survived (issue
+    #267).
+    """
+
+    references = _references()
+
+    assert ARCHIVE in references
+    assert "tracing why a rule became" in references[ARCHIVE]
