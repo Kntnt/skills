@@ -19,7 +19,7 @@
       "name": "brief",
       "category": "agents",
       "description": "Turn Brief mode on or off for the conversation it is typed in, and report which of the two it is in, so replies stay concise and decision-relevant.",
-      "digest": "a9812afce6c7de16ac8efb8320baf7672d1be479b09eb194ebb065e82e6592ec",
+      "digest": "36883f8ac41a329a1957d50b42ed8f1d6a4d39c213a5d4550deb5414c30bcbcf",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -45,7 +45,7 @@
       "name": "tldr",
       "category": "agents",
       "description": "Re-explain the answer just given for a senior developer who delegated the work and therefore does not hold its details, and say plainly what it now asks of them.",
-      "digest": "0a6e283e8ff779b965d4d4dff3dd80b00fd37fec394955b5013bad18d7bd9bbc",
+      "digest": "d22deee877355992aafecc4cdfd5224cc0f51b1a139e8d6ac742045d018b6a12",
       "binaries": [],
       "skills": [],
       "externals": [],
@@ -143,7 +143,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "06886d8fd29024a4f2bb4e77eeb6fa2d412fa1ed44b0ff7eec0f84c7b2a176f9",
+      "digest": "040fd6acbdc61ca41fbeaed15cee4865de402e37cd0ec7dd9f3781d912df35a6",
       "binaries": [
         "uv"
       ],

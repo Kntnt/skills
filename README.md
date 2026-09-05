@@ -150,7 +150,7 @@ Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--y
 
 ## Dependencies
 
-Most skills require `uv` and the manager. `brief` and `tldr` require neither.
+Most skills require `uv` and the manager. `brief` and `tldr` require the manager but not `uv`.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`. `release` can finish without `gh`, but then skips the GitHub release.
 

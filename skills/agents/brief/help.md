@@ -62,7 +62,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-None.
+The Manager must be Enabled: its Collection Library carries the Invocation Envelope contract this Skill reads before anything else. Nothing beyond it — no `uv`, no peer Skill, and no Harness Capability.
 
 ## SEE ALSO
 
