@@ -78,8 +78,8 @@ RUNTIME_SOURCES = (
 
 # The records binned `RUNTIME` on their subject alone, neither file citing them:
 # the deterministic seam (0050), the working-tree discipline (0056, 0057), the
-# amend and approval ceilings (0084, 0144), the flake protocol (0139), and the
-# parked-ticket lifecycle (0141, 0142, 0143). Whether a record is /orchestrate's
+# amend and approval ceilings (0084, 0143, 0144), the flake protocol (0139), and the
+# parked-ticket lifecycle (0141, 0142). Whether a record is /orchestrate's
 # own machinery is not decidable from the tree, so the check below holds the
 # decidable half to the citation and this half to a list: a tenth uncited
 # `RUNTIME` row goes red until somebody adds it here on purpose.
@@ -1008,8 +1008,7 @@ def test_the_runtime_bin_is_what_orchestrate_is_made_of() -> None:
         if not all(source in binned[number][1] for source in sources)
     }
     assert unsourced == set(), (
-        f"{unsourced}: a RUNTIME row's note names the file whose citation"
-        f" is the whole of its bin."
+        f"{unsourced}: a RUNTIME row's note names every file that cites the record."
     )
 
 
