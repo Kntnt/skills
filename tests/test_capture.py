@@ -635,11 +635,15 @@ def test_the_manager_can_ask_capture_to_remove_its_own_integrations(
 
 
 def test_the_hook_path_is_local_only_and_bounded() -> None:
-    """What the synchronous path may do is provable from what it can reach.
+    """What capture itself may do is provable from what it can reach.
 
-    The contract is that a hook does bounded local metadata I/O and nothing
+    The contract is that capture does bounded local metadata I/O and nothing
     else. A module that cannot reach the network, cannot start a process, and
     holds no waiting call cannot break that contract however it is invoked.
+    These absences are what keep the contract true of this module now that the
+    same session-end invocation also dispatches a bounded conditional
+    retrieval (ADR-0167): that work lives in `refresh.py` and is held to its
+    own pins in `test_refresh.py`, and none of it reaches here.
     """
 
     source = CAPTURE.read_text(encoding="utf-8")

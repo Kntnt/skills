@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "cadences": {
+    "model_release_index": "P7D",
+    "model_detail": null,
+    "capability_source": "P7D",
+    "benchmark_release_index": "P1M",
+    "commercial_terms": "P7D",
+    "gateway_rate_card": "P7D"
+  }
+}

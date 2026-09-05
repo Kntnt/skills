@@ -13,7 +13,7 @@ The selected data directory contains:
 | `standing-policy.json` | Script-owned Standing Policy overrides, one entry per moved workload Cohort. |
 | `standing-policy-history.jsonl` | Append-only Standing Policy movements and their causes. |
 
-`config.json` contains `schema_version`, `profile_id`, `revision`, `created_at`, `updated_at`, `currency`, `region`, refresh cadences, access channels, model selections and optional quota shadow prices. Give every channel and model selection a stable user-facing ID.
+`config.json` contains `schema_version`, `profile_id`, `revision`, `created_at`, `updated_at`, `currency`, `region`, access channels, model selections and optional quota shadow prices. It carries no refresh cadence and cannot override one: the cadences are shipped data in `data/refresh-cadences.json`, described in `evidence-ledger.md`. Give every channel and model selection a stable user-facing ID.
 
 The persisted version-1 shape is formalized by `profile.schema.json`. Context reads a stored profile and judges it as it stands, and never rewrites it. Version 1 is the only documented shape and no migration carries an undocumented older one forward: a profile that no longer validates is rejected, and `setup` recreates it. An absent `config.json` is represented as `profile: null` for routing; one that is present and cannot be read, parsed, or validated is represented as a profile carrying the `rejection` that names what rejected it and re-running `setup` as the way back. Neither opens setup.
 

@@ -59,6 +59,7 @@ RELATIONS = {
     ("0136", "0165"),
     ("0083", "0166"),
     ("0136", "0166"),
+    ("0090", "0167"),
     ("0017", "0019"),
     ("0029", "0059"),
     ("0050", "0059"),
@@ -594,6 +595,47 @@ def test_the_rejected_profile_preserves_the_one_missing_facts_record_history() -
     # documented version, and refusing the run instead of inheriting.
     assert "No migration is written" in later
     assert "start nothing" in later
+
+
+def test_the_unattended_refresh_preserves_the_hook_path_record_history() -> None:
+    """The bounded network path points past ADR-0090 without rewriting it.
+
+    Everything that record protects about the hook path stands — fail-open,
+    bounded, local, every failure swallowed, and no measurement reminder where
+    the model reads it. What the later record narrows is the one phrase that
+    made the path unable to check whether a source had moved at all.
+    """
+
+    earlier = (
+        ADR / "0090-a-skill-owns-the-harness-integrations-it-installs.md"
+    ).read_text(encoding="utf-8")
+    later = (
+        ADR
+        / "0167-an-unattended-pass-may-learn-what-a-model-can-do-never-what-it-costs.md"
+    ).read_text(encoding="utf-8")
+
+    # Keep the historical claim intact and add only the sanctioned pointer.
+    assert "no network request, no model call, no test run" in earlier
+    assert "narrowed by ADR-0167" in earlier
+
+    # Declare the same relation from the later record for the scan in both
+    # directions.
+    assert "narrows ADR-0090" in later
+
+    # What the later record settles: the module that performs the pass, the
+    # number the budget is, and the field cadence is measured from.
+    assert "scripts/refresh.py" in later
+    assert "two seconds" in later
+    assert "last_retrieved_at" in later
+
+    # The invariant the whole design was bought with, and the fail-closed rule
+    # that keeps it true of a source kind nobody has taught it about.
+    assert "never what it is judged to cost" in later
+    assert "including one absent or unreadable, are treated as commercial" in later
+
+    # The road not taken is named: a daemon, and a reminder inside a routed run.
+    assert "no daemon, no cron" in later
+    assert "not a routed run's account" in later
 
 
 def test_the_suspended_ceiling_preserves_both_records_it_narrows() -> None:

@@ -48,6 +48,8 @@ Every result labels its evidence source, date, uncertainty, exclusions, and miss
 
 Enabling this Skill installs session lifecycle integration into each supported Detected Harness in the Global layer. It retains only the Seat a session ran on, usage counts, timestamps, and opaque identifiers — never prompts, responses, reasoning, file contents, or paths. Disabling the Skill removes every entry this integration owns and keeps what was already measured.
 
+That integration also refreshes the Skill's own public sources unattended. At a session's end it conditionally re-retrieves the model, capability, and benchmark index pages your configuration already names and that have fallen due — one connection at a time, within a two-second budget, sending no credential and no identifier of you or your machine — and writes each source's own check state under the data directory. It reads no page for its content, starts no model, and writes no other evidence. Pricing pages, subscription terms, and gateway rate cards are never retrieved this way; `status` reports them as due and `update` is what checks them. Disabling the Skill removes this with the rest of the integration.
+
 ## COMMANDS
 
 **recommend** [*WORKLOAD*]
@@ -146,7 +148,7 @@ After a blue or orange banner, `Snabbaste vägen till mätdata` provides a bound
 
 `chart` and `compare` keep cash, quota, and renewal views separate unless explicit shadow prices create a common axis, and carry the same usage figures as columns. Missing metrics are `null`, never zero.
 
-`update` reports every checked source and appended change. A discovered model is not Enabled automatically.
+`update` reports every checked source and appended change. A discovered model is not Enabled automatically. `status` reports what the unattended session-end refresh keeps current and what it may never retrieve, naming `update` for each.
 
 ## FILES
 
@@ -157,6 +159,10 @@ The default active profile and revision history. **--data** relocates it.
 **~/.kntnt/model-selector/capture/**
 
 Temporary per-session drafts. A draft is deleted the moment its session ends.
+
+**~/.kntnt/model-selector/source-states.jsonl**
+
+One mutable row per public source, updated in place, recording when each was last looked at, last retrieved, and last seen to change.
 
 **Evidence ledger**
 

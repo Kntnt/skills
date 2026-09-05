@@ -12,7 +12,11 @@ model-selector status - report profile and evidence readiness
 
 `model-selector status` reports the active profile, evidence vintage, due sources, coverage gaps, provisional facts, low-confidence capability priors, configuration selections, and capture's own health without network access or writes.
 
-The report distinguishes evidence that is absent, stale by configured cadence, provisional, or inapplicable rather than collapsing those states into one readiness value.
+The report distinguishes evidence that is absent, stale by the shipped cadence, provisional, or inapplicable rather than collapsing those states into one readiness value. Cadences are shipped with the Skill and the profile cannot override them.
+
+`status` is also where unattended refresh is reported. Enabling this Skill installs a session-end pass that conditionally re-retrieves the non-commercial sources that are due; this section names every due source that pass may never retrieve — commercial terms, gateway rate cards, and any source kind or address it does not recognise — with `/model-selector update` as the command that resolves each. Where no source state exists yet, it reports that unattended refresh has nothing to check and that a typed `update` establishes the sources.
+
+The same section names every enabled model selection that no benchmark has ranked, and every newer family version a previous `update` discovered and left excluded — the first resolved by `update`, the second by `config add model` or `config edit model`, adoption being your own act. Everything here is a report: `status` asks nothing, refuses nothing, and stops nothing.
 
 Capture's own health is adapter presence per Harness this collection has an adapter for (`healthy`, `gated`, `degraded`, `absent`, or `unsatisfied`), whether that Harness's own finished session record can supply measurements at all, and how many bytes the capture store holds. This section performs no network request and writes nothing.
 

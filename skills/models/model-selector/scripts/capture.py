@@ -35,6 +35,7 @@ import importlib.util
 import json
 import shutil
 import sys
+from contextlib import suppress
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -176,6 +177,45 @@ def _drafts(data: Path) -> Path:
     return home(data) / "drafts"
 
 
+def _by_path(name: str, *candidates: Path) -> Any:
+    """Load one module by path under *name*, from the first candidate that exists.
+
+    Every module this one reaches is loaded this way rather than imported: a
+    Skill's scripts are placed, not installed, so there is no package for an
+    ordinary import to resolve against. The loaded module is registered under
+    *name* before it executes, which is what lets its own dataclasses resolve
+    the annotations they declare.
+    """
+
+    for candidate in candidates:
+        if not candidate.exists():
+            continue
+        spec = importlib.util.spec_from_file_location(name, candidate)
+        if spec is None or spec.loader is None:
+            continue
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        spec.loader.exec_module(module)
+        return module
+    raise RuntimeError(f"{name} is missing")
+
+
+def _library(*relative: str) -> tuple[Path, Path]:
+    """Return the two places a Collection Library module may sit, in order.
+
+    Two layouts, tried in turn: this repository's own
+    `skills/models/model-selector/scripts/` sits three directories above
+    `skills/kntnt/library/`, while an Enabled Skill's installed copy — the
+    only copy the Manager's own install and remove seams ever run (#223) —
+    sits at `<layer>/model-selector/scripts/`, two directories above the
+    sibling `<layer>/kntnt/library/`.
+    """
+
+    here = Path(__file__).resolve().parent
+    tail = Path("kntnt", "library", "scripts", *relative)
+    return here.parent.parent.parent / tail, here.parent.parent / tail
+
+
 def _integrations() -> Any:
     """Load the Collection Library's owned-integration mechanics.
 
@@ -184,27 +224,7 @@ def _integrations() -> Any:
     rather than reaching into this one (ADR-0012).
     """
 
-    # Two layouts, tried in turn: this repository's own
-    # `skills/models/model-selector/scripts/` sits three directories above
-    # `skills/kntnt/library/`, while an Enabled Skill's installed copy — the
-    # only copy the Manager's own install and remove seams ever run (#223) —
-    # sits at `<layer>/model-selector/scripts/`, two directories above the
-    # sibling `<layer>/kntnt/library/`.
-    here = Path(__file__).resolve().parent
-    for candidate in (
-        here.parent.parent.parent / "kntnt" / "library" / "scripts" / "integrations.py",
-        here.parent.parent / "kntnt" / "library" / "scripts" / "integrations.py",
-    ):
-        if candidate.exists():
-            spec = importlib.util.spec_from_file_location(
-                "kntnt_integrations", candidate
-            )
-            if spec is None or spec.loader is None:
-                continue
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            return module
-    raise RuntimeError("the Collection Library's integration mechanics are missing")
+    return _by_path("kntnt_integrations", *_library("integrations.py"))
 
 
 def _session_records() -> Any:
@@ -216,26 +236,20 @@ def _session_records() -> Any:
     instead of reaching into this Skill (#225).
     """
 
-    # The same two layouts `_integrations` resolves, for the same reason.
-    here = Path(__file__).resolve().parent
-    for candidate in (
-        here.parent.parent.parent
-        / "kntnt"
-        / "library"
-        / "scripts"
-        / "session_records.py",
-        here.parent.parent / "kntnt" / "library" / "scripts" / "session_records.py",
-    ):
-        if candidate.exists():
-            spec = importlib.util.spec_from_file_location(
-                "kntnt_session_records", candidate
-            )
-            if spec is None or spec.loader is None:
-                continue
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            return module
-    raise RuntimeError("the Collection Library's session-record reader is missing")
+    return _by_path("kntnt_session_records", *_library("session_records.py"))
+
+
+def _refresh() -> Any:
+    """Load this Skill's own unattended source refresh, from beside this module.
+
+    It is this Skill's own knowledge rather than the Library's, so it sits in
+    `scripts/` next to this file and needs neither of the two layouts a
+    Library module is resolved through.
+    """
+
+    return _by_path(
+        "model_selector_refresh", Path(__file__).resolve().parent / "refresh.py"
+    )
 
 
 def owner() -> str:
@@ -601,6 +615,15 @@ def _finish(
     records = [_usage_record(draft, entry) for entry in entries]
     appended = _append(data, records)
     _draft_path(data, draft["session_key"]).unlink(missing_ok=True)
+
+    # The session is over, so the one invocation with nothing left to delay
+    # carries this Skill's own unattended source refresh (ADR-0167). It is a
+    # sibling action on the same seam rather than part of capture's own
+    # measurement path: it writes source states and nothing capture owns, and
+    # its every failure is swallowed here exactly as this path's own are.
+    with suppress(Exception):
+        _refresh().refresh(data)
+
     return {"ok": True, "fail_open": False, **appended}
 
 
@@ -608,9 +631,13 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     """Answer one lifecycle signal, and never let answering it cost the session.
 
     This is the synchronous path a Harness runs, so it does bounded local
-    metadata I/O and nothing else: no network request, no model call, no test
-    run, no repository scan, and no long-lived work. Every failure in it is
-    swallowed, because a capture that breaks a session is worse than no capture.
+    metadata I/O and nothing else: no model call, no test run, no repository
+    scan, and no long-lived work. Every failure in it is swallowed, because a
+    capture that breaks a session is worse than no capture. The one thing a
+    session's own last invocation additionally carries is this Skill's
+    unattended source refresh, which reaches the network only as bounded
+    conditional metadata retrieval under a stated budget, in a module of its
+    own (ADR-0167).
     """
 
     try:

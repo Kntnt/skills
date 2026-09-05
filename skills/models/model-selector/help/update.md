@@ -12,7 +12,7 @@ model-selector update - refresh due public model evidence
 
 `model-selector update` performs one bounded refresh of mutable model indexes, first-party qualitative capability sources, commercial terms, and benchmark release indexes required by enabled selections and watched families. It initializes or appends applicable evidence and then rebuilds affected configured frontiers.
 
-Capability sources follow the existing model/release cadence. A changed claim or normalized tag set appends an explicitly low-confidence categorical prior without rewriting history; provider prose never becomes a numeric score, clears a quality floor, or enters a Pareto frontier.
+Cadences are shipped with the Skill and the profile does not override them; a source falls due by the time of its last retrieval and by nothing else. Capability sources follow the existing model/release cadence. A changed claim or normalized tag set appends an explicitly low-confidence categorical prior without rewriting history; provider prose never becomes a numeric score, clears a quality floor, or enters a Pareto frontier.
 
 Known immutable model detail pages and recorded local run keys are not fetched or executed again. A discovered newer model version is reported but never enabled or substituted automatically.
 
@@ -28,7 +28,7 @@ Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-sele
 
 ## DIAGNOSTICS
 
-Every due source is reported as unchanged, changed, unreachable, or invalid. An unsupported option is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector update --help`.
+Every due source is reported as unchanged, changed, unreachable, or invalid, and a source whose cadence has not elapsed is recorded as not due. Commercial terms and gateway rate cards are checked only here: the unattended session-end pass never retrieves either, and `/model-selector status` reports them as waiting for this command. An unsupported option is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector update --help`.
 
 ## EXAMPLES
 
