@@ -2854,6 +2854,21 @@ def test_serial_runs_gate_their_own_branch_before_reporting() -> None:
         " merge from the need to read the run's own writing."
     )
 
+    assert "after the last wave" in skill and "before step 12" in skill, (
+        f"{SKILL / 'SKILL.md'}: the serial branch-writing path gates after its"
+        " last wave and before the report step."
+    )
+    assert (
+        "where `worktrees` is false and this run wrote to the branch" in skill.lower()
+    ), (
+        f"{SKILL / 'SKILL.md'}: the self-gate is limited to runs that wrote"
+        " their own branch, not no-work or dry-run paths."
+    )
+    assert "gate commit" in skill and "gate result" in skill, (
+        f"{SKILL / 'SKILL.md'}: step 12 renders the serial gate commit and"
+        " result from the engine's report."
+    )
+
 
 def test_manpage_explains_the_serial_self_gate() -> None:
     """Help tells readers that concurrency one gates its branch before reporting."""
