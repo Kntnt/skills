@@ -2438,11 +2438,18 @@ def test_update_agent_guide_requires_fresh_plan_bound_authorization() -> None:
 
 
 def test_update_contract_surfaces_agree_on_fresh_exact_authorization() -> None:
-    """The public contract, help, guide, and decision expose one boundary."""
+    """The public contract, help, guide, and decision expose one boundary.
+
+    The contract surface is the rules module rather than the glossary. Issue
+    #188 named `CONTEXT.md` because the Update entry was the only written
+    account of what authorizes a real Global mutation; `docs/rules/collection.md`
+    is that account now, and the glossary entry is a definition and a clause
+    pointing at it (issue #265).
+    """
 
     # Collect every authoritative surface named by issue #188.
     paths = (
-        REPO_ROOT / "CONTEXT.md",
+        REPO_ROOT / "docs" / "rules" / "collection.md",
         REPO_ROOT / "skills" / "kntnt" / "help" / "update.md",
         REPO_ROOT / "skills" / "kntnt" / "steps" / "update.md",
         REPO_ROOT
