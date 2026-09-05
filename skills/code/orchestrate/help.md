@@ -232,6 +232,8 @@ A mismatched approval reports the expected identity, computed identity, and cano
 
 The working tree must be clean when planning and before closing a ticket. A scope with no workable ticket is reported without starting a build.
 
+A run above `--at-once=1` builds each ticket in a worktree of its own, isolated inside the repository's common Git directory. Before any ticket is claimed, the plan establishes with a read-only Git command that this session may operate the worktree directory. Where that command is refused — a session launched into its own worktree is held to that worktree and cannot issue Git commands outside it — the run reports the refusal, starts nothing, and names `--at-once=1` as the alternative, which builds on the branch already checked out and does not require access to the worktree directory.
+
 ## EXAMPLES
 
 **/orchestrate --dry-run**
