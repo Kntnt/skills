@@ -23,7 +23,7 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/adr/` — read when tracing why a rule became what it is
 - `docs/rules/general.md` — read when writing code
 - `docs/rules/python.md` — read when writing Python
-- `docs/rules/skills.md` — read when adding a Skill or changing the files one ships
+- `docs/rules/skills.md` — read when adding a Skill or a Feature, or changing the files either one ships
 - `docs/rules/collection.md` — read when changing what a Manager verb promises, or how the collection reaches a machine
 - `docs/rules/routing.md` — read when changing how a Skill routes delegated work, or what it may file as evidence
 - `docs/rules/tickets.md` — read when writing a ticket

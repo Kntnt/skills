@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "7df7e748defdf5fcfd06ffd9a27f5fe9babf17c90576d1175042a7c9dcca3741",
+  "manager_digest": "f3c5215c6207668236e8e106ec15c7065fe810e929f236e458dc6809753869da",
   "skills": [
     {
       "name": "agents-md",
@@ -185,7 +185,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
-      "digest": "067af7b9fdb76db69d3cc0cbc42186d5350b8034c26043564c39322223f8f28e",
+      "digest": "8f8aee0dc90b1b1da5221250e3742f07f6ffdf4085cc10d51ff82a8384e6bf49",
       "binaries": [
         "uv"
       ],
@@ -197,7 +197,7 @@
       "name": "rename-invoices",
       "category": "producivity",
       "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
-      "digest": "defee2497b0dcb9433b432e014264642f46c6a750f2a55c016214b8ade33196d",
+      "digest": "ebfa61fb4ac23e4a995180db049b2a97bf3a39745161d63e5843209e46c2d346",
       "binaries": [
         "pdftotext",
         "uv"
@@ -205,6 +205,45 @@
       "skills": [],
       "externals": [],
       "capabilities": []
+    }
+  ],
+  "features": [
+    {
+      "name": "session-cleanup",
+      "category": "environment",
+      "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
+      "digest": "1bed9c5845953587f26215ea3faa79d29a02d4e657dc17ad30e001178d386417",
+      "binaries": [
+        "uv"
+      ],
+      "capabilities": [],
+      "harnesses": [
+        "claude-code",
+        "codex",
+        "opencode"
+      ],
+      "writes": [
+        "A fenced block, delimited by `<!-- kntnt.session-cleanup begin -->` and `<!-- kntnt.session-cleanup end -->`, at the end of each Harness's own global instruction file — `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md`. These are files you own and read; everything above the fence is left exactly as it is, and disabling the Feature takes the fenced block away and nothing else.",
+        "One session-lifecycle entry per Harness, in that Harness's own hook table — `~/.claude/settings.json`, `~/.codex/hooks.json` — or, for OpenCode, as the plugin file `~/.config/opencode/plugins/kntnt.session-cleanup.js`.",
+        "Per-session manifests, and one log of every action taken, under `~/.kntnt/session-cleanup/`. Nothing is written outside these three places."
+      ]
+    },
+    {
+      "name": "statusline",
+      "category": "environment",
+      "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
+      "digest": "bc73b05a771222e082071aeed4e745b25a571a51ba2c36ebaaf9e4e05292bba1",
+      "binaries": [
+        "git",
+        "jq"
+      ],
+      "capabilities": [],
+      "harnesses": [
+        "claude-code"
+      ],
+      "writes": [
+        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it."
+      ]
     }
   ]
 }

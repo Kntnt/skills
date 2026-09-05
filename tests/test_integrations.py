@@ -103,6 +103,43 @@ def test_codex_hook_entries_match_the_harnesss_own_matcher_group(
     assert "handlerType" not in entry
 
 
+def test_an_installed_entry_carries_the_timeout_its_own_harness_honours(
+    tmp_path: Path,
+) -> None:
+    """Each entry asks for what its Harness will honour at that moment.
+
+    Codex clamps a session-end hook to three seconds whatever it is asked for
+    and names the clamp in `hooks/list`'s `warnings` on every session, while
+    honouring exactly what it is asked for at its other two moments; Claude
+    Code exposes no ceiling to read and takes the ten seconds it is installed
+    with; OpenCode loads a plugin module rather than a hook table and carries
+    no timeout at all.
+    """
+
+    module = _load()
+    module.install(OWNER, "claude-code", tmp_path, COMMAND)
+    module.install(OWNER, "codex", tmp_path, COMMAND)
+
+    def timeouts(hooks: dict[str, Any]) -> dict[str, int]:
+        return {
+            event: entries[0]["hooks"][0]["timeout"] for event, entries in hooks.items()
+        }
+
+    assert timeouts(_settings(tmp_path)["hooks"]) == {
+        "SessionStart": 10,
+        "Stop": 10,
+        "SessionEnd": 10,
+    }
+    assert timeouts(_codex_hooks(tmp_path)["hooks"]) == {
+        "SessionStart": 10,
+        "Stop": 10,
+        "SessionEnd": 3,
+    }
+
+    plugin = module._plugin_source(OWNER, "opencode", COMMAND, module.OPENCODE_EVENTS)
+    assert "timeout" not in plugin
+
+
 def test_an_unsupported_harness_reports_an_unsatisfied_capability(
     tmp_path: Path,
 ) -> None:

@@ -22,6 +22,10 @@ _Avoid_: namespace, group, tag, section
 A standalone Agent Skill with its own name, never namespaced under `kntnt`. What the collection ships as a Skill, and the files one carries — its help pages among them — are stated in `docs/rules/collection.md` and `docs/rules/skills.md`.
 _Avoid_: module, plugin, recipe, command, slash command
 
+**Feature**:
+A Catalog entry that owns Harness Integrations and nothing else (ADR-0173). No Harness loads it, the Transport never moves it, it has no directory in a skills tree, and nothing depends on it. It ships inside the Manager, and Select lists Features as a second group under the Skills and answers both in one checked set. What one declares, what it may write, and the layer it is Enabled at are stated in `docs/rules/skills.md`.
+_Avoid_: setup, integration skill, plugin, add-on, hook
+
 **Language Resource**:
 The single installed source for one language or locale's editorial guidance. It carries the canonical language code, a bounded set of selector aliases, and separate scopes for composing, reviewing, catching machine-sounding prose, and correcting mechanics; a scope is named for the guidance it holds rather than for the Skill that reads it, and a locale variant may inherit the scopes of its base language. What may be written into one is stated in `skills/kntnt/library/references/languages/README.md`.
 _Avoid_: language pack, translation, alias registry
@@ -205,6 +209,10 @@ _Avoid_: repo, workspace, local
 **Harness**:
 A coding agent that loads Agent Skills from a well-known directory (Claude Code, OpenCode, Codex, and others).
 _Avoid_: agent, IDE, tool, client
+
+**Harness Integration**:
+What a Skill writes into a Harness's own configuration so that the Harness calls the Skill at its own lifecycle moments, rather than the user invoking it (ADR-0179). It is written outside the Skill's own directory, and is neither a Skill file nor something that deleting a Skill's files takes away. The owner identity travels inside what is written rather than beside it, and nothing keeps a register of what was installed, so install, repair, update, and removal are one convergent operation over whatever is on disk. `health` in the Collection Library reports one in five states rather than two — `healthy`, `gated`, `degraded`, `absent`, `unsatisfied` — of which `gated` is the one the name does not predict: a fully and correctly written integration the Harness holds inert behind its own trust review, neither absent nor healthy, and reported as itself (ADR-0179).
+_Avoid_: extension, add-on, registration
 
 **Transport**:
 The existing `npx skills` CLI, used to add, remove, and refresh skill files in harness directories.
