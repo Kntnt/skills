@@ -240,6 +240,10 @@ def last_tag(cwd: Path) -> str | None:
 def commit_subjects(cwd: Path, since: str | None) -> list[dict[str, str]]:
     """Return oldest-first subjects since *since*, or the whole history."""
 
+    # An unborn branch has no history to list.
+    if not git_ok(cwd, "rev-parse", "--verify", "--quiet", "HEAD"):
+        return []
+
     fmt = "%h\t%s"
     if since:
         output = git(cwd, "log", f"{since}..HEAD", "--reverse", f"--format={fmt}")
