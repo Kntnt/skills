@@ -22,7 +22,7 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
 
 1. **Open an issue first** for anything in the *discussed* row above. For *welcomed* items, you can open a PR directly. Use the issue tracker at <https://github.com/Kntnt/skills/issues>.
 2. **One concern per PR.** Smaller PRs land faster.
-3. **Follow the project's coding standard.** It is materialised under [`docs/coding-standard/`](docs/coding-standard/) — read `general.md` plus the module(s) for what you touch before changing anything: `python.md` for the language, and [`skills.md`](docs/coding-standard/skills.md) for the files a skill itself ships. Read that last one before adding a skill. Its `SKILL.md` and its `help.md` each have to carry things the suite enforces and nothing else states, and the fourth check below is where you find out otherwise.
+3. **Follow the project's coding standard.** It is materialised under [`docs/rules/`](docs/rules/) — read `general.md` plus the module(s) for what you touch before changing anything: `python.md` for the language, and [`skills.md`](docs/rules/skills.md) for the files a skill itself ships. Read that last one before adding a skill. Its `SKILL.md` and its `help.md` each have to carry things the suite enforces and nothing else states, and the fourth check below is where you find out otherwise.
 4. **Regenerate the catalog** when you change any shipped file under `skills/`. Each Catalog entry carries a content Digest of its Skill directory, and the top-level `manager_digest` covers every file under `skills/kntnt/` except the recursively generated Catalog itself, so a Catalog left as it was no longer describes the Collection:
 
    ```
