@@ -203,6 +203,10 @@ _Avoid_: repo, workspace, local
 A coding agent that loads Agent Skills from a well-known directory (Claude Code, OpenCode, Codex, and others).
 _Avoid_: agent, IDE, tool, client
 
+**Harness Integration**:
+What a Skill writes into a Harness's own configuration so that the Harness calls the Skill at its own lifecycle moments, rather than the user invoking it (ADR-0090). It is written outside the Skill's own directory, and is neither a Skill file nor something that deleting a Skill's files takes away. The owner identity travels inside what is written rather than beside it, and nothing keeps a register of what was installed, so install, repair, update, and removal are one convergent operation over whatever is on disk. `health` in the Collection Library reports one in five states rather than two — `healthy`, `gated`, `degraded`, `absent`, `unsatisfied` — of which `gated` is the one the name does not predict: a fully and correctly written integration the Harness holds inert behind its own trust review, neither absent nor healthy, and reported as itself (ADR-0157).
+_Avoid_: extension, add-on, registration
+
 **Transport**:
 The existing `npx skills` CLI, used to add, remove, and refresh skill files in harness directories.
 _Avoid_: installer, package manager
