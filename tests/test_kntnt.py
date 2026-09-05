@@ -3917,6 +3917,7 @@ def test_the_relayed_reason_never_reaches_the_payload(tmp_path: Path) -> None:
         "removed",
         "integrations",
         "removed_integrations",
+        "features",
         "catalog_refreshed",
         "unsatisfied",
         "capabilities",

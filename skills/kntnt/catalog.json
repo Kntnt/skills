@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "6d4bce17d6312166def42d5f0252244e006b9627756ed3615baeb05c11638b24",
+  "manager_digest": "d6c9aab49b2c0e657dd81b4c5b1569a8c8545f4a702a3e8991620a101247ee59",
   "skills": [
     {
       "name": "agents-md",
@@ -205,6 +205,45 @@
       "skills": [],
       "externals": [],
       "capabilities": []
+    }
+  ],
+  "features": [
+    {
+      "name": "session-cleanup",
+      "category": "environment",
+      "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
+      "digest": "72325f7e5cf218cdce77071590d225acd19bf6cf8c929cb50ce73bf97e6ccaaa",
+      "binaries": [
+        "uv"
+      ],
+      "capabilities": [],
+      "harnesses": [
+        "claude-code",
+        "codex",
+        "opencode"
+      ],
+      "writes": [
+        "A fenced block, delimited by `<!-- kntnt.session-cleanup begin -->` and `<!-- kntnt.session-cleanup end -->`, at the end of each Harness's own global instruction file — `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md`. These are files you own and read; everything above the fence is left exactly as it is, and disabling the Feature takes the fenced block away and nothing else.",
+        "One session-lifecycle entry per Harness, in that Harness's own hook table — `~/.claude/settings.json`, `~/.codex/hooks.json` — or, for OpenCode, as the plugin file `~/.config/opencode/plugins/kntnt.session-cleanup.js`.",
+        "Per-session manifests, and one log of every action taken, under `~/.kntnt/session-cleanup/`. Nothing is written outside these three places."
+      ]
+    },
+    {
+      "name": "statusline",
+      "category": "environment",
+      "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
+      "digest": "56004b5e042464c454e7396b28583088ca373fe870a66ab67431f8b002fd6c87",
+      "binaries": [
+        "git",
+        "jq"
+      ],
+      "capabilities": [],
+      "harnesses": [
+        "claude-code"
+      ],
+      "writes": [
+        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting: where it already runs something that is not this collection's, nothing is written, the run reports the slot as taken and names what holds it, and nothing of yours is remembered anywhere. Disabling the Feature clears the setting where this collection holds it and leaves it alone where it does not."
+      ]
     }
   ]
 }

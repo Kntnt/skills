@@ -1052,6 +1052,9 @@ def validate_manager_candidate(candidate: Path) -> None:
     catalog = json.loads(contents["catalog.json"])
     if not isinstance(catalog, dict) or not isinstance(catalog.get("skills"), list):
         raise ManagerError("staged Manager carries a corrupt Catalog")
+    if not isinstance(catalog.get(FEATURES, []), list):
+        raise ManagerError("staged Manager carries a corrupt Catalog")
+    validate_staged_features(candidate, catalog)
     paths = json.loads(contents["harness-paths.json"])
     if not isinstance(paths, dict):
         raise ManagerError("staged Manager carries a corrupt harness path table")
@@ -1068,6 +1071,35 @@ def validate_manager_candidate(candidate: Path) -> None:
     # The acquired Manager must carry the same Catalog that selected this run.
     if catalog != load_catalog():
         raise ManagerError("staged Manager carries another Collection Catalog")
+
+
+def validate_staged_features(candidate: Path, catalog: dict[str, Any]) -> None:
+    """Refuse a staged Manager that cannot run the Features its own Catalog names.
+
+    A Feature ships inside the Manager rather than travelling as its own skill
+    directory (ADR-0173), so a truncated Manager is the one way a Feature's
+    files can be missing while its Catalog row goes on offering it. The list is
+    read from the staged Catalog rather than written here, because a hardcoded
+    one would grow with every Feature and would refuse a Manager from a
+    collection shipping different ones.
+    """
+
+    for entry in features_of(catalog):
+        name = str(entry.get("name") or "")
+        directory = candidate / FEATURES / name
+        body = directory / "FEATURE.md"
+        if not name or not body.is_file():
+            raise ManagerError(
+                f"staged Manager offers the Feature '{name}' and does not carry it"
+            )
+        declared = (
+            collection_block(parse_frontmatter(body.read_text(encoding="utf-8"))) or {}
+        ).get("integrations")
+        script = directory / str(declared or "")
+        if not declared or not script.is_file():
+            raise ManagerError(
+                f"staged Manager's Feature '{name}' declares no script it carries"
+            )
 
 
 def validate_candidate(name: str, candidate: Path, expected_digest: str) -> str:
@@ -1991,6 +2023,23 @@ def unattempted_removal(*, global_layer: bool) -> dict[str, Any]:
     }
 
 
+def with_records(
+    answer: dict[str, Any], records: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Return one integration answer with more records of the same kind in it.
+
+    A Feature owns exactly what ADR-0090 gave a Skill and nothing else, so what
+    its script did belongs under the key every other owned integration is
+    reported under rather than in a second place a reader has to know about
+    (ADR-0173). The `note` is untouched: it says what this layer does, which is
+    the same sentence whoever the owner was.
+    """
+
+    if not records:
+        return answer
+    return {**answer, "attempted": [*answer.get("attempted", []), *records]}
+
+
 def joined_integrations(
     first: dict[str, Any], second: dict[str, Any]
 ) -> dict[str, Any]:
@@ -2269,9 +2318,16 @@ def joined(base: list[str], extra: list[str]) -> list[str]:
 
 
 def validate_names(names: list[str]) -> list[str]:
-    """Reject the Manager and unknown Catalog names."""
+    """Reject the Manager and unknown Catalog names.
 
-    known = catalog_names()
+    Both entry types answer here, because the list is answered as one checked
+    set: the user reads two groups and writes one sentence, and a name is
+    unknown only where neither group carries it. A Feature and a Skill may
+    never share a name — Catalog generation refuses that — so nothing here has
+    to decide which of the two a name meant (ADR-0173).
+    """
+
+    known = catalog_names() | feature_names()
     cleaned: list[str] = []
     for name in names:
         if name == MANAGER:
@@ -2415,8 +2471,428 @@ def unsatisfied_on_disk(
     return {name: names for name, names in lacking.items() if names}
 
 
+# The Catalog's second entry type, and the one place a Feature's name is
+# written. A Feature is not a Skill: no Harness loads it, the transport never
+# moves it, and it has no directory in a skills tree. What it has is the one
+# thing ADR-0090 gave a Skill — an owned integration it installs into a
+# Harness's own configuration — and nothing else. So it ships inside the
+# Manager, which is always installed, and Enabling it is exactly the install
+# word the Manager already says at the seam where a Skill's files land
+# (ADR-0173).
+FEATURES = "features"
+
+# What a Project-layer answer cannot reach, in the same voice its two siblings
+# above use. A Feature owns nothing but Harness Integrations, and the Project
+# layer installs and removes none of those: a Feature offered there would be a
+# checkbox that could never change anything.
+PROJECT_LAYER_FEATURES_NOTE = (
+    "a Feature owns only Harness Integrations, which the Project layer neither "
+    "installs nor removes; Features are chosen in the Global layer"
+)
+
+
+def features_of(catalog: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return the Feature entries of *catalog*.
+
+    A Catalog with no `features` key at all is one this collection published
+    before Features existed, and reads as a collection shipping none — never as
+    a corrupt Catalog, because a Manager newer than the Catalog it fetched is
+    the ordinary state of a machine between two releases.
+    """
+
+    features = catalog.get(FEATURES, [])
+    if not isinstance(features, list):
+        raise ManagerError("Catalog is corrupt")
+    return [entry for entry in features if isinstance(entry, dict)]
+
+
+def catalog_features() -> list[dict[str, Any]]:
+    """Return the Catalog's Feature entries."""
+
+    return features_of(load_catalog())
+
+
+def feature_entries() -> dict[str, dict[str, Any]]:
+    """Return the Catalog's Features by name, in the order the Catalog lists them."""
+
+    return {
+        str(entry["name"]): entry for entry in catalog_features() if "name" in entry
+    }
+
+
+def feature_names() -> set[str]:
+    """Return every Catalog Feature name."""
+
+    return set(feature_entries())
+
+
+def feature_dir(name: str) -> Path:
+    """Return the directory a Feature ships in, inside the installed Manager."""
+
+    return here() / FEATURES / name
+
+
+def feature_script(name: str) -> Path | None:
+    """Return the script a Feature declares, or None where it declares none.
+
+    Read off the Feature's own `FEATURE.md` the same way a Skill's is read off
+    its `SKILL.md`, and held to the same rule: a declaration is a path inside
+    the Feature's own directory and never a way out of it.
+    """
+
+    directory = feature_dir(name)
+    body = directory / "FEATURE.md"
+    if not body.is_file():
+        return None
+    try:
+        declared = (
+            collection_block(parse_frontmatter(body.read_text(encoding="utf-8"))) or {}
+        ).get("integrations")
+    except (OSError, UnicodeDecodeError, yaml.YAMLError):
+        return None
+    if not isinstance(declared, str) or not declared.strip():
+        return None
+    script = (directory / declared).resolve()
+    if not script.is_relative_to(directory.resolve()) or not script.is_file():
+        return None
+    return script
+
+
+def run_feature(name: str, word: str, harnesses: list[str]) -> dict[str, Any]:
+    """Say one word to one Feature's own script and read what it answers.
+
+    The same call shape a Skill's declared integrations get, for the same
+    reasons: from `home()`, with the Detected Harnesses handed in because a
+    script may not sniff which Harness invoked it (ADR-0030), and answered per
+    Feature rather than raised, because a Feature that could not be installed
+    must not cost the user the report of the run that installed everything else.
+    """
+
+    script = feature_script(name)
+    if script is None:
+        return {
+            "name": name,
+            "status": "failed",
+            "detail": f"the Feature '{name}' declares no readable script",
+            "installed": [],
+            "removed": [],
+            "harnesses": [],
+        }
+    try:
+        completed = subprocess.run(
+            [
+                "uv",
+                "run",
+                "--quiet",
+                str(script),
+                word,
+                *[f"--harness={harness}" for harness in harnesses],
+            ],
+            cwd=home(),
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=120,
+        )
+    except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
+        return {
+            "name": name,
+            "status": "failed",
+            "detail": str(exc),
+            "installed": [],
+            "removed": [],
+            "harnesses": [],
+        }
+    if completed.returncode != 0:
+        return {
+            "name": name,
+            "status": "failed",
+            "detail": (completed.stderr or completed.stdout).strip()[:200],
+            "installed": [],
+            "removed": [],
+            "harnesses": [],
+        }
+    try:
+        answered = json.loads(completed.stdout)
+    except ValueError:
+        answered = {}
+    if not isinstance(answered, dict):
+        answered = {}
+
+    status = {"install-integrations": "installed", "remove-integrations": "removed"}
+    report: dict[str, Any] = {
+        "name": name,
+        "status": status.get(word, "reported"),
+        "detail": None,
+        "installed": answered.get("installed", []),
+        "removed": answered.get("removed", []),
+        "harnesses": answered.get("harnesses", []),
+    }
+    unsupported = answered.get("unsupported")
+    if unsupported:
+        report["unsupported"] = unsupported
+    return report
+
+
+def feature_records(name: str, harnesses: list[str]) -> list[dict[str, Any]]:
+    """Return what each Harness holds of one Feature right now."""
+
+    answered = run_feature(name, "health", harnesses)
+    records = answered.get("harnesses") or []
+    return [record for record in records if isinstance(record, dict)]
+
+
+def state_of_records(records: list[dict[str, Any]]) -> str:
+    """Return enabled, disabled, or partial for one Feature's own health.
+
+    The three words `skill_state` answers in, so a row reads the same whichever
+    kind of entry it names. `healthy` and `gated` are both present — a gated
+    integration is written and waiting on the Harness's own trust review, never
+    absent — and everything else is not.
+    """
+
+    if not records:
+        return "disabled"
+    present = sum(
+        1 for record in records if str(record.get("status")) in {"healthy", "gated"}
+    )
+    if present == 0:
+        return "disabled"
+    return "enabled" if present == len(records) else "partial"
+
+
+def feature_state(name: str, harnesses: list[str], *, global_layer: bool) -> str:
+    """Return enabled, disabled, or partial for one Feature in one layer.
+
+    A Feature is a property of the machine rather than of a working directory,
+    for the reason ADR-0160 already gave capture: an owned entry is keyed by
+    owner inside a Harness's own configuration, so a Project-layer Enable and a
+    Global one would write and remove each other's single entry. The Project
+    layer therefore holds no Feature at all, and says so rather than reporting
+    the machine's state as its own.
+    """
+
+    if not global_layer:
+        return "disabled"
+    return state_of_records(feature_records(name, harnesses))
+
+
+def feature_serves(entry: dict[str, Any], harnesses: list[str]) -> list[str]:
+    """Return the Detected Harnesses one Feature declares it can serve."""
+
+    declared = {str(harness) for harness in entry.get("harnesses", [])}
+    return [harness for harness in harnesses if harness in declared]
+
+
+def feature_freshness(name: str, digest: str) -> str:
+    """Say whether the Feature installed beside the Manager is the one shipped.
+
+    The same three words `installed_freshness` answers in, over the one copy a
+    Feature has: it ships inside the Manager, so there is never more than one.
+    """
+
+    directory = feature_dir(name)
+    if not digest or not directory.is_dir():
+        return "unknown"
+    return "current" if directory_digest(directory) == digest else "deviating"
+
+
+def enabled_feature_names(harnesses: list[str], *, global_layer: bool) -> list[str]:
+    """Return the Catalog Features this machine holds an integration of."""
+
+    if not global_layer:
+        return []
+    return [
+        str(entry["name"])
+        for entry in catalog_features()
+        if feature_state(str(entry["name"]), harnesses, global_layer=True) != "disabled"
+    ]
+
+
+def feature_rows(harnesses: list[str], *, global_layer: bool) -> list[dict[str, Any]]:
+    """Build the second group of the list the user reads and answers.
+
+    Every field a Skill's row carries that means the same thing here, plus the
+    two a Feature has of its own: what it writes and where, which has to be
+    readable before the row is checked rather than after, and which of the
+    Detected Harnesses it can actually serve. A Feature no Detected Harness can
+    serve is locked and says why, in the Capability vocabulary a Skill's
+    Harness requirement is already said in (ADR-0030) — reported, never hidden.
+    """
+
+    if not global_layer:
+        return []
+
+    rows: list[dict[str, Any]] = []
+    for entry in catalog_features():
+        name = str(entry["name"])
+        declared = [str(harness) for harness in entry.get("harnesses", [])]
+        serves = feature_serves(entry, harnesses)
+        records = feature_records(name, serves) if serves else []
+        state = state_of_records(records)
+        details = [str(record["detail"]) for record in records if record.get("detail")]
+        rows.append(
+            {
+                "name": name,
+                "category": str(entry.get("category") or "other"),
+                "description": str(entry.get("description", "")),
+                "writes": [str(line) for line in entry.get("writes", [])],
+                "capabilities": entry.get("capabilities", []),
+                "harnesses": declared,
+                "serves": serves,
+                "checked": state != "disabled",
+                "incomplete": state == "partial",
+                "freshness": feature_freshness(name, catalog_digest(entry)),
+                "locked": not serves,
+                "capability": None
+                if serves
+                else (
+                    "no Detected Harness of this machine is one this Feature can "
+                    f"serve; it serves {', '.join(declared) or 'no Harness'}"
+                ),
+                "detail": " ".join(details) or None,
+            }
+        )
+    return rows
+
+
+def feature_change(
+    answer: list[str], harnesses: list[str], *, global_layer: bool
+) -> tuple[list[str], list[str], list[str]]:
+    """Split the Catalog's Features into what the answer installs, removes, and leaves.
+
+    The Project layer changes none of them, so every Feature is left alone
+    there and the payload's own note says why rather than a row pretending
+    otherwise.
+
+    A Feature is never *carried* the way a Skill is. What `carried` protects is
+    a local edit a re-copy would overwrite, and a Feature has no copy in a
+    layer to edit: what it owns is an entry inside a Harness's own
+    configuration, where installing again is the same convergence as installing
+    once. So an Enabled Feature that is not fully healthy is repaired by any
+    run that reaches it, which is what an unattended `--as-is` promises.
+    """
+
+    if not global_layer:
+        return [], [], [str(entry["name"]) for entry in catalog_features()]
+
+    place: list[str] = []
+    remove: list[str] = []
+    noop: list[str] = []
+
+    for entry in catalog_features():
+        name = str(entry["name"])
+        serves = feature_serves(entry, harnesses)
+        state = feature_state(name, serves, global_layer=True)
+        if name not in answer:
+            if state != "disabled":
+                remove.append(name)
+            continue
+        if not serves or state == "enabled":
+            noop.append(name)
+        else:
+            place.append(name)
+
+    return place, remove, noop
+
+
+def feature_outcome(
+    place: list[str], remove: list[str], harnesses: list[str], *, global_layer: bool
+) -> dict[str, Any]:
+    """Install and tear down the answered Features, and verify both off the disk.
+
+    The transport's own contract, applied to a kind of entry the transport
+    never touches: the word a Feature was told is not the evidence it did
+    anything, so each one is asked afterwards what its Harnesses actually hold
+    (ADR-0003). A Feature that could not be brought to the answered state is
+    named with the Harnesses it was asked about, which is where to look.
+    """
+
+    if not global_layer:
+        return {
+            "intended": [],
+            "confirmed": [],
+            "failed": [],
+            "placed": [],
+            "removed": [],
+            "installed_integrations": [],
+            "removed_integrations": [],
+            "note": PROJECT_LAYER_FEATURES_NOTE,
+        }
+
+    entries = feature_entries()
+    installed = [
+        run_feature(
+            name,
+            "install-integrations",
+            feature_serves(entries.get(name, {}), harnesses),
+        )
+        for name in place
+    ]
+    torn_down = [run_feature(name, "remove-integrations", []) for name in remove]
+
+    confirmed: list[str] = []
+    failed: list[dict[str, Any]] = []
+    for name, wanted in [(name, "enabled") for name in place] + [
+        (name, "disabled") for name in remove
+    ]:
+        serves = feature_serves(entries.get(name, {}), harnesses)
+        if feature_state(name, serves, global_layer=True) == wanted:
+            confirmed.append(name)
+        else:
+            failed.append({"name": name, "harnesses": serves})
+
+    return {
+        "intended": [*place, *remove],
+        "confirmed": confirmed,
+        "failed": failed,
+        "placed": place,
+        "removed": remove,
+        "installed_integrations": installed,
+        "removed_integrations": torn_down,
+        "note": None,
+    }
+
+
+def unattempted_features(*, global_layer: bool) -> dict[str, Any]:
+    """Return the answer of a run that changed no Feature in this layer."""
+
+    return {
+        "intended": [],
+        "confirmed": [],
+        "failed": [],
+        "placed": [],
+        "removed": [],
+        "installed_integrations": [],
+        "removed_integrations": [],
+        "note": None if global_layer else PROJECT_LAYER_FEATURES_NOTE,
+    }
+
+
+def teardown_features(harnesses: list[str]) -> dict[str, Any]:
+    """Take every Enabled Feature's integrations off this machine.
+
+    Uninstall's own use, and the one seam where leaving them would be worst: a
+    hook naming a script inside a Manager that has just been deleted is an
+    entry the Harness runs at every session and nothing answers.
+    """
+
+    return feature_outcome(
+        [],
+        enabled_feature_names(harnesses, global_layer=True),
+        harnesses,
+        global_layer=True,
+    )
+
+
 def select_payload(*, global_layer: bool) -> dict[str, Any]:
     """Build the list the user reads and answers in one gesture.
+
+    Two groups rather than one: the Catalog's Skills, and under them the
+    Catalog's Features, which are the entries that install nothing a Harness
+    loads and only write into a Harness's own configuration (ADR-0173). A
+    Feature's row carries what it writes and where, because a row that edits a
+    file the user owns and reads has to say so before it is checked.
 
     One row per Catalog skill, grouped by Category so related skills are read
     together (ADR-0015), and everything a row is judged on carried on the row:
@@ -2480,6 +2956,8 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
         "catalog_refreshed": catalog_from_origin(),
         "directories": target_dirs(harnesses, global_layer=global_layer),
         "categories": categories,
+        "features": feature_rows(harnesses, global_layer=global_layer),
+        "features_note": None if global_layer else PROJECT_LAYER_FEATURES_NOTE,
         "withdrawn": withdrawn_names(harnesses, global_layer=global_layer),
     }
 
@@ -2517,8 +2995,21 @@ def delta_answer(
     # the Dependencies this layer already Satisfies, and the set on disk.
     entries = catalog_entries()
     satisfied = satisfying_names(harnesses, global_layer=global_layer)
-    answer = enabled_names(harnesses, global_layer=global_layer)
-    carried = frozenset() if as_is else frozenset(answer) - frozenset(on)
+    answer = [
+        *enabled_names(harnesses, global_layer=global_layer),
+        *enabled_feature_names(harnesses, global_layer=global_layer),
+    ]
+
+    # Only Skills are ever carried. A Feature has no copy in a layer for a
+    # re-copy to overwrite, so the edit this protects cannot exist for one
+    # (ADR-0173), and `feature_change` converges an Enabled Feature that is
+    # not healthy whichever form the run arrived in.
+    carried = (
+        frozenset()
+        if as_is
+        else frozenset(enabled_names(harnesses, global_layer=global_layer))
+        - frozenset(on)
+    )
 
     # Each named Skill brings the chain it cannot work without, ahead of
     # itself, so the order is the order the Skills would be checked in.
@@ -2711,7 +3202,15 @@ def cmd_apply_select(
     global_layer: bool,
     yes: bool,
 ) -> int:
-    """Make the targeted layer hold exactly the skills the answer checked.
+    """Make the targeted layer hold exactly the entries the answer checked.
+
+    Skills and Features are answered together and reported apart: a Skill's
+    outcome is about files in a layer and a Feature's is about entries in a
+    Harness's own configuration, so the run carries the Features' own
+    `intended`, `confirmed`, `failed`, `placed`, and `removed` under `features`
+    rather than folding two different kinds of evidence into one list
+    (ADR-0173). What each Feature's own script did is reported beside every
+    other owned integration, under the keys those already have.
 
     Both halves of the answer are one verb's work, so both are reported
     together: `intended`, `confirmed`, and `failed` cover the run, and
@@ -2755,17 +3254,32 @@ def cmd_apply_select(
     place, remove, noop = select_change(
         answer, harnesses, directories, carried=carried, global_layer=global_layer
     )
+    feature_place, feature_remove, feature_noop = feature_change(
+        answer, harnesses, global_layer=global_layer
+    )
 
     # Unchecking deletes files the user chose to delete, and a script cannot
-    # prompt, so the flag is that half of the answer's gate (ADR-0029).
+    # prompt, so the flag is that half of the answer's gate (ADR-0029). An
+    # unchecked Feature deletes no file and still changes a Harness's own
+    # configuration, which is the user's file too, so it is gated in its own
+    # words rather than under a sentence about files that would be false.
     if remove:
         require_yes(yes, "unchecking these skills deletes their files")
+    if feature_remove:
+        require_yes(
+            yes,
+            "unchecking these Features takes what they wrote back out of your "
+            "Harnesses' own configuration",
+        )
 
     # The removals are read off the disk rather than raised, because the
     # placements have already landed by then: a transport that refuses one name
     # must not cost the user the report of what the same run did place.
     placed = add_skills(place, harnesses, global_layer=global_layer)
     removed = removal_outcome(remove, harnesses, global_layer=global_layer)
+    features = feature_outcome(
+        feature_place, feature_remove, harnesses, global_layer=global_layer
+    )
     outcome = {
         "intended": [*placed["intended"], *removed["intended"]],
         "confirmed": [*placed["confirmed"], *removed["confirmed"]],
@@ -2777,18 +3291,30 @@ def cmd_apply_select(
             **outcome,
             "placed": place,
             "removed": remove,
-            "noop": noop,
-            "integrations": placement_integrations(
-                placed["confirmed"], directories, harnesses, global_layer=global_layer
+            "noop": [*noop, *feature_noop],
+            "features": {**features, "noop": feature_noop},
+            "integrations": with_records(
+                placement_integrations(
+                    placed["confirmed"],
+                    directories,
+                    harnesses,
+                    global_layer=global_layer,
+                ),
+                features["installed_integrations"],
             ),
-            "removed_integrations": removed["removed_integrations"],
+            "removed_integrations": with_records(
+                removed["removed_integrations"], features["removed_integrations"]
+            ),
             "unsatisfied": unsatisfied_on_disk(harnesses, global_layer=global_layer),
             "layer": "global" if global_layer else "project",
             "catalog_refreshed": catalog_from_origin(),
             "directories": target_dirs(harnesses, global_layer=global_layer),
         }
     )
-    return outcome_exit_code(outcome)
+
+    # One rule across both entry types: a change the disk does not show fails
+    # the run, whichever kind of entry failed to make it.
+    return outcome_exit_code({"failed": [*outcome["failed"], *features["failed"]]})
 
 
 def cmd_plan_uninstall() -> int:
@@ -2800,6 +3326,7 @@ def cmd_plan_uninstall() -> int:
             "action": "uninstall",
             "layer": "global",
             "skills": [*enabled_names(harnesses, global_layer=True), MANAGER],
+            "features": enabled_feature_names(harnesses, global_layer=True),
             "catalog_refreshed": catalog_from_origin(),
             "directories": target_dirs(harnesses, global_layer=True),
         }
@@ -2830,17 +3357,29 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
     # read while the snapshot it may have come from is still on disk.
     refreshed = catalog_from_origin()
 
+    # The Features go first, while the Manager they ship inside is still on
+    # disk to run them: a hook naming a script inside a deleted Manager is an
+    # entry the Harness runs at every session and nothing answers (ADR-0173).
+    features = feature_outcome(
+        [],
+        enabled_feature_names(harnesses, global_layer=True),
+        harnesses,
+        global_layer=True,
+    )
+
     collection = removal_outcome(
         enabled_names(harnesses, global_layer=True), harnesses, global_layer=True
     )
-    integrations = collection["removed_integrations"]
+    integrations = with_records(
+        collection["removed_integrations"], features["removed_integrations"]
+    )
     outcome = {key: collection[key] for key in ("intended", "confirmed", "failed")}
 
     # The Manager goes last, and only where the rest of the collection really
     # left: it is the one skill that can be asked to finish the job, and a
     # machine holding skills with no verb left to remove them is worse off than
     # one whose Manager outlives them by a run.
-    if not outcome["failed"]:
+    if not outcome["failed"] and not features["failed"]:
         manager = removal_outcome([MANAGER], harnesses, global_layer=True)
         integrations = joined_integrations(
             integrations, manager["removed_integrations"]
@@ -2858,6 +3397,7 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
             # under: this one places nothing, so `integrations` — which means
             # a placement everywhere else — never appears here (issue #258).
             "removed_integrations": integrations,
+            "features": features,
             "catalog_refreshed": refreshed,
             "layer": "global",
             "directories": directories,
@@ -2961,6 +3501,25 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
         global_layer=global_layer,
     )
 
+    # A refreshed Manager is a refreshed Feature: a Feature ships inside it, so
+    # the script a Harness's hook table names and the prose a Feature's block
+    # carries both come from the tree this run has just replaced. Re-converging
+    # every Enabled Feature is what keeps a Harness from going on reading last
+    # release's block; installing again is the same convergence as installing
+    # once, so a Feature already correct costs nothing (ADR-0173).
+    #
+    # Only Enabled ones. A Feature new in this Catalog is not adopted here even
+    # under `--yes`, unlike a new Skill: a Feature writes into files the user
+    # owns and reads, and an unattended run must never place instructions the
+    # user has not read (ADR-0043). It is offered by `select`, where what it
+    # writes is on the row beside the checkbox.
+    features = feature_outcome(
+        enabled_feature_names(harnesses, global_layer=global_layer),
+        [],
+        harnesses,
+        global_layer=global_layer,
+    )
+
     # Update is the collection's one writer of the snapshot, and what holds it
     # back is any failed replacement. The difference against this file is the
     # whole of what makes an entry new, so a failed run must leave the prior
@@ -3016,12 +3575,16 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
             "enabled": adopted,
             "current": current,
             "removed": withdrawals,
-            "integrations": placement_integrations(
-                outcome["confirmed"],
-                layer_dirs(harnesses, global_layer=global_layer),
-                harnesses,
-                global_layer=global_layer,
+            "integrations": with_records(
+                placement_integrations(
+                    outcome["confirmed"],
+                    layer_dirs(harnesses, global_layer=global_layer),
+                    harnesses,
+                    global_layer=global_layer,
+                ),
+                features["installed_integrations"],
             ),
+            "features": features,
             # The withdrawal teardown's own records already sit beside each
             # withdrawal in `removed`, so what is left to carry here is the
             # answer's `note` — the sentence a Project-layer run has for a
@@ -3440,7 +4003,127 @@ def generate_catalog(source: Path) -> dict[str, Any]:
         "origin": ORIGIN,
         "manager_digest": manager_digest(manager),
         "skills": entries,
+        FEATURES: generate_features(manager, {entry["name"] for entry in entries}),
     }
+
+
+# What a Feature's row has to say before it is checked, read from the Feature's
+# own page rather than from a metadata string: these are sentences a person
+# writes and a person reads, and `metadata` holds strings with spaces in them
+# (ADR-0061), which a list of sentences is not.
+WRITES_HEADING = "## Writes"
+
+
+def feature_writes(text: str) -> list[str]:
+    """Return the bullets under a Feature's `## Writes` heading.
+
+    One line per thing the Feature writes and where. Select puts these in front
+    of the user in the single question it asks before writing anything, because
+    a row that edits a file the user owns and reads has to say so before it is
+    checked rather than after (ADR-0173).
+    """
+
+    lines = text.splitlines()
+    try:
+        start = lines.index(WRITES_HEADING) + 1
+    except ValueError:
+        return []
+
+    bullets: list[str] = []
+    for line in lines[start:]:
+        if line.startswith("## "):
+            break
+        if line.startswith("- "):
+            bullets.append(line[2:].strip())
+        elif bullets and line.startswith("  ") and line.strip():
+            bullets[-1] = f"{bullets[-1]} {line.strip()}"
+    return bullets
+
+
+def generate_features(manager: Path, skill_names: set[str]) -> list[dict[str, Any]]:
+    """Build the Catalog's Feature entries from the `FEATURE.md` files inside the Manager.
+
+    A Feature ships inside the Manager because it has nothing a Harness loads:
+    what it owns is an entry in a Harness's own configuration, and the Manager
+    is the one directory always on the machine to run it from (ADR-0173). So
+    generation reads `skills/kntnt/features/*/FEATURE.md` rather than a second
+    tree of its own.
+
+    Everything a Skill's generation refuses, this refuses too, for the same
+    reasons — an unreadable declaration, a name that is not the directory, an
+    empty description, a Capability nothing defines — plus the two a Feature
+    has of its own: a Harness it claims to serve that this collection has no
+    path for, and a name a Skill already carries, which would make the one
+    checked set the list is answered as ambiguous.
+    """
+
+    entries: list[dict[str, Any]] = []
+    for feature_md in sorted((manager / FEATURES).glob("*/FEATURE.md")):
+        text = feature_md.read_text(encoding="utf-8")
+        frontmatter = parse_frontmatter(text)
+        name = str(frontmatter.get("name") or feature_md.parent.name)
+        fault = marker_fault(frontmatter)
+        if fault is not None:
+            raise ManagerError(f"{feature_md}: {fault}")
+
+        block = collection_block(frontmatter) or {}
+        deps = {
+            key: str(block.get(key, "")).split() for key in ("binaries", "capabilities")
+        }
+        capability_notes(deps["capabilities"])
+        harnesses = str(block.get("harnesses", "")).split()
+        description = str(frontmatter.get("description") or "")
+
+        if name != feature_md.parent.name:
+            raise ManagerError(
+                f"{feature_md}: name '{name}' is not the directory "
+                f"'{feature_md.parent.name}'; a Feature is addressed by its directory"
+            )
+        if name in skill_names:
+            raise ManagerError(
+                f"{feature_md}: '{name}' is also a Skill; the list is answered as "
+                "one checked set, so a name has to mean one entry"
+            )
+        if not description:
+            raise ManagerError(f"{feature_md}: description is empty")
+        if not harnesses:
+            raise ManagerError(
+                f"{feature_md}: metadata.{METADATA_PREFIX}harnesses is empty; a "
+                "Feature that serves no Harness can never be Enabled anywhere"
+            )
+        unknown = [name for name in harnesses if name not in harness_paths()]
+        if unknown:
+            raise ManagerError(
+                f"{feature_md}: no Harness is named '{unknown[0]}' in the harness "
+                "path table"
+            )
+        declared = str(block.get("integrations", ""))
+        if not declared or not (feature_md.parent / declared).is_file():
+            raise ManagerError(
+                f"{feature_md}: metadata.{METADATA_PREFIX}integrations names no "
+                "script inside this Feature; a Feature that installs nothing is "
+                "nothing to Enable"
+            )
+        writes = feature_writes(text)
+        if not writes:
+            raise ManagerError(
+                f"{feature_md}: no '{WRITES_HEADING}' bullets; a Feature's row has "
+                "to say what it writes and where before it is checked"
+            )
+
+        entries.append(
+            {
+                "name": name,
+                "category": str(block.get("category") or "other"),
+                "description": description,
+                "digest": directory_digest(feature_md.parent),
+                "binaries": deps["binaries"],
+                "capabilities": deps["capabilities"],
+                "harnesses": harnesses,
+                "writes": writes,
+            }
+        )
+    return entries
 
 
 def cmd_catalog(*, write: bool) -> int:
