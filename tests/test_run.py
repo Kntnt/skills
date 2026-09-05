@@ -1615,6 +1615,40 @@ def test_plan_refuses_a_body_edge_the_relation_does_not_carry(
     assert "relation" in result.stderr or "missing edge" in result.stderr
 
 
+def test_plan_precedence_when_body_names_only_tickets_the_relation_carries(
+    tmp_path: Path,
+) -> None:
+    """Where the relation carries at least one edge, and the body names only
+    tickets the relation already carries, precedence holds and nothing changes
+    observable: the relation stays the source, and every plan reports the
+    blockers it reports today."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(8, "the foundation"),
+                _ticket(9, "the skeleton"),
+                _ticket(
+                    10,
+                    "the graph",
+                    blocked_by=[(8, "OPEN"), (9, "OPEN")],
+                    body="## Blocked by\n\n- #8\n",
+                ),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [8, 9]
+    assert plan["blocked"] == [10]
+    assert plan["tickets"][2]["blocked_by"] == [8, 9]
+
+
 def test_plan_allows_a_body_naming_the_same_closed_done_ticket_the_relation_carries(
     tmp_path: Path,
 ) -> None:
