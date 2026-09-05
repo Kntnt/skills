@@ -60,6 +60,12 @@ The files differ from the Catalog Digest. Re-copying overwrites the layer's curr
 
 The Skill depends on an unchecked Collection Skill. The row names it; leaving it unchecked is allowed but reported as Unsatisfied.
 
+## FILES
+
+**Harness Integrations**
+
+A Skill may own a Harness Integration: what it writes into a Harness's own configuration so the Harness calls that Skill at its own lifecycle moments. It is written outside the Skill's own directory, so deleting the Skill's files does not reach it. Checking a Skill in Global asks that Skill to install what it owns, and unchecking one asks it to remove them before its files go; the Project layer installs and removes none. The report says what became of each.
+
 ## OFFLINE OPERATION
 
 Offline, Select uses the stored Catalog. It cannot fetch help for absent Skills or identify current versus Deviating files, so it offers no refresh.

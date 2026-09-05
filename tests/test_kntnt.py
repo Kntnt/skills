@@ -1291,6 +1291,96 @@ def test_the_steps_relay_the_reason_and_still_distrust_the_transport() -> None:
         )
 
 
+# The one report contract for what became of a Skill's Harness Integrations,
+# written as the same sentences in each changing verb's step file. The Manager
+# has no file all three include, so the suite is what holds them together —
+# exactly as it holds `the transport said:` across those same three (#258).
+_INTEGRATION_REPORT_SENTENCES = (
+    "A Harness Integration is what a Skill writes into a Harness's own configuration so that Harness calls the Skill at its own lifecycle moments, and it sits outside the Skill's own directory, where deleting that Skill's files never reaches it.",
+    "Each record is one Skill's own answer — its `name`, its `status`, a `detail`, and the per-Harness entries it answered with under `installed` or `removed` — and each of those entries carries its own `harness`, `status`, `entries`, and `detail`.",
+    "Read the records per Skill and per Harness rather than one line per record: the Manager asks a Skill once per directory that holds it, so a Skill in two trees answers twice about one integration written once into one Harness, and those identical records are one finding rather than two.",
+    "Where records for one Skill disagree, the disagreement is itself the finding and is reported once rather than as two outcomes the user has to reconcile, and a record that reached no Harness at all is reported against the Skill alone rather than against a Harness nobody established.",
+    "Name a failed install or teardown per Skill in the payload's own words, passing its `detail` on as it stands rather than paraphrasing it: the Manager has already cut a failed script's own output at two hundred characters, and nothing else is cut.",
+    "An integration failure raises nothing and moves no exit code, so a run whose files all landed and which exits zero can still be a run you do not call clean: say what failed, and do not call it clean.",
+    "Report a `note` wherever it is not null: it says this layer installs or removes no integration, and a user who unchecked a Skill in a project has to be told that rather than left believing their machine-wide integration went with the files.",
+    "A per-Harness entry that removed nothing — `removed` with `entries` at zero — is the converged state and adds nothing: a teardown attempts every Harness the collection has an adapter for, whether or not this machine ever held an entry there.",
+    "What is reported comes from the records the payload carries and never from the run's own list of Skills, so a Skill that owns no Harness Integration adds nothing here.",
+    "Done when the user has been told what became of every Harness Integration the payload names, or it named none.",
+)
+
+# What only a verb that can place a Skill's files ever produces. Written beside
+# the shared block in the two files whose verb can reach it, and never in the
+# file whose verb cannot: prose that can never fire is prose nobody can act on.
+_PLACEMENT_REPORT_SENTENCES = (
+    "A per-Harness entry whose `status` is `installed` and whose `detail` is not null is gated: report it as present and not yet active, never as installed and working, and pass on that whole `detail`, which is what tells the user how to activate it.",
+    "Where a record's `unsupported` carries a `count` that is not zero, say that many Harnesses no adapter serves, as that count and never as names — the payload names none of them deliberately — and say nothing where the count is zero.",
+)
+
+
+def test_every_changing_verb_reports_what_became_of_its_harness_integrations() -> None:
+    """One contract, stated as the same sentences in each of the three files.
+
+    Every changing verb asks each Skill what became of the integrations it
+    owns, and until this landed no step file mentioned integrations at all: an
+    agent following the steps exactly called the run clean while a feature the
+    user believes is on sat inert on disk (ADR-0090, ADR-0157, issue #258).
+    """
+
+    steps = REPO_ROOT / "skills" / "kntnt" / "steps"
+    for name in ("select.md", "update.md", "uninstall.md"):
+        text = (steps / name).read_text(encoding="utf-8")
+
+        assert "`removed_integrations`" in text, name
+        for sentence in _INTEGRATION_REPORT_SENTENCES:
+            assert sentence in text, (name, sentence)
+
+    # A gated install and a count of unserved Harnesses come only from a
+    # placement, so they are in the two files whose verb can place.
+    for name in ("select.md", "update.md"):
+        text = (steps / name).read_text(encoding="utf-8")
+        for sentence in _PLACEMENT_REPORT_SENTENCES:
+            assert sentence in text, (name, sentence)
+
+    uninstall = (steps / "uninstall.md").read_text(encoding="utf-8")
+    for sentence in _PLACEMENT_REPORT_SENTENCES:
+        assert sentence not in uninstall
+
+    # And the verb with no placement reads no placement key: `integrations`
+    # means a placement everywhere, which Uninstall never makes.
+    assert "`integrations`" not in uninstall
+
+
+def test_every_changing_verbs_page_names_the_state_outside_a_skills_directory() -> None:
+    """A verb that writes or removes state a Skill's own files do not carry.
+
+    Deleting a Skill's directory does not reach what it wrote into a Harness's
+    own configuration, so the pages say where that state is and which verb
+    touches it (issue #258).
+    """
+
+    for name in ("select.md", "update.md", "uninstall.md"):
+        page = MANAGER_DIR / "help" / name
+        text = page.read_text(encoding="utf-8")
+        files = _section(text, "## FILES", page)
+
+        assert "Harness Integration" in files, name
+        assert "outside the Skill's own directory" in files, name
+
+        # The optional sections sit where the standard puts them: after the
+        # description and before the collection's own DEPENDENCIES.
+        assert (
+            text.index("\n## DESCRIPTION\n")
+            < text.index("\n## FILES\n")
+            < text.index("\n## DEPENDENCIES\n")
+        ), name
+
+    # Only the verb that never places says so; the other two do both halves.
+    uninstall = (MANAGER_DIR / "help" / "uninstall.md").read_text(encoding="utf-8")
+    assert "installs none" in _section(
+        uninstall, "## FILES", MANAGER_DIR / "help" / "uninstall.md"
+    )
+
+
 def test_select_on_enables_a_skill_and_opens_no_list(tmp_path: Path) -> None:
     """A machine is set up without a human at the list (ADR-0043)."""
 
@@ -3489,6 +3579,210 @@ def test_update_installs_a_newly_adopted_entrys_own_integration(
     ]
 
 
+def test_select_reports_the_teardown_it_ran_under_its_own_key(
+    tmp_path: Path,
+) -> None:
+    """The teardown's own answer leaves the process, under a key of its own.
+
+    `integrations` is the placement answer everywhere, so a removal answers
+    beside it rather than inside it: one key, one meaning, across every verb
+    (issue #258).
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _integration_stub())
+
+    placed = _run(world, "apply", "select", "gamma")
+
+    # A run that tore nothing down still carries the key: an empty `attempted`
+    # says no Skill here owns one, which is not the same answer as silence.
+    assert placed.returncode == 0, placed.stderr
+    assert _json(placed)["removed_integrations"] == {"attempted": [], "note": None}
+
+    result = _run(world, "apply", "select", "--off", "gamma", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["removed"] == ["gamma"]
+    assert payload["removed_integrations"] == {
+        "attempted": [
+            {
+                "name": "gamma",
+                "status": "removed",
+                "detail": None,
+                "removed": [{"harness": "claude-code"}],
+            }
+        ],
+        "note": None,
+    }
+
+
+def test_select_at_the_project_layer_reports_why_it_tore_nothing_down(
+    tmp_path: Path,
+) -> None:
+    """The gate's own note reaches the user rather than dying in the process.
+
+    A Project-layer uncheck leaves the Global Enable's owned entry standing,
+    and a report that swallowed the reason would leave the user believing
+    their machine-wide integration went with the files (issue #258).
+    """
+
+    world = _world(tmp_path)
+    _present(world, "project", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _integration_stub())
+    assert _run(world, "apply", "select", "--project", "gamma").returncode == 0
+
+    result = _run(world, "apply", "select", "--project", "--off", "gamma", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["removed_integrations"]["attempted"] == []
+    assert payload["removed_integrations"]["note"]
+
+
+def test_a_refused_removal_still_reports_what_it_already_tore_down(
+    tmp_path: Path,
+) -> None:
+    """The teardown ran before the transport refused, and the machine changed.
+
+    A run that pulled a Skill's hooks out of a Harness and then failed has
+    changed the machine, so the answer may not unwind away with the exception
+    (ADR-0036, issue #258).
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _integration_stub())
+    assert _run(world, "apply", "select", "gamma").returncode == 0
+
+    result = _run(world, "apply", "select", "--off", "gamma", "--yes", refuse=["gamma"])
+
+    assert result.returncode != 0
+    attempted = _json(result)["removed_integrations"]["attempted"]
+    assert [item["name"] for item in attempted] == ["gamma"]
+    assert attempted[0]["removed"] == [{"harness": "claude-code"}]
+
+
+def test_update_reports_the_withdrawal_gate_beside_its_per_skill_records(
+    tmp_path: Path,
+) -> None:
+    """The note has nowhere to sit in a per-Skill list, so it sits beside it.
+
+    The records themselves stay inside each withdrawal and are not repeated,
+    which is why `attempted` is empty here (issue #258).
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _integration_stub())
+    _run(world, "apply", "select", "gamma")
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _apply_update(world)
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["removed_integrations"] == {"attempted": [], "note": None}
+    assert [row["status"] for row in payload["removed"][0]["integrations"]] == [
+        "removed"
+    ]
+
+
+def test_update_at_the_project_layer_reports_why_it_withdrew_no_integration(
+    tmp_path: Path,
+) -> None:
+    """The same gate, reported by the verb that meets it on a withdrawal."""
+
+    world = _world(tmp_path)
+    _present(world, "project", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _integration_stub())
+    assert _run(world, "apply", "select", "--project", "gamma").returncode == 0
+    _withdraw(world, "gamma", "text", _SURVIVORS)
+
+    result = _apply_update(world, "--project")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert payload["removed_integrations"]["attempted"] == []
+    assert payload["removed_integrations"]["note"]
+
+
+def test_uninstall_reports_both_of_its_teardowns_under_one_key(
+    tmp_path: Path,
+) -> None:
+    """Uninstall tears down twice, and both answers are the one list.
+
+    The collection's Skills go first and the Manager last, so the run has two
+    teardowns to account for and one place to account for them (issue #258).
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _integration_stub())
+    _write(
+        world["source"] / "skills" / "kntnt" / "SKILL.md",
+        _skill_md("kntnt", description="Manager.", integrations="scripts/own.py"),
+    )
+    _write(
+        world["source"] / "skills" / "kntnt" / "scripts" / "own.py",
+        _integration_stub(),
+    )
+    _run(world, "apply", "select", "gamma")
+    _install_manager(world)
+
+    result = _run(world, "apply", "uninstall", "--yes")
+
+    assert result.returncode == 0, result.stderr
+    payload = _json(result)
+    assert "integrations" not in payload
+    assert payload["removed_integrations"]["note"] is None
+    assert [item["name"] for item in payload["removed_integrations"]["attempted"]] == [
+        "gamma",
+        "kntnt",
+    ]
+
+
+def test_uninstall_reports_the_teardown_of_a_run_that_left_a_skill_behind(
+    tmp_path: Path,
+) -> None:
+    """The failure path answers under the same key as every other path.
+
+    A removal the disk contradicts emitted that list under `integrations` —
+    the key that means a placement everywhere else — while a run that reached
+    the Manager emitted nothing at all (issue #258).
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    gamma = world["source"] / "skills" / "text" / "gamma"
+    _write(gamma / "SKILL.md", _skill_md("gamma", integrations="scripts/own.py"))
+    _write(gamma / "scripts" / "own.py", _integration_stub())
+    _run(world, "apply", "select", "alpha", "gamma")
+    _install_manager(world)
+
+    result = _run(world, "apply", "uninstall", "--yes", skip=["alpha"])
+
+    assert result.returncode != 0
+    payload = _json(result)
+    assert "integrations" not in payload
+    assert [item["name"] for item in payload["removed_integrations"]["attempted"]] == [
+        "gamma"
+    ]
+
+
 def test_update_never_asks_the_transport_for_a_withdrawn_skill(
     tmp_path: Path,
 ) -> None:
@@ -3622,6 +3916,7 @@ def test_the_relayed_reason_never_reaches_the_payload(tmp_path: Path) -> None:
         "current",
         "removed",
         "integrations",
+        "removed_integrations",
         "catalog_refreshed",
         "unsatisfied",
         "capabilities",
@@ -4558,13 +4853,17 @@ def test_failed_publication_never_tears_down_withdrawn_integrations(
         lambda names, directories: teardowns.append(names),
     )
 
-    _, withdrawals = module.refresh_outcome(
+    _, withdrawals, integrations = module.refresh_outcome(
         [], ["gamma"], ["claude-code"], global_layer=True
     )
 
     assert teardowns == []
     assert target.is_dir()
     assert withdrawals[0]["disk"] == "failed"
+
+    # A publication that never committed tore nothing down, and the answer it
+    # carries says exactly that rather than nothing at all.
+    assert integrations == {"attempted": [], "note": None}
 
 
 def test_symlinked_logical_targets_publish_to_one_physical_tree(
