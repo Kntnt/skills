@@ -23,6 +23,30 @@ CITING_DOCS = ("CONTEXT.md", "README.md", "AGENTS.md", "CONTRIBUTING.md")
 STANDARD_DIR = REPO_ROOT / "docs" / "rules"
 TESTS = REPO_ROOT / "tests"
 
+# The research notes, which cite records the same way, and among them the
+# triage table the archive reform is built from. The table names every record
+# by its bare number rather than as a citation, so its completeness is checked
+# on its own below while its `ADR-NNNN` citations resolve with everything
+# else's. Both the table and this machinery go when the folded records do.
+RESEARCH_DIR = REPO_ROOT / "docs" / "research"
+TRIAGE = RESEARCH_DIR / "adr-triage.md"
+
+# The nine bins the triage sorts a record into: six consolidation bins, the
+# two the rework used beside them, and the one `main` added for a record of
+# /orchestrate's own machinery.
+BINS = ("C1", "C2", "C3", "C4", "C5", "C6", "DROP", "KEEP", "RUNTIME")
+
+# The two files whose citation is the whole of the `RUNTIME` criterion: the
+# engine behind /orchestrate and the suite that holds it to its record.
+RUNTIME_SOURCES = (
+    REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py",
+    TESTS / "test_orchestrate.py",
+)
+
+# A table row opens with the four-digit number of the record it bins, and its
+# third cell is the bin.
+TRIAGE_ROW = re.compile(r"^\|\s*(\d{4})\s*\|")
+
 # A record's file is `NNNN-slug.md` and its number is that four-digit prefix;
 # a citation is the same number written as `ADR-NNNN`.
 RECORD = re.compile(r"^(\d{4})-.+\.md$")
@@ -125,6 +149,7 @@ def _sources() -> list[Path]:
         sorted(ADR.glob("*.md"))
         + [REPO_ROOT / name for name in CITING_DOCS]
         + sorted(STANDARD_DIR.glob("*.md"))
+        + sorted(RESEARCH_DIR.glob("*.md"))
         + sorted(TESTS.glob("*.py"))
     )
 
@@ -780,4 +805,90 @@ def test_a_pointer_names_a_later_record() -> None:
         f"{invalid}: a pointer names the record that outran the one carrying"
         f" it, so it must cite a record that exists and comes later."
         f" See ADR-0075."
+    )
+
+
+def _triage() -> dict[str, tuple[str, str]]:
+    """Map each number the triage table bins to its bin and its note."""
+
+    binned: dict[str, tuple[str, str]] = {}
+    for line in TRIAGE.read_text(encoding="utf-8").splitlines():
+        match = TRIAGE_ROW.match(line)
+        if match is None:
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        binned[match.group(1)] = (cells[2], cells[-1])
+    return binned
+
+
+def _runtime_citations() -> dict[str, list[str]]:
+    """Map each number /orchestrate's engine or its suite cites to those files."""
+
+    cited: dict[str, list[str]] = {}
+    for path in RUNTIME_SOURCES:
+        where = str(path.relative_to(REPO_ROOT))
+        for number in CITATION.findall(path.read_text(encoding="utf-8")):
+            citing = cited.setdefault(number, [])
+            if where not in citing:
+                citing.append(where)
+    return cited
+
+
+def test_the_triage_bins_every_record_exactly_once() -> None:
+    """The tickets that fold the archive read the table as the whole list.
+
+    A record the table omits is a record no consolidation record names and the
+    deletion sweep leaves standing; a number the table bins and no record
+    carries sends a sweep looking for a file that is not there. So the two
+    sets are compared whole rather than one direction at a time.
+    """
+
+    binned = _triage()
+    records = set(_records())
+
+    unbinned = records - set(binned)
+    phantom = set(binned) - records
+    assert (unbinned, phantom) == (set(), set()), (
+        f"{unbinned} are records the triage does not bin and {phantom} are"
+        f" numbers it bins that no record carries. See docs/research/adr-triage.md."
+    )
+
+    unknown = {bin_ for bin_, _ in binned.values()} - set(BINS)
+    assert unknown == set(), f"{unknown}: a bin outside {BINS} names no outcome."
+
+
+def test_the_runtime_bin_is_exactly_what_orchestrates_own_files_cite() -> None:
+    """`RUNTIME` is a citation, not a reading of what a record is about.
+
+    /orchestrate stays on `main` and no rules module restates its machinery,
+    so a record its engine or its suite cites is neither consolidated nor
+    dropped. The criterion is the citation and nothing else: a record binned
+    `RUNTIME` that neither file cites would survive the sweep for a reason
+    nobody could check, and a record they cite that the sweep deletes leaves a
+    dangling pointer in the engine.
+    """
+
+    binned = _triage()
+    cited = _runtime_citations()
+
+    # A vocabulary that matched nothing would leave both sides empty and pass.
+    assert cited
+
+    runtime = {number for number, (bin_, _) in binned.items() if bin_ == "RUNTIME"}
+    assert runtime == set(cited), (
+        f"{runtime ^ set(cited)}: the RUNTIME bin is exactly the records"
+        f" {[str(p.relative_to(REPO_ROOT)) for p in RUNTIME_SOURCES]} cite,"
+        f" and no record is binned RUNTIME on any other ground."
+    )
+
+    # The note carries every file citing the record, so a reader of one row
+    # sees what holds it in place without grepping for it.
+    unsourced = {
+        number
+        for number, sources in cited.items()
+        if not all(source in binned[number][1] for source in sources)
+    }
+    assert unsourced == set(), (
+        f"{unsourced}: a RUNTIME row's note names the file whose citation"
+        f" is the whole of its bin."
     )
