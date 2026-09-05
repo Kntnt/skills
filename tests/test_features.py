@@ -521,6 +521,34 @@ def test_the_status_line_slot_is_taken_and_given_back(tmp_path: Path) -> None:
     assert "statusLine" not in _settings(tmp_path)
 
 
+def test_every_feature_answers_the_words_the_manager_says(tmp_path: Path) -> None:
+    """The Manager says one word in one shape to every Feature it installs.
+
+    It hands each one the same argument vector — the word, one `--harness` per
+    Detected Harness, and `--replace` where the user has confirmed — so a
+    Feature that had to be invoked its own way would make the seam a table of
+    exceptions the Manager has to keep. This is the check that was missing when
+    `session-cleanup` shipped without `--replace` and refused the Manager's own
+    install call with an argparse usage message.
+    """
+
+    for script in sorted(FEATURES.glob("*/scripts/*.py")):
+        for word in ("install-integrations", "health"):
+            completed = _run(
+                script,
+                word,
+                "--harness=claude-code",
+                "--replace",
+                home=tmp_path / script.parent.parent.name,
+            )
+            assert completed.returncode == 0, (
+                f"{script.relative_to(REPO_ROOT)} refused `{word} --harness=... "
+                f"--replace`, which is what the Manager says: {completed.stderr}"
+            )
+        removed = _run(script, "remove-integrations", home=tmp_path / "removal")
+        assert removed.returncode == 0, removed.stderr
+
+
 # --- the Catalog and the list ---------------------------------------------
 
 

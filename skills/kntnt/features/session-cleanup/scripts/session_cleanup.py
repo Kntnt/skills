@@ -800,6 +800,15 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--harness", action="append", default=[])
     parser.add_argument("--event", default="")
     parser.add_argument("--owner", default=OWNER)
+
+    # Part of the seam every Feature answers on rather than a flag of this
+    # one's: the Manager says one word in one shape to every Feature it
+    # installs, and a Feature it had to remember the argument list of would
+    # make the seam a table of exceptions. It means *the user has confirmed,
+    # so you may take state another owner holds*, and this Feature holds
+    # nothing of that kind — everything it owns goes in beside what is
+    # already there — so it accepts the word and has no use for it.
+    parser.add_argument("--replace", action="store_true")
     return parser.parse_args(argv)
 
 
