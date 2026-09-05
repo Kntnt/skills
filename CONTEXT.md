@@ -163,19 +163,19 @@ What one finished session on one Seat cost and how long it took. What it carries
 _Avoid_: run observation, evidence, telemetry, metric
 
 **Enabled**:
-A skill present on disk in a layer, in each Detected Harness's skills directory for that layer.
+A Catalog entry the user has chosen in a layer: a Skill present on disk in each Detected Harness's skills directory for that layer, and a Feature what its Harnesses actually hold, it placing no files a layer could be read off. What each is read from is stated in `docs/rules/collection.md` and `docs/rules/skills.md`.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)
 
 **Disabled**:
-A skill that is not present on disk in that layer.
+A Catalog entry that is not Enabled: a Skill not present on disk in that layer, and a Feature its Harnesses hold nothing of.
 _Avoid_: inactive, off, uninstalled
 
 **Partial**:
-A fact about the disk: a skill's files are present in some of the layer's Detected Harnesses and missing from others. It is not a third state a user chooses — a skill is Enabled or Disabled. What Select shows for such a skill is stated in `docs/rules/collection.md`.
+A fact about what is there rather than a third state a user chooses: a Skill's files are present in some of the layer's Detected Harnesses and missing from others, and a Feature is installed into some of the Harnesses it serves and not the rest. A Catalog entry is Enabled or Disabled. What Select shows for such an entry is stated in `docs/rules/collection.md`.
 _Avoid_: partially enabled, half-installed, third state, partial state
 
 **Catalog**:
-The collection's declared list of its skills, their dependencies, and each skill's Digest, authored in the repository and read from it at every invocation, so that it names what the collection provides now. A copy of it is stored beside the Manager. What a verb does with either — the fallback, and which verb may replace the stored copy — is stated in `docs/rules/collection.md`.
+The collection's declared list of its entries, Skills and Features alike, with the Skills' Dependencies and every entry's Digest, authored in the repository and read from it at every invocation, so that it names what the collection provides now. A copy of it is stored beside the Manager. What a verb does with either — the fallback, and which verb may replace the stored copy — is stated in `docs/rules/collection.md`.
 _Avoid_: manifest, registry, index, lockfile
 
 **Digest**:

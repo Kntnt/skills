@@ -22,7 +22,7 @@ kntnt - manage which collection Skills are Enabled
 
 Bare `kntnt` prints this page. Use `/kntnt <command> --help` or `/kntnt help <command>` for command help. Select can show help for a Skill that is not yet Enabled.
 
-Select lists every Catalog Skill, Enabled or not.
+Select lists every Catalog entry — its Skills and, under them, its Features — Enabled or not.
 
 Select and Update target Global by default; **--project** targets the current Project. Harnesses are detected on every run.
 
@@ -36,7 +36,7 @@ Print this page or the page for one Manager command.
 
 **select**
 
-List every Catalog Skill and change which ones are Enabled, or apply explicit `--on` and `--off` deltas.
+List every Catalog Skill and Feature and change which ones are Enabled, or apply explicit `--on` and `--off` deltas.
 
 **update**
 
