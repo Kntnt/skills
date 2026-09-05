@@ -3736,13 +3736,14 @@ def test_update_at_the_project_layer_reports_why_it_withdrew_no_integration(
     assert payload["removed_integrations"]["note"]
 
 
-def test_uninstall_reports_both_of_its_teardowns_under_one_key(
+def test_uninstall_reports_all_of_its_teardowns_under_one_key(
     tmp_path: Path,
 ) -> None:
-    """Uninstall tears down twice, and both answers are the one list.
+    """Uninstall tears down three times, and every answer is the one list.
 
-    The collection's Skills go first and the Manager last, so the run has two
-    teardowns to account for and one place to account for them (issue #258).
+    The Features and the collection's Skills go first and the Manager last, so
+    the run has three teardowns to account for and one place to account for
+    them (issue #258).
     """
 
     world = _world(tmp_path)

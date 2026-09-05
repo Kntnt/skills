@@ -2045,8 +2045,9 @@ def joined_integrations(
 ) -> dict[str, Any]:
     """Return two teardown answers as the one answer a verb reports.
 
-    Uninstall tears down twice — the collection's skills, then the Manager —
-    and both are one run's account of what left this machine's Harnesses. The
+    Uninstall tears down three times — the Features, the collection's skills,
+    then the Manager — and all three are one run's account of what left this
+    machine's Harnesses; the first two reach here already folded together. The
     note is a fact about the layer rather than about either half, so the two
     cannot disagree about it and the first that has one carries it.
     """
