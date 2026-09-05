@@ -2829,6 +2829,42 @@ def test_the_manpage_says_the_gate_is_resolved_once() -> None:
     )
 
 
+def test_serial_runs_gate_their_own_branch_before_reporting() -> None:
+    """A run that writes directly to its branch reads that final commit before reporting."""
+
+    skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+
+    assert "at exactly one" in skill.lower() and "before the report" in skill.lower(), (
+        f"{SKILL / 'SKILL.md'}: the serial path states that its own branch is"
+        " gated before the terminal report."
+    )
+    assert "same commands resolved at run start" in skill, (
+        f"{SKILL / 'SKILL.md'}: the serial gate reuses the frozen verification"
+        " commands rather than resolving a new gate."
+    )
+    assert "commit" in skill and "whether it passed" in skill, (
+        f"{SKILL / 'SKILL.md'}: the terminal report names the gate commit and result."
+    )
+    assert "branch as not green" in skill.lower(), (
+        f"{SKILL / 'SKILL.md'}: a failed serial gate qualifies the run without"
+        " changing ticket outcomes."
+    )
+    assert "there is no integrated wave to check" in skill, (
+        f"{SKILL / 'SKILL.md'}: serial runs distinguish the absence of a wave"
+        " merge from the need to read the run's own writing."
+    )
+
+
+def test_manpage_explains_the_serial_self_gate() -> None:
+    """Help tells readers that concurrency one gates its branch before reporting."""
+
+    entry = _manpage_entry("TICKET EXECUTION", "**Integrate**")
+
+    assert "concurrency of one" in entry and "before reporting" in entry
+    assert "no verdict" in entry and "no session" in entry
+    assert "worktrees" in entry and "unchanged" in entry
+
+
 def test_the_dependency_on_model_selector_is_declared_everywhere_it_is_read() -> None:
     """The route Interface is the only seam, so the Skill it belongs to is a hard one."""
 

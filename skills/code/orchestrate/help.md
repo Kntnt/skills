@@ -64,6 +64,8 @@ A different subagent checks every acceptance criterion and the complete Project 
 
 **Integrate**
 
+A run at a concurrency of one has no integrated wave to check, so before reporting it runs the same gate commands resolved at run start on its own branch as it stands, with no verdict and no session of its own. The report names the commit and whether it passed; a failure reports the run as having a branch that is not green without changing any ticket outcome. Runs using worktrees are unchanged: their wave check remains the reading of the integrated branch.
+
 Verified work is committed and integrated. After each wave, the complete Project gate runs on the combined branch and an independent coherence review reads what that wave merged onto it, the branch before the wave having been read and passed by the check that ended the wave before. A strict subset of failing tests is rerun unchanged three times in isolation; three passes earn one unchanged full-gate rerun, and only a green full rerun turns the result into a pass recorded as a load-induced flake.
 
 Before integration—or at `record` when the ceiling is one—the engine refuses a declared pass that is incomplete, out of order, or touches paths outside its current role. The diagnostic names the commit and offending paths, nothing is merged or recorded, and the ticket tree remains available for inspection.
