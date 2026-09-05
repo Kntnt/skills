@@ -40,10 +40,10 @@ Be respectful and constructive in issues, pull requests, and discussions. Assume
    uvx ruff check .
    uvx ruff format --check .
    uvx --with types-PyYAML --with pytest mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/routed_observations.py skills/kntnt/library/scripts/session_records.py skills/kntnt/library/scripts/standing_policy.py skills/models/model-selector/scripts/refresh.py skills/models/model-selector/scripts/context.py skills/models/model-selector/scripts/usage_evidence.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py tests
-   uv run --with pytest --with pyyaml pytest
+   uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto
    ```
 
-   The manager's script declares PyYAML in its PEP 723 block, so `uv run` gives it that package on its own; the last two commands name it because they do not go through the script — mypy needs the stubs, its test surface needs pytest's types, and the tests import the script into their own interpreter.
+   The manager's script declares PyYAML in its PEP 723 block, so `uv run` gives it that package on its own; the last two commands name it because they do not go through the script — mypy needs the stubs, its test surface needs pytest's types, and the tests import the script into their own interpreter. The suite runs across every core (`pytest-xdist`, `-n auto`): most of its time is spent waiting on the subprocesses the tests spawn, so it finishes in about a fifth of the serial time, and every test already isolates its own files, so the order and the split change nothing. Run it serially, without `-n`, only when a failure needs an uninterleaved log.
 
    These are the same four checks CI runs on every pull request, so a green run locally means a green run there.
 

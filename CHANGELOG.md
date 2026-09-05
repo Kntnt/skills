@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- The test suite runs across every core. The pytest gate in the contributing guide and in CI now provisions `pytest-xdist` and runs with `-n auto`: the suite spends most of its wall time waiting on the subprocesses its tests spawn, and it measured 4 min 51 s serial against 1 min 01 s parallel on fourteen cores, every test passing either way. A builder, a verifier, and a wave check each run the gate, so an unattended run paid the serial time at least three times per ticket and once more per wave; the same four commands are still the gate, and only the last of them got faster. A suite check pins the flag in both places so neither can drift back to serial alone.
+
 ## [0.22.0] – 2026-09-05
 
 ### Added

@@ -144,3 +144,27 @@ def test_the_catalog_is_declared_generated_with_the_line_the_guide_gives() -> No
     )
     assert [entry["command"] for entry in catalog] == [REGENERATION]
     assert REGENERATION in _contributing()
+
+
+def test_the_guide_and_ci_run_the_suite_across_every_core_alike() -> None:
+    """One pytest invocation, written in two places, and neither free to drift.
+
+    The suite spends most of its wall time waiting on the subprocesses its
+    tests spawn, so it runs across every core: measured at 4 min 51 s serial
+    against 1 min 01 s parallel on fourteen cores, with every test passing
+    either way. A builder, a verifier, and a wave check each run the gate, so
+    a guide that dropped the flag would hand every unattended run the serial
+    time back three times per ticket, and a workflow still running serially
+    would be green five times slower than it need be.
+    """
+
+    for where in (CONTRIBUTING, CI):
+        text = where.read_text(encoding="utf-8")
+        assert "--with pytest-xdist" in text, (
+            f"{where.name}: the pytest invocation does not provision"
+            f" pytest-xdist, so `-n auto` there would fail to start."
+        )
+        assert "-n auto" in text, (
+            f"{where.name}: the pytest invocation runs the suite serially,"
+            f" which is about five times the parallel time for nothing."
+        )
