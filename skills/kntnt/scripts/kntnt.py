@@ -2288,11 +2288,11 @@ def refresh_outcome(
 def require_yes(yes: bool, deletion: str) -> None:
     """Refuse a deletion the user has not been asked about.
 
-    Where a subcommand deletes files the user is choosing to delete, `--yes` is
-    the gate rather than a convenience (ADR-0029): the confirmation belongs to
-    the skill, because a script run non-interactively cannot prompt, and the
-    flag is how the skill asserts that it happened. One sentence for every such
-    verb, so the two halves cannot drift apart.
+    Where a subcommand takes back something the user is choosing to give up,
+    `--yes` is the gate rather than a convenience (ADR-0029): the confirmation
+    belongs to the skill, because a script run non-interactively cannot prompt,
+    and the flag is how the skill asserts that it happened. One sentence for
+    each such thing, so the two halves cannot drift apart.
     """
 
     if not yes:
@@ -3453,9 +3453,11 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
     emit(
         {
             **outcome,
-            # Both teardowns, under the key every verb's removal answers
-            # under: this one places nothing, so `integrations` — which means
-            # a placement everywhere else — never appears here (issue #258).
+            # All three teardowns — the Features, then the collection's
+            # Skills, then the Manager's own — under the key every verb's
+            # removal answers under: this one places nothing, so
+            # `integrations` — which means a placement everywhere else —
+            # never appears here (issue #258).
             "removed_integrations": integrations,
             "features": features,
             "catalog_refreshed": refreshed,

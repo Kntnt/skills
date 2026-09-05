@@ -48,7 +48,7 @@ Run in a discarded temporary home and report the result without changing the sel
 
 **Enabled**
 
-The Skill is present in the targeted layer. Project view identifies Global-only Skills separately.
+The Skill is present in the targeted layer, and a Feature is what its Harnesses hold, it placing no files a layer could be read off. Project view identifies Global-only Skills separately.
 
 **Incomplete**
 
