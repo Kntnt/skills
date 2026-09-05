@@ -212,7 +212,7 @@ def _skill_md_with_metadata(name: str, metadata: str) -> str:
 
 
 def _manpage(name: str) -> str:
-    """The manpage the origin ships for *name*, as ADR-0044 has every skill do."""
+    """The manpage the origin ships for *name*, as ADR-0176 has every skill do."""
 
     return f"# {name}\n\nThe {name} manpage, from the collection.\n"
 
@@ -296,7 +296,7 @@ def _world(
     # Shared resources travel inside the Manager rather than as Catalog Skills.
     shutil.copytree(MANAGER_DIR / "library", source / "skills" / "kntnt" / "library")
 
-    # Every collection skill ships its manpage beside its SKILL.md (ADR-0044),
+    # Every collection skill ships its manpage beside its SKILL.md (ADR-0176),
     # so the origin carries one too: it is what Select reads a skill's help
     # from when nobody has that skill installed.
     for entry in entries:
@@ -453,7 +453,7 @@ def _env(world: dict[str, Path]) -> dict[str, str]:
     `HOME` is redirected as well as the manager's own variable, because the
     transport resolves the Global layer through it exactly as the real one
     does. A Sandbox redirects that same variable and nothing else would carry
-    the redirection to the stand-in (ADR-0042). `uv` keeps its cache where it
+    the redirection to the stand-in (ADR-0175). `uv` keeps its cache where it
     was: it is what runs the stand-in rather than anything the collection
     installs, and a cache under the isolated home would be a change to that
     home that no verb made.
@@ -865,7 +865,7 @@ def test_plan_select_takes_no_skill_names(tmp_path: Path) -> None:
 
     Refused in the manager's own terms, as every syntax error is: what the
     parser did not declare is named, with the verb's synopsis under it and the
-    pointer to its page, rather than argparse's usage dump (ADR-0059).
+    pointer to its page, rather than argparse's usage dump (ADR-0176).
     """
 
     world = _world(tmp_path)
@@ -878,7 +878,7 @@ def test_plan_select_takes_no_skill_names(tmp_path: Path) -> None:
 
 
 def test_select_groups_the_rows_by_category(tmp_path: Path) -> None:
-    """Related skills are read together, so the grouping is the payload's (ADR-0015)."""
+    """Related skills are read together, so the grouping is the payload's (ADR-0177)."""
 
     world = _world(tmp_path)
 
@@ -953,7 +953,7 @@ def test_confirming_the_list_repairs_an_incomplete_skill(tmp_path: Path) -> None
 
 
 def test_select_reports_a_hand_edited_skill_as_deviating(tmp_path: Path) -> None:
-    """The Digest answers the one freshness question honestly (ADR-0041)."""
+    """The Digest answers the one freshness question honestly (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -998,7 +998,7 @@ def test_confirming_the_list_re_copies_a_deviating_skill(tmp_path: Path) -> None
 def test_a_snapshot_list_reports_no_skill_deviating_or_current(
     tmp_path: Path,
 ) -> None:
-    """Those digests describe the collection as of the last Update (ADR-0041)."""
+    """Those digests describe the collection as of the last Update (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1147,7 +1147,7 @@ def test_select_leaves_a_checked_row_unlocked_and_names_what_it_lacks(
 def test_select_project_counts_a_global_dependency_as_satisfied(
     tmp_path: Path,
 ) -> None:
-    """A Project row is judged against what the Harness will load (ADR-0013)."""
+    """A Project row is judged against what the Harness will load (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1270,7 +1270,7 @@ def test_select_settles_the_closure_before_anything_is_written(
 
     # The closure is resolved before the write and never against the user: a
     # step that re-checked what they unchecked would overrule the answer it
-    # was asked to carry out (ADR-0047).
+    # was asked to carry out (ADR-0175).
     assert "the user did not just uncheck" in text
     assert "reported, not refused" in text
 
@@ -1299,7 +1299,7 @@ def test_the_steps_relay_the_reason_and_still_distrust_the_transport() -> None:
 
 
 def test_select_on_enables_a_skill_and_opens_no_list(tmp_path: Path) -> None:
-    """A machine is set up without a human at the list (ADR-0043)."""
+    """A machine is set up without a human at the list (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1330,7 +1330,7 @@ def test_select_off_disables_a_skill_and_opens_no_list(tmp_path: Path) -> None:
 
 
 def test_select_on_leaves_the_skills_it_does_not_name_alone(tmp_path: Path) -> None:
-    """Naming one Skill can never silently Disable another (ADR-0043)."""
+    """Naming one Skill can never silently Disable another (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1386,7 +1386,7 @@ def test_select_on_leaves_a_deviating_skill_it_did_not_name_alone(
 def test_select_on_leaves_an_incomplete_skill_it_did_not_name_alone(
     tmp_path: Path,
 ) -> None:
-    """A delta answers for the names it carries and for no others (ADR-0043)."""
+    """A delta answers for the names it carries and for no others (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude", ".config/crush")
@@ -1503,7 +1503,7 @@ def test_select_off_stands_against_a_dependency_the_same_run_would_add(
 def test_select_project_on_leaves_a_global_dependency_where_it_is(
     tmp_path: Path,
 ) -> None:
-    """Global's copy Satisfies it, and a second one buys nothing (ADR-0013)."""
+    """Global's copy Satisfies it, and a second one buys nothing (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1520,7 +1520,7 @@ def test_select_project_on_leaves_a_global_dependency_where_it_is(
 
 
 def test_select_as_is_enables_nothing_that_was_not_enabled(tmp_path: Path) -> None:
-    """An unattended run can never inject instructions nobody read (ADR-0043)."""
+    """An unattended run can never inject instructions nobody read (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1577,7 +1577,7 @@ def test_select_as_is_refreshes_a_deviating_skill(tmp_path: Path) -> None:
 def test_select_as_is_refreshes_nothing_from_the_snapshot_and_says_why(
     tmp_path: Path,
 ) -> None:
-    """Those digests describe the collection as of the last Update (ADR-0041)."""
+    """Those digests describe the collection as of the last Update (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -1612,7 +1612,7 @@ def test_select_names_the_delta_forms_in_its_steps(tmp_path: Path) -> None:
 
 
 def test_the_manager_has_no_status_enable_or_disable_verb(tmp_path: Path) -> None:
-    """Three verbs and a transcription step became one gesture (ADR-0043)."""
+    """Three verbs and a transcription step became one gesture (ADR-0175)."""
 
     world = _world(tmp_path)
     manager = REPO_ROOT / "skills" / "kntnt"
@@ -1999,7 +1999,7 @@ def test_update_reports_a_new_catalog_entry_and_leaves_it_disabled_unanswered(
 def test_update_enables_a_new_catalog_entry_when_yes_answers_the_offer(
     tmp_path: Path,
 ) -> None:
-    """ADR-0007: the offer is a question, and `--yes` answers every question yes."""
+    """ADR-0175: the offer is a question, and `--yes` answers every question yes."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -2452,10 +2452,7 @@ def test_update_contract_surfaces_agree_on_fresh_exact_authorization() -> None:
         REPO_ROOT / "docs" / "rules" / "collection.md",
         REPO_ROOT / "skills" / "kntnt" / "help" / "update.md",
         REPO_ROOT / "skills" / "kntnt" / "steps" / "update.md",
-        REPO_ROOT
-        / "docs"
-        / "adr"
-        / "0131-a-global-update-is-authorized-by-the-current-exact-plan.md",
+        REPO_ROOT / "docs" / "adr" / "0175-how-the-collection-reaches-a-machine.md",
     )
 
     # Require each surface to state the complete authorization contract.
@@ -2580,7 +2577,7 @@ def test_check_rejects_an_unknown_capability(tmp_path: Path) -> None:
 def test_check_refuses_a_declaration_it_cannot_read(tmp_path: Path) -> None:
     """The shape a previous release wrote must not read as *requires nothing*.
 
-    ADR-0061 moved the four Dependency lists into one flat prefixed namespace,
+    ADR-0177 moved the four Dependency lists into one flat prefixed namespace,
     and a Manager that predates it finds no `kntnt.` key in the shape that
     replaced it. `check` answered that with exit 0 and two empty lists, which
     is what a skill genuinely requiring nothing answers with — so the binary
@@ -2631,7 +2628,7 @@ def test_check_refuses_every_declaration_it_cannot_read(tmp_path: Path) -> None:
         ("a metadata that is not a mapping", "metadata: hello\n"),
         ("a metadata holding no kntnt. key", 'metadata:\n  internal: "true"\n'),
         (
-            "the nested block ADR-0061 replaced",
+            "the nested block ADR-0177 replaced",
             "metadata:\n  kntnt:\n    binaries: git\n",
         ),
     )
@@ -3493,7 +3490,7 @@ def test_a_refused_placement_relays_what_the_transport_said(tmp_path: Path) -> N
     with it the report of the withdrawal the same run already made — but it
     leaves the user told which skills did not land and never why. The words go
     to stderr, where the manager's own errors go, so the payload on stdout
-    stays a statement about the disk (ADR-0036).
+    stays a statement about the disk (ADR-0175).
     """
 
     world = _world(tmp_path)
@@ -3632,7 +3629,7 @@ def test_the_stored_catalog_is_untouched_when_an_entry_did_not_land(
 
 
 def test_an_offer_the_user_declined_is_not_made_twice(tmp_path: Path) -> None:
-    """Asked and answered: the entry is `select`'s from then on (ADR-0007)."""
+    """Asked and answered: the entry is `select`'s from then on (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -3716,7 +3713,7 @@ def test_update_refreshes_a_sidecar_when_skill_md_is_unchanged(tmp_path: Path) -
 
 
 def test_update_leaves_a_skill_whose_digest_matches_alone(tmp_path: Path) -> None:
-    """A Skill already byte-identical to the collection is no work (ADR-0028)."""
+    """A Skill already byte-identical to the collection is no work (ADR-0175)."""
 
     world = _digested_world(tmp_path)
     _present(world, "home", ".claude")
@@ -3733,7 +3730,7 @@ def test_update_leaves_a_skill_whose_digest_matches_alone(tmp_path: Path) -> Non
 
 
 def test_update_refreshes_a_skill_whose_digest_deviates(tmp_path: Path) -> None:
-    """A refresh discards the local edit that made the Skill Deviate (ADR-0041)."""
+    """A refresh discards the local edit that made the Skill Deviate (ADR-0175)."""
 
     world = _digested_world(tmp_path)
     _present(world, "home", ".claude")
@@ -3849,11 +3846,11 @@ def test_update_re_checks_a_skill_it_did_not_refresh(tmp_path: Path) -> None:
 def test_update_reports_a_declaration_it_cannot_read(tmp_path: Path) -> None:
     """The re-check names an unreadable declaration; it neither hides it nor eats the report.
 
-    ADR-0068 makes an unreadable declaration a refusal rather than four empty
+    ADR-0175 makes an unreadable declaration a refusal rather than four empty
     lists, and Update re-checks every Skill the layer holds — including one the
     origin could not be reached to repair. A refusal raised there would cost
     the user the account of what the same run already deleted and placed, which
-    is the one thing ADR-0036 does not allow a verb to lose, so it is reported
+    is the one thing ADR-0175 does not allow a verb to lose, so it is reported
     in the payload like any other Unsatisfied Dependency (issue #68).
     """
 
@@ -3918,7 +3915,7 @@ def test_update_sweeps_a_withdrawal_with_everything_else_current(
 def test_update_refreshes_nothing_from_the_snapshot_and_says_so(
     tmp_path: Path,
 ) -> None:
-    """The files move through the origin the Catalog could not be read from (ADR-0041)."""
+    """The files move through the origin the Catalog could not be read from (ADR-0175)."""
 
     world = _digested_world(tmp_path)
     _present(world, "home", ".claude")
@@ -3978,7 +3975,7 @@ def test_the_transport_empties_a_skill_directory_before_it_copies(
     """`add` replaces a skill's directory rather than merging into it.
 
     A file the collection does not carry is gone after a re-`add` — verified
-    against the real transport, and ADR-0028 is where the double's obligation
+    against the real transport, and ADR-0175 is where the double's obligation
     to model it is written down.
     """
 
@@ -4542,7 +4539,7 @@ def test_a_verb_takes_yes_only_where_it_can_ask_something(tmp_path: Path) -> Non
     """The inversion of `test_every_verb_accepts_yes`, for the same reason.
 
     The flag answers a question, so a subcommand that asks none has nothing
-    for it to answer and refuses it rather than swallowing it (ADR-0059).
+    for it to answer and refuses it rather than swallowing it (ADR-0176).
     """
 
     world = _world(tmp_path)
@@ -4590,12 +4587,12 @@ def test_collection_skills_are_hidden_from_the_transport() -> None:
             f" how it is kept out of ordinary discovery by a reader elsewhere."
             f" The flag is prefixed like every other key of ours because"
             f" `metadata` is one flat namespace and a bare `internal` is a key"
-            f" any collection may claim (ADR-0061). See {STANDARD}."
+            f" any collection may claim (ADR-0177). See {STANDARD}."
         )
 
 
 def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> None:
-    """ADR-0012: a Skill with nothing to declare calls no checker.
+    """ADR-0177: a Skill with nothing to declare calls no checker.
 
     The check reads the Skill's own Dependency lists, so on a Skill whose four
     lists are empty it can only ever report an empty one — and running it would
@@ -4628,12 +4625,12 @@ def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> No
                 f"{path}: this skill declares dependencies, so its body opens"
                 f" with the preamble that runs the checker before it does any"
                 f" work — a skill owns its dependencies and refuses without"
-                f" them rather than installing them (ADR-0012). See {STANDARD}."
+                f" them rather than installing them (ADR-0177). See {STANDARD}."
             )
             assert "npx skills add Kntnt/skills" in text, (
                 f"{path}: the preamble names `npx skills add Kntnt/skills` as"
                 f" the fix where no checker is found, so a user meeting the"
-                f" refusal is told what to do about it (ADR-0012). See"
+                f" refusal is told what to do about it (ADR-0177). See"
                 f" {STANDARD}."
             )
         else:
@@ -4641,7 +4638,7 @@ def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> No
                 f"{path}: this skill declares no dependency at all, so it calls"
                 f" no checker: the call could only ever report an empty list,"
                 f" and making it would itself require `uv` — a dependency"
-                f" nobody declared (ADR-0012). See {STANDARD}."
+                f" nobody declared (ADR-0177). See {STANDARD}."
             )
 
 
@@ -4661,7 +4658,7 @@ def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
             f"{path}: every skill ships a `help.md` beside its `SKILL.md`."
             f" Help lives with the skill, so a skill in front of a user can be"
             f" asked what it does without knowing which collection it came"
-            f" from (ADR-0044). See {STANDARD}."
+            f" from (ADR-0176). See {STANDARD}."
         )
 
         marker = "\n## Invocation\n"
@@ -4669,7 +4666,7 @@ def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
             f"{path}: every body carries a `## Invocation` section, which is"
             f" where the route into the manpage lives. A skill is asked what it"
             f" does by name, so the answer is a section of the body rather than"
-            f" one skill's habit (ADR-0044). See {STANDARD}."
+            f" one skill's habit (ADR-0176). See {STANDARD}."
         )
         section = text.partition(marker)[2].partition("\n## ")[0]
 
@@ -4677,17 +4674,17 @@ def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
             f"{path}: the `## Invocation` section prints `$HERE/help.md`"
             f" verbatim rather than summarising it. The manpage is a file a"
             f" reviewer can diff, not prose an agent regenerates each time"
-            f" (ADR-0044, ADR-0045). See {STANDARD}."
+            f" (ADR-0176, ADR-0175). See {STANDARD}."
         )
         assert "--help" in section, (
             f"{path}: the `## Invocation` section routes `--help` to the"
             f" manpage, which is how every skill of this collection is asked"
-            f" what it does (ADR-0044). See {STANDARD}."
+            f" what it does (ADR-0176). See {STANDARD}."
         )
         assert "Arguments and Steps" not in text, (
             f"{path}: the body carries only what the agent executes, so its"
             f" sections are the ones it acts on rather than a heading pairing"
-            f" two of them (ADR-0046). See {STANDARD}."
+            f" two of them (ADR-0177). See {STANDARD}."
         )
 
 
@@ -4725,7 +4722,7 @@ def test_every_manpage_carries_the_sections_the_standard_requires() -> None:
                 f"{page}: this manpage carries no `{heading}`. Every manpage of"
                 f" the collection carries {_the_sections()}, while optional"
                 f" conventional sections appear only where they have content"
-                f" (ADR-0044). See {STANDARD}."
+                f" (ADR-0176). See {STANDARD}."
             )
             positions.append(text.index(marker))
 
@@ -4811,7 +4808,7 @@ def test_every_manpage_documents_the_invocation_envelope() -> None:
     assert ENVELOPE_REFERENCE.is_file(), (
         f"{ENVELOPE_REFERENCE}: every manpage sends its reader to"
         f" `{ENVELOPE_PAGE_POINTER}` for the contract in full, and a pointer"
-        f" that dangles is a reader sent to nothing (ADR-0078). See {STANDARD}."
+        f" that dangles is a reader sent to nothing (ADR-0176). See {STANDARD}."
     )
 
     # Discover every page so future command paths inherit the same contract.
@@ -4826,21 +4823,21 @@ def test_every_manpage_documents_the_invocation_envelope() -> None:
         assert forms and all(line.endswith(suffix) for line in forms), (
             f"{manpage}: every formal form exposes the optional context suffix"
             f" so callers can distinguish guidance from strict grammar"
-            f" (ADR-0078). See {STANDARD}."
+            f" (ADR-0176). See {STANDARD}."
         )
         assert all(phrase in envelope for phrase in required), (
             f"{manpage}: the envelope section names the separator and points at"
-            f" `{ENVELOPE_PAGE_POINTER}` for the contract in full (ADR-0078)."
+            f" `{ENVELOPE_PAGE_POINTER}` for the contract in full (ADR-0176)."
             f" See {STANDARD}."
         )
         assert "Redundant but applicable guidance is valid" not in envelope, (
             f"{manpage}: the page restates the Envelope contract instead of"
-            f" pointing at the one place it is stated (ADR-0076, ADR-0078)."
+            f" pointing at the one place it is stated (ADR-0177, ADR-0176)."
             f" See {STANDARD}."
         )
         assert "**--**" not in _optional_section(text, "## OPTIONS"), (
             f"{manpage}: the reserved separator is not an option and therefore"
-            f" never belongs in `## OPTIONS` (ADR-0078). See {STANDARD}."
+            f" never belongs in `## OPTIONS` (ADR-0176). See {STANDARD}."
         )
 
 
@@ -4851,7 +4848,7 @@ _ALWAYS_IN_THE_ROOT = frozenset({"SKILL.md", "help.md"})
 
 
 def test_what_a_skill_opens_on_demand_lives_under_references() -> None:
-    """ADR-0063: the spec's directory says what a flat root cannot.
+    """ADR-0177: the spec's directory says what a flat root cannot.
 
     The on-demand files are discovered rather than listed, because a list
     maintained by hand goes stale without saying so: a skill it never gained
@@ -4873,7 +4870,7 @@ def test_what_a_skill_opens_on_demand_lives_under_references() -> None:
                 f" file the body opens only when the situation arises, and it"
                 f" belongs under `references/` — the specification's own"
                 f" directory for it, which is what tells a reader it is not the"
-                f" manpage a user is meant to read (ADR-0063). See {STANDARD}."
+                f" manpage a user is meant to read (ADR-0177). See {STANDARD}."
             )
 
 
@@ -4885,16 +4882,16 @@ def test_a_skills_python_helpers_live_under_scripts() -> None:
             assert directory / "scripts" in path.parents, (
                 f"{path}: an executable helper used only by this Skill belongs"
                 f" under its `scripts/`, mirroring the Collection Library's"
-                f" resource structure (ADR-0063, ADR-0076). See {STANDARD}."
+                f" resource structure (ADR-0177). See {STANDARD}."
             )
 
 
 def test_the_paths_the_collection_publishes_are_left_where_they_are() -> None:
-    """ADR-0063's three deviations, each a published address rather than layout.
+    """ADR-0177's three deviations, each a published address rather than layout.
 
     A manpage is fetched at `skills/<category>/<name>/help.md` and the Catalog
-    at `skills/kntnt/catalog.json` (ADR-0044); the Manager's `steps/` is what
-    the agent carries out rather than what it consults (ADR-0046).
+    at `skills/kntnt/catalog.json` (ADR-0176); the Manager's `steps/` is what
+    the agent carries out rather than what it consults (ADR-0177).
     """
 
     for directory in _shipped_skills():
@@ -4902,7 +4899,7 @@ def test_the_paths_the_collection_publishes_are_left_where_they_are() -> None:
             f"{directory}: a manpage is fetched at"
             f" `skills/<category>/<name>/help.md`, so it stays in the skill's"
             f" root rather than moving under `references/` with the files a"
-            f" body opens on demand (ADR-0044, ADR-0063). See {STANDARD}."
+            f" body opens on demand (ADR-0176, ADR-0177). See {STANDARD}."
         )
 
     manager = REPO_ROOT / "skills" / "kntnt"
@@ -4935,7 +4932,7 @@ def test_the_collection_library_carries_one_delivery_contract() -> None:
     Delivery is stated once, in the Library, rather than in whichever Skill
     happened to need it first: a copy under one consumer would make that Skill
     the implementation owner of its peers, and a copy under each would make one
-    rule several things to keep true (ADR-0076, ADR-0091).
+    rule several things to keep true (ADR-0177, ADR-0178).
     """
 
     library = REPO_ROOT / "skills" / "kntnt" / "library"
@@ -4945,7 +4942,7 @@ def test_the_collection_library_carries_one_delivery_contract() -> None:
         f"{library / 'references' / 'delivery.md'}: the Output Target and"
         f" In-place Editing contract is read by every Skill that delivers a"
         f" Text Artifact, so it belongs to the Collection Library"
-        f" (ADR-0076). See {STANDARD}."
+        f" (ADR-0177). See {STANDARD}."
     )
     private = [
         directory
@@ -4955,7 +4952,7 @@ def test_the_collection_library_carries_one_delivery_contract() -> None:
     assert private == [], (
         f"{private}: the delivery contract has several consumers, so a local"
         f" copy makes one Skill the implementation owner of its peers"
-        f" (ADR-0076). See {STANDARD}."
+        f" (ADR-0177). See {STANDARD}."
     )
 
 
@@ -4964,7 +4961,7 @@ def test_the_shared_delivery_contract_binds_no_consumers_grammar() -> None:
 
     Each editorial Skill declares its own Formal Invocation, and a flag written
     into the shared document would either be a second copy of that grammar or a
-    name a later Skill is not free to choose (ADR-0091).
+    name a later Skill is not free to choose (ADR-0178).
     """
 
     contract = (
@@ -4976,7 +4973,7 @@ def test_the_shared_delivery_contract_binds_no_consumers_grammar() -> None:
     assert flags == [], (
         f"{flags}: the shared delivery contract names a consumer's flag"
         f" spelling, which binds a grammar the consuming Skill owns"
-        f" (ADR-0091). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
     # Hold the domain vocabulary and the collision sequence it is read for.
@@ -5013,7 +5010,7 @@ def test_the_shared_delivery_contract_settles_a_findings_reports_language() -> N
     fifteen Swedish findings in one run and an English report in the next, and
     neither run disobeyed anything written down (issue #145). The answer is the
     status rule's, because the reader is the status rule's reader: whoever has
-    to finish the work a correction budget did not (ADR-0123).
+    to finish the work a correction budget did not (ADR-0178).
     """
 
     contract = DELIVERY.read_text(encoding="utf-8")
@@ -5022,7 +5019,7 @@ def test_the_shared_delivery_contract_settles_a_findings_reports_language() -> N
     assert DELIVERY_STATUS_LANGUAGE in contract, (
         f"{DELIVERY}: the no-change status no longer names the language it is"
         f" written in, which is the rule a findings report is held to the same"
-        f" answer as (ADR-0091, ADR-0123). See {STANDARD}."
+        f" answer as (ADR-0178). See {STANDARD}."
     )
 
     # And hold the same answer given, once, for a findings report.
@@ -5033,13 +5030,13 @@ def test_the_shared_delivery_contract_settles_a_findings_reports_language() -> N
         f"{DELIVERY}: the shared contract says nothing about a findings"
         f" report, so the language of one is decided per run and one text"
         f" yields a Swedish status beside an English finding list"
-        f" (ADR-0123). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert any(DELIVERY_REPORT_LANGUAGE in paragraph for paragraph in reporting), (
         f"{DELIVERY}: the shared contract reaches a findings report without"
         f" saying which language it is written in, which is the gap that let"
         f" the same Swedish artifact be reported on in Swedish in one run and"
-        f" in English in the next (ADR-0123). See {STANDARD}."
+        f" in English in the next (ADR-0178). See {STANDARD}."
     )
 
     # A consumer follows that answer rather than carrying one of its own.
@@ -5049,14 +5046,14 @@ def test_the_shared_delivery_contract_settles_a_findings_reports_language() -> N
         assert REPORTING_STEP in body, (
             f"{body_path}: this Skill no longer reports findings beside the"
             f" artifact it delivers, so the list of Skills the shared language"
-            f" rule is checked against has gone stale (ADR-0123). See"
+            f" rule is checked against has gone stale (ADR-0178). See"
             f" {STANDARD}."
         )
         assert DELIVERY_REPORT_LANGUAGE not in body, (
             f"{body_path}: the body states the findings-report language"
             f" itself, which is a second copy of a rule the shared delivery"
-            f" contract owns and is free to drift from it (ADR-0091,"
-            f" ADR-0123). See {STANDARD}."
+            f" contract owns and is free to drift from it (ADR-0178,"
+            f" ADR-0178). See {STANDARD}."
         )
 
         # The reader who has to act on the findings meets the answer too.
@@ -5066,7 +5063,7 @@ def test_the_shared_delivery_contract_settles_a_findings_reports_language() -> N
             f"{page_path}: the manpage tells its reader which language a"
             f" no-change status is in and leaves the findings beside a"
             f" delivered text unanswered, which is the half of the behaviour"
-            f" the reader of those findings needs (ADR-0123). See"
+            f" the reader of those findings needs (ADR-0178). See"
             f" {STANDARD}."
         )
 
@@ -5231,7 +5228,7 @@ def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
     four paragraphs of an artifact byte-identical to the source the caller
     already had (issue #148). The answer is the no-change rule's, for the
     no-change rule's reason: repeating a text into the response spends output
-    on what the caller is already holding (ADR-0124).
+    on what the caller is already holding (ADR-0178).
     """
 
     contract = DELIVERY.read_text(encoding="utf-8")
@@ -5245,7 +5242,7 @@ def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
         f" sections that a run delivering to a named destination does not"
         f" repeat the artifact in the response, and the rule that let one run"
         f" of seven echo a text the caller was already holding is settled"
-        f" once or not at all (ADR-0124). See {STANDARD}."
+        f" once or not at all (ADR-0178). See {STANDARD}."
     )
     rule = sections[0]
 
@@ -5254,14 +5251,14 @@ def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
     assert "derived filename" in rule, (
         f"{DELIVERY}: the response of a file-targeted run no longer names the"
         f" filename a directory destination derived, which is the one thing"
-        f" the caller cannot read off their own invocation (ADR-0124). See"
+        f" the caller cannot read off their own invocation (ADR-0178). See"
         f" {STANDARD}."
     )
     assert "findings" in rule, (
         f"{DELIVERY}: the response of a file-targeted run is emptied of the"
         f" findings as well as the text, which leaves the run with nothing to"
         f" report rather than with the report the file cannot carry"
-        f" (ADR-0124). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
     # And it holds for the run that found nothing to change, which is the run
@@ -5269,7 +5266,7 @@ def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
     assert DELIVERY_NO_ECHO_UNCHANGED in rule, (
         f"{DELIVERY}: the rule is silent on the unchanged case, so a run that"
         f" writes a file byte-identical to its source becomes the one run"
-        f" that echoes a text the caller had before it started (ADR-0124)."
+        f" that echoes a text the caller had before it started (ADR-0178)."
         f" See {STANDARD}."
     )
 
@@ -5278,7 +5275,7 @@ def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
     assert DELIVERY_RESPONSE_DEFAULT in contract, (
         f"{DELIVERY}: the response-targeted default no longer delivers the"
         f" complete artifact in the response, which is where a run that named"
-        f" no destination has to put it (ADR-0091, ADR-0124). See"
+        f" no destination has to put it (ADR-0178). See"
         f" {STANDARD}."
     )
 
@@ -5290,7 +5287,7 @@ def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
                 f"{consumer}: this states what a file-targeted run's response"
                 f" carries itself, which is a second copy of a rule the shared"
                 f" delivery contract owns and is free to drift from it"
-                f" (ADR-0091, ADR-0124). See {STANDARD}."
+                f" (ADR-0178). See {STANDARD}."
             )
 
 
@@ -5300,8 +5297,7 @@ def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     Write drafts against the base contract and Redline reviews against the same
     document, so it belongs to neither of them. A copy under one would make that
     Skill the owner of its peer's rules, and a copy under each would let a
-    requirement and its review disagree about what was required (ADR-0076,
-    ADR-0095).
+    requirement and its review disagree about what was required (ADR-0177, ADR-0178).
     """
 
     editorial = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
@@ -5310,7 +5306,7 @@ def test_the_collection_library_carries_the_editorial_base_contract() -> None:
         f"{editorial / 'base.md'}: the normative outcomes a first draft has to"
         f" meet are stated once, in the Collection Library, because the Skill"
         f" that writes and the Skill that reviews read the same statement"
-        f" (ADR-0076, ADR-0095). See {STANDARD}."
+        f" (ADR-0177, ADR-0178). See {STANDARD}."
     )
 
     private = [
@@ -5321,7 +5317,7 @@ def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     assert private == [], (
         f"{private}: the editorial contract has several consumers, so a local"
         f" copy makes one Skill the implementation owner of its peers"
-        f" (ADR-0076, ADR-0095). See {STANDARD}."
+        f" (ADR-0177, ADR-0178). See {STANDARD}."
     )
 
     contract = (editorial / "base.md").read_text(encoding="utf-8")
@@ -5330,7 +5326,7 @@ def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     flags = sorted(set(re.findall(r"(?<![\w-])--[A-Za-z][\w-]*", contract)))
     assert flags == [], (
         f"{flags}: the shared base contract names a consumer's flag spelling,"
-        f" which binds a grammar the consuming Skill owns (ADR-0095). See"
+        f" which binds a grammar the consuming Skill owns (ADR-0178). See"
         f" {STANDARD}."
     )
 
@@ -5338,12 +5334,12 @@ def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     # pair a genre resource is written against.
     assert "newspaper" in contract and "magazine" in contract, (
         f"{editorial / 'base.md'}: the base contract states the register"
-        f" baseline a draft starts from (ADR-0095). See {STANDARD}."
+        f" baseline a draft starts from (ADR-0178). See {STANDARD}."
     )
     assert "genre, audience, and purpose" in contract.lower(), (
         f"{editorial / 'base.md'}: the base contract states that genre,"
         f" audience, and purpose override the register baseline, or a letter"
-        f" comes out as a news article (ADR-0095). See {STANDARD}."
+        f" comes out as a news article (ADR-0178). See {STANDARD}."
     )
 
 
@@ -5352,7 +5348,7 @@ def test_the_general_genre_ships_beside_the_contract_it_extends() -> None:
 
     `general` is the default, so it is the genre a Skill loads when nobody
     selected one. The set of installed genres is the directory itself, which is
-    what makes adding one a single-resource addition (ADR-0095).
+    what makes adding one a single-resource addition (ADR-0178).
     """
 
     genres = (
@@ -5368,7 +5364,7 @@ def test_the_general_genre_ships_beside_the_contract_it_extends() -> None:
     assert (genres / "general.md").is_file(), (
         f"{genres / 'general.md'}: `general` is the default genre, so it ships"
         f" as a resource with a complete contract rather than as the absence of"
-        f" one (ADR-0095). See {STANDARD}."
+        f" one (ADR-0178). See {STANDARD}."
     )
 
 
@@ -5378,7 +5374,7 @@ def test_a_review_extension_is_addressable_apart_from_the_base_half() -> None:
     The review half of a genre or technique is a file of its own beside the
     base half, `<name>.review.md`, rather than a section inside it: a Skill
     resolving a genre by name loads the base half and stops, and a reviewing
-    Skill asks for the extension by its own name (ADR-0095).
+    Skill asks for the extension by its own name (ADR-0178).
     """
 
     editorial = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
@@ -5394,21 +5390,21 @@ def test_a_review_extension_is_addressable_apart_from_the_base_half() -> None:
             base = path.with_name(path.name[: -len(".review.md")] + ".md")
             assert base.is_file(), (
                 f"{path}: a review extension extends a base half, and"
-                f" {base.name} is not there to extend (ADR-0095). See"
+                f" {base.name} is not there to extend (ADR-0178). See"
                 f" {STANDARD}."
             )
             continue
         assert "\n## Review\n" not in path.read_text(encoding="utf-8"), (
             f"{path}: the review half sits inside the base half, so a Skill"
             f" that only writes loads it too. Write it as"
-            f" `{path.stem}.review.md` beside this file (ADR-0095). See"
+            f" `{path.stem}.review.md` beside this file (ADR-0178). See"
             f" {STANDARD}."
         )
 
 
 # The editorial resources, and the genres and techniques a user selects among
 # by name. A Skill resolves a selection against the directory itself, so these
-# names are no registry anything reads at run time (ADR-0095): they are the
+# names are no registry anything reads at run time (ADR-0178): they are the
 # floor the suite holds the Collection to, so that a resource renamed or gone
 # is caught here rather than by the user who meets a refusal instead of a
 # draft.
@@ -5428,7 +5424,7 @@ INSTALLED_TECHNIQUES = ("abt", "pac")
 
 # The resources shipped with review guidance of their own. `general` is the
 # default genre and carries none yet, and a base half standing alone is a
-# complete resource (ADR-0095).
+# complete resource (ADR-0178).
 REVIEWED_RESOURCES = (
     "genres/article",
     "genres/report",
@@ -5463,9 +5459,9 @@ def test_the_genres_and_techniques_a_user_selects_ship_in_the_library() -> None:
 
     Genre is more than its default and technique more than none because these
     resources sit beside the base contract, where every Skill that reads the
-    contract reaches them on the same terms (ADR-0076). The directory is the
+    contract reaches them on the same terms (ADR-0177). The directory is the
     installed set, so a name with no file is a refusal rather than a default
-    quietly supplied in its place (ADR-0095).
+    quietly supplied in its place (ADR-0178).
     """
 
     for name in INSTALLED_GENRES:
@@ -5474,7 +5470,7 @@ def test_the_genres_and_techniques_a_user_selects_ship_in_the_library() -> None:
             f"{path}: `{name}` is a genre this Collection installs, and the"
             f" directory is what a Skill resolves a selection against. Absent"
             f" here, the value is refused wherever anybody selects it"
-            f" (ADR-0095). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
 
     for name in INSTALLED_TECHNIQUES:
@@ -5482,7 +5478,7 @@ def test_the_genres_and_techniques_a_user_selects_ship_in_the_library() -> None:
         assert path.is_file(), (
             f"{path}: `{name}` is a technique this Collection installs, and a"
             f" technique applies because it was selected. Absent here, there"
-            f" is nothing to select and nothing states its arc (ADR-0095). See"
+            f" is nothing to select and nothing states its arc (ADR-0178). See"
             f" {STANDARD}."
         )
 
@@ -5494,7 +5490,7 @@ def test_each_selectable_resource_carries_its_review_guidance_beside_it() -> Non
     missing leaves a reviewing Skill to invent the diagnostics, which is how a
     review acquires a target the writer was never told about. The extension is
     a file of its own so that a Skill which only writes never loads it
-    (ADR-0095).
+    (ADR-0178).
     """
 
     for name in REVIEWED_RESOURCES:
@@ -5502,12 +5498,12 @@ def test_each_selectable_resource_carries_its_review_guidance_beside_it() -> Non
         extension = EDITORIAL / f"{name}.review.md"
         assert base.is_file(), (
             f"{base}: the base half is what a draft is written against, and"
-            f" the review half below extends it (ADR-0095). See {STANDARD}."
+            f" the review half below extends it (ADR-0178). See {STANDARD}."
         )
         assert extension.is_file(), (
             f"{extension}: `{name}` states requirements and ships no review"
             f" guidance for them, leaving a reviewing Skill to invent its own"
-            f" diagnostics for rules somebody else wrote (ADR-0095). See"
+            f" diagnostics for rules somebody else wrote (ADR-0178). See"
             f" {STANDARD}."
         )
 
@@ -5518,7 +5514,7 @@ def test_a_genre_or_technique_says_what_it_is_before_it_says_what_it_asks() -> N
     The directory is the installed set, so anything showing a user what they
     may select opens each resource and reads its name and its opening
     paragraph. A file that begins with its rules makes that a choice between
-    showing nothing and loading everything (ADR-0095).
+    showing nothing and loading everything (ADR-0178).
     """
 
     for path in _editorial_resources():
@@ -5526,7 +5522,7 @@ def test_a_genre_or_technique_says_what_it_is_before_it_says_what_it_asks() -> N
 
         assert lines and re.fullmatch(r"# \S.*", lines[0]), (
             f"{path}: a resource opens with `# <Name>`, which is what names it"
-            f" wherever the installed set is shown (ADR-0095). See {STANDARD}."
+            f" wherever the installed set is shown (ADR-0178). See {STANDARD}."
         )
 
         # The summary is whatever prose stands between the title and the first
@@ -5539,7 +5535,7 @@ def test_a_genre_or_technique_says_what_it_is_before_it_says_what_it_asks() -> N
         assert any(line.strip() for line in summary), (
             f"{path}: the title is followed straight by a section, so a Skill"
             f" showing what is installed has nothing to show but the name"
-            f" (ADR-0095). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
 
 
@@ -5548,8 +5544,7 @@ def test_a_genre_or_technique_binds_no_consumers_grammar() -> None:
 
     Every editorial Skill declares its own Formal Invocation, so an option
     named in a resource all of them read is either a second copy of that
-    grammar or a name the next Skill is not free to choose (ADR-0091,
-    ADR-0095).
+    grammar or a name the next Skill is not free to choose (ADR-0178).
     """
 
     for path in sorted(EDITORIAL.rglob("*.md")):
@@ -5566,7 +5561,7 @@ def test_a_genre_or_technique_binds_no_consumers_grammar() -> None:
         )
         assert flags == [], (
             f"{flags}: {path} names a consumer's flag spelling, which binds a"
-            f" grammar the consuming Skill owns (ADR-0095). See {STANDARD}."
+            f" grammar the consuming Skill owns (ADR-0178). See {STANDARD}."
         )
 
 
@@ -5576,7 +5571,7 @@ def test_no_editorial_resource_pins_a_rule_to_one_installed_language() -> None:
     What a genre or a technique asks for holds in every language the
     Collection installs; what writing well in one language takes lives in that
     language's own resource, which is the only place a Skill looks for it
-    (ADR-0087, ADR-0095). A rule here naming one language would be applied to
+    (ADR-0178). A rule here naming one language would be applied to
     drafts written in the others.
     """
 
@@ -5597,8 +5592,8 @@ def test_no_editorial_resource_pins_a_rule_to_one_installed_language() -> None:
         assert named == [], (
             f"{named}: {path} pins a rule to a single Language Resource. The"
             f" editorial contract is language-independent, and guidance true"
-            f" of one language belongs in that language's resource (ADR-0087,"
-            f" ADR-0095). See {STANDARD}."
+            f" of one language belongs in that language's resource (ADR-0178,"
+            f" ADR-0178). See {STANDARD}."
         )
 
 
@@ -5607,7 +5602,7 @@ def _base_contract_section(name: str) -> str:
 
     Where a rule stands in that document is part of the rule: a requirement
     about what may be claimed, filed under `Words`, has been put away from the
-    requirement it qualifies and from the reader who needs it (ADR-0095).
+    requirement it qualifies and from the reader who needs it (ADR-0178).
     """
 
     text = (EDITORIAL / "base.md").read_text(encoding="utf-8")
@@ -5638,7 +5633,7 @@ def test_the_base_contract_makes_circumstantial_detail_a_claim() -> None:
     assert claims, (
         f"{EDITORIAL / 'base.md'}: the contract states what a claim owes its"
         f" reader under `## Claims`, and there is no such section to read"
-        f" (ADR-0095). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
     lowered = claims.lower()
@@ -5758,7 +5753,7 @@ def test_write_ships_in_the_editorial_category_and_invokes_no_peer() -> None:
     Write produces one first draft and stops. Invoking Redline or Proofread
     from inside it would make the pipeline the default and the single draft the
     exception, and would spend a reviewing Skill's context on every draft
-    whether or not anybody wanted one reviewed (ADR-0088).
+    whether or not anybody wanted one reviewed (ADR-0178).
     """
 
     body = REPO_ROOT / "skills" / "editorial" / "write" / "SKILL.md"
@@ -5772,13 +5767,13 @@ def test_write_ships_in_the_editorial_category_and_invokes_no_peer() -> None:
     called = sorted(set(nested.findall(body.read_text(encoding="utf-8"))))
     assert called == [], (
         f"{called}: Write invokes a peer Skill, which turns one first draft"
-        f" into an editorial pipeline nobody asked for (ADR-0088). See"
+        f" into an editorial pipeline nobody asked for (ADR-0178). See"
         f" {STANDARD}."
     )
 
     assert '\n  kntnt.skills: ""\n' in body.read_text(encoding="utf-8"), (
         f"{body}: Write declares a Skill Dependency, and it invokes no peer"
-        f" (ADR-0088). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
 
@@ -5789,7 +5784,7 @@ def test_write_loads_only_what_a_first_draft_is_written_against() -> None:
     the resolved Language Resource, and the optional technique. Review,
     anti-slop, and mechanics guidance belong to the Skills contracted to act on
     them, and a Skill that loads guidance it may not act on has spent the
-    context the split was made to save (ADR-0095).
+    context the split was made to save (ADR-0178).
     """
 
     directory = REPO_ROOT / "skills" / "editorial" / "write"
@@ -5799,17 +5794,17 @@ def test_write_loads_only_what_a_first_draft_is_written_against() -> None:
 
     assert "$LIBRARY/references/editorial/base.md" in text, (
         f"{directory}: Write never reaches the base contract, so nothing says"
-        f" what its draft is written against (ADR-0095). See {STANDARD}."
+        f" what its draft is written against (ADR-0178). See {STANDARD}."
     )
     assert "--scope=composition" in text, (
         f"{directory}: Write never asks the resolver for the composition"
         f" scope, which is the language-specific guidance a draft is written"
-        f" with (ADR-0087, ADR-0095). See {STANDARD}."
+        f" with (ADR-0178). See {STANDARD}."
     )
     for scope in ("review", "anti-slop", "mechanics"):
         assert f"--scope={scope}" not in text, (
             f"{directory}: Write asks for the {scope} scope, which belongs to"
-            f" the Skills contracted to act on it (ADR-0087, ADR-0095). See"
+            f" the Skills contracted to act on it (ADR-0178). See"
             f" {STANDARD}."
         )
 
@@ -5823,7 +5818,7 @@ def test_write_accounts_for_what_it_did_with_the_material() -> None:
     material stopped when the draft is short of a stated length, and asserts
     nothing about the draft that the run has not established. It remains an
     account and never a second pass — Write still stops at the first draft
-    (ADR-0088, issue #138).
+    (ADR-0178, issue #138).
     """
 
     directory = REPO_ROOT / "skills" / "editorial" / "write"
@@ -5845,16 +5840,16 @@ def test_write_accounts_for_what_it_did_with_the_material() -> None:
     )
 
     # The account says what the run did with the material; it never reviews the
-    # draft it has just written (ADR-0088).
+    # draft it has just written (ADR-0178).
     assert "perform neither, and offer neither as a next step" in text, (
         f"{directory}: Write no longer stops at the first draft, so the"
         f" account of a run has become the review pass this Skill does not"
-        f" have (ADR-0088). See {STANDARD}."
+        f" have (ADR-0178). See {STANDARD}."
     )
 
 
 # The Skill this wave's mechanical pass ships as, read at the one seam a test
-# has: the body is the whole of what the agent executes (ADR-0046).
+# has: the body is the whole of what the agent executes (ADR-0177).
 PROOFREAD = REPO_ROOT / "skills" / "editorial" / "proofread" / "SKILL.md"
 
 
@@ -5980,7 +5975,7 @@ def test_proofread_reads_only_the_mechanics_scope_of_a_language_resource() -> No
     """Scoping buys frugality, and the body is where it is spent or wasted.
 
     A Language Resource carries four scopes and the resolver returns only the
-    ones a caller asks for (ADR-0087). Proofread may act on mechanics alone, so
+    ones a caller asks for (ADR-0178). Proofread may act on mechanics alone, so
     a body asking for composition, review, or anti-slop guidance would be
     paying context for rules it is contracted not to apply — and holding rules
     it may not act on is how a mechanical pass drifts into a rewrite.
@@ -5992,21 +5987,21 @@ def test_proofread_reads_only_the_mechanics_scope_of_a_language_resource() -> No
         f"{PROOFREAD}: the body resolves its language through the Collection"
         f" Library's resolver rather than reading the resources itself. The"
         f" selection is deterministic and shared by every editorial Skill,"
-        f" which is why it is a script and not prose (ADR-0087, ADR-0076). See"
+        f" which is why it is a script and not prose (ADR-0178, ADR-0177). See"
         f" {STANDARD}."
     )
     assert "--scope=mechanics" in text, (
         f"{PROOFREAD}: the body asks the resolver for no scope, so it either"
         f" loads nothing language-specific or loads the resource whole. It"
         f" asks for `mechanics`, which is the one scope it may act on"
-        f" (ADR-0087). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     for scope in ("composition", "review", "anti-slop"):
         assert f"--scope={scope}" not in text, (
             f"{PROOFREAD}: the body asks the resolver for the `{scope}` scope,"
             f" which this Skill is contracted not to apply. A caller asks for"
             f" the scopes it can act on and is given those and no others"
-            f" (ADR-0087). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
 
 
@@ -6112,7 +6107,7 @@ def test_proofread_delivers_through_the_shared_output_contract() -> None:
 
     Where a result goes, when a source file may be replaced by it, and what
     happens when nothing changed are stated once in the Collection Library
-    (ADR-0091). A Skill restating them in its own body is a second copy free to
+    (ADR-0178). A Skill restating them in its own body is a second copy free to
     drift from the one every other Skill delivers by.
     """
 
@@ -6122,19 +6117,19 @@ def test_proofread_delivers_through_the_shared_output_contract() -> None:
         f"{PROOFREAD}: the body delivers its Text Artifact without following"
         f" the Collection Library's delivery contract, so the Output Target,"
         f" In-place Editing, its refusals, and the no-change status are this"
-        f" Skill's own account of rules it shares with its peers (ADR-0091,"
-        f" ADR-0076). See {STANDARD}."
+        f" Skill's own account of rules it shares with its peers (ADR-0178,"
+        f" ADR-0177). See {STANDARD}."
     )
     assert "`my-file-2.md`" not in text, (
         f"{PROOFREAD}: the body spells out the shared collision sequence"
         f" instead of following the contract that owns it, which is one rule"
-        f" made into two things to keep true (ADR-0091). See {STANDARD}."
+        f" made into two things to keep true (ADR-0178). See {STANDARD}."
     )
 
 
 # The language-independent half of objective correctness, beside the contract a
 # first draft is written against and the catalogue of machine-sounding prose.
-# Proofread reads none of its siblings and this one by name (ADR-0121).
+# Proofread reads none of its siblings and this one by name (ADR-0178).
 MECHANICS = EDITORIAL / "mechanics.md"
 
 # The directory the mechanics scopes live in, and the rule each of them used to
@@ -6168,13 +6163,13 @@ def test_the_collection_library_carries_the_shared_mechanics_contract() -> None:
     way and differ only in how strictly they default, so the rule is not
     language-specific and a scope is the wrong place for it: written once per
     language it is a rule that can disagree with itself, and written nowhere it
-    is decided by whoever is reading (ADR-0121, issue #125).
+    is decided by whoever is reading (ADR-0178, issue #125).
     """
 
     assert MECHANICS.is_file(), (
         f"{MECHANICS}: the rules of objective correctness that do not depend on"
         f" the language are stated once, beside the contract a draft is written"
-        f" against, rather than once in every Language Resource (ADR-0121)."
+        f" against, rather than once in every Language Resource (ADR-0178)."
         f" See {STANDARD}."
     )
 
@@ -6183,20 +6178,20 @@ def test_the_collection_library_carries_the_shared_mechanics_contract() -> None:
     assert BOUNDARY_RULE in text, (
         f"{MECHANICS}: the contract states no conditional for a comma joining"
         f" two main clauses, so the joint is judged by whoever is reading."
-        f" Whether the clauses cohere is what decides it (ADR-0121). See"
+        f" Whether the clauses cohere is what decides it (ADR-0178). See"
         f" {STANDARD}."
     )
     assert BOUNDARY_EXCEPTION in text, (
         f"{MECHANICS}: the contract names the error and not the accepted case,"
         f" which is how a mechanical pass starts correcting the"
         f" negative-positive contrast both shipped languages accept"
-        f" (ADR-0121). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     for phrase in MINIMUM_CORRECTION:
         assert phrase in text, (
             f"{MECHANICS}: the minimum safe correction is a change at the joint"
             f" alone, and {phrase!r} is not in the contract. A correction free"
-            f" to reach past the joint is a rewrite (ADR-0121). See {STANDARD}."
+            f" to reach past the joint is a rewrite (ADR-0178). See {STANDARD}."
         )
 
 
@@ -6206,8 +6201,7 @@ def test_proofread_reads_the_shared_mechanics_contract_and_no_other() -> None:
     Proofread loads the resolved language's mechanics scope and this contract,
     and the two together are that run's rules. Everything else in the editorial
     set belongs to the Skills contracted to apply it, and a mechanical pass
-    holding the wider contract is one round away from applying it (ADR-0087,
-    ADR-0112, ADR-0121).
+    holding the wider contract is one round away from applying it (ADR-0178).
     """
 
     text = PROOFREAD.read_text(encoding="utf-8")
@@ -6216,7 +6210,7 @@ def test_proofread_reads_the_shared_mechanics_contract_and_no_other() -> None:
         f"{PROOFREAD}: the body never reaches the shared mechanics contract, so"
         f" the rules of objective correctness that do not depend on the"
         f" language reach a run only where some language happens to restate"
-        f" them (ADR-0121). See {STANDARD}."
+        f" them (ADR-0178). See {STANDARD}."
     )
 
     for pointer in (
@@ -6229,7 +6223,7 @@ def test_proofread_reads_the_shared_mechanics_contract_and_no_other() -> None:
         assert pointer not in text, (
             f"{PROOFREAD}: the body reaches `{pointer}`, which is editorial"
             f" guidance this Skill is contracted not to apply. One document is"
-            f" admitted by name and nothing else is (ADR-0112, ADR-0121). See"
+            f" admitted by name and nothing else is (ADR-0178). See"
             f" {STANDARD}."
         )
 
@@ -6241,7 +6235,7 @@ def test_the_established_variant_rule_is_stated_once_for_every_language() -> Non
     forms are established the text's own choice stands, and Proofread's own
     body said it a fourth time. That sentence is what kept a comma splice
     standing on four independent runs, so it is stated once, where it can be
-    worded not to reach an error the contract names (ADR-0121, issue #125).
+    worded not to reach an error the contract names (ADR-0178, issue #125).
     """
 
     contract = MECHANICS.read_text(encoding="utf-8")
@@ -6249,13 +6243,13 @@ def test_the_established_variant_rule_is_stated_once_for_every_language() -> Non
     assert VARIANT_RULE in contract, (
         f"{MECHANICS}: the shared contract does not say that where several"
         f" forms are established the text's own choice stands, so the rule the"
-        f" Language Resources no longer carry is stated nowhere (ADR-0121)."
+        f" Language Resources no longer carry is stated nowhere (ADR-0178)."
         f" See {STANDARD}."
     )
     assert "preserves nothing the rules in hand name as an error" in contract, (
         f"{MECHANICS}: the rule is stated without the limit that keeps it from"
         f" reaching an error the contract itself names, which is the reading"
-        f" that left the splice standing (ADR-0121, issue #125). See"
+        f" that left the splice standing (ADR-0178, issue #125). See"
         f" {STANDARD}."
     )
 
@@ -6278,17 +6272,17 @@ def test_the_established_variant_rule_is_stated_once_for_every_language() -> Non
         f" here as well. A rule enters a scope because the language genuinely"
         f" differs or because the generic rule was observed to fail there, and"
         f" a rule written twice is a rule that can disagree with itself"
-        f" (ADR-0087, ADR-0121). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
 
 # The Skill this wave's editorial review ships as, read at the one seam a test
-# has: the body is the whole of what the agent executes (ADR-0046).
+# has: the body is the whole of what the agent executes (ADR-0177).
 REDLINE = REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md"
 
 # Its manpage, and the brief a correcting subagent is started from. The brief
 # is a file only this Skill opens, so it lives under the Skill's `references/`
-# (ADR-0063), and it is the whole of what reaches a subagent that has no
+# (ADR-0177), and it is the whole of what reaches a subagent that has no
 # history of its own to fall back on.
 REDLINE_HELP = REDLINE.parent / "help.md"
 REDLINE_CORRECTION = REDLINE.parent / "references" / "correction.md"
@@ -6307,7 +6301,7 @@ IMPROVISED_HANDOVER = (
 # What stands in its place: one handover, named once, with nothing left for a
 # run to invent. The brief is the subagent's whole instruction, and it is
 # never written anywhere a second process could read, replace, or delete it
-# (ADR-0118).
+# (ADR-0178).
 HANDOVER_RULE = (
     "the whole of its instruction",
     "Never write it to a file",
@@ -6336,7 +6330,7 @@ SLOP_PATTERNS = (
 
 
 def test_redline_reviews_a_text_artifact_that_nothing_here_wrote() -> None:
-    """Provenance is an optimisation, never an entry condition (ADR-0088).
+    """Provenance is an optimisation, never an entry condition (ADR-0178).
 
     Redline takes any Text Artifact — Write's, a human's, or one produced
     somewhere else entirely. Handoff Metadata is read where a recognized map
@@ -6355,12 +6349,12 @@ def test_redline_reviews_a_text_artifact_that_nothing_here_wrote() -> None:
         f"{REDLINE}: the body does not say that Handoff Metadata is never"
         f" created where a Text Artifact carries none. Requiring or writing it"
         f" would make provenance an entry condition instead of a shortcut"
-        f" (ADR-0088). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert "kntnt" in text and "frontmatter" in text, (
         f"{REDLINE}: the body never says which frontmatter is this"
         f" collection's, so unrelated document fields read as configuration"
-        f" (ADR-0088). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
 
@@ -6371,7 +6365,7 @@ def test_redline_loads_the_contract_it_reviews_against() -> None:
     genre and technique with theirs, the shared anti-slop catalogue, and the
     three scopes of the resolved Language Resource it may act on. Mechanics
     belong to the closing Proofread pass, which resolves them itself
-    (ADR-0087, ADR-0095).
+    (ADR-0178).
     """
 
     text = REDLINE.read_text(encoding="utf-8")
@@ -6383,7 +6377,7 @@ def test_redline_loads_the_contract_it_reviews_against() -> None:
     ):
         assert pointer in text, (
             f"{REDLINE}: the body never reaches `{pointer}`, so part of what"
-            f" the review is read against is not loaded (ADR-0095). See"
+            f" the review is read against is not loaded (ADR-0178). See"
             f" {STANDARD}."
         )
 
@@ -6391,18 +6385,18 @@ def test_redline_loads_the_contract_it_reviews_against() -> None:
         assert f"--scope={scope}" in text, (
             f"{REDLINE}: the body never asks the resolver for the `{scope}`"
             f" scope, which is language-specific guidance this Skill is"
-            f" contracted to apply (ADR-0087). See {STANDARD}."
+            f" contracted to apply (ADR-0178). See {STANDARD}."
         )
     assert "--scope=mechanics" not in text, (
         f"{REDLINE}: the body asks for the `mechanics` scope, which belongs to"
         f" the closing Proofread pass and is resolved there. A caller asks for"
         f" the scopes it can act on and is given those and no others"
-        f" (ADR-0087). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert ".review.md" in text.replace("base.review.md", ""), (
         f"{REDLINE}: the body loads no review extension for the selected genre"
         f" or technique, so the diagnostic half of those resources is written"
-        f" for a reader that never opens it (ADR-0095). See {STANDARD}."
+        f" for a reader that never opens it (ADR-0178). See {STANDARD}."
     )
 
 
@@ -6410,7 +6404,7 @@ def test_redline_loads_the_contract_it_reviews_against() -> None:
 # clauses the inference rule is held to in both of them. A genre inferred
 # rather than named is settled against the installed filenames and the opening
 # of each installed genre resource, and against nothing further of any of them
-# (ADR-0115). The licence is one paragraph, compared here across both bodies,
+# (ADR-0178). The licence is one paragraph, compared here across both bodies,
 # because an inference rule that holds in one Skill and not the other is two
 # rules for one precedence.
 WRITE = REPO_ROOT / "skills" / "editorial" / "write" / "SKILL.md"
@@ -6445,7 +6439,7 @@ def _inference_paragraph(path: Path) -> str:
     assert len(carrying) == 1, (
         f"{path}: the body states what a run may read to infer a genre in"
         f" {len(carrying)} paragraphs. Inference is licensed once, by name,"
-        f" where the genre is resolved (ADR-0115). See {STANDARD}."
+        f" where the genre is resolved (ADR-0178). See {STANDARD}."
     )
     return carrying[0]
 
@@ -6460,7 +6454,7 @@ def test_inferring_a_genre_reads_the_installed_openings_and_nothing_further() ->
     asks for (issues #139, #140). The resource format already carries the
     answer more cheaply: every genre opens with its name and a paragraph saying
     what it is, so that is what inference reads, and it stops there
-    (ADR-0095, ADR-0115).
+    (ADR-0178).
     """
 
     for path in (WRITE, REDLINE):
@@ -6469,12 +6463,12 @@ def test_inferring_a_genre_reads_the_installed_openings_and_nothing_further() ->
         assert GENRE_INFERENCE_BOUND in paragraph, (
             f"{path}: the body says what inference may read and not where the"
             f" reading stops, so a candidate opened for its opening may be"
-            f" read to the end (ADR-0115). See {STANDARD}."
+            f" read to the end (ADR-0178). See {STANDARD}."
         )
         assert "no other" in paragraph, (
             f"{path}: the body licenses inference without saying that the"
             f" loading step is unchanged by it, so what resolution read reads"
-            f" as what loading admits (ADR-0115). See {STANDARD}."
+            f" as what loading admits (ADR-0178). See {STANDARD}."
         )
 
 
@@ -6483,13 +6477,13 @@ def test_the_two_skills_infer_a_genre_in_the_same_terms() -> None:
 
     Write and Redline resolve a genre through the same precedence, so an
     inference rule stated in one and not the other — or stated differently in
-    each — is two rules a user meets as one (ADR-0115).
+    each — is two rules a user meets as one (ADR-0178).
     """
 
     assert _inference_paragraph(WRITE) == _inference_paragraph(REDLINE), (
         f"{WRITE} and {REDLINE}: the two bodies say different things about"
         f" what a run may read to infer a genre, for one precedence they"
-        f" share (ADR-0115). See {STANDARD}."
+        f" share (ADR-0178). See {STANDARD}."
     )
 
 
@@ -6500,7 +6494,7 @@ def test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading() ->
     the loading step still admits what it always admitted: the base contract,
     the resolved genre, the language scopes the resolver returned, and an
     optional technique — with the review halves Redline already loads beside
-    them (ADR-0095, ADR-0115).
+    them (ADR-0178).
     """
 
     for path in (WRITE, REDLINE):
@@ -6510,14 +6504,14 @@ def test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading() ->
         assert GENRE_INFERENCE_LICENCE in resolution, (
             f"{path}: what inference may read is licensed outside"
             f" `## Resolution`, which is where the genre is settled"
-            f" (ADR-0115). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
 
         for clause in LOADING_CLAUSES[path.parent.name]:
             assert clause in text, (
                 f"{path}: the loading step no longer carries {clause!r}, so"
                 f" the door the licence above must not widen is open"
-                f" (ADR-0095, ADR-0115). See {STANDARD}."
+                f" (ADR-0178). See {STANDARD}."
             )
 
 
@@ -6528,7 +6522,7 @@ def test_the_resource_format_records_what_inference_is_given_to_read() -> None:
     it governs — a resource whose opening does not say what it is leaves a run
     choosing between installed genres nothing to read but the filename, and
     the reading it would fall back on is the one this rule removed
-    (ADR-0115).
+    (ADR-0178).
     """
 
     readme = EDITORIAL / "README.md"
@@ -6537,25 +6531,25 @@ def test_the_resource_format_records_what_inference_is_given_to_read() -> None:
     assert "inferred rather than named" in text, (
         f"{readme}: the format page does not say that a genre inferred rather"
         f" than named is inferred against these openings, so the requirement"
-        f" reads as a convenience anybody may drop (ADR-0115). See {STANDARD}."
+        f" reads as a convenience anybody may drop (ADR-0178). See {STANDARD}."
     )
 
     # The page ships to an installed reader, who has no ADR directory, so the
     # record is cited from the standard instead.
-    assert "ADR-0115" not in text, (
+    assert "ADR-0178" not in text, (
         f"{readme}: an installed reader receives this page and not this"
         f" repository's records, so the rule is carried here and the citation"
         f" in {STANDARD}."
     )
-    assert "ADR-0115" in (REPO_ROOT / STANDARD).read_text(encoding="utf-8"), (
+    assert "ADR-0178" in (REPO_ROOT / STANDARD).read_text(encoding="utf-8"), (
         f"{STANDARD}: the rule binds every Skill resolving a genre and is"
-        f" stated here without the record carrying its reasoning (ADR-0115)."
+        f" stated here without the record carrying its reasoning (ADR-0178)."
     )
 
 
 # The level the two Skills read that section at. It is one sentence both
 # bodies carry word for word: one precedence with one question cannot have two
-# answers (ADR-0164).
+# answers (ADR-0178).
 GENRE_TECHNIQUE_LEVEL = (
     "6. For the technique alone: the technique the resolved genre names as the"
     " one it is ordinarily written with, where that genre names one."
@@ -6573,7 +6567,7 @@ def test_every_genre_names_the_technique_it_is_ordinarily_written_with() -> None
     A genre's base half names the technique that genre is ordinarily written
     with, or states that it has none, and the check is exhaustive over the
     directory rather than over any list written anywhere — which is what keeps
-    adding a genre a matter of writing one file (ADR-0095, ADR-0164).
+    adding a genre a matter of writing one file (ADR-0178).
     """
 
     installed = {
@@ -6595,12 +6589,12 @@ def test_every_genre_names_the_technique_it_is_ordinarily_written_with() -> None
             f" ordinarily written with, so a run that resolved it and named no"
             f" technique has nothing to read and the arc this kind of text"
             f" ordinarily has is reached only by a user who knew to ask"
-            f" (ADR-0164). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
         assert stated, (
             f"{path}: the section naming this genre's ordinary technique is"
             f" empty, which states neither a technique nor that the genre has"
-            f" none (ADR-0164). See {STANDARD}."
+            f" none (ADR-0178). See {STANDARD}."
         )
 
         named = ordinary_technique(stated)
@@ -6608,7 +6602,7 @@ def test_every_genre_names_the_technique_it_is_ordinarily_written_with() -> None
             f"{path}: the genre opens that section with {named!r}, which is"
             f" neither `none` nor a technique this Collection installs, so the"
             f" level that reads it resolves to a resource that is not there"
-            f" (ADR-0164). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
 
 
@@ -6618,7 +6612,7 @@ def test_the_genre_is_a_level_of_every_technique_resolution_order() -> None:
     The genre's level sits below the invocation, a recognized map and an
     instruction, and above no technique at all, so a user who names a
     technique gets the one they named and a user who names none gets the arc
-    that kind of text ordinarily has (ADR-0164).
+    that kind of text ordinarily has (ADR-0178).
     """
 
     for path in (WRITE, REDLINE):
@@ -6629,13 +6623,13 @@ def test_the_genre_is_a_level_of_every_technique_resolution_order() -> None:
             f"{path}: the resolution order carries no level for the technique"
             f" the resolved genre names, so a run that names a kind of text"
             f" and no technique writes to no arc while the genre it resolved"
-            f" states one (ADR-0164). See {STANDARD}."
+            f" states one (ADR-0178). See {STANDARD}."
         )
 
         # The level is read after the genre is settled, and out of that genre.
         assert "Settle the genre before the technique" in text, (
             f"{path}: nothing orders the two, so the technique may be settled"
-            f" against a genre the run has not yet resolved (ADR-0164). See"
+            f" against a genre the run has not yet resolved (ADR-0178). See"
             f" {STANDARD}."
         )
 
@@ -6645,7 +6639,7 @@ def test_the_genre_is_a_level_of_every_technique_resolution_order() -> None:
         ), (
             f"{path}: no technique at all is no longer the level below the"
             f" genre's, so the genre either sits at the foot of the order or"
-            f" has displaced the default (ADR-0164). See {STANDARD}."
+            f" has displaced the default (ADR-0178). See {STANDARD}."
         )
 
 
@@ -6655,7 +6649,7 @@ def test_naming_a_technique_is_still_not_inferring_one() -> None:
     What the amendment changes is where a selection may come from, never that
     a technique comes from a selection. A text that falls into a shape has not
     selected one, and both bodies say so in the same words they always did
-    (ADR-0095, ADR-0115, ADR-0164).
+    (ADR-0178).
     """
 
     for path, tail in (
@@ -6667,12 +6661,12 @@ def test_naming_a_technique_is_still_not_inferring_one() -> None:
         assert TECHNIQUE_SELECTION_SOURCES in text, (
             f"{path}: the body no longer names the four things that can select"
             f" a technique, so a run meets a genre supplying one with no rule"
-            f" saying it may (ADR-0164). See {STANDARD}."
+            f" saying it may (ADR-0178). See {STANDARD}."
         )
         assert f"{TECHNIQUE_SELECTION_SOURCES} {tail}" in text, (
             f"{path}: the prohibition on applying a technique because the text"
             f" falls into its shape no longer follows the sources that may"
-            f" select one (ADR-0095, ADR-0164). See {STANDARD}."
+            f" select one (ADR-0178). See {STANDARD}."
         )
 
         # A genre is settled against the installed openings, and the statement
@@ -6680,8 +6674,8 @@ def test_naming_a_technique_is_still_not_inferring_one() -> None:
         assert GENRE_TECHNIQUE_HEADING not in _inference_paragraph(path), (
             f"{path}: the licence for inferring a genre reaches the section a"
             f" genre states its ordinary technique in, which puts an arc in"
-            f" front of a run still deciding which genre this is (ADR-0115,"
-            f" ADR-0164). See {STANDARD}."
+            f" front of a run still deciding which genre this is (ADR-0178,"
+            f" ADR-0178). See {STANDARD}."
         )
 
 
@@ -6690,7 +6684,7 @@ def test_the_delivery_says_where_a_resolved_technique_came_from() -> None:
 
     The genre supplying one is invisible unless the run says so, and a reader
     who meets an arc they did not ask for has no way to tell a resolved
-    technique from a Skill inventing one (ADR-0164).
+    technique from a Skill inventing one (ADR-0178).
     """
 
     for path in (WRITE, REDLINE):
@@ -6699,7 +6693,7 @@ def test_the_delivery_says_where_a_resolved_technique_came_from() -> None:
         assert "naming the genre where the genre supplied it" in text, (
             f"{path}: the delivery account never says where a resolved"
             f" technique came from, so a genre-supplied arc arrives"
-            f" unexplained (ADR-0164). See {STANDARD}."
+            f" unexplained (ADR-0178). See {STANDARD}."
         )
 
 
@@ -6708,8 +6702,7 @@ def test_the_resource_format_places_the_ordinary_technique_below_the_opening() -
 
     The statement is owed by every genre and belongs below its requirements,
     outside the opening a genre is inferred against — a technique named in the
-    opening would be read as evidence about which genre applies (ADR-0115,
-    ADR-0164).
+    opening would be read as evidence about which genre applies (ADR-0178).
     """
 
     readme = EDITORIAL / "README.md"
@@ -6718,12 +6711,12 @@ def test_the_resource_format_places_the_ordinary_technique_below_the_opening() -
     assert "ordinarily written with" in text, (
         f"{readme}: the format page says nothing about the technique a genre"
         f" names, so the next genre is written without one and the"
-        f" contradiction is visible only in a run (ADR-0164). See {STANDARD}."
+        f" contradiction is visible only in a run (ADR-0178). See {STANDARD}."
     )
     assert "below the requirements" in text, (
         f"{readme}: the format page does not say where the statement goes, so"
         f" the next genre may put it in the opening a run reads to infer a"
-        f" genre (ADR-0115, ADR-0164). See {STANDARD}."
+        f" genre (ADR-0178). See {STANDARD}."
     )
 
 
@@ -6733,7 +6726,7 @@ def test_redline_leaves_source_fidelity_to_the_skill_that_owns_it() -> None:
     Redline reviews the Text Artifact against its editorial contract. It never
     compares the artifact with source material and never reports that source
     verification was unavailable, because a caveat about material nobody
-    supplied is noise in every run that was never a Write run (ADR-0088).
+    supplied is noise in every run that was never a Write run (ADR-0178).
     """
 
     text = REDLINE.read_text(encoding="utf-8")
@@ -6741,12 +6734,12 @@ def test_redline_leaves_source_fidelity_to_the_skill_that_owns_it() -> None:
     assert "source material" in text, (
         f"{REDLINE}: the body says nothing about source material, so nothing"
         f" stops a review from asking for material it was never given"
-        f" (ADR-0088). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert "Source Fidelity" in text, (
         f"{REDLINE}: the body never names Source Fidelity as somebody else's"
         f" contract, and the boundary is what keeps this Skill usable where no"
-        f" Write invocation and no material exist (ADR-0088). See {STANDARD}."
+        f" Write invocation and no material exist (ADR-0178). See {STANDARD}."
     )
 
 
@@ -6754,7 +6747,7 @@ def test_redline_invokes_proofread_once_and_declares_what_it_needs() -> None:
     """The mechanical pass is last, and both requirements are hard.
 
     Proofread is a declared Skill Dependency followed through its public
-    `SKILL.md` rather than through its private files (ADR-0076), and subagents
+    `SKILL.md` rather than through its private files (ADR-0177), and subagents
     are a hard Capability whatever Correction Budget is in force, so the Skill
     has one honest availability contract rather than one per invocation.
     """
@@ -6764,7 +6757,7 @@ def test_redline_invokes_proofread_once_and_declares_what_it_needs() -> None:
     assert "$HERE/../proofread/SKILL.md" in text, (
         f"{REDLINE}: the body never follows Proofread's public `SKILL.md`, so"
         f" the closing mechanical pass is either absent or performed by"
-        f" Redline itself (ADR-0088, ADR-0076). See {STANDARD}."
+        f" Redline itself (ADR-0178, ADR-0177). See {STANDARD}."
     )
     closing_pass = next(line for line in text.splitlines() if line.startswith("9. "))
     for requirement in (
@@ -6780,14 +6773,14 @@ def test_redline_invokes_proofread_once_and_declares_what_it_needs() -> None:
         )
     assert '\n  kntnt.skills: "proofread"\n' in text, (
         f"{REDLINE}: Proofread is invoked and not declared, so Select cannot"
-        f" show what Redline needs before it is Enabled (ADR-0088). See"
+        f" show what Redline needs before it is Enabled (ADR-0178). See"
         f" {STANDARD}."
     )
     assert '\n  kntnt.capabilities: "subagents"\n' in text, (
         f"{REDLINE}: subagents are a hard Capability of this Skill whatever"
         f" the Correction Budget in force is, a conditional declaration being"
         f" an availability contract that changes with the invocation"
-        f" (ADR-0062). See {STANDARD}."
+        f" (ADR-0177). See {STANDARD}."
     )
 
 
@@ -6796,7 +6789,7 @@ def test_redline_delivers_through_the_shared_output_contract() -> None:
 
     Where a result goes, when a source file may be replaced by it, and what
     happens when nothing changed are stated once in the Collection Library
-    (ADR-0091). A Skill restating them in its own body is a second copy free
+    (ADR-0178). A Skill restating them in its own body is a second copy free
     to drift from the one every other Skill delivers by.
     """
 
@@ -6806,13 +6799,13 @@ def test_redline_delivers_through_the_shared_output_contract() -> None:
         f"{REDLINE}: the body delivers its Text Artifact without following the"
         f" Collection Library's delivery contract, so the Output Target,"
         f" In-place Editing, its refusals, and the no-change status are this"
-        f" Skill's own account of rules it shares with its peers (ADR-0091,"
-        f" ADR-0076). See {STANDARD}."
+        f" Skill's own account of rules it shares with its peers (ADR-0178,"
+        f" ADR-0177). See {STANDARD}."
     )
     assert "`my-file-2.md`" not in text, (
         f"{REDLINE}: the body spells out the shared collision sequence instead"
         f" of following the contract that owns it, which is one rule made into"
-        f" two things to keep true (ADR-0091). See {STANDARD}."
+        f" two things to keep true (ADR-0178). See {STANDARD}."
     )
 
 
@@ -6914,7 +6907,7 @@ def test_redline_reviews_the_operand_whatever_it_turns_out_to_be() -> None:
 # The closure is a statement about the form of an invocation; the shared
 # Invocation Envelope refuses irrelevant, unaddressable, materially ambiguous,
 # conflicting, and scope-widening guidance whatever this list says, and naming
-# it is what keeps the closure from reading as the whole story (ADR-0122).
+# it is what keeps the closure from reading as the whole story (ADR-0176).
 REDLINE_ELSEWHERE = "`## INVOCATION ENVELOPE`"
 
 # A sentence claiming to enumerate every place a run may halt is the shape of
@@ -6944,7 +6937,7 @@ def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
     out, and a run reading the enumeration as the set had no reason left to
     consult the section this file binds itself to two headings earlier. So the
     closure says what it governs and points at the rest rather than counting it
-    (ADR-0122, issue #141).
+    (ADR-0176, issue #141).
     """
 
     passages = {
@@ -6971,14 +6964,14 @@ def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
                 f" form of an invocation, and the halts written elsewhere are"
                 f" pointed at rather than counted: an enumeration that misses"
                 f" one repeals it for whoever reads the enumeration as the set"
-                f" (ADR-0122, issue #141). See {STANDARD}."
+                f" (ADR-0176, issue #141). See {STANDARD}."
             )
 
         assert elsewhere in passage, (
             f"{where}: the closure calls its list whole and never points at"
             f" the {elsewhere} section, leaving a run to read a"
             f" closure over invocation form as a closure over every refusal"
-            f" this Skill makes (ADR-0122, issue #141). See {STANDARD}."
+            f" this Skill makes (ADR-0176, issue #141). See {STANDARD}."
         )
 
 
@@ -6988,7 +6981,7 @@ def test_the_correction_budget_is_any_non_negative_integer_defaulting_to_one() -
     The budget is a ceiling on delegated corrections rather than a quota to
     reach: `0` reviews and reports without correcting, the default `1` buys
     one correction and the re-review that verifies it, and a higher number
-    bounds a longer loop explicitly (ADR-0107). Every surface a caller reads
+    bounds a longer loop explicitly (ADR-0178). Every surface a caller reads
     says the same range and the same default, and the release that accepted
     zero alone is gone from all of them.
     """
@@ -7001,31 +6994,31 @@ def test_the_correction_budget_is_any_non_negative_integer_defaulting_to_one() -
         assert "non-negative integer" in text, (
             f"{path}: the Correction Budget's range is not stated, so what"
             f" `--max` accepts is left to be discovered by refusal"
-            f" (ADR-0107). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
         assert (
             "release accepts" not in text and "release does not accept" not in text
         ), (
             f"{path}: the budget is still documented against what one release"
             f" accepts, which is the half-built Skill this one has left"
-            f" (ADR-0107). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
 
     assert "defaults to `1`" in body, (
         f"{REDLINE}: the body does not default the Correction Budget to `1`,"
         f" so an ordinary review either corrects nothing or corrects without"
-        f" a bound nobody wrote down (ADR-0107). See {STANDARD}."
+        f" a bound nobody wrote down (ADR-0178). See {STANDARD}."
     )
     assert "`1`" in _optional_section(manpage, "## OPTIONS"), (
         f"{REDLINE_HELP}: the `--max` option does not state its default, which"
-        f" is what a reader deciding whether to name it needs (ADR-0107). See"
+        f" is what a reader deciding whether to name it needs (ADR-0178). See"
         f" {STANDARD}."
     )
     assert "zero alone" not in readme, (
         f"{REPO_ROOT / 'README.md'}: the `### redline` section still says the"
         f" Correction Budget accepts zero alone. The README is where somebody"
         f" decides whether they want the Skill, and it is describing a release"
-        f" that has been outrun (ADR-0107). See {STANDARD}."
+        f" that has been outrun (ADR-0178). See {STANDARD}."
     )
 
 
@@ -7036,7 +7029,7 @@ def test_each_correction_is_delegated_to_a_subagent_that_carries_no_history() ->
     the whole of what reaches the subagent: the complete current Text
     Artifact, the complete current findings, the resolved editorial
     parameters, and the requirement to preserve what the findings do not
-    concern (ADR-0107). A summary of any of those is this session's reading
+    concern (ADR-0178). A summary of any of those is this session's reading
     of the text, which is the very thing the fresh subagent exists to be
     without.
     """
@@ -7046,12 +7039,12 @@ def test_each_correction_is_delegated_to_a_subagent_that_carries_no_history() ->
     assert REDLINE_CORRECTION.is_file(), (
         f"{REDLINE_CORRECTION}: a correcting subagent is started from a brief"
         f" this Skill alone opens, which belongs under its `references/`"
-        f" (ADR-0063, ADR-0107). See {STANDARD}."
+        f" (ADR-0177, ADR-0178). See {STANDARD}."
     )
     assert "references/correction.md" in body, (
         f"{REDLINE}: the body never reaches the correction brief, so what a"
         f" fresh subagent receives is left to the session that dispatches it"
-        f" (ADR-0107). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
     brief = REDLINE_CORRECTION.read_text(encoding="utf-8")
@@ -7063,18 +7056,18 @@ def test_each_correction_is_delegated_to_a_subagent_that_carries_no_history() ->
         assert phrase in brief.lower(), (
             f"{REDLINE_CORRECTION}: the brief does not carry {missing}, so a"
             f" subagent with no history of its own repairs something other"
-            f" than the text as it now stands (ADR-0107). See {STANDARD}."
+            f" than the text as it now stands (ADR-0178). See {STANDARD}."
         )
     for parameter in ("genre", "technique", "language"):
         assert parameter in brief.lower(), (
             f"{REDLINE_CORRECTION}: the brief passes on no {parameter}, so the"
             f" repair is made against a contract other than the one the review"
-            f" found the text wanting against (ADR-0107). See {STANDARD}."
+            f" found the text wanting against (ADR-0178). See {STANDARD}."
         )
     assert "fresh" in body.lower(), (
         f"{REDLINE}: the body does not say that each correction goes to a"
         f" fresh subagent, so one context accumulates every round's framing"
-        f" and the previous attempt biases the next (ADR-0107). See"
+        f" and the previous attempt biases the next (ADR-0178). See"
         f" {STANDARD}."
     )
 
@@ -7087,7 +7080,7 @@ def _assert_one_handover_with_nothing_left_to_invent(brief: Path, body: Path) ->
     text among it. A run free to choose how that travels is a run that chooses
     differently from the next one, and a predictable path under a shared
     temporary directory is a name anything else on the machine can read,
-    replace, or delete for as long as the round lasts (ADR-0118).
+    replace, or delete for as long as the round lasts (ADR-0178).
     """
 
     filled = brief.read_text(encoding="utf-8")
@@ -7099,7 +7092,7 @@ def _assert_one_handover_with_nothing_left_to_invent(brief: Path, body: Path) ->
                 f"{path}: the run is still licensed to write the filled-in"
                 f" brief somewhere and send a path in its place, so how the"
                 f" user's text reaches a correction subagent is settled anew"
-                f" every run (ADR-0107, ADR-0118). See {STANDARD}."
+                f" every run (ADR-0178). See {STANDARD}."
             )
 
     for rule in HANDOVER_RULE:
@@ -7108,14 +7101,14 @@ def _assert_one_handover_with_nothing_left_to_invent(brief: Path, body: Path) ->
             f" directly, as the whole of its instruction and never as a file"
             f" a second process could hold, so the delivery of the complete"
             f" text and the complete findings is left to whatever the"
-            f" dispatching session invents (ADR-0107, ADR-0118). See"
+            f" dispatching session invents (ADR-0178). See"
             f" {STANDARD}."
         )
 
     assert "delivered as that brief says" in dispatch, (
         f"{body}: the delegating step reaches the brief for what to fill in"
         f" and not for how to hand it over, which is the half of the brief"
-        f" that was improvised (ADR-0107, ADR-0118). See {STANDARD}."
+        f" that was improvised (ADR-0178). See {STANDARD}."
     )
 
 
@@ -7130,7 +7123,7 @@ def test_a_correction_is_verified_by_review_rather_than_by_its_own_report() -> N
 
     Every returned text is reviewed again against everything the first review
     was read against, and the budget falls by exactly one per correction, so a
-    round that returned nothing usable still costs what it spent (ADR-0107).
+    round that returned nothing usable still costs what it spent (ADR-0178).
     """
 
     body = REDLINE.read_text(encoding="utf-8")
@@ -7138,12 +7131,12 @@ def test_a_correction_is_verified_by_review_rather_than_by_its_own_report() -> N
     assert "reviewed again" in body or "review it again" in body, (
         f"{REDLINE}: the body never reviews a corrected text again, so a"
         f" correction is accepted on the report of whoever made it"
-        f" (ADR-0107). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert "once per correction" in body, (
         f"{REDLINE}: the body does not say the budget falls once per"
         f" correction, so the bound a caller named is not the bound the loop"
-        f" keeps (ADR-0107). See {STANDARD}."
+        f" keeps (ADR-0178). See {STANDARD}."
     )
 
 
@@ -7154,7 +7147,7 @@ def test_the_correction_loop_still_stops_on_its_first_three_conditions() -> None
     so clean text is not rewritten for the sake of a number; it stops when a
     correction makes no relevant progress, saying what remains rather than
     repeating a no-op round; and it stops when the budget is spent, delivering
-    the text with the findings that are left (ADR-0107). The closing
+    the text with the findings that are left (ADR-0178). The closing
     mechanical pass happens once after the loop whatever stopped it, and
     nothing substantive follows it.
     """
@@ -7164,20 +7157,20 @@ def test_the_correction_loop_still_stops_on_its_first_three_conditions() -> None
     assert "unspent" in body, (
         f"{REDLINE}: the body never leaves budget unspent, so a clean text is"
         f" corrected again to use up a number the caller named as a ceiling"
-        f" (ADR-0107). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert "no relevant progress" in body, (
         f"{REDLINE}: the body has no stop for a correction that changed"
         f" nothing the findings named, so the loop repeats a round already"
-        f" shown to achieve nothing (ADR-0107). See {STANDARD}."
+        f" shown to achieve nothing (ADR-0178). See {STANDARD}."
     )
     assert "budget is spent" in body or "budget is exhausted" in body, (
         f"{REDLINE}: the body never stops on the spent budget, so the bound"
-        f" the caller named bounds nothing (ADR-0107). See {STANDARD}."
+        f" the caller named bounds nothing (ADR-0178). See {STANDARD}."
     )
     assert "$HERE/../proofread/SKILL.md" in body, (
         f"{REDLINE}: the closing mechanical pass is gone from the body"
-        f" (ADR-0088). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
     loop = body.index("Correction Budget", body.index("## Steps"))
@@ -7185,7 +7178,7 @@ def test_the_correction_loop_still_stops_on_its_first_three_conditions() -> None
     assert loop < proofread, (
         f"{REDLINE}: the mechanical pass is invoked before the correction loop"
         f" it is meant to close, so a correction can put mechanical errors"
-        f" back into a text already cleaned of them (ADR-0088, ADR-0107). See"
+        f" back into a text already cleaned of them (ADR-0178). See"
         f" {STANDARD}."
     )
 
@@ -7196,27 +7189,27 @@ def test_the_anti_slop_catalogue_is_shared_rather_than_one_skills_property() -> 
     The catalogue is a condensed adaptation the collection owns, which is what
     keeps an external Skill out of the dependency lists, and it ships in the
     Collection Library because a peer applying the pass alone must read it
-    without reaching into Redline's own files (ADR-0076, ADR-0101).
+    without reaching into Redline's own files (ADR-0177, ADR-0178).
     """
 
     assert ANTI_SLOP.is_file(), (
         f"{ANTI_SLOP}: the anti-slop catalogue has more than one consumer, so"
         f" it belongs to the Collection Library rather than to the Skill that"
-        f" happened to need it first (ADR-0076, ADR-0101). See {STANDARD}."
+        f" happened to need it first (ADR-0177, ADR-0178). See {STANDARD}."
     )
 
     catalogue = ANTI_SLOP.read_text(encoding="utf-8").lower()
     missing = [pattern for pattern in SLOP_PATTERNS if pattern not in catalogue]
     assert missing == [], (
         f"{missing}: the anti-slop catalogue does not carry these patterns,"
-        f" which are the ones the collection undertook to catch (ADR-0101)."
+        f" which are the ones the collection undertook to catch (ADR-0178)."
         f" See {STANDARD}."
     )
 
     assert "MIT" in ANTI_SLOP.read_text(encoding="utf-8"), (
         f"{ANTI_SLOP}: the catalogue adapts a substantial part of an upstream"
         f" MIT-licensed catalogue and ships without the upstream notice its"
-        f" terms require (ADR-0101). See {STANDARD}."
+        f" terms require (ADR-0178). See {STANDARD}."
     )
 
     private = sorted(
@@ -7228,12 +7221,12 @@ def test_the_anti_slop_catalogue_is_shared_rather_than_one_skills_property() -> 
     assert private == [], (
         f"{private}: a Skill ships its own copy of the anti-slop catalogue,"
         f" which makes one consumer the implementation owner of the other's"
-        f" rules (ADR-0076, ADR-0101). See {STANDARD}."
+        f" rules (ADR-0177, ADR-0178). See {STANDARD}."
     )
 
 
 # The Skill that applies the anti-slop pass alone, read at the one seam a test
-# has: the body is the whole of what the agent executes (ADR-0046). Its
+# has: the body is the whole of what the agent executes (ADR-0177). Its
 # manpage, and the brief its correcting subagents are started from.
 UNSLOP = REPO_ROOT / "skills" / "editorial" / "unslop" / "SKILL.md"
 UNSLOP_HELP = UNSLOP.parent / "help.md"
@@ -7254,7 +7247,7 @@ def _unslop() -> str:
     # nothing to judge and pass regardless.
     assert paths, (
         f"{UNSLOP.parent}: the Skill that applies the anti-slop pass alone"
-        f" ships in the Collection's editorial category (ADR-0112). See"
+        f" ships in the Collection's editorial category (ADR-0178). See"
         f" {STANDARD}."
     )
     return "\n".join(path.read_text(encoding="utf-8") for path in paths)
@@ -7279,7 +7272,7 @@ def test_unslop_loads_only_the_lens_it_applies() -> None:
     no technique, and none of the composition, review, or mechanics scopes.
     A Skill holding rules it is contracted not to apply is a Skill one round
     away from applying them, which is how a single pass becomes the whole
-    editorial contract nobody asked for (ADR-0087, ADR-0112).
+    editorial contract nobody asked for (ADR-0178).
     """
 
     body = UNSLOP.read_text(encoding="utf-8")
@@ -7288,19 +7281,19 @@ def test_unslop_loads_only_the_lens_it_applies() -> None:
     assert "$LIBRARY/references/editorial/anti-slop.md" in body, (
         f"{UNSLOP}: the body never reaches the shared anti-slop catalogue, so"
         f" the one pass this Skill exists to apply is applied from memory"
-        f" (ADR-0101, ADR-0112). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert "--scope=anti-slop" in body, (
         f"{UNSLOP}: the body never asks the resolver for the `anti-slop`"
         f" scope, which is where a language's own slop words, phrases,"
-        f" punctuation, and constructions live (ADR-0087). See {STANDARD}."
+        f" punctuation, and constructions live (ADR-0178). See {STANDARD}."
     )
     for scope in ("composition", "review", "mechanics"):
         assert f"--scope={scope}" not in shipped, (
             f"{UNSLOP.parent}: the Skill asks the resolver for the `{scope}`"
             f" scope, which belongs to the Skills contracted to act on it. A"
             f" caller asks for the scopes it can act on and is given those and"
-            f" no others (ADR-0087, ADR-0112). See {STANDARD}."
+            f" no others (ADR-0178). See {STANDARD}."
         )
     for pointer in (
         "editorial/base.md",
@@ -7312,7 +7305,7 @@ def test_unslop_loads_only_the_lens_it_applies() -> None:
             f"{UNSLOP.parent}: the Skill reaches `{pointer}`, which is part of"
             f" the editorial contract it selects none of. Typing the whole"
             f" contract to get one lens is the gesture this Skill exists to"
-            f" replace (ADR-0112). See {STANDARD}."
+            f" replace (ADR-0178). See {STANDARD}."
         )
 
     hint = _unslop_field("argument-hint")
@@ -7320,13 +7313,13 @@ def test_unslop_loads_only_the_lens_it_applies() -> None:
         assert option in hint, (
             f"{UNSLOP}: `argument-hint` offers no `{option}`, and the four"
             f" editorial options this Skill resolves are spelled as its peers"
-            f" spell them (ADR-0112). See {STANDARD}."
+            f" spell them (ADR-0178). See {STANDARD}."
         )
     for option in ("--genre", "--technique"):
         assert option not in hint, (
             f"{UNSLOP}: `argument-hint` offers `{option}`, which selects part"
             f" of an editorial contract this Skill never loads. A flag"
-            f" accepted here would be a flag with no work to do (ADR-0112)."
+            f" accepted here would be a flag with no work to do (ADR-0178)."
             f" See {STANDARD}."
         )
 
@@ -7336,7 +7329,7 @@ def test_unslop_reads_the_shared_catalogue_without_reaching_into_a_peer() -> Non
 
     The catalogue lives in the Collection Library precisely so a second
     consumer can apply the pass without the Skill that needed it first
-    becoming the implementation owner of its rules (ADR-0076, ADR-0101).
+    becoming the implementation owner of its rules (ADR-0177, ADR-0178).
     """
 
     body = UNSLOP.read_text(encoding="utf-8")
@@ -7345,13 +7338,13 @@ def test_unslop_reads_the_shared_catalogue_without_reaching_into_a_peer() -> Non
     assert "$LIBRARY" in body, (
         f"{UNSLOP}: the body defines no Collection Library, so the shared"
         f" catalogue and the language resources are reached from wherever the"
-        f" session happens to look (ADR-0076). See {STANDARD}."
+        f" session happens to look (ADR-0177). See {STANDARD}."
     )
     for peer in ("redline", "write", "proofread"):
         assert f"../{peer}/" not in shipped, (
             f"{UNSLOP.parent}: the Skill reads `{peer}`'s own files. A Skill"
             f" may follow a declared Dependency's public `SKILL.md` and never"
-            f" its `references/` or its `scripts/` (ADR-0076). See {STANDARD}."
+            f" its `references/` or its `scripts/` (ADR-0177). See {STANDARD}."
         )
 
     private = sorted(
@@ -7362,7 +7355,7 @@ def test_unslop_reads_the_shared_catalogue_without_reaching_into_a_peer() -> Non
     assert private == [], (
         f"{private}: the Skill ships a catalogue of its own beside the shared"
         f" one, which is the second copy the Library exists to prevent"
-        f" (ADR-0076, ADR-0101). See {STANDARD}."
+        f" (ADR-0177, ADR-0178). See {STANDARD}."
     )
 
 
@@ -7372,7 +7365,7 @@ def test_unslop_runs_no_mechanical_pass_and_names_the_separate_gesture() -> None
     Redline closes with a mechanical pass because it has just applied a whole
     editorial contract. This Skill applied one lens, so it proofreads nothing,
     declares no Dependency on a proofreading peer, and says on its own page
-    which gesture a reader wants for mechanical errors instead (ADR-0112).
+    which gesture a reader wants for mechanical errors instead (ADR-0178).
     """
 
     body = UNSLOP.read_text(encoding="utf-8")
@@ -7380,11 +7373,11 @@ def test_unslop_runs_no_mechanical_pass_and_names_the_separate_gesture() -> None
     assert '\n  kntnt.skills: ""\n' in body, (
         f"{UNSLOP}: the Skill declares a Dependency on a peer Skill. It calls"
         f" none — a Skill that ran a mechanical pass would be delivering work"
-        f" its caller did not ask for (ADR-0112). See {STANDARD}."
+        f" its caller did not ask for (ADR-0178). See {STANDARD}."
     )
     assert "$HERE/../proofread/SKILL.md" not in body, (
         f"{UNSLOP}: the body invokes the mechanical pass. This Skill was asked"
-        f" for one pass and gives one pass (ADR-0112). See {STANDARD}."
+        f" for one pass and gives one pass (ADR-0178). See {STANDARD}."
     )
 
     manpage = UNSLOP_HELP.read_text(encoding="utf-8")
@@ -7392,7 +7385,7 @@ def test_unslop_runs_no_mechanical_pass_and_names_the_separate_gesture() -> None
         f"{UNSLOP_HELP}: the page never names the separate gesture for"
         f" mechanical errors, so a reader whose text still has typos after"
         f" this pass is left to discover that it was never going to fix them"
-        f" (ADR-0112). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
 
@@ -7434,7 +7427,7 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
     Every correction goes to a subagent, so subagents are a hard Capability
     whatever Correction Budget an invocation names, and the shared resolver
     the language is settled through needs the Collection's normal runtime
-    (ADR-0062, ADR-0107).
+    (ADR-0177, ADR-0178).
     """
 
     body = UNSLOP.read_text(encoding="utf-8")
@@ -7442,12 +7435,12 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
     assert '\n  kntnt.capabilities: "subagents"\n' in body, (
         f"{UNSLOP}: subagents are a hard Capability of this Skill whatever the"
         f" Correction Budget in force is, a conditional declaration being an"
-        f" availability contract that changes with the invocation (ADR-0062)."
+        f" availability contract that changes with the invocation (ADR-0177)."
         f" See {STANDARD}."
     )
     assert '\n  kntnt.binaries: "uv"\n' in body, (
         f"{UNSLOP}: the Skill runs the Collection's resolver and declares none"
-        f" of the runtime it takes to run it (ADR-0062). See {STANDARD}."
+        f" of the runtime it takes to run it (ADR-0177). See {STANDARD}."
     )
     assert 'check --here="$HERE"' in body, (
         f"{UNSLOP}: the dependency lists are not empty and the body calls no"
@@ -7460,7 +7453,7 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
         assert requirement in compatibility, (
             f"{UNSLOP}: `compatibility` does not name {requirement!r}, and it"
             f" is the one field a reader outside this collection knows to look"
-            f" at (ADR-0062). See {STANDARD}."
+            f" at (ADR-0177). See {STANDARD}."
         )
 
 
@@ -7470,7 +7463,7 @@ def test_unslop_is_started_by_a_person_rather_than_by_a_model() -> None:
     A model reaching for this pass unasked would be rewriting a text on its
     own reading of how the text sounds, which is exactly the call the author
     is entitled to make. Both files say so, because Codex reads only the
-    sidecar and the harness reads only the frontmatter (ADR-0094, ADR-0112).
+    sidecar and the harness reads only the frontmatter (ADR-0177, ADR-0178).
     """
 
     body = UNSLOP.read_text(encoding="utf-8")
@@ -7478,7 +7471,7 @@ def test_unslop_is_started_by_a_person_rather_than_by_a_model() -> None:
     assert "\ndisable-model-invocation: true\n" in body, (
         f"{UNSLOP}: the frontmatter leaves this Skill open to a model starting"
         f" it, so a text is unslopped because something judged that it sounded"
-        f" wrong rather than because anybody asked (ADR-0094, ADR-0112). See"
+        f" wrong rather than because anybody asked (ADR-0177, ADR-0178). See"
         f" {STANDARD}."
     )
 
@@ -7486,7 +7479,7 @@ def test_unslop_is_started_by_a_person_rather_than_by_a_model() -> None:
     assert "allow_implicit_invocation: false" in sidecar, (
         f"{UNSLOP.parent / 'agents' / 'openai.yaml'}: the sidecar leaves this"
         f" Skill implicitly invocable, and it is the only copy of that"
-        f" decision Codex reads (ADR-0094). See {STANDARD}."
+        f" decision Codex reads (ADR-0177). See {STANDARD}."
     )
 
 
@@ -7498,8 +7491,8 @@ def test_unslop_carries_the_collections_one_correction_budget_contract() -> None
     findings; the budget falls once per correction; the returned text is
     reviewed again rather than accepted on its own report; and the loop stops
     on clean text, on no relevant progress, and on the spent budget
-    (ADR-0107). The brief carries no genre and no technique, because this
-    Skill resolves neither (ADR-0112).
+    (ADR-0178). The brief carries no genre and no technique, because this
+    Skill resolves neither (ADR-0178).
     """
 
     body = UNSLOP.read_text(encoding="utf-8")
@@ -7516,23 +7509,23 @@ def test_unslop_carries_the_collections_one_correction_budget_contract() -> None
         assert phrase in body, (
             f"{UNSLOP}: the body does not carry {missing}, so this Skill's"
             f" loop is a second set of semantics beside the one the Collection"
-            f" already has (ADR-0107, ADR-0112). See {STANDARD}."
+            f" already has (ADR-0178). See {STANDARD}."
         )
     assert "reviewed again" in body or "review it again" in body, (
         f"{UNSLOP}: the body never reviews a corrected text again, so a"
         f" correction is accepted on the report of whoever made it"
-        f" (ADR-0107). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
     assert UNSLOP_CORRECTION.is_file(), (
         f"{UNSLOP_CORRECTION}: a correcting subagent is started from a brief"
         f" this Skill alone opens, which belongs under its `references/`"
-        f" (ADR-0063, ADR-0107). See {STANDARD}."
+        f" (ADR-0177, ADR-0178). See {STANDARD}."
     )
     assert "references/correction.md" in body, (
         f"{UNSLOP}: the body never reaches the correction brief, so what a"
         f" fresh subagent receives is left to the session that dispatches it"
-        f" (ADR-0107). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
 
     brief = UNSLOP_CORRECTION.read_text(encoding="utf-8").lower()
@@ -7545,14 +7538,14 @@ def test_unslop_carries_the_collections_one_correction_budget_contract() -> None
         assert phrase in brief, (
             f"{UNSLOP_CORRECTION}: the brief does not carry {missing}, so a"
             f" subagent with no history of its own repairs something other"
-            f" than the text as it now stands (ADR-0107). See {STANDARD}."
+            f" than the text as it now stands (ADR-0178). See {STANDARD}."
         )
     for parameter in ("genre", "technique"):
         assert parameter not in brief, (
             f"{UNSLOP_CORRECTION}: the brief passes on a {parameter}, which"
             f" this Skill resolves nowhere and loads nothing for. A correction"
             f" made against a contract the review never applied is a change"
-            f" nobody asked for (ADR-0112). See {STANDARD}."
+            f" nobody asked for (ADR-0178). See {STANDARD}."
         )
 
 
@@ -7562,13 +7555,13 @@ def test_unslops_correction_brief_is_handed_over_the_same_single_way() -> None:
     Unslop dispatches corrections from a brief carrying the same user text
     under the same licence to improvise, and a rule holding in one Skill and
     not the other is the per-run choice again with a Skill's name on it
-    (ADR-0112, ADR-0118).
+    (ADR-0178).
     """
 
     _assert_one_handover_with_nothing_left_to_invent(UNSLOP_CORRECTION, UNSLOP)
 
 
-# The two guards that keep a longer loop from emptying a thin text (ADR-0120),
+# The two guards that keep a longer loop from emptying a thin text (ADR-0178),
 # each pinned by the clause the rule is stated in. The first two are the
 # dispatching run's, which is the only party holding what the text used to be;
 # the last four are the correction brief's, where a repair is made.
@@ -7607,7 +7600,7 @@ def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
     subagent is fresh by design and the re-review reads the text in front of
     it — so the fourth condition is stated where that history lives, and it
     carries the outstanding findings forward as its three siblings do
-    (ADR-0107, ADR-0120).
+    (ADR-0178).
     """
 
     for body, page in ((REDLINE, REDLINE_HELP), (UNSLOP, UNSLOP_HELP)):
@@ -7616,29 +7609,29 @@ def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
         assert FOUR_CONDITIONS in text, (
             f"{body}: the correction loop still stops at the first of three"
             f" conditions, none of which can see a round that removed the"
-            f" passage rather than repairing it (ADR-0120). See {STANDARD}."
+            f" passage rather than repairing it (ADR-0178). See {STANDARD}."
         )
         assert REPAIR_CREATED_STOP in text, (
             f"{body}: the loop has no stop for a re-review that reports what"
             f" an earlier round's repair did, so the next round is spent"
-            f" correcting the loop's own work (ADR-0120). See {STANDARD}."
+            f" correcting the loop's own work (ADR-0178). See {STANDARD}."
         )
         assert LOOP_HISTORY in text, (
             f"{body}: the delegating step never says the run holds what the"
             f" text used to be, and no other party in the round holds it, so"
-            f" the stop above is read against nothing (ADR-0120). See"
+            f" the stop above is read against nothing (ADR-0178). See"
             f" {STANDARD}."
         )
         assert "whichever of its three conditions" not in text, (
             f"{body}: the delivery step still counts the loop's conditions at"
             f" three, so one of them carries findings forward that the step"
-            f" says nothing about (ADR-0120). See {STANDARD}."
+            f" says nothing about (ADR-0178). See {STANDARD}."
         )
 
         assert REPAIR_CREATED_STOP in page.read_text(encoding="utf-8"), (
             f"{page}: the manpage lists the stops a caller can meet and this"
             f" one is missing, so a run that ends early ends for a reason the"
-            f" page does not carry (ADR-0120). See {STANDARD}."
+            f" page does not carry (ADR-0178). See {STANDARD}."
         )
 
 
@@ -7652,7 +7645,7 @@ def test_a_repair_that_would_take_the_claim_with_it_is_left_and_reported() -> No
     it takes no claim with it. And the judgement is about the passage in front
     of the subagent rather than about how much text is left, because the two
     runs this was observed on sit either side of the line at almost the same
-    length (ADR-0120).
+    length (ADR-0178).
     """
 
     for brief in (REDLINE_CORRECTION, UNSLOP_CORRECTION):
@@ -7661,25 +7654,25 @@ def test_a_repair_that_would_take_the_claim_with_it_is_left_and_reported() -> No
         assert CLAIM_KEPT in text, (
             f"{brief}: the brief never says the smallest change keeps the"
             f" claim a passage carries beside the pattern, so deleting the"
-            f" passage entire is a compliant repair (ADR-0120). See"
+            f" passage entire is a compliant repair (ADR-0178). See"
             f" {STANDARD}."
         )
         assert CLAIM_TAKEN in text, (
             f"{brief}: a repair that cannot remove the pattern without"
             f" removing the claim is still performed silently, where the same"
-            f" brief stops for a fact it would have to invent (ADR-0120). See"
+            f" brief stops for a fact it would have to invent (ADR-0178). See"
             f" {STANDARD}."
         )
         assert DEFECT_IS_THE_PASSAGE in text, (
             f"{brief}: the rule does not distinguish itself from the"
             f" catalogue's prescribed deletions, so an empty opening or a"
-            f" generic conclusion becomes a finding for a person (ADR-0120)."
+            f" generic conclusion becomes a finding for a person (ADR-0178)."
             f" See {STANDARD}."
         )
         assert NOT_A_LENGTH in text, (
             f"{brief}: the rule is not held away from the length of the text,"
             f" and a subagent measuring what is left would stop repairing a"
-            f" short text and go on emptying a long one (ADR-0120). See"
+            f" short text and go on emptying a long one (ADR-0178). See"
             f" {STANDARD}."
         )
 
@@ -7780,7 +7773,7 @@ def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> Non
     the Contextual Instruction, the Conversation Context, inference, and then
     the language of the supplied text. A map may supply that one value; no map
     is created and none is brought into line with what the run resolved,
-    because this Skill resolves nothing a map records (ADR-0088, ADR-0112).
+    because this Skill resolves nothing a map records (ADR-0178).
     """
 
     body = UNSLOP.read_text(encoding="utf-8")
@@ -7793,23 +7786,23 @@ def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> Non
         assert level in body, (
             f"{UNSLOP}: the body names no {level} in its language precedence,"
             f" so the order this Collection resolves a parameter in is this"
-            f" Skill's own (ADR-0088). See {STANDARD}."
+            f" Skill's own (ADR-0178). See {STANDARD}."
         )
     assert "kntnt" in body and "frontmatter" in body, (
         f"{UNSLOP}: the body never says which frontmatter is this"
         f" collection's, so unrelated document fields read as configuration"
-        f" (ADR-0088). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert "created or synchronized" in body, (
         f"{UNSLOP}: the body does not say that no Kntnt map is created or"
         f" synchronized. This Skill resolves one value of the three a map"
         f" carries, so writing one would record a configuration it never"
-        f" settled (ADR-0088, ADR-0112). See {STANDARD}."
+        f" settled (ADR-0178). See {STANDARD}."
     )
     assert "$LIBRARY/scripts/languages.py" in body, (
         f"{UNSLOP}: the body resolves its language through something other"
         f" than the Collection Library's resolver, which is deterministic and"
-        f" shared by every editorial Skill (ADR-0087, ADR-0076). See"
+        f" shared by every editorial Skill (ADR-0178, ADR-0177). See"
         f" {STANDARD}."
     )
 
@@ -7818,9 +7811,9 @@ def test_unslop_delivers_shared_and_judges_only_the_text_in_front_of_it() -> Non
     """Two contracts this Skill consumes rather than restates.
 
     Where a result goes, when a source may be replaced, and what an unchanged
-    run returns are stated once in the Collection Library (ADR-0091). Source
+    run returns are stated once in the Collection Library (ADR-0178). Source
     material is somebody else's contract, and a caveat about material nobody
-    supplied is noise in every run that was never a Write run (ADR-0088).
+    supplied is noise in every run that was never a Write run (ADR-0178).
     """
 
     body = UNSLOP.read_text(encoding="utf-8")
@@ -7829,23 +7822,23 @@ def test_unslop_delivers_shared_and_judges_only_the_text_in_front_of_it() -> Non
         f"{UNSLOP}: the body delivers its Text Artifact without following the"
         f" Collection Library's delivery contract, so the Output Target,"
         f" In-place Editing, its refusals, and the no-change status are this"
-        f" Skill's own account of rules it shares with its peers (ADR-0091,"
-        f" ADR-0076). See {STANDARD}."
+        f" Skill's own account of rules it shares with its peers (ADR-0178,"
+        f" ADR-0177). See {STANDARD}."
     )
     assert "`my-file-2.md`" not in body, (
         f"{UNSLOP}: the body spells out the shared collision sequence instead"
         f" of following the contract that owns it, which is one rule made into"
-        f" two things to keep true (ADR-0091). See {STANDARD}."
+        f" two things to keep true (ADR-0178). See {STANDARD}."
     )
     assert "source material" in body, (
         f"{UNSLOP}: the body says nothing about source material, so nothing"
         f" stops a pass from asking for material it was never given"
-        f" (ADR-0088). See {STANDARD}."
+        f" (ADR-0178). See {STANDARD}."
     )
     assert "Source Fidelity" in body, (
         f"{UNSLOP}: the body never names Source Fidelity as somebody else's"
         f" contract, and the boundary is what keeps this Skill usable where no"
-        f" Write invocation and no material exist (ADR-0088). See {STANDARD}."
+        f" Write invocation and no material exist (ADR-0178). See {STANDARD}."
     )
 
 
@@ -7939,7 +7932,7 @@ def test_the_unslop_manpage_names_the_patterns_a_finding_may_be() -> None:
     The seven patterns are the whole of what a finding may be here, and the
     page that describes the Skill is where somebody outside the run reads
     them. They are applied by what they do in the target language rather than
-    matched as English strings (ADR-0101, ADR-0112).
+    matched as English strings (ADR-0178).
     """
 
     manpage = UNSLOP_HELP.read_text(encoding="utf-8").lower()
@@ -7947,14 +7940,14 @@ def test_the_unslop_manpage_names_the_patterns_a_finding_may_be() -> None:
     missing = [pattern for pattern in SLOP_PATTERNS if pattern not in manpage]
     assert missing == [], (
         f"{missing}: the page does not name these patterns, and they are the"
-        f" whole of what this Skill finds (ADR-0101, ADR-0112). See"
+        f" whole of what this Skill finds (ADR-0178). See"
         f" {STANDARD}."
     )
     assert "semantic" in manpage, (
         f"{UNSLOP_HELP}: the page does not say that the catalogue's English"
         f" examples are applied as semantic patterns in the target language,"
         f" which is what makes one compact catalogue work on every language"
-        f" the Collection installs (ADR-0101). See {STANDARD}."
+        f" the Collection installs (ADR-0178). See {STANDARD}."
     )
 
 
@@ -7967,7 +7960,7 @@ EDITORIAL_PAGES = (PROOFREAD.parent / "help.md", REDLINE_HELP, UNSLOP_HELP)
 CORRECTION_BRIEFS = (REDLINE_CORRECTION, UNSLOP_CORRECTION)
 
 # What a pass does with a code sample, in the one wording every pass carries
-# (ADR-0125). Three Skills stating the rule in three sentences would be three
+# (ADR-0178). Three Skills stating the rule in three sentences would be three
 # answers a run may pick between, and picking between them is the disagreement
 # the rule exists to end (issue #149).
 CODE_IS_QUOTED = (
@@ -8000,7 +7993,7 @@ def test_every_editorial_pass_reads_past_a_code_sample() -> None:
     clause named quotations and formatting and stopped short of code, and the
     catalogue said nothing about code at all (issue #149). A code sample is
     quoted material, so nothing inside one is a finding and nothing inside one
-    is corrected (ADR-0125).
+    is corrected (ADR-0178).
     """
 
     for body in EDITORIAL_PASSES:
@@ -8008,18 +8001,18 @@ def test_every_editorial_pass_reads_past_a_code_sample() -> None:
             f"{body}: the pass does not say what a code sample is, so whether"
             f" a docstring or a comment is a finding is settled per run and"
             f" one text yields findings inside a code block in one invocation"
-            f" and none in the next (ADR-0125). See {STANDARD}."
+            f" and none in the next (ADR-0178). See {STANDARD}."
         )
 
 
 def test_every_correction_brief_preserves_code_beside_quotations() -> None:
     """A round that may not find a defect in code may not repair one either.
 
-    The brief is the whole of what reaches a fresh subagent (ADR-0107), so a
+    The brief is the whole of what reaches a fresh subagent (ADR-0178), so a
     preservation clause that names quotations and formatting and stops short
     of code leaves the subagent to decide for itself whether a comment is the
     writer's prose. It is the sample's content, and it comes back as it
-    arrived (ADR-0125).
+    arrived (ADR-0178).
     """
 
     for brief in CORRECTION_BRIEFS:
@@ -8027,14 +8020,14 @@ def test_every_correction_brief_preserves_code_beside_quotations() -> None:
         assert CODE_IS_PRESERVED in filled, (
             f"{brief}: the preservation clause names quotations and formatting"
             f" and stops short of code, so what a correction round does with a"
-            f" docstring is left to the subagent making it (ADR-0125). See"
+            f" docstring is left to the subagent making it (ADR-0178). See"
             f" {STANDARD}."
         )
         assert CODE_IS_QUOTED in filled, (
             f"{brief}: the brief does not carry the clause that says what a"
             f" code sample is, so the round is told to preserve code without"
             f" being told why a finding never names anything inside one"
-            f" (ADR-0125). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
 
 
@@ -8043,7 +8036,7 @@ def test_every_editorial_manpage_says_a_code_sample_is_quoted() -> None:
 
     A reader deciding to run one of these over a document that carries code
     reads the page, not the body, and what a pass leaves alone is observable
-    behaviour rather than machinery (ADR-0125).
+    behaviour rather than machinery (ADR-0178).
     """
 
     for page in EDITORIAL_PAGES:
@@ -8051,7 +8044,7 @@ def test_every_editorial_manpage_says_a_code_sample_is_quoted() -> None:
             f"{page}: the page does not tell the reader that a code sample is"
             f" quoted material, so somebody deciding whether to run this over"
             f" a document carrying code has to run it to find out"
-            f" (ADR-0125). See {STANDARD}."
+            f" (ADR-0178). See {STANDARD}."
         )
 
 
@@ -8062,7 +8055,7 @@ def test_the_base_contracts_review_extension_restates_no_base_rule() -> None:
     resolution, and minimum-safe-correction guidance for requirements the base
     half already states. A sentence carried over from the base half is one
     rule made into two things to keep true, free to drift the moment either is
-    edited (ADR-0095).
+    edited (ADR-0178).
     """
 
     editorial = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
@@ -8070,7 +8063,7 @@ def test_the_base_contracts_review_extension_restates_no_base_rule() -> None:
 
     assert extension.is_file(), (
         f"{extension}: the base contract ships without the review extension"
-        f" the reviewing Skills read it through (ADR-0095). See {STANDARD}."
+        f" the reviewing Skills read it through (ADR-0178). See {STANDARD}."
     )
 
     review = extension.read_text(encoding="utf-8")
@@ -8080,7 +8073,7 @@ def test_the_base_contracts_review_extension_restates_no_base_rule() -> None:
     flags = sorted(set(re.findall(r"(?<![\w-])--[A-Za-z][\w-]*", review)))
     assert flags == [], (
         f"{flags}: the review extension names a consumer's flag spelling,"
-        f" which binds a grammar the consuming Skill owns (ADR-0095). See"
+        f" which binds a grammar the consuming Skill owns (ADR-0178). See"
         f" {STANDARD}."
     )
 
@@ -8098,7 +8091,7 @@ def test_the_base_contracts_review_extension_restates_no_base_rule() -> None:
         f"{carried}: the review extension repeats the base half word for word."
         f" Anything a draft has to meet is a base rule and belongs where the"
         f" writing Skill will see it; the extension says how a failure is"
-        f" recognised and repaired (ADR-0095). See {STANDARD}."
+        f" recognised and repaired (ADR-0178). See {STANDARD}."
     )
 
 
@@ -8115,7 +8108,7 @@ def test_a_skill_reads_shared_implementation_only_from_the_collection_library() 
         assert peer_implementation.search(body.read_text(encoding="utf-8")) is None, (
             f"{body}: shared references and scripts belong to the Collection"
             f" Library, so a Skill never reads another Skill's implementation"
-            f" (ADR-0076). See {STANDARD}."
+            f" (ADR-0177). See {STANDARD}."
         )
 
 
@@ -8185,7 +8178,7 @@ def test_every_distributed_markdown_dependency_is_available_to_an_installed_read
 
 
 def test_select_is_where_a_skill_is_read_about_before_it_is_enabled() -> None:
-    """The route `/kntnt help <skill>` was withdrawn in favour of (ADR-0044).
+    """The route `/kntnt help <skill>` was withdrawn in favour of (ADR-0176).
 
     Prose is what carries it, so prose is where it has to be pinned: a list
     that never offers the help is a list nobody can ask for it from.
@@ -8229,12 +8222,12 @@ def test_agents_md_is_model_invoked() -> None:
         f" invokes this skill on its own, and it says so in the field rather"
         f" than by leaving the field out — an absent field is a decision nobody"
         f" wrote, and the Codex sidecar beside it has to agree with something"
-        f" (ADR-0018). See {STANDARD}."
+        f" (ADR-0177). See {STANDARD}."
     )
     assert "name: agents-md" in text, (
         f"{REPO_ROOT / 'skills' / 'agents' / 'agents-md' / 'SKILL.md'}: `name`"
         f" is the skill's directory name exactly, and the description is the"
-        f" only hook a harness has for reaching it (ADR-0019). See {STANDARD}."
+        f" only hook a harness has for reaching it (ADR-0177). See {STANDARD}."
     )
 
 
@@ -8324,7 +8317,7 @@ def test_delegation_requires_subagents_and_says_so() -> None:
     assert "haiku" not in mode, (
         f"{path.parent / 'references' / 'mode.md'}: the mode text names no"
         f" model from one vendor's ladder. It is written into a committed"
-        f" `AGENTS.md` that agents of any harness read (ADR-0026), and the"
+        f" `AGENTS.md` that agents of any harness read, and the"
         f" collection is one set across harnesses (ADR-0005) — so it tells the"
         f" reader to pick from its own ladder. See {STANDARD}."
     )
@@ -8547,7 +8540,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
 
     # The caller chooses the path, and the boundary is the seat the spawn runs
     # on: unrouted on the frozen main seat with no override, routed for every
-    # foreign surface, model, or deliberation override (ADR-0133).
+    # foreign surface, model, or deliberation override (ADR-0179).
     required_boundary_fragments = {
         "frozen main seat",
         "no model, deliberation, or surface override",
@@ -8565,7 +8558,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f"{directory / 'references' / 'mode.md'}: the standing instruction must"
         f" state, as the caller's choice, that a spawn on the frozen main seat with"
         f" no override is unrouted and that every other spawn routes, and must"
-        f" weigh a routed cheaper seat for judgment-in-noise roles (ADR-0133);"
+        f" weigh a routed cheaper seat for judgment-in-noise roles (ADR-0179);"
         f" missing {missing_boundary}."
     )
 
@@ -8603,12 +8596,12 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f" exploration policy. Routing has one — the budgeted Exploration"
         f" Attempt of ADR-0151 — and the directive still states none, because"
         f" it asks the cheap-seat question and decides no probe (ADR-0067,"
-        f" ADR-0133)."
+        f" ADR-0179)."
     )
     assert "frozen main seat" in on_page and "public `route` Interface" in on_page, (
         f"{directory / 'help' / 'on.md'}: the manpage says what goes through"
         f" model-selector's public `route` Interface, so it names the unrouted"
-        f" frozen main seat beside it (ADR-0133)."
+        f" frozen main seat beside it (ADR-0179)."
     )
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
@@ -8621,7 +8614,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f" issue #222 adds — and it is met by leaving routing and observation"
         f" implementation behind model-selector's public Interfaces. The ceiling"
         f" rose once, by what those last two obligations cost to state, rather"
-        f" than by trimming doctrine to fit them (ADR-0154)."
+        f" than by trimming doctrine to fit them (ADR-0179)."
     )
 
     # Keep one pointer and two refreshable companion files.
@@ -8727,7 +8720,7 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
     its output on disk carried the build logs and test suites, a subagent earned
     its brief where judgment had to be exercised inside noisy data, and a small
     bounded command was cheapest narrowed at the source on the main seat
-    (ADR-0134). A directive naming the subagent alone invites a fenced brief and
+    (ADR-0179). A directive naming the subagent alone invites a fenced brief and
     reply for pure command execution, where either other path is cheaper.
     """
 
@@ -8755,19 +8748,19 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
         f" with the work that selects each — a detached process whose report is"
         f" read and whose rest is searched, a subagent for judgment inside noisy"
         f" data, and the main seat narrowed at the source for a small bounded"
-        f" command (ADR-0134); missing {missing}."
+        f" command (ADR-0179); missing {missing}."
     )
 
     # *When unsure, delegate* survives and governs the subagent-versus-main-seat
     # choice alone: a detached process exercises no judgment, so uncertainty
-    # about judgment never selects it (ADR-0134).
+    # about judgment never selects it (ADR-0179).
     assert (
         "Between subagent and main seat, delegate when handoff is cheaper;"
         " when unsure, delegate."
     ) in mode, (
         f"{path}: *when unsure, delegate* stays, scoped to the choice between a"
         f" subagent and the main seat rather than to the detached process"
-        f" (ADR-0134)."
+        f" (ADR-0179)."
     )
 
     # A process the main seat detached is the main seat's to stop, or to name as
@@ -8775,7 +8768,7 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
     assert "stop it or name it as left standing" in mode, (
         f"{path}: the main seat ends what it detached, or names it as left"
         f" standing in its report, so no process outlives the turn that started"
-        f" it unaccounted for (ADR-0127, ADR-0134)."
+        f" it unaccounted for (ADR-0127, ADR-0179)."
     )
 
     # The directive is committed into a context file every Harness reads, so it
@@ -8796,7 +8789,7 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
     assert not named and not flags, (
         f"{path}: the detached path is stated as a property — a process detached"
         f" from the conversation, its output on disk — and never as one Harness's"
-        f" tool or flag (ADR-0005, ADR-0030, ADR-0134); found {named + flags}."
+        f" tool or flag (ADR-0005, ADR-0030, ADR-0179); found {named + flags}."
     )
 
     # The roles list is written once: the counterweight sentence names the
@@ -8804,7 +8797,7 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
     assert mode.count("distillation") == 1, (
         f"{path}: the judgment-in-noise roles are listed once, in the"
         f" counterweight sentence, and the subagent path names the property"
-        f" rather than a second list (ADR-0133, ADR-0134)."
+        f" rather than a second list (ADR-0179)."
     )
 
     # The manpage describes the mode, so it names the three paths beside the
@@ -8812,7 +8805,7 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
     assert "detached from the conversation" in on_page, (
         f"{directory / 'help' / 'on.md'}: the manpage says the main agent chooses"
         f" the execution path, so it names the detached process beside the"
-        f" subagent and the narrowed main seat (ADR-0134)."
+        f" subagent and the narrowed main seat (ADR-0179)."
     )
 
 
@@ -8932,12 +8925,12 @@ def test_catalog_generation_rejects_metadata_that_is_not_a_mapping(
 def test_catalog_generation_rejects_a_marker_value_that_is_not_a_string(
     tmp_path: Path,
 ) -> None:
-    """A YAML list under `kntnt.binaries` is what habit writes after ADR-0061.
+    """A YAML list under `kntnt.binaries` is what habit writes after ADR-0177.
 
     The marker is there, so the skill passes the test for one, and the value
     is then read by a reader that wants a string. Coercing it lands a Python
     repr in the Catalog's `binaries`, which is the silent wrong answer
-    ADR-0061 refused to let any other reader give (issue #48).
+    ADR-0177 refused to let any other reader give (issue #48).
     """
 
     world = _world(tmp_path)
@@ -8965,7 +8958,7 @@ def test_catalog_generation_is_the_gate_on_every_unreadable_marker(
     before anything ships: that pair is the whole of the guarantee about this
     repository, and it has to hold for every form. It was never a guarantee
     about a machine holding two revisions of the collection at once, which is
-    what the gate now answers for itself (ADR-0068). The predicate underneath
+    what the gate now answers for itself (ADR-0175). The predicate underneath
     also feeds `carries_marker`, which may not raise and so can never report —
     a skill that reached a machine with an unreadable marker is one the sweep
     could not withdraw (issue #48).
@@ -9317,7 +9310,7 @@ def test_uninstall_refuses_project_by_the_path_every_flag_is_refused_by(
 ) -> None:
     """One error path, not two: the bespoke message for this flag is gone.
 
-    A special case in the code for one flag is the seam ADR-0059 exists to
+    A special case in the code for one flag is the seam ADR-0176 exists to
     remove — a difference between two refusals only somebody reading the
     source can account for. The reason the verb has no project form stays in
     `help/uninstall.md`, which the pointer at the end of the error leads to.
@@ -9471,7 +9464,7 @@ def _tree(root: Path) -> dict[str, bytes]:
 def test_the_transport_writes_where_home_points(tmp_path: Path) -> None:
     """The real transport honours an overridden HOME, and the double has to too.
 
-    That property is the whole of what makes a Sandbox possible (ADR-0042), so
+    That property is the whole of what makes a Sandbox possible (ADR-0175), so
     a double that resolved its home some other way would let a dry run pass
     the suite while writing into the user's real home.
     """
@@ -9632,7 +9625,7 @@ def test_dry_run_project_leaves_the_working_directory_alone(tmp_path: Path) -> N
 
 
 def test_a_project_dry_run_reads_the_global_layer(tmp_path: Path) -> None:
-    """A Dependency Global supplies wants no second copy in the Project (ADR-0013)."""
+    """A Dependency Global supplies wants no second copy in the Project (ADR-0175)."""
 
     world = _world(tmp_path)
     _present(world, "home", ".claude")
@@ -9694,7 +9687,7 @@ def test_dry_run_catalog_prints_the_catalog_and_writes_nothing(
 
 
 def test_a_subparser_takes_dry_run_only_where_it_acts_on_it(tmp_path: Path) -> None:
-    """The inversion of `test_every_subparser_accepts_dry_run` (ADR-0059).
+    """The inversion of `test_every_subparser_accepts_dry_run` (ADR-0176).
 
     That test pinned the tolerance this record withdrew: every subparser took
     the flag, including the three with nothing to do with it, so that a flag
@@ -9793,13 +9786,13 @@ def test_a_damaged_path_table_names_the_file(tmp_path: Path) -> None:
 
 # The flag table settled once every verb existed: where a flag is accepted it
 # always means the same thing, and a verb with no use for one does not take it
-# (ADR-0059). Every subcommand the script has is a row, because the rule has no
+# (ADR-0176). Every subcommand the script has is a row, because the rule has no
 # exceptions — the three nobody types are as strict as the four that are typed.
 # The two classes are checked differently and are one table on purpose: a verb
 # a user meets is held to its manpage as well as to the parser, so the
 # documented grammar and the parser cannot drift apart, and an internal
 # subcommand is held to the parser alone rather than being published as user
-# documentation to satisfy the check (ADR-0046).
+# documentation to satisfy the check (ADR-0177).
 _FLAG_TABLE = {
     "help": frozenset[str](),
     "select": frozenset({"--project", "--yes", "--dry-run"}),
@@ -9898,7 +9891,7 @@ def test_an_internal_subcommand_is_not_published_as_a_manpage() -> None:
 
     `manpage`, `check`, and `catalog` are in the flag table because the rule
     has no exceptions, and a page under `help/` would make them read as verbs
-    a user is invited to type (ADR-0046).
+    a user is invited to type (ADR-0177).
     """
 
     for name in _FLAG_TABLE:
@@ -9910,7 +9903,7 @@ def test_help_takes_no_flags_and_says_so(tmp_path: Path) -> None:
     """`/kntnt help --yes` is an error, not a page with a note above it.
 
     The refusal is the script's, so the prose that routes the invocation hands
-    the flag on rather than answering for it (ADR-0059).
+    the flag on rather than answering for it (ADR-0176).
     """
 
     steps = (REPO_ROOT / "skills" / "kntnt" / "steps" / "help.md").read_text(
@@ -9938,7 +9931,7 @@ def test_an_unknown_subcommand_is_refused_with_the_managers_own_synopsis(
     """`/kntnt sel` is an error, and never a guess at which verb was meant.
 
     The synopsis is the manager's own, taken whole off the page it ships, so
-    nothing here is a second grammar free to drift from the first (ADR-0059).
+    nothing here is a second grammar free to drift from the first (ADR-0176).
     """
 
     world = _world(tmp_path)
@@ -9990,7 +9983,7 @@ def test_a_flag_a_verb_does_not_take_is_refused_with_that_verbs_synopsis(
 
 
 def test_the_route_into_help_is_not_a_flag_on_a_verb(tmp_path: Path) -> None:
-    """`--help` and `-h` reach Help, and bare `/kntnt` still does (ADR-0027)."""
+    """`--help` and `-h` reach Help, and bare `/kntnt` still does (ADR-0175)."""
 
     world = _world(tmp_path)
     shipped = (MANAGER_DIR / "help.md").read_text(encoding="utf-8").strip()
@@ -10016,15 +10009,15 @@ def test_each_manager_subcommand_routes_help_flags_to_its_manpage(
 
             assert result.returncode == 0, (
                 f"/kntnt {verb} {flag} failed instead of printing that verb's"
-                f" manpage: {result.stderr} (ADR-0077). See {STANDARD}."
+                f" manpage: {result.stderr} (ADR-0176). See {STANDARD}."
             )
             assert result.stdout.strip() == shipped.strip(), (
                 f"/kntnt {verb} {flag} did not print help/{verb}.md verbatim"
-                f" (ADR-0077). See {STANDARD}."
+                f" (ADR-0176). See {STANDARD}."
             )
             assert result.stderr == "", (
                 f"/kntnt {verb} {flag} printed the page but also diagnosed a"
-                f" help route as an error (ADR-0077). See {STANDARD}."
+                f" help route as an error (ADR-0176). See {STANDARD}."
             )
 
 
@@ -10048,7 +10041,7 @@ def test_the_dependency_gate_is_invoked_with_no_flag_in_every_skill() -> None:
             f'{name}: the checker is invoked as `check --here="$HERE"` and'
             f" with no flag on it. Under strict syntax a stray flag there is"
             f" refused rather than ignored, which would kill the skill before"
-            f" it did anything (ADR-0059). See {STANDARD}."
+            f" it did anything (ADR-0176). See {STANDARD}."
         )
 
 
@@ -10095,8 +10088,8 @@ def test_no_verb_accepts_force(tmp_path: Path) -> None:
 # user types — `agents-md` and `delegation` have no script at all, and the
 # others hand a settled command line to an engine rather than the user's own —
 # so the agent is the only thing that can refuse, and the rule has to be stated
-# where that agent reads it (ADR-0059). What follows is prose held to the
-# behaviour, which is the only seam a script-less skill has (ADR-0046).
+# where that agent reads it (ADR-0176). What follows is prose held to the
+# behaviour, which is the only seam a script-less skill has (ADR-0177).
 
 
 def _shipped_skills() -> list[Path]:
@@ -10205,12 +10198,12 @@ def _command_entries(page: Path) -> dict[str, str]:
         assert index + 1 < len(paragraphs), (
             f"{page}: `{match.group(1)}` has no short description after its"
             f" tagged term. Every immediate subcommand carries one"
-            f" (ADR-0077). See {STANDARD}."
+            f" (ADR-0176). See {STANDARD}."
         )
         description = paragraphs[index + 1]
         assert not description.startswith("**"), (
             f"{page}: `{match.group(1)}` is followed by another tagged term"
-            f" instead of its short description (ADR-0077). See {STANDARD}."
+            f" instead of its short description (ADR-0176). See {STANDARD}."
         )
         entries[match.group(1)] = description
 
@@ -10282,19 +10275,19 @@ def test_model_selector_ships_and_routes_one_manpage_per_subcommand() -> None:
     assert actual == _MODEL_SELECTOR_MANPAGES, (
         f"{MODEL_SELECTOR_DIR}: the subcommand page tree is {sorted(actual)},"
         f" but the accepted command paths are"
-        f" {sorted(_MODEL_SELECTOR_MANPAGES)} (ADR-0077). See {STANDARD}."
+        f" {sorted(_MODEL_SELECTOR_MANPAGES)} (ADR-0176). See {STANDARD}."
     )
     assert "--help" in help_section, (
         f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: subcommand pages exist but the"
         f" `## Invocation` section has no direct `--help` route to them"
-        f" (ADR-0077). See {STANDARD}."
+        f" (ADR-0176). See {STANDARD}."
     )
 
     # Hold every file to an explicit deterministic route in the Skill body.
     for relative in _MODEL_SELECTOR_MANPAGES:
         assert f"`$HERE/help/{relative}`" in help_section, (
             f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: the `## Invocation` section"
-            f" does not route the `{relative}` manpage (ADR-0077). See"
+            f" does not route the `{relative}` manpage (ADR-0176). See"
             f" {STANDARD}."
         )
 
@@ -10313,12 +10306,12 @@ def test_every_command_page_lists_all_immediate_subcommands_with_descriptions() 
         assert set(entries) == expected, (
             f"{page}: `COMMANDS` lists {sorted(entries)}, while the immediate"
             f" command pages are {sorted(expected)}. A parent lists every"
-            f" immediate child and no nested grandchild (ADR-0077). See"
+            f" immediate child and no nested grandchild (ADR-0176). See"
             f" {STANDARD}."
         )
         assert all(entries.values()), (
             f"{page}: every immediate subcommand carries a short description"
-            f" after its tagged term (ADR-0077). See {STANDARD}."
+            f" after its tagged term (ADR-0176). See {STANDARD}."
         )
 
 
@@ -10351,7 +10344,7 @@ def _hint(directory: Path) -> str:
         f"{directory}: every skill declares an `argument-hint`. It is the"
         f" grammar the harness shows a user before anything is typed, and one"
         f" of the three places the flags a skill takes are named — the manpage's"
-        f" `## SYNOPSIS` and `## OPTIONS` being the others (ADR-0059). See"
+        f" `## SYNOPSIS` and `## OPTIONS` being the others (ADR-0176). See"
         f" {STANDARD}."
     )
 
@@ -10383,28 +10376,28 @@ def test_every_skill_exposes_the_invocation_envelope_before_its_grammar() -> Non
         # Hold exposure, ordering, and the boundary into deterministic parsers.
         assert _hint(body.parent).endswith("[-- <instruction>]"), (
             f"{body}: the harness hint omits the optional Contextual"
-            f" Instruction suffix required by ADR-0078. See {STANDARD}."
+            f" Instruction suffix required by ADR-0176. See {STANDARD}."
         )
         assert text.index("\n## Invocation\n") < text.index("\n## Arguments\n"), (
             f"{body}: Envelope splitting must precede help routing and formal"
-            f" validation (ADR-0078). See {STANDARD}."
+            f" validation (ADR-0176). See {STANDARD}."
         )
         assert "before help routing or formal validation" in envelope.lower(), (
             f"{body}: the executable section does not state its required"
-            f" ordering (ADR-0078). See {STANDARD}."
+            f" ordering (ADR-0176). See {STANDARD}."
         )
         assert ENVELOPE_POINTER in envelope, (
             f"{body}: the body reads its executable Envelope contract from the"
             f" one place it is stated, `{ENVELOPE_POINTER}`, rather than"
-            f" carrying a copy of it (ADR-0076, ADR-0078). See {STANDARD}."
+            f" carrying a copy of it (ADR-0177, ADR-0176). See {STANDARD}."
         )
         assert "only the Formal Invocation reaches" in envelope, (
             f"{body}: scripts and nested parsers receive only Formal Invocation"
-            f" input (ADR-0078). See {STANDARD}."
+            f" input (ADR-0176). See {STANDARD}."
         )
         assert "Redundant but applicable guidance is valid" not in text, (
             f"{body}: the body restates the Envelope contract instead of"
-            f" pointing at it (ADR-0076, ADR-0078). See {STANDARD}."
+            f" pointing at it (ADR-0177, ADR-0176). See {STANDARD}."
         )
 
 
@@ -10435,7 +10428,7 @@ def test_invocation_envelope_defines_the_reserved_separator_without_inference() 
         assert phrase in text, (
             f"{ENVELOPE_REFERENCE}: the executable Envelope omits {phrase!r},"
             f" so it no longer distinguishes an issue #87 syntax case"
-            f" (ADR-0078). See {STANDARD}."
+            f" (ADR-0176). See {STANDARD}."
         )
 
 
@@ -10462,11 +10455,11 @@ def test_invocation_envelope_carries_worked_split_outcomes() -> None:
         assert case in text, (
             f"{ENVELOPE_REFERENCE}: worked Envelope outcomes omit `{case}`,"
             f" leaving that issue #87 split unpinned at the executable prose"
-            f" seam (ADR-0078). See {STANDARD}."
+            f" seam (ADR-0176). See {STANDARD}."
         )
 
 
-# The sentence ADR-0078 shipped, before its *ineffective* was narrowed. No page
+# The sentence ADR-0176 shipped, before its *ineffective* was narrowed. No page
 # may keep it: it made suppression by a documented precedence a refusal ground,
 # which is the contradiction issue #146 caught.
 UNNARROWED_CONTEXT_REFUSAL = (
@@ -10477,7 +10470,7 @@ UNNARROWED_CONTEXT_REFUSAL = (
 # The narrowed rule, carried in the same words by every shipped page: what
 # *unaddressable* now means, what happens instead to guidance a documented
 # precedence has settled against, and what the no-partial-application rule
-# still reaches (ADR-0122).
+# still reaches (ADR-0176).
 NARROWED_CONTEXT_REFUSAL = (
     "Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or"
     " scope-widening guidance takes the distinct context refusal."
@@ -10496,7 +10489,7 @@ SUPPRESSION_RULE = (
 
 # The same outcome stated where an editorial Skill actually resolves its
 # parameters, so a reader of the ladder meets it beside the level that is
-# there to be overridden (ADR-0122).
+# there to be overridden (ADR-0176).
 SUPPRESSED_INSTRUCTION_OUTCOME = (
     "Suppression is that precedence working rather than an error: a Contextual"
     " Instruction every higher level has already settled leaves nothing for it"
@@ -10509,7 +10502,7 @@ SUPPRESSED_INSTRUCTION_OUTCOME = (
 def test_the_context_refusal_narrows_ineffective_to_unaddressable_guidance() -> None:
     """A value a documented precedence settled against is suppressed, not refused.
 
-    Every shipped page carried ADR-0078's *ineffective* in the same words, and
+    Every shipped page carried ADR-0176's *ineffective* in the same words, and
     on an invocation whose Contextual Instruction the flags and the artifact's
     map had already settled, that word required a refusal while the editorial
     precedence ladder required the run to continue (issue #146). The narrowing
@@ -10523,17 +10516,17 @@ def test_the_context_refusal_narrows_ineffective_to_unaddressable_guidance() -> 
         f"{ENVELOPE_REFERENCE}: the envelope still refuses *ineffective*"
         f" guidance without saying what that reaches, so a Contextual"
         f" Instruction a documented precedence has settled against is a refusal"
-        f" ground again (ADR-0122). See {STANDARD}."
+        f" ground again (ADR-0176). See {STANDARD}."
     )
     assert NARROWED_CONTEXT_REFUSAL in contract, (
         f"{ENVELOPE_REFERENCE}: the envelope no longer names the context"
-        f" refusal's categories in the collection's shared wording (ADR-0122)."
+        f" refusal's categories in the collection's shared wording (ADR-0176)."
         f" See {STANDARD}."
     )
     assert all(rule in contract for rule in SUPPRESSION_RULE), (
         f"{ENVELOPE_REFERENCE}: the envelope omits the narrowed rule, so the"
         f" one place the collection states it says nothing about a suppressed"
-        f" Contextual Instruction (ADR-0122). See {STANDARD}."
+        f" Contextual Instruction (ADR-0176). See {STANDARD}."
     )
 
     # Discover every page and body so no second copy can drift from that one.
@@ -10541,12 +10534,12 @@ def test_the_context_refusal_narrows_ineffective_to_unaddressable_guidance() -> 
         text = path.read_text(encoding="utf-8")
         assert UNNARROWED_CONTEXT_REFUSAL not in text, (
             f"{path}: a copy of the refusal categories survives here, in the"
-            f" un-narrowed wording ADR-0122 withdrew. See {STANDARD}."
+            f" un-narrowed wording ADR-0176 withdrew. See {STANDARD}."
         )
         assert NARROWED_CONTEXT_REFUSAL not in text, (
             f"{path}: the refusal categories are restated here instead of being"
             f" read from `{ENVELOPE_PAGE_POINTER}`, which is a second copy of"
-            f" the contract free to drift from the first (ADR-0076, ADR-0122)."
+            f" the contract free to drift from the first (ADR-0177, ADR-0176)."
             f" See {STANDARD}."
         )
 
@@ -10559,12 +10552,12 @@ def test_the_skill_standard_carries_the_narrowed_context_refusal() -> None:
     for phrase in (
         "no addressable effect at all",
         "suppressed rather than refused",
-        "ADR-0122",
+        "ADR-0176",
     ):
         assert phrase in standard, (
             f"{STANDARD}: the contributor standard omits {phrase!r}, so its"
             f" envelope clauses still describe the unnarrowed refusal"
-            f" (ADR-0122)."
+            f" (ADR-0176)."
         )
 
 
@@ -10576,19 +10569,19 @@ def test_every_editorial_skill_states_the_suppressed_instruction_outcome() -> No
     and 2 can settle a parameter over it. Redline, Write, and Unslop state
     that ladder under `## Resolution`; Proofread states the same ladder in its
     resolving step. Wherever it is stated, the outcome of a suppressed
-    instruction is stated with it, in one wording (ADR-0122).
+    instruction is stated with it, in one wording (ADR-0176).
     """
 
     for body in (WRITE, REDLINE, UNSLOP, PROOFREAD):
         assert SUPPRESSED_INSTRUCTION_OUTCOME in body.read_text(encoding="utf-8"), (
             f"{body}: the precedence says a higher level suppresses a lower one"
             f" and not what becomes of the run, leaving the envelope's refusal"
-            f" to answer for it (ADR-0122). See {STANDARD}."
+            f" to answer for it (ADR-0176). See {STANDARD}."
         )
 
 
 # The same outcome in the words a user reads, beside the ladder each editorial
-# manpage already states (ADR-0122).
+# manpage already states (ADR-0176).
 SUPPRESSED_INSTRUCTION_FOR_THE_READER = (
     "A Contextual Instruction every higher level has already settled is"
     " suppressed rather than refused: the run continues, and the delivery names"
@@ -10603,7 +10596,7 @@ def test_every_editorial_manpage_states_the_suppressed_instruction_outcome() -> 
     Each editorial manpage states the precedence to the person deciding what to
     type. A user who names a language in an instruction against a text whose
     map already carries one needs to read what becomes of it before the run
-    tells them (ADR-0122).
+    tells them (ADR-0176).
     """
 
     for body in (WRITE, REDLINE, UNSLOP, PROOFREAD):
@@ -10612,7 +10605,7 @@ def test_every_editorial_manpage_states_the_suppressed_instruction_outcome() -> 
             encoding="utf-8"
         ), (
             f"{manpage}: the page states the precedence without stating what a"
-            f" suppressed Contextual Instruction costs the run (ADR-0122). See"
+            f" suppressed Contextual Instruction costs the run (ADR-0176). See"
             f" {STANDARD}."
         )
 
@@ -10624,7 +10617,7 @@ def test_redline_works_the_wholly_suppressed_instruction_as_an_example() -> None
     technique, and language leaves the Contextual Instruction nothing to
     settle. That invocation took a refusal in the Claude-family evaluation
     (issue #146); it is an ordinary review, and the page says so beside the
-    invocations that are less interesting (ADR-0122).
+    invocations that are less interesting (ADR-0176).
     """
 
     examples = _section(
@@ -10637,11 +10630,11 @@ def test_redline_works_the_wholly_suppressed_instruction_as_an_example() -> None
     ), (
         f"{REDLINE_HELP}: the invocation the two rules disagreed on is not"
         f" worked on the page, so nothing here says it is a review rather than"
-        f" a refusal (ADR-0122). See {STANDARD}."
+        f" a refusal (ADR-0176). See {STANDARD}."
     )
     assert "suppressed" in examples, (
         f"{REDLINE_HELP}: the worked invocation does not name the suppression"
-        f" the delivery reports (ADR-0122). See {STANDARD}."
+        f" the delivery reports (ADR-0176). See {STANDARD}."
     )
 
 
@@ -10665,7 +10658,7 @@ def test_skill_standard_requires_every_invocation_envelope_surface() -> None:
         assert phrase in standard, (
             f"{STANDARD}: the contributor standard omits {phrase!r}, so an"
             f" author meets the Envelope rule only after this suite fails"
-            f" (ADR-0078)."
+            f" (ADR-0176)."
         )
 
 
@@ -10687,17 +10680,17 @@ def test_nested_skill_calls_propagate_only_relevant_context_explicitly() -> None
         # Require both Envelope parts and the relevance filter at the call site.
         assert "Formal Invocation" in call, (
             f"{body}: the nested call to {target} does not construct an"
-            f" explicit Formal Invocation (ADR-0078). See {STANDARD}."
+            f" explicit Formal Invocation (ADR-0176). See {STANDARD}."
         )
         assert "Contextual Instruction" in call, (
             f"{body}: context propagation into nested Skill {target} is"
-            f" implicit rather than an explicit inner Envelope (ADR-0078)."
+            f" implicit rather than an explicit inner Envelope (ADR-0176)."
             f" See {STANDARD}."
         )
         assert "relevant" in call, (
             f"{body}: nested Skill {target} could receive the outer"
             f" instruction blindly instead of only relevant guidance"
-            f" (ADR-0078). See {STANDARD}."
+            f" (ADR-0176). See {STANDARD}."
         )
 
 
@@ -10710,11 +10703,11 @@ def test_manager_help_passes_only_formal_arguments_to_its_script() -> None:
     # Refuse the old whole-payload wording and require the new parser boundary.
     assert "Formal Invocation arguments" in steps, (
         f"{MANAGER_DIR / 'steps' / 'help.md'}: the Manager must pass only Formal"
-        f" Invocation input to its parser (ADR-0078). See {STANDARD}."
+        f" Invocation input to its parser (ADR-0176). See {STANDARD}."
     )
     assert "Every other argument the user gave" not in steps, (
         f"{MANAGER_DIR / 'steps' / 'help.md'}: whole-payload forwarding would"
-        f" leak Contextual Instruction into argparse (ADR-0078). See {STANDARD}."
+        f" leak Contextual Instruction into argparse (ADR-0176). See {STANDARD}."
     )
 
 
@@ -10744,7 +10737,7 @@ def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() 
             f" has no parser — the agent reading these files is the whole of"
             f" the enforcement — so a refusal composed on the spot is a second"
             f" grammar, free to drift from the one the page documents"
-            f" (ADR-0059). See {STANDARD}."
+            f" (ADR-0176). See {STANDARD}."
         )
 
     for directory in _shipped_skills():
@@ -10755,14 +10748,14 @@ def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() 
             f"{directory}: an invalid form is refused as `{ENVELOPE_POINTER}`"
             f" says, which is where the one refusal shape is written. A body"
             f" carrying its own copy is a second grammar, free to drift from"
-            f" the one the reference states (ADR-0059, ADR-0076). See"
+            f" the one the reference states (ADR-0176, ADR-0177). See"
             f" {STANDARD}."
         )
         assert "refused rather than ignored" in page, (
             f"{directory}: the manpage says a flag with no work to do is"
             f" refused rather than ignored. The strictness is documented as"
             f" well as performed, or a reader meets it first as an error"
-            f" (ADR-0059). See {STANDARD}."
+            f" (ADR-0176). See {STANDARD}."
         )
 
 
@@ -10787,15 +10780,15 @@ def test_the_reason_a_flag_is_refused_is_written_once() -> None:
 
     assert REFUSAL_RATIONALE in contract, (
         f"{ENVELOPE_REFERENCE}: the flag-refusal rule is stated here without"
-        f" the reason an installed reader uses to apply it (ADR-0059). See"
+        f" the reason an installed reader uses to apply it (ADR-0176). See"
         f" {STANDARD}."
     )
     for body in _skill_bodies():
         assert REFUSAL_RATIONALE not in body.read_text(encoding="utf-8"), (
             f"{body}: the body argues why a flag with no work to do is refused"
             f" rather than ignored. That reason belongs to the collection and"
-            f" is stated once, in `{ENVELOPE_PAGE_POINTER}` (ADR-0076,"
-            f" ADR-0059). See {STANDARD}."
+            f" is stated once, in `{ENVELOPE_PAGE_POINTER}` (ADR-0177,"
+            f" ADR-0176). See {STANDARD}."
         )
 
 
@@ -10815,17 +10808,17 @@ def test_the_skill_standard_states_that_flag_presence_follows_function() -> None
         "its presence follows its function",
         "no collection-wide flag set",
         "documents no exception for it",
-        "ADR-0059",
+        "ADR-0176",
     ):
         assert phrase in standard, (
             f"{STANDARD}: the contributor standard omits {phrase!r}, so an"
             f" author writing a Skill with no flags has nothing telling them"
-            f" not to argue the absence (ADR-0059)."
+            f" not to argue the absence (ADR-0176)."
         )
 
 
 def test_a_skills_hint_and_manpage_agree_on_the_flags_it_takes() -> None:
-    """The defence ADR-0059 names: one grammar, read by both halves.
+    """The defence ADR-0176 names: one grammar, read by both halves.
 
     Strictness re-opens ADR-0029's failure wherever the documented grammar and
     the thing that enforces it disagree, and for a skill the enforcer reads the
@@ -10845,7 +10838,7 @@ def test_a_skills_hint_and_manpage_agree_on_the_flags_it_takes() -> None:
             f" `## OPTIONS` names {sorted(documented)}. The two are one set:"
             f" the skill has no parser, so a flag advertised in one and missing"
             f" from the other is a grammar disagreeing with itself, and the"
-            f" refusal lands in a user's session instead of here (ADR-0059)."
+            f" refusal lands in a user's session instead of here (ADR-0176)."
             f" See {STANDARD}."
         )
         assert _flags(_section(page, "## SYNOPSIS", manpage)) == documented, (
@@ -10853,7 +10846,7 @@ def test_a_skills_hint_and_manpage_agree_on_the_flags_it_takes() -> None:
             f" {sorted(_flags(_section(page, '## SYNOPSIS', manpage)))} and"
             f" `## OPTIONS` names {sorted(documented)}. The synopsis is what a"
             f" refusal quotes verbatim, so a flag missing from it is a flag the"
-            f" user is refused for without being shown (ADR-0059). See"
+            f" user is refused for without being shown (ADR-0176). See"
             f" {STANDARD}."
         )
 
@@ -10891,7 +10884,7 @@ def test_no_hint_form_offers_a_combination_its_synopsis_forbids() -> None:
                 f" {[sorted(permitted) for permitted in allowed]}. The hint may"
                 f" collapse forms the page separates, but never widen one: a"
                 f" flag is refused where it has no work to do on the form it"
-                f" was given with (ADR-0059). See {STANDARD}."
+                f" was given with (ADR-0176). See {STANDARD}."
             )
 
 
@@ -10900,8 +10893,8 @@ def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None
 
     The flag is only ever acted on where a persistent scope is written, so
     `/delegation status --yes` reads as a flag that does nothing — the case
-    ADR-0059 settled, and one the command-path grammar leaves exactly as it
-    found it (ADR-0109).
+    ADR-0176 settled, and one the command-path grammar leaves exactly as it
+    found it.
     """
 
     directory = DELEGATION_DIR
@@ -10920,7 +10913,7 @@ def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None
             f"{directory}: the form `{form}` offers `--yes` on `status`, which"
             f" writes nothing and so asks nothing. A flag with no work to do is"
             f" refused rather than ignored, and a grammar that advertises one"
-            f" teaches that flags sometimes do nothing (ADR-0059). See"
+            f" teaches that flags sometimes do nothing (ADR-0176). See"
             f" {STANDARD}."
         )
 
@@ -10929,11 +10922,11 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
     """`/delegation --user` with no command path prints the synopsis and stops.
 
     Its two halves disagreed: the arguments asked for `on`, `off`, or `status`
-    while step 1 stopped. The half the agent executes is the true one (ADR-0046),
+    while step 1 stopped. The half the agent executes is the true one (ADR-0177),
     and `--yes` settles it beyond consistency — a question with three outcomes
     has no answer under the flag (ADR-0029), so *ask* needs a special case
     there and *error* needs none. The form is now a scope flag with no command
-    path, and it is refused for the same reason (ADR-0109).
+    path, and it is refused for the same reason.
     """
 
     directory = REPO_ROOT / "skills" / "agents" / "delegation"
@@ -10954,14 +10947,14 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
             f"{directory}: `{line.strip()}` answers an incomplete form by"
             f" asking. A question with three outcomes has no answer under"
             f" `--yes` (ADR-0029), so the incomplete form is refused with the"
-            f" synopsis like every other invalid one (ADR-0059). See"
+            f" synopsis like every other invalid one (ADR-0176). See"
             f" {STANDARD}."
         )
 
     assert "changes nothing and asks" not in page, (
         f"{directory / 'help.md'}: the manpage still documents the incomplete"
         f" form as asking, which is the half the agent does not execute. Where"
-        f" the two halves disagree the body is the true one (ADR-0046). See"
+        f" the two halves disagree the body is the true one (ADR-0177). See"
         f" {STANDARD}."
     )
     diagnostics = _section(page, "## DIAGNOSTICS", directory / "help.md").lower()
@@ -10969,7 +10962,7 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
         f"{directory / 'help.md'}: `DIAGNOSTICS` says the incomplete form prints the"
         f" synopsis. A reader who has not run the skill cannot tell a refusal"
         f" from a no-op unless the page names what the refusal does, and the"
-        f" refusal with the synopsis is what the body performs (ADR-0059). See"
+        f" refusal with the synopsis is what the body performs (ADR-0176). See"
         f" {STANDARD}."
     )
 
@@ -10977,7 +10970,8 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
 # The Skill whose mode is addressed through a command path, the pages that
 # path answers to, and the `--`-prefixed spelling it no longer has. The
 # spellings went rather than becoming aliases: two spellings for one form are
-# the ambiguity ADR-0103 removes, and an alias would keep it (issue #115).
+# the ambiguity the closed grammar removes, and an alias would keep it
+# (issue #115).
 BRIEF_DIR = REPO_ROOT / "skills" / "agents" / "brief"
 BRIEF_COMMANDS = frozenset({"on.md", "off.md", "status.md"})
 FLAG_SPELLING = re.compile(r"--(?:on|off|status)\b")
@@ -10990,7 +10984,7 @@ FORMER_NAME = re.compile(r"(?i)tl;?dr")
 # command path of the sibling Skill the name was freed for. What separates a
 # reference from a second name is whose path the token stands in, never the
 # token's shape, so the reframing Skill's own `/brief tldr` is no exception at
-# all (ADR-0168). A command path opens its own token, which is what the
+# all (ADR-0177). A command path opens its own token, which is what the
 # lookbehind says: a `/tldr` continuing a filesystem path or a URL is a segment
 # of something else and invokes nothing. The group is the name inside the path,
 # which is where the scan below meets it — the prefix's own length settles
@@ -11000,7 +10994,7 @@ SIBLING_INVOCATION = re.compile(r"(?<![\w./-])/(tldr)\b")
 # The shipped text a reader resolves this Skill's name from. Records and
 # released changelog entries are deliberately outside it: a record's decision
 # stands and an entry is an account of what shipped, so neither is rewritten
-# (ADR-0075).
+# (ADR-0180).
 SHIPPED_TEXT = frozenset({".md", ".json", ".yaml", ".yml", ".py", ".txt"})
 
 
@@ -11017,7 +11011,7 @@ def _brief_surfaces() -> dict[str, str]:
     Its own shipped text, its section of the root `README.md`, and its Catalog
     entry — the reach the rename's hygiene always had, the collection-wide
     sweep having been the cheapest enforcement of it while no other Skill could
-    bear the name (ADR-0168). Each surface is keyed by where a reader would go
+    bear the name (ADR-0177). Each surface is keyed by where a reader would go
     to fix it, and a lookup that finds nothing yields an empty surface rather
     than a missing one, so the caller's own emptiness check catches it.
     """
@@ -11051,13 +11045,13 @@ def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None
     the old name is a second name the Skill still answers to (ADR-0113).
 
     What the check reads on those surfaces is whose command path the token
-    stands in, and never the token's shape (ADR-0168). `/tldr` is the sibling
+    stands in, and never the token's shape (ADR-0177). `/tldr` is the sibling
     Skill's own path, so it is a citation of a different command and passes.
     Every other occurrence is this Skill wearing the old name again and fails:
     in a `name:` frontmatter, as `TL;DR` in prose, and in a path of this
     Skill's own such as `/brief tldr` — which is a command path too, and fails
     precisely because the path is this one's. The managed block whose markers
-    named the Skill is gone with the persistence itself (ADR-0170).
+    named the Skill is gone with the persistence itself (ADR-0176).
     """
 
     assert BRIEF_DIR.is_dir(), (
@@ -11096,14 +11090,14 @@ def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None
             f" mode no longer answer to. On this Skill's own surfaces the"
             f" former name stands only as `/tldr`, the sibling Skill's own"
             f" command path; anywhere else it is a second name this one"
-            f" answers to (ADR-0113, ADR-0168). See {STANDARD}."
+            f" answers to (ADR-0113, ADR-0177). See {STANDARD}."
         )
 
 
 def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
     """`on`, `off`, and `status` each answer to their own help route.
 
-    A command path is exactly what a page under `help/` answers to (ADR-0077),
+    A command path is exactly what a page under `help/` answers to (ADR-0176),
     so the three pages are what make these tokens a path rather than operands —
     and what lets a refusal quote the grammar the invalid form violated rather
     than the whole Skill's.
@@ -11113,7 +11107,7 @@ def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
     assert help_directory.is_dir(), (
         f"{BRIEF_DIR}: the mode is addressed through a command path, and every"
         f" public command path has an addressable manpage under `help/`"
-        f" (ADR-0077, ADR-0103). See {STANDARD}."
+        f" (ADR-0176). See {STANDARD}."
     )
 
     actual = {
@@ -11121,8 +11115,8 @@ def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
     }
     assert actual == set(BRIEF_COMMANDS), (
         f"{BRIEF_DIR}: the command page tree is {sorted(actual)}, while the"
-        f" accepted command paths are {sorted(BRIEF_COMMANDS)} (ADR-0077,"
-        f" ADR-0103). See {STANDARD}."
+        f" accepted command paths are {sorted(BRIEF_COMMANDS)} (ADR-0176)."
+        f" See {STANDARD}."
     )
 
     body = BRIEF_DIR / "SKILL.md"
@@ -11131,12 +11125,12 @@ def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
         assert f"`$HERE/help/{relative}`" in help_section, (
             f"{body}: the `## Invocation` section does not route the"
             f" `{relative}` manpage. `/<skill> <command-path> --help` prints"
-            f" the most specific recognized path's page verbatim (ADR-0077)."
+            f" the most specific recognized path's page verbatim (ADR-0176)."
             f" See {STANDARD}."
         )
     assert "-h" in help_section, (
         f"{body}: `-h` is the identical short route into an addressed page,"
-        f" so the command paths answer to it too (ADR-0077). See {STANDARD}."
+        f" so the command paths answer to it too (ADR-0176). See {STANDARD}."
     )
 
 
@@ -11144,7 +11138,7 @@ def test_brief_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
     """No `--`-prefixed spelling survives anywhere the Skill is described.
 
     The flag spellings go rather than becoming aliases. Two spellings for one
-    form is the ambiguity ADR-0103 exists to remove, and a Skill has no parser
+    form is the ambiguity the closed grammar removes, and a Skill has no parser
     — the agent reading these files is the whole of the enforcement — so a
     spelling left standing on any surface is a spelling that is accepted.
     """
@@ -11161,7 +11155,7 @@ def test_brief_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
             f"{path}: {found} is a `--`-prefixed spelling of a command path."
             f" `on`, `off`, and `status` are reached as a command path and by"
             f" no second spelling, the flags having gone rather than become"
-            f" aliases (ADR-0103). See {STANDARD}."
+            f" aliases. See {STANDARD}."
         )
 
     section = _brief_readme_section()
@@ -11171,7 +11165,7 @@ def test_brief_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
     )
     assert not FLAG_SPELLING.findall(section), (
         f"{REPO_ROOT / 'README.md'}: the `### brief` section still writes a"
-        f" `--`-prefixed spelling of a command path (ADR-0103). See"
+        f" `--`-prefixed spelling of a command path. See"
         f" {STANDARD}."
     )
     for form in ("/brief on", "/brief status"):
@@ -11179,7 +11173,7 @@ def test_brief_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
             f"{REPO_ROOT / 'README.md'}: the `### brief` section does not state"
             f" the `{form}` form. The README is where somebody decides whether"
             f" they want the Skill, so it states the forms it accepts"
-            f" (ADR-0103). See {STANDARD}."
+            f" See {STANDARD}."
         )
 
 
@@ -11190,13 +11184,13 @@ def test_brief_accepts_no_unseparated_text_after_its_name_or_command_path() -> N
     free text, which is what forced its mode onto flags in the first place.
     The Invocation Envelope's reserved separator now carries what the operand
     carried, so the operand is a second unseparated channel for one thing and
-    goes with the ambiguity it caused (ADR-0078, ADR-0103).
+    goes with the ambiguity it caused (ADR-0176).
 
     What went with the flags is the argument prose this used to pin, which
     refused a token that was neither a recognised command path nor a declared
     flag. The grammar declares none, so the body's refusal cites the command
     path alone and there is no second half of that sentence to hold it to
-    (ADR-0170). What the page must still not carry is a positional argument.
+    (ADR-0176). What the page must still not carry is a positional argument.
     """
 
     page = (BRIEF_DIR / "help.md").read_text(encoding="utf-8")
@@ -11204,7 +11198,7 @@ def test_brief_accepts_no_unseparated_text_after_its_name_or_command_path() -> N
     assert "\n## POSITIONAL ARGUMENTS\n" not in page, (
         f"{BRIEF_DIR / 'help.md'}: the page still documents a positional"
         f" argument. The Skill takes no operand, and an empty conventional"
-        f" section is omitted rather than filled (ADR-0103). See {STANDARD}."
+        f" section is omitted rather than filled. See {STANDARD}."
     )
 
 
@@ -11243,17 +11237,17 @@ def _delegation_forms() -> list[str]:
 def test_delegation_ships_and_routes_one_manpage_per_command_path() -> None:
     """`on`, `off`, and `status` each answer to their own help route.
 
-    A command path is exactly what a page under `help/` answers to (ADR-0077),
+    A command path is exactly what a page under `help/` answers to (ADR-0176),
     so the three pages are what make these tokens a path rather than operands,
     and what lets a refusal quote the grammar the invalid form violated rather
-    than the whole Skill's (ADR-0109).
+    than the whole Skill's.
     """
 
     help_directory = DELEGATION_DIR / "help"
     assert help_directory.is_dir(), (
         f"{DELEGATION_DIR}: the mode is addressed through a command path, and"
         f" every public command path has an addressable manpage under `help/`"
-        f" (ADR-0077, ADR-0109). See {STANDARD}."
+        f" (ADR-0176). See {STANDARD}."
     )
 
     actual = {
@@ -11262,7 +11256,7 @@ def test_delegation_ships_and_routes_one_manpage_per_command_path() -> None:
     assert actual == set(DELEGATION_COMMANDS), (
         f"{DELEGATION_DIR}: the command page tree is {sorted(actual)}, while"
         f" the accepted command paths are {sorted(DELEGATION_COMMANDS)}"
-        f" (ADR-0077, ADR-0109). See {STANDARD}."
+        f" (ADR-0176). See {STANDARD}."
     )
 
     body = DELEGATION_DIR / "SKILL.md"
@@ -11271,12 +11265,12 @@ def test_delegation_ships_and_routes_one_manpage_per_command_path() -> None:
         assert f"`$HERE/help/{relative}`" in help_section, (
             f"{body}: the `## Invocation` section does not route the"
             f" `{relative}` manpage. `/<skill> <command-path> --help` prints"
-            f" the most specific recognized path's page verbatim (ADR-0077)."
+            f" the most specific recognized path's page verbatim (ADR-0176)."
             f" See {STANDARD}."
         )
     assert "-h" in help_section, (
         f"{body}: `-h` is the identical short route into an addressed page,"
-        f" so the command paths answer to it too (ADR-0077). See {STANDARD}."
+        f" so the command paths answer to it too (ADR-0176). See {STANDARD}."
     )
 
 
@@ -11287,7 +11281,7 @@ def test_delegation_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> N
     is the defect, a period in which both work is the defect with a schedule
     attached, and a Skill has no parser — the agent reading these files is the
     whole of the enforcement — so a spelling left standing on any surface is a
-    spelling that is accepted (ADR-0109).
+    spelling that is accepted.
     """
 
     surfaces = sorted(DELEGATION_DIR.rglob("*.md"))
@@ -11302,7 +11296,7 @@ def test_delegation_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> N
             f"{path}: {found} is a `--`-prefixed spelling of a command path or"
             f" of the unnamed default scope. `on`, `off`, and `status` are"
             f" reached as a command path and by no second spelling, and the"
-            f" session scope has no spelling at all (ADR-0109). See"
+            f" session scope has no spelling at all. See"
             f" {STANDARD}."
         )
 
@@ -11313,7 +11307,7 @@ def test_delegation_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> N
     )
     assert not ALIAS_SPELLING.findall(section), (
         f"{REPO_ROOT / 'README.md'}: the `### delegation` section still writes"
-        f" a `--`-prefixed spelling of a command path (ADR-0109). See"
+        f" a `--`-prefixed spelling of a command path. See"
         f" {STANDARD}."
     )
     for form in ("/delegation on", "/delegation status"):
@@ -11321,7 +11315,7 @@ def test_delegation_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> N
             f"{REPO_ROOT / 'README.md'}: the `### delegation` section does not"
             f" state the `{form}` form. The README is where somebody decides"
             f" whether they want the Skill, so it states the forms it accepts"
-            f" (ADR-0109). See {STANDARD}."
+            f" See {STANDARD}."
         )
 
 
@@ -11332,7 +11326,7 @@ def test_delegation_takes_its_scope_as_a_flag_and_never_as_an_operand() -> None:
     what giving neither selects, and the bare invocation is the only way to
     write a session toggle. That removes the last pair of spellings for one
     thing, at the cost of a user no longer being able to write the default
-    scope for emphasis (ADR-0109).
+    scope for emphasis.
     """
 
     forms = _delegation_forms()
@@ -11346,7 +11340,7 @@ def test_delegation_takes_its_scope_as_a_flag_and_never_as_an_operand() -> None:
         assert not found, (
             f"{DELEGATION_DIR}: the form `{form.strip()}` writes {found} as a"
             f" bare operand. A scope is named by a flag or not at all, and the"
-            f" session is the unnamed default (ADR-0097, ADR-0109). See"
+            f" session is the unnamed default (ADR-0176). See"
             f" {STANDARD}."
         )
 
@@ -11354,7 +11348,7 @@ def test_delegation_takes_its_scope_as_a_flag_and_never_as_an_operand() -> None:
     assert {"--project", "--user"} <= _flags(_optional_section(page, "## OPTIONS")), (
         f"{DELEGATION_DIR / 'help.md'}: `## OPTIONS` no longer declares both"
         f" scope flags, so the two persistent scopes have no spelling at all"
-        f" (ADR-0109). See {STANDARD}."
+        f" See {STANDARD}."
     )
 
 
@@ -11364,8 +11358,8 @@ def test_delegation_accepts_no_unseparated_free_text_and_interrogates_nothing() 
     The Skill answered *is it on?* as `status` while asking about anything
     wider, so its formal grammar accepted free text at one narrow width and
     interrogated it above that. The reserved separator carries instructions
-    collection-wide (ADR-0078), so an unrecognized bare token is refused like
-    any other invalid form (ADR-0109).
+    collection-wide (ADR-0176), so an unrecognized bare token is refused like
+    any other invalid form.
     """
 
     body = DELEGATION_DIR / "SKILL.md"
@@ -11380,17 +11374,17 @@ def test_delegation_accepts_no_unseparated_free_text_and_interrogates_nothing() 
         f"{body}: the argument prose does not refuse unseparated text after"
         f" the Skill name or a command path. Anything not carried by a"
         f" recognized token is an invalid form rather than an instruction"
-        f" (ADR-0109). See {STANDARD}."
+        f" See {STANDARD}."
     )
     assert "Prose is not a form" not in text, (
         f"{body}: the interrogation clause is still in the body. Prose is not"
         f" a form at any width, so nothing is asked about in place of the"
-        f" grammar (ADR-0109). See {STANDARD}."
+        f" grammar. See {STANDARD}."
     )
     assert "Unseparated text is not an instruction" in page, (
         f"{DELEGATION_DIR / 'help.md'}: `DIAGNOSTICS` does not say that"
         f" unseparated text is refused rather than read as guidance"
-        f" (ADR-0109). See {STANDARD}."
+        f" See {STANDARD}."
     )
 
 
@@ -11400,7 +11394,7 @@ def test_delegation_reports_every_scope_when_no_scope_flag_is_given() -> None:
     Nothing about what the Skill does moves here. The one behaviour the new
     grammar could quietly have lost is the report that covers all three scopes,
     because the form that produced it was a bare `status` with no scope word
-    beside it (ADR-0109).
+    beside it.
     """
 
     body = DELEGATION_DIR / "SKILL.md"
@@ -11409,7 +11403,7 @@ def test_delegation_reports_every_scope_when_no_scope_flag_is_given() -> None:
     assert "`status` with no scope flag reports all three scopes." in arguments, (
         f"{body}: the parse rules no longer say that `status` without a scope"
         f" flag reports every scope. The scope became a flag; what `status`"
-        f" reaches did not (ADR-0109). See {STANDARD}."
+        f" reaches did not. See {STANDARD}."
     )
 
 
@@ -11441,7 +11435,7 @@ def test_delegation_names_its_cohort_and_files_machine_judged_evidence() -> None
         f"{path}: routed delegation names one Cohort so its rows are comparable"
         f" within the work they were for, and files its machine-judged attempts"
         f" through the public observation Interface with no user step, leaving"
-        f" `record` for a rubric or a person (ADR-0154, issue #222); an unrouted"
+        f" `record` for a rubric or a person (ADR-0179, issue #222); an unrouted"
         f" spawn still produces no `observe` attempt and is left to capture"
-        f" (ADR-0133); missing {missing}."
+        f" (ADR-0179); missing {missing}."
     )

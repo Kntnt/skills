@@ -35,7 +35,7 @@ SCHEMA_VERSION: int = 1
 # are different work, and an amend is a different attempt at the same work;
 # delegation's execution subagent is the sixth. The seventh is the work nobody
 # routed at all — an ordinary interactive session, which automatic capture no
-# longer produces (ADR-0156).
+# longer produces (ADR-0179).
 STRATA: tuple[str, ...] = (
     "initial_build",
     "amend",
@@ -132,7 +132,7 @@ STANDING_POLICY_MODULE: str = "standing_policy.py"
 # The Library's own argument grammar, beside this module, and the flags of this
 # engine that carry no value. The grammar is told which they are rather than
 # knowing one engine's by name, so a valueless flag added here never takes the
-# operand written behind it (ADR-0152).
+# operand written behind it (ADR-0176).
 ARGUMENT_GRAMMAR_MODULE: str = "argument_grammar.py"
 VALUELESS_FLAGS: frozenset[str] = frozenset({"--import", "--yes"})
 
@@ -1418,7 +1418,7 @@ def _evaluate_standing_policy(
     is a deliberate act of the user's: `config policy reset`, which a person
     asks for and which restores the shipped default while keeping the history
     (ADR-0149), or `config reset --evidence`, which discards the measurement
-    the movement rests on and the history with it (ADR-0159). A row naming no
+    the movement rests on and the history with it (ADR-0179). A row naming no
     Cohort is ledger accounting and moves nothing.
     """
 
@@ -1489,7 +1489,7 @@ def _chain_commercial(
     landed, retries included. Both are charged to the configuration that
     finally passed, because a cheap point that needed two escalations to get
     there saved nobody anything, and they are charged inside the Cohort that
-    pass belongs to, a row being evidence only there (ADR-0145). A chain no
+    pass belongs to, a row being evidence only there (ADR-0179). A chain no
     verdict passed contributes nothing at all: an unfinished measurement is
     not a fast free one, and a censored zero is what would make it look like
     the cheapest point on the frontier.
@@ -1611,7 +1611,7 @@ def project(records: list[dict[str, Any]]) -> dict[str, Any]:
 
     This is the ledger read as evidence rather than as accounting: one record
     per exact configuration inside one frontier, carrying the conservative
-    interval that frontier's judged runs establish (ADR-0145). Nothing is
+    interval that frontier's judged runs establish (ADR-0179). Nothing is
     classified here: the route module owns the only classifier there is
     (ADR-0083), and a second one answering the same question in a second place
     is exactly what would let `record` and `route` disagree about one ledger.
@@ -1690,7 +1690,7 @@ def purge_paths(directory: Path) -> list[dict[str, Any]]:
     """Return what this ledger owns, present or not, sized by row or byte.
 
     A row that cannot become evidence — naming no Cohort, or predating the
-    Cohort fields entirely — is permanently inert (ADR-0145), and this is the
+    Cohort fields entirely — is permanently inert (ADR-0179), and this is the
     preview `config reset --evidence` renders before it removes exactly this
     ledger, its derived frontiers, and the quota store beside them, keeping
     every other file `references/evidence-ledger.md`'s `## Store` table names
@@ -1755,7 +1755,7 @@ def _operands_first(arguments: list[str]) -> list[str]:
     """Return the same arguments with the operands ahead of the options.
 
     The Skills write one invocation order — the command path, then the flags,
-    then the operands (ADR-0097) — while this parser reads its path first, so
+    then the operands (ADR-0176) — while this parser reads its path first, so
     the shared grammar normalises both into the one this engine reads.
     """
 

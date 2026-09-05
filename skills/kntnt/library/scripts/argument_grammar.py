@@ -9,13 +9,13 @@ answers a malformed one with a usage dump on stderr and its own exit status.
 The two that reach this module cannot: their contract is one machine-readable
 refusal carrying a stable code, on exit 2, for every line they will not run. So
 they read their own arguments — and this module is the whole of how, rather
-than a habit each of them keeps privately (ADR-0152).
+than a habit each of them keeps privately (ADR-0176).
 
 Two things are normalised here. A value written apart from its flag is read as
 that flag's value, because the engines stay permissive about the attached
-spelling the collection writes everywhere else (ADR-0096); and the operands are
+spelling the collection writes everywhere else (ADR-0176); and the operands are
 separated from the options whichever order the caller wrote them in, because
-the Skills write the flags first (ADR-0097) while these parsers read their own
+the Skills write the flags first (ADR-0176) while these parsers read their own
 operand first. What a flag is, an engine knows and this module does not: the
 flags that carry no value are named by the engine that has them, so a valueless
 flag never takes the operand written behind it.

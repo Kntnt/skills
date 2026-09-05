@@ -642,7 +642,7 @@ def test_the_hook_path_is_local_only_and_bounded() -> None:
     holds no waiting call cannot break that contract however it is invoked.
     These absences are what keep the contract true of this module now that the
     same session-end invocation also dispatches a bounded conditional
-    retrieval (ADR-0167): that work lives in `refresh.py` and is held to its
+    retrieval (ADR-0179): that work lives in `refresh.py` and is held to its
     own pins in `test_refresh.py`, and none of it reaches here.
     """
 
@@ -731,7 +731,7 @@ def test_a_harness_naming_the_event_in_its_payload_is_understood(
 def test_the_opencode_event_envelope_yields_a_session_identity(
     tmp_path: Path,
 ) -> None:
-    """OpenCode hands its own event object over unmodified (ADR-0090): the
+    """OpenCode hands its own event object over unmodified (ADR-0179): the
     plugin interprets nothing, so the session identity nested inside that
     event — never on the command line, and at a different path per event —
     has to reach the hook from the payload itself.
@@ -898,7 +898,7 @@ def test_no_separate_consent_or_configuration_state_remains() -> None:
 
     There is no second opt-in, no consent text, no stored on/off flag, and no
     Harness-guessing fallback left: disk — the Harness's own configuration —
-    is the one truth capture ever reads (ADR-0090).
+    is the one truth capture ever reads (ADR-0179).
     """
 
     module = _load()

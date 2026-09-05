@@ -2,7 +2,7 @@
 
 A genre's base half closes by naming the technique that genre is ordinarily
 written with, or by stating that it has none, and its first word is the
-canonical value (ADR-0164). The resource format's suite checks that every
+canonical value (ADR-0178). The resource format's suite checks that every
 genre states it; the fixture corpus's suite checks that a fixture turning on a
 resolved arc names a genre supplying the one it needs. Read in two places, it
 is written here once.

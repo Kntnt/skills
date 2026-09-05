@@ -1,3 +1,0 @@
-# The collection repo groups skills by category
-
-A flat `skills/<name>/` list does not scale once the collection has more than a handful of skills. Following Matt Pocock, each Skill lives at `skills/<category>/<name>/`. The Skill's identity is its name, not its path: `/grill-me` stays `/grill-me` if it moves from `text/` to `code/`. Category names (today `agents`, `code`, `text`, `wordpress`) may change. The transport already discovers this layout. Select groups its list by Category so a long list stays readable. A Category is not itself something to check: the user answers one Skill at a time, and `select --on=wordpress` is not a thing.

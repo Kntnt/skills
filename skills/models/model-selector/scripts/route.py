@@ -2175,7 +2175,7 @@ def _exploration(
 
     The Rung stepped from is the one ordinary selection just returned, and the
     step is the same two-dimensional geometry `next_escalation` climbs, read
-    downward (ADR-0146). `candidates` is already inside the Cohort's inclusive
+    downward (ADR-0179). `candidates` is already inside the Cohort's inclusive
     floor, so a destination at the floor is reachable and one below it does not
     exist to be reached. The budget is counted here, on the accepted decision
     rather than on a launch nobody can promise happened: an attempt prepared
@@ -2419,7 +2419,7 @@ def _execution_decision(
     # Distinguish an absent profile from one that was read and rejected. A
     # rejected profile inherits rather than refusing: a refusal would stop an
     # unattended run outright, where inheritance costs it its optimisation
-    # and the distinct reason is what says which happened (ADR-0165).
+    # and the distinct reason is what says which happened (ADR-0179).
     profile = snapshot.get("profile")
     if profile is None:
         return _inherit(request, snapshot, "missing_profile", standing=unresolved)
@@ -2887,7 +2887,7 @@ def _experiment_fingerprints(
     fingerprints = [launch["configuration_fingerprint"]]
 
     # Compare nothing beside a dimension the request pinned: a lock is not a
-    # Rung, and the routing decision refuses to escalate one (ADR-0146).
+    # Rung, and the routing decision refuses to escalate one (ADR-0179).
     if request["overrides"].get("deliberation") is not None:
         return fingerprints
 

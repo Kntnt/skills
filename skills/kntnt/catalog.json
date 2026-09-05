@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "63357fa8e2c54bf4508ab4ae327a05580794b1d99bc978f7c69c4aaafe400d06",
+  "manager_digest": "7df7e748defdf5fcfd06ffd9a27f5fe9babf17c90576d1175042a7c9dcca3741",
   "skills": [
     {
       "name": "agents-md",
@@ -185,7 +185,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
-      "digest": "7e24998d3fe3c3a509d2673f5747a33a3d1a50aaa67040af4160503c758a355b",
+      "digest": "067af7b9fdb76db69d3cc0cbc42186d5350b8034c26043564c39322223f8f28e",
       "binaries": [
         "uv"
       ],

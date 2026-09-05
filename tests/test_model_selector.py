@@ -3892,7 +3892,7 @@ def _brief_rungs(
 
 
 def test_experiment_brief_names_no_point_a_deliberation_lock_forbids() -> None:
-    """A lock is not a Rung, so the brief has nothing to compare (ADR-0146)."""
+    """A lock is not a Rung, so the brief has nothing to compare (ADR-0179)."""
 
     # Lock the weakest level on a ladder whose own scale runs further up.
     snapshot = _complete_routing_snapshot()
@@ -3967,7 +3967,7 @@ def test_a_pinned_deliberation_never_reaches_the_inherited_brief_path() -> None:
 
     The inherited path appends from the bounded pool without asking the shared
     resolver, so a lock reaching it would name a point at the level the lock
-    forbids (ADR-0146). It carries no guard of its own because nothing reaches
+    forbids (ADR-0179). It carries no guard of its own because nothing reaches
     it under a lock: verdict authority keeps its overrides but inherits for a
     reason that emits no brief, and evidence-driven inheritance resolves an
     exact point as soon as a lock is present. This test fails the day either
@@ -5839,9 +5839,9 @@ def test_the_ledger_purge_counts_rows_for_jsonl_and_bytes_for_the_summary(
 ) -> None:
     """`purge` sizes the two JSONL stores in rows and the JSON summary in bytes.
 
-    The ledger, its frontiers, and the quota store are measurement (ADR-0145,
-    ADR-0159): rows that cannot become evidence are removed rather than
-    repaired, which is the whole point of the verb.
+    The ledger, its frontiers, and the quota store are measurement (ADR-0179):
+    rows that cannot become evidence are removed rather than repaired, which is
+    the whole point of the verb.
     """
 
     observations = _load_observations()
@@ -6328,7 +6328,7 @@ def test_the_policy_store_purge_reports_rows_and_bytes_before_removing_both_file
 ) -> None:
     """`purge` counts the JSON override in bytes and the JSONL history in rows.
 
-    A Standing Policy override is measurement (ADR-0159): `config reset
+    A Standing Policy override is measurement (ADR-0179): `config reset
     --evidence` discards it and its history outright, rather than restoring
     the shipped default the way `reset` does.
     """
@@ -7353,7 +7353,7 @@ def test_every_surface_describing_observed_usage_says_the_join_is_the_model() ->
                     f"{path.name} {heading} still says {claim!r} of what the"
                     " reader reports; the join is the model alone, no Seat"
                     " capture writes resolving a portable deliberation"
-                    " (ADR-0162)."
+                    " (ADR-0179)."
                 )
     assert covered >= 4, (
         f"only {covered} sections mention observed usage; the pin has lost its subject"

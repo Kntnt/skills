@@ -111,7 +111,7 @@ GENRES = (
 
 # The three forms a code sample takes in Markdown. A pass reads past all of
 # them, so a fixture staging only the fenced one leaves the other two to be
-# settled per run, which is the defect ADR-0125 ends.
+# settled per run, which is the defect ADR-0178 ends.
 FENCE = re.compile(r"^ {0,3}(?:```|~~~)", re.MULTILINE)
 FENCED_BLOCK = re.compile(r"^ {0,3}(```+|~~~+).*?^ {0,3}\1", re.MULTILINE | re.DOTALL)
 INDENTED_CODE = re.compile(r"^(?: {4}|\t)\S", re.MULTILINE)
@@ -807,7 +807,7 @@ def test_the_corpus_stages_code_a_pass_has_to_read_past() -> None:
     """A code sample is quoted material, and the corpus has to hold some.
 
     Every editorial Skill is under a preservation obligation that names code,
-    and ADR-0125 settles what a sample is to a pass: quoted material whose
+    and ADR-0178 settles what a sample is to a pass: quoted material whose
     contents produce no findings and are never altered. Neither claim is
     answerable from a corpus carrying no code, which is what sent one
     evaluation to run-local probe material the other provider family had
@@ -852,7 +852,7 @@ def test_the_corpus_stages_code_a_pass_has_to_read_past() -> None:
         reject = fields.get("Reject", "").lower()
         assert "finding" in reject, (
             f"{name}: the entry does not reject a finding located inside the"
-            f" code, which is half of what ADR-0125 settles."
+            f" code, which is half of what ADR-0178 settles."
         )
         assert "byte" in reject, (
             f"{name}: the entry does not reject the code coming back altered,"

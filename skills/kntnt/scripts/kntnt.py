@@ -141,7 +141,7 @@ def relay_transport(message: str) -> None:
     The mirrors below read a transport failure off the disk rather than
     raising it, which costs the user the one thing only the transport knows:
     why it declined. That belongs on stderr — the channel the manager's own
-    errors already use — and never in the payload, which ADR-0036 fixes as a
+    errors already use — and never in the payload, which ADR-0175 fixes as a
     statement about the disk in one shape every verb carries.
 
     Whole and unedited, under a line naming whose words these are. The same
@@ -157,7 +157,7 @@ def relay_transport(message: str) -> None:
 # at: the Sandbox has an npm cache of its own, so the first dry run in a
 # session downloads the transport afresh. An unexplained pause in a command
 # whose whole promise is that nothing happens is the moment somebody reaches
-# for the interrupt (ADR-0042).
+# for the interrupt (ADR-0175).
 DRY_RUN_NOTE = (
     "a dry run has an npm cache of its own, so the transport is downloaded "
     "afresh and this takes longer than the run it previews"
@@ -298,7 +298,7 @@ def parse_frontmatter(text: str) -> dict[str, Any]:
     A file with no frontmatter and one whose fence is never closed both answer
     empty: neither states anything about the skill. Malformed YAML inside a
     closed fence is a different thing — it states something unreadable — and
-    raises `yaml.YAMLError` for the caller to decide about (ADR-0060).
+    raises `yaml.YAMLError` for the caller to decide about (ADR-0177).
     """
 
     if not text.startswith("---"):
@@ -384,7 +384,7 @@ def value_fault(block: dict[str, Any]) -> str | None:
     value of any other shape is a file to send back rather than one to read
     through `str()`: coercion is what put a Python repr where a Dependency
     list belonged, and it warns nobody because a string is a legal value
-    (ADR-0061).
+    (ADR-0177).
     """
 
     for key, value in block.items():
@@ -486,7 +486,7 @@ def capability_notes(names: list[str]) -> list[dict[str, str]]:
 # The generator walks a working tree carrying the maintainer's own bytecode
 # cache; the consumer walks an installed directory carrying the one running the
 # skill created. Neither has a git to ask which files are the collection's, so
-# the two can agree only through this list (ADR-0041). A pattern ending in `/`
+# the two can agree only through this list (ADR-0175). A pattern ending in `/`
 # is a directory name skipped wherever it occurs; any other matches a filename.
 DIGEST_IGNORE = ("__pycache__/", "*.pyc")
 MANAGER_DIGEST_IGNORE = frozenset({"catalog.json"})
@@ -1385,7 +1385,7 @@ def publish_candidates(
 
 # The variables a Sandbox redirects. `HOME` is what the transport resolves the
 # Global layer and its own npm cache through — measured rather than assumed,
-# and the property the whole of `--dry-run` stands on (ADR-0042) — and the
+# and the property the whole of `--dry-run` stands on (ADR-0175) — and the
 # three of ours are how this script resolves that same layer, the Project, and
 # the Manager a verb writes beside.
 SANDBOX_ENV = ("HOME", "KNTNT_HOME", "KNTNT_PROJECT", "KNTNT_HERE")
@@ -1426,7 +1426,7 @@ def seed_skills(source: Path, destination: Path) -> None:
     the seed a dry run would report installing what the user already has, which
     is the failure mode of a preview that starts from an empty world; with more
     than the seed it would absorb a defect worth seeing, since no verb of this
-    collection touches another collection's files (ADR-0042).
+    collection touches another collection's files (ADR-0175).
     """
 
     for entry in sorted(source.iterdir()):
@@ -1462,7 +1462,7 @@ def seed_layer(root: Path, *, global_layer: bool) -> list[Path]:
 
     Every directory the layer covers is recreated, whether or not this
     collection has anything in it. A Harness is Detected by its directory
-    being there (ADR-0035), so a Sandbox missing one would resolve a different
+    being there (ADR-0175), so a Sandbox missing one would resolve a different
     set of targets than the run it is standing in for. The answer is the
     directories as they are outside the Sandbox, which is what the Manager's
     own seeding is then decided against.
@@ -1495,7 +1495,7 @@ def seed_sandbox(root: Path, *, global_layer: bool) -> dict[str, str]:
 
     # The layer being previewed, and Global with it where that layer is a
     # Project. What Satisfies a Project's Dependency is Global's copy as much
-    # as its own (ADR-0013), so a Sandbox holding only the working directory
+    # as its own (ADR-0175), so a Sandbox holding only the working directory
     # reads a machine with nothing on it and offers a second copy of every
     # Dependency the user already has. Global runs the other way: it reads no
     # Project, and one seeded for it would be a directory the real run never
@@ -1518,7 +1518,7 @@ def sandbox(*, global_layer: bool) -> Iterator[None]:
 
     The verb inside is the verb itself: the same code, the same transport
     calls, and the same reading of the disk afterwards, so what it reports is
-    an outcome rather than a description of intent (ADR-0042). The redirection
+    an outcome rather than a description of intent (ADR-0175). The redirection
     is the environment, because that is what this script resolves every
     directory through and what the transport inherits from it.
     """
@@ -1672,7 +1672,7 @@ def teardown_integrations(
     `metadata.kntnt.integrations`, naming a script inside its directory, and the
     contract is one word: `remove-integrations`, answered with JSON. The Manager
     learns no Harness's hook format that way, and a second skill needing the
-    same thing declares it the same way (ADR-0012).
+    same thing declares it the same way (ADR-0177).
 
     A teardown that fails is reported and never raised. External state this
     collection does not own cannot be allowed to hold up the removal of files
@@ -1800,7 +1800,7 @@ def install_integrations(
     those a supported adapter actually exists for is the declared script's
     own answer to give back; every Detected Harness is handed on regardless
     of size. Install, repair, and refresh stay the same convergence over
-    whatever is on disk (ADR-0090), so asking an already-installed skill
+    whatever is on disk (ADR-0179), so asking an already-installed skill
     again changes nothing, and a failed installation is reported per skill
     and never raised, exactly as a failed teardown is.
     """
@@ -1944,7 +1944,7 @@ def remove_skills(
     # What a skill installed outside its own directory is reported beside what
     # the disk says of the files: a Harness this run could not clear is state
     # the user is left with, and silence about it is the one thing that would
-    # make it theirs without their knowing (ADR-0036).
+    # make it theirs without their knowing (ADR-0175).
     return {
         **verified_outcome(
             names, harnesses, global_layer=global_layer, expect_present=False
@@ -2144,7 +2144,7 @@ def parse_layer(value: str) -> bool:
     """True when the command targets Global.
 
     `off` is Global and `on` is the Project, and those two are the whole of the
-    flag (ADR-0038). Nothing else can arrive: `add_project_flag` declares the
+    flag (ADR-0175). Nothing else can arrive: `add_project_flag` declares the
     choices, and `normalize_argv` has already turned the bare flag and the
     `--project=` form into one of them before argparse reads it.
     """
@@ -2179,7 +2179,7 @@ def installed_freshness(name: str, digest: str, directories: list[Path]) -> str:
     `deviating` where any copy differs, `current` where every copy agrees, and
     `unknown` where there is nothing to establish it from — no copy on disk, or
     no Digest to compare against. Never *out of date*: the comparison sees two
-    states and no history, so it cannot name a direction (ADR-0041).
+    states and no history, so it cannot name a direction (ADR-0175).
     """
 
     copies = [
@@ -2201,7 +2201,7 @@ def catalog_digest(entry: dict[str, Any]) -> str:
     collection as of the last Update, so a verdict made from them would be a
     claim about a revision the collection may already have left. Nothing
     Deviates and nothing is current on such a list, and no refresh is offered
-    on the strength of it (ADR-0041), which is what the empty answer buys.
+    on the strength of it (ADR-0175), which is what the empty answer buys.
     """
 
     if not catalog_from_origin():
@@ -2221,7 +2221,7 @@ def dependencies_of(name: str, entries: dict[str, dict[str, Any]]) -> list[str]:
     Only names the Catalog itself carries. A `skills` entry naming something
     this collection does not ship has no row to check and no entry to walk; a
     Dependency outside the Catalog is the checker's to answer when the Skill is
-    used (ADR-0012).
+    used (ADR-0177).
     """
 
     entry = entries.get(name)
@@ -2236,7 +2236,7 @@ def dependency_closure(name: str, entries: dict[str, dict[str, Any]]) -> list[st
 
     The whole chain rather than the first link, because the user is asked one
     question for the whole closure: `release` pulling in `push` and `commit` is
-    a single yes rather than three (ADR-0047). The order is the order the
+    a single yes rather than three (ADR-0175). The order is the order the
     Skills would be checked in, so the rendering can read the list out as what
     it is about to add.
     """
@@ -2270,7 +2270,7 @@ def satisfying_names(harnesses: list[str], *, global_layer: bool) -> set[str]:
 
     What Satisfies one is what the Harness will load, so a Project is judged by
     its own copies and Global's together: a Dependency already Enabled on the
-    machine wants no second copy in the working directory (ADR-0013).
+    machine wants no second copy in the working directory (ADR-0175).
     """
 
     satisfied = set(enabled_names(harnesses, global_layer=global_layer))
@@ -2289,9 +2289,9 @@ def unsatisfied_on_disk(
     Read off the disk rather than off the answer, because a placement the
     transport did not make leaves a Skill without that Dependency whatever the
     answer said, and a report of the answer would call that run clean
-    (ADR-0036). Reported and never blocked: unchecking a Skill that a checked
+    (ADR-0175). Reported and never blocked: unchecking a Skill that a checked
     one depends on is the user's to do, and the manager says what it left
-    Unsatisfied rather than putting the Dependency back (ADR-0047).
+    Unsatisfied rather than putting the Dependency back (ADR-0175).
     """
 
     entries = catalog_entries()
@@ -2309,17 +2309,17 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
     """Build the list the user reads and answers in one gesture.
 
     One row per Catalog skill, grouped by Category so related skills are read
-    together (ADR-0015), and everything a row is judged on carried on the row:
+    together (ADR-0177), and everything a row is judged on carried on the row:
     the checkbox, the one-line description, the Capabilities the skill wants of
     the harness, whether its files reached only some of the layer's Detected
     Harnesses, whether they are the files the collection ships, and the whole
     chain of collection Skills it needs — resolved here so that the rendering
-    names what would be added rather than walking the graph itself (ADR-0047).
+    names what would be added rather than walking the graph itself (ADR-0175).
 
     One layer, and no Effective form: without the flag the list is Global, and
-    with it the Project layer alone (ADR-0038). There is no `partial` state
+    with it the Project layer alone (ADR-0175). There is no `partial` state
     either — incompleteness is a fact about the disk that confirming the list
-    repairs, never a third thing an answer could select (ADR-0043).
+    repairs, never a third thing an answer could select (ADR-0175).
     """
 
     harnesses = target_harnesses(global_layer=global_layer)
@@ -2327,7 +2327,7 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
 
     # A Project row says where else the skill is already Enabled: this layer
     # holds no copy of a Global one to uncheck, and checking the row would put
-    # a second copy in the working directory (ADR-0013).
+    # a second copy in the working directory (ADR-0175).
     global_targets = [] if global_layer else target_harnesses(global_layer=True)
 
     entries = catalog_entries()
@@ -2354,7 +2354,7 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
         rows.append(row)
 
     # The closure is resolved here and not by the rendering, so a row names the
-    # whole chain it needs rather than the first link of it (ADR-0047). A row
+    # whole chain it needs rather than the first link of it (ADR-0175). A row
     # is locked where the user cannot yet have it; a checked Skill whose
     # Dependency has gone is a break to report, and locking it would say the
     # user may not have what they already do.
@@ -2386,12 +2386,12 @@ def delta_answer(
 
     `--on` and `--off` never mean *make this the whole set*. The base is what
     the layer already holds, so a Skill nobody named keeps the state it had and
-    a script that mentions one name cannot silently Disable another (ADR-0043).
+    a script that mentions one name cannot silently Disable another (ADR-0175).
 
     What a named Skill needs comes with it, resolved to the whole closure
-    before anything is written (ADR-0047) and minus whatever already Satisfies
+    before anything is written (ADR-0175) and minus whatever already Satisfies
     it, so a Project gains no second copy of a Dependency Global supplies
-    (ADR-0013). `--off` is applied last and stands: a name the user took off is
+    (ADR-0175). `--off` is applied last and stands: a name the user took off is
     off however the same run arrived at it, and what that leaves Unsatisfied is
     reported rather than repaired behind them.
 
@@ -2399,7 +2399,7 @@ def delta_answer(
     Keeping the state they had is a fact about their files and not only about
     their checkbox: re-copying a Deviating one would overwrite an edit under a
     command that named something else, and the offer that says so is the list's
-    (ADR-0041), which this form does not open. `--as-is` carries nothing,
+    (ADR-0175), which this form does not open. `--as-is` carries nothing,
     because there the set already on disk is itself the answer given.
     """
 
@@ -2435,7 +2435,7 @@ def select_change(
     A checked skill is placed wherever the layer does not already hold exactly
     the files the collection ships: a Disabled one is Enabled, an incomplete
     one repaired, a Deviating one re-copied — which is why the confirmation has
-    to say in the same breath that a local edit goes with it (ADR-0041).
+    to say in the same breath that a local edit goes with it (ADR-0175).
 
     Checked and already those files is no work, and an unchecked skill this
     layer does not carry is no work either. An answer that is all no work
@@ -2485,7 +2485,7 @@ def refresh_change(
     A Skill whose Digest matches the Catalog's is already byte-identical to
     what the collection ships, so re-copying it would move nothing while the
     report went on saying *twelve of twelve refreshed* — equally true of a
-    machine where everything had changed and one where nothing had (ADR-0028).
+    machine where everything had changed and one where nothing had (ADR-0175).
     Everything else is refreshed: Deviating because the files are not the
     collection's, incomplete because the layer is missing a copy, and unknown
     because nothing establishes either. An open question is one Update answers
@@ -2498,7 +2498,7 @@ def refresh_change(
     move through the transport from the same origin that Catalog could not be
     fetched from, so there is nothing to copy, and gating on digests describing
     a revision the collection may already have left would be theatre in front
-    of a fetch that cannot happen (ADR-0041).
+    of a fetch that cannot happen (ADR-0175).
 
     The Manager leads whatever is left, whatever any Digest says. It is no
     Catalog entry, so no Digest describes it, and the verb that repairs
@@ -2605,7 +2605,7 @@ def cmd_apply_select(
 
     Both halves of the answer are one verb's work, so both are reported
     together: `intended`, `confirmed`, and `failed` cover the run, and
-    `placed` and `removed` say which way each intended name went (ADR-0036).
+    `placed` and `removed` say which way each intended name went (ADR-0175).
 
     The answer arrives in one of two forms and never both. Skill names are the
     whole checked set, which is how the list is answered; `--as-is`, `--on`,
@@ -2613,7 +2613,7 @@ def cmd_apply_select(
     with nobody at the list is set up. `--as-is` names nothing and is the whole
     of `select --yes`: it Enables nothing that was not already Enabled and
     refreshes what Deviates and repairs what is incomplete, so an unattended
-    run can never place instructions the user has not read (ADR-0043).
+    run can never place instructions the user has not read (ADR-0175).
     """
 
     # Read together, the two forms would leave the Skills nobody named in a
@@ -2698,7 +2698,7 @@ def cmd_apply_uninstall(*, yes: bool) -> int:
 
     Global only, and no `--project` to say otherwise. A Skill in a working
     directory is checked into that repository and travels with it, so whether
-    it stays is that project's decision rather than this machine's (ADR-0040).
+    it stays is that project's decision rather than this machine's (ADR-0175).
 
     `catalog_refreshed` matters more here than anywhere else: the set to
     remove is every Catalog skill Enabled in Global, so a Catalog read off
@@ -2752,7 +2752,7 @@ def cmd_plan_update(*, global_layer: bool) -> int:
 
     The new Catalog entries are here for the same reason. Apply is where they
     are Enabled, and the offer to Enable them has to be answerable before that
-    — nothing reaches the disk ahead of the question it belongs to (ADR-0047).
+    — nothing reaches the disk ahead of the question it belongs to (ADR-0175).
     """
 
     _, payload = resolve_update_plan(global_layer=global_layer)
@@ -2767,7 +2767,7 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
     reaches a script that cannot prompt (ADR-0029). Answered, the entries the
     collection has added since the last run are Enabled in the layer being
     updated and named in the report; unanswered, nothing new is placed — a run
-    nobody answered has been told nothing (ADR-0007).
+    nobody answered has been told nothing (ADR-0175).
     """
 
     harnesses, plan = resolve_update_plan(global_layer=global_layer)
@@ -2802,10 +2802,10 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
     # The answer to the offer, and the whole of what a run places beyond a
     # refresh. Every name it adds is in the report, which is what makes an
     # unattended Update's one power — Enabling what the user pointed it at —
-    # legible after the fact (ADR-0007).
+    # legible after the fact (ADR-0175).
     adopted = new_names if yes else []
 
-    # What has been withdrawn is asked of the disk (ADR-0037), and only where
+    # What has been withdrawn is asked of the disk (ADR-0175), and only where
     # the origin answered. Its removal waits until acquisition and publication
     # succeed, so a failed replacement leaves the complete old Collection.
     withdrawn = cast(list[str], plan["remove"])
@@ -2816,7 +2816,7 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
 
     # An adopted entry is a placement like any other, so it joins the refresh
     # rather than travelling beside it: one transport call, one reading of the
-    # disk, and one `intended`/`confirmed`/`failed` account of both (ADR-0036).
+    # disk, and one `intended`/`confirmed`/`failed` account of both (ADR-0175).
     # The re-check covers it for the same reason: what a skill lacks is the
     # layer's business from the moment the skill is in the layer.
     place = joined(refresh, adopted)
@@ -2841,7 +2841,7 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
     # Update is the collection's one writer of the snapshot, and what holds it
     # back is any failed replacement. The difference against this file is the
     # whole of what makes an entry new, so a failed run must leave the prior
-    # snapshot beside the prior readable Manager (ADR-0007).
+    # snapshot beside the prior readable Manager (ADR-0175).
     unplaced = {item["name"] for item in outcome["failed"]} & set(adopted)
     if refreshed and not global_layer and not outcome["failed"] and not unplaced:
         write_catalog(load_catalog())
@@ -2860,10 +2860,10 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
             # Unsatisfied Dependencies rather than a refusal, because the run
             # is past the point where it may stop talking: the withdrawals
             # above are already deleted and the placements already made
-            # (ADR-0036). Update reaches Skills a refresh could not repair —
+            # (ADR-0175). Update reaches Skills a refresh could not repair —
             # one the origin was unreachable for, one a hand edit left with no
             # frontmatter at all — and each of those is exactly what has to be
-            # reported (ADR-0068).
+            # reported (ADR-0175).
             fault = declaration_fault_at(skill_dir)
             if fault is not None:
                 item = unreadable_declaration(skill_dir, fault)
@@ -2907,7 +2907,7 @@ def cmd_apply_update(*, global_layer: bool, yes: bool, approval: str | None) -> 
         }
     )
 
-    # ADR-0036's one rule reaches both halves of the run: a withdrawal whose
+    # ADR-0175's one rule reaches both halves of the run: a withdrawal whose
     # files are still there is as much a change the disk does not show as a
     # refresh that never landed.
     if any(item["disk"] == "failed" for item in withdrawals):
@@ -2924,7 +2924,7 @@ def declaration_fault_at(skill_dir: Path) -> str | None:
     *not ours*, and a stranger's skill legitimately declares nothing this
     Manager checks. Here the caller is a Skill of this collection asking about
     itself — nothing else invokes the checker — so the two states come apart
-    and no readable declaration means *ours, and unreadable* (ADR-0068).
+    and no readable declaration means *ours, and unreadable* (ADR-0175).
     """
 
     path = skill_dir / "SKILL.md"
@@ -2970,7 +2970,7 @@ def declared_deps_at(skill_dir: Path) -> dict[str, list[str]]:
             and handed the agent no Capability to confirm — both halves of the
             gate gone, without a word, for every Skill of a collection that had
             moved on (issue #68). A declaration that cannot be read is not a
-            declaration of nothing (ADR-0068).
+            declaration of nothing (ADR-0175).
     """
 
     fault = declaration_fault_at(skill_dir)
@@ -3051,13 +3051,13 @@ def cmd_check(skill_dir: Path) -> int:
 
     Exit 0 with both lists empty is the strongest thing this gate says, so it
     is never what an unreadable declaration earns: nothing missing that I can
-    see is a claim about a declaration that was read (ADR-0068).
+    see is a claim about a declaration that was read (ADR-0175).
     """
 
     # A declaration this Manager cannot read is refused the way an Unsatisfied
     # Dependency is refused, and not raised: exit 2 with the reason on stdout
     # is the one non-zero answer every Skill's body documents a response to,
-    # so the fault reaches the user rather than an empty stop (ADR-0068).
+    # so the fault reaches the user rather than an empty stop (ADR-0175).
     fault = declaration_fault_at(skill_dir)
     if fault is not None:
         emit(
@@ -3114,7 +3114,7 @@ def skill_manpage(name: str) -> str:
     """Return one collection skill's manpage, from disk or from the origin.
 
     This is what Select reads a row about, so it answers for a Skill the user
-    has Enabled and one they are only considering alike (ADR-0044) — and it
+    has Enabled and one they are only considering alike (ADR-0176) — and it
     answers with the file the collection ships either way, or says it could not.
     """
 
@@ -3164,7 +3164,7 @@ def synopsis_of(page: Path) -> str:
 
     A syntax error prints a synopsis the collection ships rather than one
     composed here, and takes the section entire rather than the line it wants
-    (ADR-0059). Anything rebuilt from the parser would be a second grammar,
+    (ADR-0176). Anything rebuilt from the parser would be a second grammar,
     free to drift from the page the pointer at the end of the error leads to.
     """
 
@@ -3195,7 +3195,7 @@ def addressed_page(argv: list[str]) -> tuple[Path, str]:
     A verb the manager documents answers with its own page. Anything else —
     an internal subcommand, or a word that is no subcommand at all — answers
     with the manager's own, and nothing is published to make the first case
-    fit: `manpage`, `check`, and `catalog` are nobody's verbs (ADR-0046).
+    fit: `manpage`, `check`, and `catalog` are nobody's verbs (ADR-0177).
     """
 
     verb = addressed_verb(argv)
@@ -3209,7 +3209,7 @@ def addressed_page(argv: list[str]) -> tuple[Path, str]:
 def syntax_error(problem: str, argv: list[str]) -> ManagerError:
     """Answer a syntax error with the error, the synopsis, and the pointer.
 
-    And with nothing else (ADR-0059): no guess at which verb was meant, no
+    And with nothing else (ADR-0176): no guess at which verb was meant, no
     half of a run, and nothing done with the rest of a line whose first word
     was wrong. One shape for both halves of the grammar, so the difference
     between two refusals is never something only the source explains.
@@ -3223,7 +3223,7 @@ def syntax_error(problem: str, argv: list[str]) -> ManagerError:
 def help_text(name: str | None) -> str:
     """Return the manager's own manpage, or the manpage of one of its verbs.
 
-    A skill's help is not reached here (ADR-0044): one the user has answers
+    A skill's help is not reached here (ADR-0176): one the user has answers
     `--help` itself, and one they do not is read about in Select. So an
     unknown name is refused with both routes named rather than looked for in
     the Catalog, which keeps Help answerable with no origin to reach.
@@ -3355,7 +3355,7 @@ def add_yes_flag(parser: argparse.ArgumentParser) -> None:
     """Add --yes to a verb that asks something answerable yes or no.
 
     To those verbs and no others. A flag with no function on this verb is not
-    a flag of this verb (ADR-0059), so the ones that ask nothing refuse it
+    a flag of this verb (ADR-0176), so the ones that ask nothing refuse it
     rather than accepting it and doing nothing with it.
     """
 
@@ -3367,7 +3367,7 @@ def add_dry_run_flag(parser: argparse.ArgumentParser) -> None:
 
     The changing verbs preview themselves in a Sandbox, and Catalog honours
     the flag where it writes. Nothing else has a use for it, and a use is the
-    only way anything holds a flag under ADR-0059.
+    only way anything holds a flag under ADR-0176.
     """
 
     parser.add_argument("--dry-run", action="store_true")
@@ -3403,7 +3403,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     An unknown subcommand and a disallowed flag are both errors, and both are
     answered in the manager's own terms rather than with argparse's usage dump
-    (ADR-0059). The parser still does the deciding — what a subcommand is, and
+    (ADR-0176). The parser still does the deciding — what a subcommand is, and
     which flags it declared — so there is no second table here to disagree
     with it.
     """
@@ -3417,7 +3417,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     help_cmd.add_argument("subcommand", nargs="?")
 
     # Not a verb the user types: Select is what runs it, for a row the user
-    # asked to read in full before answering the list (ADR-0044). The rule
+    # asked to read in full before answering the list (ADR-0176). The rule
     # binds it and the two below all the same — a surface strict where
     # somebody is looking and lax where nobody is, is the seam again.
     manpage = sub.add_parser("manpage", help="Print one skill's manpage.")
@@ -3447,7 +3447,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     add_dry_run_flag(plan_update)
 
     # Uninstall takes no --project: it acts on this machine, and a working
-    # directory's copies are that repository's to keep or drop (ADR-0040).
+    # directory's copies are that repository's to keep or drop (ADR-0175).
     plan_uninstall = plan_sub.add_parser("uninstall")
     add_yes_flag(plan_uninstall)
     add_dry_run_flag(plan_uninstall)
@@ -3500,7 +3500,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 def dry_run_layer(args: argparse.Namespace) -> bool:
     """Return the layer a changing verb's Sandbox has to stand in for.
 
-    Uninstall takes no `--project` and clears this machine (ADR-0040), so its
+    Uninstall takes no `--project` and clears this machine (ADR-0175), so its
     Sandbox is a home; every other verb previews the layer it was aimed at.
     """
 
@@ -3533,7 +3533,7 @@ def run_command(args: argparse.Namespace) -> int:
     # Catalog's `--write` is the one write this script makes outside a layer,
     # so it is the one place besides Apply where the flag has anything to
     # honour — and honouring it is the only reason Catalog keeps a flag no
-    # other internal subcommand does (ADR-0059).
+    # other internal subcommand does (ADR-0176).
     if args.command == "catalog":
         return cmd_catalog(write=args.write and not args.dry_run)
     if args.command == "plan":

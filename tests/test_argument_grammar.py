@@ -82,9 +82,9 @@ def test_the_policy_engine_reads_one_cohort_in_either_invocation_order(
 ) -> None:
     """Flags before operands and operands before flags parse to one result.
 
-    The Skills write the flags first (ADR-0097) and this engine reads its
+    The Skills write the flags first (ADR-0176) and this engine reads its
     Cohort first, so both orders are accepted and neither is a special case
-    downstream. The attached spelling of a value is one token (ADR-0096) and
+    downstream. The attached spelling of a value is one token (ADR-0176) and
     the separated one is two, which is the other half of what the normalisation
     has to see.
     """
@@ -313,7 +313,7 @@ def test_a_flag_declared_valueless_leaves_the_operand_behind_it_alone() -> None:
 
 
 def test_the_option_reader_takes_a_value_in_either_spelling() -> None:
-    """The engines stay permissive about the spelling they accept (ADR-0096)."""
+    """The engines stay permissive about the spelling they accept (ADR-0176)."""
 
     grammar = _load("kntnt_argument_grammar", GRAMMAR)
 
@@ -328,7 +328,7 @@ def test_the_option_reader_takes_a_value_in_either_spelling() -> None:
 
 
 def test_no_library_engine_carries_its_own_copy_of_the_shared_grammar() -> None:
-    """The normalising loop is written once and reached by path (ADR-0152)."""
+    """The normalising loop is written once and reached by path (ADR-0176)."""
 
     engines = sorted(LIBRARY.glob("*.py"))
 

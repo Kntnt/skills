@@ -278,7 +278,7 @@ class StoredProfile(NamedTuple):
     A validated profile carries `profile`. An absent one carries neither
     member, absence being the file not existing and nothing else. A profile
     that was read and rejected carries `rejection`, saying what rejected it
-    and naming the interview that writes a current one (ADR-0165).
+    and naming the interview that writes a current one (ADR-0179).
     """
 
     profile: dict[str, Any] | None = None
@@ -299,7 +299,7 @@ def _read_profile(data_directory: Path) -> StoredProfile:
     Version 1 is the only documented shape and nothing migrates an older one
     into it: the profile is a short interview `setup` recreates, and the
     shapes that predate the contract diverge too far to bridge without
-    inventing facts (ADR-0165).
+    inventing facts (ADR-0179).
     """
 
     # An unreadable or undecodable file was still configured by somebody, so

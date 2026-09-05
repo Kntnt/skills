@@ -11,7 +11,7 @@ learning three Harnesses' file formats and each one inventing its own idea of
 what it owns, so the mechanics live here once and the feature supplies only its
 owner identity and the command to run.
 
-Disk is the truth (ADR-0003). Nothing here remembers what it installed: an
+Disk is the truth (ADR-0175). Nothing here remembers what it installed: an
 install reads the Harness's file, converges it, and reads it back, and a removal
 finds its own entries by the owner they carry. That makes both idempotent, and
 it makes a hand-edited or externally repaired Harness the state everything works
@@ -21,7 +21,7 @@ A Harness whose supported lifecycle cannot carry the contract is reported as an
 Unsatisfied capability (ADR-0030) rather than silently skipped, because a
 feature that believes it is installed where it is not is worse than one that
 knows it is not. Event names, entry shape, and file location are established
-from each Harness as installed rather than assumed from a sibling's (ADR-0157)
+from each Harness as installed rather than assumed from a sibling's (ADR-0179)
 — Codex's own config file happens to accept the same PascalCase names and the
 same nested matcher group Claude Code's does, confirmed live rather than
 assumed, and is never the flat, camelCase shape its unrelated app-server
@@ -76,7 +76,7 @@ UNSATISFIED = (
 # and the CLI's own startup copy: "Hooks need review... Trust all and
 # continue... Continue without trusting (hooks won't run)"). This collection
 # does not forge that trust decision or write a trust record on the user's
-# behalf (ADR-0157), so a fully written Codex integration is reported gated —
+# behalf (ADR-0179), so a fully written Codex integration is reported gated —
 # present, not yet active — and named to the user, rather than healthy.
 CODEX_TRUST_GATE = (
     "Codex reviews a new or changed hook before it will run it. Start Codex "
@@ -369,7 +369,7 @@ def install(owner: str, harness: str, root: Path, command: list[str]) -> dict[st
 
     # A write that succeeded for Codex is still not an active integration: the
     # Harness itself gates a new hook behind a trust review this collection
-    # never clears on the user's behalf (ADR-0157), so installation says so
+    # never clears on the user's behalf (ADR-0179), so installation says so
     # here rather than waiting for a later health check to be asked.
     gated = installed and harness == "codex"
     return {
@@ -454,7 +454,7 @@ def health(owner: str, harness: str, root: Path) -> dict[str, Any]:
     # moment and not another, which is not health and is not absence either.
     # A fully written Codex integration is a third case again: present, but
     # never observably active, because only the Harness's own trust review —
-    # never this collection — can cross it into "healthy" (ADR-0157).
+    # never this collection — can cross it into "healthy" (ADR-0179).
     if entries == 0:
         status = "absent"
     elif entries == expected:

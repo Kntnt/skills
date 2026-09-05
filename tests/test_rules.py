@@ -18,16 +18,13 @@ DOCS = RULES / "docs.md"
 SKILLS = RULES / "skills.md"
 INGRESS = ADR / "README.md"
 
-# The record whose duty the reform retires. It stays standing in the archive
-# and goes on stating the duty as of its own date, so the module is the only
-# place a reader can learn that the duty no longer binds them.
-RETIRED = "ADR-0075"
-
 # The reform's own record, which the module cited by title while it was still
 # unwritten and now cites by number, the record having been written (issue
 # #271). The number is what a reader can follow and what the suite can refuse
 # when nothing answers to it; a title is neither, and it was only ever the
-# stand-in for the gap between the module and the record it needed.
+# stand-in for the gap between the module and the record it needed. It is also
+# where the retired pointer duty is argued, the record that imposed that duty
+# having been folded into it.
 REFORM = "ADR-0180"
 
 # The three criteria `/domain-modeling` states, which are the bar a decision
@@ -140,17 +137,12 @@ def test_the_docs_module_retires_the_outrun_pointer_duty() -> None:
     reader who had nowhere better to look found a confident wrong answer. The
     rules modules remove that reader, so the archive no longer has to be kept
     self-consistent about a question it is not asked — and the module is the
-    only place that says so, the record stating the duty being immutable and
-    still standing (issue #267).
+    only place that says so, every record written while the duty stood being
+    immutable and read as of its own date (issue #267).
     """
 
     text = DOCS.read_text(encoding="utf-8")
 
-    assert RETIRED in text, (
-        f"{DOCS.relative_to(REPO_ROOT)} names the record whose duty it"
-        f" retires, or a reader who finds {RETIRED} still standing has no way"
-        f" to learn that it no longer binds them."
-    )
     assert "retired" in text.lower(), (
         f"{DOCS.relative_to(REPO_ROOT)} says the outrun-pointer duty is"
         f" retired, in that word."

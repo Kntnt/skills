@@ -17,7 +17,7 @@ falling back to a content hash — of the non-commercial sources that are due.
 **It interprets nothing.** No page is parsed for meaning, no model is started,
 and no evidence beyond the source's own state is written. The unattended pass
 establishes *that* something moved; the person's next `update` establishes
-*what* (ADR-0167).
+*what* (ADR-0179).
 
 ## What it may touch, and what it may never touch
 
@@ -104,7 +104,7 @@ FETCHABLE_KINDS = frozenset(
 # The whole pass, in seconds. It runs inside the hook that ends somebody's
 # session, so the bound is on the pass rather than on each connection: a
 # source reached after the budget is gone would be a source retrieved at the
-# user's expense (ADR-0167).
+# user's expense (ADR-0179).
 BUDGET_SECONDS = 2.0
 
 # What a conditional retrieval may read before the source is abandoned as

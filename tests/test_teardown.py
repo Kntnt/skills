@@ -259,7 +259,7 @@ def test_the_install_declaration_may_not_escape_the_skill(tmp_path: Path) -> Non
 
 def test_installing_twice_asks_the_same_convergent_word_again(tmp_path: Path) -> None:
     """Install, repair, and refresh are the same convergence over what is on
-    disk (ADR-0090), so asking an already-installed Skill again is answered."""
+    disk (ADR-0179), so asking an already-installed Skill again is answered."""
 
     manager = _manager()
     layer = tmp_path / "skills"

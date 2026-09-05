@@ -7,7 +7,7 @@
 A user works in their Harness all day, and what that costs — the Seat it ran
 on, what it used, how long it took — is never written down, because writing
 it down is a thing they have to remember to do. This is that capture, and it
-measures ordinary work; it never judges it (ADR-0156). An ordinary session has
+measures ordinary work; it never judges it (ADR-0179). An ordinary session has
 no independent verifier in it, so a finished session produces a Usage Record
 rather than a `RunObservation`: one per Seat it ran on, carrying no outcome,
 no checker, and no Cohort, appended to its own store the moment the session
@@ -20,7 +20,7 @@ Skill is Enabled, placed, or refreshed, and removes every entry the moment
 it is Disabled — the same two seams that already place and remove the
 Skill's own files. There is no second opt-in, no consent prompt, and no
 configuration state of this feature's own to go stale: disk is the one
-truth (ADR-0090), so a hook either runs because a Harness's own
+truth (ADR-0179), so a hook either runs because a Harness's own
 configuration names it or it does not run at all. What it writes is the
 minimum a Usage Record needs: identities are opaque, measurements the
 environment did not expose stay `null`, and no prompt, response, reasoning,
@@ -51,7 +51,7 @@ SCHEMA_VERSION = 1
 # `sessionEnd`) are the app-server protocol's own `HookEventName`, the
 # normalized runtime view `hooks/list` reports back, and are accepted here as
 # the same convention rather than as a confirmed reading of any payload
-# (ADR-0157).
+# (ADR-0179).
 START_EVENTS = frozenset({"SessionStart", "sessionStart", "session.created"})
 TURN_EVENTS = frozenset({"Stop", "stop", "SubagentStop", "session.idle"})
 ERROR_EVENTS = frozenset({"session.error"})
@@ -71,7 +71,7 @@ EVENT_FIELDS: tuple[str, ...] = ("hook_event_name", "eventName", "event", "type"
 # The usage categories a Usage Record may carry, so that an object named
 # `measurements` in a Harness payload cannot smuggle material in under a
 # wanted key. Named rather than counted, so a key added here is a key this
-# comment still describes (ADR-0156).
+# comment still describes (ADR-0179).
 MEASUREMENT_ALLOWED = frozenset(
     {
         "tokens",
@@ -221,7 +221,7 @@ def _integrations() -> Any:
 
     Harness-specific installation is not this feature's knowledge to hold: it is
     the Library's, so that a second Skill needing the same thing finds it there
-    rather than reaching into this one (ADR-0012).
+    rather than reaching into this one (ADR-0177).
     """
 
     return _by_path("kntnt_integrations", *_library("integrations.py"))
@@ -231,7 +231,7 @@ def _session_records() -> Any:
     """Load the Collection Library's session-record reader.
 
     Reading a finished session's own record is Harness-specific mechanics of
-    exactly the kind ADR-0090 already put in the Library, so it lives beside
+    exactly the kind ADR-0179 already put in the Library, so it lives beside
     `integrations.py` rather than here — a second consumer finds it there
     instead of reaching into this Skill (#225).
     """
@@ -265,7 +265,7 @@ def install(
 
     This is the word the Manager says at every seam that places or refreshes
     an Enabled Skill's files (#223): install, repair, and refresh are the
-    same convergence over whatever is on disk (ADR-0090), so being asked
+    same convergence over whatever is on disk (ADR-0179), so being asked
     twice changes nothing. Naming no Harness means every Harness the
     Collection Library has an adapter for.
 
@@ -299,7 +299,7 @@ def disable(data: Path, root: Path) -> dict[str, Any]:
     Accepted Usage Records are untouched. Every Harness the Collection
     Library has an adapter for is attempted, whether or not this machine
     ever held our entry there: removal reads the Harness's own file and
-    converges it (ADR-0090), so trying one that never carried our entry is a
+    converges it (ADR-0179), so trying one that never carried our entry is a
     converged state rather than an error, and there is no separate on/off
     flag of this feature's own left to update — the Harness's own
     configuration is the one truth capture ever reads.
@@ -316,7 +316,7 @@ def disable(data: Path, root: Path) -> dict[str, Any]:
 def _opencode_session_id(payload: dict[str, Any]) -> str | None:
     """Return the session identity OpenCode's own event envelope carries.
 
-    OpenCode's plugin hands its event object on unmodified (ADR-0090: it
+    OpenCode's plugin hands its event object on unmodified (ADR-0179: it
     interprets nothing), and that object never carries the identity where
     Claude Code and Codex do — it nests it inside `properties`, and at a
     different path per event: `session.idle` names it directly as
@@ -438,7 +438,7 @@ def _touch_seat(
 
     A Usage Record's instants are its own Seat's first and last turn rather
     than the whole session's, because a session that changed Seat mid-way ran
-    two configurations and each is timed on what it actually did (ADR-0156
+    two configurations and each is timed on what it actually did (ADR-0179
     decision 3). Usage attribution between two Seats active in one session is
     issue #225's to settle; here, the usage last observed while a Seat was
     current is what that Seat's own record carries.
@@ -472,7 +472,7 @@ def _usage_key(session_identity: str, seat: dict[str, Any]) -> str:
     """Return the stable idempotency key of one session's Usage Record on one Seat.
 
     Idempotency is by session identity and Seat: the same finished session
-    appended twice is skipped under this key, not repeated (ADR-0156 decision 2).
+    appended twice is skipped under this key, not repeated (ADR-0179 decision 2).
     """
 
     canonical = json.dumps(
@@ -562,7 +562,7 @@ def _measured_seats(
     Returns None where nothing could be read at all, so the caller falls back
     to whatever the lifecycle signals themselves already established — a
     missing, truncated, or unparseable record is an absence, never a raised
-    error (ADR-0156 decision 4, applied to this read by ADR-0158).
+    error (ADR-0179, decision 4 as applied to this read).
     """
 
     if not harness or not isinstance(transcript_path, str) or not transcript_path:
@@ -617,7 +617,7 @@ def _finish(
     _draft_path(data, draft["session_key"]).unlink(missing_ok=True)
 
     # The session is over, so the one invocation with nothing left to delay
-    # carries this Skill's own unattended source refresh (ADR-0167). It is a
+    # carries this Skill's own unattended source refresh (ADR-0179). It is a
     # sibling action on the same seam rather than part of capture's own
     # measurement path: it writes source states and nothing capture owns, and
     # its every failure is swallowed here exactly as this path's own are.
@@ -637,7 +637,7 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     session's own last invocation additionally carries is this Skill's
     unattended source refresh, which reaches the network only as bounded
     conditional metadata retrieval under a stated budget, in a module of its
-    own (ADR-0167).
+    own (ADR-0179).
     """
 
     try:
@@ -742,7 +742,7 @@ def status(data: Path, root: Path) -> dict[str, Any]:
     whether or not this machine happens to hold our entry there right now —
     there is no separate configuration of this feature's own left to consult
     (#223): the Harness's own file is read fresh, exactly as `install` and
-    `remove` already read it (ADR-0090). Each one's health is reported beside
+    `remove` already read it (ADR-0179). Each one's health is reported beside
     whether its finished session record can supply measurements at all
     (#225): a store of Usage Records that stays empty because a Harness
     keeps no readable record is something to say plainly here, never
@@ -851,7 +851,7 @@ def install_integrations(harnesses: list[str]) -> dict[str, Any]:
     says at the seams that place or refresh an Enabled Skill's files (#223):
     it resolves this Skill's own default data directory and Harness root
     itself, because the Manager asking for it must not have to know where
-    this Skill keeps its evidence (ADR-0090), exactly as removal already
+    this Skill keeps its evidence (ADR-0179), exactly as removal already
     does for the opposite word.
     """
 

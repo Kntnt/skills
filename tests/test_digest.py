@@ -110,7 +110,7 @@ def test_a_removed_file_changes_the_digest(tmp_path: Path) -> None:
 
 
 def test_a_skill_that_has_been_run_does_not_deviate(tmp_path: Path) -> None:
-    """A signal that is always on is a signal nobody reads (ADR-0041)."""
+    """A signal that is always on is a signal nobody reads (ADR-0175)."""
 
     source = _skill(tmp_path / "collection" / "alpha")
     installed = shutil.copytree(source, tmp_path / "harness" / "alpha")
