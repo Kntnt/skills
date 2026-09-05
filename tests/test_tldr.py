@@ -114,7 +114,7 @@ def test_the_closing_action_line_is_required_in_its_negative_form_too() -> None:
 def test_the_perspective_is_this_skills_own_and_not_the_librarys() -> None:
     """One reader, so no shared store, and no drift toward the sibling's text.
 
-    The Library holds what more than one Skill reads (ADR-0076), and this file
+    The Library holds what more than one Skill reads (ADR-0177), and this file
     has a single consumer. The two Skills need different texts, so a copy that
     had converged on the sibling's would be the defect rather than the DRY fix.
     """
@@ -146,7 +146,7 @@ def test_the_grammar_carries_no_command_path_and_no_flag() -> None:
     """What makes bare free text unambiguous here, and the two spellings one thing.
 
     The separator may be omitted only because there is no verb for prose to
-    shadow (ADR-0169). A subcommand page or a declared flag would restore the
+    shadow (ADR-0176). A subcommand page or a declared flag would restore the
     ambiguity, and the operand would have to go in the same change.
     """
 

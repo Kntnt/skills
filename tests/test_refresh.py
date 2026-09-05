@@ -114,7 +114,7 @@ def _never(uri: str, etag: str | None, last: str | None, timeout: float) -> Any:
 def test_the_refresh_module_reaches_the_network_and_nothing_further() -> None:
     """What the unattended pass may do is provable from what it can reach.
 
-    ADR-0090's hook path is narrowed by ADR-0167 in exactly one phrase: this
+    ADR-0179's hook path is narrowed in exactly one phrase: this
     module may retrieve metadata conditionally, under a budget. Everything
     else that record protects is unchanged, so a module that cannot start a
     process, cannot start a thread, and holds no waiting call cannot break it

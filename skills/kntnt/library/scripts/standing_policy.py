@@ -44,7 +44,7 @@ HISTORY_FILE: str = "standing-policy-history.jsonl"
 
 # The Library's own argument grammar, beside this module, and the flags of this
 # engine that carry no value. The grammar is told which they are rather than
-# knowing one engine's by name (ADR-0152).
+# knowing one engine's by name (ADR-0176).
 ARGUMENT_GRAMMAR_MODULE: str = "argument_grammar.py"
 VALUELESS_FLAGS: frozenset[str] = frozenset({"--yes"})
 
@@ -355,9 +355,9 @@ def purge_paths(directory: Path) -> list[dict[str, Any]]:
 
     A Standing Policy override is measurement, not configuration: a Cohort
     ratcheted by verified failures that no longer exist is a claim with
-    nothing behind it (ADR-0159, narrowing ADR-0149 and ADR-0150). This is the
-    preview `config reset --evidence` renders before it writes anything, and
-    the same report `purge` returns once it has.
+    nothing behind it (ADR-0179, narrowing ADR-0149). This is the preview
+    `config reset --evidence` renders before it writes anything, and the same
+    report `purge` returns once it has.
     """
 
     entries: list[dict[str, Any]] = []
@@ -379,7 +379,7 @@ def purge(directory: Path) -> list[dict[str, Any]]:
     Unlike `reset`, nothing here is restored to a shipped default and no
     history row is appended — the history file goes with the override it
     explains, because both are the measurement a threshold trip rested on
-    rather than configuration to preserve (ADR-0159).
+    rather than configuration to preserve (ADR-0179).
     """
 
     report = purge_paths(directory)

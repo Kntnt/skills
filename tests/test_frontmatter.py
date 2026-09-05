@@ -29,14 +29,14 @@ SPECIFIED_FIELDS = frozenset(
     }
 )
 
-# The two Claude Code fields ADR-0066 accepts on top of them, and the record
+# The two Claude Code fields ADR-0180 accepts on top of them, and the record
 # that accepts them.
 HARNESS_FIELDS = frozenset({"argument-hint", "disable-model-invocation"})
 DEVIATION_RECORD = (
     REPO_ROOT
     / "docs"
     / "adr"
-    / "0066-the-reference-validator-is-a-baseline-not-a-gate.md"
+    / "0180-how-this-repository-records-decisions-and-writes-tickets.md"
 )
 
 
@@ -93,13 +93,13 @@ def test_every_shipped_skill_carries_the_fields_the_catalog_reads() -> None:
         assert frontmatter.get("description"), (
             f"{skill_md}: every skill declares a `description`. It is the only"
             f" hook a harness has for deciding when the skill applies"
-            f" (ADR-0019), and it is what a Catalog row shows. See {STANDARD}."
+            f" (ADR-0177), and it is what a Catalog row shows. See {STANDARD}."
         )
         assert kntnt.collection_block(frontmatter) is not None, (
             f"{skill_md}: every skill carries at least one `kntnt.`-prefixed"
             f" `metadata` key. The prefix is the marker the Manager recognises"
             f" its own by, and a skill without one is never refreshed or"
-            f" removed by it (ADR-0061). See {STANDARD}."
+            f" removed by it (ADR-0177). See {STANDARD}."
         )
 
 
@@ -145,7 +145,7 @@ def test_every_shipped_skill_declares_the_lists_the_checker_refuses_on() -> None
                 f" dependency lists are declared even where they are empty,"
                 f" because a key nobody wrote is read as an empty list — the"
                 f" same answer a skill that genuinely requires nothing gives,"
-                f" so the omission cannot be seen (ADR-0012). Write it as an"
+                f" so the omission cannot be seen (ADR-0177). Write it as an"
                 f" empty string. See {STANDARD}."
             )
 
@@ -196,20 +196,20 @@ def test_every_shipped_skill_declares_metadata_the_specification_allows() -> Non
         metadata = frontmatter.get("metadata")
         assert isinstance(metadata, dict), (
             f"{skill_md}: `metadata` is a map from string keys to string"
-            f" values, and every skill declares one (ADR-0061). See {STANDARD}."
+            f" values, and every skill declares one (ADR-0177). See {STANDARD}."
         )
         for key, value in metadata.items():
             assert isinstance(key, str), (
                 f"{skill_md}: the `metadata` key {key!r} is not a string. The"
                 f" specification allows no other kind of key, and YAML reads an"
-                f" unquoted `true` or `1` as neither (ADR-0060). See {STANDARD}."
+                f" unquoted `true` or `1` as neither (ADR-0177). See {STANDARD}."
             )
             assert isinstance(value, str), (
                 f"{skill_md}: `metadata.{key}` holds {value!r}, which is not a"
                 f" string. A reader outside this collection coerces any other"
                 f" shape rather than refusing it, so a nested map arrives as a"
                 f" Python repr and a boolean as its `str()` — the declaration is"
-                f" lost without a word being said (ADR-0061). Write a list as"
+                f" lost without a word being said (ADR-0177). Write a list as"
                 f" one space-separated string. See {STANDARD}."
             )
 
@@ -230,7 +230,7 @@ def test_every_shipped_skill_keeps_its_metadata_keys_under_the_collection() -> N
                 f" prefix, and has to be written `kntnt.{key}`. `metadata` is"
                 f" one flat namespace shared with every other collection, so an"
                 f" unprefixed key is one anybody may claim and the last writer"
-                f" of it wins (ADR-0061). See {STANDARD}."
+                f" of it wins (ADR-0177). See {STANDARD}."
             )
 
 
@@ -305,7 +305,7 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
         assert isinstance(compatibility, str), (
             f"{skill_md}: `compatibility` is a string, being the field a"
             f" foreign reader reads a skill's environment requirements out of"
-            f" (ADR-0062). See {STANDARD}."
+            f" (ADR-0177). See {STANDARD}."
         )
 
         # The specification bounds the field at 500 characters, and a skill
@@ -314,7 +314,7 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
             f"{skill_md}: `compatibility` runs to {len(compatibility)}"
             f" characters, and the specification bounds it at 500. A skill with"
             f" no requirement to state carries no field at all rather than an"
-            f" empty one (ADR-0062). See {STANDARD}."
+            f" empty one (ADR-0177). See {STANDARD}."
         )
 
         # Every hard dependency is stated, and every binary the checker knows
@@ -327,7 +327,7 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
             f" declaration refuses the skill on. `compatibility` is the one"
             f" field a reader outside this collection knows to look at, so a"
             f" requirement left out of it reads as a requirement that is not"
-            f" there (ADR-0062). See {STANDARD}."
+            f" there (ADR-0177). See {STANDARD}."
         )
         assert named <= allowed, (
             f"{skill_md}: `compatibility` names {sorted(named - allowed)}, which"
@@ -336,7 +336,7 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
             f" skill degrades gracefully without, which is named in"
             f" `compatibility` in prose, deliberately kept out of the"
             f" declaration the checker refuses on, and listed in this test"
-            f" (ADR-0062). See {STANDARD}."
+            f" (ADR-0177). See {STANDARD}."
         )
         assert _names(compatibility, kntnt.CAPABILITIES) == set(deps["capabilities"]), (
             f"{skill_md}: `compatibility` and the dependency declaration name"
@@ -344,7 +344,7 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
             f" {sorted(_names(compatibility, kntnt.CAPABILITIES))} against"
             f" {sorted(deps['capabilities'])}. A Capability is stated as the"
             f" Capability and never as the harness product that has one"
-            f" (ADR-0062, ADR-0030). See {STANDARD}."
+            f" (ADR-0177, ADR-0030). See {STANDARD}."
         )
 
 
@@ -355,7 +355,7 @@ def _shipped_skill_mds() -> list[Path]:
 
 
 def test_shipped_frontmatter_stays_within_the_recorded_deviation() -> None:
-    """The specification's six fields, plus the two ADR-0066 names, and no third.
+    """The specification's six fields, plus the two ADR-0180 names, and no third.
 
     The reference validator rejects every skill here on `argument-hint` and
     `disable-model-invocation`, which the collection ships knowingly because
@@ -380,7 +380,7 @@ def test_shipped_frontmatter_stays_within_the_recorded_deviation() -> None:
         assert set(frontmatter) <= allowed, (
             f"{skill_md}: the frontmatter carries"
             f" {sorted(set(frontmatter) - allowed)}, outside the six fields the"
-            f" specification defines and the two ADR-0066 accepts on top of"
+            f" specification defines and the two ADR-0180 accepts on top of"
             f" them. The reference validator refuses every field it does not"
             f" know, so a third deviation is one the record has to accept"
             f" before it is shipped. See {STANDARD}."
@@ -484,7 +484,7 @@ def test_proofread_bounds_the_trigger_its_description_advertises() -> None:
     refusal to answer. The trigger is therefore written narrow, a specific text
     plus an explicit proofreading request, and the generic verbs are named as
     exclusions rather than left to be inferred from what the Skill offers
-    (ADR-0019, ADR-0094).
+    (ADR-0177).
     """
 
     skill_md = SKILLS / "editorial" / "proofread" / "SKILL.md"
@@ -494,7 +494,7 @@ def test_proofread_bounds_the_trigger_its_description_advertises() -> None:
         f"{skill_md}: a model may start this Skill, so the field says so"
         f" rather than being left out — an absent field is a decision nobody"
         f" wrote, and the Codex sidecar beside it has to agree with something"
-        f" (ADR-0094). See {STANDARD}."
+        f" (ADR-0177). See {STANDARD}."
     )
 
     description = str(frontmatter.get("description", "")).lower()
@@ -502,7 +502,7 @@ def test_proofread_bounds_the_trigger_its_description_advertises() -> None:
         assert term in description, (
             f"{skill_md}: the description does not name {term!r}. It is the"
             f" only hook a harness has for deciding when the Skill applies"
-            f" (ADR-0019), so the narrow trigger has to be in it and nowhere"
+            f" (ADR-0177), so the narrow trigger has to be in it and nowhere"
             f" else. See {STANDARD}."
         )
 
@@ -510,13 +510,13 @@ def test_proofread_bounds_the_trigger_its_description_advertises() -> None:
         f"{skill_md}: the description states no exclusion. A model reads what"
         f" the Skill offers and matches on it, so the requests this Skill must"
         f" not be started for are named as exclusions rather than left to be"
-        f" inferred (ADR-0094). See {STANDARD}."
+        f" inferred (ADR-0177). See {STANDARD}."
     )
     for excluded in ("edit", "rewrite", "polish", "improve", "review"):
         assert excluded in description, (
             f"{skill_md}: the description does not name {excluded!r} among the"
             f" requests a model must not start this Skill for. Each of them is"
-            f" a request for changes the Skill refuses to make (ADR-0094). See"
+            f" a request for changes the Skill refuses to make (ADR-0177). See"
             f" {STANDARD}."
         )
 
@@ -530,20 +530,20 @@ def test_model_selector_is_model_invoked_only_for_dependent_interfaces() -> None
     assert frontmatter.get("disable-model-invocation") is False, (
         f"{skill_md}: delegation and orchestrate must reach this Skill's public"
         f" routing and observation Interfaces without a user invoking it first"
-        f" (ADR-0132). See {STANDARD}."
+        f" (ADR-0179). See {STANDARD}."
     )
 
     description = str(frontmatter.get("description", "")).lower()
     for term in ("another skill", "route", "observe"):
         assert term in description, (
             f"{skill_md}: the model-invocation description does not bound its"
-            f" dependency trigger with {term!r} (ADR-0094, ADR-0132). See"
+            f" dependency trigger with {term!r} (ADR-0177, ADR-0179). See"
             f" {STANDARD}."
         )
 
     assert "do not use implicitly" in description, (
         f"{skill_md}: the description does not separate dependent Interfaces"
-        f" from commands only an explicit user invocation starts (ADR-0132)."
+        f" from commands only an explicit user invocation starts (ADR-0179)."
         f" See {STANDARD}."
     )
     for excluded in (
@@ -558,7 +558,7 @@ def test_model_selector_is_model_invoked_only_for_dependent_interfaces() -> None
     ):
         assert excluded in description, (
             f"{skill_md}: the description does not exclude {excluded!r} from"
-            f" implicit invocation (ADR-0094, ADR-0132). See {STANDARD}."
+            f" implicit invocation (ADR-0177, ADR-0179). See {STANDARD}."
         )
 
 
@@ -570,7 +570,7 @@ def test_the_standard_names_every_skill_a_model_may_start() -> None:
     collection treats it as an exception at all. A Skill added with
     `disable-model-invocation: false` and left out of that sentence turns it
     into a confident wrong answer, and nothing else in the suite reads it
-    (ADR-0018, ADR-0094).
+    (ADR-0177).
     """
 
     invocable = sorted(
@@ -600,5 +600,5 @@ def test_the_standard_names_every_skill_a_model_may_start() -> None:
             f" not name it among the Skills a model may start on its own."
             f" That sentence is where a reader learns model invocation is the"
             f" exception here, and a Skill missing from it makes the sentence"
-            f" wrong (ADR-0094)."
+            f" wrong (ADR-0177)."
         )

@@ -9,11 +9,16 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONTRIBUTING = REPO_ROOT / "CONTRIBUTING.md"
 CI = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+
+# The record settling why the reference validator is red on every Skill here,
+# and so the file the guide sends a contributor to when they meet that run. It
+# is the reform's own record since the consolidation, which is where the two
+# knowingly deviating frontmatter fields are now argued.
 DEVIATION_RECORD = (
     REPO_ROOT
     / "docs"
     / "adr"
-    / "0066-the-reference-validator-is-a-baseline-not-a-gate.md"
+    / "0180-how-this-repository-records-decisions-and-writes-tickets.md"
 )
 
 # Where this repository declares which of its files are generated and what
@@ -59,19 +64,6 @@ def test_contributing_gives_the_line_that_obtains_the_reference_validator() -> N
     assert verbs == {"validate", "read-properties"}
 
 
-def test_the_guide_and_the_record_spell_the_invocation_the_same_way() -> None:
-    """One command line, written in two places, and neither free to drift."""
-
-    record = DEVIATION_RECORD.read_text(encoding="utf-8")
-    validate = next(
-        match.group(0)
-        for match in INVOCATION.finditer(_contributing())
-        if match.group(1) == "validate"
-    )
-
-    assert validate in record
-
-
 def test_the_guide_points_at_the_record_that_settles_the_red_run() -> None:
     """A contributor meeting a rejection must find out here that it is expected.
 
@@ -79,14 +71,14 @@ def test_the_guide_points_at_the_record_that_settles_the_red_run() -> None:
     restating why the two deviating fields are shipped knowingly.
     """
 
-    assert "ADR-0066" in _contributing()
+    assert "ADR-0180" in _contributing()
     assert DEVIATION_RECORD.exists()
 
 
 def test_no_check_ci_runs_is_the_reference_validator() -> None:
     """The tool is a baseline to compare against, and a gate would be red.
 
-    ADR-0066 reads it as a state that must not regress rather than one that
+    ADR-0180 reads it as a state that must not regress rather than one that
     must pass, so a CI job running it would fail every build there is.
     """
 

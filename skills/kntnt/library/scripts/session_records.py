@@ -15,7 +15,7 @@ the exact model and deliberation control each turn actually ran under and
 the token categories the Harness itself counted. This module is that read.
 
 Harness-specific mechanics belong to the Collection Library rather than to
-the Skill that consumes them (ADR-0090), the same reasoning `integrations.py`
+the Skill that consumes them (ADR-0179), the same reasoning `integrations.py`
 beside this module already answers for installing and removing lifecycle
 hooks. Reading a finished session's record is a second, unrelated kind of
 mechanics for the same reason: a second consumer will want it, and neither
@@ -27,14 +27,14 @@ transcript per subagent. Both are read here, bounded to exactly the file the
 caller hands over and that file's own companion directory: no encoding is
 derived, no other session's files are opened, and nothing broader than that
 is ever walked. Every field name below is re-derived rather than trusted,
-because a Harness upgrade may move any of them (ADR-0157) — this module is
+because a Harness upgrade may move any of them (ADR-0179) — this module is
 where that erosion is absorbed so its caller never has to know the shape
 underneath.
 
 A missing, truncated, or unparseable record is an absence, never a failure:
 every function here returns an empty result rather than raising, so a caller
 can leave every measurement an explicit null and still write the row it was
-about to write (ADR-0156 decision 4, narrowed for this read by ADR-0158).
+about to write (ADR-0179, decision 4 as narrowed for this read).
 """
 
 from __future__ import annotations
@@ -212,7 +212,7 @@ def usage(harness: str, transcript_path: str | None) -> list[dict[str, Any]]:
     Returns an empty list where the Harness is unsupported, no usable path
     was handed over, or nothing in it could be read or parsed at all. That is
     an absence for the caller to leave every measurement null over, never a
-    raised error (ADR-0156 decision 4, applied to this read by ADR-0158).
+    raised error (ADR-0179, decision 4 as applied to this read).
 
     Each returned entry carries `role` (`"main"` for the session's own turns,
     `"delegated"` for a subagent's), `model`, `native_deliberation`, `tokens`
