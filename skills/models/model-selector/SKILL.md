@@ -17,62 +17,35 @@ metadata:
 
 Configure the exact model versions and subscription/API channels available to one user, then select a Pareto-efficient model, effort and agent configuration for a workload, budget or quality floor without re-researching known releases.
 
-**Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run "<checker>" check --here="$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
+`$HERE` is the directory that contains this SKILL.md, and `$MANAGER` is the Manager directory: `$HERE/../kntnt/` if it exists, else `kntnt/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Neither found: tell the user to install the Manager (`npx skills add Kntnt/skills`) and stop. `$LIBRARY` is `$MANAGER/library/` — absent, tell the user to run `/kntnt update`, then stop.
 
-`$HERE` is the directory that contains this SKILL.md. `$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
+Run `uv run "$MANAGER/scripts/kntnt.py" invoke --here="$HERE"` with the invocation payload — everything the user typed after `/model-selector`, verbatim, however many lines — on stdin. On exit 0, answer the `capabilities` in its `dependencies` first: for each one, say whether its `confirm` sentence is true of you, and where it is not, give its `how`, change nothing, and stop. Then continue from the JSON. On any other exit print its stdout verbatim and stop: it has already printed what the user is to see, and none of that text is yours to write.
 
-## Invocation
-
-Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop. Where `--help` or `-h` immediately follows a recognized command path, print that path's page from the table below verbatim and stop before setup, reads, research, or writes.
-
-| Command path | Manpage |
-| --- | --- |
-| `recommend` | `$HERE/help/recommend.md` |
-| `context` | `$HERE/help/context.md` |
-| `route` | `$HERE/help/route.md` |
-| `chart` | `$HERE/help/chart.md` |
-| `compare` | `$HERE/help/compare.md` |
-| `setup` | `$HERE/help/setup.md` |
-| `config` | `$HERE/help/config.md` |
-| `config show` | `$HERE/help/config/show.md` |
-| `config add` | `$HERE/help/config/add.md` |
-| `config edit` | `$HERE/help/config/edit.md` |
-| `config remove` | `$HERE/help/config/remove.md` |
-| `config policy` | `$HERE/help/config/policy.md` |
-| `config policy show` | `$HERE/help/config/policy/show.md` |
-| `config policy reset` | `$HERE/help/config/policy/reset.md` |
-| `config history` | `$HERE/help/config/history.md` |
-| `config reset` | `$HERE/help/config/reset.md` |
-| `update` | `$HERE/help/update.md` |
-| `observe` | `$HERE/help/observe.md` |
-| `record` | `$HERE/help/record.md` |
-| `status` | `$HERE/help/status.md` |
+In the JSON, `path` is the command path as a list, `flags` holds each flag the user wrote — `true` where it stood bare, its value where it carried one, a list of values where it was repeated — `operands` is what followed the flags, in order, and `instruction` is the Contextual Instruction, or `null`, applied as `$LIBRARY/references/invocation-envelope.md` says.
 
 ## Arguments
 
-| Invocation | Effect |
+| Command | Effect |
 | --- | --- |
-| `/model-selector setup` | Create or fully review the persisted model and access-channel profile. |
-| `/model-selector config [show]` | Inspect the persisted profile. |
-| `/model-selector config add model\|channel` | Add one model selection or access channel. |
-| `/model-selector config edit model\|channel <id>` | Edit one model selection or access channel. |
-| `/model-selector config remove model\|channel <id>` | Remove one model selection or access channel after confirmation. |
-| `/model-selector config history\|reset` | Show configuration history, or reset the active configuration after confirmation. |
-| `/model-selector config reset --evidence [--yes]` | Discard this machine's own measurement — the evidence ledger, its derived frontiers, the quota store, the Standing Policy override and its history, capture and the Usage Record store — after confirmation or `--yes`, keeping the profile and researched public facts. |
-| `/model-selector config policy [show] [<cohort>]` | Show the Standing Policy each workload Cohort routes under, and what moved it. |
-| `/model-selector config policy reset [<cohort>]` | Restore the shipped Standing Policy for one Cohort, or for every overridden Cohort, after confirmation. |
-| `/model-selector [recommend] [<workload>]` | Recommend from stored evidence. Infer the current task only when the workload is omitted and unambiguous. |
-| `/model-selector context <path>` | Derive a complete route artifact from stored selections and exact runtime facts, or wrap a frozen snapshot unchanged. |
-| `/model-selector route <path>` | Resolve a structured request artifact into ordered exact launch decisions. |
-| `/model-selector chart\|compare <workload>` | Show comparable frontier tables and plotting data. |
-| `/model-selector update [--force]` | Revalidate due discovery, pricing, and benchmark indexes once. |
-| `/model-selector observe --artifact=<path> [--import] <path>` | Turn completed routed attempts into a sanitized importable artifact in caller-owned scratch, and with `--import` file the machine-judged ones. |
-| `/model-selector record <path>` | Validate and append unseen local run observations. |
-| `/model-selector status` | Report the profile, evidence vintage, due sources, gaps, and capture's own health. |
+| `setup` | Create or fully review the persisted model and access-channel profile. |
+| `config`, `config show` | Inspect the persisted profile. |
+| `config add` | Add one model selection or access channel; the operand says which. |
+| `config edit` | Edit one model selection or access channel, the operands naming which and its id. |
+| `config remove` | Remove one model selection or access channel, named the same way, after confirmation. |
+| `config history`, `config reset` | Show configuration history, or reset the active configuration after confirmation. |
+| `config reset --evidence` | Discard this machine's own measurement — the evidence ledger, its derived frontiers, the quota store, the Standing Policy override and its history, capture and the Usage Record store — after confirmation or `--yes`, keeping the profile and researched public facts. |
+| `config policy`, `config policy show` | Show the Standing Policy each workload Cohort routes under, and what moved it; an operand narrows it to one Cohort. |
+| `config policy reset` | Restore the shipped Standing Policy for the Cohort the operand names, or for every overridden Cohort, after confirmation. |
+| `recommend`, and the bare invocation | Recommend from stored evidence for the workload the operand describes. Infer the current task only when the workload is omitted and unambiguous. |
+| `context` | Derive a complete route artifact from stored selections and exact runtime facts for the request at the operand's path, or wrap a frozen snapshot unchanged. |
+| `route` | Resolve the structured request artifact at the operand's path into ordered exact launch decisions. |
+| `chart`, `compare` | Show comparable frontier tables and plotting data for the workload the operand describes. |
+| `update` | Revalidate due discovery, pricing, and benchmark indexes once. |
+| `observe` | Turn the completed routed attempts at the operand's path into a sanitized importable artifact in caller-owned scratch, and with `--import` file the machine-judged ones. |
+| `record` | Validate and append the unseen local run observations at the operand's path. |
+| `status` | Report the profile, evidence vintage, due sources, gaps, and capture's own health. |
 
-`--data=<path>` is valid on every form except `route`, which reads no profile or evidence at all, and on `observe` without `--import`, which writes none; it overrides the default data directory. `--artifact=<path>` and `--import` are valid only for `observe`, the first required and naming the caller-owned file the observations are written into, the second asked for by a routed caller that wants what it may file filed. `--decision=route|renew` is valid for `recommend`, `chart`, and `compare`; `route` is the default. `--budget=<amount>` and `--quality=<score>` are valid only for `recommend` and are mutually exclusive. `--force` is valid only for `update`. `--evidence` is valid only for `config reset`, discarding this machine's own measurement while keeping the profile and researched public facts. `--yes` is valid only combined with `--evidence` on `config reset`, and there answers that confirmation yes rather than asking; it is refused rather than ignored on every other form of this Skill, `config reset` bare included.
-
-Anything outside these forms is invalid, an operand written before a flag among them. Refuse it as `$LIBRARY/references/invocation-envelope.md` says: where the invocation starts with a recognized command path the addressed page is that path's page in the table above, and with no recognized command path it is `$HERE/help.md`. Change nothing and stop.
+`--data=<path>` overrides the default data directory; `route` reads no profile or evidence at all, and `observe` without `--import` writes none. `--artifact=<path>` names the caller-owned file `observe` writes the observations into, and `--import` is asked for by a routed caller that wants what it may file filed. `--decision=route|renew` selects the routing or the renewal decision, and `--budget=<amount>` and `--quality=<score>` are the two objectives `recommend` selects under; `## Evidence first` says what each means. `--force` makes `update` check each relevant mutable index once. `--evidence` on `config reset` discards this machine's own measurement while keeping the profile and researched public facts, and `--yes` answers that confirmation yes rather than asking.
 
 ## Evidence first
 

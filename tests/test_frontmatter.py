@@ -242,7 +242,21 @@ def test_a_skill_with_nothing_to_declare_carries_the_marker_anyway() -> None:
     now any `kntnt.` key at all, and the four lists written empty carry it.
     """
 
-    frontmatter = _frontmatter("agents/brief/SKILL.md")
+    # Every shipped Skill now declares at least `uv`, the engine running on it
+    # (ADR-0181), so the shape a Skill with nothing to declare writes is held
+    # on the frontmatter it would write rather than on a shipped file.
+    frontmatter = kntnt.parse_frontmatter(
+        "---\n"
+        "name: nothing\n"
+        "description: Declares nothing.\n"
+        "metadata:\n"
+        '  kntnt.internal: "true"\n'
+        '  kntnt.binaries: ""\n'
+        '  kntnt.skills: ""\n'
+        '  kntnt.externals: ""\n'
+        '  kntnt.capabilities: ""\n'
+        "---\n"
+    )
 
     assert kntnt.collection_block(frontmatter) is not None
     assert kntnt.skill_deps(frontmatter) == {

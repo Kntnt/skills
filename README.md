@@ -166,7 +166,7 @@ A two-line Claude Code status line: path, worktree marker, branch, working-tree 
 
 ## Dependencies
 
-Most skills require `uv` and the manager. `brief` and `tldr` require the manager but not `uv`.
+Every skill requires `uv` and the manager: the manager ships the engine that reads a skill's invocation, and `uv` runs it.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`. `release` can finish without `gh`, but then skips the GitHub release.
 

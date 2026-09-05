@@ -16,26 +16,17 @@ metadata:
 
 Read one Text Artifact against the editorial contract, repair what the review found within the budget the invocation allows, say what is left, and close with one mechanical pass. The artifact may come from anywhere: this collection wrote it, a person wrote it, or something else produced it entirely.
 
-**Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run --no-cache --no-project "<checker>" check --here="$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
+`$HERE` is the directory that contains this SKILL.md, and `$MANAGER` is the Manager directory: `$HERE/../kntnt/` if it exists, else `kntnt/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Neither found: tell the user to install the Manager (`npx skills add Kntnt/skills`) and stop. `$LIBRARY` is `$MANAGER/library/` — absent, tell the user to run `/kntnt update`, then stop.
+
+Run `uv run --no-cache --no-project "$MANAGER/scripts/kntnt.py" invoke --here="$HERE"` with the invocation payload — everything the user typed after `/redline`, verbatim, however many lines — on stdin. On exit 0, answer the `capabilities` in its `dependencies` first: for each one, say whether its `confirm` sentence is true of you, and where it is not, give its `how`, change nothing, and stop. Then continue from the JSON. On any other exit print its stdout verbatim and stop: it has already printed what the user is to see, and none of that text is yours to write.
+
+In the JSON, `path` is the command path as a list, `flags` holds each flag the user wrote — `true` where it stood bare, its value where it carried one, a list of values where it was repeated — `operands` is what followed the flags, in order, and `instruction` is the Contextual Instruction, or `null`, applied as `$LIBRARY/references/invocation-envelope.md` says.
 
 Run every UV command in this Skill with a fresh private directory as `TMPDIR`, and remove that directory after the command, including when it fails. The private directory belongs to that one command and no other run, so cleanup removes only files this run created.
 
-`$HERE` is the directory that contains this SKILL.md.
-
-`$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
-
-## Invocation
-
-Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop.
-
 ## Arguments
 
-Two forms, each carrying exactly one Text Artifact:
-
-- `/redline [--genre=<genre>] [--technique=<technique>] [--language=<language>] [--max=<n>] [--output=<response|path>] [<text>|<path>|<url>]`
-- `/redline [--genre=<genre>] [--technique=<technique>] [--language=<language>] [--max=<n>] --in-place[=on|off] <path>`
-
-The operand is the Text Artifact: inline text, one local path, or one URL. Where the invocation carries no operand, it is the single text the current turn identifies.
+The operand is the Text Artifact: inline text, one local path, or one URL, and exactly one of them — several paths, a glob reaching more than one file, or a directory of texts is more than one. Where the invocation carries no operand, it is the single text the current turn identifies.
 
 `--genre=<genre>` names a resource under `$LIBRARY/references/editorial/genres/`, by its filename without the extension.
 
@@ -45,25 +36,9 @@ The operand is the Text Artifact: inline text, one local path, or one URL. Where
 
 `--max=<n>` is the Correction Budget: the greatest number of substantive corrections the review may delegate. It takes any non-negative integer and defaults to `1`, so an ordinary review includes one correction and one opportunity to verify it. `0` reviews without correcting — the findings come back for the reader to act on, and the closing mechanical pass is still performed — and a higher value bounds a longer loop explicitly. It is a ceiling and never a quota: a run with nothing left to correct stops with the rest of it unspent.
 
-`--output=<response|path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path.
+`--output=<response|path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path. It and In-place Editing name two destinations for one text, which is why no form carries both.
 
 `--in-place[=<value>]` selects In-place Editing. It accepts `yes`, `on`, and `true` against `no`, `off`, and `false`; bare `--in-place` means `on`, `--in-place=off` has the same effect as omitting the option, and the default is `off`.
-
-Invalid forms, each refused the same way:
-
-- A `--`-prefixed token that is not one of the six options, or one of them written without `=` and a value, `--in-place` excepted.
-- The same option given twice, or given an empty value.
-- `--in-place` with a value outside the vocabulary above.
-- `--genre` or `--technique` naming a resource that is not installed.
-- `--language` reaching no installed Language Resource, or more than one.
-- `--max` with a value that is not a non-negative integer — a negative number, a fraction, or something that is not a number at all.
-- `--output` and `--in-place=on` in one invocation, which name two destinations for one text.
-- More than one Text Artifact — several paths, a glob reaching more than one file, or a directory of texts.
-- An out-of-order form: the Text Artifact written before a flag rather than after every flag.
-
-Refuse it as `$LIBRARY/references/invocation-envelope.md` says, then review nothing, write nothing, and stop.
-
-Those forms are the whole of what this section refuses. What it refuses is the form of an invocation, and where a run halts over something else — the Invocation Envelope this file binds itself to before any of this, a value it resolves, a destination it cannot write to — that is written beside the thing itself, which this list neither adds to nor takes from. Whatever the operand turns out to say, and whatever the review will have to say about it, an invocation whose form this list does not name is reviewed. A run that finds itself wanting to refuse a form the list does not name has found a gap in the list rather than a reason to stop: review the invocation, and name the gap beside the findings where it is worth naming. The Invocation Envelope says why a flag with no work to do is refused rather than ignored; refusing a form this list does not name is the opposite failure, and teaches that a valid invocation sometimes does nothing without saying which ones.
 
 ## Resolution
 
@@ -93,10 +68,10 @@ A recognized Kntnt map whose value cannot be used — a language nothing install
 
 ## Steps
 
-1. Parse the arguments by the rules above and settle the single Text Artifact. An invalid form takes the refusal those rules describe. Done when one Text Artifact and a valid set of options are in hand, or you have stopped.
+1. Settle the single Text Artifact and the options from the JSON. A value outside what `## Arguments` admits — `--max` that is not a non-negative integer, `--in-place` outside its vocabulary, or more than one Text Artifact — is refused as `$LIBRARY/references/invocation-envelope.md` says: review nothing, write nothing, and stop. That is the whole of what is refused over the invocation, the engine having already held its form: whatever the operand turns out to say, and whatever the review will have to say about it, an invocation the engine read and these values admit is reviewed. A run that finds itself wanting to refuse one has found a gap in the pages rather than a reason to stop — review the invocation, and name the gap beside the findings where it is worth naming. Done when one Text Artifact and a valid set of options are in hand, or you have stopped.
 2. Settle the destination before anything is reviewed, following `$LIBRARY/references/delivery.md`. Make every refusal that contract names by reading alone — In-place Editing together with a separate Output Target, an output path equal to the input path, In-place Editing against inline text or a URL or a source that is not a writable local file, and a destination whose parent directory does not exist — so that a refusal has nothing written behind it. Done when the destination is settled, or you have stopped.
 3. Read the Text Artifact's leading YAML frontmatter where it has any, and look in it for one top-level `kntnt` map. Read `genre`, `technique`, and `language` out of that map and nothing else out of it, and read nothing outside it as configuration. Done when the artifact's recognized values are known to be present, absent, or unusable.
-4. Resolve genre, technique, and language by `## Resolution`. A genre or technique is verified against the resources actually installed in the two directories named in `## Arguments`. Where the genre has to be inferred rather than verified, `## Resolution` says what may be read to infer it. Settle the genre before the technique, since the technique's last level reads what the settled genre names. A language selector is verified by `uv run --no-cache --no-project "$LIBRARY/scripts/languages.py" resolve --scope=composition --scope=review --scope=anti-slop "<selector>"`, whose non-zero exit says which of the ways it failed and takes the refusal in `## Arguments`; an unlisted description of a language is interpreted first, then proposed as one installed candidate and verified through that same command. Report unusable recognized metadata as `## Resolution` describes, and ask rather than guess at a mixed language. Nothing has been written yet, so asking costs nothing to undo. Done when all three are settled, or you have asked or refused.
+4. Resolve genre, technique, and language by `## Resolution`. A genre or technique is verified against the resources actually installed in the two directories named in `## Arguments`; one that is not there is refused as `$LIBRARY/references/invocation-envelope.md` says, and the run reviews nothing, writes nothing, and stops. Where the genre has to be inferred rather than verified, `## Resolution` says what may be read to infer it. Settle the genre before the technique, since the technique's last level reads what the settled genre names. A language selector is verified by `uv run --no-cache --no-project "$LIBRARY/scripts/languages.py" resolve --scope=composition --scope=review --scope=anti-slop "<selector>"`, whose non-zero exit says which of the ways it failed — no installed Language Resource reached, or more than one — and takes that same refusal; an unlisted description of a language is interpreted first, then proposed as one installed candidate and verified through that same command. Report unusable recognized metadata as `## Resolution` describes, and ask rather than guess at a mixed language. Nothing has been written yet, so asking costs nothing to undo. Done when all three are settled, or you have asked or refused.
 5. Load what the review is read against, and nothing besides it: `$LIBRARY/references/editorial/base.md` and `$LIBRARY/references/editorial/base.review.md`; the selected genre from `$LIBRARY/references/editorial/genres/` and the `.review.md` file beside it where one exists; the resolved technique from `$LIBRARY/references/editorial/techniques/` and its `.review.md` the same way; `$LIBRARY/references/editorial/anti-slop.md`; and the three language scopes the resolver already returned in step 4. A review extension that is not there is not a defect — a base half on its own is a complete resource. Load no mechanics guidance: the mechanical pass in step 9 resolves its own. Done when those are loaded and nothing else has been.
 6. Review the Text Artifact against everything loaded in step 5, and record what you find as findings: where in the text, which requirement, and what the reader loses. A code sample — a fenced block, an indented block, or an inline code span — is quoted material rather than the text's own prose: its contents are read past rather than read against the rules, so nothing inside one is a finding and nothing inside one is changed, the docstrings, comments, and string literals among them. Prose about code is ordinary prose and is read like every other sentence. Judge only what is in front of you. What the artifact turns out to be is a finding and never a ground for declining to review it: a text that reads as a brief, an outline, or notes rather than a finished piece is reviewed against the resolved genre like any other, and that mismatch is a finding — ordinarily the first one — instead of a reason to stop, to hand the invocation back, or to propose another Skill in its place. Reaching that judgement reads no other Skill's instructions, neither a `SKILL.md` of theirs nor a `help.md`; the mechanical pass in step 9 is the one Skill this run ever follows. This Skill never compares the Text Artifact with source material, never asks for material it was not given, and never remarks that source verification was unavailable — Source Fidelity is the contract of the Skill that wrote the text, and a caveat about material nobody supplied is noise in every run that was not one. A contradiction, an unsupported claim, or an editorial defect visible inside the artifact itself is an ordinary finding. Done when the review is complete.
 7. Spend the Correction Budget, up to it and never towards it. While findings remain from the most recent review and budget remains, take one round:

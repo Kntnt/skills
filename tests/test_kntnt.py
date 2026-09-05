@@ -5043,65 +5043,51 @@ def test_collection_skills_are_hidden_from_the_transport() -> None:
         )
 
 
-def test_a_skill_runs_the_checker_exactly_when_it_has_something_to_check() -> None:
-    """ADR-0177: a Skill with nothing to declare calls no checker.
+def test_every_skill_declares_uv_because_the_engine_runs_on_it() -> None:
+    """Every body opens with the engine, so every Skill requires what runs it.
 
-    The check reads the Skill's own Dependency lists, so on a Skill whose four
-    lists are empty it can only ever report an empty one — and running it would
-    mean declaring `uv` for the sole purpose of letting the check that proves
-    there are no Dependencies execute. The Catalog carries those lists, so it
-    is what decides which Skill owes the preamble, and the absence is asserted
-    as firmly as the presence: a preamble added back by habit is a Dependency
-    nobody declared.
+    ADR-0177 kept a Skill with nothing to declare free of the checker so that
+    it would not acquire `uv` for nothing. The engine is not for nothing: it
+    splits the Envelope, routes help and holds the form for every Skill alike,
+    so a Skill that declared no binary now declares the one the engine runs
+    on, in the list the checker refuses on and in the field a foreign reader
+    reads (ADR-0181).
     """
 
     catalog = json.loads((MANAGER_DIR / "catalog.json").read_text(encoding="utf-8"))
-    declares = {
-        entry["name"]: any(
-            entry[kind] for kind in ("binaries", "skills", "externals", "capabilities")
+    binaries = {entry["name"]: entry["binaries"] for entry in catalog["skills"]}
+
+    for directory in _shipped_skills():
+        text = (directory / "SKILL.md").read_text(encoding="utf-8")
+        frontmatter = text.partition("\n---\n")[0]
+        assert directory.name in binaries, (
+            f"{directory}: the Catalog carries no entry for this skill."
+            f" Regenerate the Catalog (CONTRIBUTING.md) and run this again."
         )
-        for entry in catalog["skills"]
-    }
-
-    for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
-        if path.parent.name == "kntnt":
-            continue
-        text = path.read_text(encoding="utf-8")
-        assert path.parent.name in declares, (
-            f"{path}: the Catalog carries no entry for this skill, so nothing"
-            f" says which dependencies it declares. Regenerate the Catalog"
-            f" (CONTRIBUTING.md) and run this again. See {STANDARD}."
+        assert "uv" in binaries[directory.name], (
+            f"{directory}: the body runs the engine through `uv`, so `uv` is a"
+            f" Dependency the checker refuses on, and it is declared in"
+            f" `kntnt.binaries` like any other (ADR-0181). See {STANDARD}."
         )
-        if declares[path.parent.name]:
-            assert "check --here" in text, (
-                f"{path}: this skill declares dependencies, so its body opens"
-                f" with the preamble that runs the checker before it does any"
-                f" work — a skill owns its dependencies and refuses without"
-                f" them rather than installing them (ADR-0177). See {STANDARD}."
-            )
-            assert "npx skills add Kntnt/skills" in text, (
-                f"{path}: the preamble names `npx skills add Kntnt/skills` as"
-                f" the fix where no checker is found, so a user meeting the"
-                f" refusal is told what to do about it (ADR-0177). See"
-                f" {STANDARD}."
-            )
-        else:
-            assert "check --here" not in text, (
-                f"{path}: this skill declares no dependency at all, so it calls"
-                f" no checker: the call could only ever report an empty list,"
-                f" and making it would itself require `uv` — a dependency"
-                f" nobody declared (ADR-0177). See {STANDARD}."
-            )
+        assert re.search(r'kntnt\.binaries: "[^"]*\buv\b', frontmatter), (
+            f"{directory}: `kntnt.binaries` does not name `uv` (ADR-0181). See"
+            f" {STANDARD}."
+        )
+        assert re.search(r"^compatibility:.*\buv\b", frontmatter, re.MULTILINE), (
+            f"{directory}: `compatibility` does not name `uv`, which is the"
+            f" one field a reader outside this collection knows to look at"
+            f" (ADR-0177, ADR-0181). See {STANDARD}."
+        )
 
 
-def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
-    """Help lives with the skill: a file it prints, not prose it regenerates.
+def test_every_collection_skill_ships_a_manpage_and_the_engine_prints_it() -> None:
+    """Help lives with the skill: a file the engine prints, not prose in the body.
 
-    The route is read out of the `## Invocation` section rather than out of the
-    body at large, because a body read whole would answer yes off a mention of
-    the manpage anywhere in it — and a skill that can no longer be asked what it
-    does is the failure this exists to catch. Asserting the route inside the
-    section requires the heading and pins the route to it at once.
+    The route into the manpage used to be read out of a `## Invocation`
+    section of every body. The engine now reads which pages exist off the
+    Skill's own directory and prints the addressed one, so a body that named
+    a route would be a second copy free to drift, and the section that held
+    it is gone with the routing it carried (ADR-0181).
     """
 
     for path in _skill_bodies():
@@ -5112,45 +5098,20 @@ def test_every_collection_skill_ships_a_manpage_and_prints_it() -> None:
             f" asked what it does without knowing which collection it came"
             f" from (ADR-0176). See {STANDARD}."
         )
-
-        marker = "\n## Invocation\n"
-        assert marker in text, (
-            f"{path}: every body carries a `## Invocation` section, which is"
-            f" where the route into the manpage lives. A skill is asked what it"
-            f" does by name, so the answer is a section of the body rather than"
-            f" one skill's habit (ADR-0176). See {STANDARD}."
-        )
-        section = text.partition(marker)[2].partition("\n## ")[0]
-
-        # A body that calls the engine names no route: the engine reads the
-        # routes off the shipped pages and prints the addressed one itself, so
-        # a route written into the body would be a second copy free to drift.
-        if _calls_the_engine(text):
-            assert ENGINE_CALL in section and "stdin" in section, (
-                f"{path}: the body calls the engine, so its `## Invocation`"
-                f" section is that call, with the payload on stdin (ADR-0181)."
-                f" See {STANDARD}."
+        if path.parent != MANAGER_DIR:
+            assert "\n## Invocation\n" not in text, (
+                f"{path}: the body carries a `## Invocation` section. The"
+                f" engine splits the Envelope and routes help before a step is"
+                f" read, so the section that asked the model to do so is gone"
+                f" and the body opens with the engine call instead"
+                f" (ADR-0181). See {STANDARD}."
             )
-            for route in ("`$HERE/help.md`", "--help", "`-h`"):
-                assert route not in section, (
-                    f"{path}: the body calls the engine and still names a help"
-                    f" route ({route}); the engine prints the addressed page,"
-                    f" so the route is read off the pages and nowhere else"
-                    f" (ADR-0181). See {STANDARD}."
-                )
-            continue
-
-        assert "`$HERE/help.md`" in section, (
-            f"{path}: the `## Invocation` section prints `$HERE/help.md`"
-            f" verbatim rather than summarising it. The manpage is a file a"
-            f" reviewer can diff, not prose an agent regenerates each time"
-            f" (ADR-0176, ADR-0175). See {STANDARD}."
-        )
-        assert "--help" in section, (
-            f"{path}: the `## Invocation` section routes `--help` to the"
-            f" manpage, which is how every skill of this collection is asked"
-            f" what it does (ADR-0176). See {STANDARD}."
-        )
+        for route in ("`$HERE/help.md`", "`$HERE/help/"):
+            assert route not in text, (
+                f"{path}: the body names a help route ({route}); the engine"
+                f" prints the addressed page, so the route is read off the"
+                f" pages and nowhere else (ADR-0181). See {STANDARD}."
+            )
         assert "Arguments and Steps" not in text, (
             f"{path}: the body carries only what the agent executes, so its"
             f" sections are the ones it acts on rather than a heading pairing"
@@ -5640,7 +5601,7 @@ def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) 
     assert baseline_empty.relative_to(scratch) in before
 
     # Configure UV to attempt writes inside the inventoried scratch area.
-    prefix = commands[0].partition(' "<checker>"')[0]
+    prefix = commands[0].partition(' "$')[0]
     options = prefix.split()[2:]
     env = os.environ.copy()
     env["UV_CACHE_DIR"] = str(scratch / "uv-cache")
@@ -7279,12 +7240,14 @@ def test_redline_delivers_through_the_shared_output_contract() -> None:
     )
 
 
-# The closure the refusal list gained, and the two places it is written: the
-# Skill body a run executes, and the manpage a reader is pointed at. An
-# evaluation run refused a valid invocation over what its operand turned out to
-# say, which the list never named as invalid (issue #141).
-REDLINE_CLOSURE = "the whole of what this section refuses"
-REDLINE_GAP = "a gap in the list"
+# The closure the refusal gained, and the two places it is written: the step
+# of the Skill body that settles the invocation's values, and the manpage a
+# reader is pointed at. An evaluation run refused a valid invocation over what
+# its operand turned out to say, which nothing named as invalid (issue #141);
+# the engine now holds the form, and the step says that what it and the
+# admitted values let through is reviewed (ADR-0181).
+REDLINE_CLOSURE = "the whole of what is refused over the invocation"
+REDLINE_GAP = "a gap in the pages"
 REDLINE_PAGE_CLOSURE = "the whole of what is refused over the form of an invocation"
 
 # The two things the review step now says about the kind of text an artifact
@@ -7298,48 +7261,36 @@ REDLINE_LOADS_NOTHING_ELSE = (
 
 
 def test_redline_reviews_the_operand_whatever_it_turns_out_to_be() -> None:
-    """A valid invocation is reviewed, and the refusal list says it is closed.
+    """A valid invocation is reviewed, and the settle step says the refusal is closed.
 
-    The list of invalid forms enumerates what is refused and how, which leaves
-    a run free to read it as a list of examples. One did: a brief supplied
+    The list of invalid forms once enumerated what is refused and how, which
+    left a run free to read it as a list of examples. One did: a brief supplied
     inline was declined as material the Skill had nothing to say about, and
     Write's own `SKILL.md` and `help.md` were read to say so, while the same
     material supplied as a file was reviewed and its being a brief was the
-    review's first finding. The list is closed, and the kind of text an
-    artifact turns out to be is a finding rather than a ground for stopping
-    (issue #141).
+    review's first finding. The engine now holds the form, the settle step
+    holds the values the engine cannot, and the kind of text an artifact turns
+    out to be is a finding rather than a ground for stopping (issue #141,
+    ADR-0181).
     """
 
     text = REDLINE.read_text(encoding="utf-8")
-    arguments = _section(text, "## Arguments", REDLINE)
     steps = _section(text, "## Steps", REDLINE)
+    settling = steps.partition("\n2. ")[0]
 
-    assert REDLINE_CLOSURE in arguments, (
-        f"{REDLINE}: the argument prose never says its list of invalid forms is"
-        f" closed, so a run that wants to refuse something the list does not"
-        f" name reads the list as examples. A refusal outside it teaches that a"
-        f" valid invocation sometimes does nothing, and which ones those are"
-        f" cannot be read off the page (issue #141). See {STANDARD}."
+    assert REDLINE_CLOSURE in settling, (
+        f"{REDLINE}: the settle step never says its refusal is closed, so a run"
+        f" that wants to refuse something the engine and the step admit reads"
+        f" the step as examples. A refusal outside it teaches that a valid"
+        f" invocation sometimes does nothing, and which ones those are cannot"
+        f" be read off the page (issue #141). See {STANDARD}."
     )
-    assert REDLINE_GAP in arguments, (
-        f"{REDLINE}: the argument prose does not say what a run wanting to"
-        f" refuse an unlisted form has actually found. A gap in the list is"
+    assert REDLINE_GAP in settling, (
+        f"{REDLINE}: the settle step does not say what a run wanting to refuse"
+        f" an admitted invocation has actually found. A gap in the pages is"
         f" reported and the invocation is reviewed, rather than the run"
         f" inventing a refusal the contract does not carry (issue #141). See"
         f" {STANDARD}."
-    )
-
-    # The nine forms the evaluation saw refused correctly. The closure is a
-    # statement about the list and never a shortening of it.
-    listed = arguments.partition("Invalid forms, each refused the same way:\n\n")[
-        2
-    ].partition("\n\n")[0]
-    bullets = [line for line in listed.splitlines() if line.startswith("- ")]
-    assert len(bullets) == 9, (
-        f"{REDLINE}: the list of invalid forms carries {len(bullets)} entries"
-        f" rather than the nine the evaluation saw refused correctly. Closing"
-        f" the list states that it is complete; it removes nothing from it"
-        f" (issue #141). See {STANDARD}."
     )
 
     assert REDLINE_KIND_IS_A_FINDING in steps, (
@@ -7395,24 +7346,26 @@ def _sentences(passage: str) -> list[str]:
 
 
 def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
-    """The closed list is closed over invocation forms, and nothing wider.
+    """The closed refusal is closed over the invocation, and nothing wider.
 
-    Saying that the list of invalid forms is the whole of what that section
-    refuses is a statement about the form of an invocation. A statement about
-    every place a run may halt would be something else: the shared Invocation
-    Envelope refuses irrelevant, unaddressable, materially ambiguous,
-    conflicting, and scope-widening guidance, and each value the run resolves
-    and each destination it settles carries its own refusal beside itself. The
-    first build of this closure enumerated those halts and left the envelope
-    out, and a run reading the enumeration as the set had no reason left to
-    consult the section this file binds itself to two headings earlier. So the
-    closure says what it governs and points at the rest rather than counting it
-    (ADR-0176, issue #141).
+    Saying that the settle step's refusal is the whole of what is refused over
+    the invocation is a statement about the form of an invocation and the
+    values the engine cannot judge. A statement about every place a run may
+    halt would be something else: the shared Invocation Envelope refuses
+    irrelevant, unaddressable, materially ambiguous, conflicting, and
+    scope-widening guidance, and each value the run resolves and each
+    destination it settles carries its own refusal beside itself. The first
+    build of this closure enumerated those halts and left the envelope out,
+    and a run reading the enumeration as the set had no reason left to consult
+    the contract the body opens with. So the closure says what it governs and
+    points at the rest rather than counting it (ADR-0176, issue #141).
     """
 
     passages = {
         REDLINE: (
-            _section(REDLINE.read_text(encoding="utf-8"), "## Arguments", REDLINE),
+            _section(
+                REDLINE.read_text(encoding="utf-8"), "## Steps", REDLINE
+            ).partition("\n2. ")[0],
             ENVELOPE_POINTER,
         ),
         REDLINE_HELP: (
@@ -7430,18 +7383,18 @@ def test_the_redline_closure_ranges_over_forms_and_not_over_stops() -> None:
             )
             assert not overreaches, (
                 f"{where}: a sentence claims to name every place a run may"
-                f" halt — {sentence!r}. The list closed here is closed over the"
-                f" form of an invocation, and the halts written elsewhere are"
-                f" pointed at rather than counted: an enumeration that misses"
-                f" one repeals it for whoever reads the enumeration as the set"
+                f" halt — {sentence!r}. The refusal closed here is closed over"
+                f" the invocation, and the halts written elsewhere are pointed"
+                f" at rather than counted: an enumeration that misses one"
+                f" repeals it for whoever reads the enumeration as the set"
                 f" (ADR-0176, issue #141). See {STANDARD}."
             )
 
         assert elsewhere in passage, (
-            f"{where}: the closure calls its list whole and never points at"
-            f" the {elsewhere} section, leaving a run to read a"
-            f" closure over invocation form as a closure over every refusal"
-            f" this Skill makes (ADR-0176, issue #141). See {STANDARD}."
+            f"{where}: the closure calls its refusal whole and never points at"
+            f" the {elsewhere} contract, leaving a run to read a closure over"
+            f" invocation form as a closure over every refusal this Skill makes"
+            f" (ADR-0176, issue #141). See {STANDARD}."
         )
 
 
@@ -7912,10 +7865,10 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
         f"{UNSLOP}: the Skill runs the Collection's resolver and declares none"
         f" of the runtime it takes to run it (ADR-0177). See {STANDARD}."
     )
-    assert 'check --here="$HERE"' in body, (
+    assert ENGINE_CALL in body, (
         f"{UNSLOP}: the dependency lists are not empty and the body calls no"
-        f" checker, so an Unsatisfied Dependency is met as a failure rather"
-        f" than as a refusal. See {STANDARD}."
+        f" engine, so an Unsatisfied Dependency is met as a failure rather"
+        f" than as a refusal (ADR-0181). See {STANDARD}."
     )
 
     compatibility = _unslop_field("compatibility")
@@ -8372,17 +8325,18 @@ def test_unslop_reads_the_operand_whatever_its_own_words_say() -> None:
         f" one form of supply answers neither (#147). See {STANDARD}."
     )
 
-    # The eight forms the evaluation saw refused correctly. Saying what the
-    # operand is adds nothing to what is invalid and takes nothing from it.
-    listed = arguments.partition("Invalid forms, each refused the same way:\n\n")[
-        2
-    ].partition("\n\n")[0]
-    bullets = [line for line in listed.splitlines() if line.startswith("- ")]
-    assert len(bullets) == 8, (
-        f"{UNSLOP}: the list of invalid forms carries {len(bullets)} entries"
-        f" rather than the eight the evaluation saw refused correctly. Saying"
-        f" what the operand is says nothing about what an invocation may be"
-        f" (#147). See {STANDARD}."
+    # Saying what the operand is adds nothing to what is invalid and takes
+    # nothing from it: the form is the engine's, held against the shipped page.
+    engine = _manager_module()
+    assert engine.read_invocation(UNSLOP.parent, "--genre=essay report.md").status == 2
+    assert engine.read_invocation(UNSLOP.parent, "Write me a brief").status == 0, (
+        f"{UNSLOP}: an inline text is a valid operand whatever it says, and the"
+        f" engine refused it (#147, ADR-0181). See {STANDARD}."
+    )
+    assert "The operand is the Text Artifact" in arguments, (
+        f"{UNSLOP}: `## Arguments` no longer says what the operand is, which is"
+        f" the one thing about it the engine cannot know (ADR-0181). See"
+        f" {STANDARD}."
     )
 
     positional = _section(
@@ -10521,27 +10475,27 @@ def test_every_manager_help_form_prints_through_the_engine_what_the_script_print
     )
 
 
-def test_the_dependency_gate_is_invoked_with_no_flag_in_every_skill() -> None:
-    """`check --here` runs first in every skill that has anything to check.
+def test_the_engine_is_invoked_with_no_flag_in_every_skill() -> None:
+    """`invoke --here="$HERE"` opens every body, and nothing else is on the call.
 
     Under strict syntax a stray flag on that call would kill the skill before
     it did anything, so the call sites are pinned here and the drift is caught
-    in the suite rather than in a broken `/commit`.
+    in the suite rather than in a broken `/commit`. The checker's own call is
+    gone with the preamble: the engine makes that check itself (ADR-0181).
     """
 
-    gates: dict[str, str] = {}
-    for path in (REPO_ROOT / "skills").glob("*/*/SKILL.md"):
+    for path in _skill_bodies():
         text = path.read_text(encoding="utf-8")
-        if "check --here" in text:
-            gates[path.parent.name] = text
-
-    assert {"agents-md", "delegation", "commit", "push", "release"} <= set(gates)
-    for name, text in gates.items():
-        assert 'check --here="$HERE"`' in text, (
-            f'{name}: the checker is invoked as `check --here="$HERE"` and'
+        assert f"{ENGINE_CALL}`" in text, (
+            f'{path}: the engine is invoked as `invoke --here="$HERE"` and'
             f" with no flag on it. Under strict syntax a stray flag there is"
             f" refused rather than ignored, which would kill the skill before"
-            f" it did anything (ADR-0176). See {STANDARD}."
+            f" it did anything (ADR-0176, ADR-0181). See {STANDARD}."
+        )
+        assert "check --here" not in text, (
+            f"{path}: the body still calls the checker. The engine makes the"
+            f" dependency check `check --here` makes, so one call replaces the"
+            f" preamble's (ADR-0181). See {STANDARD}."
         )
 
 
@@ -10638,17 +10592,6 @@ def _shipped_skills() -> list[Path]:
 
 # The call a body makes to read its invocation through the engine (ADR-0181).
 ENGINE_CALL = 'invoke --here="$HERE"'
-
-
-def _calls_the_engine(text: str) -> bool:
-    """True where a body reads its invocation through the engine.
-
-    The Manager's body does; every other shipped body still performs the
-    Envelope split and the help routing itself, and is held to the prose that
-    says so until it moves (ADR-0181).
-    """
-
-    return ENGINE_CALL in text
 
 
 def _skill_bodies() -> list[Path]:
@@ -10813,32 +10756,34 @@ _MODEL_SELECTOR_MANPAGES = frozenset(
 
 
 def test_model_selector_ships_and_routes_one_manpage_per_subcommand() -> None:
-    """Every accepted command path has a deterministic `--help` target."""
+    """Every accepted command path has a deterministic `--help` target.
+
+    The engine reads which pages exist off the directory and routes
+    `<path> --help` to each, so the body carries no table of routes; the
+    page tree is the whole of the declaration (ADR-0176, ADR-0181).
+    """
 
     # Compare the complete accepted command set with the shipped page tree.
     help_directory = MODEL_SELECTOR_DIR / "help"
     actual = {
         str(path.relative_to(help_directory)) for path in help_directory.rglob("*.md")
     }
-    skill = (MODEL_SELECTOR_DIR / "SKILL.md").read_text(encoding="utf-8")
-    help_section = _section(skill, "## Invocation", MODEL_SELECTOR_DIR / "SKILL.md")
 
     assert actual == _MODEL_SELECTOR_MANPAGES, (
         f"{MODEL_SELECTOR_DIR}: the subcommand page tree is {sorted(actual)},"
         f" but the accepted command paths are"
         f" {sorted(_MODEL_SELECTOR_MANPAGES)} (ADR-0176). See {STANDARD}."
     )
-    assert "--help" in help_section, (
-        f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: subcommand pages exist but the"
-        f" `## Invocation` section has no direct `--help` route to them"
-        f" (ADR-0176). See {STANDARD}."
-    )
 
-    # Hold every file to an explicit deterministic route in the Skill body.
-    for relative in _MODEL_SELECTOR_MANPAGES:
-        assert f"`$HERE/help/{relative}`" in help_section, (
-            f"{MODEL_SELECTOR_DIR / 'SKILL.md'}: the `## Invocation` section"
-            f" does not route the `{relative}` manpage (ADR-0176). See"
+    # Hold every file to the deterministic route the engine performs.
+    engine = _manager_module()
+    for relative in sorted(_MODEL_SELECTOR_MANPAGES):
+        path = " ".join(Path(relative).with_suffix("").parts)
+        page = (help_directory / relative).read_text(encoding="utf-8").rstrip("\n")
+        reading = engine.read_invocation(MODEL_SELECTOR_DIR, f"{path} --help")
+        assert reading.status == 3 and reading.text.rstrip("\n") == page, (
+            f"{MODEL_SELECTOR_DIR}: `/model-selector {path} --help` does not"
+            f" print `help/{relative}` verbatim (ADR-0176, ADR-0181). See"
             f" {STANDARD}."
         )
 
@@ -10910,50 +10855,81 @@ def _flags(text: str) -> set[str]:
     return {word for word in re.findall(r"--[a-z][a-z-]*", text)} - {"--help"}
 
 
-def test_every_skill_exposes_the_invocation_envelope_before_its_grammar() -> None:
-    """Every caller meets the same envelope before Skill-specific parsing.
+# What the opening of every body except the Manager's says, in the words a
+# test can hold: where the Manager is and the fix where it is not, the engine
+# call with the payload on stdin, the three answers, and the one sentence of the
+# Envelope no engine can execute (ADR-0181).
+ENGINE_OPENING = (
+    "`$HERE/../kntnt/`",
+    "Global harness skills directory",
+    "npx skills add Kntnt/skills",
+    "/kntnt update",
+    f"{ENGINE_CALL}`",
+    "stdin",
+    "exit 0",
+    "`capabilities`",
+    "verbatim and stop",
+    "`path`",
+    "`flags`",
+    "`operands`",
+    "`instruction`",
+    ENVELOPE_POINTER,
+)
 
-    The suffix is caller-neutral and reserved across the Collection, so a
-    future Skill discovered by the body glob must expose it in the harness
-    hint and separate it before either help routing or formal validation.
+
+def _opening(text: str) -> str:
+    """The body before its first `## ` section: the description and the engine call."""
+
+    return text.partition("\n---\n")[2].partition("\n## ")[0]
+
+
+def test_every_skill_body_opens_with_the_engine_call() -> None:
+    """The mechanics are the engine's, and the body says so once, before anything.
+
+    Sixteen bodies opened with the same checker discovery, the same Envelope
+    pointer and the same help routes, and asked the model to perform them. The
+    engine performs them now, so what a body opens with is where the engine is
+    and how to call it: the Manager beside this Skill or under a Global
+    harness skills directory, `npx skills add Kntnt/skills` where neither
+    exists, the payload on stdin, the JSON continued from on exit 0 with the
+    Capabilities answered first, and stdout printed verbatim on any other
+    exit. What stays of the Envelope is its semantic half: the Contextual
+    Instruction is applied under the Library file (ADR-0181).
     """
 
-    # Discover every body so a future Skill cannot omit the shared first step.
-    for body in _skill_bodies():
-        # Read only the body surface the harness executes.
-        text = body.read_text(encoding="utf-8")
-        envelope = _section(text, "## Invocation", body)
+    for path in _skill_bodies():
+        if path.parent == MANAGER_DIR:
+            continue
+        text = path.read_text(encoding="utf-8")
+        opening = _opening(text)
 
-        # Hold exposure, ordering, and the boundary into deterministic parsers.
-        assert _hint(body.parent).endswith("[-- <instruction>]"), (
-            f"{body}: the harness hint omits the optional Contextual"
+        assert _hint(path.parent).endswith("[-- <instruction>]"), (
+            f"{path}: the harness hint omits the optional Contextual"
             f" Instruction suffix required by ADR-0176. See {STANDARD}."
         )
-        assert text.index("\n## Invocation\n") < text.index("\n## Arguments\n"), (
-            f"{body}: Envelope splitting must precede help routing and formal"
-            f" validation (ADR-0176). See {STANDARD}."
-        )
-        assert ENVELOPE_POINTER in envelope, (
-            f"{body}: the body reads its executable Envelope contract from the"
-            f" one place it is stated, `{ENVELOPE_POINTER}`, rather than"
-            f" carrying a copy of it (ADR-0177, ADR-0176). See {STANDARD}."
-        )
-        # The split and the parser boundary are the engine's in a body that
-        # calls it, so only a body that still performs them states them.
-        if _calls_the_engine(text):
-            continue
-        assert "before help routing or formal validation" in envelope.lower(), (
-            f"{body}: the executable section does not state its required"
-            f" ordering (ADR-0176). See {STANDARD}."
-        )
-        assert "only the Formal Invocation reaches" in envelope, (
-            f"{body}: scripts and nested parsers receive only Formal Invocation"
-            f" input (ADR-0176). See {STANDARD}."
-        )
-        assert "Redundant but applicable guidance is valid" not in text, (
-            f"{body}: the body restates the Envelope contract instead of"
-            f" pointing at it (ADR-0177, ADR-0176). See {STANDARD}."
-        )
+        for phrase in ENGINE_OPENING:
+            assert phrase in opening, (
+                f"{path}: the body does not open with {phrase!r}. Every body"
+                f" except the Manager's opens with where the Manager is, the"
+                f" engine call with the payload on stdin, and what to do with"
+                f" each of its three answers (ADR-0181). See {STANDARD}."
+            )
+        for phrase in (
+            "**Dependencies.**",
+            "check --here",
+            "before help routing or formal validation",
+            "only the Formal Invocation reaches",
+            "Redundant but applicable guidance is valid",
+            "Parse the arguments",
+            "Run the dependency checker",
+        ):
+            assert phrase not in text, (
+                f"{path}: the body still carries {phrase!r}. The dependency"
+                f" preamble, the Envelope split, the help routing and the"
+                f" parse step are the engine's, and a body that restates them"
+                f" asks the model to do the engine's work a second time"
+                f" (ADR-0181). See {STANDARD}."
+            )
 
 
 def test_invocation_envelope_defines_the_reserved_separator_without_inference() -> None:
@@ -11199,10 +11175,9 @@ def test_skill_standard_requires_every_invocation_envelope_surface() -> None:
     # Read the contributor-facing source of the rules asserted by this suite.
     standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
 
-    # Hold all five authored surfaces and the separator's non-option status.
+    # Hold the authored surfaces and the separator's non-option status.
     for phrase in (
         "`[-- <instruction>]`",
-        "`## Invocation`",
         "`$LIBRARY/references/invocation-envelope.md`",
         "`library/references/invocation-envelope.md`",
         "`[**--** *INSTRUCTION*]`",
@@ -11214,6 +11189,40 @@ def test_skill_standard_requires_every_invocation_envelope_surface() -> None:
             f"{STANDARD}: the contributor standard omits {phrase!r}, so an"
             f" author meets the Envelope rule only after this suite fails"
             f" (ADR-0176)."
+        )
+
+
+def test_the_skill_standard_states_the_engine_first_body_form() -> None:
+    """An author meets the new form before the suite has to refuse the old one.
+
+    The preamble bullet and the Invocation bullet are replaced by the engine
+    call, and the refusal bullet says the engine refuses and the body adds
+    only what the Skill leaves undone when it stops (ADR-0181).
+    """
+
+    standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
+    body = standard.partition("\n### Body\n")[2].partition("\n## ")[0]
+
+    for phrase in (
+        "**Every body opens with the engine call",
+        "`npx skills add Kntnt/skills`",
+        "`$HERE/../kntnt/`",
+        "**`## Arguments` states only what the engine cannot know",
+        "**An invalid form is refused by the engine",
+        "what this Skill leaves undone when it stops",
+    ):
+        assert phrase in body, (
+            f"{STANDARD}: the Body section omits {phrase!r}, so an author"
+            f" learns the engine-first form only from a red run (ADR-0181)."
+        )
+    for phrase in (
+        "The dependency preamble is present exactly when",
+        "An `## Invocation` section precedes",
+        "a body that does not yet call the engine",
+    ):
+        assert phrase not in standard, (
+            f"{STANDARD}: the standard still requires {phrase!r}, the form"
+            f" every shipped body has left (ADR-0181)."
         )
 
 
@@ -11273,17 +11282,15 @@ def test_the_help_step_hands_the_script_the_operand_the_engine_read() -> None:
         )
 
 
-def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() -> None:
-    """One failure behaviour per skill, and no error text authored by an agent.
+def test_a_form_the_grammar_forbids_is_refused_by_the_engine_and_documented() -> None:
+    """One failure behaviour per skill, performed by the engine and documented.
 
     An undeclared flag, an invalid combination, and an incomplete form are the
     same refusal, in the shape every refusal in this collection has: what was
     wrong, the synopsis of what was addressed, and where to read the page in
-    full. The synopsis is the one shipped in `help.md`, never a second grammar
-    composed on the spot to answer with. That shape is one contract, so it is
-    stated once in the Library and pointed at from each body, and what a body
-    adds is only its own — which page a refusal addresses where the Skill has
-    more than one, and what it leaves undone when it stops.
+    full. The shape is stated once in the Library and performed by the engine
+    against the shipped pages, so a body states no refusal of its own; what a
+    manpage still carries is that the strictness exists (ADR-0181, ADR-0176).
     """
 
     contract = ENVELOPE_REFERENCE.read_text(encoding="utf-8")
@@ -11295,30 +11302,79 @@ def test_every_skill_answers_a_form_its_grammar_forbids_with_its_own_synopsis() 
         "that page's own `--help` route",
     ):
         assert phrase in contract, (
-            f"{ENVELOPE_REFERENCE}: the refusal shape omits {phrase!r}. A skill"
-            f" has no parser — the agent reading these files is the whole of"
-            f" the enforcement — so a refusal composed on the spot is a second"
-            f" grammar, free to drift from the one the page documents"
-            f" (ADR-0176). See {STANDARD}."
+            f"{ENVELOPE_REFERENCE}: the refusal shape omits {phrase!r}. The"
+            f" engine performs the refusal and this is where its shape is"
+            f" stated (ADR-0176, ADR-0181). See {STANDARD}."
         )
 
+    engine = _manager_module()
     for directory in _shipped_skills():
-        skill = (directory / "SKILL.md").read_text(encoding="utf-8")
         page = (directory / "help.md").read_text(encoding="utf-8")
-
-        assert ENVELOPE_POINTER in skill, (
-            f"{directory}: an invalid form is refused as `{ENVELOPE_POINTER}`"
-            f" says, which is where the one refusal shape is written. A body"
-            f" carrying its own copy is a second grammar, free to drift from"
-            f" the one the reference states (ADR-0176, ADR-0177). See"
-            f" {STANDARD}."
-        )
         assert "refused rather than ignored" in page, (
             f"{directory}: the manpage says a flag with no work to do is"
             f" refused rather than ignored. The strictness is documented as"
             f" well as performed, or a reader meets it first as an error"
             f" (ADR-0176). See {STANDARD}."
         )
+
+        # The syntax refusal every grammar shares: a separator with nothing
+        # behind it, refused in the collection's shape before a step is read.
+        reading = engine.read_invocation(directory, "--  ")
+        assert reading.status == 2, directory
+        assert _synopsis(directory / "help.md") in reading.text, directory
+        assert reading.text.rstrip("\n").endswith(f"see '/{directory.name} --help'"), (
+            directory
+        )
+
+
+# Words a body uses when it states a refusal the engine now performs, or a
+# grammar the engine now reads off the shipped pages. `## Arguments` keeps what
+# the engine cannot know — what an operand means, a value vocabulary the
+# SYNOPSIS does not spell out, an exclusion between two flags — and nothing of
+# this (ADR-0181).
+ENGINE_WORK = (
+    "refus",
+    "invalid",
+    "synopsis",
+    "and nothing else",
+    "is part of the form",
+    "--help",
+    "Parse rules",
+    "wherever it stands",
+)
+
+
+def test_every_arguments_section_states_only_what_the_engine_cannot_know() -> None:
+    """The grammar line and the refusal list are the engine's; the meaning stays.
+
+    Each `## Arguments` opened with the Skill's own grammar line, closed with
+    the forms it refused, and said that the order was part of the form. The
+    engine reads the grammar off the `argument-hint` and the pages and
+    refuses before a step is read, so what the section states is what no
+    page can tell the engine: what an operand means, a value vocabulary the
+    SYNOPSIS does not spell out, an exclusion between two flags (ADR-0181).
+    """
+
+    for path in _skill_bodies():
+        if path.parent == MANAGER_DIR:
+            continue
+        text = path.read_text(encoding="utf-8")
+        arguments = _section(text, "## Arguments", path)
+
+        for word in ENGINE_WORK:
+            assert word not in arguments.lower(), (
+                f"{path}: `## Arguments` says {word!r}, which is the engine's"
+                f" work restated — a grammar the engine reads off the pages,"
+                f" or a refusal it performs before a step is read (ADR-0181)."
+                f" See {STANDARD}."
+            )
+        for line in arguments.splitlines():
+            assert not line.lstrip("- ").startswith(f"`/{path.parent.name}"), (
+                f"{path}: `## Arguments` opens a line with the Skill's own"
+                f" grammar (`{line.strip()[:40]}`), which the engine reads off"
+                f" the `argument-hint` and the shipped pages (ADR-0181). See"
+                f" {STANDARD}."
+            )
 
 
 # The reason an installed reader applies the flag-refusal rule. It was written
@@ -11483,49 +11539,39 @@ def test_no_form_of_delegations_grammar_carries_yes_and_status_at_once() -> None
 def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
     """`/delegation --user` with no command path prints the synopsis and stops.
 
-    Its two halves disagreed: the arguments asked for `on`, `off`, or `status`
-    while step 1 stopped. The half the agent executes is the true one (ADR-0177),
-    and `--yes` settles it beyond consistency — a question with three outcomes
-    has no answer under the flag (ADR-0029), so *ask* needs a special case
-    there and *error* needs none. The form is now a scope flag with no command
-    path, and it is refused for the same reason.
+    Its two halves once disagreed: the arguments asked for `on`, `off`, or
+    `status` while step 1 stopped. `--yes` settles it beyond consistency — a
+    question with three outcomes has no answer under the flag (ADR-0029), so
+    *ask* needs a special case there and *error* needs none. The engine now
+    refuses the form against the root page before a step is read, and the
+    page documents the refusal it performs (ADR-0181).
     """
 
     directory = REPO_ROOT / "skills" / "agents" / "delegation"
-    skill = (directory / "SKILL.md").read_text(encoding="utf-8")
     page = (directory / "help.md").read_text(encoding="utf-8")
+    engine = _manager_module()
 
-    incomplete = [
-        line
-        for line in _section(skill, "## Arguments", directory / "SKILL.md").splitlines()
-        if "no command path" in line
-    ]
-    assert incomplete, (
-        f"{directory}: the parse rules no longer name the incomplete form, so"
-        f" this check judged nothing. See {STANDARD}."
-    )
-    for line in incomplete:
-        assert "ask" not in line.lower(), (
-            f"{directory}: `{line.strip()}` answers an incomplete form by"
-            f" asking. A question with three outcomes has no answer under"
-            f" `--yes` (ADR-0029), so the incomplete form is refused with the"
-            f" synopsis like every other invalid one (ADR-0176). See"
-            f" {STANDARD}."
+    for payload in ("--user", "--project", "--yes"):
+        reading = engine.read_invocation(directory, payload)
+        assert reading.status == 2, (
+            f"{directory}: `/delegation {payload}` is an incomplete form and"
+            f" the engine accepted it (ADR-0176, ADR-0181). See {STANDARD}."
         )
+        assert _synopsis(directory / "help.md") in reading.text, payload
+        assert "ask" not in reading.text.lower(), payload
 
     assert "changes nothing and asks" not in page, (
         f"{directory / 'help.md'}: the manpage still documents the incomplete"
-        f" form as asking, which is the half the agent does not execute. Where"
-        f" the two halves disagree the body is the true one (ADR-0177). See"
-        f" {STANDARD}."
+        f" form as asking, which is not what the engine performs (ADR-0177)."
+        f" See {STANDARD}."
     )
     diagnostics = _section(page, "## DIAGNOSTICS", directory / "help.md").lower()
     assert "prints the synopsis" in diagnostics, (
         f"{directory / 'help.md'}: `DIAGNOSTICS` says the incomplete form prints the"
         f" synopsis. A reader who has not run the skill cannot tell a refusal"
         f" from a no-op unless the page names what the refusal does, and the"
-        f" refusal with the synopsis is what the body performs (ADR-0176). See"
-        f" {STANDARD}."
+        f" refusal with the synopsis is what the engine performs (ADR-0176)."
+        f" See {STANDARD}."
     )
 
 
@@ -11660,9 +11706,11 @@ def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
     """`on`, `off`, and `status` each answer to their own help route.
 
     A command path is exactly what a page under `help/` answers to (ADR-0176),
-    so the three pages are what make these tokens a path rather than operands —
+    so the three pages are what make these tokens a path rather than operands,
     and what lets a refusal quote the grammar the invalid form violated rather
-    than the whole Skill's.
+    than the whole Skill's. The engine reads the pages off the directory and
+    routes `<path> --help` and `-h` to each, so the body names none of them
+    (ADR-0181).
     """
 
     help_directory = BRIEF_DIR / "help"
@@ -11677,23 +11725,20 @@ def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
     }
     assert actual == set(BRIEF_COMMANDS), (
         f"{BRIEF_DIR}: the command page tree is {sorted(actual)}, while the"
-        f" accepted command paths are {sorted(BRIEF_COMMANDS)} (ADR-0176)."
-        f" See {STANDARD}."
+        f" accepted command paths are {sorted(BRIEF_COMMANDS)} (ADR-0176). See"
+        f" {STANDARD}."
     )
 
-    body = BRIEF_DIR / "SKILL.md"
-    help_section = _section(body.read_text(encoding="utf-8"), "## Invocation", body)
+    engine = _manager_module()
     for relative in sorted(BRIEF_COMMANDS):
-        assert f"`$HERE/help/{relative}`" in help_section, (
-            f"{body}: the `## Invocation` section does not route the"
-            f" `{relative}` manpage. `/<skill> <command-path> --help` prints"
-            f" the most specific recognized path's page verbatim (ADR-0176)."
-            f" See {STANDARD}."
-        )
-    assert "-h" in help_section, (
-        f"{body}: `-h` is the identical short route into an addressed page,"
-        f" so the command paths answer to it too (ADR-0176). See {STANDARD}."
-    )
+        page = (help_directory / relative).read_text(encoding="utf-8").rstrip("\n")
+        for flag in ("--help", "-h"):
+            reading = engine.read_invocation(BRIEF_DIR, f"{Path(relative).stem} {flag}")
+            assert reading.status == 3 and reading.text.rstrip("\n") == page, (
+                f"{BRIEF_DIR}: `/brief {Path(relative).stem} {flag}` does not"
+                f" print `help/{relative}` verbatim (ADR-0176, ADR-0181). See"
+                f" {STANDARD}."
+            )
 
 
 def test_brief_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
@@ -11802,7 +11847,9 @@ def test_delegation_ships_and_routes_one_manpage_per_command_path() -> None:
     A command path is exactly what a page under `help/` answers to (ADR-0176),
     so the three pages are what make these tokens a path rather than operands,
     and what lets a refusal quote the grammar the invalid form violated rather
-    than the whole Skill's.
+    than the whole Skill's. The engine reads the pages off the directory and
+    routes `<path> --help` and `-h` to each, so the body names none of them
+    (ADR-0181).
     """
 
     help_directory = DELEGATION_DIR / "help"
@@ -11821,19 +11868,18 @@ def test_delegation_ships_and_routes_one_manpage_per_command_path() -> None:
         f" (ADR-0176). See {STANDARD}."
     )
 
-    body = DELEGATION_DIR / "SKILL.md"
-    help_section = _section(body.read_text(encoding="utf-8"), "## Invocation", body)
+    engine = _manager_module()
     for relative in sorted(DELEGATION_COMMANDS):
-        assert f"`$HERE/help/{relative}`" in help_section, (
-            f"{body}: the `## Invocation` section does not route the"
-            f" `{relative}` manpage. `/<skill> <command-path> --help` prints"
-            f" the most specific recognized path's page verbatim (ADR-0176)."
-            f" See {STANDARD}."
-        )
-    assert "-h" in help_section, (
-        f"{body}: `-h` is the identical short route into an addressed page,"
-        f" so the command paths answer to it too (ADR-0176). See {STANDARD}."
-    )
+        page = (help_directory / relative).read_text(encoding="utf-8").rstrip("\n")
+        for flag in ("--help", "-h"):
+            reading = engine.read_invocation(
+                DELEGATION_DIR, f"{Path(relative).stem} {flag}"
+            )
+            assert reading.status == 3 and reading.text.rstrip("\n") == page, (
+                f"{DELEGATION_DIR}: `/delegation {Path(relative).stem} {flag}`"
+                f" does not print `help/{relative}` verbatim (ADR-0176,"
+                f" ADR-0181). See {STANDARD}."
+            )
 
 
 def test_delegation_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
@@ -11920,23 +11966,19 @@ def test_delegation_accepts_no_unseparated_free_text_and_interrogates_nothing() 
     The Skill answered *is it on?* as `status` while asking about anything
     wider, so its formal grammar accepted free text at one narrow width and
     interrogated it above that. The reserved separator carries instructions
-    collection-wide (ADR-0176), so an unrecognized bare token is refused like
-    any other invalid form.
+    collection-wide (ADR-0176), so an unrecognized bare token is refused by
+    the engine like any other invalid form (ADR-0181).
     """
 
     body = DELEGATION_DIR / "SKILL.md"
     text = body.read_text(encoding="utf-8")
-    arguments = _section(text, "## Arguments", body)
     page = (DELEGATION_DIR / "help.md").read_text(encoding="utf-8")
 
-    unseparated = (
-        "A token that is neither a recognized command path nor a declared flag"
-    )
-    assert unseparated in arguments, (
-        f"{body}: the argument prose does not refuse unseparated text after"
-        f" the Skill name or a command path. Anything not carried by a"
-        f" recognized token is an invalid form rather than an instruction"
-        f" See {STANDARD}."
+    reading = _manager_module().read_invocation(DELEGATION_DIR, "is it on everywhere?")
+    assert reading.status == 2, (
+        f"{DELEGATION_DIR}: unseparated text after the Skill name is not a"
+        f" form, and the engine accepted it (ADR-0176, ADR-0181). See"
+        f" {STANDARD}."
     )
     assert "Prose is not a form" not in text, (
         f"{body}: the interrogation clause is still in the body. Prose is not"

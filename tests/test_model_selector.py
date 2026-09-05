@@ -19,6 +19,20 @@ from support.model_routing import standing_policy as _standing_policy_fixture
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 MODEL_SELECTOR: Path = REPO_ROOT / "skills" / "models" / "model-selector"
+KNTNT_PY: Path = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
+
+
+def _engine() -> Any:
+    """Load the Manager's script so its invocation engine can be asked in-process."""
+
+    spec = importlib.util.spec_from_file_location("kntnt_for_model_selector", KNTNT_PY)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
 CONTEXT_SCRIPT: Path = MODEL_SELECTOR / "scripts" / "context.py"
 PROFILE_FIXTURE: Path = REPO_ROOT / "tests" / "support" / "model_selector_profile.json"
 ROUTED_OBSERVATIONS: Path = (
@@ -4426,8 +4440,10 @@ def test_route_exposes_the_public_model_routing_contract() -> None:
     }
 
     _assert_contains_all(public_contract, required_fragments)
-    assert "| `route` | `$HERE/help/route.md` |" in skill
-    assert "/model-selector route <path>" in skill
+    reading = _engine().read_invocation(MODEL_SELECTOR, "route --help")
+    assert reading.status == 3
+    assert reading.text.rstrip("\n") == route_help.rstrip("\n")
+    assert "| `route` |" in skill
 
 
 def test_route_contract_pins_filtering_overrides_and_refusals() -> None:
@@ -6111,8 +6127,10 @@ def test_observation_contract_separates_public_and_orchestrated_imports() -> Non
     }
 
     _assert_contains_all(public_contract, required_fragments)
-    assert "| `observe` | `$HERE/help/observe.md` |" in skill
-    assert "/model-selector observe --artifact=<path> [--import] <path>" in skill
+    reading = _engine().read_invocation(MODEL_SELECTOR, "observe --help")
+    assert reading.status == 3
+    assert reading.text.rstrip("\n") == _read("help/observe.md").rstrip("\n")
+    assert "| `observe` |" in skill
 
 
 def test_observation_contract_pins_its_outcome_and_refusal_vocabulary() -> None:
@@ -6616,13 +6634,20 @@ def test_the_policy_command_is_documented_where_a_reader_looks_for_it() -> None:
     page = _read("help/config/policy.md")
     store = _read("references/profile-management.md")
 
-    # The command routes to its three pages and states its own invocation.
+    # The engine routes the command to its three pages, and the body states
+    # its own invocation.
+    engine = _engine()
     for relative in (
         "config/policy.md",
         "config/policy/show.md",
         "config/policy/reset.md",
     ):
-        assert f"| `$HERE/help/{relative}` |" in skill, relative
+        path = " ".join(Path(relative).with_suffix("").parts)
+        reading = engine.read_invocation(MODEL_SELECTOR, f"{path} --help")
+        assert reading.status == 3, relative
+        assert reading.text.rstrip("\n") == _read(f"help/{relative}").rstrip("\n"), (
+            relative
+        )
     assert "config policy [show|reset] [--data=<path>] [<cohort>]" in skill
     assert '"$LIBRARY/scripts/standing_policy.py" policy show' in skill
     assert "policy reset --yes --data=<directory> [<cohort>]" in skill

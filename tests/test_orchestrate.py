@@ -2,11 +2,27 @@
 
 from __future__ import annotations
 
+import importlib.util
 import re
+import sys
 from pathlib import Path
+from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL = REPO_ROOT / "skills" / "code" / "orchestrate"
+KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
+
+
+def _engine() -> Any:
+    """Load the Manager's script so its invocation engine can be called in-process."""
+
+    spec = importlib.util.spec_from_file_location("kntnt_for_orchestrate", KNTNT_PY)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
 
 # Every brief this skill hands a subagent that is told to run something the
 # project gates a change on. A run interviewed for issue #75 lost more turns to
@@ -2293,19 +2309,32 @@ def test_the_final_report_renders_reconciliation_provenance() -> None:
 
 def test_invalid_reconcile_form_routes_to_reconcile_synopsis() -> None:
     """Once the subcommand is recognized, its own grammar and help route make
-    a malformed invocation actionable without showing unrelated run forms."""
+    a malformed invocation actionable without showing unrelated run forms.
 
-    # Read the shipped parser instructions as the installed agent receives them.
+    The engine addresses the most specific recognized command page, so a
+    recognized `reconcile` form is refused with that page's own synopsis and
+    `--help` route, and the body no longer says which page a refusal
+    addresses (ADR-0181).
+    """
+
+    engine = _engine()
+    page = SKILL / "help" / "reconcile.md"
+    synopsis = (
+        page.read_text(encoding="utf-8")
+        .partition("\n## SYNOPSIS\n")[2]
+        .partition("\n## ")[0]
+        .strip("\n")
+    )
+
+    reading = engine.read_invocation(SKILL, "reconcile --dry-run #12")
+
+    assert reading.status == 2, reading.text
+    assert synopsis in reading.text
+    assert reading.text.rstrip("\n").endswith("see '/orchestrate reconcile --help'")
+
     instructions = (SKILL / "SKILL.md").read_text(encoding="utf-8")
-
-    # Route recognized malformed forms to the addressed subcommand contract.
-    # The refusal's own shape — what it names, the synopsis it prints, and the
-    # addressed page's `--help` route it closes with — is the collection's and
-    # is stated once in the Library, so what the body carries is which page a
-    # recognized `reconcile` form addresses rather than a second copy of it.
-    assert "invalid recognized `reconcile` form" in instructions
-    assert "`$HERE/help/reconcile.md`" in instructions
-    assert "$LIBRARY/references/invocation-envelope.md" in instructions
+    assert "invalid recognized `reconcile` form" not in instructions
+    assert "`$HERE/help/reconcile.md`" not in instructions
 
 
 # Every brief that tells its subagent to run the project's verification gate.

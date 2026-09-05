@@ -16,50 +16,31 @@ metadata:
 
 Correct the mechanical language errors in one supplied Text Artifact, and change nothing else about it.
 
-**Dependencies.** Checker: `$HERE/../kntnt/scripts/kntnt.py` if that file exists, else `kntnt/scripts/kntnt.py` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Run `uv run --no-cache --no-project "<checker>" check --here="$HERE"`. Exit 2: emit stdout and stop. If no checker is found, tell the user to install the Manager (`npx skills add Kntnt/skills`).
+`$HERE` is the directory that contains this SKILL.md, and `$MANAGER` is the Manager directory: `$HERE/../kntnt/` if it exists, else `kntnt/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Neither found: tell the user to install the Manager (`npx skills add Kntnt/skills`) and stop. `$LIBRARY` is `$MANAGER/library/` — absent, tell the user to run `/kntnt update`, then stop.
+
+Run `uv run --no-cache --no-project "$MANAGER/scripts/kntnt.py" invoke --here="$HERE"` with the invocation payload — everything the user typed after `/proofread`, verbatim, however many lines — on stdin. On exit 0, answer the `capabilities` in its `dependencies` first: for each one, say whether its `confirm` sentence is true of you, and where it is not, give its `how`, change nothing, and stop. Then continue from the JSON. On any other exit print its stdout verbatim and stop: it has already printed what the user is to see, and none of that text is yours to write.
+
+In the JSON, `path` is the command path as a list, `flags` holds each flag the user wrote — `true` where it stood bare, its value where it carried one, a list of values where it was repeated — `operands` is what followed the flags, in order, and `instruction` is the Contextual Instruction, or `null`, applied as `$LIBRARY/references/invocation-envelope.md` says.
 
 Run every UV command in this Skill with a fresh private directory as `TMPDIR`, and remove that directory after the command, including when it fails. The private directory belongs to that one command and no other run, so cleanup removes only files this run created.
-
-`$HERE` is the directory that contains this SKILL.md.
-
-`$LIBRARY` is `library/` under the Manager directory that contains the checker. If it is absent, tell the user to run `/kntnt update`, then stop.
 
 A model-invoked run changes only how the Skill starts. Once started, it takes the specific Text Artifact the current turn identifies as the omitted operand and enters the same numbered steps as invocation by name. The paths join before loading any language or editorial resource; the trigger wording is not a second source of rules or an alternate execution path.
 
 Where no Formal Invocation carries an Output Target, settle it from the current turn before correcting or writing. An unnamed destination resolves to the response, and a file mentioned only as the location of the errors names no destination: the verbs *fix* and *correct* apply to the named errors, not to the file containing them. Thus `Fix the spelling and grammar mistakes in case.md` delivers to the response. A turn that explicitly names the response or a path other than the source as the destination selects that Output Target; for example, `Write the corrected text to corrected.md` selects corrected.md as a separate Output Target. A turn that asks for the file itself to be changed selects In-place Editing only when it explicitly names that file as the object of the change or as the destination of the corrected text; for example, `Update case.md with the grammar corrections` selects In-place Editing. It remains subject to every refusal that editing mode already carries, including inline text, a URL, an uploaded or read-only source, more than one text, and a simultaneous separate Output Target. A request to save, apply, or persist the corrections without naming where they go is materially ambiguous about the destination: `Fix the grammar errors in case.md and save the corrections` asks which destination the caller intends and writes nothing. For that case and any other material ambiguity about the destination, ask which destination the caller intends and write nothing.
 
-## Invocation
-
-Read `$LIBRARY/references/invocation-envelope.md` and follow it before help routing or formal validation; only the Formal Invocation reaches Help, Arguments, scripts, and nested formal parsers. `--help`, `-h`, and `help` print `$HERE/help.md` verbatim and stop.
-
 ## Arguments
 
-Two forms, each carrying exactly one Text Artifact:
-
-- `/proofread [--language=<selector>] [--output=<response|path>] [<text>|<path>|<url>]`
-- `/proofread [--language=<selector>] --in-place[=on|off] <path>`
-
-The operand is the Text Artifact: inline text, one local path, or one URL. Where the invocation carries no operand, it is the single text the current turn identifies.
+The operand is the Text Artifact: inline text, one local path, or one URL, and exactly one of them — several paths, a glob reaching more than one file, or a directory of texts is more than one. Where the invocation carries no operand, it is the single text the current turn identifies.
 
 `--language=<selector>` names the language or locale whose mechanics apply. Any spelling the Collection's resolver reaches is accepted — a canonical code (`sv`, `en_GB`), a case or separator variant of one (`en-GB`, `EN_GB`), a curated alias (`BrE`, `brittisk engelska`), or an ordinary description of a language in any language.
 
-`--output=<response|path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path.
+`--output=<response|path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path. It and In-place Editing name two destinations for one text, which is why no form carries both.
 
 `--in-place[=<value>]` selects In-place Editing. It accepts `yes`, `on`, and `true` against `no`, `off`, and `false`; bare `--in-place` means `on`, `--in-place=off` has the same effect as omitting the option, and the default is `off`.
 
-Invalid forms, each refused the same way:
-
-- A `--`-prefixed token that is not `--language`, `--output`, or `--in-place`.
-- `--language` or `--output` without a value, or `--in-place` with a value outside the vocabulary above.
-- `--output` and `--in-place=on` in one invocation, which name two destinations for one text.
-- More than one Text Artifact — several paths, a glob reaching more than one file, or a directory of texts.
-- An out-of-order form: the Text Artifact written before a flag rather than after every flag.
-
-Refuse it as `$LIBRARY/references/invocation-envelope.md` says, then correct nothing, write nothing, and stop.
-
 ## Steps
 
-1. Parse the arguments by the rules above and settle the single Text Artifact. An invalid form takes the refusal those rules describe. Done when one Text Artifact and a valid set of options are in hand, or you have stopped.
+1. Settle the single Text Artifact and the options from the JSON. A value outside what `## Arguments` admits — `--in-place` outside its vocabulary, or more than one Text Artifact — is refused as `$LIBRARY/references/invocation-envelope.md` says: correct nothing, write nothing, and stop. Done when one Text Artifact and a valid set of options are in hand, or you have stopped.
 2. Settle the destination before anything is corrected, following `$LIBRARY/references/delivery.md`. Make every refusal that contract names by reading alone — In-place Editing together with a separate Output Target, an output path equal to the input path, In-place Editing against inline text or a URL or a source that is not a writable local file, and a destination whose parent directory does not exist — so that a refusal has nothing written behind it. Done when the destination is settled, or you have stopped.
 3. Read the Text Artifact's leading YAML frontmatter where it has any, and look in it for one top-level `kntnt` map. That map is the only Kntnt configuration a document carries; `language`, `lang`, `genre`, `technique`, and every other key outside it are the document's own fields, whatever they are named and whatever they hold. Read `language` out of the map and nothing else out of it. The map is never required: a Text Artifact carrying none is proofread exactly like one that carries a complete one, its absence refusing nothing and leaving the language to the levels below it in step 4. Done when the artifact's recognized language value is known to be present, absent, or unreachable.
 4. Resolve the language, taking the first of these that answers: the `--language` value; the recognized `kntnt` map's `language` value from step 3; the current Contextual Instruction; applicable Conversation Context; then the language of the Text Artifact itself, which is what inference reads and what the default already is. Suppression is that precedence working rather than an error: a Contextual Instruction every higher level has already settled leaves nothing for it to settle, and the run continues rather than refusing it as unaddressable guidance. Where saying so is useful, the delivery names the suppressed instruction beside the resolved configuration. Where that language is materially ambiguous or mixed — no dominant language, or alternation inside paragraphs — ask which language to proofread in rather than choosing one. Nothing has been written yet, so asking costs nothing to undo. Done when exactly one selector is in hand, or you have asked.
