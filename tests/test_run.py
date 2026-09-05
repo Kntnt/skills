@@ -1552,8 +1552,9 @@ def test_plan_keeps_a_ticket_blocked_by_open_work_outside_the_scope_blocked(
 def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
     tmp_path: Path,
 ) -> None:
-    """The relation is the tracker's own answer; a body line is the fallback,
-    never a second source added to it."""
+    """Where the relation carries no edge, the body is read as a fallback and
+    becomes the sole source of blockers — a body line is read only there,
+    never as a second source added to the relation."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(
@@ -1564,8 +1565,75 @@ def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
                 _ticket(
                     10,
                     "the graph",
-                    blocked_by=[(8, "CLOSED")],
                     body="Blocked by: #9",
+                ),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["workable"] == [9]
+    assert plan["blocked"] == [10]
+    assert plan["tickets"][1]["blocked_by"] == [9]
+
+
+def test_plan_refuses_a_body_edge_the_relation_does_not_carry(
+    tmp_path: Path,
+) -> None:
+    """A disagreement between the relation and the body is never silent.
+
+    Where the relation carries at least one edge, the body is read too, and
+    any ticket the body names that the relation does not is a refusal naming
+    that ticket, both sets, and that the missing edge belongs in the relation.
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(8, "the foundation"),
+                _ticket(9, "the skeleton"),
+                _ticket(
+                    10,
+                    "the graph",
+                    blocked_by=[(8, "OPEN")],
+                    body="## Blocked by\n\n- #8\n- #9\n",
+                ),
+            ]
+        },
+    )
+
+    result = _engine(repo, "plan", env=env)
+
+    assert result.returncode == 1
+    assert "#10" in result.stderr
+    assert "#9" in result.stderr
+    assert "relation" in result.stderr or "missing edge" in result.stderr
+
+
+def test_plan_allows_a_body_naming_the_same_closed_done_ticket_the_relation_carries(
+    tmp_path: Path,
+) -> None:
+    """The comparison is over tickets named, not over which still block, so a body
+    naming a blocker whose Ticket Resolution is done agrees with a relation
+    that carries it, regardless of outcome."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {
+            "ready-for-agent": [
+                _ticket(8, "the foundation"),
+                _ticket(9, "the skeleton"),
+                _ticket(
+                    10,
+                    "the graph",
+                    blocked_by=[(8, "CLOSED"), (9, "OPEN")],
+                    body="## Blocked by\n\n- #8\n- #9\n",
                 ),
             ]
         },
@@ -1576,7 +1644,9 @@ def test_plan_reads_the_body_only_where_the_relation_carries_nothing(
 
     assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["workable"] == [9, 10]
+    assert plan["workable"] == [8, 9]
+    assert plan["blocked"] == [10]
+    assert plan["tickets"][2]["blocked_by"] == [9]
 
 
 def test_plan_refuses_a_body_edge_naming_a_ticket_the_tracker_cannot_answer_for(

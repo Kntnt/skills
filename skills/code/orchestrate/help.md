@@ -14,7 +14,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 `orchestrate` works the current repository's open `ready-for-agent` tickets on the current branch. Fresh subagents build and independently verify each ticket; verified work is integrated, recorded, and closed. The Skill never pushes, tags, or releases.
 
-Blocking relations produce dependency waves. Native tracker relations take precedence over `Blocked by` lines. A closed blocker remains blocking until its Ticket Resolution is done.
+Blocking relations produce dependency waves. Native tracker relations take precedence over `Blocked by` lines. Where the tracker's relation carries at least one edge, the body's `Blocked by` list is read too, and any ticket the body names that the relation does not is a refusal. A closed blocker remains blocking until its Ticket Resolution is done.
 
 A ticket beginning a line with `Builds alone` is a Solo Ticket. It receives the first available wave by itself, and the plan marks it `solo`.
 
