@@ -7,10 +7,8 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import fcntl
 import hashlib
-import importlib.util
 import json
 import os
 import re
@@ -251,12 +249,11 @@ CLAIM_ASSIGNEE = "@me"
 STATE_FILE = "kntnt-orchestrate.json"
 
 # What it calls the other half of that state, and the half ADR-0052's account
-# does not cover: the frozen routing context, the invocation's own field locks,
-# and every exact decision made under them. The tracker and the branch can
-# rebuild what a run claimed and recorded; neither can reproduce the profile
-# revision, evidence vintage, prices, aliases, and Harness mappings a decision
-# was made from, so those live in a file of their own and are never inferred
-# (ADR-0085).
+# does not cover: the invocation's own field locks and every decision made
+# under them. A decision is reproducible because it was recorded here rather
+# than because the world it was made in was frozen, so a file nothing can read
+# costs this run one further call per remaining role instead of the night
+# (ADR-0182).
 ROUTING_FILE = "kntnt-orchestrate-routing.json"
 
 # The directory it keeps that file in, under the one the harness gives. A
@@ -265,18 +262,18 @@ ROUTING_FILE = "kntnt-orchestrate-routing.json"
 # level down, where no subagent is ever sent (ADR-0071).
 STATE_HOME = "kntnt-orchestrate"
 
-# The version of model-selector's public route response this engine reads. The
-# Interface is the only cross-Skill seam, and a response from another version
-# of it is refused rather than guessed at (ADR-0083).
-ROUTE_SCHEMA_VERSION = 1
+# Where model-selector keeps the two entry points a machine caller reaches it
+# by, relative to whichever layout this Skill is installed in. The interface is
+# a script rather than a Skill invocation, so nothing of that Skill's body is
+# loaded into this run's context to get an answer out of it (ADR-0182).
+SELECT_SCRIPT = "selection.py"
+RECORD_SCRIPT = "record.py"
 
-# What one public decision can be: an exact launch, a safe inheritance, or a
-# role that may not launch at all. The first two may start work; the third
-# never does.
-ROUTE_SELECTED = "selected"
-ROUTE_INHERIT = "inherit"
-ROUTE_REFUSED = "refused"
-ROUTE_ACCEPTABLE = (ROUTE_SELECTED, ROUTE_INHERIT)
+# The one launch form that is not a launch: the point named is the caller's own
+# seat and no launch argument goes with it. It is the single routing fact this
+# engine reads out of a decision — did this role get a seat chosen for it, or
+# is it running on the orchestrating session's own (ADR-0182).
+LAUNCH_INHERIT = "inherit"
 
 # The whole of the portable deliberation scale, which is what `--deliberation`
 # locks and the only vocabulary either side of the seam shares. Native names
@@ -301,44 +298,20 @@ ROUTE_REQUEST = re.compile(
 # round rather than a ladder (ADR-0110).
 WAVE_FIX_ESCALATION = "-escalated"
 
-# The stable reason model-selector inherits under where no complete adapter on
-# the active Harness can express a safe point. A run every one of whose
-# decisions came back that way has one fact about its Harness rather than one
-# fact per ticket, and says it once (ADR-0110).
-INHERITED_FOR_NO_ADAPTER = "unavailable_selection_controls"
-
-# The stable reason model-selector inherits under where every configured
-# candidate was filtered out before a safe one remained. It is a different
-# fact about the run from the one above — the adapters are complete and the
-# candidates are not safe — so it gets its own line rather than being merged
-# into that one (ADR-0166).
-INHERITED_FOR_NO_SAFE_CANDIDATE = "unavailable_safe_candidate"
-
-# The reasons under which an inheritance is a fact of the frozen snapshot
-# rather than of the request it answered: the profile the snapshot carries is
-# absent or rejected, or no configured point survives its Harness filtering.
-# Each is decided before anything about a request is read, so every automatic
-# request this Skill makes under the same snapshot comes back the same
-# decision, and the account may restate it for a new name instead of asking
-# again. Evidence too weak to select from is deliberately not among them: an
-# objectively checked request escapes that inheritance where an unchecked one
-# does not, so it is the request's own (ADR-0172).
-SNAPSHOT_INHERITANCE_REASONS = frozenset(
-    {
-        "missing_profile",
-        "rejected_profile",
-        INHERITED_FOR_NO_ADAPTER,
-        INHERITED_FOR_NO_SAFE_CANDIDATE,
-    }
-)
-
-# Where a run keeps the routed attempts an external verdict has judged, and
-# where the sanitized artifact model-selector makes of them is written. Both
-# sit in the run's own scratch, are named by the engine so a report and an
-# import mean the same two files, and neither is ever a repository file
-# (ADR-0089).
+# Where a run keeps the routed attempts an external verdict has judged. It
+# sits in the run's own scratch, is named by the engine so a report and an
+# import mean the same file, and is never a repository file (ADR-0089).
 ATTEMPTS_FILE = "kntnt-orchestrate-attempts.json"
-OBSERVATION_FILE = "kntnt-orchestrate-observations.json"
+
+# The token categories a measurement carries, which are the whole of what this
+# engine copies out of whatever the environment exposed about an attempt.
+TOKEN_CATEGORIES: tuple[str, ...] = (
+    "input",
+    "cache_read",
+    "cache_write",
+    "output",
+    "reasoning",
+)
 
 # Where a caller polls the current non-authoritative run dashboard.
 PROGRESS_FILE: str = "kntnt-orchestrate-progress.json"
@@ -362,14 +335,16 @@ FLAKE_HOME = Path(".kntnt/orchestrate")
 FLAKE_LEDGER = "flakes.jsonl"
 RUN_FLAKES_FILE = "kntnt-orchestrate-flakes.json"
 
-# The version of model-selector's public observation contract this engine
-# writes. It is versioned separately from the route response because the two
-# are different documents and neither is a reading of the other.
-OBSERVATION_SCHEMA_VERSION = 1
+# The version of the run's own account of the attempts it observed. It is this
+# Skill's audit artifact rather than anybody else's contract: what a
+# measurement looks like when it is filed is model-selector's to say.
+ATTEMPTS_SCHEMA_VERSION = 1
 
 # What each building role is as workload. An initial build and a mechanical
 # wave fix are different work rather than the same work twice, and an amend is
-# a second attempt at the first one's, so evidence keeps them apart.
+# a second attempt at the first one's, so a report keeps them apart. The
+# distinction is a label a measurement carries and reports; it never splits the
+# comparison a measurement belongs to (ADR-0182).
 OBSERVED_STRATA: dict[str, str] = {
     "build": "initial_build",
     "amend": "amend",
@@ -378,39 +353,50 @@ OBSERVED_STRATA: dict[str, str] = {
     "wave-fix": "mechanical_wave_fix",
 }
 
-# The namespace this Skill's Cohorts are named under. A ledger is shared with
-# every other routed caller, so an Orchestrate initial build has to be nameable
-# apart from anybody else's work of the same kind.
+# The namespace this Skill's labels are written under. A measurement store is
+# shared with every other routed caller, so an Orchestrate initial build has to
+# be nameable apart from anybody else's work of the same kind.
 OBSERVED_COHORT_PREFIX = "orchestrate/"
 
-# What model-selector calls a decision it placed one Rung below the Cohort's
-# production Rung. The engine reads the name and counts it; the rule that
-# emitted it is model-selector's alone (ADR-0151).
-EXPLORATION_POLICY: str = "exploration"
-
-# Which independent verdict establishes each role's outcome. A builder's own
-# report establishes nothing, so the checker an observation names is always the
-# brief of the session that judged it and never the one that did the work.
-OBSERVED_CHECKERS: dict[str, str] = {
-    "build": "verify.md",
-    "amend": "verify.md",
-    "rebuild": "verify.md",
-    "repair": "repaired.md",
-    "wave-fix": "wave.md",
+# What each building role is as a Work Kind — the closed vocabulary a
+# measurement is keyed by, chosen for one property: how much intelligence the
+# job needs. Building to a written ticket is `implement` however many times the
+# run attempts it, and a wave fix is the one role whose finding already names
+# the change, which is `mechanical` (ADR-0182).
+OBSERVED_KINDS: dict[str, str] = {
+    "build": "implement",
+    "amend": "implement",
+    "repair": "implement",
+    "rebuild": "implement",
+    "wave-fix": "mechanical",
 }
 
-# How this run's own vocabulary reaches the evidence contract's. The first two
-# are verdicts on the work; the rest are conditions of the environment and of
-# the workflow, which the ledger keeps apart from quality because none of them
-# says the configuration did the work badly.
-OBSERVED_OUTCOMES: dict[str, tuple[str, str | None, str]] = {
-    "pass": ("pass", None, "independent_verifier"),
-    "fail": ("fail", None, "independent_verifier"),
-    "hinder": ("infra_error", "mechanical_hinder", "harness"),
-    "tracker-failure": ("infra_error", "tracker_failure", "tracker"),
-    "parked": ("abstain", "open_decision", "tracker"),
-    "blocked": ("abstain", "discovered_dependency", "tracker"),
+# What each run outcome grades the attempt at, or None where it grades nothing.
+# A grade is a number rather than a verdict, so an attempt that did the work
+# and failed one criterion is not the event that an attempt which did nothing
+# useful is. The four Nones are the workflow's own failures — a mechanical
+# hinder, a tracker failure, an open decision, a discovered dependency — and
+# none of them says the configuration did the work badly, so none of them is
+# filed as evidence at all (ADR-0182).
+OBSERVED_OUTCOMES: dict[str, float | None] = {
+    "pass": 1.0,
+    "fail": 0.0,
+    "hinder": None,
+    "tracker-failure": None,
+    "parked": None,
+    "blocked": None,
 }
+
+# What a pass is worth where the work needed a further round to reach it. The
+# configuration did finish the job, so it is not the failure a zero would call
+# it, and it did not finish the job first time, so it is not the clean pass a
+# one would call it either (ADR-0182).
+FURTHER_ROUND_GRADE: float = 0.6
+
+# Who established every grade this engine files. Orchestrate's verdicts come
+# from an independent verifier reading a declared gate, which is the highest
+# authority the measurement contract knows (ADR-0182).
+OBSERVED_AUTHORITY: str = "checker"
 
 # The four things a report can say about a ticket's Time to Verified Pass.
 # Only the first carries a number; the other three are the three different
@@ -420,13 +406,6 @@ NOT_STARTED: str = "not_started"
 VERIFIED_PASS: str = "verified_pass"
 INCOMPLETE: str = "incomplete"
 NOT_PASSED: str = "not_passed"
-
-# What a Cohort's Standing Policy evaluation came to when the ledger actually
-# moved it, and the one command that puts it back. The run reports both rather
-# than leaving a developer to find out at the next freeze that a Cohort now
-# starts a Rung higher (ADR-0149).
-POLICY_MOVED: str = "moved"
-POLICY_RESET_COMMAND: str = "/model-selector config policy reset"
 
 # The roles that are never routed. A verdict inherits the complete main seat
 # exactly, so a decision made for one is refused at this seam rather than left
@@ -1049,8 +1028,8 @@ class RunState:
     the claim boundaries that the branch can no longer establish after work
     begins. `progress` remembers the session-supplied dashboard values that a
     ticket transition cannot derive, so deleting the dashboard never makes it
-    an input. The frozen routing account is separately relied on and lives in
-    a file of its own rather than in this one (ADR-0085).
+    an input. The routing account is read back rather than rebuilt and lives
+    in a file of its own rather than in this one (ADR-0085, ADR-0182).
     """
 
     branch: str
@@ -1095,71 +1074,66 @@ class RouteRecord:
     where the role belongs to one ticket, which ticket — so a claim, an amend,
     and the account can each find the decision that covers what is about to run.
 
+    `inherited` is the one routing fact this engine reads out of a decision:
+    whether the role runs on a point chosen for it or on the orchestrating
+    session's own seat. Step 7's dispatch and the changed-nothing wave-fix rule
+    both turn on it, so it is read once here and carried with the decision
+    rather than re-derived by every reader (ADR-0182).
+
     `stage`, `workload_cohort`, and `workload_tags` are the same reading again:
-    the Cohort the decision was made for, computed once here and frozen with
-    the decision, so the observation a later verdict writes names the Cohort
-    the request named rather than one reconstructed from a response that never
-    echoed it.
+    the label the decision was made under, computed once here and recorded with
+    it, so the measurement a later verdict files names the work the request
+    named rather than one reconstructed from an answer that never echoed it.
     """
 
     request_id: str
     role: str
     ticket: int | None
     decision: dict[str, Any]
+    inherited: bool
     stage: str
     workload_cohort: str
     workload_tags: list[str]
 
     @property
-    def acceptable(self) -> bool:
-        """Say whether this decision may launch work at all."""
+    def point(self) -> str:
+        """Return the model and deliberation this decision names, as one token."""
 
-        return str(self.decision["status"]) in ROUTE_ACCEPTABLE
+        model = str(self.decision.get("model") or "")
+        level = self.decision.get("deliberation")
+        return f"{model}@{level}" if level else model
 
 
 @dataclass
 class Routing:
-    """The frozen routing account: the half of a run nothing can rebuild.
+    """The routing account: this run's own record of what it decided.
 
-    Every other answer this engine gives is a reading of the tracker and the
-    branch, and comes back the same where a run's own memory is gone
-    (ADR-0051). This one does not. `snapshot` is the context model-selector
-    froze before the first claim — profile revision, evidence identity and
-    vintage, Harness inventory, main seat, native mappings, commercial facts,
-    and override policy — and the current versions of all of that are a
-    different context, not a recovered one. `model` and `deliberation` are the
-    invocation's own field locks, frozen beside it because a resume that
-    changed them would be a second run reporting as the first. `fast` is the
-    third of them and the run's objective: set, the night is routed to the
-    fastest configuration that holds quality rather than the cheapest one, and
-    a resume that added or dropped it would be routing the rest of the work
-    against a different objective than the half already built. `decisions` is
-    every exact decision made under that context, in the order they were made,
-    which is what the outcome account is audited from. `attempts` is what an
-    external verdict later established about those decisions, kept beside them
-    because an outcome and the decision it judges are one fact, and because
-    nothing else holds either once the session that reached them is gone.
+    A decision is reproducible because it was recorded here, not because the
+    world it was made in was frozen and re-signed, so this file holds nothing
+    of model-selector's own state and a run that loses it re-routes rather than
+    stopping (ADR-0182). `model` and `deliberation` are the invocation's own
+    field locks, recorded because a resume that changed them would be a second
+    run reporting as the first, and `fast` is the third of them. `seat` and
+    `harness` are what the orchestrating session said it was calling from, kept
+    so a report names the seat every verdict inherited and a measurement names
+    the Harness its attempt ran on. `decisions` is every decision made under
+    those locks, in the order they were made, which is what the outcome account
+    is audited from, and `attempts` is what an external verdict later
+    established about them, kept beside them because an outcome and the
+    decision it judges are one fact. `replaced` says that this account was
+    started over an unreadable one, so a report can say the run re-routed
+    rather than leaving the gap unexplained.
     """
 
-    snapshot: dict[str, Any]
     model: str | None
     deliberation: str | None
     decisions: list[RouteRecord]
     fast: bool = False
+    seat: str | None = None
+    harness: str | None = None
     attempts: list[dict[str, Any]] = field(default_factory=list)
     run_identity: str = ""
-
-    @property
-    def identity(self) -> str:
-        """Return the identity the snapshot is named by."""
-
-        return str(self.snapshot["snapshot_identity"])
-
-    @property
-    def main_seat(self) -> dict[str, Any]:
-        """Return the seat every verdict inherits, exactly as it was frozen."""
-
-        return cast(dict[str, Any], self.snapshot["main_seat"])
+    replaced: str | None = None
 
     def decided(self, request_id: str) -> RouteRecord | None:
         """Return the latest decision made for *request_id*, or None."""
@@ -1168,216 +1142,71 @@ class Routing:
         return made[-1] if made else None
 
 
-def frozen_inheritance(records: list[RouteRecord]) -> str | None:
-    """Return the one snapshot-level reason every decision inherits for, or None.
-
-    This is the fact `route --inherit` acts on. Where every decision the
-    account holds inherits, and all for one reason that is the snapshot's
-    rather than a request's, model-selector would answer the next automatic
-    request under that snapshot the same way, so the account may restate the
-    decision it holds. An account holding a selection, a refusal, a mix of
-    reasons, or an inheritance the request itself earned keeps every later
-    role model-selector's to decide (ADR-0172).
-    """
-
-    if not records:
-        return None
-
-    reasons: set[str] = set()
-    for record in records:
-        decision = record.decision
-        if str(decision.get("status")) != ROUTE_INHERIT:
-            return None
-        inherited = cast(dict[str, Any], decision.get("inheritance") or {})
-        reasons.add(str(inherited.get("reason")))
-
-    if len(reasons) == 1 and reasons <= SNAPSHOT_INHERITANCE_REASONS:
-        return reasons.pop()
-    return None
-
-
 def routing_details(routing: Routing | None) -> dict[str, Any] | None:
-    """Return the public shape of a frozen routing account, or None.
-
-    The identity and the main seat are hoisted out of the snapshot they are
-    part of, because those two are what a report renders and what a verdict
-    inherits, and neither reader should have to know the snapshot's own shape
-    to reach them.
-    """
+    """Return the public shape of a routing account, or None where there is none."""
 
     if routing is None:
         return None
 
     return {
-        "snapshot_identity": routing.identity,
-        "main_seat": routing.main_seat,
         "model": routing.model,
         "deliberation": routing.deliberation,
         "fast": routing.fast,
+        "seat": routing.seat,
+        "harness": routing.harness,
         "run_identity": routing.run_identity or None,
-        "routing_capability": routing_capability(routing.decisions),
-        "frozen_inheritance": frozen_inheritance(routing.decisions),
-        "snapshot": routing.snapshot,
+        "replaced": routing.replaced,
         "decisions": [asdict(record) for record in routing.decisions],
     }
 
 
-def explored_requests(routing: Routing | None) -> dict[str, list[str]]:
-    """Return which requests each Cohort has already explored in this run.
+def frozen_routing(state_path: Path | None) -> tuple[Routing | None, str | None]:
+    """Return this run's routing account, or why there is none to render.
 
-    An Exploration Attempt is an accepted decision model-selector tagged as
-    one, and the account is the run's only durable record of them. What
-    travels is the request names rather than their count, because the count
-    the derivation needs excludes the batch about to be routed and only the
-    derivation sees that batch: a request routed twice — a resume, a reroute
-    after a mechanical repair — starts from the count its first routing saw
-    and reproduces the same decision (ADR-0151).
+    Absence and damage are still different sentences, because a report that
+    could not tell them apart would leave a re-routed night looking like one
+    nobody had routed. Neither stops the run: one local call per remaining role
+    is the whole of what a lost account costs now (ADR-0182).
     """
+
+    routing, damaged = read_routing(state_path)
+    if damaged is not None:
+        return None, damaged
 
     if routing is None:
-        return {}
+        return None, "this run has recorded no routing yet"
 
-    explored: dict[str, set[str]] = {}
-    for record in routing.decisions:
-        audit = cast(dict[str, Any], record.decision.get("audit") or {})
-        if audit.get("decision_policy") == EXPLORATION_POLICY:
-            explored.setdefault(record.workload_cohort, set()).add(record.request_id)
-    return {cohort: sorted(named) for cohort, named in sorted(explored.items())}
-
-
-def routing_capability(records: list[RouteRecord]) -> str | None:
-    """Return the one routing fact a whole run shares, or None where it has none.
-
-    Where the frozen context leaves no complete adapter that can express a safe
-    point, every building role decided under it inherits the main seat, and
-    every later one will too — the context is frozen for the night. That is one
-    fact about the Harness rather than one fact per ticket, so it is stated
-    once, before the run, instead of being decoded from a dozen identical
-    inheritance reasons in the account after it (ADR-0110).
-
-    An empty safe candidate set produces the same shape from a different
-    cause — the adapters are complete and no configured candidate survived
-    filtering — so it gets a line of its own rather than being merged into
-    that one (ADR-0166). A run that mixes the two states neither, exactly as
-    a run mixing inheritance with selection already does.
-    """
-
-    if not records:
-        return None
-
-    reasons: set[str] = set()
-    for record in records:
-        decision = record.decision
-        if str(decision.get("status")) != ROUTE_INHERIT:
-            return None
-        inherited = cast(dict[str, Any], decision.get("inheritance") or {})
-        reasons.add(str(inherited.get("reason")))
-
-    if reasons == {INHERITED_FOR_NO_ADAPTER}:
-        return (
-            "no complete adapter on this Harness can express a safe point, so "
-            "every building role this run launches inherits the main seat"
-        )
-    if reasons == {INHERITED_FOR_NO_SAFE_CANDIDATE}:
-        return (
-            "no configured candidate is safe to route to, so every building "
-            "role this run launches inherits the main seat"
-        )
-    return None
-
-
-def frozen_routing(
-    state_path: Path | None,
-) -> tuple[Routing | None, str | None, str | None]:
-    """Return this run's frozen routing, why there is none, and any damage.
-
-    Three answers rather than two, because absence and damage are not the same
-    fact. A run that has not reached its preflight yet has frozen nothing; a
-    run whose frozen context is unreadable has lost something no tracker and no
-    branch can give back, and the difference decides whether the next claim may
-    be made at all (ADR-0085).
-    """
-
-    try:
-        routing = read_routing(state_path)
-    except RunError as exc:
-        return None, str(exc), str(exc)
-
-    if routing is None:
-        return None, "this run has frozen no routing yet", None
-
-    return routing, None, None
+    return routing, None
 
 
 def dispatch_refusal(
     routing: Routing | None, request_id: str, described: str
 ) -> str | None:
-    """Return why *described* may not launch from the frozen routing, or None.
+    """Return why *described* may not launch from the routing account, or None.
 
     Route before dispatch is an invariant of the run rather than a paragraph on
     its opening path, so every verb that puts an execution role to work asks
-    the same question of the same account: was this exact thing decided, and
-    did the decision allow it (ADR-0085).
+    the same question of the same account: was this exact thing decided
+    (ADR-0085).
     """
 
     if routing is None:
         return (
-            f"{described} before this run has any frozen routing: the preflight "
-            "batches the frontier through model-selector's public route "
-            "Interface before anything is claimed"
+            f"{described} before this run has routed anything: the preflight "
+            "routes the frontier through model-selector before a claim"
         )
 
-    decided = routing.decided(request_id)
-    if decided is None:
+    if routing.decided(request_id) is None:
         return (
-            f"{described}, and this run's frozen routing holds no {request_id} "
-            "decision: route it from the frozen snapshot first"
+            f"{described}, and this run's routing holds no {request_id} "
+            "decision: route it first"
         )
-
-    if not decided.acceptable:
-        reason = cast(dict[str, Any], decided.decision["reason"])
-        return f"route refused {request_id}: {reason['code']}: {reason['detail']}"
 
     return None
 
 
-def routing_refusal(
-    routing: Routing | None,
-    damaged: str | None,
-    resuming: list[int],
-    model: str | None,
-    deliberation: str | None,
-    fast: bool,
-) -> str | None:
-    """Return why a plan may not start on this run's routing, or None where it may.
-
-    A run that has not routed yet is where every run begins, and the plan is
-    what invites the preflight, so nothing is refused there. What is refused is
-    a run carrying on past one: work already claimed under a frozen context
-    that is now gone, a context damaged where it was written, and an invocation
-    asking for locks the first frontier was not routed under.
-    """
-
-    if damaged is not None:
-        return (
-            f"{damaged}, and a frozen context is never rebuilt from current "
-            "profiles, aliases, prices, evidence, or Harness defaults"
-        )
-
-    if routing is None:
-        if not resuming:
-            return None
-        return (
-            f"{as_references(resuming)} stand claimed by this run and its frozen "
-            "routing is gone: restore the state directory it was written in, or "
-            "record or release those claims before a fresh run freezes its own"
-        )
-
-    return locks_refusal(routing, model, deliberation, fast, "this invocation")
-
-
 def routing_file(path: Path | None) -> Path | None:
-    """Return the durable copy of a run's frozen routing account."""
+    """Return the durable copy of a run's routing account."""
 
     return None if path is None else path.parent / ROUTING_FILE
 
@@ -1479,17 +1308,6 @@ def advance_progress(
     )
     remember_progress(state_path, cwd, progress)
     write_progress(state_path, phase, progress, None)
-
-
-def observation_file(path: Path | None) -> Path | None:
-    """Return the legacy path for the run's observation artifact.
-
-    Runs created before automatic per-attempt import may still carry this path,
-    so reports retain it as a backward-compatible historical detail. New runs
-    import each attempt through the shared Library at its finish boundary.
-    """
-
-    return None if path is None else path.parent / OBSERVATION_FILE
 
 
 def run_flakes_file(path: Path | None) -> Path | None:
@@ -1665,33 +1483,31 @@ def write_state(path: Path | None, state: RunState) -> str | None:
     return str(path)
 
 
-def read_routing(path: Path | None) -> Routing | None:
-    """Return the run's frozen routing, or None where it never froze any.
+def read_routing(path: Path | None) -> tuple[Routing | None, str | None]:
+    """Return the run's routing account, and what made it unreadable.
 
-    Absence and damage are different answers here, and that is the whole point
-    of the file. An ordinary state file nothing can read is answered as no
-    state; ordinary account fields are recovered, and checking verbs
-    deliberately follow the undeclared path without its contract projection.
-    A routing file nothing can read is answered as an error, because nothing
-    else holds what it held and reconstructing it would mean routing this run's
-    remaining work from a context it never ran under (ADR-0085, ADR-0138).
+    Absence and damage are still different answers, but neither is fatal any
+    more. Nothing in this file is irreplaceable: every decision in it can be
+    made again for one local call apiece, and losing a night costs incomparably
+    more than re-routing it does, so a file nothing can read is answered as no
+    account plus the reason, which the next route call records and the report
+    renders (ADR-0182).
     """
 
     stored = routing_file(path)
     if stored is None or not stored.exists():
-        return None
+        return None, None
 
     try:
         held = json.loads(stored.read_text(encoding="utf-8"))
-        snapshot = cast(dict[str, Any], held["snapshot"])
-        snapshot["snapshot_identity"], snapshot["main_seat"]
         return Routing(
-            snapshot=snapshot,
             model=None if held["model"] is None else str(held["model"]),
             deliberation=(
                 None if held["deliberation"] is None else str(held["deliberation"])
             ),
             fast=bool(held.get("fast")),
+            seat=None if held.get("seat") is None else str(held["seat"]),
+            harness=None if held.get("harness") is None else str(held["harness"]),
             decisions=[
                 RouteRecord(
                     request_id=str(record["request_id"]),
@@ -1700,6 +1516,7 @@ def read_routing(path: Path | None) -> Routing | None:
                         None if record["ticket"] is None else int(record["ticket"])
                     ),
                     decision=cast(dict[str, Any], record["decision"]),
+                    inherited=bool(record["inherited"]),
                     stage=str(record["stage"]),
                     workload_cohort=str(record["workload_cohort"]),
                     workload_tags=[str(tag) for tag in record["workload_tags"]],
@@ -1708,27 +1525,26 @@ def read_routing(path: Path | None) -> Routing | None:
             ],
             attempts=cast(list[dict[str, Any]], held["attempts"]),
             run_identity=str(held.get("run_identity") or ""),
-        )
+            replaced=None if held.get("replaced") is None else str(held["replaced"]),
+        ), None
     except (OSError, TypeError, ValueError, KeyError) as exc:
-        raise RunError(
-            f"this run's frozen routing at {stored} cannot be read ({exc})"
-        ) from exc
+        return None, f"this run's routing account at {stored} cannot be read ({exc})"
 
 
 def write_routing(path: Path | None, routing: Routing) -> str:
-    """Store the frozen routing account, or say that it could not be stored.
+    """Store the routing account, or say that it could not be stored.
 
     Unlike the ordinary state, this is not an optimisation a run can go on
-    without: a frozen context nothing wrote down is one the next invocation
-    cannot reuse, so a directory that will not take it stops the run here
-    rather than at a claim it would then have to refuse.
+    without within one wave: an account nothing wrote down is one the claim
+    gate cannot read a decision out of, so a directory that will not take it
+    stops the run here rather than at the claim it would then have to refuse.
     """
 
     stored = routing_file(path)
     if stored is None:
         raise RunError(
-            "routing is frozen for the whole run, so it needs a state directory "
-            "to be frozen in: pass --state-dir"
+            "routing is recorded for the whole run, so it needs a state "
+            "directory to be recorded in: pass --state-dir"
         )
 
     try:
@@ -1736,13 +1552,15 @@ def write_routing(path: Path | None, routing: Routing) -> str:
         stored.write_text(
             json.dumps(
                 {
-                    "snapshot": routing.snapshot,
                     "model": routing.model,
                     "deliberation": routing.deliberation,
                     "fast": routing.fast,
+                    "seat": routing.seat,
+                    "harness": routing.harness,
                     "decisions": [asdict(record) for record in routing.decisions],
                     "attempts": routing.attempts,
                     "run_identity": routing.run_identity,
+                    "replaced": routing.replaced,
                 },
                 indent=2,
             )
@@ -1751,7 +1569,7 @@ def write_routing(path: Path | None, routing: Routing) -> str:
         )
     except OSError as exc:
         raise RunError(
-            f"this run's frozen routing could not be written: {exc}"
+            f"this run's routing account could not be written: {exc}"
         ) from exc
 
     return str(stored)
@@ -1890,21 +1708,16 @@ class Plan:
     lands straight on the branch with nothing to integrate (ADR-0054).
 
     `run_identity` is the opaque name this run is known by, minted by the first
-    plan that may start and `null` on a dry one, and `explored_request_ids`
-    names, per Cohort, the requests this run's frozen routing account already
-    holds an Exploration Attempt for. The agent copies both into the next
-    context request, which is where the draw and the budget are read, and
-    which subtracts the batch it is routing from the names (ADR-0151).
+    plan that may start and `null` on a dry one.
 
     `model` and `deliberation` are the field-level locks this invocation puts
     on every building role, `fast` is the objective it puts on the whole run —
     the fastest configuration that holds quality rather than the cheapest —
-    and `routing` is the frozen route account all three were frozen into: its
-    identity, the main seat every verdict inherits, the snapshot a later
-    request carries back unchanged, and every exact decision made under it.
-    `routing_reason` is the other half of that answer: where there is no
-    account to render, it says why, so a report never fills the gap
-    in from what is current. `scope` is what the run was aimed at where it was
+    and `routing` is the account all three were recorded into, beside the seat
+    the run calls from and every decision made under them. `routing_reason` is
+    the other half of that answer: where there is no account to render, it says
+    why — nothing routed yet, or an account that could not be read and will be
+    made again. `scope` is what the run was aimed at where it was
     aimed at anything — one entry per reference the developer named, and the
     tickets are the union of what they resolved to — and `state` is where the
     run left what it remembers of itself, all of it carried here because the
@@ -1943,7 +1756,6 @@ class Plan:
     approval_identity: str | None = None
     approval_payload: ApprovalPayload | None = None
     run_identity: str | None = None
-    explored_request_ids: dict[str, list[str]] = field(default_factory=dict)
 
 
 def plan_approval_payload(plan: Plan) -> ApprovalPayload:
@@ -3081,7 +2893,7 @@ def build_plan(
     branch = current_branch(cwd)
     default = default_branch(cwd)
     remembered = read_plan_state(state_path, branch)
-    routing, routing_reason, damaged = frozen_routing(state_path)
+    routing, routing_reason = frozen_routing(state_path)
     listed = open_listing(cwd)
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
     tickets = tickets_in_scope(cwd, listed, scope)
@@ -3158,15 +2970,13 @@ def build_plan(
         never_workable=never_workable,
     )
 
-    # Name the run itself. A dry run composes no identity, so the preflight it
-    # renders draws no Exploration Attempt and never disagrees with the night
-    # that follows it; a real plan carries forward whatever the run already has
-    # and mints one where it has none (ADR-0151).
+    # Name the run itself. A dry run composes no identity, so it changes
+    # nothing about the night that follows it; a real plan carries forward
+    # whatever the run already has and mints one where it has none.
     carried_identity = (routing.run_identity if routing else None) or (
         remembered.run_identity if remembered else None
     )
     plan.run_identity = None if dry_run else carried_identity
-    plan.explored_request_ids = explored_requests(routing)
 
     # Identify the complete caller-authorized frontier independently of ticket
     # prose, tracker comments, and the branch's moving base commit.
@@ -3223,8 +3033,14 @@ def build_plan(
             "person has all the work this one could start"
         )
     elif (
-        adrift := routing_refusal(routing, damaged, resuming, model, deliberation, fast)
-    ) is not None:
+        routing is not None
+        and (
+            adrift := locks_refusal(
+                routing, model, deliberation, fast, "this invocation"
+            )
+        )
+        is not None
+    ):
         plan.ready = False
         plan.reason = adrift
     if approval is not None and approval != plan.approval_identity:
@@ -3359,15 +3175,15 @@ def cmd_plan(
 
 
 def workload_identity(role: str) -> dict[str, Any]:
-    """Return the Cohort one building role's work belongs to.
+    """Return the label one building role's work is filed under.
 
-    A Cohort is a role and a kind of work, and the request name this Skill
-    writes is where the engine already reads both. The stage is that role; the
-    Cohort is the workload stratum the role is charged to, under this Skill's
-    own namespace; and the tags are empty, those two facts being the whole of
-    what Orchestrate states about the work it routes. Deriving all three from
-    the name alone is what lets the request the agent writes and the decision
-    the engine froze name the same Cohort without either checking the other.
+    The request name this Skill writes already carries the role and the kind of
+    work, so both are read off it. The stage is that role; the label is the
+    workload stratum the role is charged to, under this Skill's own namespace;
+    and the tags are empty, those two facts being the whole of what Orchestrate
+    states about the work it routes. A label is reported and never splits the
+    comparison a measurement belongs to, so it may be as fine as this without
+    fragmenting anything (ADR-0182).
     """
 
     return {
@@ -3377,8 +3193,8 @@ def workload_identity(role: str) -> dict[str, Any]:
     }
 
 
-def route_record(request_id: str, decision: dict[str, Any]) -> RouteRecord:
-    """Read one decision's request name back into the role it was made for.
+def read_request(request_id: str) -> tuple[str, int | None]:
+    """Read one request name back into the role and ticket it was written for.
 
     The names are Orchestrate's own, so an unreadable one is this Skill's own
     mistake and is refused rather than kept: a decision nothing can attach to a
@@ -3406,109 +3222,216 @@ def route_record(request_id: str, decision: dict[str, Any]) -> RouteRecord:
         )
 
     # One of the three alternatives matched, and each names its own role.
-    ticket: int | None
     if named["role"]:
-        role, ticket = str(named["role"]), int(named["ticket"])
-    elif named["amended"]:
-        role, ticket = "amend", int(named["amended"])
-    else:
-        role, ticket = "wave-fix", None
-    return RouteRecord(request_id, role, ticket, decision, **workload_identity(role))
+        return str(named["role"]), int(named["ticket"])
+    if named["amended"]:
+        return "amend", int(named["amended"])
+    return "wave-fix", None
 
 
-def read_response(response: Path) -> dict[str, Any]:
-    """Return what model-selector answered at *response*, or say it did not."""
+def route_record(
+    request_id: str, role: str, ticket: int | None, decision: dict[str, Any]
+) -> RouteRecord:
+    """Attach one answer to the role and the ticket its request name states."""
+
+    launch = cast(dict[str, Any], decision.get("launch") or {})
+    return RouteRecord(
+        request_id,
+        role,
+        ticket,
+        decision,
+        launch.get("how") == LAUNCH_INHERIT,
+        **workload_identity(role),
+    )
+
+
+def model_selector_candidates(script: Path | None = None) -> tuple[Path, ...]:
+    """Return every supported location of model-selector's own scripts."""
+
+    here = (script or Path(__file__)).resolve().parent
+    return (
+        here.parent.parent.parent / "models/model-selector/scripts",
+        here.parent.parent / "model-selector/scripts",
+    )
+
+
+def model_selector_script(name: str) -> Path:
+    """Return model-selector's *name* entry point without reaching past it.
+
+    Only the two machine entry points are ever named here. Everything behind
+    them — the catalogue, the profile, the measurement store, the estimator —
+    is that Skill's own, and a caller that read any of it would be reproducing
+    the policy it called out to (ADR-0182).
+    """
+
+    # Resolve repository and installed-sibling layouts in order.
+    for directory in model_selector_candidates():
+        candidate = directory / name
+        if candidate.is_file():
+            return candidate
+
+    raise RunError(f"model-selector's {name} is missing; install or update the Manager")
+
+
+def selector_home() -> Path:
+    """Return the directory model-selector's scripts are started from.
+
+    Not the repository: a run replaces and removes working trees while it goes,
+    and `uv` resolves what it is about to start from where it stands, so the
+    call is made from the one directory no verb of this run can take away. A
+    machine with no home says so as part of the call it was making rather than
+    as a new way for that call to fail.
+    """
 
     try:
-        return cast(dict[str, Any], json.loads(response.read_text(encoding="utf-8")))
-    except (OSError, TypeError, ValueError) as exc:
+        return Path.home()
+    except RuntimeError as exc:
         raise RunError(
-            f"{response} is not a model-selector route response: {exc}"
+            f"model-selector is run from the home directory, and there is none: {exc}"
         ) from exc
 
 
-def routed_response(
-    answered: dict[str, Any],
-) -> tuple[dict[str, Any], list[RouteRecord]]:
-    """Read one public route response into its snapshot and its decisions.
+def select_point(
+    cwd: Path,
+    *,
+    kind: str,
+    seat: str | None,
+    harness: str | None,
+    model: str | None,
+    deliberation: str | None,
+    after: str | None,
+    fast: bool,
+) -> dict[str, Any]:
+    """Return the point model-selector chose for one execution role.
 
-    Only the structure this engine acts on is checked here — the version of the
-    Interface, the frozen context's identity and main seat, and each decision's
-    request name and status. Everything inside a decision is model-selector's
-    to say and is kept exactly as it said it (ADR-0083).
+    One local call per role against the machine's own catalogue, profile and
+    measurements, which is cheap enough that no run has any reason to amortise
+    it. The answer is kept whole and never interpreted: this Skill consumes the
+    interface and reproduces none of the selection rules behind it (ADR-0182).
     """
+
+    # Say what the work is, which seat is asking, and what the developer typed.
+    named = [f"--kind={kind}", f"--repo={cwd}"]
+    if harness is not None:
+        named.append(f"--harness={harness}")
+    if seat is not None:
+        named.append(f"--seat={seat}")
+    if model is not None:
+        named.append(f"--model={model}")
+    if deliberation is not None:
+        named.append(f"--deliberation={deliberation}")
+    if after is not None:
+        named.append(f"--after={after}")
+    if fast:
+        named.append("--objective=time")
+
+    # The repository travels as an argument rather than as the directory the
+    # call is made from, a bridge command being run in it later by this run.
+    script = model_selector_script(SELECT_SCRIPT)
+    answered = subprocess.run(
+        ["uv", "run", str(script), *named],
+        cwd=selector_home(),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if answered.returncode != 0:
+        raise RunError(
+            f"model-selector could not be asked for a {kind} point: "
+            f"{answered.stderr.strip() or answered.stdout.strip()}"
+        )
 
     try:
-        if answered["schema_version"] != ROUTE_SCHEMA_VERSION:
-            raise RunError(
-                f"this response answers version {answered['schema_version']} of "
-                f"the model-selector route response, and this run reads version "
-                f"{ROUTE_SCHEMA_VERSION}"
-            )
-        decisions = cast(list[dict[str, Any]], answered["decisions"])
-        for decision in decisions:
-            if decision["status"] not in (*ROUTE_ACCEPTABLE, ROUTE_REFUSED):
-                raise RunError(
-                    f"{decision['request_id']} came back {decision['status']}, "
-                    "which is no decision this Interface makes"
-                )
-        snapshot = cast(dict[str, Any], answered["snapshot"])
-        if snapshot["snapshot_identity"] is None or snapshot["main_seat"] is None:
-            raise RunError("this response's snapshot names no identity or main seat")
-    except RunError:
-        raise
-    except (OSError, TypeError, ValueError, KeyError) as exc:
-        raise RunError(f"this is not a model-selector route response: {exc}") from exc
+        decision = json.loads(answered.stdout)
+    except ValueError as exc:
+        raise RunError(
+            f"model-selector answered no point this run can read: {exc}"
+        ) from exc
+    if not isinstance(decision, dict) or not decision.get("ok"):
+        raise RunError("model-selector answered no point this run can read")
 
-    return snapshot, [
-        route_record(str(decision["request_id"]), decision) for decision in decisions
-    ]
+    return cast(dict[str, Any], decision)
 
 
-def emit_route(
-    identity: str | None,
-    records: list[RouteRecord],
-    refusals: list[dict[str, Any]],
-    routing: Routing | None = None,
-) -> None:
-    """Print what one route call decided, what it refused, and what it spent.
+def names_model(lock: str, chosen: str) -> bool:
+    """Say whether *chosen* is the model *lock* named.
 
-    The exploration account is reported here as well as on the plan, because a
-    mid-wave request is composed from the last thing the engine said rather
-    than from a plan the wave has already left behind (ADR-0151).
+    A lock is a family alias or an exact identifier and the answer carries the
+    exact identifier alone, so the comparison is that identifier or any of the
+    words it is made of: `opus` names `claude-opus-5`, and `sonnet` does not.
     """
+
+    identifier = chosen.casefold()
+    wanted = lock.casefold()
+    return wanted == identifier or wanted in identifier.split("-")
+
+
+def locks_answered(
+    model: str | None, deliberation: str | None, answered: dict[str, Any]
+) -> str | None:
+    """Return why an answer does not honour this invocation's locks, or None.
+
+    Model-selector refuses nothing to anybody, so a lock it cannot honour comes
+    back as the nearest launchable thing with a note saying what differs. The
+    promise that an unhonourable `--model` stops the run before any claim is
+    this Skill's own contract with the developer who typed the flag, and this
+    Skill keeps it here, by comparing what came back against what it asked for
+    (ADR-0182).
+    """
+
+    chosen = str(answered.get("model") or "")
+    if model is not None and not names_model(model, chosen):
+        return (
+            f"--model={model} was asked for and {chosen or 'no model'} came "
+            "back: an unavailable, ambiguous, or unmappable exact model is "
+            "refused before claims and never falls through to another model"
+        )
+
+    level = answered.get("deliberation")
+    if deliberation is not None and level != deliberation:
+        return (
+            f"--deliberation={deliberation} was asked for and "
+            f"{level or 'no deliberation'} came back: a level nothing can "
+            "launch is refused rather than read as its neighbour"
+        )
+
+    return None
+
+
+def escalated_from(routing: Routing, task: str) -> str | None:
+    """Return the point this run's work at *task* last failed on, or None.
+
+    A caller whose attempt failed asks for the next point up by naming the one
+    that failed, and this run is the only thing that holds both halves of that:
+    which point ran, and what an independent verdict made of it. The ladder it
+    is a step on stays model-selector's own — this Skill names a point and
+    reads back whatever comes (ADR-0182).
+    """
+
+    for attempt in reversed(routing.attempts):
+        record = routing.decided(str(attempt["attempt_id"]))
+        if record is None or observed_task(record.ticket, record.request_id) != task:
+            continue
+        if attempt.get("outcome") != "fail":
+            continue
+        return record.point or None
+
+    return None
+
+
+def emit_route(records: list[RouteRecord], routing: Routing) -> None:
+    """Print what one route call decided, and what this run is calling from."""
 
     emit(
         {
             "verb": "route",
-            "snapshot_identity": identity,
-            "run_identity": (routing.run_identity or None) if routing else None,
-            "explored_request_ids": explored_requests(routing),
-            "routing_capability": routing_capability(records),
+            "run_identity": routing.run_identity or None,
+            "seat": routing.seat,
+            "harness": routing.harness,
+            "replaced": routing.replaced,
             "decisions": [asdict(record) for record in records],
-            "refused": refusals,
         }
     )
-
-
-def frozen_refusal(routing: Routing, snapshot: dict[str, Any]) -> str | None:
-    """Return why *snapshot* is not the one this run froze, or None where it is."""
-
-    identity = str(snapshot["snapshot_identity"])
-    if identity != routing.identity:
-        return (
-            f"this response carries snapshot {identity} where the run froze "
-            f"{routing.identity}: every later wave and every resumed invocation "
-            "reuses the snapshot the first frontier was routed from"
-        )
-
-    if snapshot != routing.snapshot:
-        return (
-            f"this response changes the frozen snapshot {identity} under its own "
-            "identity, so the context it names is not the context it carries"
-        )
-
-    return None
 
 
 def locks_refusal(
@@ -3529,7 +3452,7 @@ def locks_refusal(
 
     return (
         f"{invocation} locks {described_locks(model, deliberation, fast)} where "
-        "this run's routing was frozen for "
+        "this run's routing was recorded for "
         f"{described_locks(routing.model, routing.deliberation, routing.fast)}: "
         "the fields the first frontier was routed under cannot change mid-run"
     )
@@ -3546,49 +3469,6 @@ def described_locks(model: str | None, deliberation: str | None, fast: bool) -> 
     return ", ".join(named[:-1]) + f", and {named[-1]}"
 
 
-def claims_refusal(state: RunState) -> str | None:
-    """Return why a run may not freeze a first snapshot now, or None where it may.
-
-    A run holding claims has routed already, whatever is left of the file that
-    said so. Freezing a context today's environment produced would decide the
-    rest of the night from facts the claimed work was never done under, so this
-    seam asks what the plan asks rather than trusting that the plan was reached
-    (ADR-0085).
-    """
-
-    if not state.claimed:
-        return None
-
-    return (
-        f"{as_references(state.claimed)} stand claimed by this run and its "
-        "frozen routing is gone: a first snapshot frozen now would not be the "
-        "one that work was claimed under"
-    )
-
-
-def batch_refusal(state: RunState, records: list[RouteRecord]) -> str | None:
-    """Return why an opening batch is not the plan's frontier, or None where it is.
-
-    Only the opening batch is held to this. A frontier routed a ticket at a
-    time is a frontier whose tickets were each decided against a different set
-    of peers, so the run's first request is the whole of what the plan said it
-    starts, in that order. Every request after it is a smaller thing by nature
-    — one replacement, one amend attempt, one repair, one reroute after a
-    mechanical repair — and what keeps those honest is the claim and dispatch
-    gates asking for the exact role rather than a shape asked of the batch.
-    """
-
-    batched = [record.ticket for record in records if record.role == "build"]
-    if batched == state.starting:
-        return None
-
-    return (
-        f"this batch routes {batched or 'no ticket'} where the plan's starting "
-        f"frontier is {state.starting}: the preflight batches that frontier, in "
-        "that order, before anything is claimed"
-    )
-
-
 def escalated_wave(request_id: str) -> str | None:
     """Return the wave whose fix round *request_id* escalates, or None."""
 
@@ -3598,8 +3478,8 @@ def escalated_wave(request_id: str) -> str | None:
     return str(named["wave"])
 
 
-def escalation_refusal(routing: Routing, records: list[RouteRecord]) -> str | None:
-    """Return why an escalated wave fix may not be frozen, or None where it may.
+def escalation_refusal(routing: Routing | None, requests: list[str]) -> str | None:
+    """Return why an escalated wave fix may not be routed, or None where it may.
 
     A changed-nothing fix round under a selected configuration buys exactly one
     further decision, because the inference the stop rests on — no fix the
@@ -3609,254 +3489,128 @@ def escalation_refusal(routing: Routing, records: list[RouteRecord]) -> str | No
     follows a round this run actually routed, and it happens once (ADR-0110).
     """
 
-    held = [record.request_id for record in routing.decisions]
-    for record in records:
-        wave = escalated_wave(record.request_id)
+    held = [record.request_id for record in routing.decisions] if routing else []
+    for request_id in requests:
+        wave = escalated_wave(request_id)
         if wave is None:
             continue
 
         if f"wave-fix-{wave}" not in held:
             return (
-                f"{record.request_id} escalates a fix round this run never "
-                f"routed: an escalation carries the wave-fix-{wave} round it "
-                "follows as its verified failure"
+                f"{request_id} escalates a fix round this run never routed: an "
+                f"escalation follows the wave-fix-{wave} round whose verified "
+                "failure it carries"
             )
-        if record.request_id in held:
+        if request_id in held:
             return (
-                f"{record.request_id} stands in this run's frozen routing "
-                "already: a changed-nothing fix round buys exactly one further "
-                "decision, and a second changed-nothing round stops the run"
+                f"{request_id} stands in this run's routing already: a "
+                "changed-nothing fix round buys exactly one further decision, "
+                "and a second changed-nothing round stops the run"
             )
-        held.append(record.request_id)
+        held.append(request_id)
 
     return None
 
 
-def objective_refusal(snapshot: dict[str, Any], fast: bool) -> str | None:
-    """Return why a snapshot's objective is not this invocation's, or None.
-
-    `--fast` is a promise about how the night selects, and the selection is
-    made inside the frozen snapshot rather than here. A context composed
-    without the lock the invocation carries would leave the flag saying one
-    thing and the routing doing another for the whole run, which is worse than
-    refusing before the first claim.
-    """
-
-    wanted = "time_first" if fast else "cost_first"
-    policy = snapshot.get("override_policy")
-    frozen = policy.get("objective") if isinstance(policy, dict) else None
-    if frozen == wanted:
-        return None
-    invoked = "--fast" if fast else "no --fast"
-    return (
-        f"this invocation was made with {invoked} and its frozen context "
-        f"selects for {frozen!r}: compose the context request with objective "
-        f"{wanted!r}, or invoke the run the other way"
-    )
-
-
 def cmd_route(
     cwd: Path,
-    response: Path,
+    requests: list[str],
     state_path: Path | None,
     *,
     dry_run: bool,
     model: str | None,
     deliberation: str | None,
     fast: bool,
-    starting: list[int] | None,
-    run_claimed: list[int] | None,
+    seat: str | None,
+    harness: str | None,
 ) -> int:
-    """Freeze one public model-selector route response for the rest of the run.
+    """Route this run's named execution roles, and record what came back.
 
-    Model-selector owns every selection rule behind the Interface and this verb
-    reproduces none of them. What it owns is the run's side of the seam: that
-    one context is frozen and reused, that the invocation's own locks travel
-    with it, that a decision can be found again by the role it was made for,
-    and that nothing a verdict runs on is ever decided here (ADR-0085).
+    Model-selector owns every selection rule and this verb reproduces none of
+    them. What it owns is the run's side of the seam: that the invocation's own
+    locks travel with every call and are honoured by what comes back, that a
+    decision can be found again by the role it was made for, that an escalation
+    follows a round this run actually ran, and that nothing a verdict runs on
+    is ever decided here (ADR-0085, ADR-0182).
     """
 
+    # Read every name before anything is asked of model-selector: a verdict is
+    # refused by name, and a name this Skill does not write is its own mistake
+    # rather than something to route around.
+    if not requests:
+        return fail("route decides named execution roles: pass --request=<name>")
     try:
-        answered = read_response(response)
+        named = [(request_id, *read_request(request_id)) for request_id in requests]
     except RunError as exc:
         return fail(str(exc))
 
-    # A whole-artifact refusal is not a decision about any one role, so it is
-    # read before the decisions are and freezes nothing at all (ADR-0083).
-    refusal = answered.get("artifact_refusal")
-    if refusal is not None:
-        emit_route(None, [], [{"request_id": None, **cast(dict[str, Any], refusal)}])
-        return 2
-
-    try:
-        snapshot, records = routed_response(answered)
-    except RunError as exc:
-        return fail(str(exc))
-
-    # Collect role refusals before both modes enter the shared route gates.
-    refusals = [
-        {"request_id": record.request_id, **record.decision["reason"]}
-        for record in records
-        if not record.acceptable
-    ]
-
-    # Rehydrate real state or bind a dry route to its in-memory plan frontier.
-    state = remembered_state(state_path, cwd)
-    if dry_run and starting is None:
+    # Recover what this run already decided, and what it locked when it did.
+    routing, damaged = read_routing(state_path)
+    remembered = remembered_state(state_path, cwd)
+    if not dry_run and remembered is None:
         return fail(
-            "dry routing validates the plan's starting frontier: pass "
-            "--starting once for each ticket, in plan order"
+            "routing is recorded against the run the plan wrote down, so there "
+            "is nothing to record it against yet: plan before routing"
         )
-    if dry_run:
-        state = RunState(
-            branch=state.branch if state else current_branch(cwd),
-            label=state.label if state else READY_LABEL,
-            login=state.login if state else None,
-            claimed=run_claimed or [],
-            base=state.base if state else "",
-            starting=starting or [],
-            contracts=state.contracts if state else {},
-            contract_bases=state.contract_bases if state else {},
-            run_identity=state.run_identity if state else None,
+    if (
+        routing is not None
+        and (
+            relocked := locks_refusal(
+                routing, model, deliberation, fast, "this request"
+            )
         )
-    elif starting is not None or run_claimed is not None:
-        return fail(
-            "--starting and --run-claimed carry a dry plan and are refused on "
-            "a real route"
-        )
-    elif state is None:
-        return fail(
-            "routing is frozen against the run the plan wrote down, so there is "
-            "nothing to freeze it against yet: plan before routing"
-        )
+        is not None
+    ):
+        return fail(relocked)
+    if (escalated := escalation_refusal(routing, requests)) is not None:
+        return fail(escalated)
 
-    try:
-        routing = read_routing(state_path)
-    except RunError as exc:
-        return fail(str(exc))
-
-    # The first response of a run freezes its context and its locks; every one
-    # after it is held to both, and to the frontier the plan named.
+    # A run that has recorded nothing — or whose account came back unreadable —
+    # starts one, saying in it that it was started over damage (ADR-0182).
     if routing is None:
-        if (standing := claims_refusal(state)) is not None:
-            return fail(standing)
-        if (opening := batch_refusal(state, records)) is not None:
-            return fail(opening)
-        if (mismatched := objective_refusal(snapshot, fast)) is not None:
-            return fail(mismatched)
-        # A dry route freezes nothing and so mints nothing: it reports the
-        # identity the run already carries, or none at all (ADR-0151).
         routing = Routing(
-            snapshot=snapshot,
             model=model,
             deliberation=deliberation,
             fast=fast,
             decisions=[],
-            run_identity=(state.run_identity if state else None)
+            run_identity=(remembered.run_identity if remembered else None)
             or ("" if dry_run else secrets.token_hex(32)),
+            replaced=damaged,
         )
-    elif (stale := frozen_refusal(routing, snapshot)) is not None:
-        return fail(stale)
-    elif (
-        relocked := locks_refusal(routing, model, deliberation, fast, "this response")
-    ) is not None:
-        return fail(relocked)
+    routing.seat = seat or routing.seat
+    routing.harness = harness or routing.harness
 
-    if (escalated := escalation_refusal(routing, records)) is not None:
-        return fail(escalated)
+    # Ask for one point per role, and hold every answer to the locks the
+    # developer typed before any of them reaches the account.
+    records: list[RouteRecord] = []
+    for request_id, role, ticket in named:
+        try:
+            answered = select_point(
+                cwd,
+                kind=OBSERVED_KINDS[role],
+                seat=routing.seat,
+                harness=routing.harness,
+                model=model,
+                deliberation=deliberation,
+                after=escalated_from(routing, observed_task(ticket, request_id)),
+                fast=routing.fast,
+            )
+        except RunError as exc:
+            return fail(str(exc))
+        if (unhonoured := locks_answered(model, deliberation, answered)) is not None:
+            return fail(unhonoured)
+        records.append(route_record(request_id, role, ticket, answered))
 
-    # Extend the candidate account in memory before the persistence seam.
+    # Extend the account in memory before the persistence seam, and record only
+    # a real route: a dry one reports the same decisions and writes nothing.
     routing.decisions.extend(records)
-
-    # Freeze only a real route; dry mode reports the same gated candidate.
     if not dry_run:
         try:
             write_routing(state_path, routing)
         except RunError as exc:
             return fail(str(exc))
 
-    emit_route(routing.identity, records, refusals, routing)
-    return 2 if refusals else 0
-
-
-def cmd_inherit(
-    cwd: Path,
-    requests: list[str],
-    state_path: Path | None,
-    *,
-    model: str | None,
-    deliberation: str | None,
-    fast: bool,
-) -> int:
-    """Restate the frozen account's own inheritance for later roles of this run.
-
-    Model-selector decides the first batch of every run, and freezing that
-    snapshot is what establishes what it can select. Where it could select
-    nothing — no profile, a rejected profile, no adapter able to express a
-    point, no safe candidate — every later automatic request under the same
-    snapshot would come back the same decision, so this verb copies the
-    decision the account already holds under each new name instead of paying
-    the Interface twice per wave for an answer the run holds. Nothing is
-    decided here: the decision stays model-selector's own, changed in its name
-    and nothing else, and an account holding anything else sends the caller
-    back to the Interface (ADR-0172).
-    """
-
-    # Restating is a reading of the frozen account, so it needs one to read.
-    if remembered_state(state_path, cwd) is None:
-        return fail(
-            "routing is frozen against the run the plan wrote down, so there is "
-            "nothing to restate from yet: plan before routing"
-        )
-    try:
-        routing = read_routing(state_path)
-    except RunError as exc:
-        return fail(str(exc))
-    if routing is None:
-        return fail(
-            "nothing is frozen yet, and the first batch of a run is "
-            "model-selector's to decide: route it through the Interface"
-        )
-    if (
-        relocked := locks_refusal(routing, model, deliberation, fast, "this request")
-    ) is not None:
-        return fail(relocked)
-
-    # Only an inheritance the snapshot itself accounts for may be restated.
-    reason = frozen_inheritance(routing.decisions)
-    if reason is None:
-        return fail(
-            f"this run's frozen account holds a selection or an inheritance its "
-            f"request earned, so {', '.join(requests)} are model-selector's to "
-            "decide: route them through the Interface"
-        )
-
-    # Copy the frozen decision under each new name, refusing what no
-    # inheritance can answer before anything is copied.
-    frozen = routing.decisions[-1].decision
-    records: list[RouteRecord] = []
-    for request_id in requests:
-        if escalated_wave(request_id) is not None:
-            return fail(
-                f"{request_id} escalates a fix round, which is the one further "
-                "decision a selected seat can give: under inheritance a "
-                "changed-nothing round stops the run"
-            )
-        restated = copy.deepcopy(frozen)
-        restated["request_id"] = request_id
-        try:
-            records.append(route_record(request_id, restated))
-        except RunError as exc:
-            return fail(str(exc))
-
-    # Extend the account exactly as a routed response would have.
-    routing.decisions.extend(records)
-    try:
-        write_routing(state_path, routing)
-    except RunError as exc:
-        return fail(str(exc))
-
-    emit_route(routing.identity, records, [], routing)
+    emit_route(records, routing)
     return 0
 
 
@@ -3937,10 +3691,7 @@ def cmd_claim(cwd: Path, number: int, state_path: Path | None) -> int:
     # ticket somebody else already holds stays the ordinary refusal the wave
     # drops and replaces, and before the claim is written so that a ticket
     # nothing decided is never taken (ADR-0085).
-    try:
-        routing = read_routing(state_path)
-    except RunError as exc:
-        return fail(str(exc))
+    routing, _ = read_routing(state_path)
     unrouted = dispatch_refusal(routing, f"build-{number}", f"#{number} is claimed")
     if unrouted is not None:
         return fail(unrouted)
@@ -4823,10 +4574,7 @@ def cmd_amend(
     # role — and for its own attempt, the escalation the second one may carry
     # being no part of what the first was decided on.
     if phase == AMEND_BUILDING:
-        try:
-            routing = read_routing(state_path)
-        except RunError as exc:
-            return fail(str(exc))
+        routing, _ = read_routing(state_path)
         refused = dispatch_refusal(
             routing,
             f"amend-{number}-{attempt}",
@@ -5463,146 +5211,167 @@ def cmd_reconcile(cwd: Path, number: int, reference: str | None) -> int:
     return 0
 
 
-def observation_library_candidates(script: Path | None = None) -> tuple[Path, ...]:
-    """Return every supported location of the shared observation Library."""
-
-    here = (script or Path(__file__)).resolve().parent
-    return (
-        here.parent.parent.parent / "kntnt/library/scripts/routed_observations.py",
-        here.parent.parent / "kntnt/library/scripts/routed_observations.py",
-        here.parent / "library/scripts/routed_observations.py",
-    )
-
-
-def routed_observations() -> Any:
-    """Load the shared observation Library without reaching into another Skill."""
-
-    # Resolve repository, installed-sibling, and Skill-local layouts in order.
-    for candidate in observation_library_candidates():
-        if not candidate.exists():
-            continue
-        spec = importlib.util.spec_from_file_location(
-            "kntnt_routed_observations", candidate
-        )
-        if spec is None or spec.loader is None:
-            continue
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
-
-    raise RunError(
-        "routed observation mechanics are missing; install or update the Manager"
-    )
-
-
-def observed_task(record: RouteRecord, request_id: str) -> str:
+def observed_task(ticket: int | None, request_id: str) -> str:
     """Return the opaque identity of the work one routed attempt was an attempt at.
 
-    A number and a wave count, and nothing of what either is about: an
-    observation is statistical metadata, so the title, the body, and the branch
-    of a ticket have no reason to be in one.
+    A number and a wave count, and nothing of what either is about: a
+    measurement is statistical metadata, so the title, the body, and the branch
+    of a ticket have no reason to be near one.
     """
 
-    if record.ticket is not None:
-        return f"ticket-{record.ticket}"
+    if ticket is not None:
+        return f"ticket-{ticket}"
     named = ROUTE_REQUEST.match(request_id)
     return f"wave-{cast(re.Match[str], named)['wave']}"
+
+
+def observed_grade(outcome: str, after_failure: bool) -> float | None:
+    """Return what one verdict grades its attempt at, or None where it grades nothing.
+
+    A grade is a number rather than a verdict. Work that passed with nothing
+    failed before it is the whole of what was asked for; work that passed only
+    after a round of the same work had failed did the job and cost more than
+    one point's worth of it; work that failed bought nothing. The workflow's
+    own failures grade nothing at all and are never filed (ADR-0182).
+    """
+
+    graded = OBSERVED_OUTCOMES[outcome]
+    if graded is None or graded < 1.0:
+        return graded
+    return FURTHER_ROUND_GRADE if after_failure else 1.0
+
+
+def elapsed_seconds(started_at: str | None, completed_at: str) -> float | None:
+    """Return how long one attempt ran, or None where an instant is missing."""
+
+    started, completed = _instant(started_at), _instant(completed_at)
+    if started is None or completed is None:
+        return None
+    return (completed - started).total_seconds()
+
+
+def observed_measurement(
+    routing: Routing,
+    record: RouteRecord,
+    grade: float | None,
+    served: str | None,
+    tokens: dict[str, float | None],
+    started_at: str | None,
+    completed_at: str,
+) -> dict[str, Any] | None:
+    """Build what this run files about one attempt, or None where it files nothing.
+
+    A measurement is keyed by the kind of work, the model, and the deliberation
+    it ran at, and those three are the whole of its identity — everything the
+    old frozen provenance carried existed to make a snapshot auditable, and
+    there is no snapshot. What is left is what this run already holds without
+    reading anything of model-selector's: the point that ran, the label the
+    work is reported under, the grade an independent verdict established, what
+    the environment exposed of the tokens, and how long it took (ADR-0182).
+
+    Two attempts file nothing. One the workflow rather than the model failed is
+    not a measurement of the model, and one whose point cannot be named is a
+    measurement of nothing.
+    """
+
+    if grade is None or not served:
+        return None
+
+    decision = record.decision
+    channel = cast(dict[str, Any], decision.get("channel") or {})
+    return {
+        "attempt_id": str(decision.get("attempt_id") or record.request_id),
+        "at": completed_at,
+        "kind": OBSERVED_KINDS[record.role],
+        "label": record.workload_cohort,
+        "model": served,
+        "deliberation": decision.get("deliberation"),
+        "harness": routing.harness,
+        "channel": channel.get("pay"),
+        "grade": grade,
+        "graded_by": OBSERVED_AUTHORITY,
+        "tokens": tokens,
+        "seconds": elapsed_seconds(started_at, completed_at),
+        "routed": not record.inherited,
+    }
 
 
 def observed_attempt(
     routing: Routing,
     record: RouteRecord,
-    request_id: str,
     outcome: str,
     started_at: str | None,
-    measurements: dict[str, Any],
+    tokens: dict[str, float | None],
     commit: str | None,
     resolved_model: str | None,
 ) -> dict[str, Any]:
     """Build the completed routed attempt one external verdict established.
 
-    Everything here is either the frozen decision itself, an identity of the
-    thing the attempt was at, or a fact the verdict and the environment gave.
-    The exact point, the mappings, the evidence class, and the provenance ride
-    along inside the decision, because model-selector owns what they mean.
+    The run's own account of the attempt, and beside it the measurement it
+    files — or nothing, where the verdict established a condition of the
+    workflow rather than a judgement of the work.
     """
 
-    # Name the workload, the attempt at it, and who established its outcome.
-    task = observed_task(record, request_id)
-    stratum = OBSERVED_STRATA[record.role]
-    result, condition, authority = OBSERVED_OUTCOMES[outcome]
+    # Name the workload, the attempt at it, and what the verdict made of it.
+    request_id = record.request_id
+    task = observed_task(record.ticket, request_id)
     kin = [
         held.request_id
         for held in routing.decisions
-        if observed_task(held, held.request_id) == task
+        if observed_task(held.ticket, held.request_id) == task
     ]
     position = kin.index(request_id)
+    failed = {
+        str(kept["attempt_id"])
+        for kept in routing.attempts
+        if kept.get("outcome") == "fail"
+    }
+    grade = observed_grade(outcome, bool(failed.intersection(kin[:position])))
+    completed_at = (
+        datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
+    )
 
     # Say which point actually served, where the environment named another.
-    decision = record.decision
-    launch = cast(dict[str, Any], decision.get("launch") or {})
-    inherited = cast(dict[str, Any], decision.get("inheritance") or {})
-    routed_model = launch.get("model") or cast(
-        dict[str, Any], inherited.get("main_seat") or {}
-    ).get("model")
+    routed_model = str(record.decision.get("model") or "") or None
     served = resolved_model or routed_model
 
     return {
         "attempt_id": request_id,
         "prior_attempt_id": kin[position - 1] if position else None,
-        "session_identity": "session-"
-        + hashlib.sha256(f"{routing.identity}|{ROUTING_FILE}".encode()).hexdigest()[
-            :16
-        ],
         "run_identity": routing.run_identity or None,
         "task_identity": task,
-        "workload_stratum": stratum,
+        "workload_stratum": OBSERVED_STRATA[record.role],
         "stage": record.stage,
         "workload_cohort": record.workload_cohort,
         "workload_tags": list(record.workload_tags),
         "attempt_index": position + 1,
-        "harness": routing.snapshot["harness"],
-        "benchmark": {
-            "key": f"orchestrate-{stratum.replace('_', '-')}",
-            "name": "orchestrate",
-            "version": None,
-            "cohort": None,
-            "tags": [],
-        },
-        "decision": decision,
-        "outcome": {
-            "result": result,
-            "authority": authority,
-            "checker": (
-                None
-                if condition is not None
-                else {"identity": OBSERVED_CHECKERS[record.role], "independent": True}
-            ),
-            "condition": condition,
-            "scores": None,
-        },
+        "inherited": record.inherited,
+        "outcome": outcome,
+        "grade": grade,
         "resolution": {
             "model": served,
             "fallback_from": routed_model if served != routed_model else None,
         },
         "started_at": started_at,
-        "completed_at": datetime.now(UTC)
-        .isoformat(timespec="seconds")
-        .replace("+00:00", "Z"),
-        "measurements": measurements,
+        "completed_at": completed_at,
         "artifact_hashes": [] if commit is None else [f"sha1:{commit}"],
+        "measurement": observed_measurement(
+            routing, record, grade, served, tokens, started_at, completed_at
+        ),
     }
 
 
-def read_measurements(path: str | None) -> dict[str, Any]:
-    """Return the usage, cost, quota, and latency facts the environment exposed.
+def read_measurements(path: str | None) -> dict[str, float | None]:
+    """Return the token counts the environment exposed, one category at a time.
 
-    What is not there stays absent rather than becoming a zero: an unmeasured
-    attempt is a cheaper-looking one only if absence is read as nothing spent.
+    Copied by name onto the closed set of categories a measurement carries, so
+    nothing else in the file the session wrote reaches the store. What is not
+    there stays absent rather than becoming a zero: an unmeasured attempt is a
+    cheaper-looking one only if absence is read as nothing spent (ADR-0182).
     """
 
     if path is None:
-        return {}
+        return dict.fromkeys(TOKEN_CATEGORIES)
 
     try:
         exposed = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -5610,7 +5379,17 @@ def read_measurements(path: str | None) -> dict[str, Any]:
         raise RunError(f"{path} does not hold exposed measurements: {exc}") from exc
     if not isinstance(exposed, dict):
         raise RunError(f"{path} must hold one object of exposed measurements")
-    return cast(dict[str, Any], exposed)
+
+    counted = cast(dict[str, Any], exposed)
+    return {
+        category: (
+            float(counted[category])
+            if isinstance(counted.get(category), (int, float))
+            and not isinstance(counted.get(category), bool)
+            else None
+        )
+        for category in TOKEN_CATEGORIES
+    }
 
 
 def _import_details() -> dict[str, list[Any]]:
@@ -5621,7 +5400,6 @@ def _import_details() -> dict[str, list[Any]]:
         "identically_skipped": [],
         "conflicting": [],
         "refused": [],
-        "standing_policy": [],
     }
 
 
@@ -5656,13 +5434,32 @@ def _import_refusal(attempt_id: str, code: str, detail: str) -> dict[str, list[A
     return result
 
 
-def _automatic_import(attempt: dict[str, Any]) -> dict[str, list[Any]]:
-    """Import one eligible attempt without letting evidence stop the run."""
+def _reported_identities(reported: Any) -> list[tuple[str, str]]:
+    """Read one of the record report's three lists into identities and reasons.
 
-    # Convert every Library failure into the stable non-fatal import account.
+    The report crosses a process boundary, so its shape is checked rather than
+    assumed: a row is the identity and why it was treated that way, and a row
+    that is neither is reported under whatever of it can be read.
+    """
+
+    rows: list[tuple[str, str]] = []
+    for row in reported if isinstance(reported, list) else []:
+        if isinstance(row, (list, tuple)) and len(row) == 2:
+            rows.append((str(row[0]), str(row[1])))
+        else:
+            rows.append((str(row), ""))
+    return rows
+
+
+def _automatic_import(attempt: dict[str, Any]) -> dict[str, list[Any]]:
+    """File one attempt's measurement without letting evidence stop the run."""
+
+    # Convert every failure of the seam into the stable non-fatal account: the
+    # work the row describes is already done, and evidence is not a reason to
+    # fail it (ADR-0182).
     try:
         return _automatic_import_unchecked(attempt)
-    except Exception as exc:  # noqa: BLE001 - ledger failure never stops the run
+    except Exception as exc:  # noqa: BLE001 - a store failure never stops the run
         return _import_refusal(
             str(attempt.get("attempt_id") or "unknown"),
             "automatic_import_failed",
@@ -5670,90 +5467,58 @@ def _automatic_import(attempt: dict[str, Any]) -> dict[str, list[Any]]:
         )
 
 
-def _automatic_import_unchecked(
-    attempt: dict[str, Any],
-) -> dict[str, list[Any]]:
-    """Import one eligible attempt and reduce expected Library responses."""
+def _automatic_import_unchecked(attempt: dict[str, Any]) -> dict[str, list[Any]]:
+    """File one attempt's measurement and reduce the report that comes back."""
 
+    # Only an externally judged attempt is filed. An attempt the workflow
+    # rather than the model failed carries no measurement to begin with.
     attempt_id = str(attempt["attempt_id"])
-    try:
-        library = routed_observations()
-        emitted = library.observe(
-            {"schema_version": OBSERVATION_SCHEMA_VERSION, "attempts": [attempt]}
-        )
-    except (
-        AttributeError,
-        ImportError,
-        KeyError,
-        OSError,
-        RuntimeError,
-        TypeError,
-        ValueError,
-    ) as exc:
-        return _import_refusal(attempt_id, "automatic_import_failed", str(exc))
-
-    # Preserve process and per-attempt refusals without reaching the ledger.
-    if artifact_refusal := emitted.get("artifact_refusal"):
-        return _import_refusal(
-            attempt_id,
-            str(artifact_refusal.get("code") or "invalid_artifact"),
-            str(artifact_refusal.get("detail") or "Observation emission failed."),
-        )
-    refusals = [
-        {
-            "attempt_id": str(refusal.get("attempt_id") or attempt_id),
-            "code": str(refusal.get("code") or "observation_refused"),
-            "detail": str(refusal.get("detail") or "Observation emission failed."),
-        }
-        for refusal in emitted.get("refusals", [])
-    ]
-    if refusals:
-        result = _import_details()
-        result["refused"] = refusals
-        return result
-
-    # Import only what the Library calls machine-judged, which is the one
-    # eligibility rule both routed callers read (issue #222).
-    observations = library.machine_judged(emitted.get("observations", []))
-    if not observations:
+    measurement = attempt.get("measurement")
+    if not isinstance(measurement, dict):
         return _import_details()
 
-    try:
-        recorded = library.record(
-            {
-                "schema_version": OBSERVATION_SCHEMA_VERSION,
-                "observations": observations,
-            },
-            Path.home() / ".kntnt" / "model-selector",
+    # Hand the row over as a file, which is the shape the entry point reads.
+    script = model_selector_script(RECORD_SCRIPT)
+    started_from = selector_home()
+    with tempfile.TemporaryDirectory(prefix="kntnt-orchestrate-") as scratch:
+        filed = Path(scratch) / "measurement.json"
+        filed.write_text(json.dumps([measurement]) + "\n", encoding="utf-8")
+        recorded = subprocess.run(
+            ["uv", "run", str(script), str(filed)],
+            cwd=started_from,
+            text=True,
+            capture_output=True,
+            check=False,
         )
-    except (
-        AttributeError,
-        KeyError,
-        OSError,
-        RuntimeError,
-        TypeError,
-        ValueError,
-    ) as exc:
-        return _import_refusal(attempt_id, "automatic_import_failed", str(exc))
+    if recorded.returncode != 0:
+        return _import_refusal(
+            attempt_id,
+            "automatic_import_failed",
+            recorded.stderr.strip() or recorded.stdout.strip() or "record refused",
+        )
 
-    # Keep successful, duplicate, conflicting, and other refused identities.
+    try:
+        report = json.loads(recorded.stdout)
+    except ValueError as exc:
+        return _import_refusal(attempt_id, "automatic_import_failed", str(exc))
+    if not isinstance(report, dict):
+        return _import_refusal(
+            attempt_id, "automatic_import_failed", "record reported no result"
+        )
+
+    # Keep the accepted, the already-held, and the refused identities apart.
+    filing = cast(dict[str, Any], report)
     result = _import_details()
-    result["imported"] = [str(key) for key in recorded.get("accepted", [])]
-    result["identically_skipped"] = [str(key) for key in recorded.get("skipped", [])]
-    result["standing_policy"] = list(recorded.get("standing_policy", []))
-    for rejection in recorded.get("rejected", []):
-        run_key = rejection.get("run_key")
-        code = str(rejection.get("code") or "record_refused")
-        if run_key is not None and code == "conflicting_identity":
-            result["conflicting"].append(str(run_key))
-        else:
-            result["refused"].append(
-                {
-                    "attempt_id": attempt_id,
-                    "code": code,
-                    "detail": str(rejection.get("detail") or "Import was refused."),
-                }
-            )
+    result["imported"] = [
+        identity for identity, _ in _reported_identities(filing.get("accepted"))
+    ]
+    result["identically_skipped"] = [
+        identity for identity, _ in _reported_identities(filing.get("skipped"))
+    ]
+    result["refused"] = [
+        {"attempt_id": identity, "code": "record_refused", "detail": reason}
+        for identity, reason in _reported_identities(filing.get("rejected"))
+    ]
     return result
 
 
@@ -5784,7 +5549,7 @@ def _write_attempt_account(path: Path | None, routing: Routing) -> Path:
         written.write_text(
             json.dumps(
                 {
-                    "schema_version": OBSERVATION_SCHEMA_VERSION,
+                    "schema_version": ATTEMPTS_SCHEMA_VERSION,
                     "attempts": completed,
                 },
                 indent=2,
@@ -5822,10 +5587,10 @@ def cmd_observe(
     # Refuse a verdict by name before the account is read at all: the seat a
     # verdict runs on is inherited, so there is no attempt of one to observe.
     try:
-        route_record(request_id, {})
-        routing = read_routing(state_path)
+        read_request(request_id)
     except RunError as exc:
         return fail(str(exc))
+    routing, _ = read_routing(state_path)
 
     unrouted = dispatch_refusal(routing, request_id, f"{request_id} has completed")
     if unrouted is not None:
@@ -5843,17 +5608,10 @@ def cmd_observe(
     except RunError as exc:
         return fail(str(exc))
 
-    if not isinstance(held.snapshot.get("harness"), dict):
-        return fail(
-            "this run's frozen snapshot names no Harness, and an observation is "
-            "of the exact Harness its attempt ran on"
-        )
-
     try:
         attempt = observed_attempt(
             held,
             decided,
-            request_id,
             outcome,
             started_at,
             read_measurements(metrics),
@@ -5889,12 +5647,11 @@ def cmd_observe(
             "ticket": decided.ticket,
             "stratum": attempt["workload_stratum"],
             "attempt_index": attempt["attempt_index"],
-            "outcome": attempt["outcome"]["result"],
-            "condition": attempt["outcome"]["condition"],
+            "outcome": attempt["outcome"],
+            "grade": attempt["grade"],
             "recorded": recorded,
             "observed": len(held.attempts),
             "attempts": str(written),
-            "artifact": str(cast(Path, observation_file(state_path))),
         }
     )
     return 0
@@ -5903,10 +5660,10 @@ def cmd_observe(
 def _routed_attempt(
     request_id: str, state_path: Path | None, boundary: str
 ) -> tuple[Routing, RouteRecord]:
-    """Return the frozen decision one internal lifecycle boundary addresses."""
+    """Return the recorded decision one internal lifecycle boundary addresses."""
 
-    route_record(request_id, {})
-    routing = read_routing(state_path)
+    read_request(request_id)
+    routing, _ = read_routing(state_path)
     refused = dispatch_refusal(routing, request_id, boundary)
     if refused is not None:
         raise RunError(refused)
@@ -5997,7 +5754,6 @@ def cmd_attempt_finish(
     offered = observed_attempt(
         routing,
         record,
-        request_id,
         outcome,
         cast(str | None, standing.get("started_at")),
         measurements,
@@ -6082,12 +5838,7 @@ def observed_details(
         imported = attempt.get("import")
         if not isinstance(imported, dict):
             continue
-        for key in (
-            "imported",
-            "identically_skipped",
-            "conflicting",
-            "standing_policy",
-        ):
+        for key in ("imported", "identically_skipped", "conflicting"):
             values = imported.get(key)
             if isinstance(values, list):
                 _extend_unique(details[key], values)
@@ -6105,45 +5856,11 @@ def observed_details(
                 ],
             )
 
-    # The ledger retains every evaluated Cohort; the report shows the movements.
-    escalated = _escalated_cohorts(details.pop("standing_policy"))
     return {
         "attempts": str(attempts_file(state_path)) if completed else None,
         "observed": len(completed),
         **details,
-        "standing_policy": escalated,
     }
-
-
-def _escalated_cohorts(evaluated: list[Any]) -> list[dict[str, Any]]:
-    """Return the Cohorts this run's own evidence ratcheted, and the way back.
-
-    Only the movements: a Cohort the threshold left where it was is an outcome
-    the ledger accounted for and not a fact the night has to report. Each one
-    carries the count behind it and the single command that undoes it, so the
-    developer reads the decision and its reversal in the same line.
-    """
-
-    moved: list[dict[str, Any]] = []
-    for entry in evaluated:
-        if not isinstance(entry, dict) or entry.get("outcome") != POLICY_MOVED:
-            continue
-        row = entry.get("row")
-        row = row if isinstance(row, dict) else {}
-        cohort = str(entry.get("workload_cohort"))
-        moved.append(
-            {
-                "workload_cohort": cohort,
-                "from": row.get("from"),
-                "to": row.get("to"),
-                "failures": entry.get("failures"),
-                "window": entry.get("window"),
-                "threshold": entry.get("threshold"),
-                "run_keys": entry.get("run_keys"),
-                "reset": f"{POLICY_RESET_COMMAND} {cohort}",
-            }
-        )
-    return moved
 
 
 def repository_identity(cwd: Path) -> str:
@@ -6347,8 +6064,7 @@ def reported_flakes(cwd: Path, state_path: Path | None) -> list[dict[str, Any]]:
 def _attempt_passed(attempt: dict[str, Any]) -> bool:
     """Say whether one completed attempt carries an external passing verdict."""
 
-    outcome = attempt.get("outcome")
-    return isinstance(outcome, dict) and outcome.get("result") == "pass"
+    return attempt.get("outcome") == "pass"
 
 
 def _instant(value: Any) -> datetime | None:
@@ -6499,7 +6215,7 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     # decisions a night was worked under are auditable exactly, and where they
     # are gone the account says so rather than reading what is current back as
     # though it had been (ADR-0085).
-    routing, routing_reason, _ = frozen_routing(state_path)
+    routing, routing_reason = frozen_routing(state_path)
 
     # Assemble the complete durable account from the facts read above.
     timing = verified_pass_timing(routing)
@@ -6597,15 +6313,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     add_scope_flag(plan)
     add_shared_flags(plan)
 
-    route = sub.add_parser("route", help="Freeze one model-selector route response.")
-    route.add_argument("--response", type=Path)
-    route.add_argument("--inherit", action="store_true")
+    route = sub.add_parser("route", help="Route this run's execution roles.")
     route.add_argument("--request", action="append")
+    route.add_argument("--seat")
+    route.add_argument("--harness")
     route.add_argument("--dry-run", action="store_true")
     route.add_argument("--model")
     route.add_argument("--fast", action="store_true")
-    route.add_argument("--starting", action="append", type=int)
-    route.add_argument("--run-claimed", action="append", type=int)
     add_deliberation_flag(route)
     add_shared_flags(route)
 
@@ -6727,44 +6441,16 @@ def main(argv: list[str] | None = None) -> int:
             approval=args.approval,
         )
     if args.verb == "route":
-        # The two forms read different things and are refused where mixed:
-        # a response is model-selector's answer, an inheritance is the run's.
-        if args.inherit or args.request:
-            if not (args.inherit and args.request):
-                return fail(
-                    "--inherit restates the frozen account for one --request per "
-                    "role, and --request accompanies --inherit"
-                )
-            if args.response is not None or args.dry_run or args.starting:
-                return fail(
-                    "--inherit reads the frozen account and no response, so it "
-                    "takes no --response, --dry-run, --starting, or --run-claimed"
-                )
-            if args.run_claimed:
-                return fail("--inherit takes no --run-claimed: it is not a dry route")
-            return cmd_inherit(
-                cwd,
-                args.request,
-                state_path,
-                model=args.model,
-                deliberation=args.deliberation,
-                fast=args.fast,
-            )
-        if args.response is None:
-            return fail(
-                "route reads a model-selector response: pass --response=<path>, "
-                "or --inherit with one --request per role"
-            )
         return cmd_route(
             cwd,
-            args.response,
+            args.request or [],
             state_path,
             dry_run=args.dry_run,
             model=args.model,
             deliberation=args.deliberation,
             fast=args.fast,
-            starting=args.starting,
-            run_claimed=args.run_claimed,
+            seat=args.seat,
+            harness=args.harness,
         )
     if args.verb == "claim":
         result = cmd_claim(cwd, args.ticket, state_path)

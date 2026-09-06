@@ -2,7 +2,7 @@
 
 ## NAME
 
-model-selector status - report profile and evidence readiness
+model-selector status - report what is known, how fresh it is, and what is wanted from you
 
 ## SYNOPSIS
 
@@ -10,25 +10,27 @@ model-selector status - report profile and evidence readiness
 
 ## DESCRIPTION
 
-`model-selector status` reports the active profile, evidence vintage, due sources, coverage gaps, provisional facts, low-confidence capability priors, configuration selections, and capture's own health without network access or writes.
+Four accounts, none of which asks a question, changes anything, or reaches the network.
 
-The report distinguishes evidence that is absent, stale by the shipped cadence, provisional, or inapplicable rather than collapsing those states into one readiness value. Cadences are shipped with the Skill and the profile cannot override them.
+The profile: when it was answered, which Harnesses, providers, models and payment channels it holds. Where it is absent or unreadable, that is said plainly, along with the consequence — every catalogue model the detected Harnesses can reach is treated as available until you run `setup`. A profile older than ninety days, or a provider in the catalogue you have never been asked about, is named here too.
 
-`status` is also where unattended refresh is reported. Enabling this Skill installs a session-end pass that conditionally re-retrieves the non-commercial sources that are due; this section names every due source that pass may never retrieve — commercial terms, gateway rate cards, and any source kind or address it does not recognise — with `/model-selector update` as the command that resolves each. Where no source state exists yet, it reports that unattended refresh has nothing to check and that a typed `update` establishes the sources.
+The catalogue: which sources are current, which have fallen due, and which have never been established at all. The unattended pass that follows a session is reported here and nowhere else, deliberately — a reminder placed where a model reads it would change the thing being measured.
 
-The same section names every enabled model selection that no benchmark has ranked, and every newer family version a previous `update` discovered and left excluded — the first resolved by `update`, the second by `config add model` or `config edit model`, adoption being your own act. Everything here is a report: `status` asks nothing, refuses nothing, and stops nothing.
+The measurement: how many units have been recorded, over what span of dates, how many are waiting to be graded, and when the grader last ran.
 
-Capture's own health is adapter presence per Harness this collection has an adapter for (`healthy`, `gated`, `degraded`, `absent`, or `unsatisfied`), whether that Harness's own finished session record can supply measurements at all, and how many bytes the capture store holds. This section performs no network request and writes nothing.
+The integration, per Harness this collection has an adapter for: `healthy`, `gated` where the Harness is holding it behind a trust decision this collection will not make for you, `degraded`, `absent`, or `unsatisfied` where that Harness's lifecycle cannot carry the contract at all. Beside it, whether that Harness's finished session record can supply measurements, and how much the capture store holds.
+
+Everything here is a report. Nothing on this page stops a run.
 
 ## OPTIONS
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
+Use *PATH* as the profile, catalogue and measurement directory instead of `~/.kntnt/model-selector/`.
 
 ## DIAGNOSTICS
 
-An absent or invalid profile is reported. An unsupported option is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector status --help`.
+An absent or unreadable profile is reported rather than treated as an error. An option with no work to do here is refused rather than ignored: the Skill names the error, prints this SYNOPSIS, changes nothing, and points at `/model-selector status --help`.
 
 ## INVOCATION ENVELOPE
 
@@ -38,8 +40,8 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the Skill's dependency check.
+`uv` runs the two readers this page renders: the refresh pass's own account of its sources, and the capture integration's account of its health.
 
 ## SEE ALSO
 
-**/model-selector update --help**, **/model-selector config --help**, **/model-selector recommend --help**
+**/model-selector setup --help**, **/model-selector update --help**, **/model-selector evidence --help**

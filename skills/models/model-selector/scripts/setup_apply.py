@@ -1,0 +1,293 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = []
+# ///
+"""Write the answers `setup` gathered, and make the machine able to act on them.
+
+The interview belongs to the conversation: only a person can say which
+harnesses they use, which providers they pay, and how. This is the other half
+of it — the half that has to be a script, because writing a profile means
+validating it against the catalogue, replacing a file atomically, and then
+regenerating the agent definitions that make a chosen point startable at all.
+
+Nothing here asks anything. It is handed a profile as JSON, it says whether
+that profile is one this machine can act on, and where it is, it writes it and
+brings `~/.claude/agents/` into line with it. A profile it cannot act on is
+reported field by field and nothing is written, because half a profile is
+worse than the fallback: the fallback at least says it is one.
+
+The report names the directory it wrote definitions into and, where it had to
+create that directory, says why that matters. Claude Code reads the agents
+directory when a session starts, so definitions written into a directory that
+did not exist a moment ago reach the sessions started from now on rather than
+the one running this.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from collections.abc import Sequence
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
+
+import catalogue
+import launch
+import profiles
+from catalogue import Catalogue
+from profiles import PAYMENTS, Channel, Profile
+
+# Where Claude Code reads the subagent definitions this Skill generates. It is
+# the one directory outside its own data this Skill ever writes into, and it
+# writes only files carrying its own prefix.
+AGENTS_DIRECTORY = Path(".claude") / "agents"
+
+# What a caller has to know about a directory that did not exist until now.
+# Said in the report rather than left for somebody to discover from a subagent
+# the running session cannot name.
+CREATED_NOTE = (
+    "the agents directory did not exist and was created; Claude Code reads it "
+    "when a session starts, so these definitions are available to sessions "
+    "started from now on rather than to one already running"
+)
+
+
+def _now() -> str:
+    """Return this instant, as a profile dates the answers it holds."""
+
+    return datetime.now(UTC).isoformat().replace("+00:00", "Z")
+
+
+def _text(raw: Any) -> str | None:
+    """Return a non-empty string, or None for anything else including null."""
+
+    return raw if isinstance(raw, str) and raw.strip() else None
+
+
+def _number(raw: Any) -> float | None:
+    """Return a float, or None for anything that is not a number."""
+
+    if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+        return None
+    return float(raw)
+
+
+def _names(raw: Any, field: str, problems: list[str]) -> tuple[str, ...]:
+    """Return one list of names, complaining where it is not one."""
+
+    if not isinstance(raw, list):
+        problems.append(f"{field} is missing or is not a list")
+        return ()
+    named = [name for item in raw if (name := _text(item)) is not None]
+    if len(named) != len(raw):
+        problems.append(f"{field} holds something that is not a name")
+    return tuple(dict.fromkeys(named))
+
+
+def _channels(
+    raw: Any, harnesses: Sequence[str], problems: list[str]
+) -> tuple[Channel, ...]:
+    """Return the ways of paying, complaining about each one that cannot be read."""
+
+    if raw is None:
+        return ()
+    if not isinstance(raw, list):
+        problems.append("channels is not a list")
+        return ()
+
+    read: list[Channel] = []
+    for index, entry in enumerate(raw):
+        if not isinstance(entry, dict):
+            problems.append(f"channel {index} is not an object")
+            continue
+        provider = _text(entry.get("provider"))
+        harness = _text(entry.get("harness"))
+        pay = _text(entry.get("pay"))
+        if provider is None or harness is None:
+            problems.append(f"channel {index} names no provider or no harness")
+            continue
+        if pay not in PAYMENTS:
+            problems.append(
+                f"channel {index} pays by {pay!r}, which is not one of {PAYMENTS}"
+            )
+            continue
+        if harness not in harnesses:
+            problems.append(
+                f"channel {index} pays on {harness!r}, which the profile does not use"
+            )
+            continue
+        read.append(
+            Channel(
+                provider=provider,
+                harness=harness,
+                pay=pay,
+                plan=_text(entry.get("plan")),
+                tier=_text(entry.get("tier")),
+                monthly=_number(entry.get("monthly")),
+                currency=_text(entry.get("currency")),
+                gateway=_text(entry.get("gateway")),
+            )
+        )
+    return tuple(read)
+
+
+def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
+    """Return the profile *raw* describes, or the reasons it describes none.
+
+    Validated against the catalogue rather than against a schema: a model id
+    nothing in the catalogue answers to is a typo that would silently narrow
+    every future answer, and a provider nobody sells is a channel that can
+    never pay for anything.
+    """
+
+    problems: list[str] = []
+    if not isinstance(raw, dict):
+        return None, ["the profile is not a JSON object"]
+    if not cat.models:
+        return None, [
+            cat.problem or "the catalogue is empty, so nothing can be validated"
+        ]
+
+    harnesses = _names(raw.get("harnesses"), "harnesses", problems)
+    providers = _names(raw.get("providers"), "providers", problems)
+    models = _names(raw.get("models"), "models", problems)
+    channels = _channels(raw.get("channels"), harnesses, problems)
+
+    known_models = {model.id for model in cat.models}
+    known_providers = {model.provider for model in cat.models}
+    problems += [
+        f"the catalogue holds no model {name!r}"
+        for name in models
+        if name not in known_models
+    ]
+    problems += [
+        f"the catalogue holds no provider {name!r}"
+        for name in providers
+        if name not in known_providers
+    ]
+    problems += [
+        f"channel {index} pays {channel.provider!r}, which the catalogue does not know"
+        for index, channel in enumerate(channels)
+        if channel.provider not in known_providers
+    ]
+
+    if not harnesses:
+        problems.append("the profile names no harness, so nothing can be started")
+    if not models:
+        problems.append("the profile enables no model, so nothing can be chosen")
+    if problems:
+        return None, problems
+
+    return (
+        Profile(
+            harnesses=harnesses,
+            providers=providers,
+            models=models,
+            channels=channels,
+            answered_at=_text(raw.get("answered_at")) or _now(),
+            source="file",
+            problem=None,
+        ),
+        [],
+    )
+
+
+def apply(path: Path, data_dir: Path, agents: Path) -> dict[str, Any]:
+    """Validate one supplied profile, write it, and sync the definitions."""
+
+    here = Path(__file__).resolve().parent.parent
+    cat = catalogue.load(data_dir, here)
+
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as problem:
+        return {"ok": False, "problems": [f"{path} could not be read: {problem}"]}
+
+    profile, problems = validate(raw, cat)
+    if profile is None:
+        return {"ok": False, "problems": problems}
+
+    profiles.write(data_dir, profile)
+    synced = launch.sync_definitions(agents, launch.definitions(profile, cat))
+
+    return {
+        "ok": True,
+        "problems": [],
+        "profile": {
+            "path": str(data_dir / profiles.PROFILE_FILE),
+            "answered_at": profile.answered_at,
+            "harnesses": list(profile.harnesses),
+            "providers": list(profile.providers),
+            "models": len(profile.models),
+            "channels": len(profile.channels),
+        },
+        "definitions": {
+            "directory": str(agents),
+            "written": synced.written,
+            "unchanged": synced.unchanged,
+            "removed": synced.removed,
+            "created_directory": synced.created_directory,
+        },
+        "note": CREATED_NOTE if synced.created_directory else None,
+    }
+
+
+def _agents_directory(named: str | None) -> Path:
+    """Return where the generated definitions go, under a home this may not have."""
+
+    if named:
+        return Path(named).expanduser()
+    try:
+        return Path.home() / AGENTS_DIRECTORY
+    except RuntimeError:
+        return Path.cwd() / AGENTS_DIRECTORY
+
+
+def _data_dir(named: str | None) -> Path:
+    """Return the data directory, defaulting under a home this may not have."""
+
+    if named:
+        return Path(named).expanduser()
+    try:
+        return Path.home() / ".kntnt" / "model-selector"
+    except RuntimeError:
+        return Path.cwd() / ".kntnt" / "model-selector"
+
+
+def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Read the command line. The only thing in this Skill that may fail."""
+
+    parser = argparse.ArgumentParser(
+        prog="setup_apply.py",
+        description="Write the profile `setup` gathered and sync the agent definitions.",
+    )
+    parser.add_argument("--data")
+    parser.add_argument("--agents")
+    parser.add_argument("path")
+    return parser.parse_args(argv)
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """Apply one profile, print what happened, and exit 0."""
+
+    args = _parse(argv)
+    try:
+        report = apply(
+            Path(args.path).expanduser(),
+            _data_dir(args.data),
+            _agents_directory(args.agents),
+        )
+    except Exception as failure:  # noqa: BLE001 - a report is never worth a traceback
+        report = {
+            "ok": False,
+            "problems": [f"the profile could not be applied: {failure!r}"],
+        }
+
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

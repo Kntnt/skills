@@ -12,7 +12,7 @@ import urllib.request
 from datetime import UTC, datetime
 from email.message import Message
 from pathlib import Path
-from typing import Any, Self
+from typing import Any, Self, cast
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 MODEL_SELECTOR: Path = REPO_ROOT / "skills" / "models" / "model-selector"
@@ -26,15 +26,37 @@ NOW = datetime(2026, 9, 5, 12, 0, 0, tzinfo=UTC)
 STILL_FRESH = "2026-09-04T12:00:00Z"
 
 
+def _sibling(stem: str) -> Any:
+    """Load one engine module under the plain name its siblings import it by."""
+
+    if stem in sys.modules:
+        return sys.modules[stem]
+    spec = importlib.util.spec_from_file_location(
+        stem, MODEL_SELECTOR / "scripts" / f"{stem}.py"
+    )
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[stem] = module
+    spec.loader.exec_module(module)
+    return module
+
+
 def _load(path: Path = REFRESH) -> Any:
     """Load one shipped module from its installed path.
 
     Registered under its own name before it executes, exactly as the shipped
     loader in `capture.py` does it: a module whose dataclasses declare string
     annotations has to be findable by name while its classes are being built.
+    Its siblings are registered first, in dependency order, so that the plain
+    imports it makes resolve to the same objects these tests hold.
     """
 
+    for stem in ("catalogue", "profiles", "evidence", "launch"):
+        _sibling(stem)
+
     name = f"model_selector_{path.stem}"
+    if name in sys.modules:
+        return sys.modules[name]
     spec = importlib.util.spec_from_file_location(name, path)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
@@ -238,11 +260,16 @@ def test_stamping_the_check_never_moves_the_next_due_date(tmp_path: Path) -> Non
     assert module.status(data, now=NOW)["counts"]["unattended_due"] == 1
 
 
-def test_a_commercial_source_is_never_retrieved_and_its_row_is_untouched(
+def test_a_price_bearing_source_is_now_retrieved_like_any_other(
     tmp_path: Path,
 ) -> None:
-    """An unattended pass may change what a model is judged capable of, never
-    what it is judged to cost."""
+    """The rule that a pass may learn what a model can do but never what it
+    costs is reversed (ADR-0182).
+
+    A rate card is exactly what this Skill has to be current about, and what
+    bounds the pass is attribution and a budget rather than a category of fact
+    it is forbidden to look at.
+    """
 
     module = _load()
     data = _store(
@@ -250,15 +277,18 @@ def test_a_commercial_source_is_never_retrieved_and_its_row_is_untouched(
         _row(source_key="sha256:terms", kind="commercial_terms"),
         _row(source_key="sha256:card", kind="gateway_rate_card"),
     )
-    before = (data / "source-states.jsonl").read_bytes()
+    reached: list[tuple[str, float]] = []
 
-    answered = module.refresh(data, now=NOW, retrieve=_never)
+    answered = module.refresh(data, now=NOW, retrieve=_reached(module, reached))
 
-    assert (data / "source-states.jsonl").read_bytes() == before
-    assert answered["skipped"]["manual"] == 2
+    assert len(reached) == 2
+    assert answered["skipped"]["manual"] == 0
+    assert [row["last_retrieved_at"] for row in _rows(data)] == [
+        "2026-09-05T12:00:00Z"
+    ] * 2
 
 
-def test_an_unrecognised_kind_is_treated_as_commercial(tmp_path: Path) -> None:
+def test_an_unrecognised_kind_is_left_to_the_user(tmp_path: Path) -> None:
     """Fail closed, so a kind added later is safe on the day it appears."""
 
     module = _load()
@@ -484,15 +514,15 @@ def test_the_budget_stops_the_pass_and_leaves_the_rest_due(tmp_path: Path) -> No
     assert [row["last_retrieved_at"] for row in _rows(data)[1:]] == [None, None]
 
 
-def test_status_names_the_command_that_resolves_a_due_commercial_source(
+def test_status_names_the_command_that_resolves_a_source_it_may_not_fetch(
     tmp_path: Path,
 ) -> None:
-    """A due commercial source is not fetched; it is reported."""
+    """A kind nobody has taught this pass about is not fetched; it is reported."""
 
     module = _load()
     data = _store(
         tmp_path,
-        _row(source_key="sha256:terms", kind="commercial_terms"),
+        _row(source_key="sha256:new", kind="provider_incident_feed"),
         _row(source_key="sha256:ok", last_retrieved_at="2026-09-04T12:00:00Z"),
     )
 
@@ -506,8 +536,28 @@ def test_status_names_the_command_that_resolves_a_due_commercial_source(
     }
     assert reported["resolves"] == "/model-selector update"
     manual = [source for source in reported["sources"] if not source["unattended"]]
-    assert manual[0]["reason"] == "commercial"
+    assert manual[0]["reason"] == "unrecognised_kind"
     assert manual[0]["due"] is True
+
+
+def test_status_says_which_of_a_machines_sources_carry_a_price(
+    tmp_path: Path,
+) -> None:
+    """The distinction survives the reversal, because a reader wants it."""
+
+    module = _load()
+    data = _store(
+        tmp_path,
+        _row(source_key="sha256:card", kind="gateway_rate_card"),
+        _row(source_key="sha256:models", kind="model_release_index"),
+    )
+
+    priced = {
+        source["source_key"]: source["priced"]
+        for source in module.status(data, now=NOW)["sources"]
+    }
+
+    assert priced == {"sha256:card": True, "sha256:models": False}
 
 
 def test_status_retrieves_nothing_and_writes_nothing(tmp_path: Path) -> None:
@@ -717,6 +767,273 @@ def test_the_shipped_retrieval_answers_every_failure_as_unreachable(
     assert module._retrieve("https://example.invalid/a", None, None, 1.0) is None
 
 
+def _document(*models: dict[str, Any], **document: Any) -> bytes:
+    """Provide one machine-readable catalogue document, as a source serves it."""
+
+    return json.dumps({**document, "models": list(models)}).encode("utf-8")
+
+
+def _serving(module: Any, body: bytes) -> Any:
+    """Provide a retrieval that answers with one document that changed."""
+
+    def retrieve(uri: str, etag: str | None, last: str | None, timeout: float) -> Any:
+        return module.Retrieved(
+            modified=True,
+            etag=None,
+            last_modified=None,
+            content_hash="sha256:fresh",
+            body=body,
+        )
+
+    return retrieve
+
+
+def _catalogue(data: Path) -> dict[str, Any]:
+    """Return the refreshed catalogue the pass wrote under *data*."""
+
+    loaded = json.loads((data / "catalogue.json").read_text(encoding="utf-8"))
+    assert isinstance(loaded, dict)
+    return cast(dict[str, Any], loaded)
+
+
+def test_a_fetched_price_reaches_the_catalogue_with_its_source_and_its_date(
+    tmp_path: Path,
+) -> None:
+    """A rate card carried with its provenance is auditable; a bare number is not."""
+
+    module = _load()
+    data = _store(
+        tmp_path,
+        _row(kind="gateway_rate_card", reads_as="catalogue-json"),
+    )
+    body = _document(
+        {
+            "id": "example-one",
+            "provider": "example",
+            "family": "one",
+            "price": {"input": 3.0, "output": 15.0, "currency": "USD"},
+        }
+    )
+
+    answered = module.refresh(data, now=NOW, retrieve=_serving(module, body))
+
+    assert answered["catalogue"] == ["example-one"]
+    entry = _catalogue(data)["models"][0]
+    assert entry["price"]["input"] == 3.0
+    assert entry["source_url"] == "https://example.invalid/models"
+    assert entry["retrieved"] == "2026-09-05T12:00:00Z"
+
+
+def test_a_fetched_fact_that_cannot_be_attributed_is_discarded(
+    tmp_path: Path,
+) -> None:
+    """What the pass may never do is store a fact it cannot attribute.
+
+    An entry claiming a source this pass cannot use is dropped rather than
+    quietly re-attributed to whatever page it happened to arrive on.
+    """
+
+    module = _load()
+    data = _store(tmp_path, _row(reads_as="catalogue-json"))
+    body = _document(
+        {"id": "kept", "provider": "example", "family": "kept"},
+        {
+            "id": "unattributed",
+            "provider": "example",
+            "family": "unattributed",
+            "price": {"input": 1.0, "currency": "USD"},
+            "source_url": None,
+        },
+    )
+
+    answered = module.refresh(data, now=NOW, retrieve=_serving(module, body))
+
+    assert answered["catalogue"] == ["kept"]
+    assert [entry["id"] for entry in _catalogue(data)["models"]] == ["kept"]
+
+
+def test_a_price_for_a_model_the_catalogue_already_knows_lands_complete(
+    tmp_path: Path,
+) -> None:
+    """A document naming only a price is the ordinary case, and it has to load.
+
+    The catalogue's own reader rejects an entry with no provider and no
+    family, so a partial one is completed from what is already known rather
+    than written in a shape nothing can read back.
+    """
+
+    module = _load()
+    data = _store(tmp_path, _row(kind="gateway_rate_card", reads_as="catalogue-json"))
+    seeded = _load(MODEL_SELECTOR / "scripts" / "catalogue.py")
+    identifier = seeded.load(data, MODEL_SELECTOR).models[0].id
+    body = _document({"id": identifier, "price": {"input": 2.0, "currency": "USD"}})
+
+    module.refresh(data, now=NOW, retrieve=_serving(module, body))
+
+    written = seeded.load(data, MODEL_SELECTOR)
+    entry = next(model for model in written.models if model.id == identifier)
+    assert entry.price is not None
+    assert entry.price.input == 2.0
+    assert entry.family
+
+
+def test_a_model_nothing_can_place_is_not_written_to_the_catalogue(
+    tmp_path: Path,
+) -> None:
+    """An entry the reader would silently skip is not a fact worth storing."""
+
+    module = _load()
+    data = _store(tmp_path, _row(reads_as="catalogue-json"))
+    body = _document({"id": "who-knows", "price": {"input": 1.0, "currency": "USD"}})
+
+    answered = module.refresh(data, now=NOW, retrieve=_serving(module, body))
+
+    assert answered["catalogue"] == []
+    assert not (data / "catalogue.json").exists()
+
+
+def test_a_source_naming_no_reader_is_retrieved_and_never_interpreted(
+    tmp_path: Path,
+) -> None:
+    """Every source on every machine is in this state until one is registered."""
+
+    module = _load()
+    data = _store(tmp_path, _row())
+    body = _document({"id": "example-one", "provider": "example", "family": "one"})
+
+    answered = module.refresh(data, now=NOW, retrieve=_serving(module, body))
+
+    assert answered["catalogue"] == []
+    assert not (data / "catalogue.json").exists()
+
+
+def test_what_a_pass_learns_is_folded_into_what_the_catalogue_already_held(
+    tmp_path: Path,
+) -> None:
+    """A pass that learned only a price leaves every other fact standing."""
+
+    module = _load()
+    data = _store(tmp_path, _row(reads_as="catalogue-json"))
+    (data / "catalogue.json").write_text(
+        json.dumps(
+            {
+                "generated_at": "2026-08-01T00:00:00Z",
+                "models": [
+                    {
+                        "id": "example-one",
+                        "provider": "example",
+                        "family": "one",
+                        "capability": 0.8,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    body = _document({"id": "example-one", "price": {"input": 3.0, "currency": "USD"}})
+
+    module.refresh(data, now=NOW, retrieve=_serving(module, body))
+
+    entry = _catalogue(data)["models"][0]
+    assert entry["capability"] == 0.8
+    assert entry["price"]["input"] == 3.0
+
+
+def test_forcing_the_pass_checks_every_mutable_index_now(tmp_path: Path) -> None:
+    """`update --force` is what the help page advertises, so the flag does it."""
+
+    module = _load()
+    data = _store(
+        tmp_path,
+        _row(source_key="sha256:index", last_retrieved_at=STILL_FRESH),
+        _row(
+            source_key="sha256:detail",
+            kind="model_detail",
+            uri="https://example.invalid/detail",
+            last_retrieved_at=STILL_FRESH,
+        ),
+    )
+    reached: list[tuple[str, float]] = []
+
+    answered = module.refresh(
+        data, now=NOW, retrieve=_reached(module, reached), force=True
+    )
+
+    # The mutable index is brought forward; the immutable detail page says the
+    # same thing on every reading of it, so forcing it would learn nothing.
+    assert [uri for uri, _ in reached] == ["https://example.invalid/models"]
+    assert answered["forced"] is True
+    assert answered["outcomes"]["not_due"] == 1
+
+
+def test_an_unforced_pass_still_leaves_a_fresh_source_alone(tmp_path: Path) -> None:
+    """The flag is the whole of the difference, and it defaults to off."""
+
+    module = _load()
+    data = _store(tmp_path, _row(last_retrieved_at=STILL_FRESH))
+
+    answered = module.refresh(data, now=NOW, retrieve=_never)
+
+    assert answered["forced"] is False
+    assert answered["outcomes"]["not_due"] == 1
+
+
+def test_the_command_line_accepts_the_flag_the_help_page_advertises() -> None:
+    """A hint that advertises an inert flag is worse than one advertising none."""
+
+    assert _load().parse_args(["refresh", "--force"]).force is True
+    assert _load().parse_args(["refresh"]).force is False
+
+
+def test_status_says_what_the_user_may_want_to_answer_again(tmp_path: Path) -> None:
+    """It asks nothing and stops nothing; it names `setup` and stops there."""
+
+    module = _load()
+    data = _store(tmp_path, _row())
+    (data / "catalogue.json").write_text(
+        json.dumps(
+            {
+                "generated_at": "2026-09-01T00:00:00Z",
+                "models": [
+                    {"id": "example-one", "provider": "example", "family": "one"}
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (data / "profile.json").write_text(
+        json.dumps(
+            {
+                "harnesses": ["claude-code"],
+                "providers": [],
+                "models": [],
+                "channels": [],
+                "answered_at": "2026-01-01T00:00:00Z",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    reported = module.status(data, now=NOW)["profile"]
+
+    assert "example-one" in reported["adoptable"]
+    assert "example" in reported["unasked_providers"]
+    assert "was answered more than" in reported["says"]
+    assert "never asked about" in reported["says"]
+    assert "/model-selector setup" in reported["says"]
+
+
+def test_status_says_nothing_where_the_profile_has_nothing_to_answer(
+    tmp_path: Path,
+) -> None:
+    """A nudge nobody needs is a reminder that teaches people to ignore them."""
+
+    module = _load()
+    data = _store(tmp_path, _row())
+
+    assert module.status(data, now=NOW)["profile"]["says"] is None
+
+
 KIND_ROW = re.compile(r"^\| `([a-z_]+)` \|", re.MULTILINE)
 
 
@@ -741,89 +1058,16 @@ def test_no_shipped_surface_says_the_configuration_overrides_a_cadence() -> None
             assert claim not in text, f"{page.name} still says {claim!r}"
 
 
-def test_the_reference_names_the_file_the_cadences_live_in() -> None:
-    """Data rather than sentences, and the reference says which file holds it."""
+def test_the_module_and_the_shipped_cadences_carry_the_same_source_kinds() -> None:
+    """One closed vocabulary, read by the pass and priced by the shipped cadences.
 
-    ledger = (MODEL_SELECTOR / "references" / "evidence-ledger.md").read_text(
-        encoding="utf-8"
-    )
-
-    assert "data/refresh-cadences.json" in ledger
-
-
-def test_the_module_and_the_reference_carry_the_same_source_kinds() -> None:
-    """One closed vocabulary, read by the pass and documented for the reader."""
-
-    module = _load()
-    ledger = (MODEL_SELECTOR / "references" / "evidence-ledger.md").read_text(
-        encoding="utf-8"
-    )
-    documented = set(KIND_ROW.findall(ledger)) - {"kind"}
-
-    assert documented == set(module.FETCHABLE_KINDS | module.COMMERCIAL_KINDS)
-    assert documented == set(
-        json.loads(CADENCES.read_text(encoding="utf-8"))["cadences"]
-    )
-
-
-def test_the_store_is_documented_as_the_one_that_is_written_in_place() -> None:
-    """The append-only rule is the evidence stores'; this store is not one."""
-
-    ledger = (MODEL_SELECTOR / "references" / "evidence-ledger.md").read_text(
-        encoding="utf-8"
-    )
-
-    assert "`source-states.jsonl` is mutable check state" in ledger
-    assert "updated in place" in ledger
-
-
-def test_the_pages_that_stated_the_old_absolute_state_the_bounded_exception() -> None:
-    """A sentence this change makes false is corrected, never left standing.
-
-    Three surfaces asserted that nothing on this seam reaches the network. All
-    three keep every other absence and gain the same bounded exception the
-    record does.
+    The reference this used to be checked against is gone with the rest of the
+    old ledger prose, and the cadence file is the better half of that pair
+    anyway: it is what the pass actually reads to decide what is due, so a kind
+    the module knows and the cadences do not is a kind that never becomes due.
     """
 
-    for path, gone in (
-        (MODEL_SELECTOR / "references" / "run-capture.md", "no network request"),
-        (MODEL_SELECTOR / "SKILL.md", "Capture is offline and performs no research"),
-        (MODEL_SELECTOR / "scripts" / "capture.py", "and nothing else: no network"),
-    ):
-        text = path.read_text(encoding="utf-8")
-        assert gone not in text, f"{path.name} still states the old absolute"
-        assert "no model call" in text or "reaches no network" in text, path.name
+    module = _load()
+    cadences = set(json.loads(CADENCES.read_text(encoding="utf-8"))["cadences"])
 
-
-def test_the_disclosure_says_what_enabling_the_skill_now_reaches() -> None:
-    """`help.md` is where what an Enable installs and retains is stated once."""
-
-    disclosure = (MODEL_SELECTOR / "help.md").read_text(encoding="utf-8")
-
-    assert "refreshes the Skill's own public sources unattended" in disclosure
-    assert "two-second budget" in disclosure
-    assert "no credential" in disclosure
-    assert "never retrieved this way" in disclosure
-    assert "source-states.jsonl" in disclosure
-
-
-def test_status_is_the_one_surface_the_unattended_pass_reports_on() -> None:
-    """Not `route`, and not a routed run's account of its own decisions."""
-
-    skill = (MODEL_SELECTOR / "SKILL.md").read_text(encoding="utf-8")
-    _, after = skill.split("\n## Status\n", 1)
-
-    assert 'uv run "$HERE/scripts/refresh.py" status --data=<directory>' in after
-    assert "$HERE/references/unattended-refresh.md" in after
-    assert "/model-selector update" in after
-
-    # The routing surfaces stay silent about it: a measurement reminder placed
-    # where the model reads it changes the configuration being measured.
-    for path in (
-        MODEL_SELECTOR / "references" / "model-routing.md",
-        MODEL_SELECTOR / "references" / "route-response.schema.json",
-        MODEL_SELECTOR / "help" / "route.md",
-    ):
-        text = path.read_text(encoding="utf-8")
-        assert "unattended" not in text, path.name
-        assert "source-states" not in text, path.name
+    assert cadences == set(module.FETCHABLE_KINDS | module.COMMERCIAL_KINDS)

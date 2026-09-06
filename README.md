@@ -138,9 +138,9 @@ Run `/write [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--fro
 
 ### model-selector
 
-Compare complete AI model configurations using local profiles, costs, quotas, latency, and measured quality. It can recommend a configuration, derive reproducible routing context, route delegated workloads, maintain evidence, and — once Enabled — measure ordinary local session usage automatically.
+Describe a piece of work and get back the model and reasoning effort expected to finish it for the least money — price divided by the chances of actually getting it done, not the cheapest sticker — with what that estimate rests on, and the alternatives it beat. It is advice and never a refusal: with no profile, or nothing reachable, the answer is the seat you already have and a note saying why. Once Enabled it also measures substantial units of work in the harnesses on this machine — never quick exchanges — grades what nothing else judged with one cheap model call, and keeps counts, prices and dates, never your prompts, code, or paths.
 
-Start with `/model-selector setup`, then use `/model-selector recommend <workload>`, `/model-selector context <path>`, `/model-selector route <path>`, or `/model-selector --help`.
+Run `/model-selector <work>` for an answer and `/model-selector setup` to say which models you can reach and how you pay for them; `status`, `update`, `evidence`, and `reset` are the rest. Read `/model-selector --help` for what enabling it measures before you enable it.
 
 ### rename-invoices
 

@@ -2,7 +2,7 @@
 
 ## NAME
 
-model-selector setup - create or fully review the model and access profile
+model-selector setup - record which models you can reach and how you pay for them
 
 ## SYNOPSIS
 
@@ -10,19 +10,31 @@ model-selector setup - create or fully review the model and access profile
 
 ## DESCRIPTION
 
-`model-selector setup` conducts a guided review of the exact model versions and access channels available to the user. It collects model identity, effort or thinking policy, serving modes, Harness, channel, commercial terms, quota rules, and version-watch policy without storing credentials.
+A short interview, held once and revisited when something changes. It asks four things, in this order and one question at a time.
 
-The complete profile is shown before it is written. Reopening setup for an existing profile creates a validated revision and retains evidence history.
+Which Harnesses this covers. The ones found on this machine are offered as the answer, and you say if that is wrong.
+
+Which providers you want suggestions from. Only a provider you name is ever recommended, however good its models look.
+
+Which of those providers' models. All of the current ones are offered ticked, and you untick what you do not want.
+
+How each provider is paid for, per Harness — because the same provider is often reached two ways at once, on a plan in one Harness and on API rates in another, and the two cost differently. A subscription answer names the plan and its tier: Anthropic's free tier, Pro, Max 5x or Max 20x; OpenAI's Free, Plus, Pro or Business; xAI's free tier, SuperGrok or SuperGrok Heavy. An API answer is a rate card.
+
+Nothing you can look up is asked of you. Prices, model lists, release dates and each provider's own description of what its models are for are fetched, dated and attributed, and refreshed by `update`. An answer you have already made unambiguous is not asked for again. The complete profile is shown before it is written, and nothing is written until you accept it.
+
+The profile holds no credentials. Writing it also regenerates the subagent definitions that make a deliberation level launchable — one per enabled Anthropic model and supported level — and removes the ones your new answers no longer justify. Where that directory had to be created, the definitions reach sessions started from then on rather than the one you are in.
+
+Setup is not a precondition. Without a profile the Skill answers from every catalogue model the detected Harnesses can reach, which is a wider pool than anyone chose, and `status` says so.
 
 ## OPTIONS
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
+Use *PATH* as the profile, catalogue and measurement directory instead of `~/.kntnt/model-selector/`.
 
 ## DIAGNOSTICS
 
-An incomplete or invalid profile is not written. An unsupported option is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector setup --help`.
+An incomplete or unaccepted profile is not written. An option with no work to do here is refused rather than ignored: the Skill names the error, prints this SYNOPSIS, changes nothing, and points at `/model-selector setup --help`.
 
 ## INVOCATION ENVELOPE
 
@@ -32,8 +44,8 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the Skill's dependency check.
+`uv` runs the writer that validates the profile against the catalogue and syncs the generated subagent definitions. The interview itself needs a network only to refresh the catalogue it offers you, and works from the shipped seed without one.
 
 ## SEE ALSO
 
-**/model-selector config --help**, **/model-selector update --help**
+**/model-selector status --help**, **/model-selector update --help**, **/model-selector reset --help**

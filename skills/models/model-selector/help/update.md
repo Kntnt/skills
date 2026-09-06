@@ -2,7 +2,7 @@
 
 ## NAME
 
-model-selector update - refresh due public model evidence
+model-selector update - fetch what can be fetched into the catalogue
 
 ## SYNOPSIS
 
@@ -10,31 +10,29 @@ model-selector update - refresh due public model evidence
 
 ## DESCRIPTION
 
-`model-selector update` performs one bounded refresh of mutable model indexes, first-party qualitative capability sources, commercial terms, and benchmark release indexes required by enabled selections and watched families. It initializes or appends applicable evidence and then rebuilds affected configured frontiers.
+One bounded pass over the public facts this Skill reasons from: which models exist, which deliberation levels each supports, what each costs per token category, what independent benchmarks measure them at, and how the provider itself describes what each is for.
 
-Cadences are shipped with the Skill and the profile does not override them; a source falls due by the time of its last retrieval and by nothing else. Capability sources follow the existing model/release cadence. A changed claim or normalized tag set appends an explicitly low-confidence categorical prior without rewriting history; provider prose never becomes a numeric score, clears a quality floor, or enters a Pareto frontier.
+Rate cards are part of that. A price this Skill fetched carries the address it came from and the date it arrived, which is auditable in a way a figure typed in eight months ago is not — and a fetched fact with no source it can attribute is discarded rather than stored.
 
-Known immutable model detail pages and recorded local run keys are not fetched or executed again. A discovered newer model version is reported but never enabled or substituted automatically.
+The pass is conditional, one connection at a time, and bounded against the clock before it starts. It starts no model and evaluates nothing. Sources fall due on the shipped cadence, which the profile does not override, and a model whose capability nothing has ranked makes its own benchmark index due regardless, so a newly adopted seat is not unrankable for a month by construction.
+
+The same pass runs unattended at the end of a session while the Skill is Enabled. Running it by hand is the same work, immediately, and with **--force** it is that work with the cadence ignored.
+
+A model discovered that your profile does not enable is written to the catalogue and left disabled. Adopting it is your own act, and `status` names it as something you may want. A pass in which nothing changed is a successful pass.
 
 ## OPTIONS
 
 **--force**
 
-Check every relevant mutable index once regardless of cadence. Immutable details and existing observations remain untouched.
+Check every mutable source once, regardless of when it was last retrieved. A model detail page already known to be immutable is still not fetched again.
 
 **--data=**_PATH_
 
-Use *PATH* as the profile and evidence directory instead of `~/.kntnt/model-selector/`.
+Use *PATH* as the profile, catalogue and measurement directory instead of `~/.kntnt/model-selector/`.
 
 ## DIAGNOSTICS
 
-Every due source is reported as unchanged, changed, unreachable, or invalid, and a source whose cadence has not elapsed is recorded as not due. Commercial terms and gateway rate cards are checked only here: the unattended session-end pass never retrieves either, and `/model-selector status` reports them as waiting for this command. An unsupported option is refused rather than ignored; the Skill prints this SYNOPSIS and points to `/model-selector update --help`.
-
-## EXAMPLES
-
-**/model-selector update --force**
-
-Check every relevant mutable source once while retaining immutable details and recorded observations.
+An unreachable source is reported and the pass continues; nothing here fails a session. An option with no work to do here is refused rather than ignored: the Skill names the error, prints this SYNOPSIS, changes nothing, and points at `/model-selector update --help`.
 
 ## INVOCATION ENVELOPE
 
@@ -44,8 +42,9 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the Skill's dependency check. Network access is required to refresh external evidence. The command reports an unreachable source without inventing current data.
+`uv` runs the refresh pass. This is the one command that uses the network by request; the unattended pass behind it is installed with the Skill and removed when it is Disabled.
 
 ## SEE ALSO
 
-**/model-selector status --help**, **/model-selector config --help**
+**/model-selector status --help**, **/model-selector setup --help**
+

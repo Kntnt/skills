@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "5f46fe62d702a7887608772de79b21e1cf207e1031cb6be57f53c83e9dd0e50e",
+  "manager_digest": "a09ebff07f3a31bfcab4ac740f1eec8ab9e9a2511da00f8519dfd2ca30b6acab",
   "skills": [
     {
       "name": "agents-md",
@@ -31,7 +31,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "1cd18c9f640f53399fefa6925497c54584488c2e0bba0c0e5896f1053e358068",
+      "digest": "9b1d6e8a2a51a356326a2c60268a3232bee2a1797aa9378bfb5dd10eae078ff0",
       "binaries": [
         "uv"
       ],
@@ -72,7 +72,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "24403c837b17f00ee79f16ac217f66724db972cb572632b2a63e7828e6311a65",
+      "digest": "5904d6ee67e6feb4579a5252ef926cde4872420e62565b90bb51faf5831f23f1",
       "binaries": [
         "git",
         "gh",
@@ -188,8 +188,8 @@
     {
       "name": "model-selector",
       "category": "models",
-      "description": "Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.",
-      "digest": "87ba025938f5d6c1da528825c8aa03d493d42804f577c31baa29362e81a93325",
+      "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, when another Skill requires Model Selector's public select interface. Do not use implicitly for setup, status, update, evidence, or reset.",
+      "digest": "9b901fe5ca4f8a4b317d973d91bba6e486940a0d67be191fb0f509266ce3da99",
       "binaries": [
         "uv"
       ],

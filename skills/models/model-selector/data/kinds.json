@@ -1,0 +1,145 @@
+{
+  "note": "Per-kind difficulty, token priors and context class. `difficulty` is on the same 0..1 scale as a model's capability in the catalogue, and only means anything against that scale: the estimator's untried-cell prior is the sigmoid of capability plus the level's bonus minus difficulty. Calibrate a kind's difficulty near the capability of the model that ought to be doing it - that is where the deliberation ladder pays for itself, because a kind far below a model's capability is one the model already succeeds at without thinking harder, and the arithmetic will correctly buy the cheapest level for it. The token priors describe one delegated attempt at `medium`, calibrated between a ticket-sized SWE-bench change and a long agentic Terminal-Bench trial; cache reads dominate every bill. `long_context` says whether work of this kind normally passes a vendor's context threshold, which is how the kind stands in for a context size no unstarted attempt has yet. `seconds` is how long one attempt of this kind takes at `medium`, which is what a run started for time is ordered on; it is read off measured work where there is any and placed against it in proportion where there is not. A human classifying work reads the notes below. `failure_overhead_usd` is what one failed attempt of this kind costs beside its tokens - noticing it, judging it, and briefing the work again - and the retry's own tokens are already counted by dividing through the success rate, so this is everything else - and on an unattended run a failed building ticket is a verdict, a stalled wave and a real chance somebody has to look at it, which is why those kinds carry the large numbers. It is what stops the arithmetic from reading three cheap attempts and one careful one as the same bill.",
+  "deliberation": {
+    "low": {
+      "capability_bonus": -0.06,
+      "tokens": 0.9,
+      "reasoning": 0.4
+    },
+    "medium": {
+      "capability_bonus": 0.0,
+      "tokens": 1.0,
+      "reasoning": 1.0
+    },
+    "high": {
+      "capability_bonus": 0.05,
+      "tokens": 1.15,
+      "reasoning": 2.2
+    },
+    "xhigh": {
+      "capability_bonus": 0.075,
+      "tokens": 1.4,
+      "reasoning": 4.0
+    },
+    "max": {
+      "capability_bonus": 0.09,
+      "tokens": 1.8,
+      "reasoning": 7.0
+    }
+  },
+  "deliberation_note": "What one level buys and what it costs. `capability_bonus` is added to the model's capability before the sigmoid; `tokens` scales every category because a more deliberate attempt runs longer, and `reasoning` scales the thinking on top of that. The returns diminish deliberately. The whole ladder is worth 0.15 of apparent capability, less than one step up the model ladder, and the last two steps buy a quarter of that for most of the cost - because a weaker model thinking as hard as it can does not become a stronger model, and a table that says otherwise buys `max` on the cheapest model for every hard job. Both halves are needed: without the token cost a level would be free and the arithmetic would buy the top of the ladder every time; with too much of it, the bottom.",
+  "kinds": {
+    "mechanical": {
+      "difficulty": 0.35,
+      "long_context": false,
+      "note": "Work whose answer is already decided and only has to be applied: a rename across a tree, a formatting pass, a scripted migration, a version bump.",
+      "tokens": {
+        "input": 400,
+        "cache_read": 320000,
+        "cache_write": 40000,
+        "output": 4500,
+        "reasoning": 1200
+      },
+      "failure_overhead_usd": 0.3,
+      "seconds": 630
+    },
+    "converse": {
+      "difficulty": 0.3,
+      "long_context": false,
+      "note": "Answering somebody in their own words: a question about the code, a summary of what happened, a short exchange that changes no file.",
+      "tokens": {
+        "input": 1200,
+        "cache_read": 120000,
+        "cache_write": 16000,
+        "output": 3000,
+        "reasoning": 900
+      },
+      "failure_overhead_usd": 0.05,
+      "seconds": 120
+    },
+    "prose": {
+      "difficulty": 0.61,
+      "long_context": false,
+      "note": "Writing meant for a person to read: documentation, a changelog entry, a ticket body, a Skill's own instructions.",
+      "tokens": {
+        "input": 900,
+        "cache_read": 520000,
+        "cache_write": 64000,
+        "output": 12000,
+        "reasoning": 3000
+      },
+      "failure_overhead_usd": 2.0,
+      "seconds": 480
+    },
+    "review": {
+      "difficulty": 0.7,
+      "long_context": true,
+      "note": "Judging work somebody else finished against a stated standard, and saying what fails it.",
+      "tokens": {
+        "input": 500,
+        "cache_read": 1200000,
+        "cache_write": 120000,
+        "output": 8000,
+        "reasoning": 5000
+      },
+      "failure_overhead_usd": 2.0,
+      "seconds": 700
+    },
+    "analyze": {
+      "difficulty": 0.63,
+      "long_context": false,
+      "note": "Reading a system to answer a question about it - where something lives, how a change would ripple, what a measurement means - without changing it.",
+      "tokens": {
+        "input": 520,
+        "cache_read": 1400000,
+        "cache_write": 140000,
+        "output": 10000,
+        "reasoning": 6000
+      },
+      "failure_overhead_usd": 1.5,
+      "seconds": 600
+    },
+    "implement": {
+      "difficulty": 0.75,
+      "long_context": true,
+      "note": "Building what a ticket or a spec already describes: the shape is settled and the work is getting it right, tested and consistent with what surrounds it.",
+      "tokens": {
+        "input": 600,
+        "cache_read": 2080000,
+        "cache_write": 208000,
+        "output": 25000,
+        "reasoning": 6000
+      },
+      "failure_overhead_usd": 10.0,
+      "seconds": 1400
+    },
+    "debug": {
+      "difficulty": 0.79,
+      "long_context": true,
+      "note": "Finding out why something does what it does when nobody knows yet, and fixing the cause rather than the symptom.",
+      "tokens": {
+        "input": 560,
+        "cache_read": 3000000,
+        "cache_write": 290000,
+        "output": 20000,
+        "reasoning": 11000
+      },
+      "failure_overhead_usd": 12.0,
+      "seconds": 1800
+    },
+    "design": {
+      "difficulty": 0.83,
+      "long_context": true,
+      "note": "Deciding what should exist before anything is built: an interface, a module boundary, a schema, a plan somebody else will implement.",
+      "tokens": {
+        "input": 640,
+        "cache_read": 1700000,
+        "cache_write": 170000,
+        "output": 22000,
+        "reasoning": 12000
+      },
+      "failure_overhead_usd": 12.0,
+      "seconds": 1500
+    }
+  }
+}

@@ -1970,37 +1970,26 @@ def test_the_wave_step_loops_check_fix_check_to_a_fixed_point() -> None:
     )
 
 
-def test_the_wave_fix_request_states_the_facts_that_price_it() -> None:
-    """The strongest net the run owns, stated in the request rather than assumed.
+def test_the_wave_fix_step_owns_no_selection_rule_of_its_own() -> None:
+    """The retry stays the loop's and the choice of point stays the module's.
 
-    The check that demanded the fix re-runs the gate and re-reads the branch,
-    the fix is a commit on a branch that check reads whole, and the loop owns
-    the retry. Those are the facts the routing contract prices cheap
-    selection and bounded escalation on, and a request that states none of
-    them is asking to be decided from nothing (ADR-0110).
+    A caller reproduces none of the selection policy: what it says is what kind
+    of work this is and what the loop already owns, and what it reads back is a
+    point. A tier ladder of this Skill's own standing near the dispatch would
+    be the second copy that rule exists to prevent (ADR-0182).
     """
 
     step = _step(11)
 
-    assert "declared external checker" in step, (
-        f"{SKILL / 'SKILL.md'}: step 11's fix request names the wave check's"
-        f" own re-run as its declared external checker — the fact the routing"
-        f" contract prices a cheap start on (ADR-0110)."
-    )
-    assert "reversible" in step, (
-        f"{SKILL / 'SKILL.md'}: step 11's fix request states that the work is"
-        f" reversible, a fix being a commit on a branch the check reads whole"
-        f" (ADR-0110)."
-    )
     assert "the retry the loop owns" in step, (
-        f"{SKILL / 'SKILL.md'}: step 11's fix request states the retry the"
-        f" loop already owns, which is what a bounded escalation may consume"
-        f" and never mint (ADR-0110)."
+        f"{SKILL / 'SKILL.md'}: step 11 states the retry the loop already"
+        f" owns, which is what a bounded escalation may consume and never"
+        f" mint (ADR-0110)."
     )
     assert "owns no selection rule beyond stating them" in step, (
         f"{SKILL / 'SKILL.md'}: step 11 says this Skill owns no selection rule"
-        f" beyond stating those facts — the frozen decision is the routing"
-        f" module's (ADR-0074, ADR-0110)."
+        f" beyond stating those facts — the decision is the routing module's"
+        f" (ADR-0074, ADR-0182)."
     )
     assert "no tier ladder" in step, (
         f"{SKILL / 'SKILL.md'}: step 11 says no tier ladder of this Skill's"
@@ -2073,29 +2062,6 @@ def test_the_manpage_describes_the_one_escalated_fix_round() -> None:
         f"{where}: the manpage says which fixer the escalation is for — one"
         f" that ran on a selected configuration rather than on the main seat"
         f" (ADR-0110)."
-    )
-    assert "external checker" in entry, (
-        f"{where}: the manpage says the fix request states the facts that"
-        f" price it, the review's own re-run among them (ADR-0110)."
-    )
-
-
-def test_the_plan_and_the_dry_preflight_state_an_inherit_only_harness_once() -> None:
-    """One fact about the Harness, read before the night rather than after it."""
-
-    assert "routing capability" in _step(2), (
-        f"{SKILL / 'SKILL.md'}: step 2's dry preflight renders the routing"
-        f" capability the frozen context leaves the run, beside the proposed"
-        f" decisions (ADR-0110)."
-    )
-    assert "`routing_capability`" in _step(12), (
-        f"{SKILL / 'SKILL.md'}: step 12 renders the routing capability the"
-        f" account carries (ADR-0110)."
-    )
-    assert "say it once" in _step(12), (
-        f"{SKILL / 'SKILL.md'}: step 12 states that capability once rather"
-        f" than as each decision's inheritance reason — twelve identical"
-        f" inheritances are one fact about the Harness (ADR-0110)."
     )
 
 
@@ -2639,20 +2605,15 @@ def test_the_build_step_launches_on_the_decision_route_made_for_that_ticket() ->
 
     step = _step(6)
 
-    assert "selected exact Harness-native model and deliberation controls" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 launches each builder on the exact"
-        f" Harness-native model and deliberation controls its decision"
-        f" returned, rather than on a model name it chose itself (ADR-0085)."
-    )
     assert "`build-<number>` decision" in step, (
         f"{SKILL / 'SKILL.md'}: step 6 names the decision each builder launches"
         f" on — the one made for that ticket — because a decision nothing can"
         f" be matched to is one no dispatch can be held to (ADR-0085)."
     )
-    assert "exact main seat where that decision reported inheritance" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 says what a reported inheritance means"
-        f" for a builder — it launches on the exact main seat, the run"
-        f" continuing safely with optimisation unavailable (ADR-0085)."
+    assert "inherit" in step, (
+        f"{SKILL / 'SKILL.md'}: step 6 says what an inherited decision means"
+        f" for a builder — it launches on the session's own seat, the run"
+        f" continuing safely with optimisation unavailable (ADR-0182)."
     )
     assert (
         "locks only model" in step and "`--deliberation` only deliberation" in step
@@ -2743,20 +2704,10 @@ def test_every_building_role_is_routed_and_named_for_what_it_builds() -> None:
             f" building role is routed as, {request}, so the decision it"
             f" launches on can be found again (ADR-0085)."
         )
-        assert "frozen snapshot" in step, (
-            f"{SKILL / 'SKILL.md'}: step {number} routes from the run's one"
-            f" frozen snapshot rather than from whatever the environment says"
-            f" by then (ADR-0085)."
-        )
 
     assert "`rebuild-<number>`" in _step(10), (
         f"{SKILL / 'SKILL.md'}: step 10's rebuild is a building role of its"
         f" own and is routed as one (ADR-0085)."
-    )
-    assert "bounded adjacent escalation" in _step(9), (
-        f"{SKILL / 'SKILL.md'}: step 9 says what an amend's decision may do"
-        f" with the verified failure it carries — only the bounded adjacent"
-        f" escalation the Interface returns (ADR-0083)."
     )
 
 
@@ -3072,10 +3023,10 @@ def test_routing_is_reached_before_every_claim_and_not_only_the_first() -> None:
         f" where the open-decision check and the routing preflight are. A pass"
         f" that returned to step 4 would claim an unrouted wave (issue #94)."
     )
-    assert "route that replacement from the same frozen snapshot" in claim, (
+    assert "route that replacement" in claim, (
         f"{SKILL / 'SKILL.md'}: step 4 routes a replacement ticket before its"
-        f" own claim, from the same frozen snapshot — a claim collision is not"
-        f" a licence to claim something nothing decided (issue #94)."
+        f" own claim — a claim collision is not a licence to claim something"
+        f" nothing decided (issue #94)."
     )
     assert "the engine refuses a claim it has no decision for" in claim, (
         f"{SKILL / 'SKILL.md'}: step 4 says the rule is enforced rather than"
@@ -3084,54 +3035,25 @@ def test_routing_is_reached_before_every_claim_and_not_only_the_first() -> None:
     )
 
 
-def test_orchestrate_derives_context_before_every_route_call() -> None:
-    """The caller supplies runtime facts while Model Selector owns derivation."""
+def test_every_execution_role_is_routed_by_the_name_it_is_dispatched_under() -> None:
+    """One name carries the role, the ticket, the kind of work and the label.
 
-    # Read both preflight paths that can create a first or later route request.
-    dry_run = _step(2)
-    routing = _step(3)
-
-    # Assert both paths derive context and pin the exact Claude runtime shape.
-    assert dry_run.index("/model-selector context /dev/stdin") < dry_run.index(
-        "/model-selector route /dev/stdin"
-    )
-    assert "/model-selector context <path>" in routing
-    assert "/model-selector route <path>" in routing
-    assert "never reconstruct its derivation rules" in routing
-    assert '`native_deliberation` exactly `{"effort": <level>}`' in routing
-    assert "main-seat `model`, `surface`, portable deliberation" in routing
-    assert "main-seat `surface` equal to the Harness `surface`" in routing
-    assert "`carried_by_default: true` and `verified`" in routing
-
-
-def test_every_execution_request_names_the_cohort_its_own_name_states() -> None:
-    """The request and the frozen decision name one Cohort, or evidence never matches.
-
-    The engine derives the Cohort from the request name and freezes it with the
-    decision; the agent writes the same three fields into the request from the
-    same name. Two derivations of one fact stay together only while both are
-    written down, and a request naming a different Cohort than the observation
-    would leave every past run's evidence inapplicable to the next (issue #191).
+    The engine derives all of them from the request name, so nothing has to be
+    stated twice and no second derivation can drift from the first: the point a
+    role launches on and the measurement its verdict files are found under the
+    one name the step already writes (issue #191, ADR-0182).
     """
 
     routing = _step(3)
 
-    assert "`stage` is the role token of the request name" in routing, (
-        f"{SKILL / 'SKILL.md'}: step 3 states the stage every execution request"
-        f" carries, which is the role token of its own name (issue #191)."
+    assert "--request=" in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 routes by naming each execution role,"
+        f" which is the name a claim, an amend and a verdict all find the"
+        f" decision under (ADR-0085)."
     )
-    assert "`orchestrate/` followed by that role's workload stratum" in routing, (
-        f"{SKILL / 'SKILL.md'}: step 3 states the Cohort as this Skill's"
-        f" namespace and the role's workload stratum (issue #191)."
-    )
-    assert "`workload_tags` is empty" in routing, (
-        f"{SKILL / 'SKILL.md'}: step 3 says the tags are empty rather than"
-        f" leaving a caller to invent narrowing tags (issue #191)."
-    )
-    assert "the engine derives the same three from the same name" in routing.lower(), (
-        f"{SKILL / 'SKILL.md'}: step 3 says the engine derives the same Cohort"
-        f" from the same request name, which is why the request the module"
-        f" routes and the observation the ledger keeps agree (issue #191)."
+    assert "never reconstruct its" in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 says this Skill reproduces none of the"
+        f" selection rules behind the interface it calls (ADR-0182)."
     )
 
 
@@ -3171,27 +3093,12 @@ def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
         f" comments on and parks tickets — it changes no ticket at all"
         f" (issue #94)."
     )
-    assert "The dry route response is not persisted" in step, (
-        f"{SKILL / 'SKILL.md'}: step 2 says the dry preflight freezes nothing,"
-        f" a frozen snapshot being state a dry run may not leave behind"
-        f" (issue #94)."
-    )
-    assert "both travel through stream-backed paths" in step, (
-        f"{SKILL / 'SKILL.md'}: step 2 transports both routing artifacts without"
-        f" creating a path-backed request or response (issue #189)."
-    )
-    assert "/model-selector route /dev/stdin" in step
-    assert "--response=/dev/stdin" in step
-    assert "refuse the dry run instead of writing either artifact" in step
     assert "without claiming, starting setup, or writing" in step, (
         f"{SKILL / 'SKILL.md'}: step 2 names what a dry run does not write —"
         f" model-selector configuration, evidence, ledger, and run state among"
         f" them (issue #94)."
     )
     assert "files, directories, migrations" in step
-    assert "leaves no child process" in step
-    assert "--starting=<number>" in step
-    assert "--run-claimed=<number>" in step
 
     # Hold the public page to every named persistent installation surface.
     assert "repository, home, Codex state and cache" in dry_run_option
@@ -3200,27 +3107,21 @@ def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
 
 
 def test_the_run_says_which_half_of_its_state_is_rebuilt_and_which_is_not() -> None:
-    """The two halves of the state directory are read very differently.
+    """The two halves of the state directory are read differently, and neither is fatal.
 
     ADR-0051 and ADR-0052 make the run's account a reading of the tracker and
     the branch, recoverable wherever the session's own memory is gone. The
-    frozen routing has no such second source, so the Skill says plainly which
-    rule applies to which half rather than leaving a reader to assume the
-    older one covers both (ADR-0085).
+    routing account has no second source, but it needs none: a decision is
+    reproducible because it was recorded, so a lost account costs one further
+    call per remaining role rather than the run (ADR-0182).
     """
 
     body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
-    continuing = _manpage_section("CONTINUING A RUN")
 
     assert "remembered rather than relied on" in body, (
         f"{SKILL / 'SKILL.md'}: the state paragraph keeps ADR-0052's rule for"
         f" the run's ordinary account — the tracker and the branch say all of"
         f" it again (ADR-0052)."
-    )
-    assert "refuses to plan, route, or claim" in body, (
-        f"{SKILL / 'SKILL.md'}: the state paragraph says what a lost or"
-        f" damaged frozen routing costs — the run stops rather than deciding"
-        f" the rest of itself from what is current (ADR-0085)."
     )
     assert (
         "it refuses, those being the locks its first frontier was routed under" in body
@@ -3229,11 +3130,6 @@ def test_the_run_says_which_half_of_its_state_is_rebuilt_and_which_is_not() -> N
         f" cannot change `--model` or `--deliberation` mid-run: a resume that"
         f" relocked would be a second run reporting as the first (ADR-0085)."
     )
-    assert "not reconstructed from current profile" in continuing, (
-        f"{SKILL / 'help.md'}: the continuing-a-run section says the frozen"
-        f" snapshot is never rebuilt from current profile, evidence, price,"
-        f" alias, or Harness state (ADR-0085)."
-    )
 
 
 def test_the_report_renders_the_route_facts_or_says_why_it_cannot() -> None:
@@ -3241,16 +3137,6 @@ def test_the_report_renders_the_route_facts_or_says_why_it_cannot() -> None:
 
     step = _step(12)
 
-    assert "`snapshot_identity`" in step and "`main_seat`" in step, (
-        f"{SKILL / 'SKILL.md'}: step 12 renders the identity every decision"
-        f" was made under and the seat every verdict inherited, which is what"
-        f" makes the night's routing auditable (issue #94)."
-    )
-    assert "evidence class" in step and "exclusions" in step, (
-        f"{SKILL / 'SKILL.md'}: step 12 renders each decision's evidence class"
-        f" and exclusions, so a reported inheritance can be told from a"
-        f" measured selection (ADR-0083)."
-    )
     assert "`routing_reason` says why" in step, (
         f"{SKILL / 'SKILL.md'}: step 12 says why there is no route account"
         f" where there is none, rather than leaving the gap unexplained"
@@ -3373,44 +3259,4 @@ def test_the_wave_check_reads_the_wave_it_merged_not_the_whole_branch() -> None:
         f"{SKILL / 'SKILL.md'}: a rerun after a fix carries the same `<since>`"
         f" as the round before it — the narrowing is between waves, never"
         f" between rounds (ADR-0072, ADR-0171)."
-    )
-
-
-def test_a_run_whose_snapshot_can_select_nothing_pays_the_ceremony_once() -> None:
-    """Two Skill invocations per wave, for an answer the frozen snapshot had given.
-
-    On a Harness whose snapshot can select nothing, every route of a run came
-    back the same inheritance, and each cost the orchestrating session the
-    Interface's own instructions and references in context again. The first
-    batch still goes through the Interface, because freezing the snapshot is
-    what establishes the fact; every later role is restated from the account
-    (ADR-0172).
-    """
-
-    step = _step(3)
-    where = SKILL / "SKILL.md"
-
-    assert "The first batch of a run is always model-selector's to decide" in step, (
-        f"{where}: step 3 keeps the first batch model-selector's — the frozen"
-        f" snapshot is what says whether anything can be selected (ADR-0172)."
-    )
-    assert "`routing.frozen_inheritance`" in step, (
-        f"{where}: step 3 reads the account-level fact off the plan or route"
-        f" output rather than judging inheritance reasons itself (ADR-0172)."
-    )
-    assert "route --inherit --request=<name>" in step, (
-        f"{where}: step 3 names the engine form that restates the frozen"
-        f" decision for a later role (ADR-0172)."
-    )
-    assert "invoke model-selector for none of them" in step, (
-        f"{where}: step 3 says the Interface is not invoked for a role the"
-        f" account restates — that is the whole of the saving (ADR-0172)."
-    )
-    assert "A refused `--inherit` is routed through model-selector" in step, (
-        f"{where}: a refusal sends the role back through the Interface, so"
-        f" nothing is ever decided by this Skill (ADR-0172)."
-    )
-    assert "/model-selector context <path>" in step, (
-        f"{where}: the Interface path stands beside the shortcut, the first"
-        f" batch and every selecting run still taking it (ADR-0085)."
     )

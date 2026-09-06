@@ -2,29 +2,40 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Capture local session usage automatically during ordinary Harness work.
+"""Turn ordinary Harness work into Units of Work, without anybody asking.
 
-A user works in their Harness all day, and what that costs — the Seat it ran
-on, what it used, how long it took — is never written down, because writing
-it down is a thing they have to remember to do. This is that capture, and it
-measures ordinary work; it never judges it (ADR-0179). An ordinary session has
-no independent verifier in it, so a finished session produces a Usage Record
-rather than a `RunObservation`: one per Seat it ran on, carrying no outcome,
-no checker, and no Cohort, appended to its own store the moment the session
-ends. Nothing waits for a human, ever.
+A user works in their Harness all day, and what that work cost — the model it
+ran on, how long it took, how much of it changed anything — is never written
+down, because writing it down is a thing they have to remember to do. This is
+that capture, and it measures ordinary work; it never judges it (ADR-0179).
+Grading is `grade.py`'s, bought deliberately and under a budget, and this
+module only hands it something to grade.
 
-Capture follows this Skill's own Enabled state and asks for nothing beyond
-it (#223). The Manager installs this feature's owned lifecycle integration
-into every supported Detected Harness of the Global layer the moment the
-Skill is Enabled, placed, or refreshed, and removes every entry the moment
-it is Disabled there — the same two seams that already place and remove the
-Skill's own files. There is no second opt-in, no consent prompt, and no
-configuration state of this feature's own to go stale: disk is the one
-truth (ADR-0179), so a hook either runs because a Harness's own
-configuration names it or it does not run at all. What it writes is the
-minimum a Usage Record needs: identities are opaque, measurements the
-environment did not expose stay `null`, and no prompt, response, reasoning,
-diff, terminal output, or transcript is ever copied.
+What it hands over is a **Unit of Work**: one instruction and the work done in
+answer to it, from the moment an agent is told to do something — by a person
+or by another agent — to the moment it hands control back. Only a substantial
+Unit is ever written, so a session of quick questions and answers leaves no
+trace at all. On Claude Code the finished session's own record splits cleanly
+into Units: the companion `subagents/` directory is one Unit per subagent,
+each carrying the model and effort that subagent actually ran on, and the main
+transcript is one Unit per user instruction.
+
+Capture follows this Skill's own Enabled state and asks for nothing beyond it
+(#223). The Manager installs this feature's owned lifecycle integration into
+every supported Detected Harness of the Global layer the moment the Skill is
+Enabled, placed, or refreshed, and removes every entry the moment it is
+Disabled there — the same two seams that already place and remove the Skill's
+own files. There is no second opt-in, no consent prompt, and no configuration
+state of this feature's own to go stale: disk is the one truth (ADR-0179), so
+a hook either runs because a Harness's own configuration names it or it does
+not run at all.
+
+What it writes is the minimum a Unit needs: identities are opaque,
+measurements the environment did not expose stay `null`, and no prompt,
+response, reasoning, diff, terminal output, or transcript is ever copied. The
+two excerpts a Unit carries exist for the grader alone, are capped at
+`EXCERPT_CHARS`, and are removed from the pending store the moment that Unit
+becomes a measurement.
 """
 
 from __future__ import annotations
@@ -36,15 +47,15 @@ import json
 import shutil
 import sys
 from contextlib import suppress
+from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, TextIO
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 # Every lifecycle signal this feature understands, per Harness family. A stop
-# is one turn of an ongoing session and never a session's own end; a Seat's
-# Usage Record is timed on its own first and last such turn. Codex CLI
+# is one turn of an ongoing session and never a session's own end. Codex CLI
 # 0.153.0's own `hooks.json` names its moments in the same PascalCase Claude
 # Code's `settings.json` does, which is what this feature's own hook table is
 # registered under; the camelCase spellings (`sessionStart`, `stop`,
@@ -68,76 +79,214 @@ END_EVENTS = frozenset({"SessionEnd", "sessionEnd", "session.deleted"})
 # the same convention rather than as a confirmed reading of that payload.
 EVENT_FIELDS: tuple[str, ...] = ("hook_event_name", "eventName", "event", "type")
 
-# The usage categories a Usage Record may carry, so that an object named
-# `measurements` in a Harness payload cannot smuggle material in under a
-# wanted key. Named rather than counted, so a key added here is a key this
-# comment still describes (ADR-0179).
-MEASUREMENT_ALLOWED = frozenset(
-    {
-        "tokens",
-        "tool_calls",
-        "retries",
-        "cost",
-        "quota",
-        "latency",
-        "fallback_from",
-    }
-)
-
 # The only fields a lifecycle payload may contribute. Everything else a
 # Harness sends — and Harnesses send whole transcripts — is dropped before
 # anything is written, so nothing forbidden can arrive by sitting beside what
-# is wanted. A Usage Record carries no outcome, so a payload's checker and
-# error content are never read for their value, only the event name is.
+# is wanted.
 #
 # `transcript_path` is locate-only (#225): it is read at a session's end to
-# open that session's own finished record through the Collection Library's
-# reader, and it never reaches a draft written to disk or a Usage Record —
-# `_hook` reads it locally out of the cleaned payload and passes it straight
-# to `_finish` without ever folding it into the draft this dict's other
-# fields build up.
+# open that session's own finished record, and it never reaches a draft
+# written to disk or a Unit — `_hook` reads it locally out of the cleaned
+# payload and passes it straight to `_finish` without ever folding it into the
+# draft this set's other fields build up.
 PAYLOAD_ALLOWED = frozenset(
     {
         "session_id",
         "harness",
         "harness_inventory_revision",
-        "seat",
-        "measurements",
         "transcript_path",
     }
 )
-SEAT_ALLOWED = frozenset(
+
+# Where the pending Units wait for the grader, beside the measurement ledger
+# under the selected data directory, and where the grader records that it ran.
+# Named once here rather than left for a consumer to infer.
+PENDING_FILE = "pending.jsonl"
+GRADER_STATE_FILE = "grader.json"
+
+# The Harnesses whose own finished record this module knows how to split into
+# Units. It is capture's own list rather than the Collection Library's,
+# because the split is by instruction and the Library's reader folds by Seat:
+# a Harness the Library learns to read is not thereby a Harness whose
+# instruction boundaries this module knows.
+READABLE_HARNESSES: tuple[str, ...] = ("claude-code",)
+
+# The subdirectory beside a Claude Code transcript that holds one transcript
+# per subagent, and the name each of those answers to. Neither is derived from
+# anything but the transcript path the payload already handed over.
+SUBAGENTS_DIRNAME = "subagents"
+SUBAGENT_GLOB = "agent-*.jsonl"
+
+# How the token categories a Claude Code turn reports map onto the five a
+# measurement is priced in. Re-derived per turn from `message.usage`:
+# `output_tokens_details` is absent more often than it is present — on this
+# collection's own machine, on roughly six in ten subagent turns — so its
+# absence is read as an unmeasured `reasoning`, never as a zero.
+TOKEN_FIELDS: tuple[tuple[str, str], ...] = (
+    ("input", "input_tokens"),
+    ("cache_read", "cache_read_input_tokens"),
+    ("cache_write", "cache_creation_input_tokens"),
+    ("output", "output_tokens"),
+)
+REASONING_FIELD = "thinking_tokens"
+TOKEN_CATEGORIES: tuple[str, ...] = (
+    "input",
+    "cache_read",
+    "cache_write",
+    "output",
+    "reasoning",
+)
+
+# What makes a Unit substantial enough to be worth measuring at all. Any one
+# of the three is enough, because they are three ways of being real work: a
+# job that changed things, a job that took time, and a job that wrote a lot.
+# Everything below all three is discarded with no trace, which is what keeps a
+# session of quick questions and answers out of the measurement entirely.
+SUBSTANTIAL_CHANGING_CALLS = 3
+SUBSTANTIAL_SECONDS = 60.0
+SUBSTANTIAL_OUTPUT_TOKENS = 4000.0
+
+# How much of an instruction and of a result the grader is given. They are the
+# only free text a Unit carries, they exist to be read by one cheap model
+# once, and they are gone from the store the moment that Unit is graded.
+EXCERPT_CHARS = 800
+
+# The tools that change something by definition, whatever their arguments.
+CHANGING_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
+
+# The tools that run a shell command, whose arguments decide whether the call
+# changed anything. The command string is classified here and discarded here:
+# no part of it reaches a draft, a Unit, or a measurement.
+SHELL_TOOLS = frozenset({"Bash"})
+
+# Shell commands that only read. A call every one of whose segments starts
+# with one of these is a look at the machine rather than a change to it;
+# anything else is counted as changing, because the cost of over-counting is
+# one more Unit measured and the cost of under-counting is real work lost.
+READING_HEADS = frozenset(
     {
-        "model",
-        "resolved_alias",
-        "portable_deliberation",
-        "native_deliberation",
-        "channel",
-        "surface",
-        "adapter_id",
-        "serving_mode",
+        "awk",
+        "basename",
+        "cat",
+        "cd",
+        "cut",
+        "date",
+        "df",
+        "diff",
+        "dirname",
+        "du",
+        "echo",
+        "env",
+        "file",
+        "find",
+        "grep",
+        "head",
+        "jq",
+        "ls",
+        "printenv",
+        "ps",
+        "pgrep",
+        "pwd",
+        "readlink",
+        "realpath",
+        "rg",
+        "sed",
+        "sort",
+        "stat",
+        "tail",
+        "tr",
+        "tree",
+        "type",
+        "uniq",
+        "wc",
+        "which",
     }
 )
 
-# Where the Usage Record store lives, beside the evidence ledger under the
-# selected data directory, and the fields every row carries. Named once here
-# rather than left for a consumer to infer, following the Library's own
-# precedent for its ledger file (`LEDGER_FILE` in `routed_observations.py`).
-USAGE_LEDGER_FILE = "usage-records.jsonl"
-USAGE_RECORD_FIELDS: tuple[str, ...] = (
-    "usage_key",
-    "session_identity",
-    "harness",
-    "seat",
-    "usage",
-    "started_at",
-    "completed_at",
-    "elapsed_seconds",
+# `git` is the one head common enough that treating the whole of it as a
+# change would call nearly every session substantial. Its reading verbs are
+# named instead, and every other one counts as a change.
+READING_GIT_VERBS = frozenset(
+    {
+        "blame",
+        "branch",
+        "describe",
+        "diff",
+        "log",
+        "ls-files",
+        "remote",
+        "rev-parse",
+        "show",
+        "status",
+        "worktree",
+    }
 )
+
+# What a shell command has to mention before a Unit is credited with having
+# run tests. It is a free signal rather than a reading of anybody's output:
+# whether they passed is the tool result's own error flag and nothing else.
+TEST_RUNNERS = (
+    "pytest",
+    "vitest",
+    "jest",
+    "phpunit",
+    "go test",
+    "cargo test",
+    "npm test",
+)
+
+# What Claude Code writes into the transcript when a person stops a turn.
+INTERRUPTION_MARKER = "[Request interrupted"
+
+
+@dataclass(frozen=True)
+class Unit:
+    """One instruction and the work done in answer to it."""
+
+    unit_id: str
+    session: str
+    harness: str
+    started_at: str
+    ended_at: str
+    seconds: float
+    model: str | None
+    deliberation: str | None
+    tokens: dict[str, float | None]
+    tool_calls: int
+    changing_tool_calls: int
+    delegated: bool
+    signals: dict[str, Any]
+    instruction_excerpt: str
+    result_excerpt: str
+
+
+@dataclass
+class _Span:
+    """One Unit under construction, as the transcript is walked in order.
+
+    Mutable on purpose: a span is filled turn by turn and frozen into a `Unit`
+    once the instruction after it arrives, which is the only moment its end is
+    known.
+    """
+
+    instruction: str
+    started_at: str
+    ended_at: str
+    result: str = ""
+    seats: dict[tuple[str | None, str | None], int] = field(default_factory=dict)
+    tokens: dict[str, float | None] = field(
+        default_factory=lambda: dict.fromkeys(TOKEN_CATEGORIES)
+    )
+    tool_calls: int = 0
+    changing_tool_calls: int = 0
+    tests_ran: bool = False
+    tests_failed: bool = False
+    interrupted: bool = False
+    errored: bool = False
 
 
 def _now() -> str:
-    """Return this instant, as a Usage Record writes instants."""
+    """Return this instant, as a Unit writes instants."""
 
     return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
@@ -187,6 +336,12 @@ def _by_path(name: str, *candidates: Path) -> Any:
     the annotations they declare.
     """
 
+    # A module already registered under this name is handed back as it stands,
+    # so that one invocation loading the same sibling twice executes it once.
+    held = sys.modules.get(name)
+    if held is not None:
+        return held
+
     for candidate in candidates:
         if not candidate.exists():
             continue
@@ -227,28 +382,16 @@ def _integrations() -> Any:
     return _by_path("kntnt_integrations", *_library("integrations.py"))
 
 
-def _session_records() -> Any:
-    """Load the Collection Library's session-record reader.
+def _sibling(name: str) -> Any:
+    """Load one of this Skill's own scripts, from beside this module.
 
-    Reading a finished session's own record is Harness-specific mechanics of
-    exactly the kind ADR-0179 already put in the Library, so it lives beside
-    `integrations.py` rather than here — a second consumer finds it there
-    instead of reaching into this Skill (#225).
-    """
-
-    return _by_path("kntnt_session_records", *_library("session_records.py"))
-
-
-def _refresh() -> Any:
-    """Load this Skill's own unattended source refresh, from beside this module.
-
-    It is this Skill's own knowledge rather than the Library's, so it sits in
-    `scripts/` next to this file and needs neither of the two layouts a
-    Library module is resolved through.
+    Its own knowledge rather than the Library's, so it sits in `scripts/` next
+    to this file and needs neither of the two layouts a Library module is
+    resolved through.
     """
 
     return _by_path(
-        "model_selector_refresh", Path(__file__).resolve().parent / "refresh.py"
+        f"model_selector_{name}", Path(__file__).resolve().parent / f"{name}.py"
     )
 
 
@@ -296,13 +439,13 @@ def install(
 def disable(data: Path, root: Path) -> dict[str, Any]:
     """Remove every integration this feature owns, wherever it installed one.
 
-    Accepted Usage Records are untouched. Every Harness the Collection
-    Library has an adapter for is attempted, whether or not this machine
-    ever held our entry there: removal reads the Harness's own file and
-    converges it (ADR-0179), so trying one that never carried our entry is a
-    converged state rather than an error, and there is no separate on/off
-    flag of this feature's own left to update — the Harness's own
-    configuration is the one truth capture ever reads.
+    What was measured is untouched. Every Harness the Collection Library has
+    an adapter for is attempted, whether or not this machine ever held our
+    entry there: removal reads the Harness's own file and converges it
+    (ADR-0179), so trying one that never carried our entry is a converged
+    state rather than an error, and there is no separate on/off flag of this
+    feature's own left to update — the Harness's own configuration is the one
+    truth capture ever reads.
     """
 
     integrations = _integrations()
@@ -362,21 +505,7 @@ def _clean(payload: Any) -> dict[str, Any]:
 
     if not isinstance(payload, dict):
         return {}
-    kept = {key: value for key, value in payload.items() if key in PAYLOAD_ALLOWED}
-    seat = kept.get("seat")
-    if isinstance(seat, dict):
-        kept["seat"] = {key: seat.get(key) for key in SEAT_ALLOWED}
-
-    # An allow-list one level deep is no allow-list: a nested object is filtered
-    # by its own keys rather than copied because its parent's key was wanted.
-    measurements = kept.get("measurements")
-    if isinstance(measurements, dict):
-        kept["measurements"] = {
-            key: value
-            for key, value in measurements.items()
-            if key in MEASUREMENT_ALLOWED
-        }
-    return kept
+    return {key: value for key, value in payload.items() if key in PAYLOAD_ALLOWED}
 
 
 def _draft_path(data: Path, session: str) -> Path:
@@ -407,224 +536,455 @@ def _store(path: Path, record: dict[str, Any]) -> None:
     )
 
 
-def _seat_of(draft: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
-    """Return the exact seat this lifecycle signal says work ran on.
-
-    A payload that names one wins, because a session can be running on
-    something other than what the draft already tracks; the seat this draft
-    is currently tracking is the fallback. Nothing is supplied at
-    installation any more (#223 decision 7): the Seat comes from the
-    Harness's own record of the finished session, read once at that
-    session's end (`_measured_seats`), or from an explicit null where
-    neither a payload nor that record ever named one.
-    """
-
-    seat = payload.get("seat")
-    if isinstance(seat, dict) and seat.get("model"):
-        return {key: seat.get(key) for key in SEAT_ALLOWED}
-    held = draft.get("seat")
-    if isinstance(held, dict) and held.get("model"):
-        return held
-    return {}
-
-
-def _touch_seat(
-    seats: dict[str, dict[str, Any]],
-    seat: dict[str, Any],
-    measurements: Any,
-    now: str,
-) -> dict[str, dict[str, Any]]:
-    """Return *seats* with one Seat's own active window opened or extended.
-
-    A Usage Record's instants are its own Seat's first and last turn rather
-    than the whole session's, because a session that changed Seat mid-way ran
-    two configurations and each is timed on what it actually did (ADR-0179
-    decision 3). Usage attribution between two Seats active in one session is
-    issue #225's to settle; here, the usage last observed while a Seat was
-    current is what that Seat's own record carries.
-    """
-
-    key = _opaque(json.dumps(seat, sort_keys=True))
-    existing = seats.get(key) or {}
-    return {
-        **seats,
-        key: {
-            "seat": seat,
-            "started_at": existing.get("started_at") or now,
-            "completed_at": now,
-            "measurements": (
-                measurements
-                if isinstance(measurements, dict)
-                else existing.get("measurements") or {}
-            ),
-        },
-    }
-
-
-def _elapsed_seconds(started: Any, completed: Any) -> float | None:
-    """Return the seconds between two instants, or None where either is unusable."""
+def _elapsed_seconds(started: Any, completed: Any) -> float:
+    """Return the seconds between two instants, or zero where either is unusable."""
 
     first, last = _parsed(started), _parsed(completed)
-    return None if first is None or last is None else (last - first).total_seconds()
+    return 0.0 if first is None or last is None else (last - first).total_seconds()
 
 
-def _usage_key(session_identity: str, seat: dict[str, Any]) -> str:
-    """Return the stable idempotency key of one session's Usage Record on one Seat.
+def _lines(path: Path) -> list[dict[str, Any]]:
+    """Return every JSON object one JSON-lines file holds, skipping what is not one.
 
-    Idempotency is by session identity and Seat: the same finished session
-    appended twice is skipped under this key, not repeated (ADR-0179 decision 2).
+    A session can end mid-write, and a concurrent writer can leave a blank or
+    partial line; both are skipped rather than raised, because a finished
+    record is read after the fact and never gets a second chance to be whole.
     """
 
-    canonical = json.dumps(
-        {"session_identity": session_identity, "seat": seat}, sort_keys=True
-    )
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-
-
-def _usage_record(draft: dict[str, Any], entry: dict[str, Any]) -> dict[str, Any]:
-    """Return one Usage Record: what one finished session cost on one Seat.
-
-    It carries no outcome, no checker, and no Cohort — a Usage Record is never
-    quality — only the identities, the Seat, the usage the environment
-    exposed, and the two instants between which that Seat actually ran.
-    """
-
-    seat = {key: (entry.get("seat") or {}).get(key) for key in SEAT_ALLOWED}
-    measurements = entry.get("measurements") or {}
-    started = entry.get("started_at")
-    completed = entry.get("completed_at")
-    return {
-        "usage_key": _usage_key(draft["session_identity"], seat),
-        "session_identity": draft["session_identity"],
-        "harness": {
-            "name": draft.get("harness"),
-            "inventory_revision": draft.get("harness_inventory_revision"),
-        },
-        "seat": seat,
-        "usage": {key: measurements.get(key) for key in MEASUREMENT_ALLOWED},
-        "started_at": started,
-        "completed_at": completed,
-        "elapsed_seconds": _elapsed_seconds(started, completed),
-    }
-
-
-def _usage_ledger(directory: Path) -> dict[str, dict[str, Any]]:
-    """Return every Usage Record the store already holds, keyed by usage key."""
-
-    path = directory / USAGE_LEDGER_FILE
-    if not path.exists():
-        return {}
-    held: dict[str, dict[str, Any]] = {}
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.strip():
-            record = json.loads(line)
-            held[str(record["usage_key"])] = record
-    return held
-
-
-def _append(directory: Path, records: list[dict[str, Any]]) -> dict[str, Any]:
-    """Append every unseen Usage Record to the store beside the evidence ledger.
-
-    A record whose usage key the store already holds is skipped rather than
-    repeated: the same finished session appended twice adds nothing the
-    second time.
-    """
-
-    held = _usage_ledger(directory)
-    accepted = [record for record in records if record["usage_key"] not in held]
-    skipped = [record["usage_key"] for record in records if record["usage_key"] in held]
-    if accepted:
-        directory.mkdir(parents=True, exist_ok=True)
-        with (directory / USAGE_LEDGER_FILE).open("a", encoding="utf-8") as ledger:
-            for record in accepted:
-                ledger.write(json.dumps(record, sort_keys=True) + "\n")
-    return {
-        "recorded": [record["usage_key"] for record in accepted],
-        "skipped": skipped,
-    }
-
-
-def _measured_seats(
-    harness: str | None, transcript_path: Any, configured: dict[str, Any]
-) -> list[dict[str, Any]] | None:
-    """Return this session's own Seats and usage as its finished record states them.
-
-    The Seat and the usage are read from the Harness's own record of the
-    finished session where one can be read at all: the exact model, the
-    deliberation control in force, and the token categories the Harness
-    counted — nothing else is taken from it (#225 decision 1). The record
-    supplies neither channel, surface, adapter, nor serving mode for any
-    Seat, so the main Seat keeps those from *configured* — the seat this
-    session's own lifecycle signals already established — while a delegated
-    Seat the record cannot describe carries an explicit null on each of them
-    rather than borrowing the main Seat's answer.
-
-    Returns None where nothing could be read at all, so the caller falls back
-    to whatever the lifecycle signals themselves already established — a
-    missing, truncated, or unparseable record is an absence, never a raised
-    error (ADR-0179, decision 4 as applied to this read).
-    """
-
-    if not harness or not isinstance(transcript_path, str) or not transcript_path:
-        return None
     try:
-        groups = _session_records().usage(harness, transcript_path)
-    except Exception:  # noqa: BLE001 - a broken record is an absence, not a failure
+        text = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return []
+
+    parsed: list[dict[str, Any]] = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        try:
+            loaded = json.loads(stripped)
+        except ValueError:
+            continue
+        if isinstance(loaded, dict):
+            parsed.append(loaded)
+    return parsed
+
+
+def _number(value: Any) -> float | None:
+    """Return one usage count as a number, or None where it is not one."""
+
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
         return None
-    if not groups:
+    return float(value)
+
+
+def _text_of(content: Any) -> str:
+    """Return the plain text of one message body, and nothing structural.
+
+    A body is either a bare string or a list of blocks, and only a `text`
+    block carries anything a person wrote. A `tool_result` block is somebody
+    else's output and is never read here.
+    """
+
+    if isinstance(content, str):
+        return content
+    if not isinstance(content, list):
+        return ""
+    said = [
+        block.get("text")
+        for block in content
+        if isinstance(block, dict) and block.get("type") == "text"
+    ]
+    return "\n".join(part for part in said if isinstance(part, str))
+
+
+def _excerpt(text: str) -> str:
+    """Return at most `EXCERPT_CHARS` of *text*, with its edges trimmed."""
+
+    return text.strip()[:EXCERPT_CHARS]
+
+
+def _is_instruction(line: dict[str, Any]) -> bool:
+    """Return whether this line is an instruction that begins a Unit.
+
+    Claude Code marks exactly this: a user line carrying an `origin` naming
+    who it came from — a person typing, another agent messaging, a background
+    task reporting back, the session continuing itself. Every other user line
+    is a tool result, an injected reminder, or the transcript's own
+    bookkeeping, and none of those is an instruction anybody gave.
+    """
+
+    if line.get("type") != "user" or line.get("isMeta") is True:
+        return False
+    origin = line.get("origin")
+    return isinstance(origin, dict) and bool(origin.get("kind"))
+
+
+def _reads_only(command: str) -> bool:
+    """Return whether one shell command only looked at the machine.
+
+    Segment by segment, because a command is usually a pipeline or a chain and
+    the interesting verb is rarely the first word of the whole thing. A
+    segment that is a variable assignment carries no verb of its own and is
+    passed over; a segment whose head is not a known reader makes the whole
+    command a change.
+    """
+
+    segments = command.replace("||", "&&").replace(";", "&&").replace("|", "&&")
+    heads: list[list[str]] = []
+    for segment in segments.split("&&"):
+        words = [word for word in segment.split() if "=" not in word.split("/")[0]]
+        if words:
+            heads.append(words)
+
+    # A call that named no command at all is not a change: an absence is not
+    # a reading, and counting it as one would call every unclassifiable tool
+    # call substantial work.
+    if not heads:
+        return True
+
+    return all(
+        _head_reads_only(words[0].rsplit("/", 1)[-1], words[1:]) for words in heads
+    )
+
+
+def _head_reads_only(head: str, rest: list[str]) -> bool:
+    """Return whether one command's own verb only reads."""
+
+    if head == "git":
+        verbs = [word for word in rest if not word.startswith("-")]
+        return bool(verbs) and verbs[0] in READING_GIT_VERBS
+    return head in READING_HEADS
+
+
+def _tool_uses(message: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return every tool call one assistant message made."""
+
+    content = message.get("content")
+    if not isinstance(content, list):
+        return []
+    return [
+        block
+        for block in content
+        if isinstance(block, dict) and block.get("type") == "tool_use"
+    ]
+
+
+def _command_of(call: dict[str, Any]) -> str:
+    """Return the shell command one tool call ran, or an empty string."""
+
+    arguments = call.get("input")
+    command = arguments.get("command") if isinstance(arguments, dict) else None
+    return command if isinstance(command, str) else ""
+
+
+def _absorb_assistant(span: _Span, line: dict[str, Any]) -> None:
+    """Fold one assistant turn into the span it belongs to.
+
+    The Seat is counted per turn rather than taken from the first or the last
+    one, so a Unit that ran mostly on one model and briefly on another is
+    attributed to the one that did the work.
+    """
+
+    message = line.get("message")
+    if not isinstance(message, dict):
+        return
+
+    if line.get("isApiErrorMessage") is True:
+        span.errored = True
+
+    # The Seat this turn ran on, counted; the model is the message's own and
+    # the deliberation control is the line's, which is where Claude Code
+    # records the effort a turn was asked for.
+    model = message.get("model")
+    effort = line.get("effort")
+    seat = (
+        model if isinstance(model, str) and model else None,
+        effort if isinstance(effort, str) and effort else None,
+    )
+    if seat != (None, None):
+        span.seats[seat] = span.seats.get(seat, 0) + 1
+
+    # The token categories the Harness itself counted, summed. A category no
+    # turn reported stays None rather than becoming a zero: a zero is a
+    # reading and an absence is not.
+    usage = message.get("usage")
+    usage = usage if isinstance(usage, dict) else {}
+    details = usage.get("output_tokens_details")
+    details = details if isinstance(details, dict) else {}
+    counted = {category: _number(usage.get(key)) for category, key in TOKEN_FIELDS}
+    counted["reasoning"] = _number(details.get(REASONING_FIELD))
+    for category, value in counted.items():
+        if value is not None:
+            span.tokens[category] = (span.tokens[category] or 0.0) + value
+
+    # What the turn did, classified and then forgotten: the command string is
+    # read here to decide whether the call changed anything and whether it ran
+    # tests, and no part of it is kept.
+    for call in _tool_uses(message):
+        span.tool_calls += 1
+        name = call.get("name")
+        if name in CHANGING_TOOLS:
+            span.changing_tool_calls += 1
+            continue
+        if name not in SHELL_TOOLS:
+            continue
+        command = _command_of(call)
+        if not _reads_only(command):
+            span.changing_tool_calls += 1
+        if any(runner in command for runner in TEST_RUNNERS):
+            span.tests_ran = True
+
+    said = _text_of(message.get("content"))
+    if said.strip():
+        span.result = said
+
+
+def _absorb_user(span: _Span, line: dict[str, Any]) -> None:
+    """Fold one tool result or interruption into the span it belongs to.
+
+    A tool result's own error flag is the whole of what is read from it: what
+    the tool printed is terminal output and never reaches this module.
+    """
+
+    content = (line.get("message") or {}).get("content")
+    if INTERRUPTION_MARKER in _text_of(content):
+        span.interrupted = True
+
+    result = line.get("toolUseResult")
+    if isinstance(result, dict) and result.get("interrupted") is True:
+        span.interrupted = True
+
+    if not isinstance(content, list):
+        return
+    for block in content:
+        if not isinstance(block, dict) or block.get("type") != "tool_result":
+            continue
+        if block.get("is_error") is True and span.tests_ran:
+            span.tests_failed = True
+
+
+def _stamped(line: dict[str, Any]) -> str | None:
+    """Return one line's instant, or None where it carries none."""
+
+    instant = line.get("timestamp")
+    return instant if isinstance(instant, str) and instant else None
+
+
+def _spans(lines: list[dict[str, Any]], whole: bool) -> list[_Span]:
+    """Split one transcript into spans, one per instruction.
+
+    A subagent's transcript is one span *whole*: it was opened by one
+    instruction and everything in it answers that instruction. The main
+    transcript is split, each span running from a user instruction to the turn
+    before the next one, so a session that alternates between quick questions
+    and long jobs contributes the long jobs alone.
+    """
+
+    spans: list[_Span] = []
+    current: _Span | None = None
+    for line in lines:
+        if _is_instruction(line) or (
+            whole and current is None and line.get("type") == "user"
+        ):
+            instruction = _text_of((line.get("message") or {}).get("content"))
+            started = _stamped(line) or ""
+            current = _Span(
+                instruction=_excerpt(instruction), started_at=started, ended_at=started
+            )
+            spans.append(current)
+            continue
+        if current is None:
+            continue
+
+        instant = _stamped(line)
+        if instant:
+            current.ended_at = instant
+        if line.get("type") == "assistant":
+            _absorb_assistant(current, line)
+        elif line.get("type") == "user":
+            _absorb_user(current, line)
+    return spans
+
+
+def _seat_of(span: _Span) -> tuple[str | None, str | None]:
+    """Return the model and deliberation this span mostly ran on."""
+
+    if not span.seats:
+        return None, None
+    return max(span.seats.items(), key=lambda entry: entry[1])[0]
+
+
+def _substantial(span: _Span, seconds: float) -> bool:
+    """Return whether this span is work worth measuring at all."""
+
+    output = span.tokens.get("output") or 0.0
+    return (
+        span.changing_tool_calls >= SUBSTANTIAL_CHANGING_CALLS
+        or seconds >= SUBSTANTIAL_SECONDS
+        or output >= SUBSTANTIAL_OUTPUT_TOKENS
+    )
+
+
+def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | None:
+    """Return one span as a Unit, or None where it is not substantial.
+
+    The identity is the session, the Seat and the instant the Unit began, so
+    the same finished session read twice yields the same Unit and the
+    measurement store skips the second copy rather than counting it twice.
+    """
+
+    seconds = _elapsed_seconds(span.started_at, span.ended_at)
+    if not _substantial(span, seconds):
         return None
 
-    entries = []
-    for group in groups:
-        seat = (
-            {key: configured.get(key) for key in SEAT_ALLOWED}
-            if group.get("role") == "main"
-            else dict.fromkeys(SEAT_ALLOWED)
-        )
-        seat["model"] = group.get("model")
-        seat["native_deliberation"] = group.get("native_deliberation")
-        entries.append(
-            {
-                "seat": seat,
-                "started_at": group.get("started_at"),
-                "completed_at": group.get("completed_at"),
-                "measurements": {"tokens": group.get("tokens")},
-            }
-        )
-    return entries
+    model, deliberation = _seat_of(span)
+    identity = json.dumps(
+        {
+            "session": session,
+            "model": model,
+            "deliberation": deliberation,
+            "started_at": span.started_at,
+        },
+        sort_keys=True,
+    )
+    return Unit(
+        unit_id=f"unit-{_opaque(identity)}",
+        session=session,
+        harness=harness,
+        started_at=span.started_at,
+        ended_at=span.ended_at,
+        seconds=seconds,
+        model=model,
+        deliberation=deliberation,
+        tokens=dict(span.tokens),
+        tool_calls=span.tool_calls,
+        changing_tool_calls=span.changing_tool_calls,
+        delegated=delegated,
+        signals={
+            "retried": False,
+            "tests_ran": span.tests_ran,
+            "tests_passed": span.tests_ran and not span.tests_failed,
+            "interrupted": span.interrupted,
+            "errored": span.errored,
+        },
+        instruction_excerpt=span.instruction,
+        result_excerpt=_excerpt(span.result),
+    )
+
+
+def _retried(units: list[Unit]) -> list[Unit]:
+    """Mark every Unit a later one in the same session repeated.
+
+    An instruction given twice is the cheapest evidence there is that the
+    first answer was not good enough, and it costs nothing to establish.
+    """
+
+    seen: dict[str, int] = {}
+    for index, unit in enumerate(units):
+        key = " ".join(unit.instruction_excerpt.split())
+        if not key:
+            continue
+        earlier = seen.get(key)
+        if earlier is not None:
+            marked = dict(units[earlier].signals)
+            marked["retried"] = True
+            units[earlier] = Unit(**{**asdict(units[earlier]), "signals": marked})
+        seen[key] = index
+    return units
+
+
+def units(session: str, harness: str | None, transcript_path: Any) -> list[Unit]:
+    """Return every substantial Unit one finished session produced.
+
+    Bounded to exactly the session named by *transcript_path*: that file, and
+    its own companion subagent directory beside it, and nothing else — no
+    encoding is derived from a working directory or a session identity, and no
+    other session's files are ever opened.
+
+    Returns nothing where the Harness keeps no record this module can split,
+    where no usable path was handed over, or where nothing in it could be read
+    at all. That is an absence for the caller to write no Unit over, never a
+    raised error (ADR-0179, decision 4 as applied to this read).
+    """
+
+    if harness not in READABLE_HARNESSES:
+        return []
+    if not isinstance(transcript_path, str) or not transcript_path:
+        return []
+
+    path = Path(transcript_path)
+    found = [
+        unit
+        for span in _spans(_lines(path), whole=False)
+        if (unit := _unit(span, session, harness, delegated=False)) is not None
+    ]
+
+    # Each subagent transcript is one Unit of its own, carrying the model and
+    # the effort that subagent actually ran on — the cleanest available signal
+    # that a delegated point did or did not do the work it was given.
+    subagents = path.with_suffix("") / SUBAGENTS_DIRNAME
+    if subagents.is_dir():
+        for transcript in sorted(subagents.glob(SUBAGENT_GLOB)):
+            found += [
+                unit
+                for span in _spans(_lines(transcript), whole=True)
+                if (unit := _unit(span, session, harness, delegated=True)) is not None
+            ]
+
+    return _retried(found)
+
+
+def pending(data: Path) -> list[dict[str, Any]]:
+    """Return every Unit still waiting to be graded."""
+
+    path = data / PENDING_FILE
+    return _lines(path) if path.exists() else []
+
+
+def _remember(data: Path, found: list[Unit]) -> dict[str, Any]:
+    """Append every Unit the pending store does not already hold.
+
+    A lifecycle signal redelivered after the store was already written adds
+    nothing the second time, which is what the Unit's own identity is for.
+    """
+
+    held = {str(row.get("unit_id")) for row in pending(data)}
+    fresh = [unit for unit in found if unit.unit_id not in held]
+    if fresh:
+        data.mkdir(parents=True, exist_ok=True)
+        with (data / PENDING_FILE).open("a", encoding="utf-8") as store:
+            for unit in fresh:
+                store.write(json.dumps(asdict(unit), sort_keys=True) + "\n")
+    return {
+        "recorded": [unit.unit_id for unit in fresh],
+        "skipped": [unit.unit_id for unit in found if unit.unit_id in held],
+    }
 
 
 def _finish(
     data: Path, draft: dict[str, Any], harness: str | None, transcript_path: Any
 ) -> dict[str, Any]:
-    """Answer one session-ending signal: append its Usage Records and forget the draft.
+    """Answer one session-ending signal: derive its Units and forget the draft.
 
-    A session that ran on more than one Seat produces one Usage Record per
-    Seat, read from the Harness's own finished record where one can be read
-    (`_measured_seats`) and from what the lifecycle signals themselves
-    already established otherwise. A session that ended abruptly — an error
-    included, there being no outcome left for an error to carry — contributes
-    whatever its own record establishes and nothing more; nothing here waits
-    for a human.
+    A session that ended abruptly contributes whatever its own record
+    establishes and nothing more; nothing here waits for a human. The two
+    sibling actions this moment carries — grading what is pending, and
+    refreshing this Skill's own public sources — write nothing capture owns,
+    and their every failure is swallowed here exactly as this path's own are.
     """
 
-    measured = _measured_seats(harness, transcript_path, draft.get("seat") or {})
-    entries = (
-        measured if measured is not None else list(draft.get("seats", {}).values())
+    written = _remember(
+        data, units(draft["session_identity"], harness, transcript_path)
     )
-    records = [_usage_record(draft, entry) for entry in entries]
-    appended = _append(data, records)
     _draft_path(data, draft["session_key"]).unlink(missing_ok=True)
 
-    # The session is over, so the one invocation with nothing left to delay
-    # carries this Skill's own unattended source refresh (ADR-0179). It is a
-    # sibling action on the same seam rather than part of capture's own
-    # measurement path: it writes source states and nothing capture owns, and
-    # its every failure is swallowed here exactly as this path's own are.
     with suppress(Exception):
-        _refresh().refresh(data)
+        _sibling("grade").hook_pass(data)
+    with suppress(Exception):
+        _sibling("refresh").refresh(data)
 
-    return {"ok": True, "fail_open": False, **appended}
+    return {"ok": True, "fail_open": False, **written}
 
 
 def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
@@ -633,11 +993,10 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     This is the synchronous path a Harness runs, so it does bounded local
     metadata I/O and nothing else: no model call, no test run, no repository
     scan, and no long-lived work. Every failure in it is swallowed, because a
-    capture that breaks a session is worse than no capture. The one thing a
-    session's own last invocation additionally carries is this Skill's
-    unattended source refresh, which reaches the network only as bounded
-    conditional metadata retrieval under a stated budget, in a module of its
-    own (ADR-0179).
+    capture that breaks a session is worse than no capture. The two things a
+    session's own last invocation additionally carries — one bounded grading
+    pass and this Skill's unattended source refresh — are bounded in their own
+    modules and reach a model or the network only from there (ADR-0179).
 
     The object returned here is a diagnostic and never a Harness's protocol,
     so the command line writes it to standard error and leaves standard output
@@ -670,8 +1029,8 @@ def _moment(event: str, payload: Any) -> str:
         return event
     if not isinstance(payload, dict):
         return ""
-    for field in EVENT_FIELDS:
-        named = payload.get(field)
+    for name in EVENT_FIELDS:
+        named = payload.get(name)
         if isinstance(named, str) and named:
             return named
     return ""
@@ -698,26 +1057,14 @@ def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     if not session:
         return _idle()
 
-    now = _now()
     held = _draft(data, session) or {
         "schema_version": SCHEMA_VERSION,
         "session_key": session,
         "session_identity": _opaque(session),
         "harness": clean.get("harness"),
         "harness_inventory_revision": clean.get("harness_inventory_revision"),
-        "seat": {},
-        "seats": {},
     }
-    seat = _seat_of(held, clean)
-    draft = {
-        **held,
-        "session_key": session,
-        "updated_at": now,
-        "seat": seat,
-        "seats": _touch_seat(
-            held.get("seats") or {}, seat, clean.get("measurements"), now
-        ),
-    }
+    draft = {**held, "session_key": session, "updated_at": _now()}
 
     if event in END_EVENTS or event in ERROR_EVENTS:
         return _finish(
@@ -740,6 +1087,20 @@ def _storage(data: Path) -> int:
     return sum(path.stat().st_size for path in home(data).rglob("*") if path.is_file())
 
 
+def _grader_ran_at(data: Path) -> str | None:
+    """Return when the grader last completed a pass, or None where it never has."""
+
+    path = data / GRADER_STATE_FILE
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(state, dict):
+        return None
+    last = state.get("last_run_at")
+    return last if isinstance(last, str) and last else None
+
+
 def status(data: Path, root: Path) -> dict[str, Any]:
     """Report capture's own state, without a network request or an evaluation.
 
@@ -748,23 +1109,28 @@ def status(data: Path, root: Path) -> dict[str, Any]:
     there is no separate configuration of this feature's own left to consult
     (#223): the Harness's own file is read fresh, exactly as `install` and
     `remove` already read it (ADR-0179). Each one's health is reported beside
-    whether its finished session record can supply measurements at all
-    (#225): a store of Usage Records that stays empty because a Harness
-    keeps no readable record is something to say plainly here, never
-    something left for the user to discover from the store itself.
+    whether its finished session record can be split into Units at all: a
+    pending store that stays empty because a Harness keeps no readable record
+    is something to say plainly here, never something left for the user to
+    discover from the store itself.
+
+    The pending count and the grader's last pass are reported here and nowhere
+    else, because a measurement reminder placed where the model reads it
+    changes the thing being measured.
     """
 
     integrations = _integrations()
-    reader = _session_records()
     return {
         "harnesses": [
             {
                 **integrations.health(owner(), harness, root),
-                "measurements": harness in reader.SUPPORTED,
+                "measurements": harness in READABLE_HARNESSES,
             }
             for harness in integrations.SUPPORTED
         ],
         "storage_bytes": _storage(data),
+        "pending": len(pending(data)),
+        "grader_last_ran_at": _grader_ran_at(data),
     }
 
 
@@ -779,15 +1145,15 @@ def _row_count(path: Path) -> int:
 def purge_paths(data: Path) -> list[dict[str, Any]]:
     """Return what this feature owns beyond the ledger, present or not.
 
-    This is the preview `config reset --evidence` renders before it removes
-    the whole `capture/` subdirectory — drafts and all — and the Usage Record
-    store beside it, keeping the Harness hooks installed (issue #227).
-    `capture/` is a directory rather than a JSONL file, so it is sized in
-    bytes; the Usage Record store is JSONL, sized in rows.
+    This is the preview a reset renders before it removes the whole `capture/`
+    subdirectory — drafts and all — and the pending Units beside it, keeping
+    the Harness hooks installed (issue #227). `capture/` is a directory rather
+    than a JSONL file, so it is sized in bytes; the pending store is JSONL,
+    sized in rows.
     """
 
     directory = home(data)
-    ledger = data / USAGE_LEDGER_FILE
+    waiting = data / PENDING_FILE
     entries: list[dict[str, Any]] = []
     if directory.exists():
         entries.append(
@@ -800,17 +1166,17 @@ def purge_paths(data: Path) -> list[dict[str, Any]]:
         )
     else:
         entries.append({"path": str(directory), "present": False})
-    if ledger.exists():
+    if waiting.exists():
         entries.append(
             {
-                "path": str(ledger),
+                "path": str(waiting),
                 "present": True,
                 "unit": "rows",
-                "count": _row_count(ledger),
+                "count": _row_count(waiting),
             }
         )
     else:
-        entries.append({"path": str(ledger), "present": False})
+        entries.append({"path": str(waiting), "present": False})
     return entries
 
 
@@ -825,7 +1191,7 @@ def purge(data: Path) -> list[dict[str, Any]]:
 
     report = purge_paths(data)
     shutil.rmtree(home(data), ignore_errors=True)
-    (data / USAGE_LEDGER_FILE).unlink(missing_ok=True)
+    (data / PENDING_FILE).unlink(missing_ok=True)
     return report
 
 
@@ -833,7 +1199,7 @@ def _hook_command(supplied: list[str], data: Path) -> list[str]:
     """Return the command a Harness runs for a lifecycle event.
 
     The data directory travels inside it. A hook installed for one directory
-    and run against another writes its drafts and records where nobody looks
+    and run against another writes its drafts and Units where nobody looks
     for them.
     """
 
@@ -870,15 +1236,15 @@ def remove_integrations() -> dict[str, Any]:
     the Global layer, withdrawn from it, or uninstalled: the Project layer is
     never removing what it never installed, so the Manager's own gate is what
     keeps this from clearing a Global Enable's entries from inside a working
-    directory. It runs while these files still exist, takes the
-    hooks out of every Harness, and leaves the accepted Usage Records alone. It
-    is answerable at any time, because removing what is already gone is a state
-    rather than an error.
+    directory. It runs while these files still exist, takes the hooks out of
+    every Harness, and leaves what was measured alone. It is answerable at any
+    time, because removing what is already gone is a state rather than an
+    error.
     """
 
     data = default_data()
     result = disable(data, Path.home())
-    return {"removed": result["harnesses"], "usage_records_preserved": True}
+    return {"removed": result["harnesses"], "measurements_preserved": True}
 
 
 def _emit(payload: dict[str, Any], stream: TextIO | None = None) -> None:
@@ -927,8 +1293,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--event", default="")
     parser.add_argument("--owner", default=owner())
 
-    # `--yes` gates only `purge`'s write, exactly as `config reset --evidence`
-    # needs it: a preview without it is a success, never a refusal.
+    # `--yes` gates only `purge`'s write: a preview without it is a success,
+    # never a refusal.
     parser.add_argument("--yes", action="store_true")
     return parser.parse_args(argv)
 

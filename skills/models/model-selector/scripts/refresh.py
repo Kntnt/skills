@@ -12,27 +12,31 @@ and confidently, because no verb reports an empty answer (issue #247).
 
 This module is the turn nobody has to remember. It rides the session-end
 invocation this Skill's lifecycle integration already installs, and it does
-exactly one thing: validator-conditional retrieval — ETag or Last-Modified,
-falling back to a content hash — of the non-commercial sources that are due.
-**It interprets nothing.** No page is parsed for meaning, no model is started,
-and no evidence beyond the source's own state is written. The unattended pass
-establishes *that* something moved; the person's next `update` establishes
-*what* (ADR-0179).
+validator-conditional retrieval — ETag or Last-Modified, falling back to a
+content hash — of the sources that are due. No model is started and no
+evidence about anybody's work is written. The pass establishes what a source
+says about the world; what the user's own work was worth is measured
+elsewhere entirely.
 
-## What it may touch, and what it may never touch
+## What it may touch, and what it may never store
 
-An unattended fetch that mis-parsed a commercial page would write a wrong
-fact that silently reshapes which model wins, and the user holds knowledge
-those pages do not state — what a plan actually costs and how a quota
-actually behaves. So the split is by `kind`, and it is the whole design:
+**An unattended pass may now learn what a model costs** (ADR-0182). The rule
+that it could learn what a model can do but never what it costs is reversed: a
+rate card is exactly what this Skill has to be current about, and a price
+carried with its source URL and its retrieval date is auditable in a way a
+figure somebody typed eight months ago is not.
 
-**An unattended pass may change what a model is judged capable of, never what
-it is judged to cost.** `FETCHABLE_KINDS` below is the complete list of what
-it may retrieve; `commercial_terms`, `gateway_rate_card`, and **any other
-value, including one absent or unreadable, are treated as commercial** — not
-fetched, and reported as due by `status` until the user runs `update`. Failing
-closed is what makes a `kind` added later safe on the day it appears, before
-anybody has taught this pass about it.
+What the pass may never do is store a fact it cannot attribute. A source that
+names no reader this module implements is retrieved and *not interpreted* —
+its validators move and nothing else does — and an entry inside a source it
+does read that claims an attribution this module cannot use is discarded
+rather than re-attributed to whatever page it happened to arrive on. Failing
+closed is what makes a source shape added later safe on the day it appears,
+before anybody has taught this pass about it.
+
+`FETCHABLE_KINDS` below is the complete list of what it may retrieve, and a
+`kind` outside it — including one absent or unreadable — is still left for the
+user's own `update`.
 
 ## Dueness, and the defect this module must not reinstall
 
@@ -79,25 +83,29 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, Protocol
 
+import catalogue
+import profiles
+
 SCHEMA_VERSION = 1
 
-# Where the live source-state store sits, beside the evidence ledger under
+# Where the live source-state store sits, beside the measurement store under
 # the selected data directory. Named here rather than imported from a peer:
-# this module is an independent consumer of an on-disk contract, the posture
-# `usage_evidence.py` already takes on capture's own store.
+# this module is an independent consumer of an on-disk contract.
 SOURCE_STATE_FILE = "source-states.jsonl"
 
-# The kinds an unattended pass may retrieve. Everything outside this set is
-# commercial as far as this module is concerned — the two documented
-# commercial kinds and every value it does not recognise alike — and is left
-# for the user's own `update`. `references/evidence-ledger.md` holds the
-# closed six-value vocabulary these four are drawn from.
+# The kinds an unattended pass may retrieve. It is now the whole documented
+# vocabulary, the price-carrying kinds included (ADR-0182): what bounds the
+# pass is attribution and a budget rather than a category of fact it is
+# forbidden to look at. A value outside this set — one nobody has taught this
+# module about — is still left for the user's own `update`.
 FETCHABLE_KINDS = frozenset(
     {
         "model_release_index",
         "model_detail",
         "capability_source",
         "benchmark_release_index",
+        "commercial_terms",
+        "gateway_rate_card",
     }
 )
 
@@ -135,9 +143,45 @@ DURATION = re.compile(
     r"^P(?:(?P<years>\d+)Y)?(?:(?P<months>\d+)M)?(?:(?P<weeks>\d+)W)?(?:(?P<days>\d+)D)?$"
 )
 
-# The two kinds the vocabulary itself calls commercial. Every other value
-# outside `FETCHABLE_KINDS` is treated the same way and reported as such.
+# The two kinds that carry what a model costs rather than what it can do.
+# They are retrieved like any other now; the name survives because `status`
+# still says which of a machine's sources are the price-bearing ones.
 COMMERCIAL_KINDS = frozenset({"commercial_terms", "gateway_rate_card"})
+
+# The one document shape this pass knows how to make facts out of, named by a
+# source's own `reads_as` member. A source naming no reader, or a reader this
+# module has never heard of, is retrieved and left uninterpreted — which is
+# every source on a machine until somebody registers one that is machine
+# readable, and is why adding a reader later is safe.
+READERS = frozenset({"catalogue-json"})
+READER_FIELD = "reads_as"
+
+# Exactly the members of a fetched entry that may reach the catalogue. Copied
+# by name rather than passed through, so a document cannot smuggle a key into
+# the file every decision is made from.
+ENTRY_ALLOWED: tuple[str, ...] = (
+    "id",
+    "provider",
+    "family",
+    "aliases",
+    "deliberation",
+    "price",
+    "long_context_threshold",
+    "long_context",
+    "reasoning_billed_as",
+    "capability",
+    "provider_says",
+    "released",
+)
+
+# How old the user's own answers may be before `status` suggests revisiting
+# them. Ninety days is roughly the interval at which this industry replaces a
+# model somebody is paying for.
+STALE_DAYS = 90
+
+# What `status` names as the way to answer the questions again. The unattended
+# pass asks nothing and stops nothing; saying so here is the whole of it.
+SETUP = "/model-selector setup"
 
 
 @dataclass(frozen=True)
@@ -145,14 +189,18 @@ class Retrieved:
     """One conditional retrieval's outcome, in the terms a `SourceState` records.
 
     `modified` is false where the server answered that the validators still
-    hold, in which case it supplies no content hash. Nothing here describes
-    what the source says: reading that is the typed `update`'s work.
+    hold, in which case it supplies neither a content hash nor a body.
+
+    `body` is the bytes that arrived, kept only for as long as it takes a
+    source's own reader to make facts out of them. A source naming no reader
+    never has its body looked at, and no body is ever written anywhere.
     """
 
     modified: bool
     etag: str | None
     last_modified: str | None
     content_hash: str | None
+    body: bytes | None = None
 
 
 class Retrieval(Protocol):
@@ -177,6 +225,7 @@ class Source:
     row: dict[str, Any]
     uri: str | None
     kind: str | None
+    reader: str | None
     cadence: str | None
     unattended: bool
     reason: str | None
@@ -288,7 +337,11 @@ def _lines(data: Path) -> list[str]:
 
 
 def _classify(
-    row: dict[str, Any], line: int, now: datetime, shipped: dict[str, str | None]
+    row: dict[str, Any],
+    line: int,
+    now: datetime,
+    shipped: dict[str, str | None],
+    force: bool = False,
 ) -> Source:
     """Return one row's class and dueness, without retrieving anything.
 
@@ -297,6 +350,11 @@ def _classify(
     An unattended source with no retrieval on record has never been retrieved
     and is due; one whose kind has no cadence — an immutable model detail — is
     never due, because a known detail page is never fetched again.
+
+    *force* is the user having typed `update --force`, which brings every
+    mutable index forward to now. It does not reach a kind with no cadence:
+    an immutable detail page says the same thing on every reading of it, so
+    forcing one would spend a connection to learn nothing.
     """
 
     # Read defensively: this store is a file the user may hand-edit, and a
@@ -304,13 +362,14 @@ def _classify(
     # rule below is written for.
     kind = row.get("kind") if isinstance(row.get("kind"), str) else None
     uri = row.get("uri") if isinstance(row.get("uri"), str) else None
+    named = row.get(READER_FIELD)
+    reader = named if isinstance(named, str) and named in READERS else None
     cadence = shipped.get(kind or "")
 
     # Why this pass may not retrieve the source, or None where it may.
     reason = None
     if kind not in FETCHABLE_KINDS:
-        commercial = kind in COMMERCIAL_KINDS
-        reason = "commercial" if commercial else "unrecognised_kind"
+        reason = "unrecognised_kind"
     elif uri is None or not uri.startswith(FETCHABLE_SCHEMES):
         reason = "unfetchable_uri"
 
@@ -321,7 +380,7 @@ def _classify(
     retrieved = _parsed(row.get("last_retrieved_at"))
     next_due = _advanced(retrieved, cadence) if retrieved and cadence else None
     if cadence:
-        due = next_due is None or next_due <= now
+        due = force or next_due is None or next_due <= now
     else:
         due = reason is not None
 
@@ -330,6 +389,7 @@ def _classify(
         row=row,
         uri=uri,
         kind=kind,
+        reader=reader,
         cadence=cadence,
         unattended=reason is None,
         reason=reason,
@@ -338,7 +398,9 @@ def _classify(
     )
 
 
-def _plan(data: Path, now: datetime) -> tuple[list[str], list[Source], int]:
+def _plan(
+    data: Path, now: datetime, force: bool = False
+) -> tuple[list[str], list[Source], int]:
     """Return the store's lines, every row it could read, and how many it could not."""
 
     lines = _lines(data)
@@ -354,7 +416,7 @@ def _plan(data: Path, now: datetime) -> tuple[list[str], list[Source], int]:
         if not isinstance(row, dict):
             unreadable += 1
             continue
-        sources.append(_classify(row, index, now, shipped))
+        sources.append(_classify(row, index, now, shipped, force))
     return lines, sources, unreadable
 
 
@@ -386,14 +448,15 @@ def _retrieve(
     deadline = time.monotonic() + timeout
     try:
         with urllib.request.urlopen(request, timeout=timeout / 2) as response:
-            digest = _hashed(response, deadline)
-            if digest is None:
+            body = _body(response, deadline)
+            if body is None:
                 return None
             return Retrieved(
                 modified=True,
                 etag=response.headers.get("ETag"),
                 last_modified=response.headers.get("Last-Modified"),
-                content_hash=digest,
+                content_hash=f"sha256:{hashlib.sha256(body).hexdigest()}",
+                body=body,
             )
     except urllib.error.HTTPError as error:
         if error.code != 304:
@@ -408,25 +471,28 @@ def _retrieve(
         return None
 
 
-def _hashed(response: Any, deadline: float) -> str | None:
-    """Return one response body's digest, or None where it cannot be bounded.
+def _body(response: Any, deadline: float) -> bytes | None:
+    """Return one whole response body, or None where it cannot be bounded.
 
-    Two bounds, both of which answer None rather than a partial digest: a
-    body larger than `MAX_RESPONSE_BYTES`, because a hash of a truncated body
-    would report a page as unchanged on a change past the cut, and a body
-    still arriving at the deadline, because this is spending a session's
-    teardown.
+    Two bounds, both of which answer None rather than a partial read: a body
+    larger than `MAX_RESPONSE_BYTES`, because a hash of a truncated body would
+    report a page as unchanged on a change past the cut, and a body still
+    arriving at the deadline, because this is spending a session's teardown.
+
+    The bytes are kept rather than folded straight into a digest, so that a
+    source naming a reader can be read without being fetched twice. They live
+    exactly as long as the pass that fetched them.
     """
 
-    digest = hashlib.sha256()
+    chunks: list[bytes] = []
     read = 0
     while read <= MAX_RESPONSE_BYTES:
         if time.monotonic() >= deadline:
             return None
         chunk = response.read(CHUNK_BYTES)
         if not chunk:
-            return f"sha256:{digest.hexdigest()}"
-        digest.update(chunk)
+            return b"".join(chunks)
+        chunks.append(chunk)
         read += len(chunk)
     return None
 
@@ -507,12 +573,167 @@ def _write(data: Path, lines: list[str], rewritten: dict[int, dict[str, Any]]) -
     temporary.replace(path)
 
 
+def _usable_url(raw: Any) -> str | None:
+    """Return a URL this pass would be willing to say a fact came from."""
+
+    return raw if isinstance(raw, str) and raw.startswith(FETCHABLE_SCHEMES) else None
+
+
+def _entry(raw: Any, attribution: str | None, retrieved: str) -> dict[str, Any] | None:
+    """Return one catalogue entry from one fetched one, or None where it has no source.
+
+    The entry's own claim wins where it makes one. A claim this pass cannot
+    use is a fact it cannot attribute, so the entry is discarded rather than
+    quietly re-attributed to whatever page it happened to arrive on — which is
+    the whole of what stops an unattended pass from inventing a rate card.
+    """
+
+    if not isinstance(raw, dict):
+        return None
+    identifier = raw.get("id")
+    if not isinstance(identifier, str) or not identifier.strip():
+        return None
+
+    if "source_url" in raw:
+        attribution = _usable_url(raw.get("source_url"))
+    if attribution is None:
+        return None
+
+    entry = {key: raw[key] for key in ENTRY_ALLOWED if key in raw}
+    entry["id"] = identifier
+    entry["source_url"] = attribution
+    entry["retrieved"] = retrieved
+    return entry
+
+
+def _learned(
+    source: Source, body: bytes | None, retrieved: str
+) -> list[dict[str, Any]]:
+    """Return every catalogue entry one fetched document supports.
+
+    A source naming no reader this module implements is not read at all: its
+    validators moved and nothing else did. That is the state every source on
+    every machine is in until somebody registers one that is machine readable,
+    and it is what makes a reader added later safe on the day it appears.
+    """
+
+    if source.reader is None or body is None:
+        return []
+    try:
+        document = json.loads(body.decode("utf-8"))
+    except (UnicodeDecodeError, ValueError):
+        return []
+    if not isinstance(document, dict):
+        return []
+
+    entries = document.get("models")
+    if not isinstance(entries, list):
+        return []
+
+    attribution = (
+        _usable_url(document.get("source_url"))
+        if "source_url" in document
+        else source.uri
+    )
+    return [
+        entry
+        for raw in entries
+        if (entry := _entry(raw, attribution, retrieved)) is not None
+    ]
+
+
+def _placed(
+    entry: dict[str, Any], known: dict[str, dict[str, str]]
+) -> dict[str, Any] | None:
+    """Return one entry with the two facts the catalogue cannot be read without.
+
+    A document naming only a price for a model everything already knows is the
+    ordinary case, and the catalogue's own reader rejects an entry carrying no
+    provider and no family — so the entry is completed from what is already
+    known rather than written in a shape nothing can load. A model nothing can
+    place, and that names neither for itself, is not written at all.
+    """
+
+    identity = {
+        **known.get(entry["id"], {}),
+        **{key: entry[key] for key in ("provider", "family") if entry.get(key)},
+    }
+    if not identity.get("provider") or not identity.get("family"):
+        return None
+    return {**entry, **identity}
+
+
+def _merge_catalogue(
+    data: Path, entries: list[dict[str, Any]], stamp: str
+) -> list[str]:
+    """Fold what the pass learned into the refreshed catalogue, and say what moved.
+
+    Field by field per model, so a pass that learned only a price leaves every
+    other fact about that model exactly as it found it, and a model nothing
+    knew about yesterday simply appears. Whether the profile enables it is not
+    this file's question — `status` names it as something the user may want to
+    adopt, and nothing here enables anything on anybody's behalf.
+    """
+
+    if not entries:
+        return []
+
+    path = data / catalogue.REFRESHED_FILE
+    try:
+        held = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        held = {}
+
+    stored = held.get("models") if isinstance(held, dict) else None
+    merged: dict[str, dict[str, Any]] = {
+        row["id"]: row
+        for row in (stored if isinstance(stored, list) else [])
+        if isinstance(row, dict) and isinstance(row.get("id"), str)
+    }
+    known = {
+        model.id: {"provider": model.provider, "family": model.family}
+        for model in catalogue.load(data, _here()).models
+    }
+
+    written: list[str] = []
+    for entry in entries:
+        placed = _placed(entry, known)
+        if placed is None:
+            continue
+        merged[entry["id"]] = {**merged.get(entry["id"], {}), **placed}
+        written.append(entry["id"])
+
+    if not written:
+        return []
+
+    # Through a temporary sibling and an atomic rename, as every store here is
+    # written: a pass interrupted mid-write leaves the previous catalogue
+    # standing rather than half of the new one.
+    data.mkdir(parents=True, exist_ok=True)
+    staged = path.parent / f"{path.name}.tmp"
+    staged.write_text(
+        json.dumps(
+            {
+                "generated_at": stamp,
+                "models": [merged[name] for name in sorted(merged)],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    staged.replace(path)
+    return sorted(set(written))
+
+
 def refresh(
     data: Path,
     *,
     now: datetime | None = None,
     budget_seconds: float = BUDGET_SECONDS,
     retrieve: Retrieval | None = None,
+    force: bool = False,
 ) -> dict[str, Any]:
     """Run one unattended pass over the source states under *data*.
 
@@ -531,7 +752,7 @@ def refresh(
     stamp = _stamp(instant)
     fetch = retrieve or _retrieve
     deadline = time.monotonic() + budget_seconds
-    lines, sources, unreadable = _plan(data, instant)
+    lines, sources, unreadable = _plan(data, instant, force)
 
     # What the pass concluded, accumulated rather than written per source: one
     # rewrite of the store at the end is one moment it can be interrupted in.
@@ -542,10 +763,14 @@ def refresh(
     outcomes = {"unchanged": 0, "changed": 0, "not_due": 0}
     skipped = {"manual": 0, "unreachable": 0, "budget_exhausted": 0}
 
+    # What the pass made of the sources it could read, accumulated the same
+    # way and written once at the end, for the same reason.
+    learned: list[dict[str, Any]] = []
+
     for source in sources:
         # A source this pass may not retrieve is left untouched entirely, so
-        # that nothing about a commercial source — its row's own provenance
-        # included — is ever written by a pass nobody watched.
+        # that nothing about a source nobody has taught it about — its row's
+        # own provenance included — is ever written by a pass nobody watched.
         if not source.unattended:
             skipped["manual"] += 1
             continue
@@ -582,10 +807,12 @@ def refresh(
             continue
         rewritten[source.line], concluded = _retrieved_row(source.row, answer, stamp)
         outcomes[concluded] += 1
+        learned += _learned(source, answer.body, stamp)
 
-    # One rewrite for the whole pass, and one account of it for a caller that
-    # wants to see what happened.
+    # One rewrite of each store for the whole pass, and one account of it for
+    # a caller that wants to see what happened.
     _write(data, lines, rewritten)
+    adopted = _merge_catalogue(data, learned, stamp)
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -596,7 +823,50 @@ def refresh(
         "counts": {"known": len(sources), "unreadable": unreadable},
         "outcomes": outcomes,
         "skipped": skipped,
+        "catalogue": adopted,
+        "forced": force,
         "budget_seconds": budget_seconds,
+    }
+
+
+def _nudge(data: Path, instant: datetime) -> dict[str, Any]:
+    """Say what the user may want to answer again, without asking them anything.
+
+    Two things only, both of which the pass itself established and neither of
+    which stops anything: answers old enough that this industry has replaced a
+    model since, and models the catalogue now knows that the profile has never
+    been asked about. Both name `setup`, and there the matter rests — a
+    reminder placed anywhere a model reads would change what is being
+    measured.
+    """
+
+    cat = catalogue.load(data, _here())
+    profile = profiles.load(data, cat)
+    enabled = set(profile.models)
+
+    adoptable = sorted(model.id for model in cat.models if model.id not in enabled)
+    unasked = sorted(
+        {model.provider for model in cat.models if model.id not in enabled}
+        - set(profile.providers)
+    )
+
+    answered = _parsed(profile.answered_at)
+    stale = answered is None or (instant - answered).days > STALE_DAYS
+
+    says: list[str] = []
+    if profile.source == "file" and stale:
+        says.append(f"the profile was answered more than {STALE_DAYS} days ago")
+    if adoptable:
+        says.append(f"{len(adoptable)} catalogue models are not enabled")
+    if unasked:
+        says.append(f"the profile was never asked about {', '.join(unasked)}")
+
+    return {
+        "profile_source": profile.source,
+        "answered_at": profile.answered_at,
+        "adoptable": adoptable,
+        "unasked_providers": unasked,
+        "says": f"{'; '.join(says)}; run `{SETUP}`" if says else None,
     }
 
 
@@ -604,14 +874,15 @@ def status(data: Path, *, now: datetime | None = None) -> dict[str, Any]:
     """Report what unattended refresh can and cannot keep current under *data*.
 
     This is the one surface the pass is reported on. It retrieves nothing and
-    writes nothing, and it names `/model-selector update` as what resolves
-    both the sources this pass may never fetch and a machine that has no
-    source states at all.
+    writes nothing, and it names `/model-selector update` as what resolves a
+    source this pass could not reach or read, and `/model-selector setup` as
+    what answers a profile the world has moved past.
     """
 
     instant = now or _now()
     _, sources, unreadable = _plan(data, instant)
     return {
+        "profile": _nudge(data, instant),
         "schema_version": SCHEMA_VERSION,
         "verb": "status",
         "data": str(data),
@@ -623,6 +894,8 @@ def status(data: Path, *, now: datetime | None = None) -> dict[str, Any]:
                 "uri": source.uri,
                 "provider": source.row.get("provider"),
                 "kind": source.kind,
+                "priced": source.kind in COMMERCIAL_KINDS,
+                "reads_as": source.reader,
                 "unattended": source.unattended,
                 "reason": source.reason,
                 "cadence": source.cadence,
@@ -656,6 +929,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("refresh", "status"))
     parser.add_argument("--data", default=str(default_data()))
+
+    # `--force` is what `/model-selector update --force` promises: every
+    # mutable index checked once, now, rather than when its cadence next
+    # elapses. It changes nothing else about the pass — the budget, the one
+    # connection at a time, and what may be stored are all unmoved.
+    parser.add_argument("--force", action="store_true")
     return parser.parse_args(argv)
 
 
@@ -664,7 +943,10 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parse_args(sys.argv[1:] if argv is None else argv)
     data = Path(args.data)
-    _emit(refresh(data) if args.action == "refresh" else status(data))
+    if args.action == "refresh":
+        _emit(refresh(data, force=args.force))
+    else:
+        _emit(status(data))
     return 0
 
 

@@ -1,8 +1,8 @@
 ---
 name: model-selector
-description: Derive routing context, route delegated execution, and observe externally judged routed attempts when another Skill requires Model Selector's public Interfaces. Do not use implicitly for recommend, setup, config, compare, capture, update, record, or status.
+description: Choose the model and deliberation level that completes delegated work at the lowest total cost, when another Skill requires Model Selector's public select interface. Do not use implicitly for setup, status, update, evidence, or reset.
 disable-model-invocation: false
-argument-hint: "[recommend] [--decision=route|renew] [--budget=<amount>|--quality=<score>] [--data=<path>] [<workload>] | chart|compare [--decision=route|renew] [--data=<path>] <workload> | context|record [--data=<path>] <path> | route <path> | observe --artifact=<path> [--import] [--data=<path>] <path> | config [show|history] [--data=<path>] | config reset [--evidence] [--yes] [--data=<path>] | config add|edit|remove [--data=<path>] model|channel [<id>] | config policy [show|reset] [--data=<path>] [<cohort>] | update [--force] [--data=<path>] | setup|status [--data=<path>] [-- <instruction>]"
+argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | update [--force] [--data=<path>] | evidence [--data=<path>] [<kind>] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -15,7 +15,7 @@ metadata:
 
 # model-selector
 
-Configure the exact model versions and subscription/API channels available to one user, then select a Pareto-efficient model, effort and agent configuration for a workload, budget or quality floor without re-researching known releases.
+Which model, at which deliberation level, finishes a piece of work for the least money — answered from what this machine has measured rather than from reputation. The answer is advice. No form of it means *start nothing*: where the profile is missing, the catalogue empty or nothing reachable, it names the seat the caller already has and says why.
 
 `$HERE` is the directory that contains this SKILL.md, and `$MANAGER` is the Manager directory: `$HERE/../kntnt/` if it exists, else `kntnt/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Neither found: tell the user to install the Manager (`npx skills add Kntnt/skills`) and stop. `$LIBRARY` is `$MANAGER/library/` — absent, tell the user to run `/kntnt update`, then stop.
 
@@ -25,125 +25,87 @@ In the JSON, `path` is the command path as a list, `flags` holds each flag the u
 
 ## Arguments
 
-| Command | Effect |
-| --- | --- |
-| `setup` | Create or fully review the persisted model and access-channel profile. |
-| `config`, `config show` | Inspect the persisted profile. |
-| `config add` | Add one model selection or access channel; the operand says which. |
-| `config edit` | Edit one model selection or access channel, the operands naming which and its id. |
-| `config remove` | Remove one model selection or access channel, named the same way, after confirmation. |
-| `config history`, `config reset` | Show configuration history, or reset the active configuration after confirmation. |
-| `config reset --evidence` | Discard this machine's own measurement — the evidence ledger, its derived frontiers, the quota store, the Standing Policy override and its history, capture and the Usage Record store — after confirmation or `--yes`, keeping the profile and researched public facts. |
-| `config policy`, `config policy show` | Show the Standing Policy each workload Cohort routes under, and what moved it; an operand narrows it to one Cohort. |
-| `config policy reset` | Restore the shipped Standing Policy for the Cohort the operand names, or for every overridden Cohort, after confirmation. |
-| `recommend`, and the bare invocation | Recommend from stored evidence for the workload the operand describes. Infer the current task only when the workload is omitted and unambiguous. |
-| `context` | Derive a complete route artifact from stored selections and exact runtime facts for the request at the operand's path, or wrap a frozen snapshot unchanged. |
-| `route` | Resolve the structured request artifact at the operand's path into ordered exact launch decisions. |
-| `chart`, `compare` | Show comparable frontier tables and plotting data for the workload the operand describes. |
-| `update` | Revalidate due discovery, pricing, and benchmark indexes once. |
-| `observe` | Turn the completed routed attempts at the operand's path into a sanitized importable artifact in caller-owned scratch, and with `--import` file the machine-judged ones. |
-| `record` | Validate and append the unseen local run observations at the operand's path. |
-| `status` | Report the profile, evidence vintage, due sources, gaps, and capture's own health. |
+`<work>` describes the job in the user's own words. Where it is absent the job is the task at hand, and you write the description yourself: a sentence or two saying what is to be built, decided, found or written.
 
-`--data=<path>` overrides the default data directory; `route` reads no profile or evidence at all, and `observe` without `--import` writes none. `--artifact=<path>` names the caller-owned file `observe` writes the observations into, and `--import` is asked for by a routed caller that wants what it may file filed. `--decision=route|renew` selects the routing or the renewal decision, and `--budget=<amount>` and `--quality=<score>` are the two objectives `recommend` selects under; `## Evidence first` says what each means. `--force` makes `update` check each relevant mutable index once. `--evidence` on `config reset` discards this machine's own measurement while keeping the profile and researched public facts, and `--yes` answers that confirmation yes rather than asking.
+`--kind=<kind>` names the class of work, which is what an estimate is keyed on. Where it is absent you classify the work into exactly one of eight: `mechanical`, a fully specified change needing no judgement; `implement`, building to a written spec with judgement inside a fenced scope; `design`, deciding what to build at all; `debug`, finding a cause in a system that misbehaves; `review`, judging somebody else's work against a standard; `analyze`, reading a lot and reporting a little; `prose`, writing or editing text a person will read; `converse`, a short exchange with a person. There is no ninth kind, and a finer description of the job belongs in `<work>`, which is kept and reported and never splits the comparison.
 
-## Evidence first
+`--scope=limited` admits the caller's own provider. `--scope=callable`, the default, adds every model this Harness can reach through a Bridge and the profile has a channel for. `--scope=all` admits the whole catalogue, reachable or not. Scope says what may be called, never what is preferred.
 
-Default data directory: `~/.kntnt/model-selector/`. A user-supplied `--data=<path>` wins. Read `config.json` and existing evidence before any research or recommendation.
+`--json` says a machine is reading the answer rather than a person.
 
-When `config.json` is absent or invalid, read `$HERE/references/profile-management.md` and run first-use setup before any command that needs selections except `context` and `route`. Context derives the absent-profile state for a `config.json` that is not there and the rejected-profile state for one it read and could not validate, and Route inherits on both rather than refusing; neither starts setup. Never install a bundled access combination as the user's configuration.
+`--data=<path>` puts the profile, the catalogue and the measurement store somewhere other than `~/.kntnt/model-selector/`. Every command takes it and every command means the same directory by it.
 
-When no evidence ledger exists, use only the configured models covered by `$HERE/data/seed-evidence.jsonl` as dated seed priors. `recommend` reads applicable seed evidence without writing and may read applicable `capability_prior_seed` rows in place when no newer ledger record exists. Relevant matched measurements override capability priors, which choose only cold-start experiments and never supply numeric evidence or clear a quality floor. `update` initializes applicable ledger records, preserving retrieval dates and sources. Never present the seed as current after its stated date.
+On `evidence`, `<kind>` narrows the account to that one kind, spelled as above.
 
-One point means `model version × effort/thinking × harness × tools × policy × access channel × price or subscription schedule`. Never compare or recommend a bare model family.
+`--force` makes `update` check every mutable source rather than only the ones the shipped cadence has made due. `--evidence` widens `reset` from the user's answers to the measurement as well. `--yes` answers the one question `reset` asks.
 
-`--decision=route` is the default and answers which already-owned channel to use now. `--decision=renew` evaluates whether a monthly subscription earns its fixed fee. `--budget=<amount>` selects best conservative quality within a budget only when all eligible points share that cost unit. `--quality=<score>` selects the lowest conservative cost clearing the floor. Keep USD, rolling-window quota, weekly quota and subscription credits separate unless the user supplies an explicit shadow price.
+## The answer
 
-## Setup and config
+This is the bare invocation. The data directory is the `--data=<path>` value where the user gave one and `~/.kntnt/model-selector/` otherwise; every command below means that directory.
 
-Read `$HERE/references/profile-management.md`. Setup is mandatory on first use and persistent thereafter. `setup` performs a complete guided review; `config` applies the requested inspection or narrow revision. Ask one question at a time, preserve unambiguous input already given, show the resulting profile before writing and keep evidence history independent from configuration membership.
+Run:
 
-Complete when every enabled pinned release or explicitly accepted mutable alias points to a valid subscription, direct API, gateway API or other access channel, and the saved revision can be inspected without repeating the interview.
+    uv run "$HERE/scripts/selection.py" --kind=<kind> --scope=<scope> --harness=<harness> --seat=<model>@<level> [--data=<directory>]
 
-`config reset --evidence` discards what this machine measured and keeps what it researched and what the user configured. Under the selected data directory it removes exactly seven paths: `run-observations.jsonl`, `derived-frontiers.json` and `quota-observations.jsonl`, owned by the Collection Library's `routed_observations.py` and reached through `uv run "$HERE/scripts/observations.py" purge`; `standing-policy.json` and `standing-policy-history.jsonl`, owned by `$LIBRARY/scripts/standing_policy.py` and reached through `uv run "$LIBRARY/scripts/standing_policy.py" purge`; and the whole `capture/` subdirectory and `usage-records.jsonl`, owned by this Skill's own `scripts/capture.py` and reached through `uv run "$HERE/scripts/capture.py" purge`. Every other file `$HERE/references/evidence-ledger.md`'s `## Store` table names is untouched, and so are `config.json` and its history.
+The work itself is never passed in. Classifying it is your job and `--kind` is the whole of what the arithmetic reads, so nothing here writes a brief to disk or sends one anywhere.
 
-Run each of the three `purge --data=<directory>` commands once, without `--yes`, to render the exact paths this data directory holds and each one's row or byte count; a path the directory does not hold is reported as absent rather than as an error, and a purge preview is a success, unlike an unconfirmed `policy reset`. Show that combined preview and obtain confirmation the way every destructive configuration act does, or read it from a supplied `--yes` for an unattended run. A declined confirmation writes nothing. Confirmed, run the same three commands again with `--yes --data=<directory>` and report what went, per path, by count of rows or bytes, exactly as the preview named it — nothing here is migrated, backfilled or reinterpreted. Removing `capture/` clears its in-flight drafts; the Harness hooks stay installed and keep measuring, and the next session capture recreates whatever it needs. `config policy reset` is unchanged and stays the narrower act, restoring one Cohort's shipped default and keeping its own history; this is the wider one.
+`--harness` is the Harness you are running in and `--seat` is your own model and its deliberation level. Only you know those two, and `limited` scope and the inheritance floor are both measured against them. Add `--stakes=high` where the work is irreversible or has no checker behind it, and leave it off otherwise. Add `--repo=<path>` where a Bridge command would need a working directory. Where the user named a model or a level — in `<work>`, in the Contextual Instruction, or in whatever sent you here — pass it as `--model=<token>` or `--deliberation=<level>`: it is honoured, and where the point as stated cannot be launched the answer says exactly what differs.
 
-## Standing policy
+With `--json`, emit the response verbatim and add nothing beside it. A machine is reading it, and every word of prose there is a word that machine has to parse past.
 
-Read `$HERE/references/profile-management.md`. The Standing Policy is where one workload Cohort starts on the Rung ladder and the inclusive floor and ceiling routing stays between. It ships working and has no `set`: a Cohort moves only upward, only when measured failures trip its threshold, and only a reset moves it back. It is script-owned state beside `config.json`, never hand-edited, and the profile's `config.lock` protocol does not apply to it.
+Without `--json`, render the same answer for a person:
 
-Run `uv run "$LIBRARY/scripts/standing_policy.py" policy show --data=<directory> [<cohort>]` for `config policy [show]` and render its JSON: the effective starting Rung, floor, ceiling, failure threshold, and exploration budget, plus the rows that moved the Cohort with the run keys behind each. Where `store_damaged` is true, say so first: routing still has a complete policy, because the shipped default is one, but every Cohort that had moved is back at its cold start until the file is repaired or reset. Say for each shipped symbolic value — `cold_start`, `weakest_enabled`, `main_seat` — that it resolves per request against that request's own candidate ladder. `show` never writes.
+- The model and the deliberation level, and how it is launched. `launch.how` is `claude-code-agent` — a generated subagent definition named by `subagent_type` — or `bridge-command`, an argv to run as a process, or `inherit`, which carries no launch argument and means the caller's own seat.
+- What it is expected to cost and how likely it is to finish, from `expected`. The cost is the list value of the tokens, whoever pays for them, so a subscription seat and an API seat are one number and comparable.
+- What the answer rests on, from `basis`. `measured` is this machine's own rows for exactly this kind, model and level. `pooled` is rows for that model at other kinds or levels. `prior` is the model's published capability against this kind's difficulty, with no local row behind it at all. `inherit` is nothing reachable, so the seat already in hand stands.
+- The alternatives it beat, and `note` wherever it is not null.
 
-For `config policy reset [<cohort>]`, show the exact store path and every Cohort about to be restored, obtain confirmation the way every destructive configuration act does, then run the same script as `policy reset --yes --data=<directory> [<cohort>]` and report the Cohorts restored. A declined confirmation writes nothing. Evidence, derived frontiers, and the profile are untouched, and the restored default reaches the next frozen routing context rather than a run already under way.
+## Setup
 
-## Recommend
+Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which providers, which of those providers' models, and then how each provider is paid for on each channel. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that can be fetched — prices, model lists and a provider's own positioning are the machine's job. Show the assembled profile in full before it is written.
 
-Read `$HERE/references/pareto-selection.md`. Normalize the resolved profile, evidence, active Harness, exact main seat, workload, categorical workload requirements, overrides, adapter mappings, route/renew economics, and policy into the artifact contract in `$HERE/references/route-request.schema.json`, then obtain the decision through the `recommend()` Interface in `$HERE/scripts/route.py`. This is the same selection core as Route; never repeat hard filters, evidence classification, cost selection, or escalation as prose-only judgement. Render the returned detailed recommendation as follows:
+Hand it to the script rather than editing the file:
 
-1. Resolve workload stratum, surface/harness, quality metric, budget or quality floor, latency/safety/availability filters and evidence date. State any inferred value.
-2. Select only enabled configured model versions, effort/serving modes and access channels. Prefer local production-shaped observations, then matched independent evaluations, then configuration-bearing first-party results; use prose tier claims only to choose experiments.
-3. When matched measurements cannot choose the exact point, choose the weakest plausibly capable enabled model, then the lowest plausibly sufficient supported reasoning control. For reversible, objectively checked work, start there and escalate exactly one adjacent Rung only after externally verified failure — the next supported reasoning control on the same model, or the next enabled model up by capability where that scale is exhausted or the Harness carries the control. For high-consequence or irreversible work without a trustworthy external checker, choose the strongest plausible enabled configuration and refuse unsafe exploration.
-4. Compute conservative workload quality and channel-appropriate cost per successful completed task. For a routing decision, keep marginal cash, quota burn and latency visible; for a renewal decision, allocate the monthly plan fee across successful work and compare the counterfactual. Build the relevant Pareto frontiers; do not optimize a naive quality/cost ratio or pretend that included usage has a token price.
-5. Recommend one point, its nearest cheaper and stronger frontier neighbors, and any checkable cheap-first escalation policy supported by evidence. A routing policy is its own configuration, never free capability.
-6. Report evidence source/version, uncertainty, exclusions and staleness. When evidence cannot support the requested comparison, say what is missing and propose the smallest discriminating evaluation instead of inventing a rank.
+    uv run "$HERE/scripts/setup_apply.py" [--data=<directory>] <path-to-profile-json>
 
-Start every recommendation with exactly one prominent, text-bearing status banner from the evidence classes in `$HERE/references/pareto-selection.md`. The banner words are the primary accessible signal. It reports the classification reason, confidence, the evidence still missing, and whether the selected point is an exploration start or a production recommendation.
-
-Immediately after a blue or orange banner, emit a section titled `Snabbaste vägen till mätdata` using the frozen experiment-brief contract in `$HERE/references/pareto-selection.md`. `recommend` remains offline and read-only: it plans the experiment but performs no network request, evaluation, or write. Normal work executes the brief, and `record` imports its observation artifact; do not add or imply an experiment command.
-
-After the banner and any experiment brief, emit a section titled `Observerad förbrukning` beside the recommendation and never merged into it: name the selected point and its frontier neighbors — the same points named above, and no wider pool — and, for each, resolve its own `model` and `portable_deliberation` and pass the ordered list through the `usage_by_model()` Interface in `$HERE/scripts/usage_evidence.py` against the selected data directory. Only the `model` is matched on — no Seat resolves a portable deliberation — so report each returned figure exactly as it came back: the mean of each token category the Usage Record store actually holds for that model, the mean elapsed seconds, the Usage Record count and the earliest/latest instant behind them, and the deliberations those records carry, naming unresolved ones as unresolved. Two named points differing only in deliberation therefore report the same figures; say so rather than letting the repetition read as coincidence. State a figure no record supports as absent rather than as zero, and never let one feed the quality or cost figures above it — a Usage Record enters no frontier, clears no quality floor, breaks no tie, and chooses nothing; the recommendation above is made in full before this section is ever read.
-
-Complete when the recommendation names an exact configuration and decision rule, every named alternative is comparable, the user can see why dominated candidates lost, and every named point's observed usage is reported or stated absent, per model and with the deliberations behind it named.
-
-## Context
-
-Read `$HERE/references/model-routing.md` and validate the input against `$HERE/references/context-request.schema.json`. Run `uv run "$HERE/scripts/context.py" [--data=<path>] <path>` and emit its JSON response without commentary. The runtime form reads the validated profile, shipped seed, adapter templates, routing defaults, and the selected evidence ledger; specializes exact mappings from the caller-supplied Harness and main-seat facts; projects the ledger into `context.evidence.records`, so an attempt an external verdict judged reaches the next decision with nothing written by hand; and returns one complete route artifact. The snapshot form validates and returns the supplied frozen snapshot unchanged beside the current ordered requests. Context never enters setup and performs no network access, evaluation, research, or persistent write.
-
-## Route
-
-Read `$HERE/references/model-routing.md` and follow its public Model Routing Module exactly. Validate the complete artifact against `$HERE/references/route-request.schema.json`, run `uv run "$HERE/scripts/route.py" <path>`, and emit the helper's JSON response without commentary. A caller with runtime facts invokes Context first and passes its response directly to Route; Route never reconstructs derivation rules. Route never starts setup, performs no network access, evaluation, or research, and writes no configuration or evidence.
-
-## Chart
-
-Follow `recommend` through frontier construction without selecting one winner. For each comparable cohort, emit a compact table containing exact configuration, conservative quality, marginal USD per success, five-hour quota burn per success, weekly quota burn per success, allocated subscription USD per success and p90 latency. Add, for each row's own `model` and `portable_deliberation` resolved through the `usage_by_model()` Interface in `$HERE/scripts/usage_evidence.py` — only the `model` is matched on, no Seat resolving a portable deliberation: the mean of each token category the Usage Record store holds for it, the mean elapsed seconds, the Usage Record count and vintage span behind them, and the deliberations those records carry, naming unresolved ones as unresolved. Two rows differing only in deliberation therefore carry the same figures. Use `null`, not zero, for unavailable metrics, the usage columns included — a Usage Record enters no frontier and chooses nothing, so it never feeds the quality or cost columns beside it. Then emit plotting-ready CSV in a fenced block, one column per figure the table carries, plus one column naming the deliberations behind each row's usage figures — a list rather than a figure, and the one field that keeps a per-model number honest. Produce a single mixed-channel x-axis only when the user supplied a shadow price; otherwise render separate cash, quota and renewal views and explain why they cannot honestly share one numeric x-axis.
-
-## Update
-
-Read `$HERE/references/evidence-ledger.md`. Run one bounded update pass:
-
-1. Initialize a missing ledger with applicable evidence for configured selections. Merge applicable public seed records absent from an older ledger without replacing newer local evidence. The seed contains no user access profile, subscription entitlement or quota observation.
-2. Revalidate only sources required by enabled selections and watched families that are due by the shipped cadence in `$HERE/data/refresh-cadences.json`, which the configuration does not override: provider model/release indexes, mutable first-party capability sources and commercial terms weekly; benchmark release indexes monthly. Dueness is measured from each source's `last_retrieved_at` and from nothing else, so stamp that field on every source this pass actually retrieves, commercial terms and rate cards included, and `last_checked_at` on every source it considers. Refresh capability sources on the existing model/release-source cadence. An enabled selection whose model has no capability rank in the ledger or the seed makes its own benchmark release indexes due on this pass regardless of cadence, so a newly adopted seat is not unrankable for a month by construction. `--force` checks each relevant mutable index once but still never refetches a known immutable model detail page.
-3. Fetch detail pages only for newly discovered version keys. Append alias, price, subscription, quota, benchmark and deprecation changes as effective-dated records; preserve prior rows.
-4. Generate fingerprints for missing configuration observations. Never rerun an existing run key; never trigger evaluation from a price-only change.
-5. Reprice stored usage separately from historical billed cost, rebuild affected configured frontiers and report exactly what changed. A discovered newer family version is reported but remains excluded until the user adds it alongside the old selection or replaces the old version through `config edit`.
-
-For a changed first-party capability claim or normalized tag set, append changed capability-prior records without rewriting history. Keep every such row explicitly low-confidence and categorical.
-
-No source changed is a successful update. Complete when every due source has a recorded check outcome and every discovered change is appended or explicitly marked provisional.
-
-## Observe
-
-Read `$HERE/references/run-observations.md` and follow it exactly. Run `uv run "$HERE/scripts/observations.py" observe --artifact=<path> [--import] [--data=<directory>] <path>` and emit the helper's JSON response without commentary. The attempts come from the caller that routed the work; this Skill re-resolves no model, no deliberation control and no evidence, and adds nothing the attempt did not establish. Observe is offline and starts no setup, research or evaluation, and writes no profile. Without `--import` it writes the artifact and nothing else, which is the form a user runs by hand. With `--import` it also files the machine-judged observations through the shared Collection Library's `record`, writing the evidence ledger and only the affected derived frontiers under the selected data directory, and evaluating the Standing Policy of every Cohort that import touched; a routed caller that wants its evidence filed asks for that by name, and Orchestrate reaches the same Library directly at its own verdict. Report the artifact path, what became importable, what was skipped as identical, what conflicted and every refused attempt with its stable code, then the import account where one was asked for: imported, identically skipped, conflicting and refused identities, and each touched Cohort's Standing Policy answer. A ledger refusal is reported and stops nothing. Never present an unjudged, self-graded or interrupted attempt as importable evidence.
-
-## Capture
-
-Read `$HERE/references/run-capture.md` and follow it exactly. Capture follows this Skill's own Enabled state and asks for nothing beyond it: the Manager installs this feature's owned lifecycle integration into every supported Detected Harness of the Global layer the moment the Skill is Enabled, placed, or refreshed, and removes every entry the moment it is Disabled there — the same seams that already place and remove this Skill's own files, and no third step is ever asked for. A Project-layer Enable installs no integration and a Project-layer uncheck or withdrawal removes none, because an owned entry is keyed by owner inside a Harness's own configuration and a Global and a Project Enable of the same Skill would write and remove one another's single entry.
-
-Capture itself performs no research or evaluation, and reaches no network. It writes the capture store and, at a session's end, one Usage Record per Seat it ran on to its own store beside the evidence ledger; it never writes that ledger, never rebuilds a derived frontier, and changes no profile and no configuration. That same session-end invocation additionally dispatches this Skill's unattended source refresh, a sibling on the same seam and no part of capture's own measurement path: read `$HERE/references/unattended-refresh.md` for what it retrieves, what it may never retrieve, and what `status` reports of it. Ordinary work is measured and never judged: nothing here establishes an outcome, nothing waits for a human, and a Usage Record carries no checker, no condition, and no Cohort. Present a Usage Record as what one session cost on one Seat and nothing more.
-
-Accepted Usage Records survive Disabling the Skill; a purge of captured data is a separate act the user has to ask for by name (`config reset --evidence`). `status` reports capture's own health.
-
-## Record
-
-Read `$HERE/references/evidence-ledger.md` and `$HERE/references/run-observations.md`. Run `uv run "$HERE/scripts/observations.py" record --data=<directory> <path>` and render its report. It validates provenance, configuration fingerprint, benchmark key, token categories, cost, outcome and timestamps for every supplied observation, appends only unseen run keys, skips identical duplicates, rejects conflicting duplicates rather than overwriting them, and rebuilds only the derived frontiers whose eligible run set changed, each named by its benchmark key, stage, workload cohort and workload tags. This command is the user-owned ledger mutation; Orchestrate calls the shared Library's same `record` implementation directly for eligible machine-judged attempts, never this command. The same call evaluates each touched Cohort's Standing Policy failure threshold and may ratchet its starting Rung one step up, never down. Report accepted, skipped and rejected records, then the `standing_policy` outcome of every touched Cohort: a `moved` Cohort by its from and to Rung, the failures out of the rows in its window against the threshold behind them, and `/model-selector config policy reset <cohort>` as the narrower way back — restoring the shipped default and keeping the history — with `config reset --evidence` as the wider one, discarding the measurement the movement rests on and the history with it; `standing_policy_ceiling_reached`, `stale_policy_context` and `below_threshold` are stated as they came.
+Render its report: the revision written, and the generated subagent definitions written and removed. Where it says the definitions directory had to be created, pass that on — Claude Code reads that directory as a session starts, so those definitions reach sessions started from now on rather than this one.
 
 ## Status
 
-Read `config.json` and ledger metadata only. Report the active revision and the shipped source cadences against the current date, but perform no network requests, writes or evaluations. Distinguish stale mutable sources from immutable model detail records that intentionally have no refresh date.
+Report what this Skill knows, how fresh it is and what it wants from the user. Nothing here asks a question, changes anything or reaches the network.
 
-Read `$HERE/references/unattended-refresh.md` and run `uv run "$HERE/scripts/refresh.py" status --data=<directory>`. This is the one surface the unattended refresh is reported on; render its account of every source the pass may never retrieve and is therefore waiting on the user for — commercial terms, gateway rate cards, and any kind or URI it does not recognise — naming `/model-selector update` as what resolves each. Where it reports `established` as false, say that unattended refresh has nothing to check and that a typed `update` establishes the sources. This retrieves nothing and writes nothing.
+Read `<directory>/profile.json` and say when it was answered and which Harnesses, providers, models and payment channels it holds. Where it is absent or will not validate, say so and name `/model-selector setup`: until then every catalogue model the detected Harnesses can reach counts as enabled, which is a wider pool than anyone chose. Say the same where `answered_at` is more than ninety days old, or where the catalogue holds a provider the profile has never been asked about.
 
-Beside that, and from the ledger and profile already read, report the two other things a user has to act on and no verb otherwise says: every enabled selection whose model has no capability rank — no `EvaluationConfiguration` for it in `evaluation-configurations.jsonl` and no `evaluation_prior_seed` for it in the bundled seed — and every newer family version a previous `update` discovered and left excluded. Name `/model-selector update` for the first, since an unranked selection makes its own benchmark release indexes due, and `/model-selector config add model` or `/model-selector config edit model` for the second, adoption being the user's own act. Each is a report and never a prompt: nothing here asks a question, refuses anything, or stops a run.
+Run `uv run "$HERE/scripts/refresh.py" status --data=<directory>` and render its account of the world facts: which sources are current, which are due, and which the unattended pass has never established. This is the one surface that pass is reported on, and a reminder placed anywhere a model reads would change the thing being measured.
 
-Also run `uv run "$HERE/scripts/capture.py" status --data=<directory>` and render its report as capture's own health section: adapter presence per Harness this collection has an adapter for (`healthy`, `gated`, `degraded`, `absent`, or `unsatisfied`), whether that Harness's own finished session record can supply measurements at all, and how many bytes the capture store holds. This performs no network request and writes nothing.
+Run `uv run "$HERE/scripts/capture.py" status --data=<directory>` and render measurement's own health: per Harness this collection has an adapter for, whether the integration is `healthy`, `gated`, `degraded`, `absent` or `unsatisfied`; whether that Harness's finished session record can supply measurements at all; how many units are waiting to be graded; and when the grader last ran.
+
+Close with one line on what has been measured — how many rows, over what span of dates — read from the store as `## Evidence` reads it.
+
+## Evidence
+
+Report what has been measured and what an answer would therefore rest on. This reads and writes nothing.
+
+    uv run "$HERE/scripts/evidence.py" [--data=<directory>] [<kind>]
+
+It groups the store by kind, model and deliberation, those three being the whole of a measurement's identity, and reports per group how many rows, the mean grade and who established it, the mean cost and elapsed time, and the span of instants behind them. Render that: the row count is what separates a `measured` answer from a pooled one, and `## The answer` says what those words mean. Name the authorities it reports — `checker`, `judge`, `signal`, `user` — in that order, because a grade is worth what judged it.
+
+A figure it reports as `null` is a figure no row carries, and it is said as absent rather than as zero: an absence read as a zero is how an unmeasured configuration becomes the cheapest thing on offer. Nought rows is an empty measurement rather than an error — say that nothing has been measured yet, and that measuring happens on its own while the Skill is Enabled, as `$HERE/references/measurement.md` sets out.
+
+## Update
+
+Fetch what can be fetched now, in one bounded pass:
+
+    uv run "$HERE/scripts/refresh.py" refresh --data=<directory> [--force]
+
+Pass `--force` only where the user wrote it; without it the pass checks what the shipped cadence has made due. Render what it reports: every source checked, every fact that changed, and every price it discarded for arriving without a source it could attribute. A pass in which nothing changed is a successful pass. A model it discovered that the profile does not enable is written to the catalogue and left disabled, and `status` is where the user is told they may want to adopt it.
+
+## Reset
+
+`reset` discards the answers the user gave and leaves the interview to be held again. `reset --evidence` additionally discards what this machine measured. Neither touches the catalogue, which is public fact this Skill can fetch again.
+
+Name the exact paths under the selected directory before anything goes, with the size of each: `profile.json` always, and with `--evidence` also `measurements.jsonl`, `pending.jsonl` and the `capture/` directory. Get the counts for those last two from `uv run "$HERE/scripts/capture.py" purge --data=<directory>` without `--yes`, which reports rather than removes; a path the directory does not hold is reported absent rather than as a failure.
+
+Obtain confirmation the way every destructive act in this collection does, or read it from a supplied `--yes`. A declined confirmation writes nothing. Confirmed, remove `profile.json`; with `--evidence`, also remove `measurements.jsonl` and run the same purge again as `purge --yes --data=<directory>`. Report what went, per path, by the count of rows or bytes the preview named — nothing here is migrated, backfilled or reinterpreted.
+
+Say two things afterwards. The Harness hooks stay installed and keep measuring: discarding a measurement is not switching measurement off, and switching it off is unchecking this Skill in `/kntnt select`. And the generated subagent definitions are left where they are until the next `setup` rewrites the set.

@@ -8943,13 +8943,13 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "main seat",
         "Between subagent and main seat, delegate when handoff is cheaper",
         "when unsure, delegate",
-        "`$model-selector route` in Codex",
-        "`/model-selector route` in Claude",
-        "full execution brief",
-        "user overrides",
-        "checker or failure signal",
+        "`$model-selector` in Codex",
+        "`/model-selector` in Claude",
+        "`--kind=` naming the work",
+        "any override the user gave",
+        "`--stakes=high`",
         "before spawning",
-        "follow its decision without changing the main seat",
+        "launch exactly what it returns without changing the main seat",
         "Verify results independently",
         "If subagents are unavailable, execute normally",
     }
@@ -8967,10 +8967,10 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     # foreign surface, model, or deliberation override (ADR-0179).
     required_boundary_fragments = {
         "frozen main seat",
-        "no model, deliberation, or surface override",
+        "no model or deliberation override",
         "is not routed",
         "nor is verdict authority",
-        "foreign surface, model, or deliberation override",
+        "a foreign model or deliberation",
         "distillation, summarization, evidence collection",
         "routed cheaper seat",
         "frictionless main seat",
@@ -9002,8 +9002,8 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "is not routed",
         "nor is verdict authority",
         "before spawning",
-        "foreign surface, model, or deliberation override",
-        "full execution brief",
+        "a foreign model or deliberation",
+        "`--kind=` naming the work",
     }
     missing_boundary_sentence = sorted(
         fragment
@@ -9022,10 +9022,10 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f" it asks the cheap-seat question and decides no probe (ADR-0067,"
         f" ADR-0179)."
     )
-    assert "frozen main seat" in on_page and "public `route` Interface" in on_page, (
+    assert "frozen main seat" in on_page and "public `select` Interface" in on_page, (
         f"{directory / 'help' / 'on.md'}: the manpage says what goes through"
-        f" model-selector's public `route` Interface, so it names the unrouted"
-        f" frozen main seat beside it (ADR-0179)."
+        f" model-selector's public `select` Interface, so it names the unrouted"
+        f" frozen main seat beside it (ADR-0182)."
     )
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
@@ -10731,23 +10731,8 @@ def _command_groups() -> list[tuple[Path, Path]]:
 
 _MODEL_SELECTOR_MANPAGES = frozenset(
     {
-        "chart.md",
-        "compare.md",
-        "context.md",
-        "config.md",
-        "config/add.md",
-        "config/edit.md",
-        "config/history.md",
-        "config/policy.md",
-        "config/policy/reset.md",
-        "config/policy/show.md",
-        "config/remove.md",
-        "config/reset.md",
-        "config/show.md",
-        "observe.md",
-        "recommend.md",
-        "record.md",
-        "route.md",
+        "evidence.md",
+        "reset.md",
         "setup.md",
         "status.md",
         "update.md",
@@ -12049,35 +12034,30 @@ def test_delegation_reports_every_scope_when_no_scope_flag_is_given() -> None:
     )
 
 
-def test_delegation_names_its_cohort_and_files_machine_judged_evidence() -> None:
-    """The compact mode routes a Cohort and files what a machine judged."""
+def test_delegation_files_nothing_and_says_so() -> None:
+    """The directive asks for a seat and reports no outcome.
+
+    Delegation used to carry an import instruction: file the machine-judged
+    attempt through the public observation Interface, name its Cohort, and
+    leave `record` for a rubric or a person. All of that is gone. A delegated
+    spawn large enough to be worth measuring is measured where it ran and
+    graded by whatever had authority over it, so a standing instruction spends
+    no words asking for a report nobody reads. What replaces the paragraph is
+    one sentence saying there is nothing to file.
+    """
 
     path = REPO_ROOT / "skills" / "agents" / "delegation" / "references" / "mode.md"
     mode = path.read_text(encoding="utf-8")
 
-    required_fragments = {
-        "`$model-selector observe` in Codex",
-        "`/model-selector observe` in Claude",
-        "externally judged routed attempt",
-        "caller-owned scratch",
-        "`--import`",
-        "`stage` `delegated-execution`",
-        "`delegation/delegated_execution`",
-        "`benchmark.key` per workload",
-        "independent verifier, objective checker, or declared failure signal",
-        "let a refusal stop nothing",
-        "`record` remains the user's for a frozen rubric",
-        "unrouted spawn",
-        "where capture is enabled, it records actual inheritance",
-    }
-    missing = sorted(
-        fragment for fragment in required_fragments if fragment not in mode
+    assert "File nothing" in mode, (
+        f"{path}: the directive no longer says that a delegated spawn files"
+        f" nothing, which is the only thing standing between a reader and the"
+        f" reporting ceremony this collection removed."
     )
-    assert not missing, (
-        f"{path}: routed delegation names one Cohort so its rows are comparable"
-        f" within the work they were for, and files its machine-judged attempts"
-        f" through the public observation Interface with no user step, leaving"
-        f" `record` for a rubric or a person (ADR-0179, issue #222); an unrouted"
-        f" spawn still produces no `observe` attempt and is left to capture"
-        f" (ADR-0179); missing {missing}."
-    )
+
+    # Every verb the old import path named is a verb that no longer exists.
+    for retired in ("observe", "--import", "benchmark.key", "delegated_execution"):
+        assert retired not in mode, (
+            f"{path}: the directive still names {retired!r}, which belonged to"
+            f" the observation Interface this Skill no longer offers."
+        )

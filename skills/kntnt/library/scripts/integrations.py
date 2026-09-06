@@ -42,8 +42,15 @@ from typing import Any
 
 # The lifecycle moments a capture-shaped integration needs. They are
 # observations rather than verdicts: a stop says a turn ended, never that the
-# work in it succeeded.
-CLAUDE_EVENTS: tuple[str, ...] = ("SessionStart", "Stop", "SessionEnd")
+# work in it succeeded. `SubagentStop` is here because delegated work is what
+# this collection measures most of, and without it a session whose own finished
+# record cannot be read sees none of it.
+CLAUDE_EVENTS: tuple[str, ...] = (
+    "SessionStart",
+    "Stop",
+    "SubagentStop",
+    "SessionEnd",
+)
 
 # Codex CLI 0.153.0's own configuration file — `~/.codex/hooks.json`,
 # deserialized through its `HookEventsToml` — names lifecycle events in the

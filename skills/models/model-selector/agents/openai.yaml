@@ -1,5 +1,5 @@
 interface:
   display_name: "Model Selector"
-  short_description: "Compare AI model price and performance"
+  short_description: "Pick the model and effort that finish a job for the least money"
 policy:
   allow_implicit_invocation: true

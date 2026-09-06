@@ -127,40 +127,36 @@ The rule a verdict's finding is one instance of, named by the verifier on the li
 _Avoid_: defect category, root cause, finding type, symptom, distillate
 
 **Seat**:
-One model running at one exact configuration (model, deliberation, channel, surface) in one role of a run.
+One model running at one exact deliberation level in one role of a run.
 _Avoid_: agent, worker, instance, model slot
 
 **Main Seat**:
-The Seat the user chose for their own session. What a routed Seat may never exceed, and what is never routed away from it, are stated in `docs/rules/routing.md`.
+The Seat the user chose for their own session. What is never routed away from it is stated in `docs/rules/routing.md`.
 _Avoid_: parent model, orchestrator model, default model
 
-**Cohort**:
-The set of routed attempts that share a role and a kind of work, within which evidence is comparable and a Standing Policy acts. What is never compared across Cohorts is stated in `docs/rules/routing.md`.
-_Avoid_: category, bucket, task type, benchmark
+**Deliberation**:
+How hard a model is asked to think before it answers, on one scale across every provider: `low`, `medium`, `high`, `xhigh`, `max`. The one word this collection uses for what providers variously call effort, reasoning and thinking.
+_Avoid_: effort, reasoning, thinking, budget, temperature
 
-**Standing Policy**:
-A per-Cohort rule kept as script-owned state beside the user's configuration, with shipped defaults. What it fixes, what moves it, and what it bounds are stated in `docs/rules/routing.md`.
-_Avoid_: escalation rule, tier policy, auto-scaling, preset
+**Work Kind**:
+Which of the eight kinds of work a task is, chosen for the one property that predicts how much intelligence it needs. What the eight are, and what never splits them, are stated in `docs/rules/routing.md`.
+_Avoid_: cohort, category, bucket, task type, benchmark
 
-**Rung**:
-One adjacent step on the ladder a Cohort climbs. What that step is in each of its two dimensions is stated in `docs/rules/routing.md`.
-_Avoid_: tier, level, size, upgrade, model step
+**Unit of Work**:
+One instruction and the work an agent did in answer to it, from being told to handing control back. Which ones are large enough to be measured at all is stated in `docs/rules/routing.md`.
+_Avoid_: session, turn, task, job, run
 
-**Outcome Authority**:
-What judged a routed attempt from outside it: an independent verifier, an objective checker, a declared failure signal, a frozen rubric, or the user. What an attempt nothing judged is worth is stated in `docs/rules/routing.md`.
-_Avoid_: self-report, confidence, status, result
+**Measurement**:
+What one Unit of Work cost, how long it took, and how well it went, on the Seat it ran on. What it carries and what is never copied into it are stated in `docs/rules/routing.md`.
+_Avoid_: observation, evidence, telemetry, metric, usage record
 
-**Time to Verified Pass**:
-The wall-clock time from a ticket's first routed attempt to the verdict that passed it, retries included. Where it stands in the order routing decides by is stated in `docs/rules/routing.md`.
-_Avoid_: latency, duration, response time, speed
+**Grade**:
+How well a Unit of Work went, as a number between nought and one. Where it comes from, and what may never supply one, are stated in `docs/rules/routing.md`.
+_Avoid_: outcome, score, pass, success, rating
 
-**Exploration Attempt**:
-A routed attempt deliberately placed one Rung below its Cohort's current rung to gain contrast. What it is drawn from, and what its outcome may never count against, are stated in `docs/rules/routing.md`.
-_Avoid_: experiment, probe, gamble, A/B test
-
-**Usage Record**:
-What one finished session on one Seat cost and how long it took. What it carries, and what it may never become, are stated in `docs/rules/routing.md`.
-_Avoid_: run observation, evidence, telemetry, metric
+**Bridge**:
+A command one Harness runs to put work on a model belonging to another. What one may name is stated in `docs/rules/routing.md`.
+_Avoid_: adapter, shim, proxy, gateway, integration
 
 **Enabled**:
 A Catalog entry the user has chosen in a layer: a Skill present on disk in each Detected Harness's skills directory for that layer, and a Feature what its Harnesses actually hold, it placing no files a layer could be read off. What each is read from is stated in `docs/rules/collection.md` and `docs/rules/skills.md`.
@@ -231,7 +227,7 @@ A dependency whose source is another collection, not this one.
 _Avoid_: third-party, upstream, peer
 
 **Capability Rank**:
-The number a Rung is read on: one model's score on the single benchmark that covers most of the candidates a request reaches. Where that number is taken from, and what never becomes one, are stated in `docs/rules/routing.md`.
+One model's published score on an independent comparison, which is what seeds an estimate for a Work Kind nothing has been measured on yet. Where that number is taken from, and what never becomes one, are stated in `docs/rules/routing.md`.
 _Avoid_: quality score, capability (that is the Dependency below), tier, strength
 
 **Capability**:

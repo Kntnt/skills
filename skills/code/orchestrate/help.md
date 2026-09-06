@@ -22,9 +22,9 @@ A ticket may declare ordered multi-commit work with `Commit roles: implementatio
 
 The main session owns planning, triage, integration, and verification judgements. Run it from the most capable model available; those judgements are only as reliable as that model.
 
-Model Selector creates one frozen routing snapshot before claims. Builders and repair roles use decisions from that snapshot; independent verdicts always inherit the main session's exact model and deliberation configuration. Where that snapshot can select nothing — no profile, a rejected profile, no adapter able to express a point, or no safe candidate — every later role is decided from the frozen account itself, the decision Model Selector made restated under the new name, and Model Selector is invoked once per run rather than once per wave.
+Model Selector chooses a point — one model at one deliberation level — for every building role before that role is claimed, one call per role, and the run records what it decided. Builders and repair roles launch on those decisions; independent verdicts always inherit the main session's exact model and deliberation configuration and are never routed at all. Where nothing can be chosen — no profile, an empty catalogue, or no model this Harness can reach — the answer names the session's own seat and the role runs there. Model Selector refuses nothing, so no answer of its own ever stops a run.
 
-Where several measured configurations clear the quality floor, the run selects the cheapest of them, and the fastest of them under **--fast**. The objective is frozen with the snapshot and reported with it.
+What a point is chosen on is the cost of finishing the work: the tokens it is expected to spend, priced at the rate card, divided by how likely it is to finish the job. Every decision the run made is reported with the run.
 
 Before any ticket is claimed, the Skill audits ticket text for open decisions in one batch and posts the answers to their tickets. It looks for concretely named gaps, including exact commands whose inputs the repository does not fix, an external service or account with no mutation path or owner, choices phrased as alternatives, and credentials or accounts whose owner is undeclared. With `--yes`, it parks such tickets under `needs-info` instead of guessing, then continues with the rest; uncertain cases proceed and retain the mid-work park as a backstop.
 
@@ -72,7 +72,7 @@ Before integration—or at `record` when the ceiling is one—the engine refuses
 
 The verdict turns on whether correction requires a new decision, not on whether every gate command passed. Mechanical findings are fixed by another subagent and checked again until a round is clean.
 
-The fix request names its external checker, reversible work, and available retry. An unresolved choice, an undetermined gate correction, a command still failing after its fix round, or a fix that makes no progress stops the run.
+The fix loop brings its own external checker — the wave check's own re-run — to reversible work with a retry it already owns, which is what makes a cheap seat safe for it. An unresolved choice, an undetermined gate correction, a command still failing after its fix round, or a fix that makes no progress stops the run.
 
 A no-progress fixer on a selected configuration escalates once. A second no-progress round stops the run.
 
@@ -118,9 +118,9 @@ Preserved commits are the mandatory base of a resume, never discarded in favour 
 
 Prior verdicts remain ticket evidence and the resumed amend receives the immediately preceding verdict verbatim. The report keeps `amends_spent` as the lifetime total and names attempts this invocation inherited under `amends_inherited` and attempts it newly spent under `amends_newly_spent`.
 
-The frozen routing account is not reconstructed from current profile, evidence, price, alias, or Harness state. If it is missing or unreadable while this run still owns a claim, the run stops.
+The routing account is the run's own record of what it decided, and it is reported as it was recorded rather than as the current profile, price, or Harness state would answer now. A missing or unreadable account does not stop the run: the roles that still need one are routed again, the report says the account was replaced, and the claim gate holds until every role about to run has a decision.
 
-`--model` and `--deliberation` are part of that account. Changing or dropping either is refused. Repeating the same attempt and phase resumes it without spending another attempt.
+`--model`, `--deliberation`, and `--fast` are part of that account. Changing or dropping any of them is refused. Repeating the same attempt and phase resumes it without spending another attempt.
 
 A current user's claim resumes only when it can be distinguished from another active run. Otherwise the Skill stops.
 
@@ -152,9 +152,11 @@ Never became workable because of a cycle, external blocker, another claim, stopp
 
 The report names its base commit. A ticket blocked on newly discovered work is reported under its blocker's outcome rather than in a sixth category.
 
-## ROUTED OBSERVATIONS
+## MEASUREMENTS
 
-Orchestrate starts each routed attempt immediately before dispatch, finishes it at an independent verdict or terminal non-model condition, and imports eligible sanitized observations automatically. The final report lists imported, identically skipped, conflicting, and refused identities; ledger refusal never stops the run and requires no user import step. An import that brings a workload cohort to its verified-failure threshold moves that cohort's starting Rung one step up for the next run, and the report names the move, the count behind it, and the one command that restores it.
+Orchestrate starts each routed attempt immediately before dispatch, finishes it at an independent verdict or a terminal workflow condition, and files what it measured automatically. A verdict grades the attempt as a number: a pass is one, a pass reached only after an earlier attempt at the same work failed is six tenths, and a fail is nought. A mechanical hinder, a parked decision, a discovered blocker, and a tracker failure are the workflow's own conditions rather than judgements of the model, and nothing at all is filed for them.
+
+What is filed is the kind of work, the model, the deliberation level, the grade and who supplied it, the tokens the environment exposed, how long the attempt took, and whether the role was routed. No prompt, response, diff, ticket body, path, or transcript is copied into it, and a figure the environment did not expose stays absent rather than becoming a zero. The final report lists imported, identically skipped, conflicting, and refused identities; a refusal from the store never stops the run and requires no import step of the developer's.
 
 The report gives each ticket its Time to Verified Pass — the seconds from its first routed launch to its first passing verdict, retries included — beside a status saying which of the four cases it is: `verified_pass` with a number, `not_started` where the run launched no attempt for it, `incomplete` where an attempt has not finished, and `not_passed` where every finished attempt failed, parked, or was blocked.
 
@@ -162,11 +164,11 @@ The report gives each ticket its Time to Verified Pass — the seconds from its 
 
 **--dry-run**
 
-Report ticket scope, dependency waves, routing readiness, proposed decisions, and routing capability without claiming or changing tickets.
+Report ticket scope, dependency waves, routing readiness, and the decisions a run would launch on, without claiming or changing tickets.
 
-A dry run mints no run identity, so its preflight can render no Exploration Attempt: a night that starts afterwards may route a role one Rung below what the preview showed, the draw being a fact about a run that did not exist yet.
+The preview asks Model Selector exactly what a real run would ask and shows the answer, but records none of it: the decisions a run makes are its own, and a preview that kept them would have started the run.
 
-Routing uses streams and leaves no child process. The repository, home, Codex state and cache, Manager and Skill installations, GitHub, Git state, worktrees, locks, and temporary storage remain unchanged whether the preview succeeds or refuses.
+The repository, home, Codex state and cache, Manager and Skill installations, GitHub, Git state, worktrees, locks, and temporary storage remain unchanged whether the preview succeeds or refuses.
 
 **--at-once=**_COUNT_
 
@@ -174,15 +176,15 @@ Build at most *COUNT* frontier tickets concurrently. The default is `1`; larger 
 
 **--model=**_NAME_
 
-Lock only the building model dimension for every execution role. Model-selector still selects deliberation from the frozen snapshot. An unavailable, ambiguous, unmappable, or above-main exact model is refused before claims; it never falls through to another model. Verdicts retain exact main-seat inheritance.
+Lock only the building model dimension for every execution role. Model-selector still selects deliberation. *NAME* may be a family alias such as `opus`, which resolves through the catalogue to the newest enabled release of that family, or one exact model identifier. A model that cannot be resolved or cannot be reached is refused before claims — Orchestrate compares the model that came back against the one it asked for and stops the run itself — and it never falls through to another model. Verdicts retain exact main-seat inheritance.
 
 **--deliberation=**_LEVEL_
 
-Lock only the building deliberation dimension for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`; another value is refused rather than normalized. Model-selector still selects model when it is omitted. Verdicts retain exact main-seat inheritance.
+Lock only the building deliberation dimension for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`; another value is refused rather than normalized. The level is launched rather than merely asked for: a builder on a Claude model runs at the level named, through a generated subagent definition, instead of inheriting the orchestrating session's own. Model-selector still selects model when it is omitted. A level nothing can launch is refused before claims and never falls through to a neighbour. Verdicts retain exact main-seat inheritance.
 
 **--fast**
 
-Select the fastest configuration that holds quality rather than the cheapest one. The objective is frozen for the whole run alongside `--model` and `--deliberation`, so a resumed invocation that adds or drops it is refused before anything is claimed. It changes nothing about the quality floor: a configuration that does not clear it is not chosen for being quick.
+Count finishing the work in elapsed time rather than in money, for a run somebody is waiting on. Without it a point is chosen on what it costs to finish, which is what a run spends whether or not anybody is watching; with it a point is chosen on how long it takes to finish, read off the elapsed times this machine has actually measured. It is recorded with `--model` and `--deliberation` and held for the whole run, so a resumed invocation that adds or drops it is refused before anything is claimed.
 
 **--approval=**_IDENTITY_
 
@@ -208,7 +210,7 @@ Concurrent ticket worktrees, branches, reservations, and scratch space. Successf
 
 **Per-session state directory**
 
-Stores the recoverable claim account, the caller's expected and computed approval identities, and the irreplaceable frozen routing snapshot. The first matched approval payload is the authorization ceiling for later unflagged plans. A missing routing snapshot or an unmet approval stops a claim.
+Stores the recoverable claim account, the caller's expected and computed approval identities, the run's routing decisions, and the graded measurements its verdicts produced. The first matched approval payload is the authorization ceiling for later unflagged plans. An unmet approval stops a claim; a routing account that is gone or unreadable costs one further routing call per remaining role and is reported as replaced.
 
 The directory also contains `kntnt-orchestrate-progress.json`, an atomically replaced dashboard of the current wave, ticket, phase, amendment count, completed and remaining ticket counts, timestamp, and terminal outcome. The `report` verb projects its five outcome lists into the terminal dashboard directly, so the two accounts agree. It may lag a transition whose step did not report it and is never evidence or an input to an engine decision; the durable report remains authoritative. Deleting it harms nothing because the next transition recreates it.
 
@@ -228,7 +230,7 @@ The Skill-owned append-only ledger records load-induced flakes with their unchan
 
 An invalid reference, option, value, combination, or argument order is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, starts nothing, and points to `/orchestrate --help`.
 
-Routing is refused rather than adjusted. A changed snapshot, mismatched locks, routed verdict, or execution role without a decision starts no work and reports a stable reason code.
+Routing is refused rather than adjusted. Mismatched locks, a lock the answer did not honour, a request naming a verdict, a second escalation for one wave, or an execution role without a decision starts no work and reports what it refused on. Model Selector itself refuses nothing: every one of those refusals is Orchestrate's own, made before anything is claimed.
 
 A mismatched approval reports the expected identity, computed identity, and canonical payload. A later plan that exceeds a matched ceiling names the first protected field, added ticket, or lost Solo constraint, preserves the ceiling audit, and makes approval unmet. A real mismatch or drift changes neither tracker nor repository; a dry-run mismatch or drift stores nothing.
 
@@ -260,7 +262,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 **Skills**
 
-The Manager and Model Selector Skills must be Enabled so the dependency check can run and Orchestrate can use model-selector's public route Interface.
+The Manager and Model Selector Skills must be Enabled so the dependency check can run and Orchestrate can reach model-selector's public interface.
 
 **Capabilities**
 

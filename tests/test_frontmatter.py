@@ -548,10 +548,10 @@ def test_model_selector_is_model_invoked_only_for_dependent_interfaces() -> None
     )
 
     description = str(frontmatter.get("description", "")).lower()
-    for term in ("another skill", "route", "observe"):
+    for term in ("another skill", "select"):
         assert term in description, (
             f"{skill_md}: the model-invocation description does not bound its"
-            f" dependency trigger with {term!r} (ADR-0177, ADR-0179). See"
+            f" dependency trigger with {term!r} (ADR-0177, ADR-0182). See"
             f" {STANDARD}."
         )
 
@@ -560,19 +560,10 @@ def test_model_selector_is_model_invoked_only_for_dependent_interfaces() -> None
         f" from commands only an explicit user invocation starts (ADR-0179)."
         f" See {STANDARD}."
     )
-    for excluded in (
-        "recommend",
-        "setup",
-        "config",
-        "compare",
-        "capture",
-        "update",
-        "record",
-        "status",
-    ):
+    for excluded in ("setup", "status", "update", "evidence", "reset"):
         assert excluded in description, (
             f"{skill_md}: the description does not exclude {excluded!r} from"
-            f" implicit invocation (ADR-0177, ADR-0179). See {STANDARD}."
+            f" implicit invocation (ADR-0177, ADR-0182). See {STANDARD}."
         )
 
 

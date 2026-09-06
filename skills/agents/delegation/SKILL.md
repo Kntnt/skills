@@ -14,7 +14,7 @@ metadata:
 
 # delegation
 
-While delegation mode is on, you orchestrate — think, plan, brief, verify — and subagents execute, routed through model-selector unless you run them on the frozen main seat with no override. This skill turns the mode on or off. Your own model and reasoning effort stay the user's move — whatever your harness offers for changing them is theirs to run, never yours.
+While delegation mode is on, you orchestrate — think, plan, brief, verify — and subagents execute, on the seat model-selector chooses, unless you run them on the frozen main seat with no override. This skill turns the mode on or off. Your own model and reasoning effort stay the user's move — whatever your harness offers for changing them is theirs to run, never yours.
 
 `$HERE` is the directory that contains this SKILL.md, and `$MANAGER` is the Manager directory: `$HERE/../kntnt/` if it exists, else `kntnt/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Neither found: tell the user to install the Manager (`npx skills add Kntnt/skills`) and stop. `$LIBRARY` is `$MANAGER/library/` — absent, tell the user to run `/kntnt update`, then stop.
 
