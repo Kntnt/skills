@@ -222,10 +222,19 @@ def _scanned() -> list[Path]:
 
     The files a Skill ships and the documents the coding standard governs. The
     changelog and the closed tickets are deliberately outside it: they record
-    what was true when they were written (ADR-0176).
+    what was true when they were written (ADR-0176). So is `docs/research/`,
+    for a different reason — a research document quotes another tool's own
+    documentation, and this collection's spelling is not that tool's to be
+    normalised into. Rewriting `opencode run --model <MODEL>` to attach its
+    value would make the quotation false, which is worse than the uniformity
+    it would buy.
     """
 
-    roots = sorted(SKILLS.rglob("*.md")) + sorted(DOCS.rglob("*.md"))
+    roots = sorted(SKILLS.rglob("*.md")) + [
+        path
+        for path in sorted(DOCS.rglob("*.md"))
+        if "research" not in path.relative_to(DOCS).parts
+    ]
     named = [REPO_ROOT / name for name in ("README.md", "CONTEXT.md", "AGENTS.md")]
     return roots + [path for path in named if path.exists()]
 
