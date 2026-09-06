@@ -535,36 +535,49 @@ def test_proofread_bounds_the_trigger_its_description_advertises() -> None:
         )
 
 
-def test_model_selector_is_model_invoked_only_for_dependent_interfaces() -> None:
-    """Dependent Skills can reach routing without exposing user-only commands."""
+def test_model_selector_is_never_model_invoked() -> None:
+    """Nothing reaches the router by loading its body.
+
+    Every caller that routes delegated work — `orchestrate` through its own
+    engine, `delegation` from its standing instruction — runs
+    `scripts/selection.py` and reads the object it prints. The machine
+    interface is that script, so model invocation buys a caller nothing and
+    costs it a body: twelve kilobytes of prose, the Manager's invocation
+    engine, and only then the engine that answers (ADR-0182).
+    """
 
     skill_md = SKILLS / "models" / "model-selector" / "SKILL.md"
     frontmatter = _frontmatter("models/model-selector/SKILL.md")
 
-    assert frontmatter.get("disable-model-invocation") is False, (
-        f"{skill_md}: delegation and orchestrate must reach this Skill's public"
-        f" routing and observation Interfaces without a user invoking it first"
-        f" (ADR-0179). See {STANDARD}."
+    assert frontmatter.get("disable-model-invocation") is True, (
+        f"{skill_md}: no Skill invokes Model Selector as a Skill — a caller"
+        f" that routes work runs its script — so nothing may start it but the"
+        f" user (ADR-0182). See {STANDARD}."
     )
 
-    description = str(frontmatter.get("description", "")).lower()
-    for term in ("another skill", "select"):
-        assert term in description, (
-            f"{skill_md}: the model-invocation description does not bound its"
-            f" dependency trigger with {term!r} (ADR-0177, ADR-0182). See"
-            f" {STANDARD}."
-        )
-
-    assert "do not use implicitly" in description, (
-        f"{skill_md}: the description does not separate dependent Interfaces"
-        f" from commands only an explicit user invocation starts (ADR-0179)."
-        f" See {STANDARD}."
+    sidecar = yaml.safe_load(
+        (skill_md.parent / "agents" / "openai.yaml").read_text(encoding="utf-8")
     )
-    for excluded in ("setup", "status", "update", "evidence", "reset"):
-        assert excluded in description, (
-            f"{skill_md}: the description does not exclude {excluded!r} from"
-            f" implicit invocation (ADR-0177, ADR-0182). See {STANDARD}."
-        )
+    assert sidecar["policy"]["allow_implicit_invocation"] is False, (
+        f"{skill_md.parent / 'agents' / 'openai.yaml'}: the sidecar is the only"
+        f" place Codex reads the invocation policy from, so it says the same"
+        f" thing the frontmatter does (ADR-0177, ADR-0182). See {STANDARD}."
+    )
+
+    description = str(frontmatter.get("description", ""))
+    assert (
+        "Never used implicitly: a Skill that routes work runs its script."
+        in description
+    ), (
+        f"{skill_md}: the description must say that this Skill is never used"
+        f" implicitly and that a routing Skill runs its script instead, so"
+        f" nobody reads the old dependent-Interface trigger back into it"
+        f" (ADR-0182). See {STANDARD}."
+    )
+    assert "another Skill" not in description, (
+        f"{skill_md}: the description still bounds a model-invocation trigger"
+        f" this Skill no longer has (ADR-0182). See {STANDARD}."
+    )
 
 
 def test_the_standard_names_every_skill_a_model_may_start() -> None:

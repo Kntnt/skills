@@ -14,7 +14,7 @@ delegation - control delegation mode for a session, Project, or user
 
 ## DESCRIPTION
 
-Delegation mode leaves planning, delegation decisions, briefing, and verification with the main agent while subagents execute selected work. Model Selector chooses the seat delegated execution runs on without changing the main agent's own configuration; a spawn on the frozen main seat with no model or deliberation override is not routed.
+Delegation mode leaves planning, delegation decisions, briefing, and verification with the main agent while subagents execute selected work. Model Selector chooses the seat delegated execution runs on without changing the main agent's own configuration; a spawn on the frozen main seat with no model or deliberation override is not routed. It is asked as a script — `scripts/selection.py` in its own directory — so routing a spawn costs one command rather than a Skill body.
 
 No arguments toggles the current session. `on` and `off` change the selected scope; `status` reports one scope or all three.
 

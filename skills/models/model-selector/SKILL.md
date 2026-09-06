@@ -1,7 +1,7 @@
 ---
 name: model-selector
-description: Choose the model and deliberation level that completes delegated work at the lowest total cost, when another Skill requires Model Selector's public select interface. Do not use implicitly for setup, status, update, evidence, or reset.
-disable-model-invocation: false
+description: "Choose the model and deliberation level that completes delegated work at the lowest total cost. Never used implicitly: a Skill that routes work runs its script."
+disable-model-invocation: true
 argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | update [--data=<path>] | evidence [--data=<path>] [<kind>] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
@@ -31,7 +31,7 @@ In the JSON, `path` is the command path as a list, `flags` holds each flag the u
 
 `--scope=limited` admits the caller's own provider. `--scope=callable`, the default, adds every model this Harness can reach through a Bridge and the profile has a channel for. `--scope=all` admits the whole catalogue, reachable or not. Scope says what may be called, never what is preferred.
 
-`--json` says a machine is reading the answer rather than a person.
+`--json` says a machine is reading the answer rather than a person. A Skill that routes delegated work reads the same answer by running `scripts/selection.py` itself, this body being for people.
 
 `--data=<path>` puts the profile, the catalogue and the measurement store somewhere other than `~/.kntnt/model-selector/`. Every command takes it and every command means the same directory by it.
 

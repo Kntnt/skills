@@ -10,7 +10,7 @@ The rules whose reasoning is settled in a decision record are named here in a ph
 
 ## When routing happens at all
 
-**Model Selector is model-invoked only where another Skill requires its public interface** (ADR-0182). Its description is the complete trigger and excludes recommendation, setup, configuration, evidence inspection and status, each of which stays an explicit user invocation. A machine caller reaches the interface as a script rather than as a Skill invocation, so nothing of the body is loaded into the caller's context to get an answer out of it.
+**No Skill invokes Model Selector as a Skill, and a Skill that routes work runs its script** (ADR-0182). The machine interface is `scripts/selection.py`: a caller runs one command and reads one small object, and nothing of the body is loaded into its context to get an answer out of it. Orchestrate reaches it through its own engine and delegation from its standing instruction, so Model Selector is never model-invoked and only the user starts it — which is what its frontmatter and its Codex sidecar both say. A standing instruction that names the script carries the path rather than leaving a session to find it: the Skill that turns the mode on resolves it, that being a fact it knows at that moment.
 
 **A spawn the caller runs on its own Main Seat, with no model or deliberation override, is not routed** (ADR-0179). The boundary is the caller's own choice rather than a routing outcome, and there is no judgement call left for spawn time.
 

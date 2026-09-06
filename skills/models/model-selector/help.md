@@ -62,7 +62,7 @@ Discard the profile and hold the interview again. With **--evidence**, discard w
 
 **--json**
 
-Emit the selection response as the engine returned it, with nothing added. This is what a Skill routing delegated work reads; without it the same answer is rendered for a person. Valid on the bare form and no other.
+Emit the selection response as the engine returned it, with nothing added: the answer as a machine reads it, rather than rendered for a person. Valid on the bare form and no other. A Skill that routes delegated work does not come through here at all — it runs `scripts/selection.py`, which answers in that shape and no other.
 
 **--scope=**_SCOPE_
 

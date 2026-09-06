@@ -31,7 +31,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "9b1d6e8a2a51a356326a2c60268a3232bee2a1797aa9378bfb5dd10eae078ff0",
+      "digest": "58708aeb2384d5f3041e2b230a068a60241d7c23eb824cf696261112f0bc6cc3",
       "binaries": [
         "uv"
       ],
@@ -188,8 +188,8 @@
     {
       "name": "model-selector",
       "category": "models",
-      "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, when another Skill requires Model Selector's public select interface. Do not use implicitly for setup, status, update, evidence, or reset.",
-      "digest": "6a87d1327ba389fc79209081064c369c4107757fc8651801fd293a48e16a6ba7",
+      "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost. Never used implicitly: a Skill that routes work runs its script.",
+      "digest": "1e57ad0585a19dd6396a9435f9185838efb2a7dac62537a99ce823b95e1fcc7c",
       "binaries": [
         "uv"
       ],

@@ -8943,9 +8943,8 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "main seat",
         "Between subagent and main seat, delegate when handoff is cheaper",
         "when unsure, delegate",
-        "`$model-selector` in Codex",
-        "`/model-selector` in Claude",
-        "`--kind=` naming the work",
+        "uv run <model-selector>/scripts/selection.py",
+        "--kind=<kind>",
         "any override the user gave",
         "`--stakes=high`",
         "before spawning",
@@ -9003,7 +9002,7 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         "nor is verdict authority",
         "before spawning",
         "a foreign model or deliberation",
-        "`--kind=` naming the work",
+        "--kind=<kind>",
     }
     missing_boundary_sentence = sorted(
         fragment
@@ -9022,10 +9021,10 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f" it asks the cheap-seat question and decides no probe (ADR-0067,"
         f" ADR-0179)."
     )
-    assert "frozen main seat" in on_page and "public `select` Interface" in on_page, (
-        f"{directory / 'help' / 'on.md'}: the manpage says what goes through"
-        f" model-selector's public `select` Interface, so it names the unrouted"
-        f" frozen main seat beside it (ADR-0182)."
+    assert "frozen main seat" in on_page and "selection.py" in on_page, (
+        f"{directory / 'help' / 'on.md'}: the manpage says what runs"
+        f" model-selector's `selection.py`, so it names the unrouted frozen"
+        f" main seat beside it (ADR-0182)."
     )
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
@@ -9068,6 +9067,103 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f"{directory / 'references' / 'persist.md'}: persistent delegation must"
         f" keep the always-loaded context to an @ pointer and manage the mode and"
         f" fence in companion files; missing {missing_persistence}."
+    )
+
+
+def test_delegation_asks_the_selection_engine_as_a_script() -> None:
+    """A routed spawn costs one script call rather than a Skill body.
+
+    Delegation mode is a standing instruction, so every routed spawn pays for
+    whatever the routing question costs. A Skill invocation loads Model
+    Selector's body into the session to reach the engine behind it; the engine
+    itself is the machine interface, and a machine caller runs it (ADR-0182).
+    The path is a fact the Skill knows when it turns the mode on, so the mode
+    carries a placeholder and the `on` step substitutes the resolved directory
+    — which keeps a committed companion free of one machine's paths.
+    """
+
+    directory = REPO_ROOT / "skills" / "agents" / "delegation"
+    mode_path = directory / "references" / "mode.md"
+    mode = mode_path.read_text(encoding="utf-8")
+    skill = (directory / "SKILL.md").read_text(encoding="utf-8")
+    help_page = (directory / "help.md").read_text(encoding="utf-8")
+    on_page = (directory / "help" / "on.md").read_text(encoding="utf-8")
+
+    # The command a routed spawn runs, whole: the engine, the flags that carry
+    # the caller's own facts, and the working directory a Bridge command needs.
+    required_command = {
+        "uv run <model-selector>/scripts/selection.py",
+        "--kind=<kind>",
+        "--scope=callable",
+        "--harness=<harness>",
+        "--seat=<model>@<level>",
+        "--repo=<the project root>",
+        "`--stakes=high`",
+    }
+    missing_command = sorted(
+        fragment for fragment in required_command if fragment not in mode
+    )
+    assert not missing_command, (
+        f"{mode_path}: the standing instruction must name the selection engine"
+        f" and the flags a caller fills in, so that routing costs a script call"
+        f" rather than a Skill body (ADR-0182); missing {missing_command}."
+    )
+
+    # Neither Harness's Skill spelling is the thing to run any more.
+    for spelling in ("`$model-selector`", "`/model-selector`"):
+        assert spelling not in mode, (
+            f"{mode_path}: {spelling} is still named as the thing to invoke."
+            f" No Skill invokes Model Selector as a Skill (ADR-0182)."
+        )
+
+    # The placeholder is resolved by the Skill, not by the standing instruction,
+    # so the committed companion carries no machine's path (`persist.md`).
+    assert "<model-selector>" in mode, (
+        f"{mode_path}: the command must carry the `<model-selector>`"
+        f" placeholder rather than one machine's resolved path (ADR-0182)."
+    )
+    for candidate in ("$HERE/../model-selector/", "$HERE/../../models/model-selector/"):
+        assert candidate in mode, (
+            f"{mode_path}: the sentence beside the command must say what"
+            f" `<model-selector>` resolves to, and {candidate} is missing."
+        )
+
+    # Filling in `--kind` must not cost the caller Model Selector's own body.
+    kinds = (
+        "mechanical",
+        "implement",
+        "design",
+        "debug",
+        "review",
+        "analyze",
+        "prose",
+        "converse",
+    )
+    missing_kinds = sorted(kind for kind in kinds if f"`{kind}`" not in mode)
+    assert not missing_kinds, (
+        f"{mode_path}: the mode names the eight Work Kinds, so a session can"
+        f" fill `--kind` without loading Model Selector (issue #292); missing"
+        f" {missing_kinds}."
+    )
+
+    # `on` is where the placeholder becomes a path this machine can run.
+    step = skill.partition("2. Session scope")[2].partition("\n3. ")[0]
+    assert step, f"{directory / 'SKILL.md'}: the `on` step could not be found."
+    assert "<model-selector>" in step and "substitut" in step, (
+        f"{directory / 'SKILL.md'}: the `on` step must resolve"
+        f" `<model-selector>` and substitute the resolved directory before the"
+        f" mode is adopted, or the standing instruction names a path the"
+        f" session cannot run (ADR-0182)."
+    )
+
+    # Both manpages describe what is actually run.
+    assert "as a script" in help_page, (
+        f"{directory / 'help.md'}: the page must say Model Selector is asked as"
+        f" a script rather than invoked as a Skill (ADR-0182)."
+    )
+    assert "selection.py" in on_page, (
+        f"{directory / 'help' / 'on.md'}: the page must name the engine a"
+        f" routed spawn runs (ADR-0182)."
     )
 
 
@@ -9207,8 +9303,12 @@ def test_delegation_names_three_execution_paths_and_the_rule_between_them() -> N
         "Monitor",
     }
     named = sorted(tool for tool in named_tools if tool in mode)
+    # A flag inside a code span is a command the mode tells a session to run —
+    # the routing call is one — and the prose around it is what must name no
+    # tool and no flag.
+    prose = re.sub(r"`[^`]*`", " ", mode)
     flags = sorted(
-        token for token in mode.split() if token.startswith("--") or token == "&"
+        token for token in prose.split() if token.startswith("--") or token == "&"
     )
     assert not named and not flags, (
         f"{path}: the detached path is stated as a property — a process detached"

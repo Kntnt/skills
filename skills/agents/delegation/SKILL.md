@@ -31,7 +31,7 @@ In the JSON, `path` is the command path as a list, `flags` holds each flag the u
 
 ## The mode
 
-`$HERE/references/mode.md` is the single source of truth for what the mode says. Read and adopt it verbatim. Persistent scopes follow [`persist.md`](references/persist.md): they copy the mode and fence to two companion files and keep only an `@` pointer block in the context file.
+`$HERE/references/mode.md` is the single source of truth for what the mode says. Read and adopt it as it stands, with `<model-selector>` resolved as step 2 says. Persistent scopes follow [`persist.md`](references/persist.md): they copy the mode and fence to two companion files — verbatim, the placeholder included, so a committed trio carries no one machine's path — and keep only an `@` pointer block in the context file.
 
 Two states, no third:
 
@@ -49,6 +49,6 @@ The verdict is the effective state here and now:
 ## Steps
 
 1. `--project` or `--user`, with any command path: read [`persist.md`](references/persist.md) and follow it, then go to the report. Done when the pointer and companions are written, removed, or read.
-2. Session scope — `on`, `off`, or the bare invocation's toggle of the current verdict. Going on: read `$HERE/references/mode.md` and adopt it as a standing instruction for the rest of this session. Read `$HERE/references/fence.md` as its canonical fence preamble, fill in the spawn-specific paths, and paste it at the top of every subagent brief, adding only any task-specific tightening. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
+2. Session scope — `on`, `off`, or the bare invocation's toggle of the current verdict. Going on: read `$HERE/references/mode.md`, substitute every `<model-selector>` in it with Model Selector's own directory — `$HERE/../model-selector/` if that exists, else `$HERE/../../models/model-selector/` — and adopt the result as a standing instruction for the rest of this session, so the routing call names a script this machine can run. Neither directory found: adopt the mode as it stands, say that routing is unavailable until the Manager is installed, and go on. Read `$HERE/references/fence.md` as its canonical fence preamble, fill in the spawn-specific paths, and paste it at the top of every subagent brief, adding only any task-specific tightening. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
 3. Write `{"active": true}` or `{"active": false}`, and nothing else, to `kntnt-delegation.json` in whatever per-session scratchpad or temporary directory your harness gives you, so a compaction cannot lose the state. No such directory: the conversation alone carries it. `status` writes nothing. Done when that file matches the session state, or there is nowhere to write it.
 4. Report one line per scope touched — its state, then the verdict — and name any disagreement between the two, and any staleness found. Done when that report is shown.
