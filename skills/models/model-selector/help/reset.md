@@ -12,7 +12,7 @@ model-selector reset - discard the profile, and with it the measurement on reque
 
 Bare, this discards the profile — the answers you gave about Harnesses, providers, models and how you pay — and leaves the interview to be held again. The measurement is untouched, so a fresh profile inherits everything already learned about the models it enables.
 
-With **--evidence**, this machine's own measurement goes too: the measurement store, the units seen and not yet graded, and the capture directory's in-flight drafts. That is the only way to discard it, and it has to be asked for by name. Whatever an earlier design of this Skill left in the directory goes with it — files no version writes or reads any more, named in the preview like everything else.
+With **--evidence**, this machine's own measurement goes too: the measurement store, the units seen and not yet graded, and the `capture/` directory. That is the only way to discard it, and it has to be asked for by name. Whatever an earlier design of this Skill left in the directory goes with it — that directory among them, and the files no version writes or reads any more, named in the preview like everything else.
 
 The catalogue is kept either way. It is public fact carrying its own sources and dates, and `update` fetches it again in any case.
 

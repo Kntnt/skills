@@ -14,7 +14,7 @@ A unit's identity is opaque and computed here — the session, the seat and the 
 
 A unit is written only where it was **substantial**: three or more changing tool calls, or sixty seconds, or four thousand output tokens. A changing tool call is one that wrote something — an edit, a file write, a shell command that was not a read. Anything below that threshold is discarded with no trace at all, which is what keeps a session of short questions and answers out of the measurement entirely. A session that alternates between quick exchanges and long jobs contributes only the long jobs.
 
-Nothing is measured while a unit is running. The read happens once, at the session's own last lifecycle event, over that session's own finished record and its companion subagent directory — the file the Harness's own payload named, and nothing wider. A record that cannot be read is an absence, never an error.
+Nothing is measured while a unit is running, and nothing runs per turn. Each finished record is read once, at the moment it becomes finished: a subagent's record when that subagent stops, and the session's own record when the session ends. Each read is of the one file that moment's own payload named — for a stopped subagent, the `agent_transcript_path` Claude Code hands its `SubagentStop` hook — and nothing wider. A record that cannot be read is an absence, never an error.
 
 ## The row
 
@@ -70,6 +70,6 @@ There is no queue to work through, no review verb, and no reminder placed anywhe
 
 Rows are kept until they are discarded by hand. They survive Disabling the Skill, because what was measured stays true whether or not measuring continues.
 
-`/model-selector reset --evidence` is the one way to discard them, and it has to be asked for by name. It removes the measurement store, the units seen and not yet graded, and the capture directory's in-flight drafts, and it leaves the hooks installed and measuring. Switching measurement off is unchecking this Skill in `/kntnt select`, which removes every entry these hooks own from every Harness.
+`/model-selector reset --evidence` is the one way to discard them, and it has to be asked for by name. It removes the measurement store, the units seen and not yet graded, and the `capture/` directory an earlier design left beside them, and it leaves the hooks installed and measuring. Switching measurement off is unchecking this Skill in `/kntnt select`, which removes every entry these hooks own from every Harness.
 
 `/model-selector evidence` is how to see what is held, and `/model-selector status` is how to see the health of the hooks that collect it.

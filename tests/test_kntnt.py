@@ -3527,13 +3527,13 @@ def test_selecting_the_real_model_selector_installs_from_its_installed_layout(
 
     settings_path = world["home"] / ".claude" / "settings.json"
     settings = json.loads(settings_path.read_text(encoding="utf-8"))
-    assert "SessionStart" in settings.get("hooks", {})
+    assert set(settings.get("hooks", {})) == {"SubagentStop", "SessionEnd"}
 
     off = _run(world, "apply", "select", "--off", "model-selector", "--yes")
 
     assert off.returncode == 0, off.stderr
     settings_after = json.loads(settings_path.read_text(encoding="utf-8"))
-    assert not settings_after.get("hooks", {}).get("SessionStart")
+    assert not settings_after.get("hooks", {})
 
 
 def test_selecting_an_unchanged_skill_again_does_not_reinstall(tmp_path: Path) -> None:

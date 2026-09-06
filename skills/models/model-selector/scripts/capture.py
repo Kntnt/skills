@@ -15,10 +15,18 @@ What it hands over is a **Unit of Work**: one instruction and the work done in
 answer to it, from the moment an agent is told to do something — by a person
 or by another agent — to the moment it hands control back. Only a substantial
 Unit is ever written, so a session of quick questions and answers leaves no
-trace at all. On Claude Code the finished session's own record splits cleanly
-into Units: the companion `subagents/` directory is one Unit per subagent,
-each carrying the model and effort that subagent actually ran on, and the main
-transcript is one Unit per user instruction.
+trace at all. On Claude Code a finished record splits cleanly into Units, and
+there are two of them: a subagent's own record is one whole Unit, carrying the
+model and effort that subagent actually ran on, and the session's own record
+is one Unit per user instruction.
+
+Each record is read the moment it is finished and never before. A subagent's
+is read at that subagent's own stop, which is the moment its record is whole
+and the moment the Harness names the file; the session's is read at the
+session's own end. Nothing runs per turn: a start and a stop are moments this
+feature no longer asks any Harness for, because the answer to either was a
+file written for nobody and a session that never reached its end was never
+measured at all (#294).
 
 Capture follows this Skill's own Enabled state and asks for nothing beyond it
 (#223). The Manager installs this feature's owned lifecycle integration into
@@ -49,7 +57,7 @@ import shutil
 import sys
 from contextlib import suppress
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime
 from pathlib import Path
 from typing import Any, TextIO
 
@@ -65,9 +73,27 @@ SCHEMA_VERSION = 2
 # the same convention rather than as a confirmed reading of any payload
 # (ADR-0179).
 START_EVENTS = frozenset({"SessionStart", "sessionStart", "session.created"})
-TURN_EVENTS = frozenset({"Stop", "stop", "SubagentStop", "session.idle"})
+TURN_EVENTS = frozenset({"Stop", "stop", "session.idle"})
+SUBAGENT_EVENTS = frozenset({"SubagentStop"})
 ERROR_EVENTS = frozenset({"session.error"})
 END_EVENTS = frozenset({"SessionEnd", "sessionEnd", "session.deleted"})
+
+# The moments this feature actually asks each Harness for, which are the
+# moments at which a record it can read has just been finished. Everything
+# else a Harness offers is left uninstalled: an entry at a moment this module
+# answers with no work is an interpreter started once a turn, every turn, in
+# every session on the machine (#294). The two sets above are still named
+# because a stale entry on a machine the Manager has not reconverged goes on
+# arriving, and is answered with no work rather than with a traceback.
+#
+# Codex and OpenCode keep their finishing moments alone, no record this module
+# knows how to split existing at either. OpenCode has two of them — a session
+# deleted and a session errored — because either is that session finishing.
+WANTED_EVENTS: dict[str, tuple[str, ...]] = {
+    "claude-code": ("SubagentStop", "SessionEnd"),
+    "codex": ("SessionEnd",),
+    "opencode": ("session.deleted", "session.error"),
+}
 
 # Where a Harness names the lifecycle moment inside the payload rather than on
 # the command line. Claude Code and Codex both do, so a hook installed without a
@@ -85,19 +111,28 @@ EVENT_FIELDS: tuple[str, ...] = ("hook_event_name", "eventName", "event", "type"
 # anything is written, so nothing forbidden can arrive by sitting beside what
 # is wanted.
 #
-# `transcript_path` is locate-only (#225): it is read at a session's end to
-# open that session's own finished record, and it never reaches a draft
-# written to disk or a Unit — `_hook` reads it locally out of the cleaned
-# payload and passes it straight to `_finish` without ever folding it into the
-# draft this set's other fields build up.
+# Both paths are locate-only (#225): each is read to open one finished record
+# and is discarded inside the same invocation. Neither reaches a Unit, and
+# nothing this module writes to disk carries either — `_hook` reads them
+# locally out of the cleaned payload and passes one of them straight to the
+# read that moment makes.
 PAYLOAD_ALLOWED = frozenset(
     {
         "session_id",
         "harness",
-        "harness_inventory_revision",
         "transcript_path",
+        "agent_transcript_path",
     }
 )
+
+# Where Claude Code names the stopped subagent's own record. Established from
+# the Harness as installed rather than assumed (ADR-0179): Claude Code 2.1.263
+# states of `SubagentStop` that its "Input to command is JSON with agent_id,
+# agent_type, and agent_transcript_path". That is a different file from the
+# `transcript_path` every hook carries, which at this moment names the parent
+# session's own record and must not be read here — the session's turn to be
+# read is its own end.
+SUBAGENT_TRANSCRIPT_FIELD = "agent_transcript_path"
 
 # Where the pending Units wait for the grader, beside the measurement ledger
 # under the selected data directory, and where the grader records that it ran.
@@ -143,12 +178,6 @@ GRADER_STATE_FILE = "grader.json"
 # a Harness the Library learns to read is not thereby a Harness whose
 # instruction boundaries this module knows.
 READABLE_HARNESSES: tuple[str, ...] = ("claude-code",)
-
-# The subdirectory beside a Claude Code transcript that holds one transcript
-# per subagent, and the name each of those answers to. Neither is derived from
-# anything but the transcript path the payload already handed over.
-SUBAGENTS_DIRNAME = "subagents"
-SUBAGENT_GLOB = "agent-*.jsonl"
 
 # The line a routed builder brief opens with, naming the attempt whoever
 # dispatched it already decided. Where a subagent's first user message opens
@@ -340,12 +369,6 @@ class _Span:
     errored: bool = False
 
 
-def _now() -> str:
-    """Return this instant, as a Unit writes instants."""
-
-    return datetime.now(UTC).isoformat().replace("+00:00", "Z")
-
-
 def _parsed(instant: Any) -> datetime | None:
     """Return one recorded instant as a datetime, or None where it is unusable."""
 
@@ -370,15 +393,15 @@ def _opaque(value: Any) -> str:
 
 
 def home(data: Path) -> Path:
-    """Return the capture home inside one data directory."""
+    """Return the capture home inside one data directory.
+
+    Nothing writes it any more. It is still named because an earlier design
+    filled it with per-session drafts, and a directory no verb knows about
+    sits in somebody's home directory for as long as the Skill stays installed
+    (#294).
+    """
 
     return data / "capture"
-
-
-def _drafts(data: Path) -> Path:
-    """Return where per-session drafts are kept."""
-
-    return home(data) / "drafts"
 
 
 def _by_path(name: str, *candidates: Path) -> Any:
@@ -483,7 +506,10 @@ def install(
     unsupported = [harness for harness in named if harness not in supported]
     runs = _hook_command(command, data)
     installed = [
-        integrations.install(owner(), harness, root, runs) for harness in attempted
+        integrations.install(
+            owner(), harness, root, runs, events=WANTED_EVENTS.get(harness)
+        )
+        for harness in attempted
     ]
     return {
         "installed": installed,
@@ -561,34 +587,6 @@ def _clean(payload: Any) -> dict[str, Any]:
     if not isinstance(payload, dict):
         return {}
     return {key: value for key, value in payload.items() if key in PAYLOAD_ALLOWED}
-
-
-def _draft_path(data: Path, session: str) -> Path:
-    """Return where one session's draft is kept."""
-
-    return _drafts(data) / f"{_opaque(session)}.json"
-
-
-def _draft(data: Path, session: str) -> dict[str, Any] | None:
-    """Return one session's draft, or None where there is none to read."""
-
-    path = _draft_path(data, session)
-    if not path.exists():
-        return None
-    try:
-        loaded = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        return None
-    return loaded if isinstance(loaded, dict) else None
-
-
-def _store(path: Path, record: dict[str, Any]) -> None:
-    """Write one capture record, creating the directories it needs."""
-
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
 
 
 def _elapsed_seconds(started: Any, completed: Any) -> float:
@@ -969,45 +967,71 @@ def _retried(units: list[Unit]) -> list[Unit]:
     return units
 
 
+def _readable(harness: Any, transcript_path: Any) -> tuple[Path, str] | None:
+    """Return the one record to read and the Harness it came from, or None.
+
+    None where there is nothing to read at all, which is an absence for the
+    caller to write no Unit over rather than a raised error (ADR-0179,
+    decision 4 as applied to this read): a Harness whose record this module
+    cannot split and a payload that named no path are the same answer.
+    """
+
+    if not isinstance(harness, str) or harness not in READABLE_HARNESSES:
+        return None
+    if not isinstance(transcript_path, str) or not transcript_path:
+        return None
+    return Path(transcript_path), harness
+
+
 def units(session: str, harness: str | None, transcript_path: Any) -> list[Unit]:
     """Return every substantial Unit one finished session produced.
 
-    Bounded to exactly the session named by *transcript_path*: that file, and
-    its own companion subagent directory beside it, and nothing else — no
-    encoding is derived from a working directory or a session identity, and no
-    other session's files are ever opened.
-
-    Returns nothing where the Harness keeps no record this module can split,
-    where no usable path was handed over, or where nothing in it could be read
-    at all. That is an absence for the caller to write no Unit over, never a
-    raised error (ADR-0179, decision 4 as applied to this read).
+    Bounded to exactly the file named by *transcript_path* and nothing else —
+    no encoding is derived from a working directory or a session identity, no
+    companion directory is walked, and no other session's files are ever
+    opened. A subagent of this session is read at its own stop, by
+    `subagent_units`, and never here (#294).
     """
 
-    if harness not in READABLE_HARNESSES:
+    readable = _readable(harness, transcript_path)
+    if readable is None:
         return []
-    if not isinstance(transcript_path, str) or not transcript_path:
-        return []
+    path, known = readable
+    return _retried(
+        [
+            unit
+            for span in _spans(_lines(path), whole=False)
+            if (unit := _unit(span, session, known, delegated=False)) is not None
+        ]
+    )
 
-    path = Path(transcript_path)
-    found = [
+
+def subagent_units(
+    session: str, harness: str | None, transcript_path: Any
+) -> list[Unit]:
+    """Return the Unit one finished subagent produced, under its session's identity.
+
+    The record is one whole Unit: it was opened by one instruction and
+    everything in it answers that instruction. What it carries that the
+    session's own record cannot is the model and the effort that subagent
+    actually ran on — the cleanest available signal that a delegated point did
+    or did not do the work it was given.
+
+    The identity is the parent session's, because that is whose work this was;
+    the subagent's own name is not an identity and never reaches a Unit.
+    Bounded to the one file *transcript_path* names, on the same terms `units`
+    is bounded to the one file its own caller named.
+    """
+
+    readable = _readable(harness, transcript_path)
+    if readable is None:
+        return []
+    path, known = readable
+    return [
         unit
-        for span in _spans(_lines(path), whole=False)
-        if (unit := _unit(span, session, harness, delegated=False)) is not None
+        for span in _spans(_lines(path), whole=True)
+        if (unit := _unit(span, session, known, delegated=True)) is not None
     ]
-
-    # Each subagent transcript is one Unit of its own, carrying the model and
-    # the effort that subagent actually ran on — the cleanest available signal
-    # that a delegated point did or did not do the work it was given.
-    subagents = path.with_suffix("") / SUBAGENTS_DIRNAME
-    if subagents.is_dir():
-        for transcript in sorted(subagents.glob(SUBAGENT_GLOB)):
-            found += [
-                unit
-                for span in _spans(_lines(transcript), whole=True)
-                if (unit := _unit(span, session, harness, delegated=True)) is not None
-            ]
-
-    return _retried(found)
 
 
 def pending(data: Path) -> list[dict[str, Any]]:
@@ -1038,9 +1062,9 @@ def _remember(data: Path, found: list[Unit]) -> dict[str, Any]:
 
 
 def _finish(
-    data: Path, draft: dict[str, Any], harness: str | None, transcript_path: Any
+    data: Path, session: str, harness: str | None, transcript_path: Any
 ) -> dict[str, Any]:
-    """Answer one session-ending signal: derive its Units and forget the draft.
+    """Answer one session-ending signal: derive that session's own Units.
 
     A session that ended abruptly contributes whatever its own record
     establishes and nothing more; nothing here waits for a human. The one
@@ -1049,15 +1073,31 @@ def _finish(
     this path's own are.
     """
 
-    written = _remember(
-        data, units(draft["session_identity"], harness, transcript_path)
-    )
-    _draft_path(data, draft["session_key"]).unlink(missing_ok=True)
+    written = _remember(data, units(session, harness, transcript_path))
 
     with suppress(Exception):
         _sibling("grade").hook_pass(data)
 
     return {"ok": True, "fail_open": False, **written}
+
+
+def _stopped(
+    data: Path, session: str, harness: str | None, transcript_path: Any
+) -> dict[str, Any]:
+    """Answer one subagent's own stop: derive that subagent's Unit.
+
+    One bounded read of one finished record, made at the moment that record is
+    finished rather than hours later at a session end the session may never
+    reach. It carries no grading pass: buying a judgement is the session's own
+    last invocation's to carry, and a session that delegates twenty times must
+    not pay for twenty of them.
+    """
+
+    return {
+        "ok": True,
+        "fail_open": False,
+        **_remember(data, subagent_units(session, harness, transcript_path)),
+    }
 
 
 def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
@@ -1131,25 +1171,17 @@ def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     if not session:
         return _idle()
 
-    held = _draft(data, session) or {
-        "schema_version": SCHEMA_VERSION,
-        "session_key": session,
-        "session_identity": _opaque(session),
-        "harness": clean.get("harness"),
-        "harness_inventory_revision": clean.get("harness_inventory_revision"),
-    }
-    draft = {**held, "session_key": session, "updated_at": _now()}
+    identity = _opaque(session)
+    harness = clean.get("harness")
 
     if event in END_EVENTS or event in ERROR_EVENTS:
-        return _finish(
-            data,
-            draft,
-            clean.get("harness") or draft.get("harness"),
-            clean.get("transcript_path"),
-        )
+        return _finish(data, identity, harness, clean.get("transcript_path"))
+    if event in SUBAGENT_EVENTS:
+        return _stopped(data, identity, harness, clean.get(SUBAGENT_TRANSCRIPT_FIELD))
 
-    # A start or a turn is a draft update and nothing more.
-    _store(_draft_path(data, session), draft)
+    # Every other moment is one this feature no longer asks for. A stale entry
+    # on a machine the Manager has not reconverged still fires, and is answered
+    # with no work rather than with a traceback.
     return _idle()
 
 
@@ -1197,7 +1229,9 @@ def status(data: Path, root: Path) -> dict[str, Any]:
     return {
         "harnesses": [
             {
-                **integrations.health(owner(), harness, root),
+                **integrations.health(
+                    owner(), harness, root, events=WANTED_EVENTS.get(harness)
+                ),
                 "measurements": harness in READABLE_HARNESSES,
             }
             for harness in integrations.SUPPORTED
@@ -1234,10 +1268,15 @@ def purge_paths(data: Path) -> list[dict[str, Any]]:
     """Return what this feature owns beyond the ledger, present or not.
 
     This is the preview a reset renders before it removes the whole `capture/`
-    subdirectory — drafts and all — and the pending Units beside it, keeping
-    the Harness hooks installed (issue #227). `capture/` is a directory rather
-    than a JSONL file, so it is sized in bytes; the pending store is JSONL,
-    sized in rows.
+    subdirectory and the pending Units beside it, keeping the Harness hooks
+    installed (issue #227). `capture/` is a directory rather than a JSONL file,
+    so it is sized in bytes; the pending store is JSONL, sized in rows.
+
+    `capture/` is itself one of the things an earlier design left: it held a
+    per-session draft written at every start and every turn, and nothing
+    writes it any more (#294). It is named first because it is a directory
+    removed whole, while `RETIRED_FILES` is a list of files; what a reset does
+    with the two is the same.
 
     The retired design's leftovers come last and are sized in bytes, being
     files rather than stores anything counts rows in.
@@ -1316,8 +1355,7 @@ def _hook_command(supplied: list[str], data: Path) -> list[str]:
     """Return the command a Harness runs for a lifecycle event.
 
     The data directory travels inside it. A hook installed for one directory
-    and run against another writes its drafts and Units where nobody looks
-    for them.
+    and run against another writes its Units where nobody looks for them.
     """
 
     command = list(supplied) or ["uv", "run", str(Path(__file__).resolve()), "hook"]

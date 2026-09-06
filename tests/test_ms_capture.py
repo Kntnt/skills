@@ -422,20 +422,22 @@ def test_an_interruption_line_marks_the_unit_it_stopped(tmp_path: Path) -> None:
     assert found[0].signals["interrupted"] is True
 
 
-def test_a_subagent_transcript_becomes_its_own_unit_with_its_own_seat(
+def test_a_stopped_subagents_own_record_becomes_its_own_unit(
     tmp_path: Path,
 ) -> None:
-    """The companion directory is the cleanest signal a delegated point leaves.
+    """A subagent's own finished record is the cleanest signal it leaves.
 
     Its own model and its own effort, rather than the session's, which is the
-    whole reason a delegated Unit is worth measuring separately at all.
+    whole reason a delegated Unit is worth measuring separately at all. The
+    whole record is one Unit: it was opened by one instruction and everything
+    in it answers that instruction.
     """
 
     transcript = _transcript(
         tmp_path,
         *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
     )
-    _subagent(
+    stopped = _subagent(
         transcript,
         "aaa",
         {
@@ -452,16 +454,39 @@ def test_a_subagent_transcript_becomes_its_own_unit_with_its_own_seat(
         ),
     )
 
-    delegated = [
-        unit
-        for unit in capture.units("s", "claude-code", str(transcript))
-        if unit.delegated
-    ]
+    delegated = capture.subagent_units("s", "claude-code", str(stopped))
 
     assert len(delegated) == 1
+    assert delegated[0].delegated is True
     assert delegated[0].model == "claude-haiku-4-5"
     assert delegated[0].deliberation == "low"
     assert delegated[0].instruction_excerpt == "survey the tree"
+
+
+def test_a_finished_session_yields_its_own_record_and_nothing_beside_it(
+    tmp_path: Path,
+) -> None:
+    """A subagent is read at its own stop, so a session's end has none to add."""
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+    )
+    _subagent(
+        transcript,
+        "aaa",
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {"role": "user", "content": "survey the tree"},
+        },
+        _assistant("2026-09-06T10:03:30.000Z", text="Surveyed."),
+    )
+
+    found = capture.units("s", "claude-code", str(transcript))
+
+    assert [unit.delegated for unit in found] == [False]
 
 
 def test_the_token_categories_arrive_under_the_names_a_measurement_prices(
@@ -597,10 +622,14 @@ def test_an_instruction_given_again_marks_the_answer_that_preceded_it(
 # --- What reaches disk -------------------------------------------------------
 
 
-def test_a_finished_session_writes_its_units_and_forgets_the_draft(
+def test_a_finished_session_writes_its_units_with_nothing_written_before_it(
     tmp_path: Path,
 ) -> None:
-    """The session's last event is where a Unit is derived and nowhere else."""
+    """The session's last event is where a Unit is derived and nowhere else.
+
+    Nothing precedes it any more: no draft is written at a start or a turn, so
+    the end payload is the whole of what the read needs.
+    """
 
     grader = _grader()
     data = tmp_path / "data"
@@ -608,9 +637,6 @@ def test_a_finished_session_writes_its_units_and_forgets_the_draft(
         tmp_path,
         *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
     )
-
-    capture.hook(data, "SessionStart", {"session_id": "s", "harness": "claude-code"})
-    assert list((data / "capture" / "drafts").glob("*.json"))
 
     answered = capture.hook(
         data,
@@ -625,8 +651,86 @@ def test_a_finished_session_writes_its_units_and_forgets_the_draft(
     assert answered["ok"] is True
     assert len(answered["recorded"]) == 1
     assert len(capture.pending(data)) == 1
-    assert not list((data / "capture" / "drafts").glob("*.json"))
+    assert not (data / "capture").exists()
     assert grader.passes == [data]
+
+
+def test_a_stopped_subagent_is_read_at_its_stop_and_not_again_at_the_end(
+    tmp_path: Path,
+) -> None:
+    """Delegated work is measured the moment its own record is finished.
+
+    The payload names that one record, and that one record is all that is
+    read. The parent session's own end reads the session's own transcript and
+    nothing under the companion directory, so a subagent that stopped is
+    written once and a subagent nobody's stop ever named is not written at all.
+    """
+
+    _grader()
+    data = tmp_path / "data"
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+    )
+    stopped = _subagent(
+        transcript,
+        "aaa",
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {"role": "user", "content": "survey the tree"},
+        },
+        _assistant(
+            "2026-09-06T10:03:30.000Z",
+            model="claude-haiku-4-5",
+            effort="low",
+            text="Surveyed.",
+        ),
+    )
+    _subagent(
+        transcript,
+        "bbb",
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {"role": "user", "content": "still running"},
+        },
+        _assistant("2026-09-06T10:04:30.000Z", text="Working."),
+    )
+
+    answered = capture.hook(
+        data,
+        "SubagentStop",
+        {
+            "session_id": "/Users/thomas/Projects/skills",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+            "agent_transcript_path": str(stopped),
+        },
+    )
+
+    assert len(answered["recorded"]) == 1
+    [written] = capture.pending(data)
+    assert written["delegated"] is True
+    assert written["session"] == capture._opaque("/Users/thomas/Projects/skills")
+    assert written["model"] == "claude-haiku-4-5"
+
+    capture.hook(
+        data,
+        "SessionEnd",
+        {
+            "session_id": "/Users/thomas/Projects/skills",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+        },
+    )
+
+    held = capture.pending(data)
+    assert [row["unit_id"] for row in held].count(written["unit_id"]) == 1
+    assert [row["delegated"] for row in held] == [True, False]
+    assert all("still running" not in row["instruction_excerpt"] for row in held)
 
 
 def test_the_same_finished_session_answered_twice_adds_nothing(tmp_path: Path) -> None:
@@ -696,23 +800,31 @@ def test_no_forbidden_content_reaches_a_pending_unit(tmp_path: Path) -> None:
         assert forbidden not in written, forbidden
 
 
-def test_the_transcript_path_never_reaches_a_persisted_draft(tmp_path: Path) -> None:
-    """It is read to open one file and discarded inside the same invocation."""
+def test_a_moment_capture_no_longer_installs_writes_nothing_at_all(
+    tmp_path: Path,
+) -> None:
+    """A stale entry the Manager has not yet reconverged costs the session nothing.
+
+    It is answered, it does no work, and it leaves no file behind — which is
+    the whole of what a start or a turn was ever doing.
+    """
 
     data = tmp_path / "data"
 
-    capture.hook(
-        data,
-        "SessionStart",
-        {
-            "session_id": "s",
-            "harness": "claude-code",
-            "transcript_path": "/Users/thomas/.claude/projects/x/y.jsonl",
-        },
-    )
+    for moment in ("SessionStart", "Stop", "session.idle"):
+        answered = capture.hook(
+            data,
+            moment,
+            {
+                "session_id": "s",
+                "harness": "claude-code",
+                "transcript_path": "/Users/thomas/.claude/projects/x/y.jsonl",
+            },
+        )
+        assert answered["ok"] is True
+        assert answered["recorded"] == []
 
-    drafts = list((data / "capture" / "drafts").glob("*.json"))
-    assert "transcript_path" not in drafts[0].read_text(encoding="utf-8")
+    assert not data.exists()
 
 
 def test_the_session_identity_is_opaque(tmp_path: Path) -> None:
@@ -776,7 +888,12 @@ def test_a_grader_that_has_never_run_is_reported_as_such(tmp_path: Path) -> None
 
 
 def test_purge_previews_and_then_removes_the_pending_units(tmp_path: Path) -> None:
-    """The Harness hooks stay installed; what was captured does not."""
+    """The Harness hooks stay installed; what was captured does not.
+
+    `capture/` is now itself one of the things an earlier design left — it
+    held a per-session draft written at every start and every turn — and a
+    reset takes the directory whole (#294).
+    """
 
     data = tmp_path / "data"
     data.mkdir()
@@ -814,6 +931,10 @@ def test_what_the_retired_design_left_behind_is_previewed_and_removed(
     assert previewed[str(data / "standing-policy.json")]["present"] is True
     assert previewed[str(data / "config.json")]["present"] is False
 
+    # `capture/` is one of them now: nothing writes it any more, and the
+    # preview names it beside the files an earlier design left (#294).
+    assert str(data / "capture") in previewed
+
     capture.purge(data)
 
     assert not (data / "standing-policy.json").exists()
@@ -846,8 +967,8 @@ def test_default_data_uses_the_shared_kntnt_skill_directory() -> None:
     assert capture.default_data() == Path.home() / ".kntnt" / "model-selector"
 
 
-def test_simultaneous_sessions_keep_separate_drafts(tmp_path: Path) -> None:
-    """Two sessions at once are two drafts and two identities, never one."""
+def test_simultaneous_sessions_keep_separate_identities(tmp_path: Path) -> None:
+    """Two sessions at once are two identities, never one."""
 
     _grader()
     data = tmp_path / "data"
@@ -855,10 +976,6 @@ def test_simultaneous_sessions_keep_separate_drafts(tmp_path: Path) -> None:
         tmp_path,
         *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
     )
-
-    capture.hook(data, "SessionStart", {"session_id": "one", "harness": "claude-code"})
-    capture.hook(data, "SessionStart", {"session_id": "two", "harness": "claude-code"})
-    assert len(list((data / "capture" / "drafts").glob("*.json"))) == 2
 
     for session in ("one", "two"):
         capture.hook(
@@ -871,7 +988,7 @@ def test_simultaneous_sessions_keep_separate_drafts(tmp_path: Path) -> None:
             },
         )
 
-    assert not list((data / "capture" / "drafts").glob("*.json"))
+    assert not (data / "capture").exists()
     assert len({unit["session"] for unit in capture.pending(data)}) == 2
 
 
@@ -901,8 +1018,54 @@ def test_capture_writes_nothing_outside_its_own_data_directory(
     )
 
     assert list(elsewhere.iterdir()) == []
+    assert not (data / "capture").exists()
     written = {path.relative_to(tmp_path).parts[0] for path in tmp_path.rglob("*")}
     assert written <= {"data", "elsewhere", "session.jsonl"}
+
+
+def test_claude_code_is_asked_for_the_two_moments_capture_reads(
+    tmp_path: Path,
+) -> None:
+    """A subagent's own stop and the session's own end, and no other moment.
+
+    Every other moment was a hook run per turn that did no work, and a turn
+    that starts an interpreter for nothing is a cost this Skill was charging
+    every session on the machine (#294).
+    """
+
+    data, root = tmp_path / "data", tmp_path / "home"
+    capture.install(data, root, ["claude-code"], ["uv", "run", "hook"])
+
+    settings = json.loads(
+        (root / ".claude" / "settings.json").read_text(encoding="utf-8")
+    )
+
+    assert set(settings["hooks"]) == {"SubagentStop", "SessionEnd"}
+
+    reported = {
+        entry["harness"]: entry for entry in capture.status(data, root)["harnesses"]
+    }
+    assert reported["claude-code"]["status"] == "healthy"
+
+
+def test_a_harness_with_no_readable_record_is_asked_only_for_its_finish(
+    tmp_path: Path,
+) -> None:
+    """Nothing there can be split into Units, so nothing but the end is wanted."""
+
+    data, root = tmp_path / "data", tmp_path / "home"
+    capture.install(data, root, [], ["uv", "run", "hook"])
+
+    codex = json.loads((root / ".codex" / "hooks.json").read_text(encoding="utf-8"))
+    assert set(codex["hooks"]) == {"SessionEnd"}
+
+    plugin = next((root / ".config" / "opencode" / "plugins").glob("*.js")).read_text(
+        encoding="utf-8"
+    )
+    assert '"session.deleted"' in plugin
+    assert '"session.error"' in plugin
+    assert '"session.idle"' not in plugin
+    assert '"session.created"' not in plugin
 
 
 def test_naming_no_harness_installs_into_every_supported_one(tmp_path: Path) -> None:
@@ -983,9 +1146,21 @@ def test_the_hook_path_is_fail_open(tmp_path: Path) -> None:
 
     # A payload that names a session but a store that cannot be written is the
     # failure the swallow exists for, and it still exits clean.
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+    )
     blocked = tmp_path / "blocked"
     blocked.write_text("not a directory", encoding="utf-8")
-    broken = capture.hook(blocked, "SessionStart", {"session_id": "s"})
+    broken = capture.hook(
+        blocked,
+        "SessionEnd",
+        {
+            "session_id": "s",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+        },
+    )
 
     assert broken["ok"] is False
     assert broken["fail_open"] is True
@@ -1085,7 +1260,7 @@ def test_a_subagent_briefed_with_an_attempt_is_that_attempt(tmp_path: Path) -> N
         tmp_path,
         *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
     )
-    _subagent(
+    stopped = _subagent(
         transcript,
         "aaa",
         {
@@ -1100,11 +1275,7 @@ def test_a_subagent_briefed_with_an_attempt_is_that_attempt(tmp_path: Path) -> N
         _assistant("2026-09-06T10:03:30.000Z", text="Built."),
     )
 
-    delegated = [
-        unit
-        for unit in capture.units("s", "claude-code", str(transcript))
-        if unit.delegated
-    ]
+    delegated = capture.subagent_units("s", "claude-code", str(stopped))
 
     assert [unit.unit_id for unit in delegated] == ["build-291"]
 
@@ -1118,7 +1289,7 @@ def test_a_subagent_nobody_routed_keeps_the_identity_capture_computes(
         tmp_path,
         *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
     )
-    _subagent(
+    stopped = _subagent(
         transcript,
         "aaa",
         {
@@ -1130,11 +1301,7 @@ def test_a_subagent_nobody_routed_keeps_the_identity_capture_computes(
         _assistant("2026-09-06T10:03:30.000Z", text="Surveyed."),
     )
 
-    delegated = [
-        unit
-        for unit in capture.units("s", "claude-code", str(transcript))
-        if unit.delegated
-    ]
+    delegated = capture.subagent_units("s", "claude-code", str(stopped))
 
     assert len(delegated) == 1
     assert delegated[0].unit_id.startswith("unit-")

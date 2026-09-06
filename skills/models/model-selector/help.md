@@ -28,7 +28,7 @@ There is no answer that means *start nothing*. With no profile, an empty catalog
 
 `setup` is a short interview, held once: which Harnesses this covers, which providers you want suggestions from, which of their models, and how each provider is paid for on each channel — a subscription plan and its tier, an API rate card, or both at once where you reach the same provider two ways. Nothing that can be looked up is asked of you. Without a profile the Skill still answers, treating every catalogue model the detected Harnesses can reach as available, and `status` says so.
 
-Enabling this Skill installs session lifecycle hooks into every supported Harness on this machine, in the Global layer, and those hooks are what make the answers get better. They measure a unit of work — an instruction and the answer to it — and only where the unit was substantial: three or more changing tool calls, or sixty seconds, or four thousand output tokens. Quick questions and short exchanges are discarded with no trace, so an ordinary conversational session contributes nothing at all.
+Enabling this Skill installs session lifecycle hooks into every supported Harness on this machine, in the Global layer, and those hooks are what make the answers get better. They measure a unit of work — an instruction and the answer to it — and only where the unit was substantial: three or more changing tool calls, or sixty seconds, or four thousand output tokens. Quick questions and short exchanges are discarded with no trace, so an ordinary conversational session contributes nothing at all. Nothing runs while work is in flight: a subagent's record is read when that subagent stops, and the session's own record when the session ends, and those two moments are the only ones a hook is installed at.
 
 Where nothing else has established how a finished unit went, one call to a model your profile makes reachable reads that unit's instruction and its result and returns a score and a line of reason. It is chosen the way any unchecked work is: the cheapest point the measurements are confident in, rather than the cheapest point there is, because nothing downstream catches a wrong score. Those two excerpts are used to make the call and are stored nowhere. What is retained is one row per unit: the kind, the model, the deliberation level, the score and who established it, the token counts the Harness exposed, the cost those tokens price at, the elapsed time, and whether the work was routed. Prompts, responses, reasoning, diffs, file contents, terminal output and absolute paths are never copied, because the row is built by copying named fields rather than by removing unwanted ones.
 
@@ -98,9 +98,9 @@ World facts adopted over the shipped seed — exact model identities, family ali
 
 One append-only row per measured unit of work. Keyed by kind, model and deliberation level, and carrying no text from the work itself.
 
-**~/.kntnt/model-selector/capture/**
+**~/.kntnt/model-selector/pending.jsonl**
 
-In-flight per-session drafts, and `pending.jsonl` beside it holding units that have been seen and not yet graded. Both are working state and both go with **--evidence**.
+Units that have been seen and not yet graded. Working state, and it goes with **--evidence** — as does the `capture/` directory beside it, which an earlier design filled with per-session drafts and nothing writes any more.
 
 **Generated subagent definitions**
 

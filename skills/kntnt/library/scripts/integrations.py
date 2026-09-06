@@ -40,11 +40,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
-# The lifecycle moments a capture-shaped integration needs. They are
-# observations rather than verdicts: a stop says a turn ended, never that the
-# work in it succeeded. `SubagentStop` is here because delegated work is what
-# this collection measures most of, and without it a session whose own finished
-# record cannot be read sees none of it.
+# The lifecycle moments a capture-shaped integration may ask this Harness for.
+# They are observations rather than verdicts: a stop says a turn ended, never
+# that the work in it succeeded. This is the set an owner narrows from rather
+# than the set every owner installs — `SubagentStop` is here because delegated
+# work is what this collection measures most of, and which of these an owner
+# actually wants is the owner's own to say, through `events`.
 CLAUDE_EVENTS: tuple[str, ...] = (
     "SessionStart",
     "Stop",
