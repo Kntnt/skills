@@ -827,6 +827,31 @@ def test_a_moment_capture_no_longer_installs_writes_nothing_at_all(
     assert not data.exists()
 
 
+# What capture's own prose asserted while a draft existed and a start did work.
+# A comment and a docstring are surfaces of the same contract the code is, and
+# either can be the one a change leaves behind (`docs/rules/general.md`).
+RETIRED_CAPTURE_CLAIMS = (
+    "reaches a draft",
+    "neither opens nor closes a session",
+)
+
+
+def test_capture_asserts_nothing_a_draft_or_a_working_start_made_true() -> None:
+    """No comment or docstring survives stating what #294 took away.
+
+    Nothing writes a draft any more, so a shell command is not a string kept
+    out of one; and a session's own start now reaches the answer that does no
+    work, so that answer is not the one reserved for a moment which opens
+    nothing.
+    """
+
+    text = " ".join((SCRIPTS / "capture.py").read_text(encoding="utf-8").split())
+    idle = " ".join((capture._idle.__doc__ or "").split())
+
+    assert [claim for claim in RETIRED_CAPTURE_CLAIMS if claim in text] == []
+    assert "no work" in idle
+
+
 def test_the_session_identity_is_opaque(tmp_path: Path) -> None:
     """A raw session id is a path or a workspace name often enough."""
 

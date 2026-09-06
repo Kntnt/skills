@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "2bc5aca5b974424ca7d4537a0dfeac7ea020b381bf1f2e86c64d3deefed225ff",
+  "manager_digest": "44b897fbcc34b9b5879190b49ce51661bbea501b5773b4e3b543a451a3170985",
   "skills": [
     {
       "name": "agents-md",
@@ -189,7 +189,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, when another Skill requires Model Selector's public select interface. Do not use implicitly for setup, status, update, evidence, or reset.",
-      "digest": "a152f1465042ac413c156d8951e6b8559e68f48ce20dc37ada78d63381934f40",
+      "digest": "8962928084c20f75a7e192c82fa1c7647e70cfe677700ecbc16ca37ee14b9801",
       "binaries": [
         "uv"
       ],
@@ -216,7 +216,7 @@
       "name": "session-cleanup",
       "category": "environment",
       "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
-      "digest": "1bed9c5845953587f26215ea3faa79d29a02d4e657dc17ad30e001178d386417",
+      "digest": "69b670ff319f4b07097695fb1d2ef5883aa2f052d85d54d86d1d4e02e85b7198",
       "binaries": [
         "uv"
       ],

@@ -230,7 +230,7 @@ CHANGING_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
 
 # The tools that run a shell command, whose arguments decide whether the call
 # changed anything. The command string is classified here and discarded here:
-# no part of it reaches a draft, a Unit, or a measurement.
+# no part of it reaches a Unit or a measurement.
 SHELL_TOOLS = frozenset({"Bash"})
 
 # Shell commands that only read. A call every one of whose segments starts
@@ -1151,7 +1151,12 @@ def _moment(event: str, payload: Any) -> str:
 
 
 def _idle() -> dict[str, Any]:
-    """Return the answer for a signal that neither opens nor closes a session."""
+    """Return the answer for a moment this feature does no work at.
+
+    A moment it no longer asks any Harness for and a payload naming no session
+    are answered the same way: nothing recorded, and nothing charged to the
+    session that carried it (#294).
+    """
 
     return {"ok": True, "fail_open": False, "recorded": [], "skipped": []}
 

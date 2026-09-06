@@ -437,7 +437,9 @@ def install(
     session's beginning and its end has no use for the turns in between, and an
     entry installed at a moment nothing reads is an entry a later health check
     has to account for. Omitted, the Harness's own full set is installed, which
-    is what capture — the first owner here — asks for.
+    is the answer for an owner that has nothing to narrow rather than the way
+    an owner here asks for its moments: what a Harness offers is a set to
+    choose from, and every owner on this module names its own choice.
     """
 
     if harness not in SUPPORTED:

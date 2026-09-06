@@ -53,9 +53,8 @@ OWNER = "kntnt.session-cleanup"
 
 # The lifecycle moments this feature asks each Harness for, in that Harness's
 # own vocabulary. A turn ending is not a session ending and buys nothing here,
-# so the set is narrower than the one capture installs: an entry at a moment
-# this feature would do nothing at is an entry a health check still has to
-# account for.
+# so the turns between the two are left out: an entry at a moment this feature
+# would do nothing at is an entry a health check still has to account for.
 EVENTS: dict[str, tuple[str, ...]] = {
     "claude-code": ("SessionStart", "SessionEnd"),
     "codex": ("SessionStart", "SessionEnd"),

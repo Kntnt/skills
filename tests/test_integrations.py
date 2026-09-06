@@ -141,6 +141,24 @@ def test_an_installed_entry_carries_the_timeout_its_own_harness_honours(
     assert "timeout" not in plugin
 
 
+def test_the_events_default_is_explained_without_an_owner_that_narrows() -> None:
+    """`install`'s account of its own default answers to what its owners do.
+
+    Every owner this collection ships names the moments it wants — capture
+    among them since it stopped installing at moments it answers with no work
+    (#294) — so the Harness's full set is what an owner with nothing to
+    narrow would be given rather than what any caller here asks for. A
+    docstring citing one of them as the caller that takes the default tells
+    the next reader the opposite of what the code beneath it does.
+    """
+
+    module = _load()
+    prose = " ".join((module.install.__doc__ or "").split()).lower()
+
+    assert "full set" in prose
+    assert "capture" not in prose
+
+
 def test_an_unsupported_harness_reports_an_unsatisfied_capability(
     tmp_path: Path,
 ) -> None:

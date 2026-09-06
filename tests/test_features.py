@@ -250,6 +250,21 @@ def test_an_owner_installs_only_the_moments_it_asked_for(tmp_path: Path) -> None
     )
 
 
+def test_the_moments_this_feature_wants_are_stated_without_citing_captures() -> None:
+    """The comment over `EVENTS` answers for this Feature's own set alone.
+
+    Capture narrows its own set too — on Codex to the single moment against
+    this Feature's two (#294) — so a comment calling this the narrower of the
+    pair states a comparison the other side no longer bears out.
+    """
+
+    source = SESSION_CLEANUP.read_text(encoding="utf-8")
+    stated = source.partition("EVENTS: dict")[0].rsplit(f'OWNER = "{OWNER}"', 1)[-1]
+
+    assert "EVENTS" not in stated
+    assert "capture" not in stated
+
+
 def test_several_records_about_one_harness_fold_into_one() -> None:
     """A reader told a disagreement is a finding must not meet two different things."""
 
