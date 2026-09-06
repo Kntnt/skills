@@ -70,15 +70,28 @@ def _grader() -> _Grader:
     return stub
 
 
-def _user(text: str, at: str, origin: dict[str, str] | None = None) -> dict[str, Any]:
-    """Provide one instruction line, as Claude Code writes a person's own."""
+def _user(
+    text: str, at: str, *, kind: str | None = "human", meta: bool = False
+) -> dict[str, Any]:
+    """Provide one user line, as Claude Code writes one.
 
-    return {
+    *kind* is the `origin.kind` the Harness stamps on the line — a person
+    typing, a peer session messaging, a background task reporting back, the
+    session continuing itself — and `None` writes no `origin` at all, which is
+    what an injected reminder or a command echo arrives as. *meta* writes the
+    `isMeta` flag beside it.
+    """
+
+    line: dict[str, Any] = {
         "type": "user",
         "timestamp": at,
-        "origin": origin if origin is not None else {"kind": "human"},
         "message": {"role": "user", "content": text},
     }
+    if kind is not None:
+        line["origin"] = {"kind": kind}
+    if meta:
+        line["isMeta"] = True
+    return line
 
 
 def _assistant(
@@ -276,6 +289,135 @@ def test_a_tool_result_never_starts_a_unit_of_its_own(tmp_path: Path) -> None:
     )
 
     assert len(capture.units("s", "claude-code", str(transcript))) == 1
+
+
+def _spent(output: int) -> dict[str, Any]:
+    """Provide one turn's usage, distinguishable by what it wrote."""
+
+    return {
+        "input_tokens": 10,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 1000,
+        "output_tokens": output,
+        "output_tokens_details": {"thinking_tokens": 0},
+    }
+
+
+def test_a_background_report_continues_the_unit_it_arrives_in(
+    tmp_path: Path,
+) -> None:
+    """A session splits where somebody typed, and nowhere else.
+
+    A subagent finishing and a slash command echoing its own name are the
+    session's bookkeeping. Splitting at either one files a Unit whose
+    instruction is a notification and whose result is whatever happened next.
+    """
+
+    transcript = _transcript(
+        tmp_path,
+        _user("first", "2026-09-06T10:00:00.000Z"),
+        _assistant("2026-09-06T10:01:30.000Z", text="one", usage=_spent(100)),
+        _result("2026-09-06T10:01:31.000Z"),
+        _user("second", "2026-09-06T10:10:00.000Z"),
+        _assistant("2026-09-06T10:10:30.000Z", text="two", usage=_spent(200)),
+        _result("2026-09-06T10:10:31.000Z"),
+        _user(
+            "<task-notification>agent aaa finished</task-notification>",
+            "2026-09-06T10:11:00.000Z",
+            kind="task-notification",
+        ),
+        _user(
+            "<command-name>/orchestrate</command-name>",
+            "2026-09-06T10:11:10.000Z",
+            kind=None,
+        ),
+        _assistant("2026-09-06T10:12:00.000Z", text="two again", usage=_spent(300)),
+        _user("third", "2026-09-06T10:20:00.000Z"),
+        _assistant("2026-09-06T10:21:30.000Z", text="three", usage=_spent(400)),
+    )
+
+    found = capture.units("s", "claude-code", str(transcript))
+
+    assert [unit.instruction_excerpt for unit in found] == ["first", "second", "third"]
+    assert [unit.tokens["output"] for unit in found] == [100.0, 500.0, 400.0]
+    assert [round(unit.seconds) for unit in found] == [91, 120, 90]
+
+
+def test_a_peer_agents_message_begins_a_unit_of_its_own(tmp_path: Path) -> None:
+    """A message from another session is an instruction an agent typed."""
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z", "mine"),
+        _user(
+            "please look at the branch",
+            "2026-09-06T11:00:00.000Z",
+            kind="peer",
+            meta=True,
+        ),
+        _assistant("2026-09-06T11:05:00.000Z", text="Looked."),
+    )
+
+    found = capture.units("s", "claude-code", str(transcript))
+
+    assert [unit.instruction_excerpt for unit in found] == [
+        "mine",
+        "please look at the branch",
+    ]
+
+
+def test_no_other_user_line_begins_a_unit(tmp_path: Path) -> None:
+    """Everything the Harness itself put there is absorbed, never split at."""
+
+    transcript = _transcript(
+        tmp_path,
+        _user("do the work", "2026-09-06T10:00:00.000Z"),
+        _assistant("2026-09-06T10:00:30.000Z", tools=[_call("Bash", command="ls")]),
+        _result("2026-09-06T10:00:31.000Z"),
+        _user(
+            "<task-notification>agent aaa finished</task-notification>",
+            "2026-09-06T10:01:00.000Z",
+            kind="task-notification",
+        ),
+        _user(
+            "continue where you left off",
+            "2026-09-06T10:02:00.000Z",
+            kind="auto-continuation",
+            meta=True,
+        ),
+        _user(
+            "<local-command-stdout>ok</local-command-stdout>",
+            "2026-09-06T10:03:00.000Z",
+            kind=None,
+        ),
+        _assistant("2026-09-06T10:05:00.000Z", text="Done."),
+    )
+
+    found = capture.units("s", "claude-code", str(transcript))
+
+    assert [unit.instruction_excerpt for unit in found] == ["do the work"]
+
+
+def test_an_interruption_line_marks_the_unit_it_stopped(tmp_path: Path) -> None:
+    """A stopped turn says so, and does not begin a Unit of its own."""
+
+    transcript = _transcript(
+        tmp_path,
+        _user("do the work", "2026-09-06T10:00:00.000Z"),
+        _assistant(
+            "2026-09-06T10:02:00.000Z", tools=[_call("Bash", command="rm -rf x")]
+        ),
+        _user(
+            "[Request interrupted by user]",
+            "2026-09-06T10:05:00.000Z",
+            kind=None,
+        ),
+    )
+
+    found = capture.units("s", "claude-code", str(transcript))
+
+    assert len(found) == 1
+    assert found[0].signals["interrupted"] is True
 
 
 def test_a_subagent_transcript_becomes_its_own_unit_with_its_own_seat(

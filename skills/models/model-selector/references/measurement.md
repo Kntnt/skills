@@ -8,7 +8,7 @@ Enabling this Skill installs session lifecycle hooks into every supported Harnes
 
 ## A Unit of Work
 
-A unit begins at an instruction — from a person or from another agent — and ends when the agent hands control back. A subagent's own work is one unit, carrying that subagent's own model and deliberation level.
+A unit begins at an instruction somebody typed — a person at the keyboard, or a peer agent messaging this session — and ends when the agent hands control back. Nothing else in the record begins one. A background task's report continues the unit it arrives in, and so do the session continuing itself, a tool result, a command echo and the rest of the transcript's own bookkeeping: a unit whose instruction is a notification and whose result is whatever happened next measures nothing anybody asked for. A subagent's own work is one unit, carrying that subagent's own model and deliberation level.
 
 A unit is written only where it was **substantial**: three or more changing tool calls, or sixty seconds, or four thousand output tokens. A changing tool call is one that wrote something — an edit, a file write, a shell command that was not a read. Anything below that threshold is discarded with no trace at all, which is what keeps a session of short questions and answers out of the measurement entirely. A session that alternates between quick exchanges and long jobs contributes only the long jobs.
 

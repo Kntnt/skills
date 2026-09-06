@@ -268,6 +268,16 @@ TEST_RUNNERS = (
 # What Claude Code writes into the transcript when a person stops a turn.
 INTERRUPTION_MARKER = "[Request interrupted"
 
+# Who a user line has to have come from for it to begin a Unit. Claude Code
+# stamps every user line with an `origin.kind`, and only two of those kinds
+# are an instruction somebody gave: `human` is a person typing, `peer` is
+# another session messaging this one. `task-notification` is a background task
+# reporting back and `auto-continuation` is the session continuing itself —
+# neither is anybody's instruction, and splitting at a notification files a
+# Unit whose instruction is a report and whose result is whatever the session
+# did next.
+INSTRUCTION_ORIGINS = frozenset({"human", "peer"})
+
 
 @dataclass(frozen=True)
 class Unit:
@@ -637,17 +647,19 @@ def _excerpt(text: str) -> str:
 def _is_instruction(line: dict[str, Any]) -> bool:
     """Return whether this line is an instruction that begins a Unit.
 
-    Claude Code marks exactly this: a user line carrying an `origin` naming
-    who it came from — a person typing, another agent messaging, a background
-    task reporting back, the session continuing itself. Every other user line
-    is a tool result, an injected reminder, or the transcript's own
-    bookkeeping, and none of those is an instruction anybody gave.
+    A user line begins a Unit exactly where its `origin.kind` is one of
+    `INSTRUCTION_ORIGINS` — a person typing, or a peer session messaging this
+    one. `isMeta` is not consulted for those two, because a peer's message
+    carries it. Every other user line — a background task's report, the
+    session continuing itself, a tool result, a command echo, an injected
+    reminder, anything carrying no `origin` at all — is absorbed into the
+    running Unit, because none of it is an instruction anybody gave.
     """
 
-    if line.get("type") != "user" or line.get("isMeta") is True:
+    if line.get("type") != "user":
         return False
     origin = line.get("origin")
-    return isinstance(origin, dict) and bool(origin.get("kind"))
+    return isinstance(origin, dict) and origin.get("kind") in INSTRUCTION_ORIGINS
 
 
 def _reads_only(command: str) -> bool:
