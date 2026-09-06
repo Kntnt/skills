@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 from pathlib import Path
 
 from support.contract import STANDARD
@@ -25,10 +26,6 @@ CITED_SUFFIXES = (".md", ".py")
 # pointing at current law, and `CHANGELOG.md` is the evidence for changes
 # already made. Repointing either would falsify the account it is part of.
 HISTORICAL_PATHS = (Path("docs/adr"), Path("CHANGELOG.md"))
-
-# Directory names carrying no prose of this repository's own, matched wherever
-# they sit, so a working copy's incidentals cannot fail the suite.
-IGNORED_DIRECTORY_NAMES = frozenset({".git", ".venv", "__pycache__"})
 
 # The rules module binding whoever writes a ticket here, and every record
 # settling a rule it states: what a ticket may assert (0067), the numbers a run
@@ -62,20 +59,36 @@ def _records() -> dict[str, list[str]]:
 
 
 def _sources() -> list[Path]:
-    """Every file outside the archive that cites a record as a live pointer."""
+    """Every tracked file outside the archive citing a record as a live pointer.
+
+    What the repository tracks is the prose it sends a reader to, and git is
+    where that boundary is already written — so a working copy's own notes,
+    the ignored directories a tool leaves behind, and anything else nobody
+    committed cannot fail this suite over numbers they cite for themselves.
+    """
+
+    # The tracked set, asked of the repository the suite lives in.
+    listing = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
 
     found: list[Path] = []
-    for path in sorted(REPO_ROOT.rglob("*")):
-        if not path.is_file() or path.suffix not in CITED_SUFFIXES:
+    for name in filter(None, listing.stdout.split("\0")):
+        relative = Path(name)
+        if relative.suffix not in CITED_SUFFIXES:
             continue
 
-        # One of the two exclusions is rooted and the other is not: a
-        # historical account is a named place in this repository, while a
-        # working copy's incidentals turn up at any depth.
-        relative = path.relative_to(REPO_ROOT)
+        # The one exclusion left is rooted: a historical account is a named
+        # place in this repository. A tracked path can also name a file the
+        # working copy no longer has, which is nothing to read.
         if any(relative.is_relative_to(place) for place in HISTORICAL_PATHS):
             continue
-        if IGNORED_DIRECTORY_NAMES.intersection(relative.parts):
+        path = REPO_ROOT / relative
+        if not path.is_file():
             continue
 
         found.append(path)
@@ -114,10 +127,13 @@ def test_every_cited_number_has_a_record() -> None:
     """A citation to a number no file carries is as broken as a stale record.
 
     What this judges is the prose a reader is sent to for current law, which is
-    why the archive is not among the sources. A number written inside a record
-    is an address as of that record's date — a consolidation names the records
-    it supersedes precisely so the numbers stay findable in git — and a record
-    is never rewritten to agree with a later arrangement (ADR-0180).
+    why the sources are the files this repository tracks and why the archive is
+    not among them. An untracked file is nobody's pointer — a maintainer's
+    working notes beside the repository answer to their own author, not to this
+    numbering. A number written inside a record is an address as of that
+    record's date — a consolidation names the records it supersedes precisely
+    so the numbers stay findable in git — and a record is never rewritten to
+    agree with a later arrangement (ADR-0180).
     """
 
     records = _records()
