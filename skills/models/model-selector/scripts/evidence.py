@@ -124,11 +124,6 @@ CERTAINTY = 1e-6
 CROSS_KIND_SHARPNESS = 4.0
 CROSS_KIND_LIMIT = 1.5
 
-# What one failed attempt costs beside its tokens, where the kind names no
-# figure of its own: enough to be felt against a cheap attempt, not enough to
-# decide anything on its own.
-DEFAULT_OVERHEAD = 0.5
-
 # How long an attempt at a kind the shipped file does not describe is assumed
 # to take. The order of magnitude of a delegated job rather than of a question.
 UNKNOWN_SECONDS = 900.0
@@ -235,7 +230,6 @@ class KindPriors:
     token_priors: Mapping[str, Mapping[str, float]]
     deliberation: Mapping[str, Mapping[str, float]]
     long_contexts: Mapping[str, bool]
-    overheads: Mapping[str, float]
     elapsed: Mapping[str, float]
     problem: str | None
 
@@ -249,19 +243,6 @@ class KindPriors:
 
         base = self.elapsed.get(kind, UNKNOWN_SECONDS)
         return base * self._level(deliberation)["tokens"]
-
-    def overhead(self, kind: str) -> float:
-        """Return what one failed attempt of this kind costs beside its tokens.
-
-        A failure is not free once the model stops: somebody has to notice it,
-        judge it, and brief the work again, and on an unattended run it can
-        cost a whole wave. Without that term the arithmetic compares three
-        cheap attempts against one careful one on their token bills alone and
-        cannot tell the difference, which is how a candidate expected to fail
-        three times in four comes back as the economical answer.
-        """
-
-        return self.overheads.get(kind, DEFAULT_OVERHEAD)
 
     def difficulty(self, kind: str) -> float:
         """Return how much intelligence *kind* needs, on the capability scale."""
@@ -327,18 +308,15 @@ def load_kinds(here: Path) -> KindPriors:
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError) as problem:
-        return KindPriors(
-            {}, {}, {}, {}, {}, {}, f"{path} could not be read: {problem}"
-        )
+        return KindPriors({}, {}, {}, {}, {}, f"{path} could not be read: {problem}")
 
     entries = raw.get("kinds") if isinstance(raw, dict) else None
     if not isinstance(entries, dict):
-        return KindPriors({}, {}, {}, {}, {}, {}, f"{path} carries no kinds object")
+        return KindPriors({}, {}, {}, {}, {}, f"{path} carries no kinds object")
 
     difficulties: dict[str, float] = {}
     token_priors: dict[str, dict[str, float]] = {}
     long_contexts: dict[str, bool] = {}
-    overheads: dict[str, float] = {}
     elapsed: dict[str, float] = {}
     for kind, entry in entries.items():
         if not isinstance(kind, str) or not isinstance(entry, dict):
@@ -348,9 +326,6 @@ def load_kinds(here: Path) -> KindPriors:
             difficulties[kind] = min(1.0, max(0.0, difficulty))
         token_priors[kind] = _token_map(entry.get("tokens"))
         long_contexts[kind] = bool(entry.get("long_context"))
-        overhead = _number(entry.get("failure_overhead_usd"))
-        if overhead is not None:
-            overheads[kind] = max(0.0, overhead)
         taken = _number(entry.get("seconds"))
         if taken is not None and taken > 0.0:
             elapsed[kind] = taken
@@ -360,7 +335,6 @@ def load_kinds(here: Path) -> KindPriors:
         token_priors,
         _deliberation_table(raw.get("deliberation")),
         long_contexts,
-        overheads,
         elapsed,
         None,
     )

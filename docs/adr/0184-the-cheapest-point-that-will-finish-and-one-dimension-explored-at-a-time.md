@@ -1,0 +1,41 @@
+# The cheapest point that will finish, and one dimension explored at a time
+
+[ADR-0182](0182-how-a-model-is-chosen-and-how-the-choice-is-measured.md) settled that what is minimised is the cost of finishing — a point's priced token appetite divided by its chance of completing the work, plus what a failure costs to notice and brief again — and that the ranking is drawn from each candidate's posterior rather than taken from its mean. Both were built as that record describes them, and both were then read against the maintainer's own evidence store on 2026-09-06. What the arithmetic did was exactly what it had been told to do, and it was not what he wanted. What the rules now are is stated in [`docs/rules/routing.md`](../rules/routing.md) and in the Skill's own shipped files; this record argues. ADR-0182 stands as written and describes the design at its own date.
+
+## What the store actually chose
+
+**Over fifty seeds, one question got four different answers.** `--kind=implement --harness=claude-code --seat=claude-fable-5-1@high`, against the store as it stood, chose Opus 5 fifteen times, Sonnet 5 twenty times, Fable 5.1 nine times, and Luna or Grok six times. Ranked on the means alone the same question chose Opus in every one of the fifty. So the spread was not a tie being broken at the margin: the draw was moving the answer in about seven calls in ten, and a third of those landed on a model the evidence put well below the one it displaced.
+
+**Sonnet at 0.72 and Opus at 0.90 priced within two per cent of each other.** Sonnet is about four times cheaper per attempt, which is very nearly enough to pay for failing an attempt in three and a half rather than one in ten. The only term keeping the two apart was `failure_overhead_usd`, and the changelog for 0.25.0 records what that term had become: a constant raised from ten dollars to twenty because at fifteen the answer changed hands. A number tuned until the answer came out right is not evidence about the world. It is the shape of the arithmetic being wrong, expressed as a constant.
+
+**The maintainer's requirement was never that trade-off.** In his words: the job gets done, and among what gets it done the cheapest is chosen. A ratio hands back the opposite promise — that a low enough price will buy a lower chance of finishing, at whatever exchange rate the overhead constant happens to encode. He rejected it on sight, and he was right to: nobody had ever agreed to that exchange rate, and there was no way to state it that would have made him agree.
+
+**On two flat subscriptions the list value of a token is not what he pays.** That is the deeper reason the ratio was answering a question nobody had. The bill for a month is fixed; what varies is whether the wave finished. A quantity that trades dollars against completion is measuring the wrong scarce thing on a machine where dollars are not the scarce thing, and it does so with a per-failure constant that no measurement establishes and that nothing in the store could ever correct.
+
+## The bar, then the price
+
+**Every call is ranked the way high stakes was ranked.** The candidates whose posterior mean clears the floor are ordered on price and the cheapest is taken; where none clears it the likeliest is taken instead. There is one rule now instead of two, and `--stakes` no longer selects between them.
+
+**Price is second and is never a reason to accept a lower chance of finishing.** That is the whole of what changed, and it is stated as a lexicographic order rather than as a weighting because there is no exchange rate to state. A ratio has to answer *how many dollars is one point of success rate worth*; a bar answers *is this good enough*, and then *of the ones that are, which is cheapest*. Only the second pair of questions has answers this collection can get.
+
+**The floor keeps its value, and it is now the whole of what *good enough* means here.** It was already carrying that meaning for irreversible work. What it inherits is the weight the ratio used to carry, which is why calibrating it — and the capability and difficulty tables it reads against — is a real finding rather than a detail, and one deliberately left for a store that has been cleaned first.
+
+**The expected-cost arithmetic goes entirely, and so does the constant it needed.** `failure_overhead_usd` in every kind, the default behind it, the floor on the divisor, and the two derived quantities on every candidate. A term that exists only to make a division come out right has nothing left to do once nothing divides, and leaving it in place as a tie-break would leave the tuned constant deciding the same answers less visibly.
+
+**Escalation is asked the same way.** The next point whose posterior mean is higher than the one that failed, cheapest among those. It was already the second question rather than a second roll; what changes is only which quantity picks among the survivors.
+
+## Exploration replaces the draw, and moves one thing at a time
+
+**The draw's purpose survives the draw.** A store that only ever runs its favourite never learns that a cheaper point would have done, and an argmin over means never retries what it once scored badly. That is a real defect and the draw was a real answer to it. What made the draw the wrong answer is that it paid for the rows by moving the answer on most calls: seven calls in ten is not a bounded experiment, it is a lottery for the seat, and the dissent note existed precisely because a reader could not otherwise tell the lottery from a fault.
+
+**So the experiment is bounded by a probability and excluded from the answer.** About one call in ten of the kind that may be explored buys a row instead of taking the answer. It is drawn per call from the caller's seed rather than counted, so no particular call is the one that explores, a seed reproduces which calls were, and nothing has to be remembered between calls. Nine calls in ten now get the point the evidence actually backs, which the draw never did.
+
+**An exploration moves exactly one dimension, and a coin says which.** A row that moved the model and the deliberation at once says nothing about either, and the maintainer asked for the level dimension by name: stepping a strong model down two levels is, in his view, at least as informative an experiment as stepping down one model. Half the explorations each is the arrangement that takes him at his word without anybody having to rank the two kinds of ignorance.
+
+**The candidates are the points cheaper than the answer, and each is drawn once.** Cheapest first, in a fixed order, and the first draw to clear the floor is taken; where none clears, the best draw among them. This keeps what the posterior was buying — a point with few rows has a wide posterior and therefore gets tried, one that is confidently worse essentially never does, and nothing has to define which is which — while spending it on the experiment rather than on the answer.
+
+**An exploration that is offered nothing cheaper is not an exploration.** Where the chosen dimension has no cheaper point the answer stands and nothing is reported as explored, and the other dimension is not tried in its place. Falling through to the second dimension would make the coin decide nothing on exactly the calls where the two dimensions differ most, which is the opposite of what the coin is for.
+
+**The response says which calls were experiments.** `explored` is null or the dimension's name, and an explored answer's note says what the evidence would have chosen — the same duty the dissent note carried, for the same reason. `/orchestrate` renders it beside each routed build, so a reader of an unattended run can tell a build that was an experiment from one that was the answer, and read a failed experiment as the row it bought rather than as a routing fault.
+
+**A verifier is what makes exploring affordable at all, and it is why only reversible work is explored.** High stakes never explores, a lock never explores, an escalation never explores. Those three exclusions were already stated for the draw and they transfer unchanged: nothing stands behind unchecked work to catch a cheaper point that turned out not to do the job, an instruction is not a dimension to vary, and a caller whose attempt just failed is asking for the step up rather than for a row.

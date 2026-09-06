@@ -1,5 +1,5 @@
 {
-  "note": "Per-kind difficulty, token priors and context class. `difficulty` is on the same 0..1 scale as a model's capability in the catalogue, and only means anything against that scale: the estimator's untried-cell prior is the sigmoid of capability plus the level's bonus minus difficulty. Calibrate a kind's difficulty near the capability of the model that ought to be doing it - that is where the deliberation ladder pays for itself, because a kind far below a model's capability is one the model already succeeds at without thinking harder, and the arithmetic will correctly buy the cheapest level for it. The token priors describe one delegated attempt at `medium`, calibrated between a ticket-sized SWE-bench change and a long agentic Terminal-Bench trial; cache reads dominate every bill. `long_context` says whether work of this kind normally passes a vendor's context threshold, which is how the kind stands in for a context size no unstarted attempt has yet. `seconds` is how long one attempt of this kind takes at `medium`, which is what a run started for time is ordered on; it is read off measured work where there is any and placed against it in proportion where there is not. A human classifying work reads the notes below. `failure_overhead_usd` is what one failed attempt of this kind costs beside its tokens - noticing it, judging it, and briefing the work again - and the retry's own tokens are already counted by dividing through the success rate, so this is everything else - and on an unattended run a failed building ticket is a verdict, a stalled wave and a real chance somebody has to look at it, which is why those kinds carry the large numbers. It is what stops the arithmetic from reading three cheap attempts and one careful one as the same bill.",
+  "note": "Per-kind difficulty, token priors and context class. `difficulty` is on the same 0..1 scale as a model's capability in the catalogue, and only means anything against that scale: the estimator's untried-cell prior is the sigmoid of capability plus the level's bonus minus difficulty. Calibrate a kind's difficulty near the capability of the model that ought to be doing it - that is where the deliberation ladder pays for itself, because a kind far below a model's capability is one the model already succeeds at without thinking harder, and the arithmetic will correctly buy the cheapest level for it. The token priors describe one delegated attempt at `medium`, calibrated between a ticket-sized SWE-bench change and a long agentic Terminal-Bench trial; cache reads dominate every bill. `long_context` says whether work of this kind normally passes a vendor's context threshold, which is how the kind stands in for a context size no unstarted attempt has yet. `seconds` is how long one attempt of this kind takes at `medium`, which is what a run started for time is ordered on; it is read off measured work where there is any and placed against it in proportion where there is not. A human classifying work reads the notes below.",
   "deliberation": {
     "low": {
       "capability_bonus": -0.06,
@@ -40,7 +40,6 @@
         "output": 4500,
         "reasoning": 1200
       },
-      "failure_overhead_usd": 0.3,
       "seconds": 630
     },
     "converse": {
@@ -54,7 +53,6 @@
         "output": 3000,
         "reasoning": 900
       },
-      "failure_overhead_usd": 0.05,
       "seconds": 120
     },
     "prose": {
@@ -68,7 +66,6 @@
         "output": 12000,
         "reasoning": 3000
       },
-      "failure_overhead_usd": 2.0,
       "seconds": 480
     },
     "review": {
@@ -82,7 +79,6 @@
         "output": 8000,
         "reasoning": 5000
       },
-      "failure_overhead_usd": 2.0,
       "seconds": 700
     },
     "analyze": {
@@ -96,7 +92,6 @@
         "output": 10000,
         "reasoning": 6000
       },
-      "failure_overhead_usd": 1.5,
       "seconds": 600
     },
     "implement": {
@@ -110,7 +105,6 @@
         "output": 25000,
         "reasoning": 6000
       },
-      "failure_overhead_usd": 20.0,
       "seconds": 1400
     },
     "debug": {
@@ -124,7 +118,6 @@
         "output": 20000,
         "reasoning": 11000
       },
-      "failure_overhead_usd": 12.0,
       "seconds": 1800
     },
     "design": {
@@ -138,7 +131,6 @@
         "output": 22000,
         "reasoning": 12000
       },
-      "failure_overhead_usd": 12.0,
       "seconds": 1500
     }
   }

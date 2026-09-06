@@ -7,7 +7,6 @@ import json
 import random
 import subprocess
 import sys
-from collections import Counter
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
@@ -19,9 +18,13 @@ SKILL: Path = REPO_ROOT / "skills" / "models" / "model-selector"
 SCRIPTS: Path = SKILL / "scripts"
 SELECT: Path = SCRIPTS / "selection.py"
 
-# How many draws a distribution is read off. Large enough that a candidate
-# winning a tenth of the time is not going to be absent by luck, small enough
-# that the whole file still runs in a couple of seconds.
+# How many seeds a per-call probability is read off. The band in the ticket is
+# stated over exactly this many, and it is wide enough that a tenth measured
+# over them is a tenth rather than a run of luck.
+SEEDS: int = 1000
+
+# How many seeds a property asserted of every answer is read over. Enough that
+# a rule broken by one answer in fifty is caught, few enough to stay quick.
 DRAWS: int = 200
 
 # The flags that hold a pool to what a fixture profile enables: the caller's
@@ -126,23 +129,60 @@ def _store(data_dir: Path, *groups: tuple[str, str, str | None, float, int]) -> 
     )
 
 
-def _winners(capsys: pytest.CaptureFixture[str], flags: Sequence[str]) -> Counter[str]:
-    """Return how often each model wins, one call per seed."""
+def _clearing(data_dir: Path) -> None:
+    """Write a store whose cheapest clearing point is not its likeliest.
 
-    return Counter(
-        _answer(capsys, *flags, f"--seed={seed}")["model"] for seed in range(DRAWS)
+    Sonnet at `high` clears the floor at about 0.87 for USD 1.50, Opus clears
+    it everywhere and reads near 0.98 at `max` for four times the money, and
+    the fastest point that clears is Opus at `low` — three different answers
+    to three different questions off one store.
+    """
+
+    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(
+        data_dir,
+        ("implement", "claude-opus-5", "low", 1.0, 20),
+        ("implement", "claude-sonnet-5", "high", 1.0, 30),
+        ("implement", "claude-sonnet-5", "low", 0.0, 10),
     )
 
 
-def _mean(data_dir: Path, kind: str, model: str, level: str | None) -> float:
-    """Return the posterior mean the shipped estimator holds for one point."""
+def _boundary(data_dir: Path) -> None:
+    """Write a store whose one clearing point has a boundary on both dimensions.
 
-    evidence = _module("evidence")
-    cat = _module("catalogue").load(data_dir, SKILL)
-    kinds = evidence.load_kinds(SKILL)
-    estimator = evidence.Estimator(evidence.load(data_dir), cat, kinds)
-    beheld: float = estimator.p_success(kind, model, level).mean
-    return beheld
+    Only Opus at `xhigh` clears the floor, so the answer has three cheaper
+    levels of its own model below it and a cheaper model beside it at the same
+    level — which is what makes every exploration of either dimension find
+    something to try.
+    """
+
+    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(
+        data_dir,
+        ("implement", "claude-opus-5", "xhigh", 1.0, 20),
+        ("implement", "claude-opus-5", "low", 0.0, 10),
+        ("implement", "claude-sonnet-5", "high", 0.0, 10),
+    )
+
+
+def _under(data_dir: Path) -> None:
+    """Write a store no point of which clears the floor."""
+
+    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(
+        data_dir,
+        ("implement", "claude-opus-5", "low", 0.0, 8),
+        ("implement", "claude-opus-5", "high", 1.0, 8),
+        ("implement", "claude-sonnet-5", "high", 0.0, 8),
+    )
+
+
+def _over_seeds(
+    capsys: pytest.CaptureFixture[str], flags: Sequence[str]
+) -> list[dict[str, Any]]:
+    """Return one answer per seed of the band criterion 1 is read over."""
+
+    return [_answer(capsys, *flags, f"--seed={seed}") for seed in range(SEEDS)]
 
 
 def test_an_empty_data_directory_still_answers_and_exits_zero(tmp_path: Path) -> None:
@@ -271,7 +311,13 @@ def test_a_deliberation_lock_no_candidate_supports_falls_to_the_nearest(
 def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """An unpriceable model must not read as a free one and win everything."""
+    """An unpriceable model must not read as a free one and win everything.
+
+    Both candidates clear the floor, so price is what is left to order them on
+    and the one nothing can price has to lose it. A null cost is a null cost:
+    read as a nought it would make the model nothing is known about the
+    cheapest thing on the frontier by having nothing behind it.
+    """
 
     _refresh(
         tmp_path,
@@ -288,6 +334,7 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
         },
     )
     _profile(tmp_path, models=["claude-sonnet-5", "test-unpriced"])
+    _store(tmp_path, ("implement", "claude-sonnet-5", "high", 1.0, 20))
 
     answers = [
         _answer(
@@ -302,32 +349,64 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
         assert listed["test-unpriced"]["cost_usd"] is None
 
 
-def test_high_stakes_buys_the_cheapest_point_that_clears_the_floor(
+def test_the_answer_is_the_cheapest_point_that_clears_the_floor(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """A cheap attempt below the floor is a cheap way of not getting the work done.
+    """Price is second and never a reason to accept a lower chance of finishing.
 
-    The floor is read off the difference between the two requests rather than
-    off one answer: high stakes is decided and always clears it, reversible
-    work is drawn and regularly does not, and every point a draw took below the
-    floor was cheaper than the one the floor bought. That last is the whole of
-    what the floor is for, and no single seeded draw states it.
+    The floor is what the job getting done means here, and among the points
+    that clear it the cheapest is taken — so the answer is neither the likeliest
+    point on the table nor the cheapest point on it.
     """
 
-    seat = [f"--data={tmp_path}", "--harness=claude-code", "--seat=claude-opus-5@high"]
+    _clearing(tmp_path)
 
-    careful = _answer(capsys, "--kind=mechanical", "--stakes=high", *seat)
-    drawn = [
-        _answer(capsys, "--kind=mechanical", *seat, f"--seed={seed}")
-        for seed in range(DRAWS)
-    ]
-    under = [row for row in drawn if row["expected"]["p_success"] < select.FLOOR]
-
-    assert careful["expected"]["p_success"] >= select.FLOOR
-    assert under
-    assert all(
-        careful["expected"]["cost_usd"] > row["expected"]["cost_usd"] for row in under
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
     )
+
+    assert answer["explored"] is None
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
+    assert answer["expected"]["p_success"] >= select.FLOOR
+    beaten = {row["model"]: row for row in answer["alternatives"]}
+    assert beaten["claude-opus-5"]["p_success"] > answer["expected"]["p_success"]
+    assert beaten["claude-opus-5"]["cost_usd"] > answer["expected"]["cost_usd"]
+
+
+def test_where_nothing_clears_the_floor_the_likeliest_point_is_taken(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A pool that cannot promise the work is done is ranked on doing it."""
+
+    _under(tmp_path)
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
+    )
+
+    assert answer["explored"] is None
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert answer["expected"]["p_success"] < select.FLOOR
+    for row in answer["alternatives"]:
+        assert row["p_success"] <= answer["expected"]["p_success"]
+
+
+def test_a_run_ordered_on_time_takes_the_fastest_point_that_clears_the_floor(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The floor is the same floor; what orders the survivors is the caller's."""
+
+    _clearing(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0")
+
+    fastest = _answer(capsys, *flags, "--objective=time")
+    cheapest = _answer(capsys, *flags)
+
+    assert fastest["explored"] is None
+    assert (fastest["model"], fastest["deliberation"]) == ("claude-opus-5", "low")
+    assert fastest["expected"]["p_success"] >= select.FLOOR
+    assert fastest["expected"]["seconds"] < cheapest["expected"]["seconds"]
+    assert fastest["expected"]["cost_usd"] > cheapest["expected"]["cost_usd"]
 
 
 def test_a_profile_that_enables_nothing_inherits_the_callers_own_seat(
@@ -376,70 +455,82 @@ def test_the_answer_carries_the_channel_that_pays_for_the_chosen_point(
     }
 
 
-def test_two_candidates_whose_posteriors_overlap_each_win_a_share_of_the_calls(
+def test_about_a_tenth_of_reversible_calls_explore_and_no_high_stakes_call_does(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """A pool ranked on its means answers the same way for ever, and never learns."""
+    """A store that only ever runs its favourite never learns a cheaper point sufficed.
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-haiku-4-5-20251001"])
-    _store(
-        tmp_path,
-        ("mechanical", "claude-sonnet-5", "low", 1.0, 3),
-        ("mechanical", "claude-haiku-4-5-20251001", None, 1.0, 2),
-        ("mechanical", "claude-haiku-4-5-20251001", None, 0.0, 1),
-    )
+    So a bounded share of reversible calls buys the row instead of the answer.
+    It is a probability per call rather than a counter, so no particular call is
+    the one that explores; what is asserted is the share over many calls. High
+    stakes wants the best estimate on the table and never explores at all.
+    """
 
-    winners = _winners(capsys, LIMITED + (f"--data={tmp_path}", "--kind=mechanical"))
+    _boundary(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
 
-    assert set(winners) == {"claude-sonnet-5", "claude-haiku-4-5-20251001"}
-    assert min(winners.values()) >= DRAWS // 10
+    reversible = _over_seeds(capsys, flags)
+    careful = _over_seeds(capsys, (*flags, "--stakes=high"))
+
+    explored = [answer for answer in reversible if answer["explored"] is not None]
+    assert SEEDS * 0.07 <= len(explored) <= SEEDS * 0.13
+    assert not [answer for answer in careful if answer["explored"] is not None]
 
 
-def test_a_candidate_that_is_confidently_worse_essentially_never_wins(
+def test_an_exploration_moves_exactly_one_dimension_and_names_which(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """Nobody defines hopeless; two posteriors that no longer overlap do it."""
+    """A row that moved two things at once says nothing about either of them."""
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-haiku-4-5-20251001"])
-    _store(
-        tmp_path,
-        ("implement", "claude-sonnet-5", "high", 1.0, 12),
-        ("implement", "claude-haiku-4-5-20251001", None, 0.0, 12),
-    )
+    _boundary(tmp_path)
 
-    winners = _winners(capsys, LIMITED + (f"--data={tmp_path}", "--kind=implement"))
+    answers = _over_seeds(capsys, (*LIMITED, f"--data={tmp_path}", "--kind=implement"))
 
-    assert set(winners) == {"claude-sonnet-5"}
+    plain = {
+        (answer["model"], answer["deliberation"])
+        for answer in answers
+        if answer["explored"] is None
+    }
+    assert len(plain) == 1
+    model, level = plain.pop()
+
+    explored = [answer for answer in answers if answer["explored"] is not None]
+    assert {answer["explored"] for answer in explored} == {"model", "deliberation"}
+    for answer in explored:
+        if answer["explored"] == "model":
+            assert answer["model"] != model
+            assert answer["deliberation"] == level
+        else:
+            assert answer["model"] == model
+            assert answer["deliberation"] != level
 
 
-def test_a_candidate_nothing_has_measured_still_wins_now_and_then(
+def test_the_same_seed_returns_the_same_answer_twice(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """It is the only way a store ever learns that something cheaper sufficed."""
+    """A caller that has to reproduce a decision says which one it wants.
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-haiku-4-5-20251001"])
-    _store(tmp_path, ("mechanical", "claude-sonnet-5", "low", 1.0, 6))
+    Asked of a seed that explores and of one that does not, because a seed
+    reproducing only the calls that took the answer would reproduce nothing
+    about the calls that did not.
+    """
 
-    winners = _winners(capsys, LIMITED + (f"--data={tmp_path}", "--kind=mechanical"))
+    _boundary(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
 
-    assert winners["claude-haiku-4-5-20251001"] > 0
+    twice = [
+        [_answer(capsys, *flags, f"--seed={seed}") for _ in range(2)]
+        for seed in (11, 31)
+    ]
 
-
-def test_the_same_seed_draws_the_same_answer_twice(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """A caller that has to reproduce a decision says which draw it wants."""
-
-    first = _answer(capsys, f"--data={tmp_path}", "--scope=all", "--seed=11")
-    again = _answer(capsys, f"--data={tmp_path}", "--scope=all", "--seed=11")
-
-    assert (first["model"], first["deliberation"]) == (
-        again["model"],
-        again["deliberation"],
-    )
+    assert [pair[0]["explored"] for pair in twice] == [None, "deliberation"]
+    for first, again in twice:
+        first.pop("attempt_id")
+        again.pop("attempt_id")
+        assert first == again
 
 
-def test_drawing_never_disturbs_the_generator_the_rest_of_the_process_shares(
+def test_exploring_never_disturbs_the_generator_the_rest_of_the_process_shares(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     """A routing call inside somebody else's turn reseeds nothing of theirs."""
@@ -451,98 +542,53 @@ def test_drawing_never_disturbs_the_generator_the_rest_of_the_process_shares(
     assert random.getstate() == before
 
 
-def test_high_stakes_is_decided_on_the_means_rather_than_drawn(
+def test_a_lock_is_an_instruction_rather_than_a_boundary_to_try(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """Irreversible or unchecked work wants the best estimate, not a wager."""
+    """A user who names a model or a level is not offering one to experiment on."""
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
-    _store(
-        tmp_path,
-        ("implement", "claude-opus-5", "high", 1.0, 6),
-        ("implement", "claude-sonnet-5", "high", 0.5, 6),
-    )
+    _boundary(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
 
-    winners = _winners(
-        capsys,
-        LIMITED + (f"--data={tmp_path}", "--kind=implement", "--stakes=high"),
-    )
-
-    assert len(winners) == 1
-
-
-def test_a_locked_request_is_an_instruction_rather_than_a_distribution(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """A user who names a model or a level is not offering one to gamble on."""
-
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
-
-    locked = _winners(capsys, LIMITED + (f"--data={tmp_path}", "--deliberation=high"))
-
-    assert len(locked) == 1
-
-
-def test_an_escalation_after_a_failure_is_a_step_up_rather_than_a_gamble(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """A caller whose attempt just failed is asking for the step, not a roll."""
-
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
-
-    stepped = _winners(
-        capsys,
-        LIMITED + (f"--data={tmp_path}", "--after=claude-sonnet-5@low"),
-    )
-
-    assert len(stepped) == 1
-
-
-def test_the_reported_success_rate_is_the_posterior_mean_and_not_the_draw(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
-) -> None:
-    """The draw is how the choice was made, never a claim about the world."""
-
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-haiku-4-5-20251001"])
-    _store(
-        tmp_path,
-        ("mechanical", "claude-sonnet-5", "low", 1.0, 3),
-        ("mechanical", "claude-haiku-4-5-20251001", None, 0.5, 4),
-    )
-
-    answers = [
-        _answer(
-            capsys,
-            *LIMITED,
-            f"--data={tmp_path}",
-            "--kind=mechanical",
-            f"--seed={seed}",
-        )
+    locked = [
+        _answer(capsys, *flags, lock, f"--seed={seed}")
+        for lock in ("--model=claude-opus-5", "--deliberation=xhigh")
         for seed in range(DRAWS)
     ]
 
-    for answer in answers:
-        assert answer["expected"]["p_success"] == round(
-            _mean(tmp_path, "mechanical", answer["model"], answer["deliberation"]), 3
-        )
+    assert locked
+    assert all(answer["explored"] is None for answer in locked)
 
 
-def test_a_draw_that_dissents_from_the_means_names_what_they_would_have_chosen(
+def test_an_escalation_after_a_failure_is_a_step_up_rather_than_an_experiment(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """A reader seeing a weaker model chosen can tell a sample from an error."""
+    """A caller whose attempt just failed is asking for the step, not for a row."""
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-haiku-4-5-20251001"])
-    _store(
-        tmp_path,
-        ("mechanical", "claude-sonnet-5", "low", 1.0, 3),
-        ("mechanical", "claude-haiku-4-5-20251001", None, 1.0, 2),
-        ("mechanical", "claude-haiku-4-5-20251001", None, 0.0, 1),
-    )
+    _boundary(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
 
-    flags = LIMITED + (f"--data={tmp_path}", "--kind=mechanical")
-    notes = [_answer(capsys, *flags, f"--seed={seed}")["note"] for seed in range(DRAWS)]
-    dissented = [note for note in notes if note and "would have chosen" in note]
+    stepped = [
+        _answer(capsys, *flags, "--after=claude-opus-5@low", f"--seed={seed}")
+        for seed in range(DRAWS)
+    ]
 
-    assert dissented
-    assert all("claude-" in note for note in dissented)
+    assert all(answer["explored"] is None for answer in stepped)
+    assert len({answer["model"] for answer in stepped}) == 1
+
+
+def test_an_exploration_names_what_the_evidence_would_have_chosen(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A reader seeing a weaker point chosen can tell an experiment from an error."""
+
+    _boundary(tmp_path)
+
+    answers = _over_seeds(capsys, (*LIMITED, f"--data={tmp_path}", "--kind=implement"))
+    explored = [answer for answer in answers if answer["explored"] is not None]
+
+    assert explored
+    for answer in explored:
+        assert "would have chosen" in answer["note"]
+        assert "claude-opus-5@xhigh" in answer["note"]
+        assert answer["explored"] in answer["note"]

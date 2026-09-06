@@ -21,10 +21,13 @@ The work itself is never passed in. A caller names its kind and nothing more,
 because that is the whole of what the arithmetic reads, and a brief accepted
 here would be a brief somebody expects to have been recorded.
 
-The same question asked twice can come back differently, and that is this
-working rather than failing: the ranking is drawn from what the evidence
-leaves uncertain instead of taken from its middle. `_drawn` argues why, and
-names the three requests decided rather than drawn.
+What is ranked is the chance of finishing first and the price second. Among
+the candidates the evidence says will finish, the cheapest is taken; price is
+never a reason to accept a lower chance of getting the work done. `_ranked`
+states that rule, and `_explored` states the one exception to reading it off
+the means: a bounded share of reversible calls tries the boundary instead,
+because a store that only ever runs its favourite never learns that a cheaper
+point would have done.
 """
 
 from __future__ import annotations
@@ -35,7 +38,7 @@ import random
 import sys
 import uuid
 from collections.abc import Sequence
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -60,13 +63,21 @@ STAKES = ("reversible", "high")
 # instead, and asking for one is not the same as asking for the other.
 OBJECTIVES = ("cost", "time")
 
-# What `high` stakes demands before cost is allowed to decide anything. Below
+# What every call demands before price is allowed to decide anything. Below
 # this, a cheap attempt is a cheap way of not getting the work done.
 FLOOR = 0.8
 
-# The smallest chance of finishing the arithmetic will divide a bill by. A
-# candidate drawn at nought has to price as ruinous rather than as undefined.
-LEAST_CHANCE = 1e-6
+# What share of the calls that may explore actually do. It is a probability per
+# call rather than a counter, so no particular call is the one that explores and
+# over time about a tenth of them are. Low enough that exploring costs a run
+# almost nothing, high enough that the store still fills with rows about the
+# points the answer keeps stepping over.
+EXPLORATION = 0.1
+
+# The two dimensions of a point, one of which an exploration moves. A row that
+# moved both at once would say nothing about either, and the coin gives each
+# dimension half the explorations.
+DIMENSIONS = ("deliberation", "model")
 
 # Where the data directory sits when the caller does not say.
 DEFAULT_DATA = Path(".kntnt") / "model-selector"
@@ -97,9 +108,7 @@ class Scored:
     estimate: Estimate
     tokens: dict[str, float]
     cost_usd: float | None
-    expected_usd: float | None
     seconds: float
-    expected_seconds: float
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -141,34 +150,36 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     if not pool:
         return _inherit(args, _why_nothing(cat, profile, notes))
 
-    # Rank on what each candidate is believed to be worth, then — where this
-    # request is one to gamble on — rank again on what each could really be
-    # worth, which is the only way an estimate nobody retries is ever corrected.
+    # Rank on what the evidence holds, then — where this request is one the
+    # boundary may be tried on — replace the answer with one point beyond it,
+    # which is the only way an estimate nobody retries is ever corrected.
     scored = [
         _score(point, args.kind, estimator, kinds, _paid(profile, point, harness))
         for point in pool
     ]
-    ranked = _ranked(scored, args.stakes, args.objective)
-    if _drawable(args):
-        ranked = _drawn(scored, ranked[0], args, kinds, notes)
+    ranked = _ranked(scored, args.objective)
+    explored: str | None = None
+    if _explorable(args):
+        ranked, explored = _explored(scored, ranked, args, notes)
 
-    ranked = _after(ranked, args.after, notes)
+    ranked = _after(ranked, args.after, args.objective, notes)
     if not ranked:
         return _inherit(args, _why_nothing(cat, profile, notes))
     best = ranked[0]
 
-    return _report(best, ranked[1:], args, profile, cat, harness, notes)
+    return _report(best, ranked[1:], args, profile, cat, harness, explored, notes)
 
 
-def _drawable(args: argparse.Namespace) -> bool:
-    """Return whether this request is one the answer may be gambled on.
+def _explorable(args: argparse.Namespace) -> bool:
+    """Return whether this request is one the boundary may be tried on.
 
-    Three requests are decided rather than drawn. High stakes wants the best
-    estimate on the table rather than a wager on an overlap, and already ranks
-    by a rule of its own. A model or a deliberation lock is the user's own
-    instruction, and an instruction is not a distribution to sample. And a
-    caller naming the point that just failed is asking for the step up from it,
-    which is a second question rather than a second roll.
+    Three requests are answered rather than explored. High stakes wants the
+    best point the evidence knows of rather than a row about a cheaper one,
+    there being nothing behind it to catch a wrong answer. A model or a
+    deliberation lock is the user's own instruction, and an instruction is not
+    a dimension to vary. And a caller naming the point that just failed is
+    asking for the step up from it, which is a second question rather than an
+    experiment.
     """
 
     return (
@@ -179,79 +190,168 @@ def _drawable(args: argparse.Namespace) -> bool:
     )
 
 
-def _drawn(
+def _explored(
     scored: Sequence[Scored],
-    favoured: Scored,
+    ranked: Sequence[Scored],
     args: argparse.Namespace,
-    kinds: KindPriors,
     notes: list[str | None],
-) -> list[Scored]:
-    """Re-rank the pool on one draw from each candidate's success posterior.
+) -> tuple[list[Scored], str | None]:
+    """Return the answer, either as ranked or with one dimension of it moved.
 
     A pool ranked on its means answers the same question the same way for ever.
-    The moment the store holds good rows for one model that model wins every
-    call, so nothing else is ever tried, so no estimate but its own is ever
-    corrected — and a cheap model that would in fact have done the job stays
-    undiscoverable. Ranking on a draw instead asks what each candidate could
-    really be worth: two candidates whose posteriors overlap each win about as
-    often as either could be the better one, a candidate confidently worse
-    essentially never wins, and a candidate with few rows or none has a wide
-    posterior and therefore wins occasionally. As rows accumulate the posteriors
-    narrow and the draws converge on the truth, with nothing to tune.
+    The moment the store holds good rows for one point that point wins every
+    call, so nothing cheaper is ever tried, so no estimate but its own is ever
+    corrected — and a cheaper point that would in fact have done the job stays
+    undiscoverable. So a bounded share of the calls that may be explored buys a
+    row instead of the answer: about one in ten, drawn per call rather than
+    counted, so that nothing has to remember what the last call did and
+    `--seed` still reproduces which calls those were.
 
-    One roll per model, spent at every level that model exposes. A model's five
-    levels are five views of the same rows, so their posteriors move together
-    and drawing them apart would hand a model with five levels five tickets in
-    one lottery and let its luckiest speak for it — which is how the level
-    nobody has ever run comes to beat the level with the record. Sharing the
-    quantile leaves the ordering between a model's own levels where the evidence
-    put it, and makes the wager the thing it is meant to be: one model against
-    another.
+    One coin decides whether this call explores and a second decides which
+    dimension it moves, because an exploration that moved the model and the
+    level at once would come back with a row saying nothing about either. Each
+    candidate beyond the boundary is then drawn once from its own posterior,
+    cheapest first, and the first draw to clear the floor is taken: a candidate
+    with few rows behind it has a wide posterior and therefore gets tried, a
+    candidate confidently worse essentially never does, and nothing has to
+    define which is which. Where no draw clears, the best of them is taken
+    anyway — the coin has already spent this call on the experiment, and coming
+    back with the answer would spend it on nothing.
 
-    Only the chance of success is drawn. The token forecast is uncertain too,
-    but that is not where the uncertainty which decides anything lives, and a
-    sampled bill would add noise to the ranking without buying a thing.
-
-    The dissent is reported because the draw is how the choice was made and
-    never a claim about the world: a reader who finds a weaker model chosen has
-    to be able to tell a deliberate sample from an error at a glance (ADR-0182).
-    It speaks for a model and not for a level, a level being the same model
-    reconsidered rather than the surprise the note exists for.
+    The dissent is reported because an exploration is how this call was spent
+    and never a claim about the world: a reader who finds a weaker point chosen
+    has to be able to tell a deliberate experiment from an error at a glance
+    (ADR-0182).
     """
 
     rng = random.Random(args.seed)
-    rolls: dict[str, float] = {}
-    for row in scored:
-        rolls.setdefault(row.point.model.id, rng.random())
+    if rng.random() >= EXPLORATION:
+        return list(ranked), None
 
-    wagered = _ranked(
-        [_gambled(row, args.kind, kinds, rolls[row.point.model.id]) for row in scored],
-        args.stakes,
-        args.objective,
+    dimension = DIMENSIONS[0] if rng.random() < 0.5 else DIMENSIONS[1]
+    plain = ranked[0]
+    beyond = _beyond(scored, plain, dimension, args.objective)
+    if not beyond:
+        return list(ranked), None
+
+    chosen = _tried(beyond, rng)
+    notes.append(
+        f"explored the {dimension} dimension, where the evidence would have "
+        f"chosen {_named(plain.point)}"
     )
+    return [chosen, *[row for row in ranked if row is not chosen]], dimension
 
-    if wagered[0].point.model.id != favoured.point.model.id:
-        notes.append(
-            f"drawn from the posteriors, where the means would have chosen "
-            f"{_named(favoured.point)}"
-        )
 
-    return wagered
+def _beyond(
+    scored: Sequence[Scored], plain: Scored, dimension: str, objective: str
+) -> list[Scored]:
+    """Return every point one dimension away from the answer and cheaper than it.
+
+    On `deliberation` that is the answer's own model at each of its other
+    levels; on `model` it is every other model, taken at the answer's level or
+    at the nearest level that model supports. Only the cheaper ones are
+    candidates: the answer is already the cheapest point the evidence believes
+    in, so what a row is worth buying about is whether something below it would
+    have done.
+    """
+
+    if dimension == "deliberation":
+        beside = [
+            row
+            for row in scored
+            if row.point.model.id == plain.point.model.id
+            and row.point.deliberation != plain.point.deliberation
+        ]
+    else:
+        beside = [
+            _alongside(rows, plain.point.deliberation)
+            for rows in _elsewhere(scored, plain.point.model.id)
+        ]
+
+    cheaper = [row for row in beside if _below(row, plain, objective)]
+    return sorted(cheaper, key=lambda row: _order(row, objective))
+
+
+def _tried(beyond: Sequence[Scored], rng: random.Random) -> Scored:
+    """Return the cheapest candidate whose own draw clears the floor.
+
+    Every candidate is drawn once, in the fixed order it arrives in, so that a
+    seed reproduces the whole experiment rather than merely its first step.
+    """
+
+    drawn = [(row, row.estimate.draw(rng.random())) for row in beyond]
+    for row, chance in drawn:
+        if chance >= FLOOR:
+            return row
+    return max(drawn, key=lambda tried: tried[1])[0]
+
+
+def _elsewhere(scored: Sequence[Scored], model_id: str) -> list[list[Scored]]:
+    """Return the points of every model but one, grouped and in pool order."""
+
+    grouped: dict[str, list[Scored]] = {}
+    for row in scored:
+        if row.point.model.id != model_id:
+            grouped.setdefault(row.point.model.id, []).append(row)
+    return list(grouped.values())
+
+
+def _alongside(rows: Sequence[Scored], level: str | None) -> Scored:
+    """Return one model's point at a level, or at the nearest it supports.
+
+    Where the answer carries no level at all its model has no effort control,
+    so there is no level to be near and the other model is taken at the bottom
+    of its own ladder.
+    """
+
+    at = [row for row in rows if row.point.deliberation == level]
+    if at:
+        return at[0]
+    if level is None:
+        return min(rows, key=lambda row: _position(row.point.deliberation))
+    wanted = _nearest(rows[0].point.model, level)
+    near = [row for row in rows if row.point.deliberation == wanted]
+    return near[0] if near else rows[0]
+
+
+def _below(row: Scored, plain: Scored, objective: str) -> bool:
+    """Return whether one point is cheaper than the answer, in the caller's terms.
+
+    A point nothing can price is never cheaper than one that can be priced. An
+    absence read as a nought is how an unmeasured configuration becomes the
+    cheapest thing on the frontier by having nothing behind it.
+    """
+
+    if objective == "time":
+        return row.seconds < plain.seconds
+    if row.cost_usd is None or plain.cost_usd is None:
+        return False
+    return row.cost_usd < plain.cost_usd
+
+
+def _order(row: Scored, objective: str) -> tuple[float, str, int]:
+    """Return the fixed order candidates are drawn and taken in, cheapest first."""
+
+    price = row.seconds if objective == "time" else (row.cost_usd or 0.0)
+    return (price, row.point.model.id, _position(row.point.deliberation))
 
 
 def _after(
-    ranked: Sequence[Scored], failed: str | None, notes: list[str | None]
+    ranked: Sequence[Scored],
+    failed: str | None,
+    objective: str,
+    notes: list[str | None],
 ) -> list[Scored]:
     """Return one step up from a point that just failed, best first.
 
     Escalation is a second question rather than a second answer, so it is asked
-    the way the first one was and answered from the same ranked pool: keep the
+    the way the first one was and answered from the same pool: keep the
     candidates strictly likelier to finish the work than the one that failed,
-    and the existing order — the cost of finishing — picks among them. Nothing
-    is appended above the top of the ladder: where the failed point was already
-    the likeliest thing available, the caller is told so and offered it again,
-    because there is no step and pretending otherwise would spend a retry on
-    the same seat under a different name.
+    and take the cheapest of those — cheapest by the clock where the caller
+    asked for time. Nothing is appended above the top of the ladder: where the
+    failed point was already the likeliest thing available, the caller is told
+    so and offered it again, because there is no step and pretending otherwise
+    would spend a retry on the same seat under a different name.
     """
 
     if failed is None:
@@ -274,7 +374,7 @@ def _after(
         return list(ranked)
 
     notes.append(f"one step up from {failed!r}, which failed")
-    return stepped
+    return sorted(stepped, key=_time_key if objective == "time" else _cost_key)
 
 
 def _report(
@@ -284,6 +384,7 @@ def _report(
     profile: Profile,
     cat: Catalogue,
     harness: str,
+    explored: str | None,
     notes: Sequence[str | None],
 ) -> dict[str, Any]:
     """Render one ranked pool as the answer a caller acts on."""
@@ -312,6 +413,7 @@ def _report(
             "note": started.note,
         },
         "basis": best.estimate.basis,
+        "explored": explored,
         "confidence": round(best.estimate.low, 3),
         "expected": {
             "cost_usd": None if best.cost_usd is None else round(best.cost_usd, 4),
@@ -343,6 +445,7 @@ def _inherit(args: argparse.Namespace, why: str) -> dict[str, Any]:
             "note": why,
         },
         "basis": "inherit",
+        "explored": None,
         "confidence": 0.0,
         "expected": {
             "cost_usd": None,
@@ -497,95 +600,57 @@ def _score(
     kinds: KindPriors,
     rates: catalogue.Price | None,
 ) -> Scored:
-    """Attach the estimate, the token forecast and both bills to one point.
+    """Attach the estimate, the token forecast, the bill and the clock to one point.
 
-    The second bill is the one that decides, and it is taken here at the belief
-    the evidence actually holds. `_gambled` is the same point priced at one draw
-    from that belief instead.
+    All four are what the evidence holds about the point as it stands. Nothing
+    here is divided by anything: what a point costs and how likely it is to
+    finish are two facts about it, and `_ranked` is where the order between
+    them is settled.
     """
 
     estimate = estimator.p_success(kind, point.model.id, point.deliberation)
     tokens = estimator.tokens(kind, point.model.id, point.deliberation)
     cost = catalogue.cost_usd(point.model, tokens, kind, kinds, rates=rates)
     taken = estimator.seconds(kind, point.model.id, point.deliberation)
-    expected, expected_taken = _expected(
-        cost, taken, estimate.mean, kinds.overhead(kind)
-    )
-    return Scored(point, estimate, tokens, cost, expected, taken, expected_taken)
+    return Scored(point, estimate, tokens, cost, taken)
 
 
-def _gambled(row: Scored, kind: str, kinds: KindPriors, roll: float) -> Scored:
-    """Return one candidate re-priced at one quantile of its own posterior.
+def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
+    """Order the pool best first: the floor decides who is in, then price decides.
 
-    Everything the answer reports about the point is left exactly as it was
-    measured. What the draw moves is the two bills the ranking reads, so the
-    wager decides which point is chosen and states nothing about it afterwards.
+    The requirement is that the job gets done, and that among what gets it done
+    the cheapest is chosen. So the candidates the evidence believes in — those
+    whose posterior mean clears the floor — are ordered on price, and the rest
+    fall in behind them ordered on their chances, which is all a pool that can
+    promise nothing has left to offer. Price is second and is never a reason to
+    accept a lower chance of finishing.
+
+    The objective chooses which price is read. Money is the default because it
+    is what a run spends whether or not anybody is watching; time is what a
+    person waiting on the answer is spending instead, and it is theirs to ask
+    for.
     """
 
-    expected, expected_taken = _expected(
-        row.cost_usd, row.seconds, row.estimate.draw(roll), kinds.overhead(kind)
-    )
-    return replace(row, expected_usd=expected, expected_seconds=expected_taken)
-
-
-def _expected(
-    cost: float | None, seconds: float, chance: float, overhead: float
-) -> tuple[float | None, float]:
-    """Return what finishing costs and takes, at one chance of succeeding.
-
-    What a caller pays to finish the work is what every attempt costs divided
-    by the share of attempts that succeed, plus what each failure costs to
-    notice and brief again — and that last term is why a candidate expected to
-    fail three times in four is not the economical answer merely because its
-    tokens are cheap. The clock is the same arithmetic without the overhead,
-    which is somebody's attention rather than the run's own time.
-    """
-
-    survives = max(chance, LEAST_CHANCE)
-    if cost is None:
-        return None, seconds / survives
-    return (cost + overhead * (1.0 - chance)) / survives, seconds / survives
-
-
-def _ranked(scored: Sequence[Scored], stakes: str, objective: str) -> list[Scored]:
-    """Order the pool best first, under the rule the stakes call for.
-
-    The objective chooses which quantity *finishing* is counted in. Money is
-    the default because it is what a run spends whether or not anybody is
-    watching; time is what a person waiting on the answer is spending instead,
-    and it is theirs to ask for.
-    """
-
-    if stakes == "high":
-        confident = [row for row in scored if row.estimate.mean >= FLOOR]
-        if confident:
-            return sorted(confident, key=_cost_key)
-        return sorted(scored, key=_quality_key)
-    if objective == "time":
-        return sorted(scored, key=_time_key)
-    return sorted(scored, key=_value_key)
-
-
-def _value_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
-    """Rank by the cost of finishing, the default for reversible work."""
-
-    return (row.expected_usd is None, row.expected_usd or 0.0, *_tiebreak(row))
+    order = _time_key if objective == "time" else _cost_key
+    clears = [row for row in scored if row.estimate.mean >= FLOOR]
+    under = [row for row in scored if row.estimate.mean < FLOOR]
+    return sorted(clears, key=order) + sorted(under, key=_quality_key)
 
 
 def _time_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
-    """Rank by the time to finish, for a run somebody is waiting on."""
+    """Rank by the clock, for a run somebody is waiting on."""
 
-    return (False, row.expected_seconds, *_tiebreak(row))
+    return (False, row.seconds, *_tiebreak(row))
 
 
 def _cost_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
-    """Rank by cost alone, once the success floor has already been met."""
+    """Rank by price, among candidates that have already cleared the floor."""
 
     return (row.cost_usd is None, row.cost_usd or 0.0, *_tiebreak(row))
 
 
 def _quality_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
-    """Rank by success alone, for high stakes nothing clears the floor for."""
+    """Rank by chances alone, for a pool nothing in which clears the floor."""
 
     return (row.cost_usd is None, -row.estimate.mean, *_tiebreak(row))
 

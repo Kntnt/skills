@@ -20,7 +20,7 @@ model-selector - choose the model and deliberation level that finishes work for 
 
 ## DESCRIPTION
 
-Describe a piece of work and get back the model and deliberation level expected to finish it for the least money — not the cheapest model, but the one whose price divided by its chances of getting the job done is lowest. An attempt that fails bought nothing and left the work still to do, which is why a weak model has to be several times cheaper before it wins.
+Describe a piece of work and get back the model and deliberation level expected to finish it for the least money — first the models this machine's own measurements say will get the job done, and among those the cheapest. Price is second and is never a reason to accept a lower chance of finishing: an attempt that fails bought nothing and left the work still to do. About one call in ten of the reversible kind tries a cheaper point instead, moving either the model or the deliberation level but never both, because a store that only ever runs its favourite never finds out that something cheaper would have sufficed. The answer says when it was one of those, and what the measurements would otherwise have chosen.
 
 The answer names one model, one deliberation level, how to launch it, what it is expected to cost, how likely it is to succeed, and what that estimate rests on: this machine's own measurements of that exact kind of work, measurements of the same model at other work, or the model's published capability with nothing local behind it. Alternatives come with it, so a dominated candidate can be seen losing.
 
