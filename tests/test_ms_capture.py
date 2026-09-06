@@ -641,13 +641,56 @@ def test_purge_previews_and_then_removes_the_pending_units(tmp_path: Path) -> No
     (data / "capture" / "drafts" / "x.json").write_text("{}", encoding="utf-8")
 
     preview = capture.purge_paths(data)
-    assert [entry["present"] for entry in preview] == [True, True]
+    assert [entry["present"] for entry in preview[:2]] == [True, True]
     assert preview[1]["count"] == 1
 
     capture.purge(data)
 
     assert not (data / "pending.jsonl").exists()
     assert not (data / "capture").exists()
+
+
+def test_what_the_retired_design_left_behind_is_previewed_and_removed(
+    tmp_path: Path,
+) -> None:
+    """A file no version of this Skill writes any more is one nothing reads.
+
+    Seventeen of them were left in every data directory by the design this one
+    replaced. Harmless, and permanent: no verb knew they existed, so they would
+    have sat there for as long as the Skill stayed installed.
+    """
+
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "standing-policy.json").write_text("{}", encoding="utf-8")
+    (data / "run-observations.jsonl").write_text('{"a": 1}\n', encoding="utf-8")
+    (data / "measurements.jsonl").write_text('{"kept": true}\n', encoding="utf-8")
+
+    previewed = {entry["path"]: entry for entry in capture.purge_paths(data)}
+    assert previewed[str(data / "standing-policy.json")]["present"] is True
+    assert previewed[str(data / "config.json")]["present"] is False
+
+    capture.purge(data)
+
+    assert not (data / "standing-policy.json").exists()
+    assert not (data / "run-observations.jsonl").exists()
+
+    # The ledger is not this verb's to remove: `reset --evidence` names it
+    # separately, and a purge that took it would take the whole store with it.
+    assert (data / "measurements.jsonl").exists()
+
+
+def test_status_says_how_much_of_a_retired_design_is_still_sitting_there(
+    tmp_path: Path,
+) -> None:
+    """Told, or the tidying is a verb nobody knows to run."""
+
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "config.json").write_text("{}", encoding="utf-8")
+    (data / "alias-bindings.jsonl").write_text("", encoding="utf-8")
+
+    assert capture.status(data, tmp_path / "home")["retired"] == 2
 
 
 # --- What must survive inside somebody else's session ------------------------

@@ -10,7 +10,33 @@
     "`claude-haiku-4-5-20251001` exposes no effort control at all, which is why its `deliberation` list is empty rather than defaulted.",
     "Capability is a seeded prior on an arbitrary scale, refined by measurement. It is not a published score. Terminal-Bench 4.0 is the licence-clean feed a refresh replaces it from.",
     "The Codex CLI accepts `minimal|low|medium|high|xhigh` for `model_reasoning_effort` and does not accept `max`, though the API does. That is a property of the bridge, not of the model, and lives in launch.py.",
-    "`ultra` on the OpenAI models is a Codex execution mode, not an effort level, and is never sent as one."
+    "`ultra` on the OpenAI models is a Codex execution mode, not an effort level, and is never sent as one.",
+    "`plans` holds the subscriptions each provider markets, under the whole name it markets them by, so that somebody choosing how they pay sees the plan spelled as it is billed to them. A plan carries no allowance: Anthropic publishes only multipliers against the tier below, xAI publishes one weekly pool and no number at all, and OpenAI's own message estimates span roughly ninefold under a disclaimer that they are not limits. None of the three is a quantity a router may spend against.",
+    "A price of null means the provider publishes none that could be reached, which is every xAI consumer plan: x.ai/pricing and grok.com/plans both refuse an automated fetch, and third-party figures disagree with each other. A seat price is per seat and per month."
+  ],
+  "plans": [
+    {"provider": "anthropic", "name": "Claude Free", "monthly_usd": 0.0, "source_url": "https://claude.com/pricing", "retrieved": "2026-09-06"},
+    {"provider": "anthropic", "name": "Claude Pro", "monthly_usd": 20.0, "source_url": "https://claude.com/pricing", "retrieved": "2026-09-06"},
+    {"provider": "anthropic", "name": "Claude Max 5x", "monthly_usd": 100.0, "source_url": "https://claude.com/pricing", "retrieved": "2026-09-06"},
+    {"provider": "anthropic", "name": "Claude Max 20x", "monthly_usd": 200.0, "source_url": "https://claude.com/pricing", "retrieved": "2026-09-06"},
+    {"provider": "anthropic", "name": "Claude Team", "monthly_usd": 20.0, "source_url": "https://claude.com/pricing", "retrieved": "2026-09-06"},
+    {"provider": "anthropic", "name": "Claude Team Premium", "monthly_usd": 100.0, "source_url": "https://claude.com/pricing", "retrieved": "2026-09-06"},
+    {"provider": "anthropic", "name": "Claude Enterprise", "monthly_usd": 20.0, "source_url": "https://claude.com/pricing", "retrieved": "2026-09-06"},
+    {"provider": "openai", "name": "ChatGPT Free", "monthly_usd": 0.0, "source_url": "https://learn.chatgpt.com/docs/pricing.md", "retrieved": "2026-09-06"},
+    {"provider": "openai", "name": "ChatGPT Go", "monthly_usd": 8.0, "source_url": "https://learn.chatgpt.com/docs/pricing.md", "retrieved": "2026-09-06"},
+    {"provider": "openai", "name": "ChatGPT Plus", "monthly_usd": 20.0, "source_url": "https://learn.chatgpt.com/docs/pricing.md", "retrieved": "2026-09-06"},
+    {"provider": "openai", "name": "ChatGPT Pro 5x", "monthly_usd": 100.0, "source_url": "https://learn.chatgpt.com/docs/pricing.md", "retrieved": "2026-09-06"},
+    {"provider": "openai", "name": "ChatGPT Pro 20x", "monthly_usd": 200.0, "source_url": "https://learn.chatgpt.com/docs/pricing.md", "retrieved": "2026-09-06"},
+    {"provider": "openai", "name": "ChatGPT Business", "monthly_usd": 20.0, "source_url": "https://learn.chatgpt.com/docs/pricing.md", "retrieved": "2026-09-06"},
+    {"provider": "openai", "name": "ChatGPT Enterprise", "monthly_usd": null, "source_url": "https://learn.chatgpt.com/docs/pricing.md", "retrieved": "2026-09-06"},
+    {"provider": "openai", "name": "ChatGPT Edu", "monthly_usd": null, "source_url": "https://learn.chatgpt.com/docs/pricing.md", "retrieved": "2026-09-06"},
+    {"provider": "spacexai", "name": "Grok Free", "monthly_usd": null, "source_url": "https://docs.x.ai/grok/faq", "retrieved": "2026-09-06"},
+    {"provider": "spacexai", "name": "SuperGrok Lite", "monthly_usd": null, "source_url": "https://docs.x.ai/grok/faq", "retrieved": "2026-09-06"},
+    {"provider": "spacexai", "name": "SuperGrok", "monthly_usd": null, "source_url": "https://docs.x.ai/grok/faq", "retrieved": "2026-09-06"},
+    {"provider": "spacexai", "name": "SuperGrok Plus", "monthly_usd": null, "source_url": "https://docs.x.ai/grok/faq", "retrieved": "2026-09-06"},
+    {"provider": "spacexai", "name": "SuperGrok Heavy", "monthly_usd": null, "source_url": "https://docs.x.ai/grok/faq", "retrieved": "2026-09-06"},
+    {"provider": "spacexai", "name": "X Premium", "monthly_usd": null, "source_url": "https://docs.x.ai/grok/faq", "retrieved": "2026-09-06"},
+    {"provider": "spacexai", "name": "X Premium+", "monthly_usd": null, "source_url": "https://docs.x.ai/grok/faq", "retrieved": "2026-09-06"}
   ],
   "models": [
     {

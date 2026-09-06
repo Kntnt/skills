@@ -19,9 +19,11 @@ traceback there costs the caller its work rather than merely its accuracy.
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
-from collections.abc import Mapping
+import sys
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Protocol
@@ -73,6 +75,28 @@ class Price:
 
 
 @dataclass(frozen=True)
+class Plan:
+    """One subscription a provider sells, under the name it markets it by.
+
+    A whole name and no split. `Claude Max 20x` is one product and `ChatGPT
+    Pro 20x` is another, and a file that cut each into a product and a level
+    would be inventing a boundary neither provider draws — which is how two
+    profiles written a week apart come to disagree about one subscription.
+
+    The price is what the provider lists, in USD per month, and is `None`
+    where the provider publishes none that could be reached. It is here rather
+    than in a profile because it is a fetched fact like any other, and asking
+    a person for it wastes their time and gets a worse answer.
+    """
+
+    provider: str
+    name: str
+    monthly_usd: float | None
+    source_url: str | None
+    retrieved: str | None
+
+
+@dataclass(frozen=True)
 class Model:
     """One point the Skill can send work to, with everything known about it."""
 
@@ -97,6 +121,7 @@ class Catalogue:
     """Every known model, and why the answer might be thinner than it looks."""
 
     models: tuple[Model, ...]
+    plans: tuple[Plan, ...]
     generated_at: str
     problem: str | None
 
@@ -110,19 +135,53 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     """
 
     # The seed is the floor. Without it there is no catalogue to merge into.
-    seed, seed_generated, seed_problem = _read(here / "data" / SEED_FILE)
+    seed, seed_plans, seed_generated, seed_problem = _read(here / "data" / SEED_FILE)
     if seed_problem is not None:
-        return Catalogue((), "", seed_problem)
+        return Catalogue((), (), "", seed_problem)
 
     # The refreshed file overrides model by model, so a partial refresh is
     # additive rather than a replacement of everything the seed knew.
-    refreshed, refreshed_generated, refresh_problem = _read(data_dir / REFRESHED_FILE)
+    refreshed, refreshed_plans, refreshed_generated, refresh_problem = _read(
+        data_dir / REFRESHED_FILE
+    )
     merged: dict[str, Model] = {model.id: model for model in seed}
     for model in refreshed:
         merged[model.id] = model
 
     generated_at = refreshed_generated or seed_generated
-    return Catalogue(tuple(merged.values()), generated_at, refresh_problem)
+    return Catalogue(
+        tuple(merged.values()),
+        _merged_plans(seed_plans, refreshed_plans),
+        generated_at,
+        refresh_problem,
+    )
+
+
+def _merged_plans(seed: Sequence[Plan], refreshed: Sequence[Plan]) -> tuple[Plan, ...]:
+    """Return the plans in force, a refreshed provider replacing the seed's whole.
+
+    Models merge entry by entry, a model that existed being a model that still
+    exists. A plan is not like that: a provider retires one, and a merge by
+    name would go on offering it to somebody choosing how they pay for as long
+    as this Skill is installed. So a provider the refreshed file speaks about
+    at all is a provider whose plans it states in full.
+    """
+
+    spoken = {plan.provider for plan in refreshed}
+    return tuple(
+        [plan for plan in seed if plan.provider not in spoken] + list(refreshed)
+    )
+
+
+def plans_for(cat: Catalogue, provider: str) -> list[Plan]:
+    """Return the plans *provider* sells, in the order the catalogue holds them.
+
+    That order is the one they are offered in, and it belongs to whoever wrote
+    the facts: a free tier before a paid one is a judgement about the list
+    rather than about any entry in it.
+    """
+
+    return [plan for plan in cat.plans if plan.provider == provider]
 
 
 def resolve(cat: Catalogue, token: str) -> list[Model]:
@@ -155,7 +214,12 @@ def resolve(cat: Catalogue, token: str) -> list[Model]:
 
 
 def cost_usd(
-    model: Model, tokens: Mapping[str, float | None], kind: str, rule: ContextRule
+    model: Model,
+    tokens: Mapping[str, float | None],
+    kind: str,
+    rule: ContextRule,
+    *,
+    rates: Price | None = None,
 ) -> float | None:
     """Price a token count for one kind of work, or return None where nothing can be.
 
@@ -173,9 +237,14 @@ def cost_usd(
     makes a partially known price still usable. The distinction that matters to
     a caller is between a small bill and no bill at all: an unpriceable model
     returns None so that ranking can rank it last instead of ranking it free.
+
+    `rates` is what the user says they actually pay on the channel this model
+    is reached through, and it replaces the catalogue's card whole — the cliff
+    included, because a threshold is a fact about the provider's own card and
+    not about a gateway that quoted one rate for every size of request.
     """
 
-    price = _card(model, kind, rule)
+    price = rates or _card(model, kind, rule)
     if price is None:
         return None
 
@@ -220,25 +289,54 @@ def _rate_for(price: Price, category: str, billing: str) -> float | None:
     }[category]
 
 
-def _read(path: Path) -> tuple[list[Model], str, str | None]:
-    """Read one catalogue file into models, its stamp, and what went wrong."""
+def _read(path: Path) -> tuple[list[Model], list[Plan], str, str | None]:
+    """Read one catalogue file into models, plans, its stamp, and what went wrong."""
 
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        return [], "", f"no catalogue at {path}"
+        return [], [], "", f"no catalogue at {path}"
     except (OSError, ValueError) as problem:
-        return [], "", f"{path} could not be read: {problem}"
+        return [], [], "", f"{path} could not be read: {problem}"
 
     if not isinstance(raw, dict):
-        return [], "", f"{path} is not a JSON object"
+        return [], [], "", f"{path} is not a JSON object"
 
     entries = raw.get("models")
     if not isinstance(entries, list):
-        return [], "", f"{path} carries no models list"
+        return [], [], "", f"{path} carries no models list"
 
     models = [model for entry in entries if (model := _model(entry)) is not None]
-    return models, _text(raw.get("generated_at")) or "", None
+    offered = raw.get("plans")
+    plans = [
+        plan
+        for entry in (offered if isinstance(offered, list) else [])
+        if (plan := _plan(entry)) is not None
+    ]
+    return models, plans, _text(raw.get("generated_at")) or "", None
+
+
+def _plan(entry: Any) -> Plan | None:
+    """Build one subscription from one JSON entry, or None where it is unusable.
+
+    A plan with no attribution is not offered at all. It would be shown to
+    somebody choosing how they pay, with nothing to say where it came from or
+    when — which is the state this member of the catalogue exists to end.
+    """
+
+    if not isinstance(entry, dict):
+        return None
+
+    provider = _text(entry.get("provider"))
+    name = _text(entry.get("name"))
+    source_url = _text(entry.get("source_url"))
+    retrieved = _text(entry.get("retrieved"))
+    if not provider or not name or not source_url or not retrieved:
+        return None
+
+    return Plan(
+        provider, name, _number(entry.get("monthly_usd")), source_url, retrieved
+    )
 
 
 def _model(entry: Any) -> Model | None:
@@ -331,3 +429,82 @@ def _fraction(raw: Any) -> float | None:
 
     value = _number(raw)
     return None if value is None else min(1.0, max(0.0, value))
+
+
+def default_data() -> Path:
+    """Return the directory this Skill keeps its refreshed facts in by default."""
+
+    return Path.home() / ".kntnt" / "model-selector"
+
+
+def _document(cat: Catalogue) -> dict[str, Any]:
+    """Return the whole merged catalogue, in the shape a reader consumes it."""
+
+    return {
+        "generated_at": cat.generated_at,
+        "problem": cat.problem,
+        "models": [
+            {
+                "id": model.id,
+                "provider": model.provider,
+                "family": model.family,
+                "deliberation": list(model.deliberation),
+                "provider_says": model.provider_says,
+                "price": _priced(model.price),
+                "source_url": model.source_url,
+                "retrieved": model.retrieved,
+            }
+            for model in cat.models
+        ],
+        "plans": [
+            {
+                "provider": plan.provider,
+                "name": plan.name,
+                "monthly_usd": plan.monthly_usd,
+                "source_url": plan.source_url,
+                "retrieved": plan.retrieved,
+            }
+            for plan in cat.plans
+        ],
+    }
+
+
+def _priced(price: Price | None) -> dict[str, Any] | None:
+    """Return one rate card as a reader of the merged catalogue sees it."""
+
+    if price is None:
+        return None
+    return {
+        "input": price.input,
+        "cache_read": price.cache_read,
+        "cache_write": price.cache_write,
+        "output": price.output,
+        "currency": price.currency,
+        "unit": price.unit,
+    }
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Print the merged catalogue, and exit 0 whatever state it is in.
+
+    The interview reads this rather than the two files behind it. Which of the
+    two wins, and how a refreshed provider replaces a whole list of plans, are
+    rules this module keeps; a second copy of them in prose somebody follows by
+    hand is a second thing to keep true.
+    """
+
+    parser = argparse.ArgumentParser(
+        prog="catalogue.py",
+        description="Print what models and subscriptions this machine knows about.",
+    )
+    parser.add_argument("--data", default=str(default_data()))
+    args = parser.parse_args(sys.argv[1:] if argv is None else argv)
+
+    cat = load(Path(args.data).expanduser(), Path(__file__).resolve().parent.parent)
+    json.dump(_document(cat), sys.stdout, indent=2, sort_keys=True)
+    sys.stdout.write("\n")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

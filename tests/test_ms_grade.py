@@ -568,3 +568,52 @@ def test_the_module_never_lets_a_failure_reach_its_caller(tmp_path: Path) -> Non
     blocked.write_text("not a directory", encoding="utf-8")
 
     assert grade.main(["--once", "--data", str(blocked)]) == 0
+
+
+def test_a_measurement_is_priced_at_what_the_channel_that_ran_it_charges(
+    tmp_path: Path,
+) -> None:
+    """A row priced from a list price the user never paid measures nothing.
+
+    The store's whole purpose is to say what a point costs on this machine. A
+    gateway prices the same model differently from the provider whose model it
+    is, so a row priced from the catalogue's card is a row about somebody
+    else's arrangement.
+    """
+
+    data = _queue(tmp_path, _unit(signals=_signals(tests_ran=True, tests_passed=True)))
+    (data / "profile.json").write_text(
+        json.dumps(
+            {
+                "harnesses": ["claude-code"],
+                "providers": ["anthropic"],
+                "models": ["claude-opus-5"],
+                "channels": [
+                    {
+                        "provider": "anthropic",
+                        "harness": "claude-code",
+                        "pay": "api",
+                        "plan": None,
+                        "gateway": "somebody-else",
+                        "rates": {
+                            "input": 1.0,
+                            "cache_read": 1.0,
+                            "cache_write": 1.0,
+                            "output": 1.0,
+                            "currency": "USD",
+                            "unit": "per_mtok",
+                        },
+                    }
+                ],
+                "answered_at": "2026-09-06T00:00:00Z",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    grade.grade_pending(data, judge=_never)
+
+    # Every category at one dollar the million, so the bill is the token count.
+    row = evidence.load(data)[0]
+    assert row.cost_usd is not None
+    assert round(row.cost_usd, 8) == round(128660.0 / 1e6, 8)

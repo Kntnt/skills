@@ -102,6 +102,36 @@ PAYLOAD_ALLOWED = frozenset(
 # under the selected data directory, and where the grader records that it ran.
 # Named once here rather than left for a consumer to infer.
 PENDING_FILE = "pending.jsonl"
+
+# What the design this Skill replaced left behind in a data directory. Nothing
+# reads any of them and nothing writes them any more: they are the stored
+# configuration, the standing policy, the frozen snapshots and the two ledgers
+# of a router that no longer exists. Named here because a verb that does not
+# know a file exists cannot remove it, and a file no verb knows about sits in
+# somebody's home directory for as long as the Skill stays installed.
+RETIRED_FILES = (
+    "access-channel-snapshots.jsonl",
+    "alias-bindings.jsonl",
+    "benchmark-definitions.jsonl",
+    "capability-priors.jsonl",
+    "config-history.jsonl",
+    "config.bak.json",
+    "config.json",
+    "derived-frontiers.json",
+    "evaluation-configurations.jsonl",
+    "model-versions.jsonl",
+    "price-schedules.jsonl",
+    "run-observations.jsonl",
+    "standing-policy-history.jsonl",
+    "standing-policy.json",
+    "subscription-schedules.jsonl",
+    "usage-records.jsonl",
+)
+
+# The invalid configurations the retired design saved beside its own, each
+# stamped with the instant it was rejected. Matched by shape rather than named,
+# because there is one per rejection and no list can hold them all.
+RETIRED_PATTERN = "config.invalid.*.json"
 GRADER_STATE_FILE = "grader.json"
 
 # The Harnesses whose own finished record this module knows how to split into
@@ -1131,7 +1161,21 @@ def status(data: Path, root: Path) -> dict[str, Any]:
         "storage_bytes": _storage(data),
         "pending": len(pending(data)),
         "grader_last_ran_at": _grader_ran_at(data),
+        "retired": len(retired(data)),
     }
+
+
+def retired(data: Path) -> list[Path]:
+    """Return the files of the retired design this directory still holds.
+
+    Reported by `status` as well as removed by a purge, because a tidying
+    nobody is told about is a verb nobody runs.
+    """
+
+    named = [data / name for name in RETIRED_FILES]
+    return sorted(
+        path for path in named + list(data.glob(RETIRED_PATTERN)) if path.is_file()
+    )
 
 
 def _row_count(path: Path) -> int:
@@ -1150,6 +1194,9 @@ def purge_paths(data: Path) -> list[dict[str, Any]]:
     the Harness hooks installed (issue #227). `capture/` is a directory rather
     than a JSONL file, so it is sized in bytes; the pending store is JSONL,
     sized in rows.
+
+    The retired design's leftovers come last and are sized in bytes, being
+    files rather than stores anything counts rows in.
     """
 
     directory = home(data)
@@ -1177,7 +1224,27 @@ def purge_paths(data: Path) -> list[dict[str, Any]]:
         )
     else:
         entries.append({"path": str(waiting), "present": False})
+
+    # The retired design's leftovers, each named whether or not it is here, so
+    # that a preview says what a reset will actually take.
+    left = {path.name for path in retired(data)}
+    entries += [
+        {"path": str(data / name), "present": True, "unit": "bytes", "count": size}
+        if (size := _size(data / name)) is not None
+        else {"path": str(data / name), "present": False}
+        for name in sorted(set(RETIRED_FILES) | left)
+    ]
+
     return entries
+
+
+def _size(path: Path) -> int | None:
+    """Return how many bytes one file holds, or None where it is not there."""
+
+    try:
+        return path.stat().st_size
+    except OSError:
+        return None
 
 
 def purge(data: Path) -> list[dict[str, Any]]:
@@ -1187,11 +1254,17 @@ def purge(data: Path) -> list[dict[str, Any]]:
     there is no on/off flag of this feature's own for a purge to clear any
     more (#223): a session that starts after a purge is captured exactly as
     one before it was, into a `capture/` this verb's own removal recreates.
+
+    The retired design's leftovers go with it. They are not this feature's
+    own, but discarding the store is the one moment somebody has said they
+    want the directory cleared of what nothing reads.
     """
 
     report = purge_paths(data)
     shutil.rmtree(home(data), ignore_errors=True)
     (data / PENDING_FILE).unlink(missing_ok=True)
+    for path in retired(data):
+        path.unlink(missing_ok=True)
     return report
 
 

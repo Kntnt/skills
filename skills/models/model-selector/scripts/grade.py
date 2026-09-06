@@ -59,6 +59,7 @@ from typing import Any, Protocol
 
 import catalogue
 import evidence
+import profiles
 from evidence import KINDS
 
 # Where the pending Units wait, and where this module records that it ran.
@@ -521,12 +522,18 @@ def _measurement(
     at: str,
     cat: catalogue.Catalogue,
     kinds: evidence.KindPriors,
+    profile: profiles.Profile,
 ) -> dict[str, Any]:
     """Return one Unit as the measurement the store holds.
 
     Priced here rather than left for a reader, because the rate card that
     applies is the one standing when the work ran, and a row that carries a
     cost is one nothing has to re-derive.
+
+    The card is the one the channel that reached the model charges, where the
+    profile carries one. A store priced at a list price nobody paid measures
+    somebody else's arrangement, and this store exists to say what a point
+    costs on this machine.
     """
 
     counted = {
@@ -534,7 +541,22 @@ def _measurement(
         for category, value in _tokens(row).items()
     }
     matched = catalogue.resolve(cat, str(row.get("model") or ""))
-    cost = catalogue.cost_usd(matched[0], counted, kind, kinds) if matched else None
+    channel = (
+        profiles.channel_for(profile, matched[0], str(row.get("harness") or ""))
+        if matched
+        else None
+    )
+    cost = (
+        catalogue.cost_usd(
+            matched[0],
+            counted,
+            kind,
+            kinds,
+            rates=channel.rates if channel is not None else None,
+        )
+        if matched
+        else None
+    )
 
     return {
         "attempt_id": row.get("unit_id"),
@@ -576,6 +598,7 @@ def grade_pending(
     ask = judge or _judge_for(data)
     cat = catalogue.load(data, _here())
     kinds = evidence.load_kinds(_here())
+    profile = profiles.load(data, cat)
 
     counts = {"graded": 0, "judged": 0, "dropped": 0, "waiting": 0}
     written: list[dict[str, Any]] = []
@@ -602,7 +625,14 @@ def grade_pending(
         if settled is not None:
             written.append(
                 _measurement(
-                    row, _kind_from_signals(row), settled, "signal", stamp, cat, kinds
+                    row,
+                    _kind_from_signals(row),
+                    settled,
+                    "signal",
+                    stamp,
+                    cat,
+                    kinds,
+                    profile,
                 )
             )
             counts["graded"] += 1
@@ -628,6 +658,7 @@ def grade_pending(
                     stamp,
                     cat,
                     kinds,
+                    profile,
                 )
             )
             counts["graded"] += 1

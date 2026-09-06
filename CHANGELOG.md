@@ -4,6 +4,22 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- The subscriptions each provider markets are world facts in the catalogue now, each under the whole name it is billed by and each carrying the source and the date behind it, so the setup interview offers *Claude Max 20x* and *ChatGPT Pro 20x* instead of a hand-written table that could express neither. Two of the three rows in that table could not hold the answer the maintainer had, and the page contradicted itself three ways about how a plan is even spelled — `Max 20x`, then `"plan": "Claude", "tier": "Max 20x"`, then `"plan": "Claude Max", "tier": "20x"` in what actually reached disk. A plan is one name and there is no tier field to disagree about. A provider whose plans the catalogue does not hold is asked openly rather than offered a list assembled from memory; a set longer than the asking tool can carry goes into the question whole rather than being trimmed to fit, which is what had dropped Anthropic's free tier; and an answer matching nothing offered is reported as typed rather than recorded as though it had been chosen, since that is the one fact that tells an interview its own vocabulary has fallen behind.
+- A channel can carry the rate card the user actually pays, and it replaces the catalogue's card wherever it exists — in the ranking and in the price written onto every measurement that ran through that channel. The catalogue holds one list price per model from the provider's own page, which is a different arrangement's bill for a gateway: on the maintainer's own machine the catalogue's input-to-output ratio for Grok was 1:3 against his 1:6.2, so the shape of the cost was wrong and not merely its scale, and rather than record it wrongly he had left the provider out of his profile altogether. The card replaces the long-context card too, a context threshold being a fact about the provider's own card rather than about a gateway that quoted one rate for every size of request.
+
+### Changed
+
+- Every figure is USD and nothing converts, and now something says so: a rate card in another currency is refused by name, by the writer as a problem and by the loader as the reason a profile fell back, rather than being added to a dollar bill in silence. What a subscription costs per month is no longer asked for or recorded — the catalogue holds the list price, attributed and dated, and no verb of this Skill ever read the figure the interview collected.
+- A failed building ticket is priced at twenty dollars of somebody's attention rather than ten. On the maintainer's own measured rows the answer for `implement` changes hands between fifteen and twenty: below it the cheapest seat that clears the bar wins and fails about one attempt in three and a half, above it the strongest seat wins at better than nine in ten. What an unattended run costs when a ticket comes back wrong is a verdict, a stalled wave and somebody having to look at it, and ten dollars was not that. The number is per kind, so routine work stays on the cheap seats.
+- The setup interview reads the catalogue through the engine that merges it rather than through the two files behind it, so which file wins, and how a refreshed provider replaces a whole list of plans, are rules nothing has to apply by hand.
+
+### Fixed
+
+- The grader could not reach a judge at all. It runs from a home directory on purpose, so that no process it starts holds a working directory this collection may replace under it, and the Codex CLI refuses a directory that is neither a git repository nor one it has been told to trust — in milliseconds, before any model is reached. Every judge call made since the capture hooks were installed had failed for that reason and for no other, leaving the whole graded-outcome design inert while reporting nothing worse than units waiting.
+- The seventeen files the retired design left in every data directory are named by `reset --evidence` now, previewed with the rest and removed with them, and `status` says how many are still sitting there. Nothing reads any of them and no verb knew they existed, so they would have stayed for as long as the Skill did.
+
 ## [0.24.1] – 2026-09-06
 
 ### Fixed

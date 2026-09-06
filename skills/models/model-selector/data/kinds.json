@@ -110,7 +110,7 @@
         "output": 25000,
         "reasoning": 6000
       },
-      "failure_overhead_usd": 10.0,
+      "failure_overhead_usd": 20.0,
       "seconds": 1400
     },
     "debug": {

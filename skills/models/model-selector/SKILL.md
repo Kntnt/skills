@@ -64,13 +64,13 @@ Two identical questions can come back with different answers, and that is this w
 
 ## Setup
 
-Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which providers, which of those providers' models, and then how each provider is paid for on each channel. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that can be fetched — prices, model lists and a provider's own positioning are the machine's job. Show the assembled profile in full before it is written.
+Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which providers, which of those providers' models, and then how each provider is paid for on each channel. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that can be fetched — prices, model lists, the subscriptions a provider sells and its own positioning are all the machine's job. Show the assembled profile in full before it is written.
 
 Hand it to the script rather than editing the file:
 
     uv run "$HERE/scripts/setup_apply.py" [--data=<directory>] <path-to-profile-json>
 
-Render its report: the revision written, and the generated subagent definitions written and removed. Where it says the definitions directory had to be created, pass that on — Claude Code reads that directory as a session starts, so those definitions reach sessions started from now on rather than this one.
+Render its report: the revision written, its `notes`, and the generated subagent definitions written and removed. Each note names an answer the catalogue could not account for — a plan it does not hold, a gateway with no rate card — and each is recorded as given rather than refused, so the user is who decides what to do about it. Where it says the definitions directory had to be created, pass that on — Claude Code reads that directory as a session starts, so those definitions reach sessions started from now on rather than this one.
 
 ## Status
 
@@ -80,7 +80,7 @@ Read `<directory>/profile.json` and say when it was answered and which Harnesses
 
 Run `uv run "$HERE/scripts/refresh.py" status --data=<directory>` and render its account of the world facts: which sources are current, which are due, and which the unattended pass has never established. This is the one surface that pass is reported on, and a reminder placed anywhere a model reads would change the thing being measured.
 
-Run `uv run "$HERE/scripts/capture.py" status --data=<directory>` and render measurement's own health: per Harness this collection has an adapter for, whether the integration is `healthy`, `gated`, `degraded`, `absent` or `unsatisfied`; whether that Harness's finished session record can supply measurements at all; how many units are waiting to be graded; and when the grader last ran.
+Run `uv run "$HERE/scripts/capture.py" status --data=<directory>` and render measurement's own health: per Harness this collection has an adapter for, whether the integration is `healthy`, `gated`, `degraded`, `absent` or `unsatisfied`; whether that Harness's finished session record can supply measurements at all; how many units are waiting to be graded; and when the grader last ran. Where `retired` is not nought, say that the directory still holds that many files an earlier design of this Skill left behind, that nothing reads them, and that `reset --evidence` is what removes them.
 
 Close with one line on what has been measured — how many rows, over what span of dates — read from the store as `## Evidence` reads it.
 
@@ -112,7 +112,7 @@ Pass `--force` only where the user wrote it; without it the pass checks what the
 
 `reset` discards the answers the user gave and leaves the interview to be held again. `reset --evidence` additionally discards what this machine measured. Neither touches the catalogue, which is public fact this Skill can fetch again.
 
-Name the exact paths under the selected directory before anything goes, with the size of each: `profile.json` always, and with `--evidence` also `measurements.jsonl`, `pending.jsonl` and the `capture/` directory. Get the counts for those last two from `uv run "$HERE/scripts/capture.py" purge --data=<directory>` without `--yes`, which reports rather than removes; a path the directory does not hold is reported absent rather than as a failure.
+Name the exact paths under the selected directory before anything goes, with the size of each: `profile.json` always, and with `--evidence` also `measurements.jsonl`, `pending.jsonl`, the `capture/` directory, and whatever an earlier design of this Skill left in the directory. Get the counts for all but the first from `uv run "$HERE/scripts/capture.py" purge --data=<directory>` without `--yes`, which reports rather than removes; a path the directory does not hold is reported absent rather than as a failure, and the preview lists those absent paths so that the user can see the whole of what this verb knows about.
 
 Obtain confirmation the way every destructive act in this collection does, or read it from a supplied `--yes`. A declined confirmation writes nothing. Confirmed, remove `profile.json`; with `--evidence`, also remove `measurements.jsonl` and run the same purge again as `purge --yes --data=<directory>`. Report what went, per path, by the count of rows or bytes the preview named — nothing here is migrated, backfilled or reinterpreted.
 

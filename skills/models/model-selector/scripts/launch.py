@@ -231,6 +231,15 @@ def _codex(model: Model, deliberation: str | None, repo: str | None) -> tuple[st
     The answer still names `max`, which is what the point was chosen as and
     what evidence should accrue to; a caller who needs the difference reaches
     the API rather than this command.
+
+    The git check is skipped because the directory belongs to the caller. Codex
+    refuses outright — in milliseconds, before the model is reached — where it
+    is neither a git repository nor one somebody has told the CLI to trust, and
+    a Skill that plans a launch has no way to know which the caller's is. The
+    grader is the case that proves it: it runs from a home directory on purpose,
+    so that no process it starts holds a working directory this collection may
+    replace under it, and every judge call it made was refused for that reason
+    alone.
     """
 
     effort = CODEX_TOP if deliberation == "max" else deliberation or "medium"
@@ -239,6 +248,7 @@ def _codex(model: Model, deliberation: str | None, repo: str | None) -> tuple[st
         "exec",
         "-C",
         repo or HERE,
+        "--skip-git-repo-check",
         "-m",
         model.id,
         "-c",

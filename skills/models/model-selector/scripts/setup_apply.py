@@ -36,8 +36,8 @@ from typing import Any
 import catalogue
 import launch
 import profiles
-from catalogue import Catalogue
-from profiles import PAYMENTS, Channel, Profile
+from catalogue import Catalogue, Price
+from profiles import CURRENCY, PAYMENTS, UNIT, Channel, Profile
 
 # Where Claude Code reads the subagent definitions this Skill generates. It is
 # the one directory outside its own data this Skill ever writes into, and it
@@ -52,6 +52,11 @@ CREATED_NOTE = (
     "when a session starts, so these definitions are available to sessions "
     "started from now on rather than to one already running"
 )
+
+# What `_rates` answers with where a card was supplied and refused, which is
+# neither a card nor the absence of one. The complaint is already in the list
+# by then, so the marker only has to stop the channel being written.
+_REFUSED = Price(None, None, None, None, "", "")
 
 
 def _now() -> str:
@@ -118,19 +123,83 @@ def _channels(
                 f"channel {index} pays on {harness!r}, which the profile does not use"
             )
             continue
+        rates = _rates(entry.get("rates"), index, problems)
+        if rates is _REFUSED:
+            continue
         read.append(
             Channel(
                 provider=provider,
                 harness=harness,
                 pay=pay,
                 plan=_text(entry.get("plan")),
-                tier=_text(entry.get("tier")),
-                monthly=_number(entry.get("monthly")),
-                currency=_text(entry.get("currency")),
                 gateway=_text(entry.get("gateway")),
+                rates=rates,
             )
         )
     return tuple(read)
+
+
+def _rates(raw: Any, index: int, problems: list[str]) -> Price | None:
+    """Return one channel's own rate card, complaining where it is not one.
+
+    Refused rather than dropped. Every figure this Skill compares is USD and
+    nothing anywhere converts, so a card in another currency would be added to
+    a USD bill with nothing said — the one kind of wrong answer a person
+    reading the output cannot see.
+    """
+
+    if raw is None:
+        return None
+    if not isinstance(raw, dict):
+        problems.append(f"channel {index} carries a rate card that is not an object")
+        return _REFUSED
+
+    currency = _text(raw.get("currency")) or CURRENCY
+    unit = _text(raw.get("unit")) or UNIT
+    if currency != CURRENCY or unit != UNIT:
+        problems.append(
+            f"channel {index} carries a rate card in {currency} {unit}; "
+            f"this Skill compares {CURRENCY} {UNIT} and converts nothing, so a "
+            f"rate card is asked for and recorded in {CURRENCY}"
+        )
+        return _REFUSED
+
+    return Price(
+        input=_number(raw.get("input")),
+        cache_read=_number(raw.get("cache_read")),
+        cache_write=_number(raw.get("cache_write")),
+        output=_number(raw.get("output")),
+        currency=currency,
+        unit=unit,
+    )
+
+
+def _noticed(channels: Sequence[Channel], cat: Catalogue) -> list[str]:
+    """Return what is worth saying about answers this Skill could not offer.
+
+    Not problems. Each one is a profile worth writing that the catalogue
+    cannot account for, and the person who saw the screen is the record of
+    what they pay — but an interview that cannot tell a chosen answer from a
+    typed one cannot tell that its own vocabulary fell short, which is how a
+    list missing the plan somebody actually pays for goes on being offered.
+    """
+
+    said: list[str] = []
+    for channel in channels:
+        offered = {plan.name for plan in catalogue.plans_for(cat, channel.provider)}
+        if channel.plan is not None and offered and channel.plan not in offered:
+            said.append(
+                f"{channel.plan!r} is not a plan the catalogue holds for "
+                f"{channel.provider}; it is recorded as given, and "
+                f"`/model-selector update` is what brings the plans up to date"
+            )
+        if channel.gateway is not None and channel.rates is None:
+            said.append(
+                f"the {channel.provider} channel through {channel.gateway} carries "
+                f"no rate card, so it is priced at {channel.provider}'s own list "
+                f"price; a gateway prices differently"
+            )
+    return said
 
 
 def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
@@ -214,11 +283,15 @@ def apply(path: Path | None, data_dir: Path, agents: Path) -> dict[str, Any]:
         try:
             raw = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError) as problem:
-            return {"ok": False, "problems": [f"{path} could not be read: {problem}"]}
+            return {
+                "ok": False,
+                "notes": [],
+                "problems": [f"{path} could not be read: {problem}"],
+            }
 
         validated, problems = validate(raw, cat)
         if validated is None:
-            return {"ok": False, "problems": problems}
+            return {"ok": False, "notes": [], "problems": problems}
         profiles.write(data_dir, validated)
         profile = validated
 
@@ -227,6 +300,7 @@ def apply(path: Path | None, data_dir: Path, agents: Path) -> dict[str, Any]:
     return {
         "ok": True,
         "problems": [],
+        "notes": _noticed(profile.channels, cat),
         "profile": {
             "path": str(data_dir / profiles.PROFILE_FILE),
             "answered_at": profile.answered_at,
@@ -294,6 +368,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     except Exception as failure:  # noqa: BLE001 - a report is never worth a traceback
         report = {
             "ok": False,
+            "notes": [],
             "problems": [f"the profile could not be applied: {failure!r}"],
         }
 

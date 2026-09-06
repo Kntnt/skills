@@ -144,7 +144,10 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     # Rank on what each candidate is believed to be worth, then — where this
     # request is one to gamble on — rank again on what each could really be
     # worth, which is the only way an estimate nobody retries is ever corrected.
-    scored = [_score(point, args.kind, estimator, kinds) for point in pool]
+    scored = [
+        _score(point, args.kind, estimator, kinds, _paid(profile, point, harness))
+        for point in pool
+    ]
     ranked = _ranked(scored, args.stakes, args.objective)
     if _drawable(args):
         ranked = _drawn(scored, ranked[0], args, kinds, notes)
@@ -475,7 +478,25 @@ def _locked_to_deliberation(
     return nearest
 
 
-def _score(point: Point, kind: str, estimator: Estimator, kinds: KindPriors) -> Scored:
+def _paid(profile: Profile, point: Point, harness: str) -> catalogue.Price | None:
+    """Return the rate card the channel that pays for this point carries.
+
+    A gateway prices the same model differently from the provider whose model
+    it is, and the catalogue holds the provider's own list price alone. Where
+    the user has said what they pay, that is what the comparison is made on.
+    """
+
+    channel = profiles.channel_for(profile, point.model, harness)
+    return channel.rates if channel is not None else None
+
+
+def _score(
+    point: Point,
+    kind: str,
+    estimator: Estimator,
+    kinds: KindPriors,
+    rates: catalogue.Price | None,
+) -> Scored:
     """Attach the estimate, the token forecast and both bills to one point.
 
     The second bill is the one that decides, and it is taken here at the belief
@@ -485,7 +506,7 @@ def _score(point: Point, kind: str, estimator: Estimator, kinds: KindPriors) -> 
 
     estimate = estimator.p_success(kind, point.model.id, point.deliberation)
     tokens = estimator.tokens(kind, point.model.id, point.deliberation)
-    cost = catalogue.cost_usd(point.model, tokens, kind, kinds)
+    cost = catalogue.cost_usd(point.model, tokens, kind, kinds, rates=rates)
     taken = estimator.seconds(kind, point.model.id, point.deliberation)
     expected, expected_taken = _expected(
         cost, taken, estimate.mean, kinds.overhead(kind)

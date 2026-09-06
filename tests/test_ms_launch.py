@@ -45,7 +45,7 @@ def _profile(*harnesses: str, models: tuple[str, ...] = ()) -> Any:
         providers=tuple({model.provider for model in CAT.models}),
         models=models or tuple(model.id for model in CAT.models),
         channels=tuple(
-            profiles.Channel(provider, harness, "api", None, None, None, None, None)
+            profiles.Channel(provider, harness, "api", None, None, None)
             for harness in harnesses
             for provider in {model.provider for model in CAT.models}
         ),
@@ -99,6 +99,7 @@ def test_an_openai_model_is_started_through_the_codex_cli() -> None:
         "exec",
         "-C",
         "/repo",
+        "--skip-git-repo-check",
         "-m",
         "gpt-6-astra",
         "-c",
@@ -107,6 +108,21 @@ def test_an_openai_model_is_started_through_the_codex_cli() -> None:
         "workspace-write",
         "--json",
     )
+
+
+def test_the_codex_command_runs_outside_a_repository_without_being_refused() -> None:
+    """A directory Codex does not trust is the caller's to choose, not Codex's.
+
+    The CLI refuses a working directory that is neither a git repository nor
+    one it has been told to trust, and refuses it in milliseconds, before the
+    model is ever reached. Every launch this Skill plans for a directory of
+    that kind - the grader's own, above all, which runs from a home directory
+    on purpose - would fail for a reason that has nothing to do with the work.
+    """
+
+    plan = launch.plan(ASTRA, "low", "codex", _profile("codex"), CAT, repo=None)
+
+    assert "--skip-git-repo-check" in (plan.command or ())
 
 
 def test_a_model_neither_native_nor_bridged_is_started_by_inheriting() -> None:

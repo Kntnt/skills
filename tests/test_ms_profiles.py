@@ -50,9 +50,6 @@ def _answers(**overrides: Any) -> dict[str, Any]:
                 "harness": "claude-code",
                 "pay": "subscription",
                 "plan": "Claude Max 20x",
-                "tier": None,
-                "monthly": 200.0,
-                "currency": "USD",
                 "gateway": None,
             }
         ],
@@ -136,7 +133,7 @@ def test_a_written_profile_reads_back_as_the_answers_it_was_given(
     assert profile.problem is None
     assert profile.models == ("claude-opus-5",)
     assert profile.channels[0].plan == "Claude Max 20x"
-    assert profile.channels[0].monthly == 200.0
+    assert profile.channels[0].rates is None
     assert profile.answered_at == "2026-09-01T10:00:00Z"
 
 
@@ -196,21 +193,17 @@ def test_a_bridged_provider_is_paid_for_by_the_harness_that_reaches_it(
         provider="openai",
         harness="codex",
         pay="subscription",
-        plan="ChatGPT Pro",
-        tier="20x",
-        monthly=2000.0,
-        currency="SEK",
+        plan="ChatGPT Pro 20x",
         gateway=None,
+        rates=None,
     )
     direct = profiles.Channel(
         provider="openai",
         harness="claude-code",
         pay="api",
         plan=None,
-        tier=None,
-        monthly=None,
-        currency=None,
         gateway=None,
+        rates=None,
     )
     profile = profiles.Profile(
         harnesses=("claude-code", "codex"),
@@ -233,3 +226,86 @@ def test_a_bridged_provider_is_paid_for_by_the_harness_that_reaches_it(
     both = replace(profile, channels=(codex, direct))
     assert profiles.channel_for(both, astra, "claude-code") == direct
     assert profiles.channel_for(both, astra, "codex") == codex
+
+
+def test_a_gateway_channel_carries_the_rate_card_the_user_actually_pays(
+    tmp_path: Path,
+) -> None:
+    """A gateway prices differently, and the catalogue holds no gateway rates.
+
+    It holds one list price per model, from the provider's own page. Without
+    somewhere for the user's own card to live, a gateway arrangement is either
+    recorded at the wrong rates or left out of the profile altogether — and a
+    provider left out is a provider never recommended.
+    """
+
+    data_dir = _stored(
+        tmp_path,
+        _answers(
+            providers=["anthropic", "spacexai"],
+            models=["claude-opus-5", "grok-4.6"],
+            harnesses=["claude-code", "opencode"],
+            channels=[
+                {
+                    "provider": "spacexai",
+                    "harness": "opencode",
+                    "pay": "api",
+                    "plan": None,
+                    "gateway": "openrouter",
+                    "rates": {
+                        "input": 0.9915,
+                        "cache_read": 0.9915,
+                        "cache_write": 0.9915,
+                        "output": 6.174,
+                        "currency": "USD",
+                        "unit": "per_mtok",
+                    },
+                }
+            ],
+        ),
+    )
+
+    profile = profiles.load(data_dir, CAT)
+
+    assert profile.source == "file"
+    rates = profile.channels[0].rates
+    assert rates is not None
+    assert (rates.input, rates.output) == (0.9915, 6.174)
+
+    # The card survives the round trip, or the answers are lost on the next
+    # write of a profile nobody edited.
+    profiles.write(tmp_path / "again", profile)
+    assert profiles.load(tmp_path / "again", CAT) == profile
+
+
+def test_a_rate_card_this_skill_cannot_price_from_invalidates_the_profile(
+    tmp_path: Path,
+) -> None:
+    """Silence about a card is worse than the fallback, which says it is one.
+
+    Every figure this Skill compares is USD, nothing converts, and a card in
+    another currency would be added to a USD bill without a word. A card that
+    is not an object at all is the same failure with less to read.
+    """
+
+    for card in ({"input": 9.0, "output": 60.0, "currency": "SEK"}, "nine kronor"):
+        data_dir = _stored(
+            tmp_path / str(card)[:8],
+            _answers(
+                channels=[
+                    {
+                        "provider": "anthropic",
+                        "harness": "claude-code",
+                        "pay": "api",
+                        "plan": None,
+                        "gateway": None,
+                        "rates": card,
+                    }
+                ]
+            ),
+        )
+
+        profile = profiles.load(data_dir, CAT)
+
+        assert profile.source == "fallback"
+        assert profile.problem is not None

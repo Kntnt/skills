@@ -27,7 +27,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from catalogue import Catalogue, Model
+from catalogue import Catalogue, Model, Price
 
 PROFILE_FILE = "profile.json"
 
@@ -49,19 +49,41 @@ HARNESS_MARKERS = (
 # that fixes it is a diagnosis nobody acts on.
 REPAIR = "run `/model-selector setup` to answer these questions again"
 
+# The one currency and the one unit a rate card may be written in. Nothing in
+# this Skill converts anything, so a card in another currency is not a card
+# this Skill can price from — it is a number that would be added to a USD bill
+# as though it were dollars.
+CURRENCY = "USD"
+UNIT = "per_mtok"
+
+# What `_rates` answers with where a card is present and unusable, which is
+# neither a card nor the absence of one. A sentinel rather than an exception,
+# because nothing in this module raises at a caller mid-task.
+_UNREADABLE = Price(None, None, None, None, "", "")
+
 
 @dataclass(frozen=True)
 class Channel:
-    """One way of paying one provider on one harness."""
+    """One way of paying one provider on one harness.
+
+    `plan` is the subscription under the whole name the provider markets it
+    by — `Claude Max 20x`, not a product and a level in two fields. There is
+    nothing here for what the plan costs per month: that is a fetched fact the
+    catalogue holds, and a copy of it in somebody's answers is a second thing
+    to keep true that no decision ever reads.
+
+    `rates` is what the user pays per token on this channel, where they pay
+    per token at all. The catalogue holds one list price per model from the
+    provider's own page, which is the wrong bill for a gateway — and a gateway
+    is exactly the arrangement that has nowhere else to be recorded.
+    """
 
     provider: str
     harness: str
     pay: str
     plan: str | None
-    tier: str | None
-    monthly: float | None
-    currency: str | None
     gateway: str | None
+    rates: Price | None
 
 
 @dataclass(frozen=True)
@@ -121,11 +143,9 @@ def load(data_dir: Path, cat: Catalogue) -> Profile:
             cat, f"{path} is missing harnesses, providers or models; {REPAIR}"
         )
 
-    channels = _channels(raw.get("channels"))
+    channels, unreadable = _channels(raw.get("channels"))
     if channels is None:
-        return _fallback(
-            cat, f"{path} carries a channel this Skill cannot read; {REPAIR}"
-        )
+        return _fallback(cat, f"{path} {unreadable}; {REPAIR}")
 
     return Profile(
         harnesses=harnesses,
@@ -169,9 +189,9 @@ def channel_for(p: Profile, model: Model, harness: str) -> Channel | None:
 def write(data_dir: Path, p: Profile) -> None:
     """Store the profile atomically, readable only by its owner.
 
-    The file names what somebody pays every month, so it is written 0600, and
-    it is replaced rather than truncated so that an interrupted write leaves
-    the previous answers standing instead of half of the new ones.
+    The file names what somebody pays for their tokens, so it is written 0600,
+    and it is replaced rather than truncated so that an interrupted write
+    leaves the previous answers standing instead of half of the new ones.
     """
 
     data_dir.mkdir(parents=True, exist_ok=True)
@@ -200,10 +220,8 @@ def _document(p: Profile) -> dict[str, Any]:
                 "harness": channel.harness,
                 "pay": channel.pay,
                 "plan": channel.plan,
-                "tier": channel.tier,
-                "monthly": channel.monthly,
-                "currency": channel.currency,
                 "gateway": channel.gateway,
+                "rates": _card(channel.rates),
             }
             for channel in p.channels
         ],
@@ -237,41 +255,95 @@ def _names(raw: Any) -> tuple[str, ...] | None:
     return tuple(names)
 
 
-def _channels(raw: Any) -> tuple[Channel, ...] | None:
-    """Return the channels, or None where any of them is unreadable.
+def _channels(raw: Any) -> tuple[tuple[Channel, ...] | None, str | None]:
+    """Return the channels, or None and why none of them can be trusted.
 
     A profile is only worth trusting whole. One channel this Skill cannot read
     is a file somebody edited by hand and got wrong, so the answer is the
     fallback rather than a silently shortened list of ways to pay.
+
+    The reason travels with the refusal because it is the only thing anybody
+    can act on: *a rate card in SEK* names the edit to make, where *a channel
+    this Skill cannot read* sends somebody through the whole file looking.
     """
 
     if raw is None:
-        return ()
+        return (), None
     if not isinstance(raw, list):
-        return None
+        return None, "carries a channels member that is not a list"
 
     channels: list[Channel] = []
-    for entry in raw:
+    for index, entry in enumerate(raw):
         if not isinstance(entry, dict):
-            return None
+            return None, f"carries a channel {index} that is not an object"
         provider = _text(entry.get("provider"))
         harness = _text(entry.get("harness"))
         pay = _text(entry.get("pay"))
         if provider is None or harness is None or pay not in PAYMENTS:
-            return None
+            return (
+                None,
+                f"carries a channel {index} that names no provider, no harness, or no way of paying",
+            )
+        rates = _rates(entry.get("rates"))
+        if rates is _UNREADABLE:
+            return (
+                None,
+                f"carries a rate card on channel {index} that is not a readable card in {CURRENCY} {UNIT}",
+            )
         channels.append(
             Channel(
                 provider=provider,
                 harness=harness,
                 pay=pay,
                 plan=_text(entry.get("plan")),
-                tier=_text(entry.get("tier")),
-                monthly=_number(entry.get("monthly")),
-                currency=_text(entry.get("currency")),
                 gateway=_text(entry.get("gateway")),
+                rates=rates,
             )
         )
-    return tuple(channels)
+    return tuple(channels), None
+
+
+def _rates(raw: Any) -> Price | None:
+    """Return the channel's own rate card, absent, or the marker for unusable.
+
+    Every figure this Skill compares is USD and nothing anywhere converts, so
+    a card in another currency would be added to a USD bill without a word
+    said. That is worse than the fallback, which at least announces itself, so
+    it joins the states that invalidate a profile rather than the ones that
+    are quietly dropped.
+    """
+
+    if raw is None:
+        return None
+    if not isinstance(raw, dict):
+        return _UNREADABLE
+
+    card = Price(
+        input=_number(raw.get("input")),
+        cache_read=_number(raw.get("cache_read")),
+        cache_write=_number(raw.get("cache_write")),
+        output=_number(raw.get("output")),
+        currency=_text(raw.get("currency")) or CURRENCY,
+        unit=_text(raw.get("unit")) or UNIT,
+    )
+    if card.currency != CURRENCY or card.unit != UNIT:
+        return _UNREADABLE
+    return card
+
+
+def _card(rates: Price | None) -> dict[str, Any] | None:
+    """Return one channel's rate card as the JSON object `load` reads back."""
+
+    if rates is None:
+        return None
+    return {
+        "input": rates.input,
+        "cache_read": rates.cache_read,
+        "cache_write": rates.cache_write,
+        "output": rates.output,
+        "currency": rates.currency,
+        "unit": rates.unit,
+    }
 
 
 def _text(raw: Any) -> str | None:
