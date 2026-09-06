@@ -26,9 +26,9 @@ would buy a judge dearer than the work it grades. High stakes is what grading
 actually is: nothing checks the judge, and a judge that cannot do the job
 returns a plausible wrong number rather than an obvious failure. So this asks
 for the cheapest point the engine is confident in rather than the cheapest
-point there is, and it is answered from the estimates rather than from a
-wager — a store whose grades were drawn from a lottery of graders measures the
-graders.
+point there is, and never one of the calls the engine spends on an
+experiment — a store whose grades came from a lottery of graders would be
+measuring the graders.
 
 **It never invents a number.** Where no model can be reached, where the call
 times out, where the answer will not parse, the Unit waits for the next pass.
@@ -450,7 +450,7 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
     above the work it judges. Grading is unchecked work — nothing downstream
     catches a wrong grade, and a wrong grade is worse than no grade — which is
     the engine's own definition of high stakes, so it answers with the cheapest
-    point it is confident in and decides rather than draws.
+    point it is confident in and never explores.
 
     A point that is not a command — a subagent only an agent inside a Harness
     can name, or the caller's own seat — is not something a script can start,

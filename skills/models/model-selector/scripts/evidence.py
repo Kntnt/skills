@@ -189,8 +189,8 @@ class Estimate:
     """One belief about one cell: its mean, its floor, and where it came from.
 
     The Beta those first two are read off travels with them, because a caller
-    that means to gamble on this cell rather than average over it needs the
-    distribution and not a summary of it.
+    that means to try this cell rather than rank it needs the distribution and
+    not a summary of it.
     """
 
     mean: float
@@ -203,20 +203,21 @@ class Estimate:
     def draw(self, quantile: float) -> float:
         """Return this cell's success rate read off at one quantile of its Beta.
 
-        Ranking on a draw rather than on a mean is what leaves a store able to
-        correct itself. A cell measured a handful of times has a posterior wide
-        enough that it still wins occasionally, so the rows that would settle it
-        can still be taken; a cell that is confidently worse essentially never
-        wins, without anybody having had to define hopeless. The overlap between
-        two posteriors decides how often each of them is chosen, which is as
-        often as each could really be the better one.
+        The answer is ranked on the means, so nothing read off here decides an
+        ordinary call. What spends a quantile is the bounded exploration in
+        `selection.py`: on about one reversible call in ten a candidate cheaper
+        than the answer is tried where its own posterior says it could still do
+        the job. A cell measured a handful of times is wide enough to be tried,
+        so the rows that would settle it can be taken; a cell that is
+        confidently worse essentially never is, without anybody having had to
+        define hopeless.
 
         Sampling is by inverse transform — a quantile in, a rate out — rather
-        than by drawing a Beta variate, because a caller has several cells to
-        sample and some of them are the same evidence seen from different sides.
-        One quantile spent on all of a model's levels moves them together, which
-        is what stops a model exposing five levels from holding five tickets in
-        one lottery and letting its luckiest speak for it.
+        than by drawing a Beta variate, because the generator then stays the
+        caller's: it decides how many quantiles an experiment spends and on
+        what. An exploration spends a fresh one on each candidate it considers,
+        which is what leaves the candidates independent of one another rather
+        than moved together by a single roll.
         """
 
         return _beta_quantile(self.alpha, self.beta, quantile)

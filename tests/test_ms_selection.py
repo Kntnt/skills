@@ -31,6 +31,60 @@ DRAWS: int = 200
 # own provider, and the Harness that says which provider that is.
 LIMITED: tuple[str, ...] = ("--scope=limited", "--harness=claude-code")
 
+# The retired rule's own sentences, whitespace-collapsed before matching so
+# that a line break falling inside one of them hides nothing. Each states, as
+# the contract in force, an answer read off a draw over the whole pool rather
+# than off the means, or the cost the expected-cost arithmetic used to rank on
+# (issue #288). The identifiers that arithmetic went by are deliberately absent:
+# a list naming them would itself be a surface carrying them.
+RETIRED: tuple[str, ...] = (
+    "ranking on a draw",
+    "ranked on a draw",
+    "rather than on a mean",
+    "one quantile spent",
+    "tickets in one lottery",
+    "rather than from a wager",
+    "decides rather than draws",
+    "decided rather than drawn",
+    "the cost of finishing",
+    "per expected failure",
+)
+
+
+def _surfaces() -> list[Path]:
+    """Every file that says in prose how the answer is arrived at.
+
+    The engine and the Skill that fronts it, the runner that asks it and
+    renders what came back, the module where the rule is written down for the
+    collection, and the page a reader meets first. A rule stated in a docstring
+    binds a reader exactly as the page spelling it out does, so the scan takes
+    the scripts and their shipped data as well as the prose beside them.
+    """
+
+    trees = [
+        REPO_ROOT / "skills" / "models" / "model-selector",
+        REPO_ROOT / "skills" / "code" / "orchestrate",
+    ]
+    found = [
+        path
+        for tree in trees
+        for path in sorted(tree.rglob("*"))
+        if path.suffix in {".py", ".md", ".json"}
+    ]
+    return [
+        *found,
+        REPO_ROOT / "docs" / "rules" / "routing.md",
+        REPO_ROOT / "README.md",
+    ]
+
+
+@pytest.fixture(params=_surfaces(), ids=lambda path: str(path.relative_to(REPO_ROOT)))
+def subject(request: pytest.FixtureRequest) -> Path:
+    """One shipped surface of the choosing rule."""
+
+    surface: Path = request.param
+    return surface
+
 
 def _module(stem: str, name: str | None = None) -> Any:
     """Load one shipped module under the name its siblings import it by."""
@@ -592,3 +646,65 @@ def test_an_exploration_names_what_the_evidence_would_have_chosen(
         assert "would have chosen" in answer["note"]
         assert "claude-opus-5@xhigh" in answer["note"]
         assert answer["explored"] in answer["note"]
+
+
+def test_no_shipped_surface_still_says_the_answer_is_ranked_on_a_draw(
+    subject: Path,
+) -> None:
+    """A docstring is a surface of the contract, and this contract changed.
+
+    The answer used to be read off one draw from each candidate's posterior,
+    and the prose beside the arithmetic said so — that ranking on a draw is
+    what lets a store correct itself, that the overlap between two posteriors
+    settles how often each is chosen, that one quantile spent across a model's
+    levels keeps them from holding a ticket apiece. None of that is true of an
+    engine that ranks on the means and buys its correcting rows on a bounded
+    share of calls instead, so a surface still asserting it tells a reader the
+    opposite of what the code beneath it does (issue #288).
+    """
+
+    text = " ".join(subject.read_text(encoding="utf-8").split()).lower()
+    assert [phrase for phrase in RETIRED if phrase in text] == []
+
+
+def test_the_quantile_a_cell_is_read_at_says_what_now_spends_it() -> None:
+    """The method's only caller is the exploration, so its prose answers to that.
+
+    A surface emptied of the retired claim and left saying nothing is the same
+    stranded surface one edit later: the next reader still has to work out from
+    the call sites what a draw is for.
+    """
+
+    evidence = _module("evidence")
+    prose = " ".join((evidence.Estimate.draw.__doc__ or "").split()).lower()
+
+    assert "explor" in prose
+
+
+def test_an_explored_answer_reports_the_rate_measured_and_not_the_draw(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An exploration is how the call was spent, never a claim about the world.
+
+    What picked the point was a draw that cleared the floor; what the store
+    believes about it is its posterior mean, which is below the floor or the
+    point would have been the answer already. Reporting the draw would tell a
+    caller the evidence backs a point it does not, and the caller could not
+    tell that from an answer the evidence really does back.
+    """
+
+    _boundary(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+
+    answers = _over_seeds(capsys, flags)
+    explored = [answer for answer in answers if answer["explored"] is not None]
+    points = {(answer["model"], answer["deliberation"]) for answer in explored}
+
+    assert points
+    for model, level in points:
+        locked = _answer(capsys, *flags, f"--model={model}", f"--deliberation={level}")
+        rate = locked["expected"]["p_success"]
+        assert rate < select.FLOOR
+        for answer in explored:
+            if (answer["model"], answer["deliberation"]) == (model, level):
+                assert answer["expected"]["p_success"] == rate
