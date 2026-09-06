@@ -21,6 +21,13 @@ the kind informs the exact level, and the deepest level that has real rows is
 what the answer ends up being made of. `basis` says which level that was, so a
 caller can tell a measured answer from a plausible one.
 
+A parent is fitted on the rows its child does not hold, and only on those. It
+is a prior for what it can still add, and rows the child is already counting
+are not that: counted again at each level, one point's handful of failures
+compounds into a confidence about the whole model that the handful never bought.
+A level left with no rows of its own passes its own prior down unchanged, which
+is the same statement — it knew nothing the child did not.
+
 The bottom of the stack is capability against difficulty, with the level of
 deliberation counted as capability the model can be lent: a point far more
 capable than the kind is hard usually succeeds, and that is the sigmoid the
@@ -103,14 +110,17 @@ UNKNOWN_DIFFICULTY = 0.5
 # certainty is a certainty either way, so the clamp costs nothing real.
 CERTAINTY = 1e-6
 
-# How far a measurement is carried when it is carried across kinds. Moving an
-# estimate between deliberation levels of one model is only restating what the
-# shipped level table already claims, and moves at the prior's own rate. Moving
-# it between kinds is a different and much weaker claim — that rows taken at one
-# difficulty predict another they never ran at — and unbounded it turns seven
-# rows of failure on hard work into near-certainty on easy work. So that
-# direction moves at half the rate and stops after this much log-odds, keeping
-# what the rows say about the model and giving up a confidence nothing earned.
+# How far a measurement is carried when it is carried across kinds, and away
+# from what the new kind's own difficulty predicts. Moving an estimate between
+# deliberation levels of one model is only restating what the shipped level
+# table already claims, and moves at the prior's own rate. Moving it between
+# kinds is a different and much weaker claim — that rows taken at one difficulty
+# predict another they never ran at — and unbounded it turns seven rows of
+# failure on hard work into near-certainty on easy work. So a move that leaves
+# the estimate further from what the difficulty predicts goes at half the rate
+# and stops after this much log-odds. A move that leaves it nearer is the
+# conservative direction, asserts nothing the difficulty had not already said,
+# and is taken whole.
 CROSS_KIND_SHARPNESS = 4.0
 CROSS_KIND_LIMIT = 1.5
 
@@ -181,12 +191,40 @@ class AppendReport:
 
 @dataclass(frozen=True)
 class Estimate:
-    """One belief about one cell: its mean, its floor, and where it came from."""
+    """One belief about one cell: its mean, its floor, and where it came from.
+
+    The Beta those first two are read off travels with them, because a caller
+    that means to gamble on this cell rather than average over it needs the
+    distribution and not a summary of it.
+    """
 
     mean: float
     low: float
     n: float
     basis: str
+    alpha: float
+    beta: float
+
+    def draw(self, quantile: float) -> float:
+        """Return this cell's success rate read off at one quantile of its Beta.
+
+        Ranking on a draw rather than on a mean is what leaves a store able to
+        correct itself. A cell measured a handful of times has a posterior wide
+        enough that it still wins occasionally, so the rows that would settle it
+        can still be taken; a cell that is confidently worse essentially never
+        wins, without anybody having had to define hopeless. The overlap between
+        two posteriors decides how often each of them is chosen, which is as
+        often as each could really be the better one.
+
+        Sampling is by inverse transform — a quantile in, a rate out — rather
+        than by drawing a Beta variate, because a caller has several cells to
+        sample and some of them are the same evidence seen from different sides.
+        One quantile spent on all of a model's levels moves them together, which
+        is what stops a model exposing five levels from holding five tickets in
+        one lottery and letting its luckiest speak for it.
+        """
+
+        return _beta_quantile(self.alpha, self.beta, quantile)
 
 
 @dataclass(frozen=True)
@@ -416,13 +454,21 @@ class Estimator:
 
         exact, by_kind, by_model = self._levels(kind, model, deliberation)
 
+        # What each level knows that the level below it does not. A parent is
+        # only a prior for what it can still tell its child, so it is fitted on
+        # the rows the child does not already hold: without that the same rows
+        # are asserted once per level, and four failures at one point compound
+        # into a certainty about the model that four observations cannot buy.
+        other_levels = [row for row in by_kind if row.deliberation != deliberation]
+        other_kinds = [row for row in by_model if row.kind != kind]
+
         # Where each level's evidence actually stands. A level's rows ran under
-        # their own conditions, not under the ones being asked about: a model's
-        # whole record spans every kind it has attempted, and a kind's record
-        # spans every level it was attempted at.
+        # their own conditions, not under the ones being asked about: the rows
+        # left to the model span every other kind it has attempted, and the ones
+        # left to the kind span every other level it was attempted at.
         here = self._margin(kind, model, deliberation)
-        at_model = self._mean_margin(by_model, model, here)
-        at_kind = self._mean_margin(by_kind, model, here)
+        at_model = self._mean_margin(other_kinds, model, here)
+        at_kind = self._mean_margin(other_levels, model, here)
 
         # Top down: the sigmoid seeds the model, the model seeds the kind, and
         # the kind seeds the exact cell. Each level is a Beta posterior fitted
@@ -432,10 +478,14 @@ class Estimator:
         # unchanged onto easy work, and a model measured at one level of
         # deliberation would report the same number for all five of them.
         prior = _sigmoid(SHARPNESS * at_model)
-        pooled_model = _posterior_mean(by_model, prior, PSEUDO[3])
+        pooled_model = _posterior_mean(other_kinds, prior, PSEUDO[3])
         pooled_kind = _posterior_mean(
-            by_kind,
-            _translated(pooled_model, at_kind - at_model, across_kinds=True),
+            other_levels,
+            _translated(
+                pooled_model,
+                at_kind - at_model,
+                toward=_sigmoid(SHARPNESS * at_kind),
+            ),
             PSEUDO[2],
         )
         alpha, beta = _posterior(
@@ -454,6 +504,8 @@ class Estimator:
             low=_beta_quantile(alpha, beta, LOW_QUANTILE),
             n=float(len(deepest)),
             basis=basis,
+            alpha=alpha,
+            beta=beta,
         )
 
     def tokens(
@@ -655,24 +707,36 @@ def _sigmoid(x: float) -> float:
     return 1.0 / (1.0 + math.exp(-x))
 
 
-def _translated(mean: float, margin: float, *, across_kinds: bool = False) -> float:
+def _translated(mean: float, margin: float, *, toward: float | None = None) -> float:
     """Move a mean by *margin* worth of conditions, in log-odds.
 
     Log-odds is where the sigmoid is linear, so moving an estimate there says
     what the difference between the two cells is worth and nothing about the
     rest of it: the measurement is kept and only its conditions change. Between
     two levels of one model that is the shipped level table restated, and it
-    moves at the prior's own rate. Between two kinds it is an extrapolation to
-    a difficulty the rows never ran at, and it is damped and bounded.
+    moves at the prior's own rate, which is what `toward` being None asks for.
+
+    Between two kinds it is an extrapolation to a difficulty the rows never ran
+    at, and *toward* is what this kind's own difficulty predicts of this model
+    with no rows at all. The damping is asymmetric, because the two directions
+    are not the same claim. A move that lands nearer that prediction asserts
+    nothing the difficulty did not already say, so there is nothing to protect
+    against and it is taken whole; a move that lands further away is the claim
+    the damping exists for, and is damped and bounded. Bounding both alike is
+    what made a model flawless at trivial work read as near-certain at hard
+    work — the cap refused to let the estimate fall as far as the difficulty
+    said it should — and it condemned a model on work it had never been asked
+    to do for the same reason in reverse.
     """
 
     held = min(1.0 - CERTAINTY, max(CERTAINTY, mean))
-    if across_kinds:
-        shift = CROSS_KIND_SHARPNESS * margin
-        shift = min(CROSS_KIND_LIMIT, max(-CROSS_KIND_LIMIT, shift))
-    else:
-        shift = SHARPNESS * margin
-    return _sigmoid(math.log(held / (1.0 - held)) + shift)
+    odds = math.log(held / (1.0 - held))
+    whole = _sigmoid(odds + SHARPNESS * margin)
+    if toward is None or abs(whole - toward) < abs(held - toward):
+        return whole
+
+    shift = CROSS_KIND_SHARPNESS * margin
+    return _sigmoid(odds + min(CROSS_KIND_LIMIT, max(-CROSS_KIND_LIMIT, shift)))
 
 
 def _counts(rows: Iterable[Measurement], category: str) -> list[float]:

@@ -9,6 +9,7 @@ A ground-up rebuild of this collection was built on the branch `rework`, checked
 - The branch `rework` and the worktree `../skills-rework` are still EXEMPT from every cleanup instruction. "Remove all worktrees", "delete all branches", "make sure everything is merged and tidy" and the like apply to everything EXCEPT these two. Never delete, merge, rebase, or prune them, and never commit to them.
 - Never merge `rework` into `main` or `main` into `rework`. What comes over comes over in ordinary `ready-for-agent` tickets on `main`, each naming the rework commit it re-implements; reading a file from the branch (`git show rework:<path>`) is how a builder sees the original.
 - The five pipeline Skills on `rework` — frame, to-slices, compile, dispatch, and the unbuilt land — stay there until Thomas asks for them. `/orchestrate` remains the collection's ticket runner on `main`.
+- Anything brought over from `rework` that routes work is stale on arrival: `frame` and `dispatch` there call Model Selector's `context`, `route` and `observe`, none of which exist on `main` any more. Re-point such a Skill at `selection.py` and `record.py` in the same ticket that brings it over, and read `docs/rules/routing.md` for what those now promise.
 - Tickets labeled `rework` (milestone "Skills 2.0") are the closed history of the rebuild. Never reopen or work them, and never pass them to /orchestrate.
 
 ## Ground rules (authoritative)

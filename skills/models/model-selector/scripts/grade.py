@@ -15,11 +15,20 @@ instruction was given again later was not good enough the first time. A Unit
 whose tests ran and passed did the work. None of those costs anything.
 
 **The judge is bought deliberately.** Where the signals decided nothing, one
-call to the cheapest model this machine can reach reads the Unit's own two
-ends — the instruction and the result — and answers with a kind, a number and
-one line. Which model that is comes from the engine, asked for the cheapest
-point for `analyze`, because choosing a model is `selection.py`'s work and naming
-one here would be a second place to keep current.
+call to a model this machine can reach reads the Unit's own two ends — the
+instruction and the result — and answers with a kind, a number and one line.
+Which model that is comes from the engine, asked for a `converse` point at high
+stakes, because choosing a model is `selection.py`'s work and naming one here
+would be a second place to keep current. The kind is what this call is and not
+what the Unit was: two excerpts in and a number out is a short bounded exchange,
+where `analyze` is priced at reading a million and a half cached tokens, which
+would buy a judge dearer than the work it grades. High stakes is what grading
+actually is: nothing checks the judge, and a judge that cannot do the job
+returns a plausible wrong number rather than an obvious failure. So this asks
+for the cheapest point the engine is confident in rather than the cheapest
+point there is, and it is answered from the estimates rather than from a
+wager — a store whose grades were drawn from a lottery of graders measures the
+graders.
 
 **It never invents a number.** Where no model can be reached, where the call
 times out, where the answer will not parse, the Unit waits for the next pass.
@@ -431,12 +440,20 @@ def _candidates(text: str) -> list[dict[str, Any]]:
 
 
 def _bridge(data: Path, seconds: float) -> list[str] | None:
-    """Return the command that starts the cheapest model this machine can reach.
+    """Return the command that starts the model this machine grades with.
 
-    The engine chooses it, for the kind of work this is. A point that is not a
-    command — a subagent only an agent inside a Harness can name, or the
-    caller's own seat — is not something a script can start, so there is no
-    judge to call and the Unit waits.
+    The engine chooses it, for the kind of work this call is and at the stakes it
+    carries. The kind is `converse` — two short excerpts in, a number and a line
+    out — rather than the kind of the Unit being graded, and rather than
+    `analyze`, whose token prior is a repository read and would price a judge
+    above the work it judges. Grading is unchecked work — nothing downstream
+    catches a wrong grade, and a wrong grade is worse than no grade — which is
+    the engine's own definition of high stakes, so it answers with the cheapest
+    point it is confident in and decides rather than draws.
+
+    A point that is not a command — a subagent only an agent inside a Harness
+    can name, or the caller's own seat — is not something a script can start,
+    so there is no judge to call and the Unit waits.
     """
 
     engine = Path(__file__).resolve().parent / "selection.py"
@@ -444,8 +461,9 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
         "uv",
         "run",
         str(engine),
-        "--kind=analyze",
+        "--kind=converse",
         "--scope=callable",
+        "--stakes=high",
         f"--data={data}",
     ]
     try:
@@ -474,7 +492,7 @@ def _judge_for(data: Path) -> Judge:
     """Return the judge this machine actually has, or one that always declines."""
 
     def ask(prompt: str, seconds: float) -> str | None:
-        """Ask the cheapest reachable model, and answer None where none is."""
+        """Ask the model the engine trusts with this, or answer None."""
 
         argv = _bridge(data, SELECT_SECONDS)
         if argv is None:

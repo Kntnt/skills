@@ -20,16 +20,22 @@ service, because the work is what matters and the routing is an optimisation.
 The work itself is never passed in. A caller names its kind and nothing more,
 because that is the whole of what the arithmetic reads, and a brief accepted
 here would be a brief somebody expects to have been recorded.
+
+The same question asked twice can come back differently, and that is this
+working rather than failing: the ranking is drawn from what the evidence
+leaves uncertain instead of taken from its middle. `_drawn` argues why, and
+names the three requests decided rather than drawn.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import random
 import sys
 import uuid
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -57,6 +63,10 @@ OBJECTIVES = ("cost", "time")
 # What `high` stakes demands before cost is allowed to decide anything. Below
 # this, a cheap attempt is a cheap way of not getting the work done.
 FLOOR = 0.8
+
+# The smallest chance of finishing the arithmetic will divide a bill by. A
+# candidate drawn at nought has to price as ruinous rather than as undefined.
+LEAST_CHANCE = 1e-6
 
 # Where the data directory sits when the caller does not say.
 DEFAULT_DATA = Path(".kntnt") / "model-selector"
@@ -131,14 +141,99 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     if not pool:
         return _inherit(args, _why_nothing(cat, profile, notes))
 
+    # Rank on what each candidate is believed to be worth, then — where this
+    # request is one to gamble on — rank again on what each could really be
+    # worth, which is the only way an estimate nobody retries is ever corrected.
     scored = [_score(point, args.kind, estimator, kinds) for point in pool]
     ranked = _ranked(scored, args.stakes, args.objective)
+    if _drawable(args):
+        ranked = _drawn(scored, ranked[0], args, kinds, notes)
+
     ranked = _after(ranked, args.after, notes)
     if not ranked:
         return _inherit(args, _why_nothing(cat, profile, notes))
     best = ranked[0]
 
     return _report(best, ranked[1:], args, profile, cat, harness, notes)
+
+
+def _drawable(args: argparse.Namespace) -> bool:
+    """Return whether this request is one the answer may be gambled on.
+
+    Three requests are decided rather than drawn. High stakes wants the best
+    estimate on the table rather than a wager on an overlap, and already ranks
+    by a rule of its own. A model or a deliberation lock is the user's own
+    instruction, and an instruction is not a distribution to sample. And a
+    caller naming the point that just failed is asking for the step up from it,
+    which is a second question rather than a second roll.
+    """
+
+    return (
+        args.stakes != "high"
+        and args.model is None
+        and args.deliberation is None
+        and args.after is None
+    )
+
+
+def _drawn(
+    scored: Sequence[Scored],
+    favoured: Scored,
+    args: argparse.Namespace,
+    kinds: KindPriors,
+    notes: list[str | None],
+) -> list[Scored]:
+    """Re-rank the pool on one draw from each candidate's success posterior.
+
+    A pool ranked on its means answers the same question the same way for ever.
+    The moment the store holds good rows for one model that model wins every
+    call, so nothing else is ever tried, so no estimate but its own is ever
+    corrected — and a cheap model that would in fact have done the job stays
+    undiscoverable. Ranking on a draw instead asks what each candidate could
+    really be worth: two candidates whose posteriors overlap each win about as
+    often as either could be the better one, a candidate confidently worse
+    essentially never wins, and a candidate with few rows or none has a wide
+    posterior and therefore wins occasionally. As rows accumulate the posteriors
+    narrow and the draws converge on the truth, with nothing to tune.
+
+    One roll per model, spent at every level that model exposes. A model's five
+    levels are five views of the same rows, so their posteriors move together
+    and drawing them apart would hand a model with five levels five tickets in
+    one lottery and let its luckiest speak for it — which is how the level
+    nobody has ever run comes to beat the level with the record. Sharing the
+    quantile leaves the ordering between a model's own levels where the evidence
+    put it, and makes the wager the thing it is meant to be: one model against
+    another.
+
+    Only the chance of success is drawn. The token forecast is uncertain too,
+    but that is not where the uncertainty which decides anything lives, and a
+    sampled bill would add noise to the ranking without buying a thing.
+
+    The dissent is reported because the draw is how the choice was made and
+    never a claim about the world: a reader who finds a weaker model chosen has
+    to be able to tell a deliberate sample from an error at a glance (ADR-0182).
+    It speaks for a model and not for a level, a level being the same model
+    reconsidered rather than the surprise the note exists for.
+    """
+
+    rng = random.Random(args.seed)
+    rolls: dict[str, float] = {}
+    for row in scored:
+        rolls.setdefault(row.point.model.id, rng.random())
+
+    wagered = _ranked(
+        [_gambled(row, args.kind, kinds, rolls[row.point.model.id]) for row in scored],
+        args.stakes,
+        args.objective,
+    )
+
+    if wagered[0].point.model.id != favoured.point.model.id:
+        notes.append(
+            f"drawn from the posteriors, where the means would have chosen "
+            f"{_named(favoured.point)}"
+        )
+
+    return wagered
 
 
 def _after(
@@ -383,24 +478,52 @@ def _locked_to_deliberation(
 def _score(point: Point, kind: str, estimator: Estimator, kinds: KindPriors) -> Scored:
     """Attach the estimate, the token forecast and both bills to one point.
 
-    The second bill is the one that decides. What a caller pays to finish the
-    work is what every attempt costs divided by the share of attempts that
-    succeed, plus what each failure costs to notice and brief again — and that
-    last term is why a candidate expected to fail three times in four is not
-    the economical answer merely because its tokens are cheap.
+    The second bill is the one that decides, and it is taken here at the belief
+    the evidence actually holds. `_gambled` is the same point priced at one draw
+    from that belief instead.
     """
 
     estimate = estimator.p_success(kind, point.model.id, point.deliberation)
     tokens = estimator.tokens(kind, point.model.id, point.deliberation)
     cost = catalogue.cost_usd(point.model, tokens, kind, kinds)
-    probability = max(estimate.mean, 1e-6)
-    expected = (
-        None
-        if cost is None
-        else (cost + kinds.overhead(kind) * (1.0 - estimate.mean)) / probability
-    )
     taken = estimator.seconds(kind, point.model.id, point.deliberation)
-    return Scored(point, estimate, tokens, cost, expected, taken, taken / probability)
+    expected, expected_taken = _expected(
+        cost, taken, estimate.mean, kinds.overhead(kind)
+    )
+    return Scored(point, estimate, tokens, cost, expected, taken, expected_taken)
+
+
+def _gambled(row: Scored, kind: str, kinds: KindPriors, roll: float) -> Scored:
+    """Return one candidate re-priced at one quantile of its own posterior.
+
+    Everything the answer reports about the point is left exactly as it was
+    measured. What the draw moves is the two bills the ranking reads, so the
+    wager decides which point is chosen and states nothing about it afterwards.
+    """
+
+    expected, expected_taken = _expected(
+        row.cost_usd, row.seconds, row.estimate.draw(roll), kinds.overhead(kind)
+    )
+    return replace(row, expected_usd=expected, expected_seconds=expected_taken)
+
+
+def _expected(
+    cost: float | None, seconds: float, chance: float, overhead: float
+) -> tuple[float | None, float]:
+    """Return what finishing costs and takes, at one chance of succeeding.
+
+    What a caller pays to finish the work is what every attempt costs divided
+    by the share of attempts that succeed, plus what each failure costs to
+    notice and brief again — and that last term is why a candidate expected to
+    fail three times in four is not the economical answer merely because its
+    tokens are cheap. The clock is the same arithmetic without the overhead,
+    which is somebody's attention rather than the run's own time.
+    """
+
+    survives = max(chance, LEAST_CHANCE)
+    if cost is None:
+        return None, seconds / survives
+    return (cost + overhead * (1.0 - chance)) / survives, seconds / survives
 
 
 def _ranked(scored: Sequence[Scored], stakes: str, objective: str) -> list[Scored]:
@@ -556,6 +679,14 @@ def _position(level: str | None) -> int:
     return LEVELS.index(level) if level is not None else -1
 
 
+def _named(point: Point) -> str:
+    """Spell one point the way a caller names one on a command line."""
+
+    if point.deliberation is None:
+        return point.model.id
+    return f"{point.model.id}@{point.deliberation}"
+
+
 def _seat(seat: str | None) -> tuple[str | None, str | None]:
     """Split `model@level` into its two halves, either of which may be absent."""
 
@@ -612,6 +743,7 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--objective", choices=OBJECTIVES, default="cost")
     parser.add_argument("--repo")
     parser.add_argument("--n", type=int, default=2)
+    parser.add_argument("--seed", type=int)
     parser.add_argument("--data")
     return parser.parse_args(argv)
 

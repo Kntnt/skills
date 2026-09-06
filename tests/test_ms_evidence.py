@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import random
+import statistics
 import sys
 from pathlib import Path
 from typing import Any
@@ -156,25 +158,34 @@ def test_the_hierarchy_backs_off_to_the_deepest_level_that_has_rows(
     assert exact.n == 4.0
 
 
-def test_an_unmeasured_cell_does_not_beat_a_measured_one(tmp_path: Path) -> None:
+def test_evidence_moves_a_cell_off_the_prior_it_was_assumed_at(
+    tmp_path: Path,
+) -> None:
     """Evidence outranks a flattering prior, in both directions.
 
-    The weak model measured succeeding is preferred to the strong model nobody
-    has ever tried, and the strong model measured failing is not preferred to
-    the weak model nobody has tried. Neither ordering holds on the priors
-    alone, which is the point of storing anything.
+    The weak model measured succeeding is estimated above what it was assumed
+    to be, and the strong model measured failing falls below the weak model
+    nobody has tried at all. Neither ordering holds on the priors alone, which
+    is the point of storing anything.
+
+    What six good rows do not do is overtake a stronger model's untried prior,
+    because a cell shrinks towards its parent at `PSEUDO[1]` attempts' worth of
+    weight and its rows are counted once rather than once per level: six rows
+    are worth six. Whether that weight is the right one is a separate question
+    from this one, and it is asked of `PSEUDO` rather than of the hierarchy.
     """
 
+    untouched = _estimator([], tmp_path / "none")
     working = _estimator(_many(6, 0.9, model=WEAK), tmp_path / "a")
     failing = _estimator(_many(8, 0.05, model=STRONG), tmp_path / "b")
 
+    assumed = untouched.p_success("implement", WEAK, "high")
     measured_good = working.p_success("implement", WEAK, "high")
-    untried_strong = working.p_success("implement", STRONG, "high")
     measured_bad = failing.p_success("implement", STRONG, "high")
     untried_weak = failing.p_success("implement", WEAK, "high")
 
-    assert measured_good.mean > untried_strong.mean
-    assert measured_good.low > untried_strong.low
+    assert measured_good.mean > assumed.mean
+    assert measured_good.low > assumed.low
     assert measured_bad.mean < untried_weak.mean
 
 
@@ -280,3 +291,65 @@ def test_the_shipped_kinds_file_describes_every_kind_this_skill_routes() -> None
         assert 0.0 <= KINDS.difficulty(kind) <= 1.0
         assert all(value > 0.0 for value in KINDS.tokens(kind).values())
     assert KINDS.long_context("implement") and not KINDS.long_context("converse")
+
+
+def test_drawing_at_uniform_quantiles_samples_the_posterior_reported(
+    tmp_path: Path,
+) -> None:
+    """A sample that is not this cell's own belief is a wager on a fiction.
+
+    Both halves of the estimate are checked against the same sample, and the
+    tenth percentile is the sharper of the two: `low` is arrived at by bisecting
+    the incomplete beta function, so an agreement between it and the draws is
+    two independent routes to one distribution rather than one route twice.
+    """
+
+    estimator = _estimator(_many(5, 0.8, deliberation="high"), tmp_path)
+    estimate = estimator.p_success("implement", STRONG, "high")
+    rng = random.Random(4)
+
+    drawn = sorted(estimate.draw(rng.random()) for _ in range(20_000))
+
+    assert abs(statistics.fmean(drawn) - estimate.mean) < 0.01
+    assert abs(drawn[2_000] - estimate.low) < 0.01
+
+
+def test_a_draw_rises_with_the_quantile_it_is_asked_for(tmp_path: Path) -> None:
+    """The quantile is the whole of the sampling, so it has to order the answers.
+
+    Which is what lets one quantile be spent across several correlated cells:
+    a caller that shares it between a model's levels is saying they move
+    together, and that only means anything if the direction is common.
+    """
+
+    estimate = _estimator(_many(4, 0.7), tmp_path).p_success(
+        "implement", STRONG, "high"
+    )
+
+    ladder = [estimate.draw(quantile) for quantile in (0.05, 0.25, 0.5, 0.75, 0.95)]
+
+    assert ladder == sorted(ladder)
+    assert ladder[0] < estimate.mean < ladder[-1]
+
+
+def test_a_handful_of_failures_at_one_point_is_worth_one_handful(
+    tmp_path: Path,
+) -> None:
+    """Rows counted once per level are the same rows asserted three times.
+
+    A model measured at exactly one point leaves both parent levels holding no
+    rows of their own, so each contributes its prior and nothing else, and what
+    reaches the cell is its own rows against a prior worth `PSEUDO[1]` of them.
+    That is an arithmetic identity rather than a tendency, so it is asserted as
+    one: counted three times instead, four failures reach a confidence about
+    the whole model that four observations never bought.
+    """
+
+    measured = _estimator(_many(4, 0.0, deliberation="high"), tmp_path)
+    untried = _estimator([], tmp_path / "empty")
+
+    heard = measured.p_success("implement", STRONG, "high")
+    prior = untried.p_success("implement", STRONG, "high")
+
+    weight = evidence.PSEUDO[1]
+    assert heard.mean == pytest.approx(weight * prior.mean / (weight + 4))

@@ -50,7 +50,7 @@ The workflow's own failures are excluded rather than recorded as a model's failu
 
 ## The judge, and what it costs
 
-Where no checker and no free signal decided anything, one call is bought deliberately. The model is the cheapest point the profile makes reachable, asked of the engine for `kind=analyze`, which is what this task is — never a model named here, so the judge gets cheaper as the catalogue does.
+Where no checker and no free signal decided anything, one call is bought deliberately. The model is asked of the engine for `kind=converse`, which is what this call is — two short excerpts in, a number and a line out, rather than the reading `analyze` is priced for — at high stakes, which is what grading is — nothing checks a grade, and a judge that cannot do the job returns a plausible wrong number. So it is the cheapest point the engine is confident in rather than the cheapest point there is, and never a model named here, so the judge follows the catalogue rather than this page.
 
 It is shown the kind vocabulary, the unit's instruction excerpt and its result excerpt (at most 800 characters each), the tool-call counts, the duration and the token totals. It returns a strict JSON object: the kind, a score from 0 to 100, and one line of reason. **The two excerpts are used to build that call and are written nowhere.** What persists is the number and the one line.
 

@@ -60,6 +60,8 @@ Without `--json`, render the same answer for a person:
 - What the answer rests on, from `basis`. `measured` is this machine's own rows for exactly this kind, model and level. `pooled` is rows for that model at other kinds or levels. `prior` is the model's published capability against this kind's difficulty, with no local row behind it at all. `inherit` is nothing reachable, so the seat already in hand stands.
 - The alternatives it beat, and `note` wherever it is not null.
 
+Two identical questions can come back with different answers, and that is this working rather than failing: what a model is worth is a spread rather than a number, so the answer is drawn from that spread instead of read off its middle — which is how a model with little behind it gets tried at all, and therefore the only way this machine ever learns that something cheaper would have done. Where the draw landed somewhere the averages would not have, `note` says what they would have chosen instead.
+
 ## Setup
 
 Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which providers, which of those providers' models, and then how each provider is paid for on each channel. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that can be fetched — prices, model lists and a provider's own positioning are the machine's job. Show the assembled profile in full before it is written.
