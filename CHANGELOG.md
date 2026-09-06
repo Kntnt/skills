@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- Model Selector chooses the cheapest point its evidence says will finish the work, rather than the lowest priced token appetite divided by the chance of finishing. Measured against the maintainer's own store, that ratio answered one `implement` question four different ways over fifty seeds and priced a model at 0.72 within two per cent of one at 0.90, the only thing keeping them apart being a per-failure constant that had been raised from ten dollars to twenty because at fifteen the answer changed hands. A number tuned until the answer comes out right is the shape of the arithmetic being wrong, and on two flat subscriptions the list value of a token is not what anybody pays anyway. Every call is now ranked the way `--stakes=high` was: the candidates whose chances clear the floor are ordered on price and the cheapest is taken, and where none clears it the likeliest is. Price is second and is never a reason to accept a lower chance of getting the job done. An escalation is asked the same way — the next point likelier to finish, cheapest among those.
+- The answer is the point the evidence backs on nine calls in ten instead of being drawn from the posteriors on every call. The draw was moving the answer on about seven calls in ten, which is a lottery for the seat rather than a bounded experiment; what it was buying — rows about the cheaper points the answer keeps stepping over — is now bought deliberately. About one reversible call in ten explores instead of answering, drawn per call from `--seed` rather than counted, and an exploration moves exactly one dimension of the answer, a coin choosing between the model and the deliberation level, because a row that moved both says nothing about either. It takes the cheapest point one step away whose own draw clears the floor, so a point with few rows behind it still gets tried and one that is confidently worse essentially never is. A new `explored` member names that dimension or is null, the note says what the evidence would have chosen, and `/orchestrate` renders it beside each routed build so a reader of a run can tell an experiment from an answer. High stakes, a lock and an escalation are answered rather than explored, as before.
+
+### Removed
+
+- `failure_overhead_usd` and the arithmetic it existed for. Every kind carried a figure for what one failed attempt costs beside its tokens, and nothing establishes such a figure by measurement — it was there only to keep a division from reading three cheap attempts and one careful one as the same bill, and with nothing dividing there is nothing for it to do.
+
 ## [0.25.0] – 2026-09-06
 
 ### Added
