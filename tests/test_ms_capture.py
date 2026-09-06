@@ -829,10 +829,13 @@ def test_a_moment_capture_no_longer_installs_writes_nothing_at_all(
 
 # What capture's own prose asserted while a draft existed and a start did work.
 # A comment and a docstring are surfaces of the same contract the code is, and
-# either can be the one a change leaves behind (`docs/rules/general.md`).
+# either can be the one a change leaves behind (`docs/rules/general.md`). Each
+# entry is a claim rather than a phrase: that a draft is written, that a start
+# does work, that `capture/` is filled or put back by anything at all.
 RETIRED_CAPTURE_CLAIMS = (
     "reaches a draft",
     "neither opens nor closes a session",
+    "removal recreates",
 )
 
 
@@ -840,9 +843,10 @@ def test_capture_asserts_nothing_a_draft_or_a_working_start_made_true() -> None:
     """No comment or docstring survives stating what #294 took away.
 
     Nothing writes a draft any more, so a shell command is not a string kept
-    out of one; and a session's own start now reaches the answer that does no
+    out of one; a session's own start now reaches the answer that does no
     work, so that answer is not the one reserved for a moment which opens
-    nothing.
+    nothing; and nothing puts `capture/` back once a purge has removed it, so
+    the verb that removes it does not describe itself as recreating it.
     """
 
     text = " ".join((SCRIPTS / "capture.py").read_text(encoding="utf-8").split())
@@ -850,6 +854,45 @@ def test_capture_asserts_nothing_a_draft_or_a_working_start_made_true() -> None:
 
     assert [claim for claim in RETIRED_CAPTURE_CLAIMS if claim in text] == []
     assert "no work" in idle
+
+
+def test_purge_leaves_the_capture_directory_gone(tmp_path: Path) -> None:
+    """The verb that removes `capture/` puts nothing back, and says so.
+
+    A purge is the one moment somebody asks for the directory an earlier
+    design left to be cleared, and capture has not written it since #294. So
+    the directory stays gone afterwards, the Units of the sessions that follow
+    go where every Unit goes now, and the docstring of the verb doing the
+    removing describes that rather than the arrangement it replaced.
+    """
+
+    _grader()
+    data = tmp_path / "data"
+    (data / "capture" / "drafts").mkdir(parents=True)
+    (data / "capture" / "drafts" / "left.json").write_text("{}", encoding="utf-8")
+
+    capture.purge(data)
+    assert not (data / "capture").exists()
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+    )
+    capture.hook(
+        data,
+        "SessionEnd",
+        {
+            "session_id": "after-a-purge",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+        },
+    )
+
+    assert len(capture.pending(data)) == 1
+    assert not (data / "capture").exists()
+
+    docstring = " ".join((capture.purge.__doc__ or "").split())
+    assert "nothing writes it any more" in docstring.lower()
 
 
 def test_the_session_identity_is_opaque(tmp_path: Path) -> None:

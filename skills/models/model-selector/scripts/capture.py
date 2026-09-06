@@ -1191,7 +1191,11 @@ def _hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
 
 
 def _storage(data: Path) -> int:
-    """Return how many bytes the capture store is using right now."""
+    """Return how many bytes the `capture/` directory still holds.
+
+    Nothing writes it any more (#294), so this is the size of what an earlier
+    design left rather than of a store anything is filling.
+    """
 
     if not home(data).exists():
         return 0
@@ -1341,11 +1345,12 @@ def purge(data: Path) -> list[dict[str, Any]]:
     The Harness hooks stay installed, since this verb never touches them and
     there is no on/off flag of this feature's own for a purge to clear any
     more (#223): a session that starts after a purge is captured exactly as
-    one before it was, into a `capture/` this verb's own removal recreates.
+    one before it was, into the pending store this verb has just emptied.
 
-    The retired design's leftovers go with it. They are not this feature's
-    own, but discarding the store is the one moment somebody has said they
-    want the directory cleared of what nothing reads.
+    `capture/` goes whole and stays gone, nothing writes it any more (#294),
+    and the retired design's other leftovers go with it. Those are not this
+    feature's own, but discarding the store is the one moment somebody has
+    said they want the directory cleared of what nothing reads.
     """
 
     report = purge_paths(data)
