@@ -10254,21 +10254,12 @@ def test_a_replayed_verdict_is_the_same_verdict_however_the_clock_moved() -> Non
         "outcome": "pass",
         "grade": 1.0,
         "completed_at": "2026-09-06T10:00:00Z",
-        "measurement": {
-            "model": "claude-opus-5",
-            "grade": 1.0,
-            "at": "2026-09-06T10:00:00Z",
-            "seconds": 610.0,
-        },
+        "measurement": measured,
     }
-    later = {
+    later: dict[str, Any] = {
         **first,
         "completed_at": "2026-09-06T10:00:01Z",
-        "measurement": {
-            **first["measurement"],
-            "at": "2026-09-06T10:00:01Z",
-            "seconds": 611.0,
-        },
+        "measurement": {**measured, "at": "2026-09-06T10:00:01Z", "seconds": 611.0},
     }
 
     assert not engine._differs(first, later)
