@@ -132,6 +132,8 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
 
     data_dir = _data_dir(args.data)
     here = Path(__file__).resolve().parent.parent
+    if args.kinds:
+        return _vocabulary(here)
     cat = catalogue.load(data_dir, here)
     profile = profiles.load(data_dir, cat)
     kinds = evidence.load_kinds(here)
@@ -168,6 +170,25 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     best = ranked[0]
 
     return _report(best, ranked[1:], args, profile, cat, harness, explored, notes)
+
+
+def _vocabulary(here: Path) -> dict[str, Any]:
+    """Return the closed vocabulary a caller classifies its own work into.
+
+    The eight kinds and the sentence that tells each from the others, which is
+    what this Skill's own `## Arguments` gives a person. A machine caller reads
+    no Skill body and may not reach into this Skill's data, so the list it has
+    to classify against comes back through the entry point it already calls
+    (issue #292). The vocabulary is the constant rather than the file: a kind
+    the shipped data has lost its note for is still a kind, and is still
+    offered.
+    """
+
+    kinds = evidence.load_kinds(here)
+    return {
+        "ok": True,
+        "kinds": [{"kind": kind, "note": kinds.notes.get(kind, "")} for kind in KINDS],
+    }
 
 
 def _explorable(args: argparse.Namespace) -> bool:
@@ -819,6 +840,7 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
         description="Choose a model for one piece of delegated work.",
     )
     parser.add_argument("--kind", choices=KINDS, default="implement")
+    parser.add_argument("--kinds", action="store_true")
     parser.add_argument("--scope", choices=SCOPES, default="callable")
     parser.add_argument("--harness")
     parser.add_argument("--seat")

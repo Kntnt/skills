@@ -49,6 +49,12 @@ Run:
 
 The work itself is never passed in. Classifying it is your job and `--kind` is the whole of what the arithmetic reads, so nothing here writes a brief to disk or sends one anywhere.
 
+A caller that has to classify work and cannot read this page asks for the vocabulary itself:
+
+    uv run "$HERE/scripts/selection.py" --kinds
+
+That prints the eight kinds and the one sentence that tells each from the others, and nothing besides. It reads no profile, no catalogue and no measurement, so it answers the same on every machine — it is there for the machine caller that has to classify the work it is about to delegate and has no business reading this Skill's data to find out what it may classify it as.
+
 `--harness` is the Harness you are running in and `--seat` is your own model and its deliberation level. Only you know those two, and `limited` scope and the inheritance floor are both measured against them. Add `--stakes=high` where the work is irreversible or has no checker behind it, and leave it off otherwise: high stakes is what says this call is not one to experiment on, nothing standing behind it to catch a cheaper point that turned out not to do the job. Add `--repo=<path>` where a Bridge command would need a working directory. Where the user named a model or a level — in `<work>`, in the Contextual Instruction, or in whatever sent you here — pass it as `--model=<token>` or `--deliberation=<level>`: it is honoured, and where the point as stated cannot be launched the answer says exactly what differs.
 
 With `--json`, emit the response verbatim and add nothing beside it. A machine is reading it, and every word of prose there is a word that machine has to parse past.

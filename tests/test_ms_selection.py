@@ -239,6 +239,42 @@ def _over_seeds(
     return [_answer(capsys, *flags, f"--seed={seed}") for seed in range(SEEDS)]
 
 
+# The eight kinds, stated here rather than imported: a caller outside this
+# Skill classifies work into exactly this vocabulary, and a test that read it
+# off the module under test would pass on both halves being wrong together.
+VOCABULARY: tuple[str, ...] = (
+    "mechanical",
+    "implement",
+    "design",
+    "debug",
+    "review",
+    "analyze",
+    "prose",
+    "converse",
+)
+
+
+def test_the_vocabulary_is_printed_for_a_caller_that_has_to_classify_work(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A machine caller cannot read this Skill's prose, so it asks for the list.
+
+    Orchestrate classifies every ticket it routes and may not reach into this
+    Skill's data directory to learn what it may classify it as, so the eight
+    kinds and the sentence that tells them apart come back through the same
+    entry point the answer does (issue #292).
+    """
+
+    answered = _answer(capsys, "--kinds")
+
+    assert answered["ok"] is True
+    assert [entry["kind"] for entry in answered["kinds"]] == list(VOCABULARY)
+    assert all(entry["note"].strip() for entry in answered["kinds"])
+    told = {entry["kind"]: entry["note"] for entry in answered["kinds"]}
+    assert "already decided" in told["mechanical"]
+    assert "for a person to read" in told["prose"]
+
+
 def test_an_empty_data_directory_still_answers_and_exits_zero(tmp_path: Path) -> None:
     """This runs inside somebody else's turn, so there is no way to say stop."""
 

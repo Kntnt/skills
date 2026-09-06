@@ -3112,6 +3112,75 @@ def test_every_execution_role_is_routed_by_the_name_it_is_dispatched_under() -> 
     )
 
 
+def test_the_session_classifies_every_ticket_before_it_routes_anything() -> None:
+    """Only the session has read the ticket, so only the session can classify it.
+
+    The eight kinds predict how much intelligence a job needs, and a prose
+    ticket built by a cheap seat is the case that has been watched fail. The
+    engine reads no body and may not guess, so the step that reads every body
+    is the step that says what kind of work each one is, from the vocabulary
+    the plan hands it (issue #292).
+    """
+
+    routing = _step(3)
+
+    assert "classify" in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 tells the session to classify each"
+        f" ticket into one kind of work before it routes anything (issue #292)."
+    )
+    assert "`kinds`" in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 says the vocabulary is the plan's own"
+        f" `kinds`, this Skill owning no kind and the session being unable to"
+        f" read model-selector's data for itself (issue #292)."
+    )
+    assert "build-<number>:<kind>" in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 writes the request with the kind on it,"
+        f" a building request naming none being refused (issue #292)."
+    )
+    assert "reads off that same name both the kind" not in routing, (
+        f"{SKILL / 'SKILL.md'}: step 3 no longer says the engine reads the kind"
+        f" of work off the request name it wrote itself (issue #292)."
+    )
+
+
+def test_a_dry_route_names_the_kind_a_real_one_would() -> None:
+    """The preflight is read for what the run would do, classification and all."""
+
+    preflight = _step(2)
+
+    assert "build-<number>:<kind>" in preflight, (
+        f"{SKILL / 'SKILL.md'}: step 2's read-only route carries the same"
+        f" classified request name step 3's route carries (issue #292)."
+    )
+
+
+def test_a_wave_fix_is_mechanical_and_carries_no_kind() -> None:
+    """The one building role whose finding already names the change to make."""
+
+    fixing = _step(11)
+
+    assert "`mechanical`" in fixing, (
+        f"{SKILL / 'SKILL.md'}: step 11 says a wave fix is mechanical by"
+        f" definition, its finding already naming the change (issue #292)."
+    )
+    assert "carries no kind" in fixing, (
+        f"{SKILL / 'SKILL.md'}: step 11 says the wave-fix request carries no"
+        f" kind, and the engine refuses one that does (issue #292)."
+    )
+
+
+def test_the_report_renders_the_kind_beside_every_routed_decision() -> None:
+    """A reader of the run sees what each build was routed as work of."""
+
+    reporting = _step(12)
+
+    assert "the kind of work it was classified as" in reporting, (
+        f"{SKILL / 'SKILL.md'}: step 12 renders each decision's kind beside the"
+        f" model and the level it chose, so a reader can tell a prose build"
+        f" from a mechanical one (issue #292)."
+    )
+
+
 def test_a_dry_run_preflights_routing_and_changes_nothing() -> None:
     """A dry run is read for what a run would do, and a run it started is not that."""
 

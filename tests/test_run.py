@@ -146,6 +146,12 @@ shift
 case "$1" in
   *selection.py)
     echo "$@" >> "$MS_LOG"
+    for held in "$@"; do
+      if [ "$held" = "--kinds" ]; then
+        cat "$MS_KINDS"
+        exit 0
+      fi
+    done
     turn=$(cat "$MS_TURN" 2>/dev/null || echo 0)
     turn=$((turn + 1))
     printf '%s\n' "$turn" > "$MS_TURN"
@@ -205,6 +211,40 @@ _MS_APPEND = (
 )
 
 
+# The eight Work Kinds, stated here as the contract rather than imported: the
+# session classifies every ticket into exactly one of them, and a test that
+# read the list off the thing under test would pass on both halves being wrong
+# together.
+KINDS: tuple[str, ...] = (
+    "mechanical",
+    "implement",
+    "design",
+    "debug",
+    "review",
+    "analyze",
+    "prose",
+    "converse",
+)
+
+# What a building request is classified as where a test is about something
+# else. A request that named no kind is refused, so every route the suite makes
+# names one, exactly as the step that writes the request does.
+CLASSIFIED: str = "implement"
+
+
+def _classified(request_id: str) -> str:
+    """Return *request_id* as the session writes it, kind and all.
+
+    A building request carries the kind of work its ticket is; a wave fix is
+    `mechanical` by definition and carries none. A test that means to say
+    something about either writes the name itself.
+    """
+
+    if request_id.startswith("wave-fix-") or ":" in request_id:
+        return request_id
+    return f"{request_id}:{CLASSIFIED}"
+
+
 @pytest.fixture
 def isolated_attempt_environment(tmp_path: Path) -> dict[str, str]:
     """Keep every home-like surface the lifecycle subprocess reads inside the test.
@@ -244,6 +284,13 @@ def _selector(tmp_path: Path) -> dict[str, str]:
     standing.write_text(json.dumps(select_answer()), encoding="utf-8")
     report = directory / "report.json"
     report.write_text("", encoding="utf-8")
+    vocabulary = directory / "kinds.json"
+    vocabulary.write_text(
+        json.dumps(
+            {"ok": True, "kinds": [{"kind": kind, "note": kind} for kind in KINDS]}
+        ),
+        encoding="utf-8",
+    )
 
     env = fake_binary_on_path(
         tmp_path, "uv", _UV_SCRIPT.replace("PYTHON_BIN", sys.executable)
@@ -251,6 +298,7 @@ def _selector(tmp_path: Path) -> dict[str, str]:
     return env | {
         "MS_QUEUE": str(queue),
         "MS_ANSWER": str(standing),
+        "MS_KINDS": str(vocabulary),
         "MS_REPORT": str(report),
         "MS_FILED": str(directory / "filed.jsonl"),
         "MS_SEEN": str(directory / "held.txt"),
@@ -290,12 +338,24 @@ def _decided(result: subprocess.CompletedProcess[str]) -> dict[str, Any]:
     return answered
 
 
-def _select_calls(env: dict[str, str]) -> list[str]:
-    """Return what model-selector was asked, one call per line."""
+def _selector_calls(env: dict[str, str]) -> list[str]:
+    """Return every call made to model-selector's answering entry point."""
 
     log = Path(env["MS_LOG"])
     lines = log.read_text(encoding="utf-8").splitlines() if log.exists() else []
     return [line for line in lines if "selection.py" in line]
+
+
+def _select_calls(env: dict[str, str]) -> list[str]:
+    """Return what point model-selector was asked for, one call per line."""
+
+    return [call for call in _selector_calls(env) if "--kinds" not in call]
+
+
+def _kinds_calls(env: dict[str, str]) -> list[str]:
+    """Return every call that asked model-selector for the Work Kinds."""
+
+    return [call for call in _selector_calls(env) if "--kinds" in call]
 
 
 def _filed(env: dict[str, str]) -> list[dict[str, Any]]:
@@ -577,18 +637,22 @@ def _route(
     fast: bool = False,
     seat: str | None = "the-strongest@high",
     harness: str | None = "claude-code",
+    classify: bool = True,
 ) -> subprocess.CompletedProcess[str]:
     """Route *requests* through the engine, as the preflight does.
 
     *answers* is what model-selector comes back with, one per role in order;
-    where a test says nothing, every role gets the standing answer.
+    where a test says nothing, every role gets the standing answer. Every
+    building request is classified on the way out, as the step that writes it
+    classifies it; a test about the classification itself passes `classify`
+    false and writes each name as it means it.
     """
 
     if answers is not None:
         _queue(env, answers)
     args = ["route"]
     for request_id in requests:
-        args += ["--request", request_id]
+        args += ["--request", _classified(request_id) if classify else request_id]
     if dry_run:
         args.append("--dry-run")
     if model is not None:
@@ -1085,7 +1149,7 @@ def test_every_verb_accepts_yes(tmp_path: Path) -> None:
 
     for args in (
         ("plan", "--yes"),
-        ("route", "--request", "build-9", "--yes"),
+        ("route", "--request", "build-9:implement", "--yes"),
         ("claim", "--ticket", "9", "--yes"),
         ("park", "--ticket", "9", "--yes"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head, "--yes"),
@@ -3071,6 +3135,151 @@ def test_route_decides_every_execution_role_the_workflow_dispatches(
         "implement",
         "mechanical",
     ]
+
+
+def test_a_building_request_carries_the_kind_of_work_its_ticket_is(
+    tmp_path: Path,
+) -> None:
+    """The session classifies the ticket; the engine asks a point for that.
+
+    Eight kinds exist because they predict how much intelligence a job needs,
+    and a ticket that rewrites a Skill's prose is not the ticket that fixes a
+    failing test. The engine cannot read a body and is forbidden to guess, so
+    the classification arrives on the request name and is recorded beside the
+    decision it was made under (issue #292).
+    """
+
+    repo, scratch, env = _routed(tmp_path, requests=["build-9:prose"])
+
+    result = _route(repo, scratch, env, ["amend-9-1:design"], classify=False)
+
+    assert result.returncode == 0, result.stderr
+    decided = json.loads(result.stdout)["decisions"][0]
+    assert decided["kind"] == "design"
+    assert decided["stage"] == "amend"
+    assert decided["request_id"] == "amend-9-1"
+    assert [call.split("--kind=")[1].split()[0] for call in _select_calls(env)] == [
+        "prose",
+        "design",
+    ]
+
+
+def test_every_execution_role_takes_the_kind_it_was_given(tmp_path: Path) -> None:
+    """Four building roles carry a kind each, and the wave fix carries none."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    result = _route(
+        repo,
+        scratch,
+        env,
+        [
+            "amend-9-1:prose",
+            "repair-9:debug",
+            "rebuild-9:design",
+            "wave-fix-2",
+        ],
+        classify=False,
+    )
+
+    assert result.returncode == 0, result.stderr
+    decided = json.loads(result.stdout)["decisions"]
+    assert [record["role"] for record in decided] == [
+        "amend",
+        "repair",
+        "rebuild",
+        "wave-fix",
+    ]
+    assert [record["kind"] for record in decided] == [
+        "prose",
+        "debug",
+        "design",
+        "mechanical",
+    ]
+    assert [call.split("--kind=")[1].split()[0] for call in _select_calls(env)] == [
+        "implement",
+        "prose",
+        "debug",
+        "design",
+        "mechanical",
+    ]
+
+
+def test_a_building_request_naming_no_kind_is_refused(tmp_path: Path) -> None:
+    """The engine cannot classify and may not guess, so it says so and stops."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    for request_id, form in (
+        ("build-9", "<name>:<kind>"),
+        ("amend-9-1", "<name>:<kind>"),
+        ("build-9:nonsense", "<name>:<kind>"),
+        ("wave-fix-2:prose", "wave-fix-<wave>"),
+    ):
+        refused = _route(repo, scratch, env, [request_id], classify=False)
+
+        assert refused.returncode == 1, f"{request_id}: {refused.stdout}"
+        assert form in refused.stderr, request_id
+
+
+def test_an_unclassified_request_is_refused_before_a_point_is_asked_for(
+    tmp_path: Path,
+) -> None:
+    """A request nothing can read is refused rather than routed on a guess."""
+
+    repo, scratch, env = _routed(tmp_path)
+    before = len(_select_calls(env))
+
+    refused = _route(repo, scratch, env, ["build-9:prose", "amend-9-1"], classify=False)
+
+    assert refused.returncode == 1
+    assert len(_select_calls(env)) == before
+
+
+def test_the_plan_carries_the_vocabulary_a_ticket_is_classified_into(
+    tmp_path: Path,
+) -> None:
+    """The session cannot read model-selector's data, so the plan carries it.
+
+    Classifying is the session's job and the vocabulary is model-selector's,
+    so the engine — which already resolves where that Skill lives — asks it
+    for the list and hands it on (issue #292).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+
+    planned = _engine(repo, "plan", env=env)
+
+    assert planned.returncode == 0, planned.stderr
+    offered = json.loads(planned.stdout)["kinds"]
+    assert [entry["kind"] for entry in offered] == list(KINDS)
+    assert all(entry["note"] for entry in offered)
+    assert _kinds_calls(env)
+
+
+def test_a_dry_route_carries_a_kind_exactly_as_a_real_one_does(
+    tmp_path: Path,
+) -> None:
+    """The preflight names the roles a run would take, classification and all."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    planned = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 2, planned.stderr
+
+    preview = _route(
+        repo, scratch, env, ["build-9:analyze"], dry_run=True, classify=False
+    )
+
+    assert preview.returncode == 0, preview.stderr
+    assert json.loads(preview.stdout)["decisions"][0]["kind"] == "analyze"
+    assert not (scratch / STATE_HOME / ROUTING_FILE).exists()
 
 
 def test_route_accepts_one_escalated_wave_fix_and_refuses_a_second(
@@ -5247,7 +5456,7 @@ def test_every_verb_accepts_a_state_directory(tmp_path: Path) -> None:
 
     for args in (
         ("plan",),
-        ("route", "--request", "build-9"),
+        ("route", "--request", "build-9:implement"),
         ("claim", "--ticket", "9"),
         ("park", "--ticket", "9"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head),
@@ -9321,6 +9530,40 @@ def test_only_an_externally_judged_attempt_becomes_a_measurement(
     filed = _filed(env)
     assert [row["grade"] for row in filed] == [1.0]
     assert [row["graded_by"] for row in filed] == ["checker"]
+
+
+def test_a_measurement_names_the_kind_the_ticket_was_classified_as(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """Evidence pooled under one kind cannot tell prose from code.
+
+    A measurement is keyed by the kind of work, so a ticket that rewrote a
+    Skill's prose has to reach the store as `prose` — otherwise the selection
+    made from that evidence cannot tell the case the maintainer has watched
+    fail from the code the same seat handles well (issue #292).
+    """
+
+    repo, scratch, env = _routed(tmp_path, requests=["build-9:prose"])
+    env |= isolated_attempt_environment
+
+    assert _attempt_started(repo, scratch, env).returncode == 0
+    finished = _attempt_finished(repo, scratch, env)
+
+    assert finished.returncode == 0, finished.stderr
+    assert [row["kind"] for row in _filed(env)] == ["prose"]
+
+
+def test_the_engine_holds_no_table_of_kinds_of_its_own() -> None:
+    """A role no longer says what the work is; only the session's reading does.
+
+    Every building role mapped to `implement` and every wave fix to
+    `mechanical`, which made a prose ticket and a schema decision the same
+    work as a test fix. The table is gone rather than corrected, the request
+    name now carrying what the session classified (issue #292).
+    """
+
+    assert not hasattr(_run(), "OBSERVED_KINDS")
 
 
 def test_attempt_lifecycle_persists_instants_and_imports_the_verdict(

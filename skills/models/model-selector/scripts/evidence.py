@@ -234,13 +234,20 @@ class Estimate:
 
 @dataclass(frozen=True)
 class KindPriors:
-    """What each kind demands of a model, and what it costs to attempt."""
+    """What each kind demands of a model, and what it costs to attempt.
+
+    `notes` is the one sentence that tells each kind from the other seven. It
+    buys the arithmetic nothing and is carried anyway, because whoever
+    classifies the work — a person reading this Skill, or a caller that cannot
+    read it at all — needs the vocabulary and its distinctions from one place.
+    """
 
     difficulties: Mapping[str, float]
     token_priors: Mapping[str, Mapping[str, float]]
     deliberation: Mapping[str, Mapping[str, float]]
     long_contexts: Mapping[str, bool]
     elapsed: Mapping[str, float]
+    notes: Mapping[str, str]
     problem: str | None
 
     def seconds(self, kind: str, deliberation: str | None = None) -> float:
@@ -330,16 +337,19 @@ def load_kinds(here: Path) -> KindPriors:
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError) as problem:
-        return KindPriors({}, {}, {}, {}, {}, f"{path} could not be read: {problem}")
+        return KindPriors(
+            {}, {}, {}, {}, {}, {}, f"{path} could not be read: {problem}"
+        )
 
     entries = raw.get("kinds") if isinstance(raw, dict) else None
     if not isinstance(entries, dict):
-        return KindPriors({}, {}, {}, {}, {}, f"{path} carries no kinds object")
+        return KindPriors({}, {}, {}, {}, {}, {}, f"{path} carries no kinds object")
 
     difficulties: dict[str, float] = {}
     token_priors: dict[str, dict[str, float]] = {}
     long_contexts: dict[str, bool] = {}
     elapsed: dict[str, float] = {}
+    notes: dict[str, str] = {}
     for kind, entry in entries.items():
         if not isinstance(kind, str) or not isinstance(entry, dict):
             continue
@@ -351,6 +361,9 @@ def load_kinds(here: Path) -> KindPriors:
         taken = _number(entry.get("seconds"))
         if taken is not None and taken > 0.0:
             elapsed[kind] = taken
+        told = entry.get("note")
+        if isinstance(told, str) and told.strip():
+            notes[kind] = told.strip()
 
     return KindPriors(
         difficulties,
@@ -358,6 +371,7 @@ def load_kinds(here: Path) -> KindPriors:
         _deliberation_table(raw.get("deliberation")),
         long_contexts,
         elapsed,
+        notes,
         None,
     )
 

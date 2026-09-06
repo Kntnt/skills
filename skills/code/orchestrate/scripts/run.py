@@ -17,7 +17,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Sequence
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field, replace
 from datetime import UTC, datetime
@@ -292,6 +292,13 @@ ROUTE_REQUEST = re.compile(
     r"|wave-fix-(?P<wave>\d+)(?P<escalated>-escalated)?)\Z"
 )
 
+# What a wave fix is as a Work Kind. It is the one building role whose kind
+# nobody has to classify, because the finding it is dispatched with already
+# names the change to make; every other building request carries the kind the
+# session read off the ticket, there being nothing in a request name for the
+# engine to infer one from and nothing it may guess (issue #292).
+WAVE_FIX_KIND = "mechanical"
+
 # What that further decision is named: the wave's own fix request with this
 # suffix. There is exactly one such name per wave and no name at all for a
 # second, and the engine refuses a second under it, the escalation being one
@@ -357,19 +364,6 @@ OBSERVED_STRATA: dict[str, str] = {
 # shared with every other routed caller, so an Orchestrate initial build has to
 # be nameable apart from anybody else's work of the same kind.
 OBSERVED_COHORT_PREFIX = "orchestrate/"
-
-# What each building role is as a Work Kind — the closed vocabulary a
-# measurement is keyed by, chosen for one property: how much intelligence the
-# job needs. Building to a written ticket is `implement` however many times the
-# run attempts it, and a wave fix is the one role whose finding already names
-# the change, which is `mechanical` (ADR-0182).
-OBSERVED_KINDS: dict[str, str] = {
-    "build": "implement",
-    "amend": "implement",
-    "repair": "implement",
-    "rebuild": "implement",
-    "wave-fix": "mechanical",
-}
 
 # What each run outcome grades the attempt at, or None where it grades nothing.
 # A grade is a number rather than a verdict, so an attempt that did the work
@@ -1084,6 +1078,12 @@ class RouteRecord:
     the label the decision was made under, computed once here and recorded with
     it, so the measurement a later verdict files names the work the request
     named rather than one reconstructed from an answer that never echoed it.
+
+    `kind` is the one thing the request name states that the engine could not
+    have worked out: what kind of work this ticket is, classified by the
+    session that read its body and thread. It sits beside the decision rather
+    than inside it, `decision` being model-selector's own answer and kept
+    whole (issue #292).
     """
 
     request_id: str
@@ -1092,6 +1092,7 @@ class RouteRecord:
     decision: dict[str, Any]
     inherited: bool
     stage: str
+    kind: str
     workload_cohort: str
     workload_tags: list[str]
 
@@ -1518,6 +1519,7 @@ def read_routing(path: Path | None) -> tuple[Routing | None, str | None]:
                     decision=cast(dict[str, Any], record["decision"]),
                     inherited=bool(record["inherited"]),
                     stage=str(record["stage"]),
+                    kind=str(record["kind"]),
                     workload_cohort=str(record["workload_cohort"]),
                     workload_tags=[str(tag) for tag in record["workload_tags"]],
                 )
@@ -1710,6 +1712,12 @@ class Plan:
     `run_identity` is the opaque name this run is known by, minted by the first
     plan that may start and `null` on a dry one.
 
+    `kinds` is the closed vocabulary of Work Kinds, exactly as model-selector
+    publishes it. Classifying each ticket into one of them is the session's own
+    job — it is the only party that has read the bodies and threads — and it
+    may not read that Skill's data itself, so the plan that hands it the
+    tickets hands it what they may be classified as (issue #292).
+
     `model` and `deliberation` are the field-level locks this invocation puts
     on every building role, `fast` is the objective it puts on the whole run —
     the fastest configuration that holds quality rather than the cheapest —
@@ -1736,6 +1744,7 @@ class Plan:
     state: str | None
     routing: dict[str, Any] | None
     routing_reason: str | None
+    kinds: list[dict[str, Any]]
     branch: str
     default_branch: str | None
     label: str
@@ -2948,6 +2957,7 @@ def build_plan(
         state=None,
         routing=routing_details(routing),
         routing_reason=routing_reason,
+        kinds=selector_kinds(),
         branch=branch,
         default_branch=default,
         label=READY_LABEL,
@@ -3229,10 +3239,55 @@ def read_request(request_id: str) -> tuple[str, int | None]:
     return "wave-fix", None
 
 
+def read_route_request(
+    request_id: str, kinds: Sequence[str]
+) -> tuple[str, str, int | None, str]:
+    """Read one route request into the name, role, ticket and kind it states.
+
+    A building request is written `<name>:<kind>`, the kind being the session's
+    own classification of the ticket: the engine has neither the body nor the
+    thread in front of it, so it cannot classify and may not guess, and a
+    building request that names no kind — or one outside the vocabulary
+    model-selector publishes — is refused with the form spelled out. A wave fix
+    is the exception at both ends: it is `mechanical` by definition, so it
+    takes no kind and is refused if given one (issue #292).
+    """
+
+    name, _, kind = request_id.partition(":")
+    role, ticket = read_request(name)
+
+    if role == "wave-fix":
+        if kind:
+            raise RunError(
+                f"{request_id} names a kind, and a wave fix is {WAVE_FIX_KIND} "
+                "by definition: write it as wave-fix-<wave>"
+            )
+        return name, role, ticket, WAVE_FIX_KIND
+
+    if not kind:
+        raise RunError(
+            f"{request_id} names no kind of work, and the engine reads no "
+            "ticket: a building request is <name>:<kind>, a wave fix is "
+            f"wave-fix-<wave>, and a kind is one of {', '.join(kinds)}"
+        )
+    if kind not in kinds:
+        raise RunError(
+            f"{request_id} names {kind}, which is no kind of work this run "
+            "may ask a point for: a building request is <name>:<kind>, a wave "
+            f"fix is wave-fix-<wave>, and a kind is one of {', '.join(kinds)}"
+        )
+
+    return name, role, ticket, kind
+
+
 def route_record(
-    request_id: str, role: str, ticket: int | None, decision: dict[str, Any]
+    request_id: str,
+    role: str,
+    ticket: int | None,
+    kind: str,
+    decision: dict[str, Any],
 ) -> RouteRecord:
-    """Attach one answer to the role and the ticket its request name states."""
+    """Attach one answer to the role, the ticket and the kind its name states."""
 
     launch = cast(dict[str, Any], decision.get("launch") or {})
     return RouteRecord(
@@ -3241,6 +3296,7 @@ def route_record(
         ticket,
         decision,
         launch.get("how") == LAUNCH_INHERIT,
+        kind=kind,
         **workload_identity(role),
     )
 
@@ -3289,6 +3345,50 @@ def selector_home() -> Path:
         raise RunError(
             f"model-selector is run from the home directory, and there is none: {exc}"
         ) from exc
+
+
+def selector_kinds() -> list[dict[str, Any]]:
+    """Return the closed vocabulary of Work Kinds, as model-selector states it.
+
+    The kinds are that Skill's own and the classification is the session's, so
+    the engine — which resolves where that Skill lives and nothing else about
+    it — asks for the list and hands it on: the plan carries it for the session
+    to classify from, and a route validates the kind it is given against it. It
+    is the same interface the answer comes through and no reach into that
+    Skill's private data (issue #292).
+    """
+
+    # The repository is nowhere in this call: the vocabulary is the same
+    # wherever it is asked from, so it is made from the one directory no verb
+    # of this run can take away, exactly as a point is asked for.
+    script = model_selector_script(SELECT_SCRIPT)
+    answered = subprocess.run(
+        ["uv", "run", str(script), "--kinds"],
+        cwd=selector_home(),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if answered.returncode != 0:
+        raise RunError(
+            "model-selector could not be asked which kinds of work there are: "
+            f"{answered.stderr.strip() or answered.stdout.strip()}"
+        )
+
+    try:
+        published = json.loads(answered.stdout)
+    except ValueError as exc:
+        raise RunError(
+            f"model-selector named no kinds of work this run can read: {exc}"
+        ) from exc
+    kinds = published.get("kinds") if isinstance(published, dict) else None
+    if not isinstance(kinds, list) or not kinds:
+        raise RunError("model-selector named no kinds of work this run can read")
+
+    return [
+        {"kind": str(entry["kind"]), "note": str(entry.get("note") or "")}
+        for entry in cast(list[dict[str, Any]], kinds)
+    ]
 
 
 def select_point(
@@ -3540,7 +3640,8 @@ def cmd_route(
     if not requests:
         return fail("route decides named execution roles: pass --request=<name>")
     try:
-        named = [(request_id, *read_request(request_id)) for request_id in requests]
+        vocabulary = [str(entry["kind"]) for entry in selector_kinds()]
+        named = [read_route_request(request_id, vocabulary) for request_id in requests]
     except RunError as exc:
         return fail(str(exc))
 
@@ -3562,7 +3663,9 @@ def cmd_route(
         is not None
     ):
         return fail(relocked)
-    if (escalated := escalation_refusal(routing, requests)) is not None:
+    if (
+        escalated := escalation_refusal(routing, [name for name, *_ in named])
+    ) is not None:
         return fail(escalated)
 
     # A run that has recorded nothing — or whose account came back unreadable —
@@ -3583,11 +3686,11 @@ def cmd_route(
     # Ask for one point per role, and hold every answer to the locks the
     # developer typed before any of them reaches the account.
     records: list[RouteRecord] = []
-    for request_id, role, ticket in named:
+    for request_id, role, ticket, kind in named:
         try:
             answered = select_point(
                 cwd,
-                kind=OBSERVED_KINDS[role],
+                kind=kind,
                 seat=routing.seat,
                 harness=routing.harness,
                 model=model,
@@ -3599,7 +3702,7 @@ def cmd_route(
             return fail(str(exc))
         if (unhonoured := locks_answered(model, deliberation, answered)) is not None:
             return fail(unhonoured)
-        records.append(route_record(request_id, role, ticket, answered))
+        records.append(route_record(request_id, role, ticket, kind, answered))
 
     # Extend the account in memory before the persistence seam, and record only
     # a real route: a dry one reports the same decisions and writes nothing.
@@ -5282,7 +5385,7 @@ def observed_measurement(
     return {
         "attempt_id": str(decision.get("attempt_id") or record.request_id),
         "at": completed_at,
-        "kind": OBSERVED_KINDS[record.role],
+        "kind": record.kind,
         "label": record.workload_cohort,
         "model": served,
         "deliberation": decision.get("deliberation"),
