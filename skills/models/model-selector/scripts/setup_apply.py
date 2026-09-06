@@ -194,22 +194,34 @@ def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
     )
 
 
-def apply(path: Path, data_dir: Path, agents: Path) -> dict[str, Any]:
-    """Validate one supplied profile, write it, and sync the definitions."""
+def apply(path: Path | None, data_dir: Path, agents: Path) -> dict[str, Any]:
+    """Write one supplied profile and sync the definitions, or only sync.
+
+    Without a profile this is the second half alone, which is what `update`
+    runs: the generated definitions say of themselves that `update` rewrites
+    this directory, and a catalogue that has just gained or lost a model has
+    changed which of them ought to exist. The profile in force is whatever is
+    on disk, including the fallback where there is none — a machine nobody has
+    interviewed still needs the subagents an answer will name.
+    """
 
     here = Path(__file__).resolve().parent.parent
     cat = catalogue.load(data_dir, here)
 
-    try:
-        raw = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError) as problem:
-        return {"ok": False, "problems": [f"{path} could not be read: {problem}"]}
+    if path is None:
+        profile = profiles.load(data_dir, cat)
+    else:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as problem:
+            return {"ok": False, "problems": [f"{path} could not be read: {problem}"]}
 
-    profile, problems = validate(raw, cat)
-    if profile is None:
-        return {"ok": False, "problems": problems}
+        validated, problems = validate(raw, cat)
+        if validated is None:
+            return {"ok": False, "problems": problems}
+        profiles.write(data_dir, validated)
+        profile = validated
 
-    profiles.write(data_dir, profile)
     synced = launch.sync_definitions(agents, launch.definitions(profile, cat))
 
     return {
@@ -265,7 +277,7 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     )
     parser.add_argument("--data")
     parser.add_argument("--agents")
-    parser.add_argument("path")
+    parser.add_argument("path", nargs="?")
     return parser.parse_args(argv)
 
 
@@ -275,7 +287,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = _parse(argv)
     try:
         report = apply(
-            Path(args.path).expanduser(),
+            Path(args.path).expanduser() if args.path else None,
             _data_dir(args.data),
             _agents_directory(args.agents),
         )

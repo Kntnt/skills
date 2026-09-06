@@ -10229,3 +10229,50 @@ def test_an_escalation_names_the_point_the_work_last_failed_on(
     assert "--after=" not in called[0]
     assert "--after=the-cheapest@low" in called[1]
     assert "--after=the-cheapest@low" in called[2]
+
+
+def test_a_replayed_verdict_is_the_same_verdict_however_the_clock_moved() -> None:
+    """Two entries of one verdict differ only in their instants, and agree.
+
+    A replay a second later carries a later `completed_at` and a longer
+    elapsed time inside the measurement it files. Neither says anything about
+    the attempt, so neither may make the second entry a contradiction of the
+    first — and the difference only appears when the machine is busy enough
+    for the second to turn over between the two calls, which is exactly when
+    an unattended run cannot afford a spurious conflict.
+    """
+
+    engine = _run()
+    measured: dict[str, Any] = {
+        "model": "claude-opus-5",
+        "grade": 1.0,
+        "at": "2026-09-06T10:00:00Z",
+        "seconds": 610.0,
+    }
+    first: dict[str, Any] = {
+        "attempt_id": "build-9",
+        "outcome": "pass",
+        "grade": 1.0,
+        "completed_at": "2026-09-06T10:00:00Z",
+        "measurement": {
+            "model": "claude-opus-5",
+            "grade": 1.0,
+            "at": "2026-09-06T10:00:00Z",
+            "seconds": 610.0,
+        },
+    }
+    later = {
+        **first,
+        "completed_at": "2026-09-06T10:00:01Z",
+        "measurement": {
+            **first["measurement"],
+            "at": "2026-09-06T10:00:01Z",
+            "seconds": 611.0,
+        },
+    }
+
+    assert not engine._differs(first, later)
+
+    # What the verdict actually says still separates two entries of it.
+    contradicting = {**later, "outcome": "fail", "grade": 0.0}
+    assert engine._differs(first, contradicting)

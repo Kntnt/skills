@@ -98,6 +98,12 @@ Fetch what can be fetched now, in one bounded pass:
 
     uv run "$HERE/scripts/refresh.py" refresh --data=<directory> [--force]
 
+Then bring the generated subagent definitions into line with whatever the pass changed, because a catalogue that gained or lost a model has changed which of them ought to exist:
+
+    uv run "$HERE/scripts/setup_apply.py" [--data=<directory>]
+
+With no profile operand it syncs and writes no profile. Report the definitions written and removed, and where it says the directory had to be created, pass that on as `## Setup` does.
+
 Pass `--force` only where the user wrote it; without it the pass checks what the shipped cadence has made due. Render what it reports: every source checked, every fact that changed, and every price it discarded for arriving without a source it could attribute. A pass in which nothing changed is a successful pass. A model it discovered that the profile does not enable is written to the catalogue and left disabled, and `status` is where the user is told they may want to adopt it.
 
 ## Reset

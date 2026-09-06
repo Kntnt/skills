@@ -5813,13 +5813,30 @@ def _differs(standing: dict[str, Any], offered: dict[str, Any]) -> bool:
 
     The instant the outcome was recorded at is not one of those facts: the same
     verdict entered twice is the same verdict, and only what it says about the
-    attempt decides whether the second entry conflicts with the first.
+    attempt decides whether the second entry conflicts with the first. That
+    holds for the measurement the observation carries as much as for the
+    observation itself, which is why both instants inside it are dropped too —
+    a replay a second later is the same verdict, and a comparison that read the
+    clock would call it a contradiction whenever the machine was busy enough
+    for the second to turn over between the two.
     """
 
+    return _timeless(standing) != _timeless(offered)
+
+
+def _timeless(attempt: dict[str, Any]) -> dict[str, Any]:
+    """Return one observation without anything a clock decided."""
+
     ignored = {"completed_at", "import"}
-    return {key: value for key, value in standing.items() if key not in ignored} != {
-        key: value for key, value in offered.items() if key not in ignored
-    }
+    kept = {key: value for key, value in attempt.items() if key not in ignored}
+    measurement = kept.get("measurement")
+    if isinstance(measurement, dict):
+        kept["measurement"] = {
+            key: value
+            for key, value in measurement.items()
+            if key not in {"at", "seconds"}
+        }
+    return kept
 
 
 def observed_details(
