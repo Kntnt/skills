@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from support.model_routing import attempt_line
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL = REPO_ROOT / "skills" / "code" / "orchestrate"
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
@@ -54,6 +56,18 @@ ALL_BRIEFS = VERIFYING_BRIEFS
 CODE_WRITING_BRIEFS = (
     "brief.md",
     "amend.md",
+)
+
+# Every brief the run hands a subagent launched on a point the router chose —
+# the initial build and its rebuild, the two amends, the collision repair, and
+# the wave fix. Each of those is one routed attempt, so each opens with the
+# attempt it is; a wave fix left out of the list would be the double-counted
+# row this rule exists to end (issue #291).
+ROUTED_BUILDER_BRIEFS = (
+    "brief.md",
+    "amend.md",
+    "repair.md",
+    "fix.md",
 )
 
 # Every rule that applies to a subagent holding a code-writing brief, named
@@ -3260,3 +3274,56 @@ def test_the_wave_check_reads_the_wave_it_merged_not_the_whole_branch() -> None:
         f" as the round before it — the narrowing is between waves, never"
         f" between rounds (ADR-0072, ADR-0171)."
     )
+
+
+def test_every_routed_builder_brief_opens_with_the_attempt_it_is() -> None:
+    """One build files one row, however many sides of the run file about it.
+
+    The verdict files a `checker` row under the decision's `attempt_id` with no
+    tokens, and capture reads the same builder's transcript and files what it
+    spent. They are one attempt, and the only thing that can say so is the
+    identity the router already decided — so every routed builder brief opens
+    with it, and capture reads it back off the first line (issue #291).
+    """
+
+    for name in ROUTED_BUILDER_BRIEFS:
+        where = SKILL / "references" / name
+        body = _brief(name).split("\n---\n", 1)[1]
+        first = next(line for line in body.splitlines() if line.strip())
+        assert first == attempt_line("<attempt_id>"), (
+            f"{where}: the brief itself opens with the"
+            f" {attempt_line('<attempt_id>')} line, which is where capture"
+            f" reads the attempt this builder is (issue #291)."
+        )
+        assert "`<attempt_id>`" in _instructions(name), (
+            f"{where}: the fill-in instructions say what `<attempt_id>` is"
+            f" replaced with — the `attempt_id` the route answer carries for"
+            f" this request (issue #291)."
+        )
+
+
+def test_no_verdict_brief_claims_an_attempt_of_its_own() -> None:
+    """A verifier inherits the Main Seat and is never a routed attempt.
+
+    Giving one the line would file a second row against the build it read,
+    under the identity of the build rather than of the reading.
+    """
+
+    for name in set(ALL_BRIEFS) - set(ROUTED_BUILDER_BRIEFS):
+        where = SKILL / "references" / name
+        assert "attempt_id" not in _brief(name), (
+            f"{where}: a verdict brief carries no attempt line — it is never"
+            f" routed, so it is never an attempt to measure (issue #291)."
+        )
+
+
+def test_the_steps_that_dispatch_a_builder_fill_the_attempt_from_the_decision() -> None:
+    """The value is the decision's, and no step may invent one of its own."""
+
+    for number in (6, 9, 10, 11):
+        step = _step(number)
+        assert "`<attempt_id>`" in step, (
+            f"{SKILL / 'SKILL.md'}: step {number} dispatches a routed builder,"
+            f" so it says the brief's `<attempt_id>` is filled from the"
+            f" decision that step routed (issue #291)."
+        )

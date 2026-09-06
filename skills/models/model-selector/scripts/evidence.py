@@ -52,7 +52,7 @@ import argparse
 import json
 import math
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import dataclass, fields
+from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
 
@@ -189,7 +189,7 @@ class AppendReport:
     """What became of each row handed to `append`, and why."""
 
     accepted: list[tuple[str, str]]
-    skipped: list[tuple[str, str]]
+    merged: list[tuple[str, str]]
     rejected: list[tuple[str, str]]
 
 
@@ -378,35 +378,136 @@ def _deliberation_table(raw: Any) -> dict[str, dict[str, float]]:
 
 
 def append(data_dir: Path, rows: Sequence[Mapping[str, Any]]) -> AppendReport:
-    """Add rows to the ledger, reporting what was taken, held and refused.
+    """Add rows to the ledger, reporting what was taken, folded and refused.
 
     Every row is rebuilt onto the allowed field names rather than written
     through, so a caller's extra keys never reach the file and nothing has to
     be stripped out of it afterwards. An attempt id the store already holds is
-    skipped rather than duplicated: the same attempt observed twice is one
-    attempt, and re-running a filing is how a caller recovers from a crash.
+    merged into the row it holds rather than added beside it: one attempt is
+    one row however many sides of a run file about it, and re-running a filing
+    is how a caller recovers from a crash (issue #291).
     """
 
     report = AppendReport([], [], [])
-    seen = {row.attempt_id for row in load(data_dir)}
+    held = {row.attempt_id: asdict(row) for row in load(data_dir)}
+    folded: dict[str, dict[str, Any]] = {}
+    fresh: dict[str, dict[str, Any]] = {}
 
-    lines: list[str] = []
     for index, row in enumerate(rows):
         attempt_id = _text(row.get("attempt_id")) or f"row {index}"
         problem = _rejection(row)
         if problem is not None:
             report.rejected.append((attempt_id, problem))
             continue
-        if attempt_id in seen:
-            report.skipped.append((attempt_id, "the store already holds this attempt"))
-            continue
-        seen.add(attempt_id)
-        lines.append(json.dumps(_stored(row), separators=(",", ":"), sort_keys=True))
-        report.accepted.append((attempt_id, "appended"))
 
-    if lines:
-        _append_lines(data_dir / MEASUREMENTS_FILE, lines)
+        stored = _stored(row)
+        if attempt_id in fresh:
+            # Both sides of one attempt arrived in the same call, so the row
+            # this call is about to write is the one that is folded into.
+            fresh[attempt_id] = _merged(fresh[attempt_id], stored)
+            report.merged.append((attempt_id, "folded into the row filed beside it"))
+        elif attempt_id in held:
+            held[attempt_id] = _merged(held[attempt_id], stored)
+            folded[attempt_id] = held[attempt_id]
+            report.merged.append((attempt_id, "folded into the row the store held"))
+        else:
+            fresh[attempt_id] = stored
+            report.accepted.append((attempt_id, "appended"))
+
+    if folded:
+        _refold(data_dir / MEASUREMENTS_FILE, folded)
+    if fresh:
+        _append_lines(
+            data_dir / MEASUREMENTS_FILE, [_line(row) for row in fresh.values()]
+        )
     return report
+
+
+def _merged(held: Mapping[str, Any], new: Mapping[str, Any]) -> dict[str, Any]:
+    """Fold a second filing of one attempt into the row already held.
+
+    Two sides of a run see two halves of one build. A caller's verdict knows
+    the grade and the kind of work and nothing about what the attempt spent;
+    a read of that builder's own transcript knows what it spent and can only
+    grade it from a judge or a signal. Neither is a second attempt, so what is
+    kept is the union: every measurement either side actually made, and the
+    grade of whichever authority stands higher (issue #291).
+    """
+
+    merged = dict(held)
+
+    # What the environment exposed to one side and not the other. A null is an
+    # absence rather than a zero everywhere in this store, so a value only ever
+    # fills one — nothing measured is overwritten by nothing measured.
+    for name in ("cost_usd", "seconds", "harness", "channel"):
+        if merged.get(name) is None:
+            merged[name] = new.get(name)
+    merged["tokens"] = {
+        category: (
+            counted
+            if (counted := _token_counts(held.get("tokens")).get(category)) is not None
+            else _token_counts(new.get("tokens")).get(category)
+        )
+        for category in TOKEN_CATEGORIES
+    }
+
+    # The grade of the higher authority, and the reading of the work that came
+    # with it. A checker saw the finished work against what was asked for; a
+    # judge saw two excerpts of it. Where the two disagree about what the work
+    # even was, the kind travels with the grade that is worth more.
+    if _authority(new) < _authority(held):
+        merged |= {name: new.get(name) for name in ("grade", "graded_by", "kind")}
+        merged["routed"] = bool(new.get("routed"))
+        merged["label"] = new.get("label")
+    if merged.get("label") is None:
+        merged["label"] = held.get("label") or new.get("label")
+
+    # The Seat the transcript read is the Seat that ran, whatever was asked
+    # for: a launch the environment could not honour serves another point
+    # without telling the caller that decided it.
+    transcript = _transcript_row(held, new)
+    if transcript is not None and held.get("model") and new.get("model"):
+        merged["model"] = transcript.get("model")
+        merged["deliberation"] = transcript.get("deliberation")
+
+    moments = [
+        moment
+        for moment in (_text(held.get("at")), _text(new.get("at")))
+        if moment is not None
+    ]
+    if moments:
+        merged["at"] = min(moments)
+    return merged
+
+
+def _authority(row: Mapping[str, Any]) -> int:
+    """Return where a row's grade stands in `GRADED_BY`, weakest last."""
+
+    graded_by = str(row.get("graded_by") or "")
+    return GRADED_BY.index(graded_by) if graded_by in GRADED_BY else len(GRADED_BY)
+
+
+def _transcript_row(
+    held: Mapping[str, Any], new: Mapping[str, Any]
+) -> Mapping[str, Any] | None:
+    """Return whichever of the two rows read the attempt's own transcript.
+
+    A judge and a signal both grade a Unit that was read off a transcript; a
+    checker and a user grade the finished work from outside it. Where exactly
+    one of the two rows is such a reading, it is the one that knows which
+    point actually ran.
+    """
+
+    readings = [
+        row for row in (held, new) if row.get("graded_by") in ("judge", "signal")
+    ]
+    return readings[0] if len(readings) == 1 else None
+
+
+def _line(row: Mapping[str, Any]) -> str:
+    """Return one row as the ledger writes it."""
+
+    return json.dumps(row, separators=(",", ":"), sort_keys=True)
 
 
 def load(data_dir: Path) -> list[Measurement]:
@@ -669,6 +770,38 @@ def _append_lines(path: Path, lines: list[str]) -> None:
     with path.open("a", encoding="utf-8") as stream:
         for line in lines:
             stream.write(f"{line}\n")
+
+
+def _refold(path: Path, folded: Mapping[str, dict[str, Any]]) -> None:
+    """Rewrite the ledger with each folded row in the place it already had.
+
+    Line by line rather than row by row: a line this module cannot parse is a
+    line somebody's editor mangled, and a rewrite that dropped it would lose
+    it for good — so everything the fold does not name is carried across
+    exactly as it stands. Written through a temporary sibling and an atomic
+    rename, as every store here is written, so an interrupted fold leaves the
+    ledger it started from rather than half of one.
+    """
+
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (OSError, ValueError):
+        return
+
+    kept: list[str] = []
+    for line in text.splitlines():
+        try:
+            raw = json.loads(line)
+        except ValueError:
+            kept.append(line)
+            continue
+        identity = _text(raw.get("attempt_id")) if isinstance(raw, dict) else None
+        replacement = folded.get(identity) if identity is not None else None
+        kept.append(_line(replacement) if replacement is not None else line)
+
+    staged = path.parent / f"{path.name}.tmp"
+    staged.write_text("".join(f"{line}\n" for line in kept), encoding="utf-8")
+    staged.replace(path)
 
 
 def _measurement(raw: Mapping[str, Any]) -> Measurement | None:

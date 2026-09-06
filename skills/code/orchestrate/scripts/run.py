@@ -5512,8 +5512,11 @@ def _automatic_import_unchecked(attempt: dict[str, Any]) -> dict[str, list[Any]]
     result["imported"] = [
         identity for identity, _ in _reported_identities(filing.get("accepted"))
     ]
+    # A replay of a filing this run already made is what the store reports as
+    # a merge: the row it holds and the row handed to it are one attempt, and
+    # an identical second filing leaves it exactly as it stood (issue #291).
     result["identically_skipped"] = [
-        identity for identity, _ in _reported_identities(filing.get("skipped"))
+        identity for identity, _ in _reported_identities(filing.get("merged"))
     ]
     result["refused"] = [
         {"attempt_id": identity, "code": "record_refused", "detail": reason}

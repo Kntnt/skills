@@ -9,6 +9,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from support.model_routing import attempt_line
+
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 SCRIPTS: Path = REPO_ROOT / "skills" / "models" / "model-selector" / "scripts"
 
@@ -1068,3 +1070,71 @@ def test_a_harness_naming_the_event_in_its_payload_is_understood() -> None:
     assert capture._moment("", {"eventName": "SessionEnd"}) == "SessionEnd"
     assert capture._moment("", {"type": "session.deleted"}) == "session.deleted"
     assert capture._moment("Stop", {"type": "session.idle"}) == "Stop"
+
+
+def test_a_subagent_briefed_with_an_attempt_is_that_attempt(tmp_path: Path) -> None:
+    """A routed builder's row and its verdict's row are one attempt.
+
+    Orchestrate files a `checker` row under the identity the router decided,
+    carrying the verdict's grade and no tokens. This read of the same
+    builder's transcript carries the tokens and no verdict. The brief's first
+    line is what says the two are one build rather than two (issue #291).
+    """
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+    )
+    _subagent(
+        transcript,
+        "aaa",
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {
+                "role": "user",
+                "content": f"{attempt_line('build-291')}\n\nYou are building one ticket.",
+            },
+        },
+        _assistant("2026-09-06T10:03:30.000Z", text="Built."),
+    )
+
+    delegated = [
+        unit
+        for unit in capture.units("s", "claude-code", str(transcript))
+        if unit.delegated
+    ]
+
+    assert [unit.unit_id for unit in delegated] == ["build-291"]
+
+
+def test_a_subagent_nobody_routed_keeps_the_identity_capture_computes(
+    tmp_path: Path,
+) -> None:
+    """Only a brief that names an attempt has one; everything else is hashed."""
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+    )
+    _subagent(
+        transcript,
+        "aaa",
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {"role": "user", "content": "survey the tree"},
+        },
+        _assistant("2026-09-06T10:03:30.000Z", text="Surveyed."),
+    )
+
+    delegated = [
+        unit
+        for unit in capture.units("s", "claude-code", str(transcript))
+        if unit.delegated
+    ]
+
+    assert len(delegated) == 1
+    assert delegated[0].unit_id.startswith("unit-")

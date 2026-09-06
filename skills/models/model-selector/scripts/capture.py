@@ -44,6 +44,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import re
 import shutil
 import sys
 from contextlib import suppress
@@ -146,6 +147,18 @@ READABLE_HARNESSES: tuple[str, ...] = ("claude-code",)
 # anything but the transcript path the payload already handed over.
 SUBAGENTS_DIRNAME = "subagents"
 SUBAGENT_GLOB = "agent-*.jsonl"
+
+# The line a routed builder brief opens with, naming the attempt whoever
+# dispatched it already decided. Where a subagent's first user message opens
+# with it, that attempt is this Unit's identity rather than the hash below:
+# the caller that dispatched the work files its own verdict under the same
+# name, and one build filed from two sides is one row rather than two
+# (issue #291). Matched on the first line only, and never on a main-session
+# instruction — a person at a keyboard is nobody's routed attempt. The same
+# form is stated for the tests in `tests/support/model_routing.py`, a shipped
+# script having no business importing a test file. The backticks are optional
+# because a brief is Markdown and a filler may leave the placeholder's own.
+ATTEMPT_LINE = re.compile(r"^attempt_id:[ \t]*`?([^\s`]+)`?[ \t]*$")
 
 # How the token categories a Claude Code turn reports map onto the five a
 # measurement is priced in. Re-derived per turn from `message.usage`:
@@ -868,12 +881,29 @@ def _substantial(span: _Span, seconds: float) -> bool:
     )
 
 
+def _named_attempt(instruction: str) -> str | None:
+    """Return the attempt a routed brief named, or None where none did.
+
+    Whoever dispatched a routed builder holds an identity for that attempt
+    before the work starts, and files its own verdict under it. A brief that
+    opens with that identity lets this read of the same builder's transcript
+    file what the attempt spent under the same name, so the store ends with
+    one row rather than one graded attempt without a cost beside one costed
+    attempt with a weaker grade (issue #291).
+    """
+
+    matched = ATTEMPT_LINE.match(instruction.split("\n", 1)[0])
+    return matched.group(1) if matched else None
+
+
 def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | None:
     """Return one span as a Unit, or None where it is not substantial.
 
-    The identity is the session, the Seat and the instant the Unit began, so
-    the same finished session read twice yields the same Unit and the
-    measurement store skips the second copy rather than counting it twice.
+    The identity is the attempt the brief named, where a routed builder's
+    brief named one. Otherwise it is the session, the Seat and the instant the
+    Unit began, so the same finished session read twice yields the same Unit
+    and the measurement store folds the second copy into the first rather than
+    counting it twice.
     """
 
     seconds = _elapsed_seconds(span.started_at, span.ended_at)
@@ -890,8 +920,9 @@ def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | No
         },
         sort_keys=True,
     )
+    named = _named_attempt(span.instruction) if delegated else None
     return Unit(
-        unit_id=f"unit-{_opaque(identity)}",
+        unit_id=named or f"unit-{_opaque(identity)}",
         session=session,
         harness=harness,
         started_at=span.started_at,

@@ -186,8 +186,9 @@ _MS_STAMP = (
 )
 
 # What the record entry point answers with when a test says nothing else: the
-# rows it has not been handed before, accepted; the rest, skipped as already
-# held. That is the contract's own idempotency and several tests turn on it.
+# rows it has not been handed before, accepted; the rest, merged into the row
+# it already holds. That is the contract's own idempotency and several tests
+# turn on it.
 _MS_APPEND = (
     "import json,os,sys;"
     "rows=json.load(open(sys.argv[1]));"
@@ -198,7 +199,8 @@ _MS_APPEND = (
     "open(held,'a').write(''.join(row['attempt_id'] + chr(10) for row in fresh));"
     "print(json.dumps({"
     "'accepted': [[row['attempt_id'], 'appended'] for row in fresh],"
-    "'skipped': [[row['attempt_id'], 'already held'] for row in again],"
+    "'merged': [[row['attempt_id'], 'folded into the row the store held'] "
+    "for row in again],"
     "'rejected': []}))"
 )
 
@@ -9440,7 +9442,7 @@ def test_attempt_finish_reports_a_record_refusal_without_stopping(
         json.dumps(
             {
                 "accepted": [],
-                "skipped": [],
+                "merged": [],
                 "rejected": [["ms-the-cheapest-medium-1", "grade out of range"]],
             }
         ),

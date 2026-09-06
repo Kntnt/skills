@@ -73,3 +73,24 @@ def inherit_answer(
         note=note,
         **fields,
     ) | {"model": model, "deliberation": deliberation}
+
+
+# The line every routed builder brief Orchestrate dispatches opens with. It is
+# the one identity both sides of this seam already hold: the router decided it,
+# the brief carries it, and capture reads it back off the subagent transcript
+# so that the verdict's row and the transcript's row are one attempt rather
+# than two. Stated here because this file is the seam's own document; the
+# shipped `capture.py` carries the same pattern as a constant of its own, a
+# shipped script having no business importing a test file (issue #291).
+ATTEMPT_LINE = "attempt_id: {attempt_id}"
+
+
+def attempt_line(attempt_id: str) -> str:
+    """Return the first line of a filled-in routed builder brief.
+
+    Called with the template's own placeholder — `<attempt_id>` — it returns
+    the line as the unfilled template carries it, which is what lets one
+    statement of the form check both the template and the filled-in brief.
+    """
+
+    return ATTEMPT_LINE.format(attempt_id=attempt_id)

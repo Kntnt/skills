@@ -116,16 +116,142 @@ def test_a_row_outside_the_vocabulary_is_rejected_with_its_reason(
     assert all(reason for _, reason in report.rejected)
 
 
-def test_an_attempt_already_stored_is_skipped_rather_than_duplicated(
+# What Orchestrate files at the boundary that established an attempt's outcome:
+# the verdict's grade, the role's kind, and no tokens at all, because the
+# harness it dispatched on exposes none to it (issue #291).
+def _checker(**overrides: Any) -> dict[str, Any]:
+    """Provide the row a caller's own verdict files about one attempt."""
+
+    return _row(
+        graded_by="checker",
+        grade=1.0,
+        kind="implement",
+        label="build",
+        routed=True,
+        tokens=dict.fromkeys(catalogue.TOKEN_CATEGORIES),
+        cost_usd=None,
+        seconds=None,
+        channel=None,
+        **overrides,
+    )
+
+
+# What the capture pass files about the same attempt, having read the
+# transcript that build actually ran in: what it spent, and the weaker grade
+# whatever decided it could establish.
+def _captured(**overrides: Any) -> dict[str, Any]:
+    """Provide the row a transcript read files about one attempt."""
+
+    return _row(
+        graded_by="judge",
+        grade=0.18,
+        kind="analyze",
+        label=None,
+        routed=False,
+        tokens={"cache_read": 2_000_000.0, "output": 20_000.0},
+        cost_usd=1.5,
+        seconds=900.0,
+        harness="claude-code",
+        channel="subscription",
+        at="2026-09-06T09:30:00Z",
+        **overrides,
+    )
+
+
+def test_an_attempt_filed_twice_is_merged_into_one_row(tmp_path: Path) -> None:
+    """Every routed build was counted twice: once graded, once costed.
+
+    One side holds the verdict and no cost, the other the cost and a weaker
+    grade. Folding them leaves one row carrying the verdict's grade, the
+    role's kind, and the tokens the transcript exposed (issue #291).
+    """
+
+    evidence.append(tmp_path, [_checker()])
+    report = evidence.append(tmp_path, [_captured(), _row(attempt_id="ms-new")])
+
+    assert [entry[0] for entry in report.merged] == ["ms-20260906-000001"]
+    assert [entry[0] for entry in report.accepted] == ["ms-new"]
+    held = {row.attempt_id: row for row in evidence.load(tmp_path)}
+    assert len(held) == 2
+    merged = held["ms-20260906-000001"]
+    assert (merged.grade, merged.graded_by) == (1.0, "checker")
+    assert (merged.kind, merged.label, merged.routed) == ("implement", "build", True)
+    assert merged.tokens["output"] == 20_000.0
+    assert (merged.cost_usd, merged.seconds) == (1.5, 900.0)
+    assert merged.channel == "subscription"
+    assert merged.at == "2026-09-06T09:00:00Z"
+
+
+def test_the_merge_does_not_depend_on_which_side_filed_first(
     tmp_path: Path,
 ) -> None:
+    """Capture runs at a session's end and the verdict lands mid-run.
+
+    Which of them reaches the store first is a fact about the day rather than
+    about the attempt, so it decides nothing about the row.
+    """
+
+    evidence.append(tmp_path, [_captured()])
+    report = evidence.append(tmp_path, [_checker()])
+
+    assert [entry[0] for entry in report.merged] == ["ms-20260906-000001"]
+    held = evidence.load(tmp_path)
+    assert len(held) == 1
+    assert (held[0].grade, held[0].graded_by) == (1.0, "checker")
+    assert held[0].kind == "implement"
+    assert held[0].tokens["output"] == 20_000.0
+    assert held[0].at == "2026-09-06T09:00:00Z"
+
+
+def test_the_seat_that_ran_is_the_one_the_transcript_read(tmp_path: Path) -> None:
+    """The transcript is what actually ran, whatever the router asked for."""
+
+    evidence.append(tmp_path, [_checker(model=WEAK, deliberation="low")])
+    evidence.append(tmp_path, [_captured(model=STRONG, deliberation="high")])
+
+    held = evidence.load(tmp_path)
+    assert (held[0].model, held[0].deliberation) == (STRONG, "high")
+
+
+def test_two_subagents_are_two_attempts(tmp_path: Path) -> None:
+    """A merge folds one attempt filed twice, never two attempts into one."""
+
+    report = evidence.append(
+        tmp_path,
+        [_captured(attempt_id="build-1"), _captured(attempt_id="build-2")],
+    )
+
+    assert report.merged == []
+    assert len(evidence.load(tmp_path)) == 2
+
+
+def test_a_filing_repeated_after_a_crash_changes_nothing(tmp_path: Path) -> None:
     """Re-running a filing is how a caller recovers from its own crash."""
 
-    evidence.append(tmp_path, [_row()])
-    report = evidence.append(tmp_path, [_row(), _row(attempt_id="ms-new")])
+    evidence.append(tmp_path, [_checker()])
+    before = (tmp_path / "measurements.jsonl").read_text(encoding="utf-8")
+    report = evidence.append(tmp_path, [_checker()])
 
-    assert [entry[0] for entry in report.skipped] == ["ms-20260906-000001"]
-    assert [entry[0] for entry in report.accepted] == ["ms-new"]
+    assert [entry[0] for entry in report.merged] == ["ms-20260906-000001"]
+    assert (tmp_path / "measurements.jsonl").read_text(encoding="utf-8") == before
+
+
+def test_a_merge_never_loses_the_line_beside_it(tmp_path: Path) -> None:
+    """The ledger is rewritten to fold one row, not to sweep the rest.
+
+    A line somebody's editor mangled is still not a reason to lose the
+    thousand rows around it, and a rewrite is where that would happen.
+    """
+
+    evidence.append(tmp_path, [_checker(), _row(attempt_id="ms-second")])
+    path = tmp_path / "measurements.jsonl"
+    path.write_text(
+        path.read_text(encoding="utf-8") + "{half a line\n", encoding="utf-8"
+    )
+
+    evidence.append(tmp_path, [_captured()])
+
+    assert "{half a line" in path.read_text(encoding="utf-8")
     assert len(evidence.load(tmp_path)) == 2
 
 

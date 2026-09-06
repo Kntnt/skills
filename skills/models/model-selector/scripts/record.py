@@ -15,6 +15,11 @@ refused, and why the report says what happened to each one.
 Rows arriving with token counts but no price are priced here against the
 catalogue as it stands today, which is the closest this Skill can get to what
 the attempt actually cost.
+
+A row whose attempt the store already holds is folded into it rather than
+added beside it, and reported under `merged`: one attempt is one row however
+many sides of a run file about it, and a caller that files the same row twice
+after a crash changes nothing (issue #291).
 """
 
 from __future__ import annotations
@@ -55,7 +60,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         json.dumps(
             {
                 "accepted": [list(entry) for entry in report.accepted],
-                "skipped": [list(entry) for entry in report.skipped],
+                "merged": [list(entry) for entry in report.merged],
                 "rejected": [list(entry) for entry in report.rejected],
                 "problem": problem,
             }
