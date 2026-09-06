@@ -6,6 +6,7 @@ import importlib.util
 import json
 import stat
 import sys
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -153,13 +154,82 @@ def test_writing_is_atomic_and_readable_only_by_its_owner(tmp_path: Path) -> Non
     assert profiles.load(data_dir, CAT) == original
 
 
-def test_a_channel_is_found_by_provider_and_harness_together(tmp_path: Path) -> None:
-    """Who pays depends on where the work runs, not only on whose model it is."""
+def test_a_channel_is_found_by_provider_first_and_by_harness_where_it_can(
+    tmp_path: Path,
+) -> None:
+    """Who pays follows the provider; where the work runs only breaks a tie.
+
+    This test once asserted the opposite — that a channel answers for its own
+    harness alone — and that is what removed every bridged model from the pool
+    the moment somebody answered the interview. A subscription pays for its
+    provider whichever harness invokes it.
+    """
 
     profile = profiles.load(_stored(tmp_path, _answers()), CAT)
     opus = catalogue.resolve(CAT, "claude-opus-5")[0]
     astra = catalogue.resolve(CAT, "gpt-6-astra")[0]
 
+    # One channel, for Anthropic, and it pays for Anthropic from either seat.
     assert profiles.channel_for(profile, opus, "claude-code") is not None
-    assert profiles.channel_for(profile, opus, "codex") is None
+    assert profiles.channel_for(profile, opus, "codex") is not None
+
+    # A provider the profile names no channel for is still unpayable.
     assert profiles.channel_for(profile, astra, "claude-code") is None
+
+
+def test_a_bridged_provider_is_paid_for_by_the_harness_that_reaches_it(
+    tmp_path: Path,
+) -> None:
+    """A channel belongs to the harness the model is reached through.
+
+    A Claude Code session reaches an OpenAI model by running the Codex CLI, and
+    it is the Codex subscription that pays for those tokens. Matching a channel
+    on the asking harness alone answered None for every bridged model, which
+    removed all of them from the pool the moment a profile existed — an
+    answered interview leaving the caller worse off than an unanswered one.
+    """
+
+    cat = catalogue.load(tmp_path, SHIPPED)
+    astra = next(model for model in cat.models if model.id == "gpt-6-astra")
+    opus = next(model for model in cat.models if model.id == "claude-opus-5")
+    codex = profiles.Channel(
+        provider="openai",
+        harness="codex",
+        pay="subscription",
+        plan="ChatGPT Pro",
+        tier="20x",
+        monthly=2000.0,
+        currency="SEK",
+        gateway=None,
+    )
+    direct = profiles.Channel(
+        provider="openai",
+        harness="claude-code",
+        pay="api",
+        plan=None,
+        tier=None,
+        monthly=None,
+        currency=None,
+        gateway=None,
+    )
+    profile = profiles.Profile(
+        harnesses=("claude-code", "codex"),
+        providers=("anthropic", "openai"),
+        models=(astra.id, opus.id),
+        channels=(codex,),
+        answered_at="2026-09-06",
+        source="file",
+        problem=None,
+    )
+
+    # The bridged provider is payable from the seat that runs the bridge.
+    assert profiles.channel_for(profile, astra, "claude-code") == codex
+
+    # A provider the profile says nothing about is still unpayable.
+    assert profiles.channel_for(profile, opus, "claude-code") is None
+
+    # Where the same provider is reached two ways, the asking harness wins:
+    # that is the whole reason a channel names a harness at all.
+    both = replace(profile, channels=(codex, direct))
+    assert profiles.channel_for(both, astra, "claude-code") == direct
+    assert profiles.channel_for(both, astra, "codex") == codex

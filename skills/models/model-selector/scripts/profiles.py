@@ -139,15 +139,29 @@ def load(data_dir: Path, cat: Catalogue) -> Profile:
 
 
 def channel_for(p: Profile, model: Model, harness: str) -> Channel | None:
-    """Return the channel that pays for *model* on *harness*, or None.
+    """Return the channel that pays for *model*, preferring *harness*'s own.
 
-    A profile with no channel for a point is not a profile that forbids it;
-    it is a profile that cannot say what the point costs to reach, which is a
-    judgement the caller makes rather than this lookup.
+    The harness a channel names is the one the model is reached through, and
+    that is frequently not the harness doing the asking: a Claude Code session
+    reaches an OpenAI model by running the Codex CLI, and it is the Codex
+    subscription that pays for those tokens. Matching on the asking harness
+    alone therefore said no provider was payable outside the seat's own, which
+    silently removed every bridged model from the pool the moment a profile
+    existed — and made an answered interview worse than none.
+
+    So the exact harness wins where the profile has one, because that is where
+    the two arrangements differ when a provider is reached two ways at once,
+    and any channel for the provider answers where it has not. A profile with
+    no channel at all for a point is not a profile that forbids it; it is one
+    that cannot say what the point costs to reach, which is a judgement the
+    caller makes rather than this lookup.
     """
 
     for channel in p.channels:
         if channel.provider == model.provider and channel.harness == harness:
+            return channel
+    for channel in p.channels:
+        if channel.provider == model.provider:
             return channel
     return None
 
