@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "a09ebff07f3a31bfcab4ac740f1eec8ab9e9a2511da00f8519dfd2ca30b6acab",
+  "manager_digest": "e0cb0efb96dd80c3bf7c8a348e9cb303e294552084b8a4b7765e2d2d678575eb",
   "skills": [
     {
       "name": "agents-md",
@@ -189,7 +189,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, when another Skill requires Model Selector's public select interface. Do not use implicitly for setup, status, update, evidence, or reset.",
-      "digest": "349ad1fe59af63640c2e663703fd5ca24b28832b65c7c865f92be577b570125a",
+      "digest": "099780505d26e9642044fdebb4358cddf8b64124a25a8b166152d94713b6f1e5",
       "binaries": [
         "uv"
       ],

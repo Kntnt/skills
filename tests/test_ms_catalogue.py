@@ -681,3 +681,89 @@ def test_adopting_a_price_keeps_the_capability_the_seed_shipped(
     assert fable.price.input == 11.0
     assert fable.capability == 0.95
     assert fable.deliberation == ("low", "medium", "high", "xhigh", "max")
+
+
+# What the retired unattended pass went by: its module, the store it kept, the
+# member that told it how to read a body, the file that told it when to run,
+# and the constant that bounded its network time (issue #293). A shipped file
+# still carrying one of these names describes a mechanism this collection no
+# longer has, and it describes it to whoever next reads that file — which is
+# how a comment justifying a timeout came to cite a module nothing ships.
+RETIRED_NAMES: tuple[str, ...] = (
+    "refresh.py",
+    "source-states",
+    "source_states",
+    "reads_as",
+    "refresh-cadences",
+    "refresh cadence",
+    "SOURCE_STATE",
+    "BUDGET_SECONDS",
+)
+
+# The one place a retired name is still owed. `capture.reset --evidence` can
+# only remove a file it knows the name of, so the store the pass kept has to
+# stay written down there for as long as somebody's data directory might hold
+# one.
+RETIRED_NAME_EXEMPTIONS: tuple[tuple[str, str], ...] = (
+    ("skills/models/model-selector/scripts/capture.py", '"source-states.jsonl",'),
+)
+
+
+def _shipped_lines() -> list[tuple[str, int, str]]:
+    """Every line of every text file this collection ships, located."""
+
+    located: list[tuple[str, int, str]] = []
+    for path in sorted((REPO_ROOT / "skills").rglob("*")):
+        if not path.is_file() or "__pycache__" in path.parts:
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        relative = path.relative_to(REPO_ROOT).as_posix()
+        located.extend(
+            (relative, number, line)
+            for number, line in enumerate(text.splitlines(), start=1)
+        )
+    return located
+
+
+def test_no_shipped_file_names_the_retired_unattended_refresh() -> None:
+    """A file that still names the pass tells a reader it is still there.
+
+    The pass was removed because it fetched pages it could not interpret and
+    had never learned a fact (ADR-0185). Removing the module is only half of
+    that: prose elsewhere in the collection went on asserting, in the present
+    tense, that session end reached the network and was bounded by a constant
+    inside the deleted module — which contradicts what the same collection now
+    tells the user in `help.md` and in `docs/rules/routing.md`. The names are
+    checked rather than the word *refresh*, which the Manager uses for its own
+    unrelated transaction on nearly every page it ships (issue #293).
+    """
+
+    offending = [
+        f"{path}:{number}: {line.strip()}"
+        for path, number, line in _shipped_lines()
+        for name in RETIRED_NAMES
+        if name in line and (path, line.strip()) not in RETIRED_NAME_EXEMPTIONS
+    ]
+
+    assert not offending, "the retired pass is still named in:\n" + "\n".join(offending)
+
+
+def test_the_shipped_seed_promises_no_refresh_of_what_it_carries() -> None:
+    """The seed's own prose is read by whoever wonders where a figure comes from.
+
+    Nothing fetches `capability`: it is a seeded prior refined by measurement,
+    and how a published benchmark maps onto its scale is undecided, so a note
+    saying a refresh replaces it from one names a mechanism that does not
+    exist and promises an accuracy nobody is delivering. `update` is the only
+    thing that renews any figure here, and it is the agent's own reading
+    (ADR-0185).
+    """
+
+    seed = json.loads((SHIPPED / "data" / "catalogue-seed.json").read_text("utf-8"))
+
+    offending = [note for note in seed["notes"] if "refresh" in note.lower()]
+
+    assert not offending, "the seed still promises a refresh:\n" + "\n".join(offending)

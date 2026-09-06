@@ -80,19 +80,22 @@ HOOK_TIMEOUT_SECONDS = 10
 # three and `warnings` comes back empty.
 #
 # Three seconds is a ceiling on the work that moment does, so what that work
-# costs is written down here for whoever next spends it. Session end is the one
-# place in the hook path permitted to reach the network (ADR-0179): `_finish`
-# dispatches the unattended source refresh there and nowhere else, and that
-# refresh's network portion is itself hard-capped at `refresh.BUDGET_SECONDS`,
-# two seconds, against a monotonic deadline. Ten whole session-end invocations
-# — launcher included, every source in a store forced due and fetched over the
-# real network — took between 1.22 and 1.98 seconds, timed in two independent
-# sets of five by two sessions on one machine. That figure is the spread those
-# ten runs were observed to take and not a bound on what a run can take: it is
-# one machine on a live network, a slower run is not ruled out, and a budget
-# sized against it is sized against that variance rather than against the
-# quick end of it. Just over a second separates the slowest of the ten from
-# this ceiling. Raising that budget spends that margin, and beyond it Codex
+# costs is written down here for whoever next spends it. No hook this
+# collection installs reaches the network at all (ADR-0185): session end
+# derives that session's Units from a record already on disk and dispatches
+# the grading pass detached, so what happens inside the three seconds is local
+# metadata I/O and a spawn that is not waited on.
+#
+# The only timing anyone has taken of this moment was taken when it did more.
+# Ten whole session-end invocations, launcher included, took between 1.22 and
+# 1.98 seconds, timed in two independent sets of five by two sessions on one
+# machine — and each of those ten also ran an unattended source refresh that
+# fetched over the real network, which is the work ADR-0185 removed. So the
+# figure is an upper bound on what this moment now costs rather than a
+# description of it, and even as an upper bound it is a spread observed on one
+# machine rather than a limit: a slower run is not ruled out, and just over a
+# second separates the slowest of the ten from this ceiling. Adding work back
+# to session end is what spends that margin, and beyond the ceiling Codex
 # truncates the pass rather than this entry being given the longer run it
 # asked for.
 #
