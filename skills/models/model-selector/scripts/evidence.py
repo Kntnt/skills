@@ -21,6 +21,15 @@ the kind informs the exact level, and the deepest level that has real rows is
 what the answer ends up being made of. `basis` says which level that was, so a
 caller can tell a measured answer from a plausible one.
 
+That hierarchy is about success. What an attempt costs is borrowed on the same
+principle one tier shallower: a row's token counts and its elapsed time are
+divided by the factors of the level they ran at before they are pooled, so a
+model's rows for a kind are one sample at the `medium` baseline whatever level
+each of them was taken at, and the pooled figure is scaled back up to the level
+being asked about. An exact-cell tier in front of that would undo it — the level
+holding rows would answer from those rows alone, at whatever baseline they were
+taken, and the level beside it would be forecast the same appetite for nothing.
+
 A parent is fitted on the rows its child does not hold, and only on those. It
 is a prior for what it can still add, and rows the child is already counting
 are not that: counted again at each level, one point's handful of failures
@@ -243,7 +252,7 @@ class KindPriors:
         """
 
         base = self.elapsed.get(kind, UNKNOWN_SECONDS)
-        return base * self._level(deliberation)["tokens"]
+        return base * self.factor(deliberation, "seconds")
 
     def difficulty(self, kind: str) -> float:
         """Return how much intelligence *kind* needs, on the capability scale."""
@@ -270,6 +279,20 @@ class KindPriors:
 
         return self._level(deliberation)["capability_bonus"]
 
+    def factor(self, deliberation: str | None, category: str) -> float:
+        """Return what one level multiplies one category of cost by.
+
+        The reasoning category has a factor of its own, a more deliberate
+        attempt thinking disproportionately harder rather than merely longer;
+        every other token category, and the elapsed time with them, scales
+        with `tokens`. These are also the two numbers a measurement is divided
+        by to read it back to the `medium` baseline, which is what lets a row
+        taken at one level say anything about the other four.
+        """
+
+        level = self._level(deliberation)
+        return level["reasoning"] if category == "reasoning" else level["tokens"]
+
     def tokens(self, kind: str, deliberation: str | None = None) -> dict[str, float]:
         """Return the per-attempt token prior, scaled to the level asked for.
 
@@ -280,13 +303,11 @@ class KindPriors:
         capability being free.
         """
 
-        level = self._level(deliberation)
         prior = self.token_priors.get(kind, {})
         scaled: dict[str, float] = {}
         for category in TOKEN_CATEGORIES:
             base = float(prior.get(category, UNKNOWN_TOKENS[category]))
-            factor = level["reasoning"] if category == "reasoning" else level["tokens"]
-            scaled[category] = base * factor
+            scaled[category] = base * self.factor(deliberation, category)
         return scaled
 
     def _level(self, deliberation: str | None) -> Mapping[str, float]:
@@ -493,41 +514,43 @@ class Estimator:
         zero — that is the one error that would understate a bill by two
         orders of magnitude. An unmeasured category falls back to the kind's
         shipped prior instead.
+
+        Every measurement is read at the `medium` baseline and the pooled
+        answer scaled to the level asked for, so a model's rows for a kind
+        price all five of its levels and the ladder's cost survives having
+        been measured at one rung of it.
         """
 
-        exact, by_kind, by_model = self._levels(kind, model, deliberation)
+        _, by_kind, by_model = self._levels(kind, model, deliberation)
         prior = self._kinds.tokens(kind, deliberation)
 
         counted: dict[str, float] = {}
         for category in TOKEN_CATEGORIES:
             counted[category] = prior[category]
-            for group in (exact, by_kind, by_model):
-                measured = _geometric_mean(_counts(group, category))
+            for group in (by_kind, by_model):
+                measured = _geometric_mean(self._normalised(group, category))
                 if measured is not None:
-                    counted[category] = measured
+                    counted[category] = measured * self._kinds.factor(
+                        deliberation, category
+                    )
                     break
         return counted
 
     def seconds(self, kind: str, model: str, deliberation: str | None) -> float:
         """Return how long this point is expected to take to finish an attempt.
 
-        The same backoff the token forecast uses, over the one measurement a
-        run started for time is ordered on. A store with no elapsed time for
-        this point falls back to the kind's shipped figure rather than to a
-        zero, a zero being the fastest thing on any list.
+        The same two tiers the token forecast backs off through, and the same
+        normalisation, over the one measurement a run started for time is
+        ordered on. A store with no elapsed time for this point falls back to
+        the kind's shipped figure rather than to a zero, a zero being the
+        fastest thing on any list.
         """
 
-        exact, by_kind, by_model = self._levels(kind, model, deliberation)
-        for group in (exact, by_kind, by_model):
-            measured = _geometric_mean(
-                [
-                    row.seconds
-                    for row in group
-                    if row.seconds is not None and row.seconds > 0.0
-                ]
-            )
+        _, by_kind, by_model = self._levels(kind, model, deliberation)
+        for group in (by_kind, by_model):
+            measured = _geometric_mean(self._elapsed(group))
             if measured is not None:
-                return measured
+                return measured * self._kinds.factor(deliberation, "seconds")
         return self._kinds.seconds(kind, deliberation)
 
     def _levels(
@@ -539,6 +562,32 @@ class Estimator:
         by_kind = [row for row in by_model if row.kind == kind]
         exact = [row for row in by_kind if row.deliberation == deliberation]
         return exact, by_kind, by_model
+
+    def _normalised(self, rows: Iterable[Measurement], category: str) -> list[float]:
+        """Return one category's measurements, each read back to `medium`.
+
+        A row's counts are what its own level of deliberation made of them, so
+        dividing by that level's factor is what leaves rows taken at different
+        levels one sample — and what lets the level being asked about put its
+        own factor back on the pooled figure. A row that ran on a model with no
+        effort control ran at factor one and is left alone.
+        """
+
+        counted: list[float] = []
+        for row in rows:
+            value = row.tokens.get(category)
+            if value is not None and value > 0.0:
+                counted.append(value / self._kinds.factor(row.deliberation, category))
+        return counted
+
+    def _elapsed(self, rows: Iterable[Measurement]) -> list[float]:
+        """Return every measured runtime, read back to `medium` the same way."""
+
+        return [
+            row.seconds / self._kinds.factor(row.deliberation, "seconds")
+            for row in rows
+            if row.seconds is not None and row.seconds > 0.0
+        ]
 
     def _margin(self, kind: str, model: str, deliberation: str | None) -> float:
         """Return how far this point's capability exceeds what the kind demands.
@@ -712,17 +761,6 @@ def _translated(mean: float, margin: float, *, toward: float | None = None) -> f
 
     shift = CROSS_KIND_SHARPNESS * margin
     return _sigmoid(odds + min(CROSS_KIND_LIMIT, max(-CROSS_KIND_LIMIT, shift)))
-
-
-def _counts(rows: Iterable[Measurement], category: str) -> list[float]:
-    """Return every positive measurement of one token category."""
-
-    counted: list[float] = []
-    for row in rows:
-        value = row.tokens.get(category)
-        if value is not None and value > 0.0:
-            counted.append(value)
-    return counted
 
 
 def _geometric_mean(values: Sequence[float]) -> float | None:

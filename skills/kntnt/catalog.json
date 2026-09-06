@@ -189,7 +189,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, when another Skill requires Model Selector's public select interface. Do not use implicitly for setup, status, update, evidence, or reset.",
-      "digest": "30b4f5aa4ca5fc05c5d688ac2444bf5461bef98d6b6d259ac7935c4189a9826a",
+      "digest": "10d2001c513d66d3d28928d2f7630570d3b3b8624198c4c6c352eeb32af06f73",
       "binaries": [
         "uv"
       ],

@@ -36,6 +36,9 @@ evidence = _module("evidence")
 
 CAT = catalogue.load(Path("/nowhere"), SHIPPED)
 KINDS = evidence.load_kinds(SHIPPED)
+LADDER: dict[str, dict[str, float]] = json.loads(
+    (SHIPPED / "data" / "kinds.json").read_text(encoding="utf-8")
+)["deliberation"]
 
 STRONG = "claude-opus-5"
 WEAK = "claude-sonnet-5"
@@ -265,6 +268,147 @@ def test_a_category_no_row_measured_falls_back_to_the_prior_not_to_zero(
     assert counted["output"] == pytest.approx(30_000.0)
     assert counted["cache_read"] == prior["cache_read"]
     assert all(value > 0.0 for value in counted.values())
+
+
+def test_a_measured_row_is_scaled_to_the_level_it_is_forecast_at(
+    tmp_path: Path,
+) -> None:
+    """A row taken at one level is a row about every level of that model.
+
+    Read as it stands it forecasts one appetite for the whole ladder, at which
+    point the most deliberate level costs exactly what the cheapest does and
+    wins every comparison that reads success and cost together.
+    """
+
+    measured = {"cache_read": 2_300_000.0, "output": 20_000.0, "reasoning": 44_000.0}
+    estimator = _estimator(
+        _many(3, 1.0, deliberation="high", tokens=measured, seconds=1_200.0), tmp_path
+    )
+
+    counted = estimator.tokens("implement", STRONG, "max")
+
+    for category, value in measured.items():
+        rung = "reasoning" if category == "reasoning" else "tokens"
+        expected = value / LADDER["high"][rung] * LADDER["max"][rung]
+        assert counted[category] == pytest.approx(expected)
+    assert estimator.seconds("implement", STRONG, "max") == pytest.approx(
+        1_200.0 / LADDER["high"]["tokens"] * LADDER["max"]["tokens"]
+    )
+
+
+def test_rows_at_two_levels_are_forecast_from_one_baseline(tmp_path: Path) -> None:
+    """Normalised, a model's rows for a kind are one sample whatever level ran.
+
+    Which is why the exact cell stops being a tier of its own for cost: kept in
+    front of the rest, the level that happens to have rows answers from those
+    rows alone, and the level beside it answers from a different sample at a
+    baseline nobody reconciled.
+    """
+
+    rows = [
+        _row(
+            attempt_id=f"ms-low-{index}",
+            deliberation="low",
+            tokens={"cache_read": 900_000.0},
+            seconds=600.0,
+        )
+        for index in range(3)
+    ] + [
+        _row(
+            attempt_id="ms-max-1",
+            deliberation="max",
+            tokens={"cache_read": 3_600_000.0},
+            seconds=2_400.0,
+        )
+    ]
+    estimator = _estimator(rows, tmp_path)
+
+    read = statistics.geometric_mean(
+        [900_000.0 / LADDER["low"]["tokens"]] * 3
+        + [3_600_000.0 / LADDER["max"]["tokens"]]
+    )
+    taken = statistics.geometric_mean(
+        [600.0 / LADDER["low"]["tokens"]] * 3 + [2_400.0 / LADDER["max"]["tokens"]]
+    )
+
+    for level in evidence.LEVELS:
+        counted = estimator.tokens("implement", STRONG, level)
+        assert counted["cache_read"] == pytest.approx(read * LADDER[level]["tokens"])
+        assert estimator.seconds("implement", STRONG, level) == pytest.approx(
+            taken * LADDER[level]["tokens"]
+        )
+    assert estimator.p_success("implement", STRONG, "low").basis == "measured"
+    assert estimator.p_success("implement", STRONG, "max").basis == "pooled"
+
+
+def test_the_ladder_survives_the_measurement_of_two_of_its_rungs(
+    tmp_path: Path,
+) -> None:
+    """What a level costs is a ratio, and the ratio is the shipped one."""
+
+    rows = [
+        _row(
+            attempt_id="ms-high-1",
+            deliberation="high",
+            tokens={"cache_read": 2_000_000.0, "reasoning": 40_000.0},
+            seconds=1_100.0,
+        ),
+        _row(
+            attempt_id="ms-xhigh-1",
+            deliberation="xhigh",
+            tokens={"cache_read": 2_600_000.0, "reasoning": 90_000.0},
+            seconds=1_600.0,
+        ),
+    ]
+    estimator = _estimator(rows, tmp_path)
+
+    at_high = estimator.tokens("implement", STRONG, "high")
+    at_max = estimator.tokens("implement", STRONG, "max")
+
+    assert at_max["cache_read"] == pytest.approx(
+        at_high["cache_read"] * LADDER["max"]["tokens"] / LADDER["high"]["tokens"]
+    )
+    assert at_max["reasoning"] == pytest.approx(
+        at_high["reasoning"] * LADDER["max"]["reasoning"] / LADDER["high"]["reasoning"]
+    )
+    assert estimator.seconds("implement", STRONG, "max") == pytest.approx(
+        estimator.seconds("implement", STRONG, "high")
+        * LADDER["max"]["tokens"]
+        / LADDER["high"]["tokens"]
+    )
+
+
+def test_a_row_taken_without_a_level_is_neither_divided_nor_multiplied(
+    tmp_path: Path,
+) -> None:
+    """A model with no effort control ran at factor one and is read at factor one."""
+
+    estimator = _estimator(
+        _many(
+            3,
+            1.0,
+            deliberation=None,
+            tokens={"cache_read": 1_100_000.0},
+            seconds=700.0,
+        ),
+        tmp_path,
+    )
+
+    assert estimator.tokens("implement", STRONG, None)["cache_read"] == pytest.approx(
+        1_100_000.0
+    )
+    assert estimator.seconds("implement", STRONG, None) == pytest.approx(700.0)
+    assert estimator.tokens("implement", STRONG, "max")["cache_read"] == pytest.approx(
+        1_100_000.0 * LADDER["max"]["tokens"]
+    )
+
+
+def test_the_shipped_note_says_the_ladder_is_applied_to_measurements_too() -> None:
+    """A factor documented as the prior's alone is a factor nobody applies twice."""
+
+    shipped = json.loads((SHIPPED / "data" / "kinds.json").read_text(encoding="utf-8"))
+
+    assert "measured" in shipped["deliberation_note"]
 
 
 def test_the_prior_ranks_a_capable_model_above_a_weak_one_on_a_hard_kind() -> None:
