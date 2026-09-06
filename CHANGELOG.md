@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.24.1] – 2026-09-06
+
 ### Fixed
 
 - A channel answered for its own harness alone, so every model reached through a bridge was unpayable and therefore excluded from the pool: a Claude Code session runs the Codex CLI to reach an OpenAI model, and the subscription that pays for those tokens is recorded against Codex. Answering the setup interview left a caller strictly worse off than never having answered it, since a profile with channels excluded what a profile with none had merely been unable to price. A subscription now pays for its provider whichever harness invokes it, and where the same provider is reached two ways the asking harness still wins — which is the whole reason a channel names one.
