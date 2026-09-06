@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.25.0] – 2026-09-06
+
 ### Added
 
 - The subscriptions each provider markets are world facts in the catalogue now, each under the whole name it is billed by and each carrying the source and the date behind it, so the setup interview offers *Claude Max 20x* and *ChatGPT Pro 20x* instead of a hand-written table that could express neither. Two of the three rows in that table could not hold the answer the maintainer had, and the page contradicted itself three ways about how a plan is even spelled — `Max 20x`, then `"plan": "Claude", "tier": "Max 20x"`, then `"plan": "Claude Max", "tier": "20x"` in what actually reached disk. A plan is one name and there is no tier field to disagree about. A provider whose plans the catalogue does not hold is asked openly rather than offered a list assembled from memory; a set longer than the asking tool can carry goes into the question whole rather than being trimmed to fit, which is what had dropped Anthropic's free tier; and an answer matching nothing offered is reported as typed rather than recorded as though it had been chosen, since that is the one fact that tells an interview its own vocabulary has fallen behind.
