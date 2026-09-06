@@ -12,7 +12,7 @@ model-selector - choose the model and deliberation level that finishes work for 
 
 **/model-selector** **status** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
-**/model-selector** **update** [**--force**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **update** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 **/model-selector** **evidence** [**--data=**_PATH_] [*KIND*] [**--** *INSTRUCTION*]
 
@@ -32,9 +32,9 @@ Enabling this Skill installs session lifecycle hooks into every supported Harnes
 
 Where nothing else has established how a finished unit went, one call to a model your profile makes reachable reads that unit's instruction and its result and returns a score and a line of reason. It is chosen the way any unchecked work is: the cheapest point the measurements are confident in, rather than the cheapest point there is, because nothing downstream catches a wrong score. Those two excerpts are used to make the call and are stored nowhere. What is retained is one row per unit: the kind, the model, the deliberation level, the score and who established it, the token counts the Harness exposed, the cost those tokens price at, the elapsed time, and whether the work was routed. Prompts, responses, reasoning, diffs, file contents, terminal output and absolute paths are never copied, because the row is built by copying named fields rather than by removing unwanted ones.
 
-Those same hooks run one bounded refresh of the public facts at a session's end: a conditional re-fetch of the model lists, capability figures and rate cards that have fallen due, one connection at a time, within a small time budget, sending no credential and no identifier of you or your machine. It reads no page for anything but those facts, starts no model, and discards a fact that arrives without a source it can attribute. `update` is the same pass run by hand, and `status` is where it is reported.
+The public facts this Skill reasons from — which models exist, what each supports, what each costs, and what each provider's subscriptions are called — are read off the providers' own pages by the agent running `update`. A script has no web tool and does not pretend to one. So the network is reached by `update`, and by `setup` where it begins with that same reading because the catalogue has gone stale, and by nothing else at all; every other command works from what is already on disk. What was read is validated before it is stored: an entry with nothing to attribute it to is discarded by name, a rate card in a currency other than USD or a unit other than per million tokens is refused rather than converted, and `capability` is never fetched, being a seeded prior that measurement refines.
 
-Nothing waits for you. There is no queue to work through and no reminder placed where a model would read it. Disabling the Skill removes every hook it installed — the measuring and the refresh alike — and keeps what was measured; `reset --evidence` is the separate act that discards the measurement, and you have to ask for it by name.
+Nothing waits for you. There is no queue to work through and no reminder placed where a model would read it. Disabling the Skill removes every hook it installed and keeps what was measured; `reset --evidence` is the separate act that discards the measurement, and you have to ask for it by name.
 
 ## COMMANDS
 
@@ -44,11 +44,11 @@ Hold the interview and write the profile: Harnesses, providers, models, and how 
 
 **status**
 
-Report the profile and its age, how current the catalogue is, what the unattended refresh is waiting on, what has been measured, and the health of each Harness integration. It asks nothing and changes nothing.
+Report the profile and its age, how fresh the catalogue's own facts are, what has been measured, and the health of each Harness integration. It asks nothing, changes nothing, and reaches nothing.
 
 **update**
 
-Fetch what can be fetched now — model lists, capability figures, and rate cards — into the catalogue, one connection at a time and within a bounded budget. A price arriving without a source it can attribute is discarded rather than stored.
+Read the providers' own pages and adopt what they say — model lists, rate cards, and the subscriptions each provider markets — into the catalogue. The reading is the agent's; validating it, merging it and writing it is the Skill's. An entry arriving without a source it can attribute is discarded rather than stored, and a document that is not the catalogue's shape at all is refused whole.
 
 **evidence**
 
@@ -76,10 +76,6 @@ The class of work, which is what an estimate is keyed on: `mechanical`, `impleme
 
 Use *PATH* as the profile, catalogue and measurement directory instead of `~/.kntnt/model-selector/`. Every command means the same directory by it.
 
-**--force**
-
-For `update`, check every mutable source once rather than only those the shipped cadence has made due. The cadences ship with the Skill and the profile does not override them.
-
 **--evidence**
 
 For `reset`, discard this machine's measurement as well as the profile: the measurement store, the units still waiting to be graded, and the capture directory. The Harness hooks stay installed and keep measuring.
@@ -96,7 +92,7 @@ What the interview settled: Harnesses, providers, enabled models, and one paymen
 
 **~/.kntnt/model-selector/catalogue.json**
 
-World facts refreshed over the shipped seed — exact model identities, family aliases, supported deliberation levels, rate cards and capability figures, each carrying the address it came from and the date it was retrieved.
+World facts adopted over the shipped seed — exact model identities, family aliases, supported deliberation levels, rate cards, and the subscriptions each provider markets, each carrying the address it was read from and the date it was read. The capability figures beside them are the seed's own, refined by measurement rather than by fetching.
 
 **~/.kntnt/model-selector/measurements.jsonl**
 
@@ -116,7 +112,7 @@ An incomplete form, an unsupported combination, or an option with no work to do 
 
 Nothing the selection engine answers is a refusal. A missing profile, an empty catalogue and an unreachable model are each a degraded answer naming your own seat, with a note saying which it was — a caller that must be stopped is stopped by something that knows what the work is worth.
 
-A source that did not change is a successful `update`. A figure no measurement supports is reported absent rather than as a zero.
+A page that says what the catalogue already held is a successful `update`. An `update` in a Harness with no web tool says so and changes nothing. A figure no measurement supports is reported absent rather than as a zero.
 
 ## EXAMPLES
 
@@ -144,7 +140,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the shipped selection engine, the interview's writer, the refresh pass and the capture hooks. Network access is used only by `update` and by the unattended refresh that follows a session; every other command works from what is already on disk. Grading a finished unit calls one model, chosen as the cheapest your own profile makes reachable that the measurements are confident in, and stops rather than inventing a number where none can be reached.
+`uv` runs the shipped selection engine, the interview's writer, the catalogue's own reader and validator, and the capture hooks. The network is reached by `update` and by `setup`, and by nothing else; every other command works from what is already on disk. Reading a provider's page needs whatever web tool your Harness gives the agent, and where it gives none, `update` says so and changes nothing. Grading a finished unit calls one model, chosen as the cheapest your own profile makes reachable that the measurements are confident in, and stops rather than inventing a number where none can be reached.
 
 ## SEE ALSO
 

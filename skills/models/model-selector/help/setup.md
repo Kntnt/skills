@@ -46,7 +46,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the writer that validates the profile against the catalogue and syncs the generated subagent definitions. The interview itself needs a network only to refresh the catalogue it offers you, and works from the shipped seed without one.
+`uv` runs the writer that validates the profile against the catalogue and syncs the generated subagent definitions. Where the catalogue has gone stale the interview opens by reading the providers' pages, exactly as `update` does, which needs whatever web tool your Harness gives the agent; without one it offers what is already on disk.
 
 ## SEE ALSO
 

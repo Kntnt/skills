@@ -459,3 +459,225 @@ def test_a_refreshed_plan_list_replaces_the_seed_plans_of_that_provider(
 
     assert [plan.name for plan in catalogue.plans_for(cat, "testing")] == ["New Plan"]
     assert [plan.name for plan in catalogue.plans_for(cat, "other")] == ["Untouched"]
+
+
+def _fetched(**overrides: Any) -> dict[str, Any]:
+    """Provide one entry as the agent's fetch writes it: attributed, uncapable.
+
+    `capability` is absent because nothing fetches it. It is a seeded prior
+    that measurement refines, and the agent doing the reading is told not to
+    write one.
+    """
+
+    entry = _model(source_url="https://example.test/models", retrieved="2026-09-06")
+    entry.pop("capability")
+    entry.update(overrides)
+    return entry
+
+
+def _card(**overrides: Any) -> dict[str, Any]:
+    """Provide one rate card, in the units this Skill compares and never converts."""
+
+    card = {
+        "input": 10.0,
+        "cache_read": 1.0,
+        "cache_write": 12.5,
+        "output": 50.0,
+        "currency": "USD",
+        "unit": "per_mtok",
+    }
+    card.update(overrides)
+    return card
+
+
+def _fetch(tmp_path: Path, **document: Any) -> Path:
+    """Write one fetched document where `adopt` is handed it: a scratch file."""
+
+    path = tmp_path / "fetched.json"
+    path.write_text(json.dumps(document), encoding="utf-8")
+    return path
+
+
+def test_adopt_writes_the_new_the_changed_and_the_plans_and_names_what_it_dropped(
+    tmp_path: Path,
+) -> None:
+    """One document, one pass: three facts adopted and one refused by name.
+
+    This is the whole of what `update` now is on the machine's side. The agent
+    reads the provider's pages and writes what it found; everything that
+    decides whether a fact may enter the catalogue at all is here.
+    """
+
+    here = _here(tmp_path, [_model()])
+    data = tmp_path / "data"
+    document = _fetch(
+        tmp_path,
+        models=[
+            _fetched(id="test-two", family="two", capability=0.99),
+            _fetched(price=_card(input=11.0)),
+            {"id": "test-three", "provider": "testing", "family": "three"},
+        ],
+        plans=[
+            {
+                "provider": "testing",
+                "name": "New Plan",
+                "monthly_usd": 12.0,
+                "source_url": "https://example.test/pricing",
+                "retrieved": "2026-09-06",
+            }
+        ],
+    )
+
+    report = catalogue.adopt(data, here, document)
+
+    assert report["refused"] is None
+    assert {row["id"]: row["status"] for row in report["models"]} == {
+        "test-two": "added",
+        "test-one": "changed",
+    }
+    assert [row["provider"] for row in report["plans"]] == ["testing"]
+    assert [row["name"] for row in report["discarded"]] == ["test-three"]
+    assert "source_url" in report["discarded"][0]["reason"]
+
+    cat = catalogue.load(data, here)
+
+    assert {model.id for model in cat.models} == {"test-one", "test-two"}
+    assert catalogue.resolve(cat, "test-one")[0].price is not None
+    assert catalogue.resolve(cat, "test-one")[0].price.input == 11.0
+    assert [plan.name for plan in catalogue.plans_for(cat, "testing")] == ["New Plan"]
+
+    # A capability the document carried is neither adopted nor left implied:
+    # it is named as ignored, because nothing fetches that figure.
+    assert [row["ignored"] for row in report["models"] if row["id"] == "test-two"] == [
+        ["capability"]
+    ]
+    assert catalogue.resolve(cat, "test-two")[0].capability is None
+    assert list(data.glob("*.tmp")) == []
+
+
+def test_adopt_discards_a_card_in_another_currency_and_adopts_the_rest(
+    tmp_path: Path,
+) -> None:
+    """Nothing here converts, so a card in euros would be added to a dollar bill."""
+
+    here = _here(tmp_path, [_model()])
+    data = tmp_path / "data"
+    document = _fetch(
+        tmp_path,
+        models=[
+            _fetched(id="test-euro", family="euro", price=_card(currency="EUR")),
+            _fetched(price=_card(input=11.0)),
+        ],
+    )
+
+    report = catalogue.adopt(data, here, document)
+
+    assert report["refused"] is None
+    assert [row["name"] for row in report["discarded"]] == ["test-euro"]
+    assert "EUR" in report["discarded"][0]["reason"]
+
+    cat = catalogue.load(data, here)
+
+    assert {model.id for model in cat.models} == {"test-one"}
+    assert catalogue.resolve(cat, "test-one")[0].price is not None
+    assert catalogue.resolve(cat, "test-one")[0].price.input == 11.0
+
+
+def test_adopt_discards_a_card_quoted_in_another_unit_by_name(tmp_path: Path) -> None:
+    """A rate per thousand tokens read as a rate per million is off by a thousand."""
+
+    here = _here(tmp_path, [_model()])
+    data = tmp_path / "data"
+    document = _fetch(
+        tmp_path,
+        models=[_fetched(id="test-kilo", family="kilo", price=_card(unit="per_ktok"))],
+    )
+
+    report = catalogue.adopt(data, here, document)
+
+    assert [row["name"] for row in report["discarded"]] == ["test-kilo"]
+    assert "per_ktok" in report["discarded"][0]["reason"]
+    assert [model.id for model in catalogue.load(data, here).models] == ["test-one"]
+
+
+def test_adopt_discards_a_deliberation_level_outside_the_ladder_by_name(
+    tmp_path: Path,
+) -> None:
+    """The ladder is the only ordering of effort this Skill has, so it is closed."""
+
+    here = _here(tmp_path, [_model()])
+    data = tmp_path / "data"
+    document = _fetch(
+        tmp_path,
+        models=[_fetched(id="test-odd", family="odd", deliberation=["low", "extreme"])],
+    )
+
+    report = catalogue.adopt(data, here, document)
+
+    assert [row["name"] for row in report["discarded"]] == ["test-odd"]
+    assert "extreme" in report["discarded"][0]["reason"]
+    assert [model.id for model in catalogue.load(data, here).models] == ["test-one"]
+
+
+def test_adopt_refuses_a_document_that_is_not_the_catalogues_shape_and_writes_nothing(
+    tmp_path: Path,
+) -> None:
+    """A per-entry rule discards an entry; a shape this cannot read stops the pass."""
+
+    here = _here(tmp_path, [_model()])
+    data = tmp_path / "data"
+    document = _fetch(tmp_path, prices=[{"id": "test-one"}])
+
+    report = catalogue.adopt(data, here, document)
+
+    assert report["refused"] is not None
+    assert report["written"] is None
+    assert not (data / "catalogue.json").exists()
+    assert [model.id for model in catalogue.load(data, here).models] == ["test-one"]
+
+
+def test_adopting_a_price_keeps_the_capability_the_seed_shipped(
+    tmp_path: Path, capsys: Any
+) -> None:
+    """The refreshed entry replaces the seeded one whole, so it has to carry it all.
+
+    A document carrying a price and nothing else would otherwise erase the
+    model's capability, its deliberation ladder and its aliases, which is the
+    one way an `update` could leave this Skill knowing less than it shipped
+    with.
+    """
+
+    data = tmp_path / "data"
+    document = _fetch(
+        tmp_path,
+        models=[
+            {
+                "id": "claude-fable-5-1",
+                "provider": "anthropic",
+                "family": "fable",
+                "price": _card(input=11.0, cache_read=0.25),
+                "source_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+                "retrieved": "2026-09-06",
+            }
+        ],
+    )
+
+    assert catalogue.main(["adopt", str(document), f"--data={data}"]) == 0
+
+    report = json.loads(capsys.readouterr().out)
+
+    assert report["models"] == [
+        {
+            "id": "claude-fable-5-1",
+            "status": "changed",
+            "changed": ["price"],
+            "ignored": [],
+        }
+    ]
+
+    fable = catalogue.resolve(catalogue.load(data, SHIPPED), "claude-fable-5-1")[0]
+
+    assert fable.price is not None
+    assert fable.price.input == 11.0
+    assert fable.capability == 0.95
+    assert fable.deliberation == ("low", "medium", "high", "xhigh", "max")

@@ -2,7 +2,7 @@
 name: model-selector
 description: Choose the model and deliberation level that completes delegated work at the lowest total cost, when another Skill requires Model Selector's public select interface. Do not use implicitly for setup, status, update, evidence, or reset.
 disable-model-invocation: false
-argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | update [--force] [--data=<path>] | evidence [--data=<path>] [<kind>] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
+argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | update [--data=<path>] | evidence [--data=<path>] [<kind>] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -37,7 +37,7 @@ In the JSON, `path` is the command path as a list, `flags` holds each flag the u
 
 On `evidence`, `<kind>` narrows the account to that one kind, spelled as above.
 
-`--force` makes `update` check every mutable source rather than only the ones the shipped cadence has made due. `--evidence` widens `reset` from the user's answers to the measurement as well. `--yes` answers the one question `reset` asks.
+`--evidence` widens `reset` from the user's answers to the measurement as well. `--yes` answers the one question `reset` asks.
 
 ## The answer
 
@@ -70,6 +70,8 @@ Two identical questions can come back with different answers, and that is this w
 
 ## Setup
 
+Where the catalogue is due — its newest `retrieved` date more than thirty days old, read as `## Status` reads it — hold `## Update` first, so the interview offers current prices, model lists and plans rather than what the release froze.
+
 Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which providers, which of those providers' models, and then how each provider is paid for on each channel. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that can be fetched — prices, model lists, the subscriptions a provider sells and its own positioning are all the machine's job. Show the assembled profile in full before it is written.
 
 Hand it to the script rather than editing the file:
@@ -82,9 +84,9 @@ Render its report: the revision written, its `notes`, and the generated subagent
 
 Report what this Skill knows, how fresh it is and what it wants from the user. Nothing here asks a question, changes anything or reaches the network.
 
-Read `<directory>/profile.json` and say when it was answered and which Harnesses, providers, models and payment channels it holds. Where it is absent or will not validate, say so and name `/model-selector setup`: until then every catalogue model the detected Harnesses can reach counts as enabled, which is a wider pool than anyone chose. Say the same where `answered_at` is more than ninety days old, or where the catalogue holds a provider the profile has never been asked about.
+Read `<directory>/profile.json` and say when it was answered and which Harnesses, providers, models and payment channels it holds. Where it is absent or will not validate, say so and name `/model-selector setup`: until then every catalogue model the detected Harnesses can reach counts as enabled, which is a wider pool than anyone chose. Say the same where `answered_at` is more than ninety days old, where the catalogue holds a provider the profile has never been asked about, or where the catalogue holds models the profile does not enable — say how many, adopting one being the user's own act.
 
-Run `uv run "$HERE/scripts/refresh.py" status --data=<directory>` and render its account of the world facts: which sources are current, which are due, and which the unattended pass has never established. This is the one surface that pass is reported on, and a reminder placed anywhere a model reads would change the thing being measured.
+Report how fresh the world's facts are, from the dates the catalogue itself carries. Run `uv run "$HERE/scripts/catalogue.py" [--data=<directory>]` and read the `retrieved` date off every model and every plan: name the newest and the oldest, and where the newest is more than thirty days old, name `/model-selector update` as what brings them current. Nothing here fetches anything.
 
 Run `uv run "$HERE/scripts/capture.py" status --data=<directory>` and render measurement's own health: per Harness this collection has an adapter for, whether the integration is `healthy`, `gated`, `degraded`, `absent` or `unsatisfied`; whether that Harness's finished session record can supply measurements at all; how many units are waiting to be graded; and when the grader last ran. Where `retired` is not nought, say that the directory still holds that many files an earlier design of this Skill left behind, that nothing reads them, and that `reset --evidence` is what removes them.
 
@@ -102,17 +104,33 @@ A figure it reports as `null` is a figure no row carries, and it is said as abse
 
 ## Update
 
-Fetch what can be fetched now, in one bounded pass:
+The world's facts are read by you, off the providers' own pages, because a script has no web tool and should not pretend to one. Where this Harness gives you no way to read a page, say so and stop: the catalogue stands as it shipped, and every other command of this Skill goes on answering from it.
 
-    uv run "$HERE/scripts/refresh.py" refresh --data=<directory> [--force]
+Start from what is already known:
 
-Then bring the generated subagent definitions into line with whatever the pass changed, because a catalogue that gained or lost a model has changed which of them ought to exist:
+    uv run "$HERE/scripts/catalogue.py" [--data=<directory>]
+
+Read every `source_url` it carries — one per model and one per plan — and, where that page does not carry the rate card, the provider's own pricing page beside it. Write what you found to a scratch file, as one JSON document in the catalogue's own shape:
+
+- `models`, each with `id`, `provider`, `family`, `aliases`, `deliberation`, `price`, `long_context_threshold`, `long_context`, `reasoning_billed_as`, `provider_says` and `released`.
+- `plans`, each with `provider`, `name` and `monthly_usd`.
+- Every entry carrying the `source_url` it was read from and `retrieved` as today's date. An entry with neither is discarded, a fact nothing can attribute being worse than no fact.
+
+Write no `capability`: it is a seeded prior that measurement refines, and one carried here is ignored and reported as ignored. Every rate is USD per million tokens — record what the page actually says rather than converting it, and let the validator refuse what it must.
+
+Hand the file over:
+
+    uv run "$HERE/scripts/catalogue.py" adopt <path> [--data=<directory>]
+
+It merges each model field by field over what is in force, so a document saying only what you read leaves everything else standing; it replaces a provider's plans whole, a retired plan having to be able to disappear; and it writes in one move. Render its report: per model whether it was added, changed or unchanged and which fields moved; per provider the plan list that replaced which; and every entry it discarded, by name and with the rule it failed. A document it refuses whole wrote nothing and exits non-zero to say so.
+
+Then bring the generated subagent definitions into line with whatever was adopted, because a catalogue that gained or lost a model has changed which of them ought to exist:
 
     uv run "$HERE/scripts/setup_apply.py" [--data=<directory>]
 
 With no profile operand it syncs and writes no profile. Report the definitions written and removed, and where it says the directory had to be created, pass that on as `## Setup` does.
 
-Pass `--force` only where the user wrote it; without it the pass checks what the shipped cadence has made due. Render what it reports: every source checked, every fact that changed, and every price it discarded for arriving without a source it could attribute. A pass in which nothing changed is a successful pass. A model it discovered that the profile does not enable is written to the catalogue and left disabled, and `status` is where the user is told they may want to adopt it.
+A pass in which nothing changed is a successful pass. A model discovered that the profile does not enable is written to the catalogue and left disabled, and `## Status` is where the user is told they may want to adopt it.
 
 ## Reset
 

@@ -36,8 +36,8 @@ from typing import Any
 import catalogue
 import launch
 import profiles
-from catalogue import Catalogue, Price
-from profiles import CURRENCY, PAYMENTS, UNIT, Channel, Profile
+from catalogue import CURRENCY, UNIT, Catalogue, Price
+from profiles import PAYMENTS, Channel, Profile
 
 # Where Claude Code reads the subagent definitions this Skill generates. It is
 # the one directory outside its own data this Skill ever writes into, and it

@@ -16,6 +16,8 @@ Before the first question:
 
 It prints what this machine knows about the world: every model with the provider's own one-line description, its rate card and where that came from, and every subscription each provider markets with what it lists at. Questions 2, 3 and 4 are answered out of that one document. Read it rather than the files behind it — which of them wins, and how a refreshed provider replaces a whole list of plans, are rules the engine keeps so that nothing has to apply them by hand.
 
+**Where its facts have gone stale, bring them current before asking anything.** Read the `retrieved` date off every entry; where the newest is more than thirty days old, hold `SKILL.md`'s `## Update` first — read the providers' pages, adopt what they say, and print the catalogue again. The interview offers prices, model lists and plans as though they were current, and offering a plan a provider stopped selling is answered wrongly by somebody who has no way of seeing that the list came from a release rather than from the provider. Where the Harness gives you no web tool, say so once, and hold the interview on what is on disk.
+
 ## The four questions, in this order
 
 ### 1. Which Harnesses

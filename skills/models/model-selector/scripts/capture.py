@@ -104,10 +104,11 @@ PAYLOAD_ALLOWED = frozenset(
 # Named once here rather than left for a consumer to infer.
 PENDING_FILE = "pending.jsonl"
 
-# What the design this Skill replaced left behind in a data directory. Nothing
+# What earlier designs of this Skill left behind in a data directory. Nothing
 # reads any of them and nothing writes them any more: they are the stored
 # configuration, the standing policy, the frozen snapshots and the two ledgers
-# of a router that no longer exists. Named here because a verb that does not
+# of a router that no longer exists, and the check state of an unattended
+# source refresh that no longer runs. Named here because a verb that does not
 # know a file exists cannot remove it, and a file no verb knows about sits in
 # somebody's home directory for as long as the Skill stays installed.
 RETIRED_FILES = (
@@ -123,6 +124,7 @@ RETIRED_FILES = (
     "model-versions.jsonl",
     "price-schedules.jsonl",
     "run-observations.jsonl",
+    "source-states.jsonl",
     "standing-policy-history.jsonl",
     "standing-policy.json",
     "subscription-schedules.jsonl",
@@ -1041,10 +1043,10 @@ def _finish(
     """Answer one session-ending signal: derive its Units and forget the draft.
 
     A session that ended abruptly contributes whatever its own record
-    establishes and nothing more; nothing here waits for a human. The two
-    sibling actions this moment carries — grading what is pending, and
-    refreshing this Skill's own public sources — write nothing capture owns,
-    and their every failure is swallowed here exactly as this path's own are.
+    establishes and nothing more; nothing here waits for a human. The one
+    sibling action this moment carries — grading what is pending — writes
+    nothing capture owns, and its every failure is swallowed here exactly as
+    this path's own are.
     """
 
     written = _remember(
@@ -1054,8 +1056,6 @@ def _finish(
 
     with suppress(Exception):
         _sibling("grade").hook_pass(data)
-    with suppress(Exception):
-        _sibling("refresh").refresh(data)
 
     return {"ok": True, "fail_open": False, **written}
 
@@ -1066,10 +1066,11 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     This is the synchronous path a Harness runs, so it does bounded local
     metadata I/O and nothing else: no model call, no test run, no repository
     scan, and no long-lived work. Every failure in it is swallowed, because a
-    capture that breaks a session is worse than no capture. The two things a
+    capture that breaks a session is worse than no capture. The one thing a
     session's own last invocation additionally carries — one bounded grading
-    pass and this Skill's unattended source refresh — are bounded in their own
-    modules and reach a model or the network only from there (ADR-0179).
+    pass — is bounded in its own module and reaches a model only from there
+    (ADR-0179). Nothing on this path reaches the network at all: the world's
+    own facts are fetched by the agent running `setup` or `update` (ADR-0185).
 
     The object returned here is a diagnostic and never a Harness's protocol,
     so the command line writes it to standard error and leaves standard output

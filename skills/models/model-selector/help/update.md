@@ -2,29 +2,27 @@
 
 ## NAME
 
-model-selector update - fetch what can be fetched into the catalogue
+model-selector update - read the providers' pages and adopt what they say
 
 ## SYNOPSIS
 
-**/model-selector** **update** [**--force**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
+**/model-selector** **update** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-One bounded pass over the public facts this Skill reasons from: which models exist, which deliberation levels each supports, what each costs per token category, what independent benchmarks measure them at, and how the provider itself describes what each is for.
+One pass over the public facts this Skill reasons from: which models exist, which deliberation levels each supports, what each costs per token category, how the provider itself describes what each is for, and what each provider's subscriptions are called and list at.
 
-Rate cards are part of that. A price this Skill fetched carries the address it came from and the date it arrived, which is auditable in a way a figure typed in eight months ago is not — and a fetched fact with no source it can attribute is discarded rather than stored.
+The reading is done by the agent, with whatever web tool your Harness gives it, off the `source_url` the catalogue already carries for every model and every plan, and off the provider's own pricing page where that address does not carry the rate card. A script has no web tool and does not pretend to one, so where your Harness gives the agent none, this command says so and changes nothing — the catalogue stands as it shipped, and every other command goes on answering from it.
 
-The pass is conditional, one connection at a time, and bounded against the clock before it starts. It starts no model and evaluates nothing. Sources fall due on the shipped cadence, which the profile does not override, and a model whose capability nothing has ranked makes its own benchmark index due regardless, so a newly adopted seat is not unrankable for a month by construction.
+What was read is then handed to the catalogue's own validator, which is what decides whether a fact may enter the store at all. Every rule is per entry: an entry with no address and no date is discarded by name, because a price nothing can attribute is worse than no price; a rate card in a currency other than USD or a unit other than per million tokens is refused rather than converted; a deliberation level this Skill has no ladder for is refused with the level named. The rest of the document is adopted. Only a document that is not the catalogue's shape at all is refused whole, and then nothing at all is written.
 
-The same pass runs unattended at the end of a session while the Skill is Enabled. Running it by hand is the same work, immediately, and with **--force** it is that work with the cadence ignored.
+A model merges field by field over what is in force, so a document saying only what was read leaves everything else standing. A provider's plans are replaced whole, because a plan somebody stopped selling has to be able to disappear. `capability` is never fetched and never written: it is a seeded prior refined by measurement, and how a published benchmark maps onto its scale is not settled.
 
-A model discovered that your profile does not enable is written to the catalogue and left disabled. Adopting it is your own act, and `status` names it as something you may want. A pass in which nothing changed is a successful pass.
+The report names, per model, whether it was added, changed or unchanged and which fields moved; per provider, which plan list replaced which; and every entry discarded, by name and with the rule it failed. A pass in which nothing changed is a successful pass.
+
+A model discovered that your profile does not enable is written to the catalogue and left disabled. Adopting it is your own act, and `status` names it as something you may want.
 
 ## OPTIONS
-
-**--force**
-
-Check every mutable source once, regardless of when it was last retrieved. A model detail page already known to be immutable is still not fetched again.
 
 **--data=**_PATH_
 
@@ -32,7 +30,7 @@ Use *PATH* as the profile, catalogue and measurement directory instead of `~/.kn
 
 ## DIAGNOSTICS
 
-An unreachable source is reported and the pass continues; nothing here fails a session. An option with no work to do here is refused rather than ignored: the Skill names the error, prints this SYNOPSIS, changes nothing, and points at `/model-selector update --help`.
+An unreachable page is reported and the pass continues with what was read. A document the validator refuses whole exits non-zero, having written nothing. An option with no work to do here is refused rather than ignored: the Skill names the error, prints this SYNOPSIS, changes nothing, and points at `/model-selector update --help`.
 
 ## INVOCATION ENVELOPE
 
@@ -42,7 +40,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the refresh pass. This is the one command that uses the network by request; the unattended pass behind it is installed with the Skill and removed when it is Disabled.
+`uv` runs the catalogue's own reader and validator. Reading a page needs whatever web tool your Harness gives the agent. This command and `setup` are the only two that reach the network at all.
 
 ## SEE ALSO
 

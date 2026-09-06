@@ -25,6 +25,7 @@ import math
 import sys
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -48,6 +49,41 @@ REFRESHED_FILE = "catalogue.json"
 # Rate cards are quoted per million tokens by every provider this Skill has
 # met, so the unit is fixed and a file saying otherwise is not converted.
 PER_MILLION = 1_000_000.0
+
+# The one currency and the one unit every figure here is compared in. Nothing
+# in this Skill converts anything, so a card in another currency is not a card
+# it can price from — it is a number that would be added to a USD bill as
+# though it were dollars. Named here rather than beside the profile because
+# the catalogue is the lower layer, and a second copy of a rule is a second
+# thing to keep true.
+CURRENCY = "USD"
+UNIT = "per_mtok"
+
+# Every field one model entry carries, and the subset an agent's fetch may
+# write. `capability` is off that subset deliberately: it is a seeded prior
+# that measurement refines, and how a published benchmark maps onto its scale
+# is not settled.
+MODEL_FIELDS = (
+    "id",
+    "provider",
+    "family",
+    "aliases",
+    "deliberation",
+    "price",
+    "long_context_threshold",
+    "long_context",
+    "reasoning_billed_as",
+    "capability",
+    "provider_says",
+    "released",
+    "source_url",
+    "retrieved",
+)
+FETCHED_FIELDS = tuple(name for name in MODEL_FIELDS if name != "capability")
+
+# Every field one plan entry carries. A plan is a whole name, a monthly price
+# and the attribution that makes both auditable, and nothing else.
+PLAN_FIELDS = ("provider", "name", "monthly_usd", "source_url", "retrieved")
 
 
 class ContextRule(Protocol):
@@ -171,6 +207,374 @@ def _merged_plans(seed: Sequence[Plan], refreshed: Sequence[Plan]) -> tuple[Plan
     return tuple(
         [plan for plan in seed if plan.provider not in spoken] + list(refreshed)
     )
+
+
+def adopt(
+    data_dir: Path, here: Path, path: Path, *, now: str | None = None
+) -> dict[str, Any]:
+    """Merge what the agent read off the providers' pages into the catalogue.
+
+    `update` is a reading job. The agent holding a web tool opens every
+    `source_url` the catalogue carries, writes what it found as one document
+    in this catalogue's own shape, and hands the path here. This is the half
+    that has to be a script: deciding what may enter the store, merging it
+    over what is already known, and replacing the file in one move.
+
+    Every rule is per entry. An entry with nothing to attribute it to, a rate
+    card in another currency or another unit, or a deliberation level outside
+    the ladder is discarded by name with the reason, and the rest of the
+    document is adopted — a single bad row in a page somebody read is not a
+    reason to learn nothing from the other twenty. Only a document that is not
+    this shape at all is refused whole, nothing being written.
+
+    A model merges field by field over the entry `load` currently answers
+    with, so a document carrying a price and nothing else leaves everything
+    else standing — `capability` above all, which nothing fetches. A provider's
+    plans are replaced whole, as `_merged_plans` explains.
+    """
+
+    document, refusal = _offered(path)
+    if document is None:
+        return {
+            "verb": "adopt",
+            "data": str(data_dir),
+            "source": str(path),
+            "refused": refusal,
+            "written": None,
+            "generated_at": None,
+            "models": [],
+            "plans": [],
+            "discarded": [],
+        }
+
+    # What is in force right now, which is what a merge lays the document over
+    # and what the report compares against.
+    cat = load(data_dir, here)
+    known = {model.id: _entry(model) for model in cat.models}
+    stored_models, stored_plans = _stored(data_dir / REFRESHED_FILE)
+
+    discarded: list[dict[str, Any]] = []
+    adopted = _adopt_models(document["models"], known, stored_models, discarded)
+    spoken = _adopt_plans(document["plans"], discarded)
+
+    report: dict[str, Any] = {
+        "verb": "adopt",
+        "data": str(data_dir),
+        "source": str(path),
+        "refused": None,
+        "written": None,
+        "generated_at": None,
+        "models": adopted,
+        "plans": [
+            _plan_change(cat, provider, offered) for provider, offered in spoken.items()
+        ],
+        "discarded": discarded,
+    }
+    if not adopted and not spoken:
+        return report
+
+    # Through a temporary sibling and an atomic rename: a pass interrupted
+    # mid-write leaves the previous catalogue standing rather than half of the
+    # new one.
+    stamp = now or _now()
+    kept = [plan for plan in stored_plans if str(plan.get("provider")) not in spoken]
+    data_dir.mkdir(parents=True, exist_ok=True)
+    target = data_dir / REFRESHED_FILE
+    staged = target.parent / f"{target.name}.tmp"
+    staged.write_text(
+        json.dumps(
+            {
+                "generated_at": stamp,
+                "models": [stored_models[name] for name in sorted(stored_models)],
+                "plans": kept
+                + [plan for offered in spoken.values() for plan in offered],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    staged.replace(target)
+
+    report["written"] = str(target)
+    report["generated_at"] = stamp
+    return report
+
+
+def _adopt_models(
+    entries: list[Any],
+    known: Mapping[str, dict[str, Any]],
+    stored: dict[str, dict[str, Any]],
+    discarded: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Merge every usable model entry into *stored*, and say what each one did."""
+
+    accounted: list[dict[str, Any]] = []
+    for index, entry in enumerate(entries):
+        fault = _model_fault(entry)
+        if fault is not None:
+            discarded.append(
+                {"kind": "model", "name": _model_name(entry, index), "reason": fault}
+            )
+            continue
+
+        # Field by field over what is in force, so that a document saying only
+        # what it read leaves everything it did not read exactly as it was.
+        identifier = str(entry["id"])
+        base = known.get(identifier, {})
+        offered = {name: entry[name] for name in FETCHED_FIELDS if name in entry}
+        whole = {**dict.fromkeys(MODEL_FIELDS), **base, **offered}
+        if _model(whole) is None:
+            discarded.append(
+                {
+                    "kind": "model",
+                    "name": identifier,
+                    "reason": "names no provider and family, and none is known",
+                }
+            )
+            continue
+
+        stored[identifier] = whole
+        changed = sorted(name for name in whole if whole[name] != base.get(name))
+        accounted.append(
+            {
+                "id": identifier,
+                "status": _status(base, changed),
+                "changed": changed if base else [],
+                "ignored": sorted(name for name in entry if name not in FETCHED_FIELDS),
+            }
+        )
+
+    return accounted
+
+
+def _plan_change(
+    cat: Catalogue, provider: str, offered: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    """Say what one provider's adopted plan list did to the list it replaced."""
+
+    was = [plan.name for plan in plans_for(cat, provider)]
+    names = [str(plan["name"]) for plan in offered]
+    return {
+        "provider": provider,
+        "status": "unchanged" if names == was else "replaced",
+        "names": names,
+        "was": was,
+    }
+
+
+def _status(base: Mapping[str, Any], changed: Sequence[str]) -> str:
+    """Return what one adopted model did to the catalogue."""
+
+    if not base:
+        return "added"
+    return "changed" if changed else "unchanged"
+
+
+def _adopt_plans(
+    entries: list[Any], discarded: list[dict[str, Any]]
+) -> dict[str, list[dict[str, Any]]]:
+    """Return the usable plans per provider, in the order the document holds them.
+
+    A provider is spoken about by its usable entries alone. A provider whose
+    every entry was discarded keeps the plans it had rather than losing them
+    to a page somebody read badly.
+    """
+
+    spoken: dict[str, list[dict[str, Any]]] = {}
+    for index, entry in enumerate(entries):
+        fault = _plan_fault(entry)
+        if fault is not None:
+            discarded.append(
+                {"kind": "plan", "name": _plan_name(entry, index), "reason": fault}
+            )
+            continue
+        offered = {name: entry.get(name) for name in PLAN_FIELDS}
+        spoken.setdefault(str(entry["provider"]), []).append(offered)
+
+    return spoken
+
+
+def _offered(path: Path) -> tuple[dict[str, list[Any]] | None, str | None]:
+    """Read one fetched document, or say why it is not one at all."""
+
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return None, f"no document at {path}"
+    except (OSError, ValueError) as problem:
+        return None, f"{path} could not be read: {problem}"
+
+    if not isinstance(raw, dict):
+        return None, f"{path} is not a JSON object"
+    if "models" not in raw and "plans" not in raw:
+        return None, f"{path} carries neither a models list nor a plans list"
+
+    models = raw.get("models", [])
+    plans = raw.get("plans", [])
+    if not isinstance(models, list) or not isinstance(plans, list):
+        return None, f"{path} carries a models or plans member that is not a list"
+
+    return {"models": models, "plans": plans}, None
+
+
+def _stored(path: Path) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]]]:
+    """Return what the refreshed file already holds, keyed for merging into.
+
+    An unreadable file is an empty one. The seed is what stands behind it in
+    either case, so a refreshed file nothing can parse costs the facts it held
+    and never the facts the Skill shipped with.
+    """
+
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}, []
+
+    if not isinstance(raw, dict):
+        return {}, []
+
+    entries = raw.get("models")
+    plans = raw.get("plans")
+    return (
+        {
+            str(entry["id"]): entry
+            for entry in (entries if isinstance(entries, list) else [])
+            if isinstance(entry, dict) and _text(entry.get("id"))
+        },
+        [
+            entry
+            for entry in (plans if isinstance(plans, list) else [])
+            if isinstance(entry, dict)
+        ],
+    )
+
+
+def _model_fault(entry: Any) -> str | None:
+    """Return why one model entry may not enter the catalogue, or None."""
+
+    if not isinstance(entry, dict):
+        return "is not an object"
+    if not _text(entry.get("id")):
+        return "carries no id"
+    if not _text(entry.get("source_url")):
+        return "carries no source_url to attribute it to"
+    if not _text(entry.get("retrieved")):
+        return "carries no retrieved date to attribute it to"
+
+    for member in ("price", "long_context"):
+        fault = _card_fault(entry.get(member))
+        if fault is not None:
+            return f"its {member} {fault}"
+
+    return _ladder_fault(entry.get("deliberation"))
+
+
+def _card_fault(raw: Any) -> str | None:
+    """Return why one rate card may not be priced from, or None.
+
+    Nothing anywhere converts, so a card in another currency is not a cheaper
+    card — it is a number that would be added to a dollar bill as though it
+    were dollars, and a rate per thousand tokens read as one per million is
+    wrong by a factor of a thousand in the direction that wins every ranking.
+    """
+
+    if raw is None:
+        return None
+    if not isinstance(raw, dict):
+        return "is not a rate card"
+
+    currency = _text(raw.get("currency")) or CURRENCY
+    unit = _text(raw.get("unit")) or UNIT
+    if currency != CURRENCY:
+        return f"is quoted in {currency} rather than {CURRENCY}, and nothing converts"
+    if unit != UNIT:
+        return f"is quoted {unit} rather than {UNIT}"
+    return None
+
+
+def _ladder_fault(raw: Any) -> str | None:
+    """Return why one deliberation list is not a subset of the ladder, or None."""
+
+    if raw is None:
+        return None
+    if not isinstance(raw, list):
+        return "carries a deliberation that is not a list"
+
+    outside = sorted({str(item) for item in raw} - set(LEVELS))
+    if outside:
+        return f"names deliberation levels off the ladder: {', '.join(outside)}"
+    return None
+
+
+def _plan_fault(entry: Any) -> str | None:
+    """Return why one plan entry may not be offered, or None."""
+
+    if not isinstance(entry, dict):
+        return "is not an object"
+
+    for member in ("provider", "name", "source_url", "retrieved"):
+        if not _text(entry.get(member)):
+            return f"carries no {member}"
+
+    monthly = entry.get("monthly_usd")
+    if monthly is not None and _number(monthly) is None:
+        return "carries a monthly_usd that is not a number"
+    return None
+
+
+def _model_name(entry: Any, index: int) -> str:
+    """Return what a discarded model entry is called in the report."""
+
+    if isinstance(entry, dict) and (identifier := _text(entry.get("id"))):
+        return identifier
+    return f"models[{index}]"
+
+
+def _plan_name(entry: Any, index: int) -> str:
+    """Return what a discarded plan entry is called in the report."""
+
+    if isinstance(entry, dict):
+        named = " ".join(
+            part
+            for member in ("provider", "name")
+            if (part := _text(entry.get(member)))
+        )
+        if named:
+            return named
+    return f"plans[{index}]"
+
+
+def _entry(model: Model) -> dict[str, Any]:
+    """Return one model as the refreshed file holds it, every field carried.
+
+    The refreshed entry replaces the seeded one whole, so a partial entry
+    written here is a fact the Skill silently stops knowing.
+    """
+
+    return {
+        "id": model.id,
+        "provider": model.provider,
+        "family": model.family,
+        "aliases": list(model.aliases),
+        "deliberation": list(model.deliberation),
+        "price": _priced(model.price),
+        "long_context_threshold": model.long_context_threshold,
+        "long_context": _priced(model.long_context),
+        "reasoning_billed_as": model.reasoning_billed_as,
+        "capability": model.capability,
+        "provider_says": model.provider_says,
+        "released": model.released,
+        "source_url": model.source_url,
+        "retrieved": model.retrieved,
+    }
+
+
+def _now() -> str:
+    """Return this instant, as the catalogue stamps what it was written at."""
+
+    return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
 
 def plans_for(cat: Catalogue, provider: str) -> list[Plan]:
@@ -397,8 +801,8 @@ def _price(raw: Any) -> Price | None:
         cache_read=_number(raw.get("cache_read")),
         cache_write=_number(raw.get("cache_write")),
         output=_number(raw.get("output")),
-        currency=_text(raw.get("currency")) or "USD",
-        unit=_text(raw.get("unit")) or "per_mtok",
+        currency=_text(raw.get("currency")) or CURRENCY,
+        unit=_text(raw.get("unit")) or UNIT,
     )
 
 
@@ -484,26 +888,48 @@ def _priced(price: Price | None) -> dict[str, Any] | None:
     }
 
 
-def main(argv: list[str] | None = None) -> int:
-    """Print the merged catalogue, and exit 0 whatever state it is in.
+def _emit(payload: Mapping[str, Any]) -> None:
+    """Print one machine-readable answer, as every reader of this Skill's gets it."""
 
-    The interview reads this rather than the two files behind it. Which of the
-    two wins, and how a refreshed provider replaces a whole list of plans, are
-    rules this module keeps; a second copy of them in prose somebody follows by
-    hand is a second thing to keep true.
+    json.dump(payload, sys.stdout, indent=2, sort_keys=True)
+    sys.stdout.write("\n")
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Print the merged catalogue, or adopt what an agent read into it.
+
+    The interview reads the print rather than the two files behind it. Which
+    of the two wins, and how a refreshed provider replaces a whole list of
+    plans, are rules this module keeps; a second copy of them in prose
+    somebody follows by hand is a second thing to keep true.
+
+    A refused document exits 1. Nothing was written, and the agent that fetched
+    it is who has to be told so rather than left reading a report as a success.
     """
 
     parser = argparse.ArgumentParser(
         prog="catalogue.py",
-        description="Print what models and subscriptions this machine knows about.",
+        description=(
+            "Print what models and subscriptions this machine knows about, or "
+            "adopt a document of fetched facts into them."
+        ),
     )
+    parser.add_argument("action", nargs="*", metavar="adopt <path>")
     parser.add_argument("--data", default=str(default_data()))
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
 
-    cat = load(Path(args.data).expanduser(), Path(__file__).resolve().parent.parent)
-    json.dump(_document(cat), sys.stdout, indent=2, sort_keys=True)
-    sys.stdout.write("\n")
-    return 0
+    data_dir = Path(args.data).expanduser()
+    here = Path(__file__).resolve().parent.parent
+    if not args.action:
+        _emit(_document(load(data_dir, here)))
+        return 0
+
+    if len(args.action) != 2 or args.action[0] != "adopt":
+        parser.error("the one verb beside the bare form is `adopt <path>`")
+
+    report = adopt(data_dir, here, Path(args.action[1]).expanduser())
+    _emit(report)
+    return 1 if report["refused"] else 0
 
 
 if __name__ == "__main__":

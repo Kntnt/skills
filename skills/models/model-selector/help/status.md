@@ -12,9 +12,9 @@ model-selector status - report what is known, how fresh it is, and what is wante
 
 Four accounts, none of which asks a question, changes anything, or reaches the network.
 
-The profile: when it was answered, which Harnesses, providers, models and payment channels it holds. Where it is absent or unreadable, that is said plainly, along with the consequence — every catalogue model the detected Harnesses can reach is treated as available until you run `setup`. A profile older than ninety days, or a provider in the catalogue you have never been asked about, is named here too.
+The profile: when it was answered, which Harnesses, providers, models and payment channels it holds. Where it is absent or unreadable, that is said plainly, along with the consequence — every catalogue model the detected Harnesses can reach is treated as available until you run `setup`. A profile older than ninety days, a provider in the catalogue you have never been asked about, and how many catalogue models the profile does not enable are named here too.
 
-The catalogue: which sources are current, which have fallen due, and which have never been established at all. The unattended pass that follows a session is reported here and nowhere else, deliberately — a reminder placed where a model reads it would change the thing being measured.
+The catalogue: how fresh its facts are, read off the dates the entries themselves carry — the newest and the oldest of them. Past thirty days on the newest, `update` is named as what brings them current. Nothing waits on that and nothing is placed where a model would read it, deliberately: a reminder inside a session changes the thing being measured.
 
 The measurement: how many units have been recorded, over what span of dates, how many are waiting to be graded, and when the grader last ran.
 
@@ -40,7 +40,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the two readers this page renders: the refresh pass's own account of its sources, and the capture integration's account of its health.
+`uv` runs the two readers this page renders: the catalogue's own print, whose dates say how fresh its facts are, and the capture integration's account of its health. Neither reaches the network.
 
 ## SEE ALSO
 

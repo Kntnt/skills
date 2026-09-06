@@ -27,7 +27,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from catalogue import Catalogue, Model, Price
+from catalogue import CURRENCY, UNIT, Catalogue, Model, Price
 
 PROFILE_FILE = "profile.json"
 
@@ -48,13 +48,6 @@ HARNESS_MARKERS = (
 # every `problem` this module writes, because a diagnosis without the verb
 # that fixes it is a diagnosis nobody acts on.
 REPAIR = "run `/model-selector setup` to answer these questions again"
-
-# The one currency and the one unit a rate card may be written in. Nothing in
-# this Skill converts anything, so a card in another currency is not a card
-# this Skill can price from — it is a number that would be added to a USD bill
-# as though it were dollars.
-CURRENCY = "USD"
-UNIT = "per_mtok"
 
 # What `_rates` answers with where a card is present and unusable, which is
 # neither a card nor the absence of one. A sentinel rather than an exception,
