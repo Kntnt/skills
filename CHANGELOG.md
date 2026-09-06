@@ -13,6 +13,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - `failure_overhead_usd` and the arithmetic it existed for. Every kind carried a figure for what one failed attempt costs beside its tokens, and nothing establishes such a figure by measurement — it was there only to keep a division from reading three cheap attempts and one careful one as the same bill, and with nothing dividing there is nothing for it to do.
 
+### Fixed
+
+- A session is split into units at every instruction somebody typed, and at nothing else. A background task's report — the line the Harness writes when a subagent finishes — carries the same `origin` stamp a typed instruction does, and capture had been reading it as one, so a session opened a fresh unit at every subagent completion. In the maintainer's own transcripts those were the majority of what this machine had filed: 510 notification-started units against 250 instruction-started ones, each with a notification as its instruction excerpt and whatever the session did next as its result, which is a measurement of nobody's instruction. A user line now begins a unit exactly where a person or a peer agent typed it; a notification, the session continuing itself, a tool result and the transcript's own bookkeeping are absorbed into the unit they arrive in, as a tool result already was. A peer agent's message begins one even though the Harness marks it meta, which it had been excluded by.
+
 ## [0.25.0] – 2026-09-06
 
 ### Added
