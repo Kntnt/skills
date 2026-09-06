@@ -44,7 +44,7 @@ Work never grades itself. A builder's own report of how it went, and a subagent'
 
 **checker** — a caller's explicit verdict on the finished work, taken as a number rather than as a pass or fail.
 
-**judge** — one call to a cheap model, described below, where nothing above it decided anything.
+**judge** — one call to a model strong enough to review the work, described below, where nothing above it decided anything.
 
 **signal** — free heuristics with no model behind them. Tests that ran and passed with no re-attempt score high. An instruction repeated later in the same session — the work was redone — scores low. A unit that was interrupted or errored with no result establishes nothing about the model and is dropped rather than scored zero.
 
@@ -54,13 +54,13 @@ The workflow's own failures are excluded rather than recorded as a model's failu
 
 ## The judge, and what it costs
 
-Where no checker and no free signal decided anything, one call is bought deliberately. The model is asked of the engine for `kind=converse`, which is what this call is — two short excerpts in, a number and a line out, rather than the reading `analyze` is priced for — at high stakes, which is what grading is — nothing checks a grade, and a judge that cannot do the job returns a plausible wrong number. So it is the cheapest point the engine is confident in rather than the cheapest point there is, and never a model named here, so the judge follows the catalogue rather than this page.
+Where no checker and no free signal decided anything, one call is bought deliberately. The model is asked of the engine for `kind=review`, which is what this call is — judging work somebody else finished against a stated standard — at high stakes, which is what grading is: nothing checks a grade, and a judge that cannot do the job returns a plausible wrong number rather than an obvious failure. Those two settle the bar, and the engine answers with the cheapest point it is confident clears it. No model is named here, so the judge follows the catalogue rather than this page. It is asked for as a process rather than as a Harness — the grader is a script, and a script cannot spawn a subagent — so what comes back is a command, and it is asked for read-only, the judge having nothing to write.
 
-It is shown the kind vocabulary, the unit's instruction excerpt and its result excerpt (at most 800 characters each), the tool-call counts, the duration and the token totals. It returns a strict JSON object: the kind, a score from 0 to 100, and one line of reason. **The two excerpts are used to build that call and are written nowhere.** What persists is the number and the one line.
+It is shown the kind vocabulary, the unit's instruction excerpt (at most 4,000 characters) and its result excerpt (at most 12,000), the tool-call counts, the duration and the token totals. Both are sent whole: an opening paragraph of a brief and an opening paragraph of a report are not the unit, and a judge shown that much is grading a summary it invented. It returns a strict JSON object: the kind, a score from 0 to 100, and one line of reason. **The two excerpts are used to build that call and are written nowhere.** What persists is the number and the one line.
 
-The budget is hard: at most twenty gradings in a pass, at most thirty seconds per call, one call at a time, and no pass at all where the store already holds fifty judge-graded rows from the last twenty-four hours. On a Claude-class cheap model a graded unit costs a fraction of a cent, and the budget bounds a day's worth of it well below the cost of a single routed job.
+The budget is hard: at most twenty gradings in a pass, at most thirty seconds per call, one call at a time, and no pass at all where the store already holds fifty judge-graded rows from the last twenty-four hours. One grading is one bounded exchange — a few thousand tokens in, a line out — on whichever channel the profile names for the point chosen, and the budget bounds a day's worth of them against that.
 
-A judge that cannot be reached — no reachable model, a timeout, output that will not parse — leaves the unit in `pending.jsonl` for the next pass, up to three attempts, after which it is written with its signal grade if it has one and dropped if it does not. **A pass that cannot run never loses a session and never invents a number.**
+A judge call that produced no verdict leaves the unit in `pending.jsonl` for the next pass, up to three attempts, after which it is written with its signal grade if it has one and dropped if it does not. The row carries the word for which of four things happened — `no-judge`, `timed-out`, `exited-nonzero`, `unparsable` — and `/model-selector status` counts the pending units by it, so a machine where every call fails the same way says which way rather than reporting a queue that is waiting for nothing. **A pass that cannot run never loses a session and never invents a number.**
 
 ## Nothing waits for a person
 

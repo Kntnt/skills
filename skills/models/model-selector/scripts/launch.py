@@ -77,6 +77,7 @@ def plan(
     cat: Catalogue,
     *,
     repo: str | None,
+    read_only: bool = False,
 ) -> Launch:
     """Return how to start *model* at *deliberation* from *harness*.
 
@@ -84,6 +85,12 @@ def plan(
     admission that there is no path. A point the caller cannot start is worth
     saying out loud, because the alternative is a command that fails later and
     further away from the decision that produced it.
+
+    `read_only` is the caller saying the work it is planning writes nothing —
+    the grader's judge is the one that does — and it reaches the bridge as the
+    sandbox and the tool list that grant no way to write. It is off by default
+    because most delegated work is building, and a builder that cannot write
+    is a builder that cannot finish.
 
     `cat` is part of the signature because every planner in this Skill is
     handed the world it plans against; reaching one already chosen model needs
@@ -105,10 +112,14 @@ def plan(
         )
 
     if model.provider in CODEX_PROVIDERS and "codex" in profile.harnesses:
-        return Launch("bridge-command", None, _codex(model, deliberation, repo), None)
+        return Launch(
+            "bridge-command", None, _codex(model, deliberation, repo, read_only), None
+        )
 
     if model.provider in CLAUDE_PROVIDERS and "claude-code" in profile.harnesses:
-        return Launch("bridge-command", None, _claude(model, deliberation, repo), None)
+        return Launch(
+            "bridge-command", None, _claude(model, deliberation, repo, read_only), None
+        )
 
     if "opencode" in profile.harnesses and model.provider in profile.providers:
         return Launch("bridge-command", None, _opencode(model, repo), None)
@@ -224,7 +235,9 @@ def _definition(model: Model, level: str | None) -> str:
 CODEX_TOP = "xhigh"
 
 
-def _codex(model: Model, deliberation: str | None, repo: str | None) -> tuple[str, ...]:
+def _codex(
+    model: Model, deliberation: str | None, repo: str | None, read_only: bool = False
+) -> tuple[str, ...]:
     """Return the Codex CLI command that starts one point.
 
     A `max` point launches at `xhigh` because the CLI accepts nothing higher.
@@ -240,6 +253,10 @@ def _codex(model: Model, deliberation: str | None, repo: str | None) -> tuple[st
     so that no process it starts holds a working directory this collection may
     replace under it, and every judge call it made was refused for that reason
     alone.
+
+    The sandbox is the one thing the caller decides: a read-only call is given
+    a sandbox that cannot write, and everything else keeps the writable
+    workspace the work it was planned for needs.
     """
 
     effort = CODEX_TOP if deliberation == "max" else deliberation or "medium"
@@ -254,21 +271,32 @@ def _codex(model: Model, deliberation: str | None, repo: str | None) -> tuple[st
         "-c",
         f"model_reasoning_effort={effort}",
         "-s",
-        "workspace-write",
+        "read-only" if read_only else "workspace-write",
         "--json",
     )
 
 
 def _claude(
-    model: Model, deliberation: str | None, repo: str | None
+    model: Model, deliberation: str | None, repo: str | None, read_only: bool = False
 ) -> tuple[str, ...]:
     """Return the headless Claude CLI command that starts one point.
 
     A model with no effort control takes no effort flag, which is the same
-    absence a generated agent definition expresses by leaving the line out.
+    absence a generated agent definition expresses by leaving the line out. A
+    read-only call is given an empty tool list, which is what this CLI offers
+    for a call that is to answer and touch nothing.
+
+    The order is load-bearing. The caller appends its prompt to this command,
+    and `--add-dir` and `--tools` each take a variable number of values, so a
+    command ending in one of them would swallow the prompt as another value.
+    Every point therefore ends on a flag that takes exactly one: the effort
+    level where the model has one, and the model identity where it has not.
     """
 
-    command = ["claude", "-p", "--model", model.id, "--add-dir", repo or HERE]
+    command = ["claude", "-p", "--add-dir", repo or HERE]
+    if read_only:
+        command += ["--tools", ""]
+    command += ["--model", model.id]
     if deliberation is not None:
         command += ["--effort", deliberation]
     return tuple(command)

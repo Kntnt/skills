@@ -8,6 +8,7 @@ import subprocess
 import sys
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
@@ -39,20 +40,28 @@ grade = _module("grade")
 
 
 class _Judge:
-    """Stand in for the one model call, recording exactly what it was sent."""
+    """Stand in for the one model call, recording exactly what it was sent.
 
-    def __init__(self, *answers: str | None) -> None:
+    An answer given as a plain string is one a judge returned; `None` is one
+    no judge could be reached for; a `Reply` says which of the four things
+    happened in its own words.
+    """
+
+    def __init__(self, *answers: str | None | Any) -> None:
         self.answers = list(answers)
         self.prompts: list[str] = []
         self.seconds: list[float] = []
 
-    def __call__(self, prompt: str, seconds: float) -> str | None:
+    def __call__(self, prompt: str, seconds: float) -> Any:
         self.prompts.append(prompt)
         self.seconds.append(seconds)
-        return self.answers.pop(0) if self.answers else None
+        answered = self.answers.pop(0) if self.answers else None
+        if isinstance(answered, grade.Reply):
+            return answered
+        return grade.Reply(answered, None if answered else grade.NO_JUDGE)
 
 
-def _never(prompt: str, seconds: float) -> str | None:
+def _never(prompt: str, seconds: float) -> Any:
     """Provide a judge that fails the test if the pass ever calls it."""
 
     raise AssertionError("the pass asked a model, which it may not do here")
@@ -617,3 +626,170 @@ def test_a_measurement_is_priced_at_what_the_channel_that_ran_it_charges(
     row = evidence.load(data)[0]
     assert row.cost_usd is not None
     assert round(row.cost_usd, 8) == round(128660.0 / 1e6, 8)
+
+
+# --- Which judge is bought, and how it is reached ----------------------------
+
+
+def _engine(stdout: str = "") -> Any:
+    """Provide what the engine prints when it names a reachable bridge."""
+
+    return SimpleNamespace(
+        stdout=stdout
+        or json.dumps(
+            {
+                "launch": {
+                    "how": "bridge-command",
+                    "command": ["claude", "-p", "--model", "claude-fable-5-1"],
+                }
+            }
+        ),
+        stderr="",
+        returncode=0,
+    )
+
+
+def test_the_judge_is_asked_of_the_engine_as_the_review_work_it_is(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    """Grading is judging finished work against a standard, and nothing checks it.
+
+    Asked as the easiest kind there is, the high-stakes bar admitted the
+    cheapest model on the machine, which graded twelve deep reads at 0.24 and
+    a build the verifier had passed at 0.18. The kind is what fixes the bar,
+    so the ask has to be the work the call actually is.
+    """
+
+    asked: list[list[str]] = []
+
+    def run(command: list[str], **options: Any) -> Any:
+        asked.append(command)
+        assert options["cwd"] == grade._safe_home()
+        return _engine()
+
+    monkeypatch.setattr(subprocess, "run", run)
+
+    argv = grade._bridge(tmp_path, 5.0)
+
+    assert argv == ["claude", "-p", "--model", "claude-fable-5-1"]
+    assert {
+        "--kind=review",
+        "--stakes=high",
+        "--harness=process",
+        "--read-only",
+    } <= set(asked[0])
+    assert "--kind=converse" not in asked[0]
+
+
+def test_the_judge_seam_names_which_of_the_four_things_went_wrong(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    """A pass that fails the same way every time must be able to say so."""
+
+    outcomes: list[Any] = []
+
+    def run(command: list[str], **options: Any) -> Any:
+        if command[0] == "uv":
+            return _engine()
+        answer = outcomes.pop(0)
+        if isinstance(answer, BaseException):
+            raise answer
+        return answer
+
+    monkeypatch.setattr(subprocess, "run", run)
+    ask = grade._judge_for(tmp_path)
+
+    outcomes.append(subprocess.TimeoutExpired(cmd="claude", timeout=1.0))
+    assert ask("x", 1.0).failure == grade.TIMED_OUT
+
+    outcomes.append(SimpleNamespace(stdout="", stderr="", returncode=2))
+    assert ask("x", 1.0).failure == grade.EXITED_NONZERO
+
+    outcomes.append(SimpleNamespace(stdout=_verdict(), stderr="", returncode=0))
+    reply = ask("x", 1.0)
+    assert reply.failure is None
+    assert reply.text == _verdict()
+
+
+def test_no_bridge_from_the_engine_is_no_judge_at_all(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    """A subagent only an agent can name is not something a script can start."""
+
+    def run(command: list[str], **options: Any) -> Any:
+        assert command[0] == "uv"
+        return _engine(json.dumps({"launch": {"how": "inherit", "command": None}}))
+
+    monkeypatch.setattr(subprocess, "run", run)
+
+    assert grade._judge_for(tmp_path)("x", 1.0).failure == grade.NO_JUDGE
+
+
+def test_the_judge_reads_the_whole_of_what_capture_kept(tmp_path: Path) -> None:
+    """Both ends whole, because a judge shown an opening grades an opening."""
+
+    row = _unit(instruction_excerpt="i" * 4000, result_excerpt="r" * 12000)
+
+    sent = grade.prompt_for(row)
+
+    assert "i" * 4000 in sent
+    assert "r" * 12000 in sent
+
+
+def test_a_unit_no_judge_could_be_reached_for_says_so_on_its_row(
+    tmp_path: Path,
+) -> None:
+    """Three failures with nothing recorded about why is three lost readings."""
+
+    data = _queue(tmp_path, _unit())
+
+    grade.grade_pending(data, judge=_Judge(grade.Reply(None, grade.NO_JUDGE)), now=NOW)
+
+    assert _waiting(data)[0]["last_failure"] == grade.NO_JUDGE
+
+
+def test_a_judge_call_that_timed_out_says_so_on_its_row(tmp_path: Path) -> None:
+    """A timeout and an unreachable model are two different machines."""
+
+    data = _queue(tmp_path, _unit())
+
+    grade.grade_pending(data, judge=_Judge(grade.Reply(None, grade.TIMED_OUT)), now=NOW)
+
+    assert _waiting(data)[0]["last_failure"] == grade.TIMED_OUT
+
+
+def test_a_judge_that_exited_non_zero_says_so_on_its_row(tmp_path: Path) -> None:
+    """A bridge that refused the call is a fixable thing, once it is named."""
+
+    data = _queue(tmp_path, _unit())
+    refused = grade.Reply("usage: claude", grade.EXITED_NONZERO)
+
+    grade.grade_pending(data, judge=_Judge(refused), now=NOW)
+
+    assert _waiting(data)[0]["last_failure"] == grade.EXITED_NONZERO
+
+
+def test_an_answer_that_would_not_parse_is_recorded_as_unparsable(
+    tmp_path: Path,
+) -> None:
+    """A judge that answered and said nothing gradeable is its own failure."""
+
+    data = _queue(tmp_path, _unit())
+
+    grade.grade_pending(data, judge=_Judge("I would rather not say."), now=NOW)
+
+    assert _waiting(data)[0]["last_failure"] == grade.UNPARSABLE
+
+
+def test_a_verdict_that_parses_stands_whatever_the_exit_code_was(
+    tmp_path: Path,
+) -> None:
+    """The answer is what was wanted; the exit code only explains its absence."""
+
+    data = _queue(tmp_path, _unit())
+    noisy = grade.Reply(_verdict(value=55), grade.EXITED_NONZERO)
+
+    grade.grade_pending(data, judge=_Judge(noisy), now=NOW)
+
+    assert evidence.load(data)[0].grade == 0.55
+    assert _waiting(data) == []

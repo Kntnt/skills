@@ -530,6 +530,30 @@ def test_an_unreported_token_category_stays_null(tmp_path: Path) -> None:
     assert tokens["output"] == 400.0
 
 
+def test_a_unit_keeps_a_whole_brief_and_a_whole_report_up_to_its_own_limit(
+    tmp_path: Path,
+) -> None:
+    """The judge grades what the unit said rather than how it opened.
+
+    Eight hundred characters was the opening of a delegation brief and no more
+    of it, and a judge shown that much of the instruction and that much of the
+    report is grading a summary it made up. The two limits differ because the
+    two texts do: a brief states a job, a report answers it at length.
+    """
+
+    assert (capture.INSTRUCTION_CHARS, capture.RESULT_CHARS) == (4000, 12000)
+    transcript = _transcript(
+        tmp_path,
+        _user("i" * (capture.INSTRUCTION_CHARS + 500), "2026-09-06T10:00:00.000Z"),
+        _assistant("2026-09-06T10:05:00.000Z", text="r" * (capture.RESULT_CHARS + 500)),
+    )
+
+    found = capture.units("s", "claude-code", str(transcript))
+
+    assert len(found[0].instruction_excerpt) == capture.INSTRUCTION_CHARS
+    assert len(found[0].result_excerpt) == capture.RESULT_CHARS
+
+
 # --- The free signals --------------------------------------------------------
 
 
@@ -1024,6 +1048,37 @@ def test_status_says_how_much_of_a_retired_design_is_still_sitting_there(
     (data / "alias-bindings.jsonl").write_text("", encoding="utf-8")
 
     assert capture.status(data, tmp_path / "home")["retired"] == 2
+
+
+def test_status_groups_the_pending_units_by_why_their_judge_call_failed(
+    tmp_path: Path,
+) -> None:
+    """A machine where every call fails the same way says so rather than waits.
+
+    A queue reported only as a count looks the same whether it is waiting for
+    the next pass or whether nothing on this machine can reach a judge at all.
+    """
+
+    _grader()
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "pending.jsonl").write_text(
+        "".join(
+            json.dumps(row) + "\n"
+            for row in (
+                {"unit_id": "one", "last_failure": "no-judge"},
+                {"unit_id": "two", "last_failure": "no-judge"},
+                {"unit_id": "three", "last_failure": "timed-out"},
+                {"unit_id": "four"},
+            )
+        ),
+        encoding="utf-8",
+    )
+
+    reported = capture.status(data, tmp_path / "home")
+
+    assert reported["pending"] == 4
+    assert reported["pending_failures"] == {"no-judge": 2, "timed-out": 1}
 
 
 # --- What must survive inside somebody else's session ------------------------

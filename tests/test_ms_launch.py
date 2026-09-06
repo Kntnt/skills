@@ -212,3 +212,94 @@ def test_sync_creates_the_directory_it_was_pointed_at(tmp_path: Path) -> None:
 
     assert report.created_directory is True
     assert (tmp_path / "new" / "kntnt-opus-low.md").read_text() == "x\n"
+
+
+# The Claude CLI flags that take a variable number of values. A prompt appended
+# after one of them is read as another of its values rather than as the prompt,
+# so a planned command ends with a flag that is not one of these.
+VARIADIC = frozenset(
+    {
+        "--add-dir",
+        "--tools",
+        "--allowedTools",
+        "--allowed-tools",
+        "--disallowedTools",
+        "--disallowed-tools",
+        "--agents",
+        "--betas",
+    }
+)
+
+
+def test_a_read_only_codex_bridge_is_given_no_way_to_write() -> None:
+    """The judge reads two excerpts and answers; it has nothing to write."""
+
+    plan = launch.plan(
+        ASTRA,
+        "high",
+        "claude-code",
+        _profile("codex"),
+        CAT,
+        repo="/repo",
+        read_only=True,
+    )
+
+    assert plan.command is not None
+    assert plan.command[plan.command.index("-s") + 1] == "read-only"
+    assert "workspace-write" not in plan.command
+
+
+def test_an_ordinary_codex_bridge_still_writes_where_it_was_sent() -> None:
+    """Read-only is the judge's own posture, never every caller's."""
+
+    plan = launch.plan(
+        ASTRA, "high", "claude-code", _profile("codex"), CAT, repo="/repo"
+    )
+
+    assert plan.command is not None
+    assert plan.command[plan.command.index("-s") + 1] == "workspace-write"
+
+
+def test_a_read_only_claude_bridge_grants_no_tool_at_all() -> None:
+    """An empty tool list is what the CLI offers for a call that only answers."""
+
+    plan = launch.plan(
+        OPUS,
+        "high",
+        "process",
+        _profile("claude-code"),
+        CAT,
+        repo="/repo",
+        read_only=True,
+    )
+
+    assert plan.command is not None
+    assert plan.command[plan.command.index("--tools") + 1] == ""
+    assert plan.command[-2] not in VARIADIC
+
+
+def test_an_ordinary_claude_bridge_names_no_tool_list() -> None:
+    """A builder needs its tools, so nothing is said about them."""
+
+    plan = launch.plan(OPUS, "high", "process", _profile("claude-code"), CAT, repo=None)
+
+    assert plan.command is not None
+    assert "--tools" not in plan.command
+    assert plan.command[-2] not in VARIADIC
+
+
+def test_a_claude_bridge_for_a_model_with_no_effort_still_ends_non_variadic() -> None:
+    """The prompt follows the command, so the last flag must take one value."""
+
+    plan = launch.plan(
+        HAIKU,
+        None,
+        "process",
+        _profile("claude-code"),
+        CAT,
+        repo="/repo",
+        read_only=True,
+    )
+
+    assert plan.command is not None
+    assert plan.command[-2] not in VARIADIC

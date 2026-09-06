@@ -15,26 +15,29 @@ instruction was given again later was not good enough the first time. A Unit
 whose tests ran and passed did the work. None of those costs anything.
 
 **The judge is bought deliberately.** Where the signals decided nothing, one
-call to a model this machine can reach reads the Unit's own two ends — the
-instruction and the result — and answers with a kind, a number and one line.
-Which model that is comes from the engine, asked for a `converse` point at high
-stakes, because choosing a model is `selection.py`'s work and naming one here
-would be a second place to keep current. The kind is what this call is and not
-what the Unit was: two excerpts in and a number out is a short bounded exchange,
-where `analyze` is priced at reading a million and a half cached tokens, which
-would buy a judge dearer than the work it grades. High stakes is what grading
-actually is: nothing checks the judge, and a judge that cannot do the job
-returns a plausible wrong number rather than an obvious failure. So this asks
-for the cheapest point the engine is confident in rather than the cheapest
-point there is, and never one of the calls the engine spends on an
-experiment — a store whose grades came from a lottery of graders would be
-measuring the graders.
+call to a model this machine can reach reads the Unit whole — the instruction
+and the result — and answers with a kind, a number and one line. Which model
+that is comes from the engine, asked for a `review` point at high stakes,
+because choosing a model is `selection.py`'s work and naming one here would be
+a second place to keep current. The kind is what this call is and not what the
+Unit was, and what it is is review: judging work somebody else finished against
+a stated standard. High stakes is what grading actually is: nothing checks the
+judge, and a judge that cannot do the job returns a plausible wrong number
+rather than an obvious failure. Between them the two settle the bar, and the
+engine answers with the cheapest point it is confident clears it, never one of
+the calls it spends on an experiment — a store whose grades came from a lottery
+of graders would be measuring the graders. The call itself costs what it costs
+either way: one bounded exchange of a few thousand tokens on whichever channel
+the profile names.
 
 **It never invents a number.** Where no model can be reached, where the call
-times out, where the answer will not parse, the Unit waits for the next pass.
+times out, where the process exits non-zero, where the answer will not parse,
+the Unit waits for the next pass carrying the word for which of those happened.
 After three such attempts it takes whatever grade its free signals support, and
 is dropped where they support none. A grader that cannot run must lose nothing
-and must claim nothing.
+and must claim nothing — and a machine on which every call fails the same way
+must be able to say which way, rather than reporting a queue that is waiting
+for nothing.
 
 **It never costs a session.** Capture calls `hook_pass` at a session's end, and
 that call does the free half only — local arithmetic over a file — and then
@@ -53,6 +56,7 @@ import sys
 import time
 from collections.abc import Iterator, Mapping, Sequence
 from contextlib import contextmanager, suppress
+from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, Protocol
@@ -101,6 +105,16 @@ TESTS_PASSED_GRADE = 0.9
 # died. Fifteen minutes is longer than any pass can legitimately take.
 LOCK_STALE_SECONDS = 900.0
 
+# What a judge call that produced no verdict is recorded as, on the pending row
+# it leaves behind. Four words, because there are four things that go wrong and
+# they want four different repairs: nothing on this machine could be reached,
+# the model did not answer in time, the bridge itself refused the call, and the
+# model answered something with no grade in it.
+NO_JUDGE = "no-judge"
+TIMED_OUT = "timed-out"
+EXITED_NONZERO = "exited-nonzero"
+UNPARSABLE = "unparsable"
+
 # The scale the judge answers on, and what one line of reason may run to.
 JUDGE_SCALE = 100.0
 REASON_CHARS = 200
@@ -111,11 +125,24 @@ REASON_CHARS = 200
 NESTING = 3
 
 
+@dataclass(frozen=True)
+class Reply:
+    """What came back from one judge call, and what went wrong if anything did.
+
+    Both at once, because the two are not exclusive: a bridge that printed a
+    usable verdict and then exited non-zero has answered the question, and the
+    failure only ever explains an answer that is missing.
+    """
+
+    text: str | None
+    failure: str | None
+
+
 class Judge(Protocol):
     """The one seam this module reaches a model through."""
 
-    def __call__(self, prompt: str, seconds: float) -> str | None:
-        """Ask one model *prompt*, or answer None where none could be asked."""
+    def __call__(self, prompt: str, seconds: float) -> Reply:
+        """Ask one model *prompt*, and say what came back or what stopped it."""
 
 
 def default_data() -> Path:
@@ -443,18 +470,24 @@ def _candidates(text: str) -> list[dict[str, Any]]:
 def _bridge(data: Path, seconds: float) -> list[str] | None:
     """Return the command that starts the model this machine grades with.
 
-    The engine chooses it, for the kind of work this call is and at the stakes it
-    carries. The kind is `converse` — two short excerpts in, a number and a line
-    out — rather than the kind of the Unit being graded, and rather than
-    `analyze`, whose token prior is a repository read and would price a judge
-    above the work it judges. Grading is unchecked work — nothing downstream
-    catches a wrong grade, and a wrong grade is worse than no grade — which is
-    the engine's own definition of high stakes, so it answers with the cheapest
-    point it is confident in and never explores.
+    The engine chooses it, for the kind of work this call is and at the stakes
+    it carries. The kind is `review` — judging work somebody else finished
+    against a stated standard — rather than the kind of the Unit being graded.
+    Grading is unchecked work besides: nothing downstream catches a wrong
+    grade, and a wrong grade is worse than no grade, which is the engine's own
+    definition of high stakes. The two together set a bar only a model that can
+    read a Unit of work clears, and the engine answers with the cheapest point
+    it is confident clears it and never explores.
 
-    A point that is not a command — a subagent only an agent inside a Harness
-    can name, or the caller's own seat — is not something a script can start,
-    so there is no judge to call and the Unit waits.
+    It asks as what it is. This is a script rather than a Harness, so it can
+    spawn no subagent, and `--harness=process` is what says so: the answer comes
+    back as a command whatever the provider, which is the only kind of answer a
+    process can act on. The judge writes nothing, so `--read-only` asks for the
+    command that grants it no way to.
+
+    A point that is not a command — the caller's own seat, or a model nothing
+    here can reach — is not something a script can start, so there is no judge
+    to call and the Unit waits.
     """
 
     engine = Path(__file__).resolve().parent / "selection.py"
@@ -462,9 +495,11 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
         "uv",
         "run",
         str(engine),
-        "--kind=converse",
+        "--kind=review",
         "--scope=callable",
         "--stakes=high",
+        "--harness=process",
+        "--read-only",
         f"--data={data}",
     ]
     try:
@@ -490,14 +525,19 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
 
 
 def _judge_for(data: Path) -> Judge:
-    """Return the judge this machine actually has, or one that always declines."""
+    """Return the judge this machine actually has, or one that always declines.
 
-    def ask(prompt: str, seconds: float) -> str | None:
-        """Ask the model the engine trusts with this, or answer None."""
+    Every way this can fail is named rather than collapsed into an absence,
+    because the four want four different repairs and a pending row that says
+    only *not graded yet* sends nobody to any of them.
+    """
+
+    def ask(prompt: str, seconds: float) -> Reply:
+        """Ask the model the engine trusts with this, and say what came back."""
 
         argv = _bridge(data, SELECT_SECONDS)
         if argv is None:
-            return None
+            return Reply(None, NO_JUDGE)
         try:
             answered = subprocess.run(
                 [*argv, prompt],
@@ -507,9 +547,13 @@ def _judge_for(data: Path) -> Judge:
                 timeout=seconds,
                 check=False,
             )
+        except subprocess.TimeoutExpired:
+            return Reply(None, TIMED_OUT)
         except (OSError, subprocess.SubprocessError):
-            return None
-        return answered.stdout
+            return Reply(None, NO_JUDGE)
+        if answered.returncode != 0:
+            return Reply(answered.stdout, EXITED_NONZERO)
+        return Reply(answered.stdout, None)
 
     return ask
 
@@ -646,7 +690,8 @@ def grade_pending(
             continue
 
         spent += 1
-        verdict = _verdict(ask(prompt_for(row), call_seconds))
+        reply = ask(prompt_for(row), call_seconds)
+        verdict = _verdict(reply.text)
         if verdict is not None:
             kind, grade, _reason = verdict
             written.append(
@@ -665,9 +710,17 @@ def grade_pending(
             counts["judged"] += 1
             continue
 
+        # An answer that came back and would not parse is its own failure,
+        # whatever the process did afterwards.
         attempts = int(row.get("attempts") or 0) + 1
         if attempts < MAX_ATTEMPTS:
-            waiting.append({**row, "attempts": attempts})
+            waiting.append(
+                {
+                    **row,
+                    "attempts": attempts,
+                    "last_failure": reply.failure or UNPARSABLE,
+                }
+            )
             counts["waiting"] += 1
             continue
 

@@ -42,8 +42,8 @@ What it writes is the minimum a Unit needs: identities are opaque,
 measurements the environment did not expose stay `null`, and no prompt,
 response, reasoning, diff, terminal output, or transcript is ever copied. The
 two excerpts a Unit carries exist for the grader alone, are capped at
-`EXCERPT_CHARS`, and are removed from the pending store the moment that Unit
-becomes a measurement.
+`INSTRUCTION_CHARS` and `RESULT_CHARS`, and are removed from the pending store
+the moment that Unit becomes a measurement.
 """
 
 from __future__ import annotations
@@ -221,9 +221,13 @@ SUBSTANTIAL_SECONDS = 60.0
 SUBSTANTIAL_OUTPUT_TOKENS = 4000.0
 
 # How much of an instruction and of a result the grader is given. They are the
-# only free text a Unit carries, they exist to be read by one cheap model
-# once, and they are gone from the store the moment that Unit is graded.
-EXCERPT_CHARS = 800
+# only free text a Unit carries, they exist to be read by one judge once, and
+# they are gone from the store the moment that Unit is graded. Two limits
+# rather than one, because the two texts are not the same length of thing: an
+# instruction is a brief and a result is the answer to it, and a judge shown
+# the opening of each is grading a summary it invented rather than the work.
+INSTRUCTION_CHARS = 4000
+RESULT_CHARS = 12000
 
 # The tools that change something by definition, whatever their arguments.
 CHANGING_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
@@ -651,10 +655,10 @@ def _text_of(content: Any) -> str:
     return "\n".join(part for part in said if isinstance(part, str))
 
 
-def _excerpt(text: str) -> str:
-    """Return at most `EXCERPT_CHARS` of *text*, with its edges trimmed."""
+def _excerpt(text: str, limit: int) -> str:
+    """Return at most *limit* characters of *text*, with its edges trimmed."""
 
-    return text.strip()[:EXCERPT_CHARS]
+    return text.strip()[:limit]
 
 
 def _is_instruction(line: dict[str, Any]) -> bool:
@@ -845,7 +849,9 @@ def _spans(lines: list[dict[str, Any]], whole: bool) -> list[_Span]:
             instruction = _text_of((line.get("message") or {}).get("content"))
             started = _stamped(line) or ""
             current = _Span(
-                instruction=_excerpt(instruction), started_at=started, ended_at=started
+                instruction=_excerpt(instruction, INSTRUCTION_CHARS),
+                started_at=started,
+                ended_at=started,
             )
             spans.append(current)
             continue
@@ -942,7 +948,7 @@ def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | No
             "errored": span.errored,
         },
         instruction_excerpt=span.instruction,
-        result_excerpt=_excerpt(span.result),
+        result_excerpt=_excerpt(span.result, RESULT_CHARS),
     )
 
 
@@ -1247,9 +1253,26 @@ def status(data: Path, root: Path) -> dict[str, Any]:
         ],
         "storage_bytes": _storage(data),
         "pending": len(pending(data)),
+        "pending_failures": _pending_failures(data),
         "grader_last_ran_at": _grader_ran_at(data),
         "retired": len(retired(data)),
     }
+
+
+def _pending_failures(data: Path) -> dict[str, int]:
+    """Return how many pending Units last failed for each named reason.
+
+    A queue reported as one number looks the same whether it is waiting for
+    the next pass or whether nothing on this machine can reach a judge at all.
+    A Unit no pass has tried yet carries no reason and is counted in neither.
+    """
+
+    counted: dict[str, int] = {}
+    for row in pending(data):
+        why = row.get("last_failure")
+        if isinstance(why, str) and why:
+            counted[why] = counted.get(why, 0) + 1
+    return dict(sorted(counted.items()))
 
 
 def retired(data: Path) -> list[Path]:

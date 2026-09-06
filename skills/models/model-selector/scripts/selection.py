@@ -417,6 +417,7 @@ def _report(
         profile,
         cat,
         repo=args.repo,
+        read_only=args.read_only,
     )
     channel = profiles.channel_for(profile, best.point.model, harness)
     total = sum(best.tokens.values())
@@ -850,6 +851,7 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--after")
     parser.add_argument("--objective", choices=OBJECTIVES, default="cost")
     parser.add_argument("--repo")
+    parser.add_argument("--read-only", action="store_true")
     parser.add_argument("--n", type=int, default=2)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--data")

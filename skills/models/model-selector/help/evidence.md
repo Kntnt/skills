@@ -16,7 +16,7 @@ Each group reports how many rows stand behind it, the mean score and who establi
 
 A figure no row carries is reported absent, never as a zero. An absence read as a zero is exactly how an unmeasured configuration becomes the cheapest thing on a list, and this Skill exists to stop that happening.
 
-Scores come from four places, in descending authority: a checker's verdict on the finished work, a cheap model asked to grade a unit nothing else judged, a free signal such as tests that ran and passed or an attempt that was immediately redone, and you. Work never grades itself — a builder's own report of how it went establishes nothing.
+Scores come from four places, in descending authority: a checker's verdict on the finished work, a model asked to review a unit nothing else judged, a free signal such as tests that ran and passed or an attempt that was immediately redone, and you. Work never grades itself — a builder's own report of how it went establishes nothing.
 
 Nothing is reported here that could identify the work. A row carries counts, times, prices and dates, and no text from the job it measured.
 

@@ -744,3 +744,77 @@ def test_an_explored_answer_reports_the_rate_measured_and_not_the_draw(
         for answer in explored:
             if (answer["model"], answer["deliberation"]) == (model, level):
                 assert answer["expected"]["p_success"] == rate
+
+
+def test_a_process_asking_for_an_anthropic_model_is_handed_a_command(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A script cannot spawn a subagent, so the native path is not its path.
+
+    The grader is the caller that proves it: it is a process rather than a
+    Harness, and an answer naming a subagent only an agent inside Claude Code
+    can start would leave it with no judge at all.
+    """
+
+    _profile(tmp_path)
+
+    answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
+
+    assert answer["launch"]["how"] == "bridge-command"
+    assert (answer["launch"]["command"] or [])[0] == "claude"
+    assert answer["model"].startswith("claude-")
+
+
+def test_a_read_only_answer_carries_a_bridge_that_grants_no_tool(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The caller says the work writes nothing; the launch is what says how."""
+
+    _profile(tmp_path)
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=process",
+        "--kind=review",
+        "--read-only",
+    )
+
+    command = answer["launch"]["command"] or []
+    assert command[command.index("--tools") + 1] == ""
+
+
+def test_the_same_answer_asked_for_without_it_keeps_its_tools(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Every other caller is a builder, and a builder that cannot write is idle."""
+
+    _profile(tmp_path)
+
+    answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
+
+    assert "--tools" not in (answer["launch"]["command"] or [])
+
+
+def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Grading is review work nothing checks, and the bar is what picks the judge.
+
+    Asked as the easiest kind there is, the cheapest model on the machine
+    cleared the high-stakes floor and graded a build the verifier had passed
+    at 0.18. Asked as what it is, over the shipped priors and an empty store,
+    the floor admits only a model that can actually read a unit of work.
+    """
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--kind=review",
+        "--stakes=high",
+        "--harness=process",
+        "--read-only",
+    )
+
+    assert answer["expected"]["p_success"] >= select.FLOOR
+    assert answer["model"] != "gpt-5.6-luna"
