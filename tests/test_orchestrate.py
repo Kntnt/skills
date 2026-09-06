@@ -70,6 +70,26 @@ ROUTED_BUILDER_BRIEFS = (
     "fix.md",
 )
 
+# What a step that dispatches a routed builder says about the brief's attempt
+# line, and what the brief's own fill-in instructions say about it. Both are
+# stated once and asserted whole: a step that carries the placeholder inside a
+# fragment spliced into a neighbouring sentence carries it in name only, and a
+# Skill body is prose an agent executes rather than text it skims (issue #291).
+ATTEMPT_FILL_SENTENCE = (
+    "Fill the brief's `<attempt_id>` from the `attempt_id` that decision"
+    " carries — the same identity `attempt-finish` files this run's verdict"
+    " on the attempt under, so what the attempt actually spent is read back"
+    " onto that one row rather than counted as a second attempt beside it."
+)
+ATTEMPT_FILL_INSTRUCTION = (
+    "`<attempt_id>` is the `attempt_id` the route answer for this request"
+    " carries, filled in before the brief is handed over: the run files its own"
+    " verdict on this attempt under that same identity, and the line at the top"
+    " of the brief is what lets the later read of this subagent's own transcript"
+    " file what the attempt spent under it too, rather than as a second attempt"
+    " nobody graded. Never invent one, and never carry another request's over."
+)
+
 # Every rule that applies to a subagent holding a code-writing brief, named
 # by the opening of the paragraph that states it. A rule is carried whole —
 # its opening paragraph and every paragraph under it up to the next rule —
@@ -105,6 +125,27 @@ def _instructions(name: str) -> str:
     """One brief's fill-in instructions — everything above the brief itself."""
 
     return _brief(name).split("\n---\n", 1)[0]
+
+
+def _spliced_occurrences(text: str, sentence: str) -> list[str]:
+    """Where `sentence` sits in `text` without standing as a sentence of its own.
+
+    A sentence added to a paragraph that already existed belongs at a sentence
+    boundary: what runs before it has to end, and what runs after it has to
+    begin. Spliced in after a comma instead, it strands the remainder of the
+    sentence it was dropped into behind a full stop, and a reader of the step
+    is an agent executing it (issue #291).
+    """
+
+    problems: list[str] = []
+    for match in re.finditer(re.escape(sentence), text):
+        before = text[: match.start()].rstrip()
+        after = text[match.end() :].lstrip()
+        if before and not before.endswith((".", "!", "?")):
+            problems.append(f"{before[-70:]!r} runs into it")
+        if after and not (after[0].isupper() or after[0] in "`*"):
+            problems.append(f"it runs into {after[:70]!r}")
+    return problems
 
 
 def _rule_statement(text: str, opening: str) -> str:
@@ -3295,10 +3336,17 @@ def test_every_routed_builder_brief_opens_with_the_attempt_it_is() -> None:
             f" {attempt_line('<attempt_id>')} line, which is where capture"
             f" reads the attempt this builder is (issue #291)."
         )
-        assert "`<attempt_id>`" in _instructions(name), (
+        instructions = _instructions(name)
+        assert ATTEMPT_FILL_INSTRUCTION in instructions, (
             f"{where}: the fill-in instructions say what `<attempt_id>` is"
             f" replaced with — the `attempt_id` the route answer carries for"
             f" this request (issue #291)."
+        )
+        spliced = _spliced_occurrences(instructions, ATTEMPT_FILL_INSTRUCTION)
+        assert not spliced, (
+            f"{where}: the fill-in instructions state that at a sentence"
+            f" boundary, leaving what surrounds it whole:"
+            f" {'; '.join(spliced)} (issue #291)."
         )
 
 
@@ -3322,8 +3370,14 @@ def test_the_steps_that_dispatch_a_builder_fill_the_attempt_from_the_decision() 
 
     for number in (6, 9, 10, 11):
         step = _step(number)
-        assert "`<attempt_id>`" in step, (
+        assert ATTEMPT_FILL_SENTENCE in step, (
             f"{SKILL / 'SKILL.md'}: step {number} dispatches a routed builder,"
             f" so it says the brief's `<attempt_id>` is filled from the"
             f" decision that step routed (issue #291)."
+        )
+        spliced = _spliced_occurrences(step, ATTEMPT_FILL_SENTENCE)
+        assert not spliced, (
+            f"{SKILL / 'SKILL.md'}: step {number} states that as a sentence of"
+            f" its own, at a boundary of the paragraph it was added to, leaving"
+            f" what surrounds it whole: {'; '.join(spliced)} (issue #291)."
         )
