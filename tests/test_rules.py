@@ -35,11 +35,35 @@ CRITERIA = ("hard to reverse", "surprising", "trade-off")
 # the next level-two heading.
 BODY = re.compile(r"^### Body$(.*?)(?=^## )", re.MULTILINE | re.DOTALL)
 
+# The bullet under `## Collection Library` governing how a Skill reaches a
+# peer, matched by its bold lead-in: both ADR-0176 and ADR-0177 address it by
+# that name, and a record is never rewritten, so the name is the handle and
+# the rest of the line is what this module judges (issue #302).
+PEER = re.compile(
+    r"^- \*\*Peer internals are not an interface\.\*\*(.*)$", re.MULTILINE
+)
+
 
 def _docs() -> str:
     """The module saying where a rule and a decision go, lowercased."""
 
     return DOCS.read_text(encoding="utf-8").lower()
+
+
+def _peer_bullet() -> str:
+    """The peer-internals bullet of `skills.md`, past its bold lead-in."""
+
+    bullet = PEER.search(SKILLS.read_text(encoding="utf-8"))
+
+    # A renamed lead-in would leave nothing to judge and pass regardless, and
+    # would falsify two records that cannot be repaired from their own end.
+    assert bullet is not None, (
+        f"{SKILLS.relative_to(REPO_ROOT)} carries a bullet named **Peer"
+        f" internals are not an interface**, which is the name ADR-0176 and"
+        f" ADR-0177 both address it by."
+    )
+
+    return bullet.group(1)
 
 
 def test_the_docs_module_separates_what_applies_now_from_why_it_became_so() -> None:
@@ -222,4 +246,57 @@ def test_the_archive_ingress_hands_the_present_to_the_rules_modules() -> None:
     assert "annotat" in text, (
         f"{INGRESS.relative_to(REPO_ROOT)} says nothing here is annotated"
         f" when a later decision outruns it."
+    )
+
+
+def test_the_peer_bullet_admits_a_peers_documented_interface_script() -> None:
+    """Two modules stated one question as law and gave it opposite answers.
+
+    `skills.md` said a Skill never runs a peer's `scripts/`, while
+    `routing.md` says that no Skill invokes Model Selector as a Skill and that
+    a Skill routing work runs its script (ADR-0182) — which is what Orchestrate
+    and delegation mode both do. The bullet therefore carries the one
+    exception, and names the one script there is today, so that a second one
+    is added to the sentence rather than smuggled past it (issue #302).
+    """
+
+    text = _peer_bullet()
+
+    assert "exception" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s peer bullet states the exception"
+        f" for a peer's documented machine interface, without which it"
+        f" contradicts `routing.md`."
+    )
+    assert "selection.py" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s peer bullet names Model Selector's"
+        f" `selection.py` as the one such script there is today."
+    )
+    assert "ADR-0182" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s peer bullet cites ADR-0182 on the"
+        f" exception, the record that made the script the machine interface."
+    )
+
+
+def test_the_peer_bullet_keeps_what_the_exception_does_not_license() -> None:
+    """An exception nobody bounded is the prohibition gone rather than narrowed.
+
+    What is licensed is running the documented entry point on the documented
+    terms. The peer's other files, a reimplementation of what the script does,
+    and that peer's own data are all still out of reach, and the bullet says
+    so in its own words rather than leaving a reader to infer it (issue #302).
+    """
+
+    text = _peer_bullet()
+
+    assert "never reads the peer's `references/`" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s peer bullet still forbids reading"
+        f" a peer's `references/`, which no exception reaches."
+    )
+    assert "reimplement" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s peer bullet says the exception"
+        f" licenses no reimplementation of what the script does."
+    )
+    assert "data" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s peer bullet says the exception"
+        f" reaches nothing of the peer's own data."
     )

@@ -7766,8 +7766,10 @@ def test_unslop_reads_the_shared_catalogue_without_reaching_into_a_peer() -> Non
     for peer in ("redline", "write", "proofread"):
         assert f"../{peer}/" not in shipped, (
             f"{UNSLOP.parent}: the Skill reads `{peer}`'s own files. A Skill"
-            f" may follow a declared Dependency's public `SKILL.md` and never"
-            f" its `references/` or its `scripts/` (ADR-0177). See {STANDARD}."
+            f" may follow a declared Dependency's public `SKILL.md`, and run a"
+            f" script that peer documents as its machine interface; it reads"
+            f" none of that peer's `references/` and runs no other of its"
+            f" `scripts/` (ADR-0177, ADR-0182). See {STANDARD}."
         )
 
     private = sorted(
