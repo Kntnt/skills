@@ -16,6 +16,7 @@ ADR = REPO_ROOT / "docs" / "adr"
 # to hold would pass on a directory that lost the module entirely (issue #267).
 DOCS = RULES / "docs.md"
 SKILLS = RULES / "skills.md"
+GENERAL = RULES / "general.md"
 INGRESS = ADR / "README.md"
 
 # The reform's own record, which the module cited by title while it was still
@@ -42,6 +43,46 @@ BODY = re.compile(r"^### Body$(.*?)(?=^## )", re.MULTILINE | re.DOTALL)
 PEER = re.compile(
     r"^- \*\*Peer internals are not an interface\.\*\*(.*)$", re.MULTILINE
 )
+
+# The `### Refactoring completeness` section of the code module, read to the
+# next third-level heading. What survives there is the sweep over a symbol's
+# callers; the sweep over prose moved to the module a prose author is actually
+# routed to (issue #286).
+COMPLETENESS = re.compile(
+    r"^### Refactoring completeness$(.*?)(?=^### )", re.MULTILINE | re.DOTALL
+)
+
+# What a change owes what is already written, stated as claims rather than as
+# wording: a rule is a shared contract whose sweep reaches its prose, a surface
+# is enumerated by what it asserts, a pointer is enumerated too, and released
+# history is left alone. Each has to stand in the module a prose author reads
+# and nowhere else, a rule in two places being a rule that can disagree with
+# itself (issue #286).
+PROSE_SWEEP = (
+    "shared contract",
+    "what a surface asserts",
+    "a pointer asserts nothing",
+    "closed tickets",
+)
+
+# The pointers a contributor changing only prose meets before they change it,
+# each with the line that has to carry them on to the module binding them. Both
+# the module and the occasion are judged: the always-loaded guide names the
+# module in the path it points at whatever its clause says, and a clause naming
+# a narrower occasion is what sends that reader to a module they never open —
+# which is what left nine commits of prose work unbound by the rule governing
+# it (issue #286).
+PROSE_POINTERS = {
+    REPO_ROOT / "AGENTS.md": re.compile(
+        r"^- `docs/rules/docs\.md` — read when [^\n]+$", re.MULTILINE
+    ),
+    REPO_ROOT / "CONTRIBUTING.md": re.compile(
+        r"^3\. \*\*Follow the project's coding standard\.\*\*[^\n]+$", re.MULTILINE
+    ),
+    SKILLS: re.compile(
+        r"^This module covers the form of a Catalog entry's[^\n]+$", re.MULTILINE
+    ),
+}
 
 
 def _docs() -> str:
@@ -300,3 +341,95 @@ def test_the_peer_bullet_keeps_what_the_exception_does_not_license() -> None:
         f"{SKILLS.relative_to(REPO_ROOT)}'s peer bullet says the exception"
         f" reaches nothing of the peer's own data."
     )
+
+
+def _completeness() -> str:
+    """The `### Refactoring completeness` section of `general.md`."""
+
+    section = COMPLETENESS.search(GENERAL.read_text(encoding="utf-8"))
+
+    # A renamed heading would leave nothing to judge and pass regardless.
+    assert section is not None, (
+        f"{GENERAL.relative_to(REPO_ROOT)} carries a `### Refactoring"
+        f" completeness` section, which is where a change's sweep is stated."
+    )
+
+    return section.group(1)
+
+
+def test_the_docs_module_states_what_a_change_owes_what_is_already_written() -> None:
+    """A documented rule is a shared contract, and its surfaces are prose.
+
+    The rules governing a change to what this repository has written down sat
+    in the module named for code, which every pointer announces as the module
+    for writing code, so a contributor editing a glossary entry, a manpage or a
+    rules module was bound by them and routed away from them. They belong in
+    the module that already governs where a rule is written down (issue #286).
+    """
+
+    text = _docs()
+
+    for claim in PROSE_SWEEP:
+        assert claim in text, (
+            f"{claim!r}: {DOCS.relative_to(REPO_ROOT)} states what a change"
+            f" owes the prose already stating what it changes."
+        )
+
+
+def test_the_code_module_keeps_the_caller_sweep_and_hands_the_prose_one_on() -> None:
+    """One rule, one module: the code half stays where a code change meets it.
+
+    Enumerating a symbol's callers is code work and is met by a reader
+    changing code. The prose half moved, so what stays points at where it
+    went, and none of what moved is left behind to be kept true twice (issue
+    #286).
+    """
+
+    section = _completeness()
+
+    assert "enumerate every caller" in section, (
+        f"{GENERAL.relative_to(REPO_ROOT)} keeps the rule on enumerating a"
+        f" shared symbol's callers, which is code work."
+    )
+    assert "docs.md" in section, (
+        f"{GENERAL.relative_to(REPO_ROOT)} points at"
+        f" {DOCS.relative_to(REPO_ROOT)} for the half of the sweep that"
+        f" reaches prose, so a reader changing both is sent on."
+    )
+
+    text = GENERAL.read_text(encoding="utf-8").lower()
+    for claim in PROSE_SWEEP:
+        assert claim not in text, (
+            f"{claim!r}: {GENERAL.relative_to(REPO_ROOT)} still states what"
+            f" moved to {DOCS.relative_to(REPO_ROOT)}, so the rule stands in"
+            f" two modules and can disagree with itself."
+        )
+
+
+def test_every_pointer_a_prose_change_meets_names_the_module_binding_it() -> None:
+    """A pointer asserts nothing, so no search for the rule's content reaches one.
+
+    A contributor who edits only prose meets the always-loaded guide, the
+    contributor guide, and the module for whatever they touch. Each has to
+    carry them to the module holding the rules that bind them, or the rule is
+    documented and unreachable from every direction its reader arrives from
+    (issue #286).
+    """
+
+    for path, line in PROSE_POINTERS.items():
+        match = line.search(path.read_text(encoding="utf-8"))
+
+        # A reworded pointer this pattern stops matching would leave nothing
+        # to judge and pass regardless.
+        assert match is not None, (
+            f"{path.relative_to(REPO_ROOT)} carries the pointer a contributor"
+            f" changing prose meets there."
+        )
+        for named in ("docs.md", "already written"):
+            assert named in match.group(0), (
+                f"{named!r}: the pointer a prose change meets in"
+                f" {path.relative_to(REPO_ROOT)} does not send that"
+                f" contributor to {DOCS.relative_to(REPO_ROOT)} for a change"
+                f" to what is already written, so it routes them past the"
+                f" rules binding them."
+            )

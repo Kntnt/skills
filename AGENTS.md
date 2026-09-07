@@ -28,7 +28,7 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/rules/collection.md` — read when changing what a Manager verb promises, or how the collection reaches a machine
 - `docs/rules/routing.md` — read when changing how a Skill routes delegated work, or what it may file as evidence
 - `docs/rules/tickets.md` — read when writing a ticket
-- `docs/rules/docs.md` — read when deciding where a rule or a document belongs, writing a decision record, authoring a document an agent loads, or adding a pointer to this list
+- `docs/rules/docs.md` — read when deciding where a rule or a document belongs, writing a decision record, authoring a document an agent loads, adding a pointer to this list, or changing what is already written down here
 - `docs/evaluation/protocol.md` — read when evaluating an editorial Skill against the fixture corpus
 - `skills/kntnt/library/references/languages/README.md` — read when adding or changing a Language Resource
 - `skills/kntnt/library/references/editorial/README.md` — read when adding or changing the editorial base contract, a genre, a technique, the anti-slop catalogue, or the shared mechanics contract
