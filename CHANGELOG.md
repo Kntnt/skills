@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.26.0] – 2026-09-07
+
 ### Changed
 
 - Model Selector chooses the cheapest point its evidence says will finish the work, rather than the lowest priced token appetite divided by the chance of finishing. Measured against the maintainer's own store, that ratio answered one `implement` question four different ways over fifty seeds and priced a model at 0.72 within two per cent of one at 0.90, the only thing keeping them apart being a per-failure constant that had been raised from ten dollars to twenty because at fifteen the answer changed hands. A number tuned until the answer comes out right is the shape of the arithmetic being wrong, and on two flat subscriptions the list value of a token is not what anybody pays anyway. Every call is now ranked the way `--stakes=high` was: the candidates whose chances clear the floor are ordered on price and the cheapest is taken, and where none clears it the likeliest is. Price is second and is never a reason to accept a lower chance of getting the job done. An escalation is asked the same way — the next point likelier to finish, cheapest among those.
