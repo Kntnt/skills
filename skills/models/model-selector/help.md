@@ -66,7 +66,7 @@ Emit the selection response as the engine returned it, with nothing added: the a
 
 **--scope=**_SCOPE_
 
-Which models may be considered: `limited` for your own provider's, `callable` for those plus every model this Harness can reach through a Bridge and your profile has a channel for, or `all` for the whole catalogue whether it can be reached or not. The default is `callable`. Scope is a statement about reachability, never about preference.
+Which models may be considered: `limited` for your own provider's, `callable` for those plus every model this Harness can reach through a Bridge and your profile has a channel for, or `all` for the whole catalogue whether it can be reached or not. The default is `callable`. For a caller that is a process rather than a Harness, `callable` means what this machine can start, and every point takes the same test — your own provider's included, a seat being no evidence that the CLI behind it is installed: a Bridge plans a command for the point, your profile has a channel for it, and that command's binary is on the `PATH` here. Scope is a statement about reachability, never about preference.
 
 **--kind=**_KIND_
 
