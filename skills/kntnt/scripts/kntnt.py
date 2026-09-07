@@ -2920,22 +2920,6 @@ def unattempted_features(*, global_layer: bool) -> dict[str, Any]:
     }
 
 
-def teardown_features(harnesses: list[str]) -> dict[str, Any]:
-    """Take every Enabled Feature's integrations off this machine.
-
-    Uninstall's own use, and the one seam where leaving them would be worst: a
-    hook naming a script inside a Manager that has just been deleted is an
-    entry the Harness runs at every session and nothing answers.
-    """
-
-    return feature_outcome(
-        [],
-        enabled_feature_names(harnesses, global_layer=True),
-        harnesses,
-        global_layer=True,
-    )
-
-
 def select_payload(*, global_layer: bool) -> dict[str, Any]:
     """Build the list the user reads and answers in one gesture.
 
