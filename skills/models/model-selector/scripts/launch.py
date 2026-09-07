@@ -208,6 +208,16 @@ def _definition(model: Model, level: str | None) -> str:
     A model with no effort control gets no `effort:` line, because a line
     naming a level the model does not have is a line the harness either
     rejects or silently ignores, and neither is worth generating.
+
+    Claude Code honours both lines, verified against Claude Code 2.1.263: from
+    a session running at `xhigh`, subagents spawned from these definitions ran
+    at the model and the level their own file named — `claude-opus-5` at `low`
+    and `claude-sonnet-5` at `high` on every assistant line of their
+    transcripts — rather than at the parent session's. That is what lets
+    evidence accrue to the level the answer chose (issue #297), which the
+    deliberation ladder rests on entirely: a level nothing ever ran at is
+    worth nothing. Re-verify it against a later version before trusting it
+    there.
     """
 
     at = f" at {level} deliberation" if level else ""

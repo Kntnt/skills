@@ -36,6 +36,9 @@ HAIKU = catalogue.resolve(CAT, "haiku")[0]
 ASTRA = catalogue.resolve(CAT, "gpt-6-astra")[0]
 GROK = catalogue.resolve(CAT, "grok")[0]
 
+# The Harness version `effort:` was observed to be honoured on (issue #297).
+VERIFIED_ON = "Claude Code 2.1.263"
+
 
 def _profile(*harnesses: str, models: tuple[str, ...] = ()) -> Any:
     """Provide a profile that has the named harnesses and pays for everything."""
@@ -303,3 +306,25 @@ def test_a_claude_bridge_for_a_model_with_no_effort_still_ends_non_variadic() ->
 
     assert plan.command is not None
     assert plan.command[-2] not in VARIADIC
+
+
+def test_the_honoured_effort_line_names_the_version_it_was_verified_against() -> None:
+    """A level the Harness ignored would make the whole ladder's evidence a fiction.
+
+    Evidence accrues to the level a definition names, and a level nothing ever
+    ran at is worth nothing (ADR-0182), so `effort:` being honoured is the
+    assumption everything above it rests on. It was settled by observation and
+    not by argument, and an observation is worth exactly the Harness version it
+    was made against — so the two places that state it, the generator's own
+    docstring and the reference that says a subagent's unit carries the level
+    it ran on, each name that version, and both move when it is re-verified.
+    """
+
+    docstring = " ".join((launch._definition.__doc__ or "").split())
+    measurement = " ".join(
+        (SHIPPED / "references" / "measurement.md").read_text(encoding="utf-8").split()
+    )
+
+    assert "honour" in docstring.lower()
+    assert VERIFIED_ON in docstring
+    assert VERIFIED_ON in measurement
