@@ -479,6 +479,146 @@ def test_a_subcommand_refusal_addresses_the_most_specific_page(tmp_path: Path) -
     assert "see '/tool off --help'" in result.stdout
 
 
+# --- What the quotes around a value mean ------------------------------------
+
+
+def _message_skill(root: Path) -> Path:
+    """A Skill whose last slot takes the rest of the line, the way `/commit` does."""
+
+    return _fixture(
+        root,
+        "commit",
+        "[--yes] <message> [-- <instruction>]",
+        ["**/commit** [**--yes**] *MESSAGE* [**--** *INSTRUCTION*]"],
+        ["**--yes**"],
+    )
+
+
+def _valued_skill(root: Path) -> Path:
+    """A Skill with a flag carrying a value, which is where a caller quotes a space."""
+
+    return _fixture(
+        root,
+        "select",
+        "[--on=<entry>] [-- <instruction>]",
+        ["**/select** [**--on=**_ENTRY_] [**--** *INSTRUCTION*]"],
+        ["**--on=**_ENTRY_"],
+    )
+
+
+def test_a_quoted_operand_arrives_without_its_outer_quotes(tmp_path: Path) -> None:
+    """The quotes hold the spaces together for the caller; they are not the message."""
+
+    skill = _message_skill(tmp_path)
+    message = "Release 1.2.3: a, b and c"
+
+    for payload in (f'--yes "{message}"', f"--yes '{message}'"):
+        result = _invoke(skill, payload, tmp_path)
+
+        assert result.returncode == EXIT_VALID, result.stderr
+        assert json.loads(result.stdout)["operands"] == [message], payload
+
+
+def test_a_quoted_flag_value_arrives_without_its_outer_quotes(tmp_path: Path) -> None:
+    """A caller quotes a flag's value for the reason it quotes an operand."""
+
+    engine = _engine()
+    skill = _valued_skill(tmp_path)
+
+    for payload in ('--on="a b"', "--on='a b'"):
+        reading = engine.read_invocation(skill, payload)
+
+        assert reading.status == EXIT_VALID, reading.text
+        assert reading.invocation["flags"] == {"--on": "a b"}, payload
+
+    # A value written as an empty pair is the empty string, which a flag
+    # declaring a required value goes on accepting.
+    reading = engine.read_invocation(skill, '--on=""')
+    assert reading.status == EXIT_VALID, reading.text
+    assert reading.invocation["flags"] == {"--on": ""}
+
+
+def test_a_value_keeps_every_quote_that_is_not_the_outer_pair(tmp_path: Path) -> None:
+    """Only a value whose own outer pair closes at its end loses one.
+
+    The outer pair is found by scanning forward from the first character to
+    its match, which is what tells one quoted run from two written beside each
+    other and from a run closed early. A backtick is markup a writer meant to
+    be read rather than the shell's way of holding spaces together, and an
+    unbalanced quote is no run at all.
+    """
+
+    engine = _engine()
+    skill = _message_skill(tmp_path)
+    cases = {
+        "'say \"hi\"'": 'say "hi"',
+        '"part one" and more': '"part one" and more',
+        '"a" "b"': '"a" "b"',
+        '"say "hi""': '"say "hi""',
+        "`a b`": "`a b`",
+        '"unbalanced': '"unbalanced',
+    }
+
+    for payload, operand in cases.items():
+        reading = engine.read_invocation(skill, payload)
+
+        assert reading.status == EXIT_VALID, (payload, reading.text)
+        assert reading.invocation["operands"] == [operand], payload
+
+
+def test_the_quotes_come_off_the_reading_and_not_the_token(tmp_path: Path) -> None:
+    """Addressing, the flag boundary and a literal all read the token as written."""
+
+    engine = _engine()
+    commands = _fixture(
+        tmp_path,
+        "tool",
+        "(on|off) [-- <instruction>]",
+        ["**/tool** (**on**|**off**) [**--** *INSTRUCTION*]"],
+        pages={
+            "on": (["**/tool on** [**--** *INSTRUCTION*]"], []),
+            "off": (["**/tool off** [**--** *INSTRUCTION*]"], []),
+        },
+    )
+    flagged = _force_skill(tmp_path)
+
+    quoted_path = engine.read_invocation(commands, '"on"')
+    quoted_flag = engine.read_invocation(flagged, '"--force"')
+
+    assert quoted_path.status == EXIT_REFUSED, quoted_path.invocation
+    assert quoted_flag.status == EXIT_REFUSED, quoted_flag.invocation
+
+
+def test_dequoting_never_moves_where_the_envelope_split_fell(tmp_path: Path) -> None:
+    """`"--"` stays formal data, and is the operand `--` once the quotes come off."""
+
+    engine = _engine()
+    skill = _message_skill(tmp_path)
+
+    reading = engine.read_invocation(skill, '"--"')
+
+    assert reading.status == EXIT_VALID, reading.text
+    assert reading.invocation["operands"] == ["--"]
+    assert reading.invocation["instruction"] is None
+
+
+def test_the_envelope_reference_states_what_becomes_of_the_quotes() -> None:
+    """The contract a Skill reads answers the question its body would otherwise guess."""
+
+    section = (
+        ENVELOPE.read_text(encoding="utf-8")
+        .partition("\n## Quoting a value\n")[2]
+        .partition("\n## ")[0]
+    )
+
+    assert section.strip(), (
+        f"{ENVELOPE.relative_to(REPO_ROOT)}: the reference states what happens to"
+        f" the quotes around an operand and a flag value ({RECORD}). See {STANDARD}."
+    )
+    for word in ("outer", "operand", "flag value", "inner"):
+        assert word in section, f"the quoting rule names {word!r}"
+
+
 def test_the_engine_reads_no_grammar_through_the_library_module() -> None:
     """The strict order is what `argument_grammar.split` was written not to enforce."""
 
@@ -588,7 +728,9 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("fix the --yes bug", None),
         ("fix the --legacy path", {"flags": {}, "operands": ["fix the --legacy path"]}),
         ("--yes fix it", {"flags": {"--yes": True}, "operands": ["fix it"]}),
-        ('"fix the parser"', {"operands": ['"fix the parser"']}),
+        # The quoted message `/push` hands on, whose quotes are the caller's
+        # and not the subject line (issue #299).
+        ('"fix the parser"', {"operands": ["fix the parser"]}),
         ("--bogus fix it", None),
         ("--yes=on", None),
     ],
