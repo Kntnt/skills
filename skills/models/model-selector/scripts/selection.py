@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import shutil
 import sys
 import uuid
 from collections.abc import Sequence
@@ -53,7 +54,9 @@ from profiles import Profile
 
 # How wide a pool the caller wants to consider. `limited` stays with the
 # provider the caller is already paying for this turn, `callable` adds
-# everything this machine can actually start, `all` ignores reachability.
+# everything this machine can actually start — through an adapter where the
+# caller is a Harness, and through an installed Bridge command where it is a
+# process — and `all` ignores reachability.
 SCOPES = ("limited", "callable", "all")
 
 STAKES = ("reversible", "high")
@@ -86,6 +89,18 @@ DEFAULT_DATA = Path(".kntnt") / "model-selector"
 # the caller named no seat. opencode is deliberately absent: it fronts
 # whatever the user configured, so it implies no provider of its own.
 HARNESS_PROVIDER = {"claude-code": "anthropic", "codex": "openai"}
+
+# What a caller calls itself when it is a script rather than a Harness. It can
+# spawn no subagent, so every point it is offered is a Bridge command it has to
+# run — which is what makes `callable` a narrower question for it than for a
+# Harness, and why it appears in no provider table above.
+PROCESS = "process"
+
+# What is said when a process caller has candidates and no way to start any of
+# them. More specific than the locks the empty pool is otherwise blamed on: the
+# models are enabled and paid for, and the machine has nothing installed to
+# reach them with.
+NOTHING_STARTABLE = "nothing on this machine can start a process for any candidate"
 
 
 @dataclass(frozen=True)
@@ -146,7 +161,7 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     # The pool, then the two locks, in that order: a lock narrows what scope
     # admitted rather than reaching past it, except where it names a model
     # scope never offered, which is a caller saying it knows better.
-    pool = _pool(args.scope, cat, profile, seat_model, harness, args.repo)
+    pool = _pool(args.scope, cat, profile, seat_model, harness, args.repo, notes)
     pool = _locked_to_model(pool, cat, args.model, notes)
     pool = _locked_to_deliberation(pool, args.deliberation, notes)
     if not pool:
@@ -489,6 +504,7 @@ def _pool(
     seat_model: str | None,
     harness: str,
     repo: str | None,
+    notes: list[str | None],
 ) -> list[Point]:
     """Return every point the scope admits, before any lock narrows it."""
 
@@ -508,6 +524,23 @@ def _pool(
     near = [point for point in points if floor is None or point.model.provider == floor]
     if scope == "limited":
         return near
+
+    # `callable` is what this caller can actually start, and what that means
+    # depends on what the caller is. A Harness starts the points of its own
+    # provider natively, so those are admitted and the rest are tested against
+    # the adapters. A process starts every point the same way, by running a
+    # Bridge command, so every point takes the same test — the floor's own
+    # included, a seat being no evidence that the CLI behind it is installed
+    # (issue #301).
+    if harness == PROCESS:
+        startable = [
+            point
+            for point in points
+            if _reachable(point, harness, profile, cat, repo, started_here=True)
+        ]
+        if not startable and points:
+            notes.append(NOTHING_STARTABLE)
+        return startable
 
     reachable = [
         point
@@ -535,16 +568,44 @@ def _provider_floor(cat: Catalogue, seat_model: str | None, harness: str) -> str
 
 
 def _reachable(
-    point: Point, harness: str, profile: Profile, cat: Catalogue, repo: str | None
+    point: Point,
+    harness: str,
+    profile: Profile,
+    cat: Catalogue,
+    repo: str | None,
+    *,
+    started_here: bool = False,
 ) -> bool:
-    """Return whether this machine can start this point and say who pays for it."""
+    """Return whether this machine can start this point and say who pays for it.
+
+    Two tests where an adapter does the starting: something plans a way in, and
+    the profile carries a channel that says who pays for it. `started_here` adds
+    the third, for a caller that starts what it is given itself: the binary the
+    plan would run has to be on this machine. Without it an unreachable point
+    wins, degrades to `inherit` at launch, and reaches the grader as no judge
+    rather than as no CLI — a machine reporting a judge it could not run instead
+    of choosing one it could (issue #301).
+
+    The binary tested is the head of the argv the plan already carries, so
+    nothing here keeps a second list of CLI names to fall out of date. The test
+    is a `PATH` lookup and nothing more — no process is started and no network
+    is touched — which is the same probes-only stance the harness markers are
+    detected under, and which this has to keep because selection runs inside
+    somebody else's turn.
+    """
 
     started = launch.plan(
         point.model, point.deliberation, harness, profile, cat, repo=repo
     )
     if started.how == "inherit":
         return False
-    return profiles.channel_for(profile, point.model, harness) is not None
+    if profiles.channel_for(profile, point.model, harness) is None:
+        return False
+    if not started_here:
+        return True
+    if started.command is None:
+        return False
+    return shutil.which(started.command[0]) is not None
 
 
 def _locked_to_model(

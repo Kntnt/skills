@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from support.fake_binary import path_holding
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 SKILL: Path = REPO_ROOT / "skills" / "models" / "model-selector"
@@ -231,12 +232,71 @@ def _under(data_dir: Path) -> None:
     )
 
 
+def _bridged(data_dir: Path, **overrides: Any) -> None:
+    """Write a profile that pays for both providers and can bridge to either.
+
+    The profile a process caller is answered against: two Bridges the machine
+    might have, one enabled model apiece, and a channel saying who pays for
+    each. What separates the two providers in these tests is therefore never
+    the profile but the `PATH`, which is the fact under test.
+    """
+
+    document: dict[str, Any] = {
+        "harnesses": ["claude-code", "codex"],
+        "providers": ["anthropic", "openai"],
+        "models": ["claude-sonnet-5", "gpt-5.6-sol"],
+        "channels": [
+            {
+                "provider": "anthropic",
+                "harness": "claude-code",
+                "pay": "subscription",
+                "plan": "Claude Max 20x",
+            },
+            {
+                "provider": "openai",
+                "harness": "codex",
+                "pay": "subscription",
+                "plan": "ChatGPT Pro",
+            },
+        ],
+    }
+    document.update(overrides)
+    _profile(data_dir, **document)
+
+
+def _named_in(answer: dict[str, Any]) -> set[str]:
+    """Return every model the answer names, chosen or offered beside it.
+
+    A point excluded from the pool is absent from both, and reading the chosen
+    model alone would pass on a pool that still held the excluded point and
+    merely ranked something else above it.
+    """
+
+    return {answer["model"], *(row["model"] for row in answer["alternatives"])}
+
+
 def _over_seeds(
     capsys: pytest.CaptureFixture[str], flags: Sequence[str]
 ) -> list[dict[str, Any]]:
     """Return one answer per seed of the band criterion 1 is read over."""
 
     return [_answer(capsys, *flags, f"--seed={seed}") for seed in range(SEEDS)]
+
+
+# Every model the two bridged providers publish, which is the widest pool a
+# judge is ever picked out of. Named here rather than read off the catalogue,
+# because a test that took its pool from the data under test would pass just as
+# well on a catalogue that had lost the cheap model the assertion is about.
+JUDGES: tuple[str, ...] = (
+    "claude-fable-5-1",
+    "claude-opus-5",
+    "claude-sonnet-5",
+    "claude-haiku-4-5-20251001",
+    "gpt-6-astra",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+)
 
 
 # The eight kinds, stated here rather than imported: a caller outside this
@@ -755,16 +815,24 @@ def test_an_explored_answer_reports_the_rate_measured_and_not_the_draw(
 
 
 def test_a_process_asking_for_an_anthropic_model_is_handed_a_command(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """A script cannot spawn a subagent, so the native path is not its path.
 
     The grader is the caller that proves it: it is a process rather than a
     Harness, and an answer naming a subagent only an agent inside Claude Code
     can start would leave it with no judge at all.
+
+    The `PATH` is named rather than inherited, because what the answer is here
+    depends on it: a process is offered only the points something installed on
+    this machine can start, and the machine under a test is whichever one the
+    suite happens to be running on.
     """
 
     _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
 
     answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
 
@@ -774,11 +842,14 @@ def test_a_process_asking_for_an_anthropic_model_is_handed_a_command(
 
 
 def test_a_read_only_answer_carries_a_bridge_that_grants_no_tool(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """The caller says the work writes nothing; the launch is what says how."""
 
     _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
 
     answer = _answer(
         capsys,
@@ -793,11 +864,14 @@ def test_a_read_only_answer_carries_a_bridge_that_grants_no_tool(
 
 
 def test_the_same_answer_asked_for_without_it_keeps_its_tools(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Every other caller is a builder, and a builder that cannot write is idle."""
 
     _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
 
     answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
 
@@ -805,7 +879,9 @@ def test_the_same_answer_asked_for_without_it_keeps_its_tools(
 
 
 def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
-    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Grading is review work nothing checks, and the bar is what picks the judge.
 
@@ -813,7 +889,15 @@ def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
     cleared the high-stakes floor and graded a build the verifier had passed
     at 0.18. Asked as what it is, over the shipped priors and an empty store,
     the floor admits only a model that can actually read a unit of work.
+
+    The machine is named rather than inherited: every model the two providers
+    publish is enabled and paid for, and both CLIs are installed, so the pool
+    the floor picks out of is the whole of what a judge could be — which is
+    what makes the cheapest of them being refused mean anything.
     """
+
+    _bridged(tmp_path, models=list(JUDGES))
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude", "codex"))
 
     answer = _answer(
         capsys,
@@ -826,3 +910,223 @@ def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
 
     assert answer["expected"]["p_success"] >= select.FLOOR
     assert answer["model"] != "gpt-5.6-luna"
+
+
+@pytest.mark.parametrize(
+    ("installed", "answered"),
+    (("claude", "claude-sonnet-5"), ("codex", "gpt-5.6-sol")),
+)
+def test_a_process_never_answers_a_point_no_bridge_here_can_start(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    installed: str,
+    answered: str,
+) -> None:
+    """`callable` for a process is what this machine can start, and no more.
+
+    A Harness reaches a point through an adapter, so what admits one is the
+    adapter existing. A process reaches every point by running a Bridge
+    command, so what admits one is that command being installed here — and a
+    point admitted without that test comes back as a command that fails in
+    somebody else's terminal, reported by then as no judge rather than as no
+    CLI (issue #301).
+    """
+
+    _bridged(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, installed))
+
+    answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
+
+    assert _named_in(answer) == {answered}
+    assert (answer["launch"]["command"] or [])[0] == installed
+
+
+def test_a_process_that_names_a_seat_is_held_to_the_same_test(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A seat says which provider is already being paid for, not which CLI is here.
+
+    The seat gives `callable` a provider floor, and a floor admitted unfiltered
+    would put back exactly the points this machine cannot start — so the floor's
+    own points take the test with every other.
+    """
+
+    _bridged(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "codex"))
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=process",
+        "--seat=claude-sonnet-5@high",
+        "--kind=review",
+    )
+
+    assert _named_in(answer) == {"gpt-5.6-sol"}
+
+
+@pytest.mark.parametrize("missing", ("bridge", "channel"))
+def test_an_installed_binary_alone_does_not_make_a_point_startable(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    missing: str,
+) -> None:
+    """The binary is the third test and never a replacement for the first two.
+
+    A machine with both CLIs installed still cannot start a point no Bridge
+    plans a command for, and still cannot say who would pay for one the profile
+    carries no channel for. Either absence is disqualifying on its own.
+    """
+
+    without = (
+        {"harnesses": ["codex"]}
+        if missing == "bridge"
+        else {
+            "channels": [
+                {
+                    "provider": "openai",
+                    "harness": "codex",
+                    "pay": "subscription",
+                    "plan": "ChatGPT Pro",
+                }
+            ]
+        }
+    )
+    _bridged(tmp_path, **without)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude", "codex"))
+
+    answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
+
+    assert _named_in(answer) == {"gpt-5.6-sol"}
+
+
+def test_a_machine_that_can_start_nothing_says_that_rather_than_naming_a_judge(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """An empty pool is answered with the seat, and with the reason it is empty.
+
+    The reason matters because of who reads it. The grader takes `inherit` for
+    no judge and files the attempt as ungraded, so a machine with neither CLI
+    installed reports a judge that could not be reached; the note is the only
+    place that can say the machine, rather than the evidence, is what is
+    missing.
+    """
+
+    _bridged(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path))
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=process",
+        "--kind=review",
+        "--seat=claude-opus-5@high",
+    )
+
+    assert answer["launch"]["how"] == "inherit"
+    assert answer["basis"] == "inherit"
+    assert answer["model"] == "claude-opus-5"
+    assert "nothing on this machine can start a process" in (answer["note"] or "")
+
+
+@pytest.mark.parametrize("harness", ("claude-code", "codex", "process"))
+@pytest.mark.parametrize("scope", ("limited", "all"))
+def test_the_other_two_scopes_never_read_this_machine_for_binaries(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    harness: str,
+    scope: str,
+) -> None:
+    """Only `callable` claims to be about what can be started, so only it is.
+
+    `limited` is the provider already being paid for this turn and `all` is the
+    catalogue whether or not anything can reach it, and neither statement has
+    ever depended on what is installed here. Each answers the same under both
+    machines.
+    """
+
+    _bridged(tmp_path)
+    flags = (
+        f"--data={tmp_path}",
+        f"--scope={scope}",
+        f"--harness={harness}",
+        "--kind=review",
+        "--seed=1",
+    )
+
+    monkeypatch.setenv("PATH", path_holding(tmp_path / "equipped", "claude", "codex"))
+    equipped = _answer(capsys, *flags)
+    monkeypatch.setenv("PATH", path_holding(tmp_path / "bare"))
+    bare = _answer(capsys, *flags)
+
+    assert bare["basis"] != "inherit"
+    assert (bare["model"], bare["deliberation"]) == (
+        equipped["model"],
+        equipped["deliberation"],
+    )
+
+
+def test_a_harness_keeps_the_pool_it_had_before_binaries_were_asked_about(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """What a real Harness admits is unchanged, and the same hole is left in it.
+
+    A Harness plans a bridge to another provider on the profile's own account of
+    itself, with no binary consulted, and that is still what it does: the same
+    gap one step over is a ticket of its own rather than something to widen this
+    fix into.
+    """
+
+    _bridged(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path))
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--scope=callable",
+        "--kind=review",
+    )
+
+    assert "gpt-5.6-sol" in _named_in(answer)
+
+
+# The three places that each state what `callable` admits: the option a person
+# reads, the body the agent running the Skill reads, and the rule binding every
+# Skill in the collection that routes work.
+SCOPE_SURFACES: tuple[Path, ...] = (
+    SKILL / "help.md",
+    SKILL / "SKILL.md",
+    REPO_ROOT / "docs" / "rules" / "routing.md",
+)
+
+
+@pytest.mark.parametrize("surface", SCOPE_SURFACES, ids=lambda path: path.name)
+def test_every_account_of_callable_says_what_it_means_for_a_process(
+    surface: Path,
+) -> None:
+    """A rule stated in three places is stated in all three or falsified in two.
+
+    `callable` used to mean one thing, so one sentence about a Harness said the
+    whole of it. It means something narrower for a caller that starts what it is
+    given itself, and a page still giving only the Harness account promises a
+    pool wider than the one the engine will offer.
+    """
+
+    text = " ".join(surface.read_text(encoding="utf-8").split()).lower()
+    sentences = text.split(". ")
+
+    assert [
+        sentence
+        for sentence in sentences
+        if "callable" in sentence and "process" in sentence and "`path`" in sentence
+    ]
