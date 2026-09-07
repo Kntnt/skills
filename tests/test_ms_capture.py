@@ -853,7 +853,7 @@ def test_a_moment_capture_no_longer_installs_writes_nothing_at_all(
 
 # What capture's own prose asserted while a draft existed and a start did work.
 # A comment and a docstring are surfaces of the same contract the code is, and
-# either can be the one a change leaves behind (`docs/rules/general.md`). Each
+# either can be the one a change leaves behind (`docs/rules/docs.md`). Each
 # entry is a claim rather than a phrase: that a draft is written, that a start
 # does work, that `capture/` is filled or put back by anything at all.
 RETIRED_CAPTURE_CLAIMS = (
