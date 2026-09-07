@@ -306,6 +306,41 @@ def test_both_halves_go_in_together_and_come_out_together(tmp_path: Path) -> Non
     assert "hooks" not in _settings(tmp_path)
 
 
+def test_a_removal_narrowed_to_one_harness_leaves_the_others(tmp_path: Path) -> None:
+    """`--harness` narrows removal exactly as it narrows installation.
+
+    A caller reading the two seam words as symmetric — the flag is accepted by
+    both — must not lose an integration it never named.
+    """
+
+    _answer(SESSION_CLEANUP, "install-integrations", home=tmp_path)
+
+    removed = _answer(
+        SESSION_CLEANUP, "remove-integrations", "--harness=codex", home=tmp_path
+    )
+
+    assert [record["harness"] for record in removed["removed"]] == ["codex"]
+    assert f"<!-- {OWNER} begin -->" in _instructions(tmp_path)
+    assert "hooks" in _settings(tmp_path)
+    assert (
+        not (tmp_path / ".codex" / "hooks.json")
+        .read_text(encoding="utf-8")
+        .count(OWNER)
+    )
+
+
+def test_naming_no_harness_still_clears_every_one_of_them(tmp_path: Path) -> None:
+    """The Manager says the word with no `--harness` at all, and means all of them."""
+
+    _answer(SESSION_CLEANUP, "install-integrations", home=tmp_path)
+
+    removed = _answer(SESSION_CLEANUP, "remove-integrations", home=tmp_path)
+
+    assert {record["status"] for record in removed["removed"]} == {"removed"}
+    assert OWNER not in _instructions(tmp_path)
+    assert OWNER not in (tmp_path / ".codex" / "hooks.json").read_text(encoding="utf-8")
+
+
 def test_the_installed_block_names_the_command_it_asks_for(tmp_path: Path) -> None:
     """A block naming a path that is not there asks for a recording that cannot happen."""
 
@@ -536,6 +571,19 @@ def test_the_status_line_slot_is_taken_and_given_back(tmp_path: Path) -> None:
     assert "statusLine" not in _settings(tmp_path)
 
 
+def test_a_removal_named_for_a_harness_it_does_not_serve_says_so(
+    tmp_path: Path,
+) -> None:
+    """A Feature serving one Harness answers a removal for another as its install does."""
+
+    removed = _answer(
+        STATUSLINE, "remove-integrations", "--harness=codex", home=tmp_path
+    )
+
+    assert removed["removed"] == []
+    assert removed["unsupported"] == {"count": 1}
+
+
 def test_every_feature_answers_the_words_the_manager_says(tmp_path: Path) -> None:
     """The Manager says one word in one shape to every Feature it installs.
 
@@ -560,8 +608,15 @@ def test_every_feature_answers_the_words_the_manager_says(tmp_path: Path) -> Non
                 f"{script.relative_to(REPO_ROOT)} refused `{word} --harness=... "
                 f"--replace`, which is what the Manager says: {completed.stderr}"
             )
-        removed = _run(script, "remove-integrations", home=tmp_path / "removal")
-        assert removed.returncode == 0, removed.stderr
+        for arguments in ((), ("--harness=claude-code",)):
+            removed = _run(
+                script, "remove-integrations", *arguments, home=tmp_path / "removal"
+            )
+            assert removed.returncode == 0, (
+                f"{script.relative_to(REPO_ROOT)} refused `remove-integrations "
+                f"{' '.join(arguments)}`, which is what the Manager says: "
+                f"{removed.stderr}"
+            )
 
 
 # --- the Catalog and the list ---------------------------------------------

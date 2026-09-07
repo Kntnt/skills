@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "44b897fbcc34b9b5879190b49ce51661bbea501b5773b4e3b543a451a3170985",
+  "manager_digest": "63eceb743dbae1bb6547ce2a7ddd84fcc6c1c154e5740ba3c3ff0be6d54a8d57",
   "skills": [
     {
       "name": "agents-md",
@@ -189,7 +189,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "15a19c65ef320607c5c81b1245f3969b16d42fd88b9f7e24b81831300a459293",
+      "digest": "5473583a86e387076ebd3e03a06dfb86d718ab95bc3e70d38bc288e8b2b2580b",
       "binaries": [
         "uv"
       ],
@@ -216,7 +216,7 @@
       "name": "session-cleanup",
       "category": "environment",
       "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
-      "digest": "69b670ff319f4b07097695fb1d2ef5883aa2f052d85d54d86d1d4e02e85b7198",
+      "digest": "d7a97bed91e1f6315a7215768be21d9f09038c5467fa8bf6f508836eb8a624f7",
       "binaries": [
         "uv"
       ],
@@ -236,7 +236,7 @@
       "name": "statusline",
       "category": "environment",
       "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
-      "digest": "bc73b05a771222e082071aeed4e745b25a571a51ba2c36ebaaf9e4e05292bba1",
+      "digest": "4c2882b5ae8af1db1a90a153531fb21b53fd7ed27bfd7d541e7ea529e220b826",
       "binaries": [
         "git",
         "jq"
