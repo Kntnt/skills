@@ -15,6 +15,7 @@ import pytest
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 SCRIPTS: Path = REPO_ROOT / "skills" / "models" / "model-selector" / "scripts"
 SHIPPED: Path = REPO_ROOT / "skills" / "models" / "model-selector"
+ROUTING: Path = REPO_ROOT / "docs" / "rules" / "routing.md"
 
 
 def _module(stem: str, name: str | None = None) -> Any:
@@ -527,6 +528,44 @@ def test_a_row_taken_without_a_level_is_neither_divided_nor_multiplied(
     assert estimator.tokens("implement", STRONG, "max")["cache_read"] == pytest.approx(
         1_100_000.0 * LADDER["max"]["tokens"]
     )
+
+
+def test_the_rules_module_pools_appetite_the_way_the_estimator_does() -> None:
+    """The chance of success and what an attempt costs no longer back off alike.
+
+    `p_success` fits the exact (kind, model, deliberation) cell before the kind
+    and the model, the level of deliberation being the condition it estimates.
+    `tokens` and `seconds` have no such cell: `_normalised` and `_elapsed`
+    divide a row by the factors of the level it ran at, so a model's rows for a
+    kind are one sample at the `medium` baseline and the level asked for puts
+    its own factors back on the pooled figure. A module still saying appetite
+    backs off the same way the chance of success does hands a reader the
+    opposite of the arithmetic beneath it (issue #300).
+    """
+
+    module = ROUTING.read_text(encoding="utf-8")
+    collapsed = " ".join(module.split()).lower()
+
+    assert "backs off the same way" not in collapsed
+
+    written = [
+        " ".join(block.split()).lower()
+        for block in module.split("\n\n")
+        if "appetite" in block.lower()
+    ]
+    assert len(written) == 1
+    stated = written[0]
+
+    # What is pooled, in the order the estimator pools it, and the citation the
+    # rule has always answered to.
+    for phrase in ("normalised", "prior", "chance of success", "(adr-0182)"):
+        assert phrase in stated, phrase
+
+    # The two fallbacks differ, and a module that flattened them would leave a
+    # reader forecasting a cache read of nought for a store that never
+    # recorded one.
+    assert "category by category" in stated
+    assert "whole" in stated
 
 
 def test_the_shipped_note_says_the_ladder_is_applied_to_measurements_too() -> None:
