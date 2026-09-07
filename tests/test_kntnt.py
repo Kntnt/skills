@@ -37,6 +37,16 @@ UV_CACHE = Path(os.environ.get("UV_CACHE_DIR") or Path.home() / ".cache" / "uv")
 
 SHARED_SKILLS = ".agents/skills"
 
+# The directory a Feature ships in, inside the Manager, and the Feature a world
+# is given where it asks for one. It is the shipped `statusline` rather than a
+# throwaway: its script resolves the Collection Library off the Manager it sits
+# in, which a world already carries, so it runs there exactly as it runs on a
+# machine — and it serves one Harness, which is what makes a Detected Harness
+# the difference between an answer that has something to take back and one
+# that has nothing.
+FEATURES = "features"
+FEATURE = "statusline"
+
 # Every key a Select row carries, and no other. Pinned as a set because the two
 # the design withdrew — a `state` and a `source` — are absences rather than
 # values, and an absence is only testable against the whole shape.
@@ -217,8 +227,40 @@ def _manpage(name: str) -> str:
     return f"# {name}\n\nThe {name} manpage, from the collection.\n"
 
 
-def _catalog(entries: list[dict[str, Any]]) -> str:
-    return json.dumps({"origin": "Kntnt/skills", "skills": entries}, indent=2) + "\n"
+def _catalog(
+    entries: list[dict[str, Any]], features: list[dict[str, Any]] | None = None
+) -> str:
+    """Write a world's Catalog, carrying a `features` key only where asked to.
+
+    An omitted key and an empty list are two different collections: a Catalog
+    with no `features` at all is what a collection shipping no Feature looks
+    like, which is every world but the one that asks for one. So the default
+    writes no key rather than an empty list, and nothing that does not want a
+    Feature has to start looking like something that has none.
+    """
+
+    catalog: dict[str, Any] = {"origin": "Kntnt/skills", "skills": entries}
+    if features is not None:
+        catalog["features"] = features
+    return json.dumps(catalog, indent=2) + "\n"
+
+
+def _feature_entry(name: str) -> dict[str, Any]:
+    """Return the shipped Catalog's own entry for the Feature *name*.
+
+    Taken whole, Digest included, rather than written out again here: the
+    world installs the Feature the collection ships, so its entry is the one
+    the collection publishes and not a second account of it.
+    """
+
+    catalog: dict[str, Any] = json.loads(
+        (MANAGER_DIR / "catalog.json").read_text(encoding="utf-8")
+    )
+    entries: list[dict[str, Any]] = catalog["features"]
+    for entry in entries:
+        if entry["name"] == name:
+            return entry
+    raise AssertionError(f"the collection ships no Feature named '{name}'")
 
 
 def _entry(
@@ -257,13 +299,23 @@ _CHAIN = [
 
 
 def _world(
-    tmp_path: Path, entries: list[dict[str, Any]] | None = None
+    tmp_path: Path,
+    entries: list[dict[str, Any]] | None = None,
+    *,
+    feature: bool = False,
 ) -> dict[str, Path]:
     """Build an isolated home, project, collection source, and manager.
 
     The manager sits outside both the home and the project on purpose: where it
     was installed says nothing about which Harnesses are present, and a fixture
     that put it in one of their directories would detect that Harness for free.
+
+    *feature* gives the world the one Feature the collection ships for a single
+    Harness, in both Catalogs and beside the Manager. It is off by default
+    because a Feature is not free scenery: an Update reports a staged Manager
+    that does not carry it, and an Uninstall tears a Global Feature down first,
+    so a world that carries one unasked changes the shape of every test that
+    was written about Skills.
     """
 
     home = tmp_path / "home"
@@ -280,11 +332,15 @@ def _world(
             _entry("gamma", "text", description="The gamma skill."),
         ]
 
+    # Both Catalogs carry the Feature, because the Manager reads the origin's
+    # first and falls back to the snapshot beside it only when that fetch fails.
+    features = [_feature_entry(FEATURE)] if feature else None
+
     _write(
         source / "skills" / "kntnt" / "SKILL.md",
         _skill_md("kntnt", description="Manager."),
     )
-    _write(source / "skills" / "kntnt" / "catalog.json", _catalog(entries))
+    _write(source / "skills" / "kntnt" / "catalog.json", _catalog(entries, features))
     shutil.copy(HARNESS_PATHS, source / "skills" / "kntnt" / "harness-paths.json")
 
     # The collection ships the Manager's script, so the origin has to carry it:
@@ -320,13 +376,18 @@ def _world(
     dest_scripts.mkdir(parents=True)
     shutil.copy(KNTNT_PY, dest_scripts / "kntnt.py")
     shutil.copy(HARNESS_PATHS, here / "harness-paths.json")
-    _write(here / "catalog.json", _catalog(entries))
+    _write(here / "catalog.json", _catalog(entries, features))
     _write(here / "SKILL.md", _skill_md("kntnt", description="Manager."))
     _ship_manager_interface(here)
     _ship_manager_interface(source / "skills" / "kntnt")
 
     # The running Manager has the same Library its refreshed copy will carry.
     shutil.copytree(MANAGER_DIR / "library", here / "library")
+
+    # A Feature ships inside the Manager, and its script resolves the Library
+    # off that same directory — so the shipped one runs unchanged in a world.
+    if feature:
+        shutil.copytree(MANAGER_DIR / FEATURES / FEATURE, here / FEATURES / FEATURE)
 
     return {"home": home, "project": project, "source": source, "here": here}
 
@@ -5039,6 +5100,36 @@ def test_unchecking_refuses_without_yes(tmp_path: Path) -> None:
     assert result.returncode == 2
     assert "--yes" in result.stderr
     assert (world["home"] / ".claude" / "skills" / "alpha").exists()
+
+
+def test_unchecking_a_feature_refuses_without_yes(tmp_path: Path) -> None:
+    """The other half of the same gate, in the only words true of a Feature.
+
+    Unchecking a Feature deletes no file of the collection's and still takes
+    what it wrote back out of a Harness's own configuration, which is the
+    user's file too — so the gate is raised in a sentence of its own rather
+    than under one about files that would be false here (ADR-0173).
+
+    The delta form is what reaches it. The Skill half is evaluated first, so a
+    whole-set answer that unchecked both would be refused in the Skill's words
+    and this half would never be read. A Harness has to be Detected too: this
+    Feature serves `claude-code` only, and with none Detected there is nothing
+    for the answer to take back and the run exits clean.
+    """
+
+    world = _world(tmp_path, feature=True)
+    _present(world, "home", ".claude")
+    enabled = _run(world, "apply", "select", FEATURE, "--yes")
+    assert enabled.returncode == 0, enabled.stderr
+
+    result = _run(world, "apply", "select", f"--off={FEATURE}")
+
+    assert result.returncode == 2, result.stdout
+    assert (
+        "takes what they wrote back out of your Harnesses' own configuration"
+        in result.stderr
+    )
+    assert "deletes their files" not in result.stderr
 
 
 def test_an_answer_that_only_places_needs_no_gate(tmp_path: Path) -> None:

@@ -121,7 +121,7 @@ Codex accepts more than these two blocks — an icon, a brand colour, a default 
 
 ## The README
 
-A Skill gets a `### <name>` section under the README's `## Usage` heading, describing it to somebody deciding whether they want it. Keep this to one or two short paragraphs that establish the Skill's purpose and primary invocation; options, edge cases, implementation details, and full behaviour belong in its manpage. The suite fails when the Catalog names a Skill the README has no section for, and when a section names a Skill the Catalog does not.
+A Skill gets a `### <name>` section under the README's `## Usage` heading, describing it to somebody deciding whether they want it. Keep this to one or two short paragraphs that establish the Skill's purpose and primary invocation; options, edge cases, implementation details, and full behaviour belong in its manpage. The suite fails when the Catalog names a Skill the README has no section for, and when a section names a Skill the Catalog does not — and it holds a Feature and the `## Features` sections to that same comparison.
 
 The paragraph closing that part — which Skills need which binaries and which Capabilities — is prose, and nothing compares it against the dependency lists. Update it by hand when a Skill's requirements change, and expect no check to catch you if you do not.
 
