@@ -4062,6 +4062,12 @@ PATH_HELP_FLAGS = ("--help", "-h")
 # word — *don't* — is a letter and not the start of a quotation.
 QUOTES = "\"'`"
 
+# The two of those a caller writes to hold spaces together, and the only two
+# the reading takes off a value they wrap whole. The backtick is not one: it is
+# markup the writer meant to be read, as `` `--` `` is in the envelope's own
+# worked cases.
+SHELL_QUOTES = "\"'"
+
 # A long flag as the collection spells one, on every surface.
 FLAG_NAME = re.compile(r"--[a-z][a-z0-9-]*")
 
@@ -4172,10 +4178,11 @@ class Reading:
 def tokenize(text: str) -> list[Token]:
     """Split *text* on whitespace outside quotes, keeping every token verbatim.
 
-    A quoted run holds its spaces and is kept with its quotes: the engine
-    decides nothing about what an operand means, so it strips nothing off one.
-    An unbalanced quote runs to the end rather than failing, prose being what
-    a free-text operand is made of.
+    A quoted run holds its spaces and keeps its quotes here, where the token
+    is what a command path, a flag and a literal are matched against; the
+    outer pair comes off the reading instead, in `dequote`. An unbalanced
+    quote runs to the end rather than failing, prose being what a free-text
+    operand is made of.
     """
 
     tokens: list[Token] = []
@@ -4198,6 +4205,32 @@ def tokenize(text: str) -> list[Token]:
             index += 1
         tokens.append(Token(text[start:index], start, index))
     return tokens
+
+
+def dequote(value: str) -> str:
+    """Take the outer quotes off *value* where the whole of it is one quoted run.
+
+    A caller writes `"` or `'` to hold spaces together, so the pair is the
+    shell's and not part of what was written: `"a b"` is the value `a b`. Any
+    quote that is not that outer pair is kept, `'say "hi"'` being `say "hi"`.
+    The run has to close at the last character to be an outer pair at all,
+    which is what tells `"a b"` from `"a" "b"` and from `"say "hi""` — two
+    runs and a run closed early, both of which keep every quote they carry.
+    An unbalanced quote is no run, and neither is a backtick-quoted one.
+    """
+
+    if len(value) < 2 or value[0] not in SHELL_QUOTES:
+        return value
+    closing = value.find(value[0], 1)
+    return value[1:-1] if closing == len(value) - 1 else value
+
+
+def _dequoted_flag(written: Any) -> Any:
+    """One flag as it was read — bare, with a value, or repeated — dequoted."""
+
+    if isinstance(written, list):
+        return [_dequoted_flag(item) for item in written]
+    return dequote(written) if isinstance(written, str) else written
 
 
 def split_envelope(payload: str) -> tuple[str, str | None]:
@@ -4679,6 +4712,11 @@ def validate(
     none does, the fault reported is the one from the form that got furthest —
     past the path, past the flags — so that a refusal names the flag rather
     than a command the user never addressed.
+
+    The form is read off the tokens exactly as they were written, and the
+    quotes come off afterwards: the values a valid form answers with are
+    dequoted (`dequote`), so a quoted token is never a command path, a flag,
+    or a literal the Synopsis names.
     """
 
     label = f"'/{skill_dir.name}{' ' + ' '.join(path) if path else ''}'"
@@ -4736,7 +4774,13 @@ def validate(
                 if fault is not None:
                     candidate = (2, fault)
                 else:
-                    return None, {"path": path, "flags": flags, "operands": operands}
+                    return None, {
+                        "path": path,
+                        "flags": {
+                            name: _dequoted_flag(value) for name, value in flags.items()
+                        },
+                        "operands": [dequote(operand) for operand in operands],
+                    }
         if candidate[0] > best[0]:
             best = candidate
     return best[1], {}

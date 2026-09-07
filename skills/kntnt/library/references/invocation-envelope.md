@@ -8,6 +8,10 @@ The contract every Skill of this collection meets before it reads an argument of
 
 The split happens before help routing and before formal validation, and only the Formal Invocation reaches Help, the Skill's own argument grammar, its scripts, and any nested formal parser.
 
+## Quoting a value
+
+An operand and a flag value each arrive without the outer quotes they were written in — `"a b"` and `'a b'` are both the value `a b` — the pair being the caller's way of holding spaces together rather than part of what was written. Only a value whose own quoted run closes at its last character loses that pair, so an inner quote is kept (`'say "hi"'` is `say "hi"`), and a value that is two runs beside each other, a run closed early, a backtick-quoted run, or an unbalanced quote keeps every mark it carries. This happens after the split above, which it never moves: `"--"` is formal data exactly as stated there, and is the value `--`.
+
 ## What a Contextual Instruction may settle
 
 A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
