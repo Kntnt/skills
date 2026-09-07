@@ -13,7 +13,7 @@ import threading
 from pathlib import Path
 from typing import Any
 
-from support.contract import STANDARD
+from support.contract import PYTHON_STANDARD, STANDARD
 from support.editorial import (
     GENRE_TECHNIQUE_HEADING,
     ordinary_technique,
@@ -3084,6 +3084,72 @@ def test_select_says_which_catalog_the_list_came_from(tmp_path: Path) -> None:
 
     assert "catalog_refreshed" in text
     assert "deviating" in text
+
+
+# Where `--on` and `--off` are named outside the manpages. The manpages are the
+# surface that documents both entry types, so their word is the collection's:
+# these three write the same option in the lowercase angle-bracket form every
+# `argument-hint` uses, and a reader who meets one option under two names has to
+# work out whether it is one option (issue #285).
+_DELTA_FLAG_SURFACES = (
+    "skills/kntnt/SKILL.md",
+    "skills/kntnt/steps/select.md",
+    "README.md",
+)
+
+# The manpage spelling, the angle-bracket spelling, and the engine's own usage
+# line. Three typographies of one word, which is why the test folds case rather
+# than comparing the strings as they are written.
+_DELTA_MANPAGE_ARGUMENT = re.compile(r"\*\*--(?:on|off)=\*\*_([A-Za-z]+)_")
+_DELTA_HINT_ARGUMENT = re.compile(r"--(?:on|off)=<([A-Za-z]+)>")
+_DELTA_METAVAR = re.compile(r'"--(?:on|off)"[^\n]*metavar="([A-Za-z]+)"')
+
+
+def test_every_surface_names_what_the_delta_flags_take_by_the_manpages_word() -> None:
+    """`--on` and `--off` take a Catalog entry, and every surface says so.
+
+    `validate_names` resolves either flag's name against the Skills and the
+    Features together, so a surface that names a Skill alone documents the
+    option as refusing an argument it accepts. The manpages already carry both
+    entry types, and this holds the rest of the collection to the word they
+    chose rather than to a second one written here (issue #285).
+    """
+
+    manpage = MANAGER_DIR / "help" / "select.md"
+    documented = set(
+        _DELTA_MANPAGE_ARGUMENT.findall(manpage.read_text(encoding="utf-8"))
+    )
+
+    # A manpage that stopped writing the metavariable at all would leave an
+    # empty set and let every other surface say whatever it liked.
+    assert len(documented) == 1, (
+        f"{manpage}: `--on` and `--off` are documented with {sorted(documented)}."
+        f" They take one kind of argument, so the page names it with one"
+        f" metavariable. See {STANDARD}."
+    )
+    word = documented.pop().lower()
+
+    for relative in _DELTA_FLAG_SURFACES:
+        path = REPO_ROOT / relative
+        named = set(_DELTA_HINT_ARGUMENT.findall(path.read_text(encoding="utf-8")))
+
+        assert named == {word}, (
+            f"{path}: names what `--on` and `--off` take as {sorted(named)}"
+            f" where the manpages name it {word!r}. The flags take a Catalog"
+            f" entry — a Skill or a Feature — and a surface naming a Skill"
+            f" alone documents the option as refusing an argument it accepts,"
+            f" while a second word for one option leaves a reader working out"
+            f" whether it is one option (issue #285). See {STANDARD}."
+        )
+
+    metavars = set(_DELTA_METAVAR.findall(KNTNT_PY.read_text(encoding="utf-8")))
+
+    assert {name.lower() for name in metavars} == {word}, (
+        f"{KNTNT_PY}: `--on` and `--off` carry the metavariables"
+        f" {sorted(metavars)} where the manpages name the argument {word!r}."
+        f" The engine's usage line is a surface of the same rule (issue #285)."
+        f" See {PYTHON_STANDARD}."
+    )
 
 
 def test_manager_skill_is_user_invoked_and_not_internal() -> None:

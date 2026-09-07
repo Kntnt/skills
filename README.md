@@ -44,7 +44,7 @@ A project can add to the global set but cannot hide a global skill. The manager 
 |---|---|
 | `/kntnt` | Show manager help |
 | `/kntnt select [--project]` | View the catalog and change enabled skills |
-| `/kntnt select --on=<skill> --yes` | Enable a named skill without opening the list |
+| `/kntnt select --on=<entry> --yes` | Enable a named skill or feature without opening the list |
 | `/kntnt update [--project]` | Refresh changed skills and handle catalog changes |
 | `/kntnt uninstall` | Remove global skills and the manager |
 

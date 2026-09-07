@@ -2335,7 +2335,7 @@ def validate_names(names: list[str]) -> list[str]:
         if name == MANAGER:
             raise ManagerError("kntnt is the Manager; it is always Enabled")
         if name not in known:
-            raise ManagerError(f"unknown skill '{name}'")
+            raise ManagerError(f"unknown entry '{name}'")
         if name not in cleaned:
             cleaned.append(name)
     return cleaned
@@ -3008,8 +3008,9 @@ def delta_answer(
     """Resolve a delta into the whole checked set, and what it only carried.
 
     `--on` and `--off` never mean *make this the whole set*. The base is what
-    the layer already holds, so a Skill nobody named keeps the state it had and
-    a script that mentions one name cannot silently Disable another (ADR-0175).
+    the layer already holds, so a Catalog entry nobody named keeps the state it
+    had and a script that mentions one name cannot silently Disable another
+    (ADR-0175).
 
     What a named Skill needs comes with it, resolved to the whole closure
     before anything is written (ADR-0175) and minus whatever already Satisfies
@@ -3261,13 +3262,14 @@ def cmd_apply_select(
     what a placement installed, `removed_integrations` for what an uncheck
     tore down — so one key means one thing across every verb (issue #258).
 
-    The answer arrives in one of two forms and never both. Skill names are the
-    whole checked set, which is how the list is answered; `--as-is`, `--on`,
-    and `--off` change the set the layer already holds, which is how a machine
-    with nobody at the list is set up. `--as-is` names nothing and is the whole
-    of `select --yes`: it Enables nothing that was not already Enabled and
-    refreshes what Deviates and repairs what is incomplete, so an unattended
-    run can never place instructions the user has not read (ADR-0175).
+    The answer arrives in one of two forms and never both. Catalog entry names
+    are the whole checked set, which is how the list is answered; `--as-is`,
+    `--on`, and `--off` change the set the layer already holds, which is how a
+    machine with nobody at the list is set up. `--as-is` names nothing and is
+    the whole of `select --yes`: it Enables nothing that was not already
+    Enabled and refreshes what Deviates and repairs what is incomplete, so an
+    unattended run can never place instructions the user has not read
+    (ADR-0175).
     """
 
     # Read together, the two forms would leave the Skills nobody named in a
@@ -3276,7 +3278,7 @@ def cmd_apply_select(
     is_delta = as_is or bool(on) or bool(off)
     if is_delta and names:
         raise ManagerError(
-            "skill names are the whole answer, and --as-is, --on, and --off "
+            "entry names are the whole answer, and --as-is, --on, and --off "
             "change the set on disk; give one form or the other"
         )
 
@@ -5038,16 +5040,17 @@ def add_project_flag(parser: argparse.ArgumentParser) -> None:
 
 
 def add_delta_flags(parser: argparse.ArgumentParser) -> None:
-    """Add the answer form that names Skills instead of listing them.
+    """Add the answer form that names entries instead of listing them.
 
-    `--on` and `--off` each take one Skill and may be given as often as the
-    answer has names, so a whole delta is one invocation. `--as-is` is the
-    delta that names nothing — the answer is the set the layer already holds —
-    and it is what `select --yes` comes down to once there is no list to open.
+    `--on` and `--off` each take one Catalog entry — a Skill or a Feature —
+    and may be given as often as the answer has names, so a whole delta is one
+    invocation. `--as-is` is the delta that names nothing — the answer is the
+    set the layer already holds — and it is what `select --yes` comes down to
+    once there is no list to open.
     """
 
-    parser.add_argument("--on", action="append", default=[], metavar="SKILL")
-    parser.add_argument("--off", action="append", default=[], metavar="SKILL")
+    parser.add_argument("--on", action="append", default=[], metavar="ENTRY")
+    parser.add_argument("--off", action="append", default=[], metavar="ENTRY")
     parser.add_argument("--as-is", action="store_true")
 
 
