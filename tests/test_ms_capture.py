@@ -1428,3 +1428,56 @@ def test_a_subagent_nobody_routed_keeps_the_identity_capture_computes(
 
     assert len(delegated) == 1
     assert delegated[0].unit_id.startswith("unit-")
+
+
+def test_a_removal_narrowed_to_one_harness_leaves_the_others(tmp_path: Path) -> None:
+    """`--harness` narrows removal exactly as it narrows installation.
+
+    The word accepts the flag for installation, so a caller reading the two as
+    symmetric would otherwise lose an integration it never named.
+    """
+
+    data, root = tmp_path / "data", tmp_path / "home"
+    capture.install(data, root, [], ["uv", "run", "hook"])
+
+    report = capture.disable(data, root, ["codex"])
+
+    assert [record["harness"] for record in report["harnesses"]] == ["codex"]
+    assert capture.owner() not in (root / ".codex" / "hooks.json").read_text(
+        encoding="utf-8"
+    )
+    assert capture.owner() in (root / ".claude" / "settings.json").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_naming_no_harness_still_removes_from_every_one_of_them(
+    tmp_path: Path,
+) -> None:
+    """The Manager says the word with no `--harness`, and means every Harness."""
+
+    data, root = tmp_path / "data", tmp_path / "home"
+    capture.install(data, root, [], ["uv", "run", "hook"])
+
+    report = capture.disable(data, root, [])
+
+    assert {record["status"] for record in report["harnesses"]} == {"removed"}
+    assert capture.owner() not in (root / ".claude" / "settings.json").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_the_harnesses_a_removal_names_reach_the_removal(monkeypatch: Any) -> None:
+    """The list arrives where the Harnesses are actually iterated, or it is lost."""
+
+    seen: list[list[str]] = []
+
+    def _disable(data: Path, root: Path, harnesses: list[str]) -> dict[str, Any]:
+        seen.append(list(harnesses))
+        return {"harnesses": [], "unsupported": {"count": 0, "supported": []}}
+
+    monkeypatch.setattr(capture, "disable", _disable)
+    monkeypatch.setattr(sys, "stdout", io.StringIO())
+
+    assert capture.main(["remove-integrations", "--harness=codex"]) == 0
+    assert seen == [["codex"]]

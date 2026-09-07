@@ -113,11 +113,26 @@ def install_integrations(
     }
 
 
-def remove_integrations() -> dict[str, Any]:
-    """Clear the status line where this collection holds it, and never otherwise."""
+def remove_integrations(harnesses: list[str]) -> dict[str, Any]:
+    """Clear the status line where this collection holds it, and never otherwise.
+
+    Naming Harnesses narrows removal to those, exactly as it narrows the
+    install this mirrors; naming none means the one Harness this Feature
+    serves, which is the Manager's own call. A name this Feature does not
+    serve is reported as the same count its install already reports it as,
+    rather than as a status line somewhere that was cleared.
+    """
 
     integrations = _integrations()
-    return {"removed": [integrations.remove_statusline(OWNER, HARNESS, home())]}
+    named = list(harnesses) or [HARNESS]
+    attempted = [harness for harness in named if harness == HARNESS]
+    return {
+        "removed": [
+            integrations.remove_statusline(OWNER, harness, home())
+            for harness in attempted
+        ],
+        "unsupported": {"count": len(named) - len(attempted)},
+    }
 
 
 def feature_health(harnesses: list[str]) -> dict[str, Any]:
@@ -167,7 +182,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.action == "install-integrations":
         _emit(install_integrations(args.harness, replace=args.replace))
     elif args.action == "remove-integrations":
-        _emit(remove_integrations())
+        _emit(remove_integrations(args.harness))
     else:
         _emit(feature_health(args.harness))
     return 0

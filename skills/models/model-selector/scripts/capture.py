@@ -521,24 +521,37 @@ def install(
     }
 
 
-def disable(data: Path, root: Path) -> dict[str, Any]:
+def disable(
+    data: Path, root: Path, harnesses: list[str] | None = None
+) -> dict[str, Any]:
     """Remove every integration this feature owns, wherever it installed one.
 
-    What was measured is untouched. Every Harness the Collection Library has
-    an adapter for is attempted, whether or not this machine ever held our
-    entry there: removal reads the Harness's own file and converges it
-    (ADR-0179), so trying one that never carried our entry is a converged
+    What was measured is untouched. Naming no Harness means every Harness the
+    Collection Library has an adapter for, whether or not this machine ever
+    held our entry there: removal reads the Harness's own file and converges
+    it (ADR-0179), so trying one that never carried our entry is a converged
     state rather than an error, and there is no separate on/off flag of this
     feature's own left to update — the Harness's own configuration is the one
     truth capture ever reads.
+
+    Naming Harnesses narrows it to exactly those, the way naming them narrows
+    an install. The word accepts `--harness` on either side of the seam, and a
+    caller reading the two as symmetric would otherwise lose an integration it
+    never named.
     """
 
     integrations = _integrations()
-    removed = [
-        integrations.remove(owner(), harness, root)
-        for harness in integrations.SUPPORTED
-    ]
-    return {"harnesses": removed}
+    supported = set(integrations.SUPPORTED)
+    named = list(harnesses or []) or list(integrations.SUPPORTED)
+    attempted = [harness for harness in named if harness in supported]
+    removed = [integrations.remove(owner(), harness, root) for harness in attempted]
+    return {
+        "harnesses": removed,
+        "unsupported": {
+            "count": len(named) - len(attempted),
+            "supported": sorted(supported),
+        },
+    }
 
 
 def _opencode_session_id(payload: dict[str, Any]) -> str | None:
@@ -1417,7 +1430,7 @@ def install_integrations(harnesses: list[str]) -> dict[str, Any]:
     return install(default_data(), Path.home(), harnesses, [])
 
 
-def remove_integrations() -> dict[str, Any]:
+def remove_integrations(harnesses: list[str]) -> dict[str, Any]:
     """Remove every integration this feature owns, wherever it installed one.
 
     This is the word the Manager says when the Skill is being made Disabled in
@@ -1428,11 +1441,20 @@ def remove_integrations() -> dict[str, Any]:
     every Harness, and leaves what was measured alone. It is answerable at any
     time, because removing what is already gone is a state rather than an
     error.
+
+    Naming Harnesses narrows it to those, exactly as it narrows the mirror
+    word; the Manager names none, which is every Harness and is what it
+    relies on. The list is carried down to `disable`, which is where the
+    Harnesses are actually iterated.
     """
 
     data = default_data()
-    result = disable(data, Path.home())
-    return {"removed": result["harnesses"], "measurements_preserved": True}
+    result = disable(data, Path.home(), harnesses)
+    return {
+        "removed": result["harnesses"],
+        "unsupported": result["unsupported"],
+        "measurements_preserved": True,
+    }
 
 
 def _emit(payload: dict[str, Any], stream: TextIO | None = None) -> None:
@@ -1510,7 +1532,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.action == "remove-integrations":
-        _emit(remove_integrations())
+        _emit(remove_integrations(args.harness))
     elif args.action == "install-integrations":
         _emit(install_integrations(args.harness))
     elif args.action == "purge":

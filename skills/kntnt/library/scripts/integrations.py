@@ -263,16 +263,46 @@ def _converge_hooks(
     harness: str,
     command: list[str],
     events: tuple[str, ...],
-) -> dict[str, Any]:
-    """Return *document* holding exactly one entry of *owner* per event.
+) -> tuple[dict[str, Any], list[str]]:
+    """Return *document* converged on *owner*, and the moments it was cleared from.
+
+    Exactly one entry of *owner* per wanted event is left behind, and the
+    second half of the answer names the moments an entry of *owner* was taken
+    out of.
 
     Convergence rather than appending is what makes a second install a no-op and
     a repair after external damage a no-op too: whatever is there of ours is
     replaced by the one entry that should be there, and everybody else's entries
     keep their order.
+
+    It converges in both directions, because an owner narrows the moments it
+    wants — a Feature that stops answering a moment stops asking for it — and
+    an entry left at a moment nobody wants any more is one every later health
+    check counts and no owner accounts for. What is swept is every moment the
+    document actually holds rather than the set this module knows the Harness
+    by: a hand-edited entry of ours at a moment `_events` does not name is
+    still ours, and leaving it is what would let *more entries than wanted*
+    outlive an install.
     """
 
     hooks = dict(document.get("hooks") or {})
+    removed: list[str] = []
+    for event in list(hooks):
+        entries = hooks[event]
+        if event in events or not isinstance(entries, list):
+            continue
+        kept = [entry for entry in entries if not _owns(entry, owner)]
+        if len(kept) == len(entries):
+            continue
+        removed.append(event)
+
+        # An event we emptied is an event nobody else uses, so the key goes
+        # too, exactly as a removal leaves none of ours behind.
+        if kept:
+            hooks[event] = kept
+        else:
+            del hooks[event]
+
     for event in events:
         existing = hooks.get(event)
         others = [
@@ -281,7 +311,7 @@ def _converge_hooks(
             if not _owns(entry, owner)
         ]
         hooks[event] = [*others, _hook_entry(owner, harness, command, event)]
-    return {**document, "hooks": hooks}
+    return {**document, "hooks": hooks}, removed
 
 
 def _strip_hooks(document: dict[str, Any], owner: str) -> tuple[dict[str, Any], int]:
@@ -308,6 +338,19 @@ def _strip_hooks(document: dict[str, Any], owner: str) -> tuple[dict[str, Any], 
     else:
         remaining.pop("hooks", None)
     return remaining, taken
+
+
+def _owned_events(document: dict[str, Any], owner: str) -> list[str]:
+    """Return the moments one Harness document holds an entry of *owner* at."""
+
+    hooks = document.get("hooks")
+    if not isinstance(hooks, dict):
+        return []
+    return [
+        event
+        for event, entries in hooks.items()
+        if isinstance(entries, list) and any(_owns(entry, owner) for entry in entries)
+    ]
 
 
 def _count_hooks(document: dict[str, Any], owner: str) -> int:
@@ -406,6 +449,21 @@ def _wanted_events(harness: str, events: tuple[str, ...] | None) -> tuple[str, .
     return narrowed or available
 
 
+def _named(events: list[str] | tuple[str, ...]) -> str:
+    """Return lifecycle moments as one readable list, or the words for none."""
+
+    return ", ".join(events) or "no moment"
+
+
+def _degraded_detail(owner: str, found: list[str], wanted: tuple[str, ...]) -> str:
+    """Return what a Harness holds of *owner* beside what *owner* wants of it."""
+
+    return (
+        f"'{owner}' holds an entry at {_named(found)}; the moments wanted are "
+        f"{_named(wanted)}"
+    )
+
+
 def _unsatisfied(harness: str) -> dict[str, Any]:
     """Return the answer for a Harness no adapter can serve."""
 
@@ -440,12 +498,22 @@ def install(
     is the answer for an owner that has nothing to narrow rather than the way
     an owner here asks for its moments: what a Harness offers is a set to
     choose from, and every owner on this module names its own choice.
+
+    Whatever the owner held at a moment it no longer wants goes, and the
+    record names those moments in `removed`. That is what makes this a
+    convergence rather than an addition: an owner that narrows its moments on
+    a machine that already carries the wider set ends up holding exactly what
+    it asks for, instead of holding both and being told its write did not
+    take. `removed` is its own key rather than a sentence in `detail`, because
+    a non-null `detail` on an installed record means *present and not yet
+    active* to every reader of these records.
     """
 
     if harness not in SUPPORTED:
-        return _unsatisfied(harness)
+        return {**_unsatisfied(harness), "removed": []}
 
     wanted = _wanted_events(harness, events)
+    removed: list[str] = []
     try:
         if harness == "opencode":
             path = _plugin_path(root, owner)
@@ -456,12 +524,16 @@ def install(
             )
             installed = path.exists()
             entries = len(wanted) if installed else 0
+
+            # OpenCode's unit of ownership is the whole plugin file rather than
+            # a set of moments, so it converges by being rewritten and there is
+            # never a moment left over to take out.
         else:
             path = _harness_file(harness, root)
-            _write_json(
-                path,
-                _converge_hooks(_read_json(path), owner, harness, command, wanted),
+            document, removed = _converge_hooks(
+                _read_json(path), owner, harness, command, wanted
             )
+            _write_json(path, document)
             entries = _count_hooks(_read_json(path), owner)
             installed = entries == len(wanted)
     except IntegrationError as exc:
@@ -470,6 +542,7 @@ def install(
             "status": "failed",
             "entries": 0,
             "capability": None,
+            "removed": [],
             "detail": str(exc),
         }
 
@@ -483,6 +556,11 @@ def install(
         "status": "installed" if installed else "failed",
         "entries": entries,
         "capability": None,
+        "removed": removed,
+        # The one state this sentence is true of is a write that did not take.
+        # It was never the answer for more entries than wanted, and after this
+        # convergence that state cannot outlive an install to be reported at
+        # all.
         "detail": (
             CODEX_TRUST_GATE
             if gated
@@ -553,13 +631,15 @@ def health(
         return _unsatisfied(harness)
 
     wanted = _wanted_events(harness, events)
+    expected = len(wanted)
     try:
         if harness == "opencode":
-            entries = len(wanted) if _plugin_path(root, owner).exists() else 0
-            expected = len(wanted)
+            entries = expected if _plugin_path(root, owner).exists() else 0
+            found = list(wanted) if entries else []
         else:
-            entries = _count_hooks(_read_json(_harness_file(harness, root)), owner)
-            expected = len(wanted)
+            document = _read_json(_harness_file(harness, root))
+            entries = _count_hooks(document, owner)
+            found = _owned_events(document, owner)
     except IntegrationError as exc:
         return {
             "harness": harness,
@@ -580,12 +660,23 @@ def health(
         status = "gated" if harness == "codex" else "healthy"
     else:
         status = "degraded"
+
+    # A degraded Harness says what it holds, moment by moment, beside what this
+    # owner wants of it. The count alone says only that the two disagree, and
+    # which way round is what a reader has to act on; what it can never say is
+    # that the integration is not on disk, because the entries being counted
+    # are on disk and are the whole of what makes it degraded.
+    detail: str | None = None
+    if status == "gated":
+        detail = CODEX_TRUST_GATE
+    elif status == "degraded":
+        detail = _degraded_detail(owner, found, wanted)
     return {
         "harness": harness,
         "status": status,
         "entries": entries,
         "capability": None,
-        "detail": CODEX_TRUST_GATE if status == "gated" else None,
+        "detail": detail,
     }
 
 
@@ -1079,6 +1170,19 @@ def fold(records: list[dict[str, Any]]) -> dict[str, Any]:
     held = next((record["held"] for record in records if record.get("held")), None)
     if held is not None:
         folded["held"] = held
+
+    # So does what an install cleared. The moments are what says a converged
+    # Harness converged, and a part's answer dropped here is an answer nothing
+    # downstream can get back — `detail` is unavailable for carrying it,
+    # because a non-null detail on an installed record already means something
+    # else to every reader of these records.
+    if any("removed" in record for record in records):
+        folded["removed"] = [
+            event
+            for record in records
+            for event in (record.get("removed") or [])
+            if isinstance(event, str)
+        ]
     return folded
 
 

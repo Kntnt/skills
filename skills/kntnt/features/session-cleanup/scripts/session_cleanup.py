@@ -746,17 +746,27 @@ def install_integrations(harnesses: list[str]) -> dict[str, Any]:
     }
 
 
-def remove_integrations() -> dict[str, Any]:
-    """Take this Feature's block and hook out of every Harness it could reach.
+def remove_integrations(harnesses: list[str]) -> dict[str, Any]:
+    """Take this Feature's block and hook out of the Harnesses it was named for.
 
-    Every supported Harness rather than the ones this machine has now: a
-    Harness uninstalled since the block was written still holds the file it
-    was written into, and removing what is already gone is a converged state
-    rather than an error.
+    Naming none means every supported Harness rather than the ones this
+    machine has now: a Harness uninstalled since the block was written still
+    holds the file it was written into, and removing what is already gone is a
+    converged state rather than an error. That is the Manager's own call.
+
+    Naming some narrows it to those, exactly as it narrows the mirror word. The
+    seam accepts `--harness` on both words, so a caller reading them as
+    symmetric must not lose an integration it never named.
     """
 
     integrations = _integrations()
-    return {"removed": _harness_records("remove", list(integrations.SUPPORTED), "")}
+    supported = set(integrations.SUPPORTED)
+    named = list(harnesses) or list(integrations.SUPPORTED)
+    attempted = [harness for harness in named if harness in supported]
+    return {
+        "removed": _harness_records("remove", attempted, ""),
+        "unsupported": {"count": len(named) - len(attempted)},
+    }
 
 
 def feature_health(harnesses: list[str]) -> dict[str, Any]:
@@ -856,7 +866,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.action == "install-integrations":
         _emit(install_integrations(args.harness))
     elif args.action == "remove-integrations":
-        _emit(remove_integrations())
+        _emit(remove_integrations(args.harness))
     else:
         _emit(feature_health(args.harness))
     return 0

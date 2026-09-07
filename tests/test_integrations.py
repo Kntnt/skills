@@ -392,3 +392,161 @@ def test_removal_leaves_no_empty_leavings_of_ours(tmp_path: Path) -> None:
     module.remove(OWNER, "claude-code", tmp_path)
 
     assert "hooks" not in _settings(tmp_path)
+
+
+def _entry_of(owner: str, command: str = "uv run hook") -> dict[str, Any]:
+    """Return one hook entry carrying *owner* the way an installed one does."""
+
+    return {"hooks": [{"type": "command", "command": f"{command} --owner={owner}"}]}
+
+
+def test_narrowing_the_wanted_moments_clears_the_ones_left_behind(
+    tmp_path: Path,
+) -> None:
+    """An owner asking for fewer moments than it holds ends up holding those.
+
+    This is the state a machine reconverged to a narrower capture met: four
+    entries on disk, two of them wanted, and an install reporting the write it
+    had just made as a write that did not take.
+    """
+
+    module = _load()
+    module.install(OWNER, "claude-code", tmp_path, COMMAND)
+
+    result = module.install(
+        OWNER, "claude-code", tmp_path, COMMAND, events=("SubagentStop", "SessionEnd")
+    )
+
+    assert result["status"] == "installed", result
+    assert result["entries"] == 2
+    assert sorted(result["removed"]) == ["SessionStart", "Stop"]
+    assert sorted(_settings(tmp_path)["hooks"]) == ["SessionEnd", "SubagentStop"]
+    assert (
+        module.health(
+            OWNER, "claude-code", tmp_path, events=("SubagentStop", "SessionEnd")
+        )["status"]
+        == "healthy"
+    )
+
+
+def test_an_install_onto_a_harness_holding_nothing_removes_nothing(
+    tmp_path: Path,
+) -> None:
+    """Nothing removed is an empty list rather than a key a reader has to guess at."""
+
+    module = _load()
+    for harness in ("claude-code", "codex", "opencode"):
+        result = module.install(OWNER, harness, tmp_path / harness, COMMAND)
+
+        assert result["status"] == "installed", result
+        assert result["removed"] == [], harness
+
+
+def test_an_entry_at_a_moment_this_module_never_names_is_cleared_too(
+    tmp_path: Path,
+) -> None:
+    """The sweep is every moment on disk, never only the ones we know about.
+
+    A hand-edited entry of ours at a moment `CLAUDE_EVENTS` does not name is
+    still ours, and leaving it is what would let *more entries than wanted*
+    survive an install.
+    """
+
+    settings = tmp_path / ".claude" / "settings.json"
+    settings.parent.mkdir(parents=True)
+    settings.write_text(
+        json.dumps({"hooks": {"PreToolUse": [_entry_of(OWNER)]}}), encoding="utf-8"
+    )
+
+    module = _load()
+    result = module.install(
+        OWNER, "claude-code", tmp_path, COMMAND, events=("SessionEnd",)
+    )
+
+    assert result["removed"] == ["PreToolUse"]
+    assert sorted(_settings(tmp_path)["hooks"]) == ["SessionEnd"]
+    assert result["entries"] == 1
+
+
+def test_another_owner_keeps_its_entry_at_a_moment_we_clear(tmp_path: Path) -> None:
+    """We take ours out of a moment we no longer want and nothing else with it."""
+
+    settings = tmp_path / ".claude" / "settings.json"
+    settings.parent.mkdir(parents=True)
+    theirs = _entry_of("somebody.else", "their-own-thing")
+    settings.write_text(
+        json.dumps(
+            {
+                "hooks": {
+                    "SessionStart": [theirs, _entry_of(OWNER)],
+                    "Stop": [_entry_of(OWNER)],
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    module = _load()
+    result = module.install(
+        OWNER, "claude-code", tmp_path, COMMAND, events=("SessionEnd",)
+    )
+
+    hooks = _settings(tmp_path)["hooks"]
+    assert sorted(result["removed"]) == ["SessionStart", "Stop"]
+    assert hooks["SessionStart"] == [theirs]
+
+    # An event emptied of everything is our leavings rather than the user's file.
+    assert "Stop" not in hooks
+
+
+def test_health_names_the_moments_it_found_and_the_moments_wanted(
+    tmp_path: Path,
+) -> None:
+    """A degraded Harness says what is there, never that nothing was written."""
+
+    module = _load()
+    module.install(OWNER, "claude-code", tmp_path, COMMAND)
+
+    report = module.health(
+        OWNER, "claude-code", tmp_path, events=("SubagentStop", "SessionEnd")
+    )
+
+    assert report["status"] == "degraded"
+    assert report["entries"] == 4
+    detail = report["detail"]
+    assert detail and "not on disk" not in detail
+    for moment in ("SessionStart", "Stop", "SubagentStop", "SessionEnd"):
+        assert moment in detail
+    assert "wanted" in detail
+
+
+def test_a_folded_record_still_names_what_the_install_cleared(
+    tmp_path: Path,
+) -> None:
+    """A Feature owning two things in one Harness loses neither part's answer."""
+
+    module = _load()
+    module.install(OWNER, "claude-code", tmp_path, COMMAND)
+    hooks = module.install(
+        OWNER, "claude-code", tmp_path, COMMAND, events=("SessionEnd",)
+    )
+    block = module.install_block(OWNER, "claude-code", tmp_path, "a block of ours")
+
+    folded = module.fold([block, hooks])
+
+    assert folded["status"] == "installed", folded
+    assert sorted(folded["removed"]) == ["SessionStart", "Stop", "SubagentStop"]
+
+
+def test_a_codex_installs_detail_is_the_trust_gate_and_nothing_else(
+    tmp_path: Path,
+) -> None:
+    """What was cleared travels in its own key, so nothing composes with the gate."""
+
+    module = _load()
+    module.install(OWNER, "codex", tmp_path, COMMAND)
+
+    result = module.install(OWNER, "codex", tmp_path, COMMAND, events=("SessionEnd",))
+
+    assert result["detail"] == module.CODEX_TRUST_GATE
+    assert sorted(result["removed"]) == ["SessionStart", "Stop"]
