@@ -340,7 +340,9 @@ def test_an_unrecognised_model_lock_never_empties_the_pool(
 ) -> None:
     """A typo still needs an answer, and gets one with the lock reported."""
 
-    answer = _answer(capsys, f"--data={tmp_path}", "--model=gpt-9-imaginary")
+    answer = _answer(
+        capsys, f"--data={tmp_path}", "--harness=claude-code", "--model=gpt-9-imaginary"
+    )
 
     assert answer["ok"] is True
     assert answer["model"]
@@ -521,7 +523,13 @@ def test_a_model_with_no_effort_control_is_answered_with_a_null_level(
 ) -> None:
     """One point rather than five, and the answer says so rather than inventing one."""
 
-    answer = _answer(capsys, f"--data={tmp_path}", "--model=haiku", "--scope=all")
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--model=haiku",
+        "--scope=all",
+    )
 
     assert answer["model"] == "claude-haiku-4-5-20251001"
     assert answer["deliberation"] is None
