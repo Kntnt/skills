@@ -1,4 +1,4 @@
-"""The README's Skill sections, and the Catalog they are supposed to describe."""
+"""The README's entry sections, and the Catalog they are supposed to describe."""
 
 from __future__ import annotations
 
@@ -25,11 +25,25 @@ def _documented() -> set[str]:
     return set(SECTION.findall(usage.partition("\n## ")[0]))
 
 
+def _documented_features() -> set[str]:
+    """The Feature names the README's Features part gives a section of its own."""
+
+    features = README.read_text(encoding="utf-8").partition("\n## Features\n")[2]
+    return set(SECTION.findall(features.partition("\n## ")[0]))
+
+
 def _catalogued() -> set[str]:
     """The Skill names the Catalog carries an entry for."""
 
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
     return {entry["name"] for entry in catalog["skills"]}
+
+
+def _catalogued_features() -> set[str]:
+    """The Feature names the Catalog carries an entry for."""
+
+    catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
+    return {entry["name"] for entry in catalog["features"]}
 
 
 def test_the_readme_documents_exactly_the_skills_the_catalog_names() -> None:
@@ -65,4 +79,31 @@ def test_the_readme_documents_exactly_the_skills_the_catalog_names() -> None:
         f"{sorted(documented - catalogued)}. A Skill with no section is a Skill "
         "the README hides, and a section with no Skill advertises something "
         f"`/kntnt select` no longer offers. See {STANDARD}."
+    )
+
+
+def test_the_readme_documents_exactly_the_features_the_catalog_names() -> None:
+    """The same comparison, over the other kind of entry `/kntnt select` lists.
+
+    A Feature's section is written on the terms a Skill's is written on
+    (`docs/rules/skills.md`), and a rule stated for both entry types and held
+    for one is a rule the suite only half keeps. Nothing about a Feature makes
+    the drift less likely: it is offered at the same list, under its own
+    heading, and a Feature with no section is as hidden as a Skill with none.
+    """
+
+    documented = _documented_features()
+    catalogued = _catalogued_features()
+
+    # A heading shape this pattern stopped matching, or a Features heading that
+    # moved, would leave two empty sets and pass regardless.
+    assert documented
+
+    assert documented == catalogued, (
+        "the README's Features sections and the Catalog's entries name one set "
+        "of Features between them: undocumented "
+        f"{sorted(catalogued - documented)}, unshipped "
+        f"{sorted(documented - catalogued)}. A Feature with no section is a "
+        "Feature the README hides, and a section with no Feature advertises "
+        f"something `/kntnt select` no longer offers. See {STANDARD}."
     )
