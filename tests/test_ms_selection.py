@@ -503,16 +503,21 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
     for answer in answers:
         listed = {row["model"]: row for row in answer["alternatives"]}
         assert listed["test-unpriced"]["cost_usd"] is None
+        assert listed["test-unpriced"]["per_success_cost_usd"] is None
+        assert listed["test-unpriced"]["per_success_seconds"] is not None
 
 
 def test_the_answer_is_the_cheapest_point_that_clears_the_floor(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """Price is second and never a reason to accept a lower chance of finishing.
+    """No point below the floor is taken for being cheap.
 
     The floor is what the job getting done means here, and among the points
-    that clear it the cheapest is taken — so the answer is neither the likeliest
-    point on the table nor the cheapest point on it.
+    that clear it the order is on price divided by the chance of success — so
+    the answer is neither the likeliest point on the table nor the cheapest
+    point on it. On this store the cheapest attempt that clears the floor is
+    also the cheapest finished job, so the answer is the one the per-attempt
+    order gave before the division was introduced.
     """
 
     _clearing(tmp_path)
@@ -563,6 +568,274 @@ def test_a_run_ordered_on_time_takes_the_fastest_point_that_clears_the_floor(
     assert fastest["expected"]["p_success"] >= select.FLOOR
     assert fastest["expected"]["seconds"] < cheapest["expected"]["seconds"]
     assert fastest["expected"]["cost_usd"] > cheapest["expected"]["cost_usd"]
+
+
+def _finishing(data_dir: Path) -> None:
+    """Write a store whose cheapest attempt is not its cheapest finished job.
+
+    Opus at `low` and at `medium` both clear the floor on rows of their own.
+    `low` is the cheaper attempt, by the money and by the clock, and it finishes
+    about 0.82 of the time; `medium` costs about 1.14 times as much and takes
+    about 1.11 times as long, and finishes about 0.98 of the time. That gap in
+    chance is wider than the gap in price, so `medium` is the cheaper finished
+    job on both counts.
+    """
+
+    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(
+        data_dir,
+        ("implement", "claude-opus-5", "low", 0.8, 40),
+        ("implement", "claude-opus-5", "medium", 1.0, 40),
+    )
+
+
+def _point(
+    capsys: pytest.CaptureFixture[str], flags: Sequence[str], model: str, level: str
+) -> dict[str, Any]:
+    """Return the answer locked to one point, which is what the store says of it."""
+
+    return _answer(capsys, *flags, f"--model={model}", f"--deliberation={level}")
+
+
+@pytest.mark.parametrize(
+    ("objective", "attempt"),
+    (("cost", "cost_usd"), ("time", "seconds")),
+)
+def test_the_answer_is_the_point_that_finishes_the_job_for_the_least(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], objective: str, attempt: str
+) -> None:
+    """A point that fails is paid for again, so its price is read per success.
+
+    Both points clear the floor, so neither is a lower chance bought with
+    price. The cheaper attempt succeeds about 0.82 of the time and needs about
+    1.22 attempts per finished job; the dearer one, at about 0.98, needs about
+    1.02. What a finished job costs is the price divided by the chance of
+    success, and on that the dearer attempt is the cheaper job — in money and
+    in elapsed time alike.
+    """
+
+    _finishing(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0")
+
+    answer = _answer(capsys, *flags, f"--objective={objective}")
+    cheap = _point(capsys, flags, "claude-opus-5", "low")
+    sure = _point(capsys, flags, "claude-opus-5", "medium")
+
+    assert select.FLOOR <= cheap["expected"]["p_success"] < 0.85
+    assert sure["expected"]["p_success"] > 0.95
+    assert cheap["expected"][attempt] < sure["expected"][attempt]
+    total = f"per_success_{attempt}"
+    assert sure["expected"][total] < cheap["expected"][total]
+    assert answer["explored"] is None
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "medium")
+    assert answer["expected"][total] == sure["expected"][total]
+
+
+def test_the_answer_carries_the_total_it_was_ranked_on(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Beside what one attempt costs, the answer says what a finished job costs.
+
+    Both figures are the per-attempt ones divided by the chance of success,
+    rounded as their per-attempt figures are: the money to four places and the
+    clock to whole seconds.
+    """
+
+    _finishing(tmp_path)
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
+    )
+
+    expected = answer["expected"]
+    chance = expected["p_success"]
+    assert expected["per_success_cost_usd"] == pytest.approx(
+        expected["cost_usd"] / chance, rel=1e-3
+    )
+    assert expected["per_success_cost_usd"] == round(
+        expected["per_success_cost_usd"], 4
+    )
+    assert isinstance(expected["per_success_seconds"], int)
+    assert expected["per_success_seconds"] == pytest.approx(
+        expected["seconds"] / chance, abs=1
+    )
+    for row in answer["alternatives"]:
+        assert row["per_success_cost_usd"] == pytest.approx(
+            row["cost_usd"] / row["p_success"], rel=1e-3
+        )
+        assert isinstance(row["per_success_seconds"], int)
+
+
+def test_an_answer_ranked_on_its_chances_still_carries_the_total(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Where nothing clears the floor the answer is ranked on chance, and says both."""
+
+    _under(tmp_path)
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
+    )
+
+    assert answer["expected"]["p_success"] < select.FLOOR
+    assert answer["expected"]["per_success_cost_usd"] > answer["expected"]["cost_usd"]
+    assert answer["expected"]["per_success_seconds"] > answer["expected"]["seconds"]
+
+
+def test_an_inheriting_answer_carries_no_total(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Nothing was priced, so nothing is divided, and the members are still there."""
+
+    _profile(tmp_path, models=[], providers=[])
+
+    answer = _answer(capsys, f"--data={tmp_path}", "--seat=claude-opus-5@xhigh")
+
+    assert answer["basis"] == "inherit"
+    assert answer["expected"]["per_success_cost_usd"] is None
+    assert answer["expected"]["per_success_seconds"] is None
+
+
+def test_an_explored_answer_carries_the_total_of_the_point_it_tried(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The figures describe the point that was run, not the one stepped over."""
+
+    _boundary(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+
+    answers = _over_seeds(capsys, flags)
+    explored = [answer for answer in answers if answer["explored"] is not None]
+
+    assert explored
+    for answer in explored[:20]:
+        point = _point(capsys, flags, answer["model"], answer["deliberation"])
+        for member in ("per_success_cost_usd", "per_success_seconds"):
+            assert answer["expected"][member] == point["expected"][member]
+
+
+def test_the_step_up_is_the_likelier_point_that_finishes_for_the_least(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A failure is answered on the same total the first answer was.
+
+    Both Opus points are measured, clear the floor, and are likelier than the
+    Sonnet point that failed. `low` is the cheaper attempt and `medium` the
+    cheaper finished job, so the step is `medium`.
+    """
+
+    _finishing(tmp_path)
+
+    answer = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=implement",
+        "--after=claude-sonnet-5@low",
+    )
+
+    assert "one step up" in (answer["note"] or "")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "medium")
+
+
+def test_with_nothing_measured_to_step_to_the_step_is_still_read_per_success(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The floorless step is ordered on the same total as the rest.
+
+    Sonnet at `low` failed. Nothing measured above it clears the floor, so
+    every likelier point is a candidate. Sonnet at `medium` is the cheapest
+    attempt among them and finishes about half the time; Sonnet at `high` costs
+    a little more and finishes about two times in three, which makes it the
+    cheaper finished job.
+    """
+
+    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(
+        tmp_path,
+        ("implement", "claude-sonnet-5", "low", 0.0, 10),
+        ("implement", "claude-sonnet-5", "medium", 0.5, 20),
+        ("implement", "claude-sonnet-5", "high", 0.7, 20),
+    )
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+
+    answer = _answer(capsys, *flags, "--after=claude-sonnet-5@low")
+    medium = _point(capsys, flags, "claude-sonnet-5", "medium")
+    high = _point(capsys, flags, "claude-sonnet-5", "high")
+
+    assert medium["expected"]["cost_usd"] < high["expected"]["cost_usd"]
+    assert (
+        high["expected"]["per_success_cost_usd"]
+        < (medium["expected"]["per_success_cost_usd"])
+    )
+    assert high["expected"]["p_success"] < select.FLOOR
+    assert "one step up" in (answer["note"] or "")
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
+
+
+def _priced(model_id: str, scale: float) -> dict[str, Any]:
+    """Return a one-level Anthropic model whose rate card is Sonnet's times a scale.
+
+    Every row of the fixture that uses it is `implement` at `high`, and none
+    carries a token count, so each model's forecast is the kind's own and what
+    separates their bills is the scale alone.
+    """
+
+    return {
+        "id": model_id,
+        "provider": "anthropic",
+        "family": model_id,
+        "aliases": [model_id],
+        "deliberation": ["high"],
+        "price": {
+            "input": 2.0 * scale,
+            "cache_read": 0.2 * scale,
+            "cache_write": 2.5 * scale,
+            "output": 10.0 * scale,
+            "currency": "USD",
+            "unit": "per_mtok",
+        },
+        "reasoning_billed_as": "output",
+        "capability": 0.9,
+        "released": "2026-09-01",
+    }
+
+
+def test_the_alternatives_that_clear_the_floor_are_listed_per_success(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The list a caller reads its fallbacks off is ordered on the same total.
+
+    Three models clear the floor. `test-sure` is the answer on any reading.
+    Of the other two, `test-shaky` is the cheaper attempt and succeeds about
+    0.82 of the time, `test-steady` costs about a tenth more and succeeds about
+    0.98 of the time — so it is the cheaper finished job and is listed first.
+    """
+
+    _refresh(
+        tmp_path,
+        _priced("test-sure", 1.0),
+        _priced("test-shaky", 1.1),
+        _priced("test-steady", 1.2),
+    )
+    _profile(tmp_path, models=["test-sure", "test-shaky", "test-steady"])
+    _store(
+        tmp_path,
+        ("implement", "test-sure", "high", 1.0, 40),
+        ("implement", "test-shaky", "high", 0.8, 40),
+        ("implement", "test-steady", "high", 1.0, 40),
+    )
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
+    )
+
+    listed = answer["alternatives"]
+    assert answer["model"] == "test-sure"
+    assert [row["model"] for row in listed] == ["test-steady", "test-shaky"]
+    assert all(row["p_success"] >= select.FLOOR for row in listed)
+    assert listed[1]["cost_usd"] < listed[0]["cost_usd"]
+    assert listed[0]["per_success_cost_usd"] < listed[1]["per_success_cost_usd"]
 
 
 def _measured_beside_prior(data_dir: Path) -> None:

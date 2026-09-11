@@ -22,14 +22,16 @@ because that is the whole of what the arithmetic reads, and a brief accepted
 here would be a brief somebody expects to have been recorded.
 
 What is ranked is the chance of finishing first and the price second. Among
-the candidates the evidence says will finish, the cheapest is taken, and where
-any of them has been measured doing this kind of work the answer is chosen
-among those alone; price is never a reason to accept a lower chance of getting
-the work done, nor an estimate nobody has tested over one somebody has.
-`_ranked` states that rule, and `_explored` states the one exception to reading
-it off the means: a bounded share of reversible calls tries the boundary
-instead, because a store that only ever runs its favourite never learns that a
-cheaper point would have done.
+the candidates the evidence says will finish, the one whose price per finished
+job is lowest is taken — its price divided by its chance of success, since a
+point that fails is paid for again — and where any of them has been measured
+doing this kind of work the answer is chosen among those alone. No point below
+`FLOOR` is taken for being cheap, and among those above it the order is on
+price divided by the chance of success; nor is an estimate nobody has tested
+taken over one somebody has. `_ranked` states that rule, and `_explored` states
+the one exception to reading it off the means: a bounded share of reversible
+calls tries the boundary instead, because a store that only ever runs its
+favourite never learns that a cheaper point would have done.
 """
 
 from __future__ import annotations
@@ -387,11 +389,13 @@ def _after(
     the way the first one was and answered from the same pool: keep the
     candidates strictly likelier to finish the work than the one that failed,
     and where any of those has been measured for the kind and clears the floor,
-    step to the cheapest of them — a failure is answered with a point the
-    evidence has seen doing the work before it is answered with a cheaper
-    guess. Where none has, the step is the cheapest likelier point, measured or
-    not. Either way the rest follow on price, cheapest by the clock where the
-    caller asked for time. Nothing is appended above the top of the ladder:
+    step to the one of them with the lowest price per finished job — a failure
+    is answered with a point the evidence has seen doing the work before it is
+    answered with a cheaper guess. Where none has, the step is the likelier
+    point with the lowest price per finished job, measured or not and with no
+    floor. Either way every candidate is ordered on its price divided by its
+    chance of success, or on its elapsed time divided by it where the caller
+    asked for time. Nothing is appended above the top of the ladder:
     where the failed point was already the likeliest thing available, the
     caller is told so and offered it again, because there is no step and
     pretending otherwise would spend a retry on the same seat under a
@@ -466,10 +470,12 @@ def _report(
         "explored": explored,
         "confidence": round(best.estimate.low, 3),
         "expected": {
-            "cost_usd": None if best.cost_usd is None else round(best.cost_usd, 4),
+            "cost_usd": _rounded_cost(best.cost_usd),
             "p_success": round(best.estimate.mean, 3),
             "tokens": round(total),
             "seconds": round(best.seconds),
+            "per_success_cost_usd": _rounded_cost(_per_success_cost(best)),
+            "per_success_seconds": round(_per_success_seconds(best)),
             "runs": round(best.estimate.n, 1),
         },
         "alternatives": _alternatives(best, rest, args.n),
@@ -502,6 +508,8 @@ def _inherit(args: argparse.Namespace, why: str) -> dict[str, Any]:
             "p_success": None,
             "tokens": None,
             "seconds": None,
+            "per_success_cost_usd": None,
+            "per_success_seconds": None,
             "runs": 0.0,
         },
         "alternatives": [],
@@ -698,10 +706,10 @@ def _score(
 ) -> Scored:
     """Attach the estimate, the token forecast, the bill and the clock to one point.
 
-    All four are what the evidence holds about the point as it stands. Nothing
-    here is divided by anything: what a point costs and how likely it is to
-    finish are two facts about it, and `_ranked` is where the order between
-    them is settled.
+    All four are what the evidence holds about the point as it stands, and all
+    four are per attempt. Nothing here is divided by anything: what one attempt
+    costs and how likely it is to finish are two facts about the point, and the
+    keys `_ranked` orders on are where one is divided by the other.
     """
 
     estimate = estimator.p_success(kind, point.model.id, point.deliberation)
@@ -715,26 +723,32 @@ def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
     """Order the pool best first: the floor decides who is in, then price decides.
 
     The requirement is that the job gets done, and that among what gets it done
-    the cheapest is chosen. So the candidates the evidence believes in — those
-    whose posterior mean clears the floor — are ordered on price, and the rest
-    fall in behind them ordered on their chances, which is all a pool that can
-    promise nothing has left to offer. Price is second and is never a reason to
-    accept a lower chance of finishing.
+    the cheapest is chosen. A point that fails is paid for again, and a point
+    at 0.5 needs two attempts on average, so what a finished job costs is the
+    price of one attempt divided by the chance of success. So the candidates
+    the evidence believes in — those whose posterior mean clears the floor —
+    are ordered on that figure, and the rest fall in behind them ordered on
+    their chances, which is all a pool that can promise nothing has left to
+    offer. No point below `FLOOR` is taken for being cheap, and among those
+    above it the order is on price divided by the chance of success: the
+    division reads the chance as the expected number of attempts, never as an
+    exchange rate between chance and money (ADR-0188).
 
     A mean is not the same claim for every point, though. Where a point has been
     measured doing this kind of work, its mean is what this machine saw; where
     it has not, its mean is a prior or a verdict carried over from other work,
     and on the means alone that estimate wins whenever it looks cheaper. So the
     points measured for the kind that clear the floor go first, ordered on
-    price, and everything else follows exactly as it would have without them.
+    price per finished job, and everything else follows exactly as it would
+    have without them.
     Nothing is filtered out: the alternatives and a named failure read the same
     list, and whether a cheaper, untried point would have done is what the
     explored calls find out (ADR-0187).
 
-    The objective chooses which price is read. Money is the default because it
-    is what a run spends whether or not anybody is watching; time is what a
-    person waiting on the answer is spending instead, and it is theirs to ask
-    for.
+    The objective chooses which price is read, and either is divided by the
+    same chance. Money is the default because it is what a run spends whether
+    or not anybody is watching; time is what a person waiting on the answer is
+    spending instead, and it is theirs to ask for.
     """
 
     order = _time_key if objective == "time" else _cost_key
@@ -757,15 +771,41 @@ def _vouched(row: Scored) -> bool:
 
 
 def _time_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
-    """Rank by the clock, for a run somebody is waiting on."""
+    """Rank by the clock a finished job takes, for a run somebody is waiting on.
 
-    return (False, row.seconds, *_tiebreak(row))
+    One attempt's elapsed time divided by the chance of success, because an
+    attempt that fails is waited on again.
+    """
+
+    return (False, _per_success_seconds(row), *_tiebreak(row))
 
 
 def _cost_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
-    """Rank by price, among candidates that have already cleared the floor."""
+    """Rank by price per finished job: one attempt's price over its chance.
 
-    return (row.cost_usd is None, row.cost_usd or 0.0, *_tiebreak(row))
+    An attempt that fails is paid for again, so a point at 0.82 costs about
+    1.22 attempts per job and one at 0.98 about 1.02. An unpriced point still
+    sorts behind every priced one.
+    """
+
+    return (row.cost_usd is None, _per_success_cost(row) or 0.0, *_tiebreak(row))
+
+
+def _per_success_cost(row: Scored) -> float | None:
+    """Return one attempt's price divided by its chance, or None where unpriced.
+
+    The posterior mean never reaches nought, so the division needs no guard.
+    """
+
+    if row.cost_usd is None:
+        return None
+    return row.cost_usd / row.estimate.mean
+
+
+def _per_success_seconds(row: Scored) -> float:
+    """Return one attempt's elapsed time divided by its chance of success."""
+
+    return row.seconds / row.estimate.mean
 
 
 def _quality_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
@@ -792,7 +832,9 @@ def _alternatives(
 
     One per model, because a caller reading three levels of the same model has
     been told the same thing three times and still does not know what else it
-    could have run.
+    could have run. Ranked order puts the entries that clear the floor first,
+    ordered on price per finished job, so each entry carries that figure beside
+    its per-attempt price, and the elapsed time per finished job beside it.
     """
 
     seen = {best.point.model.id}
@@ -807,11 +849,19 @@ def _alternatives(
             {
                 "model": row.point.model.id,
                 "deliberation": row.point.deliberation,
-                "cost_usd": None if row.cost_usd is None else round(row.cost_usd, 4),
+                "cost_usd": _rounded_cost(row.cost_usd),
                 "p_success": round(row.estimate.mean, 3),
+                "per_success_cost_usd": _rounded_cost(_per_success_cost(row)),
+                "per_success_seconds": round(_per_success_seconds(row)),
             }
         )
     return listed
+
+
+def _rounded_cost(cost: float | None) -> float | None:
+    """Round a dollar figure the way the answer reports every one, keeping a null."""
+
+    return None if cost is None else round(cost, 4)
 
 
 def _channel(channel: profiles.Channel | None) -> dict[str, Any] | None:
