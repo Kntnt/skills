@@ -32,6 +32,10 @@ DRAWS: int = 200
 # own provider, and the Harness that says which provider that is.
 LIMITED: tuple[str, ...] = ("--scope=limited", "--harness=claude-code")
 
+# Both stakes a caller may declare, stated here rather than read off the module
+# so that a rule meant to hold at either is asked at each by name.
+STAKES_ASKED: tuple[str, ...] = ("reversible", "high")
+
 # The retired rule's own sentences, whitespace-collapsed before matching so
 # that a line break falling inside one of them hides nothing. Each states, as
 # the contract in force, an answer read off a draw over the whole pool rather
@@ -561,6 +565,205 @@ def test_a_run_ordered_on_time_takes_the_fastest_point_that_clears_the_floor(
     assert fastest["expected"]["cost_usd"] > cheapest["expected"]["cost_usd"]
 
 
+def _measured_beside_prior(data_dir: Path) -> None:
+    """Write a store whose one measured clearing point is not its cheapest.
+
+    Opus at `high` has twenty good `mechanical` rows of its own, and at `low`
+    ten bad ones. Sonnet has no row at all, and the shipped priors put every
+    level of it above the floor on work this easy for a fraction of Opus's
+    price — so ranked on the means alone, an estimate nothing on this machine
+    has ever tested would win every call.
+    """
+
+    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(
+        data_dir,
+        ("mechanical", "claude-opus-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+    )
+
+
+@pytest.mark.parametrize("stakes", STAKES_ASKED)
+def test_a_measured_point_that_clears_the_floor_outranks_a_cheaper_prior(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], stakes: str
+) -> None:
+    """An estimate the evidence has never seen doing the work is not the answer.
+
+    High stakes wants the best point the evidence knows of, and a reversible
+    call's ordinary answer is the same answer: where a point measured for the
+    kind clears the floor, the answer is chosen among those alone. Finding out
+    whether the cheaper, untried point would do is exploration's job.
+    """
+
+    _measured_beside_prior(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=mechanical", f"--stakes={stakes}")
+
+    answers = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
+    plain = [answer for answer in answers if answer["explored"] is None]
+
+    assert plain
+    for answer in plain:
+        assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+        assert answer["basis"] == "measured"
+
+
+def test_a_verdict_carried_from_a_harder_kind_does_not_outrank_a_measured_one(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Rows of another kind make a point pooled for this one, never measured.
+
+    Sonnet has only `design` rows, every one of them good, and carried down to
+    `mechanical` its estimate clears the floor for less than Opus costs. Opus
+    has measured `mechanical` rows that clear it too, and those are the only
+    evidence here about the work actually being asked for.
+    """
+
+    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(
+        tmp_path,
+        ("design", "claude-sonnet-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5", "high", 1.0, 20),
+    )
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--stakes=high"
+    )
+    carried = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=mechanical",
+        "--model=claude-sonnet-5",
+        "--deliberation=low",
+    )
+
+    assert carried["basis"] == "pooled"
+    assert carried["expected"]["p_success"] >= select.FLOOR
+    assert carried["expected"]["cost_usd"] < answer["expected"]["cost_usd"]
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert answer["basis"] == "measured"
+
+
+def test_where_no_measured_point_clears_the_floor_the_whole_pool_is_ranked(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Measured points go first only where one of them can promise the work.
+
+    Opus's own `mechanical` rows all failed, so nothing measured clears the
+    floor and the answer is what it always was: the cheapest point whose
+    estimate clears it, prior or not.
+    """
+
+    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(tmp_path, ("mechanical", "claude-opus-5", "high", 0.0, 10))
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--stakes=high"
+    )
+
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "low")
+    assert answer["basis"] == "prior"
+    assert answer["expected"]["p_success"] >= select.FLOOR
+
+
+def test_an_explored_answer_can_still_name_a_point_with_no_rows_of_its_own(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An untried point is still tried, on the calls spent on trying things."""
+
+    _measured_beside_prior(tmp_path)
+
+    answers = _over_seeds(capsys, (*LIMITED, f"--data={tmp_path}", "--kind=mechanical"))
+    explored = [answer for answer in answers if answer["explored"] is not None]
+
+    assert any(answer["basis"] == "prior" for answer in explored)
+
+
+def test_the_alternatives_still_offer_the_point_nothing_has_measured(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Measured points are ranked first, and nothing else is filtered out."""
+
+    _measured_beside_prior(tmp_path)
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--stakes=high"
+    )
+
+    assert answer["model"] == "claude-opus-5"
+    assert "claude-sonnet-5" in {row["model"] for row in answer["alternatives"]}
+
+
+def test_the_step_up_prefers_a_measured_point_that_clears_the_floor(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A failure is answered with the evidence, not with a cheaper guess.
+
+    Every level of Sonnet is likelier than the Opus point that failed and
+    cheaper than Opus at `high`, and none of them has a row. The step is the
+    measured point that clears the floor.
+    """
+
+    _measured_beside_prior(tmp_path)
+
+    answer = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=mechanical",
+        "--after=claude-opus-5@low",
+    )
+
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert answer["basis"] == "measured"
+    assert "one step up" in (answer["note"] or "")
+
+
+def test_a_failed_point_nothing_has_measured_is_still_found_and_stepped_from(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A caller may have run an unmeasured point, and may name it when it fails.
+
+    Sonnet at `low` has no row, and its prior is likelier than anything Opus
+    has measured here, so no measured point is a step up from it and the step
+    is the cheapest point that is: the next level of Sonnet.
+    """
+
+    _measured_beside_prior(tmp_path)
+
+    answer = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=mechanical",
+        "--after=claude-sonnet-5@low",
+    )
+
+    assert "nothing here matches" not in (answer["note"] or "")
+    assert "one step up" in (answer["note"] or "")
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "medium")
+
+
+def test_where_no_measured_point_steps_up_the_step_is_the_cheapest_likelier_one(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """With no measured point to prefer, the step is what it was before."""
+
+    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
+    _store(tmp_path, ("mechanical", "claude-opus-5", "low", 0.0, 10))
+
+    answer = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=mechanical",
+        "--after=claude-opus-5@low",
+    )
+
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "low")
+    assert answer["basis"] == "prior"
+
+
 def test_a_profile_that_enables_nothing_inherits_the_callers_own_seat(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
@@ -791,8 +994,10 @@ def test_an_explored_answer_reports_the_rate_measured_and_not_the_draw(
     """An exploration is how the call was spent, never a claim about the world.
 
     What picked the point was a draw that cleared the floor; what the store
-    believes about it is its posterior mean, which is below the floor or the
-    point would have been the answer already. Reporting the draw would tell a
+    believes about it is its posterior mean, which on this store is below the
+    floor, the one point clearing it being the answer. A point beyond the
+    answer may also clear the floor on an estimate nothing has measured, and
+    what is reported for it is still that mean. Reporting the draw would tell a
     caller the evidence backs a point it does not, and the caller could not
     tell that from an answer the evidence really does back.
     """
@@ -910,6 +1115,42 @@ def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
 
     assert answer["expected"]["p_success"] >= select.FLOOR
     assert answer["model"] != "gpt-5.6-luna"
+
+
+def test_the_judge_is_a_measured_reviewer_where_one_clears_the_floor(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The grader asks the same ranking, so it too prefers what was measured.
+
+    Fable at `high` has twenty good `review` rows of its own. Opus at `high`
+    has none, and its prior clears the floor for less money — which is the
+    judge an empty store picks. A store that has watched a reviewer do the
+    work grades with that reviewer rather than with an estimate.
+    """
+
+    _bridged(tmp_path, models=list(JUDGES))
+    _store(tmp_path, ("review", "claude-fable-5-1", "high", 1.0, 20))
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude", "codex"))
+
+    grader = (
+        f"--data={tmp_path}",
+        "--kind=review",
+        "--scope=callable",
+        "--stakes=high",
+        "--harness=process",
+        "--read-only",
+    )
+
+    answer = _answer(capsys, *grader)
+    prior = _answer(capsys, *grader, "--model=claude-opus-5", "--deliberation=high")
+
+    assert prior["basis"] == "prior"
+    assert prior["expected"]["p_success"] >= select.FLOOR
+    assert prior["expected"]["cost_usd"] < answer["expected"]["cost_usd"]
+    assert (answer["model"], answer["deliberation"]) == ("claude-fable-5-1", "high")
+    assert answer["basis"] == "measured"
 
 
 @pytest.mark.parametrize(

@@ -24,9 +24,11 @@ Unit was, and what it is is review: judging work somebody else finished against
 a stated standard. High stakes is what grading actually is: nothing checks the
 judge, and a judge that cannot do the job returns a plausible wrong number
 rather than an obvious failure. Between them the two settle the bar, and the
-engine answers with the cheapest point it is confident clears it, never one of
-the calls it spends on an experiment — a store whose grades came from a lottery
-of graders would be measuring the graders. The call itself costs what it costs
+engine answers with the cheapest point it is confident clears it — taken from
+the reviewers this machine has measured doing review, wherever one of them
+clears it — and never with one of the calls it spends on an experiment: a
+store whose grades came from a lottery of graders would be measuring the
+graders. The call itself costs what it costs
 either way: one bounded exchange of a few thousand tokens on whichever channel
 the profile names.
 
@@ -477,7 +479,8 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
     grade, and a wrong grade is worse than no grade, which is the engine's own
     definition of high stakes. The two together set a bar only a model that can
     read a Unit of work clears, and the engine answers with the cheapest point
-    it is confident clears it and never explores.
+    it is confident clears it — a reviewer measured doing review wherever one
+    clears it, before any it holds only an estimate for — and never explores.
 
     It asks as what it is. This is a script rather than a Harness, so it can
     spawn no subagent, and `--harness=process` is what says so: the answer comes

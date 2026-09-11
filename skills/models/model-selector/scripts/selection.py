@@ -22,12 +22,14 @@ because that is the whole of what the arithmetic reads, and a brief accepted
 here would be a brief somebody expects to have been recorded.
 
 What is ranked is the chance of finishing first and the price second. Among
-the candidates the evidence says will finish, the cheapest is taken; price is
-never a reason to accept a lower chance of getting the work done. `_ranked`
-states that rule, and `_explored` states the one exception to reading it off
-the means: a bounded share of reversible calls tries the boundary instead,
-because a store that only ever runs its favourite never learns that a cheaper
-point would have done.
+the candidates the evidence says will finish, the cheapest is taken, and where
+any of them has been measured doing this kind of work the answer is chosen
+among those alone; price is never a reason to accept a lower chance of getting
+the work done, nor an estimate nobody has tested over one somebody has.
+`_ranked` states that rule, and `_explored` states the one exception to reading
+it off the means: a bounded share of reversible calls tries the boundary
+instead, because a store that only ever runs its favourite never learns that a
+cheaper point would have done.
 """
 
 from __future__ import annotations
@@ -286,9 +288,10 @@ def _beyond(
     On `deliberation` that is the answer's own model at each of its other
     levels; on `model` it is every other model, taken at the answer's level or
     at the nearest level that model supports. Only the cheaper ones are
-    candidates: the answer is already the cheapest point the evidence believes
-    in, so what a row is worth buying about is whether something below it would
-    have done.
+    candidates: the answer is already the cheapest point the evidence vouches
+    for — measured for the kind where anything measured clears the floor — so
+    what a row is worth buying about is whether something below it, often a
+    point nothing has measured yet, would have done.
     """
 
     if dimension == "deliberation":
@@ -383,11 +386,16 @@ def _after(
     Escalation is a second question rather than a second answer, so it is asked
     the way the first one was and answered from the same pool: keep the
     candidates strictly likelier to finish the work than the one that failed,
-    and take the cheapest of those — cheapest by the clock where the caller
-    asked for time. Nothing is appended above the top of the ladder: where the
-    failed point was already the likeliest thing available, the caller is told
-    so and offered it again, because there is no step and pretending otherwise
-    would spend a retry on the same seat under a different name.
+    and where any of those has been measured for the kind and clears the floor,
+    step to the cheapest of them — a failure is answered with a point the
+    evidence has seen doing the work before it is answered with a cheaper
+    guess. Where none has, the step is the cheapest likelier point, measured or
+    not. Either way the rest follow on price, cheapest by the clock where the
+    caller asked for time. Nothing is appended above the top of the ladder:
+    where the failed point was already the likeliest thing available, the
+    caller is told so and offered it again, because there is no step and
+    pretending otherwise would spend a retry on the same seat under a
+    different name.
     """
 
     if failed is None:
@@ -410,7 +418,12 @@ def _after(
         return list(ranked)
 
     notes.append(f"one step up from {failed!r}, which failed")
-    return sorted(stepped, key=_time_key if objective == "time" else _cost_key)
+    order = _time_key if objective == "time" else _cost_key
+    stepped = sorted(stepped, key=order)
+    vouched = [row for row in stepped if _vouched(row)]
+    if not vouched:
+        return stepped
+    return [vouched[0], *[row for row in stepped if row is not vouched[0]]]
 
 
 def _report(
@@ -708,6 +721,16 @@ def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
     promise nothing has left to offer. Price is second and is never a reason to
     accept a lower chance of finishing.
 
+    A mean is not the same claim for every point, though. Where a point has been
+    measured doing this kind of work, its mean is what this machine saw; where
+    it has not, its mean is a prior or a verdict carried over from other work,
+    and on the means alone that estimate wins whenever it looks cheaper. So the
+    points measured for the kind that clear the floor go first, ordered on
+    price, and everything else follows exactly as it would have without them.
+    Nothing is filtered out: the alternatives and a named failure read the same
+    list, and whether a cheaper, untried point would have done is what the
+    explored calls find out (ADR-0187).
+
     The objective chooses which price is read. Money is the default because it
     is what a run spends whether or not anybody is watching; time is what a
     person waiting on the answer is spending instead, and it is theirs to ask
@@ -717,7 +740,20 @@ def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
     order = _time_key if objective == "time" else _cost_key
     clears = [row for row in scored if row.estimate.mean >= FLOOR]
     under = [row for row in scored if row.estimate.mean < FLOOR]
-    return sorted(clears, key=order) + sorted(under, key=_quality_key)
+    whole = sorted(clears, key=order) + sorted(under, key=_quality_key)
+    vouched = [row for row in whole if _vouched(row)]
+    return vouched + [row for row in whole if not _vouched(row)]
+
+
+def _vouched(row: Scored) -> bool:
+    """Return whether this point's own rows for the kind clear the floor.
+
+    Measured is the estimator's word for it — enough rows in the exact kind,
+    model and deliberation — so a model's rows at other levels or of other
+    kinds leave a point pooled, however good they were.
+    """
+
+    return row.estimate.basis == "measured" and row.estimate.mean >= FLOOR
 
 
 def _time_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
