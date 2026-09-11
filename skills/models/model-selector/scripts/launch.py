@@ -34,7 +34,7 @@ PREFIX = "kntnt"
 
 # The providers each bridge can reach. Codex speaks to OpenAI alone; opencode
 # is a front end for whatever the user has configured behind it, so it is
-# limited here only by what the profile says the user has.
+# limited here only by the makers the profile chooses.
 CODEX_PROVIDERS = frozenset({"openai"})
 
 # The providers the Claude CLI can reach in its headless form. This is the path
@@ -121,7 +121,7 @@ def plan(
             "bridge-command", None, _claude(model, deliberation, repo, read_only), None
         )
 
-    if "opencode" in profile.harnesses and model.provider in profile.providers:
+    if "opencode" in profile.harnesses and model.provider in profile.makers:
         return _through_opencode(model, deliberation, profile, repo)
 
     return Launch("inherit", None, None, _unreachable(model, harness, profile))
@@ -145,10 +145,15 @@ def agent_name(model: Model, deliberation: str | None) -> str | None:
 def definitions(profile: Profile, cat: Catalogue) -> dict[str, str]:
     """Return the agent-definition matrix, keyed by file name.
 
-    One definition per enabled Anthropic model and supported level, because
-    Claude Code selects a model by naming a subagent and nothing else. Two
-    enabled models in one family would want the same file name; the newer one
-    takes it, which is the same rule `resolve` applies to an ambiguous alias.
+    One definition per Anthropic model and supported level wherever the
+    profile chooses Anthropic as a maker, because Claude Code selects a model
+    by naming a subagent and nothing else. Every model the maker offers gets
+    its files, since no single model is chosen within a maker (ADR-0190), and
+    none needs a channel: Anthropic is the provider a Claude Code seat already
+    pays for. A profile that does not choose Anthropic defines none. Two
+    Anthropic models in one family would want the same file name; the newer
+    one takes it, which is the same rule `resolve` applies to an ambiguous
+    alias.
     """
 
     ordered = sorted(
@@ -199,7 +204,7 @@ def sync_definitions(dest: Path, wanted: Mapping[str, str]) -> SyncReport:
 def _generates_an_agent(model: Model, profile: Profile) -> bool:
     """Return whether this model is one Claude Code can be taught to start."""
 
-    return model.provider == "anthropic" and model.id in profile.models
+    return model.provider == "anthropic" and model.provider in profile.makers
 
 
 def _definition(model: Model, level: str | None) -> str:

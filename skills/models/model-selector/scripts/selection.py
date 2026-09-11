@@ -104,7 +104,7 @@ PROCESS = "process"
 
 # What is said when a process caller has candidates and no way to start any of
 # them. More specific than the locks the empty pool is otherwise blamed on: the
-# models are enabled and paid for, and the machine has nothing installed to
+# models are eligible and paid for, and the machine has nothing installed to
 # reach them with.
 NOTHING_STARTABLE = "nothing on this machine can start a process for any candidate"
 
@@ -585,7 +585,7 @@ def _pool(
 ) -> list[Point]:
     """Return every point the scope admits, before any lock narrows it."""
 
-    source = cat.models if scope == "all" else _enabled(cat, profile)
+    source = _eligible(cat, profile, scope)
     points = [
         Point(model, level)
         for model in source
@@ -627,11 +627,21 @@ def _pool(
     return near + reachable
 
 
-def _enabled(cat: Catalogue, profile: Profile) -> list[Model]:
-    """Return the catalogue models the profile says this machine has."""
+def _eligible(cat: Catalogue, profile: Profile, scope: str) -> list[Model]:
+    """Return the catalogue models this call may consider, before reachability.
 
-    wanted = set(profile.models)
-    return [model for model in cat.models if model.id in wanted]
+    Every model a chosen maker offers, or the whole catalogue where the scope
+    asks for it — and nothing at all where no valid profile stands, whatever
+    the scope. The stand-in chooses no maker, and the whole catalogue is a pool
+    nobody chose (ADR-0190). A model lock still reaches past an empty pool, so
+    the one call answered without a profile is the one naming its model.
+    """
+
+    if profile.source == "fallback":
+        return []
+    if scope == "all":
+        return list(cat.models)
+    return [model for model in cat.models if model.provider in profile.makers]
 
 
 def _provider_floor(cat: Catalogue, seat_model: str | None, harness: str) -> str | None:
@@ -713,11 +723,13 @@ def _locked_to_model(
 
     # The lock named something the scope never offered. A caller naming a
     # model explicitly outranks the scope it also named, so the point is
-    # admitted and the widening is said out loud.
+    # admitted and the widening is said out loud. It is also how a lock is
+    # answered with no valid profile, whose pool is empty: a model with no
+    # effort control is admitted at its one point, having no levels to list.
     notes.append(
         f"the lock {token!r} names {matched[0].id}, which this scope did not offer"
     )
-    return [Point(matched[0], level) for level in matched[0].deliberation]
+    return [Point(matched[0], level) for level in matched[0].deliberation or (None,)]
 
 
 def _locked_to_deliberation(
@@ -940,9 +952,9 @@ def _why_nothing(cat: Catalogue, profile: Profile, notes: Sequence[str | None]) 
 
     if not cat.models:
         return cat.problem or "the catalogue is empty"
-    if not profile.models:
-        return profile.problem or "the profile enables no models"
-    return _note(notes) or "no candidate model was left after the locks"
+    if profile.source == "fallback":
+        return _note(notes) or profile.problem or "no profile chooses a maker"
+    return _note(notes) or "no model a chosen maker offers can be reached from here"
 
 
 def _note(notes: Sequence[str | None]) -> str | None:

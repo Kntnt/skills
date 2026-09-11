@@ -5,7 +5,8 @@
 """Write the answers `setup` gathered, and make the machine able to act on them.
 
 The interview belongs to the conversation: only a person can say which
-harnesses they use, which providers they pay, and how. This is the other half
+harnesses they use, which makers' models they want, and how they pay for each.
+This is the other half
 of it — the half that has to be a script, because writing a profile means
 validating it against the catalogue, replacing a file atomically, and then
 regenerating the agent definitions that make a chosen point startable at all.
@@ -57,6 +58,14 @@ CREATED_NOTE = (
     "the agents directory did not exist and was created; Claude Code reads it "
     "when a session starts, so these definitions are available to sessions "
     "started from now on rather than to one already running"
+)
+
+# What a sync with no valid profile to follow says it did, which is nothing.
+# The stand-in chooses no maker, and following it would delete every
+# definition the last real answers justified.
+UNTOUCHED_NOTE = (
+    "the generated agent definitions were left as they are, since a profile "
+    "choosing no maker would remove every one of them"
 )
 
 # What `_rates` answers with where a card was supplied and refused, which is
@@ -211,10 +220,11 @@ def _noticed(channels: Sequence[Channel], cat: Catalogue) -> list[str]:
 def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
     """Return the profile *raw* describes, or the reasons it describes none.
 
-    Validated against the catalogue rather than against a schema: a model id
-    nothing in the catalogue answers to is a typo that would silently narrow
-    every future answer, and a provider nobody sells is a channel that can
-    never pay for anything.
+    Validated against the catalogue rather than against a schema: a maker the
+    catalogue holds no model of is a typo that would silently empty every
+    future answer, and a provider nobody sells is a channel that can never pay
+    for anything. A list of providers or models is refused rather than read:
+    makers replaced both, and no single model is chosen within a maker.
     """
 
     problems: list[str] = []
@@ -226,40 +236,38 @@ def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
         ]
 
     harnesses = _names(raw.get("harnesses"), "harnesses", problems)
-    providers = _names(raw.get("providers"), "providers", problems)
-    models = _names(raw.get("models"), "models", problems)
+    makers = _names(raw.get("makers"), "makers", problems)
     channels = _channels(raw.get("channels"), harnesses, problems)
 
-    known_models = {model.id for model in cat.models}
-    known_providers = {model.provider for model in cat.models}
     problems += [
-        f"the catalogue holds no model {name!r}"
-        for name in models
-        if name not in known_models
+        f"{field} is no longer part of a profile: makers replaced it, and every "
+        "model a chosen maker offers is eligible"
+        for field in profiles.RETIRED
+        if field in raw
     ]
+    known_makers = {model.provider for model in cat.models}
     problems += [
-        f"the catalogue holds no provider {name!r}"
-        for name in providers
-        if name not in known_providers
+        f"the catalogue holds no maker {name!r}"
+        for name in makers
+        if name not in known_makers
     ]
     problems += [
         f"channel {index} pays {channel.provider!r}, which the catalogue does not know"
         for index, channel in enumerate(channels)
-        if channel.provider not in known_providers
+        if channel.provider not in known_makers
     ]
 
     if not harnesses:
         problems.append("the profile names no harness, so nothing can be started")
-    if not models:
-        problems.append("the profile enables no model, so nothing can be chosen")
+    if isinstance(raw.get("makers"), list) and not makers:
+        problems.append("choose at least one maker: with none, nothing can be chosen")
     if problems:
         return None, problems
 
     return (
         Profile(
             harnesses=harnesses,
-            providers=providers,
-            models=models,
+            makers=makers,
             channels=channels,
             answered_at=_text(raw.get("answered_at")) or _now(),
             source="file",
@@ -276,8 +284,11 @@ def apply(path: Path | None, data_dir: Path, agents: Path) -> dict[str, Any]:
     runs: the generated definitions say of themselves that `update` rewrites
     this directory, and a catalogue that has just gained or lost a model has
     changed which of them ought to exist. The profile in force is whatever is
-    on disk, including the fallback where there is none — a machine nobody has
-    interviewed still needs the subagents an answer will name.
+    on disk. Where no valid one is — none, one an older release wrote, or one
+    that cannot be read — nothing is synced and no directory is made: the
+    stand-in chooses no maker, so syncing to it would remove every definition
+    a real profile had justified, and the report says so and names the verb
+    that replaces it.
     """
 
     here = Path(__file__).resolve().parent.parent
@@ -301,27 +312,38 @@ def apply(path: Path | None, data_dir: Path, agents: Path) -> dict[str, Any]:
         profiles.write(data_dir, validated)
         profile = validated
 
+    stated = {
+        "path": str(data_dir / profiles.PROFILE_FILE),
+        "answered_at": profile.answered_at,
+        "harnesses": list(profile.harnesses),
+        "makers": list(profile.makers),
+        "channels": len(profile.channels),
+    }
+    if profile.source == "fallback":
+        return {
+            "ok": True,
+            "problems": [],
+            "notes": [],
+            "profile": stated,
+            "definitions": None,
+            "created_directory": False,
+            "note": f"{profile.problem}; {UNTOUCHED_NOTE}",
+        }
+
     synced = launch.sync_definitions(agents, launch.definitions(profile, cat))
 
     return {
         "ok": True,
         "problems": [],
         "notes": _noticed(profile.channels, cat),
-        "profile": {
-            "path": str(data_dir / profiles.PROFILE_FILE),
-            "answered_at": profile.answered_at,
-            "harnesses": list(profile.harnesses),
-            "providers": list(profile.providers),
-            "models": len(profile.models),
-            "channels": len(profile.channels),
-        },
+        "profile": stated,
         "definitions": {
             "directory": str(agents),
             "written": synced.written,
             "unchanged": synced.unchanged,
             "removed": synced.removed,
-            "created_directory": synced.created_directory,
         },
+        "created_directory": synced.created_directory,
         "note": CREATED_NOTE if synced.created_directory else None,
     }
 

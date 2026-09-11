@@ -158,6 +158,10 @@ _Avoid_: outcome, score, pass, success, rating
 A command one Harness runs to put work on a model belonging to another. What one may name is stated in `docs/rules/routing.md`.
 _Avoid_: adapter, shim, proxy, gateway, integration
 
+**Maker**:
+The company whose models are chosen as a group, recorded as the catalogue's provider id. Which models a chosen Maker makes eligible is stated in `docs/rules/routing.md`.
+_Avoid_: vendor, lab, company
+
 **Enabled**:
 A Catalog entry the user has chosen in a layer: a Skill present on disk in each Detected Harness's skills directory for that layer, and a Feature what its Harnesses actually hold, it placing no files a layer could be read off. What each is read from is stated in `docs/rules/collection.md` and `docs/rules/skills.md`.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)

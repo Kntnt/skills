@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 SCRIPTS: Path = REPO_ROOT / "skills" / "models" / "model-selector" / "scripts"
 
@@ -46,8 +48,7 @@ def _answers(*channels: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "harnesses": ["claude-code", "codex", "opencode"],
-        "providers": ["anthropic", "openai", "spacexai"],
-        "models": ["claude-opus-5", "gpt-5.6-luna", "grok-4.6"],
+        "makers": ["anthropic", "openai", "spacexai"],
         "channels": list(channels),
         "answered_at": "2026-09-06T13:35:00Z",
     }
@@ -77,6 +78,136 @@ def _subscription(**overrides: Any) -> dict[str, Any]:
     }
     channel.update(overrides)
     return channel
+
+
+def test_the_written_profile_carries_makers_and_no_model_list(
+    tmp_path: Path,
+) -> None:
+    """The user chooses makers, so neither a model list nor providers is kept."""
+
+    report = _applied(tmp_path, _answers(_subscription()))
+
+    assert report["ok"] is True
+    assert report["profile"]["makers"] == ["anthropic", "openai", "spacexai"]
+    stored = json.loads((tmp_path / "data" / "profile.json").read_text("utf-8"))
+    assert stored["makers"] == ["anthropic", "openai", "spacexai"]
+    assert "providers" not in stored
+    assert "models" not in stored
+
+
+@pytest.mark.parametrize(
+    ("makers", "said"),
+    (([], "choose at least one maker"), (["anthropic", "mistral"], "mistral")),
+    ids=("none", "unknown"),
+)
+def test_a_choice_of_makers_the_catalogue_cannot_act_on_is_refused(
+    tmp_path: Path, makers: list[str], said: str
+) -> None:
+    """No maker chooses nothing, and a maker nobody sells is a typo."""
+
+    answers = _answers(_subscription())
+    answers["makers"] = makers
+
+    report = _applied(tmp_path, answers)
+
+    assert report["ok"] is False
+    assert any(said in problem for problem in report["problems"])
+    assert not (tmp_path / "data" / "profile.json").exists()
+
+
+@pytest.mark.parametrize("leftover", ("providers", "models"))
+def test_a_profile_carrying_a_list_makers_replaced_is_refused(
+    tmp_path: Path, leftover: str
+) -> None:
+    """No single model is enabled or disabled within a maker, so no list is taken."""
+
+    answers = _answers(_subscription())
+    answers[leftover] = ["anthropic"] if leftover == "providers" else ["grok-4.6"]
+
+    report = _applied(tmp_path, answers)
+
+    assert report["ok"] is False
+    assert any(leftover in problem for problem in report["problems"])
+
+
+def test_a_valid_profile_that_does_not_choose_anthropic_leaves_no_definitions(
+    tmp_path: Path,
+) -> None:
+    """Every generated subagent starts an Anthropic model, and none is chosen."""
+
+    agents = tmp_path / "agents"
+    agents.mkdir()
+    (agents / "kntnt-opus-high.md").write_text("generated\n", encoding="utf-8")
+    (agents / "somebody-elses.md").write_text("mine\n", encoding="utf-8")
+    answers = _answers(
+        _subscription(provider="openai", harness="codex", plan="ChatGPT Pro 20x")
+    )
+    answers["makers"] = ["openai"]
+
+    report = _applied(tmp_path, answers)
+
+    assert report["ok"] is True
+    assert report["definitions"]["removed"] == ["kntnt-opus-high.md"]
+    assert sorted(path.name for path in agents.iterdir()) == ["somebody-elses.md"]
+
+
+def _without_a_valid_profile(data: Path, state: str) -> None:
+    """Leave *data* with no profile, one in the old shape, or a damaged one."""
+
+    data.mkdir(parents=True)
+    if state == "missing":
+        return
+    document: dict[str, Any] = {
+        "harnesses": ["claude-code"],
+        "channels": [],
+        "answered_at": "2026-09-06T13:35:00Z",
+    }
+    if state == "old-shape":
+        document.update(providers=["anthropic"], models=["claude-opus-5"])
+    else:
+        document.update(makers=["anthropic"], models=["claude-opus-5"])
+    (data / "profile.json").write_text(json.dumps(document), encoding="utf-8")
+
+
+@pytest.mark.parametrize("state", ("missing", "old-shape", "damaged"))
+def test_a_sync_without_a_valid_profile_leaves_the_definitions_untouched(
+    tmp_path: Path, state: str
+) -> None:
+    """The stand-in chooses no maker, and syncing to it would delete every subagent.
+
+    Those are the definitions a real profile justified, and `update` runs this
+    on a machine whether or not the profile in force is one; so nothing is
+    written, nothing removed, and the report says why and what to run.
+    """
+
+    data = tmp_path / "data"
+    agents = tmp_path / "agents"
+    _without_a_valid_profile(data, state)
+    agents.mkdir()
+    (agents / "kntnt-opus-high.md").write_text("generated\n", encoding="utf-8")
+
+    report = setup_apply.apply(None, data, agents)
+
+    assert report["ok"] is True
+    assert report["definitions"] is None
+    assert report["created_directory"] is False
+    assert "/model-selector setup" in report["note"]
+    assert [path.name for path in agents.iterdir()] == ["kntnt-opus-high.md"]
+    assert (agents / "kntnt-opus-high.md").read_text() == "generated\n"
+
+
+def test_a_sync_without_a_valid_profile_creates_no_agents_directory(
+    tmp_path: Path,
+) -> None:
+    """Nothing is to be written, so no directory is made to write it into."""
+
+    agents = tmp_path / "agents"
+
+    report = setup_apply.apply(None, tmp_path / "data", agents)
+
+    assert report["definitions"] is None
+    assert report["created_directory"] is False
+    assert not agents.exists()
 
 
 def test_a_plan_the_catalogue_markets_is_written_without_comment(

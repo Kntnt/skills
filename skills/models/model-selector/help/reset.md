@@ -10,7 +10,7 @@ model-selector reset - discard the profile and the standing objective, and the m
 
 ## DESCRIPTION
 
-Bare, this discards the profile — the answers you gave about Harnesses, providers, models and how you pay — and the standing choice between time and cost that `objective` set, `objective.json`, and leaves the interview to be held again. With no standing choice, answers rank on cost until one is set again. The measurement is untouched, so a fresh profile inherits everything already learned about the models it enables.
+Bare, this discards the profile — the answers you gave about Harnesses, makers and how you pay — and the standing choice between time and cost that `objective` set, `objective.json`, and leaves the interview to be held again. Until it is, every answer not locked to a model is your own seat, and with no standing choice, answers rank on cost until one is set again. The measurement is untouched, so a fresh profile inherits everything already learned about the models of the makers it chooses.
 
 With **--evidence**, this machine's own measurement goes too: the measurement store, the units seen and not yet graded, and the `capture/` directory. That is the only way to discard it, and it has to be asked for by name. Whatever an earlier design of this Skill left in the directory goes with it — that directory among them, and the files no version writes or reads any more, named in the preview like everything else.
 

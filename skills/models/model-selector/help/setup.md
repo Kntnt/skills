@@ -2,7 +2,7 @@
 
 ## NAME
 
-model-selector setup - record which models you can reach and how you pay for them
+model-selector setup - record whose models you want and how you pay for them
 
 ## SYNOPSIS
 
@@ -10,23 +10,21 @@ model-selector setup - record which models you can reach and how you pay for the
 
 ## DESCRIPTION
 
-A short interview, held once and revisited when something changes. It asks four things, in this order and one question at a time.
+A short interview, held once and revisited when something changes. It asks three things, in this order and one question at a time.
 
 Which Harnesses this covers. The ones found on this machine are offered as the answer, and you say if that is wrong.
 
-Which providers you want suggestions from. Only a provider you name is ever recommended, however good its models look.
+Which makers you want models from: Claude, GPT and Grok, each shown with the models it currently offers. Every model a maker you choose offers is a candidate, one it releases later included, and only a model of a maker you choose is ever recommended, however good another maker's models look. You do not pick models one by one: the measurements decide between them, and a model you want for one piece of work is named with `--model`.
 
-Which of those providers' models. All of the current ones are offered ticked, and you untick what you do not want.
-
-How each provider is paid for, per Harness — because the same provider is often reached two ways at once, on a plan in one Harness and on API rates in another, and the two cost differently. A subscription answer names the plan under the whole name its provider markets it by, and the plans you are offered are the ones the catalogue holds, each with what it lists at and the date that was retrieved. An API answer is a rate card: reached directly, the catalogue already holds one per model; reached through a gateway it does not, a gateway pricing differently from the provider whose model it is, so you are asked what you pay per million tokens.
+How each maker is paid for, per Harness — because the same maker is often reached two ways at once, on a plan in one Harness and on API rates in another, and the two cost differently. A subscription answer names the plan under the whole name its provider markets it by, and the plans you are offered are the ones the catalogue holds, each with what it lists at and the date that was retrieved. An API answer is a rate card: reached directly, the catalogue already holds one per model; reached through a gateway it does not, a gateway pricing differently from the provider whose model it is, so you are asked what you pay per million tokens.
 
 Nothing you can look up is asked of you. Prices, model lists, subscriptions, release dates and each provider's own description of what its models are for are fetched, dated and attributed, and refreshed by `update`. What a plan costs you per month is shown as the catalogue's own figure and is not recorded, nothing in this Skill having a use for it. An answer you have already made unambiguous is not asked for again. The complete profile is shown before it is written, and nothing is written until you accept it.
 
 Every figure here is USD per million tokens and nothing converts. A rate card in another currency is refused by name rather than added to a dollar bill in silence. An answer that matched none of the options offered is recorded as you typed it and said to be one, because that means the catalogue has fallen behind rather than that your answer is wrong — `update` is what brings the plans back into line.
 
-The profile holds no credentials. Writing it also regenerates the subagent definitions that make a deliberation level launchable — one per enabled Anthropic model and supported level — and removes the ones your new answers no longer justify. Where that directory had to be created, the definitions reach sessions started from then on rather than the one you are in.
+The profile holds no credentials. Writing it also regenerates the subagent definitions that make a deliberation level launchable — one per Anthropic model and supported level, where Anthropic is a maker you chose — and removes the ones your new answers no longer justify. Where that directory had to be created, the definitions reach sessions started from then on rather than the one you are in.
 
-Setup is not a precondition. Without a profile the Skill answers from every catalogue model the detected Harnesses can reach, which is a wider pool than anyone chose, and `status` says so.
+Until it is held, nothing is chosen for you. Without a profile — or with one from before makers were chosen, which is read as none rather than translated, or one that cannot be read — every answer not locked to a model is the seat you already have, with a note naming this command, and `status` says the same. The generated subagent definitions are left as they are until a profile says which makers to use.
 
 ## OPTIONS
 

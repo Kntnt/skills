@@ -12,7 +12,7 @@ model-selector status - report what is known, how fresh it is, and what is wante
 
 Four accounts, none of which asks a question, changes anything, or reaches the network.
 
-The profile: when it was answered, which Harnesses, providers, models and payment channels it holds. Where it is absent or unreadable, that is said plainly, along with the consequence — every catalogue model the detected Harnesses can reach is treated as available until you run `setup`. A profile older than ninety days, a provider in the catalogue you have never been asked about, and how many catalogue models the profile does not enable are named here too.
+The profile: when it was answered, which Harnesses, makers and payment channels it holds, and every maker the catalogue holds that the profile does not choose, named as not chosen — whether you declined it or were never asked. Where it is absent, from before makers were chosen, or unreadable, that is said plainly, along with the consequence — every answer not locked to a model is your own seat until you run `setup`. A profile older than ninety days is named here too.
 
 The catalogue: how fresh its facts are, read off the dates the entries themselves carry — the newest and the oldest of them. Past thirty days on the newest, `update` is named as what brings them current. Nothing waits on that and nothing is placed where a model would read it, deliberately: a reminder inside a session changes the thing being measured.
 
@@ -30,7 +30,7 @@ Use *PATH* as the profile, catalogue and measurement directory instead of `~/.kn
 
 ## DIAGNOSTICS
 
-An absent or unreadable profile is reported rather than treated as an error. An option with no work to do here is refused rather than ignored: the Skill names the error, prints this SYNOPSIS, changes nothing, and points at `/model-selector status --help`.
+An absent, old or unreadable profile is reported rather than treated as an error. An option with no work to do here is refused rather than ignored: the Skill names the error, prints this SYNOPSIS, changes nothing, and points at `/model-selector status --help`.
 
 ## INVOCATION ENVELOPE
 

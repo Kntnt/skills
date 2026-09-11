@@ -1,4 +1,4 @@
-"""What the machine can reach, and the fallback that stands in for the answers."""
+"""What the machine can reach, and the stand-in that chooses nothing in their place."""
 
 from __future__ import annotations
 
@@ -42,8 +42,7 @@ def _answers(**overrides: Any) -> dict[str, Any]:
 
     document: dict[str, Any] = {
         "harnesses": ["claude-code"],
-        "providers": ["anthropic"],
-        "models": ["claude-opus-5"],
+        "makers": ["anthropic"],
         "channels": [
             {
                 "provider": "anthropic",
@@ -83,27 +82,85 @@ def test_detection_probes_the_filesystem_and_nothing_else(
     assert profiles.detect_harnesses() == ["claude-code", "opencode"]
 
 
-def test_an_absent_profile_falls_back_to_the_whole_catalogue(tmp_path: Path) -> None:
-    """A machine nobody has answered for still gets a routable answer."""
+def test_an_absent_profile_chooses_no_maker_and_says_what_to_run(
+    tmp_path: Path,
+) -> None:
+    """Nobody has said whose models to use, so nothing is eligible at all.
+
+    The stand-in used to be the whole catalogue, which is a pool nobody chose;
+    with no maker chosen every unlocked answer inherits the caller's own seat,
+    and the problem names the verb that replaces the stand-in with answers.
+    """
 
     profile = profiles.load(tmp_path, CAT)
 
     assert profile.source == "fallback"
-    assert profile.models == tuple(model.id for model in CAT.models)
+    assert profile.makers == ()
     assert profile.channels == ()
     assert profile.problem is not None
-    assert "setup" in profile.problem
+    assert "/model-selector setup" in profile.problem
+
+
+def test_a_profile_in_the_old_shape_is_read_like_a_missing_one(
+    tmp_path: Path,
+) -> None:
+    """A list of model ids is not translated into makers; setup is run again."""
+
+    old = _answers(providers=["anthropic"], models=["claude-opus-5"])
+    del old["makers"]
+
+    profile = profiles.load(_stored(tmp_path, old), CAT)
+
+    assert profile.source == "fallback"
+    assert profile.makers == ()
+    assert profile.problem is not None
+    assert "/model-selector setup" in profile.problem
+
+
+@pytest.mark.parametrize(
+    "damage",
+    (
+        {"makers": ["anthropic", "mistral"]},
+        {"makers": []},
+        {"makers": 7},
+        {"providers": ["anthropic"]},
+        {"models": ["claude-opus-5"]},
+    ),
+    ids=(
+        "unknown-maker",
+        "no-maker",
+        "not-a-list",
+        "leftover-providers",
+        "leftover-models",
+    ),
+)
+def test_a_damaged_profile_chooses_no_maker_and_says_what_to_run(
+    tmp_path: Path, damage: dict[str, Any]
+) -> None:
+    """A maker nobody sells, or makers beside a leftover model list, is damage.
+
+    Either is a file somebody edited by hand, or one written half by an older
+    release, and a profile is only worth trusting whole.
+    """
+
+    profile = profiles.load(_stored(tmp_path, _answers(**damage)), CAT)
+
+    assert profile.source == "fallback"
+    assert profile.makers == ()
+    assert profile.problem is not None
+    assert "/model-selector setup" in profile.problem
 
 
 def test_a_broken_profile_falls_back_rather_than_raising(tmp_path: Path) -> None:
     """The file is hand-editable, so unreadable is a state rather than a crash."""
 
-    for broken in ("{not json", json.dumps(["a", "list"]), json.dumps({"models": 7})):
+    for broken in ("{not json", json.dumps(["a", "list"]), json.dumps({"makers": 7})):
         data_dir = _stored(tmp_path / f"case-{abs(hash(broken))}", broken)
 
         profile = profiles.load(data_dir, CAT)
 
         assert profile.source == "fallback"
+        assert profile.makers == ()
         assert profile.problem is not None
 
 
@@ -131,7 +188,7 @@ def test_a_written_profile_reads_back_as_the_answers_it_was_given(
 
     assert profile.source == "file"
     assert profile.problem is None
-    assert profile.models == ("claude-opus-5",)
+    assert profile.makers == ("anthropic",)
     assert profile.channels[0].plan == "Claude Max 20x"
     assert profile.channels[0].rates is None
     assert profile.answered_at == "2026-09-01T10:00:00Z"
@@ -149,6 +206,12 @@ def test_writing_is_atomic_and_readable_only_by_its_owner(tmp_path: Path) -> Non
     assert stat.S_IMODE(written.stat().st_mode) == 0o600
     assert not list(data_dir.glob(".profile-*"))
     assert profiles.load(data_dir, CAT) == original
+
+    # The makers stand in place of both lists, so neither is written back.
+    stored = json.loads(written.read_text(encoding="utf-8"))
+    assert stored["makers"] == ["anthropic"]
+    assert "providers" not in stored
+    assert "models" not in stored
 
 
 def test_a_channel_is_found_by_provider_first_and_by_harness_where_it_can(
@@ -207,8 +270,7 @@ def test_a_bridged_provider_is_paid_for_by_the_harness_that_reaches_it(
     )
     profile = profiles.Profile(
         harnesses=("claude-code", "codex"),
-        providers=("anthropic", "openai"),
-        models=(astra.id, opus.id),
+        makers=("anthropic", "openai"),
         channels=(codex,),
         answered_at="2026-09-06",
         source="file",
@@ -242,8 +304,7 @@ def test_a_gateway_channel_carries_the_rate_card_the_user_actually_pays(
     data_dir = _stored(
         tmp_path,
         _answers(
-            providers=["anthropic", "spacexai"],
-            models=["claude-opus-5", "grok-4.6"],
+            makers=["anthropic", "spacexai"],
             harnesses=["claude-code", "opencode"],
             channels=[
                 {
@@ -281,7 +342,7 @@ def test_a_gateway_channel_carries_the_rate_card_the_user_actually_pays(
 def test_a_rate_card_this_skill_cannot_price_from_invalidates_the_profile(
     tmp_path: Path,
 ) -> None:
-    """Silence about a card is worse than the fallback, which says it is one.
+    """Silence about a card is worse than the stand-in, which says it is one.
 
     Every figure this Skill compares is USD, nothing converts, and a card in
     another currency would be added to a USD bill without a word. A card that

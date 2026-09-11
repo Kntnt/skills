@@ -28,9 +28,9 @@ The answer names one model, one deliberation level, how to launch it, what one a
 
 Whether work is ordered on money or on time is one fact about you — how much of your subscription is left this week — so it is set once, with `objective`, and every Skill that routes work inherits it rather than growing a flag of its own. An answer asked for with no `--objective` ranks on your standing choice, a caller's own `--objective` wins over it, and with nothing set the answer ranks on cost, because running out of quota mid-week stops everything while a slower job is only slower. The answer names the objective it ranked on and whether it came from the caller, your standing choice, or the default.
 
-There is no answer that means *start nothing*. With no profile, an empty catalogue or nothing reachable, the answer is the seat you already have, with a note saying why. Skills that route delegated work call the same engine directly and read the answer as JSON. A caller that is a script rather than a Harness says so with `--harness=process`, and is answered with a command it can start rather than a subagent only an agent can name; where the work it is launching writes nothing, `--read-only` asks for the command that grants no way to.
+There is no answer that means *start nothing*. With no valid profile, an empty catalogue or nothing reachable, the answer is the seat you already have, with a note saying why. Skills that route delegated work call the same engine directly and read the answer as JSON. A caller that is a script rather than a Harness says so with `--harness=process`, and is answered with a command it can start rather than a subagent only an agent can name; where the work it is launching writes nothing, `--read-only` asks for the command that grants no way to.
 
-`setup` is a short interview, held once: which Harnesses this covers, which providers you want suggestions from, which of their models, and how each provider is paid for on each channel — a subscription plan and its tier, an API rate card, or both at once where you reach the same provider two ways. Nothing that can be looked up is asked of you. Without a profile the Skill still answers, treating every catalogue model the detected Harnesses can reach as available, and `status` says so.
+`setup` is a short interview, held once: which Harnesses this covers, which makers you want models from — Claude, GPT, Grok — and how each is paid for on each channel — a subscription plan and its tier, an API rate card, or both at once where you reach the same maker two ways. Every model a maker you choose offers is then a candidate, one it releases later included. You do not pick models one by one: the measurements decide between them, and a model you want for one piece of work is named with `--model`. Nothing that can be looked up is asked of you. Without a profile — or with one from before makers were chosen, or one that cannot be read — every answer not locked to a model is the seat you already have, with a note naming `setup`, and `status` says the same.
 
 Enabling this Skill installs session lifecycle hooks into every supported Harness on this machine, in the Global layer, and those hooks are what make the answers get better. They measure a unit of work — an instruction and the answer to it — and only where the unit was a job: delegated work that was substantial — three or more changing tool calls, or sixty seconds, or four thousand output tokens — and work of the session's own that was substantial and ran for ten minutes or more besides. Quick questions, short exchanges and short turns of your own are discarded with no trace, so an ordinary conversational session contributes nothing at all. Nothing runs while work is in flight: a subagent's record is read when that subagent stops, and the session's own record when the session ends, and those two moments are the only ones a hook is installed at.
 
@@ -44,7 +44,7 @@ Nothing waits for you. There is no queue to work through and no reminder placed 
 
 **setup**
 
-Hold the interview and write the profile: Harnesses, providers, models, and how each provider is paid for on each channel. Run it again to review an existing profile.
+Hold the interview and write the profile: Harnesses, the makers whose models you want, and how each maker is paid for on each channel. Run it again to review an existing profile.
 
 **status**
 
@@ -96,7 +96,7 @@ Answer `reset`'s confirmation yes rather than asking, for an unattended run. Val
 
 **~/.kntnt/model-selector/profile.json**
 
-What the interview settled: Harnesses, providers, enabled models, and one payment channel per provider and Harness. It holds no credentials. **--data** relocates it, and everything below it.
+What the interview settled: Harnesses, the makers whose models you want, and one payment channel per maker and Harness. It holds no list of models, every model a chosen maker offers being eligible, and no credentials. **--data** relocates it, and everything below it.
 
 **~/.kntnt/model-selector/objective.json**
 
@@ -116,13 +116,13 @@ Units that have been seen and not yet graded. Working state, and it goes with **
 
 **Generated subagent definitions**
 
-One file per enabled Anthropic model and supported deliberation level, written into the Harness's own agents directory, prefixed so they are identifiable, and rewritten by every `setup`. Editing one is pointless; they are the only files this collection writes there.
+One file per Anthropic model and supported deliberation level wherever Anthropic is a maker you chose, written into the Harness's own agents directory, prefixed so they are identifiable, and rewritten by every `setup`. Without a valid profile they are left as they are. Editing one is pointless; they are the only files this collection writes there.
 
 ## DIAGNOSTICS
 
 An incomplete form, an unsupported combination, or an option with no work to do on the form it was given with is refused rather than ignored. The Skill names the error, prints the addressed command's SYNOPSIS, changes nothing, and points at that command's own help page. An option written after the work text is out of order and is refused the same way; a dash-prefixed word this Skill declares no option for is part of the work text.
 
-Nothing the selection engine answers is a refusal. A missing profile, an empty catalogue and an unreachable model are each a degraded answer naming your own seat, with a note saying which it was — a caller that must be stopped is stopped by something that knows what the work is worth.
+Nothing the selection engine answers is a refusal. A missing or unusable profile, an empty catalogue and an unreachable model are each a degraded answer naming your own seat, with a note saying which it was — a caller that must be stopped is stopped by something that knows what the work is worth.
 
 A page that says what the catalogue already held is a successful `update`. An `update` in a Harness with no web tool says so and changes nothing. A figure no measurement supports is reported absent rather than as a zero.
 

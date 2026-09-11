@@ -684,8 +684,7 @@ def test_a_measurement_is_priced_at_what_the_channel_that_ran_it_charges(
         json.dumps(
             {
                 "harnesses": ["claude-code"],
-                "providers": ["anthropic"],
-                "models": ["claude-opus-5"],
+                "makers": ["anthropic"],
                 "channels": [
                     {
                         "provider": "anthropic",

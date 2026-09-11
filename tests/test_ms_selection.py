@@ -28,9 +28,16 @@ SEEDS: int = 1000
 # a rule broken by one answer in fifty is caught, few enough to stay quick.
 DRAWS: int = 200
 
-# The flags that hold a pool to what a fixture profile enables: the caller's
-# own provider, and the Harness that says which provider that is.
+# The flags that hold a pool to the maker a fixture profile chooses: the
+# caller's own provider, and the Harness that says which provider that is.
 LIMITED: tuple[str, ...] = ("--scope=limited", "--harness=claude-code")
+
+# Every model Anthropic offers in the shipped catalogue, which is the pool a
+# fixture profile choosing Anthropic alone ranks. Named here rather than read
+# off the catalogue, so that a fixture whose premise rests on the two models
+# nothing else in it measures says which two those are.
+FABLE: str = "claude-fable-5-1"
+HAIKU: str = "claude-haiku-4-5-20251001"
 
 # Both stakes a caller may declare, stated here rather than read off the module
 # so that a rule meant to hold at either is asked at each by name.
@@ -125,12 +132,16 @@ def _answer(capsys: pytest.CaptureFixture[str], *flags: str) -> dict[str, Any]:
 
 
 def _profile(data_dir: Path, **overrides: Any) -> None:
-    """Write a profile that pays for Anthropic work in Claude Code."""
+    """Write a profile that chooses Anthropic and pays for it in Claude Code.
+
+    Every model Anthropic offers is therefore eligible. A test that needs a
+    smaller pool shapes it by the makers it chooses or by a lock, never by a
+    list of models, which a profile no longer carries.
+    """
 
     document: dict[str, Any] = {
         "harnesses": ["claude-code"],
-        "providers": ["anthropic"],
-        "models": ["claude-sonnet-5", "claude-opus-5"],
+        "makers": ["anthropic"],
         "channels": [
             {
                 "provider": "anthropic",
@@ -194,15 +205,18 @@ def _clearing(data_dir: Path) -> None:
     Sonnet at `high` clears the floor at about 0.87 for USD 1.50, Opus clears
     it everywhere and reads near 0.98 at `max` for four times the money, and
     the fastest point that clears is Opus at `low` — three different answers
-    to three different questions off one store.
+    to three different questions off one store. Fable and Haiku, the other two
+    models Anthropic offers, have failed the work, so neither is a fourth.
     """
 
-    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _profile(data_dir)
     _store(
         data_dir,
         ("implement", "claude-opus-5", "low", 1.0, 20),
         ("implement", "claude-sonnet-5", "high", 1.0, 30),
         ("implement", "claude-sonnet-5", "low", 0.0, 10),
+        ("implement", FABLE, "high", 0.0, 10),
+        ("implement", HAIKU, None, 0.0, 10),
     )
 
 
@@ -210,45 +224,54 @@ def _boundary(data_dir: Path) -> None:
     """Write a store whose one clearing point has a boundary on both dimensions.
 
     Only Opus at `xhigh` clears the floor, so the answer has three cheaper
-    levels of its own model below it and a cheaper model beside it at the same
-    level — which is what makes every exploration of either dimension find
-    something to try.
+    levels of its own model below it and cheaper models beside it: Sonnet at
+    the same level, and Haiku, which has no level at all and is taken at its
+    one point — which is what makes every exploration of either dimension find
+    something to try. Fable has failed at `xhigh` and costs more than the
+    answer, so it clears nothing and is never tried.
     """
 
-    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _profile(data_dir)
     _store(
         data_dir,
         ("implement", "claude-opus-5", "xhigh", 1.0, 20),
         ("implement", "claude-opus-5", "low", 0.0, 10),
         ("implement", "claude-sonnet-5", "high", 0.0, 10),
+        ("implement", FABLE, "xhigh", 0.0, 10),
+        ("implement", HAIKU, None, 0.0, 10),
     )
 
 
 def _under(data_dir: Path) -> None:
-    """Write a store no point of which clears the floor."""
+    """Write a store no point of which clears the floor.
 
-    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    Every model Anthropic offers has rows here, and only Opus at `high` ever
+    finished, so the prior of an untried model is not left to clear it.
+    """
+
+    _profile(data_dir)
     _store(
         data_dir,
         ("implement", "claude-opus-5", "low", 0.0, 8),
         ("implement", "claude-opus-5", "high", 1.0, 8),
         ("implement", "claude-sonnet-5", "high", 0.0, 8),
+        ("implement", FABLE, "high", 0.0, 8),
+        ("implement", HAIKU, None, 0.0, 8),
     )
 
 
 def _bridged(data_dir: Path, **overrides: Any) -> None:
-    """Write a profile that pays for both providers and can bridge to either.
+    """Write a profile that chooses both makers and can bridge to either.
 
     The profile a process caller is answered against: two Bridges the machine
-    might have, one enabled model apiece, and a channel saying who pays for
-    each. What separates the two providers in these tests is therefore never
+    might have, every model each maker offers, and a channel saying who pays
+    for each. What separates the two makers in these tests is therefore never
     the profile but the `PATH`, which is the fact under test.
     """
 
     document: dict[str, Any] = {
         "harnesses": ["claude-code", "codex"],
-        "providers": ["anthropic", "openai"],
-        "models": ["claude-sonnet-5", "gpt-5.6-sol"],
+        "makers": ["anthropic", "openai"],
         "channels": [
             {
                 "provider": "anthropic",
@@ -287,19 +310,18 @@ def _over_seeds(
     return [_answer(capsys, *flags, f"--seed={seed}") for seed in range(SEEDS)]
 
 
-# Every model the two bridged providers publish, which is the widest pool a
-# judge is ever picked out of. Named here rather than read off the catalogue,
-# because a test that took its pool from the data under test would pass just as
-# well on a catalogue that had lost the cheap model the assertion is about.
-JUDGES: tuple[str, ...] = (
-    "claude-fable-5-1",
-    "claude-opus-5",
-    "claude-sonnet-5",
-    "claude-haiku-4-5-20251001",
-    "gpt-6-astra",
-    "gpt-5.6-sol",
-    "gpt-5.6-terra",
-    "gpt-5.6-luna",
+# Enough alternatives that every model in any fixture pool is listed beside the
+# answer, so that `_named_in` reads the whole pool rather than its top three.
+EVERY: str = "--n=20"
+
+# Every model each maker in the shipped catalogue offers. Named here rather
+# than read off the catalogue, because a test that took its pool from the data
+# under test would pass just as well on a catalogue that had lost a model.
+ANTHROPIC: frozenset[str] = frozenset(
+    {"claude-fable-5-1", "claude-opus-5", "claude-sonnet-5", HAIKU}
+)
+OPENAI: frozenset[str] = frozenset(
+    {"gpt-6-astra", "gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"}
 )
 
 
@@ -340,7 +362,12 @@ def test_the_vocabulary_is_printed_for_a_caller_that_has_to_classify_work(
 
 
 def test_an_empty_data_directory_still_answers_and_exits_zero(tmp_path: Path) -> None:
-    """This runs inside somebody else's turn, so there is no way to say stop."""
+    """This runs inside somebody else's turn, so there is no way to say stop.
+
+    Nobody has chosen a maker, so nothing is eligible and the answer is to keep
+    the seat the caller has; with no `--seat` named, that answer names no
+    model, and its note says what to run.
+    """
 
     # The working directory is the repository, which nothing in this run
     # replaces; the script's own directory is what puts its siblings on the path.
@@ -356,7 +383,10 @@ def test_an_empty_data_directory_still_answers_and_exits_zero(tmp_path: Path) ->
     assert finished.returncode == 0
     assert answer["ok"] is True
     assert answer["attempt_id"].startswith("ms-")
-    assert answer["model"]
+    assert answer["basis"] == "inherit"
+    assert answer["launch"]["how"] == "inherit"
+    assert answer["model"] is None
+    assert "/model-selector setup" in answer["note"]
 
 
 def test_a_malformed_command_line_is_the_only_thing_that_fails(
@@ -381,6 +411,7 @@ def test_the_shipped_priors_send_easy_work_cheap_and_hard_work_deep(
     so a drawn request would be reading the die rather than the priors.
     """
 
+    _profile(tmp_path)
     seat = [
         "--harness=claude-code",
         "--seat=claude-opus-5@xhigh",
@@ -404,6 +435,7 @@ def test_an_unrecognised_model_lock_never_empties_the_pool(
 ) -> None:
     """A typo still needs an answer, and gets one with the lock reported."""
 
+    _profile(tmp_path)
     answer = _answer(
         capsys, f"--data={tmp_path}", "--harness=claude-code", "--model=gpt-9-imaginary"
     )
@@ -438,7 +470,7 @@ def test_a_family_lock_takes_the_newest_model_and_says_so(
             "released": "2026-08-01",
         },
     )
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-sonnet-6"])
+    _profile(tmp_path)
 
     answer = _answer(capsys, f"--data={tmp_path}", "--model=sonnet", "--scope=limited")
 
@@ -469,10 +501,12 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
 ) -> None:
     """An unpriceable model must not read as a free one and win everything.
 
-    Both candidates clear the floor, so price is what is left to order them on
-    and the one nothing can price has to lose it. A null cost is a null cost:
-    read as a nought it would make the model nothing is known about the
-    cheapest thing on the frontier by having nothing behind it.
+    Both it and Sonnet clear the floor, so price is what is left to order them
+    on and the one nothing can price has to lose it — on the answer, and on the
+    calls that explore, where a point nothing can price is never cheaper than
+    the answer. A null cost is a null cost: read as a nought it would make the
+    model nothing is known about the cheapest thing on the frontier by having
+    nothing behind it.
     """
 
     _refresh(
@@ -489,17 +523,20 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
             "released": "2026-09-01",
         },
     )
-    _profile(tmp_path, models=["claude-sonnet-5", "test-unpriced"])
+    _profile(tmp_path)
     _store(tmp_path, ("implement", "claude-sonnet-5", "high", 1.0, 20))
 
     answers = [
         _answer(
-            capsys, f"--data={tmp_path}", "--scope=limited", "--n=3", f"--seed={seed}"
+            capsys, f"--data={tmp_path}", "--scope=limited", EVERY, f"--seed={seed}"
         )
         for seed in range(DRAWS)
     ]
 
-    assert {answer["model"] for answer in answers} == {"claude-sonnet-5"}
+    assert "test-unpriced" not in {answer["model"] for answer in answers}
+    assert {answer["model"] for answer in answers if answer["explored"] is None} == {
+        "claude-sonnet-5"
+    }
     for answer in answers:
         listed = {row["model"]: row for row in answer["alternatives"]}
         assert listed["test-unpriced"]["cost_usd"] is None
@@ -581,7 +618,7 @@ def _finishing(data_dir: Path) -> None:
     job on both counts.
     """
 
-    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _profile(data_dir)
     _store(
         data_dir,
         ("implement", "claude-opus-5", "low", 0.8, 40),
@@ -592,9 +629,16 @@ def _finishing(data_dir: Path) -> None:
 def _point(
     capsys: pytest.CaptureFixture[str], flags: Sequence[str], model: str, level: str
 ) -> dict[str, Any]:
-    """Return the answer locked to one point, which is what the store says of it."""
+    """Return the answer locked to one point, which is what the store says of it.
 
-    return _answer(capsys, *flags, f"--model={model}", f"--deliberation={level}")
+    A model with no effort control has one point and no level to lock, so its
+    lock is the model's alone.
+    """
+
+    locks = [f"--model={model}"]
+    if level is not None:
+        locks.append(f"--deliberation={level}")
+    return _answer(capsys, *flags, *locks)
 
 
 @pytest.mark.parametrize(
@@ -687,8 +731,6 @@ def test_an_inheriting_answer_carries_no_total(
 ) -> None:
     """Nothing was priced, so nothing is divided, and the members are still there."""
 
-    _profile(tmp_path, models=[], providers=[])
-
     answer = _answer(capsys, f"--data={tmp_path}", "--seat=claude-opus-5@xhigh")
 
     assert answer["basis"] == "inherit"
@@ -750,7 +792,7 @@ def test_with_nothing_measured_to_step_to_the_step_is_still_read_per_success(
     cheaper finished job.
     """
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
+    _profile(tmp_path)
     _store(
         tmp_path,
         ("implement", "claude-sonnet-5", "low", 0.0, 10),
@@ -818,7 +860,7 @@ def test_the_alternatives_that_clear_the_floor_are_listed_per_success(
         _priced("test-shaky", 1.1),
         _priced("test-steady", 1.2),
     )
-    _profile(tmp_path, models=["test-sure", "test-shaky", "test-steady"])
+    _profile(tmp_path)
     _store(
         tmp_path,
         ("implement", "test-sure", "high", 1.0, 40),
@@ -848,7 +890,7 @@ def _measured_beside_prior(data_dir: Path) -> None:
     has ever tested would win every call.
     """
 
-    _profile(data_dir, models=["claude-sonnet-5", "claude-opus-5"])
+    _profile(data_dir)
     _store(
         data_dir,
         ("mechanical", "claude-opus-5", "high", 1.0, 20),
@@ -891,7 +933,7 @@ def test_a_verdict_carried_from_a_harder_kind_does_not_outrank_a_measured_one(
     evidence here about the work actually being asked for.
     """
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
+    _profile(tmp_path)
     _store(
         tmp_path,
         ("design", "claude-sonnet-5", "high", 1.0, 20),
@@ -927,7 +969,7 @@ def test_where_no_measured_point_clears_the_floor_the_whole_pool_is_ranked(
     clears it, prior or not, the one with the lowest price per finished job.
     """
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
+    _profile(tmp_path)
     _store(tmp_path, ("mechanical", "claude-opus-5", "high", 0.0, 10))
 
     answer = _answer(
@@ -1023,10 +1065,17 @@ def test_where_no_measured_point_steps_up_the_step_is_the_likelier_one_that_fini
 ) -> None:
     """With no measured point to prefer, the step is the likelier point with the
     lowest price per finished job.
+
+    Haiku, the cheapest model Anthropic offers, has failed this kind as often
+    as the Opus point did, so it is no likelier and is not a step up from it.
     """
 
-    _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
-    _store(tmp_path, ("mechanical", "claude-opus-5", "low", 0.0, 10))
+    _profile(tmp_path)
+    _store(
+        tmp_path,
+        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", HAIKU, None, 0.0, 10),
+    )
 
     answer = _answer(
         capsys,
@@ -1040,12 +1089,16 @@ def test_where_no_measured_point_steps_up_the_step_is_the_likelier_one_that_fini
     assert answer["basis"] == "prior"
 
 
-def test_a_profile_that_enables_nothing_inherits_the_callers_own_seat(
+def test_a_profile_whose_makers_reach_nothing_inherits_the_callers_own_seat(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """Where nothing can be chosen the answer is to keep the seat you have."""
+    """Where nothing can be chosen the answer is to keep the seat you have.
 
-    _profile(tmp_path, models=[], providers=[])
+    The one maker chosen is not the caller's own, and nothing this Harness has
+    reaches it, so no point is eligible and reachable at once.
+    """
+
+    _profile(tmp_path, makers=["openai"], channels=[])
 
     answer = _answer(capsys, f"--data={tmp_path}", "--seat=claude-opus-5@xhigh")
 
@@ -1135,8 +1188,12 @@ def test_an_exploration_moves_exactly_one_dimension_and_names_which(
     assert {answer["explored"] for answer in explored} == {"model", "deliberation"}
     for answer in explored:
         if answer["explored"] == "model":
+            # Held at the answer's level, except by a model with no effort
+            # control, whose one point has no level to hold.
             assert answer["model"] != model
-            assert answer["deliberation"] == level
+            assert answer["deliberation"] in (level, None)
+            if answer["deliberation"] is None:
+                assert answer["model"] == HAIKU
         else:
             assert answer["model"] == model
             assert answer["deliberation"] != level
@@ -1172,6 +1229,7 @@ def test_exploring_never_disturbs_the_generator_the_rest_of_the_process_shares(
 ) -> None:
     """A routing call inside somebody else's turn reseeds nothing of theirs."""
 
+    _profile(tmp_path)
     before = random.getstate()
 
     _answer(capsys, f"--data={tmp_path}", "--scope=all", "--seed=3")
@@ -1287,7 +1345,7 @@ def test_an_explored_answer_reports_the_rate_measured_and_not_the_draw(
 
     assert points
     for model, level in points:
-        locked = _answer(capsys, *flags, f"--model={model}", f"--deliberation={level}")
+        locked = _point(capsys, flags, model, level)
         rate = locked["expected"]["p_success"]
         assert rate < select.FLOOR
         for answer in explored:
@@ -1371,17 +1429,16 @@ def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
     at 0.18. Asked as what it is, over the shipped priors and an empty store,
     the floor admits only a model that can actually read a unit of work.
 
-    The machine is named rather than inherited: every model the two providers
-    publish is enabled and paid for, and both CLIs are installed, so the pool
-    the floor picks out of is the whole of what a judge could be — which is
-    what makes the cheapest of them being refused mean anything.
+    The machine is named rather than inherited: both makers are chosen, so
+    every model each offers is eligible, each is paid for, and both CLIs are
+    installed, so the pool the floor picks out of is the whole of what a judge
+    could be — which is what makes the cheapest of them being refused mean
+    anything.
     """
 
-    _bridged(tmp_path, models=list(JUDGES))
+    _bridged(tmp_path)
     monkeypatch.setenv("PATH", path_holding(tmp_path, "claude", "codex"))
-
-    answer = _answer(
-        capsys,
+    asked = (
         f"--data={tmp_path}",
         "--kind=review",
         "--stakes=high",
@@ -1389,8 +1446,11 @@ def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
         "--read-only",
     )
 
+    answer = _answer(capsys, *asked)
+
     assert answer["expected"]["p_success"] >= select.FLOOR
     assert answer["model"] != "gpt-5.6-luna"
+    assert _named_in(_answer(capsys, *asked, EVERY)) == ANTHROPIC | OPENAI
 
 
 def test_the_judge_is_a_measured_reviewer_where_one_clears_the_floor(
@@ -1406,7 +1466,7 @@ def test_the_judge_is_a_measured_reviewer_where_one_clears_the_floor(
     work grades with that reviewer rather than with an estimate.
     """
 
-    _bridged(tmp_path, models=list(JUDGES))
+    _bridged(tmp_path)
     _store(tmp_path, ("review", "claude-fable-5-1", "high", 1.0, 20))
     monkeypatch.setenv("PATH", path_holding(tmp_path, "claude", "codex"))
 
@@ -1431,14 +1491,15 @@ def test_the_judge_is_a_measured_reviewer_where_one_clears_the_floor(
 
 @pytest.mark.parametrize(
     ("installed", "answered"),
-    (("claude", "claude-sonnet-5"), ("codex", "gpt-5.6-sol")),
+    (("claude", ANTHROPIC), ("codex", OPENAI)),
+    ids=("claude", "codex"),
 )
 def test_a_process_never_answers_a_point_no_bridge_here_can_start(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
     monkeypatch: pytest.MonkeyPatch,
     installed: str,
-    answered: str,
+    answered: frozenset[str],
 ) -> None:
     """`callable` for a process is what this machine can start, and no more.
 
@@ -1453,9 +1514,11 @@ def test_a_process_never_answers_a_point_no_bridge_here_can_start(
     _bridged(tmp_path)
     monkeypatch.setenv("PATH", path_holding(tmp_path, installed))
 
-    answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
+    answer = _answer(
+        capsys, f"--data={tmp_path}", "--harness=process", "--kind=review", EVERY
+    )
 
-    assert _named_in(answer) == {answered}
+    assert _named_in(answer) == answered
     assert (answer["launch"]["command"] or [])[0] == installed
 
 
@@ -1480,9 +1543,10 @@ def test_a_process_that_names_a_seat_is_held_to_the_same_test(
         "--harness=process",
         "--seat=claude-sonnet-5@high",
         "--kind=review",
+        EVERY,
     )
 
-    assert _named_in(answer) == {"gpt-5.6-sol"}
+    assert _named_in(answer) == OPENAI
 
 
 @pytest.mark.parametrize("missing", ("bridge", "channel"))
@@ -1516,9 +1580,11 @@ def test_an_installed_binary_alone_does_not_make_a_point_startable(
     _bridged(tmp_path, **without)
     monkeypatch.setenv("PATH", path_holding(tmp_path, "claude", "codex"))
 
-    answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
+    answer = _answer(
+        capsys, f"--data={tmp_path}", "--harness=process", "--kind=review", EVERY
+    )
 
-    assert _named_in(answer) == {"gpt-5.6-sol"}
+    assert _named_in(answer) == OPENAI
 
 
 def test_a_machine_that_can_start_nothing_says_that_rather_than_naming_a_judge(
@@ -1612,9 +1678,10 @@ def test_a_harness_keeps_the_pool_it_had_before_binaries_were_asked_about(
         "--harness=claude-code",
         "--scope=callable",
         "--kind=review",
+        EVERY,
     )
 
-    assert "gpt-5.6-sol" in _named_in(answer)
+    assert OPENAI <= _named_in(answer)
 
 
 # The three places that each state what `callable` admits: the option a person
@@ -1785,7 +1852,6 @@ def test_an_inheriting_answer_names_its_objective_and_where_it_came_from(
 ) -> None:
     """The answer that keeps the caller's seat carries both members as well."""
 
-    _profile(tmp_path, models=[], providers=[])
     flags = (f"--data={tmp_path}", "--seat=claude-opus-5@xhigh")
 
     defaulted = _answer(capsys, *flags)
@@ -1820,3 +1886,200 @@ def test_the_vocabulary_answer_carries_no_objective(
 
     assert "objective" not in answer
     assert "objective_source" not in answer
+
+
+# --- Which models are eligible: every model a chosen maker offers ------------
+
+
+def _makers(data_dir: Path, *channels: dict[str, Any]) -> None:
+    """Write a profile choosing Anthropic and xAI, on three Harnesses.
+
+    OpenAI is not chosen, yet the machine could reach it: Codex is one of the
+    Harnesses, and the channels passed in may pay for it. Whatever keeps its
+    models out of the pool is therefore the choice of makers and nothing else.
+    """
+
+    _profile(
+        data_dir,
+        harnesses=["claude-code", "codex", "opencode"],
+        makers=["anthropic", "spacexai"],
+        channels=list(channels),
+    )
+
+
+ANTHROPIC_CHANNEL: dict[str, Any] = {
+    "provider": "anthropic",
+    "harness": "claude-code",
+    "pay": "subscription",
+    "plan": "Claude Max 20x",
+}
+XAI_CHANNEL: dict[str, Any] = {
+    "provider": "spacexai",
+    "harness": "opencode",
+    "pay": "api",
+}
+OPENAI_CHANNEL: dict[str, Any] = {
+    "provider": "openai",
+    "harness": "codex",
+    "pay": "subscription",
+    "plan": "ChatGPT Pro",
+}
+
+
+def test_every_model_a_chosen_maker_offers_that_a_channel_reaches_is_a_candidate(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Nothing new has to be enabled by hand; no model of an unchosen maker is in.
+
+    A model the catalogue gains later is eligible the moment it is there,
+    because what is chosen is its maker. OpenAI is reachable and paid for on
+    this machine and still never offered, because nobody chose it.
+    """
+
+    _makers(tmp_path, ANTHROPIC_CHANNEL, XAI_CHANNEL, OPENAI_CHANNEL)
+
+    answer = _answer(
+        capsys, f"--data={tmp_path}", "--harness=claude-code", "--kind=review", EVERY
+    )
+
+    assert _named_in(answer) == ANTHROPIC | {"grok-4.6"}
+    assert not _named_in(answer) & OPENAI
+
+
+def test_a_chosen_maker_no_channel_reaches_is_not_a_candidate(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Choosing a maker says whose models are wanted, never who pays for them.
+
+    xAI is chosen and nothing pays for it, so Grok is out. Anthropic has no
+    channel either, and is in: it is the caller's own provider, and the seat
+    already in hand needs no channel to reach its own models.
+    """
+
+    _makers(tmp_path)
+
+    answer = _answer(
+        capsys, f"--data={tmp_path}", "--harness=claude-code", "--kind=review", EVERY
+    )
+
+    assert _named_in(answer) == ANTHROPIC
+
+
+def test_the_whole_catalogue_is_still_the_scope_that_asks_for_it(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """`--scope=all` ignores reachability and the makers alike, on a valid profile."""
+
+    _makers(tmp_path, ANTHROPIC_CHANNEL)
+
+    answer = _answer(
+        capsys, f"--data={tmp_path}", "--scope=all", "--kind=review", EVERY
+    )
+
+    assert OPENAI <= _named_in(answer)
+
+
+def _stored_as(data_dir: Path, state: str) -> None:
+    """Leave no profile, one in the old shape, or one of four kinds of damage."""
+
+    old = {
+        "harnesses": ["claude-code"],
+        "providers": ["anthropic"],
+        "models": ["claude-opus-5"],
+        "channels": [ANTHROPIC_CHANNEL],
+    }
+    shapes: dict[str, Any] = {
+        "old-shape": old,
+        "unknown-maker": {**old, "makers": ["anthropic", "mistral"]},
+        "leftover-list": {**old, "makers": ["anthropic"]},
+        "bad-channel": {
+            "harnesses": ["claude-code"],
+            "makers": ["anthropic"],
+            "channels": [{"provider": "anthropic"}],
+        },
+        "unreadable": "{not json",
+    }
+    data_dir.mkdir(parents=True, exist_ok=True)
+    if state == "missing":
+        return
+    shape = shapes[state]
+    (data_dir / "profile.json").write_text(
+        shape if isinstance(shape, str) else json.dumps(shape), encoding="utf-8"
+    )
+
+
+NO_VALID_PROFILE: tuple[str, ...] = (
+    "missing",
+    "old-shape",
+    "unknown-maker",
+    "leftover-list",
+    "bad-channel",
+    "unreadable",
+)
+
+
+@pytest.mark.parametrize("scope", ("limited", "callable", "all"))
+@pytest.mark.parametrize("state", NO_VALID_PROFILE)
+def test_without_a_valid_profile_an_unlocked_call_inherits_and_names_setup(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], state: str, scope: str
+) -> None:
+    """No maker is chosen, so nothing is eligible, the caller's own provider included.
+
+    A profile in the old shape is not translated: a list of model ids says
+    nothing about makers, and the user answers the interview again. The whole
+    catalogue is no pool to fall back on either, being wider than anyone chose.
+    """
+
+    _stored_as(tmp_path, state)
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--seat=claude-opus-5@xhigh",
+        f"--scope={scope}",
+    )
+
+    assert answer["basis"] == "inherit"
+    assert answer["launch"]["how"] == "inherit"
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "xhigh")
+    assert "/model-selector setup" in answer["note"]
+
+
+@pytest.mark.parametrize("state", ("missing", "old-shape", "unknown-maker"))
+def test_without_a_valid_profile_a_model_lock_is_still_answered(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], state: str
+) -> None:
+    """A model the user named is honoured as it always was, profile or none."""
+
+    _stored_as(tmp_path, state)
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--seat=claude-opus-5@xhigh",
+        "--model=sonnet",
+        "--deliberation=high",
+    )
+
+    assert answer["basis"] != "inherit"
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
+    assert answer["launch"]["subagent_type"] == "kntnt-sonnet-high"
+
+
+def test_without_a_valid_profile_a_deliberation_lock_alone_inherits(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A level says how hard to think, never which model; so no model is chosen."""
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--seat=claude-opus-5@xhigh",
+        "--deliberation=high",
+    )
+
+    assert answer["basis"] == "inherit"
+    assert "/model-selector setup" in answer["note"]

@@ -176,7 +176,7 @@ Build at most *COUNT* frontier tickets concurrently. The default is `1`; larger 
 
 **--model=**_NAME_
 
-Lock only the building model dimension for every execution role. Model-selector still selects deliberation. *NAME* may be a family alias such as `opus`, which resolves through the catalogue to the newest enabled release of that family, or one exact model identifier. A model that cannot be resolved or cannot be reached is refused before claims — Orchestrate compares the model that came back against the one it asked for and stops the run itself — and it never falls through to another model. Verdicts retain exact main-seat inheritance.
+Lock only the building model dimension for every execution role. Model-selector still selects deliberation. *NAME* may be a family alias such as `opus`, which resolves through the catalogue to the newest release of that family, or one exact model identifier. A model that cannot be resolved or cannot be reached is refused before claims — Orchestrate compares the model that came back against the one it asked for and stops the run itself — and it never falls through to another model. Verdicts retain exact main-seat inheritance.
 
 **--deliberation=**_LEVEL_
 

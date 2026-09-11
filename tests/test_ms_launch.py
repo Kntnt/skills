@@ -41,13 +41,15 @@ GROK = catalogue.resolve(CAT, "grok")[0]
 VERIFIED_ON = "Claude Code 2.1.263"
 
 
-def _profile(*harnesses: str, models: tuple[str, ...] = ()) -> Any:
-    """Provide a profile that has the named harnesses and pays for everything."""
+def _profile(*harnesses: str, makers: tuple[str, ...] = ()) -> Any:
+    """Provide a profile that has the named harnesses and pays for everything.
+
+    It chooses every maker the catalogue holds unless *makers* names fewer.
+    """
 
     return profiles.Profile(
         harnesses=harnesses,
-        providers=tuple({model.provider for model in CAT.models}),
-        models=models or tuple(model.id for model in CAT.models),
+        makers=makers or tuple(dict.fromkeys(model.provider for model in CAT.models)),
         channels=tuple(
             profiles.Channel(provider, harness, "api", None, None, None)
             for harness in harnesses
@@ -160,8 +162,7 @@ def _gateway_profile(gateway: str | None) -> Any:
 
     return profiles.Profile(
         harnesses=("opencode",),
-        providers=("spacexai",),
-        models=(GROK.id,),
+        makers=("spacexai",),
         channels=(
             profiles.Channel("spacexai", "opencode", "api", None, gateway, None),
         ),
@@ -240,8 +241,24 @@ def test_an_opencode_channel_without_a_gateway_plans_provider_and_id() -> None:
     assert _after(plan.command, "--variant") == "low"
 
 
+def test_opencode_starts_only_what_a_chosen_maker_makes() -> None:
+    """opencode fronts whatever the profile chooses, and nothing it does not."""
+
+    plan = launch.plan(
+        GROK,
+        "high",
+        "opencode",
+        _profile("opencode", makers=("anthropic",)),
+        CAT,
+        repo="/repo",
+    )
+
+    assert plan.how == "inherit"
+    assert plan.command is None
+
+
 def test_opencode_with_no_channel_at_all_plans_provider_and_id() -> None:
-    """The fallback profile has no channels, and so no gateway to route through."""
+    """A profile with no channels has no gateway to route through."""
 
     profile = dataclasses.replace(_gateway_profile("openrouter"), channels=())
 
@@ -251,12 +268,26 @@ def test_opencode_with_no_channel_at_all_plans_provider_and_id() -> None:
     assert _after(plan.command, "--model") == "spacexai/grok-4.6"
 
 
-def test_the_definition_matrix_covers_every_enabled_point_and_nothing_else() -> None:
-    """One file per Anthropic point the profile enables, and no other provider."""
+def test_the_definition_matrix_covers_every_anthropic_point_and_nothing_else() -> None:
+    """One file per point of every Anthropic model, where Anthropic is chosen.
 
-    matrix = launch.definitions(_profile("claude-code", models=("claude-opus-5",)), CAT)
+    No single model is chosen or left out within a maker, so the matrix is
+    every Anthropic model the catalogue holds at every level it supports, and
+    no point of any other maker however many of those are chosen beside it.
+    """
 
-    assert set(matrix) == {f"kntnt-opus-{level}.md" for level in catalogue.LEVELS}
+    matrix = launch.definitions(
+        _profile("claude-code", makers=("anthropic", "spacexai")), CAT
+    )
+
+    anthropic = [model for model in CAT.models if model.provider == "anthropic"]
+    assert set(matrix) == {
+        f"kntnt-{model.family}{f'-{level}' if level else ''}.md"
+        for model in anthropic
+        for level in (model.deliberation or (None,))
+    }
+    assert {f"kntnt-opus-{level}.md" for level in catalogue.LEVELS} <= set(matrix)
+    assert not [name for name in matrix if "grok" in name]
     body = matrix["kntnt-opus-high.md"]
     assert body.startswith("---\n")
     frontmatter = dict(
@@ -274,11 +305,27 @@ def test_the_definition_matrix_covers_every_enabled_point_and_nothing_else() -> 
 def test_a_model_with_no_effort_control_gets_a_definition_with_no_effort_line() -> None:
     """An effort line naming a level the model lacks is a line worth not writing."""
 
-    matrix = launch.definitions(_profile("claude-code", models=(HAIKU.id,)), CAT)
+    matrix = launch.definitions(_profile("claude-code", makers=("anthropic",)), CAT)
 
-    assert set(matrix) == {"kntnt-haiku.md"}
+    assert not [name for name in matrix if name.startswith("kntnt-haiku-")]
     assert "effort:" not in matrix["kntnt-haiku.md"]
     assert f"model: {HAIKU.id}" in matrix["kntnt-haiku.md"]
+
+
+def test_a_profile_that_does_not_choose_anthropic_defines_no_agent() -> None:
+    """A subagent exists to start an Anthropic model, and none is chosen."""
+
+    assert launch.definitions(_profile("claude-code", makers=("openai",)), CAT) == {}
+
+
+def test_a_definition_needs_its_maker_chosen_and_no_channel() -> None:
+    """The caller's own provider needs no channel, so its subagents need none."""
+
+    unpaid = dataclasses.replace(
+        _profile("claude-code", makers=("anthropic",)), channels=()
+    )
+
+    assert "kntnt-opus-high.md" in launch.definitions(unpaid, CAT)
 
 
 def test_sync_writes_what_is_wanted_and_removes_only_its_own_leftovers(

@@ -2,20 +2,24 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""What this machine can reach, and who pays for it.
+"""Whose models this machine may be sent to, and who pays for them.
 
-The catalogue knows every model in the world; this module knows the far
-smaller set the person in front of the machine actually has. That set is
-answered once, by `/model-selector setup`, and stored as `profile.json` under
-the data directory — which means it is also a file a person can hand-edit into
-something unreadable at three in the morning.
+The catalogue knows every model in the world; this module knows which makers
+the person in front of the machine wants models from, and how they pay for
+each. Every model a chosen maker offers is then eligible, a model the catalogue
+gains later included, and no single model is chosen or left out within a maker
+(ADR-0190). The answers are given once, by `/model-selector setup`, and stored
+as `profile.json` under the data directory — which means it is also a file a
+person can hand-edit into something unreadable at three in the morning.
 
-So a broken profile is not an error here. It is a fallback: every harness this
-machine looks like it has, every provider and model the catalogue knows, no
-channels, and a `problem` that names both what went wrong and the verb that
-fixes it. A caller mid-task gets a worse answer instead of no answer, and the
-person gets told once, by whoever reports the problem, rather than by a
-traceback in the middle of somebody else's build.
+So a broken profile is not an error here. It is a stand-in: every harness this
+machine looks like it has, no maker, no channels, and a `problem` that names
+both what went wrong and the verb that fixes it. With no maker chosen nothing
+is eligible, so a caller mid-task gets its own seat back instead of no answer —
+never the whole catalogue, a pool nobody chose — and the person gets told
+once, by whoever reports the problem, rather than by a traceback in the middle
+of somebody else's build. A profile an older release wrote, with a list of
+models and no makers, is read the same way rather than translated.
 """
 
 from __future__ import annotations
@@ -45,6 +49,11 @@ OBJECTIVES = ("cost", "time")
 # How a channel is paid for. Anything else in the file is not a channel this
 # Skill can reason about, so the profile carrying it is treated as invalid.
 PAYMENTS = ("subscription", "api")
+
+# The two lists a profile carried before makers replaced them. Found beside
+# `makers`, they are a file written half by an older release or edited by hand,
+# and a profile is only worth trusting whole.
+RETIRED = ("providers", "models")
 
 # The directory each harness leaves in a home directory, and the name this
 # Skill knows that harness by. Probes only: no process is started and no
@@ -92,11 +101,15 @@ class Channel:
 
 @dataclass(frozen=True)
 class Profile:
-    """The user's own answers, or the fallback standing in for them."""
+    """The user's own answers, or the stand-in that chooses nothing for them.
+
+    `makers` are catalogue provider ids — `anthropic`, `openai`, `spacexai` —
+    and every model a chosen maker offers is eligible. The stand-in's `source`
+    is `fallback` and it chooses none.
+    """
 
     harnesses: tuple[str, ...]
-    providers: tuple[str, ...]
-    models: tuple[str, ...]
+    makers: tuple[str, ...]
     channels: tuple[Channel, ...]
     answered_at: str | None
     source: str
@@ -121,40 +134,46 @@ def detect_harnesses() -> list[str]:
 
 
 def load(data_dir: Path, cat: Catalogue) -> Profile:
-    """Read the stored profile, falling back rather than failing.
+    """Read the stored profile, standing in for it rather than failing.
 
-    Every way the file can disappoint — absent, unreadable, not an object,
-    missing a list this Skill routes by — lands in the same place: the widest
-    profile the catalogue supports, marked as a fallback and carrying why.
+    Every way the file can disappoint — absent, unreadable, not an object, in
+    the shape an older release wrote, or naming a maker or a channel this
+    Skill cannot route by — lands in the same place: a stand-in choosing no
+    maker, marked as a fallback and carrying why.
     """
 
     path = data_dir / PROFILE_FILE
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        return _fallback(cat, f"no profile at {path}; {REPAIR}")
+        return _fallback(f"no profile at {path}; {REPAIR}")
     except (OSError, ValueError) as problem:
-        return _fallback(cat, f"{path} could not be read: {problem}; {REPAIR}")
+        return _fallback(f"{path} could not be read: {problem}; {REPAIR}")
 
     if not isinstance(raw, dict):
-        return _fallback(cat, f"{path} is not a JSON object; {REPAIR}")
+        return _fallback(f"{path} is not a JSON object; {REPAIR}")
+
+    if "makers" not in raw:
+        return _fallback(
+            f"{path} is from before makers were chosen and names none; {REPAIR}"
+        )
 
     harnesses = _names(raw.get("harnesses"))
-    providers = _names(raw.get("providers"))
-    models = _names(raw.get("models"))
-    if harnesses is None or providers is None or models is None:
-        return _fallback(
-            cat, f"{path} is missing harnesses, providers or models; {REPAIR}"
-        )
+    makers = _names(raw.get("makers"))
+    if harnesses is None or makers is None:
+        return _fallback(f"{path} is missing harnesses or makers; {REPAIR}")
+
+    unreadable = _unchoosable(raw, makers, cat)
+    if unreadable is not None:
+        return _fallback(f"{path} {unreadable}; {REPAIR}")
 
     channels, unreadable = _channels(raw.get("channels"))
     if channels is None:
-        return _fallback(cat, f"{path} {unreadable}; {REPAIR}")
+        return _fallback(f"{path} {unreadable}; {REPAIR}")
 
     return Profile(
         harnesses=harnesses,
-        providers=providers,
-        models=models,
+        makers=tuple(dict.fromkeys(makers)),
         channels=channels,
         answered_at=_text(raw.get("answered_at")),
         source="file",
@@ -256,8 +275,7 @@ def _document(p: Profile) -> dict[str, Any]:
 
     return {
         "harnesses": list(p.harnesses),
-        "providers": list(p.providers),
-        "models": list(p.models),
+        "makers": list(p.makers),
         "channels": [
             {
                 "provider": channel.provider,
@@ -273,19 +291,47 @@ def _document(p: Profile) -> dict[str, Any]:
     }
 
 
-def _fallback(cat: Catalogue, problem: str) -> Profile:
-    """Return the widest profile the catalogue supports, marked as a fallback."""
+def _fallback(problem: str) -> Profile:
+    """Return the stand-in for answers nobody gave: no maker, and no channel.
 
-    providers = dict.fromkeys(model.provider for model in cat.models)
+    With no maker chosen nothing is eligible, so every call not locked to a
+    model inherits the caller's own seat and says why. The whole catalogue is
+    what this used to stand in with, and that is a pool nobody chose.
+    """
+
     return Profile(
         harnesses=tuple(detect_harnesses()),
-        providers=tuple(providers),
-        models=tuple(model.id for model in cat.models),
+        makers=(),
         channels=(),
         answered_at=None,
         source="fallback",
         problem=problem,
     )
+
+
+def _unchoosable(
+    raw: dict[str, Any], makers: tuple[str, ...], cat: Catalogue
+) -> str | None:
+    """Say why the makers cannot be trusted, or None where they can.
+
+    None chosen is a choice nothing answers, a maker the catalogue holds no
+    model of is a typo, and a list the makers replaced still standing beside
+    them is a file written half by an older release.
+    """
+
+    leftover = [field for field in RETIRED if field in raw]
+    if leftover:
+        return f"carries {' and '.join(leftover)} beside makers, which replaced them"
+    if not makers:
+        return "chooses no maker"
+    known = {model.provider for model in cat.models}
+    unknown = [name for name in makers if name not in known]
+    if unknown:
+        return (
+            f"chooses {', '.join(repr(name) for name in unknown)}, "
+            "which the catalogue holds no model of"
+        )
+    return None
 
 
 def _names(raw: Any) -> tuple[str, ...] | None:
@@ -304,7 +350,7 @@ def _channels(raw: Any) -> tuple[tuple[Channel, ...] | None, str | None]:
 
     A profile is only worth trusting whole. One channel this Skill cannot read
     is a file somebody edited by hand and got wrong, so the answer is the
-    fallback rather than a silently shortened list of ways to pay.
+    stand-in rather than a silently shortened list of ways to pay.
 
     The reason travels with the refusal because it is the only thing anybody
     can act on: *a rate card in SEK* names the edit to make, where *a channel
@@ -352,7 +398,7 @@ def _rates(raw: Any) -> Price | None:
 
     Every figure this Skill compares is USD and nothing anywhere converts, so
     a card in another currency would be added to a USD bill without a word
-    said. That is worse than the fallback, which at least announces itself, so
+    said. That is worse than the stand-in, which at least announces itself, so
     it joins the states that invalidate a profile rather than the ones that
     are quietly dropped.
     """

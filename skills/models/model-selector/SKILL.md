@@ -15,7 +15,7 @@ metadata:
 
 # model-selector
 
-Which model, at which deliberation level, finishes a piece of work for the least money, or soonest where the user has made time their standing choice — answered from what this machine has measured rather than from reputation. The answer is advice. No form of it means *start nothing*: where the profile is missing, the catalogue empty or nothing reachable, it names the seat the caller already has and says why.
+Which model, at which deliberation level, finishes a piece of work for the least money, or soonest where the user has made time their standing choice — answered from what this machine has measured rather than from reputation. The answer is advice. No form of it means *start nothing*: where no valid profile stands, the catalogue is empty or nothing is reachable, it names the seat the caller already has and says why.
 
 `$HERE` is the directory that contains this SKILL.md, and `$MANAGER` is the Manager directory: `$HERE/../kntnt/` if it exists, else `kntnt/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Neither found: tell the user to install the Manager (`npx skills add Kntnt/skills`) and stop. `$LIBRARY` is `$MANAGER/library/` — absent, tell the user to run `/kntnt update`, then stop.
 
@@ -75,7 +75,7 @@ Two identical questions can come back with different answers, and that is this w
 
 Where the catalogue is due — its newest `retrieved` date more than thirty days old, read as `## Status` reads it — hold `## Update` first, so the interview offers current prices, model lists and plans rather than what the release froze.
 
-Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which providers, which of those providers' models, and then how each provider is paid for on each channel. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that can be fetched — prices, model lists, the subscriptions a provider sells and its own positioning are all the machine's job. Show the assembled profile in full before it is written.
+Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which makers the user wants models from, and then how each maker is paid for on each channel. Every model a chosen maker offers is eligible, so no model is asked about one by one. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that can be fetched — prices, model lists, the subscriptions a provider sells and its own positioning are all the machine's job. Show the assembled profile in full before it is written.
 
 Hand it to the script rather than editing the file:
 
@@ -87,7 +87,7 @@ Render its report: the revision written, its `notes`, and the generated subagent
 
 Report what this Skill knows, how fresh it is and what it wants from the user. Nothing here asks a question, changes anything or reaches the network.
 
-Read `<directory>/profile.json` and say when it was answered and which Harnesses, providers, models and payment channels it holds. Where it is absent or will not validate, say so and name `/model-selector setup`: until then every catalogue model the detected Harnesses can reach counts as enabled, which is a wider pool than anyone chose. Say the same where `answered_at` is more than ninety days old, where the catalogue holds a provider the profile has never been asked about, or where the catalogue holds models the profile does not enable — say how many, adopting one being the user's own act.
+Read `<directory>/profile.json` and say when it was answered and which Harnesses, makers and payment channels it holds. Name every maker the catalogue holds that the profile does not choose as "not chosen", a maker declined and one never asked about being the same thing. Where the file is absent, carries no `makers` — the shape an older release wrote, with a list of models, which is not translated — or will not validate, say so and name `/model-selector setup`: until then every answer not locked to a model inherits the caller's own seat. Say the same where `answered_at` is more than ninety days old.
 
 Report how fresh the world's facts are, from the dates the catalogue itself carries. Run `uv run "$HERE/scripts/catalogue.py" [--data=<directory>]` and read the `retrieved` date off every model and every plan: name the newest and the oldest, and where the newest is more than thirty days old, name `/model-selector update` as what brings them current. Nothing here fetches anything.
 
@@ -131,9 +131,9 @@ Then bring the generated subagent definitions into line with whatever was adopte
 
     uv run "$HERE/scripts/setup_apply.py" [--data=<directory>]
 
-With no profile operand it syncs and writes no profile. Report the definitions written and removed, and where it says the directory had to be created, pass that on as `## Setup` does.
+With no profile operand it syncs and writes no profile. Report the definitions written and removed, and where it says the directory had to be created, pass that on as `## Setup` does. Where it reports `definitions` as null, no valid profile stands and nothing was synced: pass on its note, which names `/model-selector setup`.
 
-A pass in which nothing changed is a successful pass. A model discovered that the profile does not enable is written to the catalogue and left disabled, and `## Status` is where the user is told they may want to adopt it.
+A pass in which nothing changed is a successful pass. A model discovered is eligible the moment it is written to the catalogue, wherever its maker is one the profile chooses, and nothing has to be enabled by hand.
 
 ## Objective
 
