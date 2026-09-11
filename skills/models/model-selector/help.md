@@ -44,7 +44,7 @@ Hold the interview and write the profile: Harnesses, providers, models, and how 
 
 **status**
 
-Report the profile and its age, how fresh the catalogue's own facts are, what has been measured, and the health of each Harness integration. It asks nothing, changes nothing, and reaches nothing.
+Report the profile and its age, how fresh the catalogue's own facts are, what has been measured, how many units wait to be graded and how long the oldest has waited, whether the judge is at its daily cap and when the cap frees, and the health of each Harness integration. It asks nothing, changes nothing, and reaches nothing.
 
 **update**
 

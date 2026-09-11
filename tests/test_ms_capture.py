@@ -6,7 +6,9 @@ import importlib.util
 import io
 import json
 import sys
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 from support.model_routing import attempt_line
@@ -44,9 +46,14 @@ def _module(stem: str, name: str | None = None) -> Any:
 # finds the same object these tests are holding.
 _module("catalogue")
 _module("profiles")
-_module("evidence")
+evidence = _module("evidence")
 _module("launch")
 capture = _module("capture", "model_selector_capture")
+
+# The real grading module, for the tests that read the judge's cap through it.
+# Loaded under a name nothing else registers, so installing it is a choice a
+# test makes rather than an accident of which test ran first.
+_real_grade = _module("grade", "model_selector_grade_real")
 
 
 class _Grader:
@@ -63,6 +70,11 @@ class _Grader:
         self.passes.append(data)
         return {"verb": "grade", "graded": 0}
 
+    def judge_cap(self, data: Path, now: datetime) -> Any:
+        """Answer as a store holding no judge-graded rows would."""
+
+        return SimpleNamespace(capped=False, frees_at=None, in_window=0)
+
 
 def _grader() -> _Grader:
     """Install the stub grader and return it."""
@@ -70,6 +82,13 @@ def _grader() -> _Grader:
     stub = _Grader()
     sys.modules["model_selector_grade"] = stub  # type: ignore[assignment]
     return stub
+
+
+def _real_grader() -> Any:
+    """Install the real grading module under the name capture loads it by."""
+
+    sys.modules["model_selector_grade"] = _real_grade
+    return _real_grade
 
 
 def _user(
@@ -1648,3 +1667,110 @@ def test_the_harnesses_a_removal_names_reach_the_removal(monkeypatch: Any) -> No
 
     assert capture.main(["remove-integrations", "--harness=codex"]) == 0
     assert seen == [["codex"]]
+
+
+NOW = datetime(2026, 9, 11, 12, 0, 0, tzinfo=UTC)
+
+
+def _judged(data: Path, at: datetime, count: int) -> None:
+    """File *count* judge-graded rows at one instant, as one pass writes them."""
+
+    stamp = _real_grade._stamp(at)
+    evidence.append(
+        data,
+        [
+            {
+                "attempt_id": f"judged-{stamp}-{index}",
+                "at": stamp,
+                "kind": "implement",
+                "model": "claude-opus-5",
+                "deliberation": "high",
+                "grade": 0.5,
+                "graded_by": "judge",
+                "tokens": {},
+                "routed": False,
+            }
+            for index in range(count)
+        ],
+    )
+
+
+def _waiting(data: Path, *ended: str | None) -> None:
+    """Write one pending store, a Unit per *ended*, in the order given."""
+
+    (data / "pending.jsonl").write_text(
+        "".join(
+            json.dumps({"unit_id": f"unit-{index}", "ended_at": at}) + "\n"
+            for index, at in enumerate(ended)
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_status_says_the_judge_is_capped_when_it_frees_and_how_old_the_queue_is(
+    tmp_path: Path,
+) -> None:
+    """A queue at its cap every day falls further behind every day.
+
+    More judge-graded rows than the limit, at two instants, so that the time
+    the cap frees is the one that takes the window below the limit rather
+    than the time its oldest row leaves. The oldest Unit is the one that
+    finished first, wherever it sits in the file, and a Unit with no readable
+    finish is passed over rather than taken for the oldest.
+    """
+
+    _real_grader()
+    data = tmp_path / "data"
+    later = NOW - timedelta(hours=2)
+    _judged(data, NOW - timedelta(hours=20), 5)
+    _judged(data, later, _real_grade.DAILY_JUDGE_LIMIT)
+    _waiting(
+        data,
+        None,
+        "2026-09-10T20:00:00.000Z",
+        "not a time",
+        "2026-09-10T08:30:00.000Z",
+        "2026-09-11T09:00:00.000Z",
+    )
+
+    reported = capture.status(data, tmp_path / "home", now=NOW)
+
+    assert reported["now"] == "2026-09-11T12:00:00Z"
+    assert reported["judge_capped"] is True
+    assert reported["judged_in_window"] == _real_grade.DAILY_JUDGE_LIMIT + 5
+    assert reported["judge_frees_at"] == _real_grade._stamp(
+        later + _real_grade.DAILY_WINDOW
+    )
+    assert reported["oldest_waiting_at"] == "2026-09-10T08:30:00Z"
+
+
+def test_status_below_the_cap_gives_no_time_for_it_to_free(tmp_path: Path) -> None:
+    """Not capped is said plainly, with nothing to wait for."""
+
+    _real_grader()
+    data = tmp_path / "data"
+    _judged(data, NOW - timedelta(hours=2), _real_grade.DAILY_JUDGE_LIMIT - 1)
+    _waiting(data, "2026-09-11T09:00:00.000Z")
+
+    reported = capture.status(data, tmp_path / "home", now=NOW)
+
+    assert reported["judge_capped"] is False
+    assert reported["judge_frees_at"] is None
+    assert reported["judged_in_window"] == _real_grade.DAILY_JUDGE_LIMIT - 1
+
+
+def test_status_with_nothing_waiting_names_no_oldest_unit_and_still_the_cap(
+    tmp_path: Path,
+) -> None:
+    """An empty queue is not an error, and a cap is a cap whatever waits."""
+
+    _real_grader()
+    data = tmp_path / "data"
+    data.mkdir()
+    _judged(data, NOW - timedelta(hours=2), _real_grade.DAILY_JUDGE_LIMIT)
+
+    reported = capture.status(data, tmp_path / "home", now=NOW)
+
+    assert reported["pending"] == 0
+    assert reported["oldest_waiting_at"] is None
+    assert reported["judge_capped"] is True

@@ -16,7 +16,7 @@ The profile: when it was answered, which Harnesses, providers, models and paymen
 
 The catalogue: how fresh its facts are, read off the dates the entries themselves carry — the newest and the oldest of them. Past thirty days on the newest, `update` is named as what brings them current. Nothing waits on that and nothing is placed where a model would read it, deliberately: a reminder inside a session changes the thing being measured.
 
-The measurement: how many units have been recorded, over what span of dates, how many are waiting to be graded, and when the grader last ran.
+The measurement: how many units have been recorded, over what span of dates, how many are waiting to be graded, how long the oldest of them has waited, and when the grader last ran. Beside it, whether the judge is at its daily cap of fifty judge-graded units in twenty-four hours, said whether or not anything is waiting. A capped judge is named as capped, with the time the cap frees; judging resumes at the next session end after that, since nothing runs on a timer.
 
 The integration, per Harness this collection has an adapter for: `healthy`, `gated` where the Harness is holding it behind a trust decision this collection will not make for you, `degraded`, `absent`, or `unsatisfied` where that Harness's lifecycle cannot carry the contract at all. Beside it, whether that Harness's finished session record can supply measurements, and how much the capture store holds.
 

@@ -60,7 +60,7 @@ import shutil
 import sys
 from contextlib import suppress
 from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, TextIO
 
@@ -1268,7 +1268,28 @@ def _grader_ran_at(data: Path) -> str | None:
     return last if isinstance(last, str) and last else None
 
 
-def status(data: Path, root: Path) -> dict[str, Any]:
+def _stamp(instant: datetime) -> str:
+    """Return one instant in the form every stored timestamp is written in."""
+
+    return instant.astimezone(UTC).isoformat().replace("+00:00", "Z")
+
+
+def _oldest_waiting(data: Path) -> datetime | None:
+    """Return when the Unit that has waited longest finished, or None.
+
+    The smallest readable `ended_at` rather than the first row in the file,
+    and a row with no readable finish is passed over rather than guessed at.
+    """
+
+    finished = [
+        at if at.tzinfo else at.replace(tzinfo=UTC)
+        for row in pending(data)
+        if (at := _parsed(row.get("ended_at"))) is not None
+    ]
+    return min(finished, default=None)
+
+
+def status(data: Path, root: Path, now: datetime | None = None) -> dict[str, Any]:
     """Report capture's own state, without a network request or an evaluation.
 
     Every Harness the Collection Library has an adapter for is reported,
@@ -1283,9 +1304,17 @@ def status(data: Path, root: Path) -> dict[str, Any]:
 
     The pending count and the grader's last pass are reported here and nowhere
     else, because a measurement reminder placed where the model reads it
-    changes the thing being measured.
+    changes the thing being measured. So is the judge's daily cap, worked out
+    at *now* by the grader's own `judge_cap` rather than read off the last
+    pass, whose `capped` a session end's free half always writes false: a
+    queue at its cap every day falls further behind every day, and says so
+    here with when the cap frees and when the oldest waiting Unit finished.
+    `now` is reported beside them, the instant both were read at.
     """
 
+    instant = now or datetime.now(UTC)
+    cap = _sibling("grade").judge_cap(data, instant)
+    oldest = _oldest_waiting(data)
     integrations = _integrations()
     return {
         "harnesses": [
@@ -1301,6 +1330,11 @@ def status(data: Path, root: Path) -> dict[str, Any]:
         "pending": len(pending(data)),
         "pending_failures": _pending_failures(data),
         "grader_last_ran_at": _grader_ran_at(data),
+        "now": _stamp(instant),
+        "judge_capped": cap.capped,
+        "judge_frees_at": _stamp(cap.frees_at) if cap.frees_at else None,
+        "judged_in_window": cap.in_window,
+        "oldest_waiting_at": _stamp(oldest) if oldest else None,
         "retired": len(retired(data)),
     }
 

@@ -88,8 +88,9 @@ CALL_SECONDS = 30.0
 # local files, so this is generous rather than tight.
 SELECT_SECONDS = 20.0
 
-# How many judge-graded rows in the last day stop a pass entirely. A machine
-# that has already bought fifty gradings today has bought enough of them.
+# How many judge-graded rows in the last day stop a pass buying any more. A
+# machine that has already bought fifty gradings today has bought enough of
+# them, but the free half of the pass still runs, because it costs nothing.
 DAILY_JUDGE_LIMIT = 50
 DAILY_WINDOW = timedelta(hours=24)
 
@@ -273,17 +274,44 @@ def _lock(data: Path) -> Iterator[bool]:
         path.unlink(missing_ok=True)
 
 
-def _judged_today(data: Path, now: datetime) -> int:
-    """Return how many judge-graded rows the store holds from the last day."""
+@dataclass(frozen=True)
+class JudgeCap:
+    """Whether the judge is at its daily cap, and when it stops being so.
+
+    `frees_at` is None wherever the judge is not capped: there is nothing to
+    wait for. Nothing runs on a timer, so it is when the cap frees and not when
+    judging happens — that is the first session end after it.
+    """
+
+    capped: bool
+    frees_at: datetime | None
+    in_window: int
+
+
+def judge_cap(data: Path, now: datetime) -> JudgeCap:
+    """Return the judge's daily cap as the store under *data* holds it at *now*.
+
+    The one place the cap is worked out, read by a grading pass to decide
+    whether it may buy and by `capture.py status` to say so. A row counts
+    while its `at` is no more than `DAILY_WINDOW` before *now*. A pass that
+    starts one short of the limit may still buy a whole budget, so the window
+    can hold more rows than the limit, and the cap frees when enough of them
+    have left for the count to fall below it: a day after the (count - limit
+    + 1)-th oldest, not a day after the oldest.
+    """
 
     since = now - DAILY_WINDOW
-    return sum(
-        1
+    inside = sorted(
+        at
         for row in evidence.load(data)
         if row.graded_by == "judge"
         and (at := _parsed(row.at)) is not None
         and at >= since
     )
+    if len(inside) < DAILY_JUDGE_LIMIT:
+        return JudgeCap(False, None, len(inside))
+    leaving = inside[len(inside) - DAILY_JUDGE_LIMIT]
+    return JudgeCap(True, leaving + DAILY_WINDOW, len(inside))
 
 
 def _tokens(row: Mapping[str, Any]) -> dict[str, Any]:
@@ -655,7 +683,7 @@ def grade_pending(
     # A day's worth of bought gradings is enough of them, but the cap is on the
     # buying alone: the free half costs nothing and stopping it too would leave
     # a signal that already decided the matter sitting in the queue for a day.
-    capped = judging and _judged_today(data, instant) >= DAILY_JUDGE_LIMIT
+    capped = judging and judge_cap(data, instant).capped
     judging = judging and not capped
 
     for row in _pending(data):

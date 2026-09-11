@@ -423,7 +423,7 @@ def test_a_unit_left_below_the_budget_line_is_not_charged_an_attempt(
     assert "attempts" not in _waiting(data)[0]
 
 
-def test_a_days_worth_of_gradings_already_bought_stops_the_pass_entirely(
+def test_a_days_worth_of_gradings_already_bought_stops_the_buying_but_not_the_pass(
     tmp_path: Path,
 ) -> None:
     """A hard limit rather than a guideline."""
@@ -481,6 +481,95 @@ def test_gradings_older_than_a_day_do_not_count_against_the_limit(
 
     assert report["capped"] is False
     assert report["judged"] == 1
+
+
+def _judged(data: Path, at: datetime, count: int, *, by: str = "judge") -> None:
+    """File *count* graded rows at one instant, as one grading pass writes them."""
+
+    stamp = grade._stamp(at)
+    evidence.append(
+        data,
+        [
+            {
+                "attempt_id": f"{by}-{stamp}-{index}",
+                "at": stamp,
+                "kind": "implement",
+                "model": "claude-opus-5",
+                "deliberation": "high",
+                "grade": 0.5,
+                "graded_by": by,
+                "tokens": {},
+                "routed": False,
+            }
+            for index in range(count)
+        ],
+    )
+
+
+def test_the_cap_frees_when_the_window_drops_below_the_limit(tmp_path: Path) -> None:
+    """Not when its oldest row leaves: a pass can overshoot the limit.
+
+    A pass that starts one short of the limit may still buy a whole budget, so
+    the window can hold more rows than the limit. Only once enough of them
+    have left for the count to fall below the limit does judging come back,
+    and that instant is the (count - limit + 1)-th oldest row's plus a day.
+    """
+
+    data = tmp_path / "data"
+    earlier = NOW - timedelta(hours=20)
+    later = NOW - timedelta(hours=2)
+    _judged(data, earlier, 5)
+    _judged(data, later, grade.DAILY_JUDGE_LIMIT)
+
+    held = grade.judge_cap(data, NOW)
+
+    assert held.capped is True
+    assert held.in_window == grade.DAILY_JUDGE_LIMIT + 5
+    assert held.frees_at == later + grade.DAILY_WINDOW
+
+
+def test_the_cap_frees_a_day_after_the_row_that_takes_it_below_the_limit(
+    tmp_path: Path,
+) -> None:
+    """Exactly at the limit, the oldest row leaving is what frees it."""
+
+    data = tmp_path / "data"
+    earlier = NOW - timedelta(hours=20)
+    _judged(data, earlier, 1)
+    _judged(data, NOW - timedelta(hours=2), grade.DAILY_JUDGE_LIMIT - 1)
+
+    assert grade.judge_cap(data, NOW).frees_at == earlier + grade.DAILY_WINDOW
+
+
+def test_the_cap_holds_at_the_instant_it_frees_and_is_gone_just_after(
+    tmp_path: Path,
+) -> None:
+    """A row counts while it is a day old, so the release is strictly after."""
+
+    data = tmp_path / "data"
+    _judged(data, NOW - timedelta(hours=2), grade.DAILY_JUDGE_LIMIT)
+    frees = grade.judge_cap(data, NOW).frees_at
+    assert frees is not None
+
+    assert grade.judge_cap(data, frees).capped is True
+    released = grade.judge_cap(data, frees + timedelta(seconds=1))
+    assert released.capped is False
+    assert released.frees_at is None
+
+
+def test_below_the_cap_there_is_no_time_for_it_to_free(tmp_path: Path) -> None:
+    """Only judge-graded rows inside the window count toward the cap."""
+
+    data = tmp_path / "data"
+    _judged(data, NOW - timedelta(hours=2), grade.DAILY_JUDGE_LIMIT - 1)
+    _judged(data, NOW - timedelta(hours=2), 5, by="signal")
+    _judged(data, NOW - timedelta(days=3), 5)
+
+    held = grade.judge_cap(data, NOW)
+
+    assert held.capped is False
+    assert held.frees_at is None
+    assert held.in_window == grade.DAILY_JUDGE_LIMIT - 1
 
 
 # --- Two copies must not both grade ------------------------------------------
