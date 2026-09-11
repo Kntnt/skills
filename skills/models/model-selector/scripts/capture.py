@@ -13,12 +13,15 @@ module only hands it something to grade.
 
 What it hands over is a **Unit of Work**: one instruction and the work done in
 answer to it, from the moment an agent is told to do something — by a person
-or by another agent — to the moment it hands control back. Only a substantial
-Unit is ever written, so a session of quick questions and answers leaves no
-trace at all. On Claude Code a finished record splits cleanly into Units, and
-there are two of them: a subagent's own record is one whole Unit, carrying the
-model and effort that subagent actually ran on, and the session's own record
-is one Unit per user instruction.
+or by another agent — to the moment it hands control back. Only a Unit that is
+a job is ever written: a delegated one — a subagent's own record, or a span
+whose instruction names a routed attempt — once it is substantial, and one of
+the session's own once it is substantial and ran for ten minutes besides. A
+session of quick questions and answers, and a person's short exchanges with
+their own Main Seat, leave no trace at all. On Claude Code a finished record
+splits cleanly into Units, and there are two of them: a subagent's own record
+is one whole Unit, carrying the model and effort that subagent actually ran
+on, and the session's own record is one Unit per user instruction.
 
 Each record is read the moment it is finished and never before. A subagent's
 is read at that subagent's own stop, which is the moment its record is whole
@@ -180,15 +183,17 @@ GRADER_STATE_FILE = "grader.json"
 READABLE_HARNESSES: tuple[str, ...] = ("claude-code",)
 
 # The line a routed builder brief opens with, naming the attempt whoever
-# dispatched it already decided. Where a subagent's first user message opens
-# with it, that attempt is this Unit's identity rather than the hash below:
-# the caller that dispatched the work files its own verdict under the same
-# name, and one build filed from two sides is one row rather than two
-# (issue #291). Matched on the first line only, and never on a main-session
-# instruction — a person at a keyboard is nobody's routed attempt. The same
-# form is stated for the tests in `tests/support/model_routing.py`, a shipped
-# script having no business importing a test file. The backticks are optional
-# because a brief is Markdown and a filler may leave the placeholder's own.
+# dispatched it already decided. Where an instruction opens with it — a
+# subagent's first user message, or an instruction in the session's own
+# record — that attempt is this Unit's identity rather than the hash below,
+# and the Unit is delegated: the caller that dispatched the work files its own
+# verdict under the same name, and one build filed from two sides is one row
+# rather than two (issue #291, #303). Matched on the instruction's first line
+# only. A person at a keyboard does not type it, so an instruction carrying it
+# is a routed brief wherever it arrived. The same form is stated for the tests
+# in `tests/support/model_routing.py`, a shipped script having no business
+# importing a test file. The backticks are optional because a brief is
+# Markdown and a filler may leave the placeholder's own.
 ATTEMPT_LINE = re.compile(r"^attempt_id:[ \t]*`?([^\s`]+)`?[ \t]*$")
 
 # How the token categories a Claude Code turn reports map onto the five a
@@ -215,10 +220,23 @@ TOKEN_CATEGORIES: tuple[str, ...] = (
 # of the three is enough, because they are three ways of being real work: a
 # job that changed things, a job that took time, and a job that wrote a lot.
 # Everything below all three is discarded with no trace, which is what keeps a
-# session of quick questions and answers out of the measurement entirely.
+# session of quick questions and answers out of the measurement entirely. A
+# delegated Unit needs nothing more; a Unit of the session's own also has to
+# have run for `OWN_UNIT_SECONDS`, below.
 SUBSTANTIAL_CHANGING_CALLS = 3
 SUBSTANTIAL_SECONDS = 60.0
 SUBSTANTIAL_OUTPUT_TOKENS = 4000.0
+
+# How long a Unit of the session's own has to run before it is evidence at
+# all. Model Selector is only ever asked what to delegate, and a person's
+# exchange with their own Main Seat is mostly a different size of job; fitted
+# beside delegated work, that difference in size is read as a difference in
+# models. What makes a Unit a job is an agent working on its own long enough,
+# so a Unit that was delegated — read from a subagent's own record, or opened
+# by an instruction naming a routed attempt — is held to the substantial test
+# alone, and any other Unit is written only once it ran this long from its
+# instruction to handing control back (#303).
+OWN_UNIT_SECONDS = 600.0
 
 # How much of an instruction and of a result the grader is given. They are the
 # only free text a Unit carries, they exist to be read by one judge once, and
@@ -849,8 +867,10 @@ def _spans(lines: list[dict[str, Any]], whole: bool) -> list[_Span]:
     A subagent's transcript is one span *whole*: it was opened by one
     instruction and everything in it answers that instruction. The main
     transcript is split, each span running from a user instruction to the turn
-    before the next one, so a session that alternates between quick questions
-    and long jobs contributes the long jobs alone.
+    before the next one. Which spans become Units is decided after the split —
+    the substantial test in `_unit`, and the ten-minute threshold on a Unit of
+    the session's own in `units` — so a session that alternates between quick
+    questions and long jobs contributes the long jobs alone.
     """
 
     spans: list[_Span] = []
@@ -919,10 +939,15 @@ def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | No
     """Return one span as a Unit, or None where it is not substantial.
 
     The identity is the attempt the brief named, where a routed builder's
-    brief named one. Otherwise it is the session, the Seat and the instant the
-    Unit began, so the same finished session read twice yields the same Unit
-    and the measurement store folds the second copy into the first rather than
-    counting it twice.
+    brief named one, and a span whose instruction names an attempt is
+    delegated wherever it was read. Otherwise the identity is the session, the
+    Seat and the instant the Unit began, so the same finished session read
+    twice yields the same Unit and the measurement store folds the second copy
+    into the first rather than counting it twice.
+
+    Only the substantial test is applied here. Whether a Unit of the session's
+    own ran long enough to be written is `units`' to decide, once it has
+    marked the retries among every substantial Unit (#303).
     """
 
     seconds = _elapsed_seconds(span.started_at, span.ended_at)
@@ -939,7 +964,7 @@ def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | No
         },
         sort_keys=True,
     )
-    named = _named_attempt(span.instruction) if delegated else None
+    named = _named_attempt(span.instruction)
     return Unit(
         unit_id=named or f"unit-{_opaque(identity)}",
         session=session,
@@ -952,7 +977,7 @@ def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | No
         tokens=dict(span.tokens),
         tool_calls=span.tool_calls,
         changing_tool_calls=span.changing_tool_calls,
-        delegated=delegated,
+        delegated=delegated or named is not None,
         signals={
             "retried": False,
             "tests_ran": span.tests_ran,
@@ -1003,7 +1028,12 @@ def _readable(harness: Any, transcript_path: Any) -> tuple[Path, str] | None:
 
 
 def units(session: str, harness: str | None, transcript_path: Any) -> list[Unit]:
-    """Return every substantial Unit one finished session produced.
+    """Return every Unit one finished session produced that is evidence.
+
+    A Unit is evidence where it is substantial and, unless an instruction
+    naming a routed attempt made it delegated, ran for `OWN_UNIT_SECONDS` or
+    longer. The retries are marked first, across every substantial Unit, so
+    a long job redone as a short one keeps the signal the redo gave it (#303).
 
     Bounded to exactly the file named by *transcript_path* and nothing else —
     no encoding is derived from a working directory or a session identity, no
@@ -1016,13 +1046,16 @@ def units(session: str, harness: str | None, transcript_path: Any) -> list[Unit]
     if readable is None:
         return []
     path, known = readable
-    return _retried(
+    marked = _retried(
         [
             unit
             for span in _spans(_lines(path), whole=False)
             if (unit := _unit(span, session, known, delegated=False)) is not None
         ]
     )
+    return [
+        unit for unit in marked if unit.delegated or unit.seconds >= OWN_UNIT_SECONDS
+    ]
 
 
 def subagent_units(

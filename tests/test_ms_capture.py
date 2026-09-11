@@ -213,10 +213,16 @@ def test_a_unit_below_every_threshold_is_never_written(tmp_path: Path) -> None:
     )
 
     assert capture.units("s", "claude-code", str(transcript)) == []
+    assert capture.subagent_units("s", "claude-code", str(transcript)) == []
 
 
 def test_three_changing_tool_calls_make_a_unit_substantial(tmp_path: Path) -> None:
-    """Work that changed three things is work, however quickly it was done."""
+    """Work that changed three things is work, however quickly it was done.
+
+    Read as a subagent's own record, because a delegated Unit is held to the
+    substantial test alone; a Unit of the session's own this short is below
+    the ten-minute threshold whatever it changed (#303).
+    """
 
     transcript = _transcript(
         tmp_path,
@@ -232,7 +238,7 @@ def test_three_changing_tool_calls_make_a_unit_substantial(tmp_path: Path) -> No
         ),
     )
 
-    found = capture.units("s", "claude-code", str(transcript))
+    found = capture.subagent_units("s", "claude-code", str(transcript))
 
     assert len(found) == 1
     assert found[0].changing_tool_calls == 3
@@ -244,9 +250,9 @@ def test_a_reading_shell_command_is_not_a_change(tmp_path: Path) -> None:
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
         _assistant(
-            "2026-09-06T10:05:01.000Z",
+            "2026-09-06T10:15:01.000Z",
             tools=[
                 _call("Bash", command="cd /repo && grep -rn thing ."),
                 _call("Bash", command="git status"),
@@ -268,14 +274,14 @@ def test_the_main_transcript_splits_into_one_unit_per_instruction(
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z", "first"),
-        *_long_unit("2026-09-06T11:00:00.000Z", "2026-09-06T11:09:00.000Z", "second"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z", "first"),
+        *_long_unit("2026-09-06T11:00:00.000Z", "2026-09-06T11:20:00.000Z", "second"),
     )
 
     found = capture.units("s", "claude-code", str(transcript))
 
     assert [unit.instruction_excerpt for unit in found] == ["first", "second"]
-    assert [round(unit.seconds) for unit in found] == [300, 540]
+    assert [round(unit.seconds) for unit in found] == [900, 1200]
     assert [unit.delegated for unit in found] == [False, False]
 
 
@@ -287,7 +293,7 @@ def test_a_tool_result_never_starts_a_unit_of_its_own(tmp_path: Path) -> None:
         _user("do the work", "2026-09-06T10:00:00.000Z"),
         _assistant("2026-09-06T10:00:01.000Z", tools=[_call("Bash", command="ls")]),
         _result("2026-09-06T10:00:02.000Z"),
-        _assistant("2026-09-06T10:04:00.000Z", text="Done."),
+        _assistant("2026-09-06T10:14:00.000Z", text="Done."),
     )
 
     assert len(capture.units("s", "claude-code", str(transcript))) == 1
@@ -318,31 +324,31 @@ def test_a_background_report_continues_the_unit_it_arrives_in(
     transcript = _transcript(
         tmp_path,
         _user("first", "2026-09-06T10:00:00.000Z"),
-        _assistant("2026-09-06T10:01:30.000Z", text="one", usage=_spent(100)),
-        _result("2026-09-06T10:01:31.000Z"),
-        _user("second", "2026-09-06T10:10:00.000Z"),
-        _assistant("2026-09-06T10:10:30.000Z", text="two", usage=_spent(200)),
-        _result("2026-09-06T10:10:31.000Z"),
+        _assistant("2026-09-06T10:11:30.000Z", text="one", usage=_spent(100)),
+        _result("2026-09-06T10:11:31.000Z"),
+        _user("second", "2026-09-06T10:20:00.000Z"),
+        _assistant("2026-09-06T10:20:30.000Z", text="two", usage=_spent(200)),
+        _result("2026-09-06T10:20:31.000Z"),
         _user(
             "<task-notification>agent aaa finished</task-notification>",
-            "2026-09-06T10:11:00.000Z",
+            "2026-09-06T10:21:00.000Z",
             kind="task-notification",
         ),
         _user(
             "<command-name>/orchestrate</command-name>",
-            "2026-09-06T10:11:10.000Z",
+            "2026-09-06T10:21:10.000Z",
             kind=None,
         ),
-        _assistant("2026-09-06T10:12:00.000Z", text="two again", usage=_spent(300)),
-        _user("third", "2026-09-06T10:20:00.000Z"),
-        _assistant("2026-09-06T10:21:30.000Z", text="three", usage=_spent(400)),
+        _assistant("2026-09-06T10:32:00.000Z", text="two again", usage=_spent(300)),
+        _user("third", "2026-09-06T10:40:00.000Z"),
+        _assistant("2026-09-06T10:51:30.000Z", text="three", usage=_spent(400)),
     )
 
     found = capture.units("s", "claude-code", str(transcript))
 
     assert [unit.instruction_excerpt for unit in found] == ["first", "second", "third"]
     assert [unit.tokens["output"] for unit in found] == [100.0, 500.0, 400.0]
-    assert [round(unit.seconds) for unit in found] == [91, 120, 90]
+    assert [round(unit.seconds) for unit in found] == [691, 720, 690]
 
 
 def test_a_peer_agents_message_begins_a_unit_of_its_own(tmp_path: Path) -> None:
@@ -350,14 +356,14 @@ def test_a_peer_agents_message_begins_a_unit_of_its_own(tmp_path: Path) -> None:
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z", "mine"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z", "mine"),
         _user(
             "please look at the branch",
             "2026-09-06T11:00:00.000Z",
             kind="peer",
             meta=True,
         ),
-        _assistant("2026-09-06T11:05:00.000Z", text="Looked."),
+        _assistant("2026-09-06T11:15:00.000Z", text="Looked."),
     )
 
     found = capture.units("s", "claude-code", str(transcript))
@@ -392,7 +398,7 @@ def test_no_other_user_line_begins_a_unit(tmp_path: Path) -> None:
             "2026-09-06T10:03:00.000Z",
             kind=None,
         ),
-        _assistant("2026-09-06T10:05:00.000Z", text="Done."),
+        _assistant("2026-09-06T10:15:00.000Z", text="Done."),
     )
 
     found = capture.units("s", "claude-code", str(transcript))
@@ -411,7 +417,7 @@ def test_an_interruption_line_marks_the_unit_it_stopped(tmp_path: Path) -> None:
         ),
         _user(
             "[Request interrupted by user]",
-            "2026-09-06T10:05:00.000Z",
+            "2026-09-06T10:15:00.000Z",
             kind=None,
         ),
     )
@@ -435,7 +441,7 @@ def test_a_stopped_subagents_own_record_becomes_its_own_unit(
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
     stopped = _subagent(
         transcript,
@@ -470,7 +476,7 @@ def test_a_finished_session_yields_its_own_record_and_nothing_beside_it(
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
     _subagent(
         transcript,
@@ -496,7 +502,7 @@ def test_the_token_categories_arrive_under_the_names_a_measurement_prices(
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
 
     tokens = capture.units("s", "claude-code", str(transcript))[0].tokens
@@ -517,7 +523,7 @@ def test_an_unreported_token_category_stays_null(tmp_path: Path) -> None:
         tmp_path,
         _user("do the work", "2026-09-06T10:00:00.000Z"),
         _assistant(
-            "2026-09-06T10:05:00.000Z",
+            "2026-09-06T10:15:00.000Z",
             text="Done.",
             usage={"input_tokens": 5, "output_tokens": 400},
         ),
@@ -545,7 +551,7 @@ def test_a_unit_keeps_a_whole_brief_and_a_whole_report_up_to_its_own_limit(
     transcript = _transcript(
         tmp_path,
         _user("i" * (capture.INSTRUCTION_CHARS + 500), "2026-09-06T10:00:00.000Z"),
-        _assistant("2026-09-06T10:05:00.000Z", text="r" * (capture.RESULT_CHARS + 500)),
+        _assistant("2026-09-06T10:15:00.000Z", text="r" * (capture.RESULT_CHARS + 500)),
     )
 
     found = capture.units("s", "claude-code", str(transcript))
@@ -566,7 +572,7 @@ def test_an_interrupted_unit_is_marked_as_one(tmp_path: Path) -> None:
         _assistant(
             "2026-09-06T10:02:00.000Z", tools=[_call("Bash", command="rm -rf x")]
         ),
-        _result("2026-09-06T10:05:00.000Z", stopped=True),
+        _result("2026-09-06T10:15:00.000Z", stopped=True),
     )
 
     assert capture.units("s", "claude-code", str(transcript))[0].signals["interrupted"]
@@ -578,7 +584,7 @@ def test_an_api_failure_is_marked_as_errored(tmp_path: Path) -> None:
     transcript = _transcript(
         tmp_path,
         _user("do the work", "2026-09-06T10:00:00.000Z"),
-        _assistant("2026-09-06T10:05:00.000Z", api_error=True, text=""),
+        _assistant("2026-09-06T10:15:00.000Z", api_error=True, text=""),
     )
 
     assert capture.units("s", "claude-code", str(transcript))[0].signals["errored"]
@@ -597,7 +603,7 @@ def test_tests_that_ran_and_came_back_clean_are_recorded_as_passing(
             text="Green.",
             tools=[_call("Bash", command="uv run pytest tests/")],
         ),
-        _result("2026-09-06T10:05:00.000Z"),
+        _result("2026-09-06T10:15:00.000Z"),
     )
 
     signals = capture.units("s", "claude-code", str(transcript))[0].signals
@@ -617,7 +623,7 @@ def test_a_failing_test_run_is_not_recorded_as_passing(tmp_path: Path) -> None:
             text="Red.",
             tools=[_call("Bash", command="uv run pytest tests/")],
         ),
-        _result("2026-09-06T10:05:00.000Z", is_error=True),
+        _result("2026-09-06T10:15:00.000Z", is_error=True),
     )
 
     signals = capture.units("s", "claude-code", str(transcript))[0].signals
@@ -633,14 +639,175 @@ def test_an_instruction_given_again_marks_the_answer_that_preceded_it(
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z", "do it"),
-        *_long_unit("2026-09-06T11:00:00.000Z", "2026-09-06T11:05:00.000Z", "do it"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z", "do it"),
+        *_long_unit("2026-09-06T11:00:00.000Z", "2026-09-06T11:15:00.000Z", "do it"),
     )
 
     found = capture.units("s", "claude-code", str(transcript))
 
     assert found[0].signals["retried"] is True
     assert found[1].signals["retried"] is False
+
+
+# --- Which Units are the selector's evidence ---------------------------------
+
+
+def test_the_own_unit_threshold_is_ten_minutes_beside_the_substantial_ones() -> None:
+    """One named constant, stated in seconds the way `Unit.seconds` is."""
+
+    assert capture.OWN_UNIT_SECONDS == 600.0
+
+
+def test_a_short_own_unit_is_written_nowhere(tmp_path: Path) -> None:
+    """A substantial job of the session's own under ten minutes is not a job.
+
+    Model Selector is asked what to delegate, and a person's quick exchange
+    with their own Main Seat is a different size of work; measured beside
+    delegated jobs, the difference in size is read as a difference in models.
+    Nothing reaches the pending store, so the judge is never paid for it and
+    the measurement store never sees it.
+    """
+
+    _grader()
+    data = tmp_path / "data"
+    transcript = _transcript(
+        tmp_path,
+        _user("rename the constant everywhere", "2026-09-06T10:00:00.000Z"),
+        _assistant(
+            "2026-09-06T10:09:59.000Z",
+            text="Renamed.",
+            tools=[
+                _call("Edit", file_path="/a"),
+                _call("Edit", file_path="/b"),
+                _call("Bash", command="git commit -m x"),
+            ],
+        ),
+    )
+
+    assert capture.units("s", "claude-code", str(transcript)) == []
+
+    answered = capture.hook(
+        data,
+        "SessionEnd",
+        {
+            "session_id": "s",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+        },
+    )
+
+    assert answered["recorded"] == []
+    assert capture.pending(data) == []
+
+
+def test_an_own_unit_of_ten_minutes_is_written(tmp_path: Path) -> None:
+    """An agent that worked on its own for ten minutes did a job worth measuring."""
+
+    _grader()
+    data = tmp_path / "data"
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:10:00.000Z"),
+    )
+
+    answered = capture.hook(
+        data,
+        "SessionEnd",
+        {
+            "session_id": "s",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+        },
+    )
+
+    [written] = capture.pending(data)
+    assert answered["recorded"] == [written["unit_id"]]
+    assert written["delegated"] is False
+    assert written["seconds"] == 600.0
+
+
+def test_a_short_delegated_unit_is_written_whatever_its_duration(
+    tmp_path: Path,
+) -> None:
+    """A short delegated job is exactly what the selector routes."""
+
+    _grader()
+    data = tmp_path / "data"
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
+    )
+    stopped = _subagent(
+        transcript,
+        "aaa",
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {"role": "user", "content": "survey the tree"},
+        },
+        _assistant("2026-09-06T10:03:30.000Z", text="Surveyed."),
+    )
+
+    capture.hook(
+        data,
+        "SubagentStop",
+        {
+            "session_id": "s",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+            "agent_transcript_path": str(stopped),
+        },
+    )
+
+    [written] = capture.pending(data)
+    assert written["delegated"] is True
+    assert written["seconds"] == 150.0
+
+
+def test_a_short_span_naming_an_attempt_is_written_as_delegated(
+    tmp_path: Path,
+) -> None:
+    """A brief naming an attempt is routed work wherever it arrives.
+
+    Its dispatcher files a verdict under that name, so the span is the same
+    attempt's cost: it takes the name as its identity and is exempt from the
+    ten-minute threshold exactly as a subagent's own record is.
+    """
+
+    transcript = _transcript(
+        tmp_path,
+        _user(
+            f"{attempt_line('build-303')}\n\nYou are building one ticket.",
+            "2026-09-06T10:00:00.000Z",
+        ),
+        _assistant("2026-09-06T10:04:00.000Z", text="Built."),
+    )
+
+    found = capture.units("s", "claude-code", str(transcript))
+
+    assert [unit.unit_id for unit in found] == ["build-303"]
+    assert [unit.delegated for unit in found] == [True]
+
+
+def test_a_long_job_redone_briefly_keeps_its_retry(tmp_path: Path) -> None:
+    """The retry is marked before the short redo is dropped, so it survives it.
+
+    A twelve-minute answer the person asked for again, and got in four
+    minutes, is the twelve-minute answer judged not good enough — whether or
+    not the redo itself is long enough to be measured.
+    """
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:12:00.000Z", "do it"),
+        *_long_unit("2026-09-06T11:00:00.000Z", "2026-09-06T11:04:00.000Z", "do it"),
+    )
+
+    found = capture.units("s", "claude-code", str(transcript))
+
+    assert [round(unit.seconds) for unit in found] == [720]
+    assert found[0].signals["retried"] is True
 
 
 # --- What reaches disk -------------------------------------------------------
@@ -659,7 +826,7 @@ def test_a_finished_session_writes_its_units_with_nothing_written_before_it(
     data = tmp_path / "data"
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
 
     answered = capture.hook(
@@ -694,7 +861,7 @@ def test_a_stopped_subagent_is_read_at_its_stop_and_not_again_at_the_end(
     data = tmp_path / "data"
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
     stopped = _subagent(
         transcript,
@@ -764,7 +931,7 @@ def test_the_same_finished_session_answered_twice_adds_nothing(tmp_path: Path) -
     data = tmp_path / "data"
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
     payload = {
         "session_id": "s",
@@ -803,7 +970,7 @@ def test_no_forbidden_content_reaches_a_pending_unit(tmp_path: Path) -> None:
         tmp_path,
         _user("do the work", "2026-09-06T10:00:00.000Z"),
         _assistant(
-            "2026-09-06T10:05:00.000Z",
+            "2026-09-06T10:15:00.000Z",
             text="Done.",
             tools=[_call("Bash", command="cat /Users/secret/credentials.txt")],
         ),
@@ -900,7 +1067,7 @@ def test_purge_leaves_the_capture_directory_gone(tmp_path: Path) -> None:
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
     capture.hook(
         data,
@@ -926,7 +1093,7 @@ def test_the_session_identity_is_opaque(tmp_path: Path) -> None:
     data = tmp_path / "data"
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
 
     capture.hook(
@@ -1097,7 +1264,7 @@ def test_simultaneous_sessions_keep_separate_identities(tmp_path: Path) -> None:
     data = tmp_path / "data"
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
 
     for session in ("one", "two"):
@@ -1126,7 +1293,7 @@ def test_capture_writes_nothing_outside_its_own_data_directory(
     elsewhere.mkdir()
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
 
     capture.hook(data, "SessionStart", {"session_id": "s", "harness": "claude-code"})
@@ -1271,7 +1438,7 @@ def test_the_hook_path_is_fail_open(tmp_path: Path) -> None:
     # failure the swallow exists for, and it still exits clean.
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
     blocked = tmp_path / "blocked"
     blocked.write_text("not a directory", encoding="utf-8")
@@ -1381,7 +1548,7 @@ def test_a_subagent_briefed_with_an_attempt_is_that_attempt(tmp_path: Path) -> N
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
     stopped = _subagent(
         transcript,
@@ -1410,7 +1577,7 @@ def test_a_subagent_nobody_routed_keeps_the_identity_capture_computes(
 
     transcript = _transcript(
         tmp_path,
-        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:05:00.000Z"),
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
     )
     stopped = _subagent(
         transcript,
