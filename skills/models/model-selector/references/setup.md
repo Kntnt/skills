@@ -24,13 +24,13 @@ It prints what this machine knows about the world: every model with the provider
 
 Offer the ones detected on this machine as the answer and ask only whether that is right. Detection is a filesystem probe: `~/.claude` is Claude Code, `~/.codex` is Codex, `~/.config/opencode` is OpenCode. A Harness the user names that was not detected is accepted — they may be about to install it — and one that was detected and is not wanted is dropped.
 
-The answer decides which models can be reached at all, and which generated subagent definitions are worth writing.
+The answer decides which models can be reached at all. The generated subagent definitions follow the makers chosen in question 2.
 
 ### 2. Which makers
 
 Name the makers the catalogue holds — every distinct `provider` its models carry — each with the models it currently offers and the maker's own one-line description of what each is for, and ask which of them the user wants models from. Show a maker under the name its models are known by: `anthropic` is Claude, `openai` is GPT, and `spacexai` is Grok; any other provider id is shown as the id itself. Record the answer as those ids, never as the display names.
 
-Every model a chosen maker offers is eligible, including one the catalogue gains after this interview, and a maker left out is never recommended however well its models score. The user cannot choose or leave out a single model within a maker: which of them does a given job is what the measurements decide, and a model wanted for one piece of work is named with `--model` on that call. Say so when the question is asked, so that nobody expects a model list to follow.
+Every model a chosen maker offers is eligible, including one the catalogue gains after this interview, and a maker left out is never recommended however well its models score, unless a call asks for `--scope=all`, which admits the whole catalogue. The user cannot choose or leave out a single model within a maker: which of them does a given job is what the measurements decide, and a model wanted for one piece of work is named with `--model` on that call. Say so when the question is asked, so that nobody expects a model list to follow.
 
 This is a question about willingness — an account, a policy, a preference — and not about capability, so do not argue for a maker or characterise one as better. Show the maker's positioning of its models as the maker's, attributed and dated, and do not summarise it, rank the models, or add an opinion of your own: a recommendation from measurement is what this Skill is for, and a recommendation from prose here would contaminate it.
 

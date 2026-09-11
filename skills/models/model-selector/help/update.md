@@ -20,7 +20,7 @@ A model merges field by field over what is in force, so a document saying only w
 
 The report names, per model, whether it was added, changed or unchanged and which fields moved; per provider, which plan list replaced which; and every entry discarded, by name and with the rule it failed. A pass in which nothing changed is a successful pass.
 
-A model discovered is eligible the moment it is written to the catalogue, wherever its maker is one your profile chooses. Nothing has to be enabled by hand, and a model of a maker you did not choose is never recommended.
+A model discovered is eligible the moment it is written to the catalogue, wherever its maker is one your profile chooses. Nothing has to be enabled by hand, and a model of a maker you did not choose is never recommended unless a call asks for `--scope=all`, which admits the whole catalogue.
 
 ## OPTIONS
 
