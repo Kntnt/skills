@@ -373,7 +373,10 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(
         prog="setup_apply.py",
-        description="Write the profile `setup` gathered and sync the agent definitions.",
+        description=(
+            "Write the profile `setup` gathered and sync the agent definitions,"
+            " or write the standing objective on its own."
+        ),
     )
     parser.add_argument("--data")
     parser.add_argument("--agents")
@@ -386,7 +389,7 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Apply one profile, print what happened, and exit 0."""
+    """Apply one profile, or write the standing objective on its own, print what happened, and exit 0."""
 
     args = _parse(argv)
     if args.objective is not None:
