@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.28.0] – 2026-09-11
+
 ### Added
 
 - `/explain` explains the reply just given, or whatever its instruction names, for a clever but busy reader who has not followed the work. It opens with the context they need, explains rather than summarises, keeps every fact, condition, and limitation that could change what they understand or do, and makes any decision or action expected of them unmistakable.
