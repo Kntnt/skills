@@ -123,7 +123,7 @@ def test_load_returns_the_seed_alone_when_nothing_has_been_refreshed(
 def test_a_refreshed_model_replaces_the_seed_entry_of_the_same_id(
     tmp_path: Path,
 ) -> None:
-    """What a person checked this week outranks what the release froze."""
+    """What was read this week outranks what the release froze."""
 
     here = _here(tmp_path, [_model(), _model(id="test-two", family="two")])
     data = tmp_path / "data"
