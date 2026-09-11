@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import importlib.util
 import json
 import os
@@ -194,6 +195,15 @@ def _invoke(
     )
 
 
+def _reading(result: subprocess.CompletedProcess[str]) -> dict[str, Any]:
+    """The JSON a valid invocation's sheet carries, read off its fence."""
+
+    assert result.stdout.startswith("Invocation read.\n\n"), result.stdout
+    fenced = result.stdout.partition("```json\n")[2].partition("\n```")[0]
+    payload: dict[str, Any] = json.loads(fenced)
+    return payload
+
+
 def _synopsis(page: Path) -> str:
     text = page.read_text(encoding="utf-8")
     return text.partition("\n## SYNOPSIS\n")[2].partition("\n## ")[0].strip("\n")
@@ -314,7 +324,7 @@ def test_a_valid_form_answers_with_json_and_the_dependency_payload(
 
     assert result.returncode == EXIT_VALID, result.stderr
     assert result.stderr == ""
-    payload = json.loads(result.stdout)
+    payload = _reading(result)
     assert payload["ok"] is True
     assert payload["path"] == []
     assert payload["flags"] == {"--force": True}
@@ -338,7 +348,7 @@ def test_a_multi_line_instruction_with_quotes_survives_stdin(tmp_path: Path) -> 
     result = _invoke(skill, f"--force --\n\n{instruction}\n", tmp_path)
 
     assert result.returncode == EXIT_VALID, result.stderr
-    assert json.loads(result.stdout)["instruction"] == instruction
+    assert _reading(result)["instruction"] == instruction
 
 
 def test_an_exact_help_form_prints_the_addressed_page_on_its_own_status(
@@ -448,7 +458,7 @@ def test_an_empty_payload_is_the_bare_form(tmp_path: Path) -> None:
 
     accepted = _invoke(admits, "", tmp_path)
     assert accepted.returncode == EXIT_VALID, accepted.stderr
-    payload = json.loads(accepted.stdout)
+    payload = _reading(accepted)
     assert (payload["path"], payload["flags"], payload["operands"]) == ([], {}, [])
     assert payload["instruction"] is None
 
@@ -516,7 +526,7 @@ def test_a_quoted_operand_arrives_without_its_outer_quotes(tmp_path: Path) -> No
         result = _invoke(skill, payload, tmp_path)
 
         assert result.returncode == EXIT_VALID, result.stderr
-        assert json.loads(result.stdout)["operands"] == [message], payload
+        assert _reading(result)["operands"] == [message], payload
 
 
 def test_a_quoted_flag_value_arrives_without_its_outer_quotes(tmp_path: Path) -> None:
@@ -681,19 +691,18 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("--force=on", None),
         ("--yes --yes", None),
     ],
-    "agents/brief": [
-        ("on", {"path": ["on"], "operands": []}),
-        ("off", {"path": ["off"]}),
-        ("status", {"path": ["status"]}),
+    "agents/explain": [
+        ("", {"operands": []}),
         (
-            "on -- keep the security part",
-            {"path": ["on"], "instruction": "keep the security part"},
+            "bara säkerhetsdelen",
+            {"operands": ["bara säkerhetsdelen"], "instruction": None},
         ),
-        ("", None),
-        ("--yes", None),
-        ("on off", None),
-        ("on the security part", None),
-        ("toggle", None),
+        (
+            "-- bara säkerhetsdelen",
+            {"operands": [], "instruction": "bara säkerhetsdelen"},
+        ),
+        ("--only the security part", {"operands": ["--only the security part"]}),
+        ("--  ", None),
     ],
     "agents/delegation": [
         ("", {"path": [], "flags": {}}),
@@ -708,19 +717,6 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("on --project --user", None),
         ("on extra", None),
         ("toggle", None),
-    ],
-    "agents/tldr": [
-        ("", {"operands": []}),
-        (
-            "bara säkerhetsdelen",
-            {"operands": ["bara säkerhetsdelen"], "instruction": None},
-        ),
-        (
-            "-- bara säkerhetsdelen",
-            {"operands": [], "instruction": "bara säkerhetsdelen"},
-        ),
-        ("--only the security part", {"operands": ["--only the security part"]}),
-        ("--  ", None),
     ],
     "code/commit": [
         ("", {"flags": {}, "operands": []}),
@@ -1052,7 +1048,7 @@ def test_the_managers_own_directory_passes_the_dependency_gate(tmp_path: Path) -
     result = _invoke(MANAGER_DIR, "", tmp_path)
 
     assert result.returncode == EXIT_VALID, (result.stdout, result.stderr)
-    payload = json.loads(result.stdout)
+    payload = _reading(result)
     assert payload["ok"] is True
     assert payload["path"] == []
     assert payload["dependencies"] == {
@@ -1170,3 +1166,174 @@ def test_the_record_and_the_rule_state_the_engine() -> None:
     assert RECORD in rule
     for key in ("`path`", "`flags`", "`operands`", "`instruction`", "`dependencies`"):
         assert key in rule, f"{STANDARD} states the JSON shape: {key}"
+
+
+# --- The sheet a valid form answers with -------------------------------------
+
+
+def test_a_valid_form_prints_only_the_directives_this_invocation_needs(
+    tmp_path: Path,
+) -> None:
+    """The engine says what to do with the reading; a body says nothing of it.
+
+    Where the Library is, whether a Capability has to be answered first, and
+    whether an instruction is there to apply under the Envelope contract are
+    three things the engine knows and a body cannot, so they are printed by
+    the engine and only where they apply (ADR-0181).
+    """
+
+    plain = _force_skill(tmp_path / "plain")
+    result = _invoke(plain, "--force", tmp_path)
+    assert result.returncode == EXIT_VALID, result.stderr
+    assert result.stdout.startswith("Invocation read.\n\n`$LIBRARY` is `")
+    assert str(MANAGER_DIR / "library") in result.stdout
+    assert "Capability" not in result.stdout
+    assert "Contextual Instruction" not in result.stdout
+    assert _reading(result)["flags"] == {"--force": True}
+
+    guided = _invoke(plain, "--force -- Preserve deployment facts", tmp_path)
+    assert guided.returncode == EXIT_VALID, guided.stderr
+    assert f"read `{ENVELOPE}` and apply it as that file says" in guided.stdout, (
+        guided.stdout
+    )
+    assert "Capability" not in guided.stdout
+
+    capable = _force_skill(tmp_path / "capable", capabilities=["subagents"])
+    asked = _invoke(capable, "--force", tmp_path)
+    assert asked.returncode == EXIT_VALID, asked.stderr
+    assert "Before anything else, answer each Capability" in asked.stdout
+    assert asked.stdout.index("answer each Capability") < asked.stdout.index("```json")
+    assert _reading(asked)["dependencies"]["capabilities"][0]["name"] == "subagents"
+
+
+# --- The Skill-side shim -----------------------------------------------------
+
+# The one copy of the shim the suite reads the others against. Every Skill on
+# the shim form carries this file byte for byte, the Library that would hold
+# one copy being what the shim exists to find.
+SHIM = SKILLS / "agents" / "explain" / "scripts" / "invoke.py"
+HARNESS_PATHS = MANAGER_DIR / "harness-paths.json"
+
+
+def _shim_skill(root: Path, *, manager_beside: bool) -> Path:
+    """A fixture Skill carrying the shipped shim, with or without a Manager beside it."""
+
+    skill = _force_skill(root / "skills")
+    _write(skill / "scripts" / "invoke.py", SHIM.read_text(encoding="utf-8"))
+    if manager_beside:
+        (root / "skills" / "kntnt").symlink_to(MANAGER_DIR, target_is_directory=True)
+    return skill
+
+
+def _run_shim(
+    skill: Path, payload: str, tmp_path: Path
+) -> subprocess.CompletedProcess[str]:
+    """Run the shim as a body does: `uv run`, the payload on stdin."""
+
+    home = tmp_path / "home"
+    project = tmp_path / "proj"
+    home.mkdir(exist_ok=True)
+    project.mkdir(exist_ok=True)
+    env = os.environ.copy()
+    env["HOME"] = str(home)
+    env["UV_CACHE_DIR"] = str(UV_CACHE)
+    env["KNTNT_HOME"] = str(home)
+    env["KNTNT_PROJECT"] = str(project)
+    return subprocess.run(
+        ["uv", "run", "--quiet", str(skill / "scripts" / "invoke.py")],
+        input=payload,
+        cwd=project,
+        env=env,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def test_the_shim_passes_the_engines_three_answers_through(tmp_path: Path) -> None:
+    """Exit status and stdout are the engine's, whichever of the three it gave."""
+
+    skill = _shim_skill(tmp_path, manager_beside=True)
+
+    valid = _run_shim(skill, "--force -- Preserve deployment facts", tmp_path)
+    assert valid.returncode == EXIT_VALID, (valid.stdout, valid.stderr)
+    assert valid.stderr == ""
+    assert _reading(valid)["instruction"] == "Preserve deployment facts"
+
+    page = _run_shim(skill, "--help", tmp_path)
+    assert page.returncode == EXIT_HELP, (page.stdout, page.stderr)
+    assert page.stdout.rstrip("\n") == (skill / "help.md").read_text(
+        encoding="utf-8"
+    ).rstrip("\n")
+
+    refused = _run_shim(skill, "--bogus", tmp_path)
+    assert refused.returncode == EXIT_REFUSED, (refused.stdout, refused.stderr)
+    assert refused.stdout.rstrip("\n").endswith("see '/skill --help'")
+
+
+def test_the_shim_finds_a_global_manager_when_none_is_beside_the_skill(
+    tmp_path: Path,
+) -> None:
+    """A Project-layer Skill reaches the machine's Manager on its own."""
+
+    skill = _shim_skill(tmp_path, manager_beside=False)
+    global_skills = tmp_path / "home" / ".claude" / "skills"
+    global_skills.mkdir(parents=True)
+    (global_skills / "kntnt").symlink_to(MANAGER_DIR, target_is_directory=True)
+
+    result = _run_shim(skill, "--force", tmp_path)
+
+    assert result.returncode == EXIT_VALID, (result.stdout, result.stderr)
+    assert _reading(result)["flags"] == {"--force": True}
+
+
+def test_the_shim_names_the_install_where_no_manager_is_found(tmp_path: Path) -> None:
+    skill = _shim_skill(tmp_path, manager_beside=False)
+
+    result = _run_shim(skill, "--force", tmp_path)
+
+    assert result.returncode == EXIT_REFUSED, (result.stdout, result.stderr)
+    assert "npx skills add Kntnt/skills" in result.stdout
+    assert result.stderr == ""
+
+
+def test_the_shim_names_the_update_where_the_manager_has_no_engine(
+    tmp_path: Path,
+) -> None:
+    """A Manager from before ADR-0181 answers `invoke` with an argparse error."""
+
+    skill = _shim_skill(tmp_path, manager_beside=False)
+    _write(
+        tmp_path / "skills" / "kntnt" / "scripts" / "kntnt.py",
+        '# /// script\n# requires-python = ">=3.12"\n# ///\n'
+        "import argparse\n"
+        "parser = argparse.ArgumentParser()\n"
+        "parser.add_subparsers(dest='command').add_parser('check')\n"
+        "parser.parse_args()\n",
+    )
+
+    result = _run_shim(skill, "--force", tmp_path)
+
+    assert result.returncode == EXIT_REFUSED, (result.stdout, result.stderr)
+    assert "/kntnt update" in result.stdout
+    assert result.stderr == ""
+
+
+def test_the_shim_knows_every_global_directory_the_manager_knows() -> None:
+    """The shim's Global list is `harness-paths.json`, and drifts from it nowhere."""
+
+    # Read the tuple off the source rather than importing the shim, which
+    # would write bytecode into a shipped tree.
+    source = SHIM.read_text(encoding="utf-8")
+    literal = source.partition("\nGLOBAL_SKILLS = ")[2].partition("\n)\n")[0] + "\n)"
+    global_skills = ast.literal_eval(literal)
+    paths = json.loads(HARNESS_PATHS.read_text(encoding="utf-8"))
+
+    assert sorted(global_skills) == sorted(
+        {entry["global"] for entry in paths.values() if "global" in entry}
+    ), (
+        f"{SHIM}: GLOBAL_SKILLS is not the set of Global directories in"
+        f" {HARNESS_PATHS}. The shim finds a Manager under a Global harness"
+        f" skills directory it knows and no other, so the list is that file's"
+        f" (ADR-0181). See {STANDARD}."
+    )

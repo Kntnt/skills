@@ -62,23 +62,17 @@ Keep a project's `AGENTS.md`, `CLAUDE.md`, and `agents.d/` concise and current. 
 
 Run `/agents-md [--force] [--yes] [path]`.
 
-### brief
-
-Keep later replies concise and decision-focused, and drop the perspective again when you are done with it. The mode belongs to the conversation it is typed in: it holds until you turn it off or the conversation ends, nothing is written anywhere, and two windows on the same project hold independent states.
-
-Run `/brief on` or `/brief off`. Run `/brief status` to see which state this conversation is in.
-
 ### delegation
 
 Let the main agent decide, plan, and verify while subagents perform selected work routed by `model-selector` unless run on the frozen main seat with no override. The mode can apply to the session, project, or current harness user.
 
 Run `/delegation`, `/delegation on|off [--project|--user] [--yes]`, or `/delegation status [--project|--user]`.
 
-### tldr
+### explain
 
-Explain the answer just given to somebody who delegated the work and therefore did not follow it. The reply is treated as correct but pitched at the wrong reader, so the re-explanation adds the background the original assumed and unpacks the terms belonging to this work alone, while the ordinary technical vocabulary you already use stays as it is. It always closes by naming what you have to do — or saying plainly that nothing is asked of you.
+Explain the reply just given, or whatever you name in the instruction, better than it was explained the first time. It is written for somebody clever but busy who has not followed the work: it opens with the context you need, explains rather than summarises, keeps every fact, condition, and limitation that could change what you understand or do, and makes any decision or action expected of you unmistakable.
 
-Run `/tldr`, optionally followed by an instruction such as `/tldr bara säkerhetsdelen`.
+Run `/explain`, optionally followed by an instruction such as `/explain bara säkerhetsdelen`.
 
 ### commit
 

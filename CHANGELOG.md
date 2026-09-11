@@ -4,6 +4,18 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- `/explain` explains the reply just given, or whatever its instruction names, for a clever but busy reader who has not followed the work. It opens with the context they need, explains rather than summarises, keeps every fact, condition, and limitation that could change what they understand or do, and makes any decision or action expected of them unmistakable.
+
+### Changed
+
+- A Skill's body no longer opens with three paragraphs on where the Manager is, how the engine is called, and what its JSON holds. `/explain`, the first Skill on the new form, ships `scripts/invoke.py`, a shim that finds the Manager beside the Skill or under a Global harness skills directory and hands the invocation to `kntnt.py invoke`; its body says one sentence — run the shim with the payload on stdin, and do what it prints. The engine's answer on a valid form now says what a body used to: `$LIBRARY`, the Capabilities to answer first where the Skill declares any, and the Envelope contract to read where a Contextual Instruction was given, each printed only where it applies, with the reading itself as fenced JSON. Every other Skill keeps the previous opening until the form is rolled out.
+
+### Removed
+
+- `/tldr` and `/brief`, replaced by `/explain`. The re-explanation the first gave and the standing perspective the second adopted are one need — a reply the reader could follow — and one Skill now answers it, on demand, without a mode to turn on and off.
+
 ## [0.27.0] – 2026-09-11
 
 ### Added
