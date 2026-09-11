@@ -57,6 +57,7 @@ def _module(stem: str) -> Any:
 catalogue = _module("catalogue")
 profiles = _module("profiles")
 launch = _module("launch")
+evidence = _module("evidence")
 
 
 # --- The recorded payloads ---------------------------------------------------
@@ -1250,3 +1251,590 @@ def test_per_million_conversion_is_decimal_and_rounded_to_six_places() -> None:
     assert catalogue.per_million("0.000000125") == 0.125
     assert catalogue.per_million("0.0000000000001") == 0.0
     assert Decimal(str(catalogue.per_million("0.00001"))) == Decimal(10)
+
+
+# --- A model gone from its maker's list ------------------------------------------
+
+DAY = timedelta(days=1)
+GONE = "gpt-5.6-luna"
+
+
+def _codex_without(model: str = GONE, *, hidden: bool = False) -> list[dict[str, Any]]:
+    """Return the recorded Codex pages with *model* dropped, or marked hidden."""
+
+    pages = copy.deepcopy(_codex_pages())
+    for page in pages:
+        if hidden:
+            for entry in page["data"]:
+                if entry["model"] == model:
+                    entry["hidden"] = True
+        else:
+            page["data"] = [entry for entry in page["data"] if entry["model"] != model]
+    return pages
+
+
+def _failing(reason: str) -> Reader:
+    """Return a reader whose source could not be read at all."""
+
+    return lambda started: catalogue.unreadable("codex", reason)
+
+
+def _measured(
+    data: Path, model: str, count: int, *, grade: float = 1.0, first: int = 0
+) -> None:
+    """Append *count* measurement rows for *model*, in the shape the ledger holds."""
+
+    evidence.append(
+        data,
+        [
+            {
+                "attempt_id": f"{model}-{first + index}",
+                "at": "2026-09-10T10:00:00Z",
+                "kind": "implement",
+                "label": None,
+                "model": model,
+                "deliberation": "high",
+                "harness": "codex",
+                "channel": None,
+                "grade": grade,
+                "graded_by": "signal",
+                "tokens": {"output": 1000.0},
+                "cost_usd": None,
+                "seconds": 60.0,
+                "routed": False,
+            }
+            for index in range(count)
+        ],
+    )
+
+
+def _waiting(data: Path, model: str, *units: str, failure: str | None = None) -> None:
+    """Append pending Units for *model*, each carrying `last_failure` where given."""
+
+    with (data / "pending.jsonl").open("a", encoding="utf-8") as stream:
+        for unit in units:
+            row: dict[str, Any] = {"unit_id": unit, "model": model}
+            if failure is not None:
+                row["last_failure"] = failure
+                row["attempts"] = 1
+            stream.write(json.dumps(row, sort_keys=True) + "\n")
+
+
+def _ledger(data: Path) -> list[str]:
+    """Return the model of every measurement row, in ledger order."""
+
+    return [row.model for row in evidence.load(data)]
+
+
+def _queued(data: Path) -> list[str]:
+    """Return the model of every pending Unit, in queue order."""
+
+    path = data / "pending.jsonl"
+    if not path.exists():
+        return []
+    return [
+        json.loads(line)["model"]
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
+def _lifecycle(data: Path) -> dict[str, Any]:
+    """Return what `lifecycle.json` holds per model, or nothing where it is absent."""
+
+    path = data / "lifecycle.json"
+    if not path.exists():
+        return {}
+    held: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))["models"]
+    return held
+
+
+def _days(
+    here: Path,
+    data: Path,
+    agents: Path,
+    count: int,
+    *,
+    first: datetime = NOW,
+    **readers: Any,
+) -> list[dict[str, Any]]:
+    """Run one pass a day on *count* consecutive days, and return their reports."""
+
+    return [
+        _pass(here, data, agents, now=first + index * DAY, **readers)
+        for index in range(count)
+    ]
+
+
+def _removals(data: Path) -> list[dict[str, Any]]:
+    """Return every removal the journal holds."""
+
+    return [row for row in _journal(data) if row["field"] == "removed"]
+
+
+def test_a_model_missing_from_three_complete_lists_on_three_days_is_removed_with_its_evidence(
+    tmp_path: Path,
+) -> None:
+    """Its entry, every measurement row and every pending Unit go, and the journal says so."""
+
+    here, data, agents = _machine(tmp_path)
+    _measured(data, GONE, 3)
+    _measured(data, "gpt-5.6-sol", 2)
+    _waiting(data, GONE, "u1", "u2")
+    _waiting(data, "gpt-5.6-sol", "u3")
+
+    _days(here, data, agents, 2, codex=_codex_without())
+    assert _model(here, data, GONE) is not None
+    assert _ledger(data).count(GONE) == 3
+
+    _pass(here, data, agents, now=NOW + 2 * DAY, codex=_codex_without())
+
+    assert _model(here, data, GONE) is None
+    assert _ledger(data) == ["gpt-5.6-sol", "gpt-5.6-sol"]
+    assert _queued(data) == ["gpt-5.6-sol"]
+    days = [(NOW + index * DAY).date().isoformat() for index in range(3)]
+    assert _removals(data) == [
+        {
+            "at": _stamp(NOW + 2 * DAY),
+            "source": "codex",
+            "model": GONE,
+            "field": "removed",
+            "old": None,
+            "new": {"absent_days": days, "rows_deleted": 3, "units_dropped": 2},
+        }
+    ]
+    record = _lifecycle(data)[GONE]
+    assert record["absent_days"] == days
+    assert (record["rows_deleted"], record["units_dropped"]) == (3, 2)
+
+
+def test_a_failed_read_breaks_the_run_of_absent_days(tmp_path: Path) -> None:
+    """Absent, unreadable, absent, absent: a quota running out is no observation."""
+
+    here, data, agents = _machine(tmp_path)
+    _measured(data, GONE, 1)
+
+    _pass(here, data, agents, now=NOW, codex=_codex_without())
+    _pass(
+        here,
+        data,
+        agents,
+        now=NOW + DAY,
+        overrides={"codex": _failing("the weekly quota ran out")},
+    )
+    _days(here, data, agents, 2, first=NOW + 2 * DAY, codex=_codex_without())
+
+    assert _model(here, data, GONE) is not None
+    assert _ledger(data) == [GONE]
+    assert _removals(data) == []
+
+
+def test_a_day_on_which_the_list_shows_the_model_resets_the_run(tmp_path: Path) -> None:
+    """Absent, present, absent, absent removes nothing."""
+
+    here, data, agents = _machine(tmp_path)
+
+    _pass(here, data, agents, now=NOW, codex=_codex_without())
+    _pass(here, data, agents, now=NOW + DAY)
+    _days(here, data, agents, 2, first=NOW + 2 * DAY, codex=_codex_without())
+
+    assert _model(here, data, GONE) is not None
+    assert _removals(data) == []
+
+
+def test_a_day_with_no_complete_read_breaks_the_run(tmp_path: Path) -> None:
+    """Two absent days, a day read only from Codex's bundled list, then an absent day."""
+
+    here, data, agents = _machine(tmp_path)
+
+    _days(here, data, agents, 2, codex=_codex_without())
+    _pass(
+        here,
+        data,
+        agents,
+        now=NOW + 2 * DAY,
+        codex=_codex_without(),
+        cache_age=timedelta(hours=2),
+    )
+    _pass(here, data, agents, now=NOW + 3 * DAY, codex=_codex_without())
+
+    assert _model(here, data, GONE) is not None
+    assert _removals(data) == []
+
+
+def test_a_day_with_no_pass_at_all_breaks_the_run(tmp_path: Path) -> None:
+    """Three absent passes on days that are not consecutive are not three days in a row."""
+
+    here, data, agents = _machine(tmp_path)
+
+    _days(here, data, agents, 2, codex=_codex_without())
+    _pass(here, data, agents, now=NOW + 3 * DAY, codex=_codex_without())
+
+    assert _model(here, data, GONE) is not None
+
+
+def test_three_failed_runs_of_a_model_its_list_still_shows_remove_nothing(
+    tmp_path: Path,
+) -> None:
+    """Failing to run is channel health, and never a signal that a model is gone."""
+
+    here, data, agents = _machine(tmp_path)
+    _measured(data, GONE, 3, grade=0.0)
+    _waiting(data, GONE, "u1", "u2", failure="exited-nonzero")
+
+    _days(here, data, agents, 3)
+
+    assert _model(here, data, GONE) is not None
+    assert _ledger(data) == [GONE, GONE, GONE]
+    assert _queued(data) == [GONE, GONE]
+    assert _removals(data) == []
+    assert _lifecycle(data) == {}
+
+
+def test_presence_is_judged_on_the_version_identifier_each_list_names(
+    tmp_path: Path,
+) -> None:
+    """`claude-opus-5[1m]` is `claude-opus-5`, and `x-ai/grok-4.6` is `grok-4.6`."""
+
+    here, data, agents = _machine(tmp_path)
+    before = {model.id for model in catalogue.load(data, here).models}
+
+    _days(here, data, agents, 3)
+
+    after = {model.id for model in catalogue.load(data, here).models}
+    assert {"claude-opus-5", "grok-4.6"} <= after
+    assert before <= after
+    assert _removals(data) == []
+    assert _lifecycle(data) == {}
+
+
+def test_a_model_the_codex_list_returns_marked_hidden_is_present(
+    tmp_path: Path,
+) -> None:
+    """Deletion cannot be undone, so only a model the list no longer returns is absent."""
+
+    here, data, agents = _machine(tmp_path)
+    _measured(data, GONE, 1)
+
+    _days(here, data, agents, 3, codex=_codex_without(hidden=True))
+
+    assert _model(here, data, GONE) is not None
+    assert _ledger(data) == [GONE]
+
+
+def test_a_family_alias_moved_to_a_successor_does_not_keep_the_old_release(
+    tmp_path: Path,
+) -> None:
+    """`opus` naming `claude-opus-6` counts `claude-opus-5` absent, and its definitions go."""
+
+    here, data, agents = _machine(tmp_path)
+    _pass(here, data, agents, now=NOW - DAY)
+    assert "claude-opus-5" in (agents / "kntnt-opus-high.md").read_text(
+        encoding="utf-8"
+    )
+
+    succeeded = _claude_messages()
+    for entry in _claude_models(succeeded):
+        if entry["resolvedModel"] == "claude-opus-5[1m]":
+            entry["resolvedModel"] = "claude-opus-6[1m]"
+    _days(here, data, agents, 3, claude=succeeded)
+
+    assert _model(here, data, "claude-opus-5") is None
+    assert _model(here, data, "claude-opus-6") is not None
+    named = [path.read_text(encoding="utf-8") for path in agents.glob("kntnt-*.md")]
+    assert named
+    assert not any("claude-opus-5" in text for text in named)
+    assert "claude-opus-6" in (agents / "kntnt-opus-high.md").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_a_removed_model_gone_from_every_file_leaves_no_definitions_of_its_family(
+    tmp_path: Path,
+) -> None:
+    """A family with no release remaining has its definitions removed."""
+
+    here, data, agents = _machine(tmp_path)
+    _pass(here, data, agents, now=NOW - DAY)
+    assert (agents / "kntnt-sonnet-high.md").is_file()
+    dropped = _claude_messages()
+    models = _claude_models(dropped)
+    models[:] = [entry for entry in models if entry["value"] != "sonnet"]
+
+    reports = _days(here, data, agents, 3, claude=dropped)
+
+    assert _model(here, data, "claude-sonnet-5") is None
+    assert not list(agents.glob("kntnt-sonnet-*.md"))
+    assert "kntnt-sonnet-high.md" in reports[-1]["definitions"]["removed"]
+
+
+def test_a_removed_seed_model_stays_removed_across_a_reload_and_an_adopt(
+    tmp_path: Path,
+) -> None:
+    """The mask hides the seed's copy, and an `adopt` rewriting `catalogue.json` keeps it."""
+
+    here, data, agents = _machine(tmp_path)
+    _days(here, data, agents, 3, codex=_codex_without())
+    assert _model(here, data, GONE) is None
+
+    document = tmp_path / "fetched.json"
+    document.write_text(
+        json.dumps(
+            {
+                "models": [
+                    {
+                        "id": "gpt-5.6-sol",
+                        "price": {"input": 3.0},
+                        "source_url": "https://example.com",
+                        "retrieved": "2026-09-14",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert catalogue.adopt(data, here, document)["written"] is not None
+
+    assert _model(here, data, GONE) is None
+    assert GONE in _lifecycle(data)
+    assert _model(here, data, "gpt-5.6-sol").price.input == 3.0
+
+
+def test_a_row_filed_for_a_removed_model_after_its_removal_is_deleted_by_the_next_pass(
+    tmp_path: Path,
+) -> None:
+    """Capture appends without a lock, so every pass clears the ids it removed."""
+
+    here, data, agents = _machine(tmp_path)
+    _measured(data, GONE, 2)
+    _days(here, data, agents, 3, codex=_codex_without())
+    _measured(data, GONE, 1, first=10)
+    _waiting(data, GONE, "late")
+
+    _pass(here, data, agents, now=NOW + 3 * DAY, codex=_codex_without())
+
+    assert _ledger(data) == []
+    assert _queued(data) == []
+    record = _lifecycle(data)[GONE]
+    assert (record["rows_deleted"], record["units_dropped"]) == (3, 1)
+    assert len(_removals(data)) == 1
+
+
+def test_a_pass_that_chooses_no_maker_still_clears_the_rows_of_removed_models(
+    tmp_path: Path,
+) -> None:
+    """Nothing is read, but a row capture filed after the removal still goes."""
+
+    here, data, agents = _machine(tmp_path)
+    _days(here, data, agents, 3, codex=_codex_without())
+    _measured(data, GONE, 2)
+    (data / "profile.json").unlink()
+
+    report = _pass(here, data, agents, now=NOW + 3 * DAY)
+
+    assert report["outcome"] == "no makers chosen"
+    assert _ledger(data) == []
+    assert _lifecycle(data)[GONE]["rows_deleted"] == 2
+
+
+def test_a_removed_model_re_added_by_its_list_is_an_ordinary_model_again(
+    tmp_path: Path,
+) -> None:
+    """The re-add ends the removal: its rows are kept, and `lifecycle.json` forgets it."""
+
+    here, data, agents = _machine(tmp_path)
+    _days(here, data, agents, 3, codex=_codex_without())
+    assert _model(here, data, GONE) is None
+
+    _pass(here, data, agents, now=NOW + 3 * DAY)
+    assert _model(here, data, GONE) is not None
+    assert GONE not in _lifecycle(data)
+    _measured(data, GONE, 1)
+    _waiting(data, GONE, "after")
+
+    _pass(here, data, agents, now=NOW + 4 * DAY)
+
+    assert _ledger(data) == [GONE]
+    assert _queued(data) == [GONE]
+    assert GONE not in _lifecycle(data)
+
+
+def test_a_removed_model_re_added_through_adopt_is_forgotten_in_the_same_operation(
+    tmp_path: Path,
+) -> None:
+    """A pass running before the next refresh never deletes a row filed after the re-add."""
+
+    here, data, agents = _machine(tmp_path)
+    _days(here, data, agents, 3, codex=_codex_without())
+    document = tmp_path / "fetched.json"
+    document.write_text(
+        json.dumps(
+            {
+                "models": [
+                    {
+                        "id": GONE,
+                        "provider": "openai",
+                        "family": "luna",
+                        "source_url": "https://example.com",
+                        "retrieved": "2026-09-14",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    catalogue.adopt(data, here, document)
+
+    assert _model(here, data, GONE) is not None
+    assert GONE not in _lifecycle(data)
+
+
+def test_with_the_lock_busy_the_model_is_removed_and_its_rows_wait_for_the_next_pass(
+    tmp_path: Path,
+) -> None:
+    """The catalogue entry goes at once; the rows go when a pass gets the lock."""
+
+    here, data, agents = _machine(tmp_path)
+    _measured(data, GONE, 2)
+    _waiting(data, GONE, "u1")
+    _days(here, data, agents, 2, codex=_codex_without())
+
+    with evidence.lock(data) as held:
+        assert held is True
+        _pass(here, data, agents, now=NOW + 2 * DAY, codex=_codex_without())
+
+    assert _model(here, data, GONE) is None
+    assert _ledger(data) == [GONE, GONE]
+    assert _removals(data)[0]["new"]["rows_deleted"] == 0
+
+    _pass(here, data, agents, now=NOW + 3 * DAY, codex=_codex_without())
+
+    assert _ledger(data) == []
+    assert _queued(data) == []
+    record = _lifecycle(data)[GONE]
+    assert (record["rows_deleted"], record["units_dropped"]) == (2, 1)
+
+
+def test_the_first_absent_read_on_the_third_day_removes_the_model(
+    tmp_path: Path,
+) -> None:
+    """Each day is judged on the reads made so far that day."""
+
+    here, data, agents = _machine(tmp_path)
+    _days(here, data, agents, 2, codex=_codex_without())
+
+    _pass(here, data, agents, now=NOW + 2 * DAY, codex=_codex_without())
+
+    assert _model(here, data, GONE) is None
+
+
+def test_a_day_any_complete_read_showed_the_model_is_not_absent(
+    tmp_path: Path,
+) -> None:
+    """Shown in the morning and missing in the evening is a day it was present."""
+
+    here, data, agents = _machine(tmp_path)
+    _days(here, data, agents, 2, codex=_codex_without())
+    _pass(here, data, agents, now=NOW + 2 * DAY)
+
+    _pass(
+        here,
+        data,
+        agents,
+        now=NOW + 2 * DAY + timedelta(hours=6),
+        codex=_codex_without(),
+    )
+    _pass(here, data, agents, now=NOW + 3 * DAY, codex=_codex_without())
+
+    assert _model(here, data, GONE) is not None
+
+
+def test_a_grok_model_adopt_left_without_a_slug_is_present_by_the_slug_the_pass_writes(
+    tmp_path: Path,
+) -> None:
+    """The slug write-back runs before presence is judged."""
+
+    here, data, agents = _machine(tmp_path)
+    (data / "catalogue.json").write_text(
+        json.dumps(
+            {
+                "generated_at": "2026-09-10T00:00:00Z",
+                "models": [
+                    {
+                        **dict.fromkeys(catalogue.MODEL_FIELDS),
+                        "id": "grok-4.5",
+                        "provider": "spacexai",
+                        "family": "grok",
+                        "aliases": [],
+                        "deliberation": ["low", "high"],
+                        "reasoning_billed_as": "output",
+                        "source_url": "https://example.com",
+                        "retrieved": "2026-09-10",
+                    }
+                ],
+                "plans": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    _pass(here, data, agents)
+
+    assert "grok-4.5" not in _lifecycle(data)
+    assert dict(_model(here, data, "grok-4.5").gateways) == {
+        "openrouter": "x-ai/grok-4.5"
+    }
+
+
+def test_a_grok_model_missing_from_openrouter_s_complete_list_is_removed(
+    tmp_path: Path,
+) -> None:
+    """For Grok, its maker's list is OpenRouter's public one."""
+
+    here, data, agents = _machine(tmp_path)
+    payload = _openrouter()
+    payload["data"] = [
+        entry for entry in payload["data"] if entry["id"] != "x-ai/grok-4.6"
+    ]
+    payload["total_count"] = len(payload["data"])
+
+    _days(here, data, agents, 3, openrouter=payload)
+
+    assert _model(here, data, "grok-4.6") is None
+    assert _removals(data)[0]["source"] == "openrouter"
+
+
+def test_the_journal_subcommand_shows_every_removal_with_its_dates_and_counts(
+    tmp_path: Path,
+) -> None:
+    """Status reports the removal, its three dates, and rows and Units as two numbers."""
+
+    here, data, agents = _machine(tmp_path)
+    _measured(data, GONE, 2)
+    _waiting(data, GONE, "u1")
+    _days(here, data, agents, 3, codex=_codex_without())
+    _measured(data, GONE, 1, first=10)
+    _pass(here, data, agents, now=NOW + 3 * DAY, codex=_codex_without())
+    days = [(NOW + index * DAY).date().isoformat() for index in range(3)]
+
+    recent = catalogue.journal(data, 7, now=NOW + 3 * DAY)
+    later = catalogue.journal(data, 7, now=NOW + 30 * DAY)
+
+    removal = [row for row in recent["journal"] if row["field"] == "removed"]
+    assert removal[0]["new"] == {
+        "absent_days": days,
+        "rows_deleted": 2,
+        "units_dropped": 1,
+    }
+    for shown in (recent, later):
+        assert shown["removed"] == [
+            {
+                "model": GONE,
+                "absent_days": days,
+                "removed_at": _stamp(NOW + 2 * DAY),
+                "rows_deleted": 3,
+                "units_dropped": 1,
+            }
+        ]
+    assert later["journal"] == []

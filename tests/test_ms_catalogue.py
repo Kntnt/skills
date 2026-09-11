@@ -409,8 +409,9 @@ def test_a_refreshed_plan_list_replaces_the_seed_plans_of_that_provider(
 ) -> None:
     """A retired plan has to be able to disappear, which a merge by name cannot do.
 
-    Models merge entry by entry because a model that existed still exists. A
-    plan that a provider stopped selling is an option this Skill would go on
+    Models merge entry by entry because a refresh that says nothing about a
+    model is no evidence that it is gone; only its maker's own list says that.
+    A plan that a provider stopped selling is an option this Skill would go on
     offering forever, and offering a wrong list is the defect being fixed.
     """
 

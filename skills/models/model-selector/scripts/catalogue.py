@@ -13,7 +13,9 @@ because a fact read this week outranks a fact this repository froze at
 release — except for the fields `update` never reads — `capability`, which
 nothing fetches, and `gateways`, which only the seed and the catalogue pass's
 matching write — and which a refreshed entry carrying none of them takes from
-the seed.
+the seed. A model its maker stopped listing is removed by the catalogue pass,
+and `lifecycle.json` beside the refreshed file masks the seed's copy of it, so
+that no later load or release of the seed brings it back.
 
 Nothing here raises. A catalogue that cannot be read is a catalogue that says
 so in `problem` and hands back what it still has, because every caller of this
@@ -36,7 +38,7 @@ import tempfile
 import time
 import urllib.parse
 import urllib.request
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Collection, Mapping, Sequence
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal, InvalidOperation
@@ -190,6 +192,11 @@ class Catalogue:
 def load(data_dir: Path, here: Path) -> Catalogue:
     """Merge the shipped seed with the refreshed file, the refreshed one winning.
 
+    A model the catalogue pass removed is masked out of the seed, since the
+    seed goes on carrying whatever it was released with. The mask covers the
+    seed's copy alone: an entry for that id in the refreshed file shows
+    through it, a re-added model being an ordinary one.
+
     A missing or unreadable refreshed file leaves the seed standing and is
     reported in `problem`; only a seed that will not parse empties the answer,
     because at that point the Skill knows nothing at all about the world.
@@ -200,13 +207,19 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     if seed_problem is not None:
         return Catalogue((), (), "", seed_problem)
 
-    # The refreshed file overrides model by model, so a partial refresh is
-    # additive rather than a replacement of everything the seed knew.
+    # The refreshed file overrides model by model, so a refresh that says
+    # nothing about a model leaves the seed's copy standing. Only a removal
+    # recorded in `lifecycle.json` takes the seed's copy away.
     refreshed, refreshed_plans, refreshed_generated, refresh_problem = _read(
         data_dir / REFRESHED_FILE
     )
+    masked = _removed(_lifecycle(data_dir))
     seeded: dict[str, Model] = {model.id: model for model in seed}
-    merged = dict(seeded)
+    merged = {
+        identifier: model
+        for identifier, model in seeded.items()
+        if identifier not in masked
+    }
     for model in refreshed:
         merged[model.id] = _with_seeded_fields(model, seeded.get(model.id))
 
@@ -242,11 +255,13 @@ def _with_seeded_fields(model: Model, seeded: Model | None) -> Model:
 def _merged_plans(seed: Sequence[Plan], refreshed: Sequence[Plan]) -> tuple[Plan, ...]:
     """Return the plans in force, a refreshed provider replacing the seed's whole.
 
-    Models merge entry by entry, a model that existed being a model that still
-    exists. A plan is not like that: a provider retires one, and a merge by
-    name would go on offering it to somebody choosing how they pay for as long
-    as this Skill is installed. So a provider the refreshed file speaks about
-    at all is a provider whose plans it states in full.
+    Models merge entry by entry, because a refresh that says nothing about a
+    model is no evidence that it is gone; that is established only by its
+    maker's own list, and the catalogue pass records it in `lifecycle.json`.
+    Plans have no such list: a provider retires one, and a merge by name would
+    go on offering it to somebody choosing how they pay for as long as this
+    Skill is installed. So a provider the refreshed file speaks about at all is
+    a provider whose plans it states in full.
     """
 
     spoken = {plan.provider for plan in refreshed}
@@ -344,6 +359,11 @@ def adopt(
         encoding="utf-8",
     )
     staged.replace(target)
+
+    # A removed model this document brings back is an ordinary model again,
+    # and forgetting its removal in the same operation is what stops a pass
+    # running before the next refresh from deleting the rows filed since.
+    _forget_removals(data_dir, [entry["id"] for entry in adopted])
 
     report["written"] = str(target)
     report["generated_at"] = stamp
@@ -1015,6 +1035,25 @@ _PLACES = Decimal("0.000001")
 
 JOURNAL_FILE = "catalogue-journal.jsonl"
 PASS_FILE = "refresh.json"
+
+# Where a model's run of absent days and its removal are kept. Apart from
+# `catalogue.json`, which `adopt` rewrites whole, and apart from the evidence,
+# which `reset --evidence` discards: this is catalogue state.
+LIFECYCLE_FILE = "lifecycle.json"
+
+# How many consecutive UTC days a model must be missing from its maker's
+# complete list before it is gone. Deletion cannot be undone, and a vendor's
+# list is occasionally wrong for a day.
+GONE_AFTER_DAYS = 3
+
+# Which list says whether a model of each maker still exists. The two harness
+# lists speak for the makers they list; Grok is reached only through
+# OpenRouter, so OpenRouter's public list is its maker's list.
+PRESENCE_SOURCES = (
+    ("claude", "anthropic"),
+    ("codex", "openai"),
+    ("openrouter", "spacexai"),
+)
 NO_MAKERS = "no makers chosen"
 NO_PRICE_SOURCE = "no price source"
 OUTCOMES = ("complete", "incomplete", "unreadable")
@@ -1043,6 +1082,11 @@ class Reading:
     `complete` is a whole answer. `incomplete` is a positive answer that may
     be missing entries, and never evidence that something is gone. An
     `unreadable` source changes nothing it governs.
+
+    `returned` is the version identifier of every entry a harness list
+    returned, hidden ones included, which is what presence is judged on:
+    `listed` leaves hidden entries out, and a model the list still returns
+    is not a model that is gone.
     """
 
     source: str
@@ -1050,6 +1094,7 @@ class Reading:
     reason: str | None
     listed: tuple[Offer, ...] = ()
     entries: tuple[Mapping[str, Any], ...] = ()
+    returned: tuple[str, ...] = ()
 
 
 def unreadable(source: str, reason: str) -> Reading:
@@ -1126,11 +1171,14 @@ def claude_reading(messages: Sequence[Any]) -> Reading:
         )
 
     offers: dict[str, Offer] = {}
+    returned: dict[str, None] = {}
     for entry in models:
         if not isinstance(entry, dict):
             continue
         value = _text(entry.get("value"))
         resolved = _text(entry.get("resolvedModel"))
+        if resolved and value != "default":
+            returned[_unbracketed(resolved)] = None
         if not value or not resolved or value == "default":
             continue
         identifier = _unbracketed(resolved)
@@ -1146,7 +1194,9 @@ def claude_reading(messages: Sequence[Any]) -> Reading:
             levels if held is None or held.levels is None else held.levels,
         )
 
-    return Reading("claude", "complete", None, tuple(offers.values()))
+    return Reading(
+        "claude", "complete", None, tuple(offers.values()), returned=tuple(returned)
+    )
 
 
 def codex_reading(
@@ -1170,13 +1220,17 @@ def codex_reading(
         return unreadable("codex", failure or "Codex's `model/list` answered no data")
 
     offers: dict[str, Offer] = {}
+    returned: dict[str, None] = {}
     for page in pages:
         data = page.get("data") if isinstance(page, dict) else None
         for entry in data if isinstance(data, list) else []:
-            if not isinstance(entry, dict) or entry.get("hidden") is True:
+            if not isinstance(entry, dict):
                 continue
             identifier = _text(entry.get("model")) or _text(entry.get("id"))
             if not identifier:
+                continue
+            returned[identifier] = None
+            if entry.get("hidden") is True:
                 continue
             efforts = entry.get("supportedReasoningEfforts")
             named = (
@@ -1192,12 +1246,13 @@ def codex_reading(
             )
 
     listed = tuple(offers.values())
+    every = tuple(returned)
     if failure is not None:
-        return Reading("codex", "incomplete", failure, listed)
+        return Reading("codex", "incomplete", failure, listed, returned=every)
     stale = _stale(fetched_at, started)
     if stale is not None:
-        return Reading("codex", "incomplete", stale, listed)
-    return Reading("codex", "complete", None, listed)
+        return Reading("codex", "incomplete", stale, listed, returned=every)
+    return Reading("codex", "complete", None, listed, returned=every)
 
 
 def openrouter_reading(pages: Sequence[Any], failure: str | None = None) -> Reading:
@@ -1412,6 +1467,14 @@ def refresh(
     profile chooses no maker, so nothing is read and only `refresh.json` is
     written, saying so.
 
+    A model missing from its maker's complete list on three consecutive UTC
+    days is gone: its entry is removed, the seed's copy masked, and every
+    measurement row and pending Unit of it deleted. Only a complete read is an
+    observation, so a failed or partial one breaks the run rather than
+    extending it, and a failure to run a model is never one at all. Every
+    pass, one choosing no maker included, deletes whatever rows have been
+    filed since for the models it removed.
+
     Each entry is checked by the same validator `adopt` uses before it is
     written, and the stored file is written whole, the plans carried through,
     so `load` never falls back to the seed by accident. After any write the
@@ -1425,11 +1488,20 @@ def refresh(
 
     started = (now or datetime.now(UTC)).astimezone(UTC)
     stamp = _instant(started)
+    today = started.date().isoformat()
     cat = load(data_dir, here)
     profile = profiles.load(data_dir, cat)
     makers = frozenset(profile.makers) if profile.source != "fallback" else frozenset()
+    previous = _last_pass(data_dir / PASS_FILE)
+    seen = _seen_today(previous, today)
+    records = _lifecycle(data_dir)
+    held = _document_of(records)
     if not makers:
         report: dict[str, Any] = {"at": stamp, "outcome": NO_MAKERS}
+        if seen:
+            report["present"] = {"day": today, "models": sorted(seen)}
+        if _removed(records):
+            report["lifecycle"] = _settle_lifecycle(data_dir, records, held, {})
         _replace_json(data_dir / PASS_FILE, report)
         return report
 
@@ -1440,12 +1512,11 @@ def refresh(
         for source in consulted
     }
 
-    previous = _last_pass(data_dir / PASS_FILE)
     step = _Pass(
         {model.id: _entry(model) for model in cat.models},
         makers,
         stamp,
-        started.date().isoformat(),
+        today,
         frozenset(previous.get("unmatched") or ())
         if isinstance(previous.get("unmatched"), list)
         else frozenset(),
@@ -1459,39 +1530,41 @@ def refresh(
             step.offered_through_gateway(gateway)
         step.priced(gateway)
 
+    # Presence is judged on the entries as this pass leaves them, so a slug
+    # the matching above just wrote back is the slug a Grok model is found by.
     stored_models, stored_plans = _stored(data_dir / REFRESHED_FILE)
+    _forget(records, stored_models)
+    shown, lacking = _presence(readings, makers, step.entries)
+    gone = _observed(
+        records,
+        shown,
+        lacking,
+        seen,
+        today,
+        (started - timedelta(days=1)).date().isoformat(),
+    )
     changed, discarded = step.settled()
-    rows = step.rows
+    rows = [row for row in step.rows if row["model"] not in gone]
     report = {
         "at": stamp,
         "outcome": "ran",
-        "sources": {
-            source: {
-                "outcome": reading.outcome,
-                "reason": reading.reason,
-                "changes": sum(1 for row in rows if row["source"] == source),
-            }
-            for source, reading in readings.items()
-        },
-        "changes": len(rows),
+        "sources": {},
+        "changes": 0,
         "written": None,
         "definitions": None,
         "discarded": discarded,
         "unmatched": sorted(
             step.unmatched if gateway.outcome == "complete" else step.unmatched_before
         ),
+        "present": {"day": today, "models": sorted(seen)},
     }
 
-    if changed:
+    written = False
+    if changed or gone:
+        stored_models.update(changed)
+        for identifier in gone:
+            stored_models.pop(identifier, None)
         try:
-            if rows:
-                data_dir.mkdir(parents=True, exist_ok=True)
-                with (data_dir / JOURNAL_FILE).open(
-                    "a", encoding="utf-8"
-                ) as journal_stream:
-                    for row in rows:
-                        journal_stream.write(json.dumps(row, sort_keys=True) + "\n")
-            stored_models.update(changed)
             _replace_json(
                 data_dir / REFRESHED_FILE,
                 {
@@ -1503,23 +1576,74 @@ def refresh(
         except OSError as problem:
             report["problem"] = f"the catalogue could not be written: {problem}"
         else:
+            written = True
             report["written"] = str(data_dir / REFRESHED_FILE)
-            try:
-                synced = launch.sync_definitions(
-                    agents, launch.definitions(profile, load(data_dir, here))
-                )
-            except OSError as problem:
-                report["definitions"] = {
-                    "directory": str(agents),
-                    "problem": str(problem),
-                }
-            else:
-                report["definitions"] = {
-                    "directory": str(agents),
-                    "written": synced.written,
-                    "unchanged": synced.unchanged,
-                    "removed": synced.removed,
-                }
+
+    # A removal is recorded only once the entry is out of the file; until then
+    # its three absent days stand, and the next pass removes it.
+    removed_now = gone if written else {}
+    for identifier, days in removed_now.items():
+        records[identifier] = {
+            "absent_days": days,
+            "removed_at": stamp,
+            "rows_deleted": 0,
+            "units_dropped": 0,
+        }
+    if written:
+        _forget(records, stored_models)
+    report["lifecycle"] = _settle_lifecycle(data_dir, records, held, removed_now)
+    for identifier, days in removed_now.items():
+        rows.append(
+            {
+                "at": stamp,
+                "source": lacking[identifier],
+                "model": identifier,
+                "field": "removed",
+                "old": None,
+                "new": {
+                    "absent_days": days,
+                    "rows_deleted": records[identifier]["rows_deleted"],
+                    "units_dropped": records[identifier]["units_dropped"],
+                },
+            }
+        )
+
+    report["sources"] = {
+        source: {
+            "outcome": reading.outcome,
+            "reason": reading.reason,
+            "changes": sum(1 for row in rows if row["source"] == source),
+        }
+        for source, reading in readings.items()
+    }
+    report["changes"] = len(rows)
+
+    if written:
+        try:
+            if rows:
+                with (data_dir / JOURNAL_FILE).open(
+                    "a", encoding="utf-8"
+                ) as journal_stream:
+                    for row in rows:
+                        journal_stream.write(json.dumps(row, sort_keys=True) + "\n")
+        except OSError as problem:
+            report["problem"] = f"the journal could not be written: {problem}"
+        try:
+            synced = launch.sync_definitions(
+                agents, launch.definitions(profile, load(data_dir, here))
+            )
+        except OSError as problem:
+            report["definitions"] = {
+                "directory": str(agents),
+                "problem": str(problem),
+            }
+        else:
+            report["definitions"] = {
+                "directory": str(agents),
+                "written": synced.written,
+                "unchanged": synced.unchanged,
+                "removed": synced.removed,
+            }
 
     try:
         _replace_json(data_dir / PASS_FILE, report)
@@ -1528,13 +1652,231 @@ def refresh(
     return report
 
 
+def _presence(
+    readings: Mapping[str, Reading],
+    makers: frozenset[str],
+    entries: Mapping[str, Mapping[str, Any]],
+) -> tuple[dict[str, str], dict[str, str]]:
+    """Return which catalogue models their maker's complete list shows, and which it lacks.
+
+    Each maps a model id to the source that said so. A model is judged only
+    where its maker is chosen and its maker's list was read completely, and
+    only on the version identifier the list names: a Claude entry's
+    `resolvedModel` without its bracketed serving selector, a Codex entry's
+    `model`, and OpenRouter's full id, which a Grok model matches by its id or
+    by its OpenRouter slug. An alias never establishes presence — a family
+    alias moves to each new release, and matching on it would keep a replaced
+    release present for ever.
+    """
+
+    shown: dict[str, str] = {}
+    lacking: dict[str, str] = {}
+    for source, maker in PRESENCE_SOURCES:
+        reading = readings.get(source)
+        if maker not in makers or reading is None or reading.outcome != "complete":
+            continue
+        names = (
+            frozenset(str(entry["id"]) for entry in reading.entries)
+            if source == "openrouter"
+            else frozenset(reading.returned)
+        )
+        for identifier, entry in entries.items():
+            if entry.get("provider") != maker:
+                continue
+            gateways = entry.get("gateways")
+            slug = (
+                _text(gateways.get("openrouter"))
+                if source == "openrouter" and isinstance(gateways, dict)
+                else None
+            )
+            if identifier in names or (slug is not None and slug in names):
+                shown[identifier] = source
+            else:
+                lacking[identifier] = source
+    return shown, lacking
+
+
+def _observed(
+    records: dict[str, dict[str, Any]],
+    shown: Mapping[str, str],
+    lacking: Mapping[str, str],
+    seen: set[str],
+    today: str,
+    yesterday: str,
+) -> dict[str, list[str]]:
+    """Record one pass's observations, and return each model now gone with its absent days.
+
+    A day is absent where a complete read that day lacked the model and none
+    showed it, so a model shown by any read today is never absent today, and
+    *seen* carries that across the passes of one day. Absent days count only
+    while they are consecutive: a day with no complete read leaves a gap, and
+    a gap starts the run again. A run no pass can extend any more is dropped.
+    """
+
+    for identifier in shown:
+        seen.add(identifier)
+        if identifier in records and not _is_removal(records[identifier]):
+            del records[identifier]
+
+    gone: dict[str, list[str]] = {}
+    for identifier in lacking:
+        if identifier in seen or _is_removal(records.get(identifier)):
+            continue
+        held = records.get(identifier) or {}
+        days = [day for day in held.get("absent_days") or [] if isinstance(day, str)]
+        if not days or days[-1] != today:
+            days = [*days, today] if days and days[-1] == yesterday else [today]
+        days = days[-GONE_AFTER_DAYS:]
+        records[identifier] = {"absent_days": days}
+        if len(days) >= GONE_AFTER_DAYS:
+            gone[identifier] = days
+
+    for identifier in list(records):
+        held = records[identifier]
+        days = held.get("absent_days") or []
+        if not _is_removal(held) and (not days or str(days[-1]) < yesterday):
+            del records[identifier]
+    return gone
+
+
+def _settle_lifecycle(
+    data_dir: Path,
+    records: dict[str, dict[str, Any]],
+    held: str,
+    removed_now: Mapping[str, list[str]],
+) -> dict[str, Any]:
+    """Delete the rows of every removed model, then write `lifecycle.json` where it moved.
+
+    The deletion runs under the ledger's lock. Where another pass holds it,
+    the removal stands and its rows wait for the next pass that gets the lock;
+    `lifecycle.json` keeps each removed model's running counts, which is what
+    status reports.
+    """
+
+    import evidence  # Imported here: it imports this module.
+
+    removed = sorted(
+        identifier for identifier in records if _is_removal(records[identifier])
+    )
+    outcome: dict[str, Any] = {
+        "removed": sorted(removed_now),
+        "lock": None,
+        "rows_deleted": 0,
+        "units_dropped": 0,
+    }
+    if removed:
+        try:
+            with evidence.lock(data_dir) as taken:
+                outcome["lock"] = "held" if taken else "busy"
+                deleted = evidence.discard_models(data_dir, removed) if taken else None
+        except OSError as problem:
+            outcome["problem"] = (
+                f"the rows of removed models could not be deleted: {problem}"
+            )
+            deleted = None
+        if deleted is not None:
+            for identifier in removed:
+                record = records[identifier]
+                rows = deleted.rows.get(identifier, 0)
+                units = deleted.units.get(identifier, 0)
+                record["rows_deleted"] = int(record.get("rows_deleted") or 0) + rows
+                record["units_dropped"] = int(record.get("units_dropped") or 0) + units
+                outcome["rows_deleted"] += rows
+                outcome["units_dropped"] += units
+
+    path = data_dir / LIFECYCLE_FILE
+    if _document_of(records) != held and (records or path.exists()):
+        try:
+            _replace_json(path, {"models": records})
+        except OSError as problem:
+            outcome["problem"] = f"{path} could not be written: {problem}"
+    return outcome
+
+
+def _forget(records: dict[str, dict[str, Any]], present: Collection[str]) -> None:
+    """Drop the removal of every model `catalogue.json` holds again.
+
+    A re-added model is an ordinary one: its mask, its removal record and its
+    absence history all go at once, and no pass deletes anything for it again.
+    """
+
+    for identifier in [name for name in records if name in present]:
+        if _is_removal(records[identifier]):
+            del records[identifier]
+
+
+def _forget_removals(data_dir: Path, identifiers: Sequence[str]) -> None:
+    """Forget the removal of every model in *identifiers*, rewriting `lifecycle.json` if any."""
+
+    records = _lifecycle(data_dir)
+    held = _document_of(records)
+    _forget(records, frozenset(identifiers))
+    if _document_of(records) != held:
+        _replace_json(data_dir / LIFECYCLE_FILE, {"models": records})
+
+
+def _lifecycle(data_dir: Path) -> dict[str, dict[str, Any]]:
+    """Return `lifecycle.json`'s record per model, an unreadable file holding none."""
+
+    try:
+        raw = json.loads((data_dir / LIFECYCLE_FILE).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    models = raw.get("models") if isinstance(raw, dict) else None
+    if not isinstance(models, dict):
+        return {}
+    return {
+        str(identifier): dict(record)
+        for identifier, record in models.items()
+        if isinstance(record, dict)
+    }
+
+
+def _removed(records: Mapping[str, Mapping[str, Any]]) -> frozenset[str]:
+    """Return the ids whose record is a removal."""
+
+    return frozenset(
+        identifier for identifier, record in records.items() if _is_removal(record)
+    )
+
+
+def _is_removal(record: Mapping[str, Any] | None) -> bool:
+    """Return whether one lifecycle record says its model was removed."""
+
+    return record is not None and _text(record.get("removed_at")) is not None
+
+
+def _document_of(records: Mapping[str, Any]) -> str:
+    """Return *records* as one comparable string, to tell whether a pass moved them."""
+
+    return json.dumps(records, sort_keys=True)
+
+
+def _seen_today(previous: Mapping[str, Any], today: str) -> set[str]:
+    """Return the models an earlier pass today saw in a complete list.
+
+    Carried in `refresh.json` beside `unmatched` rather than in
+    `lifecycle.json`: it is what the passes of one day saw, and says nothing
+    about a model once the day is over.
+    """
+
+    present = previous.get("present")
+    if not isinstance(present, dict) or present.get("day") != today:
+        return set()
+    models = present.get("models")
+    return {str(model) for model in models} if isinstance(models, list) else set()
+
+
 def journal(
     data_dir: Path, days: int, *, now: datetime | None = None
 ) -> dict[str, Any]:
-    """Return the last pass's outcomes and the journal rows of the last *days* days.
+    """Return the last pass's outcomes, the journal rows of the last *days* days, and every removal.
 
     Reads and writes nothing else: `/model-selector status` shows this, and a
-    report that moved a marker would change what the next report says.
+    report that moved a marker would change what the next report says. A
+    removal is shown for as long as `lifecycle.json` records it, however old,
+    with the rows and Units deleted for it so far, since later passes go on
+    deleting what capture files for it.
     """
 
     until = (now or datetime.now(UTC)).astimezone(UTC)
@@ -1568,6 +1910,17 @@ def journal(
         "last_pass": last if isinstance(last, dict) else None,
         "problem": problem,
         "journal": rows,
+        "removed": [
+            {
+                "model": identifier,
+                "absent_days": record.get("absent_days"),
+                "removed_at": record.get("removed_at"),
+                "rows_deleted": record.get("rows_deleted", 0),
+                "units_dropped": record.get("units_dropped", 0),
+            }
+            for identifier, record in sorted(_lifecycle(data_dir).items())
+            if _is_removal(record)
+        ],
     }
 
 

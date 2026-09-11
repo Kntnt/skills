@@ -580,7 +580,7 @@ def test_a_second_pass_holding_no_lock_does_nothing_at_all(tmp_path: Path) -> No
 
     data = _queue(tmp_path, _unit())
 
-    with grade._lock(data) as first, grade._lock(data) as second:
+    with evidence.lock(data) as first, evidence.lock(data) as second:
         assert first is True
         assert second is False
 
@@ -595,8 +595,29 @@ def test_a_lock_left_by_a_dead_process_is_taken_over(tmp_path: Path) -> None:
     stale.write_text("", encoding="utf-8")
     os.utime(stale, (0, 0))
 
-    with grade._lock(data) as held:
+    with evidence.lock(data) as held:
         assert held is True
+
+
+def test_grading_takes_its_lock_from_the_ledger_s_own_module(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    """The catalogue pass deletes rows under the same lock, so there is one of it."""
+
+    data = _queue(tmp_path, _unit())
+    taken: list[Path] = []
+    real = evidence.lock
+
+    def watched(where: Path) -> Any:
+        taken.append(where)
+        return real(where)
+
+    monkeypatch.setattr(evidence, "lock", watched)
+
+    grade.hook_pass(data)
+
+    assert taken == [data]
+    assert not hasattr(grade, "_lock")
 
 
 # --- What a session's end actually pays for ----------------------------------

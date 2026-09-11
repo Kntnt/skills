@@ -5,9 +5,11 @@
 """What actually happened, and what it says about what will happen next.
 
 Two things live here. The store is a JSON Lines ledger of graded attempts,
-append-only, written field by field onto a closed set of names so that a
-caller cannot smuggle a key into it and nothing has to be stripped back out
-later. The estimator is what the store is for: given a kind, a model and a
+appended to and never edited, written field by field onto a closed set of
+names so that a caller cannot smuggle a key into it and nothing has to be
+stripped back out later. A row leaves it only with the model it measured:
+`reset --evidence` discards the whole ledger, and a model its maker no longer
+lists takes its rows with it (`discard_models`). The estimator is what the store is for: given a kind, a model and a
 level of deliberation, how likely is the attempt to come back good, and how
 many tokens of each category will it burn getting there.
 
@@ -51,7 +53,10 @@ from __future__ import annotations
 import argparse
 import json
 import math
-from collections.abc import Iterable, Mapping, Sequence
+import os
+import time
+from collections.abc import Collection, Iterable, Iterator, Mapping, Sequence
+from contextlib import contextmanager, suppress
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
@@ -84,6 +89,18 @@ BASIS = ("measured", "pooled", "prior", "inherit")
 
 MEASUREMENTS_FILE = "measurements.jsonl"
 KINDS_FILE = "kinds.json"
+
+# Where the Units seen and not yet graded wait. The name is capture's, which
+# appends to the file; it is read here as an on-disk contract rather than
+# imported, the posture every consumer of this Skill's stores takes.
+PENDING_FILE = "pending.jsonl"
+
+# The lock a pass holds while it rewrites the ledger or the pending store:
+# grading, and the catalogue pass deleting the rows of a model that is gone.
+# A lock older than any pass can legitimately take belonged to a process that
+# died. Fifteen minutes is longer than any pass can legitimately take.
+LOCK_FILE = "grade.lock"
+LOCK_STALE_SECONDS = 900.0
 
 # How much a level's parent is worth, in attempts, when that level is being
 # fitted. The key names the parent: a model's own pooled record is worth two
@@ -182,6 +199,14 @@ class Measurement:
 # Exactly the fields a stored row may carry. Derived from the dataclass rather
 # than typed out again, so that the store and the type cannot drift apart.
 ALLOWED_FIELDS: frozenset[str] = frozenset(field.name for field in fields(Measurement))
+
+
+@dataclass(frozen=True)
+class Discarded:
+    """How many measurement rows and pending Units `discard_models` deleted, per model."""
+
+    rows: dict[str, int]
+    units: dict[str, int]
 
 
 @dataclass(frozen=True)
@@ -816,6 +841,90 @@ def _refold(path: Path, folded: Mapping[str, dict[str, Any]]) -> None:
     staged = path.parent / f"{path.name}.tmp"
     staged.write_text("".join(f"{line}\n" for line in kept), encoding="utf-8")
     staged.replace(path)
+
+
+@contextmanager
+def lock(data_dir: Path) -> Iterator[bool]:
+    """Hold the ledger's lock for the length of one pass, or yield False.
+
+    Two passes rewriting the same files at once would each write back what
+    the other had just changed, so the second one does nothing at all rather
+    than doing it twice. A lock older than any pass can legitimately take
+    belonged to a process that died and is taken over. Capture appends to the
+    pending store without it, which is why a pass that deletes rows for a
+    model has to repeat the deletion on every later pass.
+    """
+
+    path = data_dir / LOCK_FILE
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    with suppress(OSError):
+        held = time.time() - path.stat().st_mtime
+        if held > LOCK_STALE_SECONDS:
+            path.unlink(missing_ok=True)
+
+    try:
+        handle = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    except OSError:
+        yield False
+        return
+
+    os.close(handle)
+    try:
+        yield True
+    finally:
+        path.unlink(missing_ok=True)
+
+
+def discard_models(data_dir: Path, models: Collection[str]) -> Discarded:
+    """Delete every measurement row and pending Unit of *models*, and count them.
+
+    For a model its maker no longer lists: it does not come back, and its
+    rows are worth nothing to a selection that can no longer choose it. A row
+    or Unit belongs to a model by exact id, which is what the store holds and
+    what the estimator matches on. Both files are rewritten as `_refold`
+    rewrites the ledger — every line this does not delete carried across as
+    it stands, an unparsable one included, through a sibling and an atomic
+    rename — and a file holding none of *models* is not rewritten at all. The
+    caller holds `lock`.
+    """
+
+    wanted = frozenset(models)
+    return Discarded(
+        _without(data_dir / MEASUREMENTS_FILE, wanted),
+        _without(data_dir / PENDING_FILE, wanted),
+    )
+
+
+def _without(path: Path, models: frozenset[str]) -> dict[str, int]:
+    """Rewrite one JSON Lines store without the rows of *models*, counting each model's."""
+
+    if not models:
+        return {}
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (OSError, ValueError):
+        return {}
+
+    kept: list[str] = []
+    deleted: dict[str, int] = {}
+    for line in text.splitlines():
+        try:
+            raw = json.loads(line)
+        except ValueError:
+            kept.append(line)
+            continue
+        model = raw.get("model") if isinstance(raw, dict) else None
+        if isinstance(model, str) and model in models:
+            deleted[model] = deleted.get(model, 0) + 1
+            continue
+        kept.append(line)
+
+    if deleted:
+        staged = path.parent / f"{path.name}.tmp"
+        staged.write_text("".join(f"{line}\n" for line in kept), encoding="utf-8")
+        staged.replace(path)
+    return deleted
 
 
 def _measurement(raw: Mapping[str, Any]) -> Measurement | None:

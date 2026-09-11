@@ -4,7 +4,7 @@ Read when explaining what this Skill records, when answering a question about pr
 
 ## The contract in one paragraph
 
-Enabling this Skill installs session lifecycle hooks into every supported Harness on this machine, at the Global layer. They observe finished work, keep only the units of it that were jobs, grade each unit by the cheapest means that can establish anything, and write one row per unit. No prompt, response, diff, file content, terminal line or absolute path is ever copied. Disabling the Skill removes every hook and keeps what was measured; `/model-selector reset --evidence` is the separate act that discards it.
+Enabling this Skill installs session lifecycle hooks into every supported Harness on this machine, at the Global layer. They observe finished work, keep only the units of it that were jobs, grade each unit by the cheapest means that can establish anything, and write one row per unit. No prompt, response, diff, file content, terminal line or absolute path is ever copied. Disabling the Skill removes every hook and keeps what was measured; `/model-selector reset --evidence` is the separate act that discards it, and a model its maker stops listing takes its own rows with it.
 
 ## A Unit of Work
 
@@ -70,8 +70,8 @@ There is no queue to work through, no review verb, and no reminder placed anywhe
 
 ## Retention, and how to end it
 
-Rows are kept until they are discarded by hand. They survive Disabling the Skill, because what was measured stays true whether or not measuring continues.
+Rows are kept until they are discarded by hand, or until the model they measured is gone. They survive Disabling the Skill, because what was measured stays true whether or not measuring continues. A model is gone when the catalogue pass has found it missing from its maker's complete list on three consecutive days, and its rows and its units waiting to be graded are then deleted: a model that has left its maker's list does not come back, and its rows are worth nothing to a selection that can no longer choose it. A model that fails to run is never gone for that — a quota, an outage or a refused login is the channel's health, not the model's — and a unit that failed to reach a judge stays in the queue as before.
 
-`/model-selector reset --evidence` is the one way to discard them, and it has to be asked for by name. It removes the measurement store, the units seen and not yet graded, and the `capture/` directory an earlier design left beside them, and it leaves the hooks installed and measuring. Switching measurement off is unchecking this Skill in `/kntnt select`, which removes every entry these hooks own from every Harness.
+`/model-selector reset --evidence` is the one way to discard them all, and it has to be asked for by name. It removes the measurement store, the units seen and not yet graded, and the `capture/` directory an earlier design left beside them, and it leaves the hooks installed and measuring. Switching measurement off is unchecking this Skill in `/kntnt select`, which removes every entry these hooks own from every Harness.
 
 `/model-selector evidence` is how to see what is held, and `/model-selector status` is how to see the health of the hooks that collect it.

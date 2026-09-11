@@ -662,3 +662,105 @@ def test_a_handful_of_failures_at_one_point_is_worth_one_handful(
 
     weight = evidence.PSEUDO[1]
     assert heard.mean == pytest.approx(weight * prior.mean / (weight + 4))
+
+
+# --- Discarding the rows of a model that is gone -------------------------------
+
+
+def _unit_line(unit_id: str, model: str | None) -> str:
+    """Return one pending Unit as capture appends it, carrying only what matters here."""
+
+    return json.dumps(
+        {"unit_id": unit_id, "model": model, "last_failure": "no-judge"},
+        sort_keys=True,
+    )
+
+
+def test_discarding_a_model_deletes_its_rows_and_units_and_nothing_else(
+    tmp_path: Path,
+) -> None:
+    """Matched by exact id, so a model whose id another one extends is untouched."""
+
+    evidence.append(
+        tmp_path,
+        [
+            _row(attempt_id="a1", model="gpt-5.6-luna"),
+            _row(attempt_id="a2", model="gpt-5.6-luna-pro"),
+            _row(attempt_id="a3", model="gpt-5.6-luna", grade=0.0),
+            _row(attempt_id="a4", model=STRONG),
+        ],
+    )
+    (tmp_path / "pending.jsonl").write_text(
+        "".join(
+            f"{line}\n"
+            for line in (
+                _unit_line("u1", "gpt-5.6-luna"),
+                _unit_line("u2", STRONG),
+                _unit_line("u3", "gpt-5.6-luna"),
+            )
+        ),
+        encoding="utf-8",
+    )
+
+    gone = evidence.discard_models(tmp_path, ["gpt-5.6-luna"])
+
+    assert gone.rows == {"gpt-5.6-luna": 2}
+    assert gone.units == {"gpt-5.6-luna": 2}
+    assert [row.attempt_id for row in evidence.load(tmp_path)] == ["a2", "a4"]
+    waiting = (tmp_path / "pending.jsonl").read_text(encoding="utf-8").splitlines()
+    assert [json.loads(line)["unit_id"] for line in waiting] == ["u2"]
+
+
+def test_discarding_carries_every_line_it_cannot_parse_across(tmp_path: Path) -> None:
+    """A mangled line is somebody's, and a rewrite that dropped it would lose it."""
+
+    good = json.dumps(_row(attempt_id="a1", model="gpt-5.6-luna"))
+    kept = json.dumps(_row(attempt_id="a2"))
+    (tmp_path / "measurements.jsonl").write_text(
+        f"{good}\n{{not json\n{kept}\n", encoding="utf-8"
+    )
+    (tmp_path / "pending.jsonl").write_text(
+        f"{_unit_line('u1', 'gpt-5.6-luna')}\n[half\n", encoding="utf-8"
+    )
+
+    evidence.discard_models(tmp_path, ["gpt-5.6-luna"])
+
+    assert (tmp_path / "measurements.jsonl").read_text(encoding="utf-8") == (
+        f"{{not json\n{kept}\n"
+    )
+    assert (tmp_path / "pending.jsonl").read_text(encoding="utf-8") == "[half\n"
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_discarding_a_model_nothing_holds_rewrites_nothing(tmp_path: Path) -> None:
+    """An empty directory stays empty, and a store with no such rows is not touched."""
+
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    assert evidence.discard_models(empty, ["gpt-5.6-luna"]).rows == {}
+    assert list(empty.iterdir()) == []
+
+    evidence.append(tmp_path, [_row(attempt_id="a1")])
+    before = (tmp_path / "measurements.jsonl").stat().st_mtime_ns
+    gone = evidence.discard_models(tmp_path, ["gpt-5.6-luna"])
+
+    assert (gone.rows, gone.units) == ({}, {})
+    assert (tmp_path / "measurements.jsonl").stat().st_mtime_ns == before
+
+
+def test_the_ledger_lock_admits_one_holder_and_takes_over_a_stale_one(
+    tmp_path: Path,
+) -> None:
+    """Grading and the catalogue pass both rewrite these files, under one lock."""
+
+    import os
+
+    with evidence.lock(tmp_path) as first, evidence.lock(tmp_path) as second:
+        assert (first, second) == (True, False)
+    assert not (tmp_path / "grade.lock").exists()
+
+    stale = tmp_path / "grade.lock"
+    stale.write_text("", encoding="utf-8")
+    os.utime(stale, (0, 0))
+    with evidence.lock(tmp_path) as held:
+        assert held is True

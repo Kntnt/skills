@@ -53,12 +53,10 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import subprocess
 import sys
-import time
-from collections.abc import Iterator, Mapping, Sequence
-from contextlib import contextmanager, suppress
+from collections.abc import Mapping, Sequence
+from contextlib import suppress
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -74,7 +72,6 @@ from evidence import KINDS
 # imported, the posture every consumer of this Skill's stores already takes.
 PENDING_FILE = "pending.jsonl"
 GRADER_STATE_FILE = "grader.json"
-LOCK_FILE = "grade.lock"
 
 # How many judge calls one pass may buy. It is a hard limit rather than a
 # guideline: everything above it waits for the next pass, and a pass that
@@ -104,10 +101,6 @@ MAX_ATTEMPTS = 3
 # thing to an external checker an ordinary session contains.
 RETRIED_GRADE = 0.3
 TESTS_PASSED_GRADE = 0.9
-
-# How long a lock may sit before it is assumed to belong to a process that
-# died. Fifteen minutes is longer than any pass can legitimately take.
-LOCK_STALE_SECONDS = 900.0
 
 # What a judge call that produced no verdict is recorded as, on the pending row
 # it leaves behind. Four words, because there are four things that go wrong and
@@ -242,37 +235,6 @@ def _write_pending(data: Path, rows: Sequence[Mapping[str, Any]]) -> None:
         encoding="utf-8",
     )
     staged.replace(path)
-
-
-@contextmanager
-def _lock(data: Path) -> Iterator[bool]:
-    """Hold the grading lock for the length of one pass, or yield False.
-
-    Two copies grading at once would both read the same queue and both buy the
-    same judgement, so the second one does nothing at all rather than doing it
-    twice. A lock older than any pass can legitimately take belonged to a
-    process that died and is taken over.
-    """
-
-    path = data / LOCK_FILE
-    data.mkdir(parents=True, exist_ok=True)
-
-    with suppress(OSError):
-        held = time.time() - path.stat().st_mtime
-        if held > LOCK_STALE_SECONDS:
-            path.unlink(missing_ok=True)
-
-    try:
-        handle = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
-    except OSError:
-        yield False
-        return
-
-    os.close(handle)
-    try:
-        yield True
-    finally:
-        path.unlink(missing_ok=True)
 
 
 @dataclass(frozen=True)
@@ -826,7 +788,7 @@ def hook_pass(data: Path) -> dict[str, Any]:
     not paying for it.
     """
 
-    with _lock(data) as held:
+    with evidence.lock(data) as held:
         if not held:
             return {"verb": "grade", "skipped": "another pass holds the lock"}
         report = grade_pending(data, judging=False)
@@ -864,7 +826,7 @@ def main(argv: list[str] | None = None) -> int:
         if not args.once:
             answered = hook_pass(data)
         else:
-            with _lock(data) as held:
+            with evidence.lock(data) as held:
                 answered = (
                     grade_pending(data, budget=args.budget)
                     if held
