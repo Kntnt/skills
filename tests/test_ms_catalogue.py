@@ -907,9 +907,10 @@ def test_the_shipped_seed_promises_no_refresh_of_what_it_carries() -> None:
     Nothing fetches `capability`: it is a seeded prior refined by measurement,
     and how a published benchmark maps onto its scale is undecided, so a note
     saying a refresh replaces it from one names a mechanism that does not
-    exist and promises an accuracy nobody is delivering. `update` is the only
-    thing that renews any figure here, and it is the agent's own reading
-    (ADR-0185).
+    exist and promises an accuracy nobody is delivering. The catalogue pass
+    and `update` are what renew any figure here — the first a script reading
+    three structured sources, the second the agent's own reading (ADR-0185,
+    ADR-0191) — and neither renews `capability`.
     """
 
     seed = json.loads((SHIPPED / "data" / "catalogue-seed.json").read_text("utf-8"))
