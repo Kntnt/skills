@@ -113,7 +113,7 @@ A figure it reports as `null` is a figure no row carries, and it is said as abse
 
 ## Update
 
-The world's facts are read by you, off the providers' own pages, because a script has no web tool and should not pretend to one. Where this Harness gives you no way to read a page, say so and stop: the catalogue stands as it shipped, and every other command of this Skill goes on answering from it.
+The world's facts `update` brings are read by you, off the providers' own pages, because a provider's page is prose a script cannot interpret. Where this Harness gives you no way to read a page, say so and stop: the catalogue stands as it shipped, and every other command of this Skill goes on answering from it.
 
 Start from what is already known:
 
