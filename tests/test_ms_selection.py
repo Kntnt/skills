@@ -923,8 +923,8 @@ def test_where_no_measured_point_clears_the_floor_the_whole_pool_is_ranked(
     """Measured points go first only where one of them can promise the work.
 
     Opus's own `mechanical` rows all failed, so nothing measured clears the
-    floor and the answer is what it always was: the cheapest point whose
-    estimate clears it, prior or not.
+    floor and the answer is what it always was: of the points whose estimate
+    clears it, prior or not, the one with the lowest price per finished job.
     """
 
     _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
@@ -999,7 +999,8 @@ def test_a_failed_point_nothing_has_measured_is_still_found_and_stepped_from(
 
     Sonnet at `low` has no row, and its prior is likelier than anything Opus
     has measured here, so no measured point is a step up from it and the step
-    is the cheapest point that is: the next level of Sonnet.
+    is the likelier point with the lowest price per finished job: the next
+    level of Sonnet.
     """
 
     _measured_beside_prior(tmp_path)
@@ -1017,10 +1018,12 @@ def test_a_failed_point_nothing_has_measured_is_still_found_and_stepped_from(
     assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "medium")
 
 
-def test_where_no_measured_point_steps_up_the_step_is_the_cheapest_likelier_one(
+def test_where_no_measured_point_steps_up_the_step_is_the_likelier_one_that_finishes_for_the_least(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """With no measured point to prefer, the step is what it was before."""
+    """With no measured point to prefer, the step is the likelier point with the
+    lowest price per finished job.
+    """
 
     _profile(tmp_path, models=["claude-sonnet-5", "claude-opus-5"])
     _store(tmp_path, ("mechanical", "claude-opus-5", "low", 0.0, 10))

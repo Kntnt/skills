@@ -290,10 +290,10 @@ def _beyond(
     On `deliberation` that is the answer's own model at each of its other
     levels; on `model` it is every other model, taken at the answer's level or
     at the nearest level that model supports. Only the cheaper ones are
-    candidates: the answer is already the cheapest point the evidence vouches
-    for — measured for the kind where anything measured clears the floor — so
-    what a row is worth buying about is whether something below it, often a
-    point nothing has measured yet, would have done.
+    candidates: the answer is already the point the evidence vouches for with
+    the lowest price per finished job — measured for the kind where anything
+    measured clears the floor — so what a row is worth buying about is whether
+    something below it, often a point nothing has measured yet, would have done.
     """
 
     if dimension == "deliberation":
