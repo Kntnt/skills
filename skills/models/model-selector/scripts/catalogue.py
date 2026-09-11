@@ -8,7 +8,7 @@ Every other module in this Skill asks the world a question and this is what
 answers it. The facts arrive from two places and one of them is allowed to be
 wrong: the seed shipped beside this file is what the Skill knows on the day it
 is installed, and `catalogue.json` under the data directory is whatever a later
-`update` established. The refreshed file wins per model id, because a fact a
+catalogue pass or `update` established. The refreshed file wins per model id, because a fact a
 person checked this week outranks a fact this repository froze at release —
 except for the fields nobody fetches, which only a release of the seed can
 teach, and which a refreshed entry carrying none of them takes from the seed.
@@ -24,12 +24,22 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import os
+import re
+import select
+import signal
+import subprocess
 import sys
-from collections.abc import Mapping, Sequence
+import tempfile
+import time
+import urllib.parse
+import urllib.request
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Protocol, Self
 
 # The deliberation ladder, weakest first. Index in this tuple is the only
 # ordering of effort this Skill has, so it is defined once, here, where the
@@ -263,8 +273,10 @@ def adopt(
 
     A model merges field by field over the entry `load` currently answers
     with, so a document carrying a price and nothing else leaves everything
-    else standing — `capability` and `gateways` above all, which nothing
-    fetches. A provider's plans are replaced whole, as `_merged_plans` explains.
+    else standing — `capability` and `gateways` above all, which no reading of
+    a page supplies — and a rate card merges category by category, so a card
+    carrying one figure keeps every other. A provider's plans are replaced
+    whole, as `_merged_plans` explains.
     """
 
     document, refusal = _offered(path)
@@ -358,6 +370,9 @@ def _adopt_models(
         identifier = str(entry["id"])
         base = known.get(identifier, {})
         offered = {name: entry[name] for name in FETCHED_FIELDS if name in entry}
+        for member in ("price", "long_context"):
+            if isinstance(offered.get(member), dict):
+                offered[member] = _merged_card(base.get(member), offered[member])
         whole = {**dict.fromkeys(MODEL_FIELDS), **base, **offered}
         if _model(whole) is None:
             discarded.append(
@@ -381,6 +396,25 @@ def _adopt_models(
         )
 
     return accounted
+
+
+def _merged_card(standing: Any, offered: Mapping[str, Any]) -> dict[str, Any]:
+    """Lay one offered rate card over the standing one, category by category.
+
+    A category the offer omits, or states as null, keeps the standing figure:
+    a page read for its input price is no evidence that the cached rate
+    beside it stopped existing.
+    """
+
+    held = standing if isinstance(standing, dict) else {}
+    card = {
+        category: held.get(category)
+        for category in ("input", "cache_read", "cache_write", "output")
+    }
+    card["currency"] = held.get("currency") or CURRENCY
+    card["unit"] = held.get("unit") or UNIT
+    card.update({key: value for key, value in offered.items() if value is not None})
+    return card
 
 
 def _plan_change(
@@ -525,6 +559,20 @@ def _card_fault(raw: Any) -> str | None:
         return f"is quoted in {currency} rather than {CURRENCY}, and nothing converts"
     if unit != UNIT:
         return f"is quoted {unit} rather than {UNIT}"
+
+    # Null is a state of knowledge — the provider publishes no such rate — and
+    # anything else has to be a rate somebody could actually be billed.
+    for member in ("input", "cache_read", "cache_write", "output"):
+        value = raw.get(member)
+        if value is None:
+            continue
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            or value < 0
+        ):
+            return f"carries an {member} that is not a finite, non-negative number"
     return None
 
 
@@ -678,10 +726,11 @@ def cost_usd(
     a caller is between a small bill and no bill at all: an unpriceable model
     returns None so that ranking can rank it last instead of ranking it free.
 
-    `rates` is what the user says they actually pay on the channel this model
-    is reached through, and it replaces the catalogue's card whole — the cliff
-    included, because a threshold is a fact about the provider's own card and
-    not about a gateway that quoted one rate for every size of request.
+    The catalogue's card is the price OpenRouter publishes, which is the
+    charge itself on an OpenRouter channel. `rates` is what the user says they
+    actually pay on the channel this model is reached through, and it still
+    replaces the catalogue's card whole — the cliff included, because a rate a
+    user recorded is one rate for every size of request.
     """
 
     price = rates or _card(model, kind, rule)
@@ -889,6 +938,1163 @@ def _fraction(raw: Any) -> float | None:
     return None if value is None else min(1.0, max(0.0, value))
 
 
+# --- The pass that keeps the catalogue current -------------------------------
+#
+# Three structured sources, read by a script with no agent and no model call
+# (ADR-0191). The harness lists say which Claude and GPT models this account
+# is offered and at which levels; OpenRouter's public list says what every
+# model costs, when it was released, and which Grok models exist at all.
+
+# Where each source's facts are published. The two harness lists are spoken to
+# over their own stdio protocols, exactly as recorded on 2026-09-11; nothing in
+# either exchange is a prompt, so neither can start a model.
+OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models"
+OPENROUTER_HOST = "openrouter.ai"
+CLAUDE_LIST_ARGV = (
+    "claude",
+    "-p",
+    "--input-format",
+    "stream-json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--safe-mode",
+    "--no-session-persistence",
+    "--tools",
+    "",
+    "--permission-mode",
+    "dontAsk",
+    "--permission-prompts",
+    "none",
+)
+CLAUDE_REQUEST_ID = "refresh-init"
+CODEX_LIST_ARGV = ("codex", "app-server", "--listen", "stdio://")
+
+# How long one exchange may take before its process group is killed and the
+# source reported unreadable: a `claude` waiting for a login never answers.
+EXCHANGE_SECONDS = 30.0
+
+# Codex answers `model/list` from a cache it refreshes after 300 seconds, and
+# from a list bundled with the binary where the refresh fails. A cache older
+# than that before the pass began is the bundled list speaking.
+CODEX_CACHE_TTL = 300
+CODEX_CACHE_FILE = "models_cache.json"
+
+# The first-party documentation of each harness list, which is what a model
+# the list establishes is attributed to where OpenRouter carries no page.
+HARNESS_DOCS = {
+    "claude": "https://code.claude.com/docs/en/agent-sdk/typescript",
+    "codex": "https://learn.chatgpt.com/docs/app-server#list-models-modellist",
+}
+
+# Which maker each harness list speaks for. Grok has no harness list of its
+# own: it is reached only through OpenRouter, so OpenRouter says what it offers.
+HARNESS_MAKERS = {"claude": "anthropic", "codex": "openai"}
+GATEWAY_MAKER = "spacexai"
+
+# How OpenRouter spells each maker, and how its per-token categories map onto
+# the catalogue's. A category the catalogue has no field for is ignored.
+OPENROUTER_PREFIXES = {
+    "anthropic": "anthropic/",
+    "openai": "openai/",
+    "spacexai": "x-ai/",
+}
+OPENROUTER_CATEGORIES = (
+    ("prompt", "input"),
+    ("completion", "output"),
+    ("input_cache_read", "cache_read"),
+    ("input_cache_write", "cache_write"),
+)
+PRICED = ("input", "cache_read", "cache_write", "output")
+
+# Six places per million tokens is a millionth of a cent per token, finer than
+# any price published, and coarse enough that float noise never journals.
+_PLACES = Decimal("0.000001")
+
+JOURNAL_FILE = "catalogue-journal.jsonl"
+PASS_FILE = "refresh.json"
+NO_MAKERS = "no makers chosen"
+NO_PRICE_SOURCE = "no price source"
+OUTCOMES = ("complete", "incomplete", "unreadable")
+
+
+@dataclass(frozen=True)
+class Offer:
+    """One model a harness list offers, with what that list says about it.
+
+    `levels` is None where the list reports no levels for the model, which is
+    different from reporting an empty set: Haiku's absent field leaves the
+    catalogue's levels standing.
+    """
+
+    id: str
+    provider: str
+    family: str
+    aliases: tuple[str, ...]
+    levels: tuple[str, ...] | None
+
+
+@dataclass(frozen=True)
+class Reading:
+    """What one source said, and whether it said all of it.
+
+    `complete` is a whole answer. `incomplete` is a positive answer that may
+    be missing entries, and never evidence that something is gone. An
+    `unreadable` source changes nothing it governs.
+    """
+
+    source: str
+    outcome: str
+    reason: str | None
+    listed: tuple[Offer, ...] = ()
+    entries: tuple[Mapping[str, Any], ...] = ()
+
+
+def unreadable(source: str, reason: str) -> Reading:
+    """Return the reading of a source that could not be read, and why."""
+
+    return Reading(source, "unreadable", reason)
+
+
+def per_million(raw: Any) -> float | None:
+    """Return a per-token price string as USD per million tokens, or None.
+
+    Decimal rather than float, rounded to six places, because `0.0000002` per
+    token is 0.2 per million and float arithmetic says 0.19999999999999998 —
+    a difference the journal would otherwise record as a price change on
+    every pass.
+    """
+
+    if isinstance(raw, bool) or not isinstance(raw, (str, int, float)):
+        return None
+    try:
+        value = Decimal(str(raw))
+    except InvalidOperation:
+        return None
+    if not value.is_finite():
+        return None
+    return float((value * 1_000_000).quantize(_PLACES))
+
+
+def openrouter_slug(provider: str, identifier: str) -> str | None:
+    """Return the OpenRouter id a harness id normalises to, or None.
+
+    Prefix by maker, drop a trailing `-YYYYMMDD`, and turn a hyphen between two
+    digits into a dot: `claude-haiku-4-5-20251001` is `anthropic/claude-haiku-4.5`.
+    """
+
+    prefix = OPENROUTER_PREFIXES.get(provider)
+    if prefix is None:
+        return None
+    name = re.sub(r"-\d{8}$", "", identifier)
+    return prefix + re.sub(r"(?<=\d)-(?=\d)", ".", name)
+
+
+def claude_reading(messages: Sequence[Any]) -> Reading:
+    """Read Claude Code's answer to `initialize` into the models it offers.
+
+    Complete where the control response is a `success` carrying `models`. The
+    `default` entry names a model another entry names too, and is skipped; a
+    bracketed serving selector such as `[1m]` is not a different model.
+    """
+
+    answer = next(
+        (
+            message
+            for message in messages
+            if isinstance(message, dict) and message.get("type") == "control_response"
+        ),
+        None,
+    )
+    if answer is None:
+        return unreadable("claude", "Claude Code sent no control response")
+
+    response = answer.get("response")
+    if not isinstance(response, dict) or response.get("subtype") != "success":
+        said = response.get("error") if isinstance(response, dict) else None
+        return unreadable(
+            "claude", f"Claude Code did not answer `initialize` with success: {said}"
+        )
+
+    body = response.get("response")
+    models = body.get("models") if isinstance(body, dict) else None
+    if not isinstance(models, list):
+        return unreadable(
+            "claude", "Claude Code's answer to `initialize` carries no models"
+        )
+
+    offers: dict[str, Offer] = {}
+    for entry in models:
+        if not isinstance(entry, dict):
+            continue
+        value = _text(entry.get("value"))
+        resolved = _text(entry.get("resolvedModel"))
+        if not value or not resolved or value == "default":
+            continue
+        identifier = _unbracketed(resolved)
+        family = _unbracketed(value).lower()
+        levels = _levels(entry.get("supportedEffortLevels"))
+        held = offers.get(identifier)
+        aliases = (*held.aliases, family) if held is not None else (family,)
+        offers[identifier] = Offer(
+            identifier,
+            "anthropic",
+            held.family if held is not None else family,
+            tuple(dict.fromkeys(aliases)),
+            levels if held is None or held.levels is None else held.levels,
+        )
+
+    return Reading("claude", "complete", None, tuple(offers.values()))
+
+
+def codex_reading(
+    pages: Sequence[Any],
+    fetched_at: str | None,
+    started: datetime,
+    failure: str | None = None,
+) -> Reading:
+    """Read the pages of Codex's `model/list` into the models it offers.
+
+    Hidden entries are skipped. The list is incomplete where paging broke off
+    or where the models cache is older than the pass minus its TTL, which is
+    Codex answering from the list bundled with the binary.
+    """
+
+    if (
+        not pages
+        or not isinstance(pages[0], dict)
+        or not isinstance(pages[0].get("data"), list)
+    ):
+        return unreadable("codex", failure or "Codex's `model/list` answered no data")
+
+    offers: dict[str, Offer] = {}
+    for page in pages:
+        data = page.get("data") if isinstance(page, dict) else None
+        for entry in data if isinstance(data, list) else []:
+            if not isinstance(entry, dict) or entry.get("hidden") is True:
+                continue
+            identifier = _text(entry.get("model")) or _text(entry.get("id"))
+            if not identifier:
+                continue
+            efforts = entry.get("supportedReasoningEfforts")
+            named = (
+                [
+                    item.get("reasoningEffort") if isinstance(item, dict) else item
+                    for item in efforts
+                ]
+                if isinstance(efforts, list)
+                else None
+            )
+            offers[identifier] = Offer(
+                identifier, "openai", _gpt_family(identifier), (), _levels(named)
+            )
+
+    listed = tuple(offers.values())
+    if failure is not None:
+        return Reading("codex", "incomplete", failure, listed)
+    stale = _stale(fetched_at, started)
+    if stale is not None:
+        return Reading("codex", "incomplete", stale, listed)
+    return Reading("codex", "complete", None, listed)
+
+
+def openrouter_reading(pages: Sequence[Any], failure: str | None = None) -> Reading:
+    """Collect the entries of OpenRouter's model list, and say whether all arrived.
+
+    Where `total_count` is present the collected count must equal it, or the
+    read is incomplete — and an incomplete price list changes no price.
+    """
+
+    if (
+        not pages
+        or not isinstance(pages[0], dict)
+        or not isinstance(pages[0].get("data"), list)
+    ):
+        return unreadable(
+            "openrouter", failure or "OpenRouter's model list carries no data"
+        )
+
+    entries = tuple(
+        entry
+        for page in pages
+        if isinstance(page, dict) and isinstance(page.get("data"), list)
+        for entry in page["data"]
+        if isinstance(entry, dict) and _text(entry.get("id"))
+    )
+    if failure is not None:
+        return Reading("openrouter", "incomplete", failure, entries=entries)
+
+    total = pages[-1].get("total_count") if isinstance(pages[-1], dict) else None
+    if isinstance(total, int) and not isinstance(total, bool) and len(entries) != total:
+        return Reading(
+            "openrouter",
+            "incomplete",
+            f"collected {len(entries)} models where OpenRouter's total_count names {total}",
+            entries=entries,
+        )
+    return Reading("openrouter", "complete", None, entries=entries)
+
+
+def read_claude(started: datetime) -> Reading:
+    """Ask Claude Code which models this account is offered, generating nothing."""
+
+    request = {
+        "type": "control_request",
+        "request_id": CLAUDE_REQUEST_ID,
+        "request": {"subtype": "initialize"},
+    }
+    try:
+        with _Exchange(CLAUDE_LIST_ARGV) as talk:
+            talk.send(request)
+            answer = talk.receive(_answers_initialize)
+    except FileNotFoundError:
+        return unreadable("claude", "claude is not on the PATH")
+    except TimeoutError:
+        return unreadable(
+            "claude", f"claude did not answer within {EXCHANGE_SECONDS:g} seconds"
+        )
+    except (EOFError, OSError) as problem:
+        return unreadable("claude", f"claude could not be read: {problem}")
+    return claude_reading([answer])
+
+
+def _answers_initialize(message: dict[str, Any]) -> bool:
+    """Return whether *message* is Claude Code's answer to this pass's `initialize`."""
+
+    response = message.get("response")
+    return (
+        message.get("type") == "control_response"
+        and isinstance(response, dict)
+        and response.get("request_id") == CLAUDE_REQUEST_ID
+    )
+
+
+def _answering(number: int) -> Callable[[dict[str, Any]], bool]:
+    """Return the test for the JSON-RPC response to request *number*."""
+
+    def answers(message: dict[str, Any]) -> bool:
+        return message.get("id") == number
+
+    return answers
+
+
+def read_codex(started: datetime) -> Reading:
+    """Ask Codex which models this account is offered, following every page."""
+
+    pages: list[Any] = []
+    failure: str | None = None
+    try:
+        with _Exchange(CODEX_LIST_ARGV) as talk:
+            talk.send(
+                {
+                    "id": 0,
+                    "method": "initialize",
+                    "params": {
+                        "clientInfo": {
+                            "name": "model_selector_refresh",
+                            "version": "1",
+                        },
+                        "capabilities": {},
+                    },
+                }
+            )
+            opened = talk.receive(lambda message: message.get("id") == 0)
+            if "result" not in opened:
+                return unreadable(
+                    "codex", f"Codex refused `initialize`: {opened.get('error')}"
+                )
+            talk.send({"method": "initialized", "params": {}})
+
+            cursor: Any = None
+            for number in range(1, 51):
+                params: dict[str, Any] = {"limit": 100, "includeHidden": True}
+                if cursor:
+                    params["cursor"] = cursor
+                talk.send({"id": number, "method": "model/list", "params": params})
+                try:
+                    answer = talk.receive(_answering(number))
+                except (TimeoutError, EOFError) as problem:
+                    if not pages:
+                        raise
+                    failure = f"page {number} of `model/list` did not arrive: {problem or 'deadline'}"
+                    break
+                result = answer.get("result")
+                if not isinstance(result, dict):
+                    if not pages:
+                        return unreadable(
+                            "codex",
+                            f"Codex refused `model/list`: {answer.get('error')}",
+                        )
+                    failure = f"page {number} of `model/list` was refused: {answer.get('error')}"
+                    break
+                pages.append(result)
+                cursor = result.get("nextCursor")
+                if not cursor:
+                    break
+            else:
+                failure = "`model/list` was still paging after 50 pages"
+    except FileNotFoundError:
+        return unreadable("codex", "codex is not on the PATH")
+    except TimeoutError:
+        return unreadable(
+            "codex", f"codex did not answer within {EXCHANGE_SECONDS:g} seconds"
+        )
+    except (EOFError, OSError) as problem:
+        return unreadable("codex", f"codex could not be read: {problem}")
+
+    return codex_reading(pages, _codex_fetched_at(), started, failure)
+
+
+def read_openrouter(
+    started: datetime, fetch: Callable[[str], bytes] | None = None
+) -> Reading:
+    """Read OpenRouter's public model list, following `links.next` on its own host."""
+
+    get = fetch or _fetch
+    url: str | None = OPENROUTER_MODELS_URL
+    pages: list[Any] = []
+    seen: set[str] = set()
+    failure: str | None = None
+    while url is not None:
+        seen.add(url)
+        try:
+            page = json.loads(get(url))
+        except (OSError, ValueError) as problem:
+            if not pages:
+                return unreadable("openrouter", f"{url} could not be read: {problem}")
+            failure = f"{url} could not be read: {problem}"
+            break
+        pages.append(page)
+
+        links = page.get("links") if isinstance(page, dict) else None
+        following = _text(links.get("next")) if isinstance(links, dict) else None
+        if following is None:
+            break
+        target = urllib.parse.urljoin(OPENROUTER_MODELS_URL, following)
+        parsed = urllib.parse.urlparse(target)
+        if parsed.scheme != "https" or parsed.netloc != OPENROUTER_HOST:
+            failure = f"OpenRouter's next page points off its own host, at {target}"
+            break
+        if target in seen:
+            failure = f"OpenRouter's next page repeats {target}"
+            break
+        url = target
+
+    return openrouter_reading(pages, failure)
+
+
+# The three readers a pass consults, and nothing else.
+READERS: Mapping[str, Callable[[datetime], Reading]] = {
+    "claude": read_claude,
+    "codex": read_codex,
+    "openrouter": read_openrouter,
+}
+
+
+def refresh(
+    data_dir: Path,
+    here: Path,
+    agents: Path,
+    *,
+    now: datetime | None = None,
+    readers: Mapping[str, Callable[[datetime], Reading]] | None = None,
+) -> dict[str, Any]:
+    """Bring the catalogue up to date with the three sources, journalling every change.
+
+    What each source governs is the whole of what it can change. The harness
+    lists add the Claude and GPT models of a chosen maker, and set their
+    aliases and levels. OpenRouter sets prices, release dates and the slug it
+    routes each model by, and says which Grok models are offered. A source
+    that cannot be read changes nothing it governs, and an incomplete
+    OpenRouter list changes nothing at all. A missing, old-shape or damaged
+    profile chooses no maker, so nothing is read and only `refresh.json` is
+    written, saying so.
+
+    Each entry is checked by the same validator `adopt` uses before it is
+    written, and the stored file is written whole, the plans carried through,
+    so `load` never falls back to the seed by accident. After any write the
+    generated agent definitions in *agents* are brought into line.
+    """
+
+    # Imported here: both import this module, and a module-level import would
+    # be a cycle.
+    import launch
+    import profiles
+
+    started = (now or datetime.now(UTC)).astimezone(UTC)
+    stamp = _instant(started)
+    cat = load(data_dir, here)
+    profile = profiles.load(data_dir, cat)
+    makers = frozenset(profile.makers) if profile.source != "fallback" else frozenset()
+    if not makers:
+        report: dict[str, Any] = {"at": stamp, "outcome": NO_MAKERS}
+        _replace_json(data_dir / PASS_FILE, report)
+        return report
+
+    consulted = [source for source, maker in HARNESS_MAKERS.items() if maker in makers]
+    consulted.append("openrouter")
+    readings = {
+        source: _consult((readers or READERS).get(source), source, started)
+        for source in consulted
+    }
+
+    previous = _last_pass(data_dir / PASS_FILE)
+    step = _Pass(
+        {model.id: _entry(model) for model in cat.models},
+        makers,
+        stamp,
+        started.date().isoformat(),
+        frozenset(previous.get("unmatched") or ())
+        if isinstance(previous.get("unmatched"), list)
+        else frozenset(),
+    )
+    for source, reading in readings.items():
+        if source in HARNESS_MAKERS and reading.outcome != "unreadable":
+            step.listed(source, reading)
+    gateway = readings["openrouter"]
+    if gateway.outcome == "complete":
+        if GATEWAY_MAKER in makers:
+            step.offered_through_gateway(gateway)
+        step.priced(gateway)
+
+    stored_models, stored_plans = _stored(data_dir / REFRESHED_FILE)
+    changed, discarded = step.settled()
+    rows = step.rows
+    report = {
+        "at": stamp,
+        "outcome": "ran",
+        "sources": {
+            source: {
+                "outcome": reading.outcome,
+                "reason": reading.reason,
+                "changes": sum(1 for row in rows if row["source"] == source),
+            }
+            for source, reading in readings.items()
+        },
+        "changes": len(rows),
+        "written": None,
+        "definitions": None,
+        "discarded": discarded,
+        "unmatched": sorted(
+            step.unmatched if gateway.outcome == "complete" else step.unmatched_before
+        ),
+    }
+
+    if changed:
+        try:
+            if rows:
+                data_dir.mkdir(parents=True, exist_ok=True)
+                with (data_dir / JOURNAL_FILE).open(
+                    "a", encoding="utf-8"
+                ) as journal_stream:
+                    for row in rows:
+                        journal_stream.write(json.dumps(row, sort_keys=True) + "\n")
+            stored_models.update(changed)
+            _replace_json(
+                data_dir / REFRESHED_FILE,
+                {
+                    "generated_at": stamp,
+                    "models": [stored_models[name] for name in sorted(stored_models)],
+                    "plans": stored_plans,
+                },
+            )
+        except OSError as problem:
+            report["problem"] = f"the catalogue could not be written: {problem}"
+        else:
+            report["written"] = str(data_dir / REFRESHED_FILE)
+            try:
+                synced = launch.sync_definitions(
+                    agents, launch.definitions(profile, load(data_dir, here))
+                )
+            except OSError as problem:
+                report["definitions"] = {
+                    "directory": str(agents),
+                    "problem": str(problem),
+                }
+            else:
+                report["definitions"] = {
+                    "directory": str(agents),
+                    "written": synced.written,
+                    "unchanged": synced.unchanged,
+                    "removed": synced.removed,
+                }
+
+    try:
+        _replace_json(data_dir / PASS_FILE, report)
+    except OSError as problem:
+        report["problem"] = f"{data_dir / PASS_FILE} could not be written: {problem}"
+    return report
+
+
+def journal(
+    data_dir: Path, days: int, *, now: datetime | None = None
+) -> dict[str, Any]:
+    """Return the last pass's outcomes and the journal rows of the last *days* days.
+
+    Reads and writes nothing else: `/model-selector status` shows this, and a
+    report that moved a marker would change what the next report says.
+    """
+
+    until = (now or datetime.now(UTC)).astimezone(UTC)
+    since = until - timedelta(days=days)
+    last: Any = None
+    problem: str | None = None
+    path = data_dir / PASS_FILE
+    try:
+        last = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        last = None
+    except (OSError, ValueError) as failure:
+        problem = f"{path} could not be read: {failure}"
+
+    rows: list[dict[str, Any]] = []
+    try:
+        lines = (data_dir / JOURNAL_FILE).read_text(encoding="utf-8").splitlines()
+    except OSError:
+        lines = []
+    for line in lines:
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        at = _parsed_instant(row.get("at")) if isinstance(row, dict) else None
+        if at is not None and since <= at <= until:
+            rows.append(row)
+
+    return {
+        "days": days,
+        "last_pass": last if isinstance(last, dict) else None,
+        "problem": problem,
+        "journal": rows,
+    }
+
+
+class _Pass:
+    """The working state of one pass: the entries it is changing and what it said.
+
+    Every change goes through `set`, which is where the journal row is made,
+    so a field that moved and a row that says so cannot come apart. A model
+    this pass added journals only its `model` row, and its `no price source`
+    row where OpenRouter was read and had no match.
+    """
+
+    def __init__(
+        self,
+        known: dict[str, dict[str, Any]],
+        makers: frozenset[str],
+        stamp: str,
+        today: str,
+        unmatched_before: frozenset[str],
+    ) -> None:
+        self.known = known
+        self.entries = {identifier: dict(entry) for identifier, entry in known.items()}
+        self.makers = makers
+        self.stamp = stamp
+        self.today = today
+        self.unmatched_before = unmatched_before
+        self.unmatched: set[str] = set()
+        self.added: set[str] = set()
+        self.rows: list[dict[str, Any]] = []
+
+    def note(
+        self,
+        source: str,
+        model: str,
+        field: str,
+        old: Any,
+        new: Any,
+        note: str | None = None,
+    ) -> None:
+        """Journal one change, unless it is a field of a model this pass added."""
+
+        if model in self.added and field != "model" and note is None:
+            return
+        row: dict[str, Any] = {
+            "at": self.stamp,
+            "source": source,
+            "model": model,
+            "field": field,
+            "old": old,
+            "new": new,
+        }
+        if note is not None:
+            row["note"] = note
+        self.rows.append(row)
+
+    def set(self, source: str, model: str, field: str, value: Any) -> None:
+        """Set one field, journalling it where the value actually moved."""
+
+        entry = self.entries[model]
+        if _same(field, entry.get(field), value):
+            return
+        self.note(source, model, field, entry.get(field), value)
+        entry[field] = value
+
+    def add(self, source: str, entry: dict[str, Any]) -> None:
+        """Enter a model the catalogue lacked, and journal that it came."""
+
+        self.entries[entry["id"]] = entry
+        self.added.add(entry["id"])
+        self.note(source, entry["id"], "model", None, entry["id"])
+
+    def listed(self, source: str, reading: Reading) -> None:
+        """Add or update every model one harness list offers for its maker."""
+
+        maker = HARNESS_MAKERS[source]
+        if maker not in self.makers:
+            return
+        for offer in reading.listed:
+            if offer.id not in self.entries:
+                self.add(source, _new_entry(offer, source, self.today))
+                continue
+            entry = self.entries[offer.id]
+            if entry.get("provider") != maker:
+                continue
+            held = list(entry.get("aliases") or [])
+            merged = held + [alias for alias in offer.aliases if alias not in held]
+            self.set(source, offer.id, "aliases", merged)
+            if offer.levels is not None:
+                self.set(source, offer.id, "deliberation", list(offer.levels))
+
+    def offered_through_gateway(self, reading: Reading) -> None:
+        """Add or update every standard Grok model OpenRouter lists with a level control."""
+
+        prefix = OPENROUTER_PREFIXES[GATEWAY_MAKER]
+        for entry in reading.entries:
+            slug = str(entry["id"])
+            if (
+                not slug.startswith(prefix)
+                or ":" in slug
+                or slug.endswith("-multi-agent")
+            ):
+                continue
+            levels = _openrouter_levels(entry)
+            if not levels:
+                continue
+            identifier = slug[len(prefix) :]
+            if identifier not in self.entries:
+                self.add(
+                    "openrouter",
+                    {
+                        **dict.fromkeys(MODEL_FIELDS),
+                        "id": identifier,
+                        "provider": GATEWAY_MAKER,
+                        "family": "grok",
+                        "aliases": [],
+                        "deliberation": list(levels),
+                        "reasoning_billed_as": "output",
+                        "gateways": {"openrouter": slug},
+                        "source_url": f"https://openrouter.ai/{slug}",
+                        "retrieved": self.today,
+                    },
+                )
+                continue
+            if self.entries[identifier].get("provider") == GATEWAY_MAKER:
+                self.set("openrouter", identifier, "deliberation", list(levels))
+
+    def priced(self, reading: Reading) -> None:
+        """Price every model of a chosen maker that matches an OpenRouter entry."""
+
+        every = {str(entry["id"]): entry for entry in reading.entries}
+        standard = {slug: entry for slug, entry in every.items() if ":" not in slug}
+        for identifier, entry in self.entries.items():
+            if entry.get("provider") not in self.makers:
+                continue
+            held = entry.get("gateways")
+            written = _text(held.get("openrouter")) if isinstance(held, dict) else None
+            slug = written or openrouter_slug(str(entry.get("provider")), identifier)
+            match = (every if written else standard).get(slug or "")
+            if slug is None or match is None:
+                self.unpriced(identifier)
+                continue
+            self.matched(identifier, slug, match)
+
+    def unpriced(self, identifier: str) -> None:
+        """Record a model with no OpenRouter entry, journalling only the change of state."""
+
+        entry = self.entries[identifier]
+        self.unmatched.add(identifier)
+        if identifier in self.added:
+            entry["released"] = entry.get("released") or self.today
+        if identifier not in self.unmatched_before:
+            price = entry.get("price")
+            self.note("openrouter", identifier, "price", price, price, NO_PRICE_SOURCE)
+
+    def matched(self, identifier: str, slug: str, match: Mapping[str, Any]) -> None:
+        """Take price, threshold, release date and slug from one OpenRouter entry."""
+
+        entry = self.entries[identifier]
+        gateways = dict(entry.get("gateways") or {})
+        if gateways.get("openrouter") != slug:
+            self.set(
+                "openrouter", identifier, "gateways", {**gateways, "openrouter": slug}
+            )
+
+        listed = match.get("pricing")
+        pricing: Mapping[str, Any] = listed if isinstance(listed, dict) else {}
+        base = _openrouter_card(pricing, entry.get("price"))
+        self.set("openrouter", identifier, "price", base)
+
+        override = next(
+            (
+                item
+                for item in pricing.get("overrides") or []
+                if isinstance(item, dict)
+                and _whole(item.get("min_prompt_tokens")) is not None
+            ),
+            None,
+        )
+        if override is not None:
+            self.set(
+                "openrouter",
+                identifier,
+                "long_context_threshold",
+                _whole(override["min_prompt_tokens"]),
+            )
+            self.set(
+                "openrouter",
+                identifier,
+                "long_context",
+                _openrouter_card(override, base),
+            )
+
+        created = _whole(match.get("created"))
+        if entry.get("released") is None and created is not None:
+            self.set(
+                "openrouter",
+                identifier,
+                "released",
+                datetime.fromtimestamp(created, UTC).date().isoformat(),
+            )
+
+        entry["source_url"] = f"https://openrouter.ai/{slug}"
+        entry["retrieved"] = self.today
+
+    def settled(self) -> tuple[dict[str, dict[str, Any]], list[dict[str, str]]]:
+        """Return every entry this pass changed that the validator accepts, and what it refused.
+
+        A refused entry keeps what it had, and the rows about it are withdrawn,
+        a change that did not happen being no change to journal.
+        """
+
+        changed: dict[str, dict[str, Any]] = {}
+        discarded: list[dict[str, str]] = []
+        for identifier, entry in self.entries.items():
+            if entry == self.known.get(identifier):
+                continue
+            fault = _model_fault(entry)
+            if fault is None and _model(entry) is None:
+                fault = "names no provider and family"
+            if fault is not None:
+                discarded.append({"model": identifier, "reason": fault})
+                self.rows = [row for row in self.rows if row["model"] != identifier]
+                continue
+            changed[identifier] = entry
+        return changed, discarded
+
+
+class _Exchange:
+    """One newline-delimited JSON conversation with a harness over its stdio.
+
+    The process runs in a group of its own, and leaving the block kills that
+    group, so a harness that goes on waiting — for a login, for a prompt that
+    never comes — outlives neither the exchange nor its deadline.
+    """
+
+    def __init__(self, argv: Sequence[str]) -> None:
+        self._deadline = time.monotonic() + EXCHANGE_SECONDS
+        self._buffer = b""
+        # The home directory, which nothing in this collection removes; the
+        # exchange itself reads and writes nothing there.
+        self._process = subprocess.Popen(
+            list(argv),
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            cwd=_quiet_directory(),
+            start_new_session=True,
+        )
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, *raised: object) -> None:
+        self.close()
+
+    def send(self, message: Mapping[str, Any]) -> None:
+        """Write one message as one line."""
+
+        stream = self._process.stdin
+        assert stream is not None
+        stream.write((json.dumps(message) + "\n").encode("utf-8"))
+        stream.flush()
+
+    def receive(self, wanted: Callable[[dict[str, Any]], bool]) -> dict[str, Any]:
+        """Return the first message *wanted* accepts, skipping every other line."""
+
+        while True:
+            line = self._line()
+            try:
+                message = json.loads(line)
+            except ValueError:
+                continue
+            if isinstance(message, dict) and wanted(message):
+                return message
+
+    def _line(self) -> bytes:
+        stream = self._process.stdout
+        assert stream is not None
+        while b"\n" not in self._buffer:
+            left = self._deadline - time.monotonic()
+            if left <= 0:
+                raise TimeoutError
+            ready, _, _ = select.select([stream], [], [], left)
+            if not ready:
+                raise TimeoutError
+            chunk = os.read(stream.fileno(), 1 << 16)
+            if not chunk:
+                raise EOFError("the harness closed its output")
+            self._buffer += chunk
+        line, _, self._buffer = self._buffer.partition(b"\n")
+        return line
+
+    def close(self) -> None:
+        """Stop the harness and everything it started."""
+
+        for signal_number in (signal.SIGTERM, signal.SIGKILL):
+            try:
+                os.killpg(self._process.pid, signal_number)
+            except ProcessLookupError:
+                break
+            try:
+                self._process.wait(timeout=2)
+                break
+            except subprocess.TimeoutExpired:
+                continue
+        for stream in (self._process.stdin, self._process.stdout):
+            if stream is not None:
+                stream.close()
+
+
+def _consult(
+    reader: Callable[[datetime], Reading] | None, source: str, started: datetime
+) -> Reading:
+    """Run one reader, turning any failure of its own into an unreadable source."""
+
+    if reader is None:
+        return unreadable(source, "no reader is wired for this source")
+    try:
+        return reader(started)
+    except Exception as failure:  # noqa: BLE001 - one source failing must not cost the other two
+        return unreadable(source, f"the reader failed: {failure!r}")
+
+
+def _new_entry(offer: Offer, source: str, today: str) -> dict[str, Any]:
+    """Return the complete record of a model a harness list established.
+
+    Attributed to that list's own documentation until OpenRouter matches it,
+    unpriced, and with no capability: that is a seeded prior and nothing here
+    seeds it.
+    """
+
+    return {
+        **dict.fromkeys(MODEL_FIELDS),
+        "id": offer.id,
+        "provider": offer.provider,
+        "family": offer.family,
+        "aliases": list(offer.aliases),
+        "deliberation": list(offer.levels or ()),
+        "reasoning_billed_as": "output",
+        "gateways": {},
+        "source_url": HARNESS_DOCS[source],
+        "retrieved": today,
+    }
+
+
+def _openrouter_card(pricing: Mapping[str, Any], standing: Any) -> dict[str, Any]:
+    """Return a rate card from OpenRouter's per-token prices, over *standing*.
+
+    A category OpenRouter omits keeps what *standing* has, so a partial
+    listing never costs the catalogue a figure. A price that will not convert
+    is carried as given, for the validator to refuse by name.
+    """
+
+    held = standing if isinstance(standing, dict) else {}
+    card: dict[str, Any] = {category: held.get(category) for category in PRICED}
+    for theirs, ours in OPENROUTER_CATEGORIES:
+        raw = pricing.get(theirs)
+        if raw is None:
+            continue
+        converted = per_million(raw)
+        card[ours] = raw if converted is None else converted
+    card["currency"] = CURRENCY
+    card["unit"] = UNIT
+    return card
+
+
+def _openrouter_levels(entry: Mapping[str, Any]) -> tuple[str, ...]:
+    """Return the ladder levels an OpenRouter entry's reasoning block supports."""
+
+    reasoning = entry.get("reasoning")
+    efforts = (
+        reasoning.get("supported_efforts") if isinstance(reasoning, dict) else None
+    )
+    return _levels(efforts) or ()
+
+
+def _levels(raw: Any) -> tuple[str, ...] | None:
+    """Return the ladder levels a list names, in ladder order, or None for no list.
+
+    A level off the ladder — Codex's `ultra`, OpenRouter's `none` — is dropped
+    rather than refused, since the list is the harness's and not the catalogue's.
+    """
+
+    if not isinstance(raw, list):
+        return None
+    named = {item for item in raw if isinstance(item, str)}
+    return tuple(level for level in LEVELS if level in named)
+
+
+def _gpt_family(identifier: str) -> str:
+    """Return a GPT model's family: its last segment where alphabetic, else the id."""
+
+    head, _, last = identifier.rpartition("-")
+    return last if head and last.isalpha() else identifier
+
+
+def _unbracketed(name: str) -> str:
+    """Return a Claude model name without a bracketed serving selector such as `[1m]`."""
+
+    return re.sub(r"\[[^\]]*\]$", "", name)
+
+
+def _stale(fetched_at: str | None, started: datetime) -> str | None:
+    """Return why a Codex list came from its bundled fallback, or None where it is fresh."""
+
+    fetched = _parsed_instant(fetched_at)
+    if fetched is None:
+        return "Codex's models cache carries no readable fetched_at, so the list is its bundled one"
+    if fetched < started - timedelta(seconds=CODEX_CACHE_TTL):
+        return (
+            f"Codex's models cache was fetched_at {fetched_at}, more than "
+            f"{CODEX_CACHE_TTL} seconds before the pass, so the list is its bundled one"
+        )
+    return None
+
+
+def _codex_fetched_at() -> str | None:
+    """Return the `fetched_at` of the models cache in the `CODEX_HOME` Codex used."""
+
+    named = os.environ.get("CODEX_HOME")
+    try:
+        home = Path(named) if named else Path.home() / ".codex"
+        raw = json.loads((home / CODEX_CACHE_FILE).read_text(encoding="utf-8"))
+    except (RuntimeError, OSError, ValueError):
+        return None
+    return _text(raw.get("fetched_at")) if isinstance(raw, dict) else None
+
+
+def _fetch(url: str) -> bytes:
+    """GET one OpenRouter page, unauthenticated, within the exchange deadline."""
+
+    request = urllib.request.Request(
+        url,
+        headers={"Accept": "application/json", "User-Agent": "kntnt-model-selector"},
+    )
+    with urllib.request.urlopen(request, timeout=EXCHANGE_SECONDS) as response:
+        body: bytes = response.read()
+    return body
+
+
+def _quiet_directory() -> Path:
+    """Return the working directory an exchange is started in."""
+
+    try:
+        return Path.home()
+    except RuntimeError:
+        return Path(tempfile.gettempdir())
+
+
+def _same(field: str, old: Any, new: Any) -> bool:
+    """Return whether two values of *field* are the same fact.
+
+    Rate cards compare category by category at six places, so a float read
+    back from JSON never differs from the Decimal it was rounded from.
+    """
+
+    if field in ("price", "long_context"):
+        return bool(_rounded_card(old) == _rounded_card(new))
+    return bool(old == new)
+
+
+def _rounded_card(card: Any) -> Any:
+    """Return a rate card with every number at six places, for comparison."""
+
+    if not isinstance(card, dict):
+        return card
+    return {
+        key: float(Decimal(repr(value)).quantize(_PLACES))
+        if isinstance(value, float | int)
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+        else value
+        for key, value in card.items()
+    }
+
+
+def _whole(raw: Any) -> int | None:
+    """Return a whole number, or None for anything else."""
+
+    if (
+        isinstance(raw, bool)
+        or not isinstance(raw, (int, float))
+        or not math.isfinite(raw)
+    ):
+        return None
+    return int(raw)
+
+
+def _instant(moment: datetime) -> str:
+    """Return a UTC instant the way this Skill stamps what it wrote."""
+
+    return moment.astimezone(UTC).isoformat().replace("+00:00", "Z")
+
+
+def _parsed_instant(raw: Any) -> datetime | None:
+    """Return an ISO instant as an aware UTC datetime, or None."""
+
+    if not isinstance(raw, str):
+        return None
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except ValueError:
+        return None
+    return (
+        parsed.replace(tzinfo=UTC) if parsed.tzinfo is None else parsed.astimezone(UTC)
+    )
+
+
+def _last_pass(path: Path) -> dict[str, Any]:
+    """Return what the previous pass wrote, or nothing where there is none."""
+
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return raw if isinstance(raw, dict) else {}
+
+
+def _replace_json(path: Path, document: Mapping[str, Any]) -> None:
+    """Write one JSON document whole, through a sibling and an atomic rename."""
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    staged = path.parent / f"{path.name}.tmp"
+    staged.write_text(
+        json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    staged.replace(path)
+
+
 def default_data() -> Path:
     """Return the directory this Skill keeps its refreshed facts in by default."""
 
@@ -942,6 +2148,21 @@ def _priced(price: Price | None) -> dict[str, Any] | None:
     }
 
 
+def _agents(named: str | None) -> Path:
+    """Return the agents directory a pass resyncs, Claude Code's own by default.
+
+    The default is for a person or a scheduler running the pass; a test names
+    a directory of its own.
+    """
+
+    if named:
+        return Path(named).expanduser()
+    try:
+        return Path.home() / ".claude" / "agents"
+    except RuntimeError:
+        return Path.cwd() / ".claude" / "agents"
+
+
 def _emit(payload: Mapping[str, Any]) -> None:
     """Print one machine-readable answer, as every reader of this Skill's gets it."""
 
@@ -968,8 +2189,10 @@ def main(argv: list[str] | None = None) -> int:
             "adopt a document of fetched facts into them."
         ),
     )
-    parser.add_argument("action", nargs="*", metavar="adopt <path>")
+    parser.add_argument("action", nargs="*", metavar="adopt <path> | refresh | journal")
     parser.add_argument("--data", default=str(default_data()))
+    parser.add_argument("--agents")
+    parser.add_argument("--days", type=int, default=7)
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
 
     data_dir = Path(args.data).expanduser()
@@ -978,8 +2201,17 @@ def main(argv: list[str] | None = None) -> int:
         _emit(_document(load(data_dir, here)))
         return 0
 
+    if args.action == ["refresh"]:
+        _emit(refresh(data_dir, here, _agents(args.agents)))
+        return 0
+    if args.action == ["journal"]:
+        _emit(journal(data_dir, args.days))
+        return 0
+
     if len(args.action) != 2 or args.action[0] != "adopt":
-        parser.error("the one verb beside the bare form is `adopt <path>`")
+        parser.error(
+            "the verbs beside the bare form are `adopt <path>`, `refresh` and `journal`"
+        )
 
     report = adopt(data_dir, here, Path(args.action[1]).expanduser())
     _emit(report)

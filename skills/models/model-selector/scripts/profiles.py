@@ -86,9 +86,10 @@ class Channel:
     to keep true that no decision ever reads.
 
     `rates` is what the user pays per token on this channel, where they pay
-    per token at all. The catalogue holds one list price per model from the
-    provider's own page, which is the wrong bill for a gateway — and a gateway
-    is exactly the arrangement that has nowhere else to be recorded.
+    per token at all. The catalogue holds one price per model, the one
+    OpenRouter publishes: through OpenRouter that is the charge, through any
+    other gateway it is the wrong bill, and a rate recorded here replaces it
+    on whichever channel it is recorded for.
     """
 
     provider: str

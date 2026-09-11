@@ -50,8 +50,8 @@ Ask per maker **and per channel**, because the same maker is commonly reached tw
 
 **An API channel means a rate card.** Ask only whether the provider is reached directly or through a gateway, and which gateway where that is the answer.
 
-- **Directly**, the catalogue already holds the rate card, per model and token category, from the provider's own page. Ask nothing further.
-- **Through a gateway**, the catalogue holds nothing that applies. What it holds is the provider's own list price, which is a different arrangement's bill — on this collection's own machine the gateway's ratio of input to output was wrong by more than a factor of two against it. So ask what the user pays per million tokens, for input, cached input, cache writes and output, and record it on the channel.
+- **Directly**, the catalogue already holds the rate card, per model and token category: the price OpenRouter publishes, the one measure it keeps for every channel. Ask nothing further.
+- **Through a gateway**, what the catalogue holds is the price OpenRouter publishes: through OpenRouter that is the charge itself, and through any other gateway it is a different arrangement's bill. A rate the user records replaces it either way. So ask what the user pays per million tokens, for input, cached input, cache writes and output, and record it on the channel.
 
 **Every figure is USD, and nothing anywhere converts.** Ask for a rate card in USD per million tokens, and say so as you ask. A card in any other currency is refused by the writer, by name, rather than added to a dollar bill in silence. Where the user's gateway quotes one averaged input rate with caching already accounted for, that single rate is what every input category carries, and say that is what you have done.
 

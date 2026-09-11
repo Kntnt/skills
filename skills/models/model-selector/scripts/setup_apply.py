@@ -211,8 +211,8 @@ def _noticed(channels: Sequence[Channel], cat: Catalogue) -> list[str]:
         if channel.gateway is not None and channel.rates is None:
             said.append(
                 f"the {channel.provider} channel through {channel.gateway} carries "
-                f"no rate card, so it is priced at {channel.provider}'s own list "
-                f"price; a gateway prices differently"
+                f"no rate card, so it is priced at the catalogue's price, which is "
+                f"OpenRouter's published one; another gateway prices differently"
             )
     return said
 

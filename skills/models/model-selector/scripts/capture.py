@@ -1162,7 +1162,8 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     session's own last invocation additionally carries — one bounded grading
     pass — is bounded in its own module and reaches a model only from there
     (ADR-0179). Nothing on this path reaches the network at all: the world's
-    own facts are fetched by the agent running `setup` or `update` (ADR-0185).
+    own facts are read by the catalogue pass, which a person runs, and by the
+    agent running `setup` or `update` (ADR-0185, ADR-0191).
 
     The object returned here is a diagnostic and never a Harness's protocol,
     so the command line writes it to standard error and leaves standard output

@@ -756,9 +756,9 @@ def _locked_to_deliberation(
 def _paid(profile: Profile, point: Point, harness: str) -> catalogue.Price | None:
     """Return the rate card the channel that pays for this point carries.
 
-    A gateway prices the same model differently from the provider whose model
-    it is, and the catalogue holds the provider's own list price alone. Where
-    the user has said what they pay, that is what the comparison is made on.
+    The catalogue holds the price OpenRouter publishes, which is the charge
+    through OpenRouter and a stand-in on every other channel. Where the user
+    has said what they pay, that is what the comparison is made on.
     """
 
     channel = profiles.channel_for(profile, point.model, harness)
