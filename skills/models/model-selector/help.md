@@ -140,7 +140,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the shipped selection engine, the interview's writer, the catalogue's own reader and validator, and the capture hooks. The network is reached by `update` and by `setup`, and by nothing else; every other command works from what is already on disk. Reading a provider's page needs whatever web tool your Harness gives the agent, and where it gives none, `update` says so and changes nothing. Grading a finished unit calls one model, chosen as the cheapest your own profile makes reachable that the measurements are confident in, and stops rather than inventing a number where none can be reached.
+`uv` runs the shipped selection engine, the interview's writer, the catalogue's own reader and validator, and the capture hooks. The network is reached by `update` and by `setup`, and by nothing else; every other command works from what is already on disk. Reading a provider's page needs whatever web tool your Harness gives the agent, and where it gives none, `update` says so and changes nothing. Grading a finished unit calls one model, chosen, among those your own profile makes reachable that the measurements are confident in, as the one whose price per finished job is lowest, and stops rather than inventing a number where none can be reached.
 
 ## SEE ALSO
 
