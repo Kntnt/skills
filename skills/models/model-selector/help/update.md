@@ -40,7 +40,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the catalogue's own reader and validator. Reading a page needs whatever web tool your Harness gives the agent. This command and `setup` are the only two commands that reach the network, and the catalogue pass, `scripts/catalogue.py refresh`, is the one thing beside them that does.
+`uv` runs the catalogue's own reader and validator. Reading a page needs whatever web tool your Harness gives the agent. This command and `setup` are the only two commands that reach the network. The catalogue pass, `scripts/catalogue.py refresh`, is the one thing beside them that does, once a day by itself and whenever it is started by hand, and it reaches only the three structured model lists, never a page.
 
 ## SEE ALSO
 

@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "8cd3659b9648607b7bb6365836147b791fcaeb9de145fc44db30a20b60051752",
+  "manager_digest": "c4ecf43f96ec4613db7db2beeb51d5b65194d6234dda89e2606d54ab2f79b852",
   "skills": [
     {
       "name": "agents-md",
@@ -189,7 +189,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "c5f3563991d66e943cf55e2ceca7c96c67cc8e95b8e2db8019974e3c8f656751",
+      "digest": "01023f20f63afa0b84b57686c7b8fbc2b7937b8c600f5b6694d37eef88879027",
       "binaries": [
         "uv"
       ],

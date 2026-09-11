@@ -844,8 +844,8 @@ def _refold(path: Path, folded: Mapping[str, dict[str, Any]]) -> None:
 
 
 @contextmanager
-def lock(data_dir: Path) -> Iterator[bool]:
-    """Hold the ledger's lock for the length of one pass, or yield False.
+def lock(data_dir: Path, name: str = LOCK_FILE) -> Iterator[bool]:
+    """Hold one lock for the length of one pass, or yield False.
 
     Two passes rewriting the same files at once would each write back what
     the other had just changed, so the second one does nothing at all rather
@@ -853,9 +853,13 @@ def lock(data_dir: Path) -> Iterator[bool]:
     belonged to a process that died and is taken over. Capture appends to the
     pending store without it, which is why a pass that deletes rows for a
     model has to repeat the deletion on every later pass.
+
+    *name* is the lock's file in *data_dir*: the ledger's own by default, and
+    `refresh.lock` for the catalogue pass as a whole, which takes the ledger's
+    as well where it deletes rows.
     """
 
-    path = data_dir / LOCK_FILE
+    path = data_dir / name
     data_dir.mkdir(parents=True, exist_ok=True)
 
     with suppress(OSError):

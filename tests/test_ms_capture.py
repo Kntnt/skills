@@ -1660,7 +1660,11 @@ def test_the_harnesses_a_removal_names_reach_the_removal(monkeypatch: Any) -> No
 
     def _disable(data: Path, root: Path, harnesses: list[str]) -> dict[str, Any]:
         seen.append(list(harnesses))
-        return {"harnesses": [], "unsupported": {"count": 0, "supported": []}}
+        return {
+            "harnesses": [],
+            "unsupported": {"count": 0, "supported": []},
+            "scheduler": {"state": "left", "detail": None},
+        }
 
     monkeypatch.setattr(capture, "disable", _disable)
     monkeypatch.setattr(sys, "stdout", io.StringIO())

@@ -55,12 +55,13 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import re
 import shutil
 import sys
 from contextlib import suppress
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, TextIO
 
@@ -174,6 +175,23 @@ RETIRED_FILES = (
 # because there is one per rejection and no list can hold them all.
 RETIRED_PATTERN = "config.invalid.*.json"
 GRADER_STATE_FILE = "grader.json"
+
+# The job that runs the catalogue pass once a day, installed and removed with
+# this Skill's Enabled state beside the hooks (#312, ADR-0193). It is the
+# operating system's, not any Harness's, so it is one per machine: any install
+# puts it in place, and only a removal naming no Harness — the Skill being
+# Disabled — takes it away. It runs the `catalogue.py` beside this file, at
+# 05:00 local time and at load, against the default data directory, and never
+# carries `--data`.
+SCHEDULE_LABEL = "com.kntnt.model-selector.refresh"
+SCHEDULE_HOUR = 5
+SCHEDULE_MINUTE = 0
+SCHEDULE_ARGUMENTS = ("refresh", "--scheduled")
+
+# The marker the scheduled pass writes when it ends, read here as an on-disk
+# contract rather than imported, and how long after it the pass is overdue.
+REFRESH_MARKER_FILE = "refresh-marker.json"
+OVERDUE_AFTER = timedelta(hours=24)
 
 # The Harnesses whose own finished record this module knows how to split into
 # Units. It is capture's own list rather than the Collection Library's,
@@ -501,8 +519,33 @@ def owner() -> str:
     return "kntnt.model-selector.capture"
 
 
+def _schedule(integrations: Any) -> Any:
+    """Return the daily catalogue pass as the Library's scheduler adapter takes it.
+
+    `uv` is resolved to its absolute path and the `PATH` captured from this
+    process, because launchd's own `PATH` finds neither `uv` nor the harness
+    CLIs the pass asks for their model lists.
+    """
+
+    found = shutil.which("uv")
+    return integrations.Schedule(
+        label=SCHEDULE_LABEL,
+        runner=os.path.abspath(found) if found else "uv",
+        script=Path(__file__).resolve().parent / "catalogue.py",
+        arguments=SCHEDULE_ARGUMENTS,
+        hour=SCHEDULE_HOUR,
+        minute=SCHEDULE_MINUTE,
+        path=os.environ.get("PATH", ""),
+    )
+
+
 def install(
-    data: Path, root: Path, harnesses: list[str], command: list[str]
+    data: Path,
+    root: Path,
+    harnesses: list[str],
+    command: list[str],
+    *,
+    platform: str | None = None,
 ) -> dict[str, Any]:
     """Install this feature's owned integration, idempotently.
 
@@ -519,6 +562,12 @@ def install(
     adapter for three of the seventy-odd this machine may have — would
     otherwise bury the outcome that matters under rows for Harnesses no
     adapter exists for (#223 decision 3).
+
+    The daily catalogue pass's job is put in place whatever Harness is named,
+    being one per machine, and answered under `scheduler`: `loaded`, `not
+    loaded` — written but kept out of launchd, as under a redirected home — or
+    `unsatisfied` on an operating system with no adapter. *platform* stands
+    in for `sys.platform`.
     """
 
     integrations = _integrations()
@@ -536,11 +585,18 @@ def install(
     return {
         "installed": installed,
         "unsupported": {"count": len(unsupported), "supported": sorted(supported)},
+        "scheduler": integrations.install_schedule(
+            _schedule(integrations), root, platform=platform
+        ),
     }
 
 
 def disable(
-    data: Path, root: Path, harnesses: list[str] | None = None
+    data: Path,
+    root: Path,
+    harnesses: list[str] | None = None,
+    *,
+    platform: str | None = None,
 ) -> dict[str, Any]:
     """Remove every integration this feature owns, wherever it installed one.
 
@@ -556,6 +612,11 @@ def disable(
     an install. The word accepts `--harness` on either side of the seam, and a
     caller reading the two as symmetric would otherwise lose an integration it
     never named.
+
+    The daily catalogue pass's job goes only with a removal naming no Harness,
+    which is the Skill being Disabled: `scheduler` says `removed`, `left` where
+    Harnesses were named, or `unsatisfied` on an operating system with no
+    adapter.
     """
 
     integrations = _integrations()
@@ -563,12 +624,19 @@ def disable(
     named = list(harnesses or []) or list(integrations.SUPPORTED)
     attempted = [harness for harness in named if harness in supported]
     removed = [integrations.remove(owner(), harness, root) for harness in attempted]
+    if harnesses and integrations.scheduler_supported(platform):
+        scheduler: dict[str, Any] = {"state": "left", "detail": None}
+    else:
+        scheduler = integrations.remove_schedule(
+            SCHEDULE_LABEL, root, platform=platform
+        )
     return {
         "harnesses": removed,
         "unsupported": {
             "count": len(named) - len(attempted),
             "supported": sorted(supported),
         },
+        "scheduler": scheduler,
     }
 
 
@@ -1162,8 +1230,9 @@ def hook(data: Path, event: str, payload: Any) -> dict[str, Any]:
     session's own last invocation additionally carries — one bounded grading
     pass — is bounded in its own module and reaches a model only from there
     (ADR-0179). Nothing on this path reaches the network at all: the world's
-    own facts are read by the catalogue pass, which a person runs, and by the
-    agent running `setup` or `update` (ADR-0185, ADR-0191).
+    own facts are read by the catalogue pass, which its own daily job runs and
+    a person may start, and by the agent running `setup` or `update`
+    (ADR-0191, ADR-0193).
 
     The object returned here is a diagnostic and never a Harness's protocol,
     so the command line writes it to standard error and leaves standard output
@@ -1290,7 +1359,13 @@ def _oldest_waiting(data: Path) -> datetime | None:
     return min(finished, default=None)
 
 
-def status(data: Path, root: Path, now: datetime | None = None) -> dict[str, Any]:
+def status(
+    data: Path,
+    root: Path,
+    now: datetime | None = None,
+    *,
+    platform: str | None = None,
+) -> dict[str, Any]:
     """Report capture's own state, without a network request or an evaluation.
 
     Every Harness the Collection Library has an adapter for is reported,
@@ -1311,6 +1386,12 @@ def status(data: Path, root: Path, now: datetime | None = None) -> dict[str, Any
     queue at its cap every day falls further behind every day, and says so
     here with when the cap frees and when the oldest waiting Unit finished.
     `now` is reported beside them, the instant both were read at.
+
+    The daily catalogue pass is reported under `scheduler`: its job's health,
+    `unsatisfied`, `absent`, `degraded` or `healthy`; `next_due`, the next
+    05:00 local time, where a job is on disk to run then; `overdue`, whether
+    the last scheduled pass ended more than a day ago, null before the first;
+    and `last_pass`, when that pass ended and which bound it hit.
     """
 
     instant = now or datetime.now(UTC)
@@ -1337,6 +1418,41 @@ def status(data: Path, root: Path, now: datetime | None = None) -> dict[str, Any
         "judged_in_window": cap.in_window,
         "oldest_waiting_at": _stamp(oldest) if oldest else None,
         "retired": len(retired(data)),
+        "scheduler": _scheduler(data, root, instant, platform),
+    }
+
+
+def _scheduler(
+    data: Path, root: Path, now: datetime, platform: str | None
+) -> dict[str, Any]:
+    """Return the daily catalogue pass's job and its last scheduled pass, as status reports them."""
+
+    integrations = _integrations()
+    health = integrations.schedule_health(
+        _schedule(integrations), root, platform=platform
+    )
+    try:
+        raw = json.loads((data / REFRESH_MARKER_FILE).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        raw = None
+    marker = raw if isinstance(raw, dict) else None
+    ended = _parsed(marker.get("ended_at")) if marker else None
+    if ended is not None and ended.tzinfo is None:
+        ended = None
+    due = (
+        integrations.next_run(SCHEDULE_HOUR, SCHEDULE_MINUTE, now)
+        if health["health"] in ("healthy", "degraded")
+        else None
+    )
+    return {
+        "health": health["health"],
+        "detail": health["detail"],
+        "capability": health["capability"],
+        "next_due": due.isoformat() if due else None,
+        "overdue": None if ended is None else now - ended > OVERDUE_AFTER,
+        "last_pass": None
+        if marker is None
+        else {"ended_at": marker.get("ended_at"), "bound_hit": marker.get("bound_hit")},
     }
 
 
@@ -1521,6 +1637,7 @@ def remove_integrations(harnesses: list[str]) -> dict[str, Any]:
     return {
         "removed": result["harnesses"],
         "unsupported": result["unsupported"],
+        "scheduler": result["scheduler"],
         "measurements_preserved": True,
     }
 

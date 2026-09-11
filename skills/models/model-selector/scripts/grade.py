@@ -242,7 +242,7 @@ class JudgeCap:
     """Whether the judge is at its daily cap, and when it stops being so.
 
     `frees_at` is None wherever the judge is not capped: there is nothing to
-    wait for. Nothing runs on a timer, so it is when the cap frees and not when
+    wait for. Grading runs on no timer, so it is when the cap frees and not when
     judging happens — that is the first session end after it.
     """
 

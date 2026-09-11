@@ -29,16 +29,29 @@ protocol reports back. A Harness that gates a new integration behind a user's
 trust, as Codex does, is reported gated rather than healthy: present, not yet
 active, and never a trust decision this collection forges on the user's
 behalf.
+
+One owned entry is no Harness's at all: a job the operating system runs on a
+clock, for an owner whose work has to happen whether or not anybody opens a
+session (ADR-0193). It follows the same rules — the owner travels in what is
+written, disk is the truth, and an operating system with no adapter is
+reported Unsatisfied — and it is written only into the account it names: the
+real `launchd` is spoken to only where the job's own file lies inside the
+real user's home, so a redirected home or a temporary root never loads
+anything.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import plistlib
 import re
+import subprocess
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, NamedTuple
 
 # The lifecycle moments a capture-shaped integration may ask this Harness for.
 # They are observations rather than verdicts: a stop says a turn ended, never
@@ -1123,6 +1136,332 @@ _FOLD_ORDER: tuple[str, ...] = (
     "installed",
     "healthy",
 )
+
+
+# --- A job the operating system runs on a clock -------------------------------
+#
+# The one adapter is macOS's `launchd`, as a user LaunchAgent under the home the
+# caller hands in. `StartCalendarInterval` rather than `StartInterval`, because
+# `launchd.plist(5)` coalesces the calendar firings missed while the Mac slept
+# into one run on wake, where an interval's are simply lost (ADR-0193).
+# `RunAtLoad` as well, so a login after a day the Mac was off still runs that
+# day's job; the owner's own marker is what makes a second run that day
+# harmless, and nothing here knows about it.
+SCHEDULER_PLATFORMS: tuple[str, ...] = ("darwin",)
+
+# Why an operating system outside SCHEDULER_PLATFORMS gets no job, in the same
+# words every other Capability the agent has to answer for itself is said in.
+SCHEDULER_UNSATISFIED = (
+    "this operating system has no scheduler this collection has an adapter "
+    "for, so nothing runs this job by itself here; macOS's launchd is the one "
+    "adapter, and the job can still be run by hand"
+)
+
+# Why a job was written and not loaded: the account the file names is not the
+# one this process runs as, which is what a Manager Sandbox's redirected home
+# and a test's temporary root both are.
+NOT_THE_REAL_ACCOUNT = (
+    "the job was written outside the real user's home, so nothing was loaded "
+    "into launchd"
+)
+
+# How long one `launchctl` command may take. Every one of them answers from
+# launchd's own state and returns at once; a hung one is not worth waiting on.
+LAUNCHCTL_SECONDS = 10
+
+
+class Schedule(NamedTuple):
+    """One job an owner wants run daily, at a local time, through `uv run`.
+
+    `label` is the job's name and carries its owner, which is what makes
+    removal surgical. `runner` is the absolute path of `uv`, and `path` the
+    `PATH` the job runs with, both resolved by whoever installs it, because
+    launchd's own `PATH` finds neither `uv` nor the tools a job starts.
+    """
+
+    label: str
+    runner: str
+    script: Path
+    arguments: tuple[str, ...]
+    hour: int
+    minute: int
+    path: str
+
+
+def scheduler_supported(platform: str | None = None) -> bool:
+    """Return whether this collection has a scheduler adapter for *platform*."""
+
+    return (sys.platform if platform is None else platform) in SCHEDULER_PLATFORMS
+
+
+def _job_path(label: str, root: Path) -> Path:
+    """Return where a user LaunchAgent named *label* lives under *root*."""
+
+    return root / "Library" / "LaunchAgents" / f"{label}.plist"
+
+
+def _job(schedule: Schedule) -> dict[str, Any]:
+    """Return the whole LaunchAgent document *schedule* installs."""
+
+    return {
+        "Label": schedule.label,
+        "ProgramArguments": [
+            schedule.runner,
+            "run",
+            str(schedule.script),
+            *schedule.arguments,
+        ],
+        "EnvironmentVariables": {"PATH": schedule.path},
+        "StartCalendarInterval": {"Hour": schedule.hour, "Minute": schedule.minute},
+        "RunAtLoad": True,
+    }
+
+
+def _compared(job: dict[str, Any]) -> tuple[Any, ...]:
+    """Return the keys that make a job the job an owner asked for.
+
+    The `uv` path and the captured `PATH` depend on who is asking, and the
+    script's path on which placed copy of the Skill installed last, so none of
+    them is compared: several copies would otherwise flap the job between
+    healthy and degraded, and between reloads, for ever.
+    """
+
+    arguments = job.get("ProgramArguments")
+    tail = list(arguments[3:]) if isinstance(arguments, list) else None
+    return (
+        job.get("Label"),
+        job.get("StartCalendarInterval"),
+        job.get("RunAtLoad"),
+        tail,
+    )
+
+
+def _standing(path: Path) -> dict[str, Any] | None:
+    """Return the job on disk at *path*, or None where it is absent or unreadable."""
+
+    try:
+        with path.open("rb") as stream:
+            loaded = plistlib.load(stream)
+    except (OSError, ValueError, plistlib.InvalidFileException):
+        return None
+    return loaded if isinstance(loaded, dict) else None
+
+
+def _real_account(directory: Path) -> bool:
+    """Return whether *directory* lies inside the real user's home.
+
+    The home the password database names, and never `$HOME`: a Manager Sandbox
+    redirects `$HOME` to rehearse an install, and a rehearsal must not load a
+    job into the account it is rehearsing for.
+    """
+
+    try:
+        import pwd
+
+        real = Path(pwd.getpwuid(os.getuid()).pw_dir).resolve()
+    except (ImportError, KeyError, OSError):
+        return False
+    return directory.resolve().is_relative_to(real)
+
+
+def _launchctl(*arguments: str) -> subprocess.CompletedProcess[str] | None:
+    """Run one `launchctl` command, or return None where it could not be run."""
+
+    # The root directory as its working directory: launchctl reads nothing
+    # relative to where it stands, and `/` is the one directory no run of this
+    # collection can replace or remove from under it.
+    try:
+        return subprocess.run(
+            ["launchctl", *arguments],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=LAUNCHCTL_SECONDS,
+            cwd="/",
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def _domain() -> str:
+    """Return the launchd domain of this user's own login session."""
+
+    return f"gui/{os.getuid()}"
+
+
+def _loaded(label: str, directory: Path) -> bool:
+    """Return whether launchd holds *label*, asking it only for the real account."""
+
+    if not _real_account(directory):
+        return False
+    done = _launchctl("print", f"{_domain()}/{label}")
+    return done is not None and done.returncode == 0
+
+
+def install_schedule(
+    schedule: Schedule, root: Path, *, platform: str | None = None
+) -> dict[str, Any]:
+    """Put *schedule*'s job in place under *root*, and load it into the real account.
+
+    The file is always written, so the `uv` path and the `PATH` it carries
+    stay those of the latest install. Where the job on disk already matched on
+    the keys that make it this job and launchd holds it, nothing is reloaded:
+    reloading boots out a running job, and a Manager refresh that changed
+    nothing must not kill a pass mid-run. Otherwise the label is booted out,
+    whatever it was, and the file bootstrapped. The answer's `state` is
+    `loaded`, `not loaded`, or `unsatisfied` where there is no adapter.
+    """
+
+    if not scheduler_supported(platform):
+        return {
+            "state": "unsatisfied",
+            "plist": None,
+            "capability": SCHEDULER_UNSATISFIED,
+            "detail": None,
+        }
+
+    path = _job_path(schedule.label, root)
+    if not Path(schedule.runner).is_absolute():
+        return {
+            "state": "not loaded",
+            "plist": None,
+            "capability": None,
+            "detail": (
+                f"no absolute path to uv was found (got {schedule.runner!r}), "
+                "so no job was written"
+            ),
+        }
+
+    wanted = _job(schedule)
+    standing = _standing(path)
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        staged = path.with_name(f"{path.name}.tmp")
+        staged.write_bytes(plistlib.dumps(wanted))
+        staged.replace(path)
+    except OSError as exc:
+        return {
+            "state": "not loaded",
+            "plist": None,
+            "capability": None,
+            "detail": f"the job could not be written: {exc}",
+        }
+
+    answer: dict[str, Any] = {"plist": str(path), "capability": None}
+    if not _real_account(path.parent):
+        return {**answer, "state": "not loaded", "detail": NOT_THE_REAL_ACCOUNT}
+    if (
+        standing is not None
+        and _compared(standing) == _compared(wanted)
+        and _loaded(schedule.label, path.parent)
+    ):
+        return {**answer, "state": "loaded", "detail": None}
+
+    # Out first, whatever launchd holds under the label, so the job loaded is
+    # the one just written. Booting out a label nothing holds fails, and that
+    # failure is the converged state rather than a problem.
+    _launchctl("bootout", f"{_domain()}/{schedule.label}")
+    done = _launchctl("bootstrap", _domain(), str(path))
+    if done is None or done.returncode != 0:
+        said = (done.stderr or done.stdout).strip() if done is not None else ""
+        return {
+            **answer,
+            "state": "not loaded",
+            "detail": said or "launchctl could not be run",
+        }
+    return {**answer, "state": "loaded", "detail": None}
+
+
+def remove_schedule(
+    label: str, root: Path, *, platform: str | None = None
+) -> dict[str, Any]:
+    """Boot the job named *label* out of the real account and delete its file.
+
+    Surgical: only this label is booted out and only its own file deleted, so
+    every other job under the same directory stays exactly as it was. The
+    real `launchd` is spoken to only where the file lies inside the real
+    user's home, so a rehearsed Disable never unloads the real job.
+    """
+
+    if not scheduler_supported(platform):
+        return {
+            "state": "unsatisfied",
+            "capability": SCHEDULER_UNSATISFIED,
+            "detail": None,
+        }
+
+    path = _job_path(label, root)
+    if _real_account(path.parent):
+        _launchctl("bootout", f"{_domain()}/{label}")
+    try:
+        path.unlink(missing_ok=True)
+    except OSError as exc:
+        return {"state": "failed", "detail": f"the job could not be deleted: {exc}"}
+    return {"state": "removed", "detail": None}
+
+
+def schedule_health(
+    schedule: Schedule, root: Path, *, platform: str | None = None
+) -> dict[str, Any]:
+    """Report what the operating system holds of *schedule*'s job right now.
+
+    `unsatisfied` where there is no adapter, `absent` where there is no file,
+    `degraded` where the file differs from what install writes on the keys
+    that make it this job, names a `uv` that is not there to run, or is not
+    loaded — a job written under a redirected home included — and `healthy`
+    otherwise.
+    """
+
+    if not scheduler_supported(platform):
+        return {
+            "health": "unsatisfied",
+            "capability": SCHEDULER_UNSATISFIED,
+            "detail": None,
+        }
+
+    path = _job_path(schedule.label, root)
+    if not path.exists():
+        return {"health": "absent", "capability": None, "detail": None}
+
+    standing = _standing(path)
+    detail: str | None = None
+    if standing is None:
+        detail = f"{path} cannot be read as a property list"
+    elif _compared(standing) != _compared(_job(schedule)):
+        detail = f"{path} differs from the job install writes"
+    else:
+        runner = standing["ProgramArguments"][0]
+        if not isinstance(runner, str) or not (
+            Path(runner).is_file() and os.access(runner, os.X_OK)
+        ):
+            detail = f"the uv the job runs, {runner!r}, is not there to run"
+        elif not _loaded(schedule.label, path.parent):
+            detail = (
+                NOT_THE_REAL_ACCOUNT
+                if not _real_account(path.parent)
+                else "the job is on disk and launchd does not hold it"
+            )
+    return {
+        "health": "healthy" if detail is None else "degraded",
+        "capability": None,
+        "detail": detail,
+    }
+
+
+def next_run(hour: int, minute: int, now: datetime) -> datetime:
+    """Return the first *hour*:*minute* local time after *now*, with its offset.
+
+    Built from the local date rather than by adding a day to an offset, so a
+    change to or from daylight saving time between now and then is honoured.
+    """
+
+    local = now.astimezone()
+    for days in (0, 1, 2):
+        day = local.date() + timedelta(days=days)
+        due = datetime(day.year, day.month, day.day, hour, minute).astimezone()
+        if due > local:
+            return due
+    raise AssertionError("a local time recurs within two days")
 
 
 def fold(records: list[dict[str, Any]]) -> dict[str, Any]:

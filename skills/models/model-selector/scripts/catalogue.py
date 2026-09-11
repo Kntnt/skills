@@ -38,7 +38,8 @@ import tempfile
 import time
 import urllib.parse
 import urllib.request
-from collections.abc import Callable, Collection, Mapping, Sequence
+from collections.abc import Callable, Collection, Iterator, Mapping, Sequence
+from contextlib import contextmanager, suppress
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal, InvalidOperation
@@ -992,9 +993,18 @@ CLAUDE_LIST_ARGV = (
 CLAUDE_REQUEST_ID = "refresh-init"
 CODEX_LIST_ARGV = ("codex", "app-server", "--listen", "stdio://")
 
-# How long one exchange may take before its process group is killed and the
-# source reported unreadable: a `claude` waiting for a login never answers.
+# How long one source may take before it is reported unreadable: a harness
+# exchange's process group is killed at it, and OpenRouter's pages share it as
+# one budget, each request given what remains. A `claude` waiting for a login
+# never answers. Each source is given the lesser of this and what remains of
+# the whole pass, which is how the whole deadline stops a source in flight.
 EXCHANGE_SECONDS = 30.0
+
+# How long a whole pass may take before it writes nothing at all. Checked
+# before the first write of any kind; applying is local, bounded work, so a
+# pass that has begun writing is never interrupted, and nothing kills it from
+# outside (#312).
+PASS_SECONDS = 300.0
 
 # Codex answers `model/list` from a cache it refreshes after 300 seconds, and
 # from a list bundled with the binary where the refresh fails. A cache older
@@ -1035,6 +1045,14 @@ _PLACES = Decimal("0.000001")
 
 JOURNAL_FILE = "catalogue-journal.jsonl"
 PASS_FILE = "refresh.json"
+
+# The pass's own bounds beside what it writes. One lock per data directory, so
+# a second pass started while one runs does nothing, and one marker, which
+# keeps the scheduled entry point to one attempt a UTC day and says when the
+# last scheduled pass ended and which bound it hit (ADR-0193).
+REFRESH_LOCK = "refresh.lock"
+MARKER_FILE = "refresh-marker.json"
+PAST_DEADLINE = "past the whole-pass deadline"
 
 # Where a model's run of absent days and its removal are kept. Apart from
 # `catalogue.json`, which `adopt` rewrites whole, and apart from the evidence,
@@ -1087,6 +1105,9 @@ class Reading:
     returned, hidden ones included, which is what presence is judged on:
     `listed` leaves hidden entries out, and a model the list still returns
     is not a model that is gone.
+
+    `timed_out` says the reading stopped at the deadline it was given, which
+    is how a pass knows which bound it hit.
     """
 
     source: str
@@ -1095,12 +1116,13 @@ class Reading:
     listed: tuple[Offer, ...] = ()
     entries: tuple[Mapping[str, Any], ...] = ()
     returned: tuple[str, ...] = ()
+    timed_out: bool = False
 
 
-def unreadable(source: str, reason: str) -> Reading:
+def unreadable(source: str, reason: str, *, timed_out: bool = False) -> Reading:
     """Return the reading of a source that could not be read, and why."""
 
-    return Reading(source, "unreadable", reason)
+    return Reading(source, "unreadable", reason, timed_out=timed_out)
 
 
 def per_million(raw: Any) -> float | None:
@@ -1292,23 +1314,30 @@ def openrouter_reading(pages: Sequence[Any], failure: str | None = None) -> Read
     return Reading("openrouter", "complete", None, entries=entries)
 
 
-def read_claude(started: datetime) -> Reading:
-    """Ask Claude Code which models this account is offered, generating nothing."""
+def read_claude(started: datetime, seconds: float | None = None) -> Reading:
+    """Ask Claude Code which models this account is offered, generating nothing.
 
+    *seconds* is the deadline the exchange is given, `EXCHANGE_SECONDS` where
+    none is named.
+    """
+
+    budget = EXCHANGE_SECONDS if seconds is None else seconds
     request = {
         "type": "control_request",
         "request_id": CLAUDE_REQUEST_ID,
         "request": {"subtype": "initialize"},
     }
     try:
-        with _Exchange(CLAUDE_LIST_ARGV) as talk:
+        with _Exchange(CLAUDE_LIST_ARGV, budget) as talk:
             talk.send(request)
             answer = talk.receive(_answers_initialize)
     except FileNotFoundError:
         return unreadable("claude", "claude is not on the PATH")
     except TimeoutError:
         return unreadable(
-            "claude", f"claude did not answer within {EXCHANGE_SECONDS:g} seconds"
+            "claude",
+            f"claude did not answer within its deadline of {_seconds(budget)} seconds",
+            timed_out=True,
         )
     except (EOFError, OSError) as problem:
         return unreadable("claude", f"claude could not be read: {problem}")
@@ -1335,13 +1364,19 @@ def _answering(number: int) -> Callable[[dict[str, Any]], bool]:
     return answers
 
 
-def read_codex(started: datetime) -> Reading:
-    """Ask Codex which models this account is offered, following every page."""
+def read_codex(started: datetime, seconds: float | None = None) -> Reading:
+    """Ask Codex which models this account is offered, following every page.
 
+    *seconds* is the deadline the whole exchange is given, every page
+    included, `EXCHANGE_SECONDS` where none is named.
+    """
+
+    budget = EXCHANGE_SECONDS if seconds is None else seconds
     pages: list[Any] = []
     failure: str | None = None
+    late = False
     try:
-        with _Exchange(CODEX_LIST_ARGV) as talk:
+        with _Exchange(CODEX_LIST_ARGV, budget) as talk:
             talk.send(
                 {
                     "id": 0,
@@ -1373,7 +1408,13 @@ def read_codex(started: datetime) -> Reading:
                 except (TimeoutError, EOFError) as problem:
                     if not pages:
                         raise
-                    failure = f"page {number} of `model/list` did not arrive: {problem or 'deadline'}"
+                    late = isinstance(problem, TimeoutError)
+                    failure = (
+                        f"page {number} of `model/list` did not arrive within "
+                        f"the deadline of {_seconds(budget)} seconds"
+                        if late
+                        else f"page {number} of `model/list` did not arrive: {problem}"
+                    )
                     break
                 result = answer.get("result")
                 if not isinstance(result, dict):
@@ -1394,32 +1435,57 @@ def read_codex(started: datetime) -> Reading:
         return unreadable("codex", "codex is not on the PATH")
     except TimeoutError:
         return unreadable(
-            "codex", f"codex did not answer within {EXCHANGE_SECONDS:g} seconds"
+            "codex",
+            f"codex did not answer within its deadline of {_seconds(budget)} seconds",
+            timed_out=True,
         )
     except (EOFError, OSError) as problem:
         return unreadable("codex", f"codex could not be read: {problem}")
 
-    return codex_reading(pages, _codex_fetched_at(), started, failure)
+    reading = codex_reading(pages, _codex_fetched_at(), started, failure)
+    return replace(reading, timed_out=True) if late else reading
 
 
 def read_openrouter(
-    started: datetime, fetch: Callable[[str], bytes] | None = None
+    started: datetime,
+    seconds: float | None = None,
+    fetch: Callable[[str, float], bytes] | None = None,
 ) -> Reading:
-    """Read OpenRouter's public model list, following `links.next` on its own host."""
+    """Read OpenRouter's public model list, following `links.next` on its own host.
 
+    *seconds* is one budget for every page together, `EXCHANGE_SECONDS` where
+    none is named: each request is given what remains of it as its socket
+    timeout, and a page not begun before it runs out is not asked for.
+    """
+
+    budget = EXCHANGE_SECONDS if seconds is None else seconds
+    ends = time.monotonic() + budget
     get = fetch or _fetch
     url: str | None = OPENROUTER_MODELS_URL
     pages: list[Any] = []
     seen: set[str] = set()
     failure: str | None = None
+    late = False
     while url is not None:
+        left = ends - time.monotonic()
+        if left <= 0:
+            late = True
+            failure = f"the deadline of {_seconds(budget)} seconds passed before {url} was read"
+            if not pages:
+                return unreadable("openrouter", failure, timed_out=True)
+            break
         seen.add(url)
         try:
-            page = json.loads(get(url))
+            page = json.loads(get(url, left))
         except (OSError, ValueError) as problem:
+            late = _timed_out(problem)
+            failure = (
+                f"{url} was not read within the deadline of {_seconds(budget)} seconds"
+                if late
+                else f"{url} could not be read: {problem}"
+            )
             if not pages:
-                return unreadable("openrouter", f"{url} could not be read: {problem}")
-            failure = f"{url} could not be read: {problem}"
+                return unreadable("openrouter", failure, timed_out=late)
             break
         pages.append(page)
 
@@ -1437,11 +1503,13 @@ def read_openrouter(
             break
         url = target
 
-    return openrouter_reading(pages, failure)
+    reading = openrouter_reading(pages, failure)
+    return replace(reading, timed_out=True) if late else reading
 
 
-# The three readers a pass consults, and nothing else.
-READERS: Mapping[str, Callable[[datetime], Reading]] = {
+# The three readers a pass consults, and nothing else. Each is given the
+# instant the pass began and the seconds it may take.
+READERS: Mapping[str, Callable[[datetime, float], Reading]] = {
     "claude": read_claude,
     "codex": read_codex,
     "openrouter": read_openrouter,
@@ -1454,7 +1522,7 @@ def refresh(
     agents: Path,
     *,
     now: datetime | None = None,
-    readers: Mapping[str, Callable[[datetime], Reading]] | None = None,
+    readers: Mapping[str, Callable[[datetime, float], Reading]] | None = None,
 ) -> dict[str, Any]:
     """Bring the catalogue up to date with the three sources, journalling every change.
 
@@ -1479,6 +1547,13 @@ def refresh(
     written, and the stored file is written whole, the plans carried through,
     so `load` never falls back to the seed by accident. After any write the
     generated agent definitions in *agents* are brought into line.
+
+    Each source is given the lesser of `EXCHANGE_SECONDS` and what remains of
+    `PASS_SECONDS`, and a source reached with nothing left is not read. Where
+    the whole deadline has passed by the time the pass would write, it writes
+    nothing at all — no catalogue, journal, `refresh.json`, lifecycle record,
+    deletion or definition — and answers `PAST_DEADLINE`. `bound_hit` names
+    the first bound hit: `whole-pass`, `source:<name>`, or null.
     """
 
     # Imported here: both import this module, and a module-level import would
@@ -1486,6 +1561,7 @@ def refresh(
     import launch
     import profiles
 
+    deadline = time.monotonic() + PASS_SECONDS
     started = (now or datetime.now(UTC)).astimezone(UTC)
     stamp = _instant(started)
     today = started.date().isoformat()
@@ -1497,6 +1573,8 @@ def refresh(
     records = _lifecycle(data_dir)
     held = _document_of(records)
     if not makers:
+        if time.monotonic() > deadline:
+            return _past_deadline(stamp, "whole-pass", {})
         report: dict[str, Any] = {"at": stamp, "outcome": NO_MAKERS}
         if seen:
             report["present"] = {"day": today, "models": sorted(seen)}
@@ -1507,10 +1585,25 @@ def refresh(
 
     consulted = [source for source, maker in HARNESS_MAKERS.items() if maker in makers]
     consulted.append("openrouter")
-    readings = {
-        source: _consult((readers or READERS).get(source), source, started)
-        for source in consulted
-    }
+    readings: dict[str, Reading] = {}
+    bound: str | None = None
+    for source in consulted:
+        left = deadline - time.monotonic()
+        if left <= 0:
+            readings[source] = unreadable(
+                source,
+                f"the pass's deadline of {_seconds(PASS_SECONDS)} seconds passed "
+                f"before {source} was read",
+                timed_out=True,
+            )
+            bound = bound or "whole-pass"
+            continue
+        seconds = min(EXCHANGE_SECONDS, left)
+        readings[source] = _consult(
+            (readers or READERS).get(source), source, started, seconds
+        )
+        if readings[source].timed_out and bound is None:
+            bound = f"source:{source}" if seconds >= EXCHANGE_SECONDS else "whole-pass"
 
     step = _Pass(
         {model.id: _entry(model) for model in cat.models},
@@ -1545,9 +1638,15 @@ def refresh(
     )
     changed, discarded = step.settled()
     rows = [row for row in step.rows if row["model"] not in gone]
+    # Everything above is reading and working out; everything below writes.
+    # Past the deadline, nothing below runs at all.
+    if time.monotonic() > deadline:
+        return _past_deadline(stamp, bound or "whole-pass", readings)
+
     report = {
         "at": stamp,
         "outcome": "ran",
+        "bound_hit": bound,
         "sources": {},
         "changes": 0,
         "written": None,
@@ -1650,6 +1749,122 @@ def refresh(
     except OSError as problem:
         report["problem"] = f"{data_dir / PASS_FILE} could not be written: {problem}"
     return report
+
+
+def _past_deadline(
+    stamp: str, bound: str, readings: Mapping[str, Reading]
+) -> dict[str, Any]:
+    """Return the answer of a pass that passed its deadline before it wrote anything."""
+
+    return {
+        "at": stamp,
+        "outcome": PAST_DEADLINE,
+        "bound_hit": bound,
+        "sources": {
+            source: {"outcome": reading.outcome, "reason": reading.reason, "changes": 0}
+            for source, reading in readings.items()
+        },
+        "changes": 0,
+        "written": None,
+    }
+
+
+def run(
+    data_dir: Path,
+    here: Path,
+    agents: Path,
+    *,
+    scheduled: bool = False,
+    now: datetime | None = None,
+    readers: Mapping[str, Callable[[datetime, float], Reading]] | None = None,
+) -> dict[str, Any]:
+    """Run one pass under the pass's lock, and the scheduled one once a UTC day.
+
+    A pass started while another holds `REFRESH_LOCK` does nothing and answers
+    `{"ran": false, "reason": "locked"}`. The daily marker gates only the
+    scheduled entry point, so a pass a person starts always runs; a scheduled
+    one on a day the marker already names answers `already ran today`. The
+    marker is written when a scheduled pass ends, whatever its outcome, and
+    never by a pass that found the lock busy or was stopped by SIGTERM, which
+    `launchctl bootout` sends a running job: that signal releases the lock
+    and ends the process, and the harness exchange in flight kills its own
+    process group on the way out.
+    """
+
+    import evidence  # Imported here: it imports this module.
+
+    started = (now or datetime.now(UTC)).astimezone(UTC)
+    today = started.date().isoformat()
+    with _terminable(), evidence.lock(data_dir, REFRESH_LOCK) as taken:
+        if not taken:
+            return {"ran": False, "reason": "locked"}
+        if scheduled and _last_pass(data_dir / MARKER_FILE).get("date") == today:
+            return {"ran": False, "reason": "already ran today"}
+        try:
+            report = refresh(data_dir, here, agents, now=started, readers=readers)
+        except Exception:
+            if scheduled:
+                _mark(data_dir, today, None)
+            raise
+        if scheduled:
+            _mark(data_dir, today, report.get("bound_hit"))
+        return {"ran": True, **report}
+
+
+@contextmanager
+def _terminable() -> Iterator[None]:
+    """Turn SIGTERM into an ordinary exit for as long as the block runs.
+
+    Its default action ends the process where it stands, lock and all; raised
+    as `SystemExit` instead it unwinds through every release on the way out.
+    A caller off the main thread cannot install a handler and keeps the one
+    it has.
+    """
+
+    def stop(signum: int, frame: object) -> None:
+        raise SystemExit(128 + signum)
+
+    try:
+        previous = signal.signal(signal.SIGTERM, stop)
+    except ValueError:
+        yield
+        return
+    try:
+        yield
+    finally:
+        signal.signal(signal.SIGTERM, signal.SIG_DFL if previous is None else previous)
+
+
+def _mark(data_dir: Path, today: str, bound: str | None) -> None:
+    """Write the scheduled pass's marker: its UTC day, when it ended, and its bound.
+
+    A marker that cannot be written costs one more attempt that day, which is
+    the safe direction, so it is not an error.
+    """
+
+    with suppress(OSError):
+        _replace_json(
+            data_dir / MARKER_FILE,
+            {
+                "date": today,
+                "ended_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+                "bound_hit": bound,
+            },
+        )
+
+
+def _seconds(value: float) -> str:
+    """Return a deadline in seconds the way a reason names it."""
+
+    return f"{round(value, 1):g}"
+
+
+def _timed_out(problem: BaseException) -> bool:
+    """Return whether a failed fetch ran out of time, directly or inside a URLError."""
+
+    return isinstance(problem, TimeoutError) or isinstance(
+        getattr(problem, "reason", None), TimeoutError
+    )
 
 
 def _presence(
@@ -2156,8 +2371,8 @@ class _Exchange:
     never comes — outlives neither the exchange nor its deadline.
     """
 
-    def __init__(self, argv: Sequence[str]) -> None:
-        self._deadline = time.monotonic() + EXCHANGE_SECONDS
+    def __init__(self, argv: Sequence[str], seconds: float) -> None:
+        self._deadline = time.monotonic() + seconds
         self._buffer = b""
         # The home directory, which nothing in this collection removes; the
         # exchange itself reads and writes nothing there.
@@ -2232,14 +2447,17 @@ class _Exchange:
 
 
 def _consult(
-    reader: Callable[[datetime], Reading] | None, source: str, started: datetime
+    reader: Callable[[datetime, float], Reading] | None,
+    source: str,
+    started: datetime,
+    seconds: float,
 ) -> Reading:
-    """Run one reader, turning any failure of its own into an unreadable source."""
+    """Run one reader within *seconds*, turning any failure of its own into an unreadable source."""
 
     if reader is None:
         return unreadable(source, "no reader is wired for this source")
     try:
-        return reader(started)
+        return reader(started, seconds)
     except Exception as failure:  # noqa: BLE001 - one source failing must not cost the other two
         return unreadable(source, f"the reader failed: {failure!r}")
 
@@ -2349,14 +2567,14 @@ def _codex_fetched_at() -> str | None:
     return _text(raw.get("fetched_at")) if isinstance(raw, dict) else None
 
 
-def _fetch(url: str) -> bytes:
-    """GET one OpenRouter page, unauthenticated, within the exchange deadline."""
+def _fetch(url: str, timeout: float) -> bytes:
+    """GET one OpenRouter page, unauthenticated, with *timeout* as its socket timeout."""
 
     request = urllib.request.Request(
         url,
         headers={"Accept": "application/json", "User-Agent": "kntnt-model-selector"},
     )
-    with urllib.request.urlopen(request, timeout=EXCHANGE_SECONDS) as response:
+    with urllib.request.urlopen(request, timeout=timeout) as response:
         body: bytes = response.read()
     return body
 
@@ -2548,7 +2766,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--data", default=str(default_data()))
     parser.add_argument("--agents")
     parser.add_argument("--days", type=int, default=7)
+    parser.add_argument("--scheduled", action="store_true")
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
+    if args.scheduled and args.action != ["refresh"]:
+        parser.error("--scheduled is a form of `refresh` alone")
 
     data_dir = Path(args.data).expanduser()
     here = Path(__file__).resolve().parent.parent
@@ -2557,7 +2778,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.action == ["refresh"]:
-        _emit(refresh(data_dir, here, _agents(args.agents)))
+        _emit(run(data_dir, here, _agents(args.agents), scheduled=args.scheduled))
         return 0
     if args.action == ["journal"]:
         _emit(journal(data_dir, args.days))

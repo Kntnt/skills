@@ -15,7 +15,11 @@ from __future__ import annotations
 import copy
 import importlib.util
 import json
+import os
+import signal
+import subprocess
 import sys
+import time
 from collections.abc import Callable, Mapping
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
@@ -121,7 +125,7 @@ def _stamp(instant: datetime) -> str:
     return instant.isoformat().replace("+00:00", "Z")
 
 
-Reader = Callable[[datetime], Any]
+Reader = Callable[[datetime, float], Any]
 
 
 def _readers(
@@ -139,11 +143,11 @@ def _readers(
     payload = _openrouter() if openrouter is None else openrouter
 
     readers: dict[str, Reader] = {
-        "claude": lambda started: catalogue.claude_reading(claude_messages),
-        "codex": lambda started: catalogue.codex_reading(
+        "claude": lambda started, seconds: catalogue.claude_reading(claude_messages),
+        "codex": lambda started, seconds: catalogue.codex_reading(
             codex_pages, _stamp(started - cache_age), started
         ),
-        "openrouter": lambda started: catalogue.openrouter_reading([payload]),
+        "openrouter": lambda started, seconds: catalogue.openrouter_reading([payload]),
     }
     readers.update(overrides or {})
     return readers
@@ -786,7 +790,7 @@ def test_an_unreadable_claude_list_adds_nothing_while_openrouter_still_prices_cl
         "0.000006"
     )
     unreadable = {
-        "claude": lambda started: catalogue.unreadable(
+        "claude": lambda started, seconds: catalogue.unreadable(
             "claude", "claude is not on the PATH"
         )
     }
@@ -808,7 +812,9 @@ def test_an_unreadable_openrouter_changes_no_price_and_adds_undated_models_quiet
 
     here, data, agents = _machine(tmp_path)
     unreadable = {
-        "openrouter": lambda started: catalogue.unreadable("openrouter", "HTTP 503")
+        "openrouter": lambda started, seconds: catalogue.unreadable(
+            "openrouter", "HTTP 503"
+        )
     }
 
     report = _pass(here, data, agents, overrides=unreadable)
@@ -873,7 +879,7 @@ def test_no_makers_chosen_writes_the_outcome_and_nothing_else(tmp_path: Path) ->
             (data / "profile.json").write_text(json.dumps(profile), encoding="utf-8")
         before = sorted(path.name for path in data.iterdir())
 
-        def never(started: datetime) -> Any:
+        def never(started: datetime, seconds: float) -> Any:
             called.append("read")
             raise AssertionError("a source was read")
 
@@ -1125,7 +1131,7 @@ def test_openrouter_is_read_from_its_one_address_and_a_foreign_next_link_is_not_
     }
     asked: list[str] = []
 
-    def fetch(url: str) -> bytes:
+    def fetch(url: str, timeout: float) -> bytes:
         asked.append(url)
         return json.dumps(pages[url]).encode()
 
@@ -1149,7 +1155,7 @@ def test_openrouter_is_read_from_its_one_address_and_a_foreign_next_link_is_not_
 def test_openrouter_that_cannot_be_fetched_is_unreadable() -> None:
     """A failed first page is no list at all."""
 
-    def fetch(url: str) -> bytes:
+    def fetch(url: str, timeout: float) -> bytes:
         raise OSError("connection refused")
 
     reading = catalogue.read_openrouter(NOW, fetch=fetch)
@@ -1276,7 +1282,7 @@ def _codex_without(model: str = GONE, *, hidden: bool = False) -> list[dict[str,
 def _failing(reason: str) -> Reader:
     """Return a reader whose source could not be read at all."""
 
-    return lambda started: catalogue.unreadable("codex", reason)
+    return lambda started, seconds: catalogue.unreadable("codex", reason)
 
 
 def _measured(
@@ -1838,3 +1844,400 @@ def test_the_journal_subcommand_shows_every_removal_with_its_dates_and_counts(
             }
         ]
     assert later["journal"] == []
+
+
+# --- The bounds a pass runs within (#312) ------------------------------------------
+#
+# The pass runs by itself once a day, so nothing may make it outlive its
+# welcome: one pass at a time, one scheduled attempt a day, thirty seconds a
+# source and three hundred for the whole, and a pass past its deadline writes
+# nothing but the marker that says so.
+
+SOURCES = ("claude", "codex", "openrouter")
+
+
+def _never(started: datetime, seconds: float) -> Any:
+    raise AssertionError("a source was read")
+
+
+def _marker(data: Path) -> dict[str, Any]:
+    marker: dict[str, Any] = json.loads(
+        (data / "refresh-marker.json").read_text(encoding="utf-8")
+    )
+    return marker
+
+
+def _files(*directories: Path) -> dict[str, bytes]:
+    """Return every file under *directories* but the marker, by path, with its bytes."""
+
+    return {
+        str(path): path.read_bytes()
+        for directory in directories
+        if directory.exists()
+        for path in sorted(directory.rglob("*"))
+        if path.is_file() and path.name != "refresh-marker.json"
+    }
+
+
+def _gone(pid: int) -> bool:
+    """Return whether process *pid* no longer runs, waiting up to ten seconds.
+
+    A killed process lingers as a zombie until whatever inherited it reaps
+    it, and under a loaded suite that can take a moment; a zombie runs
+    nothing, so it counts as gone.
+    """
+
+    for _ in range(100):
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            return True
+        state = subprocess.run(
+            ["ps", "-o", "stat=", "-p", str(pid)],
+            capture_output=True,
+            text=True,
+            check=False,
+            cwd="/",
+        ).stdout.strip()
+        if not state or state.startswith("Z"):
+            return True
+        time.sleep(0.1)
+    return False
+
+
+def test_a_pass_started_while_another_holds_the_lock_does_nothing(
+    tmp_path: Path,
+) -> None:
+    """Hand-started or scheduled, it reads nothing, writes nothing, and leaves no marker."""
+
+    here, data, agents = _machine(tmp_path)
+    before = _files(data)
+
+    with evidence.lock(data, catalogue.REFRESH_LOCK) as taken:
+        assert taken
+        for scheduled in (False, True):
+            report = catalogue.run(
+                data,
+                here,
+                agents,
+                scheduled=scheduled,
+                now=NOW,
+                readers=dict.fromkeys(SOURCES, _never),
+            )
+            assert report == {"ran": False, "reason": "locked"}
+
+    assert _files(data) == before
+    assert not (data / "refresh-marker.json").exists()
+
+
+def test_a_hand_started_pass_finding_the_lock_busy_says_so_and_exits_zero(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    _, data, agents = _machine(tmp_path)
+    monkeypatch.setattr(catalogue, "READERS", dict.fromkeys(SOURCES, _never))
+
+    with evidence.lock(data, catalogue.REFRESH_LOCK):
+        code = catalogue.main(["refresh", f"--data={data}", f"--agents={agents}"])
+
+    assert code == 0
+    assert json.loads(capsys.readouterr().out) == {"ran": False, "reason": "locked"}
+
+
+def test_a_second_scheduled_attempt_on_the_same_day_does_nothing(
+    tmp_path: Path,
+) -> None:
+    """The marker holds the UTC day, when the pass ended, and the bound it hit."""
+
+    here, data, agents = _machine(tmp_path)
+
+    first = catalogue.run(
+        data, here, agents, scheduled=True, now=NOW, readers=_readers()
+    )
+
+    assert first["outcome"] == "ran"
+    marker = _marker(data)
+    assert marker["date"] == TODAY
+    assert marker["bound_hit"] is None
+    assert datetime.fromisoformat(marker["ended_at"]).tzinfo is not None
+    before = _files(data, agents)
+
+    second = catalogue.run(
+        data,
+        here,
+        agents,
+        scheduled=True,
+        now=NOW + timedelta(hours=6),
+        readers=dict.fromkeys(SOURCES, _never),
+    )
+
+    assert second == {"ran": False, "reason": "already ran today"}
+    assert _files(data, agents) == before
+    assert _marker(data) == marker
+
+
+def test_the_next_day_s_scheduled_attempt_runs(tmp_path: Path) -> None:
+    here, data, agents = _machine(tmp_path)
+    catalogue.run(data, here, agents, scheduled=True, now=NOW, readers=_readers())
+
+    report = catalogue.run(
+        data, here, agents, scheduled=True, now=NOW + DAY, readers=_readers()
+    )
+
+    assert report["outcome"] == "ran"
+    assert _marker(data)["date"] == (NOW + DAY).date().isoformat()
+
+
+def test_a_hand_started_pass_runs_on_a_day_the_scheduled_pass_already_ran(
+    tmp_path: Path,
+) -> None:
+    """The daily marker gates only the scheduled entry point."""
+
+    here, data, agents = _machine(tmp_path)
+    catalogue.run(data, here, agents, scheduled=True, now=NOW, readers=_readers())
+    marker = _marker(data)
+
+    later = NOW + timedelta(hours=1)
+    report = catalogue.run(data, here, agents, now=later, readers=_readers())
+
+    assert report["outcome"] == "ran"
+    stored = json.loads((data / "refresh.json").read_text(encoding="utf-8"))
+    assert stored["at"] == _stamp(later)
+    assert _marker(data) == marker
+
+
+def test_the_scheduled_entry_point_on_the_command_line_is_gated_by_the_marker(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    _, data, agents = _machine(tmp_path)
+    monkeypatch.setattr(catalogue, "READERS", dict.fromkeys(SOURCES, _never))
+    (data / "refresh-marker.json").write_text(
+        json.dumps(
+            {
+                "date": datetime.now(UTC).date().isoformat(),
+                "ended_at": datetime.now(UTC).isoformat(),
+                "bound_hit": None,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    code = catalogue.main(
+        ["refresh", "--scheduled", f"--data={data}", f"--agents={agents}"]
+    )
+
+    assert code == 0
+    assert json.loads(capsys.readouterr().out) == {
+        "ran": False,
+        "reason": "already ran today",
+    }
+
+
+def test_a_source_past_its_deadline_is_stopped_with_its_process_group_and_keeps_its_facts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The harness and what it started are killed; the source changes nothing it governs."""
+
+    here, data, agents = _machine(tmp_path, "anthropic", drop=("claude-sonnet-5",))
+    child = tmp_path / "child.pid"
+    hanging = f"#!/bin/sh\nsleep 60 &\necho $! > '{child}'\nexec sleep 60\n"
+    # The stand-in's own `sleep` has to resolve, or the harness exits at once
+    # instead of hanging with a child in its group.
+    bin_dir = _install(tmp_path, "claude", hanging)
+    monkeypatch.setenv("PATH", os.pathsep.join((bin_dir, "/bin", "/usr/bin")))
+    # Long enough for a loaded suite to start the stand-in and its child.
+    monkeypatch.setattr(catalogue, "EXCHANGE_SECONDS", 4.0)
+
+    report = catalogue.run(
+        data,
+        here,
+        agents,
+        scheduled=True,
+        now=NOW,
+        readers=_readers(overrides={"claude": catalogue.read_claude}),
+    )
+
+    claude = report["sources"]["claude"]
+    assert claude["outcome"] == "unreadable"
+    assert "deadline" in claude["reason"]
+    assert report["bound_hit"] == "source:claude"
+    assert _marker(data)["bound_hit"] == "source:claude"
+    stored = json.loads((data / "refresh.json").read_text(encoding="utf-8"))
+    assert "deadline" in stored["sources"]["claude"]["reason"]
+    assert _model(here, data, "claude-sonnet-5") is None
+    assert all(row["source"] != "claude" for row in _journal(data))
+    assert child.exists(), "the stand-in never started its child"
+    assert _gone(int(child.read_text(encoding="utf-8")))
+
+
+def test_the_whole_deadline_stops_a_source_in_flight(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A source is given the lesser of its own deadline and what the pass has left."""
+
+    here, data, agents = _machine(tmp_path, "anthropic")
+    silent = f"#!{sys.executable}\nimport time\ntime.sleep(60)\n"
+    monkeypatch.setenv("PATH", _install(tmp_path, "claude", silent))
+    monkeypatch.setattr(catalogue, "PASS_SECONDS", 1.0)
+    before = _files(data)
+
+    started = time.monotonic()
+    report = catalogue.run(
+        data,
+        here,
+        agents,
+        scheduled=True,
+        now=NOW,
+        readers=_readers(overrides={"claude": catalogue.read_claude}),
+    )
+
+    assert time.monotonic() - started < 10
+    assert report["bound_hit"] == "whole-pass"
+    assert _marker(data)["bound_hit"] == "whole-pass"
+    assert _files(data) == before
+
+
+def test_a_pass_past_its_whole_deadline_before_applying_writes_nothing_but_its_marker(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """No catalogue, journal, pass report, lifecycle, deletion or definition moves."""
+
+    here, data, agents = _machine(tmp_path)
+    _measured(data, GONE, 2)
+    _days(here, data, agents, 2, codex=_codex_without())
+    before = _files(data, agents)
+    monkeypatch.setattr(catalogue, "PASS_SECONDS", 0.5)
+
+    def slow(started: datetime, seconds: float) -> Any:
+        time.sleep(0.6)
+        return catalogue.claude_reading(_claude_messages())
+
+    report = catalogue.run(
+        data,
+        here,
+        agents,
+        scheduled=True,
+        now=NOW + 2 * DAY,
+        readers=_readers(codex=_codex_without(), overrides={"claude": slow}),
+    )
+
+    assert report["outcome"] == catalogue.PAST_DEADLINE
+    assert report["bound_hit"] == "whole-pass"
+    assert _files(data, agents) == before
+    assert _model(here, data, GONE) is not None
+    assert _ledger(data).count(GONE) == 2
+    assert _marker(data)["bound_hit"] == "whole-pass"
+
+
+def test_a_pass_whose_deadline_passes_while_it_is_applying_finishes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Applying is local and bounded, so nothing interrupts it once it has begun."""
+
+    here, data, agents = _machine(tmp_path, drop=("claude-sonnet-5",))
+    monkeypatch.setattr(catalogue, "PASS_SECONDS", 2.0)
+    synced = launch.sync_definitions
+
+    def slow_sync(*arguments: Any, **options: Any) -> Any:
+        time.sleep(2.3)
+        return synced(*arguments, **options)
+
+    monkeypatch.setattr(launch, "sync_definitions", slow_sync)
+
+    report = catalogue.run(data, here, agents, now=NOW, readers=_readers())
+
+    assert report["outcome"] == "ran"
+    assert report["bound_hit"] is None
+    assert (agents / "kntnt-sonnet-high.md").is_file()
+    stored = json.loads((data / "refresh.json").read_text(encoding="utf-8"))
+    assert stored["at"] == _stamp(NOW)
+
+
+def test_a_sigterm_to_a_running_pass_releases_its_lock(tmp_path: Path) -> None:
+    """A `bootout` that arrives mid-pass leaves no stale lock and no marker."""
+
+    here, data, agents = _machine(tmp_path)
+    previous = signal.getsignal(signal.SIGTERM)
+
+    def terminated(started: datetime, seconds: float) -> Any:
+        assert (data / catalogue.REFRESH_LOCK).exists()
+        os.kill(os.getpid(), signal.SIGTERM)
+        time.sleep(5)
+        raise AssertionError("the pass outlived its SIGTERM")
+
+    with pytest.raises(SystemExit):
+        catalogue.run(
+            data,
+            here,
+            agents,
+            scheduled=True,
+            now=NOW,
+            readers=_readers(overrides={"claude": terminated}),
+        )
+
+    assert not (data / catalogue.REFRESH_LOCK).exists()
+    assert not (data / "refresh-marker.json").exists()
+    assert signal.getsignal(signal.SIGTERM) is previous
+
+
+def _paged() -> dict[str, dict[str, Any]]:
+    """Return OpenRouter's recorded list split over two pages on its own host."""
+
+    payload = _openrouter()
+    half = len(payload["data"]) // 2
+    return {
+        catalogue.OPENROUTER_MODELS_URL: {
+            "data": payload["data"][:half],
+            "total_count": payload["total_count"],
+            "links": {"next": "/api/v1/models?cursor=2"},
+        },
+        "https://openrouter.ai/api/v1/models?cursor=2": {
+            "data": payload["data"][half:],
+            "total_count": payload["total_count"],
+            "links": {"next": None},
+        },
+    }
+
+
+def test_openrouter_gives_every_page_what_remains_of_its_one_budget() -> None:
+    pages = _paged()
+    given: list[float] = []
+
+    def fetch(url: str, timeout: float) -> bytes:
+        given.append(timeout)
+        time.sleep(0.2)
+        return json.dumps(pages[url]).encode()
+
+    reading = catalogue.read_openrouter(NOW, 5.0, fetch=fetch)
+
+    assert reading.outcome == "complete"
+    assert given[0] <= 5.0
+    assert given[1] <= given[0] - 0.2
+
+
+def test_openrouter_past_its_budget_between_pages_is_incomplete_and_names_the_deadline() -> (
+    None
+):
+    pages = _paged()
+
+    def fetch(url: str, timeout: float) -> bytes:
+        time.sleep(0.3)
+        return json.dumps(pages[url]).encode()
+
+    reading = catalogue.read_openrouter(NOW, 0.2, fetch=fetch)
+
+    assert reading.outcome == "incomplete"
+    assert "deadline" in (reading.reason or "")
+    assert reading.timed_out
+
+
+def test_openrouter_timing_out_on_its_first_page_is_unreadable_and_names_the_deadline() -> (
+    None
+):
+    def fetch(url: str, timeout: float) -> bytes:
+        raise TimeoutError("timed out")
+
+    reading = catalogue.read_openrouter(NOW, 0.2, fetch=fetch)
+
+    assert reading.outcome == "unreadable"
+    assert "deadline" in (reading.reason or "")
+    assert reading.timed_out
