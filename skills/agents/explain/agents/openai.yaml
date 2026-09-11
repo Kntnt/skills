@@ -1,0 +1,5 @@
+interface:
+  display_name: "Explain"
+  short_description: "Explain the reply just given, or whatever the argument names"
+policy:
+  allow_implicit_invocation: false

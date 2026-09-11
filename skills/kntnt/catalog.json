@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "8cd3659b9648607b7bb6365836147b791fcaeb9de145fc44db30a20b60051752",
+  "manager_digest": "6fb946fcd99ae24c20060bf16c2b50e2878129c38283ca4a24ac3b99c49b1a9c",
   "skills": [
     {
       "name": "agents-md",
@@ -16,22 +16,10 @@
       "capabilities": []
     },
     {
-      "name": "brief",
-      "category": "agents",
-      "description": "Turn Brief mode on or off for the conversation it is typed in, and report which of the two it is in, so replies stay concise and decision-relevant.",
-      "digest": "c4dd7581c5d0e61b36455ac65412dc1b2bc326663fac5dfe2ed4fa7510bcd155",
-      "binaries": [
-        "uv"
-      ],
-      "skills": [],
-      "externals": [],
-      "capabilities": []
-    },
-    {
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "58708aeb2384d5f3041e2b230a068a60241d7c23eb824cf696261112f0bc6cc3",
+      "digest": "d7eda0d396dbf682c4354f74c8bfddb2eebd2b57b2380a540c2d48da02c31c2a",
       "binaries": [
         "uv"
       ],
@@ -44,10 +32,10 @@
       ]
     },
     {
-      "name": "tldr",
+      "name": "explain",
       "category": "agents",
-      "description": "Re-explain the answer just given for a senior developer who delegated the work and therefore does not hold its details, and say plainly what it now asks of them.",
-      "digest": "431ff697aab3fa3d4d9b06a33e3f0812b4fbf2d497245c993d1c82e719056ac3",
+      "description": "Provides a better explanation of what is specified in the argument, or of the reply that has just been given if there is no argument.",
+      "digest": "6f17e1e50cdbecffd677ce4657922e9a15330f672a2b32d41f0cd14e45c99471",
       "binaries": [
         "uv"
       ],

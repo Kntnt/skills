@@ -10745,6 +10745,14 @@ def test_the_engine_is_invoked_with_no_flag_in_every_skill() -> None:
 
     for path in _skill_bodies():
         text = path.read_text(encoding="utf-8")
+        if _shim(path.parent) is not None:
+            assert f"{SHIM_CALL}`" in text and ENGINE_CALL not in text, (
+                f"{path}: a body that ships the shim invokes the shim, as"
+                f" `{SHIM_CALL}`, and never the engine itself — the shim's own"
+                f" call to the engine is held by the suite, in"
+                f" tests/test_invoke.py (ADR-0181). See {STANDARD}."
+            )
+            continue
         assert f"{ENGINE_CALL}`" in text, (
             f'{path}: the engine is invoked as `invoke --here="$HERE"` and'
             f" with no flag on it. Under strict syntax a stray flag there is"
@@ -10851,6 +10859,32 @@ def _shipped_skills() -> list[Path]:
 
 # The call a body makes to read its invocation through the engine (ADR-0181).
 ENGINE_CALL = 'invoke --here="$HERE"'
+
+# The call a body on the shim form makes instead: the Skill's own shim, which
+# finds the engine. A Skill is on that form exactly when it ships the shim, and
+# every shim is the one file, read here against the first Skill that carried
+# it (ADR-0181).
+SHIM_CALL = 'uv run "$HERE/scripts/invoke.py"'
+SHIM_REFERENCE = REPO_ROOT / "skills" / "agents" / "explain" / "scripts" / "invoke.py"
+
+# What a body on the shim form no longer says: the shim finds the Manager and
+# the engine's answer carries `$LIBRARY`, the Capabilities and the contract.
+SHIM_FORBIDDEN = (
+    "`$HERE/../kntnt/`",
+    "Global harness skills directory",
+    "npx skills add Kntnt/skills",
+    "/kntnt update",
+    ENGINE_CALL,
+    "`confirm`",
+    ENVELOPE_POINTER,
+)
+
+
+def _shim(directory: Path) -> Path | None:
+    """The shim a Skill ships, or None where it is still on the previous form."""
+
+    shim = directory / "scripts" / "invoke.py"
+    return shim if shim.is_file() else None
 
 
 def _skill_bodies() -> list[Path]:
@@ -11141,6 +11175,14 @@ def test_every_skill_body_opens_with_the_engine_call() -> None:
     Capabilities answered first, and stdout printed verbatim on any other
     exit. What stays of the Envelope is its semantic half: the Contextual
     Instruction is applied under the Library file (ADR-0181).
+
+    A body that ships the shim says less than that, because the shim finds
+    the Manager and the engine's answer carries the rest: its first
+    instruction is the shim call with the payload on stdin, do what it prints
+    on exit 0, show it verbatim and stop otherwise, and none of the previous
+    opening's location, fix, or JSON shape stands anywhere in it. The two
+    forms coexist until the shim is rolled out to every Skill; the previous
+    form's branch below goes with that rollout.
     """
 
     for path in _skill_bodies():
@@ -11153,6 +11195,28 @@ def test_every_skill_body_opens_with_the_engine_call() -> None:
             f"{path}: the harness hint omits the optional Contextual"
             f" Instruction suffix required by ADR-0176. See {STANDARD}."
         )
+        if _shim(path.parent) is not None:
+            call = text.find(f"{SHIM_CALL}`")
+            assert call != -1 and call == text.find("uv run "), (
+                f"{path}: a body on the shim form makes `{SHIM_CALL}` its"
+                f" first call, before any other `uv run` (ADR-0181). See"
+                f" {STANDARD}."
+            )
+            for phrase in ("on stdin", "verbatim"):
+                assert phrase in text[call : call + 400], (
+                    f"{path}: the shim call says the payload goes on stdin"
+                    f" and that any other answer is shown verbatim, in the"
+                    f" same sentence (ADR-0181). See {STANDARD}."
+                )
+            for phrase in SHIM_FORBIDDEN:
+                assert phrase not in text, (
+                    f"{path}: the body still says {phrase!r}. The shim finds"
+                    f" the Manager, and the engine's answer carries `$LIBRARY`,"
+                    f" the Capabilities to answer and the contract to apply an"
+                    f" instruction under, so a body on the shim form says none"
+                    f" of it (ADR-0181). See {STANDARD}."
+                )
+            continue
         for phrase in ENGINE_OPENING:
             assert phrase in opening, (
                 f"{path}: the body does not open with {phrase!r}. Every body"
@@ -11176,6 +11240,32 @@ def test_every_skill_body_opens_with_the_engine_call() -> None:
                 f" asks the model to do the engine's work a second time"
                 f" (ADR-0181). See {STANDARD}."
             )
+
+
+def test_every_shim_is_the_one_file() -> None:
+    """The shim is one file carried by every Skill on its form, byte for byte.
+
+    The Library would hold the one copy of anything several Skills run, and
+    the shim is the exception because it is what finds the Library: a copy
+    per Skill is the price of a body that names no location. The price is
+    paid once by holding every copy to the first (ADR-0181).
+    """
+
+    assert SHIM_REFERENCE.is_file(), (
+        f"{SHIM_REFERENCE}: the shim every other copy is read against is gone."
+        f" See {STANDARD}."
+    )
+    reference = SHIM_REFERENCE.read_bytes()
+    for directory in _shipped_skills():
+        shim = _shim(directory)
+        if shim is None or shim == SHIM_REFERENCE:
+            continue
+        assert shim.read_bytes() == reference, (
+            f"{shim}: differs from {SHIM_REFERENCE}. Every Skill on the shim"
+            f" form carries the same file; copy the reference over this one,"
+            f" or change the reference and every copy together (ADR-0181)."
+            f" See {STANDARD}."
+        )
 
 
 def test_invocation_envelope_defines_the_reserved_separator_without_inference() -> None:
@@ -11441,16 +11531,19 @@ def test_skill_standard_requires_every_invocation_envelope_surface() -> None:
 def test_the_skill_standard_states_the_engine_first_body_form() -> None:
     """An author meets the new form before the suite has to refuse the old one.
 
-    The preamble bullet and the Invocation bullet are replaced by the engine
-    call, and the refusal bullet says the engine refuses and the body adds
-    only what the Skill leaves undone when it stops (ADR-0181).
+    The preamble bullet and the Invocation bullet are replaced by the one
+    shim call, and the refusal bullet says the engine refuses and the body
+    adds only what the Skill leaves undone when it stops (ADR-0181). The
+    previous opening is still described, because the bodies not yet on the
+    shim form are held to it until the rollout.
     """
 
     standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
     body = standard.partition("\n### Body\n")[2].partition("\n## ")[0]
 
     for phrase in (
-        "**Every body opens with the engine call",
+        "**Every body's first instruction is one call to the shim",
+        '`uv run "$HERE/scripts/invoke.py"`',
         "`npx skills add Kntnt/skills`",
         "`$HERE/../kntnt/`",
         "**`## Arguments` states only what the engine cannot know",
@@ -11858,241 +11951,7 @@ def test_delegation_refuses_an_incomplete_form_rather_than_asking() -> None:
     )
 
 
-# The Skill whose mode is addressed through a command path, the pages that
-# path answers to, and the `--`-prefixed spelling it no longer has. The
-# spellings went rather than becoming aliases: two spellings for one form are
-# the ambiguity the closed grammar removes, and an alias would keep it
-# (issue #115).
-BRIEF_DIR = REPO_ROOT / "skills" / "agents" / "brief"
-BRIEF_COMMANDS = frozenset({"on.md", "off.md", "status.md"})
-FLAG_SPELLING = re.compile(r"--(?:on|off|status)\b")
-
-# The name the Skill answered to before ADR-0113, in both the spellings it was
-# written in: the command's own `tldr` and the standing mode's `TL;DR`.
-FORMER_NAME = re.compile(r"(?i)tl;?dr")
-
-# The one form the former name may still take on this Skill's own surfaces: the
-# command path of the sibling Skill the name was freed for. What separates a
-# reference from a second name is whose path the token stands in, never the
-# token's shape, so the reframing Skill's own `/brief tldr` is no exception at
-# all (ADR-0177). A command path opens its own token, which is what the
-# lookbehind says: a `/tldr` continuing a filesystem path or a URL is a segment
-# of something else and invokes nothing. The group is the name inside the path,
-# which is where the scan below meets it — the prefix's own length settles
-# nothing.
-SIBLING_INVOCATION = re.compile(r"(?<![\w./-])/(tldr)\b")
-
-# The shipped text a reader resolves this Skill's name from. Records and
-# released changelog entries are deliberately outside it: a record's decision
-# stands and an entry is an account of what shipped, so neither is rewritten
-# (ADR-0180).
-SHIPPED_TEXT = frozenset({".md", ".json", ".yaml", ".yml", ".py", ".txt"})
-
-
-def _brief_readme_section() -> str:
-    """The README's own entry for `/brief`, which states the forms it accepts."""
-
-    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-    return readme.partition("\n### brief\n")[2].partition("\n### ")[0]
-
-
-def _brief_surfaces() -> dict[str, str]:
-    """Every surface a user of this collection reads this Skill's name from.
-
-    Its own shipped text, its section of the root `README.md`, and its Catalog
-    entry — the reach the rename's hygiene always had, the collection-wide
-    sweep having been the cheapest enforcement of it while no other Skill could
-    bear the name (ADR-0177). Each surface is keyed by where a reader would go
-    to fix it, and a lookup that finds nothing yields an empty surface rather
-    than a missing one, so the caller's own emptiness check catches it.
-    """
-
-    catalog = json.loads((MANAGER_DIR / "catalog.json").read_text(encoding="utf-8"))
-    entry = next(
-        (skill for skill in catalog["skills"] if skill["name"] == "brief"), None
-    )
-
-    return {
-        **{
-            str(path): path.read_text(encoding="utf-8")
-            for path in sorted(BRIEF_DIR.rglob("*"))
-            if path.is_file() and path.suffix in SHIPPED_TEXT
-        },
-        f"{REPO_ROOT / 'README.md'} (the `### brief` section)": _brief_readme_section(),
-        f"{MANAGER_DIR / 'catalog.json'} (the `brief` entry)": (
-            "" if entry is None else json.dumps(entry)
-        ),
-    }
-
-
-def test_the_reframing_skill_answers_to_brief_on_every_shipped_surface() -> None:
-    """One name for the command and for the standing mode it carries.
-
-    `tldr` named the bare form and nothing else. The standing mode adopts a
-    perspective for later replies and deliberately revisits nothing, so under
-    the old name `on` read as *turn the too-long-didn't-read on* and promised
-    a summary that never arrived. A Skill has no parser — the agent reading
-    these files is the whole of the enforcement — so a surface left spelling
-    the old name is a second name the Skill still answers to (ADR-0113).
-
-    What the check reads on those surfaces is whose command path the token
-    stands in, and never the token's shape (ADR-0177). `/tldr` is the sibling
-    Skill's own path, so it is a citation of a different command and passes.
-    Every other occurrence is this Skill wearing the old name again and fails:
-    in a `name:` frontmatter, as `TL;DR` in prose, and in a path of this
-    Skill's own such as `/brief tldr` — which is a command path too, and fails
-    precisely because the path is this one's. The managed block whose markers
-    named the Skill is gone with the persistence itself (ADR-0176).
-    """
-
-    assert BRIEF_DIR.is_dir(), (
-        f"{BRIEF_DIR}: the Skill's directory is its name under its Category,"
-        f" and the rename is not done while the old one is what exists"
-        f" (ADR-0113). See {STANDARD}."
-    )
-
-    body = (BRIEF_DIR / "SKILL.md").read_text(encoding="utf-8")
-    assert "\nname: brief\n" in body, (
-        f"{BRIEF_DIR / 'SKILL.md'}: the `name` frontmatter is what every"
-        f" reader outside this collection resolves the Skill by, so it spells"
-        f" the name the directory does (ADR-0113). See {STANDARD}."
-    )
-
-    surfaces = _brief_surfaces()
-
-    # Past the two fragments there has to be at least one of the Skill's own
-    # files: a glob that matched nothing, a README section that partitioned to
-    # nothing, or a Catalog the Skill has fallen out of would each pass the
-    # loop below without reading a surface, which is what this check catches.
-    assert len(surfaces) > 2
-    assert all(text.strip() for text in surfaces.values())
-
-    for where, text in surfaces.items():
-        sanctioned = {match.start(1) for match in SIBLING_INVOCATION.finditer(text)}
-        found = sorted(
-            {
-                match.group()
-                for match in FORMER_NAME.finditer(text)
-                if match.start() not in sanctioned
-            }
-        )
-        assert not found, (
-            f"{where}: {found} spells the name this Skill and its standing"
-            f" mode no longer answer to. On this Skill's own surfaces the"
-            f" former name stands only as `/tldr`, the sibling Skill's own"
-            f" command path; anywhere else it is a second name this one"
-            f" answers to (ADR-0113, ADR-0177). See {STANDARD}."
-        )
-
-
-def test_brief_ships_and_routes_one_manpage_per_command_path() -> None:
-    """`on`, `off`, and `status` each answer to their own help route.
-
-    A command path is exactly what a page under `help/` answers to (ADR-0176),
-    so the three pages are what make these tokens a path rather than operands,
-    and what lets a refusal quote the grammar the invalid form violated rather
-    than the whole Skill's. The engine reads the pages off the directory and
-    routes `<path> --help` and `-h` to each, so the body names none of them
-    (ADR-0181).
-    """
-
-    help_directory = BRIEF_DIR / "help"
-    assert help_directory.is_dir(), (
-        f"{BRIEF_DIR}: the mode is addressed through a command path, and every"
-        f" public command path has an addressable manpage under `help/`"
-        f" (ADR-0176). See {STANDARD}."
-    )
-
-    actual = {
-        str(page.relative_to(help_directory)) for page in help_directory.rglob("*.md")
-    }
-    assert actual == set(BRIEF_COMMANDS), (
-        f"{BRIEF_DIR}: the command page tree is {sorted(actual)}, while the"
-        f" accepted command paths are {sorted(BRIEF_COMMANDS)} (ADR-0176). See"
-        f" {STANDARD}."
-    )
-
-    engine = _manager_module()
-    for relative in sorted(BRIEF_COMMANDS):
-        page = (help_directory / relative).read_text(encoding="utf-8").rstrip("\n")
-        for flag in ("--help", "-h"):
-            reading = engine.read_invocation(BRIEF_DIR, f"{Path(relative).stem} {flag}")
-            assert reading.status == 3 and reading.text.rstrip("\n") == page, (
-                f"{BRIEF_DIR}: `/brief {Path(relative).stem} {flag}` does not"
-                f" print `help/{relative}` verbatim (ADR-0176, ADR-0181). See"
-                f" {STANDARD}."
-            )
-
-
-def test_brief_spells_its_mode_as_a_command_path_and_never_as_a_flag() -> None:
-    """No `--`-prefixed spelling survives anywhere the Skill is described.
-
-    The flag spellings go rather than becoming aliases. Two spellings for one
-    form is the ambiguity the closed grammar removes, and a Skill has no parser
-    — the agent reading these files is the whole of the enforcement — so a
-    spelling left standing on any surface is a spelling that is accepted.
-    """
-
-    surfaces = sorted(BRIEF_DIR.rglob("*.md"))
-
-    # A glob that matched nothing would pass the loop below without reading a
-    # single surface, which is the one outcome this check exists to catch.
-    assert surfaces
-
-    for path in surfaces:
-        found = sorted(set(FLAG_SPELLING.findall(path.read_text(encoding="utf-8"))))
-        assert not found, (
-            f"{path}: {found} is a `--`-prefixed spelling of a command path."
-            f" `on`, `off`, and `status` are reached as a command path and by"
-            f" no second spelling, the flags having gone rather than become"
-            f" aliases. See {STANDARD}."
-        )
-
-    section = _brief_readme_section()
-    assert section.strip(), (
-        f"{REPO_ROOT / 'README.md'}: the `### brief` section could not be"
-        f" found, so this check judged nothing. See {STANDARD}."
-    )
-    assert not FLAG_SPELLING.findall(section), (
-        f"{REPO_ROOT / 'README.md'}: the `### brief` section still writes a"
-        f" `--`-prefixed spelling of a command path. See"
-        f" {STANDARD}."
-    )
-    for form in ("/brief on", "/brief status"):
-        assert form in section, (
-            f"{REPO_ROOT / 'README.md'}: the `### brief` section does not state"
-            f" the `{form}` form. The README is where somebody decides whether"
-            f" they want the Skill, so it states the forms it accepts"
-            f" See {STANDARD}."
-        )
-
-
-def test_brief_accepts_no_unseparated_text_after_its_name_or_command_path() -> None:
-    """The free-text operand is gone, and the separator is the one channel.
-
-    `/brief` was the only Skill in the collection whose formal grammar accepted
-    free text, which is what forced its mode onto flags in the first place.
-    The Invocation Envelope's reserved separator now carries what the operand
-    carried, so the operand is a second unseparated channel for one thing and
-    goes with the ambiguity it caused (ADR-0176).
-
-    What went with the flags is the argument prose this used to pin, which
-    refused a token that was neither a recognised command path nor a declared
-    flag. The grammar declares none, so the body's refusal cites the command
-    path alone and there is no second half of that sentence to hold it to
-    (ADR-0176). What the page must still not carry is a positional argument.
-    """
-
-    page = (BRIEF_DIR / "help.md").read_text(encoding="utf-8")
-
-    assert "\n## POSITIONAL ARGUMENTS\n" not in page, (
-        f"{BRIEF_DIR / 'help.md'}: the page still documents a positional"
-        f" argument. The Skill takes no operand, and an empty conventional"
-        f" section is omitted rather than filled. See {STANDARD}."
-    )
-
-
-# The other Skill whose mode is addressed through a command path, the pages
+# The Skill whose mode is addressed through a command path, the pages
 # that path answers to, and the spellings it no longer has. Its scope became a
 # flag and the session, being the default, lost its name with them: one intent
 # has one spelling where a scope word, a state word, six aliases, and a free

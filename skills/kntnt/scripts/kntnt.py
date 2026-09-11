@@ -171,16 +171,18 @@ DRY_RUN_NOTE = (
 _SANDBOX: Path | None = None
 
 
+def with_dry_run(payload: dict[str, Any]) -> dict[str, Any]:
+    """Return *payload* saying where a dry run read its outcome from."""
+
+    if _SANDBOX is None:
+        return payload
+    return {**payload, "dry_run": {"sandbox": str(_SANDBOX), "note": DRY_RUN_NOTE}}
+
+
 def emit(payload: dict[str, Any]) -> None:
     """Print *payload* as JSON, saying where a dry run read its outcome from."""
 
-    if _SANDBOX is not None:
-        payload = {
-            **payload,
-            "dry_run": {"sandbox": str(_SANDBOX), "note": DRY_RUN_NOTE},
-        }
-
-    print(json.dumps(payload, indent=2))
+    print(json.dumps(with_dry_run(payload), indent=2))
 
 
 def home() -> Path:
@@ -4836,8 +4838,55 @@ def cmd_invoke(skill_dir: Path) -> int:
     if reading.status != 0:
         print(reading.text)
         return reading.status
-    emit({"ok": True, **reading.invocation, "dependencies": dependencies})
+    print(
+        reading_sheet(
+            {"ok": True, **reading.invocation, "dependencies": dependencies},
+            here() / "library",
+        )
+    )
     return 0
+
+
+# What a valid invocation answers with, besides the reading itself: the
+# directives a body used to carry in prose, printed only where they apply.
+# They are the engine's to print because the engine knows what a body cannot
+# — where the Library is, and whether this Skill declares a Capability or this
+# invocation carries a Contextual Instruction — so a body that calls it says
+# nothing about either and does what the answer says (ADR-0181).
+READ_LINE = "Invocation read."
+CAPABILITIES_DIRECTIVE = (
+    "Before anything else, answer each Capability under"
+    " `dependencies.capabilities`: say whether its `confirm` sentence is true"
+    " of you, and where one is not, give its `how`, change nothing, and stop."
+)
+
+
+def reading_sheet(reading: dict[str, Any], library: Path) -> str:
+    """Render a valid invocation's answer: the directives that apply, then the reading.
+
+    The reading is the JSON the engine always answered with, fenced so that a
+    body continuing from it finds it unchanged; the lines before it are what
+    the model does with it, and only the lines this invocation needs are
+    printed — a Skill with no Capability and a payload with no instruction
+    gets the reading, `$LIBRARY`, and nothing else.
+    """
+
+    lines = [READ_LINE]
+    if reading["dependencies"]["capabilities"]:
+        lines.append(CAPABILITIES_DIRECTIVE)
+    if reading["instruction"] is not None:
+        contract = library / "references" / "invocation-envelope.md"
+        lines.append(
+            "The `instruction` is a Contextual Instruction: read"
+            f" `{contract}` and apply it as that file says."
+        )
+    lines.append(f"`$LIBRARY` is `{library}`.")
+    lines.append(
+        "```json\n"
+        f"{json.dumps(with_dry_run(reading), indent=2, ensure_ascii=False)}"
+        "\n```"
+    )
+    return "\n\n".join(lines)
 
 
 def generate_catalog(source: Path) -> dict[str, Any]:
