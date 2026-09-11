@@ -8,10 +8,11 @@ Every other module in this Skill asks the world a question and this is what
 answers it. The facts arrive from two places and one of them is allowed to be
 wrong: the seed shipped beside this file is what the Skill knows on the day it
 is installed, and `catalogue.json` under the data directory is whatever a later
-catalogue pass or `update` established. The refreshed file wins per model id, because a fact a
-person checked this week outranks a fact this repository froze at release —
-except for the fields nobody fetches, which only a release of the seed can
-teach, and which a refreshed entry carrying none of them takes from the seed.
+catalogue pass or `update` established. The refreshed file wins per model id,
+because a fact read this week outranks a fact this repository froze at
+release — except for the fields nobody fetches, which only a release of the
+seed can teach, and which a refreshed entry carrying none of them takes from
+the seed.
 
 Nothing here raises. A catalogue that cannot be read is a catalogue that says
 so in `problem` and hands back what it still has, because every caller of this
