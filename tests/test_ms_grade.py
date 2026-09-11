@@ -671,12 +671,13 @@ def test_the_module_never_lets_a_failure_reach_its_caller(tmp_path: Path) -> Non
 def test_a_measurement_is_priced_at_what_the_channel_that_ran_it_charges(
     tmp_path: Path,
 ) -> None:
-    """A row priced from a list price the user never paid measures nothing.
+    """A row priced from a price the user never paid measures nothing.
 
-    The store's whole purpose is to say what a point costs on this machine. A
-    gateway prices the same model differently from the provider whose model it
-    is, so a row priced from the catalogue's card is a row about somebody
-    else's arrangement.
+    The store's whole purpose is to say what a point costs on this machine. The
+    catalogue holds the price OpenRouter publishes, which through any other
+    gateway is a different arrangement's bill, so a row priced from it rather
+    than from the channel's own card is a row about somebody else's
+    arrangement.
     """
 
     data = _queue(tmp_path, _unit(signals=_signals(tests_ran=True, tests_passed=True)))

@@ -337,10 +337,10 @@ def test_a_channel_rate_card_replaces_the_one_the_catalogue_holds() -> None:
 def test_a_channel_rate_card_prices_repo_scale_work_at_the_same_rates() -> None:
     """A rate the user quoted is what they pay, at every size of request.
 
-    The context cliff is a fact about a provider's own card. A channel that
-    carries its own card has already said what the tokens cost, and a second
-    card applied on top of it would be this Skill inventing a threshold its
-    source never mentioned.
+    The context cliff is a fact about the catalogue's card, the threshold
+    OpenRouter publishes with its price. A channel that carries its own card
+    has already said what the tokens cost, and a second card applied on top of
+    it would be this Skill inventing a threshold its source never mentioned.
     """
 
     cliff = catalogue._model(
