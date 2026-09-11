@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- Model Selector measures only delegated work, and work of a session's own that ran for ten minutes. It is only ever asked to choose a seat for delegated work, yet its estimates were fitted on every substantial Unit of Work capture saw, and most of those were a person's own short exchanges with their Main Seat — a different size of job. Because the Main Seat is mostly Fable and routed builds mostly Opus, the difference in size was read as a difference in models: `selection.py --kind=implement` answered `claude-fable-5-1` at `high` over `claude-opus-5` at `xhigh` against measured grades of 0.82 and 0.93, Fable's rows being mostly one-minute turns and Opus's mostly ticket builds. A delegated Unit — one read from a subagent's own record, or one whose instruction opens with a routed brief's `attempt_id:` line, which now takes that attempt as its identity wherever it was read — is still written under the substantial test alone; a Unit of the session's own is written only where it also ran for ten minutes from its instruction to handing control back (`OWN_UNIT_SECONDS` in `capture.py`); anything else reaches neither the pending store nor the measurement store, so the judge is never paid for it. Retries are marked before the threshold is applied, so a long answer redone as a short one keeps its signal. The threshold is on elapsed time and so leans slightly against a fast model's own-session work, which is accepted and stated where the rule is written. A routed attempt launched as a headless `claude -p` process is still not measured. `docs/rules/routing.md`, `references/measurement.md`, `help.md` and the README state the new rule, and ADR-0186 records it with the two alternatives rejected.
+
 ## [0.26.2] – 2026-09-07
 
 ### Changed
