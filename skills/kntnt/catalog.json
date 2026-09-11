@@ -6,7 +6,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "93b7fa528fca2b33d663bcfa1cc0e91ffe36cfebbcde96532bc2fdb66cac8b3a",
+      "digest": "5f510f1bc090772da278dcc1a5e6841b92329a1ad1fc368955485d6396c627f5",
       "binaries": [
         "git",
         "uv"
@@ -19,7 +19,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "dda8f176500717775934fe94b3a9d8e6d06894b9d47512f765d073ca13e96e5e",
+      "digest": "5b93871a32e56022fd9ed3612990cbc31a1181a148e43603c92db42930c84db7",
       "binaries": [
         "uv"
       ],
@@ -47,7 +47,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "0b18c28c4c9af74e6326c2bb9c1f0c232fc6f954fd62730db3279dafcfee24ef",
+      "digest": "1b33575353f93fe9cda2eea5f4bb80f427f0a1a2963f871120c1fb9b173f7e36",
       "binaries": [
         "git",
         "uv"
@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "023eddb0b4fd3eec9516f2eb6ca89c3bb279d3ef7edca4adcc79c7c192236e54",
+      "digest": "b6b4dcd45bc804cf52d7da60023de09e83fda26b950f4e3b81026c8bb6b30c10",
       "binaries": [
         "git",
         "gh",
@@ -78,7 +78,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "3e451951e2abaaf4fb49844055e86983229cbbf42c8ddf7b005b984e5effa034",
+      "digest": "52eef2f1acef6f87bbe51bef68b796e0904129075ed2a67720268ad2fe981271",
       "binaries": [
         "git",
         "uv"
@@ -93,7 +93,7 @@
       "name": "ready-for-agent-check",
       "category": "code",
       "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
-      "digest": "a1def91a95769f8fb6ff4fae3a8278dd5020d6b689b7c71d8a00d0c9434c6fc6",
+      "digest": "6463fec01da78506ffdd25c460f2b227fc8464f1a928bef72bf10cf56eee0c4e",
       "binaries": [
         "gh",
         "uv"
@@ -108,7 +108,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "ef3ba77c6db632cc73ddada12e7eb5d6fc2eb5b2aa14dcccd70d4fa015b5a1aa",
+      "digest": "abe424c72ed6a7a96f513d1613371187d277dc4d606f172afa0d435448beddb5",
       "binaries": [
         "git",
         "uv"
@@ -123,7 +123,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "46db4f18f9556a55da7c777fdde50a55a47b76a5eee202b8f43999879a80f946",
+      "digest": "06c049b264fb2d9b997fd293a45d76a658fe9bf319c44a7339d7c00b5054aab4",
       "binaries": [
         "uv"
       ],
@@ -135,7 +135,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "55059518e06c8a1d6fb7feb5cb07a52bb5cbae19d659981a9ce475199ff8eac7",
+      "digest": "0ce22b13fd79b4a7f8720e459381c38fc8bee64a4705f6c9d5549ffa3d44096d",
       "binaries": [
         "uv"
       ],
@@ -151,7 +151,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "5a514240545dcfe325f43d4c2377d513ac6552f1fc9e6e9dce059ee3f77732bf",
+      "digest": "eae7abe32ca36382f46410868a77cc2b4636a5dbad365450c4d3f6044651ffd8",
       "binaries": [
         "uv"
       ],
@@ -165,7 +165,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "b40cad7b8eaae86001cc789e0d374309aa7353271dbbe47d82d78b66611a87d3",
+      "digest": "485eea25c438e1a2a117b3d383ff18eb729473a716d811f38e5ea7b3b0a5522f",
       "binaries": [
         "uv"
       ],
@@ -177,7 +177,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "9b1a1b4b02c591559b8adeab8ff798c28f027ace45f3b81524af295632e5bab6",
+      "digest": "6c0af4d02814c707247041f148127ceab10ffe01c30d9f88a2f891c0c9c52d78",
       "binaries": [
         "uv"
       ],
@@ -189,7 +189,7 @@
       "name": "rename-invoices",
       "category": "producivity",
       "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
-      "digest": "ec698a6e15d5c72268df85b24eb4581625d1f21b2b79be24818e070d3aa89f6d",
+      "digest": "74bcd6f795a35963376073ee9f5189d4dce71f2e40275783fff3231bb356f4e4",
       "binaries": [
         "pdftotext",
         "uv"

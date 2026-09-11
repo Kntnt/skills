@@ -1208,8 +1208,8 @@ def test_a_valid_form_prints_only_the_directives_this_invocation_needs(
 
 # --- The Skill-side shim -----------------------------------------------------
 
-# The one copy of the shim the suite reads the others against. Every Skill on
-# the shim form carries this file byte for byte, the Library that would hold
+# The one copy of the shim the suite reads the others against. Every Skill but
+# the Manager carries this file byte for byte, the Library that would hold
 # one copy being what the shim exists to find.
 SHIM = SKILLS / "agents" / "explain" / "scripts" / "invoke.py"
 HARNESS_PATHS = MANAGER_DIR / "harness-paths.json"

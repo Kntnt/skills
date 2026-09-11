@@ -5740,7 +5740,9 @@ def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) 
         for name in ("write", "redline", "proofread", "unslop")
     ]
     commands = [
-        command for body in bodies for command in re.findall(r"`(uv run [^`]+)`", body)
+        command
+        for body in bodies
+        for command in re.findall(r"`((?:UV_[A-Z_]+=1 )*uv run [^`]+)`", body)
     ]
 
     # Stage scratch as a project with an unchanged empty directory.
@@ -5757,32 +5759,34 @@ def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) 
     # Prove the observer includes directories before trusting the comparison.
     assert baseline_empty.relative_to(scratch) in before
 
+    # Read the two ways a body suppresses both behaviours: the flags on a
+    # direct call, and the environment on the shim call, which the engine
+    # call inside the shim inherits where it would not inherit a flag.
+    flagged = [command for command in commands if command.startswith("uv run ")]
+    shimmed = [command for command in commands if command.startswith("UV_")]
+    assert flagged and shimmed
+    options = flagged[0].partition(' "$')[0].split()[2:]
+    environment = dict(
+        pair.split("=", 1) for pair in shimmed[0].partition(" uv run ")[0].split()
+    )
+
     # Configure UV to attempt writes inside the inventoried scratch area.
-    prefix = commands[0].partition(' "$')[0]
-    options = prefix.split()[2:]
     env = os.environ.copy()
     env["UV_CACHE_DIR"] = str(scratch / "uv-cache")
     runtime_tmp = scratch / "uv-tmp"
     runtime_tmp.mkdir()
     env["TMPDIR"] = str(runtime_tmp)
 
-    # Execute a successful UV probe with the declared safety options.
-    subprocess.run(
-        [
-            "uv",
-            "run",
-            *options,
-            "--offline",
-            "python",
-            "-c",
-            "pass",
-        ],
-        cwd=scratch,
-        env=env,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    # Execute a successful UV probe each way the bodies declare.
+    for probe_options, probe_env in ((options, env), ([], env | environment)):
+        subprocess.run(
+            ["uv", "run", *probe_options, "--offline", "python", "-c", "pass"],
+            cwd=scratch,
+            env=probe_env,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
 
     # Apply the cleanup instruction only when every consumer carries it.
     if all(UV_RUNTIME_CLEANUP in body for body in bodies):
@@ -5797,12 +5801,21 @@ def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) 
     )
 
     # Confirm every Text-Artifact Skill declares the options under test.
-    assert commands and all(
-        command.startswith("uv run --no-cache --no-project ") for command in commands
+    assert all(
+        command.startswith("uv run --no-cache --no-project ") for command in flagged
     ), (
-        "Every uv command in a Text-Artifact Skill must suppress cache writes"
-        " and project discovery so the response default can leave every"
-        " filesystem location unchanged (issue #180)."
+        "Every direct uv command in a Text-Artifact Skill must suppress cache"
+        " writes and project discovery so the response default can leave every"
+        f" filesystem location unchanged (issue #180). See {STANDARD}."
+    )
+    assert all(
+        command.startswith(f"UV_NO_CACHE=1 UV_NO_PROJECT=1 {SHIM_CALL}")
+        for command in shimmed
+    ), (
+        "Every shim call in a Text-Artifact Skill must carry the same"
+        " suppression as its environment, the engine call inside the shim"
+        f" inheriting the environment and not the flags (issue #180). See"
+        f" {STANDARD}."
     )
 
 
@@ -8024,9 +8037,9 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
         f"{UNSLOP}: the Skill runs the Collection's resolver and declares none"
         f" of the runtime it takes to run it (ADR-0177). See {STANDARD}."
     )
-    assert ENGINE_CALL in body, (
+    assert f"{SHIM_CALL}`" in body, (
         f"{UNSLOP}: the dependency lists are not empty and the body calls no"
-        f" engine, so an Unsatisfied Dependency is met as a failure rather"
+        f" shim, so an Unsatisfied Dependency is met as a failure rather"
         f" than as a refusal (ADR-0181). See {STANDARD}."
     )
 
@@ -8889,11 +8902,12 @@ def test_delegation_requires_subagents_and_says_so() -> None:
         f" a fourth kind of dependency the skill refuses on, never a row in a"
         f" per-harness matrix (ADR-0030). See {STANDARD}."
     )
-    assert "`capabilities`" in text, (
-        f"{path}: the body answers the checker's `capabilities` list itself."
-        f" No script can: the agent is the harness, so exit 0 with a non-empty"
-        f" list means nothing a script could see is missing rather than"
-        f" go-ahead (ADR-0030). See {STANDARD}."
+    assert f"{SHIM_CALL}`" in text, (
+        f"{path}: the body calls the shim, whose answer on exit 0 says which"
+        f" Capabilities to answer before continuing. No script can answer"
+        f" them: the agent is the harness, so a non-empty list means nothing a"
+        f" script could see is missing rather than go-ahead (ADR-0030,"
+        f" ADR-0181). See {STANDARD}."
     )
 
     mode = (path.parent / "references" / "mode.md").read_text(encoding="utf-8")
@@ -10734,31 +10748,25 @@ def test_every_manager_help_form_prints_through_the_engine_what_the_script_print
     )
 
 
-def test_the_engine_is_invoked_with_no_flag_in_every_skill() -> None:
-    """`invoke --here="$HERE"` opens every body, and nothing else is on the call.
+def test_the_engine_is_named_in_no_body_and_the_shim_in_every_one() -> None:
+    """The shim call opens every body, and the engine call is the shim's alone.
 
-    Under strict syntax a stray flag on that call would kill the skill before
-    it did anything, so the call sites are pinned here and the drift is caught
-    in the suite rather than in a broken `/commit`. The checker's own call is
-    gone with the preamble: the engine makes that check itself (ADR-0181).
+    Under strict syntax a stray flag on the engine call would kill the skill
+    before it did anything, so the one call site is the shim's, held in
+    tests/test_invoke.py, and a body names the shim and never the engine. The
+    checker's own call is gone with the preamble: the engine makes that check
+    itself (ADR-0181).
     """
 
     for path in _skill_bodies():
         text = path.read_text(encoding="utf-8")
-        if _shim(path.parent) is not None:
+        if path.parent != MANAGER_DIR:
             assert f"{SHIM_CALL}`" in text and ENGINE_CALL not in text, (
-                f"{path}: a body that ships the shim invokes the shim, as"
-                f" `{SHIM_CALL}`, and never the engine itself — the shim's own"
-                f" call to the engine is held by the suite, in"
-                f" tests/test_invoke.py (ADR-0181). See {STANDARD}."
+                f"{path}: a body invokes the shim, as `{SHIM_CALL}`, and never"
+                f" the engine itself — the shim's own call to the engine is"
+                f" held by the suite, in tests/test_invoke.py (ADR-0181). See"
+                f" {STANDARD}."
             )
-            continue
-        assert f"{ENGINE_CALL}`" in text, (
-            f'{path}: the engine is invoked as `invoke --here="$HERE"` and'
-            f" with no flag on it. Under strict syntax a stray flag there is"
-            f" refused rather than ignored, which would kill the skill before"
-            f" it did anything (ADR-0176, ADR-0181). See {STANDARD}."
-        )
         assert "check --here" not in text, (
             f"{path}: the body still calls the checker. The engine makes the"
             f" dependency check `check --here` makes, so one call replaces the"
@@ -10857,18 +10865,20 @@ def _shipped_skills() -> list[Path]:
     return directories
 
 
-# The call a body makes to read its invocation through the engine (ADR-0181).
+# The call the shim makes to read a body's invocation through the engine; the
+# Manager's own body makes it too, being where the engine is (ADR-0181).
 ENGINE_CALL = 'invoke --here="$HERE"'
 
-# The call a body on the shim form makes instead: the Skill's own shim, which
-# finds the engine. A Skill is on that form exactly when it ships the shim, and
-# every shim is the one file, read here against the first Skill that carried
-# it (ADR-0181).
+# The call every other body makes: the Skill's own shim, which finds the
+# engine. Every shim is the one file, read here against the first Skill that
+# carried it (ADR-0181).
 SHIM_CALL = 'uv run "$HERE/scripts/invoke.py"'
 SHIM_REFERENCE = REPO_ROOT / "skills" / "agents" / "explain" / "scripts" / "invoke.py"
 
-# What a body on the shim form no longer says: the shim finds the Manager and
-# the engine's answer carries `$LIBRARY`, the Capabilities and the contract.
+# What a body no longer says anywhere: the shim finds the Manager and the
+# engine's answer carries `$LIBRARY` and the Capabilities. The Envelope pointer
+# is held out of the opening alone, a Step that refuses a value the engine
+# cannot still pointing at the contract, as the refusal rule says.
 SHIM_FORBIDDEN = (
     "`$HERE/../kntnt/`",
     "Global harness skills directory",
@@ -10876,12 +10886,11 @@ SHIM_FORBIDDEN = (
     "/kntnt update",
     ENGINE_CALL,
     "`confirm`",
-    ENVELOPE_POINTER,
 )
 
 
 def _shim(directory: Path) -> Path | None:
-    """The shim a Skill ships, or None where it is still on the previous form."""
+    """The shim a Skill ships, or None for the Manager, which ships none."""
 
     shim = directory / "scripts" / "invoke.py"
     return shim if shim.is_file() else None
@@ -11133,96 +11142,59 @@ def _flags(text: str) -> set[str]:
     return {word for word in re.findall(r"--[a-z][a-z-]*", text)} - {"--help"}
 
 
-# What the opening of every body except the Manager's says, in the words a
-# test can hold: where the Manager is and the fix where it is not, the engine
-# call with the payload on stdin, the three answers, and the one sentence of the
-# Envelope no engine can execute (ADR-0181).
-ENGINE_OPENING = (
-    "`$HERE/../kntnt/`",
-    "Global harness skills directory",
-    "npx skills add Kntnt/skills",
-    "/kntnt update",
-    f"{ENGINE_CALL}`",
-    "stdin",
-    "exit 0",
-    "`capabilities`",
-    "verbatim and stop",
-    "`path`",
-    "`flags`",
-    "`operands`",
-    "`instruction`",
-    ENVELOPE_POINTER,
-)
-
-
 def _opening(text: str) -> str:
-    """The body before its first `## ` section: the description and the engine call."""
+    """The body before its first `## ` section: the description and the shim call."""
 
     return text.partition("\n---\n")[2].partition("\n## ")[0]
 
 
-def test_every_skill_body_opens_with_the_engine_call() -> None:
+def test_every_skill_body_opens_with_the_shim_call() -> None:
     """The mechanics are the engine's, and the body says so once, before anything.
 
     Fifteen bodies besides the Manager's opened with the same checker
-    discovery, the same Envelope
-    pointer and the same help routes, and asked the model to perform them. The
-    engine performs them now, so what a body opens with is where the engine is
-    and how to call it: the Manager beside this Skill or under a Global
-    harness skills directory, `npx skills add Kntnt/skills` where neither
-    exists, the payload on stdin, the JSON continued from on exit 0 with the
-    Capabilities answered first, and stdout printed verbatim on any other
-    exit. What stays of the Envelope is its semantic half: the Contextual
-    Instruction is applied under the Library file (ADR-0181).
-
-    A body that ships the shim says less than that, because the shim finds
-    the Manager and the engine's answer carries the rest: its first
-    instruction is the shim call with the payload on stdin, do what it prints
-    on exit 0, show it verbatim and stop otherwise, and none of the previous
-    opening's location, fix, or JSON shape stands anywhere in it. The two
-    forms coexist until the shim is rolled out to every Skill; the previous
-    form's branch below goes with that rollout.
+    discovery, the same Envelope pointer and the same help routes, and asked
+    the model to perform them. The engine performs them now and the shim
+    finds the engine, so a body's first instruction is the shim call with the
+    payload on stdin: do what it prints on exit 0, show it verbatim and stop
+    otherwise. None of the previous opening's location, fix, or JSON shape
+    stands anywhere in the body, and the Envelope pointer stands only where a
+    Step refuses a value the engine cannot, never in the opening (ADR-0181).
     """
 
     for path in _skill_bodies():
         if path.parent == MANAGER_DIR:
             continue
         text = path.read_text(encoding="utf-8")
-        opening = _opening(text)
 
         assert _hint(path.parent).endswith("[-- <instruction>]"), (
             f"{path}: the harness hint omits the optional Contextual"
             f" Instruction suffix required by ADR-0176. See {STANDARD}."
         )
-        if _shim(path.parent) is not None:
-            call = text.find(f"{SHIM_CALL}`")
-            assert call != -1 and call == text.find("uv run "), (
-                f"{path}: a body on the shim form makes `{SHIM_CALL}` its"
-                f" first call, before any other `uv run` (ADR-0181). See"
-                f" {STANDARD}."
+        call = text.find(f"{SHIM_CALL}`")
+        assert call != -1 and call == text.find("uv run "), (
+            f"{path}: a body makes `{SHIM_CALL}` its first call, before any"
+            f" other `uv run` (ADR-0181). See {STANDARD}."
+        )
+        for phrase in ("on stdin", "verbatim"):
+            assert phrase in text[call : call + 400], (
+                f"{path}: the shim call says the payload goes on stdin and"
+                f" that any other answer is shown verbatim, in the same"
+                f" sentence (ADR-0181). See {STANDARD}."
             )
-            for phrase in ("on stdin", "verbatim"):
-                assert phrase in text[call : call + 400], (
-                    f"{path}: the shim call says the payload goes on stdin"
-                    f" and that any other answer is shown verbatim, in the"
-                    f" same sentence (ADR-0181). See {STANDARD}."
-                )
-            for phrase in SHIM_FORBIDDEN:
-                assert phrase not in text, (
-                    f"{path}: the body still says {phrase!r}. The shim finds"
-                    f" the Manager, and the engine's answer carries `$LIBRARY`,"
-                    f" the Capabilities to answer and the contract to apply an"
-                    f" instruction under, so a body on the shim form says none"
-                    f" of it (ADR-0181). See {STANDARD}."
-                )
-            continue
-        for phrase in ENGINE_OPENING:
-            assert phrase in opening, (
-                f"{path}: the body does not open with {phrase!r}. Every body"
-                f" except the Manager's opens with where the Manager is, the"
-                f" engine call with the payload on stdin, and what to do with"
-                f" each of its three answers (ADR-0181). See {STANDARD}."
+        for phrase in SHIM_FORBIDDEN:
+            assert phrase not in text, (
+                f"{path}: the body still says {phrase!r}. The shim finds the"
+                f" Manager, and the engine's answer carries `$LIBRARY` and the"
+                f" Capabilities to answer, so a body says none of it"
+                f" (ADR-0181). See {STANDARD}."
             )
+        assert ENVELOPE_POINTER not in _opening(text), (
+            f"{path}: the opening still applies the Contextual Instruction"
+            f" under {ENVELOPE_POINTER!r}. The engine names the contract where"
+            f" an instruction was given, so a body points at it only where a"
+            f" Step refuses a value the engine cannot (ADR-0181). See"
+            f" {STANDARD}."
+        )
         for phrase in (
             "**Dependencies.**",
             "check --here",
@@ -11242,7 +11214,7 @@ def test_every_skill_body_opens_with_the_engine_call() -> None:
 
 
 def test_every_shim_is_the_one_file() -> None:
-    """The shim is one file carried by every Skill on its form, byte for byte.
+    """The shim is one file carried by every Skill but the Manager, byte for byte.
 
     The Library would hold the one copy of anything several Skills run, and
     the shim is the exception because it is what finds the Library: a copy
@@ -11533,8 +11505,9 @@ def test_the_skill_standard_states_the_engine_first_body_form() -> None:
     The preamble bullet and the Invocation bullet are replaced by the one
     shim call, and the refusal bullet says the engine refuses and the body
     adds only what the Skill leaves undone when it stops (ADR-0181). The
-    previous opening is still described, because the bodies not yet on the
-    shim form are held to it until the rollout.
+    previous opening is described nowhere, every body being on the shim form,
+    and the environment a Text-Artifact Skill runs the shim under is stated
+    with the call (issue #180).
     """
 
     standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
@@ -11543,8 +11516,7 @@ def test_the_skill_standard_states_the_engine_first_body_form() -> None:
     for phrase in (
         "**Every body's first instruction is one call to the shim",
         '`uv run "$HERE/scripts/invoke.py"`',
-        "`npx skills add Kntnt/skills`",
-        "`$HERE/../kntnt/`",
+        "`UV_NO_CACHE=1 UV_NO_PROJECT=1`",
         "**`## Arguments` states only what the engine cannot know",
         "**An invalid form is refused by the engine",
         "what this Skill leaves undone when it stops",
@@ -11557,6 +11529,7 @@ def test_the_skill_standard_states_the_engine_first_body_form() -> None:
         "The dependency preamble is present exactly when",
         "An `## Invocation` section precedes",
         "a body that does not yet call the engine",
+        "a body that ships no shim carries the previous opening",
     ):
         assert phrase not in standard, (
             f"{STANDARD}: the standard still requires {phrase!r}, the form"
