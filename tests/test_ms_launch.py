@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import importlib.util
 import sys
 from pathlib import Path
@@ -152,6 +153,102 @@ def test_opencode_starts_whatever_the_profile_says_it_fronts() -> None:
     assert plan.command is not None
     assert plan.command[:2] == ("opencode", "run")
     assert "spacexai/grok-4.6" in plan.command
+
+
+def _gateway_profile(gateway: str | None) -> Any:
+    """Provide a profile that pays for Grok through opencode, via *gateway*."""
+
+    return profiles.Profile(
+        harnesses=("opencode",),
+        providers=("spacexai",),
+        models=(GROK.id,),
+        channels=(
+            profiles.Channel("spacexai", "opencode", "api", None, gateway, None),
+        ),
+        answered_at=None,
+        source="file",
+        problem=None,
+    )
+
+
+def _after(command: tuple[str, ...], flag: str) -> str:
+    """Return the value a planned command gives *flag*."""
+
+    return command[command.index(flag) + 1]
+
+
+def test_opencode_names_the_model_the_way_the_channel_s_gateway_routes_it() -> None:
+    """The gateway's own slug is a catalogue fact, never the provider's name.
+
+    `spacexai/grok-4.6` is a route this machine has no provider for: the one it
+    is configured for is `openrouter/x-ai/grok-4.6`, and the slug after the
+    gateway's name is not derivable from the catalogue's provider by string
+    surgery (issue #308).
+    """
+
+    plan = launch.plan(
+        GROK, "high", "claude-code", _gateway_profile("openrouter"), CAT, repo="/repo"
+    )
+
+    assert plan.how == "bridge-command"
+    assert plan.command is not None
+    assert plan.command[:2] == ("opencode", "run")
+    assert _after(plan.command, "--dir") == "/repo"
+    assert _after(plan.command, "--model") == "openrouter/x-ai/grok-4.6"
+    assert _after(plan.command, "--variant") == "high"
+    assert "--cwd" not in plan.command
+
+
+def test_opencode_carries_no_variant_for_a_point_with_no_level() -> None:
+    """A level nobody chose is a level nothing should claim the work ran at."""
+
+    plan = launch.plan(
+        GROK, None, "process", _gateway_profile("openrouter"), CAT, repo=None
+    )
+
+    assert plan.command is not None
+    assert "--variant" not in plan.command
+    assert _after(plan.command, "--dir") == "."
+
+
+def test_a_model_with_no_slug_for_the_gateway_is_inherited_rather_than_guessed() -> (
+    None
+):
+    """A guessed slug is a command that fails in somebody else's terminal."""
+
+    unslugged = dataclasses.replace(GROK, gateways=())
+
+    plan = launch.plan(
+        unslugged, "high", "process", _gateway_profile("openrouter"), CAT, repo=None
+    )
+
+    assert plan.how == "inherit"
+    assert plan.command is None
+    assert plan.note is not None
+    assert "grok-4.6" in plan.note
+    assert "openrouter" in plan.note
+    assert "no slug" in plan.note
+
+
+def test_an_opencode_channel_without_a_gateway_plans_provider_and_id() -> None:
+    """A direct channel is reached under the provider's own name, as before."""
+
+    plan = launch.plan(GROK, "low", "process", _gateway_profile(None), CAT, repo=None)
+
+    assert plan.command is not None
+    assert _after(plan.command, "--model") == "spacexai/grok-4.6"
+    assert _after(plan.command, "--variant") == "low"
+
+
+def test_opencode_with_no_channel_at_all_plans_provider_and_id() -> None:
+    """The fallback profile has no channels, and so no gateway to route through."""
+
+    profile = dataclasses.replace(_gateway_profile("openrouter"), channels=())
+
+    plan = launch.plan(GROK, "low", "process", profile, CAT, repo=None)
+
+    assert plan.command is not None
+    assert _after(plan.command, "--model") == "spacexai/grok-4.6"
 
 
 def test_the_definition_matrix_covers_every_enabled_point_and_nothing_else() -> None:
@@ -328,3 +425,73 @@ def test_the_honoured_effort_line_names_the_version_it_was_verified_against() ->
     assert "honour" in docstring.lower()
     assert VERIFIED_ON in docstring
     assert VERIFIED_ON in measurement
+
+
+# The flags each installed CLI's own help lists, for exactly the flags the
+# planner emits, each with the short alias its help lists beside the long form.
+# Read on 2026-09-11 from `claude --help` (Claude Code 2.1.268), `codex exec
+# --help` (codex-cli 0.154.0) and `opencode run --help` (opencode 1.18.30). A
+# flag the planner emits that is not here is one the CLI would refuse, which
+# is how `--cwd` reached every opencode launch while opencode had only `--dir`
+# (issue #308). Re-read the help and move these sets when a CLI is upgraded.
+INSTALLED_FLAGS: dict[str, frozenset[str]] = {
+    "claude": frozenset(
+        {"-p", "--print", "--add-dir", "--tools", "--model", "--effort"}
+    ),
+    "codex": frozenset(
+        {
+            "-C",
+            "--cd",
+            "--skip-git-repo-check",
+            "-m",
+            "--model",
+            "-c",
+            "--config",
+            "-s",
+            "--sandbox",
+            "--json",
+        }
+    ),
+    "opencode": frozenset({"--dir", "-m", "--model", "--variant"}),
+}
+
+
+def _flags(command: tuple[str, ...]) -> set[str]:
+    """Return every flag a planned command passes, values left out."""
+
+    return {token for token in command if token.startswith("-")}
+
+
+def test_every_flag_a_bridge_emits_is_one_its_installed_cli_lists() -> None:
+    """Held for every variant the planner emits: read-only, with and without a level."""
+
+    bridges = (
+        (OPUS, _profile("claude-code")),
+        (HAIKU, _profile("claude-code")),
+        (ASTRA, _profile("codex")),
+        (GROK, _gateway_profile("openrouter")),
+        (GROK, _gateway_profile(None)),
+    )
+
+    planned = 0
+    for model, profile in bridges:
+        levels = model.deliberation or (None,)
+        for level in (*levels, None):
+            for read_only in (False, True):
+                plan = launch.plan(
+                    model,
+                    level,
+                    "process",
+                    profile,
+                    CAT,
+                    repo="/repo",
+                    read_only=read_only,
+                )
+                if plan.command is None:
+                    continue
+                planned += 1
+                binary = plan.command[0]
+                unlisted = _flags(plan.command) - INSTALLED_FLAGS[binary]
+                assert not unlisted, f"{binary} lists no {sorted(unlisted)}"
+
+    assert planned >= len(bridges) * 2

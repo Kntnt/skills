@@ -9,7 +9,9 @@ answers it. The facts arrive from two places and one of them is allowed to be
 wrong: the seed shipped beside this file is what the Skill knows on the day it
 is installed, and `catalogue.json` under the data directory is whatever a later
 `update` established. The refreshed file wins per model id, because a fact a
-person checked this week outranks a fact this repository froze at release.
+person checked this week outranks a fact this repository froze at release —
+except for the fields nobody fetches, which only a release of the seed can
+teach, and which a refreshed entry carrying none of them takes from the seed.
 
 Nothing here raises. A catalogue that cannot be read is a catalogue that says
 so in `problem` and hands back what it still has, because every caller of this
@@ -24,7 +26,7 @@ import json
 import math
 import sys
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Protocol
@@ -62,7 +64,9 @@ UNIT = "per_mtok"
 # Every field one model entry carries, and the subset an agent's fetch may
 # write. `capability` is off that subset deliberately: it is a seeded prior
 # that measurement refines, and how a published benchmark maps onto its scale
-# is not settled.
+# is not settled. `gateways` is off it too: a gateway's slug for a model is on
+# no page the provider publishes, so it is written by the seed and by matching
+# against the gateway's own list, and never by a reading of the provider.
 MODEL_FIELDS = (
     "id",
     "provider",
@@ -74,12 +78,14 @@ MODEL_FIELDS = (
     "long_context",
     "reasoning_billed_as",
     "capability",
+    "gateways",
     "provider_says",
     "released",
     "source_url",
     "retrieved",
 )
-FETCHED_FIELDS = tuple(name for name in MODEL_FIELDS if name != "capability")
+SEEDED_FIELDS = ("capability", "gateways")
+FETCHED_FIELDS = tuple(name for name in MODEL_FIELDS if name not in SEEDED_FIELDS)
 
 # Every field one plan entry carries. A plan is a whole name, a monthly price
 # and the attribution that makes both auditable, and nothing else.
@@ -134,7 +140,13 @@ class Plan:
 
 @dataclass(frozen=True)
 class Model:
-    """One point the Skill can send work to, with everything known about it."""
+    """One point the Skill can send work to, with everything known about it.
+
+    `gateways` pairs a gateway's name, spelled as a profile spells it, with
+    that gateway's own slug for this model: OpenRouter routes `grok-4.6` as
+    `x-ai/grok-4.6`, which no string surgery on the provider's name produces.
+    Pairs rather than a mapping, so that the model stays a frozen value.
+    """
 
     id: str
     provider: str
@@ -146,6 +158,7 @@ class Model:
     long_context: Price | None
     reasoning_billed_as: str
     capability: float | None
+    gateways: tuple[tuple[str, str], ...]
     provider_says: str | None
     released: str | None
     source_url: str | None
@@ -180,9 +193,10 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     refreshed, refreshed_plans, refreshed_generated, refresh_problem = _read(
         data_dir / REFRESHED_FILE
     )
-    merged: dict[str, Model] = {model.id: model for model in seed}
+    seeded: dict[str, Model] = {model.id: model for model in seed}
+    merged = dict(seeded)
     for model in refreshed:
-        merged[model.id] = model
+        merged[model.id] = _with_seeded_fields(model, seeded.get(model.id))
 
     generated_at = refreshed_generated or seed_generated
     return Catalogue(
@@ -190,6 +204,26 @@ def load(data_dir: Path, here: Path) -> Catalogue:
         _merged_plans(seed_plans, refreshed_plans),
         generated_at,
         refresh_problem,
+    )
+
+
+def _with_seeded_fields(model: Model, seeded: Model | None) -> Model:
+    """Return a refreshed *model*, the seed filling what nothing fetches.
+
+    A refreshed entry replaces the seeded one whole, which is right for every
+    fact `update` reads and wrong for the ones it never does: a catalogue
+    refreshed before a release of the seed learned a slug would otherwise
+    never learn it (issue #308). So `SEEDED_FIELDS` alone fall back, field by
+    field, and only where the refreshed entry carries none — absent, null and
+    empty all being none.
+    """
+
+    if seeded is None:
+        return model
+    return replace(
+        model,
+        capability=seeded.capability if model.capability is None else model.capability,
+        gateways=model.gateways or seeded.gateways,
     )
 
 
@@ -229,8 +263,8 @@ def adopt(
 
     A model merges field by field over the entry `load` currently answers
     with, so a document carrying a price and nothing else leaves everything
-    else standing — `capability` above all, which nothing fetches. A provider's
-    plans are replaced whole, as `_merged_plans` explains.
+    else standing — `capability` and `gateways` above all, which nothing
+    fetches. A provider's plans are replaced whole, as `_merged_plans` explains.
     """
 
     document, refusal = _offered(path)
@@ -549,8 +583,9 @@ def _plan_name(entry: Any, index: int) -> str:
 def _entry(model: Model) -> dict[str, Any]:
     """Return one model as the refreshed file holds it, every field carried.
 
-    The refreshed entry replaces the seeded one whole, so a partial entry
-    written here is a fact the Skill silently stops knowing.
+    The refreshed entry replaces the seeded one whole, the fields in
+    `SEEDED_FIELDS` aside, so a partial entry written here is a fact the Skill
+    silently stops knowing.
     """
 
     return {
@@ -564,6 +599,7 @@ def _entry(model: Model) -> dict[str, Any]:
         "long_context": _priced(model.long_context),
         "reasoning_billed_as": model.reasoning_billed_as,
         "capability": model.capability,
+        "gateways": dict(model.gateways),
         "provider_says": model.provider_says,
         "released": model.released,
         "source_url": model.source_url,
@@ -767,6 +803,7 @@ def _model(entry: Any) -> Model | None:
         long_context=_price(entry.get("long_context")),
         reasoning_billed_as=billing if billing in BILLING else "unknown",
         capability=_fraction(entry.get("capability")),
+        gateways=_gateways(entry.get("gateways")),
         provider_says=_text(entry.get("provider_says")),
         released=_text(entry.get("released")),
         source_url=_text(entry.get("source_url")),
@@ -780,6 +817,23 @@ def _aliases(raw: Any, family: str) -> tuple[str, ...]:
     found = [] if not isinstance(raw, list) else [_text(item) for item in raw]
     names = [name.lower() for name in found if name] + [family.lower()]
     return tuple(dict.fromkeys(names))
+
+
+def _gateways(raw: Any) -> tuple[tuple[str, str], ...]:
+    """Return each gateway's slug for a model, dropping what is not one.
+
+    A value that is not an object is no slugs at all, and a slug that is not a
+    non-empty string is dropped alone: a hand-edited catalogue costs its own
+    bad entry, and a planner never reads a slug nobody wrote.
+    """
+
+    if not isinstance(raw, dict):
+        return ()
+    return tuple(
+        (gateway, slug)
+        for gateway, value in raw.items()
+        if (slug := _text(value)) is not None and _text(gateway) is not None
+    )
 
 
 def _deliberation(raw: Any) -> tuple[str, ...]:

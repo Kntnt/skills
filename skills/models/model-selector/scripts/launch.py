@@ -122,7 +122,7 @@ def plan(
         )
 
     if "opencode" in profile.harnesses and model.provider in profile.providers:
-        return Launch("bridge-command", None, _opencode(model, repo), None)
+        return _through_opencode(model, deliberation, profile, repo)
 
     return Launch("inherit", None, None, _unreachable(model, harness, profile))
 
@@ -312,22 +312,65 @@ def _claude(
     return tuple(command)
 
 
-def _opencode(model: Model, repo: str | None) -> tuple[str, ...]:
-    """Return the opencode command that starts one point.
+def _through_opencode(
+    model: Model, deliberation: str | None, profile: Profile, repo: str | None
+) -> Launch:
+    """Return how opencode starts one point, as the channel paying for it routes it.
 
-    opencode names a model as `provider/model` and takes the prompt as its
-    trailing argument, which the caller appends: this module plans a launch
-    rather than composing somebody else's brief.
+    The paying channel is the profile's opencode channel for this model's
+    provider, matched exactly rather than through `channel_for`'s fallback: a
+    gateway on some other harness's channel says nothing about what opencode
+    is configured to reach. Where that channel names a gateway, the model is
+    named the way the gateway routes it, by the slug the catalogue records for
+    that gateway; with no slug recorded there is no route to name, and a guess
+    would be a command that fails later and further away, so the point is
+    inherited. A channel with no gateway, or no opencode channel at all, keeps
+    the provider's own name.
     """
 
-    return (
-        "opencode",
-        "run",
-        "--cwd",
-        repo or HERE,
-        "--model",
-        f"{model.provider}/{model.id}",
+    gateway = next(
+        (
+            channel.gateway
+            for channel in profile.channels
+            if channel.harness == "opencode" and channel.provider == model.provider
+        ),
+        None,
     )
+    if gateway is None:
+        route = f"{model.provider}/{model.id}"
+    elif (slug := dict(model.gateways).get(gateway)) is not None:
+        route = f"{gateway}/{slug}"
+    else:
+        return Launch(
+            "inherit",
+            None,
+            None,
+            f"{model.id} has no slug recorded for the {gateway} gateway its opencode "
+            "channel pays through, so opencode has no route to start it by",
+        )
+
+    return Launch("bridge-command", None, _opencode(route, deliberation, repo), None)
+
+
+def _opencode(
+    route: str, deliberation: str | None, repo: str | None
+) -> tuple[str, ...]:
+    """Return the opencode command that starts one point by its *route*.
+
+    The flags are the ones `opencode run --help` lists, verified against
+    opencode 1.18.30 (issue #308): the working directory is `--dir`, since the
+    command refuses anything else before a model is reached, and the model is
+    `<provider>/<model>` in opencode's own sense of provider, which for a
+    gateway is the gateway and its slug. The level travels as `--variant`, so
+    that a row recorded at a level ran at it; a point with no level passes
+    none. The prompt is the trailing argument the caller appends: this module
+    plans a launch rather than composing somebody else's brief.
+    """
+
+    command = ["opencode", "run", "--dir", repo or HERE, "--model", route]
+    if deliberation is not None:
+        command += ["--variant", deliberation]
+    return tuple(command)
 
 
 def _unreachable(model: Model, harness: str, profile: Profile) -> str:

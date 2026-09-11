@@ -683,6 +683,157 @@ def test_adopting_a_price_keeps_the_capability_the_seed_shipped(
     assert fable.deliberation == ("low", "medium", "high", "xhigh", "max")
 
 
+def test_gateways_is_a_model_field_that_update_never_fetches() -> None:
+    """A gateway's slug is matched, not read off the provider's page (issue #308)."""
+
+    assert "gateways" in catalogue.MODEL_FIELDS
+    assert "gateways" not in catalogue.FETCHED_FIELDS
+    assert "capability" not in catalogue.FETCHED_FIELDS
+
+
+def test_the_shipped_seed_carries_the_openrouter_slug_for_grok_alone() -> None:
+    """The one gateway route this collection ships knowing is Grok's through OpenRouter."""
+
+    cat = catalogue.load(Path("/nowhere"), SHIPPED)
+
+    slugged = {model.id: model.gateways for model in cat.models if model.gateways}
+
+    assert slugged == {"grok-4.6": (("openrouter", "x-ai/grok-4.6"),)}
+
+
+def _seed_entry(identifier: str) -> dict[str, Any]:
+    """Return one entry of the shipped seed exactly as the file holds it."""
+
+    seed = json.loads((SHIPPED / "data" / "catalogue-seed.json").read_text("utf-8"))
+    return next(entry for entry in seed["models"] if entry["id"] == identifier)
+
+
+def _refreshed(data: Path, entry: dict[str, Any]) -> None:
+    """Write a refreshed catalogue holding one entry, as `update` leaves it."""
+
+    data.mkdir(parents=True, exist_ok=True)
+    (data / "catalogue.json").write_text(
+        json.dumps({"generated_at": "2026-09-10T00:00:00Z", "models": [entry]}),
+        encoding="utf-8",
+    )
+
+
+def test_a_refreshed_entry_carrying_no_gateways_keeps_the_seed_s(
+    tmp_path: Path,
+) -> None:
+    """A machine that ran `update` before the seed knew a slug still learns it.
+
+    The refreshed entry otherwise replaces the seeded one whole, so a slug the
+    seed gained in a release would never reach a catalogue refreshed before it.
+    Absent, null and empty all count as not carrying one.
+    """
+
+    carried: object
+    for carried in ("absent", None, {}):
+        entry = _seed_entry("grok-4.6")
+        entry["price"] = _card(input=3.0)
+        if carried == "absent":
+            entry.pop("gateways", None)
+        else:
+            entry["gateways"] = carried
+        data = tmp_path / f"data-{carried}"
+        _refreshed(data, entry)
+
+        grok = catalogue.resolve(catalogue.load(data, SHIPPED), "grok-4.6")[0]
+
+        assert grok.price is not None and grok.price.input == 3.0
+        assert grok.gateways == (("openrouter", "x-ai/grok-4.6"),), carried
+
+
+def test_a_refreshed_entry_carrying_no_capability_keeps_the_seed_s(
+    tmp_path: Path,
+) -> None:
+    """Capability is the other field nothing fetches, and falls back the same way."""
+
+    entry = _seed_entry("grok-4.6")
+    entry["capability"] = None
+    data = tmp_path / "data"
+    _refreshed(data, entry)
+
+    grok = catalogue.resolve(catalogue.load(data, SHIPPED), "grok-4.6")[0]
+
+    assert grok.capability == 0.7
+
+
+def test_a_refreshed_entry_that_carries_its_own_gateways_keeps_them(
+    tmp_path: Path,
+) -> None:
+    """The fallback fills an absence; it does not overrule what was written."""
+
+    entry = _seed_entry("grok-4.6")
+    entry["gateways"] = {"elsewhere": "grok/4.6"}
+    data = tmp_path / "data"
+    _refreshed(data, entry)
+
+    grok = catalogue.resolve(catalogue.load(data, SHIPPED), "grok-4.6")[0]
+
+    assert grok.gateways == (("elsewhere", "grok/4.6"),)
+
+
+def test_a_malformed_gateways_value_is_dropped_rather_than_raised(
+    tmp_path: Path,
+) -> None:
+    """A hand-edited catalogue costs its own bad slug and nothing more."""
+
+    here = _here(
+        tmp_path,
+        [
+            _model(gateways="openrouter"),
+            _model(
+                id="test-two",
+                family="two",
+                gateways={"openrouter": 3, "elsewhere": "two/1", "blank": " "},
+            ),
+        ],
+    )
+
+    cat = catalogue.load(tmp_path / "data", here)
+
+    assert catalogue.resolve(cat, "test-one")[0].gateways == ()
+    assert catalogue.resolve(cat, "test-two")[0].gateways == (("elsewhere", "two/1"),)
+
+
+def test_adopting_a_price_keeps_the_gateway_slug_the_seed_shipped(
+    tmp_path: Path, capsys: Any
+) -> None:
+    """The refreshed entry replaces the seeded one whole, so it has to carry the slug."""
+
+    data = tmp_path / "data"
+    document = _fetch(
+        tmp_path,
+        models=[
+            {
+                "id": "grok-4.6",
+                "provider": "spacexai",
+                "family": "grok",
+                "price": _card(input=2.5, cache_read=0.5, cache_write=None, output=6.0),
+                "gateways": {"openrouter": "somebody/guessed"},
+                "source_url": "https://docs.x.ai/developers/models/grok-4.6",
+                "retrieved": "2026-09-11",
+            }
+        ],
+    )
+
+    assert catalogue.main(["adopt", str(document), f"--data={data}"]) == 0
+
+    report = json.loads(capsys.readouterr().out)
+
+    assert report["models"][0]["ignored"] == ["gateways"]
+
+    stored = json.loads((data / "catalogue.json").read_text("utf-8"))
+    grok = catalogue.resolve(catalogue.load(data, SHIPPED), "grok-4.6")[0]
+
+    assert stored["models"][0]["gateways"] == {"openrouter": "x-ai/grok-4.6"}
+    assert grok.price is not None
+    assert grok.price.input == 2.5
+    assert grok.gateways == (("openrouter", "x-ai/grok-4.6"),)
+
+
 # What the retired unattended pass went by: its module, the store it kept, the
 # member that told it how to read a body, the file that told it when to run,
 # and the constant that bounded its network time (issue #293). A shipped file
