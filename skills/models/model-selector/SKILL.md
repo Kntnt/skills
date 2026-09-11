@@ -1,8 +1,8 @@
 ---
 name: model-selector
-description: "Choose the model and deliberation level that completes delegated work at the lowest total cost. Never used implicitly: a Skill that routes work runs its script."
+description: "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script."
 disable-model-invocation: true
-argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | update [--data=<path>] | evidence [--data=<path>] [<kind>] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
+argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | update [--data=<path>] | evidence [--data=<path>] [<kind>] | objective [--data=<path>] [time|cost] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -15,7 +15,7 @@ metadata:
 
 # model-selector
 
-Which model, at which deliberation level, finishes a piece of work for the least money — answered from what this machine has measured rather than from reputation. The answer is advice. No form of it means *start nothing*: where the profile is missing, the catalogue empty or nothing reachable, it names the seat the caller already has and says why.
+Which model, at which deliberation level, finishes a piece of work for the least money, or soonest where the user has made time their standing choice — answered from what this machine has measured rather than from reputation. The answer is advice. No form of it means *start nothing*: where the profile is missing, the catalogue empty or nothing reachable, it names the seat the caller already has and says why.
 
 `$HERE` is the directory that contains this SKILL.md, and `$MANAGER` is the Manager directory: `$HERE/../kntnt/` if it exists, else `kntnt/` under a Global harness skills directory (`~/.claude/skills`, `~/.config/opencode/skills`, or wherever another Harness keeps them). Neither found: tell the user to install the Manager (`npx skills add Kntnt/skills`) and stop. `$LIBRARY` is `$MANAGER/library/` — absent, tell the user to run `/kntnt update`, then stop.
 
@@ -36,6 +36,8 @@ In the JSON, `path` is the command path as a list, `flags` holds each flag the u
 `--data=<path>` puts the profile, the catalogue and the measurement store somewhere other than `~/.kntnt/model-selector/`. Every command takes it and every command means the same directory by it.
 
 On `evidence`, `<kind>` narrows the account to that one kind, spelled as above.
+
+On `objective`, the operand is `time` or `cost`, the two words `--objective` already has: `time` orders every answer asked for with no `--objective` on how long a finished job takes, and `cost` on what it costs. Without the operand, `objective` reports which is in force.
 
 `--evidence` widens `reset` from the user's answers to the measurement as well. `--yes` answers the one question `reset` asks.
 
@@ -62,7 +64,8 @@ With `--json`, emit the response verbatim and add nothing beside it. A machine i
 Without `--json`, render the same answer for a person:
 
 - The model and the deliberation level, and how it is launched. `launch.how` is `claude-code-agent` — a generated subagent definition named by `subagent_type` — or `bridge-command`, an argv to run as a process, or `inherit`, which carries no launch argument and means the caller's own seat.
-- What one attempt is expected to cost and how likely it is to finish, from `expected`, and what a finished job is expected to cost: `per_success_cost_usd`, or `per_success_seconds` where the call asked for time with `--objective=time` — one attempt's price, or its elapsed time, divided by its chance of success, a failed attempt being paid for again. Say a null one as absent. The cost is the list value of the tokens, whoever pays for them, so a subscription seat and an API seat are one number and comparable. The chance of finishing decided which points were in and the price per finished job ordered them: among the points the measurements say will finish the job, the one whose price per finished job was lowest was taken, and a model unlikely to finish is never chosen for being cheap.
+- What one attempt is expected to cost and how likely it is to finish, from `expected`, and what a finished job is expected to cost: `per_success_cost_usd`, or `per_success_seconds` where the answer's `objective` is `time` — one attempt's price, or its elapsed time, divided by its chance of success, a failed attempt being paid for again. Say a null one as absent. The cost is the list value of the tokens, whoever pays for them, so a subscription seat and an API seat are one number and comparable. The chance of finishing decided which points were in and the price per finished job ordered them: among the points the measurements say will finish the job, the one whose price per finished job was lowest was taken, and a model unlikely to finish is never chosen for being cheap.
+- What it ranked on, from `objective` and `objective_source`: `cost` or `time`, and whether the caller asked for it (`caller`), the user's standing choice set it (`standing`), or neither did and cost is the default (`default`). Where a standing choice was there and could not be read, `note` names the file.
 - What the answer rests on, from `basis`. `measured` is this machine's own rows for exactly this kind, model and level. `pooled` is rows for that model at other kinds or levels. `prior` is the model's published capability against this kind's difficulty, with no local row behind it at all. `inherit` is nothing reachable, so the seat already in hand stands.
 - The alternatives it beat, and `note` wherever it is not null.
 
@@ -132,12 +135,24 @@ With no profile operand it syncs and writes no profile. Report the definitions w
 
 A pass in which nothing changed is a successful pass. A model discovered that the profile does not enable is written to the catalogue and left disabled, and `## Status` is where the user is told they may want to adopt it.
 
+## Objective
+
+Whether work is ordered on what it costs to finish or on how long it takes depends on something only the user knows — how much of their subscription is left this week — so it is one standing choice, set here, that every answer asked for with no `--objective` inherits. A caller's own `--objective` still wins, and with nothing set the answer ranks on cost: running out of quota mid-week stops everything, while a slower job is only slower.
+
+With `time` or `cost` as the operand, hand it to the script rather than editing the file:
+
+    uv run "$HERE/scripts/setup_apply.py" --objective=<time|cost> [--data=<directory>]
+
+It writes `<directory>/objective.json` and nothing else — neither the profile nor the generated subagent definitions. Render its report: the objective now standing, and that every answer asked for without `--objective` ranks on it from now on and names it under `objective`, with `objective_source` `standing`. A caller that holds one objective for a whole run, as Orchestrate does, keeps the one its run started with.
+
+Without the operand, report what is in force and where it came from. Read `<directory>/objective.json`: where it holds `{"objective": "time"}` or `{"objective": "cost"}`, that objective is the standing choice. Where the file is absent, nothing is set and answers rank on cost, the default. Where it cannot be read or names any other word, say so, name the file, and say that answers rank on cost, the default, until `objective time` or `objective cost` writes it again. Nothing here asks a question, and nothing reaches the network.
+
 ## Reset
 
-`reset` discards the answers the user gave and leaves the interview to be held again. `reset --evidence` additionally discards what this machine measured. Neither touches the catalogue, which is public fact this Skill can fetch again.
+`reset` discards the answers the user gave — the profile and the standing objective — and leaves the interview to be held again. `reset --evidence` additionally discards what this machine measured. Neither touches the catalogue, which is public fact this Skill can fetch again.
 
-Name the exact paths under the selected directory before anything goes, with the size of each: `profile.json` always, and with `--evidence` also `measurements.jsonl`, `pending.jsonl`, the `capture/` directory, and whatever an earlier design of this Skill left in the directory. Get the counts for all but the first from `uv run "$HERE/scripts/capture.py" purge --data=<directory>` without `--yes`, which reports rather than removes; a path the directory does not hold is reported absent rather than as a failure, and the preview lists those absent paths so that the user can see the whole of what this verb knows about.
+Name the exact paths under the selected directory before anything goes, with the size of each: `profile.json` and `objective.json` always, and with `--evidence` also `measurements.jsonl`, `pending.jsonl`, the `capture/` directory, and whatever an earlier design of this Skill left in the directory. Get the counts for all but the first from `uv run "$HERE/scripts/capture.py" purge --data=<directory>` without `--yes`, which reports rather than removes; a path the directory does not hold is reported absent rather than as a failure, and the preview lists those absent paths so that the user can see the whole of what this verb knows about.
 
-Obtain confirmation the way every destructive act in this collection does, or read it from a supplied `--yes`. A declined confirmation writes nothing. Confirmed, remove `profile.json`; with `--evidence`, also remove `measurements.jsonl` and run the same purge again as `purge --yes --data=<directory>`. Report what went, per path, by the count of rows or bytes the preview named — nothing here is migrated, backfilled or reinterpreted.
+Obtain confirmation the way every destructive act in this collection does, or read it from a supplied `--yes`. A declined confirmation writes nothing. Confirmed, remove `profile.json` and `objective.json`; with `--evidence`, also remove `measurements.jsonl` and run the same purge again as `purge --yes --data=<directory>`. Report what went, per path, by the count of rows or bytes the preview named — nothing here is migrated, backfilled or reinterpreted.
 
 Say two things afterwards. The Harness hooks stay installed and keep measuring: discarding a measurement is not switching measurement off, and switching it off is unchecking this Skill in `/kntnt select`. And the generated subagent definitions are left where they are until the next `setup` rewrites the set.

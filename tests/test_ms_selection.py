@@ -1647,3 +1647,145 @@ def test_every_account_of_callable_says_what_it_means_for_a_process(
         for sentence in sentences
         if "callable" in sentence and "process" in sentence and "`path`" in sentence
     ]
+
+
+setup_apply = _module("setup_apply")
+
+# The flags every standing-objective test asks with: a store where the cheapest
+# finished job and the quickest one are two different points.
+STANDING: tuple[str, ...] = (*LIMITED, "--kind=implement", "--seed=0")
+
+
+def _stand(capsys: pytest.CaptureFixture[str], data_dir: Path, objective: str) -> None:
+    """Set the standing objective as `/model-selector objective` does, then clear stdout."""
+
+    assert setup_apply.main([f"--data={data_dir}", f"--objective={objective}"]) == 0
+    capsys.readouterr()
+
+
+def _pointed(answer: dict[str, Any]) -> tuple[str, str | None]:
+    """Return the point an answer names."""
+
+    return answer["model"], answer["deliberation"]
+
+
+def test_the_standing_choice_orders_an_answer_asked_for_no_objective(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """After `objective time` a bare call ranks on time, after `objective cost` on cost."""
+
+    _clearing(tmp_path)
+    flags = (*STANDING, f"--data={tmp_path}")
+    on_time = _answer(capsys, *flags, "--objective=time")
+    on_cost = _answer(capsys, *flags, "--objective=cost")
+    assert _pointed(on_time) != _pointed(on_cost)
+
+    _stand(capsys, tmp_path, "time")
+    timed = _answer(capsys, *flags)
+    _stand(capsys, tmp_path, "cost")
+    costed = _answer(capsys, *flags)
+
+    assert _pointed(timed) == _pointed(on_time)
+    assert (timed["objective"], timed["objective_source"]) == ("time", "standing")
+    assert _pointed(costed) == _pointed(on_cost)
+    assert (costed["objective"], costed["objective_source"]) == ("cost", "standing")
+
+
+@pytest.mark.parametrize(("standing", "asked"), (("time", "cost"), ("cost", "time")))
+def test_an_explicit_objective_outranks_the_standing_choice(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], standing: str, asked: str
+) -> None:
+    """The caller's `--objective` wins in both directions, so `--fast` still means time."""
+
+    _clearing(tmp_path)
+    flags = (*STANDING, f"--data={tmp_path}")
+    _stand(capsys, tmp_path, standing)
+
+    inherited = _answer(capsys, *flags)
+    answer = _answer(capsys, *flags, f"--objective={asked}")
+
+    assert _pointed(answer) != _pointed(inherited)
+    assert (answer["objective"], answer["objective_source"]) == (asked, "caller")
+    assert (inherited["objective"], inherited["objective_source"]) == (
+        standing,
+        "standing",
+    )
+
+
+def test_with_nothing_set_an_answer_ranks_on_cost(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Running out of quota stops everything, while a slower job is only slower."""
+
+    _clearing(tmp_path)
+    flags = (*STANDING, f"--data={tmp_path}")
+
+    answer = _answer(capsys, *flags)
+    on_cost = _answer(capsys, *flags, "--objective=cost")
+
+    assert _pointed(answer) == _pointed(on_cost)
+    assert (answer["objective"], answer["objective_source"]) == ("cost", "default")
+    assert not (tmp_path / "objective.json").exists()
+
+
+@pytest.mark.parametrize(
+    "held",
+    ("{not json", '{"objective": "fast"}', '{"objective": 1}', '["time"]', "{}"),
+)
+def test_a_standing_choice_nothing_can_read_is_the_default_said_out_loud(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], held: str
+) -> None:
+    """An unreadable file is treated as absent, named in the note, and never refused."""
+
+    _clearing(tmp_path)
+    (tmp_path / "objective.json").write_text(held, encoding="utf-8")
+    flags = (*STANDING, f"--data={tmp_path}")
+
+    answer = _answer(capsys, *flags)
+
+    assert answer["ok"] is True
+    assert _pointed(answer) == _pointed(_answer(capsys, *flags, "--objective=cost"))
+    assert (answer["objective"], answer["objective_source"]) == ("cost", "default")
+    assert "objective.json" in (answer["note"] or "")
+
+
+def test_an_inheriting_answer_names_its_objective_and_where_it_came_from(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The answer that keeps the caller's seat carries both members as well."""
+
+    _profile(tmp_path, models=[], providers=[])
+    flags = (f"--data={tmp_path}", "--seat=claude-opus-5@xhigh")
+
+    defaulted = _answer(capsys, *flags)
+    asked = _answer(capsys, *flags, "--objective=time")
+    _stand(capsys, tmp_path, "time")
+    standing = _answer(capsys, *flags)
+    (tmp_path / "objective.json").write_text("{not json", encoding="utf-8")
+    unreadable = _answer(capsys, *flags)
+
+    assert {row["basis"] for row in (defaulted, asked, standing, unreadable)} == {
+        "inherit"
+    }
+    assert (defaulted["objective"], defaulted["objective_source"]) == (
+        "cost",
+        "default",
+    )
+    assert (asked["objective"], asked["objective_source"]) == ("time", "caller")
+    assert (standing["objective"], standing["objective_source"]) == ("time", "standing")
+    assert (unreadable["objective"], unreadable["objective_source"]) == (
+        "cost",
+        "default",
+    )
+    assert "objective.json" in unreadable["note"]
+
+
+def test_the_vocabulary_answer_carries_no_objective(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """`--kinds` ranks nothing, so it has nothing to say it ranked on."""
+
+    answer = _answer(capsys, "--kinds")
+
+    assert "objective" not in answer
+    assert "objective_source" not in answer

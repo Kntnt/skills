@@ -10512,3 +10512,77 @@ def test_a_replayed_verdict_is_the_same_verdict_however_the_clock_moved() -> Non
     # What the verdict actually says still separates two entries of it.
     contradicting = {**later, "outcome": "fail", "grade": 0.0}
     assert engine._differs(first, contradicting)
+
+
+def test_a_run_holds_the_objective_its_first_route_was_answered_with(
+    tmp_path: Path,
+) -> None:
+    """Flipping the standing choice mid-run never changes a run already under way.
+
+    The first route asks with no objective and is answered on cost; the user
+    then sets time as the standing choice, so every later answer the stub gives
+    says time. Every later request — the amend, the repair and the rebuild, in
+    a later invocation that reads the account back as a resume does — still
+    asks for cost by name.
+    """
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        requests=["build-9"],
+        answers=[select_answer(objective="cost", objective_source="standing")],
+    )
+    flipped = select_answer(objective="time", objective_source="standing")
+    _queue(env, [flipped, flipped, flipped, flipped])
+
+    later = _route(repo, scratch, env, ["amend-9-1", "repair-9"])
+    resumed = _route(repo, scratch, env, ["rebuild-9", "amend-9-2"])
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert later.returncode == 0, later.stderr
+    assert resumed.returncode == 0, resumed.stderr
+    calls = _select_calls(env)
+    assert len(calls) == 5
+    assert "--objective" not in calls[0]
+    assert all("--objective=cost" in call for call in calls[1:]), calls
+    assert not any("--objective=time" in call for call in calls)
+    assert json.loads(reported.stdout)["routing"]["objective"] == "cost"
+
+
+def test_an_answer_naming_no_objective_puts_none_on_later_requests(
+    tmp_path: Path,
+) -> None:
+    """An older Model Selector says nothing about it, and nothing is passed on."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    assert _route(repo, scratch, env, ["amend-9-1"]).returncode == 0
+    assert not any("--objective" in call for call in _select_calls(env))
+
+
+def test_a_fast_run_asks_for_time_whatever_its_first_answer_said(
+    tmp_path: Path,
+) -> None:
+    """`--fast` is the caller's own objective, and a caller's objective wins."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    assert (
+        _engine(repo, "plan", "--fast", "--state-dir", str(scratch), env=env).returncode
+        == 0
+    )
+    first = select_answer(objective="time", objective_source="caller")
+    assert (
+        _route(repo, scratch, env, ["build-9"], fast=True, answers=[first]).returncode
+        == 0
+    )
+    assert _route(repo, scratch, env, ["amend-9-1"], fast=True).returncode == 0
+
+    calls = _select_calls(env)
+    assert len(calls) == 2
+    assert all("--objective=time" in call for call in calls)
+    assert not any("--objective=cost" in call for call in calls)

@@ -21,6 +21,12 @@ create that directory, says why that matters. Claude Code reads the agents
 directory when a session starts, so definitions written into a directory that
 did not exist a moment ago reach the sessions started from now on rather than
 the one running this.
+
+It also writes the one answer that is changed without an interview: the
+standing choice between time and cost, which `/model-selector objective` sets.
+That writes `objective.json` and nothing else — not the profile, which a
+standing choice is kept out of so that `setup` cannot drop it, and not the
+definitions, which it has no bearing on.
 """
 
 from __future__ import annotations
@@ -320,6 +326,26 @@ def apply(path: Path | None, data_dir: Path, agents: Path) -> dict[str, Any]:
     }
 
 
+def set_objective(data_dir: Path, objective: str) -> dict[str, Any]:
+    """Write the user's standing objective, and touch nothing beside it."""
+
+    try:
+        path = profiles.write_objective(data_dir, objective)
+    except OSError as problem:
+        return {
+            "ok": False,
+            "notes": [],
+            "problems": [f"the objective could not be written: {problem}"],
+        }
+    return {
+        "ok": True,
+        "notes": [],
+        "problems": [],
+        "objective": objective,
+        "path": str(path),
+    }
+
+
 def _agents_directory(named: str | None) -> Path:
     """Return where the generated definitions go, under a home this may not have."""
 
@@ -351,14 +377,21 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     )
     parser.add_argument("--data")
     parser.add_argument("--agents")
+    parser.add_argument("--objective", choices=profiles.OBJECTIVES)
     parser.add_argument("path", nargs="?")
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+    if args.objective is not None and args.path is not None:
+        parser.error("--objective is written on its own, without a profile")
+    return args
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     """Apply one profile, print what happened, and exit 0."""
 
     args = _parse(argv)
+    if args.objective is not None:
+        print(json.dumps(set_objective(_data_dir(args.data), args.objective), indent=2))
+        return 0
     try:
         report = apply(
             Path(args.path).expanduser() if args.path else None,

@@ -2,7 +2,7 @@
 
 ## NAME
 
-model-selector reset - discard the profile, and with it the measurement on request
+model-selector reset - discard the profile and the standing objective, and the measurement on request
 
 ## SYNOPSIS
 
@@ -10,7 +10,7 @@ model-selector reset - discard the profile, and with it the measurement on reque
 
 ## DESCRIPTION
 
-Bare, this discards the profile — the answers you gave about Harnesses, providers, models and how you pay — and leaves the interview to be held again. The measurement is untouched, so a fresh profile inherits everything already learned about the models it enables.
+Bare, this discards the profile — the answers you gave about Harnesses, providers, models and how you pay — and the standing choice between time and cost that `objective` set, `objective.json`, and leaves the interview to be held again. With no standing choice, answers rank on cost until one is set again. The measurement is untouched, so a fresh profile inherits everything already learned about the models it enables.
 
 With **--evidence**, this machine's own measurement goes too: the measurement store, the units seen and not yet graded, and the `capture/` directory. That is the only way to discard it, and it has to be asked for by name. Whatever an earlier design of this Skill left in the directory goes with it — that directory among them, and the files no version writes or reads any more, named in the preview like everything else.
 
@@ -24,7 +24,7 @@ Two things survive on purpose. The Harness hooks stay installed and go on measur
 
 **--evidence**
 
-Discard this machine's measurement as well as the profile. Without it, only the profile goes.
+Discard this machine's measurement as well as the profile and the standing objective. Without it, only those two go.
 
 **--yes**
 

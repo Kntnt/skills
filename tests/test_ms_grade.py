@@ -764,6 +764,7 @@ def test_the_judge_is_asked_of_the_engine_as_the_review_work_it_is(
     assert {
         "--kind=review",
         "--stakes=high",
+        "--objective=cost",
         "--harness=process",
         "--read-only",
     } <= set(asked[0])

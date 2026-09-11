@@ -31,6 +31,17 @@ from catalogue import CURRENCY, UNIT, Catalogue, Model, Price
 
 PROFILE_FILE = "profile.json"
 
+# Where the user's standing choice between time and cost is kept. Beside the
+# profile rather than inside it: `write` replaces the profile whole on every
+# `setup`, which would drop it, and a profile holding nothing but an objective
+# is not one `load` can read.
+OBJECTIVE_FILE = "objective.json"
+
+# What finishing the work is counted in. Money is what a run spends whether or
+# not anybody is watching it; time is what the person waiting on it spends
+# instead, and asking for one is not the same as asking for the other.
+OBJECTIVES = ("cost", "time")
+
 # How a channel is paid for. Anything else in the file is not a channel this
 # Skill can reason about, so the profile carrying it is treated as invalid.
 PAYMENTS = ("subscription", "api")
@@ -187,17 +198,57 @@ def write(data_dir: Path, p: Profile) -> None:
     leaves the previous answers standing instead of half of the new ones.
     """
 
+    _replace(data_dir, PROFILE_FILE, _document(p))
+
+
+def standing_objective(data_dir: Path) -> tuple[str | None, str | None]:
+    """Return the objective the user set, and why it could not be read.
+
+    Both are None where nothing is set. A file that is there and cannot be
+    read, or that names a word other than one of `OBJECTIVES`, answers None
+    with the reason: whoever reads it treats it as absent and says so, because
+    a standing choice is a preference and never a reason to refuse a call.
+    """
+
+    path = data_dir / OBJECTIVE_FILE
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return None, None
+    except (OSError, ValueError) as problem:
+        return None, f"the standing objective at {path} cannot be read ({problem})"
+
+    held = raw.get("objective") if isinstance(raw, dict) else None
+    if held not in OBJECTIVES:
+        return None, (
+            f"the standing objective at {path} names neither "
+            f"{' nor '.join(OBJECTIVES)}, so it cannot be read"
+        )
+    return str(held), None
+
+
+def write_objective(data_dir: Path, objective: str) -> Path:
+    """Store the user's standing objective atomically, and nothing beside it."""
+
+    return _replace(data_dir, OBJECTIVE_FILE, {"objective": objective})
+
+
+def _replace(data_dir: Path, name: str, document: dict[str, Any]) -> Path:
+    """Write one of the user's answer files whole, readable only by its owner."""
+
     data_dir.mkdir(parents=True, exist_ok=True)
-    handle, staged = tempfile.mkstemp(dir=data_dir, prefix=".profile-", suffix=".json")
+    stem = Path(name).stem
+    handle, staged = tempfile.mkstemp(dir=data_dir, prefix=f".{stem}-", suffix=".json")
     try:
         with os.fdopen(handle, "w", encoding="utf-8") as stream:
-            json.dump(_document(p), stream, indent=2, sort_keys=True)
+            json.dump(document, stream, indent=2, sort_keys=True)
             stream.write("\n")
         os.chmod(staged, 0o600)
-        os.replace(staged, data_dir / PROFILE_FILE)
+        os.replace(staged, data_dir / name)
     except OSError:
         Path(staged).unlink(missing_ok=True)
         raise
+    return data_dir / name
 
 
 def _document(p: Profile) -> dict[str, Any]:

@@ -1114,7 +1114,12 @@ class Routing:
     of model-selector's own state and a run that loses it re-routes rather than
     stopping (ADR-0182). `model` and `deliberation` are the invocation's own
     field locks, recorded because a resume that changed them would be a second
-    run reporting as the first, and `fast` is the third of them. `seat` and
+    run reporting as the first, and `fast` is the third of them. `objective`
+    is what the run's first answer said it ranked on — the caller's `--fast`,
+    else the user's standing choice, else cost — and every later request of
+    the run asks for it by name, so a standing choice flipped mid-run never
+    changes a run already under way; an answer naming none records none, and
+    nothing is then passed. `seat` and
     `harness` are what the orchestrating session said it was calling from, kept
     so a report names the seat every verdict inherited and a measurement names
     the Harness its attempt ran on. `decisions` is every decision made under
@@ -1130,6 +1135,7 @@ class Routing:
     deliberation: str | None
     decisions: list[RouteRecord]
     fast: bool = False
+    objective: str | None = None
     seat: str | None = None
     harness: str | None = None
     attempts: list[dict[str, Any]] = field(default_factory=list)
@@ -1153,6 +1159,7 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
         "model": routing.model,
         "deliberation": routing.deliberation,
         "fast": routing.fast,
+        "objective": routing.objective,
         "seat": routing.seat,
         "harness": routing.harness,
         "run_identity": routing.run_identity or None,
@@ -1507,6 +1514,9 @@ def read_routing(path: Path | None) -> tuple[Routing | None, str | None]:
                 None if held["deliberation"] is None else str(held["deliberation"])
             ),
             fast=bool(held.get("fast")),
+            objective=(
+                None if held.get("objective") is None else str(held["objective"])
+            ),
             seat=None if held.get("seat") is None else str(held["seat"]),
             harness=None if held.get("harness") is None else str(held["harness"]),
             decisions=[
@@ -1557,6 +1567,7 @@ def write_routing(path: Path | None, routing: Routing) -> str:
                     "model": routing.model,
                     "deliberation": routing.deliberation,
                     "fast": routing.fast,
+                    "objective": routing.objective,
                     "seat": routing.seat,
                     "harness": routing.harness,
                     "decisions": [asdict(record) for record in routing.decisions],
@@ -1721,7 +1732,10 @@ class Plan:
     `model` and `deliberation` are the field-level locks this invocation puts
     on every building role, `fast` is the objective it puts on the whole run —
     the fastest configuration that holds quality rather than the cheapest —
-    and `routing` is the account all three were recorded into, beside the seat
+    where it is set, the run otherwise taking whatever its first answer ranked
+    on, the user's standing choice or else cost, and holding that for the rest
+    of it; and `routing` is the account all three were recorded into, beside
+    the objective the run holds and the seat
     the run calls from and every decision made under them. `routing_reason` is
     the other half of that answer: where there is no account to render, it says
     why — nothing routed yet, or an account that could not be read and will be
@@ -3400,9 +3414,14 @@ def select_point(
     model: str | None,
     deliberation: str | None,
     after: str | None,
-    fast: bool,
+    objective: str | None,
 ) -> dict[str, Any]:
     """Return the point model-selector chose for one execution role.
+
+    `objective` is asked for by name wherever the run holds one — `time` under
+    `--fast`, and otherwise the one its first answer ranked on — and left off
+    only on that first request, which model-selector answers on the user's
+    standing choice or else on cost.
 
     One local call per role against the machine's own catalogue, profile and
     measurements, which is cheap enough that no run has any reason to amortise
@@ -3422,8 +3441,8 @@ def select_point(
         named.append(f"--deliberation={deliberation}")
     if after is not None:
         named.append(f"--after={after}")
-    if fast:
-        named.append("--objective=time")
+    if objective is not None:
+        named.append(f"--objective={objective}")
 
     # The repository travels as an argument rather than as the directory the
     # call is made from, a bridge command being run in it later by this run.
@@ -3696,12 +3715,18 @@ def cmd_route(
                 model=model,
                 deliberation=deliberation,
                 after=escalated_from(routing, observed_task(ticket, request_id)),
-                fast=routing.fast,
+                objective="time" if routing.fast else routing.objective,
             )
         except RunError as exc:
             return fail(str(exc))
         if (unhonoured := locks_answered(model, deliberation, answered)) is not None:
             return fail(unhonoured)
+        # The run holds the objective its first answer ranked on, so a standing
+        # choice flipped mid-run reaches the next run rather than this one. An
+        # answer naming none is an older model-selector, and nothing is held.
+        ranked_on = answered.get("objective")
+        if routing.objective is None and isinstance(ranked_on, str) and ranked_on:
+            routing.objective = ranked_on
         records.append(route_record(request_id, role, ticket, kind, answered))
 
     # Extend the account in memory before the persistence seam, and record only

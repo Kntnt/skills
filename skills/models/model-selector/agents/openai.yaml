@@ -1,5 +1,5 @@
 interface:
   display_name: "Model Selector"
-  short_description: "Pick the model and effort that finish a job for the least money"
+  short_description: "Pick the model and effort that finish a job cheapest or soonest"
 policy:
   allow_implicit_invocation: false

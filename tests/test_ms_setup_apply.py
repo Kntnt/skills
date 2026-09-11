@@ -197,3 +197,123 @@ def test_the_rate_card_a_gateway_channel_carries_survives_being_written(
 
     stored = json.loads((tmp_path / "data" / "profile.json").read_text("utf-8"))
     assert stored["channels"][0]["rates"] == OPENROUTER
+
+
+SKILL_DIR: Path = SCRIPTS.parent
+
+
+def _objective(data: Path, agents: Path, objective: str, capsys: Any) -> dict[str, Any]:
+    """Set the standing objective through the writer `objective` hands it to."""
+
+    assert (
+        setup_apply.main(
+            [f"--data={data}", f"--agents={agents}", f"--objective={objective}"]
+        )
+        == 0
+    )
+    report: dict[str, Any] = json.loads(capsys.readouterr().out)
+    return report
+
+
+def test_the_standing_objective_is_written_on_its_own(
+    tmp_path: Path, capsys: Any
+) -> None:
+    """Setting time or cost touches neither the profile nor the agent definitions."""
+
+    data = tmp_path / "data"
+    agents = tmp_path / "agents"
+    assert _applied(tmp_path, _answers(_subscription()))["ok"] is True
+    profile = (data / "profile.json").read_bytes()
+    defined = sorted((path.name, path.read_bytes()) for path in agents.iterdir())
+
+    for objective in ("time", "cost"):
+        report = _objective(data, agents, objective, capsys)
+
+        assert report["ok"] is True
+        assert report["objective"] == objective
+        written = json.loads((data / "objective.json").read_text(encoding="utf-8"))
+        assert written == {"objective": objective}
+        assert (data / "profile.json").read_bytes() == profile
+        assert (
+            sorted((path.name, path.read_bytes()) for path in agents.iterdir())
+            == defined
+        )
+
+
+def test_setting_the_objective_on_a_machine_nobody_interviewed_writes_that_alone(
+    tmp_path: Path, capsys: Any
+) -> None:
+    """No profile is conjured and no agents directory is created by the one answer."""
+
+    data = tmp_path / "data"
+    agents = tmp_path / "agents"
+
+    _objective(data, agents, "time", capsys)
+
+    assert [path.name for path in data.iterdir()] == ["objective.json"]
+    assert not agents.exists()
+
+
+def test_an_objective_outside_the_vocabulary_is_refused_by_the_command_line(
+    tmp_path: Path,
+) -> None:
+    """The words are the ones `--objective` already has, and no new one."""
+
+    try:
+        setup_apply.main([f"--data={tmp_path}", "--objective=fast"])
+    except SystemExit as stopped:
+        assert stopped.code == 2
+    else:
+        raise AssertionError("an objective nobody defined was accepted")
+    assert not (tmp_path / "objective.json").exists()
+
+
+def test_setup_and_update_leave_the_standing_objective_where_it_was(
+    tmp_path: Path, capsys: Any
+) -> None:
+    """The choice survives the interview, the sync, and the adoption of new facts."""
+
+    data = tmp_path / "data"
+    agents = tmp_path / "agents"
+    _objective(data, agents, "time", capsys)
+    held = (data / "objective.json").read_bytes()
+
+    # `setup`: a profile operand written and the definitions synced.
+    assert _applied(tmp_path, _answers(_subscription()))["ok"] is True
+    assert (data / "objective.json").read_bytes() == held
+
+    # `update`: the facts adopted, then the definitions synced with no operand.
+    fetched = tmp_path / "fetched.json"
+    fetched.write_text(
+        json.dumps(
+            {
+                "plans": [
+                    {
+                        "provider": "anthropic",
+                        "name": "Claude Max 20x",
+                        "monthly_usd": 200.0,
+                        "source_url": "https://example.test/pricing",
+                        "retrieved": "2026-09-11",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    adopted = catalogue.adopt(data, SKILL_DIR, fetched)
+    assert adopted["refused"] is None
+    assert (data / "catalogue.json").exists()
+    assert (data / "objective.json").read_bytes() == held
+    assert setup_apply.apply(None, data, agents)["ok"] is True
+    assert (data / "objective.json").read_bytes() == held
+
+
+def test_reset_names_and_removes_the_standing_objective() -> None:
+    """The standing choice is an answer the user gave, so `reset` discards it."""
+
+    body = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
+    section = body.partition("\n## Reset\n")[2].partition("\n## ")[0]
+    page = (SKILL_DIR / "help" / "reset.md").read_text(encoding="utf-8")
+
+    assert section.count("objective.json") >= 2, "previewed and removed"
+    assert "objective.json" in page

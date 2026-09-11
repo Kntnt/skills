@@ -54,7 +54,7 @@ import launch
 import profiles
 from catalogue import LEVELS, Catalogue, Model
 from evidence import KINDS, Estimate, Estimator, KindPriors
-from profiles import Profile
+from profiles import OBJECTIVES, Profile
 
 # How wide a pool the caller wants to consider. `limited` stays with the
 # provider the caller is already paying for this turn, `callable` adds
@@ -65,10 +65,12 @@ SCOPES = ("limited", "callable", "all")
 
 STAKES = ("reversible", "high")
 
-# What finishing the work is counted in. Money is what a run spends whether or
-# not anybody is watching it; time is what the person waiting on it spends
-# instead, and asking for one is not the same as asking for the other.
-OBJECTIVES = ("cost", "time")
+# What finishing the work is counted in where the caller names nothing and the
+# user has set nothing. The order is the caller's `--objective`, else the
+# user's standing choice, else this: running out of quota mid-week stops
+# everything, while a slower job is only slower. The vocabulary, `OBJECTIVES`,
+# is the profile module's, the standing choice being one of the user's answers.
+DEFAULT_OBJECTIVE = "cost"
 
 # What every call demands before price is allowed to decide anything. Below
 # this, a cheap attempt is a cheap way of not getting the work done.
@@ -130,6 +132,21 @@ class Scored:
     seconds: float
 
 
+@dataclass(frozen=True)
+class Objective:
+    """What this call's finishing is counted in, and who said so.
+
+    `source` is `caller` where the request named it, `standing` where the
+    user's standing choice did, and `default` where neither did. `problem`
+    names a standing choice that was there and could not be read, which counts
+    as none and is said in the answer's note rather than refused.
+    """
+
+    name: str
+    source: str
+    problem: str | None = None
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Print one answer as JSON and exit 0, whatever the state of the machine."""
 
@@ -153,6 +170,7 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     here = Path(__file__).resolve().parent.parent
     if args.kinds:
         return _vocabulary(here)
+    objective = _objective(args.objective, data_dir)
     cat = catalogue.load(data_dir, here)
     profile = profiles.load(data_dir, cat)
     kinds = evidence.load_kinds(here)
@@ -169,7 +187,7 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     pool = _locked_to_model(pool, cat, args.model, notes)
     pool = _locked_to_deliberation(pool, args.deliberation, notes)
     if not pool:
-        return _inherit(args, _why_nothing(cat, profile, notes))
+        return _inherit(args, _why_nothing(cat, profile, notes), objective)
 
     # Rank on what the evidence holds, then — where this request is one the
     # boundary may be tried on — replace the answer with one point beyond it,
@@ -178,17 +196,36 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
         _score(point, args.kind, estimator, kinds, _paid(profile, point, harness))
         for point in pool
     ]
-    ranked = _ranked(scored, args.objective)
+    ranked = _ranked(scored, objective.name)
     explored: str | None = None
     if _explorable(args):
-        ranked, explored = _explored(scored, ranked, args, notes)
+        ranked, explored = _explored(scored, ranked, args, objective.name, notes)
 
-    ranked = _after(ranked, args.after, args.objective, notes)
+    ranked = _after(ranked, args.after, objective.name, notes)
     if not ranked:
-        return _inherit(args, _why_nothing(cat, profile, notes))
+        return _inherit(args, _why_nothing(cat, profile, notes), objective)
     best = ranked[0]
 
-    return _report(best, ranked[1:], args, profile, cat, harness, explored, notes)
+    return _report(
+        best, ranked[1:], args, profile, cat, harness, explored, objective, notes
+    )
+
+
+def _objective(asked: str | None, data_dir: Path) -> Objective:
+    """Return what this call ranks on: the caller's, the user's, or the default.
+
+    The standing choice is read only where the caller named nothing, because
+    a caller's `--objective` wins and a file it does not need is no business of
+    that call. A file that cannot be read is treated as absent, and its reason
+    travels to the note: the call is answered on the default, never refused.
+    """
+
+    if asked is not None:
+        return Objective(asked, "caller")
+    standing, problem = profiles.standing_objective(data_dir)
+    if standing is not None:
+        return Objective(standing, "standing")
+    return Objective(DEFAULT_OBJECTIVE, "default", problem)
 
 
 def _vocabulary(here: Path) -> dict[str, Any]:
@@ -234,6 +271,7 @@ def _explored(
     scored: Sequence[Scored],
     ranked: Sequence[Scored],
     args: argparse.Namespace,
+    objective: str,
     notes: list[str | None],
 ) -> tuple[list[Scored], str | None]:
     """Return the answer, either as ranked or with one dimension of it moved.
@@ -270,7 +308,7 @@ def _explored(
 
     dimension = DIMENSIONS[0] if rng.random() < 0.5 else DIMENSIONS[1]
     plain = ranked[0]
-    beyond = _beyond(scored, plain, dimension, args.objective)
+    beyond = _beyond(scored, plain, dimension, objective)
     if not beyond:
         return list(ranked), None
 
@@ -438,9 +476,15 @@ def _report(
     cat: Catalogue,
     harness: str,
     explored: str | None,
+    objective: Objective,
     notes: Sequence[str | None],
 ) -> dict[str, Any]:
-    """Render one ranked pool as the answer a caller acts on."""
+    """Render one ranked pool as the answer a caller acts on.
+
+    It names the objective it ranked on and where that came from, because two
+    callers asking the same question with no `--objective` are answered on
+    whatever the user last set, and a reader has to be able to see which.
+    """
 
     started = launch.plan(
         best.point.model,
@@ -468,6 +512,8 @@ def _report(
         },
         "basis": best.estimate.basis,
         "explored": explored,
+        "objective": objective.name,
+        "objective_source": objective.source,
         "confidence": round(best.estimate.low, 3),
         "expected": {
             "cost_usd": _rounded_cost(best.cost_usd),
@@ -480,13 +526,20 @@ def _report(
         },
         "alternatives": _alternatives(best, rest, args.n),
         "attempt_id": _attempt_id(),
-        "note": _note([*notes, started.note]),
+        "note": _note([*notes, objective.problem, started.note]),
     }
 
 
-def _inherit(args: argparse.Namespace, why: str) -> dict[str, Any]:
-    """Return the answer that declines to route, naming the caller's own seat."""
+def _inherit(
+    args: argparse.Namespace, why: str, objective: Objective | None = None
+) -> dict[str, Any]:
+    """Return the answer that declines to route, naming the caller's own seat.
 
+    It still names the objective the call would have ranked on, so a caller
+    reading any answer finds the same members in it.
+    """
+
+    held = objective or _objective(args.objective, _data_dir(args.data))
     seat_model, seat_level = _seat(args.seat)
     return {
         "ok": True,
@@ -502,6 +555,8 @@ def _inherit(args: argparse.Namespace, why: str) -> dict[str, Any]:
         },
         "basis": "inherit",
         "explored": None,
+        "objective": held.name,
+        "objective_source": held.source,
         "confidence": 0.0,
         "expected": {
             "cost_usd": None,
@@ -514,7 +569,7 @@ def _inherit(args: argparse.Namespace, why: str) -> dict[str, Any]:
         },
         "alternatives": [],
         "attempt_id": _attempt_id(),
-        "note": why,
+        "note": _note([why, held.problem]),
     }
 
 
@@ -746,9 +801,11 @@ def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
     explored calls find out (ADR-0187).
 
     The objective chooses which price is read, and either is divided by the
-    same chance. Money is the default because it is what a run spends whether
-    or not anybody is watching; time is what a person waiting on the answer is
-    spending instead, and it is theirs to ask for.
+    same chance. It is the caller's where the caller names one, else the
+    user's standing choice, else money: money because it is what a run spends
+    whether or not anybody is watching, and running out of quota stops
+    everything while a slower job is only slower; time is what a person
+    waiting on the answer is spending instead, and it is theirs to ask for.
     """
 
     order = _time_key if objective == "time" else _cost_key
@@ -996,7 +1053,7 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--deliberation", choices=LEVELS)
     parser.add_argument("--stakes", choices=STAKES, default="reversible")
     parser.add_argument("--after")
-    parser.add_argument("--objective", choices=OBJECTIVES, default="cost")
+    parser.add_argument("--objective", choices=OBJECTIVES)
     parser.add_argument("--repo")
     parser.add_argument("--read-only", action="store_true")
     parser.add_argument("--n", type=int, default=2)

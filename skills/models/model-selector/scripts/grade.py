@@ -510,7 +510,10 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
     read a Unit of work clears, and the engine answers, among the points it is
     confident clear it, with the one whose price divided by its chance of
     success is lowest — a reviewer measured doing review wherever one clears
-    it, before any it holds only an estimate for — and never explores.
+    it, before any it holds only an estimate for — and never explores. It asks
+    on cost by name: the user's standing choice between time and cost is about
+    work somebody is waiting on, and nobody waits on a grade, so the judge is
+    chosen on what it costs to finish whatever that choice says.
 
     It asks as what it is. This is a script rather than a Harness, so it can
     spawn no subagent, and `--harness=process` is what says so: the answer comes
@@ -531,6 +534,7 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
         "--kind=review",
         "--scope=callable",
         "--stakes=high",
+        "--objective=cost",
         "--harness=process",
         "--read-only",
         f"--data={data}",

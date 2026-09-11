@@ -2,7 +2,7 @@
 
 ## NAME
 
-model-selector - choose the model and deliberation level that finishes work for the least money
+model-selector - choose the model and deliberation level that finishes work for the least money, or soonest
 
 ## SYNOPSIS
 
@@ -16,13 +16,17 @@ model-selector - choose the model and deliberation level that finishes work for 
 
 **/model-selector** **evidence** [**--data=**_PATH_] [*KIND*] [**--** *INSTRUCTION*]
 
+**/model-selector** **objective** [**--data=**_PATH_] [**time**|**cost**] [**--** *INSTRUCTION*]
+
 **/model-selector** **reset** [**--evidence**] [**--yes**] [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-Describe a piece of work and get back the model and deliberation level expected to finish it for the least money — first the models this machine's own measurements say will get the job done, and among those the one whose price per finished job is lowest: what one attempt costs divided by its chance of success, because an attempt that fails bought nothing, left the work still to do, and is paid for again. A model unlikely to finish is never chosen for being cheap. About one call in ten of the reversible kind tries a cheaper point instead, moving either the model or the deliberation level but never both, because a store that only ever runs its favourite never finds out that something cheaper would have sufficed. The answer says when it was one of those, and what the measurements would otherwise have chosen.
+Describe a piece of work and get back the model and deliberation level expected to finish it for the least money, or in the least time where you have made that your standing choice — first the models this machine's own measurements say will get the job done, and among those the one whose price per finished job is lowest: what one attempt costs divided by its chance of success, because an attempt that fails bought nothing, left the work still to do, and is paid for again. A model unlikely to finish is never chosen for being cheap. About one call in ten of the reversible kind tries a cheaper point instead, moving either the model or the deliberation level but never both, because a store that only ever runs its favourite never finds out that something cheaper would have sufficed. The answer says when it was one of those, and what the measurements would otherwise have chosen.
 
 The answer names one model, one deliberation level, how to launch it, what one attempt is expected to cost and how long it takes, how likely it is to succeed, what a finished job is expected to cost and how long it takes — one attempt's price and elapsed time each divided by that chance, the total the answer was ranked on — and what that estimate rests on: this machine's own measurements of that exact kind of work, measurements of the same model at other work, or the model's published capability with nothing local behind it. Alternatives come with it, so a dominated candidate can be seen losing.
+
+Whether work is ordered on money or on time is one fact about you — how much of your subscription is left this week — so it is set once, with `objective`, and every Skill that routes work inherits it rather than growing a flag of its own. An answer asked for with no `--objective` ranks on your standing choice, a caller's own `--objective` wins over it, and with nothing set the answer ranks on cost, because running out of quota mid-week stops everything while a slower job is only slower. The answer names the objective it ranked on and whether it came from the caller, your standing choice, or the default.
 
 There is no answer that means *start nothing*. With no profile, an empty catalogue or nothing reachable, the answer is the seat you already have, with a note saying why. Skills that route delegated work call the same engine directly and read the answer as JSON. A caller that is a script rather than a Harness says so with `--harness=process`, and is answered with a command it can start rather than a subagent only an agent can name; where the work it is launching writes nothing, `--read-only` asks for the command that grants no way to.
 
@@ -30,7 +34,7 @@ There is no answer that means *start nothing*. With no profile, an empty catalog
 
 Enabling this Skill installs session lifecycle hooks into every supported Harness on this machine, in the Global layer, and those hooks are what make the answers get better. They measure a unit of work — an instruction and the answer to it — and only where the unit was a job: delegated work that was substantial — three or more changing tool calls, or sixty seconds, or four thousand output tokens — and work of the session's own that was substantial and ran for ten minutes or more besides. Quick questions, short exchanges and short turns of your own are discarded with no trace, so an ordinary conversational session contributes nothing at all. Nothing runs while work is in flight: a subagent's record is read when that subagent stops, and the session's own record when the session ends, and those two moments are the only ones a hook is installed at.
 
-Where nothing else has established how a finished unit went, one call to a model your profile makes reachable reads that unit's instruction and its result and returns a score and a line of reason. It is chosen as the work it is — reviewing what somebody else finished against a standard — and at high stakes, because nothing downstream catches a wrong score: among the points the measurements are confident clear that bar, the one whose price per finished job is lowest, rather than the cheapest point there is — and where a model has already been measured reviewing on this machine and clears it, the judge is chosen among those before any point that is only estimated. The call itself is one bounded exchange whichever way it is asked for, so what the kind buys is a judge that can read the work rather than a cheaper call. Those two excerpts are used to make the call and are stored nowhere. What is retained is one row per unit: the kind, the model, the deliberation level, the score and who established it, the token counts the Harness exposed, the cost those tokens price at, the elapsed time, and whether the work was routed. Prompts, responses, reasoning, diffs, file contents, terminal output and absolute paths are never copied, because the row is built by copying named fields rather than by removing unwanted ones.
+Where nothing else has established how a finished unit went, one call to a model your profile makes reachable reads that unit's instruction and its result and returns a score and a line of reason. It is chosen as the work it is — reviewing what somebody else finished against a standard — at high stakes, because nothing downstream catches a wrong score, and on cost whatever your standing choice, nobody waiting on a grade: among the points the measurements are confident clear that bar, the one whose price per finished job is lowest, rather than the cheapest point there is — and where a model has already been measured reviewing on this machine and clears it, the judge is chosen among those before any point that is only estimated. The call itself is one bounded exchange whichever way it is asked for, so what the kind buys is a judge that can read the work rather than a cheaper call. Those two excerpts are used to make the call and are stored nowhere. What is retained is one row per unit: the kind, the model, the deliberation level, the score and who established it, the token counts the Harness exposed, the cost those tokens price at, the elapsed time, and whether the work was routed. Prompts, responses, reasoning, diffs, file contents, terminal output and absolute paths are never copied, because the row is built by copying named fields rather than by removing unwanted ones.
 
 The public facts this Skill reasons from — which models exist, what each supports, what each costs, and what each provider's subscriptions are called — are read off the providers' own pages by the agent running `update`. A script has no web tool and does not pretend to one. So the network is reached by `update`, and by `setup` where it begins with that same reading because the catalogue has gone stale, and by nothing else at all; every other command works from what is already on disk. What was read is validated before it is stored: an entry with nothing to attribute it to is discarded by name, a rate card in a currency other than USD or a unit other than per million tokens is refused rather than converted, and `capability` is never fetched, being a seeded prior that measurement refines.
 
@@ -54,9 +58,13 @@ Read the providers' own pages and adopt what they say — model lists, rate card
 
 Report what has been measured, grouped by kind, model and deliberation level, with the counts and dates behind each figure. An optional operand narrows it to one kind.
 
+**objective**
+
+Set the standing choice between time and cost that every answer asked for with no `--objective` ranks on, or, without an operand, say which is in force and whether it is your choice or the default. It survives `setup` and `update`.
+
 **reset**
 
-Discard the profile and hold the interview again. With **--evidence**, discard what this machine measured as well. The catalogue is public fact and is kept either way.
+Discard the profile and the standing objective, and hold the interview again. With **--evidence**, discard what this machine measured as well. The catalogue is public fact and is kept either way.
 
 ## OPTIONS
 
@@ -90,6 +98,10 @@ Answer `reset`'s confirmation yes rather than asking, for an unattended run. Val
 
 What the interview settled: Harnesses, providers, enabled models, and one payment channel per provider and Harness. It holds no credentials. **--data** relocates it, and everything below it.
 
+**~/.kntnt/model-selector/objective.json**
+
+Your standing choice between time and cost, written by `objective` alone and kept apart from the profile so that `setup` and `update` leave it standing. Absent, answers rank on cost. `reset` removes it.
+
 **~/.kntnt/model-selector/catalogue.json**
 
 World facts adopted over the shipped seed — exact model identities, family aliases, supported deliberation levels, rate cards, and the subscriptions each provider markets, each carrying the address it was read from and the date it was read. The capability figures beside them are the seed's own, refined by measurement rather than by fetching.
@@ -118,11 +130,15 @@ A page that says what the catalogue already held is a successful `update`. An `u
 
 **/model-selector rewrite the payment reconciliation module against the new schema**
 
-Classify the work, then name the model and deliberation level expected to finish it for the least money, with its nearest alternatives.
+Classify the work, then name the model and deliberation level expected to finish it for the least money, or soonest where time is your standing choice, with its nearest alternatives.
 
 **/model-selector --scope=all --kind=design what should the retry policy be**
 
 Consider the whole catalogue, including models this machine cannot currently reach, for a decision about what to build.
+
+**/model-selector objective time**
+
+Order every answer asked for with no `--objective` on how long a finished job takes, until `objective cost` sets it back.
 
 **/model-selector evidence debug**
 
@@ -144,4 +160,4 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## SEE ALSO
 
-**/model-selector setup --help**, **/model-selector status --help**, **/model-selector evidence --help**, **/kntnt select**
+**/model-selector setup --help**, **/model-selector status --help**, **/model-selector evidence --help**, **/model-selector objective --help**, **/kntnt select**
