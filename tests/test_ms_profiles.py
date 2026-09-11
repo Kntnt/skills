@@ -293,9 +293,9 @@ def test_a_bridged_provider_is_paid_for_by_the_harness_that_reaches_it(
 def test_a_gateway_channel_carries_the_rate_card_the_user_actually_pays(
     tmp_path: Path,
 ) -> None:
-    """A gateway prices differently, and the catalogue holds no gateway rates.
+    """A gateway prices differently, and the catalogue holds one gateway's rates.
 
-    It holds one list price per model, from the provider's own page. Without
+    It holds one price per model, the one OpenRouter publishes. Without
     somewhere for the user's own card to live, a gateway arrangement is either
     recorded at the wrong rates or left out of the profile altogether — and a
     provider left out is a provider never recommended.

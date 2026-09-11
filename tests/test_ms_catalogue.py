@@ -311,12 +311,11 @@ def test_the_shipped_seed_parses_into_the_models_it_names() -> None:
 
 
 def test_a_channel_rate_card_replaces_the_one_the_catalogue_holds() -> None:
-    """What the user says they pay outranks what the provider publishes.
+    """What the user says they pay outranks what the catalogue holds.
 
-    A gateway prices the same model differently from the provider whose model
-    it is, and the catalogue holds one list price per model from that
-    provider's own page. Pricing a gateway channel from it is not an
-    approximation but a different arrangement's bill.
+    The catalogue holds the price OpenRouter publishes, which is the charge
+    through OpenRouter and a different arrangement's bill through any other
+    gateway, so the card the user records replaces it.
     """
 
     model = catalogue._model(_model())

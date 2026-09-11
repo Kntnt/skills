@@ -279,14 +279,15 @@ def test_a_rate_card_the_arithmetic_cannot_read_is_refused_by_name(
     assert not (tmp_path / "data" / "profile.json").exists()
 
 
-def test_a_gateway_priced_from_the_provider_s_own_page_is_noticed(
+def test_a_gateway_priced_at_openrouter_s_published_price_is_noticed(
     tmp_path: Path,
 ) -> None:
-    """A gateway prices differently, and the catalogue holds only list prices.
+    """A gateway channel recorded without a card is priced at OpenRouter's price.
 
-    Recorded without a card, the channel is silently billed at the provider's
-    own rates — the arrangement whose ratio was wrong by more than a factor of
-    two on this machine, in whatever currency it was read.
+    The catalogue's price is the one OpenRouter publishes, and another gateway
+    prices differently. Left unsaid, a channel through one of those is billed
+    at the wrong rates — the arrangement whose ratio was wrong by more than a
+    factor of two on this machine, in whatever currency it was read.
     """
 
     answers = _answers(
