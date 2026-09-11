@@ -8,12 +8,14 @@ Every other module in this Skill asks the world a question and this is what
 answers it. The facts arrive from two places and one of them is allowed to be
 wrong: the seed shipped beside this file is what the Skill knows on the day it
 is installed, and `catalogue.json` under the data directory is whatever a later
-catalogue pass or `update` established. The refreshed file wins per model id,
-because a fact read this week outranks a fact this repository froze at
-release — except for the fields `update` never reads — `capability`, which
-nothing fetches, and `gateways`, which only the seed and the catalogue pass's
-matching write — and which a refreshed entry carrying none of them takes from
-the seed. A model its maker stopped listing is removed by the catalogue pass,
+catalogue pass established. The refreshed file wins per model id, because a
+fact read this week outranks a fact this repository froze at release — except
+for `capability`, which nothing fetches, and `gateways`, which only the seed
+and the catalogue pass's matching write, each of which a refreshed entry
+carrying none takes from the seed. The plans each provider sells come from the
+seed alone: no structured source lists them, so they change with a release of
+the collection, and plans an older release wrote into `catalogue.json` are not
+read. A model its maker stopped listing is removed by the catalogue pass,
 and `lifecycle.json` beside the refreshed file masks the seed's copy of it, so
 that no later load or release of the seed brings it back.
 
@@ -76,12 +78,11 @@ PER_MILLION = 1_000_000.0
 CURRENCY = "USD"
 UNIT = "per_mtok"
 
-# Every field one model entry carries, and the subset an agent's fetch may
-# write. `capability` is off that subset deliberately: it is a seeded prior
-# that measurement refines, and how a published benchmark maps onto its scale
-# is not settled. `gateways` is off it too: a gateway's slug for a model is on
-# no page the provider publishes, so it is written by the seed and by matching
-# against the gateway's own list, and never by a reading of the provider.
+# Every field one model entry carries, and the two a refreshed entry carrying
+# none takes from the seed. `capability` is a seeded prior that measurement
+# refines, and how a published benchmark maps onto its scale is not settled.
+# `gateways` is a gateway's slug for a model, written by the seed and by
+# matching against the gateway's own list.
 MODEL_FIELDS = (
     "id",
     "provider",
@@ -94,17 +95,11 @@ MODEL_FIELDS = (
     "reasoning_billed_as",
     "capability",
     "gateways",
-    "provider_says",
     "released",
     "source_url",
     "retrieved",
 )
 SEEDED_FIELDS = ("capability", "gateways")
-FETCHED_FIELDS = tuple(name for name in MODEL_FIELDS if name not in SEEDED_FIELDS)
-
-# Every field one plan entry carries. A plan is a whole name, a monthly price
-# and the attribution that makes both auditable, and nothing else.
-PLAN_FIELDS = ("provider", "name", "monthly_usd", "source_url", "retrieved")
 
 
 class ContextRule(Protocol):
@@ -142,8 +137,10 @@ class Plan:
 
     The price is what the provider lists, in USD per month, and is `None`
     where the provider publishes none that could be reached. It is here rather
-    than in a profile because it is a fetched fact like any other, and asking
-    a person for it wastes their time and gets a worse answer.
+    than in a profile because it is a fact about the provider rather than an
+    answer, and asking a person for it wastes their time. Plans ship with the
+    seed and change with a release of the collection, since no structured
+    source lists them (ADR-0194).
     """
 
     provider: str
@@ -174,7 +171,6 @@ class Model:
     reasoning_billed_as: str
     capability: float | None
     gateways: tuple[tuple[str, str], ...]
-    provider_says: str | None
     released: str | None
     source_url: str | None
     retrieved: str | None
@@ -198,6 +194,10 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     seed's copy alone: an entry for that id in the refreshed file shows
     through it, a re-added model being an ordinary one.
 
+    The plans are the seed's alone. Nothing on this machine learns a plan, so
+    plans an older release wrote into the refreshed file are left unread
+    rather than offered as though they were current.
+
     A missing or unreadable refreshed file leaves the seed standing and is
     reported in `problem`; only a seed that will not parse empties the answer,
     because at that point the Skill knows nothing at all about the world.
@@ -211,7 +211,7 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     # The refreshed file overrides model by model, so a refresh that says
     # nothing about a model leaves the seed's copy standing. Only a removal
     # recorded in `lifecycle.json` takes the seed's copy away.
-    refreshed, refreshed_plans, refreshed_generated, refresh_problem = _read(
+    refreshed, _, refreshed_generated, refresh_problem = _read(
         data_dir / REFRESHED_FILE
     )
     masked = _removed(_lifecycle(data_dir))
@@ -227,17 +227,17 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     generated_at = refreshed_generated or seed_generated
     return Catalogue(
         tuple(merged.values()),
-        _merged_plans(seed_plans, refreshed_plans),
+        tuple(seed_plans),
         generated_at,
         refresh_problem,
     )
 
 
 def _with_seeded_fields(model: Model, seeded: Model | None) -> Model:
-    """Return a refreshed *model*, the seed filling what `update` never reads.
+    """Return a refreshed *model*, the seed filling the fields it keeps.
 
     A refreshed entry replaces the seeded one whole, which is right for every
-    fact `update` reads and wrong for the ones it never does: a catalogue
+    fact a pass establishes and wrong for the two the seed keeps: a catalogue
     refreshed before a release of the seed learned a slug would otherwise
     never learn it (issue #308). So `SEEDED_FIELDS` alone fall back, field by
     field, and only where the refreshed entry carries none — absent, null and
@@ -253,265 +253,8 @@ def _with_seeded_fields(model: Model, seeded: Model | None) -> Model:
     )
 
 
-def _merged_plans(seed: Sequence[Plan], refreshed: Sequence[Plan]) -> tuple[Plan, ...]:
-    """Return the plans in force, a refreshed provider replacing the seed's whole.
-
-    Models merge entry by entry, because a refresh that says nothing about a
-    model is no evidence that it is gone; that is established only by its
-    maker's own list, and the catalogue pass records it in `lifecycle.json`.
-    Plans have no such list: a provider retires one, and a merge by name would
-    go on offering it to somebody choosing how they pay for as long as this
-    Skill is installed. So a provider the refreshed file speaks about at all is
-    a provider whose plans it states in full.
-    """
-
-    spoken = {plan.provider for plan in refreshed}
-    return tuple(
-        [plan for plan in seed if plan.provider not in spoken] + list(refreshed)
-    )
-
-
-def adopt(
-    data_dir: Path, here: Path, path: Path, *, now: str | None = None
-) -> dict[str, Any]:
-    """Merge what the agent read off the providers' pages into the catalogue.
-
-    `update` is a reading job. The agent holding a web tool opens every
-    `source_url` the catalogue carries, writes what it found as one document
-    in this catalogue's own shape, and hands the path here. This is the half
-    that has to be a script: deciding what may enter the store, merging it
-    over what is already known, and replacing the file in one move.
-
-    Every rule is per entry. An entry with nothing to attribute it to, a rate
-    card in another currency or another unit, or a deliberation level outside
-    the ladder is discarded by name with the reason, and the rest of the
-    document is adopted — a single bad row in a page somebody read is not a
-    reason to learn nothing from the other twenty. Only a document that is not
-    this shape at all is refused whole, nothing being written.
-
-    A model merges field by field over the entry `load` currently answers
-    with, so a document carrying a price and nothing else leaves everything
-    else standing — `capability` and `gateways` above all, which no reading of
-    a page supplies — and a rate card merges category by category, so a card
-    carrying one figure keeps every other. A provider's plans are replaced
-    whole, as `_merged_plans` explains.
-    """
-
-    document, refusal = _offered(path)
-    if document is None:
-        return {
-            "verb": "adopt",
-            "data": str(data_dir),
-            "source": str(path),
-            "refused": refusal,
-            "written": None,
-            "generated_at": None,
-            "models": [],
-            "plans": [],
-            "discarded": [],
-        }
-
-    # What is in force right now, which is what a merge lays the document over
-    # and what the report compares against.
-    cat = load(data_dir, here)
-    known = {model.id: _entry(model) for model in cat.models}
-    stored_models, stored_plans = _stored(data_dir / REFRESHED_FILE)
-
-    discarded: list[dict[str, Any]] = []
-    adopted = _adopt_models(document["models"], known, stored_models, discarded)
-    spoken = _adopt_plans(document["plans"], discarded)
-
-    report: dict[str, Any] = {
-        "verb": "adopt",
-        "data": str(data_dir),
-        "source": str(path),
-        "refused": None,
-        "written": None,
-        "generated_at": None,
-        "models": adopted,
-        "plans": [
-            _plan_change(cat, provider, offered) for provider, offered in spoken.items()
-        ],
-        "discarded": discarded,
-    }
-    if not adopted and not spoken:
-        return report
-
-    # Through a temporary sibling and an atomic rename: a pass interrupted
-    # mid-write leaves the previous catalogue standing rather than half of the
-    # new one.
-    stamp = now or _now()
-    kept = [plan for plan in stored_plans if str(plan.get("provider")) not in spoken]
-    data_dir.mkdir(parents=True, exist_ok=True)
-    target = data_dir / REFRESHED_FILE
-    staged = target.parent / f"{target.name}.tmp"
-    staged.write_text(
-        json.dumps(
-            {
-                "generated_at": stamp,
-                "models": [stored_models[name] for name in sorted(stored_models)],
-                "plans": kept
-                + [plan for offered in spoken.values() for plan in offered],
-            },
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    staged.replace(target)
-
-    # A removed model this document brings back is an ordinary model again,
-    # and forgetting its removal in the same operation is what stops a pass
-    # running before the next refresh from deleting the rows filed since.
-    _forget_removals(data_dir, [entry["id"] for entry in adopted])
-
-    report["written"] = str(target)
-    report["generated_at"] = stamp
-    return report
-
-
-def _adopt_models(
-    entries: list[Any],
-    known: Mapping[str, dict[str, Any]],
-    stored: dict[str, dict[str, Any]],
-    discarded: list[dict[str, Any]],
-) -> list[dict[str, Any]]:
-    """Merge every usable model entry into *stored*, and say what each one did."""
-
-    accounted: list[dict[str, Any]] = []
-    for index, entry in enumerate(entries):
-        fault = _model_fault(entry)
-        if fault is not None:
-            discarded.append(
-                {"kind": "model", "name": _model_name(entry, index), "reason": fault}
-            )
-            continue
-
-        # Field by field over what is in force, so that a document saying only
-        # what it read leaves everything it did not read exactly as it was.
-        identifier = str(entry["id"])
-        base = known.get(identifier, {})
-        offered = {name: entry[name] for name in FETCHED_FIELDS if name in entry}
-        for member in ("price", "long_context"):
-            if isinstance(offered.get(member), dict):
-                offered[member] = _merged_card(base.get(member), offered[member])
-        whole = {**dict.fromkeys(MODEL_FIELDS), **base, **offered}
-        if _model(whole) is None:
-            discarded.append(
-                {
-                    "kind": "model",
-                    "name": identifier,
-                    "reason": "names no provider and family, and none is known",
-                }
-            )
-            continue
-
-        stored[identifier] = whole
-        changed = sorted(name for name in whole if whole[name] != base.get(name))
-        accounted.append(
-            {
-                "id": identifier,
-                "status": _status(base, changed),
-                "changed": changed if base else [],
-                "ignored": sorted(name for name in entry if name not in FETCHED_FIELDS),
-            }
-        )
-
-    return accounted
-
-
-def _merged_card(standing: Any, offered: Mapping[str, Any]) -> dict[str, Any]:
-    """Lay one offered rate card over the standing one, category by category.
-
-    A category the offer omits, or states as null, keeps the standing figure:
-    a page read for its input price is no evidence that the cached rate
-    beside it stopped existing.
-    """
-
-    held = standing if isinstance(standing, dict) else {}
-    card = {
-        category: held.get(category)
-        for category in ("input", "cache_read", "cache_write", "output")
-    }
-    card["currency"] = held.get("currency") or CURRENCY
-    card["unit"] = held.get("unit") or UNIT
-    card.update({key: value for key, value in offered.items() if value is not None})
-    return card
-
-
-def _plan_change(
-    cat: Catalogue, provider: str, offered: Sequence[Mapping[str, Any]]
-) -> dict[str, Any]:
-    """Say what one provider's adopted plan list did to the list it replaced."""
-
-    was = [plan.name for plan in plans_for(cat, provider)]
-    names = [str(plan["name"]) for plan in offered]
-    return {
-        "provider": provider,
-        "status": "unchanged" if names == was else "replaced",
-        "names": names,
-        "was": was,
-    }
-
-
-def _status(base: Mapping[str, Any], changed: Sequence[str]) -> str:
-    """Return what one adopted model did to the catalogue."""
-
-    if not base:
-        return "added"
-    return "changed" if changed else "unchanged"
-
-
-def _adopt_plans(
-    entries: list[Any], discarded: list[dict[str, Any]]
-) -> dict[str, list[dict[str, Any]]]:
-    """Return the usable plans per provider, in the order the document holds them.
-
-    A provider is spoken about by its usable entries alone. A provider whose
-    every entry was discarded keeps the plans it had rather than losing them
-    to a page somebody read badly.
-    """
-
-    spoken: dict[str, list[dict[str, Any]]] = {}
-    for index, entry in enumerate(entries):
-        fault = _plan_fault(entry)
-        if fault is not None:
-            discarded.append(
-                {"kind": "plan", "name": _plan_name(entry, index), "reason": fault}
-            )
-            continue
-        offered = {name: entry.get(name) for name in PLAN_FIELDS}
-        spoken.setdefault(str(entry["provider"]), []).append(offered)
-
-    return spoken
-
-
-def _offered(path: Path) -> tuple[dict[str, list[Any]] | None, str | None]:
-    """Read one fetched document, or say why it is not one at all."""
-
-    try:
-        raw = json.loads(path.read_text(encoding="utf-8"))
-    except FileNotFoundError:
-        return None, f"no document at {path}"
-    except (OSError, ValueError) as problem:
-        return None, f"{path} could not be read: {problem}"
-
-    if not isinstance(raw, dict):
-        return None, f"{path} is not a JSON object"
-    if "models" not in raw and "plans" not in raw:
-        return None, f"{path} carries neither a models list nor a plans list"
-
-    models = raw.get("models", [])
-    plans = raw.get("plans", [])
-    if not isinstance(models, list) or not isinstance(plans, list):
-        return None, f"{path} carries a models or plans member that is not a list"
-
-    return {"models": models, "plans": plans}, None
-
-
-def _stored(path: Path) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]]]:
-    """Return what the refreshed file already holds, keyed for merging into.
+def _stored(path: Path) -> dict[str, dict[str, Any]]:
+    """Return the models the refreshed file already holds, keyed for merging into.
 
     An unreadable file is an empty one. The seed is what stands behind it in
     either case, so a refreshed file nothing can parse costs the facts it held
@@ -521,25 +264,17 @@ def _stored(path: Path) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]]
     try:
         raw = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        return {}, []
+        return {}
 
     if not isinstance(raw, dict):
-        return {}, []
+        return {}
 
     entries = raw.get("models")
-    plans = raw.get("plans")
-    return (
-        {
-            str(entry["id"]): entry
-            for entry in (entries if isinstance(entries, list) else [])
-            if isinstance(entry, dict) and _text(entry.get("id"))
-        },
-        [
-            entry
-            for entry in (plans if isinstance(plans, list) else [])
-            if isinstance(entry, dict)
-        ],
-    )
+    return {
+        str(entry["id"]): entry
+        for entry in (entries if isinstance(entries, list) else [])
+        if isinstance(entry, dict) and _text(entry.get("id"))
+    }
 
 
 def _model_fault(entry: Any) -> str | None:
@@ -613,44 +348,6 @@ def _ladder_fault(raw: Any) -> str | None:
     return None
 
 
-def _plan_fault(entry: Any) -> str | None:
-    """Return why one plan entry may not be offered, or None."""
-
-    if not isinstance(entry, dict):
-        return "is not an object"
-
-    for member in ("provider", "name", "source_url", "retrieved"):
-        if not _text(entry.get(member)):
-            return f"carries no {member}"
-
-    monthly = entry.get("monthly_usd")
-    if monthly is not None and _number(monthly) is None:
-        return "carries a monthly_usd that is not a number"
-    return None
-
-
-def _model_name(entry: Any, index: int) -> str:
-    """Return what a discarded model entry is called in the report."""
-
-    if isinstance(entry, dict) and (identifier := _text(entry.get("id"))):
-        return identifier
-    return f"models[{index}]"
-
-
-def _plan_name(entry: Any, index: int) -> str:
-    """Return what a discarded plan entry is called in the report."""
-
-    if isinstance(entry, dict):
-        named = " ".join(
-            part
-            for member in ("provider", "name")
-            if (part := _text(entry.get(member)))
-        )
-        if named:
-            return named
-    return f"plans[{index}]"
-
-
 def _entry(model: Model) -> dict[str, Any]:
     """Return one model as the refreshed file holds it, every field carried.
 
@@ -671,17 +368,10 @@ def _entry(model: Model) -> dict[str, Any]:
         "reasoning_billed_as": model.reasoning_billed_as,
         "capability": model.capability,
         "gateways": dict(model.gateways),
-        "provider_says": model.provider_says,
         "released": model.released,
         "source_url": model.source_url,
         "retrieved": model.retrieved,
     }
-
-
-def _now() -> str:
-    """Return this instant, as the catalogue stamps what it was written at."""
-
-    return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
 
 def plans_for(cat: Catalogue, provider: str) -> list[Plan]:
@@ -876,7 +566,6 @@ def _model(entry: Any) -> Model | None:
         reasoning_billed_as=billing if billing in BILLING else "unknown",
         capability=_fraction(entry.get("capability")),
         gateways=_gateways(entry.get("gateways")),
-        provider_says=_text(entry.get("provider_says")),
         released=_text(entry.get("released")),
         source_url=_text(entry.get("source_url")),
         retrieved=_text(entry.get("retrieved")),
@@ -1055,7 +744,7 @@ MARKER_FILE = "refresh-marker.json"
 PAST_DEADLINE = "past the whole-pass deadline"
 
 # Where a model's run of absent days and its removal are kept. Apart from
-# `catalogue.json`, which `adopt` rewrites whole, and apart from the evidence,
+# `catalogue.json`, which a pass rewrites whole, and apart from the evidence,
 # which `reset --evidence` discards: this is catalogue state.
 LIFECYCLE_FILE = "lifecycle.json"
 
@@ -1543,9 +1232,9 @@ def refresh(
     pass, one choosing no maker included, deletes whatever rows have been
     filed since for the models it removed.
 
-    Each entry is checked by the same validator `adopt` uses before it is
-    written, and the stored file is written whole, the plans carried through,
-    so `load` never falls back to the seed by accident. After any write the
+    Each entry is checked by the validator before it is written, and the
+    stored file is written whole, so `load` never falls back to the seed by
+    accident. After any write the
     generated agent definitions in *agents* are brought into line.
 
     Each source is given the lesser of `EXCHANGE_SECONDS` and what remains of
@@ -1625,7 +1314,7 @@ def refresh(
 
     # Presence is judged on the entries as this pass leaves them, so a slug
     # the matching above just wrote back is the slug a Grok model is found by.
-    stored_models, stored_plans = _stored(data_dir / REFRESHED_FILE)
+    stored_models = _stored(data_dir / REFRESHED_FILE)
     _forget(records, stored_models)
     shown, lacking = _presence(readings, makers, step.entries)
     gone = _observed(
@@ -1669,7 +1358,6 @@ def refresh(
                 {
                     "generated_at": stamp,
                     "models": [stored_models[name] for name in sorted(stored_models)],
-                    "plans": stored_plans,
                 },
             )
         except OSError as problem:
@@ -2018,16 +1706,6 @@ def _forget(records: dict[str, dict[str, Any]], present: Collection[str]) -> Non
     for identifier in [name for name in records if name in present]:
         if _is_removal(records[identifier]):
             del records[identifier]
-
-
-def _forget_removals(data_dir: Path, identifiers: Sequence[str]) -> None:
-    """Forget the removal of every model in *identifiers*, rewriting `lifecycle.json` if any."""
-
-    records = _lifecycle(data_dir)
-    held = _document_of(records)
-    _forget(records, frozenset(identifiers))
-    if _document_of(records) != held:
-        _replace_json(data_dir / LIFECYCLE_FILE, {"models": records})
 
 
 def _lifecycle(data_dir: Path) -> dict[str, dict[str, Any]]:
@@ -2686,7 +2364,6 @@ def _document(cat: Catalogue) -> dict[str, Any]:
                 "provider": model.provider,
                 "family": model.family,
                 "deliberation": list(model.deliberation),
-                "provider_says": model.provider_says,
                 "price": _priced(model.price),
                 "source_url": model.source_url,
                 "retrieved": model.retrieved,
@@ -2744,25 +2421,22 @@ def _emit(payload: Mapping[str, Any]) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Print the merged catalogue, or adopt what an agent read into it.
+    """Print the merged catalogue, run a pass, or print what the passes did.
 
     The interview reads the print rather than the two files behind it. Which
-    of the two wins, and how a refreshed provider replaces a whole list of
-    plans, are rules this module keeps; a second copy of them in prose
+    of the two wins is a rule this module keeps; a second copy of it in prose
     somebody follows by hand is a second thing to keep true.
-
-    A refused document exits 1. Nothing was written, and the agent that fetched
-    it is who has to be told so rather than left reading a report as a success.
     """
 
     parser = argparse.ArgumentParser(
         prog="catalogue.py",
         description=(
-            "Print what models and subscriptions this machine knows about, or "
-            "adopt a document of fetched facts into them."
+            "Print what models and subscriptions this machine knows about, "
+            "bring the models current from their structured sources, or say "
+            "what the passes changed."
         ),
     )
-    parser.add_argument("action", nargs="*", metavar="adopt <path> | refresh | journal")
+    parser.add_argument("action", nargs="*", metavar="refresh | journal")
     parser.add_argument("--data", default=str(default_data()))
     parser.add_argument("--agents")
     parser.add_argument("--days", type=int, default=7)
@@ -2784,14 +2458,7 @@ def main(argv: list[str] | None = None) -> int:
         _emit(journal(data_dir, args.days))
         return 0
 
-    if len(args.action) != 2 or args.action[0] != "adopt":
-        parser.error(
-            "the verbs beside the bare form are `adopt <path>`, `refresh` and `journal`"
-        )
-
-    report = adopt(data_dir, here, Path(args.action[1]).expanduser())
-    _emit(report)
-    return 1 if report["refused"] else 0
+    parser.error("the verbs beside the bare form are `refresh` and `journal`")
 
 
 if __name__ == "__main__":

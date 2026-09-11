@@ -8,11 +8,11 @@
     "Only the input and output rates above a long-context threshold are published. The cached rates in a `long_context` card are the standard cached rates scaled by that model's own input ratio, which is an inference and not a vendor figure.",
     "`gpt-5.6-sol` at 4.00 input is promotional at least through 2026-11-21 and reverts without notice.",
     "`claude-haiku-4-5-20251001` exposes no effort control at all, which is why its `deliberation` list is empty rather than defaulted.",
-    "Capability is a seeded prior on an arbitrary scale, refined by measurement. It is not a published score, and `update` never fetches it: how a published benchmark such as Terminal-Bench 4.0 maps onto this scale is undecided, so a figure here changes by measurement or by a release of this file and by nothing else.",
-    "`gateways` maps a gateway, spelled as a profile spells it, to that gateway's own slug for the model: OpenRouter routes `grok-4.6` as `x-ai/grok-4.6`. It is on no page the provider publishes, so `update` never fetches it, and opencode is started on a gateway channel by that slug or not at all.",
+    "Capability is a seeded prior on an arbitrary scale, refined by measurement. It is not a published score, and the daily pass never fetches it: how a published benchmark such as Terminal-Bench 4.0 maps onto this scale is undecided, so a figure here changes by measurement or by a release of this file and by nothing else.",
+    "`gateways` maps a gateway, spelled as a profile spells it, to that gateway's own slug for the model: OpenRouter routes `grok-4.6` as `x-ai/grok-4.6`. It is on no page the provider publishes, so it is written by this file and by the daily pass matching the model against OpenRouter's own list, and opencode is started on a gateway channel by that slug or not at all.",
     "The Codex CLI accepts `minimal|low|medium|high|xhigh` for `model_reasoning_effort` and does not accept `max`, though the API does. That is a property of the bridge, not of the model, and lives in launch.py.",
     "`ultra` on the OpenAI models is a Codex execution mode, not an effort level, and is never sent as one.",
-    "`plans` holds the subscriptions each provider markets, under the whole name it markets them by, so that somebody choosing how they pay sees the plan spelled as it is billed to them. A plan carries no allowance: Anthropic publishes only multipliers against the tier below, xAI publishes one weekly pool and no number at all, and OpenAI's own message estimates span roughly ninefold under a disclaimer that they are not limits. None of the three is a quantity a router may spend against.",
+    "`plans` holds the subscriptions each provider markets, under the whole name it markets them by, so that somebody choosing how they pay sees the plan spelled as it is billed to them. No structured source lists them, so they are this file's alone and change with a release of the collection. A plan carries no allowance: Anthropic publishes only multipliers against the tier below, xAI publishes one weekly pool and no number at all, and OpenAI's own message estimates span roughly ninefold under a disclaimer that they are not limits. None of the three is a quantity a router may spend against.",
     "A price of null means the provider publishes none that could be reached, which is every xAI consumer plan: x.ai/pricing and grok.com/plans both refuse an automated fetch, and third-party figures disagree with each other. A seat price is per seat and per month."
   ],
   "plans": [
@@ -51,7 +51,6 @@
       "long_context": null,
       "reasoning_billed_as": "output",
       "capability": 0.95,
-      "provider_says": "For demanding reasoning and long-horizon agentic work",
       "released": null,
       "source_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
       "retrieved": "2026-09-06"
@@ -67,7 +66,6 @@
       "long_context": null,
       "reasoning_billed_as": "output",
       "capability": 0.87,
-      "provider_says": "For complex agentic coding and enterprise work",
       "released": "2026-07-24",
       "source_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
       "retrieved": "2026-09-06"
@@ -83,7 +81,6 @@
       "long_context": null,
       "reasoning_billed_as": "output",
       "capability": 0.73,
-      "provider_says": "The best combination of speed and intelligence",
       "released": null,
       "source_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
       "retrieved": "2026-09-06"
@@ -99,7 +96,6 @@
       "long_context": null,
       "reasoning_billed_as": "output",
       "capability": 0.52,
-      "provider_says": "The fastest model with near-frontier intelligence",
       "released": "2025-10-01",
       "source_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
       "retrieved": "2026-09-06"
@@ -115,7 +111,6 @@
       "long_context": {"input": 20.0, "cache_read": 2.0, "cache_write": 25.0, "output": 75.0, "currency": "USD", "unit": "per_mtok"},
       "reasoning_billed_as": "output",
       "capability": 0.9,
-      "provider_says": "Our most capable model, built for the hardest end-to-end work",
       "released": null,
       "source_url": "https://developers.openai.com/api/docs/models",
       "retrieved": "2026-09-06"
@@ -131,7 +126,6 @@
       "long_context": {"input": 8.0, "cache_read": 0.8, "cache_write": 10.0, "output": 30.0, "currency": "USD", "unit": "per_mtok"},
       "reasoning_billed_as": "output",
       "capability": 0.78,
-      "provider_says": "Flagship model for complex professional work",
       "released": null,
       "source_url": "https://developers.openai.com/api/docs/models",
       "retrieved": "2026-09-06"
@@ -147,7 +141,6 @@
       "long_context": {"input": 4.0, "cache_read": 0.4, "cache_write": 5.0, "output": 18.0, "currency": "USD", "unit": "per_mtok"},
       "reasoning_billed_as": "output",
       "capability": 0.6,
-      "provider_says": "GPT-5.6 model that balances intelligence and cost",
       "released": null,
       "source_url": "https://developers.openai.com/api/docs/models",
       "retrieved": "2026-09-06"
@@ -163,7 +156,6 @@
       "long_context": {"input": 0.4, "cache_read": 0.04, "cache_write": 0.5, "output": 1.8, "currency": "USD", "unit": "per_mtok"},
       "reasoning_billed_as": "output",
       "capability": 0.42,
-      "provider_says": "GPT-5.6 model optimized for cost-sensitive workloads",
       "released": null,
       "source_url": "https://developers.openai.com/api/docs/models",
       "retrieved": "2026-09-06"
@@ -180,7 +172,6 @@
       "reasoning_billed_as": "output",
       "capability": 0.7,
       "gateways": {"openrouter": "x-ai/grok-4.6"},
-      "provider_says": "SpaceXAI's frontier model for coding, agentic tasks, and knowledge work.",
       "released": null,
       "source_url": "https://docs.x.ai/developers/models/grok-4.6",
       "retrieved": "2026-09-06"

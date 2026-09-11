@@ -189,7 +189,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "617fef9d5d984e55b988d57ba3b03fcfb1cec29b1acb6553cf23a145a0d7ec46",
+      "digest": "4d4cb456b975bc43514be59f26d0e7653026cfcec11127372f27ab40c9312b14",
       "binaries": [
         "uv"
       ],

@@ -151,63 +151,20 @@ def test_a_valid_profile_that_does_not_choose_anthropic_leaves_no_definitions(
     assert sorted(path.name for path in agents.iterdir()) == ["somebody-elses.md"]
 
 
-def _without_a_valid_profile(data: Path, state: str) -> None:
-    """Leave *data* with no profile, one in the old shape, or a damaged one."""
+def test_the_writer_needs_a_profile_or_an_objective(tmp_path: Path) -> None:
+    """Nothing calls a sync without a profile any more, so there is no such form.
 
-    data.mkdir(parents=True)
-    if state == "missing":
-        return
-    document: dict[str, Any] = {
-        "harnesses": ["claude-code"],
-        "channels": [],
-        "answered_at": "2026-09-06T13:35:00Z",
-    }
-    if state == "old-shape":
-        document.update(providers=["anthropic"], models=["claude-opus-5"])
-    else:
-        document.update(makers=["anthropic"], models=["claude-opus-5"])
-    (data / "profile.json").write_text(json.dumps(document), encoding="utf-8")
-
-
-@pytest.mark.parametrize("state", ("missing", "old-shape", "damaged"))
-def test_a_sync_without_a_valid_profile_leaves_the_definitions_untouched(
-    tmp_path: Path, state: str
-) -> None:
-    """The stand-in chooses no maker, and syncing to it would delete every subagent.
-
-    Those are the definitions a real profile justified, and `update` runs this
-    on a machine whether or not the profile in force is one; so nothing is
-    written, nothing removed, and the report says why and what to run.
+    `update` ran it after adopting new facts; the catalogue pass resyncs the
+    definitions itself, and `setup` always hands the writer a profile.
     """
 
-    data = tmp_path / "data"
-    agents = tmp_path / "agents"
-    _without_a_valid_profile(data, state)
-    agents.mkdir()
-    (agents / "kntnt-opus-high.md").write_text("generated\n", encoding="utf-8")
-
-    report = setup_apply.apply(None, data, agents)
-
-    assert report["ok"] is True
-    assert report["definitions"] is None
-    assert report["created_directory"] is False
-    assert "/model-selector setup" in report["note"]
-    assert [path.name for path in agents.iterdir()] == ["kntnt-opus-high.md"]
-    assert (agents / "kntnt-opus-high.md").read_text() == "generated\n"
-
-
-def test_a_sync_without_a_valid_profile_creates_no_agents_directory(
-    tmp_path: Path,
-) -> None:
-    """Nothing is to be written, so no directory is made to write it into."""
-
-    agents = tmp_path / "agents"
-
-    report = setup_apply.apply(None, tmp_path / "data", agents)
-
-    assert report["definitions"] is None
-    assert report["created_directory"] is False
-    assert not agents.exists()
+    try:
+        setup_apply.main([f"--data={tmp_path / 'data'}"])
+    except SystemExit as stopped:
+        assert stopped.code == 2
+    else:
+        raise AssertionError("a sync with no profile was accepted")
+    assert not (tmp_path / "data").exists()
 
 
 def test_a_plan_the_catalogue_markets_is_written_without_comment(
@@ -239,7 +196,10 @@ def test_a_plan_that_came_from_nowhere_is_noticed_rather_than_recorded_quietly(
     # catalogue that has fallen behind is not grounds for refusing an answer.
     assert report["ok"] is True
     assert any("Codex Pro 5x" in note for note in report["notes"])
-    assert any("update" in note for note in report["notes"])
+    # Plans ship with the collection and nothing refreshes them at runtime, so
+    # the note names the Manager's own verb that brings a newer release in.
+    assert any("/kntnt update" in note for note in report["notes"])
+    assert not any("/model-selector update" in note for note in report["notes"])
 
 
 def test_a_provider_whose_plans_the_catalogue_lacks_draws_no_complaint(
@@ -400,10 +360,10 @@ def test_an_objective_outside_the_vocabulary_is_refused_by_the_command_line(
     assert not (tmp_path / "objective.json").exists()
 
 
-def test_setup_and_update_leave_the_standing_objective_where_it_was(
+def test_setup_leaves_the_standing_objective_where_it_was(
     tmp_path: Path, capsys: Any
 ) -> None:
-    """The choice survives the interview, the sync, and the adoption of new facts."""
+    """The choice survives the interview and the sync that follows it."""
 
     data = tmp_path / "data"
     agents = tmp_path / "agents"
@@ -412,31 +372,6 @@ def test_setup_and_update_leave_the_standing_objective_where_it_was(
 
     # `setup`: a profile operand written and the definitions synced.
     assert _applied(tmp_path, _answers(_subscription()))["ok"] is True
-    assert (data / "objective.json").read_bytes() == held
-
-    # `update`: the facts adopted, then the definitions synced with no operand.
-    fetched = tmp_path / "fetched.json"
-    fetched.write_text(
-        json.dumps(
-            {
-                "plans": [
-                    {
-                        "provider": "anthropic",
-                        "name": "Claude Max 20x",
-                        "monthly_usd": 200.0,
-                        "source_url": "https://example.test/pricing",
-                        "retrieved": "2026-09-11",
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
-    )
-    adopted = catalogue.adopt(data, SKILL_DIR, fetched)
-    assert adopted["refused"] is None
-    assert (data / "catalogue.json").exists()
-    assert (data / "objective.json").read_bytes() == held
-    assert setup_apply.apply(None, data, agents)["ok"] is True
     assert (data / "objective.json").read_bytes() == held
 
 

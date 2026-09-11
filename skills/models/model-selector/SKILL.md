@@ -2,7 +2,7 @@
 name: model-selector
 description: "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script."
 disable-model-invocation: true
-argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | update [--data=<path>] | evidence [--data=<path>] [<kind>] | objective [--data=<path>] [time|cost] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
+argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | evidence [--data=<path>] [<kind>] | objective [--data=<path>] [time|cost] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv; on macOS, launchctl runs the daily catalogue pass
 metadata:
   kntnt.internal: "true"
@@ -73,9 +73,7 @@ Two identical questions can come back with different answers, and that is this w
 
 ## Setup
 
-Where the catalogue is due — its newest `retrieved` date more than thirty days old, read as `## Status` reads it — hold `## Update` first, so the interview offers current prices, model lists and plans rather than what the release froze.
-
-Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which makers the user wants models from, and then how each maker is paid for on each channel. Every model a chosen maker offers is eligible, so no model is asked about one by one. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that can be fetched — prices, model lists, the subscriptions a provider sells and its own positioning are all the machine's job. Show the assembled profile in full before it is written.
+Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which makers the user wants models from, and then how each maker is paid for on each channel. Every model a chosen maker offers is eligible, so no model is asked about one by one. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that the catalogue holds — prices, model lists and the plans each provider sells are all in it. Show the assembled profile in full before it is written.
 
 Hand it to the script rather than editing the file:
 
@@ -83,15 +81,19 @@ Hand it to the script rather than editing the file:
 
 Render its report: the revision written, its `notes`, and the generated subagent definitions written and removed. Each note names an answer the catalogue could not account for — a plan it does not hold, a gateway with no rate card — and each is recorded as given rather than refused, so the user is who decides what to do about it. Where it says the definitions directory had to be created, pass that on — Claude Code reads that directory as a session starts, so those definitions reach sessions started from now on rather than this one.
 
+Then run the catalogue pass once, so that a fresh machine has a current catalogue straight away rather than after the next daily pass. Run it where the writer answered `ok`, and where the user declined the review and nothing was written. Where the writer refused the profile, report the refusal as above and run nothing.
+
+    uv run "$HERE/scripts/catalogue.py" refresh [--data=<directory>]
+
+Started this way rather than with `--scheduled`, it runs whether or not the day's pass already has, and takes the pass's own lock. Report its outcome as `## Status` reads a pass: per source under `sources`, what it said and how many changes it made, and, where `definitions` is not null, the generated subagent definitions it wrote and removed. Where it answers `ran` false with the reason `locked`, another pass is running and this one did nothing; say so. Where `outcome` is `no makers chosen`, no valid profile chooses a maker, so it read nothing.
+
 ## Status
 
 Report what this Skill knows, how fresh it is and what it wants from the user. Nothing here asks a question, changes anything or reaches the network.
 
-Read `<directory>/profile.json` and say when it was answered and which Harnesses, makers and payment channels it holds. Name every maker the catalogue holds that the profile does not choose as "not chosen", a maker declined and one never asked about being the same thing. Where the file is absent, carries no `makers` — the shape an older release wrote, with a list of models, which is not translated — or will not validate, say so and name `/model-selector setup`: until then every answer not locked to a model inherits the caller's own seat. Say the same where `answered_at` is more than ninety days old.
+Read `<directory>/profile.json` and say when it was answered and which Harnesses, makers and payment channels it holds. Name every maker the catalogue holds — every distinct `provider` among the models `uv run "$HERE/scripts/catalogue.py" [--data=<directory>]` prints — that the profile does not choose as "not chosen", a maker declined and one never asked about being the same thing. Where the file is absent, carries no `makers` — the shape an older release wrote, with a list of models, which is not translated — or will not validate, say so and name `/model-selector setup`: until then every answer not locked to a model inherits the caller's own seat. Say the same where `answered_at` is more than ninety days old.
 
-Report how fresh the world's facts are, from the dates the catalogue itself carries. Run `uv run "$HERE/scripts/catalogue.py" [--data=<directory>]` and read the `retrieved` date off every model and every plan: name the newest and the oldest, and where the newest is more than thirty days old, name `/model-selector update` as what brings them current. Nothing here fetches anything.
-
-Report the catalogue pass:
+Report how current the catalogue is, from the catalogue pass:
 
     uv run "$HERE/scripts/catalogue.py" journal --data=<directory> --days=7
 
@@ -112,36 +114,6 @@ Report what has been measured and what an answer would therefore rest on. This r
 It groups the store by kind, model and deliberation, those three being the whole of a measurement's identity, and reports per group how many rows, the mean grade and who established it, the mean cost and elapsed time, and the span of instants behind them. Render that: the row count is what separates a `measured` answer from a pooled one, and `## The answer` says what those words mean. Name the authorities it reports — `checker`, `judge`, `signal`, `user` — in that order, because a grade is worth what judged it.
 
 A figure it reports as `null` is a figure no row carries, and it is said as absent rather than as zero: an absence read as a zero is how an unmeasured configuration becomes the cheapest thing on offer. Nought rows is an empty measurement rather than an error — say that nothing has been measured yet, and that measuring happens on its own while the Skill is Enabled, as `$HERE/references/measurement.md` sets out.
-
-## Update
-
-The world's facts `update` brings are read by you, off the providers' own pages, because a provider's page is prose a script cannot interpret. Where this Harness gives you no way to read a page, say so and stop: the catalogue stands as it shipped, and every other command of this Skill goes on answering from it.
-
-Start from what is already known:
-
-    uv run "$HERE/scripts/catalogue.py" [--data=<directory>]
-
-Read every `source_url` it carries — one per model and one per plan — and, where that page does not carry the rate card, the provider's own pricing page beside it. Write what you found to a scratch file, as one JSON document in the catalogue's own shape:
-
-- `models`, each with `id`, `provider`, `family`, `aliases`, `deliberation`, `price`, `long_context_threshold`, `long_context`, `reasoning_billed_as`, `provider_says` and `released`.
-- `plans`, each with `provider`, `name` and `monthly_usd`.
-- Every entry carrying the `source_url` it was read from and `retrieved` as today's date. An entry with neither is discarded, a fact nothing can attribute being worse than no fact.
-
-Write no `capability`: it is a seeded prior that measurement refines, and one carried here is ignored and reported as ignored. Every rate is USD per million tokens — record what the page actually says rather than converting it, and let the validator refuse what it must.
-
-Hand the file over:
-
-    uv run "$HERE/scripts/catalogue.py" adopt <path> [--data=<directory>]
-
-It merges each model field by field over what is in force, so a document saying only what you read leaves everything else standing; it replaces a provider's plans whole, a retired plan having to be able to disappear; and it writes in one move. Render its report: per model whether it was added, changed or unchanged and which fields moved; per provider the plan list that replaced which; and every entry it discarded, by name and with the rule it failed. A document it refuses whole wrote nothing and exits non-zero to say so.
-
-Then bring the generated subagent definitions into line with whatever was adopted, because a catalogue that gained or lost a model has changed which of them ought to exist:
-
-    uv run "$HERE/scripts/setup_apply.py" [--data=<directory>]
-
-With no profile operand it syncs and writes no profile. Report the definitions written and removed, and where it says the directory had to be created, pass that on as `## Setup` does. Where it reports `definitions` as null, no valid profile stands and nothing was synced: pass on its note, which names `/model-selector setup`.
-
-A pass in which nothing changed is a successful pass. A model discovered is eligible the moment it is written to the catalogue, wherever its maker is one the profile chooses, and nothing has to be enabled by hand.
 
 ## Objective
 

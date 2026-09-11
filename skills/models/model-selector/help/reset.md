@@ -14,7 +14,7 @@ Bare, this discards the profile — the answers you gave about Harnesses, makers
 
 With **--evidence**, this machine's own measurement goes too: the measurement store, the units seen and not yet graded, and the `capture/` directory. That is the only way to discard all of it, and it has to be asked for by name; the one other deletion is of a model its maker has stopped listing, whose own rows and units the catalogue pass deletes when it removes the model. `lifecycle.json`, which records those removals, is catalogue state and stays. Whatever an earlier design of this Skill left in the directory goes with it — that directory among them, and the files no version writes or reads any more, named in the preview like everything else.
 
-The catalogue is kept either way. It is public fact carrying its own sources and dates, and `update` fetches it again in any case.
+The catalogue is kept either way. It is public fact carrying its own sources and dates, and the catalogue pass keeps it current in any case.
 
 The exact paths are named with their row or byte counts before anything is removed, and you confirm the list. A declined confirmation writes nothing. What went is reported per path, by the same counts the preview showed — nothing here is migrated, backfilled or reinterpreted.
 

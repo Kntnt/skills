@@ -81,7 +81,6 @@ def _model(**overrides: Any) -> dict[str, Any]:
         },
         "reasoning_billed_as": "output",
         "capability": 0.8,
-        "provider_says": None,
         "released": "2026-01-01",
         "source_url": None,
         "retrieved": None,
@@ -404,15 +403,15 @@ def test_plans_for_answers_with_one_provider_s_plans_in_the_order_held() -> None
     assert catalogue.plans_for(cat, "nobody") == []
 
 
-def test_a_refreshed_plan_list_replaces_the_seed_plans_of_that_provider(
+def test_load_returns_the_seed_s_plans_even_when_catalogue_json_holds_plans(
     tmp_path: Path,
 ) -> None:
-    """A retired plan has to be able to disappear, which a merge by name cannot do.
+    """Plans ship with the collection, and nothing on this machine replaces them.
 
-    Models merge entry by entry because a refresh that says nothing about a
-    model is no evidence that it is gone; only its maker's own list says that.
-    A plan that a provider stopped selling is an option this Skill would go on
-    offering forever, and offering a wrong list is the defect being fixed.
+    No structured source lists what a provider sells, and the agent reading
+    pages that once refreshed them is retired (ADR-0194). A `catalogue.json`
+    an older release wrote may still carry plans; they are left unread, so
+    the plans in force are the ones the release shipped.
     """
 
     here = _here(tmp_path, [_model()])
@@ -457,22 +456,8 @@ def test_a_refreshed_plan_list_replaces_the_seed_plans_of_that_provider(
 
     cat = catalogue.load(data, here)
 
-    assert [plan.name for plan in catalogue.plans_for(cat, "testing")] == ["New Plan"]
+    assert [plan.name for plan in catalogue.plans_for(cat, "testing")] == ["Old Plan"]
     assert [plan.name for plan in catalogue.plans_for(cat, "other")] == ["Untouched"]
-
-
-def _fetched(**overrides: Any) -> dict[str, Any]:
-    """Provide one entry as the agent's fetch writes it: attributed, uncapable.
-
-    `capability` is absent because nothing fetches it. It is a seeded prior
-    that measurement refines, and the agent doing the reading is told not to
-    write one.
-    """
-
-    entry = _model(source_url="https://example.test/models", retrieved="2026-09-06")
-    entry.pop("capability")
-    entry.update(overrides)
-    return entry
 
 
 def _card(**overrides: Any) -> dict[str, Any]:
@@ -490,205 +475,96 @@ def _card(**overrides: Any) -> dict[str, Any]:
     return card
 
 
-def _fetch(tmp_path: Path, **document: Any) -> Path:
-    """Write one fetched document where `adopt` is handed it: a scratch file."""
+def _attributed(**overrides: Any) -> dict[str, Any]:
+    """Provide one entry as the catalogue pass writes it: attributed and dated."""
 
-    path = tmp_path / "fetched.json"
-    path.write_text(json.dumps(document), encoding="utf-8")
-    return path
-
-
-def test_adopt_writes_the_new_the_changed_and_the_plans_and_names_what_it_dropped(
-    tmp_path: Path,
-) -> None:
-    """One document, one pass: three facts adopted and one refused by name.
-
-    This is the whole of what `update` now is on the machine's side. The agent
-    reads the provider's pages and writes what it found; everything that
-    decides whether a fact may enter the catalogue at all is here.
-    """
-
-    here = _here(tmp_path, [_model()])
-    data = tmp_path / "data"
-    document = _fetch(
-        tmp_path,
-        models=[
-            _fetched(id="test-two", family="two", capability=0.99),
-            _fetched(price=_card(input=11.0)),
-            {"id": "test-three", "provider": "testing", "family": "three"},
-        ],
-        plans=[
-            {
-                "provider": "testing",
-                "name": "New Plan",
-                "monthly_usd": 12.0,
-                "source_url": "https://example.test/pricing",
-                "retrieved": "2026-09-06",
-            }
-        ],
-    )
-
-    report = catalogue.adopt(data, here, document)
-
-    assert report["refused"] is None
-    assert {row["id"]: row["status"] for row in report["models"]} == {
-        "test-two": "added",
-        "test-one": "changed",
-    }
-    assert [row["provider"] for row in report["plans"]] == ["testing"]
-    assert [row["name"] for row in report["discarded"]] == ["test-three"]
-    assert "source_url" in report["discarded"][0]["reason"]
-
-    cat = catalogue.load(data, here)
-
-    assert {model.id for model in cat.models} == {"test-one", "test-two"}
-    assert catalogue.resolve(cat, "test-one")[0].price is not None
-    assert catalogue.resolve(cat, "test-one")[0].price.input == 11.0
-    assert [plan.name for plan in catalogue.plans_for(cat, "testing")] == ["New Plan"]
-
-    # A capability the document carried is neither adopted nor left implied:
-    # it is named as ignored, because nothing fetches that figure.
-    assert [row["ignored"] for row in report["models"] if row["id"] == "test-two"] == [
-        ["capability"]
-    ]
-    assert catalogue.resolve(cat, "test-two")[0].capability is None
-    assert list(data.glob("*.tmp")) == []
+    entry = _model(source_url="https://example.test/models", retrieved="2026-09-06")
+    entry.update(overrides)
+    return entry
 
 
-def test_adopt_discards_a_card_in_another_currency_and_adopts_the_rest(
-    tmp_path: Path,
-) -> None:
+def test_the_validator_refuses_a_card_in_another_currency() -> None:
     """Nothing here converts, so a card in euros would be added to a dollar bill."""
 
-    here = _here(tmp_path, [_model()])
-    data = tmp_path / "data"
-    document = _fetch(
-        tmp_path,
-        models=[
-            _fetched(id="test-euro", family="euro", price=_card(currency="EUR")),
-            _fetched(price=_card(input=11.0)),
-        ],
-    )
+    fault = catalogue._model_fault(_attributed(price=_card(currency="EUR")))
 
-    report = catalogue.adopt(data, here, document)
-
-    assert report["refused"] is None
-    assert [row["name"] for row in report["discarded"]] == ["test-euro"]
-    assert "EUR" in report["discarded"][0]["reason"]
-
-    cat = catalogue.load(data, here)
-
-    assert {model.id for model in cat.models} == {"test-one"}
-    assert catalogue.resolve(cat, "test-one")[0].price is not None
-    assert catalogue.resolve(cat, "test-one")[0].price.input == 11.0
+    assert fault is not None
+    assert "EUR" in fault
 
 
-def test_adopt_discards_a_card_quoted_in_another_unit_by_name(tmp_path: Path) -> None:
+def test_the_validator_refuses_a_card_quoted_in_another_unit() -> None:
     """A rate per thousand tokens read as a rate per million is off by a thousand."""
 
-    here = _here(tmp_path, [_model()])
-    data = tmp_path / "data"
-    document = _fetch(
-        tmp_path,
-        models=[_fetched(id="test-kilo", family="kilo", price=_card(unit="per_ktok"))],
-    )
+    fault = catalogue._model_fault(_attributed(price=_card(unit="per_ktok")))
 
-    report = catalogue.adopt(data, here, document)
-
-    assert [row["name"] for row in report["discarded"]] == ["test-kilo"]
-    assert "per_ktok" in report["discarded"][0]["reason"]
-    assert [model.id for model in catalogue.load(data, here).models] == ["test-one"]
+    assert fault is not None
+    assert "per_ktok" in fault
 
 
-def test_adopt_discards_a_deliberation_level_outside_the_ladder_by_name(
-    tmp_path: Path,
-) -> None:
+def test_the_validator_refuses_a_deliberation_level_outside_the_ladder() -> None:
     """The ladder is the only ordering of effort this Skill has, so it is closed."""
 
-    here = _here(tmp_path, [_model()])
-    data = tmp_path / "data"
-    document = _fetch(
-        tmp_path,
-        models=[_fetched(id="test-odd", family="odd", deliberation=["low", "extreme"])],
-    )
+    fault = catalogue._model_fault(_attributed(deliberation=["low", "extreme"]))
 
-    report = catalogue.adopt(data, here, document)
-
-    assert [row["name"] for row in report["discarded"]] == ["test-odd"]
-    assert "extreme" in report["discarded"][0]["reason"]
-    assert [model.id for model in catalogue.load(data, here).models] == ["test-one"]
+    assert fault is not None
+    assert "extreme" in fault
 
 
-def test_adopt_refuses_a_document_that_is_not_the_catalogues_shape_and_writes_nothing(
-    tmp_path: Path,
-) -> None:
-    """A per-entry rule discards an entry; a shape this cannot read stops the pass."""
+def test_the_validator_refuses_an_entry_with_nothing_to_attribute_it_to() -> None:
+    """A fact nothing can attribute is worse than no fact."""
 
-    here = _here(tmp_path, [_model()])
-    data = tmp_path / "data"
-    document = _fetch(tmp_path, prices=[{"id": "test-one"}])
+    fault = catalogue._model_fault(_model())
 
-    report = catalogue.adopt(data, here, document)
-
-    assert report["refused"] is not None
-    assert report["written"] is None
-    assert not (data / "catalogue.json").exists()
-    assert [model.id for model in catalogue.load(data, here).models] == ["test-one"]
+    assert fault is not None
+    assert "source_url" in fault
 
 
-def test_adopting_a_price_keeps_the_capability_the_seed_shipped(
-    tmp_path: Path, capsys: Any
-) -> None:
-    """The refreshed entry replaces the seeded one whole, so it has to carry it all.
+def test_the_catalogue_has_no_verb_that_adopts_a_document() -> None:
+    """`update` is retired, and the half of it that was a script goes with it.
 
-    A document carrying a price and nothing else would otherwise erase the
-    model's capability, its deliberation ladder and its aliases, which is the
-    one way an `update` could leave this Skill knowing less than it shipped
-    with.
+    The catalogue pass is the one writer of `catalogue.json` (ADR-0194), and
+    it goes through the validator on its own path, so nothing is left that
+    would hand `adopt` a document.
     """
 
-    data = tmp_path / "data"
-    document = _fetch(
-        tmp_path,
-        models=[
-            {
-                "id": "claude-fable-5-1",
-                "provider": "anthropic",
-                "family": "fable",
-                "price": _card(input=11.0, cache_read=0.25),
-                "source_url": "https://platform.claude.com/docs/en/about-claude/models/overview",
-                "retrieved": "2026-09-06",
-            }
-        ],
-    )
+    for name in ("adopt", "_adopt_models", "_adopt_plans", "_merged_plans"):
+        assert not hasattr(catalogue, name), name
+    for name in ("FETCHED_FIELDS", "PLAN_FIELDS", "_plan_fault", "_offered"):
+        assert not hasattr(catalogue, name), name
+    try:
+        catalogue.main(["adopt", "/nowhere/fetched.json", "--data=/nowhere"])
+    except SystemExit as stopped:
+        assert stopped.code == 2
+    else:
+        raise AssertionError("`adopt` is still accepted")
 
-    assert catalogue.main(["adopt", str(document), f"--data={data}"]) == 0
 
-    report = json.loads(capsys.readouterr().out)
+def test_no_model_carries_a_provider_s_own_prose() -> None:
+    """Prose never becomes a number, and nothing ranks on it (ADR-0194).
 
-    assert report["models"] == [
-        {
-            "id": "claude-fable-5-1",
-            "status": "changed",
-            "changed": ["price"],
-            "ignored": [],
-        }
+    `provider_says` was the provider's one-line positioning of a model, shown
+    in the interview and fetched by `update`. Nothing reads it any more, so the
+    seed, the loaded catalogue and its print carry it nowhere.
+    """
+
+    seed = json.loads((SHIPPED / "data" / "catalogue-seed.json").read_text("utf-8"))
+    cat = catalogue.load(Path("/nowhere"), SHIPPED)
+
+    assert "provider_says" not in catalogue.MODEL_FIELDS
+    assert not [entry["id"] for entry in seed["models"] if "provider_says" in entry]
+    assert not [model.id for model in cat.models if hasattr(model, "provider_says")]
+    assert not [
+        entry["id"]
+        for entry in catalogue._document(cat)["models"]
+        if "provider_says" in entry
     ]
 
-    fable = catalogue.resolve(catalogue.load(data, SHIPPED), "claude-fable-5-1")[0]
 
-    assert fable.price is not None
-    assert fable.price.input == 11.0
-    assert fable.capability == 0.95
-    assert fable.deliberation == ("low", "medium", "high", "xhigh", "max")
-
-
-def test_gateways_is_a_model_field_that_update_never_fetches() -> None:
-    """A gateway's slug is matched, not read off the provider's page (issue #308)."""
+def test_gateways_and_capability_are_the_fields_the_seed_keeps() -> None:
+    """A gateway's slug is matched, not read off any page (issue #308)."""
 
     assert "gateways" in catalogue.MODEL_FIELDS
-    assert "gateways" not in catalogue.FETCHED_FIELDS
-    assert "capability" not in catalogue.FETCHED_FIELDS
+    assert catalogue.SEEDED_FIELDS == ("capability", "gateways")
 
 
 def test_the_shipped_seed_carries_the_openrouter_slug_for_grok_alone() -> None:
@@ -798,42 +674,6 @@ def test_a_malformed_gateways_value_is_dropped_rather_than_raised(
     assert catalogue.resolve(cat, "test-two")[0].gateways == (("elsewhere", "two/1"),)
 
 
-def test_adopting_a_price_keeps_the_gateway_slug_the_seed_shipped(
-    tmp_path: Path, capsys: Any
-) -> None:
-    """The refreshed entry replaces the seeded one whole, so it has to carry the slug."""
-
-    data = tmp_path / "data"
-    document = _fetch(
-        tmp_path,
-        models=[
-            {
-                "id": "grok-4.6",
-                "provider": "spacexai",
-                "family": "grok",
-                "price": _card(input=2.5, cache_read=0.5, cache_write=None, output=6.0),
-                "gateways": {"openrouter": "somebody/guessed"},
-                "source_url": "https://docs.x.ai/developers/models/grok-4.6",
-                "retrieved": "2026-09-11",
-            }
-        ],
-    )
-
-    assert catalogue.main(["adopt", str(document), f"--data={data}"]) == 0
-
-    report = json.loads(capsys.readouterr().out)
-
-    assert report["models"][0]["ignored"] == ["gateways"]
-
-    stored = json.loads((data / "catalogue.json").read_text("utf-8"))
-    grok = catalogue.resolve(catalogue.load(data, SHIPPED), "grok-4.6")[0]
-
-    assert stored["models"][0]["gateways"] == {"openrouter": "x-ai/grok-4.6"}
-    assert grok.price is not None
-    assert grok.price.input == 2.5
-    assert grok.gateways == (("openrouter", "x-ai/grok-4.6"),)
-
-
 # What the retired unattended pass went by: its module, the store it kept, the
 # member that told it how to read a body, the file that told it when to run,
 # and the constant that bounded its network time (issue #293). A shipped file
@@ -908,10 +748,10 @@ def test_the_shipped_seed_promises_no_refresh_of_what_it_carries() -> None:
     Nothing fetches `capability`: it is a seeded prior refined by measurement,
     and how a published benchmark maps onto its scale is undecided, so a note
     saying a refresh replaces it from one names a mechanism that does not
-    exist and promises an accuracy nobody is delivering. The catalogue pass
-    and `update` are what renew any figure here — the first a script reading
-    three structured sources, the second the agent's own reading (ADR-0185,
-    ADR-0191) — and neither renews `capability`.
+    exist and promises an accuracy nobody is delivering. The daily catalogue
+    pass is what renews a figure here, a script reading three structured
+    sources (ADR-0191, ADR-0193), and it never fetches `capability`; the plans
+    change only with a release of the collection (ADR-0194).
     """
 
     seed = json.loads((SHIPPED / "data" / "catalogue-seed.json").read_text("utf-8"))
@@ -919,3 +759,81 @@ def test_the_shipped_seed_promises_no_refresh_of_what_it_carries() -> None:
     offending = [note for note in seed["notes"] if "refresh" in note.lower()]
 
     assert not offending, "the seed still promises a refresh:\n" + "\n".join(offending)
+
+
+# Where a person or an agent is told how to use this Skill: every file it
+# ships, the collection's rule on routing, and the README that lists its
+# verbs. `update` was retired, so none of them may name it as this Skill's
+# verb — neither the slash form nor the backticked word nor a heading — and
+# none may hand a document to `catalogue.py adopt` (ADR-0194).
+UPDATE_SWEEP: tuple[Path, ...] = (
+    REPO_ROOT / "docs" / "rules" / "routing.md",
+    REPO_ROOT / "README.md",
+)
+RETIRED_UPDATE_FORMS: tuple[str, ...] = (
+    "/model-selector update",
+    "model-selector update",
+    "`update`",
+    "## Update",
+    "catalogue.py adopt",
+    'catalogue.py" adopt',
+    "`adopt`",
+)
+
+
+def test_no_shipped_file_tells_anybody_to_run_the_retired_update() -> None:
+    """A verb a page names is a verb somebody runs, and this one no longer exists."""
+
+    files = [
+        path
+        for path in sorted(SHIPPED.rglob("*"))
+        if path.is_file() and "__pycache__" not in path.parts
+    ]
+    offending = [
+        f"{path.relative_to(REPO_ROOT)}:{number}: {form}"
+        for path in [*files, *UPDATE_SWEEP]
+        for number, line in enumerate(
+            path.read_text(encoding="utf-8").splitlines(), start=1
+        )
+        for form in RETIRED_UPDATE_FORMS
+        if form in line
+    ]
+
+    assert not (SHIPPED / "help" / "update.md").exists()
+    assert not offending, "`update` is still named in:\n" + "\n".join(offending)
+
+
+def _section(heading: str) -> str:
+    """Return one `## ` section of the Skill's own body."""
+
+    body = (SHIPPED / "SKILL.md").read_text(encoding="utf-8")
+    return body.partition(f"\n## {heading}\n")[2].partition("\n## ")[0]
+
+
+def test_setup_reads_no_page_and_ends_by_running_the_pass_by_hand() -> None:
+    """A fresh machine has a current catalogue straight away, not the next morning.
+
+    Setup runs the pass the way a person would, without `--scheduled`, so the
+    daily marker is not consulted and the pass's own lock is taken. It runs
+    whether the profile was written or the review declined, and not after the
+    writer refused one.
+    """
+
+    setup = _section("Setup")
+
+    assert 'catalogue.py" refresh [--data=<directory>]' in setup
+    assert "refresh --scheduled" not in setup
+    assert "declined" in setup
+    assert "refused" in setup
+    assert "page" not in setup
+    assert "thirty days" not in setup
+
+
+def test_status_reports_the_pass_rather_than_the_age_of_the_facts() -> None:
+    """The plans' `retrieved` dates are a release's, so their age says nothing."""
+
+    status = _section("Status")
+
+    assert "journal --data=<directory> --days=7" in status
+    assert "retrieved" not in status
+    assert "thirty days" not in status

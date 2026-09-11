@@ -18,7 +18,7 @@ Bare, this reports the objective in force and whether it is your standing choice
 
 Every answer names the objective it ranked on and whether it came from the caller, your standing choice, or the default. A run already under way that holds one objective for its whole length, as Orchestrate does, keeps the one it started with: a choice changed here reaches the next run.
 
-The choice is kept on its own, beside the profile, so `setup` and `update` leave it standing. `reset` discards it with the profile, being an answer you gave.
+The choice is kept on its own, beside the profile, so `setup` and the catalogue pass leave it standing. `reset` discards it with the profile, being an answer you gave.
 
 ## OPTIONS
 

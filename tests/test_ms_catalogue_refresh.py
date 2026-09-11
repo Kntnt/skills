@@ -461,7 +461,7 @@ def test_a_new_model_s_entry_is_complete_in_the_stored_file(tmp_path: Path) -> N
         model for model in stored["models"] if model["id"] == "claude-sonnet-5"
     )
     assert set(entry) == set(catalogue.MODEL_FIELDS)
-    assert entry["provider_says"] is None
+    assert "provider_says" not in entry
     assert catalogue._model_fault(entry) is None
 
 
@@ -1173,23 +1173,12 @@ def test_the_pass_reads_exactly_the_three_sources() -> None:
     assert "--model" not in catalogue.CLAUDE_LIST_ARGV
 
 
-# --- The validator the pass and `adopt` both go through --------------------------
-
-
-def _adopted(tmp_path: Path, entry: dict[str, Any]) -> dict[str, Any]:
-    """Adopt one fetched model entry over the shipped seed, and return the report."""
-
-    document = tmp_path / "fetched.json"
-    document.write_text(json.dumps({"models": [entry]}), encoding="utf-8")
-    report: dict[str, Any] = catalogue.adopt(
-        tmp_path / "data", SHIPPED, document, now="2026-09-11T00:00:00Z"
-    )
-    return report
+# --- The validator the pass goes through ----------------------------------------
 
 
 @pytest.mark.parametrize("member", [-1.0, "2.0", float("inf"), float("nan"), True])
 def test_the_validator_refuses_a_price_member_that_is_not_a_finite_non_negative_number(
-    tmp_path: Path, member: Any
+    member: Any,
 ) -> None:
     """A plausible wrong number is the validator's to catch where it can."""
 
@@ -1207,14 +1196,13 @@ def test_the_validator_refuses_a_price_member_that_is_not_a_finite_non_negative_
         "retrieved": "2026-09-11",
     }
 
-    report = _adopted(tmp_path, entry)
+    fault = catalogue._model_fault(entry)
 
-    assert report["models"] == []
-    assert report["discarded"][0]["name"] == "claude-opus-5"
-    assert "input" in report["discarded"][0]["reason"]
+    assert fault is not None
+    assert "input" in fault
 
 
-def test_the_validator_accepts_a_null_price_member_as_unknown(tmp_path: Path) -> None:
+def test_the_validator_accepts_a_null_price_member_as_unknown() -> None:
     """Null is a state of knowledge, not a malformed number."""
 
     entry = {
@@ -1229,25 +1217,7 @@ def test_the_validator_accepts_a_null_price_member_as_unknown(tmp_path: Path) ->
         "retrieved": "2026-09-11",
     }
 
-    assert _adopted(tmp_path, entry)["discarded"] == []
-
-
-def test_adopting_a_partial_price_keeps_every_category_it_omits(tmp_path: Path) -> None:
-    """Omitted and null both leave the standing figure; the long-context card merges the same way."""
-
-    entry = {
-        "id": "gpt-5.6-sol",
-        "price": {"input": 3.0, "output": None, "currency": "USD", "unit": "per_mtok"},
-        "long_context": {"output": 31.0},
-        "source_url": "https://example.com",
-        "retrieved": "2026-09-11",
-    }
-
-    _adopted(tmp_path, entry)
-
-    sol = _model(SHIPPED, tmp_path / "data", "gpt-5.6-sol")
-    assert sol.price == catalogue.Price(3.0, 0.4, 5.0, 20.0, "USD", "per_mtok")
-    assert sol.long_context == catalogue.Price(8.0, 0.8, 10.0, 31.0, "USD", "per_mtok")
+    assert catalogue._model_fault(entry) is None
 
 
 def test_per_million_conversion_is_decimal_and_rounded_to_six_places() -> None:
@@ -1574,36 +1544,21 @@ def test_a_removed_model_gone_from_every_file_leaves_no_definitions_of_its_famil
     assert "kntnt-sonnet-high.md" in reports[-1]["definitions"]["removed"]
 
 
-def test_a_removed_seed_model_stays_removed_across_a_reload_and_an_adopt(
+def test_a_removed_seed_model_stays_removed_across_a_reload_and_a_later_write(
     tmp_path: Path,
 ) -> None:
-    """The mask hides the seed's copy, and an `adopt` rewriting `catalogue.json` keeps it."""
+    """The mask hides the seed's copy, and a pass rewriting `catalogue.json` keeps it."""
 
     here, data, agents = _machine(tmp_path)
     _days(here, data, agents, 3, codex=_codex_without())
     assert _model(here, data, GONE) is None
+    held = (data / "catalogue.json").read_text(encoding="utf-8")
 
-    document = tmp_path / "fetched.json"
-    document.write_text(
-        json.dumps(
-            {
-                "models": [
-                    {
-                        "id": "gpt-5.6-sol",
-                        "price": {"input": 3.0},
-                        "source_url": "https://example.com",
-                        "retrieved": "2026-09-14",
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
-    )
-    assert catalogue.adopt(data, here, document)["written"] is not None
+    _pass(here, data, agents, now=NOW + 3 * DAY, codex=_codex_without())
 
+    assert (data / "catalogue.json").read_text(encoding="utf-8") != held
     assert _model(here, data, GONE) is None
     assert GONE in _lifecycle(data)
-    assert _model(here, data, "gpt-5.6-sol").price.input == 3.0
 
 
 def test_a_row_filed_for_a_removed_model_after_its_removal_is_deleted_by_the_next_pass(
@@ -1662,37 +1617,6 @@ def test_a_removed_model_re_added_by_its_list_is_an_ordinary_model_again(
 
     assert _ledger(data) == [GONE]
     assert _queued(data) == [GONE]
-    assert GONE not in _lifecycle(data)
-
-
-def test_a_removed_model_re_added_through_adopt_is_forgotten_in_the_same_operation(
-    tmp_path: Path,
-) -> None:
-    """A pass running before the next refresh never deletes a row filed after the re-add."""
-
-    here, data, agents = _machine(tmp_path)
-    _days(here, data, agents, 3, codex=_codex_without())
-    document = tmp_path / "fetched.json"
-    document.write_text(
-        json.dumps(
-            {
-                "models": [
-                    {
-                        "id": GONE,
-                        "provider": "openai",
-                        "family": "luna",
-                        "source_url": "https://example.com",
-                        "retrieved": "2026-09-14",
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
-    )
-
-    catalogue.adopt(data, here, document)
-
-    assert _model(here, data, GONE) is not None
     assert GONE not in _lifecycle(data)
 
 
@@ -1756,7 +1680,7 @@ def test_a_day_any_complete_read_showed_the_model_is_not_absent(
     assert _model(here, data, GONE) is not None
 
 
-def test_a_grok_model_adopt_left_without_a_slug_is_present_by_the_slug_the_pass_writes(
+def test_a_grok_model_stored_without_a_slug_is_present_by_the_slug_the_pass_writes(
     tmp_path: Path,
 ) -> None:
     """The slug write-back runs before presence is judged."""
@@ -1779,7 +1703,6 @@ def test_a_grok_model_adopt_left_without_a_slug_is_present_by_the_slug_the_pass_
                         "retrieved": "2026-09-10",
                     }
                 ],
-                "plans": [],
             }
         ),
         encoding="utf-8",

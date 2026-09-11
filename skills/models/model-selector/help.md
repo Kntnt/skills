@@ -12,8 +12,6 @@ model-selector - choose the model and deliberation level that finishes work for 
 
 **/model-selector** **status** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
-**/model-selector** **update** [**--data=**_PATH_] [**--** *INSTRUCTION*]
-
 **/model-selector** **evidence** [**--data=**_PATH_] [*KIND*] [**--** *INSTRUCTION*]
 
 **/model-selector** **objective** [**--data=**_PATH_] [**time**|**cost**] [**--** *INSTRUCTION*]
@@ -36,7 +34,7 @@ Enabling this Skill installs session lifecycle hooks into every supported Harnes
 
 Where nothing else has established how a finished unit went, one call to a model your profile makes reachable reads that unit's instruction and its result and returns a score and a line of reason. It is chosen as the work it is — reviewing what somebody else finished against a standard — at high stakes, because nothing downstream catches a wrong score, and on cost whatever your standing choice, nobody waiting on a grade: among the points the measurements are confident clear that bar, the one whose price per finished job is lowest, rather than the cheapest point there is — and where a model has already been measured reviewing on this machine and clears it, the judge is chosen among those before any point that is only estimated. The call itself is one bounded exchange whichever way it is asked for, so what the kind buys is a judge that can read the work rather than a cheaper call. Those two excerpts are used to make the call and are stored nowhere. What is retained is one row per unit: the kind, the model, the deliberation level, the score and who established it, the token counts the Harness exposed, the cost those tokens price at, the elapsed time, and whether the work was routed. Prompts, responses, reasoning, diffs, file contents, terminal output and absolute paths are never copied, because the row is built by copying named fields rather than by removing unwanted ones.
 
-The public facts this Skill reasons from — which models exist, what each supports, what each costs, and what each provider's subscriptions are called — reach it two ways. The catalogue pass asks Claude Code and Codex which models your account is offered, at which deliberation levels, and asks OpenRouter's public model list what each costs per token category, when it was released, and which Grok models there are; it starts no model and reads nothing else. Enabling this Skill on macOS installs one job into your own `launchd` account, `com.kntnt.model-selector.refresh`, that runs the pass once a day at 05:00 local time, on waking where the Mac slept through that time, and whenever the job is loaded: at Enabling itself, at each login, and when the Manager's refresh reloads a job that changed. Only the first of those runs on a given UTC day does anything. On an operating system with no scheduler adapter, `status` says the job is unsatisfied and the pass runs only when you start it. You can start it by hand at any time, from this Skill's directory, as `uv run scripts/catalogue.py refresh [--data=PATH]`, and it runs whether or not the day's pass already has. Either way one pass runs at a time, each source is given thirty seconds and the whole pass three hundred, and a pass that runs out of time keeps the facts it had; the daily pass says so in `status`, and a pass you start by hand says so in its own answer. The agent running `update` reads the providers' own pages, which is where the subscriptions are found. So the network is reached by the catalogue pass, by `update`, and by `setup` where it begins with that same reading because the catalogue has gone stale, and by nothing else at all. The catalogue pass is the one thing that reaches it unattended, and then only those three structured lists: nothing unattended runs a model or reads a page, and every other command works from what is already on disk. What either brings is validated before it is stored: an entry with nothing to attribute it to is discarded by name, a rate card in a currency other than USD or a unit other than per million tokens is refused rather than converted, a price that is neither null nor a finite, non-negative number is refused, and `capability`, a seeded prior that measurement refines, is never fetched. The prices are the ones OpenRouter publishes, per token category, never its blended average. A model missing from its maker's complete list on three consecutive days is removed from the catalogue, and every measurement row and waiting unit of it is deleted; a list that could not be read, or was read only in part, is no observation, and a model failing to run never counts. Every change the pass makes is journalled with its old and new value, and `status` shows when it last ran, what each source said, the changes of the last seven days, and every model it has removed.
+The public facts this Skill reasons from — which models exist, what each supports and what each costs — are kept current by the catalogue pass. What each provider's subscriptions are called and what they list at ships with the Skill, and changes only with a release of the collection, which `/kntnt update` brings in: no structured source lists them. The catalogue pass asks Claude Code and Codex which models your account is offered, at which deliberation levels, and asks OpenRouter's public model list what each costs per token category, when it was released, and which Grok models there are; it starts no model and reads nothing else. Enabling this Skill on macOS installs one job into your own `launchd` account, `com.kntnt.model-selector.refresh`, that runs the pass once a day at 05:00 local time, on waking where the Mac slept through that time, and whenever the job is loaded: at Enabling itself, at each login, and when the Manager's refresh reloads a job that changed. Only the first of those runs on a given UTC day does anything. On an operating system with no scheduler adapter, `status` says the job is unsatisfied and the pass runs only when you start it. You can start it by hand at any time, from this Skill's directory, as `uv run scripts/catalogue.py refresh [--data=PATH]`, and it runs whether or not the day's pass already has. Either way one pass runs at a time, each source is given thirty seconds and the whole pass three hundred, and a pass that runs out of time keeps the facts it had; the daily pass says so in `status`, and a pass you start by hand says so in its own answer. `setup` runs the pass once more at its end, so a fresh machine has a current catalogue straight away. So the network is reached by the catalogue pass and by nothing else at all, and then only those three structured lists: nothing this Skill does reads a page or runs a model to learn a fact, and every other command works from what is already on disk. What the pass brings is validated before it is stored: an entry with nothing to attribute it to is discarded by name, a rate card in a currency other than USD or a unit other than per million tokens is refused rather than converted, a price that is neither null nor a finite, non-negative number is refused, and `capability`, a seeded prior that measurement refines, is never fetched. The prices are the ones OpenRouter publishes, per token category, never its blended average. A model missing from its maker's complete list on three consecutive days is removed from the catalogue, and every measurement row and waiting unit of it is deleted; a list that could not be read, or was read only in part, is no observation, and a model failing to run never counts. Every change the pass makes is journalled with its old and new value, and `status` shows when it last ran, what each source said, the changes of the last seven days, and every model it has removed.
 
 Nothing waits for you. There is no queue to work through and no reminder placed where a model would read it. Disabling the Skill removes every hook it installed and the daily job, leaves every other job in your `launchd` account alone, and keeps what was measured; `reset --evidence` is the separate act that discards the measurement, and you have to ask for it by name. The one other deletion is of a model its maker no longer lists, whose own rows go when the catalogue pass removes it.
 
@@ -44,15 +42,11 @@ Nothing waits for you. There is no queue to work through and no reminder placed 
 
 **setup**
 
-Hold the interview and write the profile: Harnesses, the makers whose models you want, and how each maker is paid for on each channel. Run it again to review an existing profile.
+Hold the interview and write the profile: Harnesses, the makers whose models you want, and how each maker is paid for on each channel. It ends by running the catalogue pass once and reporting what each of its sources said. Run it again to review an existing profile.
 
 **status**
 
-Report the profile and its age, how fresh the catalogue's own facts are, when the catalogue pass last ran and what each of its sources said, the catalogue changes of the last seven days, every model the pass has removed with the three days it was missing and how many measurement rows and waiting units have been deleted for it, what has been measured, how many units wait to be graded and how long the oldest has waited, whether the judge is at its daily cap and when the cap frees, and the health of each Harness integration. It asks nothing, changes nothing, and reaches nothing.
-
-**update**
-
-Read the providers' own pages and adopt what they say — model lists, rate cards, and the subscriptions each provider markets — into the catalogue. The reading is the agent's; validating it, merging it and writing it is the Skill's. An entry arriving without a source it can attribute is discarded rather than stored, and a document that is not the catalogue's shape at all is refused whole.
+Report the profile and its age, when the catalogue pass last ran and what each of its sources said, the catalogue changes of the last seven days, every model the pass has removed with the three days it was missing and how many measurement rows and waiting units have been deleted for it, what has been measured, how many units wait to be graded and how long the oldest has waited, whether the judge is at its daily cap and when the cap frees, and the health of each Harness integration. It asks nothing, changes nothing, and reaches nothing.
 
 **evidence**
 
@@ -60,7 +54,7 @@ Report what has been measured, grouped by kind, model and deliberation level, wi
 
 **objective**
 
-Set the standing choice between time and cost that every answer asked for with no `--objective` ranks on, or, without an operand, say which is in force and whether it is your choice or the default. It survives `setup` and `update`.
+Set the standing choice between time and cost that every answer asked for with no `--objective` ranks on, or, without an operand, say which is in force and whether it is your choice or the default. It survives `setup` and the catalogue pass.
 
 **reset**
 
@@ -100,11 +94,11 @@ What the interview settled: Harnesses, the makers whose models you want, and one
 
 **~/.kntnt/model-selector/objective.json**
 
-Your standing choice between time and cost, written by `objective` alone and kept apart from the profile so that `setup` and `update` leave it standing. Absent, answers rank on cost. `reset` removes it.
+Your standing choice between time and cost, written by `objective` alone and kept apart from the profile so that `setup` and the catalogue pass leave it standing. Absent, answers rank on cost. `reset` removes it.
 
 **~/.kntnt/model-selector/catalogue.json**
 
-World facts written over the shipped seed by the catalogue pass and by `update` — exact model identities, family aliases, supported deliberation levels, rate cards, the slug OpenRouter routes each model by, and the subscriptions each provider markets, each carrying the address it was read from and the date it was read. The capability figures beside them are the seed's own, refined by measurement rather than by fetching.
+World facts written over the shipped seed by the catalogue pass — exact model identities, family aliases, supported deliberation levels, rate cards, release dates and the slug OpenRouter routes each model by, each carrying the address it was read from and the date it was read. The capability figures beside them are the seed's own, refined by measurement rather than by fetching, and the subscriptions each provider markets are the seed's alone.
 
 **~/.kntnt/model-selector/catalogue-journal.jsonl**
 
@@ -148,7 +142,7 @@ An incomplete form, an unsupported combination, or an option with no work to do 
 
 Nothing the selection engine answers is a refusal. A missing or unusable profile, an empty catalogue and an unreachable model are each a degraded answer naming your own seat, with a note saying which it was — a caller that must be stopped is stopped by something that knows what the work is worth.
 
-A page that says what the catalogue already held is a successful `update`. An `update` in a Harness with no web tool says so and changes nothing. A figure no measurement supports is reported absent rather than as a zero.
+A catalogue pass that changes nothing is a successful pass. A figure no measurement supports is reported absent rather than as a zero.
 
 ## EXAMPLES
 
@@ -180,7 +174,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the shipped selection engine, the interview's writer, the catalogue's own reader and validator, and the capture hooks. On macOS, `launchctl` loads and unloads the job that runs the catalogue pass daily; on an operating system with no scheduler adapter, the pass runs only when started by hand. The network is reached by the catalogue pass — which starts Claude Code and Codex only to ask for their model lists, and fetches OpenRouter's public model list, and is the one thing that reaches it unattended — by `update` and by `setup`, and by nothing else; every other command works from what is already on disk. Reading a provider's page needs whatever web tool your Harness gives the agent, and where it gives none, `update` says so and changes nothing. Grading a finished unit calls one model, chosen, among those your own profile makes reachable that the measurements are confident in, as the one whose price per finished job is lowest, and stops rather than inventing a number where none can be reached.
+`uv` runs the shipped selection engine, the interview's writer, the catalogue's own reader and validator, and the capture hooks. On macOS, `launchctl` loads and unloads the job that runs the catalogue pass daily; on an operating system with no scheduler adapter, the pass runs only when started by hand. The network is reached by the catalogue pass — which starts Claude Code and Codex only to ask for their model lists, and fetches OpenRouter's public model list — whether its daily job runs it, `setup` runs it at its end, or you start it by hand, and by nothing else; every other command works from what is already on disk. Grading a finished unit calls one model, chosen, among those your own profile makes reachable that the measurements are confident in, as the one whose price per finished job is lowest, and stops rather than inventing a number where none can be reached.
 
 ## SEE ALSO
 

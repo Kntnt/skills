@@ -60,14 +60,6 @@ CREATED_NOTE = (
     "started from now on rather than to one already running"
 )
 
-# What a sync with no valid profile to follow says it did, which is nothing.
-# The stand-in chooses no maker, and following it would delete every
-# definition the last real answers justified.
-UNTOUCHED_NOTE = (
-    "the generated agent definitions were left as they are, since a profile "
-    "choosing no maker would remove every one of them"
-)
-
 # What `_rates` answers with where a card was supplied and refused, which is
 # neither a card nor the absence of one. The complaint is already in the list
 # by then, so the marker only has to stop the channel being written.
@@ -205,8 +197,9 @@ def _noticed(channels: Sequence[Channel], cat: Catalogue) -> list[str]:
         if channel.plan is not None and offered and channel.plan not in offered:
             said.append(
                 f"{channel.plan!r} is not a plan the catalogue holds for "
-                f"{channel.provider}; it is recorded as given, and "
-                f"`/model-selector update` is what brings the plans up to date"
+                f"{channel.provider}; it is recorded as given. Plans come with a "
+                f"release of this collection, and `/kntnt update` is what brings "
+                f"them up to date"
             )
         if channel.gateway is not None and channel.rates is None:
             said.append(
@@ -277,40 +270,30 @@ def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
     )
 
 
-def apply(path: Path | None, data_dir: Path, agents: Path) -> dict[str, Any]:
-    """Write one supplied profile and sync the definitions, or only sync.
+def apply(path: Path, data_dir: Path, agents: Path) -> dict[str, Any]:
+    """Write one supplied profile and sync the definitions to it.
 
-    Without a profile this is the second half alone, which is what `update`
-    runs: the generated definitions say of themselves that `update` rewrites
-    this directory, and a catalogue that has just gained or lost a model has
-    changed which of them ought to exist. The profile in force is whatever is
-    on disk. Where no valid one is — none, one an older release wrote, or one
-    that cannot be read — nothing is synced and no directory is made: the
-    stand-in chooses no maker, so syncing to it would remove every definition
-    a real profile had justified, and the report says so and names the verb
-    that replaces it.
+    `setup` is the one caller. The catalogue pass resyncs the definitions
+    itself whenever it changes the catalogue, so nothing here syncs without a
+    profile to follow.
     """
 
     here = Path(__file__).resolve().parent.parent
     cat = catalogue.load(data_dir, here)
 
-    if path is None:
-        profile = profiles.load(data_dir, cat)
-    else:
-        try:
-            raw = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, ValueError) as problem:
-            return {
-                "ok": False,
-                "notes": [],
-                "problems": [f"{path} could not be read: {problem}"],
-            }
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as problem:
+        return {
+            "ok": False,
+            "notes": [],
+            "problems": [f"{path} could not be read: {problem}"],
+        }
 
-        validated, problems = validate(raw, cat)
-        if validated is None:
-            return {"ok": False, "notes": [], "problems": problems}
-        profiles.write(data_dir, validated)
-        profile = validated
+    profile, problems = validate(raw, cat)
+    if profile is None:
+        return {"ok": False, "notes": [], "problems": problems}
+    profiles.write(data_dir, profile)
 
     stated = {
         "path": str(data_dir / profiles.PROFILE_FILE),
@@ -319,17 +302,6 @@ def apply(path: Path | None, data_dir: Path, agents: Path) -> dict[str, Any]:
         "makers": list(profile.makers),
         "channels": len(profile.channels),
     }
-    if profile.source == "fallback":
-        return {
-            "ok": True,
-            "problems": [],
-            "notes": [],
-            "profile": stated,
-            "definitions": None,
-            "created_directory": False,
-            "note": f"{profile.problem}; {UNTOUCHED_NOTE}",
-        }
-
     synced = launch.sync_definitions(agents, launch.definitions(profile, cat))
 
     return {
@@ -407,6 +379,8 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     args = parser.parse_args(argv)
     if args.objective is not None and args.path is not None:
         parser.error("--objective is written on its own, without a profile")
+    if args.objective is None and args.path is None:
+        parser.error("name the profile to write, or give --objective")
     return args
 
 
@@ -419,7 +393,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     try:
         report = apply(
-            Path(args.path).expanduser() if args.path else None,
+            Path(args.path).expanduser(),
             _data_dir(args.data),
             _agents_directory(args.agents),
         )

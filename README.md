@@ -140,7 +140,7 @@ Run `/write [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--fro
 
 Describe a piece of work and get back the model and reasoning effort expected to finish it for the least money, or in the least time where `/model-selector objective time` has made that your standing choice — among those its measurements say will actually get the job done, the one whose price divided by its chance of success is lowest, a cheap run that has to be redone being the expensive one, rather than the cheapest sticker or the strongest model — with what that estimate rests on, and the alternatives it beat. It is advice and never a refusal: with no profile, or nothing reachable, the answer is the seat you already have and a note saying why. Once Enabled it also measures substantial units of work in the harnesses on this machine — delegated work, and a session's own work that ran ten minutes or more, never quick exchanges — grades what nothing else judged with one bought model call, and keeps counts, prices and dates, never your prompts, code, or paths.
 
-Run `/model-selector <work>` for an answer and `/model-selector setup` to say whose models you want and how you pay for them; `status`, `update`, `evidence`, `objective`, and `reset` are the rest. Read `/model-selector --help` for what enabling it measures before you enable it.
+Run `/model-selector <work>` for an answer and `/model-selector setup` to say whose models you want and how you pay for them; `status`, `evidence`, `objective`, and `reset` are the rest. Read `/model-selector --help` for what enabling it measures before you enable it.
 
 ### rename-invoices
 

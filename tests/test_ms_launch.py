@@ -299,7 +299,10 @@ def test_the_definition_matrix_covers_every_anthropic_point_and_nothing_else() -
         "model": "claude-opus-5",
         "effort": "high",
     }
-    assert "update" in body.split("---\n")[2]
+    header = body.split("---\n")[2]
+    assert "daily catalogue pass" in header
+    assert "`/model-selector setup`" in header
+    assert "update" not in header
 
 
 def test_a_model_with_no_effort_control_gets_a_definition_with_no_effort_line() -> None:

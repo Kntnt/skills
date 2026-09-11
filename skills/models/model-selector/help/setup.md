@@ -16,13 +16,15 @@ Which Harnesses this covers. The ones found on this machine are offered as the a
 
 Which makers you want models from: Claude, GPT and Grok, each shown with the models it currently offers. Every model a maker you choose offers is a candidate, one it releases later included, and only a model of a maker you choose is ever recommended, however good another maker's models look, unless a call asks for `--scope=all`, which admits the whole catalogue. You do not pick models one by one: the measurements decide between them, and a model you want for one piece of work is named with `--model`.
 
-How each maker is paid for, per Harness — because the same maker is often reached two ways at once, on a plan in one Harness and on API rates in another, and the two cost differently. A subscription answer names the plan under the whole name its provider markets it by, and the plans you are offered are the ones the catalogue holds, each with what it lists at and the date that was retrieved. An API answer is a rate card: reached directly, the catalogue already holds one per model, the price OpenRouter publishes; reached through a gateway, that price is the charge itself through OpenRouter and a different arrangement's bill through any other, so you are asked what you pay per million tokens, and what you record replaces it.
+How each maker is paid for, per Harness — because the same maker is often reached two ways at once, on a plan in one Harness and on API rates in another, and the two cost differently. A subscription answer names the plan under the whole name its provider markets it by, and the plans you are offered are the ones the catalogue holds, each with what it lists at. An API answer is a rate card: reached directly, the catalogue already holds one per model, the price OpenRouter publishes; reached through a gateway, that price is the charge itself through OpenRouter and a different arrangement's bill through any other, so you are asked what you pay per million tokens, and what you record replaces it.
 
-Nothing you can look up is asked of you. Prices, model lists, subscriptions, release dates and each provider's own description of what its models are for are fetched, dated and attributed, and refreshed by `update`. What a plan costs you per month is shown as the catalogue's own figure and is not recorded, nothing in this Skill having a use for it. An answer you have already made unambiguous is not asked for again. The complete profile is shown before it is written, and nothing is written until you accept it.
+Nothing the catalogue holds is asked of you. Prices, model lists and release dates are kept current by the catalogue pass, dated and attributed, and the subscriptions each provider sells come with a release of this collection. What a plan costs you per month is shown as the catalogue's own figure and is not recorded, nothing in this Skill having a use for it. An answer you have already made unambiguous is not asked for again. The complete profile is shown before it is written, and nothing is written until you accept it.
 
-Every figure here is USD per million tokens and nothing converts. A rate card in another currency is refused by name rather than added to a dollar bill in silence. An answer that matched none of the options offered is recorded as you typed it and said to be one, because that means the catalogue has fallen behind rather than that your answer is wrong — `update` is what brings the plans back into line.
+Every figure here is USD per million tokens and nothing converts. A rate card in another currency is refused by name rather than added to a dollar bill in silence. An answer that matched none of the options offered is recorded as you typed it and said to be one, because that means the catalogue has fallen behind rather than that your answer is wrong — plans come with a release of this collection, and `/kntnt update` is what brings a newer one in.
 
 The profile holds no credentials. Writing it also regenerates the subagent definitions that make a deliberation level launchable — one per Anthropic model and supported level, where Anthropic is a maker you chose — and removes the ones your new answers no longer justify. Where that directory had to be created, the definitions reach sessions started from then on rather than the one you are in.
+
+Once the profile is written, or you decline the review, setup runs the catalogue pass once and reports what each of its sources said, so the catalogue is current straight away rather than after the next daily pass. It does not run where the profile was refused.
 
 Until it is held, nothing is chosen for you. Without a profile — or with one from before makers were chosen, which is read as none rather than translated, or one that cannot be read — every answer not locked to a model is the seat you already have, with a note naming this command, and `status` says the same. The generated subagent definitions are left as they are until a profile says which makers to use.
 
@@ -44,8 +46,8 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the writer that validates the profile against the catalogue and syncs the generated subagent definitions. Where the catalogue has gone stale the interview opens by reading the providers' pages, exactly as `update` does, which needs whatever web tool your Harness gives the agent; without one it offers what is already on disk.
+`uv` runs the writer that validates the profile against the catalogue and syncs the generated subagent definitions, and the catalogue pass setup ends with, which reaches only Claude Code's and Codex's model lists and OpenRouter's public one. No web page is read.
 
 ## SEE ALSO
 
-**/model-selector status --help**, **/model-selector update --help**, **/model-selector reset --help**
+**/model-selector status --help**, **/model-selector reset --help**
