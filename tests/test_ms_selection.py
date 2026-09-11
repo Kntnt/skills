@@ -1728,6 +1728,37 @@ def test_with_nothing_set_an_answer_ranks_on_cost(
     assert not (tmp_path / "objective.json").exists()
 
 
+# The sentences that tied ranking on time to the caller asking for it,
+# whitespace-collapsed and lowered before matching. A call is ranked on time
+# where the caller asks, and equally where the user's standing choice says so,
+# so a surface still naming the caller as the only way there states the rule
+# ADR-0189 replaced (issue #307).
+CALLER_ONLY_TIME: tuple[str, ...] = (
+    "where the caller asked for time",
+    "where the caller asks for time",
+    "caller asked for time",
+    "in the caller's terms",
+)
+
+
+def test_no_shipped_surface_ties_ranking_on_time_to_the_caller(
+    subject: Path,
+) -> None:
+    """Time is reached from the caller's `--objective` or the standing choice alike."""
+
+    text = " ".join(subject.read_text(encoding="utf-8").split()).lower()
+    assert [phrase for phrase in CALLER_ONLY_TIME if phrase in text] == []
+
+
+def test_a_step_up_is_ordered_on_time_wherever_the_call_is_ranked_on_time() -> None:
+    """The step is asked the way the first answer was, whatever set its objective."""
+
+    selection = _module("selection")
+    prose = " ".join((selection._after.__doc__ or "").split()).lower()
+
+    assert "where the call is ranked on time" in prose
+
+
 @pytest.mark.parametrize(
     "held",
     ("{not json", '{"objective": "fast"}', '{"objective": 1}', '["time"]', "{}"),

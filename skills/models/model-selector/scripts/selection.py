@@ -394,7 +394,7 @@ def _alongside(rows: Sequence[Scored], level: str | None) -> Scored:
 
 
 def _below(row: Scored, plain: Scored, objective: str) -> bool:
-    """Return whether one point is cheaper than the answer, in the caller's terms.
+    """Return whether one point is cheaper than the answer, on its objective.
 
     A point nothing can price is never cheaper than one that can be priced. An
     absence read as a nought is how an unmeasured configuration becomes the
@@ -432,8 +432,9 @@ def _after(
     answered with a cheaper guess. Where none has, the step is the likelier
     point with the lowest price per finished job, measured or not and with no
     floor. Either way every candidate is ordered on its price divided by its
-    chance of success, or on its elapsed time divided by it where the caller
-    asked for time. Nothing is appended above the top of the ladder:
+    chance of success, or on its elapsed time divided by it where the call is
+    ranked on time, whether the caller's `--objective` or the user's standing
+    choice set it. Nothing is appended above the top of the ladder:
     where the failed point was already the likeliest thing available, the
     caller is told so and offered it again, because there is no step and
     pretending otherwise would spend a retry on the same seat under a
