@@ -10,11 +10,11 @@ explain - explain the reply just given, or whatever the instruction names, bette
 
 ## DESCRIPTION
 
-`explain` answers for a clever but busy reader who does not keep track of the work in progress. Without an instruction it explains the reply just given; with one it explains whatever the instruction names — a decision, a term, a part of the answer, a thing said earlier in the conversation.
+`explain` answers for a clever but busy reader who owns the outcome and has not followed the work. Without an instruction it explains the reply just given; with one it explains whatever the instruction names — a decision, a term, a part of that reply, a thing said earlier in the conversation.
 
-This is an explanation and not a summary. The Skill starts from what the reader needs in their current role, opens with the context they need to follow the answer, and then explains the matter better than the earlier reply did rather than restating it in fewer words. Terms and abbreviations that are not widely established are explained before they are used.
+This is an explanation and not a summary. The reply opens with the context the reader needs, explains the matter better than the earlier reply did rather than restating it in fewer words, and explains any term or abbreviation that is not widely established where it introduces it.
 
-What comes back keeps facts, negations, quantities, exceptions, conditions, and limitations that could change what the reader understands, decides, or has to do, and leaves out work logs, step-by-step narration, discarded approaches, and file-level mechanics unless they are material or asked for. Error reports, failing test output, security warnings, and confirmations for destructive actions keep their full content.
+What comes back keeps every fact, negation, quantity, exception, condition, and limitation that could change what the reader understands, decides, or has to do, and leaves out work logs, step-by-step narration, discarded approaches, and file-level mechanics unless they are material or asked for. Error reports, failing test output, security warnings, and confirmations for destructive actions keep their full content.
 
 Where a decision is expected of the reader, the reply gives a brief basis for it and a recommendation. Where an action is expected, it says why. Where nothing is required, the reply says nothing about it and stops.
 
@@ -24,17 +24,15 @@ The Skill writes one reply and changes nothing. It adopts no standing mode, and 
 
 *INSTRUCTION*
 
-An instruction on what to explain and how. It may name the subject, narrow it to a part of the earlier reply, name a language, or constrain the output. It is optional, and everything after the Skill name belongs to it, dash-prefixed words included — this grammar declares no flag, so a token such as `--foo` is part of the instruction rather than an undeclared option.
-
-This is the same instruction the reserved separator carries, offered without the separator because a grammar with no command path has no verb for prose to shadow.
+An instruction on what to explain and how. It may name the subject, narrow it to a part of the earlier reply, name a language, or constrain the output. It is optional, and everything after the Skill name belongs to it, dash-prefixed words included — this grammar declares no flag, so a token such as `--foo` is part of the instruction rather than an undeclared option. The reserved separator carries the same instruction, and the two spellings are one invocation with one meaning.
 
 ## DIAGNOSTICS
 
-The Skill takes one optional free-text instruction and no options. It declares no flag, so a dash-prefixed token is read as part of the instruction; where a flag would have no work to do it is refused rather than ignored, never accepted and quietly dropped. A malformed Envelope — a separator with no instruction behind it — names the error, prints the SYNOPSIS, writes nothing, and points to `/explain --help`.
+The Skill takes one optional free-text instruction and no options. It declares no flag, so a dash-prefixed token is read as part of the instruction. A malformed Envelope — a separator with no instruction behind it — is refused rather than ignored: the Skill names the error, prints the SYNOPSIS, writes nothing, and points to `/explain --help`.
 
-An instruction that would widen the Skill's responsibility, such as one asking it to change a file or run a command instead of explaining something, takes the context refusal rather than the syntax refusal.
+An instruction that would widen the Skill, such as one asking it to change a file or run a command instead of explaining something, takes the context refusal rather than the syntax refusal.
 
-Where no reply precedes the invocation and no instruction names a subject, the Skill says so; that is reported and is not an error.
+Where nothing precedes the invocation and no instruction names a subject, the Skill says so and explains nothing; that is reported and is not an error.
 
 ## EXAMPLES
 
@@ -44,7 +42,7 @@ Explain the reply above, with no further instruction.
 /explain
 ```
 
-Explain one part of it, in Swedish. The reserved separator is accepted here and changes nothing, this grammar having no command path for the text to be mistaken for.
+Explain one part of it, in Swedish. The two spellings are one invocation.
 
 ```
 /explain bara säkerhetsdelen
@@ -69,4 +67,4 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## SEE ALSO
 
-**/delegation --help**, **/kntnt select**
+**/kntnt select**
