@@ -10,8 +10,9 @@ wrong: the seed shipped beside this file is what the Skill knows on the day it
 is installed, and `catalogue.json` under the data directory is whatever a later
 catalogue pass or `update` established. The refreshed file wins per model id,
 because a fact read this week outranks a fact this repository froze at
-release — except for the fields nobody fetches, which only a release of the
-seed can teach, and which a refreshed entry carrying none of them takes from
+release — except for the fields `update` never reads — `capability`, which
+nothing fetches, and `gateways`, which only the seed and the catalogue pass's
+matching write — and which a refreshed entry carrying none of them takes from
 the seed.
 
 Nothing here raises. A catalogue that cannot be read is a catalogue that says
@@ -219,7 +220,7 @@ def load(data_dir: Path, here: Path) -> Catalogue:
 
 
 def _with_seeded_fields(model: Model, seeded: Model | None) -> Model:
-    """Return a refreshed *model*, the seed filling what nothing fetches.
+    """Return a refreshed *model*, the seed filling what `update` never reads.
 
     A refreshed entry replaces the seeded one whole, which is right for every
     fact `update` reads and wrong for the ones it never does: a catalogue

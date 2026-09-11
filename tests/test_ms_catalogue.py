@@ -747,7 +747,7 @@ def test_a_refreshed_entry_carrying_no_gateways_keeps_the_seed_s(
 def test_a_refreshed_entry_carrying_no_capability_keeps_the_seed_s(
     tmp_path: Path,
 ) -> None:
-    """Capability is the other field nothing fetches, and falls back the same way."""
+    """Capability, which nothing fetches, falls back the same way."""
 
     entry = _seed_entry("grok-4.6")
     entry["capability"] = None
