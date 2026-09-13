@@ -62,6 +62,7 @@ MANIFEST_FIELDS = {
     "outcome",
     "charset",
     "rung",
+    "robots_tag",
 }
 
 # The attributes a saved page references another file through.
@@ -1322,6 +1323,103 @@ def test_robots_txt_applies_the_group_for_the_runs_own_token_before_the_star(
     assert not site.requested("/docs/public/")
 
 
+def test_a_nofollow_robots_tag_keeps_a_pages_links_unfollowed_unless_robots_are_ignored(
+    site: Site, tmp_path: Path
+) -> None:
+    site.html(
+        "/docs/",
+        '<a href="meta">Meta</a><a href="token">Token</a><a href="other">Other</a>'
+        '<a href="header">Header</a><a href="theirs">Theirs</a>',
+    )
+    site.html(
+        "/docs/meta",
+        '<meta name="robots" content="noindex, NoFollow">'
+        '<a href="from-meta">On</a><img src="meta.png">',
+    )
+    site.html(
+        "/docs/token",
+        '<meta name="kntnt-mirror" content="none"><a href="from-token">On</a>',
+    )
+    site.html(
+        "/docs/other",
+        '<meta name="googlebot" content="nofollow"><a href="from-other">On</a>',
+    )
+    site.add(
+        "/docs/header",
+        Response(
+            b'<a href="from-header">On</a>',
+            headers={"X-Robots-Tag": "noarchive, nofollow"},
+        ),
+    )
+    site.add(
+        "/docs/theirs",
+        Response(
+            b'<a href="from-theirs">On</a>',
+            headers={"X-Robots-Tag": "googlebot: nofollow"},
+        ),
+    )
+    for path in ("from-meta", "from-token", "from-other", "from-header", "from-theirs"):
+        site.html(f"/docs/{path}", "<p>on</p>")
+    site.binary("/docs/meta.png", b"png")
+
+    obeyed = tmp_path / "obeyed"
+    obeyed.mkdir()
+    result = mirror(obeyed, "--output=out", site.url("/docs/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    for page in ("meta", "token", "header"):
+        assert site.requested(f"/docs/{page}"), (
+            f"a nofollow page is still saved: {page}"
+        )
+        assert not site.requested(f"/docs/from-{page}"), page
+    assert site.requested("/docs/meta.png"), "resources are exempt"
+    assert site.requested("/docs/from-other"), (
+        "a tag for another crawler binds nobody here"
+    )
+    assert site.requested("/docs/from-theirs"), "so does a header for another crawler"
+    assert count(result.stdout, "Pages whose links nofollow stopped") == 3
+    rows = {row["url"]: row for row in manifest(obeyed / "out")}
+    assert rows[site.url("/docs/header")]["robots_tag"] == ["noarchive, nofollow"]
+    assert rows[site.url("/docs/meta")]["robots_tag"] is None
+
+    site.requests.clear()
+    ignored = tmp_path / "ignored"
+    ignored.mkdir()
+    result = mirror(ignored, "--output=out", "--ignore-robots", site.url("/docs/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    for page in ("meta", "token", "header"):
+        assert site.requested(f"/docs/from-{page}"), page
+    assert count(result.stdout, "Pages whose links nofollow stopped") == 0
+
+
+def test_a_nofollow_header_still_binds_a_page_a_rerun_finds_unchanged(
+    site: Site, tmp_path: Path
+) -> None:
+    site.html("/docs/", '<a href="header">Header</a>')
+    site.add(
+        "/docs/header",
+        Response(
+            b'<a href="beyond">On</a>',
+            headers={"X-Robots-Tag": "nofollow", "ETag": '"h1"'},
+        ),
+    )
+    site.html("/docs/beyond", "<p>on</p>")
+
+    first = mirror(tmp_path, "--output=out", site.url("/docs/"))
+    assert first.returncode == 0, (first.stdout, first.stderr)
+    site.requests.clear()
+    second = mirror(tmp_path, "--output=out", site.url("/docs/"))
+
+    assert second.returncode == 0, (second.stdout, second.stderr)
+    [request] = site.requested("/docs/header")
+    assert request.headers["If-None-Match"] == '"h1"'
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    assert rows[site.url("/docs/header")]["outcome"] == "unchanged"
+    assert rows[site.url("/docs/header")]["robots_tag"] == ["nofollow"]
+    assert not site.requested("/docs/beyond"), "the 304 carries no X-Robots-Tag"
+
+
 def test_an_unreadable_robots_txt_allows_everything_and_is_reported(
     site: Site, tmp_path: Path
 ) -> None:
@@ -1444,6 +1542,8 @@ def test_the_manpage_states_what_the_crawl_does() -> None:
         "5000 pages and files",
         "differ only in case",
         "suspected JavaScript shell",
+        "`nofollow`",
+        "`X-Robots-Tag`",
     ):
         assert statement in description, statement
 

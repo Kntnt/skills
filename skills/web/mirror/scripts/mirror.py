@@ -17,8 +17,8 @@ browser is a fetcher beside `HttpFetcher` rather than threaded through it.
 
 A run has three passes. The fetch pass follows the start page's redirects and
 crawls from there, one request at a time and breadth first: every page and file
-in scope that a link, a sitemap or a feed names, as far as `robots.txt`
-and the page cap allow, and every resource those pages and their stylesheets
+in scope that a link, a sitemap or a feed names, as far as `robots.txt`,
+the `nofollow` of the page that names it, and the page cap allow, and every resource those pages and their stylesheets
 reference that `--resources` admits, where a browser on rung 3 or 4 loads every
 resource a page needs itself and `--resources` decides which of them are saved;
 sitemaps and feeds are read, never saved.
@@ -311,6 +311,14 @@ INFLATED_LIMIT = 50 * 1024 * 1024
 # A suspected JavaScript shell: scripts, and less text than this outside them.
 SHELL_TEXT_LIMIT = 200
 SHELL_HIDDEN_TAGS = ("script", "style", "noscript", "template")
+
+# The robots directives that keep a page's links unfollowed; `noindex` is about
+# search engines and binds no copy. A directive that takes a value names it after
+# a colon, so a colon after one of these names no crawler.
+NOFOLLOW_DIRECTIVES = frozenset({"nofollow", "none"})
+VALUED_DIRECTIVES = frozenset(
+    {"unavailable_after", "max-snippet", "max-image-preview", "max-video-preview"}
+)
 
 # The mark a file takes when a case-folding file system already holds its name.
 CASE_MARK = "~"
@@ -684,6 +692,7 @@ class Fetched:
     unchanged: bool = False  # A `304`: the bytes are those an earlier run saved.
     stored: PurePosixPath | None = None  # Where an unchanged file's bytes are.
     blocked: str | None = None  # What made the answer a block, as the report names it.
+    robots_tag: tuple[str, ...] = ()  # Every `X-Robots-Tag` header, as sent.
     captured: list[Fetched] = field(
         default_factory=list
     )  # What a browser loaded with it.
@@ -900,6 +909,7 @@ class HttpFetcher:
             charset=charset,
             etag=response.headers.get("ETag"),
             last_modified=response.headers.get("Last-Modified"),
+            robots_tag=tuple(response.headers.get_list("X-Robots-Tag")),
         )
         headers = response.headers.multi_items()
         html = is_html(content_type, fetched.final_url)
@@ -1210,7 +1220,14 @@ class BrowserFetcher:
         content_type, charset = header_type(headers)
         if content_type is None and main is not None:
             content_type = header_type([("Content-Type", har_mime(main))])[0]
-        fetched = Fetched(final_url, status=status, content_type=content_type)
+        fetched = Fetched(
+            final_url,
+            status=status,
+            content_type=content_type,
+            robots_tag=tuple(
+                value for name, value in headers if name.lower() == "x-robots-tag"
+            ),
+        )
 
         # A page is its rendered DOM, judged with its scripts and saved without.
         if is_html(content_type, final_url):
@@ -1743,6 +1760,39 @@ def feed_entries(body: bytes, base: str) -> list[str]:
     return found
 
 
+def robots_directives(values: Iterable[str], token: str) -> set[str]:
+    """The robots directives *values* give the product token *token*, lowercased.
+
+    Each value is a comma-separated list. One that opens with a crawler's name
+    and a colon, as an `X-Robots-Tag` may, binds that crawler alone.
+    """
+
+    directives: set[str] = set()
+    for value in values:
+        name, colon, rest = value.partition(":")
+        crawler = name.strip().lower()
+        if colon and crawler not in VALUED_DIRECTIVES and "," not in name:
+            if crawler != token:
+                continue
+            value = rest
+        directives.update(part.strip().lower() for part in value.split(","))
+    return directives
+
+
+def meta_robots(tree: LexborHTMLParser, token: str) -> list[str]:
+    """The `content` of every robots `meta` element a page addresses to *token*.
+
+    `name="robots"` addresses every crawler, and a crawler's own product token
+    it alone.
+    """
+
+    return [
+        node.attributes.get("content") or ""
+        for node in tree.css("meta[name][content]")
+        if (node.attributes.get("name") or "").strip().lower() in ("robots", token)
+    ]
+
+
 def is_suspected_shell(text: str) -> bool:
     """Whether a page carries scripts but almost no text a reader would see.
 
@@ -2017,6 +2067,9 @@ class Record:
             "status": fetched.status if fetched else None,
             "content_type": fetched.content_type if fetched else None,
             "charset": fetched.charset if fetched else None,
+            "robots_tag": list(fetched.robots_tag)
+            if fetched and fetched.robots_tag
+            else None,
             "size": fetched.size if fetched else None,
             "local_path": str(self.local_path) if self.local_path else None,
             "sha256": fetched.sha256 if fetched else None,
@@ -2083,6 +2136,7 @@ class Mirror:
         self.token = product_token(options.user_agent)
         self.admitted = 0
         self.shells = 0
+        self.nofollowed = 0  # Pages whose links a `nofollow` kept unfollowed.
         self.last_request: float | None = None
         self.previous: dict[str, dict[str, object]] = {}
         self.previous_output: Path | None = None
@@ -2329,6 +2383,7 @@ class Mirror:
             status=answer.status,
             content_type=answer.content_type or earlier_type,
             charset=answer.charset or optional_text(row.get("charset")),
+            robots_tag=answer.robots_tag or earlier_robots_tag(row),
             etag=answer.etag or optional_text(row.get("etag")),
             last_modified=answer.last_modified
             or optional_text(row.get("last_modified")),
@@ -2464,7 +2519,14 @@ class Mirror:
             tree = LexborHTMLParser(text)
             found = html_references(tree, fetched.final_url)
             found.extend(item.final_url for item in fetched.captured)
-            if self._in_scope(record.final):
+            follows = self.options.links or self.options.feeds
+            if (
+                self._in_scope(record.final)
+                and follows
+                and self._nofollow(tree, fetched)
+            ):
+                self.nofollowed += 1
+            elif self._in_scope(record.final):
                 if self.options.links:
                     links = html_links(tree, fetched.final_url)
                 if self.options.feeds:
@@ -2481,6 +2543,18 @@ class Mirror:
             self._take_page(reference, SOURCE_LINK, record.url)
         for reference in feeds:
             self._read_feed(reference, SOURCE_LINK, record.url)
+
+    def _nofollow(self, tree: LexborHTMLParser, fetched: Fetched) -> bool:
+        """Whether a page's robots `meta` elements or headers keep its links unfollowed.
+
+        Resources are exempt, as they are from `robots.txt`, and
+        `--ignore-robots` obeys neither.
+        """
+
+        if self.options.ignore_robots:
+            return False
+        values = [*meta_robots(tree, self.token), *fetched.robots_tag]
+        return bool(robots_directives(values, self.token) & NOFOLLOW_DIRECTIVES)
 
     def _take_resource(self, reference: str, document: Record) -> None:
         url = self._normal(reference)
@@ -2865,6 +2939,7 @@ class Mirror:
         lines.append(f"Over the cap: {over_cap}")
         lines.append(f"Absent: {len(self.absent)}")
         lines.append(f"Suspected JavaScript shells: {self.shells}")
+        lines.append(f"Pages whose links nofollow stopped: {self.nofollowed}")
         lines.append(f"Blocked: {len(blocked)}")
         lines.append(
             "Hosts that stayed on rung 1: "
@@ -2978,6 +3053,15 @@ def optional_text(value: object) -> str | None:
     """A manifest value as text, or None where it is not."""
 
     return value if isinstance(value, str) else None
+
+
+def earlier_robots_tag(row: dict[str, object]) -> tuple[str, ...]:
+    """The `X-Robots-Tag` headers a manifest row kept, which a `304` does not resend."""
+
+    value = row.get("robots_tag")
+    if not isinstance(value, list):
+        return ()
+    return tuple(item for item in value if isinstance(item, str))
 
 
 def human_size(size: int) -> str:
