@@ -16,11 +16,11 @@ second fetcher is added beside `HttpFetcher` rather than threaded through it.
 
 A run has three passes. The fetch pass follows the start page's redirects and
 crawls from there, one request at a time and breadth first: every page and file
-under the root that a link reaches, as far as `robots.txt` and the page cap
-allow, and every resource those pages and their stylesheets reference that
-`--resources` admits. The placement pass maps every fetched URL to a path, keeps
-HTML and CSS as served under `.mirror/raw/`, and puts every other file straight
-into the tree. The rewrite pass derives the tree's HTML and CSS from the raw
+under the root that a link, a sitemap or a feed names, as far as `robots.txt`
+and the page cap allow, and every resource those pages and their stylesheets
+reference that `--resources` admits; sitemaps and feeds are read, never saved.
+The placement pass maps every fetched URL to a path, keeps HTML and CSS as
+served under `.mirror/raw/`, and puts every other file straight into the tree. The rewrite pass derives the tree's HTML and CSS from the raw
 copies, so a later run can rewrite again without fetching.
 """
 
@@ -37,6 +37,7 @@ import shutil
 import sys
 import tempfile
 import time
+import zlib
 from collections import deque
 from collections.abc import Callable, Iterable, Iterator
 from contextlib import contextmanager, nullcontext
@@ -46,6 +47,7 @@ from email.utils import parsedate_to_datetime
 from pathlib import Path, PurePosixPath
 from typing import Protocol
 from urllib.parse import quote, unquote_to_bytes, urljoin, urlsplit, urlunsplit
+from xml.etree import ElementTree
 
 import httpx
 import tinycss2
@@ -91,16 +93,26 @@ KIND_PAGE = "page"
 KIND_RESOURCE = "resource"
 KIND_FILE = "file"  # Linked from a page, or the start page, and no HTML itself.
 KIND_ROBOTS = "robots"
+KIND_SITEMAP = "sitemap"
+KIND_FEED = "feed"
 SOURCE_START = "start"
 SOURCE_RESOURCE = "resource"
 SOURCE_LINK = "link"
 SOURCE_ROBOTS = "robots"
+SOURCE_SITEMAP = "sitemap"
+SOURCE_FEED = "feed"
+SOURCE_PROBE = "probe"  # A well-known location, tried whatever names it.
 OUTCOME_FETCHED = "fetched"
 OUTCOME_OUT_OF_SCOPE = "out-of-scope"
 OUTCOME_FAILED = "failed"
 OUTCOME_REDIRECT_OUT = "redirect-out"
 OUTCOME_ROBOTS = "robots"
 OUTCOME_OVER_CAP = "over-cap"
+OUTCOME_MISSING = "missing"
+
+# What names a page or file the crawl may take, and the documents read, not saved.
+PAGE_SOURCES = (SOURCE_LINK, SOURCE_SITEMAP, SOURCE_FEED)
+READ_KINDS = (KIND_SITEMAP, KIND_FEED)
 
 # The crawl: its default cap on pages and files, and the pace between requests.
 DEFAULT_MAX_PAGES = 5000
@@ -108,6 +120,17 @@ DEFAULT_DELAY = 0.0
 
 # `robots.txt`: where it is, and the file it is never saved as.
 ROBOTS_PATH = "/robots.txt"
+
+# Sitemaps and feeds: the well-known locations tried every run, the answers
+# that say one is not there, the media types that make an `alternate` a feed,
+# and the most a compressed sitemap or feed is inflated to, the sitemap
+# protocol's own limit.
+SITEMAP_PATHS = ("/sitemap.xml", "/sitemap_index.xml", "/wp-sitemap.xml")
+FEED_PATH = "feed/"
+MISSING_STATUSES = frozenset({404, 410})
+FEED_TYPES = frozenset({"application/rss+xml", "application/atom+xml"})
+GZIP_MAGIC = b"\x1f\x8b"
+INFLATED_LIMIT = 50 * 1024 * 1024
 
 # A suspected JavaScript shell: scripts, and less text than this outside them.
 SHELL_TEXT_LIMIT = 200
@@ -846,7 +869,8 @@ def html_links(tree: LexborHTMLParser, url: str) -> list[str]:
     """The absolute URLs of every page and file a page links to.
 
     `a` and `area` with `href`, and `link` whose `rel` is `next`, `prev`,
-    `canonical` or `alternate`.
+    `canonical` or `alternate`. An `alternate` that names a feed is a feed
+    and only a feed, and is left to `html_feeds`.
     """
 
     base = document_base(tree, url)
@@ -855,11 +879,101 @@ def html_links(tree: LexborHTMLParser, url: str) -> list[str]:
     for node in tree.css(selector):
         if node.tag == "link":
             relations = set((node.attributes.get("rel") or "").lower().split())
-            if not relations & LINK_RELATIONS:
+            if not relations & LINK_RELATIONS or is_feed_link(node):
                 continue
         href = (node.attributes.get("href") or "").strip()
         if href:
             found.append(urljoin(base, href))
+    return found
+
+
+def is_feed_link(node: LexborNode) -> bool:
+    """Whether a `link` is an `alternate` whose type is RSS or Atom."""
+
+    relations = set((node.attributes.get("rel") or "").lower().split())
+    media_type = (node.attributes.get("type") or "").partition(";")[0]
+    return "alternate" in relations and media_type.strip().lower() in FEED_TYPES
+
+
+def html_feeds(tree: LexborHTMLParser, url: str) -> list[str]:
+    """The absolute URLs of every feed a page names through `link rel="alternate"`."""
+
+    base = document_base(tree, url)
+    return [
+        urljoin(base, href)
+        for node in tree.css("link[href]")
+        if is_feed_link(node) and (href := (node.attributes.get("href") or "").strip())
+    ]
+
+
+# --- Sitemaps and feeds -----------------------------------------------------------
+
+
+def xml_root(body: bytes) -> ElementTree.Element | None:
+    """The root element of a sitemap or feed, inflated where it is gzip, or None.
+
+    A document that is no XML, a soft 404 answering with a page for instance,
+    names nothing rather than failing the run.
+    """
+
+    if body.startswith(GZIP_MAGIC):
+        try:
+            body = zlib.decompressobj(wbits=31).decompress(body, INFLATED_LIMIT)
+        except zlib.error:
+            return None
+    try:
+        return ElementTree.fromstring(body)
+    except ElementTree.ParseError:
+        return None
+
+
+def local_name(element: ElementTree.Element) -> str:
+    """An element's name without its namespace."""
+
+    return str(element.tag).rpartition("}")[2]
+
+
+def sitemap_entries(body: bytes, base: str) -> tuple[list[str], list[str]]:
+    """The sitemaps an index names and the URLs a URL set names, each absolute."""
+
+    root = xml_root(body)
+    if root is None:
+        return [], []
+    wanted = {"sitemapindex": "sitemap", "urlset": "url"}.get(local_name(root))
+    locations = [
+        urljoin(base, child.text.strip())
+        for entry in root
+        if local_name(entry) == wanted
+        for child in entry
+        if local_name(child) == "loc" and child.text and child.text.strip()
+    ]
+    return (locations, []) if wanted == "sitemap" else ([], locations)
+
+
+def feed_entries(body: bytes, base: str) -> list[str]:
+    """The link of every item in an RSS feed and every entry in an Atom feed."""
+
+    root = xml_root(body)
+    if root is None:
+        return []
+    found: list[str] = []
+    for element in root.iter():
+        name = local_name(element)
+        if name not in ("item", "entry"):
+            continue
+        for child in element:
+            if local_name(child) != "link":
+                continue
+            text = (child.text or "").strip()
+            href = (child.get("href") or "").strip()
+            if name == "item" and text:
+                found.append(urljoin(base, text))
+            elif (
+                name == "entry"
+                and href
+                and child.get("rel", "alternate") == "alternate"
+            ):
+                found.append(urljoin(base, href))
     return found
 
 
@@ -999,6 +1113,7 @@ class Robots:
     rules: tuple[tuple[bool, re.Pattern[str], int], ...] = ()
     crawl_delay: float | None = None
     unreadable: bool = False
+    sitemaps: tuple[str, ...] = ()  # As written; they belong to no group.
 
     @classmethod
     def parse(cls, text: str, token: str) -> Robots:
@@ -1010,6 +1125,7 @@ class Robots:
 
         # Group the records: user-agent lines open a group, rules fill it.
         groups: list[tuple[list[str], list[tuple[bool, str]], list[float]]] = []
+        sitemaps: list[str] = []
         opening = False
         for raw in text.splitlines():
             line = raw.partition("#")[0].strip()
@@ -1017,7 +1133,10 @@ class Robots:
             if not colon:
                 continue
             key, value = key.strip().lower(), value.strip()
-            if key == "user-agent":
+            if key == "sitemap":
+                if value:
+                    sitemaps.append(value)
+            elif key == "user-agent":
                 if not opening:
                     groups.append(([], [], []))
                     opening = True
@@ -1058,7 +1177,7 @@ class Robots:
             for allow, pattern in group_rules
         )
         delays = [delay for _, _, group_delays in chosen for delay in group_delays]
-        return cls(rules, max(delays) if delays else None)
+        return cls(rules, max(delays) if delays else None, sitemaps=tuple(sitemaps))
 
     def allows(self, url: str) -> bool:
         """Whether the normalised *url* may be fetched: the longest match decides.
@@ -1153,6 +1272,8 @@ class Options:
     max_pages: int = DEFAULT_MAX_PAGES
     ignore_robots: bool = False
     links: bool = True
+    sitemaps: bool = True
+    feeds: bool = True
 
 
 class Mirror:
@@ -1204,6 +1325,12 @@ class Mirror:
         self.output = self.options.output or Path(self.root_host)
         self.admitted = 1
         self._settle_kind(start)
+
+        # Sitemaps and the well-known feeds before the crawl, then the start page.
+        if self.options.sitemaps:
+            self._read_sitemaps()
+        if self.options.feeds:
+            self._read_well_known_feeds()
         self._discover(start)
 
         # Every page, file and resource, breadth first, one request at a time.
@@ -1291,7 +1418,7 @@ class Mirror:
     def _fetch(self, record: Record, staging: Path | None) -> None:
         self.fetches += 1
         place = staging / str(self.fetches) if staging else None
-        follow = self._in_scope if record.source == SOURCE_LINK else None
+        follow = self._in_scope if record.source in PAGE_SOURCES else None
         record.fetched = self._request(record.url, place, follow)
         record.final_url = self._normal(record.fetched.final_url)
         record.timestamp = timestamp()
@@ -1327,12 +1454,16 @@ class Mirror:
         if fetched is None or fetched.body is None or record.final is None:
             return
         links: list[str] = []
+        feeds: list[str] = []
         if is_html(fetched.content_type, fetched.final_url):
             text = decode_html(fetched.body, fetched.charset)
             tree = LexborHTMLParser(text)
             found = html_references(tree, fetched.final_url)
-            if self.options.links and self._in_scope(record.final):
-                links = html_links(tree, fetched.final_url)
+            if self._in_scope(record.final):
+                if self.options.links:
+                    links = html_links(tree, fetched.final_url)
+                if self.options.feeds:
+                    feeds = html_feeds(tree, fetched.final_url)
             if record.kind == KIND_PAGE and is_suspected_shell(text):
                 self.shells += 1
         else:
@@ -1342,7 +1473,9 @@ class Mirror:
         for reference in found:
             self._take_resource(reference, record)
         for reference in links:
-            self._take_link(reference, record)
+            self._take_page(reference, SOURCE_LINK, record.url)
+        for reference in feeds:
+            self._read_feed(reference, SOURCE_LINK, record.url)
 
     def _take_resource(self, reference: str, document: Record) -> None:
         url = self._normal(reference)
@@ -1355,7 +1488,8 @@ class Mirror:
         declined = (OUTCOME_OUT_OF_SCOPE, OUTCOME_ROBOTS, OUTCOME_OVER_CAP)
         if existing is not None and not (
             admitted
-            and existing.source == SOURCE_LINK
+            and existing.kind == KIND_PAGE
+            and existing.source in PAGE_SOURCES
             and existing.fetched is None
             and existing.outcome in declined
         ):
@@ -1369,7 +1503,9 @@ class Mirror:
             resource.outcome = OUTCOME_OUT_OF_SCOPE
             self.log.decision(OUTCOME_OUT_OF_SCOPE, url)
 
-    def _take_link(self, reference: str, document: Record) -> None:
+    def _take_page(self, reference: str, source: str, discovered_from: str) -> None:
+        """Take a position on a page or file a link, a sitemap or a feed names."""
+
         url = self._normal(reference)
         if url is None:
             return
@@ -1383,7 +1519,7 @@ class Mirror:
             and self._in_scope(url)
         ):
             return
-        link = Record(url, KIND_PAGE, SOURCE_LINK, document.url)
+        link = Record(url, KIND_PAGE, source, discovered_from)
         self.records[url] = link
 
         # Scope first, then robots.txt, then the cap, which counts at admission.
@@ -1400,6 +1536,98 @@ class Mirror:
             return
         self.log.decision(link.outcome, url)
 
+    def _read_document(
+        self, reference: str, kind: str, source: str, discovered_from: str | None
+    ) -> Record | None:
+        """Read a sitemap or feed once: the record, where there is a body to read.
+
+        It is fetched with the run's identity and headers, obeys `robots.txt`,
+        and is recorded but never placed in the tree. A well-known location
+        that is not there is `missing`, which fails nothing.
+        """
+
+        url = self._normal(reference)
+        if url is None or url in self.records:
+            return None
+        record = Record(url, kind, source, discovered_from)
+        self.records[url] = record
+        if not self._robots_allow(url):
+            record.outcome = OUTCOME_ROBOTS
+            self.log.decision(OUTCOME_ROBOTS, url)
+            return None
+
+        fetched = self._request(url, None, keep=True)
+        record.fetched = fetched
+        record.final_url = self._normal(fetched.final_url)
+        record.timestamp = timestamp()
+        if fetched.succeeded and fetched.body is not None:
+            return record
+        record.outcome = (
+            OUTCOME_MISSING
+            if fetched.status in MISSING_STATUSES
+            and url in (*self._well_known_sitemaps(), *self._well_known_feeds())
+            else OUTCOME_FAILED
+        )
+        self.log.decision(record.outcome, url, fetched.error or str(fetched.status))
+        return None
+
+    def _well_known_sitemaps(self) -> list[str]:
+        """The sitemap locations a run tries at the root host's root."""
+
+        assert self.scope is not None
+        return [origin(self.scope.start) + path for path in SITEMAP_PATHS]
+
+    def _well_known_feeds(self) -> list[str]:
+        """The feed locations a run tries: at the root host's root, and under the root."""
+
+        assert self.scope is not None
+        root = origin(self.scope.start)
+        return [root + "/" + FEED_PATH, root + self.scope.prefix + FEED_PATH]
+
+    def _read_sitemaps(self) -> None:
+        """Read every sitemap the root host's `robots.txt` or a well-known location holds.
+
+        Indexes are followed recursively, each sitemap read once, and every URL
+        a URL set names is a candidate the crawl takes as it takes a link.
+        """
+
+        assert self.scope is not None
+        root = origin(self.scope.start)
+        robots = self._robots(root + "/")
+        robots_record = self.robots[root][0]
+        pending: deque[tuple[str, str, str | None]] = deque(
+            (urljoin(robots_record.url, named), SOURCE_ROBOTS, robots_record.url)
+            for named in robots.sitemaps
+        )
+        pending.extend((url, SOURCE_PROBE, None) for url in self._well_known_sitemaps())
+        while pending:
+            url, source, discovered_from = pending.popleft()
+            record = self._read_document(url, KIND_SITEMAP, source, discovered_from)
+            if record is None or record.fetched is None or record.fetched.body is None:
+                continue
+            base = record.fetched.final_url
+            sitemaps, pages = sitemap_entries(record.fetched.body, base)
+            pending.extend((child, SOURCE_SITEMAP, record.url) for child in sitemaps)
+            for page in pages:
+                self._take_page(page, SOURCE_SITEMAP, record.url)
+
+    def _read_well_known_feeds(self) -> None:
+        """Read `/feed/` at the root host's root and under the root prefix."""
+
+        for url in self._well_known_feeds():
+            self._read_feed(url, SOURCE_PROBE, None)
+
+    def _read_feed(
+        self, reference: str, source: str, discovered_from: str | None
+    ) -> None:
+        """Read a feed once, and take every item's link as a candidate."""
+
+        record = self._read_document(reference, KIND_FEED, source, discovered_from)
+        if record is None or record.fetched is None or record.fetched.body is None:
+            return
+        for page in feed_entries(record.fetched.body, record.fetched.final_url):
+            self._take_page(page, SOURCE_FEED, record.url)
+
     def _admits(self, url: str) -> bool:
         policy = self.options.resources
         if policy == "all":
@@ -1409,7 +1637,13 @@ class Mirror:
     # --- Placement and rewriting ----------------------------------------------
 
     def _fetched(self) -> list[Record]:
-        return [record for record in self.records.values() if record.final is not None]
+        """Every page, file and resource fetched: what the tree holds."""
+
+        return [
+            record
+            for record in self.records.values()
+            if record.final is not None and record.kind not in READ_KINDS
+        ]
 
     def _write(self) -> None:
         """Place every fetched file, rewrite from the raw copies, write the state."""
@@ -1532,10 +1766,18 @@ class Mirror:
 
         records = list(self.records.values())
         fetched = [record for record in records if record.final is not None]
-        size = sum((record.fetched.size or 0) for record in fetched if record.fetched)
+        saved = self._fetched()
+        size = sum((record.fetched.size or 0) for record in saved if record.fetched)
 
         def fetched_of(kind: str) -> int:
             return sum(1 for record in fetched if record.kind == kind)
+
+        def candidates_from(source: str) -> int:
+            return sum(
+                1
+                for record in records
+                if record.source == source and record.kind in (KIND_PAGE, KIND_FILE)
+            )
 
         def declined(outcome: str) -> int:
             return sum(1 for record in records if record.outcome == outcome)
@@ -1556,6 +1798,11 @@ class Mirror:
         lines.append(f"Files fetched: {fetched_of(KIND_FILE)}")
         lines.append(f"Resources fetched: {fetched_of(KIND_RESOURCE)}")
         lines.append(f"Total size: {human_size(size)}")
+        lines.append(f"Sitemaps read: {fetched_of(KIND_SITEMAP)}")
+        lines.append(f"Feeds read: {fetched_of(KIND_FEED)}")
+        lines.append(f"Candidates from links: {candidates_from(SOURCE_LINK)}")
+        lines.append(f"Candidates from sitemaps: {candidates_from(SOURCE_SITEMAP)}")
+        lines.append(f"Candidates from feeds: {candidates_from(SOURCE_FEED)}")
         lines.append(f"Out of scope: {declined(OUTCOME_OUT_OF_SCOPE)}")
         lines.append(f"Redirected out of scope: {declined(OUTCOME_REDIRECT_OUT)}")
         lines.append(f"Stopped by robots.txt: {declined(OUTCOME_ROBOTS)}")
@@ -1651,6 +1898,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-pages", default=str(DEFAULT_MAX_PAGES))
     parser.add_argument("--ignore-robots", action="store_true")
     parser.add_argument("--no-links", action="store_true")
+    parser.add_argument("--no-sitemap", action="store_true")
+    parser.add_argument("--no-feeds", action="store_true")
     parser.add_argument("url")
     arguments = parser.parse_args(argv)
 
@@ -1696,6 +1945,8 @@ def main(argv: list[str] | None = None) -> int:
         max_pages=int(arguments.max_pages),
         ignore_robots=arguments.ignore_robots,
         links=not arguments.no_links,
+        sitemaps=not arguments.no_sitemap,
+        feeds=not arguments.no_feeds,
     )
 
     # Run; a real run stages the files it downloads outside the output directory.
