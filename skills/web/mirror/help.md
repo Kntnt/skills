@@ -82,7 +82,7 @@ One line per request the run made, with its timestamp, method, URL, status and e
 
 **0**
 
-Everything in scope was fetched.
+Everything was fetched.
 
 **1**
 
