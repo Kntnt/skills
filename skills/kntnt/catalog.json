@@ -197,6 +197,18 @@
       "skills": [],
       "externals": [],
       "capabilities": []
+    },
+    {
+      "name": "mirror",
+      "category": "web",
+      "description": "Copy a web page and everything it needs to display to disk, so it opens in a browser with nothing fetched from the network.",
+      "digest": "7094031e5f849f396d6b77e31e671a933d5f56a46bbc9d46e1074fcc79d56071",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
     }
   ],
   "features": [

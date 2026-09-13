@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/github/license/Kntnt/skills)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/Kntnt/skills)](https://github.com/Kntnt/skills/releases/latest)
 
-You are in the right place if you want practical [agent skills](https://agentskills.io) for maintaining agent instructions, delegating work, shipping code, preparing tickets, editing prose, choosing AI models, and organizing accounting PDFs.
+You are in the right place if you want practical [agent skills](https://agentskills.io) for maintaining agent instructions, delegating work, shipping code, preparing tickets, editing prose, choosing AI models, organizing accounting PDFs, and saving web pages for offline reading.
 
 The collection works across Claude Code, Codex, OpenCode, and other harnesses. Its `kntnt` manager installs the skills you choose into every detected harness, while keeping machine-wide skills separate from project-specific ones.
 
@@ -141,6 +141,12 @@ Run `/model-selector <work>` for an answer and `/model-selector setup` to say wh
 Plan and apply deterministic filenames for accounting PDFs using extracted document evidence, an explicit document type, and configured locales. By default, it applies after confirmation; `--yes` skips the question and `--dry-run` only reports the plan.
 
 Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--yes|--dry-run]`.
+
+### mirror
+
+Save a web page to disk with everything it needs to display — images, stylesheets, scripts, fonts and media, on whatever host they are — and rewrite its references so the copy opens in a browser with nothing fetched from the network. Each run leaves a manifest of every URL it fetched and a log beside the copy; `--dry-run` shows what would be fetched without writing anything.
+
+Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--dry-run] <url>`.
 
 ## Features
 
