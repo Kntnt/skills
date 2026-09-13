@@ -943,6 +943,31 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("--type=x --config=a --no-config", None),
         ("--type", None),
     ],
+    "web/mirror": [
+        ("https://x.se/", {"flags": {}, "operands": ["https://x.se/"]}),
+        (
+            (
+                "--output=out --resources=in-scope --header='X-A: 1'"
+                " --header='Cookie: b=2' --user-agent=bot --dry-run https://x.se/docs/"
+            ),
+            {
+                "flags": {
+                    "--output": "out",
+                    "--resources": "in-scope",
+                    "--header": ["X-A: 1", "Cookie: b=2"],
+                    "--user-agent": "bot",
+                    "--dry-run": True,
+                },
+                "operands": ["https://x.se/docs/"],
+            },
+        ),
+        ("", None),
+        ("--dry-run", None),
+        ("--depth=2 https://x.se/", None),
+        ("https://x.se/ --dry-run", None),
+        ("--output https://x.se/", None),
+        ("--dry-run --dry-run https://x.se/", None),
+    ],
 }
 
 

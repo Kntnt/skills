@@ -1,0 +1,6 @@
+interface:
+  display_name: "Mirror"
+  short_description: "Save a web page for offline browsing"
+
+policy:
+  allow_implicit_invocation: false
