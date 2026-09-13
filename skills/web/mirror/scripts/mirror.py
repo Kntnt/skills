@@ -19,7 +19,9 @@ A run has three passes. The fetch pass follows the start page's redirects and
 crawls from there, one request at a time and breadth first: every page and file
 in scope that a link, a sitemap or a feed names, as far as `robots.txt`
 and the page cap allow, and every resource those pages and their stylesheets
-reference that `--resources` admits; sitemaps and feeds are read, never saved.
+reference that `--resources` admits, where a browser on rung 3 or 4 loads every
+resource a page needs itself and `--resources` decides which of them are saved;
+sitemaps and feeds are read, never saved.
 The placement pass maps every fetched URL to a path, keeps HTML and CSS as
 served under `.mirror/raw/`, a browser page as its rendered DOM without its
 scripts, and puts every other file straight into the tree.
@@ -730,9 +732,11 @@ class Fetcher(Protocol):
         returned in `body`. Any other body is written to *staging* and named in
         `staged`, or only counted when *staging* is None. Where *follow* says
         no to a redirect's target, the fetch stops there: `final_url` is that
-        target, `status` the redirect's, and `redirected_out` is set. With
-        *validators*, the request is conditional, and a `304` comes back as
-        that status with whatever validators it carries and no body. An answer
+        target, `status` the redirect's, and `redirected_out` is set; a
+        browser, which follows the redirect itself, has already loaded the
+        target by then. With *validators*, the request is conditional, and a
+        `304` comes back as that status with whatever validators it carries
+        and no body. An answer
         `block_reason` calls a block comes back with `blocked` set.
         """
         ...
