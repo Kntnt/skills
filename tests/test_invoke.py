@@ -976,7 +976,19 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("", None),
         ("--dry-run", None),
         ("--depth=2 https://x.se/", None),
+        (
+            "--no-links --no-sitemap --no-feeds https://x.se/",
+            {
+                "flags": {
+                    "--no-links": True,
+                    "--no-sitemap": True,
+                    "--no-feeds": True,
+                },
+                "operands": ["https://x.se/"],
+            },
+        ),
         ("--no-links=yes https://x.se/", None),
+        ("--no-feeds=yes https://x.se/", None),
         ("--max-pages https://x.se/", None),
         ("https://x.se/ --dry-run", None),
         ("--output https://x.se/", None),

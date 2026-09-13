@@ -6,15 +6,21 @@ mirror - copy a web page, the pages under it, and everything they need to disk, 
 
 ## SYNOPSIS
 
-**/mirror** [**--output=**_DIR_] [**--resources=**_all_|_in-scope_|_none_] [**--max-pages=**_N_] [**--delay=**_SECONDS_] [**--no-links**] [**--ignore-robots**] [**--header=**_HEADER_ ...] [**--user-agent=**_STRING_] [**--dry-run**] *URL* [**--** *INSTRUCTION*]
+**/mirror** [**--output=**_DIR_] [**--resources=**_all_|_in-scope_|_none_] [**--max-pages=**_N_] [**--delay=**_SECONDS_] [**--no-links**] [**--no-sitemap**] [**--no-feeds**] [**--ignore-robots**] [**--header=**_HEADER_ ...] [**--user-agent=**_STRING_] [**--dry-run**] *URL* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
-`mirror` copies a web page, and every page under it that its links reach, to disk so that it can be opened in a browser with nothing fetched from the network: an archive of a section as it looked, a copy to read without a connection, or a snapshot to work from.
+`mirror` copies a web page, and every page under it that its links, the site's sitemaps and its feeds reach, to disk so that it can be opened in a browser with nothing fetched from the network: an archive of a section as it looked, a copy to read without a connection, or a snapshot to work from.
 
-It follows the URL's redirects, and the page where they end is the start page. From there it crawls, one request at a time and breadth first: it saves the start page and every page and file under the root that can be reached by following links, together with everything each page needs to display: images, including those named in `srcset` and `picture`, stylesheets, scripts, fonts, video, audio, posters, text tracks, icons, preloaded files, the web manifest, and what `iframe`, `object` and `embed` show. Everything a stylesheet references through `url()` and `@import` is fetched too, recursively, and so is every `url()` in a `style` attribute. A resource is fetched whatever host it is on, unless **--resources** says otherwise.
+It follows the URL's redirects, and the page where they end is the start page. From there it crawls, one request at a time and breadth first: it saves the start page and every page and file under the root that a link, a sitemap or a feed names, together with everything each page needs to display: images, including those named in `srcset` and `picture`, stylesheets, scripts, fonts, video, audio, posters, text tracks, icons, preloaded files, the web manifest, and what `iframe`, `object` and `embed` show. Everything a stylesheet references through `url()` and `@import` is fetched too, recursively, and so is every `url()` in a `style` attribute. A resource is fetched whatever host it is on, unless **--resources** says otherwise.
 
-Links are read from every fetched HTML page in scope: from `a` and `area` elements with `href`, and from `link` elements whose `rel` is `next`, `prev`, `canonical` or `alternate`. A link in scope that has not been seen is fetched. A link out of scope is recorded in the manifest as `out-of-scope` and never fetched. An HTML page in scope is read for links in turn, and anything else in scope, a PDF for instance, is saved as it is. A link in scope that redirects out of scope is recorded as `redirect-out`, and where it leads is not fetched. **--no-links** turns link discovery off, and then the start page and its resources are all that is fetched.
+Pages are found three ways, and a page found any of them is a candidate. Links are read from every fetched HTML page in scope: from `a` and `area` elements with `href`, and from `link` elements whose `rel` is `next`, `prev`, `canonical` or `alternate`, except an `alternate` that names a feed, which is read as a feed and never taken as a page. Sitemaps and feeds name the rest, as the next two paragraphs say. A candidate is normalised and tested against the scope: one in scope that has not been seen is fetched, and one out of scope is recorded in the manifest as `out-of-scope` and never fetched. An HTML page in scope is read for links and feeds in turn, and anything else in scope, a PDF for instance, is saved as it is. A candidate in scope that redirects out of scope is recorded as `redirect-out`, and where it leads is not fetched. **--no-links** turns links off as a source: every fetched page is still read for its resources and its feeds, and the pages fetched are the start page and those sitemaps and feeds name. With **--no-links**, **--no-sitemap** and **--no-feeds** together, the start page and its resources are all that is fetched.
+
+Sitemaps are read after the start page is fetched and before the crawl goes on from it. Every `Sitemap:` line in the `robots.txt` of the start page's host names one, under **--ignore-robots** too, and `/sitemap.xml`, `/sitemap_index.xml` and `/wp-sitemap.xml` at the root of that host are tried on every run, whatever `robots.txt` names. A sitemap index is followed recursively, a gzip-compressed sitemap is read as well as a plain one, and every `loc` in a URL set is a candidate. Each sitemap is read once, so an index that names itself ends. A sitemap on another host is read anyway, and the scope decides about the URLs it names. **--no-sitemap** reads none.
+
+Feeds are named in two ways: by a `link` element with `rel="alternate"` and `type` `application/rss+xml` or `application/atom+xml` on any fetched HTML page in scope, and by `/feed/` at the root of the start page's host and `/feed/` under the root prefix, which are tried on every run. Each feed is read once, on whatever host it is, and the link of every RSS item and Atom entry in it is a candidate. **--no-feeds** reads none.
+
+A sitemap or feed is fetched with the run's identity and headers and obeys `robots.txt`, as a page does. It is recorded in the manifest with the kind `sitemap` or `feed` and never saved in the tree. One of the well-known locations above that answers `404` or `410` is recorded as `missing`, which is no failure: most sites have only some of them. A sitemap or feed that fails any other way, or that something named and answers `404`, is a failure. A document that is not the XML of a sitemap or feed, such as a page a server answers every unknown path with, names no candidate and fails nothing.
 
 Every reference in the saved HTML and CSS that points at a file in the mirror is rewritten to a relative path, a link to another saved page included, so the copy works from wherever it is put. A reference to anything not in the mirror, such as a link to a page out of scope, is left as an absolute URL: following it leaves the mirror deliberately, and nothing is fetched by itself. `base` elements are honoured when references are resolved, and removed afterwards. An `integrity` attribute is removed where the rewrite changed the bytes of the file it guards, and kept otherwise.
 
@@ -22,9 +28,9 @@ The start page's directory is the root. If the start page's path ends in a slash
 
 Before URLs are compared, the scheme and host are put in lower case, the fragment, the default port and the credentials are removed, dot segments are resolved, percent-encoding is made canonical, `index.html` and `index.php` are read as their directory, and the tracking parameters `utm_*`, `fbclid`, `gclid`, `mc_cid` and `mc_eid` are removed. Every other query parameter is kept, in its order. The start page's host with `www.` added or removed is then written as the start page's host, in the form the start page's final URL has, so `www.x.se` and `x.se` are one site: a page reached through the other form is fetched and saved once, under the start page's host directory, and the tree has no directory for the other form. Only that host folds; `www.` on any other host is left alone. A URL is fetched once, in that form.
 
-Before a page or file is fetched from a host, the start page included, the host's `robots.txt` is read, once per run, with the run's identity and headers, and obeyed. A URL it disallows is recorded as `robots` and not fetched, and the report counts them. The rules are those of the group whose `User-agent` line most specifically matches the run's product token, and those of the `*` group only where no group matches, as RFC 9309 says; the longest matching rule decides, and `Allow` wins a tie. The product token is `kntnt-mirror`, or the first word of **--user-agent** without its version. A `Crawl-delay` longer than **--delay** is honoured for its host. A `robots.txt` that answers with any `4xx` status allows everything; one that answers `5xx`, or not at all after the retries, allows everything too, and the report says it could not be read. Resources are exempt: they are fetched on behalf of a page a person would load, and a `Disallow: /` on a CDN would otherwise break the copy without a word. The file itself is recorded in the manifest and never saved in the tree. **--ignore-robots** turns every rule and `Crawl-delay` off, and the file is still read.
+Before a page, file, sitemap or feed is fetched from a host, the start page included, the host's `robots.txt` is read, once per run, with the run's identity and headers, and obeyed. A URL it disallows is recorded as `robots` and not fetched, and the report counts them. The rules are those of the group whose `User-agent` line most specifically matches the run's product token, and those of the `*` group only where no group matches, as RFC 9309 says; the longest matching rule decides, and `Allow` wins a tie. The product token is `kntnt-mirror`, or the first word of **--user-agent** without its version. A `Crawl-delay` longer than **--delay** is honoured for its host. A `robots.txt` that answers with any `4xx` status allows everything; one that answers `5xx`, or not at all after the retries, allows everything too, and the report says it could not be read. Resources are exempt: they are fetched on behalf of a page a person would load, and a `Disallow: /` on a CDN would otherwise break the copy without a word. The file itself is recorded in the manifest and never saved in the tree. **--ignore-robots** turns every rule and `Crawl-delay` off, and the file is still read.
 
-The crawl stops taking new pages at a cap, 5000 pages and files unless **--max-pages** says otherwise, the start page among them; resources do not count. A page or file counts when it is admitted to the crawl, so under a cap of *N* exactly *N* are fetched. When the cap is reached, discovery stops, what is already queued is fetched, every link found afterwards is recorded as `over-cap`, and the report says the cap was reached and what it was.
+The crawl stops taking new pages at a cap, 5000 pages and files unless **--max-pages** says otherwise, the start page among them; resources, sitemaps and feeds do not count. A page or file counts when it is admitted to the crawl, whichever source named it, so under a cap of *N* exactly *N* are fetched, however many URLs a sitemap lists. When the cap is reached, discovery stops, what is already queued is fetched, every candidate found afterwards is recorded as `over-cap`, and the report says the cap was reached and what it was.
 
 A fetched HTML page with at least one `script` element and fewer than 200 characters of text outside `script`, `style`, `noscript` and `template` elements, whitespace collapsed, is counted as a suspected JavaScript shell: what it shows is likely drawn by a script, which this Skill does not run. The report says how many there were. It is a warning, and the run does not fail for it.
 
@@ -36,7 +42,7 @@ Resources a script loads while the page runs cannot be found by reading the page
 
 Chrome restricts fonts and `type="module"` scripts on pages opened as `file://`. For full fidelity, serve the output directory with any static file server, such as `python3 -m http.server`, and open the page through it.
 
-When the run ends, the Skill prints a short report: the pages, files and resources fetched, their total size, how many links were out of scope, redirected out of scope, stopped by `robots.txt` and over the cap, whether the cap was reached, how many pages were suspected shells, any `robots.txt` that could not be read, and every failure with its status and URL.
+When the run ends, the Skill prints a short report: the pages, files and resources fetched, their total size, how many sitemaps and feeds were read, how many candidates links, sitemaps and feeds each contributed, counting each URL once under the source that named it first, how many candidates were out of scope, redirected out of scope, stopped by `robots.txt` and over the cap, whether the cap was reached, how many pages were suspected shells, any `robots.txt` that could not be read, and every failure with its status and URL.
 
 ## POSITIONAL ARGUMENTS
 
@@ -56,7 +62,7 @@ Say which resources are fetched. `all`, the default, fetches every resource the 
 
 **--max-pages=**_N_
 
-Fetch at most *N* pages and files, the start page among them; resources do not count. Defaults to `5000`, and `0` sets no cap. Links found once the cap is reached are recorded as `over-cap` and not fetched.
+Fetch at most *N* pages and files, the start page among them; resources do not count. Defaults to `5000`, and `0` sets no cap. Candidates found once the cap is reached, from links, sitemaps or feeds, are recorded as `over-cap` and not fetched.
 
 **--delay=**_SECONDS_
 
@@ -64,7 +70,15 @@ Wait *SECONDS*, a number of 0 or more, between one request and the next. Default
 
 **--no-links**
 
-Follow no links. The start page is saved with its resources, and no other page or file is fetched.
+Follow no links. Pages are still read for their resources and feeds, and the pages fetched are the start page and those sitemaps and feeds name in scope. With **--no-sitemap** and **--no-feeds** as well, the start page is saved with its resources, and no other page or file is fetched.
+
+**--no-sitemap**
+
+Read no sitemap: neither those `robots.txt` names nor `/sitemap.xml`, `/sitemap_index.xml` and `/wp-sitemap.xml`, so a page only a sitemap names is not fetched.
+
+**--no-feeds**
+
+Read no feed: neither those a page names with `link rel="alternate"` nor `/feed/` at the host's root and under the root prefix, so a page only a feed names is not fetched.
 
 **--ignore-robots**
 
@@ -98,11 +112,11 @@ The bytes of every HTML and CSS file as the server sent them, at the same relati
 
 **<output>/.mirror/manifest.ndjson**
 
-One JSON object per line, one per URL the run took a position on, each with the same fields: `url`; `final_url`, where its redirects ended; `kind`, one of `page`, `file`, `resource` and `robots`, a link not fetched being a `page`; `source`, `start`, `link`, `resource` or `robots`, what led to it; `discovered_from`, the URL of the page or file that referenced it, or `null` for the start page and a `robots.txt`; `fetcher`, `http`; `status`; `content_type`; `size` in bytes; `local_path`, relative to the output directory; `sha256`; `etag`; `last_modified`; `timestamp`; and `outcome`, one of `fetched`, `out-of-scope`, `redirect-out`, `robots`, `over-cap` and `failed`. A field with nothing to say is `null`. A URL that normalises to one already recorded, a fragment or tracking-parameter variant for instance, gets no row of its own. A `robots.txt` that could not be read is `failed` without failing the run.
+One JSON object per line, one per URL the run took a position on, each with the same fields: `url`; `final_url`, where its redirects ended; `kind`, one of `page`, `file`, `resource`, `robots`, `sitemap` and `feed`, a candidate not fetched being a `page`; `source`, what led to it: `start`, `link`, `resource`, `robots` for a sitemap a `robots.txt` names, `sitemap`, `feed`, or `probe` for a sitemap or feed at a well-known location; `discovered_from`, the URL of the page, file, `robots.txt`, sitemap or feed that named it, or `null` for the start page, a `robots.txt` and a well-known location; `fetcher`, `http`; `status`; `content_type`; `size` in bytes; `local_path`, relative to the output directory; `sha256`; `etag`; `last_modified`; `timestamp`; and `outcome`, one of `fetched`, `out-of-scope`, `redirect-out`, `robots`, `over-cap`, `missing` and `failed`. A field with nothing to say is `null`. A URL that normalises to one already recorded, a fragment or tracking-parameter variant for instance, gets no row of its own. A `robots.txt` that could not be read is `failed` without failing the run, and a well-known sitemap or feed location that is not there is `missing`.
 
 **<output>/.mirror/run.log**
 
-One line per request the run made, with its timestamp, method, URL, status and elapsed time, and one line per URL the manifest records as `out-of-scope`, `redirect-out`, `robots`, `over-cap` or `failed`.
+One line per request the run made, with its timestamp, method, URL, status and elapsed time, and one line per URL the manifest records as `out-of-scope`, `redirect-out`, `robots`, `over-cap`, `missing` or `failed`.
 
 ## EXIT STATUS
 
@@ -138,10 +152,16 @@ Mirror a section, every page under `/docs/` its links reach and everything those
 /mirror https://example.com/docs/
 ```
 
-Mirror one page and what it needs, and no page it links to:
+Mirror one page and what it needs, and no other page:
 
 ```text
-/mirror --no-links https://example.com/articles/launch
+/mirror --no-links --no-sitemap --no-feeds https://example.com/articles/launch
+```
+
+Mirror a blog's posts from its sitemaps and feeds only, following no link:
+
+```text
+/mirror --no-links https://example.com/blog/
 ```
 
 Crawl a large site gently, a second between requests and at most 200 pages:

@@ -12,6 +12,7 @@ as another subdomain. The server answers by the name in the `Host` header.
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import os
@@ -55,6 +56,9 @@ MANIFEST_FIELDS = {
 
 # The attributes a saved page references another file through.
 REFERENCE_ATTRIBUTES = {"href", "src", "srcset", "poster", "data", "action"}
+
+# The well-known locations a run tries at the root of the root's host; `/feed/` is tried under the root too.
+PROBED = ("/sitemap.xml", "/sitemap_index.xml", "/wp-sitemap.xml", "/feed/")
 
 
 @dataclass
@@ -403,7 +407,12 @@ def test_a_resource_on_a_second_host_follows_the_resources_flag(
     nothing.mkdir()
     result = mirror(nothing, "--output=out", "--resources=none", site.url("/p/"))
     assert result.returncode == 0, (result.stdout, result.stderr)
-    assert [request.path for request in site.requests] == ["/robots.txt", "/p/"]
+    assert [request.path for request in site.requests] == [
+        "/robots.txt",
+        "/p/",
+        *PROBED,
+        "/p/feed/",
+    ]
     page = site.tree(nothing / "out") / "p" / "index.html"
     references = [reference for _, _, reference in read_page(page).references]
     assert references == [logo, site.url("/p/here.png"), site.url("/elsewhere/x.png")]
@@ -507,7 +516,14 @@ def test_the_manifest_has_one_row_per_url_with_every_field(
     for row in rows:
         assert set(row) == MANIFEST_FIELDS, row
     by_url = {row["url"]: row for row in rows}
-    assert len(by_url) == len(rows) == 5
+    assert len(by_url) == len(rows) == 10
+    for path in (*PROBED, "/site/feed/"):
+        probe = by_url[site.url(path)]
+        assert (probe["kind"], probe["source"], probe["outcome"]) == (
+            "feed" if "feed" in path else "sitemap",
+            "probe",
+            "missing",
+        ), path
 
     start = by_url[site.url("/site/")]
     assert (start["kind"], start["source"], start["outcome"]) == (
@@ -576,7 +592,7 @@ def test_every_request_carries_the_identity_and_every_header(
     result = mirror(tmp_path, "--output=a", site.url("/site/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
-    assert len(site.requests) == 10
+    assert len(site.requests) == 15
     assert {request.headers["User-Agent"] for request in site.requests} == {IDENTITY}
 
     site.requests.clear()
@@ -590,7 +606,7 @@ def test_every_request_carries_the_identity_and_every_header(
     )
 
     assert result.returncode == 0, (result.stdout, result.stderr)
-    assert len(site.requests) == 10
+    assert len(site.requests) == 15
     for request in site.requests:
         assert request.headers["User-Agent"] == "fixture-bot/2"
         assert request.headers["X-Token"] == "secret"
@@ -631,6 +647,8 @@ def test_every_header_survives_every_redirect_and_retry(
         "--header=Authorization: Bearer secret",
         "--header=X-Token: secret",
         "--user-agent=fixture-bot/2",
+        "--no-sitemap",
+        "--no-feeds",
         site.url("/start"),
     )
 
@@ -683,7 +701,9 @@ def test_equal_urls_are_fetched_once(site: Site, tmp_path: Path) -> None:
     )
     site.binary("/n/img/a.png", b"a")
 
-    result = mirror(tmp_path, "--output=out", site.url("/n/"))
+    result = mirror(
+        tmp_path, "--output=out", "--no-sitemap", "--no-feeds", site.url("/n/")
+    )
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     assert [request.path for request in site.requests] == [
@@ -1218,3 +1238,308 @@ def test_a_link_in_scope_is_fetched_where_resources_left_the_same_url_out(
         "fetched",
     )
     assert (site.tree(tmp_path / "out") / "l" / "big.png").read_bytes() == b"big"
+
+
+# --- Sitemaps and feeds ---------------------------------------------------------
+
+SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
+
+
+def urlset(*urls: str) -> bytes:
+    entries = "".join(f"<url><loc>{url}</loc></url>" for url in urls)
+    return (
+        f'<?xml version="1.0"?><urlset xmlns="{SITEMAP_NS}">{entries}</urlset>'.encode()
+    )
+
+
+def sitemap_index(*urls: str) -> bytes:
+    entries = "".join(f"<sitemap><loc>{url}</loc></sitemap>" for url in urls)
+    return (
+        f'<?xml version="1.0"?><sitemapindex xmlns="{SITEMAP_NS}">{entries}'
+        "</sitemapindex>"
+    ).encode()
+
+
+def rss(*links: str) -> bytes:
+    items = "".join(
+        f"<item><title>t</title><link>{link}</link></item>" for link in links
+    )
+    return f'<?xml version="1.0"?><rss version="2.0"><channel>{items}</channel></rss>'.encode()
+
+
+def atom(*links: str) -> bytes:
+    entries = "".join(
+        f'<entry><title>t</title><link rel="alternate" href="{link}"/></entry>'
+        for link in links
+    )
+    return (
+        '<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom">'
+        f"{entries}</feed>"
+    ).encode()
+
+
+def serve_the_sourced_site(site: Site) -> None:
+    """A root `/docs/` whose unlinked pages only sitemaps and feeds name."""
+
+    site.add(
+        "/robots.txt",
+        Response(
+            b"User-agent: *\nAllow: /\n\nSitemap: /maps/index.xml\n", "text/plain"
+        ),
+    )
+    site.add(
+        "/maps/index.xml",
+        Response(
+            sitemap_index(site.url("/maps/pages.xml.gz"), site.url("/maps/index.xml")),
+            "application/xml",
+        ),
+    )
+    site.add(
+        "/maps/pages.xml.gz",
+        Response(
+            gzip.compress(
+                urlset(
+                    site.url("/docs/unlinked-a"),
+                    site.url("/docs/unlinked-b"),
+                    site.url("/outside/page"),
+                    site.url("/docs/elsewhere", host="localhost"),
+                )
+            ),
+            "application/x-gzip",
+        ),
+    )
+    site.add(
+        "/wp-sitemap.xml",
+        Response(urlset(site.url("/docs/wp-only")), "application/xml"),
+    )
+    site.html(
+        "/docs/",
+        '<html><head><link rel="alternate" type="application/atom+xml"'
+        ' href="atom.xml"></head><body><img src="pic.png"></body></html>',
+    )
+    site.binary("/docs/pic.png", b"pic")
+    site.add("/docs/atom.xml", Response(atom("from-atom"), "application/atom+xml"))
+    site.add("/feed/", Response(rss(site.url("/docs/from-rss")), "application/rss+xml"))
+    for page in ("unlinked-a", "unlinked-b", "wp-only", "from-atom", "from-rss"):
+        site.html(f"/docs/{page}", f"<p>{page}</p>")
+    site.html("/outside/page", "<p>outside</p>")
+    site.html("/docs/elsewhere", "<p>elsewhere</p>")
+
+
+def test_sitemaps_named_by_robots_and_tried_at_the_root_feed_the_crawl(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_sourced_site(site)
+
+    result = mirror(tmp_path, "--output=out", site.url("/docs/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    output = tmp_path / "out"
+    tree = site.tree(output)
+    for page in ("unlinked-a", "unlinked-b", "wp-only"):
+        assert (tree / "docs" / f"{page}.html").is_file(), page
+    assert not site.requested("/outside/page")
+    assert not site.requested("/docs/elsewhere", host="localhost")
+    assert len(site.requested("/maps/index.xml")) == 1, "a cyclic index ends"
+
+    rows = manifest(output)
+    by_url = {row["url"]: row for row in rows}
+    assert len(by_url) == len(rows)
+    for page in ("unlinked-a", "unlinked-b"):
+        row = by_url[site.url(f"/docs/{page}")]
+        assert (row["kind"], row["source"], row["outcome"]) == (
+            "page",
+            "sitemap",
+            "fetched",
+        )
+        assert row["discovered_from"] == site.url("/maps/pages.xml.gz")
+    assert by_url[site.url("/docs/wp-only")]["discovered_from"] == site.url(
+        "/wp-sitemap.xml"
+    )
+    for outside in (
+        site.url("/outside/page"),
+        site.url("/docs/elsewhere", host="localhost"),
+    ):
+        assert (by_url[outside]["source"], by_url[outside]["outcome"]) == (
+            "sitemap",
+            "out-of-scope",
+        )
+
+    for path in ("/maps/index.xml", "/maps/pages.xml.gz", "/wp-sitemap.xml"):
+        row = by_url[site.url(path)]
+        assert (row["kind"], row["outcome"], row["local_path"]) == (
+            "sitemap",
+            "fetched",
+            None,
+        ), path
+    for path in ("/sitemap.xml", "/sitemap_index.xml"):
+        row = by_url[site.url(path)]
+        assert (row["kind"], row["outcome"], row["status"]) == (
+            "sitemap",
+            "missing",
+            404,
+        )
+    assert not list(output.rglob("*.xml")) and not list(output.rglob("*.gz"))
+    assert not (tree / "feed").exists() and not (tree / "docs" / "atom.xml").exists()
+
+
+def test_feeds_named_by_a_page_and_tried_at_the_root_feed_the_crawl(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_sourced_site(site)
+
+    result = mirror(tmp_path, "--output=out", site.url("/docs/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    output = tmp_path / "out"
+    tree = site.tree(output)
+    rows = {row["url"]: row for row in manifest(output)}
+    for page, feed in (("from-atom", "/docs/atom.xml"), ("from-rss", "/feed/")):
+        assert (tree / "docs" / f"{page}.html").is_file(), page
+        row = rows[site.url(f"/docs/{page}")]
+        assert (row["source"], row["discovered_from"]) == ("feed", site.url(feed))
+    for feed in ("/docs/atom.xml", "/feed/"):
+        row = rows[site.url(feed)]
+        assert (row["kind"], row["outcome"], row["local_path"]) == (
+            "feed",
+            "fetched",
+            None,
+        )
+        assert len(site.requested(feed)) == 1
+    probe = rows[site.url("/docs/feed/")]
+    assert (probe["kind"], probe["outcome"]) == ("feed", "missing")
+    assert not [
+        row
+        for row in rows.values()
+        if row["kind"] == "page" and "atom.xml" in str(row["url"])
+    ]
+
+    assert re.search(r"^Candidates from sitemaps: 5$", result.stdout, re.MULTILINE)
+    assert re.search(r"^Candidates from feeds: 2$", result.stdout, re.MULTILINE)
+    assert re.search(r"^Candidates from links: 0$", result.stdout, re.MULTILINE)
+    assert re.search(r"^Sitemaps read: 3$", result.stdout, re.MULTILINE)
+    assert re.search(r"^Feeds read: 2$", result.stdout, re.MULTILINE)
+
+
+def test_each_source_can_be_turned_off(site: Site, tmp_path: Path) -> None:
+    serve_the_sourced_site(site)
+    site.html(
+        "/docs/",
+        '<html><head><link rel="alternate" type="application/rss+xml"'
+        ' href="atom.xml"></head><body><a href="linked">L</a></body></html>',
+    )
+    site.html("/docs/linked", "<p>linked</p>")
+
+    def run(name: str, *flags: str) -> set[str]:
+        site.requests.clear()
+        directory = tmp_path / name
+        directory.mkdir()
+        result = mirror(directory, "--output=out", *flags, site.url("/docs/"))
+        assert result.returncode == 0, (result.stdout, result.stderr)
+        return {request.path for request in site.requests}
+
+    no_sitemap = run("no-sitemap", "--no-sitemap")
+    assert not {"/docs/unlinked-a", "/docs/wp-only", "/maps/index.xml"} & no_sitemap
+    assert not {"/sitemap.xml", "/wp-sitemap.xml"} & no_sitemap
+    assert {"/docs/from-atom", "/docs/from-rss", "/docs/linked"} <= no_sitemap
+
+    no_feeds = run("no-feeds", "--no-feeds")
+    assert (
+        not {"/docs/from-atom", "/docs/from-rss", "/feed/", "/docs/atom.xml"} & no_feeds
+    )
+    assert {"/docs/unlinked-a", "/docs/linked"} <= no_feeds
+
+    no_links = run("no-links", "--no-links")
+    assert "/docs/linked" not in no_links
+    assert {"/docs/unlinked-a", "/docs/from-atom", "/docs/from-rss"} <= no_links
+
+    nothing = run("nothing", "--no-links", "--no-sitemap", "--no-feeds")
+    assert nothing == {"/robots.txt", "/docs/"}
+
+
+def test_sitemap_candidates_count_toward_the_cap_and_obey_robots(
+    site: Site, tmp_path: Path
+) -> None:
+    site.add(
+        "/robots.txt",
+        Response(b"User-agent: *\nDisallow: /docs/private\n", "text/plain"),
+    )
+    site.add(
+        "/sitemap.xml",
+        Response(
+            urlset(
+                *(site.url(f"/docs/p{n}") for n in range(40)), site.url("/docs/private")
+            ),
+            "application/xml",
+        ),
+    )
+    site.html("/docs/", "<p>start</p>")
+    for n in range(40):
+        site.html(f"/docs/p{n}", f"<p>{n}</p>")
+    site.html("/docs/private", "<p>private</p>")
+
+    capped = tmp_path / "capped"
+    capped.mkdir()
+    result = mirror(capped, "--output=out", "--max-pages=3", site.url("/docs/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    fetched = [n for n in range(40) if site.requested(f"/docs/p{n}")]
+    assert fetched == [0, 1]
+    assert re.search(r"^Over the cap: 38$", result.stdout, re.MULTILINE)
+
+    site.requests.clear()
+    polite = tmp_path / "polite"
+    polite.mkdir()
+    result = mirror(polite, "--output=out", site.url("/docs/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert not site.requested("/docs/private")
+    rows = {row["url"]: row for row in manifest(polite / "out")}
+    assert (
+        rows[site.url("/docs/private")]["source"],
+        rows[site.url("/docs/private")]["outcome"],
+    ) == (
+        "sitemap",
+        "robots",
+    )
+    assert re.search(r"^Stopped by robots\.txt: 1$", result.stdout, re.MULTILINE)
+
+
+def test_sitemaps_and_feeds_are_fetched_with_the_runs_identity_and_headers(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_sourced_site(site)
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--header=X-Token: secret",
+        "--user-agent=fixture-bot/2",
+        site.url("/docs/"),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    for path in ("/maps/index.xml", "/maps/pages.xml.gz", "/feed/", "/docs/atom.xml"):
+        [request] = site.requested(path)
+        assert request.headers["User-Agent"] == "fixture-bot/2", path
+        assert request.headers["X-Token"] == "secret", path
+
+
+def test_the_manpage_states_the_sources_and_where_they_are_looked_for() -> None:
+    page = (SKILL / "help.md").read_text(encoding="utf-8")
+    synopsis = page.partition("\n## SYNOPSIS\n")[2].partition("\n## ")[0]
+    options = page.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
+    description = page.partition("\n## DESCRIPTION\n")[2].partition("\n## ")[0]
+    body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    for flag in ("--no-sitemap", "--no-feeds"):
+        assert f"**{flag}**" in synopsis, flag
+        assert f"**{flag}**" in options, flag
+        assert f"[{flag}]" in body, flag
+        assert f"`{flag}`" in body.partition("## Arguments")[2], flag
+    for location in (
+        *PROBED,
+        "`Sitemap:`",
+        "application/rss+xml",
+        "application/atom+xml",
+    ):
+        assert location.strip("`") in description, location
