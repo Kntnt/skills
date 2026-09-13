@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "1ea357fad54d8d12a4d4d853338bb42d36607f08b1a1c4f897608b34aae1277c",
+  "manager_digest": "c795bef45a9753410804a5315e1b02c93bad72c74d075f3ab2d24efb2e839efb",
   "skills": [
     {
       "name": "agents-md",
@@ -202,9 +202,10 @@
       "name": "mirror",
       "category": "web",
       "description": "Copy a web page, the pages under it that its links, sitemaps and feeds reach, and everything they need to display to disk, so they open in a browser with nothing fetched from the network.",
-      "digest": "01f2c0f3614743b585a6416e65aa4c7f32f06bc71c1be1291b4850ae8f27e04a",
+      "digest": "041649d60c6819d4ed2b15664ac33c6f15930436a72d9d647bc5ecacc3ea3230",
       "binaries": [
-        "uv"
+        "uv",
+        "agent-browser"
       ],
       "skills": [],
       "externals": [],

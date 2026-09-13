@@ -12,8 +12,8 @@
 The engine owns the three things a mirror is made of — fetching, the mapping
 from a URL to a file, and the rewriting of references — because a fetcher added
 later produces pages no external tool has seen, and a rewrite needs the mapping
-to be its own (ADR-0196). Fetching sits behind the `Fetcher` protocol, so a
-second fetcher is added beside `HttpFetcher` rather than threaded through it.
+to be its own (ADR-0196). Fetching sits behind the `Fetcher` protocol, so the
+browser is a fetcher beside `HttpFetcher` rather than threaded through it.
 
 A run has three passes. The fetch pass follows the start page's redirects and
 crawls from there, one request at a time and breadth first: every page and file
@@ -32,21 +32,29 @@ and a saved file this run did not discover stays and is recorded `absent`.
 
 A host that blocks the run climbs a ladder of rungs, each a fetcher with its own
 identity: rung 1 is plain HTTP as the Skill, rung 2 plain HTTP dressed as
-Chrome. The rung belongs to the host and lasts the run; a block moves the host
-one rung up and the blocked URL is asked again there, and a block on the top
-rung is the URL's outcome.
+Chrome, rung 3 a headless browser and rung 4 a visible one, both driven through
+`agent-browser` in one session of the run's own. The rung belongs to the host
+and lasts the run; a block moves the host one rung up and the blocked URL is
+asked again there, and a block on the top rung the run may reach is the URL's
+outcome. A browser fetch saves the rendered DOM without its scripts, and takes
+the page's resources from the HAR the browser recorded while it loaded.
 """
 
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import hashlib
 import json
 import math
 import os
 import posixpath
 import re
+import shlex
 import shutil
+import signal
+import subprocess
 import sys
 import tempfile
 import time
@@ -58,6 +66,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
 from pathlib import Path, PurePosixPath
+from types import FrameType
 from typing import Protocol
 from urllib.parse import quote, unquote_to_bytes, urljoin, urlsplit, urlunsplit
 from xml.etree import ElementTree
@@ -76,9 +85,11 @@ IDENTITY = "kntnt-mirror (+https://github.com/Kntnt/skills)"
 FETCHER_NAME = "http"
 
 # The rungs a host climbs, each a fetcher and the headers it sends as its own.
-# Every host starts every run on the first.
+# Every host starts every run on the lowest rung the run's ladder holds.
 RUNG_OWN = 1  # Plain HTTP, as the Skill.
 RUNG_CHROME = 2  # Plain HTTP, as Chrome.
+RUNG_HEADLESS = 3  # A headless browser.
+RUNG_HEADED = 4  # A visible browser, which only `--headed` lets a host reach.
 FIRST_RUNG = RUNG_OWN
 OWN_HEADERS = (("User-Agent", IDENTITY),)
 
@@ -108,10 +119,53 @@ CHROME_HEADERS = (
     ("sec-ch-ua-platform", '"macOS"'),
 )
 
-# `--browser`: whether a host may climb past plain HTTP. No browser rung exists
-# yet, so both values give the same ladder.
-BROWSER_POLICIES = ("auto", "never")
-DEFAULT_BROWSER = "auto"
+# `--browser`: whether a host may climb past plain HTTP to a browser, or starts there.
+BROWSER_AUTO = "auto"
+BROWSER_ALWAYS = "always"
+BROWSER_NEVER = "never"
+BROWSER_POLICIES = (BROWSER_AUTO, BROWSER_ALWAYS, BROWSER_NEVER)
+DEFAULT_BROWSER = BROWSER_AUTO
+
+# The browser rungs: the binary that drives them, the session the run owns, and
+# how long a command, a headed page's challenge and each look at it may take.
+BROWSER_FETCHER_NAME = "browser"
+BROWSER_BINARY = "agent-browser"
+SESSION_PREFIX = "kntnt-mirror-"
+BROWSER_COMMAND_TIMEOUT = 180.0
+HEADED_WAIT = 600.0  # Ten minutes for the person at the window to pass a challenge.
+HEADED_POLL = 2.0
+SCROLL_DISTANCE = 1_000_000  # Far enough to reach the bottom of any page at once.
+SET_BROWSER_HEADERS = ("set", "headers")
+
+# What reading a page in the browser returns: where it ended, the status its
+# document was answered with, and the rendered DOM with its doctype.
+DOM_SCRIPT = """(() => {
+  const navigation = performance.getEntriesByType("navigation")[0];
+  const doctype = document.doctype;
+  return {
+    url: location.href,
+    status: navigation ? navigation.responseStatus || 0 : 0,
+    doctype: doctype ? new XMLSerializer().serializeToString(doctype) : "",
+    html: document.documentElement.outerHTML,
+  };
+})()"""
+
+# The HAR entries a browser fetch saves, by the resource type the browser gave
+# each. Every other type, `xhr`, `fetch`, `websocket`, `eventsource`, `ping`
+# and `other` among them, is left: no script remains in the page to read it.
+SAVED_RESOURCE_TYPES = frozenset(
+    {
+        "document",
+        "stylesheet",
+        "image",
+        "font",
+        "media",
+        "script",
+        "manifest",
+        "texttrack",
+    }
+)
+JSON_TYPE = re.compile(r"^application/(?:[\w.+-]+\+)?json$")
 
 # A block: an answer that refuses the run's identity rather than the request.
 # These statuses are a block once the retries are spent.
@@ -626,6 +680,9 @@ class Fetched:
     unchanged: bool = False  # A `304`: the bytes are those an earlier run saved.
     stored: PurePosixPath | None = None  # Where an unchanged file's bytes are.
     blocked: str | None = None  # What made the answer a block, as the report names it.
+    captured: list[Fetched] = field(
+        default_factory=list
+    )  # What a browser loaded with it.
 
     @property
     def succeeded(self) -> bool:
@@ -874,12 +931,445 @@ class HttpFetcher:
         return fetched
 
 
+class BrowserUnavailable(RuntimeError):
+    """`agent-browser` is missing or cannot launch a browser: the run cannot go on."""
+
+
+class BrowserSession:
+    """The one `agent-browser` session a run owns, started on first use and closed at the end.
+
+    Its name carries the engine's process id, so it cannot be a session the
+    user or another run has open. Every command carries the run's launch
+    options, so the browser the session holds is always the one they describe.
+    """
+
+    def __init__(
+        self,
+        user_agent: str | None,
+        headers: list[tuple[str, str]],
+        profile: str | None,
+    ) -> None:
+        self.name = f"{SESSION_PREFIX}{os.getpid()}"
+        self.user_agent = user_agent
+        self.headers = headers
+        self.profile = profile
+        self.checked = False
+        self.started = False
+        self.headed: bool | None = None  # The window the headers were last set for.
+        self.directory: Path | None = None
+        self.hars = 0
+
+    def ensure(self) -> None:
+        """Check once, before the first browser fetch, that a browser can be launched."""
+
+        if self.checked:
+            return
+        # Every command runs in the session's own directory, which lasts the
+        # session, and which holds no `agent-browser.json` to change the browser.
+        if self.directory is None:
+            self.directory = Path(tempfile.mkdtemp(prefix="kntnt-mirror-browser-"))
+        try:
+            result = subprocess.run(
+                [BROWSER_BINARY, "doctor", "--json"],
+                cwd=self.directory,
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=BROWSER_COMMAND_TIMEOUT,
+            )
+        except FileNotFoundError as error:
+            raise BrowserUnavailable(
+                f"{BROWSER_BINARY} is not installed, and a host the run reached"
+                f" needs a browser: install it with `brew install {BROWSER_BINARY}`,"
+                f" then run `{BROWSER_BINARY} install`. Nothing was written."
+            ) from error
+        except subprocess.TimeoutExpired as error:
+            raise BrowserUnavailable(
+                f"{BROWSER_BINARY} could not say whether it can launch a browser:"
+                f" run `{BROWSER_BINARY} install`, then run the mirror again."
+                " Nothing was written."
+            ) from error
+        if result.returncode != 0:
+            raise BrowserUnavailable(
+                f"{BROWSER_BINARY} cannot launch a browser, and a host the run"
+                f" reached needs one: run `{BROWSER_BINARY} install`, then run the"
+                " mirror again. Nothing was written."
+            )
+        self.checked = True
+
+    def har_path(self) -> Path:
+        """A fresh path for one recording, in the session's own directory."""
+
+        assert self.directory is not None
+        self.hars += 1
+        return self.directory / f"{self.hars}.har"
+
+    def command(
+        self, headed: bool, *arguments: str, stdin: str | None = None
+    ) -> tuple[bool, object]:
+        """Run one command in the session: whether it succeeded, and the data it answered."""
+
+        self.ensure()
+        if self.headers and self.headed is not headed:
+            self.headed = headed
+            names: dict[str, str] = {}
+            for name, value in self.headers:
+                names[name] = f"{names[name]}, {value}" if name in names else value
+            self._run(headed, *SET_BROWSER_HEADERS, json.dumps(names))
+        return self._run(headed, *arguments, stdin=stdin)
+
+    def _run(
+        self, headed: bool, *arguments: str, stdin: str | None = None
+    ) -> tuple[bool, object]:
+        launch = ["--session", self.name]
+        if self.profile:
+            launch += ["--profile", self.profile]
+        if self.user_agent:
+            launch += ["--user-agent", self.user_agent]
+        if headed:
+            launch.append("--headed")
+        self.started = True
+        try:
+            result = subprocess.run(
+                [BROWSER_BINARY, *launch, "--json", *arguments],
+                cwd=self.directory,
+                input=stdin,
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=BROWSER_COMMAND_TIMEOUT,
+            )
+        except subprocess.TimeoutExpired:
+            return False, f"{BROWSER_BINARY} {arguments[0]} did not answer in time"
+        try:
+            answer = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            answer = None
+        if not isinstance(answer, dict):
+            detail = (result.stderr or result.stdout).strip() or "no answer"
+            return result.returncode == 0, detail
+        if result.returncode != 0 or answer.get("success") is False:
+            return False, answer.get("error") or result.stderr.strip() or "failed"
+        return True, answer.get("data")
+
+    def close(self) -> None:
+        """Close the session, where the run started one, and remove its recordings."""
+
+        if self.started:
+            self.started = False
+            try:
+                subprocess.run(
+                    [BROWSER_BINARY, "--session", self.name, "close"],
+                    cwd=self.directory,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                    timeout=BROWSER_COMMAND_TIMEOUT,
+                )
+            except (OSError, subprocess.SubprocessError):
+                pass
+        if self.directory is not None:
+            shutil.rmtree(self.directory, ignore_errors=True)
+            self.directory = None
+
+
+@dataclass(frozen=True)
+class Rendered:
+    """What reading a page in the browser gave: where it is, its status, and its DOM."""
+
+    url: str
+    status: int
+    html: str
+
+    @classmethod
+    def of(cls, data: object) -> Rendered | None:
+        result = data.get("result") if isinstance(data, dict) else None
+        if not isinstance(result, dict) or not isinstance(result.get("html"), str):
+            return None
+        status = result.get("status")
+        return cls(
+            str(result.get("url") or ""),
+            status if isinstance(status, int) else 0,
+            str(result.get("doctype") or "") + result["html"],
+        )
+
+    def blocked(self) -> str | None:
+        """What makes the page as it stands a challenge, judged on its status and DOM."""
+
+        return block_reason(self.status, [], self.html.encode("utf-8"), "utf-8")
+
+
+class BrowserFetcher:
+    """A browser in the run's session: headless on rung 3, visible on rung 4."""
+
+    name = BROWSER_FETCHER_NAME
+
+    def __init__(self, session: BrowserSession, headed: bool, log: RunLog) -> None:
+        self.session = session
+        self.headed = headed
+        self.log = log
+
+    def fetch(
+        self,
+        url: str,
+        staging: Path | None,
+        follow: Callable[[str], bool] | None = None,
+        keep: bool = False,
+        validators: Validators | None = None,
+    ) -> Fetched:
+        """Load *url* in the browser under a HAR recording, and read what it rendered.
+
+        The browser makes no conditional request, so *validators* go unused.
+        """
+
+        began = time.monotonic()
+        self.session.ensure()
+        har = self.session.har_path()
+        started, detail = self.session.command(
+            self.headed, "network", "har", "start", "--content", "all"
+        )
+        if not started:
+            return Fetched(url, error=f"the browser could not record: {detail}")
+        rendered: Rendered | None = None
+        try:
+            opened, detail = self.session.command(self.headed, "open", url)
+            if opened:
+                rendered = self._load()
+        finally:
+            self.session.command(self.headed, "network", "har", "stop", str(har))
+        if not opened:
+            return Fetched(url, error=f"the browser could not open it: {detail}")
+        if rendered is None:
+            return Fetched(url, error="the browser could not read the page")
+        entries = har_entries(har)
+        har.unlink(missing_ok=True)
+        fetched = self._answer(url, rendered, entries, staging, follow, keep)
+        self.log.request(
+            "GET", url, str(fetched.status or "error"), time.monotonic() - began
+        )
+        return fetched
+
+    def _load(self) -> Rendered | None:
+        """Let the page settle, past a challenge where a person can pass one, and read it."""
+
+        self.session.command(self.headed, "wait", "--load", "networkidle")
+        if self.headed:
+            deadline = time.monotonic() + HEADED_WAIT
+            while True:
+                seen = Rendered.of(self._read())
+                if seen is not None and seen.blocked() is None:
+                    break
+                if time.monotonic() >= deadline:
+                    return seen
+                time.sleep(HEADED_POLL)
+            self.session.command(self.headed, "wait", "--load", "networkidle")
+        self.session.command(self.headed, "scroll", "down", str(SCROLL_DISTANCE))
+        self.session.command(self.headed, "wait", "--load", "networkidle")
+        return Rendered.of(self._read())
+
+    def _read(self) -> object:
+        _, data = self.session.command(self.headed, "eval", "--stdin", stdin=DOM_SCRIPT)
+        return data
+
+    def _answer(
+        self,
+        url: str,
+        rendered: Rendered,
+        entries: list[dict[str, object]],
+        staging: Path | None,
+        follow: Callable[[str], bool] | None,
+        keep: bool,
+    ) -> Fetched:
+        """What the browser's load of *url* comes to, as HTTP's answer would."""
+
+        # The document is the last one recorded where the page ended.
+        final = normalise(rendered.url) if rendered.url else None
+        documents = [entry for entry in entries if har_type(entry) == "document"]
+        main = next(
+            (
+                entry
+                for entry in reversed(documents)
+                if normalise(har_url(entry)) == final
+            ),
+            documents[-1] if documents else None,
+        )
+        if final is None or (main is None and not rendered.status):
+            return Fetched(url, error="the browser got no answer")
+        final_url = rendered.url
+        if final != normalise(url) and follow is not None and not follow(final_url):
+            return Fetched(final_url, status=har_status(main), redirected_out=True)
+
+        headers = har_headers(main) if main is not None else []
+        status = har_status(main) or rendered.status
+        content_type, charset = header_type(headers)
+        if content_type is None and main is not None:
+            content_type = header_type([("Content-Type", har_mime(main))])[0]
+        fetched = Fetched(final_url, status=status, content_type=content_type)
+
+        # A page is its rendered DOM, judged with its scripts and saved without.
+        if is_html(content_type, final_url):
+            dom = rendered.html.encode("utf-8")
+            fetched.blocked = block_reason(status, headers, dom, "utf-8")
+            body: bytes | None = without_scripts(rendered.html).encode("utf-8")
+            fetched.charset = "utf-8"
+            if fetched.succeeded:
+                fetched.captured = self._captured(entries, main, staging)
+        else:
+            fetched.blocked = block_reason(status, headers, None, charset)
+            body, recoded = har_body(main) if main is not None else (None, False)
+            fetched.charset = "utf-8" if recoded else charset
+            if body is None and fetched.succeeded:
+                return Fetched(final_url, error="the browser kept no body for it")
+        if body is not None:
+            settle_body(fetched, body, staging, keep)
+        return fetched
+
+    def _captured(
+        self,
+        entries: list[dict[str, object]],
+        main: dict[str, object] | None,
+        staging: Path | None,
+    ) -> list[Fetched]:
+        """Every resource the page loaded that a mirror keeps, one per URL, last answer kept."""
+
+        captured: dict[str, Fetched] = {}
+        for position, entry in enumerate(entries):
+            if entry is main or not saves(entry):
+                continue
+            status = har_status(entry)
+            body, recoded = har_body(entry)
+            if status is None or not 200 <= status < 300 or body is None:
+                continue
+            content_type, charset = header_type(har_headers(entry))
+            if content_type is None:
+                content_type = header_type([("Content-Type", har_mime(entry))])[0]
+            item = Fetched(
+                har_url(entry),
+                status=status,
+                content_type=content_type,
+                charset="utf-8" if recoded else charset,
+            )
+            place = staging.with_name(f"{staging.name}-{position}") if staging else None
+            settle_body(item, body, place, keep=False)
+            captured[har_url(entry)] = item
+        return list(captured.values())
+
+
+def settle_body(
+    fetched: Fetched, body: bytes, staging: Path | None, keep: bool
+) -> None:
+    """Keep *body* where the rewrite or the caller reads it, and stage or count it otherwise."""
+
+    fetched.size = len(body)
+    fetched.sha256 = hashlib.sha256(body).hexdigest()
+    if keep or is_rewritable(fetched.content_type, fetched.final_url):
+        fetched.body = body
+    elif staging is not None:
+        staging.parent.mkdir(parents=True, exist_ok=True)
+        staging.write_bytes(body)
+        fetched.staged = staging
+
+
+def without_scripts(html: str) -> str:
+    """A rendered DOM with every `script` element removed and every `noscript` kept."""
+
+    tree = LexborHTMLParser(html)
+    for node in tree.css("script"):
+        node.decompose()
+    return tree.html or ""
+
+
+def har_entries(path: Path) -> list[dict[str, object]]:
+    """The entries of a HAR file, or none where it is missing or unreadable."""
+
+    try:
+        har = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    log = har.get("log") if isinstance(har, dict) else None
+    entries = log.get("entries") if isinstance(log, dict) else None
+    return (
+        [entry for entry in entries if isinstance(entry, dict)]
+        if isinstance(entries, list)
+        else []
+    )
+
+
+def _part(entry: dict[str, object] | None, name: str) -> dict[str, object]:
+    part = entry.get(name) if entry is not None else None
+    return part if isinstance(part, dict) else {}
+
+
+def har_url(entry: dict[str, object]) -> str:
+    return str(_part(entry, "request").get("url") or "")
+
+
+def har_type(entry: dict[str, object]) -> str | None:
+    kind = entry.get("_resourceType")
+    return kind.lower() if isinstance(kind, str) else None
+
+
+def har_status(entry: dict[str, object] | None) -> int | None:
+    status = _part(entry, "response").get("status")
+    return status if isinstance(status, int) and status > 0 else None
+
+
+def har_headers(entry: dict[str, object]) -> list[tuple[str, str]]:
+    headers = _part(entry, "response").get("headers")
+    if not isinstance(headers, list):
+        return []
+    return [
+        (str(header.get("name")), str(header.get("value")))
+        for header in headers
+        if isinstance(header, dict) and header.get("name") is not None
+    ]
+
+
+def har_mime(entry: dict[str, object]) -> str:
+    content = _part(_part(entry, "response"), "content")
+    return str(content.get("mimeType") or "")
+
+
+def har_body(entry: dict[str, object]) -> tuple[bytes | None, bool]:
+    """An entry's body, and whether it came as text the HAR holds in UTF-8 rather than as its bytes."""
+
+    content = _part(_part(entry, "response"), "content")
+    text = content.get("text")
+    if not isinstance(text, str):
+        return None, False
+    if content.get("encoding") == "base64":
+        try:
+            return base64.b64decode(text, validate=True), False
+        except (binascii.Error, ValueError):
+            return None, False
+    return text.encode("utf-8"), True
+
+
+def saves(entry: dict[str, object]) -> bool:
+    """Whether a browser fetch keeps a HAR entry: by its resource type, or where it has none, unless it is JSON."""
+
+    kind = har_type(entry)
+    if kind is not None:
+        return kind in SAVED_RESOURCE_TYPES
+    media_type = header_type([("Content-Type", har_mime(entry))])[0] or ""
+    return JSON_TYPE.match(media_type) is None
+
+
+def header_type(headers: Iterable[tuple[str, str]]) -> tuple[str | None, str | None]:
+    """A media type, lowercased, and the charset a `Content-Type` among *headers* names."""
+
+    value = next(
+        (value for name, value in headers if name.lower() == "content-type"), ""
+    )
+    media_type, _, parameters = value.partition(";")
+    charset = re.search(r"charset=\"?([^\";\s]+)", parameters, re.IGNORECASE)
+    return media_type.strip().lower() or None, charset.group(1) if charset else None
+
+
 def answer_type(response: httpx.Response) -> tuple[str | None, str | None]:
     """An answer's media type, lowercased, and the charset its header names."""
 
-    media_type, _, parameters = response.headers.get("Content-Type", "").partition(";")
-    charset = re.search(r"charset=\"?([^\";\s]+)", parameters, re.IGNORECASE)
-    return media_type.strip().lower() or None, charset.group(1) if charset else None
+    return header_type([("Content-Type", response.headers.get("Content-Type", ""))])
 
 
 def block_reason(
@@ -1551,6 +2041,8 @@ class Options:
     includes: tuple[regex.Pattern[str], ...] = ()
     excludes: tuple[regex.Pattern[str], ...] = ()
     browser: str = DEFAULT_BROWSER
+    headed: bool = False
+    invocation: tuple[str, ...] = ()  # The arguments as given, for a command to paste.
 
 
 @dataclass(frozen=True)
@@ -1589,6 +2081,8 @@ class Mirror:
         self.previous: dict[str, dict[str, object]] = {}
         self.previous_output: Path | None = None
         self.absent: list[dict[str, object]] = []
+        # What a browser loaded with a page, by URL, and the rung it was loaded on.
+        self.captured: dict[str, tuple[Fetched, int]] = {}
 
     def run(self, staging: Path | None) -> int:
         """Mirror everything under the start page; return the exit status."""
@@ -1621,6 +2115,8 @@ class Mirror:
             print(
                 f"Could not fetch the start page {start_url}: {why}. Nothing was written."
             )
+            for line in self._next_step([start]):
+                print(line)
             return EXIT_FAILED
         self.root_host = urlsplit(start.final).hostname or ""
         self.scope = Scope.of(start.final, self.options.includes, self.options.excludes)
@@ -1697,7 +2193,7 @@ class Mirror:
         url = record.url
         host = origin(url)
         while True:
-            rung = self.rungs.setdefault(host, FIRST_RUNG)
+            rung = self.rungs.setdefault(host, min(self.fetchers))
             fetcher = self.fetchers[rung]
             self._pace(url)
             try:
@@ -1795,6 +2291,9 @@ class Mirror:
         row = self.previous.get(url)
         if row is None or self.previous_output is None:
             return None
+        # A browser sends no validators, so what it fetched is fetched again.
+        if row.get("fetcher") == BROWSER_FETCHER_NAME:
+            return None
         saved = self._saved(row)
         if saved is None or not (row.get("etag") or row.get("last_modified")):
             return None
@@ -1870,8 +2369,24 @@ class Mirror:
             if previous is not None
             else None
         )
-        record.conditional = validators is not None
-        fetched = self._request(record, place, follow, validators=validators)
+
+        # A resource a browser already loaded with a page is taken as it loaded it.
+        captured = (
+            self.captured.pop(record.url, None)
+            if record.kind == KIND_RESOURCE
+            else None
+        )
+        if captured is not None:
+            fetched, record.rung = captured
+            record.fetcher = BROWSER_FETCHER_NAME
+        else:
+            record.conditional = validators is not None
+            fetched = self._request(record, place, follow, validators=validators)
+            record.conditional &= record.fetcher != BROWSER_FETCHER_NAME
+            for item in fetched.captured:
+                key = self._normal(item.final_url)
+                if key is not None and record.rung is not None:
+                    self.captured.setdefault(key, (item, record.rung))
         if (
             previous is not None
             and fetched.status == NOT_MODIFIED
@@ -1937,6 +2452,7 @@ class Mirror:
             text = decode_html(fetched.body, fetched.charset)
             tree = LexborHTMLParser(text)
             found = html_references(tree, fetched.final_url)
+            found.extend(item.final_url for item in fetched.captured)
             if self._in_scope(record.final):
                 if self.options.links:
                     links = html_links(tree, fetched.final_url)
@@ -2360,6 +2876,7 @@ class Mirror:
                     " stayed blocked"
                 )
             lines.append(line + ".")
+        lines.extend(self._next_step(blocked))
         if over_cap:
             lines.append(
                 f"The cap of {self.options.max_pages} pages and files was reached;"
@@ -2383,6 +2900,31 @@ class Mirror:
                 status = record.fetched.status or f"no answer ({record.fetched.error})"
                 lines.append(f"  {record.fetched.blocked or status} {record.url}")
         return "\n".join(lines)
+
+    def _next_step(self, blocked: Iterable[Record]) -> list[str]:
+        """Where the headless browser was not enough and a visible one may be: what to run.
+
+        The command is the invocation as given with `--headed` added before
+        the URL, on a line of its own, ready to paste.
+        """
+
+        if RUNG_HEADLESS not in self.fetchers or RUNG_HEADED in self.fetchers:
+            return []
+        urls = [record.url for record in blocked if record.rung == RUNG_HEADLESS]
+        if not urls:
+            return []
+        given = list(self.options.invocation)
+        if self.options.url in given:
+            given.pop(len(given) - 1 - given[::-1].index(self.options.url))
+        command = " ".join(
+            shlex.quote(argument) for argument in (*given, "--headed", self.options.url)
+        )
+        explanation = (
+            f"Still blocked in the headless browser: {', '.join(urls)}. --headed is"
+            " the next step: it opens a visible browser, where you can pass the"
+            " challenge or log in, and waits for you. Run:"
+        )
+        return [explanation, f"/mirror {command}"]
 
 
 def decode_css(body: bytes, charset: str | None) -> tuple[str, str]:
@@ -2485,14 +3027,18 @@ def ladder(
     headers: list[tuple[str, str]],
     credentials: tuple[str, str, str] | None,
     log: RunLog,
+    browser: str,
+    headed: bool,
+    session: BrowserSession,
 ) -> dict[int, Fetcher]:
     """The rungs a host may climb, each with its fetcher, lowest first.
 
-    Plain HTTP holds both rungs this run has, so `--browser=never`, which
-    keeps a host on HTTP, gives the same ladder as `auto`.
+    `never` keeps a host on plain HTTP, rungs 1 and 2; `auto` adds the headless
+    browser, and the visible one where `--headed` allows it; `always` holds
+    only the browser, headless or, with `--headed`, visible.
     """
 
-    return {
+    http: dict[int, Fetcher] = {
         RUNG_OWN: HttpFetcher(
             compose_headers(OWN_HEADERS, user_agent, headers), credentials, log
         ),
@@ -2500,6 +3046,36 @@ def ladder(
             compose_headers(CHROME_HEADERS, user_agent, headers), credentials, log
         ),
     }
+    browsers: dict[int, Fetcher] = {
+        RUNG_HEADLESS: BrowserFetcher(session, headed=False, log=log),
+        RUNG_HEADED: BrowserFetcher(session, headed=True, log=log),
+    }
+    if browser == BROWSER_NEVER:
+        return http
+    if browser == BROWSER_ALWAYS:
+        rung = RUNG_HEADED if headed else RUNG_HEADLESS
+        return {rung: browsers[rung]}
+    if not headed:
+        browsers.pop(RUNG_HEADED)
+    return {**http, **browsers}
+
+
+def profile(value: str | None) -> str | None:
+    """A `--profile` as the browser takes it: a name as given, a path made absolute.
+
+    The browser runs in a directory of its own, so a relative path is resolved
+    against the invocation's working directory first.
+    """
+
+    if value is None or not (os.sep in value or value.startswith((".", "~"))):
+        return value
+    return str(Path(value).expanduser().resolve())
+
+
+def interrupted(signum: int, frame: FrameType | None) -> None:
+    """End the run on `SIGINT` or `SIGTERM` as an exit does, so the session is closed."""
+
+    raise SystemExit(128 + signum)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -2512,6 +3088,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--header", action="append", default=[])
     parser.add_argument("--user-agent")
     parser.add_argument("--browser", default=DEFAULT_BROWSER)
+    parser.add_argument("--headed", action="store_true")
+    parser.add_argument("--profile")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--delay", default=str(DEFAULT_DELAY))
     parser.add_argument("--max-pages", default=str(DEFAULT_MAX_PAGES))
@@ -2522,7 +3100,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--include", action="append", default=[])
     parser.add_argument("--exclude", action="append", default=[])
     parser.add_argument("url")
-    arguments = parser.parse_args(argv)
+    given = list(sys.argv[1:] if argv is None else argv)
+    arguments = parser.parse_args(given)
 
     # A value whose form the page admits and whose meaning the Skill rejects.
     parts = urlsplit(arguments.url)
@@ -2533,7 +3112,21 @@ def main(argv: list[str] | None = None) -> int:
             f"'--resources' takes all, in-scope or none, not '{arguments.resources}'"
         )
     if arguments.browser not in BROWSER_POLICIES:
-        return refusal(f"'--browser' takes auto or never, not '{arguments.browser}'")
+        return refusal(
+            f"'--browser' takes auto, always or never, not '{arguments.browser}'"
+        )
+    if arguments.browser == BROWSER_NEVER:
+        for flag, given_flag in (
+            ("--headed", arguments.headed),
+            ("--profile", arguments.profile is not None),
+        ):
+            if given_flag:
+                return refusal(
+                    f"'{flag}' needs a browser, and '--browser=never' keeps every"
+                    " host on plain HTTP"
+                )
+    if arguments.profile is not None and not arguments.profile.strip():
+        return refusal("'--profile' takes a Chrome profile name or a directory path")
     headers: list[tuple[str, str]] = []
     for header in arguments.header:
         name, colon, value = header.partition(":")
@@ -2583,15 +3176,36 @@ def main(argv: list[str] | None = None) -> int:
         includes=includes,
         excludes=excludes,
         browser=arguments.browser,
+        headed=arguments.headed,
+        invocation=tuple(given),
     )
 
-    # Run; a real run stages the files it downloads outside the output directory.
+    # Run; a real run stages the files it downloads outside the output directory,
+    # and the browser session is closed however the run ends.
     log = RunLog()
-    run = Mirror(options, ladder(arguments.user_agent, headers, credentials, log), log)
-    if options.dry_run:
-        return run.run(None)
-    with tempfile.TemporaryDirectory(prefix="kntnt-mirror-") as staging:
-        return run.run(Path(staging))
+    session = BrowserSession(arguments.user_agent, headers, profile(arguments.profile))
+    fetchers = ladder(
+        arguments.user_agent,
+        headers,
+        credentials,
+        log,
+        arguments.browser,
+        arguments.headed,
+        session,
+    )
+    run = Mirror(options, fetchers, log)
+    for signum in (signal.SIGINT, signal.SIGTERM):
+        signal.signal(signum, interrupted)
+    try:
+        if options.dry_run:
+            return run.run(None)
+        with tempfile.TemporaryDirectory(prefix="kntnt-mirror-") as staging:
+            return run.run(Path(staging))
+    except BrowserUnavailable as error:
+        print(error)
+        return EXIT_REFUSED
+    finally:
+        session.close()
 
 
 if __name__ == "__main__":

@@ -144,9 +144,9 @@ Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--y
 
 ### mirror
 
-Save a web page, and every page and file under it that its links, sitemaps and feeds reach, to disk with everything they need to display — images, stylesheets, scripts, fonts and media, on whatever host they are — and rewrite their references so the copy opens in a browser with nothing fetched from the network. The crawl stays under the start page's directory, widened by `--include` and narrowed by `--exclude` regular expressions, obeys `robots.txt`, and stops at 5000 pages unless `--max-pages` says otherwise; `--no-links`, `--no-sitemap` and `--no-feeds` turn each way of finding pages off. Each run leaves a manifest of every URL it took a position on and a log beside the copy; `--dry-run` shows what would be fetched without writing anything.
+Save a web page, and every page and file under it that its links, sitemaps and feeds reach, to disk with everything they need to display — images, stylesheets, scripts, fonts and media, on whatever host they are — and rewrite their references so the copy opens in a browser with nothing fetched from the network. The crawl stays under the start page's directory, widened by `--include` and narrowed by `--exclude` regular expressions, obeys `robots.txt`, and stops at 5000 pages unless `--max-pages` says otherwise; `--no-links`, `--no-sitemap` and `--no-feeds` turn each way of finding pages off. A host that blocks it climbs from plain HTTP to a Chrome identity and then to a headless browser, whose rendered page is saved without its scripts; `--headed` opens a visible browser where you can pass a challenge or log in, and `--profile` lends it your Chrome profile. Each run leaves a manifest of every URL it took a position on and a log beside the copy; `--dry-run` shows what would be fetched without writing anything.
 
-Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] [--delay=<seconds>] [--no-links] [--no-sitemap] [--no-feeds] [--ignore-robots] [--include=<regex> ...] [--exclude=<regex> ...] [--dry-run] <url>`.
+Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] [--delay=<seconds>] [--no-links] [--no-sitemap] [--no-feeds] [--ignore-robots] [--include=<regex> ...] [--exclude=<regex> ...] [--header=<name: value> ...] [--user-agent=<string>] [--browser=auto|always|never] [--headed] [--profile=<name|path>] [--dry-run] <url>`.
 
 ## Features
 
@@ -168,7 +168,7 @@ A two-line Claude Code status line: path, worktree marker, branch, working-tree 
 
 Every skill requires `uv` and the manager: the manager ships the engine that reads a skill's invocation, and `uv` runs it.
 
-Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`. `release` can finish without `gh`, but then skips the GitHub release.
+Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`; `mirror` requires `agent-browser`, which fetches in a real browser what plain HTTP cannot, installed with `brew install agent-browser` and then `agent-browser install`. `release` can finish without `gh`, but then skips the GitHub release.
 
 `push` requires `commit`; `release` requires `push`; `delegation` and `orchestrate` require `model-selector`; `redline` requires `proofread`.
 
