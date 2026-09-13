@@ -21,8 +21,14 @@ in scope that a link, a sitemap or a feed names, as far as `robots.txt`
 and the page cap allow, and every resource those pages and their stylesheets
 reference that `--resources` admits; sitemaps and feeds are read, never saved.
 The placement pass maps every fetched URL to a path, keeps HTML and CSS as
-served under `.mirror/raw/`, and puts every other file straight into the tree. The rewrite pass derives the tree's HTML and CSS from the raw
-copies, so a later run can rewrite again without fetching.
+served under `.mirror/raw/`, and puts every other file straight into the tree.
+The rewrite pass derives the tree's HTML and CSS from the raw copies, so a later
+run can rewrite again without fetching.
+
+A rerun into the same output directory is incremental: the earlier manifest's
+validators make every request for a file still on disk conditional, a `304`
+reads a page back from its raw copy, the rewrite writes only bytes that differ,
+and a saved file this run did not discover stays and is recorded `absent`.
 """
 
 from __future__ import annotations
@@ -69,6 +75,7 @@ READ_TIMEOUT = 30.0
 RETRIED_STATUSES = frozenset({429, 500, 502, 503, 504})
 RETRY_WAITS = (1.0, 2.0, 4.0)
 REDIRECT_STATUSES = frozenset({301, 302, 303, 307, 308})
+NOT_MODIFIED = 304
 MAX_REDIRECTS = 20
 
 # What normalisation removes from a URL before it is compared.
@@ -112,6 +119,8 @@ OUTCOME_ROBOTS = "robots"
 OUTCOME_OVER_CAP = "over-cap"
 OUTCOME_MISSING = "missing"
 OUTCOME_EXCLUDED = "excluded"
+OUTCOME_UNCHANGED = "unchanged"  # A conditional request the server answered `304`.
+OUTCOME_ABSENT = "absent"  # Saved by an earlier run, and not discovered by this one.
 
 # What names a page or file the crawl may take, and the documents read, not saved.
 PAGE_SOURCES = (SOURCE_LINK, SOURCE_SITEMAP, SOURCE_FEED)
@@ -157,6 +166,9 @@ STATE_DIRECTORY = ".mirror"
 RAW_DIRECTORY = "raw"
 MANIFEST_NAME = "manifest.ndjson"
 LOG_NAME = "run.log"
+
+# The word a dry run's list puts after a URL it would request conditionally.
+CONDITIONAL_MARK = "conditional"
 
 # Attributes whose value is one URL, and those that hold a candidate list.
 URL_ATTRIBUTES = ("href", "src", "poster", "data", "action")
@@ -505,12 +517,32 @@ class Fetched:
     staged: Path | None = None
     error: str | None = None
     redirected_out: bool = False
+    unchanged: bool = False  # A `304`: the bytes are those an earlier run saved.
+    stored: PurePosixPath | None = None  # Where an unchanged file's bytes are.
 
     @property
     def succeeded(self) -> bool:
-        return (
-            self.error is None and self.status is not None and 200 <= self.status < 300
-        )
+        if self.error is not None or self.status is None:
+            return False
+        return self.unchanged or 200 <= self.status < 300
+
+
+@dataclass(frozen=True)
+class Validators:
+    """What an earlier run's manifest row says identifies the bytes it saved."""
+
+    etag: str | None
+    last_modified: str | None
+
+    def headers(self) -> list[tuple[str, str]]:
+        """The conditional headers these validators can send, and only those."""
+
+        sent: list[tuple[str, str]] = []
+        if self.etag:
+            sent.append(("If-None-Match", self.etag))
+        if self.last_modified:
+            sent.append(("If-Modified-Since", self.last_modified))
+        return sent
 
 
 class Fetcher(Protocol):
@@ -524,6 +556,7 @@ class Fetcher(Protocol):
         staging: Path | None,
         follow: Callable[[str], bool] | None = None,
         keep: bool = False,
+        validators: Validators | None = None,
     ) -> Fetched:
         """Fetch *url*, following redirects.
 
@@ -531,7 +564,9 @@ class Fetcher(Protocol):
         returned in `body`. Any other body is written to *staging* and named in
         `staged`, or only counted when *staging* is None. Where *follow* says
         no to a redirect's target, the fetch stops there: `final_url` is that
-        target, `status` the redirect's, and `redirected_out` is set.
+        target, `status` the redirect's, and `redirected_out` is set. With
+        *validators*, the request is conditional, and a `304` comes back as
+        that status with whatever validators it carries and no body.
         """
         ...
 
@@ -596,6 +631,7 @@ class HttpFetcher:
         staging: Path | None,
         follow: Callable[[str], bool] | None = None,
         keep: bool = False,
+        validators: Validators | None = None,
     ) -> Fetched:
         """Fetch *url*, retrying connection errors, timeouts and busy answers."""
 
@@ -604,7 +640,7 @@ class HttpFetcher:
             last = attempt == attempts - 1
             began = time.monotonic()
             try:
-                with self._send(url, follow) as (response, declined):
+                with self._send(url, follow, validators) as (response, declined):
                     if declined is not None:
                         return Fetched(
                             declined,
@@ -629,15 +665,19 @@ class HttpFetcher:
 
     @contextmanager
     def _send(
-        self, url: str, follow: Callable[[str], bool] | None
+        self,
+        url: str,
+        follow: Callable[[str], bool] | None,
+        validators: Validators | None = None,
     ) -> Iterator[tuple[httpx.Response, str | None]]:
         """GET *url*, following redirects with every header on every hop.
 
         Yields the final answer, and the redirect target *follow* declined, if any.
         """
 
+        headers = [*self.headers, *(validators.headers() if validators else [])]
         for _ in range(MAX_REDIRECTS + 1):
-            request = self.client.build_request("GET", url, headers=self.headers)
+            request = self.client.build_request("GET", url, headers=headers)
             response = self.client.send(request, auth=self._auth(url), stream=True)
             location = response.headers.get("Location")
             redirected = response.status_code in REDIRECT_STATUSES and location
@@ -1253,6 +1293,7 @@ class Record:
     timestamp: str = field(default_factory=timestamp)
     local_path: PurePosixPath | None = None
     final_url: str | None = None  # Where the fetch ended, in its compared form.
+    conditional: bool = False  # Requested with an earlier run's validators.
 
     @property
     def final(self) -> str | None:
@@ -1276,6 +1317,7 @@ class Record:
             "fetcher": fetcher if attempted else None,
             "status": fetched.status if fetched else None,
             "content_type": fetched.content_type if fetched else None,
+            "charset": fetched.charset if fetched else None,
             "size": fetched.size if fetched else None,
             "local_path": str(self.local_path) if self.local_path else None,
             "sha256": fetched.sha256 if fetched else None,
@@ -1327,12 +1369,18 @@ class Mirror:
         self.admitted = 0
         self.shells = 0
         self.last_request: float | None = None
+        self.previous: dict[str, dict[str, object]] = {}
+        self.previous_output: Path | None = None
+        self.absent: list[dict[str, object]] = []
 
     def run(self, staging: Path | None) -> int:
         """Mirror everything under the start page; return the exit status."""
 
-        # The start page is a page robots.txt governs, like every other.
+        # An earlier run's manifest makes every request it can conditional.
         start_url = self.start
+        self._remember(self.options.output or Path(urlsplit(start_url).hostname or ""))
+
+        # The start page is a page robots.txt governs, like every other.
         start = Record(start_url, KIND_PAGE, SOURCE_START, None)
         self.records[start_url] = start
         if not self._robots_allow(start_url):
@@ -1357,6 +1405,7 @@ class Mirror:
             if pattern.search(start.final):
                 return excludes_start(pattern, start.final)
         self.output = self.options.output or Path(self.root_host)
+        self._remember(self.output)
         self.admitted = 1
         self._settle_kind(start)
 
@@ -1374,6 +1423,8 @@ class Mirror:
             self._settle_kind(record)
             self._discover(record)
 
+        # What an earlier run saved and this one never came to.
+        self._settle_absent()
         if not self.options.dry_run:
             self._write()
         print(self._report())
@@ -1410,10 +1461,11 @@ class Mirror:
         staging: Path | None,
         follow: Callable[[str], bool] | None = None,
         keep: bool = False,
+        validators: Validators | None = None,
     ) -> Fetched:
         self._pace(url)
         try:
-            return self.fetcher.fetch(url, staging, follow, keep)
+            return self.fetcher.fetch(url, staging, follow, keep, validators)
         finally:
             self.last_request = time.monotonic()
 
@@ -1447,13 +1499,126 @@ class Mirror:
         robots = self._robots(url)
         return self.options.ignore_robots or robots.allows(url)
 
+    # --- An earlier run -----------------------------------------------------------
+
+    def _remember(self, output: Path) -> None:
+        """Read the manifest an earlier run left in *output*, where there is one.
+
+        Read once per output directory: the start page's own request goes to
+        the directory its URL names, and the rest to the one the run writes.
+        """
+
+        if output == self.previous_output:
+            return
+        self.previous_output = output
+        self.previous = {}
+        manifest = output / STATE_DIRECTORY / MANIFEST_NAME
+        if not manifest.is_file():
+            return
+        for line in manifest.read_text(encoding="utf-8").splitlines():
+            row = json.loads(line) if line.strip() else None
+            if isinstance(row, dict) and isinstance(row.get("url"), str):
+                self.previous[row["url"]] = row
+
+    def _saved(self, row: dict[str, object]) -> PurePosixPath | None:
+        """The path of the file an earlier run's row saved, while it is still there."""
+
+        local_path = row.get("local_path")
+        if self.previous_output is None or not isinstance(local_path, str):
+            return None
+        if not (self.previous_output / local_path).is_file():
+            return None
+        return PurePosixPath(local_path)
+
+    def _reusable(self, url: str) -> dict[str, object] | None:
+        """The earlier row a request for *url* can be made conditional on, or None.
+
+        It needs a saved file that is still there, its raw copy too where the
+        rewrite reads it, and at least one validator to send.
+        """
+
+        row = self.previous.get(url)
+        if row is None or self.previous_output is None:
+            return None
+        saved = self._saved(row)
+        if saved is None or not (row.get("etag") or row.get("last_modified")):
+            return None
+        content_type = optional_text(row.get("content_type"))
+        final = optional_text(row.get("final_url")) or url
+        raw = self.previous_output / STATE_DIRECTORY / RAW_DIRECTORY / str(saved)
+        if is_rewritable(content_type, final) and not raw.is_file():
+            return None
+        return row
+
+    def _unchanged(self, answer: Fetched, row: dict[str, object]) -> Fetched:
+        """What a `304` stands for: the earlier row, updated by what the `304` carries.
+
+        A rewritable file's bytes are read back from its raw copy, so the page
+        is read for links and resources, and rewritten, as a fetched one is.
+        """
+
+        assert self.previous_output is not None
+        saved = self._saved(row)
+        assert saved is not None
+        earlier_type = optional_text(row.get("content_type"))
+        rewritable = is_rewritable(earlier_type, answer.final_url)
+        raw = self.previous_output / STATE_DIRECTORY / RAW_DIRECTORY / str(saved)
+        size = row.get("size")
+        return Fetched(
+            final_url=answer.final_url,
+            status=answer.status,
+            content_type=answer.content_type or earlier_type,
+            charset=answer.charset or optional_text(row.get("charset")),
+            etag=answer.etag or optional_text(row.get("etag")),
+            last_modified=answer.last_modified
+            or optional_text(row.get("last_modified")),
+            size=size if isinstance(size, int) else None,
+            sha256=optional_text(row.get("sha256")),
+            body=raw.read_bytes() if rewritable else None,
+            unchanged=True,
+            stored=saved,
+        )
+
+    def _settle_absent(self) -> None:
+        """Record every file an earlier run saved whose URL this run did not discover.
+
+        The file stays where it is: nothing is ever deleted from the tree.
+        """
+
+        self.absent = []
+        for url, row in self.previous.items():
+            if url in self.records or self._saved(row) is None:
+                continue
+            self.absent.append(
+                {**row, "outcome": OUTCOME_ABSENT, "timestamp": timestamp()}
+            )
+            self.log.decision(OUTCOME_ABSENT, url)
+
     # --- Fetching and discovery -------------------------------------------------
 
     def _fetch(self, record: Record, staging: Path | None) -> None:
         self.fetches += 1
         place = staging / str(self.fetches) if staging else None
         follow = self._in_scope if record.source in PAGE_SOURCES else self._not_excluded
-        record.fetched = self._request(record.url, place, follow)
+        previous = self._reusable(record.url)
+        validators = (
+            Validators(
+                optional_text(previous.get("etag")),
+                optional_text(previous.get("last_modified")),
+            )
+            if previous is not None
+            else None
+        )
+        record.conditional = validators is not None
+        fetched = self._request(record.url, place, follow, validators=validators)
+        if (
+            previous is not None
+            and fetched.status == NOT_MODIFIED
+            and not fetched.error
+        ):
+            fetched = self._unchanged(fetched, previous)
+            record.outcome = OUTCOME_UNCHANGED
+        record.fetched = fetched
         record.final_url = self._normal(record.fetched.final_url)
         record.timestamp = timestamp()
         if record.fetched.redirected_out:
@@ -1729,16 +1894,19 @@ class Mirror:
             record.local_path = paths[record.final or ""]
         self.by_final = by_final
 
-        # HTML and CSS go to raw as served; everything else straight to the tree.
+        # HTML and CSS go to raw as served; everything else straight to the tree,
+        # where an unchanged file already is unless its path moved.
         for final, record in by_final.items():
             fetched = record.fetched
             assert fetched is not None
+            target = output / str(paths[final])
             if fetched.body is not None:
                 write_bytes(raw / str(paths[final]), fetched.body)
             elif fetched.staged is not None:
-                target = output / str(paths[final])
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(fetched.staged, target)
+            elif fetched.stored is not None and fetched.stored != paths[final]:
+                write_bytes(target, (output / str(fetched.stored)).read_bytes())
 
         # The rewrite pass derives the tree's HTML and CSS from raw, CSS first
         # so each page knows which stylesheets' bytes changed.
@@ -1779,14 +1947,17 @@ class Mirror:
             )
             write_bytes(output / str(paths[final]), page.encode("utf-8"))
 
-        # The manifest, `robots.txt` files last, and the log.
+        # The manifest, `robots.txt` files and what is absent last, and the log.
         records = [
             *self.records.values(),
             *(record for record, _ in self.robots.values()),
         ]
         rows = "".join(
-            json.dumps(record.row(self.fetcher.name), ensure_ascii=False) + "\n"
-            for record in records
+            json.dumps(row, ensure_ascii=False) + "\n"
+            for row in (
+                *(record.row(self.fetcher.name) for record in records),
+                *self.absent,
+            )
         )
         write_bytes(state / MANIFEST_NAME, rows.encode("utf-8"))
         write_bytes(
@@ -1826,12 +1997,25 @@ class Mirror:
         """What the Skill relays: counts, size, what the crawl declined, and every failure."""
 
         records = list(self.records.values())
-        fetched = [record for record in records if record.final is not None]
-        saved = self._fetched()
+        fetched = [
+            record
+            for record in records
+            if record.final is not None and record.outcome != OUTCOME_UNCHANGED
+        ]
+        saved = [
+            record for record in self._fetched() if record.outcome != OUTCOME_UNCHANGED
+        ]
         size = sum((record.fetched.size or 0) for record in saved if record.fetched)
 
         def fetched_of(kind: str) -> int:
             return sum(1 for record in fetched if record.kind == kind)
+
+        def unchanged_of(kind: str) -> int:
+            return sum(
+                1
+                for record in records
+                if record.outcome == OUTCOME_UNCHANGED and record.kind == kind
+            )
 
         def candidates_from(source: str) -> int:
             return sum(
@@ -1851,13 +2035,18 @@ class Mirror:
             lines.append(f"Dry run of {self.start}: nothing was written. Would fetch:")
             lines.extend(f"  {robots.url}" for robots, _ in self.robots.values())
             lines.extend(
-                f"  {record.url}" for record in records if record.fetched is not None
+                f"  {record.url}{f' {CONDITIONAL_MARK}' if record.conditional else ''}"
+                for record in records
+                if record.fetched is not None
             )
         else:
             lines.append(f"Mirrored {self.start} to {self.output}.")
         lines.append(f"Pages fetched: {fetched_of(KIND_PAGE)}")
         lines.append(f"Files fetched: {fetched_of(KIND_FILE)}")
         lines.append(f"Resources fetched: {fetched_of(KIND_RESOURCE)}")
+        lines.append(f"Pages unchanged: {unchanged_of(KIND_PAGE)}")
+        lines.append(f"Files unchanged: {unchanged_of(KIND_FILE)}")
+        lines.append(f"Resources unchanged: {unchanged_of(KIND_RESOURCE)}")
         lines.append(f"Total size: {human_size(size)}")
         lines.append(f"Sitemaps read: {fetched_of(KIND_SITEMAP)}")
         lines.append(f"Feeds read: {fetched_of(KIND_FEED)}")
@@ -1869,6 +2058,7 @@ class Mirror:
         lines.append(f"Redirected out of scope: {declined(OUTCOME_REDIRECT_OUT)}")
         lines.append(f"Stopped by robots.txt: {declined(OUTCOME_ROBOTS)}")
         lines.append(f"Over the cap: {over_cap}")
+        lines.append(f"Absent: {len(self.absent)}")
         lines.append(f"Suspected JavaScript shells: {self.shells}")
         if over_cap:
             lines.append(
@@ -1909,8 +2099,25 @@ def decode_css(body: bytes, charset: str | None) -> tuple[str, str]:
 
 
 def write_bytes(path: Path, content: bytes) -> None:
+    """Write *content* to *path*, unless the file there already holds exactly it.
+
+    An unchanged file keeps its modification time through a rerun's rewrite.
+    """
+
+    if (
+        path.is_file()
+        and path.stat().st_size == len(content)
+        and path.read_bytes() == content
+    ):
+        return
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(content)
+
+
+def optional_text(value: object) -> str | None:
+    """A manifest value as text, or None where it is not."""
+
+    return value if isinstance(value, str) else None
 
 
 def human_size(size: int) -> str:

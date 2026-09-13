@@ -21,7 +21,7 @@ import subprocess
 import tempfile
 import threading
 import time
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -52,6 +52,7 @@ MANIFEST_FIELDS = {
     "last_modified",
     "timestamp",
     "outcome",
+    "charset",
 }
 
 # The attributes a saved page references another file through.
@@ -126,6 +127,24 @@ class Site:
         return output / f"{host}%3A{self.port}"
 
 
+# The validators a route may carry, and the conditional headers that name them.
+VALIDATORS = ("ETag", "Last-Modified")
+
+
+def not_modified(response: Response, headers: Mapping[str, str]) -> bool:
+    """Whether a conditional request matches the route's validators: a `304`.
+
+    `If-None-Match` decides where it is sent, as RFC 9110 says, and
+    `If-Modified-Since` only where it is not.
+    """
+
+    tag = headers.get("If-None-Match")
+    if tag is not None:
+        return tag == response.headers.get("ETag")
+    since = headers.get("If-Modified-Since")
+    return since is not None and since == response.headers.get("Last-Modified")
+
+
 @pytest.fixture
 def site() -> Iterator[Site]:
     """Serve a fresh fixture site for one test, and stop it afterwards."""
@@ -145,6 +164,13 @@ def site() -> Iterator[Site]:
                 self.end_headers()
                 return
             response = responses.pop(0) if len(responses) > 1 else responses[0]
+            if not_modified(response, dict(self.headers)):
+                self.send_response(304)
+                for name in VALIDATORS:
+                    if name in response.headers:
+                        self.send_header(name, response.headers[name])
+                self.end_headers()
+                return
             self.send_response(response.status)
             self.send_header("Content-Type", response.content_type)
             self.send_header("Content-Length", str(len(response.body)))
@@ -1798,3 +1824,288 @@ def test_the_manpage_states_include_and_exclude() -> None:
     engine = ENGINE.read_text(encoding="utf-8")
     metadata = engine.partition("# /// script")[2].partition("# ///")[0]
     assert re.search(r'"regex==[0-9.]+"', metadata)
+
+
+# --- A second run ---------------------------------------------------------------
+
+# The date every versioned route says it was last modified.
+LAST_MODIFIED = "Wed, 09 Sep 2026 10:00:00 GMT"
+
+# A time well before any run, set on every saved file so a rewrite shows.
+EARLIER = 1_000_000_000
+
+
+def versioned(
+    site: Site,
+    path: str,
+    body: bytes,
+    content_type: str = "text/html; charset=utf-8",
+    version: int = 1,
+) -> None:
+    """Serve *body* at *path* with an `ETag` of its *version* and a `Last-Modified`."""
+
+    headers = {"ETag": f'"{path}-{version}"', "Last-Modified": LAST_MODIFIED}
+    site.add(path, Response(body, content_type, headers=headers))
+
+
+def serve_the_versioned_site(site: Site) -> None:
+    """A root `/v/` with pages, a file and resources, every one with both validators."""
+
+    versioned(
+        site,
+        "/v/",
+        b'<link rel="stylesheet" href="css/site.css"><img src="img/pic.png">'
+        b'<a href="page">Page</a><a href="gone">Gone</a><a href="doc.pdf">Doc</a>',
+    )
+    versioned(site, "/v/page", b"<p>Page</p>")
+    versioned(site, "/v/gone", b"<p>Gone</p>")
+    versioned(site, "/v/doc.pdf", b"%PDF-1.4", "application/pdf")
+    versioned(
+        site, "/v/css/site.css", b"body { background: url(../img/bg.png); }", "text/css"
+    )
+    versioned(site, "/v/img/pic.png", b"pic", "image/png")
+    versioned(site, "/v/img/bg.png", b"bg", "image/png")
+
+
+def saved_rows(output: Path) -> dict[str, dict[str, object]]:
+    """Every manifest row with a saved file, by its URL."""
+
+    return {str(row["url"]): row for row in manifest(output) if row["local_path"]}
+
+
+def age_the_mirror(output: Path) -> dict[Path, int]:
+    """Set every saved file and raw copy to an earlier time, and return the times."""
+
+    times: dict[Path, int] = {}
+    for path in output.rglob("*"):
+        if path.is_file() and path.name not in ("manifest.ndjson", "run.log"):
+            os.utime(path, ns=(EARLIER * 10**9, EARLIER * 10**9))
+            times[path] = path.stat().st_mtime_ns
+    return times
+
+
+def count(report: str, label: str) -> int:
+    found = re.search(rf"^{re.escape(label)}: (\d+)$", report, re.MULTILINE)
+    assert found is not None, (label, report)
+    return int(found.group(1))
+
+
+def test_a_second_run_against_an_unchanged_site_asks_conditionally_and_replaces_nothing(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_versioned_site(site)
+    output = tmp_path / "out"
+    first = mirror(tmp_path, "--output=out", site.url("/v/"))
+    assert first.returncode == 0, (first.stdout, first.stderr)
+    saved = saved_rows(output)
+    assert len(saved) == 7
+    times = age_the_mirror(output)
+
+    for run in ("second", "third"):
+        site.requests.clear()
+        result = mirror(tmp_path, "--output=out", site.url("/v/"))
+
+        assert result.returncode == 0, (run, result.stdout, result.stderr)
+        for url, row in saved.items():
+            [request] = site.requested(urlsplit(url).path)
+            assert request.headers["If-None-Match"] == row["etag"], (run, url)
+            assert request.headers["If-Modified-Since"] == row["last_modified"], url
+        rows = {str(row["url"]): row for row in manifest(output)}
+        for url, row in saved.items():
+            now = rows[url]
+            assert (now["outcome"], now["status"]) == ("unchanged", 304), (run, url)
+            for kept in ("etag", "last_modified", "sha256", "size", "content_type"):
+                assert now[kept] == row[kept], (run, url, kept)
+            assert now["local_path"] == row["local_path"], (run, url)
+        assert {path: path.stat().st_mtime_ns for path in times} == times, run
+        assert count(result.stdout, "Pages unchanged") == 3
+        assert count(result.stdout, "Files unchanged") == 1
+        assert count(result.stdout, "Resources unchanged") == 3
+        assert count(result.stdout, "Pages fetched") == 0
+        assert count(result.stdout, "Absent") == 0
+
+
+def test_a_changed_page_is_replaced_with_its_raw_copy_and_nothing_else_is(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_versioned_site(site)
+    output = tmp_path / "out"
+    first = mirror(tmp_path, "--output=out", site.url("/v/"))
+    assert first.returncode == 0, (first.stdout, first.stderr)
+    times = age_the_mirror(output)
+    versioned(site, "/v/page", b"<p>Page, revised</p>", version=2)
+
+    result = mirror(tmp_path, "--output=out", site.url("/v/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    tree = site.tree(output)
+    page = tree / "v" / "page.html"
+    raw = output / ".mirror" / "raw" / tree.name / "v" / "page.html"
+    assert "revised" in page.read_text(encoding="utf-8")
+    assert raw.read_bytes() == b"<p>Page, revised</p>"
+    for path, before in times.items():
+        if path not in (page, raw):
+            assert path.stat().st_mtime_ns == before, path
+    rows = {str(row["url"]): row for row in manifest(output)}
+    changed = rows[site.url("/v/page")]
+    assert (changed["outcome"], changed["etag"]) == ("fetched", '"/v/page-2"')
+    for url, row in rows.items():
+        if row["local_path"] and url != site.url("/v/page"):
+            assert row["outcome"] == "unchanged", url
+    assert count(result.stdout, "Pages fetched") == 1
+    assert count(result.stdout, "Pages unchanged") == 2
+
+
+def test_a_page_new_to_the_mirror_turns_a_reference_in_an_unchanged_page_local(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_versioned_site(site)
+    versioned(site, "/v/", b'<a href="later">Later</a>')
+    site.add("/v/later", Response(b"", status=404), Response(b"<p>Later</p>"))
+    output = tmp_path / "out"
+    first = mirror(tmp_path, "--output=out", site.url("/v/"))
+    start = site.tree(output) / "v" / "index.html"
+    assert links_from(start) == [site.url("/v/later")], first.stdout
+
+    result = mirror(tmp_path, "--output=out", site.url("/v/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    rows = {str(row["url"]): row for row in manifest(output)}
+    assert rows[site.url("/v/")]["outcome"] == "unchanged"
+    assert rows[site.url("/v/later")]["outcome"] == "fetched"
+    [reference] = links_from(start)
+    target = resolves(start, reference)
+    assert target is not None and target.read_text().count("Later") == 1
+
+
+def test_a_page_gone_from_the_site_keeps_its_file_and_is_recorded_absent(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_versioned_site(site)
+    output = tmp_path / "out"
+    first = mirror(tmp_path, "--output=out", site.url("/v/"))
+    assert first.returncode == 0, (first.stdout, first.stderr)
+    gone = saved_rows(output)[site.url("/v/gone")]
+    versioned(
+        site,
+        "/v/",
+        b'<link rel="stylesheet" href="css/site.css"><img src="img/pic.png">'
+        b'<a href="page">Page</a><a href="doc.pdf">Doc</a>',
+        version=2,
+    )
+    site.add("/v/gone", Response(b"", status=404))
+
+    for run in ("second", "third"):
+        result = mirror(tmp_path, "--output=out", site.url("/v/"))
+
+        assert result.returncode == 0, (run, result.stdout, result.stderr)
+        assert "<p>Gone</p>" in (output / str(gone["local_path"])).read_text(), run
+        rows = {str(row["url"]): row for row in manifest(output)}
+        absent = rows[site.url("/v/gone")]
+        assert (absent["outcome"], absent["local_path"]) == (
+            "absent",
+            gone["local_path"],
+        )
+        assert count(result.stdout, "Absent") == 1, run
+    assert not site.requested("/v/gone")[1:]
+
+
+def test_a_row_without_a_validator_sends_only_what_it_has(
+    site: Site, tmp_path: Path
+) -> None:
+    site.html("/n/", '<img src="dated.png"><img src="plain.png">')
+    site.add(
+        "/n/dated.png",
+        Response(b"dated", "image/png", headers={"Last-Modified": LAST_MODIFIED}),
+    )
+    site.binary("/n/plain.png", b"plain")
+    first = mirror(tmp_path, "--output=out", site.url("/n/"))
+    assert first.returncode == 0, (first.stdout, first.stderr)
+    site.requests.clear()
+
+    result = mirror(tmp_path, "--output=out", site.url("/n/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    [dated] = site.requested("/n/dated.png")
+    assert dated.headers.get("If-Modified-Since") == LAST_MODIFIED
+    assert "If-None-Match" not in dated.headers
+    for path in ("/n/plain.png", "/n/"):
+        [plain] = site.requested(path)
+        assert "If-None-Match" not in plain.headers, path
+        assert "If-Modified-Since" not in plain.headers, path
+    rows = {str(row["url"]): row for row in manifest(tmp_path / "out")}
+    assert rows[site.url("/n/dated.png")]["outcome"] == "unchanged"
+    assert rows[site.url("/n/plain.png")]["outcome"] == "fetched"
+
+
+def test_a_dry_run_against_a_mirror_marks_the_conditional_urls_and_writes_nothing(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_versioned_site(site)
+    output = tmp_path / "out"
+    first = mirror(tmp_path, "--output=out", site.url("/v/"))
+    assert first.returncode == 0, (first.stdout, first.stderr)
+    saved = saved_rows(output)
+    times = age_the_mirror(output)
+    state = {
+        name: (output / ".mirror" / name).read_bytes()
+        for name in ("manifest.ndjson", "run.log")
+    }
+    before = sorted(output.rglob("*"))
+
+    result = mirror(tmp_path, "--output=out", "--dry-run", site.url("/v/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    listed = result.stdout.partition("Would fetch:")[2].partition("\nPages")[0]
+    marked = {
+        line.split()[0]
+        for line in listed.splitlines()
+        if line.strip().endswith(" conditional")
+    }
+    assert marked == set(saved)
+    assert f"{site.url('/robots.txt')}\n" in listed
+    assert sorted(output.rglob("*")) == before
+    assert {path: path.stat().st_mtime_ns for path in times} == times
+    for name, content in state.items():
+        assert (output / ".mirror" / name).read_bytes() == content, name
+
+
+def test_a_charset_the_server_declared_holds_for_an_unchanged_page(
+    site: Site, tmp_path: Path
+) -> None:
+    body = "<p>Smörgåsbord</p>".encode("iso-8859-1")
+    site.add(
+        "/l/",
+        Response(body, "text/html; charset=iso-8859-1", headers={"ETag": '"l"'}),
+    )
+    first = mirror(tmp_path, "--output=out", site.url("/l/"))
+    assert first.returncode == 0, (first.stdout, first.stderr)
+    page = site.tree(tmp_path / "out") / "l" / "index.html"
+    saved = page.read_bytes()
+
+    result = mirror(tmp_path, "--output=out", site.url("/l/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert page.read_bytes() == saved
+    assert "Smörgåsbord" in saved.decode("utf-8")
+
+
+def test_the_manpage_states_that_a_rerun_is_incremental() -> None:
+    page = (SKILL / "help.md").read_text(encoding="utf-8")
+    description = page.partition("\n## DESCRIPTION\n")[2].partition("\n## ")[0]
+    for statement in (
+        "incremental",
+        "`If-None-Match`",
+        "`If-Modified-Since`",
+        "`ETag`",
+        "`Last-Modified`",
+        "nothing is ever deleted",
+        "`unchanged`",
+        "`absent`",
+    ):
+        assert statement in description, statement
+    files = page.partition("\n## FILES\n")[2].partition("\n## ")[0]
+    for outcome in ("`unchanged`", "`absent`", "`charset`"):
+        assert outcome in files, outcome
+    options = page.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
+    assert "`conditional`" in options
