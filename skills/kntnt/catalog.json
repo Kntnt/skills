@@ -202,7 +202,7 @@
       "name": "mirror",
       "category": "web",
       "description": "Copy a web page and everything it needs to display to disk, so it opens in a browser with nothing fetched from the network.",
-      "digest": "7094031e5f849f396d6b77e31e671a933d5f56a46bbc9d46e1074fcc79d56071",
+      "digest": "a5a423cb5d566e98563f57bd578cd67d97f1274dea348864e4de505ca61063e8",
       "binaries": [
         "uv"
       ],

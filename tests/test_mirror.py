@@ -576,6 +576,62 @@ def test_every_request_carries_the_identity_and_every_header(
         assert request.headers["Cookie"] == "session=1"
 
 
+def test_every_header_survives_every_redirect_and_retry(
+    site: Site, tmp_path: Path
+) -> None:
+    other = site.url("/elsewhere/logo.png", host="localhost")
+    site.add(
+        "/start",
+        Response(
+            b"",
+            status=302,
+            headers={"Location": "/h/", "Set-Cookie": "tracker=server"},
+        ),
+    )
+    site.html("/h/", '<img src="moved.png"><img src="away.png"><img src="busy.png">')
+    site.add("/h/moved.png", Response(b"", status=301, headers={"Location": "a.png"}))
+    site.binary("/h/a.png", b"a")
+    site.add("/h/away.png", Response(b"", status=307, headers={"Location": other}))
+    site.binary("/elsewhere/logo.png", b"logo")
+    site.add(
+        "/h/busy.png",
+        Response(b"", status=302, headers={"Location": "/h/b.png"}),
+    )
+    site.add(
+        "/h/b.png",
+        Response(b"", status=503, headers={"Retry-After": "0"}),
+        Response(b"b", "image/png"),
+    )
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--header=Cookie: session=1",
+        "--header=Authorization: Bearer secret",
+        "--header=X-Token: secret",
+        "--user-agent=fixture-bot/2",
+        site.url("/start"),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    paths = {(request.host.split(":")[0], request.path) for request in site.requests}
+    assert paths == {
+        ("127.0.0.1", "/start"),
+        ("127.0.0.1", "/h/"),
+        ("127.0.0.1", "/h/moved.png"),
+        ("127.0.0.1", "/h/a.png"),
+        ("127.0.0.1", "/h/away.png"),
+        ("localhost", "/elsewhere/logo.png"),
+        ("127.0.0.1", "/h/busy.png"),
+        ("127.0.0.1", "/h/b.png"),
+    }
+    for request in site.requests:
+        assert request.headers.get("User-Agent") == "fixture-bot/2", request
+        assert request.headers.get("Cookie") == "session=1", request
+        assert request.headers.get("Authorization") == "Bearer secret", request
+        assert request.headers.get("X-Token") == "secret", request
+
+
 def test_a_busy_answer_is_retried_and_a_missing_one_is_not(
     site: Site, tmp_path: Path
 ) -> None:

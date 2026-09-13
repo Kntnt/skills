@@ -35,7 +35,7 @@ import tempfile
 import time
 from collections import deque
 from collections.abc import Callable, Iterable, Iterator
-from contextlib import nullcontext
+from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
@@ -59,6 +59,8 @@ CONNECT_TIMEOUT = 30.0
 READ_TIMEOUT = 30.0
 RETRIED_STATUSES = frozenset({429, 500, 502, 503, 504})
 RETRY_WAITS = (1.0, 2.0, 4.0)
+REDIRECT_STATUSES = frozenset({301, 302, 303, 307, 308})
+MAX_REDIRECTS = 20
 
 # What normalisation removes from a URL before it is compared.
 DEFAULT_PORTS = {"http": 80, "https": 443}
@@ -82,6 +84,7 @@ FILE_SUFFIX = "~file"
 RESOURCE_POLICIES = ("all", "in-scope", "none")
 KIND_PAGE = "page"
 KIND_RESOURCE = "resource"
+KIND_FILE = "file"  # Linked from a page and no page itself; a crawl emits it.
 SOURCE_START = "start"
 SOURCE_RESOURCE = "resource"
 OUTCOME_FETCHED = "fetched"
@@ -415,10 +418,13 @@ class HttpFetcher:
         self.credentials = credentials
         self.log = log
         self.started: dict[int, float] = {}
+        # The client follows no redirect itself: on each hop httpx drops
+        # `Cookie` and cross-origin `Authorization`, and every header the
+        # caller gave belongs on every request, so `_send` follows them.
+        self.headers = [("User-Agent", user_agent), *headers]
         self.client = httpx.Client(
-            headers=[("User-Agent", user_agent), *headers],
             timeout=httpx.Timeout(READ_TIMEOUT, connect=CONNECT_TIMEOUT),
-            follow_redirects=True,
+            follow_redirects=False,
             event_hooks={"request": [self._sent], "response": [self._answered]},
         )
 
@@ -442,7 +448,7 @@ class HttpFetcher:
             last = attempt == attempts - 1
             began = time.monotonic()
             try:
-                with self.client.stream("GET", url, auth=self._auth(url)) as response:
+                with self._send(url) as response:
                     if response.status_code in RETRIED_STATUSES and not last:
                         wait = retry_after(response.headers.get("Retry-After"))
                         time.sleep(RETRY_WAITS[attempt] if wait is None else wait)
@@ -458,6 +464,26 @@ class HttpFetcher:
                 # nothing a retry can change.
                 return Fetched(url, error=f"{type(error).__name__}: {error}")
         raise AssertionError("the last attempt always returns")
+
+    @contextmanager
+    def _send(self, url: str) -> Iterator[httpx.Response]:
+        """GET *url*, following redirects with every header on every hop."""
+
+        for _ in range(MAX_REDIRECTS + 1):
+            request = self.client.build_request("GET", url, headers=self.headers)
+            response = self.client.send(request, auth=self._auth(url), stream=True)
+            location = response.headers.get("Location")
+            if response.status_code not in REDIRECT_STATUSES or location is None:
+                try:
+                    yield response
+                finally:
+                    response.close()
+                return
+            response.close()
+            url = urljoin(str(response.url), location)
+        raise httpx.TooManyRedirects(
+            f"more than {MAX_REDIRECTS} redirects", request=request
+        )
 
     def _auth(self, url: str) -> httpx.BasicAuth | None:
         """Basic auth from the start URL, for the start page's host only."""

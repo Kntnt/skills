@@ -46,7 +46,7 @@ Say which resources are fetched. `all`, the default, fetches every resource the 
 
 **--header=**_HEADER_
 
-Send *HEADER*, written `name: value`, with every request. Repeatable. It covers `Authorization` and `Cookie`.
+Send *HEADER*, written `name: value`, with every request, to whatever host, each hop of a redirect included. Repeatable. It covers `Authorization` and `Cookie`.
 
 **--user-agent=**_STRING_
 
