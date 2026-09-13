@@ -15,11 +15,13 @@ to be its own (ADR-0196). Fetching sits behind the `Fetcher` protocol, so a
 second fetcher is added beside `HttpFetcher` rather than threaded through it.
 
 A run has three passes. The fetch pass follows the start page's redirects and
-fetches, one request at a time, every resource the page and its stylesheets
-reference that `--resources` admits. The placement pass maps every fetched URL
-to a path, keeps HTML and CSS as served under `.mirror/raw/`, and puts every
-other file straight into the tree. The rewrite pass derives the tree's HTML and
-CSS from the raw copies, so a later run can rewrite again without fetching.
+crawls from there, one request at a time and breadth first: every page and file
+under the root that a link reaches, as far as `robots.txt` and the page cap
+allow, and every resource those pages and their stylesheets reference that
+`--resources` admits. The placement pass maps every fetched URL to a path, keeps
+HTML and CSS as served under `.mirror/raw/`, and puts every other file straight
+into the tree. The rewrite pass derives the tree's HTML and CSS from the raw
+copies, so a later run can rewrite again without fetching.
 """
 
 from __future__ import annotations
@@ -27,6 +29,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
+import os
 import posixpath
 import re
 import shutil
@@ -50,7 +54,8 @@ import tinycss2.bytes
 from selectolax.lexbor import LexborHTMLParser, LexborNode
 from tinycss2.serializer import serialize_string_value, serialize_url
 
-# The identity every request carries unless `--user-agent` replaces it.
+# The identity every request carries unless `--user-agent` replaces it, and the
+# product token `robots.txt` groups are matched against.
 IDENTITY = "kntnt-mirror (+https://github.com/Kntnt/skills)"
 FETCHER_NAME = "http"
 
@@ -84,12 +89,33 @@ FILE_SUFFIX = "~file"
 RESOURCE_POLICIES = ("all", "in-scope", "none")
 KIND_PAGE = "page"
 KIND_RESOURCE = "resource"
-KIND_FILE = "file"  # Linked from a page and no page itself; a crawl emits it.
+KIND_FILE = "file"  # Linked from a page, or the start page, and no HTML itself.
+KIND_ROBOTS = "robots"
 SOURCE_START = "start"
 SOURCE_RESOURCE = "resource"
+SOURCE_LINK = "link"
+SOURCE_ROBOTS = "robots"
 OUTCOME_FETCHED = "fetched"
 OUTCOME_OUT_OF_SCOPE = "out-of-scope"
 OUTCOME_FAILED = "failed"
+OUTCOME_REDIRECT_OUT = "redirect-out"
+OUTCOME_ROBOTS = "robots"
+OUTCOME_OVER_CAP = "over-cap"
+
+# The crawl: its default cap on pages and files, and the pace between requests.
+DEFAULT_MAX_PAGES = 5000
+DEFAULT_DELAY = 0.0
+
+# `robots.txt`: where it is, and the file it is never saved as.
+ROBOTS_PATH = "/robots.txt"
+
+# A suspected JavaScript shell: scripts, and less text than this outside them.
+SHELL_TEXT_LIMIT = 200
+SHELL_HIDDEN_TAGS = ("script", "style", "noscript", "template")
+
+# The mark a file takes when a case-folding file system already holds its name.
+CASE_MARK = "~"
+CASE_PROBE_PREFIX = ".mirror-case-probe-"
 
 # Exit statuses.
 EXIT_CLEAN = 0
@@ -139,6 +165,10 @@ RESOURCE_LINK_RELATIONS = frozenset(
         "manifest",
     }
 )
+
+# The references a crawl follows to other pages and files.
+LINK_TAGS = ("a", "area")
+LINK_RELATIONS = frozenset({"next", "prev", "canonical", "alternate"})
 
 # CSS functions whose string arguments are URLs.
 CSS_IMAGE_SETS = frozenset({"image-set", "-webkit-image-set"})
@@ -230,13 +260,33 @@ def _remove_dot_segments(path: str) -> str:
     return resolved
 
 
+def fold_host(url: str, root_host: str) -> str:
+    """*url* with the other form of the root host, `www.` added or removed, folded onto it.
+
+    Only the root host folds: `www.` on any other host is left alone.
+    """
+
+    parts = urlsplit(url)
+    host = parts.hostname or ""
+    if host == root_host or root_host.removeprefix("www.") != host.removeprefix("www."):
+        return url
+    netloc = root_host if parts.port is None else f"{root_host}:{parts.port}"
+    return urlunsplit(parts._replace(netloc=netloc))
+
+
+def origin(url: str) -> str:
+    """The scheme and authority of a normalised *url*: where its `robots.txt` is."""
+
+    parts = urlsplit(url)
+    return f"{parts.scheme}://{parts.netloc}"
+
+
 @dataclass(frozen=True)
 class Scope:
     """What belongs to the site under the start page's directory.
 
-    The scope predicate is written once, here. This engine applies it to
-    resources under `--resources=in-scope`; a later fetch of pages applies the
-    same predicate to them.
+    The scope predicate is written once, here. The crawl applies it to every
+    link it finds, and `--resources=in-scope` to every resource.
     """
 
     start: str
@@ -322,12 +372,16 @@ def natural_path(url: str, is_html: bool) -> PurePosixPath:
     return PurePosixPath(escape_name(parts.netloc), *directories, file_name)
 
 
-def assign_paths(files: dict[str, bool]) -> dict[str, PurePosixPath]:
+def assign_paths(
+    files: dict[str, bool], folds_case: bool = False
+) -> dict[str, PurePosixPath]:
     """Map every normalised final URL to its path, collisions settled.
 
-    *files* says of each URL whether it is HTML. Where a file's natural path is
-    a directory another file needs, the file moves inside it as `index.html`
-    when it is HTML and that name is free, and takes `~file` otherwise.
+    *files* says of each URL whether it is HTML, in the order the run fetched
+    them. Where a file's natural path is a directory another file needs, the
+    file moves inside it as `index.html` when it is HTML and that name is free,
+    and takes `~file` otherwise. Where *folds_case*, the later of two paths
+    that differ only in case takes `~2`, `~3` and so on before its extension.
     """
 
     natural = {url: natural_path(url, is_html) for url, is_html in files.items()}
@@ -342,7 +396,42 @@ def assign_paths(files: dict[str, bool]) -> dict[str, PurePosixPath]:
             assigned[url] = path / DIRECTORY_INDEX
         else:
             assigned[url] = path.with_name(path.name + FILE_SUFFIX)
-    return assigned
+    return separate_cases(assigned) if folds_case else assigned
+
+
+def separate_cases(assigned: dict[str, PurePosixPath]) -> dict[str, PurePosixPath]:
+    """Give the later of two paths that differ only in case a numbered name."""
+
+    folded = {str(path).lower() for path in assigned.values()}
+    held: set[str] = set()
+    separated: dict[str, PurePosixPath] = {}
+    for url, path in assigned.items():
+        suffix = path.suffix
+        stem = path.name[: len(path.name) - len(suffix)]
+        candidate = path
+        number = 1
+        # A numbered name is also kept clear of every path another URL has.
+        while str(candidate).lower() in held or (
+            candidate != path and str(candidate).lower() in folded
+        ):
+            number += 1
+            candidate = path.with_name(f"{stem}{CASE_MARK}{number}{suffix}")
+        held.add(str(candidate).lower())
+        separated[url] = candidate
+    return separated
+
+
+def folds_case(directory: Path) -> bool:
+    """Whether the file system under *directory* holds names differing in case as one."""
+
+    directory.mkdir(parents=True, exist_ok=True)
+    handle, name = tempfile.mkstemp(prefix=CASE_PROBE_PREFIX, dir=directory)
+    os.close(handle)
+    probe = Path(name)
+    try:
+        return (probe.parent / probe.name.swapcase()).exists()
+    finally:
+        probe.unlink()
 
 
 # --- Fetching -----------------------------------------------------------------
@@ -363,6 +452,7 @@ class Fetched:
     body: bytes | None = None
     staged: Path | None = None
     error: str | None = None
+    redirected_out: bool = False
 
     @property
     def succeeded(self) -> bool:
@@ -376,12 +466,20 @@ class Fetcher(Protocol):
 
     name: str
 
-    def fetch(self, url: str, staging: Path | None) -> Fetched:
+    def fetch(
+        self,
+        url: str,
+        staging: Path | None,
+        follow: Callable[[str], bool] | None = None,
+        keep: bool = False,
+    ) -> Fetched:
         """Fetch *url*, following redirects.
 
-        The body of an HTML or CSS answer is returned in `body`. Any other body
-        is written to *staging* and named in `staged`, or only counted when
-        *staging* is None.
+        The body of an HTML or CSS answer, or of any answer when *keep*, is
+        returned in `body`. Any other body is written to *staging* and named in
+        `staged`, or only counted when *staging* is None. Where *follow* says
+        no to a redirect's target, the fetch stops there: `final_url` is that
+        target, `status` the redirect's, and `redirected_out` is set.
         """
         ...
 
@@ -440,7 +538,13 @@ class HttpFetcher:
             time.monotonic() - began,
         )
 
-    def fetch(self, url: str, staging: Path | None) -> Fetched:
+    def fetch(
+        self,
+        url: str,
+        staging: Path | None,
+        follow: Callable[[str], bool] | None = None,
+        keep: bool = False,
+    ) -> Fetched:
         """Fetch *url*, retrying connection errors, timeouts and busy answers."""
 
         attempts = len(RETRY_WAITS) + 1
@@ -448,12 +552,18 @@ class HttpFetcher:
             last = attempt == attempts - 1
             began = time.monotonic()
             try:
-                with self._send(url) as response:
+                with self._send(url, follow) as (response, declined):
+                    if declined is not None:
+                        return Fetched(
+                            declined,
+                            status=response.status_code,
+                            redirected_out=True,
+                        )
                     if response.status_code in RETRIED_STATUSES and not last:
                         wait = retry_after(response.headers.get("Retry-After"))
                         time.sleep(RETRY_WAITS[attempt] if wait is None else wait)
                         continue
-                    return self._receive(response, staging)
+                    return self._receive(response, staging, keep)
             except (httpx.TimeoutException, httpx.NetworkError) as error:
                 self.log.request("GET", url, "error", time.monotonic() - began)
                 if last:
@@ -466,21 +576,29 @@ class HttpFetcher:
         raise AssertionError("the last attempt always returns")
 
     @contextmanager
-    def _send(self, url: str) -> Iterator[httpx.Response]:
-        """GET *url*, following redirects with every header on every hop."""
+    def _send(
+        self, url: str, follow: Callable[[str], bool] | None
+    ) -> Iterator[tuple[httpx.Response, str | None]]:
+        """GET *url*, following redirects with every header on every hop.
+
+        Yields the final answer, and the redirect target *follow* declined, if any.
+        """
 
         for _ in range(MAX_REDIRECTS + 1):
             request = self.client.build_request("GET", url, headers=self.headers)
             response = self.client.send(request, auth=self._auth(url), stream=True)
             location = response.headers.get("Location")
-            if response.status_code not in REDIRECT_STATUSES or location is None:
+            redirected = response.status_code in REDIRECT_STATUSES and location
+            target = urljoin(str(response.url), location) if redirected else None
+            declined = target if target and follow and not follow(target) else None
+            if target is None or declined is not None:
                 try:
-                    yield response
+                    yield response, declined
                 finally:
                     response.close()
                 return
             response.close()
-            url = urljoin(str(response.url), location)
+            url = target
         raise httpx.TooManyRedirects(
             f"more than {MAX_REDIRECTS} redirects", request=request
         )
@@ -492,7 +610,9 @@ class HttpFetcher:
             return None
         return httpx.BasicAuth(self.credentials[1], self.credentials[2])
 
-    def _receive(self, response: httpx.Response, staging: Path | None) -> Fetched:
+    def _receive(
+        self, response: httpx.Response, staging: Path | None, keep: bool
+    ) -> Fetched:
         """Read one final answer: keep HTML and CSS, stage or count the rest."""
 
         # What the headers say.
@@ -515,7 +635,8 @@ class HttpFetcher:
         # The body: kept where the rewrite reads it, staged or counted otherwise.
         digest = hashlib.sha256()
         size = 0
-        kept = bytearray() if is_rewritable(content_type, fetched.final_url) else None
+        rewritable = is_rewritable(content_type, fetched.final_url)
+        kept = bytearray() if keep or rewritable else None
         staged = staging if staging and kept is None else None
         with open(staged, "wb") if staged else nullcontext() as sink:
             for chunk in response.iter_bytes():
@@ -721,6 +842,43 @@ def html_references(tree: LexborHTMLParser, url: str) -> list[str]:
     return found
 
 
+def html_links(tree: LexborHTMLParser, url: str) -> list[str]:
+    """The absolute URLs of every page and file a page links to.
+
+    `a` and `area` with `href`, and `link` whose `rel` is `next`, `prev`,
+    `canonical` or `alternate`.
+    """
+
+    base = document_base(tree, url)
+    found: list[str] = []
+    selector = ", ".join(f"{tag}[href]" for tag in (*LINK_TAGS, "link"))
+    for node in tree.css(selector):
+        if node.tag == "link":
+            relations = set((node.attributes.get("rel") or "").lower().split())
+            if not relations & LINK_RELATIONS:
+                continue
+        href = (node.attributes.get("href") or "").strip()
+        if href:
+            found.append(urljoin(base, href))
+    return found
+
+
+def is_suspected_shell(text: str) -> bool:
+    """Whether a page carries scripts but almost no text a reader would see.
+
+    At least one `script` element, and fewer than 200 characters of text
+    outside `script`, `style`, `noscript` and `template`, whitespace collapsed.
+    """
+
+    tree = LexborHTMLParser(text)
+    if tree.css_first("script") is None:
+        return False
+    tree.strip_tags(list(SHELL_HIDDEN_TAGS))
+    root = tree.root
+    visible = root.text(deep=True, separator=" ") if root is not None else ""
+    return len(" ".join(visible.split())) < SHELL_TEXT_LIMIT
+
+
 def decode_html(body: bytes, charset: str | None) -> str:
     """Decode a page as a browser would: BOM, then header, then meta, then UTF-8."""
 
@@ -824,6 +982,113 @@ def declare_utf8(tree: LexborHTMLParser) -> None:
         head.child.insert_before(meta)
 
 
+# --- robots.txt -----------------------------------------------------------------
+
+
+def product_token(user_agent: str) -> str:
+    """The product token of an identity: its first word, without a version."""
+
+    words = user_agent.split()
+    return words[0].partition("/")[0].lower() if words else ""
+
+
+@dataclass(frozen=True)
+class Robots:
+    """The rules one host's `robots.txt` sets for this run's product token."""
+
+    rules: tuple[tuple[bool, re.Pattern[str], int], ...] = ()
+    crawl_delay: float | None = None
+    unreadable: bool = False
+
+    @classmethod
+    def parse(cls, text: str, token: str) -> Robots:
+        """Read *text* as RFC 9309 does, for the product token *token*.
+
+        The groups whose user-agent line most specifically matches *token* are
+        combined and apply; the `*` groups apply only where none matches.
+        """
+
+        # Group the records: user-agent lines open a group, rules fill it.
+        groups: list[tuple[list[str], list[tuple[bool, str]], list[float]]] = []
+        opening = False
+        for raw in text.splitlines():
+            line = raw.partition("#")[0].strip()
+            key, colon, value = line.partition(":")
+            if not colon:
+                continue
+            key, value = key.strip().lower(), value.strip()
+            if key == "user-agent":
+                if not opening:
+                    groups.append(([], [], []))
+                    opening = True
+                groups[-1][0].append(value.partition("/")[0].strip().lower())
+            elif key in ("allow", "disallow") and groups:
+                opening = False
+                if value:
+                    groups[-1][1].append((key == "allow", value))
+            elif key == "crawl-delay" and groups:
+                opening = False
+                try:
+                    delay = float(value)
+                except ValueError:
+                    continue
+                if math.isfinite(delay) and delay >= 0:
+                    groups[-1][2].append(delay)
+
+        # The most specific match for the token, else `*`, else nothing.
+        def specificity(agent: str) -> int:
+            return len(agent) if agent != "*" and token.startswith(agent) else -1
+
+        best = max(
+            (specificity(agent) for agents, _, _ in groups for agent in agents),
+            default=-1,
+        )
+        if best > 0:
+            chosen = [
+                group
+                for group in groups
+                if any(specificity(agent) == best for agent in group[0])
+            ]
+        else:
+            chosen = [group for group in groups if "*" in group[0]]
+
+        rules = tuple(
+            (allow, robots_pattern(pattern), len(pattern))
+            for _, group_rules, _ in chosen
+            for allow, pattern in group_rules
+        )
+        delays = [delay for _, _, group_delays in chosen for delay in group_delays]
+        return cls(rules, max(delays) if delays else None)
+
+    def allows(self, url: str) -> bool:
+        """Whether the normalised *url* may be fetched: the longest match decides.
+
+        Where an `Allow` and a `Disallow` match equally long, `Allow` wins, and
+        `robots.txt` itself is always allowed.
+        """
+
+        parts = urlsplit(url)
+        target = parts.path + (f"?{parts.query}" if parts.query else "")
+        if target == ROBOTS_PATH:
+            return True
+        decisive: tuple[int, bool] | None = None
+        for allow, pattern, length in self.rules:
+            if pattern.match(target) and (
+                decisive is None or (length, allow) > decisive
+            ):
+                decisive = (length, allow)
+        return decisive is None or decisive[1]
+
+
+def robots_pattern(pattern: str) -> re.Pattern[str]:
+    """A robots.txt path pattern as a regular expression: `*` any run, `$` the end."""
+
+    anchored = pattern.endswith("$")
+    body = _canonical_escapes(pattern.removesuffix("$"), QUERY_SAFE)
+    expression = ".*".join(re.escape(piece) for piece in body.split("*"))
+    return re.compile(expression + ("$" if anchored else ""))
+
+
 # --- The run ------------------------------------------------------------------
 
 
@@ -839,6 +1104,7 @@ class Record:
     fetched: Fetched | None = None
     timestamp: str = field(default_factory=timestamp)
     local_path: PurePosixPath | None = None
+    final_url: str | None = None  # Where the fetch ended, in its compared form.
 
     @property
     def final(self) -> str | None:
@@ -846,7 +1112,7 @@ class Record:
 
         if self.fetched is None or not self.fetched.succeeded:
             return None
-        return normalise(self.fetched.final_url)
+        return self.final_url
 
     def row(self, fetcher: str) -> dict[str, object]:
         """The manifest row: every field on every row, null where nothing is known."""
@@ -855,7 +1121,7 @@ class Record:
         attempted = fetched is not None
         return {
             "url": self.url,
-            "final_url": normalise(fetched.final_url) if fetched else None,
+            "final_url": self.final_url if fetched else None,
             "kind": self.kind,
             "source": self.source,
             "discovered_from": self.discovered_from,
@@ -883,10 +1149,14 @@ class Options:
     user_agent: str
     dry_run: bool
     credentials: tuple[str, str, str] | None
+    delay: float = DEFAULT_DELAY
+    max_pages: int = DEFAULT_MAX_PAGES
+    ignore_robots: bool = False
+    links: bool = True
 
 
 class Mirror:
-    """One run: fetch, place, rewrite, and account for it."""
+    """One run: crawl, place, rewrite, and account for it."""
 
     def __init__(self, options: Options, fetcher: Fetcher, log: RunLog) -> None:
         self.options = options
@@ -897,16 +1167,30 @@ class Mirror:
         self.fetches = 0
         self.by_final: dict[str, Record] = {}
         self.scope: Scope | None = None
+        self.root_host: str | None = None
         self.start = normalise(options.url) or options.url
         self.output = options.output or Path(".")
+        self.robots: dict[str, tuple[Record, Robots]] = {}
+        self.token = product_token(options.user_agent)
+        self.admitted = 0
+        self.shells = 0
+        self.last_request: float | None = None
 
     def run(self, staging: Path | None) -> int:
-        """Mirror the start page; return the exit status."""
+        """Mirror everything under the start page; return the exit status."""
 
-        # The start page, where its redirects end, is the root of the scope.
+        # The start page is a page robots.txt governs, like every other.
         start_url = self.start
         start = Record(start_url, KIND_PAGE, SOURCE_START, None)
         self.records[start_url] = start
+        if not self._robots_allow(start_url):
+            print(
+                f"robots.txt disallows the start page {start_url}; --ignore-robots"
+                " fetches it anyway. Nothing was written."
+            )
+            return EXIT_FAILED
+
+        # The start page, where its redirects end, is the root of the scope.
         self._fetch(start, staging)
         if start.final is None:
             assert start.fetched is not None
@@ -915,14 +1199,18 @@ class Mirror:
                 f"Could not fetch the start page {start_url}: {why}. Nothing was written."
             )
             return EXIT_FAILED
+        self.root_host = urlsplit(start.final).hostname or ""
         self.scope = Scope.of(start.final)
-        self.output = self.options.output or Path(urlsplit(start.final).hostname or "")
+        self.output = self.options.output or Path(self.root_host)
+        self.admitted = 1
+        self._settle_kind(start)
         self._discover(start)
 
-        # Every resource the fetched documents need, breadth first.
+        # Every page, file and resource, breadth first, one request at a time.
         while self.queue:
             record = self.queue.popleft()
             self._fetch(record, staging)
+            self._settle_kind(record)
             self._discover(record)
 
         if not self.options.dry_run:
@@ -933,48 +1221,190 @@ class Mirror:
         )
         return EXIT_FAILED if failed else EXIT_CLEAN
 
+    # --- URLs, pace and robots.txt ----------------------------------------------
+
+    def _normal(self, url: str) -> str | None:
+        """*url* in its compared form, the other form of the root host folded onto it."""
+
+        normalised = normalise(url)
+        if normalised is None or not self.root_host:
+            return normalised
+        return fold_host(normalised, self.root_host)
+
+    def _pace(self, url: str) -> None:
+        """Wait what `--delay`, or a longer `Crawl-delay` for *url*'s host, asks."""
+
+        delay = self.options.delay
+        robots = self.robots.get(origin(url))
+        if robots and robots[1].crawl_delay and not self.options.ignore_robots:
+            delay = max(delay, robots[1].crawl_delay)
+        if self.last_request is not None and delay > 0:
+            remaining = self.last_request + delay - time.monotonic()
+            if remaining > 0:
+                time.sleep(remaining)
+
+    def _request(
+        self,
+        url: str,
+        staging: Path | None,
+        follow: Callable[[str], bool] | None = None,
+        keep: bool = False,
+    ) -> Fetched:
+        self._pace(url)
+        try:
+            return self.fetcher.fetch(url, staging, follow, keep)
+        finally:
+            self.last_request = time.monotonic()
+
+    def _robots(self, url: str) -> Robots:
+        """The rules for *url*'s host, its `robots.txt` read the first time it is asked."""
+
+        host = origin(url)
+        if host in self.robots:
+            return self.robots[host][1]
+        robots_url = host + ROBOTS_PATH
+        record = Record(robots_url, KIND_ROBOTS, SOURCE_ROBOTS, None)
+        fetched = self._request(robots_url, None, keep=True)
+        record.fetched = fetched
+        record.final_url = normalise(fetched.final_url)
+        record.timestamp = timestamp()
+
+        # 2xx is read; any 4xx allows everything; 5xx or no answer does too, unread.
+        if fetched.succeeded and fetched.body is not None:
+            robots = Robots.parse(fetched.body.decode("utf-8", "replace"), self.token)
+        elif fetched.error is None and fetched.status and fetched.status < 500:
+            robots = Robots()
+        else:
+            robots = Robots(unreadable=True)
+            record.outcome = OUTCOME_FAILED
+            detail = fetched.error or str(fetched.status)
+            self.log.decision(OUTCOME_FAILED, robots_url, detail)
+        self.robots[host] = (record, robots)
+        return robots
+
+    def _robots_allow(self, url: str) -> bool:
+        robots = self._robots(url)
+        return self.options.ignore_robots or robots.allows(url)
+
+    # --- Fetching and discovery -------------------------------------------------
+
     def _fetch(self, record: Record, staging: Path | None) -> None:
         self.fetches += 1
         place = staging / str(self.fetches) if staging else None
-        record.fetched = self.fetcher.fetch(record.url, place)
+        follow = self._in_scope if record.source == SOURCE_LINK else None
+        record.fetched = self._request(record.url, place, follow)
+        record.final_url = self._normal(record.fetched.final_url)
         record.timestamp = timestamp()
-        if record.final is None:
+        if record.fetched.redirected_out:
+            record.outcome = OUTCOME_REDIRECT_OUT
+            self.log.decision(OUTCOME_REDIRECT_OUT, record.url, record.final_url or "")
+        elif record.final is None:
             record.outcome = OUTCOME_FAILED
             detail = record.fetched.error or str(record.fetched.status)
             self.log.decision(OUTCOME_FAILED, record.url, detail)
 
-    def _discover(self, record: Record) -> None:
-        """Take a position on every resource a fetched document references."""
+    def _in_scope(self, url: str) -> bool:
+        normalised = self._normal(url)
+        return (
+            normalised is not None
+            and self.scope is not None
+            and self.scope.admits(normalised)
+        )
+
+    def _settle_kind(self, record: Record) -> None:
+        """A page or file is a page when it is HTML and a file otherwise."""
 
         fetched = record.fetched
-        if fetched is None or fetched.body is None:
+        if record.kind == KIND_RESOURCE or fetched is None or record.final is None:
             return
+        html = is_html(fetched.content_type, fetched.final_url)
+        record.kind = KIND_PAGE if html else KIND_FILE
+
+    def _discover(self, record: Record) -> None:
+        """Take a position on every resource and link a fetched document references."""
+
+        fetched = record.fetched
+        if fetched is None or fetched.body is None or record.final is None:
+            return
+        links: list[str] = []
         if is_html(fetched.content_type, fetched.final_url):
-            tree = LexborHTMLParser(decode_html(fetched.body, fetched.charset))
+            text = decode_html(fetched.body, fetched.charset)
+            tree = LexborHTMLParser(text)
             found = html_references(tree, fetched.final_url)
+            if self.options.links and self._in_scope(record.final):
+                links = html_links(tree, fetched.final_url)
+            if record.kind == KIND_PAGE and is_suspected_shell(text):
+                self.shells += 1
         else:
             text, _ = decode_css(fetched.body, fetched.charset)
             found = css_references(text, fetched.final_url)
 
         for reference in found:
-            url = normalise(reference)
-            if url is None or url in self.records:
-                continue
-            resource = Record(url, KIND_RESOURCE, SOURCE_RESOURCE, record.url)
-            self.records[url] = resource
-            if self._admits(url):
-                self.queue.append(resource)
-            else:
-                resource.outcome = OUTCOME_OUT_OF_SCOPE
-                self.log.decision(OUTCOME_OUT_OF_SCOPE, url)
+            self._take_resource(reference, record)
+        for reference in links:
+            self._take_link(reference, record)
+
+    def _take_resource(self, reference: str, document: Record) -> None:
+        url = self._normal(reference)
+        if url is None:
+            return
+        existing = self.records.get(url)
+        admitted = self._admits(url)
+
+        # A link the crawl declined is still a resource a page needs.
+        declined = (OUTCOME_OUT_OF_SCOPE, OUTCOME_ROBOTS, OUTCOME_OVER_CAP)
+        if existing is not None and not (
+            admitted
+            and existing.source == SOURCE_LINK
+            and existing.fetched is None
+            and existing.outcome in declined
+        ):
+            return
+
+        resource = Record(url, KIND_RESOURCE, SOURCE_RESOURCE, document.url)
+        self.records[url] = resource
+        if admitted:
+            self.queue.append(resource)
+        else:
+            resource.outcome = OUTCOME_OUT_OF_SCOPE
+            self.log.decision(OUTCOME_OUT_OF_SCOPE, url)
+
+    def _take_link(self, reference: str, document: Record) -> None:
+        url = self._normal(reference)
+        if url is None:
+            return
+
+        # A resource `--resources` left out is still a page or file the crawl may take.
+        existing = self.records.get(url)
+        if existing is not None and not (
+            existing.source == SOURCE_RESOURCE
+            and existing.fetched is None
+            and existing.outcome == OUTCOME_OUT_OF_SCOPE
+            and self._in_scope(url)
+        ):
+            return
+        link = Record(url, KIND_PAGE, SOURCE_LINK, document.url)
+        self.records[url] = link
+
+        # Scope first, then robots.txt, then the cap, which counts at admission.
+        cap = self.options.max_pages
+        if not self._in_scope(url):
+            link.outcome = OUTCOME_OUT_OF_SCOPE
+        elif not self._robots_allow(url):
+            link.outcome = OUTCOME_ROBOTS
+        elif cap and self.admitted >= cap:
+            link.outcome = OUTCOME_OVER_CAP
+        else:
+            self.admitted += 1
+            self.queue.append(link)
+            return
+        self.log.decision(link.outcome, url)
 
     def _admits(self, url: str) -> bool:
         policy = self.options.resources
         if policy == "all":
             return True
-        return (
-            policy == "in-scope" and self.scope is not None and self.scope.admits(url)
-        )
+        return policy == "in-scope" and self._in_scope(url)
 
     # --- Placement and rewriting ----------------------------------------------
 
@@ -997,7 +1427,8 @@ class Mirror:
                 final: is_html(record.fetched.content_type, final)
                 for final, record in by_final.items()
                 if record.fetched is not None
-            }
+            },
+            folds_case(output),
         )
         for record in self._fetched():
             record.local_path = paths[record.final or ""]
@@ -1053,10 +1484,14 @@ class Mirror:
             )
             write_bytes(output / str(paths[final]), page.encode("utf-8"))
 
-        # The manifest and the log.
+        # The manifest, `robots.txt` files last, and the log.
+        records = [
+            *self.records.values(),
+            *(record for record, _ in self.robots.values()),
+        ]
         rows = "".join(
             json.dumps(record.row(self.fetcher.name), ensure_ascii=False) + "\n"
-            for record in self.records.values()
+            for record in records
         )
         write_bytes(state / MANIFEST_NAME, rows.encode("utf-8"))
         write_bytes(
@@ -1067,7 +1502,7 @@ class Mirror:
     def _located(self, url: str) -> Record | None:
         """The fetched record an absolute URL leads to, by its own URL or where it ended."""
 
-        normalised = normalise(url)
+        normalised = self._normal(url)
         if normalised is None:
             return None
         record = self.records.get(normalised) or self.by_final.get(normalised)
@@ -1093,33 +1528,55 @@ class Mirror:
     # --- The report -------------------------------------------------------------
 
     def _report(self) -> str:
-        """What the Skill relays: counts, size, and every failure."""
+        """What the Skill relays: counts, size, what the crawl declined, and every failure."""
 
-        fetched = [
-            record for record in self.records.values() if record.final is not None
-        ]
-        pages = sum(1 for record in fetched if record.kind == KIND_PAGE)
-        resources = sum(1 for record in fetched if record.kind == KIND_RESOURCE)
+        records = list(self.records.values())
+        fetched = [record for record in records if record.final is not None]
         size = sum((record.fetched.size or 0) for record in fetched if record.fetched)
-        failures = [
-            record
-            for record in self.records.values()
-            if record.outcome == OUTCOME_FAILED
-        ]
+
+        def fetched_of(kind: str) -> int:
+            return sum(1 for record in fetched if record.kind == kind)
+
+        def declined(outcome: str) -> int:
+            return sum(1 for record in records if record.outcome == outcome)
+
+        failures = [record for record in records if record.outcome == OUTCOME_FAILED]
+        over_cap = declined(OUTCOME_OVER_CAP)
 
         lines: list[str] = []
         if self.options.dry_run:
             lines.append(f"Dry run of {self.start}: nothing was written. Would fetch:")
+            lines.extend(f"  {robots.url}" for robots, _ in self.robots.values())
             lines.extend(
-                f"  {record.url}"
-                for record in self.records.values()
-                if record.fetched is not None
+                f"  {record.url}" for record in records if record.fetched is not None
             )
         else:
             lines.append(f"Mirrored {self.start} to {self.output}.")
-        lines.append(f"Pages fetched: {pages}")
-        lines.append(f"Resources fetched: {resources}")
+        lines.append(f"Pages fetched: {fetched_of(KIND_PAGE)}")
+        lines.append(f"Files fetched: {fetched_of(KIND_FILE)}")
+        lines.append(f"Resources fetched: {fetched_of(KIND_RESOURCE)}")
         lines.append(f"Total size: {human_size(size)}")
+        lines.append(f"Out of scope: {declined(OUTCOME_OUT_OF_SCOPE)}")
+        lines.append(f"Redirected out of scope: {declined(OUTCOME_REDIRECT_OUT)}")
+        lines.append(f"Stopped by robots.txt: {declined(OUTCOME_ROBOTS)}")
+        lines.append(f"Over the cap: {over_cap}")
+        lines.append(f"Suspected JavaScript shells: {self.shells}")
+        if over_cap:
+            lines.append(
+                f"The cap of {self.options.max_pages} pages and files was reached;"
+                " --max-pages raises it."
+            )
+        for robots, rules in self.robots.values():
+            if rules.unreadable:
+                lines.append(
+                    f"{robots.url} could not be read, so nothing was kept out by it."
+                )
+        if self.shells:
+            lines.append(
+                "A suspected shell is a page that carries scripts but almost no"
+                " text; its content is likely drawn by JavaScript, which this run"
+                " does not execute."
+            )
         if failures:
             lines.append(f"Failures: {len(failures)}")
             for record in failures:
@@ -1170,6 +1627,16 @@ def refusal(problem: str) -> int:
     return EXIT_REFUSED
 
 
+def seconds(value: str) -> float | None:
+    """A `--delay` value as seconds, or None where it is not a finite number of 0 or more."""
+
+    try:
+        amount = float(value)
+    except ValueError:
+        return None
+    return amount if math.isfinite(amount) and amount >= 0 else None
+
+
 def main(argv: list[str] | None = None) -> int:
     """Read the invocation, refuse what the Skill rejects, and run the mirror."""
 
@@ -1180,6 +1647,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--header", action="append", default=[])
     parser.add_argument("--user-agent", default=IDENTITY)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--delay", default=str(DEFAULT_DELAY))
+    parser.add_argument("--max-pages", default=str(DEFAULT_MAX_PAGES))
+    parser.add_argument("--ignore-robots", action="store_true")
+    parser.add_argument("--no-links", action="store_true")
     parser.add_argument("url")
     arguments = parser.parse_args(argv)
 
@@ -1197,6 +1668,15 @@ def main(argv: list[str] | None = None) -> int:
         if not colon or not name.strip():
             return refusal(f"'--header={header}' is not written 'name: value'")
         headers.append((name.strip(), value.strip()))
+    delay = seconds(arguments.delay)
+    if delay is None:
+        return refusal(
+            f"'--delay' takes a number of seconds, 0 or more, not '{arguments.delay}'"
+        )
+    if not re.fullmatch(r"[0-9]+", arguments.max_pages.strip()):
+        return refusal(
+            f"'--max-pages' takes a whole number, 0 or more, not '{arguments.max_pages}'"
+        )
 
     # Credentials in the URL are sent to the start page's host.
     credentials = (
@@ -1212,6 +1692,10 @@ def main(argv: list[str] | None = None) -> int:
         user_agent=arguments.user_agent,
         dry_run=arguments.dry_run,
         credentials=credentials,
+        delay=delay,
+        max_pages=int(arguments.max_pages),
+        ignore_robots=arguments.ignore_robots,
+        links=not arguments.no_links,
     )
 
     # Run; a real run stages the files it downloads outside the output directory.

@@ -144,9 +144,9 @@ Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--y
 
 ### mirror
 
-Save a web page to disk with everything it needs to display — images, stylesheets, scripts, fonts and media, on whatever host they are — and rewrite its references so the copy opens in a browser with nothing fetched from the network. Each run leaves a manifest of every URL it fetched and a log beside the copy; `--dry-run` shows what would be fetched without writing anything.
+Save a web page, and every page and file under it that its links reach, to disk with everything they need to display — images, stylesheets, scripts, fonts and media, on whatever host they are — and rewrite their references so the copy opens in a browser with nothing fetched from the network. The crawl stays under the start page's directory, obeys `robots.txt`, and stops at 5000 pages unless `--max-pages` says otherwise; `--no-links` saves the one page. Each run leaves a manifest of every URL it took a position on and a log beside the copy; `--dry-run` shows what would be fetched without writing anything.
 
-Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--dry-run] <url>`.
+Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] [--delay=<seconds>] [--no-links] [--ignore-robots] [--dry-run] <url>`.
 
 ## Features
 

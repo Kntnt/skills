@@ -961,9 +961,23 @@ SHIPPED_CASES: dict[str, list[Case]] = {
                 "operands": ["https://x.se/docs/"],
             },
         ),
+        (
+            "--max-pages=0 --delay=0.5 --no-links --ignore-robots https://x.se/",
+            {
+                "flags": {
+                    "--max-pages": "0",
+                    "--delay": "0.5",
+                    "--no-links": True,
+                    "--ignore-robots": True,
+                },
+                "operands": ["https://x.se/"],
+            },
+        ),
         ("", None),
         ("--dry-run", None),
         ("--depth=2 https://x.se/", None),
+        ("--no-links=yes https://x.se/", None),
+        ("--max-pages https://x.se/", None),
         ("https://x.se/ --dry-run", None),
         ("--output https://x.se/", None),
         ("--dry-run --dry-run https://x.se/", None),
