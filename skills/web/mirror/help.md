@@ -112,7 +112,7 @@ The bytes of every HTML and CSS file as the server sent them, at the same relati
 
 **<output>/.mirror/manifest.ndjson**
 
-One JSON object per line, one per URL the run took a position on, each with the same fields: `url`; `final_url`, where its redirects ended; `kind`, one of `page`, `file`, `resource`, `robots`, `sitemap` and `feed`, a candidate not fetched being a `page`; `source`, what led to it: `start`, `link`, `resource`, `robots` for a sitemap a `robots.txt` names, `sitemap`, `feed`, or `probe` for a sitemap or feed at a well-known location; `discovered_from`, the URL of the page, file, `robots.txt`, sitemap or feed that named it, or `null` for the start page, a `robots.txt` and a well-known location; `fetcher`, `http`; `status`; `content_type`; `size` in bytes; `local_path`, relative to the output directory; `sha256`; `etag`; `last_modified`; `timestamp`; and `outcome`, one of `fetched`, `out-of-scope`, `redirect-out`, `robots`, `over-cap`, `missing` and `failed`. A field with nothing to say is `null`. A URL that normalises to one already recorded, a fragment or tracking-parameter variant for instance, gets no row of its own. A `robots.txt` that could not be read is `failed` without failing the run, and a well-known sitemap or feed location that is not there is `missing`.
+One JSON object per line, one per URL the run took a position on, each with the same fields: `url`; `final_url`, where its redirects ended; `kind`, one of `page`, `file`, `resource`, `robots`, `sitemap` and `feed`, a candidate not fetched being a `page`; `source`, what led to it: `start`, `link`, `resource`, `robots` for a `robots.txt` and for a sitemap a `robots.txt` names, `sitemap`, `feed`, or `probe` for a sitemap or feed at a well-known location; `discovered_from`, the URL of the page, file, `robots.txt`, sitemap or feed that named it, or `null` for the start page, a `robots.txt` and a well-known location; `fetcher`, `http`; `status`; `content_type`; `size` in bytes; `local_path`, relative to the output directory; `sha256`; `etag`; `last_modified`; `timestamp`; and `outcome`, one of `fetched`, `out-of-scope`, `redirect-out`, `robots`, `over-cap`, `missing` and `failed`. A field with nothing to say is `null`. A URL that normalises to one already recorded, a fragment or tracking-parameter variant for instance, gets no row of its own. A `robots.txt` that could not be read is `failed` without failing the run, and a well-known sitemap or feed location that is not there is `missing`.
 
 **<output>/.mirror/run.log**
 
@@ -146,7 +146,7 @@ A start page that cannot be fetched, or that `robots.txt` disallows, is reported
 
 ## EXAMPLES
 
-Mirror a section, every page under `/docs/` its links reach and everything those pages need, into `./example.com`:
+Mirror a section, every page under `/docs/` its links, sitemaps and feeds reach and everything those pages need, into `./example.com`:
 
 ```text
 /mirror https://example.com/docs/
