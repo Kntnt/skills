@@ -21,12 +21,14 @@ in scope that a link, a sitemap or a feed names, as far as `robots.txt`
 and the page cap allow, and every resource those pages and their stylesheets
 reference that `--resources` admits; sitemaps and feeds are read, never saved.
 The placement pass maps every fetched URL to a path, keeps HTML and CSS as
-served under `.mirror/raw/`, and puts every other file straight into the tree.
+served under `.mirror/raw/`, a browser page as its rendered DOM without its
+scripts, and puts every other file straight into the tree.
 The rewrite pass derives the tree's HTML and CSS from the raw copies, so a later
 run can rewrite again without fetching.
 
 A rerun into the same output directory is incremental: the earlier manifest's
-validators make every request for a file still on disk conditional, a `304`
+validators make every request for a file still on disk conditional, except for
+a row a browser fetched, which sends none and is fetched again; a `304`
 reads a page back from its raw copy, the rewrite writes only bytes that differ,
 and a saved file this run did not discover stays and is recorded `absent`.
 
@@ -2889,9 +2891,9 @@ class Mirror:
                 )
         if self.shells:
             lines.append(
-                "A suspected shell is a page that carries scripts but almost no"
-                " text; its content is likely drawn by JavaScript, which this run"
-                " does not execute."
+                "A suspected shell is a page fetched over plain HTTP that carries"
+                " scripts but almost no text; its content is likely drawn by"
+                " JavaScript, which plain HTTP does not execute."
             )
         if failures:
             lines.append(f"Failures: {len(failures)}")
