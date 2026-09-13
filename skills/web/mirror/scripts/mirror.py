@@ -2429,7 +2429,12 @@ class Mirror:
         )
 
     def _not_excluded(self, url: str) -> bool:
-        """Whether a redirect may lead to *url*: an excluded URL is never requested, except along the start page's redirects."""
+        """Whether a redirect may lead to *url*.
+
+        Over plain HTTP an excluded URL is never requested, except along the
+        start page's redirects; a browser has already followed the redirect,
+        and this only records it.
+        """
 
         return not self._excluded(url)
 
@@ -2679,7 +2684,8 @@ class Mirror:
             record.local_path = paths[record.final or ""]
         self.by_final = by_final
 
-        # HTML and CSS go to raw as served; everything else straight to the tree,
+        # HTML and CSS go to raw as served, a browser page as its rendered DOM
+        # without its scripts; everything else straight to the tree,
         # where an unchanged file already is unless its path moved.
         for final, record in by_final.items():
             fetched = record.fetched
