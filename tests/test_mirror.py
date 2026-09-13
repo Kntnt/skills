@@ -8,16 +8,23 @@ the network. A crawl needs three names on that one server, and takes them under
 `.localhost`, which resolves to the loopback address: `mirror.localhost` as the
 root host, `www.mirror.localhost` as its other form, and `other.mirror.localhost`
 as another subdomain. The server answers by the name in the `Host` header.
+
+No test reaches a real browser either: every run finds a stand-in `agent-browser`
+first on `PATH`, which records what it was asked and answers from fixtures.
 """
 
 from __future__ import annotations
 
+import base64
 import gzip
 import hashlib
 import json
 import os
 import re
+import shlex
+import signal
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -29,6 +36,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 import pytest
+from support.fake_binary import fake_binary_on_path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL = REPO_ROOT / "skills" / "web" / "mirror"
@@ -208,9 +216,180 @@ def site() -> Iterator[Site]:
         thread.join()
 
 
-def mirror(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
-    """Run the engine as its Skill does, from *cwd*."""
+# The stand-in for `agent-browser`. It logs every call, with its arguments and
+# what it read on stdin, and answers each subcommand from `fixture.json` beside
+# its `bin/`: a page's rendered DOM for `eval`, its HAR for `network har stop`.
+# What it was last asked to open is kept in `state.json` between calls.
+FAKE_BROWSER = f"""#!{sys.executable}
+import base64, json, sys, time
+from pathlib import Path
 
+HOME = Path(__file__).resolve().parent.parent
+FIXTURE = json.loads((HOME / "fixture.json").read_text())
+STATE = HOME / "state.json"
+VALUED = {{"--session", "--profile", "--user-agent"}}
+BARE = {{"--json", "--headed"}}
+
+# The global flags come first, and the subcommand with its own arguments after them.
+arguments = sys.argv[1:]
+flags = {{}}
+index = 0
+while index < len(arguments) and arguments[index] in VALUED | BARE:
+    token = arguments[index]
+    if token in VALUED:
+        flags[token] = arguments[index + 1]
+        index += 2
+    else:
+        flags[token] = True
+        index += 1
+command = arguments[index:]
+stdin = sys.stdin.read() if "--stdin" in command else None
+with (HOME / "calls.ndjson").open("a") as log:
+    log.write(json.dumps({{"argv": arguments, "flags": flags, "command": command, "stdin": stdin}}) + "\\n")
+
+def answer(data=None, success=True, code=0):
+    print(json.dumps({{"success": success, "data": data, "error": None if success else "failed"}}))
+    sys.exit(code)
+
+state = json.loads(STATE.read_text()) if STATE.exists() else {{}}
+if command[:1] == ["doctor"]:
+    code = FIXTURE.get("doctor_exit", 0)
+    status = "pass" if code == 0 else "fail"
+    print(json.dumps({{"success": code == 0, "checks": [{{"id": "chrome.installed", "status": status}}]}}))
+    sys.exit(code)
+if command[:1] == ["open"]:
+    url = command[1]
+    page = FIXTURE.get("pages", {{}}).get(url, {{}})
+    state = {{"url": url, "headed": bool(flags.get("--headed"))}}
+    STATE.write_text(json.dumps(state))
+    if page.get("hang"):
+        time.sleep(120)
+    answer({{"url": page.get("final", url), "title": ""}})
+page = FIXTURE.get("pages", {{}}).get(state.get("url"), {{}})
+headed = state.get("headed") and "headed_dom" in page
+if command[:1] == ["eval"]:
+    html = page["headed_dom"] if headed else page.get("dom", "<html><head></head><body></body></html>")
+    status = page.get("headed_status" if headed else "status", 404 if not page else 200)
+    answer({{"result": {{"url": page.get("final", state.get("url")), "status": status, "doctype": "<!DOCTYPE html>", "html": html}}}})
+if command[:3] == ["network", "har", "stop"]:
+    entries = page.get("headed_har" if headed else "har")
+    if entries is None:
+        entries = [{{"url": state.get("url"), "type": "Document", "status": 404, "mime": "text/html", "text": ""}}]
+    har = {{"log": {{"version": "1.2", "entries": [
+        {{
+            "_resourceType": entry["type"],
+            "request": {{"method": "GET", "url": entry["url"], "headers": []}},
+            "response": {{
+                "status": entry["status"],
+                "headers": [{{"name": "Content-Type", "value": entry["mime"]}}, *[{{"name": n, "value": v}} for n, v in entry.get("headers", {{}}).items()]],
+                "content": {{"mimeType": entry["mime"], **({{"text": entry["base64"], "encoding": "base64"}} if "base64" in entry else {{"text": entry["text"]}} if "text" in entry else {{}})}},
+            }},
+        }}
+        for entry in entries
+    ]}}}}
+    Path(command[3]).write_text(json.dumps(har))
+    answer({{"path": command[3]}})
+answer({{}})
+"""
+
+
+@dataclass
+class Call:
+    """One call the stand-in `agent-browser` received."""
+
+    argv: list[str]
+    flags: dict[str, str | bool]
+    command: list[str]
+    stdin: str | None
+
+
+@dataclass
+class FakeBrowser:
+    """A stand-in `agent-browser` on `PATH`: what it answers, and what it was asked."""
+
+    home: Path
+    env: dict[str, str]
+    fixture: dict[str, object] = field(default_factory=lambda: {"pages": {}})
+
+    @classmethod
+    def at(cls, home: Path) -> FakeBrowser:
+        home.mkdir(parents=True, exist_ok=True)
+        browser = cls(home, fake_binary_on_path(home, "agent-browser", FAKE_BROWSER))
+        browser.save()
+        return browser
+
+    def save(self) -> None:
+        (self.home / "fixture.json").write_text(json.dumps(self.fixture))
+
+    def serve(self, url: str, **page: object) -> None:
+        """Answer an `open` of *url* with *page*: `dom`, `status`, `har`, and their headed forms."""
+
+        pages = self.fixture["pages"]
+        assert isinstance(pages, dict)
+        pages[url] = page
+        self.save()
+
+    def lacks_a_browser(self) -> None:
+        self.fixture["doctor_exit"] = 1
+        self.save()
+
+    def calls(self) -> list[Call]:
+        log = self.home / "calls.ndjson"
+        if not log.exists():
+            return []
+        return [
+            Call(**json.loads(line)) for line in log.read_text().splitlines() if line
+        ]
+
+    def commands(self) -> list[list[str]]:
+        return [call.command for call in self.calls()]
+
+    def opened(self) -> list[str]:
+        return [command[1] for command in self.commands() if command[:1] == ["open"]]
+
+
+def har_entry(
+    url: str,
+    kind: str,
+    body: bytes | str,
+    mime: str,
+    status: int = 200,
+    headers: dict[str, str] | None = None,
+) -> dict[str, object]:
+    """One HAR entry the stand-in records: text as text, bytes base64-encoded."""
+
+    entry: dict[str, object] = {
+        "url": url,
+        "type": kind,
+        "status": status,
+        "mime": mime,
+        "headers": headers or {},
+    }
+    if isinstance(body, bytes):
+        entry["base64"] = base64.b64encode(body).decode("ascii")
+    else:
+        entry["text"] = body
+    return entry
+
+
+IDLE_BROWSER: FakeBrowser | None = None
+
+
+@pytest.fixture(autouse=True, scope="session")
+def idle_browser(tmp_path_factory: pytest.TempPathFactory) -> None:
+    """A stand-in `agent-browser` for every run a test gives none, so none reaches a real one."""
+
+    global IDLE_BROWSER
+    IDLE_BROWSER = FakeBrowser.at(tmp_path_factory.mktemp("idle-browser"))
+
+
+def mirror(
+    cwd: Path, *args: str, browser: FakeBrowser | None = None
+) -> subprocess.CompletedProcess[str]:
+    """Run the engine as its Skill does, from *cwd*, with a stand-in `agent-browser`."""
+
+    stand_in = browser or IDLE_BROWSER
+    assert stand_in is not None
     return subprocess.run(
         ["uv", "run", "--quiet", str(ENGINE), *args],
         cwd=cwd,
@@ -218,6 +397,7 @@ def mirror(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
         capture_output=True,
         check=False,
         timeout=300,
+        env={**os.environ, **stand_in.env},
     )
 
 
@@ -1149,7 +1329,7 @@ def test_an_unreadable_robots_txt_allows_everything_and_is_reported(
     site.html("/u/", '<a href="next">Next</a>')
     site.html("/u/next", "<p>next</p>")
 
-    result = mirror(tmp_path, "--output=out", site.url("/u/"))
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/u/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     assert site.requested("/u/next")
@@ -2311,7 +2491,7 @@ def test_a_host_that_refuses_every_identity_ends_blocked(
     site.html("/w/", '<a href="private">Private</a><a href="open">Open</a>')
     site.html("/w/open", "<p>open</p>")
 
-    result = mirror(tmp_path, "--output=out", site.url("/w/"))
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/w/"))
 
     assert result.returncode == 1, (result.stdout, result.stderr)
     assert [is_chrome(request) for request in site.requested("/w/private")] == [
@@ -2336,11 +2516,17 @@ def test_a_host_that_refuses_every_identity_ends_blocked(
     site.gate = lambda request: FORBIDDEN
     whole = tmp_path / "whole"
     whole.mkdir()
-    result = mirror(whole, "--output=out", "--browser=never", site.url("/w/"))
+    browser = FakeBrowser.at(tmp_path / "browser")
+    browser.serve(site.url("/w/"), dom="<body><p>w</p></body>")
+    result = mirror(
+        whole, "--output=out", "--browser=never", site.url("/w/"), browser=browser
+    )
 
     assert result.returncode == 1, (result.stdout, result.stderr)
     assert "rung 2 was not enough" in result.stdout
+    assert "--headed" not in result.stdout
     assert not (whole / "out").exists()
+    assert browser.calls() == [], "--browser=never never calls the browser"
 
 
 def test_a_robots_disallow_is_obeyed_and_moves_no_host(
@@ -2370,7 +2556,7 @@ def test_a_robots_disallow_is_obeyed_and_moves_no_host(
     assert "climbed" not in result.stdout
 
 
-def test_browser_never_is_accepted(site: Site, tmp_path: Path) -> None:
+def test_browser_never_and_always_are_accepted(site: Site, tmp_path: Path) -> None:
     site.html("/n/", "<p>n</p>")
 
     result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/n/"))
@@ -2397,9 +2583,9 @@ def test_the_manpage_states_the_rungs_and_what_a_block_is() -> None:
     body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
     synopsis = page.partition("\n## SYNOPSIS\n")[2].partition("\n## ")[0]
     options = page.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
-    assert "[**--browser=**_auto_|_never_]" in synopsis
-    assert "**--browser=**_auto_|_never_" in options
-    assert "[--browser=auto|never]" in body
+    assert "[**--browser=**_auto_|_always_|_never_]" in synopsis
+    assert "**--browser=**_auto_|_always_|_never_" in options
+    assert "[--browser=auto|always|never]" in body
     assert "`--browser`" in body.partition("## Arguments")[2]
     description = page.partition("\n## DESCRIPTION\n")[2].partition("\n## ")[0]
     for statement in (
@@ -2419,3 +2605,498 @@ def test_the_manpage_states_the_rungs_and_what_a_block_is() -> None:
     files = page.partition("\n## FILES\n")[2].partition("\n## ")[0]
     for statement in ("`rung`", "`blocked`"):
         assert statement in files, statement
+
+
+# --- The browser rungs ------------------------------------------------------------
+
+SESSION = re.compile(r"^kntnt-mirror-[0-9]+$")
+
+# The page the browser renders: what its scripts drew is in it, and so are they.
+RENDERED = """<html><head><title>Rendered</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js"></script>
+</head><body>
+<img src="logo.png">
+<img src="extra.png">
+<noscript><p>Scripts are off.</p></noscript>
+<script>document.body.insertAdjacentHTML('beforeend', '<a href="rendered">R</a>')</script>
+<a href="rendered">Rendered</a>
+</body></html>"""
+
+# What the server sent before any script ran: no link to the rendered page.
+SERVED = """<!DOCTYPE html><html><head><title>Rendered</title>
+<link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body><img src="logo.png"><noscript><p>Scripts are off.</p></noscript>
+<script>document.body.insertAdjacentHTML('beforeend', '<a href="rendered">R</a>')</script>
+</body></html>"""
+
+STYLE = "body { color: navy; }\n"
+LOGO = b"\x89PNG logo"
+EXTRA = b"\x89PNG extra"
+APP = "console.log('app');\n"
+
+
+def serve_the_rendered_page(
+    site: Site, browser: FakeBrowser, path: str = "/b/"
+) -> None:
+    """A page only a browser gets: its DOM, and a HAR of what loading it fetched."""
+
+    url = site.url(path)
+    browser.serve(
+        url,
+        dom=RENDERED,
+        har=[
+            har_entry(url, "Document", SERVED, "text/html"),
+            har_entry(url + "style.css", "Stylesheet", STYLE, "text/css"),
+            har_entry(url + "app.js", "Script", APP, "text/javascript"),
+            har_entry(url + "logo.png", "Image", LOGO, "image/png"),
+            har_entry(url + "api/data.json", "XHR", '{"a": 1}', "application/json"),
+        ],
+    )
+    browser.serve(
+        url + "rendered",
+        dom="<html><head><title>R</title></head><body><p>rendered</p></body></html>",
+        har=[har_entry(url + "rendered", "Document", "<p>rendered</p>", "text/html")],
+    )
+    browser.serve(
+        url + "extra.png",
+        dom='<html><body><img src="extra.png"></body></html>',
+        har=[har_entry(url + "extra.png", "Document", EXTRA, "image/png")],
+    )
+
+
+def test_a_host_every_http_identity_is_refused_by_is_mirrored_from_a_headless_browser(
+    site: Site, tmp_path: Path
+) -> None:
+    site.gate = lambda request: FORBIDDEN
+    browser = FakeBrowser.at(tmp_path / "browser")
+    serve_the_rendered_page(site, browser)
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--user-agent=fixture-bot/3",
+        "--header=X-One: 1",
+        "--header=X-Two: 2",
+        site.url("/b/"),
+        browser=browser,
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+
+    # Only `robots.txt` went over HTTP, on rungs 1 and 2; the rest went to the browser.
+    assert [request.path for request in site.requests] == ["/robots.txt"] * 2
+    assert site.url("/robots.txt") in browser.opened()
+    assert site.url("/sitemap.xml") in browser.opened()
+
+    # The page is the rendered DOM, its scripts gone and its `noscript` kept.
+    tree = site.tree(tmp_path / "out") / "b"
+    page = (tree / "index.html").read_text(encoding="utf-8")
+    assert "<script" not in page
+    assert "<noscript>" in page and "Scripts are off." in page
+    assert (tree / "style.css").read_text(encoding="utf-8") == STYLE
+    assert (tree / "logo.png").read_bytes() == LOGO
+    assert (tree / "app.js").read_text(encoding="utf-8") == APP
+    references = {
+        (tag, name): value
+        for tag, name, value in read_page(tree / "index.html").references
+    }
+    assert references[("link", "href")] == "style.css"
+    sources = [
+        value
+        for tag, name, value in read_page(tree / "index.html").references
+        if tag == "img"
+    ]
+    assert sources == ["logo.png", "extra.png"]
+
+    # A statically found resource the HAR lacks is opened in the browser too.
+    assert (tree / "extra.png").read_bytes() == EXTRA
+    assert site.url("/b/extra.png") in browser.opened()
+    assert site.url("/b/style.css") not in browser.opened()
+
+    # A link only the rendered DOM holds is followed; the XHR answer is not saved.
+    assert (tree / "rendered.html").is_file()
+    assert not (tree / "api").exists()
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    assert site.url("/b/api/data.json") not in rows
+    for path in ("/b/", "/b/style.css", "/b/logo.png", "/b/extra.png", "/b/rendered"):
+        row = rows[site.url(path)]
+        assert (row["fetcher"], row["rung"], row["outcome"]) == (
+            "browser",
+            3,
+            "fetched",
+        ), path
+    assert re.search(
+        rf"{re.escape(site.url(''))}.* climbed to rung 3 after a 403 on", result.stdout
+    )
+
+    # What the browser was asked, in the engine's own session, with the run's identity.
+    calls = browser.calls()
+    sessions = {
+        call.flags.get("--session") for call in calls if call.command[:1] != ["doctor"]
+    }
+    assert len(sessions) == 1 and SESSION.match(str(next(iter(sessions))))
+    commands = browser.commands()
+    assert ["doctor", "--json"] in commands
+    for call in calls:
+        if call.command[:1] == ["open"]:
+            assert call.flags.get("--user-agent") == "fixture-bot/3", call
+    headers = [command for command in commands if command[:2] == ["set", "headers"]]
+    assert headers and json.loads(headers[0][2]) == {"X-One": "1", "X-Two": "2"}
+    assert commands.index(headers[0]) < commands.index(["open", site.url("/b/")])
+    page_calls = commands[commands.index(["open", site.url("/b/")]) - 1 :]
+    assert page_calls[0] == ["network", "har", "start", "--content", "all"]
+    reads = [call for call in calls if call.command[:2] == ["eval", "--stdin"]]
+    assert reads and "document.documentElement.outerHTML" in str(reads[0].stdin)
+    after_open = page_calls[1:]
+    assert ["wait", "--load", "networkidle"] in after_open
+    assert any(command[:1] == ["scroll"] for command in after_open)
+    stop = next(
+        command for command in after_open if command[:3] == ["network", "har", "stop"]
+    )
+    read = next(command for command in after_open if command[:2] == ["eval", "--stdin"])
+    assert after_open.index(read) < after_open.index(stop)
+    assert commands[-1] == ["close"]
+    closing = calls[-1].flags
+    assert isinstance(closing, dict) and closing.get("--session") in sessions
+
+
+def test_browser_always_sends_the_first_request_to_the_browser(
+    site: Site, tmp_path: Path
+) -> None:
+    site.html("/b/", "<p>served over HTTP</p>")
+    browser = FakeBrowser.at(tmp_path / "browser")
+    serve_the_rendered_page(site, browser)
+
+    result = mirror(
+        tmp_path, "--output=out", "--browser=always", site.url("/b/"), browser=browser
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert site.requests == [], "no HTTP attempt"
+    assert browser.opened()[0] == site.url("/robots.txt")
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    assert (rows[site.url("/b/")]["fetcher"], rows[site.url("/b/")]["rung"]) == (
+        "browser",
+        3,
+    )
+    assert (
+        "<script" not in (site.tree(tmp_path / "out") / "b" / "index.html").read_text()
+    )
+
+
+CHALLENGE = "<html><head><title>Just a moment...</title></head><body><p>Checking</p></body></html>"
+
+
+def serve_the_challenged_page(site: Site, browser: FakeBrowser) -> None:
+    """A page the headless browser meets a challenge on, and a headed one gets past."""
+
+    url = site.url("/x/")
+    site.gate = lambda request: FORBIDDEN
+    browser.serve(
+        url,
+        dom=CHALLENGE,
+        status=403,
+        har=[har_entry(url, "Document", CHALLENGE, "text/html", status=403)],
+        headed_dom="<html><head><title>X</title></head><body><p>real</p></body></html>",
+        headed_status=200,
+        headed_har=[har_entry(url, "Document", "<p>real</p>", "text/html")],
+    )
+
+
+def test_a_challenge_in_the_headless_browser_ends_blocked_and_names_headed(
+    site: Site, tmp_path: Path
+) -> None:
+    browser = FakeBrowser.at(tmp_path / "browser")
+    serve_the_challenged_page(site, browser)
+
+    result = mirror(
+        tmp_path, "--output=out", "--no-sitemap", site.url("/x/"), browser=browser
+    )
+
+    assert result.returncode == 1, (result.stdout, result.stderr)
+    assert not any(call.flags.get("--headed") for call in browser.calls())
+    assert "rung 3 was not enough" in result.stdout
+    command = (
+        f"/mirror --output=out --no-sitemap --headed {shlex.quote(site.url('/x/'))}"
+    )
+    assert command in result.stdout.splitlines(), result.stdout
+    assert any(
+        "--headed" in line and site.url("/x/") in line and line != command
+        for line in result.stdout.splitlines()
+    ), "a line names the URLs still blocked and --headed as the next step"
+    assert not (tmp_path / "out").exists(), "a blocked start page writes nothing"
+
+    # A blocked page that is not the start page is recorded `blocked` on rung 3.
+    site.gate = lambda request: FORBIDDEN
+    browser.serve(
+        site.url("/y/"),
+        dom='<body><a href="/x/">X</a></body>',
+        har=[
+            har_entry(site.url("/y/"), "Document", "<a href='/x/'>X</a>", "text/html")
+        ],
+    )
+    result = mirror(
+        tmp_path, "--output=out", "--include=/x/", site.url("/y/"), browser=browser
+    )
+
+    assert result.returncode == 1, (result.stdout, result.stderr)
+    row = {row["url"]: row for row in manifest(tmp_path / "out")}[site.url("/x/")]
+    assert (row["outcome"], row["fetcher"], row["rung"]) == ("blocked", "browser", 3)
+    assert (
+        f"/mirror --output=out --include=/x/ --headed {site.url('/y/')}"
+        in result.stdout.splitlines()
+    )
+
+
+def test_headed_takes_a_host_the_headless_browser_is_challenged_on_to_rung_four(
+    site: Site, tmp_path: Path
+) -> None:
+    browser = FakeBrowser.at(tmp_path / "browser")
+    serve_the_challenged_page(site, browser)
+    profile = tmp_path / "profile"
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--headed",
+        f"--profile={profile}",
+        site.url("/x/"),
+        browser=browser,
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    opens = [
+        call for call in browser.calls() if call.command == ["open", site.url("/x/")]
+    ]
+    assert [bool(call.flags.get("--headed")) for call in opens] == [False, True]
+    for call in opens:
+        assert call.flags.get("--profile") == str(profile), call
+    row = {row["url"]: row for row in manifest(tmp_path / "out")}[site.url("/x/")]
+    assert (row["outcome"], row["fetcher"], row["rung"]) == ("fetched", "browser", 4)
+    assert "real" in (site.tree(tmp_path / "out") / "x" / "index.html").read_text()
+    assert "climbed to rung 4" in result.stdout
+
+
+def patched_mirror(
+    cwd: Path, overrides: dict[str, float], *args: str, browser: FakeBrowser
+) -> subprocess.CompletedProcess[str]:
+    """Run the engine with some of its module constants replaced, as `uv run` would run it."""
+
+    source = ENGINE.read_text(encoding="utf-8")
+    block = source[
+        : source.index("# ///\n", source.index("# /// script")) + len("# ///\n")
+    ]
+    driver = cwd.parent / f"{cwd.name}-driver.py"
+    driver.write_text(
+        block
+        + "import importlib.util, sys\n"
+        + f"spec = importlib.util.spec_from_file_location('mirror', {str(ENGINE)!r})\n"
+        + "module = importlib.util.module_from_spec(spec)\n"
+        + "sys.modules['mirror'] = module\n"
+        + "spec.loader.exec_module(module)\n"
+        + "".join(f"module.{name} = {value!r}\n" for name, value in overrides.items())
+        + "sys.exit(module.main(sys.argv[1:]))\n",
+        encoding="utf-8",
+    )
+    return subprocess.run(
+        ["uv", "run", "--quiet", str(driver), *args],
+        cwd=cwd,
+        text=True,
+        capture_output=True,
+        check=False,
+        timeout=300,
+        env={**os.environ, **browser.env},
+    )
+
+
+def test_a_headed_page_still_a_challenge_when_the_wait_ends_is_blocked(
+    site: Site, tmp_path: Path
+) -> None:
+    browser = FakeBrowser.at(tmp_path / "browser")
+    serve_the_challenged_page(site, browser)
+    url = site.url("/x/")
+    browser.serve(
+        url,
+        dom=CHALLENGE,
+        status=403,
+        har=[har_entry(url, "Document", CHALLENGE, "text/html", status=403)],
+        headed_dom=CHALLENGE,
+        headed_status=403,
+        headed_har=[har_entry(url, "Document", CHALLENGE, "text/html", status=403)],
+    )
+    work = tmp_path / "work"
+    work.mkdir()
+
+    began = time.monotonic()
+    result = patched_mirror(
+        work,
+        {"HEADED_WAIT": 1.0, "HEADED_POLL": 0.2},
+        "--output=out",
+        "--no-sitemap",
+        "--no-feeds",
+        "--headed",
+        site.url("/x/"),
+        browser=browser,
+    )
+
+    assert result.returncode == 1, (result.stdout, result.stderr)
+    assert time.monotonic() - began < 120
+    headed_reads = [
+        call
+        for call in browser.calls()
+        if call.command[:1] == ["eval"] and call.flags.get("--headed")
+    ]
+    assert len(headed_reads) >= 3, "the headed page is polled until the wait ends"
+    assert "rung 4 was not enough" in result.stdout
+
+
+@pytest.mark.parametrize("flag", ["--headed", "--profile=Default"])
+def test_a_browser_flag_with_browser_never_is_refused(
+    site: Site, tmp_path: Path, flag: str
+) -> None:
+    site.html("/n/", "<p>n</p>")
+    browser = FakeBrowser.at(tmp_path / "browser")
+    work = tmp_path / "work"
+    work.mkdir()
+
+    result = mirror(work, "--browser=never", flag, site.url("/n/"), browser=browser)
+
+    assert result.returncode == 2, (result.stdout, result.stderr)
+    assert flag.partition("=")[0] in result.stdout.splitlines()[0]
+    assert result.stdout.rstrip("\n").endswith("see '/mirror --help'")
+    assert site.requests == [] and browser.calls() == []
+    assert list(work.iterdir()) == []
+
+
+def test_no_browser_to_launch_stops_the_run_before_it_fetches(
+    site: Site, tmp_path: Path
+) -> None:
+    site.html("/b/", "<p>b</p>")
+    browser = FakeBrowser.at(tmp_path / "browser")
+    browser.lacks_a_browser()
+    work = tmp_path / "work"
+    work.mkdir()
+
+    result = mirror(
+        work, "--output=out", "--browser=always", site.url("/b/"), browser=browser
+    )
+
+    assert result.returncode == 2, (result.stdout, result.stderr)
+    assert "agent-browser install" in result.stdout
+    assert site.requests == []
+    assert browser.commands() == [["doctor", "--json"]]
+    assert list(work.iterdir()) == []
+
+    # Under `auto`, the check waits for the first climb to the browser, and still writes nothing.
+    site.gate = lambda request: FORBIDDEN
+    result = mirror(work, "--output=out", site.url("/b/"), browser=browser)
+
+    assert result.returncode == 2, (result.stdout, result.stderr)
+    assert "agent-browser install" in result.stdout
+    assert [
+        command for command in browser.commands() if command[:1] != ["doctor"]
+    ] == []
+    assert list(work.iterdir()) == []
+
+
+def test_the_session_is_closed_when_the_engine_is_interrupted(
+    site: Site, tmp_path: Path
+) -> None:
+    browser = FakeBrowser.at(tmp_path / "browser")
+    browser.serve(site.url("/robots.txt"), hang=True)
+    work = tmp_path / "work"
+    work.mkdir()
+
+    engine = subprocess.Popen(
+        ["uv", "run", "--quiet", str(ENGINE), "--browser=always", site.url("/h/")],
+        cwd=work,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env={**os.environ, **browser.env},
+    )
+    try:
+        deadline = time.monotonic() + 120
+        while not browser.opened():
+            assert engine.poll() is None, engine.communicate()
+            assert time.monotonic() < deadline, "the engine never opened the page"
+            time.sleep(0.1)
+        session = next(
+            call.flags["--session"]
+            for call in browser.calls()
+            if call.command[:1] == ["open"]
+        )
+        os.kill(int(str(session).rpartition("-")[2]), signal.SIGTERM)
+        engine.communicate(timeout=60)
+    finally:
+        if engine.poll() is None:
+            engine.kill()
+            engine.communicate()
+
+    closes = [call for call in browser.calls() if call.command == ["close"]]
+    assert [call.flags.get("--session") for call in closes] == [session]
+
+
+def test_a_page_a_browser_fetched_is_fetched_again_on_the_next_run(
+    site: Site, tmp_path: Path
+) -> None:
+    url = site.url("/v/")
+    site.add("/v/", Response(b"<p>v</p>", headers={"ETag": '"v1"'}))
+    browser = FakeBrowser.at(tmp_path / "browser")
+    browser.serve(
+        url,
+        dom="<html><body><p>v</p></body></html>",
+        har=[
+            har_entry(
+                url, "Document", "<p>v</p>", "text/html", headers={"ETag": '"v1"'}
+            )
+        ],
+    )
+
+    first = mirror(tmp_path, "--output=out", "--browser=always", url, browser=browser)
+    second = mirror(tmp_path, "--output=out", url, browser=browser)
+
+    assert first.returncode == 0, (first.stdout, first.stderr)
+    assert second.returncode == 0, (second.stdout, second.stderr)
+    asked = site.requested("/v/")
+    assert len(asked) == 1 and "If-None-Match" not in asked[0].headers
+    row = {row["url"]: row for row in manifest(tmp_path / "out")}[url]
+    assert (row["outcome"], row["fetcher"]) == ("fetched", "http")
+
+
+def test_the_manpage_states_the_browser_rungs() -> None:
+    page = (SKILL / "help.md").read_text(encoding="utf-8")
+    body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    synopsis = page.partition("\n## SYNOPSIS\n")[2].partition("\n## ")[0]
+    options = page.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
+    arguments = body.partition("## Arguments")[2].partition("\n## ")[0]
+    for flag, hint in (
+        ("[**--headed**]", "[--headed]"),
+        ("[**--profile=**_PROFILE_]", "[--profile=<name|path>]"),
+    ):
+        assert flag in synopsis, flag
+        assert flag.strip("[]") in options, flag
+        assert hint in body, hint
+    for flag in ("`--headed`", "`--profile`", "`always`"):
+        assert flag in arguments, flag
+    description = page.partition("\n## DESCRIPTION\n")[2].partition("\n## ")[0]
+    for statement in (
+        "rung 3",
+        "rung 4",
+        "`agent-browser`",
+        "`script` element",
+        "`noscript`",
+        "XHR",
+        "fetched again",
+        "ten minutes",
+    ):
+        assert statement in description, statement
+    dependencies = page.partition("\n## DEPENDENCIES\n")[2].partition("\n## ")[0]
+    assert "`agent-browser`" in dependencies and "agent-browser install" in dependencies
+    frontmatter = body.partition("\n---\n")[0]
+    assert 'kntnt.binaries: "uv agent-browser"' in frontmatter
+    assert re.search(r"^compatibility: .*\bagent-browser\b", frontmatter, re.MULTILINE)
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    dependencies = readme.partition("\n## Dependencies\n")[2].partition("\n## ")[0]
+    assert "`mirror` requires `agent-browser`" in dependencies

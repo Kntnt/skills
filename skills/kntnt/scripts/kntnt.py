@@ -62,6 +62,10 @@ BINARY_HOW = {
     "git": "install git",
     "gh": "install GitHub CLI (gh) from https://cli.github.com/",
     "pdftotext": "install Poppler so pdftotext is available on PATH",
+    "agent-browser": (
+        "install with `brew install agent-browser`, then run"
+        " `agent-browser install` for the browser binaries"
+    ),
 }
 
 # A Capability is a Dependency on the Harness itself. No script can test one:
