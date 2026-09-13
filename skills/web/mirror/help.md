@@ -40,11 +40,13 @@ On a file system that treats names differing only in case as one, as macOS does 
 
 Requests go one at a time over plain HTTP with the identity `kntnt-mirror (+https://github.com/Kntnt/skills)`, and **--delay** spaces them. Connecting and reading each time out after 30 seconds. A connection error, a timeout, and the statuses `429`, `500`, `502`, `503` and `504` are retried up to three times, after the wait `Retry-After` asks for or otherwise after 1, 2 and 4 seconds. Nothing else is retried.
 
+A rerun into an output directory that holds an earlier run's manifest is incremental: discovery is done in full every run, and only fetching is conditional. Every URL the run comes to whose row in that manifest names a saved file that is still there, and for an HTML page or a stylesheet its copy under `.mirror/raw/` too, is requested with `If-None-Match` from the row's `ETag` and `If-Modified-Since` from its `Last-Modified`, whichever of the two the row has; a row with neither, and a URL the manifest does not know, are fetched as on a first run. A `304` keeps the file as it is and records the URL as `unchanged`, carrying the earlier row's `ETag`, `Last-Modified`, digest, size and content type, replaced by whatever the `304` itself supplies, so the run after it is as conditional; an unchanged page or stylesheet is read for links and resources from its raw copy, as a fetched one is. Any other success replaces the file and, for HTML and CSS, its raw copy. The rewrite runs over every raw file, unchanged ones included, so a reference left absolute because its target was not yet in the mirror becomes relative once the target is, and it writes a file only where its bytes differ, so an unchanged file keeps its modification time. A URL an earlier run saved that this run did not discover keeps its file on disk and is recorded as `absent`: nothing is ever deleted from the tree.
+
 Resources a script loads while the page runs cannot be found by reading the page, and are not saved; the saved page asks the network for them, or goes without.
 
 Chrome restricts fonts and `type="module"` scripts on pages opened as `file://`. For full fidelity, serve the output directory with any static file server, such as `python3 -m http.server`, and open the page through it.
 
-When the run ends, the Skill prints a short report: the pages, files and resources fetched, their total size, how many sitemaps and feeds were read, how many candidates links, sitemaps and feeds each contributed, counting each URL once under the source that named it first, how many candidates were out of scope, excluded, redirected out of scope, stopped by `robots.txt` and over the cap, whether the cap was reached, how many pages were suspected shells, any `robots.txt` that could not be read, and every failure with its status and URL.
+When the run ends, the Skill prints a short report: the pages, files and resources fetched, their total size, the pages, files and resources a conditional request found unchanged, how many sitemaps and feeds were read, how many candidates links, sitemaps and feeds each contributed, counting each URL once under the source that named it first, how many candidates were out of scope, excluded, redirected out of scope, stopped by `robots.txt` and over the cap, how many saved files are absent, whether the cap was reached, how many pages were suspected shells, any `robots.txt` that could not be read, and every failure with its status and URL.
 
 ## POSITIONAL ARGUMENTS
 
@@ -104,7 +106,7 @@ Send *STRING* as the identity on every request, in place of the Skill's own.
 
 **--dry-run**
 
-Fetch and count everything a real run would, and write nothing: no output directory, no manifest, no log. The report lists every URL that would be fetched, followed by the counts a real run prints.
+Fetch and count everything a real run would, and write nothing: no output directory, no manifest, no log, and against an existing mirror no change to it. The report lists every URL that would be fetched, with the word `conditional` after each one that would be requested conditionally, as DESCRIPTION says, followed by the counts a real run prints.
 
 ## FILES
 
@@ -118,15 +120,15 @@ A directory URL, one whose path ends in a slash, is saved as `index.html` in tha
 
 **<output>/.mirror/raw/**
 
-The bytes of every HTML and CSS file as the server sent them, at the same relative path as in the tree. The saved copies in the tree are derived from these at the end of the run. Images, fonts, scripts and every other file the rewrite never changes are kept in the tree only.
+The bytes of every HTML and CSS file as the server sent them, at the same relative path as in the tree. The saved copies in the tree are derived from these at the end of every run, unchanged ones included. Images, fonts, scripts and every other file the rewrite never changes are kept in the tree only.
 
 **<output>/.mirror/manifest.ndjson**
 
-One JSON object per line, one per URL the run took a position on, each with the same fields: `url`; `final_url`, where its redirects ended; `kind`, one of `page`, `file`, `resource`, `robots`, `sitemap` and `feed`, a candidate not fetched being a `page`; `source`, what led to it: `start`, `link`, `resource`, `robots` for a `robots.txt` and for a sitemap a `robots.txt` names, `sitemap`, `feed`, or `probe` for a sitemap or feed at a well-known location; `discovered_from`, the URL of the page, file, `robots.txt`, sitemap or feed that named it, or `null` for the start page, a `robots.txt` and a well-known location; `fetcher`, `http`; `status`; `content_type`; `size` in bytes; `local_path`, relative to the output directory; `sha256`; `etag`; `last_modified`; `timestamp`; and `outcome`, one of `fetched`, `out-of-scope`, `excluded`, `redirect-out`, `robots`, `over-cap`, `missing` and `failed`. A field with nothing to say is `null`. A URL that normalises to one already recorded, a fragment or tracking-parameter variant for instance, gets no row of its own. A `robots.txt` that could not be read is `failed` without failing the run, and a well-known sitemap or feed location that is not there is `missing`.
+Rewritten whole every run: one JSON object per line, one per URL the run took a position on and one per URL an earlier run saved that this run did not discover, each with the same fields: `url`; `final_url`, where its redirects ended; `kind`, one of `page`, `file`, `resource`, `robots`, `sitemap` and `feed`, a candidate not fetched being a `page`; `source`, what led to it: `start`, `link`, `resource`, `robots` for a `robots.txt` and for a sitemap a `robots.txt` names, `sitemap`, `feed`, or `probe` for a sitemap or feed at a well-known location; `discovered_from`, the URL of the page, file, `robots.txt`, sitemap or feed that named it, or `null` for the start page, a `robots.txt` and a well-known location; `fetcher`, `http`; `status`, `304` for an unchanged file; `content_type`; `charset`, the character encoding the server declared, which a rerun decodes an unchanged page or stylesheet with; `size` in bytes; `local_path`, relative to the output directory; `sha256`; `etag`; `last_modified`; `timestamp`; and `outcome`, one of `fetched`, `out-of-scope`, `excluded`, `redirect-out`, `robots`, `over-cap`, `missing`, `failed`, `unchanged` for a URL a conditional request found as the earlier run saved it, and `absent` for a file an earlier run saved whose URL this run did not discover, its row otherwise as that run left it. A field with nothing to say is `null`. A URL that normalises to one already recorded, a fragment or tracking-parameter variant for instance, gets no row of its own. A `robots.txt` that could not be read is `failed` without failing the run, and a well-known sitemap or feed location that is not there is `missing`.
 
 **<output>/.mirror/run.log**
 
-One line per request the run made, with its timestamp, method, URL, status and elapsed time, and one line per URL the manifest records as `out-of-scope`, `excluded`, `redirect-out`, `robots`, `over-cap`, `missing` or `failed`.
+One line per request the run made, with its timestamp, method, URL, status and elapsed time, and one line per URL the manifest records as `out-of-scope`, `excluded`, `redirect-out`, `robots`, `over-cap`, `missing`, `failed` or `absent`.
 
 ## EXIT STATUS
 
