@@ -1000,6 +1000,11 @@ SHIPPED_CASES: dict[str, list[Case]] = {
                 "operands": ["https://x.se/docs/"],
             },
         ),
+        (
+            "--browser=never https://x.se/",
+            {"flags": {"--browser": "never"}, "operands": ["https://x.se/"]},
+        ),
+        ("--browser https://x.se/", None),
         ("--no-links=yes https://x.se/", None),
         ("--no-feeds=yes https://x.se/", None),
         ("--max-pages https://x.se/", None),

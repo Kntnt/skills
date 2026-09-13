@@ -21,7 +21,7 @@ import subprocess
 import tempfile
 import threading
 import time
-from collections.abc import Iterator, Mapping
+from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -53,6 +53,7 @@ MANIFEST_FIELDS = {
     "timestamp",
     "outcome",
     "charset",
+    "rung",
 }
 
 # The attributes a saved page references another file through.
@@ -90,6 +91,8 @@ class Site:
         self.host_routes: dict[tuple[str, str], list[Response]] = {}
         self.requests: list[Request] = []
         self.port = 0
+        # Answers a request before any route does, where it returns a response.
+        self.gate: Callable[[Request], Response | None] | None = None
 
     def add(self, path: str, *responses: Response, host: str | None = None) -> None:
         """Serve *responses* at *path* in turn, the last one from then on.
@@ -154,7 +157,18 @@ def site() -> Iterator[Site]:
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self) -> None:
             host = self.headers.get("Host", "")
-            served.requests.append(Request(host, self.path, dict(self.headers)))
+            request = Request(host, self.path, dict(self.headers))
+            served.requests.append(request)
+            gated = served.gate(request) if served.gate else None
+            if gated is not None:
+                self.send_response(gated.status)
+                self.send_header("Content-Type", gated.content_type)
+                self.send_header("Content-Length", str(len(gated.body)))
+                for name, value in gated.headers.items():
+                    self.send_header(name, value)
+                self.end_headers()
+                self.wfile.write(gated.body)
+                return
             responses = served.host_routes.get(
                 (host.rpartition(":")[0], self.path)
             ) or served.routes.get(self.path)
@@ -558,6 +572,12 @@ def test_the_manifest_has_one_row_per_url_with_every_field(
         "fetched",
     )
     assert start["fetcher"] == "http" and start["status"] == 200
+    assert start["rung"] == 1
+    for row in rows:
+        requested = row["status"] is not None
+        assert (row["fetcher"], row["rung"]) == (
+            ("http", 1) if requested else (None, None)
+        ), row
     assert start["local_path"] == f"{site.tree(Path('.')).name}/site/index.html"
     assert start["discovered_from"] is None
 
@@ -818,6 +838,7 @@ def test_a_start_page_that_cannot_be_fetched_exits_one_and_writes_nothing(
         ("--delay=-1", "http://example.com/"),
         ("--max-pages=two", "http://example.com/"),
         ("--max-pages=-3", "http://example.com/"),
+        ("--browser=maybe", "http://example.com/"),
     ],
 )
 def test_a_value_the_skill_rejects_is_refused_in_the_collections_shape(
@@ -2109,3 +2130,279 @@ def test_the_manpage_states_that_a_rerun_is_incremental() -> None:
         assert outcome in files, outcome
     options = page.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
     assert "`conditional`" in options
+
+
+# --- Blocks and rungs ------------------------------------------------------------
+
+# The rung-2 identity the engine sends, as the ticket states it literally.
+CHROME_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+        " (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+    ),
+    "Accept": (
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,"
+        "image/webp,*/*;q=0.8"
+    ),
+    "Accept-Language": "sv-SE,sv;q=0.9,en-US;q=0.8,en;q=0.7",
+    "sec-ch-ua": '"Chromium";v="140", "Google Chrome";v="140", "Not?A_Brand";v="24"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"macOS"',
+}
+
+FORBIDDEN = Response(b"<title>Forbidden</title>", status=403)
+
+
+def is_chrome(request: Request) -> bool:
+    return "Chrome" in request.headers.get("User-Agent", "")
+
+
+def serve_the_guarded_site(site: Site) -> None:
+    """A section that answers `403` to every request whose user-agent is not Chrome."""
+
+    site.gate = lambda request: None if is_chrome(request) else FORBIDDEN
+    site.html("/g/", '<a href="next">Next</a><img src="logo.png">')
+    site.html("/g/next", "<p>next</p>")
+    site.binary("/g/logo.png", b"logo")
+
+
+def test_a_host_that_refuses_the_skills_identity_climbs_to_rung_two(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_guarded_site(site)
+
+    result = mirror(tmp_path, "--output=out", site.url("/g/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    first = site.requests[0]
+    assert (first.path, is_chrome(first)) == ("/robots.txt", False)
+    assert all(is_chrome(request) for request in site.requests[1:])
+    asked = [(request.path, is_chrome(request)) for request in site.requests]
+    assert len(asked) == len(set(asked)), "nothing is fetched twice on one rung"
+    assert site.requested("/robots.txt")[-1] is not first
+    for path in ("/g/", "/g/next", "/g/logo.png"):
+        assert [is_chrome(request) for request in site.requested(path)] == [True]
+    tree = site.tree(tmp_path / "out") / "g"
+    assert (tree / "index.html").is_file() and (tree / "next.html").is_file()
+
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    for path in ("/robots.txt", "/g/", "/g/next", "/g/logo.png"):
+        assert (rows[site.url(path)]["fetcher"], rows[site.url(path)]["rung"]) == (
+            "http",
+            2,
+        ), path
+    assert re.search(
+        rf"{re.escape(site.url(''))}.* climbed to rung 2 after a 403 on"
+        rf" {re.escape(site.url('/robots.txt'))}",
+        result.stdout,
+    )
+    assert re.search(r"^Hosts that stayed on rung 1: 0$", result.stdout, re.MULTILINE)
+    assert re.search(r"^Blocked: 0$", result.stdout, re.MULTILINE)
+
+
+def test_rung_two_looks_like_chrome_and_the_users_identity_wins_on_both_rungs(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_guarded_site(site)
+
+    result = mirror(tmp_path, "--output=a", site.url("/g/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    for request in site.requests[1:]:
+        for name, value in CHROME_HEADERS.items():
+            assert request.headers.get(name) == value, (name, request)
+
+    site.requests.clear()
+    site.gate = lambda request: None if "sec-ch-ua" in request.headers else FORBIDDEN
+    result = mirror(
+        tmp_path,
+        "--output=b",
+        "--user-agent=fixture-bot/2",
+        "--header=Accept-Language: en",
+        site.url("/g/"),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    rungs = {"sec-ch-ua" in request.headers for request in site.requests}
+    assert rungs == {False, True}, "both rungs were asked"
+    for request in site.requests:
+        assert request.headers["User-Agent"] == "fixture-bot/2", request
+        assert request.headers["Accept-Language"] == "en", request
+
+
+def test_a_challenge_page_is_a_block_and_a_busy_answer_that_recovers_is_not(
+    site: Site, tmp_path: Path
+) -> None:
+    challenge = Response(b"<html><head><title>Just a moment...</title></head></html>")
+    site.gate = lambda request: (
+        challenge if request.path == "/c/" and not is_chrome(request) else None
+    )
+    site.html("/c/", '<a href="mentions">Mentions</a><img src="busy.png">')
+    site.html(
+        "/c/mentions",
+        "<title>How cf-browser-verification and _cf_chl_opt work</title><p>x</p>",
+    )
+    site.add(
+        "/c/busy.png",
+        Response(b"", status=429, headers={"Retry-After": "1"}),
+        Response(b"busy", "image/png"),
+    )
+
+    result = mirror(tmp_path, "--output=out", site.url("/c/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert [is_chrome(request) for request in site.requested("/c/")] == [False, True]
+    busy = site.requested("/c/busy.png")
+    assert len(busy) == 2 and busy[1].time - busy[0].time >= 0.9
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    assert rows[site.url("/c/busy.png")]["outcome"] == "fetched"
+    assert rows[site.url("/c/mentions")]["outcome"] == "fetched"
+    assert re.search(
+        r'climbed to rung 2 after Cloudflare\'s title "Just a moment\.\.\." on '
+        + re.escape(site.url("/c/")),
+        result.stdout,
+    )
+    assert re.search(r"^Blocked: 0$", result.stdout, re.MULTILINE)
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        Response(b"<p>ok</p>", headers={"cf-mitigated": "challenge"}),
+        Response(b"<p>ok</p>", headers={"X-DataDome": "protected"}),
+        Response(b"<p>ok</p>", headers={"X-Iinfo": "1-2-3"}),
+        Response(b"<title>ATTENTION REQUIRED! | CLOUDFLARE</title>"),
+    ],
+)
+def test_a_marker_on_any_answer_moves_the_host(
+    site: Site, tmp_path: Path, response: Response
+) -> None:
+    site.gate = lambda request: (
+        response if request.path == "/m/" and not is_chrome(request) else None
+    )
+    site.html("/m/", "<p>real</p>")
+
+    result = mirror(
+        tmp_path, "--output=out", "--no-sitemap", "--no-feeds", site.url("/m/")
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert [is_chrome(request) for request in site.requested("/m/")] == [False, True]
+    assert "climbed to rung 2" in result.stdout
+
+
+def test_a_host_that_refuses_every_identity_ends_blocked(
+    site: Site, tmp_path: Path
+) -> None:
+    site.gate = lambda request: FORBIDDEN if request.path == "/w/private" else None
+    site.html("/w/", '<a href="private">Private</a><a href="open">Open</a>')
+    site.html("/w/open", "<p>open</p>")
+
+    result = mirror(tmp_path, "--output=out", site.url("/w/"))
+
+    assert result.returncode == 1, (result.stdout, result.stderr)
+    assert [is_chrome(request) for request in site.requested("/w/private")] == [
+        False,
+        True,
+    ]
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    private = rows[site.url("/w/private")]
+    assert (private["outcome"], private["status"], private["rung"]) == (
+        "blocked",
+        403,
+        2,
+    )
+    assert rows[site.url("/w/open")]["outcome"] == "fetched"
+    assert re.search(r"^Blocked: 1$", result.stdout, re.MULTILINE)
+    assert re.search(r"rung 2 was not enough", result.stdout)
+    assert re.search(
+        rf"^\s*403 {re.escape(site.url('/w/private'))}$", result.stdout, re.MULTILINE
+    )
+
+    site.requests.clear()
+    site.gate = lambda request: FORBIDDEN
+    whole = tmp_path / "whole"
+    whole.mkdir()
+    result = mirror(whole, "--output=out", "--browser=never", site.url("/w/"))
+
+    assert result.returncode == 1, (result.stdout, result.stderr)
+    assert "rung 2 was not enough" in result.stdout
+    assert not (whole / "out").exists()
+
+
+def test_a_robots_disallow_is_obeyed_and_moves_no_host(
+    site: Site, tmp_path: Path
+) -> None:
+    site.add(
+        "/robots.txt",
+        Response(b"User-agent: *\nDisallow: /r/private\n", "text/plain"),
+    )
+    site.html("/r/", '<a href="private">Private</a>')
+    site.html("/r/private", "<p>private</p>")
+
+    result = mirror(tmp_path, "--output=out", site.url("/r/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert not any(is_chrome(request) for request in site.requests)
+    assert not site.requested("/r/private")
+    private = {row["url"]: row for row in manifest(tmp_path / "out")}[
+        site.url("/r/private")
+    ]
+    assert (private["outcome"], private["fetcher"], private["rung"]) == (
+        "robots",
+        None,
+        None,
+    )
+    assert re.search(r"^Hosts that stayed on rung 1: 1$", result.stdout, re.MULTILINE)
+    assert "climbed" not in result.stdout
+
+
+def test_browser_never_is_accepted(site: Site, tmp_path: Path) -> None:
+    site.html("/n/", "<p>n</p>")
+
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/n/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+
+
+def test_a_browser_value_the_skill_rejects_is_refused_before_anything_is_fetched(
+    site: Site, tmp_path: Path
+) -> None:
+    site.html("/n/", "<p>n</p>")
+
+    result = mirror(tmp_path, "--browser=maybe", site.url("/n/"))
+
+    assert result.returncode == 2, (result.stdout, result.stderr)
+    assert "'--browser'" in result.stdout.splitlines()[0]
+    assert result.stdout.rstrip("\n").endswith("see '/mirror --help'")
+    assert site.requests == []
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_the_manpage_states_the_rungs_and_what_a_block_is() -> None:
+    page = (SKILL / "help.md").read_text(encoding="utf-8")
+    body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    synopsis = page.partition("\n## SYNOPSIS\n")[2].partition("\n## ")[0]
+    options = page.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
+    assert "[**--browser=**_auto_|_never_]" in synopsis
+    assert "**--browser=**_auto_|_never_" in options
+    assert "[--browser=auto|never]" in body
+    assert "`--browser`" in body.partition("## Arguments")[2]
+    description = page.partition("\n## DESCRIPTION\n")[2].partition("\n## ")[0]
+    for statement in (
+        "rung 1",
+        "rung 2",
+        "`sec-ch-ua`",
+        "`403`, `429` or `503`",
+        "`Just a moment...`",
+        "Cloudflare",
+        "Akamai",
+        "PerimeterX",
+        "DataDome",
+        "Imperva",
+        "is not a block",
+    ):
+        assert statement in description, statement
+    files = page.partition("\n## FILES\n")[2].partition("\n## ")[0]
+    for statement in ("`rung`", "`blocked`"):
+        assert statement in files, statement

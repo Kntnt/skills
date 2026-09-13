@@ -29,6 +29,12 @@ A rerun into the same output directory is incremental: the earlier manifest's
 validators make every request for a file still on disk conditional, a `304`
 reads a page back from its raw copy, the rewrite writes only bytes that differ,
 and a saved file this run did not discover stays and is recorded `absent`.
+
+A host that blocks the run climbs a ladder of rungs, each a fetcher with its own
+identity: rung 1 is plain HTTP as the Skill, rung 2 plain HTTP dressed as
+Chrome. The rung belongs to the host and lasts the run; a block moves the host
+one rung up and the blocked URL is asked again there, and a block on the top
+rung is the URL's outcome.
 """
 
 from __future__ import annotations
@@ -64,10 +70,109 @@ import tinycss2.bytes
 from selectolax.lexbor import LexborHTMLParser, LexborNode
 from tinycss2.serializer import serialize_string_value, serialize_url
 
-# The identity every request carries unless `--user-agent` replaces it, and the
-# product token `robots.txt` groups are matched against.
+# The identity every rung-1 request carries unless `--user-agent` replaces it, and
+# the product token `robots.txt` groups are matched against.
 IDENTITY = "kntnt-mirror (+https://github.com/Kntnt/skills)"
 FETCHER_NAME = "http"
+
+# The rungs a host climbs, each a fetcher and the headers it sends as its own.
+# Every host starts every run on the first.
+RUNG_OWN = 1  # Plain HTTP, as the Skill.
+RUNG_CHROME = 2  # Plain HTTP, as Chrome.
+FIRST_RUNG = RUNG_OWN
+OWN_HEADERS = (("User-Agent", IDENTITY),)
+
+# The identity rung 2 sends, imitating Chrome 140 on macOS. Bump every line
+# together, so the version the user-agent names is the one `sec-ch-ua` names.
+CHROME_HEADERS = (
+    (
+        "User-Agent",
+        (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+            " (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+        ),
+    ),
+    (
+        "Accept",
+        (
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,"
+            "image/webp,*/*;q=0.8"
+        ),
+    ),
+    ("Accept-Language", "sv-SE,sv;q=0.9,en-US;q=0.8,en;q=0.7"),
+    (
+        "sec-ch-ua",
+        '"Chromium";v="140", "Google Chrome";v="140", "Not?A_Brand";v="24"',
+    ),
+    ("sec-ch-ua-mobile", "?0"),
+    ("sec-ch-ua-platform", '"macOS"'),
+)
+
+# `--browser`: whether a host may climb past plain HTTP. No browser rung exists
+# yet, so both values give the same ladder.
+BROWSER_POLICIES = ("auto", "never")
+DEFAULT_BROWSER = "auto"
+
+# A block: an answer that refuses the run's identity rather than the request.
+# These statuses are a block once the retries are spent.
+BLOCK_STATUSES = frozenset({403, 429, 503})
+MATCH_HEADER = "header"  # Matched on every answer.
+MATCH_TITLE = "title"  # Matched on every HTML answer.
+MATCH_BODY = "body"  # Matched on HTML answers with a block status only.
+
+
+@dataclass(frozen=True)
+class Marker:
+    """A sign that a bot defence answered: where it is matched, and what it is.
+
+    A header marker with no *value* matches the header whatever its value, and
+    one with a *status* only on that status. Matching is case-insensitive.
+    """
+
+    owner: str
+    where: str
+    text: str
+    value: str | None = None
+    status: int | None = None
+
+    def describe(self) -> str:
+        """The marker as the report names it."""
+
+        if self.where == MATCH_HEADER:
+            shown = f"{self.text}: {self.value}" if self.value else self.text
+            return f"{self.owner}'s header `{shown}`"
+        if self.where == MATCH_TITLE:
+            return f'{self.owner}\'s title "{self.text}"'
+        return f"{self.owner}'s `{self.text}` in the body"
+
+
+BLOCK_MARKERS = (
+    # Cloudflare: the header its challenges answer with.
+    Marker("Cloudflare", MATCH_HEADER, "cf-mitigated", "challenge"),
+    # Cloudflare: the title of its JavaScript challenge.
+    Marker("Cloudflare", MATCH_TITLE, "Just a moment..."),
+    # Cloudflare: the title of its block page.
+    Marker("Cloudflare", MATCH_TITLE, "Attention Required! | Cloudflare"),
+    # Cloudflare: the scripts of its browser check.
+    Marker("Cloudflare", MATCH_BODY, "cf-browser-verification"),
+    Marker("Cloudflare", MATCH_BODY, "_cf_chl_opt"),
+    # Akamai: its error pages' host.
+    Marker("Akamai", MATCH_BODY, "errors.edgesuite.net"),
+    # Akamai: its edge server, refusing.
+    Marker("Akamai", MATCH_HEADER, "Server", "AkamaiGHost", status=403),
+    # PerimeterX (HUMAN): its challenge script and captcha.
+    Marker("PerimeterX", MATCH_BODY, "_pxAppId"),
+    Marker("PerimeterX", MATCH_BODY, "px-captcha"),
+    # DataDome: its captcha host.
+    Marker("DataDome", MATCH_BODY, "captcha-delivery.com"),
+    # DataDome: its header.
+    Marker("DataDome", MATCH_HEADER, "x-datadome"),
+    # Imperva (Incapsula): its challenge resource and incident page.
+    Marker("Imperva", MATCH_BODY, "_Incapsula_Resource"),
+    Marker("Imperva", MATCH_BODY, "Incapsula incident ID"),
+    # Imperva (Incapsula): its header.
+    Marker("Imperva", MATCH_HEADER, "X-Iinfo"),
+)
 
 # Connection handling: timeouts in seconds, and what is retried after which wait.
 CONNECT_TIMEOUT = 30.0
@@ -121,6 +226,7 @@ OUTCOME_MISSING = "missing"
 OUTCOME_EXCLUDED = "excluded"
 OUTCOME_UNCHANGED = "unchanged"  # A conditional request the server answered `304`.
 OUTCOME_ABSENT = "absent"  # Saved by an earlier run, and not discovered by this one.
+OUTCOME_BLOCKED = "blocked"  # Blocked on the highest rung the run can reach.
 
 # What names a page or file the crawl may take, and the documents read, not saved.
 PAGE_SOURCES = (SOURCE_LINK, SOURCE_SITEMAP, SOURCE_FEED)
@@ -519,10 +625,11 @@ class Fetched:
     redirected_out: bool = False
     unchanged: bool = False  # A `304`: the bytes are those an earlier run saved.
     stored: PurePosixPath | None = None  # Where an unchanged file's bytes are.
+    blocked: str | None = None  # What made the answer a block, as the report names it.
 
     @property
     def succeeded(self) -> bool:
-        if self.error is not None or self.status is None:
+        if self.error is not None or self.status is None or self.blocked is not None:
             return False
         return self.unchanged or 200 <= self.status < 300
 
@@ -566,7 +673,8 @@ class Fetcher(Protocol):
         no to a redirect's target, the fetch stops there: `final_url` is that
         target, `status` the redirect's, and `redirected_out` is set. With
         *validators*, the request is conditional, and a `304` comes back as
-        that status with whatever validators it carries and no body.
+        that status with whatever validators it carries and no body. An answer
+        `block_reason` calls a block comes back with `blocked` set.
         """
         ...
 
@@ -596,7 +704,6 @@ class HttpFetcher:
     def __init__(
         self,
         headers: list[tuple[str, str]],
-        user_agent: str,
         credentials: tuple[str, str, str] | None,
         log: RunLog,
     ) -> None:
@@ -606,7 +713,7 @@ class HttpFetcher:
         # The client follows no redirect itself: on each hop httpx drops
         # `Cookie` and cross-origin `Authorization`, and every header the
         # caller gave belongs on every request, so `_send` follows them.
-        self.headers = [("User-Agent", user_agent), *headers]
+        self.headers = headers
         self.client = httpx.Client(
             timeout=httpx.Timeout(READ_TIMEOUT, connect=CONNECT_TIMEOUT),
             follow_redirects=False,
@@ -721,7 +828,15 @@ class HttpFetcher:
             etag=response.headers.get("ETag"),
             last_modified=response.headers.get("Last-Modified"),
         )
+        headers = response.headers.multi_items()
+        html = is_html(content_type, fetched.final_url)
         if not fetched.succeeded:
+            body = None
+            if html and response.status_code in BLOCK_STATUSES:
+                body = response.read()
+            fetched.blocked = block_reason(
+                response.status_code, headers, body if html else None, fetched.charset
+            )
             return fetched
 
         # The body: kept where the rewrite reads it, staged or counted otherwise.
@@ -743,7 +858,78 @@ class HttpFetcher:
         fetched.sha256 = digest.hexdigest()
         fetched.body = bytes(kept) if kept is not None else None
         fetched.staged = staged
+        fetched.blocked = block_reason(
+            response.status_code,
+            headers,
+            fetched.body if html else None,
+            fetched.charset,
+        )
         return fetched
+
+
+def block_reason(
+    status: int, headers: list[tuple[str, str]], html: bytes | None, charset: str | None
+) -> str | None:
+    """What makes an answer a block, as the report names it, or None where it is none.
+
+    *status* is the final answer's, its retries spent, and *html* the body of
+    an HTML answer, or None for any other. A marker is named where one matches,
+    after the status where the status is a block too; header markers are
+    matched on every answer, title markers on every HTML answer, and body
+    markers only on an HTML answer with a block status.
+    """
+
+    blocked_status = status in BLOCK_STATUSES
+    text = decode_html(html, charset) if html is not None else None
+    title = page_title(text) if text is not None else None
+    for marker in BLOCK_MARKERS:
+        if marker.status is not None and marker.status != status:
+            continue
+        if marker.where == MATCH_HEADER:
+            found = any(
+                name.lower() == marker.text.lower()
+                and (marker.value is None or marker.value.lower() in value.lower())
+                for name, value in headers
+            )
+        elif marker.where == MATCH_TITLE:
+            found = title is not None and title.lower() == marker.text.lower()
+        else:
+            found = (
+                blocked_status
+                and text is not None
+                and marker.text.lower() in text.lower()
+            )
+        if found:
+            described = marker.describe()
+            return f"{status} with {described}" if blocked_status else described
+    return str(status) if blocked_status else None
+
+
+def page_title(text: str) -> str | None:
+    """A page's title, whitespace collapsed, or None where it has none."""
+
+    node = LexborHTMLParser(text).css_first("title")
+    return " ".join(node.text(deep=True).split()) if node is not None else None
+
+
+def compose_headers(
+    identity: Iterable[tuple[str, str]],
+    user_agent: str | None,
+    headers: list[tuple[str, str]],
+) -> list[tuple[str, str]]:
+    """The headers one rung sends: its identity, as the user replaced it.
+
+    `--user-agent` replaces the rung's `User-Agent`, and a `--header` whose
+    name the rung also sets replaces the rung's header of that name.
+    """
+
+    replaced = {name.lower() for name, _ in headers}
+    own = [
+        (name, user_agent if user_agent and name.lower() == "user-agent" else value)
+        for name, value in identity
+        if name.lower() not in replaced
+    ]
+    return [*own, *headers]
 
 
 def retry_after(value: str | None) -> float | None:
@@ -1294,6 +1480,8 @@ class Record:
     local_path: PurePosixPath | None = None
     final_url: str | None = None  # Where the fetch ended, in its compared form.
     conditional: bool = False  # Requested with an earlier run's validators.
+    fetcher: str | None = None  # The fetcher of the last attempt, None before one.
+    rung: int | None = None  # The rung of the last attempt, None before one.
 
     @property
     def final(self) -> str | None:
@@ -1303,18 +1491,18 @@ class Record:
             return None
         return self.final_url
 
-    def row(self, fetcher: str) -> dict[str, object]:
+    def row(self) -> dict[str, object]:
         """The manifest row: every field on every row, null where nothing is known."""
 
         fetched = self.fetched
-        attempted = fetched is not None
         return {
             "url": self.url,
             "final_url": self.final_url if fetched else None,
             "kind": self.kind,
             "source": self.source,
             "discovered_from": self.discovered_from,
-            "fetcher": fetcher if attempted else None,
+            "fetcher": self.fetcher,
+            "rung": self.rung,
             "status": fetched.status if fetched else None,
             "content_type": fetched.content_type if fetched else None,
             "charset": fetched.charset if fetched else None,
@@ -1347,15 +1535,29 @@ class Options:
     feeds: bool = True
     includes: tuple[regex.Pattern[str], ...] = ()
     excludes: tuple[regex.Pattern[str], ...] = ()
+    browser: str = DEFAULT_BROWSER
+
+
+@dataclass(frozen=True)
+class Climb:
+    """One step a host took up the ladder: the rung, and the block that moved it."""
+
+    rung: int
+    reason: str
+    url: str
 
 
 class Mirror:
     """One run: crawl, place, rewrite, and account for it."""
 
-    def __init__(self, options: Options, fetcher: Fetcher, log: RunLog) -> None:
+    def __init__(
+        self, options: Options, fetchers: dict[int, Fetcher], log: RunLog
+    ) -> None:
         self.options = options
-        self.fetcher = fetcher
+        self.fetchers = fetchers
         self.log = log
+        self.rungs: dict[str, int] = {}  # The rung each host asked is on.
+        self.climbs: dict[str, list[Climb]] = {}
         self.records: dict[str, Record] = {}
         self.queue: deque[Record] = deque()
         self.fetches = 0
@@ -1395,6 +1597,12 @@ class Mirror:
         if start.final is None:
             assert start.fetched is not None
             why = start.fetched.error or f"the server answered {start.fetched.status}"
+            if start.fetched.blocked is not None:
+                why = (
+                    f"it was blocked on rung {start.rung} after"
+                    f" {with_article(start.fetched.blocked)}, and rung {start.rung}"
+                    " was not enough"
+                )
             print(
                 f"Could not fetch the start page {start_url}: {why}. Nothing was written."
             )
@@ -1429,7 +1637,8 @@ class Mirror:
             self._write()
         print(self._report())
         failed = any(
-            record.outcome == OUTCOME_FAILED for record in self.records.values()
+            record.outcome in (OUTCOME_FAILED, OUTCOME_BLOCKED)
+            for record in self.records.values()
         )
         return EXIT_FAILED if failed else EXIT_CLEAN
 
@@ -1457,17 +1666,45 @@ class Mirror:
 
     def _request(
         self,
-        url: str,
+        record: Record,
         staging: Path | None,
         follow: Callable[[str], bool] | None = None,
         keep: bool = False,
         validators: Validators | None = None,
     ) -> Fetched:
-        self._pace(url)
-        try:
-            return self.fetcher.fetch(url, staging, follow, keep, validators)
-        finally:
-            self.last_request = time.monotonic()
+        """Fetch *record*'s URL on its host's rung, climbing while the host blocks it.
+
+        The first block on a host moves the host one rung up, so every later
+        request to it goes there, and the blocked URL is asked again there at
+        once. A block on the highest rung is returned as it came.
+        """
+
+        url = record.url
+        host = origin(url)
+        while True:
+            rung = self.rungs.setdefault(host, FIRST_RUNG)
+            fetcher = self.fetchers[rung]
+            self._pace(url)
+            try:
+                fetched = fetcher.fetch(url, staging, follow, keep, validators)
+            finally:
+                self.last_request = time.monotonic()
+            record.fetcher, record.rung = fetcher.name, rung
+            if fetched.blocked is None:
+                return fetched
+            higher = [step for step in self.fetchers if step > rung]
+            if not higher:
+                self.log.decision(
+                    OUTCOME_BLOCKED, url, f"rung {rung} {fetched.blocked}"
+                )
+                return fetched
+            self.rungs[host] = min(higher)
+            self.climbs.setdefault(host, []).append(
+                Climb(min(higher), fetched.blocked, url)
+            )
+            self.log.decision(
+                "climbed", host, f"rung {min(higher)} {fetched.blocked} {url}"
+            )
 
     def _robots(self, url: str) -> Robots:
         """The rules for *url*'s host, its `robots.txt` read the first time it is asked."""
@@ -1477,7 +1714,7 @@ class Mirror:
             return self.robots[host][1]
         robots_url = host + ROBOTS_PATH
         record = Record(robots_url, KIND_ROBOTS, SOURCE_ROBOTS, None)
-        fetched = self._request(robots_url, None, keep=True)
+        fetched = self._request(record, None, keep=True)
         record.fetched = fetched
         record.final_url = normalise(fetched.final_url)
         record.timestamp = timestamp()
@@ -1487,6 +1724,9 @@ class Mirror:
             robots = Robots.parse(fetched.body.decode("utf-8", "replace"), self.token)
         elif fetched.error is None and fetched.status and fetched.status < 500:
             robots = Robots()
+        elif fetched.blocked is not None:
+            robots = Robots(unreadable=True)
+            record.outcome = OUTCOME_BLOCKED
         else:
             robots = Robots(unreadable=True)
             record.outcome = OUTCOME_FAILED
@@ -1590,7 +1830,13 @@ class Mirror:
             if url in self.records or self._saved(row) is None:
                 continue
             self.absent.append(
-                {**row, "outcome": OUTCOME_ABSENT, "timestamp": timestamp()}
+                {
+                    **row,
+                    "fetcher": None,
+                    "rung": None,
+                    "outcome": OUTCOME_ABSENT,
+                    "timestamp": timestamp(),
+                }
             )
             self.log.decision(OUTCOME_ABSENT, url)
 
@@ -1610,11 +1856,12 @@ class Mirror:
             else None
         )
         record.conditional = validators is not None
-        fetched = self._request(record.url, place, follow, validators=validators)
+        fetched = self._request(record, place, follow, validators=validators)
         if (
             previous is not None
             and fetched.status == NOT_MODIFIED
             and not fetched.error
+            and fetched.blocked is None
         ):
             fetched = self._unchanged(fetched, previous)
             record.outcome = OUTCOME_UNCHANGED
@@ -1624,6 +1871,8 @@ class Mirror:
         if record.fetched.redirected_out:
             record.outcome = OUTCOME_REDIRECT_OUT
             self.log.decision(OUTCOME_REDIRECT_OUT, record.url, record.final_url or "")
+        elif record.fetched.blocked is not None:
+            record.outcome = OUTCOME_BLOCKED
         elif record.final is None:
             record.outcome = OUTCOME_FAILED
             detail = record.fetched.error or str(record.fetched.status)
@@ -1778,7 +2027,7 @@ class Mirror:
             self.log.decision(OUTCOME_ROBOTS, url)
             return None
 
-        fetched = self._request(url, None, self._not_excluded, keep=True)
+        fetched = self._request(record, None, self._not_excluded, keep=True)
         record.fetched = fetched
         record.final_url = self._normal(fetched.final_url)
         record.timestamp = timestamp()
@@ -1787,6 +2036,9 @@ class Mirror:
         if fetched.redirected_out:
             record.outcome = OUTCOME_REDIRECT_OUT
             self.log.decision(OUTCOME_REDIRECT_OUT, url, record.final_url or "")
+            return None
+        if fetched.blocked is not None:
+            record.outcome = OUTCOME_BLOCKED
             return None
         record.outcome = (
             OUTCOME_MISSING
@@ -1955,7 +2207,7 @@ class Mirror:
         rows = "".join(
             json.dumps(row, ensure_ascii=False) + "\n"
             for row in (
-                *(record.row(self.fetcher.name) for record in records),
+                *(record.row() for record in records),
                 *self.absent,
             )
         )
@@ -2027,8 +2279,18 @@ class Mirror:
         def declined(outcome: str) -> int:
             return sum(1 for record in records if record.outcome == outcome)
 
-        failures = [record for record in records if record.outcome == OUTCOME_FAILED]
+        failures = [
+            record
+            for record in records
+            if record.outcome in (OUTCOME_FAILED, OUTCOME_BLOCKED)
+        ]
         over_cap = declined(OUTCOME_OVER_CAP)
+        robots_records = [record for record, _ in self.robots.values()]
+        blocked = [
+            record
+            for record in (*records, *robots_records)
+            if record.outcome == OUTCOME_BLOCKED
+        ]
 
         lines: list[str] = []
         if self.options.dry_run:
@@ -2060,6 +2322,29 @@ class Mirror:
         lines.append(f"Over the cap: {over_cap}")
         lines.append(f"Absent: {len(self.absent)}")
         lines.append(f"Suspected JavaScript shells: {self.shells}")
+        lines.append(f"Blocked: {len(blocked)}")
+        lines.append(
+            "Hosts that stayed on rung 1: "
+            f"{sum(1 for rung in self.rungs.values() if rung == FIRST_RUNG)}"
+        )
+        blocked_hosts = {origin(record.url) for record in blocked}
+        for host, rung in self.rungs.items():
+            if rung == FIRST_RUNG and host not in blocked_hosts:
+                continue
+            climb = self.climbs[host][-1] if host in self.climbs else None
+            line = f"{host} is on rung {rung}"
+            if climb is not None:
+                line = (
+                    f"{host} climbed to rung {rung} after"
+                    f" {with_article(climb.reason)} on {climb.url}"
+                )
+            if host in blocked_hosts:
+                count = sum(1 for record in blocked if origin(record.url) == host)
+                line += (
+                    f", and rung {rung} was not enough: {count} of its URLs"
+                    " stayed blocked"
+                )
+            lines.append(line + ".")
         if over_cap:
             lines.append(
                 f"The cap of {self.options.max_pages} pages and files was reached;"
@@ -2081,7 +2366,7 @@ class Mirror:
             for record in failures:
                 assert record.fetched is not None
                 status = record.fetched.status or f"no answer ({record.fetched.error})"
-                lines.append(f"  {status} {record.url}")
+                lines.append(f"  {record.fetched.blocked or status} {record.url}")
         return "\n".join(lines)
 
 
@@ -2096,6 +2381,12 @@ def decode_css(body: bytes, charset: str | None) -> tuple[str, str]:
         body, protocol_encoding=charset
     )
     return text, encoding.codec_info.name
+
+
+def with_article(reason: str) -> str:
+    """A block's reason as it follows "after": a status takes "a", a marker none."""
+
+    return f"a {reason}" if reason[:1].isdigit() else reason
 
 
 def write_bytes(path: Path, content: bytes) -> None:
@@ -2174,6 +2465,28 @@ def seconds(value: str) -> float | None:
     return amount if math.isfinite(amount) and amount >= 0 else None
 
 
+def ladder(
+    user_agent: str | None,
+    headers: list[tuple[str, str]],
+    credentials: tuple[str, str, str] | None,
+    log: RunLog,
+) -> dict[int, Fetcher]:
+    """The rungs a host may climb, each with its fetcher, lowest first.
+
+    Plain HTTP holds both rungs this run has, so `--browser=never`, which
+    keeps a host on HTTP, gives the same ladder as `auto`.
+    """
+
+    return {
+        RUNG_OWN: HttpFetcher(
+            compose_headers(OWN_HEADERS, user_agent, headers), credentials, log
+        ),
+        RUNG_CHROME: HttpFetcher(
+            compose_headers(CHROME_HEADERS, user_agent, headers), credentials, log
+        ),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     """Read the invocation, refuse what the Skill rejects, and run the mirror."""
 
@@ -2182,7 +2495,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output")
     parser.add_argument("--resources", default="all")
     parser.add_argument("--header", action="append", default=[])
-    parser.add_argument("--user-agent", default=IDENTITY)
+    parser.add_argument("--user-agent")
+    parser.add_argument("--browser", default=DEFAULT_BROWSER)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--delay", default=str(DEFAULT_DELAY))
     parser.add_argument("--max-pages", default=str(DEFAULT_MAX_PAGES))
@@ -2203,6 +2517,8 @@ def main(argv: list[str] | None = None) -> int:
         return refusal(
             f"'--resources' takes all, in-scope or none, not '{arguments.resources}'"
         )
+    if arguments.browser not in BROWSER_POLICIES:
+        return refusal(f"'--browser' takes auto or never, not '{arguments.browser}'")
     headers: list[tuple[str, str]] = []
     for header in arguments.header:
         name, colon, value = header.partition(":")
@@ -2240,7 +2556,7 @@ def main(argv: list[str] | None = None) -> int:
         output=Path(arguments.output) if arguments.output else None,
         resources=arguments.resources,
         headers=headers,
-        user_agent=arguments.user_agent,
+        user_agent=arguments.user_agent or IDENTITY,
         dry_run=arguments.dry_run,
         credentials=credentials,
         delay=delay,
@@ -2251,12 +2567,12 @@ def main(argv: list[str] | None = None) -> int:
         feeds=not arguments.no_feeds,
         includes=includes,
         excludes=excludes,
+        browser=arguments.browser,
     )
 
     # Run; a real run stages the files it downloads outside the output directory.
     log = RunLog()
-    fetcher = HttpFetcher(headers, options.user_agent, credentials, log)
-    run = Mirror(options, fetcher, log)
+    run = Mirror(options, ladder(arguments.user_agent, headers, credentials, log), log)
     if options.dry_run:
         return run.run(None)
     with tempfile.TemporaryDirectory(prefix="kntnt-mirror-") as staging:
