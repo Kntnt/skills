@@ -2272,6 +2272,19 @@ def test_a_challenge_page_is_a_block_and_a_busy_answer_that_recovers_is_not(
         Response(b"<p>ok</p>", headers={"X-DataDome": "protected"}),
         Response(b"<p>ok</p>", headers={"X-Iinfo": "1-2-3"}),
         Response(b"<title>ATTENTION REQUIRED! | CLOUDFLARE</title>"),
+        # A title marker is read on every HTML answer, not only a block status.
+        Response(b"<title>Just a moment...</title>", status=404),
+        Response(b"<title>Just a moment...</title>", status=401),
+        # Every answer counts: a redirect followed, and one declined.
+        Response(
+            b"", status=302, headers={"Location": "/m/", "cf-mitigated": "challenge"}
+        ),
+        Response(
+            b"<title>Just a moment...</title>",
+            status=302,
+            headers={"Location": "/m/landing"},
+        ),
+        Response(b"", status=302, headers={"Location": "/elsewhere/", "X-Iinfo": "1"}),
     ],
 )
 def test_a_marker_on_any_answer_moves_the_host(

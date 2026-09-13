@@ -790,9 +790,11 @@ class HttpFetcher:
             redirected = response.status_code in REDIRECT_STATUSES and location
             target = urljoin(str(response.url), location) if redirected else None
             declined = target if target and follow and not follow(target) else None
-            if target is None or declined is not None:
+            # A redirect is an answer too: one carrying a marker is the block.
+            screened = target is not None and self._screen(response) is not None
+            if target is None or declined is not None or screened:
                 try:
-                    yield response, declined
+                    yield response, None if screened else declined
                 finally:
                     response.close()
                 return
@@ -809,34 +811,39 @@ class HttpFetcher:
             return None
         return httpx.BasicAuth(self.credentials[1], self.credentials[2])
 
+    def _screen(self, response: httpx.Response) -> str | None:
+        """What makes an answer that is not kept a block, its HTML body read."""
+
+        content_type, charset = answer_type(response)
+        html = is_html(content_type, str(response.url))
+        return block_reason(
+            response.status_code,
+            response.headers.multi_items(),
+            response.read() if html else None,
+            charset,
+        )
+
     def _receive(
         self, response: httpx.Response, staging: Path | None, keep: bool
     ) -> Fetched:
         """Read one final answer: keep HTML and CSS, stage or count the rest."""
 
         # What the headers say.
-        media_type, _, parameters = response.headers.get("Content-Type", "").partition(
-            ";"
-        )
-        content_type = media_type.strip().lower() or None
-        charset_match = re.search(r"charset=\"?([^\";\s]+)", parameters, re.IGNORECASE)
+        content_type, charset = answer_type(response)
         fetched = Fetched(
             final_url=str(response.url),
             status=response.status_code,
             content_type=content_type,
-            charset=charset_match.group(1) if charset_match else None,
+            charset=charset,
             etag=response.headers.get("ETag"),
             last_modified=response.headers.get("Last-Modified"),
         )
         headers = response.headers.multi_items()
         html = is_html(content_type, fetched.final_url)
         if not fetched.succeeded:
-            body = None
-            if html and response.status_code in BLOCK_STATUSES:
-                body = response.read()
-            fetched.blocked = block_reason(
-                response.status_code, headers, body if html else None, fetched.charset
-            )
+            # Every failed answer is screened, its HTML body read whatever the
+            # status, since a title marker counts on every HTML answer.
+            fetched.blocked = self._screen(response)
             return fetched
 
         # The body: kept where the rewrite reads it, staged or counted otherwise.
@@ -865,6 +872,14 @@ class HttpFetcher:
             fetched.charset,
         )
         return fetched
+
+
+def answer_type(response: httpx.Response) -> tuple[str | None, str | None]:
+    """An answer's media type, lowercased, and the charset its header names."""
+
+    media_type, _, parameters = response.headers.get("Content-Type", "").partition(";")
+    charset = re.search(r"charset=\"?([^\";\s]+)", parameters, re.IGNORECASE)
+    return media_type.strip().lower() or None, charset.group(1) if charset else None
 
 
 def block_reason(
