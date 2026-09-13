@@ -92,7 +92,7 @@ Bring every `http` or `https` URL that *REGEX* matches into scope, beside the ro
 
 **--exclude=**_REGEX_
 
-Keep every URL that *REGEX* matches out: it is never requested, and the manifest records it as `excluded`. Repeatable: a URL any of them matches is out, whatever the root or an **--include** says. Written and matched as **--include** is. A pattern that matches the start page is refused.
+Keep every URL that *REGEX* matches out: it is never requested, and the manifest records one a link, a sitemap, a feed or a page's resources named as `excluded`, and a URL whose redirect leads to it as `redirect-out`. Repeatable: a URL any of them matches is out, whatever the root or an **--include** says. Written and matched as **--include** is. A pattern that matches the start page is refused.
 
 **--header=**_HEADER_
 

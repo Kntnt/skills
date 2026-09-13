@@ -17,7 +17,7 @@ second fetcher is added beside `HttpFetcher` rather than threaded through it.
 
 A run has three passes. The fetch pass follows the start page's redirects and
 crawls from there, one request at a time and breadth first: every page and file
-under the root that a link, a sitemap or a feed names, as far as `robots.txt`
+in scope that a link, a sitemap or a feed names, as far as `robots.txt`
 and the page cap allow, and every resource those pages and their stylesheets
 reference that `--resources` admits; sitemaps and feeds are read, never saved.
 The placement pass maps every fetched URL to a path, keeps HTML and CSS as
