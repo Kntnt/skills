@@ -987,6 +987,19 @@ SHIPPED_CASES: dict[str, list[Case]] = {
                 "operands": ["https://x.se/"],
             },
         ),
+        (
+            (
+                r"--include='^https://ir\.x\.se/' --include='/news/'"
+                r" --exclude='[^/]++/drafts/\K' https://x.se/docs/"
+            ),
+            {
+                "flags": {
+                    "--include": [r"^https://ir\.x\.se/", "/news/"],
+                    "--exclude": [r"[^/]++/drafts/\K"],
+                },
+                "operands": ["https://x.se/docs/"],
+            },
+        ),
         ("--no-links=yes https://x.se/", None),
         ("--no-feeds=yes https://x.se/", None),
         ("--max-pages https://x.se/", None),

@@ -1543,3 +1543,258 @@ def test_the_manpage_states_the_sources_and_where_they_are_looked_for() -> None:
         "application/atom+xml",
     ):
         assert location.strip("`") in description, location
+
+
+# --- Include and exclude --------------------------------------------------------
+
+
+def serve_the_widened_site(site: Site) -> None:
+    """A root `/docs/` beside `/press/` on its own host, and a second host's pages.
+
+    `robots.txt` disallows `/docs/private/`, so an exclude that keeps that page
+    out is seen to win over the robots outcome.
+    """
+
+    second = site.url("/", host=OTHER_HOST)
+    site.add(
+        "/robots.txt",
+        Response(b"User-agent: *\nDisallow: /docs/private/\n", "text/plain"),
+    )
+    site.html(
+        "/docs/",
+        f"""<html><head><link rel="stylesheet" href="style.css"></head><body>
+<img src="/assets/logo.png">
+<a href="guide">Guide</a>
+<a href="private/secret">Secret</a>
+<a href="/press/">Press</a>
+<a href="{second}">Second host</a>
+</body></html>""",
+        host=ROOT_HOST,
+    )
+    site.html("/docs/guide", "<p>guide</p>", host=ROOT_HOST)
+    site.html("/docs/private/secret", "<p>secret</p>", host=ROOT_HOST)
+    site.css("/docs/style.css", "body { color: black }")
+    site.binary("/assets/logo.png", b"logo")
+    site.html(
+        "/press/",
+        '<a href="release">Release</a><a href="/about/">About</a>',
+        host=ROOT_HOST,
+    )
+    site.html("/press/release", '<a href="./">Press</a>', host=ROOT_HOST)
+    site.html("/about/", "<p>about</p>", host=ROOT_HOST)
+    site.html("/", '<a href="page">Page</a>', host=OTHER_HOST)
+    site.html("/page", '<a href="/">Home</a>', host=OTHER_HOST)
+
+
+def test_an_include_widens_the_scope_to_pages_outside_the_root(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_widened_site(site)
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--include=^https?://[^/]+/press/",
+        site.url("/docs/", host=ROOT_HOST),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    tree = site.tree(tmp_path / "out", host=ROOT_HOST)
+    for path, relative in (
+        ("/press/", "press/index.html"),
+        ("/press/release", "press/release.html"),
+    ):
+        assert len(site.requested(path, host=ROOT_HOST)) == 1, path
+        assert (tree / relative).is_file(), relative
+    assert not site.requested("/about/", host=ROOT_HOST)
+    assert not [r for r in site.requests if r.host.startswith(OTHER_HOST)]
+
+    # The link to the included page is rewritten like one under the root.
+    start = tree / "docs" / "index.html"
+    [press] = [ref for ref in links_from(start) if "press" in ref]
+    target = resolves(start, press)
+    assert target == (tree / "press" / "index.html").resolve()
+
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    assert rows[site.url("/press/", host=ROOT_HOST)]["outcome"] == "fetched"
+    assert rows[site.url("/about/", host=ROOT_HOST)]["outcome"] == "out-of-scope"
+    assert rows[site.url("/", host=OTHER_HOST)]["outcome"] == "out-of-scope"
+
+
+def test_an_include_matching_a_second_hosts_root_saves_that_host(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_widened_site(site)
+    second = site.url("/", host=OTHER_HOST)
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        f"--include=^{re.escape(second)}",
+        site.url("/docs/", host=ROOT_HOST),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    output = tmp_path / "out"
+    other = site.tree(output, host=OTHER_HOST)
+    home = other / "index.html"
+    page = other / "page.html"
+    assert home.is_file() and page.is_file()
+    [back] = links_from(page)
+    assert resolves(page, back) == home.resolve()
+    [forward] = links_from(home)
+    assert resolves(home, forward) == page.resolve()
+    start = site.tree(output, host=ROOT_HOST) / "docs" / "index.html"
+    [to_second] = [ref for ref in links_from(start) if OTHER_HOST in ref]
+    assert resolves(start, to_second) == home.resolve()
+    assert not site.requested("/press/", host=ROOT_HOST)
+
+
+def test_an_exclude_keeps_a_page_and_a_resource_out_and_wins_over_robots(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_widened_site(site)
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--exclude=/docs/private/",
+        r"--exclude=style\.css$",
+        "--exclude=/assets/",
+        "--exclude=/about/",
+        "--include=/press/",
+        site.url("/docs/", host=ROOT_HOST),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    for path in ("/docs/private/secret", "/docs/style.css", "/assets/logo.png"):
+        assert not site.requested(path, host=ROOT_HOST), path
+    assert not site.requested("/about/", host=ROOT_HOST)
+    assert site.requested("/docs/guide", host=ROOT_HOST)
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    for path in ("/docs/private/secret", "/docs/style.css", "/assets/logo.png"):
+        row = rows[site.url(path, host=ROOT_HOST)]
+        assert (row["outcome"], row["status"], row["local_path"]) == (
+            "excluded",
+            None,
+            None,
+        ), path
+    # Outside the root and included too, the exclude still wins.
+    assert rows[site.url("/about/", host=ROOT_HOST)]["outcome"] == "excluded"
+
+    # The stylesheet's reference is left absolute.
+    start = site.tree(tmp_path / "out", host=ROOT_HOST) / "docs" / "index.html"
+    references = {ref for _, _, ref in read_page(start).references}
+    assert site.url("/docs/style.css", host=ROOT_HOST) in references
+    assert site.url("/assets/logo.png", host=ROOT_HOST) in references
+
+    assert re.search(r"^Excluded: 4$", result.stdout, re.MULTILINE)
+    assert re.search(r"^Stopped by robots\.txt: 0$", result.stdout, re.MULTILINE)
+    log = (tmp_path / "out" / ".mirror" / "run.log").read_text(encoding="utf-8")
+    assert f"excluded {site.url('/docs/private/secret', host=ROOT_HOST)}" in log
+
+
+def test_in_scope_resources_follow_the_widened_scope(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_widened_site(site)
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--resources=in-scope",
+        "--include=/assets/",
+        site.url("/docs/", host=ROOT_HOST),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert len(site.requested("/assets/logo.png", host=ROOT_HOST)) == 1
+    tree = site.tree(tmp_path / "out", host=ROOT_HOST)
+    assert (tree / "assets" / "logo.png").read_bytes() == b"logo"
+
+
+def test_a_possessive_quantifier_and_keep_out_compile_and_match(
+    site: Site, tmp_path: Path
+) -> None:
+    serve_the_widened_site(site)
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        r"--include=^https?://[^/]++/pre\Kss/",
+        r"--exclude=/press/\Krel(?:ease)++$",
+        site.url("/docs/", host=ROOT_HOST),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert site.requested("/press/", host=ROOT_HOST)
+    assert not site.requested("/press/release", host=ROOT_HOST)
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    assert rows[site.url("/press/release", host=ROOT_HOST)]["outcome"] == "excluded"
+
+
+def test_an_exclude_keeps_a_sitemap_from_being_read(site: Site, tmp_path: Path) -> None:
+    serve_the_sourced_site(site)
+
+    result = mirror(tmp_path, "--output=out", "--exclude=/maps/", site.url("/docs/"))
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert not site.requested("/maps/index.xml")
+    assert not site.requested("/docs/unlinked-a")
+    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    row = rows[site.url("/maps/index.xml")]
+    assert (row["kind"], row["outcome"]) == ("sitemap", "excluded")
+
+
+@pytest.mark.parametrize(
+    ("flag", "error"),
+    [
+        ("--include=(", "missing )"),
+        ("--exclude=[a-", "unterminated character set"),
+    ],
+)
+def test_a_pattern_that_does_not_compile_is_refused_before_anything_is_fetched(
+    site: Site, tmp_path: Path, flag: str, error: str
+) -> None:
+    site.html("/docs/", "<p>docs</p>")
+
+    result = mirror(tmp_path, flag, site.url("/docs/"))
+
+    assert result.returncode == 2, (result.stdout, result.stderr)
+    first = result.stdout.splitlines()[0]
+    assert f"'{flag}'" in first
+    assert error in first
+    assert result.stdout.rstrip("\n").endswith("see '/mirror --help'")
+    assert site.requests == []
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_an_exclude_matching_the_start_page_is_refused(
+    site: Site, tmp_path: Path
+) -> None:
+    site.html("/docs/", "<p>docs</p>")
+
+    result = mirror(tmp_path, "--exclude=/docs/$", site.url("/docs/"))
+
+    assert result.returncode == 2, (result.stdout, result.stderr)
+    assert "'--exclude=/docs/$'" in result.stdout.splitlines()[0]
+    assert result.stdout.rstrip("\n").endswith("see '/mirror --help'")
+    assert site.requests == []
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_the_manpage_states_include_and_exclude() -> None:
+    page = (SKILL / "help.md").read_text(encoding="utf-8")
+    synopsis = page.partition("\n## SYNOPSIS\n")[2].partition("\n## ")[0]
+    options = page.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
+    body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    for flag in ("--include=", "--exclude="):
+        assert f"[**{flag}**_REGEX_ ...]" in synopsis, flag
+        assert f"**{flag}**_REGEX_" in options, flag
+        assert f"[{flag}<regex> ...]" in body, flag
+        assert f"`{flag.rstrip('=')}`" in body.partition("## Arguments")[2], flag
+    for statement in ("`regex`", "unanchored", r"`^https://ir\.x\.se/`"):
+        assert statement in page, statement
+    engine = ENGINE.read_text(encoding="utf-8")
+    metadata = engine.partition("# /// script")[2].partition("# ///")[0]
+    assert re.search(r'"regex==[0-9.]+"', metadata)

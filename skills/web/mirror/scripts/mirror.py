@@ -2,6 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #     "httpx==0.28.1",
+#     "regex==2026.9.10",
 #     "selectolax==0.4.11",
 #     "tinycss2==1.5.1",
 # ]
@@ -50,6 +51,7 @@ from urllib.parse import quote, unquote_to_bytes, urljoin, urlsplit, urlunsplit
 from xml.etree import ElementTree
 
 import httpx
+import regex
 import tinycss2
 import tinycss2.ast
 import tinycss2.bytes
@@ -109,6 +111,7 @@ OUTCOME_REDIRECT_OUT = "redirect-out"
 OUTCOME_ROBOTS = "robots"
 OUTCOME_OVER_CAP = "over-cap"
 OUTCOME_MISSING = "missing"
+OUTCOME_EXCLUDED = "excluded"
 
 # What names a page or file the crawl may take, and the documents read, not saved.
 PAGE_SOURCES = (SOURCE_LINK, SOURCE_SITEMAP, SOURCE_FEED)
@@ -306,19 +309,29 @@ def origin(url: str) -> str:
 
 @dataclass(frozen=True)
 class Scope:
-    """What belongs to the site under the start page's directory.
+    """What belongs to the site under the start page's directory, as widened and narrowed.
 
     The scope predicate is written once, here. The crawl applies it to every
-    link it finds, and `--resources=in-scope` to every resource.
+    candidate it finds, and `--resources=in-scope` to every resource. An
+    `--include` widens the root's subtree and an `--exclude` narrows
+    everything, the root and the includes alike; both are matched, unanchored,
+    against the normalised URL.
     """
 
     start: str
     scheme_hosts: frozenset[str]
     port: int | None
     prefix: str
+    includes: tuple[regex.Pattern[str], ...] = ()
+    excludes: tuple[regex.Pattern[str], ...] = ()
 
     @classmethod
-    def of(cls, start: str) -> Scope:
+    def of(
+        cls,
+        start: str,
+        includes: tuple[regex.Pattern[str], ...] = (),
+        excludes: tuple[regex.Pattern[str], ...] = (),
+    ) -> Scope:
         """The scope rooted at the normalised start page *start*."""
 
         # The root prefix is the start page's directory.
@@ -328,20 +341,36 @@ class Scope:
         # The host with and without `www.` is one site.
         host = parts.hostname or ""
         bare = host.removeprefix("www.")
-        return cls(start, frozenset({bare, f"www.{bare}"}), parts.port, prefix)
+        hosts = frozenset({bare, f"www.{bare}"})
+        return cls(start, hosts, parts.port, prefix, includes, excludes)
+
+    def excluded(self, url: str) -> bool:
+        """Whether an `--exclude` matches the normalised *url*."""
+
+        return matches(self.excludes, url)
 
     def admits(self, url: str) -> bool:
         """Whether the normalised *url* is in scope."""
 
+        if self.excluded(url):
+            return False
         if url == self.start:
             return True
         parts = urlsplit(url)
-        return (
-            parts.scheme in DEFAULT_PORTS
-            and (parts.hostname or "") in self.scheme_hosts
+        if parts.scheme not in DEFAULT_PORTS:
+            return False
+        under_root = (
+            (parts.hostname or "") in self.scheme_hosts
             and parts.port == self.port
             and parts.path.startswith(self.prefix)
         )
+        return under_root or matches(self.includes, url)
+
+
+def matches(patterns: Iterable[regex.Pattern[str]], url: str) -> bool:
+    """Whether any of *patterns* matches *url* anywhere: unanchored."""
+
+    return any(pattern.search(url) is not None for pattern in patterns)
 
 
 # --- The tree -----------------------------------------------------------------
@@ -1274,6 +1303,8 @@ class Options:
     links: bool = True
     sitemaps: bool = True
     feeds: bool = True
+    includes: tuple[regex.Pattern[str], ...] = ()
+    excludes: tuple[regex.Pattern[str], ...] = ()
 
 
 class Mirror:
@@ -1321,7 +1352,10 @@ class Mirror:
             )
             return EXIT_FAILED
         self.root_host = urlsplit(start.final).hostname or ""
-        self.scope = Scope.of(start.final)
+        self.scope = Scope.of(start.final, self.options.includes, self.options.excludes)
+        for pattern in self.options.excludes:
+            if pattern.search(start.final):
+                return excludes_start(pattern, start.final)
         self.output = self.options.output or Path(self.root_host)
         self.admitted = 1
         self._settle_kind(start)
@@ -1418,7 +1452,7 @@ class Mirror:
     def _fetch(self, record: Record, staging: Path | None) -> None:
         self.fetches += 1
         place = staging / str(self.fetches) if staging else None
-        follow = self._in_scope if record.source in PAGE_SOURCES else None
+        follow = self._in_scope if record.source in PAGE_SOURCES else self._not_excluded
         record.fetched = self._request(record.url, place, follow)
         record.final_url = self._normal(record.fetched.final_url)
         record.timestamp = timestamp()
@@ -1437,6 +1471,21 @@ class Mirror:
             and self.scope is not None
             and self.scope.admits(normalised)
         )
+
+    def _excluded(self, url: str) -> bool:
+        """Whether an `--exclude` matches *url* in its compared form."""
+
+        normalised = self._normal(url)
+        return (
+            normalised is not None
+            and self.scope is not None
+            and self.scope.excluded(normalised)
+        )
+
+    def _not_excluded(self, url: str) -> bool:
+        """Whether a redirect may lead to *url*: an excluded URL is never requested."""
+
+        return not self._excluded(url)
 
     def _settle_kind(self, record: Record) -> None:
         """A page or file is a page when it is HTML and a file otherwise."""
@@ -1482,7 +1531,8 @@ class Mirror:
         if url is None:
             return
         existing = self.records.get(url)
-        admitted = self._admits(url)
+        excluded = self._excluded(url)
+        admitted = not excluded and self._admits(url)
 
         # A link the crawl declined is still a resource a page needs.
         declined = (OUTCOME_OUT_OF_SCOPE, OUTCOME_ROBOTS, OUTCOME_OVER_CAP)
@@ -1500,8 +1550,8 @@ class Mirror:
         if admitted:
             self.queue.append(resource)
         else:
-            resource.outcome = OUTCOME_OUT_OF_SCOPE
-            self.log.decision(OUTCOME_OUT_OF_SCOPE, url)
+            resource.outcome = OUTCOME_EXCLUDED if excluded else OUTCOME_OUT_OF_SCOPE
+            self.log.decision(resource.outcome, url)
 
     def _take_page(self, reference: str, source: str, discovered_from: str) -> None:
         """Take a position on a page or file a link, a sitemap or a feed names."""
@@ -1522,9 +1572,12 @@ class Mirror:
         link = Record(url, KIND_PAGE, source, discovered_from)
         self.records[url] = link
 
-        # Scope first, then robots.txt, then the cap, which counts at admission.
+        # Exclusion first, then scope, then robots.txt, then the cap, which
+        # counts at admission.
         cap = self.options.max_pages
-        if not self._in_scope(url):
+        if self._excluded(url):
+            link.outcome = OUTCOME_EXCLUDED
+        elif not self._in_scope(url):
             link.outcome = OUTCOME_OUT_OF_SCOPE
         elif not self._robots_allow(url):
             link.outcome = OUTCOME_ROBOTS
@@ -1551,17 +1604,25 @@ class Mirror:
             return None
         record = Record(url, kind, source, discovered_from)
         self.records[url] = record
+        if self._excluded(url):
+            record.outcome = OUTCOME_EXCLUDED
+            self.log.decision(OUTCOME_EXCLUDED, url)
+            return None
         if not self._robots_allow(url):
             record.outcome = OUTCOME_ROBOTS
             self.log.decision(OUTCOME_ROBOTS, url)
             return None
 
-        fetched = self._request(url, None, keep=True)
+        fetched = self._request(url, None, self._not_excluded, keep=True)
         record.fetched = fetched
         record.final_url = self._normal(fetched.final_url)
         record.timestamp = timestamp()
         if fetched.succeeded and fetched.body is not None:
             return record
+        if fetched.redirected_out:
+            record.outcome = OUTCOME_REDIRECT_OUT
+            self.log.decision(OUTCOME_REDIRECT_OUT, url, record.final_url or "")
+            return None
         record.outcome = (
             OUTCOME_MISSING
             if fetched.status in MISSING_STATUSES
@@ -1804,6 +1865,7 @@ class Mirror:
         lines.append(f"Candidates from sitemaps: {candidates_from(SOURCE_SITEMAP)}")
         lines.append(f"Candidates from feeds: {candidates_from(SOURCE_FEED)}")
         lines.append(f"Out of scope: {declined(OUTCOME_OUT_OF_SCOPE)}")
+        lines.append(f"Excluded: {declined(OUTCOME_EXCLUDED)}")
         lines.append(f"Redirected out of scope: {declined(OUTCOME_REDIRECT_OUT)}")
         lines.append(f"Stopped by robots.txt: {declined(OUTCOME_ROBOTS)}")
         lines.append(f"Over the cap: {over_cap}")
@@ -1874,6 +1936,27 @@ def refusal(problem: str) -> int:
     return EXIT_REFUSED
 
 
+def excludes_start(pattern: regex.Pattern[str], start: str) -> int:
+    """Refuse an `--exclude` that matches the start page, which is always in scope."""
+
+    return refusal(
+        f"'--exclude={pattern.pattern}' matches the start page {start},"
+        " which is always in scope"
+    )
+
+
+def patterns(flag: str, values: list[str]) -> tuple[regex.Pattern[str], ...] | str:
+    """Compile every *flag* value, or the refusal the first that does not compile earns."""
+
+    compiled: list[regex.Pattern[str]] = []
+    for value in values:
+        try:
+            compiled.append(regex.compile(value))
+        except regex.error as error:
+            return f"'{flag}={value}' is not a regular expression: {error}"
+    return tuple(compiled)
+
+
 def seconds(value: str) -> float | None:
     """A `--delay` value as seconds, or None where it is not a finite number of 0 or more."""
 
@@ -1900,6 +1983,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-links", action="store_true")
     parser.add_argument("--no-sitemap", action="store_true")
     parser.add_argument("--no-feeds", action="store_true")
+    parser.add_argument("--include", action="append", default=[])
+    parser.add_argument("--exclude", action="append", default=[])
     parser.add_argument("url")
     arguments = parser.parse_args(argv)
 
@@ -1926,6 +2011,16 @@ def main(argv: list[str] | None = None) -> int:
         return refusal(
             f"'--max-pages' takes a whole number, 0 or more, not '{arguments.max_pages}'"
         )
+    includes = patterns("--include", arguments.include)
+    if isinstance(includes, str):
+        return refusal(includes)
+    excludes = patterns("--exclude", arguments.exclude)
+    if isinstance(excludes, str):
+        return refusal(excludes)
+    start = normalise(arguments.url) or arguments.url
+    for pattern in excludes:
+        if pattern.search(start):
+            return excludes_start(pattern, start)
 
     # Credentials in the URL are sent to the start page's host.
     credentials = (
@@ -1947,6 +2042,8 @@ def main(argv: list[str] | None = None) -> int:
         links=not arguments.no_links,
         sitemaps=not arguments.no_sitemap,
         feeds=not arguments.no_feeds,
+        includes=includes,
+        excludes=excludes,
     )
 
     # Run; a real run stages the files it downloads outside the output directory.
