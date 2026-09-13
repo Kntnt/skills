@@ -261,14 +261,25 @@ if command[:1] == ["doctor"]:
 if command[:1] == ["open"]:
     url = command[1]
     page = FIXTURE.get("pages", {{}}).get(url, {{}})
-    state = {{"url": url, "headed": bool(flags.get("--headed"))}}
+    state = {{"url": url, "headed": bool(flags.get("--headed")), "scroll": 0}}
     STATE.write_text(json.dumps(state))
     if page.get("hang"):
         time.sleep(120)
     answer({{"url": page.get("final", url), "title": ""}})
 page = FIXTURE.get("pages", {{}}).get(state.get("url"), {{}})
 headed = state.get("headed") and "headed_dom" in page
+if command[:1] == ["scroll"]:
+    distance = int(command[2])
+    bottom = int(page.get("scroll_bottom", 0))
+    if command[1] == "down":
+        state["scroll"] = min(int(state.get("scroll", 0)) + distance, bottom)
+    else:
+        state["scroll"] = max(int(state.get("scroll", 0)) - distance, 0)
+    STATE.write_text(json.dumps(state))
+    answer({{}})
 if command[:1] == ["eval"]:
+    if stdin and "window.scrollY" in stdin:
+        answer({{"result": {{"top": int(state.get("scroll", 0)), "bottom": int(page.get("scroll_bottom", 0))}}}})
     html = page["headed_dom"] if headed else page.get("dom", "<html><head></head><body></body></html>")
     status = page.get("headed_status" if headed else "status", 404 if not page else 200)
     answer({{"result": {{"url": page.get("final", state.get("url")), "status": status, "doctype": "<!DOCTYPE html>", "html": html}}}})
@@ -502,7 +513,7 @@ def test_every_resource_a_page_needs_is_saved_and_every_reference_resolves(
 ) -> None:
     serve_the_full_page(site)
 
-    result = mirror(tmp_path, "--output=out", site.url("/site/"))
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/site/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     tree = site.tree(tmp_path / "out")
@@ -553,7 +564,7 @@ def test_the_saved_page_drops_base_and_only_the_integrity_its_rewrite_broke(
         ),
     )
 
-    result = mirror(tmp_path, "--output=out", site.url("/site/"))
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/site/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     tags = read_page(site.tree(tmp_path / "out") / "site" / "index.html").tags
@@ -562,6 +573,30 @@ def test_the_saved_page_drops_base_and_only_the_integrity_its_rewrite_broke(
     script = next(attributes for tag, attributes in tags if tag == "script")
     assert "integrity" not in link
     assert script["integrity"] == SCRIPT_INTEGRITY
+
+
+def test_a_local_resource_drops_crossorigin(site: Site, tmp_path: Path) -> None:
+    site.html(
+        "/media/",
+        '<video crossorigin="anonymous" src="movie.mp4"></video>',
+    )
+    site.binary("/media/movie.mp4", b"video", "video/mp4")
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--browser=never",
+        "--no-sitemap",
+        "--no-feeds",
+        site.url("/media/"),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    page = site.tree(tmp_path / "out") / "media" / "index.html"
+    video = next(
+        attributes for tag, attributes in read_page(page).tags if tag == "video"
+    )
+    assert "crossorigin" not in video
 
 
 def test_a_base_element_is_honoured_before_it_is_removed(
@@ -644,7 +679,7 @@ def test_a_link_to_a_page_outside_the_mirror_stays_absolute(
 ) -> None:
     serve_the_full_page(site)
 
-    result = mirror(tmp_path, "--output=out", site.url("/site/"))
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/site/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     page = site.tree(tmp_path / "out") / "site" / "index.html"
@@ -689,12 +724,45 @@ def test_file_names_follow_the_mapping_the_manpage_states(
         assert statement in files, statement
 
 
+def test_long_url_components_are_bounded_and_collision_resistant(
+    site: Site, tmp_path: Path
+) -> None:
+    first = "/long/asset?payload=" + "x" * 1000
+    second = "/long/asset?payload=" + "y" * 1000
+    site.html("/long/", f'<img src="{first}"><img src="{second}">')
+    site.binary(first, b"first")
+    site.binary(second, b"second")
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--browser=never",
+        "--no-sitemap",
+        "--no-feeds",
+        site.url("/long/"),
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    rows = [
+        row
+        for row in manifest(tmp_path / "out")
+        if str(row["url"]).startswith(site.url("/long/asset"))
+    ]
+    paths = [Path(str(row["local_path"])) for row in rows]
+    assert len(paths) == 2 and paths[0] != paths[1]
+    assert all(
+        len(component.encode("utf-8")) <= 240
+        for path in paths
+        for component in path.parts
+    )
+
+
 def test_html_and_css_keep_their_bytes_as_served_and_nothing_else_does(
     site: Site, tmp_path: Path
 ) -> None:
     serve_the_full_page(site)
 
-    result = mirror(tmp_path, "--output=out", site.url("/site/"))
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/site/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     output = tmp_path / "out"
@@ -790,14 +858,14 @@ def test_a_dry_run_writes_nothing_and_reports_what_a_real_run_would(
 ) -> None:
     serve_the_full_page(site)
 
-    dry = mirror(tmp_path, "--dry-run", site.url("/site/"))
+    dry = mirror(tmp_path, "--dry-run", "--browser=never", site.url("/site/"))
 
     assert dry.returncode == 0, (dry.stdout, dry.stderr)
     assert list(tmp_path.iterdir()) == []
     for path in ("/site/", "/site/css/theme.css", "/site/img/bg.png"):
         assert site.url(path) in dry.stdout, path
 
-    real = mirror(tmp_path, site.url("/site/"))
+    real = mirror(tmp_path, "--browser=never", site.url("/site/"))
 
     assert real.returncode == 0, (real.stdout, real.stderr)
     assert (tmp_path / "127.0.0.1").is_dir()
@@ -816,7 +884,7 @@ def test_every_request_carries_the_identity_and_every_header(
 ) -> None:
     serve_the_full_page(site)
 
-    result = mirror(tmp_path, "--output=a", site.url("/site/"))
+    result = mirror(tmp_path, "--output=a", "--browser=never", site.url("/site/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     assert len(site.requests) == 15
@@ -829,6 +897,7 @@ def test_every_request_carries_the_identity_and_every_header(
         "--header=X-Token: secret",
         "--header=Cookie: session=1",
         "--user-agent=fixture-bot/2",
+        "--browser=never",
         site.url("/site/"),
     )
 
@@ -977,7 +1046,7 @@ def test_a_clean_run_exits_zero_and_reports_what_it_fetched(
 ) -> None:
     serve_the_full_page(site)
 
-    result = mirror(tmp_path, "--output=out", site.url("/site/"))
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/site/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     assert re.search(r"^Pages fetched: 1$", result.stdout, re.MULTILINE)
@@ -1520,7 +1589,7 @@ def test_a_page_of_scripts_without_text_is_counted_as_a_suspected_shell(
         "<script>track()</script><p>" + "A paragraph of real text. " * 10 + "</p>",
     )
 
-    result = mirror(tmp_path, "--output=out", site.url("/s/"))
+    result = mirror(tmp_path, "--output=out", "--browser=never", site.url("/s/"))
 
     assert result.returncode == 0, (result.stdout, result.stderr)
     assert re.search(r"^Suspected JavaScript shells: 1$", result.stdout, re.MULTILINE)
@@ -2714,6 +2783,8 @@ SESSION = re.compile(r"^kntnt-mirror-[0-9]+$")
 # The page the browser renders: what its scripts drew is in it, and so are they.
 RENDERED = """<html><head><title>Rendered</title>
 <link rel="stylesheet" href="style.css">
+<link rel="prefetch" href="runtime.json">
+<link rel="modulepreload" href="app.js">
 <script src="app.js"></script>
 </head><body>
 <img src="logo.png">
@@ -2745,11 +2816,18 @@ def serve_the_rendered_page(
     browser.serve(
         url,
         dom=RENDERED,
+        scroll_bottom=1440,
         har=[
             har_entry(url, "Document", SERVED, "text/html"),
             har_entry(url + "style.css", "Stylesheet", STYLE, "text/css"),
             har_entry(url + "app.js", "Script", APP, "text/javascript"),
             har_entry(url + "logo.png", "Image", LOGO, "image/png"),
+            har_entry(
+                url + "telemetry?payload=" + "x" * 1000,
+                "Image",
+                b"pixel",
+                "image/gif",
+            ),
             har_entry(url + "api/data.json", "XHR", '{"a": 1}', "application/json"),
         ],
     )
@@ -2763,6 +2841,67 @@ def serve_the_rendered_page(
         dom='<html><body><img src="extra.png"></body></html>',
         har=[har_entry(url + "extra.png", "Document", EXTRA, "image/png")],
     )
+
+
+def test_auto_renders_html_with_executable_javascript(
+    site: Site, tmp_path: Path
+) -> None:
+    url = site.url("/dynamic/")
+    site.html(
+        "/dynamic/",
+        "<html><script>document.body.textContent = 'rendered'</script></html>",
+    )
+    browser = FakeBrowser.at(tmp_path / "browser")
+    browser.serve(
+        url,
+        dom="<html><body><p>rendered</p></body></html>",
+        har=[har_entry(url, "Document", "<p>rendered</p>", "text/html")],
+    )
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--no-links",
+        "--no-sitemap",
+        "--no-feeds",
+        url,
+        browser=browser,
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert browser.opened() == [url]
+    page = site.tree(tmp_path / "out") / "dynamic" / "index.html"
+    assert "rendered" in page.read_text(encoding="utf-8")
+    assert "executable JavaScript" in result.stdout
+
+
+@pytest.mark.parametrize(
+    "markup",
+    [
+        "<html><body><p>static</p></body></html>",
+        '<html><script type="application/ld+json">{}</script></html>',
+    ],
+)
+def test_auto_keeps_non_executable_html_on_http(
+    site: Site, tmp_path: Path, markup: str
+) -> None:
+    site.html("/static/", markup)
+    browser = FakeBrowser.at(tmp_path / "browser")
+
+    result = mirror(
+        tmp_path,
+        "--output=out",
+        "--no-links",
+        "--no-sitemap",
+        "--no-feeds",
+        site.url("/static/"),
+        browser=browser,
+    )
+
+    assert result.returncode == 0, (result.stdout, result.stderr)
+    assert browser.calls() == []
+    [row] = [row for row in manifest(tmp_path / "out") if row["kind"] == "page"]
+    assert (row["fetcher"], row["rung"]) == ("http", 1)
 
 
 def test_a_host_every_http_identity_is_refused_by_is_mirrored_from_a_headless_browser(
@@ -2794,9 +2933,10 @@ def test_a_host_every_http_identity_is_refused_by_is_mirrored_from_a_headless_br
     page = (tree / "index.html").read_text(encoding="utf-8")
     assert "<script" not in page
     assert "<noscript>" in page and "Scripts are off." in page
+    assert 'rel="prefetch"' not in page and 'rel="modulepreload"' not in page
     assert (tree / "style.css").read_text(encoding="utf-8") == STYLE
     assert (tree / "logo.png").read_bytes() == LOGO
-    assert (tree / "app.js").read_text(encoding="utf-8") == APP
+    assert not (tree / "app.js").exists()
     references = {
         (tag, name): value
         for tag, name, value in read_page(tree / "index.html").references
@@ -2817,8 +2957,9 @@ def test_a_host_every_http_identity_is_refused_by_is_mirrored_from_a_headless_br
     # A link only the rendered DOM holds is followed; the XHR answer is not saved.
     assert (tree / "rendered.html").is_file()
     assert not (tree / "api").exists()
-    rows = {row["url"]: row for row in manifest(tmp_path / "out")}
+    rows = {str(row["url"]): row for row in manifest(tmp_path / "out")}
     assert site.url("/b/api/data.json") not in rows
+    assert not [url for url in rows if "telemetry?payload=" in url]
     for path in ("/b/", "/b/style.css", "/b/logo.png", "/b/extra.png", "/b/rendered"):
         row = rows[site.url(path)]
         assert (row["fetcher"], row["rung"], row["outcome"]) == (
@@ -2844,18 +2985,30 @@ def test_a_host_every_http_identity_is_refused_by_is_mirrored_from_a_headless_br
     headers = [command for command in commands if command[:2] == ["set", "headers"]]
     assert headers and json.loads(headers[0][2]) == {"X-One": "1", "X-Two": "2"}
     assert commands.index(headers[0]) < commands.index(["open", site.url("/b/")])
+    viewport = ["set", "viewport", "1280", "720"]
+    recording = ["network", "har", "start", "--content", "all"]
+    assert commands.index(viewport) < commands.index(recording)
     page_calls = commands[commands.index(["open", site.url("/b/")]) - 1 :]
-    assert page_calls[0] == ["network", "har", "start", "--content", "all"]
+    assert page_calls[0] == recording
     reads = [call for call in calls if call.command[:2] == ["eval", "--stdin"]]
-    assert reads and "document.documentElement.outerHTML" in str(reads[0].stdin)
+    assert any(
+        "document.documentElement.outerHTML" in str(call.stdin) for call in reads
+    )
     after_open = page_calls[1:]
     assert ["wait", "--load", "networkidle"] in after_open
-    assert any(command[:1] == ["scroll"] for command in after_open)
     stop = next(
         command for command in after_open if command[:3] == ["network", "har", "stop"]
     )
-    read = next(command for command in after_open if command[:2] == ["eval", "--stdin"])
-    assert after_open.index(read) < after_open.index(stop)
+    capture = after_open[: after_open.index(stop) + 1]
+    scrolls = [command for command in capture if command[:1] == ["scroll"]]
+    assert scrolls == [
+        ["scroll", "down", "600"],
+        ["scroll", "down", "600"],
+        ["scroll", "down", "600"],
+        ["scroll", "up", "1000000"],
+    ]
+    read = next(command for command in capture if command[:2] == ["eval", "--stdin"])
+    assert capture.index(read) < capture.index(stop)
     assert commands[-1] == ["close"]
     closing = calls[-1].flags
     assert isinstance(closing, dict) and closing.get("--session") in sessions
@@ -3187,7 +3340,7 @@ def test_the_manpage_states_the_browser_rungs() -> None:
         "`agent-browser`",
         "`script` element",
         "`noscript`",
-        "XHR",
+        "application traffic",
         "fetched again",
         "ten minutes",
     ):

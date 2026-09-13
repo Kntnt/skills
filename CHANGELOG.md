@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.29.1] – 2026-09-13
+
+### Changed
+
+- `/mirror --browser=auto` renders HTML that contains executable classic or module JavaScript in Chrome even when plain HTTP is not blocked, while data scripts such as JSON-LD stay on HTTP. Browser captures use a fixed 1280 × 720 viewport, move through the page in overlapping steps to trigger lazy loading, return to the top before serialising the DOM, and discover saved resources from that DOM and its stylesheets rather than treating unrelated HAR telemetry as page content. The static snapshot removes script-supporting preload, prefetch and connection hints together with scripts, so opening it does not repeat their network traffic. Static HTML and non-HTML files keep conditional HTTP reruns; only a previously HTTP-fetched dynamic page suppresses its validators so the new browser policy can take effect.
+
+### Fixed
+
+- `/mirror` produces stable offline copies of script-rendered sites: sticky elements retain their initial state, lazy images throughout long pages are captured, local media and fonts no longer fail under `file://` because stale `crossorigin` attributes are removed, and long URL components are shortened with a collision-resistant hash before they can exceed common file-system limits.
+
 ## [0.29.0] – 2026-09-13
 
 ### Added

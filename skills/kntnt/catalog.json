@@ -202,7 +202,7 @@
       "name": "mirror",
       "category": "web",
       "description": "Copy a web page, the pages under it that its links, sitemaps and feeds reach, and everything they need to display to disk, so they open in a browser with nothing fetched from the network.",
-      "digest": "7e95a4832187e9655608bca1d5cb431f7fc4cdcb8bb9487742e4cc88911425e2",
+      "digest": "9c466c5f0c6a5aa2506d4b960c08a585279fbc8fc1d5368147fc089dfff57352",
       "binaries": [
         "uv",
         "agent-browser"

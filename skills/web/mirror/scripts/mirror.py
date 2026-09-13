@@ -37,11 +37,14 @@ and a saved file this run did not discover stays and is recorded `absent`.
 A host that blocks the run climbs a ladder of rungs, each a fetcher with its own
 identity: rung 1 is plain HTTP as the Skill, rung 2 plain HTTP dressed as
 Chrome, rung 3 a headless browser and rung 4 a visible one, both driven through
-`agent-browser` in one session of the run's own. The rung belongs to the host
-and lasts the run; a block moves the host one rung up and the blocked URL is
-asked again there, and a block on the top rung the run may reach is the URL's
-outcome. A browser fetch saves the rendered DOM without its scripts, and takes
-the page's resources from the HAR the browser recorded while it loaded.
+`agent-browser` in one session of the run's own. Under `--browser=auto`, an HTML
+page with executable JavaScript climbs directly from plain HTTP to the headless
+browser, so the saved page reflects what the scripts rendered. The rung belongs
+to the host and lasts the run; a block moves the host one rung up and the
+blocked URL is asked again there, and a block on the top rung the run may reach
+is the URL's outcome. A browser fetch saves the rendered DOM without its
+scripts, and uses its HAR as a cache for the resources that DOM and its
+stylesheets reference.
 """
 
 from __future__ import annotations
@@ -123,7 +126,7 @@ CHROME_HEADERS = (
     ("sec-ch-ua-platform", '"macOS"'),
 )
 
-# `--browser`: whether a host may climb past plain HTTP to a browser, or starts there.
+# `--browser`: whether dynamic HTML or a block may move a host to a browser.
 BROWSER_AUTO = "auto"
 BROWSER_ALWAYS = "always"
 BROWSER_NEVER = "never"
@@ -138,6 +141,10 @@ SESSION_PREFIX = "kntnt-mirror-"
 BROWSER_COMMAND_TIMEOUT = 180.0
 HEADED_WAIT = 600.0  # Ten minutes for the person at the window to pass a challenge.
 HEADED_POLL = 2.0
+BROWSER_VIEWPORT_WIDTH = 1280
+BROWSER_VIEWPORT_HEIGHT = 720
+SCROLL_STEP = 600  # Smaller than the viewport so every lazy region enters it.
+MAX_SCROLL_STEPS = 500
 SCROLL_DISTANCE = 1_000_000  # Far enough to reach the bottom of any page at once.
 SET_BROWSER_HEADERS = ("set", "headers")
 
@@ -153,6 +160,13 @@ DOM_SCRIPT = """(() => {
     html: document.documentElement.outerHTML,
   };
 })()"""
+SCROLL_STATE_SCRIPT = """(() => ({
+  top: Math.round(window.scrollY),
+  bottom: Math.max(
+    0,
+    Math.round(document.documentElement.scrollHeight - window.innerHeight),
+  ),
+}))()"""
 
 # The HAR entries a browser fetch saves, by the resource type the browser gave
 # each. Every other type, `xhr`, `fetch`, `websocket`, `eventsource`, `ping`
@@ -255,6 +269,9 @@ HEX_PAIR = re.compile(r"[0-9A-Fa-f]{2}")
 
 # The characters a file name cannot hold on macOS or Linux, percent-encoded.
 FORBIDDEN_IN_NAMES = frozenset('/\x00?#%\\:*"<>|')
+# Leave room below the common 255-byte component limit for collision suffixes.
+NAME_BYTE_LIMIT = 240
+NAME_HASH_LENGTH = 12
 DIRECTORY_INDEX = "index.html"
 HTML_SUFFIX = ".html"
 FILE_SUFFIX = "~file"
@@ -374,6 +391,11 @@ RESOURCE_LINK_RELATIONS = frozenset(
         "modulepreload",
         "manifest",
     }
+)
+# Browser-generated hints support scripts that the static snapshot removes.
+# Left in place, they make an otherwise offline page contact the network.
+STATIC_REMOVED_LINK_RELATIONS = frozenset(
+    {"dns-prefetch", "manifest", "modulepreload", "preconnect", "prefetch", "preload"}
 )
 
 # The references a crawl follows to other pages and files.
@@ -573,6 +595,28 @@ def escape_name(text: str) -> str:
     )
 
 
+def bounded_name(stem: str, suffix: str = "") -> str:
+    """A stable file-name component within the portable byte limit.
+
+    The readable prefix and a short hash distinguish long URL components;
+    a short extension stays at the end so local browsers can infer the type.
+    """
+
+    combined = stem + suffix
+    if len(combined.encode("utf-8")) <= NAME_BYTE_LIMIT:
+        return combined
+    marker = (
+        "~" + hashlib.sha256(combined.encode("utf-8")).hexdigest()[:NAME_HASH_LENGTH]
+    )
+    if len(suffix.encode("utf-8")) > 32:
+        suffix = ""
+    budget = NAME_BYTE_LIMIT - len((marker + suffix).encode("utf-8"))
+    prefix = stem.encode("utf-8")[:budget].decode("utf-8", errors="ignore")
+    # Keep a percent escape whole where the byte cut reached its middle.
+    prefix = re.sub(r"%(?:[0-9A-F])?$", "", prefix)
+    return prefix + marker + suffix
+
+
 def _decoded(text: str) -> str:
     """Decode percent-escapes where they spell UTF-8, and keep them otherwise."""
 
@@ -594,7 +638,9 @@ def natural_path(url: str, is_html: bool) -> PurePosixPath:
     # The host directory and the directories on the way to the file.
     parts = urlsplit(url)
     segments = parts.path.split("/")[1:]
-    directories = [escape_name(_decoded(segment)) for segment in segments[:-1]]
+    directories = [
+        bounded_name(escape_name(_decoded(segment))) for segment in segments[:-1]
+    ]
 
     # The name, with its extension and query string placed.
     name = _decoded(segments[-1]) if segments and segments[-1] else DIRECTORY_INDEX
@@ -603,9 +649,13 @@ def natural_path(url: str, is_html: bool) -> PurePosixPath:
     suffix = PurePosixPath(name).suffix
     stem = name[: len(name) - len(suffix)]
     query = f"?{_decoded(parts.query)}" if parts.query else ""
-    file_name = escape_name(stem) + escape_name(query) + escape_name(suffix)
+    file_name = bounded_name(
+        escape_name(stem) + escape_name(query), escape_name(suffix)
+    )
 
-    return PurePosixPath(escape_name(parts.netloc), *directories, file_name)
+    return PurePosixPath(
+        bounded_name(escape_name(parts.netloc)), *directories, file_name
+    )
 
 
 def assign_paths(
@@ -1140,6 +1190,17 @@ class BrowserFetcher:
 
         began = time.monotonic()
         self.session.ensure()
+        resized, detail = self.session.command(
+            self.headed,
+            "set",
+            "viewport",
+            str(BROWSER_VIEWPORT_WIDTH),
+            str(BROWSER_VIEWPORT_HEIGHT),
+        )
+        if not resized:
+            return Fetched(
+                url, error=f"the browser could not set its viewport: {detail}"
+            )
         har = self.session.har_path()
         started, detail = self.session.command(
             self.headed, "network", "har", "start", "--content", "all"
@@ -1179,9 +1240,44 @@ class BrowserFetcher:
                     return seen
                 time.sleep(HEADED_POLL)
             self.session.command(self.headed, "wait", "--load", "networkidle")
-        self.session.command(self.headed, "scroll", "down", str(SCROLL_DISTANCE))
+        self._scroll_through()
+        # Scrolling loads lazy resources; returning restores sticky headers,
+        # scroll effects and other DOM state before the static snapshot is read.
+        self.session.command(self.headed, "scroll", "up", str(SCROLL_DISTANCE))
         self.session.command(self.headed, "wait", "--load", "networkidle")
         return Rendered.of(self._read())
+
+    def _scroll_through(self) -> None:
+        """Move through every viewport so native and scripted lazy loaders run."""
+
+        state = self._scroll_state()
+        if state is None:
+            self.session.command(self.headed, "scroll", "down", str(SCROLL_DISTANCE))
+            self.session.command(self.headed, "wait", "--load", "networkidle")
+            return
+        for _ in range(MAX_SCROLL_STEPS):
+            top, bottom = state
+            if top >= bottom:
+                return
+            self.session.command(self.headed, "scroll", "down", str(SCROLL_STEP))
+            self.session.command(self.headed, "wait", "--load", "networkidle")
+            state = self._scroll_state()
+            if state is None or state[0] <= top:
+                return
+
+    def _scroll_state(self) -> tuple[int, int] | None:
+        """The current and final vertical scroll positions, where readable."""
+
+        ok, data = self.session.command(
+            self.headed, "eval", "--stdin", stdin=SCROLL_STATE_SCRIPT
+        )
+        result = data.get("result") if ok and isinstance(data, dict) else None
+        if not isinstance(result, dict):
+            return None
+        top, bottom = result.get("top"), result.get("bottom")
+        if not isinstance(top, (int, float)) or not isinstance(bottom, (int, float)):
+            return None
+        return int(top), int(bottom)
 
     def _read(self) -> object:
         _, data = self.session.command(self.headed, "eval", "--stdin", stdin=DOM_SCRIPT)
@@ -1294,11 +1390,15 @@ def settle_body(
 
 
 def without_scripts(html: str) -> str:
-    """A rendered DOM with every `script` element removed and every `noscript` kept."""
+    """A rendered static DOM without programs or their network hints."""
 
     tree = LexborHTMLParser(html)
     for node in tree.css("script"):
         node.decompose()
+    for node in tree.css("link[rel]"):
+        relations = set((node.attributes.get("rel") or "").lower().split())
+        if relations & STATIC_REMOVED_LINK_RELATIONS:
+            node.decompose()
     return tree.html or ""
 
 
@@ -1809,6 +1909,29 @@ def is_suspected_shell(text: str) -> bool:
     return len(" ".join(visible.split())) < SHELL_TEXT_LIMIT
 
 
+def has_executable_scripts(text: str) -> bool:
+    """Whether HTML carries a script Chromium may execute.
+
+    Data blocks such as JSON-LD do not change the rendered page. Classic and
+    module scripts do, whether their program is inline or external.
+    """
+
+    tree = LexborHTMLParser(text)
+    for node in tree.css("script"):
+        script_type = (node.attributes.get("type") or "").strip().lower()
+        executable = (
+            not script_type
+            or script_type == "module"
+            or "javascript" in script_type
+            or "ecmascript" in script_type
+        )
+        if executable and (
+            (node.attributes.get("src") or "").strip() or node.text(deep=True).strip()
+        ):
+            return True
+    return False
+
+
 def decode_html(body: bytes, charset: str | None) -> str:
     """Decode a page as a browser would: BOM, then header, then meta, then UTF-8."""
 
@@ -1850,8 +1973,15 @@ def rewrite_html(
             return value
         return replace(urljoin(base, written)) or value
 
+    def is_local(value: str) -> bool:
+        """Whether *value* resolves to a file this mirror holds."""
+
+        written = value.strip()
+        return bool(written) and replace(urljoin(base, written)) is not None
+
     for node in tree.css("*"):
         attributes = node.attributes
+        localised = False
 
         # Integrity no longer holds where the guarded bytes changed.
         guarded = attributes.get("src") or attributes.get("href")
@@ -1866,14 +1996,25 @@ def rewrite_html(
         for attribute in URL_ATTRIBUTES:
             value = attributes.get(attribute)
             if value:
-                node.attrs[attribute] = rewritten(value)
+                replacement = rewritten(value)
+                node.attrs[attribute] = replacement
+                localised |= replacement != value or is_local(value)
         for attribute in SRCSET_ATTRIBUTES:
             value = attributes.get(attribute)
             if value:
-                node.attrs[attribute] = ", ".join(
+                candidates = parse_srcset(value)
+                replacement = ", ".join(
                     f"{rewritten(candidate)} {descriptors}".strip()
-                    for candidate, descriptors in parse_srcset(value)
+                    for candidate, descriptors in candidates
                 )
+                node.attrs[attribute] = replacement
+                localised |= replacement != value or any(
+                    is_local(candidate) for candidate, _ in candidates
+                )
+        # A file URL has an opaque origin. CORS mode makes otherwise valid
+        # sibling images, fonts and media fail when the mirror is opened there.
+        if localised and "crossorigin" in attributes:
+            del node.attrs["crossorigin"]
         style = attributes.get("style")
         if style:
             node.attrs["style"] = rewrite_css(style, base, replace) or style
@@ -2106,7 +2247,7 @@ class Options:
 
 @dataclass(frozen=True)
 class Climb:
-    """One step a host took up the ladder: the rung, and the block that moved it."""
+    """One step a host took up the ladder: the rung, and what moved it."""
 
     rung: int
     reason: str
@@ -2243,11 +2384,13 @@ class Mirror:
         keep: bool = False,
         validators: Validators | None = None,
     ) -> Fetched:
-        """Fetch *record*'s URL on its host's rung, climbing while the host blocks it.
+        """Fetch *record*'s URL on its host's rung, climbing when it needs a browser.
 
         The first block on a host moves the host one rung up, so every later
         request to it goes there, and the blocked URL is asked again there at
-        once. A block on the highest rung is returned as it came.
+        once. Under `auto`, executable scripts move an HTML page directly from
+        plain HTTP to the headless browser. A block on the highest rung is
+        returned as it came.
         """
 
         url = record.url
@@ -2262,6 +2405,32 @@ class Mirror:
                 self.last_request = time.monotonic()
             record.fetcher, record.rung = fetcher.name, rung
             if fetched.blocked is None:
+                browser_steps = [
+                    step
+                    for step in self.fetchers
+                    if step >= RUNG_HEADLESS and step > rung
+                ]
+                dynamic = (
+                    self.options.browser == BROWSER_AUTO
+                    and record.kind == KIND_PAGE
+                    and fetched.body is not None
+                    and is_html(fetched.content_type, fetched.final_url)
+                    and has_executable_scripts(
+                        decode_html(fetched.body, fetched.charset)
+                    )
+                )
+                if dynamic and browser_steps:
+                    next_rung = min(browser_steps)
+                    reason = "executable JavaScript"
+                    self.rungs[host] = next_rung
+                    self.climbs.setdefault(host, []).append(
+                        Climb(next_rung, reason, url)
+                    )
+                    self.log.decision(
+                        "climbed", host, f"rung {next_rung} {reason} {url}"
+                    )
+                    validators = None
+                    continue
                 return fetched
             higher = [step for step in self.fetchers if step > rung]
             if not higher:
@@ -2394,6 +2563,20 @@ class Mirror:
             stored=saved,
         )
 
+    def _previous_page_needs_browser(self, row: dict[str, object]) -> bool:
+        """Whether a previously HTTP-fetched page contains executable JavaScript."""
+
+        assert self.previous_output is not None
+        content_type = optional_text(row.get("content_type"))
+        final = optional_text(row.get("final_url")) or str(row["url"])
+        if not is_html(content_type, final):
+            return False
+        saved = self._saved(row)
+        assert saved is not None
+        raw = self.previous_output / STATE_DIRECTORY / RAW_DIRECTORY / str(saved)
+        charset = optional_text(row.get("charset"))
+        return has_executable_scripts(decode_html(raw.read_bytes(), charset))
+
     def _settle_absent(self) -> None:
         """Record every file an earlier run saved whose URL this run did not discover.
 
@@ -2430,6 +2613,15 @@ class Mirror:
             if previous is not None
             else None
         )
+        # An earlier engine may have saved dynamic HTML over HTTP. Do not let
+        # a 304 prevent the current auto policy from rendering that page.
+        if (
+            self.options.browser == BROWSER_AUTO
+            and record.kind == KIND_PAGE
+            and previous is not None
+            and self._previous_page_needs_browser(previous)
+        ):
+            validators = None
 
         # A resource a browser already loaded with a page is taken as it loaded it.
         captured = (
@@ -2518,7 +2710,6 @@ class Mirror:
             text = decode_html(fetched.body, fetched.charset)
             tree = LexborHTMLParser(text)
             found = html_references(tree, fetched.final_url)
-            found.extend(item.final_url for item in fetched.captured)
             follows = self.options.links or self.options.feeds
             if (
                 self._in_scope(record.final)
