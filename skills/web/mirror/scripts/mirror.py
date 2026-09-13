@@ -1483,7 +1483,7 @@ class Mirror:
         )
 
     def _not_excluded(self, url: str) -> bool:
-        """Whether a redirect may lead to *url*: an excluded URL is never requested."""
+        """Whether a redirect may lead to *url*: an excluded URL is never requested, except along the start page's redirects."""
 
         return not self._excluded(url)
 
