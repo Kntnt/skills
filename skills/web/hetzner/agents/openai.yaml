@@ -1,0 +1,5 @@
+interface:
+  display_name: "Hetzner"
+  short_description: "Provision Hetzner servers and operate web deployments"
+policy:
+  allow_implicit_invocation: true

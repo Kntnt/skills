@@ -148,6 +148,12 @@ Save a web page, and every page and file under it that its links, sitemaps and f
 
 Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] [--delay=<seconds>] [--no-links] [--no-sitemap] [--no-feeds] [--ignore-robots] [--include=<regex> ...] [--exclude=<regex> ...] [--header=<name: value> ...] [--user-agent=<string>] [--browser=auto|always|never] [--headed] [--profile=<name|path>] [--dry-run] <url>`.
 
+### hetzner
+
+Provision Hetzner Cloud servers, install software, and deploy or maintain their websites and applications with the official hcloud CLI, cloud-init, and SSH. It follows the project's existing stack and deployment files, reconciles existing resources and interrupted writes, and verifies bootstrap, services, and the requested public endpoint. Application-specific release and recovery routines stay in the project.
+
+Run `/hetzner`, followed by the operation and constraints, or let the agent use it for a matching Hetzner Cloud task. Preparation alone creates no remote resources; billed and destructive changes stay within the established authorization. Robot dedicated servers and Object Storage are outside its scope.
+
 ## Features
 
 Besides skills, the collection ships **features**: catalog entries that install nothing a harness loads and only write into a harness's own configuration. `/kntnt select` lists them as a second group under the skills, and a feature's row says what it writes and where before you check it. They apply to the machine rather than to a project, so `--project` offers none.
@@ -167,6 +173,8 @@ A two-line Claude Code status line: path, worktree marker, branch, working-tree 
 ## Dependencies
 
 Every skill requires `uv` and the manager: the manager ships the engine that reads a skill's invocation, and `uv` runs it.
+
+`hetzner` can prepare deployment files without remote tools; Cloud operations additionally need hcloud, network access, and a project token, and host operations need OpenSSH and server access.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`; `mirror` requires `agent-browser`, which fetches in a real browser what plain HTTP cannot, installed with `brew install agent-browser` and then `agent-browser install`. `release` can finish without `gh`, but then skips the GitHub release.
 

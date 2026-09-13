@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.30.0] – 2026-09-13
+
+### Added
+
+- `/hetzner` prepares and operates Hetzner Cloud infrastructure and web deployments through hcloud, SSH, and cloud-init. It follows project-owned deployment workflows, reconciles resources before writes and retries, verifies bootstrap and application health, and separates code rollback, data restoration, and resource cleanup. Both Claude Code and Codex may select it for matching tasks; local preparation works without remote credentials or tools.
+
 ## [0.29.1] – 2026-09-13
 
 ### Changed

@@ -943,6 +943,26 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("--type=x --config=a --no-config", None),
         ("--type", None),
     ],
+    "web/hetzner": [
+        ("", {"path": [], "flags": {}, "operands": []}),
+        (
+            "prepare staging deployment files",
+            {"operands": ["prepare staging deployment files"], "instruction": None},
+        ),
+        (
+            "-- inspect staging only",
+            {"operands": [], "instruction": "inspect staging only"},
+        ),
+        (
+            "prepare files\n-- leave production unchanged",
+            {
+                "operands": ["prepare files"],
+                "instruction": "leave production unchanged",
+            },
+        ),
+        ("--dry-run", {"operands": ["--dry-run"]}),
+        ("--  ", None),
+    ],
     "web/mirror": [
         ("https://x.se/", {"flags": {}, "operands": ["https://x.se/"]}),
         (
