@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.30.1] – 2026-09-15
+
 ### Changed
 
 - Model Selector holds every routed answer to a deliberation ceiling, `xhigh` unless the caller passes `--max-deliberation=<level>`, so a subagent, a builder or the grader's judge no longer lands on `max` unasked when nothing clears the floor or a step up climbs the ladder. The ceiling is compared by position, so a level later added above `max` is excluded too; a model with no effort control is unaffected; a `--deliberation` lock above the ceiling raises it to that level and says so; and where the ceiling changed the answer or emptied the pool, the note names it and the call inherits rather than refuses. `/orchestrate` takes `--max-deliberation` and holds it for the whole run like `--fast`, outside the approval identity, and `/delegation` passes a ceiling the user gave. ADR-0197 records why the ceiling bounds the level rather than the model or the caller's seat, and why it is a flag of its own rather than the lock (issue #323).
