@@ -2083,3 +2083,293 @@ def test_without_a_valid_profile_a_deliberation_lock_alone_inherits(
 
     assert answer["basis"] == "inherit"
     assert "/model-selector setup" in answer["note"]
+
+
+def _deepest(data_dir: Path) -> None:
+    """Write a store whose likeliest point, by far, is Opus at `max`.
+
+    Only Opus at `max` ever finished, and every other model Anthropic offers
+    has failed, so no point clears the floor and the pool is ranked on its
+    chances — which is the case in which the top of the ladder used to win
+    unasked. Opus at `xhigh` has failed too, so a step up from it has nowhere
+    likelier to go but `max`.
+    """
+
+    _profile(data_dir)
+    _store(
+        data_dir,
+        ("implement", "claude-opus-5", "low", 0.0, 8),
+        ("implement", "claude-opus-5", "xhigh", 0.0, 8),
+        ("implement", "claude-opus-5", "max", 1.0, 8),
+        ("implement", "claude-sonnet-5", "high", 0.0, 8),
+        ("implement", FABLE, "high", 0.0, 8),
+        ("implement", HAIKU, None, 0.0, 8),
+    )
+
+
+def _levels_named(answer: dict[str, Any]) -> set[str | None]:
+    """Return every level the answer names, chosen or offered beside it."""
+
+    return {
+        answer["deliberation"],
+        *(row["deliberation"] for row in answer["alternatives"]),
+    }
+
+
+def test_with_no_deliberation_ceiling_given_nothing_above_xhigh_is_chosen(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The top of the ladder is never reached for unasked (issue #323).
+
+    Nothing clears the floor, so the likeliest point is taken, and the
+    likeliest point is Opus at `max`. The deliberation ceiling defaults to
+    `xhigh`, so `max` is not in the pool at all, and the note says the
+    ceiling is why the answer is not the point the evidence would have taken.
+    """
+
+    _deepest(tmp_path)
+
+    answer = _answer(capsys, *LIMITED, f"--data={tmp_path}", EVERY, "--stakes=high")
+
+    assert "max" not in _levels_named(answer)
+    assert answer["launch"]["how"] != "inherit"
+    assert "deliberation ceiling" in answer["note"]
+
+
+def test_a_call_that_explores_stays_under_the_deliberation_ceiling(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An exploration moves within the pool, and `max` is not in it."""
+
+    _deepest(tmp_path)
+
+    answers = [
+        _answer(capsys, *LIMITED, f"--data={tmp_path}", EVERY, f"--seed={seed}")
+        for seed in range(DRAWS)
+    ]
+
+    assert any(answer["explored"] for answer in answers)
+    for answer in answers:
+        assert "max" not in _levels_named(answer)
+
+
+def test_a_step_up_from_xhigh_does_not_climb_past_the_deliberation_ceiling(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The only likelier point is `max`, so the ceiling is why there is no step.
+
+    Every other level of every model Anthropic offers has failed outright, and
+    Opus at `xhigh` finished some of the time, so without the ceiling the step
+    up is `max` and nothing else.
+    """
+
+    _profile(tmp_path)
+    _store(
+        tmp_path,
+        ("implement", "claude-opus-5", "low", 0.0, 8),
+        ("implement", "claude-opus-5", "medium", 0.0, 8),
+        ("implement", "claude-opus-5", "high", 0.0, 8),
+        ("implement", "claude-opus-5", "xhigh", 0.6, 20),
+        ("implement", "claude-opus-5", "max", 1.0, 20),
+        *(
+            ("implement", model, level, 0.0, 8)
+            for model in ("claude-sonnet-5", FABLE)
+            for level in ("low", "medium", "high", "xhigh", "max")
+        ),
+        ("implement", HAIKU, None, 0.0, 8),
+    )
+    free = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--after=claude-opus-5@xhigh",
+        "--max-deliberation=max",
+    )
+    assert (free["model"], free["deliberation"]) == ("claude-opus-5", "max")
+
+    answer = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        EVERY,
+        "--after=claude-opus-5@xhigh",
+    )
+
+    assert "max" not in _levels_named(answer)
+    assert "deliberation ceiling 'xhigh' ruled out claude-opus-5@max" in answer["note"]
+
+
+def test_a_ceiling_at_max_admits_the_whole_ladder_and_a_lower_one_narrows_it(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """`--max-deliberation` moves the ceiling in either direction."""
+
+    _deepest(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", EVERY, "--stakes=high")
+
+    opened = _answer(capsys, *flags, "--max-deliberation=max")
+    lowered = _answer(capsys, *flags, "--max-deliberation=high")
+
+    assert (opened["model"], opened["deliberation"]) == ("claude-opus-5", "max")
+    assert "deliberation ceiling" not in (opened["note"] or "")
+    assert not {"xhigh", "max"} & _levels_named(lowered)
+    assert "deliberation ceiling 'high'" in lowered["note"]
+
+
+def test_the_ceiling_compares_positions_so_a_level_above_max_is_excluded() -> None:
+    """A level nobody has named yet sits above `max`, and the default keeps it out.
+
+    The ladder is passed in rather than patched into the catalogue, which
+    silently drops a level its own ladder lacks and would leave the rule
+    unexercised (issue #323).
+    """
+
+    ladder = ("low", "medium", "high", "xhigh", "max", "beyond")
+    ceiling = select.DEFAULT_MAX_DELIBERATION
+
+    assert ceiling == "xhigh"
+    assert select._admitted("xhigh", ceiling, ladder)
+    assert not select._admitted("max", ceiling, ladder)
+    assert not select._admitted("beyond", ceiling, ladder)
+    assert not select._admitted("beyond", "max", ladder)
+    assert select._admitted(None, "low", ladder)
+
+
+def test_a_deliberation_lock_at_max_lifts_the_ceiling_and_says_so(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The user named the level, and an explicit choice outranks the default."""
+
+    _deepest(tmp_path)
+
+    answer = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--model=claude-opus-5",
+        "--deliberation=max",
+    )
+
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "max")
+    assert (
+        "deliberation lock 'max' lifted the deliberation ceiling 'xhigh'"
+        in answer["note"]
+    )
+
+    unlocked_model = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--deliberation=max"
+    )
+
+    assert unlocked_model["deliberation"] == "max"
+    assert "lifted the deliberation ceiling" in unlocked_model["note"]
+
+
+def _ladder_with_a_gap(data_dir: Path, *levels: str) -> None:
+    """Add one Anthropic model supporting only the levels given."""
+
+    _refresh(
+        data_dir,
+        {
+            "id": "test-gapped",
+            "provider": "anthropic",
+            "family": "gapped",
+            "aliases": ["gapped"],
+            "deliberation": list(levels),
+            "price": {
+                "input": 3.0,
+                "cache_read": 0.3,
+                "cache_write": 3.75,
+                "output": 15.0,
+            },
+            "reasoning_billed_as": "output",
+            "capability": 0.8,
+            "released": "2026-09-01",
+        },
+    )
+    _profile(data_dir)
+
+
+def test_a_lock_under_the_ceiling_never_falls_back_to_a_level_above_it(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The nearest supported level is looked for at or below the ceiling.
+
+    The model supports `low` and `xhigh`, so `high` is nearest to `xhigh`; with
+    the ceiling at `high` the fallback is `low` instead.
+    """
+
+    _ladder_with_a_gap(tmp_path, "low", "xhigh")
+    flags = (f"--data={tmp_path}", "--harness=claude-code", "--model=test-gapped")
+
+    open_ladder = _answer(
+        capsys, *flags, "--deliberation=high", "--max-deliberation=max"
+    )
+    capped = _answer(capsys, *flags, "--deliberation=high", "--max-deliberation=high")
+
+    assert (open_ladder["model"], open_ladder["deliberation"]) == (
+        "test-gapped",
+        "xhigh",
+    )
+    assert (capped["model"], capped["deliberation"]) == ("test-gapped", "low")
+
+
+def test_a_model_lock_alone_is_still_held_to_the_ceiling(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A model re-admitted from the catalogue is filtered like any other point.
+
+    With no valid profile the pool is empty, so the lock reaches past it and
+    admits every level of the model it names — `max` among them.
+    """
+
+    _store(tmp_path, ("implement", "claude-opus-5", "max", 1.0, 8))
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--model=claude-opus-5",
+    )
+
+    assert answer["basis"] != "inherit"
+    assert answer["model"] == "claude-opus-5"
+    assert answer["deliberation"] != "max"
+
+
+def test_a_point_with_no_effort_control_is_admitted_under_any_ceiling(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A model with no levels has nothing to hold against a ceiling."""
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--model=haiku",
+        "--scope=all",
+        "--max-deliberation=low",
+    )
+
+    assert answer["model"] == HAIKU
+    assert answer["deliberation"] is None
+    assert answer["launch"]["how"] != "inherit"
+
+
+def test_a_ceiling_that_empties_the_pool_inherits_and_names_the_ceiling(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Never a refusal: the caller keeps its own seat and is told why."""
+
+    _ladder_with_a_gap(tmp_path, "max")
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--seat=claude-opus-5@high",
+        "--model=test-gapped",
+    )
+
+    assert answer["launch"]["how"] == "inherit"
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert "deliberation ceiling 'xhigh' admits no candidate" in answer["note"]

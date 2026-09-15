@@ -32,6 +32,11 @@ taken over one somebody has. `_ranked` states that rule, and `_explored` states
 the one exception to reading it off the means: a bounded share of reversible
 calls tries the boundary instead, because a store that only ever runs its
 favourite never learns that a cheaper point would have done.
+
+All of that happens under a deliberation ceiling. No point above it is in the
+pool — `xhigh` where the caller names no `--max-deliberation` — so the top of
+the ladder is a level somebody asked for rather than one the arithmetic arrived
+at, and a deliberation lock above the ceiling is the one thing that lifts it.
 """
 
 from __future__ import annotations
@@ -75,6 +80,14 @@ DEFAULT_OBJECTIVE = "cost"
 # What every call demands before price is allowed to decide anything. Below
 # this, a cheap attempt is a cheap way of not getting the work done.
 FLOOR = 0.8
+
+# The deepest deliberation a call is answered at where the caller names no
+# deliberation ceiling of its own. The top of the ladder is bought on purpose
+# rather than arrived at: where nothing clears the floor the likeliest point is
+# taken, and a step up climbs as far as the ladder goes, so without a ceiling
+# hard work reaches `max` unasked (issue #323). Every level above this one — a
+# level later added above `max` included — is out of the pool.
+DEFAULT_MAX_DELIBERATION = "xhigh"
 
 # What share of the calls that may explore actually do. It is a probability per
 # call rather than a counter, so no particular call is the one that explores and
@@ -185,18 +198,50 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     # scope never offered, which is a caller saying it knows better.
     pool = _pool(args.scope, cat, profile, seat_model, harness, args.repo, notes)
     pool = _locked_to_model(pool, cat, args.model, notes)
-    pool = _locked_to_deliberation(pool, args.deliberation, notes)
+
+    # The deliberation ceiling comes last, so a point either lock re-admitted
+    # from the catalogue is held to it too. The pool as it would have stood
+    # without the ceiling is kept beside it, only to say what the ceiling cost.
+    base = args.max_deliberation or DEFAULT_MAX_DELIBERATION
+    ceiling = _ceiling(base, args.deliberation)
+    free = _locked_to_deliberation(pool, args.deliberation, None, [])
+    pool = [
+        point
+        for point in _locked_to_deliberation(pool, args.deliberation, ceiling, notes)
+        if _admitted(point.deliberation, ceiling)
+    ]
     if not pool:
+        if free:
+            notes.append(f"the deliberation ceiling {ceiling!r} admits no candidate")
         return _inherit(args, _why_nothing(cat, profile, notes), objective)
 
     # Rank on what the evidence holds, then — where this request is one the
     # boundary may be tried on — replace the answer with one point beyond it,
     # which is the only way an estimate nobody retries is ever corrected.
-    scored = [
-        _score(point, args.kind, estimator, kinds, _paid(profile, point, harness))
-        for point in pool
-    ]
+    known: dict[tuple[str, str | None], Scored] = {}
+
+    def scored_as(points: Sequence[Point]) -> list[Scored]:
+        """Score each point once, however many of the two pools it is in."""
+
+        for point in points:
+            if (point.model.id, point.deliberation) not in known:
+                rates = _paid(profile, point, harness)
+                known[(point.model.id, point.deliberation)] = _score(
+                    point, args.kind, estimator, kinds, rates
+                )
+        return [known[(point.model.id, point.deliberation)] for point in points]
+
+    scored = scored_as(pool)
     ranked = _ranked(scored, objective.name)
+    notes.append(
+        _ceiling_ruled_out(
+            ranked,
+            _ranked(scored_as(free), objective.name),
+            args.after,
+            objective.name,
+            ceiling,
+        )
+    )
     explored: str | None = None
     if _explorable(args):
         ranked, explored = _explored(scored, ranked, args, objective.name, notes)
@@ -205,6 +250,14 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     if not ranked:
         return _inherit(args, _why_nothing(cat, profile, notes), objective)
     best = ranked[0]
+
+    # An answer above the ceiling the caller would otherwise have had is one a
+    # lock asked for, and says so, so that `max` never appears unexplained.
+    if not _admitted(best.point.deliberation, base):
+        notes.append(
+            f"the deliberation lock {args.deliberation!r} lifted the "
+            f"deliberation ceiling {base!r}"
+        )
 
     return _report(
         best, ranked[1:], args, profile, cat, harness, explored, objective, notes
@@ -245,6 +298,62 @@ def _vocabulary(here: Path) -> dict[str, Any]:
         "ok": True,
         "kinds": [{"kind": kind, "note": kinds.notes.get(kind, "")} for kind in KINDS],
     }
+
+
+def _ceiling(base: str, lock: str | None) -> str:
+    """Return the deepest level this call may be answered at.
+
+    *base* is the caller's `--max-deliberation`, else `DEFAULT_MAX_DELIBERATION`.
+    A deliberation lock above it raises it to the lock's own level and no
+    further: the user named that level, and an explicit choice wins, but a lock
+    is no licence for the fallback to a model's nearest level to climb past
+    what was named.
+    """
+
+    if lock is not None and _position(lock) > _position(base):
+        return lock
+    return base
+
+
+def _admitted(level: str | None, ceiling: str, ladder: Sequence[str] = LEVELS) -> bool:
+    """Return whether a point at this level sits at or below the ceiling.
+
+    Positions on the ladder are compared rather than names, so a level added
+    above the ceiling is excluded without anybody listing it. A point with no
+    effort control has no level to hold against a ceiling, and is admitted.
+    """
+
+    if level is None:
+        return True
+    return ladder.index(level) <= ladder.index(ceiling)
+
+
+def _ceiling_ruled_out(
+    ranked: Sequence[Scored],
+    unceiled: Sequence[Scored],
+    failed: str | None,
+    objective: str,
+    ceiling: str,
+) -> str | None:
+    """Say which point the deliberation ceiling kept from being the answer.
+
+    Judged against the answer the same call would have given with no ceiling
+    and no exploration — the top of each ranking, after the step up where the
+    caller named a point that failed — so that an exploration is never mistaken
+    for the ceiling at work, and a failed point above the ceiling, which is
+    therefore not in the pool, is still answered for. None where the two agree.
+    """
+
+    capped = _after(ranked, failed, objective, [])
+    free = _after(unceiled, failed, objective, [])
+    if not capped or not free:
+        return None
+    if _named(capped[0].point) == _named(free[0].point):
+        return None
+    return (
+        f"the deliberation ceiling {ceiling!r} ruled out "
+        f"{_named(free[0].point)}, which the evidence would have chosen"
+    )
 
 
 def _explorable(args: argparse.Namespace) -> bool:
@@ -733,9 +842,17 @@ def _locked_to_model(
 
 
 def _locked_to_deliberation(
-    pool: Sequence[Point], level: str | None, notes: list[str | None]
+    pool: Sequence[Point],
+    level: str | None,
+    ceiling: str | None,
+    notes: list[str | None],
 ) -> list[Point]:
-    """Narrow the pool to one level, or to the nearest each model supports."""
+    """Narrow the pool to one level, or to the nearest each model supports.
+
+    The nearest is taken at or below the deliberation ceiling where one is
+    given, and a model that supports no level there offers no point: a lock
+    below the ceiling is never answered above it.
+    """
 
     if level is None:
         return list(pool)
@@ -744,7 +861,13 @@ def _locked_to_deliberation(
     if kept:
         return kept
 
-    nearest = [Point(model, _nearest(model, level)) for model in _models(pool)]
+    nearest = [
+        Point(model, _nearest(model, level, ceiling))
+        for model in _models(pool)
+        if ceiling is None
+        or not model.deliberation
+        or any(_admitted(supported, ceiling) for supported in model.deliberation)
+    ]
     if nearest:
         offered = ", ".join(
             sorted({point.deliberation or "no effort control" for point in nearest})
@@ -809,7 +932,8 @@ def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
     points measured for the kind that clear the floor go first, ordered on
     price per finished job, and everything else follows exactly as it would
     have without them.
-    Nothing is filtered out: the alternatives and a named failure read the same
+    Nothing under the deliberation ceiling is filtered out here: the
+    alternatives and a named failure read the same
     list, and whether a cheaper, untried point would have done is what the
     explored calls find out (ADR-0187).
 
@@ -979,18 +1103,25 @@ def _models(pool: Sequence[Point]) -> list[Model]:
     return list(seen.values())
 
 
-def _nearest(model: Model, level: str) -> str | None:
+def _nearest(model: Model, level: str, ceiling: str | None = None) -> str | None:
     """Return the supported level closest to the one that was asked for.
 
     None where the model has no effort control, that model's one point being
-    as near the requested level as it is ever going to get.
+    as near the requested level as it is ever going to get. Where a ceiling is
+    given only the levels at or below it are candidates, and a caller asking
+    with one has already made sure the model supports such a level.
     """
 
     if not model.deliberation:
         return None
     wanted = LEVELS.index(level)
+    under = [
+        supported
+        for supported in model.deliberation
+        if ceiling is None or _admitted(supported, ceiling)
+    ]
     return min(
-        model.deliberation,
+        under or model.deliberation,
         key=lambda supported: (
             abs(LEVELS.index(supported) - wanted),
             LEVELS.index(supported),
@@ -1064,6 +1195,7 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--seat")
     parser.add_argument("--model")
     parser.add_argument("--deliberation", choices=LEVELS)
+    parser.add_argument("--max-deliberation", choices=LEVELS)
     parser.add_argument("--stakes", choices=STAKES, default="reversible")
     parser.add_argument("--after")
     parser.add_argument("--objective", choices=OBJECTIVES)

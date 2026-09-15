@@ -635,6 +635,7 @@ def _route(
     model: str | None = None,
     deliberation: str | None = None,
     fast: bool = False,
+    max_deliberation: str | None = None,
     seat: str | None = "the-strongest@high",
     harness: str | None = "claude-code",
     classify: bool = True,
@@ -661,6 +662,8 @@ def _route(
         args += ["--deliberation", deliberation]
     if fast:
         args.append("--fast")
+    if max_deliberation is not None:
+        args += ["--max-deliberation", max_deliberation]
     if seat is not None:
         args += ["--seat", seat]
     if harness is not None:
@@ -3690,6 +3693,74 @@ def test_a_fast_run_records_its_objective_and_refuses_a_resume_without_it(
     assert json.loads(reported.stdout)["routing"]["fast"] is True
     assert relocked.returncode == 1
     assert "no fast" in relocked.stderr
+
+
+def test_a_deliberation_ceiling_reaches_every_route_and_is_held_for_the_run(
+    tmp_path: Path,
+) -> None:
+    """The ceiling travels to model-selector and cannot change halfway (issue #323).
+
+    It is held like `--fast`: in the routing account, shown by the plan and
+    the report, and refused on a resume that drops it. It narrows the choice
+    and pins no level, so it is never part of the plan's approval payload.
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    opening = _engine(
+        repo,
+        "plan",
+        "--max-deliberation=high",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    assert opening.returncode == 0, opening.stderr
+    planned = json.loads(opening.stdout)
+    assert planned["max_deliberation"] == "high"
+    routed = _route(repo, scratch, env, ["build-9"], max_deliberation="high")
+    assert routed.returncode == 0, routed.stderr
+
+    dropped = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+    relocked = _route(repo, scratch, env, ["amend-9-1"])
+
+    assert all("--max-deliberation=high" in call for call in _select_calls(env))
+    assert dropped.returncode == 2
+    assert "deliberation ceiling" in json.loads(dropped.stdout)["reason"]
+    assert json.loads(reported.stdout)["routing"]["max_deliberation"] == "high"
+    assert relocked.returncode == 1
+    assert "no deliberation ceiling" in relocked.stderr
+    changed = _route(repo, scratch, env, ["amend-9-1"], max_deliberation="low")
+    assert changed.returncode == 1
+    assert "--max-deliberation=low" in changed.stderr
+    ceiled = _engine(repo, "plan", "--dry-run", "--max-deliberation=low", env=env)
+    unceiled = _engine(repo, "plan", "--dry-run", env=env)
+    assert (
+        json.loads(ceiled.stdout)["approval_identity"]
+        == json.loads(unceiled.stdout)["approval_identity"]
+    )
+
+
+def test_a_resume_that_adds_a_deliberation_ceiling_is_refused(tmp_path: Path) -> None:
+    """A run routed with no deliberation ceiling is not given one halfway through."""
+
+    repo, scratch, env = _routed(tmp_path)
+
+    added = _route(repo, scratch, env, ["amend-9-1"], max_deliberation="high")
+    replanned = _engine(
+        repo, "plan", "--max-deliberation=high", "--state-dir", str(scratch), env=env
+    )
+
+    assert added.returncode == 1
+    assert "no deliberation ceiling" in added.stderr
+    assert replanned.returncode == 2
+    assert "deliberation ceiling" in json.loads(replanned.stdout)["reason"]
 
 
 def test_the_report_times_every_ticket_to_its_first_verified_pass(

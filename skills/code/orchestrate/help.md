@@ -6,7 +6,7 @@ orchestrate - work ready-for-agent tickets in dependency waves
 
 ## SYNOPSIS
 
-**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--fast**] [**--approval=**_IDENTITY_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
+**/orchestrate** [**--dry-run**] [**--at-once=**_COUNT_] [**--model=**_NAME_] [**--deliberation=**_LEVEL_] [**--max-deliberation=**_LEVEL_] [**--fast**] [**--approval=**_IDENTITY_] [**--yes**] [*TICKET-OR-SPEC*...] [**--** *INSTRUCTION*]
 
 **/orchestrate reconcile** [**--commit=**_COMMIT_] [**--yes**] *TICKET* [**--** *INSTRUCTION*]
 
@@ -120,7 +120,7 @@ Prior verdicts remain ticket evidence and the resumed amend receives the immedia
 
 The routing account is the run's own record of what it decided, and it is reported as it was recorded rather than as the current profile, price, or Harness state would answer now. A missing or unreadable account does not stop the run: the roles that still need one are routed again, the report says the account was replaced, and the claim gate holds until every role about to run has a decision.
 
-`--model`, `--deliberation`, and `--fast` are part of that account. Changing or dropping any of them is refused. Repeating the same attempt and phase resumes it without spending another attempt.
+`--model`, `--deliberation`, `--max-deliberation`, and `--fast` are part of that account. Changing or dropping any of them is refused. Repeating the same attempt and phase resumes it without spending another attempt.
 
 A current user's claim resumes only when it can be distinguished from another active run. Otherwise the Skill stops.
 
@@ -182,9 +182,13 @@ Lock only the building model dimension for every execution role. Model-selector 
 
 Lock only the building deliberation dimension for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`; another value is refused rather than normalized. The level is launched rather than merely asked for: a builder on a Claude model runs at the level named, through a generated subagent definition, instead of inheriting the orchestrating session's own. Model-selector still selects model when it is omitted. A level nothing can launch is refused before claims and never falls through to a neighbour. Verdicts retain exact main-seat inheritance.
 
+**--max-deliberation=**_LEVEL_
+
+Set the deliberation ceiling for every execution role. *LEVEL* is exactly one of `low`, `medium`, `high`, `xhigh`, or `max`. Model-selector still chooses the level, and chooses none above this one. Without it the deliberation ceiling is `xhigh`, so a builder reaches `max` only where the developer asked: `--max-deliberation=max` lets model-selector choose it where the evidence calls for it, and `--deliberation=max` locks it. The deliberation ceiling is not a lock, so a builder answered below it is not refused. It is recorded with `--model`, `--deliberation` and `--fast` and held for the whole run, so a resumed invocation that adds, drops or changes it is refused before anything is claimed. It is not part of the approval identity. Verdicts retain exact main-seat inheritance.
+
 **--fast**
 
-Count finishing the work in elapsed time rather than in money, for a run somebody is waiting on. With it a point is chosen on how long it takes to finish, read off the elapsed times this machine has actually measured. Without it a point is chosen on the standing choice between time and cost set with `/model-selector objective`, and where nothing is set, on what it costs to finish, which is what a run spends whether or not anybody is watching. It is recorded with `--model` and `--deliberation` and held for the whole run, so a resumed invocation that adds or drops it is refused before anything is claimed. Without it, the objective the run's first routing call was answered on is recorded instead and asked for by name on every later call, so a standing choice changed mid-run reaches the next run rather than this one.
+Count finishing the work in elapsed time rather than in money, for a run somebody is waiting on. With it a point is chosen on how long it takes to finish, read off the elapsed times this machine has actually measured. Without it a point is chosen on the standing choice between time and cost set with `/model-selector objective`, and where nothing is set, on what it costs to finish, which is what a run spends whether or not anybody is watching. It is recorded with `--model`, `--deliberation` and `--max-deliberation` and held for the whole run, so a resumed invocation that adds or drops it is refused before anything is claimed. Without it, the objective the run's first routing call was answered on is recorded instead and asked for by name on every later call, so a standing choice changed mid-run reaches the next run rather than this one.
 
 **--approval=**_IDENTITY_
 

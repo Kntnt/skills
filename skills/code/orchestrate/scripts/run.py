@@ -1114,7 +1114,9 @@ class Routing:
     of model-selector's own state and a run that loses it re-routes rather than
     stopping (ADR-0182). `model` and `deliberation` are the invocation's own
     field locks, recorded because a resume that changed them would be a second
-    run reporting as the first, and `fast` is the third of them. `objective`
+    run reporting as the first, and `fast` is the third of them.
+    `max_deliberation` is the deliberation ceiling the invocation put on every
+    building role, held on the same terms though it pins no level. `objective`
     is what the run's first answer said it ranked on — the caller's `--fast`,
     else the user's standing choice, else cost — and every later request of
     the run asks for it by name, so a standing choice flipped mid-run never
@@ -1135,6 +1137,7 @@ class Routing:
     deliberation: str | None
     decisions: list[RouteRecord]
     fast: bool = False
+    max_deliberation: str | None = None
     objective: str | None = None
     seat: str | None = None
     harness: str | None = None
@@ -1159,6 +1162,7 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
         "model": routing.model,
         "deliberation": routing.deliberation,
         "fast": routing.fast,
+        "max_deliberation": routing.max_deliberation,
         "objective": routing.objective,
         "seat": routing.seat,
         "harness": routing.harness,
@@ -1514,6 +1518,11 @@ def read_routing(path: Path | None) -> tuple[Routing | None, str | None]:
                 None if held["deliberation"] is None else str(held["deliberation"])
             ),
             fast=bool(held.get("fast")),
+            max_deliberation=(
+                None
+                if held.get("max_deliberation") is None
+                else str(held["max_deliberation"])
+            ),
             objective=(
                 None if held.get("objective") is None else str(held["objective"])
             ),
@@ -1567,6 +1576,7 @@ def write_routing(path: Path | None, routing: Routing) -> str:
                     "model": routing.model,
                     "deliberation": routing.deliberation,
                     "fast": routing.fast,
+                    "max_deliberation": routing.max_deliberation,
                     "objective": routing.objective,
                     "seat": routing.seat,
                     "harness": routing.harness,
@@ -1734,7 +1744,9 @@ class Plan:
     the fastest configuration that holds quality rather than the cheapest —
     where it is set, the run otherwise taking whatever its first answer ranked
     on, the user's standing choice or else cost, and holding that for the rest
-    of it; and `routing` is the account all three were recorded into, beside
+    of it; `max_deliberation` is the deliberation ceiling it puts on every
+    building role, where it names one, model-selector's own default applying
+    otherwise; and `routing` is the account all four were recorded into, beside
     the objective the run holds and the seat
     the run calls from and every decision made under them. `routing_reason` is
     the other half of that answer: where there is no account to render, it says
@@ -1755,6 +1767,7 @@ class Plan:
     model: str | None
     deliberation: str | None
     fast: bool
+    max_deliberation: str | None
     state: str | None
     routing: dict[str, Any] | None
     routing_reason: str | None
@@ -2903,6 +2916,7 @@ def build_plan(
     model: str | None,
     deliberation: str | None,
     fast: bool,
+    max_deliberation: str | None,
     state_path: Path | None,
     reference: str | None,
     approval: str | None,
@@ -2968,6 +2982,7 @@ def build_plan(
         model=model,
         deliberation=deliberation,
         fast=fast,
+        max_deliberation=max_deliberation,
         state=None,
         routing=routing_details(routing),
         routing_reason=routing_reason,
@@ -3059,8 +3074,8 @@ def build_plan(
     elif (
         routing is not None
         and (
-            adrift := locks_refusal(
-                routing, model, deliberation, fast, "this invocation"
+            adrift := held_fields_refusal(
+                routing, model, deliberation, fast, max_deliberation, "this invocation"
             )
         )
         is not None
@@ -3165,6 +3180,7 @@ def cmd_plan(
     model: str | None,
     deliberation: str | None,
     fast: bool,
+    max_deliberation: str | None,
     state_path: Path | None,
     reference: str | None,
     approval: str | None,
@@ -3187,6 +3203,7 @@ def cmd_plan(
             model=model,
             deliberation=deliberation,
             fast=fast,
+            max_deliberation=max_deliberation,
             state_path=state_path,
             reference=reference,
             approval=approval,
@@ -3413,6 +3430,7 @@ def select_point(
     harness: str | None,
     model: str | None,
     deliberation: str | None,
+    max_deliberation: str | None,
     after: str | None,
     objective: str | None,
 ) -> dict[str, Any]:
@@ -3439,6 +3457,8 @@ def select_point(
         named.append(f"--model={model}")
     if deliberation is not None:
         named.append(f"--deliberation={deliberation}")
+    if max_deliberation is not None:
+        named.append(f"--max-deliberation={max_deliberation}")
     if after is not None:
         named.append(f"--after={after}")
     if objective is not None:
@@ -3553,37 +3573,55 @@ def emit_route(records: list[RouteRecord], routing: Routing) -> None:
     )
 
 
-def locks_refusal(
+def held_fields_refusal(
     routing: Routing,
     model: str | None,
     deliberation: str | None,
     fast: bool,
+    max_deliberation: str | None,
     invocation: str,
 ) -> str | None:
-    """Return why these locks are not this run's own, or None where they are."""
+    """Return why these locks are not this run's own, or None where they are.
 
-    if (model, deliberation, fast) == (
+    The deliberation ceiling is held with them, though it pins no level: a
+    resume under another ceiling would route the rest of the run on a choice
+    the first frontier was never offered.
+    """
+
+    asked = (model, deliberation, fast, max_deliberation)
+    held = (
         routing.model,
         routing.deliberation,
         routing.fast,
-    ):
+        routing.max_deliberation,
+    )
+    if asked == held:
         return None
 
     return (
-        f"{invocation} locks {described_locks(model, deliberation, fast)} where "
-        "this run's routing was recorded for "
-        f"{described_locks(routing.model, routing.deliberation, routing.fast)}: "
-        "the fields the first frontier was routed under cannot change mid-run"
+        f"{invocation} asks for {described_fields(*asked)} where this run's "
+        f"routing was recorded for {described_fields(*held)}: the fields the "
+        "first frontier was routed under cannot change mid-run"
     )
 
 
-def described_locks(model: str | None, deliberation: str | None, fast: bool) -> str:
-    """Say in words which building fields and objective an invocation locked."""
+def described_fields(
+    model: str | None,
+    deliberation: str | None,
+    fast: bool,
+    max_deliberation: str | None,
+) -> str:
+    """Say in words which building fields, objective and ceiling an invocation named."""
 
     named = [
         f"--model={model}" if model else "no model",
         f"--deliberation={deliberation}" if deliberation else "no deliberation",
         "--fast" if fast else "no fast",
+        (
+            f"--max-deliberation={max_deliberation}"
+            if max_deliberation
+            else "no deliberation ceiling"
+        ),
     ]
     return ", ".join(named[:-1]) + f", and {named[-1]}"
 
@@ -3640,6 +3678,7 @@ def cmd_route(
     model: str | None,
     deliberation: str | None,
     fast: bool,
+    max_deliberation: str | None,
     seat: str | None,
     harness: str | None,
 ) -> int:
@@ -3675,8 +3714,8 @@ def cmd_route(
     if (
         routing is not None
         and (
-            relocked := locks_refusal(
-                routing, model, deliberation, fast, "this request"
+            relocked := held_fields_refusal(
+                routing, model, deliberation, fast, max_deliberation, "this request"
             )
         )
         is not None
@@ -3694,6 +3733,7 @@ def cmd_route(
             model=model,
             deliberation=deliberation,
             fast=fast,
+            max_deliberation=max_deliberation,
             decisions=[],
             run_identity=(remembered.run_identity if remembered else None)
             or ("" if dry_run else secrets.token_hex(32)),
@@ -3714,6 +3754,7 @@ def cmd_route(
                 harness=routing.harness,
                 model=model,
                 deliberation=deliberation,
+                max_deliberation=max_deliberation,
                 after=escalated_from(routing, observed_task(ticket, request_id)),
                 objective="time" if routing.fast else routing.objective,
             )
@@ -6433,6 +6474,18 @@ def add_deliberation_flag(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--deliberation", choices=DELIBERATION_LEVELS)
 
 
+def add_max_deliberation_flag(parser: argparse.ArgumentParser) -> None:
+    """Let a verb take the deliberation ceiling, on the same portable scale.
+
+    A ceiling rather than a lock: model-selector still chooses the level, and
+    chooses none above this one. Left off, model-selector's own default ceiling
+    applies, so a run nobody put a ceiling on is still not answered at the top
+    of the ladder unasked (issue #323).
+    """
+
+    parser.add_argument("--max-deliberation", choices=DELIBERATION_LEVELS)
+
+
 def add_scope_flag(parser: argparse.ArgumentParser) -> None:
     """Let a verb that reads the whole label be aimed at part of it.
 
@@ -6458,6 +6511,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     plan.add_argument("--approval")
     plan.add_argument("--fast", action="store_true")
     add_deliberation_flag(plan)
+    add_max_deliberation_flag(plan)
     add_scope_flag(plan)
     add_shared_flags(plan)
 
@@ -6469,6 +6523,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     route.add_argument("--model")
     route.add_argument("--fast", action="store_true")
     add_deliberation_flag(route)
+    add_max_deliberation_flag(route)
     add_shared_flags(route)
 
     claim = sub.add_parser("claim", help="Take one ticket before working it.")
@@ -6584,6 +6639,7 @@ def main(argv: list[str] | None = None) -> int:
             model=args.model,
             deliberation=args.deliberation,
             fast=args.fast,
+            max_deliberation=args.max_deliberation,
             state_path=state_path,
             reference=args.scope,
             approval=args.approval,
@@ -6597,6 +6653,7 @@ def main(argv: list[str] | None = None) -> int:
             model=args.model,
             deliberation=args.deliberation,
             fast=args.fast,
+            max_deliberation=args.max_deliberation,
             seat=args.seat,
             harness=args.harness,
         )
