@@ -34,9 +34,13 @@ What to write and which sources to use, in any language. It may be omitted when 
 
 Select an installed genre by filename without its extension. The default is `general`; an unknown genre is refused.
 
+<!-- kntnt:editorial-genres -->
+
 **--technique**=*TECHNIQUE*
 
 Select an installed structural technique. Where none is named here, in the material's `kntnt` map, in an instruction, or in applicable conversation context, the resolved genre's ordinary technique applies. To write without one, say so in an instruction or carry `technique: none` in the map: this flag takes an installed name and cannot say none. A technique is never inferred from resemblance.
+
+<!-- kntnt:editorial-techniques -->
 
 **--language**=*LANGUAGE*
 

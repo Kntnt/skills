@@ -4824,6 +4824,71 @@ def read_invocation(skill_dir: Path, payload: str) -> Reading:
     return Reading(0, invocation={**invocation, "instruction": instruction})
 
 
+def editorial_choices(directory: Path) -> str:
+    """List base resources in name order, or fail rather than return a partial list.
+
+    Filesystem and decoding failures propagate to the help renderer; a
+    missing introduction or an empty directory is likewise unavailable.
+    """
+
+    # Only canonical base filenames are selectable; review halves and support
+    # documents do not name choices, and `none` is metadata, never a flag value.
+    rows: list[str] = []
+    for path in sorted(directory.iterdir()):
+        # Ignore entries outside the resource format's selectable namespace.
+        if not re.fullmatch(
+            r"[a-z0-9]+(?:-[a-z0-9]+)*\.md", path.name
+        ) or path.stem in {"none", "readme"}:
+            continue
+
+        # A damaged base resource cannot supply an honest help description.
+        paragraphs = re.split(
+            r"\n\s*\n", path.read_text(encoding="utf-8").strip(), maxsplit=2
+        )
+        if (
+            len(paragraphs) < 2
+            or not re.fullmatch(r"# [^\n]+", paragraphs[0])
+            or paragraphs[1].startswith(("#", "<!--", "```", "- ", "* "))
+        ):
+            raise ManagerError(f"'{path}' has no opening paragraph after its title")
+
+        # Keep the opening's words and markup while joining wrapped lines.
+        description = " ".join(paragraphs[1].split())
+        rows.append(f"- `{path.stem}` — {description}")
+
+    # An empty installation has no complete inventory to show.
+    if not rows:
+        raise ManagerError("no selectable base resources found")
+    return "Installed choices:\n\n" + "\n".join(rows)
+
+
+def render_invocation_help(page: str, library: Path) -> str:
+    """Expand the two editorial list slots; preserve every other help byte.
+
+    This runs only after an exact help form has been accepted. Grammar and
+    refusals continue to read the authored page, without touching resources.
+    """
+
+    for kind in ("genres", "techniques"):
+        # Only the two published slots cause a resource lookup.
+        marker = f"<!-- kntnt:editorial-{kind} -->"
+        if marker in page:
+            directory = library / "references" / "editorial" / kind
+
+            # An unreadable install must not masquerade as a complete list.
+            try:
+                choices = editorial_choices(directory)
+            except (OSError, UnicodeError, ManagerError) as exc:
+                choices = (
+                    f"Installed choices unavailable from `{directory}`: {exc}. "
+                    "No list is shown; repair the resources or run `/kntnt update`."
+                )
+
+            page = page.replace(marker, choices)
+
+    return page
+
+
 def cmd_invoke(skill_dir: Path) -> int:
     """Read the invocation on stdin for the Skill at *skill_dir*.
 
@@ -4839,6 +4904,9 @@ def cmd_invoke(skill_dir: Path) -> int:
         return status
 
     reading = read_invocation(skill_dir, sys.stdin.read())
+    if reading.status == EXIT_HELP:
+        print(render_invocation_help(reading.text, here() / "library"))
+        return reading.status
     if reading.status != 0:
         print(reading.text)
         return reading.status

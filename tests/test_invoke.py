@@ -171,7 +171,7 @@ def _force_skill(
 
 
 def _invoke(
-    directory: Path, payload: str, tmp_path: Path
+    directory: Path, payload: str, tmp_path: Path, *, manager: Path | None = None
 ) -> subprocess.CompletedProcess[str]:
     """Run the shipped engine against *directory* with *payload* on stdin."""
 
@@ -184,6 +184,8 @@ def _invoke(
     env["UV_CACHE_DIR"] = str(UV_CACHE)
     env["KNTNT_HOME"] = str(home)
     env["KNTNT_PROJECT"] = str(project)
+    if manager is not None:
+        env["KNTNT_HERE"] = str(manager)
     return subprocess.run(
         ["uv", "run", "--quiet", str(KNTNT_PY), "invoke", f"--here={directory}"],
         input=payload,
@@ -377,6 +379,190 @@ def test_an_exact_help_form_prints_the_addressed_page_on_its_own_status(
         result = _invoke(skill, payload, tmp_path)
         assert result.returncode == EXIT_HELP, (payload, result.stderr)
         assert result.stdout.rstrip("\n") == on, payload
+
+
+# The help contract's exception to verbatim pages is checked through invoke.
+EDITORIAL_HELP_RULE = (
+    "Installed editorial choices come from the invocation's Library, preserving "
+    "the page and help status; see docs/rules/skills.md, `help.md` (issue #325)."
+)
+
+
+def _editorial_skill(root: Path, name: str) -> Path:
+    """Copy shipped grammar, omitting dependencies unrelated to help rendering."""
+
+    source = SKILLS / "editorial" / name
+    skill = root / name
+    declaration = re.sub(
+        r"(?m)^(  kntnt\.(?:binaries|skills|externals|capabilities):).*$",
+        r'\1 ""',
+        (source / "SKILL.md").read_text(encoding="utf-8"),
+    )
+    _write(skill / "SKILL.md", declaration)
+    _write(skill / "help.md", (source / "help.md").read_text(encoding="utf-8"))
+    return skill
+
+
+@pytest.mark.parametrize("name", ["write", "redline"])
+@pytest.mark.parametrize("payload", ["help", "--help", "-h"])
+def test_editorial_help_lists_installed_choices_under_their_flags(
+    tmp_path: Path, name: str, payload: str
+) -> None:
+    """The same Library used by a valid invocation supplies help's choices."""
+
+    # Install the shipped grammar beside a distinct fixture Library.
+    skill = _editorial_skill(tmp_path, name)
+    source = SKILLS / "editorial" / name / "help.md"
+    manager = tmp_path / "installed" / "kntnt"
+    library = manager / "library"
+    editorial = library / "references" / "editorial"
+    _write(editorial / "genres" / "zebra.md", "# Zebra\n\nThe last genre.\n")
+    _write(
+        editorial / "genres" / "alpha.md",
+        "# Display name\n\nThe first genre,\nwith a wrapped opening.\n\n## Rules\n\nNot help.\n",
+    )
+    _write(editorial / "techniques" / "arc.md", "# Arc\n\nA chosen arc.\n")
+    for support in ("alpha.review.md", "README.md", "none.md"):
+        _write(editorial / "genres" / support, "# Support\n\nNot a choice.\n")
+
+    result = _invoke(skill, payload, tmp_path, manager=manager)
+
+    # Each flag owns its complete, ordered list; help cannot enter the Skill.
+    assert result.returncode == EXIT_HELP, (result.stderr, EDITORIAL_HELP_RULE)
+    assert result.stderr == "", EDITORIAL_HELP_RULE
+    genre = result.stdout.partition("## OPTIONS\n")[2].partition("**--technique**")[0]
+    technique = (
+        result.stdout.partition("## OPTIONS\n")[2]
+        .partition("**--technique**")[2]
+        .partition("**--language**")[0]
+    )
+    assert "- `alpha` — The first genre, with a wrapped opening." in genre, (
+        EDITORIAL_HELP_RULE
+    )
+    assert "- `zebra` — The last genre." in genre, EDITORIAL_HELP_RULE
+    assert genre.index("- `alpha`") < genre.index("- `zebra`"), EDITORIAL_HELP_RULE
+    assert "- `arc` — A chosen arc." in technique, EDITORIAL_HELP_RULE
+    assert result.stdout.count("- `alpha`") == 1, EDITORIAL_HELP_RULE
+    assert "Not help." not in result.stdout, EDITORIAL_HELP_RULE
+    assert "Not a choice." not in result.stdout, EDITORIAL_HELP_RULE
+    assert "<!-- kntnt:" not in result.stdout, EDITORIAL_HELP_RULE
+    assert "Invocation read." not in result.stdout, EDITORIAL_HELP_RULE
+
+    # Removing the two known insertions recovers every authored help byte.
+    restored = result.stdout.replace(
+        "Installed choices:\n\n- `alpha` — The first genre, with a wrapped opening.\n- `zebra` — The last genre.",
+        "<!-- kntnt:editorial-genres -->",
+    ).replace(
+        "Installed choices:\n\n- `arc` — A chosen arc.",
+        "<!-- kntnt:editorial-techniques -->",
+    )
+    assert restored == source.read_text(encoding="utf-8"), EDITORIAL_HELP_RULE
+
+    # Normal execution receives the exact Library whose resources help used.
+    valid = _invoke(skill, "", tmp_path, manager=manager)
+    assert valid.returncode == EXIT_VALID, (valid.stderr, EDITORIAL_HELP_RULE)
+    assert f"`$LIBRARY` is `{library}`." in valid.stdout, EDITORIAL_HELP_RULE
+
+
+@pytest.mark.parametrize("name", ["write", "redline"])
+@pytest.mark.parametrize("kind", ["genres", "techniques"])
+def test_editorial_help_reads_resource_changes_on_every_call(
+    tmp_path: Path, name: str, kind: str
+) -> None:
+    """Adding, renaming, editing and removing needs no help or registry edit."""
+
+    # Install the shipped grammar with isolated resources.
+    skill = _editorial_skill(tmp_path, name)
+    manager = tmp_path / "installed" / "kntnt"
+    editorial = manager / "library" / "references" / "editorial"
+    for category in ("genres", "techniques"):
+        _write(editorial / category / "baseline.md", "# Baseline\n\nOriginal choice.\n")
+    resource = editorial / kind / "new-choice.md"
+
+    # Observe each resource edit through the next invocation, without caching.
+    before = _invoke(skill, "help", tmp_path, manager=manager)
+    _write(resource, "# New\n\nA new choice.\n")
+    added = _invoke(skill, "help", tmp_path, manager=manager)
+    renamed = resource.with_name("renamed.md")
+    resource.rename(renamed)
+    moved = _invoke(skill, "help", tmp_path, manager=manager)
+    _write(renamed, "# New\n\nAn updated description.\n")
+    edited = _invoke(skill, "help", tmp_path, manager=manager)
+    renamed.unlink()
+    removed = _invoke(skill, "help", tmp_path, manager=manager)
+
+    # Every transition keeps help's stop status and reflects only current data.
+    assert all(
+        result.returncode == EXIT_HELP
+        for result in (before, added, moved, edited, removed)
+    ), EDITORIAL_HELP_RULE
+    assert "- `new-choice`" not in before.stdout, EDITORIAL_HELP_RULE
+    assert "- `new-choice` — A new choice." in added.stdout, EDITORIAL_HELP_RULE
+    assert "- `new-choice`" not in moved.stdout, EDITORIAL_HELP_RULE
+    assert "- `renamed` — A new choice." in moved.stdout, EDITORIAL_HELP_RULE
+    assert "- `renamed` — An updated description." in edited.stdout, EDITORIAL_HELP_RULE
+    assert "A new choice." not in edited.stdout, EDITORIAL_HELP_RULE
+    assert removed.stdout == before.stdout, EDITORIAL_HELP_RULE
+
+
+@pytest.mark.parametrize(
+    "fault", ["missing", "empty", "unreadable", "invalid-utf8", "no-opening"]
+)
+def test_editorial_help_reports_unavailable_lists_without_partial_choices(
+    tmp_path: Path, fault: str
+) -> None:
+    """A broken installation still answers help, with an explicit list failure."""
+
+    # Break one resource set while keeping the other readable.
+    skill = _editorial_skill(tmp_path, "write")
+    manager = tmp_path / "installed" / "kntnt"
+    editorial = manager / "library" / "references" / "editorial"
+    _write(editorial / "techniques" / "arc.md", "# Arc\n\nThe healthy list.\n")
+    genres = editorial / "genres"
+    if fault != "missing":
+        genres.mkdir()
+    if fault not in ("missing", "empty"):
+        _write(genres / "alpha.md", "# Alpha\n\nA partial choice.\n")
+        broken = genres / "broken.md"
+        if fault == "unreadable":
+            broken.symlink_to(genres / "absent.md")
+        elif fault == "invalid-utf8":
+            broken.write_bytes(b"\xff")
+        else:
+            _write(broken, "# Broken\n\n## Requirements\n\nNo introduction.\n")
+
+    result = _invoke(skill, "help", tmp_path, manager=manager)
+
+    # Hide the broken list as a whole and preserve the healthy list beside it.
+    assert result.returncode == EXIT_HELP, (result.stderr, EDITORIAL_HELP_RULE)
+    assert result.stderr == "", EDITORIAL_HELP_RULE
+    assert "Installed choices unavailable" in result.stdout, EDITORIAL_HELP_RULE
+    assert str(genres) in result.stdout, EDITORIAL_HELP_RULE
+    assert "A partial choice." not in result.stdout, EDITORIAL_HELP_RULE
+    assert "- `arc` — The healthy list." in result.stdout, EDITORIAL_HELP_RULE
+    assert "/kntnt update" in result.stdout, EDITORIAL_HELP_RULE
+
+
+@pytest.mark.parametrize("name", ["write", "redline"])
+@pytest.mark.parametrize(
+    "payload", ["--help -- Explain", "--help --", "--help --genre=general"]
+)
+def test_invalid_editorial_help_never_reads_or_renders_resource_lists(
+    tmp_path: Path, name: str, payload: str
+) -> None:
+    """A missing Library cannot change the existing refusal for a bad help form."""
+
+    # Install the shipped grammar with isolated resources.
+    skill = _editorial_skill(tmp_path, name)
+
+    result = _invoke(skill, payload, tmp_path, manager=tmp_path / "absent")
+
+    # Refusal happens before either list or normal Skill execution is reached.
+    assert result.returncode == EXIT_REFUSED, (result.stderr, EDITORIAL_HELP_RULE)
+    assert result.stderr == "", EDITORIAL_HELP_RULE
+    assert "Installed choices" not in result.stdout, EDITORIAL_HELP_RULE
+    assert "## OPTIONS" not in result.stdout, EDITORIAL_HELP_RULE
+    assert "Invocation read." not in result.stdout, EDITORIAL_HELP_RULE
 
 
 def test_a_help_form_beside_an_instruction_is_refused_without_the_page(

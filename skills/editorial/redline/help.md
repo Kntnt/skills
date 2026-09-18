@@ -52,9 +52,13 @@ The single text to review, supplied inline, as a local path, or as a URL. When o
 
 Select an installed genre. The default is `general`; an unknown genre is refused.
 
+<!-- kntnt:editorial-genres -->
+
 **--technique**=*TECHNIQUE*
 
 Select an installed structural technique. Where none is named here, in the text's `kntnt` map, in an instruction, or in applicable conversation context, the resolved genre's ordinary technique applies. To review against no technique, say so in an instruction or carry `technique: none` in the map: this flag takes an installed name and cannot say none. Resemblance never selects one.
+
+<!-- kntnt:editorial-techniques -->
 
 **--language**=*LANGUAGE*
 

@@ -4,7 +4,7 @@
 
 This note asks which established conventions should govern the Collection's user-facing `help.md` files. It records evidence rather than adding a second coding standard; the normative rule belongs in [`docs/rules/skills.md`](../rules/skills.md).
 
-The repository currently makes one Markdown artifact serve three help spellings: `--help`, `-h`, and `help` print `help.md` verbatim, and the same file is called the Skill's man page ([ADR-0176](../adr/0176-how-an-invocation-is-read.md)). No file is installed into a numbered system manual section and no roff formatter adds a title, indentation, font changes, indexing metadata, or a pager. The result is therefore a project-specific hybrid: a complete reference page delivered through a help route, not an installed Unix man page.
+The repository currently makes one Markdown artifact serve three help spellings: `--help`, `-h`, and `help` print the addressed `help.md` (with the bounded installed-resource insertions for Write and Redline specified in `docs/rules/skills.md`), and the same file is called the Skill's man page ([ADR-0176](../adr/0176-how-an-invocation-is-read.md)). No file is installed into a numbered system manual section and no roff formatter adds a title, indentation, font changes, indexing metadata, or a pager. The result is therefore a project-specific hybrid: a complete reference page delivered through a help route, not an installed Unix man page.
 
 ## Source authority and limits
 
