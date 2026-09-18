@@ -4,6 +4,20 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.31.0] – 2026-09-18
+
+### Added
+
+- `/write --help` and `/redline --help` list the genres and techniques actually installed under `--genre` and `--technique`, each with the opening paragraph that introduces it, read from the Collection Library on every help call so a genre added or removed shows at once. Where a list cannot be read — missing, empty, unreadable or malformed — the page says so and names the source and the recovery rather than printing part of a list as the whole; the rest of the page and the help exit status are unchanged (issue #325).
+
+### Changed
+
+- Every Skill's argument hint now states exactly the forms the Skill accepts. `/proofread`, `/redline` and `/unslop` write their shared flags once and group the two exclusive destinations, `(--output=response|<path> [<text>|<path>|<url>] | --in-place[=on|off] <path>)`, instead of repeating `--language` and the rest per form. Placeholders are always in angle brackets and fixed values always bare, so `/agents-md [<path>]`, `/release [minor|major|<X.Y.Z>]`, `/write --frontmatter=yes|no` and `/orchestrate --deliberation=low|medium|high|xhigh|max` read the same way as every other hint. What each Skill accepts is unchanged (issue #324).
+
+### Fixed
+
+- `/delegation`'s hint no longer offers `/delegation --yes` or `/delegation --project`, which the Skill refuses; `on` or `off` is required before those flags. `/kntnt`'s hint shows that `--on` and `--off` may be repeated (issue #324).
+
 ## [0.30.1] – 2026-09-15
 
 ### Changed
