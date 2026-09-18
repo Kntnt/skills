@@ -110,7 +110,7 @@ Use `/orchestrate reconcile [--commit=COMMIT] [--yes] #ticket` when a failed or 
 
 Correct mechanical language errors in one text while preserving wording, meaning, tone, structure, formatting, code, and metadata. The result goes to the response unless another output or explicit in-place editing is selected.
 
-Run `/proofread [--language=LANGUAGE] [--output=TARGET] [text|path|url]` or `/proofread [--language=LANGUAGE] --in-place path`.
+Run `/proofread [--language=LANGUAGE] [--output=TARGET] [text|path|url]` or use `--in-place path`.
 
 ### redline
 
@@ -146,7 +146,7 @@ Run `/rename-invoices [--folder=<path>] --type=<name> [--locale=<name> ...] [--y
 
 Save a web page, and every page and file under it that its links, sitemaps and feeds reach, to disk with everything they need to display — images, stylesheets, scripts, fonts and media, on whatever host they are — and rewrite their references so the copy opens in a browser with nothing fetched from the network. The crawl stays under the start page's directory, widened by `--include` and narrowed by `--exclude` regular expressions, obeys `robots.txt`, and stops at 5000 pages unless `--max-pages` says otherwise; `--no-links`, `--no-sitemap` and `--no-feeds` turn each way of finding pages off. A host that blocks it climbs from plain HTTP to a Chrome identity and then to a headless browser, whose rendered page is saved without its scripts; `--headed` opens a visible browser where you can pass a challenge or log in, and `--profile` lends it your Chrome profile. Each run leaves a manifest of every URL it took a position on and a log beside the copy; `--dry-run` shows what would be fetched without writing anything.
 
-Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] [--delay=<seconds>] [--no-links] [--no-sitemap] [--no-feeds] [--ignore-robots] [--include=<regex> ...] [--exclude=<regex> ...] [--header=<name: value> ...] [--user-agent=<string>] [--browser=auto|always|never] [--headed] [--profile=<name|path>] [--dry-run] <url>`.
+Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] [--delay=<seconds>] [--no-links] [--no-sitemap] [--no-feeds] [--ignore-robots] [--include=<regex> ...] [--exclude=<regex> ...] [--header=<name: value> ...] [--user-agent=<string>] [--browser=auto|always|never] [--headed] [--profile=<name>|<path>] [--dry-run] <url>`.
 
 ### hetzner
 

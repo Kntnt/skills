@@ -2,7 +2,7 @@
 name: write
 description: Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.
 disable-model-invocation: false
-argument-hint: '[--genre=<genre>] [--technique=<technique>] [--language=<language>] [--frontmatter=<yes|no>] [--output=<response|path>] [<brief>] [-- <instruction>]'
+argument-hint: '[--genre=<genre>] [--technique=<technique>] [--language=<language>] [--frontmatter=yes|no] [--output=response|<path>] [<brief>] [-- <instruction>]'
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -26,8 +26,8 @@ Run every UV command in this Skill with a fresh private directory as `TMPDIR`, a
 - `--genre=<genre>` names a resource under `$LIBRARY/references/editorial/genres/`, by its filename without the extension.
 - `--technique=<technique>` names a resource under `$LIBRARY/references/editorial/techniques/`, the same way.
 - `--language=<language>` is any selector `$LIBRARY/scripts/languages.py` accepts: a canonical code, a curated alias, or a description of a language in words.
-- `--frontmatter=<yes|no>` accepts `yes`, `on`, or `true` and `no`, `off`, or `false`.
-- `--output=<response|path>` accepts the keyword `response` or one filesystem path, whose parent directory exists and which is no local file that supplied material for this run.
+- `--frontmatter=yes|no` accepts `yes`, `on`, or `true` and `no`, `off`, or `false`.
+- `--output=response|<path>` accepts the keyword `response` or one filesystem path, whose parent directory exists and which is no local file that supplied material for this run.
 
 ## Resolution
 

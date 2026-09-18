@@ -2,7 +2,7 @@
 name: redline
 description: Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.
 disable-model-invocation: true
-argument-hint: '[--genre=<genre>] [--technique=<technique>] [--language=<language>] [--max=<n>] [--output=<response|path>] [<text>|<path>|<url>] | [--genre=<genre>] [--technique=<technique>] [--language=<language>] [--max=<n>] --in-place[=on|off] <path> [-- <instruction>]'
+argument-hint: '[--genre=<genre>] [--technique=<technique>] [--language=<language>] [--max=<n>] ([--output=response|<path>] [<text>|<path>|<url>] | --in-place[=on|off] <path>) [-- <instruction>]'
 compatibility: Requires uv, proofread, and a harness that can run subagents
 metadata:
   kntnt.internal: "true"
@@ -32,7 +32,7 @@ The operand is the Text Artifact: inline text, one local path, or one URL, and e
 
 `--max=<n>` is the Correction Budget: the greatest number of substantive corrections the review may delegate. It takes any non-negative integer and defaults to `1`, so an ordinary review includes one correction and one opportunity to verify it. `0` reviews without correcting — the findings come back for the reader to act on, and the closing mechanical pass is still performed — and a higher value bounds a longer loop explicitly. It is a ceiling and never a quota: a run with nothing left to correct stops with the rest of it unspent.
 
-`--output=<response|path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path. It and In-place Editing name two destinations for one text, which is why no form carries both.
+`--output=response|<path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path. It and In-place Editing name two destinations for one text, which is why no form carries both.
 
 `--in-place[=<value>]` selects In-place Editing. It accepts `yes`, `on`, and `true` against `no`, `off`, and `false`; bare `--in-place` means `on`, `--in-place=off` has the same effect as omitting the option, and the default is `off`.
 

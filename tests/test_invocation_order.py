@@ -6,6 +6,7 @@ import re
 from pathlib import Path
 
 from support.contract import STANDARD
+from support.hint import form_text, hint_forms
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS = REPO_ROOT / "skills"
@@ -21,11 +22,11 @@ RECORD = "ADR-0176"
 SUFFIX = re.compile(r"\[--\s*(?:INSTRUCTION|<instruction>)\]\s*$")
 
 # A flag's attached value is part of the flag rather than an operand beside it
-# (ADR-0176): the bracketed optional spelling, a metavariable that may itself
-# offer alternatives, and a plain value, which carries any bare alternatives
-# written after it rather than letting them read as operands.
+# (ADR-0176): the bracketed optional spelling, a metavariable that may be one
+# of several — `<name>|<path>` — and a plain value, which carries any bare
+# alternatives written after it rather than letting them read as operands.
 ATTACHED_GROUP = re.compile(r"\[=[^\]]*\]")
-ATTACHED_META = re.compile(r"=<[^>]*>")
+ATTACHED_META = re.compile(r"=<[^>]*>(?:\|(?:<[^>]*>|[^\s\]|)<-][^\s\]|)]*))*")
 ATTACHED_VALUE = re.compile(r"=[^\s\]|)]*(?:\|[^\s\]|)-][^\s\]|)]*)*")
 
 # What separates the atoms inside one unit: whitespace, the alternation bar,
@@ -210,7 +211,7 @@ def test_every_argument_hint_writes_its_forms_in_the_invocation_order() -> None:
     for body in skills:
         directory = body.parent
         known = _command_paths(directory)
-        for form in _hint(directory).split(" | "):
+        for form in map(form_text, hint_forms(_hint(directory))):
             for fault in violations(form, known):
                 raise AssertionError(
                     f"{directory.relative_to(REPO_ROOT)}: in the"

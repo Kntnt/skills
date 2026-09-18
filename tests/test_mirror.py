@@ -3326,7 +3326,7 @@ def test_the_manpage_states_the_browser_rungs() -> None:
     arguments = body.partition("## Arguments")[2].partition("\n## ")[0]
     for flag, hint in (
         ("[**--headed**]", "[--headed]"),
-        ("[**--profile=**_PROFILE_]", "[--profile=<name|path>]"),
+        ("[**--profile=**_PROFILE_]", "[--profile=<name>|<path>]"),
     ):
         assert flag in synopsis, flag
         assert flag.strip("[]") in options, flag

@@ -2,7 +2,7 @@
 name: release
 description: Ship a version — changelog, bump, push, tag, and GitHub release.
 disable-model-invocation: true
-argument-hint: "[--no-build] [--yes] [minor|major|X.Y.Z] [-- <instruction>]"
+argument-hint: "[--no-build] [--yes] [minor|major|<X.Y.Z>] [-- <instruction>]"
 compatibility: Requires git and uv; gh only for the GitHub release step
 metadata:
   kntnt.internal: "true"

@@ -2,7 +2,7 @@
 name: proofread
 description: Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.
 disable-model-invocation: false
-argument-hint: '[--language=<selector>] [--output=<response|path>] [<text>|<path>|<url>] | [--language=<selector>] --in-place[=on|off] <path> [-- <instruction>]'
+argument-hint: '[--language=<language>] ([--output=response|<path>] [<text>|<path>|<url>] | --in-place[=on|off] <path>) [-- <instruction>]'
 compatibility: Requires uv
 metadata:
   kntnt.internal: "true"
@@ -28,9 +28,9 @@ Where no Formal Invocation carries an Output Target, settle it from the current 
 
 The operand is the Text Artifact: inline text, one local path, or one URL, and exactly one of them — several paths, a glob reaching more than one file, or a directory of texts is more than one. Where the invocation carries no operand, it is the single text the current turn identifies.
 
-`--language=<selector>` names the language or locale whose mechanics apply. Any spelling the Collection's resolver reaches is accepted — a canonical code (`sv`, `en_GB`), a case or separator variant of one (`en-GB`, `EN_GB`), a curated alias (`BrE`, `brittisk engelska`), or an ordinary description of a language in any language.
+`--language=<language>` names the language or locale whose mechanics apply. Any spelling the Collection's resolver reaches is accepted — a canonical code (`sv`, `en_GB`), a case or separator variant of one (`en-GB`, `EN_GB`), a curated alias (`BrE`, `brittisk engelska`), or an ordinary description of a language in any language.
 
-`--output=<response|path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path. It and In-place Editing name two destinations for one text, which is why no form carries both.
+`--output=response|<path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path. It and In-place Editing name two destinations for one text, which is why no form carries both.
 
 `--in-place[=<value>]` selects In-place Editing. It accepts `yes`, `on`, and `true` against `no`, `off`, and `false`; bare `--in-place` means `on`, `--in-place=off` has the same effect as omitting the option, and the default is `off`.
 

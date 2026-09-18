@@ -1,12 +1,12 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "a6fc044d4e7f561720241f717c4c8c8eacef6961f26d275379a327300e7aeea4",
+  "manager_digest": "691fd97932e56050bde80ec00cd73c57c7975ed2a8cbd64eca981bdec38b6073",
   "skills": [
     {
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "5f510f1bc090772da278dcc1a5e6841b92329a1ad1fc368955485d6396c627f5",
+      "digest": "4ffc4730897ddce58c2f9b5352413f0fd34e074b2ad0e6ea839ac8872905662d",
       "binaries": [
         "git",
         "uv"
@@ -19,7 +19,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "2fe00c9d16d9915a0d8ad50bd4d9faff55ff52ea79458b143f54b5de0bbd94df",
+      "digest": "09bff1e9ec54fefd24c4da0f85baffab0fc2070a2df5d7fb57ee5f08159c0afc",
       "binaries": [
         "uv"
       ],
@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "0bf50599590883b751b192441208e2263b80fa3c02ba6c1e21eee80b7e9745ca",
+      "digest": "a474d8c6f17ca0a649d074840ce83c26296f4d638b8b5ae6f39c7c7a1f3c1e9b",
       "binaries": [
         "git",
         "gh",
@@ -108,7 +108,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "abe424c72ed6a7a96f513d1613371187d277dc4d606f172afa0d435448beddb5",
+      "digest": "d2067b405f0173e053dfd721d404f12fc425e68f6d8c7a1f9bdd8ec2ca6272c5",
       "binaries": [
         "git",
         "uv"
@@ -123,7 +123,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "06c049b264fb2d9b997fd293a45d76a658fe9bf319c44a7339d7c00b5054aab4",
+      "digest": "b02bd1a4929401da90d1ab2a55f576d6d96cd7ae3f3a0878b1118fc9e487ec0d",
       "binaries": [
         "uv"
       ],
@@ -135,7 +135,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "4c0f32b3b9c647868ac8ff223c87b5a939084b1ec1dd5a139cf238c4516828d3",
+      "digest": "320f49d48c1a719febe8d16d084dcf75dcbe3b1aa5a0f8b9a8fc5e0ded1d1015",
       "binaries": [
         "uv"
       ],
@@ -151,7 +151,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "eae7abe32ca36382f46410868a77cc2b4636a5dbad365450c4d3f6044651ffd8",
+      "digest": "70e226b1948ee5e2a3d62aac5db5af6373664829eecacdf94c7e4e50259644fc",
       "binaries": [
         "uv"
       ],
@@ -165,7 +165,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "3f65aeaf2aacef5792f44f5792640a2fe7c75ef32fbb91bed64bb64476029ceb",
+      "digest": "4aaf794985c09abe5bd8035e0817cde45fe641eeaa59e4c0f00c711c3372c15f",
       "binaries": [
         "uv"
       ],
@@ -214,7 +214,7 @@
       "name": "mirror",
       "category": "web",
       "description": "Copy a web page, the pages under it that its links, sitemaps and feeds reach, and everything they need to display to disk, so they open in a browser with nothing fetched from the network.",
-      "digest": "9c466c5f0c6a5aa2506d4b960c08a585279fbc8fc1d5368147fc089dfff57352",
+      "digest": "30fedf6e9e431dec7c415093fdfd0b2f77028725b1d34fbaacbdd9f64f9f003a",
       "binaries": [
         "uv",
         "agent-browser"
