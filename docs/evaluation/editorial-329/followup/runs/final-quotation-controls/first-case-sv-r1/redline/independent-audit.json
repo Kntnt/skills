@@ -1,0 +1,40 @@
+{
+  "actual_identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "spawns": [
+    {
+      "task_name": "quotation_review",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "closing_proofread",
+      "fork_turns": "none"
+    }
+  ],
+  "readers": [
+    {
+      "role": "/root/quotation_review",
+      "original_artifact_visible": true,
+      "repaired_artifact_visible": false,
+      "composition_visible": true,
+      "review_visible": true,
+      "base_and_genre_review_visible": true,
+      "unselected_scope_visible": false
+    }
+  ],
+  "proofread_invocations": 1,
+  "final_diff": "",
+  "input_unchanged": true,
+  "authentication_changed": false,
+  "nonhome_changes": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "duration_seconds": 176.04,
+  "returncode": 0
+}

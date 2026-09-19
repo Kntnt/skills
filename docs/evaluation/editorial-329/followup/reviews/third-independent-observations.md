@@ -47,3 +47,17 @@ The US opinion is withheld after its final comparison. The complete report and e
 Read the full case source and response: F1 passes, with decision date separated from selection, exact quotations and all quantities, exclusions, causal/measurement limits, customer agency and reservation intact. No invented question or event. The supplied English speech remains its source's wording.
 
 All three frozen timetable controls return clean unchanged statuses, correctly preserving the eight-week advocated target without requiring a feasibility guarantee. The certainty contrast removes only the actual completion guarantee, separately reports that removal, and retains explicit unknown feasibility and the requested timetable. These four R1 outcomes pass under unchanged criteria; the successful third-wave opinion boundary does not erase the second-wave failures.
+
+## Original US case repetition 2
+
+Complete source/final comparison passes F1. September modifies only the decision, and the separate choice sentence remains undated. All supplied quotations, trial scope, metrics/exclusions, distinct assignment-versus-completion measures, workload and causal limitations, qualified appraisal and expansion condition survive. No interview question or additional event is created. “Svale's implementation checklist” expresses the ordinary supplier association of the supplied optional CTA in this supplier-published case; it does not independently assert exclusive authorship or ownership. That distinction matters for the later reference-inventory diagnostic's overconservative finding.
+
+## Original Swedish case: valid translation refusal
+
+The last original Swedish case is withheld after a second fresh comparison still identifies “innan nästa byggnad kommer i gång”. The complete withheld prose was independently read against the source: substantive facts and qualifications remain supported, but the known native-idiom defect remains. This is a valid gate stop, not a false-positive refusal and not a delivered F1/L1 pass. Its paired Redline is skipped; no artifact is available for the fourth quoted-artifact predicate.
+
+## Complete third matrix
+
+All sixteen Write slots are resolved: twelve delivered artifacts, of which ten pass full-source F1 and two fail on unsupported personal attribution; four withheld drafts, comprising two false-positive refusals (column and Swedish opinion) and two valid stops (US opinion variable mismatch and Swedish quotation idiom). All twelve actual paired Redline results preserve the source-blind contract; four paired stages are explicitly skipped after refusals. All four separate timetable/certainty controls pass. The 36 planned slots therefore contain 32 completed native invocations and four explained skips, not 36 completed native runs.
+
+`third-native-audit.json` independently checks all 32 raw native attempts: no runner error/timeout, inherited `gpt-6-astra/high`, unchanged input/authentication, no surviving non-home file and absent isolated roots. Every paired input byte-matches its extracted Write artifact. `third-input-transport-audit.json` directly matches the complete source and exact delivered prose in the last checker's readable output for all twelve delivered drafts, excluding only metadata and outer whitespace. Every checker's full source is visible, including refused runs. These transport successes do not turn faulty delivered claims into F1 passes.

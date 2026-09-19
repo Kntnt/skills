@@ -1,0 +1,7 @@
+# One additional repair and strict comparison
+
+Declared before execution. Test exactly three third-wave withheld drafts: Swedish column, Swedish opinion and American opinion. Copy each full source, final checked prose and actual final report without editing; provenance.json records origins and hashes. No outcome labels or evaluator expectations enter native inputs.
+
+One repair stage makes supported minimal clarifications while preserving meaning, rhetorical function and voice; deletion merely to silence a checker is forbidden. The evaluator independently reads the resulting full draft and diff. A separate fresh native process then receives only complete original source, revised prose, resolved language and Claims guidance. It executes the exact comparison task paragraph from ae24f9b3 source-check.md, unchanged. No earlier report, repair account or expected verdict reaches it. No direct quotations occur in these drafts; the translated American prose is not a quotation.
+
+This is a continuation diagnostic: one extra repair and a third strict comparison, not a Write evaluation. Success requires independently supported prose, preservation against the withheld draft and a complete clean final report. Any failure stays visible. The original two-comparison refusals are never replaced, and no checker verdict overrides the independent quality judgement. At most two native lanes run with the inherited Main Seat. Preserve captured revised.md and report.md before literal root cleanup.

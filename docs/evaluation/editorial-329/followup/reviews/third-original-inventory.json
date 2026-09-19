@@ -1,0 +1,322 @@
+{
+  "invocations": 9,
+  "sessions": 20,
+  "all_roots_removed": true,
+  "entries": [
+    {
+      "case": "opinion-sv-r1",
+      "phase": "write",
+      "sessions": 3,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bp2661cm",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "checker_complete_source": [
+        true,
+        true
+      ],
+      "checked_prose": "not applicable: no delivered artifact"
+    },
+    {
+      "case": "opinion-en_GB-r1",
+      "phase": "write",
+      "sessions": 3,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-mz8u15i4",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "checker_complete_source": [
+        true,
+        true
+      ],
+      "checked_prose": true
+    },
+    {
+      "case": "opinion-en_GB-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-cp3xfoer",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [],
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "phase": "write",
+      "sessions": 3,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-qrirg9us",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [
+        {
+          "task_name": "source_comparison",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_source_comparison",
+          "fork_turns": "none"
+        }
+      ],
+      "checker_complete_source": [
+        true,
+        true
+      ],
+      "checked_prose": "not applicable: no delivered artifact"
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "phase": "write",
+      "sessions": 3,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-xc3izhqi",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "checker_complete_source": [
+        true,
+        true
+      ],
+      "checked_prose": true
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-d3rzqm7s",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [],
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "case-study-en_US-r2",
+      "phase": "write",
+      "sessions": 2,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-enc50pbz",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "checker_complete_source": [
+        true
+      ],
+      "checked_prose": true
+    },
+    {
+      "case": "case-study-en_US-r2",
+      "phase": "redline",
+      "sessions": 1,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dqlt86f2",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [],
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "case-study-sv-r1",
+      "phase": "write",
+      "sessions": 3,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6lieluns",
+      "root_exists": false,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "fresh_spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "source_check_final",
+          "fork_turns": "none"
+        }
+      ],
+      "checker_complete_source": [
+        true,
+        true
+      ],
+      "checked_prose": "not applicable: no delivered artifact"
+    }
+  ]
+}

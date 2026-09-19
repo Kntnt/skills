@@ -1,0 +1,31 @@
+**Accepted — finding 8: the draft adds an unsupported September date for choosing Svale.** This is the report’s sole alleged defect; its other numbered entries identify supported claims.
+
+**What the draft communicates.** The draft says:
+
+> “In September 2025, its maintenance team decided to try a shared log and chose Svale Systems after testing whether it could show the status of each repair.”
+
+On the ordinary reading, the opening modifier “In September 2025” applies to both coordinated actions by Elm Quay’s maintenance team: it **decided** to try the log and **chose** Svale. The choice followed testing whether the log could show each repair’s status. This does not independently date the testing to September or assert that testing demonstrated success.
+
+The surrounding account does not narrow the date to the decision. The introduction describes an eight-week trial without specifying its dates, and the later December note supplies no alternative selection date. Thus, the report identifies a claim the draft ordinarily communicates, rather than merely a conceivable stronger reading.
+
+**What the source supports.** The source explicitly dates the decision:
+
+> “In September 2025 its own maintenance team decided to trial a shared repair log in two buildings.”
+
+It separately establishes the selection and its prerequisite:
+
+> “It chose Svale Systems after testing whether the log could show the status of each repair.”
+
+The second passage supplies no selection date. In the source, the September modifier belongs to the sentence about deciding to trial the log; the subsequent account connects selection to testing without establishing that selection occurred in the same month. The draft’s coordination extends the explicit date to an additional action.
+
+**The counterexample fits the actual claim.** The report proposes a September decision followed by selection on October 1 after testing. An eight-week trial could then finish before the source’s December 4 note. That sequence preserves the source’s decision date, testing-before-selection order, trial duration, and note date, while making the draft’s September selection claim false. The counterexample therefore demonstrates the identified support gap.
+
+The report’s second and third reconstructed propositions contain the **same defect**, not two independent defects: both place the choice in September. Its first proposition—the September decision—is supported.
+
+**Accepted defects still present in the unchanged draft**
+
+- Item 8: the sentence beginning “In September 2025” dates the choice of Svale to September, although the source establishes that month only for the decision to trial the log.
+
+**Genuinely unresolved material claims**
+
+- None. The possibility of reading the date more narrowly does not create a material unresolved ambiguity here: the ordinary coordinated reading establishes the allegation, and the source does not establish the added timing.

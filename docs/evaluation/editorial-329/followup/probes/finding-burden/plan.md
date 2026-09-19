@@ -1,0 +1,5 @@
+# Burden of establishing a review finding
+
+Repeat the same four immutable source/draft/report packages once under a clarified adjudication burden. The earlier task accepted both genuine faults but treated uncertainty whether its reconstructed allegation was actually communicated as a validated unresolved source defect in both contextual cases. This operation must first establish the actual ordinary contextual proposition, then its support defect. It preserves genuine material factual ambiguity and requires exact evidence; confidence or source-only repairs do not authorize rejection.
+
+Predeclared expectation: reject both contextual mismatches, accept both established chronology/document-scope faults. No expected verdict or issue hint is supplied to the native model. Retain all results, including any failure; do not turn unresolved into successful rejection. This is report adjudication, not blind source detection, and any successful operation still requires complete real Skill evaluation.

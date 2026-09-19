@@ -1,0 +1,57 @@
+{
+  "actual_identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "spawns": [
+    {
+      "task_name": "quotation_reading",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "correction",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "quotation_rereading",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "mechanical_pass",
+      "fork_turns": "none"
+    }
+  ],
+  "readers": [
+    {
+      "role": "/root/quotation_reading",
+      "original_artifact_visible": true,
+      "repaired_artifact_visible": false,
+      "composition_visible": true,
+      "review_visible": true,
+      "base_and_genre_review_visible": true,
+      "unselected_scope_visible": false
+    },
+    {
+      "role": "/root/quotation_rereading",
+      "original_artifact_visible": false,
+      "repaired_artifact_visible": true,
+      "composition_visible": true,
+      "review_visible": true,
+      "base_and_genre_review_visible": true,
+      "unselected_scope_visible": false
+    }
+  ],
+  "proofread_invocations": 1,
+  "final_diff": "--- \n\n+++ \n\n@@ -15,7 +15,7 @@\n\n \n Teamet utformade kategorierna och l\u00e4t de boende forts\u00e4tta att anm\u00e4la fel via telefon. Svale konfigurerade loggen och utbildade sex medarbetare vid tv\u00e5 tillf\u00e4llen. F\u00f6rs\u00f6ket p\u00e5gick i \u00e5tta veckor.\n \n-\u2013 Vi lade mer tid p\u00e5 att komma \u00f6verens om kategorierna \u00e4n p\u00e5 att l\u00e4gga in de f\u00f6rsta anm\u00e4lningarna. Den tiden skulle jag avs\u00e4tta innan n\u00e4sta byggnad kommer i g\u00e5ng, s\u00e4ger Maya Lind.\n+\u2013 Vi lade mer tid p\u00e5 att komma \u00f6verens om kategorierna \u00e4n p\u00e5 att l\u00e4gga in de f\u00f6rsta anm\u00e4lningarna. Den tiden skulle jag avs\u00e4tta innan f\u00f6rs\u00f6ket kommer i g\u00e5ng i n\u00e4sta byggnad, s\u00e4ger Maya Lind.\n \n Enligt Elm Quays interna f\u00f6rs\u00f6ksanteckning, daterad den 4 december 2025, registrerades 31 felanm\u00e4lningar. Akuta \u00e4renden och arbeten som hade best\u00e4llts f\u00f6re f\u00f6rs\u00f6ket ing\u00e5r inte i underlaget.\n ",
+  "input_unchanged": true,
+  "authentication_changed": false,
+  "nonhome_changes": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "duration_seconds": 429.52,
+  "returncode": 0
+}

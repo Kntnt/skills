@@ -1,0 +1,21 @@
+{
+  "pid": 88244,
+  "process_group": 88244,
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "3f21d9b1",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-quotation-controls/frozen-clean-r1/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-quotation-controls/frozen-clean-r1/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-quotation-controls/frozen-clean-r1/redline"
+  ]
+}

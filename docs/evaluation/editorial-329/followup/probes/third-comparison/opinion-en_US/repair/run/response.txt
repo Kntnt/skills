@@ -1,0 +1,6 @@
+Wrote the complete revised prose to [revised.md](revised.md), with two changes:
+
+- Replaced “disability” with “functional ability” to match the source’s measured domain, *funktionsförmåga*.
+- Clarified “whose size has not been established” as “that those documents do not quantify in staff time or projected savings.” This preserves the passage’s criticism while specifying the missing measures supported by the source.
+
+All other draft wording remains unchanged.

@@ -1,0 +1,13 @@
+{
+  "pid": 88236,
+  "process_group": 88236,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/quotation_controls.py",
+    "--revision",
+    "3f21d9b1",
+    "--output-directory",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-quotation-controls"
+  ]
+}

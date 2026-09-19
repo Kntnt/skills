@@ -126,7 +126,7 @@ Run `/unslop [--language=LANGUAGE] [--max=N] [--output=TARGET] [text|path|url]` 
 
 ### write
 
-Turn a brief and one or more sources into a first draft, with an independent comparison of source support and translated quotations before delivery. It resolves genre, technique, and language, and can attach handoff metadata for later editorial review.
+Turn a brief and one or more sources into a first draft, with an independent comparison of source support and translated quotations and evidence-based validation of its findings before delivery. It resolves genre, technique, and language, and can attach handoff metadata for later editorial review.
 
 Run `/write [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--frontmatter=BOOLEAN] [--output=TARGET] [brief]`.
 

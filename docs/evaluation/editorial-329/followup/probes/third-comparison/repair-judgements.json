@@ -1,0 +1,20 @@
+{
+  "column": {
+    "source_fidelity": "pass — Complete revised prose remains within the supplied facts and authorial position.",
+    "preservation": "pass — One local clarification retains the complete surrounding argument, stance, rhythm and rhetorical contrast; no argument is deleted.",
+    "change": "Clarifies that the template itself supplies no evidence of colleague failure.",
+    "checker_result": "fail — Third comparison returns new K1, changing the proposed question-in-template intervention into a hypothetical oral question. Full closing context (beside time fields, place in template, doubt about another field) makes that counterexample inapplicable. Independent diagnosis agrees false positive; original repaired sentence now passes but clean final gate does not."
+  },
+  "opinion-sv": {
+    "source_fidelity": "pass — Complete revised prose remains within the supplied facts and authorial position.",
+    "preservation": "pass — One local clarification retains the complete surrounding argument, stance, rhythm and rhetorical contrast; no argument is deleted.",
+    "change": "Clarifies present decision-basis insufficiency as the author’s assessment without an institution-wide knowledge inventory or future prediction.",
+    "checker_result": "pass — Complete fresh strict comparison returns no findings; its 46-item ledger retains the supported insufficiency judgement, factual document omissions and association no-claim scope. Independent full-source and preservation passes were recorded before this result."
+  },
+  "opinion-en_US": {
+    "source_fidelity": "fail — Documents containing an estimated staff-time quantity remain compatible with no time measurement, but do not quantify in staff time excludes them. The retained digital proficiency also changes the source variable digital vana (familiarity/experience). Independent diagnosis reviewer confirms both before fresh checker outcomes were read.",
+    "preservation": "pass — Two local substitutions preserve the criticism, figures, authorial stance, qualifications, requested action and all other wording. The genuine disability-to-functional-ability correction succeeds; preservation alone does not establish F1.",
+    "change": "Replaces disability with functional ability; replaces unknown concern size with absent staff-time/savings quantification. The second wording remains factually broader than the source.",
+    "checker_result": "pending; the independent failure is recorded before reading it."
+  }
+}

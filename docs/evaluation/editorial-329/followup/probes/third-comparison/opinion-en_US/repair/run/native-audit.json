@@ -1,0 +1,61 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T00-33-05-01a0bbcd-3ff9-76d2-ac89-75ad24c8b47a.jsonl",
+      "session": {
+        "id": "01a0bbcd-3ff9-76d2-ac89-75ad24c8b47a",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat input.md\",max_output_tokens:30000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\ntext = Path('input.md').read_text()\\ndraft = text.split('# Complete current draft\\\\n\\\\n', 1)[1].split('\\\\n\\\\n# Complete comparison report', 1)[0]\\nchanges = [\\n    ('measures neither age, disability, nor digital proficiency.', 'measures neither age, functional ability, nor digital proficiency.'),\\n    ('whose size has not been established in those documents', 'that those documents do not quantify in staff time or projected savings'),\\n]\\nrevised = draft\\nfor old, new in changes:\\n    assert revised.count(old) == 1\\n    revised = revised.replace(old, new, 1)\\nPath('revised.md').write_text(revised.rstrip('\\\\n') + '\\\\n')\\nwritten = Path('revised.md').read_text()\\nrestored = written\\nfor old, new in reversed(changes):\\n    restored = restored.replace(new, old, 1)\\nassert restored == draft.rstrip('\\\\n') + '\\\\n'\\nprint('Wrote revised.md; verified that only the two intended wording changes were made.')\\nPY\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": null,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 9,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "genres/column.md": 10,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {
+      "work/revised.md": {
+        "mode": 420,
+        "type": "file",
+        "size": 2684,
+        "sha256": "60e717df8c58e4b16655a8aed7f1bb6c68eec0de43c52f4027109e1651ef533e"
+      }
+    },
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

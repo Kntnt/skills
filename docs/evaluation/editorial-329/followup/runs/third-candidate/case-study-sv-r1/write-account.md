@@ -1,0 +1,3 @@
+Utkastet lämnas inte ut. Den andra källkontrollen fann en kvarstående oklarhet i citatöversättningen: ”innan nästa byggnad kommer i gång”. Föreslagen precisering är ”innan försöket kommer i gång i nästa byggnad”. Inga sakpåståenden fick anmärkningar.
+
+[Write-färdigheten](.agents/skills/write/SKILL.md) kräver att dess [kontrollregel](.agents/skills/write/references/source-check.md) följs: ”If […] findings remain after the second comparison […] stop without delivering the draft”. Därför avslutas körningen här. Alla arbetsfiler från körningen är borttagna; `source.md` är oförändrad.

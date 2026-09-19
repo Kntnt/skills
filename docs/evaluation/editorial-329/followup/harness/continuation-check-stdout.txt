@@ -1,0 +1,3 @@
+{"case": "column", "stage": "check", "returncode": 0}
+{"case": "opinion-sv", "stage": "check", "returncode": 0}
+{"case": "opinion-en_US", "stage": "check", "returncode": 0}

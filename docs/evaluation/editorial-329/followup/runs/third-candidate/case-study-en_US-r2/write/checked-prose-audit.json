@@ -1,0 +1,18 @@
+{
+  "normalization": "Remove only leading delivery YAML map and outer blank lines; preserve all prose characters and internal whitespace.",
+  "checker_reads": [
+    {
+      "session": "native-sessions/2026/09/20/rollout-2026-09-20T00-28-27-01a0bbc9-01ae-73e1-b7f1-4ce207bc5c70.jsonl",
+      "has_explicit_draft_read": true,
+      "complete_delivered_prose_visible": true,
+      "read_calls": [
+        {
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat source.md\",max_output_tokens:16000}));\ntext(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-enc50pbz/scratch/write-source-check-gwkqnqqt/draft.md\",max_output_tokens:16000}));\ntext(await tools.exec_command({cmd:\"cat .agents/skills/write/references/quotations.md\",max_output_tokens:8000}));\n"
+        }
+      ]
+    }
+  ],
+  "last_checker_matches": true,
+  "note": "A match proves continuous final prose was visibly read. Inspect the native read command/output for complete draft boundaries and truncation; checker approval alone is insufficient."
+}

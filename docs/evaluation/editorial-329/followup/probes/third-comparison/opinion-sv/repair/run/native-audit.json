@@ -1,0 +1,61 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T00-32-38-01a0bbcc-d3ba-7370-bda8-a18055d6c61a.jsonl",
+      "session": {
+        "id": "01a0bbcc-d3ba-7370-bda8-a18055d6c61a",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat input.md\",max_output_tokens:30000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\ntext = Path('input.md').read_text()\\ndraft = text.split('# Complete current draft\\\\n\\\\n', 1)[1].split('\\\\n\\\\n\\\\n# Complete comparison report', 1)[0]\\nold = 'Min invändning gäller att kommunen föreslås ta bort telefonen innan den har underlag för den avvägningen.'\\nnew = 'Min invändning gäller att kommunen föreslås ta bort telefonen trots att det nuvarande beslutsunderlaget inte räcker för den avvägningen.'\\nassert draft.count(old) == 1\\nrevised = draft.replace(old, new)\\nPath('revised.md').write_text(revised + '\\\\n')\\nassert Path('revised.md').read_text().replace(new, old) == draft + '\\\\n'\\nprint('Wrote revised.md. Verified that only the identified sentence changed.')\\nPY\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": null,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 8,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 9,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 8,
+        "genres/article.review.md": 4,
+        "genres/column.md": 9,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 9,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {
+      "work/revised.md": {
+        "mode": 420,
+        "type": "file",
+        "size": 2721,
+        "sha256": "9b25c69d17cabe92e20b35e87bad78de55000b6470d4f35a0ca2ac93a50c7b48"
+      }
+    },
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

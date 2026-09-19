@@ -1,0 +1,3 @@
+{"case": "opinion-sv", "stage": "repair", "returncode": 0}
+{"case": "column", "stage": "repair", "returncode": 0}
+{"case": "opinion-en_US", "stage": "repair", "returncode": 0}

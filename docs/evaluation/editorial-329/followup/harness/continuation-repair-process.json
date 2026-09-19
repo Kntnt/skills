@@ -1,0 +1,10 @@
+{
+  "pid": 90680,
+  "process_group": 90680,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/continuation_probe.py",
+    "repair"
+  ]
+}

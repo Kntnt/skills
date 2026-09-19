@@ -1,0 +1,267 @@
+{
+  "note": "Direct full source and exact delivered prose substring checks against native tool outputs; metadata and outer whitespace excluded. False means not observed, not proved absent; refusal has no delivered artifact.",
+  "rows": [
+    {
+      "case": "article-sv-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/article-sv-r1/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-01-40-01a0bbb0-7ad9-7942-87e1-94442d8fe10b.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-20T00-04-51-01a0bbb3-63e8-7f20-b8a9-cb4205caa79a.jsonl",
+          "role": "/root/final_source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/case-question-en_GB-r1/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-59-17-01a0bbae-4ecf-7891-a06b-0d87cc1bb0a5.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/case-study-en_US-r1/draft.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-19-06-01a0bbc0-6fb6-7510-8d2e-7fdd29ca022a.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-20T00-22-53-01a0bbc3-e9f9-7d23-ac93-4ea8c937626d.jsonl",
+          "role": "/root/final_source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-study-en_US-r2",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/case-study-en_US-r2/draft.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-28-27-01a0bbc9-01ae-73e1-b7f1-4ce207bc5c70.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-study-sv-r1",
+      "delivered_artifact": null,
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-31-59-01a0bbcc-3c5d-7593-9cd5-98627084f1a0.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": null
+        },
+        {
+          "session": "rollout-2026-09-20T00-36-07-01a0bbd0-053d-7aa3-895e-979e4eb62fcf.jsonl",
+          "role": "/root/source_check_final",
+          "full_source_visible": true,
+          "delivered_prose_visible": null
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": null
+    },
+    {
+      "case": "case-unprompted-en_US-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/case-unprompted-en_US-r1/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-54-49-01a0bbaa-3460-74e0-8480-397293a3b740.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "column-sv-r1",
+      "delivered_artifact": null,
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-02-53-01a0bbb1-994b-7c61-b9ac-d696ee6b7541.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": null
+        },
+        {
+          "session": "rollout-2026-09-20T00-06-25-01a0bbb4-d4d6-7263-a782-b6b579057d14.jsonl",
+          "role": "/root/final_source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": null
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": null
+    },
+    {
+      "case": "general-en_GB-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/general-en_GB-r1/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-10-52-01a0bbb8-e788-7241-930f-eecccac0c413.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/opinion-absence-en_GB-r1/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-50-00-01a0bba5-ce22-7ed3-b803-bf03edaa4aed.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r2",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/opinion-absence-en_GB-r2/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-54-29-01a0bba9-e6da-7210-9284-6f75a69f3702.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-57-23-01a0bbac-914c-7803-90ef-7191b74f3c69.jsonl",
+          "role": "/root/final_source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r3",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/opinion-absence-en_GB-r3/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-13-39-01a0bbbb-75fa-7a00-82d3-ea2c9f7a4f0a.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-20T00-16-50-01a0bbbe-5f50-7cd1-bbed-97d6f1060214.jsonl",
+          "role": "/root/final_source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-en_GB-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/opinion-en_GB-r1/draft.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-08-01-01a0bbb6-4d1e-7913-938d-754265c037a7.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-20T00-11-47-01a0bbb9-bcf6-7d40-a43b-5355fa275796.jsonl",
+          "role": "/root/final_source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "delivered_artifact": null,
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-17-35-01a0bbbf-0fc5-7b72-af22-aceee434d461.jsonl",
+          "role": "/root/source_comparison",
+          "full_source_visible": true,
+          "delivered_prose_visible": null
+        },
+        {
+          "session": "rollout-2026-09-20T00-21-45-01a0bbc2-de5c-7080-a5d6-c577a1a27aea.jsonl",
+          "role": "/root/final_source_comparison",
+          "full_source_visible": true,
+          "delivered_prose_visible": null
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": null
+    },
+    {
+      "case": "opinion-sv-r1",
+      "delivered_artifact": null,
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-08-12-01a0bbb6-7753-71b0-aba0-87e75b7c04f9.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": null
+        },
+        {
+          "session": "rollout-2026-09-20T00-11-33-01a0bbb9-8696-7c80-b878-9b20605c707d.jsonl",
+          "role": "/root/final_source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": null
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": null
+    },
+    {
+      "case": "opinion-unknown-sv-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/opinion-unknown-sv-r1/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-49-54-01a0bba5-b53d-7822-8522-933b4347ae36.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "web-copy-en_US-r1",
+      "delivered_artifact": "docs/evaluation/editorial-329/followup/runs/third-candidate/web-copy-en_US-r1/write/artifact.md",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-09-56-01a0bbb8-0d37-7cd1-9b54-64bd883a585e.jsonl",
+          "role": "/root/source_check",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    }
+  ]
+}

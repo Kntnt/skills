@@ -1,0 +1,18 @@
+[
+  {
+    "session": "native-sessions/2026/09/20/rollout-2026-09-20T00-42-34-01a0bbd5-ebea-7b03-a944-782d97f83160.jsonl",
+    "complete_current_artifact_visible": true,
+    "complete_composition_visible": true,
+    "complete_review_visible": true,
+    "unselected_anti_slop_complete": false,
+    "unselected_mechanics_complete": false
+  },
+  {
+    "session": "native-sessions/2026/09/20/rollout-2026-09-20T00-45-32-01a0bbd8-a3c9-7c52-b8e5-220fda950303.jsonl",
+    "complete_current_artifact_visible": true,
+    "complete_composition_visible": true,
+    "complete_review_visible": true,
+    "unselected_anti_slop_complete": false,
+    "unselected_mechanics_complete": false
+  }
+]

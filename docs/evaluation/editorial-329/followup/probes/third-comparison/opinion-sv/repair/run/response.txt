@@ -1,0 +1,5 @@
+Wrote the complete revised prose to [revised.md](revised.md).
+
+One change: replaced “innan den har underlag för den avvägningen” with “trots att det nuvarande beslutsunderlaget inte räcker för den avvägningen”. This preserves Sanna’s forceful judgment about insufficient evidence while avoiding an unsupported claim about all municipal knowledge or future evidence. The contrast with her support for digital booking remains intact.
+
+Everything else is unchanged.

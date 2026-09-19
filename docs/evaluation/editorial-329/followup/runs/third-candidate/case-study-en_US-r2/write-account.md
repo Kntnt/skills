@@ -1,0 +1,1 @@
+*Delivered here in American English, with no technique selected, consistent with the case-study genre default. Source comparison passed; no files retained. The draft is about 360 words; additional implementation detail would bring it closer to 400.*

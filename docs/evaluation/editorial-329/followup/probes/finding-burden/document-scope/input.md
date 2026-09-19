@@ -1,0 +1,100 @@
+# Complete supplied source package
+
+# Opinion brief and source
+
+SYNTHETIC EVALUATION MATERIAL. Every name, event and document below is fictional. This is the complete source package. Source language: English.
+
+## Brief
+
+Write a British English opinion article for residents of Bellwick, in the voice of Amina Reed, chair of the local music association Room to Rehearse. She wants the trustees of Bellwick Hall to investigate evening rehearsal use before committing the former storage wing to long-term commercial letting. Approximately 250–300 words, in Markdown. Make a clear case while treating the trustees' financial concern seriously. End with the decision she wants them to take.
+
+## Material
+
+The trustees' paper of 3 July 2026 proposes letting the former storage wing for three years. It says predictable income would help meet the hall's maintenance costs. No prospective tenant or rental figure is named. The wing is currently empty; the hall's main rooms continue to host their usual activities.
+
+Room to Rehearse surveyed 14 local music groups. Nine said they would consider using a rehearsal room on weekday evenings. This is an expression of interest, not a booking commitment. The survey did not ask what they would pay or how often they would attend.
+
+The association proposes a feasibility study covering sound insulation, access, likely running costs and potential income. Its treasurer's signed note explicitly confirms that the association has not prepared a cost estimate for converting the wing. Reed accepts this gap and wants the trustees to commission the study before choosing between uses. The association's submission makes no representation that it has secured the building owner's consent for rehearsal use. The supplied material does not state the consent's actual status.
+
+Reed's position: “The survey is a reason to investigate a rehearsal room, not a promise that it will pay its way.” She accepts that commercial letting may prove the better option. Her proposal is that the trustees defer the three-year letting decision for eight weeks, obtain the feasibility study and publish a comparison of the two uses. There is no evidence that a study can be completed within eight weeks; this is her requested timetable. No noise complaints, legal entitlement to the wing or promised grant funding are supplied.
+
+
+# Complete draft to check
+
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Investigate rehearsal use before letting Bellwick Hall’s wing
+
+*By Amina Reed, chair of Room to Rehearse*
+
+Before Bellwick Hall’s trustees commit its former storage wing to three years of commercial letting, they should investigate whether it could accommodate weekday evening rehearsals. As chair of Room to Rehearse, I want that possibility assessed before they choose between the two uses.
+
+The trustees’ paper of 3 July 2026 makes a serious case: predictable income would help meet maintenance costs. That concern deserves weight. But the paper names neither a prospective tenant nor a rental figure. Commercial letting may prove the better option; a comparison should help establish that.
+
+Our survey gives a reason to examine rehearsal use. Of 14 local music groups surveyed, nine said they would consider using a room on weekday evenings. Those responses are expressions of interest, not booking commitments. We did not ask what groups would pay or how often they would attend. The survey cannot promise that a rehearsal room would pay its way.
+
+We must be equally clear about conversion costs. Our treasurer’s signed note confirms that we have not prepared an estimate. Our submission also makes no claim to have secured the building owner’s consent for rehearsal use; it does not establish whether that consent exists.
+
+The wing is empty, while the hall’s main rooms continue their usual activities. I want the trustees to commission a feasibility study covering sound insulation, access, likely running costs and potential income, then publish a comparison with commercial letting.
+
+I am asking for an eight-week deferral, without claiming the study can be completed within that period. Trustees should defer the three-year letting decision for eight weeks, commission the study and publish the comparison before choosing.
+
+
+# Complete comparison report
+
+I found **one unsupported claim**, concerning what the association’s submission establishes about consent. The remaining factual claims are supported, and the recommendations and evaluations are grounded advocacy.
+
+Below, “negation” means the precise denial being tested—not a finding that the denial is true. Repeated claims are grouped. Qualifications such as “would consider”, “likely” and “potential” remain part of the propositions.
+
+| Original draft passage | Meaning-equivalent proposition | Precise negation | Exact supplied statement or countermodel; judgement |
+|---|---|---|---|
+| “By Amina Reed, chair of Room to Rehearse”; “As chair of Room to Rehearse” | Amina Reed chairs Room to Rehearse. | Amina Reed does not chair Room to Rehearse. | Brief: “Amina Reed, chair of the local music association Room to Rehearse.” **Supported.** |
+| “Before Bellwick Hall’s trustees commit its former storage wing to three years of commercial letting” | The trustees are considering a proposed three-year commercial letting of the former storage wing. The sentence does not assert that they have committed to it. | The trustees are not considering such a proposal. | “The trustees’ paper of 3 July 2026 proposes letting the former storage wing for three years”; the brief identifies the proposed use as “long-term commercial letting”. **Supported.** |
+| “I want that possibility assessed before they choose between the two uses.” | Reed wants rehearsal use assessed before the trustees choose between rehearsal use and commercial letting. | Reed does not want that assessment before the choice. | “Reed accepts this gap and wants the trustees to commission the study before choosing between uses.” **Supported.** |
+| “The trustees’ paper of 3 July 2026” | The relevant trustees’ paper is dated 3 July 2026. | The relevant trustees’ paper is not dated 3 July 2026. | “The trustees’ paper of 3 July 2026 proposes letting the former storage wing for three years.” **Supported.** |
+| “The trustees’ paper … makes a serious case: predictable income would help meet maintenance costs.” | The paper says predictable income would help meet the hall’s maintenance costs. This reports its rationale; it does not assert that a particular rent has been secured. | The paper does not say predictable income would help meet those costs. | “It says predictable income would help meet the hall’s maintenance costs.” **Supported.** “Serious” is an evaluation, addressed below. |
+| “the paper names neither a prospective tenant” | The paper names no prospective tenant. | The paper names at least one prospective tenant. | “No prospective tenant or rental figure is named.” **Supported.** |
+| “nor a rental figure” | The paper names no rental figure. | The paper names at least one rental figure. | “No prospective tenant or rental figure is named.” **Supported.** |
+| “Commercial letting may prove the better option” | Reed allows that commercial letting could turn out to be the better option. | Reed excludes the possibility that commercial letting could turn out to be the better option. | “She accepts that commercial letting may prove the better option.” **Supported as Reed’s stated position.** This is not a prediction that commercial letting will win. |
+| “Our survey … Of 14 local music groups surveyed” | Room to Rehearse surveyed 14 local music groups. | Room to Rehearse did not survey 14 local music groups. | “Room to Rehearse surveyed 14 local music groups.” **Supported.** |
+| “nine said they would consider using a room on weekday evenings” | Nine surveyed groups expressed willingness to consider using a rehearsal room on weekday evenings. | It is not the case that nine surveyed groups expressed that willingness to consider weekday-evening use. | “Nine said they would consider using a rehearsal room on weekday evenings.” **Supported.** Neither proposition turns consideration into attendance or booking. |
+| “Those responses are expressions of interest” | The reported responses express interest in the proposed rehearsal use. | The reported responses do not express interest in that use. | “This is an expression of interest, not a booking commitment.” **Supported.** |
+| “not booking commitments” | Those responses do not constitute booking commitments. | At least one of those responses constitutes a booking commitment. | “This is an expression of interest, not a booking commitment.” **Supported.** |
+| “We did not ask what groups would pay” | The association’s survey did not ask what the groups would pay. | The association’s survey asked what the groups would pay. | “The survey did not ask what they would pay or how often they would attend.” **Supported.** The survey context limits “we did not ask”; it is not a claim about every conversation the association has ever had. |
+| “or how often they would attend” | The survey did not ask how often the groups would attend. | The survey asked how often the groups would attend. | “The survey did not ask what they would pay or how often they would attend.” **Supported.** |
+| “The survey cannot promise that a rehearsal room would pay its way.” | The survey provides no guarantee that a rehearsal room would cover its costs. | The survey provides a guarantee that a rehearsal room would cover its costs. | Reed: “The survey is a reason to investigate a rehearsal room, not a promise that it will pay its way.” The source also expressly excludes booking commitments and payment or attendance-frequency data. **Supported.** This does not assert that rehearsal use would fail financially. |
+| “Our treasurer’s signed note” | The association’s treasurer supplied a signed note. | There is no such signed note from the association’s treasurer. | “Its treasurer’s signed note explicitly confirms…” **Supported.** |
+| “Our treasurer’s signed note confirms that we have not prepared an estimate.” | The note explicitly confirms that the association has not prepared a conversion-cost estimate. | The note does not explicitly confirm that the association has not prepared a conversion-cost estimate. | “Its treasurer’s signed note explicitly confirms that the association has not prepared a cost estimate for converting the wing.” **Supported.** |
+| “we have not prepared an estimate” | The association has not prepared a cost estimate for converting the wing. | The association has prepared a cost estimate for converting the wing. | The same source statement explicitly confirms this absence. **Supported.** “Conversion costs” in the preceding sentence supplies the draft’s scope; this is not a claim that the association has prepared no estimates of any kind. |
+| “Our submission also makes no claim to have secured the building owner’s consent for rehearsal use” | The association’s submission does not claim that the association has secured the owner’s consent for rehearsal use. | The submission claims that the association has secured that consent. | “The association’s submission makes no representation that it has secured the building owner’s consent for rehearsal use.” **Supported.** This concerns the submission’s claim, not the actual consent status. |
+| “it does not establish whether that consent exists” | The association’s submission establishes neither that the owner’s consent for rehearsal use exists nor that it does not exist. | The association’s submission establishes that the consent exists **or** establishes that it does not exist. | **No supplied statement rules this out.** The source says: “The supplied material does not state the consent’s actual status.” That concerns the supplied material, not everything established by the submission. See the countermodel below. **Unsupported.** |
+| “The wing is empty” | The former storage wing is currently empty. | The former storage wing is not currently empty. | “The wing is currently empty”. **Supported.** |
+| “the hall’s main rooms continue their usual activities” | The main rooms continue to host their usual activities. | The main rooms do not continue to host their usual activities. | “the hall’s main rooms continue to host their usual activities.” **Supported.** |
+| “I want the trustees to commission a feasibility study covering sound insulation, access, likely running costs and potential income” | Reed wants the trustees to commission a study covering all four named subjects, with costs and income framed as prospective. | Reed does not want the trustees to commission such a study, or her desired study omits at least one of those four subjects. | “The association proposes a feasibility study covering sound insulation, access, likely running costs and potential income”; “Reed … wants the trustees to commission the study”. **Supported.** |
+| “then publish a comparison with commercial letting” | Reed wants the study followed by publication of a comparison between rehearsal use and commercial letting. | Reed does not want that subsequent publication of a comparison. | “Her proposal is that the trustees defer the three-year letting decision for eight weeks, obtain the feasibility study and publish a comparison of the two uses.” **Supported.** |
+| “I am asking for an eight-week deferral” | Reed requests an eight-week deferral of the three-year letting decision. | Reed does not request that eight-week deferral. | “Her proposal is that the trustees defer the three-year letting decision for eight weeks”. **Supported.** |
+| “without claiming the study can be completed within that period” | In making this request, Reed does not assert that completing the study within eight weeks is feasible. | In making this request, Reed asserts that completing the study within eight weeks is feasible. | “There is no evidence that a study can be completed within eight weeks; this is her requested timetable.” The draft itself expressly limits its present request. **Supported as a qualification of the current advocacy.** It does not claim that Reed has never made such an assertion elsewhere. |
+
+The following passages make recommendations or express editorial judgements. Their negations are recorded to make the scope explicit, but disagreement with an evaluation is not evidence of factual error.
+
+| Original draft passage | Meaning-equivalent proposition | Precise negation | Supplied grounding and judgement |
+|---|---|---|---|
+| “Investigate rehearsal use before letting Bellwick Hall’s wing”; “they should investigate whether it could accommodate weekday evening rehearsals” | The trustees ought to investigate the feasibility of weekday-evening rehearsal use before committing to the letting. | The trustees have no such obligation to investigate before committing. | The brief says Reed wants investigation “before committing the former storage wing to long-term commercial letting”. **Faithful advocacy.** “Whether” leaves suitability open. |
+| “makes a serious case”; “That concern deserves weight.” | The financial rationale merits serious consideration. | The financial rationale does not merit serious consideration. | The brief requires “treating the trustees’ financial concern seriously”; the paper identifies maintenance costs. **Grounded evaluation.** |
+| “a comparison should help establish that” | A comparison can reasonably be expected to help determine whether commercial letting is the better option. | A comparison cannot reasonably be expected to help determine that. | The proposed study addresses costs and potential income, and Reed requests a comparison of the uses. **Grounded argument**, not a guarantee that the comparison will establish commercial letting’s superiority. |
+| “Our survey gives a reason to examine rehearsal use.” | The expressed interest warrants investigation of rehearsal use. | The expressed interest does not warrant that investigation. | Reed: “The survey is a reason to investigate a rehearsal room”. **Supported attributed interpretation.** |
+| “We must be equally clear about conversion costs.” | The association ought to be candid about its conversion-cost information. | The association has no such obligation to be candid. | The treasurer confirms the missing estimate, and “Reed accepts this gap”. **Grounded advocacy.** “Equally” connects this candour to the preceding treatment of the survey’s limitations. |
+| “Trustees should defer the three-year letting decision for eight weeks, commission the study and publish the comparison before choosing.” | The trustees ought to adopt the requested eight-week deferral and obtain the study and published comparison before choosing a use. | It is not the case that the trustees ought to adopt that combined course of action. | The source explicitly gives Reed’s requested deferral, study and publication, and her wish for the study before the choice. **Faithful advocacy.** The timetable remains a request, not an assertion of achievable completion. |
+
+For the consent clause, the concrete countermodel is this: the association’s submission includes an authoritative statement from the building owner that consent for rehearsal use has been refused and remains withheld. The submission therefore establishes that consent does not exist. It makes no representation that the association has secured consent, exactly as the source says. The supplied package omits the refusal and consequently still does not state the actual consent status. Every other supplied statement can remain unchanged.
+
+Thus the countermodel preserves both the **submission** as the document making or establishing the claim and **the owner’s consent for rehearsal use** as its subject. It does not substitute the different question of what the supplied package tells the reader.
+
+**Finding and smallest repair:** In “Our submission …; it does not establish whether that consent exists”, “it” refers to the submission. The source does not support that claim about the submission’s contents or evidential reach. Delete **“; it does not establish whether that consent exists”**, ending the preceding supported clause with a full stop.
+
+No other findings. No files changed.

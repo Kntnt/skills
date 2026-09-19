@@ -1,0 +1,59 @@
+{
+  "actual_identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "spawns": [
+    {
+      "task_name": "quotation_reading",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "correction",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "quotation_rereading",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "mechanical_pass",
+      "fork_turns": "none"
+    }
+  ],
+  "readers": [
+    {
+      "role": "/root/quotation_reading",
+      "original_artifact_visible": true,
+      "repaired_artifact_visible": false,
+      "composition_visible": true,
+      "review_visible": true,
+      "base_and_genre_review_visible": true,
+      "unselected_scope_visible": false
+    },
+    {
+      "role": "/root/quotation_rereading",
+      "original_artifact_visible": false,
+      "repaired_artifact_visible": true,
+      "composition_visible": true,
+      "review_visible": true,
+      "base_and_genre_review_visible": true,
+      "unselected_scope_visible": false
+    }
+  ],
+  "proofread_invocations": 1,
+  "only_intended_repair_in_final": false,
+  "final_diff": "--- \n+++ \n@@ -4,13 +4,13 @@\n \n För Elm Quays underhållsgrupp handlade försöket om att se samma information över skiftgränserna. Gruppen valde kategorierna; leverantören Svale konfigurerade loggen och utbildade sex medarbetare.\n \n-– Vi lade mer tid på att enas om kategorierna än på att lägga in de första ärendena. Den tiden skulle jag avsätta innan nästa hus börjar, säger Maya Lind.\n+– Vi lade mer tid på att enas om kategorierna än på att lägga in de första ärendena. Den tiden skulle jag avsätta innan försöket börjar i nästa hus, säger Maya Lind.\n \n ## Två perioder med olika arbetsbelastning\n \n Enligt Elm Quays interna försöksanteckning från den 4 december 2025 registrerades 31 ärenden under åtta veckor. Akuta ärenden och tidigare beställda arbeten ingick inte. Mediantiden från anmälan till tilldelning var två arbetsdagar, jämfört med tre under de föregående åtta veckorna.\n \n-Perioderna hade olika arbetsbelastning. Anteckningen tillskriver därför inte skillnaden programvaran.\n+Perioderna hade olika arbetsbelastningning. Anteckningen tillskriver därför inte skillnaden programvaran.\n \n ## Kunden vill ge förberedelserna mer tid\n ",
+  "input_unchanged": true,
+  "authentication_changed": false,
+  "nonhome_changes": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "duration_seconds": 328.81,
+  "returncode": 0,
+  "typo_trace_limit": "For r1, correct spelling visible in correction and rereader; typo only visible in final response; exact mechanical dispatch inaccessible."
+}

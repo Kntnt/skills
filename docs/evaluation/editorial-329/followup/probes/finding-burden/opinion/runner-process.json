@@ -1,0 +1,23 @@
+{
+  "pid": 99450,
+  "process_group": 99450,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "3f21d9b1",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/opinion/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/opinion/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/opinion/run"
+  ],
+  "input_origin": "docs/evaluation/editorial-329/followup/probes/finding-adjudication/opinion/input.md",
+  "input_sha256": "f3fde13229e6afe8a7baa1aa45bd14b324a8f8c194320088fcad2eed38f30125"
+}

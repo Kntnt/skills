@@ -1,0 +1,6 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc \"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zr3ugus7/scratch/quotation.3lmIXA/report.md\npython3 - <<'PY'\nfrom pathlib import Path\np = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zr3ugus7/scratch/quotation.3lmIXA')\n(p / 'report.md').unlink()\np.rmdir()\nPY\"",
+    "output": "# Focused quotation review\n\nCompleted an independent reading of all quoted statements in the complete artifact, using the supplied base and case-study contracts and en_US guidance.\n\nNo findings. The quotations use intelligible American English and retain a natural customer voice. Their references are recoverable from the surrounding account: \u201cthe categories\u201d refers to repair-log categories, \u201cthat time\u201d to preparation spent agreeing on those categories, and \u201cbefore the next building starts\u201d to starting the trial in another building. The final quotation supplies a clear, qualified appraisal. None requires a repair for idiom, reference, or clarity.\n"
+  }
+]

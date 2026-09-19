@@ -1,0 +1,61 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T00-32-38-01a0bbcc-d398-7520-8158-95d6aa57b2c9.jsonl",
+      "session": {
+        "id": "01a0bbcc-d398-7520-8158-95d6aa57b2c9",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat input.md\",max_output_tokens:20000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport difflib\\nsource = Path('input.md').read_text()\\ndraft = source.split('# Complete current draft\\\\n\\\\n', 1)[1].split('\\\\n\\\\n# Complete comparison report', 1)[0]\\nold = 'Jag sitter med en mall, inte med bevis för kollegernas tillkortakommanden.'\\nnew = 'Jag sitter med en mall, och den är i sig inget bevis för kollegernas tillkortakommanden.'\\nassert draft.count(old) == 1\\nrevised = draft.replace(old, new, 1)\\nPath('revised.md').write_text(revised)\\nassert Path('revised.md').read_text().replace(new, old, 1) == draft\\nprint(''.join(difflib.unified_diff(draft.splitlines(keepends=True), revised.splitlines(keepends=True), fromfile='current draft', tofile='revised.md')))\\nPY\",\"max_output_tokens\":1500}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": null,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "genres/column.md": 9,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {
+      "work/revised.md": {
+        "mode": 420,
+        "type": "file",
+        "size": 2020,
+        "sha256": "cc133d733dc0c267b73f5e5f54f5fc7b44943a94c01adb59be2266a02ee0e548"
+      }
+    },
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

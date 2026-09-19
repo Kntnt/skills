@@ -1,0 +1,38 @@
+**F1 (also table row 17): rejected.** The report does not establish that the draft communicates the broader absence-of-evidence claim it alleges.
+
+The actual contextual proposition is that Nora is examining a meeting template and offering a personal reflection, rather than presenting evidence of colleagues’ shortcomings. The complete sentence is:
+
+> “Jag sitter med en mall, inte med bevis för kollegernas tillkortakommanden.”
+
+Grammatically, “inte med bevis” shares “Jag sitter” with “med en mall”: the contrast concerns the material she is working with in this reflection. Its immediate context explicitly establishes that scope:
+
+> “Det är min reflektion, ingen mätning av hur andra använder sina arbetsdagar.”
+
+The opening identifies her activity—“Jag granskar bibliotekets mötesmall”—and the next paragraph continues:
+
+> “Dessutom uppskattar jag möten där kolleger upptäcker att de har förstått en fråga olika.”
+
+Taken together, these passages distinguish her document-based reflection from an evidential assessment of colleagues. They do not ordinarily communicate an inventory of what evidence she possesses, even of evidence potentially relevant to this topic.
+
+The source supports that contextual proposition directly through the combination of:
+
+> “Jag granskar bibliotekets mötesmall.”
+
+> “Det är en iakttagelse av dokumentet, inte en scen från ett visst möte.”
+
+> “Det här är min reflektion, inte något jag har mätt hos andra.”
+
+This support does **not** depend on inferring that absence of measurement entails absence of every other kind of evidence. That inference would be invalid; it is also not what the draft needs to assert.
+
+The report instead reconstructs the sentence as:
+
+> “Nora har i detta sammanhang inga bevis för kollegernas tillkortakommanden.”
+
+Its negation—“åtminstone något bevis”—makes the shift explicit: the report tests whether Nora **has any evidence**, whereas the draft contrasts the template she is examining with evidence of colleagues’ failings. Adding “i detta sammanhang” does not remove that mismatch.
+
+The counterexample likewise fails to contradict the actual claim. A colleague could have reported “ett dokumenterat misslyckande” while Nora’s present examination still concerns the template and her calendar argument remains a personal reflection. The counterexample does not establish that she is examining or using that documented failure here. It therefore defeats the report’s stronger reconstruction, not the draft’s contextual proposition.
+
+A broader possession reading is conceivable in isolation, but the immediate syntax and surrounding text do not establish it as a genuinely competing material claim. F1 consequently does not warrant an unresolved verdict.
+
+- **Accepted defects still present in the unchanged draft:** none.
+- **Genuinely unresolved material claims:** none.

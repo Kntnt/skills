@@ -1,0 +1,42 @@
+{
+  "revision": "3f21d9b1",
+  "rows": [
+    {
+      "case": "frozen-clean-r1",
+      "duration_seconds": 328.81,
+      "whole_pass": false,
+      "target_repaired": true
+    },
+    {
+      "case": "frozen-clean-r2",
+      "duration_seconds": 325.86,
+      "whole_pass": true,
+      "target_repaired": true
+    },
+    {
+      "case": "first-case-sv-r1",
+      "duration_seconds": 176.04,
+      "whole_pass": false,
+      "target_repaired": false
+    },
+    {
+      "case": "first-case-sv-r2",
+      "duration_seconds": 429.52,
+      "whole_pass": true,
+      "target_repaired": true
+    },
+    {
+      "case": "quote-free-bypass",
+      "duration_seconds": 71.75,
+      "whole_pass": true,
+      "target_repaired": null
+    }
+  ],
+  "whole_pass": 3,
+  "whole_total": 5,
+  "target_repaired": 3,
+  "target_total": 4,
+  "total_native_seconds": 1331.98,
+  "batch_pid": 88236,
+  "batch_exited": true
+}

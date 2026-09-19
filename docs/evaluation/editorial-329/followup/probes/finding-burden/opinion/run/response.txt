@@ -1,0 +1,35 @@
+**F1 — Rejected.** This is the report’s only alleged source-support defect, presented in claim 28 and repeated under “Findings.”
+
+**What the draft communicates.** The complete sentence is:
+
+> “Min invändning gäller att kommunen föreslås ta bort telefonen innan den har underlag för den avvägningen.”
+
+Sanna objects to the municipality’s proposed removal of telephone booking before it has an adequate basis for weighing labour cost against user value. The municipality remains the subject of “har”; “föreslås” preserves the proposal’s status; “innan” expresses the sequencing she objects to; and “den avvägningen” specifies the particular comparison.
+
+The adequacy reading follows directly from the preceding argument:
+
+> “Att hänvisa till dubbel administration besvarar därför inte frågan om hur stor arbetskostnaden är. Det räcker inte som grund för att väga den mot värdet av att kunna boka per telefon.”
+
+Thus, “underlag” concerns a basis sufficient for that comparison. This is not an invented qualification imported from the source. The draft itself supplies it through “Det räcker inte som grund”. The first-person frame, “Min invändning”, attributes that assessment to Sanna.
+
+The whole text reinforces this reading through “Ett permanent beslut behöver ett bättre underlag” and the proposed collection of information, after which “nästa beslut” **can** draw on knowledge of the work and users’ reasons. It does not assert that the municipality possesses no relevant information anywhere or cannot acquire sufficient information before September.
+
+**Source support.** The source explicitly establishes the factual premises:
+
+> “Någon tidsmätning eller ekonomisk besparingsberäkning finns inte i handlingarna.”
+
+It also supplies Sanna’s evaluative standard:
+
+> “Hon menar att kommunen först måste kunna väga arbetskostnaden mot värdet för användarna.”
+
+The brief calls for postponing the permanent change and first trying both channels for six months. The source specifies that this trial would record “tidsåtgång per bokningsväg” and seek users’ reasons for their choices. Together, these support Sanna’s criticism of the present decision basis and her proposed sequence. They do not establish an institution-wide inventory of knowledge—but the contextual claim does not require one.
+
+**Mismatch in the report and counterexample.** The report reconstructs the sentence as asserting that the municipality “has no basis for the comparison, or would still have none when removal happens”. That substitutes categorical absence and a future state of knowledge for the draft’s attributed assessment of sufficiency.
+
+Its hypothetical internal time log and user feedback establish only that additional information might exist. Their existence does not establish that they provide an adequate basis for this comparison. Likewise, information acquired before September could address the present objection; its possible later acquisition does not falsify that objection.
+
+The report’s counterexample expressly allows that “Sanna still objects that the present documented basis is inadequate”. That preserves the contextual criticism rather than contradicting it. Consequently, the report has not established its stronger alleged proposition. This is a failed allegation, not a genuinely unresolved material ambiguity.
+
+**Accepted defects still present in the unchanged draft:** None.
+
+**Genuinely unresolved material claims:** None identified.

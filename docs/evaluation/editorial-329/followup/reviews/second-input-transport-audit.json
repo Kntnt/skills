@@ -1,0 +1,328 @@
+{
+  "note": "Direct complete source and exact delivered prose matches against last fresh checker native command outputs; excludes only metadata and outer whitespace. False is an unobserved component, never presumed success.",
+  "rows": [
+    {
+      "case": "article-sv-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-17-33-01a0bb88-1957-7d42-8f11-c95e55fd3a48.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-11-06-01a0bb82-2e86-7a62-8208-9c1de885f6f2.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-13-30-01a0bb84-642d-7342-b495-9c817ce12654.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-question-en_GB-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-13-39-01a0bb84-840a-7e20-92fd-d8ed217c55fd.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-16-08-01a0bb86-cbb4-7bd2-8149-9b21c2cbc129.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-51-36-01a0bba7-4560-77f0-b0f2-505eecae661b.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-54-12-01a0bba9-a537-7741-880e-0489de284b58.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-study-en_US-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-55-02-01a0bbaa-6a47-74f2-bf14-afae703b98ad.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-57-37-01a0bbac-c5d8-7fc0-98c0-65ba52d98546.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-study-en_US-r3",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-59-42-01a0bbae-af3e-70c3-934e-a6a54c2962df.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-20T00-01-59-01a0bbb0-c544-7a51-911c-a415b6d99deb.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-study-sv-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-04-25-01a0bbb3-0019-7df3-95f3-5415eb5e2448.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-20T00-07-34-01a0bbb5-e2ff-7d81-8e31-878391d0e3a7.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-study-sv-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-20T00-12-09-01a0bbba-14d0-7f82-8b5b-ab2644f85fe2.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-20T00-15-23-01a0bbbd-0b5e-7093-b379-4d1389d824f3.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-unprompted-en_US-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-07-24-01a0bb7e-cdb5-7b23-add4-b5733486c552.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "case-unprompted-en_US-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-10-11-01a0bb81-5a70-78f2-98df-93f251deb970.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "column-sv-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-19-29-01a0bb89-db25-7c01-b0e8-e0f8de998fda.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-48-56-01a0bba4-d4db-7742-bd8b-fb3dc88e2d86.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "general-en_GB-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-49-56-01a0bba5-bd9f-7961-ac9f-7154dbe3282e.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-03-30-01a0bb7b-3be9-73d0-b81e-45d661165630.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-06-42-01a0bb7e-274b-7071-a678-54f1ad521737.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-en_GB-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-06-25-01a0bb7d-e815-7730-9e4b-f84102774056.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-09-14-01a0bb80-78d6-77c2-8d14-d7f7f728a955.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-en_GB-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-12-16-01a0bb83-41a0-7002-8c87-7edcc926046a.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-15-21-01a0bb86-1362-7380-8c36-fd8c7841b595.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-15-29-01a0bb86-3292-7cc0-a457-6adfc0c99b39.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-18-05-01a0bb88-9437-70c3-915c-6cb69bcb7c1f.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-en_US-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-45-55-01a0bba2-1170-7182-8ea2-8b8094c308e0.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-48-54-01a0bba4-c9dd-79e3-99ef-9100f442d8cb.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-sv-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-00-30-01a0bb78-7a2b-7b11-94d0-74103e9e20c9.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-03-53-01a0bb7b-93d6-7ff1-98de-78ca3d4c5e91.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-sv-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-00-31-01a0bb78-7f11-7153-8014-6ac4d1f881a8.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-unknown-sv-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T22-59-22-01a0bb77-728f-7e12-8f0e-c5acb7d51e32.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "opinion-unknown-sv-r2",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T22-59-23-01a0bb77-7687-7b70-a91f-7f48446ef7aa.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": false
+        },
+        {
+          "session": "rollout-2026-09-19T23-02-16-01a0bb7a-1839-7fc1-af3d-5d5b24c97f4f.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    },
+    {
+      "case": "web-copy-en_US-r1",
+      "children": [
+        {
+          "session": "rollout-2026-09-19T23-46-05-01a0bba2-3740-7e10-a3e8-617fcb2b9a86.jsonl",
+          "full_source_visible": true,
+          "delivered_prose_visible": true
+        }
+      ],
+      "last_checker_source_and_delivered_prose_visible": true
+    }
+  ]
+}

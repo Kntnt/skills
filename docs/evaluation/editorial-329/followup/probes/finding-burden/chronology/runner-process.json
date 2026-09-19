@@ -1,0 +1,23 @@
+{
+  "pid": 99460,
+  "process_group": 99460,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "3f21d9b1",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/chronology/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/chronology/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/chronology/run"
+  ],
+  "input_origin": "docs/evaluation/editorial-329/followup/probes/finding-adjudication/chronology/input.md",
+  "input_sha256": "356d3880cc94765c3e730692fc6ded477426379ee366ed19b551d68819e549f1"
+}

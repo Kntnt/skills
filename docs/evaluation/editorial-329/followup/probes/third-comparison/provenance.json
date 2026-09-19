@@ -1,0 +1,35 @@
+[
+  {
+    "case": "column",
+    "source": "runs/third-candidate/column-sv-r1/write/supplied-input.md",
+    "draft": "runs/third-candidate/column-sv-r1/write/withheld-draft.md",
+    "report": "runs/third-candidate/column-sv-r1/write/observed-report-2.md",
+    "report_index": null,
+    "source_sha256": "904f89206bcb553c2908491eb065cd9594bf0879e66f0edaded975407fd55192",
+    "draft_sha256": "b697342977dae89a552813a04da2ea43187972e61e74a02c69fd06d33217af53",
+    "report_sha256": "9ca36c74ca482ba508f87cde9075e5613d768591e4f1fc79b056e351f6da1d6e",
+    "repair_input_sha256": "dd4f62dce6eba147b8e0ed37ec67146bb0f50f3e6d345262b70cdb9fc490fcd8"
+  },
+  {
+    "case": "opinion-sv",
+    "source": "runs/third-candidate/opinion-sv-r1/write/supplied-input.md",
+    "draft": "runs/third-candidate/opinion-sv-r1/withheld-checked-prose.md",
+    "report": "runs/third-candidate/opinion-sv-r1/write/source-check-reports.json",
+    "report_index": -1,
+    "source_sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "draft_sha256": "cd45a3cf34a3c65ec2fc37c08f749233af60f7cd914d74ecc7a5fc83fe1c7b87",
+    "report_sha256": "17444d705c1464ee62e447af538569bb9aff9868d2247a2173b495f6c33cda37",
+    "repair_input_sha256": "021ed8b61b082fb79d85b424fd4d96a7b2076f9f3c76e6bc2b5503da5a0a6daf"
+  },
+  {
+    "case": "opinion-en_US",
+    "source": "runs/third-candidate/opinion-en_US-r1/write/supplied-input.md",
+    "draft": "runs/third-candidate/opinion-en_US-r1/withheld-checked-prose.md",
+    "report": "runs/third-candidate/opinion-en_US-r1/write/source-check-reports.json",
+    "report_index": -1,
+    "source_sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "draft_sha256": "36bc74a36ad0798a5c9f6c22ca3803a15ef5ce1424e7144897b1fab7e8b290df",
+    "report_sha256": "53ddf0968f63c9eef707b898af09015b390b57ebdb7da0be9e3e0cab8dbd3848",
+    "repair_input_sha256": "4cba25b6ac69322c034307fb45e8b42628ff34f699ccd03b73db0ca2bfac0df1"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "pid": 96615,
+  "process_group": 96615,
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "3f21d9b1",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-quotation-controls/quote-free-bypass/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-quotation-controls/quote-free-bypass/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-quotation-controls/quote-free-bypass/redline"
+  ]
+}

@@ -167,7 +167,9 @@ def main() -> None:
     parser.add_argument("--cases", nargs="*")
     parser.add_argument("--revision", default="8f92e12")
     parser.add_argument("--wave", default="candidate")
-    parser.add_argument("--matrix", choices=["standard", "third"], default="standard")
+    parser.add_argument(
+        "--matrix", choices=["standard", "third", "fifth"], default="standard"
+    )
     parser.add_argument("--artifact-wave")
     parser.add_argument("--workers", type=int, choices=[1, 2], default=2)
     args = parser.parse_args()
@@ -191,6 +193,21 @@ def main() -> None:
                 "bf14dc2",
             )
         ]
+    elif args.matrix == "fifth":
+        rows = [
+            row
+            for row in ROWS
+            if row[0]
+            in (
+                "case-unprompted-en_US-r1",
+                "case-unprompted-en_US-r2",
+                "case-question-en_GB-r1",
+                "case-question-en_GB-r2",
+                "opinion-absence-en_GB-r1",
+                "column-sv-r1",
+                "article-sv-r1",
+            )
+        ] + [("column-sv-r2", "column", "sv", "column.md", "6e531f5")]
     selected = [row for row in rows if not args.cases or row[0] in args.cases]
     results: list[dict[str, object]] = []
 

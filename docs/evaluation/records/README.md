@@ -81,3 +81,17 @@ The [reading packet](../editorial-329/README.md) links full sources, drafts, rev
 - [redline-gpt-2026-09-19-355-second-new.md](redline-gpt-2026-09-19-355-second-new.md).
 
 - [write-gpt-2026-09-19-355-second-new.md](write-gpt-2026-09-19-355-second-new.md).
+
+- [redline-gpt-2026-09-19-341-quotation-new.md](redline-gpt-2026-09-19-341-quotation-new.md).
+
+- [redline-gpt-2026-09-19-355-third-new.md](redline-gpt-2026-09-19-355-third-new.md).
+
+- [redline-gpt-2026-09-20-341-quotation-controls.md](redline-gpt-2026-09-20-341-quotation-controls.md).
+
+- [redline-gpt-2026-09-20-341-second-idiom.md](redline-gpt-2026-09-20-341-second-idiom.md).
+
+- [redline-gpt-2026-09-20-349-second-original.md](redline-gpt-2026-09-20-349-second-original.md).
+
+- [write-gpt-2026-09-19-355-third-new.md](write-gpt-2026-09-19-355-third-new.md).
+
+- [write-gpt-2026-09-20-349-second-original.md](write-gpt-2026-09-20-349-second-original.md).

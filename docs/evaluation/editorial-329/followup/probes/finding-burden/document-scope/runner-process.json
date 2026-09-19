@@ -1,0 +1,23 @@
+{
+  "pid": 99474,
+  "process_group": 99474,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "3f21d9b1",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/document-scope/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/document-scope/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/finding-burden/document-scope/run"
+  ],
+  "input_origin": "docs/evaluation/editorial-329/followup/probes/finding-adjudication/document-scope/input.md",
+  "input_sha256": "6759440588475fb381d3a4064a7716959cd0d35381c4b2b3e92f9de0fd5e39ff"
+}

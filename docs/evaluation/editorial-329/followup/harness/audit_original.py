@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -116,7 +117,7 @@ def main() -> None:
             if (
                 item.get("status") == "completed"
                 and "cat " in command
-                and "report.md" in command
+                and re.search(r"[\w-]*report[\w-]*\.md", command)
             ):
                 reports.append(
                     {"command": command, "output": item.get("aggregated_output", "")}

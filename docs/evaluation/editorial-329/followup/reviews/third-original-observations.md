@@ -27,3 +27,17 @@ Complete final checked prose and both reports are retained separately from any d
 All original delivered-text criteria and observable S1 components pass. First checker narrows an explicit causal “because” linking the trial decision to separate storage into the sourced sequence “Previously … stored separately”, preserving both the decision and the actual cross-shift goal. A second fresh checker approves the entire draft; its actual file read exactly matches delivery. All three original English quotations remain intact, including preparation effort and reservation. September dates only the decision; measures, exclusions, workload caveat, attribution and pending expansion remain supported. No invented question occurs. No Skill effects; root removed.
 
 The artifact qualifies for fourth quotation-reader replay because it contains Maya Lind’s three direct quotations. The complete third artifact and metadata are copied byte-for-byte to a fresh ae24f9b3 Redline, independent of the original third paired Redline. English quotations are assessed as preservation controls.
+
+The case-study-en_US-r1 third paired Redline passes all applicable criteria and retains the complete exact artifact. No-change status, full scoped reads, one final installed Proofread and no surviving Skill effects are verified; root removed. Source-aware final F1 remains pass.
+
+## case-study-en_US-r2 Write
+
+All original delivered-text criteria and observable S1 components pass. One complete fresh checker finds no issue; independent source comparison agrees. September dates only the decision, supplier choice is separate, actual duration is not presented as decision content, and all three original quotations retain meaning and qualifications. The headline’s value claim is anchored to Lind’s attributed practical assessment. Counts, exclusions, assignment endpoints, workload difference, noncausal attribution, pending expansion and checklist destination remain supported. No invented question occurs. Actual checker-read prose exactly matches delivery; no Skill effects, root removed. This quotation-bearing artifact qualifies for the fourth replay and is copied complete with metadata.
+
+The case-study-en_US-r2 paired Redline passes all applicable criteria and preserves the exact complete draft. Full scoped review, one final installed Proofread and no surviving Skill effects are verified; root removed. Source-aware final F1 remains pass.
+
+## case-study-sv-r1 — withheld for a valid translation finding
+
+The final comparison retains the translated “innan nästa byggnad kommer i gång” idiom obstruction, with the context-supported repair “innan försöket kommer i gång i nästa byggnad”. The first checker had explicitly accepted the calque as contextual metonymy while finding two separate source-scope problems (comparison availability and expansion versus continuation). Parent repairs those two, but the fresh second checker correctly identifies the Swedish quotation problem. Write obeys its two-comparison bound and withholds the draft. This is a valid refusal for an unresolved translation finding, not a delivered F1 or L1 pass. Paired Redline is skipped; no artifact qualifies for fourth replay.
+
+Both complete reports and the exact final checked prose are retained. The evaluator report-extraction helper was broadened to recognize report-final.md as well as final-report.md; original native capture was complete throughout. Complete source/draft reads, inherited fresh identities and clean filesystem exit are recorded; root removed.

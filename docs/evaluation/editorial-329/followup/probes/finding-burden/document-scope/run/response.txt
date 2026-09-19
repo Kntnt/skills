@@ -1,0 +1,33 @@
+**Finding 1 — Accepted: unsupported claim about what the submission establishes.**
+
+The draft says:
+
+> “Our submission also makes no claim to have secured the building owner’s consent for rehearsal use; it does not establish whether that consent exists.”
+
+Under its ordinary immediate and whole-text reading, “it” refers to **“Our submission”**. The first clause reports that the submission makes no claim that the association secured consent. The second says that the submission does not establish the status of the owner’s consent for rehearsal use: neither its existence nor its absence. It does **not** assert that consent is absent.
+
+The paragraph’s emphasis on acknowledging limitations reinforces that reading. It does not change the second clause’s subject from the submission to the supplied source package. Reading “it” as referring merely to the preceding absence of a claim is conceivable, but that is not the ordinary reading of this sentence.
+
+The source supports the first clause exactly:
+
+> “The association’s submission makes no representation that it has secured the building owner’s consent for rehearsal use.”
+
+For the second clause, however, the source says only:
+
+> “The supplied material does not state the consent’s actual status.”
+
+These statements concern different evidential objects. The supplied material’s failure to state consent’s status does not establish that the submission itself leaves that status undetermined. Likewise, making no representation of **secured consent** does not exclude establishing **refused consent**.
+
+The report’s counterexample therefore addresses the actual contextual claim. A submission containing an authoritative statement that consent was refused and remains withheld could establish the absence of consent while making no claim to have secured it. The supplied package could describe the submission as it does without reporting that refusal. Nothing supplied says that the submission is reproduced in full.
+
+This counterexample is not evidence that consent was refused. It demonstrates the specific missing support: the source leaves open something that the draft rules out about the submission’s evidential content. The report establishes both the proposition actually communicated and its support defect; it does not depend on an artificially stronger reconstruction.
+
+The report identifies no other defect findings. Its remaining support assessments preserve the relevant contextual limits, including conversion costs, survey questions, expressions of interest and the requested—not guaranteed—eight-week timetable.
+
+**Accepted defects still present in the unchanged draft:**
+
+- “It does not establish whether that consent exists” unsupportedly attributes an inability to establish consent’s status to the association’s submission.
+
+**Genuinely unresolved material claims:**
+
+- None. Consent’s actual status remains unknown in the source, but the draft does not assert that status.
