@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- `/agents-md` keeps a project's agent-only documents under `docs/agents/` instead of `agents.d/`, and may write there while the rest of `docs/` stays a proposal for a human. A project still holding `agents.d/` has its documents moved to the same paths under `docs/agents/`, with pointers and links rewritten; an identical copy is removed, and a file that differs from the one already at its destination stops the move with both paths reported and nothing changed. `/delegation --project` writes its mode and fence companions to `docs/agents/`; user scope keeps them in `agents.d/` beside the global context file. This repository's own agent documents, the Frame handoff among them, now live in `docs/agents/` (issue #326).
+
 ### Fixed
 
 - The recorded Codex exchange under `tests/support/model_selector_refresh/` no longer carries the maintainer's Codex installation ID or machine name. `installationId` is now the all-zero UUID and `serverName` is `redacted`, and the refresh tests list every redacted field and fail on any other recorded UUID or home-directory path. The old values remain in the Git history (issue #315).
