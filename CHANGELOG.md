@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.32.1] – 2026-09-19
+
 ### Changed
 
 - `/kntnt help <skill>` prints the help page of an Enabled Collection Skill again, the same page `/<skill> --help` prints, installed genre and technique lists included. The page comes from the Global or Project copy, with nothing run, installed or fetched, so it works offline. A Manager command outranks a Skill of the same name. A name that is neither is refused, with `/kntnt select` named for a Skill that is not Enabled, and an Enabled Skill missing its `help.md` is reported by that path instead of being fetched from the collection (issue #327).
