@@ -18,7 +18,8 @@ Orchestrate may remain the executor permanently. Replacing it is not a condition
 
 | Step | Deliverable | Status and next action |
 | --- | --- | --- |
-| 1 | An owned `frame`, adapted from rework, replacing `grill-with-docs` in this workflow and taking responsibility for its interview and domain-documentation work. | Next. Source implementation exists on rework; no Frame has been added to main. Use the [Frame handoff](../../agents.d/frame-handoff.md). Settle the glossary convention with Thomas early. |
+| 0 | Move project agent documents to `docs/agents/` and make `agents-md` maintain that placement. | Ready for an agent: [#326](https://github.com/Kntnt/skills/issues/326). Placement and reference changes only; the glossary migration belongs to step 1. |
+| 1 | An owned `frame`, adapted from rework, replacing `grill-with-docs` in this workflow and taking responsibility for its interview and domain-documentation work. | After #326. Source implementation exists on rework; no Frame has been added to main. Use the [Frame handoff](../../agents.d/frame-handoff.md), which #326 moves with the other agent documents. Apply the agreed glossary convention below. |
 | 2 | An owned `to-slices`, producing the decision issue and executable child tickets together. | Planned after Frame. Replaces `to-spec` and `to-tickets`; its tickets must work with the retained executor. |
 | 3 | A workflow whose direct and indirect dependencies are maintained here. | Audit incrementally during steps 1 and 2, then verify the complete chain. Cover documentation, testing guidance, setup/configuration, and runtime references; do not recreate the entire external collection. |
 | 4 | Measured improvements to execution cost and elapsed time, including automatic completion. | Deferred until the planning replacement works. Start from current Orchestrate; selectively adopt useful preparation and closure ideas from rework. |
@@ -47,11 +48,13 @@ The interview must distinguish facts to investigate, technical choices the agent
 
 The first delivery covers framing, relevant glossary and decision documentation, and a resumable handoff. It does not implement the later pipeline Skills or redesign Orchestrate.
 
-## Open owner decision: glossary convention
+## Agreed documentation and glossary conventions
 
-Thomas dislikes the name and location of the shared project glossary currently created as root `CONTEXT.md`. A replacement name and path have not been selected. Settle this in the Frame implementation session; do not present an assistant-suggested path as approved.
+On 2026-09-19 Thomas chose `docs/agents/` for compact instructions addressed specifically to agents. Other project documentation under `docs/` is written for humans and used by agents as the same source. `AGENTS.md` stays at the root as the entry point. Ticket #326 owns the placement migration and the corresponding Skill changes; it preserves document contents except for necessary path/link changes and changes only paths in `AGENTS.md`.
 
-Distinguish the default Frame should use in a target project without a convention from migration of this collection's existing glossary. Agree whether the latter is part of the first delivery. Preserve explicit target-project conventions, and keep the temporary `to-spec`/`to-tickets` consumers able to find the chosen glossary. Inspect their project-level convention mechanism rather than altering user-global configuration as a side effect. A chosen migration must update active readers and pointers; historical decision records remain historical.
+Thomas also chose `docs/glossary.md` to replace root `CONTEXT.md`, as part of the Frame delivery. It is a human-readable shared vocabulary used by people and agents, and contains only term definitions, including preferred names and distinctions needed to identify their meaning. Requirements, behavioural rules, implementation instructions, architecture decisions, and general project background belong in their respective documents, not in the glossary.
+
+Step 1 migrates this collection's glossary and its active readers/pointers, and gives Frame `docs/glossary.md` as its default for a target project without an explicit convention. Preserve explicit target-project conventions and keep the temporary `to-spec`/`to-tickets` consumers able to find the glossary through project-level instructions. Do not alter user-global configuration as a side effect or rewrite historical decision records. The filename, placement, purpose, and inclusion of this collection's migration are settled; do not ask Thomas to approve them again.
 
 ## Questions reserved for the later execution work
 

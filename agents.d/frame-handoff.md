@@ -2,7 +2,9 @@ Read when preparing or implementing the first Frame delivery on main.
 
 # Frame implementation handoff
 
-Implement the first delivery in [the engineering workflow plan](../docs/plans/engineering-workflow.md). Read that plan and the current `AGENTS.md` first. The plan owns direction, status, the source addresses, and open owner decisions; this handoff scopes the next implementation session.
+Implement the first delivery in [the engineering workflow plan](../docs/plans/engineering-workflow.md). Read that plan and the current `AGENTS.md` first. The plan owns direction, status, source addresses, and owner decisions; this handoff scopes the next implementation session.
+
+[Ticket #326](https://github.com/Kntnt/skills/issues/326) is the placement prerequisite: it moves this handoff to `docs/agents/frame-handoff.md` and updates its references. Follow the current `AGENTS.md` pointer to find it. Source inspection and preparation can proceed while #326 is pending; make the affected Frame implementation tickets depend on its completed migration using the tracker's dependency convention.
 
 ## Start from the existing implementation
 
@@ -14,13 +16,15 @@ Inspect today's applicable rules through `AGENTS.md`, especially Skill form, rou
 
 Done when the implementation scope and tickets identify the current contracts and source material without importing the old pipeline wholesale.
 
-## Resolve the remaining owner choice
+## Apply the agreed glossary convention
 
-Early in the session, read the plan's glossary decision and ask Thomas for the preferred name and location if it is still unresolved. Clarify whether he wants only Frame's default changed or this collection's current glossary migrated too. Present consequences for finding and maintaining domain knowledge, not parser or file-handling details. Continue independent adaptation work while awaiting the answer.
+Thomas has chosen `docs/glossary.md` to replace root `CONTEXT.md`. Apply the plan's agreed convention without reopening the filename or placement decision. This collection's migration is part of the Frame delivery, separate from #326's agent-document placement migration.
 
-If a convention is chosen, record it in the plan and implementation ticket before dependent edits. Trace active references and the temporary downstream consumers. Preserve target-project overrides, update readers with any agreed migration, and keep historical documents intact. User-global skill installations and configuration are outside this repository delivery.
+The glossary is written for people and read by agents too. It contains only term definitions, including preferred names and distinctions that establish meaning. Keep requirements, behavioural rules, implementation instructions, architecture decisions, and general background in their own documents. Preserve the meaning of existing terms; if an entry contains a rule, place that rule in the appropriate authoritative document rather than dropping it or disguising it as a definition.
 
-Done when the agreed convention and migration scope are explicit and the transitional workflow can find the glossary.
+Move the existing glossary and update active rules, links, examples, and readers as needed. Make `docs/glossary.md` Frame's default in a target project without an explicit convention, while preserving target-project overrides. Keep `to-spec` and `to-tickets` able to find it through project-level instructions during the transition. Historical documents and user-global installations/configuration are outside this migration.
+
+Done when the collection uses `docs/glossary.md` as its single current glossary, the glossary contains only term definitions, and Frame and the transitional workflow find the intended glossary.
 
 ## Deliver a usable first step
 
