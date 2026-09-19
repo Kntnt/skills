@@ -1,0 +1,1 @@
+Delivered here: British English opinion, with no technique selected, matching the genre default. Source comparison passed. The material supports the requested length but leaves financial viability, actual consent status and study timing unresolved. All temporary files have been removed; no draft file was retained.

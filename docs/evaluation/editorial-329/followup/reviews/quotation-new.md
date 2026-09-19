@@ -1,0 +1,9 @@
+# Focused quotation-reader evaluation: new/general subset
+
+The frozen predicate selected four of the ten planned third-candidate artifacts: both supplemental cases, the Swedish article and British general prose. Five delivered opinions/service texts contain no personal quoted statements; the column has no delivered artifact. The [selection record](quotation-new-selection.md) accounts for every row. Revised Redline at `ae24f9b3` receives exact complete artifact bytes and no source or earlier findings.
+
+All four preservation controls remain byte-identical and independently idiomatic. Every parent obtains one fresh inherited quotation reader, reads its complete report, performs the full review and closes with exactly one installed Proofread. No correction budget is spent. The two case artifacts still fail source-aware F1 for unsupported pronouns (#356); clean source-blind review does not settle source fidelity.
+
+Process findings remain separate from prose quality. All four child artifact/base/genre reads are directly visible. Three English children's composition/review language payloads are inside encrypted dispatch, so exact language transfer is skipped, not assumed. The Swedish article child reads the entire Swedish language resource, including mechanics and anti-slop beyond its focused guidance: R2 fails for that scope breach despite no text change. Root has the concrete observation for correction.
+
+The [full record](../../../records/redline-gpt-2026-09-19-341-quotation-new.md) and [verification](quotation-new-verification.json) retain all eight native sessions, exact handoffs, complete reports and cleanup receipts. All four roots are absent, every owned batch ended, and no source/resource or Skill scratch effect survives. This subset tests preservation; the separately owned fixed faulty-quotation controls test detection and repair.

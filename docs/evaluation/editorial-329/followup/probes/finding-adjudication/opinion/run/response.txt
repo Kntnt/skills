@@ -1,0 +1,35 @@
+**F1 — unresolved.** The report identifies a real question about scope, but does not establish that its broader reconstruction is what the complete passage communicates.
+
+The exact draft sentence is:
+
+> “Min invändning gäller att kommunen föreslås ta bort telefonen innan den har underlag för den avvägningen.”
+
+“Den” refers to **kommunen**, while “den avvägningen” refers specifically to weighing labour cost against the value of telephone booking. The sentence retains the proposal’s status through “föreslås” and presents the objection as Sanna’s through “Min invändning”. That attribution does not automatically remove the embedded factual implication about the municipality’s information.
+
+The immediate context, however, explicitly concerns documentary evidence and its sufficiency:
+
+> “Men handlingarna innehåller varken någon tidsmätning eller någon ekonomisk besparingsberäkning.”
+
+> “Att hänvisa till dubbel administration besvarar därför inte frågan om hur stor arbetskostnaden är. Det räcker inte som grund för att väga den mot värdet av att kunna boka per telefon.”
+
+The whole text likewise frames the criticism as a need for **better** evidence: “Ett permanent beslut behöver ett bättre underlag.” It proposes collecting time data and users’ reasons before deciding which channel to retain. These are concrete contextual grounds for interpreting the disputed sentence as an assessment of the available decision basis’s adequacy.
+
+The source supports that argument through:
+
+> “Någon tidsmätning eller ekonomisk besparingsberäkning finns inte i handlingarna.”
+
+> “Hon menar att kommunen först måste kunna väga arbetskostnaden mot värdet för användarna.”
+
+It also specifies that the proposed trial would “registrera tidsåtgång per bokningsväg och be användarna frivilligt ange varför de väljer telefon eller webb”. But these statements do **not** establish everything the municipality knows outside the documents, or what information it might obtain before September.
+
+The report reconstructs the disputed clause as:
+
+> “The proposal would remove telephone booking before the municipality has a basis for weighing labour cost against user value.”
+
+This captures a possible factual implication. Its further formulation—“would still have none when removal happens”—treats the objection as a prediction more definite than the proposal-focused, first-person passage clearly establishes.
+
+The counterexample—staff possessing an internal time log and user feedback outside the documents, or obtaining them before September—is compatible with the source. **If that information provides an adequate basis**, it defeats an institution-wide absence claim. It does not defeat an objection to the adequacy of the present documented basis. Consequently, the counterexample establishes the distinction between those claims, but cannot determine which the draft communicates.
+
+Acceptance would require establishing that the draft makes the broader unsupported claim. Rejection would require establishing that its actual claim is confined to the supported sufficiency judgment. The context supports the latter interpretation, but the unqualified municipal subject leaves the former implication genuinely open. Neither conclusion is established.
+
+**One validated unresolved finding remains: F1.** The report contains no other adverse findings.

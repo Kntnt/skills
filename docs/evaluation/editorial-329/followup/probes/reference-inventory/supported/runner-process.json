@@ -1,0 +1,24 @@
+{
+  "pid": 83940,
+  "process_group": 83940,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "ae24f9b3",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/reference-inventory/supported/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/reference-inventory/supported/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/reference-inventory/supported/run"
+  ],
+  "source_origin": "docs/evaluation/corpus/editorial-quality/sources/case-study.md",
+  "draft_origin": "docs/evaluation/editorial-329/followup/runs/second-candidate/case-study-en_US-r1/draft.md",
+  "draft_sha256": "830105d3d45dcb61cb1d0b87a5f9f7cdd9494ada8475a815e69e9635fef02d13"
+}

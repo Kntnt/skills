@@ -1,0 +1,1 @@
+Inga ändringar behövdes efter granskning och korrekturläsning. Texten granskades som svensk kundberättelse (`case-study`), utan berättarteknik enligt metadata. Inga olösta anmärkningar finns. `input.md` är oförändrad.

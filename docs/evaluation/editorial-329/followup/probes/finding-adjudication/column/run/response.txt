@@ -1,0 +1,29 @@
+**F1 — unresolved.** The source does not establish the report’s reconstructed proposition, but the report has not established that its reconstruction captures the draft’s full contextual meaning.
+
+The relevant draft passage is:
+
+> Det retar mig hur lätt tid i kalendern kan behandlas som ett resultat i sig. Som om en starttid och en sluttid tillsammans vore ett svar på varför vi behöver träffas. Det är min reflektion, ingen mätning av hur andra använder sina arbetsdagar. Jag sitter med en mall, inte med bevis för kollegernas tillkortakommanden.
+
+The disputed sentence retains Nora as its grammatical subject: “Jag sitter med”. Its negation concerns “bevis för kollegernas tillkortakommanden”, a broader category than measurements of calendar use. It contains no uncertainty marker. These features support taking it as a factual statement about Nora’s present evidentiary position.
+
+However, its immediate context explicitly identifies the preceding argument as “min reflektion”. The opening establishes that she is examining a document; the following paragraph begins “Dessutom uppskattar jag möten där kolleger upptäcker att de har förstått en fråga olika.” Throughout the draft, she questions the template and her own proposed remedy. This context also supports understanding the disputed contrast as identifying what her present examination supplies: a template to reflect on, without presenting it as evidence of colleagues’ shortcomings.
+
+The exact source support is:
+
+> Jag granskar bibliotekets mötesmall.
+
+> Det är en iakttagelse av dokumentet, inte en scen från ett visst möte.
+
+> Samtidigt retar jag mig på att tid i kalendern lätt behandlas som ett resultat i sig. Det här är min reflektion, inte något jag har mätt hos andra.
+
+These words support the document-focused, non-measured character of her reflection. They do **not** expressly establish that Nora lacks every other kind of relevant evidence.
+
+The report reconstructs the claim as:
+
+> Nora har i detta sammanhang inga bevis för kollegernas tillkortakommanden.
+
+That reconstruction makes absence of evidence explicit. Its counterexample is that “en kollega har redovisat ett dokumenterat misslyckande” while Nora’s calendar reflection remains unmeasured. This demonstrates why **unmeasured reflection alone does not entail absence of evidence**. But it does not specify that the documented failure forms part of the material Nora is currently considering. Consequently, it does not contradict the contextual reading in which she distinguishes her present reflection from an evidentiary judgment about colleagues.
+
+The distinction prevents either definitive verdict. Accepting F1 requires establishing that the draft asserts the factual absence the report reconstructs. Rejecting it requires establishing that the contextual limitation fully accounts for the sentence, despite its personal subject and unqualified negation. The supplied wording does not decisively settle that scope.
+
+**One validated unresolved finding remains: F1.** The unresolved issue is the scope of the draft’s denial of evidence; an unsupported factual addition has not been conclusively established.

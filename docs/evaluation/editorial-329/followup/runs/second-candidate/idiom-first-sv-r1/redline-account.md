@@ -1,0 +1,1 @@
+Granskad som kundcase på svenska, utan berättarteknik enligt textens metadata. Inga redaktionella eller språkliga fel hittades. Inga ändringar behövdes och inga filer har ändrats.

@@ -1,0 +1,10 @@
+{
+  "pid": 70508,
+  "command": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/second_idiom_controls.py",
+    "--cases",
+    "idiom-first-sv-r2"
+  ]
+}

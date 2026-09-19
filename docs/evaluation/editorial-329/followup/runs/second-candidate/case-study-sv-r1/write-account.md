@@ -1,0 +1,1 @@
+Första utkastet levereras här: kundcase på svenska, utan särskild berättarteknik. Sakpåståenden och översatta citat har kontrollerats mot det fiktiva underlaget. Begränsningarna i mätningarna framgår av texten. Inga utkast eller kontrollfiler finns kvar på disk.

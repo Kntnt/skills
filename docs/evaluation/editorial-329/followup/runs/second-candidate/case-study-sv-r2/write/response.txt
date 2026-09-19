@@ -1,0 +1,48 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quay fick en gemensam vy över felanmälningarna
+
+Elm Quay Housing prövade en gemensam logg för felanmälningar i två byggnader för att ge personal på olika skift samma information. Arbetsledaren Maya Lind skulle välja att göra försöket igen, men vill avsätta mer tid för förberedelser. Något beslut om att utöka försöket har ännu inte fattats.
+
+*Avsändare: Svale Systems.*
+
+Elm Quay Housing förvaltar 640 lägenheter. Tidigare förvarades felanmälningar via telefon och mejl separat. I september 2025 beslutade bolagets eget underhållsteam att testa en gemensam logg. Försöket pågick i åtta veckor.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, säger arbetsledaren Maya Lind i en mejlintervju.
+
+Teamet valde Svale Systems efter att ha testat om loggen kunde visa status för varje reparation. Underlaget innehåller ingen jämförelse med andra leverantörer.
+
+## Teamet utformade kategorierna
+
+Underhållsteamet tog fram kategorierna och behöll möjligheten för de boende att felanmäla via telefon. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+För Lind gav arbetet med att komma i gång en erfarenhet att ta med till en eventuell fortsättning:
+
+– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Jag skulle avsätta den tiden innan försöket börjar i nästa byggnad.
+
+## Kortare tid till tilldelning under försöket
+
+Enligt Elm Quays interna försöksanteckning, daterad den 4 december 2025, registrerades 31 felanmälningar. Akuta ärenden och arbeten som beställts före försöket ingår inte i sammanställningen.
+
+Mediantiden från anmälan till tilldelning var två arbetsdagar under försöket, jämfört med tre under den föregående åttaveckorsperioden. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte programvaran skillnaden. Måttet gäller tilldelning av arbetet, inte tiden tills reparationen var klar.
+
+Det finns inga mätningar av kostnader, de boendes nöjdhet eller tiden till slutförd reparation.
+
+## Lind vill ge förberedelserna mer tid
+
+Lind ger sin egen bedömning av försöket:
+
+– Jag skulle välja att göra försöket igen. Det hjälper oss att ha en samlad vy över anmälningarna, men jag skulle avsätta en extra vecka för förberedelser.
+
+Försöket har ännu inte utökats. Teamet ska fatta beslut efter att ha kontrollerat hur kategorierna fungerar för större reparationer.
+
+För dig som vill läsa vidare finns [Svales checklista för införande](https://example.invalid/svale/checklist).
+
+---
+
+*Leverans: Ett första utkast till kundcase på svenska, utan särskild berättarteknik, levererat här i svaret. Källstöd och citatöversättningar är kontrollerade utan kvarstående anmärkningar. Underlagets mätbegränsningar framgår i texten. Alla tillfälliga filer har tagits bort; ingen utkastfil har sparats.*

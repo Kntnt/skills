@@ -1,0 +1,44 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quay fick en gemensam vy över felanmälningarna
+
+En gemensam vy över felanmälningarna hjälper Elm Quay Housings underhållsteam, enligt arbetsledaren Maya Lind. Bostadsbolaget prövade Svale Systems i två byggnader under åtta veckor. Lind skulle välja att göra försöket igen, men skulle avsätta mer tid för förberedelser. Något beslut om att gå vidare till fler byggnader är ännu inte fattat.
+
+Elm Quay Housing förvaltar 640 lägenheter. Tidigare förvarades felanmälningar som kom in via telefon och e-post separat. I september 2025 beslutade bolagets eget underhållsteam att pröva en gemensam logg för reparationsärenden. Målet var att medarbetare på olika skift skulle kunna se samma information.
+
+Teamet valde Svale Systems efter att ha testat om loggen kunde visa status för varje reparation. Underlaget innehåller ingen jämförelse med någon annan leverantör.
+
+## Teamet bestämde kategorierna
+
+De boende kunde fortsätta att anmäla fel via telefon under försöket. Teamet utformade kategorierna, medan Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen. Arbetsledaren Maya Lind beskriver ansvarsfördelningen i en mejlintervju:
+
+– Vi ville att kvällsskiftet skulle kunna se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen.
+
+Linds råd inför arbetet med nästa byggnad handlar om förberedelserna:
+
+– Vi lade mer tid på att komma överens om kategorierna än på att lägga in de första anmälningarna. Jag skulle avsätta den tiden innan försöket börjar i nästa byggnad.
+
+## Kortare tid till fördelning
+
+Enligt Elm Quays interna försöksanteckning, daterad den 4 december 2025, registrerades 31 felanmälningar. Akuta ärenden och arbeten som beställts före försöket ingår inte i sammanställningen.
+
+Mediantiden från anmälan till fördelning av ärendet var två arbetsdagar under försöket, jämfört med tre under de föregående åtta veckorna. Perioderna hade olika arbetsbelastning. Anteckningen tillskriver uttryckligen inte programvaran skillnaden. Måttet gäller fördelning av ärenden, inte tiden tills reparationerna var klara.
+
+Det finns inga mätningar av kostnader, boendes nöjdhet eller tid till slutförd reparation. Linds egen bedömning är:
+
+– Jag skulle välja att göra försöket igen. Att ha en samlad vy över anmälningarna hjälper oss, men jag skulle avsätta en extra vecka för förberedelser.
+
+Försöket har ännu inte utökats. Innan teamet beslutar om fortsättningen ska det kontrollera hur kategorierna fungerar för större reparationer.
+
+För den som vill läsa vidare finns [Svales checklista för införande](https://example.invalid/svale/checklist).
+
+*Detta kundcase publiceras av leverantören Svale Systems.*
+
+---
+
+Första utkastet levereras här: kundcase på svenska, utan särskild berättarteknik. Sakpåståenden och översatta citat har kontrollerats mot det fiktiva underlaget. Begränsningarna i mätningarna framgår av texten. Inga utkast eller kontrollfiler finns kvar på disk.

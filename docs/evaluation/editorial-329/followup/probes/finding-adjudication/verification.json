@@ -1,0 +1,91 @@
+{
+  "invocations": 4,
+  "native_sessions": 4,
+  "rows": [
+    {
+      "case": "column",
+      "sessions": 1,
+      "full_input_read": true,
+      "actual_identity": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-a2kchfbc",
+      "exists_after": false,
+      "method": "Literal absolute-path evaluator deletion after capture and independent judgment."
+    },
+    {
+      "case": "opinion",
+      "sessions": 1,
+      "full_input_read": true,
+      "actual_identity": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-o6kfpbe7",
+      "exists_after": false,
+      "method": "Literal absolute-path evaluator deletion after capture and independent judgment."
+    },
+    {
+      "case": "chronology",
+      "sessions": 1,
+      "full_input_read": true,
+      "actual_identity": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-m7_q8du9",
+      "exists_after": false,
+      "method": "Literal absolute-path evaluator deletion after capture and independent judgment."
+    },
+    {
+      "case": "document-scope",
+      "sessions": 1,
+      "full_input_read": true,
+      "actual_identity": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ph5xanhq",
+      "exists_after": false,
+      "method": "Literal absolute-path evaluator deletion after capture and independent judgment."
+    }
+  ],
+  "process_ended": 84597
+}

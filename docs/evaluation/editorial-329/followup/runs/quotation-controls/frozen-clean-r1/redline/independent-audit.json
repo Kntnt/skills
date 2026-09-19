@@ -1,0 +1,61 @@
+{
+  "actual_identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "spawns": [
+    {
+      "task_name": "quotation_read",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "correction",
+      "fork_turns": "none"
+    },
+    {
+      "task_name": "quotation_reread",
+      "fork_turns": "none"
+    }
+  ],
+  "child_reads": [
+    {
+      "native_session": "rollout-2026-09-20T00-11-23-01a0bbb9-60ea-71d3-b664-b914bb8837d4.jsonl",
+      "input_visible": true,
+      "case_review_visible": true,
+      "base_review_visible": true,
+      "swedish_composition_visible": true,
+      "swedish_review_visible": true
+    },
+    {
+      "native_session": "rollout-2026-09-20T00-14-19-01a0bbbc-0f30-7170-9515-4f0085488356.jsonl",
+      "input_visible": false,
+      "case_review_visible": true,
+      "base_review_visible": true,
+      "swedish_composition_visible": true,
+      "swedish_review_visible": true
+    },
+    {
+      "native_session": "rollout-2026-09-20T00-13-17-01a0bbbb-1d92-7851-a8e6-644c025c0987.jsonl",
+      "input_visible": false,
+      "case_review_visible": true,
+      "base_review_visible": true,
+      "swedish_composition_visible": true,
+      "swedish_review_visible": true
+    }
+  ],
+  "proofread_invocations": 1,
+  "input_inventory_unchanged": true,
+  "authentication_changed": false,
+  "nonhome_changes": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "duration_seconds": 322.03,
+  "result": 0,
+  "judgement": "pass: smallest idiomatic repair, all other text retained",
+  "proofread_invocations_all_native_sessions": 1,
+  "encrypted_dispatch_limitation": "Exact full dispatched message unavailable; missing child read evidence remains skipped, not proved by summary."
+}

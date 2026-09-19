@@ -1,0 +1,9 @@
+{
+  "pid": 84597,
+  "process_group": 84597,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/adjudication_probe.py"
+  ]
+}

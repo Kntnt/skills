@@ -1,0 +1,22 @@
+{
+  "pid": 41460,
+  "command": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/candidate_originals.py",
+    "--revision",
+    "7b86144d",
+    "--corpus",
+    "7b86144d",
+    "--wave",
+    "third-candidate",
+    "--pipeline",
+    "--cases",
+    "opinion-sv-r1",
+    "opinion-en_GB-r1",
+    "opinion-en_US-r1",
+    "case-study-en_US-r1",
+    "case-study-en_US-r2",
+    "case-study-sv-r1"
+  ]
+}

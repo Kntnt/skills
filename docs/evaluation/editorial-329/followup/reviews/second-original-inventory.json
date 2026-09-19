@@ -1,0 +1,645 @@
+{
+  "invocations": 25,
+  "sessions": 47,
+  "all_roots_removed": true,
+  "entries": [
+    {
+      "case": "opinion-sv-r1",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l02az9oc",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "opinion-sv-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-tykt1bbk",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "opinion-sv-r2",
+      "phase": "write",
+      "sessions": 2,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-isgsqxb0",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "opinion-sv-r2",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-z2h5ep8b",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "opinion-en_GB-r1",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-u280a_ah",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "opinion-en_GB-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-maw3af7x",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "opinion-en_GB-r2",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-53_1u93y",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "opinion-en_GB-r2",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-erfa574t",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-p1ctoeym",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4qjeowfe",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "opinion-en_US-r2",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-j0k8g0bj",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "opinion-en_US-r2",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-qjca65yu",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-h5edq42u",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-0wy8iws6",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "case-study-en_US-r2",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-mwogc2w4",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "case-study-en_US-r2",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iu7jhnu_",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "case-study-en_US-r3",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-k63y1cg4",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "case-study-en_US-r3",
+      "phase": "redline",
+      "sessions": 2,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_eq85auu",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "case-study-sv-r1",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-t22yj7c2",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "case-study-sv-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nf6z36c2",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "case-study-sv-r2",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pjon9ixp",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "checked_prose": true
+    },
+    {
+      "case": "case-study-sv-r2",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dbsow6aj",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "idiom-frozen-clean",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pd9z5ugz",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "idiom-first-sv-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-grplgydk",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    },
+    {
+      "case": "idiom-first-sv-r2",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-h7oh5yzf",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "parent_missing_paragraphs": {},
+      "instruction_revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+      "exact_source_blind_input": true
+    }
+  ]
+}

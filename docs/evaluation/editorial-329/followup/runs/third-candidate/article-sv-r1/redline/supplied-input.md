@@ -1,0 +1,38 @@
+---
+kntnt:
+  genre: article
+  technique: none
+  language: sv
+---
+
+# Fyra veckors mätning visar när värmen behöver granskas
+
+Ett kort mätförsök kan visa när lufttemperaturen i undersökta klassrum ligger under en vald gräns. Det förklarar inte i sig varför det sker eller hur eleverna upplever värmen. Björkskolans försök ger kommunala fastighetsförvaltare ett exempel på hur mätvärden kan användas och var slutsatserna måste stanna.
+
+I januari 2026 satte Lerviks fastighetskontor temperaturgivare i sex klassrum i Björkskolan. Kontoret ville undersöka om klagomål på kall luft sammanföll med låga temperaturer under lektionstid. Under fyra veckor registrerade givarna värden var femte minut.
+
+## Ett lektionspass säger inte hur länge det var kallt
+
+I rapporten *Mätförsök i Björkskolan*, daterad den 12 mars 2026, redovisas 120 registrerade lektionspass. Av dem innehöll 14 minst en mätning under 20 grader Celsius. Rapporten anger inte hur länge temperaturen låg under gränsen. Resultatet ska därför inte läsas som att temperaturen var under 20 grader under hela dessa lektioner.
+
+Gränsen var fastighetskontorets egen arbetsgräns för försöket. Den var inte ett påstående om ett rättsligt krav. Underlaget ger heller ingen norm att jämföra antalet pass med.
+
+Att rapporten redovisar lektionspass har en poäng: ett medelvärde för hela dagen kan dölja variationer under lektionerna. Men även uppgiften om antalet pass behöver läsas tillsammans med sin begränsning – den anger förekomst av mätvärden under gränsen, inte varaktigheten.
+
+## Givaren mäter luften där den sitter
+
+En temperaturgivare mäter temperaturen på sin plats. I försöket stod två givare nära ytterväggar och fyra på innerväggar. Placeringarna dokumenterades, men jämfördes inte experimentellt. Försöket fastställer alltså inte vilken betydelse placeringen hade för resultaten.
+
+För att beskriva värmen finns också måttet operativ temperatur. Det tar hänsyn till både lufttemperaturen och värmestrålningen från omgivande ytor. I Björkskolan mättes bara lufttemperaturen. Ventilation, luftdrag och upplevd temperatur mättes inte, och rapporten säger inte om eleverna frös.
+
+Resultaten gäller dessutom bara de sex klassrummen under de fyra veckorna. De ger inte besked om temperaturen i skolans övriga rum eller under andra perioder.
+
+## Koppla mätvärdena till när rummen används
+
+Efter försöket gick driftteknikern Elin Rask igenom tiderna för ventilation och värme med skolans vaktmästare. Effekten av eventuella justeringar har ännu inte mätts.
+
+– Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då, sade Elin Rask.
+
+Nästa försök planeras för november, med likadant placerade givare och noteringar om när rummen används. Finansieringen är inte beslutad.
+
+Rasks rekommendation till förvaltaren är att koppla temperaturserier – mätvärden ordnade över tid – till användningstider innan styrningen ändras. Det är ett nästa steg som håller isär vad försöket har visat och vad som återstår att undersöka.

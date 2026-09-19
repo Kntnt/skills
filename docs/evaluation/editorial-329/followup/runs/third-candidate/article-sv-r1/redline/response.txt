@@ -1,0 +1,1 @@
+Texten är granskad som artikel på svenska, utan särskild berättarteknik enligt metadata. Inga redaktionella anmärkningar eller korrekturfel hittades. Inga ändringar behövdes; `input.md` är orörd.

@@ -1,0 +1,20 @@
+{
+  "pid": 81218,
+  "process_group": 81218,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/candidate_new_batch.py",
+    "redline",
+    "--revision",
+    "7b86144d",
+    "--wave",
+    "third-candidate",
+    "--matrix",
+    "third",
+    "--workers",
+    "1",
+    "--cases",
+    "opinion-absence-en_GB-r3"
+  ]
+}

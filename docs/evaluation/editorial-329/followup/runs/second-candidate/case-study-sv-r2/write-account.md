@@ -1,0 +1,1 @@
+*Leverans: Ett första utkast till kundcase på svenska, utan särskild berättarteknik, levererat här i svaret. Källstöd och citatöversättningar är kontrollerade utan kvarstående anmärkningar. Underlagets mätbegränsningar framgår i texten. Alla tillfälliga filer har tagits bort; ingen utkastfil har sparats.*

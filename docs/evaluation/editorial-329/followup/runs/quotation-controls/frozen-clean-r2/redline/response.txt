@@ -1,0 +1,1 @@
+Texten är granskad som kundcase på svenska, utan särskild berättarteknik. Inga redaktionella eller språkliga fel hittades. Inga ändringar behövdes; `input.md` är orörd.

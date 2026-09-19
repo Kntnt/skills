@@ -1,0 +1,4 @@
+{"case": "opinion", "returncode": 0}
+{"case": "column", "returncode": 0}
+{"case": "chronology", "returncode": 0}
+{"case": "document-scope", "returncode": 0}

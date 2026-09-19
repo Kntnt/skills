@@ -23,3 +23,8 @@ Native dispatch encrypts the checker message. Thirteen of fourteen source-check 
 All 24 inventories show no surviving Skill effects outside private native Harness state. Sources/resources are unchanged, all 24 roots are absent after literal-path cleanup, and every owned batch has ended. [Verification](candidate-new-verification.json) records per-run roots, durations and checks. The two evaluator-only helpers pass Ruff, format checking and strict mypy; `git diff --check` passes. No evaluator scratch or process remains.
 
 Full criterion-by-criterion records: [Write](../../../records/write-gpt-2026-09-19-349-followup-new.md) and [Redline](../../../records/redline-gpt-2026-09-19-349-followup-new.md). Each links the complete source/input, artifact, account, trace audit, filesystem changes and cleanup receipt. The root owns tracker disposition and any further repair of the separate Redline observations.
+
+
+## Superseding F1 assessment — 20 September 2026
+
+The two first-wave `case-question-en_GB` artifacts and their unchanged paired outputs fail F1 for unsupported personal attribution (“she”), absent from the complete fictional source. The supported question itself remains permissible. See [#356](https://github.com/Kntnt/skills/issues/356) and the visible supersession in both linked records. The earlier 12/12 statement remains historical; the corrected new/general result is **10/12 F1**, with no other criterion changed.

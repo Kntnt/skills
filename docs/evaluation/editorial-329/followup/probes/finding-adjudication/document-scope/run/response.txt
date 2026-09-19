@@ -1,0 +1,25 @@
+**Finding 1 — Accepted: the claim about what the submission establishes is unsupported.**
+
+Exact draft passage:
+
+> Our submission also makes no claim to have secured the building owner’s consent for rehearsal use; it does not establish whether that consent exists.
+
+Exact source words:
+
+> The association's submission makes no representation that it has secured the building owner's consent for rehearsal use. The supplied material does not state the consent's actual status.
+
+The draft’s first clause faithfully reports the submission’s lack of a claim to have secured consent. The second clause makes an additional assertion: the submission does not establish whether consent exists. Its grammatical subject, “it”, refers to “Our submission”. “That consent” retains the specific scope of the building owner’s consent for rehearsal use.
+
+The immediate context distinguishes what documents confirm: the treasurer’s note confirms the missing conversion estimate, while the submission makes no claim to secured consent. The article’s broader emphasis on uncertainty does not change the second clause’s subject to the supplied source package. Nor does it turn that assertion into a possibility or qualification.
+
+The report’s reconstructed proposition—
+
+> The association’s submission establishes neither that the owner’s consent for rehearsal use exists nor that it does not exist.
+
+—therefore preserves the draft’s actual claim. It does not misrepresent the draft as asserting that consent is absent.
+
+The source establishes uncertainty **in the supplied material**, but does not establish that the submission itself leaves consent’s status undetermined. Those are different claims about different bodies of information.
+
+The report’s counterexample demonstrates the gap: a submission could contain an authoritative owner’s statement that consent has been refused and remains withheld. Such a submission would make no representation that consent had been secured, satisfying the source description, while establishing its absence, contradicting the draft’s second clause. The supplied package could omit that statement without contradicting any supplied fact. This counterexample establishes lack of support; it does not establish that a refusal actually occurred.
+
+The report contains one adverse finding. Its other support assessments reveal no additional unsupported claim on independent review. **No validated unresolved finding remains.** The draft has not been edited.

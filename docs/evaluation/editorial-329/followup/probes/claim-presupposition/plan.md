@@ -1,0 +1,3 @@
+# Neutral presupposition extraction diagnostic
+
+One authorized source-aware replay of the exact complete third-candidate archive draft and source. Hypothesis: prior claim accounting left an unprovided presupposition assumed in both a proposition and its negation, so neither branch tested it. The neutral task extracts presuppositions into separate propositions before applying the existing exact-negation support test. No suspected attribute, name, passage or issue is identified in the prompt. Product `7b86144d`, corpus `bf14dc2`. This diagnostic is separate from every Skill matrix; the failed delivered artifact remains unchanged.

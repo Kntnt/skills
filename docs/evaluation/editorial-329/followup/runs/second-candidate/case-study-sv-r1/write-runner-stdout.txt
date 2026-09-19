@@ -1,0 +1,1 @@
+{"returncode": 0, "timed_out": false, "duration_seconds": 497.78, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-t22yj7c2", "cleanup_required": true}

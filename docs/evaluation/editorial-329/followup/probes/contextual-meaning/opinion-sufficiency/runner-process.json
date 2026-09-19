@@ -1,0 +1,24 @@
+{
+  "pid": 77298,
+  "process_group": 77298,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "ae24f9b3",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/opinion-sufficiency/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/opinion-sufficiency/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/opinion-sufficiency/run"
+  ],
+  "source_origin": "docs/evaluation/corpus/editorial-quality/sources/opinion.md",
+  "draft_origin": "docs/evaluation/editorial-329/followup/runs/third-candidate/opinion-sv-r1/withheld-checked-prose.md",
+  "draft_sha256": "cd45a3cf34a3c65ec2fc37c08f749233af60f7cd914d74ecc7a5fc83fe1c7b87"
+}

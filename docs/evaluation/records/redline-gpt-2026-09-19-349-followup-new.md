@@ -303,3 +303,8 @@ Full inventories for all twelve runs show only private native Harness state chan
 - **unresolved findings** — none
 - **defects filed** — none from this Redline artifact
 - **notes** — The final artifact remains independently source-faithful. Optional supported material need not be added, and no unseen-source verification is attributed to this pass.
+
+
+## Independent F1 supersession — 20 September 2026
+
+The earlier F1 passes for `case-question-en_GB-r1` and `case-question-en_GB-r2` are superseded: both delivered artifacts assign Priya Vale the pronoun “she”, absent from the complete supplied fictional source. A different personal attribution remains source-compatible. Their actual supplied interview question stays permissible; the failure is the unsupported attribution, [#356](https://github.com/Kntnt/skills/issues/356), not invented question framing. Both source-blind paired reviews preserve the same defect. The original entries remain as history; first-wave new/general F1 is therefore 10/12, and the combined first-wave total is 14/23. No other criterion changes.

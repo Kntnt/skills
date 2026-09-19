@@ -1,0 +1,29 @@
+{
+  "normalization": "Remove only leading delivery YAML map and outer blank lines; preserve all prose characters and internal whitespace.",
+  "checker_reads": [
+    {
+      "session": "native-sessions/2026/09/20/rollout-2026-09-20T00-04-25-01a0bbb3-0019-7df3-95f3-5415eb5e2448.jsonl",
+      "has_explicit_draft_read": true,
+      "complete_delivered_prose_visible": false,
+      "read_calls": [
+        {
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat source.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-t22yj7c2/scratch/write-check.ech8aqkm/draft.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/write/references/quotations.md\",max_output_tokens:26000});text(r.output);\n"
+        }
+      ]
+    },
+    {
+      "session": "native-sessions/2026/09/20/rollout-2026-09-20T00-07-34-01a0bbb5-e2ff-7d81-8e31-878391d0e3a7.jsonl",
+      "has_explicit_draft_read": true,
+      "complete_delivered_prose_visible": true,
+      "read_calls": [
+        {
+          "name": "exec",
+          "input": "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"cat source.md\",\"max_output_tokens\":15000}),\ntools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-t22yj7c2/scratch/write-check.ech8aqkm/draft.md\",\"max_output_tokens\":15000}),\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md\",\"max_output_tokens\":10000}),\ntools.exec_command({cmd:\"cat .agents/skills/write/references/quotations.md\",\"max_output_tokens\":10000})\n]); for (let i=0;i<results.length;i++) text({i,...results[i]});\n"
+        }
+      ]
+    }
+  ],
+  "last_checker_matches": true,
+  "note": "A match proves continuous final prose was visibly read. Inspect the native read command/output for complete draft boundaries and truncation; checker approval alone is insufficient."
+}

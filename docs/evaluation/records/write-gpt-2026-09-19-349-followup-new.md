@@ -315,3 +315,8 @@ Every run retains its full response, extracted artifact and account, native pare
 - **unresolved findings** — none delivered
 - **defects filed** — none from this Write artifact
 - **notes** — This control exercises the changed Write workflow outside the five-genre shared-craft path. General and no technique remain explicit; one checker approved. Native duration: 140.98 seconds. No further tool-visible substantive edit follows the final approval; exact approved/final equality retains the S1 limitation.
+
+
+## Independent F1 supersession — 20 September 2026
+
+The earlier F1 passes for `case-question-en_GB-r1` and `case-question-en_GB-r2` are superseded: both delivered artifacts assign Priya Vale the pronoun “she”, absent from the complete supplied fictional source. A different personal attribution remains source-compatible. Their actual supplied interview question stays permissible; the failure is the unsupported attribution, [#356](https://github.com/Kntnt/skills/issues/356), not invented question framing. Both source-blind paired reviews preserve the same defect. The original entries remain as history; first-wave new/general F1 is therefore 10/12, and the combined first-wave total is 14/23. No other criterion changes.

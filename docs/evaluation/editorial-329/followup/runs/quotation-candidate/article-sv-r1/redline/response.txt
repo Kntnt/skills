@@ -1,0 +1,1 @@
+Texten har granskats som artikel på svenska, utan berättarteknik enligt metadata. Inga redaktionella eller språkliga fel hittades. Inga ändringar behövdes och inga filer har ändrats.

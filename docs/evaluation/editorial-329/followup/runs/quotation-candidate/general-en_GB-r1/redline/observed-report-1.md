@@ -1,0 +1,3 @@
+Focused quotation reading completed: no findings.
+
+Read the complete artifact, including metadata, title, headings and the surrounding account, against the supplied base and general contracts and en_GB guidance. The quoted statement (‘We know when we need to take a closer look. We don’t yet know why it got cold at those particular times,’ Rask said.) is idiomatic and intelligible in context. ‘We’ clearly refers to the people investigating the school’s temperature readings; ‘those particular times’ refers to the low-temperature periods discussed immediately beforehand. No concrete idiom, reference or clarity obstruction warrants changing the quotation. General editorial review, source verification and mechanics were outside this reading’s scope.

@@ -1,0 +1,1 @@
+Delivered here as US English web copy, with no technique selected. Source comparison passed. No files remain from this run. The draft is about 260 words; the missing payment terms and summary delivery timeline would provide useful material toward the requested 300 words.

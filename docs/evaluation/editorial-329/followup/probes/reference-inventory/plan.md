@@ -1,0 +1,5 @@
+# Grammatical reference inventory diagnostic
+
+The generic presupposition and referring-property prompts both failed to extract an attribute encoded by a pronoun. This hypothesis makes the general grammar operation concrete: inventory names, pronouns/titles/descriptions and separately account for pronoun person, number and natural-gender attribution. It names no faulty person, expression, expected verdict or issue in the model task. This is a focused coverage diagnostic, not an unconstrained discovery claim or a prohibition on gendered language.
+
+Use the complete third Ortiz artifact/source (unsupported attribution) and the independently faithful second Lind artifact/source (expressly supplied attribution), with identical task and the existing precise comparison otherwise intact. Expected: find unsupported attribution in the first, preserve supported attribution in the second, without new unrelated findings. Retain every outcome before considering any product change; a detector success does not establish end-to-end Write repair.

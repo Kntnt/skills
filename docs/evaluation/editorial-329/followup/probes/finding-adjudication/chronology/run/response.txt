@@ -1,0 +1,31 @@
+**Accepted — unsupported September date for choosing Svale (report item 8, the report’s sole defect finding).**
+
+The complete draft sentence reads:
+
+> “In September 2025, its maintenance team decided to try a shared log and chose Svale Systems after testing whether it could show the status of each repair.”
+
+The subject is Elm Quay’s maintenance team. The opening modifier “In September 2025” scopes over the coordinated actions “decided” and “chose.” The sentence therefore dates both the trial decision and supplier selection to September. “After testing” places testing before selection; it does not independently place testing in September or assert that the test succeeded.
+
+The source says:
+
+> “In September 2025 its own maintenance team decided to trial a shared repair log in two buildings.”
+
+It subsequently says:
+
+> “It chose Svale Systems after testing whether the log could show the status of each repair.”
+
+These support a September trial decision and selection following testing. They do not establish a September selection. The intervening source sentences describe the previous reporting arrangement and the team’s purpose; they provide no additional timing constraint.
+
+The immediate draft context establishes the customer’s identity and previous reporting arrangements. The whole draft supplies the trial duration and note date, but neither narrows supplier selection to September nor qualifies the opening date’s application to “chose.” Thus the report’s reconstruction retains the actual subject, temporal modifier and sequence rather than manufacturing a stronger claim.
+
+The report’s counterexample is compatible with the complete source. A September decision followed by selection on October 1 after testing would leave enough time for an eight-week trial before December 4. The relevant source words are:
+
+> “The trial lasted eight weeks.”
+
+> “Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered.”
+
+Nothing in the source requires the trial itself to start in September. The counterexample therefore preserves the supplied facts while making the draft’s September selection date false. It establishes missing support; it does not establish that selection actually occurred in October.
+
+The report correctly treats the unsupported date in its third reconstructed proposition as the same defect repeated within the testing-before-selection relationship, not a separate claim that testing happened in September.
+
+**No validated unresolved finding remains.** The sole reported defect is accepted. The draft has not been edited.

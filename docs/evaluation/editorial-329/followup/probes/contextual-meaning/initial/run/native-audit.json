@@ -1,0 +1,51 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T00-15-11-01a0bbbc-dbc7-7cb2-962b-60eeea9b8285.jsonl",
+      "session": {
+        "id": "01a0bbbc-dbc7-7cb2-962b-60eeea9b8285",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat input.md\",max_output_tokens:24000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": null,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "genres/column.md": 9,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

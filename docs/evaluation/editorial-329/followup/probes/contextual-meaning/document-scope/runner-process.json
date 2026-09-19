@@ -1,0 +1,24 @@
+{
+  "pid": 77284,
+  "process_group": 77284,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "ae24f9b3",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/document-scope/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/document-scope/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/document-scope/run"
+  ],
+  "source_origin": "docs/evaluation/editorial-329/followup/fixtures/opinion-absence-en_GB.md",
+  "draft_origin": "docs/evaluation/editorial-329/followup/runs/second-candidate/opinion-absence-en_GB-r1/write/artifact.md",
+  "draft_sha256": "f3b1e5a8b849c9213f9a5bcd088a3d0b330d48a17a304d74d4aff56a3850ab0a"
+}

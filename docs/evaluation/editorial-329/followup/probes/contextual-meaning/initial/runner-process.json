@@ -1,0 +1,23 @@
+{
+  "pid": 69996,
+  "process_group": 69996,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "ae24f9b3",
+    "--corpus-revision",
+    "6e531f5",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/initial/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/initial/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/initial/run"
+  ],
+  "draft_sha256": "83f2434387d9e8f6d1787070b55b54ebb3d262c10789061d39542bf0d2279b09",
+  "draft_origin": "docs/evaluation/editorial-329/followup/runs/third-candidate/column-sv-r1/write/trace.jsonl item item_7 command literal"
+}

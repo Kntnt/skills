@@ -1,0 +1,1 @@
+Granskad som kundcase (`case-study`) på svenska, utan berättarteknik enligt metadata. Inga redaktionella eller mekaniska fel hittades. Texten är oförändrad och inga filer har ändrats.

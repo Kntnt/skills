@@ -1,0 +1,1 @@
+Draft delivered here in British English, using `general` with no technique. Source and quotation checks passed. The material supports no conclusion about causes or adjustment effects. No files retained or source files changed.

@@ -1,0 +1,1 @@
+Delivery: en_US case study, no technique applied, delivered here. Source comparison passed. No files retained. The supplied material supports this approximately 370-word draft; further measured outcomes or implementation detail would support a longer account.

@@ -1,0 +1,8 @@
+{
+  "native_session": "native-sessions/2026/09/20/rollout-2026-09-20T00-06-25-01a0bbb4-d4d6-7263-a782-b6b579057d14.jsonl",
+  "jsonl_line": 14,
+  "field": "payload.output[1].text",
+  "extraction": "Exact suffix beginning with draft H1 after source/contract reads; no prose edits, original terminal newline retained.",
+  "sha256": "b697342977dae89a552813a04da2ea43187972e61e74a02c69fd06d33217af53",
+  "delivered": false
+}

@@ -1,0 +1,59 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T00-10-21-01a0bbb8-6f47-7a92-a3db-3a74c06a0a25.jsonl",
+      "session": {
+        "id": "01a0bbb8-6f47-7a92-a3db-3a74c06a0a25",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"pwd && rg --files -g 'AGENTS.md' -g 'input.md' -g 'SKILL.md' -g '*.md' .agents/skills/redline . 2>/dev/null\",max_output_tokens:4000}));\ntext(await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",max_output_tokens:12000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fzp07ewq/scratch/redline.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--output=response input.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py\",\"max_output_tokens\":6000}));\ntext(await tools.exec_command({cmd:\"cat input.md\",\"max_output_tokens\":8000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='redline.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fzp07ewq/scratch') as tmp:\\n p=subprocess.run(['uv','run','.agents/skills/redline/scripts/invoke.py'],input='--output=response input.md',text=True,env={**os.environ,'TMPDIR':tmp,'UV_NO_CACHE':'1','UV_NO_PROJECT':'1'})\\n raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":6000}));\ntext(await tools.exec_command({cmd:\"cat input.md\",\"max_output_tokens\":8000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/redline/references/correction.md\",\"max_output_tokens\":12000}));\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='redline.',dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fzp07ewq/scratch') as tmp:\\n p=subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=composition','--scope=review','--scope=anti-slop','en_GB'],env={**os.environ,'TMPDIR':tmp,'UV_NO_CACHE':'1','UV_NO_PROJECT':'1'})\\n raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":5000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/case-study.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md\",\"max_output_tokens\":22000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":14000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='proofread.',dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fzp07ewq/scratch') as tmp:\\n p=subprocess.run(['uv','run','.agents/skills/proofread/scripts/invoke.py'],input='--language=en_GB --output=response',text=True,env={**os.environ,'TMPDIR':tmp,'UV_NO_CACHE':'1','UV_NO_PROJECT':'1'})\\n raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":4000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='proofread.',dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fzp07ewq/scratch') as tmp:\\n p=subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=mechanics','en_GB'],env={**os.environ,'TMPDIR':tmp,'UV_NO_CACHE':'1','UV_NO_PROJECT':'1'})\\n raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":6000}));\ntext(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/mechanics.md\",\"max_output_tokens\":7000}));\n",
+        "text(await tools.exec_command({cmd:\"git status --short\\npython3 - <<'PY'\\nfrom pathlib import Path\\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fzp07ewq/scratch')\\nprint('Scratch contents:', [x.name for x in p.iterdir()])\\nprint('Run temporary directories:', [str(x) for x in p.iterdir() if x.name.startswith(('redline.','proofread.'))])\\nPY\",\"max_output_tokens\":2000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    }
+  ],
+  "parent_visible_reports": [],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

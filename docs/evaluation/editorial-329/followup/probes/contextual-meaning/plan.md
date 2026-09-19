@@ -1,0 +1,3 @@
+# Contextual-meaning diagnostic
+
+Two neutral complete-source replays use the exact third-column final withheld draft and its initial precheck draft. The first should preserve the contextually grounded rhetorical contrast; the second must still detect the independently observed template-information overreach. This checks both false-positive removal and true-defect preservation, with no passage hints, issue descriptions or earlier reports supplied. Both are diagnostics, not Write/Redline evaluations. Retain every result and full native capture; no product change or acceptance conclusion precedes the results.

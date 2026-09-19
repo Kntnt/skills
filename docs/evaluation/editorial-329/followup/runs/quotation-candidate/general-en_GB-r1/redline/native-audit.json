@@ -1,0 +1,120 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T00-15-55-01a0bbbd-87e3-7741-b1a4-55f460984eb3.jsonl",
+      "session": {
+        "id": "01a0bbbd-87e3-7741-b1a4-55f460984eb3",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_reading",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",max_output_tokens:12000}));\ntext(await tools.exec_command({cmd:\"cat input.md\",max_output_tokens:12000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch/redline.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--output=response input.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py\",max_output_tokens:12000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '.agents/skills/redline/scripts/invoke.py'], input='--output=response input.md', text=True, env={**os.environ, 'TMPDIR':tmp, 'UV_NO_CACHE':'1', 'UV_NO_PROJECT':'1'})\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":12000}));\n",
+        "const r = await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/general.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/redline/references/quotation-review.md\\nrg --files .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library/references/editorial/techniques\",\"max_output_tokens\":22000}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='languages.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'en_GB'], env={**os.environ, 'TMPDIR':tmp, 'UV_NO_CACHE':'1', 'UV_NO_PROJECT':'1'})\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":4000})\n]);for(let i=0;i<r.length;i++)text({i,result:r[i]});\n",
+        "text(await tools.exec_command({cmd:\"mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch/quotation.XXXXXX\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":14000}));\n",
+        "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch/quotation.SB2w0J/report.md\",\"max_output_tokens\":3000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile, shutil\\nshutil.rmtree('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch/quotation.SB2w0J')\\nwith tempfile.TemporaryDirectory(prefix='proofread.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '.agents/skills/proofread/scripts/invoke.py'], input='--language=en_GB --output=response', text=True, env={**os.environ, 'TMPDIR':tmp, 'UV_NO_CACHE':'1', 'UV_NO_PROJECT':'1'})\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":4000}));\n",
+        "const r = await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/mechanics.md\",\"max_output_tokens\":8000}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='mechanics.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=mechanics', 'en_GB'], env={**os.environ, 'TMPDIR':tmp, 'UV_NO_CACHE':'1', 'UV_NO_PROJECT':'1'})\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":6000})\n]); for (let i=0;i<r.length;i++) text({i,result:r[i]});\n",
+        "text(await tools.exec_command({cmd:\"git status --short\\npython3 - <<'PY'\\nfrom pathlib import Path\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch')\\nprint('Scratch contents:', [p.name for p in scratch.iterdir()])\\nPY\",\"max_output_tokens\":2000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 0,
+        "mechanics.md": 0,
+        "genres/opinion.md": 7,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 7,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 6,
+        "genres/article.review.md": 4,
+        "genres/column.md": 7,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 7,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 0
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T00-16-57-01a0bbbe-7849-7d70-b487-dedfe1652585.jsonl",
+      "session": {
+        "id": "01a0bbbe-7849-7d70-b487-dedfe1652585",
+        "parent_thread_id": "01a0bbbd-87e3-7741-b1a4-55f460984eb3",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bbbd-87e3-7741-b1a4-55f460984eb3",
+              "depth": 1,
+              "agent_path": "/root/quotation_reading",
+              "agent_nickname": "Helmholtz",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "const r=await tools.exec_command({cmd:\"cat input.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/general.md\",max_output_tokens:18000});text(r.output);\n",
+        "text(await tools.exec_command({cmd:\"cat > /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv/scratch/quotation.SB2w0J/report.md <<'EOF'\\nFocused quotation reading completed: no findings.\\n\\nRead the complete artifact, including metadata, title, headings and the surrounding account, against the supplied base and general contracts and en_GB guidance. The quoted statement (‘We know when we need to take a closer look. We don’t yet know why it got cold at those particular times,’ Rask said.) is idiomatic and intelligible in context. ‘We’ clearly refers to the people investigating the school’s temperature readings; ‘those particular times’ refers to the low-temperature periods discussed immediately beforehand. No concrete idiom, reference or clarity obstruction warrants changing the quotation. General editorial review, source verification and mechanics were outside this reading’s scope.\\nEOF\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 7,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 7,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 6,
+        "genres/article.review.md": 4,
+        "genres/column.md": 7,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 7,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 0
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

@@ -1,0 +1,1 @@
+No changes needed. Reviewed as a case study in British English, with no technique applied as specified in the metadata. Quotation review and mechanical proofreading found no issues. No files changed.

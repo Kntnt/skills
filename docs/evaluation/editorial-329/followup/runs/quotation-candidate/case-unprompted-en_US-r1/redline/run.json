@@ -1,0 +1,43 @@
+{
+  "instruction_revision": "ae24f9b30d5c0928c5b83ea70dedf03ab0a0e7ae",
+  "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+  "harness": "Codex CLI 0.155.1",
+  "parent_identity": {
+    "model": "gpt-6-astra",
+    "effort": "high"
+  },
+  "input_name": "input.md",
+  "input_source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/third-candidate/case-unprompted-en_US-r1/write/artifact.md",
+  "argv": [
+    "/opt/homebrew/Caskroom/codex/0.155.1/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "workspace-write",
+    "-c",
+    "sandbox_workspace_write.network_access=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "--add-dir",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/scratch",
+    "-C",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/work",
+    "--skip-git-repo-check",
+    "--json",
+    "-o",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/quotation-candidate/case-unprompted-en_US-r1/redline/response.txt",
+    "-"
+  ],
+  "environment": {
+    "HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/home",
+    "CODEX_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/home/.codex",
+    "TMPDIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/scratch/tmp",
+    "UV_CACHE_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/scratch/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/scratch/data/uv/python",
+    "XDG_DATA_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/scratch/data",
+    "XDG_CACHE_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c/scratch/cache"
+  },
+  "note": "Identity must also be checked against each native turn_context after the run."
+}

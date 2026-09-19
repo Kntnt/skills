@@ -1,0 +1,21 @@
+{
+  "pid": 56738,
+  "process_group": 56738,
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "ae24f9b3",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/quotation-controls/frozen-clean-r1/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/quotation-controls/frozen-clean-r1/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/quotation-controls/frozen-clean-r1/redline"
+  ]
+}

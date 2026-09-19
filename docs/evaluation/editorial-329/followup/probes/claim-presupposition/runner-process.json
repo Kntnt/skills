@@ -1,0 +1,21 @@
+{
+  "pid": 34131,
+  "process_group": 34131,
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "7b86144d",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/claim-presupposition/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/claim-presupposition/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/claim-presupposition/run-1"
+  ]
+}

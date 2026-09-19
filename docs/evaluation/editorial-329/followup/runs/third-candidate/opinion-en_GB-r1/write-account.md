@@ -1,0 +1,1 @@
+*Opinion draft in British English, delivered here with no technique selected. Checked against the fictional source; no unresolved findings. The material supplies no trial costing, staff-time measurements or savings calculation. Temporary files removed; no files retained or source files changed.*

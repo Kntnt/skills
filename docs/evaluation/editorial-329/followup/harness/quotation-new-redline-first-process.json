@@ -1,0 +1,1 @@
+{"pid": 47468, "process_group": 47468, "argv": ["redline", "--revision", "ae24f9b3", "--wave", "quotation-candidate", "--artifact-wave", "third-candidate", "--matrix", "third", "--workers", "1", "--cases", "case-unprompted-en_US-r1", "case-question-en_GB-r1"]}

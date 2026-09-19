@@ -1,0 +1,1 @@
+Inga ändringar behövdes och inga anmärkningar kvarstår efter granskning och korrekturläsning. Texten granskades som kundcase på svenska, utan berättarteknik enligt metadata. Inga filer ändrades.

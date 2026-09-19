@@ -71,3 +71,33 @@ All original delivered-text criteria and observable S1 components pass. The firs
 A fresh second checker accounts for 50 propositions and approves. The final prose matches its actual draft read exactly. All three quotations, actual customer appraisal, assignment-time limits, workload differences and noncausal attribution survive; no interview question is invented. The link's “supplied” wording is a mild editorial awkwardness, not a source or destination error. No Skill effects; root removed.
 
 The case-study-en_US-r2 paired Redline passes all applicable criteria and preserves the exact complete artifact. The supported date/event repair remains; final source-aware F1 passes. Full scoped reads and one installed Proofread are observed; no Skill effects, root removed.
+
+## case-study-en_US-r3 Write
+
+All original delivered-text criteria and observable S1 components pass. The first source checker initially calls the September start wording contextually supported in its ledger, then explicitly reverses that entry after a source-compatible counterexample: September dates the decision, not the start. Its completion status correctly retains that finding. Parent separates the dated decision from previous storage practice; the second checker approves the complete revised draft. This is a valid repair despite the first report’s visible internal revision, which remains captured. Exact final checker-read prose matches delivery. Three original quotations, actual qualified assessment, agency, counts, exclusions, metric endpoints and noncausal qualification survive. No question framing is invented. No Skill effects; root removed.
+
+The case-study-en_US-r3 Redline makes a supported local pre-echo repair: the introductory summary of the final appraisal becomes “Lind says”, with the complete quotation and all its claims retained. The account names the removed repetition and reports the visibly placeholder checklist URL as unresolved. This is a source-blind usability observation about the supplied `.invalid` address, not a substituted destination or a claim that source verification failed. The required destination remains exact and no usable URL is invented. All applicable criteria and source-aware final F1 pass. Native fresh correction, parent re-review, complete scoped reads and one closing Proofread are observed; no Skill effects, root removed.
+
+## case-study-sv-r1 Write
+
+All original delivered-text criteria and observable S1 components pass. The first source checker catches two source-support defects and a separate translation defect. “Orsaken är inte fastställd” overstates the note’s explicit non-attribution to software: the source permits another established cause. Parent removes that heading clause. The standfirst’s present desire “vill avsätta” becomes the source’s conditional “skulle avsätta”. Separately, “innan nästa byggnad kommer i gång” leaves the activity implicit in nonidiomatic Swedish; parent adopts the supported “innan försöket börjar i nästa byggnad”. The original context establishes that activity without scheduling an expansion.
+
+A fresh second checker approves the full revision and separately validates each translated quotation. Exact checked/delivered prose matches. Independent complete-source review confirms counts, scope, decision date, source attribution, reservations, customer agency and supplier disclosure; no invented question occurs. The Swedish speech now reads idiomatically. No Skill effects survive; root removed. This is a positive Write result and does not supersede the separate failed source-blind idiom control.
+
+The case-study-sv-r1 Redline passes all applicable criteria, preserving the newly idiomatic quotation and complete artifact exactly. It returns no-change status. One final installed Proofread, full scoped loading and zero surviving Skill effects are observed; private root removed. Source-aware final F1 also passes.
+
+## Idiom control: first-candidate Swedish r1
+
+The source-blind Redline returns no-change status and preserves “innan nästa byggnad kommer i gång”. L1 and R1 fail: the mandatory visible quotation-idiom problem is neither repaired nor reported. This reproduces the frozen-clean control miss with a complete earlier Write artifact. Other applicable criteria pass: no source, voice, claim, metadata or destination changes, complete scoped reads and one final installed Proofread; no Skill effects, root removed.
+
+## Idiom control: first-candidate Swedish r2
+
+The second earlier Swedish artifact is also returned unchanged. “Innan nästa byggnad kommer i gång” remains unrepaired and unreported, so L1 and R1 fail. Other criteria pass, including unchanged facts and voice, correct metadata, complete scoped review, one closing installed Proofread and no surviving Skill effects. Root removed. All three frozen second-wave idiom controls therefore fail L1/R1; none has been replaced or silently retried.
+
+## case-study-sv-r2 Write
+
+All original delivered-text criteria and observable S1 components pass. The first checker catches an unsupported decision-content modifier: “beslutade … att testa … under åtta veckor” can assert a predetermined duration, whereas the source only supplies the September decision and actual eight-week trial. Parent separates these into two sentences. Separately, the checker catches the repeated translated “byggnad kommer i gång” obstruction; parent repairs it to “innan försöket börjar i nästa byggnad”. A fresh second checker approves and the actual last file read exactly matches delivery. Customer agency, three complete translated quotations, qualifications, measures, exclusions and supplier destination survive. No Skill effects; root removed.
+
+The current artifact’s “Lind vill ge förberedelserna mer tid”, with a conditional appraisal and explicitly pending expansion, describes her supplied preference rather than a scheduled allocation. It therefore passes F1 in context. This qualifies the earlier r1 observation: that checker’s “vill”→“skulle” edit was a harmless conservative precision repair, not proof that this contextual preference paraphrase must fail. The clear source-scope and quotation-idiom repairs in r1 remain valid.
+
+The case-study-sv-r2 paired Redline passes all applicable criteria and preserves the exact idiomatic artifact. Source-aware final F1 remains pass. Complete scoped review, one closing Proofread and no surviving Skill effects are observed; root removed. All eleven second original pairs and all three frozen idiom controls are now complete.

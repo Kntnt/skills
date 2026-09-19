@@ -1,0 +1,15 @@
+One finding.
+
+**Detection**
+
+- **Exact passage:** “Den tiden skulle jag avsätta innan nästa hus börjar”
+- **Applicable requirements:** The case-study review guidance says to check quoted speech for target-language idiom and clarify missing referents only where the surrounding text settles them. The base contract requires clear terminology and reference.
+- **What the reader loses:** “Nästa hus börjar” leaves the activity unstated and makes *huset* the awkward subject of *börjar*. The reader must reconstruct that Lind means starting the trial in the next building. The meaning is recoverable, but the construction obstructs idiomatic Swedish; the text gives no basis for treating it as characteristic voice.
+
+**Proposed repair**
+
+“Den tiden skulle jag avsätta innan försöket börjar i nästa hus”
+
+This supplies the activity established by the surrounding text while preserving the timing and conditional judgement.
+
+No other findings are warranted in the quoted speech.

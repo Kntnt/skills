@@ -1,0 +1,5 @@
+Krönikan levereras inte: den andra källkontrollen fann att formuleringen ”inte med bevis för kollegernas tillkortakommanden” saknar stöd. Anteckningarna säger endast att Noras reflektion inte bygger på mätningar.
+
+Färdigheten [write](.agents/skills/write/SKILL.md) kräver enligt [källkontrollens instruktioner](.agents/skills/write/references/source-check.md): ”There are at most two comparisons.” Kvarstående fynd efter den andra kontrollen innebär att körningen måste stoppas utan leverans.
+
+Det tillfälliga utkastet och kontrollrapporterna är borttagna.

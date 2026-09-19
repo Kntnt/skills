@@ -1,0 +1,149 @@
+The draft’s substantive account is supported. One referring expression adds an unsupported attribute: **“her email” assigns feminine natural gender to Ortiz.** The smallest repair is **“the email.”** The email’s authorship is supported; the gender attribution is not.
+
+There are no translation findings: the source and draft are both in English, and the quotations preserve the supplied wording.
+
+The accounting below treats support as support within this fictional source package. A quotation supports what Ortiz wrote; it does not, by itself, independently verify the event or judgment described.
+
+**Referent inventory.** Repeated expressions are grouped, with their attributes kept separate from their identities.
+
+| Expression | Referent or identity | Attributes communicated | Exact source check |
+|---|---|---|---|
+| “Briar County” in the heading; “Briar County Theater Archive”; “the archive”; “the archive’s” | The customer archive | Name; institutional identity; association with its volunteers, holdings, decisions, and note | The brief names “Briar County Theater Archive”; the material repeatedly identifies “the archive.” The heading uses an ordinary shortened institutional reference, without asserting the volunteers’ residence. |
+| “Index Lantern”; “Index Lantern–published” | The supplier and case publisher | Supplies the catalog; performs the import and training; publishes the case | “The publisher is catalog software supplier Index Lantern”; the material names its import and training work. |
+| “Lena Ortiz”; “Ortiz”; “the collection coordinator”; “collection coordinator Lena Ortiz” | The quoted correspondent | Personal name; collection-coordinator role at the customer archive | “Collection coordinator Lena Ortiz sent the following complete quotations…” No gender is supplied. |
+| “her” in “her email” | Ortiz as the person associated with the email | Third person; singular; possessive relationship; feminine natural-gender attribution | The email relationship is established by “Lena Ortiz sent…” The feminine attribution has no supporting source words. The name and title do not establish it. |
+| “I” in both final-quotation sentences | Ortiz, the quoted speaker | First person; singular; no natural gender | The source explicitly assigns both quotations to Ortiz. The pronoun identifies whose willingness and proposed testing are expressed; it does not independently establish that either action occurred. |
+| “We” in “We kept…”; “we” in “before we bring…” | Ortiz speaking as part of the archive group | First person; plural; speaker inclusion; no natural gender | Both expressions occur verbatim in Ortiz’s source quotations. The archive context settles the institutional referent, but not the group’s exact membership. |
+| “volunteers”; “Briar County volunteers”; “five volunteers” | People volunteering for the archive | Volunteer role; five recipients of the training session where specified | “Volunteers had described new donations…”; “one remote training session for five volunteers.” The source does not establish that five was the archive’s total volunteer count. |
+| “the next volunteer” | A generic subsequent volunteer consulting a description | Volunteer role; succession relative to earlier work; singular generic reference; no gender | Exact source wording: “tell the next volunteer different things.” No particular individual is identified. |
+| “the collection team”; “the team”; “the team’s” | The archive’s collection team | Collective role; decision-making; agreement on fields; association with the template | “the archive’s collection team”; “The team agreed…”; “the team’s spreadsheet template.” |
+| “the catalog”; “a shared catalog”; “the shared catalog” | The catalog tested using Index Lantern | Shared access; use for incoming donations; possible later use for older holdings | “test a shared catalog for incoming donations, using Index Lantern.” |
+| “the pilot”; “an eight-week pilot” | That limited catalog trial | Eight-week duration; incoming-donation scope; exclusion of existing collections | “during the eight-week pilot”; “Existing collections were outside the pilot.” |
+| “incoming donations”; “new donations”; “47 incoming donations” | Material newly donated to the archive | Incoming status; 47 cataloged during the pilot | “47 incoming donations cataloged during the eight-week pilot.” This does not establish 47 records or 47 individual objects. |
+| “existing collections”; “older collections”; “older records”; “the older collection” | The archive’s preexisting holdings or their descriptions, as appropriate | Earlier holdings; excluded from the pilot; potential later catalog migration | The source uses “Existing collections,” “older records,” and “the older collection.” The draft’s collective plural does not require multiple separately constituted collections. |
+| “the same records”; “imported records”; “11 records” | Catalog descriptions, with different subsets specified | Shared consultability; imported status; eleven retaining uncertain dates | All three descriptions are supplied expressly. Their exact overlap is not established and is not asserted in the draft. |
+| “the archive’s pilot note”; “the archive’s May 6 pilot note”; “the note” | The supplied pilot report | Archive association; pilot subject; May 6 date | “The archive’s pilot note, dated May 6…” |
+| “an email”; “her email”; the final “wrote” | Ortiz’s supplied correspondence | Written communication; Ortiz’s authorship; supplied for publication | “sent the following complete quotations in an email…”; “The archive supplied that email…” |
+| “this Index Lantern–published case” | The present customer case | Supplier publication; use of supplied correspondence | “for this supplier-published case,” together with the brief naming Index Lantern as publisher. |
+| “production title,” “year,” “donor,” “location”; “the fields”; “field definitions” | Description categories and their definitions | Four agreed fields; definitions subject to later review | The source names all four fields and the intended review. These are categories, not claims identifying a particular production, donor, year, or location. |
+| “a free-text note”; “uncertain dates”; “an empty field”; “an estimated year” | Description mechanisms and states | Free-text format; unresolved dating; absence of a value; estimated dating | Each occurs expressly in the material or Ortiz’s quotation. “Uncertain” does not mean erroneous. |
+| “the import”; “two meetings”; “one remote training session”; “more posters” | The import task, agreement meetings, training event, and proposed additional test material | Comparative duration; meeting count; session count, mode, and recipients; additional posters | These attributes appear expressly in the source. “More posters” does not establish a particular number already tested. |
+
+For completeness, source-only **“It”** refers to the team: third person, singular collective reference, without natural-gender attribution. **“These”** refers to the email and pilot note: plural demonstrative reference, without natural gender or person inflection. Neither supplies a gender antecedent for the draft’s “her.” In “records that 11 records retained…,” **“that” is a clause introducer**, not a referring pronoun.
+
+**Evidence key.** These are the supporting source passages used in the accounting.
+
+| Key | Exact supplied words |
+|---|---|
+| S1 | “The publisher is catalog software supplier Index Lantern; the customer is Briar County Theater Archive.” |
+| S2 | “Briar County Theater Archive holds donated programs, photographs, and posters from local productions.” |
+| S3 | “Volunteers had described new donations in separate spreadsheets.” |
+| S4 | “In February 2026 the archive's collection team chose to test a shared catalog for incoming donations, using Index Lantern. Existing collections were outside the pilot.” |
+| S5 | “The team agreed on fields for production title, year, donor, and location. It retained a free-text note for uncertain dates.” |
+| S6 | “Index Lantern imported the team's spreadsheet template and provided one remote training session for five volunteers.” |
+| S7 | “The archive decided which descriptions to use and checked the imported records.” |
+| S8 | “The archive's pilot note, dated May 6, records 47 incoming donations cataloged during the eight-week pilot. Eleven records retained uncertain dates.” |
+| S9 | “The note reports that volunteers could consult the same records, but contains no before-and-after time measurement, cost calculation, or assessment of public access.” |
+| S10 | “The archive will review the field definitions before deciding whether to move older records into the catalog.” |
+| S11 | “Collection coordinator Lena Ortiz sent the following complete quotations in an email headed ‘Catalog pilot: notes for publication’:” |
+| S12 | “We kept the uncertain dates visible. An empty field and an estimated year tell the next volunteer different things.” |
+| S13 | “Agreeing on the fields took two meetings. The import was the short part.” |
+| S14 | “I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.” |
+| S15 | “The archive supplied that email and the pilot note for this supplier-published case.” |
+| S16 | “The customer's assessment is limited to this pilot; no comparison with another supplier is available.” |
+
+In the following tables, **“excludes” means the cited supplied statement rules out the precise negation at the level asserted by the draft**. For attributed claims, that level is what the note reports or Ortiz wrote—not independent verification of its content.
+
+**Heading and opening paragraph.**
+
+| # | Draft passage | Complete standalone proposition | Precise negation | Support and result |
+|---|---|---|---|---|
+| 1 | “Briar County volunteers share records for new donations” | Volunteers at Briar County Theater Archive have shared access to catalog records for new donations. | Volunteers at Briar County Theater Archive do not have shared access to catalog records for new donations. | S4 establishes the incoming-donation catalog; S9 establishes access to the same records. Together they exclude the negation. “Share” here describes shared access, without claiming file transfers or publication. |
+| 2 | “cataloged 47 incoming donations during an eight-week pilot with Index Lantern” | Briar County Theater Archive cataloged 47 incoming donations during its eight-week pilot using Index Lantern. | It is not the case that Briar County Theater Archive cataloged 47 incoming donations during its eight-week pilot using Index Lantern. | S8 supplies the count, incoming status, and duration; S4 identifies the catalog used. They exclude the negation. |
+| 3 | “an eight-week pilot” | The archive’s incoming-donation catalog pilot using Index Lantern lasted eight weeks. | The archive’s incoming-donation catalog pilot using Index Lantern did not last eight weeks. | S8 excludes the negation. |
+| 4 | “with Index Lantern” | The archive used Index Lantern for its incoming-donation catalog pilot. | The archive did not use Index Lantern for its incoming-donation catalog pilot. | S4 excludes the negation. |
+| 5 | “Volunteers could consult the same records, according to the archive’s pilot note.” | The archive’s pilot note reports that volunteers could consult the same catalog records. | The archive’s pilot note does not report that volunteers could consult the same catalog records. | S9 excludes the negation. This reports a capability, not a measured frequency of use. |
+| 6 | “The collection coordinator would use the catalog again for new donations, with further testing before bringing in older collections.” | The archive’s collection coordinator expresses willingness to use the shared catalog again for new donations, while expressing a preference for further testing before introducing older holdings. | The archive’s collection coordinator does not express that combination of willingness for new donations and preference for testing before introducing older holdings. | S11 identifies the coordinator; S14 states both parts. They exclude the negation. The qualification concerns older holdings, not a requirement to finish testing before using the catalog for new donations. |
+| 7 | “with further testing before bringing in older collections” | As part of that qualified assessment, the collection coordinator would conduct further testing before the archive brings older holdings into the catalog. | As part of that qualified assessment, the collection coordinator would not conduct further testing before the archive brings older holdings into the catalog. | S14 excludes the negation at the level of Ortiz’s expressed preference. It does not establish a scheduled test or a settled migration decision. |
+
+**Holdings, pilot scope, and implementation.**
+
+| # | Draft passage | Complete standalone proposition | Precise negation | Support and result |
+|---|---|---|---|---|
+| 8 | “holds donated programs … from local productions” | Briar County Theater Archive holds donated programs from local productions. | Briar County Theater Archive does not hold donated programs from local productions. | S2 excludes the negation. Both “donated” and “from local productions” apply. |
+| 9 | “holds donated … photographs … from local productions” | Briar County Theater Archive holds donated photographs from local productions. | Briar County Theater Archive does not hold donated photographs from local productions. | S2 excludes the negation, including both modifiers. |
+| 10 | “holds donated … posters from local productions” | Briar County Theater Archive holds donated posters from local productions. | Briar County Theater Archive does not hold donated posters from local productions. | S2 excludes the negation, including both modifiers. |
+| 11 | “Volunteers had described new donations in separate spreadsheets.” | Before the shared-catalog pilot, the archive’s volunteers had described new donations in separate spreadsheets. | It is not the case that, before the shared-catalog pilot, the archive’s volunteers had described new donations in separate spreadsheets. | S3, in the sequence established by S4, excludes the negation. |
+| 12 | “In February 2026, the collection team chose to test a shared catalog for incoming donations” | In February 2026, Briar County Theater Archive’s collection team chose to test a shared catalog for incoming donations. | In February 2026, Briar County Theater Archive’s collection team did not choose to test a shared catalog for incoming donations. | S4 excludes the negation. This dates the decision, not necessarily the pilot’s first day. |
+| 13 | “existing collections stayed outside the pilot” | The archive’s existing collections were excluded from the incoming-donation catalog pilot. | The archive’s existing collections were not excluded from the incoming-donation catalog pilot. | S4 excludes the negation. |
+| 14 | “agreed on fields for production title” | For the pilot, the archive’s collection team agreed to include a production-title field. | For the pilot, the archive’s collection team did not agree to include a production-title field. | S5 excludes the negation. |
+| 15 | “year” | For the pilot, the archive’s collection team agreed to include a year field. | For the pilot, the archive’s collection team did not agree to include a year field. | S5 excludes the negation. |
+| 16 | “donor” | For the pilot, the archive’s collection team agreed to include a donor field. | For the pilot, the archive’s collection team did not agree to include a donor field. | S5 excludes the negation. |
+| 17 | “location” | For the pilot, the archive’s collection team agreed to include a location field. | For the pilot, the archive’s collection team did not agree to include a location field. | S5 excludes the negation. |
+| 18 | “retaining a free-text note for uncertain dates” | In establishing the pilot’s description fields, the collection team retained a free-text note for uncertain dates. | In establishing the pilot’s description fields, the collection team did not retain a free-text note for uncertain dates. | S5 excludes the negation. The participle preserves the team as actor. |
+| 19 | “Index Lantern imported the team’s spreadsheet template” | Index Lantern imported the archive collection team’s spreadsheet template for the pilot. | Index Lantern did not import the archive collection team’s spreadsheet template for the pilot. | S6 excludes the negation. |
+| 20 | “provided one … training session” | Index Lantern provided one training session for the archive’s pilot. | It is not the case that Index Lantern provided one training session for the archive’s pilot. | S6 excludes the negation. |
+| 21 | “one remote training session” | The single pilot training session provided by Index Lantern was remote. | The single pilot training session provided by Index Lantern was not remote. | S6 excludes the negation. |
+| 22 | “for five volunteers” | Index Lantern’s single remote pilot training session was provided for five volunteers. | Index Lantern’s single remote pilot training session was not provided for five volunteers. | S6 excludes the negation. This does not assert that the archive had only five volunteers. |
+| 23 | “The archive chose the descriptions” | Briar County Theater Archive decided which descriptions to use for the pilot. | Briar County Theater Archive did not decide which descriptions to use for the pilot. | S7 excludes the negation. |
+| 24 | “checked the imported records” | Briar County Theater Archive checked the records imported for the pilot. | Briar County Theater Archive did not check the records imported for the pilot. | S7 excludes the negation. “Checked” does not assert that every record was error-free. |
+
+**First quotation and its attribution.**
+
+| # | Draft passage | Complete standalone proposition | Precise negation | Support and result |
+|---|---|---|---|---|
+| 25 | “collection coordinator Lena Ortiz” | The quoted correspondent is named Lena Ortiz and serves as the archive’s collection coordinator. | It is not the case that the quoted correspondent is named Lena Ortiz and serves as the archive’s collection coordinator. | S11 identifies both the person and role, excluding the negation. Neither supplies natural gender. |
+| 26 | “‘Agreeing … short part,’ … wrote in an email” | Lena Ortiz wrote the two quoted sentences about agreeing on fields and the import in an email. | Lena Ortiz did not write those two sentences in an email. | S11 and S13 exclude the negation. |
+| 27 | “Agreeing on the fields took two meetings.” | In the email, Ortiz stated that agreeing on the archive pilot’s description fields took two meetings. | In the email, Ortiz did not state that agreeing on the archive pilot’s description fields took two meetings. | S13 excludes the negation. This is Ortiz’s reported account of the meetings. |
+| 28 | “The import was the short part.” | In the email, Ortiz characterized the pilot import as the shorter part relative to the work of agreeing on the fields. | In the email, Ortiz did not characterize the pilot import as the shorter part relative to the work of agreeing on the fields. | S13 excludes the negation. This is a relative assessment, not a quantified duration or evidence of overall time savings. |
+| 29 | “an email supplied for this … case” | Ortiz’s email was supplied for the present customer case. | Ortiz’s email was not supplied for the present customer case. | S15 excludes the negation. |
+| 30 | “this Index Lantern–published case” | Index Lantern is the publisher of the present customer case. | Index Lantern is not the publisher of the present customer case. | S1 and S15 exclude the negation. |
+
+**Uncertainty heading, pilot note, and second quotation.**
+
+| # | Draft passage | Complete standalone proposition | Precise negation | Support and result |
+|---|---|---|---|---|
+| 31 | “Keeping uncertainty visible” | The archive’s pilot description practice preserved indications that some dates were uncertain. | The archive’s pilot description practice did not preserve indications that some dates were uncertain. | S5 and S8 establish retained uncertainty; S12 expressly describes keeping it visible. These exclude the negation. The heading does not promise visibility to the public. |
+| 32 | “The archive’s May 6 pilot note” | The pilot note belonging to Briar County Theater Archive is dated May 6. | The pilot note belonging to Briar County Theater Archive is not dated May 6. | S8 excludes the negation. |
+| 33 | “pilot note records that 11 records retained uncertain dates” | The archive’s May 6 pilot note records that eleven pilot records retained uncertain dates. | The archive’s May 6 pilot note does not record that eleven pilot records retained uncertain dates. | S8 supplies the note’s result across its consecutive sentences and excludes the negation. The unit remains records, not donations. |
+| 34 | “Ortiz explained the distinction in … email” | In the supplied email, Ortiz explained the difference in information conveyed by an empty field and an estimated year to a subsequent volunteer. | In the supplied email, Ortiz did not explain that difference in information conveyed to a subsequent volunteer. | S11 and S12 exclude the negation. “Explained” is supported by the quoted contrast; it does not imply a spoken interview, demeanor, or emotion. |
+| 35 | “her email”: possessive relationship | The email containing the explanation is Ortiz’s email. | The email containing the explanation is not Ortiz’s email. | S11 excludes the negation. This component of the possessive expression is supported. |
+| 36 | “her email”: gender attribution | Lena Ortiz, the person whose email contains the explanation, is female. | Lena Ortiz, the person whose email contains the explanation, is not female. | **Unsupported.** No supplied statement excludes the negation. A concrete compatible case is that Ortiz is a man who uses he/him pronouns and sent precisely the supplied email. Every source statement could remain unchanged. |
+| 37 | “We kept the uncertain dates visible.” | In the supplied email, Ortiz stated that the archive group including Ortiz kept uncertain dates visible during the pilot. | In the supplied email, Ortiz did not state that the archive group including Ortiz kept uncertain dates visible during the pilot. | S11 and S12 exclude the negation. “We” retains first-person plural agency without identifying every group member. |
+| 38 | “An empty field and an estimated year tell the next volunteer different things.” | In the supplied email, Ortiz stated that an empty field and an estimated year communicate different information to the next volunteer consulting the description. | In the supplied email, Ortiz did not state that an empty field and an estimated year communicate different information to the next volunteer consulting the description. | S12 excludes the negation. This preserves the comparison, the recipient, and the interpretive nature of the statement. |
+
+**Reporting limits, future decision, and final quotation.**
+
+| # | Draft passage | Complete standalone proposition | Precise negation | Support and result |
+|---|---|---|---|---|
+| 39 | “The note contains no before-and-after time measurement” | The archive’s pilot note contains no before-and-after time measurement. | The archive’s pilot note contains at least one before-and-after time measurement. | S9 excludes the negation. This describes the document’s contents, not whether any time saving occurred. |
+| 40 | “no … cost calculation” | The archive’s pilot note contains no cost calculation. | The archive’s pilot note contains at least one cost calculation. | S9 excludes the negation. This does not assert that the pilot had no costs or no financial benefit. |
+| 41 | “no … assessment of public access” | The archive’s pilot note contains no assessment of public access. | The archive’s pilot note contains at least one assessment of public access. | S9 excludes the negation. This does not assert that public access improved, worsened, or remained unchanged. |
+| 42 | “The archive will review the field definitions before deciding whether to move older records into the catalog.” | Briar County Theater Archive will review the pilot’s field definitions before making its decision about whether to move older records into the shared catalog. | It is not the case that Briar County Theater Archive will review the pilot’s field definitions before making its decision about whether to move older records into the shared catalog. | S10 excludes the negation. The source warrants “will” for the review and its ordering. “Whether” leaves the migration outcome undecided. |
+| 43 | “‘I would use … older collection,’ Ortiz wrote.” | Ortiz wrote the two supplied sentences expressing willingness to reuse the shared catalog and a preference for additional poster testing before older holdings enter it. | Ortiz did not write those two sentences. | S11 and S14 exclude the negation. |
+| 44 | “I would use the shared catalog again for new donations.” | In the supplied email, Ortiz expressed willingness to use the shared catalog again for new donations. | In the supplied email, Ortiz did not express willingness to use the shared catalog again for new donations. | S14 excludes the negation. This is a personal assessment within the pilot’s scope, not an unconditional recommendation to other archives or a claim of actual subsequent use. |
+| 45 | “I would test the descriptions on more posters before we bring in the older collection.” | In the supplied email, Ortiz expressed a preference to test the descriptions on additional posters before the archive group including Ortiz brings its older collection into the catalog. | In the supplied email, Ortiz did not express that preference to test descriptions on additional posters before the archive group brings its older collection into the catalog. | S14 excludes the negation. It preserves the testing object, additional posters, first-person actor, group migration actor, and ordering. It does not establish that testing or migration has occurred or that migration has been approved. |
+
+The front matter supplies classification and presentation metadata: `genre: case-study` matches the brief, and `language: en_US` specifies the requested language. `technique: none` has no supplied schema defining an independently checkable real-world proposition. It therefore yields no source-support finding; assessing mechanical language compliance is outside this comparison.
+
+There is no separate advocacy claim in the draft. Ortiz’s willingness and preferred testing sequence are attributed assessments; “the short part” and the distinction between blank and estimated values are attributed interpretations. The remaining narrative claims concern the archive’s actions, holdings, document contents, or stated future review. None asserts measured efficiency, savings, public-access improvement, supplier superiority, an observed interview, or the completion of future migration.
+
+**Source-support finding and repair.**
+
+The only missing support is for the feminine attribute embedded in **“her.”** Supporting the surrounding explanation and identifying the email’s author do not establish that attribute.
+
+Smallest repair:
+
+> Ortiz explained the distinction in **the email**: “We kept the uncertain dates visible. An empty field and an estimated year tell the next volunteer different things.”
+
+All other supported claims, qualifications, certainty, and editorial choices can remain.
+
+**Quotation and translation findings.**
+
+All three quotation blocks reproduce the English source wording. There is no translation to assess and no concrete obstruction to reading them as idiomatic English with the supplied voice:
+
+- “The import was the short part” retains Ortiz’s concise relative assessment.
+- “Tell the next volunteer different things” retains the practical, person-centered explanation.
+- The repeated “I would” retains personal judgment and the distinction between reuse for new donations and testing before older holdings enter the catalog.
+
+The context already identifies “the fields,” “the import,” and the archive group meant by “we.” No clarification inside the quotations is needed.

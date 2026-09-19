@@ -144,7 +144,7 @@ def audit(run: Path) -> dict[str, Any]:
             and item.get("type") == "command_execution"
         ):
             command = item.get("command", "")
-            if re.search(r"\bcat\b", command) and re.search(
+            if re.search(r"\bcat\b|\.read_text\(", command) and re.search(
                 r"report|finding", command, re.IGNORECASE
             ):
                 output = item.get("aggregated_output", "")

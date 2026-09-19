@@ -1,0 +1,126 @@
+{
+  "instruction_revision": "ae24f9b3",
+  "invocations": 4,
+  "native_sessions": 8,
+  "rows": [
+    {
+      "case": "case-unprompted-en_US-r1",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhps5m0c",
+      "root_absent": true,
+      "sessions": 2,
+      "input_equals_third_artifact": true,
+      "output_preserved": true,
+      "native_identity_correct": true,
+      "fresh_reader": [
+        {
+          "task_name": "quotation_review",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "child_full_artifact_read": true,
+      "parent_reports": [
+        "observed-report-1.md"
+      ],
+      "R2": "parent and base/genre pass; child inline language transport skipped: encrypted",
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      }
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zg6hge_p",
+      "root_absent": true,
+      "sessions": 2,
+      "input_equals_third_artifact": true,
+      "output_preserved": true,
+      "native_identity_correct": true,
+      "fresh_reader": [
+        {
+          "task_name": "quotation_review",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "child_full_artifact_read": true,
+      "parent_reports": [
+        "observed-report-1.md"
+      ],
+      "R2": "parent and base/genre pass; child inline language transport skipped: encrypted",
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      }
+    },
+    {
+      "case": "article-sv-r1",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4_8gjelj",
+      "root_absent": true,
+      "sessions": 2,
+      "input_equals_third_artifact": true,
+      "output_preserved": true,
+      "native_identity_correct": true,
+      "fresh_reader": [
+        {
+          "task_name": "quotation_reading",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "child_full_artifact_read": true,
+      "parent_reports": [
+        "observed-report-1.md"
+      ],
+      "R2": "fail: child reads whole Swedish language resource",
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      }
+    },
+    {
+      "case": "general-en_GB-r1",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn5bw7zv",
+      "root_absent": true,
+      "sessions": 2,
+      "input_equals_third_artifact": true,
+      "output_preserved": true,
+      "native_identity_correct": true,
+      "fresh_reader": [
+        {
+          "task_name": "quotation_reading",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "child_full_artifact_read": true,
+      "parent_reports": [
+        "observed-report-1.md"
+      ],
+      "R2": "parent and base/genre pass; child inline language transport skipped: encrypted",
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      }
+    }
+  ],
+  "capture_transport_cleanup_errors": [],
+  "semantic_judgements": "quotation-new-judgements.json",
+  "processes_ended": [
+    47468,
+    64334,
+    72390
+  ]
+}

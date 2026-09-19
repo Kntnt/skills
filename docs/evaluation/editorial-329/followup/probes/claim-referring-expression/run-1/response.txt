@@ -1,0 +1,141 @@
+**No findings.** The supplied material supports the draft’s factual content and attributions. No repairs are needed.
+
+The audit below separates properties carried by referring expressions from the main assertions. Each negation keeps the proposition’s subject, modifiers, and scope. For quotations, the proposition concerns what Ortiz wrote; her interpretation is not converted into an independently measured result.
+
+Evidence labels refer to these **exact supplied words**:
+
+- **S1:** “The publisher is catalog software supplier Index Lantern; the customer is Briar County Theater Archive.”
+- **S2:** “Briar County Theater Archive holds donated programs, photographs, and posters from local productions.”
+- **S3:** “Volunteers had described new donations in separate spreadsheets.”
+- **S4:** “In February 2026 the archive's collection team chose to test a shared catalog for incoming donations, using Index Lantern. Existing collections were outside the pilot.”
+- **S5:** “The team agreed on fields for production title, year, donor, and location. It retained a free-text note for uncertain dates.”
+- **S6:** “Index Lantern imported the team's spreadsheet template and provided one remote training session for five volunteers. The archive decided which descriptions to use and checked the imported records.”
+- **S7:** “The archive's pilot note, dated May 6, records 47 incoming donations cataloged during the eight-week pilot. Eleven records retained uncertain dates.”
+- **S8:** “The note reports that volunteers could consult the same records, but contains no before-and-after time measurement, cost calculation, or assessment of public access.”
+- **S9:** “The archive will review the field definitions before deciding whether to move older records into the catalog.”
+- **S10:** “Collection coordinator Lena Ortiz sent the following complete quotations in an email headed ‘Catalog pilot: notes for publication’”
+- **S11:** “We kept the uncertain dates visible. An empty field and an estimated year tell the next volunteer different things.”
+- **S12:** “Agreeing on the fields took two meetings. The import was the short part.”
+- **S13:** “I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.”
+- **S14:** “The archive supplied that email and the pilot note for this supplier-published case.”
+
+In every table row, the cited evidence **rules out the stated negation within the supplied account**. Where support involves inference, I identify it explicitly after the table. Consequently, no row requires a scenario preserving both the supplied material and its negation.
+
+The title and opening paragraph:
+
+| Original passage | Complete proposition | Precise negation | Evidence |
+|---|---|---|---|
+| “Briar County volunteers” | The volunteers referred to are volunteers working with Briar County Theater Archive. | The volunteers referred to are not volunteers working with Briar County Theater Archive. | S3–S4, S6–S8; inference A |
+| “share records for new donations” | Briar County Theater Archive’s volunteers have shared access to records for new donations. | Briar County Theater Archive’s volunteers do not have shared access to records for new donations. | S4, S8; inference B |
+| “an eight-week pilot with Index Lantern” | Briar County Theater Archive conducted a catalog pilot. | Briar County Theater Archive did not conduct a catalog pilot. | S4, S7 |
+| “an eight-week pilot” | Briar County Theater Archive’s catalog pilot lasted eight weeks. | Briar County Theater Archive’s catalog pilot did not last eight weeks. | S7 |
+| “pilot with Index Lantern” | Briar County Theater Archive used Index Lantern in its catalog pilot. | Briar County Theater Archive did not use Index Lantern in its catalog pilot. | S4 |
+| “cataloged 47 incoming donations during an eight-week pilot with Index Lantern” | Briar County Theater Archive cataloged 47 incoming donations during its eight-week pilot using Index Lantern. | It is not the case that Briar County Theater Archive cataloged 47 incoming donations during its eight-week pilot using Index Lantern. | S4, S7 |
+| “Volunteers could consult the same records” | Volunteers at Briar County Theater Archive could consult the same catalog records during the pilot. | Volunteers at Briar County Theater Archive could not consult the same catalog records during the pilot. | S8 |
+| “according to the archive’s pilot note” | Briar County Theater Archive’s pilot note reports that volunteers could consult the same records. | Briar County Theater Archive’s pilot note does not report that volunteers could consult the same records. | S8 |
+| “the archive’s pilot note” | A pilot note associated with Briar County Theater Archive exists. | No pilot note associated with Briar County Theater Archive exists. | S7, S14 |
+| “The collection coordinator” | Lena Ortiz is Briar County Theater Archive’s collection coordinator. | Lena Ortiz is not Briar County Theater Archive’s collection coordinator. | S10 in the supplied customer account |
+| “would use the catalog again for new donations” | Ortiz’s stated assessment is that she would use the shared catalog again for new donations. | It is not Ortiz’s stated assessment that she would use the shared catalog again for new donations. | S13 |
+| “with further testing before bringing in older collections” | Ortiz’s stated assessment includes further testing before bringing older collection material into the catalog. | Ortiz’s stated assessment does not include further testing before bringing older collection material into the catalog. | S13; inference C |
+
+**Inference A:** The surrounding source account identifies the otherwise unnamed volunteers as the archive’s volunteers. “Briar County” in the title functions as shorthand for the named archive; the draft does not separately assert where those volunteers reside.
+
+**Inference B:** The ability to “consult the same records” supports the title’s ordinary meaning of sharing records: shared access. It does not establish simultaneous editing or public access, neither of which the draft claims.
+
+**Inference C:** Testing “the descriptions on more posters” entails further testing. The opening retains **“would”** as the governing assessment; it does not state that further testing or migration has been scheduled. Its broader wording is supported without adding the source’s poster-specific qualification to repair it.
+
+The collection background and pilot decision:
+
+| Original passage | Complete proposition | Precise negation | Evidence |
+|---|---|---|---|
+| “holds donated programs … from local productions” | Briar County Theater Archive holds donated programs from local productions. | Briar County Theater Archive does not hold donated programs from local productions. | S2 |
+| “holds donated … photographs … from local productions” | Briar County Theater Archive holds donated photographs from local productions. | Briar County Theater Archive does not hold donated photographs from local productions. | S2 |
+| “holds donated … posters from local productions” | Briar County Theater Archive holds donated posters from local productions. | Briar County Theater Archive does not hold donated posters from local productions. | S2 |
+| “Volunteers had described new donations in separate spreadsheets” | Before the shared-catalog pilot, the archive’s volunteers had described new donations in separate spreadsheets. | It is not the case that, before the shared-catalog pilot, the archive’s volunteers had described new donations in separate spreadsheets. | S3–S4 |
+| “the collection team” | The team making the catalog-testing decision was the archive’s collection team. | The team making the catalog-testing decision was not the archive’s collection team. | S4 |
+| “In February 2026, the collection team chose to test a shared catalog for incoming donations” | In February 2026, the archive’s collection team chose to test a shared catalog for incoming donations. | It is not the case that, in February 2026, the archive’s collection team chose to test a shared catalog for incoming donations. | S4 |
+| “a shared catalog for incoming donations” | The selected trial concerned a catalog shared for handling incoming donations. | The selected trial did not concern a catalog shared for handling incoming donations. | S4 |
+| “existing collections” | The archive had collection material predating or otherwise outside the incoming donations covered by the pilot. | The archive had no collection material predating or otherwise outside the incoming donations covered by the pilot. | S4, S9, S13; inference D |
+| “existing collections stayed outside the pilot” | The archive’s existing collections were excluded from the pilot. | The archive’s existing collections were not excluded from the pilot. | S4 |
+
+**Inference D:** “Existing collections,” “older records,” and “the older collection” explicitly identify collection material beyond the incoming donations covered by the trial. The draft does not assert how many separately constituted older collections exist.
+
+The fields, import, training, and checking:
+
+| Original passage | Complete proposition | Precise negation | Evidence |
+|---|---|---|---|
+| “agreed on fields for production title” | The archive’s collection team agreed on a production-title field. | The archive’s collection team did not agree on a production-title field. | S5 |
+| “agreed on fields for … year” | The archive’s collection team agreed on a year field. | The archive’s collection team did not agree on a year field. | S5 |
+| “agreed on fields for … donor” | The archive’s collection team agreed on a donor field. | The archive’s collection team did not agree on a donor field. | S5 |
+| “agreed on fields for … location” | The archive’s collection team agreed on a location field. | The archive’s collection team did not agree on a location field. | S5 |
+| “retaining a free-text note for uncertain dates” | The archive’s collection team retained a free-text note for uncertain dates. | The archive’s collection team did not retain a free-text note for uncertain dates. | S5 |
+| “a free-text note” | The retained note allowed free-text content. | The retained note did not allow free-text content. | S5 |
+| “the team’s spreadsheet template” | The spreadsheet template used for the import was the archive collection team’s template. | The spreadsheet template used for the import was not the archive collection team’s template. | S6 |
+| “Index Lantern imported the team’s spreadsheet template” | Index Lantern imported the archive collection team’s spreadsheet template. | Index Lantern did not import the archive collection team’s spreadsheet template. | S6 |
+| “provided one remote training session for five volunteers” | Index Lantern provided one remote training session for five volunteers. | It is not the case that Index Lantern provided one remote training session for five volunteers. | S6 |
+| “one … training session” | The number of training sessions Index Lantern provided in the described arrangement was one. | The number of training sessions Index Lantern provided in the described arrangement was not one. | S6 |
+| “remote training session” | The training session Index Lantern provided was remote. | The training session Index Lantern provided was not remote. | S6 |
+| “for five volunteers” | The training session Index Lantern provided was for five volunteers. | The training session Index Lantern provided was not for five volunteers. | S6 |
+| “The archive chose the descriptions” | Briar County Theater Archive decided which descriptions to use. | Briar County Theater Archive did not decide which descriptions to use. | S6 |
+| “the imported records” | Records had been imported in the archive’s catalog setup. | No records had been imported in the archive’s catalog setup. | S6 |
+| “checked the imported records” | Briar County Theater Archive checked the records that had been imported. | Briar County Theater Archive did not check the records that had been imported. | S6 |
+
+“Chose the descriptions” and “decided which descriptions to use” are meaning-equivalent here. The training statement does not assert that five volunteers attended, completed, or benefited from the session; it retains the source’s **“for five volunteers.”**
+
+The first quotation and its attribution:
+
+| Original passage | Complete proposition | Precise negation | Evidence |
+|---|---|---|---|
+| “‘Agreeing on the fields took two meetings’ … Ortiz wrote” | Ortiz wrote that agreeing on the catalog fields took two meetings. | Ortiz did not write that agreeing on the catalog fields took two meetings. | S10, S12 |
+| “‘The import was the short part’ … Ortiz wrote” | Ortiz characterized the import as the short part of the work under discussion. | Ortiz did not characterize the import as the short part of the work under discussion. | S10, S12 |
+| “collection coordinator Lena Ortiz” | The collection coordinator quoted in the draft is named Lena Ortiz. | The collection coordinator quoted in the draft is not named Lena Ortiz. | S10 |
+| “wrote in an email” | Ortiz communicated these statements in an email. | Ortiz did not communicate these statements in an email. | S10, S12 |
+| “an email supplied for this … case” | The archive supplied Ortiz’s email for this case. | The archive did not supply Ortiz’s email for this case. | S14 |
+| “this Index Lantern–published case” | Index Lantern is the publisher of this customer case. | Index Lantern is not the publisher of this customer case. | S1, S14; inference E |
+
+**Inference E:** The brief names Index Lantern as publisher, and the reporting material identifies the case as supplier-published. Together they establish the draft’s publisher attribution.
+
+“The import was the short part” remains **Ortiz’s attributed comparative assessment**. The draft does not transform it into a measured duration, a claim that the entire implementation was quick, or a demonstrated time saving.
+
+The uncertainty section:
+
+| Original passage | Complete proposition | Precise negation | Evidence |
+|---|---|---|---|
+| “Keeping uncertainty visible” | The archive preserved visible indications of date uncertainty in its catalog work. | The archive did not preserve visible indications of date uncertainty in its catalog work. | S5, S7, S11; inference F |
+| “The archive’s May 6 pilot note” | The archive’s pilot note is dated May 6. | The archive’s pilot note is not dated May 6. | S7 |
+| “11 records retained uncertain dates” | Eleven records retained uncertain dates. | It is not the case that eleven records retained uncertain dates. | S7 |
+| “the … pilot note records that 11 records retained uncertain dates” | The archive’s pilot note records that eleven records retained uncertain dates. | The archive’s pilot note does not record that eleven records retained uncertain dates. | S7; inference G |
+| “uncertain dates” | Date uncertainty remained in the catalog records described. | No date uncertainty remained in the catalog records described. | S7, S11 |
+| “Ortiz explained the distinction in her email” | In her email, Ortiz explained the informational distinction between an empty field and an estimated year. | In her email, Ortiz did not explain the informational distinction between an empty field and an estimated year. | S10–S11; inference H |
+| “‘We kept the uncertain dates visible’” | Ortiz wrote that the archive team kept uncertain dates visible. | Ortiz did not write that the archive team kept uncertain dates visible. | S10–S11 |
+| “‘An empty field and an estimated year tell the next volunteer different things’” | Ortiz wrote that an empty field and an estimated year convey different information to a subsequent volunteer. | Ortiz did not write that an empty field and an estimated year convey different information to a subsequent volunteer. | S10–S11 |
+
+**Inference F:** Retaining uncertain dates and explicitly saying they were kept visible support the heading. The heading does not imply that uncertainty was resolved.
+
+**Inference G:** “Eleven records retained uncertain dates” follows the description of what the pilot note records in the same reporting paragraph. Reading it as another finding recorded in that note is supported by that immediate context.
+
+**Inference H:** Ortiz’s second sentence identifies the two alternatives and says they communicate different things. Describing that statement as explaining the distinction is a grounded characterization of her words. It supplies neither an imagined interview exchange nor an account of her manner or emotions. “The next volunteer” is a generic subsequent reader, not an assertion that a particular future volunteer exists.
+
+The note’s limitations and the archive’s next decision:
+
+| Original passage | Complete proposition | Precise negation | Evidence |
+|---|---|---|---|
+| “The note contains no before-and-after time measurement” | The archive’s pilot note contains no before-and-after time measurement. | The archive’s pilot note contains at least one before-and-after time measurement. | S8 |
+| “no … cost calculation” | The archive’s pilot note contains no cost calculation. | The archive’s pilot note contains at least one cost calculation. | S8 |
+| “no … assessment of public access” | The archive’s pilot note contains no assessment of public access. | The archive’s pilot note contains at least one assessment of public access. | S8 |
+| “The archive will review the field definitions” | Briar County Theater Archive will review the catalog field definitions. | Briar County Theater Archive will not review the catalog field definitions. | S9 |
+| “will review the field definitions before deciding whether to move older records into the catalog” | Briar County Theater Archive will review the catalog field definitions before deciding whether to move older records into the catalog. | It is not the case that Briar County Theater Archive will review the catalog field definitions before deciding whether to move older records into the catalog. | S9 |
+| “whether to move older records” | Moving older records into the catalog remains a decision to be made. | Moving older records into the catalog does not remain a decision to be made. | S9; inference I |
+
+**Inference I:** “Before deciding whether” places the migration decision after the forthcoming review and leaves its outcome open. The draft correctly preserves that scope. Likewise, the three absence claims concern **the note**, not whether measurements or assessments could exist anywhere else.
+
+The closing quotation:
+
+| Original passage | Complete proposition | Precise negation | Evidence |
+|---|---|---|---|
+| “‘I would use the shared catalog again for new donations’ … Ortiz wrote” | Ortiz wrote that she would use the shared catalog again for new donations. | Ortiz did not write that she would use the shared catalog again for new donations. | S10, S13 |
+| “‘I would test the descriptions on more posters before we bring in the older collection’ … Ortiz wrote” | Ortiz wrote that she would test the descriptions on more posters before the archive brought its older collection into the catalog. | Ortiz did not write that she would test the descriptions on more posters before the archive brought its older collection into the catalog. | S10, S13 |
+
+The closing statements express **Ortiz’s qualified endorsement and proposed precaution**. They are faithfully attributed, including “again,” “for new donations,” “on more posters,” and the ordering of testing before older-collection migration. They do not assert demonstrated general effectiveness or an unconditional migration commitment.
+
+**Concrete findings: none. Smallest supported repairs: none.**

@@ -1,0 +1,22 @@
+{
+  "actual_identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "complete_input_visible": true,
+  "input_inventory_unchanged": true,
+  "authentication_changed": false,
+  "nonhome_changes": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "duration_seconds": 24.53,
+  "word_counts_whitespace": {
+    "task": 156,
+    "input": 2568,
+    "report": 142
+  }
+}

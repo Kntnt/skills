@@ -1,0 +1,18 @@
+{
+  "actual_identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "complete_input_visible_in_native_command_output": true,
+  "input_inventory_unchanged": true,
+  "authentication_changed": false,
+  "nonhome_changes": [],
+  "duration_seconds": 197.9,
+  "word_counts_whitespace": {
+    "prompt": 176,
+    "source_plus_draft": 654,
+    "report": 2817
+  }
+}

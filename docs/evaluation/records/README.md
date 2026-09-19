@@ -73,3 +73,11 @@ The [reading packet](../editorial-329/README.md) links full sources, drafts, rev
 - [write-gpt-2026-09-19-349-followup-baseline.md](write-gpt-2026-09-19-349-followup-baseline.md).
 - [write-gpt-2026-09-19-349-followup-new.md](write-gpt-2026-09-19-349-followup-new.md).
 - [write-gpt-2026-09-19-349-followup-original.md](write-gpt-2026-09-19-349-followup-original.md).
+
+- [redline-gpt-2026-09-19-354-second-controls.md](redline-gpt-2026-09-19-354-second-controls.md).
+
+- [redline-gpt-2026-09-19-354-third-controls.md](redline-gpt-2026-09-19-354-third-controls.md).
+
+- [redline-gpt-2026-09-19-355-second-new.md](redline-gpt-2026-09-19-355-second-new.md).
+
+- [write-gpt-2026-09-19-355-second-new.md](write-gpt-2026-09-19-355-second-new.md).

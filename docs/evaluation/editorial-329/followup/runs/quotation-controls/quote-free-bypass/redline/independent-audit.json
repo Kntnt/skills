@@ -1,0 +1,23 @@
+{
+  "actual_identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "spawns": [],
+  "child_reads": [],
+  "proofread_invocations": 1,
+  "input_inventory_unchanged": true,
+  "authentication_changed": false,
+  "nonhome_changes": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "duration_seconds": 71.7,
+  "result": 0,
+  "judgement": "pass: quote-free reader bypass and clean unchanged review",
+  "proofread_invocations_all_native_sessions": 1,
+  "encrypted_dispatch_limitation": "Exact full dispatched message unavailable; missing child read evidence remains skipped, not proved by summary."
+}

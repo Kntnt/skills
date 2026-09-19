@@ -1,0 +1,3 @@
+Utkastet klarade inte den sista källkontrollen. En formulering gjorde avsaknaden av tidsmätning och besparingsberäkning i handlingarna till ett bredare påstående om kommunens kunskap.
+
+[Write-färdighetens kontrollregel](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bp2661cm/work/.agents/skills/write/references/source-check.md) säger: “There are at most two comparisons” och kräver stopp utan leverans om invändningar återstår efter den andra jämförelsen. Därför lämnar jag inget utkast. Alla tillfälliga filer är borttagna; source.md är oförändrad.

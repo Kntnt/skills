@@ -1,0 +1,22 @@
+{
+  "pid": 72390,
+  "process_group": 72390,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/candidate_new_batch.py",
+    "redline",
+    "--revision",
+    "ae24f9b3",
+    "--wave",
+    "quotation-candidate",
+    "--artifact-wave",
+    "third-candidate",
+    "--matrix",
+    "third",
+    "--workers",
+    "1",
+    "--cases",
+    "general-en_GB-r1"
+  ]
+}

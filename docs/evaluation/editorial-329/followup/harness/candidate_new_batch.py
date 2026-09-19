@@ -69,7 +69,11 @@ ROWS: list[tuple[str, str, str, str, str]] = (
 
 
 def run_cell(
-    row: tuple[str, str, str, str, str], stage: str, revision: str, wave: str
+    row: tuple[str, str, str, str, str],
+    stage: str,
+    revision: str,
+    wave: str,
+    artifact_wave: str,
 ) -> dict[str, object]:
     """Capture one immutable invocation, refusing existing evidence directories."""
 
@@ -94,7 +98,7 @@ def run_cell(
         )
         input_name = "source.md"
     else:
-        supplied = case_dir / "write/artifact.md"
+        supplied = FOLLOW / "runs" / artifact_wave / case / "write/artifact.md"
         if not supplied.is_file():
             return {
                 "case": case,
@@ -164,6 +168,8 @@ def main() -> None:
     parser.add_argument("--revision", default="8f92e12")
     parser.add_argument("--wave", default="candidate")
     parser.add_argument("--matrix", choices=["standard", "third"], default="standard")
+    parser.add_argument("--artifact-wave")
+    parser.add_argument("--workers", type=int, choices=[1, 2], default=2)
     args = parser.parse_args()
     rows = ROWS
     if args.matrix == "third":
@@ -189,9 +195,16 @@ def main() -> None:
     results: list[dict[str, object]] = []
 
     # Separate outputs keep parallel runs from changing each other's inputs.
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = [
-            pool.submit(run_cell, row, args.stage, args.revision, args.wave)
+            pool.submit(
+                run_cell,
+                row,
+                args.stage,
+                args.revision,
+                args.wave,
+                args.artifact_wave or args.wave,
+            )
             for row in selected
         ]
         for future in concurrent.futures.as_completed(futures):

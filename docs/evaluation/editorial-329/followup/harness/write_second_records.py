@@ -23,7 +23,7 @@ def header(name: str, skill: str, wave: str) -> list[str]:
         "",
         f"- **record** — `{name}`",
         "- **date** — `2026-09-19`",
-        "- **ticket** — #329, #349, #352, #353, #354, #355",
+        "- **ticket** — #329, #349, #352, #353, #354, #355, #356",
         f"- **skill** — `{skill}`",
         "- **provider family** — `gpt`",
         "- **model** — `gpt-6-astra`, inherited `high`, checked in native parent/child traces",
@@ -43,6 +43,15 @@ def entry(
 
     # Run facts supply provenance; all criterion text comes from manual judging.
     relative = "../editorial-329/followup/" + str(run.relative_to(FOLLOW))
+    if not (run / "result.json").is_file():
+        return [
+            f"## `{case}`",
+            "",
+            f"- **observed delivery** — skipped: {notes['skip_reason']}",
+            "- **criteria** —",
+            *(f"  - {criterion} — {notes[criterion]}" for criterion in criteria),
+            "",
+        ]
     invocation = (run / "invocation.txt").read_text().strip()
     result = json.loads((run / "result.json").read_text())
     target = (
@@ -63,10 +72,20 @@ def entry(
         f"- **invocation** — `{invocation}`",
         "- **contextual instruction** — none",
         f"- **output target** — {target}",
-        f"- **observed delivery** — {notes.get('delivery', notes.get('outcome', 'Complete draft and separate account'))}. [Response]({relative}/response.txt), [artifact]({relative}/artifact.md), [account]({relative}/account.md), [input]({relative}/supplied-input.md).",
+        f"- **observed delivery** — {notes.get('delivery', notes.get('outcome', 'Complete draft and separate account'))}. [Response]({relative}/response.txt), [input]({relative}/supplied-input.md).",
         f"- **side effects** — Skill-visible differences outside native Harness state: `{json.dumps(effects)}`. [Inventory differences]({relative}/filesystem-changes.json), [native audit]({relative}/native-audit.json), [cleanup]({relative}/cleanup.json).",
         "- **criteria** —",
     ]
+    if (run / "artifact.md").is_file():
+        lines.insert(
+            -1,
+            f"- **preserved result** — [artifact]({relative}/artifact.md), [account]({relative}/account.md).",
+        )
+    elif (run / "withheld-draft.md").is_file():
+        lines.insert(
+            -1,
+            f"- **withheld material** — [last checked draft]({relative}/withheld-draft.md), [exact extraction provenance]({relative}/withheld-draft-provenance.json); not delivered.",
+        )
     lines.extend(f"  - {criterion} — {notes[criterion]}" for criterion in criteria)
     lines.extend(
         [

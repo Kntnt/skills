@@ -1,0 +1,1 @@
+*Delivery note: American English case-study draft based on the supplied fictional material; no technique selected. Source comparison passed. Delivered here with no files retained. The source supplies no cost, satisfaction, or completion-time results.*

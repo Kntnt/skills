@@ -1,0 +1,23 @@
+{
+  "pid": 69991,
+  "process_group": 69991,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "ae24f9b3",
+    "--corpus-revision",
+    "6e531f5",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/withheld/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/withheld/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/contextual-meaning/withheld/run"
+  ],
+  "draft_sha256": "b697342977dae89a552813a04da2ea43187972e61e74a02c69fd06d33217af53",
+  "draft_origin": "docs/evaluation/editorial-329/followup/runs/third-candidate/column-sv-r1/write/withheld-draft.md"
+}
