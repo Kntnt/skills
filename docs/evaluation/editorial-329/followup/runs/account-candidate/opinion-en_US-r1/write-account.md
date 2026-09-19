@@ -1,0 +1,1 @@
+*Opinion draft in American English, delivered here with no technique applied. Source comparison complete against the supplied fictional material; costs remain unspecified. No generated files retained.*

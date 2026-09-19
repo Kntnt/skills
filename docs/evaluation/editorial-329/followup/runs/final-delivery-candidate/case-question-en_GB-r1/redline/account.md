@@ -1,0 +1,1 @@
+No changes needed. Reviewed as a case study in British English, with no technique applied. Editorial review and final proofreading found no issues. `input.md` remains unchanged; all temporary files were removed.

@@ -1,0 +1,29 @@
+{
+  "normalization": "Remove only leading delivery YAML map and outer blank lines; preserve all prose characters and internal whitespace.",
+  "checker_reads": [
+    {
+      "session": "native-sessions/2026/09/20/rollout-2026-09-20T01-38-30-01a0bc09-2432-7052-93e3-fd6f662e3b6e.jsonl",
+      "has_explicit_draft_read": true,
+      "complete_delivered_prose_visible": false,
+      "read_calls": [
+        {
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat source.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-d9a_gwh4/scratch/write-check.jqkw56yt/draft.md\",max_output_tokens:14000});text(r.output)\n"
+        }
+      ]
+    },
+    {
+      "session": "native-sessions/2026/09/20/rollout-2026-09-20T01-43-23-01a0bc0d-9c58-76c1-957d-f75332c38d70.jsonl",
+      "has_explicit_draft_read": true,
+      "complete_delivered_prose_visible": true,
+      "read_calls": [
+        {
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-d9a_gwh4/work/source.md\",\"max_output_tokens\":16000}));text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-d9a_gwh4/scratch/write-check.jqkw56yt/draft.md\",\"max_output_tokens\":12000}));\n"
+        }
+      ]
+    }
+  ],
+  "last_checker_matches": true,
+  "note": "A match proves continuous final prose was visibly read. Inspect the native read command/output for complete draft boundaries and truncation; checker approval alone is insufficient."
+}

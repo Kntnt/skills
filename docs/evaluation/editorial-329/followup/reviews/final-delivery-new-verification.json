@@ -1,0 +1,52 @@
+[
+  {
+    "case": "case-unprompted-en_US-r1",
+    "input_and_final_sha256": "0daaacf80d32053cbbc83f277f75528e88f0b5f41ce5a65412f69a48a1c503ad",
+    "sessions": 1,
+    "mechanical_boundary": "pass",
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-0d18iytl",
+    "root_exists": false,
+    "quality": "pass",
+    "pipeline_F1": "pass"
+  },
+  {
+    "case": "case-unprompted-en_US-r2",
+    "input_and_final_sha256": "00b326c65967557da0e59eba9d2f1c8e62afcb3e1ede21bc74e5031500738885",
+    "sessions": 1,
+    "mechanical_boundary": "pass",
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-woi7qka9",
+    "root_exists": false,
+    "quality": "pass",
+    "pipeline_F1": "pass"
+  },
+  {
+    "case": "case-question-en_GB-r1",
+    "input_and_final_sha256": "005ded14fecb60dc36bc2b2b2f3dde6fde9052bd1d4b375b32bf0dc7e1d0d9e5",
+    "sessions": 2,
+    "mechanical_boundary": "pass",
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pg5xoecm",
+    "root_exists": false,
+    "quality": "pass",
+    "pipeline_F1": "pass"
+  },
+  {
+    "case": "case-question-en_GB-r2",
+    "input_and_final_sha256": "72be26f367ca0ab2b9fa7a3be72c52ae55c7b9bc38db31afbebe023750ddd657",
+    "sessions": 2,
+    "mechanical_boundary": "pass",
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i",
+    "root_exists": false,
+    "quality": "pass",
+    "pipeline_F1": "pass"
+  },
+  {
+    "case": "article-sv-r1",
+    "input_and_final_sha256": "5d0dd90bec36c2fba582c70e82457362bdc7a580314d53595470762165e3baee",
+    "sessions": 1,
+    "mechanical_boundary": "pass",
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nrxg1miw",
+    "root_exists": false,
+    "quality": "pass",
+    "pipeline_F1": "pass"
+  }
+]

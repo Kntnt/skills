@@ -1,0 +1,33 @@
+{
+  "pid": 57949,
+  "process_group": 57949,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/candidate_new_batch.py",
+    "redline",
+    "--revision",
+    "5ecadb76",
+    "--wave",
+    "final-delivery-candidate",
+    "--artifact-wave",
+    "presupposition-candidate",
+    "--matrix",
+    "fifth",
+    "--workers",
+    "1",
+    "--cases",
+    "case-unprompted-en_US-r1",
+    "case-unprompted-en_US-r2",
+    "case-question-en_GB-r1",
+    "case-question-en_GB-r2",
+    "article-sv-r1"
+  ],
+  "verified_cases": [
+    "case-unprompted-en_US-r1",
+    "case-unprompted-en_US-r2",
+    "case-question-en_GB-r1",
+    "case-question-en_GB-r2",
+    "article-sv-r1"
+  ]
+}

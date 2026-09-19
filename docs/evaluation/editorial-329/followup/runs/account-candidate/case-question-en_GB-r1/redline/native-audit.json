@@ -1,0 +1,118 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T01-42-16-01a0bc0c-977e-7093-b2fd-882a51121267.jsonl",
+      "session": {
+        "id": "01a0bc0c-977e-7093-b2fd-882a51121267",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "correction",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000}));\ntext(await tools.exec_command({cmd:\"cat input.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch/redline-uv.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--output=response input.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline-uv-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch') as tmp:\\n    p = subprocess.run(['uv', 'run', '.agents/skills/redline/scripts/invoke.py'], input='--output=response input.md', text=True, env={**os.environ, 'TMPDIR':tmp, 'UV_NO_CACHE':'1', 'UV_NO_PROJECT':'1'})\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/genres/case-study.md\\npython3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline-uv-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch') as tmp:\\n    p = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'en_GB'], env={**os.environ, 'TMPDIR':tmp})\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":14000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/case-study.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md .agents/skills/redline/references/correction.md\",\"max_output_tokens\":20000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":14000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch')\\nprint('\\\\n'.join(sorted(str(x.relative_to(p)) for x in p.rglob('*'))))\\nPY\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport os, subprocess, tempfile\\nscratch='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch'\\nprivate=Path(tempfile.mkdtemp(prefix='redline-mechanical-',dir=scratch))\\noriginal=Path('input.md').read_text()\\ncurrent=original.replace('Asked about choosing the system again and what to change, Vale’s endorsement was specific to new jobs, with more time allowed before extending its use:', 'Asked about choosing the system again and what to change, Vale said:')\\nsource=private/'input.md'\\ndest=private/'output.md'\\nsource.write_text(current)\\nprint('PRIVATE_DIRECTORY='+str(private), flush=True)\\nwith tempfile.TemporaryDirectory(prefix='proofread-uv-',dir=scratch) as tmp:\\n    p=subprocess.run(['uv','run','.agents/skills/proofread/scripts/invoke.py'],input=f'--language=en_GB --output={dest} {source}',text=True,env={**os.environ,'TMPDIR':tmp,'UV_NO_CACHE':'1','UV_NO_PROJECT':'1'})\\n    if p.returncode:\\n        source.unlink()\\n        private.rmdir()\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":3000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nfrom pathlib import Path\\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch/redline-mechanical-zmdlvb_d')\\nassert (p/'input.md').is_file() and not (p/'output.md').exists()\\nprint((p/'input.md').read_text())\\nwith tempfile.TemporaryDirectory(prefix='proofread-uv-',dir=p.parent) as tmp:\\n    result=subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=mechanics','en_GB'],env={**os.environ,'TMPDIR':tmp,'UV_NO_CACHE':'1','UV_NO_PROJECT':'1'})\\n    raise SystemExit(result.returncode)\\nPY\\ncat .agents/skills/kntnt/library/references/editorial/mechanics.md\",\"max_output_tokens\":9000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport difflib\\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch/redline-mechanical-zmdlvb_d')\\nsource=p/'input.md'\\noutput=p/'output.md'\\nfrozen=source.read_bytes()\\noutput.write_bytes(frozen)\\nassert source.read_bytes()==frozen\\noriginal=Path('input.md').read_bytes()\\nexpected=original.replace('Asked about choosing the system again and what to change, Vale’s endorsement was specific to new jobs, with more time allowed before extending its use:'.encode(),b'Asked about choosing the system again and what to change, Vale said:')\\nassert frozen==expected\\nfinal=output.read_text()\\nprint(final)\\nsource.unlink()\\noutput.unlink()\\np.rmdir()\\nassert not p.exists()\\nprint('CLEANUP VERIFIED; remaining scratch entries: '+', '.join(sorted(x.name for x in p.parent.iterdir())))\\nPY\",\"max_output_tokens\":2000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T01-44-00-01a0bc0e-2aa9-7760-99f5-8891523efcaf.jsonl",
+      "session": {
+        "id": "01a0bc0e-2aa9-7760-99f5-8891523efcaf",
+        "parent_thread_id": "01a0bc0c-977e-7093-b2fd-882a51121267",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bc0c-977e-7093-b2fd-882a51121267",
+              "depth": 1,
+              "agent_path": "/root/correction",
+              "agent_nickname": "Carver",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "const root = \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/work/.agents/skills/kntnt/library\";\ntext(await tools.exec_command({cmd:\"cat references/editorial/base.md references/editorial/base.review.md references/editorial/genres/case-study.md references/editorial/genres/case-study.review.md references/editorial/anti-slop.md references/editorial/web-craft.md references/editorial/web-craft.review.md\",workdir:root,max_output_tokens:22000}));\ntext(await tools.exec_command({cmd:\"task_tmpdir=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch/correction.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmpdir\\\"' EXIT\\nUV_NO_CACHE=1 UV_NO_PROJECT=1 TMPDIR=\\\"$task_tmpdir\\\" uv run scripts/languages.py resolve --scope=composition --scope=review --scope=anti-slop en_GB\",workdir:root,max_output_tokens:4000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='correction-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/scratch') as tmp:\\n    env = dict(os.environ, UV_NO_CACHE='1', UV_NO_PROJECT='1', TMPDIR=tmp)\\n    subprocess.run(['uv', 'run', 'scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'en_GB'], env=env, check=True)\\nPY\",workdir:\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wup32sr2/work/.agents/skills/kntnt/library\",max_output_tokens:6000}));\n"
+      ],
+      "complete_supplied_input_visible": false,
+      "delivered_prose_visible": false,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    }
+  ],
+  "parent_visible_reports": [],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

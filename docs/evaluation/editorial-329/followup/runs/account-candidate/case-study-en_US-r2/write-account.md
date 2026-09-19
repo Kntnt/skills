@@ -1,0 +1,1 @@
+*Delivered here as an en_US case study with no selected technique. Temporary files were removed; the source is unchanged. The draft is approximately 350 words. Further implementation detail or measured outcomes would support a longer account; cost, satisfaction, and completion-time measurements were not supplied.*

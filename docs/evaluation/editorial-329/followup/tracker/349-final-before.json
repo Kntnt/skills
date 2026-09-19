@@ -1,0 +1,143 @@
+{
+  "body": "## What to build\n\nPart of #329, observed in #338's opinion rerun for #343. Preserve the distinction between an absent claim about completed work and a factual assertion that the work has not been done. Assess the existing base claim-strength/absence boundary before adding any rule; this may be a stochastic execution failure under already-clear instructions.\n\nAt `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`, corpus `6e531f5`, native GPT `gpt-6-astra/high`, Codex CLI 0.155.1, `/write --genre=opinion --language=sv --output=response source.md` turned the source statement “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket” into “Vi har varken kostnadsberäknat eller finansierat försöket.” The former withholds a claim; the latter asserts absence of the work. That absence is not established by the source, even though both forms leave a practical cost decision with the board. The separate delivery account recognises missing information, but the artifact asserts a stronger fact. The fixed non-opposition stance remains correct in this run.\n\nFull source, artifact and native evidence are retained in `docs/evaluation/editorial-329/runs/rerun-343/opinion-sv/`. Source-blind Redline receives only the complete artifact and cannot be expected to reconstruct this source distinction. This is the frozen F1/base Claims test, not a preference for a particular sentence.\n\n## Acceptance criteria\n\n- [ ] Preserve the complete failed Write artifact and source-aware F1 assessment.\n- [ ] Assess the paired source-blind Redline independently without expecting unseen-source verification.\n- [ ] Any affected rerun leaves both the unknown funding/cost work and the board's cost decision within supplied limits, without requiring one canonical wording.\n- [ ] Record whether resolution is an existing-contract execution limitation or a justified instruction repair; a later pass is not proof of guaranteed reliability.\n- [ ] Run the four CONTRIBUTING checks for the integrated change.\n\n---\nWritten against 1a4f65b\n",
+  "comments": [
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmf6LA",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "The unchanged-source en_GB sample on 1a4f65b repeats #349: “Öppna beslut has neither funded nor costed this proposal.” Source only withholds a claim of such work. Full evidence in runs/rerun-343/opinion-en_GB/write. Original #343 stance is now correctly “I do not oppose digital booking”. Paired Redline remains source-blind and is assessed separately.\n",
+      "createdAt": "2026-09-19T19:14:31Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744622124",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmjjaQ",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "On revised instruction commit 93758f485614c3b0e79b1bcce9fb8080de755d08, opinion-sv Write again produces “Vi har varken kostnadsberäknat eller finansierat försöket.” The new base Claims state-of-knowledge sentence is visible in actual item5 resource output. Thus the instruction clarification has not yet repaired this observed behaviour. Full unchanged-source/prompt evidence: runs/rerun-349/opinion-sv/write. F1 remains fail; paired source-blind Redline and the other locales are assessed independently. No fixture weakening, tailored prompt or erasure of prior failures.\n",
+      "createdAt": "2026-09-19T19:24:12Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744681833",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmk0rg",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "93758f4 en_GB Write still fails F1, with partial improvement: “Öppna beslut has neither costed the trial nor claimed to have funded it.” Funding preserves the no-claim status; costing becomes categorical absence. Both statuses are unclaimed in the source. The revised base Claims is visible in item4. The faulty sentence is third person, so the evidence does not establish first-person conversion as the sole cause. Full evidence in runs/rerun-349/opinion-en_GB/write. Paired source-blind Redline and US remain separately assessed.\n",
+      "createdAt": "2026-09-19T19:27:51Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744702638",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmlF-A",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "Original d60 candidate opinion-sv also says “Vi har varken kostnadsberäknat eller finansierat försöket”; its earlier F1 pass is explicitly superseded by fail in the append-only record. Original opinion-en_GB, already F1fail#343, also asserts “has neither costed nor secured funding for the trial” and receives an additional #349 finding. The source/criteria are unchanged. Root has identified the same costing/funding absence claim in baseline opinion-sv: this is pre-existing quality failure, not evidence of a regression introduced by #329. Source-blind Redline assessments remain separate and unchanged.\n",
+      "createdAt": "2026-09-19T19:28:42Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744707064",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVml2Jw",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "93758f4 en_US also repeats #349: “Our association has neither costed nor funded this proposal.” All three locale Write samples on93758 now fail F1 on unclaimed→absent work, despite actual loading of the state-of-knowledge sentence. en_GB preserved no-claim funding but still asserted absent costing. The source, prompts and criteria remain unchanged. These observations justify treating the semantic wording-only clarification as insufficient evidence of repair. A separately committed source-support completion condition is a new bounded process hypothesis, not success inferred from its existence.\n",
+      "createdAt": "2026-09-19T19:30:56Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744719399",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmnErw",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "The first d0b2c99 source-check-completion sample, opinion-sv, still fails F1: “Vi har inte kostnadsberäknat försöket eller ordnat finansiering för det.” The new Write step6 is visible in item1 and revised Claims in item4. No extra review or proofreading pass occurred. Thus this sample provides no observed repair of #349; the complete failure is retained under runs/rerun-349-source-check/opinion-sv/write, with separate source-check records. Remaining declared locales will be assessed unchanged; no claim of success is inferred from instruction wording.\n",
+      "createdAt": "2026-09-19T19:34:18Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744739503",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmoYfw",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "d0b2c99 en_GB Write also fails F1: “Öppna beslut has neither costed nor funded this proposal.” Both the new Write step6 and revised Claims were actually read. The error remains in third person; this is not evidence that pronoun conversion alone causes it. The process hypothesis has not repaired either of the two assessed locales. Full evidence in runs/rerun-349-source-check/opinion-en_GB/write; source-blind pair and US assessed separately.\n",
+      "createdAt": "2026-09-19T19:37:49Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744760959",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmrBmg",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "The final US sample on `d0b2c99c12a8727503b1738f1cad92611d879e1e` repeats the defect: “Öppna beslut has neither costed nor funded this proposal.” The frozen source says only that the association does not claim costing/funding. Native trace confirms that the strengthened source-check completion condition and shared Claims guidance were loaded. All three unchanged-source locale samples now fail F1 under this process hypothesis; the wording is not a verified repair. The faulty GB/US assertions are third person, so first-person conversion is not a sufficient causal explanation.\n\nEvidence: `docs/evaluation/editorial-329/runs/rerun-349-source-check/opinion-en_US/write/response.txt`, `trace.jsonl`, native session and full inventories; criterion record `docs/evaluation/records/write-gpt-2026-09-19-349-source-check-opinion.md`. Source-blind paired Redline is separately assessed and cannot recover missing source knowledge. Earlier failures and baseline reassessment remain preserved. No criterion or fixture change, and no further instruction layer is proposed from these samples.\n",
+      "createdAt": "2026-09-19T19:45:05Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744804250",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmvzLQ",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "Kvarstår öppet: det observerade kvalitetsfelet är inte verifierat rättat.\n\nOkänt/inte påstått kostnadsarbete blir belagd frånvaro i baslinjen och flera kandidater. Kunskapsgräns och explicit källkontroll under skrivandet har prövats utan att undanröja felet i något av de tre sista språkproven. Alla misslyckanden och omprövade bedömningar är bevarade; ingen ytterligare belagd instruktionskonflikt har hittats.\n\nLokalt integrerat i `main` vid `579ec85ee9d49c0ec65039e96d005c11fb7c98ac`; inga commits har pushats och aktiv installation är inte uppdaterad. Fyra CONTRIBUTING-kontroller passerar, inklusive 1 873 tester. Evidens: `docs/evaluation/editorial-329/runs/rerun-349-source-check`, `docs/evaluation/editorial-329/reviews/baseline.md`. Samlat läspaket: `docs/evaluation/editorial-329/README.md`. Tekniskt godkännande innebär inte att samtliga provtexter passerar.\n",
+      "createdAt": "2026-09-19T19:58:21Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5744882477",
+      "viewerDidAuthor": true
+    }
+  ],
+  "number": 349,
+  "state": "OPEN",
+  "title": "Write: do not turn absent funding claims into categorical absence"
+}

@@ -1,0 +1,1 @@
+*Första utkast: svensk krönika utan särskild berättarteknik, levererad här. Brödtexten är 303 ord; ytterligare en egen iakttagelse eller reflektion från Nora skulle ge underlag för närmare 350. Inga filer har lämnats kvar.*

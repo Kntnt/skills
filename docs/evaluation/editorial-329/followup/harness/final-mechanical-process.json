@@ -1,0 +1,13 @@
+{
+  "pid": 39635,
+  "process_group": 39635,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/mechanical_controls.py",
+    "--revision",
+    "5ecadb76",
+    "--output-directory",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-mechanical-controls"
+  ]
+}

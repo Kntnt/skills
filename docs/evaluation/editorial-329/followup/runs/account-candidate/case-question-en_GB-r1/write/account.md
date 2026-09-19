@@ -1,0 +1,1 @@
+*Delivered here: a British English case study, with no technique selected. Source comparison completed against the fictional material supplied; no measured performance gains were available. No byline or call to action was supplied. No draft or check files remain on disk.*

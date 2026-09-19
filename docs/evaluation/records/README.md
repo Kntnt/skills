@@ -95,3 +95,22 @@ The [reading packet](../editorial-329/README.md) links full sources, drafts, rev
 - [write-gpt-2026-09-19-355-third-new.md](write-gpt-2026-09-19-355-third-new.md).
 
 - [write-gpt-2026-09-20-349-second-original.md](write-gpt-2026-09-20-349-second-original.md).
+
+- [redline-gpt-2026-09-20-341-final-delivery-new.md](redline-gpt-2026-09-20-341-final-delivery-new.md).
+- [redline-gpt-2026-09-20-341-final-parent-control.md](redline-gpt-2026-09-20-341-final-parent-control.md).
+- [redline-gpt-2026-09-20-341-final-quotation-controls.md](redline-gpt-2026-09-20-341-final-quotation-controls.md).
+- [redline-gpt-2026-09-20-341-final-quotation-original.md](redline-gpt-2026-09-20-341-final-quotation-original.md).
+- [redline-gpt-2026-09-20-341-quotation-original.md](redline-gpt-2026-09-20-341-quotation-original.md).
+- [redline-gpt-2026-09-20-349-third-original.md](redline-gpt-2026-09-20-349-third-original.md).
+- [redline-gpt-2026-09-20-356-presupposition-new.md](redline-gpt-2026-09-20-356-presupposition-new.md).
+- [redline-gpt-2026-09-20-356-presupposition-original.md](redline-gpt-2026-09-20-356-presupposition-original.md).
+- [redline-gpt-2026-09-20-359-final-delivery-original.md](redline-gpt-2026-09-20-359-final-delivery-original.md).
+- [redline-gpt-2026-09-20-359-final-mechanical-controls.md](redline-gpt-2026-09-20-359-final-mechanical-controls.md).
+- [write-gpt-2026-09-20-349-third-original.md](write-gpt-2026-09-20-349-third-original.md).
+- [write-gpt-2026-09-20-356-presupposition-new.md](write-gpt-2026-09-20-356-presupposition-new.md).
+- [write-gpt-2026-09-20-356-presupposition-original.md](write-gpt-2026-09-20-356-presupposition-original.md).
+
+- [redline-gpt-2026-09-20-344-account-new.md](redline-gpt-2026-09-20-344-account-new.md).
+- [redline-gpt-2026-09-20-344-account-original.md](redline-gpt-2026-09-20-344-account-original.md).
+- [write-gpt-2026-09-20-344-account-new.md](write-gpt-2026-09-20-344-account-new.md).
+- [write-gpt-2026-09-20-344-account-original.md](write-gpt-2026-09-20-344-account-original.md).

@@ -1,0 +1,13 @@
+{
+  "one_installed_proofread": true,
+  "full_private_input_visible": true,
+  "accepted_to_mechanical_input_exact": true,
+  "private_input_unchanged_assertion_observed": true,
+  "distinct_private_result_written": true,
+  "full_parent_result_read": true,
+  "source_metadata_unchanged": true,
+  "mechanical_result_matches_retained_final_artifact_bytes": true,
+  "unchanged_response_status": true,
+  "artifact_sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+  "note": "One parent follows installed Proofread; exact input copy, actual complete read, no-change result copy, assertions and full output print are visible. No artifact repeated in final response, consistent with no-change delivery."
+}

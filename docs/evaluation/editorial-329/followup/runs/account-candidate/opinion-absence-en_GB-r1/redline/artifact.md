@@ -1,0 +1,24 @@
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Investigate rehearsal use before letting Bellwick Hall’s wing
+
+*By Amina Reed, chair of Room to Rehearse*
+
+Before Bellwick Hall’s trustees commit its former storage wing to a three-year commercial letting, they should investigate whether it could serve local musicians on weekday evenings. An empty wing deserves a considered choice about its future.
+
+The trustees’ paper of 3 July 2026 makes a serious case for predictable income to help meet maintenance costs. I accept that commercial letting may prove the better option. But the paper names neither a prospective tenant nor a rental figure. We should compare the possibilities before choosing.
+
+## Interest warrants investigation
+
+Room to Rehearse surveyed 14 local music groups. Nine said they would consider using a rehearsal room on weekday evenings. Those answers are expressions of interest, not booking commitments: we did not ask what groups would pay or how often they would attend. The survey gives us a reason to investigate, without promising that a rehearsal room will pay its way.
+
+Our proposal has gaps too. Our treasurer’s signed note confirms that we have not prepared a cost estimate for converting the wing. Our submission makes no claim that we have secured the building owner’s consent for rehearsal use. Neither point should be glossed over.
+
+A feasibility study should examine sound insulation, access, likely running costs and potential income. That would give the trustees a basis for comparing rehearsal use with commercial letting.
+
+I am asking for an eight-week deferral, although the material available does not establish that the study can be completed within that time. Trustees should defer the three-year letting decision for eight weeks, commission the study and publish a comparison of the two uses before choosing.

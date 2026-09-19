@@ -1,0 +1,10 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\np = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nqx4kk0n/scratch/write-check-2ytu2zsz')\nf = p / 'draft.md'\nf.write_text(f.read_text().replace('men vill avsätta mer tid för förberedelser.', 'men skulle avsätta mer tid för förberedelser.'))\n(p / 'dispositions.md').write_text('First report read in full. All draft passages covered. F1 accepted: the lead uses present vill while source says I would leave an extra week for preparation. Repaired only vill to skulle. Other reconstructions retain contextual scope and attribution. Generic reader invitation is conditional advocacy, not an assertion that a reader exists. No further accepted defects. All quotation comparisons validated against exact source and Swedish guidance. Final fresh comparison required.\\\\n')\nPY\"",
+    "output": ""
+  },
+  {
+    "command": "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport shutil\np = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nqx4kk0n/scratch/write-check-2ytu2zsz')\nwith (p / 'dispositions.md').open('a') as f:\n    f.write('Final report read in full. All current prose covered with contextual scope and attribution retained. No source-support findings. T1 accepted: source before the next building starts means trial rollout in next building; Swedish innan nästa byggnad kommer i gång leaves an awkward building-as-activity subject. Clear supported repair would be innan försöket startar i nästa byggnad, but no unchecked prose changes allowed after the second comparison. Stop without delivery. No prose changes made after final comparison.\\\\n')\nshutil.rmtree(p)\nprint('Source-check scratch removed:', not p.exists())\nprint('Remaining scratch entries:')\nfor item in sorted(p.parent.iterdir()):\n    print(item.name)\nPY\"",
+    "output": "Source-check scratch removed: True\nRemaining scratch entries:\ncache\ndata\ntmp\nuv-cache\n"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "one_installed_proofread": true,
+  "full_private_input_visible": true,
+  "accepted_to_mechanical_input_exact": true,
+  "private_input_unchanged_assertion_observed": true,
+  "distinct_private_result_written": true,
+  "full_parent_result_read": true,
+  "source_metadata_unchanged": true,
+  "mechanical_result_matches_retained_final_artifact_bytes": true,
+  "unchanged_response_status": true,
+  "artifact_sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+  "note": "Exact file copy, actual full input read, separate unchanged output, source/input equality assertion and full final output read visible. No-change final status correctly does not repeat artifact."
+}

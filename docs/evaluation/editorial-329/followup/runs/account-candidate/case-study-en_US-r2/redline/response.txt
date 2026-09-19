@@ -1,0 +1,1 @@
+No changes needed. Reviewed as a case study in US English, with no technique applied, as specified in the metadata. Editorial review and proofreading found no issues. `input.md` remains unchanged.

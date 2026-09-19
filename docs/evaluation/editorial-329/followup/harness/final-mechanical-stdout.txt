@@ -1,0 +1,2 @@
+{"case": "mechanical-clean", "returncode": 0}
+{"case": "mechanical-error", "returncode": 0}

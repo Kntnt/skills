@@ -23,3 +23,11 @@ The combined candidate also implements the separately declared final Redline tra
 ## Scheduling amendment before candidate launch
 
 All twelve cd375d4f Write artifacts and their input selections are now frozen. One mandatory old-wave Swedish Redline remains in progress. Its invocation and assessment continue unchanged while the independent new candidate may freeze and launch; all old outcomes must finish before final integration. This overlap changes neither selection, criteria, required invocations nor treatment of failures. The repeated English preservation failure now also occurs in the completed new US pair, reinforcing the independently recommended rollback.
+
+Immutable combined candidate: `5ecadb76`. Parent full-account validation, parent-only quotation review and exact-file mechanical transport are frozen together. No model or effort override.
+
+## Completed outcomes
+
+All eight Write slots resolve at 5ecadb76: seven delivered, one valid Swedish-idiom withholding. Delivered F1 is six passes and one measurement-construct failure #360; the British customer draft independently fails G2 #361. The Swedish dependent Redline is skipped, not rerun or counted as a pass. All seven delivered drafts enter separate source-blind Redline. US r1 repeats quotation-preservation failure #358; the British bridge is repaired, and US opinion retains its unseen source defect.
+
+The parent accounting operation is actually observed correcting report-only scope errors without changing supported prose. Final column and US r2 also exercise evidence-based rejection of contextual false positives. Earlier column F4 is nevertheless falsely accepted, so #357 remains unmet. Both US cases preserve actual chronology; r2 repairs a genuine first-draft trial-start date. No selective retry or additional product revision follows these rows. Actual count: fifteen Skill invocations, versus sixteen planned. Complete assessments and native records are linked from completion-report.md and records/README.md.

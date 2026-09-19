@@ -2,6 +2,12 @@
 
 Thomas approved reopening #329 with #349 and #352 blocking quality completion; #341 follows at lower priority. Starting revision: `7ff6ec0`. Original corpus and failed outputs remain immutable. This directory contains supplementary diagnosis and evaluation, not replacements for the first delivery.
 
+## Final outcome
+
+[Current result and limitations](completion-report.md) · [Requirement disposition](completion-map.md) · [Independent technical/protocol verdict](reviews/final-technical-protocol-disposition.md) · [Independent editorial review](reviews/final-whole-resource-editorial.md) · [Complete invocation census](reviews/invocation-census-final.json).
+
+The frozen final product is 5ecadb76. All declared slots resolve: 26 actual final Skill invocations and one explicit dependent skip. The follow-up as a whole contains 212 Skill invocations plus 33 neutral diagnostics. #329 remains open because concrete #341/#357/#358/#360/#361 failures remain. Historical stages below retain their original chronology and superseding assessments; final disposition is in the linked report.
+
 ## Diagnosis plan
 
 1. Reconfirm original failures from the preserved complete sources and outputs. The existing native pipeline is the red-capable loop; model runs take minutes and semantic judgement cannot be reduced to a deterministic seconds-long text assertion. That limitation justifies using frozen replay probes rather than claiming a unit test establishes prose fidelity.
@@ -60,7 +66,7 @@ Revision `3f21d9b1` exposes the complete current artifact and selected guidance 
 
 Revision `cd375d4f` adds separate pronoun-feature accounting and parent validation of each source-check finding against exact contextual evidence. It retains the two-comparison limit. A four-case adjudication diagnostic rejects both contextual misreadings while accepting both genuine chronology/document-scope defects. A broader contextual detector and an extra comparison were tested unsuccessfully and not adopted. See [finding-burden diagnostic](reviews/finding-burden-diagnostic.md) and the preserved preceding probes.
 
-The [twelve-pair matrix](matrix-presupposition.md) runs at that immutable revision. All twelve Writes have completed: eleven pass F1, one repeats the unsupported coordinated date in #344. The Swedish case separately retains the #341 idiom defect; no Write refuses delivery. Eight supplementary pairs and both opinion pairs are complete and pass; the original US paired review repeats the #358 unnecessary quotation edit while retaining the hidden source failure. The final Swedish paired review is still completing. It tests the full Write→Redline path, source and quotation fidelity, justified versus false refusals, supported personal attribution, scope, chronology, advocacy and unaffected genre behavior. No final quality approval is claimed while those outcomes remain pending.
+The [twelve-pair matrix](matrix-presupposition.md) runs at that immutable revision. All twelve Writes have completed: eleven pass F1, one repeats the unsupported coordinated date in #344. The Swedish case separately retains the #341 idiom defect; no Write refuses delivery. Eight supplementary pairs and both opinion pairs are complete and pass; the original US paired review repeats the #358 unnecessary quotation edit while retaining the hidden source failure. The Swedish paired review completes a supported idiom repair, so all twenty-four invocations are complete. The original US final still fails source-aware F1 and quotation preservation; neither is hidden by the successful Swedish repair. It tests the full Write→Redline path, source and quotation fidelity, justified versus false refusals, supported personal attribution, scope, chronology, advocacy and unaffected genre behavior. These phase outcomes remain separate from the final combined candidate.
 
 ## Last bounded integration candidate
 
@@ -69,3 +75,11 @@ The late chronology recurrence is a no-findings checker miss: its report silentl
 Independent review recommends removing fresh quotation delegation, whose unnecessary English edit now recurs in three observed phases. Source-aware quotation checking remains. A separate concrete mechanical transport improvement uses Proofread’s existing file-input/separate-output interface to make accepted prose, actual mechanical input and complete result inspectable. It does not establish the original typo’s hidden cause. [Final Redline verification](matrix-final-delivery.md) preserves all selected old quoted artifacts, the exact English positive control and two provenance-backed mechanical controls.
 
 New distinct defects are tracked as [#358](https://github.com/Kntnt/skills/issues/358) (quote preservation), [#359](https://github.com/Kntnt/skills/issues/359) (final artifact corruption) and [#360](https://github.com/Kntnt/skills/issues/360) (measurement constructs). They are children/blockers of #329; failure history remains even if later verification supports closure.
+
+## Combined verification at 5ecadb76
+
+The final product candidate retains at most two independent source comparisons and makes the writer audit complete claim accounting before accepting a report, including a no-findings report. Redline returns to parent-only reported-speech review and uses an exact private file boundary for the single final Proofread pass.
+
+All four CONTRIBUTING checks pass, including 1,873 tests in 95.86 seconds; commands and complete logs are under `validation/integration/`. Both exact mechanical controls pass independent native inspection: the clean input receives a full byte-identical result despite no corrections; the erroneous input changes only the duplicated suffix, and the response exactly matches the actual result. The original hidden corruption stage remains unknown; observable transport is the verified improvement.
+
+Eight planned source pairs and eleven separately declared Redline replays provide final outcome coverage. Seven Writes deliver and one validly withholds for Swedish quotation idiom, so seven paired Redlines run and one is skipped. The eleven separate replays all complete. They include every selected old quoted artifact, the exact English preservation control, two mechanical controls and the unchanged original Swedish control explicitly required by #341. Complete final outcomes, all remaining failures and cleanup are in completion-report.md. No selective retry replaces any failed result.

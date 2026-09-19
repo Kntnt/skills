@@ -1,0 +1,6 @@
+{
+  "source": "runs/second-candidate/idiom-frozen-clean/redline/supplied-input.md",
+  "sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66",
+  "revision": "5ecadb76",
+  "reason": "Mandatory exact #341 original case-study-clean acceptance replay after parent-only rollback; one run, no hints or retry."
+}

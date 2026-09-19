@@ -1,0 +1,121 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T01-32-01-01a0bc03-3277-74b3-a930-609bf1430be5.jsonl",
+      "session": {
+        "id": "01a0bc03-3277-74b3-a930-609bf1430be5",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "mechanical_pass",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000}));\ntext(await tools.exec_command({cmd:\"cat input.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"run_tmp=$(mktemp -d)\\ntrap 'rm -rf \\\"$run_tmp\\\"' EXIT\\nprintf '%s' '--output=response input.md' | TMPDIR=\\\"$run_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py\",\"max_output_tokens\":8000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory() as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    p = subprocess.run(['uv','run','.agents/skills/redline/scripts/invoke.py'], input='--output=response input.md', text=True, env=env)\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":8000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md\\nrg --files .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library/references/editorial/techniques\\ncat .agents/skills/kntnt/library/references/editorial/genres/case-study.md\\npython3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory() as tmp:\\n    p = subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=composition','--scope=review','--scope=anti-slop','en_GB'], env=dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1'))\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/case-study.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md\",\"max_output_tokens\":16000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport pathlib, tempfile\\nroot=pathlib.Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/scratch')\\np=pathlib.Path(tempfile.mkdtemp(prefix='redline-',dir=root))\\n(p/'mechanical-input.md').write_bytes(pathlib.Path('input.md').read_bytes())\\nprint(p)\\nPY\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/scratch')\\nprint('Scratch entries:', [x.name for x in p.iterdir()])\\nprint('Work entries:', [x.name for x in Path('.').iterdir()])\\nPY\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/scratch/redline-tte3omcc')\\nsource=Path('input.md').read_bytes()\\nassert (p/'mechanical-input.md').read_bytes()==source, 'Mechanical input changed'\\nresult=(p/'mechanical-output.md').read_bytes()\\nprint(result.decode())\\nprint('Unchanged:', result==source)\\nfor name in ['mechanical-input.md','mechanical-output.md']:\\n    (p/name).unlink()\\np.rmdir()\\nprint('Private files removed:', not p.exists())\\nprint('Scratch entries:', [x.name for x in p.parent.iterdir()])\\nprint('Work entries:', [x.name for x in Path('.').iterdir()])\\nPY\",\"max_output_tokens\":2500}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T01-32-55-01a0bc04-078e-7bf0-bfde-a02f8f705dc5.jsonl",
+      "session": {
+        "id": "01a0bc04-078e-7bf0-bfde-a02f8f705dc5",
+        "parent_thread_id": "01a0bc03-3277-74b3-a930-609bf1430be5",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bc03-3277-74b3-a930-609bf1430be5",
+              "depth": 1,
+              "agent_path": "/root/mechanical_pass",
+              "agent_nickname": "Helmholtz",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/work/.agents/skills/proofread/SKILL.md\",max_output_tokens:12000}));\n",
+        "text(await tools.exec_command({cmd:\"python - <<'PY'\\nimport os, tempfile, subprocess\\ninvocation='--language=en_GB --output=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/scratch/redline-tte3omcc/mechanical-output.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/scratch/redline-tte3omcc/mechanical-input.md'\\nwith tempfile.TemporaryDirectory() as td:\\n env=os.environ.copy(); env.update(TMPDIR=td,UV_NO_CACHE='1',UV_NO_PROJECT='1')\\n result=subprocess.run(['uv','run','/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/work/.agents/skills/proofread/scripts/invoke.py'],input=invocation,text=True,env=env)\\n raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/scratch/redline-tte3omcc/mechanical-input.md\",\"max_output_tokens\":11000}));\n",
+        "text(await tools.exec_command({cmd:\"python - <<'PY'\\nimport os, tempfile, subprocess\\nfrom pathlib import Path\\nsrc=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/scratch/redline-tte3omcc/mechanical-input.md')\\ndst=src.with_name('mechanical-output.md')\\nassert src.is_file() and dst.parent.is_dir() and src.resolve()!=dst.resolve()\\nassert os.access(dst.parent,os.W_OK)\\nwith tempfile.TemporaryDirectory() as td:\\n env=os.environ.copy();env['TMPDIR']=td\\n result=subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=mechanics','en_GB'],env=env)\\n raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/mechanics.md\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python - <<'PY'\\nfrom pathlib import Path\\nroot=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-y39l_z4i/scratch/redline-tte3omcc')\\nsource=root/'mechanical-input.md'\\ntarget=root/'mechanical-output.md'\\ntarget.write_bytes(source.read_bytes())\\nprint('Delivered complete, unchanged artifact to '+str(target))\\nPY\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 0,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "genres/column.md": 10,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

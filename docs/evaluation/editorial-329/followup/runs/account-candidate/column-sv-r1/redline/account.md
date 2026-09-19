@@ -1,0 +1,1 @@
+Granskad som svensk krönika utan särskild berättarteknik, enligt textens metadata. Inga ändringar behövdes vid granskningen eller den avslutande korrekturläsningen. Källfilen är orörd och inga arbetsfiler finns kvar.

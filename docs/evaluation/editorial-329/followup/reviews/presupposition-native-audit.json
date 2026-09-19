@@ -1,7 +1,7 @@
 {
-  "status": "Rolling audit; final matrix has 24 declared slots",
-  "completed_native": 23,
-  "aggregate_native_seconds": 6383.34,
+  "status": "Complete: 24 declared native invocations, no dependent skips",
+  "completed_native": 24,
+  "aggregate_native_seconds": 6747.7,
   "rows": [
     {
       "run": "runs/presupposition-candidate/article-sv-r1/redline",
@@ -199,7 +199,7 @@
         "changed": [],
         "removed": []
       },
-      "root_absent": false
+      "root_absent": true
     },
     {
       "run": "runs/presupposition-candidate/case-study-en_US-r1/write",
@@ -255,7 +255,7 @@
         "changed": [],
         "removed": []
       },
-      "root_absent": false
+      "root_absent": true
     },
     {
       "run": "runs/presupposition-candidate/case-unprompted-en_US-r1/redline",
@@ -608,6 +608,40 @@
       "returncode": 0,
       "timed_out": false,
       "duration_seconds": 345.65,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-study-sv-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_review",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "correction",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "quotation_recheck",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 364.36,
       "input_unchanged": true,
       "authentication_changed": false,
       "nonhome_changes": {

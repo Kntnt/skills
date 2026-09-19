@@ -1,0 +1,28 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_GB
+---
+
+# Fenwick puts waiting and ready jobs on one schedule
+
+Fenwick Instrument Repairs’ six-week trial of a shared bench schedule recorded 38 jobs and, according to the workshop’s summary, let staff see which instruments were waiting for parts. The manager approved continued use for new jobs, while postponing the backlog pending a review of status definitions.
+
+The brass and woodwind repair workshop began the trial in January 2026. Previously, jobs awaiting parts and those ready for work appeared on separate paper sheets. The team chose Benchline after checking that its software could distinguish the two statuses.
+
+The workshop defined the statuses and decided who would update them. Benchline configured those choices and trained four staff in one online session. Telephone calls remained part of the process for discussing collection arrangements with customers.
+
+In an email interview with Benchline’s case writer on 2 March, workshop manager Priya Vale described what the team had needed to settle:
+
+‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+The trial summary, dated 23 February 2026, documents the team’s reported experience. It does not measure repair duration, revenue or customer satisfaction, so it cannot establish whether repairs became faster.
+
+Asked about choosing the system again and what to change, Vale said:
+
+‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+
+---
+
+Finding 1 repaired: removed the bridge’s preview of Vale’s answer, preserving the question context and attribution. All claims remain in the unchanged quotation. No findings left unresolved.

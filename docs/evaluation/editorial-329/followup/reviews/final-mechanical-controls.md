@@ -1,0 +1,5 @@
+# Independent final mechanical-control review
+
+Both frozen controls pass at 5ecadb76. The clean artifact receives a complete separate result despite no changes; its bytes equal the input, and outer delivery correctly returns short status. The typo-bearing artifact receives only the required duplicated-suffix correction; its final response exactly equals the actual complete mechanical result. Both paths visibly preserve the private/source inputs and remove private files. One installed Proofread invocation occurs per run, with inherited identity and no extraneous review or effect.
+
+This directly verifies the new public file transport for no-change and real correction, without inferring encrypted dispatch contents. It does not establish where the original corrupted suffix arose or generalize two controls into universal reliability. Full criteria, exact hashes, native provenance and side effects are in `../../../records/redline-gpt-2026-09-20-359-final-mechanical-controls.md` and the run audits. Total native time is 218.97 seconds. Both roots and all owned processes are cleaned; no new run is requested.

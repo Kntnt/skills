@@ -26,3 +26,15 @@ Run the four CONTRIBUTING checks at the integrated final product revision. Recor
 ## Scheduling amendment before candidate launch
 
 All twelve cd375d4f Write artifacts and their input selections are now frozen. One mandatory old-wave Swedish Redline remains in progress. Its invocation and assessment continue unchanged while the independent new candidate may freeze and launch; all old outcomes must finish before final integration. This overlap changes neither selection, criteria, required invocations nor treatment of failures. The repeated English preservation failure now also occurs in the completed new US pair, reinforcing the independently recommended rollback.
+
+Immutable combined candidate: `5ecadb76`. Parent full-account validation, parent-only quotation review and exact-file mechanical transport are frozen together. No model or effort override.
+
+## Required unchanged Swedish control
+
+The full #341 thread explicitly requires a fresh replay of the original unchanged `case-study-clean` control. The conditional fallback above would omit that exact artifact when a newer Swedish case exists; that is insufficient for this acceptance requirement. Add the unchanged original frozen control once at 5ecadb76 regardless of the newer Swedish artifact. The newer case remains selected. This increases the declared final Redline replays from ten to eleven, before this additional control launches; no criterion or earlier result changes. It independently exposes the remaining idiom/preservation tradeoff after rollback.
+
+## Completed outcomes
+
+All eleven frozen replays complete once at 5ecadb76. Five supplementary/genre artifacts remain unchanged and pass. Both exact old English preservation inputs now preserve their quotations; the old US artifact still fails source-aware F1 on its inherited unsupported date. The old Swedish artifact and mandatory original Swedish control both remain L1/R1 failures. Both mechanical controls pass. Thus nine of eleven pass applicable source-blind quality criteria, with two retained Swedish idiom failures; this is not eleven faithful whole artifacts.
+
+Every replay has one actual installed Proofread invocation and a directly observed complete private-file mechanical boundary. No-change results remain complete files. The changed old US response differs from its result only in outer trailing newlines, explicitly recorded rather than called byte-identical. All roots are removed. The separately generated US case r1 still fails English quotation preservation at the same final revision, so these old-input passes do not close #358. See completion-report.md and the final-delivery/mechanical formal records for full criteria and evidence.

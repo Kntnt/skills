@@ -1,0 +1,13 @@
+{
+  "one_installed_proofread": true,
+  "full_private_input_visible": true,
+  "accepted_to_mechanical_input_exact": true,
+  "private_input_unchanged_assertion_observed": true,
+  "distinct_private_result_written": true,
+  "full_parent_result_read": true,
+  "source_metadata_unchanged": true,
+  "mechanical_result_matches_retained_final_artifact_bytes": true,
+  "unchanged_response_status": true,
+  "artifact_sha256": "a6177130965cbe50ee91975ad110f71fa857dc80783967b89991fddacb5b032a",
+  "note": "Actual full reads, exact no-change file copy, explicit source/input/output assertions and cleanup observed."
+}

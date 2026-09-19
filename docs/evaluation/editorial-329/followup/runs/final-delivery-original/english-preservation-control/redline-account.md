@@ -1,0 +1,1 @@
+No changes needed. Reviewed as a case study in US English, with no technique applied, as specified in the metadata. The final proofreading pass found no mechanical errors. No unresolved findings; `input.md` is unchanged, and all temporary files were removed.

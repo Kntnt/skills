@@ -1,0 +1,102 @@
+{
+  "revision": "5ecadb76",
+  "invocations": 3,
+  "native_sessions": 4,
+  "rows": [
+    {
+      "case": "case-study-en_US-r1",
+      "sessions": 2,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-w2ltbbwa",
+      "root_exists": false,
+      "source_artifact": {
+        "path": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-study-en_US-r1/draft.md",
+        "sha256": "eaef8848e4cff872139ca98502a27992d78dde123f5a0cea6c4624a73e8f1b51"
+      },
+      "input_exact": true,
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "mechanical_transport": {
+        "one_installed_proofread": true,
+        "native_mechanical_performer": "parent follows installed Proofread after editorial correction; no separate mechanical agent is required",
+        "full_private_input_visible": true,
+        "distinct_private_result_written": true,
+        "full_parent_result_read": true,
+        "accepted_to_mechanical_input_exact": true,
+        "private_input_unchanged_assertion_observed": true,
+        "source_metadata_unchanged": true,
+        "mechanical_result_matches_final_prose_metadata": true,
+        "literal_result_bytes_equal_response": false,
+        "outer_trailing_lf_only_difference": true,
+        "expected_sha256": "556c96abfd62f6314cec3773d155b6d62734a10e32a10c3526e90e3754b0ca87",
+        "response_sha256": "0f6d1909a13ff0223d8e6db75d8e25f1261749a03753fc89730a7492322b686f",
+        "input_final_lf_count": 2,
+        "response_final_lf_count": 0,
+        "note": "Exact complete input reconstruction and no-change output copy are visible in native commands; full output is printed before cleanup. Delivery strips only outer trailing newlines, no prose or metadata change. No encrypted dispatch is treated as exact artifact evidence."
+      }
+    },
+    {
+      "case": "case-study-sv-r1",
+      "sessions": 1,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-x3u41faf",
+      "root_exists": false,
+      "source_artifact": {
+        "path": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-study-sv-r1/draft.md",
+        "sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36"
+      },
+      "input_exact": true,
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "mechanical_transport": {
+        "one_installed_proofread": true,
+        "full_private_input_visible": true,
+        "accepted_to_mechanical_input_exact": true,
+        "private_input_unchanged_assertion_observed": true,
+        "distinct_private_result_written": true,
+        "full_parent_result_read": true,
+        "source_metadata_unchanged": true,
+        "mechanical_result_matches_retained_final_artifact_bytes": true,
+        "unchanged_response_status": true,
+        "artifact_sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+        "note": "One parent follows installed Proofread; exact input copy, actual complete read, no-change result copy, assertions and full output print are visible. No artifact repeated in final response, consistent with no-change delivery."
+      }
+    },
+    {
+      "case": "english-preservation-control",
+      "sessions": 1,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ywola73v",
+      "root_exists": false,
+      "source_artifact": {
+        "path": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/third-candidate/case-study-en_US-r2/draft.md",
+        "sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26"
+      },
+      "input_exact": true,
+      "effects": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "mechanical_transport": {
+        "one_installed_proofread": true,
+        "full_private_input_visible": true,
+        "accepted_to_mechanical_input_exact": true,
+        "private_input_unchanged_assertion_observed": true,
+        "distinct_private_result_written": true,
+        "full_parent_result_read": true,
+        "source_metadata_unchanged": true,
+        "mechanical_result_matches_retained_final_artifact_bytes": true,
+        "unchanged_response_status": true,
+        "artifact_sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+        "note": "Exact file copy, actual full input read, separate unchanged output, source/input equality assertion and full final output read visible. No-change final status correctly does not repeat artifact."
+      }
+    }
+  ]
+}

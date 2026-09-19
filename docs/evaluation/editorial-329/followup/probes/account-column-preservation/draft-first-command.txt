@@ -1,0 +1,28 @@
+/opt/homebrew/bin/bash -lc "python3 - <<'PY'
+from pathlib import Path
+import tempfile
+p = Path(tempfile.mkdtemp(prefix='write-check-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sek5mkjb/scratch'))
+draft = '''# En ruta till för det vi inte vet
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Men ingen ruta för det beslut vi ska kunna fatta när vi går därifrån. Tiden har fått två rutor. Vad vi ska kunna göra med den har inte fått samma tydliga plats.
+
+Det är frestande att börja där: lägg till en ruta för beslutet. Då skulle den som planerar mötet behöva formulera vad det ska leda till. Men redan när jag tänker det behöver jag hejda mig. Ett beslut är inte det enda som kan göra ett samtal värt tiden.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att snabbt enas. Att få syn på skillnaden är också ett skäl att träffas, även om den inte låter sig sammanfattas i ett beslut. Jag vill inte ha en mall som gör sådana samtal svårare att motivera.
+
+Samtidigt retar jag mig på hur lätt tid i kalendern kan behandlas som ett resultat i sig. Där står mötet, alltså finns det något att peka på. Det är min reflektion, ingen mätning av hur andra använder sina arbetsdagar. Ändå får den mig att undra vad vi ber om när vi ber om varandras tid.
+
+Ett samtal kan skapa förtroende. Det kan också hjälpa oss att upptäcka en fråga vi inte visste att vi behövde ställa. Då kan vi knappast begära att den färdiga frågan ska finnas i kallelsen. Men vi borde kunna försöka formulera varför vi behöver undersöka något tillsammans. Vad behöver just de här människorna varandra till?
+
+Så jag återvänder till mötesmallen med en fråga jag vill prova bredvid tiden: vad behöver vi förstå tillsammans?
+
+Det finns förstås en komik i detta. Jag granskar ett formulär och hoppas på ännu en ruta. Formuläret har åtminstone inte anledning att känna sig hotat.
+
+Om tillägget gör möten bättre vet jag inte. Jag vill prova frågan, men behålla tvivlet på rutan. Starttid och sluttid kan stå kvar. Däremellan hoppas jag att det får plats både ett syfte och något vi ännu inte har förstått.
+'''
+(p/'draft.md').write_text(draft)
+print(p)
+print('Words:', len(draft.split()))
+PY"

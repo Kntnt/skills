@@ -1,0 +1,6 @@
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
+service_tier = "default"
+
+[projects."/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-3nky6_o_/work"]
+trust_level = "trusted"

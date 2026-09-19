@@ -1,0 +1,22 @@
+{
+  "draft-first.md": {
+    "trace_line": 18,
+    "extraction": "Complete Python draft literal",
+    "sha256": "cc0d58de7174d1bce83721866622f8dfd907a8d84654dee50dcd91823a2bdb22"
+  },
+  "report-first.md": {
+    "trace_line": 38,
+    "extraction": "Full parent cat stdout",
+    "sha256": "437f264a154cbc0f64724b56c3a62fdc3cae0a1059dde0b669a42580de26c127"
+  },
+  "parent-disposition.md": {
+    "trace_line": 41,
+    "extraction": "Exact successful command literal; shell-rendered newline escape preserved",
+    "sha256": "34d0299ca6525fb213b197a6cf868233c7e37b1790eec097d3f0abbf41627553"
+  },
+  "draft-revised-observed.txt": {
+    "trace_line": 58,
+    "extraction": "Full final draft print stdout including cleanup messages",
+    "sha256": "cb7cb2e1f031a4857bced89af9c0ca75c63d1e8effa6835d6f751411fbb8f927"
+  }
+}

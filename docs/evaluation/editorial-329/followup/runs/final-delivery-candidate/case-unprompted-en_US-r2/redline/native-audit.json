@@ -1,0 +1,60 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T01-28-37-01a0bc00-16a6-7b21-902a-2302977ffb07.jsonl",
+      "session": {
+        "id": "01a0bc00-16a6-7b21-902a-2302977ffb07",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-woi7qka9/scratch/redline-invoke.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--output=response input.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='redline-invoke.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-woi7qka9/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv','run','.agents/skills/redline/scripts/invoke.py'], input='--output=response input.md', text=True, env=env)\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"cat input.md .agents/skills/kntnt/library/references/delivery.md\\nrg --files .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library/references/editorial/techniques\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='redline-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-woi7qka9/scratch') as tmp:\\n    result = subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=composition','--scope=review','--scope=anti-slop','en_US'],env=dict(os.environ,TMPDIR=tmp,UV_NO_CACHE='1',UV_NO_PROJECT='1'))\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/kntnt/library/references/editorial/genres/case-study.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md\",\"max_output_tokens\":24000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":16000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nfrom pathlib import Path\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-woi7qka9/scratch')\\nprivate = Path(tempfile.mkdtemp(prefix='redline-mechanical.',dir=scratch))\\nsource = private/'input.md'\\noutput = private/'output.md'\\nsource.write_bytes(Path('input.md').read_bytes())\\nprint('PRIVATE_DIRECTORY='+str(private),flush=True)\\nwith tempfile.TemporaryDirectory(prefix='proofread-invoke.',dir=scratch) as tmp:\\n    result = subprocess.run(['uv','run','.agents/skills/proofread/scripts/invoke.py'],input=f'--language=en_US --output={output} {source}',text=True,env=dict(os.environ,TMPDIR=tmp,UV_NO_CACHE='1',UV_NO_PROJECT='1'))\\n    if result.returncode:\\n        source.unlink()\\n        private.rmdir()\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":5000}));\n",
+        "const results=await Promise.allSettled([\ntools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='proofread-language.',dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-woi7qka9/scratch') as tmp:\\n    result = subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=mechanics','en_US'],env=dict(os.environ,TMPDIR=tmp,UV_NO_CACHE='1',UV_NO_PROJECT='1'))\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":7000}),\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/mechanics.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-woi7qka9/scratch/redline-mechanical.50d4b0bu/input.md\",\"max_output_tokens\":9000})\n]);for(let i=0;i<results.length;i++)text({i,result:results[i]});\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nprivate = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-woi7qka9/scratch/redline-mechanical.50d4b0bu')\\nsource = private/'input.md'\\noutput = private/'output.md'\\ntry:\\n    frozen = source.read_bytes()\\n    output.write_bytes(frozen)\\n    assert source.read_bytes() == frozen == Path('input.md').read_bytes()\\n    final = output.read_bytes()\\n    print(final.decode(),end='')\\n    assert final == frozen\\nfinally:\\n    for path in (output,source):\\n        if path.exists():\\n            path.unlink()\\n    private.rmdir()\\nscratch = private.parent\\nleftovers = [str(p) for p in scratch.iterdir() if p.name.startswith(('redline-invoke.','redline-language.','redline-mechanical.','proofread-invoke.','proofread-language.'))]\\nassert not leftovers, leftovers\\nprint('\\\\nVerification: complete output read; source unchanged; all run-created temporary files removed.')\\nPY\",\"max_output_tokens\":3000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": null,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    }
+  ],
+  "parent_visible_reports": [],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

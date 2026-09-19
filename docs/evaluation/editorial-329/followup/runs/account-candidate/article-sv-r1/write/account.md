@@ -1,0 +1,1 @@
+*Levererat här: ett svenskt artikelutkast, utan särskild berättarteknik enligt artikelgenrens standard. Källjämförelsen är klar. Underlaget ger inga besked om kylans orsak eller justeringars effekt. Inga filer från körningen finns kvar.*

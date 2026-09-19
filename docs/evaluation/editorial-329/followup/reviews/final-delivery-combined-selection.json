@@ -1,5 +1,5 @@
 {
-  "note": "All12oldWrite rows plus1exactEnglish and2mechanical controls;10selected Redline invocations. Sources/criteria unchanged; oldSvRedline may complete concurrently but is mandatory before integration.",
+  "note": "All twelve old Write rows, one exact English control, two mechanical controls and one mandatory original Swedish control: eleven selected Redline invocations. All criteria and source bytes remain fixed.",
   "rows": [
     {
       "case": "case-unprompted-en_US-r1",
@@ -105,6 +105,13 @@
       "sha256": "4c35cf893a1f39d6bff978a355ac88db6ad4badaa0448c6cd7c46beac7e3c918",
       "selected": true,
       "reason": "Fixed complete-artifact mechanical transport control."
+    },
+    {
+      "id": "original-frozen-swedish",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/second-candidate/idiom-frozen-clean/redline/supplied-input.md",
+      "sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66",
+      "selected": true,
+      "reason": "Exact unchanged case-study-clean required explicitly by the full #341 thread; mandatory beyond the newer Swedish case."
     }
   ]
 }

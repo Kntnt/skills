@@ -1,0 +1,132 @@
+{
+  "native_process_groups": [
+    {
+      "wave": "presupposition-candidate",
+      "case": "opinion-sv-r1",
+      "phase": "write",
+      "process_group": 2070,
+      "live": false
+    },
+    {
+      "wave": "presupposition-candidate",
+      "case": "opinion-sv-r1",
+      "phase": "redline",
+      "process_group": 25113,
+      "live": false
+    },
+    {
+      "wave": "presupposition-candidate",
+      "case": "opinion-en_US-r1",
+      "phase": "write",
+      "process_group": 2069,
+      "live": false
+    },
+    {
+      "wave": "presupposition-candidate",
+      "case": "opinion-en_US-r1",
+      "phase": "redline",
+      "process_group": 27101,
+      "live": false
+    },
+    {
+      "wave": "presupposition-candidate",
+      "case": "case-study-en_US-r1",
+      "phase": "write",
+      "process_group": 25609,
+      "live": false
+    },
+    {
+      "wave": "presupposition-candidate",
+      "case": "case-study-en_US-r1",
+      "phase": "redline",
+      "process_group": 31800,
+      "live": false
+    },
+    {
+      "wave": "presupposition-candidate",
+      "case": "case-study-sv-r1",
+      "phase": "write",
+      "process_group": 28263,
+      "live": false
+    },
+    {
+      "wave": "presupposition-candidate",
+      "case": "case-study-sv-r1",
+      "phase": "redline",
+      "process_group": 37153,
+      "live": false
+    },
+    {
+      "wave": "account-candidate",
+      "case": "opinion-en_US-r1",
+      "phase": "write",
+      "process_group": 39123,
+      "live": false
+    },
+    {
+      "wave": "account-candidate",
+      "case": "opinion-en_US-r1",
+      "phase": "redline",
+      "process_group": 65961,
+      "live": false
+    },
+    {
+      "wave": "account-candidate",
+      "case": "case-study-en_US-r1",
+      "phase": "write",
+      "process_group": 39124,
+      "live": false
+    },
+    {
+      "wave": "account-candidate",
+      "case": "case-study-en_US-r1",
+      "phase": "redline",
+      "process_group": 64779,
+      "live": false
+    },
+    {
+      "wave": "account-candidate",
+      "case": "case-study-en_US-r2",
+      "phase": "write",
+      "process_group": 67299,
+      "live": false
+    },
+    {
+      "wave": "account-candidate",
+      "case": "case-study-en_US-r2",
+      "phase": "redline",
+      "process_group": 72544,
+      "live": false
+    },
+    {
+      "wave": "account-candidate",
+      "case": "case-study-sv-r1",
+      "phase": "write",
+      "process_group": 67678,
+      "live": false
+    },
+    {
+      "wave": "final-delivery-original",
+      "case": "case-study-en_US-r1",
+      "phase": "redline",
+      "process_group": 58260,
+      "live": false
+    },
+    {
+      "wave": "final-delivery-original",
+      "case": "case-study-sv-r1",
+      "phase": "redline",
+      "process_group": 62304,
+      "live": false
+    },
+    {
+      "wave": "final-delivery-original",
+      "case": "english-preservation-control",
+      "phase": "redline",
+      "process_group": 64116,
+      "live": false
+    }
+  ],
+  "live_count": 0,
+  "note": "All earlier original waves have separate completed cleanup inventories; this verifies all three most recent owned phases after completion."
+}

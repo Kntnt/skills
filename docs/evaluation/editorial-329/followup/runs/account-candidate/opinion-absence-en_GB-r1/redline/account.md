@@ -1,0 +1,1 @@
+Reviewed as an opinion piece in British English, with no technique, as specified in the metadata. The correction removed the claim “The hall’s main rooms currently host their usual activities” because its relevance to the argument was unexplained. No findings remain unresolved. The final mechanical pass required no changes. `input.md` is unchanged; temporary files were removed.

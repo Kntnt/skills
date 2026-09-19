@@ -12,6 +12,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 6120,
           "with_quote_words": 6791
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 6171,
+          "with_quote_words": 6842
         }
       }
     },
@@ -26,6 +30,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5812,
           "with_quote_words": 6483
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5863,
+          "with_quote_words": 6534
         }
       }
     },
@@ -40,6 +48,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5742,
           "with_quote_words": 6413
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5793,
+          "with_quote_words": 6464
         }
       }
     },
@@ -54,6 +66,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 6165,
           "with_quote_words": 6836
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 6216,
+          "with_quote_words": 6887
         }
       }
     },
@@ -68,6 +84,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5857,
           "with_quote_words": 6528
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5908,
+          "with_quote_words": 6579
         }
       }
     },
@@ -82,6 +102,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5787,
           "with_quote_words": 6458
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5838,
+          "with_quote_words": 6509
         }
       }
     },
@@ -96,6 +120,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 6128,
           "with_quote_words": 6799
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 6179,
+          "with_quote_words": 6850
         }
       }
     },
@@ -110,6 +138,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5820,
           "with_quote_words": 6491
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5871,
+          "with_quote_words": 6542
         }
       }
     },
@@ -124,6 +156,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5750,
           "with_quote_words": 6421
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5801,
+          "with_quote_words": 6472
         }
       }
     },
@@ -138,6 +174,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 6122,
           "with_quote_words": 6793
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 6173,
+          "with_quote_words": 6844
         }
       }
     },
@@ -152,6 +192,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5814,
           "with_quote_words": 6485
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5865,
+          "with_quote_words": 6536
         }
       }
     },
@@ -166,6 +210,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5744,
           "with_quote_words": 6415
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5795,
+          "with_quote_words": 6466
         }
       }
     },
@@ -180,6 +228,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 6154,
           "with_quote_words": 6825
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 6205,
+          "with_quote_words": 6876
         }
       }
     },
@@ -194,6 +246,10 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5846,
           "with_quote_words": 6517
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5897,
+          "with_quote_words": 6568
         }
       }
     },
@@ -208,8 +264,13 @@
         "cd375d4f": {
           "write_parent_no_quote_words": 5776,
           "with_quote_words": 6447
+        },
+        "5ecadb76": {
+          "write_parent_no_quote_words": 5827,
+          "with_quote_words": 6498
         }
       }
     }
-  ]
+  ],
+  "final_delta_note": "5ecadb76 adds 51 words to source-check.md; the other counted Write parent resources are unchanged from cd375d4f. Redline removes the conditional fresh-reader reference and child load; see reading-load-final.json for resource counts."
 }

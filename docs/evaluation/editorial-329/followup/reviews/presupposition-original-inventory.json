@@ -1,0 +1,260 @@
+{
+  "invocations": 8,
+  "native_sessions": 21,
+  "rows": [
+    {
+      "case": "opinion-sv-r1",
+      "phase": "write",
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ag5m0943",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "exact_paired_input": null
+    },
+    {
+      "case": "opinion-sv-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lhirx9fk",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "exact_paired_input": true
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-86z8lik7",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "exact_paired_input": null
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "phase": "redline",
+      "sessions": 1,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-9_wddy5b",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "exact_paired_input": true
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "phase": "write",
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4sqnhtq_",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "exact_paired_input": null
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "phase": "redline",
+      "sessions": 5,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-hn9uffrq",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "exact_paired_input": true
+    },
+    {
+      "case": "case-study-sv-r1",
+      "phase": "write",
+      "sessions": 3,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pgt346xh",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "exact_paired_input": null
+    },
+    {
+      "case": "case-study-sv-r1",
+      "phase": "redline",
+      "sessions": 4,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-0q23qla7",
+      "root_exists": false,
+      "outside_native_home_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "exact_paired_input": true
+    }
+  ]
+}

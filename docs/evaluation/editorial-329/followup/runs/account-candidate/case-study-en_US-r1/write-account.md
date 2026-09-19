@@ -1,0 +1,1 @@
+Delivery: en_US case study, with no technique selected. Source comparison completed. The supplied material supports no causal, cost, satisfaction, or completion-time conclusions. Delivered here; no files retained.

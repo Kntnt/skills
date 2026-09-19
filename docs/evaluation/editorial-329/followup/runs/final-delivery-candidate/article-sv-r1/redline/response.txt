@@ -1,0 +1,1 @@
+Granskad som artikel på svenska, utan berättarteknik enligt metadata. Inga redaktionella brister eller korrekturfel hittades. Texten är oförändrad; inga filer har ändrats eller lämnats kvar.

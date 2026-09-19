@@ -1,0 +1,123 @@
+# /// script
+# requires-python = ">=3.12"
+# ///
+"""Run two frozen final-mechanical controls in two native lanes, retaining failures."""
+
+import argparse
+import json
+import os
+import subprocess
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial
+from pathlib import Path
+
+ROOT: Path = Path("/Users/thomas/Projects/skills")
+FOLLOW: Path = ROOT / "docs/evaluation/editorial-329/followup"
+CLEANUP: str = "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py"
+ROWS: tuple[tuple[str, str], ...] = (
+    ("mechanical-clean", "fixtures/final-mechanical-clean.md"),
+    ("mechanical-error", "fixtures/final-mechanical-error.md"),
+)
+
+
+def register(pid: int, reason: str) -> None:
+    """Register each independent process group as soon as it starts."""
+    subprocess.run(
+        ["uv", "run", CLEANUP, "add", "pid", str(pid), reason],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    )
+
+
+def run_case(
+    row: tuple[str, str], *, revision: str, destination: Path
+) -> dict[str, str | int]:
+    """Execute one frozen artifact once, preserving the complete attempt."""
+
+    # Stage exact artifact bytes and the unchanged formal invocation.
+    name, source = row
+    case = destination / name
+    case.mkdir(parents=True, exist_ok=False)
+    artifact = case / "input.md"
+    artifact.write_bytes((FOLLOW / source).read_bytes())
+    prompt = case / "prompt.txt"
+    prompt.write_text("/redline --output=response input.md\n")
+    argv = [
+        "uv",
+        "run",
+        "docs/evaluation/editorial-329/harness/run.py",
+        "--revision",
+        revision,
+        "--corpus-revision",
+        "bf14dc2",
+        "--prompt",
+        str(prompt),
+        "--input",
+        str(artifact),
+        "--input-name",
+        "input.md",
+        "--output",
+        str(case / "redline"),
+    ]
+    (case / "input-provenance.json").write_text(
+        json.dumps({"source": source}, indent=2) + "\n"
+    )
+
+    # Give every native runner its own registered process group and logs.
+    with (
+        (case / "runner-stdout.txt").open("w") as stdout,
+        (case / "runner-stderr.txt").open("w") as stderr,
+    ):
+        process = subprocess.Popen(
+            argv, cwd=ROOT, stdout=stdout, stderr=stderr, start_new_session=True
+        )
+        register(process.pid, f"Editorial final-mechanical control {name}")
+        (case / "runner-process.json").write_text(
+            json.dumps(
+                {
+                    "pid": process.pid,
+                    "process_group": process.pid,
+                    "argv": argv,
+                },
+                indent=2,
+            )
+            + "\n"
+        )
+        returncode = process.wait()
+
+    # A failed attempt remains evidence and does not suppress later cases.
+    result: dict[str, str | int] = {"case": name, "returncode": returncode}
+    (case / "runner-result.json").write_text(json.dumps(result, indent=2) + "\n")
+    print(json.dumps(result), flush=True)
+    return result
+
+
+def main() -> None:
+    """Freeze the helper and finish both declared cases without retries."""
+
+    # Require an explicit immutable revision and a distinct evidence directory.
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--revision", required=True)
+    parser.add_argument("--output-directory", type=Path, required=True)
+    arguments = parser.parse_args()
+    destination = arguments.output_directory.resolve()
+
+    # Register the batch and preserve its exact executed source.
+    register(os.getpid(), "Editorial two fixed mechanical controls, two lanes")
+    destination.mkdir(parents=True, exist_ok=False)
+    (destination / "executed-helper.txt").write_bytes(Path(__file__).read_bytes())
+
+    # Fixed ordering and bounded parallelism make the execution reproducible.
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        execute = partial(
+            run_case, revision=arguments.revision, destination=destination
+        )
+        results = list(executor.map(execute, ROWS))
+    (destination / "batch-results.json").write_text(
+        json.dumps(results, indent=2) + "\n"
+    )
+
+
+if __name__ == "__main__":
+    main()

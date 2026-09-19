@@ -1,0 +1,15 @@
+{
+  "one_installed_proofread": true,
+  "full_private_input_visible": true,
+  "accepted_to_mechanical_input_exact": true,
+  "private_input_unchanged_assertion_observed": true,
+  "distinct_private_result_written": true,
+  "full_parent_result_read": true,
+  "source_metadata_unchanged": true,
+  "mechanical_result_matches_final_prose_metadata": true,
+  "literal_result_bytes_equal_retained_artifact": false,
+  "outer_trailing_lf_only_difference": true,
+  "accepted_sha256": "de51ceab5d1d26c83bdd9824d3f6c4e61faf052830ec32f4b2bb2a7537179fbb",
+  "retained_final_sha256": "38553bc67e51a4cfdad6ebd49cfa528d2da67bb6d19a3b9c556f06b819100323",
+  "note": "Actual full input/output reads and no-change mechanical output-file write/copy observed; metadata retained. Corrected case delivery fence and outer blank lines are wrapper, no substantive mismatch."
+}

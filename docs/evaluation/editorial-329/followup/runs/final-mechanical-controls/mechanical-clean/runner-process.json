@@ -1,0 +1,21 @@
+{
+  "pid": 39643,
+  "process_group": 39643,
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "5ecadb76",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-mechanical-controls/mechanical-clean/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-mechanical-controls/mechanical-clean/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/final-mechanical-controls/mechanical-clean/redline"
+  ]
+}
