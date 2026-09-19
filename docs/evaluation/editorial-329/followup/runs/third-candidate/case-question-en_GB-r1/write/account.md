@@ -1,0 +1,1 @@
+*British English case-study draft, delivered here with no technique applied. Source comparison passed. The supplied fictional material supports the requested scope; no author name or call to action was supplied or added. Temporary files have been removed.*

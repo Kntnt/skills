@@ -1,0 +1,1 @@
+*Förstautkast på svenska, genre krönika, utan särskild berättarteknik. Levererat här i svaret och källkontrollerat utan kvarstående anmärkningar. Underlaget räckte till önskad längd; effekten av en extra ruta förblir okänd. Inga filer har lämnats kvar eller ändrats.*

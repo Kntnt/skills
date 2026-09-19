@@ -1,0 +1,32 @@
+[
+  {
+    "case": "opinion-unknown-sv-r1",
+    "stage": "write",
+    "returncode": 0,
+    "source_revision": "bf14dc2"
+  },
+  {
+    "case": "opinion-absence-en_GB-r1",
+    "stage": "write",
+    "returncode": 0,
+    "source_revision": "bf14dc2"
+  },
+  {
+    "case": "case-unprompted-en_US-r1",
+    "stage": "write",
+    "returncode": 0,
+    "source_revision": "bf14dc2"
+  },
+  {
+    "case": "opinion-absence-en_GB-r2",
+    "stage": "write",
+    "returncode": 0,
+    "source_revision": "bf14dc2"
+  },
+  {
+    "case": "case-question-en_GB-r1",
+    "stage": "write",
+    "returncode": 0,
+    "source_revision": "bf14dc2"
+  }
+]

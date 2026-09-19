@@ -1,0 +1,18 @@
+[
+  {
+    "control": "timetable-r2",
+    "returncode": 0
+  },
+  {
+    "control": "timetable-r1",
+    "returncode": 0
+  },
+  {
+    "control": "timetable-r3",
+    "returncode": 0
+  },
+  {
+    "control": "certainty-r1",
+    "returncode": 0
+  }
+]

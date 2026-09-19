@@ -1,0 +1,120 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T23-20-23-01a0bb8a-b141-7661-bbe4-5317876c28ee.jsonl",
+      "session": {
+        "id": "01a0bb8a-b141-7661-bbe4-5317876c28ee",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/write/SKILL.md\",\"max_output_tokens\":12000}));\ntext(await tools.exec_command({cmd:\"cat source.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch/write-invoke.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--genre=web-copy --language=en_US --output=response source.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/write/scripts/invoke.py\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='write-invoke-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=web-copy --language=en_US --output=response source.md', text=True, env=env)\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/genres/web-copy.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/write/references/source-check.md\\nrg --files .agents/skills/kntnt/library/references/editorial/techniques\",\"max_output_tokens\":14000}));\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='write-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp)\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'en_US'], env=env)\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":5000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport tempfile\\nroot = Path(tempfile.mkdtemp(prefix='write-check-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch'))\\ndraft = '''# Review your shared room’s booking routine\\n\\nSvale helps boards of smaller Swedish tenant-owner associations take stock of how a shared room is booked. Get a shared understanding of the current routine and two possible ways to simplify it, through a review with a defined scope.\\n\\n## What the review includes\\n\\nThe review covers one shared room in one association. It includes a 45-minute video meeting with two representatives from your board and a written summary of:\\n\\n- The steps in your current booking routine\\n- Points that are unclear\\n- Two possible simplifications\\n\\nThis gives your board a common picture of the routine and concrete options to consider. Svale does not guarantee a particular time saving or fewer conflicts.\\n\\n## Price, preparation, and scope\\n\\nThe fixed price is **SEK 4,800, including VAT**.\\n\\nYour board needs to be able to describe its existing booking rules and show the instructions currently given to residents. Use those requirements to assess whether your board is ready for the review.\\n\\nThe service does not include legal advice, installation of a booking system, or interviews with residents. Its focus is the booking routine for your shared room.\\n\\n## Express interest and hear what happens next\\n\\nThe interest form asks for your name, association, and email address. Submitting it is an expression of interest, not an order. No payment details are required, and submitting the form does not book a meeting.\\n\\nSvale will reply by email within three business days to check whether the service is a fit and propose a meeting time.\\n\\n[Open the interest form](https://example.invalid/svale/intresse)\\n'''\\n(root / 'draft.md').write_text(draft)\\nprint(root)\\nprint('Word count:', len(draft.split()))\\nPY\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"rg --files --hidden -g '!.git/**' -g '!.agents/**' -g '!.codex/**' . /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch\",\"max_output_tokens\":2000}));\n",
+        "text(await tools.exec_command({cmd:\"ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch/write-check-r1ai89ll\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch/write-check-r1ai89ll/report.md\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nroot = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch/write-check-r1ai89ll')\\nfor name in ('draft.md', 'report.md'):\\n    (root / name).unlink()\\nroot.rmdir()\\nscratch = root.parent\\nprint('Remaining scratch entries:', ', '.join(sorted(p.name for p in scratch.iterdir())) or '(none)')\\nprint('Remaining work entries:', ', '.join(sorted(p.name for p in Path.cwd().iterdir())))\\nPY\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": false,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 7,
+        "web-craft.md": 0,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 6,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 0,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T23-46-05-01a0bba2-3740-7e10-a3e8-617fcb2b9a86.jsonl",
+      "session": {
+        "id": "01a0bba2-3740-7e10-a3e8-617fcb2b9a86",
+        "parent_thread_id": "01a0bb8a-b141-7661-bbe4-5317876c28ee",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bb8a-b141-7661-bbe4-5317876c28ee",
+              "depth": 1,
+              "agent_path": "/root/source_check",
+              "agent_nickname": "Kepler",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "const results = await Promise.allSettled([tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/work/source.md\",\"max_output_tokens\":12000}),tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch/write-check-r1ai89ll/draft.md\",\"max_output_tokens\":12000})]);results.forEach(text);\n",
+        "text(await tools.apply_patch(\"*** Begin Patch\\n*** Add File: /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l7t3sz_c/scratch/write-check-r1ai89ll/report.md\\n+# Source fidelity comparison\\n+\\n+Compared the complete supplied source and brief with the complete draft. Target language: en_US. Review is limited to source support; no editorial or mechanical review was performed. No quotations occur, so no translated-quotation assessment is required.\\n+\\n+## Claim accounting\\n+\\n+Each numbered entry reconstructs an independently checkable proposition, retaining its scope and qualifications. The counterexample test asks whether the supplied material could remain true while the reconstructed proposition was false.\\n+\\n+1. Draft: “Review your shared room’s booking routine.” Proposition: The offered review concerns booking routines for a shared room. Source: “Svale erbjuder en avgränsad genomgång av rutinerna för bokning av en gemensam lokal.” Supported; the imperative introduces the offered subject, without claiming a booking or outcome.\\n+\\n+2. Draft: “Svale helps boards of smaller Swedish tenant-owner associations take stock of how a shared room is booked.” Proposition: Svale offers boards of smaller tenant-owner associations a review of how their shared room is booked. Source: “Skriv en tjänstesida för mindre bostadsrättsföreningars styrelser” and “Svale erbjuder en avgränsad genomgång av rutinerna för bokning av en gemensam lokal.” Supported. “Swedish tenant-owner associations” identifies the Swedish institution named by “bostadsrättsföreningar”; it does not add a separate service location or promise. “Take stock” describes the supplied review, rather than an additional result.\\n+\\n+3. Draft: “Get a shared understanding of the current routine.” Proposition: The review gives the board a shared understanding of its current booking routine. Source: “Beskriv nyttan i termer av vad styrelsen faktiskt får: en gemensam bild av rutinen.” Supported with warranted certainty; no counterexample consistent with that expressly supplied benefit.\\n+\\n+4. Draft: “and two possible ways to simplify it.” Proposition: The review provides two possible simplifications of the current booking routine. Source: “två möjliga förenklingar.” Supported; “possible” preserves the qualification and does not promise implementation or success.\\n+\\n+5. Draft: “through a review with a defined scope.” Proposition: The offered booking-routine review has a defined scope. Source: “en avgränsad genomgång” and the enumerated inclusions and exclusions. Supported; no additional scope is implied.\\n+\\n+6. Draft: “What the review includes.” Proposition: The following meeting and written summary are included in the review. Source: “Genomgången omfattar ett videomöte … och en skriftlig sammanställning.” Supported; the heading adds no further deliverable.\\n+\\n+7. Draft: “The review covers one shared room in one association.” Proposition: One assignment covers one shared room. Source: “Uppdraget gäller en lokal i en förening.” Supported; singular scope preserved.\\n+\\n+8. Same draft passage. Proposition: One assignment covers one association. Source: “Uppdraget gäller en lokal i en förening.” Supported; singular scope preserved.\\n+\\n+9. Draft: “It includes a 45-minute video meeting.” Proposition: The review includes a video meeting lasting 45 minutes. Source: “ett videomöte på 45 minuter.” Supported, including both format and duration.\\n+\\n+10. Draft: “with two representatives from your board.” Proposition: The included 45-minute video meeting involves two representatives of the association’s board. Source: “ett videomöte på 45 minuter med två representanter för styrelsen.” Supported; the modifiers and participant count are retained.\\n+\\n+11. Draft: “and a written summary of … The steps in your current booking routine.” Proposition: The review includes a written summary of the current steps in the association’s booking routine. Source: “en skriftlig sammanställning av nuvarande steg.” Supported; no counterexample consistent with the source.\\n+\\n+12. Draft: “and a written summary of … Points that are unclear.” Proposition: The included written summary covers unclear points in the current booking routine. Source: “en skriftlig sammanställning av nuvarande steg, oklarheter.” Supported; this describes the summary’s coverage, rather than inventing a particular problem.\\n+\\n+13. Draft: “and a written summary of … Two possible simplifications.” Proposition: The included written summary contains two possible simplifications of the current booking routine. Source: “en skriftlig sammanställning av nuvarande steg, oklarheter och två möjliga förenklingar.” Supported; number, modality, medium, and scope are preserved.\\n+\\n+14. Draft: “This gives your board a common picture of the routine.” Proposition: The described review gives the board a shared picture of its booking routine. Source: “vad styrelsen faktiskt får: en gemensam bild av rutinen.” Supported. The source explicitly authorizes this benefit, so the causal wording does not extrapolate from chronology or correlation.\\n+\\n+15. Draft: “and concrete options to consider.” Proposition: The two possible simplifications supplied by the review are options for the board to consider. Source: “vad styrelsen faktiskt får … två möjliga förenklingar.” Supported. “Concrete” refers to the supplied pair of possible simplifications, rather than asserting measured effectiveness, guaranteed feasibility, or an implementation plan.\\n+\\n+16. Draft: “Svale does not guarantee a particular time saving.” Proposition: Svale provides no guarantee of any particular amount of time saved by the review. Source: “Ingen garanti lämnas för en viss tidsbesparing.” Supported. This preserves absence of a guarantee without claiming that savings cannot happen.\\n+\\n+17. Draft: “or fewer conflicts.” Proposition: Svale provides no guarantee that the review will result in fewer conflicts. Source: “Ingen garanti lämnas för … färre konflikter.” Supported. This preserves absence of a guarantee without claiming that conflict reduction cannot happen.\\n+\\n+18. Draft: “The fixed price is SEK 4,800, including VAT.” Proposition: The review’s fixed price is SEK 4,800. Source: “Fast pris är 4 800 SEK inklusive moms.” Supported; currency, amount, and fixed-price character are unchanged.\\n+\\n+19. Same draft passage. Proposition: The fixed SEK 4,800 price includes VAT. Source: “Fast pris är 4 800 SEK inklusive moms.” Supported; the tax qualification remains explicit.\\n+\\n+20. Draft: “Your board needs to be able to describe its existing booking rules.” Proposition: The board must be able to describe its current booking rules for the review. Source: “Styrelsen behöver kunna beskriva sina befintliga bokningsregler.” Supported; no additional preparation requirement is introduced.\\n+\\n+21. Draft: “and show the instructions currently given to residents.” Proposition: The board must be able to show its current instructions to residents for booking the room. Source: “och visa nuvarande instruktion till de boende.” Supported. The English plural is idiomatic for an instruction document and does not require multiple documents.\\n+\\n+22. Draft: “The service does not include legal advice.” Proposition: Legal advice is excluded from this booking-routine review. Source: “Den omfattar inte juridisk rådgivning.” Supported; no broader assertion about Svale’s other activities is made.\\n+\\n+23. Draft: “installation of a booking system.” Proposition: Installation of a booking system is excluded from this review. Source: “Den omfattar inte … installation av bokningssystem.” Supported; the governing exclusion carries over to the list item.\\n+\\n+24. Draft: “or interviews with residents.” Proposition: Interviews with residents are excluded from this review. Source: “Den omfattar inte … intervjuer med boende.” Supported; the governing exclusion carries over to the list item.\\n+\\n+25. Draft: “Its focus is the booking routine for your shared room.” Proposition: The offered service concerns the association’s shared-room booking routine. Source: “en avgränsad genomgång av rutinerna för bokning av en gemensam lokal.” Supported; this restates the supplied scope.\\n+\\n+26. Draft: “The interest form asks for your name, association, and email address.” Proposition: The expression-of-interest process requests the submitter’s name. Source: “Intresseanmälan … efterfrågar namn, förening och e-postadress.” Supported. “Form” is a reasonable description of the supplied online registration requesting these fields; no design or extra functionality is asserted.\\n+\\n+27. Same draft passage. Proposition: The expression-of-interest process requests the submitter’s association. Source: “efterfrågar namn, förening och e-postadress.” Supported; no counterexample consistent with the source.\\n+\\n+28. Same draft passage. Proposition: The expression-of-interest process requests the submitter’s email address. Source: “efterfrågar namn, förening och e-postadress.” Supported; no counterexample consistent with the source.\\n+\\n+29. Draft: “Submitting it is an expression of interest, not an order.” Proposition: Submitting the interest form expresses interest in the service. Source: “Intresseanmälan sker på https://example.invalid/svale/intresse.” Supported; the action is characterized consistently with the named process.\\n+\\n+30. Same draft passage. Proposition: Submitting the interest form does not place an order. Source: “Den är inte en beställning.” Supported; a definite source fact remains definite.\\n+\\n+31. Draft: “No payment details are required.” Proposition: The expression-of-interest submission does not require payment information. Source: “och kräver inga betalningsuppgifter.” Supported. This does not assert free service, different payment terms, or the absence of future payment requirements.\\n+\\n+32. Draft: “submitting the form does not book a meeting.” Proposition: Submitting an expression of interest does not directly reserve a meeting. Source: “En knapp/länk får inte heta Boka och antyda att mötet bokas direkt: destinationen är intresseanmälan” and “Svale svarar via e-post … och föreslå mötestid.” Supported explicitly by the brief’s boundary and the subsequent proposal process; this is not an inference from silence.\\n+\\n+33. Draft: “Svale will reply by email within three business days.” Proposition: Svale replies to an expression of interest by email. Source: “Svale svarar via e-post.” Supported; response channel and responding organization preserved.\\n+\\n+34. Same draft passage. Proposition: Svale’s email reply comes within three business days of the expression of interest. Source: “Intresseanmälan … Svale svarar via e-post inom tre arbetsdagar.” Supported; timing applies to the reply, without inventing meeting or summary delivery timing.\\n+\\n+35. Draft: “to check whether the service is a fit.” Proposition: The purpose of Svale’s email reply is to check the assignment’s suitability. Source: “för att stämma av om uppdraget passar.” Supported; no automatic acceptance or suitability guarantee is asserted.\\n+\\n+36. Draft: “and propose a meeting time.” Proposition: Svale’s email reply proposes a meeting time. Source: “och föreslå mötestid.” Supported; proposal is preserved rather than changed into confirmed booking.\\n+\\n+37. Draft: “[Open the interest form](https://example.invalid/svale/intresse).” Proposition: The supplied URL is the expression-of-interest destination. Source: “Intresseanmälan sker på https://example.invalid/svale/intresse.” Supported; destination is exact and link label correctly identifies an interest submission rather than booking or purchase. The source labels this a fictional service with an inert test destination; the copy is assessed as the requested fictional service page, not as independent verification of a live business.\\n+\\n+## Nonfactual language and heading implications\\n+\\n+- “Review …” and “Get …” are invitations grounded in the supported offer; they do not add a required action or guaranteed downstream outcome.\\n+- “Price, preparation, and scope” is an organizational label; the content supplies each item without extra factual implications.\\n+- “Use those requirements to assess whether your board is ready for the review” is reader-directed advice. Its referent is the two supported preparation requirements, not a newly asserted eligibility policy or claim that they are sufficient for acceptance.\\n+- “Express interest and hear what happens next” directs readers to the interest process and the described subsequent email. It does not imply an immediate reply, automatic order, or direct booking.\\n+- “Open the interest form” is a navigation instruction with the destination accounted for above.\\n+\\n+## Findings\\n+\\n+No unsupported factual or attributed claim identified. No source-compatible counterexample establishes an added factual assertion in the draft’s ordinary contextual reading. No missing or changed qualification requires repair. The draft preserves one room/one association, meeting duration and participant count, two possible simplifications, fixed SEK price including VAT, preparation requirements, exclusions, lack of guaranteed savings or fewer conflicts, non-order/non-booking interest submission, required fields, and reply timing and purpose.\\n+\\n+The draft does not invent payment terms or written-summary delivery timing. Those unknowns are not recast as negative facts. No comparison, customer claim, quotation, rating, availability count, promotion, or additional guarantee is introduced.\\n+\\n+Translation findings: None; there are no quotations. Swedish institutional and service terms retain their supplied meaning in the factual accounting above.\\n+\\n+Completion status: Complete. Unresolved findings: None.\\n*** End Patch\"));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "genres/column.md": 10,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

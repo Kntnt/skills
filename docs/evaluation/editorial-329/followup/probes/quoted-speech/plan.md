@@ -1,0 +1,3 @@
+# Neutral source-blind quoted-speech diagnostic
+
+One authorized independent focused reading after the parent reported-speech review unit missed the frozen idiom control. The full unchanged original Swedish case-study-clean text is supplied, with existing resolved Swedish composition/review guidance and base/case-study base/review resources. No English source, issue hint or suspected passage is supplied. This tests a fresh focused reader, not a new language norm. Detection and proposed repair are assessed separately; no complete Skill invocation or successful applied repair is claimed. Product `82db439`, corpus `bf14dc2`.

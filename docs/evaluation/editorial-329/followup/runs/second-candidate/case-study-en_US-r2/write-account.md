@@ -1,0 +1,1 @@
+Draft delivered here in US English; no technique applied, consistent with the case-study genre’s default. Source comparison passed. No files retained. The roughly 360-word draft reflects the available material; additional measured outcomes would support a fuller results account.

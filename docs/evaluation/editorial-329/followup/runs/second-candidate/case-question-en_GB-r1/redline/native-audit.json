@@ -1,0 +1,119 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T23-47-38-01a0bba3-a1c8-76c3-9787-2e2d2545ac47.jsonl",
+      "session": {
+        "id": "01a0bba3-a1c8-76c3-9787-2e2d2545ac47",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "mechanical_pass",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "const r = await tools.exec_command({cmd:\"pwd && rg --files -g 'AGENTS.md' -g 'input.md' -g 'SKILL.md' .agents . 2>/dev/null\",max_output_tokens:4000});text(r.output);\ntext((await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",max_output_tokens:12000})).output);\n",
+        "text((await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lezy3mrm/scratch/redline.XXXXXX)\\nTMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py <<'EOF'\\n--output=response input.md\\nEOF\\nresult=$?\\nrm -rf \\\"$task_tmp\\\"\\nexit \\\"$result\\\"\",max_output_tokens:12000})).output);\ntext((await tools.exec_command({cmd:\"cat input.md\",max_output_tokens:14000})).output);\n",
+        "text((await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='redline-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lezy3mrm/scratch') as tmp:\\n p=subprocess.run(['uv','run','.agents/skills/redline/scripts/invoke.py'],input='--output=response input.md\\\\n',text=True,env=dict(os.environ,TMPDIR=tmp,UV_NO_CACHE='1',UV_NO_PROJECT='1'))\\nraise SystemExit(p.returncode)\\nPY\",max_output_tokens:14000})).output);\ntext((await tools.exec_command({cmd:\"cat input.md\",max_output_tokens:14000})).output);\n",
+        "const rs=await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/genres/case-study.md\",max_output_tokens:16000}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(prefix='redline-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lezy3mrm/scratch') as tmp:\\n p=subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=composition','--scope=review','--scope=anti-slop','en_GB'],env=dict(os.environ,TMPDIR=tmp))\\nraise SystemExit(p.returncode)\\nPY\",max_output_tokens:8000})]);for(let i=0;i<rs.length;i++)text({i,result:rs[i]});\n",
+        "text((await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/case-study.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md\",max_output_tokens:20000})).output);\n",
+        "text((await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",max_output_tokens:15000})).output);\n",
+        "text((await tools.exec_command({cmd:\"git status --short --untracked-files=all\\nls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lezy3mrm/scratch\",max_output_tokens:3000})).output);\n",
+        "text((await tools.exec_command({cmd:\"ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lezy3mrm/scratch\\nrg --files -g '!**/.agents/**' -g '!**/.git/**' .\",max_output_tokens:1500})).output);\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T23-48-51-01a0bba4-c05e-7c22-a6d7-b35a4ea54278.jsonl",
+      "session": {
+        "id": "01a0bba4-c05e-7c22-a6d7-b35a4ea54278",
+        "parent_thread_id": "01a0bba3-a1c8-76c3-9787-2e2d2545ac47",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bba3-a1c8-76c3-9787-2e2d2545ac47",
+              "depth": 1,
+              "agent_path": "/root/mechanical_pass",
+              "agent_nickname": "Mendel",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",max_output_tokens:16000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lezy3mrm/scratch') as tmp:\\n env=os.environ.copy()\\n env.update(TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n p=subprocess.run(['uv','run','.agents/skills/proofread/scripts/invoke.py'],input='--language=en_GB --output=response',text=True,capture_output=True,env=env)\\n print(p.stdout,end='')\\n print(p.stderr,end='')\\n print('Exit:',p.returncode)\\nPY\",\"max_output_tokens\":5000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md\",max_output_tokens:10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile, subprocess, os\\nwith tempfile.TemporaryDirectory(dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lezy3mrm/scratch') as tmp:\\n env=os.environ.copy()\\n env['TMPDIR']=tmp\\n p=subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=mechanics','en_GB'],text=True,capture_output=True,env=env)\\n print(p.stdout,end='')\\n print(p.stderr,end='')\\n print('Exit:',p.returncode)\\nPY\",\"max_output_tokens\":7000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/mechanics.md\",max_output_tokens:10000}));\n"
+      ],
+      "complete_supplied_input_visible": false,
+      "delivered_prose_visible": false,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 0,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "genres/column.md": 10,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

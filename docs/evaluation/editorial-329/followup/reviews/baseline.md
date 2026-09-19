@@ -1,5 +1,7 @@
 # Supplementary baseline evaluation
 
+**Superseding adjudication, 20 September 2026:** whole-artifact F1 is **4/8 pass, 4/8 fail**, superseding the original table/count below. The workshop question control adds an unprovided “she” for Vale. Its question framing remains supported; the new failure is personal attribution. See the appended adjudication in the full record.
+
 All eight predeclared baseline Write invocations completed at product revision `7ff6ec0`, against supplementary corpus `bf14dc2` and unchanged original source bytes from `6e531f5`. All eight native sessions expose `gpt-6-astra/high` in Codex CLI 0.155.1. The evaluator read no candidate result before fixing these assessments. No baseline Redline pass is claimed.
 
 The [full record](../../../records/write-gpt-2026-09-19-349-followup-baseline.md) scores all ten applicable criteria for each run and links complete artifacts, delivery accounts and raw evidence. The [native audit](baseline-native-audit.json) verifies full source/resource reads, identities, original-source preservation, all writable-root side effects, process results and removal of every private root.

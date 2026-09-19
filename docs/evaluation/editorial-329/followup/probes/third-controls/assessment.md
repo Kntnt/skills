@@ -1,0 +1,9 @@
+# Independent third-candidate timetable controls
+
+All four frozen controls completed at product `7b86144d`, using unchanged sources `20de1df7` and inherited `gpt-6-astra/high`. The [full record](../../../../records/redline-gpt-2026-09-19-354-third-controls.md) scores every applicable criterion.
+
+All three exact-input timetable repetitions return clean no-change statuses. Each preserves the original explicit uncertainty and the author's eight-week request. The contrasting certainty control identifies the actual unsupported guarantee, removes only that sentence, reports the removed claim and retains the proposed deferral. This supports the bounded [#354](https://github.com/Kntnt/skills/issues/354) clarification without suppressing genuine unsupported-certainty findings. Earlier two-of-three failures at each preceding candidate remain unchanged in their records; the final three clean observations are coverage, not a general reliability guarantee.
+
+All six actual native sessions have the inherited identity. Every review loads the selected opinion scope and closes with one successful installed Proofread. The first timetable run delegates its mechanical pass to a fresh child; an initial shell command is rejected before execution and retried, so there is still one completed mechanical pass. The certainty run uses one fresh correction and re-reviews it. No substantive edit follows Proofread.
+
+The three no-change artifacts match the supplied input bytes. The certainty artifact differs only by the unsupported guarantee's removal, apart from an outer trailing separator newline. Complete all-root inventories show no source/resource changes, surviving scratch or authentication changes. All four literal private roots were removed after capture, extraction and native audit. Encrypted correction dispatch limits inspection of the exact task payload; actual fresh settings, resources, identity and results remain observable.

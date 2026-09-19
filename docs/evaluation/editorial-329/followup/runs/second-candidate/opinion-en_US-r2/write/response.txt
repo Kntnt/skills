@@ -1,0 +1,38 @@
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_US
+---
+
+# Lervik should test both booking options before cutting one
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+Lervik’s municipal executive board should postpone a permanent switch to online-only booking for community venues. Before removing phone reservations, it should authorize a six-month trial of both phone and web booking at all seven venues, with the cost explicitly considered. The evidence needed to weigh staff workload against value for users is still missing.
+
+## What the pilot actually tells us
+
+The municipality’s April 8, 2026, pilot report, *Bokning av föreningslokaler*, records 96 web bookings and 24 phone bookings during eight weeks at two venues. Those are bookings, not individual people. The report does not measure age, functional ability, or digital familiarity.
+
+The phone bookings therefore cannot tell us what share of Lervik’s residents cannot book online. Making that claim would overstate the evidence. But a phone reservation is a reason to ask why someone chose that route.
+
+I do not oppose digital booking. I want the board to establish what it would gain and what users would lose before it permanently removes an option.
+
+## Measure the workload behind the proposal
+
+The staff recommendation prepared for the board’s June 18 meeting proposes ending phone booking at all seven venues starting in September. Its reason deserves a serious response: staff would no longer have to enter information through two workflows.
+
+Duplicate administration is the objection our proposal must address. Yet the documents contain neither measurements of staff time nor a calculation of financial savings. The board is being asked to remove a booking channel across all seven venues without those figures. That is an inadequate basis for a permanent change.
+
+## Give the board a basis for deciding
+
+Öppna beslut proposes keeping both channels during a six-month trial at all seven venues. Staff should record the time spent on each booking channel and invite users to explain voluntarily why they choose phone or web booking. That would give the board evidence for weighing administrative work against users’ reasons for choosing each option.
+
+We do not claim to have costed or funded the trial. The board must assess that cost; a trial cannot simply be assumed to pay for itself.
+
+The board should postpone the permanent switch, address the trial’s cost, and approve six months with both channels available. It can then decide whether to remove, change, or retain a booking channel on the basis of what the trial establishes.
+
+---
+
+*Delivered here: an American English opinion draft, with no prescribed technique. Source comparison passed. The supplied fictional material supports the requested length; costs and savings remain unquantified. Temporary files were removed; no output file remains.*

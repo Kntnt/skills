@@ -1,0 +1,1 @@
+*Delivered here in British English, using the requested general genre with no technique. Based solely on the supplied fictional material; source and translated-quotation checks passed. The material supported the brief within the limitations stated above. No files retained.*

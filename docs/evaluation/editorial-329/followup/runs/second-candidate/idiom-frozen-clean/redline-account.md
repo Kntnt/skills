@@ -1,0 +1,1 @@
+Texten är granskad som kundcase på svenska, utan särskild berättarteknik. Inga redaktionella eller språkliga ändringar behövdes. Inga filer har ändrats.

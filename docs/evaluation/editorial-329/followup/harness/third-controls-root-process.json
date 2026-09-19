@@ -1,0 +1,18 @@
+{
+  "pid": 17221,
+  "process_group": 17221,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/second_controls.py",
+    "--revision",
+    "7b86144d",
+    "--wave",
+    "third-controls",
+    "--cases",
+    "timetable-r1",
+    "timetable-r2",
+    "timetable-r3",
+    "certainty-r1"
+  ]
+}

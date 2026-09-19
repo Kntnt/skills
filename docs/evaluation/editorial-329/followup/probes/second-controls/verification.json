@@ -1,0 +1,170 @@
+[
+  {
+    "control": "certainty-r1",
+    "returncode": 0,
+    "revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+    "root_absent": true,
+    "native_sessions": 2,
+    "input_stats": {
+      "before": {
+        "mtime_ns": 1789851378291866143,
+        "inode": 313158405
+      },
+      "after": {
+        "mtime_ns": 1789851378291866143,
+        "inode": 313158405
+      }
+    },
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "delivery-file",
+    "returncode": 0,
+    "revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+    "root_absent": true,
+    "native_sessions": 1,
+    "input_stats": {
+      "before": {
+        "mtime_ns": 1789851378291936892,
+        "inode": 313167091
+      },
+      "after": {
+        "mtime_ns": 1789851378291936892,
+        "inode": 313167091
+      }
+    },
+    "outside_native_changes": {
+      "created": {
+        "work/result.md": {
+          "mode": 420,
+          "type": "file",
+          "size": 313,
+          "sha256": "b8800c50446ef66852ad4423bcab1db83cd5f1f6681ffa2d1797b66475ab093e"
+        }
+      },
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "delivery-in-place",
+    "returncode": 0,
+    "revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+    "root_absent": true,
+    "native_sessions": 1,
+    "input_stats": {
+      "before": {
+        "mtime_ns": 1789851378291936892,
+        "inode": 313164403
+      },
+      "after": {
+        "mtime_ns": 1789851378291936892,
+        "inode": 313164403
+      }
+    },
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "delivery-response",
+    "returncode": 0,
+    "revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+    "root_absent": true,
+    "native_sessions": 1,
+    "input_stats": {
+      "before": {
+        "mtime_ns": 1789851378291936892,
+        "inode": 313162441
+      },
+      "after": {
+        "mtime_ns": 1789851378291936892,
+        "inode": 313162441
+      }
+    },
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "timetable-r1",
+    "returncode": 0,
+    "revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+    "root_absent": true,
+    "native_sessions": 2,
+    "input_stats": {
+      "before": {
+        "mtime_ns": 1789851378291765229,
+        "inode": 313149024
+      },
+      "after": {
+        "mtime_ns": 1789851378291765229,
+        "inode": 313149024
+      }
+    },
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "timetable-r2",
+    "returncode": 0,
+    "revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+    "root_absent": true,
+    "native_sessions": 1,
+    "input_stats": {
+      "before": {
+        "mtime_ns": 1789851378291765229,
+        "inode": 313149025
+      },
+      "after": {
+        "mtime_ns": 1789851378291765229,
+        "inode": 313149025
+      }
+    },
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "timetable-r3",
+    "returncode": 0,
+    "revision": "82db43935adf53f831a0da5b46894b3fc1eac735",
+    "root_absent": true,
+    "native_sessions": 2,
+    "input_stats": {
+      "before": {
+        "mtime_ns": 1789851378291765229,
+        "inode": 313154312
+      },
+      "after": {
+        "mtime_ns": 1789851378291765229,
+        "inode": 313154312
+      }
+    },
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  }
+]

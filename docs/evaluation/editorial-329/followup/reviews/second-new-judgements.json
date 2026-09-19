@@ -10,7 +10,17 @@
     "S1": "pass — One fresh inherited checker visibly read full source and exact complete delivered prose from draft.md; complete32-proposition report read before cleanup and final delivery; no substantive post-approval change.",
     "coverage": "Optional nonclaim about association estimate/permissions omitted, so this repetition adds no direct positive coverage of that distinction.",
     "write_status": "delivered",
-    "checker_count": 1
+    "checker_count": 1,
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass — All attributed motives, 18 booked days and 2027 proposal remain scoped to source; estimate/permit status is omitted rather than invented. No cost or seasonal superiority is asserted.",
+      "unresolved": "none"
+    }
   },
   "opinion-unknown-sv-r2": {
     "F1": "pass — Counts, attributed benefits, installation proposal and timing remain source-bound; no unknown estimate/permit status becomes an absence. The final conditional comparison is advocacy, not an outcome claim.",
@@ -24,7 +34,17 @@
     "coverage": "Optional association estimate/permit nonclaim omitted again; no direct target distinction coverage here.",
     "write_status": "delivered",
     "checker_count": 2,
-    "repair": "First checker removed Det är skäl att ta på allvar. as an unsupplied author evaluation. Root adjudication: conservative/disputed source-boundary limitation; final F1 and craft pass. Do not count as a proven factual repair. No refusal or loss of supplied factual claim."
+    "repair": "First checker removed Det är skäl att ta på allvar. as an unsupplied author evaluation. Root adjudication: conservative/disputed source-boundary limitation; final F1 and craft pass. Do not count as a proven factual repair. No refusal or loss of supplied factual claim.",
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Parent reads full review scope; fresh inherited mechanical child invokes installed Proofread exactly once and loads its full mechanics scope; no editorial correction or later substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass — Counts, attributed benefits, installation proposal and timing remain source-bound; no unknown estimate/permit status becomes an absence. The final conditional comparison is advocacy, not an outcome claim.",
+      "unresolved": "none"
+    }
   },
   "opinion-absence-en_GB-r1": {
     "F1": "fail — Unsupported fact (document-knowledge scope): Our submission ...; it does not establish whether that consent exists makes the whole submission unable to establish consent status. Source establishes only no representation of secured consent and no actual status in supplied material; an omitted refusal in the submission remains source-compatible. The checker adds as supplied in source package to its reconstruction, a restriction absent from delivered prose.",
@@ -38,7 +58,17 @@
     "coverage": "Explicit absent estimate and unestablished consent remain distinct; no categorical absent consent invented. However an independent document-content scope assertion fails F1. Requested eight weeks explicitly remains advocacy, not guarantee.",
     "write_status": "delivered",
     "checker_count": 1,
-    "defect": "https://github.com/Kntnt/skills/issues/355"
+    "defect": "https://github.com/Kntnt/skills/issues/355",
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "fail — Unsupported fact (document-knowledge scope): Our submission ...; it does not establish whether that consent exists makes the whole submission unable to establish consent status. Source establishes only no representation of secured consent and no actual status in supplied material; an omitted refusal in the submission remains source-compatible. The checker adds as supplied in source package to its reconstruction, a restriction absent from delivered prose.",
+      "unresolved": "none"
+    }
   },
   "opinion-absence-en_GB-r2": {
     "F1": "fail — Unsupported fact (document-knowledge scope): Our submission ...; it does not establish whether that consent exists makes the whole submission unable to establish consent status. Source establishes only no representation of secured consent and no actual status in supplied material; an omitted refusal in the submission remains source-compatible. The checker adds as supplied in source package to its reconstruction, a restriction absent from delivered prose.",
@@ -52,7 +82,17 @@
     "coverage": "Explicit absent estimate and unestablished consent remain distinct; no categorical absent consent invented. However an independent document-content scope assertion fails F1. Requested eight weeks explicitly remains advocacy, not guarantee.",
     "write_status": "delivered",
     "checker_count": 1,
-    "defect": "https://github.com/Kntnt/skills/issues/355"
+    "defect": "https://github.com/Kntnt/skills/issues/355",
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "fail — Unsupported fact (document-knowledge scope): Our submission ...; it does not establish whether that consent exists makes the whole submission unable to establish consent status. Source establishes only no representation of secured consent and no actual status in supplied material; an omitted refusal in the submission remains source-compatible. The checker adds as supplied in source package to its reconstruction, a restriction absent from delivered prose.",
+      "unresolved": "none"
+    }
   },
   "case-unprompted-en_US-r1": {
     "F1": "pass — Exact email quotations retain all qualifications and supplied authorship; no invented question, spoken exchange, visit, emotion or supplier comparison. Pilot counts, existing-collection exclusion and absence of measurements stay scoped.",
@@ -65,7 +105,17 @@
     "S1": "pass — One fresh inherited checker reads full source and exact final prose; complete30-claim report read by parent before cleanup; no later prose change.",
     "coverage": "Email quotation framing remains unprompted; no unsupported question or physical scene.",
     "write_status": "delivered",
-    "checker_count": 1
+    "checker_count": 1,
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass — Exact email quotations retain all qualifications and supplied authorship; no invented question, spoken exchange, visit, emotion or supplier comparison. Pilot counts, existing-collection exclusion and absence of measurements stay scoped.",
+      "unresolved": "none"
+    }
   },
   "case-unprompted-en_US-r2": {
     "F1": "pass — Exact email quotations retain all qualifications and supplied authorship; no invented question, spoken exchange, visit, emotion or supplier comparison. Pilot counts, existing-collection exclusion and absence of measurements stay scoped.",
@@ -78,7 +128,17 @@
     "S1": "pass — One fresh inherited checker reads full source and exact delivered prose; parent reads complete36-claim report before cleanup; no subsequent prose edit.",
     "coverage": "Email quotation framing remains unprompted; no unsupported question or physical scene.",
     "write_status": "delivered",
-    "checker_count": 1
+    "checker_count": 1,
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass — Exact email quotations retain all qualifications and supplied authorship; no invented question, spoken exchange, visit, emotion or supplier comparison. Pilot counts, existing-collection exclusion and absence of measurements stay scoped.",
+      "unresolved": "none"
+    }
   },
   "case-question-en_GB-r1": {
     "F1": "pass — Customer choices, reported visibility,38 entered jobs and unmeasured outcomes retain scope; exact supplied email question is permissibly paraphrased and both answer quotations preserved. No physical scene or emotion invented.",
@@ -92,7 +152,17 @@
     "coverage": "Supported question framing appears explicitly and survives; first checker replaces unsupplied she with Vale without dropping question meaning.",
     "write_status": "delivered",
     "checker_count": 2,
-    "repair": "Unsupported gendered pronoun removed; supplied question and exact quotations retained."
+    "repair": "Unsupported gendered pronoun removed; supplied question and exact quotations retained.",
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Preserves supported question framing, exact quotes, customer choices and qualified appraisal without needless correction.",
+      "R2": "pass — Parent reads full review scope; fresh inherited mechanical child invokes installed Proofread exactly once and loads its full mechanics scope; no editorial correction or later substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass — Customer choices, reported visibility,38 entered jobs and unmeasured outcomes retain scope; exact supplied email question is permissibly paraphrased and both answer quotations preserved. No physical scene or emotion invented.",
+      "unresolved": "none"
+    }
   },
   "case-question-en_GB-r2": {
     "F1": "pass — Customer choices, reported visibility,38 entered jobs and unmeasured outcomes retain scope; exact supplied email question is permissibly paraphrased and both answer quotations preserved. No physical scene or emotion invented.",
@@ -106,7 +176,17 @@
     "coverage": "Supported question framing appears explicitly and survives; first checker replaces unsupplied she with Vale without dropping question meaning.",
     "write_status": "delivered",
     "checker_count": 2,
-    "repair": "Unsupported gendered pronoun removed; supplied question and exact quotations retained."
+    "repair": "Unsupported gendered pronoun removed; supplied question and exact quotations retained.",
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Preserves supported question framing, exact quotes, customer choices and qualified appraisal without needless correction.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass — Customer choices, reported visibility,38 entered jobs and unmeasured outcomes retain scope; exact supplied email question is permissibly paraphrased and both answer quotations preserved. No physical scene or emotion invented.",
+      "unresolved": "none"
+    }
   },
   "article-sv-r1": {
     "F1": "pass —14of120 lesson periods retains at-least-one-reading denominator; no duration, cause, legal threshold, savings or whole-school/year inference. Sensor placements, exact quote, unmeasured effects and undecided funding preserved.",
@@ -119,6 +199,86 @@
     "S1": "pass — One fresh inherited checker reads full source and exact delivered prose; complete claim report read before cleanup; no substantive post-approval change.",
     "coverage": "Unaffected article regression cell retains technical substance and all source limits.",
     "write_status": "delivered",
-    "checker_count": 1
+    "checker_count": 1,
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass —14of120 lesson periods retains at-least-one-reading denominator; no duration, cause, legal threshold, savings or whole-school/year inference. Sensor placements, exact quote, unmeasured effects and undecided funding preserved.",
+      "unresolved": "none"
+    }
+  },
+  "web-copy-en_US-r1": {
+    "F1": "pass — One-room scope,45-minute/two-representative meeting, written deliverables,SEK4800VAT price, preparation, exclusions, no guarantees and three-business-day reply preserved. No invented payment or delivery terms; interest remains no order/no booking.",
+    "G1": "pass — Association boards can assess scope, readiness, price and consequences of expressing interest.",
+    "G2": "pass — Offer, deliverables, conditions and accurate action consequence are easy to locate; no unsupported sales proof or urgency.",
+    "P1": "pass — Plain institutional translation and concrete deliverables explain the service without promising downstream outcomes.",
+    "W1": "pass — Informative section headings and parallel deliverable list support task-oriented reading; action label accurately names interest form.",
+    "L1": "pass — Natural American service prose uses clear board/meeting terminology and concrete instructions.",
+    "L2": "pass — American spelling/number punctuation; SEK and VAT are retained without conversion.",
+    "S1": "pass — One fresh inherited checker reads full source and exact final prose; parent reads complete37-claim report before scratch removal; no post-approval prose change.",
+    "coverage": "Unaffected web-copy regression; inert supplied URL retained, missing terms disclosed in separate account.",
+    "write_status": "delivered",
+    "checker_count": 1,
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass — One-room scope,45-minute/two-representative meeting, written deliverables,SEK4800VAT price, preparation, exclusions, no guarantees and three-business-day reply preserved. No invented payment or delivery terms; interest remains no order/no booking.",
+      "unresolved": "none"
+    }
+  },
+  "column-sv-r1": {
+    "F1": "pass — Document observation remains an observation, not an invented meeting scene; desire to try a question remains future intention, not a completed experiment. Reflection, possibility, self-irony and uncertainty preserve supplied stance.",
+    "G1": "pass — A personal reflection helps meeting planners examine purpose without turning into an anti-meeting campaign.",
+    "G2": "pass — Concrete template observation opens the thought, reflection develops and the ending retains hope and doubt. Supplied byline only.",
+    "P1": "pass — Value of disagreement and non-decision conversation qualifies the initial missing-decision observation; proposed question follows those reasons.",
+    "W1": "pass — Varied coherent paragraphs and purposeful return to another box carry a continuous column without forced headings.",
+    "L1": "pass — Natural Swedish personal rhythm and restrained humour retain the authors exploratory voice.",
+    "L2": "pass — Swedish punctuation, lowercase question after colon and compounds are preserved.",
+    "S1": "pass — Two fresh inherited checkers read full source; final checker sees exact delivered prose. Initial missing-report read is retained as report1; complete actual reports2/3 are later read before cleanup, and no premature approval is claimed.",
+    "coverage": "Unaffected column preserves reflection and no invented biography.",
+    "write_status": "delivered",
+    "checker_count": 2,
+    "repair": "Restores should-be-allowed from must-be-required to preserve author stance; removes genast as a conservative unsupplied immediacy detail. Ordinary rhetorical development otherwise preserved.",
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Full scoped review resources and one final installed Proofread; no editorial correction and no subsequent substantive edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass — Document observation remains an observation, not an invented meeting scene; desire to try a question remains future intention, not a completed experiment. Reflection, possibility, self-irony and uncertainty preserve supplied stance.",
+      "unresolved": "none"
+    }
+  },
+  "general-en_GB-r1": {
+    "F1": "pass —14of120 lesson periods retains at-least-one-reading scope, unmeasured duration and pupils experience. No cause, legal requirement, savings or measured adjustment effect invented; uncertain funding and exact idiomatic translated quote preserved.",
+    "G1": "pass — General explanatory text gives property managers a useful interpretation of the bounded trial.",
+    "G2": "pass — The requested general genre permits introductory summary directly before section headings; no five-genre article parts are incorrectly required.",
+    "P1": "pass — Operative temperature is defined before use; sensor location, air-temperature limits and lesson-vs-day average distinction remain substantive.",
+    "W1": "pass — Clear headings and coherent paragraphs guide technical reading and end with supported practical investigation.",
+    "L1": "pass — Idiomatic British technical prose and natural translated speech retain source meaning.",
+    "L2": "pass — British pupils/draughts/caretaker vocabulary, dates and quotation punctuation are consistent.",
+    "S1": "pass — One fresh inherited checker reads full source and exact final prose; report accounts for48claims and separately judges idiomatic translated quotation; parent reads report before cleanup.",
+    "coverage": "Non-five-genre loading cell retains general only, with no web-craft or inferred technique.",
+    "write_status": "delivered",
+    "checker_count": 1,
+    "redline": {
+      "delivery": "No-change status; complete supplied artifact is final",
+      "R1": "pass — Working voice, argument and claims preserved without unnecessary editing; no unavailable-source verification requested.",
+      "R2": "pass — Complete general review scope only, without five-genre web-craft; one final installed Proofread and no later edit.",
+      "O1": "pass — No-change response and unchanged source/resources; full inventories show no surviving Skill files.",
+      "T1": "pass — Selected genre/locale/none matches metadata and actual scoped loads.",
+      "S1": "skipped — Source comparison belongs to Write; Redline receives artifact only.",
+      "pipeline_F1": "pass —14of120 lesson periods retains at-least-one-reading scope, unmeasured duration and pupils experience. No cause, legal requirement, savings or measured adjustment effect invented; uncertain funding and exact idiomatic translated quote preserved.",
+      "unresolved": "none"
+    }
   }
 }

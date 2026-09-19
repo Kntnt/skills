@@ -1,0 +1,1 @@
+*Delivered here: an American English opinion draft, with no prescribed technique. Source comparison passed. The supplied fictional material supports the requested length; costs and savings remain unquantified. Temporary files were removed; no output file remains.*

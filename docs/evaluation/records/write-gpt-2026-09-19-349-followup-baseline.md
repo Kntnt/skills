@@ -200,3 +200,9 @@ All eight completed with exit 0. F1 fails in three artifacts: both original Swed
 - **defects filed** — none; existing defect references, no new issue created by this evaluator.
 - **notes** — Positive control is exercised: “Asked whether she would make the same choice again, and what she would change” accurately reflects the supplied question and is not removed merely for matching the earlier defect’s form.
 
+
+## Superseding adjudication — 20 September 2026
+
+The earlier `case-question-en_GB-r1` F1 pass is superseded by **F1 fail**. Its complete source identifies Priya Vale by name and role but supplies no gendered pronouns. The artifact adds “she” in the otherwise accurately supported question-based transition. That attributes an unprovided personal characteristic from a name alone, violating the unchanged complete-source F1 criterion. The question itself is supplied and remains a valid positive-control result; the failure concerns the additional pronoun attribution, not question framing.
+
+This distinction was discovered while comparing later checker repairs and delivered failures. The evaluator reread the complete source and baseline artifact, and root independently agreed that all waves must receive the same judgement. No source, criterion, invocation or response is changed; the earlier judgement stays above as history. All other criterion scores remain unchanged. **The current baseline whole-artifact F1 result is 4/8 pass and 4/8 fail**, superseding 5/8 and 3/8. Target-specific #349/#352 counts are unchanged.

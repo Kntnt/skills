@@ -1,0 +1,1 @@
+Granskad som svensk debattartikel utan särskild berättarteknik, enligt textens metadata. Inga redaktionella brister eller mekaniska språkfel hittades. Texten är oförändrad; inga filer har ändrats eller lämnats kvar.

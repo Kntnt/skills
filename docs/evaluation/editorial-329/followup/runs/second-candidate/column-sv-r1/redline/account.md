@@ -1,0 +1,1 @@
+Inga ändringar behövdes efter redaktionell granskning och korrekturläsning. Texten granskades som svensk krönika utan särskild berättarteknik, enligt metadata. Inga olösta anmärkningar kvarstår.

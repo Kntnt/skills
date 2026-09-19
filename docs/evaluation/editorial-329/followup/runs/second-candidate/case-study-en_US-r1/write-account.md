@@ -1,0 +1,1 @@
+Delivered here: an American English case study, with no technique applied. Source and quotation checks passed. No files retained. The source provides no supplier comparison or further outcome measurements.

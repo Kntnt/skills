@@ -30,6 +30,8 @@ The final `proofread` pass runs exactly once with the resolved language. No subs
 
 The Correction Budget is any non-negative integer and defaults to one. `0` reports findings without substantive correction but still runs the final mechanical pass. A larger value is a ceiling, not a quota.
 
+Quoted statements by people receive a focused reading from a fresh subagent as part of each review and re-review. It checks visible idiom and clarity against the loaded contract, without source verification or edits; this adds execution time where quotations occur. The main reviewer validates its findings. An incomplete focused reading is reported as a coverage gap, separately from text findings; it does not spend correction budget.
+
 Each correction uses a fresh subagent with the complete current text and current findings. Returned text is compared with the pre-round text and reviewed again before acceptance.
 
 A correction must repair the finding without removing the passage's claim. A claim-losing correction is rejected and restored, and every removed claim is reported.

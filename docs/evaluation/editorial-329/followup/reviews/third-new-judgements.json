@@ -1,0 +1,41 @@
+{
+  "opinion-unknown-sv-r1": {
+    "F1": "pass — Company benefits remain attributed;18 booked days remain days, not visits or revenues. Requested comparison, permit clarification and next-meeting action preserve author stance without deciding cost superiority.",
+    "G1": "pass — Clear comparison-before-investment position addresses the board.",
+    "G2": "pass — Thesis, actual practical benefits, limited evidence and concrete requested decision perform distinct opinion jobs.",
+    "P1": "pass — Limited booking information motivates comparison without asserting the seasonal option is cheaper.",
+    "W1": "pass — Informative title and coherent compact paragraphs maintain the complete argument.",
+    "L1": "pass — Idiomatic Swedish advocacy preserves factual tone and firm association voice.",
+    "L2": "pass — Swedish compounds, dates and punctuation remain consistent.",
+    "S1": "pass — One fresh inherited checker reads full source and exact delivered prose; complete precise-negation accounting read by parent before cleanup and no post-approval prose change.",
+    "coverage": "Optional association estimate/permit nonclaim omitted; no direct positive coverage of that distinction. Motives need weighing is a modest argumentative invitation, consistent with prior root adjudication.",
+    "write_status": "delivered",
+    "checker_count": 1
+  },
+  "opinion-absence-en_GB-r1": {
+    "F1": "pass — Explicit unprepared estimate preserved, consent statement limited exactly to no secured-consent claim; no added assertion about whole-submission knowledge. Survey interest remains no commitments; requested interval is explicitly not established completion date.",
+    "G1": "pass — Firm study-before-letting proposal takes trustees maintenance-income concern seriously.",
+    "G2": "pass — Early position, real financial concern, survey limits, candid cost gap and concrete eight-week request form a complete opinion.",
+    "P1": "pass — Feasibility study is the requested comparative basis; no outcome or timetable guarantee invented.",
+    "W1": "pass — Clear heading and six coherent short paragraphs keep evidence and action distinct.",
+    "L1": "pass — Natural British opinion prose preserves a qualified but firm authorial voice.",
+    "L2": "pass — British date order, letting vocabulary and punctuation are appropriate.",
+    "S1": "pass — One fresh inherited checker reads full source and exact final prose; complete precise-negation report read before scratch removal; no later prose changes.",
+    "coverage": "Positive absent-estimate/unknown-consent asymmetry exercised; prior document/package scope failure absent.",
+    "write_status": "delivered",
+    "checker_count": 1
+  },
+  "case-unprompted-en_US-r1": {
+    "F1": "fail — Unsupported personal attribution: her email assigns a pronoun not supplied for Lena Ortiz. The complete fictional source uses the name and role only; a different pronoun remains source-compatible. Independent second reviewer agrees; otherwise pilot facts and email provenance are faithful.",
+    "G1": "pass — Archive managers see practical field choices and the pilots limited result.",
+    "G2": "pass — Customer situation, customer decisions, supplier configuration/training, evidence limits and qualified appraisal remain distinct; supplier publication disclosed.",
+    "P1": "pass — Uncertain-date distinction is concrete; shared records do not become measured savings or faster work.",
+    "W1": "pass — Result-bearing opening and one useful uncertainty heading guide the case without forcing sales structure.",
+    "L1": "pass — Natural American case prose and unchanged direct quotations retain customer voice.",
+    "L2": "pass — American dates, spelling and quotation punctuation are appropriate.",
+    "S1": "pass — One fresh inherited checker reads complete source and exact final prose; parent reads full report before cleanup. Semantic approval remains separate from pending F1 pronoun finding.",
+    "coverage": "No invented question, spoken scene or emotion; complete supplied email quotes retained.",
+    "write_status": "delivered",
+    "checker_count": 1
+  }
+}

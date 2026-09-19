@@ -1,0 +1,1 @@
+Texten har granskats som debattartikel på svenska, utan särskild teknik enligt metadata, och korrekturlästs. Inga ändringar behövdes och inga olösta anmärkningar återstår. Inga filer har ändrats.

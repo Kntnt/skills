@@ -1,0 +1,1 @@
+*Delivered here as American English web copy, with no technique selected. Source comparison passed. Payment terms and summary delivery timing were not supplied; those details could expand this roughly 260-word draft toward 300 words. No draft or check files retained.*

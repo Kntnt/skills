@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # ///
-"""Capture the eleven frozen original-source candidate Writes independently."""
+"""Capture frozen original-source candidate Writes and optional blind pairs."""
 
 from __future__ import annotations
 
@@ -145,7 +145,17 @@ def main() -> None:
     parser.add_argument("--corpus", default="bf14dc2")
     parser.add_argument("--wave", default="candidate")
     parser.add_argument("--pipeline", action="store_true")
+    parser.add_argument(
+        "--cases",
+        nargs="+",
+        choices=[f"{genre}-{locale}-r{repeat}" for genre, locale, repeat in ROWS],
+    )
     args = parser.parse_args()
+    selected = [
+        row
+        for row in ROWS
+        if not args.cases or f"{row[0]}-{row[1]}-r{row[2]}" in args.cases
+    ]
 
     # Record the owned batch before launching native sessions.
     subprocess.run(
@@ -174,7 +184,7 @@ def main() -> None:
                     wave=args.wave,
                     pipeline=args.pipeline,
                 ),
-                ROWS,
+                selected,
             )
         )
     (FOLLOW / f"harness/{args.wave}-original-write-results.json").write_text(

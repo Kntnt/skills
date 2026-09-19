@@ -1,0 +1,36 @@
+---
+kntnt:
+  genre: general
+  technique: none
+  language: en_GB
+---
+
+# What a short temperature trial can tell you about a school
+
+A four-week trial at Björkskolan identified lessons with air-temperature readings below the property office’s chosen threshold. For municipal property managers, the findings show when to investigate further, while leaving the cause of the cold and pupils’ experience unresolved.
+
+## Start with what was recorded
+
+In January 2026, Lervik’s property office installed temperature sensors in six classrooms at Björkskolan. It wanted to find out whether complaints about cold air coincided with low temperatures during lessons. The sensors recorded a reading every five minutes for four weeks.
+
+The report, *Mätförsök i Björkskolan*, dated 12 March 2026, says that 14 of the 120 recorded lesson periods contained at least one reading below 20°C. That figure counts lessons containing a reading below the threshold. It does not say how long the temperature stayed below it, or whether pupils felt cold.
+
+The office chose 20°C as its working threshold for the trial; it was not presented as a legal requirement. The findings cover only these six rooms and these four weeks.
+
+## Understand what the sensor measures
+
+A sensor measures the temperature where it is placed. Two sensors were near external walls and four were on internal walls. Their positions were documented, but the trial did not experimentally compare the effects of placement.
+
+The measurements also covered only air temperature. A measure that takes account of both air temperature and heat radiating from surrounding surfaces is called operative temperature. This was not measured, nor were ventilation, draughts or perceived temperature. The recorded air temperatures therefore leave these aspects of conditions in the rooms unmeasured.
+
+Timing matters when reading the results. An average for the whole day can hide variations during lessons, which is why the report presents lesson periods rather than a single daily average. Even so, the count of lessons with at least one reading below 20°C does not establish the duration of those conditions.
+
+## Connect readings with room use
+
+After the trial, building services technician Elin Rask reviewed the ventilation and heating schedules with the school caretaker. The effects of any adjustments have yet to be measured.
+
+‘We know when we need to take a closer look. We don’t yet know why it got cold at those particular times,’ Rask said.
+
+A further trial is planned for November, with sensors placed in the same way and notes on when the rooms are used. Funding has not been decided.
+
+For managers considering changes to heating controls, Rask recommends first matching the sequence of temperature readings to the times when rooms are in use. That gives the existing readings a place in the investigation without treating them as an explanation of the cold.

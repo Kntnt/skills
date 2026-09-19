@@ -1,0 +1,1 @@
+No changes needed. Reviewed as an opinion article in American English, with no technique applied, as specified in the metadata. Editorial review and final proofreading found no outstanding issues. `input.md` remains unchanged.

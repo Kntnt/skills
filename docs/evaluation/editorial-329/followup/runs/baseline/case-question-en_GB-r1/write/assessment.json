@@ -44,5 +44,12 @@
   },
   "defects": "none",
   "notes": "Positive control is exercised: “Asked whether she would make the same choice again, and what she would change” accurately reflects the supplied question and is not removed merely for matching the earlier defect’s form.",
-  "candidate_results_read_before_judgement": false
+  "candidate_results_read_before_judgement": false,
+  "superseding_adjudication": {
+    "date": "2026-09-20",
+    "criterion": "F1",
+    "outcome": "fail",
+    "supersedes": "pass",
+    "reason": "The complete source supplies no gender for Priya Vale; the delivered question transition adds she. The actual interview question remains supported. Other criteria unchanged."
+  }
 }

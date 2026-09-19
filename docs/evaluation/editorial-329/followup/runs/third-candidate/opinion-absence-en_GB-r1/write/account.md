@@ -1,0 +1,1 @@
+Draft delivered here in British English, as an opinion article with no technique applied. Source comparison passed. The material supported the requested length; costs, actual consent status and study timing remain unestablished. No files retained.

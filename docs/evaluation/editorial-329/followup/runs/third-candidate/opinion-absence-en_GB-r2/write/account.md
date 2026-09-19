@@ -1,0 +1,1 @@
+*Delivered here: British English opinion draft; no technique, following the genre default. Source comparison passed. Conversion costs, actual consent status and study timing remain unestablished by the source. All temporary files removed; source unchanged.*

@@ -1,0 +1,15 @@
+One finding.
+
+**Detection**
+
+- **Exact passage:** “Den tiden skulle jag avsätta innan nästa hus börjar”
+- **Applicable requirement:** `genres/case-study.review.md` identifies “a missing referent that makes the reader reconstruct the meaning” in quoted speech as a problem and permits clarification only where the surrounding text settles it.
+- **What the reader loses:** “Nästa hus börjar” leaves the activity unstated. The reader must reconstruct that the trial begins in the next building. The surrounding account supplies that meaning.
+
+**Proposed repair**
+
+“Den tiden skulle jag avsätta innan försöket börjar i nästa hus”
+
+This makes the activity explicit while preserving Lind’s conditional wording and emphasis on preparation.
+
+No findings are warranted in the other quotation.

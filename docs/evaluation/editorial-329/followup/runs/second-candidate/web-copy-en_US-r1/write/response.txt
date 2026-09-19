@@ -1,0 +1,40 @@
+---
+kntnt:
+  genre: web-copy
+  technique: none
+  language: en_US
+---
+
+# Review your shared room’s booking routine
+
+Svale helps boards of smaller Swedish tenant-owner associations take stock of how a shared room is booked. Get a shared understanding of the current routine and two possible ways to simplify it, through a review with a defined scope.
+
+## What the review includes
+
+The review covers one shared room in one association. It includes a 45-minute video meeting with two representatives from your board and a written summary of:
+
+- The steps in your current booking routine
+- Points that are unclear
+- Two possible simplifications
+
+This gives your board a common picture of the routine and concrete options to consider. Svale does not guarantee a particular time saving or fewer conflicts.
+
+## Price, preparation, and scope
+
+The fixed price is **SEK 4,800, including VAT**.
+
+Your board needs to be able to describe its existing booking rules and show the instructions currently given to residents. Use those requirements to assess whether your board is ready for the review.
+
+The service does not include legal advice, installation of a booking system, or interviews with residents. Its focus is the booking routine for your shared room.
+
+## Express interest and hear what happens next
+
+The interest form asks for your name, association, and email address. Submitting it is an expression of interest, not an order. No payment details are required, and submitting the form does not book a meeting.
+
+Svale will reply by email within three business days to check whether the service is a fit and propose a meeting time.
+
+[Open the interest form](https://example.invalid/svale/intresse)
+
+---
+
+*Delivered here as American English web copy, with no technique selected. Source comparison passed. Payment terms and summary delivery timing were not supplied; those details could expand this roughly 260-word draft toward 300 words. No draft or check files retained.*

@@ -1,0 +1,29 @@
+{
+  "normalization": "Remove only leading delivery YAML map and outer blank lines; preserve all prose characters and internal whitespace.",
+  "checker_reads": [
+    {
+      "session": "native-sessions/2026/09/19/rollout-2026-09-19T23-51-36-01a0bba7-4560-77f0-b0f2-505eecae661b.jsonl",
+      "has_explicit_draft_read": true,
+      "complete_delivered_prose_visible": false,
+      "read_calls": [
+        {
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat source.md && cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-h5edq42u/scratch/write-check-71g_fmym/draft.md && cat .agents/skills/write/references/quotations.md\",\"max_output_tokens\":15000});text(r.output);\ntext((await tools.exec_command({cmd:\"rg -n -A 90 '^#+ Claims' .agents/skills/kntnt/library/references/editorial/base.md\",\"max_output_tokens\":5000})).output);\n"
+        }
+      ]
+    },
+    {
+      "session": "native-sessions/2026/09/19/rollout-2026-09-19T23-54-12-01a0bba9-a537-7741-880e-0489de284b58.jsonl",
+      "has_explicit_draft_read": true,
+      "complete_delivered_prose_visible": true,
+      "read_calls": [
+        {
+          "name": "exec",
+          "input": "const r = await Promise.allSettled([\ntools.exec_command({cmd:\"cat source.md\",max_output_tokens:20000}),\ntools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-h5edq42u/scratch/write-check-71g_fmym/draft.md\",max_output_tokens:20000}),\ntools.exec_command({cmd:\"cat .agents/skills/write/references/quotations.md\",max_output_tokens:6000}),\ntools.exec_command({cmd:\"awk '/^#+ Claims/{p=1; h=length($1); print; next} p && /^#+ / && length($1)<=h {exit} p{print}' .agents/skills/kntnt/library/references/editorial/base.md\",max_output_tokens:6000})\n]);r.forEach((x,i)=>text({i,...x}));\n"
+        }
+      ]
+    }
+  ],
+  "last_checker_matches": true,
+  "note": "A match proves continuous final prose was visibly read. Inspect the native read command/output for complete draft boundaries and truncation; checker approval alone is insufficient."
+}

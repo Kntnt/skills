@@ -52,5 +52,23 @@
     "stage": "write",
     "returncode": 0,
     "source_revision": "6e531f5"
+  },
+  {
+    "case": "web-copy-en_US-r1",
+    "stage": "write",
+    "returncode": 0,
+    "source_revision": "6e531f5"
+  },
+  {
+    "case": "column-sv-r1",
+    "stage": "write",
+    "returncode": 0,
+    "source_revision": "6e531f5"
+  },
+  {
+    "case": "general-en_GB-r1",
+    "stage": "write",
+    "returncode": 0,
+    "source_revision": "6e531f5"
   }
 ]

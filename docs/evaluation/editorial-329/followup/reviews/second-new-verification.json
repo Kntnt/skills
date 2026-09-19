@@ -1,0 +1,408 @@
+{
+  "runs": [
+    {
+      "case": "opinion-unknown-sv-r1",
+      "stage": "write",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "opinion-unknown-sv-r1",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "opinion-unknown-sv-r2",
+      "stage": "write",
+      "sessions": 3,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "opinion-unknown-sv-r2",
+      "stage": "redline",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "stage": "write",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r2",
+      "stage": "write",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r2",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "case-unprompted-en_US-r1",
+      "stage": "write",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "case-unprompted-en_US-r1",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "case-unprompted-en_US-r2",
+      "stage": "write",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "case-unprompted-en_US-r2",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "stage": "write",
+      "sessions": 3,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "stage": "redline",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "case-question-en_GB-r2",
+      "stage": "write",
+      "sessions": 3,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "case-question-en_GB-r2",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "article-sv-r1",
+      "stage": "write",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "article-sv-r1",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "web-copy-en_US-r1",
+      "stage": "write",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "web-copy-en_US-r1",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "column-sv-r1",
+      "stage": "write",
+      "sessions": 3,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "column-sv-r1",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    },
+    {
+      "case": "general-en_GB-r1",
+      "stage": "write",
+      "sessions": 2,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "final_checker_read_exact_delivered_prose": true,
+      "all_checker_source_reads": true
+    },
+    {
+      "case": "general-en_GB-r1",
+      "stage": "redline",
+      "sessions": 1,
+      "returncode": 0,
+      "root_absent": true,
+      "inherited_identity": true,
+      "outside_native_changes": {
+        "created": {},
+        "removed": {},
+        "changed": {}
+      },
+      "authentication_changed": false,
+      "handoff_exact": true,
+      "final_preserves_input": true
+    }
+  ],
+  "sessions": 42,
+  "errors": [],
+  "batch_processes": [
+    {
+      "pid": 53534,
+      "ended": true
+    },
+    {
+      "pid": 81242,
+      "ended": true
+    },
+    {
+      "pid": 20059,
+      "ended": true
+    },
+    {
+      "pid": 69475,
+      "ended": true
+    }
+  ]
+}

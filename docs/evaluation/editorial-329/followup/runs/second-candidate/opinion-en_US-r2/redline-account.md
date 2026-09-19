@@ -1,0 +1,1 @@
+No changes needed after editorial review and proofreading. Reviewed as opinion in US English, with no technique applied, as specified in the metadata. No unresolved findings; input.md is unchanged.

@@ -1,0 +1,1 @@
+*Debattutkast på svenska, utan särskild teknik, levererat här i svaret. Källkontrollen är klar utan anmärkningar. Det fiktiva underlaget räcker för briefen men saknar kostnadsbelopp och preciserade tillståndskrav. Inga utkast eller kontrollfiler har sparats.*

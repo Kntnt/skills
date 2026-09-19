@@ -1,0 +1,28 @@
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# En ruta till för det vi inte vet
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Starttid, sluttid, deltagare, dagordning. Där finns rutor för allt detta, men ingen för det beslut vi ska kunna fatta när vi går därifrån. Tiden har sin plats i dokumentet. Vad vi ska kunna göra med den är svårare att få syn på.
+
+Det är frestande att börja just där: lägg till en ruta för beslutet. Sedan borde väl mallen vara färdig? Men jag är inte säker på att det är beslutet jag saknar mest. Jag vill att den som fyller i mallen ska få formulera varför vi behöver just varandras tid.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Att få syn på den skillnaden kan vara viktigare än att snabbt bli överens. Om jag bara letar efter ett beslut som mått på mötets värde riskerar jag att förbise just det jag uppskattar. Också ett samtal som gör frågan tydligare måste få räknas.
+
+Ändå retar jag mig på hur lätt tid i kalendern kan behandlas som ett resultat i sig. Som om starttiden och sluttiden tillsammans vore ett svar. Det är min egen reflektion, ingen kartläggning av andras mötesvanor. Min invändning gäller vad vi ber mallen hjälpa oss att tänka på.
+
+Varje samtal behöver inte pressas fram till ett beslut. Ett samtal kan skapa förtroende. Det kan också hjälpa oss att upptäcka en fråga vi inte visste att vi behövde ställa. Det måste finnas utrymme att undersöka något tillsammans, utan att redan ha bestämt vad undersökningen ska mynna ut i.
+
+Därför vill jag prova en fråga bredvid tiden: vad behöver vi förstå tillsammans? Den ger plats åt det jag saknar i mallen, utan att kräva att varje möte ska sluta med ett avgörande. Åtminstone hoppas jag det.
+
+För det finns något komiskt i min lösning. Jag granskar ett formulär, tycker att något fattas och vill utöka formuläret. Ännu en ruta. Jag vet inte om den gör mötena bättre. Men jag vill prova frågan och behålla tvivlet på rutan. Också det vore något att få plats med bredvid starttiden.
+
+---
+
+*Förstautkast på svenska, genre krönika, utan särskild berättarteknik. Levererat här i svaret och källkontrollerat utan kvarstående anmärkningar. Underlaget räckte till önskad längd; effekten av en extra ruta förblir okänd. Inga filer har lämnats kvar eller ändrats.*

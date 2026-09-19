@@ -1,0 +1,54 @@
+[
+  {
+    "control": "certainty-r1",
+    "returncode": 0,
+    "revision": "7b86144d53e39bcb76e8a547a786e7a3937decd5",
+    "root_absent": true,
+    "native_sessions": 2,
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "timetable-r1",
+    "returncode": 0,
+    "revision": "7b86144d53e39bcb76e8a547a786e7a3937decd5",
+    "root_absent": true,
+    "native_sessions": 2,
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "timetable-r2",
+    "returncode": 0,
+    "revision": "7b86144d53e39bcb76e8a547a786e7a3937decd5",
+    "root_absent": true,
+    "native_sessions": 1,
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  },
+  {
+    "control": "timetable-r3",
+    "returncode": 0,
+    "revision": "7b86144d53e39bcb76e8a547a786e7a3937decd5",
+    "root_absent": true,
+    "native_sessions": 1,
+    "outside_native_changes": {
+      "created": {},
+      "removed": {},
+      "changed": {}
+    },
+    "authentication_changed": false
+  }
+]

@@ -1,0 +1,1 @@
+No changes needed. Reviewed as web copy in American English, with no technique applied, as specified in the metadata. The final proofreading pass found no mechanical errors. No unresolved findings; `input.md` remains unchanged.

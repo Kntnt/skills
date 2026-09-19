@@ -33,3 +33,41 @@ The opinion-en_GB-r1 Redline preserves the exact corrected source variables and 
 All original criteria and observable S1 components pass. The first checker independently catches the same two factual variable shifts as en_GB r1: disability instead of functional ability, and digital confidence instead of digital familiarity. Parent makes the supported one-sentence repair to “age, functional ability or digital familiarity”. A second fresh checker reads the original source and exact revised scratch draft and returns no findings. Checked/delivered prose matches exactly; no Skill effects survive and root is removed. The strong advocacy, specified six-month proposal, real objection, cost uncertainty and no-claim funding/costing distinction remain intact.
 
 The opinion-en_GB-r2 paired Redline passes all applicable criteria and preserves the exact artifact. No-change status, full scoped reads, one installed Proofread and no Skill effects are verified; root removed. Both complete British English pairs preserve the supported variable meanings after checker repairs.
+
+## opinion-en_US-r1 Write
+
+All original criteria and observable S1 components pass on delivery. The first checker catches #349 in “Öppna beslut has neither costed the trial nor claimed to have funded it”. Parent repairs to the supported “makes no claim to have costed or funded”; a fresh second checker approves the complete revised draft, whose actual read matches final prose exactly. No surviving Skill effects; root removed.
+
+The sentence “Those figures describe transactions. They do not tell us … anything about their age, abilities, or digital skills” has the aggregate booking counts as its subject, not the report's measurement variables. Counts do not establish these attributes. It therefore does not repeat the earlier disability/familiarity variable-substitution error, despite using “digital skills”. This scoped interpretation was independently confirmed by the final reviewer. Advocacy, cost qualification and sourced counts remain intact.
+
+## Priority idiom control: frozen case-study-clean
+
+The unchanged frozen source-blind control was run at `82db439` before the remaining original pairs to test the new reported-speech review unit promptly. Redline returns no-change status and leaves “innan nästa hus börjar” intact. **L1 and R1 fail**: the activity remains missing, despite loaded genre guidance explicitly covering such quoted-idiom defects. The existing customer/trial context is enough to locate the referent problem without source access. The reported-speech review unit alone did not produce a reliable repair.
+
+Other applicable control criteria pass: customer agency, qualified appraisal, numbers, voice, supplier stance, metadata absence, scoped loading and exactly one final installed Proofread are preserved. Output is the unchanged input; no Skill effects; root removed. This control is retained as a failure and will not be silently retried or replaced.
+
+The opinion-en_US-r1 Redline passes all applicable criteria, preserves the exact complete draft and returns no-change status. Source-aware final F1 remains pass. Scoped loading, one final installed Proofread and zero Skill effects are verified; root removed.
+
+## opinion-en_US-r2 Write
+
+All original delivered-text criteria and observable S1 components pass. First checker identifies three concrete source-support findings: disability/digital-skills substitutions for the source's actual unmeasured variables; “The pilot leaves that question unanswered” asserting absent reason findings not established by the source; and “We have not costed the trial” converting no claim into known absence. Parent repairs the variable sentence, removes the unsupported pilot-knowledge sentence while retaining the call to investigate reasons, and restores “We do not claim to have costed or funded the trial”.
+
+A fresh second checker accounts for the whole revision and reports no findings. Final prose matches its actual file read exactly. The opening statement that decision-relevant evidence is missing reads as the author's evaluation of the specified measurement gaps, not a claim that the board possesses no other information; it retains the available counts immediately afterwards. The sharp policy recommendation, real objection and cost qualification remain. No source/Skill effects survive; root removed.
+
+The opinion-en_US-r2 paired Redline passes all applicable criteria and preserves the exact corrected artifact. All six original opinion pairs are now complete and independently source-faithful, without suppressing the author's advocacy. Every final Proofread and scoped load is recorded; no surviving Skill effects and all twelve opinion roots are removed.
+
+## case-study-en_US-r1 Write
+
+All original delivered-text criteria and observable S1 components pass. The September trial decision and supplier selection are distinct sentences, all three quotations are exact, email attribution invents no question, and 31 reports/exclusions, assignment-time medians, different workloads and lack of causal attribution are retained. Customer agency, actual qualified appraisal, supplier publication and the correct checklist destination remain.
+
+The first checker finds a new heading overclaim: “Preparation took more than data entry” drops the source's comparison with entering only the first reports and broadens category agreement to all preparation. The counterexample distinguishes initial from later entry time. Parent changes the H2 to the noncomparative “Making time to agree on categories”, preserving the complete bounded comparison inside the quotation. This is a supported local repair. A fresh second checker approves; exact checked/delivered prose match is verified. No Skill effects; root removed.
+
+The case-study-en_US-r1 Redline passes all applicable criteria and returns no-change status. Complete quotations, chronology, bounded results and customer qualifications remain exact. Scoped review and one final installed Proofread are recorded; no Skill effects, root removed. Source-aware final F1 remains pass.
+
+## case-study-en_US-r2 Write
+
+All original delivered-text criteria and observable S1 components pass. The first checker directly catches #344: “Before its maintenance team began the trial in September 2025 …” assigns the source's decision date to the trial start. Its concrete counterexample (September decision, October start, December note) is source-compatible. Parent applies the smallest supported event/date repair, retaining September as the decision and separating the previous storage practice. No hypothetical date enters the draft.
+
+A fresh second checker accounts for 50 propositions and approves. The final prose matches its actual draft read exactly. All three quotations, actual customer appraisal, assignment-time limits, workload differences and noncausal attribution survive; no interview question is invented. The link's “supplied” wording is a mild editorial awkwardness, not a source or destination error. No Skill effects; root removed.
+
+The case-study-en_US-r2 paired Redline passes all applicable criteria and preserves the exact complete artifact. The supported date/event repair remains; final source-aware F1 passes. Full scoped reads and one installed Proofread are observed; no Skill effects, root removed.

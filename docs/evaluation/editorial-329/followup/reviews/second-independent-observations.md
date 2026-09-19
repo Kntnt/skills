@@ -73,3 +73,51 @@ Complete source/draft comparison passes F1. The email interview retains its supp
 ## opinion-en_GB-r2 — Write
 
 Complete source/draft comparison passes F1. It correctly uses functional ability and digital familiarity, while preserving booking/person distinction, attribution, source-specific unknown savings, the real workflow objection and voluntary reasons in the proposed six-month/seven-venue trial. The original no-claim costing/funding state survives exactly. The author's criticism remains pointed without unsupported exclusion claims or motives. No concrete language or genre defect found.
+
+## opinion-en_US-r1 — Write
+
+Full source/draft comparison passes F1. The wording “digital skills” does not repeat the initial English variable error: here the subject is explicitly the aggregate booking figures (“Those figures … They do not tell us”), not the report's measurement coverage. The 96/24 counts do not establish individual abilities or skills, even if some other study information might. This contextual proposition is supported; applying a forbidden-word test would produce a false failure. The original evaluator independently agrees. The no-claim costing/funding state, authorial position, real objection and proposal remain intact. No concrete language/genre defect found.
+
+## article-sv-r1 — Write
+
+Full source/draft comparison passes F1. It preserves six rooms/four weeks/five-minute intervals, the 14-of-120 at-least-one-reading measure, unknown duration, internal 20-degree threshold, lack of norm comparison, unmeasured ventilation/draught/experience, sensor placement limits and air/operative-temperature distinction. Rask's quote is exact; the schedule review does not become a measured intervention effect. The planned November trial retains undecided funding. The piece explains technical scope and uses a complete independent lead, functional subheadings and a supported practical close. No causal, health, legal or savings invention, and no concrete language/genre defect found.
+
+## Five further source-blind opinion reviews
+
+Read complete Redline responses for `opinion-absence-en_GB-r1/r2`, `opinion-en_GB-r2`, and `opinion-unknown-sv-r1/r2`. Each returns a clean no-change response. No concrete visible editorial/mechanical defect requires a correction in these inputs. The two absence-control drafts retain #355, but that source-package/document distinction is unavailable to source-blind Redline; their pipeline F1 failures remain source-aware findings, not invented Redline obligations. These two reviews do not add the timetable objection observed in the separate exact-input control. No-change delivery is appropriately short.
+
+## idiom-frozen-clean — source-blind Redline control
+
+Read the complete original frozen artifact and response. The specific “innan nästa hus börjar” obstruction survives unchanged, while Redline reports no editorial/language changes needed. L1 and R1 therefore fail under the already established #341 criterion. This is the exact pre-existing control, not a judgement inferred from a newly written translation. The new explicit reported-speech review unit has not resolved this observed miss. Native no-change delivery is separate from the semantic failure.
+
+## web-copy-en_US-r1 — Write
+
+Complete source/draft comparison passes F1. The service covers one room/association, 45 minutes with two board representatives, defined written outputs and exactly two possible simplifications. SEK 4,800 including VAT, preparation requirements, exclusions and absence of guaranteed time/conflict improvements survive. The linked interest form asks the supplied fields, is neither order nor meeting booking, and promises only the supplied email reply within three business days. Missing payment and summary-delivery terms are not fabricated; the account records those gaps. No fake customer evidence, converted currency, urgency or additional service is introduced. The direct section openings and link wording serve the user's decision. No concrete language/genre defect found.
+
+## opinion-en_US-r2 — Write
+
+Full source/draft comparison passes F1. Report measurement variables are correctly rendered as functional ability and digital familiarity. The no-claim costing/funding distinction survives, as do attributed 96/24 figures, the booking/person limitation, the real objection, document-specific missing savings/time evidence, voluntary trial questions and the authorial request. It preserves sharp criticism without invented motives or a guaranteed benefit. No concrete language/genre defect found.
+
+## column-sv-r1 — Write
+
+Full source/draft comparison passes F1. Nora's opening remains an observation of the actual meeting template, not a fabricated meeting scene. The expanded reflection develops her supplied appreciation of differing interpretations, irritation at treating calendar time as results, defence of non-decision conversations, proposed question and hope/doubt about another form field. Rhetorical questions and the imagined start/end-time comparison are identifiable argument, not new historical experience. The supplied curious/self-ironic stance survives without invented data, memories or physical feelings. No concrete language/genre defect found.
+
+## general-en_GB-r1 — Write
+
+Full source/draft comparison passes F1. The complete article source's measurement counts, period/room limits, five-minute interval, internal threshold, missing duration/experience information, placement/air-temperature limits, unmeasured adjustment effects, technician's recommendation and conditional next-trial funding survive. Rask's translated quotation preserves meaning and uncertainty in natural British English. The explicit general selection does not require importing the article genre's separate formatting contract. No concrete source, language or general-genre defect found.
+
+## Eight further no-change Redline pairs
+
+Read complete responses for both question-control repetitions, both unprompted-email repetitions, both US opinion repetitions, article-sv and column-sv. Each returns a clean no-change result without an unresolved finding. Independent artifact reading finds no concrete visible defect requiring repair. The case quotations contribute explanation/experience beyond their short narrative setup; the supplied questions remain permitted and unprovided questions are not introduced. Both opinion positions, article measurement limits and the column's distinct voice/uncertainty remain intact. Clean no-change response delivery is appropriate. Nested-proofreading identity/occurrence, exact input matching and cleanup require the separate native audit.
+
+## case-study-en_US-r1 — Write
+
+Read the complete original source, final response and both parent-visible checker reports. Final F1 passes. September applies only to the decision; supplier selection is separately undated. The email interview is supported, without an invented assessment question. All quotations, 640 apartments, two buildings, six staff/two sessions, eight-week trial, December note, count exclusions, assignment medians, workload/causality limits, missing outcome measures, customer's reservation and undecided expansion survive.
+
+A real source repair is visible. The first report identifies “Preparation took more than data entry” as broader than agreeing on categories versus entering the first reports. Its concrete hypothetical shows later data entry could exceed preparation while every source statement stayed true. The parent replaces the heading with “Making time to agree on categories”; the second fresh report returns no findings. The final artifact has no unsupported comparison. The native last-checker read exposes the final prose continuously after metadata/outer blank-line normalization. This successful repair is separate from the disputed optional opinion concession.
+
+## Remaining source-blind timetable, certainty and delivery controls
+
+Read all seven completed separate-control responses. Timetable repetition 2 is clean; repetition 3 repeats repetition 1's unjustified demand for a reason for precisely eight weeks. Thus the second-wave exact-input timetable control fails R1 in 2/3 invocations, while preserving the proposal and uncertainty in all three. The guarantee contrast is correctly repaired by removing only the claim of certain completion, reporting that removed claim, and retaining the eight-week proposal and all other content.
+
+All three destination controls correctly report the actual Monday opening/closure contradiction without deciding which is true. `--max=0` leaves that substantive contradiction unresolved. Response delivery contains the complete artifact and separate findings; in-place returns findings/status without rewriting the source; the separate-file run creates the complete artifact and reports its path/findings without an artifact echo. Independently compared source inode/mtime before/after: unchanged for all three. Both captured file artifacts byte-match supplied input. The response artifact matches supplied text except outer fence/newline wrapper. Additional tautology findings in the in-place/file runs are ordinary visible editorial observations, not source verification. No delivery defect found.
