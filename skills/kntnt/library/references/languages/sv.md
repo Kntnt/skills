@@ -51,7 +51,7 @@ Prepositional filler multiplies in Swedish official prose: *i syfte att* for *f�
 
 Check that the register is one register. Swedish shifts sharply between *ni*-formality, *du*-directness, and youth-informal, and a text that mixes them reads as assembled rather than written.
 
-Check reported speech against the mark it is set in. Sentences inside *”…”* better formed than anything a person says aloud have been repaired behind a mark that promised they would not be, and the mark is the error rather than the repair. A text that moves between the two marks for one speaker with no reason a reader can see has chosen neither.
+Check reported speech for text-internal inconsistency in its quotation form. Fluent wording alone does not show that a quotation was repaired; without the source, leave that provenance claim unjudged. A change of mark may distinguish exact wording from rendered speech, so diagnose it only where the text gives grounds for a conflicting reading.
 
 Read for the loan that arrived with the draft rather than with the field. *Regulatorer* is *tillsynsmyndigheter* or *myndigheter*, *adressera* in the sense of taking something up is *ta upp* or *behandla*, *leverera* in the sense of giving is *ge* or *erbjuda*, *metrik* is *mätvärde* or *nyckeltal*, and an *approach* is an *angreppssätt* or an *ansats*. The pairs are illustrative rather than a list to work through: which loans a Swedish text keeps is settled in Composition, and what a review adds is noticing the ones that are there because the sentence was thought in English.
 

@@ -129,10 +129,15 @@ correction-agent resources. Verify exactly one final whole-artifact Proofread
 invocation and no substantive edit afterwards. A self-report is not evidence
 of a file read. Record missing/ambiguous evidence rather than infer a pass.
 
-The initial probe establishes authentication, fresh-session isolation, observed
-model identity and tool availability. It did not run UV, use workspace-write,
-execute the dispatch instruction or perform a correction. Those parts of the
-runner must be verified in the first real run and are not yet claimed successes.
+The initial probe established authentication, fresh-session isolation, observed
+model identity and tool availability. A separate [sandbox probe](../harness/sandbox-probe/response.txt)
+then verified `workspace-write`, the staged `source.md`, and UV execution with
+Python 3.12.13 / PyYAML 6.0.3. Its before/after inventory contains no work or
+scratch changes and authentication is unchanged. The first `rm -rf` cleanup
+command was rejected by the tool policy; a Python temporary-directory cleanup
+succeeded. Both attempts are retained. No editorial Skill or correction was
+run in either technical probe; actual dispatch and correction still require
+the editorial traces.
 
 Only GPT records were consulted: `write-gpt-2026-08-26-180.md`,
 `redline-gpt-2026-08-26-174.md`, and a header match in
@@ -147,3 +152,7 @@ The registered probe root was
 Process-group leader `9806` had exited before cleanup. The root, including its
 credential copy, was removed after capturing the declared evidence. The harness
 artifacts and this report are evaluation deliverables and remain.
+
+The registered sandbox-probe root
+`/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nlqwot3k`
+was also removed after the process exited and all evidence was captured.

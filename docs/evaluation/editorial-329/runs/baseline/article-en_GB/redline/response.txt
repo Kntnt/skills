@@ -1,0 +1,9 @@
+'---' is not a flag of this collection's grammar
+
+**/proofread** [**--language**=*LANGUAGE*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+
+**/proofread** [**--language**=*LANGUAGE*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+
+see '/proofread --help'
+
+The final pass failed because I passed the frontmatter incorrectly. [proofread’s instructions](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-em3v601r/work/.agents/skills/proofread/SKILL.md) require: “Any other exit: show what it printed to the user verbatim, and stop.” The review is incomplete; `input.md` is unchanged.

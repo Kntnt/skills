@@ -8,6 +8,15 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - A source-grounded editorial evaluation corpus for five web genres, with Swedish and English briefs, positive and negative controls, fixed baseline cases and a frozen semantic assessment matrix (#330).
 
+### Changed
+
+- Write and Redline use concise, distinct briefs for article, case-study, column, opinion and web-copy, with shared Swedish professional craft, idiomatic target-language writing and advisory web dimensions. These genres no longer select a technique automatically; explicit choices and existing metadata retain their priority. ABT allows a genuine question and PAC analysis may begin in facts (#329–337).
+
+### Fixed
+
+- Swedish editorial review no longer infers that a quotation was altered merely because it is fluent (#331, #334).
+- Redline passes the complete text separately from the closing Proofread invocation grammar, so YAML frontmatter cannot be mistaken for a flag (#339).
+
 ## [0.32.1] – 2026-09-19
 
 ### Changed

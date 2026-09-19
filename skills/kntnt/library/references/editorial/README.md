@@ -6,7 +6,7 @@ Everything here is language-independent and written in English. The language-spe
 
 ## The base contract
 
-`base.md` holds every normative outcome a first draft is expected to meet. Every one of them, and each of them once: a Skill that writes and a Skill that reviews read the same document, so a requirement stated in two places is a requirement that can come to disagree with itself about what was required.
+`base.md` holds the outcomes shared by all genres; genre-specific outcomes belong in the selected genre and its explicitly loaded support, and chosen structural relations in the selected technique. Each requirement is stated once: a Skill that writes and a Skill that reviews read the same document, so a requirement stated in two places is a requirement that can come to disagree with itself about what was required.
 
 It states outcomes rather than procedure, and it names no Skill and no option. What differs between drafting and reviewing is what a Skill does about a failure, never what counts as one, so a contract that mentioned a flag would bind a grammar the consuming Skill owns.
 
@@ -16,7 +16,7 @@ Its examples are English and are meant to be applied semantically. An example de
 
 A genre says what a kind of text owes its reader on top of the base contract: what a report, an article, or a press release is, and what a reader of one expects. A technique is a chosen structure for a text — an editorial requirement the draft has to satisfy, never a template to be filled in.
 
-Part of what a kind of text owes its reader is the shape its reader expects, and where a genre has one the base half states it: which parts a text of this kind carries, and the order somebody meets them in. A reader who meets a kind of text often reads it by habit — they know where the next thing is and they find it there — so a text that rearranges the parts spends that recognition before its content gets a hearing. State the shape as every other requirement here is stated, as an outcome the draft has to reach rather than a procedure for reaching it: what the reader expects to find, and in what order. Never a numbered form to fill, and never a measurement bolted to a part — a word count, a character limit, a number of paragraphs — because what a reader recognises is the part and its place, and a measurement is a different rule wearing the shape's clothes.
+Part of what a kind of text owes its reader is the shape its reader expects, and where a genre has one the base half states it: which parts a text of this kind carries, and the order somebody meets them in. A reader who meets a kind of text often reads it by habit — they know where the next thing is and they find it there — so a text that rearranges the parts spends that recognition before its content gets a hearing. State the shape as every other requirement here is stated, as an outcome the draft has to reach rather than a procedure for reaching it: what the reader expects to find, and in what order. Never a numbered form to fill. Advisory dimensions may describe the web's reading scale, but they are not quotas or automatic failure thresholds; actual limits in a brief or publication format remain binding.
 
 A shape is stated where the genre has one, and is not invented for a genre that has none. The test is the reader: a convention whose absence they would notice is part of what the genre owes them, and a shape written here because the format allowed one is a convention this Collection invented and then imposed on every text of that kind afterwards. Where the structure is the writer's to choose from the material, the genre states no shape, and the base contract's ordering by the reader's need is the whole of it. `general` is the case that settles the boundary: the default genre imposes no convention at all, because a text whose kind nobody named has no reader expecting one.
 
@@ -31,6 +31,12 @@ An example in the default genre's opening names a kind of text, never a channel 
 A genre's base half names the technique that genre is ordinarily written with, or states that it has none, and every genre in the directory states one or the other. That is a statement of practice rather than a requirement on the draft: a Skill's resolution order reads it below everything the user or the material says and above no technique at all, so somebody who names a kind of text and no technique gets the arc that kind of text ordinarily has, and somebody who names a technique gets the one they named. It is written as its own section below the requirements, where a run choosing between installed genres never reaches it — the openings are what an unnamed genre is settled against, and a technique named up there would be read as evidence about which genre this is.
 
 `general` is the default genre and therefore the contract an unspecified content type gets in full. A technique applies because it was selected — by the person invoking, by the material's own metadata, by an instruction, or by the genre that was resolved — and nothing anywhere gives a Skill grounds to infer one from a draft's shape.
+
+## Shared five-genre craft
+
+[`web-craft.md`](web-craft.md) holds the shared professional tradition, target-language boundary, web scale and ingress function for article, case-study, column, opinion and web-copy. Each of those genres links it below its identifying opening. It lives outside the selectable directories and is never a choice or genre-inference input. Write loads its base half only; Redline and its fresh correction agents also load [`web-craft.review.md`](web-craft.review.md). Their loading steps name this exact bounded exception; no recursive link loading is authorised. Other genres retain their own profiles.
+
+The complete loaded path should remain a short usable brief. Genre conventions and factual boundaries are requirements; successful choices of angle, rhythm, rhetoric and proportions remain the writer's. Review extensions diagnose actual reader loss rather than alternative preferences.
 
 ## Review extensions
 

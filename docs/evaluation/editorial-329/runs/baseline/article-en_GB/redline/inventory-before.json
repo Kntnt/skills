@@ -1,0 +1,1297 @@
+{
+  "export": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/proofread": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/proofread/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 12551,
+    "sha256": "fa8f79b30ffd02b2a2e37b528a37981ffc80e814a2647ee7504bcd5d25c5e462"
+  },
+  "export/skills/editorial/proofread/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/proofread/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "ef05500ed19dff98c0181872ac5ff04d99ba241f992f70284629119c0451883a"
+  },
+  "export/skills/editorial/proofread/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6279,
+    "sha256": "e85c6467429d286acd2d9632225cf3e839f730c779a16c3b44ca97b75fe99c56"
+  },
+  "export/skills/editorial/proofread/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/proofread/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "export/skills/editorial/redline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/redline/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 20604,
+    "sha256": "9f135d963e6e1f2d66bc07263270ec147a3187689da0d3a3d1747ae65fdc7312"
+  },
+  "export/skills/editorial/redline/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/redline/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 176,
+    "sha256": "a9ff49ac5ec1f2d858911e08212525c5d8404c5d1a6789c3bf2713f25f388973"
+  },
+  "export/skills/editorial/redline/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8307,
+    "sha256": "c0943baf6e9d9ecdcbc2ee1a07afe532d966f931b71bf9a898c90407136e89d4"
+  },
+  "export/skills/editorial/redline/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/redline/references/correction.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7481,
+    "sha256": "2d3fad2cd8ce0ebb6ad05a992c626572b20ac88267813549b0456189c84c1b6c"
+  },
+  "export/skills/editorial/redline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/redline/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "export/skills/editorial/write": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/write/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11569,
+    "sha256": "3e181a178033063c0c3a5f4c4131b0c0151dd4d19d4ae070663d0e86253f7235"
+  },
+  "export/skills/editorial/write/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/write/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "6c2c5457f3b5d6e237a9cc7c147763d13115065ac7c8dc96da16b17017fd1953"
+  },
+  "export/skills/editorial/write/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7025,
+    "sha256": "694204b801aa1709cf5591166431fb1f3deca203cfffff00a09adbd97abc6519"
+  },
+  "export/skills/editorial/write/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/write/references/quotations.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3630,
+    "sha256": "6486001a7dbb1daa63c30ea4a36d54e42d5dbc676350616ac2e5a349276622de"
+  },
+  "export/skills/editorial/write/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/write/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "export/skills/kntnt": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3526,
+    "sha256": "1e8ae946e52e9a389fc342b96550d39ce4cf85c6ad6c2de64863a137dc463641"
+  },
+  "export/skills/kntnt/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 148,
+    "sha256": "709b566f6698b9a6c2a3ba4d95a6e33b7a590608f66b5af515069234ac0dbd91"
+  },
+  "export/skills/kntnt/catalog.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 11330,
+    "sha256": "d69097fd438d5f68cbaf502c898cae7f67f19ba8b655f4fe96848f0e23292f32"
+  },
+  "export/skills/kntnt/features": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/session-cleanup": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/session-cleanup/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4913,
+    "sha256": "a6a8be14fdf18919da279c41e73cc6e80cec8226569b132461ead1dc69c3beba"
+  },
+  "export/skills/kntnt/features/session-cleanup/instructions.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1194,
+    "sha256": "64434359eaccc208e0d9c52038dd08b6349c42459c58d8e3af846086c7f25e36"
+  },
+  "export/skills/kntnt/features/session-cleanup/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 33967,
+    "sha256": "dfac0128d2d3500a0cf06be6ff1a281cde89a57c718c9e73856330a11cf0f4ac"
+  },
+  "export/skills/kntnt/features/statusline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/statusline/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3066,
+    "sha256": "cc9b504086badc5e8289c3c83397ba6acdba84564be0af47dae6792f979115f3"
+  },
+  "export/skills/kntnt/features/statusline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/statusline/scripts/statusline_feature.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 7126,
+    "sha256": "3596f97853a1d1adfc654a91c8778ebf57fbf90c0a3dfb051f95e8399248d220"
+  },
+  "export/skills/kntnt/features/statusline/statusline.sh": {
+    "mode": 493,
+    "type": "file",
+    "size": 9502,
+    "sha256": "dcf378d5867c4c6c2c8efb59e364c29edd4147d391dec1d504c4972e2f7221d4"
+  },
+  "export/skills/kntnt/harness-paths.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 5922,
+    "sha256": "4d288adb766da2b686bfcdb7dc082f7938de7e68c359d29c9f3b5529dcbb4b81"
+  },
+  "export/skills/kntnt/help": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/help/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2805,
+    "sha256": "4ea6bb85655233bc6329446dc4b947d5a0499bb7dbc67a46292a3140428a7701"
+  },
+  "export/skills/kntnt/help/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6752,
+    "sha256": "8fbbe07776916cd3bf5dd2af29372b914485a59525af926cf440eec8717f0484"
+  },
+  "export/skills/kntnt/help/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3393,
+    "sha256": "c1e01918ef371836b0e09247240691534cf4d68d225f26b0cad52f72b967b149"
+  },
+  "export/skills/kntnt/help/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3888,
+    "sha256": "571931337a9d2b7cc5bce9027ffd278180b3307a60907a686bac5cc4e8ae3437"
+  },
+  "export/skills/kntnt/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4536,
+    "sha256": "680e5731fc90b4e437a0d7b17c9d4dbfec0e984c957cb7f3def291b83e5df1aa"
+  },
+  "export/skills/kntnt/library": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/changelog.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1393,
+    "sha256": "ffbaa70cec4453d3fb366ca2cb0ea07359d5c4f6d86edc1882458aa9e627fb56"
+  },
+  "export/skills/kntnt/library/references/delivery.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10036,
+    "sha256": "ef66cf766073a48a46e0b32bf79b3400796f3821071999e635b5bbccc7403f22"
+  },
+  "export/skills/kntnt/library/references/editorial": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/editorial/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 12025,
+    "sha256": "518d3d7f54524fa12623cfc40e304b9b5268ba90a898f3518b8ed3cfa0bf81f4"
+  },
+  "export/skills/kntnt/library/references/editorial/anti-slop.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6654,
+    "sha256": "0f1a17c1defa7773fe1847bf4b8fd04add716b5bddddbb2d4456c09bb4316d69"
+  },
+  "export/skills/kntnt/library/references/editorial/base.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15602,
+    "sha256": "217aea15f470fd37572c665d6e54ea45ccf639185643328a85b2eb4691d66338"
+  },
+  "export/skills/kntnt/library/references/editorial/base.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14481,
+    "sha256": "b08c718222b3f5f436e0b0231d32ddb4d9f303bad14504e31747c4e0e667b304"
+  },
+  "export/skills/kntnt/library/references/editorial/genres": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8027,
+    "sha256": "0b008eda5e1904680b3f8bdb563f8cbccd8639316b7b6bdfe3b2f3b560ef82a1"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/article.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11014,
+    "sha256": "d6da19dc1b20785b594f3d0b8ef0d990568524f9121f83a39fcae31321e05b07"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/case-study.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7637,
+    "sha256": "0dc31b1227d3b9a073ce32797cd9a584bc25128d0fdb459e8890e76ed0bb2e0a"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/case-study.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9790,
+    "sha256": "72a3804ecc9b289a4d0faa496767c78fcfb3534c4cc7175a4a10814cdb9d0dab"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/column.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6519,
+    "sha256": "561f6835f67e8fdd68738d2dfbbd504a58ac7441678d5e9448014964200bd79d"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/column.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8377,
+    "sha256": "7bc73ea823dcb08a3acf75a596a8cb3eaef4676bc00772061771f022dc71958b"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/general.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2873,
+    "sha256": "438d85d3016889dd994d70a989b4ab73b8b70e149aea8e45d144cf3d371c6be5"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/opinion.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6698,
+    "sha256": "8f7a92170c3856bf16760842924b34d6622c68b1ea9a4a554197a696db6f0662"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/opinion.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8292,
+    "sha256": "b4cbc45720dae33cf11488664989d6c330bcc4e723b6f84c2072963459b5274f"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/press-release.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4570,
+    "sha256": "4e554d322f25995dbc7ed2237ac261b49eec1283eb64576dc80b95ed7066db3b"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/press-release.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7601,
+    "sha256": "b2660413e3bd94843a7092309859a6fd14be880ca8a66d861509d4eb2c9d96f6"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/report.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8648,
+    "sha256": "8c41b94d769774ea69087ba3c8a4a39570962169a90d293a0370be79e1f9f5fa"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/report.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13445,
+    "sha256": "8c6e3a5b5dfb224d6324026c2708d930abc009a34206caad5bf6296d7235e026"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/teaser.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7499,
+    "sha256": "f607f4782fa0a3c13fa619fdc8c3be97fa3e9449d423bfbc2e88677679fefe66"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/teaser.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9092,
+    "sha256": "1233f4bcab42736762315a20a0de45265f1373fa77a7aebd69b57c893366b33e"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/web-copy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7865,
+    "sha256": "85a0a9eb2f45b55aefdda5f56b7c993cb33f9d4bbccb83435095a5f9228a00a0"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/web-copy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8378,
+    "sha256": "b7cc2b3ce7b36aa0fcc40ed6f5cec20fe5c237c8749e4d6a6652244fb13594d0"
+  },
+  "export/skills/kntnt/library/references/editorial/mechanics.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11577,
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques/abt.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5853,
+    "sha256": "22fb82e3ffdbdf5659a138d9f6d03f8ef64f5db1a6744dc4e994320d7a432f22"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques/abt.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10309,
+    "sha256": "edbd6804fef8785ac2912bef6acbe729909e27803a0ccb0cac8bd738adace660"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques/pac.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5050,
+    "sha256": "c876d36847db418f42394409f56d834637d5603992b0dbb1b303b3f7f337df0c"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques/pac.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10938,
+    "sha256": "7ee89fb28b35850864bae4055fc5e565f7ea28a36298cec067e96496df22758a"
+  },
+  "export/skills/kntnt/library/references/invocation-envelope.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5874,
+    "sha256": "a6bc1686316c3f87fcea9b9693bd91ab92fddbcb3a38c71fe940ba9236b3f7cd"
+  },
+  "export/skills/kntnt/library/references/languages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/languages/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8470,
+    "sha256": "23929466b467620f2d5b12a2c6ea040ef381a906e0892eaa877dd5210c01a338"
+  },
+  "export/skills/kntnt/library/references/languages/en_GB.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6993,
+    "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413"
+  },
+  "export/skills/kntnt/library/references/languages/en_US.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6240,
+    "sha256": "0b8062d4c7a308d5522bfc2168c7db3cf5b0123361c9bd4135a6df6772e690f7"
+  },
+  "export/skills/kntnt/library/references/languages/sv.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14085,
+    "sha256": "57efb9ccba1567a174c2ac78df9b0ce561d0685eaf5ab88b3e09637a2b65eac8"
+  },
+  "export/skills/kntnt/library/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/scripts/argument_grammar.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3879,
+    "sha256": "dc732205eb9e2942aae2880018342d3789e379bcddca4ce9326295327a36937f"
+  },
+  "export/skills/kntnt/library/scripts/integrations.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 61037,
+    "sha256": "60d5dc8dfebac1497bf155ad9016ba4cead3eda7532f8173e2f0ebd061858c61"
+  },
+  "export/skills/kntnt/library/scripts/languages.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24089,
+    "sha256": "6d09120fc7ab52ba69db24bb6db6e85ff9ab304d5d5ebe04ec5f2f2dd0042d70"
+  },
+  "export/skills/kntnt/library/scripts/ship.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24521,
+    "sha256": "e66d1eaec0d1f875559e6d1b89a4ab2065917f38763fc67e36b9ebbc378fdc47"
+  },
+  "export/skills/kntnt/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/scripts/kntnt.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 212860,
+    "sha256": "d35484abcb64965ac8b9b06663c5fbdeab1311cfc39ffe25c23a5f092e9b9891"
+  },
+  "export/skills/kntnt/steps": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/steps/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1020,
+    "sha256": "a80d128ae214de0a759e9d5ae912e68005fd63d23f8361db5ab5c5e39411045b"
+  },
+  "export/skills/kntnt/steps/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17441,
+    "sha256": "865912bb1637b621a4567b1da890564331aced596a16d717576390d505ee9edd"
+  },
+  "export/skills/kntnt/steps/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5826,
+    "sha256": "5dc6650fd7c885bbd551b5d94fffc966c60b70005a8ca3da67a5944a218515bf"
+  },
+  "export/skills/kntnt/steps/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11279,
+    "sha256": "095e9d0d950793f69a8171b80639ec2039ee995055b495f2cd117c253ce96b45"
+  },
+  "home": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/auth.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 4105
+  },
+  "home/.codex/config.toml": {
+    "mode": 420,
+    "type": "file",
+    "size": 79,
+    "sha256": "bbd39d2d6f7cd528f56c03372c24d9332a6b8d9975895c247d23f03188394fdd"
+  },
+  "scratch": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/data": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/tmp": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/uv-cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3526,
+    "sha256": "1e8ae946e52e9a389fc342b96550d39ce4cf85c6ad6c2de64863a137dc463641"
+  },
+  "work/.agents/skills/kntnt/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 148,
+    "sha256": "709b566f6698b9a6c2a3ba4d95a6e33b7a590608f66b5af515069234ac0dbd91"
+  },
+  "work/.agents/skills/kntnt/catalog.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 11330,
+    "sha256": "d69097fd438d5f68cbaf502c898cae7f67f19ba8b655f4fe96848f0e23292f32"
+  },
+  "work/.agents/skills/kntnt/features": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4913,
+    "sha256": "a6a8be14fdf18919da279c41e73cc6e80cec8226569b132461ead1dc69c3beba"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/instructions.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1194,
+    "sha256": "64434359eaccc208e0d9c52038dd08b6349c42459c58d8e3af846086c7f25e36"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 33967,
+    "sha256": "dfac0128d2d3500a0cf06be6ff1a281cde89a57c718c9e73856330a11cf0f4ac"
+  },
+  "work/.agents/skills/kntnt/features/statusline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/statusline/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3066,
+    "sha256": "cc9b504086badc5e8289c3c83397ba6acdba84564be0af47dae6792f979115f3"
+  },
+  "work/.agents/skills/kntnt/features/statusline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/statusline/scripts/statusline_feature.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 7126,
+    "sha256": "3596f97853a1d1adfc654a91c8778ebf57fbf90c0a3dfb051f95e8399248d220"
+  },
+  "work/.agents/skills/kntnt/features/statusline/statusline.sh": {
+    "mode": 493,
+    "type": "file",
+    "size": 9502,
+    "sha256": "dcf378d5867c4c6c2c8efb59e364c29edd4147d391dec1d504c4972e2f7221d4"
+  },
+  "work/.agents/skills/kntnt/harness-paths.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 5922,
+    "sha256": "4d288adb766da2b686bfcdb7dc082f7938de7e68c359d29c9f3b5529dcbb4b81"
+  },
+  "work/.agents/skills/kntnt/help": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/help/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2805,
+    "sha256": "4ea6bb85655233bc6329446dc4b947d5a0499bb7dbc67a46292a3140428a7701"
+  },
+  "work/.agents/skills/kntnt/help/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6752,
+    "sha256": "8fbbe07776916cd3bf5dd2af29372b914485a59525af926cf440eec8717f0484"
+  },
+  "work/.agents/skills/kntnt/help/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3393,
+    "sha256": "c1e01918ef371836b0e09247240691534cf4d68d225f26b0cad52f72b967b149"
+  },
+  "work/.agents/skills/kntnt/help/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3888,
+    "sha256": "571931337a9d2b7cc5bce9027ffd278180b3307a60907a686bac5cc4e8ae3437"
+  },
+  "work/.agents/skills/kntnt/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4536,
+    "sha256": "680e5731fc90b4e437a0d7b17c9d4dbfec0e984c957cb7f3def291b83e5df1aa"
+  },
+  "work/.agents/skills/kntnt/library": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/changelog.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1393,
+    "sha256": "ffbaa70cec4453d3fb366ca2cb0ea07359d5c4f6d86edc1882458aa9e627fb56"
+  },
+  "work/.agents/skills/kntnt/library/references/delivery.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10036,
+    "sha256": "ef66cf766073a48a46e0b32bf79b3400796f3821071999e635b5bbccc7403f22"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 12025,
+    "sha256": "518d3d7f54524fa12623cfc40e304b9b5268ba90a898f3518b8ed3cfa0bf81f4"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/anti-slop.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6654,
+    "sha256": "0f1a17c1defa7773fe1847bf4b8fd04add716b5bddddbb2d4456c09bb4316d69"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/base.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15602,
+    "sha256": "217aea15f470fd37572c665d6e54ea45ccf639185643328a85b2eb4691d66338"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/base.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14481,
+    "sha256": "b08c718222b3f5f436e0b0231d32ddb4d9f303bad14504e31747c4e0e667b304"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8027,
+    "sha256": "0b008eda5e1904680b3f8bdb563f8cbccd8639316b7b6bdfe3b2f3b560ef82a1"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/article.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11014,
+    "sha256": "d6da19dc1b20785b594f3d0b8ef0d990568524f9121f83a39fcae31321e05b07"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/case-study.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7637,
+    "sha256": "0dc31b1227d3b9a073ce32797cd9a584bc25128d0fdb459e8890e76ed0bb2e0a"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/case-study.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9790,
+    "sha256": "72a3804ecc9b289a4d0faa496767c78fcfb3534c4cc7175a4a10814cdb9d0dab"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/column.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6519,
+    "sha256": "561f6835f67e8fdd68738d2dfbbd504a58ac7441678d5e9448014964200bd79d"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/column.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8377,
+    "sha256": "7bc73ea823dcb08a3acf75a596a8cb3eaef4676bc00772061771f022dc71958b"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/general.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2873,
+    "sha256": "438d85d3016889dd994d70a989b4ab73b8b70e149aea8e45d144cf3d371c6be5"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/opinion.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6698,
+    "sha256": "8f7a92170c3856bf16760842924b34d6622c68b1ea9a4a554197a696db6f0662"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/opinion.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8292,
+    "sha256": "b4cbc45720dae33cf11488664989d6c330bcc4e723b6f84c2072963459b5274f"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/press-release.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4570,
+    "sha256": "4e554d322f25995dbc7ed2237ac261b49eec1283eb64576dc80b95ed7066db3b"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/press-release.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7601,
+    "sha256": "b2660413e3bd94843a7092309859a6fd14be880ca8a66d861509d4eb2c9d96f6"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/report.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8648,
+    "sha256": "8c41b94d769774ea69087ba3c8a4a39570962169a90d293a0370be79e1f9f5fa"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/report.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13445,
+    "sha256": "8c6e3a5b5dfb224d6324026c2708d930abc009a34206caad5bf6296d7235e026"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/teaser.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7499,
+    "sha256": "f607f4782fa0a3c13fa619fdc8c3be97fa3e9449d423bfbc2e88677679fefe66"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/teaser.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9092,
+    "sha256": "1233f4bcab42736762315a20a0de45265f1373fa77a7aebd69b57c893366b33e"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/web-copy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7865,
+    "sha256": "85a0a9eb2f45b55aefdda5f56b7c993cb33f9d4bbccb83435095a5f9228a00a0"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/web-copy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8378,
+    "sha256": "b7cc2b3ce7b36aa0fcc40ed6f5cec20fe5c237c8749e4d6a6652244fb13594d0"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/mechanics.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11577,
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/abt.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5853,
+    "sha256": "22fb82e3ffdbdf5659a138d9f6d03f8ef64f5db1a6744dc4e994320d7a432f22"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/abt.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10309,
+    "sha256": "edbd6804fef8785ac2912bef6acbe729909e27803a0ccb0cac8bd738adace660"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/pac.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5050,
+    "sha256": "c876d36847db418f42394409f56d834637d5603992b0dbb1b303b3f7f337df0c"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/pac.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10938,
+    "sha256": "7ee89fb28b35850864bae4055fc5e565f7ea28a36298cec067e96496df22758a"
+  },
+  "work/.agents/skills/kntnt/library/references/invocation-envelope.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5874,
+    "sha256": "a6bc1686316c3f87fcea9b9693bd91ab92fddbcb3a38c71fe940ba9236b3f7cd"
+  },
+  "work/.agents/skills/kntnt/library/references/languages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/languages/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8470,
+    "sha256": "23929466b467620f2d5b12a2c6ea040ef381a906e0892eaa877dd5210c01a338"
+  },
+  "work/.agents/skills/kntnt/library/references/languages/en_GB.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6993,
+    "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413"
+  },
+  "work/.agents/skills/kntnt/library/references/languages/en_US.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6240,
+    "sha256": "0b8062d4c7a308d5522bfc2168c7db3cf5b0123361c9bd4135a6df6772e690f7"
+  },
+  "work/.agents/skills/kntnt/library/references/languages/sv.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14085,
+    "sha256": "57efb9ccba1567a174c2ac78df9b0ce561d0685eaf5ab88b3e09637a2b65eac8"
+  },
+  "work/.agents/skills/kntnt/library/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/scripts/argument_grammar.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3879,
+    "sha256": "dc732205eb9e2942aae2880018342d3789e379bcddca4ce9326295327a36937f"
+  },
+  "work/.agents/skills/kntnt/library/scripts/integrations.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 61037,
+    "sha256": "60d5dc8dfebac1497bf155ad9016ba4cead3eda7532f8173e2f0ebd061858c61"
+  },
+  "work/.agents/skills/kntnt/library/scripts/languages.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24089,
+    "sha256": "6d09120fc7ab52ba69db24bb6db6e85ff9ab304d5d5ebe04ec5f2f2dd0042d70"
+  },
+  "work/.agents/skills/kntnt/library/scripts/ship.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24521,
+    "sha256": "e66d1eaec0d1f875559e6d1b89a4ab2065917f38763fc67e36b9ebbc378fdc47"
+  },
+  "work/.agents/skills/kntnt/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/scripts/kntnt.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 212860,
+    "sha256": "d35484abcb64965ac8b9b06663c5fbdeab1311cfc39ffe25c23a5f092e9b9891"
+  },
+  "work/.agents/skills/kntnt/steps": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/steps/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1020,
+    "sha256": "a80d128ae214de0a759e9d5ae912e68005fd63d23f8361db5ab5c5e39411045b"
+  },
+  "work/.agents/skills/kntnt/steps/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17441,
+    "sha256": "865912bb1637b621a4567b1da890564331aced596a16d717576390d505ee9edd"
+  },
+  "work/.agents/skills/kntnt/steps/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5826,
+    "sha256": "5dc6650fd7c885bbd551b5d94fffc966c60b70005a8ca3da67a5944a218515bf"
+  },
+  "work/.agents/skills/kntnt/steps/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11279,
+    "sha256": "095e9d0d950793f69a8171b80639ec2039ee995055b495f2cd117c253ce96b45"
+  },
+  "work/.agents/skills/proofread": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/proofread/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 12551,
+    "sha256": "fa8f79b30ffd02b2a2e37b528a37981ffc80e814a2647ee7504bcd5d25c5e462"
+  },
+  "work/.agents/skills/proofread/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/proofread/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "ef05500ed19dff98c0181872ac5ff04d99ba241f992f70284629119c0451883a"
+  },
+  "work/.agents/skills/proofread/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6279,
+    "sha256": "e85c6467429d286acd2d9632225cf3e839f730c779a16c3b44ca97b75fe99c56"
+  },
+  "work/.agents/skills/proofread/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/proofread/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "work/.agents/skills/redline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/redline/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 20604,
+    "sha256": "9f135d963e6e1f2d66bc07263270ec147a3187689da0d3a3d1747ae65fdc7312"
+  },
+  "work/.agents/skills/redline/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/redline/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 176,
+    "sha256": "a9ff49ac5ec1f2d858911e08212525c5d8404c5d1a6789c3bf2713f25f388973"
+  },
+  "work/.agents/skills/redline/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8307,
+    "sha256": "c0943baf6e9d9ecdcbc2ee1a07afe532d966f931b71bf9a898c90407136e89d4"
+  },
+  "work/.agents/skills/redline/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/redline/references/correction.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7481,
+    "sha256": "2d3fad2cd8ce0ebb6ad05a992c626572b20ac88267813549b0456189c84c1b6c"
+  },
+  "work/.agents/skills/redline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/redline/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "work/.agents/skills/write": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/write/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11569,
+    "sha256": "3e181a178033063c0c3a5f4c4131b0c0151dd4d19d4ae070663d0e86253f7235"
+  },
+  "work/.agents/skills/write/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/write/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "6c2c5457f3b5d6e237a9cc7c147763d13115065ac7c8dc96da16b17017fd1953"
+  },
+  "work/.agents/skills/write/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7025,
+    "sha256": "694204b801aa1709cf5591166431fb1f3deca203cfffff00a09adbd97abc6519"
+  },
+  "work/.agents/skills/write/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/write/references/quotations.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3630,
+    "sha256": "6486001a7dbb1daa63c30ea4a36d54e42d5dbc676350616ac2e5a349276622de"
+  },
+  "work/.agents/skills/write/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/write/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "work/.git": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/HEAD": {
+    "mode": 420,
+    "type": "file",
+    "size": 21,
+    "sha256": "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80"
+  },
+  "work/.git/config": {
+    "mode": 420,
+    "type": "file",
+    "size": 137,
+    "sha256": "cae33efdb02cf774435c1ff9cb16bcc1014606908530c6e1dc727615fe3e8cda"
+  },
+  "work/.git/description": {
+    "mode": 420,
+    "type": "file",
+    "size": 73,
+    "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee"
+  },
+  "work/.git/hooks": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/hooks/applypatch-msg.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 478,
+    "sha256": "0223497a0b8b033aa58a3a521b8629869386cf7ab0e2f101963d328aa62193f7"
+  },
+  "work/.git/hooks/commit-msg.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 1972,
+    "sha256": "efc1401b0e99d1ff51494d154d98b46c1e99059bcd8bf9f73cecde19fd3eb23b"
+  },
+  "work/.git/hooks/fsmonitor-watchman.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 4611,
+    "sha256": "9159720099ad5595b8e66645cbfd47763c1e920f46e0b50ae75e642bbec57ef0"
+  },
+  "work/.git/hooks/post-update.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 189,
+    "sha256": "81765af2daef323061dcbc5e61fc16481cb74b3bac9ad8a174b186523586f6c5"
+  },
+  "work/.git/hooks/pre-applypatch.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 424,
+    "sha256": "e15c5b469ea3e0a695bea6f2c82bcf8e62821074939ddd85b77e0007ff165475"
+  },
+  "work/.git/hooks/pre-commit.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 1649,
+    "sha256": "57185b7b9f05239d7ab52db045f5b89eb31348d7b2177eab214f5eb872e1971b"
+  },
+  "work/.git/hooks/pre-merge-commit.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 416,
+    "sha256": "d3825a70337940ebbd0a5c072984e13245920cdf8898bd225c8d27a6dfc9cb53"
+  },
+  "work/.git/hooks/pre-push.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 1374,
+    "sha256": "ecce9c7e04d3f5dd9d8ada81753dd1d549a9634b26770042b58dda00217d086a"
+  },
+  "work/.git/hooks/pre-rebase.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 4898,
+    "sha256": "4febce867790052338076f4e66cc47efb14879d18097d1d61c8261859eaaa7b3"
+  },
+  "work/.git/hooks/pre-receive.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 544,
+    "sha256": "a4c3d2b9c7bb3fd8d1441c31bd4ee71a595d66b44fcf49ddb310252320169989"
+  },
+  "work/.git/hooks/prepare-commit-msg.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 1492,
+    "sha256": "e9ddcaa4189fddd25ed97fc8c789eca7b6ca16390b2392ae3276f0c8e1aa4619"
+  },
+  "work/.git/hooks/push-to-checkout.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 2783,
+    "sha256": "a53d0741798b287c6dd7afa64aee473f305e65d3f49463bb9d7408ec3b12bf5f"
+  },
+  "work/.git/hooks/sendemail-validate.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 2308,
+    "sha256": "44ebfc923dc5466bc009602f0ecf067b9c65459abfe8868ddc49b78e6ced7a92"
+  },
+  "work/.git/hooks/update.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 3650,
+    "sha256": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106"
+  },
+  "work/.git/info": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/info/exclude": {
+    "mode": 420,
+    "type": "file",
+    "size": 240,
+    "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1"
+  },
+  "work/.git/objects": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/objects/info": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/objects/pack": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/refs": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/refs/heads": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/refs/tags": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/AGENTS.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 447,
+    "sha256": "8e38f4a0bf8d0bb27b2941cd9913518cc44ad1642641296e724855566cb66076"
+  },
+  "work/input.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2843,
+    "sha256": "0d4da560398ca0e5360eb198a3e40e463ba65cdd784efe03f1f0e1d32098c9b6"
+  }
+}

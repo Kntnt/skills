@@ -7143,10 +7143,14 @@ GENRE_INFERENCE_BOUND = "Read that far and no further."
 LOADING_CLAUSES = {
     "write": (
         "Load the contract, and nothing besides it",
-        "Done when those four are loaded and nothing else has been.",
+        "This is the only additional genre support file: follow no other genre links"
+        " and load no unselected genre or technique.",
+        "Done when this bounded contract is loaded, with no review half.",
     ),
     "redline": (
         "Load what the review is read against, and nothing besides it",
+        "These are the only additional genre support files: follow no other genre"
+        " links and load no unselected genre or technique.",
         "Done when those are loaded and nothing else has been.",
     ),
 }
@@ -7214,11 +7218,10 @@ def test_the_two_skills_infer_a_genre_in_the_same_terms() -> None:
 def test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading() -> None:
     """Anything inference reads is licensed where inference happens.
 
-    The resolution step owns the question, so the licence is stated there and
-    the loading step still admits what it always admitted: the base contract,
-    the resolved genre, the language scopes the resolver returned, and an
-    optional technique — with the review halves Redline already loads beside
-    them (ADR-0178).
+    The resolution step owns the question, so the licence is stated there.
+    Loading remains bounded to the base, resolved genre, returned language
+    scopes, optional technique and the named support for the five web genres,
+    with review halves only in Redline (ADR-0178, issue #331).
     """
 
     for path in (WRITE, REDLINE):

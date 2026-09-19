@@ -1,0 +1,1 @@
+Första utkastet levereras här som svensk artikel, med ABT vald genom genren `article` och Kntnt-metadata påslagen. Fallet är fiktivt. Underlaget saknar besked om kylans varaktighet, orsak, elevernas upplevelse och justeringars effekt. Inga filer har sparats; tillfälliga kataloger har tagits bort.

@@ -14,9 +14,9 @@ write - turn a brief and its source material into one first draft
 
 Sources may be inline text, local files, URLs, the Contextual Instruction, or Conversation Context. Several sources may feed one draft. Supplying a file does not select an output; the response is the default.
 
-Genre, technique, language, and output resolve independently before writing. Genre defaults to `general`, and language to the request and material. Where nothing names a technique, the resolved genre supplies the one that kind of text is ordinarily written with, and a genre naming none leaves the draft with none. The delivery says which technique was resolved and where it came from. Ambiguous or mixed language produces a question.
+Genre, technique, language, and output resolve independently before writing. Genre defaults to `general`, and language to the request and material. Where nothing names a technique, the resolved genre supplies the one that kind of text is ordinarily written with, and a genre naming none leaves the draft with none. Article, case-study, column, opinion and web-copy ordinarily select no technique. Explicit selections and existing metadata keep their priority. The delivery says which technique was resolved and where it came from. Ambiguous or mixed language produces a question.
 
-The draft follows the base editorial contract, resolved genre, optional technique, and resolved language's composition guidance. It uses no review, anti-slop, or mechanics guidance.
+The draft follows the base editorial contract, resolved genre, optional technique, and resolved language's composition guidance. The five web genres also use their shared craft brief. It uses no review, anti-slop, or mechanics guidance.
 
 Every claim must be supported by the supplied material. Attribution, uncertainty, scope, chronology, and causality are preserved; uncertain quotations are paraphrased.
 

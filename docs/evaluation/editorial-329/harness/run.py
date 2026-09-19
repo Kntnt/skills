@@ -272,6 +272,7 @@ def main() -> int:
     sessions = root / "home/.codex/sessions"
     if sessions.exists():
         shutil.copytree(sessions, output / "native-sessions")
+    shutil.copy2(root / "home/.codex/config.toml", output / "harness-config-after.toml")
     after = inventory(root)
     write_json(output / "inventory-after.json", after)
     write_json(

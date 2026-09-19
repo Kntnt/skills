@@ -2,6 +2,8 @@
 
 Diagnostics for the requirements the teaser genre's base half states, for a Skill reviewing a draft written against them. Nothing here is a requirement: every target a draft has to meet is in the base half, where the Skill that wrote the draft could see it, and a finding raised here is raised against a rule stated there. The examples are English and are patterns — apply what one does, in the language of the draft, rather than looking for its words.
 
+This guidance is for the selected teaser genre, not the informative ingress within an article or case study. Reuse outside the piece does not make that ingress subject to a withheld-resolution test.
+
 ## The parts and their order
 
 **Test.** Read the draft for its parts alone, ignoring how well each is written: what names the text, what makes the reader want it, what tells them what they get by going. A reader scanning has to meet them in that order.
@@ -64,9 +66,9 @@ Diagnostics for the requirements the teaser genre's base half states, for a Skil
 
 ## The fixed forms
 
-**Test.** Ask what renders this teaser and where it is cut, then read only what survives the cut and check that the declaration, the promise, and the action are all inside it. For a standfirst, read it twice: once as a reader already at the text, once as a reader meeting it in a feed.
+**Test.** Ask what renders this teaser and where it is cut, then read only what survives the cut and check that the declaration, the promise, and the action are all inside it.
 
-**Failure.** A meta description whose sense arrives in a clause the search result will not show; a social post whose hook falls past the platform's fold; a module written to a length its template does not give it; a standfirst that works at the door of its text and says nothing to somebody who has not arrived.
+**Failure.** A meta description whose sense arrives in a clause the search result will not show; a social post whose hook falls past the platform's fold; a module written to a length its template does not give it.
 
 **Edge.** The cut belongs to the surface, so the measure is the limit the placement or the request names and never a number brought from elsewhere. Where nothing names one, there is no cut to measure against and no finding to raise on length.
 

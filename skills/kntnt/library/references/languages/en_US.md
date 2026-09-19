@@ -16,7 +16,7 @@ American English. Bare English resolves to British English, so this resource is 
 
 ## Composition
 
-American general-interest prose is direct and front-loaded. The point comes first, sentences are short, the voice is active, and concrete nouns do the work that a British writer might give to an understated construction.
+Use natural American vocabulary and syntax within the selected genre's voice and structure. American English permits direct, active phrasing without requiring short sentences, an early conclusion or a promotional tone.
 
 Collective nouns take singular agreement: *the team is meeting*, *the committee has decided*, *the band is on tour*. The plural agreement of British usage reads as a foreign import here.
 

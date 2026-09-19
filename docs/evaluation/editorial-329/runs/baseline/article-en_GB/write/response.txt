@@ -1,0 +1,40 @@
+---
+kntnt:
+  genre: article
+  technique: abt
+  language: en_GB
+---
+
+# A school temperature trial shows when to look closer
+
+*For municipal property managers, four weeks of classroom readings can help focus an investigation into complaints about cold air. A fictional trial at Björkskolan illustrates how to interpret those readings and where the evidence stops.*
+
+In January 2026, Lervik’s property office installed temperature sensors in six classrooms at Björkskolan. It wanted to find out whether complaints about cold air coincided with low temperatures during lessons. The sensors recorded a reading every five minutes for four weeks.
+
+## What the lesson count tells you
+
+The office’s report, *Mätförsök i Björkskolan*, dated 12 March 2026, records that 14 of 120 monitored lessons contained at least one reading below 20°C. That figure counts lessons containing a reading below the threshold; it does not say how long the temperature stayed below it.
+
+The office chose 20°C as a working threshold for the trial. It was not presented as a legal requirement, and the report provides no benchmark for judging whether 14 lessons out of 120 is a high or low proportion.
+
+Reporting by lesson preserves a distinction that a whole-day average can hide: temperatures may vary during teaching hours. Even so, the findings cover only those six rooms and those four weeks. The report does not establish whether pupils felt cold.
+
+## What a sensor measures
+
+A temperature sensor measures conditions where it sits. Two sensors were near external walls and four were on internal walls. Their positions were documented, but the trial did not experimentally compare placements, so it cannot establish what difference those positions made.
+
+The trial measured air temperature. A measure that accounts for both air temperature and heat radiating from surrounding surfaces is called operative temperature. That was outside the trial’s scope, as were ventilation, draughts and perceived temperature.
+
+Those gaps leave the cause of the cold unresolved. As operations technician Elin Rask put it: ‘We know when we need to look more closely. We don’t yet know why it got cold at those particular times.’
+
+## Connect readings to room use
+
+After the trial, Rask reviewed the ventilation and heating schedules with the school caretaker. The effects of any adjustments have yet to be measured.
+
+A further trial is planned for November, with sensors in equivalent positions and notes recording when the rooms are used. Funding has not been decided.
+
+For managers considering a similar investigation, Rask recommends matching the sequence of temperature readings to room-use times before changing the controls. Start by placing the readings alongside the hours when each room was occupied, so the investigation can focus on conditions during use.
+
+---
+
+Draft delivered here in British English, with frontmatter. ABT comes from the article genre’s default. The supplied material leaves causes, pupils’ experience and adjustment effects unresolved. No files from this run remain.
