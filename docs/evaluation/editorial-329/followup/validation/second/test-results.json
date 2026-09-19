@@ -1,0 +1,26 @@
+{
+  "revision": "82db439",
+  "pytest_basetemp": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-fidelity-final-tests-5t88ci4g/pytest",
+  "results": [
+    {
+      "check": "mypy",
+      "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py tests",
+      "exit": 0
+    },
+    {
+      "check": "pytest",
+      "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+      "exit": 0
+    },
+    {
+      "check": "ruff",
+      "command": "uvx ruff check .",
+      "exit": 0
+    },
+    {
+      "check": "format",
+      "command": "uvx ruff format --check .",
+      "exit": 0
+    }
+  ]
+}

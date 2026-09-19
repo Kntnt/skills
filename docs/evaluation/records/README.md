@@ -63,3 +63,13 @@ The [reading packet](../editorial-329/README.md) links full sources, drafts, rev
 - [write-gpt-2026-09-19-349-opinion.md](write-gpt-2026-09-19-349-opinion.md).
 - [write-gpt-2026-09-19-349-source-check-column.md](write-gpt-2026-09-19-349-source-check-column.md).
 - [write-gpt-2026-09-19-349-source-check-opinion.md](write-gpt-2026-09-19-349-source-check-opinion.md).
+
+## Source-fidelity follow-up — #329
+
+[The follow-up packet](../editorial-329/followup/README.md) preserves repeated baseline and candidate runs, independent source judgements and all failed attempts.
+
+- [redline-gpt-2026-09-19-349-followup-new.md](redline-gpt-2026-09-19-349-followup-new.md).
+- [redline-gpt-2026-09-19-349-followup-original.md](redline-gpt-2026-09-19-349-followup-original.md).
+- [write-gpt-2026-09-19-349-followup-baseline.md](write-gpt-2026-09-19-349-followup-baseline.md).
+- [write-gpt-2026-09-19-349-followup-new.md](write-gpt-2026-09-19-349-followup-new.md).
+- [write-gpt-2026-09-19-349-followup-original.md](write-gpt-2026-09-19-349-followup-original.md).

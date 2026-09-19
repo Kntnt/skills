@@ -68,12 +68,14 @@ ROWS: list[tuple[str, str, str, str, str]] = (
 )
 
 
-def run_cell(row: tuple[str, str, str, str, str], stage: str) -> dict[str, object]:
+def run_cell(
+    row: tuple[str, str, str, str, str], stage: str, revision: str, wave: str
+) -> dict[str, object]:
     """Capture one immutable invocation, refusing existing evidence directories."""
 
     # Confirm the actual input against its frozen source or extracted artifact.
     case, genre, locale, filename, source_revision = row
-    case_dir = FOLLOW / "runs/candidate" / case
+    case_dir = FOLLOW / "runs" / wave / case
     case_dir.mkdir(parents=True, exist_ok=True)
     if stage == "write":
         base = (
@@ -111,7 +113,7 @@ def run_cell(row: tuple[str, str, str, str, str], stage: str) -> dict[str, objec
             "run",
             str(RUNNER),
             "--revision",
-            "8f92e12",
+            revision,
             "--corpus-revision",
             "bf14dc2",
             "--prompt",
@@ -159,20 +161,25 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["write", "redline"])
     parser.add_argument("--cases", nargs="*")
+    parser.add_argument("--revision", default="8f92e12")
+    parser.add_argument("--wave", default="candidate")
     args = parser.parse_args()
     selected = [row for row in ROWS if not args.cases or row[0] in args.cases]
     results: list[dict[str, object]] = []
 
     # Separate outputs keep parallel runs from changing each other's inputs.
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
-        futures = [pool.submit(run_cell, row, args.stage) for row in selected]
+        futures = [
+            pool.submit(run_cell, row, args.stage, args.revision, args.wave)
+            for row in selected
+        ]
         for future in concurrent.futures.as_completed(futures):
             result = future.result()
             results.append(result)
             path = (
                 FOLLOW
                 / "harness"
-                / f"candidate-new-{args.stage}-{os.getpid()}-results.json"
+                / f"{args.wave}-new-{args.stage}-{os.getpid()}-results.json"
             )
             path.write_text(json.dumps(results, indent=2) + "\n")
             print(json.dumps(result), flush=True)

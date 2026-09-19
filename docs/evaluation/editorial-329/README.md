@@ -1,5 +1,7 @@
 # Redaktionell leverans #329 — läspaket
 
+**Aktuell fortsättning:** #329 har återöppnats för källtrohet och citatidiom. [Uppföljningen](followup/README.md) redovisar implementation, nya kontroller och aktuellt utfall. Avsnitten nedan är den första leveransens historiska läspaket vid `7ff6ec0`; dess issue-status och provantal gäller den tidpunkten.
+
 Implementation och föreskriven utvärdering är genomförda. **Tre kvalitetsfel står kvar öppna: #341, #349 och #352.** Historiska fel och senare försök redovisas sida vid sida; de underkända texterna räknas inte som godkända.
 
 Källor och bedömningsmatris frystes i `6e531f5` före omskrivningen. Baslinjen är `8ae4c21`; varje körning anger sin egen oföränderliga instruktionsrevision i `run.json` och sitt record. Slutliga produktresurser finns i `29ff204`; testavgränsningen rättas i `bda07f7`. Endast native Codex CLI 0.155.1 med faktiskt observerad `gpt-6-astra`, reasoning `high`, används. Inga andra providerresultat ingår.

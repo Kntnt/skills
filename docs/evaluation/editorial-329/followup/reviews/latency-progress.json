@@ -1,0 +1,177 @@
+{
+  "baseline": {
+    "count": 8,
+    "median_seconds": 63.25,
+    "sum_seconds": 511.74,
+    "runs": [
+      {
+        "case": "case-unprompted-en_US-r1",
+        "seconds": 58.4,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-absence-en_GB-r1",
+        "seconds": 63.8,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-sv-r1",
+        "seconds": 71.67,
+        "returncode": 0
+      },
+      {
+        "case": "case-study-en_US-r1",
+        "seconds": 61.86,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-unknown-sv-r1",
+        "seconds": 63.2,
+        "returncode": 0
+      },
+      {
+        "case": "case-question-en_GB-r1",
+        "seconds": 58.92,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-sv-r2",
+        "seconds": 70.59,
+        "returncode": 0
+      },
+      {
+        "case": "case-study-en_US-r2",
+        "seconds": 63.3,
+        "returncode": 0
+      }
+    ]
+  },
+  "candidate": {
+    "count": 23,
+    "median_seconds": 150.17,
+    "sum_seconds": 3756.7,
+    "runs": [
+      {
+        "case": "opinion-unknown-sv-r2",
+        "seconds": 219.34,
+        "returncode": 0
+      },
+      {
+        "case": "case-unprompted-en_US-r1",
+        "seconds": 130.35,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-absence-en_GB-r1",
+        "seconds": 153.16,
+        "returncode": 0
+      },
+      {
+        "case": "article-sv-r1",
+        "seconds": 195.4,
+        "returncode": 0
+      },
+      {
+        "case": "case-study-sv-r1",
+        "seconds": 158.44,
+        "returncode": 0
+      },
+      {
+        "case": "case-question-en_GB-r2",
+        "seconds": 135.76,
+        "returncode": 0
+      },
+      {
+        "case": "column-sv-r1",
+        "seconds": 128.2,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-en_US-r2",
+        "seconds": 216.36,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-sv-r1",
+        "seconds": 150.17,
+        "returncode": 0
+      },
+      {
+        "case": "case-study-en_US-r1",
+        "seconds": 132.41,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-en_GB-r1",
+        "seconds": 209.92,
+        "returncode": 0
+      },
+      {
+        "case": "case-unprompted-en_US-r2",
+        "seconds": 125.11,
+        "returncode": 0
+      },
+      {
+        "case": "web-copy-en_US-r1",
+        "seconds": 118.61,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-unknown-sv-r1",
+        "seconds": 163.97,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-absence-en_GB-r2",
+        "seconds": 131.56,
+        "returncode": 0
+      },
+      {
+        "case": "case-study-sv-r2",
+        "seconds": 145.22,
+        "returncode": 0
+      },
+      {
+        "case": "case-question-en_GB-r1",
+        "seconds": 206.0,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-en_US-r1",
+        "seconds": 204.21,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-sv-r2",
+        "seconds": 236.28,
+        "returncode": 0
+      },
+      {
+        "case": "case-study-en_US-r3",
+        "seconds": 125.09,
+        "returncode": 0
+      },
+      {
+        "case": "general-en_GB-r1",
+        "seconds": 140.98,
+        "returncode": 0
+      },
+      {
+        "case": "opinion-en_GB-r2",
+        "seconds": 202.73,
+        "returncode": 0
+      },
+      {
+        "case": "case-study-en_US-r2",
+        "seconds": 127.43,
+        "returncode": 0
+      }
+    ]
+  },
+  "second-candidate": {
+    "count": 0,
+    "median_seconds": null,
+    "sum_seconds": 0,
+    "runs": []
+  }
+}

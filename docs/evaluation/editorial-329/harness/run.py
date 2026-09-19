@@ -113,6 +113,7 @@ def main() -> int:
     )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--timeout", type=int, default=1800)
+    parser.add_argument("--capture-output-name")
     args = parser.parse_args()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=False)
@@ -235,6 +236,7 @@ def main() -> int:
     )
     before = inventory(root)
     write_json(output / "inventory-before.json", before)
+    input_before = (work / args.input_name).stat()
 
     # Native traces and evaluator captures are kept outside the writable root.
     started = time.monotonic()
@@ -275,6 +277,27 @@ def main() -> int:
     shutil.copy2(root / "home/.codex/config.toml", output / "harness-config-after.toml")
     after = inventory(root)
     write_json(output / "inventory-after.json", after)
+    # A faulty Skill may remove its source; preserve that failure as evidence.
+    source_after = work / args.input_name
+    input_after = source_after.stat() if source_after.exists() else None
+    write_json(
+        output / "input-stat.json",
+        {
+            "before": {
+                "mtime_ns": input_before.st_mtime_ns,
+                "inode": input_before.st_ino,
+            },
+            "after": (
+                {"mtime_ns": input_after.st_mtime_ns, "inode": input_after.st_ino}
+                if input_after
+                else None
+            ),
+        },
+    )
+    if args.capture_output_name:
+        delivered = work / args.capture_output_name
+        if delivered.is_file():
+            shutil.copy2(delivered, output / "captured-output.md")
     write_json(
         output / "filesystem-changes.json",
         {

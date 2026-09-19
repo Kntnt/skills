@@ -1,0 +1,20 @@
+{
+  "returncode": 0,
+  "timed_out": false,
+  "duration_seconds": 145.78,
+  "identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "complete_input_visible": true,
+  "input_preserved": true,
+  "authentication_changed": false,
+  "non_home_effects": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "judgement": "Detected exactly the inherited September timing claim with a valid source-compatible counterexample; reconstructed remaining propositions faithfully, with no collateral false positives."
+}

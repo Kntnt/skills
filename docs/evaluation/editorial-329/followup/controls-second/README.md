@@ -1,0 +1,9 @@
+# Second-candidate supplemental controls
+
+These inputs are frozen before native evaluation against candidate `82db439`. They are diagnostic controls, not changes to the original corpus or its quality criteria.
+
+- `timetable.md` is the exact full candidate `opinion-absence-en_GB-r2` Write artifact, including metadata and trailing whitespace. Run three fresh `/redline --output=response input.md` invocations. Its admitted lack of timetable evidence does not turn the requested deferral into a promise of completion. Independently judge all criteria.
+- `certainty.md` differs only in the final paragraph's first sentence, replaced with an explicit certainty following an admission of no evidence. Run `/redline --output=response input.md` once. A factual unsupported leap must remain diagnosable, without invented support or a new authorial policy.
+- `delivery.md` supplies mechanically clean Swedish prose with an internal contradiction. Run `/redline --max=0 --output=response input.md`, `/redline --max=0 --in-place input.md`, and `/redline --max=0 --output=result.md input.md` once each. Findings must remain unresolved. Response must contain the complete artifact and separate findings; in-place must preserve source bytes and timestamp and report findings; separate output must hold the complete artifact without a response echo. All three still invoke exactly one mechanical pass. Inspect independent inventories and native traces, not the model's delivery claim alone.
+
+All inputs go into fresh private workspaces as `input.md`, with no evaluator expectations included. Preserve every response, actual native identity, parent and child trace, source stat, file output and cleanup receipt. The evaluator captures file outputs before cleanup. Do not interpret an omitted optional detail as a failure, or checker approval as independent Source Fidelity proof.
