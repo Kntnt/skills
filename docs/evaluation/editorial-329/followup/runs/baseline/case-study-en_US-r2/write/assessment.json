@@ -1,0 +1,48 @@
+{
+  "case": "case-study-en_US-r2",
+  "criteria": {
+    "F1": {
+      "status": "pass",
+      "evidence": "September remains the decision date, interview attribution stays with the supplied email, all three quotations preserve their qualifications, and the figures retain workload and causal limits."
+    },
+    "G1": {
+      "status": "pass",
+      "evidence": "The case gives an operations reader concrete implementation choices and the customer’s own judgement."
+    },
+    "G2": {
+      "status": "pass",
+      "evidence": "The customer remains the actor; the supplier is third person, publication is disclosed, and appraisal is not inferred from the figures."
+    },
+    "P1": {
+      "status": "pass",
+      "evidence": "Purpose, setup, evidence, appraisal and the pending expansion decision follow intelligibly, with no unsupported question framing."
+    },
+    "W1": {
+      "status": "pass",
+      "evidence": "The independent ingress and continuous paragraph sequence orient the reader; the brief source-limit sentence does not obstruct the account."
+    },
+    "L1": {
+      "status": "pass",
+      "evidence": "Idiomatic American narration and the original speaker’s voice coexist without promotional inflation."
+    },
+    "L2": {
+      "status": "pass",
+      "evidence": "American spelling, December 4 date order and quotation punctuation are coherent."
+    },
+    "T1": {
+      "status": "pass",
+      "evidence": "The exact genre and locale flags govern the artifact metadata; technique resolves to none and no technique resource is loaded."
+    },
+    "R2": {
+      "status": "pass",
+      "evidence": "The native trace contains the complete Write body, base, selected genre, web craft and delivery contract, plus the resolved composition scope; no review half, peer editorial pass or unselected genre is loaded."
+    },
+    "O1": {
+      "status": "pass",
+      "evidence": "Full inventories show unchanged source/work/scratch, no retained Skill files, unchanged authentication and only Harness-owned home effects; the private root is now absent."
+    }
+  },
+  "defects": "none",
+  "notes": "This independent repetition passes F1; it does not erase the first repetition’s failure.",
+  "candidate_results_read_before_judgement": false
+}

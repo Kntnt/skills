@@ -1,0 +1,36 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quay Housing fick en samlad vy över felanmälningarna
+
+Elm Quay Housing prövade en gemensam logg för felanmälningar i två byggnader. Underhållsansvariga Maya Lind ser nytta i att ha anmälningarna samlade, men skulle avsätta mer tid för förberedelser. Försöket pågick i åtta veckor och har ännu inte utökats till fler byggnader.
+
+Bostadsbolaget förvaltar 640 lägenheter. Tidigare förvarades felanmälningar via telefon och mejl var för sig. I september 2025 beslutade bolagets eget underhållsteam att testa en gemensam logg, så att personal på olika skift skulle kunna se samma information.
+
+Teamet valde Svale Systems efter att ha testat om loggen kunde visa status för varje reparation. Underlaget innehåller ingen jämförelse med någon annan leverantör. Teamet utformade kategorierna och behöll möjligheten för de boende att felanmäla via telefon. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+Arbetet med kategorierna gav Maya Lind en erfarenhet att ta med inför en eventuell fortsättning. I en mejlintervju beskriver hon förberedelserna:
+
+– Vi lade mer tid på att enas om kategorierna än på att registrera de första anmälningarna. Jag skulle avsätta den tiden innan nästa byggnad kommer i gång.
+
+I Elm Quays interna försöksanteckning, daterad den 4 december 2025, redovisas 31 registrerade felanmälningar. Akuta ärenden och arbeten som beställts före försöket ingår inte. Mediantiden från anmälan till tilldelning var två arbetsdagar under försöket, jämfört med tre under den föregående åttaveckorsperioden.
+
+Perioderna hade olika arbetsbelastning. I anteckningen tillskrivs skillnaden uttryckligen inte programvaran. Siffrorna gäller tiden till tilldelning, inte tiden tills en reparation var färdig. Det finns inga mätningar av kostnader, boendes nöjdhet eller tid till slutförd reparation i underlaget.
+
+Linds bedömning av försöket rymmer både nyttan i vardagen och ett förbehåll:
+
+– Jag skulle välja att göra försöket igen. Att ha en samlad vy över anmälningarna hjälper oss, men jag skulle avsätta en extra vecka för förberedelser, skriver hon.
+
+Något beslut om att utöka försöket har ännu inte fattats. Teamet ska först kontrollera hur kategorierna fungerar för större reparationer och därefter ta ställning till en fortsättning. Linds omdöme gäller det egna försöket; hon rekommenderar inte Svale till alla bostadsbolag.
+
+För dig som vill läsa vidare finns [Svale Systems checklista för införande](https://example.invalid/svale/checklist).
+
+*Fiktivt kundcase för publicering av leverantören Svale Systems. Underlaget bygger på mejlintervjuer och Elm Quay Housings interna försöksanteckning.*
+
+---
+
+Levererat här som ett första utkast på svenska i genren `case-study`, utan särskild berättarteknik. Källjämförelsen gav inga anmärkningar. Underlaget saknar leverantörsjämförelse och mätningar av kostnader, boendes nöjdhet och reparationstid. Inga filer har lämnats kvar eller ändrats.

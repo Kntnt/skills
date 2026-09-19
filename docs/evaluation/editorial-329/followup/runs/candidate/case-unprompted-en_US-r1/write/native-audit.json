@@ -1,0 +1,116 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T22-31-09-01a0bb5d-9d09-7850-b513-984ef40a36ba.jsonl",
+      "session": {
+        "id": "01a0bb5d-9d09-7850-b513-984ef40a36ba",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/write/SKILL.md\",max_output_tokens:12000}));\ntext(await tools.exec_command({cmd:\"cat source.md\",max_output_tokens:12000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch/write-invoke.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--genre=case-study --language=en_US --output=response source.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/write/scripts/invoke.py\",max_output_tokens:10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='write-invoke.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=case-study --language=en_US --output=response source.md', text=True, env=env)\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":12000}));\n",
+        "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/write/references/quotations.md .agents/skills/write/references/source-check.md\",max_output_tokens:16000}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='write-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'en_US'], env=env)\\n    raise SystemExit(result.returncode)\\nPY\",max_output_tokens:8000})]); for(let i=0;i<results.length;i++) text({i,...results[i]});\n",
+        "const draft = `# Briar County volunteers share records of new donations\n\nBriar County Theater Archive cataloged 47 incoming donations during an eight-week pilot of Index Lantern. Volunteers could consult the same records, while uncertain dates remained visible. A decision on moving older records is still pending.\n\nThe archive holds donated programs, photographs, and posters from local productions. Volunteers had described new donations in separate spreadsheets. In February 2026, the collection team chose to test a shared catalog for incoming donations, leaving existing collections outside the pilot.\n\nThe team agreed on fields for production title, year, donor, and location, retaining a free-text note for uncertain dates. Collection coordinator Lena Ortiz explained the work in an email headed “Catalog pilot: notes for publication”:\n\n“Agreeing on the fields took two meetings. The import was the short part.”\n\nIndex Lantern imported the team’s spreadsheet template and provided one remote training session for five volunteers. The archive chose the descriptions and checked the imported records.\n\nThe archive’s May 6 pilot note records the 47 donations and reports that volunteers could consult the same records. Eleven records retained uncertain dates. The note contains no before-and-after time measurement, cost calculation, or assessment of public access.\n\nOrtiz’s assessment was qualified:\n\n“I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.”\n\nThe archive will review the field definitions before deciding whether to move older records into the catalog.\n\nThis case is based on the email and pilot note supplied by the archive for publication by Index Lantern.`;\nstore(\"draft\",draft); text({words:draft.split(/\\s+/).length}); text(await tools.exec_command({cmd:\"mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch/write-source-check.XXXXXX\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch\\nrg --files -g '!source.md' -g '!.agents/**' -g '!.git/**' -g '!.codex/**' .\",\"max_output_tokens\":2000}));\n",
+        "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch/write-source-check.ZTLcE7/report.md\",\"max_output_tokens\":3000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch')\\ncheck = scratch / 'write-source-check.ZTLcE7'\\n(check / 'report.md').unlink()\\ncheck.rmdir()\\nprint('Remaining run scratch:', [str(p) for p in scratch.glob('write-*')])\\nprint('Workspace top level:', sorted(p.name for p in Path.cwd().iterdir()))\\nPY\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 7,
+        "web-craft.md": 0,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T22-32-35-01a0bb5e-ede1-7113-9d24-15696ce0ee08.jsonl",
+      "session": {
+        "id": "01a0bb5e-ede1-7113-9d24-15696ce0ee08",
+        "parent_thread_id": "01a0bb5d-9d09-7850-b513-984ef40a36ba",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bb5d-9d09-7850-b513-984ef40a36ba",
+              "depth": 1,
+              "agent_path": "/root/source_check",
+              "agent_nickname": "Copernicus",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "const r = await tools.exec_command({cmd:\"cat source.md .agents/skills/write/references/quotations.md\",max_output_tokens:10000});text(r.output);\n",
+        "text(await tools.exec_command({cmd:\"cat > /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch/write-source-check.ZTLcE7/report.md <<'EOF'\\n# Source comparison\\n\\nComparison complete with no findings.\\n\\nEvery factual and attributed claim in the complete draft, including its title, summary, quotations, and publication-source statement, is supported by the supplied source package. The draft preserves the pilot's scope, the uncertain dates, the pending decision about older records, the limits of the pilot note, and Ortiz's qualified assessment. Both quotations reproduce the supplied email wording exactly. No unsupported causal, evaluative, observational, or personal detail was identified.\\n\\nThe case's fictional status is covered by the delivery wrapper, as specified in the comparison instructions.\\nEOF\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "genres/column.md": 10,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch prevents a byte-level audit of its full prompt and draft."
+}

@@ -1,0 +1,6 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e1b1yco6/scratch/write-source-check.jkuibnti/report.md'",
+    "output": "Source comparison complete with no findings.\n\nEvery factual and attributed claim in the complete draft was compared with the entire supplied source package, including the title, headings, introductory summary, quotations, numerical comparisons, next-step link, and publisher disclosure. The draft preserves the exclusions, the distinction between assignment and completion, the different workloads and absence of software attribution, Lind’s qualified assessment, and the pending expansion decision. The quotations match the supplied usable quotations.\n"
+  }
+]

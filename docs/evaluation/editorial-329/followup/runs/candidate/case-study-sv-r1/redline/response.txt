@@ -1,0 +1,1 @@
+Inga ändringar behövdes efter redaktionell granskning och korrekturläsning. Texten granskades som kundcase på svenska, utan berättarteknik enligt metadata. Inga filer har ändrats.

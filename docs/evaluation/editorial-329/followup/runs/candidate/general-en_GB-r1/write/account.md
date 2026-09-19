@@ -1,0 +1,1 @@
+Draft delivered here in British English, using `general` with no technique. Source comparison completed with no findings. Causes, pupils’ comfort and adjustment effects remain unestablished. No files retained.

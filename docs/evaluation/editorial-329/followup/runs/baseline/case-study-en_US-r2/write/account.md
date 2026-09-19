@@ -1,0 +1,1 @@
+Draft delivered here in American English as a case study, with no technique selected; the genre specifies none. No files remain from this run. The material supports no supplier comparison or conclusions about costs, resident satisfaction, completion time, or software causation.

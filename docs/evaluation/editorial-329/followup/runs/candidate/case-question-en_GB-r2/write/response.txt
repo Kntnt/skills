@@ -1,0 +1,28 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_GB
+---
+
+# Fenwick’s shared schedule shows which jobs await parts
+
+Fenwick Instrument Repairs’ six-week trial put 38 jobs into a shared bench schedule. Staff reported being able to see which instruments were waiting for parts, and the manager approved continued use for new jobs. Adding the backlog would wait until the team had reviewed its status definitions.
+
+The brass and woodwind repair workshop began the trial in January 2026. Previously, jobs awaiting parts and those ready for work appeared on separate paper sheets. The team chose scheduling supplier Benchline after checking that it could distinguish the two statuses.
+
+The workshop defined those statuses and decided who would update them. Benchline configured the team’s choices and trained four staff in one online session. Telephone calls remained part of discussing collection arrangements with customers.
+
+For manager Priya Vale, making the schedule useful required agreement within the workshop. In an email interview on 2 March 2026, she explained:
+
+‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+The workshop’s trial summary, dated 23 February 2026, recorded the 38 jobs and reported that staff could see which instruments were waiting for parts. It did not measure repair duration, revenue or customer satisfaction. The findings establish the team’s reported experience, without demonstrating faster repairs or supporting a recommendation for every workshop.
+
+Vale’s appraisal was specific about both continued use and what she would change:
+
+‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+
+---
+
+Draft delivered here in British English, using the case-study genre with no technique. Source comparison passed. The supplied material is fictional; no author name or call to action was supplied or added. No files remain from this run.

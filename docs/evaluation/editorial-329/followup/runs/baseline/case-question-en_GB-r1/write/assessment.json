@@ -1,0 +1,48 @@
+{
+  "case": "case-question-en_GB-r1",
+  "criteria": {
+    "F1": {
+      "status": "pass",
+      "evidence": "The final question-based transition is supported by the actual email question, the January start is supplied, and the text preserves unmeasured repair duration/revenue/satisfaction and the backlog reservation."
+    },
+    "G1": {
+      "status": "pass",
+      "evidence": "Workshop managers learn the status-definition decision, reported visibility and qualified continued use."
+    },
+    "G2": {
+      "status": "pass",
+      "evidence": "Headline and ingress introduce the customer result; customer action, supplier setup, trial limits and manager appraisal each do useful work."
+    },
+    "P1": {
+      "status": "pass",
+      "evidence": "Status definitions precede the account of what the trial established, and reported experience is distinguished from measured speed."
+    },
+    "W1": {
+      "status": "pass",
+      "evidence": "The What the trial established section gives a useful second entry point after the setup narrative."
+    },
+    "L1": {
+      "status": "pass",
+      "evidence": "Natural British workshop prose and exact supplied quotations keep the manager’s practical reservation."
+    },
+    "L2": {
+      "status": "pass",
+      "evidence": "British spelling, day-month dates and consistently chosen double quotation marks are valid."
+    },
+    "T1": {
+      "status": "pass",
+      "evidence": "The exact genre and locale flags govern the artifact metadata; technique resolves to none and no technique resource is loaded."
+    },
+    "R2": {
+      "status": "pass",
+      "evidence": "The native trace contains the complete Write body, base, selected genre, web craft and delivery contract, plus the resolved composition scope; no review half, peer editorial pass or unselected genre is loaded."
+    },
+    "O1": {
+      "status": "pass",
+      "evidence": "Full inventories show unchanged source/work/scratch, no retained Skill files, unchanged authentication and only Harness-owned home effects; the private root is now absent."
+    }
+  },
+  "defects": "none",
+  "notes": "Positive control is exercised: “Asked whether she would make the same choice again, and what she would change” accurately reflects the supplied question and is not removed merely for matching the earlier defect’s form.",
+  "candidate_results_read_before_judgement": false
+}

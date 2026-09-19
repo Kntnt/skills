@@ -1,0 +1,33 @@
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_US
+---
+
+# Lervik should keep phone booking while it gathers evidence
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+Lervik’s municipal executive board should postpone a permanent switch to online-only booking for community venues. Our association, Öppna beslut, proposes a six-month trial with both phone and web booking at all seven venues. Before removing a booking option, the municipality needs to weigh the staff time it requires against its value to users.
+
+## The pilot counted bookings, not barriers
+
+The municipality’s April 8, 2026, pilot report, *Bokning av föreningslokaler*, records 96 web bookings and 24 phone bookings during eight weeks at two venues. Those are bookings, not individual people. The report does not measure age, disability, or digital skills.
+
+The phone bookings therefore cannot tell us what share of residents cannot book online. Using them to make that claim would go beyond the evidence. But their existence gives the municipality a reason to ask why people still choose the phone. That question deserves an answer before the option disappears.
+
+## Measure the administrative burden
+
+The staff recommendation prepared for the board’s June 18 meeting proposes ending phone booking at all seven venues in September. Its stated reason is to spare staff from entering information through two workflows. Double administration is a real objection to keeping both channels, and the board should take it seriously.
+
+Yet the documents contain neither a measurement of staff time nor an estimate of financial savings. The board is being asked to remove a booking channel across all seven venues without those measures. That is an inadequate basis for a permanent change: the administrative concern is clear, but its scale and the value of phone booking to users remain to be established.
+
+## Test both channels, then decide
+
+We propose that, during the six-month trial, staff record the time spent on each booking channel and ask users to volunteer their reasons for choosing phone or web. This would give the board evidence to weigh the workload against what users value.
+
+Our association makes no claim to have funded or costed this trial. The board must assess the trial’s cost; keeping both channels cannot simply be assumed to be free.
+
+I do not oppose digital booking. I want the decision about removing phone booking to rest on a stronger foundation. The board should postpone the permanent switch, address the trial’s unresolved cost, and approve six months with both channels. Afterward, it can decide whether to remove, modify, or retain a booking channel.
+

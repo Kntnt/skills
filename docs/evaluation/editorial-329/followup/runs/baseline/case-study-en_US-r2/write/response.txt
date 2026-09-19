@@ -1,0 +1,38 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_US
+---
+
+# Elm Quay brings repair reports into one shared view
+
+Elm Quay Housing tested a shared repair log in two buildings to give maintenance staff a common view across shifts. The eight-week trial helped the team see reports together, according to maintenance supervisor Maya Lind. Her advice for another trial: allow more preparation time.
+
+*Published by Svale Systems.*
+
+Elm Quay manages 640 apartments. Before its maintenance team decided to trial the log in September 2025, telephone reports and emails were stored separately. The team wanted staff on different shifts to see the same information.
+
+“We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log,” Lind said in an email interview.
+
+The team chose Svale Systems after testing whether its log could show the status of each repair. The source material provides no comparison with another supplier.
+
+Elm Quay designed the categories and kept telephone reporting open for residents. Svale configured the log and trained six staff members during two sessions. For Lind, the setup work offered a lesson for any further rollout.
+
+“We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+
+Elm Quay’s internal trial note, dated December 4, 2025, records 31 repair reports entered during the eight weeks. That count excludes emergencies and work ordered before the trial.
+
+The median time from report to assignment was two working days during the trial, compared with three in the preceding eight-week period. The workloads differed between the periods, and the note explicitly does not attribute the difference to the software. These figures concern assignment, not completion; the trial provided no measurements of completion time, costs, or resident satisfaction.
+
+Lind’s assessment combines support for the trial with a reservation about preparation.
+
+“I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
+
+The trial has not expanded. Elm Quay’s team will decide whether to proceed after checking how its categories work for larger repairs. That question remains open as the team considers its next step.
+
+For operations managers considering their own implementation, Svale provides an [implementation checklist to read](https://example.invalid/svale/checklist).
+
+---
+
+Draft delivered here in American English as a case study, with no technique selected; the genre specifies none. No files remain from this run. The material supports no supplier comparison or conclusions about costs, resident satisfaction, completion time, or software causation.

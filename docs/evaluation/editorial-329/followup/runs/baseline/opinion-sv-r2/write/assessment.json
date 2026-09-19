@@ -1,0 +1,48 @@
+{
+  "case": "opinion-sv-r2",
+  "criteria": {
+    "F1": {
+      "status": "fail",
+      "evidence": "Unsupported fact (#349): “Försöket är varken kostnadsberäknat eller finansierat av föreningen” asserts absence of work where the source only withholds a claim."
+    },
+    "G1": {
+      "status": "pass",
+      "evidence": "The author argues for a defined trial while acknowledging the administration burden."
+    },
+    "G2": {
+      "status": "pass",
+      "evidence": "The thesis is early, evidence is attributed, the real objection is met and the board receives a concrete requested decision."
+    },
+    "P1": {
+      "status": "pass",
+      "evidence": "The argument distinguishes bookings from people and connects evidence gaps to the proposed measurement; F1 separately rejects the costing/funding assertion."
+    },
+    "W1": {
+      "status": "pass",
+      "evidence": "The evidence, objection and proposed action have useful headings and coherent paragraph lengths."
+    },
+    "L1": {
+      "status": "pass",
+      "evidence": "Native Swedish prose preserves the author’s non-opposition and avoids invented hostile motives."
+    },
+    "L2": {
+      "status": "pass",
+      "evidence": "Swedish date and number forms and ordinary punctuation are consistent."
+    },
+    "T1": {
+      "status": "pass",
+      "evidence": "The exact genre and locale flags govern the artifact metadata; technique resolves to none and no technique resource is loaded."
+    },
+    "R2": {
+      "status": "pass",
+      "evidence": "The native trace contains the complete Write body, base, selected genre, web craft and delivery contract, plus the resolved composition scope; no review half, peer editorial pass or unselected genre is loaded."
+    },
+    "O1": {
+      "status": "pass",
+      "evidence": "Full inventories show unchanged source/work/scratch, no retained Skill files, unchanged authentication and only Harness-owned home effects; the private root is now absent."
+    }
+  },
+  "defects": "#349",
+  "notes": "A second fresh repetition reproduces the defect with different grammatical framing; no first-person explanation suffices.",
+  "candidate_results_read_before_judgement": false
+}

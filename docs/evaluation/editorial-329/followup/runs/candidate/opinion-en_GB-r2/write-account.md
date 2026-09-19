@@ -1,0 +1,1 @@
+Delivered here as an opinion draft in British English, with no technique selected. Source comparison passed. The material supplies no trial costing or savings estimate. No files from this run remain.

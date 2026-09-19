@@ -1,0 +1,1 @@
+*Opinion draft in US English, delivered here with no technique selected. Source comparison completed with no remaining findings. The source supplies no trial cost or savings estimate. No files were retained; source.md is unchanged.*

@@ -1,0 +1,1 @@
+*Draft delivered here: British English case study, no technique selected. Based on the supplied fictional material; source comparison passed. No brief requirements lacked supporting material. No author name or call to action was supplied or added. No files retained.*

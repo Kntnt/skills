@@ -1,0 +1,1 @@
+*Delivered here as an American English case study, with no technique selected. Source comparison completed with no findings; no files retained. The material supports the requested length but provides no supplier comparison or measured cost, satisfaction, or completion-time outcomes.*

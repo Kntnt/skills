@@ -1,0 +1,1 @@
+Delivered here in British English as a case study, with no technique selected; the genre specifies none. The supplied material is fictional and provides no measured business outcomes, author name or call to action. No files remain from this run.

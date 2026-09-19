@@ -1,0 +1,32 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_US
+---
+
+# Briar County volunteers share records of new donations
+
+Briar County Theater Archive cataloged 47 incoming donations during an eight-week pilot of Index Lantern. Volunteers could consult the same records, while uncertain dates remained visible. A decision on moving older records is still pending.
+
+The archive holds donated programs, photographs, and posters from local productions. Volunteers had described new donations in separate spreadsheets. In February 2026, the collection team chose to test a shared catalog for incoming donations, leaving existing collections outside the pilot.
+
+The team agreed on fields for production title, year, donor, and location, retaining a free-text note for uncertain dates. Collection coordinator Lena Ortiz explained the work in an email headed “Catalog pilot: notes for publication”:
+
+“Agreeing on the fields took two meetings. The import was the short part.”
+
+Index Lantern imported the team’s spreadsheet template and provided one remote training session for five volunteers. The archive chose the descriptions and checked the imported records.
+
+The archive’s May 6 pilot note records the 47 donations and reports that volunteers could consult the same records. Eleven records retained uncertain dates. The note contains no before-and-after time measurement, cost calculation, or assessment of public access.
+
+Ortiz’s assessment was qualified:
+
+“I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.”
+
+The archive will review the field definitions before deciding whether to move older records into the catalog.
+
+This case is based on the email and pilot note supplied by the archive for publication by Index Lantern.
+
+---
+
+*Fictional case study from the supplied evaluation material. Delivered here in American English, with no technique selected, following the genre default. Source comparison passed; evidence is limited to the pilot. No files retained.*

@@ -10,7 +10,7 @@ write - turn a brief and its source material into one first draft
 
 ## DESCRIPTION
 
-`write` turns a brief and its source material into one first draft and independently compares its claims with that material before delivery. It performs no editorial review or proofreading.
+`write` turns a brief and its source material into one first draft and independently compares its claims with that material and checks translated quotations before delivery. It performs no editorial review or proofreading.
 
 Sources may be inline text, local files, URLs, the Contextual Instruction, or Conversation Context. Several sources may feed one draft. Supplying a file does not select an output; the response is the default.
 
@@ -64,7 +64,7 @@ Only `genre`, `technique`, and `language` under a leading `kntnt` map are config
 
 ## SOURCE FIDELITY
 
-A fresh checker compares the complete draft with the complete supplied material. The writer repairs supported findings, with at most one further independent comparison. If checking cannot finish or findings remain, Write reports the obstacle and delivers no draft. It requires a harness that can run subagents; it does not replace a missing checker with self-approval. The comparison adds execution time and checks fidelity to supplied material, not whether that material is true in the outside world.
+A fresh checker compares the complete draft with the complete supplied material. Where quotations are translated, it also checks idiomatic target-language speech while preserving meaning and distinctive voice. The writer repairs supported findings, with at most one further independent comparison. If checking cannot finish or findings remain, Write reports the obstacle and delivers no draft. It requires a harness that can run subagents; it does not replace a missing checker with self-approval. The comparison adds execution time and checks fidelity to supplied material, not whether that material is true in the outside world.
 
 Every claim must be supported by the supplied material. Attribution, uncertainty, scope, chronology, and causality are preserved.
 

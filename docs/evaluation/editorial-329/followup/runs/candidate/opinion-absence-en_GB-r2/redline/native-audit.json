@@ -1,0 +1,116 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T22-32-20-01a0bb5e-b216-75f0-ac2a-e7431edb9ecc.jsonl",
+      "session": {
+        "id": "01a0bb5e-b216-75f0-ac2a-e7431edb9ecc",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "correction",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",max_output_tokens:20000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch/redline.XXXXXX)\\nTMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py <<'EOF'\\n--output=response input.md\\nEOF\\nstatus=$?\\nrm -rf \\\"$task_tmp\\\"\\nexit \\\"$status\\\"\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '.agents/skills/redline/scripts/invoke.py'], input='--output=response input.md\\\\n', text=True, env={**os.environ, 'TMPDIR': tmp, 'UV_NO_CACHE': '1', 'UV_NO_PROJECT': '1'})\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":16000}));\n",
+        "text(await tools.exec_command({cmd:\"cat input.md .agents/skills/kntnt/library/references/delivery.md\\nrg --files .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library/references/editorial/techniques\",\"max_output_tokens\":18000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'en_GB'], env={**os.environ, 'TMPDIR': tmp, 'UV_NO_CACHE': '1', 'UV_NO_PROJECT': '1'})\\nraise SystemExit(result.returncode)\\nPY\\ncat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/opinion.md .agents/skills/kntnt/library/references/editorial/genres/opinion.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md .agents/skills/redline/references/correction.md\",\"max_output_tokens\":30000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":18000}));\n",
+        "text(await tools.exec_command({cmd:\"git status --short\\nls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch\",\"max_output_tokens\":2000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='proofread.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '.agents/skills/proofread/scripts/invoke.py'], input='--language=en_GB --output=response\\\\n', text=True, env={**os.environ, 'TMPDIR': tmp, 'UV_NO_CACHE': '1', 'UV_NO_PROJECT': '1'})\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":4000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='proofread-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=mechanics', 'en_GB'], env={**os.environ, 'TMPDIR': tmp, 'UV_NO_CACHE': '1', 'UV_NO_PROJECT': '1'})\\nraise SystemExit(result.returncode)\\nPY\\ncat .agents/skills/kntnt/library/references/editorial/mechanics.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch\\nls -la\",\"max_output_tokens\":2000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0,
+        "genres/opinion.md": 0,
+        "genres/opinion.review.md": 0,
+        "genres/case-study.md": 6,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T22-34-09-01a0bb60-59e7-7f22-a8d5-8c05762dce99.jsonl",
+      "session": {
+        "id": "01a0bb60-59e7-7f22-a8d5-8c05762dce99",
+        "parent_thread_id": "01a0bb5e-b216-75f0-ac2a-e7431edb9ecc",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bb5e-b216-75f0-ac2a-e7431edb9ecc",
+              "depth": 1,
+              "agent_path": "/root/correction",
+              "agent_nickname": "Wegener",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "const paths = [\n\".agents/skills/kntnt/library/references/editorial/base.md\",\n\".agents/skills/kntnt/library/references/editorial/base.review.md\",\n\".agents/skills/kntnt/library/references/editorial/genres/opinion.md\",\n\".agents/skills/kntnt/library/references/editorial/genres/opinion.review.md\",\n\".agents/skills/kntnt/library/references/editorial/anti-slop.md\",\n\".agents/skills/kntnt/library/references/editorial/web-craft.md\",\n\".agents/skills/kntnt/library/references/editorial/web-craft.review.md\"\n];\ntext(await tools.exec_command({cmd: \"cat \" + paths.map(p=>\"'\"+p+\"'\").join(\" \"),max_output_tokens:20000}));\ntext(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d '/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch/correction.XXXXXX')\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nUV_NO_CACHE=1 UV_NO_PROJECT=1 TMPDIR=\\\"$task_tmp\\\" uv run '/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/work/.agents/skills/kntnt/library/scripts/languages.py' resolve --scope=composition --scope=review --scope=anti-slop en_GB\", max_output_tokens:6000}));\n",
+        "text(await tools.exec_command({cmd: \"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='correction-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/scratch') as tmp:\\n    env = dict(os.environ, UV_NO_CACHE='1', UV_NO_PROJECT='1', TMPDIR=tmp)\\n    subprocess.run(['uv','run','/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y/work/.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=composition','--scope=review','--scope=anti-slop','en_GB'], env=env, check=True)\\nPY\",\"max_output_tokens\":6000}));\n"
+      ],
+      "complete_supplied_input_visible": false,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26,
+        "genres/opinion.md": 0,
+        "genres/opinion.review.md": 0,
+        "genres/case-study.md": 6,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    }
+  ],
+  "parent_visible_reports": [],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch prevents a byte-level audit of its full prompt and draft."
+}

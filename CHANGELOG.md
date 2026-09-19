@@ -11,6 +11,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
+- Write’s independent comparison reconstructs complete claims with grammatical scope and checks translated quotations; Redline gives reported speech an explicit review unit and distinguishes advocated targets from factual predictions.
+- Shared delivery instructions define how unresolved findings accompany unchanged response, in-place and separate-file artifacts consistently across review Skills.
 - Write compares its complete draft with the supplied material through a fresh source checker before delivery, keeping editorial review and proofreading separate. Supported repairs receive one final independent comparison; unresolved or unavailable checking stops delivery. Write now requires subagent capability (#349, #352).
 - Write and Redline use concise, distinct briefs for article, case-study, column, opinion and web-copy, with shared Swedish professional craft, idiomatic target-language writing and advisory web dimensions. These genres no longer select a technique automatically; explicit choices and existing metadata retain their priority. ABT allows a genuine question and PAC analysis may begin in facts (#329–337).
 

@@ -1,0 +1,117 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T22-36-04-01a0bb62-1db5-70b0-87d6-4e95fabf2be1.jsonl",
+      "session": {
+        "id": "01a0bb62-1db5-70b0-87d6-4e95fabf2be1",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "const r = await tools.exec_command({cmd:\"cat .agents/skills/write/SKILL.md\",\"max_output_tokens\":12000});text(r.output);\ntext(await tools.exec_command({cmd:\"cat source.md\",\"max_output_tokens\":14000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch/write-invoke.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--genre=article --language=sv --output=response source.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/write/scripts/invoke.py\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='write-invoke-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    p = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=article --language=sv --output=response source.md', text=True, env=env)\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/genres/article.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/write/references/source-check.md .agents/skills/write/references/quotations.md\\n\",\"max_output_tokens\":18000}));\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='write-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    p = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'sv'], env=env)\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":8000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md\",\"max_output_tokens\":12000}));\n",
+        "const draft = `# Fyra veckors mätning visar när värmen behöver granskas\n\nEtt kort mätförsök kan ge en kommunal fastighetsförvaltare tider att undersöka närmare. I Björkskolan registrerades lufttemperaturer under kontorets arbetsgräns under 14 av 120 lektionspass. Resultatet säger däremot varken hur länge temperaturen låg under gränsen eller varför. För att använda siffrorna behöver förvaltaren förstå vad givarna faktiskt mätte.\n\nI januari 2026 satte Lerviks fastighetskontor temperaturgivare i sex klassrum. Syftet var att undersöka om klagomål på kall luft sammanföll med låga temperaturer under lektionstid. Under fyra veckor registrerade givarna ett värde var femte minut.\n\n## Ett lektionspass säger inget om varaktigheten\n\nEnligt rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, innehöll 14 av totalt 120 registrerade lektionspass minst en mätning under 20 grader Celsius. Det betyder inte att temperaturen låg under gränsen under hela dessa pass. Rapporten anger inte hur länge den gjorde det.\n\nGränsen på 20 grader var fastighetskontorets egen arbetsgräns för försöket. Den ska inte läsas som ett rättsligt krav. Materialet ger heller ingen normjämförelse som gör det möjligt att bedöma antalet pass som högt eller lågt.\n\nAtt redovisa lektionspass har en poäng: ett medelvärde för hela dagen kan dölja temperaturvariationer under lektionerna. Rapporten använder därför passen i stället för ett enda dygnsmedelvärde. Men redovisningen säger inte om eleverna frös.\n\n## Givaren mäter luften där den sitter\n\nEn temperaturgivare mäter temperaturen på sin plats. I försöket stod två givare nära ytterväggar och fyra på innerväggar. Placeringarna dokumenterades, men jämfördes inte experimentellt. Försöket ger därför inget underlag för att avgöra vilken betydelse placeringen hade för resultaten.\n\nFör att ta hänsyn till både luftens temperatur och värmestrålningen från omgivande ytor används ett annat mått: operativ temperatur. I Björkskolan mättes bara lufttemperaturen. Varken ventilation, luftdrag eller upplevd temperatur mättes.\n\nResultaten gäller alltså dessa sex rum under dessa fyra veckor. De beskriver inte värmen i hela skolan över året och fastställer ingen orsak till kylan.\n\n## Koppla mätvärdena till när rummen används\n\nEfter försöket gick driftteknikern Elin Rask igenom tiderna för ventilation och värme med skolans vaktmästare. Effekten av eventuella justeringar är ännu inte mätt.\n\n– Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då, säger Elin Rask.\n\nNästa försök planeras till november, med likadant placerade givare och noteringar om när rummen används. Finansieringen är ännu inte beslutad.\n\nRasks rekommendation är att koppla temperaturserierna – mätvärdena ordnade över tid – till rummens användningstider innan styrningen ändras. För förvaltaren blir det ett konkret nästa steg: läsa temperaturerna tillsammans med uppgifter om när lokalerna används. Mätförsöket ger tider att följa upp, medan orsaker och effekter av åtgärder återstår att undersöka.`;\nstore(\"draft\",draft);\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport tempfile\\nprint(tempfile.mkdtemp(prefix='write-source-check-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch'))\\nPY\",\"max_output_tokens\":1000}));\ntext(draft.split(/\\s+/).length);\n",
+        "text(await tools.exec_command({cmd:\"ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch\",\"max_output_tokens\":2000}));\n",
+        "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch/write-source-check-tmozvbk4/report.md\",\"max_output_tokens\":4000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch/write-source-check-tmozvbk4')\\n(p / 'report.md').unlink()\\np.rmdir()\\nscratch = p.parent\\nprint('Kvarvarande skrivkataloger:', [str(x) for x in scratch.glob('write-*')])\\nPY\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 7,
+        "web-craft.md": 0,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 6,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 0,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T22-38-15-01a0bb64-1bd1-7342-8c55-a4a357f438ab.jsonl",
+      "session": {
+        "id": "01a0bb64-1bd1-7342-8c55-a4a357f438ab",
+        "parent_thread_id": "01a0bb62-1db5-70b0-87d6-4e95fabf2be1",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bb62-1db5-70b0-87d6-4e95fabf2be1",
+              "depth": 1,
+              "agent_path": "/root/source_check",
+              "agent_nickname": "Hilbert",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "const r = await tools.exec_command({cmd:\"cat source.md .agents/skills/write/references/quotations.md\",max_output_tokens:10000});text(r.output);\n",
+        "text(await tools.exec_command({cmd:\"cat > /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch/write-source-check-tmozvbk4/report.md <<'EOF'\\n# Källjämförelse\\n\\nJämförelsen av hela utkastet mot hela det tillhandahållna materialet är slutförd utan fynd.\\n\\nUtkastets sakuppgifter och tillskrivningar har stöd i materialet. Antal, tidpunkter, mätintervall, givarnas placering och mätningarnas omfattning återges korrekt. Begränsningarna beträffande varaktighet, elevernas upplevelse, orsaker, placeringarnas betydelse och effekter av eventuella justeringar bevaras. Arbetsgränsen blir inte ett rättsligt krav, och antalet pass värderas inte utan jämförelse. Planeringen av nästa försök behåller förbehållet om finansiering. Elin Rasks citat återges ordagrant och rekommendationen tillskrivs henne korrekt.\\nEOF\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 8,
+        "genres/article.review.md": 4,
+        "genres/column.md": 10,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch prevents a byte-level audit of its full prompt and draft."
+}

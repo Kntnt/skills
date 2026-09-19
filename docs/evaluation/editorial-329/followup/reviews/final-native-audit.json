@@ -1,0 +1,2680 @@
+[
+  {
+    "case": "article-sv-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 195.4,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb62-1db5-70b0-87d6-4e95fabf2be1",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb64-1bd1-7342-8c55-a4a357f438ab",
+          "parent_thread_id": "01a0bb62-1db5-70b0-87d6-4e95fabf2be1",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb62-1db5-70b0-87d6-4e95fabf2be1",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Hilbert",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb62-1db5-70b0-87d6-4e95fabf2be1",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p/scratch/write-source-check-tmozvbk4/report.md'",
+          "report": "# Källjämförelse\n\nJämförelsen av hela utkastet mot hela det tillhandahållna materialet är slutförd utan fynd.\n\nUtkastets sakuppgifter och tillskrivningar har stöd i materialet. Antal, tidpunkter, mätintervall, givarnas placering och mätningarnas omfattning återges korrekt. Begränsningarna beträffande varaktighet, elevernas upplevelse, orsaker, placeringarnas betydelse och effekter av eventuella justeringar bevaras. Arbetsgränsen blir inte ett rättsligt krav, och antalet pass värderas inte utan jämförelse. Planeringen av nästa försök behåller förbehållet om finansiering. Elin Rasks citat återges ordagrant och rekommendationen tillskrivs henne korrekt.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/article-sv-r1/write/artifact.md",
+      "artifact_sha256": "f0d1e6053e7ad1d4d4eca7f11cb1641b82bec2bb43a31f92f3d78ff8e2397105",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 67.72,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb65-8e29-7de0-a225-c758ca4d726d",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/article-sv-r1/redline/artifact.md",
+      "artifact_sha256": "f0d1e6053e7ad1d4d4eca7f11cb1641b82bec2bb43a31f92f3d78ff8e2397105",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-question-en_GB-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 206.0,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5f-9aea-7040-b376-526291a811be",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb60-db7d-7d12-972f-d27d5361a13f",
+          "parent_thread_id": "01a0bb5f-9aea-7040-b376-526291a811be",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5f-9aea-7040-b376-526291a811be",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Harvey",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb62-0a3a-7141-8799-e777cfbd3980",
+          "parent_thread_id": "01a0bb5f-9aea-7040-b376-526291a811be",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5f-9aea-7040-b376-526291a811be",
+                "depth": 1,
+                "agent_path": "/root/final_source_check",
+                "agent_nickname": "Carver",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5f-9aea-7040-b376-526291a811be",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        },
+        {
+          "session": "01a0bb5f-9aea-7040-b376-526291a811be",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n25tq0fq/scratch/write-source-check.lfvcoxvp/report.md'",
+          "report": "# Source-fidelity comparison\n\nThe complete draft has been compared with the complete supplied source package and quotation guidance. One finding:\n\n## Headline asserts a causal change beyond the reported observation\n\nDraft: “Fenwick’s trial makes jobs awaiting parts visible”\n\nSource: “It says staff could see which instruments were waiting for parts.” Also: “Previously, jobs awaiting parts and jobs ready for work appeared on separate paper sheets.”\n\nThe source establishes reported visibility during the trial. It does not establish that the trial caused previously unavailable visibility; indeed, the previous paper sheets already distinguished the two categories. “Makes” attributes a change to the trial beyond that observation.\n\nSmallest supported repair: “Fenwick reports visibility of jobs awaiting parts in trial”.\n\nThe remaining factual and attributed claims are supported, including the precise interview medium and date, unchanged quotations, trial counts and exclusions, and the manager’s restriction of continued use to new jobs pending a status review. No other findings.\n"
+        },
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n25tq0fq/scratch/write-source-check.1cq2vzej/report.md'",
+          "report": "Comparison complete with no findings.\n\nEvery factual and attributed claim in the complete draft, including its title and introductory summary, is supported by the supplied material. The draft preserves the trial chronology, the division of responsibilities, the backlog qualification and the limits of the reported evidence. Both quotations reproduce Vale’s supplied wording and are accurately identified as coming from an email interview. No unsupported scene, causal claim, evaluative count or attributed reaction was identified.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-question-en_GB-r1/write/artifact.md",
+      "artifact_sha256": "c5da2112e5b91aa892cbd923dad14c633a28ba185ffdc8a3cbca2c435c3c6d68",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 83.67,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb63-44b0-7892-b0a0-3c2148a9f96e",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-question-en_GB-r1/redline/artifact.md",
+      "artifact_sha256": "c5da2112e5b91aa892cbd923dad14c633a28ba185ffdc8a3cbca2c435c3c6d68",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-question-en_GB-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 135.76,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb60-0a6d-7a83-81f9-7bb3f7431ffa",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb61-62e7-7822-a036-dbf8fcd20df0",
+          "parent_thread_id": "01a0bb60-0a6d-7a83-81f9-7bb3f7431ffa",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb60-0a6d-7a83-81f9-7bb3f7431ffa",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Harvey",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb60-0a6d-7a83-81f9-7bb3f7431ffa",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dffmzdcz/scratch/write-source-check-dd0a8iic/report.md'",
+          "report": "Source comparison complete with no findings.\n\nCompared every factual and attributed claim in the complete draft, including its title, implications and direct quotations, with the complete supplied source and brief. The draft preserves the reported nature and limits of the trial findings, chronology, implementation responsibilities, continued-use decision and backlog qualification. Both email quotations reproduce the supplied approved wording faithfully.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-question-en_GB-r2/write/artifact.md",
+      "artifact_sha256": "6d6a742421bcf1bd36a6dcfcdccc6199f9b7e32231a85ed44b5bfa40bbb6486a",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 76.48,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb63-449c-73e1-9a9a-07fd3cbeba4d",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-question-en_GB-r2/redline/artifact.md",
+      "artifact_sha256": "6d6a742421bcf1bd36a6dcfcdccc6199f9b7e32231a85ed44b5bfa40bbb6486a",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-study-en_US-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 132.41,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb61-4b2d-79c2-aa23-3a29f31feefe",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb62-8f95-79c2-ad5d-b26658374bcb",
+          "parent_thread_id": "01a0bb61-4b2d-79c2-aa23-3a29f31feefe",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb61-4b2d-79c2-aa23-3a29f31feefe",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Ampere",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb61-4b2d-79c2-aa23-3a29f31feefe",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-uehffvsd/scratch/write-source-check-0xyx65pk/report.md'",
+          "report": "# Source comparison\n\nComparison of the complete draft against the complete supplied brief, source material, claims contract, and quotation guidance is complete with no findings.\n\nAll factual and attributed claims are supported, including those in the headline, introduction, and checklist link. The draft preserves the trial's scope, count exclusions, differing workloads, assignment versus completion distinction, absence of measurements, and explicit lack of causal attribution to the software. All three quotations match the supplied wording, and Lind's qualified assessment and the pending expansion decision remain intact. Supplier publication and the email interview format are accurately identified. No unsupported scene, motive, evaluative characterization, supplier comparison, or customer endorsement has been added.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-en_US-r1/draft.md",
+      "artifact_sha256": "ad20b47a81713e7ea1652c591feb49c0db7b6a0add1c7a9ff82a80d19affba98",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 74.02,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb64-1082-7290-83a3-d11a51ed24e8",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-en_US-r1/final.md",
+      "artifact_sha256": "ad20b47a81713e7ea1652c591feb49c0db7b6a0add1c7a9ff82a80d19affba98",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-study-en_US-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 127.43,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb62-ae00-78e2-bde9-c018d7b5f7df",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb63-c771-7f93-aec0-f88af8303248",
+          "parent_thread_id": "01a0bb62-ae00-78e2-bde9-c018d7b5f7df",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb62-ae00-78e2-bde9-c018d7b5f7df",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Singer",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb62-ae00-78e2-bde9-c018d7b5f7df",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bh20wcui/scratch/write-source-check._ftxs9v_/report.md'",
+          "report": "# Source comparison\n\nThe comparison of every factual and attributed claim in the complete draft with the complete supplied source and brief is complete. No findings.\n\nThe draft preserves the reported counts and exclusions, the distinction between assignment and completion, the differing workloads and absence of causal attribution, and the limits of the available measurements. Both quotations reproduce the supplied email interview accurately, including Lind’s reservation about preparation. Her assessment remains limited to repeating Elm Quay’s trial, and the pending expansion decision retains its stated condition. The optional link correctly describes the supplied implementation checklist as a document to read.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-en_US-r2/draft.md",
+      "artifact_sha256": "7abf31edbefbf0c6ef0b12e5cfe67d8e6c146900fbc757ff9c2d5bfc841f90f8",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 226.64,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb66-5e21-7091-a70b-ed0d6172e248",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb68-52c7-7542-9d5b-1bc317fc1f7c",
+          "parent_thread_id": "01a0bb66-5e21-7091-a70b-ed0d6172e248",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb66-5e21-7091-a70b-ed0d6172e248",
+                "depth": 1,
+                "agent_path": "/root/correction",
+                "agent_nickname": "Euclid",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": false
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb66-5e21-7091-a70b-ed0d6172e248",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-en_US-r2/final.md",
+      "artifact_sha256": "57a739befaddd60ac9ba5379ec5bdfb5237a0353fdade3e54cf5b2032ba3d223",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-study-en_US-r3",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 125.09,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb63-509d-7373-a0e8-be397f179c2e",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb64-6f2c-7be0-aa03-35e251dc8180",
+          "parent_thread_id": "01a0bb63-509d-7373-a0e8-be397f179c2e",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb63-509d-7373-a0e8-be397f179c2e",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Euler",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb63-509d-7373-a0e8-be397f179c2e",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e1b1yco6/scratch/write-source-check.jkuibnti/report.md'",
+          "report": "Source comparison complete with no findings.\n\nEvery factual and attributed claim in the complete draft was compared with the entire supplied source package, including the title, headings, introductory summary, quotations, numerical comparisons, next-step link, and publisher disclosure. The draft preserves the exclusions, the distinction between assignment and completion, the different workloads and absence of software attribution, Lind’s qualified assessment, and the pending expansion decision. The quotations match the supplied usable quotations.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-en_US-r3/draft.md",
+      "artifact_sha256": "90d0c95a621557025a68a9df5d8e04c6c4dcf18f156bfdd35af26063f340ae63",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 211.25,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb66-5e21-7a80-8043-f34f9daf9820",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb68-29e2-70f2-8b78-38257f2b8f97",
+          "parent_thread_id": "01a0bb66-5e21-7a80-8043-f34f9daf9820",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb66-5e21-7a80-8043-f34f9daf9820",
+                "depth": 1,
+                "agent_path": "/root/correction",
+                "agent_nickname": "Tesla",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": false
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb66-5e21-7a80-8043-f34f9daf9820",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-en_US-r3/final.md",
+      "artifact_sha256": "d5869c28fa8df035f305e93966914cd772b01d20b3b8492da349dbcd970cc6a4",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-study-sv-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 158.44,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb64-a0eb-7410-86c5-256209351b0b",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb66-0c5f-7f73-93ad-b2a235a7be5f",
+          "parent_thread_id": "01a0bb64-a0eb-7410-86c5-256209351b0b",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb64-a0eb-7410-86c5-256209351b0b",
+                "depth": 1,
+                "agent_path": "/root/source_comparison",
+                "agent_nickname": "Popper",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb64-a0eb-7410-86c5-256209351b0b",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-gzpm9c13/scratch/write-source-check.2ppwcgx0/report.md'",
+          "report": "# Source comparison\n\nComparison complete with no findings.\n\nI compared every factual and attributed claim in the complete Swedish draft, including the title, introduction, translated quotations, link description and final disclosure, against the entire supplied source package in source.md. The draft preserves the figures, chronology, exclusions, workload qualification, distinction between assignment and completion time, absence of causal attribution, customer's qualified assessment, and pending expansion decision. The quotations retain their meaning and reservations, and their email provenance is stated. No unsupported addition, changed meaning or lost qualification was identified.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-sv-r1/draft.md",
+      "artifact_sha256": "bb10b22e789bedb5ff889d99fd8d5d412b901c0c16afaa972426710d9b3ac5ac",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 72.33,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb67-e1e7-78d1-b9cc-f55265576105",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-sv-r1/final.md",
+      "artifact_sha256": "bb10b22e789bedb5ff889d99fd8d5d412b901c0c16afaa972426710d9b3ac5ac",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-study-sv-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 145.22,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb65-3a2b-7200-8c8a-17d647808413",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb66-78ae-7b72-82ae-b4ba8e12a538",
+          "parent_thread_id": "01a0bb65-3a2b-7200-8c8a-17d647808413",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb65-3a2b-7200-8c8a-17d647808413",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Erdos",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb65-3a2b-7200-8c8a-17d647808413",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-rh09ur34/scratch/write-source-check-e8rr_66k/report.md'",
+          "report": "# Källjämförelse\n\nJämförelsen av hela utkastet med det fullständiga källmaterialet är slutförd utan fynd.\n\nSamtliga faktapåståenden och attribuerade bedömningar har stöd i materialet. De översatta citaten bevarar innebörd, säkerhet och förbehåll. Mättiden gäller tilldelning, periodernas olika arbetsbelastning och avsaknaden av kausalt stöd framgår, och uteblivna mätningar görs inte till påståenden om uteblivna effekter. Kundens handlande, det ännu inte fattade beslutet om utökning, leverantörens publicistroll och checklistans funktion återges med stöd i källan.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-sv-r2/draft.md",
+      "artifact_sha256": "6c851c453daceb6c257f5f6c2190dd61790e86fa5d9a765a1770ce9ad3891fab",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 72.17,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb67-e249-7102-83ac-633be082161c",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-study-sv-r2/final.md",
+      "artifact_sha256": "6c851c453daceb6c257f5f6c2190dd61790e86fa5d9a765a1770ce9ad3891fab",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-unprompted-en_US-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 130.35,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5d-9d09-7850-b513-984ef40a36ba",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5e-ede1-7113-9d24-15696ce0ee08",
+          "parent_thread_id": "01a0bb5d-9d09-7850-b513-984ef40a36ba",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5d-9d09-7850-b513-984ef40a36ba",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Copernicus",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5d-9d09-7850-b513-984ef40a36ba",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i/scratch/write-source-check.ZTLcE7/report.md'",
+          "report": "# Source comparison\n\nComparison complete with no findings.\n\nEvery factual and attributed claim in the complete draft, including its title, summary, quotations, and publication-source statement, is supported by the supplied source package. The draft preserves the pilot's scope, the uncertain dates, the pending decision about older records, the limits of the pilot note, and Ortiz's qualified assessment. Both quotations reproduce the supplied email wording exactly. No unsupported causal, evaluative, observational, or personal detail was identified.\n\nThe case's fictional status is covered by the delivery wrapper, as specified in the comparison instructions.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-unprompted-en_US-r1/write/artifact.md",
+      "artifact_sha256": "037caac876d8ce9cb36ed08739b8a75f794e4a7ee57c03b58cf60fc1eb0e4c00",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 75.51,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb60-71c9-7b51-b48a-108ed48878ea",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-unprompted-en_US-r1/redline/artifact.md",
+      "artifact_sha256": "037caac876d8ce9cb36ed08739b8a75f794e4a7ee57c03b58cf60fc1eb0e4c00",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "case-unprompted-en_US-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 125.11,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5e-20f8-7211-b19d-b595eea7fc82",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5f-5f83-7593-8c5a-138378c23c33",
+          "parent_thread_id": "01a0bb5e-20f8-7211-b19d-b595eea7fc82",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5e-20f8-7211-b19d-b595eea7fc82",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Hilbert",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5e-20f8-7211-b19d-b595eea7fc82",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-j0l2xmsq/scratch/write-source-check.nw_46xmj/report.md'",
+          "report": "Source comparison complete with no findings.\n\nCompared every factual and attributed claim in the complete draft, including the title, introductory summary, quotations, framing, and publisher disclosure, against the complete supplied source package. The draft preserves the pilot's scope, chronology, counts, uncertain dates, reporting limitations, and qualified assessment. Quotations match the supplied email verbatim, and their attribution correctly identifies the written source. No unsupported additions, changed meanings, or lost qualifications were found.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-unprompted-en_US-r2/write/artifact.md",
+      "artifact_sha256": "00c7868b3aa61060cae1208b676c37cf4a05956d49b56b1f36dc06b7594bfa45",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 77.12,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb60-71c9-7f63-8186-88f860f97cf1",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/case-unprompted-en_US-r2/redline/artifact.md",
+      "artifact_sha256": "00c7868b3aa61060cae1208b676c37cf4a05956d49b56b1f36dc06b7594bfa45",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "column-sv-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 128.2,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb62-c07c-7a52-bf71-5319fd0f7375",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb63-e93e-7330-ada6-f0efea975867",
+          "parent_thread_id": "01a0bb62-c07c-7a52-bf71-5319fd0f7375",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb62-c07c-7a52-bf71-5319fd0f7375",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Tesla",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb62-c07c-7a52-bf71-5319fd0f7375",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-hssch_8l/scratch/write-source-check-eeh26_85/report.md'",
+          "report": "# Source fidelity review\n\nComparison of the complete draft against the complete supplied brief and Nora Viks egna anteckningar is complete. No findings.\n\nThe document observation, attributed personal reflections, value of exploratory conversations, proposed question, self-directed humor, and uncertainty about the effect of an additional form field are supported. The draft adds no meeting scene, measured general trend, external authority, or claimed causal outcome. Its elaborations remain within the supplied reflective stance and preserve the uncertainty of the ending.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/column-sv-r1/write/artifact.md",
+      "artifact_sha256": "a3af897e725045621bfe176d3270b6bec6c1507ef7170acfe0d43bc2514a58a8",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 72.09,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb65-8e3d-7633-a2fb-2884ef41e947",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/column-sv-r1/redline/artifact.md",
+      "artifact_sha256": "a3af897e725045621bfe176d3270b6bec6c1507ef7170acfe0d43bc2514a58a8",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "general-en_GB-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 140.98,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb65-1993-7ed2-a860-5cae2b08089e",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb66-6665-7030-ac87-6b529631ad1f",
+          "parent_thread_id": "01a0bb65-1993-7ed2-a860-5cae2b08089e",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb65-1993-7ed2-a860-5cae2b08089e",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Anscombe",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb65-1993-7ed2-a860-5cae2b08089e",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-13_7kgyh/scratch/write-source-check-__0b8nq5/report.md'",
+          "report": "# Source comparison\n\nThe comparison is complete with no findings.\n\nEvery factual and attributed claim in the complete draft was compared with the full supplied brief and source material, including the title, lead, headings, explanatory statements and translated quotation. The draft preserves the scope and timing of the measurements, the lesson-level count and its missing duration information, the status of the working threshold, the limits of the measurements and placement comparison, uncertainty about cause and pupils’ experience, the absence of measured adjustment effects, and the unresolved funding for the planned further trial. The translated quotation and attributed recommendation retain the source’s meaning and certainty.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/general-en_GB-r1/write/artifact.md",
+      "artifact_sha256": "9a1bcc24b4012cb51460f991c9b98002f401800efb588bc384ddda18532e7880",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 71.49,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb67-a034-7f60-96ee-e344cd7aa3c4",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/general-en_GB-r1/redline/artifact.md",
+      "artifact_sha256": "9a1bcc24b4012cb51460f991c9b98002f401800efb588bc384ddda18532e7880",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-absence-en_GB-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 153.16,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5b-4646-7fb0-8c4f-81a7df6e00c5",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5c-f22a-7123-96a3-c3a2c5143b99",
+          "parent_thread_id": "01a0bb5b-4646-7fb0-8c4f-81a7df6e00c5",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5b-4646-7fb0-8c4f-81a7df6e00c5",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Euclid",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": false
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5b-4646-7fb0-8c4f-81a7df6e00c5",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wzt9fe2q/scratch/write-source-check.GDnoiJ/report.md'",
+          "report": "# Source comparison\n\nComparison complete with no findings.\n\nEvery factual and attributed claim in the complete draft, including the title and byline, is supported by the supplied source package. The draft preserves the distinction between survey interest and booking commitments, the absent conversion estimate, the unknown actual status of the building owner's consent, and the requested rather than established eight-week timetable. Its acknowledgement that commercial letting may prove preferable and its final requested decision accurately represent Reed's stated position. The opinion and connective reasoning introduce no unsupported factual premise.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-absence-en_GB-r1/write/artifact.md",
+      "artifact_sha256": "3ed8db61763af4ce8bacf690e60cb07edb665625299efbe49fb606b7f3728e29",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 78.68,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5e-b23f-70e2-9d2c-d66dd841344e",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-absence-en_GB-r1/redline/artifact.md",
+      "artifact_sha256": "3ed8db61763af4ce8bacf690e60cb07edb665625299efbe49fb606b7f3728e29",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-absence-en_GB-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 131.56,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5c-1eb5-7a90-a025-7ce394d2948b",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5d-649d-74b0-af0f-8978a9210816",
+          "parent_thread_id": "01a0bb5c-1eb5-7a90-a025-7ce394d2948b",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5c-1eb5-7a90-a025-7ce394d2948b",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Chandrasekhar",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5c-1eb5-7a90-a025-7ce394d2948b",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-v04u4dyv/scratch/write-source-check-k613kx6h/report.md'",
+          "report": "# Source comparison\n\nThe comparison is complete with no findings.\n\nEvery factual and attributed claim in the complete draft, including the title and implied claims, is supported by the supplied brief and material. The draft preserves the survey's limits, the unprepared conversion estimate, the distinction between the submission's representation and actual consent status, the possible merits of commercial letting, and the absence of evidence supporting the requested eight-week study timetable.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-absence-en_GB-r2/write/artifact.md",
+      "artifact_sha256": "dd55b853403da2fe64ec4006e686c355f7c83f77f6715936ce1af1161e465760",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 193.78,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5e-b216-75f0-ac2a-e7431edb9ecc",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb60-59e7-7f22-a8d5-8c05762dce99",
+          "parent_thread_id": "01a0bb5e-b216-75f0-ac2a-e7431edb9ecc",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5e-b216-75f0-ac2a-e7431edb9ecc",
+                "depth": 1,
+                "agent_path": "/root/correction",
+                "agent_nickname": "Wegener",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": false
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5e-b216-75f0-ac2a-e7431edb9ecc",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-absence-en_GB-r2/redline/artifact.md",
+      "artifact_sha256": "24265efbc7611fd41129b63af2f0df4515780c73108f6dbff28e709da7cf1794",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-en_GB-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 209.92,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5a-f73d-7c90-ada8-3b72be3a3052",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5c-30f5-70c3-bf6a-fbe532352940",
+          "parent_thread_id": "01a0bb5a-f73d-7c90-ada8-3b72be3a3052",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5a-f73d-7c90-ada8-3b72be3a3052",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Erdos",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5d-3b7f-7b30-be41-c06430fb21db",
+          "parent_thread_id": "01a0bb5a-f73d-7c90-ada8-3b72be3a3052",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5a-f73d-7c90-ada8-3b72be3a3052",
+                "depth": 1,
+                "agent_path": "/root/final_source_check",
+                "agent_nickname": "Kuhn",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5a-f73d-7c90-ada8-3b72be3a3052",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        },
+        {
+          "session": "01a0bb5a-f73d-7c90-ada8-3b72be3a3052",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc \"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6av_5r_r/scratch/write-source-check-sh4giois/report.md\npython3 - <<'PY'\nimport tempfile\nprint(tempfile.mkdtemp(prefix='write-source-check-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6av_5r_r/scratch'))\nPY\"",
+          "report": "# Source comparison\n\nComparison complete: every factual and attributed claim in the complete draft has been checked against the supplied brief and material in source.md. One finding.\n\n## 1. An absence of a claim becomes a claim of absence\n\nDraft: “Öppna beslut has neither costed nor funded this proposal.”\n\nSource: “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket. Kostnaden behöver kommunstyrelsen ta ställning till.”\n\nThe source says the association makes no claim to have funded or costed the trial. It does not establish that neither activity has happened. The draft converts an explicit limit on what is claimed into categorical knowledge of what has not happened.\n\nSmallest supported repair: “Öppna beslut makes no claim to have costed or funded this proposal.” Retain the following sentences about the board assessing the cost and the trial not being assumed cost-free.\n\nNo other findings.\n/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6av_5r_r/scratch/write-source-check-xz24bxmr\n"
+        },
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6av_5r_r/scratch/write-source-check-xz24bxmr/report.md'",
+          "report": "Source comparison complete. No findings.\n\nEvery factual and attributed claim in the complete draft, including the title, headings and implied claims, was compared with source.md. The draft preserves the pilot's scope, booking figures and limitations; the officers' proposal and administrative rationale; the absence of measured time and calculated savings; the association's proposed trial and uncosted, unfunded status as a claim it does not make; and Sanna Ek's stated position. The closing decision options preserve the unresolved cost assessment.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_GB-r1/draft.md",
+      "artifact_sha256": "0347ee3f05d47900c95fbd39b25d5220198d4480da0bcf11548af41cbe28707e",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 80.92,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5e-aeef-78d2-bca9-1e48baa68f76",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_GB-r1/final.md",
+      "artifact_sha256": "0347ee3f05d47900c95fbd39b25d5220198d4480da0bcf11548af41cbe28707e",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-en_GB-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 202.73,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5c-47af-71f3-94c0-ad56f7e2f604",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5d-6f9f-7732-bb05-4aed36e8e91a",
+          "parent_thread_id": "01a0bb5c-47af-71f3-94c0-ad56f7e2f604",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5c-47af-71f3-94c0-ad56f7e2f604",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Mencius",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5e-89ff-77f1-9e13-21d57834cf6b",
+          "parent_thread_id": "01a0bb5c-47af-71f3-94c0-ad56f7e2f604",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5c-47af-71f3-94c0-ad56f7e2f604",
+                "depth": 1,
+                "agent_path": "/root/final_source_check",
+                "agent_nickname": "McClintock",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5c-47af-71f3-94c0-ad56f7e2f604",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        },
+        {
+          "session": "01a0bb5c-47af-71f3-94c0-ad56f7e2f604",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e23kmgar/scratch/write-source-check.ej85_r_5/report.md'",
+          "report": "# Source comparison\n\nThe comparison of the complete draft against all supplied material is complete. One finding requires a repair.\n\n## Unsupported assertion that the trial has not been costed\n\nDraft: “We have neither costed this trial nor claimed to have funded it.”\n\nSource: “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket. Kostnaden behöver kommunstyrelsen ta ställning till.”\n\nThe source states that the association makes no claim to have funded or costed the trial. It does not establish that the association has not costed it. The draft changes an absence of a claim into a categorical denial concerning costing. Its separate wording about funding preserves the source qualification.\n\nSmallest supported repair: “We make no claim to have costed or funded this trial.”\n\nAll other factual and attributed claims are supported by the material, or are editorial arguments and proposals consistent with the supplied position. No other source-support repair is required.\n"
+        },
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e23kmgar/scratch/write-source-check.lxz4422t/report.md'",
+          "report": "Source comparison complete with no findings.\n\nCompared the complete draft, including its title, byline, headings, factual statements, attributed positions, proposed trial and concluding decision, with the full supplied brief and material in source.md. The draft preserves the booking figures and their attribution, the distinction between bookings and people, the limits of the pilot's measurements, the administrative rationale, the absence of time measurements and savings calculations in the papers, and the uncertainty over trial costs. Its criticism and proposed next steps are supported by the supplied position and brief.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_GB-r2/draft.md",
+      "artifact_sha256": "3cdc2167fcd56cee521e576e8f0093359fdad8ece662dcbaa62d203d4a219280",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 77.46,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5f-e69f-7e22-9925-0f671d050c3f",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_GB-r2/final.md",
+      "artifact_sha256": "3cdc2167fcd56cee521e576e8f0093359fdad8ece662dcbaa62d203d4a219280",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-en_US-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 204.21,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5e-2bfc-7033-8632-f4203636dbac",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5f-58e2-78e3-899b-dfebae34d99a",
+          "parent_thread_id": "01a0bb5e-2bfc-7033-8632-f4203636dbac",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5e-2bfc-7033-8632-f4203636dbac",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Volta",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb60-815a-7372-8c95-acded0edf027",
+          "parent_thread_id": "01a0bb5e-2bfc-7033-8632-f4203636dbac",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5e-2bfc-7033-8632-f4203636dbac",
+                "depth": 1,
+                "agent_path": "/root/final_source_check",
+                "agent_nickname": "Einstein",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5e-2bfc-7033-8632-f4203636dbac",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        },
+        {
+          "session": "01a0bb5e-2bfc-7033-8632-f4203636dbac",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nhcxvqub/scratch/write-source-check-kh5nahnb/report.md'",
+          "report": "# Source comparison\n\nComparison of every factual and attributed claim in the complete draft with the complete supplied source is complete. One finding.\n\n## 1. An absence of a claim becomes a claim of absence\n\nDraft: “We have neither costed nor secured funding for this proposal.”\n\nSource: “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket. Kostnaden behöver kommunstyrelsen ta ställning till.”\n\nThe source says that the association makes no claim to have funded or costed the trial. It does not establish that neither action has happened. “Secured funding” also changes the source's “finansierat” (funded) into a separate assertion about funding arrangements.\n\nSmallest supported repair: “Our association makes no claim to have funded or costed this trial.” Keep the following sentence about the board assessing the cost.\n\nNo other findings.\n"
+        },
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nhcxvqub/scratch/write-source-check-dvllw9kr/report.md'",
+          "report": "# Source comparison report\n\nThe comparison of every factual and attributed claim in the complete draft, including the title, headings, and implied claims, against the complete supplied source and brief is complete with no findings.\n\nThe draft preserves the booking counts and their attribution, the distinction between bookings and people, the pilot's limited scope and measurements, the administration's stated objection, the absence of time and savings calculations, the proposed trial and its unresolved cost, and the board's possible subsequent decisions. Its evaluations and recommendations are supported by the brief and Sanna Ek's stated position.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_US-r1/draft.md",
+      "artifact_sha256": "61371a2832a8770ddb7874454db285593544e334c3f6b112ee23f936879ed745",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 87.5,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb61-d831-7e42-b3c2-6bcff5fd60a2",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_US-r1/final.md",
+      "artifact_sha256": "61371a2832a8770ddb7874454db285593544e334c3f6b112ee23f936879ed745",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-en_US-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 216.36,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5f-602e-7c63-99a3-6f7c663822e7",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb60-ccc5-7801-b259-1298d1bb1cd5",
+          "parent_thread_id": "01a0bb5f-602e-7c63-99a3-6f7c663822e7",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5f-602e-7c63-99a3-6f7c663822e7",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Noether",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb61-eaba-7a51-9205-518a63183c26",
+          "parent_thread_id": "01a0bb5f-602e-7c63-99a3-6f7c663822e7",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb5f-602e-7c63-99a3-6f7c663822e7",
+                "depth": 1,
+                "agent_path": "/root/final_source_check",
+                "agent_nickname": "Avicenna",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb5f-602e-7c63-99a3-6f7c663822e7",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        },
+        {
+          "session": "01a0bb5f-602e-7c63-99a3-6f7c663822e7",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dc9ofsjx/scratch/write-source-check.kjj_i0bh/report.md'",
+          "report": "# Source comparison\n\nComparison of all factual and attributed claims in the complete draft against the complete supplied brief and source is complete. One finding:\n\n## Unsupported certainty about funding and costing\n\nDraft: “Öppna beslut has neither funded nor costed this trial.”\n\nSource: “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket. Kostnaden behöver kommunstyrelsen ta ställning till.”\n\nThe source says the association makes no claim to have funded or costed the trial. It does not establish that neither action has occurred. The draft converts an absence of a claim into a definite negative factual claim.\n\nSmallest supported repair: “Öppna beslut does not claim to have funded or costed this trial.”\n\nNo other source-support findings.\n"
+        },
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dc9ofsjx/scratch/write-source-check.fs5w4smy/report.md'",
+          "report": "Source comparison complete with no findings.\n\nCompared every factual and attributed claim in the complete draft, including its title, byline, headings, implications, and concluding recommendations, against the complete supplied brief and source in source.md. The draft preserves the booking counts and their limits, report attribution, pilot scope, proposed change, stated administrative objection, absence of time and savings calculations, association proposal, cost uncertainty, and Sanna Ek’s stated position. No unsupported addition, changed meaning, or lost qualification was identified.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_US-r2/draft.md",
+      "artifact_sha256": "1f73f2b781a90dbccf66f65308df4b0f045c0339d1e7009dcde908e9bd6ab905",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 111.28,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb64-1080-7322-9145-008226565b60",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb65-33c2-71a3-9cd2-94265e65daff",
+          "parent_thread_id": "01a0bb64-1080-7322-9145-008226565b60",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb64-1080-7322-9145-008226565b60",
+                "depth": 1,
+                "agent_path": "/root/final_proofread",
+                "agent_nickname": "Hooke",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": false
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb64-1080-7322-9145-008226565b60",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_US-r2/final.md",
+      "artifact_sha256": "1f73f2b781a90dbccf66f65308df4b0f045c0339d1e7009dcde908e9bd6ab905",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-sv-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 150.17,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb58-ac77-7ed0-8693-ec539e7a9bba",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5a-0386-75e2-bd81-965e70b4659e",
+          "parent_thread_id": "01a0bb58-ac77-7ed0-8693-ec539e7a9bba",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb58-ac77-7ed0-8693-ec539e7a9bba",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Singer",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb58-ac77-7ed0-8693-ec539e7a9bba",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jwnr39hm/scratch/write-source-check.69bdf6pa/report.md'",
+          "report": "Källjämförelsen är slutförd utan anmärkningar.\n\nSamtliga faktapåståenden och tillskrivna ståndpunkter i hela utkastet, inklusive rubrik, ingress, mellanrubriker och avslutning, har jämförts med briefen och underlaget i source.md. Siffrorna tillskrivs pilotrapporten och avgränsningarna av vad bokningarna visar bevaras. Texten behåller skillnaden mellan avsaknad av mätningar i handlingarna och förvaltningens uttalade motiv. Förslagets omfattning, frivilliga uppgiftsinsamling och osäkerhet om kostnad och finansiering återges med stöd i underlaget. Inga ogrundade tillägg, betydelseförskjutningar eller förlorade kvalifikationer har identifierats.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-sv-r1/draft.md",
+      "artifact_sha256": "2a71cd6b1ea13bec2bf412398a5aa4674ed1d5451b09337f17ffcf57fc18e187",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 83.47,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5c-3e76-7aa2-8574-d2ecb4bc6430",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-sv-r1/final.md",
+      "artifact_sha256": "2a71cd6b1ea13bec2bf412398a5aa4674ed1d5451b09337f17ffcf57fc18e187",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-sv-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 236.28,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb58-ac3d-7f83-be76-c9d5c99013f7",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5a-0baa-7830-9338-e92e2143abf0",
+          "parent_thread_id": "01a0bb58-ac3d-7f83-be76-c9d5c99013f7",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb58-ac3d-7f83-be76-c9d5c99013f7",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Lagrange",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5b-4dbb-7f71-ac8d-5ae039c939d5",
+          "parent_thread_id": "01a0bb58-ac3d-7f83-be76-c9d5c99013f7",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb58-ac3d-7f83-be76-c9d5c99013f7",
+                "depth": 1,
+                "agent_path": "/root/source_check_final",
+                "agent_nickname": "Anscombe",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb58-ac3d-7f83-be76-c9d5c99013f7",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        },
+        {
+          "session": "01a0bb58-ac3d-7f83-be76-c9d5c99013f7",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g1becg5o/scratch/write-source-check-zm_n_acy/report.md'",
+          "report": "# Källjämförelse\n\nHela utkastet har jämförts med hela det tillhandahållna materialet, inklusive briefen. En avvikelse hittades.\n\n## 1. Avsaknad av anspråk blir ett påstående om vad som inte har gjorts\n\n**Utkast:** ”Vi har inte kostnadsberäknat försöket och gör inget anspråk på att ha finansierat det.”\n\n**Källa:** ”Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket.”\n\n**Bedömning:** Källan säger att föreningen inte gör anspråk på att ha kostnadsberäknat försöket. Den fastställer inte att någon kostnadsberäkning aldrig har gjorts av föreningen. Utkastets första led gör därmed ett obelagt nekande sakpåstående och förlorar källans avgränsning av kunskapsläget.\n\n**Minsta stödda rättelse:** ”Vi gör inget anspråk på att ha kostnadsberäknat eller finansierat försöket.”\n\nÖvriga sakuppgifter, tillskrivningar och argument har stöd i underlaget eller uttrycker den ståndpunkt och de förslag som briefen anger. Inga ytterligare avvikelser hittades.\n"
+        },
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g1becg5o/scratch/write-source-check-k48k5ov2/report.md'",
+          "report": "Källjämförelsen är slutförd utan anmärkningar.\n\nHela utkastet, inklusive titel, ingress, avsändare, mellanrubriker och avslutning, har jämförts med hela source.md, inklusive briefen. Sakuppgifter och tillskrivna ståndpunkter har stöd i underlaget. Rapportens avgränsningar, avsaknaden av redovisade mätningar och beräkningar samt förslagets kostnadsosäkerhet är bevarade. Inga påståenden som saknar stöd, betydelseförskjutningar eller förlorade förbehåll har identifierats.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-sv-r2/draft.md",
+      "artifact_sha256": "32521730e8691b652e426d70abbb70fdab0b41783b5ff22eb51a8ad4bd8f4dd4",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 75.26,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5d-1888-7600-ae45-5511005e1fb9",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-sv-r2/final.md",
+      "artifact_sha256": "32521730e8691b652e426d70abbb70fdab0b41783b5ff22eb51a8ad4bd8f4dd4",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-unknown-sv-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 163.97,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb58-c513-7231-be23-edfe11305aca",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5a-513a-71e1-b912-9e87c449837b",
+          "parent_thread_id": "01a0bb58-c513-7231-be23-edfe11305aca",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb58-c513-7231-be23-edfe11305aca",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Zeno",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb58-c513-7231-be23-edfe11305aca",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bczl9p0n/scratch/write-source-check.p7dhh9qh/report.md'",
+          "report": "# Source comparison report\n\nComparison complete with no findings.\n\nEvery factual and attributed claim in the complete draft, including the title and final proposal, was compared with the supplied brief and material in `source.md`. The draft preserves attribution of the expected booking and cable benefits to the company, the limits of the booking figures, and the uncertainty about comparative costs and permits. Its statement about the association’s written submission does not claim that no calculation exists or that no permit has been obtained. The proposed decision and the author’s expressed position are supported by the supplied material.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-unknown-sv-r1/write/artifact.md",
+      "artifact_sha256": "863c492d65c220ceff89a69da153f5149f9bc69a791e8fa5c444e39d3248bf7f",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 66.7,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5c-abdc-7ce2-8ca3-0e8a9d566fe6",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-unknown-sv-r1/redline/artifact.md",
+      "artifact_sha256": "863c492d65c220ceff89a69da153f5149f9bc69a791e8fa5c444e39d3248bf7f",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "opinion-unknown-sv-r2",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 219.34,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb58-c50e-7232-8df7-bd3abafb76f0",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb59-ef6f-75d0-abfc-76c508bc129b",
+          "parent_thread_id": "01a0bb58-c50e-7232-8df7-bd3abafb76f0",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb58-c50e-7232-8df7-bd3abafb76f0",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Feynman",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb5b-3f63-7cb2-90fb-8ef760609fee",
+          "parent_thread_id": "01a0bb58-c50e-7232-8df7-bd3abafb76f0",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb58-c50e-7232-8df7-bd3abafb76f0",
+                "depth": 1,
+                "agent_path": "/root/source_check_final",
+                "agent_nickname": "Kierkegaard",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb58-c50e-7232-8df7-bd3abafb76f0",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        },
+        {
+          "session": "01a0bb58-c50e-7232-8df7-bd3abafb76f0",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lxj6mn4g/scratch/write-source-check.c_f4y2oy/report.md'",
+          "report": "# Källjämförelse\n\nJämförelsen av samtliga faktiska och tillskrivna påståenden i hela utkastet är slutförd. En iakttagelse:\n\n## Tidsangivelsen kan ändra avsändarens krav\n\n**Utkast:** ”Hamnbolagets styrelse bör vänta med beslutet om sex fasta eluttag vid Norra kajen till sommaren 2027.”\n\n**Källa:** ”Det kommunala hamnbolaget föreslår sex fasta eluttag vid Norra kajen till sommaren 2027.” Vidare: ”Hon vill att styrelsen beställer jämförelsen vid nästa möte och återkommer till investeringsbeslutet när den är klar.”\n\n**Problem:** I utkastets formulering kan ”till sommaren 2027” läsas som tidpunkten till vilken styrelsen ska vänta med beslutet. Källan knyter sommaren 2027 till bolagets föreslagna uttag. Kajliv vill vänta tills jämförelsen är klar; materialet anger inte sommaren 2027 som önskad beslutstidpunkt.\n\n**Minsta reparation:** Stryk ”till sommaren 2027” ur första meningen: ”Hamnbolagets styrelse bör vänta med beslutet om sex fasta eluttag vid Norra kajen.” Om tidsuppgiften ska behållas, knyt den uttryckligen till förslaget: ”Hamnbolagets styrelse bör vänta med beslutet om de sex fasta eluttag som bolaget föreslår ska finnas vid Norra kajen till sommaren 2027.”\n\nInga ytterligare källstödsproblem har identifierats.\n"
+        },
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lxj6mn4g/scratch/write-source-check.c8rjhvsw/report.md'",
+          "report": "# Källjämförelse\n\nJämförelsen är slutförd utan anmärkningar. Samtliga faktiska och tillskrivna påståenden i hela utkastet, inklusive rubrik och signatur, har jämförts med det fullständiga underlaget i source.md. Inga tillägg utan stöd, betydelseförskjutningar eller förlorade förbehåll har identifierats.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-unknown-sv-r2/write/artifact.md",
+      "artifact_sha256": "acd7c972fee98a87bf814aaad968befcc8a2f083402444f5539c7f7bddbbdf63",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 70.3,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb5c-ab31-72d3-b170-7697b93ba0d3",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/opinion-unknown-sv-r2/redline/artifact.md",
+      "artifact_sha256": "acd7c972fee98a87bf814aaad968befcc8a2f083402444f5539c7f7bddbbdf63",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  },
+  {
+    "case": "web-copy-en_US-r1",
+    "write": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 118.61,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb64-b60c-7c21-96ef-2e74685e0000",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb65-d6db-7051-acce-46e22d9ddcd7",
+          "parent_thread_id": "01a0bb64-b60c-7c21-96ef-2e74685e0000",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb64-b60c-7c21-96ef-2e74685e0000",
+                "depth": 1,
+                "agent_path": "/root/source_check",
+                "agent_nickname": "Aristotle",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": true
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb64-b60c-7c21-96ef-2e74685e0000",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [
+        {
+          "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-tz2bawih/scratch/write-source-check.v3bmgb63/report.md'",
+          "report": "# Source fidelity report\n\nComparison complete with no findings.\n\nEvery factual and attributed claim in the complete draft was compared with `source.md`, including the title, headings, scope, price, qualifications, process, and link microcopy. All are supported by the supplied material. No unsupported additions, changed meanings, or lost qualifications were identified.\n"
+        }
+      ],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/web-copy-en_US-r1/write/artifact.md",
+      "artifact_sha256": "f9f4a2e6d0d1f09c17cb721cfd3e318835d285ba20d377bcedba1a830b902e76",
+      "S1_exact_complete_dispatch": "skipped: encrypted message; plaintext draft/source elsewhere does not prove exact transported bytes"
+    },
+    "redline": {
+      "complete": true,
+      "instruction_revision": "8f92e1266493f40099b3274374b6c0223c2f76a8",
+      "corpus_revision": "bf14dc23ea872694d095e3a386beb06793a4e556",
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 205.04,
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "sessions": [
+        {
+          "id": "01a0bb67-9fc4-7812-958e-011c0c3ca9ab",
+          "parent_thread_id": null,
+          "source": "exec",
+          "full_source_plaintext_visible": true
+        },
+        {
+          "id": "01a0bb69-71f8-7d23-a835-7841268069d4",
+          "parent_thread_id": "01a0bb67-9fc4-7812-958e-011c0c3ca9ab",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0bb67-9fc4-7812-958e-011c0c3ca9ab",
+                "depth": 1,
+                "agent_path": "/root/correction",
+                "agent_nickname": "Carver",
+                "agent_role": null
+              }
+            }
+          },
+          "full_source_plaintext_visible": false
+        }
+      ],
+      "spawns": [
+        {
+          "session": "01a0bb67-9fc4-7812-958e-011c0c3ca9ab",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "encrypted": true
+        }
+      ],
+      "report_reads": [],
+      "non_home_effects": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "input_preserved": true,
+      "authentication_changed": false,
+      "root_absent": true,
+      "artifact_path": "docs/evaluation/editorial-329/followup/runs/candidate/web-copy-en_US-r1/redline/artifact.md",
+      "artifact_sha256": "0e88446cf8971bb44bac2142a0fc5230aaaac9edbcf290af0cb95ed719914fab",
+      "S1_exact_complete_dispatch": "not applicable",
+      "input_matches_write_artifact": true
+    }
+  }
+]

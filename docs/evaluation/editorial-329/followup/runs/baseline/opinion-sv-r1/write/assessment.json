@@ -1,0 +1,48 @@
+{
+  "case": "opinion-sv-r1",
+  "criteria": {
+    "F1": {
+      "status": "fail",
+      "evidence": "Unsupported fact (#349): “Vi har varken kostnadsberäknat eller finansierat försöket” converts an absent claim into known absence. The unqualified statement that neither workload nor users’ reasons have been investigated also exceeds the source’s narrower limits on the documents and pilot measures."
+    },
+    "G1": {
+      "status": "pass",
+      "evidence": "An accountable case for keeping two booking routes leads to a named municipal decision."
+    },
+    "G2": {
+      "status": "pass",
+      "evidence": "The early postponement thesis, report figures, real administration objection and closing board action perform distinct jobs."
+    },
+    "P1": {
+      "status": "pass",
+      "evidence": "The booking denominator and absence of demographic measures are explained before the proposed wider trial; the source-strength failure is recorded under F1."
+    },
+    "W1": {
+      "status": "pass",
+      "evidence": "Three informative subheadings and connected paragraphs guide the argument without fragmenting it."
+    },
+    "L1": {
+      "status": "pass",
+      "evidence": "Natural Swedish argumentation retains the author’s precise non-opposition to digital booking."
+    },
+    "L2": {
+      "status": "pass",
+      "evidence": "Swedish dates, compounds and punctuation are consistent."
+    },
+    "T1": {
+      "status": "pass",
+      "evidence": "The exact genre and locale flags govern the artifact metadata; technique resolves to none and no technique resource is loaded."
+    },
+    "R2": {
+      "status": "pass",
+      "evidence": "The native trace contains the complete Write body, base, selected genre, web craft and delivery contract, plus the resolved composition scope; no review half, peer editorial pass or unselected genre is loaded."
+    },
+    "O1": {
+      "status": "pass",
+      "evidence": "Full inventories show unchanged source/work/scratch, no retained Skill files, unchanged authentication and only Harness-owned home effects; the private root is now absent."
+    }
+  },
+  "defects": "#349",
+  "notes": "The completion account says the material’s gaps are reflected in the text, but that does not cure the stronger factual assertion.",
+  "candidate_results_read_before_judgement": false
+}

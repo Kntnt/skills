@@ -1,0 +1,1 @@
+Delivery: en_US case study, no technique selected, delivered here. Source comparison passed. The material provides no cost, satisfaction, or completion-time measurements. No files retained; temporary scratch removed.

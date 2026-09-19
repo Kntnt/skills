@@ -1,0 +1,10 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e23kmgar/scratch/write-source-check.ej85_r_5/report.md'",
+    "output": "# Source comparison\n\nThe comparison of the complete draft against all supplied material is complete. One finding requires a repair.\n\n## Unsupported assertion that the trial has not been costed\n\nDraft: “We have neither costed this trial nor claimed to have funded it.”\n\nSource: “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket. Kostnaden behöver kommunstyrelsen ta ställning till.”\n\nThe source states that the association makes no claim to have funded or costed the trial. It does not establish that the association has not costed it. The draft changes an absence of a claim into a categorical denial concerning costing. Its separate wording about funding preserves the source qualification.\n\nSmallest supported repair: “We make no claim to have costed or funded this trial.”\n\nAll other factual and attributed claims are supported by the material, or are editorial arguments and proposals consistent with the supplied position. No other source-support repair is required.\n"
+  },
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e23kmgar/scratch/write-source-check.lxz4422t/report.md'",
+    "output": "Source comparison complete with no findings.\n\nCompared the complete draft, including its title, byline, headings, factual statements, attributed positions, proposed trial and concluding decision, with the full supplied brief and material in source.md. The draft preserves the booking figures and their attribution, the distinction between bookings and people, the limits of the pilot's measurements, the administrative rationale, the absence of time measurements and savings calculations in the papers, and the uncertainty over trial costs. Its criticism and proposed next steps are supported by the supplied position and brief.\n"
+  }
+]

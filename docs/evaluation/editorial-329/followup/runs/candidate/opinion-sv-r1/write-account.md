@@ -1,0 +1,1 @@
+*Första utkast på svenska i genren opinion, utan särskild teknik. Levererat här i svaret och källjämfört utan anmärkningar. Underlaget saknar tidsmätning och kostnadsberäkningar; osäkerheten är bevarad. Inga filer har lämnats kvar.*

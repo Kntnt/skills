@@ -1,0 +1,1 @@
+Första utkastet levereras här som en svensk fallstudie utan särskild berättarteknik. Det bygger på det fiktiva källpaketet och har genomgått källkontroll utan anmärkningar. Underlaget saknar leverantörsjämförelse och de effektmått som anges ovan. Inga filer från körningen finns kvar.

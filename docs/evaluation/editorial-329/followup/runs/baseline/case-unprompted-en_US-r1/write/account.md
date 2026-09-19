@@ -1,0 +1,1 @@
+Delivered here in American English as a case study, with frontmatter and no technique; the case-study genre specifies none. The supplied material is fictional and supports only the pilot assessment, not measured savings or public-access outcomes. No files remain from this run.

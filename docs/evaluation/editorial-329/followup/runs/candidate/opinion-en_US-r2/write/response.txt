@@ -1,0 +1,38 @@
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_US
+---
+
+# Lervik should test both booking options before dropping the phone
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+Lervik’s municipal executive board should postpone a permanent switch to online-only booking for community facilities. Our association, Öppna beslut, proposes a six-month trial with both phone and web booking available at all seven facilities. Before removing an option, the board needs evidence about the staff time it requires and its value to users.
+
+## Booking totals do not explain users’ choices
+
+The municipality’s pilot report, *Bokning av föreningslokaler*, dated April 8, 2026, records 96 web bookings and 24 phone bookings during eight weeks at two facilities. Those are counts of bookings, not individual people. The report measured neither age nor disability nor familiarity with digital tools.
+
+The phone total therefore cannot tell us what share of Lervik’s residents cannot book online. Treating it as a measure of digital exclusion would claim knowledge the report does not provide.
+
+But a phone booking is a reason to ask why someone chose that route. The pilot establishes that the phone was used. It leaves the reasons unanswered. I do not oppose online booking; I oppose making a permanent choice before the municipality can weigh the labor cost against the value to users.
+
+## The administrative objection deserves a measured answer
+
+The staff recommendation prepared for the board’s June 18 meeting proposes ending phone booking at all seven facilities starting in September. Its stated reason is to spare staff from entering information through two workflows. That is the administrative objection our proposal must address.
+
+Yet the documents contain neither measurements of staff time nor a calculation of financial savings. The board is being asked to remove a booking channel without figures showing how much work the change would save. A stated administrative burden is an argument to investigate, not a substitute for measuring it.
+
+## Run a trial with costs on the table
+
+During the six-month trial, staff should record the time spent on each booking channel and invite users to explain voluntarily why they choose phone or web booking. That would give the board a basis for comparing staff workload with users’ reasons.
+
+Öppna beslut does not claim to have funded or costed this trial. The executive board must consider its cost; keeping both channels open cannot simply be presented as free.
+
+The board should postpone the permanent switch, address the trial’s unresolved cost, and authorize six months with both channels. Afterward, it can decide whether to remove a channel, change it, or retain both.
+
+---
+
+*Opinion draft in US English; no technique applied. Delivered here, with no files retained. Source comparison passed. The source leaves trial costs and potential savings unresolved.*

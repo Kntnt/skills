@@ -1,0 +1,443 @@
+[
+  {
+    "case": "case-question-en_GB-r1",
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 58.92,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-5cru2ucu",
+      "cleanup_required": true
+    },
+    "source_matches_frozen": true,
+    "source_read_in_full": true,
+    "source_preserved": true,
+    "complete_contract_loads": {
+      "skills/editorial/write/SKILL.md": true,
+      "skills/kntnt/library/references/editorial/base.md": true,
+      "skills/kntnt/library/references/editorial/genres/case-study.md": true,
+      "skills/kntnt/library/references/editorial/web-craft.md": true,
+      "skills/kntnt/library/references/delivery.md": true
+    },
+    "native_identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "native_dates": [
+      "2026-09-19"
+    ],
+    "native_sessions": 1,
+    "non_harness_effects": {
+      "created": [],
+      "removed": [],
+      "changed": []
+    },
+    "harness_changed_path_count": 319,
+    "authentication_changed": false,
+    "root_absent": true,
+    "command_sequence": [
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/SKILL.md'",
+      "/opt/homebrew/bin/bash -lc 'cat source.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-invoke-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-5cru2ucu/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=case-study --language=en_GB --output=response source.md', text=True, env=env)\nraise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/write/references/quotations.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-5cru2ucu/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'en_GB'], env=env)\nraise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-5cru2ucu/scratch')\nremaining = [str(p) for p in scratch.iterdir() if p.name.startswith(('write-invoke-', 'write-language-'))]\nprint('Run temporary directories remaining:', remaining)\nPY\""
+    ],
+    "usage": [
+      {
+        "input_tokens": 121667,
+        "cached_input_tokens": 101120,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1294,
+        "reasoning_output_tokens": 44
+      }
+    ]
+  },
+  {
+    "case": "case-study-en_US-r1",
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 61.86,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-1ws2vi51",
+      "cleanup_required": true
+    },
+    "source_matches_frozen": true,
+    "source_read_in_full": true,
+    "source_preserved": true,
+    "complete_contract_loads": {
+      "skills/editorial/write/SKILL.md": true,
+      "skills/kntnt/library/references/editorial/base.md": true,
+      "skills/kntnt/library/references/editorial/genres/case-study.md": true,
+      "skills/kntnt/library/references/editorial/web-craft.md": true,
+      "skills/kntnt/library/references/delivery.md": true
+    },
+    "native_identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "native_dates": [
+      "2026-09-19"
+    ],
+    "native_sessions": 1,
+    "non_harness_effects": {
+      "created": [],
+      "removed": [],
+      "changed": []
+    },
+    "harness_changed_path_count": 317,
+    "authentication_changed": false,
+    "root_absent": true,
+    "command_sequence": [
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/SKILL.md'",
+      "/opt/homebrew/bin/bash -lc 'cat source.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-invoke.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-1ws2vi51/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=case-study --language=en_US --output=response source.md', text=True, env=env)\nraise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/write/references/quotations.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-1ws2vi51/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'en_US'], text=True, env=env)\nraise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-1ws2vi51/scratch')\nprint('Remaining command temporary directories:', [p.name for p in scratch.iterdir() if p.name.startswith(('write-invoke.', 'write-language.'))])\nprint('Scratch contents:', [p.name for p in scratch.iterdir()])\nprint('Workspace root contents:', [p.name for p in Path('.').iterdir()])\nPY\""
+    ],
+    "usage": [
+      {
+        "input_tokens": 122320,
+        "cached_input_tokens": 102144,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1521,
+        "reasoning_output_tokens": 69
+      }
+    ]
+  },
+  {
+    "case": "case-study-en_US-r2",
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 63.3,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-98e1rnav",
+      "cleanup_required": true
+    },
+    "source_matches_frozen": true,
+    "source_read_in_full": true,
+    "source_preserved": true,
+    "complete_contract_loads": {
+      "skills/editorial/write/SKILL.md": true,
+      "skills/kntnt/library/references/editorial/base.md": true,
+      "skills/kntnt/library/references/editorial/genres/case-study.md": true,
+      "skills/kntnt/library/references/editorial/web-craft.md": true,
+      "skills/kntnt/library/references/delivery.md": true
+    },
+    "native_identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "native_dates": [
+      "2026-09-19"
+    ],
+    "native_sessions": 1,
+    "non_harness_effects": {
+      "created": [],
+      "removed": [],
+      "changed": []
+    },
+    "harness_changed_path_count": 317,
+    "authentication_changed": false,
+    "root_absent": true,
+    "command_sequence": [
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/SKILL.md'",
+      "/opt/homebrew/bin/bash -lc 'cat source.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-invoke.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-98e1rnav/scratch') as tmp:\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=case-study --language=en_US --output=response source.md', text=True, env={**os.environ, 'TMPDIR': tmp, 'UV_NO_CACHE': '1', 'UV_NO_PROJECT': '1'})\n    result_code = result.returncode\nraise SystemExit(result_code)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/write/references/quotations.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-98e1rnav/scratch') as tmp:\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'en_US'], env={**os.environ, 'TMPDIR': tmp, 'UV_NO_CACHE': '1', 'UV_NO_PROJECT': '1'})\n    result_code = result.returncode\nraise SystemExit(result_code)\nPY\"",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-98e1rnav/scratch')\nprint('Run temporary directories remaining:', [p.name for p in scratch.iterdir() if p.name.startswith(('write-invoke.', 'write-language.'))])\nprint('Workspace files:', [str(p) for p in Path('.').iterdir()])\nPY\""
+    ],
+    "usage": [
+      {
+        "input_tokens": 122274,
+        "cached_input_tokens": 108544,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1523,
+        "reasoning_output_tokens": 132
+      }
+    ]
+  },
+  {
+    "case": "case-unprompted-en_US-r1",
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 58.4,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-5qc2jme4",
+      "cleanup_required": true
+    },
+    "source_matches_frozen": true,
+    "source_read_in_full": true,
+    "source_preserved": true,
+    "complete_contract_loads": {
+      "skills/editorial/write/SKILL.md": true,
+      "skills/kntnt/library/references/editorial/base.md": true,
+      "skills/kntnt/library/references/editorial/genres/case-study.md": true,
+      "skills/kntnt/library/references/editorial/web-craft.md": true,
+      "skills/kntnt/library/references/delivery.md": true
+    },
+    "native_identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "native_dates": [
+      "2026-09-19"
+    ],
+    "native_sessions": 1,
+    "non_harness_effects": {
+      "created": [],
+      "removed": [],
+      "changed": []
+    },
+    "harness_changed_path_count": 319,
+    "authentication_changed": false,
+    "root_absent": true,
+    "command_sequence": [
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/SKILL.md'",
+      "/opt/homebrew/bin/bash -lc 'cat source.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-invoke.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-5qc2jme4/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=case-study --language=en_US --output=response source.md', text=True, env=env)\n    raise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/write/references/quotations.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-5qc2jme4/scratch') as tmp:\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'en_US'], env=dict(os.environ, TMPDIR=tmp))\n    raise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-5qc2jme4/scratch')\nprint('Temporary directories remaining:', [p.name for p in scratch.iterdir() if p.name.startswith(('write-invoke.', 'write-language.'))])\nPY\""
+    ],
+    "usage": [
+      {
+        "input_tokens": 121584,
+        "cached_input_tokens": 100992,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1301,
+        "reasoning_output_tokens": 86
+      }
+    ]
+  },
+  {
+    "case": "opinion-absence-en_GB-r1",
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 63.8,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-___pwlta",
+      "cleanup_required": true
+    },
+    "source_matches_frozen": true,
+    "source_read_in_full": true,
+    "source_preserved": true,
+    "complete_contract_loads": {
+      "skills/editorial/write/SKILL.md": true,
+      "skills/kntnt/library/references/editorial/base.md": true,
+      "skills/kntnt/library/references/editorial/genres/opinion.md": true,
+      "skills/kntnt/library/references/editorial/web-craft.md": true,
+      "skills/kntnt/library/references/delivery.md": true
+    },
+    "native_identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "native_dates": [
+      "2026-09-19"
+    ],
+    "native_sessions": 1,
+    "non_harness_effects": {
+      "created": [],
+      "removed": [],
+      "changed": []
+    },
+    "harness_changed_path_count": 317,
+    "authentication_changed": false,
+    "root_absent": true,
+    "command_sequence": [
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/SKILL.md'",
+      "/opt/homebrew/bin/bash -lc 'cat source.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-invoke-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-___pwlta/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=opinion --language=en_GB --output=response source.md', text=True, env=env)\n    code = result.returncode\nraise SystemExit(code)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/opinion.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/write/references/quotations.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-___pwlta/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp)\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'en_GB'], env=env)\n    code = result.returncode\nraise SystemExit(code)\nPY\"",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-___pwlta/scratch')\nprint('Remaining run temporary directories:', [str(p) for p in scratch.iterdir() if p.name.startswith(('write-invoke-', 'write-language-'))])\nprint('Workspace root entries:', sorted(p.name for p in Path('.').iterdir()))\nPY\""
+    ],
+    "usage": [
+      {
+        "input_tokens": 121466,
+        "cached_input_tokens": 100864,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1389,
+        "reasoning_output_tokens": 83
+      }
+    ]
+  },
+  {
+    "case": "opinion-sv-r1",
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 71.67,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-q9zzntgo",
+      "cleanup_required": true
+    },
+    "source_matches_frozen": true,
+    "source_read_in_full": true,
+    "source_preserved": true,
+    "complete_contract_loads": {
+      "skills/editorial/write/SKILL.md": true,
+      "skills/kntnt/library/references/editorial/base.md": true,
+      "skills/kntnt/library/references/editorial/genres/opinion.md": true,
+      "skills/kntnt/library/references/editorial/web-craft.md": true,
+      "skills/kntnt/library/references/delivery.md": true
+    },
+    "native_identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "native_dates": [
+      "2026-09-19"
+    ],
+    "native_sessions": 1,
+    "non_harness_effects": {
+      "created": [],
+      "removed": [],
+      "changed": []
+    },
+    "harness_changed_path_count": 317,
+    "authentication_changed": false,
+    "root_absent": true,
+    "command_sequence": [
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/SKILL.md'",
+      "/opt/homebrew/bin/bash -lc 'cat source.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport tempfile, subprocess, os\nwith tempfile.TemporaryDirectory(prefix='write-invoke.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-q9zzntgo/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=opinion --language=sv --output=response source.md', text=True, env=env)\n    code = result.returncode\nraise SystemExit(code)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/opinion.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport tempfile, subprocess, os\nwith tempfile.TemporaryDirectory(prefix='write-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-q9zzntgo/scratch') as tmp:\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'sv'], env=dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1'))\n    code = result.returncode\nraise SystemExit(code)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/references/quotations.md\n'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-q9zzntgo/scratch')\nprint('Kvarvarande tillfälliga kataloger för denna körning:', [p.name for p in scratch.iterdir() if p.name.startswith(('write-invoke.', 'write-language.'))])\nPY\""
+    ],
+    "usage": [
+      {
+        "input_tokens": 122244,
+        "cached_input_tokens": 101376,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1816,
+        "reasoning_output_tokens": 47
+      }
+    ]
+  },
+  {
+    "case": "opinion-sv-r2",
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 70.59,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-itdvqwij",
+      "cleanup_required": true
+    },
+    "source_matches_frozen": true,
+    "source_read_in_full": true,
+    "source_preserved": true,
+    "complete_contract_loads": {
+      "skills/editorial/write/SKILL.md": true,
+      "skills/kntnt/library/references/editorial/base.md": true,
+      "skills/kntnt/library/references/editorial/genres/opinion.md": true,
+      "skills/kntnt/library/references/editorial/web-craft.md": true,
+      "skills/kntnt/library/references/delivery.md": true
+    },
+    "native_identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "native_dates": [
+      "2026-09-19"
+    ],
+    "native_sessions": 1,
+    "non_harness_effects": {
+      "created": [],
+      "removed": [],
+      "changed": []
+    },
+    "harness_changed_path_count": 321,
+    "authentication_changed": false,
+    "root_absent": true,
+    "command_sequence": [
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/SKILL.md'",
+      "/opt/homebrew/bin/bash -lc 'cat source.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-invoke.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-itdvqwij/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=opinion --language=sv --output=response source.md', text=True, env=env)\n    raise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/opinion.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/delivery.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-itdvqwij/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'sv'], env=env)\n    raise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-itdvqwij/scratch')\nprint('Kvarvarande temporära kataloger:', [p.name for p in scratch.iterdir() if p.name.startswith(('write-invoke.', 'write-language.'))])\nprint('Filer i arbetskatalogen:', [p.name for p in Path.cwd().iterdir()])\nPY\""
+    ],
+    "usage": [
+      {
+        "input_tokens": 121559,
+        "cached_input_tokens": 101376,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1731,
+        "reasoning_output_tokens": 67
+      }
+    ]
+  },
+  {
+    "case": "opinion-unknown-sv-r1",
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 63.2,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s_f5nf1w",
+      "cleanup_required": true
+    },
+    "source_matches_frozen": true,
+    "source_read_in_full": true,
+    "source_preserved": true,
+    "complete_contract_loads": {
+      "skills/editorial/write/SKILL.md": true,
+      "skills/kntnt/library/references/editorial/base.md": true,
+      "skills/kntnt/library/references/editorial/genres/opinion.md": true,
+      "skills/kntnt/library/references/editorial/web-craft.md": true,
+      "skills/kntnt/library/references/delivery.md": true
+    },
+    "native_identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "native_dates": [
+      "2026-09-19"
+    ],
+    "native_sessions": 1,
+    "non_harness_effects": {
+      "created": [],
+      "removed": [],
+      "changed": []
+    },
+    "harness_changed_path_count": 317,
+    "authentication_changed": false,
+    "root_absent": true,
+    "command_sequence": [
+      "/opt/homebrew/bin/bash -lc 'cat source.md'",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/write/SKILL.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-invoke-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s_f5nf1w/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=opinion --language=sv --output=response source.md', text=True, env=env)\nraise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/opinion.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md'",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nimport os, subprocess, tempfile\nwith tempfile.TemporaryDirectory(prefix='write-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s_f5nf1w/scratch') as tmp:\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'sv'], env=env)\nraise SystemExit(result.returncode)\nPY\"",
+      "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s_f5nf1w/scratch')\nprint('Kvarvarande temporära kataloger från körningen:', [p.name for p in scratch.iterdir() if p.name.startswith(('write-invoke-', 'write-language-'))])\nPY\""
+    ],
+    "usage": [
+      {
+        "input_tokens": 121504,
+        "cached_input_tokens": 101376,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1517,
+        "reasoning_output_tokens": 82
+      }
+    ]
+  }
+]

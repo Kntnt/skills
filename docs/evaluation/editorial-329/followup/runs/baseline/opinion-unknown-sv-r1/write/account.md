@@ -1,0 +1,1 @@
+*Första utkastet levereras här som debattartikel på svenska, utan särskild teknik; genren anger ingen. Det fiktiva underlaget räckte för briefen, men innehåller inga kostnadsbelopp eller besked om tillstånd. Inga filer finns kvar från körningen.*

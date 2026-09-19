@@ -1,0 +1,1 @@
+*Opinion draft in US English; no technique applied. Delivered here, with no files retained. Source comparison passed. The source leaves trial costs and potential savings unresolved.*

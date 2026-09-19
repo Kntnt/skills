@@ -1,0 +1,16 @@
+{
+  "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iq2so9w4",
+  "root_exists": false,
+  "method": "Already removed by registered session-cleanup start hook; evaluator independently verified absence and captured exact deletion event.",
+  "event": {
+    "at": "2026-09-19T20:48:39+00:00",
+    "detail": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iq2so9w4",
+    "event": "acted",
+    "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iq2so9w4",
+    "kind": "path",
+    "outcome": "deleted",
+    "reason": "Editorial #338 isolated native evaluation",
+    "session": "354c9cfc-ebf9-4f44-bd10-3dd85af088f2",
+    "why": "start"
+  }
+}

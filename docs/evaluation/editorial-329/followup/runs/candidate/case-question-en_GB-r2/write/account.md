@@ -1,0 +1,1 @@
+Draft delivered here in British English, using the case-study genre with no technique. Source comparison passed. The supplied material is fictional; no author name or call to action was supplied or added. No files remain from this run.

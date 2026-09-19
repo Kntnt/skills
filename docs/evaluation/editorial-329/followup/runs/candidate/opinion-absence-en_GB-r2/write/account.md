@@ -1,0 +1,1 @@
+*Delivered here: British English opinion draft, no technique applied. Source comparison passed. The fictional material leaves costs, actual consent status and study timing unresolved. No files retained.*

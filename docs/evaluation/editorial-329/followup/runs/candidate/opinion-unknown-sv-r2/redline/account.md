@@ -1,0 +1,1 @@
+Granskad som debattartikel på svenska, utan särskild teknik enligt textens metadata. Inga redaktionella eller språkliga fel hittades. Ingen ändring behövdes; inga filer har ändrats.

@@ -1,0 +1,10 @@
+Jag identifierade ett konkret idiomatiskt problem i de två översatta citaten.
+
+- **Utkast:** ”Jag skulle avsätta den tiden innan nästa byggnad kommer i gång.”
+- **Källa:** ”I would set that time aside before the next building starts.”
+- **Problem:** ”Nästa byggnad kommer i gång” för över källans komprimerade uttryck till en onaturlig svensk konstruktion. Det är arbetet i byggnaden som kommer i gång; med själva byggnaden som subjekt blir innebörden oklar.
+- **Minsta reparation:** ”Jag skulle avsätta den tiden innan vi kommer i gång i nästa byggnad.”
+
+Reparationen bevarar den villkorliga rekommendationen och den vardagliga rösten.
+
+I övrigt identifierade jag inga konkreta idiomproblem. ”Jag skulle välja att göra försöket igen” och ”Att ha en samlad vy över anmälningarna hjälper oss” fungerar som svenskt tal och bevarar källans innebörd och hållning. Att formulera dem annorlunda vore en stilpreferens, inte en nödvändig rättelse.

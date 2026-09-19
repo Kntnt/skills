@@ -1,0 +1,1 @@
+Texten är granskad som kundberättelse på svenska, utan särskild berättarteknik enligt metadata. Inga redaktionella eller språkliga ändringar behövdes. Inga filer har ändrats.

@@ -1,0 +1,19 @@
+{
+  "returncode": 0,
+  "timed_out": false,
+  "identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "input_preserved": true,
+  "authentication_changed": false,
+  "non_home_effects": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "complete_input_visible": true,
+  "judgement": "Diagnostic miss: decomposition drops inherited date from the supplier-choice proposition, then labels the incomplete proposition supported."
+}

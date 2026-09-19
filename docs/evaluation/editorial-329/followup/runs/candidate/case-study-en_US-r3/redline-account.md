@@ -1,0 +1,1 @@
+Reviewed as a case study in American English, with no technique, following the metadata. The correction removed the redundant paraphrase that preparation deserves its own time; that advice remains in Lind’s quotation. No unresolved findings. The final proofread required no changes. No files were changed or left behind.

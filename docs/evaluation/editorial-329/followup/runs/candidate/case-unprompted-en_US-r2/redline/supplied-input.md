@@ -1,0 +1,29 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_US
+---
+
+# Briar County archive brings new donations into a shared catalog
+
+Briar County Theater Archive cataloged 47 incoming donations during an eight-week pilot with Index Lantern. Volunteers could consult the same records, while uncertain dates remained visible. The archive will review its field definitions before deciding whether to bring older records into the catalog.
+
+The archive holds donated programs, photographs, and posters from local productions. Volunteers had described new donations in separate spreadsheets. In February 2026, the collection team chose to test Index Lantern for incoming donations, leaving existing collections outside the pilot.
+
+The team agreed on fields for production title, year, donor, and location, retaining a free-text note for uncertain dates.
+
+“We kept the uncertain dates visible. An empty field and an estimated year tell the next volunteer different things,” collection coordinator Lena Ortiz wrote in an email supplied for publication.
+
+Index Lantern imported the team’s spreadsheet template and provided one remote training session for five volunteers. The archive chose the descriptions and checked the imported records.
+
+“Agreeing on the fields took two meetings. The import was the short part,” Ortiz wrote.
+
+The archive’s May 6 pilot note records the 47 donations; 11 records retained uncertain dates. It reports shared access for volunteers but includes no before-and-after time measurement, cost calculation, or assessment of public access.
+
+Ortiz’s appraisal sets a condition for extending the work:
+
+“I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.”
+
+*This case is published by Index Lantern and draws on the archive’s pilot note and Ortiz’s email, supplied by the archive.*
+

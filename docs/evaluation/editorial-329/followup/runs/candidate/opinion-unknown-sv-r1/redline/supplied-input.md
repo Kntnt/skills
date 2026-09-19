@@ -1,0 +1,23 @@
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: sv
+---
+
+# Jämför alternativen innan kajen får fasta eluttag
+
+Hamnbolagets styrelse bör vänta med beslutet om sex fasta eluttag vid Norra kajen och först jämföra en säsongslösning med en permanent installation. Vi i Kajliv vill ha fler verksamheter på kajen. Just därför behöver valet av lösning bygga på ett underlag som visar kostnader och tillståndskrav.
+
+Det kommunala hamnbolaget föreslår fasta uttag till sommaren 2027. I tjänsteunderlaget från den 12 augusti 2026 anger bolaget att de skulle förenkla bokningen och minska behovet av tillfälliga kabeldragningar. Det är motiv som behöver vägas in. Men underlaget innehåller varken uppmätta arbetstider eller belopp för installation och drift. Styrelsen saknar därmed uppgifter för att bedöma kostnaderna för förslaget.
+
+Enligt bokningslistan bokades plats för matvagnar under 18 dagar förra sommaren. Listan visar dagar, inte antalet besökare eller företagens intäkter. Vi ser en möjlighet att utveckla kajen, men de bokningarna visar inte hur stor en permanent anläggning behöver vara. Sex fasta uttag behöver motiveras; antalet följer inte av 18 bokade dagar.
+
+Kajliv föreslår därför att bolaget jämför offerter för en säsongslösning och en permanent installation. Bemanning, förvaring och underhåll ska ingå i jämförelsen. Bolaget behöver också klarlägga vilka tillstånd respektive alternativ kräver.
+
+Vi påstår inte att en säsongslösning är billigare. Vår skrivelse redovisar ingen egen kostnadskalkyl och uppger inte att vi har fått tillstånd för en sådan lösning. Jämförelsen behövs för att styrelsen ska kunna välja med kostnader och tillståndskrav klarlagda.
+
+Vårt förslag innebär inte att sommarens matvagnar ska förbjudas. Vid nästa möte bör styrelsen beställa jämförelsen och vänta med investeringsbeslutet tills den är klar.
+
+**Elin Fors, ordförande för föreningen Kajliv**
+

@@ -1,0 +1,6 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-gzpm9c13/scratch/write-source-check.2ppwcgx0/report.md'",
+    "output": "# Source comparison\n\nComparison complete with no findings.\n\nI compared every factual and attributed claim in the complete Swedish draft, including the title, introduction, translated quotations, link description and final disclosure, against the entire supplied source package in source.md. The draft preserves the figures, chronology, exclusions, workload qualification, distinction between assignment and completion time, absence of causal attribution, customer's qualified assessment, and pending expansion decision. The quotations retain their meaning and reservations, and their email provenance is stated. No unsupported addition, changed meaning or lost qualification was identified.\n"
+  }
+]

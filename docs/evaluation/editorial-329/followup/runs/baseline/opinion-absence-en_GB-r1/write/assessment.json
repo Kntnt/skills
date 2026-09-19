@@ -1,0 +1,48 @@
+{
+  "case": "opinion-absence-en_GB-r1",
+  "criteria": {
+    "F1": {
+      "status": "pass",
+      "evidence": "The signed treasurer note supports “we have not prepared a conversion cost estimate”; the distinct owner-consent status is explicitly left unestablished. Interest remains nonbinding and eight weeks remains a requested timetable."
+    },
+    "G1": {
+      "status": "pass",
+      "evidence": "Residents receive a clear case for a feasibility study that takes predictable rental income seriously."
+    },
+    "G2": {
+      "status": "pass",
+      "evidence": "Early position, 9-of-14 survey support, fair financial objection and named trustee action are all present."
+    },
+    "P1": {
+      "status": "pass",
+      "evidence": "The draft separates interest from bookings, estimate absence from unknown consent, and a desired timetable from established feasibility."
+    },
+    "W1": {
+      "status": "pass",
+      "evidence": "A specific headline and coherent topical paragraphs let readers follow a compact argument without arbitrary segmentation."
+    },
+    "L1": {
+      "status": "pass",
+      "evidence": "Natural British opinion prose preserves the author’s conditional acceptance of commercial letting."
+    },
+    "L2": {
+      "status": "pass",
+      "evidence": "British date order and spelling are maintained."
+    },
+    "T1": {
+      "status": "pass",
+      "evidence": "The exact genre and locale flags govern the artifact metadata; technique resolves to none and no technique resource is loaded."
+    },
+    "R2": {
+      "status": "pass",
+      "evidence": "The native trace contains the complete Write body, base, selected genre, web craft and delivery contract, plus the resolved composition scope; no review half, peer editorial pass or unselected genre is loaded."
+    },
+    "O1": {
+      "status": "pass",
+      "evidence": "Full inventories show unchanged source/work/scratch, no retained Skill files, unchanged authentication and only Harness-owned home effects; the private root is now absent."
+    }
+  },
+  "defects": "none",
+  "notes": "Positive control is exercised rather than omitted: warranted categorical absence and unclaimed consent both appear with the correct asymmetry.",
+  "candidate_results_read_before_judgement": false
+}

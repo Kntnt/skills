@@ -1,0 +1,355 @@
+{
+  "invocations": 22,
+  "native_sessions": 41,
+  "all_source_blind_inputs_exact": true,
+  "rows": [
+    {
+      "case": "opinion-sv-r1",
+      "skill": "write",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jwnr39hm",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-sv-r1",
+      "skill": "redline",
+      "native_sessions": 1,
+      "spawns": [],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-7se4k4fg",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-sv-r2",
+      "skill": "write",
+      "native_sessions": 3,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        },
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check_final"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g1becg5o",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-sv-r2",
+      "skill": "redline",
+      "native_sessions": 1,
+      "spawns": [],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-1ptrc64w",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-en_GB-r1",
+      "skill": "write",
+      "native_sessions": 3,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        },
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "final_source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6av_5r_r",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-en_GB-r1",
+      "skill": "redline",
+      "native_sessions": 1,
+      "spawns": [],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ldd85vcu",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-en_GB-r2",
+      "skill": "write",
+      "native_sessions": 3,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        },
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "final_source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e23kmgar",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-en_GB-r2",
+      "skill": "redline",
+      "native_sessions": 1,
+      "spawns": [],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e8_b2hii",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "skill": "write",
+      "native_sessions": 3,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        },
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "final_source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nhcxvqub",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-en_US-r1",
+      "skill": "redline",
+      "native_sessions": 1,
+      "spawns": [],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fzz25ly9",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-en_US-r2",
+      "skill": "write",
+      "native_sessions": 3,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        },
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "final_source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dc9ofsjx",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "opinion-en_US-r2",
+      "skill": "redline",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "final_proofread"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-xpkhglao",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "skill": "write",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-uehffvsd",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-en_US-r1",
+      "skill": "redline",
+      "native_sessions": 1,
+      "spawns": [],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-1a4d5evp",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-en_US-r2",
+      "skill": "write",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bh20wcui",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-en_US-r2",
+      "skill": "redline",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "correction"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wqb5ux8y",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-en_US-r3",
+      "skill": "write",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e1b1yco6",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-en_US-r3",
+      "skill": "redline",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "correction"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-oiy40whe",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-sv-r1",
+      "skill": "write",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_comparison"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-gzpm9c13",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-sv-r1",
+      "skill": "redline",
+      "native_sessions": 1,
+      "spawns": [],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-8ow6y51l",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-sv-r2",
+      "skill": "write",
+      "native_sessions": 2,
+      "spawns": [
+        {
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "task_name": "source_check"
+        }
+      ],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-rh09ur34",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    },
+    {
+      "case": "case-study-sv-r2",
+      "skill": "redline",
+      "native_sessions": 1,
+      "spawns": [],
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-qo3gsqmb",
+      "root_exists": false,
+      "skill_effects": [],
+      "returncode": 0
+    }
+  ]
+}

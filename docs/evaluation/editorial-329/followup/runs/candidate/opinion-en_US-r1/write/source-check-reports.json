@@ -1,0 +1,10 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nhcxvqub/scratch/write-source-check-kh5nahnb/report.md'",
+    "output": "# Source comparison\n\nComparison of every factual and attributed claim in the complete draft with the complete supplied source is complete. One finding.\n\n## 1. An absence of a claim becomes a claim of absence\n\nDraft: “We have neither costed nor secured funding for this proposal.”\n\nSource: “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket. Kostnaden behöver kommunstyrelsen ta ställning till.”\n\nThe source says that the association makes no claim to have funded or costed the trial. It does not establish that neither action has happened. “Secured funding” also changes the source's “finansierat” (funded) into a separate assertion about funding arrangements.\n\nSmallest supported repair: “Our association makes no claim to have funded or costed this trial.” Keep the following sentence about the board assessing the cost.\n\nNo other findings.\n"
+  },
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-nhcxvqub/scratch/write-source-check-dvllw9kr/report.md'",
+    "output": "# Source comparison report\n\nThe comparison of every factual and attributed claim in the complete draft, including the title, headings, and implied claims, against the complete supplied source and brief is complete with no findings.\n\nThe draft preserves the booking counts and their attribution, the distinction between bookings and people, the pilot's limited scope and measurements, the administration's stated objection, the absence of time and savings calculations, the proposed trial and its unresolved cost, and the board's possible subsequent decisions. Its evaluations and recommendations are supported by the brief and Sanna Ek's stated position.\n"
+  }
+]

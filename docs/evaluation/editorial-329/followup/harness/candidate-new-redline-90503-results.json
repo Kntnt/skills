@@ -1,0 +1,14 @@
+[
+  {
+    "case": "opinion-absence-en_GB-r1",
+    "stage": "redline",
+    "returncode": 0,
+    "source_revision": "bf14dc2"
+  },
+  {
+    "case": "opinion-absence-en_GB-r2",
+    "stage": "redline",
+    "returncode": 0,
+    "source_revision": "bf14dc2"
+  }
+]

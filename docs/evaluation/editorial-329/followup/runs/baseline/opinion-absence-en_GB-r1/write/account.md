@@ -1,0 +1,1 @@
+Draft delivered here in British English as an opinion article, with no technique applied; the opinion genre specifies none. The source supports the requested length but leaves costs, consent status and study timing unresolved. No draft file or temporary directory remains.

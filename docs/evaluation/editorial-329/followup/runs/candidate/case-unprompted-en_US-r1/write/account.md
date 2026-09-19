@@ -1,0 +1,1 @@
+*Fictional case study from the supplied evaluation material. Delivered here in American English, with no technique selected, following the genre default. Source comparison passed; evidence is limited to the pilot. No files retained.*

@@ -1,0 +1,6 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jwnr39hm/scratch/write-source-check.69bdf6pa/report.md'",
+    "output": "Källjämförelsen är slutförd utan anmärkningar.\n\nSamtliga faktapåståenden och tillskrivna ståndpunkter i hela utkastet, inklusive rubrik, ingress, mellanrubriker och avslutning, har jämförts med briefen och underlaget i source.md. Siffrorna tillskrivs pilotrapporten och avgränsningarna av vad bokningarna visar bevaras. Texten behåller skillnaden mellan avsaknad av mätningar i handlingarna och förvaltningens uttalade motiv. Förslagets omfattning, frivilliga uppgiftsinsamling och osäkerhet om kostnad och finansiering återges med stöd i underlaget. Inga ogrundade tillägg, betydelseförskjutningar eller förlorade kvalifikationer har identifierats.\n"
+  }
+]

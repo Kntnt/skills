@@ -50,7 +50,9 @@ An explicit output path equal to the input path is refused in favour of In-place
 
 A run may finish with nothing to change, and what it does then follows its destination.
 
-A response-targeted run and an in-place run that changed nothing write nothing at all and return a short no-change status in place of the text. Repeating an unchanged text into the response spends output on what the caller is already holding, and rewriting a file with its own contents makes its timestamp claim that something happened.
+A response-targeted run that changed nothing returns a short no-change status in place of the text when no unresolved findings remain. When findings remain, deliver the complete Text Artifact in the response and report the unresolved findings separately.
+
+An in-place run that changed nothing leaves the source file untouched and returns the short status with any unresolved findings. Rewriting a file with its own contents would make its timestamp claim that something happened.
 
 That status is written in the language of the Text Artifact rather than the language of the invocation, so a Swedish text that needed no work is reported on in Swedish.
 

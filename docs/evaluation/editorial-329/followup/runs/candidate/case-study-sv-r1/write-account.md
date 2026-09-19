@@ -1,0 +1,1 @@
+Levererat här som ett första utkast på svenska i genren `case-study`, utan särskild berättarteknik. Källjämförelsen gav inga anmärkningar. Underlaget saknar leverantörsjämförelse och mätningar av kostnader, boendes nöjdhet och reparationstid. Inga filer har lämnats kvar eller ändrats.

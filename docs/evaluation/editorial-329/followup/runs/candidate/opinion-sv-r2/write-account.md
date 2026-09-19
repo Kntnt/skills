@@ -1,0 +1,1 @@
+*Leverans: Debattartikel på svenska, utan särskild teknik, levererad här i svaret. Källjämförelsen är slutförd utan kvarstående anmärkningar. Försökets kostnad lämnas öppen enligt underlaget. Inga filer har lämnats kvar eller ändrats.*

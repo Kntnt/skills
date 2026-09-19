@@ -1,0 +1,1 @@
+*Fictional opinion draft in British English, with no prescribed technique. Source comparison passed. Costs and users’ reasons remain unestablished in the material. Delivered here; no files left behind.*

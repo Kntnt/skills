@@ -1,0 +1,38 @@
+[
+  {
+    "run": "r1",
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iq2so9w4",
+    "native_sessions": 2,
+    "prose_and_metadata_preserved": true,
+    "runner_returncode": 0,
+    "full_scoped_resources_visible": true,
+    "exactly_one_Proofread": true,
+    "non_native_filesystem_effects": false,
+    "root_exists": false,
+    "cleanup_by": "Registered session-cleanup start hook at 2026-09-19T20:48:39Z"
+  },
+  {
+    "run": "r2",
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-rwps1242",
+    "native_sessions": 1,
+    "prose_and_metadata_preserved": true,
+    "runner_returncode": 0,
+    "full_scoped_resources_visible": true,
+    "exactly_one_Proofread": true,
+    "non_native_filesystem_effects": false,
+    "root_exists": false,
+    "cleanup_by": "Registered session-cleanup start hook at 2026-09-19T20:48:39Z"
+  },
+  {
+    "run": "r3",
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-f4pnx5ew",
+    "native_sessions": 2,
+    "prose_and_metadata_preserved": true,
+    "runner_returncode": 0,
+    "full_scoped_resources_visible": true,
+    "exactly_one_Proofread": true,
+    "non_native_filesystem_effects": false,
+    "root_exists": false,
+    "cleanup_by": "Registered session-cleanup start hook at 2026-09-19T20:48:39Z"
+  }
+]

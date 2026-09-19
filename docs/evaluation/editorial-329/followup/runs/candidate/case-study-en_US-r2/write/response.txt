@@ -1,0 +1,34 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_US
+---
+
+# Elm Quay brings repair reports into one view
+
+Elm Quay Housing tested a shared repair log in two buildings to help staff on different shifts see the same information. The eight-week trial gave its maintenance supervisor reasons to repeat the exercise—and a reservation about preparation time. A decision on expansion is still pending.
+
+Elm Quay manages 640 apartments. Before the trial, telephone reports and emails were stored separately. In September 2025, its maintenance team decided to test a shared log and chose Svale Systems after checking whether it could show the status of each repair.
+
+The team designed the categories for the log and kept telephone reporting open for residents. Svale configured the system and trained six staff members over two sessions. For maintenance supervisor Maya Lind, setting up the categories was work that needed time of its own.
+
+“We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts,” Lind said in an email interview.
+
+Elm Quay’s internal trial note, dated December 4, 2025, recorded 31 repair reports entered during the eight weeks. The count excludes emergencies and work ordered before the trial, so it does not cover all repair work.
+
+Median time from report to assignment was two working days during the trial, compared with three in the preceding eight-week period. These figures describe assignment, not completion. The periods had different workloads, and the note explicitly does not attribute the difference to the software.
+
+There were no measurements of cost, resident satisfaction, or completion time. The figures therefore leave those parts of the experience unmeasured; they do not establish savings or a change in how quickly repairs were finished.
+
+Lind’s own assessment combines support for repeating the trial with a change she would make to the schedule.
+
+“I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
+
+The team has not yet expanded the trial. It will decide after checking how the categories work for larger repairs. For now, Lind’s endorsement remains a qualified judgment about Elm Quay’s experience.
+
+For an optional next step, read [Svale Systems’ implementation checklist](https://example.invalid/svale/checklist).
+
+---
+
+*Delivery note: Fictional supplier-published case study in American English, delivered here with no technique selected. Source comparison completed without findings; no files retained. The material supports the requested length but provides no cost, resident-satisfaction, or completion-time measurements.*

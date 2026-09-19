@@ -1,0 +1,33 @@
+{
+  "method": "whitespace word count; new checker also receives full source/draft, Claims, and conditional quotation guidance; not a token or total pipeline cost estimate",
+  "resources": [
+    {
+      "path": "skills/editorial/write/SKILL.md",
+      "words": {
+        "7ff6ec0": 1914,
+        "8f92e12": 1963
+      }
+    },
+    {
+      "path": "skills/editorial/write/references/source-check.md",
+      "words": {
+        "7ff6ec0": 0,
+        "8f92e12": 456
+      }
+    },
+    {
+      "path": "skills/editorial/write/references/quotations.md",
+      "words": {
+        "7ff6ec0": 671,
+        "8f92e12": 671
+      }
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/base.md",
+      "words": {
+        "7ff6ec0": 597,
+        "8f92e12": 597
+      }
+    }
+  ]
+}

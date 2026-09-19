@@ -1,0 +1,1 @@
+*Svenskt artikelutkast utan särskild berättarteknik, levererat här i svaret. Källjämförelsen är slutförd utan fynd. Underlaget är fiktivt och saknar besked om orsaker, upplevd temperatur och åtgärders effekt. Inga filer har lämnats kvar.*

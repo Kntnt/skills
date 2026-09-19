@@ -1,0 +1,1 @@
+Inga ändringar behövs efter granskning och korrekturläsning. Texten har granskats som debattartikel (`opinion`) på svenska, utan berättarteknik enligt metadata. Inga filer har ändrats.

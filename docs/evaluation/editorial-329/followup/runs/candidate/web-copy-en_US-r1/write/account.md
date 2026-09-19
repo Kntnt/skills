@@ -1,0 +1,1 @@
+*Draft delivered here as US English web copy, with no technique applied. Source comparison passed. Payment terms and summary delivery time remain unspecified in the source. No files retained.*

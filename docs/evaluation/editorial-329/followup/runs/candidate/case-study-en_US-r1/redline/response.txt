@@ -1,0 +1,1 @@
+No changes needed. Reviewed as a case study in American English, with no narrative technique selected in the metadata. The final proofreading pass found no mechanical errors. No files changed.

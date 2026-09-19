@@ -1,0 +1,10 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g1becg5o/scratch/write-source-check-zm_n_acy/report.md'",
+    "output": "# Källjämförelse\n\nHela utkastet har jämförts med hela det tillhandahållna materialet, inklusive briefen. En avvikelse hittades.\n\n## 1. Avsaknad av anspråk blir ett påstående om vad som inte har gjorts\n\n**Utkast:** ”Vi har inte kostnadsberäknat försöket och gör inget anspråk på att ha finansierat det.”\n\n**Källa:** ”Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket.”\n\n**Bedömning:** Källan säger att föreningen inte gör anspråk på att ha kostnadsberäknat försöket. Den fastställer inte att någon kostnadsberäkning aldrig har gjorts av föreningen. Utkastets första led gör därmed ett obelagt nekande sakpåstående och förlorar källans avgränsning av kunskapsläget.\n\n**Minsta stödda rättelse:** ”Vi gör inget anspråk på att ha kostnadsberäknat eller finansierat försöket.”\n\nÖvriga sakuppgifter, tillskrivningar och argument har stöd i underlaget eller uttrycker den ståndpunkt och de förslag som briefen anger. Inga ytterligare avvikelser hittades.\n"
+  },
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g1becg5o/scratch/write-source-check-k48k5ov2/report.md'",
+    "output": "Källjämförelsen är slutförd utan anmärkningar.\n\nHela utkastet, inklusive titel, ingress, avsändare, mellanrubriker och avslutning, har jämförts med hela source.md, inklusive briefen. Sakuppgifter och tillskrivna ståndpunkter har stöd i underlaget. Rapportens avgränsningar, avsaknaden av redovisade mätningar och beräkningar samt förslagets kostnadsosäkerhet är bevarade. Inga påståenden som saknar stöd, betydelseförskjutningar eller förlorade förbehåll har identifierats.\n"
+  }
+]

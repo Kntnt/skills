@@ -1,0 +1,1 @@
+*Första utkast: svensk debattartikel, utan särskild teknik, levererad här i svaret. Källjämförelsen är klar utan kvarstående anmärkningar. Underlaget saknar kostnadsbelopp och besked om tillståndskraven. Inga utkast eller arbetsfiler har lämnats kvar.*

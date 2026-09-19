@@ -1,0 +1,1 @@
+*Första utkast till svensk krönika, levererat här i svaret utan särskild berättarteknik. Källjämförelsen gav inga anmärkningar. Underlaget räckte för den önskade längden; frågans effekt är fortsatt oviss. Inga filer har lämnats kvar.*

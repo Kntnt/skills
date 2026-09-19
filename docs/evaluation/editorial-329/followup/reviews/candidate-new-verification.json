@@ -1,0 +1,432 @@
+{
+  "runs": [
+    {
+      "case": "opinion-unknown-sv-r1",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bczl9p0n",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 163.97,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bczl9p0n",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "opinion-unknown-sv-r1",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_p_0cfho",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 66.7,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_p_0cfho",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "opinion-unknown-sv-r2",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lxj6mn4g",
+      "root_exists": false,
+      "native_sessions": 3,
+      "duration_seconds": 219.34,
+      "reports": [
+        "observed-report-1.md",
+        "observed-report-2.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lxj6mn4g",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "opinion-unknown-sv-r2",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-xbmyg005",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 70.3,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-xbmyg005",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wzt9fe2q",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 153.16,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wzt9fe2q",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ubkvnm6i",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 78.68,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ubkvnm6i",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "opinion-absence-en_GB-r2",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-v04u4dyv",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 131.56,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-v04u4dyv",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "opinion-absence-en_GB-r2",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 193.78,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-iztgfn8y",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "case-unprompted-en_US-r1",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 130.35,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lz4_rp7i",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "case-unprompted-en_US-r1",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-90qumrtg",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 75.51,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-90qumrtg",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "case-unprompted-en_US-r2",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-j0l2xmsq",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 125.11,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-j0l2xmsq",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "case-unprompted-en_US-r2",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-i0zv2lo8",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 77.12,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-i0zv2lo8",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n25tq0fq",
+      "root_exists": false,
+      "native_sessions": 3,
+      "duration_seconds": 206.0,
+      "reports": [
+        "observed-report-1.md",
+        "observed-report-2.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n25tq0fq",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-3vcbszbl",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 83.67,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-3vcbszbl",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "case-question-en_GB-r2",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dffmzdcz",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 135.76,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dffmzdcz",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "case-question-en_GB-r2",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-xqtkcy6n",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 76.48,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-xqtkcy6n",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "article-sv-r1",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 195.4,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpysv45p",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "article-sv-r1",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-rdc5oou7",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 67.72,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-rdc5oou7",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "column-sv-r1",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-hssch_8l",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 128.2,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-hssch_8l",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "column-sv-r1",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-osnhz_kg",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 72.09,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-osnhz_kg",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "web-copy-en_US-r1",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-tz2bawih",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 118.61,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-tz2bawih",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "web-copy-en_US-r1",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-rdvh2ah9",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 205.04,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-rdvh2ah9",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "general-en_GB-r1",
+      "stage": "write",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-13_7kgyh",
+      "root_exists": false,
+      "native_sessions": 2,
+      "duration_seconds": 140.98,
+      "reports": [
+        "observed-report-1.md"
+      ],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-13_7kgyh",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    },
+    {
+      "case": "general-en_GB-r1",
+      "stage": "redline",
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bzxnpv7b",
+      "root_exists": false,
+      "native_sessions": 1,
+      "duration_seconds": 71.49,
+      "reports": [],
+      "artifact_exists": true,
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bzxnpv7b",
+        "root_exists": false,
+        "method": "Evaluator removed literal absolute path after native capture and independent inventory review."
+      }
+    }
+  ],
+  "run_count": 24,
+  "native_session_count": 40,
+  "all_roots_absent": true,
+  "artifact_handoffs_byte_equal": true,
+  "owned_batch_processes": [
+    {
+      "receipt": "candidate-new-write-process.json",
+      "pid": 65104,
+      "running_command": ""
+    },
+    {
+      "receipt": "candidate-new-redline-sixth-process.json",
+      "pid": 14618,
+      "running_command": ""
+    },
+    {
+      "receipt": "candidate-new-redline-fifth-process.json",
+      "pid": 9460,
+      "running_command": ""
+    },
+    {
+      "receipt": "candidate-new-redline-first-process.json",
+      "pid": 86209,
+      "running_command": ""
+    },
+    {
+      "receipt": "candidate-new-redline-fourth-process.json",
+      "pid": 1250,
+      "running_command": ""
+    },
+    {
+      "receipt": "candidate-new-redline-third-process.json",
+      "pid": 94487,
+      "running_command": ""
+    },
+    {
+      "receipt": "candidate-new-redline-second-process.json",
+      "pid": 90500,
+      "running_command": ""
+    }
+  ],
+  "errors": []
+}

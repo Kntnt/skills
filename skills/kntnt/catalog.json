@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "514b666675efc0c6c0eafb5d2af34ddfabf8b487131d820c86858f7db6262ba6",
+  "manager_digest": "dcfc9ade860df9a23f3043b1f2db3115be799b1a62de4191beb28eb0f22919ad",
   "skills": [
     {
       "name": "agents-md",
@@ -135,7 +135,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "e399c76c8a1d5638ff1c239f338c883128ce8b845f72204b7161f2d02e23396b",
+      "digest": "b40916915879dcbc57a8aa113b073b93119d8be3da3e340a52c8e3af47fb2b55",
       "binaries": [
         "uv"
       ],
@@ -151,7 +151,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "70e226b1948ee5e2a3d62aac5db5af6373664829eecacdf94c7e4e50259644fc",
+      "digest": "3051a2e742109e7193e3bd58372ebbd78ca7a5c6f53593c5981f3fb98c1fb2e9",
       "binaries": [
         "uv"
       ],
@@ -165,7 +165,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "7087ec5fd63aed9c5cb5e076e6ae2da5be48371caf7cf22c957c851448298374",
+      "digest": "f641b5a0c2e2978683a464e257adfc39d8c29637354203552cb3596f7ec209b7",
       "binaries": [
         "uv"
       ],

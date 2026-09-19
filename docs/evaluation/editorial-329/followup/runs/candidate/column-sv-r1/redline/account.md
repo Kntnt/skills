@@ -1,0 +1,1 @@
+Granskad som svensk krönika, utan särskild teknik enligt textens metadata. Inga redaktionella eller språkliga fel hittades. Texten är oförändrad.

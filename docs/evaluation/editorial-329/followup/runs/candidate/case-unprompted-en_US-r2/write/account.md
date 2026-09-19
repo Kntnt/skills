@@ -1,0 +1,1 @@
+Draft delivered here in American English as a case study, with no technique selected. Source comparison passed. The supplied material is fictional; its evidence is limited to the pilot. No author name or call to action was supplied or added. No files remain from this run.

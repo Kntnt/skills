@@ -1,0 +1,10 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dc9ofsjx/scratch/write-source-check.kjj_i0bh/report.md'",
+    "output": "# Source comparison\n\nComparison of all factual and attributed claims in the complete draft against the complete supplied brief and source is complete. One finding:\n\n## Unsupported certainty about funding and costing\n\nDraft: “Öppna beslut has neither funded nor costed this trial.”\n\nSource: “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket. Kostnaden behöver kommunstyrelsen ta ställning till.”\n\nThe source says the association makes no claim to have funded or costed the trial. It does not establish that neither action has occurred. The draft converts an absence of a claim into a definite negative factual claim.\n\nSmallest supported repair: “Öppna beslut does not claim to have funded or costed this trial.”\n\nNo other source-support findings.\n"
+  },
+  {
+    "command": "/opt/homebrew/bin/bash -lc 'cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dc9ofsjx/scratch/write-source-check.fs5w4smy/report.md'",
+    "output": "Source comparison complete with no findings.\n\nCompared every factual and attributed claim in the complete draft, including its title, byline, headings, implications, and concluding recommendations, against the complete supplied brief and source in source.md. The draft preserves the booking counts and their limits, report attribution, pilot scope, proposed change, stated administrative objection, absence of time and savings calculations, association proposal, cost uncertainty, and Sanna Ek’s stated position. No unsupported addition, changed meaning, or lost qualification was identified.\n"
+  }
+]

@@ -1,0 +1,1 @@
+Granskad som debattartikel (`opinion`) på svenska, utan särskild teknik, enligt textens metadata. Inga redaktionella eller mekaniska fel hittades. Texten är oförändrad och inga filer har ändrats.

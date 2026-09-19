@@ -1,0 +1,1 @@
+*Delivered here as a British English opinion draft, with no technique selected. Source comparison passed; the material’s uncertainties remain explicit. No additional material was needed to meet the brief. No files remain from this run.*

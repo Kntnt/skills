@@ -1,0 +1,1 @@
+Första utkastet levereras här som debattartikel på svenska, utan särskild teknik. Källjämförelsen gav inga anmärkningar. Underlaget räckte för uppdraget; kostnader och tillstånd är fortsatt öppna frågor. Inga filer har sparats eller ändrats.

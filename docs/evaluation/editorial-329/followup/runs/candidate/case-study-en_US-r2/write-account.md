@@ -1,0 +1,1 @@
+*Delivery note: Fictional supplier-published case study in American English, delivered here with no technique selected. Source comparison completed without findings; no files retained. The material supports the requested length but provides no cost, resident-satisfaction, or completion-time measurements.*

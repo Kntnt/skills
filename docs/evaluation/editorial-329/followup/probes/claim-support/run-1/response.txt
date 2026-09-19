@@ -1,0 +1,61 @@
+All factual claims are supported by the supplied material, including their qualifications. The sources establish the claims below rather than merely being compatible with them. Quotations establish Lind’s reported experience and position; they do not establish general product outcomes.
+
+Repeated claims are grouped where their meaning and qualifications are unchanged.
+
+| Draft passage / independently checkable claim | Actual supporting source passage | Assessment |
+|---|---|---|
+| “Elm Quay gains a shared view of repair reports”; “The eight-week trial gave the team a common view of reports” | Lind: “Having one view of the reports helps us” | Fully supported as this customer’s experience. |
+| “Elm Quay Housing’s maintenance team tested a shared repair log” | “its own maintenance team decided to trial a shared repair log”; “The trial lasted eight weeks.” | Fully supported, including that the trial occurred. |
+| “in two buildings” | “trial a shared repair log in two buildings” | Fully supported. |
+| “to help staff on different shifts see the same information” | “The team wanted staff on different shifts to see the same information.” | Fully supported as the purpose. |
+| “The eight-week trial” | “The trial lasted eight weeks.” | Fully supported. |
+| “its supervisor would allow more preparation time before starting again” | Maintenance supervisor Lind: “I would choose to do the trial again. … I would leave an extra week for preparation.” | Fully supported; preserves the conditional reservation. |
+| “Expansion remains undecided.” | “The trial has not yet expanded; the team will decide after checking how the categories work for larger repairs.” | Fully supported. |
+| “Published by Svale Systems.” | “The publisher is the supplier, Svale Systems.” | Fully supported. |
+| “Elm Quay manages 640 apartments.” | “Elm Quay Housing manages 640 flats.” | Fully supported. |
+| “Before the trial, telephone reports and emails were stored separately.” | “Previously telephone reports and emails were stored separately.” | Fully supported. |
+| “In September 2025, its maintenance team decided to try a shared log” | “In September 2025 its own maintenance team decided to trial a shared repair log in two buildings.” | Fully supported, including date and customer agency. |
+| “chose Svale Systems after testing whether it could show the status of each repair” | “It chose Svale Systems after testing whether the log could show the status of each repair.” | Fully supported; does not imply a supplier comparison. |
+| “In an email interview” | “All interviews occurred by email” | Fully supported. |
+| “maintenance supervisor Maya Lind” | “Customer interview with maintenance supervisor Maya Lind” | Fully supported. |
+| “We wanted the evening shift to see what the morning shift had already done.” | “We wanted the evening shift to see what the morning shift had already done.” | Fully supported as Lind’s account of the team’s aim. |
+| “The categories were ours”; “The team designed the categories” | “The categories were ours”; “The maintenance team designed its categories” | Fully supported. |
+| “Svale helped us put them into the log.” | “Svale helped us put them into the log.” | Fully supported as Lind’s account, also corroborated by the configuration statement. |
+| “kept telephone reporting open for residents” | “kept telephone reporting open for residents” | Fully supported. |
+| “Svale configured the log” | “Svale configured the log” | Fully supported. |
+| “trained six staff members” | “trained six staff” | Fully supported. |
+| “over two sessions” | “during two sessions” | Fully supported. |
+| “We spent more time agreeing on the categories than entering the first reports.” | “We spent more time agreeing on the categories than entering the first reports.” | Fully supported as Lind’s reported experience, preserving the specific comparison. |
+| “Elm Quay’s internal trial note” | “Elm Quay’s internal trial note” | Fully supported, including its internal status. |
+| “dated December 4, 2025” | “4 December 2025” | Fully supported. |
+| “recorded 31 repair reports” | “says that 31 repair reports were entered” | Fully supported. |
+| “excluding emergencies” | “It excludes emergencies” | Fully supported as a qualification of the reported data. |
+| “excluding … work ordered before the trial” | “It excludes … work ordered before the trial.” | Fully supported as a qualification of the reported data. |
+| “Median time from report to assignment was two working days during the trial” | “Median time from report to assignment was two working days during the trial” | Fully supported, including statistic, endpoints, unit and period. |
+| “compared with three in the preceding eight-week period” | “and three in the preceding eight-week period” | Fully supported; the draft retains the median report-to-assignment measure and working-day unit. |
+| “The periods had different workloads” | “The periods had different workloads” | Fully supported. |
+| “the note explicitly did not attribute the difference to the software” | “the note explicitly does not attribute the difference to the software” | Fully supported. |
+| “These figures concern assignment, not repair completion.” | “Median time from report to assignment”; “There are no … completion-time measurements.” | Fully supported. |
+| “There were no measurements of costs” | “There are no cost … measurements.” | Fully supported within the trial’s scope. |
+| “There were no measurements of … resident satisfaction” | “There are no … resident-satisfaction … measurements.” | Fully supported within the trial’s scope. |
+| “There were no measurements of … completion times” | “There are no … completion-time measurements.” | Fully supported within the trial’s scope. |
+| “Having one view of the reports helps us” | “Having one view of the reports helps us” | Fully supported as Lind’s assessment; no causal claim about the assignment figures is introduced. |
+| “That assessment was specific to the trial” | “I would choose to do the trial again”; “Her final quotation is her actual, qualified assessment.” | Fully supported as a description of the assessment’s scope. |
+| “Lind did not recommend Svale to every housing company.” | “Lind did not recommend Svale to every housing company.” | Fully supported. |
+| “The team has not yet expanded the trial.” | “The trial has not yet expanded” | Fully supported. |
+| “It will decide after checking how the categories work for larger repairs.” | “the team will decide after checking how the categories work for larger repairs” | Fully supported, including the unresolved decision and its condition. |
+| “Svale provides an … implementation checklist” | “The publisher is the supplier, Svale Systems”; “The optional next step is the supplied implementation checklist at https://example.invalid/svale/checklist” | Supported by the brief’s identification of the supplier and its supplied next-step resource. |
+| “implementation checklist to read” and its linked destination | “the supplied implementation checklist at https://example.invalid/svale/checklist; it is a document to read, not a consultation booking or a product trial” | Fully supported; both destination and proposed action match. |
+
+The following passages present interpretation, personal recommendations or editorial framing rather than additional factual outcomes:
+
+| Draft passage | Actual supporting source passage | Assessment |
+|---|---|---|
+| “For Lind, preparing the categories was work worth planning for” | “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.” | Clearly attributed interpretation, fully grounded in her statement. |
+| “I would set that time aside before the next building starts.” | Same exact quotation in the source. | Personal recommendation faithfully reproduced; does not assert that expansion is scheduled. |
+| “Lind’s assessment of the experience came with a reservation” | “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.” | Supported characterization of her qualified assessment. |
+| “I would choose to do the trial again.” | Same exact quotation in the source. | Personal position faithfully reproduced, preserving its conditional form. |
+| “I would leave an extra week for preparation.” | Same exact quotation in the source. | Personal recommendation faithfully reproduced, including the amount of extra time. |
+| “For operations managers considering their own implementation” | “Write a journalistic customer case for operations managers at small housing companies”; “The optional next step is the supplied implementation checklist” | Audience framing and an optional invitation, not an assertion that readers have decided to implement. |
+
+**No findings.** No unsupported qualification, implication or factual assertion identified. No repairs needed.

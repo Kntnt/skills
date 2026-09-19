@@ -1,0 +1,25 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_GB
+---
+
+# Fenwick approves shared schedule for new repair jobs
+
+Fenwick Instrument Repairs reported that staff could see which instruments were waiting for parts during a six-week trial of a shared bench schedule. The manager approved continued use for new jobs, but held back the backlog pending a review of how the team defined job statuses.
+
+The brass and woodwind repair workshop began the trial in January 2026. Previously, jobs awaiting parts and those ready for work appeared on separate paper sheets. The team chose scheduling supplier Benchline after checking that it could distinguish those statuses.
+
+The workshop defined the statuses and decided who would update them. Benchline configured those choices and trained four staff in one online session. Telephone calls remained part of discussing collection arrangements with customers.
+
+For manager Priya Vale, making the schedule useful required agreement within the workshop. In an email interview with Benchline’s case writer on 2 March 2026, she explained:
+
+‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+The workshop’s trial summary, dated 23 February 2026, recorded 38 jobs entered in the schedule and reported that staff could see which instruments were waiting for parts. It did not measure repair duration, revenue or customer satisfaction. The evidence therefore describes the team’s reported experience, without establishing an improvement in repair speed.
+
+Asked whether she would make the same choice again and what she would change, Vale offered a qualified appraisal:
+
+‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+
