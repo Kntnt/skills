@@ -2880,20 +2880,142 @@ def test_help_named_subcommand_prints_that_subcommands_manpage(
     assert result.stdout.strip() == shipped.strip()
 
 
-def test_help_no_longer_answers_for_a_skill(tmp_path: Path) -> None:
-    """`/kntnt help <skill>` is withdrawn: it asked the user the wrong question.
+def _engine_help(world: dict[str, Path], skill_dir: Path) -> str:
+    """Print what `/<skill> --help` prints: the engine answering the Skill's help form."""
 
-    Knowing which collection a skill arrived from is the fact the route made
-    the user hold, and both replacements are named where the refusal is read.
+    result = subprocess.run(
+        [
+            "uv",
+            "run",
+            "--quiet",
+            str(world["here"] / "scripts" / "kntnt.py"),
+            "invoke",
+            f"--here={skill_dir}",
+        ],
+        input="--help",
+        cwd=world["project"],
+        env=_env(world),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 3, result.stdout + result.stderr
+    return result.stdout
+
+
+def test_help_of_an_enabled_skill_prints_what_its_own_help_form_prints(
+    tmp_path: Path,
+) -> None:
+    """`/kntnt help write` is `/write --help`, installed lists and all.
+
+    The page is rendered as the Skill's own help form renders it, so the
+    editorial list slots are expanded from the Library beside the Manager
+    rather than printed as markers.
     """
 
     world = _world(tmp_path)
+    installed = world["home"] / SHARED_SKILLS / "write"
+    shutil.copytree(REPO_ROOT / "skills" / "editorial" / "write", installed)
+
+    result = _run(world, "help", "write")
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout == _engine_help(world, installed)
+    assert "Installed choices:" in result.stdout
+    assert "<!-- kntnt:editorial-" not in result.stdout
+
+
+def test_help_of_a_project_skill_is_read_offline_and_changes_nothing(
+    tmp_path: Path,
+) -> None:
+    """A Project copy answers too, with no origin to reach and nothing written."""
+
+    world = _world(tmp_path)
+    installed = world["project"] / SHARED_SKILLS / "proofread"
+    shutil.copytree(REPO_ROOT / "skills" / "editorial" / "proofread", installed)
+    shutil.rmtree(world["source"])
+    before = (_tree(world["home"]), _tree(world["project"]), _tree(world["here"]))
+
+    result = _run(world, "help", "proofread")
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout == _engine_help(world, installed)
+    assert result.stdout.startswith("# proofread")
+    assert (_tree(world["home"]), _tree(world["project"]), _tree(world["here"])) == (
+        before
+    )
+
+
+def test_a_manager_command_outranks_a_skill_of_the_same_name(tmp_path: Path) -> None:
+    """`/kntnt help select` is the Manager's page whatever a layer holds."""
+
+    world = _world(tmp_path)
+    installed = world["home"] / SHARED_SKILLS / "select"
+    _write(installed / "SKILL.md", _skill_md("select"))
+    _write(installed / "help.md", "# select\n\nA Skill's page, not the verb's.\n")
+
+    result = _run(world, "help", "select")
+
+    assert result.returncode == 0, result.stderr
+    shipped = (MANAGER_DIR / "help" / "select.md").read_text(encoding="utf-8")
+    assert result.stdout.strip() == shipped.strip()
+
+
+def test_help_of_a_skill_that_is_not_enabled_is_refused_toward_select(
+    tmp_path: Path,
+) -> None:
+    """A name no layer holds is refused, never fetched and never installed.
+
+    `alpha` is in the Catalog and at the origin, so reading it from there
+    would have been possible; the refusal names Select as the route that
+    reads help for a Skill the user does not have.
+    """
+
+    world = _world(tmp_path)
+    _present(world, "home", ".claude")
+    before = (_tree(world["home"]), _tree(world["project"]), _tree(world["here"]))
+
+    for name in ("alpha", "nosuch", "../alpha"):
+        result = _run(world, "help", name)
+
+        assert result.returncode != 0, name
+        assert name in result.stderr, name
+        assert "/kntnt select" in result.stderr, name
+        assert "from the collection" not in result.stdout + result.stderr, name
+    assert (_tree(world["home"]), _tree(world["project"]), _tree(world["here"])) == (
+        before
+    )
+
+
+def test_help_ignores_a_skill_that_is_not_the_collections(tmp_path: Path) -> None:
+    """A directory without the marker is some other collection's Skill."""
+
+    world = _world(tmp_path)
+    installed = world["home"] / SHARED_SKILLS / "alpha"
+    _write(installed / "SKILL.md", _foreign_skill_md("alpha"))
+    _write(installed / "help.md", "# alpha\n\nSomebody else's manpage.\n")
 
     result = _run(world, "help", "alpha")
 
     assert result.returncode != 0
-    assert "--help" in result.stderr
-    assert "select" in result.stderr
+    assert "Somebody else's manpage." not in result.stdout
+    assert "/kntnt select" in result.stderr
+
+
+def test_help_names_a_missing_local_page_rather_than_fetching_one(
+    tmp_path: Path,
+) -> None:
+    """An Enabled Skill without its page is a damaged install, said as such."""
+
+    world = _world(tmp_path)
+    installed = world["home"] / SHARED_SKILLS / "alpha"
+    _write(installed / "SKILL.md", _skill_md("alpha"))
+
+    result = _run(world, "help", "alpha")
+
+    assert result.returncode != 0
+    assert str(installed / "help.md") in result.stderr
+    assert "from the collection" not in result.stdout
 
 
 def test_manpage_of_an_enabled_skill_is_read_from_disk(tmp_path: Path) -> None:
@@ -8775,7 +8897,7 @@ def test_every_distributed_markdown_dependency_is_available_to_an_installed_read
 
 
 def test_select_is_where_a_skill_is_read_about_before_it_is_enabled() -> None:
-    """The route `/kntnt help <skill>` was withdrawn in favour of (ADR-0176).
+    """Select reads the help of a Skill that is not Enabled (ADR-0176).
 
     Prose is what carries it, so prose is where it has to be pinned: a list
     that never offers the help is a list nobody can ask for it from.
@@ -8789,25 +8911,36 @@ def test_select_is_where_a_skill_is_read_about_before_it_is_enabled() -> None:
     assert "read in full" in page
 
 
-def test_the_manager_documents_its_own_verbs_and_no_skill() -> None:
-    """A withdrawn route left standing in the prose is one users keep trying."""
+def test_the_manager_documents_help_for_an_enabled_skill() -> None:
+    """`/kntnt help <skill>` is a route again, so every help surface says so (#327).
 
-    withdrawn = (
-        "help <skill>",
-        "one collection skill",
-        "named collection skill",
-        "collection skill's help",
-    )
+    The withdrawn wording is refused by name as well: a surface still saying
+    the Manager has no route for a Skill's page is one users stop trying.
+    """
+
     manager = REPO_ROOT / "skills" / "kntnt"
+    for path in (manager / "help.md", manager / "help" / "help.md"):
+        text = path.read_text(encoding="utf-8")
+        assert "Enabled Skill" in text, path
+    stale = (
+        "no route for a Collection Skill",
+        "not how another Skill's help is reached",
+        "documents its own verbs",
+    )
     for path in (
         manager / "SKILL.md",
         manager / "help.md",
         manager / "help" / "help.md",
         manager / "steps" / "help.md",
+        REPO_ROOT / "CONTEXT.md",
+        REPO_ROOT / "docs" / "rules" / "collection.md",
     ):
         text = path.read_text(encoding="utf-8")
-        for phrase in withdrawn:
+        for phrase in stale:
             assert phrase not in text, f"{path}: {phrase}"
+    assert "/kntnt help <skill>" in (
+        REPO_ROOT / "docs" / "rules" / "collection.md"
+    ).read_text(encoding="utf-8")
 
 
 def test_agents_md_is_model_invoked() -> None:

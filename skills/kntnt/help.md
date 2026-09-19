@@ -8,7 +8,7 @@ kntnt - manage which collection Skills and Features are Enabled
 
 **/kntnt** [**--** *INSTRUCTION*]
 
-**/kntnt** **help** [*COMMAND*] [**--** *INSTRUCTION*]
+**/kntnt** **help** [*NAME*] [**--** *INSTRUCTION*]
 
 **/kntnt** **select** [**--on=**_ENTRY_]... [**--off=**_ENTRY_]... [**--project**[=**on**|**off**]] [**--yes**] [**--dry-run**] [**--** *INSTRUCTION*]
 
@@ -20,7 +20,7 @@ kntnt - manage which collection Skills and Features are Enabled
 
 `kntnt` lists, Enables, refreshes, and removes Collection Skills and Features across detected Harnesses. Other Skills are invoked by their own names.
 
-Bare `kntnt` prints this page. Use `/kntnt <command> --help` or `/kntnt help <command>` for command help. Select can show help for a Skill that is not yet Enabled.
+Bare `kntnt` prints this page. Use `/kntnt <command> --help` or `/kntnt help <command>` for command help. Use `/kntnt help <skill>` or `/<skill> --help` for an Enabled Skill. Select can show help for a Skill that is not yet Enabled.
 
 Select lists every Catalog entry — its Skills and, under them, its Features — Enabled or not.
 
@@ -30,9 +30,9 @@ A real Global Update without formal **--yes** shows its complete plan and applie
 
 ## COMMANDS
 
-**help** [*COMMAND*]
+**help** [*NAME*]
 
-Print this page or the page for one Manager command.
+Print this page, the page for one Manager command, or the page for one Enabled Skill.
 
 **select**
 

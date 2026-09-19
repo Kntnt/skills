@@ -34,6 +34,11 @@ MANAGER = "kntnt"
 UNIVERSAL_PROJECT = ".agents/skills"
 CANONICAL_GLOBAL = "~/.agents/skills"
 
+# What a Skill may be named, per the Agent Skills specification: lowercase
+# letters and digits in hyphen-separated runs. A typed name is held to it
+# before it reaches a path.
+SKILL_NAME = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+
 # Directory-relative sentinel used when Linux receives absolute paths.
 AT_FDCWD = -100
 
@@ -3841,23 +3846,57 @@ def cmd_check(skill_dir: Path) -> int:
     return status
 
 
-def enabled_manpage(name: str) -> Path | None:
-    """Locate the manpage of *name* where a layer holds it, Global or Project.
+def layer_copies(name: str) -> Iterator[Path]:
+    """Yield every directory a layer would hold *name* in, Global before Project.
 
-    Both layers answer, and Global before Project only because something has to
-    come first: the question is what a Skill does, and any copy of it says so.
-    A directory of that name is read as that skill's without asking the marker,
-    which is the manager's one notion of presence — the same one the checkbox
-    on the row is computed from, so the help and the checkbox cannot disagree.
+    Global comes first only because something has to: the question each caller
+    asks is what a Skill does, and any copy of it says so.
     """
 
     for global_layer in (True, False):
         for harness in target_harnesses(global_layer=global_layer):
             for directory in skill_dirs(harness, global_layer=global_layer):
-                candidate = directory / name / "help.md"
-                if candidate.is_file():
-                    return candidate
-    return None
+                yield directory / name
+
+
+def enabled_manpage(name: str) -> Path | None:
+    """Locate the manpage of *name* where a layer holds it, Global or Project.
+
+    A directory of that name is read as that skill's without asking the marker,
+    which is the manager's one notion of presence — the same one the checkbox
+    on the row is computed from, so the help and the checkbox cannot disagree.
+    """
+
+    return next(
+        (
+            copy / "help.md"
+            for copy in layer_copies(name)
+            if (copy / "help.md").is_file()
+        ),
+        None,
+    )
+
+
+def enabled_skill(name: str) -> Path | None:
+    """Return a copy of the collection Skill *name* that a layer holds, if any.
+
+    Asked of the layers alone, so the answer needs no origin. A copy without
+    the marker is another collection's Skill and is passed over; among ours, one
+    carrying its manpage is preferred, and one without is still returned so
+    that its missing page is named rather than looked for elsewhere.
+    """
+
+    # The name reaches a path, so only a name a Skill can have is looked up.
+    if SKILL_NAME.fullmatch(name) is None:
+        return None
+
+    ours = [
+        copy
+        for copy in layer_copies(name)
+        if skill_present_at(copy.parent, name) and carries_marker(copy)
+    ]
+    candidates = [copy for copy in ours if (copy / "help.md").is_file()] or ours
+    return candidates[0] if candidates else None
 
 
 def fetch_manpage(category: str, name: str) -> str:
@@ -3985,12 +4024,12 @@ def syntax_error(problem: str, argv: list[str]) -> ManagerError:
 
 
 def help_text(name: str | None) -> str:
-    """Return the manager's own manpage, or the manpage of one of its verbs.
+    """Return the manager's own manpage, one of its verbs', or an Enabled Skill's.
 
-    A skill's help is not reached here (ADR-0176): one the user has answers
-    `--help` itself, and one they do not is read about in Select. So an
-    unknown name is refused with both routes named rather than looked for in
-    the Catalog, which keeps Help answerable with no origin to reach.
+    A verb of the manager answers first, so no Skill can shadow one. A Skill is
+    answered from a copy a layer holds, rendered as its own `--help` renders it,
+    and never from the origin: Help stays answerable offline, and a Skill the
+    user does not have is read about in Select instead.
     """
 
     # Bare help, and the manager's own name, both mean the manager's manpage.
@@ -3998,18 +4037,21 @@ def help_text(name: str | None) -> str:
         return read_manpage(here() / "help.md")
 
     verb = subcommand_manpage(name)
-    if verb is None:
+    if verb is not None:
+        return read_manpage(verb)
+
+    skill = enabled_skill(name)
+    if skill is None:
         raise ManagerError(
-            f"unknown subcommand '{name}'; the manager documents its own verbs — "
-            f"a skill of this collection answers '/{name} --help' itself, and "
-            "'/kntnt select' reads the help of one you do not have"
+            f"'{name}' is neither a Manager command nor a Skill of this collection "
+            "Enabled here; '/kntnt select' reads the help of one you do not have"
         )
 
-    return read_manpage(verb)
+    return render_invocation_help(read_manpage(skill / "help.md"), here() / "library")
 
 
 def cmd_help(name: str | None) -> int:
-    """Print help for the manager or one of its subcommands."""
+    """Print help for the manager, one of its subcommands, or an Enabled Skill."""
 
     print(help_text(name))
     return 0

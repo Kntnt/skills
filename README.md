@@ -48,7 +48,7 @@ A project can add to the global set but cannot hide a global skill. The manager 
 | `/kntnt update [--project]` | Refresh changed skills and handle catalog changes |
 | `/kntnt uninstall` | Remove global skills and the manager |
 
-Use `/kntnt help <command>` for manager details. Use `/<skill> --help` for an enabled skill.
+Use `/kntnt help <command>` for manager details. Use `/<skill> --help` or `/kntnt help <skill>` for an enabled skill.
 
 `--dry-run` is available for select, update, and uninstall. `--yes` answers every yes-or-no question with yes; on update, that includes enabling new skills.
 

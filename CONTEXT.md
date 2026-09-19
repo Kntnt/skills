@@ -95,7 +95,7 @@ The manager subcommand that takes this collection off this machine: every Featur
 _Avoid_: remove, delete, purge, reset
 
 **Help**:
-The Manager subcommand that prints the Manager's own help, or the help for one of its own subcommands. It is not how another Skill's help is reached; what it promises is stated in `docs/rules/collection.md`.
+The Manager subcommand that prints the Manager's own help, the help for one of its own subcommands, or the help of an Enabled Collection Skill. What it promises is stated in `docs/rules/collection.md`.
 _Avoid_: usage, man
 
 **Assume yes**:
