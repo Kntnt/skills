@@ -26,6 +26,7 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--revision", default=INSTRUCTIONS)
+    parser.add_argument("--web-copy-revision")
     parser.add_argument(
         "--genres",
         nargs="+",
@@ -45,7 +46,11 @@ def main() -> None:
                     "run",
                     str(RUNNER),
                     "--revision",
-                    args.revision,
+                    (
+                        args.web_copy_revision
+                        if genre == "web-copy" and args.web_copy_revision
+                        else args.revision
+                    ),
                     "--corpus-revision",
                     CORPUS,
                     "--prompt",

@@ -8,7 +8,7 @@
 - **model** — `gpt-6-astra`, inherited `high`; each native turn context is checked below
 - **harness** — Codex CLI 0.155.1, fresh isolated invocation per stage
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commit** — `d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd`
+- **instruction commits** — `d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd` for the first five cases; `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9` for case-study-en_US and article-abt/article-pac. The later revision clarifies translated quotations and changes only column/opinion beyond this batch’s contracts.
 - **method** — Frozen editorial-quality matrix; no other provider's results consulted. Every input/output is synthetic. This record is the article/case-study part of the candidate matrix, including article ABT and PAC.
 
 ## article-sv
@@ -125,4 +125,28 @@
 - **unresolved findings** — Unsupported trial commencement date in September 2025.
 - **defects filed** — #344 (linked to #329).
 - **notes** — This is source-aware F1 evidence; the draft contains no internal fact exposing the date shift to Redline. Existing Source Fidelity already names chronology, so no additional rule is justified by this sample alone. A later successful rerun cannot establish guaranteed repair.
+
+## case-study-en_US
+
+- **fixture** — case-study-en_US
+- **instruction commit** — f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9
+- **invocation** — `/write --genre=case-study --language=en_US --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Full American customer case and separate account in `editorial-329/runs/candidate/case-study-en_US/write/`.
+- **side effects** — No work/export/scratch changes; temporary UV directories removed. Native home effects inventoried, authentication unchanged. Evaluator root removed.
+- **criteria** —
+  - F1 — pass — September dates the decision to test; 640 apartments, eight weeks, 31 reports/exclusions, medians and workload/causal limits remain exact. Original quotations and qualified appraisal preserved.
+  - G1 — pass — Team choices and preparation experience carry the story, with Svale third-person support.
+  - G2 — pass — Benefit headline, distinct ingress, customer context, implementation, results, appraisal and actual checklist function all supplied; supplier publication explicitly disclosed.
+  - P1 — pass — Assignment/completion distinction and undecided expansion remain clear; no causal inference added.
+  - W1 — pass — Compact paragraphs and quotations support a continuous short account without compulsory section headings.
+  - L1 — pass — Native American narrative (“follow reports across shifts”) and preserved natural English customer speech.
+  - L2 — pass — Apartments, staff members, December 4 and American quotation punctuation consistent.
+  - T1 — pass — Case-study/none/en_US and actual selected-resource loading agree; no technique.
+  - R2 — pass — Full bounded Write contract including updated quotation policy loaded; no review or peer pass.
+  - O1 — pass — Input preserved and no surviving Skill artifacts in all inventories.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — English source needs no quotation translation; no unsupported trial-start date appears. Native identity checked in consolidated audit.
 

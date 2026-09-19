@@ -153,3 +153,30 @@ Each invocation uses a fresh native session and the immutable candidate installa
 - **unresolved findings** — The visible absent-form reference remains and Redline reports none; #345.
 - **defects filed** — [#345](https://github.com/Kntnt/skills/issues/345).
 - **notes** — Native rollout confirms gpt-6-astra/high. This is a missed visible defect, not a source-verification limitation. No correction-child session was spawned.
+
+## `web-copy-en_US`
+
+- **fixture** — `web-copy-en_US`
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Short no-change status; [final](../editorial-329/runs/candidate/web-copy-en_US/final.md) equals the entire input.
+- **side effects** — No surviving Skill changes; 316 native-home creations plus trust config. Root removed.
+- **criteria** —
+  - `G1` — `pass` — Concrete offer and reader's decision remain clear.
+  - `G2` — `pass` — Accurate interest link, non-order consequence, price and prerequisites are preserved without an embedded-form claim.
+  - `P1` — `pass` — Benefits, scope, exclusions and next step remain connected.
+  - `W1` — `pass` — Specific headings and short coherent paragraphs remain usable from direct entry.
+  - `L1` — `pass` — Native US English task language remains intact.
+  - `L2` — `pass` — One US mechanics pass makes no change; currency and metadata remain.
+  - `T1` — `pass` — web-copy/none/en_US from metadata; selected genre and support in items 6/8, no technique.
+  - `R1` — `pass` — Byte-identical final preserves every condition, number, destination and supported benefit.
+  - `R2` — `pass` — Three editorial scopes in item_7 and review contract in 6/8; sole flags-only installed Proofread invocation in 11 and mechanics in 12/13; no post-pass edit.
+  - `O1` — `pass` — Full inventories and item_14 establish no remaining Skill files or mutations.
+- **unresolved findings** — `none`
+- **defects filed** — `none`
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.
+
+## Original-batch completion and transfer
+
+Seven original pairs on d60c4fc were completed and assessed: column sv/en_GB, opinion sv/en_GB, and web-copy sv/en_GB/en_US. All fourteen registered private run roots were removed after their evidence was captured. Column-en_US and opinion-en_US were not started on this revision; their first runs belong to corrected-candidate coverage, never an assumed original pass. Explicit web-copy-abt likewise waits for the corrected candidate. The column reruns are owned by the parent evaluator; opinion reruns are in the separate -343-opinion records and web-copy reruns plus the original-draft regression in -345-web-copy records. The failed original outputs and judgement corrections above remain preserved.

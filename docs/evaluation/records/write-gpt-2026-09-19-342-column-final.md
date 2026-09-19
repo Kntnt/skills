@@ -36,3 +36,26 @@ Each invocation is a fresh native session through the unchanged runner. Only Wri
 - **unresolved findings** — none; efficacy of the proposed box stays unknown.
 - **defects filed** — none in this sample; affected verification for #342.
 - **notes** — Native gpt-6-astra/high; judgement precedes the paired Redline output. Earlier failures remain visible and this sample alone is no reliability guarantee.
+
+## column-sv
+
+- **fixture** — column-sv
+- **invocation** — `/write --genre=column --language=sv --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Full column/metadata and account; [artifact](../editorial-329/runs/rerun-column-final/column-sv/write/artifact.md), [response](../editorial-329/runs/rerun-column-final/column-sv/write/response.txt).
+- **side effects** — No Skill effect; 318 native home entries plus trust config update, [classification](../editorial-329/runs/rerun-column-final/column-sv/write/side-effects.md); root removed.
+- **criteria** —
+  - F1 — pass — “tid i kalendern ... kan behandlas som ett resultat ... Det är min reflektion” preserves the supplied general observation without inventing Nora's own habit. All template fields, uncertainty, trust/exploration and self-irony stay within the notes; no meeting anecdote or measured trend.
+  - G1 — pass — Nora's document observation develops into a recognisable reflective perspective for meeting planners.
+  - G2 — pass — Relevant title/byline, concrete opening, reconsideration and earned uncertain closing; no compulsory scene or campaign.
+  - P1 — pass — A decision-only box is questioned through discovery and trust before a broader purpose question emerges.
+  - W1 — pass — Connected paragraphs and rhetorical questions support reading; absence of H2s suits the short continuous reflection.
+  - L1 — pass — “Ett syfte behöver inte vara ett löfte om ett färdigt svar” and the final return to start/end times are idiomatic Swedish; no English structural calque.
+  - L2 — pass — Swedish compounds, title case, punctuation and byline conventions hold.
+  - T1 — pass — column/none/sv metadata and item4 selected/base/web-craft read agree; item5 returns composition only, no technique.
+  - R2 — pass — Installed invocation and scoped writing resources, no review half or peer pass.
+  - O1 — pass — Full inventories and explicit temporary cleanup establish preserved source/resources and no Skill artifacts.
+- **unresolved findings** — none; efficacy remains an honest unknown.
+- **defects filed** — none in this final-resource sample.
+- **notes** — Native gpt-6-astra/high verified; independently judged before paired review.

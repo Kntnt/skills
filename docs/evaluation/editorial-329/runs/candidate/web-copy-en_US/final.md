@@ -1,0 +1,39 @@
+---
+kntnt:
+  genre: web-copy
+  technique: none
+  language: en_US
+---
+
+# A clearer picture of your shared-room booking routine
+
+Svale helps boards of smaller housing cooperatives take stock of how residents book a shared room. Our focused review gives your board a shared understanding of the current routine and two possible ways to simplify it.
+
+## What your board receives
+
+The review includes a 45-minute video meeting with two representatives from your board and a written summary covering:
+
+- The steps in your current booking routine.
+- Points that are unclear.
+- Two possible simplifications.
+
+The scope is one shared room in one housing cooperative. This gives your board a defined routine to consider, with the current steps and possible changes set out in writing.
+
+## What you need to prepare
+
+Your board needs to be able to describe its existing booking rules and show the instructions currently provided to residents. Two board representatives take part in the video meeting.
+
+The service is relevant if your board wants to examine its booking routine and consider possible simplifications. It does not include legal advice, installation of a booking system, or interviews with residents.
+
+## Fixed price: 4,800 SEK including VAT
+
+The price covers the meeting and written summary for one room in one cooperative. Svale does not guarantee a particular amount of time saved or fewer conflicts.
+
+## Express interest and hear from Svale
+
+The interest form asks for your name, housing cooperative, and email address. Submitting it is not an order, and no payment details are required.
+
+Svale will email you within three business days to check whether the service is a fit and suggest a meeting time. Submitting the form does not book the meeting.
+
+[Express interest in a booking-routine review](https://example.invalid/svale/intresse)
+

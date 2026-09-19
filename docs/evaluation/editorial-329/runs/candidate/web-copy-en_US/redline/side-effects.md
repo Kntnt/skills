@@ -1,0 +1,1 @@
+No changes outside home; 316 native bootstrap/cache/database/session entries and only private-project trust added to config. Authentication unchanged. TemporaryDirectory scopes in 3/7/11/13 and cleanup inspection in 14 agree with full inventories. No correction agent used.

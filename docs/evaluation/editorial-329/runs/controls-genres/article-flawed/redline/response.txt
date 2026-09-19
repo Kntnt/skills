@@ -1,0 +1,30 @@
+# Temperaturer under 20 grader i sex klassrum
+
+**Givarna registrerade temperaturer under 20 grader i sex klassrum. Givarna registrerade temperaturer under 20 grader i sex klassrum.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Arbetsgränsen är inte en lagregel. Enligt rapporten varade försöket fyra veckor.
+
+## Begränsningar i mätningarna
+
+Två givare stod vid ytterväggar och fyra vid innerväggar. Placeringens effekt jämfördes inte experimentellt.
+
+Operativ temperatur är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Operativ temperatur saknas, trots att resonemanget bygger på den. Givarna mätte bara luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Nästa försök planeras till november
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+---
+
+Granskad som artikel på svenska, utan särskild teknik. Dispositionen och begreppsförklaringen har bearbetats.
+
+**Olöst:** Ingressens dubblering kvarstår efter den enda korrigeringsrundan och den avslutande korrekturläsningen. Jag hänförde den felaktigt till den mekaniska genomgången.
+
+Korrigeringsrundan tog bort följande påståenden eftersom granskningen pekade ut dem som ogrundade eller innehållstomma:
+
+- Att givarna räddar skolan från en katastrof och att katastrofen lurade bakom varje hörn.
+- Att givarna säkert har gjort eleverna friskare.
+- Att detta är mycket viktigt för alla som tycker att temperatur är viktigt.
+- Att kontakt med avsändaren skulle rädda framtiden, tillsammans med kontaktuppmaningen.

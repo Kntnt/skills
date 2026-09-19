@@ -1,0 +1,1 @@
+No work/export/scratch changes, additions or removals. Source/instructions unchanged; 318 native private-home entries and project trust config update classified as Harness effects; authentication unchanged. Full inventories enumerate every path. Items3/5 use fresh context-managed UV directories; item6 confirms no survivors. Root removed after capture.

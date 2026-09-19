@@ -8,7 +8,7 @@
 - **model** — `gpt-6-astra`, inherited `high`; each native turn context is checked below
 - **harness** — Codex CLI 0.155.1, fresh isolated invocation per stage
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commit** — `d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd`
+- **instruction commits** — `d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd` for the first five cases; `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9` for case-study-en_US and article-abt/article-pac. The later revision clarifies translated quotations and changes only column/opinion beyond this batch’s contracts.
 - **method** — Frozen editorial-quality matrix; no other provider's results consulted. Every input/output is synthetic. This record is the article/case-study part of the candidate matrix, including article ABT and PAC.
 
 ## article-sv
@@ -102,4 +102,27 @@
 - **unresolved findings** — Skill reported none; evaluator’s L1 finding remains unreported.
 - **defects filed** — #341, candidate repetition and missed editorial diagnosis.
 - **notes** — Both parent and mechanical child native contexts are `gpt-6-astra/high`. No source package or expected finding was supplied to Redline. This observation remains even if a later rerun passes.
+
+## case-study-en_GB
+
+- **fixture** — case-study-en_GB
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Complete corrected case with a separate removal account, retained under `editorial-329/runs/candidate/case-study-en_GB/redline/`.
+- **side effects** — No work/export/scratch changes survive; scoped transient UV directories removed. Two shell cleanup forms were denied before successful Python temporary-directory forms. Native home effects inventoried, authentication unchanged; evaluator root removed.
+- **criteria** —
+  - G1 — pass — Customer agency and qualified voice retained.
+  - G2 — pass — Case’s functional parts and precise checklist destination remain.
+  - P1 — pass — Visible result limitations remain; the source-only chronology mismatch is not diagnosable from this artifact.
+  - W1 — pass — The quotation now contributes its own advice without a pre-echo in the narrative; cohesive paragraphing remains.
+  - L1 — pass — Native British narrative and original English customer voice retained.
+  - L2 — pass — British conventions preserved; final mechanical pass changed nothing.
+  - T1 — pass — Case-study/none/en_GB metadata and actual selected-resource loads agree; no technique resource.
+  - R1 — pass — Only “For Lind, the preparation involved work that another building would also need time to do” became “Lind said:”. The same advice remains in the quotation. Every other claim and quotation is unchanged; the removal is explicitly reported.
+  - R2 — pass — Full parent and fresh correction-child base/genre/web/anti-slop/language loads established in native traces; one correction and re-review, then one installed Proofread shim with shared/local mechanics, no later substantive edit.
+  - O1 — pass — Input unchanged, no enduring Skill file in any inventoried writable root.
+- **unresolved findings** — Skill reports none. Source-aware evaluator notes Write’s September commencement error remains; Redline was not given the evidence needed to detect it.
+- **defects filed** — #344 belongs to Write’s source-fidelity result, not a Redline failure.
+- **notes** — Parent and fresh correction child expose gpt-6-astra/high. Complete input/output diff and removal account support the preservation judgment.
 

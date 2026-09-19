@@ -188,3 +188,7 @@ The absent-form interface reference is filed as [#345](https://github.com/Kntnt/
 - **unresolved findings** — Account accurately notes unspecified payment terms and summary delivery timeframe.
 - **defects filed** — `none`
 - **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.
+
+## Original-batch completion and transfer
+
+Seven original pairs on d60c4fc were completed and assessed: column sv/en_GB, opinion sv/en_GB, and web-copy sv/en_GB/en_US. All fourteen registered private run roots were removed after their evidence was captured. Column-en_US and opinion-en_US were not started on this revision; their first runs belong to corrected-candidate coverage, never an assumed original pass. Explicit web-copy-abt likewise waits for the corrected candidate. The column reruns are owned by the parent evaluator; opinion reruns are in the separate -343-opinion records and web-copy reruns plus the original-draft regression in -345-web-copy records. The failed original outputs and judgement corrections above remain preserved.

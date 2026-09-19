@@ -1,0 +1,14 @@
+--- artifact.md
++++ final.md
+@@ -30,9 +30,8 @@
+ 
+ ## Express your interest and find out what happens next
+ 
+-To express interest, provide your name, association and email address using the form below. Submitting the form is not an order, and no payment details are required.
++To express interest, provide your name, association and email address using the form linked below. Submitting the form is not an order, and no payment details are required.
+ 
+ Svale will reply by email within three working days to check whether the service is a suitable fit and suggest a meeting time. The form itself does not book a meeting.
+ 
+-[Express interest in a booking routine review](https://example.invalid/svale/intresse)
+-
++[Express interest in a booking routine review](https://example.invalid/svale/intresse)

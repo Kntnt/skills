@@ -1,0 +1,3 @@
+# Filesystem effects
+
+No surviving Skill effects. Input/work/resources/scratch are unchanged after a real fresh editorial correction and a separate fresh installed Proofread pass. The 320 new native private-home entries are Codex bootstrap/plugin/cache/session/database/lock artifacts; the sole changed file adds project trust to private config.toml. Authentication is unchanged. All three native turn contexts expose gpt-6-astra/high; trace-audit.json records actual calls and complete resource paragraph visibility. This positively exercises #340's correction cleanup fix, beyond a no-change case. The original whole-sentence duplicate remains as an openly reported quality defect (#346), not a filesystem or hidden-reporting failure.

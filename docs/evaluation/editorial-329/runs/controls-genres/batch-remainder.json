@@ -1,0 +1,17 @@
+{
+  "pid": 15925,
+  "process_group": 15925,
+  "wait_for": "article-flawed/redline/result.json",
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run_genre_controls.py",
+    "--genres",
+    "case-study",
+    "column",
+    "opinion",
+    "web-copy",
+    "--web-copy-revision",
+    "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f"
+  ]
+}
