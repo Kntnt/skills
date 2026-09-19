@@ -8,7 +8,7 @@
 - **model** — `gpt-6-astra`, inherited `high`, verified against native turn contexts
 - **harness** — Codex CLI 0.155.1, fresh isolated invocation per stage
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commits** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd` for article-en_GB; `7022c804dfbda4332723bf96b6a9857c24e63b6e` for remaining pairs. Only Swedish mechanics colon variants changed between these revisions; each pair uses one immutable revision.
+- **instruction commits** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd` for article-en_GB; `7022c804dfbda4332723bf96b6a9857c24e63b6e` for article-en_US; `93758f485614c3b0e79b1bcce9fb8080de755d08` for the two case-study reruns. Changes across these revisions are Swedish colon variants and the base clarification that unknown/unclaimed does not mean known absent; each pair uses one immutable revision.
 - **method** — Same frozen matrix and source packages, no added prompt hints. New runs preserve the earlier d60 failures. No other provider's records consulted. Chronology is already covered by Source Fidelity: an observed pass on this revision is not proof of a targeted fix or future reliability.
 
 ## article-en_GB
@@ -34,4 +34,28 @@
 - **unresolved findings** — none
 - **defects filed** — none; no regression observed in the translation-policy affected path.
 - **notes** — Independent judgment before Redline; no expected phrasing or defect hint in invocation. Native identity checked in consolidated audit.
+
+## article-en_US
+
+- **fixture** — article-en_US, affected translation rerun
+- **instruction commit** — 7022c804dfbda4332723bf96b6a9857c24e63b6e
+- **invocation** — `/write --genre=article --language=en_US --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Full article and separate delivery account in `editorial-329/runs/rerun-341/article-en_US/write/`.
+- **side effects** — No enduring work/export/scratch changes; native home effects inventoried, authentication unchanged, root removed.
+- **criteria** —
+  - F1 — pass — Exact 14/120 lesson-unit count, duration unknown, local threshold, placement limitations, unmeasured comfort/effects and undecided funding; translated quote preserves uncertainty.
+  - G1 — pass — Useful measurement interpretation for property managers, no promotional claims.
+  - G2 — pass — H1, standalone ingress, concrete deployment lead and connected explanation end in a warranted next step.
+  - P1 — pass — Differentiates point readings, lesson counts and operative temperature; does not infer cause or student experience.
+  - W1 — pass — Three descriptive H2s divide readable explanatory paragraphs without unnecessary lists.
+  - L1 — pass — Natural American wording throughout, including “take a closer look” and “Connect the readings to room use”.
+  - L2 — pass — American date, drafts/students/custodian, double quotes and unspaced em dashes consistent.
+  - T1 — pass — Article/none/en_US metadata agrees with selected resources; no technique loaded.
+  - R2 — pass — Full Write bounded contract and composition scope loaded, no review resources or delegated pass.
+  - O1 — pass — Source unchanged, no enduring Skill file in complete inventories.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Judgment before Redline; inherited model/effort confirmed in native turn contexts.
 

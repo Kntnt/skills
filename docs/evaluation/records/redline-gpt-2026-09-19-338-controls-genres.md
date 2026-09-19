@@ -249,3 +249,99 @@ The per-session `trace-audit.json` checks required resource paragraphs separatel
 - **unresolved findings** — none
 - **defects filed** — none
 - **notes** — Actual positive coverage of #345: the linked form is treated as a destination, not proof of embedded interface controls. Source-blind correction uses only the supplied offer and conditions and requests no nonexistent brief.
+
+## Affected rerun: `article-flawed` — #346
+
+- **fixture** — Exact unchanged `article-flawed`, sv; original failure remains above
+- **instruction commit** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`
+- **invocation** — `/redline --genre=article --language=sv --output=response input.md`
+- **contextual instruction** — `none`; no expected repair or previous result supplied
+- **output target** — `response`
+- **observed delivery** — Corrected [final artifact](../editorial-329/runs/controls-genres-rerun/article-flawed/final.md), with one ingress sentence and an explicit removed-claim account.
+- **side effects** — No surviving Skill effects. Input/work/resource/scratch inventories unchanged; 318 native-home creations and trust-config change are Harness effects.
+- **criteria** —
+  - `G1` — `pass` — An explanatory article replaces catastrophe/health certainty without inventing replacement stakes.
+  - `G2` — `pass` — Informative headline, nonduplicated ingress, complementary evidential lead, explained limits and a supported next-step ending perform distinct jobs; no byline is manufactured.
+  - `P1` — `pass` — Operative temperature is defined before the limitation; placement, missing measurements and funding uncertainty constrain the conclusions.
+  - `W1` — `pass` — The duplicate is removed within correction; mixed material is grouped into measurement limits and the next trial. The final two short paragraphs have different jobs and are not failed on a length quota.
+  - `L1` — `pass` — Idiomatic Swedish explanation preserves useful technical substance.
+  - `L2` — `pass` — Swedish mechanics and date/number forms are correct after the closing installed pass.
+  - `T1` — `pass` — Default none, with no technique resource loaded.
+  - `R1` — `pass` — Repairs whole-sentence duplication in the editorial correction, along with the named unsupported claims and structural defects. Retains six rooms, 14/120, four weeks, local nonlegal threshold, two/four placements, no experimental placement comparison, operative-temperature definition/absence, missing draught/experience/duration/health-effect evidence, Rask's recommendation and November's undecided funding. Each legitimate removed claim is named.
+  - `R2` — `pass` — Parent and one fresh correction each actually see complete editorial resources. A separate fresh same-model/high mechanical agent runs installed Proofread once after re-review; its first shell trap command was rejected before execution, and Python cleanup successfully executes the pass. No substantive edit follows. Raw dispatch remains encrypted as documented.
+  - `O1` — `pass` — Entire-root inventory verifies no remaining correction or mechanical scratch and no source/resource mutation.
+- **unresolved findings** — none
+- **defects filed** — Positive affected rerun for [#346](https://github.com/Kntnt/skills/issues/346); the previous failed-quality run is preserved.
+- **notes** — The same frozen artifact and invocation were used without rubric, expected findings or previous output. Different valid headings/paragraph grouping from the first attempt are not themselves scored as improvements; the decisive change is removal of the observable duplicate while preserving facts and the stage boundary.
+
+## Positive rerun: `article-clean` — #346
+
+- **fixture** — Exact unchanged `article-clean`, sv
+- **instruction commit** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`
+- **invocation** — `/redline --genre=article --language=sv --output=response input.md`
+- **contextual instruction** — `none`; no earlier result or expected preservation supplied
+- **output target** — `response`
+- **observed delivery** — Completed no-change status; [final text](../editorial-329/runs/controls-genres-rerun/article-clean/final.md) equals the exact frozen input.
+- **side effects** — No Skill artifacts; input/work/resources/scratch unchanged. 316 native-home creations and trust-config change are classified Harness effects.
+- **criteria** —
+  - `G1` — `pass` — Calm bounded explanation is preserved.
+  - `G2` — `pass` — Informative short H1, result-bearing ingress, complementary lead, explanatory body and supported ending remain, with no invented byline.
+  - `P1` — `pass` — Placement precedes interpretation; the local threshold and missing duration/experience evidence retain their constraints.
+  - `W1` — `pass` — No finding targets valid heading/paragraph lengths or useful ingress/body overlap; no literal accidental duplicate exists.
+  - `L1` — `pass` — Native Swedish explanation remains unchanged.
+  - `L2` — `pass` — Swedish mechanics remain correct after the installed final pass.
+  - `T1` — `pass` — Default none and no technique resource load.
+  - `R1` — `pass` — Byte-identical preservation of working voice, facts, quote and limits; the new sentence-duplication classification does not induce taste-only editing.
+  - `R2` — `pass` — Full resources actually visible, no correction needed, exactly one installed Proofread invocation and no later substantive edit.
+  - `O1` — `pass` — Whole-root inventories show no surviving Skill files and unchanged source/resources.
+- **unresolved findings** — none
+- **defects filed** — Positive regression counterpart for [#346](https://github.com/Kntnt/skills/issues/346).
+- **notes** — Combined with the unchanged purposeful-recurrence column control and the successful article-flawed rerun, this supports the narrowly observed boundary correction; it does not establish that all future repetition will be judged correctly.
+
+## Affected rerun: `case-study-clean` — #341
+
+- **fixture** — Exact unchanged `case-study-clean`, sv; its contaminated clean-label limitation remains
+- **instruction commit** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`
+- **invocation** — `/redline --genre=case-study --language=sv --output=response input.md`
+- **contextual instruction** — `none`; no expected diagnosis, original source or previous output supplied
+- **output target** — `response`
+- **observed delivery** — No-change/no-findings status; [final text](../editorial-329/runs/controls-genres-rerun/case-study-clean/final.md) equals the input, including the previously identified quotation ellipsis.
+- **side effects** — No surviving Skill files; all input/work/resource/scratch inventories unchanged. Native-home bootstrap/session effects and trust-config update are classified separately.
+- **criteria** —
+  - `G1` — `pass` — Customer agency, cross-shift purpose and supplier's supporting role remain intact.
+  - `G2` — `pass` — Customer situation/action/results/appraisal and the supplier publication disclosure remain present and distinct.
+  - `P1` — `pass` — Preparation, assignment-time comparison and different-workload causal limitation retain their relation.
+  - `W1` — `pass` — Useful paragraphs, section entries and qualified appraisal remain readable without extra sales blocks.
+  - `L1` — `fail` — **Remaining qualitative concern, consistent with the original assessment:** “innan nästa hus börjar” still leaves the activity unstated, requiring the reader to reconstruct what starts. This is an idiom/clarity judgement, not a mechanical error or proof of an invented quotation. Distinctive spoken voice alone is not grounds for replacement; several possible intended activities mean the source-blind reviewer cannot silently supply one as the speaker's words.
+  - `L2` — `pass` — Swedish date, number, quotation and inflection mechanics are correct after installed Proofread.
+  - `T1` — `pass` — Default none and no technique resource load.
+  - `R1` — `fail` — **Remaining qualitative diagnosis miss:** the clearer case-review distinction is actually loaded, but the run still reports no findings and does not identify the ellipsis as a clarification concern. Preservation succeeds; the intended source-blind reporting regression is not demonstrated.
+  - `R2` — `pass` — The parent actually sees every updated case-review paragraph and other editorial resources. No correction is spawned on its no-findings judgement. A separate fresh same-model/high agent executes installed Proofread once with the complete mechanics scope; no substantive edit follows. This is not a resource-loading failure.
+  - `O1` — `pass` — Full-root inventory proves unchanged input/resources and no remaining Skill scratch.
+- **unresolved findings** — The run reports none; the evaluator retains the L1/R1 concern. The revised instruction cannot be claimed to have solved this observed case.
+- **defects filed** — Additional retained evidence for [#341](https://github.com/Kntnt/skills/issues/341).
+- **notes** — This is a qualitative judgement with an explicit clean-fixture limitation, not an unconditional contract rejection or a demand for one preferred wording. The original and rerun remain separate. No rubric, example answer or source was exposed to induce the expected diagnosis.
+
+## Positive rerun: `column-clean` — #348
+
+- **fixture** — Exact unchanged `column-clean`, sv
+- **instruction commit** — `7022c804dfbda4332723bf96b6a9857c24e63b6e`
+- **invocation** — `/redline --genre=column --language=sv --output=response input.md`
+- **contextual instruction** — `none`; no prior result or expected casing supplied
+- **output target** — `response`
+- **observed delivery** — Completed no-change status; [final text](../editorial-329/runs/controls-348/column-clean/final.md) equals the frozen original.
+- **side effects** — No surviving Skill files; input/work/resources/scratch unchanged. 316 native-home creations and trust-config update are classified Harness effects.
+- **criteria** —
+  - `G1` — `pass` — Preserves the personal reflective angle and self-irony.
+  - `G2` — `pass` — Keeps early point, meaningful non-decision reflection and qualified ending; no anecdote or campaign is manufactured.
+  - `P1` — `pass` — Shared understanding remains a possible benefit, not an invented measured improvement.
+  - `W1` — `pass` — The coherent long paragraph, purposeful recurrence, short H1 and absence of H2s are preserved without quantitative/taste findings.
+  - `L1` — `pass` — Native Swedish personal voice remains unchanged.
+  - `L2` — `pass` — The updated sv mechanics rule is actually visible in the resolver output; correct punctuation/casing is preserved, including “lösningen: ännu en ruta”.
+  - `T1` — `pass` — Default none; no technique resource load.
+  - `R1` — `pass` — Byte-identical preservation of every claim, doubt, voice choice and purposeful repetition.
+  - `R2` — `pass` — Complete editorial resource paragraphs are visible; no correction is warranted. Exactly one installed Proofread invocation resolves the updated sv mechanics scope and no substantive edit follows.
+  - `O1` — `pass` — Complete root inventories establish no Skill scratch and unchanged source/resources.
+- **unresolved findings** — none
+- **defects filed** — Positive preservation regression for [#348](https://github.com/Kntnt/skills/issues/348).
+- **notes** — This control verifies preservation on the updated mechanics resource. It does not itself contain the disputed unquoted full-question casing; the root evaluator's exact earlier column-artifact replay supplies that targeted negative/positive case. The evidence boundaries are not conflated.

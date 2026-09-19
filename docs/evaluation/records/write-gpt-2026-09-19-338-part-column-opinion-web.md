@@ -192,3 +192,11 @@ The absent-form interface reference is filed as [#345](https://github.com/Kntnt/
 ## Original-batch completion and transfer
 
 Seven original pairs on d60c4fc were completed and assessed: column sv/en_GB, opinion sv/en_GB, and web-copy sv/en_GB/en_US. All fourteen registered private run roots were removed after their evidence was captured. Column-en_US and opinion-en_US were not started on this revision; their first runs belong to corrected-candidate coverage, never an assumed original pass. Explicit web-copy-abt likewise waits for the corrected candidate. The column reruns are owned by the parent evaluator; opinion reruns are in the separate -343-opinion records and web-copy reruns plus the original-draft regression in -345-web-copy records. The failed original outputs and judgement corrections above remain preserved.
+
+## Historical reassessment — opinion source knowledge, #349
+
+The original candidate opinion-sv F1 pass is superseded by **fail** after consistent comparison of the already-frozen source. Its `runs/candidate/opinion-sv/artifact.md` says “Vi har varken kostnadsberäknat eller finansierat försöket.” The source only says the association makes no claim to have done those things. The earlier judgement preserved practical cost uncertainty but overlooked this stronger assertion of unperformed work. The original assessment and artifact remain visible; neither the fixture nor the criterion changed.
+
+The original opinion-en_GB F1 already failed for #343 (“I support digital booking”). It also independently fails #349: “Öppna beslut has neither costed nor secured funding for the trial.” The source establishes neither absent costing nor an absence of secured funding. This added finding does not replace the original stance defect.
+
+The same absence claim has now also been identified in the baseline opinion-sv sample by the root reviewer. This is therefore a pre-existing quality failure; these observations do not establish that #329 introduced it. Source-blind Redline assessments remain unchanged: the artifacts themselves do not disclose this external mismatch.

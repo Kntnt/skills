@@ -1,0 +1,1 @@
+Complete inventory created316 home-only, removed0, changed1 trust config. No work/scratch changes; auth unchanged. Native gpt-6-astra/high; full revised base Claims present in item5 output. Complete root removed.

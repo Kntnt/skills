@@ -1,0 +1,3 @@
+# Filesystem effects
+
+No surviving Skill artifacts: full input/work/resource/scratch inventories are unchanged. The 319 native-home creations are Codex bootstrap/plugin/cache/session/database/lock artifacts; private config.toml alone records project trust. Authentication is unchanged. Parent and separate mechanical agent both expose gpt-6-astra/high. The parent sees every updated case-review paragraph and all other editorial resources; the child sees the full mechanics contract and executes installed Proofread once. The remaining L1/R1 concern is a semantic diagnosis issue, not missing resources or an output-target failure.

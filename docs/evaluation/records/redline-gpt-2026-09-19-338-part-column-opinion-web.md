@@ -180,3 +180,7 @@ Each invocation uses a fresh native session and the immutable candidate installa
 ## Original-batch completion and transfer
 
 Seven original pairs on d60c4fc were completed and assessed: column sv/en_GB, opinion sv/en_GB, and web-copy sv/en_GB/en_US. All fourteen registered private run roots were removed after their evidence was captured. Column-en_US and opinion-en_US were not started on this revision; their first runs belong to corrected-candidate coverage, never an assumed original pass. Explicit web-copy-abt likewise waits for the corrected candidate. The column reruns are owned by the parent evaluator; opinion reruns are in the separate -343-opinion records and web-copy reruns plus the original-draft regression in -345-web-copy records. The failed original outputs and judgement corrections above remain preserved.
+
+## Upstream reassessment — #349
+
+Original opinion-sv Write is now F1 fail (previous pass superseded), and opinion-en_GB has an additional F1 reason beyond #343: both convert the source's unclaimed costing/funding into categorical absence. The paired Redline outcomes remain valid source-blind no-change assessments; no source was available and the mismatch is not text-internal. Pipeline quality is not thereby passing. See the explicit addendum in the separate Write record.

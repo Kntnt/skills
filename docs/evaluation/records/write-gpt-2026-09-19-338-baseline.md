@@ -160,3 +160,11 @@ Raw responses, invocation/context, inventories, exact filesystem changes, native
 - **defects filed** — `none` for this Write run.
 - **notes** — The destination remains the supplied inert interest form. An acceptable service page need not use a standard hero/testimonial/sales template.
 
+
+## Transparent reassessment: `opinion-sv` F1 — #349
+
+The original F1 pass above is superseded by **F1 fail (unsupported factual assertion; unconditional contract rejection)** after rereading the exact frozen source and baseline artifact. The source says “Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket.” The draft says “Öppna beslut har varken kostnadsberäknat eller finansierat försöket.” Absence of a claim does not establish that neither action occurred. The latter is a categorical factual denial unsupported by the supplied material, even though both versions leave the council with a cost decision.
+
+The first assessment incorrectly treated this strengthening as preservation of an evidence limit. Its original wording is retained above to expose the evaluator error rather than rewriting the pass history. The predeclared F1 criterion and frozen corpus are unchanged. The supporting comparison is the source's association paragraph and the draft paragraph under “Pröva i sex månader och ta ställning till kostnaden”; no external fact or preferred wording is needed to establish the difference.
+
+This finding links to [#349](https://github.com/Kntnt/skills/issues/349) and proves the failure is already present on baseline 8ae4c21. It cannot fairly be described as a candidate-only regression. The remaining original criterion assessments are not silently rescored. Baseline Redline lacked the source and separately failed its mandatory closing stage (#339), so the source-aware F1 failure is assigned to Write, not retroactively imposed on Redline as an unavailable-source check.
