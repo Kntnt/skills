@@ -181,11 +181,14 @@ def test_agents_md_sends_a_reader_to_the_archive_for_why_and_not_for_law() -> No
 # The directory this repository's agent-only documents live in, and the one
 # they were moved out of (issue #326). The retired name survives only where it
 # is history, an input the migration reads, or user-scoped persistence, which
-# the project move never covered.
+# the project move never covered. Ticket notes under `.kntnt-orchestrate/` are
+# the same historical surface as the changelog they become: a fragment that
+# describes the move is not an instruction to recreate the old directory.
 AGENT_DOCUMENTS = "docs/agents/"
 RETIRED = "agents.d/"
 RETIRED_MENTIONS_ALLOWED = (
     "CHANGELOG.md",
+    ".kntnt-orchestrate/",
     "docs/adr/",
     "docs/archive/",
     "tests/",
@@ -221,9 +224,10 @@ def test_project_agent_documents_live_under_docs_agents() -> None:
 def test_no_active_file_names_the_retired_agent_directory() -> None:
     """An instruction naming the old directory recreates it on its next use.
 
-    What remains is history left as it stood, the migration's own input, and
-    user-scoped persistence; anything else is a producer or a reader the move
-    missed (issue #326).
+    What remains is history left as it stood, the migration's own input,
+    user-scoped persistence, and the ticket notes that become changelog
+    entries; anything else is a producer or a reader the move missed
+    (issue #326).
     """
 
     tracked = subprocess.run(
