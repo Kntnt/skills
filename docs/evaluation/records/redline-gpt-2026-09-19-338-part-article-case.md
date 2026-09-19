@@ -34,3 +34,49 @@
 - **defects filed** — none
 - **notes** — Native identity `gpt-6-astra/high`; no correction child was needed. Full response, trace, input/final artifact, disk evidence and cleanup remain with the case.
 
+## article-en_GB
+
+- **fixture** — article-en_GB
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — No-change status; complete supplied draft remains final in `editorial-329/runs/candidate/article-en_GB/redline/`.
+- **side effects** — No work/export/scratch changes. Temporary directories cleaned in executed commands; native home bootstrap/cache/database/session effects inventoried. Authentication unchanged; evaluator root removed after capture.
+- **criteria** —
+  - G1 — pass — Focused measurement explanation remains useful to municipal property managers.
+  - G2 — pass — Complementary ingress/lead and useful final recommendation retained; no invented byline.
+  - P1 — pass — Operative temperature explained before naming; count and scope limitations remain explicit.
+  - W1 — pass — Clear counts/measurement/action sections and cohesive paragraphing preserved.
+  - L1 — pass — Idiomatic British explanation and natural translated quotation retained.
+  - L2 — pass — Inspection agrees with the final British mechanics pass: consistent locale conventions.
+  - T1 — pass — Metadata article/none/en_GB respected; no technique read, only selected genre plus bounded web support.
+  - R1 — pass — Byte-identical final artifact preserves every claim, qualification and quotation; no editorial finding was fabricated.
+  - R2 — pass — Full review resources and three language scopes loaded; zero corrections, exactly one installed Proofread invocation and mechanics load, no later substantive edit.
+  - O1 — pass — Input unchanged and no surviving Skill file anywhere in the inventory.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Native identity checked in the consolidated audit; no correction child needed.
+
+## article-en_US
+
+- **fixture** — article-en_US
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — No-change status; supplied article preserved as final in `editorial-329/runs/candidate/article-en_US/redline/`.
+- **side effects** — No work/export/scratch changes; scoped transient directories removed. Only native home bootstrap/cache/session/database changes inventoried. Authentication unchanged; evaluator removed root.
+- **criteria** —
+  - G1 — pass — Useful distinction between measurement and explanation remains central.
+  - G2 — pass — Complete article form and differentiated ingress/lead retained.
+  - P1 — pass — Air versus operative temperature and limits on the count remain intelligible and proportionate.
+  - W1 — pass — Informative headings and coherent sections preserve scanning and continuous reading.
+  - L1 — pass — Natural American explanation and quotation retained without gratuitous editing.
+  - L2 — pass — American dates, spelling and quotation punctuation remain consistent after the installed mechanical pass.
+  - T1 — pass — None metadata honoured in actual loading; only article and bounded support loaded.
+  - R1 — pass — Final artifact equals input byte for byte; claims, quotation, qualifiers and formatting unchanged.
+  - R2 — pass — Full review contract and language scopes loaded; no needless correction; one Proofread shim with omitted operand, shared/local mechanics, no edit afterwards.
+  - O1 — pass — Source unchanged and no enduring Skill file across inventoried roots.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Native identity covered in consolidated audit; no correction child needed.
+

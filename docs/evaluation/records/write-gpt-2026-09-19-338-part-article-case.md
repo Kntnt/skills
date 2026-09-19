@@ -57,3 +57,49 @@
 - **defects filed** — none
 - **notes** — Source-to-English transformation judged independently before its Redline result; native identity is checked with the consolidated trace audit.
 
+## article-en_US
+
+- **fixture** — article-en_US
+- **invocation** — `/write --genre=article --language=en_US --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Complete American English article with metadata and a separate delivery account, retained under `editorial-329/runs/candidate/article-en_US/write/`.
+- **side effects** — No work/export/scratch changes remain; transient UV directories removed. Native home/bootstrap/cache/session/database effects inventoried; authentication unchanged. Evaluator removed isolated root after capture.
+- **criteria** —
+  - F1 — pass — Preserves the lesson denominator, local threshold, air-only measurement, placement and funding limitations, and unmeasured effects; quote translation retains “don’t yet know”.
+  - G1 — pass — Counts, measurement limits and a cautious next step make a useful focused property-management article.
+  - G2 — pass — Informative H1, separate ingress, deployment lead and explanatory H2 sections; conclusion follows Rask’s supported recommendation.
+  - P1 — pass — Operative temperature receives an immediate definition and is distinguished from what the sensors actually measured.
+  - W1 — pass — Cohesive short paragraphs and useful headings allow scanning without breaking the methodological explanation.
+  - L1 — pass — “periods that deserve closer attention” and “before deciding how to respond” form native professional English without imported Swedish phrasing.
+  - L2 — pass — March 12, drafts, students/custodian and American double quotation marks are locally consistent.
+  - T1 — pass — Article/none/en_US resolved and loaded; no technique read despite a natural question-to-answer progression.
+  - R2 — pass — Write SKILL/shim, bounded base/genre/web-craft, composition, delivery and quotations read; no review half or peer pass.
+  - O1 — pass — Supplied source unchanged; full-root inventory shows no enduring Skill files.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Independently judged against source before Redline; identity checked in consolidated native audit.
+
+## case-study-sv
+
+- **fixture** — case-study-sv
+- **invocation** — `/write --genre=case-study --language=sv --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Complete Swedish customer case, metadata case-study/none/sv and separate account; preserved under `editorial-329/runs/candidate/case-study-sv/write/`.
+- **side effects** — No work/export/scratch changes; scoped UV temporary directories removed. Native private-home bootstrap/cache/session/database effects inventoried; authentication unchanged. Evaluator removed root.
+- **criteria** —
+  - F1 — pass — The trial’s agency, eight weeks, 31 reports/exclusions, assignment-versus-completion distinction, workload/causal caveat and customer reservation remain; no satisfaction or benefit invented.
+  - G1 — pass — Customer decisions and Maya Lind’s own qualified appraisal carry the account, while supplier publication is explicit.
+  - G2 — pass — Result headline, standalone ingress, customer context, choices, implementation, measured result, appraisal and accurate checklist link all function without a sales template.
+  - P1 — pass — Two-versus-three-day median is separated from causality and completion; the next expansion decision remains conditional.
+  - W1 — pass — Clear opening and two later sections organise experience, measurement and next decision; quote bridges add context without repeating the full speech.
+  - L1 — fail (qualitative concern) — “Jag skulle avsätta den tiden innan nästa byggnad börjar” transfers the English construction literally: the Swedish reader must reconstruct which activity in the building starts. This is an idiom defect, not a fabricated fact or mechanical misspelling.
+  - L2 — pass — Swedish quotation dashes, date and compound forms; the L1 defect is not a locale-mechanics error.
+  - T1 — pass — None metadata and actual no-technique loading; selected case/base/web-craft plus Swedish composition only.
+  - R2 — pass — Write SKILL/shim, complete bounded writing contract, quotation policy and delivery read; no review or Proofread invoked.
+  - O1 — pass — Input untouched, no surviving Skill artifacts in all inventoried writable roots.
+- **unresolved findings** — L1 translated interview idiom remains in this first draft.
+- **defects filed** — #341, repeated candidate evidence of the already filed class.
+- **notes** — Independent source/rubric judgement was made and reported before #341 was opened for comparison. The candidate repeats the same faulty phrase as that issue’s baseline evidence; no baseline output was supplied to the model. All other customer voice and content were preserved. Native identity covered by consolidated audit.
+

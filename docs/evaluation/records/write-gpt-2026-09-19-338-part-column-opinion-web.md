@@ -38,3 +38,103 @@ Each invocation uses a fresh native session and the immutable candidate installa
 - **unresolved findings** — None; the delivery notes the source's unknown effect without inventing it.
 - **defects filed** — `none`
 - **notes** — Native turn_context confirms gpt-6-astra/high. Judged independently before any baseline comparison.
+
+## Assessment correction: `column-sv` F1
+
+The earlier F1 pass above is superseded by **fail — unsupported fact / altered author perspective**, filed as [#342](https://github.com/Kntnt/skills/issues/342). On comparing the English manifestation with the Swedish source, “åtminstone i mitt sätt att tänka kring mötesplanering” is the same personal self-attribution: it relocates the criticised tendency into Nora's own thinking. The source supplies a reflection that calendar time easily gets treated as a result; it does not supply a personal admission that she does so. This is more than a stylistic qualification of her perspective. Other recorded criteria stand. The earlier assessment remains visible to make this correction auditable; neither output nor frozen criterion changed.
+
+## `column-en_GB`
+
+- **fixture** — `column-en_GB`
+- **invocation** — `/write --genre=column --language=en_GB --output=response source.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Complete British English column and account; [artifact](../editorial-329/runs/candidate/column-en_GB/artifact.md), [response](../editorial-329/runs/candidate/column-en_GB/write/response.txt).
+- **side effects** — No Skill files remain; 318 Harness home entries plus trust-config change, [classification](../editorial-329/runs/candidate/column-en_GB/write/side-effects.md); root removed.
+- **criteria** —
+  - `F1` — `fail` — **Unsupported fact / altered author perspective:** “I find myself regarding time in the calendar as a result in itself” invents Nora's own practice from her supplied critical reflection; #342. No invented meeting or statistic was otherwise found.
+  - `G1` — `pass` — “a modest comedy ... proposing a larger template” carries the supplied personal self-irony and reflective purpose.
+  - `G2` — `pass` — Title/byline, document observation, widening reflection and uncertain close fulfill the genre; no forced scene or campaign.
+  - `P1` — `pass` — Decision-making is qualified by trust and discovery before the proposed question, without a false causal claim about results.
+  - `W1` — `pass` — Clear short paragraphs allow scanning while recurrent box/question imagery connects the reflection.
+  - `L1` — `pass` — “squeeze either into one” and “one another's time” are idiomatic English; no Swedish clause structure is carried across.
+  - `L2` — `pass` — Single outer quotation marks and British phrasing are consistent; no factual locale conversion.
+  - `T1` — `pass` — column/none/en_GB in YAML; item_4 loads only selected genre/base/web-craft, no technique.
+  - `R2` — `pass` — Composition-only resolver in item_5, no review halves or peer editorial pass.
+  - `O1` — `pass` — Complete inventories and item_6 scratch inspection establish no surviving Skill artifacts or mutations.
+- **unresolved findings** — The unsupported personal admission remains in the delivered draft; the source-blind Redline must not be credited with detecting it.
+- **defects filed** — [#342](https://github.com/Kntnt/skills/issues/342), linked as a native sub-issue of #329.
+- **notes** — Native identity confirms gpt-6-astra/high. The full unrepaired artifact is passed to Redline. Parent owns the three-locale corrected-column reruns; column-en_US in this original batch is not started and is not counted as passed.
+
+## `opinion-sv`
+
+- **fixture** — `opinion-sv`
+- **invocation** — `/write --genre=opinion --language=sv --output=response source.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Complete attributed debate article with early position and three informative H2s; [artifact](../editorial-329/runs/candidate/opinion-sv/artifact.md).
+- **side effects** — No surviving Skill changes; 316 native-home creations plus one project-trust update. Registered root removed.
+- **criteria** —
+  - `F1` — `pass` — 96/24 bookings, eight weeks/two rooms, seven-room proposal, missing demographic/time/cost evidence and voluntary reasons remain; no motives, legal duty or savings invented.
+  - `G1` — `pass` — “Det är för tunt för ett permanent beslut” gives accountable policy criticism while accepting the real administrative objection.
+  - `G2` — `pass` — Early thesis, attributed figures, fair objection and explicit municipal-board decision identify author, actor and desired change.
+  - `P1` — `pass` — Booking counts are distinguished from residents' abilities; missing evidence motivates measurement before the permanent decision.
+  - `W1` — `pass` — Informative H2s expose argument steps; paragraphs retain qualifications beside the claims they constrain.
+  - `L1` — `pass` — “Den begränsningen måste också vi ... respektera” is idiomatic, pointed Swedish rather than translation or sales language.
+  - `L2` — `pass` — Swedish dates, compounds and punctuation are consistent.
+  - `T1` — `pass` — opinion/none/sv in YAML; item_4 loads selected genre/base/web-craft with no technique.
+  - `R2` — `pass` — item_5 resolves composition only; quotation policy in item_6, no review/Proofread pass.
+  - `O1` — `pass` — Full inventories and cleanup-check item_6 establish no enduring Skill files.
+- **unresolved findings** — `none`
+- **defects filed** — `none`
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.
+
+## `opinion-en_GB`
+
+- **fixture** — `opinion-en_GB`
+- **invocation** — `/write --genre=opinion --language=en_GB --output=response source.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Complete debate article in British English with metadata, attributed author and account; [artifact](../editorial-329/runs/candidate/opinion-en_GB/artifact.md).
+- **side effects** — No surviving Skill changes; 318 native-home entries plus project-trust update. Registered root removed.
+- **criteria** —
+  - `F1` — `fail` — **Unsupported attributed stance:** “I support digital booking” strengthens the source's “Hon motsätter sig inte digital bokning” into an endorsement. Figures, scope and cost uncertainty otherwise remain; #342 evidence comment records the distinction.
+  - `G1` — `pass` — Firm criticism of decision evidence and acknowledgement of staff workload maintain debate-article craft.
+  - `G2` — `pass` — Early proposal, Sanna attribution, real administrative objection and concrete board decision fulfill the form.
+  - `P1` — `pass` — “bookings, not people” prevents population inference; the trial measures the uncertainties used in the argument.
+  - `W1` — `pass` — Three informative headings expose the reasoning; qualifications remain beside figures and costs.
+  - `L1` — `pass` — “Double administration deserves a measured answer” and “costed” are idiomatic British English, with no Swedish word-order residue.
+  - `L2` — `pass` — 8 April 2026, judgement and British conventions are consistent; no invented currency/date conversion.
+  - `T1` — `pass` — opinion/none/en_GB in YAML; item_4 loads selected genre/base/web-craft only.
+  - `R2` — `pass` — item_5 returns composition alone; item_6 reads quotation policy, no editorial review or mechanical pass.
+  - `O1` — `pass` — Whole-root inventory and cleanup checks establish no retained Skill files.
+- **unresolved findings** — The strengthened stance remains in the delivered draft and the unmodified Redline input.
+- **defects filed** — [#342](https://github.com/Kntnt/skills/issues/342#issuecomment-5744415506), additional supplied-position evidence.
+- **notes** — Native rollout confirms gpt-6-astra/high. The evaluative distinction is stance, not preferred wording; source-blind Redline cannot verify it.
+
+## Tracking clarification: opinion stance
+
+The opinion-en_GB failure is tracked separately as [#343](https://github.com/Kntnt/skills/issues/343), a native sub-issue of #329. The earlier comment on #342 remains as history; #342 is restricted to column self-attribution. Root will provide corrected instructions for the opinion reruns. Opinion-en_US under d60c4fc is not started or counted as passed.
+
+## `web-copy-sv`
+
+- **fixture** — `web-copy-sv`
+- **invocation** — `/write --genre=web-copy --language=sv --output=response source.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Complete service page, metadata and separate account; [artifact](../editorial-329/runs/candidate/web-copy-sv/artifact.md).
+- **side effects** — No surviving Skill changes; 320 native-home creations and trust-config update enumerated; root removed.
+- **criteria** —
+  - `F1` — `pass` — 45-minute/two-representative meeting, written summary/two possible simplifications, price/VAT, one-room scope, exclusions, no guarantee and three-day email response all stay supported; payment/delivery terms are not invented.
+  - `G1` — `pass` — The page answers board relevance, purchased deliverables and how an expression of interest works.
+  - `G2` — `pass` — Information structure follows task, with clear price/conditions and an accurate interest link rather than a booking or sales template.
+  - `P1` — `pass` — Deliverables lead to prerequisites and then action consequences; exclusions distinguish adjacent services.
+  - `W1` — `pass` — Each H2 names its content and establishes local context; the list helps scan the summary contents.
+  - `L1` — `pass` — Natural Swedish task language; group Ni addresses the board and du addresses the individual filling the form.
+  - `L2` — `pass` — 4 800 kr, Swedish compounds and spaced en dash follow Swedish form without currency conversion.
+  - `T1` — `pass` — web-copy/none/sv in YAML; item_4 loads selected genre/base/web-craft and no technique.
+  - `R2` — `pass` — item_5 resolves composition only; no review half, mechanics or peer Skill.
+  - `O1` — `pass` — Full inventories and item_6 check prove unchanged source/resources/scratch and no retained Skill files.
+- **unresolved findings** — Account correctly names absent payment terms and summary-delivery time.
+- **defects filed** — `none`
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.

@@ -38,3 +38,72 @@ Each invocation uses a fresh native session and the immutable candidate installa
 - **unresolved findings** — `none`
 - **defects filed** — `none`; this trace supplies a successful metadata-bearing candidate check for existing #339.
 - **notes** — Native context confirms gpt-6-astra/high. No correction-child session exists because no findings required one. Assessed independently before baseline comparison.
+
+## `column-en_GB`
+
+- **fixture** — `column-en_GB`
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Short no-change status; final.md is byte-identical to the supplied artifact. [Response](../editorial-329/runs/candidate/column-en_GB/redline/response.txt).
+- **side effects** — No remaining Skill changes; 318 native-home creations and one trust-config update, enumerated in filesystem-changes.json. Registered root removed.
+- **criteria** —
+  - `G1` — `pass` — Personal self-irony, reflective focus and admitted doubt remain.
+  - `G2` — `pass` — Title/byline and observation-to-reflection movement remain without a forced scene or section template.
+  - `P1` — `pass` — Decision, trust and shared discovery retain their distinctions and logical progression.
+  - `W1` — `pass` — Coherent paragraphs and purposeful returns are preserved without numerical findings.
+  - `L1` — `pass` — Idiomatic British English remains; no neutralising rewrite.
+  - `L2` — `pass` — Mechanics pass finds no objective error; punctuation and metadata remain identical.
+  - `T1` — `pass` — column/none/en_GB resolves from metadata; item_8 loads no technique.
+  - `R1` — `pass` — Byte-identical before/after preserves every claim and voice; unavailable sources are not requested.
+  - `R2` — `pass` — item_7 returns scoped composition/review/anti-slop; item_8 loads both base/genre/web-craft halves; exactly one flags-only Proofread invocation in item_11, mechanics in 12/13, no later substantive edit.
+  - `O1` — `pass` — Full-root inventories and cleanup-check item_14 establish no surviving Skill files.
+- **unresolved findings** — No Redline findings. The source-aware #342 defect remains in the input and final artifact; it is not detectable from this text alone and is not a Redline failure.
+- **defects filed** — #342 applies to the preceding Write result, not this source-blind review.
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.
+
+## `opinion-sv`
+
+- **fixture** — `opinion-sv`
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Short no-change status; [final](../editorial-329/runs/candidate/opinion-sv/final.md) equals the complete supplied artifact.
+- **side effects** — No Skill files remain; 320 native-home creations and trust-config update are enumerated. Registered root removed.
+- **criteria** —
+  - `G1` — `pass` — The sharp policy position and fair recognition of administrative cost survive.
+  - `G2` — `pass` — Early thesis, attribution, objection and concrete municipal-board decision remain.
+  - `P1` — `pass` — Booking denominator and missing user/time/cost evidence remain distinct.
+  - `W1` — `pass` — Argument-bearing headings and readable coherent paragraphs are preserved.
+  - `L1` — `pass` — Natural Swedish argumentative voice is retained, without forced neutralisation.
+  - `L2` — `pass` — The sv mechanics pass finds no objective correction; original metadata remains.
+  - `T1` — `pass` — opinion/none/sv from metadata; selected genre in item_5 and bounded support in item_7, no technique.
+  - `R1` — `pass` — Byte-identical comparison preserves all numbers, reservations, argument and action.
+  - `R2` — `pass` — item_6 resolves three editorial scopes, item_7 loads review contract, and item_10 is the sole flags-only installed Proofread invocation; mechanics follows in 11/12 and no substantive edit follows.
+  - `O1` — `pass` — Complete inventory and item_13 cleanup check show no source or resource mutations and no surviving Skill scratch.
+- **unresolved findings** — `none`
+- **defects filed** — `none`
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.
+
+## `opinion-en_GB`
+
+- **fixture** — `opinion-en_GB`
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Short no-change status; [final](../editorial-329/runs/candidate/opinion-en_GB/final.md) is byte-identical to the full input.
+- **side effects** — No Skill mutation remains; 318 Harness home creations and project-trust update enumerated. Registered root removed.
+- **criteria** —
+  - `G1` — `pass` — Argument retains its sharp evidence critique and recognition of staff workload.
+  - `G2` — `pass` — Thesis, attributed figures, real objection and board decision remain.
+  - `P1` — `pass` — Bookings versus people and the purpose of the proposed measurements stay clear.
+  - `W1` — `pass` — Informative headings and coherent paragraphs remain without taste-based rewriting.
+  - `L1` — `pass` — Idiomatic British English and accountable first-person argument are preserved.
+  - `L2` — `pass` — Single en_GB mechanics pass identifies no change; metadata stays byte-identical.
+  - `T1` — `pass` — Metadata selects opinion/none/en_GB; item_7 loads bounded support with no technique.
+  - `R1` — `pass` — Exact before/after comparison preserves all claims, reservations and voice; no source-verification request.
+  - `R2` — `pass` — item_6 resolves three editorial scopes; item_7 loads review contract; sole installed flags-only Proofread invocation is item_10, mechanics follows in 11/12 and no substantive edit follows.
+  - `O1` — `pass` — Complete inventory and item_13 cleanup check show no surviving Skill artifacts.
+- **unresolved findings** — No Redline finding; source-aware #343 remains in the unchanged input/final, outside this review's knowledge.
+- **defects filed** — #343 belongs to the paired Write run; no new Redline defect.
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.

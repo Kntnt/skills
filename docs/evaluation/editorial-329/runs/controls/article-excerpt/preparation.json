@@ -1,0 +1,6 @@
+{
+  "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+  "source": "controls/article-clean.md",
+  "transformation": "take exactly the two paragraphs below the named heading",
+  "sha256": "d3126e1180948e00bd1c7bcfd9f54fe8b204761e309ed7ee68f12e12161daa96"
+}

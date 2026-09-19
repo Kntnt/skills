@@ -4,6 +4,8 @@ Read this before putting quotation marks around anything somebody said. It appli
 
 Speech is not written prose, and a transcript quoted raw reads as carelessness towards the speaker rather than fidelity to them. So a spoken quotation may be repaired — cautiously, within a boundary that is easier to state than to feel your way to.
 
+When translating permitted quotations, preserve meaning, stance, certainty and distinctive voice in idiomatic target-language speech, not source-language syntax. The restrictions below protect that substance; they do not require word-for-word translation. Make an implicit referent explicit only when the supplied context settles it. Where the meaning remains ambiguous, paraphrase what is established rather than inventing a fluent interpretation.
+
 ## What may be repaired
 
 The syntax of speech: a sentence abandoned halfway and restarted, a subject left behind by its verb, a clause that never closes. Fillers — *you know*, *sort of*, *liksom*, *alltså* — where they carry nothing. Repetition that is the speaker searching for a word rather than insisting on one. False starts, and the small disfluencies a person does not hear themselves make.

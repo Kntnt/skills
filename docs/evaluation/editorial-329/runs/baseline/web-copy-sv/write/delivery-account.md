@@ -1,0 +1,1 @@
+Första utkastet levereras här som svensk webbtext, med ABT som standardteknik från genren `web-copy`. Inga filer har sparats. Underlaget saknar betalningsvillkor och leveranstid för sammanställningen; dessa uppgifter har därför inte lagts till.

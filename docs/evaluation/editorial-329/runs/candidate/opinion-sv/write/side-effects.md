@@ -1,0 +1,1 @@
+All created paths are 316 native Codex private-home bootstrap/cache/database/session entries; changed config only adds private-project trust. Authentication unchanged. Work/source/resources/scratch are unchanged. UV directories in items 3/5 are TemporaryDirectory-scoped and item_6 checks none remain. Exact paths are in filesystem-changes.json and inventories.

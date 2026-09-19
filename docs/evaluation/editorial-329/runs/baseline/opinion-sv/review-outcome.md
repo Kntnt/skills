@@ -1,0 +1,1 @@
+Redline attempted its mandatory closing Proofread invocation but returned the raw-YAML parser error. No final Text Artifact was delivered. draft.md remains the Write draft, not a completed reviewed output. This is #339.

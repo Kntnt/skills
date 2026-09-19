@@ -88,3 +88,51 @@ Raw responses, invocation/context, inventories, exact filesystem changes, native
 - **defects filed** — [#341](https://github.com/Kntnt/skills/issues/341).
 - **notes** — Several idiomatic translations could satisfy L1, and the quotation need not be retained in every valid draft. This observation does not itself justify an additional blanket instruction. Candidate wording was not consulted for this judgement.
 
+## `column-sv`
+
+- **fixture** — `column-sv`, complete baseline draft only
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`; neutral Harness context is captured separately.
+- **output target** — `response`
+- **observed delivery** — Only the nested Proofread parser error (`'---' is not a flag of this collection's grammar`) was delivered; no final text or completed no-change status. [Response](../editorial-329/runs/baseline/column-sv/redline/response.txt).
+- **side effects** — No remaining Skill files, and source/work/resources/scratch unchanged. All private UV contexts were cleaned. Native Codex's 316 created private-home entries and project-trust config update are enumerated separately.
+- **criteria** —
+  - `G1` — `skipped` — Closing-stage technical failure prevented final artifact delivery; the source draft is not relabelled as reviewed output.
+  - `G2` — `skipped` — No completed final artifact was delivered.
+  - `P1` — `skipped` — Final reasoning could not be judged after the failed mandatory handoff.
+  - `W1` — `skipped` — No final artifact was delivered for web-reading judgement.
+  - `L1` — `skipped` — No completed final artifact was delivered for idiom judgement.
+  - `L2` — `skipped` — The mechanical pass failed at invocation parsing, before its own mechanics resolution.
+  - `T1` — `pass` — The input metadata governs column/ABT/sv and the trace loads only the selected technique alongside genre/base/review/anti-slop and Swedish review scopes.
+  - `T2` — `skipped` — A completed reviewed artifact is unavailable.
+  - `R1` — `skipped` — No correction was needed according to the review, but its preservation result was not delivered after the parser refusal.
+  - `R2` — `fail` — Contract failure: item_11 passes a raw YAML-bearing inline artifact to the installed Proofread engine, which rejects `---`; one closing pass was attempted, none completed.
+  - `O1` — `pass` — Whole-root inventories preserve input/resources and show no surviving Skill-created files, even after the failed nested invocation.
+- **unresolved findings** — The technical refusal is reported verbatim; the mandatory mechanical pass is incomplete.
+- **defects filed** — [#339](https://github.com/Kntnt/skills/issues/339).
+- **notes** — This real failed invocation is not counted as a quality pass and no final.md is fabricated.
+
+## `opinion-sv`
+
+- **fixture** — `opinion-sv`, complete baseline draft only
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`; neutral Harness context is captured separately.
+- **output target** — `response`
+- **observed delivery** — Only the nested Proofread parser error (`'---' is not a flag of this collection's grammar`) was delivered; no final text or completed no-change status. [Response](../editorial-329/runs/baseline/opinion-sv/redline/response.txt).
+- **side effects** — No remaining Skill files, and source/work/resources/scratch unchanged. All private UV contexts were cleaned. Native Codex's 318 created private-home entries and project-trust config update are enumerated separately.
+- **criteria** —
+  - `G1` — `skipped` — Closing-stage technical failure prevented final artifact delivery; the source draft is not relabelled as reviewed output.
+  - `G2` — `skipped` — No completed final artifact was delivered.
+  - `P1` — `skipped` — Final reasoning could not be judged after the failed mandatory handoff.
+  - `W1` — `skipped` — No final artifact was delivered for web-reading judgement.
+  - `L1` — `skipped` — No completed final artifact was delivered for idiom judgement.
+  - `L2` — `skipped` — The mechanical pass failed at invocation parsing, before its own mechanics resolution.
+  - `T1` — `pass` — The input metadata governs opinion/ABT/sv and the trace loads only the selected technique alongside genre/base/review/anti-slop and Swedish review scopes.
+  - `T2` — `skipped` — A completed reviewed artifact is unavailable.
+  - `R1` — `skipped` — No correction was needed according to the review, but its preservation result was not delivered after the parser refusal.
+  - `R2` — `fail` — Contract failure: item_12 passes a raw YAML-bearing inline artifact to the installed Proofread engine, which rejects `---`; one closing pass was attempted, none completed.
+  - `O1` — `pass` — Whole-root inventories preserve input/resources and show no surviving Skill-created files, even after the failed nested invocation.
+- **unresolved findings** — The technical refusal is reported verbatim; the mandatory mechanical pass is incomplete.
+- **defects filed** — [#339](https://github.com/Kntnt/skills/issues/339).
+- **notes** — This real failed invocation is not counted as a quality pass and no final.md is fabricated.
+

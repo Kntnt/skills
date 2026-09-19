@@ -1,0 +1,7 @@
+'---' is not a flag of this collection's grammar
+
+**/proofread** [**--language**=*LANGUAGE*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+
+**/proofread** [**--language**=*LANGUAGE*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+
+see '/proofread --help'

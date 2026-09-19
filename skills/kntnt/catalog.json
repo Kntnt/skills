@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "4b5b25823cd3ee917aff44b6656cd5b35ce982218e5aec825566933e1eaabd59",
+  "manager_digest": "e69d8a41c03510b8a0f68d8811f123ca002707e41871396c0ee0aa38b637b0c7",
   "skills": [
     {
       "name": "agents-md",
@@ -165,7 +165,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "d36b8be6299ebd35c5b7d9e07e8ce19836ace638fa24fb4a2bc127708d3d1ec5",
+      "digest": "cd0c75a9ae7c4a79c98e841e4b807f17829f4db6130faa9df4db51b0b301f0dc",
       "binaries": [
         "uv"
       ],

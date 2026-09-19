@@ -1,0 +1,1 @@
+All 318 created paths are native home bootstrap/cache/database/session entries; home/.codex/config.toml adds only project trust. Authentication unchanged; source/work/resources/scratch unchanged. UV uses TemporaryDirectory in items 3/6/10/12 and item_13 confirms cleanup. Every path/hash is preserved in filesystem-changes.json.

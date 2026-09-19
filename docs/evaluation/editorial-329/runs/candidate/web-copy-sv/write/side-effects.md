@@ -1,0 +1,1 @@
+No paths outside home changed. The 320 created paths are native bootstrap/cache/database/session state; config change adds only private-project trust. Authentication unchanged. Items 3/5 use command-private TemporaryDirectory and item_6 confirms cleanup. Exact paths/hashes retained.

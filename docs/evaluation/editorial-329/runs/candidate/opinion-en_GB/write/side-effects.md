@@ -1,0 +1,1 @@
+All 318 created paths are native Codex home bootstrap/cache/database/session artifacts; sole changed path is home/.codex/config.toml adding trust. Authentication unchanged; work/source/resource/scratch unchanged. Items 3/5 use TemporaryDirectory and item_6 inspects scratch/work. Exact paths/hashes retained in filesystem-changes.json.

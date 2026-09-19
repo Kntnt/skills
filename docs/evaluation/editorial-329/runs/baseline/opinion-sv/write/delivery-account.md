@@ -1,0 +1,1 @@
+*Första utkastet levereras här på svenska, som debattartikel (`opinion`) med Kntnt-metadata. Tekniken ABT kommer från genrens standardval. Underlaget saknar tidsmätning, besparingsberäkning och kostnad för det föreslagna försöket; dessa frågor lämnas öppna. Inga filer har sparats och körningens temporära kataloger är borttagna.*

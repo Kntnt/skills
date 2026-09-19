@@ -1,0 +1,1 @@
+/redline --genre=article --language=sv --output=response input.md -- Use no technique (none).

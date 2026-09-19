@@ -1,6 +1,6 @@
 # Reading load — #331–337
 
-Whitespace-delimited word counts, baseline `8ae4c21` versus candidate `d60c4fc`. Counts describe context cost, not quality targets. Language scopes are counted alone, as the resolver returns them. No rules have been displaced into this report.
+Whitespace-delimited word counts, baseline `8ae4c21` versus candidate `d60c4fc`, with the column clarification in `eb4a26e`. Counts describe context cost, not quality targets. Language scopes are counted alone, as the resolver returns them. No rules have been displaced into this report.
 
 ## Authored resources
 
@@ -14,7 +14,7 @@ Whitespace-delimited word counts, baseline `8ae4c21` versus candidate `d60c4fc`.
 | editorial/genres/article.review.md | 1938 | 131 |
 | editorial/genres/case-study.md | 1369 | 251 |
 | editorial/genres/case-study.review.md | 1668 | 130 |
-| editorial/genres/column.md | 1183 | 201 |
+| editorial/genres/column.md | 1183 | 217 |
 | editorial/genres/column.review.md | 1445 | 126 |
 | editorial/genres/opinion.md | 1223 | 194 |
 | editorial/genres/opinion.review.md | 1435 | 116 |
@@ -37,9 +37,9 @@ Each Write column includes base + selected genre + its ordinary technique (ABT b
 | case-study / sv | 5704 | 1679 | 13554 | 4125 |
 | case-study / en_GB | 5396 | 1371 | 12918 | 3500 |
 | case-study / en_US | 5330 | 1301 | 12844 | 3422 |
-| column / sv | 5518 | 1629 | 13145 | 4071 |
-| column / en_GB | 5210 | 1321 | 12509 | 3446 |
-| column / en_US | 5144 | 1251 | 12435 | 3368 |
+| column / sv | 5518 | 1645 | 13145 | 4087 |
+| column / en_GB | 5210 | 1337 | 12509 | 3462 |
+| column / en_US | 5144 | 1267 | 12435 | 3384 |
 | opinion / sv | 5558 | 1622 | 13175 | 4054 |
 | opinion / en_GB | 5250 | 1314 | 12539 | 3429 |
 | opinion / en_US | 5184 | 1244 | 12465 | 3351 |

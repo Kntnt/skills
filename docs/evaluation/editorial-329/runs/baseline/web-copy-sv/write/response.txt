@@ -1,0 +1,38 @@
+---
+kntnt:
+  genre: web-copy
+  technique: abt
+  language: sv
+---
+
+# Genomgång av bokningsrutiner för föreningens gemensamma lokal
+
+Svale hjälper styrelser i mindre bostadsrättsföreningar att gå igenom rutinerna för bokning av en gemensam lokal. Ni får en gemensam bild av hur bokningen fungerar i dag och två möjliga förenklingar att ta ställning till.
+
+## Ett videomöte och en skriftlig sammanställning
+
+Genomgången omfattar ett videomöte på 45 minuter med två representanter för styrelsen. Svale sammanställer också skriftligt de nuvarande stegen i bokningen, oklarheter och två möjliga förenklingar.
+
+Genomgången ger styrelsen ett underlag för att diskutera rutinen. Svale lämnar ingen garanti för en viss tidsbesparing eller färre konflikter.
+
+## För styrelser som vill se över befintliga rutiner
+
+Svales genomgång passar när ni vill se över hur bokningen av en lokal går till. Styrelsen behöver kunna beskriva sina befintliga bokningsregler och visa den nuvarande instruktionen till de boende. Två representanter för styrelsen deltar i videomötet.
+
+Uppdraget är avgränsat till bokningsrutinerna. Juridisk rådgivning, installation av bokningssystem och intervjuer med boende ingår inte. Om det är sådan hjälp ni behöver, täcker genomgången inte det behovet.
+
+## Fast pris: 4 800 kronor inklusive moms
+
+Priset för Svales genomgång är 4 800 kronor inklusive moms och gäller en lokal i en förening. I priset ingår videomötet och den skriftliga sammanställningen.
+
+## Anmäl intresse för en avstämning
+
+Med en intresseanmälan kan ni få avstämt om Svales genomgång passar föreningens behov innan ni tar ställning till ett uppdrag. I formuläret anger du namn, förening och e-postadress. Intresseanmälan är inte en beställning och kräver inga betalningsuppgifter.
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av om uppdraget passar och föreslå en mötestid. Mötet bokas alltså inte direkt när du skickar formuläret.
+
+[Anmäl intresse för en genomgång](https://example.invalid/svale/intresse)
+
+---
+
+Första utkastet levereras här som svensk webbtext, med ABT som standardteknik från genren `web-copy`. Inga filer har sparats. Underlaget saknar betalningsvillkor och leveranstid för sammanställningen; dessa uppgifter har därför inte lagts till.

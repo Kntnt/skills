@@ -1,0 +1,1 @@
+/redline --genre=article --language=sv --output=response input.md -- This is an excerpt, not a complete article.

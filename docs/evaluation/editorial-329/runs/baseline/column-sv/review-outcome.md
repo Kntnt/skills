@@ -1,0 +1,1 @@
+Redline did not deliver a final artifact: the mandatory installed Proofread invocation rejected the raw YAML opening as an unknown flag. The real response is preserved under redline/response.txt. draft.md is not relabelled as successful reviewed output. This is another observed #339 occurrence.

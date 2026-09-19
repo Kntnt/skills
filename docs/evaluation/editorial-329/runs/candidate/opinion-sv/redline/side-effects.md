@@ -1,0 +1,1 @@
+No created/removed/changed paths outside home; 320 native bootstrap/cache/database/session paths and home/.codex/config.toml trust update only. Authentication unchanged. Items 3/6/10/12 use command-private TemporaryDirectory; item_13 checks workspace, scratch and Python caches. Full path/hash inventories retained.
