@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- The `session-cleanup` block asks the agent to name every path it deletes in full, as literal text, with no shell variable, glob, command substitution or `cd` before it. Claude Code stops for the user's approval of any other removal, even with permissions bypassed, and an agent shortening a long scratch path to `"$S/…"` made its own cleanup wait for the user.
+
 ## [0.31.0] – 2026-09-18
 
 ### Added
