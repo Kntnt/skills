@@ -4,10 +4,22 @@ Every test here is built from payloads recorded on the maintainer's machine on
 2026-09-11 and stored under `tests/support/model_selector_refresh/`: Claude
 Code's `initialize` control response, Codex's `app-server` exchange ending in
 `model/list`, the header of the models cache that exchange left behind, and
-OpenRouter's public `GET /api/v1/models`. Account identifiers were redacted and
-nothing else was touched, so a parser that reads them reads the shapes the
-tools actually emit. A change in either CLI shows up when the fixtures are
-recorded again; no test here reaches a network or starts a real harness.
+OpenRouter's public `GET /api/v1/models`. Only identifiers of the account and
+the machine were redacted, and nothing else was touched, so a parser that
+reads them reads the shapes the tools actually emit. The redacted fields are
+these:
+
+- `email` and `organization` in Claude's `account`, now `redacted@example.com`
+  and `redacted`
+- `installationId` in Codex's `remoteControl/status/changed`, now the all-zero
+  UUID `00000000-0000-0000-0000-000000000000`
+- `serverName` in that same message, the machine's name, now `redacted`
+
+A fresh recording redacts the same fields the same way, and names here any
+new field it redacts. The tests fail on a recorded UUID other than that
+placeholder, or on a path under a home directory. A change in either CLI
+shows up when the fixtures are recorded again; no test here reaches a network
+or starts a real harness.
 """
 
 from __future__ import annotations
@@ -16,6 +28,7 @@ import copy
 import importlib.util
 import json
 import os
+import re
 import signal
 import subprocess
 import sys
@@ -271,6 +284,42 @@ def _day(created: int) -> str:
     """Return the UTC date of an OpenRouter `created`."""
 
     return datetime.fromtimestamp(created, UTC).date().isoformat()
+
+
+# --- What the recordings may not carry -----------------------------------------
+
+
+PLACEHOLDER_UUID = "00000000-0000-0000-0000-000000000000"
+
+
+def test_no_recording_carries_a_uuid_other_than_the_placeholder() -> None:
+    uuid = re.compile(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}", re.IGNORECASE)
+    found = {
+        (path.name, match)
+        for path in sorted(FIXTURES.iterdir())
+        for match in uuid.findall(path.read_text(encoding="utf-8"))
+        if match != PLACEHOLDER_UUID
+    }
+    assert found == set()
+
+
+def test_no_recording_carries_a_path_under_a_home_directory() -> None:
+    found = {
+        path.name
+        for path in sorted(FIXTURES.iterdir())
+        if re.search(r"/(?:Users|home)/", path.read_text(encoding="utf-8"))
+    }
+    assert found == set()
+
+
+def test_the_codex_remote_control_status_names_no_installation() -> None:
+    status = next(
+        message["params"]
+        for message in _lines("codex-app-server.jsonl")
+        if message.get("method") == "remoteControl/status/changed"
+    )
+    assert status["installationId"] == PLACEHOLDER_UUID
+    assert status["serverName"] == "redacted"
 
 
 # --- The parsers, against what the tools actually emitted ----------------------
