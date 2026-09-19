@@ -1,0 +1,1 @@
+Draft delivered here in American English as a case study, with frontmatter enabled and no technique selected; the case-study genre specifies none. The supplied material supports approximately 400 words. No supplier comparison or broader outcome measurements were available. No draft file was saved; temporary command directories were removed.

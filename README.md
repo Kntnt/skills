@@ -126,7 +126,7 @@ Run `/unslop [--language=LANGUAGE] [--max=N] [--output=TARGET] [text|path|url]` 
 
 ### write
 
-Turn a brief and one or more sources into a first draft. It preserves source fidelity, resolves genre, technique, and language, and can attach handoff metadata for later review.
+Turn a brief and one or more sources into a first draft, with an independent source comparison before delivery. It resolves genre, technique, and language, and can attach handoff metadata for later editorial review.
 
 Run `/write [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--frontmatter=BOOLEAN] [--output=TARGET] [brief]`.
 
@@ -180,7 +180,7 @@ Git workflows also require `git`; ticket workflows require `gh`; `rename-invoice
 
 `push` requires `commit`; `release` requires `push`; `delegation` and `orchestrate` require `model-selector`; `redline` requires `proofread`.
 
-Delegation, orchestrate, ready for agent check, redline, and unslop require a harness that can spawn subagents. Select shows skill and harness requirements before enablement.
+Delegation, orchestrate, ready for agent check, write, redline, and unslop require a harness that can spawn subagents. Select shows skill and harness requirements before enablement.
 
 ## Contributing and license
 

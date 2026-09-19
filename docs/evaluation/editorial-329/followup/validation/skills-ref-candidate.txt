@@ -1,0 +1,2 @@
+Validation failed for skills/editorial/write:
+  - Unexpected fields in frontmatter: argument-hint, disable-model-invocation. Only ['allowed-tools', 'compatibility', 'description', 'license', 'metadata', 'name'] are allowed.

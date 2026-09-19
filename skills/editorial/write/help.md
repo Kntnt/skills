@@ -10,7 +10,7 @@ write - turn a brief and its source material into one first draft
 
 ## DESCRIPTION
 
-`write` turns a brief and its source material into one first draft. It does not review or proofread the result.
+`write` turns a brief and its source material into one first draft and independently compares its claims with that material before delivery. It performs no editorial review or proofreading.
 
 Sources may be inline text, local files, URLs, the Contextual Instruction, or Conversation Context. Several sources may feed one draft. Supplying a file does not select an output; the response is the default.
 
@@ -63,6 +63,8 @@ A Contextual Instruction every higher level has already settled is suppressed ra
 Only `genre`, `technique`, and `language` under a leading `kntnt` map are configuration. Ordinary frontmatter and output settings are not. Unsupported map values stop the run unless the Formal Invocation overrides them.
 
 ## SOURCE FIDELITY
+
+A fresh checker compares the complete draft with the complete supplied material. The writer repairs supported findings, with at most one further independent comparison. If checking cannot finish or findings remain, Write reports the obstacle and delivers no draft. It requires a harness that can run subagents; it does not replace a missing checker with self-approval. The comparison adds execution time and checks fidelity to supplied material, not whether that material is true in the outside world.
 
 Every claim must be supported by the supplied material. Attribution, uncertainty, scope, chronology, and causality are preserved.
 
@@ -117,7 +119,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-Requires `uv` and the Manager, whose Collection Library carries the editorial contract, the genres and techniques, the Language Resources, and the resolver that selects among them. No peer Skill and no Harness Capability beyond reading the material you supply.
+Requires `uv`, a harness that can run subagents, and the Manager, whose Collection Library carries the editorial contract, the genres and techniques, the Language Resources, and the resolver that selects among them. No peer Skill is required. An unavailable subagent capability stops the invocation before writing.
 
 ## SEE ALSO
 

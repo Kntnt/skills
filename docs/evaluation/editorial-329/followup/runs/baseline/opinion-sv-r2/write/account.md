@@ -1,0 +1,1 @@
+Första utkastet levereras här som debattartikel på svenska, utan särskild teknik; genren `opinion` anger ingen. Inga filer har sparats. Underlaget räckte till den efterfrågade längden. Försökets kostnad och finansiering är fortsatt öppna frågor.

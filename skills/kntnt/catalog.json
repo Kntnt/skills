@@ -165,13 +165,15 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "2f4af884e3c3afb3d7498841730a85f3fe26827cfd88fc473b371848f6fb5ac0",
+      "digest": "7087ec5fd63aed9c5cb5e076e6ae2da5be48371caf7cf22c957c851448298374",
       "binaries": [
         "uv"
       ],
       "skills": [],
       "externals": [],
-      "capabilities": []
+      "capabilities": [
+        "subagents"
+      ]
     },
     {
       "name": "model-selector",

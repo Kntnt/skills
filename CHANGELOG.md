@@ -11,7 +11,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
-- Write’s completion condition explicitly requires checking source support during composition, and the shared claim boundary distinguishes unknown or unclaimed work from established absence. Evaluation still finds the latter error; these clarifications are not a verified fix for #349.
+- Write compares its complete draft with the supplied material through a fresh source checker before delivery, keeping editorial review and proofreading separate. Supported repairs receive one final independent comparison; unresolved or unavailable checking stops delivery. Write now requires subagent capability (#349, #352).
 - Write and Redline use concise, distinct briefs for article, case-study, column, opinion and web-copy, with shared Swedish professional craft, idiomatic target-language writing and advisory web dimensions. These genres no longer select a technique automatically; explicit choices and existing metadata retain their priority. ABT allows a genuine question and PAC analysis may begin in facts (#329–337).
 
 ### Fixed

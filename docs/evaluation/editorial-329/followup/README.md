@@ -18,3 +18,9 @@ Thomas approved reopening #329 with #349 and #352 blocking quality completion; #
 Both neutral source-aware replay probes detected exactly the original unsupported claim without an issue hint: the opinion checker distinguished no claim from no work, and the case checker rejected the invented request to assess. Responses are preserved in `probes/`; both private roots were inspected and removed. The probes took 20.92 and 18.35 seconds. They establish a viable detector seam, not end-to-end repair or general reliability. The original complete examples remain the regression seam; shrinking them would discard genre and context interactions that the final repair must preserve.
 
 The predeclared supplementary run plan is [matrix.md](matrix.md). New source packages were prepared independently and read in full before freezing.
+
+## Candidate mechanism
+
+The candidate replaces unobservable composition-only self-checking with a fresh, read-only source comparison on the inherited seat. The writer owns supported repairs. A changed or disputed draft receives one final fresh comparison; unresolved checking withholds delivery. Sources and checked prose are preserved, reports remain private and are cleaned. This adds subagent capability and latency, which help/README/declarations expose. No genre rule, source fixture or editorial quality criterion changes. The broad code-preservation quantifier in the Skills rule now explicitly names editorial, anti-slop and mechanical passes, matching its existing subject; source comparison of newly generated claims is a different operation.
+
+The supplementary corpus was frozen at `bf14dc2` before product edits. Original material is still byte-identical to `6e531f5`. Focused loading/account checks passed (3 tests). The external Skill validator reports the same two previously accepted extension-field complaints on baseline and candidate, with no new complaint.

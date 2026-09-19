@@ -6541,8 +6541,8 @@ def test_write_accounts_for_what_it_did_with_the_material() -> None:
     is answerable to the contract the draft is written under: it says where the
     material stopped when the draft is short of a stated length, and asserts
     nothing about the draft that the run has not established. It remains an
-    account and never a second pass — Write still stops at the first draft
-    (ADR-0178, issue #138).
+    account and never an editorial pass. Write's independent source comparison
+    happens before delivery, not inside this account (issue #349).
     """
 
     directory = REPO_ROOT / "skills" / "editorial" / "write"
@@ -6563,8 +6563,7 @@ def test_write_accounts_for_what_it_did_with_the_material() -> None:
         f" did (issue #138). See {STANDARD}."
     )
 
-    # The account says what the run did with the material; it never reviews the
-    # draft it has just written (ADR-0178).
+    # The account does not start editorial review or mechanical proofreading.
     assert "perform neither, and offer neither as a next step" in text, (
         f"{directory}: Write no longer stops at the first draft, so the"
         f" account of a run has become the review pass this Skill does not"

@@ -1,0 +1,36 @@
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: sv
+---
+
+# Lervik behöver bättre underlag innan telefonbokningen tas bort
+
+Kommunstyrelsen bör skjuta upp ett permanent byte till enbart digital bokning av föreningslokaler. Vi i Öppna beslut föreslår ett halvår med både telefon och webb i alla sju lokaler. Innan en bokningsväg stängs måste kommunen kunna väga arbetskostnaden mot värdet för användarna.
+
+## Bokningarna säger inte vilka behoven är
+
+Kommunens pilotrapport *Bokning av föreningslokaler*, daterad den 8 april 2026, redovisar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Det visar att båda bokningsvägarna användes under försöket. Men rapporten räknar bokningar, inte unika personer.
+
+Rapporten mäter inte heller ålder, funktionsförmåga eller digital vana. Telefonbokningarna kan därför inte användas för att säga hur stor andel av Lerviks invånare som saknar möjlighet att boka digitalt. Att någon bokar via telefon bevisar inte att personen inte kan använda webben. Däremot ger det kommunen anledning att undersöka varför telefonen används.
+
+Den skillnaden är avgörande för beslutet. Kommunen har räknat hur bokningarna kom in, men saknar underlag för att bedöma vad användarna skulle förlora om telefonen försvann.
+
+## Dubbel administration behöver mätas
+
+Tjänsteutlåtandet inför kommunstyrelsens möte den 18 juni föreslår att telefonbokningen tas bort för samtliga sju lokaler från september. Förvaltningens invändning mot två bokningsvägar är konkret: personalen behöver föra in uppgifter i två flöden.
+
+Det är en relevant invändning. Personalens arbetstid måste ingå i bedömningen. Men handlingarna innehåller varken någon tidsmätning eller någon ekonomisk besparingsberäkning. Kommunstyrelsen saknar alltså underlag för att bedöma hur stor arbetsbesparingen skulle bli.
+
+Ett begränsat försök i två lokaler räcker inte som grund för att permanent stänga telefonbokningen i alla sju när varken arbetsåtgången eller användarnas skäl har undersökts. Beslutsunderlaget lämnar själva avvägningen ogjord.
+
+## Pröva båda vägarna och redovisa kostnaden
+
+Öppna beslut föreslår ett sex månader långt försök i alla sju lokaler, med både telefon och webb kvar. Förvaltningen ska registrera tidsåtgången per bokningsväg och be användarna frivilligt ange varför de väljer den ena eller den andra.
+
+Jag motsätter mig inte digital bokning. Frågan är om kommunen har tillräckliga skäl att göra den till den enda möjligheten. Med det föreslagna försöket kan kommunen få ett bättre underlag för att väga arbetskostnaden mot värdet för användarna.
+
+Vi har varken kostnadsberäknat eller finansierat försöket. Kommunstyrelsen behöver ta ställning till den kostnaden. Den bör skjuta upp det permanenta bytet och besluta om ett halvår med båda bokningsvägarna, med finansieringen klarlagd. Därefter kan den avgöra om en kanal ska tas bort, ändras eller behållas.
+
+*Sanna Ek, talesperson för Öppna beslut*

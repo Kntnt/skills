@@ -1,0 +1,6 @@
+{
+  "baseline": "7ff6ec0",
+  "candidate": "working tree before candidate commit",
+  "result": "same two accepted frontmatter-field complaints, no regression",
+  "scratch_removed": true
+}

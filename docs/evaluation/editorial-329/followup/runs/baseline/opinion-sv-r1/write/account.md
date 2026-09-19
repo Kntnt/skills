@@ -1,0 +1,1 @@
+Första utkastet levereras här som debattartikel på svenska, utan särskild teknik; genren `opinion` anger ingen. Inga filer finns kvar från körningen. Underlaget saknar kostnadsberäkning och finansiering för försöket, vilket framgår i texten.
