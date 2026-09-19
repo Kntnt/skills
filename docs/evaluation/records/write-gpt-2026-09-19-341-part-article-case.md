@@ -8,6 +8,6 @@
 - **model** — `gpt-6-astra`, inherited `high`, verified against native turn contexts
 - **harness** — Codex CLI 0.155.1, fresh isolated invocation per stage
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commit** — `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9`
+- **instruction commit** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`
 - **method** — Same frozen matrix and source packages, no added prompt hints. New runs preserve the earlier d60 failures. No other provider's records consulted. Chronology is already covered by Source Fidelity: an observed pass on this revision is not proof of a targeted fix or future reliability.
 

@@ -1,0 +1,1 @@
+The response used an outer Markdown code fence. Evaluator removed only that presentation wrapper and the separated delivery account. All contents within the fence, including complete YAML frontmatter, body wording and formatting, are retained exactly with the terminating newline. No source or account goes to Redline.

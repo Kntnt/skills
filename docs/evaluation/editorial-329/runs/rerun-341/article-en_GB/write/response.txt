@@ -1,0 +1,42 @@
+---
+kntnt:
+  genre: article
+  technique: none
+  language: en_GB
+---
+
+# What four weeks of school temperature readings can tell you
+
+A short monitoring trial can help municipal property managers identify when classroom temperatures need closer attention. A fictional trial at Björkskolan illustrates how to interpret those readings — and why they cannot, on their own, explain cold complaints or establish how pupils felt.
+
+In January 2026, Lervik’s property office installed temperature sensors in six classrooms at Björkskolan. It wanted to find out whether complaints about cold air coincided with low temperatures during lessons. The sensors recorded readings every five minutes for four weeks.
+
+## Read the lesson count within its limits
+
+The report, *Mätförsök i Björkskolan*, dated 12 March 2026, records that 14 of 120 monitored lesson periods contained at least one reading below 20°C. That was the office’s working threshold for the trial; it was not presented as a legal requirement.
+
+The count tells managers how many lesson periods included a reading below that threshold. It does not say how long temperatures remained below it or whether pupils felt cold. The report provides no benchmark for judging whether 14 out of 120 is high or low.
+
+Reporting by lesson period matters because an average for the whole day can hide temperature variation during lessons. Even so, these findings cover only the six rooms and four weeks measured.
+
+## Understand what the sensors measured
+
+A sensor measures the temperature where it is positioned. Two sensors stood near external walls and four on internal walls. Their positions were documented, but the trial did not experimentally compare placements. It therefore cannot establish what difference those positions made to the readings.
+
+The trial measured air temperature. Another measure, called operative temperature, takes account of both air temperature and heat radiating from surrounding surfaces. That distinction matters when interpreting what the readings describe: air temperature alone does not establish how warm or cold a room felt.
+
+Ventilation, draughts and perceived temperature were not measured. The readings therefore leave unanswered questions about the complaints and their causes.
+
+## Connect readings to room use before changing controls
+
+After the trial, operations technician Elin Rask reviewed the ventilation and heating schedules with the school caretaker. No effects of any adjustments have yet been measured.
+
+‘We know when we need to take a closer look. We don’t yet know why it got cold at those particular times,’ Rask said.
+
+She recommends matching the sequence of temperature readings to the times rooms are used before changing the controls. A further trial is planned for November, with sensors in equivalent positions and notes on room use, although funding has not been decided.
+
+For property managers, that is the practical next step supported by this trial: connect the readings to occupancy times to guide further investigation. The measurements identify periods to examine; the explanation for the cold remains open.
+
+---
+
+Draft delivered here in British English as an article, with no technique applied. No files retained. The supplied material supported the requested scope; causes, comfort and adjustment effects remain unestablished.

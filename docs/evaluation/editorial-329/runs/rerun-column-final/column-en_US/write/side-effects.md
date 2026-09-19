@@ -1,0 +1,1 @@
+No work/export/scratch mutations. Source and instructions unchanged;316 native private-home additions and config project trust update are Harness effects. Authentication unchanged; all paths/hashes inventoried. Items3/5 use context-managed private UV directories, item6 checks scratch, root removed after capture.

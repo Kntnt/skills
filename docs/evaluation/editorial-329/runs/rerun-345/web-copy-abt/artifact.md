@@ -1,0 +1,40 @@
+---
+kntnt:
+  genre: web-copy
+  technique: abt
+  language: sv
+---
+
+# Få en gemensam bild av lokalens bokningsrutiner
+
+Sitter du i styrelsen för en mindre bostadsrättsförening och vill se över hur föreningens gemensamma lokal bokas? Svale erbjuder en avgränsad genomgång av bokningsrutinerna. Styrelsen får en gemensam bild av rutinen och två möjliga förenklingar.
+
+## Från befintliga regler till möjliga förenklingar
+
+Föreningens bokningsregler och instruktionen till de boende är utgångspunkten. Vilka steg ingår i bokningen, och var finns oklarheter? Det är de frågorna genomgången tar upp.
+
+Två representanter för styrelsen deltar i ett videomöte på 45 minuter. Styrelsen behöver kunna beskriva de befintliga bokningsreglerna och visa den nuvarande instruktionen till de boende.
+
+I uppdraget ingår också en skriftlig sammanställning med:
+
+- de nuvarande stegen i bokningen
+- oklarheter i rutinen
+- två möjliga förenklingar.
+
+Sammanställningen ger styrelsen ett underlag för att ta ställning till möjliga förändringar. Svale garanterar ingen viss tidsbesparing eller färre konflikter.
+
+## Pris och omfattning för genomgången
+
+Det fasta priset är **4 800 SEK inklusive moms**. Uppdraget gäller en lokal i en förening och omfattar videomötet och den skriftliga sammanställningen.
+
+Genomgången gäller bokningsrutinerna. Juridisk rådgivning, installation av bokningssystem och intervjuer med boende ingår inte. Om styrelsen behöver något av detta täcker genomgången alltså inte hela behovet.
+
+## Anmäl intresse – så går nästa steg till
+
+Vill du stämma av om genomgången passar föreningens behov? I formuläret för intresseanmälan anger du namn, förening och e-postadress. Anmälan är inte en beställning och du behöver inte lämna några betalningsuppgifter.
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av om uppdraget passar och föreslå en mötestid. Du bokar alltså inget möte direkt i formuläret.
+
+Betalningsvillkor och leveranstid för den skriftliga sammanställningen är ännu inte angivna.
+
+[Anmäl intresse för en genomgång av bokningsrutinerna](https://example.invalid/svale/intresse)

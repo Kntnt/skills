@@ -8,7 +8,7 @@
 - **model** — `gpt-6-astra`, inherited `high`; each native turn context is checked below
 - **harness** — Codex CLI 0.155.1, fresh isolated invocation per stage
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commits** — `d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd` for the first five cases; `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9` for case-study-en_US and article-abt/article-pac. The later revision clarifies translated quotations and changes only column/opinion beyond this batch’s contracts.
+- **instruction commits** — `d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd` for the first five cases; `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9` for case-study-en_US; `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd` for article-abt/article-pac. F8 clarifies translated quotations; 1a4 also clarifies review responsibility for whole-sentence repetition and visible quoted idiom. Per-case traces preserve exact bytes.
 - **method** — Frozen editorial-quality matrix; no other provider's results consulted. Every input/output is synthetic. This record is the article/case-study part of the candidate matrix, including article ABT and PAC.
 
 ## article-sv
@@ -149,4 +149,54 @@
 - **unresolved findings** — none
 - **defects filed** — none
 - **notes** — English source needs no quotation translation; no unsupported trial-start date appears. Native identity checked in consolidated audit.
+
+## article-abt
+
+- **fixture** — article-abt
+- **instruction commit** — 1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd
+- **invocation** — `/write --genre=article --technique=abt --language=sv --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Complete Swedish ABT article and separate account, retained under `editorial-329/runs/candidate/article-abt/write/`.
+- **side effects** — No work/export/scratch changes, scoped UV temporary directories removed; native home effects inventoried, authentication unchanged, evaluator root removed.
+- **criteria** —
+  - F1 — fail (unsupported fact: presupposed experience) — H2 “Lufttemperatur berättar inte hur eleverna frös” presupposes cold pupils; source establishes neither whether pupils felt cold nor how. The body correctly retains the uncertainty.
+  - G1 — pass — Focused practical measurement explanation remains useful; no manufactured crisis.
+  - G2 — pass — Informative H1, standalone ingress, lead, explanation and qualified ending are distinct.
+  - P1 — fail — The heading’s “hur eleverna frös” contradicts the section’s “Rapporten säger heller inte om eleverna frös”; the reader receives incompatible degrees of knowledge.
+  - W1 — pass — Coherent sections and complementary ingress/lead support scanning and sustained explanation; numerical proportions are not used as thresholds.
+  - L1 — pass — The Swedish is idiomatic; the heading fault is semantic certainty, not translation syntax.
+  - L2 — pass — Swedish date, speech dashes and number/unit expressions remain correct.
+  - T1 — pass — Formal ABT flag, metadata abt and actual ABT base loading agree; no PAC/review loaded.
+  - T2 — pass — Situation and measured periods lead through real limits to linking readings with room use; no crisis, triumph or mandatory scene imposed.
+  - R2 — pass — Full bounded Write/genre/web/composition/quotation contract loaded; no peer review or proofreading pass.
+  - O1 — pass — Source unchanged, no enduring Skill artifact in any inventoried writable root.
+- **unresolved findings** — Unsupported presupposition in the quoted H2 remains in this first draft.
+- **defects filed** — #347 (linked to #329).
+- **notes** — Existing base/Source Fidelity already protects headline claims and certainty; this observed failure does not itself justify another blanket rule. Redline receives the unaltered draft without a hint.
+
+## article-pac
+
+- **fixture** — article-pac
+- **instruction commit** — 1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd
+- **invocation** — `/write --genre=article --technique=pac --language=en_GB --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Full British PAC article and separate account under `editorial-329/runs/candidate/article-pac/write/`.
+- **side effects** — No work/export/scratch changes, scoped UV temporary directories removed; native home effects inventoried, authentication unchanged; evaluator root removed.
+- **criteria** —
+  - F1 — pass — Count/denominator, unknown duration/comfort, local threshold, placement limits and undecided funding retained. Translated Rask quotation preserves its uncertainty and meaning.
+  - G1 — pass — Focused explanation of what measurement establishes serves council property managers without promotion.
+  - G2 — pass — Informative H1, standalone ingress, concrete deployment lead, explanatory body and supported next step all work separately.
+  - P1 — pass — “A lesson count does not show duration” follows the reported facts; sensor locality and operative temperature clarify what cannot be concluded.
+  - W1 — pass — Three clear sections and cohesive paragraphs permit scanning without losing the analytical argument.
+  - L1 — pass — “brief dip”, “closer attention” and “funding remains undecided” are natural British phrasing, not translated Swedish syntax.
+  - L2 — pass — British date, draughts, pupils/caretaker and single quotation marks consistent; em-dash house style is an established British option.
+  - T1 — pass — PAC selected by flag, recorded in metadata and loaded alone; ABT absent.
+  - T2 — pass — Given facts lead through duration/location/thermal limits to connecting readings and occupancy. No manufactured thesis or counterargument; early summary remains compatible with analysis.
+  - R2 — pass — Actual Write/shim, bounded contract including PAC and translated-quotation policy, composition/delivery loads; no review or peer pass.
+  - O1 — pass — Input unchanged, no enduring Skill artifact across all inventories.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Judged independently before Redline. Native identity covered by consolidated audit.
 

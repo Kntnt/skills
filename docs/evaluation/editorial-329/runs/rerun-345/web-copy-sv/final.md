@@ -1,0 +1,39 @@
+---
+kntnt:
+  genre: web-copy
+  technique: none
+  language: sv
+---
+
+# Få en gemensam bild av lokalens bokningsrutiner
+
+Svale hjälper styrelser i mindre bostadsrättsföreningar att gå igenom rutinerna för bokning av en gemensam lokal. Ni får en gemensam bild av hur bokningen fungerar i dag, vilka oklarheter som finns och två möjliga förenklingar.
+
+Genomgången passar er som vill se över de befintliga rutinerna. Uppdraget är avgränsat till en lokal i en förening.
+
+## Ett videomöte och en skriftlig sammanställning
+
+Två representanter för styrelsen deltar i ett videomöte på 45 minuter. Styrelsen behöver kunna beskriva sina befintliga bokningsregler och visa den instruktion som de boende har i dag.
+
+I uppdraget ingår också en skriftlig sammanställning med:
+
+- de nuvarande stegen i bokningen
+- oklarheter i rutinen
+- två möjliga förenklingar.
+
+Det ger styrelsen ett gemensamt underlag för att ta ställning till möjliga förändringar.
+
+## Fast pris och tydlig omfattning
+
+Priset är **4 800 kronor inklusive moms** för genomgången av en lokal i en förening. Videomötet och den skriftliga sammanställningen ingår.
+
+Genomgången omfattar inte juridisk rådgivning, installation av bokningssystem eller intervjuer med boende. Svale lämnar ingen garanti för en viss tidsbesparing eller färre konflikter. Det styrelsen får är en genomgång av rutinen och två möjliga förenklingar att ta ställning till.
+
+## Anmäl intresse – så går det vidare
+
+I intresseanmälan lämnar du namn, förening och e-postadress. **Anmälan är inte en beställning**, och du behöver inte lämna några betalningsuppgifter.
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av om uppdraget passar föreningen och föreslå en mötestid. Du bokar alltså inget möte genom att skicka in anmälan.
+
+[Anmäl intresse för en genomgång](https://example.invalid/svale/intresse)
+

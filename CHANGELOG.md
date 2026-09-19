@@ -14,6 +14,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- Swedish mechanical proofreading preserves valid upper- or lowercase readings of an unquoted question after a colon (#348).
 - Redline keeps whole-sentence duplication in the editorial correction and diagnoses context-visible idiom problems inside customer quotations (#346, #341).
 - Web-copy distinguishes a link to a form from a form included on the page, including in Redline’s interface checks (#345).
 - Column ghostwriting preserves the author’s supplied perspective, and opinion writing preserves the actual strength of the author’s position (#342, #343).

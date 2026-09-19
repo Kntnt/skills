@@ -1,0 +1,1 @@
+Native filesystem inventory: created=321, changed=1 (home/.codex/config.toml trust entry), removed=0. No changes outside home; auth unchanged. Both native sessions are gpt-6-astra/high. Child first attempted nonliteral shell cleanup was rejected before execution; retry used TemporaryDirectory successfully. Full native traces retained. All root contents removed after inspection.

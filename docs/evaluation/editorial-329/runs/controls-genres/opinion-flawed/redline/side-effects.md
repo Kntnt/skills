@@ -1,0 +1,5 @@
+# Filesystem effects
+
+No Skill files survive; full input/work/resource/scratch inventories are unchanged after actual correction and installed Proofread. The 324 created native-home entries are Codex bootstrap/plugin/cache/session/database/lock artifacts; the sole changed private config adds project trust. Authentication is unchanged. All native turn contexts expose gpt-6-astra/high. Full inventories and resource/call audit are preserved before evaluator cleanup.
+
+The closing mechanical agent first attempted a shell rm trap, rejected before execution. Its next bare mktemp used an unwritable system-temp default and failed; the invocation engine still ran successfully with no cache and an empty temporary override. The agent then used the explicit writable scratch path with failure checking for actual mechanics resolution. Full inventories show no surviving files; the attempted out-of-root creation was denied, not silently excluded as an effect. This transient Harness/sandbox interaction is retained in the native trace.

@@ -16,6 +16,8 @@ The [frozen matrix](../corpus/editorial-quality/README.md) supplied the criteria
 
 Raw responses, invocation/context, inventories, exact filesystem changes, native parent/correction rollouts and cleanup evidence are under [baseline runs](../editorial-329/runs/baseline/). Harness-created caches, native sessions and trusted-project config updates are explicitly distinguished from Skill effects in each `side-effects.md`. The evaluator's artifact extraction removes only the separately identified delivery account; it does not rewrite the text. Failed runs remain.
 
+**R2 trace limit:** native dispatch serializes subagent task messages as encrypted strings. Fresh child sessions, inherited identities, actual resource reads/tool results, correction outputs, re-review and installed closing passes are observable, but the evaluator cannot independently reproduce every byte of the raw spawn brief from this trace. Statements about supplied findings are supported by the child's resulting account and visible behaviour, not claimed decryption. No source package is staged in any Redline session, and its fresh parent never receives one. This observation limit is retained even where the exercised R2 behaviour passes.
+
 ## `article-sv`
 
 - **fixture** — `article-sv`, complete baseline draft only

@@ -1,0 +1,1 @@
+No work/export/scratch additions, removals or changes. Artifact/instructions preserved; 315 native private-home entries and project-trust config addition are Harness effects, authentication unchanged. Both parent and Proofread-child use fresh context-managed UV directories; final checks find none. Inventories/native child retained, root removed.

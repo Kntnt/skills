@@ -103,6 +103,8 @@ Currency follows the amount: *1 250 kr*, *250 000 SEK*, with a space before the 
 
 A sentence-initial connective adverb takes no comma before the finite verb: *Dessutom är det viktigt*, not *Dessutom, är det viktigt*.
 
+After a colon, direct speech or a quotation starts with a capital. A closely connected specification or explanation may begin with lowercase even when it is a complete sentence. An unquoted question can similarly stand as an independent utterance with a capital or as an integrated specification with lowercase; both readings can be valid. A colon followed by several sentences takes a capital.
+
 The Swedish dash is the en dash, and it is spaced wherever it stands inside a line: the sentence-breaking dash in *snabbare – det*, and the parenthetical insertion, which takes a space on each side. A dash opening a line takes a space after it and has nothing before it to space against. The range is the exception and is unspaced, as above. The em dash belongs to English typography, so *snabbare—det* is an error wherever it stands.
 
 Quotation marks are *”…”* — the same right-pointing mark at both ends — so English marks in *“kundresa”* are an error. Quotation inside quotation uses *’…’*.

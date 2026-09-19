@@ -36,3 +36,30 @@ Each invocation is a fresh native session through the unchanged runner. Only Wri
 - **unresolved findings** — none
 - **defects filed** — none
 - **notes** — Native gpt-6-astra/high. Source-aware Write assessment is separate; Redline sees no source.
+
+## column-sv
+
+- **fixture** — column-sv
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Complete [final artifact](../editorial-329/runs/rerun-column-final/column-sv/redline/artifact.md); the only textual change is capital V beginning the independent question after a colon. Final trailing blank-line presentation also differs; no content removed.
+- **side effects** — No Skill effect;315 native home entries/trust config change, [classification](../editorial-329/runs/rerun-column-final/column-sv/redline/side-effects.md); root removed.
+- **criteria** —
+  - G1 — pass — Reflective author voice, form humour and uncertainty retained.
+  - G2 — pass — Title/byline, observation and developed reflection preserved without a formula.
+  - P1 — pass — Every reasoning step and qualification retained.
+  - W1 — pass — Coherent variable paragraphs remain intact, no imposed headings or quota repairs.
+  - L1 — pass — Idiomatic Swedish expression unchanged.
+  - L2 — pass — Final Proofread capitalises the independent question after the colon; no other language or locale change. This mechanical classification is also flagged for independent final review.
+  - T1 — pass — column/none/sv from metadata, parent items5–7 selected/shared review contract and three sv scopes, no technique resource.
+  - R1 — pass — Before/after diff shows only question-initial case; all facts, stance, wording and structure otherwise remain.
+  - R2 — pass — Parent reads installed Proofread then spawns one fresh mechanical_pass with fork_turns=none; native child actually reads Proofread, runs its flags-only shim, reads delivery/shared mechanics and resolves sv mechanics once. Complete child text is final; no substantive edit afterwards.
+  - O1 — pass — Whole-root inventory and both sessions' transient-directory commands prove no surviving Skill file or input/resource mutation.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Both native identities gpt-6-astra/high. Native spawn message bytes are encrypted: direct byte verification of the handed-over brief is unavailable. Child tool actions are visible, it reads no input artifact file, and it returns the complete text, supporting the full-text handoff without claiming direct plaintext evidence.
+
+### Independent reassessment of column-sv — #348
+
+The L2/R1 pass above is superseded by **fail** for this preserved run. Independent review identified that the unquoted question can be read as a closely integrated specification after the colon; the supplied lowercase is a valid variant. Proofread therefore made an unnecessary preference edit. No fact, voice or stance changed, but preserving valid mechanical variants is part of the frozen contract. [Defect and primary-source check](../editorial-329/defects/swedish-colon-variant.md). The original artifact and trace remain untouched. A language-resource clarification and exact-input replay are recorded separately; they do not turn this outcome into a pass.

@@ -1,0 +1,40 @@
+---
+kntnt:
+  genre: web-copy
+  technique: none
+  language: en_US
+---
+
+# Get a shared picture of your booking routine
+
+Svale helps boards of smaller tenant-owner housing associations understand how bookings for a shared room work today and identify two possible ways to simplify the process.
+
+The review focuses on your existing routine for one room in one association. It gives your board a common reference point: the steps involved, what is unclear, and two possible simplifications.
+
+## What the review includes
+
+Two representatives from your board take part in a 45-minute video meeting. Svale also provides a written summary covering:
+
+- The steps in your current booking routine.
+- Unclear points in that routine.
+- Two possible simplifications.
+
+The review does not include legal advice, installation of a booking system, or interviews with residents. Svale does not guarantee a particular time saving or fewer conflicts.
+
+## Price and what your board needs to prepare
+
+The fixed price is **SEK 4,800, including VAT**, for one shared room in one association.
+
+Your board needs to be able to describe its existing booking rules and show the instructions currently provided to residents. If you want a focused review of those arrangements, this is the scope Svale offers.
+
+## Express interest and discuss whether it fits
+
+Use the linked form to provide your name, association, and email address. Submitting it is an expression of interest, not an order. No payment details are required, and submitting the form does not book a meeting.
+
+Svale will reply by email within three business days to discuss whether the review fits your needs and suggest a meeting time.
+
+[Express interest in Svale’s booking routine review](https://example.invalid/svale/intresse)
+
+---
+
+Draft delivered here in US English as `web-copy`, with frontmatter enabled. No technique was selected; the genre specifies none. The source does not specify payment terms or the written summary’s delivery timeframe, so those remain unresolved. No draft or temporary files remain on disk.

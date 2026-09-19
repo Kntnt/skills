@@ -1,0 +1,23 @@
+# Vad ska vi förstå tillsammans?
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+
+---
+
+Granskad som krönika på svenska, utan särskild berättarteknik.
+
+**Olöst:** Första stycket säger både att berättaren deltog i sitt första möte om mötesmallen och att hon aldrig deltagit i något sådant möte. Båda uppgifterna står kvar eftersom texten inte avgör vilken som gäller.
+
+**Borttagna påståenden i korrigeringsrundan:**
+
+- Att möten förändrar allt: rubrikens överdrift ersattes med en fråga förankrad i texten.
+- Att dagens värld förändras snabbt och att möten är viktigare än någonsin: de generiska påståendena ströks från andra stycket och avslutningen.
+- Att det är viktigt att vara viktig: tautologin ströks.
+
+Den avslutande korrekturläsningen gav inga ytterligare ändringar. `input.md` är oförändrad; inga arbetsfiler finns kvar.

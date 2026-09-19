@@ -1,0 +1,1 @@
+Filesystem created=318, removed=0, changed=1 (home/.codex/config.toml trust). No changes outside home; auth unchanged. Native session gpt-6-astra/high. Isolated root removed after complete artifact and resource audit.

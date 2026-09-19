@@ -68,3 +68,7 @@ Baseline12invocations complete and independently assessed: five Redline YAML fai
 Frozen case-study-clean contains the same #341 calque (“innan nästa hus börjar”), so its clean label cannot confer L1 pass. No fixture changes: record a contaminated positive-control limitation and assess visible idiom honestly. Root clarified case-study.review's existing quote/idiom diagnosis: context-visible missing referent, clarify only settled meaning else report. Independent review approved. Evaluator will replay that exact control. Changes affect review only; no new Write contract.
 
 #345 regression already passed on2bd2afe: exact failed en_GB draft corrected solely from “form below” to “form linked below”; fresh correction, full actual resource loads, one Proofread, no scratch. Native spawn-message bodies are encrypted; disclose inability to inspect raw brief bytes, while fork_turns/child actions and full outputs remain visible. Same method limit applies to root column-sv Proofread child.
+
+## Colon-variant correction checkpoint
+
+Independent review supersedes the initial root column-sv L2/R1 pass: the lowercase integrated question after a colon was valid, so Proofread's case edit failed preservation (#348). Swedish Mechanics now describes the language-specific boundary, checked against Språkrådet and independently reviewed. Exact-input replay and the frozen clean column control will verify this revision. Other evaluation batches and records are still in progress; this commit is a reproducible resource checkpoint, not a final verdict.

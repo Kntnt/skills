@@ -8,11 +8,13 @@
 - **model** — `gpt-6-astra`, reasoning `high`, observed native turn contexts
 - **harness** — native Codex CLI `0.155.1`
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commit** — `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9`
+- **instruction commits** — first eight controls: `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9`; web-copy controls and explicitly labelled affected reruns: `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`
 
 ## Conditions
 
 The frozen [matrix](../corpus/editorial-quality/README.md) precedes every run. Each control has a fresh native session, immutable private installation and only its supplied artifact as input.md. No rubric, original source, baseline result or other provider record reaches the model. The ten controls are sequential; correction agents use the inherited observed model/effort. The neutral Harness dispatch identifies local SKILL.md and does not replace its workflow. Complete before/after inventories include work, resource copies, scratch and private native state. Side-effect classifications distinguish Skill work from Harness bootstrap/log/database changes. Each control is judged on its own before comparisons.
+
+**R2 trace limit:** native dispatch serializes subagent task messages as encrypted strings. Fresh child sessions, inherited identities, actual resource reads/tool results, correction outputs, re-review and installed closing passes are observable, but the evaluator cannot independently reproduce every byte of the raw spawn brief from this trace. Statements about supplied findings are supported by the child's resulting account and visible behaviour, not claimed decryption. No source package is staged in any Redline session, and its fresh parent never receives one. This observation limit is retained even where the exercised R2 behaviour passes.
 
 ## `article-clean`
 
@@ -105,3 +107,119 @@ The frozen [matrix](../corpus/editorial-quality/README.md) precedes every run. E
 - **unresolved findings** — Customer background, purpose, choices and implementation absent from the input, explicitly reported.
 - **defects filed** — none; the remaining quality gap is the control's intentionally unavailable information, correctly handled.
 - **notes** — The frozen expectation separates detection/preservation from final completeness. G2 therefore remains fail while R1/R2 pass; the honest missing-facts account is not falsely scored as a complete customer case. This run already repairs the whole-sentence duplication correctly on f8cac6d, independently of #346's later boundary clarification.
+
+## `column-clean`
+
+- **fixture** — `column-clean`, sv
+- **invocation** — `/redline --genre=column --language=sv --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Completed no-change status; [final text](../editorial-329/runs/controls-genres/column-clean/final.md) equals the supplied artifact.
+- **side effects** — No surviving Skill effects; full input/work/resource/scratch inventories unchanged. 316 native private-home entries and project-trust config update are classified Harness effects.
+- **criteria** —
+  - `G1` — `pass` — Preserves Nora Vik's personal questioning and self-irony, not recasting reflection as a campaign or manufacturing an anecdote.
+  - `G2` — `pass` — The early point, reflection on valuable non-decision conversations and doubtful closing “Kanske” retain their distinct jobs.
+  - `P1` — `pass` — The move from the meeting form to shared understanding remains coherent; the speculative benefit stays qualified rather than becoming a guarantee.
+  - `W1` — `pass` — The coherent paragraph over 80 words, purposeful repeated question and lack of H2s survive. No numerical preference forces fragmentation or a deviation explanation.
+  - `L1` — `pass` — Native Swedish personal syntax and dry final joke remain intact.
+  - `L2` — `pass` — Punctuation and inflection are consistent after the final mechanical pass.
+  - `T1` — `pass` — Default none is honoured in configuration and actual file loads; reflection's turn does not trigger ABT.
+  - `R1` — `pass` — Every claim, doubt and rough personal turn is preserved byte-for-byte; no taste-only correction is requested.
+  - `R2` — `pass` — Full required resource paragraphs are visible in native outputs. No correction is needed. Installed Proofread runs exactly once with resolved sv mechanics; no substantive edit follows.
+  - `O1` — `pass` — Whole-root before/after inventories prove source preservation and no Skill scratch.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Positive preservation coverage includes the deliberate long coherent paragraph and purposeful recurrence. It contains no accidental verbatim whole-sentence duplication, so #346's subsequent classification clarification does not target its actual text.
+
+## `column-flawed`
+
+- **fixture** — `column-flawed`, sv
+- **invocation** — `/redline --genre=column --language=sv --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Corrected [final text](../editorial-329/runs/controls-genres/column-flawed/final.md), preserving and explicitly reporting the irreparable participation contradiction.
+- **side effects** — No Skill files survive; full input/work/resource/scratch unchanged. 319 native-home creations and private trust-config change are classified Harness effects.
+- **criteria** —
+  - `G1` — `pass` — Keeps the personal reflection about understanding together and the author's actual doubt; no replacement memory or invented habit is supplied.
+  - `G2` — `pass` — Replaces the unsupported sweeping headline and generic ending with the text's concrete question and existing reflective ending; no compulsory anecdote or campaign is added.
+  - `P1` — `fail` — **Reported irreparable contradiction:** the opening still asserts both a first meeting and never attending such a meeting. The supplied text cannot decide which is true; its continuing reader conflict is not falsely scored as repaired.
+  - `W1` — `pass` — Removes the generic opening/closing material and tautology while preserving compact coherent paragraphs without manufactured H2s.
+  - `L1` — `pass` — The author's Swedish reflection and uncertain voice remain idiomatic; contradiction is a factual/coherence problem rather than language interference.
+  - `L2` — `pass` — Swedish quotation and sentence mechanics remain correct after the closing pass.
+  - `T1` — `pass` — Default none, with no technique resources loaded.
+  - `R1` — `pass` — Names the contradictory claims precisely, leaves both rather than selecting or inventing a memory, and reports the unresolved issue. Removes only identified sweeping/generic claims with a complete removal account; preserves non-decision value and uncertainty about the extra box.
+  - `R2` — `pass` — Actual full scoped reads, one fresh same-model/high correction, re-review and exactly one successful installed Proofread pass are observable. No substantive edit follows.
+  - `O1` — `pass` — Full-root inventories establish unchanged input/resources and no persistent Skill scratch.
+- **unresolved findings** — Mutually incompatible meeting participation claims, explicitly reported with the inability to decide from text alone.
+- **defects filed** — none; this is the control's intended missing-source boundary, correctly respected.
+- **notes** — P1 records the final artifact's real remaining problem; R1 records successful detection, preservation and reporting. These are deliberately different judgements. The earlier invented scene is neither silently endorsed as factual nor replaced with a more plausible invented experience.
+
+## `opinion-clean`
+
+- **fixture** — `opinion-clean`, sv
+- **invocation** — `/redline --genre=opinion --language=sv --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Completed no-change status; [final text](../editorial-329/runs/controls-genres/opinion-clean/final.md) is byte-identical to input.
+- **side effects** — No remaining Skill artifacts; full input/work/resource/scratch unchanged. 316 native private-home entries and project-trust config change are classified Harness effects.
+- **criteria** —
+  - `G1` — `pass` — Preserves the author's polemical argument for postponement and a measured dual-channel trial, rather than flattening it to neutral exposition.
+  - `G2` — `pass` — Early thesis, pilot evidence, real administrative objection and explicit council/administration action remain intact.
+  - `P1` — `pass` — Distinguishes booking counts from people and digital ability; acknowledges the unmeasured workload/cost before demanding measurement.
+  - `W1` — `pass` — Informative sections and coherent argument paragraphs remain navigable without mechanical shortening.
+  - `L1` — `pass` — Native Swedish polemical syntax and the final calendar/assumption sentence retain their force.
+  - `L2` — `pass` — Date, number, attribution and punctuation forms remain correct after the mechanics pass.
+  - `T1` — `pass` — Default none resolves; actual loads contain no inferred technique.
+  - `R1` — `pass` — Preserves every claim, objection, cost uncertainty and the sharp final sentence byte-for-byte; adds no generic hedges or unsupported motives.
+  - `R2` — `pass` — Complete required scoped resource paragraphs are visible. No correction is warranted; exactly one installed Proofread invocation completes, with no substantive edit afterward.
+  - `O1` — `pass` — Full-root inventories show no surviving Skill files and unchanged supplied input/resources.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — This is a positive preservation test of opinion strength and legitimate polemic, separate from the source-aware Write modality issue #343.
+
+## `opinion-flawed`
+
+- **fixture** — `opinion-flawed`, sv
+- **invocation** — `/redline --genre=opinion --language=sv --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Corrected [final text](../editorial-329/runs/controls-genres/opinion-flawed/final.md), with the four removed unsupported claims named separately.
+- **side effects** — No surviving Skill effects; input/work/resources/scratch unchanged after correction and a separate mechanical agent. 324 native-home creations and trust-config update are classified Harness effects.
+- **criteria** —
+  - `G1` — `pass` — Keeps the proposal to retain telephone booking during the six-month trial rather than making the author neutral; removes invented hateful/exclusionary motives.
+  - `G2` — `pass` — Early position, attributed counts, administrative objection and named council action all remain. The vague exhortation becomes an action already supported in the body.
+  - `P1` — `pass` — Removes the population/digital-ability inference that booking counts cannot support and the false no-cost conclusion that absence of time measurement cannot support.
+  - `W1` — `pass` — Replaces opaque background/discussion headings with information-bearing entries while retaining coherent argument paragraphs.
+  - `L1` — `pass` — Idiomatic direct Swedish argument remains; the final address to Kommunstyrelsen is clear and warranted.
+  - `L2` — `pass` — Correct date, counts, compounds and punctuation survive the installed mechanical pass.
+  - `T1` — `pass` — Default none, and actual resource loads contain no technique inferred from argument form.
+  - `R1` — `pass` — Corrects all six visible findings while preserving 96/24 bookings, no unique-person count, unexamined digital ability, 8 April attribution, double-administration objection, no time measurement, uncomputed cost and the proposed measurement/trial. The removal account names only the unsupported motives, millions claim, population inference and cost conclusion. No force-reducing generic hedge is added.
+  - `R2` — `pass` — Full scoped resources are visible; one fresh correction is re-reviewed, then a separate same-model/high agent executes the installed closing Proofread pass once. No substantive edit follows. Raw spawn briefs retain the common encrypted-trace limitation.
+  - `O1` — `pass` — Complete inventories prove source preservation and zero remaining Skill files across all staged writable roots.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — A rejected rm-trap command did not execute. A subsequent bare mktemp attempted an unwritable system-temp location and failed, while the invocation engine itself succeeded; the agent then used the declared explicit scratch path with failure checking for mechanics resolution. These actual transient failures remain in the trace/side-effect account rather than being hidden, but caused no persistent side effect or second mechanical pass.
+
+## `web-copy-clean`
+
+- **fixture** — `web-copy-clean`, sv
+- **instruction commit** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`
+- **invocation** — `/redline --genre=web-copy --language=sv --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Completed no-change status; [final text](../editorial-329/runs/controls-genres/web-copy-clean/final.md) equals the supplied information page.
+- **side effects** — No remaining Skill files; complete input/work/resource/scratch unchanged. 316 native-home entries and the trust-config update are classified Harness effects.
+- **criteria** —
+  - `G1` — `pass` — Preserves a useful information page explaining the expression-of-interest process; no sales template or invented CTA is imposed.
+  - `G2` — `pass` — Keeps the nonorder condition, requested fields, lack of payment requirement and email/meeting consequence without inventing a destination or page function.
+  - `P1` — `pass` — Explains what the form does before details, then what happens after submission; no hidden booking consequence is added.
+  - `W1` — `pass` — Short informative headings and variable section lengths remain intact without numerical findings or gratuitous expansion.
+  - `L1` — `pass` — Clear native Swedish action/information wording is preserved.
+  - `L2` — `pass` — Correct e-post compound, punctuation and temporal expression survive the mechanics pass.
+  - `T1` — `pass` — Default none, with no technique file loaded or sales arc inferred.
+  - `R1` — `pass` — Preserves every condition and consequence byte-for-byte; no taste-only rewrite, unsupported button or embedded form state is requested.
+  - `R2` — `pass` — Full required resource paragraphs are visible; no correction is needed. Exactly one installed Proofread invocation completes with mechanics scope and no substantive edit afterward.
+  - `O1` — `pass` — Full-root inventory proves input/resource preservation and no Skill scratch.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Positive information-page coverage complements the separate service-page pipeline and misleading-action flawed control. The absence of a CTA is purposeful and accepted.

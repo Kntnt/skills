@@ -8,7 +8,7 @@
 - **model** — `gpt-6-astra`, inherited `high`; each native turn context is checked below
 - **harness** — Codex CLI 0.155.1, fresh isolated invocation per stage
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commits** — `d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd` for the first five cases; `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9` for case-study-en_US and article-abt/article-pac. The later revision clarifies translated quotations and changes only column/opinion beyond this batch’s contracts.
+- **instruction commits** — `d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd` for the first five cases; `f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9` for case-study-en_US; `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd` for article-abt/article-pac. F8 clarifies translated quotations; 1a4 also clarifies review responsibility for whole-sentence repetition and visible quoted idiom. Per-case traces preserve exact bytes.
 - **method** — Frozen editorial-quality matrix; no other provider's results consulted. Every input/output is synthetic. This record is the article/case-study part of the candidate matrix, including article ABT and PAC.
 
 ## article-sv
@@ -125,4 +125,78 @@
 - **unresolved findings** — Skill reports none. Source-aware evaluator notes Write’s September commencement error remains; Redline was not given the evidence needed to detect it.
 - **defects filed** — #344 belongs to Write’s source-fidelity result, not a Redline failure.
 - **notes** — Parent and fresh correction child expose gpt-6-astra/high. Complete input/output diff and removal account support the preservation judgment.
+
+## case-study-en_US
+
+- **fixture** — case-study-en_US
+- **instruction commit** — f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Complete corrected case and explicit two-claim removal account in `editorial-329/runs/candidate/case-study-en_US/redline/`.
+- **side effects** — No work/export/scratch changes survive. Initial shell cleanup commands were denied and safely retried with scoped Python temporary directories. Native private-home effects inventoried; authentication unchanged. Evaluator root removed.
+- **criteria** —
+  - G1 — pass — Customer agency and qualified perspective remain the focus.
+  - G2 — pass — Functional case parts, supplier disclosure and correct checklist action retained.
+  - P1 — pass — Median limitations, report exclusions and conditional expansion preserved.
+  - W1 — pass — Removing pre-echoed appraisal and a repeated next-decision sentence improves economy without imposing headings or a template.
+  - L1 — pass — Native American prose and complete original quotations remain intact.
+  - L2 — pass — American conventions preserved; actual final Proofread returned no-change.
+  - T1 — pass — Case-study/none/en_US metadata honoured in parent and correction resource loading.
+  - R1 — pass — Only the appraisal pre-summary became “Lind said:” and the redundant “That leaves Elm Quay with a specific question...” sentence was deleted. Both meanings remain in adjacent quotation/specific next step; every other claim/quote is unchanged. Both removals reported.
+  - R2 — pass — Parent and fresh correction child loaded full bounded contracts. One correction, re-review, then one fresh mechanical child loaded/invoked installed Proofread with shared/local mechanics. No substantive edit followed.
+  - O1 — pass — Input unchanged and no enduring Skill file in all inventories.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — All three native sessions expose gpt-6-astra/high; comparison of complete input/output supports the narrowly reported removals.
+
+## article-abt
+
+- **fixture** — article-abt
+- **instruction commit** — 1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Complete corrected article, preserved in `editorial-329/runs/candidate/article-abt/redline/`; one word changed in the faulty heading.
+- **side effects** — No work/export/scratch changes. Denied shell cleanup form replaced with scoped Python temporary directory; native home changes inventoried, authentication unchanged, evaluator root removed.
+- **criteria** —
+  - G1 — pass — Clear measurement-limits angle and professional explanation retained.
+  - G2 — pass — Article’s distinct parts and noncommercial useful conclusion retained.
+  - P1 — pass — “hur eleverna frös” becomes “om eleverna frös”, restoring agreement with the body’s explicit uncertainty.
+  - W1 — pass — Useful headings and cohesive explanatory paragraphs unchanged except the semantic repair.
+  - L1 — pass — Natural Swedish professional register retained.
+  - L2 — pass — Installed final Swedish mechanics pass makes no changes; inspection agrees.
+  - T1 — pass — Metadata ABT honoured, only selected technique and its review loaded in parent/child.
+  - T2 — pass — Situation, genuine question and supported next investigation still form a calm arc; early ingress result left in place.
+  - R1 — pass — Exactly the named heading defect repaired (hur→om); all other wording, claims, quotation and metadata remain identical. No passage was deleted or unrelated claim lost.
+  - R2 — pass — Full scoped parent/fresh correction-child contracts loaded, one correction and re-review, then exactly one installed Proofread invocation with shared/local mechanics; no substantive change after it.
+  - O1 — pass — Input unchanged and no surviving Skill file anywhere in inventoried roots.
+- **unresolved findings** — none
+- **defects filed** — #347 remains the observed Write failure; this Redline outcome repairs its visible contradiction.
+- **notes** — Parent and correction child are gpt-6-astra/high. Source was never supplied to Redline. This successful correction does not erase the first-draft failure or guarantee future detection.
+
+## article-pac
+
+- **fixture** — article-pac
+- **instruction commit** — 1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — No-change response; input retained as final artifact in `editorial-329/runs/candidate/article-pac/redline/`.
+- **side effects** — No work/export/scratch changes; scoped UV temporary directories removed, native home effects inventoried, authentication unchanged, evaluator root removed.
+- **criteria** —
+  - G1 — pass — Focused professional account of measurement value and limits preserved.
+  - G2 — pass — Complete article form and distinct explanatory opening retained.
+  - P1 — pass — Facts lead through duration/location limits to a proportionate recommendation.
+  - W1 — pass — Clear section entries and coherent paragraphs retained without template-driven changes.
+  - L1 — pass — Natural British narrative and translated quotation retained.
+  - L2 — pass — Final installed British mechanics pass correctly retains valid dash/quotation choices.
+  - T1 — pass — Metadata PAC governs actual PAC base/review loading; ABT absent.
+  - T2 — pass — Descriptive facts are accepted as a premise, analysis earns the conclusion; no invented thesis or counterargument demanded.
+  - R1 — pass — Every word, claim, qualification, quote and metadata byte preserved; no taste-driven finding.
+  - R2 — pass — Full review resources and three language scopes loaded; no unnecessary correction; exactly one installed Proofread shim and shared/local mechanics pass, no later edit.
+  - O1 — pass — Input unchanged and no enduring Skill file in all inventories.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Native identity covered in consolidated audit; no correction child required.
 

@@ -59,3 +59,27 @@ Each invocation is a fresh native session through the unchanged runner. Only Wri
 - **unresolved findings** — none; efficacy remains an honest unknown.
 - **defects filed** — none in this final-resource sample.
 - **notes** — Native gpt-6-astra/high verified; independently judged before paired review.
+
+## column-en_US
+
+- **fixture** — column-en_US, first declared US cell
+- **instruction commit** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`; all Write-loaded bytes equal f8cac6d, later changes concerned review and unselected web-copy resources.
+- **invocation** — `/write --genre=column --language=en_US --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Full column/metadata/account; [artifact](../editorial-329/runs/rerun-column-final/column-en_US/write/artifact.md), [response](../editorial-329/runs/rerun-column-final/column-en_US/write/response.txt).
+- **side effects** — No Skill effect;316 native home entries/config trust update, [classification](../editorial-329/runs/rerun-column-final/column-en_US/write/side-effects.md); root removed.
+- **criteria** —
+  - F1 — pass — “I’m irritated by how easily time on a calendar can come to count as a result” retains the observation and supplied irritation without claiming Nora practises it. Document fields, appreciation of discovered differences, trust, exploratory purposes, proposed question and uncertain effect remain. Hypothetical “I would hate to design a form...” expresses the supplied wish not to force decisions, not an invented event or habit.
+  - G1 — pass — A personally voiced reflection for meeting planners with quiet self-irony, not a campaign.
+  - G2 — pass — Title/byline, concrete document opening, evolving perspective and doubtful ending; no fabricated memory.
+  - P1 — pass — Decision as one legitimate outcome is widened to exploration before proposing the question.
+  - W1 — pass — Varied connected paragraphs and short turns provide rhythm without imposed H2s or numerical conformity.
+  - L1 — pass — “with rather inconvenient logic” and “prescribing more template” are native English expressions of the supplied comic idea.
+  - L2 — pass — American title case, serial comma, contractions and unspaced em dash follow the resolved resource. No currency/date conversion.
+  - T1 — pass — column/none/en_US metadata and item4 selected/base/web-craft read agree; item5 composition only, no technique file.
+  - R2 — pass — Installed Write/invocation and scoped resources, no review half or peer pass.
+  - O1 — pass — Complete inventory and actual transient cleanup prove preserved source/resources and response-only effects.
+- **unresolved findings** — none; the possible benefit remains explicitly unknown.
+- **defects filed** — none
+- **notes** — Native gpt-6-astra/high verified; judgement precedes paired review. This sample adds US coverage without claiming deterministic prevention of every future fidelity error.
