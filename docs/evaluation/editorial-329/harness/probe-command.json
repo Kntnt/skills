@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "/opt/homebrew/Caskroom/codex/0.155.1/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "read-only",
+    "-C",
+    "/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/work",
+    "--skip-git-repo-check",
+    "--json",
+    "-o",
+    "/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/response.txt",
+    "-"
+  ],
+  "environment": {
+    "HOME": "/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/home",
+    "CODEX_HOME": "/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/home/.codex",
+    "TMPDIR": "/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/tmp",
+    "UV_CACHE_DIR": "/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/uv-cache",
+    "XDG_DATA_HOME": "/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/data",
+    "XDG_CACHE_HOME": "/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/cache"
+  },
+  "prompt": "This is a harness access and isolation probe, not an editorial task. Do not invoke any skill, do not write files, and do not spawn subagents. List the names and absolute paths of the skills exposed in your system context and whether a fresh-subagent tool is available. Do not infer model identity; the evaluator reads it from the native trace. Finish with ACCESS_OK."
+}

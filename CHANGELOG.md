@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- A source-grounded editorial evaluation corpus for five web genres, with Swedish and English briefs, positive and negative controls, fixed baseline cases and a frozen semantic assessment matrix (#330).
+
 ## [0.32.1] – 2026-09-19
 
 ### Changed

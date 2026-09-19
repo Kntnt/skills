@@ -1,0 +1,104 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills
+configfile: pyproject.toml
+testpaths: tests
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [1873 items]
+
+........................................................................ [  3%]
+........................................................................ [  7%]
+F....................................................................... [ 11%]
+...F.................................................................... [ 15%]
+........................................................................ [ 19%]
+........................................................................ [ 23%]
+........................................................................ [ 26%]
+........................................................................ [ 30%]
+........................................................................ [ 34%]
+........................................................................ [ 38%]
+........................................................................ [ 42%]
+........................................................................ [ 46%]
+........................................................................ [ 49%]
+........................................................................ [ 53%]
+........................................................................ [ 57%]
+........................................................................ [ 61%]
+........................................................................ [ 65%]
+........................................................................ [ 69%]
+........................................................................ [ 73%]
+........................................................................ [ 76%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+........................................................................ [ 96%]
+........................................................................ [ 99%]
+.                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_the_index_and_the_corpus_directory_describe_the_same_fixtures ______
+[gw3] darwin -- Python 3.12.13 /Users/thomas/.cache/uv/builds-v0/.tmpljkbU8/bin/python
+
+    def test_the_index_and_the_corpus_directory_describe_the_same_fixtures() -> None:
+        """A file nothing documents, and an entry pointing at nothing, both fail."""
+    
+        listed: set[str] = set()
+        for body in _entries().values():
+            listed |= set(PATH.findall(_fields(body).get("Files", "")))
+    
+        missing = {name for name in listed if not (CORPUS / name).exists()}
+        assert missing == set(), f"{missing}: named by an entry, absent from disk"
+    
+        undocumented = _fixture_files() - listed
+>       assert undocumented == set(), (
+            f"{undocumented}: present in the corpus and named by no entry, so an"
+            f" evaluator meets material with no account of what it is for."
+        )
+E       AssertionError: {'editorial-quality/controls/case-study-flawed.md', 'editorial-quality/controls/article-flawed.md', 'editorial-quality/controls/article-clean.md', 'editorial-quality/sources/web-copy.md', 'editorial-quality/controls/case-study-clean.md', 'editorial-quality/controls/column-flawed.md', 'editorial-quality/controls/web-copy-flawed.md', 'editorial-quality/sources/article.md', 'editorial-quality/controls/web-copy-clean.md', 'editorial-quality/sources/opinion.md', 'editorial-quality/controls/report-pac.md', 'editorial-quality/controls/opinion-clean.md', 'editorial-quality/sources/column.md', 'editorial-quality/controls/column-clean.md', 'editorial-quality/sources/case-study.md', 'editorial-quality/controls/opinion-flawed.md'}: present in the corpus and named by no entry, so an evaluator meets material with no account of what it is for.
+E       assert {'editorial-q...awed.md', ...} == set()
+E         
+E         Extra items in the left set:
+E         'editorial-quality/controls/case-study-flawed.md'
+E         'editorial-quality/controls/article-flawed.md'
+E         'editorial-quality/sources/web-copy.md'
+E         'editorial-quality/controls/report-pac.md'
+E         'editorial-quality/controls/opinion-clean.md'...
+E         
+E         ...Full output truncated (12 lines hidden), use '-vv' to show
+
+tests/test_evaluation.py:577: AssertionError
+____ test_no_valued_flag_of_the_collections_grammar_is_written_with_a_space ____
+[gw5] darwin -- Python 3.12.13 /Users/thomas/.cache/uv/builds-v0/.tmpljkbU8/bin/python
+
+    def test_no_valued_flag_of_the_collections_grammar_is_written_with_a_space() -> None:
+        """`--flag=value`, on every surface the collection owns (ADR-0176)."""
+    
+        scanned = _scanned()
+    
+        # A glob that matched nothing would pass the loop below without reading a
+        # single file, which is the one outcome this test exists to catch.
+        assert scanned
+    
+        for path in scanned:
+            for number, flag, value in violations(
+                path.read_text(encoding="utf-8"), VALUED_FLAGS
+            ):
+                where = f"{path.relative_to(REPO_ROOT)}:{number}"
+>               raise AssertionError(
+                    f"{where}: `{flag} {value}` separates a valued flag from its"
+                    f" value with a space. A flag of this collection's own grammar"
+                    f" attaches its value with `=`, as `{flag}=…`, because that is"
+                    f" the only spelling an optional value has, the only one that"
+                    f" is unambiguous where a value begins with `-` or is empty,"
+                    f" and the one that keeps a flag and its value a single token"
+                    f" ({RECORD}). A `git`, `gh`, `uv`, or `npx` command line keeps"
+                    f" its own tool's spelling and is not under this rule. See"
+                    f" {STANDARD}."
+                )
+E               AssertionError: docs/evaluation/editorial-329/reviews/harness-setup.md:74: `--output <new-evaluator-output-directory>` separates a valued flag from its value with a space. A flag of this collection's own grammar attaches its value with `=`, as `--output=…`, because that is the only spelling an optional value has, the only one that is unambiguous where a value begins with `-` or is empty, and the one that keeps a flag and its value a single token (ADR-0176). A `git`, `gh`, `uv`, or `npx` command line keeps its own tool's spelling and is not under this rule. See docs/rules/skills.md.
+
+tests/test_flag_grammar.py:355: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evaluation.py::test_the_index_and_the_corpus_directory_describe_the_same_fixtures
+FAILED tests/test_flag_grammar.py::test_no_valued_flag_of_the_collections_grammar_is_written_with_a_space
+================== 2 failed, 1871 passed in 100.25s (0:01:40) ==================

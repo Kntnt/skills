@@ -1,0 +1,93 @@
+# Editorial quality matrix — #330 / #338
+
+Frozen before the implementation and before editorial model runs. The commit that first contains this matrix is the corpus revision for all runs; record its full ID. Baseline instructions are `8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6`. This matrix and its examples are evaluation material, never runtime guidance. Read [the protocol](../../protocol.md).
+
+## Material and staging
+
+Every person, organisation, event, quote, measurement and URL in this directory is **synthetic**. Source files are complete brief/source packages with explicit limits, not facts to verify on the web. Control files contain only the Text Artifact; this index supplies their synthetic label and intended use. An evaluator copies the necessary input into an isolated working directory and exposes only that input to the invoked Skill. Do not expose this rubric, expected findings, another output, or the other provider's records to it.
+
+Use a fresh supported native session for each invocation. Install only the revision's Manager, Write, Redline and Proofread into that run's private skill directory. A neutral Harness dispatch instruction may identify the exact local SKILL.md for a formal invocation; it may not paraphrase or replace its steps. Preserve the full trace, including correction agents and the closing Proofread invocation. The evaluator captures output externally; response-targeted Skills create no enduring files. Inventory all staged writable roots before and after, including the complete working copy, temporary directories and Harness state/scratch. Separate Harness-owned logs/database changes and evaluator writes from Skill effects by trace and timing, rather than excluding those roots.
+
+For Write, copy `sources/<genre>.md` to `source.md`. Invoke exactly `/write --genre=<genre> --language=<locale> --output=response source.md`. The requested language overrides the source language. Use no technique or contextual instruction in a normal run. Preserve the full response and the complete draft including its Kntnt metadata as separate evaluator artifacts. Then give a fresh session only that draft as `input.md` and invoke `/redline --output=response input.md`. Redline never sees the source package. Preserve its response, final text (the input is final for a no-change status), findings and removed-claim account separately. The default correction budget remains unchanged.
+
+## Predeclared semantic criteria
+
+Score each applicable criterion `pass`, `fail` or `skipped` with an observable passage or trace event. A quantitative measurement supports judgement; it never makes a failure on its own. Distinguish **contract rejection** from **qualitative concern** and **method limit**. Several very different successful texts can pass. Never score exact wording, newspaper names in output, similarity to an example, or preference for one valid editorial solution.
+
+| ID | Question and evidence | Applies |
+|---|---|---|
+| F1 | Does every assertion, quotation, attribution and implication stay within the supplied material, including uncertainty, chronology, causal limits and author perspective? Cite any unsupported addition or dropped caveat. Count-size judgements need a supplied comparison. | Write, source-aware evaluator only |
+| G1 | Does the chosen genre do its job for the named reader, keep a recognisable angle and carry the appropriate journalistic or copy/UX craft? Cite what the reader learns, sees, considers or can do. | Both |
+| G2 | Do the required parts perform distinct useful jobs? Article: informative H1, separate informative ingress, lead before first H2, supplied-only byline, explanatory body, earned ending. Case: customer situation/action/results/appraisal, truthful publisher stance. Column: personal reflection, not compulsory anecdote or campaign. Opinion: early position, support, relevant real objection, identifiable action/actor. Web-copy: useful information/choice, conditions and accurate next-step consequence where applicable. | Both; excerpt control exempts full article form |
+| P1 | Can this reader follow the reasoning, with unfamiliar concepts introduced before use, real transitions and conclusions proportionate to visible support? Does useful technical substance remain? | Both; Redline uses text alone |
+| W1 | Can a web reader orient and enter the text without losing its continuous explanation or voice? Are paragraphs coherent with useful rhythm, headings informative where the genre needs them, and ingress/lead complementary? Identify actual reader loss for density or fragmentation. The 30–70-character headings, roughly 60-word ingress, roughly 80-word upper paragraph guide and usual 2–3 sentences / 2–3 paragraphs are advisory, not quotas. | Both |
+| L1 | Does the prose sound professionally written in the resolved language, with native idiom and syntax, without importing Swedish phrasing into English or generic translated English into Swedish? Separate this from locale mechanics. | Both |
+| L2 | Does the resolved locale govern spelling, punctuation and number/date/currency forms? Established variation is preserved; do not invent a new factual date or currency conversion. | Both, particularly final Proofread |
+| T1 | Do resolved configuration **and actual loaded files** honour selection precedence? No technique inferred from shape; default none for candidate five, baseline automatic ABT acknowledged; only selected technique loaded. | Trace and artifact |
+| T2 | When ABT is selected, do situation, genuine question/complication and supported response relate without invented crisis or triumph? When PAC is selected, does factual starting point/question lead through analysis to warranted conclusion? Early answer and section-level use can succeed. | Explicit technique cases and baseline |
+| R1 | Does Redline address concrete visible defects while preserving working voice, arguments, quotations and claims outside findings? Compare every before/after claim; report legitimate removals, rejected losses and irreparable findings. Clean texts may not be rewritten to satisfy taste or numerical guidelines. No unavailable-source verification. | Redline only |
+| R2 | Does the trace establish full scoped contract loading, fresh correction when needed, budget/re-review and exactly one final installed Proofread pass, with no substantive edit after it? Write loads no review half or peer editorial pass. | Both, respective boundaries |
+| O1 | Does the before/after inventory prove the Output Target contract, source preservation and cleanup? An evaluator capture is not a Skill file. No unapproved extra artifacts or surviving scratch. | Both |
+
+The protocol's five unconditional rejections remain: unsupported facts, wrong locale, substantive mechanical editing, unresolved mandatory findings not reported, and incorrect side effects. A reported irreparable finding satisfies reporting, but its text is still labelled as having a remaining quality problem. Hidden invention in a source-blind control cannot fairly be required of Redline; visible contradictions can.
+
+## Pipeline matrix
+
+Each row is a separate Write invocation followed by a separate Redline invocation. All normal runs are unprompted about technique. `F1 G1 G2 P1 W1 L1 L2 T1 R2 O1` apply to Write; `G1 G2 P1 W1 L1 L2 T1 R1 R2 O1` to Redline.
+
+| IDs | Source | Candidate locales | Baseline locales selected now |
+|---|---|---|---|
+| article-sv / article-en_GB / article-en_US | [article](sources/article.md), Swedish source | sv, en_GB, en_US | sv, en_GB |
+| case-study-sv / case-study-en_GB / case-study-en_US | [customer case](sources/case-study.md), English source | sv, en_GB, en_US | sv |
+| column-sv / column-en_GB / column-en_US | [column](sources/column.md), Swedish source | sv, en_GB, en_US | sv |
+| opinion-sv / opinion-en_GB / opinion-en_US | [opinion](sources/opinion.md), Swedish source | sv, en_GB, en_US | sv |
+| web-copy-sv / web-copy-en_GB / web-copy-en_US | [web-copy](sources/web-copy.md), Swedish source | sv, en_GB, en_US | sv |
+
+Baseline and candidate use identical material, invocation and native model/Harness where technically possible, but their own default techniques. Judge each separately before comparison. A failed or impossible baseline remains recorded; it is never assumed worse. These six baseline pairs are fixed before results exist.
+
+## Explicit technique pipelines
+
+Same staging and preservation as above, candidate only; add T2. No other instruction is added.
+
+| ID | Write invocation | Redline invocation | Distinction |
+|---|---|---|---|
+| article-abt | `/write --genre=article --technique=abt --language=sv --output=response source.md` | `/redline --output=response input.md` | Low-key technical question; informative ingress can answer early. |
+| article-pac | `/write --genre=article --technique=pac --language=en_GB --output=response source.md` | `/redline --output=response input.md` | Facts → interpretation → conclusion without manufactured controversial thesis. |
+| web-copy-abt | `/write --genre=web-copy --technique=abt --language=sv --output=response source.md` | `/redline --output=response input.md` | Section-level reader questions; answer/action not hidden behind a global crisis. |
+
+## Redline controls
+
+Copy only the linked artifact to `input.md`. Invoke `/redline --genre=<genre> --language=<locale> --output=response input.md`. No contextual instruction or technique unless the row says so. Apply G1/G2/P1/W1/L1/L2/T1/R1/R2/O1. A corrected example may legitimately retain reported findings that require absent facts; the required detection and preservation are scored separately from the final text's quality.
+
+| ID / genre / locale | Artifact | Frozen expectation and rejection |
+|---|---|---|
+| article-clean / article / sv | [text](controls/article-clean.md) | Preserve calm explanation, short informative heading, independent result-bearing ingress and no byline. ABT-shaped logic must not select a technique. Reject numerical or missing-name findings. |
+| article-flawed / article / sv | [text](controls/article-flawed.md) | Detect unsupported catastrophe/health certainty visible against explicit limits, duplicated ingress/lead, late concept and an unbroken paragraph mixing unlike jobs. Restore navigation without deleting measured facts, exclusions or funding uncertainty. A supplied-source investigation is not a remedy. |
+| case-study-clean / case-study / sv | [text](controls/case-study-clean.md) | Preserve customer agency, qualified appraisal, numbers and supplier publication disclosure. No required quote count or extra sales block. |
+| case-study-flawed / case-study / sv | [text](controls/case-study-flawed.md) | Detect first-person supplier praise/rescue, pre-echoed quote, duplicate ingress/lead and causal contradiction. Keep the customer's reservation and factual measures; report unavailable support. |
+| column-clean / column / sv | [text](controls/column-clean.md) | Preserve personal reflection, early point, purposeful recurrence, no H2 and the coherent paragraph exceeding 80 words. No permission or deviation explanation is owed. |
+| column-flawed / column / sv | [text](controls/column-flawed.md) | Detect mutually incompatible participation claims, generic opening/ending. The scene cannot be established from text alone: report the contradiction rather than inventing a replacement memory. Preserve the actual reflection and doubt. |
+| opinion-clean / opinion / sv | [text](controls/opinion-clean.md) | Preserve polemical final sentence, early thesis, attribution, real administrative objection and cost uncertainty. Do not flatten to neutral exposition or add generic hedges. |
+| opinion-flawed / opinion / sv | [text](controls/opinion-flawed.md) | Detect unsupported motives, population inference contradicted by booking denominator, cost contradiction and vague final exhortation. Existing action/actor in body can repair the ending. Keep qualified facts and the proposal. |
+| web-copy-clean / web-copy / sv | [text](controls/web-copy-clean.md) | Preserve a complete information page without sales template or CTA. Short headings and variable section length work. No invention of destination or function. |
+| web-copy-flawed / web-copy / en_US | [text](controls/web-copy-flawed.md) | Repair Swedish idiom calque, abstract audience description, opaque fragmented headings and misleading Book and pay action contradicted by the page. Preserve price, scope, timing, deliverables, conditions and destination. Existing content permits useful regrouping without a brief. |
+
+The normal web-copy pipeline supplies the positive service-page case; the clean control supplies the positive information-page case. The normal column source explicitly prevents invented personal experience; the flawed control tests only the contradiction Redline can see. These are distinct knowledge boundaries.
+
+## Metadata, precedence and non-five-genre controls
+
+Evaluator preparation below is a deterministic change to a **copy**, never to the frozen fixture. Preserve the prepared input verbatim. The report control is a synthetic annual-log analysis with its recommendation already at the top, followed by the stated evidence and analysis; its facts are complete within the artifact. These are Redline invocations; apply T1/T2/R1/R2/O1 and the applicable text criteria above.
+
+| ID | Prepared artifact and invocation | Expected configuration / diagnosis |
+|---|---|---|
+| metadata-none | article-clean prefixed with YAML `kntnt: {genre: article, technique: none, language: sv}`. `/redline --output=response input.md -- Use ABT.` | Metadata none beats instruction ABT; no technique file. Keep valid text. |
+| instruction-none | article-clean, no metadata. `/redline --genre=article --language=sv --output=response input.md -- Use no technique (none).` | Instruction none, no technique load. |
+| legacy-abt | article-clean prefixed with YAML `kntnt: {genre: article, technique: abt, language: sv}`. `/redline --output=response input.md -- Use no technique (none).` | Legacy ABT honoured above instruction none; calm A/B/T is valid, no forced drama. |
+| flag-pac | article-clean with same legacy ABT map. `/redline --technique=pac --output=response input.md` | Flag PAC overrides only technique and synchronises map. Factual PAC valid without a contentious thesis. |
+| instruction-abt | article-clean, no metadata. `/redline --genre=article --language=sv --output=response input.md -- Use ABT.` | Instruction positively selects ABT; calm question-driven arc remains valid. |
+| report-pac | Copy [report with early answer](controls/report-pac.md). `/redline --genre=report --language=en_GB --output=response input.md` | Report's existing ordinary PAC remains. Facts can be premises; genre's initial summary can precede detailed analysis. No invented objections. |
+| article-excerpt | Only the two paragraphs under “En gräns för det lokala försöket” in article-clean. `/redline --genre=article --language=sv --output=response input.md -- This is an excerpt, not a complete article.` | No manufactured headline/ingress/byline/full article requirement for an explicit excerpt. |
+
+## Limitations and comparison
+
+One native GPT configuration and one sample per declared cell establish observed coverage, not general literary quality or future reliability. Source material is synthetic and deliberately bounded. L1/G1 require editorial judgement; support them with passages and reader effect rather than an unexplained score. Numeric measures and four code checks are not literary evidence. Other locales/providers are untested. Keep failures, reruns and filed defects visible. Any needed correction is followed by affected reruns against the final resource revision; never change this matrix to fit a result.

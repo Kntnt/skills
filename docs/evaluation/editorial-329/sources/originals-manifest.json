@@ -1,0 +1,104 @@
+[
+  {
+    "file": "google-article-instructions.txt",
+    "origin": "https://docs.google.com/document/d/191vKmkF68VCgepdEKcFhiB5bI0i9nLqAPcr5oInGnWI/export?format=txt",
+    "read_date": "2026-09-19",
+    "sha256": "085572047b95c49bb96ce1a9c0f519d84bda507c9d4ae088edb1348f9b4aa178"
+  },
+  {
+    "file": "google-pedagogical-dramaturgy.txt",
+    "origin": "https://docs.google.com/document/d/1mKORkyC1FQU0rY0n8rWPhEzx95bsXPninr3j2mBnIGY/export?format=txt",
+    "read_date": "2026-09-19",
+    "sha256": "71ae078ed9f29bfcf007ce4a3a5fabaf3583243aacefb200d32c3257cde51a78"
+  },
+  {
+    "file": "google-article-style-tone.txt",
+    "origin": "https://docs.google.com/document/d/1xIpbMYNMzsUIpmsp8JC5ivHTz1-cU8TiKsZz14G9rHk/export?format=txt",
+    "read_date": "2026-09-19",
+    "sha256": "3de986e9e0fed886f5f8322a4692d926fded2d431612cc0659c1d8377dc9c16c"
+  },
+  {
+    "file": "legacy-lib-genres-article.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/genres/article.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "b6a4659ebaa8879c728e99a60ad09c10fda189ff273c5873463f79afe13f442f"
+  },
+  {
+    "file": "legacy-lib-genres-case-study.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/genres/case-study.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "df6ff2d1e0bae46d86297686149fcb8a181d4df59a6bca3cfb4de6f79aa7f84a"
+  },
+  {
+    "file": "legacy-lib-genres-column.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/genres/column.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "5b56be27c6a4357357c422dabd8ca83319c9536069eb753622d05822b2f832ea"
+  },
+  {
+    "file": "legacy-lib-genres-opinion.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/genres/opinion.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "899e5dce2ad789f34fdea89e7d36581692add8042c1ba60a048a62de65f0d511"
+  },
+  {
+    "file": "legacy-lib-genres-web-copy.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/genres/web-copy.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "a3c5f37b05528aafdc9c203207e1fea4d519e1313dac3822c649aeb9c1dee731"
+  },
+  {
+    "file": "legacy-lib-genres-general.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/genres/general.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "0372ab10906fdf3e29d1e9b876f89aad02126027186416fff5c86ab764eb1ca7"
+  },
+  {
+    "file": "legacy-lib-genres-teaser.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/genres/teaser.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "045c26bdf67b0acd4a6c804a993bf4077d131e4541cd4d1218482e8346f38eef"
+  },
+  {
+    "file": "legacy-lib-techniques-abt.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/techniques/abt.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "dac623242295fc3fdb58ba2b48cb8d7ad43f5c741f549929ce5b107cdcc150b9"
+  },
+  {
+    "file": "legacy-lib-techniques-pac.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/techniques/pac.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "d490cba6c85aa9c6edc384b9568b25835b6423e1e87fbb37a900d711dc7b2376"
+  },
+  {
+    "file": "legacy-lib-rules-style.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/rules/style.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "93825b229751b9f1e0514b77bdaf672c041c3f2f7bf1a1aded20798e46e3399f"
+  },
+  {
+    "file": "legacy-lib-rules-writing.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/rules/writing.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "3023e50f7bcaa2294ef7ee90a3189e65e417a2ee82ee6a58d080ea4557c91eca"
+  },
+  {
+    "file": "legacy-lib-rules-constructions.md",
+    "origin": "https://github.com/Kntnt/kntnt-text-skills/blob/b121cfcb274803193c3b0d60e751429bb0aef67a/lib/rules/constructions.md",
+    "read_date": "2026-09-19",
+    "revision": "b121cfcb274803193c3b0d60e751429bb0aef67a",
+    "sha256": "26a8cf9c0928b2d457cf294ce77367ffd1daad3aa3b601f553beba87c871f887"
+  }
+]

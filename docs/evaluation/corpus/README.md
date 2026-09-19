@@ -302,3 +302,15 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Material** — no material of its own; use `in-place-request`'s file with both an output path and In-place Editing requested at once.
 - **Use** — invoke with both, in either order.
 - **Reject** — either half executed. The two are mutually exclusive, and a contradictory request produces no side effect at all before it is refused.
+
+## Editorial quality
+
+The [frozen five-genre matrix](editorial-quality/README.md) supplies synthetic briefs, source packages and positive/negative controls for #329–338. It covers Swedish, British English and American English Write→Redline pipelines, explicit technique/metadata cases and a fixed baseline comparison. Its criteria distinguish source-aware drafting from text-only review, advisory web dimensions from actual defects, and editorial judgement from mechanically testable contracts.
+
+### `editorial-quality`
+
+- **Files** — `editorial-quality/controls/article-clean.md`, `editorial-quality/controls/article-flawed.md`, `editorial-quality/controls/case-study-clean.md`, `editorial-quality/controls/case-study-flawed.md`, `editorial-quality/controls/column-clean.md`, `editorial-quality/controls/column-flawed.md`, `editorial-quality/controls/opinion-clean.md`, `editorial-quality/controls/opinion-flawed.md`, `editorial-quality/controls/report-pac.md`, `editorial-quality/controls/web-copy-clean.md`, `editorial-quality/controls/web-copy-flawed.md`, `editorial-quality/sources/article.md`, `editorial-quality/sources/case-study.md`, `editorial-quality/sources/column.md`, `editorial-quality/sources/opinion.md`, `editorial-quality/sources/web-copy.md`
+- **Covers** — genre; technique; clean prose; ai slop; locale mechanics; handoff metadata present; handoff metadata conflicting; no-change status
+- **Material** — synthetic five-genre sources and clean/flawed controls, with explicit factual boundaries and a frozen semantic rubric in [the matrix](editorial-quality/README.md).
+- **Use** — stage only the input each matrix row names; run its exact Write and/or Redline invocation in a fresh isolated session. The matrix predetermines all locales, baseline cases and metadata preparations.
+- **Reject** — unsupported facts, hidden loss of claims or voice, unavailable-source review, invented technique selection, wrong locale, numerical taste corrections, or an Output Target side effect. Detailed per-fixture questions and rejection cases are frozen in the linked matrix.

@@ -1,0 +1,43 @@
+﻿Instruktioner för artiklar och blogginlägg
+När du skriver en artikel eller ett blogginlägg för mig ska texten följa denna mall:
+Huvudrubrik
+1. Artikeln eller blogginlägget ska börja med en huvudrubrik.
+2. Rubriken ska vara mellan 30 och 70 tecken lång (inklusive blanksteg).
+3. Rubriken ska vara informativ och locka till läsning utan att vara vilseledande eller för allmän.
+4. Huvudrubriken ska använda HTML:s H1-element.
+Ingress (standfirst)
+Ingressen är en sammanfattande, fristående textdel som introducerar innehållet i artikeln eller blogginlägget. På engelska kallas den för ”standfirst”. Den ska uppfylla följande villkor:
+1. Vara ett enda stycke.
+2. Inte vara längre än 60 ord.
+3. Vara fristående, så att läsaren kan förstå ingressen utan att läsa resten av artikeln.
+4. Förklara vad läsaren får ut av att läsa artikeln och vad den handlar om.
+5. Locka till läsning.
+6. Inte upplevas som en upprepning av artikelns första stycke (lead).
+7. Inte börja med samma ord som det första stycket i artikeln.
+Byline
+Efter ingressen ska det finnas en byline med texten: Text: Thomas Barregren.
+Brödtext
+Brödtexten består av flera stycken och avbryts med mellanrubriker. Följande riktlinjer gäller:
+Stycken
+1. Varje stycke ska logiskt samla meningar som hör ihop eller skapa dramatik.
+2. Stycken ska bestå av meningar med varierande längd för att skapa en naturlig rytm.
+3. Ett stycke kan bestå av en mening (eller ett enda ord) om det är motiverat.
+4. Ett normalt stycke består av 2–3 meningar och bör aldrig överskrida 80 ord.
+Lead (första stycket i brödtexten)
+Det första stycket i brödtexten kallas för ”lead” och ska utöver allmänna riktlinjer för stycken även uppfylla följande villkor:
+1. Introducera ämnet och ge läsaren en tydlig förväntan om vad de får veta om de fortsätter läsa.
+2. Inte upplevas som en upprepning av ingressen.
+3. Inte börja med samma ord som ingressen.
+Mellanrubriker
+1. Mellanrubriker ska tydligt beskriva vad de efterföljande styckena handlar om.
+2. Varje mellanrubrik ska vara mellan 30 och 70 tecken lång (inklusive blanksteg).
+3. En mellanrubrik måste följas av minst ett stycke innan nästa mellanrubrik.
+4. Normalt bör en mellanrubrik följas av 2–3 stycken. Undvik fler än tre stycken mellan två mellanrubriker.
+5. Mellanrubriker ska använda HTML:s H2-element.
+Placering av mellanrubriker
+1. Den första mellanrubriken ska komma efter brödtextens inledning (leaden).
+2. Avslutningen ska inledas med en sista mellanrubrik följd av ett eller flera stycken.
+Avslutning
+Brödtextens avslutning ska:
+1. Visa att inledningens löfte har infriats.
+2. Uppmana läsaren till handling baserat på innehållet i artikeln (call to action).

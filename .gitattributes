@@ -4,3 +4,6 @@
 
 # Preserve whitespace-only separators in the verbatim observed CLI help fixture.
 tests/support/codex_cli_0_152_1_exec_help.txt whitespace=-blank-at-eol
+
+# Keep the retrieved editorial source snapshots byte-identical to their manifest.
+docs/evaluation/editorial-329/sources/google-*.txt -text

@@ -1,0 +1,1 @@
+/write --genre=article --language=en_GB --output=response source.md

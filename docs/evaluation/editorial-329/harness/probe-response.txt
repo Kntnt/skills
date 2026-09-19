@@ -1,0 +1,11 @@
+- imagegen: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/home/.codex/skills/.system/imagegen/SKILL.md`
+- openai-docs: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/home/.codex/skills/.system/openai-docs/SKILL.md`
+- plugin-creator: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/home/.codex/skills/.system/plugin-creator/SKILL.md`
+- skill-creator: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/home/.codex/skills/.system/skill-creator/SKILL.md`
+- skill-installer: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/home/.codex/skills/.system/skill-installer/SKILL.md`
+- proofread: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/work/.agents/skills/proofread/SKILL.md`
+- write: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-harness-nxb35u9c/work/.agents/skills/write/SKILL.md`
+
+Fresh-subagent tool available: yes, `collaboration.spawn_agent`. Not invoked.
+
+ACCESS_OK
