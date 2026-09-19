@@ -1,0 +1,42 @@
+{
+  "identities": [
+    {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    }
+  ],
+  "resources": {
+    "base.md": {
+      "paragraphs": 15,
+      "missing_paragraphs": []
+    },
+    "base.review.md": {
+      "paragraphs": 7,
+      "missing_paragraphs": []
+    },
+    "web-craft.md": {
+      "paragraphs": 7,
+      "missing_paragraphs": []
+    },
+    "web-craft.review.md": {
+      "paragraphs": 4,
+      "missing_paragraphs": []
+    },
+    "genres/article.md": {
+      "paragraphs": 9,
+      "missing_paragraphs": []
+    },
+    "genres/article.review.md": {
+      "paragraphs": 4,
+      "missing_paragraphs": []
+    },
+    "anti-slop.md": {
+      "paragraphs": 19,
+      "missing_paragraphs": []
+    },
+    "mechanics.md": {
+      "paragraphs": 26,
+      "missing_paragraphs": []
+    }
+  }
+}

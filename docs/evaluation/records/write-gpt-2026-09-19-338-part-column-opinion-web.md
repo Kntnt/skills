@@ -138,3 +138,53 @@ The opinion-en_GB failure is tracked separately as [#343](https://github.com/Knt
 - **unresolved findings** — Account correctly names absent payment terms and summary-delivery time.
 - **defects filed** — `none`
 - **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.
+
+## `web-copy-en_GB`
+
+- **fixture** — `web-copy-en_GB`
+- **invocation** — `/write --genre=web-copy --language=en_GB --output=response source.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Complete British service page and account; [artifact](../editorial-329/runs/candidate/web-copy-en_GB/artifact.md).
+- **side effects** — No remaining Skill changes; 318 native-home creations and trust-config update. Root removed.
+- **criteria** —
+  - `F1` — `pass` — Price SEK 4,800/VAT, scope, 45 minutes/two representatives, deliverables, exclusions, no guarantee and response time remain; missing payment/delivery terms stay unspecified.
+  - `G1` — `pass` — The offer serves board understanding and the decision whether to express interest, without inflated benefits.
+  - `G2` — `fail` — **Qualitative UX concern:** “using the form below” describes a form on this page, but only a link to a separate form is supplied. This is a stranded interface reference; the link otherwise names the truthful interest action.
+  - `P1` — `pass` — Offer, prerequisites, exclusions and non-order consequence are logically separated.
+  - `W1` — `fail` — **Qualitative UX concern:** a reader entering the final section is directed to an absent inline form; “the linked form” would match the actual surface. Other headings/paragraphs support scanning.
+  - `L1` — `pass` — Clear idiomatic British service language; domain-specific tenant-owner association preserves the Swedish service context.
+  - `L2` — `pass` — SEK and destination retained, English thousands separator and British forms used without conversion.
+  - `T1` — `pass` — web-copy/none/en_GB in YAML; item_4 loads only selected genre/base/web-craft.
+  - `R2` — `pass` — item_5 resolves composition only; no review halves or peer editorial pass.
+  - `O1` — `pass` — Complete inventories and item_6 show no remaining Skill output or scratch.
+- **unresolved findings** — The absent-form reference remains in the unrepaired artifact passed to Redline; it is a qualitative usability defect, not one of the protocol's five unconditional source/mechanics/side-effect rejections.
+- **defects filed** — Pending triage of the concrete interface-reference concern; no new rule inferred from one stylistic sample.
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed before Redline, independently of baseline. The form/link distinction concerns observable navigation, not preferred phrasing.
+
+## Defect registration: web-copy-en_GB
+
+The absent-form interface reference is filed as [#345](https://github.com/Kntnt/skills/issues/345), a native sub-issue of #329. Its paired Redline outcome is recorded separately; the initial Write judgement stands even if the pipeline repairs it.
+
+## `web-copy-en_US`
+
+- **fixture** — `web-copy-en_US`
+- **invocation** — `/write --genre=web-copy --language=en_US --output=response source.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Complete American English service page with metadata and account; [artifact](../editorial-329/runs/candidate/web-copy-en_US/artifact.md).
+- **side effects** — No remaining Skill changes; 316 native-home creations and trust-config update. Root removed.
+- **criteria** —
+  - `F1` — `pass` — Scope, meeting, summary, two possible simplifications, price/VAT, exclusions and no-guarantee conditions remain; no payment or delivery terms invented.
+  - `G1` — `pass` — Board relevance, deliverables and interest consequences are concretely explained.
+  - `G2` — `pass` — Price, preparation and next step are accessible; interest form is described without claiming it is embedded, with a truthful supplied link.
+  - `P1` — `pass` — Defined service and exclusions lead clearly to the no-order/no-payment next step.
+  - `W1` — `pass` — Four specific headings create usable entry points and list the actual summary contents.
+  - `L1` — `pass` — Natural American task language, including “take stock” and “three business days”, without Swedish syntax.
+  - `L2` — `pass` — 4,800 SEK and American list punctuation preserve amount/currency and destination.
+  - `T1` — `pass` — web-copy/none/en_US in YAML; item_4 loads selected base/genre/web-craft only.
+  - `R2` — `pass` — item_5 resolves composition only, no review half or peer editorial pass.
+  - `O1` — `pass` — Complete inventories and item_6 inspection show no surviving Skill changes.
+- **unresolved findings** — Account accurately notes unspecified payment terms and summary delivery timeframe.
+- **defects filed** — `none`
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.

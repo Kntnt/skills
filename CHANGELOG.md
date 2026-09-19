@@ -14,6 +14,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- Web-copy distinguishes a link to a form from a form included on the page, including in Redline’s interface checks (#345).
 - Column ghostwriting preserves the author’s supplied perspective, and opinion writing preserves the actual strength of the author’s position (#342, #343).
 - Translated quotations preserve the speaker’s meaning and voice in idiomatic target-language speech, with context-grounded referents rather than compulsory word-for-word syntax (#341).
 - Redline correction agents clean their temporary resolver environment and disable UV cache/project discovery (#340).

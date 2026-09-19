@@ -80,3 +80,26 @@
 - **defects filed** — none
 - **notes** — Native identity covered in consolidated audit; no correction child needed.
 
+## case-study-sv
+
+- **fixture** — case-study-sv
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — No-change status; final artifact remains supplied customer case under `editorial-329/runs/candidate/case-study-sv/redline/`.
+- **side effects** — No work/export/scratch changes; transient UV directories removed. Native home bootstrap/cache/database/session effects inventoried, authentication unchanged. Evaluator root cleaned.
+- **criteria** —
+  - G1 — pass — Customer agency and qualified appraisal remain, with supplier publication disclosed.
+  - G2 — pass — Complete case structure and accurate optional checklist action retained.
+  - P1 — pass — Assignment median retains its workload/causal caveat and remains distinct from completion.
+  - W1 — pass — Scannable sections and distinct ingress/body preserve the customer account.
+  - L1 — fail (qualitative concern) — “innan nästa byggnad börjar” remains an unidiomatic literal transfer; the reader must supply the missing rollout activity.
+  - L2 — pass — Swedish locale mechanics remain correct; Proofread appropriately makes no stylistic repair.
+  - T1 — pass — Case-study/none/sv metadata respected; selected resources and three language scopes loaded, no technique.
+  - R1 — fail — Visible L1 obstruction was neither repaired nor reported; this is an unresolved required editorial defect, not absent-source verification. Every claim and quotation otherwise remains byte-identical.
+  - R2 — pass — Full review contract loaded; no correction round. One fresh mechanical_pass child reads installed Proofread SKILL, invokes its shim once with omitted operand, loads shared/Swedish mechanics and returns no-change; parent edits nothing afterwards.
+  - O1 — pass — No source change or surviving Skill artifact across all inventories.
+- **unresolved findings** — Skill reported none; evaluator’s L1 finding remains unreported.
+- **defects filed** — #341, candidate repetition and missed editorial diagnosis.
+- **notes** — Both parent and mechanical child native contexts are `gpt-6-astra/high`. No source package or expected finding was supplied to Redline. This observation remains even if a later rerun passes.
+

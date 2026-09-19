@@ -9,6 +9,7 @@ The evaluator judges completed cases independently while later cases run.
 
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
 from pathlib import Path
@@ -16,15 +17,24 @@ from pathlib import Path
 REPOSITORY = Path(__file__).resolve().parents[4]
 RUNNER = Path(__file__).with_name("run.py")
 CONTROLS = REPOSITORY / "docs/evaluation/editorial-329/runs/controls-genres"
-INSTRUCTIONS = "eb4a26efd4f8ea54599972b0a74033b2c9811c23"
+INSTRUCTIONS = "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9"
 CORPUS = "6e531f5fe0b610e046ae58787f246cc6239acbcc"
 
 
 def main() -> None:
     """Capture every declared control, preserving each child's exit status."""
 
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--revision", default=INSTRUCTIONS)
+    parser.add_argument(
+        "--genres",
+        nargs="+",
+        choices=["article", "case-study", "column", "opinion", "web-copy"],
+        default=["article", "case-study", "column", "opinion", "web-copy"],
+    )
+    args = parser.parse_args()
     # Sequence the model sessions so each Redline has room for its correction.
-    for genre in ["article", "case-study", "column", "opinion", "web-copy"]:
+    for genre in args.genres:
         for kind in ["clean", "flawed"]:
             identifier = f"{genre}-{kind}"
             case = CONTROLS / identifier
@@ -35,7 +45,7 @@ def main() -> None:
                     "run",
                     str(RUNNER),
                     "--revision",
-                    INSTRUCTIONS,
+                    args.revision,
                     "--corpus-revision",
                     CORPUS,
                     "--prompt",

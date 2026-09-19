@@ -1,0 +1,154 @@
+[
+  {
+    "case": "article-en_GB",
+    "skill": "redline",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "0d4da560398ca0e5360eb198a3e40e463ba65cdd784efe03f1f0e1d32098c9b6",
+    "cleaned": true
+  },
+  {
+    "case": "article-en_GB",
+    "skill": "write",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "74168474d991a54b8860db48b3608eb31cbd6ff838da3ce3ff33607b096c1e82",
+    "cleaned": true
+  },
+  {
+    "case": "article-sv",
+    "skill": "redline",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "30b9715cb246b788ddc5114fb01a620e1caedddaadc6b1af1d59c0278dda781a",
+    "cleaned": true
+  },
+  {
+    "case": "article-sv",
+    "skill": "write",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "74168474d991a54b8860db48b3608eb31cbd6ff838da3ce3ff33607b096c1e82",
+    "cleaned": true
+  },
+  {
+    "case": "case-study-sv",
+    "skill": "redline",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "94ff5cf451863ee9ca7864a821d583a07e580bfa1b008ae3b7a5edc6e0c1adf6",
+    "cleaned": true
+  },
+  {
+    "case": "case-study-sv",
+    "skill": "write",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+    "cleaned": true
+  },
+  {
+    "case": "column-sv",
+    "skill": "redline",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "102e5c9f0e52b689e58169cd1e63c107f61f1500d8f61485793a48fa43902add",
+    "cleaned": true
+  },
+  {
+    "case": "column-sv",
+    "skill": "write",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "904f89206bcb553c2908491eb065cd9594bf0879e66f0edaded975407fd55192",
+    "cleaned": true
+  },
+  {
+    "case": "opinion-sv",
+    "skill": "redline",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "f8e0133ddaa72674b4e5b6d79242866a9b07f7dd9a357e7e7cdc93c43734247c",
+    "cleaned": true
+  },
+  {
+    "case": "opinion-sv",
+    "skill": "write",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "cleaned": true
+  },
+  {
+    "case": "web-copy-sv",
+    "skill": "redline",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "69f4f6b126331764095bc88bf202bcdb2dcbc07264e17f22ad5efb0ec4845b02",
+    "cleaned": true
+  },
+  {
+    "case": "web-copy-sv",
+    "skill": "write",
+    "identities": [
+      {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    ],
+    "input_sha256": "92d55c2a223cf4590d7ae27db7409454cb01b30bb8298ecb71a2db090ce5ece6",
+    "cleaned": true
+  }
+]

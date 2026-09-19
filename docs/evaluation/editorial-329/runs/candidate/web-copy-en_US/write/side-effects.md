@@ -1,0 +1,1 @@
+No work/source/resource/scratch changes; all 316 created paths are native home bootstrap/cache/database/session effects. Config adds project trust only; authentication unchanged. TemporaryDirectory cleanup in 3/5 and inspection in 6 establish no retained UV scratch. Exact path/hash inventories retained.

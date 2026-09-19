@@ -107,3 +107,49 @@ Each invocation uses a fresh native session and the immutable candidate installa
 - **unresolved findings** — No Redline finding; source-aware #343 remains in the unchanged input/final, outside this review's knowledge.
 - **defects filed** — #343 belongs to the paired Write run; no new Redline defect.
 - **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.
+
+## `web-copy-sv`
+
+- **fixture** — `web-copy-sv`
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Correct no-change status; [final](../editorial-329/runs/candidate/web-copy-sv/final.md) equals the complete input.
+- **side effects** — No remaining Skill changes; 316 native-home creations and trust-config update. Root removed.
+- **criteria** —
+  - `G1` — `pass` — Board task, purchased output and expression-of-interest consequence remain clear.
+  - `G2` — `pass` — Useful service-page structure and truthful link remain; no extra sales template or CTA.
+  - `P1` — `pass` — Scope, exclusions, prerequisites and next-step consequences stay distinct.
+  - `W1` — `pass` — Section entry points and list retain enough context without needless duplication.
+  - `L1` — `pass` — Native Swedish task language and purposeful group/individual address are preserved.
+  - `L2` — `pass` — The single sv mechanics pass finds no correction; price and typography remain.
+  - `T1` — `pass` — web-copy/none/sv from YAML; bounded resources in items 5/7 and no technique.
+  - `R1` — `pass` — Byte-identical final preserves all conditions, figures, exclusions, destination and voice.
+  - `R2` — `pass` — Three editorial language scopes in item_6; complete review resources in 5/7; sole installed Proofread invocation in item_10, mechanics in 11/12, no post-pass substantive edit.
+  - `O1` — `pass` — Complete inventories show no Skill artifact, source/resource mutation or surviving scratch.
+- **unresolved findings** — `none`
+- **defects filed** — `none`
+- **notes** — Native rollout confirms gpt-6-astra/high. Assessed independently before any baseline comparison.
+
+## `web-copy-en_GB`
+
+- **fixture** — `web-copy-en_GB`
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — No-change status; [final](../editorial-329/runs/candidate/web-copy-en_GB/final.md) preserves the absent-form reference unchanged.
+- **side effects** — No surviving Skill mutations; 318 native-home creations and trust update. Root removed.
+- **criteria** —
+  - `G1` — `pass` — Offer and board decision remain useful and accurately bounded.
+  - `G2` — `fail` — **Unresolved mandatory finding not reported:** “using the form below” remains although only an external link exists; no finding is reported.
+  - `P1` — `pass` — Service scope, preparation and expression-of-interest consequences otherwise remain connected.
+  - `W1` — `fail` — **Unresolved mandatory finding not reported:** direct entry to the last section still points to a nonexistent inline form, #345.
+  - `L1` — `pass` — Idiomatic British copy is preserved.
+  - `L2` — `pass` — One en_GB mechanics pass finds no objective error; metadata and price remain.
+  - `T1` — `pass` — web-copy/none/en_GB from YAML; items 5/7 load the selected contract and no technique.
+  - `R1` — `fail` — **Unresolved mandatory finding not reported:** despite loading the genre's stranded-reference diagnostic, review returns no-change and no issue for the absent form. Exact comparison shows no claim loss.
+  - `R2` — `pass` — Complete review resources in 5/7, three language scopes in 6, sole flags-only installed Proofread invocation in 10 and mechanics in 11/12; no correction was attempted.
+  - `O1` — `pass` — Complete inventories show unchanged input/resources/scratch; native effects are separately enumerated.
+- **unresolved findings** — The visible absent-form reference remains and Redline reports none; #345.
+- **defects filed** — [#345](https://github.com/Kntnt/skills/issues/345).
+- **notes** — Native rollout confirms gpt-6-astra/high. This is a missed visible defect, not a source-verification limitation. No correction-child session was spawned.

@@ -1,0 +1,43 @@
+{
+  "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+  "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+  "harness": "Codex CLI 0.155.1",
+  "parent_identity": {
+    "model": "gpt-6-astra",
+    "effort": "high"
+  },
+  "input_name": "input.md",
+  "input_source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/harness/selection-inputs/metadata-none.md",
+  "argv": [
+    "/opt/homebrew/Caskroom/codex/0.155.1/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "workspace-write",
+    "-c",
+    "sandbox_workspace_write.network_access=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "--add-dir",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/scratch",
+    "-C",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/work",
+    "--skip-git-repo-check",
+    "--json",
+    "-o",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/runs/controls-selection/metadata-none/redline/response.txt",
+    "-"
+  ],
+  "environment": {
+    "HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/home",
+    "CODEX_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/home/.codex",
+    "TMPDIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/scratch/tmp",
+    "UV_CACHE_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/scratch/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/scratch/data/uv/python",
+    "XDG_DATA_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/scratch/data",
+    "XDG_CACHE_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz/scratch/cache"
+  },
+  "note": "Identity must also be checked against each native turn_context after the run."
+}

@@ -1,0 +1,1 @@
+No changes outside home. All 318 created paths are native bootstrap/cache/database/session state; config adds private-project trust only and authentication is unchanged. UV temporary contexts in 3/6/10/12 exit cleanly, item_13 lists scratch/work and inventories confirm no remaining Skill files. Every changed path/hash retained.

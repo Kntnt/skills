@@ -12,7 +12,7 @@ Put useful words first in headings, labels and passages. Headings declare their 
 
 Choose an information structure from the goal and available content. Lists, tables, buttons and supporting copy earn their place by their function. Neither an article's ingress nor a universal sales-page sequence is required; an information page can stop once it answers the question.
 
-Name what each link or button actually does, and use only supplied destinations, functions and terms. Distinguish expressing interest from ordering, paying or booking. Persuasion rests on what is offered, without invented promises, urgency, guarantees or testimonials.
+Name what each link or button actually does and where it takes the reader; a linked form is not a form embedded in the page. Use only supplied destinations, functions and terms. Distinguish expressing interest from ordering, paying or booking. Persuasion rests on what is offered, without invented promises, urgency, guarantees or testimonials.
 
 ## The technique this genre is ordinarily written with
 

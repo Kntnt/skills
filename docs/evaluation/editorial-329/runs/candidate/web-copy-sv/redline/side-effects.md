@@ -1,0 +1,1 @@
+All 316 created paths are native home bootstrap/cache/database/session entries; only config changed, adding trust. Authentication unchanged. Work/input/resources/scratch unchanged. UV temporary contexts exit cleanly in items 3/6/10/12; inventories independently show no remaining scratch. Exact paths/hashes preserved.

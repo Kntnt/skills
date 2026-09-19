@@ -136,3 +136,26 @@ Raw responses, invocation/context, inventories, exact filesystem changes, native
 - **defects filed** — [#339](https://github.com/Kntnt/skills/issues/339).
 - **notes** — This real failed invocation is not counted as a quality pass and no final.md is fabricated.
 
+## `web-copy-sv`
+
+- **fixture** — `web-copy-sv`, complete baseline draft only
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`; neutral Harness context is preserved separately.
+- **output target** — `response`
+- **observed delivery** — A real fresh correction ran, but only the closing Proofread parser error was delivered; no completed final artifact. [Response](../editorial-329/runs/baseline/web-copy-sv/redline/response.txt), [intermediate correction](../editorial-329/runs/baseline/web-copy-sv/redline/correction-agent-response.md).
+- **side effects** — 125 Skill-triggered UV scratch entries remain after the correction's bare resolver invocation. The other 317 created native-home entries and project-trust config update are Harness effects. Input, work and installed resources remain unchanged; complete inventories and classification are preserved before evaluator cleanup.
+- **criteria** —
+  - `G1` — `skipped` — No completed final artifact was delivered.
+  - `G2` — `skipped` — The intermediate correction retains the service-page parts, but the closing mandatory stage fails.
+  - `P1` — `skipped` — Final reasoning cannot be assessed from an undelivered artifact.
+  - `W1` — `skipped` — The correction repeats the service subject in three section openings; this intermediate adjustment is preserved but is not a delivered final result.
+  - `L1` — `skipped` — No final artifact was delivered for idiom assessment.
+  - `L2` — `skipped` — The mechanical pass fails before resolving its mechanics scope.
+  - `T1` — `pass` — Input metadata selects web-copy/ABT/sv; parent and correction load the selected resources and Swedish scopes. No alternative technique is smuggled in.
+  - `T2` — `skipped` — No completed final artifact. The intermediate correction refuses to invent an ABT complication absent from the supplied service facts; the unresolved finding documents the cost of the baseline automatic technique choice.
+  - `R1` — `skipped` — The intermediate correction preserves all offer details, qualifications, price, timing, URL and the distinction between interest and order. It repeats the service subject in three places and explicitly leaves the unsupported complication unresolved. Mandatory final delivery nevertheless fails.
+  - `R2` — `fail` — Contract failure: a fresh same-model/high correction is actually invoked and reviewed, but the one attempted closing Proofread invocation serializes raw YAML into flags and exits 2 on `---`.
+  - `O1` — `fail` — Incorrect side effect: 125 UV environment/cache/lock entries survive in scratch after the Skill finishes. Evaluator cleanup does not count as Skill compliance.
+- **unresolved findings** — Correction says the ABT complication cannot be supplied without inventing information. The final parent response exposes only the mechanical parser failure; it does not deliver the correction and its unresolved-finding account.
+- **defects filed** — [#339](https://github.com/Kntnt/skills/issues/339), [#340](https://github.com/Kntnt/skills/issues/340). The forced-technique mismatch is already in #329's planned scope.
+- **notes** — Both native turn contexts verify gpt-6-astra/high. The correction receives only the draft and findings, never Write's source package. Baseline is preserved without improving its invocation or forcing `none`.

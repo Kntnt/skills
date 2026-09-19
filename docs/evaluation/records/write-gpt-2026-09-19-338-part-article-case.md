@@ -103,3 +103,26 @@
 - **defects filed** — #341, repeated candidate evidence of the already filed class.
 - **notes** — Independent source/rubric judgement was made and reported before #341 was opened for comparison. The candidate repeats the same faulty phrase as that issue’s baseline evidence; no baseline output was supplied to the model. All other customer voice and content were preserved. Native identity covered by consolidated audit.
 
+## case-study-en_GB
+
+- **fixture** — case-study-en_GB
+- **invocation** — `/write --genre=case-study --language=en_GB --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Complete British customer case and separate account, preserved under `editorial-329/runs/candidate/case-study-en_GB/write/`.
+- **side effects** — No work/export/scratch changes; scoped transient UV directories removed. Native home bootstrap/cache/session/database effects inventoried; authentication unchanged. Root removed by evaluator.
+- **criteria** —
+  - F1 — fail (unsupported fact: chronology) — “Before the trial began in September 2025” dates commencement to the month the source assigns only to the decision. Source gives eight-week duration but no start date. Other measures, exclusions and quotations retain their limits.
+  - G1 — pass — Customer agency, preparation effort and qualified appraisal drive the story rather than supplier praise.
+  - G2 — pass — Benefit headline, ingress, context, implementation, results, appraisal and accurate checklist next step all present. No independent-reporting claim is made; delivery identifies supplier publication.
+  - P1 — pass — The account distinguishes assignment from completion and preserves the different-workload caveat; conclusions otherwise remain proportionate.
+  - W1 — pass — Short cohesive paragraphs and discrete customer quotations orient a roughly 400-word account without mandatory H2 sections; chronological reading stays clear.
+  - L1 — pass — The supplied English quotations retain their natural register and the narrative reads as native British prose.
+  - L2 — pass — Trialled, flats, organising, 4 December date and consistent double quotes are established British choices.
+  - T1 — pass — Case-study/none/en_GB and corresponding selected resources; no technique loaded.
+  - R2 — pass — Full bounded Write contract and quotation policy loaded; no review or Proofread pass.
+  - O1 — pass — Input unchanged, no surviving Skill artifacts in inventoried roots.
+- **unresolved findings** — Unsupported trial commencement date in September 2025.
+- **defects filed** — #344 (linked to #329).
+- **notes** — This is source-aware F1 evidence; the draft contains no internal fact exposing the date shift to Redline. Existing Source Fidelity already names chronology, so no additional rule is justified by this sample alone. A later successful rerun cannot establish guaranteed repair.
+

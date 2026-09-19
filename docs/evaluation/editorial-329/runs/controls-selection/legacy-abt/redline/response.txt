@@ -1,0 +1,1 @@
+Inga ändringar behövdes efter granskning och korrekturläsning. Texten granskades som svensk artikel med ABT från `kntnt`-metadata, som enligt färdighetens prioritetsordning går före instruktionen ”none”. Inga filer ändrades.

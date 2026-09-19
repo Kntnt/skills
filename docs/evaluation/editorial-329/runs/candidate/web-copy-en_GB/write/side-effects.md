@@ -1,0 +1,1 @@
+No work/input/resource/scratch mutations. All 318 created paths are native Codex home bootstrap/cache/database/session effects and config only adds trust. Authentication unchanged. TemporaryDirectory contexts in 3/5 clean UV scratch; item_6 verifies cleanup. Exact inventories retained.
