@@ -19,7 +19,17 @@
       ],
       "final_messages": [
         "# Behåll telefonbokningen under ett halvårs försök\n\nSanna Ek, Öppna beslut\n\nKommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.\n\n## 96 webbokningar och 24 telefonbokningar\n\nDet gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.\n\n## Försökets kostnad är inte beräknad\n\nFörvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.\n\nKommunstyrelsen: behåll telefonbokning under ett halvårs försök i alla sju lokaler.\n\n---\n\nGranskad som debattartikel på svenska, utan särskild teknik. Alla sex fynd är åtgärdade. Den avslutande korrekturläsningen fann inga mekaniska språkfel.\n\nKorrigeringsrundan tog bort följande påståenden eftersom de saknade stöd eller drog slutsatser som textens underlag inte medgav:\n\n- Att kommunledningen hatar människor.\n- Att alla vet att politikerna vill stänga ute äldre för att spara miljoner.\n- Att bokningarna bevisar att 20 procent av kommunens invånare inte kan använda internet.\n- Att avsaknaden av tidsmätning innebär att telefonbokningen inte kostar något."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/opinion.md": 0,
+        "genres/opinion.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26
+      }
     },
     {
       "file": "native-sessions/2026/09/19/rollout-2026-09-19T21-05-50-01a0bb0f-80e1-7891-9a4b-fe69a42c4d71.jsonl",
@@ -35,7 +45,17 @@
       ],
       "final_messages": [
         "# Behåll telefonbokningen under ett halvårs försök\n\nSanna Ek, Öppna beslut\n\nKommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.\n\n## 96 webbokningar och 24 telefonbokningar\n\nDet gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.\n\n## Försökets kostnad är inte beräknad\n\nFörvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.\n\nKommunstyrelsen: behåll telefonbokning under ett halvårs försök i alla sju lokaler.\n\n---\n\nAlla sex fynd är åtgärdade; inget är lämnat olöst. Rubriken och mellanrubrikerna bär nu sakfrågan. Avslutningen anger ansvarig och det befintliga förslaget.\n\nFöljande påståenden har tagits bort eftersom respektive fynd pekade ut hela påståendet som defekt:\n\n- **Fynd 1:** Att kommunledningen hatar människor.\n- **Fynd 2:** Att alla vet att politikerna vill stänga ute äldre för att spara miljoner, inklusive påståendena om avsikt och besparingsmotiv.\n- **Fynd 3:** Att bokningarna bevisar att 20 procent av kommunens invånare inte kan använda internet.\n- **Fynd 4:** Att avsaknaden av tidsmätning innebär att telefonbokningen inte kostar något."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/opinion.md": 0,
+        "genres/opinion.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26
+      }
     },
     {
       "file": "native-sessions/2026/09/19/rollout-2026-09-19T21-06-53-01a0bb10-771c-7572-a00a-629228d17b2a.jsonl",
@@ -56,7 +76,17 @@
       ],
       "final_messages": [
         "Inga språkliga korrekturfel hittades."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 0
+      }
     }
   ],
   "resources_visible_across_sessions": {

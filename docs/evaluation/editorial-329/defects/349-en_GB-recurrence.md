@@ -1,0 +1,1 @@
+The unchanged-source en_GB sample on 1a4f65b repeats #349: “Öppna beslut has neither funded nor costed this proposal.” Source only withholds a claim of such work. Full evidence in runs/rerun-343/opinion-en_GB/write. Original #343 stance is now correctly “I do not oppose digital booking”. Paired Redline remains source-blind and is assessed separately.

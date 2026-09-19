@@ -135,3 +135,7 @@ The #345 Redline-only regression and the already-started complete web-copy-sv pa
 - **unresolved findings** — No textual findings. Evaluator records unnecessary genre-opening discovery as a bounded-reading-path deviation; original metadata selection and final artifact remain correct.
 - **defects filed** — Scope-overread observation reported to parent; tracking disposition pending.
 - **notes** — Native rollout confirms gpt-6-astra/high. Instruction commit 1a4f65b. This observed trace deviation is separate from successful text and technique criteria, and is not the protocol's unsupported-fact/locale/mechanics/side-effect rejection.
+
+## Tracking clarification
+
+The web-copy-abt R2 opening-discovery deviation is [#350](https://github.com/Kntnt/skills/issues/350). The integrating parent and reviewer agree the selector instruction is already unambiguous: retain the observed failure without adding an instruction solely to fit this sample. Any replay is additional evidence, not erasure. All four pipeline cases and the exact #345 Redline regression are complete; all nine isolated roots are absent after explicit audited cleanup.

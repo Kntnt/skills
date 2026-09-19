@@ -22,7 +22,17 @@
       ],
       "final_messages": [
         "# Vad ska vi förstå tillsammans?\n\nNora Vik\n\nFörra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.\n\nVår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.\n\nSamtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.\n\n---\n\nGranskad som krönika på svenska, utan särskild berättarteknik.\n\n**Olöst:** Första stycket säger både att berättaren deltog i sitt första möte om mötesmallen och att hon aldrig deltagit i något sådant möte. Båda uppgifterna står kvar eftersom texten inte avgör vilken som gäller.\n\n**Borttagna påståenden i korrigeringsrundan:**\n\n- Att möten förändrar allt: rubrikens överdrift ersattes med en fråga förankrad i texten.\n- Att dagens värld förändras snabbt och att möten är viktigare än någonsin: de generiska påståendena ströks från andra stycket och avslutningen.\n- Att det är viktigt att vara viktig: tautologin ströks.\n\nDen avslutande korrekturläsningen gav inga ytterligare ändringar. `input.md` är oförändrad; inga arbetsfiler finns kvar."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/column.md": 0,
+        "genres/column.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0
+      }
     },
     {
       "file": "native-sessions/2026/09/19/rollout-2026-09-19T21-00-54-01a0bb0a-fa6a-79c2-8340-fb4c7995b221.jsonl",
@@ -38,7 +48,17 @@
       ],
       "final_messages": [
         "# Vad ska vi förstå tillsammans?\n\nNora Vik\n\nFörra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.\n\nVår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.\n\nSamtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.\n\n---\n\nAnmärkning 1, 3 och 4 är åtgärdade. Rubrikens påstående att möten förändrar allt har ersatts med en fråga förankrad i reflektionen (1). Påståendena att dagens värld förändras snabbt, att möten är viktigare än någonsin och att det är viktigt att vara viktig har tagits bort; anmärkning 3 pekade ut hela meningarna som defekter. Det upprepade påståendet om mötens betydelse i dagens snabbt föränderliga värld har tagits bort enligt anmärkning 4.\n\nAnmärkning 2 är olöst. Båda uppgifterna om deltagandet står kvar eftersom texten inte ger grund för att avgöra vilken som gäller. Övrig text är oförändrad."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/column.md": 0,
+        "genres/column.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26
+      }
     }
   ],
   "resources_visible_across_sessions": {

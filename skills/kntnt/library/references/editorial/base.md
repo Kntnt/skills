@@ -20,7 +20,7 @@ Each passage earns its place. Repetition may establish an independent entry poin
 
 ## Claims
 
-Every claim is supported by the text or its material, with exact attribution and proportionate strength. Preserve uncertainty where it exists and certainty where it is warranted. A fact, quotation, source, scene, personal experience or opinion attributed to somebody is never invented to complete a form. Name the actual source of an attributed claim rather than invoking unnamed studies or experts.
+Every claim is supported by the text or its material, with exact attribution and proportionate strength. Preserve the state of knowledge: what is unknown or unclaimed is not thereby known not to have happened. Keep uncertainty where it exists and certainty where it is warranted. A fact, quotation, source, scene, personal experience or opinion attributed to somebody is never invented to complete a form. Name the actual source of an attributed claim rather than invoking unnamed studies or experts.
 
 Circumstantial detail is a claim too: duration, manner, motive, absence and background all need support. So does an evaluative characterisation: calling a count high, low or modest needs a comparison, target, capacity or speaker assessment. Otherwise give the count with its exclusions, without that assessment.
 

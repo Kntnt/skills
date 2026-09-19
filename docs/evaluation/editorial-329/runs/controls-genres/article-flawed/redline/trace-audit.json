@@ -20,7 +20,17 @@
       ],
       "final_messages": [
         "# Temperaturer under 20 grader i sex klassrum\n\n**Givarna registrerade temperaturer under 20 grader i sex klassrum. Givarna registrerade temperaturer under 20 grader i sex klassrum.**\n\nFastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Arbetsgränsen är inte en lagregel. Enligt rapporten varade försöket fyra veckor.\n\n## Begränsningar i mätningarna\n\nTvå givare stod vid ytterväggar och fyra vid innerväggar. Placeringens effekt jämfördes inte experimentellt.\n\nOperativ temperatur är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Operativ temperatur saknas, trots att resonemanget bygger på den. Givarna mätte bara luften där de satt.\n\nDet saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.\n\n## Nästa försök planeras till november\n\nDriftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.\n\n---\n\nGranskad som artikel på svenska, utan särskild teknik. Dispositionen och begreppsförklaringen har bearbetats.\n\n**Olöst:** Ingressens dubblering kvarstår efter den enda korrigeringsrundan och den avslutande korrekturläsningen. Jag hänförde den felaktigt till den mekaniska genomgången.\n\nKorrigeringsrundan tog bort följande påståenden eftersom granskningen pekade ut dem som ogrundade eller innehållstomma:\n\n- Att givarna räddar skolan från en katastrof och att katastrofen lurade bakom varje hörn.\n- Att givarna säkert har gjort eleverna friskare.\n- Att detta är mycket viktigt för alla som tycker att temperatur är viktigt.\n- Att kontakt med avsändaren skulle rädda framtiden, tillsammans med kontaktuppmaningen."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/article.md": 0,
+        "genres/article.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0
+      }
     },
     {
       "file": "native-sessions/2026/09/19/rollout-2026-09-19T20-50-00-01a0bb01-035f-7480-ba8e-1fcaef629e27.jsonl",
@@ -36,7 +46,17 @@
       ],
       "final_messages": [
         "# Temperaturer under 20 grader i sex klassrum\n\n**Givarna registrerade temperaturer under 20 grader i sex klassrum. Givarna registrerade temperaturer under 20 grader i sex klassrum.**\n\nFastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Arbetsgränsen är inte en lagregel. Enligt rapporten varade försöket fyra veckor.\n\n## Begränsningar i mätningarna\n\nTvå givare stod vid ytterväggar och fyra vid innerväggar. Placeringens effekt jämfördes inte experimentellt.\n\nOperativ temperatur är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Operativ temperatur saknas, trots att resonemanget bygger på den. Givarna mätte bara luften där de satt.\n\nDet saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.\n\n## Nästa försök planeras till november\n\nDriftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.\n\n---\n\nAlla sju fynd är åtgärdade. Inga redaktionella fynd lämnades olösta. Den mekaniska dubbleringen inne i ingressen är kvar enligt instruktionen.\n\nBorttagna påståenden: att givarna räddar skolan från en katastrof och att katastrofen lurade bakom varje hörn (fynd 1), att givarna säkert har gjort eleverna friskare (fynd 5), det cirkulära påståendet om temperaturens viktighet (fynd 6) samt uppmaningen att kontakta avsändaren för att rädda framtiden och dess räddningsanspråk (fynd 7). Dessa fynd pekade ut hela påståendena som defekter. Upprepningen om temperaturer under 20 grader i sex klassrum togs bort ur brödtexten enligt fynd 2; uppgiften finns kvar i ingressen."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/article.md": 0,
+        "genres/article.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26
+      }
     },
     {
       "file": "native-sessions/2026/09/19/rollout-2026-09-19T20-51-22-01a0bb02-43bb-7ae3-a4e7-59e2f30df364.jsonl",
@@ -56,7 +76,17 @@
       ],
       "final_messages": [
         "Inga mekaniska språkfel hittades."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 15,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 0
+      }
     }
   ],
   "resources_visible_across_sessions": {

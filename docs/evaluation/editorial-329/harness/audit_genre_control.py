@@ -33,9 +33,11 @@ def main() -> None:
     run = args.case / "redline"
     metadata = json.loads((run / "run.json").read_text())
     genre = args.case.name.rsplit("-", 1)[0]
-    sessions = []
+    sessions: list[dict[str, Any]] = []
     visible = ""
+    session_outputs: dict[str, str] = {}
     for session in sorted((run / "native-sessions").rglob("*.jsonl")):
+        session_visible = ""
         identities = []
         calls = []
         finals = []
@@ -47,7 +49,9 @@ def main() -> None:
                     {key: payload.get(key) for key in ("model", "effort")}
                 )
             if payload.get("type") == "custom_tool_call_output":
-                visible += text_values(payload.get("output", ""))
+                output = text_values(payload.get("output", ""))
+                visible += output
+                session_visible += output
             if payload.get("type") == "custom_tool_call":
                 calls.append(payload.get("input", ""))
             if payload.get("phase") == "final_answer":
@@ -56,12 +60,14 @@ def main() -> None:
                         block.get("text", "") for block in payload.get("content", [])
                     )
                 )
+        session_outputs[str(session.relative_to(run))] = session_visible
         sessions.append(
             {
                 "file": str(session.relative_to(run)),
                 "identities": identities,
                 "tool_calls": calls,
                 "final_messages": finals,
+                "resource_missing_paragraph_counts": {},
             }
         )
     resources: dict[str, dict[str, Any]] = {}
@@ -93,6 +99,13 @@ def main() -> None:
             if part not in visible
             and json.dumps(part, ensure_ascii=False)[1:-1] not in visible
         ]
+        for observed in sessions:
+            output = session_outputs[observed["file"]]
+            observed["resource_missing_paragraph_counts"][name] = sum(
+                part not in output
+                and json.dumps(part, ensure_ascii=False)[1:-1] not in output
+                for part in paragraphs
+            )
         resources[name] = {
             "paragraphs": len(paragraphs),
             "missing_paragraphs": missing,

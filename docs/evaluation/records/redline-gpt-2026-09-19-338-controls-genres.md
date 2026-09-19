@@ -14,6 +14,8 @@
 
 The frozen [matrix](../corpus/editorial-quality/README.md) precedes every run. Each control has a fresh native session, immutable private installation and only its supplied artifact as input.md. No rubric, original source, baseline result or other provider record reaches the model. The ten controls are sequential; correction agents use the inherited observed model/effort. The neutral Harness dispatch identifies local SKILL.md and does not replace its workflow. Complete before/after inventories include work, resource copies, scratch and private native state. Side-effect classifications distinguish Skill work from Harness bootstrap/log/database changes. Each control is judged on its own before comparisons.
 
+The per-session `trace-audit.json` checks required resource paragraphs separately for each actual parent, correction and mechanical session, not only their union. Every editorial correction in the ten original controls sees its full base/genre/web-craft/review/anti-slop resources; the mechanical-only children see the complete mechanics contract. Their scope split is intentional.
+
 **R2 trace limit:** native dispatch serializes subagent task messages as encrypted strings. Fresh child sessions, inherited identities, actual resource reads/tool results, correction outputs, re-review and installed closing passes are observable, but the evaluator cannot independently reproduce every byte of the raw spawn brief from this trace. Statements about supplied findings are supported by the child's resulting account and visible behaviour, not claimed decryption. No source package is staged in any Redline session, and its fresh parent never receives one. This observation limit is retained even where the exercised R2 behaviour passes.
 
 ## `article-clean`
@@ -223,3 +225,27 @@ The frozen [matrix](../corpus/editorial-quality/README.md) precedes every run. E
 - **unresolved findings** — none
 - **defects filed** — none
 - **notes** — Positive information-page coverage complements the separate service-page pipeline and misleading-action flawed control. The absence of a CTA is purposeful and accepted.
+
+## `web-copy-flawed`
+
+- **fixture** — `web-copy-flawed`, en_US
+- **instruction commit** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd`
+- **invocation** — `/redline --genre=web-copy --language=en_US --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Corrected [final text](../editorial-329/runs/controls-genres/web-copy-flawed/final.md), with the removed defective claims listed separately.
+- **side effects** — No surviving Skill files; input/work/resources/scratch unchanged after actual fresh correction and installed Proofread. 317 native-home creations and private trust-config update are classified Harness effects.
+- **criteria** —
+  - `G1` — `pass` — Names the actual shared-room booking review and useful reader action rather than an abstract audience facing complexity.
+  - `G2` — `pass` — Preserves price/scope/deliverables and the accurate expression-of-interest consequence. The link opens the supplied form; no embedded form fields, button state, payment function or destination are invented.
+  - `P1` — `pass` — The offer precedes price/inclusions and the next step; no false promise that submission places an order or books a meeting survives.
+  - `W1` — `pass` — Replaces fragmented opaque one-word headings with useful sections and a concise deliverables list; related conditions now sit together.
+  - `L1` — `pass` — Removes “Take the thumb out” and generic translated-sounding promotion; the resulting English reads naturally as concise service information.
+  - `L2` — `pass` — US-English mechanics, number/currency and punctuation are consistent; SEK 4,800 including VAT is retained without currency conversion.
+  - `T1` — `pass` — Default none, actual files contain no inferred narrative technique.
+  - `R1` — `pass` — Corrects the calque, abstract opening, opaque headings and false Book and pay action. Preserves one shared room/one housing association, 45 minutes/two representatives, written booking steps/unclear points/two simplifications, all requested fields, no order/payment/meeting booking, email within three working days and the exact URL. Removed empty/full-potential/journey/complexity and false-action claims are explicitly accounted for.
+  - `R2` — `pass` — Full scoped resource paragraphs are visible. One fresh same-model/high correction is re-reviewed; exactly one installed Proofread pass resolves en_US mechanics and no substantive edit follows.
+  - `O1` — `pass` — Complete inventories demonstrate unchanged source/resources and no persistent Skill effects.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — Actual positive coverage of #345: the linked form is treated as a destination, not proof of embedded interface controls. Source-blind correction uses only the supplied offer and conditions and requests no nonexistent brief.

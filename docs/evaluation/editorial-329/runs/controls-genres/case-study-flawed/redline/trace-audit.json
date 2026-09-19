@@ -22,7 +22,17 @@
       ],
       "final_messages": [
         "# Elm Quay fick en gemensam bild av ärendena\n\n**Elm Quay registrerade 31 ärenden under åtta veckor, med akuta ärenden undantagna.**\n\n## Kunden fick en gemensam bild\n\n– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.\n\n## Två arbetsdagar till tilldelning\n\nEnligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.\n\n– Jag skulle välja att göra försöket igen, säger Lind.\n\nKundcaset publiceras av leverantören Svale.\n\n---\n\nGranskad som fallstudie på svenska, utan särskild berättarteknik. Upprepningar, leverantörsperspektiv och obelagda slutsatser har åtgärdats. Avslutande korrekturläsning är genomförd.\n\n**Kvarstående brist:** Kundens bakgrund, försökets syfte, kundens val och genomförandet behöver beskrivas. Texten innehåller inte uppgifter som kan fylla dessa luckor.\n\n**Borttagna påståenden i korrigeringsrundan:**\n\n- Att Svales lösning var fantastisk och räddade Elm Quay.\n- Att Svale är världsledande på att skapa framgång.\n- Att kunden stod hjälplös innan Svale kom.\n- Att resultatet bevisar allt.\n- Att programvaran orsakade hela förbättringen.\n\nUpprepade formuleringar om 31 ärenden och Linds omdöme har också strukits; sakuppgifterna finns kvar. Inga filer har ändrats eller lämnats kvar."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0
+      }
     },
     {
       "file": "native-sessions/2026/09/19/rollout-2026-09-19T20-56-13-01a0bb06-b32d-7f63-b309-b18ff025bab3.jsonl",
@@ -38,7 +48,17 @@
       ],
       "final_messages": [
         "# Elm Quay fick en gemensam bild av ärendena\n\n**Elm Quay registrerade 31 ärenden under åtta veckor, med akuta ärenden undantagna.**\n\n## Kunden fick en gemensam bild\n\n– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.\n\n## Två arbetsdagar till tilldelning\n\nEnligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.\n\n– Jag skulle välja att göra försöket igen, säger Lind.\n\nKundcaset publiceras av leverantören Svale.\n\n---\n\nAnmärkning: Fynd 1–5 är åtgärdade. Följande påståenden har tagits bort eftersom respektive fynd pekade ut själva påståendet som defekt: att Svales lösning var fantastisk och räddade Elm Quay (1), att Svale är världsledande på att skapa framgång och att kunden stod hjälplös före leverantörens ankomst (3), samt att resultatet bevisar allt och att programvaran orsakade hela förbättringen (5). Överflödiga upprepningar av uppgiften om 31 ärenden (2) och av Linds omdöme om en gemensam bild (4) har strukits; uppgifterna finns kvar med avgränsningar respektive i citatet. Båda citaten och samtliga mätuppgifter och reservationer är bevarade.\n\nFynd 6 kvarstår: texten saknar uppgifter om kundens bakgrund, försökets drivkraft, kundens val och genomförandet utöver tidsperioden och undantaget för akuta ärenden. Luckorna kan inte fyllas utan nya sakuppgifter."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 26
+      }
     }
   ],
   "resources_visible_across_sessions": {

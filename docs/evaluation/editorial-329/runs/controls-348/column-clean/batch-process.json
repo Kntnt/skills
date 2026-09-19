@@ -1,0 +1,22 @@
+{
+  "pid": 50552,
+  "process_group": 50552,
+  "wait_for": "docs/evaluation/editorial-329/runs/controls-genres-rerun/case-study-clean/redline/result.json",
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+    "--corpus-revision",
+    "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+    "--prompt",
+    "docs/evaluation/editorial-329/runs/controls-348/column-clean/invocation.txt",
+    "--input",
+    "docs/evaluation/editorial-329/runs/controls-348/column-clean/prepared-input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "docs/evaluation/editorial-329/runs/controls-348/column-clean/redline"
+  ]
+}

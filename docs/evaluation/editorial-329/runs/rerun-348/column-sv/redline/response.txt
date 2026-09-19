@@ -1,0 +1,1 @@
+Inga ändringar behövdes efter granskning och korrekturläsning. Texten granskades som svensk krönika utan berättarteknik: metadatafältet `kntnt.technique: none` har enligt skillens prioritetsordning företräde framför ”Use ABT”. Inga filer har ändrats eller lämnats kvar.

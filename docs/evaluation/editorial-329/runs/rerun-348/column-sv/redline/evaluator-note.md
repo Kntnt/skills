@@ -1,0 +1,1 @@
+Supplementary selection/casing run: evaluator accidentally supplied the metadata-none control prompt with contextual Use ABT, which metadata none suppresses. This is not the exact-input/prompt replay; that is preserved separately under rerun-348-exact. The accidental run is retained and assessed rather than hidden.

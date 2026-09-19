@@ -21,7 +21,17 @@
       ],
       "final_messages": [
         "Granskad som svensk debattartikel (`opinion`), utan särskild teknik. Inga redaktionella brister eller korrekturfel hittades. Texten och filerna är oförändrade."
-      ]
+      ],
+      "resource_missing_paragraph_counts": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "genres/opinion.md": 0,
+        "genres/opinion.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0
+      }
     }
   ],
   "resources_visible_across_sessions": {

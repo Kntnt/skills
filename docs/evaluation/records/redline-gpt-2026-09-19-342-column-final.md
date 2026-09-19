@@ -63,3 +63,27 @@ Each invocation is a fresh native session through the unchanged runner. Only Wri
 ### Independent reassessment of column-sv — #348
 
 The L2/R1 pass above is superseded by **fail** for this preserved run. Independent review identified that the unquoted question can be read as a closely integrated specification after the colon; the supplied lowercase is a valid variant. Proofread therefore made an unnecessary preference edit. No fact, voice or stance changed, but preserving valid mechanical variants is part of the frozen contract. [Defect and primary-source check](../editorial-329/defects/swedish-colon-variant.md). The original artifact and trace remain untouched. A language-resource clarification and exact-input replay are recorded separately; they do not turn this outcome into a pass.
+
+## column-en_US
+
+- **fixture** — column-en_US
+- **instruction commit** — 1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — [No-change response](../editorial-329/runs/rerun-column-final/column-en_US/redline/response.txt); [artifact](../editorial-329/runs/rerun-column-final/column-en_US/redline/artifact.md) equals complete input bytes.
+- **side effects** — 318 native home entries and trust config; no work/export/scratch changes, authentication unchanged. [Full classification](../editorial-329/runs/rerun-column-final/column-en_US/redline/side-effects.md). Root already absent at explicit cleanup attempt; actor not verified, inventories/trace captured before disappearance.
+- **criteria** —
+  - G1 — pass — Personal reflection and form/box humour remain.
+  - G2 — pass — Title, supplied author, document observation, reflection and uncertain ending form a column.
+  - P1 — pass — Distinction between meeting duration and useful shared understanding remains coherent.
+  - W1 — pass — Intentional paragraph variation remains; no formulaic headings added.
+  - L1 — pass — Natural American expression retained, with no source translation calques.
+  - L2 — pass — Explicit American mechanics scope and shared contract read; correct text left unchanged.
+  - T1 — pass — Metadata column/none/en_US; only selected column, base, web-craft pairs, anti-slop and returned language scopes loaded. Directory filename listing is discovery, not unselected content reading.
+  - R1 — pass — Full byte equality preserves all source-limited claims, voice and wording.
+  - R2 — pass — Full review, no correction needed; installed Proofread read and flags-only shim invoked exactly once, shared/en_US mechanics loaded. No later substantive edit.
+  - O1 — pass — Full writable-root inventory supports response-only delivery; absence of final temporary root verified.
+- **unresolved findings** — none
+- **defects filed** — none
+- **notes** — One native session, gpt-6-astra/high confirmed in turn context. No rubric or source supplied to Redline; source-aware assessment is in the separate Write record.

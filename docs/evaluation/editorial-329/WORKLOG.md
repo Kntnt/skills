@@ -72,3 +72,7 @@ Frozen case-study-clean contains the same #341 calque (“innan nästa hus börj
 ## Colon-variant correction checkpoint
 
 Independent review supersedes the initial root column-sv L2/R1 pass: the lowercase integrated question after a colon was valid, so Proofread's case edit failed preservation (#348). Swedish Mechanics now describes the language-specific boundary, checked against Språkrådet and independently reviewed. Exact-input replay and the frozen clean column control will verify this revision. Other evaluation batches and records are still in progress; this commit is a reproducible resource checkpoint, not a final verdict.
+
+## Knowledge-state correction checkpoint
+
+The opinion source's absent claim of funding/costing became a factual assertion that neither had been done in both sv and en_GB on1a4 (#349). The existing base Claims sentence is sharpened to distinguish unknown/unclaimed from established absence; independent technical/editorial review found the boundary precise and consistent. All three opinion locales will run on this revision; failed texts remain. #348 exact replay on7022 preserves the lowercase and full text, as does a separately labelled accidental contextual-ABT run. The latter is retained rather than passed off as the exact replay. #350 records one unnecessary genre-definition scan despite resolved metadata; existing selector instructions are already explicit, so no new rule is added for that single execution lapse.
