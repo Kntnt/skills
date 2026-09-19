@@ -1,0 +1,1 @@
+*British English opinion draft; no technique selected. Delivered here, with no files retained. Source comparison passed. The supplied fictional material supported the requested length; costs, consent status and study timing remain unresolved as described.*

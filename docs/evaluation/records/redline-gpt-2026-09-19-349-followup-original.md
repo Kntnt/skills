@@ -264,3 +264,9 @@ Eleven fresh source-blind pairs. Each input is exactly the corresponding complet
 - **unresolved findings** — none reported; #341 remains visible and unreported.
 - **defects filed** — #341.
 - **notes** — No-change status; the input is the final artifact. Independent source-aware final F1 passes; the artifact retains the supplied knowledge state, claims and qualifications.
+
+## Superseding source-aware final judgement — four English opinions
+
+The later independent source-variable review supersedes the source-aware F1-pass notes for `opinion-en_GB-r1`, `opinion-en_GB-r2`, `opinion-en_US-r1` and `opinion-en_US-r2`: **their final artifacts fail F1**. All four retain Write's unsupported assertion that the report does not measure disability where the source says functional ability; the first three additionally change digital familiarity to digital skills. See the [Write judgement addendum](write-gpt-2026-09-19-349-followup-original.md#superseding-f1-judgement--source-variables-in-four-english-opinions).
+
+No Redline criterion is changed by this finding: the source material is intentionally unavailable to these invocations and the variable substitution is not an internal contradiction. Their no-change artifacts remain exact; their source-aware failure is attributed to Write. The six opinion finals still preserve the correct #349 no-claim knowledge state, which is a separate, narrower result.

@@ -277,3 +277,13 @@ S1 is **skipped for its unobservable exact-draft component**, not passed by infe
 - **unresolved findings** — none reported by Write; the separate idiom defect remains in the delivered artifact.
 - **defects filed** — #341.
 - **notes** — The dated trial decision and supplier selection are separate sentences. One checker returned no findings. Email provenance, customer agency and qualification remain; the Swedish quotation still lacks its activity referent. See [checker reports](../editorial-329/followup/runs/candidate/case-study-sv-r2/write/source-check-reports.json) and [trace audit](../editorial-329/followup/runs/candidate/case-study-sv-r2/write/trace-audit.json).
+
+## Superseding F1 judgement — source variables in four English opinions
+
+A later independent comparison, prompted by a second-candidate checker finding and confirmed by the final reviewer against all four complete first-wave artifacts, identified a further source-equivalence error. The earlier F1 passes remain as judgement history and are superseded by **F1 fail** for `opinion-en_GB-r1`, `opinion-en_GB-r2`, `opinion-en_US-r1` and `opinion-en_US-r2`.
+
+The source states that the pilot does not measure “ålder, funktionsförmåga eller digital vana” — age, functional ability or digital familiarity. All four outputs assert that it does not measure **disability**. Disability status and functional ability are distinct constructs: the report could record the former without measuring the latter, leaving the complete source true while the draft's asserted absence is false. The first three additionally substitute **digital skills** for digital familiarity, which similarly changes the variable. The fourth correctly says “familiarity with digital tools” but still changes functional ability to disability.
+
+This is the protocol's unsupported-fact rejection, not a preference for one English synonym. All four first-wave source checkers failed to identify it. The factual error survives their delivered drafts and source-blind paired finals. Root owns tracker disposition for this additional defect class.
+
+The original-half overall Write F1 result is therefore **4/11 pass, 7/11 fail**: four English opinions fail the source-variable assertion; three en_US case studies fail chronology; the two Swedish opinions and two Swedish cases pass source fidelity (the latter still fail L1 separately). The #349-specific knowledge-state outcome remains **0/6 delivered occurrences**, with five observed precheck repairs. Fixing that specific defect did not make every other assertion faithful. None of the original artifacts, source bytes or checker reports has been changed.

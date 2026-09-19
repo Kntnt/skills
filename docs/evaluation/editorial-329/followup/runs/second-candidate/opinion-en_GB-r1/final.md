@@ -1,0 +1,35 @@
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Lervik should test both booking routes before cutting one
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+Lervik’s municipal executive board should postpone a permanent switch to online-only booking for community venues. Our association, Öppna beslut, proposes six months with both telephone and web booking across all seven venues. Before removing a service, the board needs evidence that allows it to weigh staff costs against its value to users.
+
+## The pilot counted bookings, not people
+
+The council’s pilot report, *Bokning av föreningslokaler*, dated 8 April 2026, records 96 online bookings and 24 telephone bookings during an eight-week trial at two venues. Those figures describe transactions. They do not tell us how many different people used either route.
+
+The report did not measure age, functional ability or familiarity with digital tools. Its telephone bookings cannot establish what proportion of Lervik’s residents are unable to book online. Making that claim would ask the figures to carry an argument they cannot support.
+
+But a telephone booking is a reason to investigate why that route is still used. I do not oppose digital booking. I want the council to understand what it would remove before it commits to removing it.
+
+## Double administration deserves a proper measure
+
+The officers’ report prepared for the board’s 18 June meeting proposes ending telephone booking at all seven venues from September. Its reason is to spare staff from entering information through two separate workflows.
+
+That objection deserves a direct answer. Keeping both routes means the question of administrative work must be addressed. Yet the documents contain neither a measurement of staff time nor a calculation of financial savings. The board is being asked to remove a booking route without those measures of the benefit claimed for doing so.
+
+## Six months to inform a permanent decision
+
+Under our proposal, officers would record the time spent on each booking route throughout a six-month trial at all seven venues. Users would also be asked to say voluntarily why they choose telephone or web booking. That would give the board a basis for weighing the work involved against users’ reasons for choosing each route.
+
+Öppna beslut does not claim to have funded or costed this trial. The board must assess its cost. That uncertainty belongs in the decision.
+
+The municipal executive board should defer the permanent withdrawal of telephone booking, address the cost of the proposed trial and approve six months with both routes available. It can then decide whether to remove, change or retain a booking route with evidence about staff time and users’ choices before it.
+

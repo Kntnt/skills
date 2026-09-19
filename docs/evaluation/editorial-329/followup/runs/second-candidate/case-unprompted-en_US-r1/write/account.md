@@ -1,0 +1,1 @@
+Draft delivered here in American English; case-study genre, no technique applied. Source comparison passed against the supplied fictional material. Results remain limited to the documented pilot. No files retained.

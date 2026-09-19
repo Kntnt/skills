@@ -1,0 +1,61 @@
+{
+  "note": "Whitespace word counts describe shipped resource load, not total context tokens or invocation cost. Conditional quotation/composition branches load only when applicable. The claim accounting adds execution/report tokens beyond these document counts.",
+  "resources": [
+    {
+      "path": "skills/editorial/write/SKILL.md",
+      "words": {
+        "7ff6ec0": 1914,
+        "8f92e12": 1963,
+        "82db439": 1971
+      }
+    },
+    {
+      "path": "skills/editorial/write/references/source-check.md",
+      "words": {
+        "7ff6ec0": 0,
+        "8f92e12": 456,
+        "82db439": 611
+      }
+    },
+    {
+      "path": "skills/editorial/write/references/quotations.md",
+      "words": {
+        "7ff6ec0": 671,
+        "8f92e12": 671,
+        "82db439": 671
+      }
+    },
+    {
+      "path": "skills/editorial/redline/SKILL.md",
+      "words": {
+        "7ff6ec0": 3449,
+        "8f92e12": 3449,
+        "82db439": 3456
+      }
+    },
+    {
+      "path": "skills/editorial/unslop/SKILL.md",
+      "words": {
+        "7ff6ec0": 2692,
+        "8f92e12": 2692,
+        "82db439": 2673
+      }
+    },
+    {
+      "path": "skills/kntnt/library/references/delivery.md",
+      "words": {
+        "7ff6ec0": 1721,
+        "8f92e12": 1721,
+        "82db439": 1738
+      }
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/genres/opinion.review.md",
+      "words": {
+        "7ff6ec0": 116,
+        "8f92e12": 116,
+        "82db439": 143
+      }
+    }
+  ]
+}

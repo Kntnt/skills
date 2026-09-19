@@ -1,0 +1,1 @@
+*Första utkast: debattartikel på svenska, utan särskild teknik, levererad här. Källkontrollen är klar utan anmärkningar. Underlagets osäkerhet om behov och kostnader är bevarad. Inga filer har lämnats kvar.*

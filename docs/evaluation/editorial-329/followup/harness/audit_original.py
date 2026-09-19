@@ -35,6 +35,7 @@ def main() -> None:
     # Read only the named completed invocation and immutable product resources.
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run", type=Path)
+    parser.add_argument("--genre")
     args = parser.parse_args()
     run = args.run
     config = json.loads((run / "run.json").read_text())
@@ -74,7 +75,7 @@ def main() -> None:
         sessions.append(entry)
 
     # Check exact resource paragraphs in visible outputs, without inferring reads.
-    genre = run.parent.name.split("-en_")[0].split("-sv")[0]
+    genre = args.genre or run.parent.name.split("-en_")[0].split("-sv")[0]
     names = ["base.md", "web-craft.md", f"genres/{genre}.md"]
     if run.name == "redline":
         names += [

@@ -38,6 +38,13 @@ def audit(run: Path) -> dict[str, Any]:
     # Read only the completed evaluator captures, never another family's data.
     metadata = json.loads((run / "run.json").read_text())
     supplied = (run / "supplied-input.md").read_text()
+    artifact_path = run / "artifact.md"
+    artifact = artifact_path.read_text() if artifact_path.is_file() else None
+    prose = (
+        re.sub(r"\A---\n.*?\n---\n\n?", "", artifact, count=1, flags=re.DOTALL)
+        if artifact
+        else None
+    )
     sessions: list[dict[str, Any]] = []
     for session in sorted((run / "native-sessions").rglob("*.jsonl")):
         events = [json.loads(line) for line in session.read_text().splitlines()]
@@ -87,6 +94,9 @@ def audit(run: Path) -> dict[str, Any]:
         visible = "\n".join(outputs)
         observed.update(identities=identities, spawns=spawns, calls=calls)
         observed["complete_supplied_input_visible"] = supplied.strip() in visible
+        observed["delivered_prose_visible"] = (
+            prose.rstrip("\n") in visible if prose else None
+        )
         resources: dict[str, int] = {}
         paths = [
             "base.md",
@@ -154,7 +164,7 @@ def audit(run: Path) -> dict[str, Any]:
             for kind in ("created", "removed", "changed")
         },
         "authentication_changed": changes["authentication_changed"],
-        "note": "Observed facts only. Encrypted dispatch prevents a byte-level audit of its full prompt and draft.",
+        "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker.",
     }
     (run / "native-audit.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2) + "\n"

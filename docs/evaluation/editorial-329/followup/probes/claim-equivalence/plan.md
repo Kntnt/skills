@@ -1,0 +1,3 @@
+# Neutral claim-equivalence diagnostic
+
+One authorized diagnostic, separate from the frozen 56-invocation second matrix. Hypothesis: when reconstructing a draft claim, source-aware comparison imports a source-only qualifier that repairs the meaning before evaluating support. The neutral prompt requires equivalence to actual draft wording before source matching and retains the counterexample test. It gives no suspect passage or topic-specific hint. Complete source and final draft are copied from second-candidate/opinion-absence-en_GB-r1 without substantive changes. Product `82db439` and corpus `bf14dc2` are immutable. No result replaces the two observed F1 failures.

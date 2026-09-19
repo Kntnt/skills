@@ -1,0 +1,20 @@
+{
+  "returncode": 0,
+  "timed_out": false,
+  "duration_seconds": 139.35,
+  "identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "complete_input_visible": true,
+  "input_preserved": true,
+  "authentication_changed": false,
+  "non_home_effects": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "judgement": "Detected exactly the unsupported submission-wide knowledge claim, with precise negation retaining the claim referent and a valid complete-source countermodel. No collateral false positives."
+}

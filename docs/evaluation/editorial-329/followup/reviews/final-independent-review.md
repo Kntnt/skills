@@ -1,6 +1,6 @@
 # Independent final review — source-fidelity follow-up
 
-Status: all 23 initial candidate pairs and their native evidence are complete. This verdict concerns the frozen initial matrix; subsequent diagnostics and product refinements must be evaluated separately. Baseline judgements were fixed before this reviewer opened any candidate output. Product under review starts at `8f92e12`, compared with `7ff6ec0`. This reviewer edits no product files and runs no model evaluations in this phase.
+Status: all 23 initial candidate pairs and their native evidence are complete. **Later adjudication correction: initial whole-artifact F1 is 16/23, superseding the earlier 20/23 assessment below; see the dated correction at the end.** This verdict concerns the frozen initial matrix; subsequent diagnostics and product refinements must be evaluated separately. Baseline judgements were fixed before this reviewer opened any candidate output. Product under review starts at `8f92e12`, compared with `7ff6ec0`. This reviewer edits no product files and runs no model evaluations in this phase.
 
 ## Contract review
 
@@ -73,3 +73,19 @@ The quotation branch is conditional on translation and receives only the already
 Current body, help, README, dependency declarations, generated catalogue, shared rules and test comments present a consistent contract. Historical ADRs and closed evidence are not rewritten. The static test change updates explanatory comments around the continuing delivery-account invariant; it does not substitute substring assertions for model evaluation. Root owns current automated validation. This reviewer claims no new automated test run here.
 
 Remaining empirical risks are increased accounting cost, false-positive refusal of supported drafts, careless treatment of contextual interpretation as factual invention, and needless homogenization of translated speech. The second matrix must judge these independently and retain any failed attempts. Purely structural review cannot establish them away.
+
+## Visible adjudication correction — translated measurement variables
+
+While reviewing the second candidate's supported repair, the independent evaluators found a distinction missed in the initial candidate judgement. The initial four English opinion drafts (`opinion-en_GB-r1`, `opinion-en_GB-r2`, `opinion-en_US-r1`, `opinion-en_US-r2`) all translate the source's unmeasured “funktionsförmåga” as unmeasured “disability”. The first three also replace “digital vana” with “digital skills”; the last correctly uses “familiarity with digital tools”.
+
+The reviewer reread all four passages and the source and confirms F1 failure. Disability status and functional ability are not equivalent measured variables: a report could record a disability label without measuring functional ability. Skills and familiarity likewise differ. Claiming these other variables were not measured adds unsupported information about the report. This is a semantic scope correction, not a mandatory-wording rule; equivalent idiomatic renderings remain valid.
+
+Therefore **the initial candidate's whole-artifact F1 score is 16/23**, superseding the earlier 20/23 judgement: three original US case-study chronology failures and four English opinion measurement-variable failures. The history above retains the initial judgement rather than pretending this was found earlier. The #349-specific no-claim-to-absence distinction still succeeds in all six original opinion finals, including five observed repairs; that target result must not be misrepresented as six complete F1 passes. No source, frozen criterion or failed native output is changed. The second candidate's British-English repetition 1 repairs these variables to “functional ability” and “familiarity with digital tools” and independently passes this component.
+
+## Third candidate pre-freeze contract review
+
+Reviewed the full source-comparison resource, the two product changes against `82db439`, and the declared 36-invocation third matrix. No blocking contract finding. The precise-negation/evidence operation replaces the weaker counterexample wording; it preserves the complete meaning of the actual claim and holds the subject and knowledge scope fixed. It adds no topic-specific example or exception. The independently successful [negation diagnostic](claim-negation-diagnostic.md) supports evaluating this mechanism; the preceding failed [equivalence diagnostic](claim-equivalence-diagnostic.md) remains visible.
+
+The revised opinion review ties support findings to premises or inferential dependencies the argument actually asserts. It preserves clearly proposed uncertain targets while retaining contradiction and broken-inference review. The unchanged base/genre contract still prohibits invented motives and supports a persuasive accountable voice. This is a coherent correction to the clause that invited a separate rationale for every requested interval.
+
+The matrix repeats the new scope failures, includes every previously exercised genre, preserves both question controls, tests every original opinion locale and repeats the certainty contrast. It transparently reuses second-wave delivery and reported-speech controls because those implementations are unchanged. No frozen source or criterion is weakened. This is approval to freeze and evaluate, not final semantic approval; second-wave and third-wave outcomes must remain separate, with no refusal counted as a source-fidelity pass.

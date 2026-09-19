@@ -27,10 +27,18 @@ The supplementary corpus was frozen at `bf14dc2` before product edits. Original 
 
 ## First candidate result and second candidate
 
-All 54 invocations in the initial supplementary matrix completed. The baseline passes F1 in 5/8 drafts; the first candidate passes F1 in 20/23. The three failures are unsupported supplier-choice dates in the US customer case (#344, reopened). Both Swedish cases retain a quote-translation defect that both paired Redlines miss (#341). All six candidate opinion drafts preserve #349's no-claim boundary; all five customer cases avoid #352's invented question. Preserve the baseline and first-candidate reports as phase-specific evidence.
+All 54 invocations in the initial supplementary matrix completed. The baseline passes F1 in 5/8 drafts; the first candidate’s revised F1 result is 16/23. The initial 20/23 judgement is preserved and superseded: four English opinion drafts also substitute disability status for functional ability, and three substitute digital skills for familiarity. Three other failures are unsupported supplier-choice dates in the US customer case (#344, reopened). Both Swedish cases retain a quote-translation defect that both paired Redlines miss (#341). All six candidate opinion drafts preserve #349's no-claim boundary; all five customer cases avoid #352's invented question. Preserve the baseline and first-candidate reports as phase-specific evidence.
 
 The first neutral claim-ledger diagnostic also misses the chronology defect: it drops an inherited grammatical modifier while decomposing the sentence. A second neutral diagnostic reconstructs complete propositions with their grammatical scope and tests whether all source material could be true while a draft proposition is false. That diagnostic detects the timing addition without a date or clause hint. A separate neutral quotation-translation diagnostic detects the Swedish idiom obstruction and proposes one supported local repair.
 
 Second candidate `82db439` makes those operations explicit in the bounded checker, gives the checker an exact scratch draft file, and adds a conditional translated-quotation comparison using already-resolved composition guidance. Redline gives reported speech an explicit review unit. Its opinion review now distinguishes advocated targets from factual feasibility predictions (#354); shared delivery owns the unchanged-with-findings exception while leaving unchanged in-place files untouched (#353). Both new issues are children and blockers of #329.
 
 The [second matrix](matrix-second.md) fixes 56 Skill invocations before its results: the same 23 pairs plus ten specific controls. The independent review and full-source judgements remain the completion gate; a checker verdict is never sufficient evidence that an artifact passes. This phase is in progress.
+
+## Findings while the second wave runs
+
+Both new British-English absence-control drafts add a document-wide consent-status claim supported only at the source-package level (#355). The checker either imports an absent qualifier into its reconstruction or compares the wrong subject’s state. A neutral equivalence replay does not catch the mismatch; that failed hypothesis is retained and not copied into runtime guidance. A separate bounded negation experiment tests the precise truth condition.
+
+The three unchanged timetable replays still produce two false-positive objections, now demanding a separate rationale for the exact interval (#354); one is clean. Delivery of unchanged text with findings follows the reconciled contract. Full outcomes remain in progress.
+
+One internal checker deletion of a modest argumentative concession is recorded as a disputed preservation limitation. The final text preserves source facts, author stance and fair presentation of the company’s motives; the deletion is not counted as a demonstrated factual repair.

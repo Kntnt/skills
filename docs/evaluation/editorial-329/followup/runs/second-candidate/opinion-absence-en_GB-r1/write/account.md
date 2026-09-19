@@ -1,0 +1,1 @@
+Draft delivered here in British English, as opinion with no prescribed technique. Source check passed. The material supports the requested length; financial viability, consent status and study timing remain unestablished. No files retained.

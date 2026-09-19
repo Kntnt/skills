@@ -31,3 +31,9 @@ The three en_US F1 failures were initially missed by this evaluator. Independent
 - [Chronological observation history](candidate-original-observations.md): independent judgements and visible corrections.
 
 Every all-root before/after inventory shows no surviving Skill effect outside native `home/.codex/` state; authentication and supplied input are unchanged. All 22 private roots were removed by literal absolute paths after native trace/inventory capture. The owned Write batch and all Redline runners completed. The three evaluator helpers pass Ruff lint and format checks. No product files were edited, no commits were made by this evaluator, and no new baseline outcomes or other-provider records were opened.
+
+## Later independently confirmed source-variable addendum
+
+**This addendum supersedes the overall F1 totals above.** All four original English opinion outputs assert that disability was unmeasured, whereas the source specifies functional ability. The first three also replace digital familiarity with digital skills. These are different measured constructs, so their asserted absence is an unsupported fact. A second-candidate checker exposed the distinction; both evaluators confirmed it against all four original complete outputs. Prior judgements remain visible in the records and observation history.
+
+The current original-half overall F1 outcome is **4/11 pass, 7/11 fail** (three chronology failures and four source-variable failures), in both the Write drafts and source-aware paired final assessment. Redline's own source-blind criteria remain unchanged. The narrower #349 outcome remains 0/6 delivered occurrences with five observed repairs, and #352 remains 0/5 invented questions. There is no claim that these narrower successes establish overall source fidelity. The two Swedish case L1/R1 failures also remain.

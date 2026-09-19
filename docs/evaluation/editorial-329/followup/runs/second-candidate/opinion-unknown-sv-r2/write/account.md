@@ -1,0 +1,1 @@
+*Första utkast: svensk debattartikel utan särskild teknik, levererad här i svaret. Källkontrollen är klar utan kvarstående fynd. Det fiktiva underlaget räckte för briefen; kostnader och tillståndskrav är fortsatt öppna frågor. Tillfälliga filer har tagits bort och inga leveransfiler har sparats.*

@@ -1,0 +1,1 @@
+Inga ändringar behövdes efter redaktionell granskning och korrekturläsning. Texten granskades som debattartikel på svenska, utan särskild teknik, enligt dess metadata. Inga kvarstående anmärkningar. Inga filer har ändrats eller lämnats kvar.

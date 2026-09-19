@@ -1,0 +1,20 @@
+{
+  "returncode": 0,
+  "timed_out": false,
+  "duration_seconds": 103.42,
+  "identities": [
+    [
+      "gpt-6-astra",
+      "high"
+    ]
+  ],
+  "complete_input_visible": true,
+  "input_preserved": true,
+  "authentication_changed": false,
+  "non_home_effects": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "judgement": "Miss. Reconstructed submission-wide assertion accurately, then incorrectly inferred support from package-level absence of knowledge. Equivalence enforcement alone did not detect the scope transfer."
+}

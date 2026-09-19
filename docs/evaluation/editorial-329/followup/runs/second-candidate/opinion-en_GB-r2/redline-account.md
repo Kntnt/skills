@@ -1,0 +1,1 @@
+No changes needed. Reviewed as an opinion piece in British English, with no technique selected in the metadata. Final proofreading found no mechanical errors. No unresolved findings; `input.md` is unchanged.

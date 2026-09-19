@@ -1,0 +1,1 @@
+*Första utkast på svenska i genren opinion, utan särskild teknik, levererat här i svaret. Källkontrollen är slutförd utan kvarstående fynd. Kostnader och besparingar är fortsatt obelagda i det fiktiva underlaget. Inga arbetsfiler finns kvar.*

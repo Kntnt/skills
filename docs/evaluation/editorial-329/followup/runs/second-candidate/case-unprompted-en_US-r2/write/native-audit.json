@@ -1,0 +1,120 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T23-08-59-01a0bb80-4015-7181-ba54-82703dd0f6ad.jsonl",
+      "session": {
+        "id": "01a0bb80-4015-7181-ba54-82703dd0f6ad",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/write/SKILL.md\",\"max_output_tokens\":12000}));\ntext(await tools.exec_command({cmd:\"cat source.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch/write-invoke.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--genre=case-study --language=en_US --output=response source.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/write/scripts/invoke.py\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='write-invoke-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    p = subprocess.run(['uv', 'run', '.agents/skills/write/scripts/invoke.py'], input='--genre=case-study --language=en_US --output=response source.md', text=True, env=env)\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":12000}));\n",
+        "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/delivery.md .agents/skills/write/references/quotations.md .agents/skills/write/references/source-check.md\",\"max_output_tokens\":16000}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='write-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    p = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', 'en_US'], env=env)\\n    raise SystemExit(p.returncode)\\nPY\",\"max_output_tokens\":6000})\n]); results.forEach(text);\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport tempfile\\ntext = '''# Briar County archive shares records for new donations\\n\\nBriar County Theater Archive cataloged 47 incoming donations during an eight-week pilot of Index Lantern, with volunteers able to consult the same records. The trial excluded existing collections, and the archive has yet to decide whether to move older records into the catalog.\\n\\nThe archive holds donated programs, photographs, and posters from local productions. Volunteers had described new donations in separate spreadsheets before the collection team chose to test a shared catalog in February 2026.\\n\\nThe team agreed on fields for production title, year, donor, and location, retaining a free-text note for uncertain dates. Collection coordinator Lena Ortiz explained the choice in an email supplied for this Index Lantern–published case:\\n\\n“We kept the uncertain dates visible. An empty field and an estimated year tell the next volunteer different things.”\\n\\nIndex Lantern imported the team’s spreadsheet template and provided one remote training session for five volunteers. The archive chose the descriptions and checked the imported records.\\n\\n“Agreeing on the fields took two meetings. The import was the short part,” Ortiz wrote.\\n\\nThe archive’s May 6 pilot note records the 47 donations and reports that eleven records retained uncertain dates. It contains no before-and-after time measurement, cost calculation, or assessment of public access.\\n\\nOrtiz’s appraisal was qualified:\\n\\n“I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.”\\n\\nThe archive will review the field definitions before deciding whether to move older records into the catalog.\\n'''\\np = Path(tempfile.mkdtemp(prefix='write-check-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch'))\\n(p/'draft.md').write_text(text)\\nprint(p)\\nprint('Words:', len(text.split()))\\nPY\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"rg --files --hidden /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch\\n git status --short\",\"max_output_tokens\":2000}));\n",
+        "text(await tools.exec_command({cmd:\"ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch/write-check-wlaxlpj_\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch/write-check-wlaxlpj_/report.md\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch/write-check-wlaxlpj_')\\n(p/'draft.md').unlink()\\n(p/'report.md').unlink()\\np.rmdir()\\nroot = p.parent\\nprint('Scratch files remaining:', [str(f.relative_to(root)) for f in root.rglob('*') if f.is_file()])\\nprint('Run scratch directory removed:', not p.exists())\\nPY\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": false,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 7,
+        "web-craft.md": 0,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 25,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/19/rollout-2026-09-19T23-10-11-01a0bb81-5a70-78f2-98df-93f251deb970.jsonl",
+      "session": {
+        "id": "01a0bb81-5a70-78f2-98df-93f251deb970",
+        "parent_thread_id": "01a0bb80-4015-7181-ba54-82703dd0f6ad",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bb80-4015-7181-ba54-82703dd0f6ad",
+              "depth": 1,
+              "agent_path": "/root/source_check",
+              "agent_nickname": "Ptolemy",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "const paths = [\n\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/work/source.md\",\n\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch/write-check-wlaxlpj_/draft.md\",\n\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/work/.agents/skills/kntnt/library/references/editorial/base.md\",\n\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/work/.agents/skills/write/references/quotations.md\"];\nconst results = await Promise.allSettled(paths.map(path=>tools.exec_command({cmd:\"cat '\"+path+\"'\",max_output_tokens:18000})));\nresults.forEach((r,i)=>text({path:paths[i],result:r}));\n",
+        "text(await tools.apply_patch(\"*** Begin Patch\\n*** Add File: /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dpn8cm30/scratch/write-check-wlaxlpj_/report.md\\n+# Source comparison report\\n+\\n+Compared the complete supplied brief and material in `source.md` against the complete draft in `draft.md`, using the base contract's Claims section and quotation guidance. Source and target are English; target locale is en_US. This report concerns source support only, not general editorial or mechanical review.\\n+\\n+## Claim accounting\\n+\\n+Each entry reconstructs the independently checkable proposition, including its scope, and identifies its support. “Supported” means no source-compatible counterexample exposes an addition under the passage's ordinary contextual reading.\\n+\\n+| # | Draft passage | Complete proposition | Supporting source passage and assessment |\\n+|---|---|---|---|\\n+| 1 | “Briar County archive shares records for new donations” | Briar County Theater Archive makes records for incoming donations available in common to its volunteers. | “The note reports that volunteers could consult the same records”; pilot was “for incoming donations.” Supported. The heading's sharing claim is explained by the opening sentence as volunteer access, not public access. |\\n+| 2 | “cataloged 47 incoming donations during an eight-week pilot of Index Lantern” | The archive cataloged 47 incoming donations during an eight-week Index Lantern pilot. | “using Index Lantern”; “records 47 incoming donations cataloged during the eight-week pilot.” Supported with count, duration, product, and incoming-donation scope intact. |\\n+| 3 | “with volunteers able to consult the same records” | During this pilot, volunteers could consult the same catalog records. | “The note reports that volunteers could consult the same records.” Supported. No efficiency or causal claim is added. |\\n+| 4 | “The trial excluded existing collections” | Existing collections were outside this pilot. | “Existing collections were outside the pilot.” Supported. |\\n+| 5 | “the archive has yet to decide whether to move older records into the catalog” | At the reporting point supplied by the material, the archive has not decided whether to move older records into the catalog. | “The archive will review the field definitions before deciding whether to move older records into the catalog.” Supported; the source expressly places the decision in the future. |\\n+| 6 | “holds donated programs, photographs, and posters from local productions” | The archive holds donated programs from local productions. | “holds donated programs, photographs, and posters from local productions.” Supported; both donated status and local-production origin apply. |\\n+| 7 | Same passage | The archive holds donated photographs from local productions. | Same source passage. Supported with modifiers preserved. |\\n+| 8 | Same passage | The archive holds donated posters from local productions. | Same source passage. Supported with modifiers preserved. |\\n+| 9 | “Volunteers had described new donations in separate spreadsheets before…” | Before the shared-catalog test decision, volunteers had described new donations in separate spreadsheets. | “Volunteers had described new donations in separate spreadsheets. In February 2026 … chose to test a shared catalog.” Supported, including chronology. |\\n+| 10 | “the collection team chose to test a shared catalog in February 2026” | The archive's collection team chose in February 2026 to test a shared catalog for the incoming donations discussed here. | “In February 2026 the archive's collection team chose to test a shared catalog for incoming donations.” Supported. |\\n+| 11 | “agreed on fields for production title, year, donor, and location” | The team agreed on a field for production title. | “The team agreed on fields for production title, year, donor, and location.” Supported. |\\n+| 12 | Same passage | The team agreed on a field for year. | Same source passage. Supported. |\\n+| 13 | Same passage | The team agreed on a field for donor. | Same source passage. Supported. |\\n+| 14 | Same passage | The team agreed on a field for location. | Same source passage. Supported. |\\n+| 15 | “retaining a free-text note for uncertain dates” | The team retained a free-text note for uncertain dates alongside the agreed fields. | “It retained a free-text note for uncertain dates.” Supported. |\\n+| 16 | “Collection coordinator Lena Ortiz” | Lena Ortiz is the archive's collection coordinator. | “Collection coordinator Lena Ortiz sent…” Supported. |\\n+| 17 | “explained the choice in an email” | Ortiz provided an explanation of retaining visible date uncertainty in an email. | The source identifies an email containing: “We kept the uncertain dates visible. An empty field and an estimated year tell the next volunteer different things.” Supported as a characterization of the supplied explanation; no interview or observed speech is implied. |\\n+| 18 | “an email supplied for this Index Lantern–published case” | The archive supplied Ortiz's email for a case published by Index Lantern. | Brief: “The publisher is catalog software supplier Index Lantern”; material: “The archive supplied that email and the pilot note for this supplier-published case.” Supported. |\\n+| 19 | “We kept the uncertain dates visible.” | Ortiz wrote that the archive kept uncertain dates visible. | Identical complete sentence in the first supplied quotation. Supported, including attribution and certainty. |\\n+| 20 | “An empty field and an estimated year tell the next volunteer different things.” | Ortiz's stated interpretation is that an empty field and an estimated year communicate different information to the next volunteer. | Identical complete sentence in the first supplied quotation. Supported as attributed interpretation, not as an independently measured outcome. |\\n+| 21 | “Index Lantern imported the team’s spreadsheet template” | Index Lantern imported the team's spreadsheet template. | “Index Lantern imported the team's spreadsheet template.” Supported. |\\n+| 22 | “provided one remote training session for five volunteers” | Index Lantern provided one remote training session for five volunteers. | “provided one remote training session for five volunteers.” Supported with number, remote format, and audience preserved. |\\n+| 23 | “The archive chose the descriptions” | The archive decided which descriptions to use. | “The archive decided which descriptions to use.” Supported. |\\n+| 24 | “and checked the imported records” | The archive checked the records that had been imported. | “and checked the imported records.” Supported. No error-free import or validation outcome is asserted. |\\n+| 25 | “Agreeing on the fields took two meetings.” | Ortiz wrote that agreeing on the fields took two meetings. | Identical first sentence of the second supplied quotation. Supported. |\\n+| 26 | “The import was the short part,” Ortiz wrote. | Ortiz characterized the import as the short part of the process she describes. | “The import was the short part.” The quotations were sent in her email. Supported as her comparative characterization; no measured time saving is inferred. The attribution accurately signals writing. |\\n+| 27 | “The archive’s May 6 pilot note” | The archive has a pilot note dated May 6. | “The archive's pilot note, dated May 6…” Supported. |\\n+| 28 | “records the 47 donations” | That pilot note records the previously specified 47 incoming donations cataloged during the eight-week pilot. | “records 47 incoming donations cataloged during the eight-week pilot.” Supported; the definite phrase carries the earlier scope. |\\n+| 29 | “reports that eleven records retained uncertain dates” | The pilot note reports that eleven records retained uncertain dates. | “The archive's pilot note … records … Eleven records retained uncertain dates.” Supported by the source's account of the pilot note. |\\n+| 30 | “It contains no before-and-after time measurement” | The pilot note contains no before-and-after time measurement. | “contains no before-and-after time measurement.” Supported as a statement about the document, not proof that time did not change or was never measured elsewhere. |\\n+| 31 | “cost calculation” | The pilot note contains no cost calculation. | “contains no … cost calculation.” Supported with the document-level limitation carried over. |\\n+| 32 | “or assessment of public access” | The pilot note contains no assessment of public access. | “contains no … assessment of public access.” Supported; no claim is made that public access did not occur. |\\n+| 33 | “Ortiz’s appraisal was qualified” | Ortiz's appraisal of the pilot includes a willingness to use the catalog again for new donations and a reservation about bringing in the older collection before additional description testing. | Third quotation: “I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.” Supported evaluative characterization. It does not invent an emotion or manner. |\\n+| 34 | “I would use the shared catalog again for new donations.” | Ortiz expressed that she would use the shared catalog again for new donations. | Identical first sentence in the third quotation. Supported; conditional personal assessment and incoming-donation scope preserved. This is not a claim that the archive has committed to future use. |\\n+| 35 | “I would test the descriptions on more posters before we bring in the older collection.” | Ortiz expressed that she would test the descriptions on more posters before bringing in the older collection. | Identical second sentence in the third quotation. Supported; the draft retains her wording and conditional stance rather than converting it into an approved migration plan. |\\n+| 36 | “The archive will review the field definitions before deciding whether to move older records into the catalog.” | The archive will review field definitions, and that review will precede its decision on whether to move older records into the catalog. | Identical source sentence. Supported, including order, future review, and the unresolved decision. |\\n+\\n+## Counterexample and implication checks\\n+\\n+The source could remain true while the pilot produced no time saving, cost reduction, public-access improvement, supplier advantage, or decision to migrate old records. The draft asserts none of those outcomes. Its discussion of absent measurements concerns the note's contents. It does not turn unmeasured outcomes into negative findings.\\n+\\n+The source could remain true without a visit, interview, observable emotion, or performed interaction with Ortiz. The draft uses the actual email source and “wrote”; “explained” describes the content of her supplied explanation. No scene, manner, or emotion is introduced.\\n+\\n+The opening and headline confine their concrete benefit to shared records for new donations, as established by the note. The body expressly excludes existing collections and preserves the pending migration decision. Ortiz's qualified recommendation remains her assessment of this pilot; it is not generalized to other archives or competing suppliers.\\n+\\n+## Source-support findings\\n+\\n+None. No missing or changed support requiring repair was identified. All supported wording, warranted certainty, attribution, and editorial choices can be preserved.\\n+\\n+## Quotations and translation findings\\n+\\n+No translation was performed or needed. All three supplied quotations are reproduced completely, preserving meaning, stance, certainty, and distinctive wording. The second quotation's final period becomes a comma to accommodate “Ortiz wrote”; this does not alter its content. There are no translation findings.\\n+\\n+## Completion status\\n+\\n+Complete: the full draft, including its heading, qualifications, attributions, and contextual implications, has been compared with the complete supplied material. Unresolved findings: none. Source and draft were not modified.\\n*** End Patch\"));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": true,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 7,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 10,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 10,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 9,
+        "genres/article.review.md": 4,
+        "genres/column.md": 10,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 10,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 13
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

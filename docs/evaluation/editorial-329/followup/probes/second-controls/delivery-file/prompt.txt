@@ -1,0 +1,1 @@
+/redline --max=0 --output=result.md input.md

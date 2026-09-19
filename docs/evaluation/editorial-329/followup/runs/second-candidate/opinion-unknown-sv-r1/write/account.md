@@ -1,0 +1,1 @@
+*Första utkastet levereras här på svenska, i genren opinion, utan särskild teknik. Källkontrollen är slutförd utan anmärkningar. Materialet räcker för briefen men ger inga kostnadsbelopp eller besked om tillståndskraven. Inga filer från körningen finns kvar.*

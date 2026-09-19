@@ -1,0 +1,18 @@
+## What to build
+
+Part of #329. Preserve the scope of what a supplied source package establishes about a document it summarizes. In both `opinion-absence-en_GB` repetitions on second candidate `82db439`, Write says the association's submission makes no claim of secured consent and then adds that "it does not establish whether consent exists". The natural antecedent is the entire submission. The source establishes only the submission's no-claim statement; its separate actual-status limitation belongs to the supplied package, not necessarily to every statement in the underlying submission.
+
+The original submission could report refusal while the provided package omits that status: all supplied facts would remain true, but the draft's document-wide claim would be false. Fresh checkers approve both outputs. In one complete claim account, the checker adds "as supplied in the source package" to its reconstructed proposition although that qualification is absent from the draft. The comparison therefore tests a silently repaired reading.
+
+Diagnose meaning equivalence between the actual draft and the propositions being checked. Any repair must address this general comparison failure rather than add a consent/document-specific writing rule. Keep the full failed sources, outputs and judgements under `docs/evaluation/editorial-329/followup/runs/second-candidate/opinion-absence-en_GB-r1/` and `-r2/`. The earlier candidate's passing outcomes remain separate history.
+
+## Acceptance criteria
+
+- [ ] Both complete failed outputs remain F1 failures under the original frozen criterion, with source and native comparison evidence.
+- [ ] Reconstructed propositions preserve the draft's actual scope rather than importing a source-only qualification.
+- [ ] Repeated fresh Write runs preserve both explicit absent conversion estimates and unclaimed consent, without inventing the contents of the unseen submission; paired Redline remains source-blind.
+- [ ] Existing chronology, attribution and unknown-versus-absence cases retain coverage; document any genuine refusal or preservation limitation separately.
+- [ ] Run the four CONTRIBUTING checks for the integrated change.
+
+---
+Written against 82db439

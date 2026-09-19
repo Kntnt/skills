@@ -1,0 +1,1 @@
+*Förstautkastet levereras här som svensk artikel, utan särskild berättarteknik enligt artikelgenrens standard. Källkontrollen är slutförd utan kvarstående anmärkningar. Underlaget saknar besked om kylans orsak, elevernas upplevelse och åtgärdernas effekt. Inga skapade filer finns kvar.*

@@ -1,0 +1,1 @@
+*British English opinion draft delivered here; no technique applied. Source comparison passed. The supplied fictional material provides no trial cost estimate. All temporary files were removed.*
