@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.31.2] – 2026-09-19
+
+### Changed
+
+- `/explain` answers the point needing clarification with just enough context for an intelligent, busy colleague. Focused questions normally get one to three short paragraphs; project-specific and unusual terms are explained briefly, and natural sentence fragments are allowed when their meaning is clear. Details that affect the answer or decision, causal links, conditions and meaningful uncertainty are preserved.
+- `/agents-md` creates the `CLAUDE.md` bridge as a relative symbolic link to `AGENTS.md` and can replace an existing one-line `@AGENTS.md` import. The import remains the fallback where symbolic links are unavailable. The repository uses the symbolic link too, and `/delegation` follows the same bridge convention for project instructions.
+
 ## [0.31.1] – 2026-09-19
 
 ### Changed

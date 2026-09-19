@@ -6,6 +6,7 @@
 - Add a pointer to an existing `docs/` file, or a reading brief when placement allows.
 - Shorten text this skill owns; keep the meaning.
 - Rebuild the References index.
+- Replace a `CLAUDE.md` that is exactly `@AGENTS.md` with the symbolic link placement prescribes.
 - `CUT` a line with a cited discoverable source.
 - `CUT` a line that a **tracked Project** skill already covers (Enabled in Project, `SKILL.md` in `git ls-files`, same meaning, that skill starts when the line would have mattered).
 

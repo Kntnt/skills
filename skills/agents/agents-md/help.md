@@ -14,7 +14,7 @@ agents-md - tend a project's always-loaded agent instructions
 
 `AGENTS.md` remains a compact table of contents and set of ground rules. Concern-specific material belongs under `agents.d/` and is reached through a pointer that states when to read it. If no fact justifies always-loaded text or a referenced file, nothing is written.
 
-The Skill may create or update the one-line `CLAUDE.md` bridge, `AGENTS.md`, and files under `agents.d/`. It never changes instructions outside the current repository and never writes proposed documentation prose under `docs/`; it may report a proposed location and purpose for a human to write.
+The Skill may create or update `AGENTS.md`, files under `agents.d/`, and the `CLAUDE.md` bridge: a symbolic link to `AGENTS.md`, so Claude Code reads the same file without importing it, and a session started in a subdirectory is not asked to approve an external import. It never changes instructions outside the current repository and never writes proposed documentation prose under `docs/`; it may report a proposed location and purpose for a human to write.
 
 ## POSITIONAL ARGUMENTS
 

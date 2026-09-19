@@ -52,7 +52,7 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `<path>` — read when <situation>
 ```
 
-Emit Ground rules only when narrative docs exist. Omit empty sections. `CLAUDE.md` is exactly `@AGENTS.md`. Leave a symlink `CLAUDE.md` → `AGENTS.md` as-is. Leave `CLAUDE.local.md` alone. Prefer an existing `.claude/CLAUDE.md` over creating a root one.
+Emit Ground rules only when narrative docs exist. Omit empty sections. `CLAUDE.md` is a relative symbolic link to `AGENTS.md` (`ln -s AGENTS.md CLAUDE.md`): Claude Code reads it as `AGENTS.md` itself, where an `@AGENTS.md` import can make a session started in a subdirectory ask to approve an external import. Only where the filesystem cannot hold a symbolic link is `CLAUDE.md` exactly `@AGENTS.md`. Leave `CLAUDE.local.md` alone. Prefer an existing `.claude/CLAUDE.md` over creating a root one.
 
 ## Index
 

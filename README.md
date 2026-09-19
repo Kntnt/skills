@@ -70,7 +70,7 @@ Run `/delegation`, `/delegation on|off [--project|--user] [--yes]`, or `/delegat
 
 ### explain
 
-Explain the reply just given, or whatever you name in the instruction, better than it was explained the first time. It is written for somebody clever but busy who has not followed the work: it opens with the context you need, explains rather than summarises, keeps every fact, condition, and limitation that could change what you understand or do, and makes any decision or action expected of you unmistakable.
+Get a brief, clear explanation of the reply just given, or whatever you name in the instruction. Written for an intelligent, busy colleague, it answers what needs clarification with just enough context, explains unfamiliar project terms, and makes any decision or action expected of you clear. Focused questions normally get one to three short paragraphs.
 
 Run `/explain`, optionally followed by an instruction such as `/explain bara säkerhetsdelen`.
 

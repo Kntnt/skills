@@ -10,11 +10,13 @@ explain - explain the reply just given, or whatever the instruction names, bette
 
 ## DESCRIPTION
 
-`explain` answers for a clever but busy reader who owns the outcome and has not followed the work. Without an instruction it explains the reply just given; with one it explains whatever the instruction names — a decision, a term, a part of that reply, a thing said earlier in the conversation.
+`explain` gives an intelligent, busy colleague a brief, clear explanation. Without an instruction it explains the reply just given; with one it explains whatever the instruction names — a decision, a term, a part of that reply, a thing said earlier in the conversation.
 
-This is an explanation and not a summary. The reply opens with the context the reader needs, explains the matter better than the earlier reply did rather than restating it in fewer words, and explains any term or abbreviation that is not widely established where it introduces it.
+The reply answers the point needing clarification directly, with only the background needed to understand it. It assumes ordinary subject knowledge but no familiarity with the project's glossary: project terms are used consistently, and project-specific or unusual terms are briefly explained where needed.
 
-What comes back keeps every fact, negation, quantity, exception, condition, and limitation that could change what the reader understands, decides, or has to do, and leaves out work logs, step-by-step narration, discarded approaches, and file-level mechanics unless they are material or asked for. Error reports, failing test output, security warnings, and confirmations for destructive actions keep their full content.
+A focused question normally gets one to three short paragraphs; the reply expands when the question requires it or the reader asks. It keeps details that change the answer, its consequences, or the reader's decision. Implementation details and work history appear only when needed to answer the question or explicitly requested.
+
+The prose uses short, familiar words and may use sentence fragments where the meaning is clear. Each point is stated once, with causal links, conditions, negation, and meaningful uncertainty preserved. Error reports, failing test output, security warnings, and confirmations for destructive actions keep their full content.
 
 Where a decision is expected of the reader, the reply gives a brief basis for it and a recommendation. Where an action is expected, it says why. Where nothing is required, the reply says nothing about it and stops.
 

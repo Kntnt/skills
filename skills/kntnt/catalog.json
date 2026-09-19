@@ -6,7 +6,7 @@
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "4ffc4730897ddce58c2f9b5352413f0fd34e074b2ad0e6ea839ac8872905662d",
+      "digest": "a1ffd7ea50f6b3110845af5c1058f4f9a7d5fbb617768af1b7d762e5fa42748e",
       "binaries": [
         "git",
         "uv"
@@ -19,7 +19,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "09bff1e9ec54fefd24c4da0f85baffab0fc2070a2df5d7fb57ee5f08159c0afc",
+      "digest": "e2b5e5ba1a8201b72bc5f7621890fa90a9f563bf43970e965b8addbc487246c6",
       "binaries": [
         "uv"
       ],
@@ -35,7 +35,7 @@
       "name": "explain",
       "category": "agents",
       "description": "Explain the reply just given, or whatever the instruction names, better than it was explained the first time.",
-      "digest": "21773132e8fa2aa12c8ebe7d996cfb6be4b31c904e3d368f46604aa93cdab25a",
+      "digest": "eff2483e6d5756ade90eb23fd220cf1667bf6058e33914b50a1c0a876e7d70dc",
       "binaries": [
         "uv"
       ],
