@@ -4,6 +4,14 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- A living engineering-workflow plan and Frame handoff document the incremental path to independently maintained planning Skills on `main`, using the protected `rework` branch as source material. They record the agreed future placement of project agent instructions in `docs/agents/` and the glossary in `docs/glossary.md`; those migrations and the new Skills remain forthcoming work.
+
+### Fixed
+
+- Session cleanup no longer stops a registered builder when that builder starts a nested agent session. Start cleanup preserves manifests holding the current process or its ancestors, including their scratch paths and containers, and keeps recent manifests with live processes when session ownership is missing. The existing cleanup of abandoned work and the one-day backstop remain in place.
+
 ## [0.31.2] – 2026-09-19
 
 ### Changed

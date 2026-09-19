@@ -18,6 +18,8 @@ import sys
 from pathlib import Path
 from typing import Any, cast
 
+import pytest
+
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 MANAGER: Path = REPO_ROOT / "skills" / "kntnt"
 LIBRARY: Path = MANAGER / "library" / "scripts"
@@ -443,6 +445,138 @@ def test_a_start_leaves_a_manifest_whose_terminal_is_still_alive(
         assert here in foreign
     finally:
         del os.environ["KNTNT_HOME"]
+
+
+@pytest.mark.parametrize(
+    ("has_session_header", "detached_hook", "age_hours"),
+    [(False, False, 0), (True, False, 0), (False, True, 0), (True, True, 25)],
+)
+def test_a_nested_start_preserves_its_recorded_launcher(
+    tmp_path: Path, has_session_header: bool, detached_hook: bool, age_hours: int
+) -> None:
+    """A registered builder must survive its own session-start cleanup hook."""
+
+    # Exercise the actual signal path in a separate process group, so the
+    # regression can kill its launcher without reaching the pytest worker.
+    program = """
+import importlib.util
+import os
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+spec = importlib.util.spec_from_file_location("cleanup", sys.argv[1])
+cleanup = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(cleanup)
+if sys.argv[2] == "True":
+    cleanup.open_session("parent", "codex", "parent")
+record = cleanup.add("pid", str(os.getpid()), "nested builder")
+scratch = Path(os.environ["KNTNT_HOME"]) / "builder-scratch"
+scratch.mkdir()
+cleanup.add("path", str(scratch), "builder scratch")
+old = time.time() - int(sys.argv[4]) * 3600
+os.utime(record["manifest"], (old, old))
+answer = subprocess.run(
+    [sys.executable, sys.argv[1], "hook", "--harness=codex", "--event=SessionStart"],
+    cwd=Path(sys.argv[1]).parent,
+    input='{"session_id": "child"}',
+    text=True,
+    start_new_session=sys.argv[3] == "True",
+    capture_output=True,
+    check=True,
+)
+assert Path(record["manifest"]).exists(), answer
+assert scratch.exists(), answer
+print("builder survived")
+"""
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            program,
+            str(SESSION_CLEANUP),
+            str(has_session_header),
+            str(detached_hook),
+            str(age_hours),
+        ],
+        cwd=REPO_ROOT,
+        env={**os.environ, "KNTNT_HOME": str(tmp_path)},
+        start_new_session=True,
+        text=True,
+        capture_output=True,
+        check=False,
+        timeout=10,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert completed.stdout.strip() == "builder survived"
+
+
+def test_a_start_keeps_a_recent_unowned_manifest_with_a_live_process(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A missing session header does not establish that a sibling has ended."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    path = cleanup.manifest_path("unowned")
+    cleanup.append(path, {"kind": "pid", "id": "123456", "started": "then"})
+    monkeypatch.setattr(cleanup, "alive", lambda pid: pid == 123456)
+    monkeypatch.setattr(cleanup, "started_at", lambda pid: "then")
+
+    assert path not in cleanup.foreign_manifests("new")
+
+
+def test_an_unowned_manifest_with_a_gone_process_can_still_be_swept(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An ended launcher does not keep its recorded scratch forever."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    path = cleanup.manifest_path("unowned")
+    cleanup.append(path, {"kind": "pid", "id": "123456", "started": "then"})
+    monkeypatch.setattr(cleanup, "alive", lambda pid: False)
+
+    assert path in cleanup.foreign_manifests("new")
+
+
+@pytest.mark.parametrize(
+    ("current_start", "expired"), [("different", False), ("then", True)]
+)
+def test_reused_processes_and_the_age_backstop_release_unowned_manifests(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    current_start: str,
+    expired: bool,
+) -> None:
+    """Conservative ownership does not disable orphan cleanup's existing bounds."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    path = cleanup.manifest_path("unowned")
+    cleanup.append(path, {"kind": "pid", "id": "123456", "started": "then"})
+    monkeypatch.setattr(cleanup, "alive", lambda pid: pid == 123456)
+    monkeypatch.setattr(cleanup, "started_at", lambda pid: current_start)
+    monkeypatch.setattr(cleanup, "stale", lambda path: expired)
+
+    assert path in cleanup.foreign_manifests("new")
+
+
+def test_a_start_without_readable_ancestry_cannot_authorize_a_sweep(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Failure to establish live ownership cannot become permission to kill."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    path = cleanup.manifest_path("old")
+    cleanup.append(path, {"kind": "path", "id": str(tmp_path / "scratch")})
+    monkeypatch.setattr(cleanup, "process_ancestors", lambda: None)
+
+    assert cleanup.foreign_manifests("new") == []
+    assert path.exists()
 
 
 def test_a_session_that_recorded_nothing_says_so_in_the_log(tmp_path: Path) -> None:

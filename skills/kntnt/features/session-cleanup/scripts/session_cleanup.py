@@ -24,13 +24,13 @@ worse than neither: the block without the hook asks for records nothing reads,
 and the hook without the block reads an empty manifest forever while looking
 perfectly healthy.
 
-The sweep runs at a session's start as well as at its end. A manifest belonging
-to a session other than the one now starting belongs to a session that has
-already ended, however it ended — and a hard kill, a crash, and a Harness whose
-end event is weak all end a session without ever reaching its own SessionEnd.
-Sweeping at the start is what turns a best-effort cleanup into one that heals
-itself, and it is the same convergence over disk that ADR-0179 already states:
-nothing here remembers anything, and every run reads what is actually there.
+The sweep runs at a session's start as well as at its end. A hard kill, a crash,
+and a Harness whose end event is weak can leave an ended session's manifest
+behind. A nested session can also find its own launcher's manifest, so a start
+never sweeps a manifest holding the current process or an ancestor. A manifest
+without session ownership and with a live recorded process waits for the age
+backstop rather than being assumed abandoned. Sweeping eligible manifests at
+the start makes cleanup converge over disk, as ADR-0179 requires.
 """
 
 from __future__ import annotations
@@ -558,6 +558,69 @@ def stale(path: Path) -> bool:
     return age > STALE_HOURS * 3600
 
 
+def process_ancestors() -> set[int] | None:
+    """Return this process and its ancestors, or None if they cannot be read.
+
+    A hook may run inside a registered builder's process group. Its launcher
+    is live ownership, even where the recording shell has already ended or
+    the nested session shares the parent's terminal. An unreadable process
+    table cannot authorize a session-start sweep.
+    """
+
+    try:
+        completed = subprocess.run(
+            ["ps", "-axo", "pid=,ppid="],
+            cwd=home(),
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=5,
+        )
+        if completed.returncode:
+            return None
+        parents = {
+            int(pid): int(parent)
+            for pid, parent in (line.split() for line in completed.stdout.splitlines())
+        }
+    except (OSError, subprocess.SubprocessError, ValueError):
+        return None
+
+    # Include the hook itself and stop when the snapshot reaches its root.
+    ancestors: set[int] = set()
+    pid = os.getpid()
+    while pid > 1 and pid not in ancestors:
+        ancestors.add(pid)
+        if pid not in parents:
+            return None
+        pid = parents[pid]
+    return ancestors
+
+
+def live_recorded_processes(entries: list[dict[str, Any]]) -> set[int]:
+    """Return live recorded identities, retaining an unreadable start time.
+
+    A known reused id establishes that the recorded process has gone. A start
+    time that cannot be read establishes nothing, so keeping a manifest is
+    safer than treating that missing evidence as permission to sweep it.
+    """
+
+    processes: set[int] = set()
+    for entry in entries:
+        if entry.get("kind") != "pid":
+            continue
+        try:
+            pid = int(str(entry.get("id")))
+        except ValueError:
+            continue
+        if pid <= 1 or not alive(pid):
+            continue
+        recorded = str(entry.get("started") or "")
+        current = started_at(pid)
+        if not recorded or not current or current == recorded:
+            processes.add(pid)
+    return processes
+
+
 def foreign_manifests(mine: str) -> list[Path]:
     """Return the manifests of sessions that have ended, and only those.
 
@@ -567,12 +630,17 @@ def foreign_manifests(mine: str) -> list[Path]:
     catches the file, and the cost of not skipping it is killing a working
     session's dev server. One of those is recoverable.
 
-    A manifest sharing this terminal is a different matter. A terminal runs one
-    session at a time, so a start here means the session that wrote it is over.
+    A nested session may share its parent's terminal or outlive the shell
+    that recorded its launcher. Its own process chain always keeps the whole
+    manifest, including scratch and containers. Without session ownership,
+    a live recorded process keeps a recent manifest until the age backstop.
     """
 
     here = terminal()
     found: list[Path] = []
+    ancestors = process_ancestors()
+    if ancestors is None:
+        return found
     try:
         candidates = sorted(sessions_dir().glob("*.jsonl"))
     except OSError:
@@ -581,11 +649,16 @@ def foreign_manifests(mine: str) -> list[Path]:
     for path in candidates:
         if path.stem == safe_key(mine):
             continue
-        header, _ = read_manifest(path)
+        header, entries = read_manifest(path)
+        processes = live_recorded_processes(entries)
+        if ancestors & processes:
+            continue
         try:
             sid = int(header.get("sid") or 0)
         except (TypeError, ValueError):
             sid = 0
+        if sid == 0 and processes and not stale(path):
+            continue
         if sid == here or sid == 0 or not alive(sid) or stale(path):
             found.append(path)
     return found
