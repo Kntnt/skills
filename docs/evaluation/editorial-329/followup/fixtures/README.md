@@ -1,0 +1,18 @@
+# Supplemental source packages
+
+Evaluator-only material for the source-fidelity follow-up. Freeze these files in a commit before their first model run and record that revision. They supplement the original [editorial matrix](../../../corpus/editorial-quality/README.md); they do not replace or alter its corpus, criteria or rejection rules.
+
+Expose only one source package to Write, copied as `source.md`. Do not expose this README, issue history, expected findings or previous outputs. Use the matrix's native-session staging, evidence capture and semantic judging. Invoke `/write --genre=<genre> --language=<locale> --output=response source.md`, with the genre and locale below and no contextual instruction or technique. If evaluating the pipeline, give a fresh Redline session only the complete delivered draft and metadata as `input.md`, then invoke `/redline --output=response input.md`.
+
+| Package | Genre / locale | Semantic expectation |
+|---|---|---|
+| [Harbour](opinion-unknown-sv.md) | opinion / sv | A submission's silence about a cost estimate or permission does not establish that neither exists. Preserve the difference between what the association reports and what it has done. The proposed comparison and timetable are advocacy, not established outcomes. |
+| [Rehearsal space](opinion-absence-en_GB.md) | opinion / en_GB | The treasurer explicitly establishes that the association has not prepared a conversion estimate: a categorical statement of that absence is supported. The submission's lack of a representation about owner consent establishes no equivalent absence. Preserve this asymmetry without weakening the supplied fact or the author's position. |
+| [Archive](case-unprompted-en_US.md) | case-study / en_US | Ortiz's email supports quotation, attribution and a qualified appraisal. It supplies no interviewer question or reporting scene. Framing that asserts an unprovided question, visit or reaction is an unsupported fact, even if it introduces an accurate quotation. |
+| [Workshop](case-question-en_GB.md) | case-study / en_GB | The dated email interview explicitly supports its two questions and Vale's answers. Question-based framing can therefore be accurate here. Its existence licenses neither a spoken interview nor a physical scene. Preserve the customer's reservation and the distinction between reported usefulness and measured performance. |
+
+Apply the original Write criteria `F1 G1 G2 P1 W1 L1 L2 T1 R2 O1` and, where run, Redline criteria `G1 G2 P1 W1 L1 L2 T1 R1 R2 O1`. These expectations explain F1 on the supplied material; they create no wording tests or new mandatory content. Optional facts and question framing may be omitted. If a positive control omits the relevant supported statement, record that it provides no evidence of handling that statement; omission alone is not a failure. A sourced categorical fact need not be hedged, and a supported interview question need not be removed.
+
+Judge every assertion in the artifact, not only the targeted distinction. Preserve useful craft, customer agency, stance and qualifications. A source-blind Redline pass cannot establish whether an otherwise coherent factual claim is absent from the source. Evaluate Write's source fidelity against the package, and label any unsupported assertion that survives into the final text without assigning unavailable-source verification to Redline.
+
+These compact synthetic packages test additional topics and a supported counterpart for each distinction. They do not establish population-wide failure rates. Repetitions and comparisons are declared by the follow-up run plan, not selected after seeing outputs; retain every attempt and its actual result.
